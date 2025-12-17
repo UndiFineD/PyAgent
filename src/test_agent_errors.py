@@ -1792,7 +1792,10 @@ test.py:10: error: Call to untyped function
 
     def test_parse_json_logs(self):
         """Test parsing JSON format logs."""
-        log_entry = '{"level":"ERROR","message":"Connection failed","timestamp":"2024-12-16T10:00:00"}'
+        log_entry = (
+            '{"level":"ERROR","message":"Connection failed",'
+            '"timestamp":"2024-12-16T10:00:00"}'
+        )
         data = json.loads(log_entry)
         assert data["level"] == "ERROR"
         assert "Connection failed" in data["message"]

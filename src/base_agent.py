@@ -1043,8 +1043,14 @@ class BaseAgent:
             Dictionary with cache stats.
         """
         total_hits = sum(e.hit_count for e in cls._response_cache.values())
-        return {"entries": len(cls._response_cache), "total_hits": total_hits, "avg_quality": sum(
-            e.quality_score for e in cls._response_cache.values()) / max(len(cls._response_cache), 1)}
+        avg_quality = sum(
+            e.quality_score for e in cls._response_cache.values()
+        ) / max(len(cls._response_cache), 1)
+        return {
+            "entries": len(cls._response_cache),
+            "total_hits": total_hits,
+            "avg_quality": avg_quality
+        }
 
     # ========== Token Budget Management ==========
 

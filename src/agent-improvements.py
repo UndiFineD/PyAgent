@@ -307,14 +307,20 @@ DEFAULT_TEMPLATES: List[ImprovementTemplate] = [
         name="add_tests",
         category=ImprovementCategory.TESTING,
         title_pattern="Add tests for {function_name}",
-        description_template="Add unit tests to cover {function_name} including edge cases and error handling.",
+        description_template=(
+            "Add unit tests to cover {function_name} including "
+            "edge cases and error handling."
+        ),
         default_effort=EffortEstimate.SMALL
     ),
     ImprovementTemplate(
         name="add_type_hints",
         category=ImprovementCategory.MAINTAINABILITY,
         title_pattern="Add type hints to {function_name}",
-        description_template="Add proper type annotations to {function_name} for better IDE support and documentation.",
+        description_template=(
+            "Add proper type annotations to {function_name} for "
+            "better IDE support and documentation."
+        ),
         default_effort=EffortEstimate.TRIVIAL
     ),
     ImprovementTemplate(
@@ -1888,7 +1894,8 @@ class ImprovementsAgent(BaseAgent):
         # Add guidance for structured output
         enhanced_prompt = (
             f"{prompt}\n\n"
-            "Please format the improvements as a markdown list with checkboxes for actionable items:\n"
+            "Please format the improvements as a markdown list with "
+            "checkboxes for actionable items:\n"
             "- [ ] Actionable item 1\n"
             "- [ ] Actionable item 2\n\n"
             "Group improvements by priority (High, Medium, Low) if applicable."

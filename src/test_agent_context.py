@@ -2634,9 +2634,24 @@ class TestGitHistoryIntegration(unittest.TestCase):
     def test_git_history_extraction(self):
         """Test extracting last 10 commits."""
         git_history = [
-            {'commit': 'abc123', 'author': 'dev1', 'message': 'Fix bug in parser', 'date': '2025-12-16'},
-            {'commit': 'def456', 'author': 'dev2', 'message': 'Add feature X', 'date': '2025-12-15'},
-            {'commit': 'ghi789', 'author': 'dev1', 'message': 'Refactor context module', 'date': '2025-12-14'},
+            {
+                'commit': 'abc123',
+                'author': 'dev1',
+                'message': 'Fix bug in parser',
+                'date': '2025-12-16'
+            },
+            {
+                'commit': 'def456',
+                'author': 'dev2',
+                'message': 'Add feature X',
+                'date': '2025-12-15'
+            },
+            {
+                'commit': 'ghi789',
+                'author': 'dev1',
+                'message': 'Refactor context module',
+                'date': '2025-12-14'
+            },
         ]
         self.assertEqual(len(git_history), 3)
         self.assertEqual(git_history[0]['commit'], 'abc123')

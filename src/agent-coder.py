@@ -1382,10 +1382,12 @@ class AccessibilityAnalyzer:
                         wcag_level=WCAGLevel.A,
                         wcag_criterion="1.1.1",
                         description="Image missing alt attribute",
-                        element=match.group()[
-                            :50],
+                        element=match.group()[:50],
                         line_number=line_num,
-                        suggested_fix='Add alt="" for decorative or alt="description" for meaningful images',
+                        suggested_fix=(
+                            'Add alt="" for decorative or alt="description" '
+                            'for meaningful images'
+                        ),
                         auto_fixable=False))
 
         # Check for form inputs without labels
@@ -1424,7 +1426,10 @@ class AccessibilityAnalyzer:
                     wcag_criterion="4.1.2",
                     description="Page missing landmark regions",
                     element="document",
-                    suggested_fix="Add semantic HTML5 elements (main, nav, header, footer) or ARIA landmarks",
+                    suggested_fix=(
+                        "Add semantic HTML5 elements (main, nav, header, "
+                        "footer) or ARIA landmarks"
+                    ),
                     auto_fixable=False))
 
         # Check heading hierarchy
@@ -1453,7 +1458,10 @@ class AccessibilityAnalyzer:
                         severity=AccessibilitySeverity.MODERATE,
                         wcag_level=WCAGLevel.AA,
                         wcag_criterion="2.4.6",
-                        description=f"Heading level skipped: h{heading_levels[i - 1]} to h{heading_levels[i]}",
+                        description=(
+                            f"Heading level skipped: "
+                            f"h{heading_levels[i - 1]} to h{heading_levels[i]}"
+                        ),
                         element=f"h{heading_levels[i]}",
                         suggested_fix="Use sequential heading levels without skipping",
                         auto_fixable=False
@@ -1843,12 +1851,15 @@ class CoderAgent(BaseAgent):
             loc = metrics.lines_of_code
             cm = metrics.lines_of_comments
             # Simplified maintainability index
-            metrics.maintainability_index = max(0, min(100,
-                                                       171 - 5.2 * math.log(halstead_volume + 1) -
-                                                       0.23 * cc -
-                                                       16.2 * math.log(loc + 1) +
-                                                       50 * math.sin(math.sqrt(2.4 * (cm / (loc + cm + 1))))
-                                                       ))
+            metrics.maintainability_index = max(
+                0, min(
+                    100,
+                    171 - 5.2 * math.log(halstead_volume + 1) -
+                    0.23 * cc -
+                    16.2 * math.log(loc + 1) +
+                    50 * math.sin(math.sqrt(2.4 * (cm / (loc + cm + 1))))
+                )
+            )
         self._metrics = metrics
         return metrics
 
@@ -2035,7 +2046,10 @@ class CoderAgent(BaseAgent):
                     "hash": block_hash,
                     "occurrences": len(line_numbers),
                     "lines": line_numbers,
-                    "preview": '\n'.join(lines[line_numbers[0] - 1:line_numbers[0] - 1 + min_lines])[:100]
+                    "preview": '\n'.join(
+                        lines[line_numbers[0] - 1:
+                              line_numbers[0] - 1 + min_lines]
+                    )[:100]
                 })
         return duplicates
 
@@ -2088,7 +2102,10 @@ class CoderAgent(BaseAgent):
             elif smell.name == "too_many_parameters":
                 suggestions.append({
                     "type": "introduce_parameter_object",
-                    "description": f"Create a data class for parameters at line {smell.line_number}",
+                    "description": (
+                        f"Create a data class for parameters at "
+                        f"line {smell.line_number}"
+                    ),
                     "reason": smell.description
                 })
             elif smell.name == "god_class":
@@ -2102,7 +2119,10 @@ class CoderAgent(BaseAgent):
         if duplicates:
             suggestions.append({
                 "type": "extract_method",
-                "description": f"Extract {len(duplicates)} duplicate code blocks into shared methods",
+                "description": (
+                    f"Extract {len(duplicates)} duplicate code blocks "
+                    f"into shared methods"
+                ),
                 "reason": f"Found {len(duplicates)} duplicate code patterns"
             })
         return suggestions

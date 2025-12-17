@@ -779,7 +779,10 @@ class StatsAgent:
             writer.writerow(stats.values())
         else:
             def fmt(count: int) -> str:
-                return f"{count}/{total} ({count / total * 100:.1f}%)" if total > 0 else "0 / 0 (0.0%)"
+                if total > 0:
+                    return f"{count}/{total} ({count / total * 100:.1f}%)"
+                else:
+                    return "0 / 0 (0.0%)"
 
             print("=== Stats Report ===")
             print(f"Total files: {total}")

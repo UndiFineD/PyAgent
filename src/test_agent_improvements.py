@@ -2015,10 +2015,13 @@ class TestImprovementAccessControl:
         controller.assign_role(imp.id, user="dev1", role="developer")
 
         assert controller.can_access(imp.id, user="dev1", level="read")
-        assert not controller.can_access(imp.id, user="dev1", level="delete")
+        assert not controller.can_access(
+            imp.id, user="dev1", level="delete"
+        )
 
 
-# ========== Comprehensive Improvements Tests (from test_agent_improvements_comprehensive.py) ==========
+# ========== Comprehensive Improvements Tests (from
+# test_agent_improvements_comprehensive.py) ==========
 
 class TestImprovementDetection(unittest.TestCase):
     """Tests for improvement detection."""
@@ -3143,7 +3146,8 @@ class TestImpactAnalysis(unittest.TestCase):
         assert impact['improvement_percent'] == 40.0
 
 
-# ========== Final Comprehensive Improvements Tests (from test_agent_final_improvements_comprehensive.py) ==========
+# ========== Final Comprehensive Improvements Tests (from
+# test_agent_final_improvements_comprehensive.py) ==========
 
 class TestRefactoringStrategy(unittest.TestCase):
     """Test strategies for refactoring agent.py into separate modules."""

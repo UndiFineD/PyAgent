@@ -1636,8 +1636,11 @@ def run_subagent(description: str, prompt: str, original_content: str = "") -> O
         result = _try_github_models()
         if result is None:
             raise RuntimeError(
-                "Requested DV_AGENT_BACKEND=github - models but it is not configured; "
-                "set GITHUB_MODELS_BASE_URL, GITHUB_TOKEN, and DV_AGENT_MODEL (or GITHUB_MODELS_MODEL)")
+                "Requested DV_AGENT_BACKEND=github - models but it is "
+                "not configured; set GITHUB_MODELS_BASE_URL, "
+                "GITHUB_TOKEN, and DV_AGENT_MODEL (or "
+                "GITHUB_MODELS_MODEL)"
+            )
         return result
 
     # auto (default)

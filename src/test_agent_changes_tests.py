@@ -418,7 +418,13 @@ class TestReleaseNotesIntegration:
         with agent_dir_on_path():
             mod = load_agent_module("agent-changes.py")
 
-        content = "# Release Notes v1.0\n\n## Highlights\n- Major feature\n\n## All Changes\n- Detail"
+        content = (
+            "# Release Notes v1.0\n\n"
+            "## Highlights\n"
+            "- Major feature\n\n"
+            "## All Changes\n"
+            "- Detail"
+        )
         target = tmp_path / "test.changes.md"
         target.write_text(content)
 

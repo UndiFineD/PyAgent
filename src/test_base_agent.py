@@ -781,7 +781,11 @@ class TestEventHooks:
             my_hook
         )
         # Verify hook was registered
-        assert my_hook in base_agent_module.BaseAgent._event_hooks[base_agent_module.EventType.PRE_READ]
+        assert my_hook in (
+            base_agent_module.BaseAgent._event_hooks[
+                base_agent_module.EventType.PRE_READ
+            ]
+        )
 
     def test_unregister_hook(self, base_agent_module: Any) -> None:
         """Test unregistering a hook."""

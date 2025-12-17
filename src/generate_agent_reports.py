@@ -2984,11 +2984,14 @@ def render_errors(py_path: Path, source: str, compile_result: CompileResult) -> 
     if "subprocess.run([\"git\"" in source or "subprocess.run(['git'" in source:
 
         known.append(
-            "Runs `git` via `subprocess`; will fail if git is not installed or repo has no remote.")
+            "Runs `git` via `subprocess`; will fail if git is not "
+            "installed or repo has no remote.")
 
     if "copilot" in source and "subprocess.run" in source:
-
-        known.append("Invokes `copilot` CLI; will be a no-op / fallback if Copilot CLI is not installed.")
+        known.append(
+            "Invokes `copilot` CLI; will be a no-op / fallback if "
+            "Copilot CLI is not installed."
+        )
 
     lines.append("  ## Known issues / hazards")
 
@@ -3031,8 +3034,10 @@ def _find_issues(tree: ast.AST, source: str) -> List[str]:
     for node in ast.walk(tree):
 
         if isinstance(node, ast.ExceptHandler) and node.type is None:
-
-            issues.append("Contains bare `except:` clause (catches SystemExit / KeyboardInterrupt).")
+            issues.append(
+                "Contains bare `except:` clause (catches SystemExit / "
+                "KeyboardInterrupt)."
+            )
 
     # 3. Missing type hints
 
@@ -3075,26 +3080,36 @@ def render_improvements(py_path: Path, source: str, tree: ast.AST) -> str:
     if "sys.path.insert" in source:
 
         suggestions.append(
-            "Avoid `sys.path.insert(...)` imports; prefer a proper package layout or relative imports.")
+            "Avoid `sys.path.insert(...)` imports; prefer a proper "
+            "package layout or relative imports."
+        )
 
     if "subprocess.run" in source:
 
         suggestions.append(
-            "Add robust subprocess error handling (`check=True`, timeouts, clearer stderr reporting).")
+            "Add robust subprocess error handling (`check=True`, "
+            "timeouts, clearer stderr reporting)."
+        )
 
     if _detect_cli_entry(source) and _detect_argparse(source):
 
         suggestions.append("Add `--help` examples and validate CLI args (paths, required files).")
 
-    if _is_pytest_test_file(py_path) and re.search(r"def\s + test_placeholder\s*\(", source):
+    if _is_pytest_test_file(py_path) and re.search(
+        r"def\s + test_placeholder\s*\(", source
+    ):
 
         suggestions.append(
-            "Replace placeholder tests with real assertions; target the most important behaviors first.")
+            "Replace placeholder tests with real assertions; target "
+            "the most important behaviors first."
+        )
 
     if _looks_like_pytest_import_problem(py_path):
 
         suggestions.append(
-            "Rename the file to be pytest-importable (avoid '-' and extra '.'), then update references.")
+            "Rename the file to be pytest-importable (avoid '-' and "
+            "extra '.'), then update references."
+        )
 
     # Generic quality improvements
 

@@ -927,7 +927,12 @@ class CodeGenerator:
             GeneratedCode with generated content.
         """
         # Simplified generation - in production, use LLM
-        code = f"# Generated for: {prompt}\n# Based on context\n\ndef generated_function():\n    pass"
+        code = (
+            f"# Generated for: {prompt}\n"
+            f"# Based on context\n"
+            f"def generated_function():\n"
+            f"    pass"
+        )
 
         return GeneratedCode(
             language=language,

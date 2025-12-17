@@ -2079,7 +2079,8 @@ class TestIntegration(unittest.TestCase):
         assert pass_rate > 95
 
 
-# ========== Comprehensive Stats Improvements Tests (from test_agent_stats_improvements_comprehensive.py) ==========
+# ========== Comprehensive Stats Improvements Tests (from
+# test_agent_stats_improvements_comprehensive.py) ==========
 
 class TestTrendAnalysisAdvanced(unittest.TestCase):
     """Tests for trend analysis and change tracking."""
@@ -2129,7 +2130,10 @@ class TestTrendAnalysisAdvanced(unittest.TestCase):
             "previous": stats_history[-2],
             "change": {
                 "files": stats_history[-1]["files"] - stats_history[-2]["files"],
-                "improvements": stats_history[-1]["improvements"] - stats_history[-2]["improvements"],
+                "improvements": (
+                    stats_history[-1]["improvements"] -
+                    stats_history[-2]["improvements"]
+                ),
             }
         }
 

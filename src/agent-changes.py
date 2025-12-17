@@ -931,7 +931,9 @@ class ComplianceChecker:
             if any(kw in entry.description.lower() for kw in self.SECURITY_KEYWORDS):
                 if entry.category != "Security":
                     issues.append(
-                        f"Security-related entry not in Security category: {entry.description[:50]}")
+                        f"Security-related entry not in Security category: "
+                        f"{entry.description[:50]}"
+                    )
                     recommendations.append("Move security-related entries to the Security section")
 
         return ComplianceResult(

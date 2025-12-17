@@ -2832,14 +2832,22 @@ class Agent:
             agents_only: If True, only process files in scripts / agent. Defaults to False.
             max_files: Maximum number of files to process. None=unlimited. Defaults to None.
             loop: Number of full cycles to run. Defaults to 1.
-            skip_code_update: If True, skip code update phase. Defaults to False.
-            no_git: If True, don't commit changes to git. Defaults to False.
-            dry_run: If True, preview changes without modifying files. Defaults to False.
-            selective_agents: List of agent names to execute (e.g., ['coder', 'tests']). Defaults to None (all).
-            timeout_per_agent: Dict mapping agent names to timeout values in seconds. Defaults to None.
-            enable_async: If True, use async file processing. Defaults to False.
-            enable_multiprocessing: If True, use multiprocessing for agents. Defaults to False.
-            max_workers: Maximum number of worker threads / processes. Defaults to 4.
+            skip_code_update: If True, skip code update phase.
+                Defaults to False.
+            no_git: If True, don't commit changes to git.
+                Defaults to False.
+            dry_run: If True, preview changes without modifying files.
+                Defaults to False.
+            selective_agents: List of agent names to execute
+                (e.g., ['coder', 'tests']). Defaults to None (all).
+            timeout_per_agent: Dict mapping agent names to timeout values
+                in seconds. Defaults to None.
+            enable_async: If True, use async file processing.
+                Defaults to False.
+            enable_multiprocessing: If True, use multiprocessing for agents.
+                Defaults to False.
+            max_workers: Maximum number of worker threads / processes.
+                Defaults to 4.
 
         Raises:
             FileNotFoundError: If repo_root doesn't exist.
@@ -3668,11 +3676,15 @@ Agents applied:
         # Limit to top 3 to avoid overwhelming
         target_improvements = pending_improvements[:3]
         if target_improvements:
-            improvements_text = "\n".join([f"- {item}" for item in target_improvements])
+            improvements_text = "\n".join(
+                [f"- {item}" for item in target_improvements]
+            )
             prompt = (
-                f"Improve the code in {code_file.name} by implementing the following specific improvements:\n"
+                f"Improve the code in {code_file.name} by implementing "
+                f"the following specific improvements:\n"
                 f"{improvements_text}\n\n"
-                f"Ensure the code remains functional and follows best practices."
+                f"Ensure the code remains functional and follows best "
+                f"practices."
             )
             logging.info(f"Targeting {len(target_improvements)} improvements for {code_file.name}")
         else:
@@ -3792,10 +3804,14 @@ def test_placeholder():
         errors_file = dir_path / f"{base}.errors.md"
         improvements_file = dir_path / f"{base}.improvements.md"
         return (
-            context_file.exists() and len(context_file.read_text(encoding='utf-8').strip()) > 100 and
-            changes_file.exists() and len(changes_file.read_text(encoding='utf-8').strip()) > 100 and
-            errors_file.exists() and len(errors_file.read_text(encoding='utf-8').strip()) > 100 and
-            improvements_file.exists() and len(improvements_file.read_text(encoding='utf-8').strip()) > 100
+            context_file.exists() and
+            len(context_file.read_text(encoding='utf-8').strip()) > 100 and
+            changes_file.exists() and
+            len(changes_file.read_text(encoding='utf-8').strip()) > 100 and
+            errors_file.exists() and
+            len(errors_file.read_text(encoding='utf-8').strip()) > 100 and
+            improvements_file.exists() and
+            len(improvements_file.read_text(encoding='utf-8').strip()) > 100
         )
 
     def _perform_iteration(self, code_file: Path) -> bool:
