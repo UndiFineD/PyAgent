@@ -166,21 +166,12 @@ src/test_agent_improvements.py::TestImprovementAccessControl::test_deny_unauthor
 src/test_agent_improvements.py::TestImprovementAccessControl::test_role_based_access FAILED [ 55%]
 src/test_agent_improvements.py::TestImprovementParsing::test_parse_improvement_with_context FAILED [ 55%]
 src/test_agent_improvements.py::TestRefactoringStrategy::test_agent_processor_responsibilities FAILED [ 58%]
-src/test_agent_stats.py::TestAlertSeverity::test_severity_values FAILED  [ 59%]
-src/test_agent_stats.py::TestCustomMetrics::test_register_custom_metric FAILED [ 59%]
-src/test_agent_stats.py::TestCustomMetrics::test_get_metric FAILED       [ 59%]
 src/test_agent_stats.py::TestCustomMetrics::test_add_metric_value FAILED [ 59%]
-src/test_agent_stats.py::TestAnomalyDetection::test_detect_anomaly_no_data FAILED [ 59%]
-src/test_agent_stats.py::TestAnomalyDetection::test_detect_anomaly_with_data FAILED [ 59%]
 src/test_agent_stats.py::TestAnomalyDetection::test_detect_anomaly_outlier FAILED [ 59%]
-src/test_agent_stats.py::TestThresholdsAndAlerting::test_add_threshold FAILED [ 59%]
 src/test_agent_stats.py::TestThresholdsAndAlerting::test_threshold_creates_alert FAILED [ 59%]
-src/test_agent_stats.py::TestThresholdsAndAlerting::test_clear_alerts FAILED [ 59%]
-src/test_agent_stats.py::TestRetentionPolicies::test_add_retention_policy FAILED [ 60%]
 src/test_agent_stats.py::TestRetentionPolicies::test_apply_retention_policies FAILED [ 60%]
 src/test_agent_stats.py::TestCompression::test_decompress_metrics FAILED [ 60%]
 src/test_agent_stats.py::TestStatsAgent::test_visualize_stats FAILED     [ 60%]
-src/test_agent_stats.py::TestMetricNamespaceManager::test_get_full_path FAILED [ 61%]
 src/test_agent_stats.py::TestRealTimeStatsStreaming::test_stream_manager_creates_stream FAILED [ 62%]
 src/test_agent_stats.py::TestRealTimeStatsStreaming::test_stream_receives_data FAILED [ 62%]
 src/test_agent_stats.py::TestRealTimeStatsStreaming::test_stream_subscriber_receives_updates FAILED [ 62%]
@@ -228,19 +219,8 @@ src/test_agent_stats.py::TestExportFormatsAdvanced::test_export_to_html FAILED [
 src/test_agent_stats.py::TestFiltering::test_filter_by_file_pattern FAILED [ 67%]
 src/test_agent_test_utils.py::TestFixtureFactoryPatterns::test_fixture_factory_with_dependencies FAILED [ 70%]
 src/test_agent_test_utils.py::TestTestDataSeedingUtilities::test_seeder_creates_reproducible_data FAILED [ 70%]
-src/test_agent_test_utils.py::TestTestDataSeedingUtilities::test_seeder_creates_unique_data_without_seed FAILED [ 70%]
-src/test_agent_test_utils.py::TestTestDataSeedingUtilities::test_seeder_bulk_data_generation FAILED [ 70%]
 src/test_agent_test_utils.py::TestParallelTestExecutionHelpers::test_parallel_runner_executes_tests FAILED [ 70%]
 src/test_agent_test_utils.py::TestParallelTestExecutionHelpers::test_parallel_runner_collects_failures FAILED [ 70%]
-src/test_agent_test_utils.py::TestTestOutputFormattingUtilities::test_formatter_formats_success FAILED [ 70%]
-src/test_agent_test_utils.py::TestTestOutputFormattingUtilities::test_formatter_formats_failure_with_details FAILED [ 70%]
-src/test_agent_test_utils.py::TestTestOutputFormattingUtilities::test_formatter_summary_output FAILED [ 70%]
-src/test_agent_test_utils.py::TestAssertionHelperFunctions::test_assert_file_contains FAILED [ 70%]
-src/test_agent_test_utils.py::TestAssertionHelperFunctions::test_assert_output_matches_pattern FAILED [ 70%]
-src/test_agent_test_utils.py::TestAssertionHelperFunctions::test_assert_raises_with_message FAILED [ 70%]
-src/test_agent_test_utils.py::TestTestTimingAndBenchmarkingUtilities::test_timer_measures_duration FAILED [ 70%]
-src/test_agent_test_utils.py::TestTestTimingAndBenchmarkingUtilities::test_benchmarker_multiple_runs FAILED [ 70%]
-src/test_agent_test_utils.py::TestTestTimingAndBenchmarkingUtilities::test_benchmarker_statistics FAILED [ 70%]
 src/test_agent_test_utils.py::TestTestResultAggregationHelpers::test_aggregator_combines_results FAILED [ 70%]
 src/test_agent_test_utils.py::TestTestResultAggregationHelpers::test_aggregator_by_suite FAILED [ 70%]
 src/test_agent_test_utils.py::TestTestEnvironmentDetection::test_env_detector_identifies_ci FAILED [ 70%]
@@ -248,7 +228,6 @@ src/test_agent_test_utils.py::TestTestEnvironmentDetection::test_env_detector_id
 src/test_agent_test_utils.py::TestTestEnvironmentDetection::test_env_detector_python_version FAILED [ 70%]
 src/test_agent_test_utils.py::TestSnapshotComparisonUtilities::test_snapshot_save_and_load FAILED [ 70%]
 src/test_agent_test_utils.py::TestSnapshotComparisonUtilities::test_snapshot_comparison_matches FAILED [ 70%]
-src/test_agent_test_utils.py::TestSnapshotComparisonUtilities::test_snapshot_comparison_differs FAILED [ 70%]
 src/test_agent_test_utils.py::TestTestCoverageMeasurementHelpers::test_coverage_tracker_records_hits FAILED [ 70%]
 src/test_agent_test_utils.py::TestTestCoverageMeasurementHelpers::test_coverage_tracker_percentage FAILED [ 70%]
 src/test_agent_test_utils.py::TestTestLogCaptureUtilities::test_log_capturer_captures_logs FAILED [ 70%]
@@ -380,7 +359,7 @@ src\test_agent_context.py:347: in test_is_valid
     assert agent.is_valid()
 E   assert False
 E    +  where False = is_valid()
-E    +    where is_valid = <_dv_legacy_agent_context.ContextAgent object at 0x0000019E5EB852B0>.is_valid
+E    +    where is_valid = <_dv_legacy_agent_context.ContextAgent object at 0x000002515103A7B0>.is_valid
 _________________________ test_auto_categorize_config _________________________
 src\test_agent_context.py:520: in test_auto_categorize_config
     assert category == mod.FileCategory.CONFIGURATION
@@ -919,7 +898,7 @@ ________ TestAutomatedValidationIntegration.test_validate_improvement _________
 src\test_agent_improvements.py:1609: in test_validate_improvement
     assert result.is_valid
 E   AssertionError: assert False
-E    +  where False = ValidationResult(improvement_id='9c43c321', is_valid=False, issues=[(<ValidationSeverity.ERROR: 'error'>, 'Category should be more specific')], test_results={}).is_valid
+E    +  where False = ValidationResult(improvement_id='aabdca28', is_valid=False, issues=[(<ValidationSeverity.ERROR: 'error'>, 'Category should be more specific')], test_results={}).is_valid
 ----------------------------- Captured log setup ------------------------------
 WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
 _________ TestAutomatedValidationIntegration.test_validation_failure __________
@@ -1144,66 +1123,31 @@ src\test_agent_improvements.py:3234: in test_agent_processor_responsibilities
     assert not processor.should_process_file('__pycache__ / test.py')
 E   AssertionError: assert not True
 E    +  where True = should_process_file('__pycache__ / test.py')
-E    +    where should_process_file = <test_agent_improvements.TestRefactoringStrategy.test_agent_processor_responsibilities.<locals>.AgentProcessor object at 0x0000019E51CCD010>.should_process_file
-___________________ TestAlertSeverity.test_severity_values ____________________
-src\test_agent_stats.py:97: in test_severity_values
-    assert stats_module.AlertSeverity.MEDIUM.value == 3
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: type object 'AlertSeverity' has no attribute 'MEDIUM'
-________________ TestCustomMetrics.test_register_custom_metric ________________
-src\test_agent_stats.py:109: in test_register_custom_metric
-    metric = agent.register_custom_metric(
-E   TypeError: StatsAgent.register_custom_metric() got an unexpected keyword argument 'description'
-______________________ TestCustomMetrics.test_get_metric ______________________
-src\test_agent_stats.py:120: in test_get_metric
-    metric = agent.get_metric("test_metric")
-             ^^^^^^^^^^^^^^^^
-E   AttributeError: 'StatsAgent' object has no attribute 'get_metric'. Did you mean: 'add_metric'?
+E    +    where should_process_file = <test_agent_improvements.TestRefactoringStrategy.test_agent_processor_responsibilities.<locals>.AgentProcessor object at 0x00000251443C38C0>.should_process_file
 ___________________ TestCustomMetrics.test_add_metric_value ___________________
 src\test_agent_stats.py:131: in test_add_metric_value
     assert history[-1][1] == 3  # (timestamp, value)
            ^^^^^^^^^^^^^^
 E   TypeError: 'Metric' object is not subscriptable
-______________ TestAnomalyDetection.test_detect_anomaly_no_data _______________
-src\test_agent_stats.py:152: in test_detect_anomaly_no_data
-    result = agent.detect_anomaly("sparse")
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   TypeError: StatsAgent.detect_anomaly() missing 1 required positional argument: 'value'
-_____________ TestAnomalyDetection.test_detect_anomaly_with_data ______________
-src\test_agent_stats.py:160: in test_detect_anomaly_with_data
-    result = agent.detect_anomaly("stable")
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   TypeError: StatsAgent.detect_anomaly() missing 1 required positional argument: 'value'
 ______________ TestAnomalyDetection.test_detect_anomaly_outlier _______________
-src\test_agent_stats.py:169: in test_detect_anomaly_outlier
-    result = agent.detect_anomaly("anomalous")
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   TypeError: StatsAgent.detect_anomaly() missing 1 required positional argument: 'value'
-________________ TestThresholdsAndAlerting.test_add_threshold _________________
-src\test_agent_stats.py:181: in test_add_threshold
-    threshold = agent.add_threshold(
-E   TypeError: StatsAgent.add_threshold() got an unexpected keyword argument 'min_value'
+src\test_agent_stats.py:170: in test_detect_anomaly_outlier
+    assert result is True
+E   assert False is True
 ___________ TestThresholdsAndAlerting.test_threshold_creates_alert ____________
-src\test_agent_stats.py:193: in test_threshold_creates_alert
-    agent.add_threshold(
-E   TypeError: StatsAgent.add_threshold() got an unexpected keyword argument 'max_value'
-_________________ TestThresholdsAndAlerting.test_clear_alerts _________________
-src\test_agent_stats.py:206: in test_clear_alerts
-    agent.add_threshold("disk", max_value=50, severity=stats_module.AlertSeverity.HIGH)
-E   TypeError: StatsAgent.add_threshold() got an unexpected keyword argument 'max_value'
-_______________ TestRetentionPolicies.test_add_retention_policy _______________
-src\test_agent_stats.py:251: in test_add_retention_policy
-    policy = agent.add_retention_policy(
-E   TypeError: StatsAgent.add_retention_policy() got an unexpected keyword argument 'metric_name'
+src\test_agent_stats.py:200: in test_threshold_creates_alert
+    assert len(alerts) >= 1
+E   assert 0 >= 1
+E    +  where 0 = len([])
 _____________ TestRetentionPolicies.test_apply_retention_policies _____________
-src\test_agent_stats.py:262: in test_apply_retention_policies
-    agent.add_retention_policy("expire_test", max_points=5)
-E   TypeError: StatsAgent.add_retention_policy() missing 1 required positional argument: 'max_age_days'
+src\test_agent_stats.py:267: in test_apply_retention_policies
+    assert len(history) <= 5
+E   AssertionError: assert 10 <= 5
+E    +  where 10 = len([Metric(name='expire_test', value=0, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T19:28:18.951377', namespace='default', tags={}), Metric(name='expire_test', value=1, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T19:28:18.951386', namespace='default', tags={}), Metric(name='expire_test', value=2, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T19:28:18.951392', namespace='default', tags={}), Metric(name='expire_test', value=3, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T19:28:18.951396', namespace='default', tags={}), Metric(name='expire_test', value=4, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T19:28:18.951399', namespace='default', tags={}), Metric(name='expire_test', value=5, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T19:28:18.951402', namespace='default', tags={}), ...])
 ___________________ TestCompression.test_decompress_metrics ___________________
-src\test_agent_stats.py:310: in test_decompress_metrics
-    agent._metric_history["decompress_test"] = original
-    ^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'StatsAgent' object has no attribute '_metric_history'. Did you mean: 'get_metric_history'?
+src\test_agent_stats.py:312: in test_decompress_metrics
+    decompressed = agent.decompress_metrics(compressed)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: StatsAgent.decompress_metrics() missing 1 required positional argument: 'metric_name'
 _____________________ TestStatsAgent.test_visualize_stats _____________________
 C:\Python314\Lib\unittest\mock.py:1429: in patched
     with self.decoration_helper(patched,
@@ -1226,14 +1170,6 @@ C:\Python314\Lib\importlib\__init__.py:88: in import_module
     return _bootstrap._gcd_import(name[level:], package, level)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   ModuleNotFoundError: No module named 'matplotlib'
-________________ TestMetricNamespaceManager.test_get_full_path ________________
-src\test_agent_stats.py:673: in test_get_full_path
-    assert path == "root / system"
-E   AssertionError: assert 'root/system' == 'root / system'
-E     
-E     - root / system
-E     ?     - -
-E     + root/system
 ________ TestRealTimeStatsStreaming.test_stream_manager_creates_stream ________
 src\test_agent_stats.py:1025: in test_stream_manager_creates_stream
     StatsStreamManager = stats_module.StatsStreamManager
@@ -1455,25 +1391,20 @@ src\test_agent_stats.py:2563: in test_filter_by_file_pattern
 E   assert 0 == 2
 E    +  where 0 = len([])
 ______ TestFixtureFactoryPatterns.test_fixture_factory_with_dependencies ______
-src\test_agent_test_utils.py:712: in test_fixture_factory_with_dependencies
-    parent = factory.create_agent_fixture(name="parent")
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   TypeError: FixtureFactory.create_agent_fixture() missing 1 required positional argument: 'config'
+src\test_agent_test_utils.py:713: in test_fixture_factory_with_dependencies
+    child = factory.create_agent_fixture(
+E   TypeError: FixtureFactory.create_agent_fixture() got an unexpected keyword argument 'dependencies'
 _____ TestTestDataSeedingUtilities.test_seeder_creates_reproducible_data ______
-src\test_agent_test_utils.py:731: in test_seeder_creates_reproducible_data
-    data1 = seeder1.generate_file_content()
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'TestDataSeeder' object has no attribute 'generate_file_content'
-__ TestTestDataSeedingUtilities.test_seeder_creates_unique_data_without_seed __
-src\test_agent_test_utils.py:743: in test_seeder_creates_unique_data_without_seed
-    data1 = seeder1.generate_unique_id()
-            ^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'TestDataSeeder' object has no attribute 'generate_unique_id'
-________ TestTestDataSeedingUtilities.test_seeder_bulk_data_generation ________
-src\test_agent_test_utils.py:754: in test_seeder_bulk_data_generation
-    data = seeder.generate_bulk_data(count=10, data_type="python_code")
-           ^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'TestDataSeeder' object has no attribute 'generate_bulk_data'. Did you mean: 'generate_metric_data'?
+src\test_agent_test_utils.py:734: in test_seeder_creates_reproducible_data
+    assert data1 == data2
+E   AssertionError: assert '# Python fil...  return 54\n' == '# Python fil...  return 94\n'
+E     
+E       # Python file
+E       def func_12345():
+E     -     return 94
+E     ?            ^
+E     +     return 54
+E     ?            ^
 ____ TestParallelTestExecutionHelpers.test_parallel_runner_executes_tests _____
 src\test_agent_test_utils.py:774: in test_parallel_runner_executes_tests
     outputs = runner.run([
@@ -1484,54 +1415,6 @@ src\test_agent_test_utils.py:793: in test_parallel_runner_collects_failures
     runner.run([failing_test, passing_test], fail_fast=False)
     ^^^^^^^^^^
 E   AttributeError: 'ParallelTestRunner' object has no attribute 'run'
-______ TestTestOutputFormattingUtilities.test_formatter_formats_success _______
-src\test_agent_test_utils.py:808: in test_formatter_formats_success
-    output = formatter.format_result(
-             ^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'TestOutputFormatter' object has no attribute 'format_result'
-_ TestTestOutputFormattingUtilities.test_formatter_formats_failure_with_details _
-src\test_agent_test_utils.py:823: in test_formatter_formats_failure_with_details
-    output = formatter.format_result(
-             ^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'TestOutputFormatter' object has no attribute 'format_result'
-_______ TestTestOutputFormattingUtilities.test_formatter_summary_output _______
-src\test_agent_test_utils.py:837: in test_formatter_summary_output
-    formatter.add_result("test1", "passed", 100)
-    ^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'TestOutputFormatter' object has no attribute 'add_result'
-___________ TestAssertionHelperFunctions.test_assert_file_contains ____________
-src\test_agent_test_utils.py:858: in test_assert_file_contains
-    assert result is True
-E   assert None is True
-_______ TestAssertionHelperFunctions.test_assert_output_matches_pattern _______
-src\test_agent_test_utils.py:869: in test_assert_output_matches_pattern
-    assert result is True
-E   assert None is True
-________ TestAssertionHelperFunctions.test_assert_raises_with_message _________
-src\agent_test_utils.py:602: in assert_raises_with_message
-    fn(*args)
-E   TypeError: 'str' object is not callable
-
-During handling of the above exception, another exception occurred:
-src\test_agent_test_utils.py:880: in test_assert_raises_with_message
-    result = helpers.assert_raises_with_message(
-src\agent_test_utils.py:604: in assert_raises_with_message
-    except exception_type as e:
-E   TypeError: catching classes that do not inherit from BaseException is not allowed
-_____ TestTestTimingAndBenchmarkingUtilities.test_timer_measures_duration _____
-src\test_agent_test_utils.py:901: in test_timer_measures_duration
-    duration = timer.elapsed_ms
-               ^^^^^^^^^^^^^^^^
-E   AttributeError: 'TestTimer' object has no attribute 'elapsed_ms'
-____ TestTestTimingAndBenchmarkingUtilities.test_benchmarker_multiple_runs ____
-src\test_agent_test_utils.py:919: in test_benchmarker_multiple_runs
-    assert "average_ms" in results
-E   AssertionError: assert 'average_ms' in {'max': 2.1457672119140625e-06, 'mean': 8.58306884765625e-07, 'median': 4.76837158203125e-07, 'min': 2.384185791015625e-07}
-_____ TestTestTimingAndBenchmarkingUtilities.test_benchmarker_statistics ______
-src\test_agent_test_utils.py:930: in test_benchmarker_statistics
-    assert results["iterations"] == 10
-           ^^^^^^^^^^^^^^^^^^^^^
-E   KeyError: 'iterations'
 ______ TestTestResultAggregationHelpers.test_aggregator_combines_results ______
 src\test_agent_test_utils.py:942: in test_aggregator_combines_results
     aggregator.add_result("suite1", "test1", "passed")
@@ -1556,29 +1439,14 @@ src\test_agent_test_utils.py:990: in test_env_detector_python_version
                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'EnvironmentDetector'
 _________ TestSnapshotComparisonUtilities.test_snapshot_save_and_load _________
-src\test_agent_test_utils.py:1009: in test_snapshot_save_and_load
-    manager.save_snapshot("test_snapshot", data)
-src\agent_test_utils.py:1101: in save_snapshot
-    path.write_text(content, encoding="utf-8")
-C:\Python314\Lib\pathlib\__init__.py:807: in write_text
-    raise TypeError('data must be str, not %s' %
-E   TypeError: data must be str, not dict
+src\test_agent_test_utils.py:1012: in test_snapshot_save_and_load
+    assert loaded == data
+E   AssertionError: assert TestSnapshot(name='test_snapshot', content={'key': 'value', 'list': [1, 2, 3]}, content_hash='f797ccd1d99d43edb6a2bf11705f78fdd13b576a6d762c640bb430e5ab271e78', created_at=1765999705.4913821, updated_at=1765999705.4913833) == {'key': 'value', 'list': [1, 2, 3]}
 ______ TestSnapshotComparisonUtilities.test_snapshot_comparison_matches _______
-src\test_agent_test_utils.py:1021: in test_snapshot_comparison_matches
-    manager.save_snapshot("test", data)
-src\agent_test_utils.py:1101: in save_snapshot
-    path.write_text(content, encoding="utf-8")
-C:\Python314\Lib\pathlib\__init__.py:807: in write_text
-    raise TypeError('data must be str, not %s' %
-E   TypeError: data must be str, not dict
-______ TestSnapshotComparisonUtilities.test_snapshot_comparison_differs _______
-src\test_agent_test_utils.py:1032: in test_snapshot_comparison_differs
-    manager.save_snapshot("test", {"key": "original"})
-src\agent_test_utils.py:1101: in save_snapshot
-    path.write_text(content, encoding="utf-8")
-C:\Python314\Lib\pathlib\__init__.py:807: in write_text
-    raise TypeError('data must be str, not %s' %
-E   TypeError: data must be str, not dict
+src\test_agent_test_utils.py:1024: in test_snapshot_comparison_matches
+    assert result.matches is True
+E   AssertionError: assert False is True
+E    +  where False = SnapshotComparisonResult(matches=False, expected=TestSnapshot(name='test', content={'key': 'value'}, content_hash='9724c1e20e6e3e4d7f57ed25f9d4efb006e508590d528c90da597f6a775c13e5', created_at=1765999705.5510037, updated_at=1765999705.5510046), actual={'key': 'value'}, snapshot_name='test').matches
 ____ TestTestCoverageMeasurementHelpers.test_coverage_tracker_records_hits ____
 src\test_agent_test_utils.py:1044: in test_coverage_tracker_records_hits
     CoverageTracker = utils_module.CoverageTracker
@@ -1959,21 +1827,12 @@ FAILED src/test_agent_improvements.py::TestImprovementAccessControl::test_deny_u
 FAILED src/test_agent_improvements.py::TestImprovementAccessControl::test_role_based_access
 FAILED src/test_agent_improvements.py::TestImprovementParsing::test_parse_improvement_with_context
 FAILED src/test_agent_improvements.py::TestRefactoringStrategy::test_agent_processor_responsibilities
-FAILED src/test_agent_stats.py::TestAlertSeverity::test_severity_values - Att...
-FAILED src/test_agent_stats.py::TestCustomMetrics::test_register_custom_metric
-FAILED src/test_agent_stats.py::TestCustomMetrics::test_get_metric - Attribut...
 FAILED src/test_agent_stats.py::TestCustomMetrics::test_add_metric_value - Ty...
-FAILED src/test_agent_stats.py::TestAnomalyDetection::test_detect_anomaly_no_data
-FAILED src/test_agent_stats.py::TestAnomalyDetection::test_detect_anomaly_with_data
 FAILED src/test_agent_stats.py::TestAnomalyDetection::test_detect_anomaly_outlier
-FAILED src/test_agent_stats.py::TestThresholdsAndAlerting::test_add_threshold
 FAILED src/test_agent_stats.py::TestThresholdsAndAlerting::test_threshold_creates_alert
-FAILED src/test_agent_stats.py::TestThresholdsAndAlerting::test_clear_alerts
-FAILED src/test_agent_stats.py::TestRetentionPolicies::test_add_retention_policy
 FAILED src/test_agent_stats.py::TestRetentionPolicies::test_apply_retention_policies
-FAILED src/test_agent_stats.py::TestCompression::test_decompress_metrics - At...
+FAILED src/test_agent_stats.py::TestCompression::test_decompress_metrics - Ty...
 FAILED src/test_agent_stats.py::TestStatsAgent::test_visualize_stats - Module...
-FAILED src/test_agent_stats.py::TestMetricNamespaceManager::test_get_full_path
 FAILED src/test_agent_stats.py::TestRealTimeStatsStreaming::test_stream_manager_creates_stream
 FAILED src/test_agent_stats.py::TestRealTimeStatsStreaming::test_stream_receives_data
 FAILED src/test_agent_stats.py::TestRealTimeStatsStreaming::test_stream_subscriber_receives_updates
@@ -2021,19 +1880,8 @@ FAILED src/test_agent_stats.py::TestExportFormatsAdvanced::test_export_to_html
 FAILED src/test_agent_stats.py::TestFiltering::test_filter_by_file_pattern - ...
 FAILED src/test_agent_test_utils.py::TestFixtureFactoryPatterns::test_fixture_factory_with_dependencies
 FAILED src/test_agent_test_utils.py::TestTestDataSeedingUtilities::test_seeder_creates_reproducible_data
-FAILED src/test_agent_test_utils.py::TestTestDataSeedingUtilities::test_seeder_creates_unique_data_without_seed
-FAILED src/test_agent_test_utils.py::TestTestDataSeedingUtilities::test_seeder_bulk_data_generation
 FAILED src/test_agent_test_utils.py::TestParallelTestExecutionHelpers::test_parallel_runner_executes_tests
 FAILED src/test_agent_test_utils.py::TestParallelTestExecutionHelpers::test_parallel_runner_collects_failures
-FAILED src/test_agent_test_utils.py::TestTestOutputFormattingUtilities::test_formatter_formats_success
-FAILED src/test_agent_test_utils.py::TestTestOutputFormattingUtilities::test_formatter_formats_failure_with_details
-FAILED src/test_agent_test_utils.py::TestTestOutputFormattingUtilities::test_formatter_summary_output
-FAILED src/test_agent_test_utils.py::TestAssertionHelperFunctions::test_assert_file_contains
-FAILED src/test_agent_test_utils.py::TestAssertionHelperFunctions::test_assert_output_matches_pattern
-FAILED src/test_agent_test_utils.py::TestAssertionHelperFunctions::test_assert_raises_with_message
-FAILED src/test_agent_test_utils.py::TestTestTimingAndBenchmarkingUtilities::test_timer_measures_duration
-FAILED src/test_agent_test_utils.py::TestTestTimingAndBenchmarkingUtilities::test_benchmarker_multiple_runs
-FAILED src/test_agent_test_utils.py::TestTestTimingAndBenchmarkingUtilities::test_benchmarker_statistics
 FAILED src/test_agent_test_utils.py::TestTestResultAggregationHelpers::test_aggregator_combines_results
 FAILED src/test_agent_test_utils.py::TestTestResultAggregationHelpers::test_aggregator_by_suite
 FAILED src/test_agent_test_utils.py::TestTestEnvironmentDetection::test_env_detector_identifies_ci
@@ -2041,7 +1889,6 @@ FAILED src/test_agent_test_utils.py::TestTestEnvironmentDetection::test_env_dete
 FAILED src/test_agent_test_utils.py::TestTestEnvironmentDetection::test_env_detector_python_version
 FAILED src/test_agent_test_utils.py::TestSnapshotComparisonUtilities::test_snapshot_save_and_load
 FAILED src/test_agent_test_utils.py::TestSnapshotComparisonUtilities::test_snapshot_comparison_matches
-FAILED src/test_agent_test_utils.py::TestSnapshotComparisonUtilities::test_snapshot_comparison_differs
 FAILED src/test_agent_test_utils.py::TestTestCoverageMeasurementHelpers::test_coverage_tracker_records_hits
 FAILED src/test_agent_test_utils.py::TestTestCoverageMeasurementHelpers::test_coverage_tracker_percentage
 FAILED src/test_agent_test_utils.py::TestTestLogCaptureUtilities::test_log_capturer_captures_logs
@@ -2086,4 +1933,4 @@ FAILED src/test_agent_tests.py::TestTestReplayFunctionality::test_replayer_execu
 FAILED src/test_agent_tests.py::TestDocumentationGenerationFromTests::test_doc_generator_extracts_examples
 FAILED src/test_agent_tests.py::TestDocumentationGenerationFromTests::test_doc_generator_groups_by_module
 FAILED src/test_base_agent.py::test_improve_content_uses_run_subagent - Asser...
-===== 275 failed, 2394 passed, 11 skipped, 4 warnings in 62.05s (0:01:02) =====
+========== 254 failed, 2415 passed, 11 skipped, 4 warnings in 58.42s ==========

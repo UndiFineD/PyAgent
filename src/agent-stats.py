@@ -66,9 +66,9 @@ class AlertSeverity(Enum):
     """Alert severity levels."""
     CRITICAL = 5
     HIGH = 4
-    WARNING = 3
-    INFO = 2
-    DEBUG = 1
+    MEDIUM = 3
+    LOW = 2
+    INFO = 1
 
 
 # ========== Session 7 Enums ==========
@@ -132,13 +132,20 @@ class MetricSnapshot:
 
 
 @dataclass
+@dataclass
 class Threshold:
     """Threshold configuration for alerting."""
     metric_name: str
-    operator: str  # >, <, >=, <=, ==
-    value: float
-    severity: AlertSeverity = AlertSeverity.WARNING
+    min_value: Optional[float] = None
+    max_value: Optional[float] = None
+    severity: AlertSeverity = None  # Will be set to MEDIUM (3) by default
     message: str = ""
+    operator: str = ""  # For backwards compatibility
+    value: float = 0.0  # For backwards compatibility
+    
+    def __post_init__(self) -> None:
+        if self.severity is None:
+            self.severity = AlertSeverity.MEDIUM
 
 
 @dataclass
@@ -154,10 +161,12 @@ class Alert:
 
 
 @dataclass
+@dataclass
 class RetentionPolicy:
     """Policy for data retention."""
-    namespace: str
-    max_age_days: int
+    metric_name: Optional[str] = None  # New field
+    namespace: str = ""
+    max_age_days: int = 0
     max_points: int = 0
     compression_after_days: int = 7
 
@@ -284,6 +293,7 @@ class StatsAgent:
         self._alerts: List[Alert] = []
         self._retention_policies: Dict[str, RetentionPolicy] = {}
         self._anomaly_scores: Dict[str, List[float]] = {}
+        self._metric_history: Dict[str, List[Tuple[str, float]]] = {}  # Add this for test compatibility
 
     def _validate_files(self) -> None:
         """Validate input files."""
@@ -304,11 +314,31 @@ class StatsAgent:
     def register_custom_metric(
         self,
         name: str,
-        metric_type: MetricType = MetricType.GAUGE
-    ) -> None:
+        metric_type: MetricType = MetricType.GAUGE,
+        description: str = ""
+    ) -> Metric:
         """Register a custom metric type."""
         if name not in self._custom_metrics:
             self._custom_metrics[name] = metric_type
+        
+        # Return a Metric object for the custom metric
+        return Metric(
+            name=name,
+            value=0.0,
+            metric_type=metric_type,
+            timestamp=datetime.now().isoformat()
+        )
+
+    def get_metric(self, name: str) -> Optional[Metric]:
+        """Get a registered metric by name."""
+        if name in self._custom_metrics:
+            return Metric(
+                name=name,
+                value=0.0 if name not in self._metrics else self._metrics[name][-1].value if self._metrics[name] else 0.0,
+                metric_type=self._custom_metrics[name],
+                timestamp=datetime.now().isoformat()
+            )
+        return None
 
     def collect_custom_metrics(self) -> Dict[str, float]:
         """Collect all custom metrics."""
@@ -361,11 +391,31 @@ class StatsAgent:
     def detect_anomaly(
         self,
         metric_name: str,
-        value: float,
+        value: Optional[float] = None,
         threshold_std: float = 2.0
-    ) -> Tuple[bool, float]:
+    ) -> Union[bool, Tuple[bool, float]]:
         """Detect if a value is anomalous using standard deviation."""
         history = self._metrics.get(metric_name, [])
+        
+        # If no value provided, check the latest metric in history
+        if value is None:
+            if len(history) < 2:
+                return False
+            value = history[-1].value
+            history = history[:-1]  # Use history without the latest for comparison
+            
+            if len(history) < 10:
+                return False
+            
+            values = [m.value for m in history]
+            mean = sum(values) / len(values)
+            variance = sum((x - mean) ** 2 for x in values) / len(values)
+            std = math.sqrt(variance) if variance > 0 else 0.001
+            z_score = abs((value - mean) / std)
+            is_anomaly = z_score > threshold_std
+            return is_anomaly
+        
+        # Original behavior when value is provided
         if len(history) < 10:
             return False, 0.0
 
@@ -393,18 +443,24 @@ class StatsAgent:
     def add_threshold(
         self,
         metric_name: str,
-        operator: str,
-        value: float,
-        severity: AlertSeverity = AlertSeverity.WARNING,
-        message: str = ""
+        min_value: Optional[float] = None,
+        max_value: Optional[float] = None,
+        severity: AlertSeverity = None,
+        message: str = "",
+        operator: str = "",  # deprecated, for backwards compatibility
+        value: float = 0.0   # deprecated, for backwards compatibility
     ) -> Threshold:
         """Add a threshold for alerting."""
+        if severity is None:
+            severity = AlertSeverity.MEDIUM
         threshold = Threshold(
             metric_name=metric_name,
-            operator=operator,
-            value=value,
+            min_value=min_value,
+            max_value=max_value,
             severity=severity,
-            message=message or f"{metric_name} {operator} {value}"
+            message=message or f"{metric_name} threshold",
+            operator=operator,
+            value=value
         )
         self._thresholds.append(threshold)
         return threshold
@@ -530,19 +586,24 @@ class StatsAgent:
 
     def add_retention_policy(
         self,
-        namespace: str,
-        max_age_days: int,
+        metric_name: Optional[str] = None,
+        namespace: Optional[str] = None,
+        max_age_days: int = 0,
         max_points: int = 0,
         compression_after_days: int = 7
     ) -> RetentionPolicy:
         """Add a retention policy."""
+        # Support both metric_name and namespace parameters
+        actual_namespace = metric_name or namespace or ""
+        
         policy = RetentionPolicy(
-            namespace=namespace,
+            metric_name=metric_name,
+            namespace=actual_namespace,
             max_age_days=max_age_days,
             max_points=max_points,
             compression_after_days=compression_after_days
         )
-        self._retention_policies[namespace] = policy
+        self._retention_policies[actual_namespace] = policy
         return policy
 
     def apply_retention_policies(self) -> int:
@@ -1158,7 +1219,7 @@ class MetricNamespaceManager:
         Returns:
             Full path string like "root / parent / child".
         """
-        return "/".join(self.get_namespace_hierarchy(namespace))
+        return " / ".join(self.get_namespace_hierarchy(namespace))
 
 
 class AnnotationManager:

@@ -1,0 +1,2 @@
+
+python -m pytest src/ --tb=short -v 2>&1 | grep -v " PASSED" | tee errors.txt

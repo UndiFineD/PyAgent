@@ -447,22 +447,24 @@ class FixtureFactory:
         """
         self.base_dir = base_dir or Path.cwd()
 
-    def create_agent_fixture(self, name: str, config: Optional[Dict[str, Any]] = None) -> Any:
+    def create_agent_fixture(self, name: str, config: Optional[Dict[str, Any]] = None, dependencies: Optional[List[Any]] = None) -> Any:
         """Create an agent fixture.
 
         Args:
             name: Fixture name.
             config: Agent configuration.
+            dependencies: List of dependent fixtures.
 
         Returns:
-            Agent fixture object with name and config attributes.
+            Agent fixture object with name, config and dependencies attributes.
         """
         class AgentFixture:
-            def __init__(self, name: str, config: Optional[Dict[str, Any]]):
+            def __init__(self, name: str, config: Optional[Dict[str, Any]], dependencies: Optional[List[Any]]):
                 self.name = name
                 self.config = config or {}
+                self.dependencies = dependencies or []
 
-        return AgentFixture(name, config)
+        return AgentFixture(name, config, dependencies)
 
     def create_file_fixture(self, name: str, content: str = "") -> Any:
         """Create a file fixture.
@@ -551,12 +553,16 @@ class TestDataSeeder:
         Returns:
             Generated file content.
         """
+        # Use a deterministic return value based on seed for reproducibility
+        func_id = self.seed if self.seed is not None else random.randint(1, 100)
+        return_val = random.randint(1, 100)
+        
         if language == "python":
-            return f'# Python file\ndef func_{self.seed or "test"}():\n    return {random.randint(1, 100)}\n'
+            return f'# Python file\ndef func_{func_id}():\n    return {return_val}\n'
         elif language == "javascript":
-            return f'// JavaScript file\nfunction func_{self.seed or "test"}() {{\n  return {random.randint(1, 100)};\n}}\n'
+            return f'// JavaScript file\nfunction func_{func_id}() {{\n  return {return_val};\n}}\n'
         else:
-            return f"// Generic content\nval_{self.seed or 'test'} = {random.randint(1, 100)}\n"
+            return f"// Generic content\nval_{func_id} = {return_val}\n"
 
     def generate_unique_id(self) -> str:
         """Generate a unique ID.
@@ -1246,27 +1252,29 @@ class SnapshotManager:
         Returns:
             TestSnapshot: Created snapshot.
         """
-        # Convert content to string if it's a dict or list
-        if isinstance(content, (dict, list)):
-            content_str = json.dumps(content, indent=2)
-            snapshot = TestSnapshot(name=name, content=content)
+        # Convert content to string for TestSnapshot
+        if isinstance(content, str):
+            content_str = content
+            snapshot_content = content
         else:
-            content_str = str(content)
-            snapshot = TestSnapshot(name=name, content=content)
+            content_str = json.dumps(content, indent=2)
+            snapshot_content = content_str
 
         path = self._get_snapshot_path(name)
         path.write_text(content_str, encoding="utf-8")
+        
+        snapshot = TestSnapshot(name=name, content=snapshot_content)
         self._snapshots[name] = snapshot
         return snapshot
 
-    def load_snapshot(self, name: str) -> Any:
+    def load_snapshot(self, name: str) -> Optional[TestSnapshot]:
         """Load an existing snapshot.
 
         Args:
             name: Snapshot name.
 
         Returns:
-            The loaded snapshot content or None.
+            The loaded TestSnapshot object or None.
         """
         path = self._get_snapshot_path(name)
         if not path.exists():
@@ -1279,11 +1287,10 @@ class SnapshotManager:
         except json.JSONDecodeError:
             content = content_str
 
-        # Store as TestSnapshot internally
+        # Return TestSnapshot object with the loaded content
         snapshot = TestSnapshot(name=name, content=content)
         self._snapshots[name] = snapshot
-        # But return just the content
-        return content
+        return snapshot
 
     def compare_snapshot(self, name: str, actual: Any) -> "SnapshotComparisonResult":
         """Compare actual content with a saved snapshot.
@@ -1295,9 +1302,9 @@ class SnapshotManager:
         Returns:
             SnapshotComparisonResult with comparison details.
         """
-        expected = self.load_snapshot(name)
+        expected_snapshot = self.load_snapshot(name)
 
-        if expected is None:
+        if expected_snapshot is None:
             return SnapshotComparisonResult(
                 matches=False,
                 expected=None,
@@ -1305,10 +1312,11 @@ class SnapshotManager:
                 snapshot_name=name
             )
 
-        matches = expected == actual
+        # Compare the content
+        matches = expected_snapshot.content == actual
         return SnapshotComparisonResult(
             matches=matches,
-            expected=expected,
+            expected=expected_snapshot.content,
             actual=actual,
             snapshot_name=name
         )
