@@ -442,16 +442,16 @@ class DiffVisualizer:
 
     def _render_side_by_side(self, result: DiffResult) -> str:
         """Render side-by-side diff view."""
-        return f"<div class='diff - side - by - side'>Deletions: {
-            len(
-                result.deletions)}, Additions: {
-            len(
-                result.additions)}</div>"
+        return (
+            f"<div class='diff - side - by - side'>Deletions: "
+            f"{len(result.deletions)}, Additions: "
+            f"{len(result.additions)}</div>"
+        )
 
     def _render_inline(self, result: DiffResult) -> str:
         """Render inline diff view."""
-        return f"<div class='diff - inline'>Changes: {len(result.deletions) +
-                                                      len(result.additions)}</div>"
+        total_changes = len(result.deletions) + len(result.additions)
+        return f"<div class='diff - inline'>Changes: {total_changes}</div>"
 
 
 class ExternalImporter:

@@ -1494,14 +1494,10 @@ class ErrorsAgent(BaseAgent):
             lines = ["id,message,file,line,severity,category,resolved"]
             for e in self._errors:
                 lines.append(
-                    f"{
-                        e.id},{
-                        e.message},{
-                        e.file_path},{
-                        e.line_number},{
-                        e.severity.name},{
-                            e.category.name},{
-                                e.resolved}")
+                    f"{e.id},{e.message},{e.file_path},"
+                    f"{e.line_number},{e.severity.name},"
+                    f"{e.category.name},{e.resolved}"
+                )
             return '\n'.join(lines)
         return ""
 

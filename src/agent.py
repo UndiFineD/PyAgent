@@ -2881,8 +2881,9 @@ class Agent:
         }
 
         logging.info(
-            f"Agent initialized: repo={
-                self.repo_root}, loop={loop}, agents_only={agents_only}")
+            f"Agent initialized: repo={self.repo_root}, loop={loop}, "
+            f"agents_only={agents_only}"
+        )
         if dry_run:
             logging.info("DRY RUN MODE: No files will be modified")
         if selective_agents:
@@ -3633,9 +3634,9 @@ Agents applied:
                     new_lines.append(line)
             improvements_file.write_text('\n'.join(new_lines) + '\n', encoding='utf-8')
             logging.info(
-                f"Marked {
-                    len(fixed_items)} improvements as fixed in {
-                    improvements_file.name}")
+                f"Marked {len(fixed_items)} improvements as fixed in "
+                f"{improvements_file.name}"
+            )
         except Exception as e:
             logging.warning(f"Failed to update improvements file: {e}")
 

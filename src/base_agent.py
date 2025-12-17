@@ -676,10 +676,8 @@ class BaseAgent:
             self.current_content = cached.response
             return self.current_content
 
-        description = f"Improve the {
-            self.__class__.__name__.replace(
-                'Agent', '').lower()} for {
-            self.file_path.stem}"
+        class_name = self.__class__.__name__.replace('Agent', '').lower()
+        description = f"Improve the {class_name} for {self.file_path.stem}"
         try:
             logging.info(f"Improving content with prompt: {prompt[:50]}...")
 

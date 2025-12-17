@@ -688,10 +688,10 @@ class ContextDiffer:
             added_sections=added,
             removed_sections=removed,
             modified_sections=modified,
-            change_summary=f"Added {
-                len(added)}, removed {
-                len(removed)}, modified {
-                len(modified)} sections")
+            change_summary=(
+                f"Added {len(added)}, removed {len(removed)}, "
+                f"modified {len(modified)} sections"
+            ))
 
 
 class ContextInheritance:

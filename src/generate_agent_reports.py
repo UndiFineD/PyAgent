@@ -3020,8 +3020,9 @@ def _find_issues(tree: ast.AST, source: str) -> List[str]:
                 if isinstance(default, (ast.List, ast.Dict, ast.Set)):
 
                     issues.append(
-                        f"Function `{
-                            node.name}` has a mutable default argument (list / dict / set).")
+                        f"Function `{node.name}` has a mutable default "
+                        f"argument (list / dict / set)."
+                    )
 
                     break  # One per function is enough
 

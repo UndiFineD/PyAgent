@@ -1943,12 +1943,16 @@ class CoderAgent(BaseAgent):
                         smells.append(
                             CodeSmell(
                                 name="long_method",
-                                description=f"Method '{
-                                    node.name}' is {length} lines (>{threshold})",
+                                description=(
+                                    f"Method '{node.name}' is {length} "
+                                    f"lines (>{threshold})"
+                                ),
                                 severity="warning",
                                 line_number=node.lineno,
-                                suggestion=f"Consider breaking down '{
-                                    node.name}' into smaller functions",
+                                suggestion=(
+                                    f"Consider breaking down '{node.name}' "
+                                    f"into smaller functions"
+                                ),
                                 category="complexity"))
                 # Too many parameters
                 param_count = len(node.args.args)
@@ -1957,8 +1961,10 @@ class CoderAgent(BaseAgent):
                     smells.append(
                         CodeSmell(
                             name="too_many_parameters",
-                            description=f"Function '{
-                                node.name}' has {param_count} parameters (>{threshold})",
+                            description=(
+                                f"Function '{node.name}' has {param_count} "
+                                f"parameters (>{threshold})"
+                            ),
                             severity="warning",
                             line_number=node.lineno,
                             suggestion="Consider using a data class or dictionary for parameters",
@@ -1973,8 +1979,10 @@ class CoderAgent(BaseAgent):
                     smells.append(
                         CodeSmell(
                             name="god_class",
-                            description=f"Class '{
-                                node.name}' has {method_count} methods (>{threshold})",
+                            description=(
+                                f"Class '{node.name}' has {method_count} "
+                                f"methods (>{threshold})"
+                            ),
                             severity="warning",
                             line_number=node.lineno,
                             suggestion="Consider splitting into smaller, focused classes",

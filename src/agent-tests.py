@@ -2048,19 +2048,15 @@ class TestsAgent(BaseAgent):
 
     def suggest_tests_for_gap(self, gap: CoverageGap) -> str:
         """Generate test suggestion for a coverage gap."""
+        file_name = gap.file_path.replace('/', '_').replace('.py', '')
         return (
-            f"# Suggested test for {
-                gap.file_path} lines {
-                gap.line_start}-{
-                gap.line_end}\n" f"def test_{
-                    gap.file_path.replace(
-                        '/',
-                        '_').replace(
-                            '.py',
-                            '')}_line{
-                                gap.line_start}():\n" f"    # TODO: Add test for {
-                                    gap.coverage_type.value} coverage\n" f"    {
-                                        gap.suggestion or 'pass'}\n")
+            f"# Suggested test for {gap.file_path} "
+            f"lines {gap.line_start}-{gap.line_end}\n"
+            f"def test_{file_name}_line{gap.line_start}():\n"
+            f"    # TODO: Add test for {gap.coverage_type.value} "
+            f"coverage\n"
+            f"    {gap.suggestion or 'pass'}\n"
+        )
 
     # ========== Test Data Factories ==========
 

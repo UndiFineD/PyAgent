@@ -1384,8 +1384,9 @@ def llm_chat_via_github_models(
                 _metrics["total_latency_ms"] += latency_ms
 
                 logging.debug(
-                    f"Received {
-                        len(result)} bytes from GitHub Models API ({latency_ms}ms)")
+                    f"Received {len(result)} bytes from GitHub Models "
+                    f"API ({latency_ms}ms)"
+                )
                 return result
             except (KeyError, IndexError, TypeError) as e:
                 raise RuntimeError(f"Unexpected response shape from LLM endpoint: {data!r}") from e
@@ -1552,8 +1553,9 @@ def run_subagent(description: str, prompt: str, original_content: str = "") -> O
         prompt_to_use = prompt
         if len(prompt) > max_len:
             logging.warning(
-                f"Prompt truncated from {
-                    len(prompt)} to {max_len} chars for gh copilot")
+                f"Prompt truncated from {len(prompt)} to {max_len} "
+                f"chars for gh copilot"
+            )
             prompt_to_use = prompt[:max_len]
 
         try:
