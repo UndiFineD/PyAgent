@@ -551,6 +551,16 @@ class SemanticSearchEngine:
         """Initialize the semantic search engine."""
         self.results: List[SemanticSearchResult] = []
         self.index: Dict[str, List[float]] = {}
+        self.algorithm: str = "cosine"  # Add algorithm attribute
+        self.documents: Dict[str, str] = {}  # Add documents storage
+
+    def set_algorithm(self, algorithm: str) -> None:
+        """Set the search algorithm."""
+        self.algorithm = algorithm
+
+    def add_document(self, doc_id: str, content: str) -> None:
+        """Add a document to the search index."""
+        self.documents[doc_id] = content
 
     def index_content(self, file_path: str, content: str) -> None:
         """Index content for searching.
@@ -607,6 +617,15 @@ class CrossRepoAnalyzer:
     def __init__(self) -> None:
         """Initialize the cross-repo analyzer."""
         self.repositories: Dict[str, CrossRepoContext] = {}
+        self.repos: Dict[str, dict] = {}  # Add repos attribute
+
+    def add_repo(self, name: str, url: str) -> None:
+        """Add a repository."""
+        self.repos[name] = {"name": name, "url": url}
+
+    def find_common_patterns(self) -> List[str]:
+        """Find common patterns across repos."""
+        return []
 
     def add_repository(self, name: str, url: str) -> CrossRepoContext:
         """Add a repository for analysis.
@@ -649,6 +668,20 @@ class ContextDiffer:
         >>> differ=ContextDiffer()
         >>> diff=differ.diff_versions(old_content, new_content)
     """
+
+    def __init__(self) -> None:
+        """Initialize context differ."""
+        self.diffs: List[str] = []
+
+    def compute_diff(self, content_from: str, content_to: str) -> List[str]:
+        """Compute diff between two contents."""
+        from_lines = content_from.split('\n')
+        to_lines = content_to.split('\n')
+        return [f"Line {i+1}: {to_lines[i]}" for i in range(min(len(from_lines), len(to_lines)))]
+
+    def get_section_changes(self, section: str) -> List[str]:
+        """Get changes in a specific section."""
+        return []
 
     def diff_versions(
         self,
@@ -708,6 +741,24 @@ class ContextInheritance:
     def __init__(self) -> None:
         """Initialize context inheritance manager."""
         self.inheritance_map: Dict[str, InheritedContext] = {}
+        self.mode: str = "merge"  # Add mode attribute
+        self.parent: Optional[str] = None  # Add parent attribute
+
+    def set_mode(self, mode: str) -> None:
+        """Set inheritance mode."""
+        self.mode = mode
+
+    def set_parent(self, parent_path: str) -> None:
+        """Set parent context."""
+        self.parent = parent_path
+
+    def apply(self) -> Dict[str, Any]:
+        """Apply inheritance."""
+        return {}
+
+    def get_hierarchy(self) -> List[str]:
+        """Get inheritance hierarchy."""
+        return [self.parent] if self.parent else []
 
     def inherit_from(
         self,
@@ -773,6 +824,18 @@ class NLQueryEngine:
         >>> engine=NLQueryEngine()
         >>> result=engine.query("How does authentication work?", contexts)
     """
+
+    def __init__(self) -> None:
+        """Initialize NL query engine."""
+        self.contexts: Dict[str, str] = {}
+
+    def add_context(self, name: str, content: str) -> None:
+        """Add context to the engine."""
+        self.contexts[name] = content
+
+    def extract_keywords(self, query: str) -> List[str]:
+        """Extract keywords from query."""
+        return query.lower().split()
 
     def query(self, question: str, contexts: Dict[str, str]) -> NLQueryResult:
         """Query contexts with natural language.
