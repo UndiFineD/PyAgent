@@ -291,7 +291,7 @@ class ReportMetadata:
 
     file_path: str
 
-    generated_at: float = field(default_factory=time.time)
+    generated_at: float = field(default_factory=time.time)  # type: ignore[assignment]
 
     source_hash: str = ""
 
@@ -319,7 +319,9 @@ class ReportTemplate:
 
     name: str
 
-    sections: List[str] = field(default_factory=lambda: ["purpose", "location", "surface"])
+    sections: List[str] = field(
+        default_factory=lambda: ["purpose", "location", "surface"]
+    )  # type: ignore[assignment]
 
     include_metadata: bool = True
 
@@ -341,9 +343,9 @@ class ReportCache:
 
     """
 
-    reports: Dict[str, Dict[str, Any]] = field(default_factory=dict)
+    reports: Dict[str, Dict[str, Any]] = field(default_factory=dict)  # type: ignore[assignment]
 
-    last_updated: float = field(default_factory=time.time)
+    last_updated: float = field(default_factory=time.time)  # type: ignore[assignment]
 
     ttl_seconds: int = 3600  # 1 hour default
 
@@ -369,11 +371,11 @@ class ReportComparison:
 
     file_path: str
 
-    added_issues: List[str] = field(default_factory=list)
+    added_issues: List[str] = field(default_factory=list)  # type: ignore[assignment]
 
-    removed_issues: List[str] = field(default_factory=list)
+    removed_issues: List[str] = field(default_factory=list)  # type: ignore[assignment]
 
-    changed_issues: List[str] = field(default_factory=list)
+    changed_issues: List[str] = field(default_factory=list)  # type: ignore[assignment]
 
     summary: str = ""
 
@@ -403,9 +405,9 @@ class FilterCriteria:
 
     severity_min: SeverityLevel = SeverityLevel.INFO
 
-    categories: List[IssueCategory] = field(default_factory=list)
+    categories: List[IssueCategory] = field(default_factory=list)  # type: ignore[assignment]
 
-    file_patterns: List[str] = field(default_factory=list)
+    file_patterns: List[str] = field(default_factory=list)  # type: ignore[assignment]
 
 
 @dataclass
@@ -435,9 +437,9 @@ class ReportSubscription:
 
     frequency: SubscriptionFrequency = SubscriptionFrequency.DAILY
 
-    report_types: List[ReportType] = field(default_factory=list)
+    report_types: List[ReportType] = field(default_factory=list)  # type: ignore[assignment]
 
-    file_patterns: List[str] = field(default_factory=list)
+    file_patterns: List[str] = field(default_factory=list)  # type: ignore[assignment]
 
     enabled: bool = True
 
@@ -469,11 +471,11 @@ class ArchivedReport:
 
     content: str
 
-    archived_at: float = field(default_factory=time.time)
+    archived_at: float = field(default_factory=time.time)  # type: ignore[assignment]
 
     retention_days: int = 90
 
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]
 
 
 @dataclass
@@ -507,7 +509,7 @@ class ReportAnnotation:
 
     line_number: Optional[int] = None
 
-    created_at: float = field(default_factory=time.time)
+    created_at: float = field(default_factory=time.time)  # type: ignore[assignment]
 
 
 @dataclass
@@ -631,7 +633,7 @@ class AuditEntry:
 
     report_id: str
 
-    details: Dict[str, Any] = field(default_factory=dict)
+    details: Dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]
 
 
 @dataclass
@@ -651,7 +653,7 @@ class LocalizedString:
 
     key: str
 
-    translations: Dict[str, str] = field(default_factory=dict)
+    translations: Dict[str, str] = field(default_factory=dict)  # type: ignore[assignment]
 
     default: str = ""
 
@@ -675,9 +677,9 @@ class ValidationResult:
 
     valid: bool
 
-    errors: List[str] = field(default_factory=list)
+    errors: List[str] = field(default_factory=list)  # type: ignore[assignment]
 
-    warnings: List[str] = field(default_factory=list)
+    warnings: List[str] = field(default_factory=list)  # type: ignore[assignment]
 
     checksum: str = ""
 
@@ -699,13 +701,13 @@ class AggregatedReport:
 
     """
 
-    sources: List[str] = field(default_factory=list)
+    sources: List[str] = field(default_factory=list)  # type: ignore[assignment]
 
-    combined_issues: List[CodeIssue] = field(default_factory=list)
+    combined_issues: List[CodeIssue] = field(default_factory=list)  # type: ignore[assignment]
 
-    summary: Dict[str, Any] = field(default_factory=dict)
+    summary: Dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]
 
-    generated_at: float = field(default_factory=time.time)
+    generated_at: float = field(default_factory=time.time)  # type: ignore[assignment]
 
 # =============================================================================
 
@@ -769,7 +771,7 @@ class ReportCacheManager:
 
         try:
 
-            data = {
+            data: Dict[str, Any] = {
 
                 'reports': self.cache.reports,
 
@@ -925,7 +927,7 @@ class ReportComparator:
 
         removed = list(old_set - new_set)
 
-        summary_parts = []
+        summary_parts: List[str] = []
 
         if added:
 
@@ -954,7 +956,7 @@ class ReportComparator:
     def _extract_items(self, content: str) -> List[str]:
         """Extract list items from markdown content."""
 
-        items = []
+        items: List[str] = []
 
         for line in content.split('\n'):
 
@@ -1311,7 +1313,7 @@ class ReportArchiver:
 
         for file_path in list(self.archives.keys()):
 
-            valid = []
+            valid: List[ArchivedReport] = []
 
             for archive in self.archives[file_path]:
 
@@ -2778,7 +2780,7 @@ def _find_imports(tree: ast.AST) -> List[str]:
 
     # De - dupe while preserving order
 
-    seen = set()
+    seen: set[str] = set()
 
     out: List[str] = []
 
@@ -3069,7 +3071,7 @@ def _find_issues(tree: ast.AST, source: str) -> List[str]:
 
 def render_improvements(py_path: Path, source: str, tree: ast.AST) -> str:
 
-    functions, classes = _find_top_level_defs(tree)
+    _, classes = _find_top_level_defs(tree)
 
     suggestions: List[str] = []
 

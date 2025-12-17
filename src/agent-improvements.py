@@ -143,8 +143,8 @@ class Improvement:
     created_at: str = ""
     updated_at: str = ""
     assignee: str = ""
-    tags: List[str] = field(default_factory=list)
-    dependencies: List[str] = field(default_factory=list)
+    tags: List[str] = field(default_factory=list)  # type: ignore[assignment]
+    dependencies: List[str] = field(default_factory=list)  # type: ignore[assignment]
     votes: int = 0
 
 
@@ -174,7 +174,7 @@ class ScheduledImprovement:
     improvement_id: str
     scheduled_start: str = ""
     scheduled_end: str = ""
-    assigned_resources: List[str] = field(default_factory=list)
+    assigned_resources: List[str] = field(default_factory=list)  # type: ignore[assignment]
     status: ScheduleStatus = ScheduleStatus.UNSCHEDULED
     sprint_id: str = ""
 
@@ -196,7 +196,7 @@ class ProgressReport:
     in_progress_count: int = 0
     blocked_count: int = 0
     velocity: float = 0.0
-    burndown_data: List[Tuple[str, int]] = field(default_factory=list)
+    burndown_data: List[Tuple[str, int]] = field(default_factory=list)  # type: ignore[assignment]
 
 
 @dataclass
@@ -211,8 +211,12 @@ class ValidationResult:
     """
     improvement_id: str
     is_valid: bool = True
-    issues: List[Tuple[ValidationSeverity, str]] = field(default_factory=list)
-    test_results: Dict[str, bool] = field(default_factory=dict)
+    issues: List[Tuple[ValidationSeverity, str]] = field(
+        default_factory=list
+    )  # type: ignore[assignment]
+    test_results: Dict[str, bool] = field(
+        default_factory=dict
+    )  # type: ignore[assignment]
 
 
 @dataclass
@@ -266,7 +270,7 @@ class SLAConfiguration:
     level: SLALevel
     max_hours: int
     escalation_hours: int
-    notification_emails: List[str] = field(default_factory=list)
+    notification_emails: List[str] = field(default_factory=list)  # type: ignore[assignment]
 
 
 @dataclass
@@ -283,6 +287,24 @@ class MergeCandidate:
     target_id: str
     similarity_score: float = 0.0
     merge_reason: str = ""
+
+
+@dataclass
+class ImprovementDiff:
+    """Difference in a single improvement between branches.
+
+    Attributes:
+        improvement_id: Unique improvement identifier.
+        diff_type: Type of difference.
+        source_version: Improvement in source branch (if exists).
+        target_version: Improvement in target branch (if exists).
+        change_summary: Summary of changes.
+    """
+    improvement_id: str
+    diff_type: ImprovementDiffType
+    source_version: Optional[Improvement] = None
+    target_version: Optional[Improvement] = None
+    change_summary: str = ""
 
 
 @dataclass
@@ -1075,24 +1097,6 @@ class ImprovementDiffType(Enum):
 
 
 @dataclass
-class ImprovementDiff:
-    """Difference in a single improvement between branches.
-
-    Attributes:
-        improvement_id: Unique improvement identifier.
-        diff_type: Type of difference.
-        source_version: Improvement in source branch (if exists).
-        target_version: Improvement in target branch (if exists).
-        change_summary: Summary of changes.
-    """
-    improvement_id: str
-    diff_type: ImprovementDiffType
-    source_version: Optional[Improvement] = None
-    target_version: Optional[Improvement] = None
-    change_summary: str = ""
-
-
-@dataclass
 class BranchComparison:
     """Result of comparing improvements across branches.
 
@@ -1111,7 +1115,7 @@ class BranchComparison:
     target_branch: str
     file_path: str
     status: BranchComparisonStatus = BranchComparisonStatus.PENDING
-    diffs: List[ImprovementDiff] = field(default_factory=list)
+    diffs: List[ImprovementDiff] = field(default_factory=list)  # type: ignore[assignment]
     added_count: int = 0
     removed_count: int = 0
     modified_count: int = 0
@@ -1267,7 +1271,8 @@ class BranchComparer:
             improvements[improvement_id] = Improvement(
                 id=improvement_id,
                 title=title,
-                description=match.strip()
+                description=match.strip(),
+                file_path=""
             )
 
         return improvements
@@ -1682,11 +1687,12 @@ class ImprovementsAgent(BaseAgent):
         if not improvement:
             return []
 
-        return [
-            self.get_improvement_by_id(dep_id)
-            for dep_id in improvement.dependencies
-            if self.get_improvement_by_id(dep_id)
-        ]
+        dependencies: List[Improvement] = []
+        for dep_id in improvement.dependencies:
+            dep = self.get_improvement_by_id(dep_id)
+            if dep is not None:
+                dependencies.append(dep)
+        return dependencies
 
     def get_dependents(self, improvement_id: str) -> List[Improvement]:
         """Get all improvements that depend on this one."""
@@ -1697,12 +1703,12 @@ class ImprovementsAgent(BaseAgent):
 
     def get_ready_to_implement(self) -> List[Improvement]:
         """Get improvements that have all dependencies satisfied."""
-        ready = []
+        ready: List[Improvement] = []
         for imp in self._improvements:
             if imp.status == ImprovementStatus.SUGGESTED:
                 deps_satisfied = all(
-                    self.get_improvement_by_id(dep_id) and
-                    self.get_improvement_by_id(dep_id).status == ImprovementStatus.COMPLETED
+                    (dep := self.get_improvement_by_id(dep_id)) is not None and
+                    dep.status == ImprovementStatus.COMPLETED
                     for dep_id in imp.dependencies
                 )
                 if deps_satisfied or not imp.dependencies:
