@@ -35,6 +35,13 @@ from pathlib import Path
 from types import ModuleType
 from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, TypeVar
 
+import random
+
+try:
+    import numpy as np
+except ImportError:
+    np = None  # type: ignore
+
 
 # ============================================================================
 # Type - Safe Enums for Test Utilities
@@ -289,6 +296,8 @@ class MockAIBackend:
         self._responses: Dict[str, MockResponse] = {}
         self._default_response = MockResponse(content="Mock response")
         self._call_history: List[Tuple[str, float]] = []
+        self._response_sequence: List[MockResponse] = []
+        self._sequence_index: int = 0
 
     def add_response(
         self,
@@ -327,12 +336,17 @@ class MockAIBackend:
         """
         self._call_history.append((prompt, time.time()))
 
-        # Find matching response
-        response = self._default_response
-        for pattern, resp in self._responses.items():
-            if pattern in prompt or re.search(pattern, prompt):
-                response = resp
-                break
+        # Use response sequence if available
+        if self._response_sequence and self._sequence_index < len(self._response_sequence):
+            response = self._response_sequence[self._sequence_index]
+            self._sequence_index += 1
+        else:
+            # Find matching response
+            response = self._default_response
+            for pattern, resp in self._responses.items():
+                if pattern in prompt or re.search(pattern, prompt):
+                    response = resp
+                    break
 
         # Simulate latency
         if response.latency_ms > 0:
@@ -350,6 +364,27 @@ class MockAIBackend:
 
         return response.content
 
+    def add_response_sequence(self, responses: List[MockResponse]) -> None:
+        """Add a sequence of responses for sequential calls.
+
+        Args:
+            responses: List of mock responses.
+        """
+        self._response_sequence = responses
+        self._sequence_index = 0
+
+    def set_error_response(self, response_type: MockResponseType, message: str) -> None:
+        """Set an error response to be returned.
+
+        Args:
+            response_type: Type of error response.
+            message: Error message.
+        """
+        self._default_response = MockResponse(
+            response_type=response_type,
+            error_message=message
+        )
+
     def get_call_history(self) -> List[Tuple[str, float]]:
         """Get history of calls made."""
         return list(self._call_history)
@@ -363,6 +398,268 @@ class MockAIBackend:
 # ============================================================================
 # Test Fixture Generator
 # ============================================================================
+
+
+class FixtureFactory:
+    """Factory for creating test fixtures.
+
+    Creates pre-configured fixtures for tests including agents,
+    files, and other resources with optional dependencies.
+    """
+
+    def __init__(self, base_dir: Optional[Path] = None) -> None:
+        """Initialize fixture factory.
+
+        Args:
+            base_dir: Base directory for file fixtures.
+        """
+        self.base_dir = base_dir or Path.cwd()
+
+    def create_agent_fixture(self, name: str, config: Dict[str, Any]) -> Any:
+        """Create an agent fixture.
+
+        Args:
+            name: Fixture name.
+            config: Agent configuration.
+
+        Returns:
+            Agent fixture object with name and config attributes.
+        """
+        class AgentFixture:
+            def __init__(self, name: str, config: Dict[str, Any]):
+                self.name = name
+                self.config = config
+
+        return AgentFixture(name, config)
+
+    def create_file_fixture(self, name: str, content: str = "") -> Any:
+        """Create a file fixture.
+
+        Args:
+            name: File name.
+            content: File content.
+
+        Returns:
+            File fixture object with setup_fn method.
+        """
+        class FileFixture:
+            def __init__(self, base_dir: Path, name: str, content: str):
+                self.base_dir = base_dir
+                self.name = name
+                self.content = content
+
+            def setup_fn(self) -> Path:
+                """Set up the file and return its path."""
+                path = self.base_dir / self.name
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(self.content)
+                return path
+
+        return FileFixture(self.base_dir, name, content)
+
+
+class TestDataSeeder:
+    """Generates reproducible test data with optional seeding."""
+
+    def __init__(self, seed: Optional[int] = None) -> None:
+        """Initialize test data seeder.
+
+        Args:
+            seed: Random seed for reproducibility.
+        """
+        self.seed = seed
+        if seed is not None:
+            random.seed(seed)
+            if np:
+                np.random.seed(seed)
+
+    def generate_metric_data(self, count: int = 10) -> List[Dict[str, float]]:
+        """Generate metric data for testing.
+
+        Args:
+            count: Number of metrics to generate.
+
+        Returns:
+            List of metric dictionaries.
+        """
+        return [
+            {
+                "metric": f"metric_{i}",
+                "value": random.uniform(0, 100),
+                "timestamp": time.time() + i
+            }
+            for i in range(count)
+        ]
+
+    def generate_test_results(self, count: int = 10, pass_rate: float = 0.8) -> List[Dict[str, Any]]:
+        """Generate test results for testing.
+
+        Args:
+            count: Number of test results to generate.
+            pass_rate: Fraction of tests that should pass.
+
+        Returns:
+            List of test result dictionaries.
+        """
+        return [
+            {
+                "test_name": f"test_{i}",
+                "status": "PASSED" if random.random() < pass_rate else "FAILED",
+                "duration_ms": random.uniform(10, 5000)
+            }
+            for i in range(count)
+        ]
+
+
+class TestOutputFormatter:
+    """Formats test output and results for display."""
+
+    @staticmethod
+    def format_success(test_name: str, duration_ms: float) -> str:
+        """Format a successful test result.
+
+        Args:
+            test_name: Name of the test.
+            duration_ms: Duration of the test in milliseconds.
+
+        Returns:
+            Formatted success message.
+        """
+        return f"✓ {test_name} ({duration_ms:.2f}ms)"
+
+    @staticmethod
+    def format_failure(test_name: str, error: str) -> str:
+        """Format a failed test result.
+
+        Args:
+            test_name: Name of the test.
+            error: Error message.
+
+        Returns:
+            Formatted failure message.
+        """
+        return f"✗ {test_name}: {error}"
+
+    @staticmethod
+    def format_summary(passed: int, failed: int, total: int) -> str:
+        """Format test summary.
+
+        Args:
+            passed: Number of passed tests.
+            failed: Number of failed tests.
+            total: Total number of tests.
+
+        Returns:
+            Formatted summary.
+        """
+        return f"{passed} passed, {failed} failed out of {total} tests"
+
+
+class AssertionHelpers:
+    """Helper functions for common assertions in tests."""
+
+    @staticmethod
+    def assert_file_contains(file_path: Path, text: str) -> None:
+        """Assert that a file contains specific text.
+
+        Args:
+            file_path: Path to the file.
+            text: Text to search for.
+
+        Raises:
+            AssertionError: If text is not found.
+        """
+        content = file_path.read_text()
+        assert text in content, f"File {file_path} does not contain '{text}'"
+
+    @staticmethod
+    def assert_output_matches_pattern(output: str, pattern: str) -> None:
+        """Assert that output matches a regex pattern.
+
+        Args:
+            output: The output string.
+            pattern: The regex pattern.
+
+        Raises:
+            AssertionError: If pattern does not match.
+        """
+        assert re.search(pattern, output), f"Output does not match pattern '{pattern}'"
+
+    @staticmethod
+    def assert_raises_with_message(exception_type: type, message: str, fn: Callable, *args: Any) -> None:
+        """Assert that a function raises an exception with a specific message.
+
+        Args:
+            exception_type: Expected exception type.
+            message: Expected message text.
+            fn: Function to call.
+            *args: Arguments to pass to the function.
+
+        Raises:
+            AssertionError: If exception is not raised or message doesn't match.
+        """
+        try:
+            fn(*args)
+            raise AssertionError(f"Expected {exception_type.__name__} but no exception was raised")
+        except exception_type as e:
+            assert message in str(e), f"Exception message '{str(e)}' does not contain '{message}'"
+
+
+class TestTimer:
+    """Timer for measuring test execution time."""
+
+    def __init__(self) -> None:
+        """Initialize timer."""
+        self.start_time: Optional[float] = None
+        self.end_time: Optional[float] = None
+
+    def start(self) -> None:
+        """Start the timer."""
+        self.start_time = time.time()
+
+    def stop(self) -> float:
+        """Stop the timer and return elapsed time in seconds.
+
+        Returns:
+            Elapsed time in seconds.
+        """
+        self.end_time = time.time()
+        if self.start_time is None:
+            return 0.0
+        return self.end_time - self.start_time
+
+
+class Benchmarker:
+    """Runs benchmarks and collects statistics."""
+
+    def __init__(self) -> None:
+        """Initialize benchmarker."""
+        self.timings: List[float] = []
+
+    def run(self, fn: Callable, iterations: int = 5) -> Dict[str, float]:
+        """Run a function multiple times and collect timing statistics.
+
+        Args:
+            fn: Function to benchmark.
+            iterations: Number of iterations.
+
+        Returns:
+            Statistics dictionary with min, max, mean, and median.
+        """
+        self.timings = []
+        for _ in range(iterations):
+            timer = TestTimer()
+            timer.start()
+            fn()
+            elapsed = timer.stop()
+            self.timings.append(elapsed)
+
+        return {
+            "min": min(self.timings),
+            "max": max(self.timings),
+            "mean": sum(self.timings) / len(self.timings),
+            "median": sorted(self.timings)[len(self.timings) // 2]
+        }
 
 
 class FixtureGenerator:

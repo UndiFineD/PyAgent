@@ -1293,7 +1293,7 @@ class ResultAggregator:
             "failed": failed,
             "pass_rate": (passed / total * 100) if total > 0 else 0,
             "total_duration_ms": total_duration,
-            "sources": list(self._by_source.keys())
+            "sources": [s.value for s in self._by_source.keys()]
         }
 
     def export_unified_report(self) -> str:

@@ -64,7 +64,8 @@ class MetricType(Enum):
 
 class AlertSeverity(Enum):
     """Alert severity levels."""
-    CRITICAL = 4
+    CRITICAL = 5
+    HIGH = 4
     WARNING = 3
     INFO = 2
     DEBUG = 1
@@ -123,6 +124,7 @@ class Metric:
 @dataclass
 class MetricSnapshot:
     """A snapshot of metrics at a point in time."""
+    name: str
     id: str
     timestamp: str
     metrics: Dict[str, float]
@@ -302,20 +304,20 @@ class StatsAgent:
     def register_custom_metric(
         self,
         name: str,
-        collector: Callable[[], float],
         metric_type: MetricType = MetricType.GAUGE
     ) -> None:
-        """Register a custom metric collector."""
-        self._custom_metrics[name] = collector
+        """Register a custom metric type."""
+        if name not in self._custom_metrics:
+            self._custom_metrics[name] = metric_type
 
     def collect_custom_metrics(self) -> Dict[str, float]:
         """Collect all custom metrics."""
         results = {}
-        for name, collector in self._custom_metrics.items():
-            try:
-                results[name] = collector()
-            except Exception as e:
-                logging.error(f"Failed to collect metric {name}: {e}")
+        for name in self._custom_metrics:
+            if name in self._metrics and self._metrics[name]:
+                # Get the latest value for this metric
+                latest_metric = self._metrics[name][-1]
+                results[name] = latest_metric.value
         return results
 
     def add_metric(
@@ -470,6 +472,7 @@ class StatsAgent:
 
     def create_snapshot(
         self,
+        name: str = "",
         tags: Optional[Dict[str, str]] = None
     ) -> MetricSnapshot:
         """Create a snapshot of current metrics."""
@@ -479,6 +482,7 @@ class StatsAgent:
         metrics = {**current_stats, **custom}
 
         snapshot = MetricSnapshot(
+            name=name or f"snapshot_{len(self._snapshots)}",
             id=hashlib.md5(datetime.now().isoformat().encode()).hexdigest()[:8],
             timestamp=datetime.now().isoformat(),
             metrics=metrics,
@@ -487,18 +491,22 @@ class StatsAgent:
         self._snapshots.append(snapshot)
         return snapshot
 
+    def get_snapshot(self, name: str) -> Optional[MetricSnapshot]:
+        """Get a snapshot by name."""
+        return next((s for s in self._snapshots if s.name == name), None)
+
     def get_snapshots(self, limit: int = 100) -> List[MetricSnapshot]:
         """Get recent snapshots."""
         return self._snapshots[-limit:]
 
     def compare_snapshots(
         self,
-        snapshot1_id: str,
-        snapshot2_id: str
+        snapshot1_name: str,
+        snapshot2_name: str
     ) -> Dict[str, Dict[str, float]]:
         """Compare two snapshots."""
-        s1 = next((s for s in self._snapshots if s.id == snapshot1_id), None)
-        s2 = next((s for s in self._snapshots if s.id == snapshot2_id), None)
+        s1 = next((s for s in self._snapshots if s.name == snapshot1_name), None)
+        s2 = next((s for s in self._snapshots if s.name == snapshot2_name), None)
 
         if not s1 or not s2:
             return {}
