@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 import unittest
+from typing import Any
 from unittest.mock import MagicMock, patch
 import time
 import json
@@ -23,7 +24,7 @@ from agent_test_utils import agent_dir_on_path
 
 
 @pytest.fixture()
-def agent_backend_module() -> any:
+def agent_backend_module() -> Any:
     with agent_dir_on_path():
         import agent_backend
         return agent_backend
@@ -33,7 +34,7 @@ def agent_backend_module() -> any:
 # Caching and Response Tests
 # ============================================================================
 
-def test_response_caching_enabled(agent_backend_module: any) -> None:
+def test_response_caching_enabled(agent_backend_module: Any) -> None:
     """Test that responses are cached when use_cache=True."""
     agent_backend_module.clear_response_cache()
 
@@ -61,7 +62,7 @@ def test_response_caching_enabled(agent_backend_module: any) -> None:
         assert mock_requests.post.call_count == 1  # Still 1, cache was used
 
 
-def test_response_cache_disabled(agent_backend_module: any) -> None:
+def test_response_cache_disabled(agent_backend_module: Any) -> None:
     """Test that caching can be disabled with use_cache=False."""
     agent_backend_module.clear_response_cache()
 
@@ -87,7 +88,7 @@ def test_response_cache_disabled(agent_backend_module: any) -> None:
         assert mock_requests.post.call_count == 2
 
 
-def test_clear_response_cache(agent_backend_module: any) -> None:
+def test_clear_response_cache(agent_backend_module: Any) -> None:
     """Test that cache can be cleared."""
     agent_backend_module.clear_response_cache()
 
@@ -104,7 +105,7 @@ def test_clear_response_cache(agent_backend_module: any) -> None:
 # Response Validation Tests
 # ============================================================================
 
-def test_validate_response_content_basic(agent_backend_module: any) -> None:
+def test_validate_response_content_basic(agent_backend_module: Any) -> None:
     """Test basic response validation (non-empty)."""
     assert agent_backend_module.validate_response_content("valid response") is True
     assert agent_backend_module.validate_response_content("") is False
@@ -112,7 +113,7 @@ def test_validate_response_content_basic(agent_backend_module: any) -> None:
     assert agent_backend_module.validate_response_content(None) is False
 
 
-def test_validate_response_content_with_types(agent_backend_module: any) -> None:
+def test_validate_response_content_with_types(agent_backend_module: Any) -> None:
     """Test response validation with expected content types."""
     # Should pass if content contains expected type
     assert agent_backend_module.validate_response_content(
@@ -134,7 +135,7 @@ def test_validate_response_content_with_types(agent_backend_module: any) -> None
 # Token and Cost Estimation Tests
 # ============================================================================
 
-def test_estimate_tokens(agent_backend_module: any) -> None:
+def test_estimate_tokens(agent_backend_module: Any) -> None:
     """Test token estimation."""
     # Empty text
     assert agent_backend_module.estimate_tokens("") == 0
@@ -145,7 +146,7 @@ def test_estimate_tokens(agent_backend_module: any) -> None:
     assert estimated == 25  # 100 / 4
 
 
-def test_estimate_cost(agent_backend_module: any) -> None:
+def test_estimate_cost(agent_backend_module: Any) -> None:
     """Test cost estimation."""
     # 1000 tokens at $0.03 per 1k=$0.03
     cost = agent_backend_module.estimate_cost(1000, model="gpt-4", rate_per_1k_input=0.03)
@@ -160,7 +161,7 @@ def test_estimate_cost(agent_backend_module: any) -> None:
 # Circuit Breaker Tests
 # ============================================================================
 
-def test_circuit_breaker_closed_state(agent_backend_module: any) -> None:
+def test_circuit_breaker_closed_state(agent_backend_module: Any) -> None:
     """Test circuit breaker in CLOSED state."""
     breaker = agent_backend_module.CircuitBreaker("test", failure_threshold=3)
     assert breaker.state == "CLOSED"
@@ -172,7 +173,7 @@ def test_circuit_breaker_closed_state(agent_backend_module: any) -> None:
     assert breaker.is_open() is False
 
 
-def test_circuit_breaker_opens_on_threshold(agent_backend_module: any) -> None:
+def test_circuit_breaker_opens_on_threshold(agent_backend_module: Any) -> None:
     """Test that circuit breaker opens after failure threshold."""
     breaker = agent_backend_module.CircuitBreaker("test", failure_threshold=3)
 
@@ -185,7 +186,7 @@ def test_circuit_breaker_opens_on_threshold(agent_backend_module: any) -> None:
     assert breaker.is_open() is True
 
 
-def test_circuit_breaker_recovery(agent_backend_module: any) -> None:
+def test_circuit_breaker_recovery(agent_backend_module: Any) -> None:
     """Test circuit breaker recovery after timeout."""
     breaker = agent_backend_module.CircuitBreaker("test", failure_threshold=2, recovery_timeout=1)
 
@@ -206,7 +207,7 @@ def test_circuit_breaker_recovery(agent_backend_module: any) -> None:
     assert breaker.state == "CLOSED"
 
 
-def test_circuit_breaker_half_open_to_open(agent_backend_module: any) -> None:
+def test_circuit_breaker_half_open_to_open(agent_backend_module: Any) -> None:
     """Test that failure in HALF_OPEN state reopens circuit."""
     breaker = agent_backend_module.CircuitBreaker("test", failure_threshold=2, recovery_timeout=1)
 
@@ -227,7 +228,7 @@ def test_circuit_breaker_half_open_to_open(agent_backend_module: any) -> None:
 # Metrics Tests
 # ============================================================================
 
-def test_get_metrics(agent_backend_module: any) -> None:
+def test_get_metrics(agent_backend_module: Any) -> None:
     """Test metrics collection."""
     agent_backend_module.reset_metrics()
 
@@ -239,7 +240,7 @@ def test_get_metrics(agent_backend_module: any) -> None:
     assert "total_latency_ms" in metrics
 
 
-def test_reset_metrics(agent_backend_module: any) -> None:
+def test_reset_metrics(agent_backend_module: Any) -> None:
     """Test metrics reset."""
     agent_backend_module.reset_metrics()
 
@@ -252,7 +253,7 @@ def test_reset_metrics(agent_backend_module: any) -> None:
     assert agent_backend_module._metrics["requests"] == 0
 
 
-def test_metrics_tracking_in_llm_chat(agent_backend_module: any) -> None:
+def test_metrics_tracking_in_llm_chat(agent_backend_module: Any) -> None:
     """Test that metrics are tracked during API calls."""
     agent_backend_module.reset_metrics()
     agent_backend_module.clear_response_cache()
@@ -277,7 +278,7 @@ def test_metrics_tracking_in_llm_chat(agent_backend_module: any) -> None:
 # Timeout Configuration Tests
 # ============================================================================
 
-def test_configure_timeout_per_backend(agent_backend_module: any) -> None:
+def test_configure_timeout_per_backend(agent_backend_module: Any) -> None:
     """Test backend-specific timeout configuration."""
     agent_backend_module.configure_timeout_per_backend("github-models", 120)
 
@@ -289,7 +290,7 @@ def test_configure_timeout_per_backend(agent_backend_module: any) -> None:
 # Streaming Tests
 # ============================================================================
 
-def test_streaming_payload_flag(agent_backend_module: any) -> None:
+def test_streaming_payload_flag(agent_backend_module: Any) -> None:
     """Test that streaming flag is included in payload when requested."""
     with patch("agent_backend.requests") as mock_requests:
         mock_response = MagicMock()
@@ -314,7 +315,7 @@ def test_streaming_payload_flag(agent_backend_module: any) -> None:
 # Backend Diagnostics Tests
 # ============================================================================
 
-def test_get_backend_status(agent_backend_module: any) -> None:
+def test_get_backend_status(agent_backend_module: Any) -> None:
     """Test backend status reporting."""
     status = agent_backend_module.get_backend_status()
 
@@ -336,7 +337,7 @@ def test_get_backend_status(agent_backend_module: any) -> None:
     assert "configured" in status["github_models"]
 
 
-def test_describe_backends(agent_backend_module: any) -> None:
+def test_describe_backends(agent_backend_module: Any) -> None:
     """Test backend diagnostics output."""
     description = agent_backend_module.describe_backends()
 
@@ -351,7 +352,7 @@ def test_describe_backends(agent_backend_module: any) -> None:
 # Integration Tests
 # ============================================================================
 
-def test_cache_different_models_separately(agent_backend_module: any) -> None:
+def test_cache_different_models_separately(agent_backend_module: Any) -> None:
     """Test that different models are cached separately."""
     agent_backend_module.clear_response_cache()
 
@@ -362,7 +363,7 @@ def test_cache_different_models_separately(agent_backend_module: any) -> None:
     assert key1 != key2
 
 
-def test_cache_different_prompts_separately(agent_backend_module: any) -> None:
+def test_cache_different_prompts_separately(agent_backend_module: Any) -> None:
     """Test that different prompts are cached separately."""
     agent_backend_module.clear_response_cache()
 
@@ -373,7 +374,7 @@ def test_cache_different_prompts_separately(agent_backend_module: any) -> None:
     assert key1 != key2
 
 
-def test_validation_with_streaming_disabled(agent_backend_module: any) -> None:
+def test_validation_with_streaming_disabled(agent_backend_module: Any) -> None:
     """Test response validation with streaming disabled (default)."""
     with patch("agent_backend.requests") as mock_requests:
         mock_response = MagicMock()
@@ -391,7 +392,7 @@ def test_validation_with_streaming_disabled(agent_backend_module: any) -> None:
         assert result == "valid code response"
 
 
-def test_response_content_stripped(agent_backend_module: any) -> None:
+def test_response_content_stripped(agent_backend_module: Any) -> None:
     """Test that responses are trimmed of whitespace."""
     with patch("agent_backend.requests") as mock_requests:
         mock_response = MagicMock()
@@ -418,7 +419,7 @@ def test_response_content_stripped(agent_backend_module: any) -> None:
 class TestBackendTypeEnum:
     """Tests for BackendType enum."""
 
-    def test_enum_values(self, agent_backend_module: any) -> None:
+    def test_enum_values(self, agent_backend_module: Any) -> None:
         """Test enum has expected values."""
         BackendType = agent_backend_module.BackendType
         assert BackendType.COPILOT_CLI.value == "copilot"
@@ -426,7 +427,7 @@ class TestBackendTypeEnum:
         assert BackendType.GITHUB_MODELS.value == "github-models"
         assert BackendType.AUTO.value == "auto"
 
-    def test_all_members(self, agent_backend_module: any) -> None:
+    def test_all_members(self, agent_backend_module: Any) -> None:
         """Test all members exist."""
         BackendType = agent_backend_module.BackendType
         assert len(list(BackendType)) == 4
@@ -435,7 +436,7 @@ class TestBackendTypeEnum:
 class TestBackendStateEnum:
     """Tests for BackendState enum."""
 
-    def test_enum_values(self, agent_backend_module: any) -> None:
+    def test_enum_values(self, agent_backend_module: Any) -> None:
         """Test enum has expected values."""
         BackendState = agent_backend_module.BackendState
         assert BackendState.HEALTHY.value == "healthy"
@@ -447,7 +448,7 @@ class TestBackendStateEnum:
 class TestCircuitStateEnum:
     """Tests for CircuitState enum."""
 
-    def test_enum_values(self, agent_backend_module: any) -> None:
+    def test_enum_values(self, agent_backend_module: Any) -> None:
         """Test enum has expected values."""
         CircuitState = agent_backend_module.CircuitState
         assert CircuitState.CLOSED.value == "closed"
@@ -458,7 +459,7 @@ class TestCircuitStateEnum:
 class TestRequestPriorityEnum:
     """Tests for RequestPriority enum."""
 
-    def test_enum_ordering(self, agent_backend_module: any) -> None:
+    def test_enum_ordering(self, agent_backend_module: Any) -> None:
         """Test priority values are ordered."""
         RequestPriority = agent_backend_module.RequestPriority
         assert RequestPriority.LOW.value < RequestPriority.NORMAL.value
@@ -469,7 +470,7 @@ class TestRequestPriorityEnum:
 class TestResponseTransformEnum:
     """Tests for ResponseTransform enum."""
 
-    def test_all_members(self, agent_backend_module: any) -> None:
+    def test_all_members(self, agent_backend_module: Any) -> None:
         """Test all members exist."""
         ResponseTransform = agent_backend_module.ResponseTransform
         members = [m.name for m in ResponseTransform]
@@ -500,7 +501,7 @@ class TestLoadBalanceStrategyEnum:
 class TestBackendConfigDataclass:
     """Tests for BackendConfig dataclass."""
 
-    def test_creation(self, agent_backend_module: any) -> None:
+    def test_creation(self, agent_backend_module: Any) -> None:
         """Test creating BackendConfig."""
         BackendConfig = agent_backend_module.BackendConfig
         BackendType = agent_backend_module.BackendType
@@ -522,7 +523,7 @@ class TestBackendConfigDataclass:
 class TestRequestContextDataclass:
     """Tests for RequestContext dataclass."""
 
-    def test_creation_with_defaults(self, agent_backend_module: any) -> None:
+    def test_creation_with_defaults(self, agent_backend_module: Any) -> None:
         """Test creating RequestContext with defaults."""
         RequestContext = agent_backend_module.RequestContext
         RequestPriority = agent_backend_module.RequestPriority
@@ -536,7 +537,7 @@ class TestRequestContextDataclass:
 class TestBackendResponseDataclass:
     """Tests for BackendResponse dataclass."""
 
-    def test_creation(self, agent_backend_module: any) -> None:
+    def test_creation(self, agent_backend_module: Any) -> None:
         """Test creating BackendResponse."""
         BackendResponse = agent_backend_module.BackendResponse
 
@@ -555,7 +556,7 @@ class TestBackendResponseDataclass:
 class TestBackendHealthStatusDataclass:
     """Tests for BackendHealthStatus dataclass."""
 
-    def test_creation(self, agent_backend_module: any) -> None:
+    def test_creation(self, agent_backend_module: Any) -> None:
         """Test creating BackendHealthStatus."""
         BackendHealthStatus = agent_backend_module.BackendHealthStatus
         BackendState = agent_backend_module.BackendState
@@ -573,7 +574,7 @@ class TestBackendHealthStatusDataclass:
 class TestQueuedRequestDataclass:
     """Tests for QueuedRequest dataclass."""
 
-    def test_comparison(self, agent_backend_module: any) -> None:
+    def test_comparison(self, agent_backend_module: Any) -> None:
         """Test QueuedRequest priority comparison."""
         QueuedRequest = agent_backend_module.QueuedRequest
 
@@ -592,7 +593,7 @@ class TestQueuedRequestDataclass:
 class TestStripWhitespaceTransformer:
     """Tests for StripWhitespaceTransformer."""
 
-    def test_transform(self, agent_backend_module: any) -> None:
+    def test_transform(self, agent_backend_module: Any) -> None:
         """Test whitespace stripping."""
         transformer = agent_backend_module.StripWhitespaceTransformer()
         assert transformer.transform("  hello  ") == "hello"
@@ -602,7 +603,7 @@ class TestStripWhitespaceTransformer:
 class TestExtractCodeTransformer:
     """Tests for ExtractCodeTransformer."""
 
-    def test_extract_code_block(self, agent_backend_module: any) -> None:
+    def test_extract_code_block(self, agent_backend_module: Any) -> None:
         """Test extracting code from markdown."""
         transformer = agent_backend_module.ExtractCodeTransformer()
 
@@ -612,7 +613,7 @@ class TestExtractCodeTransformer:
         assert "print('hello')" in result
         assert "```" not in result
 
-    def test_get_name(self, agent_backend_module: any) -> None:
+    def test_get_name(self, agent_backend_module: Any) -> None:
         """Test transformer name."""
         transformer = agent_backend_module.ExtractCodeTransformer()
         assert transformer.get_name() == "extract_code"
@@ -621,7 +622,7 @@ class TestExtractCodeTransformer:
 class TestExtractJsonTransformer:
     """Tests for ExtractJsonTransformer."""
 
-    def test_extract_json(self, agent_backend_module: any) -> None:
+    def test_extract_json(self, agent_backend_module: Any) -> None:
         """Test extracting JSON from response."""
         transformer = agent_backend_module.ExtractJsonTransformer()
 
@@ -630,7 +631,7 @@ class TestExtractJsonTransformer:
 
         assert '{"key": "value"}' in result or '"key"' in result
 
-    def test_get_name(self, agent_backend_module: any) -> None:
+    def test_get_name(self, agent_backend_module: Any) -> None:
         """Test transformer name."""
         transformer = agent_backend_module.ExtractJsonTransformer()
         assert transformer.get_name() == "extract_json"
@@ -644,14 +645,14 @@ class TestExtractJsonTransformer:
 class TestRequestQueue:
     """Tests for RequestQueue class."""
 
-    def test_initialization(self, agent_backend_module: any) -> None:
+    def test_initialization(self, agent_backend_module: Any) -> None:
         """Test queue initialization."""
         RequestQueue = agent_backend_module.RequestQueue
         queue = RequestQueue()
         assert queue.is_empty() is True
         assert queue.size() == 0
 
-    def test_enqueue_dequeue(self, agent_backend_module: any) -> None:
+    def test_enqueue_dequeue(self, agent_backend_module: Any) -> None:
         """Test enqueue and dequeue operations."""
         RequestQueue = agent_backend_module.RequestQueue
         RequestPriority = agent_backend_module.RequestPriority
@@ -666,7 +667,7 @@ class TestRequestQueue:
         assert request.prompt == "test prompt"
         assert request.request_id == request_id
 
-    def test_priority_ordering(self, agent_backend_module: any) -> None:
+    def test_priority_ordering(self, agent_backend_module: Any) -> None:
         """Test that high priority requests are dequeued first."""
         RequestQueue = agent_backend_module.RequestQueue
         RequestPriority = agent_backend_module.RequestPriority
@@ -689,13 +690,13 @@ class TestRequestQueue:
 class TestRequestBatcher:
     """Tests for RequestBatcher class."""
 
-    def test_initialization(self, agent_backend_module: any) -> None:
+    def test_initialization(self, agent_backend_module: Any) -> None:
         """Test batcher initialization."""
         RequestBatcher = agent_backend_module.RequestBatcher
         batcher = RequestBatcher(batch_size=5, timeout_s=10.0)
         assert batcher.pending_count() == 0
 
-    def test_add_requests(self, agent_backend_module: any) -> None:
+    def test_add_requests(self, agent_backend_module: Any) -> None:
         """Test adding requests to batcher."""
         RequestBatcher = agent_backend_module.RequestBatcher
         batcher = RequestBatcher(batch_size=3)
@@ -708,7 +709,7 @@ class TestRequestBatcher:
         batcher.add("prompt3")
         assert batcher.is_ready() is True
 
-    def test_get_batch(self, agent_backend_module: any) -> None:
+    def test_get_batch(self, agent_backend_module: Any) -> None:
         """Test getting batch."""
         RequestBatcher = agent_backend_module.RequestBatcher
         batcher = RequestBatcher(batch_size=2)
@@ -730,13 +731,13 @@ class TestRequestBatcher:
 class TestBackendHealthMonitor:
     """Tests for BackendHealthMonitor class."""
 
-    def test_initialization(self, agent_backend_module: any) -> None:
+    def test_initialization(self, agent_backend_module: Any) -> None:
         """Test monitor initialization."""
         BackendHealthMonitor = agent_backend_module.BackendHealthMonitor
         monitor = BackendHealthMonitor()
         assert monitor.health_threshold == 0.8
 
-    def test_record_success(self, agent_backend_module: any) -> None:
+    def test_record_success(self, agent_backend_module: Any) -> None:
         """Test recording successful request."""
         BackendHealthMonitor = agent_backend_module.BackendHealthMonitor
         monitor = BackendHealthMonitor()
@@ -744,7 +745,7 @@ class TestBackendHealthMonitor:
         monitor.record_success("test-backend", 150)
         assert monitor.is_healthy("test-backend") is True
 
-    def test_record_failures_unhealthy(self, agent_backend_module: any) -> None:
+    def test_record_failures_unhealthy(self, agent_backend_module: Any) -> None:
         """Test that many failures mark backend unhealthy."""
         BackendHealthMonitor = agent_backend_module.BackendHealthMonitor
         monitor = BackendHealthMonitor(health_threshold=0.8, window_size=10)

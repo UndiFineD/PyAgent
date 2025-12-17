@@ -76,7 +76,7 @@ from enum import Enum, auto
 
 from pathlib import Path
 
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple, cast
 
 AGENT_DIR = Path(__file__).resolve().parent
 
@@ -2836,7 +2836,7 @@ def _rel(path: Path) -> str:
 
 def render_description(py_path: Path, source: str, tree: ast.AST) -> str:
 
-    doc = ast.get_docstring(tree) or ""
+    doc = ast.get_docstring(cast(ast.Module, tree)) or ""
 
     functions, classes = _find_top_level_defs(tree)
 
@@ -3113,7 +3113,7 @@ def render_improvements(py_path: Path, source: str, tree: ast.AST) -> str:
 
     # Generic quality improvements
 
-    if not ast.get_docstring(tree):
+    if not ast.get_docstring(cast(ast.Module, tree)):
 
         suggestions.append("Add a concise module docstring describing purpose / usage.")
 

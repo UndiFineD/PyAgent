@@ -1559,7 +1559,7 @@ class PromptVersionManager:
         total_weight = sum(v.weight for v in versions)
         r = random.uniform(0, total_weight)
 
-        cumulative = 0
+        cumulative = 0.0
         for version in versions:
             cumulative += version.weight
             if r <= cumulative:

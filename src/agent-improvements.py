@@ -1632,7 +1632,7 @@ class ImprovementsAgent(BaseAgent):
 
     # ========== Effort Estimation ==========
 
-    def estimate_total_effort(self) -> Dict[str, int]:
+    def estimate_total_effort(self) -> Dict[str, Any]:
         """Estimate total effort for all improvements."""
         # Effort in hours
         effort_hours = {

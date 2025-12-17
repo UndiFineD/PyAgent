@@ -1963,7 +1963,7 @@ class TestsAgent(BaseAgent):
 
     def calculate_priority_score(self, test: TestCase) -> float:
         """Calculate a priority score for a test."""
-        score = test.priority.value * 20
+        score: float = test.priority.value * 20
 
         # Boost score for tests that fail often
         if test.run_count > 0:

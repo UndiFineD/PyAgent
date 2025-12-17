@@ -1134,7 +1134,7 @@ class MetricNamespaceManager:
             List of namespace names from root to given namespace.
         """
         hierarchy: list[str] = []
-        current = name
+        current: str | None = name
         while current:
             hierarchy.insert(0, current)
             ns = self.namespaces.get(current)
