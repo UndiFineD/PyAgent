@@ -2105,7 +2105,7 @@ class StatsAPIServer:
         Returns:
             OpenAPI - style documentation.
         """
-        docs = {
+        docs: Dict[str, Any] = {
             "openapi": "3.0.0",
             "info": {"title": "Stats API", "version": "1.0.0"},
             "paths": {}

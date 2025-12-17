@@ -563,7 +563,7 @@ class TestDataGenerator:
         Returns:
             str: Generated JSON.
         """
-        data = {
+        data: Dict[str, Any] = {
             "items": [
                 {
                     "id": i,
@@ -1205,7 +1205,7 @@ class DependencyContainer:
     def __init__(self) -> None:
         """Initialize dependency container."""
         self._dependencies: Dict[str, Any] = {}
-        self._factories: Dict[str, Callable[[], Any]] = {}
+        self._factories: Dict[str, Tuple[Callable[[], Any], bool]] = {}
         self._singletons: Dict[str, Any] = {}
 
     def register(self, name: str, instance: Any) -> None:

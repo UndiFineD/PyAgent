@@ -1268,8 +1268,7 @@ class ErrorsAgent(BaseAgent):
         # Adjust based on factors
         if error.category == ErrorCategory.SECURITY:
             base_score += 15
-        if error.category == ErrorCategory.CRITICAL:
-            base_score += 10
+        # Note: CRITICAL category not defined in ErrorCategory enum
         if error.stack_trace:
             base_score += 5  # More context available
         if error.resolved:
