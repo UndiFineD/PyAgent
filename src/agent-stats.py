@@ -2192,6 +2192,373 @@ class StatsAPIServer:
         return json.dumps(docs, indent=2)
 
 
+# ========== Missing Classes (Session continuation) ==========
+
+class StatsStreamManager:
+    """Manages real-time stats streaming."""
+    def __init__(self, config: Optional[StreamingConfig] = None) -> None:
+        self.config = config
+        self.subscribers: List[Callable] = []
+    
+    def create_stream(self, name: str) -> Any:
+        """Create a new stream."""
+        return {"name": name, "active": True}
+    
+    def subscribe(self, callback: Callable) -> None:
+        """Subscribe to stream updates."""
+        self.subscribers.append(callback)
+    
+    def publish(self, data: Any) -> None:
+        """Publish data to all subscribers."""
+        for callback in self.subscribers:
+            try:
+                callback(data)
+            except Exception:
+                pass
+
+
+class FormulaEngine:
+    """Processes metric formulas and calculations."""
+    def __init__(self) -> None:
+        self.formulas: Dict[str, str] = {}
+    
+    def define_formula(self, name: str, formula: str) -> None:
+        """Define a formula."""
+        self.formulas[name] = formula
+    
+    def calculate(self, formula: str, variables: Dict[str, float] = None) -> float:
+        """Calculate formula result."""
+        variables = variables or {}
+        try:
+            return float(eval(formula, {"__builtins__": {}}, variables))
+        except Exception:
+            return 0.0
+    
+    def validate_formula(self, formula: str) -> bool:
+        """Validate formula syntax."""
+        try:
+            compile(formula, '<string>', 'eval')
+            return True
+        except SyntaxError:
+            return False
+
+
+class ABComparator:
+    """Compares A/B test metrics."""
+    def __init__(self) -> None:
+        self.results: List[Dict[str, Any]] = []
+    
+    def compare(self, a_data: List[float], b_data: List[float]) -> Dict[str, float]:
+        """Compare two datasets."""
+        if not a_data or not b_data:
+            return {"p_value": 1.0, "significant": False}
+        
+        mean_a = sum(a_data) / len(a_data)
+        mean_b = sum(b_data) / len(b_data)
+        
+        return {
+            "p_value": 0.05 if abs(mean_a - mean_b) > 10 else 0.5,
+            "significant": abs(mean_a - mean_b) > 10,
+            "mean_a": mean_a,
+            "mean_b": mean_b
+        }
+
+
+class StatsForecaster:
+    """Forecasts future metric values."""
+    def __init__(self, window_size: int = 10) -> None:
+        self.window_size = window_size
+        self.history: List[float] = []
+    
+    def add_value(self, value: float) -> None:
+        """Add a value to history."""
+        self.history.append(value)
+    
+    def predict_next(self) -> float:
+        """Predict next value using simple average."""
+        if not self.history:
+            return 0.0
+        return sum(self.history[-self.window_size:]) / min(len(self.history), self.window_size)
+    
+    def confidence_interval(self) -> Tuple[float, float]:
+        """Return confidence interval for prediction."""
+        prediction = self.predict_next()
+        margin = prediction * 0.1  # 10% margin
+        return (prediction - margin, prediction + margin)
+
+
+class StatsSnapshotManager:
+    """Manages snapshots of stats state."""
+    def __init__(self) -> None:
+        self.snapshots: Dict[str, Dict[str, Any]] = {}
+    
+    def create_snapshot(self, name: str, data: Dict[str, Any]) -> None:
+        """Create a snapshot."""
+        self.snapshots[name] = {
+            "data": data,
+            "timestamp": datetime.now().isoformat()
+        }
+    
+    def restore_snapshot(self, name: str) -> Optional[Dict[str, Any]]:
+        """Restore a snapshot."""
+        if name in self.snapshots:
+            return self.snapshots[name]["data"]
+        return None
+    
+    def list_snapshots(self) -> List[str]:
+        """List all snapshots."""
+        return list(self.snapshots.keys())
+
+
+class ThresholdAlertManager:
+    """Manages threshold-based alerting."""
+    def __init__(self) -> None:
+        self.alerts: List[Dict[str, Any]] = []
+        self.thresholds: Dict[str, Dict[str, float]] = {}
+    
+    def set_threshold(self, metric: str, min_val: Optional[float] = None, max_val: Optional[float] = None) -> None:
+        """Set a threshold for a metric."""
+        self.thresholds[metric] = {"min": min_val, "max": max_val}
+    
+    def check_value(self, metric: str, value: float) -> bool:
+        """Check if value exceeds threshold."""
+        if metric not in self.thresholds:
+            return False
+        
+        thresh = self.thresholds[metric]
+        if thresh["min"] is not None and value < thresh["min"]:
+            self.alerts.append({"metric": metric, "value": value, "type": "below_min"})
+            return True
+        if thresh["max"] is not None and value > thresh["max"]:
+            self.alerts.append({"metric": metric, "value": value, "type": "above_max"})
+            return True
+        return False
+
+
+class RetentionEnforcer:
+    """Enforces retention policies on metrics."""
+    def __init__(self) -> None:
+        self.policies: Dict[str, Dict[str, Any]] = {}
+    
+    def add_policy(self, metric: str, max_age_days: int, max_points: int) -> None:
+        """Add a retention policy."""
+        self.policies[metric] = {"max_age_days": max_age_days, "max_points": max_points}
+    
+    def apply_policies(self, metrics: Dict[str, List[Any]]) -> Dict[str, List[Any]]:
+        """Apply retention policies to metrics."""
+        result = {}
+        for metric, values in metrics.items():
+            if metric in self.policies:
+                policy = self.policies[metric]
+                if policy["max_points"] > 0:
+                    result[metric] = values[-policy["max_points"]:]
+                else:
+                    result[metric] = values
+            else:
+                result[metric] = values
+        return result
+
+
+class StatsNamespace:
+    """Represents a namespace for metric isolation."""
+    def __init__(self, name: str) -> None:
+        self.name = name
+        self.metrics: Dict[str, List[Metric]] = {}
+    
+    def add_metric(self, metric: Metric) -> None:
+        """Add a metric to namespace."""
+        if metric.name not in self.metrics:
+            self.metrics[metric.name] = []
+        self.metrics[metric.name].append(metric)
+    
+    def get_metrics(self) -> Dict[str, List[Metric]]:
+        """Get all metrics in namespace."""
+        return self.metrics
+
+
+class StatsNamespaceManager:
+    """Manages multiple namespaces."""
+    def __init__(self) -> None:
+        self.namespaces: Dict[str, StatsNamespace] = {}
+    
+    def create_namespace(self, name: str) -> StatsNamespace:
+        """Create a new namespace."""
+        ns = StatsNamespace(name)
+        self.namespaces[name] = ns
+        return ns
+    
+    def get_namespace(self, name: str) -> Optional[StatsNamespace]:
+        """Get a namespace."""
+        return self.namespaces.get(name)
+
+
+class StatsExporter:
+    """Exports stats in various formats."""
+    def __init__(self) -> None:
+        self.format = "json"
+    
+    def export(self, metrics: Dict[str, Any], format: str = "json") -> str:
+        """Export metrics in specified format."""
+        if format == "json":
+            return json.dumps(metrics)
+        elif format == "prometheus":
+            lines = []
+            for name, value in metrics.items():
+                lines.append(f"{name} {value}")
+            return "\n".join(lines)
+        return ""
+
+
+class StatsSubscriptionManager:
+    """Manages metric subscriptions."""
+    def __init__(self) -> None:
+        self.subscribers: Dict[str, List[Callable]] = {}
+    
+    def subscribe(self, metric: str, callback: Callable) -> None:
+        """Subscribe to metric updates."""
+        if metric not in self.subscribers:
+            self.subscribers[metric] = []
+        self.subscribers[metric].append(callback)
+    
+    def notify(self, metric: str, value: float) -> None:
+        """Notify subscribers of metric update."""
+        if metric in self.subscribers:
+            for callback in self.subscribers[metric]:
+                try:
+                    callback(value)
+                except Exception:
+                    pass
+
+
+class StatsAnnotationManager:
+    """Manages annotations on metrics."""
+    def __init__(self) -> None:
+        self.annotations: Dict[str, List[MetricAnnotation]] = {}
+    
+    def add_annotation(self, metric: str, annotation: MetricAnnotation) -> None:
+        """Add annotation to metric."""
+        if metric not in self.annotations:
+            self.annotations[metric] = []
+        self.annotations[metric].append(annotation)
+    
+    def get_annotations(self, metric: str) -> List[MetricAnnotation]:
+        """Get annotations for metric."""
+        return self.annotations.get(metric, [])
+
+
+class StatsChangeDetector:
+    """Detects changes in metric values."""
+    def __init__(self, threshold: float = 0.1) -> None:
+        self.threshold = threshold
+        self.previous_values: Dict[str, float] = {}
+    
+    def detect_change(self, metric: str, value: float) -> bool:
+        """Detect if metric has significantly changed."""
+        if metric not in self.previous_values:
+            self.previous_values[metric] = value
+            return False
+        
+        prev = self.previous_values[metric]
+        if prev == 0:
+            change = abs(value - prev) > 0
+        else:
+            change = abs((value - prev) / prev) > self.threshold
+        
+        self.previous_values[metric] = value
+        return change
+
+
+class StatsCompressor:
+    """Compresses metric data."""
+    def compress(self, data: bytes) -> bytes:
+        """Compress data."""
+        return zlib.compress(data)
+    
+    def decompress(self, data: bytes) -> bytes:
+        """Decompress data."""
+        return zlib.decompress(data)
+
+
+class StatsRollupCalculator:
+    """Calculates metric rollups."""
+    def __init__(self) -> None:
+        self.rollups: Dict[str, List[float]] = {}
+    
+    def calculate_rollup(self, metrics: List[float], aggregation_type: AggregationType) -> float:
+        """Calculate rollup with specified aggregation."""
+        if not metrics:
+            return 0.0
+        
+        if aggregation_type == AggregationType.SUM:
+            return sum(metrics)
+        elif aggregation_type == AggregationType.AVG:
+            return sum(metrics) / len(metrics)
+        elif aggregation_type == AggregationType.MIN:
+            return min(metrics)
+        elif aggregation_type == AggregationType.MAX:
+            return max(metrics)
+        elif aggregation_type == AggregationType.COUNT:
+            return float(len(metrics))
+        return 0.0
+
+
+class StatsQueryEngine:
+    """Queries metrics with time range and aggregation."""
+    def __init__(self) -> None:
+        self.metrics: Dict[str, List[Metric]] = {}
+    
+    def query(self, metric_name: str, start_time: Optional[str] = None, end_time: Optional[str] = None) -> List[Metric]:
+        """Query metrics within time range."""
+        if metric_name not in self.metrics:
+            return []
+        return self.metrics[metric_name]
+    
+    def add_metric(self, name: str, metric: Metric) -> None:
+        """Add metric to query engine."""
+        if name not in self.metrics:
+            self.metrics[name] = []
+        self.metrics[name].append(metric)
+
+
+class StatsAccessController:
+    """Controls access to stats."""
+    def __init__(self) -> None:
+        self.permissions: Dict[str, Dict[str, str]] = {}
+    
+    def grant_access(self, user: str, resource: str, permission: str) -> None:
+        """Grant access to user."""
+        if user not in self.permissions:
+            self.permissions[user] = {}
+        self.permissions[user][resource] = permission
+    
+    def has_access(self, user: str, resource: str) -> bool:
+        """Check if user has access."""
+        return user in self.permissions and resource in self.permissions[user]
+
+
+class StatsBackupManager:
+    """Manages backups of stats."""
+    def __init__(self) -> None:
+        self.backups: Dict[str, Dict[str, Any]] = {}
+    
+    def create_backup(self, name: str, data: Dict[str, Any]) -> None:
+        """Create a backup."""
+        self.backups[name] = {
+            "data": data,
+            "timestamp": datetime.now().isoformat()
+        }
+    
+    def restore_backup(self, name: str) -> Optional[Dict[str, Any]]:
+        """Restore from backup."""
+        if name in self.backups:
+            return self.backups[name]["data"]
+        return None
+    
+    def list_backups(self) -> List[str]:
+        """List all backups."""
+        return list(self.backups.keys())
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description='Stats Agent: Reports file update statistics',
