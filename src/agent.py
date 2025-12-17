@@ -1915,7 +1915,7 @@ class ConditionalExecutor:
     def __init__(self) -> None:
         """Initialize executor."""
         self._conditions: Dict[str, ExecutionCondition] = {}
-        self._agent_conditions: Dict[str, List[str]] = {}
+        self._agent_conditions: Dict[str, Dict[str, Any]] = {}
 
     def add_condition(
         self,
@@ -1974,7 +1974,7 @@ class ConditionalExecutor:
             return True  # No conditions, always execute
 
         config = self._agent_conditions[agent_name]
-        condition_names = config["conditions"]
+        condition_names: List[str] = config["conditions"]  # type: ignore
         require_all = config["require_all"]
 
         results = []
