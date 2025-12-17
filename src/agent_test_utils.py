@@ -253,6 +253,38 @@ class TestSnapshot:
 
 
 @dataclass
+class SnapshotComparisonResult:
+    """Result of comparing snapshots.
+
+    Attributes:
+        matches: Whether snapshots match.
+        expected: Expected content.
+        actual: Actual content.
+        snapshot_name: Name of the snapshot.
+    """
+
+    matches: bool
+    expected: Any
+    actual: Any
+    snapshot_name: str
+
+    @property
+    def diff(self) -> Optional[str]:
+        """Get a simple diff representation."""
+        if self.matches:
+            return None
+
+        if isinstance(self.expected, dict) and isinstance(self.actual, dict):
+            expected_str = json.dumps(self.expected, indent=2)
+            actual_str = json.dumps(self.actual, indent=2)
+        else:
+            expected_str = str(self.expected)
+            actual_str = str(self.actual)
+
+        return f"Expected:\n{expected_str}\n\nActual:\n{actual_str}"
+
+
+@dataclass
 class TestAssertion:
     """Custom assertion for agent testing.
 
@@ -415,7 +447,7 @@ class FixtureFactory:
         """
         self.base_dir = base_dir or Path.cwd()
 
-    def create_agent_fixture(self, name: str, config: Dict[str, Any]) -> Any:
+    def create_agent_fixture(self, name: str, config: Optional[Dict[str, Any]] = None) -> Any:
         """Create an agent fixture.
 
         Args:
@@ -426,9 +458,9 @@ class FixtureFactory:
             Agent fixture object with name and config attributes.
         """
         class AgentFixture:
-            def __init__(self, name: str, config: Dict[str, Any]):
+            def __init__(self, name: str, config: Optional[Dict[str, Any]]):
                 self.name = name
-                self.config = config
+                self.config = config or {}
 
         return AgentFixture(name, config)
 
@@ -510,9 +542,54 @@ class TestDataSeeder:
             for i in range(count)
         ]
 
+    def generate_file_content(self, language: str = "python") -> str:
+        """Generate sample file content.
+
+        Args:
+            language: Programming language ("python", "javascript", etc.).
+
+        Returns:
+            Generated file content.
+        """
+        if language == "python":
+            return f'# Python file\ndef func_{self.seed or "test"}():\n    return {random.randint(1, 100)}\n'
+        elif language == "javascript":
+            return f'// JavaScript file\nfunction func_{self.seed or "test"}() {{\n  return {random.randint(1, 100)};\n}}\n'
+        else:
+            return f"// Generic content\nval_{self.seed or 'test'} = {random.randint(1, 100)}\n"
+
+    def generate_unique_id(self) -> str:
+        """Generate a unique ID.
+
+        Returns:
+            Unique ID string.
+        """
+        return f"id_{int(time.time() * 1000000)}_{random.randint(1000, 9999)}"
+
+    def generate_bulk_data(self, count: int = 10, data_type: str = "python_code") -> List[str]:
+        """Generate bulk data.
+
+        Args:
+            count: Number of items to generate.
+            data_type: Type of data to generate.
+
+        Returns:
+            List of generated data items.
+        """
+        if data_type == "python_code":
+            return [f"def func_{i}():\n    return {i}\n" for i in range(count)]
+        elif data_type == "ids":
+            return [self.generate_unique_id() for _ in range(count)]
+        else:
+            return [f"item_{i}_{self.generate_unique_id()}" for i in range(count)]
+
 
 class TestOutputFormatter:
     """Formats test output and results for display."""
+
+    def __init__(self) -> None:
+        """Initialize formatter."""
+        self.results: List[Tuple[str, str, float]] = []
 
     @staticmethod
     def format_success(test_name: str, duration_ms: float) -> str:
@@ -525,7 +602,7 @@ class TestOutputFormatter:
         Returns:
             Formatted success message.
         """
-        return f"✓ {test_name} ({duration_ms:.2f}ms)"
+        return f"✓ {test_name} - PASSED ({duration_ms:.2f}ms)"
 
     @staticmethod
     def format_failure(test_name: str, error: str) -> str:
@@ -554,46 +631,106 @@ class TestOutputFormatter:
         """
         return f"{passed} passed, {failed} failed out of {total} tests"
 
+    def format_result(self, test_name: str, status: Any, duration_ms: float, error_message: str = "") -> str:
+        """Format a test result based on status.
+
+        Args:
+            test_name: Name of the test.
+            status: Status (TestStatus enum, str).
+            duration_ms: Duration in milliseconds.
+            error_message: Optional error message.
+
+        Returns:
+            Formatted result string.
+        """
+        # Handle TestStatus enum
+        status_str = status.value if hasattr(status, 'value') else str(status)
+        status_str = status_str.lower()
+
+        if "pass" in status_str:
+            return self.format_success(test_name, duration_ms)
+        else:
+            msg = f"{status_str}: {error_message}" if error_message else status_str
+            return self.format_failure(test_name, msg)
+
+    def add_result(self, test_name: str, status: Any, duration_ms: float) -> None:
+        """Add a test result.
+
+        Args:
+            test_name: Name of the test.
+            status: Status of the test.
+            duration_ms: Duration in milliseconds.
+        """
+        status_str = status.value if hasattr(status, 'value') else str(status)
+        self.results.append((test_name, status_str, duration_ms))
+
+    def get_summary(self) -> Dict[str, int]:
+        """Get a summary of all results as a dict.
+
+        Returns:
+            Summary dict with counts.
+        """
+        passed = sum(1 for _, status, _ in self.results if "pass" in status.lower())
+        failed = sum(1 for _, status, _ in self.results if "fail" in status.lower())
+        total = len(self.results)
+        return {
+            "passed": passed,
+            "failed": failed,
+            "total": total
+        }
+
+
 
 class AssertionHelpers:
     """Helper functions for common assertions in tests."""
 
     @staticmethod
-    def assert_file_contains(file_path: Path, text: str) -> None:
+    def assert_file_contains(file_path: Path, text: str) -> bool:
         """Assert that a file contains specific text.
 
         Args:
             file_path: Path to the file.
             text: Text to search for.
 
+        Returns:
+            True if assertion passes.
+
         Raises:
             AssertionError: If text is not found.
         """
         content = file_path.read_text()
         assert text in content, f"File {file_path} does not contain '{text}'"
+        return True
 
     @staticmethod
-    def assert_output_matches_pattern(output: str, pattern: str) -> None:
+    def assert_output_matches_pattern(output: str, pattern: str) -> bool:
         """Assert that output matches a regex pattern.
 
         Args:
             output: The output string.
             pattern: The regex pattern.
 
+        Returns:
+            True if assertion passes.
+
         Raises:
             AssertionError: If pattern does not match.
         """
         assert re.search(pattern, output), f"Output does not match pattern '{pattern}'"
+        return True
 
     @staticmethod
-    def assert_raises_with_message(exception_type: type, message: str, fn: Callable, *args: Any) -> None:
+    def assert_raises_with_message(fn: Callable, exception_type: type, message: str, *args: Any) -> bool:
         """Assert that a function raises an exception with a specific message.
 
         Args:
+            fn: Function to call.
             exception_type: Expected exception type.
             message: Expected message text.
-            fn: Function to call.
             *args: Arguments to pass to the function.
+
+        Returns:
+            True if assertion passes.
 
         Raises:
             AssertionError: If exception is not raised or message doesn't match.
@@ -603,6 +740,7 @@ class AssertionHelpers:
             raise AssertionError(f"Expected {exception_type.__name__} but no exception was raised")
         except exception_type as e:
             assert message in str(e), f"Exception message '{str(e)}' does not contain '{message}'"
+            return True
 
 
 class TestTimer:
@@ -628,6 +766,13 @@ class TestTimer:
             return 0.0
         return self.end_time - self.start_time
 
+    @property
+    def elapsed_ms(self) -> float:
+        """Get elapsed time in milliseconds."""
+        if self.start_time is None or self.end_time is None:
+            return 0.0
+        return (self.end_time - self.start_time) * 1000
+
 
 class Benchmarker:
     """Runs benchmarks and collects statistics."""
@@ -644,7 +789,7 @@ class Benchmarker:
             iterations: Number of iterations.
 
         Returns:
-            Statistics dictionary with min, max, mean, and median.
+            Statistics dictionary with min/max/mean in both seconds and milliseconds, plus iterations.
         """
         self.timings = []
         for _ in range(iterations):
@@ -654,11 +799,16 @@ class Benchmarker:
             elapsed = timer.stop()
             self.timings.append(elapsed)
 
+        mean_seconds = sum(self.timings) / len(self.timings)
         return {
             "min": min(self.timings),
             "max": max(self.timings),
-            "mean": sum(self.timings) / len(self.timings),
-            "median": sorted(self.timings)[len(self.timings) // 2]
+            "mean": mean_seconds,
+            "median": sorted(self.timings)[len(self.timings) // 2],
+            "min_ms": min(self.timings) * 1000,
+            "max_ms": max(self.timings) * 1000,
+            "average_ms": mean_seconds * 1000,
+            "iterations": iterations
         }
 
 
@@ -1086,39 +1236,82 @@ class SnapshotManager:
         """Get path for a snapshot."""
         return self.snapshot_dir / f"{name}.snap"
 
-    def save_snapshot(self, name: str, content: str) -> TestSnapshot:
+    def save_snapshot(self, name: str, content: Any) -> TestSnapshot:
         """Save a new snapshot.
 
         Args:
             name: Snapshot name.
-            content: Snapshot content.
+            content: Snapshot content (str or dict/list).
 
         Returns:
             TestSnapshot: Created snapshot.
         """
-        snapshot = TestSnapshot(name=name, content=content)
+        # Convert content to string if it's a dict or list
+        if isinstance(content, (dict, list)):
+            content_str = json.dumps(content, indent=2)
+            snapshot = TestSnapshot(name=name, content=content)
+        else:
+            content_str = str(content)
+            snapshot = TestSnapshot(name=name, content=content)
+
         path = self._get_snapshot_path(name)
-        path.write_text(content, encoding="utf-8")
+        path.write_text(content_str, encoding="utf-8")
         self._snapshots[name] = snapshot
         return snapshot
 
-    def load_snapshot(self, name: str) -> Optional[TestSnapshot]:
+    def load_snapshot(self, name: str) -> Any:
         """Load an existing snapshot.
 
         Args:
             name: Snapshot name.
 
         Returns:
-            Optional[TestSnapshot]: Loaded snapshot or None.
+            The loaded snapshot content or None.
         """
         path = self._get_snapshot_path(name)
         if not path.exists():
             return None
 
-        content = path.read_text(encoding="utf-8")
+        content_str = path.read_text(encoding="utf-8")
+        # Try to parse as JSON
+        try:
+            content = json.loads(content_str)
+        except json.JSONDecodeError:
+            content = content_str
+
+        # Store as TestSnapshot internally
         snapshot = TestSnapshot(name=name, content=content)
         self._snapshots[name] = snapshot
-        return snapshot
+        # But return just the content
+        return content
+
+    def compare_snapshot(self, name: str, actual: Any) -> "SnapshotComparisonResult":
+        """Compare actual content with a saved snapshot.
+
+        Args:
+            name: Snapshot name.
+            actual: Actual content to compare.
+
+        Returns:
+            SnapshotComparisonResult with comparison details.
+        """
+        expected = self.load_snapshot(name)
+
+        if expected is None:
+            return SnapshotComparisonResult(
+                matches=False,
+                expected=None,
+                actual=actual,
+                snapshot_name=name
+            )
+
+        matches = expected == actual
+        return SnapshotComparisonResult(
+            matches=matches,
+            expected=expected,
+            actual=actual,
+            snapshot_name=name
+        )
 
     def assert_match(
         self,
