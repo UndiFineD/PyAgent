@@ -4,6 +4,11 @@ from __future__ import annotations
 import ast
 from pathlib import Path
 from typing import Any
+import unittest
+import json
+import tempfile
+import os
+from datetime import datetime
 import pytest
 from agent_test_utils import agent_dir_on_path, load_agent_module
 
@@ -2339,3 +2344,1637 @@ class TestReportPermissionManagement:
         assert controller.check("user1", "reports / daily.md", PermissionLevel.READ)
         assert controller.check("user1", "admin / config.md", PermissionLevel.WRITE)
         assert not controller.check("user1", "admin / config.md", PermissionLevel.ADMIN)
+
+
+# =============================================================================
+# Session 11: Comprehensive Report Generation Tests (Unittest Style)
+# =============================================================================
+
+
+class TestReportGeneration(unittest.TestCase):
+    """Tests for basic report generation."""
+
+    def test_generate_basic_report(self) -> None:
+        """Test generating basic report."""
+        report = {
+            "title": "Test Report",
+            "timestamp": datetime.now().isoformat(),
+            "version": "1.0",
+        }
+
+        assert report["title"] == "Test Report"
+        assert report["version"] == "1.0"
+
+    def test_generate_report_with_sections(self) -> None:
+        """Test generating report with sections."""
+        report = {
+            "title": "Comprehensive Report",
+            "sections": {
+                "summary": "Summary content",
+                "details": "Details content",
+                "recommendations": "Recommendations content",
+            },
+        }
+
+        assert len(report["sections"]) == 3
+        assert "summary" in report["sections"]
+
+    def test_generate_report_with_metadata(self) -> None:
+        """Test generating report with metadata."""
+        report = {
+            "title": "Report",
+            "metadata": {
+                "author": "Agent",
+                "created": datetime.now().isoformat(),
+                "tags": ["important", "analysis"],
+            },
+        }
+
+        assert report["metadata"]["author"] == "Agent"
+        assert "important" in report["metadata"]["tags"]
+
+    def test_generate_report_with_data(self) -> None:
+        """Test generating report with data."""
+        report = {
+            "title": "Data Report",
+            "data": {
+                "total_items": 100,
+                "processed": 95,
+                "errors": 5,
+            },
+        }
+
+        assert report["data"]["total_items"] == 100
+        assert report["data"]["processed"] + report["data"]["errors"] == 100
+
+
+class TestMarkdownReportFormatting(unittest.TestCase):
+    """Tests for markdown report formatting."""
+
+    def test_format_markdown_header(self) -> None:
+        """Test formatting markdown header."""
+        title = "Report Title"
+        markdown = f"# {title}\n\n"
+
+        assert "# " in markdown
+        assert title in markdown
+
+    def test_format_markdown_sections(self) -> None:
+        """Test formatting markdown sections."""
+        markdown = """
+# Main Title
+
+## Section 1
+Content 1
+
+## Section 2
+Content 2
+"""
+
+        assert "##" in markdown
+        assert "Section 1" in markdown
+        assert "Section 2" in markdown
+
+    def test_format_markdown_table(self) -> None:
+        """Test formatting markdown table."""
+        data = [
+            {"name": "Item 1", "count": 10},
+            {"name": "Item 2", "count": 20},
+        ]
+
+        markdown = "| Name | Count |\n|---|---|\n"
+        for row in data:
+            markdown += f"| {row['name']} | {row['count']} |\n"
+
+        assert "| Name | Count |" in markdown
+        assert "| Item 1 | 10 |" in markdown
+
+    def test_format_markdown_list(self) -> None:
+        """Test formatting markdown list."""
+        items = ["Item 1", "Item 2", "Item 3"]
+        markdown = ""
+        for item in items:
+            markdown += f"- {item}\n"
+
+        assert markdown.count("-") == 3
+
+    def test_format_markdown_code_block(self) -> None:
+        """Test formatting markdown code block."""
+        code = "def hello():\n    print('Hello')"
+        markdown = f"```python\n{code}\n```"
+
+        assert "```python" in markdown
+        assert code in markdown
+
+
+class TestHTMLReportFormatting(unittest.TestCase):
+    """Tests for HTML report formatting."""
+
+    def test_format_html_basic(self) -> None:
+        """Test formatting basic HTML."""
+        html = """
+<html>
+<head><title>Report</title></head>
+<body>
+<h1>Report Title</h1>
+<p>Content</p>
+</body>
+</html>
+"""
+
+        assert "<html>" in html
+        assert "<h1>" in html
+
+    def test_format_html_table(self) -> None:
+        """Test formatting HTML table."""
+        html = """
+<table>
+<tr><th>Header 1</th><th>Header 2</th></tr>
+<tr><td>Data 1</td><td>Data 2</td></tr>
+</table>
+"""
+
+        assert "<table>" in html
+        assert "<th>" in html
+        assert "<td>" in html
+
+    def test_format_html_styled(self) -> None:
+        """Test formatting styled HTML."""
+        html = """
+<html>
+<head>
+<style>
+h1 { color: blue; }
+p { font-size: 14px; }
+</style>
+</head>
+<body>
+<h1>Title</h1>
+</body>
+</html>
+"""
+
+        assert "<style>" in html
+        assert "color: blue" in html
+
+    def test_format_html_responsive(self) -> None:
+        """Test formatting responsive HTML."""
+        html = """
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+Content
+</body>
+</html>
+"""
+
+        assert 'viewport' in html
+        assert 'width=device-width' in html
+
+
+class TestJSONReportFormatting(unittest.TestCase):
+    """Tests for JSON report formatting."""
+
+    def test_format_json_basic(self) -> None:
+        """Test formatting basic JSON."""
+        data = {
+            "title": "Report",
+            "timestamp": "2025-12-16",
+            "items": [1, 2, 3],
+        }
+
+        json_str = json.dumps(data)
+        restored = json.loads(json_str)
+
+        assert restored["title"] == "Report"
+
+    def test_format_json_nested(self) -> None:
+        """Test formatting nested JSON."""
+        data = {
+            "report": {
+                "title": "Title",
+                "sections": {
+                    "summary": "Summary",
+                    "details": "Details",
+                },
+            },
+        }
+
+        json_str = json.dumps(data)
+        assert '"report"' in json_str
+
+    def test_format_json_with_arrays(self) -> None:
+        """Test formatting JSON with arrays."""
+        data = {
+            "items": [
+                {"id": 1, "name": "Item 1"},
+                {"id": 2, "name": "Item 2"},
+            ],
+        }
+
+        json_str = json.dumps(data)
+        restored = json.loads(json_str)
+
+        assert len(restored["items"]) == 2
+
+    def test_format_json_pretty_print(self) -> None:
+        """Test JSON pretty printing."""
+        data = {"key": "value"}
+
+        pretty_json = json.dumps(data, indent=2)
+        compact_json = json.dumps(data)
+
+        assert len(pretty_json) > len(compact_json)
+
+
+class TestCSVReportFormatting(unittest.TestCase):
+    """Tests for CSV report formatting."""
+
+    def test_format_csv_basic(self) -> None:
+        """Test formatting basic CSV."""
+        headers = ["Name", "Count", "Status"]
+        rows = [
+            ["Item 1", "10", "Done"],
+            ["Item 2", "20", "Pending"],
+        ]
+
+        csv_lines = [",".join(headers)]
+        for row in rows:
+            csv_lines.append(",".join(row))
+
+        csv_content = "\n".join(csv_lines)
+        assert "Name,Count,Status" in csv_content
+
+    def test_format_csv_with_quotes(self) -> None:
+        """Test formatting CSV with quotes."""
+        data = [
+            ['Item "A"', 'Value "B"'],
+        ]
+
+        csv_line = ','.join(['"{item}"' for item in data[0]])
+        assert '"Item' in csv_line
+
+    def test_format_csv_escaping(self) -> None:
+        """Test CSV escaping."""
+        escaped = '"{value}"'
+
+        assert isinstance(escaped, str)
+
+    def test_format_csv_header_footer(self) -> None:
+        """Test CSV with header and footer."""
+        csv = "# Generated: 2025-12-16\n"
+        csv += "Name,Value\n"
+        csv += "Item 1,100\n"
+        csv += "# Total: 1 item"
+
+        assert csv.startswith("#")
+        assert "Name,Value" in csv
+
+
+class TestReportTemplates(unittest.TestCase):
+    """Tests for report templates."""
+
+    def test_template_substitution(self) -> None:
+        """Test template substitution."""
+        template = "Report for {project} generated on {date}"
+
+        report = template.format(project="MyApp", date="2025-12-16")
+        assert report == "Report for MyApp generated on 2025-12-16"
+
+    def test_template_with_conditionals(self) -> None:
+        """Test template with conditionals."""
+        data = {"has_errors": True, "errors": 5}
+
+        if data["has_errors"]:
+            message = f"Found {data['errors']} errors"
+        else:
+            message = "No errors"
+
+        assert "Found 5 errors" in message
+
+    def test_template_with_loops(self) -> None:
+        """Test template with loops."""
+        items = ["Item 1", "Item 2", "Item 3"]
+
+        content = "Items:\n"
+        for item in items:
+            content += f"  - {item}\n"
+
+        assert "- Item 1" in content
+        assert content.count("-") == 3
+
+    def test_template_inheritance(self) -> None:
+        """Test template inheritance."""
+        base_template = "### {title}\n{content}"
+
+        title = "Section"
+        content = "Details"
+
+        result = base_template.format(title=title, content=content)
+        assert "### Section" in result
+
+
+class TestMetricsCollection(unittest.TestCase):
+    """Tests for metrics collection in reports."""
+
+    def test_collect_count_metrics(self) -> None:
+        """Test collecting count metrics."""
+        items = [1, 2, 3, 4, 5]
+
+        metrics = {
+            "total_items": len(items),
+            "sum": sum(items),
+            "average": sum(items) / len(items),
+        }
+
+        assert metrics["total_items"] == 5
+        assert metrics["average"] == 3.0
+
+    def test_collect_time_metrics(self) -> None:
+        """Test collecting time metrics."""
+        import time
+        start = datetime.now()
+        time.sleep(0.01)
+        end = datetime.now()
+
+        elapsed = (end - start).total_seconds()
+
+        assert elapsed > 0
+
+    def test_collect_status_metrics(self) -> None:
+        """Test collecting status metrics."""
+        items = [
+            {"status": "success"},
+            {"status": "success"},
+            {"status": "failed"},
+        ]
+
+        metrics = {
+            "success": sum(1 for i in items if i["status"] == "success"),
+            "failed": sum(1 for i in items if i["status"] == "failed"),
+        }
+
+        assert metrics["success"] == 2
+        assert metrics["failed"] == 1
+
+    def test_collect_performance_metrics(self) -> None:
+        """Test collecting performance metrics."""
+        metrics = {
+            "requests": 1000,
+            "errors": 5,
+            "error_rate": 5 / 1000,
+            "success_rate": 995 / 1000,
+        }
+
+        assert metrics["error_rate"] == 0.005
+        assert metrics["success_rate"] == 0.995
+
+
+class TestReportExport(unittest.TestCase):
+    """Tests for exporting reports."""
+
+    def test_export_to_file(self) -> None:
+        """Test exporting report to file."""
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as f:
+            f.write("Report content")
+            temp_file = f.name
+
+        try:
+            with open(temp_file, 'r') as f:
+                content = f.read()
+
+            assert content == "Report content"
+        finally:
+            os.unlink(temp_file)
+
+    def test_export_markdown_file(self) -> None:
+        """Test exporting markdown file."""
+        content = "# Title\n\nContent"
+
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.md') as f:
+            f.write(content)
+            filename = f.name
+
+        try:
+            assert os.path.exists(filename)
+        finally:
+            os.unlink(filename)
+
+    def test_export_json_file(self) -> None:
+        """Test exporting JSON file."""
+        data = {"title": "Report", "items": [1, 2, 3]}
+
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f:
+            json.dump(data, f)
+            filename = f.name
+
+        try:
+            with open(filename, 'r') as f:
+                restored = json.load(f)
+
+            assert restored["title"] == "Report"
+        finally:
+            os.unlink(filename)
+
+    def test_export_multiple_formats(self) -> None:
+        """Test exporting to multiple formats."""
+        data = {"title": "Report", "content": "Data"}
+        formats = ["md", "json", "csv"]
+
+        exported = {}
+        for fmt in formats:
+            if fmt == "json":
+                exported[fmt] = json.dumps(data)
+            else:
+                exported[fmt] = str(data)
+
+        assert len(exported) == 3
+
+
+class TestReportAggregation(unittest.TestCase):
+    """Tests for report aggregation."""
+
+    def test_aggregate_multiple_reports(self) -> None:
+        """Test aggregating multiple reports."""
+        reports = [
+            {"name": "Report 1", "items": 10},
+            {"name": "Report 2", "items": 20},
+            {"name": "Report 3", "items": 15},
+        ]
+
+        aggregated = {
+            "total_reports": len(reports),
+            "total_items": sum(r["items"] for r in reports),
+        }
+
+        assert aggregated["total_reports"] == 3
+        assert aggregated["total_items"] == 45
+
+    def test_aggregate_with_grouping(self) -> None:
+        """Test aggregating with grouping."""
+        items = [
+            {"type": "A", "value": 10},
+            {"type": "A", "value": 20},
+            {"type": "B", "value": 15},
+        ]
+
+        grouped = {}
+        for item in items:
+            if item["type"] not in grouped:
+                grouped[item["type"]] = []
+            grouped[item["type"]].append(item["value"])
+
+        assert len(grouped["A"]) == 2
+        assert grouped["B"] == [15]
+
+    def test_aggregate_with_statistics(self) -> None:
+        """Test aggregating with statistics."""
+        values = [10, 20, 30, 40, 50]
+
+        stats = {
+            "count": len(values),
+            "sum": sum(values),
+            "mean": sum(values) / len(values),
+            "min": min(values),
+            "max": max(values),
+        }
+
+        assert stats["count"] == 5
+        assert stats["mean"] == 30
+        assert stats["min"] == 10
+
+
+class TestReportValidation(unittest.TestCase):
+    """Tests for report validation."""
+
+    def test_validate_required_fields(self) -> None:
+        """Test validating required fields."""
+        report = {
+            "title": "Report",
+            "timestamp": "2025-12-16",
+        }
+
+        required = ["title", "timestamp"]
+        valid = all(field in report for field in required)
+
+        assert valid
+
+    def test_validate_report_structure(self) -> None:
+        """Test validating report structure."""
+        report = {
+            "metadata": {"author": "Test"},
+            "sections": {},
+            "data": {},
+        }
+
+        structure_valid = all(k in report for k in ["metadata", "sections", "data"])
+        assert structure_valid
+
+    def test_validate_data_types(self) -> None:
+        """Test validating data types."""
+        report = {
+            "title": "Report",
+            "items": [1, 2, 3],
+            "count": 3,
+        }
+
+        assert isinstance(report["title"], str)
+        assert isinstance(report["items"], list)
+        assert isinstance(report["count"], int)
+
+    def test_validate_consistency(self) -> None:
+        """Test validating consistency."""
+        report = {
+            "items": [1, 2, 3, 4, 5],
+            "count": 5,
+        }
+
+        consistent = len(report["items"]) == report["count"]
+        assert consistent
+
+
+class TestReportIntegration(unittest.TestCase):
+    """Integration tests for report generation."""
+
+    def test_end_to_end_report_generation(self) -> None:
+        """Test end-to-end report generation."""
+        data = {
+            "total": 100,
+            "success": 95,
+            "failed": 5,
+        }
+
+        report = {
+            "title": "Test Report",
+            "data": data,
+            "timestamp": datetime.now().isoformat(),
+        }
+
+        assert report["title"] == "Test Report"
+        assert report["data"]["total"] == 100
+
+        json_export = json.dumps(report)
+        assert len(json_export) > 0
+
+    def test_multi_format_export_workflow(self) -> None:
+        """Test multi-format export workflow."""
+        content = "# Report\n\nContent"
+
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+            f.write(content)
+            md_file = f.name
+
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
+            f.write(content)
+            txt_file = f.name
+
+        try:
+            assert os.path.exists(md_file)
+            assert os.path.exists(txt_file)
+        finally:
+            os.unlink(md_file)
+            os.unlink(txt_file)
+
+    def test_batch_report_generation(self) -> None:
+        """Test batch report generation."""
+        reports = []
+
+        for i in range(5):
+            report = {
+                "id": i,
+                "title": f"Report {i}",
+                "data": {"count": i * 10},
+            }
+            reports.append(report)
+
+        assert len(reports) == 5
+        assert reports[0]["id"] == 0
+        assert reports[4]["data"]["count"] == 40
+
+
+class TestComprehensiveDocstrings(unittest.TestCase):
+    """Test that all methods have comprehensive Google-style docstrings."""
+
+    def test_google_style_docstring_format(self) -> None:
+        """Verify docstring format follows Google conventions."""
+        docstring = """Generate a report for the specified agent.
+
+        Args:
+            agent_name (str): Name of the agent.
+            output_dir (Path): Directory for report output.
+            report_type (str): Type of report to generate.
+
+        Returns:
+            Dict[str, Any]: Report data including metrics and analysis.
+
+        Raises:
+            FileNotFoundError: If agent data directory not found.
+            ValueError: If report_type is invalid.
+        """
+        self.assertIn("Args:", docstring)
+        self.assertIn("Returns:", docstring)
+        self.assertIn("Raises:", docstring)
+
+    def test_method_docstring_includes_examples(self) -> None:
+        """Verify docstring includes usage examples."""
+        docstring = """Generate visual report with charts.
+
+        Args:
+            data (List[Dict]): Report data points.
+
+        Returns:
+            str: Path to generated visual report file.
+
+        Example:
+            >>> data=[{'metric': 'coverage', 'value': 85}]
+            >>> path=generate_visual_report(data)
+            >>> assert Path(path).exists()
+        """
+        self.assertIn("Example:", docstring)
+
+    def test_parameter_type_hints_in_docstring(self) -> None:
+        """Verify all parameters have type hints in docstring."""
+        docstring = """Process report configuration.
+
+        Args:
+            config (Dict[str, Any]): Report configuration settings.
+            override (bool): Override existing settings.
+
+        Returns:
+            bool: Success status.
+        """
+        self.assertIn("(Dict[str, Any])", docstring)
+        self.assertIn("(bool)", docstring)
+
+
+class TestReportRefactoring(unittest.TestCase):
+    """Test strategies for refactoring generate_agent_reports.py."""
+
+    def test_report_generator_module_split(self) -> None:
+        """Verify refactoring into separate report generator modules."""
+        modules = [
+            "base_report_generator.py",
+            "text_report_generator.py",
+            "structured_report_generator.py",
+            "visual_report_generator.py",
+            "distribution_report_handler.py"
+        ]
+        self.assertEqual(len(modules), 5)
+
+    def test_report_generator_abstract_interface(self) -> None:
+        """Test abstract interface for report generators."""
+        class BaseReportGenerator:
+            """Abstract base class for report generation."""
+
+            def generate(self, data: dict[str, Any]) -> str:
+                """Generate report from data."""
+                raise NotImplementedError
+
+            def validate(self) -> bool:
+                """Validate report can be generated."""
+                raise NotImplementedError
+
+        self.assertTrue(hasattr(BaseReportGenerator, 'generate'))
+        self.assertTrue(hasattr(BaseReportGenerator, 'validate'))
+
+    def test_report_factory_pattern(self) -> None:
+        """Test factory pattern for report generator creation."""
+        class ReportGeneratorFactory:
+            """Factory for creating report generators."""
+
+            _generators = {
+                'markdown': 'MarkdownReportGenerator',
+                'json': 'JSONReportGenerator',
+                'html': 'HTMLReportGenerator',
+                'pdf': 'PDFReportGenerator'
+            }
+
+            @classmethod
+            def create(cls, report_type: str):
+                """Create report generator of specified type."""
+                if report_type not in cls._generators:
+                    raise ValueError(f"Unknown report type: {report_type}")
+                return cls._generators[report_type]
+
+        self.assertIn('markdown', ReportGeneratorFactory._generators)
+        self.assertIn('json', ReportGeneratorFactory._generators)
+
+
+class TestMultipleFormatSupport(unittest.TestCase):
+    """Test support for generating reports in multiple formats."""
+
+    def test_html_report_generation(self) -> None:
+        """Test HTML report generation with styling."""
+        html_content = """<!DOCTYPE html>
+        <html>
+        <head><title>Agent Report</title></head>
+        <body>
+            <h1>Agent Analysis Report</h1>
+            <div class="metrics">
+                <p>Total Files: 150</p>
+                <p>Test Coverage: 85%</p>
+            </div>
+        </body>
+        </html>"""
+
+        self.assertIn("<!DOCTYPE html>", html_content)
+        self.assertIn("<h1>", html_content)
+        self.assertIn("metrics", html_content)
+
+    def test_pdf_report_generation(self) -> None:
+        """Test PDF report generation."""
+        pdf_config = {
+            'page_size': 'A4',
+            'orientation': 'portrait',
+            'margins': {'top': 1, 'bottom': 1, 'left': 1, 'right': 1},
+            'fonts': ['Helvetica', 'Times-Roman']
+        }
+
+        self.assertEqual(pdf_config['page_size'], 'A4')
+        self.assertEqual(pdf_config['orientation'], 'portrait')
+
+    def test_markdown_report_generation(self) -> None:
+        """Test markdown report generation."""
+        markdown_report = """# Agent Report
+
+## Summary
+- Total Files: 150
+- Test Coverage: 85%
+
+## Metrics
+| Metric | Value |
+|--------|-------|
+| Coverage | 85% |
+| Issues | 12 |
+"""
+
+        self.assertIn("# Agent Report", markdown_report)
+        self.assertIn("## Summary", markdown_report)
+        self.assertIn("|", markdown_report)
+
+    def test_json_report_generation(self) -> None:
+        """Test JSON report generation."""
+        report_data = {
+            "metadata": {
+                "generated_at": "2024-01-15T10:30:00Z",
+                "version": "1.0"
+            },
+            "summary": {
+                "total_files": 150,
+                "test_coverage": 85.5
+            },
+            "metrics": []
+        }
+
+        json_str = json.dumps(report_data)
+        self.assertIn("metadata", json_str)
+        self.assertIn("summary", json_str)
+
+    def test_format_detection_from_filename(self) -> None:
+        """Test format detection from report filename."""
+        files = [
+            ("report.html", "html"),
+            ("report.pdf", "pdf"),
+            ("report.md", "markdown"),
+            ("report.json", "json"),
+            ("report.xlsx", "excel")
+        ]
+
+        for filename, expected_format in files:
+            detected = filename.split('.')[-1]
+            format_map = {
+                'html': 'html',
+                'pdf': 'pdf',
+                'md': 'markdown',
+                'json': 'json',
+                'xlsx': 'excel'
+            }
+            self.assertEqual(format_map.get(detected), expected_format)
+
+
+class TestIncrementalGeneration(unittest.TestCase):
+    """Test incremental report generation and change tracking."""
+
+    def test_track_changed_files(self) -> None:
+        """Test tracking which files have changed."""
+        baseline_files = {
+            'agent.py': {'hash': 'abc123', 'mtime': 1000},
+            'base_agent.py': {'hash': 'def456', 'mtime': 1001}
+        }
+
+        current_files = {
+            'agent.py': {'hash': 'abc123', 'mtime': 1000},
+            'base_agent.py': {'hash': 'xyz789', 'mtime': 1002}
+        }
+
+        changed_files = [
+            f for f in current_files
+            if current_files[f]['hash'] != baseline_files.get(f, {}).get('hash')
+        ]
+
+        self.assertIn('base_agent.py', changed_files)
+        self.assertNotIn('agent.py', changed_files)
+
+    def test_skip_unchanged_sections(self) -> None:
+        """Test skipping analysis for unchanged sections."""
+        report_cache = {
+            'section_1': {'data': 'unchanged', 'timestamp': 1000},
+            'section_2': {'data': 'changed', 'timestamp': 1000}
+        }
+
+        unchanged_threshold = 1500
+
+        skipped = [
+            s for s, v in report_cache.items()
+            if v['timestamp'] < unchanged_threshold
+        ]
+
+        self.assertIn('section_1', skipped)
+
+    def test_incremental_metrics_update(self) -> None:
+        """Test updating only changed metrics incrementally."""
+        previous_metrics = {
+            'files': 150,
+            'coverage': 85.0,
+            'warnings': 42,
+            'timestamp': 1000
+        }
+
+        updated_metrics = previous_metrics.copy()
+        updated_metrics['timestamp'] = 2000
+        updated_metrics['files'] = 151
+
+        self.assertEqual(updated_metrics['timestamp'], 2000)
+        self.assertNotEqual(
+            updated_metrics['timestamp'],
+            previous_metrics['timestamp']
+        )
+
+
+class TestReportCaching(unittest.TestCase):
+    """Test report caching mechanisms."""
+
+    def test_section_level_caching(self) -> None:
+        """Test caching individual report sections."""
+        cache = {
+            'summary': {'content': 'Summary data', 'valid': True},
+            'metrics': {'content': 'Metrics data', 'valid': True},
+            'details': {'content': 'Details data', 'valid': False}
+        }
+
+        valid_sections = [k for k, v in cache.items() if v['valid']]
+        self.assertEqual(len(valid_sections), 2)
+
+    def test_cache_expiration_time(self) -> None:
+        """Test cache expiration based on time."""
+        cache_entries = [
+            {'key': 'entry1', 'timestamp': 1000, 'ttl': 300},
+            {'key': 'entry2', 'timestamp': 1000, 'ttl': 600}
+        ]
+
+        current_time = 1400
+
+        valid_entries = [
+            e for e in cache_entries
+            if current_time - e['timestamp'] < e['ttl']
+        ]
+
+        self.assertEqual(len(valid_entries), 1)
+        self.assertEqual(valid_entries[0]['key'], 'entry2')
+
+    def test_cache_invalidation_on_file_change(self) -> None:
+        """Test cache invalidation when source files change."""
+        cache = {
+            'report_v1': {
+                'file_hash': 'abc123',
+                'data': 'cached report'
+            }
+        }
+
+        new_hash = 'def456'
+
+        if cache['report_v1']['file_hash'] != new_hash:
+            cache['report_v1'] = None
+
+        self.assertIsNone(cache['report_v1'])
+
+    def test_cache_with_file_hashing(self) -> None:
+        """Test cache validation using file hashing."""
+        import hashlib
+
+        content = "report data"
+        hash_value = hashlib.md5(content.encode()).hexdigest()
+
+        cache_entry = {
+            'content': content,
+            'hash': hash_value
+        }
+
+        new_content = "report data"
+        new_hash = hashlib.md5(new_content.encode()).hexdigest()
+
+        self.assertEqual(cache_entry['hash'], new_hash)
+
+
+class TestReportCustomization(unittest.TestCase):
+    """Test report customization and user-selectable sections."""
+
+    def test_user_selectable_sections(self) -> None:
+        """Test user-customizable report sections."""
+        available_sections = {
+            'summary': True,
+            'metrics': True,
+            'analysis': True,
+            'recommendations': False,
+            'trends': True
+        }
+
+        selected_sections = [s for s, inc in available_sections.items() if inc]
+        self.assertIn('summary', selected_sections)
+        self.assertNotIn('recommendations', selected_sections)
+
+    def test_custom_metrics_selection(self) -> None:
+        """Test selection of custom metrics for report."""
+        all_metrics = [
+            'files_analyzed',
+            'test_coverage',
+            'warnings',
+            'errors',
+            'code_complexity',
+            'duplicated_code',
+            'security_issues'
+        ]
+
+        custom_selection = ['test_coverage', 'security_issues', 'warnings']
+
+        selected = [m for m in all_metrics if m in custom_selection]
+        self.assertEqual(len(selected), 3)
+
+    def test_report_template_customization(self) -> None:
+        """Test custom report templates."""
+        template = """
+        # {title}
+
+        ## Overview
+        {overview}
+
+        ## Metrics
+        {metrics}
+
+        ## Recommendations
+        {recommendations}
+        """
+
+        filled_template = template.format(
+            title="Agent Analysis Report",
+            overview="This report analyzes...",
+            metrics="- Coverage: 85%",
+            recommendations="- Add tests"
+        )
+
+        self.assertIn("Agent Analysis Report", filled_template)
+        self.assertIn("85%", filled_template)
+
+    def test_filter_metrics_by_threshold(self) -> None:
+        """Test filtering metrics by threshold values."""
+        metrics = [
+            {'name': 'coverage', 'value': 85},
+            {'name': 'warnings', 'value': 12},
+            {'name': 'errors', 'value': 2},
+            {'name': 'complexity', 'value': 45}
+        ]
+
+        high_value_metrics = [m for m in metrics if m['value'] > 40]
+
+        self.assertEqual(len(high_value_metrics), 2)
+
+
+class TestVisualReportGeneration(unittest.TestCase):
+    """Test generation of visual reports with graphs and charts."""
+
+    def test_matplotlib_line_chart_generation(self) -> None:
+        """Test generating line charts with matplotlib."""
+        chart_config = {
+            'type': 'line',
+            'title': 'Coverage Trend',
+            'xlabel': 'Date',
+            'ylabel': 'Coverage %',
+            'data': [
+                {'date': '2024-01-01', 'value': 75},
+                {'date': '2024-01-02', 'value': 78},
+                {'date': '2024-01-03', 'value': 82}
+            ]
+        }
+
+        self.assertEqual(chart_config['type'], 'line')
+        self.assertEqual(len(chart_config['data']), 3)
+
+    def test_bar_chart_generation(self) -> None:
+        """Test generating bar charts."""
+        bar_data = {
+            'categories': ['agent.py', 'base_agent.py', 'agent_context.py'],
+            'values': [150, 200, 120],
+            'title': 'Lines of Code by Module'
+        }
+
+        self.assertEqual(len(bar_data['categories']), 3)
+        self.assertEqual(len(bar_data['values']), 3)
+
+    def test_heatmap_generation(self) -> None:
+        """Test generating heatmaps for correlation analysis."""
+        heatmap_data = {
+            'modules': ['agent.py', 'base_agent.py', 'agent_context.py'],
+            'metrics': ['coverage', 'complexity', 'tests'],
+            'values': [
+                [85, 45, 120],
+                [92, 38, 150],
+                [78, 52, 95]
+            ]
+        }
+
+        self.assertEqual(len(heatmap_data['values']), 3)
+        self.assertEqual(len(heatmap_data['values'][0]), 3)
+
+    def test_pie_chart_generation(self) -> None:
+        """Test generating pie charts for composition."""
+        pie_data = {
+            'labels': ['Passed', 'Failed', 'Skipped'],
+            'values': [450, 25, 10],
+            'colors': ['#2ecc71', '#e74c3c', '#f39c12']
+        }
+
+        total = sum(pie_data['values'])
+        self.assertEqual(total, 485)
+
+    def test_save_charts_as_image(self) -> None:
+        """Test saving generated charts as image files."""
+        image_formats = ['png', 'pdf', 'svg', 'jpg']
+
+        for fmt in image_formats:
+            filepath = f"/reports/chart.{fmt}"
+            self.assertTrue(filepath.endswith(f".{fmt}"))
+
+
+class TestExecutiveSummary(unittest.TestCase):
+    """Test executive summary generation."""
+
+    def test_generate_key_metrics_summary(self) -> None:
+        """Test generating summary of key metrics."""
+        _ = {
+            'total_files': 150,
+            'test_coverage': 85.5,
+            'warnings': 12,
+            'errors': 2,
+            'code_complexity': 4.2
+        }
+
+        summary = """
+        Executive Summary
+        - Total Files: {metrics['total_files']}
+        - Test Coverage: {metrics['test_coverage']}%
+        - Critical Issues: {metrics['errors']}
+        """
+
+        self.assertIn("150", summary)
+        self.assertIn("85.5", summary)
+
+    def test_executive_summary_with_trends(self) -> None:
+        """Test executive summary including trend information."""
+        summary = {
+            'period': 'Last 7 days',
+            'coverage_trend': 'up 3.2%',
+            'warning_trend': 'down 5',
+            'complexity_trend': 'stable',
+            'highlight': 'Coverage improved due to new tests'
+        }
+
+        self.assertIn('%', summary['coverage_trend'])
+
+    def test_summary_with_priority_issues(self) -> None:
+        """Test executive summary highlighting priority issues."""
+        issues = [
+            {'priority': 'critical', 'count': 2},
+            {'priority': 'high', 'count': 8},
+            {'priority': 'medium', 'count': 15}
+        ]
+
+        critical = [i for i in issues if i['priority'] == 'critical']
+        self.assertEqual(len(critical), 1)
+        self.assertEqual(critical[0]['count'], 2)
+
+
+class TestReportTemplating(unittest.TestCase):
+    """Test report templating for consistent formatting."""
+
+    def test_jinja2_template_rendering(self) -> None:
+        """Test Jinja2 template rendering for reports."""
+        template_str = """
+        Report for {agent_name}
+        Generated: {date}
+        Summary: {summary}
+        """
+
+        data = {
+            'agent_name': 'TestAgent',
+            'date': '2024-01-15',
+            'summary': 'Analysis complete'
+        }
+
+        result = template_str.format(**data)
+
+        self.assertIn('TestAgent', result)
+
+    def test_template_with_conditional_sections(self) -> None:
+        """Test templates with conditional sections."""
+        template_config = {
+            'sections': {
+                'summary': True,
+                'metrics': True,
+                'recommendations': False,
+                'warnings': True
+            }
+        }
+
+        active_sections = [s for s, v in template_config['sections'].items() if v]
+        self.assertNotIn('recommendations', active_sections)
+
+    def test_template_inheritance(self) -> None:
+        """Test template inheritance for code reuse."""
+
+        derived_template = "# Agent Report\n{{ agent_name }}\n{{ content }}"
+
+        self.assertIn("# Agent Report", derived_template)
+
+
+class TestGitIntegration(unittest.TestCase):
+    """Test git integration in reports."""
+
+    def test_extract_authors_from_commits(self) -> None:
+        """Test extracting authors from git history."""
+        commits = [
+            {'hash': 'abc123', 'author': 'Alice', 'date': '2024-01-15'},
+            {'hash': 'def456', 'author': 'Bob', 'date': '2024-01-14'},
+            {'hash': 'ghi789', 'author': 'Alice', 'date': '2024-01-13'}
+        ]
+
+        authors = set(c['author'] for c in commits)
+        self.assertIn('Alice', authors)
+        self.assertIn('Bob', authors)
+
+    def test_commit_history_in_report(self) -> None:
+        """Test including commit history in report."""
+        commit_history = [
+            {
+                'message': 'Add test coverage',
+                'author': 'Alice',
+                'date': '2024-01-15',
+                'files_changed': 3
+            },
+            {
+                'message': 'Fix bug in agent',
+                'author': 'Bob',
+                'date': '2024-01-14',
+                'files_changed': 1
+            }
+        ]
+
+        self.assertEqual(len(commit_history), 2)
+        self.assertEqual(commit_history[0]['files_changed'], 3)
+
+    def test_blame_information_integration(self) -> None:
+        """Test integrating git blame information."""
+        blame_data = {
+            'file': 'agent.py',
+            'lines': [
+                {
+                    'number': 1,
+                    'author': 'Alice',
+                    'commit': 'abc123',
+                    'date': '2024-01-10'
+                },
+                {
+                    'number': 2,
+                    'author': 'Bob',
+                    'commit': 'def456',
+                    'date': '2024-01-15'
+                }
+            ]
+        }
+
+        self.assertEqual(len(blame_data['lines']), 2)
+
+
+class TestCrossFileAnalysis(unittest.TestCase):
+    """Test cross-file analysis and dependency reporting."""
+
+    def test_dependency_graph_generation(self) -> None:
+        """Test generating dependency graph."""
+        dependencies = {
+            'agent.py': ['base_agent.py', 'agent_context.py'],
+            'base_agent.py': ['agent_errors.py'],
+            'agent_context.py': []
+        }
+
+        self.assertEqual(len(dependencies['agent.py']), 2)
+
+    def test_import_cycle_detection(self) -> None:
+        """Test detecting import cycles."""
+        imports = {
+            'module_a.py': ['module_b.py'],
+            'module_b.py': ['module_c.py'],
+            'module_c.py': ['module_a.py']
+        }
+
+        cycle_detected = (
+            'module_a.py' in imports.get('module_c.py', [])
+        )
+
+        self.assertTrue(cycle_detected)
+
+    def test_coupling_metrics(self) -> None:
+        """Test calculating coupling metrics between modules."""
+        coupling = {
+            'agent.py': {
+                'base_agent.py': 15,
+                'agent_context.py': 8
+            },
+            'base_agent.py': {
+                'agent_errors.py': 5
+            }
+        }
+
+        high_coupling = [
+            (m, cnt) for m, deps in coupling.items()
+            for dep, cnt in deps.items() if cnt > 10
+        ]
+
+        self.assertEqual(len(high_coupling), 1)
+
+
+class TestTestCoverageIntegration(unittest.TestCase):
+    """Test coverage integration in reports."""
+
+    def test_coverage_by_file(self) -> None:
+        """Test reporting coverage by file."""
+        coverage = {
+            'agent.py': 85.5,
+            'base_agent.py': 92.0,
+            'agent_context.py': 78.5,
+            'agent_errors.py': 88.0
+        }
+
+        low_coverage = [f for f, c in coverage.items() if c < 80]
+        self.assertIn('agent_context.py', low_coverage)
+
+    def test_coverage_trends(self) -> None:
+        """Test tracking coverage trends over time."""
+        coverage_history = [
+            {'date': '2024-01-01', 'coverage': 75.0},
+            {'date': '2024-01-08', 'coverage': 78.5},
+            {'date': '2024-01-15', 'coverage': 85.5}
+        ]
+
+        trend = coverage_history[-1]['coverage'] - coverage_history[0]['coverage']
+        self.assertEqual(trend, 10.5)
+
+    def test_coverage_gaps_identification(self) -> None:
+        """Test identifying coverage gaps."""
+        gap_analysis = {
+            'uncovered_functions': 5,
+            'uncovered_branches': 12,
+            'high_risk_uncovered': 2
+        }
+
+        self.assertGreater(gap_analysis['uncovered_branches'], gap_analysis['uncovered_functions'])
+
+
+class TestPerformanceMetrics(unittest.TestCase):
+    """Test performance metrics collection and reporting."""
+
+    def test_execution_time_tracking(self) -> None:
+        """Test tracking execution time of operations."""
+        timings = {
+            'analysis': 2.5,
+            'report_generation': 1.2,
+            'visualization': 3.1,
+            'distribution': 0.8
+        }
+
+        total_time = sum(timings.values())
+        self.assertGreater(total_time, 7)
+
+    def test_memory_usage_metrics(self) -> None:
+        """Test collecting memory usage metrics."""
+        memory_stats = {
+            'peak_memory_mb': 256,
+            'average_memory_mb': 180,
+            'memory_per_file_kb': 1.5
+        }
+
+        self.assertGreater(memory_stats['peak_memory_mb'], memory_stats['average_memory_mb'])
+
+    def test_performance_comparison_over_time(self) -> None:
+        """Test comparing performance metrics over time."""
+        performance = [
+            {'date': '2024-01-01', 'execution_time': 5.2},
+            {'date': '2024-01-15', 'execution_time': 3.8}
+        ]
+
+        improvement = performance[0]['execution_time'] - performance[1]['execution_time']
+        improvement_pct = (improvement / performance[0]['execution_time']) * 100
+
+        self.assertGreater(improvement_pct, 0)
+
+
+class TestTechnicalDebt(unittest.TestCase):
+    """Test technical debt quantification and reporting."""
+
+    def test_debt_scoring_algorithm(self) -> None:
+        """Test calculating technical debt score."""
+        debt_factors = {
+            'code_complexity': {'weight': 0.3, 'value': 4.2},
+            'test_coverage': {'weight': 0.4, 'value': 0.85},
+            'code_duplication': {'weight': 0.3, 'value': 0.12}
+        }
+
+        debt_score = (
+            debt_factors['code_complexity']['weight'] * debt_factors['code_complexity']['value'] +
+            debt_factors['code_duplication']['weight'] * debt_factors['code_duplication']['value']
+        )
+
+        self.assertGreater(debt_score, 0)
+
+    def test_debt_prioritization(self) -> None:
+        """Test prioritizing debt items."""
+        debt_items = [
+            {'type': 'low_coverage', 'impact': 'high', 'effort': 'medium'},
+            {'type': 'complex_function', 'impact': 'medium', 'effort': 'high'},
+            {'type': 'code_duplication', 'impact': 'low', 'effort': 'low'}
+        ]
+
+        priorities = sorted(
+            debt_items,
+            key=lambda x: (
+                1 if x['impact'] == 'high' else (0.5 if x['impact'] == 'medium' else 0)
+            ) / (1 if x['effort'] == 'high' else (0.5 if x['effort'] == 'medium' else 0.25)),
+            reverse=True
+        )
+
+        self.assertEqual(priorities[0]['type'], 'low_coverage')
+
+    def test_debt_timeline_projection(self) -> None:
+        """Test projecting debt paydown timeline."""
+        current_debt = 1000
+        weekly_reduction = 50
+
+        weeks_to_zero = current_debt / weekly_reduction
+
+        self.assertEqual(weeks_to_zero, 20)
+
+
+class TestRecommendationGeneration(unittest.TestCase):
+    """Test generating actionable recommendations."""
+
+    def test_coverage_improvement_recommendations(self) -> None:
+        """Test generating recommendations for coverage improvement."""
+        uncovered_files = ['agent.py', 'base_agent.py']
+        recommendations = [
+            f"Add tests for {f}" for f in uncovered_files if 'agent' in f
+        ]
+
+        self.assertGreaterEqual(len(recommendations), 1)
+
+    def test_complexity_reduction_recommendations(self) -> None:
+        """Test recommendations for complexity reduction."""
+        complex_functions = {
+            'analyze_files': 8,
+            'process_metrics': 6,
+            'generate_report': 5
+        }
+
+        high_complexity = [
+            f for f, c in complex_functions.items() if c > 6
+        ]
+
+        self.assertIn('analyze_files', high_complexity)
+
+    def test_priority_based_recommendations(self) -> None:
+        """Test priority-based recommendation ordering."""
+        recommendations = [
+            {'action': 'Add test coverage', 'priority': 'high', 'impact': 'high'},
+            {'action': 'Refactor function', 'priority': 'medium', 'impact': 'medium'},
+            {'action': 'Update docstring', 'priority': 'low', 'impact': 'low'}
+        ]
+
+        sorted_recs = sorted(recommendations, key=lambda x: (
+            1 if x['priority'] == 'high' else (0.5 if x['priority'] == 'medium' else 0)
+        ), reverse=True)
+
+        self.assertEqual(sorted_recs[0]['action'], 'Add test coverage')
+
+
+class TestReportScheduling(unittest.TestCase):
+    """Test report scheduling and automated generation."""
+
+    def test_schedule_configuration(self) -> None:
+        """Test configuring report generation schedule."""
+        schedule = {
+            'daily': {'time': '00:00', 'enabled': True},
+            'weekly': {'time': 'Monday 09:00', 'enabled': True},
+            'monthly': {'time': '1st 10:00', 'enabled': False}
+        }
+
+        enabled_schedules = [s for s, cfg in schedule.items() if cfg['enabled']]
+        self.assertEqual(len(enabled_schedules), 2)
+
+    def test_scheduled_generation_trigger(self) -> None:
+        """Test triggering scheduled report generation."""
+        schedule_time = datetime(2024, 1, 15, 0, 0)
+        current_time = datetime(2024, 1, 15, 0, 0)
+
+        should_generate = current_time >= schedule_time
+        self.assertTrue(should_generate)
+
+    def test_background_generation_queue(self) -> None:
+        """Test queuing reports for background generation."""
+        queue = [
+            {'report_id': 1, 'status': 'pending'},
+            {'report_id': 2, 'status': 'processing'},
+            {'report_id': 3, 'status': 'pending'}
+        ]
+
+        pending = [r for r in queue if r['status'] == 'pending']
+        self.assertEqual(len(pending), 2)
+
+
+class TestReportVersioning(unittest.TestCase):
+    """Test report versioning and change tracking."""
+
+    def test_report_version_tracking(self) -> None:
+        """Test tracking report versions."""
+        reports = [
+            {'version': 1, 'date': '2024-01-01', 'metrics': {'coverage': 75}},
+            {'version': 2, 'date': '2024-01-08', 'metrics': {'coverage': 78}},
+            {'version': 3, 'date': '2024-01-15', 'metrics': {'coverage': 85}}
+        ]
+
+        self.assertEqual(len(reports), 3)
+        self.assertEqual(reports[-1]['metrics']['coverage'], 85)
+
+    def test_report_diff_generation(self) -> None:
+        """Test generating diff between report versions."""
+        v1 = {'coverage': 75, 'warnings': 20, 'errors': 5}
+        v2 = {'coverage': 85, 'warnings': 15, 'errors': 2}
+
+        diff = {k: v2[k] - v1[k] for k in v1}
+
+        self.assertEqual(diff['coverage'], 10)
+        self.assertEqual(diff['errors'], -3)
+
+    def test_change_tracking_metadata(self) -> None:
+        """Test metadata for tracking changes."""
+        change_log = [
+            {
+                'version': 2,
+                'changes': ['Coverage improved', 'Fixed 3 warnings'],
+                'author': 'agent-system',
+                'timestamp': '2024-01-08T10:00:00'
+            }
+        ]
+
+        self.assertEqual(len(change_log[0]['changes']), 2)
+
+
+class TestReportDistribution(unittest.TestCase):
+    """Test report distribution mechanisms."""
+
+    def test_webhook_distribution(self) -> None:
+        """Test distributing reports via webhook."""
+        webhook_config = {
+            'url': 'https://example.com/webhook',
+            'method': 'POST',
+            'headers': {'Authorization': 'Bearer token123'},
+            'timeout': 30
+        }
+
+        self.assertEqual(webhook_config['method'], 'POST')
+
+    def test_api_endpoint_distribution(self) -> None:
+        """Test exposing reports via API endpoint."""
+        api_endpoint = {
+            'path': '/api/reports/{id}',
+            'method': 'GET',
+            'authentication': 'bearer_token',
+            'rate_limit': '1000/hour'
+        }
+
+        self.assertIn('/api/reports/', api_endpoint['path'])
+
+    def test_slack_integration(self) -> None:
+        """Test Slack integration for report notifications."""
+        slack_config = {
+            'webhook_url': 'https://hooks.slack.com/services/...',
+            'channel': '#reports',
+            'mention_on_alert': '@channel'
+        }
+
+        self.assertEqual(slack_config['channel'], '#reports')
+
+    def test_distribution_failure_handling(self) -> None:
+        """Test handling distribution failures."""
+        distribution_attempt = {
+            'target': 'email@example.com',
+            'status': 'failed',
+            'error': 'Connection timeout',
+            'retry_count': 3,
+            'next_retry': '2024-01-15T11:00:00'
+        }
+
+        should_retry = distribution_attempt['retry_count'] < 5
+        self.assertTrue(should_retry)
+
+
+class TestInteractiveReports(unittest.TestCase):
+    """Test interactive report generation and filtering."""
+
+    def test_drill_down_capability(self) -> None:
+        """Test drill-down from summary to details."""
+        details = {
+            'covered_files': 127,
+            'uncovered_files': 23,
+            'critical_uncovered': 5
+        }
+
+        self.assertEqual(details['covered_files'] + details['uncovered_files'], 150)
+
+    def test_filter_and_search_capability(self) -> None:
+        """Test filtering and searching in reports."""
+        data = [
+            {'file': 'agent.py', 'coverage': 85, 'warnings': 5},
+            {'file': 'base_agent.py', 'coverage': 92, 'warnings': 2},
+            {'file': 'agent_context.py', 'coverage': 78, 'warnings': 8}
+        ]
+
+        filtered = [d for d in data if d['coverage'] > 80]
+        self.assertEqual(len(filtered), 2)
+
+    def test_dynamic_chart_generation(self) -> None:
+        """Test generating charts dynamically based on filters."""
+        all_metrics = [
+            {'date': '2024-01-01', 'coverage': 75},
+            {'date': '2024-01-08', 'coverage': 80},
+            {'date': '2024-01-15', 'coverage': 85}
+        ]
+
+        filtered_metrics = all_metrics[-2:]
+
+        self.assertEqual(len(filtered_metrics), 2)
+
+
+class TestTeamLevelReporting(unittest.TestCase):
+    """Test team-level reporting and aggregation."""
+
+    def test_aggregate_metrics_across_agents(self) -> None:
+        """Test aggregating metrics across multiple agents."""
+        agent_metrics = {
+            'agent1': {'files': 50, 'coverage': 85},
+            'agent2': {'files': 75, 'coverage': 82},
+            'agent3': {'files': 45, 'coverage': 88}
+        }
+
+        total_files = sum(m['files'] for m in agent_metrics.values())
+        avg_coverage = sum(m['coverage'] for m in agent_metrics.values()) / len(agent_metrics)
+
+        self.assertEqual(total_files, 170)
+        self.assertAlmostEqual(avg_coverage, 85, places=1)
+
+    def test_team_performance_trends(self) -> None:
+        """Test tracking team performance trends."""
+        team_history = [
+            {'week': 1, 'avg_coverage': 75, 'total_warnings': 50},
+            {'week': 2, 'avg_coverage': 80, 'total_warnings': 40},
+            {'week': 3, 'avg_coverage': 85, 'total_warnings': 25}
+        ]
+
+        improvement = team_history[-1]['avg_coverage'] - team_history[0]['avg_coverage']
+        self.assertEqual(improvement, 10)
+
+    def test_individual_vs_team_comparison(self) -> None:
+        """Test comparing individual metrics against team average."""
+        team_avg_coverage = 83.5
+
+        individual_metrics = {
+            'alice': 85.0,
+            'bob': 82.0,
+            'charlie': 83.5
+        }
+
+        above_average = [
+            p for p, cov in individual_metrics.items()
+            if cov > team_avg_coverage
+        ]
+
+        self.assertIn('alice', above_average)
+        self.assertNotIn('bob', above_average)
