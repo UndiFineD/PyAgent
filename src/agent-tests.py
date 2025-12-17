@@ -1484,6 +1484,63 @@ class MutationTester:
         return "\n".join(report)
 
 
+class MutationRunner:
+    """Run mutation testing analysis.
+
+    Provides mutation testing capabilities with a test-friendly interface.
+    """
+
+    def __init__(self) -> None:
+        """Initialize mutation runner."""
+        self.tester = MutationTester()
+        self.mutation_counter = 0
+
+    def generate_mutations(self, source_code: str) -> List[str]:
+        """Generate mutations for source code.
+
+        Args:
+            source_code: The source code to mutate.
+
+        Returns:
+            List of mutated code strings.
+        """
+        mutations = self.tester.generate_mutations(source_code, "test.py")
+        return [m.mutated_code for m in mutations]
+
+    def add_result(self, mutation_id: str, killed: bool) -> None:
+        """Record mutation test result.
+
+        Args:
+            mutation_id: The mutation identifier.
+            killed: Whether the mutation was killed by tests.
+        """
+        # If mutation not in tester, create it
+        if not any(m.id == mutation_id for m in self.tester.mutations):
+            # Create a synthetic mutation
+            self.mutation_counter += 1
+            mut = Mutation(
+                id=mutation_id,
+                file_path="test.py",
+                line_number=self.mutation_counter,
+                operator=MutationOperator.ARITHMETIC,
+                original_code="",
+                mutated_code=""
+            )
+            mut.killed = killed
+            self.tester.mutations.append(mut)
+        
+        # Record in results
+        self.tester.record_kill(mutation_id, killed)
+
+    def get_mutation_score(self) -> float:
+        """Get mutation score.
+
+        Returns:
+            Mutation score as percentage (0-100).
+        """
+        return self.tester.get_mutation_score()
+
+
 class TestGenerator:
     """Generate tests from specifications.
 
@@ -2483,6 +2540,226 @@ class TestsAgent(BaseAgent):
     def update_file(self) -> None:
         """Write the improved content back to the file (no markdown fixing for test files)."""
         self.file_path.write_text(self.current_content, encoding='utf-8')
+
+
+class TestMetricsCollector:
+    """Collect test execution metrics.
+
+    Tracks execution times, flakiness, and other metrics.
+    """
+
+    def __init__(self) -> None:
+        """Initialize metrics collector."""
+        self.executions: Dict[str, List[float]] = {}  # test_name -> durations
+        self.flaky_tests: Dict[str, int] = {}  # test_name -> occurrence count
+
+    def record_execution(self, test_name: str, duration_ms: float) -> None:
+        """Record test execution time.
+
+        Args:
+            test_name: The test name.
+            duration_ms: Execution duration in milliseconds.
+        """
+        if test_name not in self.executions:
+            self.executions[test_name] = []
+        self.executions[test_name].append(duration_ms)
+
+    def record_flaky(self, test_name: str, occurrences: int = 1) -> None:
+        """Record flaky test occurrence.
+
+        Args:
+            test_name: The test name.
+            occurrences: Number of flaky occurrences.
+        """
+        self.flaky_tests[test_name] = occurrences
+
+    def get_metrics(self) -> Dict[str, float]:
+        """Get aggregated metrics.
+
+        Returns:
+            Dict with total_duration_ms and average_duration_ms.
+        """
+        total_duration = sum(sum(durations) for durations in self.executions.values())
+        total_tests = sum(len(durations) for durations in self.executions.values())
+        avg_duration = total_duration / total_tests if total_tests > 0 else 0
+
+        return {
+            "total_duration_ms": total_duration,
+            "average_duration_ms": avg_duration
+        }
+
+    def get_flaky_tests(self) -> Dict[str, int]:
+        """Get flaky tests.
+
+        Returns:
+            Dict of test_name -> occurrence count.
+        """
+        return self.flaky_tests.copy()
+
+
+class BaselineComparisonResult:
+    """Result of comparing output to baseline.
+
+    Attributes:
+        matches: Whether output matches baseline.
+        differences: List of differences found.
+    """
+
+    def __init__(self, matches: bool, differences: Optional[List[str]] = None) -> None:
+        """Initialize comparison result."""
+        self.matches = matches
+        self.differences = differences or []
+
+
+class BaselineManager:
+    """Manage test baselines.
+
+    Saves and compares test output to baselines.
+    """
+
+    def __init__(self, baseline_dir: Optional[Path] = None) -> None:
+        """Initialize baseline manager.
+
+        Args:
+            baseline_dir: Directory to store baselines.
+        """
+        self.baseline_dir = Path(baseline_dir) if baseline_dir else Path("./baselines")
+        self.baseline_dir.mkdir(exist_ok=True)
+
+    def save_baseline(self, name: str, data: Dict[str, Any]) -> None:
+        """Save a baseline.
+
+        Args:
+            name: Baseline name.
+            data: Data to save.
+        """
+        baseline_path = self.baseline_dir / f"{name}.json"
+        with open(baseline_path, "w") as f:
+            json.dump(data, f, indent=2)
+
+    def load_baseline(self, name: str) -> Dict[str, Any]:
+        """Load a baseline.
+
+        Args:
+            name: Baseline name.
+
+        Returns:
+            The baseline data.
+        """
+        baseline_path = self.baseline_dir / f"{name}.json"
+        if baseline_path.exists():
+            with open(baseline_path, "r") as f:
+                return json.load(f)
+        return {}
+
+    def compare(self, name: str, current: Dict[str, Any]) -> BaselineComparisonResult:
+        """Compare current data to baseline.
+
+        Args:
+            name: Baseline name.
+            current: Current data.
+
+        Returns:
+            Comparison result.
+        """
+        baseline = self.load_baseline(name)
+        if baseline == current:
+            return BaselineComparisonResult(matches=True)
+
+        differences = []
+        for key in set(list(baseline.keys()) + list(current.keys())):
+            baseline_val = baseline.get(key)
+            current_val = current.get(key)
+            if baseline_val != current_val:
+                differences.append(f"{key}: {baseline_val} -> {current_val}")
+
+        return BaselineComparisonResult(matches=False, differences=differences)
+
+    def update_baseline(self, name: str, data: Dict[str, Any]) -> None:
+        """Update a baseline.
+
+        Args:
+            name: Baseline name.
+            data: New data.
+        """
+        self.save_baseline(name, data)
+
+
+class DIContainer:
+    """Dependency injection container.
+
+    Manages dependency registration and resolution
+    with override support for testing.
+    """
+
+    def __init__(self) -> None:
+        """Initialize DI container."""
+        self._dependencies: Dict[str, Callable[[], Any]] = {}
+        self._overrides: Dict[str, Callable[[], Any]] = {}
+
+    def register(self, name: str, factory: Callable[[], Any]) -> None:
+        """Register a dependency.
+
+        Args:
+            name: Dependency name.
+            factory: Callable that creates the dependency.
+        """
+        self._dependencies[name] = factory
+
+    def has(self, name: str) -> bool:
+        """Check if dependency is registered.
+
+        Args:
+            name: Dependency name.
+
+        Returns:
+            True if registered.
+        """
+        return name in self._dependencies
+
+    def resolve(self, name: str) -> Any:
+        """Resolve a dependency.
+
+        Args:
+            name: Dependency name.
+
+        Returns:
+            The resolved dependency.
+        """
+        # Check for override first
+        if name in self._overrides:
+            return self._overrides[name]()
+
+        if name not in self._dependencies:
+            raise ValueError(f"Dependency not registered: {name}")
+
+        return self._dependencies[name]()
+
+    def override(self, name: str, factory: Callable[[], Any]) -> Any:
+        """Context manager for dependency override.
+
+        Args:
+            name: Dependency name.
+            factory: Override factory.
+
+        Returns:
+            Context manager.
+        """
+        from contextlib import contextmanager
+
+        @contextmanager
+        def override_context():
+            old_override = self._overrides.get(name)
+            self._overrides[name] = factory
+            try:
+                yield
+            finally:
+                if old_override is None:
+                    self._overrides.pop(name, None)
+                else:
+                    self._overrides[name] = old_override
+
+        return override_context()
 
 
 # Create main function using the helper

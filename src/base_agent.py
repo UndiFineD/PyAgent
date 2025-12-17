@@ -22,6 +22,7 @@ import json
 import logging
 import os
 from dataclasses import dataclass, field
+from datetime import datetime
 from enum import Enum
 from pathlib import Path
 import sys
@@ -370,20 +371,75 @@ class AuthConfig:
     custom_headers: Dict[str, str] = field(default_factory=dict)
 
 
-@dataclass
 class BatchRequest:
     """Request in a batch processing queue.
 
+    Supports both generic batching (with items) and file-based batching.
+
     Attributes:
-        file_path: Path to the file to process.
-        prompt: Improvement prompt.
+        file_path: Path to the file to process (optional).
+        prompt: Improvement prompt (optional).
         priority: Processing priority.
         callback: Optional callback on completion.
+        max_size: Maximum batch size (for generic batching).
+        items: Items in the batch (for generic batching).
     """
-    file_path: Path
-    prompt: str
-    priority: FilePriority = FilePriority.NORMAL
-    callback: Optional[Callable[[str], None]] = None
+
+    def __init__(
+        self,
+        file_path: Optional[Path] = None,
+        prompt: Optional[str] = None,
+        priority: FilePriority = FilePriority.NORMAL,
+        callback: Optional[Callable[[str], None]] = None,
+        max_size: Optional[int] = None
+    ) -> None:
+        """Initialize batch request.
+
+        Supports both old file-based API and new generic batching API.
+
+        Args:
+            file_path: Path to file (old API).
+            prompt: Prompt text (old API).
+            priority: Processing priority (old API).
+            callback: Completion callback (old API).
+            max_size: Max items before flush (new API).
+        """
+        # Old API fields
+        self.file_path = file_path
+        self.prompt = prompt or ""
+        self.priority = priority
+        self.callback = callback
+
+        # New API fields
+        self.max_size = max_size
+        self.items: List[Any] = []
+
+    def add(self, item: Any) -> None:
+        """Add item to batch (new API).
+
+        Args:
+            item: Item to add.
+        """
+        # If at max size, don't add
+        if self.max_size is not None and len(self.items) >= self.max_size:
+            return
+        self.items.append(item)
+
+    @property
+    def size(self) -> int:
+        """Get batch size (new API)."""
+        return len(self.items)
+
+    def execute(self, processor: Callable[[List[Any]], List[Any]]) -> List[Any]:
+        """Execute batch with processor (new API).
+
+        Args:
+            processor: Function to process batch items.
+
+        Returns:
+            Processed results.
+        """
+        return processor(self.items)
 
 
 @dataclass
@@ -406,22 +462,65 @@ class BatchResult:
 
 @dataclass
 class PromptVersion:
-    """Versioned prompt for A / B testing.
+    """Versioned prompt for A/B testing.
+
+    Supports both simple and advanced versioning APIs.
 
     Attributes:
-        version_id: Unique version identifier.
-        template_id: Reference to base template.
-        variant: Variant name (A, B, control, etc.).
-        prompt_text: The prompt text for this version.
-        weight: Selection weight for A / B testing.
-        metrics: Recorded metrics for this version.
+        version: Version identifier.
+        content: The prompt content.
+        description: Prompt description.
+        active: Whether this version is active.
+        created_at: Creation timestamp.
+        metrics: Performance metrics.
+        version_id: Alias for version (compatibility).
+        template_id: Template identifier (compatibility).
+        variant: Variant name (compatibility).
+        prompt_text: Alias for content (compatibility).
+        weight: Selection weight (compatibility).
     """
-    version_id: str
-    template_id: str
-    variant: str
-    prompt_text: str
-    weight: float = 1.0
-    metrics: Dict[str, float] = field(default_factory=dict)
+
+    def __init__(
+        self,
+        version: Optional[str] = None,
+        content: Optional[str] = None,
+        description: str = "",
+        active: bool = True,
+        version_id: Optional[str] = None,
+        template_id: Optional[str] = None,
+        variant: Optional[str] = None,
+        prompt_text: Optional[str] = None,
+        weight: float = 1.0
+    ) -> None:
+        """Initialize prompt version.
+
+        Supports both new and old parameter names for compatibility.
+
+        Args:
+            version: Version string (new API).
+            content: Prompt content (new API).
+            description: Optional description.
+            active: Whether version is active.
+            version_id: Version ID (old API, used if version is None).
+            template_id: Template ID (old API).
+            variant: Variant name (old API).
+            prompt_text: Prompt text (old API, used if content is None).
+            weight: Selection weight (old API).
+        """
+        # Support both APIs
+        self.version = version or version_id or ""
+        self.content = content or prompt_text or ""
+        self.description = description
+        self.active = active
+        self.created_at = datetime.now()
+        self.metrics: Dict[str, float] = {}
+
+        # Old API compatibility
+        self.version_id = self.version
+        self.template_id = template_id or ""
+        self.variant = variant or ""
+        self.prompt_text = self.content
+        self.weight = weight
 
 
 @dataclass
@@ -1629,42 +1728,77 @@ class AuthenticationManager:
 
 
 class PromptVersionManager:
-    """Manager for prompt versioning and A / B testing.
+    """Manager for prompt versioning and A/B testing.
 
-    Handles prompt version management, variant selection,
-    and metrics tracking for A / B testing.
+    Supports both simple and advanced version management APIs.
 
     Attributes:
         versions: Registered prompt versions.
+        active_version: Currently active version.
         metrics: Collected metrics per version.
-        selection_history: History of version selections.
-
-    Example:
-        manager=PromptVersionManager()
-        manager.register_version(PromptVersion("v1", "improve", "A", "Improve {content}"))
-        selected=manager.select_version("improve")
     """
 
     def __init__(self) -> None:
         """Initialize the prompt version manager."""
-        self.versions: Dict[str, List[PromptVersion]] = {}
+        self.versions: Dict[str, PromptVersion] = {}
+        self.active_version: Optional[str] = None
         self.metrics: Dict[str, Dict[str, float]] = {}
+        self._old_api_versions: Dict[str, List[PromptVersion]] = {}  # For old API
         self.selection_history: List[Dict[str, Any]] = []
         logging.debug("PromptVersionManager initialized")
 
     def register_version(self, version: PromptVersion) -> None:
-        """Register a prompt version.
+        """Register a prompt version (old API).
 
         Args:
             version: The prompt version to register.
         """
-        if version.template_id not in self.versions:
-            self.versions[version.template_id] = []
-        self.versions[version.template_id].append(version)
-        logging.debug(f"Registered version {version.version_id} for {version.template_id}")
+        # Old API: organize by template_id
+        template_id = version.template_id
+        if template_id not in self._old_api_versions:
+            self._old_api_versions[template_id] = []
+        self._old_api_versions[template_id].append(version)
 
-    def get_versions(self, template_id: str) -> List[PromptVersion]:
-        """Get all versions for a template.
+        # Also store in new API format
+        self.versions[version.version_id] = version
+        if self.active_version is None:
+            self.active_version = version.version_id
+        logging.debug(f"Registered version {version.version_id} for {template_id}")
+
+    def add_version(self, version: PromptVersion) -> None:
+        """Add a prompt version (new API).
+
+        Args:
+            version: The prompt version to add.
+        """
+        self.versions[version.version] = version
+        if self.active_version is None:
+            self.active_version = version.version
+        logging.debug(f"Added version {version.version}")
+
+    def set_active(self, version: str) -> None:
+        """Set the active version (new API).
+
+        Args:
+            version: Version identifier.
+        """
+        if version in self.versions:
+            self.active_version = version
+            self.versions[version].active = True
+            logging.debug(f"Set active version to {version}")
+
+    def get_active(self) -> Optional[PromptVersion]:
+        """Get the active version (new API).
+
+        Returns:
+            The active prompt version.
+        """
+        if self.active_version and self.active_version in self.versions:
+            return self.versions[self.active_version]
+        return None
+
+    def get_versions(self, template_id: str = "") -> List[PromptVersion]:
+        """Get all versions (old API).
 
         Args:
             template_id: The template ID.
@@ -1672,10 +1806,12 @@ class PromptVersionManager:
         Returns:
             List of prompt versions.
         """
-        return self.versions.get(template_id, [])
+        if template_id:
+            return self._old_api_versions.get(template_id, [])
+        return list(self.versions.values())
 
-    def select_version(self, template_id: str) -> Optional[PromptVersion]:
-        """Select a version using weighted random selection.
+    def select_version(self, template_id: str = "") -> Optional[PromptVersion]:
+        """Select a version using weighted random selection (old API).
 
         Args:
             template_id: The template ID.
@@ -1691,8 +1827,10 @@ class PromptVersionManager:
 
         # Weighted selection
         total_weight = sum(v.weight for v in versions)
-        r = random.uniform(0, total_weight)
+        if total_weight <= 0:
+            return versions[0]
 
+        r = random.uniform(0, total_weight)
         cumulative = 0.0
         for version in versions:
             cumulative += version.weight
@@ -1723,40 +1861,70 @@ class PromptVersionManager:
         if version_id not in self.metrics:
             self.metrics[version_id] = {}
 
-        # Rolling average
-        current = self.metrics[version_id].get(metric_name, value)
-        self.metrics[version_id][metric_name] = (current + value) / 2
+        # Rolling average for old API
+        if metric_name in self.metrics[version_id]:
+            current = self.metrics[version_id][metric_name]
+            self.metrics[version_id][metric_name] = (current + value) / 2
+        else:
+            self.metrics[version_id][metric_name] = value
+
+        # Also update in version if it exists
+        if version_id in self.versions:
+            self.versions[version_id].metrics[metric_name] = value
 
     def get_best_version(
             self,
-            template_id: str,
+            template_id: str = "",
             metric: str = "quality") -> Optional[PromptVersion]:
         """Get the best performing version.
 
         Args:
-            template_id: The template ID.
+            template_id: Optional template ID.
             metric: Metric to use for comparison.
 
         Returns:
             Best performing version.
         """
-        versions = self.get_versions(template_id)
+        versions = self.get_versions(template_id) if template_id else list(self.versions.values())
         if not versions:
             return None
 
         best: Optional[PromptVersion] = None
-        best_score = -1.0
+        best_score = -float('inf')
 
         for version in versions:
-            score = self.metrics.get(version.version_id, {}).get(metric, 0)
+            score = version.metrics.get(metric, 0)
             if score > best_score:
                 best_score = score
                 best = version
 
-        return best or versions[0]
+        return best
+
+    def generate_report(self, template_id: str = "") -> Dict[str, Any]:
+        """Generate a report about versions.
+
+        Args:
+            template_id: Optional template ID.
+
+        Returns:
+            Report with version statistics.
+        """
+        report: Dict[str, Any] = {
+            "total_versions": len(self.versions),
+            "versions": {}
+        }
+
+        for version_id, version in self.versions.items():
+            report["versions"][version_id] = {
+                "content": version.content,
+                "active": version.active,
+                "metrics": version.metrics
+            }
+
+        return report
 
     def get_ab_report(self, template_id: str) -> Dict[str, Any]:
-        """Get A / B testing report for a template.
+        """Get A/B testing report for a template (old API).
 
         Args:
             template_id: The template ID.
