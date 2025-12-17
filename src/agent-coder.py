@@ -603,10 +603,10 @@ class PerformanceOptimizer:
     """
 
     OPTIMIZATION_PATTERNS: List[Tuple[str, OptimizationType, str, str]] = [
-        (r"for\s+\w+\s + in\s + range\(len\((\w+)\)\)", OptimizationType.ALGORITHMIC,
+        (r"for\s+\w+\s+in\s+range\(len\((\w+)\)\)", OptimizationType.ALGORITHMIC,
          "Use enumerate() instead of range(len())",
          "for idx, item in enumerate({0}):"),
-        (r"\+\s*=\s*.*?for\s+", OptimizationType.MEMORY,
+        (r"\+=\s*.*?for\s+", OptimizationType.MEMORY,
          "String concatenation in loop is inefficient",
          "Use ''.join() or list comprehension"),
         (r"time\.sleep\(\d+\)", OptimizationType.CONCURRENCY,
@@ -660,11 +660,11 @@ class SecurityScanner:
     """
 
     SECURITY_PATTERNS: List[Tuple[str, SecurityIssueType, str, str, str]] = [
-        (r"password\s*=\s * ['\"][^'\"]+['\"]",
+        (r"password\s*=\s*['\"][^'\"]+['\"]",
          SecurityIssueType.HARDCODED_SECRET, "high",
          "Hardcoded password detected",
          "Use environment variables or secure vault"),
-        (r"api_key\s*=\s * ['\"][^'\"]+['\"]",
+        (r"api_key\s*=\s*['\"][^'\"]+['\"]",
          SecurityIssueType.HARDCODED_SECRET, "high",
          "Hardcoded API key detected",
          "Use environment variables or secure vault"),
@@ -676,7 +676,7 @@ class SecurityScanner:
          SecurityIssueType.INSECURE_DESERIALIZATION, "critical",
          "Use of eval() is dangerous",
          "Avoid eval() or use ast.literal_eval() for safe parsing"),
-        (r"random\.(random | randint | choice)\s*\(",
+        (r"random\.(random|randint|choice)\s*\(",
          SecurityIssueType.INSECURE_RANDOM, "medium",
          "Insecure random number generation for security context",
          "Use secrets module for cryptographic randomness"),
@@ -738,12 +738,12 @@ class ModernizationAdvisor:
     """
 
     DEPRECATIONS: List[Tuple[str, str, str, Optional[str], str]] = [
-        (r"import\s + urllib2", "urllib.request", "2.7", "3.0",
-         "https://docs.python.org / 3/library / urllib.request.html"),
-        (r"from\s + collections\s + import\s+.*\bMapping\b",
+        (r"import\s+urllib2", "urllib.request", "2.7", "3.0",
+         "https://docs.python.org/3/library/urllib.request.html"),
+        (r"from\s+collections\s+import\s+.*\bMapping\b",
          "collections.abc.Mapping", "3.3", "3.10",
          "Use collections.abc instead of collections for ABCs"),
-        (r"\.encode\s*\(\s * ['\"]hex['\"]\s*\)",
+        (r"\.encode\s*\(\s*['\"]hex['\"]\s*\)",
          "binascii.hexlify()", "3.0", None,
          "Use binascii.hexlify() instead of .encode('hex')"),
         (r"asyncio\.get_event_loop\(\)",

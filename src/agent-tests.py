@@ -2994,6 +2994,10 @@ class TestDocGenerator:
         """Add test for documentation."""
         self.tests.append({"name": name, "module": module})
     
+    def generate_grouped(self) -> Dict[str, List[Dict[str, Any]]]:
+        """Generate documentation grouped by module."""
+        return self.group_by_module(self.tests)
+    
     def extract_examples(self, test_code: str) -> List[Dict[str, str]]:
         """Extract examples from test code."""
         return [{"example": "example_code"}]
