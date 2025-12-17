@@ -237,9 +237,11 @@ class TestSnapshot:
 
     def __post_init__(self) -> None:
         """Compute content hash if not provided."""
+        # Convert content to string if it's a dict or other type
+        content_str = self.content if isinstance(self.content, str) else json.dumps(self.content)
         if not self.content_hash:
             self.content_hash = hashlib.sha256(
-                self.content.encode("utf-8")
+                content_str.encode("utf-8")
             ).hexdigest()
 
 

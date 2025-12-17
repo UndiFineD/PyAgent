@@ -570,6 +570,15 @@ class TestSuiteOptimizer:
         self.tests: List[TestCase] = []
         self.coverage_map: Dict[str, Set[str]] = {}  # test_id -> covered lines
 
+    def add_test(self, test_id: str, covers: Set[str]) -> None:
+        """Add a test with its coverage.
+
+        Args:
+            test_id: The test identifier.
+            covers: Set of identifiers it covers.
+        """
+        self.coverage_map[test_id] = covers
+
     def load_tests(self, tests: List[TestCase]) -> None:
         """Load tests for optimization.
 
@@ -715,20 +724,26 @@ class EnvironmentProvisioner:
         self._setup_logs[name] = []
         return env
 
-    def provision(self, name: str) -> Dict[str, Any]:
+    def provision(self, name: Dict[str, Any] | str) -> Dict[str, Any]:
         """Provision an environment.
 
         Args:
-            name: The environment name.
+            name: The environment name or config dict.
 
         Returns:
             Provisioning result.
         """
-        env = self.environments.get(name)
+        # Convert dict to string key if needed
+        if isinstance(name, dict):
+            name_key = json.dumps(name, sort_keys=True)
+        else:
+            name_key = name
+            
+        env = self.environments.get(name_key)
         if not env:
             return {"error": "Environment not found", "success": False}
 
-        if self.active.get(name):
+        if self.active.get(name_key):
             return {"warning": "Already active", "success": True}
 
         # Run setup commands (simulated)
@@ -1202,6 +1217,35 @@ class ResultAggregator:
         self._by_source[source].append(result)
 
         return result
+
+    def add_run(self, run_data: Dict[str, int]) -> None:
+        """Add a test run with summary stats.
+
+        Args:
+            run_data: Dictionary with passed, failed, skipped counts.
+        """
+        # Create synthetic results from run summary
+        for _ in range(run_data.get("passed", 0)):
+            self.add_result(
+                source=TestSourceType.PYTEST,
+                test_name="synthetic_test",
+                status=TestStatus.PASSED,
+                duration_ms=1.0
+            )
+        for _ in range(run_data.get("failed", 0)):
+            self.add_result(
+                source=TestSourceType.PYTEST,
+                test_name="synthetic_test",
+                status=TestStatus.FAILED,
+                duration_ms=1.0
+            )
+        for _ in range(run_data.get("skipped", 0)):
+            self.add_result(
+                source=TestSourceType.PYTEST,
+                test_name="synthetic_test",
+                status=TestStatus.SKIPPED,
+                duration_ms=0.0
+            )
 
     def import_pytest_results(self, json_report: str) -> int:
         """Import results from pytest JSON report.

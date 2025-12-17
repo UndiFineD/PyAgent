@@ -116,6 +116,15 @@ class InputType(Enum):
     VIDEO = "video"
 
 
+class AgentType(Enum):
+    """Agent type classifications."""
+    GENERAL = "general"
+    CODE_REVIEW = "code_review"
+    DOCUMENTATION = "documentation"
+    TESTING = "testing"
+    REFACTORING = "refactoring"
+
+
 # ========== Dataclasses for Data Structures ==========
 
 @dataclass
@@ -2202,6 +2211,566 @@ class FilePriorityManager:
             Filtered list of paths.
         """
         return [p for p in paths if self.get_priority(p).value >= min_priority.value]
+
+
+# ========== Context Window Management ==========
+
+@dataclass
+class ContextWindow:
+    """Manages token-based context window."""
+    max_tokens: int
+    messages: List[str] = field(default_factory=list)
+    token_counts: List[int] = field(default_factory=list)
+
+    @property
+    def used_tokens(self) -> int:
+        """Get total used tokens."""
+        return sum(self.token_counts)
+
+    @property
+    def available_tokens(self) -> int:
+        """Get available tokens."""
+        return max(0, self.max_tokens - self.used_tokens)
+
+    def add(self, message: str, token_count: int) -> None:
+        """Add a message to the window."""
+        self.messages.append(message)
+        self.token_counts.append(token_count)
+        
+        # Truncate if necessary
+        while self.used_tokens > self.max_tokens and self.messages:
+            self.messages.pop(0)
+            self.token_counts.pop(0)
+
+    def clear(self) -> None:
+        """Clear all messages."""
+        self.messages.clear()
+        self.token_counts.clear()
+
+
+# ========== Multimodal Builder ==========
+
+@dataclass
+class MultimodalBuilder:
+    """Builds multimodal input sets."""
+    inputs: List[MultimodalInput] = field(default_factory=list)
+
+    def add(self, content: str, input_type: "InputType") -> None:
+        """Add an input."""
+        self.inputs.append(MultimodalInput(content=content, input_type=input_type))
+
+    def add_text(self, content: str) -> None:
+        """Add text input."""
+        self.inputs.append(MultimodalInput(content=content, input_type=InputType.TEXT))
+
+    def add_image(self, content: str) -> None:
+        """Add image input."""
+        self.inputs.append(MultimodalInput(content=content, input_type=InputType.IMAGE))
+
+    def build(self) -> List[MultimodalInput]:
+        """Build and return inputs."""
+        return self.inputs
+
+
+# ========== Response Caching ==========
+
+@dataclass
+class ResponseCache:
+    """Caches responses based on prompts."""
+    cache_dir: Path
+    cache_data: Dict[str, str] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        """Initialize cache directory."""
+        self.cache_dir.mkdir(parents=True, exist_ok=True)
+
+    def _get_cache_key(self, prompt: str) -> str:
+        """Generate cache key from prompt."""
+        return hashlib.md5(prompt.encode()).hexdigest()
+
+    def set(self, prompt: str, response: str) -> None:
+        """Cache a response."""
+        key = self._get_cache_key(prompt)
+        self.cache_data[key] = response
+        
+        # Also write to disk
+        cache_file = self.cache_dir / f"{key}.json"
+        cache_file.write_text(json.dumps({"prompt": prompt, "response": response}))
+
+    def get(self, prompt: str) -> Optional[str]:
+        """Get cached response."""
+        key = self._get_cache_key(prompt)
+        if key in self.cache_data:
+            return self.cache_data[key]
+        
+        # Try to load from disk
+        cache_file = self.cache_dir / f"{key}.json"
+        if cache_file.exists():
+            data = json.loads(cache_file.read_text())
+            self.cache_data[key] = data["response"]
+            return data["response"]
+        
+        return None
+
+    def invalidate(self, prompt: str) -> None:
+        """Invalidate cached response."""
+        key = self._get_cache_key(prompt)
+        self.cache_data.pop(key, None)
+        
+        cache_file = self.cache_dir / f"{key}.json"
+        if cache_file.exists():
+            cache_file.unlink()
+
+
+# ========== Agent Composition Patterns ==========
+
+@dataclass
+class AgentPipeline:
+    """Chains agent steps sequentially."""
+    steps: Dict[str, Callable[[Any], Any]] = field(default_factory=dict)
+    step_order: List[str] = field(default_factory=list)
+
+    def add_step(self, name: str, func: Callable[[Any], Any]) -> None:
+        """Add a pipeline step."""
+        self.steps[name] = func
+        self.step_order.append(name)
+
+    def execute(self, data: Any) -> Any:
+        """Execute pipeline."""
+        result = data
+        for step_name in self.step_order:
+            result = self.steps[step_name](result)
+        return result
+
+
+@dataclass
+class AgentParallel:
+    """Executes agent branches in parallel conceptually."""
+    branches: Dict[str, Callable[[Any], Any]] = field(default_factory=dict)
+
+    def add_branch(self, name: str, func: Callable[[Any], Any]) -> None:
+        """Add a parallel branch."""
+        self.branches[name] = func
+
+    def execute(self, data: Any) -> Dict[str, Any]:
+        """Execute all branches."""
+        return {name: func(data) for name, func in self.branches.items()}
+
+
+@dataclass
+class AgentRouter:
+    """Routes input based on conditions."""
+    routes: List[tuple[Callable[[Any], bool], Callable[[Any], Any]]] = field(default_factory=list)
+    default_handler: Optional[Callable[[Any], Any]] = None
+
+    def add_route(self, condition: Callable[[Any], bool], handler: Callable[[Any], Any]) -> None:
+        """Add a route."""
+        self.routes.append((condition, handler))
+
+    def set_default(self, handler: Callable[[Any], Any]) -> None:
+        """Set default handler."""
+        self.default_handler = handler
+
+    def route(self, data: Any) -> Any:
+        """Route and execute."""
+        for condition, handler in self.routes:
+            if condition(data):
+                return handler(data)
+        
+        if self.default_handler:
+            return self.default_handler(data)
+        
+        return data
+
+
+# ========== Token Budget ==========
+
+@dataclass
+class TokenBudget:
+    """Manages token allocation."""
+    total: int
+    allocations: Dict[str, int] = field(default_factory=dict)
+
+    @property
+    def used(self) -> int:
+        """Get total used tokens."""
+        return sum(self.allocations.values())
+
+    @property
+    def remaining(self) -> int:
+        """Get remaining tokens."""
+        return max(0, self.total - self.used)
+
+    def allocate(self, name: str, tokens: int) -> None:
+        """Allocate tokens."""
+        # Cap allocation to not exceed total
+        capped = min(tokens, self.total - sum(v for k, v in self.allocations.items() if k != name))
+        self.allocations[name] = max(0, capped)
+
+    def release(self, name: str) -> None:
+        """Release allocated tokens."""
+        self.allocations.pop(name, None)
+
+
+# ========== State Persistence ==========
+
+@dataclass
+class StatePersistence:
+    """Persists agent state to disk."""
+    state_file: Path
+    backup: bool = False
+    backup_count: int = 0
+
+    def save(self, state: Dict[str, Any]) -> None:
+        """Save state to file."""
+        if self.backup and self.state_file.exists():
+            backup_file = self.state_file.parent / f"{self.state_file.stem}.{self.backup_count}.bak"
+            self.state_file.rename(backup_file)
+            self.backup_count += 1
+        
+        self.state_file.parent.mkdir(parents=True, exist_ok=True)
+        self.state_file.write_text(json.dumps(state))
+
+    def load(self, default: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Load state from file."""
+        if self.state_file.exists():
+            return json.loads(self.state_file.read_text())
+        
+        return default or {}
+
+
+# ========== Model Configuration & Selection ==========
+
+@dataclass
+class ModelConfig:
+    """Model configuration."""
+    model_id: str
+    temperature: float = 0.7
+    max_tokens: int = 2000
+
+
+@dataclass
+class ModelSelector:
+    """Selects models for different agent types."""
+    models: Dict[str, ModelConfig] = field(default_factory=dict)
+    
+    def __post_init__(self) -> None:
+        """Initialize with default model."""
+        if "default" not in self.models:
+            self.models["default"] = ModelConfig(model_id="gpt-3.5-turbo")
+
+    def select(self, agent_type: str) -> ModelConfig:
+        """Select model for agent type."""
+        return self.models.get(agent_type, self.models.get("default"))
+
+    def set_model(self, agent_type: str, config: ModelConfig) -> None:
+        """Set model for agent type."""
+        self.models[agent_type] = config
+
+
+# ========== Batch Request Management ==========
+
+@dataclass
+class BatchRequest:
+    """Manages batch requests."""
+    prompts: List[str] = field(default_factory=list)
+    max_size: Optional[int] = None
+
+    @property
+    def size(self) -> int:
+        """Get batch size."""
+        return len(self.prompts)
+
+    def add(self, prompt: str) -> None:
+        """Add prompt to batch."""
+        if self.max_size and len(self.prompts) >= self.max_size:
+            # Keep size at max
+            self.prompts.pop(0)
+        self.prompts.append(prompt)
+
+    def execute(self, processor: Callable[[List[str]], List[Any]]) -> List[Any]:
+        """Execute batch with processor."""
+        return processor(self.prompts)
+
+    def clear(self) -> None:
+        """Clear all prompts."""
+        self.prompts.clear()
+
+
+# ========== Authentication Management ==========
+
+@dataclass
+class AuthManager:
+    """Manages authentication."""
+    method: Optional[str] = None
+    credentials: Dict[str, str] = field(default_factory=dict)
+    custom_headers: Dict[str, str] = field(default_factory=dict)
+
+    def set_method(self, method: str, **kwargs: str) -> None:
+        """Set authentication method."""
+        self.method = method
+        self.credentials = kwargs
+
+    def add_custom_header(self, header: str, value: str) -> None:
+        """Add custom header."""
+        self.custom_headers[header] = value
+
+    def get_headers(self) -> Dict[str, str]:
+        """Get authentication headers."""
+        headers = dict(self.custom_headers)
+        
+        if self.method == "api_key" and "api_key" in self.credentials:
+            headers["X-API-Key"] = self.credentials["api_key"]
+        elif self.method == "token" and "token" in self.credentials:
+            headers["Authorization"] = f"Bearer {self.credentials['token']}"
+        elif self.method == "bearer_token" and "token" in self.credentials:
+            headers["Authorization"] = f"Bearer {self.credentials['token']}"
+        
+        return headers
+
+
+# ========== Quality Scoring ==========
+
+@dataclass
+class QualityScorer:
+    """Scores response quality."""
+    criteria: Dict[str, tuple[Callable[[str], float], float]] = field(default_factory=dict)
+
+    def add_criterion(self, name: str, func: Callable[[str], float], weight: float = 1.0) -> None:
+        """Add scoring criterion."""
+        self.criteria[name] = (func, weight)
+
+    def score(self, text: str) -> float:
+        """Score response quality."""
+        if not self.criteria:
+            # Default: score based on length
+            length_score = min(1.0, len(text) / 200.0)
+            return length_score
+        
+        total_weight = 0.0
+        total_score = 0.0
+        
+        for func, weight in self.criteria.values():
+            score = func(text)
+            total_score += score * weight
+            total_weight += weight
+        
+        return total_score / total_weight if total_weight > 0 else 0.0
+
+
+# ========== Prompt Versioning & A/B Testing ==========
+
+@dataclass
+class PromptVersion:
+    """Version of a prompt."""
+    version: str
+    content: str
+    description: str = ""
+    active: bool = True
+
+    def __hash__(self) -> int:
+        """Make hashable by version."""
+        return hash(self.version)
+
+
+@dataclass
+class PromptVersionManager:
+    """Manages prompt versions."""
+    versions: Dict[str, PromptVersion] = field(default_factory=dict)
+    active_version: Optional[str] = None
+
+    def add_version(self, version: PromptVersion) -> None:
+        """Add a version."""
+        self.versions[version.version] = version
+
+    def set_active(self, version: str) -> None:
+        """Set active version."""
+        if version in self.versions:
+            self.active_version = version
+
+    def get_active(self) -> Optional[PromptVersion]:
+        """Get active version."""
+        if self.active_version and self.active_version in self.versions:
+            return self.versions[self.active_version]
+        return None
+
+
+@dataclass
+class ABTest:
+    """A/B test for variants."""
+    name: str
+    variants: List[str]
+    weights: List[float] = field(default_factory=list)
+    variant_counts: Dict[str, int] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        """Initialize variant counts."""
+        for variant in self.variants:
+            self.variant_counts[variant] = 0
+        
+        # Normalize weights if not provided
+        if not self.weights:
+            self.weights = [1.0 / len(self.variants)] * len(self.variants)
+
+    def select_variant(self) -> str:
+        """Select a variant based on weights."""
+        import random
+        return random.choices(self.variants, weights=self.weights, k=1)[0]
+
+
+# ========== Event Management ==========
+
+class AgentEvent(Enum):
+    """Agent event types."""
+    START = "start"
+    COMPLETE = "complete"
+    ERROR = "error"
+
+
+@dataclass
+class EventManager:
+    """Manages agent events."""
+    handlers: Dict[AgentEvent, List[Callable[[Any], None]]] = field(default_factory=dict)
+
+    def on(self, event: AgentEvent, handler: Callable[[Any], None]) -> None:
+        """Register event handler."""
+        if event not in self.handlers:
+            self.handlers[event] = []
+        self.handlers[event].append(handler)
+
+    def emit(self, event: AgentEvent, data: Any = None) -> None:
+        """Emit event."""
+        if event in self.handlers:
+            for handler in self.handlers[event]:
+                if data is not None:
+                    handler(data)
+                else:
+                    handler()
+
+
+# ========== Plugin Management ==========
+
+@dataclass
+class PluginManager:
+    """Manages agent plugins."""
+    plugins: Dict[str, Any] = field(default_factory=dict)
+
+    def register(self, plugin: Any) -> None:
+        """Register a plugin."""
+        self.plugins[plugin.name] = plugin
+
+    def activate_all(self) -> None:
+        """Activate all plugins."""
+        for plugin in self.plugins.values():
+            if hasattr(plugin, 'activate'):
+                plugin.activate()
+
+    def deactivate(self, name: str) -> None:
+        """Deactivate a plugin."""
+        if name in self.plugins:
+            plugin = self.plugins[name]
+            if hasattr(plugin, 'deactivate'):
+                plugin.deactivate()
+
+
+# ========== Health Checking ==========
+
+@dataclass
+class HealthChecker:
+    """Checks agent health status."""
+    checks: Dict[str, Callable[[], Dict[str, Any]]] = field(default_factory=dict)
+    request_count: int = 0
+    error_count: int = 0
+    total_latency: int = 0
+
+    def add_check(self, name: str, check_func: Callable[[], Dict[str, Any]]) -> None:
+        """Add a health check."""
+        self.checks[name] = check_func
+
+    def check(self) -> Dict[str, Any]:
+        """Run health check."""
+        result = {
+            "status": "healthy",
+            "components": {}
+        }
+        
+        for name, check_func in self.checks.items():
+            result["components"][name] = check_func()
+        
+        return result
+
+    def record_request(self, success: bool, latency_ms: int) -> None:
+        """Record a request."""
+        self.request_count += 1
+        self.total_latency += latency_ms
+        if not success:
+            self.error_count += 1
+
+    def get_metrics(self) -> Dict[str, Any]:
+        """Get health metrics."""
+        error_rate = self.error_count / self.request_count if self.request_count > 0 else 0
+        avg_latency = self.total_latency / self.request_count if self.request_count > 0 else 0
+        
+        return {
+            "total_requests": self.request_count,
+            "error_count": self.error_count,
+            "error_rate": error_rate,
+            "avg_latency_ms": avg_latency
+        }
+
+
+# ========== Configuration Profiles ==========
+
+@dataclass
+class ConfigProfile:
+    """Configuration profile."""
+    name: str
+    settings: Dict[str, Any]
+    parent: Optional[str] = None
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Get setting value."""
+        return self.settings.get(key, default)
+
+
+@dataclass
+class ProfileManager:
+    """Manages configuration profiles."""
+    profiles: Dict[str, ConfigProfile] = field(default_factory=dict)
+    active_name: Optional[str] = None
+
+    @property
+    def active(self) -> Optional[ConfigProfile]:
+        """Get active profile."""
+        if self.active_name and self.active_name in self.profiles:
+            return self.profiles[self.active_name]
+        return None
+
+    def add_profile(self, profile: ConfigProfile) -> None:
+        """Add a profile."""
+        self.profiles[profile.name] = profile
+
+    def set_active(self, name: str) -> None:
+        """Set active profile."""
+        if name in self.profiles:
+            self.active_name = name
+
+    def get_setting(self, key: str, default: Any = None) -> Any:
+        """Get setting from active profile with inheritance."""
+        if not self.active:
+            return default
+        
+        # Check active profile
+        if key in self.active.settings:
+            return self.active.settings[key]
+        
+        # Check parent
+        if self.active.parent and self.active.parent in self.profiles:
+            parent = self.profiles[self.active.parent]
+            if key in parent.settings:
+                return parent.settings[key]
+        
+        return default
 
 
 # Initialize default templates

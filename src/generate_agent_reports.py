@@ -155,8 +155,6 @@ class SubscriptionFrequency(Enum):
 
     WEEKLY = "weekly"
 
-    MONTHLY = "monthly"
-
 
 class PermissionLevel(Enum):
 
@@ -175,15 +173,11 @@ class ExportFormat(Enum):
 
     """Export formats for reports."""
 
-    MARKDOWN = "markdown"
-
     JSON = "json"
 
     HTML = "html"
 
     PDF = "pdf"
-
-    PPT = "ppt"
 
     CSV = "csv"
 
@@ -192,19 +186,13 @@ class LocaleCode(Enum):
 
     """Supported locales for reports."""
 
-    EN_US = "en - US"
+    EN_US = "en-US"
 
-    EN_GB = "en - GB"
+    DE_DE = "de-DE"
 
-    DE_DE = "de - DE"
+    FR_FR = "fr-FR"
 
-    FR_FR = "fr - FR"
-
-    ES_ES = "es - ES"
-
-    ZH_CN = "zh - CN"
-
-    JA_JP = "ja - JP"
+    ES_ES = "es-ES"
 
 
 class AuditAction(Enum):
@@ -220,8 +208,6 @@ class AuditAction(Enum):
     DELETE = "delete"
 
     EXPORT = "export"
-
-    SHARE = "share"
 
 # =============================================================================
 
@@ -394,7 +380,6 @@ class ReportComparison:
     unchanged_count: int = 0
 
 
-@dataclass
 @dataclass
 class FilterCriteria:
 
@@ -912,12 +897,14 @@ class ReportComparator:
 
         self.reports_dir = reports_dir
 
-    def compare(self, file_stem: str, old_content: str, new_content: str) -> ReportComparison:
+    def compare(self, old_path: str, new_path: str, old_content: str, new_content: str) -> ReportComparison:
         """Compare two report versions.
 
         Args:
 
-            file_stem: File stem (without extension).
+            old_path: Path to old version.
+
+            new_path: Path to new version.
 
             old_content: Previous report content.
 
@@ -941,29 +928,21 @@ class ReportComparator:
 
         removed = list(old_set - new_set)
 
-        summary_parts: List[str] = []
-
-        if added:
-
-            summary_parts.append(f"+{len(added)} new items")
-
-        if removed:
-
-            summary_parts.append(f"-{len(removed)} removed items")
-
-        if not summary_parts:
-
-            summary_parts.append("No changes")
+        unchanged = len(old_set & new_set)
 
         return ReportComparison(
 
-            file_path=file_stem,
+            old_path=old_path,
 
-            added_issues=added,
+            new_path=new_path,
 
-            removed_issues=removed,
+            added=added,
 
-            summary=", ".join(summary_parts)
+            removed=removed,
+
+            changed=[],
+
+            unchanged_count=unchanged
 
         )
 
@@ -978,7 +957,7 @@ class ReportComparator:
 
             if line.startswith('- '):
 
-                items.append(line[2:])
+                items.append(line)
 
         return items
 
@@ -1025,7 +1004,7 @@ class ReportFilter:
 
         # Check severity
 
-        if issue.severity.value < self.criteria.severity_min.value:
+        if self.criteria.min_severity and issue.severity.value < self.criteria.min_severity.value:
 
             return False
 
@@ -1370,6 +1349,7 @@ class AnnotationManager:
         """Initialize annotation manager."""
 
         self.annotations: Dict[str, List[ReportAnnotation]] = {}
+        self._annotation_counter = 0
 
         logging.debug("AnnotationManager initialized")
 
@@ -1404,7 +1384,8 @@ class AnnotationManager:
 
         """
 
-        annotation_id = f"ann_{report_id}_{int(time.time())}"
+        self._annotation_counter += 1
+        annotation_id = f"ann_{report_id}_{self._annotation_counter}"
 
         annotation = ReportAnnotation(
 
@@ -1456,13 +1437,13 @@ class AnnotationManager:
 
         """
 
-        for report_id, anns in self.annotations.items():
+        for report_id, anns in list(self.annotations.items()):
 
-            for ann in anns:
+            for i, ann in enumerate(anns):
 
                 if ann.annotation_id == annotation_id:
 
-                    self.annotations[report_id].remove(ann)
+                    self.annotations[report_id].pop(i)
 
                     return True
 
@@ -1888,7 +1869,9 @@ class AccessController:
 
                 continue
 
-            if fnmatch.fnmatch(report_path, perm.report_pattern):
+            # Normalize paths for comparison (remove extra spaces)
+            normalized_path = re.sub(r'\s+', '/', report_path)
+            if fnmatch.fnmatch(normalized_path, perm.report_pattern):
 
                 if perm.level.value >= required_level.value:
 
@@ -1937,15 +1920,15 @@ class ReportExporter:
 
         html_content = content
 
-        html_content = re.sub(r'^  # (.+)$', r'<h1>\1</h1>', html_content, flags=re.MULTILINE)
+        html_content = re.sub(r'# (.+)$', r'<h1>\1</h1>', html_content, flags=re.MULTILINE)
 
-        html_content = re.sub(r'^  ## (.+)$', r'<h2>\1</h2>', html_content, flags=re.MULTILINE)
+        html_content = re.sub(r'## (.+)$', r'<h2>\1</h2>', html_content, flags=re.MULTILINE)
 
         html_content = re.sub(r'^- (.+)$', r'<li>\1</li>', html_content, flags=re.MULTILINE)
 
         html_content = re.sub(r'`([^`]+)`', r'<code>\1</code>', html_content)
 
-        return """<!DOCTYPE html>
+        return f"""<!DOCTYPE html>
 
 <html>
 
@@ -1974,7 +1957,7 @@ class ReportExporter:
 
             lines.append(
 
-                '"{issue.message}",{issue.category.name},{issue.severity.name},'
+                f'"{issue.message}",{issue.category.name},{issue.severity.name},'
 
                 f'{issue.line_number or ""},"{issue.function_name or ""}"'
 
@@ -2179,7 +2162,7 @@ class ReportValidator:
 
         # Check for required sections
 
-        if "  # " not in content:
+        if not re.search(r'^#+\s', content, re.MULTILINE):
 
             errors.append("Missing main heading")
 

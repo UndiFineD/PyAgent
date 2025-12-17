@@ -2613,7 +2613,7 @@ class TestCSVReportFormatting(unittest.TestCase):
             ['Item "A"', 'Value "B"'],
         ]
 
-        csv_line = ','.join(['"{item}"' for item in data[0]])
+        csv_line = ','.join([f'"{item}"' for item in data[0]])
         assert '"Item' in csv_line
 
     def test_format_csv_escaping(self) -> None:
@@ -3422,7 +3422,7 @@ class TestExecutiveSummary(unittest.TestCase):
 
     def test_generate_key_metrics_summary(self) -> None:
         """Test generating summary of key metrics."""
-        _ = {
+        metrics = {
             'total_files': 150,
             'test_coverage': 85.5,
             'warnings': 12,
@@ -3430,7 +3430,7 @@ class TestExecutiveSummary(unittest.TestCase):
             'code_complexity': 4.2
         }
 
-        summary = """
+        summary = f"""
         Executive Summary
         - Total Files: {metrics['total_files']}
         - Test Coverage: {metrics['test_coverage']}%
