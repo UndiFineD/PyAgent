@@ -1869,7 +1869,9 @@ class CoderAgent(BaseAgent):
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef) or isinstance(node, ast.AsyncFunctionDef):
                 metrics.function_count += 1
-                if hasattr(node, 'end_lineno') and hasattr(node, 'lineno') and node.end_lineno is not None and node.lineno is not None:
+                has_lineno = hasattr(node, 'end_lineno') and hasattr(node, 'lineno')
+                lineno_not_none = node.end_lineno is not None and node.lineno is not None
+                if has_lineno and lineno_not_none:
                     length = node.end_lineno - node.lineno + 1
                     function_lengths.append(length)
                     # Calculate cyclomatic complexity for this function
@@ -1947,7 +1949,9 @@ class CoderAgent(BaseAgent):
         for node in ast.walk(tree):
             # Long method detection
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                if hasattr(node, 'end_lineno') and hasattr(node, 'lineno') and node.end_lineno is not None and node.lineno is not None:
+                has_lineno = hasattr(node, 'end_lineno') and hasattr(node, 'lineno')
+                lineno_not_none = node.end_lineno is not None and node.lineno is not None
+                if has_lineno and lineno_not_none:
                     length = node.end_lineno - node.lineno + 1
                     threshold = CODE_SMELL_PATTERNS["long_method"]["threshold"]
                     if length > threshold:

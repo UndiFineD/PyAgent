@@ -1409,7 +1409,7 @@ def llm_chat_via_github_models(
 
     if last_error:
         raise last_error
-    
+
     raise RuntimeError("GitHub Models API request failed: no response after retries")
 
 
