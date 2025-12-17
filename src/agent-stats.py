@@ -408,7 +408,8 @@ class StatsAgent:
             value = history[-1].value
             history = history[:-1]  # Use history without the latest for comparison
             
-            if len(history) < 10:
+            # Lower minimum to 2 values instead of 10
+            if len(history) < 2:
                 return False
             
             values = [m.value for m in history]
