@@ -75,7 +75,7 @@ except ImportError:
 # Import markdown fixing functionality
 
 
-def _load_fix_markdown_content() -> callable:
+def _load_fix_markdown_content() -> Callable[..., str]:
     """Load the markdown fixer module dynamically."""
     fix_dir = Path(__file__).parent.parent / 'fix'
     spec = importlib.util.spec_from_file_location(
