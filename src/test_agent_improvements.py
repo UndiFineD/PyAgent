@@ -1085,8 +1085,8 @@ class TestBranchComparer:
         comparer = improvements_module.BranchComparer()
         imp = agent.add_improvement("Test", "Description")
 
-        source = {imp.id: imp}
-        target = {}
+        source: dict[str, agent.Improvement] = {imp.id: imp}
+        target: dict[str, agent.Improvement] = {}
 
         diffs = comparer._calculate_diffs(source, target)
         removed = [d for d in diffs if d.diff_type ==

@@ -2820,7 +2820,7 @@ class TestReportAggregation(unittest.TestCase):
             {"type": "B", "value": 15},
         ]
 
-        grouped = {}
+        grouped: dict[str, list[int]] = {}
         for item in items:
             if item["type"] not in grouped:
                 grouped[item["type"]] = []

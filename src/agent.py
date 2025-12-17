@@ -1695,7 +1695,7 @@ class AgentPriorityQueue:
         """
         # Topological sort with priority
         executed = set()
-        order = []
+        order: list[str] = []
 
         while len(order) < len(self._agents):
             available = []
@@ -2147,7 +2147,7 @@ class DependencyGraph:
                 pass  # Actually, we track outgoing
 
         # Build reverse graph for topological sort
-        reverse = {n: set() for n in self._nodes}
+        reverse: dict[str, set[str]] = {n: set() for n in self._nodes}
         for node, deps in self._edges.items():
             for dep in deps:
                 reverse[dep].add(node)
@@ -3450,7 +3450,7 @@ Agents applied:
             - Limited by max_files parameter if set
         """
         logging.info("Searching for code files...")
-        code_files = []
+        code_files: list[Path] = []
         for ext in self.SUPPORTED_EXTENSIONS:
             code_files.extend(self.repo_root.rglob(f'*{ext}'))
         logging.debug(f"Found {len(code_files)} files with supported extensions")

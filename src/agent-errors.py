@@ -494,7 +494,7 @@ class ImpactAnalyzer:
 
     def _find_downstream_effects(self, file_path: str) -> List[str]:
         """Find downstream effects recursively."""
-        effects = []
+        effects: List[str] = []
         visited: Set[str] = set()
         self._find_downstream_recursive(file_path, effects, visited)
         return effects

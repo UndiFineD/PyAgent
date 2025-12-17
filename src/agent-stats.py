@@ -640,7 +640,7 @@ class StatsAgent:
 
     def get_missing_items(self) -> Dict[str, List[str]]:
         """Identify files missing specific auxiliary components."""
-        missing = {
+        missing: Dict[str, List[str]] = {
             'context': [],
             'changes': [],
             'errors': [],
@@ -1133,7 +1133,7 @@ class MetricNamespaceManager:
         Returns:
             List of namespace names from root to given namespace.
         """
-        hierarchy = []
+        hierarchy: list[str] = []
         current = name
         while current:
             hierarchy.insert(0, current)

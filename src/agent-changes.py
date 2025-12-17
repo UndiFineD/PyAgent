@@ -1325,8 +1325,8 @@ class ChangesAgent(BaseAgent):
         lines = content.split('\n')
         in_conflict = False
         conflict_start = 0
-        ours = []
-        theirs = []
+        ours: list[str] = []
+        theirs: list[str] = []
 
         for i, line in enumerate(lines):
             if line.startswith('<<<<<<<'):
@@ -1368,8 +1368,8 @@ class ChangesAgent(BaseAgent):
         lines = content.split('\n')
         in_conflict = False
         ours_section = True
-        ours = []
-        theirs = []
+        ours: list[str] = []
+        theirs: list[str] = []
 
         for line in lines:
             if line.startswith('<<<<<<<'):

@@ -1033,7 +1033,7 @@ class ContextVisualizer:
             VisualizationData for rendering.
         """
         nodes = []
-        edges = []
+        edges: list[dict[str, str]] = []
 
         for path in contexts.keys():
             nodes.append({"id": path, "label": Path(path).name})
