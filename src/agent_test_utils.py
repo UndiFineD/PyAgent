@@ -26,6 +26,7 @@ import re
 import shutil
 import sys
 import tempfile
+import threading
 import time
 from contextlib import contextmanager
 from dataclasses import dataclass, field
@@ -33,7 +34,7 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from types import ModuleType
-from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, TypeVar
+from typing import Any, Callable, Dict, Iterator, List, Optional, Set, Tuple, TypeVar, Union
 
 import random
 
@@ -1396,13 +1397,27 @@ class TestResultAggregator:
         """Initialize result aggregator."""
         self._results: List[TestResult] = []
 
-    def add_result(self, result: TestResult) -> None:
+    def add_result(self, result: Union[TestResult, str], test_name: Optional[str] = None, status: Optional[str] = None) -> None:
         """Add a test result.
 
         Args:
-            result: Test result to add.
+            result: Test result object OR suite name (for backwards compatibility).
+            test_name: Test name (when result is a string).
+            status: Test status (when result is a string).
         """
-        self._results.append(result)
+        if isinstance(result, TestResult):
+            self._results.append(result)
+        elif isinstance(result, str) and test_name and status:
+            # Support add_result(suite, test_name, status) style
+            test_result = TestResult(
+                name=f"{result}/{test_name}",
+                status=TestStatus[status.upper()] if hasattr(TestStatus, status.upper()) else TestStatus.PASSED,
+                suite=result,
+                duration_ms=0.0
+            )
+            self._results.append(test_result)
+        else:
+            raise TypeError("Invalid arguments to add_result")
 
     def get_results(self) -> List[TestResult]:
         """Get all results."""
@@ -2244,6 +2259,8 @@ class ParallelTestRunner:
         self.workers = workers
         self._tests: Dict[str, Callable[[], None]] = {}
         self._results: List[ParallelTestResult] = []
+        self.success_count = 0
+        self.failure_count = 0
 
     def add_test(self, name: str, test_fn: Callable[[], None]) -> None:
         """Add test to run.
@@ -2253,6 +2270,39 @@ class ParallelTestRunner:
             test_fn: Test function.
         """
         self._tests[name] = test_fn
+
+    def run(self, test_functions: List[Callable[[], Any]], fail_fast: bool = True) -> List[Any]:
+        """Run tests in parallel.
+
+        Args:
+            test_functions: List of test functions to run.
+            fail_fast: Stop on first failure.
+
+        Returns:
+            List of results from test functions.
+        """
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        
+        self.success_count = 0
+        self.failure_count = 0
+        results = []
+        
+        with ThreadPoolExecutor(max_workers=self.workers) as executor:
+            futures = {executor.submit(test_fn): i for i, test_fn in enumerate(test_functions)}
+            
+            for future in as_completed(futures):
+                try:
+                    result = future.result()
+                    results.append(result)
+                    self.success_count += 1
+                except Exception as e:
+                    self.failure_count += 1
+                    if fail_fast:
+                        executor.shutdown(wait=False)
+                        raise
+                    results.append(None)
+        
+        return results
 
     def _run_test(
         self,
@@ -2758,6 +2808,222 @@ def agent_dir_on_path() -> Iterator[None]:
         yield
     finally:
         sys.path[:] = old_sys_path
+
+
+# ========== Additional Test Utilities Classes ==========
+
+class EnvironmentDetector:
+    """Detects and reports test environment information."""
+
+    def detect(self) -> Dict[str, Any]:
+        """Detect environment information."""
+        import platform
+        import os
+        
+        is_ci = any(env in os.environ for env in ['CI', 'CONTINUOUS_INTEGRATION', 'BUILD_ID', 'GITHUB_ACTIONS'])
+        system = platform.system().lower()
+        os_name = 'windows' if system == 'windows' else 'darwin' if system == 'darwin' else 'linux' if system == 'linux' else 'unknown'
+        
+        return {
+            'is_ci': is_ci,
+            'os': os_name,
+            'python_version': platform.python_version(),
+            'platform': system
+        }
+
+
+class LogCapturer:
+    """Captures logging output for testing."""
+
+    def __init__(self, level: int = logging.INFO) -> None:
+        """Initialize log capturer."""
+        self.level = level
+        self.logs: List[logging.LogRecord] = []
+        self.handler = logging.Handler()
+        self.handler.emit = lambda record: self.logs.append(record)
+
+    def start(self) -> None:
+        """Start capturing logs."""
+        root_logger = logging.getLogger()
+        root_logger.addHandler(self.handler)
+        root_logger.setLevel(self.level)
+
+    def stop(self) -> None:
+        """Stop capturing logs."""
+        logging.getLogger().removeHandler(self.handler)
+
+    def get_logs(self, level: Optional[int] = None) -> List[str]:
+        """Get captured log messages."""
+        if level is None:
+            return [record.getMessage() for record in self.logs]
+        return [record.getMessage() for record in self.logs if record.levelno >= level]
+
+
+class TestConfigLoader:
+    """Loads test configuration from files."""
+
+    def __init__(self, config_path: Optional[Path] = None) -> None:
+        """Initialize config loader."""
+        self.config_path = config_path or Path("test_config.json")
+        self.config: Dict[str, Any] = {}
+
+    def load(self) -> Dict[str, Any]:
+        """Load configuration."""
+        if self.config_path.exists():
+            with open(self.config_path) as f:
+                self.config = json.load(f)
+        return self.config
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Get configuration value."""
+        return self.config.get(key, default)
+
+
+class TestReportGenerator:
+    """Generates test reports in various formats."""
+
+    def __init__(self) -> None:
+        """Initialize report generator."""
+        self.results: List[Dict[str, Any]] = []
+
+    def add_result(self, test_name: str, passed: bool, duration_ms: float) -> None:
+        """Add test result."""
+        self.results.append({
+            'test_name': test_name,
+            'passed': passed,
+            'duration_ms': duration_ms
+        })
+
+    def generate_html(self) -> str:
+        """Generate HTML report."""
+        rows = ''
+        for r in self.results:
+            status = 'PASSED' if r['passed'] else 'FAILED'
+            rows += f"<tr><td>{r['test_name']}</td><td>{status}</td><td>{r['duration_ms']:.2f}ms</td></tr>"
+        
+        return f"""
+        <html>
+        <head><title>Test Report</title></head>
+        <body>
+        <h1>Test Results</h1>
+        <table border="1">
+        <tr><th>Test</th><th>Status</th><th>Duration</th></tr>
+        {rows}
+        </table>
+        </body>
+        </html>
+        """
+
+    def generate_json(self) -> str:
+        """Generate JSON report."""
+        return json.dumps(self.results, indent=2)
+
+
+class CleanupManager:
+    """Manages cleanup hooks for tests."""
+
+    def __init__(self) -> None:
+        """Initialize cleanup manager."""
+        self.hooks: List[Callable[[], None]] = []
+
+    def add_hook(self, hook: Callable[[], None]) -> None:
+        """Add cleanup hook."""
+        self.hooks.append(hook)
+
+    def cleanup(self) -> None:
+        """Execute all cleanup hooks."""
+        for hook in reversed(self.hooks):
+            try:
+                hook()
+            except Exception:
+                pass
+
+
+class DependencyResolver:
+    """Resolves dependencies between tests."""
+
+    def __init__(self) -> None:
+        """Initialize resolver."""
+        self.dependencies: Dict[str, List[str]] = {}
+
+    def add_dependency(self, test: str, depends_on: str) -> None:
+        """Add dependency."""
+        if test not in self.dependencies:
+            self.dependencies[test] = []
+        self.dependencies[test].append(depends_on)
+
+    def resolve_order(self) -> List[str]:
+        """Resolve execution order (topological sort)."""
+        visited: Set[str] = set()
+        order: List[str] = []
+
+        def visit(node: str) -> None:
+            if node in visited:
+                return
+            visited.add(node)
+            for dep in self.dependencies.get(node, []):
+                visit(dep)
+            order.append(node)
+
+        for test in self.dependencies:
+            visit(test)
+        return order
+
+    def detect_cycle(self) -> bool:
+        """Detect circular dependencies."""
+        visited: Set[str] = set()
+        rec_stack: Set[str] = set()
+
+        def has_cycle(node: str) -> bool:
+            visited.add(node)
+            rec_stack.add(node)
+            for dep in self.dependencies.get(node, []):
+                if dep not in visited:
+                    if has_cycle(dep):
+                        return True
+                elif dep in rec_stack:
+                    return True
+            rec_stack.remove(node)
+            return False
+
+        for test in self.dependencies:
+            if test not in visited:
+                if has_cycle(test):
+                    return True
+        return False
+
+
+class ResourcePool:
+    """Manages resource allocation for tests."""
+
+    def __init__(self, max_resources: int = 10) -> None:
+        """Initialize resource pool."""
+        self.max_resources = max_resources
+        self.available = max_resources
+        self.lock = threading.Lock()
+
+    def acquire(self, count: int = 1) -> bool:
+        """Acquire resources."""
+        with self.lock:
+            if self.available >= count:
+                self.available -= count
+                return True
+            return False
+
+    def release(self, count: int = 1) -> None:
+        """Release resources."""
+        with self.lock:
+            self.available = min(self.available + count, self.max_resources)
+
+    def wait_available(self, count: int = 1, timeout: float = 10.0) -> bool:
+        """Wait for resources to be available."""
+        import time as time_module
+        start = time_module.time()
+        while time_module.time() - start < timeout:
+            if self.acquire(count):
+                return True
+            time_module.sleep(0.1)
+        return False
 
 
 def get_base_agent_module() -> ModuleType:
