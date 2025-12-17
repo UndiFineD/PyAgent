@@ -1,4 +1,4 @@
-#!/usr / bin / env python3
+I see - the test is checking for "&lt;script & gt;" but the actual output is "&lt;script&gt;" (no spaces). Let me fix that:#!/usr / bin / env python3
 """
 Tests for agent_test_utils.py improvements.
 
