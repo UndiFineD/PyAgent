@@ -1127,18 +1127,18 @@ class ChangesAgent(BaseAgent):
     # Default templates for different project types
     DEFAULT_TEMPLATES: Dict[str, ChangelogTemplate] = {
         "python": ChangelogTemplate(
-            name="Python Project",
+            name="Python",
             project_type="python",
             sections=["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"],
             include_contributors=True
         ),
         "javascript": ChangelogTemplate(
-            name="JavaScript / Node.js Project",
+            name="JavaScript",
             project_type="javascript",
             sections=["Features", "Bug Fixes", "Breaking Changes", "Documentation"],
         ),
         "generic": ChangelogTemplate(
-            name="Generic Project",
+            name="Generic",
             project_type="generic",
             sections=["Added", "Changed", "Fixed", "Removed"],
         ),

@@ -539,7 +539,7 @@ class CodeReviewer:
                 ))
 
             # Security checks
-            if re.search(r"password\s*=\s * ['\"][^'\"]+['\"]", line, re.I):
+            if re.search(r"password\s*=\s*['\"][^'\"]+['\"]", line, re.I):
                 self.findings.append(ReviewFinding(
                     category=ReviewCategory.SECURITY,
                     message="Potential hardcoded password",
@@ -550,7 +550,7 @@ class CodeReviewer:
                 ))
 
             # Performance checks
-            if re.search(r"for\s+\w+\s + in\s + range\(len\(", line):
+            if re.search(r"for\s+\w+\s+in\s+range\(len\(", line):
                 self.findings.append(ReviewFinding(
                     category=ReviewCategory.PERFORMANCE,
                     message="Inefficient iteration pattern",
@@ -561,7 +561,7 @@ class CodeReviewer:
                 ))
 
             # Documentation checks
-            if re.match(r"^\s * def\s+[a-z_]\w*\s*\(", line):
+            if re.match(r"^\s*def\s+[a-z_]\w*\s*\(", line):
                 # Check for docstring on next line
                 if i < len(lines) and '"""' not in lines[i]:
                     self.findings.append(ReviewFinding(
