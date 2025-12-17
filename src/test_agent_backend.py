@@ -483,7 +483,7 @@ class TestResponseTransformEnum:
 class TestLoadBalanceStrategyEnum:
     """Tests for LoadBalanceStrategy enum."""
 
-    def test_all_strategies(self, agent_backend_module: any) -> None:
+    def test_all_strategies(self, agent_backend_module: Any) -> None:
         """Test all strategies exist."""
         LoadBalanceStrategy = agent_backend_module.LoadBalanceStrategy
         members = [m.name for m in LoadBalanceStrategy]
@@ -759,7 +759,7 @@ class TestBackendHealthMonitor:
         # Success rate is 20%, should be unhealthy
         assert monitor.is_healthy("test-backend") is False
 
-    def test_get_healthiest(self, agent_backend_module: any) -> None:
+    def test_get_healthiest(self, agent_backend_module: Any) -> None:
         """Test getting healthiest backend."""
         BackendHealthMonitor = agent_backend_module.BackendHealthMonitor
         monitor = BackendHealthMonitor()
@@ -782,7 +782,7 @@ class TestBackendHealthMonitor:
 class TestLoadBalancer:
     """Tests for LoadBalancer class."""
 
-    def test_initialization(self, agent_backend_module: any) -> None:
+    def test_initialization(self, agent_backend_module: Any) -> None:
         """Test load balancer initialization."""
         LoadBalancer = agent_backend_module.LoadBalancer
         LoadBalanceStrategy = agent_backend_module.LoadBalanceStrategy
@@ -790,7 +790,7 @@ class TestLoadBalancer:
         lb = LoadBalancer(LoadBalanceStrategy.ROUND_ROBIN)
         assert lb.strategy == LoadBalanceStrategy.ROUND_ROBIN
 
-    def test_add_backend(self, agent_backend_module: any) -> None:
+    def test_add_backend(self, agent_backend_module: Any) -> None:
         """Test adding backends."""
         LoadBalancer = agent_backend_module.LoadBalancer
 
@@ -802,7 +802,7 @@ class TestLoadBalancer:
         assert backend is not None
         assert backend.name in ["backend1", "backend2"]
 
-    def test_round_robin(self, agent_backend_module: any) -> None:
+    def test_round_robin(self, agent_backend_module: Any) -> None:
         """Test round robin distribution."""
         LoadBalancer = agent_backend_module.LoadBalancer
         LoadBalanceStrategy = agent_backend_module.LoadBalanceStrategy
@@ -818,7 +818,7 @@ class TestLoadBalancer:
 
         assert b1.name != b2.name or len([b1, b2, b3]) == 3
 
-    def test_remove_backend(self, agent_backend_module: any) -> None:
+    def test_remove_backend(self, agent_backend_module: Any) -> None:
         """Test removing backends."""
         LoadBalancer = agent_backend_module.LoadBalancer
 
@@ -838,13 +838,13 @@ class TestLoadBalancer:
 class TestUsageQuotaManager:
     """Tests for UsageQuotaManager class."""
 
-    def test_initialization(self, agent_backend_module: any) -> None:
+    def test_initialization(self, agent_backend_module: Any) -> None:
         """Test quota manager initialization."""
         UsageQuotaManager = agent_backend_module.UsageQuotaManager
         manager = UsageQuotaManager(daily_limit=100, hourly_limit=10)
         assert manager.can_request() is True
 
-    def test_record_request(self, agent_backend_module: any) -> None:
+    def test_record_request(self, agent_backend_module: Any) -> None:
         """Test recording requests."""
         UsageQuotaManager = agent_backend_module.UsageQuotaManager
         manager = UsageQuotaManager(daily_limit=100, hourly_limit=10)
@@ -854,7 +854,7 @@ class TestUsageQuotaManager:
         assert daily == 99
         assert hourly == 9
 
-    def test_quota_exceeded(self, agent_backend_module: any) -> None:
+    def test_quota_exceeded(self, agent_backend_module: Any) -> None:
         """Test quota enforcement."""
         UsageQuotaManager = agent_backend_module.UsageQuotaManager
         manager = UsageQuotaManager(daily_limit=2, hourly_limit=2)
@@ -864,7 +864,7 @@ class TestUsageQuotaManager:
 
         assert manager.can_request() is False
 
-    def test_usage_report(self, agent_backend_module: any) -> None:
+    def test_usage_report(self, agent_backend_module: Any) -> None:
         """Test getting usage report."""
         UsageQuotaManager = agent_backend_module.UsageQuotaManager
         manager = UsageQuotaManager(daily_limit=100, hourly_limit=10)
@@ -885,13 +885,13 @@ class TestUsageQuotaManager:
 class TestRequestTracer:
     """Tests for RequestTracer class."""
 
-    def test_initialization(self, agent_backend_module: any) -> None:
+    def test_initialization(self, agent_backend_module: Any) -> None:
         """Test tracer initialization."""
         RequestTracer = agent_backend_module.RequestTracer
         tracer = RequestTracer()
         assert tracer.get_active_traces() == []
 
-    def test_start_trace(self, agent_backend_module: any) -> None:
+    def test_start_trace(self, agent_backend_module: Any) -> None:
         """Test starting a trace."""
         RequestTracer = agent_backend_module.RequestTracer
         tracer = RequestTracer()
@@ -901,7 +901,7 @@ class TestRequestTracer:
         assert context.correlation_id is not None
         assert len(tracer.get_active_traces()) == 1
 
-    def test_end_trace(self, agent_backend_module: any) -> None:
+    def test_end_trace(self, agent_backend_module: Any) -> None:
         """Test ending a trace."""
         RequestTracer = agent_backend_module.RequestTracer
         tracer = RequestTracer()
@@ -922,7 +922,7 @@ class TestRequestTracer:
 class TestAuditLogger:
     """Tests for AuditLogger class."""
 
-    def test_initialization(self, agent_backend_module: any) -> None:
+    def test_initialization(self, agent_backend_module: Any) -> None:
         """Test audit logger initialization."""
         AuditLogger = agent_backend_module.AuditLogger
         logger = AuditLogger()
@@ -969,7 +969,7 @@ class TestAuditLogger:
 class TestPhase6Integration:
     """Integration tests for Phase 6 features."""
 
-    def test_queue_with_batcher(self, agent_backend_module: any) -> None:
+    def test_queue_with_batcher(self, agent_backend_module: Any) -> None:
         """Test queue and batcher working together."""
         RequestQueue = agent_backend_module.RequestQueue
         RequestBatcher = agent_backend_module.RequestBatcher
@@ -991,7 +991,7 @@ class TestPhase6Integration:
         batch = batcher.get_batch()
         assert len(batch.requests) == 2
 
-    def test_health_monitor_with_load_balancer(self, agent_backend_module: any) -> None:
+    def test_health_monitor_with_load_balancer(self, agent_backend_module: Any) -> None:
         """Test health monitor with load balancer."""
         BackendHealthMonitor = agent_backend_module.BackendHealthMonitor
         LoadBalancer = agent_backend_module.LoadBalancer
@@ -1048,14 +1048,14 @@ class TestPhase6Integration:
 class TestRequestSigner:
     """Tests for RequestSigner class."""
 
-    def test_signer_init(self, agent_backend_module: any) -> None:
+    def test_signer_init(self, agent_backend_module: Any) -> None:
         """Test RequestSigner initialization."""
         RequestSigner = agent_backend_module.RequestSigner
 
         signer = RequestSigner(secret_key="test-secret")
         assert signer.secret_key == b"test-secret"
 
-    def test_sign_data(self, agent_backend_module: any) -> None:
+    def test_sign_data(self, agent_backend_module: Any) -> None:
         """Test signing data."""
         RequestSigner = agent_backend_module.RequestSigner
 
@@ -1065,7 +1065,7 @@ class TestRequestSigner:
         assert len(signature) == 64  # SHA256 hex digest
         assert signature.isalnum()
 
-    def test_verify_valid_signature(self, agent_backend_module: any) -> None:
+    def test_verify_valid_signature(self, agent_backend_module: Any) -> None:
         """Test verifying valid signature."""
         RequestSigner = agent_backend_module.RequestSigner
 
@@ -1075,7 +1075,7 @@ class TestRequestSigner:
 
         assert signer.verify(data, signature) is True
 
-    def test_verify_invalid_signature(self, agent_backend_module: any) -> None:
+    def test_verify_invalid_signature(self, agent_backend_module: Any) -> None:
         """Test verifying invalid signature."""
         RequestSigner = agent_backend_module.RequestSigner
 
@@ -1083,7 +1083,7 @@ class TestRequestSigner:
 
         assert signer.verify("test data", "invalid") is False
 
-    def test_stored_signature(self, agent_backend_module: any) -> None:
+    def test_stored_signature(self, agent_backend_module: Any) -> None:
         """Test signature storage by request ID."""
         RequestSigner = agent_backend_module.RequestSigner
 
@@ -1101,14 +1101,14 @@ class TestRequestSigner:
 class TestRequestDeduplicator:
     """Tests for RequestDeduplicator class."""
 
-    def test_deduplicator_init(self, agent_backend_module: any) -> None:
+    def test_deduplicator_init(self, agent_backend_module: Any) -> None:
         """Test RequestDeduplicator initialization."""
         RequestDeduplicator = agent_backend_module.RequestDeduplicator
 
         dedup = RequestDeduplicator(ttl_seconds=60)
         assert dedup.ttl_seconds == 60
 
-    def test_first_request_not_duplicate(self, agent_backend_module: any) -> None:
+    def test_first_request_not_duplicate(self, agent_backend_module: Any) -> None:
         """Test first request is not a duplicate."""
         RequestDeduplicator = agent_backend_module.RequestDeduplicator
 
@@ -1116,7 +1116,7 @@ class TestRequestDeduplicator:
 
         assert dedup.is_duplicate("new prompt") is False
 
-    def test_second_request_is_duplicate(self, agent_backend_module: any) -> None:
+    def test_second_request_is_duplicate(self, agent_backend_module: Any) -> None:
         """Test second identical request is a duplicate."""
         RequestDeduplicator = agent_backend_module.RequestDeduplicator
 
@@ -1125,7 +1125,7 @@ class TestRequestDeduplicator:
         dedup.is_duplicate("same prompt")  # First request
         assert dedup.is_duplicate("same prompt") is True
 
-    def test_store_and_retrieve_result(self, agent_backend_module: any) -> None:
+    def test_store_and_retrieve_result(self, agent_backend_module: Any) -> None:
         """Test storing and retrieving result."""
         RequestDeduplicator = agent_backend_module.RequestDeduplicator
 
@@ -1147,14 +1147,14 @@ class TestRequestDeduplicator:
 class TestVersionNegotiator:
     """Tests for VersionNegotiator class."""
 
-    def test_negotiator_init(self, agent_backend_module: any) -> None:
+    def test_negotiator_init(self, agent_backend_module: Any) -> None:
         """Test VersionNegotiator initialization."""
         VersionNegotiator = agent_backend_module.VersionNegotiator
 
         negotiator = VersionNegotiator()
         assert negotiator._versions == {}
 
-    def test_register_backend(self, agent_backend_module: any) -> None:
+    def test_register_backend(self, agent_backend_module: Any) -> None:
         """Test registering backend version."""
         VersionNegotiator = agent_backend_module.VersionNegotiator
 
@@ -1169,7 +1169,7 @@ class TestVersionNegotiator:
         assert version.version == "2.0"
         assert "streaming" in version.capabilities
 
-    def test_negotiate_success(self, agent_backend_module: any) -> None:
+    def test_negotiate_success(self, agent_backend_module: Any) -> None:
         """Test successful version negotiation."""
         VersionNegotiator = agent_backend_module.VersionNegotiator
 
@@ -1179,7 +1179,7 @@ class TestVersionNegotiator:
         result = negotiator.negotiate("api", required=["streaming"])
         assert result is not None
 
-    def test_negotiate_missing_capability(self, agent_backend_module: any) -> None:
+    def test_negotiate_missing_capability(self, agent_backend_module: Any) -> None:
         """Test negotiation fails with missing capability."""
         VersionNegotiator = agent_backend_module.VersionNegotiator
 
@@ -1198,14 +1198,14 @@ class TestVersionNegotiator:
 class TestCapabilityDiscovery:
     """Tests for CapabilityDiscovery class."""
 
-    def test_discovery_init(self, agent_backend_module: any) -> None:
+    def test_discovery_init(self, agent_backend_module: Any) -> None:
         """Test CapabilityDiscovery initialization."""
         CapabilityDiscovery = agent_backend_module.CapabilityDiscovery
 
         discovery = CapabilityDiscovery()
         assert discovery._capabilities == {}
 
-    def test_register_capability(self, agent_backend_module: any) -> None:
+    def test_register_capability(self, agent_backend_module: Any) -> None:
         """Test registering capability."""
         CapabilityDiscovery = agent_backend_module.CapabilityDiscovery
 
@@ -1219,7 +1219,7 @@ class TestCapabilityDiscovery:
         assert cap.name == "streaming"
         assert cap.enabled is True
 
-    def test_has_capability(self, agent_backend_module: any) -> None:
+    def test_has_capability(self, agent_backend_module: Any) -> None:
         """Test checking capability."""
         CapabilityDiscovery = agent_backend_module.CapabilityDiscovery
 
@@ -1229,7 +1229,7 @@ class TestCapabilityDiscovery:
         assert discovery.has_capability("backend", "feature1") is True
         assert discovery.has_capability("backend", "unknown") is False
 
-    def test_discover_all(self, agent_backend_module: any) -> None:
+    def test_discover_all(self, agent_backend_module: Any) -> None:
         """Test discovering all capabilities."""
         CapabilityDiscovery = agent_backend_module.CapabilityDiscovery
 
@@ -1250,14 +1250,14 @@ class TestCapabilityDiscovery:
 class TestRequestRecorder:
     """Tests for RequestRecorder class."""
 
-    def test_recorder_init(self, agent_backend_module: any) -> None:
+    def test_recorder_init(self, agent_backend_module: Any) -> None:
         """Test RequestRecorder initialization."""
         RequestRecorder = agent_backend_module.RequestRecorder
 
         recorder = RequestRecorder(max_recordings=100)
         assert recorder.max_recordings == 100
 
-    def test_record_request(self, agent_backend_module: any) -> None:
+    def test_record_request(self, agent_backend_module: Any) -> None:
         """Test recording a request."""
         RequestRecorder = agent_backend_module.RequestRecorder
 
@@ -1272,7 +1272,7 @@ class TestRequestRecorder:
         assert recording.prompt == "test prompt"
         assert recording.response == "test response"
 
-    def test_get_recordings(self, agent_backend_module: any) -> None:
+    def test_get_recordings(self, agent_backend_module: Any) -> None:
         """Test getting recordings."""
         RequestRecorder = agent_backend_module.RequestRecorder
 
@@ -1286,7 +1286,7 @@ class TestRequestRecorder:
         b1_recs = recorder.get_recordings(backend="b1")
         assert len(b1_recs) == 1
 
-    def test_export_recordings(self, agent_backend_module: any) -> None:
+    def test_export_recordings(self, agent_backend_module: Any) -> None:
         """Test exporting recordings as JSON."""
         RequestRecorder = agent_backend_module.RequestRecorder
         import json
@@ -1307,14 +1307,14 @@ class TestRequestRecorder:
 class TestConfigHotReloader:
     """Tests for ConfigHotReloader class."""
 
-    def test_reloader_init(self, agent_backend_module: any) -> None:
+    def test_reloader_init(self, agent_backend_module: Any) -> None:
         """Test ConfigHotReloader initialization."""
         ConfigHotReloader = agent_backend_module.ConfigHotReloader
 
         reloader = ConfigHotReloader()
         assert reloader._config == {}
 
-    def test_set_and_get_config(self, agent_backend_module: any) -> None:
+    def test_set_and_get_config(self, agent_backend_module: Any) -> None:
         """Test setting and getting config."""
         ConfigHotReloader = agent_backend_module.ConfigHotReloader
 
@@ -1323,7 +1323,7 @@ class TestConfigHotReloader:
 
         assert reloader.get_config("timeout") == 60
 
-    def test_change_callback(self, agent_backend_module: any) -> None:
+    def test_change_callback(self, agent_backend_module: Any) -> None:
         """Test change callback is called."""
         ConfigHotReloader = agent_backend_module.ConfigHotReloader
 
@@ -1345,14 +1345,14 @@ class TestConfigHotReloader:
 class TestRequestCompressor:
     """Tests for RequestCompressor class."""
 
-    def test_compressor_init(self, agent_backend_module: any) -> None:
+    def test_compressor_init(self, agent_backend_module: Any) -> None:
         """Test RequestCompressor initialization."""
         RequestCompressor = agent_backend_module.RequestCompressor
 
         compressor = RequestCompressor(compression_level=6)
         assert compressor.compression_level == 6
 
-    def test_compress_small_data(self, agent_backend_module: any) -> None:
+    def test_compress_small_data(self, agent_backend_module: Any) -> None:
         """Test small data is not compressed."""
         RequestCompressor = agent_backend_module.RequestCompressor
 
@@ -1363,7 +1363,7 @@ class TestRequestCompressor:
         # Should have 0x00 header (uncompressed)
         assert compressed[0] == 0
 
-    def test_compress_large_data(self, agent_backend_module: any) -> None:
+    def test_compress_large_data(self, agent_backend_module: Any) -> None:
         """Test large data is compressed."""
         RequestCompressor = agent_backend_module.RequestCompressor
 
@@ -1374,7 +1374,7 @@ class TestRequestCompressor:
         # Should have 0x01 header (compressed)
         assert compressed[0] == 1
 
-    def test_roundtrip(self, agent_backend_module: any) -> None:
+    def test_roundtrip(self, agent_backend_module: Any) -> None:
         """Test compression / decompression roundtrip."""
         RequestCompressor = agent_backend_module.RequestCompressor
 
@@ -1394,14 +1394,14 @@ class TestRequestCompressor:
 class TestBackendAnalytics:
     """Tests for BackendAnalytics class."""
 
-    def test_analytics_init(self, agent_backend_module: any) -> None:
+    def test_analytics_init(self, agent_backend_module: Any) -> None:
         """Test BackendAnalytics initialization."""
         BackendAnalytics = agent_backend_module.BackendAnalytics
 
         analytics = BackendAnalytics(retention_hours=24)
         assert analytics.retention_hours == 24
 
-    def test_record_usage(self, agent_backend_module: any) -> None:
+    def test_record_usage(self, agent_backend_module: Any) -> None:
         """Test recording usage."""
         BackendAnalytics = agent_backend_module.BackendAnalytics
 
@@ -1415,7 +1415,7 @@ class TestBackendAnalytics:
         assert record.tokens_used == 500
         assert record.backend == "github-models"
 
-    def test_generate_report(self, agent_backend_module: any) -> None:
+    def test_generate_report(self, agent_backend_module: Any) -> None:
         """Test generating report."""
         BackendAnalytics = agent_backend_module.BackendAnalytics
 
@@ -1438,14 +1438,14 @@ class TestBackendAnalytics:
 class TestConnectionPool:
     """Tests for ConnectionPool class."""
 
-    def test_pool_init(self, agent_backend_module: any) -> None:
+    def test_pool_init(self, agent_backend_module: Any) -> None:
         """Test ConnectionPool initialization."""
         ConnectionPool = agent_backend_module.ConnectionPool
 
         pool = ConnectionPool(max_connections=10)
         assert pool.max_connections == 10
 
-    def test_acquire_connection(self, agent_backend_module: any) -> None:
+    def test_acquire_connection(self, agent_backend_module: Any) -> None:
         """Test acquiring connection."""
         ConnectionPool = agent_backend_module.ConnectionPool
 
@@ -1455,7 +1455,7 @@ class TestConnectionPool:
         assert conn is not None
         assert conn["backend"] == "backend1"
 
-    def test_release_connection(self, agent_backend_module: any) -> None:
+    def test_release_connection(self, agent_backend_module: Any) -> None:
         """Test releasing connection."""
         ConnectionPool = agent_backend_module.ConnectionPool
 
@@ -1475,14 +1475,14 @@ class TestConnectionPool:
 class TestRequestThrottler:
     """Tests for RequestThrottler class."""
 
-    def test_throttler_init(self, agent_backend_module: any) -> None:
+    def test_throttler_init(self, agent_backend_module: Any) -> None:
         """Test RequestThrottler initialization."""
         RequestThrottler = agent_backend_module.RequestThrottler
 
         throttler = RequestThrottler(requests_per_second=10)
         assert throttler.requests_per_second == 10
 
-    def test_allow_request(self, agent_backend_module: any) -> None:
+    def test_allow_request(self, agent_backend_module: Any) -> None:
         """Test allowing requests."""
         RequestThrottler = agent_backend_module.RequestThrottler
 
@@ -1492,7 +1492,7 @@ class TestRequestThrottler:
         assert throttler.allow_request("backend") is True
         assert throttler.allow_request("backend") is True
 
-    def test_throttle_exhausted(self, agent_backend_module: any) -> None:
+    def test_throttle_exhausted(self, agent_backend_module: Any) -> None:
         """Test throttling when exhausted."""
         RequestThrottler = agent_backend_module.RequestThrottler
 
@@ -1514,14 +1514,14 @@ class TestRequestThrottler:
 class TestTTLCache:
     """Tests for TTLCache class."""
 
-    def test_cache_init(self, agent_backend_module: any) -> None:
+    def test_cache_init(self, agent_backend_module: Any) -> None:
         """Test TTLCache initialization."""
         TTLCache = agent_backend_module.TTLCache
 
         cache = TTLCache(default_ttl_seconds=300)
         assert cache.default_ttl_seconds == 300
 
-    def test_set_and_get(self, agent_backend_module: any) -> None:
+    def test_set_and_get(self, agent_backend_module: Any) -> None:
         """Test setting and getting cache entry."""
         TTLCache = agent_backend_module.TTLCache
 
@@ -1530,7 +1530,7 @@ class TestTTLCache:
 
         assert cache.get("key") == "value"
 
-    def test_expired_entry(self, agent_backend_module: any) -> None:
+    def test_expired_entry(self, agent_backend_module: Any) -> None:
         """Test expired entry returns None."""
         TTLCache = agent_backend_module.TTLCache
 
@@ -1540,7 +1540,7 @@ class TestTTLCache:
         time.sleep(0.02)  # Wait for expiration
         assert cache.get("key") is None
 
-    def test_invalidate(self, agent_backend_module: any) -> None:
+    def test_invalidate(self, agent_backend_module: Any) -> None:
         """Test invalidating cache entry."""
         TTLCache = agent_backend_module.TTLCache
 
@@ -1559,14 +1559,14 @@ class TestTTLCache:
 class TestABTester:
     """Tests for ABTester class."""
 
-    def test_tester_init(self, agent_backend_module: any) -> None:
+    def test_tester_init(self, agent_backend_module: Any) -> None:
         """Test ABTester initialization."""
         ABTester = agent_backend_module.ABTester
 
         tester = ABTester()
         assert tester._tests == {}
 
-    def test_create_test(self, agent_backend_module: any) -> None:
+    def test_create_test(self, agent_backend_module: Any) -> None:
         """Test creating A / B test."""
         ABTester = agent_backend_module.ABTester
 
@@ -1582,7 +1582,7 @@ class TestABTester:
         assert variant_a.weight == 0.7
         assert variant_b.weight == 0.3
 
-    def test_assign_variant(self, agent_backend_module: any) -> None:
+    def test_assign_variant(self, agent_backend_module: Any) -> None:
         """Test variant assignment is consistent."""
         ABTester = agent_backend_module.ABTester
 
@@ -1595,7 +1595,7 @@ class TestABTester:
         # Same user should get same variant
         assert variant1.name == variant2.name
 
-    def test_record_result(self, agent_backend_module: any) -> None:
+    def test_record_result(self, agent_backend_module: Any) -> None:
         """Test recording test results."""
         ABTester = agent_backend_module.ABTester
 
@@ -1608,7 +1608,7 @@ class TestABTester:
         results = tester.get_results("test1")
         assert results["variants"]["A"]["sample_count"] == 2
 
-    def test_get_winner(self, agent_backend_module: any) -> None:
+    def test_get_winner(self, agent_backend_module: Any) -> None:
         """Test determining winner."""
         ABTester = agent_backend_module.ABTester
 
