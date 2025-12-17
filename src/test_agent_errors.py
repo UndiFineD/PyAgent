@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 import json
+import unittest
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -1751,3 +1752,1138 @@ class TestErrorSuppression:
         previous = agent.read_previous_content()
 
         assert "Suppression Reason:" in previous
+
+
+# ========== Comprehensive Errors Tests (from test_agent_errors_comprehensive.py) ==========
+
+
+class TestErrorLogParsingComprehensive(unittest.TestCase):
+    """Tests for parsing error logs from various sources."""
+
+    def test_parse_python_traceback(self):
+        """Test parsing Python traceback."""
+        traceback = """Traceback (most recent call last):
+  File "test.py", line 10, in func
+    result=x / 0
+ZeroDivisionError: division by zero
+"""
+        assert "Traceback" in traceback
+        assert "ZeroDivisionError" in traceback
+        assert "division by zero" in traceback
+
+    def test_parse_flake8_output(self):
+        """Test parsing flake8 error output."""
+        flake8_output = """test.py:5:1: E302 expected 2 blank lines
+test.py:10:15: F401 'os' imported but unused
+"""
+        lines = flake8_output.split("\n")
+        errors = [line for line in lines if line.strip()]
+        assert len(errors) == 2
+        assert "E302" in errors[0]
+        assert "F401" in errors[1]
+
+    def test_parse_mypy_output(self):
+        """Test parsing mypy error output."""
+        mypy_output = """test.py:5: error: Incompatible types in assignment
+test.py:10: error: Call to untyped function
+"""
+        assert "error:" in mypy_output
+        assert "Incompatible types" in mypy_output
+
+    def test_parse_json_logs(self):
+        """Test parsing JSON format logs."""
+        log_entry = '{"level":"ERROR","message":"Connection failed","timestamp":"2024-12-16T10:00:00"}'
+        data = json.loads(log_entry)
+        assert data["level"] == "ERROR"
+        assert "Connection failed" in data["message"]
+
+
+class TestErrorCategorizationComprehensive(unittest.TestCase):
+    """Tests for error categorization and grouping."""
+
+    def test_categorize_syntax_error(self):
+        """Test categorizing syntax errors."""
+        error = "SyntaxError: invalid syntax"
+        assert "syntax" in error.lower()
+
+    def test_categorize_runtime_error(self):
+        """Test categorizing runtime errors."""
+        error = "RuntimeError: operation failed"
+        assert "runtime" in error.lower()
+
+    def test_categorize_import_error(self):
+        """Test categorizing import errors."""
+        error = "ModuleNotFoundError: No module named 'xyz'"
+        assert "module" in error.lower() or "import" in error.lower()
+
+    def test_categorize_type_error(self):
+        """Test categorizing type errors."""
+        error = "TypeError: expected str, got int"
+        assert "type" in error.lower()
+
+    def test_group_errors_by_type(self):
+        """Test grouping errors by category."""
+        errors = [
+            {"type": "SyntaxError", "message": "invalid syntax"},
+            {"type": "SyntaxError", "message": "expected colon"},
+            {"type": "RuntimeError", "message": "operation failed"},
+        ]
+
+        grouped = {}
+        for error in errors:
+            etype = error["type"]
+            if etype not in grouped:
+                grouped[etype] = []
+            grouped[etype].append(error)
+
+        assert len(grouped["SyntaxError"]) == 2
+        assert len(grouped["RuntimeError"]) == 1
+
+
+class TestErrorDeduplicationComprehensive(unittest.TestCase):
+    """Tests for error deduplication logic."""
+
+    def test_detect_duplicate_errors(self):
+        """Test detecting duplicate errors."""
+        errors = [
+            {"file": "a.py", "line": 5, "message": "error 1"},
+            {"file": "a.py", "line": 5, "message": "error 1"},
+            {"file": "b.py", "line": 10, "message": "error 2"},
+        ]
+
+        seen = set()
+        unique = []
+        for error in errors:
+            key = (error["file"], error["line"], error["message"])
+            if key not in seen:
+                seen.add(key)
+                unique.append(error)
+
+        assert len(unique) == 2
+        assert len(seen) == 2
+
+    def test_deduplicate_by_pattern(self):
+        """Test deduplication by pattern matching."""
+        errors = [
+            "AttributeError: 'NoneType' object has no attribute 'x'",
+            "AttributeError: 'NoneType' object has no attribute 'y'",
+        ]
+
+        patterns = {}
+        for error in errors:
+            pattern = error.split("'")[0]  # Base pattern
+            if pattern not in patterns:
+                patterns[pattern] = []
+            patterns[pattern].append(error)
+
+        assert len(patterns) == 1  # Same base pattern
+
+
+class TestErrorTrendAnalysisComprehensive(unittest.TestCase):
+    """Tests for error trend analysis over time."""
+
+    def test_track_error_frequency(self):
+        """Test tracking error frequency over time."""
+        errors = [
+            {"timestamp": "2024-12-16T10:00:00", "type": "SyntaxError"},
+            {"timestamp": "2024-12-16T11:00:00", "type": "SyntaxError"},
+            {"timestamp": "2024-12-16T12:00:00", "type": "RuntimeError"},
+        ]
+
+        frequency = {}
+        for error in errors:
+            etype = error["type"]
+            frequency[etype] = frequency.get(etype, 0) + 1
+
+        assert frequency["SyntaxError"] == 2
+        assert frequency["RuntimeError"] == 1
+
+    def test_detect_error_spikes(self):
+        """Test detecting error spikes."""
+        hourly_counts = [1, 2, 1, 5, 10, 8, 2, 1]  # Spike at hours 4-5
+        average = sum(hourly_counts) / len(hourly_counts)
+        spikes = [c for c in hourly_counts if c > average * 2]
+        assert len(spikes) > 0
+
+    def test_trend_direction(self):
+        """Test determining error trend direction."""
+        weekly_errors = [10, 12, 15, 18, 20]  # Increasing
+        is_increasing = weekly_errors[-1] > weekly_errors[0]
+        assert is_increasing
+
+
+class TestErrorContextExtractionComprehensive(unittest.TestCase):
+    """Tests for error context extraction."""
+
+    def test_extract_file_and_line(self):
+        """Test extracting file and line information."""
+        error = 'File "test.py", line 42, in function'
+        assert "test.py" in error
+        assert "42" in error
+
+    def test_extract_stack_trace(self):
+        """Test extracting stack trace."""
+        traceback = """Traceback (most recent call last):
+  File "a.py", line 10, in func_a
+    func_b()
+  File "b.py", line 20, in func_b
+    raise ValueError("error")
+ValueError: error
+"""
+        lines = [line.strip() for line in traceback.split("\n")]
+        frames = [line for line in lines if "File" in line]
+        assert len(frames) == 2
+
+    def test_extract_error_message(self):
+        """Test extracting error message."""
+        error_line = "ValueError: invalid value provided"
+        message = error_line.split(": ", 1)[1] if ": " in error_line else error_line
+        assert message == "invalid value provided"
+
+
+class TestErrorRemediationComprehensive(unittest.TestCase):
+    """Tests for error remediation suggestions."""
+
+    def test_suggest_import_fix(self):
+        """Test suggesting fix for import errors."""
+        error = "ModuleNotFoundError: No module named 'pandas'"
+        if "ModuleNotFoundError" in error:
+            suggestion = "Install the package: pip install pandas"
+        else:
+            suggestion = "Unknown fix"
+        assert "pip install" in suggestion
+
+    def test_suggest_type_fix(self):
+        """Test suggesting fix for type errors."""
+        error = "TypeError: expected str, got int"
+        if "TypeError" in error and "expected" in error:
+            suggestion = "Convert the value to the expected type"
+        assert "Convert" in suggestion
+
+    def test_suggest_syntax_fix(self):
+        """Test suggesting fix for syntax errors."""
+        error = "SyntaxError: expected ':'"
+        if "SyntaxError" in error and "':'" in error:
+            suggestion = "Add missing colon"
+        assert "colon" in suggestion
+
+
+class TestMultiToolErrorIntegrationComprehensive(unittest.TestCase):
+    """Tests for integrating errors from multiple tools."""
+
+    def test_integrate_pylint_errors(self):
+        """Test integrating pylint errors."""
+        errors = [
+            {"tool": "pylint", "code": "C0111", "message": "missing docstring"},
+        ]
+        assert errors[0]["tool"] == "pylint"
+
+    def test_integrate_flake8_errors(self):
+        """Test integrating flake8 errors."""
+        errors = [
+            {"tool": "flake8", "code": "E501", "message": "line too long"},
+        ]
+        assert errors[0]["tool"] == "flake8"
+
+    def test_integrate_mypy_errors(self):
+        """Test integrating mypy errors."""
+        errors = [
+            {"tool": "mypy", "code": "error", "message": "type mismatch"},
+        ]
+        assert errors[0]["tool"] == "mypy"
+
+    def test_deduplicate_across_tools(self):
+        """Test deduplicating errors from different tools."""
+        all_errors = [
+            {"tool": "pylint", "file": "a.py", "line": 5, "message": "error"},
+            {"tool": "flake8", "file": "a.py", "line": 5, "message": "error"},
+        ]
+
+        unique = {}
+        for error in all_errors:
+            key = (error["file"], error["line"], error["message"])
+            if key not in unique:
+                unique[key] = error
+
+        assert len(unique) == 1
+
+
+class TestErrorMetricsComprehensive(unittest.TestCase):
+    """Tests for error metrics collection and reporting."""
+
+    def test_count_errors_by_severity(self):
+        """Test counting errors by severity."""
+        errors = [
+            {"severity": "critical", "count": 2},
+            {"severity": "warning", "count": 5},
+            {"severity": "info", "count": 10},
+        ]
+
+        total = sum(e["count"] for e in errors)
+        assert total == 17
+        assert errors[0]["severity"] == "critical"
+
+    def test_calculate_error_rate(self):
+        """Test calculating error rate."""
+        total_lines = 1000
+        errors_found = 15
+        error_rate = (errors_found / total_lines) * 100
+        assert error_rate == 1.5
+
+    def test_track_error_resolution_time(self):
+        """Test tracking error resolution time."""
+        error_found = datetime(2024, 12, 16, 10, 0, 0)
+        error_fixed = datetime(2024, 12, 16, 11, 30, 0)
+        resolution_time = (error_fixed - error_found).total_seconds() / 3600
+        assert resolution_time == 1.5
+
+
+class TestErrorPriorityComprehensive(unittest.TestCase):
+    """Tests for error priority scoring."""
+
+    def test_score_by_severity(self):
+        """Test scoring errors by severity."""
+        severity_scores = {
+            "critical": 10,
+            "high": 7,
+            "medium": 5,
+            "low": 2,
+        }
+
+        critical_score = severity_scores["critical"]
+        assert critical_score == 10
+
+    def test_score_by_frequency(self):
+        """Test scoring errors by frequency."""
+        frequency_scores = {
+            "once": 1,
+            "occasional": 3,
+            "frequent": 7,
+            "constant": 10,
+        }
+
+        frequent_score = frequency_scores["frequent"]
+        assert frequent_score == 7
+
+    def test_combined_priority_score(self):
+        """Test combined priority scoring."""
+        severity = 8
+        frequency = 6
+        impact = 5
+        priority = (severity + frequency + impact) / 3
+        assert priority > 5
+
+
+class TestErrorBaselineComprehensive(unittest.TestCase):
+    """Tests for error baseline tracking."""
+
+    def test_establish_baseline(self):
+        """Test establishing error baseline."""
+        baseline_errors = 10
+        baseline_warnings = 25
+        baseline = {"errors": baseline_errors, "warnings": baseline_warnings}
+        assert baseline["errors"] == 10
+
+    def test_compare_to_baseline(self):
+        """Test comparing current to baseline."""
+        baseline = 10
+        current = 8
+        improvement = baseline - current
+        assert improvement == 2
+
+    def test_detect_baseline_deviation(self):
+        """Test detecting deviation from baseline."""
+        baseline = 10
+        threshold_percent = 0.20  # 20% tolerance
+        current = 13
+
+        deviation = (current - baseline) / baseline
+        exceeds_threshold = deviation > threshold_percent
+        assert exceeds_threshold
+
+
+class TestErrorPreventionComprehensive(unittest.TestCase):
+    """Tests for error prevention pattern detection."""
+
+    def test_detect_common_error_pattern(self):
+        """Test detecting common error patterns."""
+        errors = [
+            {"type": "NoneType", "method": "split"},
+            {"type": "NoneType", "method": "strip"},
+            {"type": "NoneType", "method": "upper"},
+        ]
+
+        none_errors = [e for e in errors if e["type"] == "NoneType"]
+        assert len(none_errors) == 3
+
+    def test_suggest_type_check(self):
+        """Test suggesting type checks."""
+        error = "AttributeError: 'NoneType' object has no attribute"
+        if "NoneType" in error:
+            suggestion = "Add None check before accessing attribute"
+        assert "None check" in suggestion
+
+    def test_suggest_error_handling(self):
+        """Test suggesting error handling."""
+        error = "ZeroDivisionError: division by zero"
+        if "ZeroDivisionError" in error:
+            suggestion = "Add try-except or validate divisor"
+        assert "except" in suggestion or "validate" in suggestion
+
+
+class TestErrorSuppressionComprehensive(unittest.TestCase):
+    """Tests for error suppression guideline generation."""
+
+    def test_identify_suppressible_errors(self):
+        """Test identifying suppressible errors."""
+        error = "C0111: missing docstring"  # Low priority
+        is_suppressible = error.startswith("C") or error.startswith("W")
+        assert is_suppressible
+
+    def test_generate_suppress_comment(self):
+        """Test generating suppress comments."""
+        error_code = "E501"
+        suppress_comment = f"# noqa: {error_code}"
+        assert "noqa" in suppress_comment
+        assert "E501" in suppress_comment
+
+    def test_suggest_suppress_strategy(self):
+        """Test suggesting suppression strategy."""
+        errors_to_suppress = ["C0111", "C0103"]  # Docstring and naming
+        if all(code.startswith("C") for code in errors_to_suppress):
+            strategy = "Suppress convention warnings project-wide"
+        assert "Suppress" in strategy
+
+
+class TestErrorReportingComprehensive(unittest.TestCase):
+    """Tests for error report formatting."""
+
+    def test_format_markdown_report(self):
+        """Test formatting error report as markdown."""
+        report = """# Error Report
+
+## Summary
+- Total Errors: 5
+- Critical: 2
+- Warnings: 3
+
+## Errors
+- E501: Line too long
+- W291: Trailing whitespace
+"""
+        assert "# Error Report" in report
+        assert "## Summary" in report
+
+    def test_format_html_report(self):
+        """Test formatting error report as HTML."""
+        html = "<html><body><h1>Error Report</h1><table><tr><td>5</td></tr></table></body></html>"
+        assert "<html>" in html
+        assert "<h1>Error Report</h1>" in html
+
+    def test_format_json_report(self):
+        """Test formatting error report as JSON."""
+        report = {
+            "total": 5,
+            "critical": 2,
+            "errors": [
+                {"code": "E501", "message": "Line too long"}
+            ]
+        }
+        json_str = json.dumps(report)
+        assert "total" in json_str
+        assert "5" in json_str
+
+
+class TestErrorAcknowledgmentComprehensive(unittest.TestCase):
+    """Tests for error acknowledgment tracking."""
+
+    def test_track_acknowledged_error(self):
+        """Test tracking acknowledged errors."""
+        error = {
+            "id": "err_001",
+            "status": "acknowledged",
+            "acknowledged_at": "2024-12-16T10:30:00",
+        }
+        assert error["status"] == "acknowledged"
+
+    def test_transition_error_states(self):
+        """Test error state transitions."""
+        states = ["new", "acknowledged", "assigned", "resolved"]
+        current_index = 1
+        next_state = states[current_index + 1]
+        assert next_state == "assigned"
+
+    def test_track_error_resolution(self):
+        """Test tracking error resolution."""
+        error = {
+            "id": "err_001",
+            "status": "resolved",
+            "resolved_at": "2024-12-16T11:00:00",
+            "fix_commit": "abc123def",
+        }
+        assert error["status"] == "resolved"
+        assert "abc123def" in error["fix_commit"]
+
+
+class TestIntegrationComprehensive(unittest.TestCase):
+    """Integration tests for error processing."""
+
+    def test_end_to_end_error_processing(self):
+        """Test complete error processing workflow."""
+        # Parse
+
+        # Categorize
+        error_type = "ValueError"
+
+        # Analyze
+        priority = 5
+
+        # Report
+        report = f"{error_type} - Priority: {priority}"
+        assert error_type in report
+
+    def test_error_metrics_generation(self):
+        """Test generating error metrics."""
+        errors = [
+            {"type": "SyntaxError", "severity": "critical"},
+            {"type": "RuntimeError", "severity": "high"},
+            {"type": "Warning", "severity": "low"},
+        ]
+
+        metrics = {
+            "total": len(errors),
+            "critical": sum(1 for e in errors if e["severity"] == "critical"),
+            "high": sum(1 for e in errors if e["severity"] == "high"),
+        }
+
+        assert metrics["total"] == 3
+        assert metrics["critical"] == 1
+
+
+# ========== Comprehensive Errors Improvements Tests
+# (from test_agent_errors_improvements_comprehensive.py) ==========
+
+
+class TestErrorLogParsingImprovements(unittest.TestCase):
+    """Test parsing error logs to automatically populate error report."""
+
+    def test_parse_python_tracebacks(self):
+        """Test parsing Python traceback format."""
+        traceback_text = """
+Traceback (most recent call last):
+  File "main.py", line 42, in calculate
+    result=func()
+TypeError: unsupported operand type(s) for +: 'str' and 'int'
+        """
+        self.assertIn('TypeError', traceback_text)
+        self.assertIn('line 42', traceback_text)
+
+    def test_extract_error_location(self):
+        """Test extracting error file and line number."""
+        error_info = {
+            'file': 'main.py',
+            'line': 42,
+            'function': 'calculate',
+            'error_type': 'TypeError',
+            'message': "unsupported operand type(s)"
+        }
+        self.assertEqual(error_info['line'], 42)
+
+    def test_parse_multiline_errors(self):
+        """Test parsing multi-line error messages."""
+        error = """ValueError: Expected a valid JSON object, got:
+{
+    "invalid": json
+}"""
+        self.assertIn('ValueError', error)
+
+    def test_error_log_aggregation(self):
+        """Test aggregating multiple errors from logs."""
+        errors = [
+            {'type': 'SyntaxError', 'count': 5},
+            {'type': 'ValueError', 'count': 3},
+            {'type': 'TypeError', 'count': 8}
+        ]
+        total_errors = sum(e['count'] for e in errors)
+        self.assertEqual(total_errors, 16)
+
+
+class TestStaticAnalysisIntegration(unittest.TestCase):
+    """Test integration with static analysis tools."""
+
+    def test_pylint_output_parsing(self):
+        """Test parsing pylint output."""
+        pylint_output = {
+            'tool': 'pylint',
+            'issues': [
+                {'type': 'convention', 'message': 'invalid-name', 'line': 10},
+                {'type': 'warning', 'message': 'unused-import', 'line': 5},
+                {'type': 'error', 'message': 'undefined-variable', 'line': 25}
+            ]
+        }
+        errors = [i for i in pylint_output['issues'] if i['type'] == 'error']
+        self.assertEqual(len(errors), 1)
+
+    def test_flake8_integration(self):
+        """Test parsing flake8 output."""
+        flake8_results = [
+            {'code': 'E501', 'message': 'line too long', 'line': 42},
+            {'code': 'F401', 'message': 'unused import', 'line': 5},
+            {'code': 'W503', 'message': 'line break before operator', 'line': 50}
+        ]
+        self.assertEqual(len(flake8_results), 3)
+
+    def test_mypy_type_errors(self):
+        """Test parsing mypy type checking errors."""
+        mypy_errors = [
+            {'error': 'Argument 1 has incompatible type', 'line': 30},
+            {'error': 'Missing return statement', 'line': 45},
+            {'error': 'Incompatible assignment', 'line': 60}
+        ]
+        self.assertEqual(len(mypy_errors), 3)
+
+    def test_bandit_security_findings(self):
+        """Test parsing bandit security scanning output."""
+        security_issues = [
+            {'severity': 'HIGH', 'test_id': 'B303', 'message': 'Use of pickle'},
+            {'severity': 'MEDIUM', 'test_id': 'B101', 'message': 'assert_used'},
+            {'severity': 'LOW', 'test_id': 'B105', 'message': 'hardcoded_password_string'}
+        ]
+        high_severity = [i for i in security_issues if i['severity'] == 'HIGH']
+        self.assertEqual(len(high_severity), 1)
+
+
+class TestErrorCategorizationImprovements(unittest.TestCase):
+    """Test auto-categorization of errors by severity."""
+
+    def test_severity_classification(self):
+        """Test classifying errors by severity levels."""
+        errors = [
+            {'type': 'SyntaxError', 'severity': 'critical'},
+            {'type': 'ValueError', 'severity': 'high'},
+            {'type': 'DeprecationWarning', 'severity': 'low'},
+            {'type': 'FutureWarning', 'severity': 'info'}
+        ]
+        critical = [e for e in errors if e['severity'] == 'critical']
+        self.assertEqual(len(critical), 1)
+
+    def test_error_deduplication(self):
+        """Test grouping and deduplicating related errors."""
+        duplicate_errors = [
+            {'file': 'main.py', 'line': 42, 'type': 'TypeError', 'count': 5},
+            {'file': 'main.py', 'line': 42, 'type': 'TypeError', 'count': 3},
+            {'file': 'utils.py', 'line': 10, 'type': 'TypeError', 'count': 2}
+        ]
+        # Deduplicate by file and line
+        unique_errors = {}
+        for err in duplicate_errors:
+            key = (err['file'], err['line'], err['type'])
+            if key not in unique_errors:
+                unique_errors[key] = err['count']
+
+        self.assertEqual(len(unique_errors), 2)
+
+    def test_error_grouping(self):
+        """Test grouping related errors together."""
+        errors = [
+            {'type': 'TypeError', 'context': 'type_mismatch'},
+            {'type': 'TypeError', 'context': 'type_mismatch'},
+            {'type': 'ValueError', 'context': 'validation'},
+            {'type': 'ValueError', 'context': 'validation'}
+        ]
+        grouped = {}
+        for err in errors:
+            key = (err['type'], err['context'])
+            grouped[key] = grouped.get(key, 0) + 1
+
+        self.assertEqual(len(grouped), 2)
+
+
+class TestErrorTrends(unittest.TestCase):
+    """Test generating error trends and metrics."""
+
+    def test_error_count_over_time(self):
+        """Test tracking error count trends over time."""
+        error_timeline = [
+            {'date': '2025-01-01', 'count': 50},
+            {'date': '2025-01-08', 'count': 42},
+            {'date': '2025-01-15', 'count': 35},
+            {'date': '2025-01-22', 'count': 28}
+        ]
+        trend = error_timeline[-1]['count'] - error_timeline[0]['count']
+        self.assertEqual(trend, -22)  # Decreasing errors
+
+    def test_most_common_errors(self):
+        """Test identifying most common error types."""
+        error_counts = {
+            'TypeError': 25,
+            'ValueError': 18,
+            'AttributeError': 12,
+            'KeyError': 8
+        }
+        top_errors = sorted(error_counts.items(), key=lambda x: x[1], reverse=True)
+        self.assertEqual(top_errors[0][0], 'TypeError')
+
+    def test_error_frequency_analysis(self):
+        """Test analyzing error frequency patterns."""
+        error_frequency = {
+            'morning': 15,
+            'afternoon': 12,
+            'evening': 8,
+            'night': 5
+        }
+        peak_period = max(error_frequency, key=error_frequency.get)
+        self.assertEqual(peak_period, 'morning')
+
+
+class TestErrorContext(unittest.TestCase):
+    """Test providing error context and code snippets."""
+
+    def test_code_snippet_extraction(self):
+        """Test extracting code snippet around error line."""
+        code_lines = [
+            'def process(data):',
+            '    result=[]',
+            '    for item in data:',  # line 3, error
+            '        result.append(item.value)',
+            '    return result'
+        ]
+
+        error_line = 2  # 0-indexed
+        context_start = max(0, error_line - 1)
+        context_end = min(len(code_lines), error_line + 2)
+
+        snippet = code_lines[context_start:context_end]
+        self.assertEqual(len(snippet), 3)
+
+    def test_source_context_preservation(self):
+        """Test preserving source context with line numbers."""
+        context = {
+            'file': 'main.py',
+            'lines': [
+                (2, 'def process(data):'),
+                (3, '    result=[]'),
+                (4, '    for item in data:'),  # error line
+                (5, '        result.append(item.value)'),
+                (6, '    return result')
+            ],
+            'error_line': 4
+        }
+        self.assertEqual(context['lines'][2][0], 4)
+
+    def test_error_line_highlighting(self):
+        """Test highlighting the error line in context."""
+        error_context = """
+   2: def process(data):
+   3:     result=[]
+>> 4:     for item in data:  # ERROR: type error
+   5:         result.append(item)
+        """
+        self.assertIn('>>', error_context)
+
+
+class TestRemediationSuggestions(unittest.TestCase):
+    """Test error remediation and quick-fix recommendations."""
+
+    def test_remediation_from_history(self):
+        """Test implementing error remediation from historical fixes."""
+        error_history = {
+            'TypeError: unsupported operand': [
+                'Cast operands to same type',
+                'Check type before operation',
+                'Use type hints'
+            ]
+        }
+        suggestions = error_history.get('TypeError: unsupported operand', [])
+        self.assertEqual(len(suggestions), 3)
+
+    def test_nlp_analysis_for_quickfixes(self):
+        """Test NLP analysis for quick-fix recommendations."""
+
+        suggested_fixes = [
+            'Convert int to str: str(variable)',
+            'Use format string: f"{variable}"',
+            'Use str.format(): "{}".format(variable)'
+        ]
+        self.assertEqual(len(suggested_fixes), 3)
+
+    def test_common_fix_patterns(self):
+        """Test recognizing common fix patterns."""
+        fix_patterns = {
+            'AttributeError': 'Check object has attribute with hasattr()',
+            'KeyError': 'Use dict.get() with default value',
+            'IndexError': 'Check list length before accessing',
+            'ZeroDivisionError': 'Check divisor is not zero'
+        }
+        self.assertIn('AttributeError', fix_patterns)
+
+
+class TestRuntimeErrorParsing(unittest.TestCase):
+    """Test parsing runtime errors from test output and CI logs."""
+
+    def test_parse_pytest_output(self):
+        """Test parsing pytest error output."""
+        pytest_output = """
+FAILED test_main.py::test_calculate - AssertionError: assert 5 == 6
+    File "test_main.py", line 42, in test_calculate
+        assert result == 6
+        """
+        self.assertIn('AssertionError', pytest_output)
+        self.assertIn('test_calculate', pytest_output)
+
+    def test_parse_ci_build_logs(self):
+        """Test parsing CI / CD build logs for errors."""
+        ci_log = {
+            'build_id': 'build_123',
+            'status': 'failed',
+            'errors': [
+                'Test failed: test_integration',
+                'Dependency resolution failed: package not found',
+                'Security scan found 2 high-severity issues'
+            ]
+        }
+        self.assertEqual(len(ci_log['errors']), 3)
+
+    def test_extract_error_from_logs(self):
+        """Test extracting structured errors from unstructured logs."""
+
+        error_data = {
+            'timestamp': '2025-12-16 10:30:45',
+            'level': 'ERROR',
+            'message': 'Database connection failed',
+            'cause': 'Connection refused'
+        }
+        self.assertEqual(error_data['level'], 'ERROR')
+
+
+class TestErrorSuppressionImprovements(unittest.TestCase):
+    """Test error suppression guidelines and tracking."""
+
+    def test_suppression_guidelines(self):
+        """Test generating error suppression guidelines with rationale."""
+        suppression_config = {
+            'error_type': 'W503',  # line break before operator
+            'tool': 'flake8',
+            'rationale': 'PEP 8 update recommends placing operators at start of line',
+            'approved': True,
+            'date_approved': '2025-12-16'
+        }
+        self.assertTrue(suppression_config['approved'])
+
+    def test_suppression_comment_generation(self):
+        """Test generating proper suppression comments."""
+        suppression_comment = {
+            'type': '# noqa',
+            'error_codes': ['E501', 'W503'],
+            'comment': '# noqa: E501,W503  - long line is for readability'
+        }
+        self.assertIn('noqa', suppression_comment['comment'])
+
+    def test_suppression_audit_log(self):
+        """Test tracking all error suppressions."""
+        suppression_log = [{'error': 'E501',
+                            'file': 'main.py',
+                            'suppressed_at': '2025-12-16',
+                            'reason': 'readability'},
+                           {'error': 'W503',
+                            'file': 'utils.py',
+                            'suppressed_at': '2025-12-16',
+                            'reason': 'PEP 8 update'}]
+        self.assertEqual(len(suppression_log), 2)
+
+
+class TestErrorMetricsImprovements(unittest.TestCase):
+    """Test error metrics collection and analysis."""
+
+    def test_error_count_metrics(self):
+        """Test collecting total error count and unique types."""
+        metrics = {
+            'total_errors': 150,
+            'unique_types': 12,
+            'files_affected': 25,
+            'avg_errors_per_file': 6
+        }
+        self.assertEqual(metrics['unique_types'], 12)
+
+    def test_error_distribution(self):
+        """Test error distribution across codebase."""
+        error_distribution = {
+            'module_a': {'errors': 45, 'severity_avg': 'medium'},
+            'module_b': {'errors': 30, 'severity_avg': 'low'},
+            'module_c': {'errors': 75, 'severity_avg': 'high'}
+        }
+        most_errors = max(error_distribution.values(), key=lambda x: x['errors'])
+        self.assertEqual(most_errors['severity_avg'], 'high')
+
+    def test_error_metrics_comparison(self):
+        """Test comparing error metrics over time."""
+        metrics_timeline = [
+            {'period': 'week_1', 'total_errors': 100, 'critical': 5},
+            {'period': 'week_2', 'total_errors': 85, 'critical': 3},
+            {'period': 'week_3', 'total_errors': 70, 'critical': 2}
+        ]
+        improvement = metrics_timeline[0]['total_errors'] - metrics_timeline[-1]['total_errors']
+        self.assertEqual(improvement, 30)
+
+
+class TestErrorPriorityImprovements(unittest.TestCase):
+    """Test error priority scoring based on impact."""
+
+    def test_priority_scoring(self):
+        """Test calculating priority score for errors."""
+        class PriorityScore:
+            @staticmethod
+            def calculate(severity, frequency, affected_users):
+                return (severity * 0.5) + (frequency * 0.3) + (affected_users * 0.2)
+
+        score = PriorityScore.calculate(severity=10, frequency=8, affected_users=100)
+        self.assertGreater(score, 0)
+
+    def test_impact_analysis(self):
+        """Test analyzing error impact on system."""
+        error_impact = {
+            'critical_path': True,
+            'affects_users': True,
+            'users_count': 500,
+            'estimated_loss_usd': 2500,
+            'priority': 'critical'
+        }
+        self.assertEqual(error_impact['priority'], 'critical')
+
+    def test_priority_queue(self):
+        """Test maintaining priority queue of errors."""
+        error_queue = [
+            {'id': 1, 'priority': 'critical', 'score': 95},
+            {'id': 2, 'priority': 'high', 'score': 75},
+            {'id': 3, 'priority': 'medium', 'score': 50}
+        ]
+        sorted_queue = sorted(error_queue, key=lambda x: x['score'], reverse=True)
+        self.assertEqual(sorted_queue[0]['id'], 1)
+
+
+class TestCustomErrorParsers(unittest.TestCase):
+    """Test custom error parser plugins."""
+
+    def test_plugin_registry(self):
+        """Test registering custom error parsers."""
+        class ParserRegistry:
+            def __init__(self):
+                self.parsers = {}
+
+            def register(self, error_type, parser):
+                self.parsers[error_type] = parser
+
+            def get_parser(self, error_type):
+                return self.parsers.get(error_type)
+
+        registry = ParserRegistry()
+        self.assertEqual(len(registry.parsers), 0)
+
+    def test_custom_parser_implementation(self):
+        """Test implementing custom error parser."""
+        class CustomParser:
+            def parse(self, error_text):
+                return {'parsed': True, 'data': error_text}
+
+        parser = CustomParser()
+        result = parser.parse("custom error")
+        self.assertTrue(result['parsed'])
+
+
+class TestErrorReportingImprovements(unittest.TestCase):
+    """Test error report generation in multiple formats."""
+
+    def test_markdown_report_generation(self):
+        """Test generating markdown error reports."""
+        markdown_report = """
+# Error Report
+
+## Summary
+- Total Errors: 150
+- Critical: 5
+- High: 25
+- Medium: 60
+- Low: 60
+
+## Top Errors
+1. TypeError (25 occurrences)
+2. ValueError (18 occurrences)
+3. AttributeError (12 occurrences)
+        """
+        self.assertIn('# Error Report', markdown_report)
+
+    def test_html_report_generation(self):
+        """Test generating HTML error reports."""
+        html_report = """
+<html>
+  <body>
+    <h1>Error Report</h1>
+    <table>
+      <tr><th>Error Type</th><th>Count</th></tr>
+      <tr><td>TypeError</td><td>25</td></tr>
+      <tr><td>ValueError</td><td>18</td></tr>
+    </table>
+  </body>
+</html>
+        """
+        self.assertIn('<h1>Error Report</h1>', html_report)
+
+    def test_json_report_format(self):
+        """Test generating JSON error reports."""
+        json_report = {
+            'timestamp': '2025-12-16T10:00:00Z',
+            'summary': {
+                'total': 150,
+                'critical': 5,
+                'high': 25
+            },
+            'errors': [
+                {'type': 'TypeError', 'count': 25}
+            ]
+        }
+        self.assertIn('summary', json_report)
+
+
+class TestErrorTimeline(unittest.TestCase):
+    """Test error timeline visualization and tracking."""
+
+    def test_error_introduction_tracking(self):
+        """Test tracking when errors were introduced."""
+        error_timeline = {
+            'error': 'TypeError in module_a',
+            'introduced': '2025-12-01',
+            'first_occurrence': '2025-12-01T10:30:00Z',
+            'fix_attempts': 3,
+            'resolved': False
+        }
+        self.assertFalse(error_timeline['resolved'])
+
+    def test_fix_attempts_tracking(self):
+        """Test tracking fix attempts for errors."""
+        fix_history = [
+            {'attempt': 1, 'date': '2025-12-02', 'fix': 'Added type check', 'success': False},
+            {'attempt': 2, 'date': '2025-12-03', 'fix': 'Changed variable type', 'success': False},
+            {'attempt': 3, 'date': '2025-12-04', 'fix': 'Refactored function', 'success': True}
+        ]
+        successful = [f for f in fix_history if f['success']]
+        self.assertEqual(len(successful), 1)
+
+
+class TestErrorPreventionImprovements(unittest.TestCase):
+    """Test error prevention patterns and detection."""
+
+    def test_prevention_pattern_detection(self):
+        """Test detecting error prevention patterns in code."""
+        patterns = [
+            'null_check_before_access',
+            'type_validation',
+            'boundary_checking',
+            'exception_handling',
+            'input_validation'
+        ]
+        self.assertEqual(len(patterns), 5)
+
+    def test_tech_debt_warning_generation(self):
+        """Test generating warnings for potential future errors."""
+        warnings = [
+            {'type': 'code_duplication', 'likelihood': 'high', 'severity': 'medium'},
+            {'type': 'missing_tests', 'likelihood': 'high', 'severity': 'high'},
+            {'type': 'hardcoded_values', 'likelihood': 'medium', 'severity': 'low'}
+        ]
+        self.assertEqual(len(warnings), 3)
+
+
+class TestErrorManagement(unittest.TestCase):
+    """Test error acknowledgment and tracking."""
+
+    def test_acknowledgment_tracking(self):
+        """Test tracking error acknowledgment status."""
+        error_status = {
+            'error_id': 'ERR_001',
+            'status': 'acknowledged',
+            'acknowledged_by': 'developer',
+            'acknowledgement_date': '2025-12-16',
+            'wontfix_reason': None
+        }
+        self.assertEqual(error_status['status'], 'acknowledged')
+
+    def test_wontfix_tracking(self):
+        """Test tracking errors marked as wontfix."""
+        wontfix_errors = [
+            {'id': 'ERR_001', 'reason': 'By design', 'decision_date': '2025-12-16'},
+            {'id': 'ERR_002', 'reason': 'Deprecated code', 'decision_date': '2025-12-15'},
+            {'id': 'ERR_003', 'reason': 'Low impact', 'decision_date': '2025-12-14'}
+        ]
+        self.assertEqual(len(wontfix_errors), 3)
+
+
+class TestErrorBaselineImprovements(unittest.TestCase):
+    """Test error baseline and improvement tracking."""
+
+    def test_baseline_establishment(self):
+        """Test establishing error baseline for comparison."""
+        baseline = {
+            'date': '2025-01-01',
+            'total_errors': 250,
+            'critical': 10,
+            'high': 50,
+            'medium': 120,
+            'low': 70
+        }
+        self.assertEqual(baseline['total_errors'], 250)
+
+    def test_improvement_calculation(self):
+        """Test calculating improvement against baseline."""
+        baseline = {'total_errors': 250}
+        current = {'total_errors': 150}
+
+        improvement_pct = (
+            (baseline['total_errors'] - current['total_errors']) /
+            baseline['total_errors']) * 100
+        self.assertEqual(improvement_pct, 40.0)
+
+    def test_trend_projection(self):
+        """Test projecting error trends into future."""
+        historical = [
+            {'week': 1, 'errors': 200},
+            {'week': 2, 'errors': 180},
+            {'week': 3, 'errors': 160}
+        ]
+        # Linear projection
+        weekly_reduction = (historical[0]['errors'] - historical[-1]['errors']) / 2
+        projected_week_4 = historical[-1]['errors'] - weekly_reduction
+        self.assertEqual(projected_week_4, 140.0)
+
+
+class TestRootCauseAnalysisImprovements(unittest.TestCase):
+    """Test error root cause analysis using git blame."""
+
+    def test_blame_integration(self):
+        """Test integrating git blame for error origins."""
+        blame_data = {
+            'file': 'main.py',
+            'error_line': 42,
+            'introduced_by': 'developer@example.com',
+            'commit': 'abc123def456',
+            'date': '2025-12-10',
+            'message': 'Add new feature'
+        }
+        self.assertEqual(blame_data['introduced_by'], 'developer@example.com')
+
+    def test_root_cause_identification(self):
+        """Test identifying root cause of errors."""
+        root_cause = {
+            'primary': 'Missing type validation',
+            'contributing': ['Insufficient testing', 'Code review gap'],
+            'systemic': 'Lack of type hints'
+        }
+        self.assertEqual(root_cause['primary'], 'Missing type validation')
+
+    def test_prevention_recommendation(self):
+        """Test recommending prevention measures."""
+        recommendations = [
+            {'action': 'Add type hints', 'impact': 'high', 'effort': 'medium'},
+            {'action': 'Increase test coverage', 'impact': 'high', 'effort': 'high'},
+            {'action': 'Add code review checklist', 'impact': 'medium', 'effort': 'low'}
+        ]
+        self.assertEqual(len(recommendations), 3)
