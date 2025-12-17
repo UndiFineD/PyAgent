@@ -77,6 +77,7 @@ class ImprovementCategory(Enum):
 
 class ImprovementStatus(Enum):
     """Status of an improvement."""
+    PROPOSED = "proposed"
     SUGGESTED = "suggested"
     APPROVED = "approved"
     IN_PROGRESS = "in_progress"
@@ -149,12 +150,14 @@ class Improvement:
 
 
 @dataclass
+@dataclass
 class ImprovementTemplate:
     """Template for creating improvements."""
+    id: str
     name: str
     category: ImprovementCategory
-    title_pattern: str
-    description_template: str
+    title_pattern: str = ""
+    description_template: str = ""
     default_priority: ImprovementPriority = ImprovementPriority.MEDIUM
     default_effort: EffortEstimate = EffortEstimate.MEDIUM
 
@@ -326,6 +329,7 @@ class ArchivedImprovement:
 # Default templates
 DEFAULT_TEMPLATES: List[ImprovementTemplate] = [
     ImprovementTemplate(
+        id="add_tests",
         name="add_tests",
         category=ImprovementCategory.TESTING,
         title_pattern="Add tests for {function_name}",
@@ -336,6 +340,7 @@ DEFAULT_TEMPLATES: List[ImprovementTemplate] = [
         default_effort=EffortEstimate.SMALL
     ),
     ImprovementTemplate(
+        id="add_type_hints",
         name="add_type_hints",
         category=ImprovementCategory.MAINTAINABILITY,
         title_pattern="Add type hints to {function_name}",
@@ -346,6 +351,7 @@ DEFAULT_TEMPLATES: List[ImprovementTemplate] = [
         default_effort=EffortEstimate.TRIVIAL
     ),
     ImprovementTemplate(
+        id="improve_performance",
         name="improve_performance",
         category=ImprovementCategory.PERFORMANCE,
         title_pattern="Optimize {target}",
@@ -354,6 +360,7 @@ DEFAULT_TEMPLATES: List[ImprovementTemplate] = [
         default_effort=EffortEstimate.MEDIUM
     ),
     ImprovementTemplate(
+        id="security_fix",
         name="security_fix",
         category=ImprovementCategory.SECURITY,
         title_pattern="Fix security issue in {component}",
@@ -1780,6 +1787,37 @@ class ImprovementsAgent(BaseAgent):
             return True
         return False
 
+    def unassign(self, improvement_id: str) -> bool:
+        """Unassign an improvement."""
+        improvement = self.get_improvement_by_id(improvement_id)
+        if improvement:
+            improvement.assignee = ""
+            improvement.updated_at = datetime.now().isoformat()
+            return True
+        return False
+
+    def get_by_assignee(self, assignee: str) -> List[Improvement]:
+        """Get improvements assigned to a specific person."""
+        return [i for i in self._improvements if i.assignee == assignee]
+
+    def approve_improvement(self, improvement_id: str) -> bool:
+        """Approve an improvement."""
+        improvement = self.get_improvement_by_id(improvement_id)
+        if improvement:
+            improvement.status = ImprovementStatus.APPROVED
+            improvement.updated_at = datetime.now().isoformat()
+            return True
+        return False
+
+    def reject_improvement(self, improvement_id: str, reason: str = "") -> bool:
+        """Reject an improvement."""
+        improvement = self.get_improvement_by_id(improvement_id)
+        if improvement:
+            improvement.status = ImprovementStatus.REJECTED
+            improvement.updated_at = datetime.now().isoformat()
+            return True
+        return False
+
     def get_assigned_to(self, assignee: str) -> List[Improvement]:
         """Get improvements assigned to a specific person."""
         return [i for i in self._improvements if i.assignee == assignee]
@@ -1907,6 +1945,113 @@ class ImprovementsAgent(BaseAgent):
             "Group improvements by priority (High, Medium, Low) if applicable."
         )
         return super().improve_content(enhanced_prompt)
+
+
+# ========== Missing Classes (Session continuation) ==========
+
+class ImpactScorer:
+    """Scores improvements based on impact metrics."""
+    def __init__(self) -> None:
+        self.scores: Dict[str, float] = {}
+    
+    def score(self, improvement: Improvement) -> float:
+        """Score an improvement."""
+        score = improvement.priority.value * 20
+        if improvement.category == ImprovementCategory.SECURITY:
+            score += 30
+        elif improvement.category == ImprovementCategory.PERFORMANCE:
+            score += 25
+        else:
+            score += 10
+        return min(100, max(0, score))
+
+
+class DependencyResolver:
+    """Resolves improvement dependencies."""
+    def __init__(self) -> None:
+        self.graph: Dict[str, List[str]] = {}
+    
+    def add_dependency(self, source: str, target: str) -> None:
+        """Add a dependency edge."""
+        if source not in self.graph:
+            self.graph[source] = []
+        self.graph[source].append(target)
+    
+    def resolve_order(self) -> List[str]:
+        """Resolve dependency order using topological sort."""
+        visited = set()
+        stack = []
+        
+        def visit(node: str) -> None:
+            if node not in visited:
+                visited.add(node)
+                for dep in self.graph.get(node, []):
+                    visit(dep)
+                stack.append(node)
+        
+        for node in self.graph:
+            visit(node)
+        
+        return stack
+
+
+class EffortEstimator:
+    """Estimates effort for improvements."""
+    def __init__(self) -> None:
+        self.historical_data: Dict[str, List[float]] = {}
+    
+    def estimate(self, improvement: Improvement) -> int:
+        """Estimate effort in hours."""
+        effort_map = {
+            EffortEstimate.TRIVIAL: 1,
+            EffortEstimate.SMALL: 3,
+            EffortEstimate.MEDIUM: 12,
+            EffortEstimate.LARGE: 32,
+            EffortEstimate.EPIC: 80
+        }
+        return effort_map.get(improvement.effort, 12)
+
+
+class WorkflowEngine:
+    """Manages improvement workflow transitions."""
+    def __init__(self) -> None:
+        self.transitions: Dict[str, List[str]] = {}
+        self._setup_default_transitions()
+    
+    def _setup_default_transitions(self) -> None:
+        """Setup default state transitions."""
+        self.transitions = {
+            "PROPOSED": ["SUGGESTED", "REJECTED"],
+            "SUGGESTED": ["APPROVED", "REJECTED"],
+            "APPROVED": ["IN_PROGRESS"],
+            "IN_PROGRESS": ["COMPLETED", "DEFERRED"],
+            "COMPLETED": [],
+            "REJECTED": [],
+            "DEFERRED": ["IN_PROGRESS"]
+        }
+    
+    def can_transition(self, from_status: str, to_status: str) -> bool:
+        """Check if transition is allowed."""
+        return to_status in self.transitions.get(from_status, [])
+
+
+class VotingSystem:
+    """Manages voting on improvements."""
+    def __init__(self) -> None:
+        self.votes: Dict[str, List[str]] = {}
+    
+    def cast_vote(self, improvement_id: str, voter: str) -> bool:
+        """Cast a vote for an improvement."""
+        if improvement_id not in self.votes:
+            self.votes[improvement_id] = []
+        if voter not in self.votes[improvement_id]:
+            self.votes[improvement_id].append(voter)
+            return True
+        return False
+    
+    def get_vote_count(self, improvement_id: str) -> int:
+        """Get vote count for improvement."""
+        return len(self.votes.get(improvement_id, []))
 
 
 # Create main function using the helper
