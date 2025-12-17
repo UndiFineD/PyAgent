@@ -82,6 +82,7 @@ class AuthMethod(Enum):
     """Authentication methods for backends."""
     NONE = "none"
     API_KEY = "api_key"
+    TOKEN = "token"
     BEARER_TOKEN = "bearer_token"
     BASIC_AUTH = "basic_auth"
     OAUTH2 = "oauth2"
@@ -2468,35 +2469,6 @@ class ModelSelector:
         self.models[agent_type] = config
 
 
-# ========== Batch Request Management ==========
-
-@dataclass
-class BatchRequest:
-    """Manages batch requests."""
-    prompts: List[str] = field(default_factory=list)
-    max_size: Optional[int] = None
-
-    @property
-    def size(self) -> int:
-        """Get batch size."""
-        return len(self.prompts)
-
-    def add(self, prompt: str) -> None:
-        """Add prompt to batch."""
-        if self.max_size and len(self.prompts) >= self.max_size:
-            # Keep size at max
-            self.prompts.pop(0)
-        self.prompts.append(prompt)
-
-    def execute(self, processor: Callable[[List[str]], List[Any]]) -> List[Any]:
-        """Execute batch with processor."""
-        return processor(self.prompts)
-
-    def clear(self) -> None:
-        """Clear all prompts."""
-        self.prompts.clear()
-
-
 # ========== Authentication Management ==========
 
 @dataclass
@@ -2519,11 +2491,16 @@ class AuthManager:
         """Get authentication headers."""
         headers = dict(self.custom_headers)
         
-        if self.method == "api_key" and "api_key" in self.credentials:
+        # Convert enum to string if needed
+        method = self.method
+        if isinstance(method, AuthMethod):
+            method = method.value
+        
+        if method == "api_key" and "api_key" in self.credentials:
             headers["X-API-Key"] = self.credentials["api_key"]
-        elif self.method == "token" and "token" in self.credentials:
+        elif method == "token" and "token" in self.credentials:
             headers["Authorization"] = f"Bearer {self.credentials['token']}"
-        elif self.method == "bearer_token" and "token" in self.credentials:
+        elif method == "bearer_token" and "token" in self.credentials:
             headers["Authorization"] = f"Bearer {self.credentials['token']}"
         
         return headers
@@ -2558,42 +2535,7 @@ class QualityScorer:
         return total_score / total_weight if total_weight > 0 else 0.0
 
 
-# ========== Prompt Versioning & A/B Testing ==========
-
-@dataclass
-class PromptVersion:
-    """Version of a prompt."""
-    version: str
-    content: str
-    description: str = ""
-    active: bool = True
-
-    def __hash__(self) -> int:
-        """Make hashable by version."""
-        return hash(self.version)
-
-
-@dataclass
-class PromptVersionManager:
-    """Manages prompt versions."""
-    versions: Dict[str, PromptVersion] = field(default_factory=dict)
-    active_version: Optional[str] = None
-
-    def add_version(self, version: PromptVersion) -> None:
-        """Add a version."""
-        self.versions[version.version] = version
-
-    def set_active(self, version: str) -> None:
-        """Set active version."""
-        if version in self.versions:
-            self.active_version = version
-
-    def get_active(self) -> Optional[PromptVersion]:
-        """Get active version."""
-        if self.active_version and self.active_version in self.versions:
-            return self.versions[self.active_version]
-        return None
-
+# ========== A/B Testing ==========
 
 @dataclass
 class ABTest:

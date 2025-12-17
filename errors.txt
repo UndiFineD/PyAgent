@@ -2317,16 +2317,16 @@ src/test_base_agent.py::TestSession8Enums::test_serialization_format_values PASS
 src/test_base_agent.py::TestSession8Enums::test_file_priority_values PASSED [ 86%]
 src/test_base_agent.py::TestSession8Enums::test_input_type_values PASSED [ 86%]
 src/test_base_agent.py::TestSession8Dataclasses::test_auth_config_defaults PASSED [ 86%]
-src/test_base_agent.py::TestSession8Dataclasses::test_batch_request_creation PASSED [ 86%]
+src/test_base_agent.py::TestSession8Dataclasses::test_batch_request_creation FAILED [ 86%]
 src/test_base_agent.py::TestSession8Dataclasses::test_batch_result_creation PASSED [ 86%]
-src/test_base_agent.py::TestSession8Dataclasses::test_prompt_version_creation PASSED [ 86%]
+src/test_base_agent.py::TestSession8Dataclasses::test_prompt_version_creation FAILED [ 86%]
 src/test_base_agent.py::TestSession8Dataclasses::test_multimodal_input_creation PASSED [ 86%]
 src/test_base_agent.py::TestSession8Dataclasses::test_composed_agent_creation PASSED [ 86%]
 src/test_base_agent.py::TestSession8Dataclasses::test_serialization_config_defaults PASSED [ 86%]
 src/test_base_agent.py::TestSession8Dataclasses::test_file_priority_config_defaults PASSED [ 86%]
-src/test_base_agent.py::TestRequestBatcher::test_add_request PASSED      [ 86%]
-src/test_base_agent.py::TestRequestBatcher::test_add_multiple_requests PASSED [ 86%]
-src/test_base_agent.py::TestRequestBatcher::test_clear_queue PASSED      [ 86%]
+src/test_base_agent.py::TestRequestBatcher::test_add_request FAILED      [ 86%]
+src/test_base_agent.py::TestRequestBatcher::test_add_multiple_requests FAILED [ 86%]
+src/test_base_agent.py::TestRequestBatcher::test_clear_queue FAILED      [ 86%]
 src/test_base_agent.py::TestRequestBatcher::test_get_stats_empty PASSED  [ 86%]
 src/test_base_agent.py::TestAuthenticationManager::test_no_auth_headers PASSED [ 86%]
 src/test_base_agent.py::TestAuthenticationManager::test_api_key_headers PASSED [ 86%]
@@ -2336,12 +2336,12 @@ src/test_base_agent.py::TestAuthenticationManager::test_custom_headers PASSED [ 
 src/test_base_agent.py::TestAuthenticationManager::test_validate_api_key PASSED [ 86%]
 src/test_base_agent.py::TestAuthenticationManager::test_validate_missing_api_key PASSED [ 86%]
 src/test_base_agent.py::TestAuthenticationManager::test_refresh_token PASSED [ 86%]
-src/test_base_agent.py::TestPromptVersionManager::test_register_version PASSED [ 86%]
-src/test_base_agent.py::TestPromptVersionManager::test_get_versions_empty PASSED [ 86%]
-src/test_base_agent.py::TestPromptVersionManager::test_select_version PASSED [ 86%]
-src/test_base_agent.py::TestPromptVersionManager::test_select_version_empty PASSED [ 87%]
-src/test_base_agent.py::TestPromptVersionManager::test_record_metric PASSED [ 87%]
-src/test_base_agent.py::TestPromptVersionManager::test_get_ab_report PASSED [ 87%]
+src/test_base_agent.py::TestPromptVersionManager::test_register_version FAILED [ 86%]
+src/test_base_agent.py::TestPromptVersionManager::test_get_versions_empty FAILED [ 86%]
+src/test_base_agent.py::TestPromptVersionManager::test_select_version FAILED [ 86%]
+src/test_base_agent.py::TestPromptVersionManager::test_select_version_empty FAILED [ 87%]
+src/test_base_agent.py::TestPromptVersionManager::test_record_metric FAILED [ 87%]
+src/test_base_agent.py::TestPromptVersionManager::test_get_ab_report FAILED [ 87%]
 src/test_base_agent.py::TestMultimodalProcessor::test_add_text PASSED    [ 87%]
 src/test_base_agent.py::TestMultimodalProcessor::test_add_code PASSED    [ 87%]
 src/test_base_agent.py::TestMultimodalProcessor::test_add_image PASSED   [ 87%]
@@ -2371,51 +2371,51 @@ src/test_base_agent.py::TestConversationHistoryManagement::test_conversation_his
 src/test_base_agent.py::TestResponsePostProcessingHooks::test_post_processor_registration PASSED [ 88%]
 src/test_base_agent.py::TestResponsePostProcessingHooks::test_post_processor_execution_order PASSED [ 88%]
 src/test_base_agent.py::TestResponsePostProcessingHooks::test_post_processor_chain PASSED [ 88%]
-src/test_base_agent.py::TestModelSelectionPerAgentType::test_model_config_creation FAILED [ 88%]
-src/test_base_agent.py::TestModelSelectionPerAgentType::test_model_selector_default FAILED [ 88%]
-src/test_base_agent.py::TestModelSelectionPerAgentType::test_model_selector_custom_mapping FAILED [ 88%]
-src/test_base_agent.py::TestRequestBatchingPerformance::test_batch_request_creation FAILED [ 88%]
-src/test_base_agent.py::TestRequestBatchingPerformance::test_batch_execution FAILED [ 88%]
-src/test_base_agent.py::TestRequestBatchingPerformance::test_batch_max_size FAILED [ 88%]
+src/test_base_agent.py::TestModelSelectionPerAgentType::test_model_config_creation PASSED [ 88%]
+src/test_base_agent.py::TestModelSelectionPerAgentType::test_model_selector_default PASSED [ 88%]
+src/test_base_agent.py::TestModelSelectionPerAgentType::test_model_selector_custom_mapping PASSED [ 88%]
+src/test_base_agent.py::TestRequestBatchingPerformance::test_batch_request_creation PASSED [ 88%]
+src/test_base_agent.py::TestRequestBatchingPerformance::test_batch_execution PASSED [ 88%]
+src/test_base_agent.py::TestRequestBatchingPerformance::test_batch_max_size PASSED [ 88%]
 src/test_base_agent.py::TestCustomAuthenticationMethods::test_auth_token_method FAILED [ 88%]
 src/test_base_agent.py::TestCustomAuthenticationMethods::test_auth_api_key_method FAILED [ 88%]
-src/test_base_agent.py::TestCustomAuthenticationMethods::test_auth_custom_header FAILED [ 88%]
-src/test_base_agent.py::TestResponseQualityScoring_v2::test_quality_scorer_basic FAILED [ 88%]
-src/test_base_agent.py::TestResponseQualityScoring_v2::test_quality_scorer_length_factor FAILED [ 88%]
-src/test_base_agent.py::TestResponseQualityScoring_v2::test_quality_scorer_custom_criteria FAILED [ 88%]
-src/test_base_agent.py::TestPromptVersioningAndABTesting::test_prompt_version_creation FAILED [ 88%]
-src/test_base_agent.py::TestPromptVersioningAndABTesting::test_prompt_version_manager FAILED [ 88%]
-src/test_base_agent.py::TestPromptVersioningAndABTesting::test_ab_test_variant_selection FAILED [ 88%]
-src/test_base_agent.py::TestContextWindowManagement::test_context_window_size FAILED [ 88%]
-src/test_base_agent.py::TestContextWindowManagement::test_context_window_truncation FAILED [ 88%]
-src/test_base_agent.py::TestContextWindowManagement::test_context_window_clear FAILED [ 88%]
+src/test_base_agent.py::TestCustomAuthenticationMethods::test_auth_custom_header PASSED [ 88%]
+src/test_base_agent.py::TestResponseQualityScoring_v2::test_quality_scorer_basic PASSED [ 88%]
+src/test_base_agent.py::TestResponseQualityScoring_v2::test_quality_scorer_length_factor PASSED [ 88%]
+src/test_base_agent.py::TestResponseQualityScoring_v2::test_quality_scorer_custom_criteria PASSED [ 88%]
+src/test_base_agent.py::TestPromptVersioningAndABTesting::test_prompt_version_creation PASSED [ 88%]
+src/test_base_agent.py::TestPromptVersioningAndABTesting::test_prompt_version_manager PASSED [ 88%]
+src/test_base_agent.py::TestPromptVersioningAndABTesting::test_ab_test_variant_selection PASSED [ 88%]
+src/test_base_agent.py::TestContextWindowManagement::test_context_window_size PASSED [ 88%]
+src/test_base_agent.py::TestContextWindowManagement::test_context_window_truncation PASSED [ 88%]
+src/test_base_agent.py::TestContextWindowManagement::test_context_window_clear PASSED [ 88%]
 src/test_base_agent.py::TestMultimodalInputHandling::test_multimodal_input_text PASSED [ 88%]
 src/test_base_agent.py::TestMultimodalInputHandling::test_multimodal_input_image PASSED [ 88%]
-src/test_base_agent.py::TestMultimodalInputHandling::test_multimodal_builder FAILED [ 88%]
-src/test_base_agent.py::TestContentBasedResponseCaching::test_response_cache_set_get FAILED [ 88%]
-src/test_base_agent.py::TestContentBasedResponseCaching::test_response_cache_miss FAILED [ 89%]
-src/test_base_agent.py::TestContentBasedResponseCaching::test_response_cache_invalidation FAILED [ 89%]
-src/test_base_agent.py::TestAgentCompositionPatterns::test_agent_pipeline FAILED [ 89%]
-src/test_base_agent.py::TestAgentCompositionPatterns::test_agent_parallel_composition FAILED [ 89%]
-src/test_base_agent.py::TestAgentCompositionPatterns::test_agent_conditional FAILED [ 89%]
-src/test_base_agent.py::TestTokenBudgetManagement::test_token_budget_allocation FAILED [ 89%]
-src/test_base_agent.py::TestTokenBudgetManagement::test_token_budget_overflow_prevention FAILED [ 89%]
-src/test_base_agent.py::TestTokenBudgetManagement::test_token_budget_release FAILED [ 89%]
-src/test_base_agent.py::TestAgentStatePersistence::test_state_save_and_load FAILED [ 89%]
-src/test_base_agent.py::TestAgentStatePersistence::test_state_auto_backup FAILED [ 89%]
-src/test_base_agent.py::TestAgentStatePersistence::test_state_default_on_missing FAILED [ 89%]
-src/test_base_agent.py::TestAgentEventHooks::test_event_hook_registration FAILED [ 89%]
-src/test_base_agent.py::TestAgentEventHooks::test_event_multiple_handlers FAILED [ 89%]
-src/test_base_agent.py::TestAgentEventHooks::test_event_with_data FAILED [ 89%]
-src/test_base_agent.py::TestAgentPluginLoading::test_plugin_registration FAILED [ 89%]
-src/test_base_agent.py::TestAgentPluginLoading::test_plugin_activation FAILED [ 89%]
-src/test_base_agent.py::TestAgentPluginLoading::test_plugin_deactivation FAILED [ 89%]
-src/test_base_agent.py::TestAgentHealthDiagnostics::test_health_check_basic FAILED [ 89%]
-src/test_base_agent.py::TestAgentHealthDiagnostics::test_health_check_components FAILED [ 89%]
-src/test_base_agent.py::TestAgentHealthDiagnostics::test_health_metrics FAILED [ 89%]
-src/test_base_agent.py::TestAgentConfigurationProfiles::test_profile_creation FAILED [ 89%]
-src/test_base_agent.py::TestAgentConfigurationProfiles::test_profile_manager_switch FAILED [ 89%]
-src/test_base_agent.py::TestAgentConfigurationProfiles::test_profile_inheritance FAILED [ 89%]
+src/test_base_agent.py::TestMultimodalInputHandling::test_multimodal_builder PASSED [ 88%]
+src/test_base_agent.py::TestContentBasedResponseCaching::test_response_cache_set_get PASSED [ 88%]
+src/test_base_agent.py::TestContentBasedResponseCaching::test_response_cache_miss PASSED [ 89%]
+src/test_base_agent.py::TestContentBasedResponseCaching::test_response_cache_invalidation PASSED [ 89%]
+src/test_base_agent.py::TestAgentCompositionPatterns::test_agent_pipeline PASSED [ 89%]
+src/test_base_agent.py::TestAgentCompositionPatterns::test_agent_parallel_composition PASSED [ 89%]
+src/test_base_agent.py::TestAgentCompositionPatterns::test_agent_conditional PASSED [ 89%]
+src/test_base_agent.py::TestTokenBudgetManagement::test_token_budget_allocation PASSED [ 89%]
+src/test_base_agent.py::TestTokenBudgetManagement::test_token_budget_overflow_prevention PASSED [ 89%]
+src/test_base_agent.py::TestTokenBudgetManagement::test_token_budget_release PASSED [ 89%]
+src/test_base_agent.py::TestAgentStatePersistence::test_state_save_and_load PASSED [ 89%]
+src/test_base_agent.py::TestAgentStatePersistence::test_state_auto_backup PASSED [ 89%]
+src/test_base_agent.py::TestAgentStatePersistence::test_state_default_on_missing PASSED [ 89%]
+src/test_base_agent.py::TestAgentEventHooks::test_event_hook_registration PASSED [ 89%]
+src/test_base_agent.py::TestAgentEventHooks::test_event_multiple_handlers PASSED [ 89%]
+src/test_base_agent.py::TestAgentEventHooks::test_event_with_data PASSED [ 89%]
+src/test_base_agent.py::TestAgentPluginLoading::test_plugin_registration PASSED [ 89%]
+src/test_base_agent.py::TestAgentPluginLoading::test_plugin_activation PASSED [ 89%]
+src/test_base_agent.py::TestAgentPluginLoading::test_plugin_deactivation PASSED [ 89%]
+src/test_base_agent.py::TestAgentHealthDiagnostics::test_health_check_basic PASSED [ 89%]
+src/test_base_agent.py::TestAgentHealthDiagnostics::test_health_check_components PASSED [ 89%]
+src/test_base_agent.py::TestAgentHealthDiagnostics::test_health_metrics PASSED [ 89%]
+src/test_base_agent.py::TestAgentConfigurationProfiles::test_profile_creation PASSED [ 89%]
+src/test_base_agent.py::TestAgentConfigurationProfiles::test_profile_manager_switch PASSED [ 89%]
+src/test_base_agent.py::TestAgentConfigurationProfiles::test_profile_inheritance PASSED [ 89%]
 src/test_generate_agent_reports.py::test_sha256_text PASSED              [ 89%]
 src/test_generate_agent_reports.py::test_detect_cli_entry PASSED         [ 89%]
 src/test_generate_agent_reports.py::test_find_top_level_defs PASSED      [ 89%]
@@ -2598,7 +2598,7 @@ src/test_generate_agent_reports.py::TestJSONReportFormatting::test_format_json_w
 src/test_generate_agent_reports.py::TestCSVReportFormatting::test_format_csv_basic PASSED [ 96%]
 src/test_generate_agent_reports.py::TestCSVReportFormatting::test_format_csv_escaping PASSED [ 96%]
 src/test_generate_agent_reports.py::TestCSVReportFormatting::test_format_csv_header_footer PASSED [ 96%]
-src/test_generate_agent_reports.py::TestCSVReportFormatting::test_format_csv_with_quotes FAILED [ 96%]
+src/test_generate_agent_reports.py::TestCSVReportFormatting::test_format_csv_with_quotes PASSED [ 96%]
 src/test_generate_agent_reports.py::TestReportTemplates::test_template_inheritance PASSED [ 96%]
 src/test_generate_agent_reports.py::TestReportTemplates::test_template_substitution PASSED [ 96%]
 src/test_generate_agent_reports.py::TestReportTemplates::test_template_with_conditionals PASSED [ 96%]
@@ -2649,7 +2649,7 @@ src/test_generate_agent_reports.py::TestVisualReportGeneration::test_matplotlib_
 src/test_generate_agent_reports.py::TestVisualReportGeneration::test_pie_chart_generation PASSED [ 98%]
 src/test_generate_agent_reports.py::TestVisualReportGeneration::test_save_charts_as_image PASSED [ 98%]
 src/test_generate_agent_reports.py::TestExecutiveSummary::test_executive_summary_with_trends PASSED [ 98%]
-src/test_generate_agent_reports.py::TestExecutiveSummary::test_generate_key_metrics_summary FAILED [ 98%]
+src/test_generate_agent_reports.py::TestExecutiveSummary::test_generate_key_metrics_summary PASSED [ 98%]
 src/test_generate_agent_reports.py::TestExecutiveSummary::test_summary_with_priority_issues PASSED [ 98%]
 src/test_generate_agent_reports.py::TestReportTemplating::test_jinja2_template_rendering PASSED [ 98%]
 src/test_generate_agent_reports.py::TestReportTemplating::test_template_inheritance PASSED [ 98%]
@@ -2816,7 +2816,7 @@ src\test_agent_context.py:347: in test_is_valid
     assert agent.is_valid()
 E   assert False
 E    +  where False = is_valid()
-E    +    where is_valid = <_dv_legacy_agent_context.ContextAgent object at 0x000001FEC0218C20>.is_valid
+E    +    where is_valid = <_dv_legacy_agent_context.ContextAgent object at 0x0000019C5D92BCB0>.is_valid
 _________________________ test_auto_categorize_config _________________________
 src\test_agent_context.py:520: in test_auto_categorize_config
     assert category == mod.FileCategory.CONFIGURATION
@@ -3355,7 +3355,7 @@ ________ TestAutomatedValidationIntegration.test_validate_improvement _________
 src\test_agent_improvements.py:1609: in test_validate_improvement
     assert result.is_valid
 E   AssertionError: assert False
-E    +  where False = ValidationResult(improvement_id='57746f5c', is_valid=False, issues=[(<ValidationSeverity.ERROR: 'error'>, 'Category should be more specific')], test_results={}).is_valid
+E    +  where False = ValidationResult(improvement_id='b28cd208', is_valid=False, issues=[(<ValidationSeverity.ERROR: 'error'>, 'Category should be more specific')], test_results={}).is_valid
 ----------------------------- Captured log setup ------------------------------
 WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
 _________ TestAutomatedValidationIntegration.test_validation_failure __________
@@ -3580,7 +3580,7 @@ src\test_agent_improvements.py:3234: in test_agent_processor_responsibilities
     assert not processor.should_process_file('__pycache__ / test.py')
 E   AssertionError: assert not True
 E    +  where True = should_process_file('__pycache__ / test.py')
-E    +    where should_process_file = <test_agent_improvements.TestRefactoringStrategy.test_agent_processor_responsibilities.<locals>.AgentProcessor object at 0x000001FEBD7FC6E0>.should_process_file
+E    +    where should_process_file = <test_agent_improvements.TestRefactoringStrategy.test_agent_processor_responsibilities.<locals>.AgentProcessor object at 0x0000019C5D928440>.should_process_file
 ___________________ TestAlertSeverity.test_severity_values ____________________
 src\test_agent_stats.py:95: in test_severity_values
     assert stats_module.AlertSeverity.CRITICAL.value == 5
@@ -4365,228 +4365,62 @@ E   AssertionError: assert 'IMPROVED' == 'AFTER'
 E     
 E     - AFTER
 E     + IMPROVED
-__________ TestModelSelectionPerAgentType.test_model_config_creation __________
-src\test_base_agent.py:1597: in test_model_config_creation
-    ModelConfig = base_agent_module.ModelConfig
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'ModelConfig'
-_________ TestModelSelectionPerAgentType.test_model_selector_default __________
-src\test_base_agent.py:1610: in test_model_selector_default
-    ModelSelector = base_agent_module.ModelSelector
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'ModelSelector'
-______ TestModelSelectionPerAgentType.test_model_selector_custom_mapping ______
-src\test_base_agent.py:1621: in test_model_selector_custom_mapping
-    ModelSelector = base_agent_module.ModelSelector
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'ModelSelector'
-_________ TestRequestBatchingPerformance.test_batch_request_creation __________
-src\test_base_agent.py:1640: in test_batch_request_creation
-    batch = BatchRequest()
-            ^^^^^^^^^^^^^^
-E   TypeError: BatchRequest.__init__() missing 2 required positional arguments: 'file_path' and 'prompt'
-_____________ TestRequestBatchingPerformance.test_batch_execution _____________
-src\test_base_agent.py:1651: in test_batch_execution
-    batch = BatchRequest()
-            ^^^^^^^^^^^^^^
-E   TypeError: BatchRequest.__init__() missing 2 required positional arguments: 'file_path' and 'prompt'
-_____________ TestRequestBatchingPerformance.test_batch_max_size ______________
-src\test_base_agent.py:1666: in test_batch_max_size
-    batch = BatchRequest(max_size=2)
-            ^^^^^^^^^^^^^^^^^^^^^^^^
-E   TypeError: BatchRequest.__init__() got an unexpected keyword argument 'max_size'
+_____________ TestSession8Dataclasses.test_batch_request_creation _____________
+src\test_base_agent.py:1005: in test_batch_request_creation
+    request = base_agent_module.BatchRequest(
+E   TypeError: BatchRequest.__init__() got an unexpected keyword argument 'file_path'
+____________ TestSession8Dataclasses.test_prompt_version_creation _____________
+src\test_base_agent.py:1025: in test_prompt_version_creation
+    version = base_agent_module.PromptVersion(
+E   TypeError: PromptVersion.__init__() got an unexpected keyword argument 'version_id'. Did you mean 'version'?
+_____________________ TestRequestBatcher.test_add_request _____________________
+src\test_base_agent.py:1072: in test_add_request
+    request = base_agent_module.BatchRequest(
+E   TypeError: BatchRequest.__init__() got an unexpected keyword argument 'file_path'
+________________ TestRequestBatcher.test_add_multiple_requests ________________
+src\test_base_agent.py:1083: in test_add_multiple_requests
+    base_agent_module.BatchRequest(file_path=tmp_path / f"test{i}.py", prompt="Improve")
+E   TypeError: BatchRequest.__init__() got an unexpected keyword argument 'file_path'
+_____________________ TestRequestBatcher.test_clear_queue _____________________
+src\test_base_agent.py:1092: in test_clear_queue
+    batcher.add_request(base_agent_module.BatchRequest(
+E   TypeError: BatchRequest.__init__() got an unexpected keyword argument 'file_path'
+_______________ TestPromptVersionManager.test_register_version ________________
+src\test_base_agent.py:1190: in test_register_version
+    version = base_agent_module.PromptVersion(
+E   TypeError: PromptVersion.__init__() got an unexpected keyword argument 'version_id'. Did you mean 'version'?
+______________ TestPromptVersionManager.test_get_versions_empty _______________
+src\test_base_agent.py:1204: in test_get_versions_empty
+    versions = manager.get_versions("nonexistent")
+               ^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'PromptVersionManager' object has no attribute 'get_versions'. Did you mean: 'add_version'?
+________________ TestPromptVersionManager.test_select_version _________________
+src\test_base_agent.py:1210: in test_select_version
+    version = base_agent_module.PromptVersion(
+E   TypeError: PromptVersion.__init__() got an unexpected keyword argument 'version_id'. Did you mean 'version'?
+_____________ TestPromptVersionManager.test_select_version_empty ______________
+src\test_base_agent.py:1224: in test_select_version_empty
+    selected = manager.select_version("nonexistent")
+               ^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'PromptVersionManager' object has no attribute 'select_version'
+_________________ TestPromptVersionManager.test_record_metric _________________
+src\test_base_agent.py:1230: in test_record_metric
+    manager.record_metric("v1", "quality", 4.5)
+    ^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'PromptVersionManager' object has no attribute 'record_metric'
+_________________ TestPromptVersionManager.test_get_ab_report _________________
+src\test_base_agent.py:1237: in test_get_ab_report
+    version = base_agent_module.PromptVersion(
+E   TypeError: PromptVersion.__init__() got an unexpected keyword argument 'version_id'. Did you mean 'version'?
 ___________ TestCustomAuthenticationMethods.test_auth_token_method ____________
-src\test_base_agent.py:1680: in test_auth_token_method
-    AuthManager = base_agent_module.AuthManager
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'AuthManager'
+src\test_base_agent.py:1683: in test_auth_token_method
+    manager.set_method(AuthMethod.TOKEN, token="secret-token")
+                       ^^^^^^^^^^^^^^^^
+E   AttributeError: type object 'AuthMethod' has no attribute 'TOKEN'
 __________ TestCustomAuthenticationMethods.test_auth_api_key_method ___________
-src\test_base_agent.py:1691: in test_auth_api_key_method
-    AuthManager = base_agent_module.AuthManager
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'AuthManager'
-___________ TestCustomAuthenticationMethods.test_auth_custom_header ___________
-src\test_base_agent.py:1701: in test_auth_custom_header
-    AuthManager = base_agent_module.AuthManager
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'AuthManager'
-___________ TestResponseQualityScoring_v2.test_quality_scorer_basic ___________
-src\test_base_agent.py:1715: in test_quality_scorer_basic
-    QualityScorer = base_agent_module.QualityScorer
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'QualityScorer'
-_______ TestResponseQualityScoring_v2.test_quality_scorer_length_factor _______
-src\test_base_agent.py:1724: in test_quality_scorer_length_factor
-    QualityScorer = base_agent_module.QualityScorer
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'QualityScorer'
-______ TestResponseQualityScoring_v2.test_quality_scorer_custom_criteria ______
-src\test_base_agent.py:1735: in test_quality_scorer_custom_criteria
-    QualityScorer = base_agent_module.QualityScorer
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'QualityScorer'
-________ TestPromptVersioningAndABTesting.test_prompt_version_creation ________
-src\test_base_agent.py:1757: in test_prompt_version_creation
-    v1 = PromptVersion(
-E   TypeError: PromptVersion.__init__() got an unexpected keyword argument 'version'. Did you mean 'version_id'?
-________ TestPromptVersioningAndABTesting.test_prompt_version_manager _________
-src\test_base_agent.py:1773: in test_prompt_version_manager
-    v1 = PromptVersion("1.0.0", "Original")
-         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   TypeError: PromptVersion.__init__() missing 2 required positional arguments: 'variant' and 'prompt_text'
-_______ TestPromptVersioningAndABTesting.test_ab_test_variant_selection _______
-src\test_base_agent.py:1785: in test_ab_test_variant_selection
-    ABTest = base_agent_module.ABTest
-             ^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'ABTest'
-____________ TestContextWindowManagement.test_context_window_size _____________
-src\test_base_agent.py:1802: in test_context_window_size
-    ContextWindow = base_agent_module.ContextWindow
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'ContextWindow'
-_________ TestContextWindowManagement.test_context_window_truncation __________
-src\test_base_agent.py:1812: in test_context_window_truncation
-    ContextWindow = base_agent_module.ContextWindow
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'ContextWindow'
-____________ TestContextWindowManagement.test_context_window_clear ____________
-src\test_base_agent.py:1823: in test_context_window_clear
-    ContextWindow = base_agent_module.ContextWindow
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'ContextWindow'
-_____________ TestMultimodalInputHandling.test_multimodal_builder _____________
-src\test_base_agent.py:1864: in test_multimodal_builder
-    MultimodalBuilder = base_agent_module.MultimodalBuilder
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'MultimodalBuilder'
-_________ TestContentBasedResponseCaching.test_response_cache_set_get _________
-src\test_base_agent.py:1880: in test_response_cache_set_get
-    ResponseCache = base_agent_module.ResponseCache
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'ResponseCache'
-__________ TestContentBasedResponseCaching.test_response_cache_miss ___________
-src\test_base_agent.py:1890: in test_response_cache_miss
-    ResponseCache = base_agent_module.ResponseCache
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'ResponseCache'
-______ TestContentBasedResponseCaching.test_response_cache_invalidation _______
-src\test_base_agent.py:1899: in test_response_cache_invalidation
-    ResponseCache = base_agent_module.ResponseCache
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'ResponseCache'
-______________ TestAgentCompositionPatterns.test_agent_pipeline _______________
-src\test_base_agent.py:1914: in test_agent_pipeline
-    AgentPipeline = base_agent_module.AgentPipeline
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'AgentPipeline'
-________ TestAgentCompositionPatterns.test_agent_parallel_composition _________
-src\test_base_agent.py:1932: in test_agent_parallel_composition
-    AgentParallel = base_agent_module.AgentParallel
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'AgentParallel'
-_____________ TestAgentCompositionPatterns.test_agent_conditional _____________
-src\test_base_agent.py:1945: in test_agent_conditional
-    AgentRouter = base_agent_module.AgentRouter
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'AgentRouter'. Did you mean: 'AgentState'?
-___________ TestTokenBudgetManagement.test_token_budget_allocation ____________
-src\test_base_agent.py:1961: in test_token_budget_allocation
-    TokenBudget = base_agent_module.TokenBudget
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'TokenBudget'
-_______ TestTokenBudgetManagement.test_token_budget_overflow_prevention _______
-src\test_base_agent.py:1972: in test_token_budget_overflow_prevention
-    TokenBudget = base_agent_module.TokenBudget
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'TokenBudget'
-_____________ TestTokenBudgetManagement.test_token_budget_release _____________
-src\test_base_agent.py:1981: in test_token_budget_release
-    TokenBudget = base_agent_module.TokenBudget
-                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'TokenBudget'
-_____________ TestAgentStatePersistence.test_state_save_and_load ______________
-src\test_base_agent.py:1995: in test_state_save_and_load
-    StatePersistence = base_agent_module.StatePersistence
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'StatePersistence'
-______________ TestAgentStatePersistence.test_state_auto_backup _______________
-src\test_base_agent.py:2008: in test_state_auto_backup
-    StatePersistence = base_agent_module.StatePersistence
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'StatePersistence'
-___________ TestAgentStatePersistence.test_state_default_on_missing ___________
-src\test_base_agent.py:2022: in test_state_default_on_missing
-    StatePersistence = base_agent_module.StatePersistence
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'StatePersistence'
-______________ TestAgentEventHooks.test_event_hook_registration _______________
-src\test_base_agent.py:2037: in test_event_hook_registration
-    EventManager = base_agent_module.EventManager
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'EventManager'
-______________ TestAgentEventHooks.test_event_multiple_handlers _______________
-src\test_base_agent.py:2050: in test_event_multiple_handlers
-    EventManager = base_agent_module.EventManager
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'EventManager'
-__________________ TestAgentEventHooks.test_event_with_data ___________________
-src\test_base_agent.py:2064: in test_event_with_data
-    EventManager = base_agent_module.EventManager
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'EventManager'
-_______________ TestAgentPluginLoading.test_plugin_registration _______________
-src\test_base_agent.py:2081: in test_plugin_registration
-    PluginManager = base_agent_module.PluginManager
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'PluginManager'
-________________ TestAgentPluginLoading.test_plugin_activation ________________
-src\test_base_agent.py:2096: in test_plugin_activation
-    PluginManager = base_agent_module.PluginManager
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'PluginManager'
-_______________ TestAgentPluginLoading.test_plugin_deactivation _______________
-src\test_base_agent.py:2114: in test_plugin_deactivation
-    PluginManager = base_agent_module.PluginManager
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'PluginManager'
-_____________ TestAgentHealthDiagnostics.test_health_check_basic ______________
-src\test_base_agent.py:2141: in test_health_check_basic
-    HealthChecker = base_agent_module.HealthChecker
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'HealthChecker'. Did you mean: 'HealthCheckResult'?
-___________ TestAgentHealthDiagnostics.test_health_check_components ___________
-src\test_base_agent.py:2151: in test_health_check_components
-    HealthChecker = base_agent_module.HealthChecker
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'HealthChecker'. Did you mean: 'HealthCheckResult'?
-_______________ TestAgentHealthDiagnostics.test_health_metrics ________________
-src\test_base_agent.py:2163: in test_health_metrics
-    HealthChecker = base_agent_module.HealthChecker
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'HealthChecker'. Did you mean: 'HealthCheckResult'?
-____________ TestAgentConfigurationProfiles.test_profile_creation _____________
-src\test_base_agent.py:2181: in test_profile_creation
-    ConfigProfile = base_agent_module.ConfigProfile
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'ConfigProfile'
-_________ TestAgentConfigurationProfiles.test_profile_manager_switch __________
-src\test_base_agent.py:2197: in test_profile_manager_switch
-    ProfileManager = base_agent_module.ProfileManager
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'ProfileManager'
-___________ TestAgentConfigurationProfiles.test_profile_inheritance ___________
-src\test_base_agent.py:2214: in test_profile_inheritance
-    ProfileManager = base_agent_module.ProfileManager
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module 'base_agent' has no attribute 'ProfileManager'
-_____________ TestCSVReportFormatting.test_format_csv_with_quotes _____________
-src\test_generate_agent_reports.py:2617: in test_format_csv_with_quotes
-    assert '"Item' in csv_line
-E   assert '"Item' in '"{item}","{item}"'
-___________ TestExecutiveSummary.test_generate_key_metrics_summary ____________
-src\test_generate_agent_reports.py:3440: in test_generate_key_metrics_summary
-    self.assertIn("150", summary)
-E   AssertionError: '150' not found in "\n        Executive Summary\n        - Total Files: {metrics['total_files']}\n        - Test Coverage: {metrics['test_coverage']}%\n        - Critical Issues: {metrics['errors']}\n        "
+src\test_base_agent.py:1697: in test_auth_api_key_method
+    assert "X-API-Key" in headers
+E   AssertionError: assert 'X-API-Key' in {}
 ============================== warnings summary ===============================
 src/test_agent_backend.py::TestAuditLogger::test_log_request
 src/test_agent_backend.py::TestAuditLogger::test_get_recent_entries
@@ -4899,49 +4733,17 @@ FAILED src/test_agent_tests.py::TestTestBaselineManagement::test_baseline_manage
 FAILED src/test_agent_tests.py::TestTestBaselineManagement::test_baseline_manager_compares_to_baseline
 FAILED src/test_agent_tests.py::TestTestBaselineManagement::test_baseline_manager_updates_baseline
 FAILED src/test_base_agent.py::test_improve_content_uses_run_subagent - Asser...
-FAILED src/test_base_agent.py::TestModelSelectionPerAgentType::test_model_config_creation
-FAILED src/test_base_agent.py::TestModelSelectionPerAgentType::test_model_selector_default
-FAILED src/test_base_agent.py::TestModelSelectionPerAgentType::test_model_selector_custom_mapping
-FAILED src/test_base_agent.py::TestRequestBatchingPerformance::test_batch_request_creation
-FAILED src/test_base_agent.py::TestRequestBatchingPerformance::test_batch_execution
-FAILED src/test_base_agent.py::TestRequestBatchingPerformance::test_batch_max_size
+FAILED src/test_base_agent.py::TestSession8Dataclasses::test_batch_request_creation
+FAILED src/test_base_agent.py::TestSession8Dataclasses::test_prompt_version_creation
+FAILED src/test_base_agent.py::TestRequestBatcher::test_add_request - TypeErr...
+FAILED src/test_base_agent.py::TestRequestBatcher::test_add_multiple_requests
+FAILED src/test_base_agent.py::TestRequestBatcher::test_clear_queue - TypeErr...
+FAILED src/test_base_agent.py::TestPromptVersionManager::test_register_version
+FAILED src/test_base_agent.py::TestPromptVersionManager::test_get_versions_empty
+FAILED src/test_base_agent.py::TestPromptVersionManager::test_select_version
+FAILED src/test_base_agent.py::TestPromptVersionManager::test_select_version_empty
+FAILED src/test_base_agent.py::TestPromptVersionManager::test_record_metric
+FAILED src/test_base_agent.py::TestPromptVersionManager::test_get_ab_report
 FAILED src/test_base_agent.py::TestCustomAuthenticationMethods::test_auth_token_method
 FAILED src/test_base_agent.py::TestCustomAuthenticationMethods::test_auth_api_key_method
-FAILED src/test_base_agent.py::TestCustomAuthenticationMethods::test_auth_custom_header
-FAILED src/test_base_agent.py::TestResponseQualityScoring_v2::test_quality_scorer_basic
-FAILED src/test_base_agent.py::TestResponseQualityScoring_v2::test_quality_scorer_length_factor
-FAILED src/test_base_agent.py::TestResponseQualityScoring_v2::test_quality_scorer_custom_criteria
-FAILED src/test_base_agent.py::TestPromptVersioningAndABTesting::test_prompt_version_creation
-FAILED src/test_base_agent.py::TestPromptVersioningAndABTesting::test_prompt_version_manager
-FAILED src/test_base_agent.py::TestPromptVersioningAndABTesting::test_ab_test_variant_selection
-FAILED src/test_base_agent.py::TestContextWindowManagement::test_context_window_size
-FAILED src/test_base_agent.py::TestContextWindowManagement::test_context_window_truncation
-FAILED src/test_base_agent.py::TestContextWindowManagement::test_context_window_clear
-FAILED src/test_base_agent.py::TestMultimodalInputHandling::test_multimodal_builder
-FAILED src/test_base_agent.py::TestContentBasedResponseCaching::test_response_cache_set_get
-FAILED src/test_base_agent.py::TestContentBasedResponseCaching::test_response_cache_miss
-FAILED src/test_base_agent.py::TestContentBasedResponseCaching::test_response_cache_invalidation
-FAILED src/test_base_agent.py::TestAgentCompositionPatterns::test_agent_pipeline
-FAILED src/test_base_agent.py::TestAgentCompositionPatterns::test_agent_parallel_composition
-FAILED src/test_base_agent.py::TestAgentCompositionPatterns::test_agent_conditional
-FAILED src/test_base_agent.py::TestTokenBudgetManagement::test_token_budget_allocation
-FAILED src/test_base_agent.py::TestTokenBudgetManagement::test_token_budget_overflow_prevention
-FAILED src/test_base_agent.py::TestTokenBudgetManagement::test_token_budget_release
-FAILED src/test_base_agent.py::TestAgentStatePersistence::test_state_save_and_load
-FAILED src/test_base_agent.py::TestAgentStatePersistence::test_state_auto_backup
-FAILED src/test_base_agent.py::TestAgentStatePersistence::test_state_default_on_missing
-FAILED src/test_base_agent.py::TestAgentEventHooks::test_event_hook_registration
-FAILED src/test_base_agent.py::TestAgentEventHooks::test_event_multiple_handlers
-FAILED src/test_base_agent.py::TestAgentEventHooks::test_event_with_data - At...
-FAILED src/test_base_agent.py::TestAgentPluginLoading::test_plugin_registration
-FAILED src/test_base_agent.py::TestAgentPluginLoading::test_plugin_activation
-FAILED src/test_base_agent.py::TestAgentPluginLoading::test_plugin_deactivation
-FAILED src/test_base_agent.py::TestAgentHealthDiagnostics::test_health_check_basic
-FAILED src/test_base_agent.py::TestAgentHealthDiagnostics::test_health_check_components
-FAILED src/test_base_agent.py::TestAgentHealthDiagnostics::test_health_metrics
-FAILED src/test_base_agent.py::TestAgentConfigurationProfiles::test_profile_creation
-FAILED src/test_base_agent.py::TestAgentConfigurationProfiles::test_profile_manager_switch
-FAILED src/test_base_agent.py::TestAgentConfigurationProfiles::test_profile_inheritance
-FAILED src/test_generate_agent_reports.py::TestCSVReportFormatting::test_format_csv_with_quotes
-FAILED src/test_generate_agent_reports.py::TestExecutiveSummary::test_generate_key_metrics_summary
-========== 347 failed, 2322 passed, 11 skipped, 4 warnings in 59.38s ==========
+===== 315 failed, 2354 passed, 11 skipped, 4 warnings in 60.99s (0:01:00) =====

@@ -1312,6 +1312,49 @@ class ResultAggregator:
             } for r in self.results]
         }, indent=2)
 
+    def merge(self) -> Dict[str, Any]:
+        """Merge all results into a single summary.
+
+        Returns:
+            Merged summary with totals.
+        """
+        summary = self.get_summary()
+        failed = summary.get("failed", 0)
+        passed = summary.get("passed", 0)
+        
+        return {
+            "total_passed": passed,
+            "total_failed": failed,
+            "total_skipped": sum(1 for r in self.results if r.status == TestStatus.SKIPPED),
+            "total_duration_ms": summary.get("total_duration_ms", 0)
+        }
+
+    def get_trend(self) -> Dict[str, Any]:
+        """Analyze trend in test results.
+
+        Returns:
+            Trend analysis.
+        """
+        if len(self.results) < 2:
+            return {"pass_rate_trend": "stable"}
+        
+        # Calculate pass rates over time
+        mid_point = len(self.results) // 2
+        earlier_results = self.results[:mid_point]
+        later_results = self.results[mid_point:]
+        
+        earlier_rate = sum(1 for r in earlier_results if r.status == TestStatus.PASSED) / len(earlier_results) if earlier_results else 0
+        later_rate = sum(1 for r in later_results if r.status == TestStatus.PASSED) / len(later_results) if later_results else 0
+        
+        if later_rate > earlier_rate:
+            trend = "improving"
+        elif later_rate < earlier_rate:
+            trend = "declining"
+        else:
+            trend = "stable"
+        
+        return {"pass_rate_trend": trend}
+
 
 class MutationTester:
     """Test mutation analysis.
