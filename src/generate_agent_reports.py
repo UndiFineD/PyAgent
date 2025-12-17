@@ -93,24 +93,24 @@ class ReportType(Enum):
 
     """Type of report to generate."""
 
-    DESCRIPTION = auto()
+    DESCRIPTION = "description"
 
-    ERRORS = auto()
+    ERRORS = "errors"
 
-    IMPROVEMENTS = auto()
+    IMPROVEMENTS = "improvements"
 
-    SUMMARY = auto()
+    SUMMARY = "summary"
 
 
 class ReportFormat(Enum):
 
     """Output format for reports."""
 
-    MARKDOWN = auto()
+    MARKDOWN = "markdown"
 
-    JSON = auto()
+    JSON = "json"
 
-    HTML = auto()
+    HTML = "html"
 
 
 class SeverityLevel(Enum):
@@ -130,17 +130,17 @@ class IssueCategory(Enum):
 
     """Category of code issue."""
 
-    SYNTAX = auto()
+    SYNTAX = "syntax"
 
-    TYPE_ANNOTATION = auto()
+    TYPE_ANNOTATION = "type_annotation"
 
-    STYLE = auto()
+    STYLE = "style"
 
-    SECURITY = auto()
+    SECURITY = "security"
 
-    PERFORMANCE = auto()
+    PERFORMANCE = "performance"
 
-    DOCUMENTATION = auto()
+    DOCUMENTATION = "documentation"
 
 
 class SubscriptionFrequency(Enum):
@@ -241,6 +241,7 @@ class CompileResult:
 
 
 @dataclass
+@dataclass
 class CodeIssue:
 
     """Represents a code issue or improvement suggestion.
@@ -255,6 +256,8 @@ class CodeIssue:
 
         line_number: Line number if applicable.
 
+        file_path: File path if applicable.
+
         function_name: Function name if applicable.
 
     """
@@ -267,6 +270,8 @@ class CodeIssue:
 
     line_number: Optional[int] = None
 
+    file_path: Optional[str] = None
+
     function_name: Optional[str] = None
 
 
@@ -277,27 +282,23 @@ class ReportMetadata:
 
     Attributes:
 
-        file_path: Path to source file.
+        path: Path to source file.
 
         generated_at: Timestamp of generation.
 
-        source_hash: SHA256 hash of source content.
+        content_hash: SHA256 hash of content.
 
-        version: Report version number.
-
-        previous_hash: Hash of previous version (for comparison).
+        version: Report version string.
 
     """
 
-    file_path: str
+    path: str
 
-    generated_at: float = field(default_factory=time.time)  # type: ignore[assignment]
+    generated_at: str
 
-    source_hash: str = ""
+    content_hash: str
 
-    version: int = 1
-
-    previous_hash: Optional[str] = None
+    version: str
 
 
 @dataclass
@@ -329,25 +330,34 @@ class ReportTemplate:
 
 
 @dataclass
+@dataclass
 class ReportCache:
 
     """Cache for report data.
 
     Attributes:
 
-        reports: Dict mapping file path to cached report data.
+        path: File path for the cached report.
 
-        last_updated: Timestamp of last cache update.
+        content_hash: Hash of the cached content.
+
+        content: The cached report content.
+
+        created_at: Timestamp when cache was created.
 
         ttl_seconds: Time - to - live for cache entries.
 
     """
 
-    reports: Dict[str, Dict[str, Any]] = field(default_factory=dict)  # type: ignore[assignment]
+    path: str = ""
 
-    last_updated: float = field(default_factory=time.time)  # type: ignore[assignment]
+    content_hash: str = ""
 
-    ttl_seconds: int = 3600  # 1 hour default
+    content: str = ""
+
+    created_at: float = 0.0
+
+    ttl_seconds: int = 3600
 
 
 @dataclass
@@ -357,29 +367,34 @@ class ReportComparison:
 
     Attributes:
 
-        file_path: Path to source file.
+        old_path: Path to old version.
 
-        added_issues: Issues added in new version.
+        new_path: Path to new version.
 
-        removed_issues: Issues removed from old version.
+        added: Items added in new version.
 
-        changed_issues: Issues that changed between versions.
+        removed: Items removed from old version.
 
-        summary: Text summary of changes.
+        changed: Items that changed (list of tuples of old, new).
+
+        unchanged_count: Count of unchanged items.
 
     """
 
-    file_path: str
+    old_path: str
 
-    added_issues: List[str] = field(default_factory=list)  # type: ignore[assignment]
+    new_path: str
 
-    removed_issues: List[str] = field(default_factory=list)  # type: ignore[assignment]
+    added: List[str] = field(default_factory=list)  # type: ignore[assignment]
 
-    changed_issues: List[str] = field(default_factory=list)  # type: ignore[assignment]
+    removed: List[str] = field(default_factory=list)  # type: ignore[assignment]
 
-    summary: str = ""
+    changed: List[tuple] = field(default_factory=list)  # type: ignore[assignment]
+
+    unchanged_count: int = 0
 
 
+@dataclass
 @dataclass
 class FilterCriteria:
 
@@ -391,7 +406,7 @@ class FilterCriteria:
 
         date_to: End date for filtering.
 
-        severity_min: Minimum severity level.
+        min_severity: Minimum severity level.
 
         categories: Categories to include.
 
@@ -403,11 +418,11 @@ class FilterCriteria:
 
     date_to: Optional[datetime] = None
 
-    severity_min: SeverityLevel = SeverityLevel.INFO
+    min_severity: Optional[SeverityLevel] = None
 
-    categories: List[IssueCategory] = field(default_factory=list)  # type: ignore[assignment]
+    categories: Optional[List[IssueCategory]] = None
 
-    file_patterns: List[str] = field(default_factory=list)  # type: ignore[assignment]
+    file_patterns: Optional[List[str]] = None
 
 
 @dataclass
@@ -724,7 +739,7 @@ class ReportCacheManager:
 
         cache_file: Path to cache file.
 
-        cache: Current cache data.
+        _cache: Current cache data mapping (path, hash) -> (content, ttl_end).
 
     """
 
@@ -739,7 +754,7 @@ class ReportCacheManager:
 
         self.cache_file = cache_file or AGENT_DIR / ".report_cache.json"
 
-        self.cache = ReportCache()
+        self._cache: Dict[str, Any] = {}
 
         self._load_cache()
 
@@ -752,15 +767,7 @@ class ReportCacheManager:
 
                 data = json.loads(self.cache_file.read_text())
 
-                self.cache = ReportCache(
-
-                    reports=data.get('reports', {}),
-
-                    last_updated=data.get('last_updated', time.time()),
-
-                    ttl_seconds=data.get('ttl_seconds', 3600)
-
-                )
+                self._cache = data.get('cache', {})
 
             except Exception as e:
 
@@ -773,11 +780,7 @@ class ReportCacheManager:
 
             data: Dict[str, Any] = {
 
-                'reports': self.cache.reports,
-
-                'last_updated': self.cache.last_updated,
-
-                'ttl_seconds': self.cache.ttl_seconds
+                'cache': self._cache
 
             }
 
@@ -787,67 +790,78 @@ class ReportCacheManager:
 
             logging.warning(f"Failed to save cache: {e}")
 
-    def get(self, file_path: str, source_hash: str) -> Optional[Dict[str, Any]]:
+    def get(self, file_path: str, content_hash: str) -> Optional[str]:
         """Get cached report if valid.
 
         Args:
 
             file_path: Path to source file.
 
-            source_hash: Current source hash.
+            content_hash: Current content hash.
 
         Returns:
 
-            Cached report data or None if not valid.
+            Cached content or None if not valid or expired.
 
         """
 
-        if file_path not in self.cache.reports:
+        cache_key = f"{file_path}:{content_hash}"
+
+        if cache_key not in self._cache:
 
             return None
 
-        cached = self.cache.reports[file_path]
+        entry = self._cache[cache_key]
 
-        # Check if hash matches
+        # Check if expired
 
-        if cached.get('source_hash') != source_hash:
-
-            return None
-
-        # Check TTL
-
-        cached_time = cached.get('generated_at', 0)
-
-        if time.time() - cached_time > self.cache.ttl_seconds:
+        if time.time() > entry.get('expires_at', 0):
 
             return None
 
-        return cached
+        return entry.get('content')
 
-    def set(self, file_path: str, source_hash: str, data: Dict[str, Any]) -> None:
-        """Cache report data.
+    def set(self, file_path: str, content_hash: str, content: str, ttl: int = 3600) -> None:
+        """Cache report content.
 
         Args:
 
             file_path: Path to source file.
 
-            source_hash: Current source hash.
+            content_hash: Content hash.
 
-            data: Report data to cache.
+            content: Report content to cache.
+
+            ttl: Time-to-live in seconds.
 
         """
 
-        self.cache.reports[file_path] = {
+        cache_key = f"{file_path}:{content_hash}"
 
-            'source_hash': source_hash,
+        self._cache[cache_key] = {
 
-            'generated_at': time.time(),
+            'content': content,
 
-            'data': data
+            'expires_at': time.time() + ttl
 
         }
 
-        self.cache.last_updated = time.time()
+        self._save_cache()
+
+    def invalidate_by_path(self, file_path: str) -> None:
+        """Invalidate all cache entries for a file path.
+
+        Args:
+
+            file_path: Path to file.
+
+        """
+
+        keys_to_delete = [k for k in self._cache.keys() if k.startswith(f"{file_path}:")]
+
+        for key in keys_to_delete:
+
+            del self._cache[key]
 
         self._save_cache()
 
@@ -862,13 +876,13 @@ class ReportCacheManager:
 
         if file_path:
 
-            self.cache.reports.pop(file_path, None)
+            self.invalidate_by_path(file_path)
 
         else:
 
-            self.cache.reports.clear()
+            self._cache.clear()
 
-        self._save_cache()
+            self._save_cache()
 
 # =============================================================================
 

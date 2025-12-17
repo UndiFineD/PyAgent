@@ -123,19 +123,72 @@ class PromptTemplate:
     """Reusable prompt template.
 
     Attributes:
-        id: Unique identifier for the template.
         name: Human - readable template name.
         template: The prompt template with {placeholders}.
+        variables: List of variable names in the template.
+        id: Optional unique identifier for the template.
         description: Description of when to use this template.
         version: Version string for A / B testing.
         tags: Tags for categorization.
     """
-    id: str
     name: str
     template: str
+    variables: List[str] = field(default_factory=list)
+    id: str = ""
     description: str = ""
     version: str = "1.0"
     tags: List[str] = field(default_factory=list)
+
+    def render(self, **kwargs: Any) -> str:
+        """Render the template with provided variables.
+
+        Args:
+            **kwargs: Variables to substitute in the template.
+
+        Returns:
+            Rendered template string.
+        """
+        return self.template.format(**kwargs)
+
+
+class PromptTemplateManager:
+    """Manages a collection of prompt templates."""
+
+    def __init__(self) -> None:
+        """Initialize the template manager."""
+        self.templates: Dict[str, PromptTemplate] = {}
+
+    def register(self, template: PromptTemplate) -> None:
+        """Register a prompt template.
+
+        Args:
+            template: PromptTemplate to register.
+        """
+        self.templates[template.name] = template
+
+    def render(self, template_name: str, **kwargs: Any) -> str:
+        """Render a template by name.
+
+        Args:
+            template_name: Name of the template to render.
+            **kwargs: Variables to substitute in the template.
+
+        Returns:
+            Rendered template string.
+
+        Raises:
+            KeyError: If template not found.
+        """
+        template = self.templates[template_name]
+        return template.render(**kwargs)
+
+
+class MessageRole(Enum):
+    """Roles for conversation messages."""
+
+    USER = "user"
+    ASSISTANT = "assistant"
+    SYSTEM = "system"
 
 
 @dataclass
@@ -147,9 +200,80 @@ class ConversationMessage:
         content: Message content.
         timestamp: When the message was created.
     """
-    role: str  # "user", "assistant", "system"
+    role: MessageRole
     content: str
     timestamp: float = field(default_factory=time.time)
+
+
+class ConversationHistory:
+    """Manages a conversation history with message storage and retrieval."""
+
+    def __init__(self, max_messages: int = 100) -> None:
+        """Initialize conversation history.
+
+        Args:
+            max_messages: Maximum number of messages to keep.
+        """
+        self.messages: List[ConversationMessage] = []
+        self.max_messages = max_messages
+
+    def add(self, role: MessageRole, content: str) -> None:
+        """Add a message to the history.
+
+        Args:
+            role: Message role (user, assistant, system).
+            content: Message content.
+        """
+        msg = ConversationMessage(role=role, content=content)
+        self.messages.append(msg)
+
+        # Keep only the last max_messages
+        if len(self.messages) > self.max_messages:
+            self.messages = self.messages[-self.max_messages:]
+
+    def get_context(self) -> List[ConversationMessage]:
+        """Get conversation context (all messages).
+
+        Returns:
+            List of conversation messages.
+        """
+        return self.messages.copy()
+
+    def clear(self) -> None:
+        """Clear all messages from history."""
+        self.messages.clear()
+
+
+class ResponsePostProcessor:
+    """Manages post-processing hooks for agent responses."""
+
+    def __init__(self) -> None:
+        """Initialize the post-processor."""
+        self.hooks: List[tuple[Callable[[str], str], int]] = []
+
+    def register(self, hook: Callable[[str], str], priority: int = 0) -> None:
+        """Register a post-processing hook.
+
+        Args:
+            hook: Function that takes text and returns processed text.
+            priority: Priority level (higher = executed first).
+        """
+        self.hooks.append((hook, priority))
+
+    def process(self, text: str) -> str:
+        """Process text through all registered hooks in priority order.
+
+        Args:
+            text: Text to process.
+
+        Returns:
+            Processed text.
+        """
+        # Sort by priority (descending), then execute in order
+        sorted_hooks = sorted(self.hooks, key=lambda x: x[1], reverse=True)
+        for hook, _ in sorted_hooks:
+            text = hook(text)
+        return text
 
 
 @dataclass

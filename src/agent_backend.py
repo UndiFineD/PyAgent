@@ -64,7 +64,7 @@ class BackendType(Enum):
 
     COPILOT_CLI = "copilot"
     GH_COPILOT = "gh"
-    GITHUB_MODELS = "github - models"
+    GITHUB_MODELS = "github-models"
     AUTO = "auto"
 
 
@@ -1334,7 +1334,7 @@ def llm_chat_via_github_models(
             "Missing base URL: set GITHUB_MODELS_BASE_URL env var or pass base_url="
         )
 
-    url = resolved_base_url.rstrip("/") + "/v1 / chat / completions"
+    url = resolved_base_url.rstrip("/") + " / v1 / chat / completions"
     payload: Dict[str, Any] = {
         "model": model,
         "messages": [
