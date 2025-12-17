@@ -81,7 +81,7 @@ class ValidationRule:
     name: str
     pattern: str
     message: str
-    severity: str = "warning"  # warning, error
+    severity: str = "error"  # warning, error
 
 
 # ========== Session 6 Enums ==========
@@ -377,7 +377,7 @@ class ChangelogLocalizer:
 class DiffVisualizer:
     """Visualizes changelog differences with multiple view modes.
 
-    Provides side - by - side and unified diff views for changelog
+    Provides side-by-side and unified diff views for changelog
     comparison.
 
     Example:
@@ -443,7 +443,7 @@ class DiffVisualizer:
     def _render_side_by_side(self, result: DiffResult) -> str:
         """Render side-by-side diff view."""
         return (
-            f"<div class='diff - side - by - side'>Deletions: "
+            f"<div class='diff-side-by-side'>Deletions: "
             f"{len(result.deletions)}, Additions: "
             f"{len(result.additions)}</div>"
         )
@@ -451,7 +451,7 @@ class DiffVisualizer:
     def _render_inline(self, result: DiffResult) -> str:
         """Render inline diff view."""
         total_changes = len(result.deletions) + len(result.additions)
-        return f"<div class='diff - inline'>Changes: {total_changes}</div>"
+        return f"<div class='diff-inline'>Changes: {total_changes}</div>"
 
 
 class ExternalImporter:
