@@ -162,9 +162,13 @@ class Alert:
 
 @dataclass
 @dataclass
+@dataclass
 class RetentionPolicy:
     """Policy for data retention."""
-    metric_name: Optional[str] = None  # New field
+    name: str = ""  # Changed from metric_name to name for constructor
+    retention_days: int = 0
+    resolution: str = "1m"
+    metric_name: Optional[str] = None
     namespace: str = ""
     max_age_days: int = 0
     max_points: int = 0
@@ -1004,15 +1008,26 @@ class StatsFederation:
         self.aggregated: Dict[str, List[float]] = {}
         self._last_sync: Dict[str, datetime] = {}
 
-    def add_source(self, name: str, source: FederatedSource) -> None:
+    def add_source(self, name: str, endpoint: Optional[str] = None, data: Optional[Dict[str, float]] = None, healthy: bool = True) -> None:
         """Add a federated source.
 
         Args:
             name: Name for the source.
-            source: The source configuration.
+            endpoint: Optional API endpoint for the source.
+            data: Optional data dictionary from the source.
+            healthy: Whether the source is healthy.
         """
+        source = FederatedSource(
+            name=name,
+            endpoint=endpoint or "",
+            enabled=healthy
+        )
         self.sources[name] = source
         self._last_sync[name] = datetime.min
+        
+        # Store data if provided
+        if data:
+            self.aggregated[name] = data
 
     def remove_source(self, name: str) -> bool:
         """Remove a federated source.
@@ -1065,7 +1080,7 @@ class StatsFederation:
         self,
         metric_name: str,
         aggregation: AggregationType = AggregationType.AVG
-    ) -> float:
+    ) -> Dict[str, Any]:
         """Aggregate a metric across all sources.
 
         Args:
@@ -1073,16 +1088,31 @@ class StatsFederation:
             aggregation: The aggregation type.
 
         Returns:
-            The aggregated value.
+            Dictionary with aggregation results.
         """
-        values = self.aggregated.get(metric_name, [])
-        if not values:
-            return 0.0
-
-        if aggregation == AggregationType.SUM:
-            return sum(values)
-        elif aggregation == AggregationType.AVG:
-            return sum(values) / len(values)
+        values = []
+        failed_sources = 0
+        
+        # Collect values from all sources
+        for source_name, source in self.sources.items():
+            if not source.enabled:
+                failed_sources += 1
+            elif source_name in self.aggregated and isinstance(self.aggregated[source_name], dict):
+                if metric_name in self.aggregated[source_name]:
+                    values.append(self.aggregated[source_name][metric_name])
+        
+        total = 0.0
+        if values:
+            if aggregation == AggregationType.SUM:
+                total = sum(values)
+            elif aggregation == AggregationType.AVG:
+                total = sum(values) / len(values)
+        
+        return {
+            "total": total,
+            "failed_sources": failed_sources,
+            "source_count": len(self.sources)
+        }
         elif aggregation == AggregationType.MIN:
             return min(values)
         elif aggregation == AggregationType.MAX:
@@ -2198,23 +2228,52 @@ class StatsStreamManager:
     """Manages real-time stats streaming."""
     def __init__(self, config: Optional[StreamingConfig] = None) -> None:
         self.config = config
-        self.subscribers: List[Callable] = []
+        self.streams: Dict[str, Any] = {}
+        self.subscribers: Dict[str, List[Callable]] = {}
     
-    def create_stream(self, name: str) -> Any:
+    def create_stream(self, name: str, buffer_size: int = 1000) -> Any:
         """Create a new stream."""
-        return {"name": name, "active": True}
+        stream = {
+            "name": name,
+            "buffer_size": buffer_size,
+            "buffer": [],
+            "active": True
+        }
+        self.streams[name] = stream
+        self.subscribers[name] = []
+        return stream
     
-    def subscribe(self, callback: Callable) -> None:
+    def get_latest(self, name: str, count: int = 1) -> List[Any]:
+        """Get latest data from stream."""
+        if name not in self.streams:
+            return []
+        return self.streams[name]["buffer"][-count:] if self.streams[name]["buffer"] else []
+    
+    def subscribe(self, stream_name: str, callback: Callable) -> None:
         """Subscribe to stream updates."""
-        self.subscribers.append(callback)
+        if stream_name not in self.subscribers:
+            self.subscribers[stream_name] = []
+        self.subscribers[stream_name].append(callback)
     
-    def publish(self, data: Any) -> None:
-        """Publish data to all subscribers."""
-        for callback in self.subscribers:
-            try:
-                callback(data)
-            except Exception:
-                pass
+    def publish(self, stream_name: str, data: Any) -> None:
+        """Publish data to stream."""
+        if stream_name in self.streams:
+            self.streams[stream_name]["buffer"].append(data)
+        
+        # Notify subscribers
+        if stream_name in self.subscribers:
+            for callback in self.subscribers[stream_name]:
+                try:
+                    callback(data)
+                except Exception:
+                    pass
+
+
+@dataclass
+class FormulaValidation:
+    """Result of formula validation."""
+    is_valid: bool = True
+    error: str = ""
 
 
 class FormulaEngine:
@@ -2222,25 +2281,65 @@ class FormulaEngine:
     def __init__(self) -> None:
         self.formulas: Dict[str, str] = {}
     
-    def define_formula(self, name: str, formula: str) -> None:
+    def define(self, name: str, formula: str) -> None:
         """Define a formula."""
         self.formulas[name] = formula
     
-    def calculate(self, formula: str, variables: Dict[str, float] = None) -> float:
+    def define_formula(self, name: str, formula: str) -> None:
+        """Define a formula (backward compat)."""
+        self.define(name, formula)
+    
+    def calculate(self, formula_or_name: str, variables: Optional[Dict[str, Any]] = None) -> float:
         """Calculate formula result."""
         variables = variables or {}
+        
+        # If formula_or_name is in formulas dict, use stored formula
+        if formula_or_name in self.formulas:
+            formula = self.formulas[formula_or_name]
+        else:
+            formula = formula_or_name
+        
+        # Handle special functions like AVG
+        if "AVG(" in formula:
+            import re
+            match = re.search(r'AVG\(\{(\w+)\}\)', formula)
+            if match:
+                var_name = match.group(1)
+                if var_name in variables:
+                    values = variables[var_name]
+                    if isinstance(values, list) and values:
+                        return sum(values) / len(values)
+            return 0.0
+        
         try:
-            return float(eval(formula, {"__builtins__": {}}, variables))
+            # Replace {variable} with actual values
+            eval_formula = formula
+            for var_name, var_value in variables.items():
+                eval_formula = eval_formula.replace(f"{{{var_name}}}", str(var_value))
+            
+            return float(eval(eval_formula, {"__builtins__": {}}))
         except Exception:
             return 0.0
     
-    def validate_formula(self, formula: str) -> bool:
+    def validate(self, formula: str) -> FormulaValidation:
         """Validate formula syntax."""
         try:
-            compile(formula, '<string>', 'eval')
-            return True
-        except SyntaxError:
-            return False
+            # Basic validation
+            if "{" in formula and "}" in formula:
+                # This is a template formula
+                test_formula = formula
+                for var in ["a", "b", "used", "total"]:
+                    test_formula = test_formula.replace(f"{{{var}}}", "1")
+                compile(test_formula, '<string>', 'eval')
+            else:
+                compile(formula, '<string>', 'eval')
+            return FormulaValidation(is_valid=True)
+        except SyntaxError as e:
+            return FormulaValidation(is_valid=False, error=str(e))
+    
+    def validate_formula(self, formula: str) -> bool:
+        """Validate formula syntax (backward compat)."""
+        return self.validate(formula).is_valid
 
 
 class ABComparator:
@@ -2338,20 +2437,60 @@ class ThresholdAlertManager:
 class RetentionEnforcer:
     """Enforces retention policies on metrics."""
     def __init__(self) -> None:
-        self.policies: Dict[str, Dict[str, Any]] = {}
+        self.policies: Dict[str, RetentionPolicy] = {}
+        self.data: Dict[str, List[Dict[str, Any]]] = {}
+    
+    def set_policy(self, metric_pattern: str, policy: RetentionPolicy) -> None:
+        """Set a retention policy for metrics matching pattern."""
+        self.policies[metric_pattern] = policy
     
     def add_policy(self, metric: str, max_age_days: int, max_points: int) -> None:
-        """Add a retention policy."""
-        self.policies[metric] = {"max_age_days": max_age_days, "max_points": max_points}
+        """Add a retention policy (backward compat)."""
+        policy = RetentionPolicy(name=metric, retention_days=max_age_days)
+        self.policies[metric] = policy
+    
+    def add_data(self, metric_name: str, timestamp: float, value: Any) -> None:
+        """Add data point to a metric."""
+        if metric_name not in self.data:
+            self.data[metric_name] = []
+        self.data[metric_name].append({"timestamp": timestamp, "value": value})
+    
+    def enforce(self) -> int:
+        """Enforce retention policies, return count of removed items."""
+        from datetime import datetime, timedelta
+        import time
+        
+        removed_count = 0
+        now = datetime.now().timestamp()
+        
+        for metric_pattern, policy in self.policies.items():
+            # Find matching metrics
+            matching_metrics = [m for m in self.data.keys() if metric_pattern.replace("*", "") in m]
+            
+            for metric in matching_metrics:
+                if metric in self.data:
+                    original_count = len(self.data[metric])
+                    
+                    # Apply retention days policy
+                    if policy.retention_days > 0:
+                        cutoff_time = now - (policy.retention_days * 86400)  # days to seconds
+                        self.data[metric] = [
+                            d for d in self.data[metric]
+                            if d["timestamp"] > cutoff_time
+                        ]
+                    
+                    removed_count += original_count - len(self.data[metric])
+        
+        return removed_count
     
     def apply_policies(self, metrics: Dict[str, List[Any]]) -> Dict[str, List[Any]]:
         """Apply retention policies to metrics."""
         result = {}
         for metric, values in metrics.items():
-            if metric in self.policies:
-                policy = self.policies[metric]
-                if policy["max_points"] > 0:
-                    result[metric] = values[-policy["max_points"]:]
+            policy = self.policies.get(metric)
+            if policy:
+                if hasattr(policy, 'max_points') and policy.max_points > 0:
+                    result[metric] = values[-policy.max_points:]
                 else:
                     result[metric] = values
             else:
@@ -2364,12 +2503,21 @@ class StatsNamespace:
     def __init__(self, name: str) -> None:
         self.name = name
         self.metrics: Dict[str, List[Metric]] = {}
+        self.metric_values: Dict[str, float] = {}  # Direct metric values for set_metric/get_metric
     
     def add_metric(self, metric: Metric) -> None:
         """Add a metric to namespace."""
         if metric.name not in self.metrics:
             self.metrics[metric.name] = []
         self.metrics[metric.name].append(metric)
+    
+    def set_metric(self, name: str, value: float) -> None:
+        """Set a metric value."""
+        self.metric_values[name] = value
+    
+    def get_metric(self, name: str) -> Optional[float]:
+        """Get a metric value."""
+        return self.metric_values.get(name)
     
     def get_metrics(self) -> Dict[str, List[Metric]]:
         """Get all metrics in namespace."""

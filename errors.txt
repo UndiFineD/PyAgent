@@ -19,13 +19,7 @@ src/test_agent.py::TestAgentConfigInheritance::test_config_override SKIPPED [  6
 src/test_agent.py::TestAgentOutputValidation::test_validation_rule SKIPPED [  6%]
 src/test_agent.py::TestAgentGracefulShutdownBehavior::test_shutdown_state SKIPPED [  6%]
 src/test_agent_backend.py::TestABTester::test_create_test FAILED         [ 11%]
-src/test_agent_changes.py::test_validation_rule_dataclass FAILED         [ 13%]
-src/test_agent_changes.py::test_diff_visualizer_render_html_side_by_side FAILED [ 14%]
 src/test_agent_changes_tests.py::test_changes_agent_non_keyword_sets_current_content FAILED [ 20%]
-src/test_agent_coder.py::test_performance_optimizer_analyze FAILED       [ 26%]
-src/test_agent_coder.py::test_security_scanner_scan FAILED               [ 26%]
-src/test_agent_coder.py::test_modernization_advisor_analyze FAILED       [ 26%]
-src/test_agent_coder.py::test_modernization_advisor_detects_collections_mapping FAILED [ 26%]
 src/test_agent_coder.py::TestAccessibilityAnalyzer::test_analyze_javascript_interactive_div FAILED [ 27%]
 src/test_agent_coder.py::TestMultiLanguageCodeGeneration::test_generate_python_code FAILED [ 28%]
 src/test_agent_coder.py::TestMultiLanguageCodeGeneration::test_generate_javascript_code FAILED [ 28%]
@@ -36,25 +30,16 @@ src/test_agent_context.py::test_validate_content_valid FAILED            [ 32%]
 src/test_agent_context.py::test_is_valid FAILED                          [ 32%]
 src/test_agent_context.py::test_auto_categorize_config FAILED            [ 32%]
 src/test_agent_context.py::test_semantic_search_engine_init FAILED       [ 33%]
-src/test_agent_context.py::test_semantic_search_engine_set_algorithm FAILED [ 34%]
-src/test_agent_context.py::test_semantic_search_engine_add_document FAILED [ 34%]
 src/test_agent_context.py::test_semantic_search_engine_search FAILED     [ 34%]
 src/test_agent_context.py::test_semantic_search_engine_clear FAILED      [ 34%]
-src/test_agent_context.py::test_cross_repo_analyzer_init FAILED          [ 34%]
-src/test_agent_context.py::test_cross_repo_analyzer_add_repo FAILED      [ 34%]
 src/test_agent_context.py::test_cross_repo_analyzer_analyze FAILED       [ 34%]
-src/test_agent_context.py::test_cross_repo_analyzer_find_patterns FAILED [ 34%]
 src/test_agent_context.py::test_context_differ_compute_diff FAILED       [ 34%]
 src/test_agent_context.py::test_context_differ_section_diff FAILED       [ 34%]
 src/test_agent_context.py::test_context_differ_summarize FAILED          [ 34%]
 src/test_agent_context.py::test_context_inheritance_init FAILED          [ 34%]
-src/test_agent_context.py::test_context_inheritance_set_mode FAILED      [ 34%]
 src/test_agent_context.py::test_context_inheritance_set_parent FAILED    [ 34%]
 src/test_agent_context.py::test_context_inheritance_apply FAILED         [ 34%]
-src/test_agent_context.py::test_context_inheritance_get_hierarchy FAILED [ 34%]
-src/test_agent_context.py::test_nl_query_engine_add_context FAILED       [ 34%]
 src/test_agent_context.py::test_nl_query_engine_query FAILED             [ 34%]
-src/test_agent_context.py::test_nl_query_engine_extract_keywords FAILED  [ 34%]
 src/test_agent_context.py::test_context_exporter_init FAILED             [ 34%]
 src/test_agent_context.py::test_context_exporter_set_format FAILED       [ 34%]
 src/test_agent_context.py::test_context_exporter_supported_formats FAILED [ 34%]
@@ -93,18 +78,15 @@ src/test_agent_context.py::test_branch_comparer_summarize FAILED         [ 36%]
 src/test_agent_context.py::TestContextNotification::test_alert_marker_detection FAILED [ 37%]
 src/test_agent_errors.py::TestSeverityScoring_v2::test_critical_severity FAILED [ 45%]
 src/test_agent_improvements.py::TestImprovementCategory::test_all_categories_exist FAILED [ 49%]
-src/test_agent_improvements.py::TestImprovementStatus::test_status_values FAILED [ 49%]
+src/test_agent_improvements.py::TestImprovementStatus::test_all_statuses_exist FAILED [ 49%]
 src/test_agent_improvements.py::TestEffortEstimate::test_effort_values FAILED [ 49%]
 src/test_agent_improvements.py::TestImprovementDataclass::test_create_improvement FAILED [ 49%]
 src/test_agent_improvements.py::TestImprovementRetrieval::test_get_improvements_by_status FAILED [ 49%]
-src/test_agent_improvements.py::TestStatusUpdate::test_approve_improvement FAILED [ 50%]
-src/test_agent_improvements.py::TestStatusUpdate::test_reject_improvement FAILED [ 50%]
 src/test_agent_improvements.py::TestEffortEstimation::test_estimate_total_effort FAILED [ 50%]
 src/test_agent_improvements.py::TestDependencies::test_get_ready_to_implement FAILED [ 50%]
 src/test_agent_improvements.py::TestTemplates::test_create_from_template FAILED [ 50%]
 src/test_agent_improvements.py::TestTemplates::test_add_custom_template FAILED [ 50%]
 src/test_agent_improvements.py::TestAssignment::test_unassign FAILED     [ 50%]
-src/test_agent_improvements.py::TestAssignment::test_get_by_assignee FAILED [ 50%]
 src/test_agent_improvements.py::TestExport::test_export_csv FAILED       [ 50%]
 src/test_agent_improvements.py::TestImprovementImpactScoring::test_impact_scorer_initialization FAILED [ 53%]
 src/test_agent_improvements.py::TestImprovementImpactScoring::test_calculate_impact_score FAILED [ 53%]
@@ -120,7 +102,6 @@ src/test_agent_improvements.py::TestImprovementTemplateInstantiation::test_templ
 src/test_agent_improvements.py::TestStatusWorkflowTransitions::test_workflow_engine_init FAILED [ 53%]
 src/test_agent_improvements.py::TestStatusWorkflowTransitions::test_valid_transition FAILED [ 53%]
 src/test_agent_improvements.py::TestStatusWorkflowTransitions::test_invalid_transition_blocked FAILED [ 53%]
-src/test_agent_improvements.py::TestVotingAndPrioritization::test_voting_system_init FAILED [ 53%]
 src/test_agent_improvements.py::TestVotingAndPrioritization::test_cast_vote FAILED [ 53%]
 src/test_agent_improvements.py::TestVotingAndPrioritization::test_prioritization_by_votes FAILED [ 53%]
 src/test_agent_improvements.py::TestSchedulingAndResourceAllocation::test_scheduler_init FAILED [ 54%]
@@ -180,7 +161,6 @@ src/test_agent_stats.py::TestStatsFederationAcrossSources::test_federation_aggre
 src/test_agent_stats.py::TestStatsFederationAcrossSources::test_federation_handles_source_failure FAILED [ 63%]
 src/test_agent_stats.py::TestStatsRetentionPolicyEnforcement::test_retention_policy_creation FAILED [ 63%]
 src/test_agent_stats.py::TestStatsRetentionPolicyEnforcement::test_retention_enforcer_removes_old_data FAILED [ 63%]
-src/test_agent_stats.py::TestStatsNamespaceIsolation::test_namespace_creation FAILED [ 63%]
 src/test_agent_stats.py::TestStatsNamespaceIsolation::test_namespace_metric_scoping FAILED [ 63%]
 src/test_agent_stats.py::TestStatsNamespaceIsolation::test_namespace_isolation FAILED [ 63%]
 src/test_agent_stats.py::TestStatsMetricFormulaCalculation::test_formula_simple_calculation FAILED [ 63%]
@@ -217,17 +197,10 @@ src/test_agent_stats.py::TestStatsBackupAndRestore::test_backup_restore FAILED [
 src/test_agent_stats.py::TestStatsBackupAndRestore::test_backup_list FAILED [ 64%]
 src/test_agent_stats.py::TestExportFormatsAdvanced::test_export_to_html FAILED [ 66%]
 src/test_agent_stats.py::TestFiltering::test_filter_by_file_pattern FAILED [ 67%]
-src/test_agent_test_utils.py::TestFixtureFactoryPatterns::test_fixture_factory_with_dependencies FAILED [ 70%]
 src/test_agent_test_utils.py::TestTestDataSeedingUtilities::test_seeder_creates_reproducible_data FAILED [ 70%]
-src/test_agent_test_utils.py::TestParallelTestExecutionHelpers::test_parallel_runner_executes_tests FAILED [ 70%]
-src/test_agent_test_utils.py::TestParallelTestExecutionHelpers::test_parallel_runner_collects_failures FAILED [ 70%]
 src/test_agent_test_utils.py::TestTestResultAggregationHelpers::test_aggregator_combines_results FAILED [ 70%]
 src/test_agent_test_utils.py::TestTestResultAggregationHelpers::test_aggregator_by_suite FAILED [ 70%]
-src/test_agent_test_utils.py::TestTestEnvironmentDetection::test_env_detector_identifies_ci FAILED [ 70%]
-src/test_agent_test_utils.py::TestTestEnvironmentDetection::test_env_detector_identifies_os FAILED [ 70%]
-src/test_agent_test_utils.py::TestTestEnvironmentDetection::test_env_detector_python_version FAILED [ 70%]
 src/test_agent_test_utils.py::TestSnapshotComparisonUtilities::test_snapshot_save_and_load FAILED [ 70%]
-src/test_agent_test_utils.py::TestSnapshotComparisonUtilities::test_snapshot_comparison_matches FAILED [ 70%]
 src/test_agent_test_utils.py::TestTestCoverageMeasurementHelpers::test_coverage_tracker_records_hits FAILED [ 70%]
 src/test_agent_test_utils.py::TestTestCoverageMeasurementHelpers::test_coverage_tracker_percentage FAILED [ 70%]
 src/test_agent_test_utils.py::TestTestLogCaptureUtilities::test_log_capturer_captures_logs FAILED [ 70%]
@@ -246,6 +219,14 @@ src/test_agent_test_utils.py::TestTestDependencyManagement::test_dependency_reso
 src/test_agent_test_utils.py::TestTestResourceAllocation::test_resource_pool_allocation FAILED [ 71%]
 src/test_agent_test_utils.py::TestTestResourceAllocation::test_resource_pool_release FAILED [ 71%]
 src/test_agent_test_utils.py::TestTestResourceAllocation::test_resource_pool_exhaustion FAILED [ 71%]
+src/test_agent_tests.py::TestTestSuiteOptimizer::test_init FAILED        [ 76%]
+src/test_agent_tests.py::TestTestSuiteOptimizer::test_add_coverage FAILED [ 76%]
+src/test_agent_tests.py::TestTestSuiteOptimizer::test_find_redundant_tests FAILED [ 76%]
+src/test_agent_tests.py::TestTestSuiteOptimizer::test_suggest_removals FAILED [ 76%]
+src/test_agent_tests.py::TestEnvironmentProvisioner::test_init FAILED    [ 76%]
+src/test_agent_tests.py::TestEnvironmentProvisioner::test_register_environment FAILED [ 76%]
+src/test_agent_tests.py::TestEnvironmentProvisioner::test_provision FAILED [ 77%]
+src/test_agent_tests.py::TestEnvironmentProvisioner::test_teardown FAILED [ 77%]
 src/test_agent_tests.py::TestTestPrioritizationAlgorithms::test_prioritizer_by_recent_changes FAILED [ 78%]
 src/test_agent_tests.py::TestTestPrioritizationAlgorithms::test_prioritizer_by_failure_history FAILED [ 78%]
 src/test_agent_tests.py::TestTestPrioritizationAlgorithms::test_prioritizer_combined_strategy FAILED [ 78%]
@@ -270,7 +251,6 @@ src/test_agent_tests.py::TestEnvironmentProvisioningAutomation::test_provisioner
 src/test_agent_tests.py::TestTestReplayFunctionality::test_recorder_saves_execution FAILED [ 79%]
 src/test_agent_tests.py::TestTestReplayFunctionality::test_replayer_executes_recording FAILED [ 79%]
 src/test_agent_tests.py::TestDocumentationGenerationFromTests::test_doc_generator_extracts_examples FAILED [ 79%]
-src/test_agent_tests.py::TestDocumentationGenerationFromTests::test_doc_generator_groups_by_module FAILED [ 79%]
 src/test_base_agent.py::test_improve_content_uses_run_subagent FAILED    [ 83%]
 src/test_base_agent.py::test_setup_logging_verbosity_levels SKIPPED      [ 84%]
 
@@ -280,18 +260,6 @@ src\test_agent_backend.py:1583: in test_create_test
     assert variant_b.weight == 0.3
 E   AssertionError: assert 0.30000000000000004 == 0.3
 E    +  where 0.30000000000000004 = ABTestVariant(name='B', backend='slow', weight=0.30000000000000004, metrics={}, sample_count=0).weight
-_______________________ test_validation_rule_dataclass ________________________
-src\test_agent_changes.py:638: in test_validation_rule_dataclass
-    assert rule.severity == "error"  # default
-    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AssertionError: assert 'warning' == 'error'
-E     
-E     - error
-E     + warning
-________________ test_diff_visualizer_render_html_side_by_side ________________
-src\test_agent_changes.py:902: in test_diff_visualizer_render_html_side_by_side
-    assert "side-by-side" in html
-E   assert 'side-by-side' in "<div class='diff - side - by - side'>Deletions: 1, Additions: 1</div>"
 _____________ test_changes_agent_non_keyword_sets_current_content _____________
 src\test_agent_changes_tests.py:75: in test_changes_agent_non_keyword_sets_current_content
     assert agent.improve_content("noop") == "UPDATED"
@@ -301,26 +269,6 @@ E     - UPDATED
 E     + IMPROVED
 ------------------------------ Captured log call ------------------------------
 WARNING  root:agent-changes.py:1200 Could not find associated code file for x.changes.md
-_____________________ test_performance_optimizer_analyze ______________________
-src\test_agent_coder.py:1001: in test_performance_optimizer_analyze
-    assert len(suggestions) >= 1
-E   assert 0 >= 1
-E    +  where 0 = len([])
-_________________________ test_security_scanner_scan __________________________
-src\test_agent_coder.py:1023: in test_security_scanner_scan
-    assert len(vulns) >= 1
-E   assert 0 >= 1
-E    +  where 0 = len([])
-_____________________ test_modernization_advisor_analyze ______________________
-src\test_agent_coder.py:1066: in test_modernization_advisor_analyze
-    assert len(suggestions) >= 1
-E   assert 0 >= 1
-E    +  where 0 = len([])
-___________ test_modernization_advisor_detects_collections_mapping ____________
-src\test_agent_coder.py:1075: in test_modernization_advisor_detects_collections_mapping
-    assert len(suggestions) >= 1
-E   assert 0 >= 1
-E    +  where 0 = len([])
 ______ TestAccessibilityAnalyzer.test_analyze_javascript_interactive_div ______
 src\test_agent_coder.py:1502: in test_analyze_javascript_interactive_div
     assert len(semantic_issues) > 0
@@ -359,7 +307,7 @@ src\test_agent_context.py:347: in test_is_valid
     assert agent.is_valid()
 E   assert False
 E    +  where False = is_valid()
-E    +    where is_valid = <_dv_legacy_agent_context.ContextAgent object at 0x000002515103A7B0>.is_valid
+E    +    where is_valid = <_dv_legacy_agent_context.ContextAgent object at 0x000001B52759A900>.is_valid
 _________________________ test_auto_categorize_config _________________________
 src\test_agent_context.py:520: in test_auto_categorize_config
     assert category == mod.FileCategory.CONFIGURATION
@@ -369,103 +317,62 @@ E    +    where <enum 'FileCategory'> = <module '_dv_legacy_agent_context' from 
 ______________________ test_semantic_search_engine_init _______________________
 src\test_agent_context.py:880: in test_semantic_search_engine_init
     assert engine.algorithm == mod.SearchAlgorithm.KEYWORD
-           ^^^^^^^^^^^^^^^^
-E   AttributeError: 'SemanticSearchEngine' object has no attribute 'algorithm'
-__________________ test_semantic_search_engine_set_algorithm __________________
-src\test_agent_context.py:888: in test_semantic_search_engine_set_algorithm
-    engine.set_algorithm(mod.SearchAlgorithm.FUZZY)
-    ^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'SemanticSearchEngine' object has no attribute 'set_algorithm'
-__________________ test_semantic_search_engine_add_document ___________________
-src\test_agent_context.py:897: in test_semantic_search_engine_add_document
-    engine.add_document("file.py", "def hello(): pass")
-    ^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'SemanticSearchEngine' object has no attribute 'add_document'
+E   AssertionError: assert 'cosine' == <SearchAlgorithm.KEYWORD: 'keyword'>
+E    +  where 'cosine' = <_dv_legacy_agent_context.SemanticSearchEngine object at 0x000001B527CAAA50>.algorithm
+E    +  and   <SearchAlgorithm.KEYWORD: 'keyword'> = <enum 'SearchAlgorithm'>.KEYWORD
+E    +    where <enum 'SearchAlgorithm'> = <module '_dv_legacy_agent_context' from 'C:\\Users\\kdejo\\DEV\\PyAgent\\src\\agent-context.py'>.SearchAlgorithm
 _____________________ test_semantic_search_engine_search ______________________
-src\test_agent_context.py:906: in test_semantic_search_engine_search
-    engine.add_document("file.py", "def hello world function")
-    ^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'SemanticSearchEngine' object has no attribute 'add_document'
+src\test_agent_context.py:908: in test_semantic_search_engine_search
+    assert len(results) > 0
+E   assert 0 > 0
+E    +  where 0 = len([])
 ______________________ test_semantic_search_engine_clear ______________________
-src\test_agent_context.py:916: in test_semantic_search_engine_clear
-    engine.add_document("file.py", "content")
-    ^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'SemanticSearchEngine' object has no attribute 'add_document'
-________________________ test_cross_repo_analyzer_init ________________________
-src\test_agent_context.py:929: in test_cross_repo_analyzer_init
-    assert analyzer.repos == {}
-           ^^^^^^^^^^^^^^
-E   AttributeError: 'CrossRepoAnalyzer' object has no attribute 'repos'
-______________________ test_cross_repo_analyzer_add_repo ______________________
-src\test_agent_context.py:937: in test_cross_repo_analyzer_add_repo
-    analyzer.add_repo("my-repo", "https://github.com / user / repo")
-    ^^^^^^^^^^^^^^^^^
-E   AttributeError: 'CrossRepoAnalyzer' object has no attribute 'add_repo'
+src\test_agent_context.py:917: in test_semantic_search_engine_clear
+    engine.clear()
+    ^^^^^^^^^^^^
+E   AttributeError: 'SemanticSearchEngine' object has no attribute 'clear'
 ______________________ test_cross_repo_analyzer_analyze _______________________
-src\test_agent_context.py:946: in test_cross_repo_analyzer_analyze
-    analyzer.add_repo("repo1", "https://github.com / user / repo1")
-    ^^^^^^^^^^^^^^^^^
-E   AttributeError: 'CrossRepoAnalyzer' object has no attribute 'add_repo'
-___________________ test_cross_repo_analyzer_find_patterns ____________________
-src\test_agent_context.py:956: in test_cross_repo_analyzer_find_patterns
-    patterns = analyzer.find_common_patterns()
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'CrossRepoAnalyzer' object has no attribute 'find_common_patterns'
+src\test_agent_context.py:947: in test_cross_repo_analyzer_analyze
+    results = analyzer.analyze("file.py")
+              ^^^^^^^^^^^^^^^^
+E   AttributeError: 'CrossRepoAnalyzer' object has no attribute 'analyze'
 ______________________ test_context_differ_compute_diff _______________________
-src\test_agent_context.py:976: in test_context_differ_compute_diff
-    diff = differ.compute_diff("# Old\nContent", "# New\nContent")
-           ^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'ContextDiffer' object has no attribute 'compute_diff'
+src\test_agent_context.py:977: in test_context_differ_compute_diff
+    assert isinstance(diff, mod.ContextDiff)
+E   AssertionError: assert False
+E    +  where False = isinstance(['Line 1: # New', 'Line 2: Content'], <class '_dv_legacy_agent_context.ContextDiff'>)
+E    +    where <class '_dv_legacy_agent_context.ContextDiff'> = <module '_dv_legacy_agent_context' from 'C:\\Users\\kdejo\\DEV\\PyAgent\\src\\agent-context.py'>.ContextDiff
 ______________________ test_context_differ_section_diff _______________________
 src\test_agent_context.py:985: in test_context_differ_section_diff
     sections = differ.get_section_changes(
-               ^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'ContextDiffer' object has no attribute 'get_section_changes'
+E   TypeError: ContextDiffer.get_section_changes() takes 2 positional arguments but 3 were given
 ________________________ test_context_differ_summarize ________________________
-src\test_agent_context.py:997: in test_context_differ_summarize
-    diff = differ.compute_diff("Old", "New")
-           ^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'ContextDiffer' object has no attribute 'compute_diff'
+src\test_agent_context.py:998: in test_context_differ_summarize
+    summary = differ.summarize_diff(diff)
+              ^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'ContextDiffer' object has no attribute 'summarize_diff'
 ________________________ test_context_inheritance_init ________________________
 src\test_agent_context.py:1010: in test_context_inheritance_init
     assert inheritance.mode == mod.InheritanceMode.MERGE
-           ^^^^^^^^^^^^^^^^
-E   AttributeError: 'ContextInheritance' object has no attribute 'mode'
-______________________ test_context_inheritance_set_mode ______________________
-src\test_agent_context.py:1018: in test_context_inheritance_set_mode
-    inheritance.set_mode(mod.InheritanceMode.OVERRIDE)
-    ^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'ContextInheritance' object has no attribute 'set_mode'
+E   AssertionError: assert 'merge' == <InheritanceMode.MERGE: 'merge'>
+E    +  where 'merge' = <_dv_legacy_agent_context.ContextInheritance object at 0x000001B523B31160>.mode
+E    +  and   <InheritanceMode.MERGE: 'merge'> = <enum 'InheritanceMode'>.MERGE
+E    +    where <enum 'InheritanceMode'> = <module '_dv_legacy_agent_context' from 'C:\\Users\\kdejo\\DEV\\PyAgent\\src\\agent-context.py'>.InheritanceMode
 _____________________ test_context_inheritance_set_parent _____________________
-src\test_agent_context.py:1027: in test_context_inheritance_set_parent
-    inheritance.set_parent("/path / to / parent.md")
-    ^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'ContextInheritance' object has no attribute 'set_parent'
+src\test_agent_context.py:1028: in test_context_inheritance_set_parent
+    assert inheritance.parent_path == "/path / to / parent.md"
+           ^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'ContextInheritance' object has no attribute 'parent_path'
 _______________________ test_context_inheritance_apply ________________________
 src\test_agent_context.py:1036: in test_context_inheritance_apply
     result = inheritance.apply("child content", "parent content")
-             ^^^^^^^^^^^^^^^^^
-E   AttributeError: 'ContextInheritance' object has no attribute 'apply'
-___________________ test_context_inheritance_get_hierarchy ____________________
-src\test_agent_context.py:1045: in test_context_inheritance_get_hierarchy
-    hierarchy = inheritance.get_hierarchy()
-                ^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'ContextInheritance' object has no attribute 'get_hierarchy'
-______________________ test_nl_query_engine_add_context _______________________
-src\test_agent_context.py:1065: in test_nl_query_engine_add_context
-    engine.add_context("file.md", "# Description\nThis is a test.")
-    ^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'NLQueryEngine' object has no attribute 'add_context'
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: ContextInheritance.apply() takes 1 positional argument but 3 were given
 _________________________ test_nl_query_engine_query __________________________
-src\test_agent_context.py:1074: in test_nl_query_engine_query
-    engine.add_context("file.md", "This module handles data processing.")
-    ^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'NLQueryEngine' object has no attribute 'add_context'
-____________________ test_nl_query_engine_extract_keywords ____________________
-src\test_agent_context.py:1084: in test_nl_query_engine_extract_keywords
-    keywords = engine.extract_keywords("How does the data processing work?")
-               ^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'NLQueryEngine' object has no attribute 'extract_keywords'
+src\test_agent_context.py:1075: in test_nl_query_engine_query
+    result = engine.query("What does this do?")
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: NLQueryEngine.query() missing 1 required positional argument: 'contexts'
 _________________________ test_context_exporter_init __________________________
 src\test_agent_context.py:1096: in test_context_exporter_init
     assert exporter.default_format == mod.ExportFormat.MARKDOWN
@@ -525,7 +432,7 @@ ______________________ test_refactoring_advisor_analyze _______________________
 src\test_agent_context.py:1243: in test_refactoring_advisor_analyze
     suggestions = advisor.analyze("## Purpose\nVery long repeated code...")
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-src\agent-context.py:968: in analyze
+src\agent-context.py:1031: in analyze
     for path, content in contexts.items():
                          ^^^^^^^^^^^^^^
 E   AttributeError: 'str' object has no attribute 'items'
@@ -538,7 +445,7 @@ _____________________ test_refactoring_advisor_prioritize _____________________
 src\test_agent_context.py:1261: in test_refactoring_advisor_prioritize
     suggestions = advisor.analyze("Long content")
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-src\agent-context.py:968: in analyze
+src\agent-context.py:1031: in analyze
     for path, content in contexts.items():
                          ^^^^^^^^^^^^^^
 E   AttributeError: 'str' object has no attribute 'items'
@@ -665,11 +572,11 @@ src\test_agent_improvements.py:104: in test_all_categories_exist
     assert len(categories) == 8
 E   AssertionError: assert 11 == 8
 E    +  where 11 = len([<ImprovementCategory.PERFORMANCE: 'performance'>, <ImprovementCategory.SECURITY: 'security'>, <ImprovementCategory.MAINTAINABILITY: 'maintainability'>, <ImprovementCategory.READABILITY: 'readability'>, <ImprovementCategory.TESTING: 'testing'>, <ImprovementCategory.DOCUMENTATION: 'documentation'>, ...])
-__________________ TestImprovementStatus.test_status_values ___________________
-src\test_agent_improvements.py:114: in test_status_values
-    assert improvements_module.ImprovementStatus.PROPOSED.value == "proposed"
-           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: type object 'ImprovementStatus' has no attribute 'PROPOSED'
+________________ TestImprovementStatus.test_all_statuses_exist ________________
+src\test_agent_improvements.py:121: in test_all_statuses_exist
+    assert len(statuses) == 6
+E   AssertionError: assert 7 == 6
+E    +  where 7 = len([<ImprovementStatus.PROPOSED: 'proposed'>, <ImprovementStatus.SUGGESTED: 'suggested'>, <ImprovementStatus.APPROVED: 'approved'>, <ImprovementStatus.IN_PROGRESS: 'in_progress'>, <ImprovementStatus.COMPLETED: 'completed'>, <ImprovementStatus.REJECTED: 'rejected'>, ...])
 ____________________ TestEffortEstimate.test_effort_values ____________________
 src\test_agent_improvements.py:132: in test_effort_values
     assert improvements_module.EffortEstimate.SMALL.value == 3
@@ -680,176 +587,150 @@ E    +      where <enum 'EffortEstimate'> = <module '_dv_legacy_agent_improvemen
 ______________ TestImprovementDataclass.test_create_improvement _______________
 src\test_agent_improvements.py:154: in test_create_improvement
     assert improvement.status == improvements_module.ImprovementStatus.PROPOSED
-                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: type object 'ImprovementStatus' has no attribute 'PROPOSED'
+E   AssertionError: assert <ImprovementStatus.SUGGESTED: 'suggested'> == <ImprovementStatus.PROPOSED: 'proposed'>
+E    +  where <ImprovementStatus.SUGGESTED: 'suggested'> = Improvement(id='imp123', title='Add caching', description='Add caching to improve performance', file_path='cache.py', priority=<ImprovementPriority.MEDIUM: 3>, category=<ImprovementCategory.OTHER: 'other'>, status=<ImprovementStatus.SUGGESTED: 'suggested'>, effort=<EffortEstimate.MEDIUM: 3>, impact_score=50.0, created_at='', updated_at='', assignee='', tags=[], dependencies=[], votes=0).status
+E    +  and   <ImprovementStatus.PROPOSED: 'proposed'> = <enum 'ImprovementStatus'>.PROPOSED
+E    +    where <enum 'ImprovementStatus'> = <module '_dv_legacy_agent_improvements' from 'C:\\Users\\kdejo\\DEV\\PyAgent\\src\\agent-improvements.py'>.ImprovementStatus
 __________ TestImprovementRetrieval.test_get_improvements_by_status ___________
-src\test_agent_improvements.py:222: in test_get_improvements_by_status
-    proposed = agent.get_improvements_by_status(improvements_module.ImprovementStatus.PROPOSED)
-                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: type object 'ImprovementStatus' has no attribute 'PROPOSED'
+src\test_agent_improvements.py:223: in test_get_improvements_by_status
+    assert len(proposed) == 2
+E   assert 0 == 2
+E    +  where 0 = len([])
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
-__________________ TestStatusUpdate.test_approve_improvement __________________
-src\test_agent_improvements.py:260: in test_approve_improvement
-    result = agent.approve_improvement(imp.id)
-             ^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'ImprovementsAgent' object has no attribute 'approve_improvement'. Did you mean: 'add_improvement'?
------------------------------ Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
-__________________ TestStatusUpdate.test_reject_improvement ___________________
-src\test_agent_improvements.py:267: in test_reject_improvement
-    result = agent.reject_improvement(imp.id, "Too complex")
-             ^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'ImprovementsAgent' object has no attribute 'reject_improvement'. Did you mean: 'get_improvements'?
------------------------------ Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _______________ TestEffortEstimation.test_estimate_total_effort _______________
 src\test_agent_improvements.py:313: in test_estimate_total_effort
     assert total == 8  # 3 + 5
     ^^^^^^^^^^^^^^^^^
 E   AssertionError: assert {'by_category': {'OTHER': 15}, 'estimated_days': 1.875, 'estimated_weeks': 0.375, 'total_hours': 15} == 8
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ________________ TestDependencies.test_get_ready_to_implement _________________
 src\test_agent_improvements.py:346: in test_get_ready_to_implement
     assert len(ready) == 1
 E   assert 0 == 1
 E    +  where 0 = len([])
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ___________________ TestTemplates.test_create_from_template ___________________
 src\test_agent_improvements.py:366: in test_create_from_template
     assert imp is not None
 E   assert None is not None
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ___________________ TestTemplates.test_add_custom_template ____________________
 src\test_agent_improvements.py:371: in test_add_custom_template
     template = improvements_module.ImprovementTemplate(
-E   TypeError: ImprovementTemplate.__init__() got an unexpected keyword argument 'id'
+E   TypeError: ImprovementTemplate.__init__() got an unexpected keyword argument 'description_pattern'. Did you mean 'description_template'?
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ________________________ TestAssignment.test_unassign _________________________
-src\test_agent_improvements.py:426: in test_unassign
-    result = agent.unassign(imp.id)
-             ^^^^^^^^^^^^^^
-E   AttributeError: 'ImprovementsAgent' object has no attribute 'unassign'. Did you mean: 'assign'?
+src\test_agent_improvements.py:428: in test_unassign
+    assert imp.assignee is None
+E   AssertionError: assert '' is None
+E    +  where '' = Improvement(id='bba93dd7', title='Unassign me', description='Description', file_path='C:\\Users\\kdejo\\AppData\\Local\\Temp\\pytest-of-keimpe\\pytest-347\\test_unassign0\\improvements.md', priority=<ImprovementPriority.MEDIUM: 3>, category=<ImprovementCategory.OTHER: 'other'>, status=<ImprovementStatus.IN_PROGRESS: 'in_progress'>, effort=<EffortEstimate.MEDIUM: 3>, impact_score=50.0, created_at='2025-12-17T20:34:49.525933', updated_at='2025-12-17T20:34:49.525956', assignee='', tags=[], dependencies=[], votes=0).assignee
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
-_____________________ TestAssignment.test_get_by_assignee _____________________
-src\test_agent_improvements.py:436: in test_get_by_assignee
-    dev1_tasks = agent.get_by_assignee("dev1")
-                 ^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'ImprovementsAgent' object has no attribute 'get_by_assignee'
------------------------------ Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _________________________ TestExport.test_export_csv __________________________
 src\test_agent_improvements.py:479: in test_export_csv
     assert "id,title" in exported
 E   AssertionError: assert 'id,title' in ''
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _______ TestImprovementImpactScoring.test_impact_scorer_initialization ________
-src\test_agent_improvements.py:1303: in test_impact_scorer_initialization
-    ImpactScorer = improvements_module.ImpactScorer
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'ImpactScorer'
+src\test_agent_improvements.py:1306: in test_impact_scorer_initialization
+    assert scorer.weights is not None
+           ^^^^^^^^^^^^^^
+E   AttributeError: 'ImpactScorer' object has no attribute 'weights'
 __________ TestImprovementImpactScoring.test_calculate_impact_score ___________
-src\test_agent_improvements.py:1310: in test_calculate_impact_score
-    ImpactScorer = improvements_module.ImpactScorer
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'ImpactScorer'
+src\test_agent_improvements.py:1315: in test_calculate_impact_score
+    score = scorer.calculate_score(imp)
+            ^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'ImpactScorer' object has no attribute 'calculate_score'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ______________ TestImprovementImpactScoring.test_impact_factors _______________
-src\test_agent_improvements.py:1320: in test_impact_factors
-    ImpactScorer = improvements_module.ImpactScorer
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'ImpactScorer'
+src\test_agent_improvements.py:1323: in test_impact_factors
+    scorer.set_weights({
+    ^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'ImpactScorer' object has no attribute 'set_weights'
 ______ TestImprovementDependencyResolution.test_dependency_resolver_init ______
-src\test_agent_improvements.py:1341: in test_dependency_resolver_init
-    DependencyResolver = improvements_module.DependencyResolver
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'DependencyResolver'
+src\test_agent_improvements.py:1344: in test_dependency_resolver_init
+    assert resolver.dependencies == {}
+           ^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'DependencyResolver' object has no attribute 'dependencies'
 ___________ TestImprovementDependencyResolution.test_add_dependency ___________
-src\test_agent_improvements.py:1348: in test_add_dependency
-    DependencyResolver = improvements_module.DependencyResolver
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'DependencyResolver'
+src\test_agent_improvements.py:1356: in test_add_dependency
+    deps = resolver.get_dependencies(imp2.id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'DependencyResolver' object has no attribute 'get_dependencies'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ___________ TestImprovementDependencyResolution.test_resolve_order ____________
-src\test_agent_improvements.py:1361: in test_resolve_order
-    DependencyResolver = improvements_module.DependencyResolver
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'DependencyResolver'
+src\test_agent_improvements.py:1371: in test_resolve_order
+    order = resolver.resolve_order([imp1.id, imp2.id, imp3.id])
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: DependencyResolver.resolve_order() takes 1 positional argument but 2 were given
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 __________ TestEffortEstimationAlgorithms.test_effort_estimator_init __________
-src\test_agent_improvements.py:1382: in test_effort_estimator_init
-    EffortEstimator = improvements_module.EffortEstimator
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'EffortEstimator'. Did you mean: 'EffortEstimate'?
+src\test_agent_improvements.py:1385: in test_effort_estimator_init
+    assert estimator.base_rates is not None
+           ^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'EffortEstimator' object has no attribute 'base_rates'
 __________ TestEffortEstimationAlgorithms.test_estimate_simple_task ___________
-src\test_agent_improvements.py:1389: in test_estimate_simple_task
-    EffortEstimator = improvements_module.EffortEstimator
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'EffortEstimator'. Did you mean: 'EffortEstimate'?
+src\test_agent_improvements.py:1394: in test_estimate_simple_task
+    estimate = estimator.estimate(imp, complexity="low")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: EffortEstimator.estimate() got an unexpected keyword argument 'complexity'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ______ TestEffortEstimationAlgorithms.test_estimate_with_historical_data ______
-src\test_agent_improvements.py:1400: in test_estimate_with_historical_data
-    EffortEstimator = improvements_module.EffortEstimator
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'EffortEstimator'. Did you mean: 'EffortEstimate'?
+src\test_agent_improvements.py:1403: in test_estimate_with_historical_data
+    estimator.add_historical_data("bug_fix", actual_hours=4)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'EffortEstimator' object has no attribute 'add_historical_data'. Did you mean: 'historical_data'?
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _________ TestImprovementTemplateInstantiation.test_template_creation _________
 src\test_agent_improvements.py:1420: in test_template_creation
     template = ImprovementTemplate(
-E   TypeError: ImprovementTemplate.__init__() missing 1 required positional argument: 'category'
+E   TypeError: ImprovementTemplate.__init__() missing 2 required positional arguments: 'id' and 'category'
 ______ TestImprovementTemplateInstantiation.test_template_instantiation _______
 src\test_agent_improvements.py:1432: in test_template_instantiation
     template = ImprovementTemplate(
-E   TypeError: ImprovementTemplate.__init__() missing 1 required positional argument: 'category'
+E   TypeError: ImprovementTemplate.__init__() missing 2 required positional arguments: 'id' and 'category'
 ___________ TestStatusWorkflowTransitions.test_workflow_engine_init ___________
-src\test_agent_improvements.py:1451: in test_workflow_engine_init
-    WorkflowEngine = improvements_module.WorkflowEngine
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'WorkflowEngine'
+src\test_agent_improvements.py:1454: in test_workflow_engine_init
+    assert len(engine.states) > 0
+               ^^^^^^^^^^^^^
+E   AttributeError: 'WorkflowEngine' object has no attribute 'states'
 _____________ TestStatusWorkflowTransitions.test_valid_transition _____________
-src\test_agent_improvements.py:1458: in test_valid_transition
-    WorkflowEngine = improvements_module.WorkflowEngine
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'WorkflowEngine'
+src\test_agent_improvements.py:1463: in test_valid_transition
+    result = engine.transition(imp, from_status="pending", to_status="in_progress")
+             ^^^^^^^^^^^^^^^^^
+E   AttributeError: 'WorkflowEngine' object has no attribute 'transition'. Did you mean: 'transitions'?
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ________ TestStatusWorkflowTransitions.test_invalid_transition_blocked ________
-src\test_agent_improvements.py:1469: in test_invalid_transition_blocked
-    WorkflowEngine = improvements_module.WorkflowEngine
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'WorkflowEngine'
+src\test_agent_improvements.py:1475: in test_invalid_transition_blocked
+    result = engine.transition(imp, from_status="pending", to_status="completed")
+             ^^^^^^^^^^^^^^^^^
+E   AttributeError: 'WorkflowEngine' object has no attribute 'transition'. Did you mean: 'transitions'?
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
-_____________ TestVotingAndPrioritization.test_voting_system_init _____________
-src\test_agent_improvements.py:1484: in test_voting_system_init
-    VotingSystem = improvements_module.VotingSystem
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'VotingSystem'
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _________________ TestVotingAndPrioritization.test_cast_vote __________________
-src\test_agent_improvements.py:1491: in test_cast_vote
-    VotingSystem = improvements_module.VotingSystem
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'VotingSystem'
+src\test_agent_improvements.py:1496: in test_cast_vote
+    voting.cast_vote(imp.id, voter_id="user1", vote_value=1)
+E   TypeError: VotingSystem.cast_vote() got an unexpected keyword argument 'voter_id'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 __________ TestVotingAndPrioritization.test_prioritization_by_votes ___________
-src\test_agent_improvements.py:1503: in test_prioritization_by_votes
-    VotingSystem = improvements_module.VotingSystem
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'VotingSystem'
+src\test_agent_improvements.py:1509: in test_prioritization_by_votes
+    voting.cast_vote(imp1.id, "user1", 1)
+E   TypeError: VotingSystem.cast_vote() takes 3 positional arguments but 4 were given
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ___________ TestSchedulingAndResourceAllocation.test_scheduler_init ___________
 src\test_agent_improvements.py:1526: in test_scheduler_init
     assert scheduler.schedule == []
@@ -862,19 +743,19 @@ ________ TestSchedulingAndResourceAllocation.test_schedule_improvement ________
 src\test_agent_improvements.py:1537: in test_schedule_improvement
     scheduled = scheduler.schedule_improvement(imp.id, start_date=start_date)
                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-src\agent-improvements.py:412: in schedule_improvement
+src\agent-improvements.py:419: in schedule_improvement
     days = effort_days.get(improvement.effort, 5)
                            ^^^^^^^^^^^^^^^^^^
 E   AttributeError: 'str' object has no attribute 'effort'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ________ TestSchedulingAndResourceAllocation.test_resource_allocation _________
 src\test_agent_improvements.py:1548: in test_resource_allocation
     scheduler.allocate_resources(imp.id, resources=["dev1", "dev2"])
     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: 'ImprovementScheduler' object has no attribute 'allocate_resources'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 __________ TestDashboardRenderingAndUpdates.test_dashboard_creation ___________
 src\test_agent_improvements.py:1559: in test_dashboard_creation
     ImprovementDashboard = improvements_module.ImprovementDashboard
@@ -886,27 +767,27 @@ src\test_agent_improvements.py:1566: in test_dashboard_render
                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'ImprovementDashboard'. Did you mean: 'ImprovementCategory'?
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ______ TestDashboardRenderingAndUpdates.test_dashboard_update_on_change _______
 src\test_agent_improvements.py:1578: in test_dashboard_update_on_change
     ImprovementDashboard = improvements_module.ImprovementDashboard
                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'ImprovementDashboard'. Did you mean: 'ImprovementCategory'?
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ________ TestAutomatedValidationIntegration.test_validate_improvement _________
 src\test_agent_improvements.py:1609: in test_validate_improvement
     assert result.is_valid
 E   AssertionError: assert False
-E    +  where False = ValidationResult(improvement_id='aabdca28', is_valid=False, issues=[(<ValidationSeverity.ERROR: 'error'>, 'Category should be more specific')], test_results={}).is_valid
+E    +  where False = ValidationResult(improvement_id='bcafac4c', is_valid=False, issues=[(<ValidationSeverity.ERROR: 'error'>, 'Category should be more specific')], test_results={}).is_valid
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _________ TestAutomatedValidationIntegration.test_validation_failure __________
 src\test_agent_improvements.py:1616: in test_validation_failure
     validator.add_rule("min_description_length", min_length=50)
 E   TypeError: ImprovementValidator.add_rule() got an unexpected keyword argument 'min_length'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _______________ TestRollbackTracking.test_rollback_manager_init _______________
 src\test_agent_improvements.py:1630: in test_rollback_manager_init
     RollbackManager = improvements_module.RollbackManager
@@ -918,14 +799,14 @@ src\test_agent_improvements.py:1637: in test_create_rollback_point
                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'RollbackManager'. Did you mean: 'RollbackTracker'?
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _________________ TestRollbackTracking.test_rollback_to_point _________________
 src\test_agent_improvements.py:1648: in test_rollback_to_point
     RollbackManager = improvements_module.RollbackManager
                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'RollbackManager'. Did you mean: 'RollbackTracker'?
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _____________ TestCodeAnalysisToolSuggestions.test_analyzer_init ______________
 src\test_agent_improvements.py:1665: in test_analyzer_init
     CodeAnalyzer = improvements_module.CodeAnalyzer
@@ -937,7 +818,7 @@ src\test_agent_improvements.py:1672: in test_suggest_tools_for_improvement
                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'CodeAnalyzer'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _________ TestDocumentationGenerationQuality.test_doc_generator_init __________
 src\test_agent_improvements.py:1688: in test_doc_generator_init
     DocGenerator = improvements_module.DocGenerator
@@ -949,14 +830,14 @@ src\test_agent_improvements.py:1695: in test_generate_improvement_docs
                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'DocGenerator'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ________ TestDocumentationGenerationQuality.test_docs_include_metadata ________
 src\test_agent_improvements.py:1705: in test_docs_include_metadata
     DocGenerator = improvements_module.DocGenerator
                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'DocGenerator'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _______ TestAssignmentAndOwnershipTracking.test_assignment_manager_init _______
 src\test_agent_improvements.py:1720: in test_assignment_manager_init
     AssignmentManager = improvements_module.AssignmentManager
@@ -968,14 +849,14 @@ src\test_agent_improvements.py:1727: in test_assign_improvement
                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'AssignmentManager'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 __________ TestAssignmentAndOwnershipTracking.test_ownership_history __________
 src\test_agent_improvements.py:1738: in test_ownership_history
     AssignmentManager = improvements_module.AssignmentManager
                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'AssignmentManager'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _____________ TestSLAEnforcementAndAlerting.test_sla_manager_init _____________
 src\test_agent_improvements.py:1759: in test_sla_manager_init
     assert manager.sla_policies is not None
@@ -992,7 +873,7 @@ src\test_agent_improvements.py:1777: in test_sla_violation_alert
     ^^^^^^^^^^^^^^^^^^
 E   AttributeError: 'SLAManager' object has no attribute 'set_policy'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ________ TestAnalyticsAndTrendCalculations.test_analytics_engine_init _________
 src\test_agent_improvements.py:1791: in test_analytics_engine_init
     AnalyticsEngine = improvements_module.AnalyticsEngine
@@ -1004,14 +885,14 @@ src\test_agent_improvements.py:1798: in test_calculate_completion_trend
                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'AnalyticsEngine'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _________ TestAnalyticsAndTrendCalculations.test_velocity_calculation _________
 src\test_agent_improvements.py:1813: in test_velocity_calculation
     AnalyticsEngine = improvements_module.AnalyticsEngine
                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'AnalyticsEngine'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ____________ TestImprovementBulkOperations.test_bulk_manager_init _____________
 src\test_agent_improvements.py:1832: in test_bulk_manager_init
     BulkManager = improvements_module.BulkManager
@@ -1023,14 +904,14 @@ src\test_agent_improvements.py:1839: in test_bulk_status_update
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'BulkManager'. Did you mean: 'SLAManager'?
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _______________ TestImprovementBulkOperations.test_bulk_assign ________________
 src\test_agent_improvements.py:1852: in test_bulk_assign
     BulkManager = improvements_module.BulkManager
                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'BulkManager'. Did you mean: 'SLAManager'?
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ______________ TestImprovementArchival.test_archive_manager_init ______________
 src\test_agent_improvements.py:1869: in test_archive_manager_init
     ArchiveManager = improvements_module.ArchiveManager
@@ -1042,14 +923,14 @@ src\test_agent_improvements.py:1876: in test_archive_improvement
                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'ArchiveManager'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 ______________ TestImprovementArchival.test_restore_from_archive ______________
 src\test_agent_improvements.py:1888: in test_restore_from_archive
     ArchiveManager = improvements_module.ArchiveManager
                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'ArchiveManager'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _______________ TestImprovementExportFormats.test_exporter_init _______________
 src\test_agent_improvements.py:1905: in test_exporter_init
     ImprovementExporter = improvements_module.ImprovementExporter
@@ -1061,14 +942,14 @@ src\test_agent_improvements.py:1912: in test_export_to_json
                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'ImprovementExporter'. Did you mean: 'ImprovementTemplate'?
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _______________ TestImprovementExportFormats.test_export_to_csv _______________
 src\test_agent_improvements.py:1925: in test_export_to_csv
     ImprovementExporter = improvements_module.ImprovementExporter
                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'ImprovementExporter'. Did you mean: 'ImprovementTemplate'?
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _________ TestImprovementNotifications.test_notification_manager_init _________
 src\test_agent_improvements.py:1941: in test_notification_manager_init
     NotificationManager = improvements_module.NotificationManager
@@ -1080,14 +961,14 @@ src\test_agent_improvements.py:1948: in test_subscribe_to_improvement
                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'NotificationManager'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _______ TestImprovementNotifications.test_notification_on_status_change _______
 src\test_agent_improvements.py:1960: in test_notification_on_status_change
     NotificationManager = improvements_module.NotificationManager
                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'NotificationManager'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 __________ TestImprovementAccessControl.test_access_controller_init ___________
 src\test_agent_improvements.py:1979: in test_access_controller_init
     AccessController = improvements_module.AccessController
@@ -1099,21 +980,21 @@ src\test_agent_improvements.py:1986: in test_grant_access
                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'AccessController'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _________ TestImprovementAccessControl.test_deny_unauthorized_access __________
 src\test_agent_improvements.py:1997: in test_deny_unauthorized_access
     AccessController = improvements_module.AccessController
                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'AccessController'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _____________ TestImprovementAccessControl.test_role_based_access _____________
 src\test_agent_improvements.py:2008: in test_role_based_access
     AccessController = improvements_module.AccessController
                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_improvements' has no attribute 'AccessController'
 ----------------------------- Captured log setup ------------------------------
-WARNING  root:agent-improvements.py:1505 File improvements.md does not end with .improvements.md
+WARNING  root:agent-improvements.py:1512 File improvements.md does not end with .improvements.md
 _________ TestImprovementParsing.test_parse_improvement_with_context __________
 src\test_agent_improvements.py:2145: in test_parse_improvement_with_context
     assert improvement_with_context["before"] != improvement_with_context["after"]
@@ -1123,7 +1004,7 @@ src\test_agent_improvements.py:3234: in test_agent_processor_responsibilities
     assert not processor.should_process_file('__pycache__ / test.py')
 E   AssertionError: assert not True
 E    +  where True = should_process_file('__pycache__ / test.py')
-E    +    where should_process_file = <test_agent_improvements.TestRefactoringStrategy.test_agent_processor_responsibilities.<locals>.AgentProcessor object at 0x00000251443C38C0>.should_process_file
+E    +    where should_process_file = <test_agent_improvements.TestRefactoringStrategy.test_agent_processor_responsibilities.<locals>.AgentProcessor object at 0x000001B51B395010>.should_process_file
 ___________________ TestCustomMetrics.test_add_metric_value ___________________
 src\test_agent_stats.py:131: in test_add_metric_value
     assert history[-1][1] == 3  # (timestamp, value)
@@ -1142,7 +1023,7 @@ _____________ TestRetentionPolicies.test_apply_retention_policies _____________
 src\test_agent_stats.py:267: in test_apply_retention_policies
     assert len(history) <= 5
 E   AssertionError: assert 10 <= 5
-E    +  where 10 = len([Metric(name='expire_test', value=0, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T19:28:18.951377', namespace='default', tags={}), Metric(name='expire_test', value=1, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T19:28:18.951386', namespace='default', tags={}), Metric(name='expire_test', value=2, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T19:28:18.951392', namespace='default', tags={}), Metric(name='expire_test', value=3, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T19:28:18.951396', namespace='default', tags={}), Metric(name='expire_test', value=4, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T19:28:18.951399', namespace='default', tags={}), Metric(name='expire_test', value=5, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T19:28:18.951402', namespace='default', tags={}), ...])
+E    +  where 10 = len([Metric(name='expire_test', value=0, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T20:34:57.856964', namespace='default', tags={}), Metric(name='expire_test', value=1, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T20:34:57.856973', namespace='default', tags={}), Metric(name='expire_test', value=2, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T20:34:57.856979', namespace='default', tags={}), Metric(name='expire_test', value=3, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T20:34:57.856982', namespace='default', tags={}), Metric(name='expire_test', value=4, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T20:34:57.856986', namespace='default', tags={}), Metric(name='expire_test', value=5, metric_type=<MetricType.GAUGE: 'gauge'>, timestamp='2025-12-17T20:34:57.856989', namespace='default', tags={}), ...])
 ___________________ TestCompression.test_decompress_metrics ___________________
 src\test_agent_stats.py:312: in test_decompress_metrics
     decompressed = agent.decompress_metrics(compressed)
@@ -1171,20 +1052,18 @@ C:\Python314\Lib\importlib\__init__.py:88: in import_module
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   ModuleNotFoundError: No module named 'matplotlib'
 ________ TestRealTimeStatsStreaming.test_stream_manager_creates_stream ________
-src\test_agent_stats.py:1025: in test_stream_manager_creates_stream
-    StatsStreamManager = stats_module.StatsStreamManager
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsStreamManager'. Did you mean: 'StatsStreamer'?
+src\test_agent_stats.py:1028: in test_stream_manager_creates_stream
+    stream = manager.create_stream("cpu_metrics", buffer_size=100)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: StatsStreamManager.create_stream() got an unexpected keyword argument 'buffer_size'
 ____________ TestRealTimeStatsStreaming.test_stream_receives_data _____________
-src\test_agent_stats.py:1035: in test_stream_receives_data
-    StatsStreamManager = stats_module.StatsStreamManager
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsStreamManager'. Did you mean: 'StatsStreamer'?
+src\test_agent_stats.py:1040: in test_stream_receives_data
+    manager.publish("test_stream", {"value": 42})
+E   TypeError: StatsStreamManager.publish() takes 2 positional arguments but 3 were given
 _____ TestRealTimeStatsStreaming.test_stream_subscriber_receives_updates ______
-src\test_agent_stats.py:1048: in test_stream_subscriber_receives_updates
-    StatsStreamManager = stats_module.StatsStreamManager
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsStreamManager'. Did you mean: 'StatsStreamer'?
+src\test_agent_stats.py:1054: in test_stream_subscriber_receives_updates
+    manager.subscribe("events", lambda d: received.append(d))
+E   TypeError: StatsStreamManager.subscribe() takes 2 positional arguments but 3 were given
 ________ TestStatsFederationAcrossSources.test_federation_adds_sources ________
 src\test_agent_stats.py:1068: in test_federation_adds_sources
     federation.add_source("source1", endpoint="http://localhost:8001")
@@ -1202,185 +1081,183 @@ src\test_agent_stats.py:1104: in test_retention_policy_creation
     policy = RetentionPolicy(
 E   TypeError: RetentionPolicy.__init__() got an unexpected keyword argument 'name'
 _ TestStatsRetentionPolicyEnforcement.test_retention_enforcer_removes_old_data _
-src\test_agent_stats.py:1114: in test_retention_enforcer_removes_old_data
-    RetentionEnforcer = stats_module.RetentionEnforcer
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'RetentionEnforcer'
-_____________ TestStatsNamespaceIsolation.test_namespace_creation _____________
-src\test_agent_stats.py:1134: in test_namespace_creation
-    StatsNamespace = stats_module.StatsNamespace
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsNamespace'. Did you mean: 'MetricNamespace'?
+src\test_agent_stats.py:1118: in test_retention_enforcer_removes_old_data
+    policy = RetentionPolicy("test", retention_days=1)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: RetentionPolicy.__init__() got an unexpected keyword argument 'retention_days'
 __________ TestStatsNamespaceIsolation.test_namespace_metric_scoping __________
-src\test_agent_stats.py:1141: in test_namespace_metric_scoping
-    StatsNamespace = stats_module.StatsNamespace
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsNamespace'. Did you mean: 'MetricNamespace'?
+src\test_agent_stats.py:1146: in test_namespace_metric_scoping
+    prod.set_metric("cpu", 80)
+    ^^^^^^^^^^^^^^^
+E   AttributeError: 'StatsNamespace' object has no attribute 'set_metric'. Did you mean: 'get_metrics'?
 ____________ TestStatsNamespaceIsolation.test_namespace_isolation _____________
-src\test_agent_stats.py:1154: in test_namespace_isolation
-    StatsNamespaceManager = stats_module.StatsNamespaceManager
-                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsNamespaceManager'. Did you mean: 'MetricNamespaceManager'?
+src\test_agent_stats.py:1157: in test_namespace_isolation
+    ns1 = manager.create("ns1")
+          ^^^^^^^^^^^^^^
+E   AttributeError: 'StatsNamespaceManager' object has no attribute 'create'
 ______ TestStatsMetricFormulaCalculation.test_formula_simple_calculation ______
-src\test_agent_stats.py:1170: in test_formula_simple_calculation
-    FormulaEngine = stats_module.FormulaEngine
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'FormulaEngine'
+src\test_agent_stats.py:1173: in test_formula_simple_calculation
+    engine.define("usage_percent", "{used} / {total} * 100")
+    ^^^^^^^^^^^^^
+E   AttributeError: 'FormulaEngine' object has no attribute 'define'
 _______ TestStatsMetricFormulaCalculation.test_formula_with_aggregation _______
-src\test_agent_stats.py:1180: in test_formula_with_aggregation
-    FormulaEngine = stats_module.FormulaEngine
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'FormulaEngine'
+src\test_agent_stats.py:1183: in test_formula_with_aggregation
+    engine.define("avg_latency", "AVG({latencies})")
+    ^^^^^^^^^^^^^
+E   AttributeError: 'FormulaEngine' object has no attribute 'define'
 __________ TestStatsMetricFormulaCalculation.test_formula_validation __________
-src\test_agent_stats.py:1190: in test_formula_validation
-    FormulaEngine = stats_module.FormulaEngine
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'FormulaEngine'
+src\test_agent_stats.py:1194: in test_formula_validation
+    valid = engine.validate("{a} + {b}")
+            ^^^^^^^^^^^^^^^
+E   AttributeError: 'FormulaEngine' object has no attribute 'validate'
 _______________ TestStatsABComparison.test_ab_comparison_basic ________________
-src\test_agent_stats.py:1206: in test_ab_comparison_basic
-    ABComparator = stats_module.ABComparator
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'ABComparator'. Did you mean: 'ABComparison'?
+src\test_agent_stats.py:1213: in test_ab_comparison_basic
+    result = comparator.compare(group_a, group_b)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\agent-stats.py:2256: in compare
+    mean_a = sum(a_data) / len(a_data)
+             ^^^^^^^^^^^
+E   TypeError: unsupported operand type(s) for +: 'int' and 'str'
 ___________ TestStatsABComparison.test_ab_statistical_significance ____________
-src\test_agent_stats.py:1220: in test_ab_statistical_significance
-    ABComparator = stats_module.ABComparator
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'ABComparator'. Did you mean: 'ABComparison'?
+src\test_agent_stats.py:1225: in test_ab_statistical_significance
+    result = comparator.calculate_significance(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'ABComparator' object has no attribute 'calculate_significance'
 _________ TestStatsForecastingAccuracy.test_forecaster_predicts_trend _________
-src\test_agent_stats.py:1238: in test_forecaster_predicts_trend
-    StatsForecaster = stats_module.StatsForecaster
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsForecaster'. Did you mean: 'StatsStreamer'?
+src\test_agent_stats.py:1244: in test_forecaster_predicts_trend
+    forecast = forecaster.predict(historical, periods=3)
+               ^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'StatsForecaster' object has no attribute 'predict'
 _____ TestStatsForecastingAccuracy.test_forecaster_calculates_confidence ______
-src\test_agent_stats.py:1252: in test_forecaster_calculates_confidence
-    StatsForecaster = stats_module.StatsForecaster
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsForecaster'. Did you mean: 'StatsStreamer'?
+src\test_agent_stats.py:1257: in test_forecaster_calculates_confidence
+    result = forecaster.predict_with_confidence(historical, periods=2)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'StatsForecaster' object has no attribute 'predict_with_confidence'
 _________ TestStatsSnapshotCreationAndRestore.test_snapshot_creation __________
-src\test_agent_stats.py:1269: in test_snapshot_creation
-    StatsSnapshotManager = stats_module.StatsSnapshotManager
-                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsSnapshotManager'
+src\test_agent_stats.py:1271: in test_snapshot_creation
+    manager = StatsSnapshotManager(snapshot_dir=tmp_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: StatsSnapshotManager.__init__() got an unexpected keyword argument 'snapshot_dir'
 __________ TestStatsSnapshotCreationAndRestore.test_snapshot_restore __________
-src\test_agent_stats.py:1281: in test_snapshot_restore
-    StatsSnapshotManager = stats_module.StatsSnapshotManager
-                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsSnapshotManager'
+src\test_agent_stats.py:1283: in test_snapshot_restore
+    manager = StatsSnapshotManager(snapshot_dir=tmp_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: StatsSnapshotManager.__init__() got an unexpected keyword argument 'snapshot_dir'
 ___________ TestStatsSnapshotCreationAndRestore.test_snapshot_list ____________
-src\test_agent_stats.py:1293: in test_snapshot_list
-    StatsSnapshotManager = stats_module.StatsSnapshotManager
-                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsSnapshotManager'
+src\test_agent_stats.py:1295: in test_snapshot_list
+    manager = StatsSnapshotManager(snapshot_dir=tmp_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: StatsSnapshotManager.__init__() got an unexpected keyword argument 'snapshot_dir'
 __________ TestStatsThresholdAlerting.test_threshold_alert_triggers ___________
-src\test_agent_stats.py:1308: in test_threshold_alert_triggers
-    ThresholdAlertManager = stats_module.ThresholdAlertManager
-                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'ThresholdAlertManager'
+src\test_agent_stats.py:1311: in test_threshold_alert_triggers
+    manager.set_threshold("cpu_usage", warning=70, critical=90)
+E   TypeError: ThresholdAlertManager.set_threshold() got an unexpected keyword argument 'warning'
 _____ TestStatsThresholdAlerting.test_threshold_no_alert_below_threshold ______
-src\test_agent_stats.py:1320: in test_threshold_no_alert_below_threshold
-    ThresholdAlertManager = stats_module.ThresholdAlertManager
-                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'ThresholdAlertManager'
+src\test_agent_stats.py:1323: in test_threshold_no_alert_below_threshold
+    manager.set_threshold("memory", warning=80, critical=95)
+E   TypeError: ThresholdAlertManager.set_threshold() got an unexpected keyword argument 'warning'
 _______ TestStatsSubscriptionAndNotification.test_subscription_creation _______
-src\test_agent_stats.py:1334: in test_subscription_creation
-    StatsSubscriptionManager = stats_module.StatsSubscriptionManager
-                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsSubscriptionManager'. Did you mean: 'SubscriptionManager'?
+src\test_agent_stats.py:1337: in test_subscription_creation
+    sub = manager.subscribe(
+E   TypeError: StatsSubscriptionManager.subscribe() got an unexpected keyword argument 'subscriber_id'
 _______ TestStatsSubscriptionAndNotification.test_notification_delivery _______
-src\test_agent_stats.py:1347: in test_notification_delivery
-    StatsSubscriptionManager = stats_module.StatsSubscriptionManager
-                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsSubscriptionManager'. Did you mean: 'SubscriptionManager'?
+src\test_agent_stats.py:1350: in test_notification_delivery
+    manager.subscribe("user1", "alerts.*", "webhook")
+E   TypeError: StatsSubscriptionManager.subscribe() takes 3 positional arguments but 4 were given
 _________ TestStatsExportToMonitoringPlatforms.test_prometheus_export _________
-src\test_agent_stats.py:1364: in test_prometheus_export
-    StatsExporter = stats_module.StatsExporter
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsExporter'
+src\test_agent_stats.py:1366: in test_prometheus_export
+    exporter = StatsExporter(format="prometheus")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: StatsExporter.__init__() got an unexpected keyword argument 'format'
 ____________ TestStatsExportToMonitoringPlatforms.test_json_export ____________
-src\test_agent_stats.py:1376: in test_json_export
-    StatsExporter = stats_module.StatsExporter
-                    ^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsExporter'
+src\test_agent_stats.py:1378: in test_json_export
+    exporter = StatsExporter(format="json")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: StatsExporter.__init__() got an unexpected keyword argument 'format'
 ___________ TestStatsAnnotationPersistence.test_annotation_creation ___________
-src\test_agent_stats.py:1392: in test_annotation_creation
-    StatsAnnotationManager = stats_module.StatsAnnotationManager
-                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsAnnotationManager'. Did you mean: 'AnnotationManager'?
+src\test_agent_stats.py:1395: in test_annotation_creation
+    annotation = manager.add_annotation(
+E   TypeError: StatsAnnotationManager.add_annotation() got an unexpected keyword argument 'timestamp'
 __________ TestStatsAnnotationPersistence.test_annotation_retrieval ___________
-src\test_agent_stats.py:1406: in test_annotation_retrieval
-    StatsAnnotationManager = stats_module.StatsAnnotationManager
-                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsAnnotationManager'. Did you mean: 'AnnotationManager'?
+src\test_agent_stats.py:1409: in test_annotation_retrieval
+    manager.add_annotation("cpu", timestamp=100, text="Event 1")
+E   TypeError: StatsAnnotationManager.add_annotation() got an unexpected keyword argument 'timestamp'
 ___________ TestStatsChangeNotificationSystem.test_change_detection ___________
-src\test_agent_stats.py:1421: in test_change_detection
-    StatsChangeDetector = stats_module.StatsChangeDetector
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsChangeDetector'
+src\test_agent_stats.py:1423: in test_change_detection
+    detector = StatsChangeDetector(threshold_percent=10)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: StatsChangeDetector.__init__() got an unexpected keyword argument 'threshold_percent'
 _________ TestStatsChangeNotificationSystem.test_change_notification __________
-src\test_agent_stats.py:1433: in test_change_notification
-    StatsChangeDetector = stats_module.StatsChangeDetector
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsChangeDetector'
+src\test_agent_stats.py:1435: in test_change_notification
+    detector = StatsChangeDetector(threshold_percent=20)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: StatsChangeDetector.__init__() got an unexpected keyword argument 'threshold_percent'
 ________ TestStatsCompressionAlgorithms.test_compression_reduces_size _________
-src\test_agent_stats.py:1451: in test_compression_reduces_size
-    StatsCompressor = stats_module.StatsCompressor
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsCompressor'
+src\test_agent_stats.py:1457: in test_compression_reduces_size
+    compressed = compressor.compress(data)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+src\agent-stats.py:2475: in compress
+    return zlib.compress(data)
+           ^^^^^^^^^^^^^^^^^^^
+E   TypeError: a bytes-like object is required, not 'list'
 ___ TestStatsCompressionAlgorithms.test_compression_decompression_roundtrip ___
-src\test_agent_stats.py:1463: in test_compression_decompression_roundtrip
-    StatsCompressor = stats_module.StatsCompressor
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsCompressor'
+src\test_agent_stats.py:1468: in test_compression_decompression_roundtrip
+    compressed = compressor.compress(original)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+src\agent-stats.py:2475: in compress
+    return zlib.compress(data)
+           ^^^^^^^^^^^^^^^^^^^
+E   TypeError: a bytes-like object is required, not 'list'
 _______________ TestStatsRollupCalculations.test_hourly_rollup ________________
-src\test_agent_stats.py:1479: in test_hourly_rollup
-    StatsRollupCalculator = stats_module.StatsRollupCalculator
-                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsRollupCalculator'
+src\test_agent_stats.py:1485: in test_hourly_rollup
+    calculator.add_point("cpu", timestamp=i * 60, value=50 + i % 10)
+    ^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'StatsRollupCalculator' object has no attribute 'add_point'
 ________________ TestStatsRollupCalculations.test_daily_rollup ________________
-src\test_agent_stats.py:1492: in test_daily_rollup
-    StatsRollupCalculator = stats_module.StatsRollupCalculator
-                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsRollupCalculator'
+src\test_agent_stats.py:1498: in test_daily_rollup
+    calculator.add_point("memory", timestamp=i * 3600, value=60)
+    ^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'StatsRollupCalculator' object has no attribute 'add_point'
 ____________ TestStatsQueryPerformance.test_query_with_time_range _____________
-src\test_agent_stats.py:1509: in test_query_with_time_range
-    StatsQueryEngine = stats_module.StatsQueryEngine
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsQueryEngine'
+src\test_agent_stats.py:1515: in test_query_with_time_range
+    engine.insert("metric1", timestamp=i * 1000, value=i)
+    ^^^^^^^^^^^^^
+E   AttributeError: 'StatsQueryEngine' object has no attribute 'insert'
 ____________ TestStatsQueryPerformance.test_query_with_aggregation ____________
-src\test_agent_stats.py:1523: in test_query_with_aggregation
-    StatsQueryEngine = stats_module.StatsQueryEngine
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsQueryEngine'
+src\test_agent_stats.py:1527: in test_query_with_aggregation
+    engine.insert("metric1", timestamp=1000, value=10)
+    ^^^^^^^^^^^^^
+E   AttributeError: 'StatsQueryEngine' object has no attribute 'insert'
 ______________ TestStatsAccessControl.test_access_control_grant _______________
-src\test_agent_stats.py:1540: in test_access_control_grant
-    StatsAccessController = stats_module.StatsAccessController
-                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsAccessController'
+src\test_agent_stats.py:1543: in test_access_control_grant
+    controller.grant("user1", "metrics.*", level="read")
+    ^^^^^^^^^^^^^^^^
+E   AttributeError: 'StatsAccessController' object has no attribute 'grant'
 _______________ TestStatsAccessControl.test_access_control_deny _______________
-src\test_agent_stats.py:1549: in test_access_control_deny
-    StatsAccessController = stats_module.StatsAccessController
-                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsAccessController'
+src\test_agent_stats.py:1552: in test_access_control_deny
+    controller.grant("user1", "public.*", level="read")
+    ^^^^^^^^^^^^^^^^
+E   AttributeError: 'StatsAccessController' object has no attribute 'grant'
 ___________ TestStatsAccessControl.test_access_control_write_level ____________
-src\test_agent_stats.py:1558: in test_access_control_write_level
-    StatsAccessController = stats_module.StatsAccessController
-                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsAccessController'
+src\test_agent_stats.py:1561: in test_access_control_write_level
+    controller.grant("admin", "metrics.*", level="write")
+    ^^^^^^^^^^^^^^^^
+E   AttributeError: 'StatsAccessController' object has no attribute 'grant'
 _______________ TestStatsBackupAndRestore.test_backup_creation ________________
-src\test_agent_stats.py:1572: in test_backup_creation
-    StatsBackupManager = stats_module.StatsBackupManager
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsBackupManager'
+src\test_agent_stats.py:1574: in test_backup_creation
+    manager = StatsBackupManager(backup_dir=tmp_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: StatsBackupManager.__init__() got an unexpected keyword argument 'backup_dir'
 ________________ TestStatsBackupAndRestore.test_backup_restore ________________
-src\test_agent_stats.py:1584: in test_backup_restore
-    StatsBackupManager = stats_module.StatsBackupManager
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsBackupManager'
+src\test_agent_stats.py:1586: in test_backup_restore
+    manager = StatsBackupManager(backup_dir=tmp_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: StatsBackupManager.__init__() got an unexpected keyword argument 'backup_dir'
 _________________ TestStatsBackupAndRestore.test_backup_list __________________
-src\test_agent_stats.py:1596: in test_backup_list
-    StatsBackupManager = stats_module.StatsBackupManager
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_stats' has no attribute 'StatsBackupManager'
+src\test_agent_stats.py:1598: in test_backup_list
+    manager = StatsBackupManager(backup_dir=tmp_path)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: StatsBackupManager.__init__() got an unexpected keyword argument 'backup_dir'
 ________________ TestExportFormatsAdvanced.test_export_to_html ________________
 src\test_agent_stats.py:2383: in test_export_to_html
     assert "100" in html
@@ -1390,10 +1267,6 @@ src\test_agent_stats.py:2563: in test_filter_by_file_pattern
     assert len(src_only) == 2
 E   assert 0 == 2
 E    +  where 0 = len([])
-______ TestFixtureFactoryPatterns.test_fixture_factory_with_dependencies ______
-src\test_agent_test_utils.py:713: in test_fixture_factory_with_dependencies
-    child = factory.create_agent_fixture(
-E   TypeError: FixtureFactory.create_agent_fixture() got an unexpected keyword argument 'dependencies'
 _____ TestTestDataSeedingUtilities.test_seeder_creates_reproducible_data ______
 src\test_agent_test_utils.py:734: in test_seeder_creates_reproducible_data
     assert data1 == data2
@@ -1405,48 +1278,22 @@ E     -     return 94
 E     ?            ^
 E     +     return 54
 E     ?            ^
-____ TestParallelTestExecutionHelpers.test_parallel_runner_executes_tests _____
-src\test_agent_test_utils.py:774: in test_parallel_runner_executes_tests
-    outputs = runner.run([
-              ^^^^^^^^^^
-E   AttributeError: 'ParallelTestRunner' object has no attribute 'run'
-___ TestParallelTestExecutionHelpers.test_parallel_runner_collects_failures ___
-src\test_agent_test_utils.py:793: in test_parallel_runner_collects_failures
-    runner.run([failing_test, passing_test], fail_fast=False)
-    ^^^^^^^^^^
-E   AttributeError: 'ParallelTestRunner' object has no attribute 'run'
 ______ TestTestResultAggregationHelpers.test_aggregator_combines_results ______
 src\test_agent_test_utils.py:942: in test_aggregator_combines_results
     aggregator.add_result("suite1", "test1", "passed")
-E   TypeError: TestResultAggregator.add_result() takes 2 positional arguments but 4 were given
+src\agent_test_utils.py:1412: in add_result
+    test_result = TestResult(
+E   TypeError: TestResult.__init__() got an unexpected keyword argument 'name'
 __________ TestTestResultAggregationHelpers.test_aggregator_by_suite __________
 src\test_agent_test_utils.py:956: in test_aggregator_by_suite
     aggregator.add_result("suite1", "test1", "passed")
-E   TypeError: TestResultAggregator.add_result() takes 2 positional arguments but 4 were given
-________ TestTestEnvironmentDetection.test_env_detector_identifies_ci _________
-src\test_agent_test_utils.py:970: in test_env_detector_identifies_ci
-    EnvironmentDetector = utils_module.EnvironmentDetector
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'EnvironmentDetector'
-________ TestTestEnvironmentDetection.test_env_detector_identifies_os _________
-src\test_agent_test_utils.py:980: in test_env_detector_identifies_os
-    EnvironmentDetector = utils_module.EnvironmentDetector
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'EnvironmentDetector'
-________ TestTestEnvironmentDetection.test_env_detector_python_version ________
-src\test_agent_test_utils.py:990: in test_env_detector_python_version
-    EnvironmentDetector = utils_module.EnvironmentDetector
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'EnvironmentDetector'
+src\agent_test_utils.py:1412: in add_result
+    test_result = TestResult(
+E   TypeError: TestResult.__init__() got an unexpected keyword argument 'name'
 _________ TestSnapshotComparisonUtilities.test_snapshot_save_and_load _________
 src\test_agent_test_utils.py:1012: in test_snapshot_save_and_load
     assert loaded == data
-E   AssertionError: assert TestSnapshot(name='test_snapshot', content={'key': 'value', 'list': [1, 2, 3]}, content_hash='f797ccd1d99d43edb6a2bf11705f78fdd13b576a6d762c640bb430e5ab271e78', created_at=1765999705.4913821, updated_at=1765999705.4913833) == {'key': 'value', 'list': [1, 2, 3]}
-______ TestSnapshotComparisonUtilities.test_snapshot_comparison_matches _______
-src\test_agent_test_utils.py:1024: in test_snapshot_comparison_matches
-    assert result.matches is True
-E   AssertionError: assert False is True
-E    +  where False = SnapshotComparisonResult(matches=False, expected=TestSnapshot(name='test', content={'key': 'value'}, content_hash='9724c1e20e6e3e4d7f57ed25f9d4efb006e508590d528c90da597f6a775c13e5', created_at=1765999705.5510037, updated_at=1765999705.5510046), actual={'key': 'value'}, snapshot_name='test').matches
+E   AssertionError: assert TestSnapshot(name='test_snapshot', content={'key': 'value', 'list': [1, 2, 3]}, content_hash='f797ccd1d99d43edb6a2bf11705f78fdd13b576a6d762c640bb430e5ab271e78', created_at=1766003703.7094162, updated_at=1766003703.7094176) == {'key': 'value', 'list': [1, 2, 3]}
 ____ TestTestCoverageMeasurementHelpers.test_coverage_tracker_records_hits ____
 src\test_agent_test_utils.py:1044: in test_coverage_tracker_records_hits
     CoverageTracker = utils_module.CoverageTracker
@@ -1458,40 +1305,40 @@ src\test_agent_test_utils.py:1057: in test_coverage_tracker_percentage
                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'CoverageTracker'
 _________ TestTestLogCaptureUtilities.test_log_capturer_captures_logs _________
-src\test_agent_test_utils.py:1073: in test_log_capturer_captures_logs
-    LogCapturer = utils_module.LogCapturer
-                  ^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'LogCapturer'
+src\test_agent_test_utils.py:1076: in test_log_capturer_captures_logs
+    with LogCapturer() as capturer:
+         ^^^^^^^^^^^^^
+E   TypeError: '_dv_legacy_agent_test_utils.LogCapturer' object does not support the context manager protocol (missed __exit__ method)
 _______ TestTestLogCaptureUtilities.test_log_capturer_filters_by_level ________
-src\test_agent_test_utils.py:1085: in test_log_capturer_filters_by_level
-    LogCapturer = utils_module.LogCapturer
-                  ^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'LogCapturer'
+src\test_agent_test_utils.py:1088: in test_log_capturer_filters_by_level
+    with LogCapturer(level=logging.ERROR) as capturer:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: '_dv_legacy_agent_test_utils.LogCapturer' object does not support the context manager protocol (missed __exit__ method)
 _____ TestTestConfigurationLoadingUtilities.test_config_loader_loads_json _____
-src\test_agent_test_utils.py:1102: in test_config_loader_loads_json
-    TestConfigLoader = utils_module.TestConfigLoader
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'TestConfigLoader'
+src\test_agent_test_utils.py:1109: in test_config_loader_loads_json
+    config = loader.load(config_file)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: TestConfigLoader.load() takes 1 positional argument but 2 were given
 ___ TestTestConfigurationLoadingUtilities.test_config_loader_with_defaults ____
-src\test_agent_test_utils.py:1115: in test_config_loader_with_defaults
-    TestConfigLoader = utils_module.TestConfigLoader
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'TestConfigLoader'
+src\test_agent_test_utils.py:1122: in test_config_loader_with_defaults
+    config = loader.load(config_file, defaults={"timeout": 30, "retries": 5})
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: TestConfigLoader.load() got an unexpected keyword argument 'defaults'
 _____ TestTestReportGenerationHelpers.test_report_generator_creates_html ______
-src\test_agent_test_utils.py:1133: in test_report_generator_creates_html
-    TestReportGenerator = utils_module.TestReportGenerator
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'TestReportGenerator'. Did you mean: 'TestDataGenerator'?
+src\test_agent_test_utils.py:1135: in test_report_generator_creates_html
+    generator = TestReportGenerator(output_dir=tmp_path)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: TestReportGenerator.__init__() got an unexpected keyword argument 'output_dir'
 _____ TestTestReportGenerationHelpers.test_report_generator_creates_json ______
-src\test_agent_test_utils.py:1148: in test_report_generator_creates_json
-    TestReportGenerator = utils_module.TestReportGenerator
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'TestReportGenerator'. Did you mean: 'TestDataGenerator'?
+src\test_agent_test_utils.py:1151: in test_report_generator_creates_json
+    generator = TestReportGenerator(output_dir=tmp_path)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: TestReportGenerator.__init__() got an unexpected keyword argument 'output_dir'
 _______ TestTestIsolationMechanisms.test_isolator_preserves_environment _______
 src\test_agent_test_utils.py:1182: in test_isolator_preserves_environment
     EnvironmentIsolator = utils_module.EnvironmentIsolator
                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'EnvironmentIsolator'
+E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'EnvironmentIsolator'. Did you mean: 'EnvironmentDetector'?
 ________________ TestTestRetryUtilities.test_retry_on_failure _________________
 src\test_agent_test_utils.py:1200: in test_retry_on_failure
     RetryHelper = utils_module.RetryHelper
@@ -1503,165 +1350,202 @@ src\test_agent_test_utils.py:1218: in test_retry_exhausted
                   ^^^^^^^^^^^^^^^^^^^^^^^^
 E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'RetryHelper'
 _______________ TestTestCleanupHooks.test_cleanup_hooks_execute _______________
-src\test_agent_test_utils.py:1234: in test_cleanup_hooks_execute
-    CleanupManager = utils_module.CleanupManager
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'CleanupManager'
+src\test_agent_test_utils.py:1239: in test_cleanup_hooks_execute
+    manager.register(lambda: cleaned.append("first"))
+    ^^^^^^^^^^^^^^^^
+E   AttributeError: 'CleanupManager' object has no attribute 'register'
 __________ TestTestCleanupHooks.test_cleanup_hooks_execute_in_order ___________
-src\test_agent_test_utils.py:1249: in test_cleanup_hooks_execute_in_order
-    CleanupManager = utils_module.CleanupManager
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'CleanupManager'
+src\test_agent_test_utils.py:1254: in test_cleanup_hooks_execute_in_order
+    manager.register(lambda: order.append(1))
+    ^^^^^^^^^^^^^^^^
+E   AttributeError: 'CleanupManager' object has no attribute 'register'
 ___ TestTestDependencyManagement.test_dependency_resolver_orders_correctly ____
-src\test_agent_test_utils.py:1269: in test_dependency_resolver_orders_correctly
-    DependencyResolver = utils_module.DependencyResolver
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'DependencyResolver'
+src\test_agent_test_utils.py:1272: in test_dependency_resolver_orders_correctly
+    resolver.add_test("test_c", depends_on=["test_b"])
+    ^^^^^^^^^^^^^^^^^
+E   AttributeError: 'DependencyResolver' object has no attribute 'add_test'
 _____ TestTestDependencyManagement.test_dependency_resolver_detects_cycle _____
-src\test_agent_test_utils.py:1283: in test_dependency_resolver_detects_cycle
-    DependencyResolver = utils_module.DependencyResolver
-                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'DependencyResolver'
+src\test_agent_test_utils.py:1286: in test_dependency_resolver_detects_cycle
+    resolver.add_test("test_a", depends_on=["test_b"])
+    ^^^^^^^^^^^^^^^^^
+E   AttributeError: 'DependencyResolver' object has no attribute 'add_test'
 __________ TestTestResourceAllocation.test_resource_pool_allocation ___________
-src\test_agent_test_utils.py:1298: in test_resource_pool_allocation
-    ResourcePool = utils_module.ResourcePool
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'ResourcePool'
+src\test_agent_test_utils.py:1302: in test_resource_pool_allocation
+    r1 = pool.acquire("test1")
+         ^^^^^^^^^^^^^^^^^^^^^
+src\agent_test_utils.py:3008: in acquire
+    if self.available >= count:
+       ^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: '>=' not supported between instances of 'int' and 'str'
 ____________ TestTestResourceAllocation.test_resource_pool_release ____________
-src\test_agent_test_utils.py:1311: in test_resource_pool_release
-    ResourcePool = utils_module.ResourcePool
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'ResourcePool'
+src\test_agent_test_utils.py:1315: in test_resource_pool_release
+    r1 = pool.acquire("test1")
+         ^^^^^^^^^^^^^^^^^^^^^
+src\agent_test_utils.py:3008: in acquire
+    if self.available >= count:
+       ^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: '>=' not supported between instances of 'int' and 'str'
 __________ TestTestResourceAllocation.test_resource_pool_exhaustion ___________
-src\test_agent_test_utils.py:1323: in test_resource_pool_exhaustion
-    ResourcePool = utils_module.ResourcePool
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_test_utils' has no attribute 'ResourcePool'
+src\test_agent_test_utils.py:1327: in test_resource_pool_exhaustion
+    r1 = pool.acquire("test1")
+         ^^^^^^^^^^^^^^^^^^^^^
+src\agent_test_utils.py:3008: in acquire
+    if self.available >= count:
+       ^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: '>=' not supported between instances of 'int' and 'str'
+______________________ TestTestSuiteOptimizer.test_init _______________________
+src\test_agent_tests.py:605: in test_init
+    optimizer = tests_module.TestSuiteOptimizer()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: TestSuiteOptimizer.__init__() missing 1 required positional argument: 'tests'
+__________________ TestTestSuiteOptimizer.test_add_coverage ___________________
+src\test_agent_tests.py:610: in test_add_coverage
+    optimizer = tests_module.TestSuiteOptimizer()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: TestSuiteOptimizer.__init__() missing 1 required positional argument: 'tests'
+______________ TestTestSuiteOptimizer.test_find_redundant_tests _______________
+src\test_agent_tests.py:616: in test_find_redundant_tests
+    optimizer = tests_module.TestSuiteOptimizer()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: TestSuiteOptimizer.__init__() missing 1 required positional argument: 'tests'
+________________ TestTestSuiteOptimizer.test_suggest_removals _________________
+src\test_agent_tests.py:624: in test_suggest_removals
+    optimizer = tests_module.TestSuiteOptimizer()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: TestSuiteOptimizer.__init__() missing 1 required positional argument: 'tests'
+____________________ TestEnvironmentProvisioner.test_init _____________________
+src\test_agent_tests.py:640: in test_init
+    assert provisioner.environments == {}
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'EnvironmentProvisioner' object has no attribute 'environments'
+____________ TestEnvironmentProvisioner.test_register_environment _____________
+src\test_agent_tests.py:645: in test_register_environment
+    env = provisioner.register_environment("staging", "http://staging.example.com")
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'EnvironmentProvisioner' object has no attribute 'register_environment'
+__________________ TestEnvironmentProvisioner.test_provision __________________
+src\test_agent_tests.py:651: in test_provision
+    provisioner.register_environment("staging")
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'EnvironmentProvisioner' object has no attribute 'register_environment'
+__________________ TestEnvironmentProvisioner.test_teardown ___________________
+src\test_agent_tests.py:658: in test_teardown
+    provisioner.register_environment("staging")
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'EnvironmentProvisioner' object has no attribute 'register_environment'
 _____ TestTestPrioritizationAlgorithms.test_prioritizer_by_recent_changes _____
-src\test_agent_tests.py:1010: in test_prioritizer_by_recent_changes
-    TestPrioritizer = tests_module.TestPrioritizer
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'TestPrioritizer'. Did you mean: 'TestPriority'?
+src\test_agent_tests.py:1013: in test_prioritizer_by_recent_changes
+    prioritizer.add_test("test1", changed_recently=True)
+E   TypeError: TestPrioritizer.add_test() got an unexpected keyword argument 'changed_recently'
 ____ TestTestPrioritizationAlgorithms.test_prioritizer_by_failure_history _____
-src\test_agent_tests.py:1023: in test_prioritizer_by_failure_history
-    TestPrioritizer = tests_module.TestPrioritizer
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'TestPrioritizer'. Did you mean: 'TestPriority'?
+src\test_agent_tests.py:1030: in test_prioritizer_by_failure_history
+    ordered = prioritizer.prioritize_by_failure_rate()
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'TestPrioritizer' object has no attribute 'prioritize_by_failure_rate'. Did you mean: 'prioritize_by_failure_history'?
 _____ TestTestPrioritizationAlgorithms.test_prioritizer_combined_strategy _____
-src\test_agent_tests.py:1035: in test_prioritizer_combined_strategy
-    TestPrioritizer = tests_module.TestPrioritizer
-                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'TestPrioritizer'. Did you mean: 'TestPriority'?
+src\test_agent_tests.py:1038: in test_prioritizer_combined_strategy
+    prioritizer.add_test("test1", changed_recently=False, failure_rate=0.9)
+E   TypeError: TestPrioritizer.add_test() got an unexpected keyword argument 'changed_recently'
 _ TestFlakinessDetectionAndQuarantine.test_flakiness_detector_identifies_flaky _
-src\test_agent_tests.py:1050: in test_flakiness_detector_identifies_flaky
-    FlakinessDetector = tests_module.FlakinessDetector
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'FlakinessDetector'
+src\test_agent_tests.py:1054: in test_flakiness_detector_identifies_flaky
+    detector.record_result("test1", passed=True)
+    ^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'FlakinessDetector' object has no attribute 'record_result'
 ___ TestFlakinessDetectionAndQuarantine.test_flakiness_detector_stable_test ___
-src\test_agent_tests.py:1063: in test_flakiness_detector_stable_test
-    FlakinessDetector = tests_module.FlakinessDetector
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'FlakinessDetector'
+src\test_agent_tests.py:1067: in test_flakiness_detector_stable_test
+    detector.record_result("test_stable", passed=True)
+    ^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'FlakinessDetector' object has no attribute 'record_result'
 _________ TestFlakinessDetectionAndQuarantine.test_quarantine_manager _________
-src\test_agent_tests.py:1073: in test_quarantine_manager
-    QuarantineManager = tests_module.QuarantineManager
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'QuarantineManager'
+src\test_agent_tests.py:1076: in test_quarantine_manager
+    manager.quarantine("flaky_test1", reason="Flaky for 7 days")
+E   TypeError: QuarantineManager.quarantine() got an unexpected keyword argument 'reason'
 __________ TestTestImpactAnalysis.test_impact_analyzer_file_changes ___________
-src\test_agent_tests.py:1087: in test_impact_analyzer_file_changes
-    ImpactAnalyzer = tests_module.ImpactAnalyzer
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'ImpactAnalyzer'
+src\test_agent_tests.py:1090: in test_impact_analyzer_file_changes
+    analyzer.map_test_to_files("test_auth", ["auth.py", "utils.py"])
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'ImpactAnalyzer' object has no attribute 'map_test_to_files'
 ________ TestTestImpactAnalysis.test_impact_analyzer_dependency_graph _________
-src\test_agent_tests.py:1099: in test_impact_analyzer_dependency_graph
-    ImpactAnalyzer = tests_module.ImpactAnalyzer
-                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'ImpactAnalyzer'
+src\test_agent_tests.py:1103: in test_impact_analyzer_dependency_graph
+    analyzer.map_test_to_files("test_auth", ["auth.py"])
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'ImpactAnalyzer' object has no attribute 'map_test_to_files'
 ________ TestDataFactoryIntegration.test_data_factory_creates_objects _________
-src\test_agent_tests.py:1118: in test_data_factory_creates_objects
-    DataFactory = tests_module.DataFactory
-                  ^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'DataFactory'. Did you mean: 'TestFactory'?
+src\test_agent_tests.py:1121: in test_data_factory_creates_objects
+    factory.register("user", {
+    ^^^^^^^^^^^^^^^^
+E   AttributeError: 'DataFactory' object has no attribute 'register'
 _________ TestDataFactoryIntegration.test_data_factory_with_overrides _________
-src\test_agent_tests.py:1134: in test_data_factory_with_overrides
-    DataFactory = tests_module.DataFactory
-                  ^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'DataFactory'. Did you mean: 'TestFactory'?
+src\test_agent_tests.py:1137: in test_data_factory_with_overrides
+    factory.register("user", {"name": "random_string", "age": 25})
+    ^^^^^^^^^^^^^^^^
+E   AttributeError: 'DataFactory' object has no attribute 'register'
 __________ TestDataFactoryIntegration.test_data_factory_batch_create __________
-src\test_agent_tests.py:1145: in test_data_factory_batch_create
-    DataFactory = tests_module.DataFactory
-                  ^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'DataFactory'. Did you mean: 'TestFactory'?
+src\test_agent_tests.py:1148: in test_data_factory_batch_create
+    factory.register("item", {"value": "random_int"})
+    ^^^^^^^^^^^^^^^^
+E   AttributeError: 'DataFactory' object has no attribute 'register'
 _______ TestTestParallelizationStrategies.test_round_robin_distribution _______
-src\test_agent_tests.py:1159: in test_round_robin_distribution
-    ParallelizationStrategy = tests_module.ParallelizationStrategy
-                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'ParallelizationStrategy'
+src\test_agent_tests.py:1161: in test_round_robin_distribution
+    strategy = ParallelizationStrategy("round_robin", workers=4)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: ParallelizationStrategy.__init__() got an unexpected keyword argument 'workers'
 ______ TestTestParallelizationStrategies.test_load_balanced_distribution ______
-src\test_agent_tests.py:1172: in test_load_balanced_distribution
-    ParallelizationStrategy = tests_module.ParallelizationStrategy
-                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'ParallelizationStrategy'
+src\test_agent_tests.py:1174: in test_load_balanced_distribution
+    strategy = ParallelizationStrategy("load_balanced", workers=2)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: ParallelizationStrategy.__init__() got an unexpected keyword argument 'workers'
 __________ TestCoverageGapAnalysis.test_gap_analyzer_finds_uncovered __________
-src\test_agent_tests.py:1188: in test_gap_analyzer_finds_uncovered
-    CoverageGapAnalyzer = tests_module.CoverageGapAnalyzer
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'CoverageGapAnalyzer'
+src\test_agent_tests.py:1191: in test_gap_analyzer_finds_uncovered
+    analyzer.add_coverage_data("file.py", covered_lines={1, 2, 3, 5, 6})
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'CoverageGapAnalyzer' object has no attribute 'add_coverage_data'
 ________ TestCoverageGapAnalysis.test_gap_analyzer_coverage_percentage ________
-src\test_agent_tests.py:1200: in test_gap_analyzer_coverage_percentage
-    CoverageGapAnalyzer = tests_module.CoverageGapAnalyzer
-                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'CoverageGapAnalyzer'
+src\test_agent_tests.py:1203: in test_gap_analyzer_coverage_percentage
+    analyzer.add_coverage_data("file.py", covered_lines={1, 2, 3, 4, 5})
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'CoverageGapAnalyzer' object has no attribute 'add_coverage_data'
 ________ TestContractTestingIntegration.test_contract_validator_valid _________
-src\test_agent_tests.py:1215: in test_contract_validator_valid
-    ContractValidator = tests_module.ContractValidator
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'ContractValidator'
+src\test_agent_tests.py:1223: in test_contract_validator_valid
+    result = validator.validate(
+E   TypeError: ContractValidator.validate() got an unexpected keyword argument 'actual_response'
 _______ TestContractTestingIntegration.test_contract_validator_invalid ________
-src\test_agent_tests.py:1231: in test_contract_validator_invalid
-    ContractValidator = tests_module.ContractValidator
-                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'ContractValidator'
+src\test_agent_tests.py:1238: in test_contract_validator_invalid
+    result = validator.validate(
+E   TypeError: ContractValidator.validate() got an unexpected keyword argument 'actual_response'
 _________ TestTestSuiteOptimization.test_optimizer_removes_redundant __________
-src\test_agent_tests.py:1257: in test_optimizer_removes_redundant
-    optimized = optimizer.optimize()
-                ^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'TestSuiteOptimizer' object has no attribute 'optimize'
+src\test_agent_tests.py:1252: in test_optimizer_removes_redundant
+    optimizer = TestSuiteOptimizer()
+                ^^^^^^^^^^^^^^^^^^^^
+E   TypeError: TestSuiteOptimizer.__init__() missing 1 required positional argument: 'tests'
 _________ TestTestSuiteOptimization.test_optimizer_preserves_coverage _________
-src\test_agent_tests.py:1270: in test_optimizer_preserves_coverage
-    optimized = optimizer.optimize()
-                ^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'TestSuiteOptimizer' object has no attribute 'optimize'
+src\test_agent_tests.py:1266: in test_optimizer_preserves_coverage
+    optimizer = TestSuiteOptimizer()
+                ^^^^^^^^^^^^^^^^^^^^
+E   TypeError: TestSuiteOptimizer.__init__() missing 1 required positional argument: 'tests'
 _ TestEnvironmentProvisioningAutomation.test_provisioner_creates_environment __
-src\test_agent_tests.py:1291: in test_provisioner_creates_environment
-    assert env.status == "ready"
-           ^^^^^^^^^^
-E   AttributeError: 'dict' object has no attribute 'status'
+src\test_agent_tests.py:1286: in test_provisioner_creates_environment
+    env = provisioner.provision({
+E   TypeError: EnvironmentProvisioner.provision() takes 1 positional argument but 2 were given
 _______ TestEnvironmentProvisioningAutomation.test_provisioner_cleanup ________
-src\test_agent_tests.py:1301: in test_provisioner_cleanup
-    provisioner.cleanup(env)
-    ^^^^^^^^^^^^^^^^^^^
-E   AttributeError: 'EnvironmentProvisioner' object has no attribute 'cleanup'
+src\test_agent_tests.py:1299: in test_provisioner_cleanup
+    env = provisioner.provision({"python_version": "3.11"})
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   TypeError: EnvironmentProvisioner.provision() takes 1 positional argument but 2 were given
 __________ TestTestReplayFunctionality.test_recorder_saves_execution __________
-src\test_agent_tests.py:1310: in test_recorder_saves_execution
-    TestRecorder = tests_module.TestRecorder
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'TestRecorder'
+src\test_agent_tests.py:1313: in test_recorder_saves_execution
+    recorder.start_recording("test_example")
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'TestRecorder' object has no attribute 'start_recording'
 ________ TestTestReplayFunctionality.test_replayer_executes_recording _________
-src\test_agent_tests.py:1322: in test_replayer_executes_recording
-    TestReplayer = tests_module.TestReplayer
-                   ^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'TestReplayer'
+src\test_agent_tests.py:1327: in test_replayer_executes_recording
+    recorder.start_recording("test1")
+    ^^^^^^^^^^^^^^^^^^^^^^^^
+E   AttributeError: 'TestRecorder' object has no attribute 'start_recording'
 __ TestDocumentationGenerationFromTests.test_doc_generator_extracts_examples __
-src\test_agent_tests.py:1343: in test_doc_generator_extracts_examples
-    TestDocGenerator = tests_module.TestDocGenerator
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'TestDocGenerator'. Did you mean: 'TestGenerator'?
-__ TestDocumentationGenerationFromTests.test_doc_generator_groups_by_module ___
-src\test_agent_tests.py:1358: in test_doc_generator_groups_by_module
-    TestDocGenerator = tests_module.TestDocGenerator
-                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-E   AttributeError: module '_dv_legacy_agent_tests' has no attribute 'TestDocGenerator'. Did you mean: 'TestGenerator'?
+src\test_agent_tests.py:1346: in test_doc_generator_extracts_examples
+    generator.add_test(
+E   TypeError: TestDocGenerator.add_test() got an unexpected keyword argument 'docstring'
 ___________________ test_improve_content_uses_run_subagent ____________________
 src\test_base_agent.py:71: in test_improve_content_uses_run_subagent
     assert agent.improve_content("prompt") == "AFTER"
@@ -1680,13 +1564,7 @@ src/test_agent_backend.py::TestPhase6Integration::test_tracer_with_audit_logger
 -- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
 =========================== short test summary info ===========================
 FAILED src/test_agent_backend.py::TestABTester::test_create_test - AssertionE...
-FAILED src/test_agent_changes.py::test_validation_rule_dataclass - AssertionE...
-FAILED src/test_agent_changes.py::test_diff_visualizer_render_html_side_by_side
 FAILED src/test_agent_changes_tests.py::test_changes_agent_non_keyword_sets_current_content
-FAILED src/test_agent_coder.py::test_performance_optimizer_analyze - assert 0...
-FAILED src/test_agent_coder.py::test_security_scanner_scan - assert 0 >= 1
-FAILED src/test_agent_coder.py::test_modernization_advisor_analyze - assert 0...
-FAILED src/test_agent_coder.py::test_modernization_advisor_detects_collections_mapping
 FAILED src/test_agent_coder.py::TestAccessibilityAnalyzer::test_analyze_javascript_interactive_div
 FAILED src/test_agent_coder.py::TestMultiLanguageCodeGeneration::test_generate_python_code
 FAILED src/test_agent_coder.py::TestMultiLanguageCodeGeneration::test_generate_javascript_code
@@ -1696,26 +1574,17 @@ FAILED src/test_agent_coder.py::TestCodeFormatting::test_black_format_detection
 FAILED src/test_agent_context.py::test_validate_content_valid - AssertionErro...
 FAILED src/test_agent_context.py::test_is_valid - assert False
 FAILED src/test_agent_context.py::test_auto_categorize_config - AssertionErro...
-FAILED src/test_agent_context.py::test_semantic_search_engine_init - Attribut...
-FAILED src/test_agent_context.py::test_semantic_search_engine_set_algorithm
-FAILED src/test_agent_context.py::test_semantic_search_engine_add_document - ...
-FAILED src/test_agent_context.py::test_semantic_search_engine_search - Attrib...
+FAILED src/test_agent_context.py::test_semantic_search_engine_init - Assertio...
+FAILED src/test_agent_context.py::test_semantic_search_engine_search - assert...
 FAILED src/test_agent_context.py::test_semantic_search_engine_clear - Attribu...
-FAILED src/test_agent_context.py::test_cross_repo_analyzer_init - AttributeEr...
-FAILED src/test_agent_context.py::test_cross_repo_analyzer_add_repo - Attribu...
 FAILED src/test_agent_context.py::test_cross_repo_analyzer_analyze - Attribut...
-FAILED src/test_agent_context.py::test_cross_repo_analyzer_find_patterns - At...
-FAILED src/test_agent_context.py::test_context_differ_compute_diff - Attribut...
-FAILED src/test_agent_context.py::test_context_differ_section_diff - Attribut...
+FAILED src/test_agent_context.py::test_context_differ_compute_diff - Assertio...
+FAILED src/test_agent_context.py::test_context_differ_section_diff - TypeErro...
 FAILED src/test_agent_context.py::test_context_differ_summarize - AttributeEr...
-FAILED src/test_agent_context.py::test_context_inheritance_init - AttributeEr...
-FAILED src/test_agent_context.py::test_context_inheritance_set_mode - Attribu...
+FAILED src/test_agent_context.py::test_context_inheritance_init - AssertionEr...
 FAILED src/test_agent_context.py::test_context_inheritance_set_parent - Attri...
-FAILED src/test_agent_context.py::test_context_inheritance_apply - AttributeE...
-FAILED src/test_agent_context.py::test_context_inheritance_get_hierarchy - At...
-FAILED src/test_agent_context.py::test_nl_query_engine_add_context - Attribut...
-FAILED src/test_agent_context.py::test_nl_query_engine_query - AttributeError...
-FAILED src/test_agent_context.py::test_nl_query_engine_extract_keywords - Att...
+FAILED src/test_agent_context.py::test_context_inheritance_apply - TypeError:...
+FAILED src/test_agent_context.py::test_nl_query_engine_query - TypeError: NLQ...
 FAILED src/test_agent_context.py::test_context_exporter_init - AttributeError...
 FAILED src/test_agent_context.py::test_context_exporter_set_format - Attribut...
 FAILED src/test_agent_context.py::test_context_exporter_supported_formats - A...
@@ -1754,18 +1623,15 @@ FAILED src/test_agent_context.py::test_branch_comparer_summarize - AttributeE...
 FAILED src/test_agent_context.py::TestContextNotification::test_alert_marker_detection
 FAILED src/test_agent_errors.py::TestSeverityScoring_v2::test_critical_severity
 FAILED src/test_agent_improvements.py::TestImprovementCategory::test_all_categories_exist
-FAILED src/test_agent_improvements.py::TestImprovementStatus::test_status_values
+FAILED src/test_agent_improvements.py::TestImprovementStatus::test_all_statuses_exist
 FAILED src/test_agent_improvements.py::TestEffortEstimate::test_effort_values
 FAILED src/test_agent_improvements.py::TestImprovementDataclass::test_create_improvement
 FAILED src/test_agent_improvements.py::TestImprovementRetrieval::test_get_improvements_by_status
-FAILED src/test_agent_improvements.py::TestStatusUpdate::test_approve_improvement
-FAILED src/test_agent_improvements.py::TestStatusUpdate::test_reject_improvement
 FAILED src/test_agent_improvements.py::TestEffortEstimation::test_estimate_total_effort
 FAILED src/test_agent_improvements.py::TestDependencies::test_get_ready_to_implement
 FAILED src/test_agent_improvements.py::TestTemplates::test_create_from_template
 FAILED src/test_agent_improvements.py::TestTemplates::test_add_custom_template
-FAILED src/test_agent_improvements.py::TestAssignment::test_unassign - Attrib...
-FAILED src/test_agent_improvements.py::TestAssignment::test_get_by_assignee
+FAILED src/test_agent_improvements.py::TestAssignment::test_unassign - Assert...
 FAILED src/test_agent_improvements.py::TestExport::test_export_csv - Assertio...
 FAILED src/test_agent_improvements.py::TestImprovementImpactScoring::test_impact_scorer_initialization
 FAILED src/test_agent_improvements.py::TestImprovementImpactScoring::test_calculate_impact_score
@@ -1781,7 +1647,6 @@ FAILED src/test_agent_improvements.py::TestImprovementTemplateInstantiation::tes
 FAILED src/test_agent_improvements.py::TestStatusWorkflowTransitions::test_workflow_engine_init
 FAILED src/test_agent_improvements.py::TestStatusWorkflowTransitions::test_valid_transition
 FAILED src/test_agent_improvements.py::TestStatusWorkflowTransitions::test_invalid_transition_blocked
-FAILED src/test_agent_improvements.py::TestVotingAndPrioritization::test_voting_system_init
 FAILED src/test_agent_improvements.py::TestVotingAndPrioritization::test_cast_vote
 FAILED src/test_agent_improvements.py::TestVotingAndPrioritization::test_prioritization_by_votes
 FAILED src/test_agent_improvements.py::TestSchedulingAndResourceAllocation::test_scheduler_init
@@ -1841,7 +1706,6 @@ FAILED src/test_agent_stats.py::TestStatsFederationAcrossSources::test_federatio
 FAILED src/test_agent_stats.py::TestStatsFederationAcrossSources::test_federation_handles_source_failure
 FAILED src/test_agent_stats.py::TestStatsRetentionPolicyEnforcement::test_retention_policy_creation
 FAILED src/test_agent_stats.py::TestStatsRetentionPolicyEnforcement::test_retention_enforcer_removes_old_data
-FAILED src/test_agent_stats.py::TestStatsNamespaceIsolation::test_namespace_creation
 FAILED src/test_agent_stats.py::TestStatsNamespaceIsolation::test_namespace_metric_scoping
 FAILED src/test_agent_stats.py::TestStatsNamespaceIsolation::test_namespace_isolation
 FAILED src/test_agent_stats.py::TestStatsMetricFormulaCalculation::test_formula_simple_calculation
@@ -1878,17 +1742,10 @@ FAILED src/test_agent_stats.py::TestStatsBackupAndRestore::test_backup_restore
 FAILED src/test_agent_stats.py::TestStatsBackupAndRestore::test_backup_list
 FAILED src/test_agent_stats.py::TestExportFormatsAdvanced::test_export_to_html
 FAILED src/test_agent_stats.py::TestFiltering::test_filter_by_file_pattern - ...
-FAILED src/test_agent_test_utils.py::TestFixtureFactoryPatterns::test_fixture_factory_with_dependencies
 FAILED src/test_agent_test_utils.py::TestTestDataSeedingUtilities::test_seeder_creates_reproducible_data
-FAILED src/test_agent_test_utils.py::TestParallelTestExecutionHelpers::test_parallel_runner_executes_tests
-FAILED src/test_agent_test_utils.py::TestParallelTestExecutionHelpers::test_parallel_runner_collects_failures
 FAILED src/test_agent_test_utils.py::TestTestResultAggregationHelpers::test_aggregator_combines_results
 FAILED src/test_agent_test_utils.py::TestTestResultAggregationHelpers::test_aggregator_by_suite
-FAILED src/test_agent_test_utils.py::TestTestEnvironmentDetection::test_env_detector_identifies_ci
-FAILED src/test_agent_test_utils.py::TestTestEnvironmentDetection::test_env_detector_identifies_os
-FAILED src/test_agent_test_utils.py::TestTestEnvironmentDetection::test_env_detector_python_version
 FAILED src/test_agent_test_utils.py::TestSnapshotComparisonUtilities::test_snapshot_save_and_load
-FAILED src/test_agent_test_utils.py::TestSnapshotComparisonUtilities::test_snapshot_comparison_matches
 FAILED src/test_agent_test_utils.py::TestTestCoverageMeasurementHelpers::test_coverage_tracker_records_hits
 FAILED src/test_agent_test_utils.py::TestTestCoverageMeasurementHelpers::test_coverage_tracker_percentage
 FAILED src/test_agent_test_utils.py::TestTestLogCaptureUtilities::test_log_capturer_captures_logs
@@ -1907,6 +1764,14 @@ FAILED src/test_agent_test_utils.py::TestTestDependencyManagement::test_dependen
 FAILED src/test_agent_test_utils.py::TestTestResourceAllocation::test_resource_pool_allocation
 FAILED src/test_agent_test_utils.py::TestTestResourceAllocation::test_resource_pool_release
 FAILED src/test_agent_test_utils.py::TestTestResourceAllocation::test_resource_pool_exhaustion
+FAILED src/test_agent_tests.py::TestTestSuiteOptimizer::test_init - TypeError...
+FAILED src/test_agent_tests.py::TestTestSuiteOptimizer::test_add_coverage - T...
+FAILED src/test_agent_tests.py::TestTestSuiteOptimizer::test_find_redundant_tests
+FAILED src/test_agent_tests.py::TestTestSuiteOptimizer::test_suggest_removals
+FAILED src/test_agent_tests.py::TestEnvironmentProvisioner::test_init - Attri...
+FAILED src/test_agent_tests.py::TestEnvironmentProvisioner::test_register_environment
+FAILED src/test_agent_tests.py::TestEnvironmentProvisioner::test_provision - ...
+FAILED src/test_agent_tests.py::TestEnvironmentProvisioner::test_teardown - A...
 FAILED src/test_agent_tests.py::TestTestPrioritizationAlgorithms::test_prioritizer_by_recent_changes
 FAILED src/test_agent_tests.py::TestTestPrioritizationAlgorithms::test_prioritizer_by_failure_history
 FAILED src/test_agent_tests.py::TestTestPrioritizationAlgorithms::test_prioritizer_combined_strategy
@@ -1931,6 +1796,5 @@ FAILED src/test_agent_tests.py::TestEnvironmentProvisioningAutomation::test_prov
 FAILED src/test_agent_tests.py::TestTestReplayFunctionality::test_recorder_saves_execution
 FAILED src/test_agent_tests.py::TestTestReplayFunctionality::test_replayer_executes_recording
 FAILED src/test_agent_tests.py::TestDocumentationGenerationFromTests::test_doc_generator_extracts_examples
-FAILED src/test_agent_tests.py::TestDocumentationGenerationFromTests::test_doc_generator_groups_by_module
 FAILED src/test_base_agent.py::test_improve_content_uses_run_subagent - Asser...
-========== 254 failed, 2415 passed, 11 skipped, 4 warnings in 58.42s ==========
+========== 234 failed, 2435 passed, 11 skipped, 4 warnings in 54.36s ==========
