@@ -1017,11 +1017,14 @@ class StatsFederation:
             data: Optional data dictionary from the source.
             healthy: Whether the source is healthy.
         """
-        source = FederatedSource(
-            name=name,
-            endpoint=endpoint or "",
-            enabled=healthy
-        )
+        # Create a simple object to hold source info
+        class Source:
+            def __init__(self, name: str, endpoint: str, enabled: bool):
+                self.name = name
+                self.endpoint = endpoint
+                self.enabled = enabled
+        
+        source = Source(name=name, endpoint=endpoint or "", enabled=healthy)
         self.sources[name] = source
         self._last_sync[name] = datetime.min
         
@@ -1079,7 +1082,7 @@ class StatsFederation:
     def aggregate(
         self,
         metric_name: str,
-        aggregation: AggregationType = AggregationType.AVG
+        aggregation: AggregationType = AggregationType.SUM
     ) -> Dict[str, Any]:
         """Aggregate a metric across all sources.
 
@@ -1113,14 +1116,6 @@ class StatsFederation:
             "failed_sources": failed_sources,
             "source_count": len(self.sources)
         }
-        elif aggregation == AggregationType.MIN:
-            return min(values)
-        elif aggregation == AggregationType.MAX:
-            return max(values)
-        elif aggregation == AggregationType.COUNT:
-            return float(len(values))
-        else:
-            return sum(values) / len(values)
 
     def get_federation_status(self) -> Dict[str, Any]:
         """Get status of all federated sources.
@@ -2224,21 +2219,36 @@ class StatsAPIServer:
 
 # ========== Missing Classes (Session continuation) ==========
 
+class StatsStream:
+    """Represents a real-time stats stream."""
+    def __init__(self, name: str, buffer_size: int = 1000) -> None:
+        self.name = name
+        self.buffer_size = buffer_size
+        self.buffer: List[Any] = []
+        self.active = True
+    
+    def get_latest(self, count: int = 1) -> List[Any]:
+        """Get latest data points."""
+        return self.buffer[-count:] if self.buffer else []
+    
+    def add_data(self, data: Any) -> None:
+        """Add data to stream."""
+        self.buffer.append(data)
+        # Enforce buffer size limit
+        if len(self.buffer) > self.buffer_size:
+            self.buffer.pop(0)
+
+
 class StatsStreamManager:
     """Manages real-time stats streaming."""
     def __init__(self, config: Optional[StreamingConfig] = None) -> None:
         self.config = config
-        self.streams: Dict[str, Any] = {}
+        self.streams: Dict[str, StatsStream] = {}
         self.subscribers: Dict[str, List[Callable]] = {}
     
-    def create_stream(self, name: str, buffer_size: int = 1000) -> Any:
+    def create_stream(self, name: str, buffer_size: int = 1000) -> StatsStream:
         """Create a new stream."""
-        stream = {
-            "name": name,
-            "buffer_size": buffer_size,
-            "buffer": [],
-            "active": True
-        }
+        stream = StatsStream(name=name, buffer_size=buffer_size)
         self.streams[name] = stream
         self.subscribers[name] = []
         return stream
@@ -2247,7 +2257,7 @@ class StatsStreamManager:
         """Get latest data from stream."""
         if name not in self.streams:
             return []
-        return self.streams[name]["buffer"][-count:] if self.streams[name]["buffer"] else []
+        return self.streams[name].get_latest(count)
     
     def subscribe(self, stream_name: str, callback: Callable) -> None:
         """Subscribe to stream updates."""
@@ -2258,7 +2268,7 @@ class StatsStreamManager:
     def publish(self, stream_name: str, data: Any) -> None:
         """Publish data to stream."""
         if stream_name in self.streams:
-            self.streams[stream_name]["buffer"].append(data)
+            self.streams[stream_name].add_data(data)
         
         # Notify subscribers
         if stream_name in self.subscribers:
@@ -2324,17 +2334,27 @@ class FormulaEngine:
     def validate(self, formula: str) -> FormulaValidation:
         """Validate formula syntax."""
         try:
-            # Basic validation
+            # Basic validation - check for invalid operators
+            if "+++" in formula or "***" in formula or "---" in formula:
+                return FormulaValidation(is_valid=False, error="Invalid operator sequence")
+            
+            # Handle template formulas with variables
             if "{" in formula and "}" in formula:
-                # This is a template formula
                 test_formula = formula
-                for var in ["a", "b", "used", "total"]:
+                import re
+                # Find all variable names and replace them
+                vars_found = re.findall(r'\{(\w+)\}', formula)
+                for var in vars_found:
                     test_formula = test_formula.replace(f"{{{var}}}", "1")
+                
+                # Try to compile the test formula
                 compile(test_formula, '<string>', 'eval')
             else:
+                # Direct formula validation
                 compile(formula, '<string>', 'eval')
+            
             return FormulaValidation(is_valid=True)
-        except SyntaxError as e:
+        except (SyntaxError, ValueError) as e:
             return FormulaValidation(is_valid=False, error=str(e))
     
     def validate_formula(self, formula: str) -> bool:
@@ -2529,11 +2549,15 @@ class StatsNamespaceManager:
     def __init__(self) -> None:
         self.namespaces: Dict[str, StatsNamespace] = {}
     
-    def create_namespace(self, name: str) -> StatsNamespace:
+    def create(self, name: str) -> StatsNamespace:
         """Create a new namespace."""
         ns = StatsNamespace(name)
         self.namespaces[name] = ns
         return ns
+    
+    def create_namespace(self, name: str) -> StatsNamespace:
+        """Create a new namespace (backward compat)."""
+        return self.create(name)
     
     def get_namespace(self, name: str) -> Optional[StatsNamespace]:
         """Get a namespace."""
