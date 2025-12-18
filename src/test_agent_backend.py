@@ -326,6 +326,7 @@ def test_get_backend_status(agent_backend_module: Any) -> None:
     assert "github_models" in status
 
     # Check commands dict
+    assert "codex" in status["commands"]
     assert "copilot" in status["commands"]
     assert "gh" in status["commands"]
 
@@ -344,6 +345,7 @@ def test_describe_backends(agent_backend_module: Any) -> None:
     assert "Backend diagnostics:" in description
     assert "selected:" in description
     assert "repo_root:" in description
+    assert "codex" in description or "Codex" in description
     assert "copilot" in description or "Copilot" in description
     assert "github-models" in description or "GitHub" in description
 
@@ -422,6 +424,7 @@ class TestBackendTypeEnum:
     def test_enum_values(self, agent_backend_module: Any) -> None:
         """Test enum has expected values."""
         BackendType = agent_backend_module.BackendType
+        assert BackendType.CODEX.value == "codex"
         assert BackendType.COPILOT_CLI.value == "copilot"
         assert BackendType.GH_COPILOT.value == "gh"
         assert BackendType.GITHUB_MODELS.value == "github-models"
@@ -430,7 +433,8 @@ class TestBackendTypeEnum:
     def test_all_members(self, agent_backend_module: Any) -> None:
         """Test all members exist."""
         BackendType = agent_backend_module.BackendType
-        assert len(list(BackendType)) == 4
+        assert len(list(BackendType)) == 5
+
 
 
 class TestBackendStateEnum:
