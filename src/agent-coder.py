@@ -11,27 +11,16 @@
 # limitations under the License.
 
 """
-Coder Agent: Improves and updates code files.
+Coder Agent: improves and updates code files.
 
-Reads a code file, uses Copilot to enhance the code,
-and updates the code file with improvements.
+The agent delegates to `BaseAgent` for LLM-backed improvements (when available)
+and then validates generated Python code:
 
-## Description
-This module provides a Coder Agent that reads existing code files,
-uses AI assistance to improve and complete them, and updates the code files
-with enhanced implementations.
+- Hard validation: parse with `ast` (syntax must be valid).
+- Soft validation: run `flake8` when available (logs warnings but does not block).
 
-## Changelog
-- 1.0.0: Initial implementation
-- 1.1.0: Added code style enforcement, multi - language support, metrics, quality scoring
-
-## Suggested Fixes
-- Add validation for code file format
-- Improve prompt engineering for better code improvements
-
-## Improvements
-- Better integration with other agents
-- Enhanced diff reporting
+The module also contains several helper classes for code analysis/metrics and
+accessibility scanning.
 """
 
 from __future__ import annotations
@@ -838,7 +827,7 @@ class TestGapAnalyzer:
         complexity = 1
         for child in ast.walk(node):
             if isinstance(child, (ast.If, ast.While, ast.For, ast.ExceptHandler,
-                    ast.With, ast.Assert, ast.comprehension)):
+                                  ast.With, ast.Assert, ast.comprehension)):
                 complexity += 1
             elif isinstance(child, ast.BoolOp):
                 complexity += len(child.values) - 1
@@ -2013,7 +2002,7 @@ class CoderAgent(BaseAgent):
                     "preview": '\n'.join(
                         lines[line_numbers[0] - 1:line_numbers[0] - 1 + min_lines]
                     )[:100]
-                })
+                    })
         return duplicates
 
     def get_duplicate_ratio(self, content: Optional[str] = None) -> float:

@@ -1,24 +1,30 @@
 # Description: `base_agent.py`
 
 ## Module purpose
-Base Agent: Common functionality for all AI-powered agents.
+`base_agent.py` provides the shared foundation for agent modules in this repo.
 
-Provides shared functionality for agents that improve code files using AI assistance.
+The primary class is `BaseAgent`, which reads a target file, sends an improvement request through `agent_backend`, stores the improved content, and writes changes back to disk (optionally normalizing markdown-like files).
 
 ## Location
-- Path: `scripts/agent/base_agent.py`
+- Path: `src/base_agent.py`
 
 ## Public surface
-- Classes: BaseAgent
-- Functions: setup_logging, _resolve_repo_root, _command_available, create_main_function
+- Classes: `BaseAgent`
+- Functions: `setup_logging`, `create_main_function`
 
 ## Behavior summary
-- Uses `argparse` for CLI parsing.
-- Invokes external commands via `subprocess`.
-- Mutates `sys.path` to import sibling modules.
+- Uses `argparse` in `create_main_function()` to provide a uniform CLI wrapper for agent classes.
+- Integrates with `agent_backend` for backend selection (e.g., `DV_AGENT_BACKEND`) and diagnostics (`describe_backends`).
+- Applies markdown normalization only for markdown-like files (`.md`, `.markdown`, `.plan.md`).
+- Uses a small in-memory response cache keyed by a SHA256-derived cache key.
+- Performs lightweight health checks and can persist minimal state to `{file_path}.state.json`.
+
+Note: This module contains many supporting enums/dataclasses/utilities (templates, caching, batching, auth config, serialization config, etc.) used by the agent ecosystem.
 
 ## Key dependencies
-- Top imports: `argparse`, `difflib`, `json`, `logging`, `os`, `pathlib`, `subprocess`, `sys`, `typing`, `requests`, `scripts.fix.fix_markdown_lint`, `fix_markdown_lint`
+- Top imports: `argparse`, `difflib`, `hashlib`, `json`, `logging`, `os`, `pathlib`, `sys`, `time`, `typing`
+- Internal dependency: `agent_backend`
+- Optional dependency: markdown fixer (`scripts.fix.fix_markdown_lint` or `fix/fix_markdown_lint.py`)
 
 ## File fingerprint
-- SHA256(source): `89f539359072285a…`
+- SHA256(source): `F8793A413520CFB7C3D15BA4A66166FD1BD2A9B3D4AEC91FB139C2B31B92E453`

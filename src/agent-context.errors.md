@@ -1,50 +1,28 @@
-● I'll analyze the agent-context.py file and improve the error report by performing a
-   comprehensive check for syntax, style, type, and logical issues.
+# Errors & limitations: `agent-context.py`
 
-● Now let me run comprehensive analysis tools on the agent-context.py file:
+This document captures known limitations and common failure modes for
+`src/agent-context.py` based on the current implementation.
 
-● Let me check what test files exist and analyze the code more carefully:
+## LLM / Copilot integration
 
-● Now let me perform a comprehensive manual analysis of the code and create an improved error
-   report:
+- `ContextAgent` delegates to `BaseAgent.improve_content()`; if Copilot/LLM tooling is missing or fails, behavior depends on `BaseAgent`.
+- `_get_fallback_response()` returns a placeholder block, but “preserve existing content on failure” is handled in `BaseAgent`.
 
-● I cannot directly modify the file, but I can provide you with the improved error report content.
-    Here's the comprehensive analysis I've prepared:
+## Source-file enrichment
 
-   ## Improved Error Report for agent-context.py
+- Source file may not be found: `ContextAgent` derives a source path by checking a fixed list of extensions next to the `.description.md` file.
+- Source read failures are silent: `OSError` and `UnicodeDecodeError` while reading the derived source file are caught and ignored.
+- Truncation is fixed: only the first ~8000 characters of source code are appended to the prompt.
 
-   The current error report is minimal and doesn't provide actionable insights. Here's what I found
-    after analyzing the code:
+## Content templates
 
-   ### **Key Issues Identified:**
+- Default template placeholder is not expanded: `_get_default_content()` returns a template containing `{filename}` without formatting it.
 
-   1. **Silent Exception Handling (Medium Priority)** - Lines 111-112
-      - Exception caught but not logged, making debugging difficult
-      - Should add: `logging.warning(f"Could not read source file {self.source_path}: {e}")`
+## Validation behavior
 
-   2. **Ineffective Validation (Low Priority)** - Lines 50-54
-      - The `_validate_file_extension()` method does nothing despite its name suggesting validation
-      - Should either implement the warning or remove the method
+- Extension “validation” is best-effort: non-`.description.md` inputs are not rejected, and `_validate_file_extension()` currently does not warn.
+- Validation rules are regex-based: `validate_content()` operates on raw markdown text and can produce false positives/negatives.
 
-   3. **Magic Number (Low Priority)** - Line 103
-      - Hardcoded `[:8000]` without explanation
-      - Should extract as class constant: `MAX_SOURCE_CODE_CHARS = 8000`
+## Usage expectations
 
-   4. **Limited Extensions (Low Priority)** - Line 61
-      - Only checks 7 file extensions, may miss `.jsx`, `.tsx`, `.c`, `.cpp`, etc.
-      - Consider expanding or making configurable
-
-   ### **Strengths:**
-   - ✅ Proper type hints throughout
-   - ✅ Good use of BaseAgent inheritance
-   - ✅ Proper encoding and Path handling
-   - ✅ No security vulnerabilities
-
-   ### **Recommendations:**
-   1. Add logging to exception handler
-   2. Implement validation warning or remove method
-   3. Extract magic numbers to constants
-   4. Expand test coverage (currently only 1 test)
-
-   Would you like me to create a file with this improved error report content that you can review
-   and save manually?
+- Import path expectations: the module imports `base_agent` as a top-level import; running from an unexpected working directory can break imports unless `PYTHONPATH` is set appropriately.

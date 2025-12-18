@@ -1,14 +1,21 @@
 # Changelog
 
+## [2025-12-18] - Documentation refresh
+
+- Refreshed module docstring and companion `agent-stats.*.md` documentation.
+- Updated `agent-stats.description.md` with the current SHA256 fingerprint.
+
 ## [2025-01-16] - Session 7 Implementation
 
 ### Added Enums
+
 - `StreamingProtocol`: WEBSOCKET, SSE, GRPC, MQTT for real-time streaming
 - `ExportDestination`: DATADOG, PROMETHEUS, GRAFANA, CLOUDWATCH, STACKDRIVER
 - `AggregationType`: SUM, AVG, MIN, MAX, COUNT, P50, P95, P99 for rollups
 - `FederationMode`: PULL, PUSH, HYBRID for multi-repo aggregation
 
 ### Added Dataclasses
+
 - `StreamingConfig`: Configuration for real-time stats streaming
 - `MetricNamespace`: Namespace for organizing metrics hierarchically
 - `MetricAnnotation`: Annotation or comment on a metric
@@ -21,6 +28,7 @@
 - `APIEndpoint`: Stats API endpoint configuration
 
 ### Added Helper Classes
+
 - `StatsStreamer`: Real-time stats streaming via WebSocket for live dashboards
 - `StatsFederation`: Aggregate stats from multiple repositories
 - `MetricNamespaceManager`: Manage metric namespaces for organizing large metric sets
@@ -35,11 +43,13 @@
 
 ## [2025-12-18] - Session 6 Implementation
 
-### Added Enums
+### Added Enums (Session 6)
+
 - `MetricType` enum: COUNTER, GAUGE, HISTOGRAM, SUMMARY
 - `AlertSeverity` enum: CRITICAL, HIGH, MEDIUM, LOW, INFO
 
-### Added Dataclasses
+### Added Dataclasses (Session 6)
+
 - `Metric`: Custom metric definition with name, metric_type, description, unit, tags
 - `MetricSnapshot`: Point-in-time metric snapshot with name, timestamp, metrics
 - `Threshold`: Alert threshold with metric_name, min_value, max_value, severity, message
@@ -47,6 +57,7 @@
 - `RetentionPolicy`: Data retention policy with metric_name, max_age_days, max_points, aggregation
 
 ### Added Methods
+
 - `register_custom_metric()`: Register custom metric with type
 - `get_metric()`, `add_metric()`, `get_metric_history()`: Metric management
 - `collect_custom_metrics()`: Collect all custom metrics
@@ -59,13 +70,16 @@
 - `compress_metrics()`, `decompress_metrics()`: Data compression using zlib
 
 ### Added Flag
+
 - `HAS_MATPLOTLIB`: Optional matplotlib import flag for visualization
 
 ## [Initial]
+
 - Initial version of agent-stats.py
 - 2025-12-15: No functional changes in this iteration; documentation and test coverage refreshed.
 
 ## [2025-12-16]
+
 - Add support for exporting stats to CSV. (Fixed)
 - Add logging for all major actions. (Fixed)
 - Add type hints for all methods. (Fixed)
@@ -91,6 +105,7 @@
 - Generate comparative analysis across team members or branches. (Fixed)
 
 ## [2025-12-15]
+
 - Added support for exporting stats to CSV format (`--format csv`).
 - Added detailed logging for stats reporting.
 - Added explicit type hints to `__init__` and `report_stats`.

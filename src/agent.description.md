@@ -1,42 +1,35 @@
 # Description: `agent.py`
 
 ## Module purpose
-Agent: Orchestrates work among sub-agents for code improvement.
+Repository-level agent orchestrator.
 
-Assigns tasks to various agents to improve code files, their documentation,
-tests, and related artifacts.
-
-## Description
-This module provides the main Agent that coordinates the improvement process
-across code files by calling specialized sub-agents for different aspects
-of code quality and documentation.
-
-## Changelog
-- 1.0.0: Initial implementation
-
-## Suggested Fixes
-- Add better error handling
-- Implement async execution for agents
-
-## Improvements
-- Enhanced coordination between agents
-- Better progress tracking
+`agent.py` coordinates multiple sub-agents over a repo: reading files,
+invoking backend-driven improvements, and emitting markdown reports.
 
 ## Location
-- Path: `scripts/agent/agent.py`
+- Path: `src/agent.py`
 
 ## Public surface
-- Classes: Agent
-- Functions: setup_logging, load_codeignore, main
+- Class: `Agent`
+- Functions: `setup_logging`, `load_codeignore`, `main`
 
 ## Behavior summary
-- Has a CLI entrypoint (`__main__`).
-- Uses `argparse` for CLI parsing.
-- Invokes external commands via `subprocess`.
-- Mutates `sys.path` to import sibling modules.
+- CLI entrypoint via `main()` (uses `argparse`).
+- Executes external commands via `subprocess`.
+- Loads a markdown post-processor dynamically (`fix/fix_markdown_lint.py`) and
+	applies it when writing `*.md` reports.
 
-## Key dependencies
-- Top imports: `subprocess`, `sys`, `os`, `logging`, `pathlib`, `typing`, `argparse`, `fnmatch`, `fix_markdown_lint`, `re`
+## Optional dependencies
+- `requests` (webhook delivery)
+	- Availability flag: `HAS_REQUESTS`
+	- When unavailable, webhook sending is skipped safely.
+- `tqdm` (progress display)
+	- Availability flag: `HAS_TQDM`
+	- When unavailable, a typed fallback `tqdm()` returns the input iterable.
+
+## Notes on typing
+- Uses typed empty-container factories for dataclass defaults to avoid
+	`list[Unknown]` / `dict[Unknown, Unknown]` propagation in static analysis.
 
 ## File fingerprint
-- SHA256(source): `643e371284bca0e0…`
+- SHA256(source): `b3057336af81ed1c175eeb6c3e85a750628593a77361ae43ff4f0f09f258aee0`

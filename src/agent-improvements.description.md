@@ -1,39 +1,53 @@
 # Description: `agent-improvements.py`
 
 ## Module purpose
-Improvements Agent: Improves and updates code file improvement suggestions.
 
-Reads an improvements file (Codefile.improvements.md), uses Copilot to enhance the suggestions,
-and updates the improvements file with improvements.
+Improves and maintains `*.improvements.md` “improvement suggestion” files.
 
-# Description
-This module provides an Improvements Agent that reads existing code file improvement suggestions,
-uses AI assistance to improve and complete them, and updates the improvements files
-with enhanced documentation.
-
-# Changelog
-- 1.0.0: Initial implementation
-
-# Suggested Fixes
-- Add validation for improvements file format
-- Improve prompt engineering for better suggestions
-
-# Improvements
-- Better integration with other agents
-- Enhanced diff reporting
+In addition to delegating to the LLM (via `BaseAgent`), this module includes a
+large set of supporting enums, dataclasses, and helper classes for organizing
+and managing improvement work (priorities/categories/status, templates, impact
+scoring, dependencies, scheduling, validation, rollback tracking, SLA
+management, merge detection, archiving, and branch comparison).
 
 ## Location
-- Path: `scripts/agent/agent-improvements.py`
 
-## Public surface
-- Classes: ImprovementsAgent
-- Functions: (none)
+- Path: `src/agent-improvements.py`
+
+## Public surface (high level)
+
+- CLI:
+
+  - `main` (created via `create_main_function(...)`)
+
+- Primary class:
+
+  - `ImprovementsAgent(BaseAgent)`
 
 ## Behavior summary
-- Has a CLI entrypoint (`__main__`).
+
+- Input is typically `something.improvements.md`.
+- Emits a warning if the file name does not end with `.improvements.md`.
+- Best-effort checks for an associated code file with the same stem next to the
+
+  improvements file (exact match or common extensions like `.py`, `.sh`, `.js`,
+  `.ts`, `.md`).
+- `improve_content()` augments the prompt to encourage actionable markdown
+
+  checkbox items and grouping by priority before delegating to
+  `BaseAgent.improve_content()`.
+
+## How to run
+
+```bash
+python src/agent-improvements.py path/to/file.improvements.md
+```
 
 ## Key dependencies
-- Top imports: `pathlib`, `typing`, `base_agent`
+
+- `base_agent.BaseAgent`
+- `base_agent.create_main_function`
 
 ## File fingerprint
-- SHA256(source): `ab71f0fae34cfecf…`
+
+- SHA256(source): `2120b52c2f6fa66279340952c3f00ba6a246bf2c82e4a3097bc8998efb5673a3`

@@ -11,27 +11,23 @@
 # limitations under the License.
 
 """
-Tests Agent: Improves and updates code file test suites.
+Tests Agent: improve a Python test module using BaseAgent AI assistance.
 
-Reads a tests file (test_Codefile.py), uses Copilot to enhance the tests,
-and updates the tests file with improvements.
+The primary entrypoint is :class:`TestsAgent`, which:
 
-# Description
-This module provides a Tests Agent that reads existing code file test suites,
-uses AI assistance to improve and complete them, ensuring each line of the codefile is tested,
-and updates the tests files with enhanced test coverage.
+- Accepts a path to a test file (commonly named ``test_*.py``).
+- Attempts to locate the corresponding source file to provide extra context
+    (same directory, a parent directory when tests live in ``tests/``, and a
+    legacy ``scripts/agent`` lookup).
+- Calls :meth:`BaseAgent.improve_content` with an enhanced prompt.
+- Validates generated output with ``ast.parse`` and performs lightweight
+    structural checks (e.g., warns if ``test_`` functions have no assertions).
+- Writes the updated tests back to disk without applying markdown-specific
+    formatting.
 
-# Changelog
-- 1.0.0: Initial implementation
-- 1.1.0: Added test prioritization, flakiness detection, coverage analysis
-
-# Suggested Fixes
-- Add validation for tests file format
-- Improve prompt engineering for better test generation
-
-# Improvements
-- Better integration with other agents
-- Enhanced diff reporting
+This module also contains supporting enums, data models, and utilities for test
+metadata management (prioritization, flakiness, coverage gaps, scheduling,
+profiling, and related helpers). Some helper classes are placeholders.
 """
 
 from __future__ import annotations
@@ -722,10 +718,10 @@ class EnvironmentProvisioner:
             return {"warning": "Already active", "success": True}
         # Run setup commands (simulated)
         for cmd in env.setup_commands:
-            self._setup_logs[name].append(f"Executed: {cmd}")
-        self.active[name] = True
+            self._setup_logs.setdefault(name_key, []).append(f"Executed: {cmd}")
+        self.active[name_key] = True
         return {
-            "environment": name,
+            "environment": name_key,
             "success": True,
             "variables": env.variables
         }
@@ -817,7 +813,7 @@ class ExecutionReplayer:
 
         trace = self.traces.get(self._current_recording)
         if trace:
-            step = {
+            step: Dict[str, Any] = {
                 "index": len(trace.steps),
                 "timestamp": datetime.now().isoformat(),
                 "action": action,
@@ -857,22 +853,18 @@ class ExecutionReplayer:
         trace = self.traces.get(test_id)
         if not trace:
             return []
-
-        replayed = []
+        replayed: List[Dict[str, Any]] = []
         for i, step in enumerate(trace.steps):
             if mode == ExecutionMode.BREAKPOINT and i == breakpoint_step:
                 break
-
             replayed.append({
                 "step": i,
                 "action": step["action"],
                 "replayed": True
             })
-
             if mode == ExecutionMode.STEP_BY_STEP:
                 # In real impl, would pause for user input
                 pass
-
         return replayed
 
     def get_step(self, test_id: str, step_index: int) -> Optional[Dict[str, Any]]:
@@ -993,11 +985,9 @@ class DependencyInjector:
         # Check overrides first
         if name in self.overrides:
             return self.overrides[name]
-
         dep = self.dependencies.get(name)
         if not dep:
             return None
-
         # Return implementation reference
         return dep.implementation
 
@@ -1013,7 +1003,6 @@ class DependencyInjector:
         dep = self.dependencies.get(name)
         if not dep:
             return ""
-
         scope = self._scopes.get(name, "function")
         return (
             f"@pytest.fixture(scope='{scope}')\n"
@@ -1028,7 +1017,7 @@ class DependencyInjector:
         Returns:
             All fixtures as code string.
         """
-        fixtures = []
+        fixtures: List[str] = []
         for name in self.dependencies:
             fixtures.append(self.get_fixture_code(name))
         return "\n".join(fixtures)
@@ -1092,21 +1081,17 @@ class CrossBrowserRunner:
         Returns:
             Results for each browser.
         """
-        results = {}
-
+        results: Dict[BrowserType, Dict[str, Any]] = {}
         for browser in self.config.browsers:
             self.setup_driver(browser)
-
             retries = 0
             passed = False
-
             while retries <= self.config.retries and not passed:
                 try:
                     passed = test_code()
                 except Exception:
                     retries += 1
-
-            result = {
+            result: Dict[str, Any] = {
                 "test": test_name,
                 "passed": passed,
                 "retries": retries,
@@ -1114,9 +1099,7 @@ class CrossBrowserRunner:
             }
             results[browser] = result
             self.results[browser].append(result)
-
             self.teardown_driver(browser)
-
         return results
 
     def get_summary(self) -> Dict[str, Any]:
@@ -1129,11 +1112,12 @@ class CrossBrowserRunner:
 
         for browser, results in self.results.items():
             passed = sum(1 for r in results if r.get("passed"))
-            summary["browsers"][browser.value] = {
+            browser_summary: Dict[str, int] = {
                 "total": len(results),
                 "passed": passed,
                 "failed": len(results) - passed
             }
+            summary["browsers"][browser.value] = browser_summary
 
         return summary
 
@@ -1363,9 +1347,8 @@ class MutationTester:
         Returns:
             List of generated mutations.
         """
-        mutations = []
+        mutations: List[Mutation] = []
         lines = source_code.split("\n")
-
         for i, line in enumerate(lines, 1):
             # Arithmetic mutations
             if "+" in line:
@@ -1378,7 +1361,6 @@ class MutationTester:
                     original_code=line,
                     mutated_code=line.replace("+", "-", 1)
                 ))
-
             # Relational mutations
             if "==" in line:
                 mut_id = hashlib.md5(f"{file_path}:{i}:==->!=".encode()).hexdigest()[:8]
@@ -1390,7 +1372,6 @@ class MutationTester:
                     original_code=line,
                     mutated_code=line.replace("==", "!=", 1)
                 ))
-
             # Logical mutations
             if " and " in line:
                 mut_id = hashlib.md5(f"{file_path}:{i}:and->or".encode()).hexdigest()[:8]
@@ -1402,7 +1383,6 @@ class MutationTester:
                     original_code=line,
                     mutated_code=line.replace(" and ", " or ", 1)
                 ))
-
         self.mutations.extend(mutations)
         return mutations
 
@@ -1596,7 +1576,6 @@ class TestGenerator:
             The generated test.
         """
         test_name = f"test_{function_name}_parametrized"
-
         params = ", ".join(str(tc) for tc in test_cases)
         code = (
             f"@pytest.mark.parametrize('input_val,expected', [\n"
@@ -1606,7 +1585,6 @@ class TestGenerator:
             f"    result={function_name}(input_val)\n"
             f"    assert result == expected\n"
         )
-
         generated = GeneratedTest(
             name=test_name,
             specification=f"Parametrized test for {function_name}",
@@ -1627,7 +1605,6 @@ class TestGenerator:
         """
         if test_id < 0 or test_id >= len(self.generated):
             return False
-
         try:
             ast.parse(self.generated[test_id].generated_code)
             self.generated[test_id].validated = True
@@ -1681,7 +1658,6 @@ class TestCaseMinimizer:
             mid = len(current) // 2
             left = current[:mid]
             right = current[mid:]
-
             if test_fn(left):
                 current = left
             elif test_fn(right):
@@ -1689,13 +1665,11 @@ class TestCaseMinimizer:
             else:
                 # Can't reduce further at this granularity
                 break
-
         self.history.append({
             "original": input_str,
             "minimized": current,
             "reduction": 1 - len(current) / len(input_str)
         })
-
         return current
 
     def minimize_list(
@@ -1722,12 +1696,10 @@ class TestCaseMinimizer:
                 current = candidate
             else:
                 i += 1
-
         self.history.append({
             "original_length": len(input_list),
             "minimized_length": len(current)
         })
-
         return current
 
     def get_minimization_stats(self) -> Dict[str, Any]:
@@ -1738,10 +1710,8 @@ class TestCaseMinimizer:
         """
         if not self.history:
             return {"total": 0}
-
         reductions = [h.get("reduction", 0) for h in self.history if "reduction" in h]
         avg_reduction = sum(reductions) / len(reductions) if reductions else 0
-
         return {
             "total_minimizations": len(self.history),
             "average_reduction": avg_reduction
@@ -1791,7 +1761,6 @@ class TestProfiler:
         """
         start = self._start_times.pop(test_id, time.time())
         cpu_time = (time.time() - start) * 1000  # ms
-
         profile = TestProfile(
             test_id=test_id,
             cpu_time_ms=cpu_time,
@@ -1843,14 +1812,12 @@ class TestProfiler:
         """
         report = ["# Test Profiling Report\n"]
         report.append(f"Total profiled: {len(self.profiles)}\n")
-
         report.append("## Slowest Tests\n")
         for profile in self.get_slowest_tests(5):
             report.append(
                 f"- `{profile.test_id}`: {profile.cpu_time_ms:.2f}ms, "
                 f"{profile.memory_peak_mb:.1f}MB"
             )
-
         return "\n".join(report)
 
 
@@ -1927,20 +1894,17 @@ class TestScheduler:
             key=lambda t: self._test_durations.get(t, 1000),
             reverse=True
         )
-
         # Distribute across workers
         worker_loads: List[List[str]] = [[] for _ in range(self.num_workers)]
         worker_times = [0.0] * self.num_workers
-
         for test in sorted_tests:
             # Find worker with least load
             min_worker = worker_times.index(min(worker_times))
             worker_loads[min_worker].append(test)
             worker_times[min_worker] += self._test_durations.get(test, 1000)
-
         # Create slots
         self.schedule = []
-        for i, tests_for_worker in enumerate(worker_loads):
+        for tests_for_worker in worker_loads:
             if tests_for_worker:
                 slot = ScheduleSlot(
                     start_time=start_time,
@@ -1949,7 +1913,6 @@ class TestScheduler:
                     workers=1
                 )
                 self.schedule.append(slot)
-
         return self.schedule
 
     def _schedule_sequential(
@@ -1983,14 +1946,12 @@ class TestScheduler:
         """
         if not self.schedule:
             return 0.0
-
         max_duration = 0.0
         for slot in self.schedule:
             slot_duration = sum(
                 self._test_durations.get(t, 1000) for t in slot.tests
             )
             max_duration = max(max_duration, slot_duration)
-
         return max_duration
 
     def get_worker_assignments(self) -> Dict[int, List[str]]:
@@ -1999,7 +1960,7 @@ class TestScheduler:
         Returns:
             Dictionary of worker index to test list.
         """
-        assignments = {}
+        assignments: Dict[int, List[str]] = {}
         for i, slot in enumerate(self.schedule):
             assignments[i] = slot.tests
         return assignments
@@ -2116,7 +2077,7 @@ class TestsAgent(BaseAgent):
 
     def detect_flaky_tests(self) -> List[TestCase]:
         """Detect tests that are flaky."""
-        flaky = []
+        flaky: List[TestCase] = []
         for test in self._tests:
             score = self.calculate_flakiness(test)
             if score > self._flakiness_threshold:
@@ -2314,14 +2275,12 @@ class TestsAgent(BaseAgent):
     def generate_test_documentation(self) -> str:
         """Generate documentation for all tests."""
         docs = ["# Test Documentation\n"]
-
         # Summary
         docs.append("## Summary\n")
         docs.append(f"- Total Tests: {len(self._tests)}")
         docs.append(f"- Critical: {len(self.get_tests_by_priority(TestPriority.CRITICAL))}")
         docs.append(f"- Flaky: {len(self.detect_flaky_tests())}")
         docs.append(f"- Coverage Gaps: {len(self._coverage_gaps)}\n")
-
         # Tests by priority
         docs.append("## Tests by Priority\n")
         for priority in TestPriority:
@@ -2332,13 +2291,12 @@ class TestsAgent(BaseAgent):
                     status_icon = "✓" if test.status == TestStatus.PASSED else "✗"
                     docs.append(f"- [{status_icon}] `{test.name}` (line {test.line_number})")
                 docs.append("")
-
         return '\n'.join(docs)
 
     def export_tests(self, format: str = "json") -> str:
         """Export tests to various formats."""
         if format == "json":
-            data = [{
+            data: List[Dict[str, Any]] = [{
                 "id": t.id,
                 "name": t.name,
                 "file": t.file_path,
@@ -2352,26 +2310,21 @@ class TestsAgent(BaseAgent):
         return ""
 
     # ========== Statistics ==========
-
     def calculate_statistics(self) -> Dict[str, Any]:
         """Calculate test statistics."""
         total = len(self._tests)
         if total == 0:
             return {"total_tests": 0}
-
         by_status = {}
         for status in TestStatus:
             count = len([t for t in self._tests if t.status == status])
             by_status[status.name] = count
-
         by_priority = {}
         for priority in TestPriority:
             count = len([t for t in self._tests if t.priority == priority])
             by_priority[priority.name] = count
-
         avg_duration = sum(t.duration_ms for t in self._tests) / total if total > 0 else 0
         flaky_count = len([t for t in self._tests if t.flakiness_score > self._flakiness_threshold])
-
         return {
             "total_tests": total,
             "by_status": by_status,
@@ -2384,7 +2337,6 @@ class TestsAgent(BaseAgent):
         }
 
     # ========== Original Methods ==========
-
     def _get_default_content(self) -> str:
         """Return default content for new test files."""
         return "# Tests\n\nimport pytest\n\n# Add tests here\n"
@@ -2398,26 +2350,22 @@ class TestsAgent(BaseAgent):
         """Locate source file for test file (test_foo.py -> foo.py)."""
         if not self.file_path.name.startswith('test_'):
             return None
-
         source_name = self.file_path.name[5:]  # Remove test_ prefix
         # Try to find source file in common locations
         # 1. Same directory
         source_path = self.file_path.parent / source_name
         if source_path.exists():
             return source_path
-
         # 2. Parent directory (if tests are in tests/)
         if self.file_path.parent.name == 'tests':
             source_path = self.file_path.parent.parent / source_name
             if source_path.exists():
                 return source_path
-
         # 3. scripts / agent directory (specific to this project structure)
         agent_dir = self.file_path.parent.parent / 'scripts' / 'agent'
         source_path = agent_dir / source_name
         if source_path.exists():
             return source_path
-
         return None
 
     def _validate_syntax(self, content: str) -> bool:
@@ -2433,15 +2381,13 @@ class TestsAgent(BaseAgent):
         """Validate pytest / unittest-specific patterns."""
         try:
             tree = ast.parse(content)
-            issues = []
-
+            issues: List[str] = []
             # Check 1: All test functions follow naming convention
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef):
                     if not node.name.startswith('test_') and 'test' in node.name.lower():
                         # Just a warning, might be a helper
                         pass
-
             # Check 2: Tests contain assertions
             test_funcs = [n for n in ast.walk(tree) if isinstance(
                 n, ast.FunctionDef) and n.name.startswith('test_')]
@@ -2456,14 +2402,11 @@ class TestsAgent(BaseAgent):
                                 if isinstance(item.context_expr.func, ast.Attribute):
                                     if item.context_expr.func.attr == 'raises':
                                         has_raises = True
-
                 if not (has_assert or has_raises):
                     issues.append(f"Test '{func.name}' lacks assertions")
-
             if issues:
                 logging.warning(f"Test structure issues: {', '.join(issues)}")
                 # We don't fail validation for this yet, just warn
-
             return True
         except Exception as e:
             logging.warning(f"Failed to validate test structure: {e}")
@@ -2489,7 +2432,6 @@ class TestsAgent(BaseAgent):
                 max_source_chars = 20000
                 if len(source_content) > max_source_chars:
                     source_content = source_content[:max_source_chars] + "\n# ... (truncated)"
-
                 enhanced_prompt = (
                     f"{prompt}\n\n"
                     f"# Source Code being tested ({source_path.name}):\n"
@@ -2498,20 +2440,15 @@ class TestsAgent(BaseAgent):
                 )
             except Exception as e:
                 logging.warning(f"Failed to read source file context: {e}")
-
         new_content = super().improve_content(enhanced_prompt)
-
         # Validate syntax
         if not self._validate_syntax(new_content):
             logging.error("Generated tests failed syntax validation. Reverting.")
             self.current_content = self.previous_content
             return self.previous_content
-
         logging.debug("Syntax validation passed")
-
         # Validate structure
         self._validate_test_structure(new_content)
-
         return new_content
 
     def update_file(self) -> None:
@@ -2559,7 +2496,6 @@ class TestMetricsCollector:
         total_duration = sum(sum(durations) for durations in self.executions.values())
         total_tests = sum(len(durations) for durations in self.executions.values())
         avg_duration = total_duration / total_tests if total_tests > 0 else 0
-
         return {
             "total_duration_ms": total_duration,
             "average_duration_ms": avg_duration
@@ -2642,14 +2578,12 @@ class BaselineManager:
         baseline = self.load_baseline(name)
         if baseline == current:
             return BaselineComparisonResult(matches=True)
-
-        differences = []
+        differences: List[str] = []
         for key in set(list(baseline.keys()) + list(current.keys())):
             baseline_val = baseline.get(key)
             current_val = current.get(key)
             if baseline_val != current_val:
                 differences.append(f"{key}: {baseline_val} -> {current_val}")
-
         return BaselineComparisonResult(matches=False, differences=differences)
 
     def update_baseline(self, name: str, data: Dict[str, Any]) -> None:
@@ -2762,7 +2696,7 @@ class TestPrioritizer:
 
     def prioritize_combined(self) -> List[str]:
         """Prioritize with combined strategy."""
-        scores = {}
+        scores: Dict[str, float] = {}
         for test, data in self.tests.items():
             scores[test] = data["recent_changes"] + data["failure_rate"] * 100
         return sorted(scores.keys(), key=lambda t: scores[t], reverse=True)
@@ -2826,7 +2760,7 @@ class ImpactAnalyzer:
 
     def get_impacted_tests(self, changed_files: List[str]) -> Set[str]:
         """Get tests impacted by file changes."""
-        impacted = set()
+        impacted: Set[str] = set()
         for test, deps in self.dependencies.items():
             if any(f in deps for f in changed_files):
                 impacted.add(test)

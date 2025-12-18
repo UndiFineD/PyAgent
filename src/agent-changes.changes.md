@@ -3,12 +3,20 @@
 - Initial version of agent-changes.py
 - 2025-12-15: No functional changes in this iteration; documentation and test coverage refreshed.
 
+## [2025-12-18] - Documentation refresh
+
+- Updated companion docs to match current code location (`src/agent-changes.py`).
+- Refreshed description, improvements, and errors docs to match actual behavior.
+- Recorded current SHA256 fingerprint.
+
 ## [2025-12-15]
+
 - Added detailed logging for changelog improvement process.
 - Added explicit type hints to `__init__`.
 - Function `__init__` is missing type annotations. (Fixed)
 
 ## [2025-12-16]
+
 - Implement `ChangelogValidator` class with regex patterns for Keep a Changelog format validation. (Fixed)
 - Add semantic version parsing using `semantic_version` or `packaging` library. (Fixed)
 - Create `validate_changelog_structure()` method to verify section hierarchy (h2 for versions, h3 for categories). (Fixed)
@@ -31,6 +39,7 @@
 - Cache associated file lookups to avoid repeated filesystem operations. (Fixed)
 
 ## [2025-06-02]
+
 - Implement changelog merge detection: handle merge conflicts gracefully with `detect_merge_conflicts()` and `resolve_merge_conflict()` methods. (Fixed)
 - Add support for changelog templates for different project types (Python, JavaScript, Generic) with `set_template()` and `create_custom_template()`. (Fixed)
 - Implement changelog preview mode before committing changes with `enable_preview_mode()`, `disable_preview_mode()`, and `preview_changes()`. (Fixed)
@@ -47,6 +56,7 @@
 ## [2025-01-13] - Session 6 Advanced Changelog Management Tools
 
 ### New Enums (6)
+
 - `LocalizationLanguage`: Supported languages for changelog localization (en, es, fr, de, ja, zh, pt). (Added)
 - `DiffViewMode`: Modes for changelog diff visualization (unified, side_by_side, inline). (Added)
 - `ImportSource`: External sources for changelog import (github_releases, jira, gitlab, manual). (Added)
@@ -55,6 +65,7 @@
 - `GroupingStrategy`: Strategies for entry grouping (by_date, by_version, by_category, by_author). (Added)
 
 ### New Dataclasses (9)
+
 - `LocalizedEntry`: Changelog entry with localization support including translations dictionary. (Added)
 - `DiffResult`: Result of changelog diff comparison with additions, deletions, and similarity score. (Added)
 - `ImportedEntry`: Entry imported from external source with source, external_id, and labels. (Added)
@@ -66,6 +77,7 @@
 - `EntryTemplate`: Template for changelog entries with placeholders and description. (Added)
 
 ### New Helper Classes (11)
+
 - `ChangelogLocalizer`: Handles changelog localization to multiple languages with translation support. (Added)
 - `DiffVisualizer`: Visualizes changelog differences with unified, side-by-side, and inline modes. (Added)
 - `ExternalImporter`: Imports changelog entries from GitHub releases, JIRA, and other sources. (Added)
@@ -79,6 +91,7 @@
 - `TemplateManager`: Manages entry templates with placeholders and template application. (Added)
 
 ### Key Features Implemented
+
 - Changelog localization to 7 languages with translation management. (Fixed)
 - Diff visualization with side-by-side comparison and HTML rendering. (Fixed)
 - Import from external sources (GitHub releases, JIRA) with entry conversion. (Fixed)
@@ -92,6 +105,7 @@
 - Entry templates with placeholder support. (Fixed)
 
 ### Documentation
+
 - All new classes include comprehensive Google-style docstrings. (Added)
 - Each class includes usage examples in docstrings. (Added)
 - All methods documented with Args, Returns, and type hints. (Added)

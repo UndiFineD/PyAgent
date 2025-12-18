@@ -10,30 +10,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Improvements Agent: Improves and updates code file improvement suggestions.
+"""src.agent-improvements
 
-Reads an improvements file (Codefile.improvements.md), uses Copilot to enhance the suggestions,
-and updates the improvements file with improvements.
+Maintains and improves `*.improvements.md` “improvement suggestion” files.
 
-# Description
-This module provides an Improvements Agent that reads existing code file improvement suggestions,
-uses AI assistance to improve and complete them, and updates the improvements files
-with enhanced documentation.
+The main entrypoint is `ImprovementsAgent`, a `BaseAgent` subclass that:
 
-# Changelog
-- 1.0.0: Initial implementation
-- 1.1.0: Added impact scoring, dependencies, effort estimation, templates
-- 1.2.0: Added scheduling, progress dashboards, validation, rollback tracking,
-         tool integration, SLA management, merge detection, archiving
+- Accepts a path to an improvements file (typically `some_module.improvements.md`).
+- Warns if the file name does not end with `.improvements.md`.
+- Best-effort checks for a related code file with the same stem next to the
+    improvements file (exact match or common extensions like `.py`, `.sh`, `.js`,
+    `.ts`, `.md`).
+- Provides in-memory helpers for managing improvement entries: priority/category
+    enums, templates, impact scoring, dependencies, voting, assignment, analytics,
+    export, and documentation generation.
+- Delegates to `BaseAgent.improve_content()` to improve the markdown content via
+    Copilot/LLM tooling; the prompt is augmented to encourage actionable checkbox
+    items grouped by priority.
 
-# Suggested Fixes
-- Add validation for improvements file format
-- Improve prompt engineering for better suggestions
+CLI
+---
+This file exposes a CLI via `create_main_function(...)`:
 
-# Improvements
-- Better integration with other agents
-- Enhanced diff reporting
+                python src/agent-improvements.py path/to/file.improvements.md
 """
 
 from __future__ import annotations

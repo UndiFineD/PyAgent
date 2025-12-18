@@ -1,14 +1,22 @@
 # Changelog: agent-tests.py
 
+## [2025-12-18] - Documentation refresh
+
+- Updated module docstring and companion documentation to match current `TestsAgent` behavior.
+- Corrected paths to use `src/agent-tests.py` and refreshed the SHA256 fingerprint in the description doc.
+- Normalized markdown formatting (blank lines around headings/lists).
+
 ## [2025-01-16] - Session 7 Implementation
 
 ### Added Enums
+
 - `BrowserType`: CHROME, FIREFOX, SAFARI, EDGE, IE for cross-browser testing
 - `TestSourceType`: PYTEST, UNITTEST, JEST, MOCHA, JUNIT for result aggregation
 - `MutationOperator`: ARITHMETIC, RELATIONAL, LOGICAL, ASSIGNMENT, RETURN_VALUE
 - `ExecutionMode`: STEP_BY_STEP, FULL_REPLAY, BREAKPOINT for replay debugging
 
 ### Added Dataclasses
+
 - `VisualRegressionConfig`: Configuration for visual regression testing with viewport sizes
 - `ContractTest`: Contract test for API boundaries with schemas
 - `TestEnvironment`: Test environment configuration with setup/teardown commands
@@ -22,6 +30,7 @@
 - `ScheduleSlot`: Scheduled time slot for test execution
 
 ### Added Helper Classes
+
 - `VisualRegressionTester`: Visual regression testing for UI components
 - `ContractTestRunner`: Contract testing for API boundaries
 - `TestSuiteOptimizer`: Optimize test suites by removing redundant tests
@@ -41,8 +50,8 @@
 ### Added Enums
 
 - `TestPriority` enum: CRITICAL, HIGH, MEDIUM, LOW, SKIP
-- `TestStatus` enum: PASSED, FAILED, FLAKY, SKIPPED, ERROR
-- `CoverageType` enum: LINE, BRANCH, FUNCTION, STATEMENT
+- `TestStatus` enum: PASSED, FAILED, SKIPPED, ERROR, FLAKY
+- `CoverageType` enum: LINE, BRANCH, FUNCTION, CLASS
 
 ### Added Dataclasses
 

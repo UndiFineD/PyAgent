@@ -1,15 +1,21 @@
 # Changelog
 
-- 2025-12-15: Added report generation for each `scripts/agent/*.py` into `*.description.md`, `*.errors.md`, and `*.improvements.md`.
+## [2025-12-18] - Documentation refresh
+
+- Updated docs to match current behavior (scans `src/*.py`, emits companion markdown files into `src/`).
+- Corrected stale dependency/behavior claims in companion docs.
+- Refreshed SHA256 fingerprint in the description doc.
+
+- 2025-12-15: Added report generation for each `src/*.py` into `*.description.md`, `*.errors.md`, and `*.improvements.md`.
 
 ## Session 8 [2025-12-16]
 
 ### Added - Session 8 Enums
-- `SubscriptionFrequency` enum: IMMEDIATE, HOURLY, DAILY, WEEKLY, MONTHLY
+- `SubscriptionFrequency` enum: IMMEDIATE, HOURLY, DAILY, WEEKLY
 - `PermissionLevel` enum: NONE, READ, WRITE, ADMIN
-- `ExportFormat` enum: MARKDOWN, JSON, HTML, PDF, PPT, CSV
-- `LocaleCode` enum: EN_US, EN_GB, DE_DE, FR_FR, ES_ES, ZH_CN, JA_JP
-- `AuditAction` enum: CREATE, READ, UPDATE, DELETE, EXPORT, SHARE
+- `ExportFormat` enum: JSON, HTML, PDF, CSV
+- `LocaleCode` enum: EN_US, DE_DE, FR_FR, ES_ES
+- `AuditAction` enum: CREATE, READ, UPDATE, DELETE, EXPORT
 
 ### Added - Session 8 Dataclasses
 - `ReportSubscription`: Subscription for report delivery with frequency, email, patterns

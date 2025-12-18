@@ -1,22 +1,43 @@
 # Description: `agent_test_utils.py`
 
 ## Module purpose
-Test utilities for agent scripts.
 
-Provides helpers to load agent modules dynamically and manage sys.path for testing.
+`src/agent_test_utils.py` contains reusable utilities for the repository’s agent
+tests and development tooling. It includes structured dataclasses/enums,
+generators and harness helpers, and a small set of legacy import utilities used
+by older tests.
 
 ## Location
-- Path: `scripts/agent/agent_test_utils.py`
+
+- Path: `src/agent_test_utils.py`
 
 ## Public surface
-- Classes: (none)
-- Functions: agent_dir_on_path, load_agent_module
+
+- Commonly used classes (representative, not exhaustive):
+  - `MockAIBackend`
+  - `FixtureGenerator`, `TestDataGenerator`
+  - `FileSystemIsolator`, `PerformanceTracker`, `SnapshotManager`
+  - `TestResultAggregator`, `AgentAssertions`
+- Legacy helpers:
+  - `agent_dir_on_path()`
+  - `agent_sys_path()`
+  - `load_module_from_path()`
+  - `load_agent_module()`
+  - `get_base_agent_module()`
 
 ## Behavior summary
-- Mutates `sys.path` to import sibling modules.
+
+- Provides test-support types and helpers; no CLI entrypoint.
+- Some legacy helpers temporarily mutate `sys.path` to support older tests.
+- `load_agent_module()` loads a module by file path and generates a safe module
+  name when needed.
 
 ## Key dependencies
-- Top imports: `__future__`, `importlib.util`, `re`, `sys`, `contextlib`, `pathlib`, `types`, `typing`
+
+- Standard library heavy: `importlib.util`, `contextlib`, `dataclasses`,
+  `pathlib`, `tempfile`, `shutil`, `threading`, `logging`, `json`, `re`, `sys`
+- Optional: `numpy` (some utilities tolerate it being unavailable)
 
 ## File fingerprint
-- SHA256(source): `e19868e4c8b5a47f…`
+
+- SHA256(source): `7232856B2E51E2AB2E60A852AE65E26C13D0FEF42115EC7B011CB34BED287D93`

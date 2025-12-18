@@ -10,31 +10,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Errors Agent: Improves and updates code file error reports.
+"""src.agent-errors
 
-Reads an errors file (Codefile.errors.md), uses Copilot to enhance the error analysis,
-and updates the errors file with improvements.
+Maintains and improves `*.errors.md` “error report” files.
 
-# Description
-This module provides an Errors Agent that reads existing code file error reports,
-uses AI assistance to improve and complete them, and updates the errors files
-with enhanced documentation.
+The main entrypoint is `ErrorsAgent`, a `BaseAgent` subclass that:
 
-# Changelog
-- 1.0.0: Initial implementation
-- 1.1.0: Added error correlation, clustering, severity scoring, pattern recognition
-- 1.2.0: Added notification integrations, impact analysis, timeline visualization,
-         regression detection, automated fix suggestions, external reporting,
-         budget tracking, trend analysis, blame tracking, branch comparison
+- Accepts a path to an errors file (typically `some_module.errors.md`).
+- Warns if the file name does not end with `.errors.md`.
+- Best-effort checks for a related code file with the same stem next to the
+    errors file (optionally with common extensions).
+- Provides in-memory helpers for managing error entries (severity/category),
+    deduplication, clustering, pattern recognition, suppression rules, annotations,
+    statistics, and export.
+- Delegates to `BaseAgent.improve_content()` to improve the markdown content via
+    Copilot/LLM tooling; if Copilot is unavailable, fallback behavior is handled
+    by `BaseAgent`.
 
-# Suggested Fixes
-- Add validation for errors file format
-- Improve prompt engineering for better error analysis
+CLI
+---
+This file exposes a CLI via `create_main_function(...)`:
 
-# Improvements
-- Better integration with other agents
-- Enhanced diff reporting
+        python src/agent-errors.py path/to/file.errors.md
 """
 
 from __future__ import annotations

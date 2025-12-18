@@ -11,23 +11,15 @@
 # limitations under the License.
 
 """
-Changes Agent: Improves and updates code file changelogs.
+Changes Agent: improves and updates per-file changelog content.
 
-Reads a changes file (Codefile.changes.md), uses Copilot to enhance the changelog,
-and updates the changes file with improvements.
+The agent is intended to operate on `*.changes.md` files. It validates the file
+extension, tries to locate an associated source file nearby, and then delegates
+to `BaseAgent` for LLM-backed improvements (when available).
 
-## Description
-This module provides a Changes Agent that reads existing code file changelogs,
-uses AI assistance to improve and complete them, and updates the changes files
-with enhanced documentation.
-
-## Changelog
-- 1.0.0: Initial implementation
-- 1.1.0: Added changelog templates, preview mode, versioning strategies
-- 1.2.0: Added merge detection, validation rules, statistics
-
-## Suggested Fixes
-- Add validation for changes file format
+Note: `ChangesAgent.improve_content()` currently contains a keyword-triggered
+fallback path that can return suggestions without invoking the LLM for common
+prompts. See `src/agent-changes.errors.md`.
 """
 
 from typing import Optional, Dict, List, Any, Tuple
