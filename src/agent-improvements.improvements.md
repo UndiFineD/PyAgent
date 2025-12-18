@@ -1,67 +1,35 @@
 # Improvements: `agent-improvements.py`
 
-## Status
-All 20 improvements have been implemented and documented in `agent-improvements.changes.md`.
+This document tracks realistic, maintenance-oriented improvements for
+`src/agent-improvements.py`. Feature history belongs in
+`agent-improvements.changes.md`.
 
-## Session 5 Completion Summary
-- Total improvements: 15
-- Test coverage: 39 comprehensive tests
-- All tests passing: ✅ 100% (39/39)
-- Test file: `test_agent_improvements_improvements_comprehensive.py`
+## Updated in this pass (2025-12-18)
 
-## Session 7 Completion Summary
-- New improvements: 8
-- New enums: 4 (ScheduleStatus, ValidationSeverity, AnalysisToolType, SLALevel)
-- New dataclasses: 8 (ScheduledImprovement, ProgressReport, ValidationResult, RollbackRecord, ToolSuggestion, SLAConfiguration, MergeCandidate, ArchivedImprovement)
-- New classes: 8 (ImprovementScheduler, ProgressDashboard, ImprovementValidator, RollbackTracker, ToolIntegration, SLAManager, MergeDetector, ImprovementArchive)
-- Test file: `test_agent_improvements.py`
+- Documentation accuracy:
+  - Companion docs now point at `src/agent-improvements.py` (not `scripts/...`).
+  - Description doc reflects the current public surface and current SHA256 fingerprint.
+  - Error report documents current limitations and failure modes.
 
-## Suggested improvements
-- [x] FIXED: Implement improvement impact scoring based on code complexity.
-- [x] FIXED: Add support for improvement dependencies and ordering.
-- [x] FIXED: Implement improvement effort estimation.
-- [x] FIXED: Add support for improvement templates for common patterns.
-- [x] FIXED: Implement improvement tracking with status workflow.
-- [x] FIXED: Add support for improvement voting and prioritization.
-- [x] FIXED: [2025-12-16] Implement improvement scheduling with resource allocation.
-- [x] FIXED: [2025-12-16] Add support for improvement reporting with progress dashboards.
-- [x] FIXED: [2025-12-16] Implement improvement validation with automated testing.
-- [x] FIXED: [2025-12-16] Add support for improvement rollback tracking.
-- [x] FIXED: [2025-12-16] Implement improvement suggestions from code analysis tools.
-- [x] FIXED: Add support for improvement documentation generation.
-- [x] FIXED: Implement improvement assignment and ownership tracking.
-- [x] FIXED: [2025-12-16] Add support for improvement SLA management.
-- [x] FIXED: Implement improvement analytics with trend analysis.
-- [x] FIXED: Add support for improvement categories and tags.
-- [x] FIXED: [2025-12-16] Implement improvement merge detection across files.
-- [x] FIXED: Add support for improvement export to issue trackers.
-- [x] FIXED: [2025-12-16] Implement improvement comparison across branches.
-- [x] FIXED: [2025-12-16] Add support for improvement archiving and history.
+## Suggested next improvements
+
+### Parse `.improvements.md` into structured data
+
+- `ImprovementsAgent` provides rich in-memory APIs (`add_improvement()`, dependencies, analytics, export), but it does not parse an existing markdown report into `Improvement` objects.
+- Add a parser (and serializer) to round-trip between markdown and structured entries.
+
+### Make associated-file discovery more robust
+
+- Expand the extension list (or make it configurable) and consider searching adjacent directories.
+
+### Validate/normalize LLM output
+
+- `improve_content()` requests checkboxes and priority grouping, but the output is not validated. Consider adding lightweight structural validation or a normalization pass.
+
+### Tighten type-checking and remove obvious generation artifacts
+
+- There are duplicated decorators (e.g. `@dataclass`) and a number of `# type: ignore[assignment]` annotations. Cleaning these up would improve static analysis and reduce linter noise.
 
 ## Notes
-- File: `scripts/agent/agent-improvements.py`
-- Created as part of comprehensive agent framework improvements
-- Session 7: ImprovementScheduler, ProgressDashboard, ImprovementValidator, RollbackTracker,
-  ToolIntegration, SLAManager, MergeDetector, ImprovementArchive
-- All improvements validated through unit and integration tests
 
-## Security
-
-- OWASP community edition
-
-### access
-
-- (MFA) authentication
-- authorisation
-
-### data protection
-
-### Input Output
-
-### Secrets and configuration
-
-#### Depende3ncies and supply chain
-
-### API security
-
-### loggin and monitoring
+- File: `src/agent-improvements.py`

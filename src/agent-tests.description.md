@@ -1,39 +1,35 @@
 # Description: `agent-tests.py`
 
 ## Module purpose
-Tests Agent: Improves and updates code file test suites.
+`agent-tests.py` defines `TestsAgent`, an AI-assisted agent for improving an existing Python test module.
 
-Reads a tests file (test_Codefile.py), uses Copilot to enhance the tests,
-and updates the tests file with improvements.
-
-# Description
-This module provides a Tests Agent that reads existing code file test suites,
-uses AI assistance to improve and complete them, ensuring each line of the codefile is tested,
-and updates the tests files with enhanced test coverage.
-
-# Changelog
-- 1.0.0: Initial implementation
-
-# Suggested Fixes
-- Add validation for tests file format
-- Improve prompt engineering for better test generation
-
-# Improvements
-- Better integration with other agents
-- Enhanced diff reporting
+The agent focuses on editing a single test file in-place, optionally enriching the prompt with context from the corresponding source file and applying lightweight validation before writing changes.
 
 ## Location
-- Path: `scripts/agent/agent-tests.py`
+- Path: `src/agent-tests.py`
 
 ## Public surface
-- Classes: TestsAgent
-- Functions: (none)
+- Primary CLI agent: `TestsAgent`
+- CLI entrypoint: `main = create_main_function(TestsAgent, ...)` (invoked under `if __name__ == '__main__':`)
 
 ## Behavior summary
-- Has a CLI entrypoint (`__main__`).
+- Enhances the improvement prompt with source-code context when a matching source file is found.
+- Calls `BaseAgent.improve_content()` to obtain updated test content (when AI tooling is unavailable, the base implementation may leave content unchanged).
+- Validates generated tests via `ast.parse()`; on syntax failure, it reverts to the previous content.
+- Performs a lightweight structural pass and logs warnings (e.g., test functions that appear to have no assertions).
+- Writes updated content back to disk without applying markdown-specific formatting.
+
+## Source-file lookup
+To locate the source file being tested, `TestsAgent` attempts:
+
+- A same-directory lookup using the test file stem (e.g., `test_foo.py` -> `foo.py`).
+- A parent-directory lookup when tests live in a `tests/` folder.
+- A legacy project-structure lookup under `scripts/agent/`.
 
 ## Key dependencies
-- Top imports: `ast`, `logging`, `pathlib`, `typing`, `base_agent`
+- `base_agent.BaseAgent` and `base_agent.create_main_function`
+- `ast` (syntax validation)
+- `hashlib` (IDs for internal test records)
 
 ## File fingerprint
-- SHA256(source): `ae8e05121940b28c…`
+- SHA256(source): `DF0ECD6E7A860E65AAB51AF415B4C854D5AF04BF24BDF346AA6D661BD6E427FB`

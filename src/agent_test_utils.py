@@ -10,10 +10,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Test utilities for agent scripts.
+"""Test utilities for agent modules.
 
-Provides helpers to load agent modules dynamically and manage sys.path for testing.
+This module is a grab-bag of helpers used by the test suite and other
+development scripts:
+
+- Structured types for test data and results (enums + dataclasses).
+- A mock AI backend for deterministic testing.
+- Fixture/test-data generators and filesystem isolation helpers.
+- Snapshot testing utilities.
+- Convenience helpers for logging capture and environment detection.
+
+Legacy / compatibility helpers
+------------------------------
+Some functions at the end of the file are intentionally preserved to support
+older tests that load modules by path (including hyphenated filenames) and/or
+temporarily adjust `sys.path`.
+
+This module is not intended to be executed as a CLI.
 """
 
 from __future__ import annotations

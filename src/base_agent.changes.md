@@ -1,5 +1,11 @@
 # Changelog
 
+## [2025-12-18] - Documentation refresh
+
+- Updated docs to match current `src/base_agent.py` behavior and CLI helper surface.
+- Corrected module path references from `scripts/agent/...` to `src/...`.
+- Refreshed SHA256 fingerprint in the description doc.
+
 ## [2025-12-16] - Session 8 Implementation
 
 ### Added Enums

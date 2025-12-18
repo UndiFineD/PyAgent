@@ -10,28 +10,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Agent orchestrator.
+
+This module contains the main `Agent` class plus supporting dataclasses and
+helpers used to coordinate multiple sub-agents over a repository.
+
+Key characteristics:
+- Provides a CLI entrypoint (`main`) for running agent passes.
+- Supports optional dependencies:
+    - `requests` for webhook delivery (guarded by `HAS_REQUESTS`).
+    - `tqdm` for progress display (guarded by `HAS_TQDM`, with a typed fallback).
+- Writes and post-processes markdown reports via a dynamically loaded
+    `fix_markdown_content` helper.
+
+Detailed change history and improvement ideas live in the accompanying markdown
+files (`agent.changes.md`, `agent.description.md`, `agent.improvements.md`).
 """
-Agent: Orchestrates work among sub - agents for code improvement.
 
-Assigns tasks to various agents to improve code files, their documentation,
-tests, and related artifacts.
-
-## Description
-This module provides the main Agent that coordinates the improvement process
-across code files by calling specialized sub - agents for different aspects
-of code quality and documentation.
-
-## Changelog
-- 1.0.0: Initial implementation
-
-## Suggested Fixes
-- Add better error handling
-- Implement async execution for agents
-
-## Improvements
-- Enhanced coordination between agents
-- Better progress tracking
-"""
+from __future__ import annotations
 
 import subprocess
 import sys
@@ -39,7 +35,7 @@ import os
 import logging
 import uuid
 from pathlib import Path
-from typing import List, Set, Optional, Dict, Any, Callable
+from typing import List, Set, Optional, Dict, Any, Callable, Iterable, TypeVar, cast, Final
 import argparse
 import fnmatch
 import importlib.util
@@ -56,18 +52,55 @@ import difflib
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from abc import ABC, abstractmethod
-try:
-    import requests
-    HAS_REQUESTS = True
-except ImportError:
-    HAS_REQUESTS = False
-try:
-    from tqdm import tqdm
-    HAS_TQDM = True
-except ImportError:
-    HAS_TQDM = False
+from types import TracebackType
 
-    def tqdm(iterable, *args, **kwargs):
+
+def _empty_dict_str_any() -> dict[str, Any]:
+    return {}
+
+
+def _empty_dict_str_float() -> dict[str, float]:
+    return {}
+
+
+def _empty_dict_str_int() -> dict[str, int]:
+    return {}
+
+
+def _empty_dict_str_str() -> dict[str, str]:
+    return {}
+
+
+def _empty_list_str() -> list[str]:
+    return []
+
+
+def _empty_list_dict_str_any() -> list[dict[str, Any]]:
+    return []
+
+
+_T = TypeVar("_T")
+
+try:
+    import requests as _requests
+except ImportError:  # pragma: no cover
+    _requests = None
+
+requests = _requests
+HAS_REQUESTS: Final[bool] = _requests is not None
+
+try:
+    from tqdm import tqdm as _tqdm
+except ImportError:  # pragma: no cover
+    _tqdm = None
+
+HAS_TQDM: Final[bool] = _tqdm is not None
+
+if _tqdm is not None:
+    tqdm = _tqdm
+else:
+
+    def tqdm(iterable: Iterable[_T], *args: Any, **kwargs: Any) -> Iterable[_T]:
         """Fallback if tqdm not available."""
         return iterable
 
@@ -75,7 +108,7 @@ except ImportError:
 # Import markdown fixing functionality
 
 
-def _load_fix_markdown_content() -> Callable[..., str]:
+def _load_fix_markdown_content() -> Callable[[str], str]:
     """Load the markdown fixer module dynamically."""
     fix_dir = Path(__file__).parent.parent / 'fix'
     spec = importlib.util.spec_from_file_location(
@@ -84,16 +117,20 @@ def _load_fix_markdown_content() -> Callable[..., str]:
         module = importlib.util.module_from_spec(spec)
         sys.modules["fix_markdown_lint"] = module
         spec.loader.exec_module(module)
-        return module.fix_markdown_content
-    return lambda x: x  # Fallback
+        return cast(Callable[[str], str], module.fix_markdown_content)
+
+    def _fallback(text: str) -> str:
+        return text
+
+    return _fallback
 
 
-fix_markdown_content = _load_fix_markdown_content()
+fix_markdown_content: Callable[[str], str] = _load_fix_markdown_content()
 
 
 # Global cache for .codeignore patterns to avoid re - parsing
-_CODEIGNORE_CACHE: Dict[str, Set[str]] = {}
-_CODEIGNORE_CACHE_TIME: Dict[str, float] = {}
+_CODEIGNORE_CACHE: dict[str, set[str]] = {}
+_CODEIGNORE_CACHE_TIME: dict[str, float] = {}
 
 
 # =============================================================================
@@ -199,7 +236,11 @@ class AgentPluginConfig:
     entry_point: str = "run"
     priority: AgentPriority = AgentPriority.NORMAL
     enabled: bool = True
-    config: Dict[str, Any] = field(default_factory=dict)
+    config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+
+
+def _empty_plugin_config_list() -> list[AgentPluginConfig]:
+    return []
 
 
 @dataclass
@@ -236,7 +277,7 @@ class DiffResult:
     file_path: Path
     original_content: str
     modified_content: str
-    diff_lines: List[str] = field(default_factory=list)
+    diff_lines: list[str] = field(default_factory=_empty_list_str)
     additions: int = 0
     deletions: int = 0
     changes: int = 0
@@ -253,9 +294,9 @@ class IncrementalState:
         pending_files: List of files pending processing.
     """
     last_run_timestamp: float = 0.0
-    processed_files: Dict[str, float] = field(default_factory=dict)
-    file_hashes: Dict[str, str] = field(default_factory=dict)
-    pending_files: List[str] = field(default_factory=list)
+    processed_files: dict[str, float] = field(default_factory=_empty_dict_str_float)
+    file_hashes: dict[str, str] = field(default_factory=_empty_dict_str_str)
+    pending_files: list[str] = field(default_factory=_empty_list_str)
 
 
 @dataclass
@@ -275,7 +316,7 @@ class AgentHealthCheck:
     response_time_ms: float = 0.0
     last_check: float = field(default_factory=time.time)
     error_message: Optional[str] = None
-    details: Dict[str, Any] = field(default_factory=dict)
+    details: dict[str, Any] = field(default_factory=_empty_dict_str_any)
 
 
 @dataclass
@@ -291,8 +332,8 @@ class ShutdownState:
     """
     shutdown_requested: bool = False
     current_file: Optional[str] = None
-    completed_files: List[str] = field(default_factory=list)
-    pending_files: List[str] = field(default_factory=list)
+    completed_files: list[str] = field(default_factory=_empty_list_str)
+    pending_files: list[str] = field(default_factory=_empty_list_str)
     start_time: float = field(default_factory=time.time)
 
 
@@ -321,9 +362,9 @@ class AgentConfig:
     no_git: bool = False
     verbosity: str = "normal"
     rate_limit: Optional[RateLimitConfig] = None
-    plugins: List[AgentPluginConfig] = field(default_factory=list)
-    selective_agents: List[str] = field(default_factory=list)
-    timeout_per_agent: Dict[str, int] = field(default_factory=dict)
+    plugins: list[AgentPluginConfig] = field(default_factory=_empty_plugin_config_list)
+    selective_agents: list[str] = field(default_factory=_empty_list_str)
+    timeout_per_agent: dict[str, int] = field(default_factory=_empty_dict_str_int)
 
 
 # =============================================================================
@@ -727,7 +768,11 @@ class IncrementalProcessor:
         """Load state from disk."""
         if self.state_file.exists():
             try:
-                data = json.loads(self.state_file.read_text())
+                raw = json.loads(self.state_file.read_text())
+                if isinstance(raw, dict):
+                    data: dict[str, Any] = cast(dict[str, Any], raw)
+                else:
+                    data = {}
                 self.state = IncrementalState(
                     last_run_timestamp=data.get('last_run_timestamp', 0),
                     processed_files=data.get('processed_files', {}),
@@ -741,7 +786,7 @@ class IncrementalProcessor:
     def _save_state(self) -> None:
         """Save state to disk."""
         try:
-            data = {
+            data: dict[str, Any] = {
                 'last_run_timestamp': self.state.last_run_timestamp,
                 'processed_files': self.state.processed_files,
                 'file_hashes': self.state.file_hashes,
@@ -769,7 +814,7 @@ class IncrementalProcessor:
         Returns:
             List of files that have changed.
         """
-        changed = []
+        changed: list[Path] = []
 
         for file_path in files:
             path_str = str(file_path)
@@ -909,7 +954,7 @@ class GracefulShutdown:
     def _save_state(self) -> None:
         """Save shutdown state to disk."""
         try:
-            data = {
+            data: dict[str, Any] = {
                 'shutdown_requested': self.state.shutdown_requested,
                 'current_file': self.state.current_file,
                 'completed_files': self.state.completed_files,
@@ -930,7 +975,8 @@ class GracefulShutdown:
             return None
 
         try:
-            data = json.loads(self.state_file.read_text())
+            raw = json.loads(self.state_file.read_text())
+            data: dict[str, Any] = cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
             state = ShutdownState(
                 shutdown_requested=False,  # Reset for resume
                 current_file=data.get('current_file'),
@@ -1006,31 +1052,35 @@ class ConfigLoader:
             logging.error(f"Failed to load config from {self.config_path}: {e}")
             return AgentConfig()
 
-    def _parse_content(self, content: str) -> Dict[str, Any]:
+    def _parse_content(self, content: str) -> dict[str, Any]:
         """Parse configuration content based on format."""
         if self.format == ConfigFormat.JSON:
-            return json.loads(content)
+            raw: Any = json.loads(content)
+            return cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
         elif self.format == ConfigFormat.YAML:
             try:
                 import yaml
-                return yaml.safe_load(content)
+                raw: Any = yaml.safe_load(content)
+                return cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
             except ImportError:
                 logging.warning("PyYAML not installed, falling back to JSON")
                 return {}
         elif self.format == ConfigFormat.TOML:
             try:
                 import tomllib
-                return tomllib.loads(content)
+                raw: Any = tomllib.loads(content)
+                return cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
             except ImportError:
                 try:
                     import toml
-                    return toml.loads(content)
+                    raw: Any = toml.loads(content)
+                    return cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
                 except ImportError:
                     logging.warning("tomllib / toml not installed")
                     return {}
         return {}
 
-    def _build_config(self, data: Dict[str, Any]) -> AgentConfig:
+    def _build_config(self, data: dict[str, Any]) -> AgentConfig:
         """Build AgentConfig from parsed data."""
         # Build rate limit config
         rate_limit = None
@@ -1044,8 +1094,8 @@ class ConfigLoader:
             )
 
         # Build plugin configs
-        plugins = []
-        for plugin_data in data.get('plugins', []):
+        plugins: list[AgentPluginConfig] = []
+        for plugin_data in cast(list[dict[str, Any]], data.get('plugins', [])):
             plugins.append(AgentPluginConfig(
                 name=plugin_data.get('name', 'unknown'),
                 module_path=plugin_data.get('module_path', ''),
@@ -1455,7 +1505,7 @@ class GitBranchProcessor:
                 logging.warning(f"Git diff failed: {result.stderr}")
                 return []
 
-            files = []
+            files: list[Path] = []
             for line in result.stdout.strip().split("\n"):
                 if not line:
                     continue
@@ -1591,7 +1641,7 @@ class ValidationRuleManager:
         Returns:
             List of validation results.
         """
-        results = []
+        results: list[dict[str, Any]] = []
 
         for rule in self._rules.values():
             if fnmatch.fnmatch(file_path.name, rule.file_pattern):
@@ -1694,11 +1744,11 @@ class AgentPriorityQueue:
             List of agent names in order.
         """
         # Topological sort with priority
-        executed = set()
+        executed: set[str] = set()
         order: list[str] = []
 
         while len(order) < len(self._agents):
-            available = []
+            available: list[tuple[int, str]] = []
 
             for name, info in self._agents.items():
                 if name in executed:
@@ -1751,8 +1801,8 @@ class TelemetrySpan:
     parent_id: Optional[str] = None
     start_time: float = field(default_factory=time.time)
     end_time: Optional[float] = None
-    attributes: Dict[str, Any] = field(default_factory=dict)
-    events: List[Dict[str, Any]] = field(default_factory=list)
+    attributes: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+    events: list[dict[str, Any]] = field(default_factory=_empty_list_dict_str_any)
 
 
 class TelemetryCollector:
@@ -1826,7 +1876,7 @@ class TelemetryCollector:
         Returns:
             JSON string of spans.
         """
-        spans_data = []
+        spans_data: list[dict[str, Any]] = []
         for span in self._spans:
             spans_data.append({
                 "name": span.name,
@@ -1977,7 +2027,7 @@ class ConditionalExecutor:
         condition_names: List[str] = config["conditions"]  # type: ignore
         require_all = config["require_all"]
 
-        results = []
+        results: list[bool] = []
         for cond_name in condition_names:
             if cond_name not in self._conditions:
                 continue
@@ -2015,9 +2065,9 @@ class AgentTemplate:
 
     name: str
     description: str = ""
-    agents: List[str] = field(default_factory=list)
-    config: Dict[str, Any] = field(default_factory=dict)
-    file_patterns: List[str] = field(default_factory=lambda: ["*.py"])
+    agents: list[str] = field(default_factory=_empty_list_str)
+    config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+    file_patterns: list[str] = field(default_factory=lambda: ["*.py"])
 
 
 class TemplateManager:
@@ -2156,8 +2206,8 @@ class DependencyGraph:
         in_degree = {n: len(self._edges.get(n, set())) for n in self._nodes}
 
         # Start with nodes that have no dependencies
-        queue = [n for n in self._nodes if in_degree[n] == 0]
-        result = []
+        queue: list[str] = [n for n in self._nodes if in_degree[n] == 0]
+        result: list[str] = []
 
         while queue:
             node = queue.pop(0)
@@ -2415,7 +2465,7 @@ class ScheduledExecution:
 
     name: str
     cron: str  # Simplified: "hourly", "daily", "weekly", or HH:MM
-    agent_config: Dict[str, Any] = field(default_factory=dict)
+    agent_config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
     enabled: bool = True
     last_run: Optional[float] = None
     next_run: Optional[float] = None
@@ -2535,47 +2585,8 @@ class ExecutionScheduler:
         return {}
 
 
-def _exponential_backoff_retry(
-        func,
-        max_attempts: int = 3,
-        base_delay: float = 1.0,
-        max_delay: float = 30.0):
-    """Execute a function with exponential backoff retry on failure.
-
-    Retries a function call if it raises an exception, with exponentially
-    increasing delays between attempts. Useful for transient failures.
-
-    Args:
-        func: Callable that returns True on success, False on failure.
-        max_attempts: Maximum number of attempts. Defaults to 3.
-        base_delay: Initial delay in seconds. Defaults to 1.0.
-        max_delay: Maximum delay between retries. Defaults to 30.0.
-
-    Returns:
-        bool: True if func succeeded, False after max_attempts.
-
-    Note:
-        - Delay formula: min(base_delay * (2 ^ attempt), max_delay)
-        - Logs each retry attempt
-        - Final failure is logged as error
-    """
-    for attempt in range(1, max_attempts + 1):
-        try:
-            result = func()
-            if result:
-                return True
-        except Exception as e:
-            if attempt == max_attempts:
-                logging.error(f"Failed after {max_attempts} attempts: {e}")
-                return False
-            delay = min(base_delay * (2 ** (attempt - 1)), max_delay)
-            logging.warning(f"Attempt {attempt} failed, retrying in {delay}s: {e}")
-            time.sleep(delay)
-    return False
-
-
 # Module - level worker function for multiprocessing (cannot be a nested function)
-def _multiprocessing_worker(agent_instance, file_path: Path) -> Optional[Path]:
+def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Optional[Path]:
     """Worker function for multiprocessing file processing.
 
     This function must be at module level to be pickleable for multiprocessing.
@@ -2727,7 +2738,7 @@ class CircuitBreaker:
         self.last_failure_time = 0.0
         self.consecutive_successes_needed = 2
 
-    def call(self, func: Callable, *args, **kwargs):
+    def call(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
         """Execute function through circuit breaker.
 
         Args:
@@ -2877,13 +2888,14 @@ class Agent:
 
         # Webhook support
         self.webhooks: List[str] = []
-        self.callbacks: List[Callable] = []
+        self.callbacks: list[Callable[..., Any]] = []
 
         # Metrics tracking
-        self.metrics = {
+        agents_applied: dict[str, int] = {}
+        self.metrics: dict[str, Any] = {
             'files_processed': 0,
             'files_modified': 0,
-            'agents_applied': {},
+            'agents_applied': agents_applied,
             'start_time': time.time(),
             'end_time': None,
         }
@@ -2901,12 +2913,17 @@ class Agent:
         if enable_multiprocessing:
             logging.info(f"Multiprocessing enabled with {max_workers} workers")
 
-    def __enter__(self):
+    def __enter__(self) -> "Agent":
         """Context manager entry. Returns self for use in 'with' statement."""
         logging.debug("Agent entering context manager")
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> bool:
         """Context manager exit. Handles cleanup if needed."""
         logging.debug("Agent exiting context manager")
         if exc_type is not None:
@@ -2961,7 +2978,6 @@ class Agent:
             agent.print_metrics_summary()
         """
         self.metrics['end_time'] = time.time()
-        self.metrics['end_time'] - self.metrics['start_time']
 
         summary = """
 === Agent Execution Summary ===
@@ -3002,7 +3018,7 @@ Agents applied:
         self.metrics['end_time'] = time.time()
         elapsed = self.metrics['end_time'] - self.metrics['start_time']
 
-        report = {
+        report: dict[str, Any] = {
             'timestamp': time.time(),
             'summary': {
                 'files_processed': self.metrics.get('files_processed', 0),
@@ -3019,8 +3035,8 @@ Agents applied:
         }
 
         # Calculate effectiveness metrics
-        files_proc = report['summary']['files_processed']
-        files_mod = report['summary']['files_modified']
+        files_proc = cast(int, report['summary']['files_processed'])
+        files_mod = cast(int, report['summary']['files_modified'])
         report['summary']['modification_rate'] = (
             files_mod / files_proc * 100) if files_proc > 0 else 0
 
@@ -3056,7 +3072,7 @@ Agents applied:
         files_count = len(files)
         avg_per_file = total_time / max(files_count, 1)
 
-        benchmarks = {
+        benchmarks: dict[str, Any] = {
             'total_time': total_time,
             'file_count': files_count,
             'average_per_file': avg_per_file,
@@ -3101,7 +3117,7 @@ Agents applied:
         estimated_requests = total_agent_runs
         estimated_cost = estimated_requests * cost_per_request
 
-        analysis = {
+        analysis: dict[str, Any] = {
             'backend': backend,
             'files_processed': files_processed,
             'agents_applied': dict(agents_applied),
@@ -3301,7 +3317,7 @@ Agents applied:
         if directory is None:
             directory = self.repo_root
 
-        all_patterns = set()
+        all_patterns: set[str] = set()
         current_dir = directory.resolve()
 
         # Walk up to repo root, loading .codeignore files
@@ -3325,7 +3341,7 @@ Agents applied:
         return all_patterns
 
     def _run_command(self, cmd: List[str], timeout: int = 120,
-                     max_retries: int = 1) -> subprocess.CompletedProcess:
+                     max_retries: int = 1) -> subprocess.CompletedProcess[str]:
         """Run a command with timeout, error handling, retry logic, and logging.
 
         Executes a subprocess command with comprehensive error handling,
@@ -3356,7 +3372,7 @@ Agents applied:
             - Returns CompletedProcess even on timeout (returncode=-1)
             - Retries with exponential backoff: 1s, 2s, 4s, etc.
         """
-        def attempt_command():
+        def attempt_command() -> subprocess.CompletedProcess[str]:
             logging.debug(f"Running command: {' '.join(cmd[:3])}... (timeout={timeout}s)")
             try:
                 result = subprocess.run(
@@ -3382,7 +3398,7 @@ Agents applied:
                 logging.error(f"Command failed with unexpected error: {e}")
                 return subprocess.CompletedProcess(cmd, returncode=-1, stdout="", stderr=str(e))
 
-        result = attempt_command()
+        result: subprocess.CompletedProcess[str] = attempt_command()
 
         # Retry on failure with exponential backoff
         for attempt in range(1, max_retries):
@@ -3591,7 +3607,7 @@ Agents applied:
         try:
             content = improvements_file.read_text(encoding='utf-8')
             lines = content.splitlines()
-            pending = []
+            pending: list[str] = []
             import re
             # Match "1. ", "1) ", "- [ ]", "- ", "* "
             list_pattern = re.compile(r'^(\d+[\.\)]|\*|\-)\s+(\[ \]\s+)?(.*)')
@@ -3625,7 +3641,7 @@ Agents applied:
         try:
             content = improvements_file.read_text(encoding='utf-8')
             lines = content.splitlines()
-            new_lines = []
+            new_lines: list[str] = []
             for line in lines:
                 updated = False
                 for item in fixed_items:
@@ -3937,10 +3953,10 @@ def test_placeholder():
             - If requests library not available, webhooks are skipped
             - Timeouts are set to 5 seconds per webhook
         """
-        if not HAS_REQUESTS or not self.webhooks:
+        if not HAS_REQUESTS or requests is None or not self.webhooks:
             return
 
-        payload = {
+        payload: dict[str, Any] = {
             'event': event_name,
             'timestamp': time.time(),
             'data': event_data
@@ -4016,9 +4032,9 @@ def test_placeholder():
             - File processing happens in separate threads
             - Modified files are tracked in metrics
         """
-        modified_files = []
+        modified_files: list[Path] = []
 
-        async def process_file_async(file_path: Path):
+        async def process_file_async(file_path: Path) -> None:
             """Process a single file asynchronously."""
             try:
                 logging.debug(f"[async] Processing {file_path.name}")
@@ -4107,9 +4123,9 @@ def test_placeholder():
             - Shared state (metrics) is updated from worker threads
             - Progress tracking with tqdm if available
         """
-        processed_files = []
+        processed_files: list[Path] = []
 
-        def worker_thread_process_file(file_path: Path) -> Path:
+        def worker_thread_process_file(file_path: Path) -> Optional[Path]:
             """Worker function to process a file in a separate thread."""
             try:
                 logging.debug(f"[thread] Processing {file_path.name}")
@@ -4304,8 +4320,8 @@ def test_placeholder():
         if not hasattr(self, 'plugins') or not self.plugins:
             return {}
 
-        results = {}
-        context = {
+        results: dict[str, bool] = {}
+        context: dict[str, Any] = {
             'agent': self,
             'repo_root': self.repo_root,
             'dry_run': self.dry_run,

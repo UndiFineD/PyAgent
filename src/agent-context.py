@@ -10,28 +10,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Context Agent: Improves and updates code file descriptions.
+"""src.agent-context
 
-Reads a context file (Codefile.description.md), uses Copilot to enhance the description,
-and updates the context file with improvements.
+Maintains and improves `*.description.md` “context” files for source code.
 
-# Description
-This module provides a Context Agent that reads existing code file descriptions,
-uses AI assistance to improve and complete them, and updates the context files
-with enhanced documentation.
+The primary entrypoint is `ContextAgent`, a `BaseAgent` subclass that:
 
-# Changelog
-- 1.0.0: Initial implementation
-- 1.1.0: Added context templates, tagging, versioning, compression, validation, priority scoring
+- Accepts a path to a context file (typically `some_module.description.md`).
+- Best-effort derives the corresponding source file by matching the same stem
+    against common extensions.
+- Delegates to `BaseAgent.improve_content()` (Copilot CLI / LLM-backed) to
+    improve the description; if a source file exists it includes a truncated slice
+    of source code in the prompt to make the description more accurate.
 
-# Suggested Fixes
-- Add validation for context file format
-- Improve prompt engineering for better descriptions
+This module also defines a large set of supporting enums, dataclasses, and
+helper classes for template management, tagging, versioning, validation,
+annotations, prioritization, metadata export, and additional context analysis.
 
-# Improvements
-- Better integration with other agents
-- Enhanced diff reporting
+CLI
+---
+This file exposes a CLI via `create_main_function(...)`:
+
+        python src/agent-context.py path/to/file.description.md
 """
 
 from __future__ import annotations

@@ -10,26 +10,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Stats Agent: Reports statistics on file updates and progress.
+"""Stats agent.
 
-Tracks which files have updates needed and how many are done.
+This module provides a standalone `StatsAgent` that reports progress statistics
+across a set of files.
 
-# Description
-This module provides a Stats Agent that monitors the progress of code improvements
-across files, reporting on pending updates and completed work.
+Primary CLI use case
+--------------------
+Given a list of code files (typically `src/*.py`), it counts how many have
+adjacent companion documentation files and tests:
 
-# Changelog
-- 1.0.0: Initial implementation
-- 1.1.0: Added anomaly detection, custom metrics, alerting, forecasting
+- `{stem}.description.md`
+- `{stem}.changes.md`
+- `{stem}.errors.md`
+- `{stem}.improvements.md`
+- `test_{stem}.py`
 
-# Suggested Fixes
-- Improve statistics tracking
-- Add more detailed progress reports
+It can also:
 
-# Improvements
-- Better integration with other agents
-- Enhanced reporting
+- Emit the summary as text, JSON, or CSV.
+- Load a JSON coverage report and attach `total_coverage` as a stat.
+- Export stats to JSON/CSV/HTML/SQLite.
+- Compare current stats against a baseline stats JSON.
+- Optionally visualize stats with `matplotlib` if installed.
+
+The module also contains a larger in-memory metrics/alerting/snapshot API
+(metrics, thresholds, anomaly detection, rollups, federation helpers). Most of
+those advanced types are not exercised by the CLI entrypoint, but may be useful
+for programmatic integration.
 """
 
 from __future__ import annotations

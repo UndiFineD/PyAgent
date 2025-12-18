@@ -1,39 +1,55 @@
 # Description: `agent-context.py`
 
 ## Module purpose
-Context Agent: Improves and updates code file descriptions.
 
-Reads a context file (Codefile.description.md), uses Copilot to enhance the description,
-and updates the context file with improvements.
+Improves and maintains `*.description.md` “context” files for source code.
 
-# Description
-This module provides a Context Agent that reads existing code file descriptions,
-uses AI assistance to improve and complete them, and updates the context files
-with enhanced documentation.
-
-# Changelog
-- 1.0.0: Initial implementation
-
-# Suggested Fixes
-- Add validation for context file format
-- Improve prompt engineering for better descriptions
-
-# Improvements
-- Better integration with other agents
-- Enhanced diff reporting
+The agent can optionally derive and read the matching source file (same stem) to
+provide better context to the LLM prompt.
 
 ## Location
-- Path: `scripts/agent/agent-context.py`
 
-## Public surface
-- Classes: ContextAgent
-- Functions: (none)
+- Path: `src/agent-context.py`
+
+## Public surface (high level)
+
+- CLI:
+
+  - `main` (created via `create_main_function(...)`)
+- Primary class:
+
+  - `ContextAgent(BaseAgent)`
+- Key supporting types (selected):
+
+  - Enums: `ContextPriority`, `FileCategory`, `SearchAlgorithm` (and others)
+  - Dataclasses: `ContextTemplate`, `ContextTag`, `ContextVersion`,
+    `ValidationRule`, `ContextAnnotation` (and others)
+  - Helper classes: `SemanticSearchEngine`, `CrossRepoAnalyzer` (and others)
 
 ## Behavior summary
-- Has a CLI entrypoint (`__main__`).
+
+- Input is typically a file named `something.description.md`.
+- Derives a source path by checking common extensions (e.g. `.py`, `.js`, `.ts`,
+
+  `.go`, `.rs`, `.java`, `.sh`) next to the context file.
+- When a source file is available, reads up to ~8000 characters and appends it
+
+  to the prompt before delegating to `BaseAgent.improve_content()`.
+- Provides local helpers for templates/tags/versioning/validation/annotations/
+
+  metadata export that can be used by callers or tests.
+
+## How to run
+
+```bash
+python src/agent-context.py path/to/file.description.md
+```
 
 ## Key dependencies
-- Top imports: `pathlib`, `typing`, `base_agent`
+
+- `base_agent.BaseAgent`
+- `base_agent.create_main_function`
 
 ## File fingerprint
-- SHA256(source): `0196e7229ebfa5b2…`
+
+- SHA256(source): `61b976a17c5402d83b2c6f9e259afffd7621b9f3dcda3e0c072aab7cd387cf40`

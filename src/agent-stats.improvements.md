@@ -1,30 +1,47 @@
 # Improvements: `agent-stats.py`
 
-## Status
-All previous fixed items have been documented in `agent-stats.changes.md`.
+This document tracks realistic, maintenance-oriented improvements for
+`src/agent-stats.py`. Feature history belongs in `agent-stats.changes.md`.
 
-## Suggested improvements
-- [x] FIXED: [2025-01-16] Add real-time stats streaming via WebSocket for live dashboards.
-- [x] FIXED: Implement machine learning-based anomaly detection for metrics.
-- [x] FIXED: Add support for custom metric formulas and calculated fields.
-- [x] FIXED: [2025-01-16] Implement stats federation: aggregate stats from multiple repositories.
-- [x] FIXED: [2025-01-16] Add support for metric namespaces to organize large metric sets.
-- [x] FIXED: Implement retention policies for time-series data.
-- [x] FIXED: [2025-01-16] Add support for metric annotations and comments.
-- [x] FIXED: [2025-01-16] Implement stats API endpoint for programmatic access.
-- [x] FIXED: [2025-01-16] Add support for metric subscriptions and change notifications.
-- [x] FIXED: [2025-01-16] Implement stats export to cloud monitoring services (Datadog, Prometheus, Grafana).
-- [x] FIXED: [2025-01-16] Add support for A/B comparison of different code versions.
-- [x] FIXED: Implement stats forecasting using historical trends.
-- [x] FIXED: [2025-01-16] Add support for metric dependencies and derived metrics.
-- [x] FIXED: Implement stats snapshots for point-in-time analysis.
-- [x] FIXED: Add support for metric thresholds with configurable actions.
-- [x] FIXED: Implement stats alerting with notification channels.
-- [x] FIXED: [2025-01-16] Add support for metric correlations and relationship analysis.
-- [x] FIXED: Implement stats compression for efficient storage.
-- [x] FIXED: [2025-01-16] Add support for metric tags and filtering.
-- [x] FIXED: [2025-01-16] Implement stats rollup for aggregated views.
+## Updated in this pass (2025-12-18)
+
+- Documentation accuracy:
+  - Companion docs now point at `src/agent-stats.py` (not an older
+    `scripts/...` path).
+  - Description doc reflects the current public surface and current SHA256
+    fingerprint.
+  - Error report documents current limitations and failure modes.
+
+## Suggested next improvements
+
+### Fix obvious CLI/help text issues
+
+- `main()` still includes an epilog example referencing an older
+  `scripts/agent/agent-stats.py` path and odd spacing. Update the epilog to match
+  the real location and typical usage.
+
+### Make error handling more consistent
+
+- Catch and report common runtime failures (JSON decode errors, file I/O errors,
+  sqlite exceptions) with a clear exit code and message, similar to the existing
+  `ValueError` handling.
+
+### Separate “CLI stats” from “metrics platform”
+
+- The module contains a large set of in-memory types (alerts, rollups,
+  federation, streaming helpers) that the CLI does not currently use. Consider
+  splitting into:
+  - a small CLI-focused module
+  - a library module for the richer metrics API
+
+### Add tests around filesystem expectations
+
+- Add unit tests covering:
+  - filtering missing input files
+  - companion-file detection based on `stem`
+  - CSV output formatting
+  - export formats (including sqlite)
 
 ## Notes
-- These are suggestions based on static inspection; validate behavior with tests/runs.
-- File: `scripts/agent/agent-stats.py`
+
+- File: `src/agent-stats.py`

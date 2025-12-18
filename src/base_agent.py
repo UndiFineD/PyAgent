@@ -11,9 +11,20 @@
 # limitations under the License.
 
 """
-Base Agent: Common functionality for all AI - powered agents.
+Base Agent: shared functionality for AI-powered file-improvement agents.
 
-Provides shared functionality for agents that improve code files using AI assistance.
+This module defines `BaseAgent`, which provides:
+
+- File I/O helpers for reading an existing file (or generating default content).
+- AI backend integration via `agent_backend` with caching, retries, and simple
+    response quality scoring.
+- Optional markdown normalization (only for markdown-like files) via the
+    `fix_markdown_content` helper.
+- Convenience utilities such as prompt templates, conversation history,
+    post-processing hooks, health checks, and lightweight state persistence.
+
+It also exposes `create_main_function()` to generate a small argparse-based CLI
+wrapper for agents.
 """
 
 import argparse
@@ -26,25 +37,72 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 import sys
-from typing import Optional, Dict, List, Any, Callable, Type
+from types import TracebackType
+from typing import Optional, Dict, List, Any, Callable, Type, cast
 import hashlib
 import time
 
 try:
-    from scripts.agent import agent_backend
-except ImportError:
-    # Fallback for when running directly or in tests without package structure
-    try:
-        import agent_backend  # type: ignore
-    except ImportError:
-        # Last resort: try to find it relative to this file
-        sys.path.append(str(Path(__file__).parent))
-        import agent_backend  # type: ignore
-
-try:
-    import requests
+    import agent_backend as agent_backend
 except ImportError:  # pragma: no cover
-    requests = None  # type: ignore[assignment]
+    # Last resort: try to find it relative to this file
+    sys.path.append(str(Path(__file__).parent))
+    import agent_backend as agent_backend
+
+
+def _empty_list_str() -> list[str]:
+    return []
+
+
+def _empty_list_int() -> list[int]:
+    return []
+
+
+def _empty_list_float() -> list[float]:
+    return []
+
+
+def _empty_dict_str_any() -> dict[str, Any]:
+    return {}
+
+
+def _empty_dict_str_int() -> dict[str, int]:
+    return {}
+
+
+def _empty_dict_str_str() -> dict[str, str]:
+    return {}
+
+
+def _empty_dict_str_callable_any_any() -> dict[str, Callable[[Any], Any]]:
+    return {}
+
+
+def _empty_dict_str_quality_criteria() -> dict[str, tuple[Callable[[str], float], float]]:
+    return {}
+
+
+def _empty_dict_str_health_checks() -> dict[str, Callable[[], dict[str, Any]]]:
+    return {}
+
+
+def _empty_dict_str_configprofile() -> dict[str, "ConfigProfile"]:
+    return {}
+
+
+def _empty_routes_list() -> list[tuple[Callable[[Any], bool], Callable[[Any], Any]]]:
+    return []
+
+
+def _empty_dict_str_filepriority() -> dict[str, "FilePriority"]:
+    return {}
+
+
+def _empty_dict_str_modelconfig() -> dict[str, "ModelConfig"]:
+    return {}
+
+
+EventHook = Callable[[dict[str, Any]], None]
 
 
 # ========== Enums for Type Safety ==========
@@ -144,11 +202,11 @@ class PromptTemplate:
     """
     name: str
     template: str
-    variables: List[str] = field(default_factory=list)
+    variables: List[str] = field(default_factory=_empty_list_str)
     id: str = ""
     description: str = ""
     version: str = "1.0"
-    tags: List[str] = field(default_factory=list)
+    tags: List[str] = field(default_factory=_empty_list_str)
 
     def render(self, **kwargs: Any) -> str:
         """Render the template with provided variables.
@@ -344,7 +402,7 @@ class HealthCheckResult:
     backend_available: bool
     memory_ok: bool = True
     disk_ok: bool = True
-    details: Dict[str, Any] = field(default_factory=dict)
+    details: Dict[str, Any] = field(default_factory=_empty_dict_str_any)
 
 
 @dataclass
@@ -368,7 +426,7 @@ class AuthConfig:
     password: str = ""
     oauth_client_id: str = ""
     oauth_client_secret: str = ""
-    custom_headers: Dict[str, str] = field(default_factory=dict)
+    custom_headers: Dict[str, str] = field(default_factory=_empty_dict_str_str)
 
 
 class BatchRequest:
@@ -453,7 +511,7 @@ class BatchResult:
         error: Error message if failed.
         processing_time: Time taken to process.
     """
-    file_path: Path
+    file_path: Path | None
     success: bool
     content: str = ""
     error: str = ""
@@ -536,7 +594,7 @@ class MultimodalInput:
     input_type: InputType
     content: str
     mime_type: str = ""
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=_empty_dict_str_any)
 
 
 @dataclass
@@ -550,9 +608,9 @@ class ComposedAgent:
         depends_on: Other agents this depends on.
     """
     agent_type: str
-    config: Dict[str, Any] = field(default_factory=dict)
+    config: Dict[str, Any] = field(default_factory=_empty_dict_str_any)
     order: int = 0
-    depends_on: List[str] = field(default_factory=list)
+    depends_on: List[str] = field(default_factory=_empty_list_str)
 
 
 @dataclass
@@ -566,7 +624,7 @@ class SerializationConfig:
         encryption: Whether to encrypt output.
     """
     format: SerializationFormat = SerializationFormat.JSON
-    options: Dict[str, Any] = field(default_factory=dict)
+    options: Dict[str, Any] = field(default_factory=_empty_dict_str_any)
     compression: bool = False
     encryption: bool = False
 
@@ -580,8 +638,8 @@ class FilePriorityConfig:
         extension_priorities: Extensions mapped to priorities.
         default_priority: Default priority level.
     """
-    path_patterns: Dict[str, FilePriority] = field(default_factory=dict)
-    extension_priorities: Dict[str, FilePriority] = field(default_factory=dict)
+    path_patterns: Dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
+    extension_priorities: Dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
     default_priority: FilePriority = FilePriority.NORMAL
 
 
@@ -732,7 +790,7 @@ class BaseAgent:
     _prompt_templates: Dict[str, PromptTemplate] = {}
     _response_cache: Dict[str, CacheEntry] = {}
     _plugins: Dict[str, Any] = {}
-    _event_hooks: Dict[EventType, List[Callable]] = {e: [] for e in EventType}
+    _event_hooks: Dict[EventType, List[EventHook]] = {e: cast(List[EventHook], []) for e in EventType}
 
     def __init__(self, file_path: str) -> None:
         """Initialize the BaseAgent with file path.
@@ -796,12 +854,17 @@ class BaseAgent:
         """Get the currently configured model."""
         return self._model or self._config.model or None
 
-    def __enter__(self):
+    def __enter__(self) -> "BaseAgent":
         """Context manager entry. Returns self for use in 'with' statement."""
         logging.debug(f"{self.__class__.__name__} entering context manager")
         return self
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> bool:
         """Context manager exit. Handles cleanup if needed.
 
         Note:
@@ -929,7 +992,7 @@ class BaseAgent:
             # Retry if quality is poor
             if quality.value <= ResponseQuality.POOR.value and self._config.retry_count > 0:
                 logging.warning(f"Response quality {quality.name}, retrying...")
-                for attempt in range(self._config.retry_count):
+                for _ in range(self._config.retry_count):
                     improvement = self.run_subagent(description, full_prompt, self.previous_content)
                     quality = self._score_response_quality(improvement)
                     if quality.value >= ResponseQuality.ACCEPTABLE.value:
@@ -947,9 +1010,9 @@ class BaseAgent:
                 )
 
             # Add to conversation history
-            self._conversation_history.append(ConversationMessage(role="user", content=prompt))
+            self._conversation_history.append(ConversationMessage(role=MessageRole.USER, content=prompt))
             self._conversation_history.append(ConversationMessage(
-                role="assistant", content=improvement[:500]))
+                role=MessageRole.ASSISTANT, content=improvement[:500]))
 
             logging.info(f"Content improved successfully ({len(improvement)} bytes)")
             self._trigger_event(EventType.POST_IMPROVE, {"quality": quality.name})
@@ -983,14 +1046,14 @@ class BaseAgent:
             - Returns original_content as fallback if backend unavailable
         """
         logging.debug(f"Running subagent: {description}")
-        result = agent_backend.run_subagent(description, prompt, original_content)
+        result: str | None = agent_backend.run_subagent(description, prompt, original_content)
         if result is None:
             logging.warning("Subagent returned None, using fallback response")
             return original_content or self._get_fallback_response()
         return result
 
     @staticmethod
-    def get_backend_status() -> dict:
+    def get_backend_status() -> dict[str, Any]:
         """Return a diagnostic snapshot of backend availability and configuration.
 
         Returns:
@@ -1167,7 +1230,12 @@ class BaseAgent:
             role: Message role (user, assistant, system).
             content: Message content.
         """
-        self._conversation_history.append(ConversationMessage(role=role, content=content))
+        role_value = role.strip().lower()
+        try:
+            role_enum = MessageRole(role_value)
+        except ValueError:
+            role_enum = MessageRole.SYSTEM
+        self._conversation_history.append(ConversationMessage(role=role_enum, content=content))
 
     def clear_history(self) -> None:
         """Clear conversation history."""
@@ -1192,7 +1260,7 @@ class BaseAgent:
 
         # Include last few messages for context
         recent = self._conversation_history[-6:]  # Last 3 exchanges
-        context_lines = []
+        context_lines: list[str] = []
         for msg in recent:
             context_lines.append(f"[{msg.role}]: {msg.content[:200]}...")
 
@@ -1305,7 +1373,7 @@ class BaseAgent:
     # ========== Event Hooks ==========
 
     @classmethod
-    def register_hook(cls, event: EventType, callback: Callable[[Dict[str, Any]], None]) -> None:
+    def register_hook(cls, event: EventType, callback: EventHook) -> None:
         """Register an event hook.
 
         Args:
@@ -1318,7 +1386,7 @@ class BaseAgent:
         logging.debug(f"Registered hook for event: {event.value}")
 
     @classmethod
-    def unregister_hook(cls, event: EventType, callback: Callable) -> None:
+    def unregister_hook(cls, event: EventType, callback: EventHook) -> None:
         """Unregister an event hook.
 
         Args:
@@ -1379,8 +1447,11 @@ class BaseAgent:
             HealthCheckResult with diagnostic information.
         """
         backend_status = cls.get_backend_status()
-        backend_available = any(v.get("available", False)
-                                for v in backend_status.values() if isinstance(v, dict))
+        backend_available = any(
+            cast(dict[str, Any], v).get("available", False)
+            for v in backend_status.values()
+            if isinstance(v, dict)
+        )
 
         return HealthCheckResult(
             healthy=backend_available,
@@ -1401,7 +1472,7 @@ class BaseAgent:
             path: Path to save state file. Defaults to {file_path}.state.json.
         """
         state_path = path or self.file_path.with_suffix(".state.json")
-        state = {
+        state: dict[str, Any] = {
             "file_path": str(self.file_path),
             "state": self._state.value,
             "token_usage": self._token_usage,
@@ -2107,8 +2178,8 @@ class AgentComposer:
         """Calculate execution order based on dependencies."""
         # Topological sort
         sorted_agents: List[str] = []
-        visited: set = set()
-        temp: set = set()
+        visited: set[str] = set()
+        temp: set[str] = set()
 
         def visit(agent_type: str) -> None:
             if agent_type in temp:
@@ -2388,8 +2459,8 @@ class FilePriorityManager:
 class ContextWindow:
     """Manages token-based context window."""
     max_tokens: int
-    messages: List[str] = field(default_factory=list)
-    token_counts: List[int] = field(default_factory=list)
+    messages: List[str] = field(default_factory=_empty_list_str)
+    token_counts: List[int] = field(default_factory=_empty_list_int)
 
     @property
     def used_tokens(self) -> int:
@@ -2405,7 +2476,7 @@ class ContextWindow:
         """Add a message to the window."""
         self.messages.append(message)
         self.token_counts.append(token_count)
-        
+
         # Truncate if necessary
         while self.used_tokens > self.max_tokens and self.messages:
             self.messages.pop(0)
@@ -2422,7 +2493,7 @@ class ContextWindow:
 @dataclass
 class MultimodalBuilder:
     """Builds multimodal input sets."""
-    inputs: List[MultimodalInput] = field(default_factory=list)
+    inputs: List[MultimodalInput] = field(default_factory=lambda: cast(List[MultimodalInput], []))
 
     def add(self, content: str, input_type: "InputType") -> None:
         """Add an input."""
@@ -2447,7 +2518,7 @@ class MultimodalBuilder:
 class ResponseCache:
     """Caches responses based on prompts."""
     cache_dir: Path
-    cache_data: Dict[str, str] = field(default_factory=dict)
+    cache_data: Dict[str, str] = field(default_factory=_empty_dict_str_str)
 
     def __post_init__(self) -> None:
         """Initialize cache directory."""
@@ -2461,7 +2532,7 @@ class ResponseCache:
         """Cache a response."""
         key = self._get_cache_key(prompt)
         self.cache_data[key] = response
-        
+
         # Also write to disk
         cache_file = self.cache_dir / f"{key}.json"
         cache_file.write_text(json.dumps({"prompt": prompt, "response": response}))
@@ -2471,21 +2542,21 @@ class ResponseCache:
         key = self._get_cache_key(prompt)
         if key in self.cache_data:
             return self.cache_data[key]
-        
+
         # Try to load from disk
         cache_file = self.cache_dir / f"{key}.json"
         if cache_file.exists():
             data = json.loads(cache_file.read_text())
             self.cache_data[key] = data["response"]
             return data["response"]
-        
+
         return None
 
     def invalidate(self, prompt: str) -> None:
         """Invalidate cached response."""
         key = self._get_cache_key(prompt)
         self.cache_data.pop(key, None)
-        
+
         cache_file = self.cache_dir / f"{key}.json"
         if cache_file.exists():
             cache_file.unlink()
@@ -2496,8 +2567,8 @@ class ResponseCache:
 @dataclass
 class AgentPipeline:
     """Chains agent steps sequentially."""
-    steps: Dict[str, Callable[[Any], Any]] = field(default_factory=dict)
-    step_order: List[str] = field(default_factory=list)
+    steps: Dict[str, Callable[[Any], Any]] = field(default_factory=_empty_dict_str_callable_any_any)
+    step_order: List[str] = field(default_factory=_empty_list_str)
 
     def add_step(self, name: str, func: Callable[[Any], Any]) -> None:
         """Add a pipeline step."""
@@ -2515,7 +2586,7 @@ class AgentPipeline:
 @dataclass
 class AgentParallel:
     """Executes agent branches in parallel conceptually."""
-    branches: Dict[str, Callable[[Any], Any]] = field(default_factory=dict)
+    branches: Dict[str, Callable[[Any], Any]] = field(default_factory=_empty_dict_str_callable_any_any)
 
     def add_branch(self, name: str, func: Callable[[Any], Any]) -> None:
         """Add a parallel branch."""
@@ -2529,7 +2600,7 @@ class AgentParallel:
 @dataclass
 class AgentRouter:
     """Routes input based on conditions."""
-    routes: List[tuple[Callable[[Any], bool], Callable[[Any], Any]]] = field(default_factory=list)
+    routes: List[tuple[Callable[[Any], bool], Callable[[Any], Any]]] = field(default_factory=_empty_routes_list)
     default_handler: Optional[Callable[[Any], Any]] = None
 
     def add_route(self, condition: Callable[[Any], bool], handler: Callable[[Any], Any]) -> None:
@@ -2545,10 +2616,10 @@ class AgentRouter:
         for condition, handler in self.routes:
             if condition(data):
                 return handler(data)
-        
+
         if self.default_handler:
             return self.default_handler(data)
-        
+
         return data
 
 
@@ -2558,7 +2629,7 @@ class AgentRouter:
 class TokenBudget:
     """Manages token allocation."""
     total: int
-    allocations: Dict[str, int] = field(default_factory=dict)
+    allocations: Dict[str, int] = field(default_factory=_empty_dict_str_int)
 
     @property
     def used(self) -> int:
@@ -2596,7 +2667,7 @@ class StatePersistence:
             backup_file = self.state_file.parent / f"{self.state_file.stem}.{self.backup_count}.bak"
             self.state_file.rename(backup_file)
             self.backup_count += 1
-        
+
         self.state_file.parent.mkdir(parents=True, exist_ok=True)
         self.state_file.write_text(json.dumps(state))
 
@@ -2604,7 +2675,7 @@ class StatePersistence:
         """Load state from file."""
         if self.state_file.exists():
             return json.loads(self.state_file.read_text())
-        
+
         return default or {}
 
 
@@ -2621,8 +2692,8 @@ class ModelConfig:
 @dataclass
 class ModelSelector:
     """Selects models for different agent types."""
-    models: Dict[str, ModelConfig] = field(default_factory=dict)
-    
+    models: Dict[str, ModelConfig] = field(default_factory=_empty_dict_str_modelconfig)
+
     def __post_init__(self) -> None:
         """Initialize with default model."""
         if "default" not in self.models:
@@ -2630,7 +2701,10 @@ class ModelSelector:
 
     def select(self, agent_type: str) -> ModelConfig:
         """Select model for agent type."""
-        return self.models.get(agent_type, self.models.get("default"))
+        selected = self.models.get(agent_type)
+        if selected is not None:
+            return selected
+        return self.models["default"]
 
     def set_model(self, agent_type: str, config: ModelConfig) -> None:
         """Set model for agent type."""
@@ -2642,9 +2716,9 @@ class ModelSelector:
 @dataclass
 class AuthManager:
     """Manages authentication."""
-    method: Optional[str] = None
-    credentials: Dict[str, str] = field(default_factory=dict)
-    custom_headers: Dict[str, str] = field(default_factory=dict)
+    method: AuthMethod | str | None = None
+    credentials: Dict[str, str] = field(default_factory=_empty_dict_str_str)
+    custom_headers: Dict[str, str] = field(default_factory=_empty_dict_str_str)
 
     def set_method(self, method: str, **kwargs: str) -> None:
         """Set authentication method."""
@@ -2658,19 +2732,19 @@ class AuthManager:
     def get_headers(self) -> Dict[str, str]:
         """Get authentication headers."""
         headers = dict(self.custom_headers)
-        
+
         # Convert enum to string if needed
         method = self.method
         if isinstance(method, AuthMethod):
             method = method.value
-        
+
         if method == "api_key" and "api_key" in self.credentials:
             headers["X-API-Key"] = self.credentials["api_key"]
         elif method == "token" and "token" in self.credentials:
             headers["Authorization"] = f"Bearer {self.credentials['token']}"
         elif method == "bearer_token" and "token" in self.credentials:
             headers["Authorization"] = f"Bearer {self.credentials['token']}"
-        
+
         return headers
 
 
@@ -2679,7 +2753,7 @@ class AuthManager:
 @dataclass
 class QualityScorer:
     """Scores response quality."""
-    criteria: Dict[str, tuple[Callable[[str], float], float]] = field(default_factory=dict)
+    criteria: Dict[str, tuple[Callable[[str], float], float]] = field(default_factory=_empty_dict_str_quality_criteria)
 
     def add_criterion(self, name: str, func: Callable[[str], float], weight: float = 1.0) -> None:
         """Add scoring criterion."""
@@ -2691,15 +2765,15 @@ class QualityScorer:
             # Default: score based on length
             length_score = min(1.0, len(text) / 200.0)
             return length_score
-        
+
         total_weight = 0.0
         total_score = 0.0
-        
+
         for func, weight in self.criteria.values():
             score = func(text)
             total_score += score * weight
             total_weight += weight
-        
+
         return total_score / total_weight if total_weight > 0 else 0.0
 
 
@@ -2710,14 +2784,14 @@ class ABTest:
     """A/B test for variants."""
     name: str
     variants: List[str]
-    weights: List[float] = field(default_factory=list)
-    variant_counts: Dict[str, int] = field(default_factory=dict)
+    weights: List[float] = field(default_factory=_empty_list_float)
+    variant_counts: Dict[str, int] = field(default_factory=_empty_dict_str_int)
 
     def __post_init__(self) -> None:
         """Initialize variant counts."""
         for variant in self.variants:
             self.variant_counts[variant] = 0
-        
+
         # Normalize weights if not provided
         if not self.weights:
             self.weights = [1.0 / len(self.variants)] * len(self.variants)
@@ -2737,12 +2811,16 @@ class AgentEvent(Enum):
     ERROR = "error"
 
 
+def _empty_agent_event_handlers() -> dict[AgentEvent, list[Callable[..., None]]]:
+    return {}
+
+
 @dataclass
 class EventManager:
     """Manages agent events."""
-    handlers: Dict[AgentEvent, List[Callable[[Any], None]]] = field(default_factory=dict)
+    handlers: Dict[AgentEvent, List[Callable[..., None]]] = field(default_factory=_empty_agent_event_handlers)
 
-    def on(self, event: AgentEvent, handler: Callable[[Any], None]) -> None:
+    def on(self, event: AgentEvent, handler: Callable[..., None]) -> None:
         """Register event handler."""
         if event not in self.handlers:
             self.handlers[event] = []
@@ -2763,7 +2841,7 @@ class EventManager:
 @dataclass
 class PluginManager:
     """Manages agent plugins."""
-    plugins: Dict[str, Any] = field(default_factory=dict)
+    plugins: Dict[str, Any] = field(default_factory=_empty_dict_str_any)
 
     def register(self, plugin: Any) -> None:
         """Register a plugin."""
@@ -2788,7 +2866,7 @@ class PluginManager:
 @dataclass
 class HealthChecker:
     """Checks agent health status."""
-    checks: Dict[str, Callable[[], Dict[str, Any]]] = field(default_factory=dict)
+    checks: Dict[str, Callable[[], Dict[str, Any]]] = field(default_factory=_empty_dict_str_health_checks)
     request_count: int = 0
     error_count: int = 0
     total_latency: int = 0
@@ -2799,14 +2877,12 @@ class HealthChecker:
 
     def check(self) -> Dict[str, Any]:
         """Run health check."""
-        result = {
-            "status": "healthy",
-            "components": {}
-        }
-        
+        components: dict[str, Any] = {}
+        result: dict[str, Any] = {"status": "healthy", "components": components}
+
         for name, check_func in self.checks.items():
-            result["components"][name] = check_func()
-        
+            components[name] = check_func()
+
         return result
 
     def record_request(self, success: bool, latency_ms: int) -> None:
@@ -2820,7 +2896,7 @@ class HealthChecker:
         """Get health metrics."""
         error_rate = self.error_count / self.request_count if self.request_count > 0 else 0
         avg_latency = self.total_latency / self.request_count if self.request_count > 0 else 0
-        
+
         return {
             "total_requests": self.request_count,
             "error_count": self.error_count,
@@ -2846,7 +2922,7 @@ class ConfigProfile:
 @dataclass
 class ProfileManager:
     """Manages configuration profiles."""
-    profiles: Dict[str, ConfigProfile] = field(default_factory=dict)
+    profiles: Dict[str, ConfigProfile] = field(default_factory=_empty_dict_str_configprofile)
     active_name: Optional[str] = None
 
     @property
@@ -2869,17 +2945,17 @@ class ProfileManager:
         """Get setting from active profile with inheritance."""
         if not self.active:
             return default
-        
+
         # Check active profile
         if key in self.active.settings:
             return self.active.settings[key]
-        
+
         # Check parent
         if self.active.parent and self.active.parent in self.profiles:
             parent = self.profiles[self.active.parent]
             if key in parent.settings:
                 return parent.settings[key]
-        
+
         return default
 
 

@@ -1,46 +1,44 @@
 # Improvements: `agent-context.py`
 
-## Status
-All 17 improvements have been implemented and documented in `agent-context.changes.md`.
-Session 6 adds 12 new improvements with comprehensive helper classes.
+This document tracks realistic, maintenance-oriented improvements for
+`src/agent-context.py`. Feature history belongs in `agent-context.changes.md`.
 
-## Session 5 Completion Summary
-- Total improvements: 17
-- Test coverage: 41 comprehensive tests
-- All tests passing: ✅ 100% (41/41)
-- Test file: `test_agent_context_improvements_comprehensive.py`
+## Updated in this pass (2025-12-18)
 
-## Session 6 Completion Summary
-- New improvements: 12
-- New enums: 6 (SearchAlgorithm, ExportFormat, InheritanceMode, VisualizationType, ConflictResolution, SharingPermission)
-- New dataclasses: 12 (SemanticSearchResult, CrossRepoContext, ContextDiff, InheritedContext, NLQueryResult, ExportedContext, ContextRecommendation, GeneratedCode, RefactoringSuggestion, VisualizationData, SharedContext, MergeConflict, BranchComparison)
-- New classes: 12 (SemanticSearchEngine, CrossRepoAnalyzer, ContextDiffer, ContextInheritance, NLQueryEngine, ContextExporter, ContextRecommender, CodeGenerator, RefactoringAdvisor, ContextVisualizer, ContextSharingManager, MergeConflictResolver, BranchComparer)
-- Test file: `test_agent_context.py`
+- Documentation accuracy:
 
-## Suggested improvements
-- [x] FIXED: [2025-01-13] Implement semantic code search using embeddings for related code discovery.
-- [x] FIXED: [2025-01-13] Add support for cross-repository context analysis.
-- [x] FIXED: [2025-01-13] Implement context diffing: show changes in context between versions.
-- [x] Add support for context templates for common file types.
-- [x] FIXED: [2025-01-13] Implement context inheritance: child files inherit parent context.
-- [x] Add support for context tagging and categorization.
-- [x] FIXED: [2025-01-13] Implement context search with natural language queries.
-- [x] Add support for context versioning and history.
-- [x] Implement context compression for large files.
-- [x] FIXED: [2025-01-13] Add support for context export to documentation systems.
-- [x] Implement context validation rules for consistency.
-- [x] Add support for context annotations and comments.
-- [x] FIXED: [2025-01-13] Implement context recommendations based on similar files.
-- [x] FIXED: [2025-01-13] Add support for context-aware code generation.
-- [x] FIXED: [2025-01-13] Implement context-based refactoring suggestions.
-- [x] FIXED: [2025-01-13] Add support for context visualization (dependency graphs, call hierarchies).
-- [x] Implement context priority scoring for relevance ranking.
-- [x] FIXED: [2025-01-13] Add support for context sharing across team members.
-- [x] FIXED: [2025-01-13] Implement context merge conflict resolution.
-- [x] FIXED: [2025-01-13] Add support for context comparison across branches.
+  - Companion docs point at `src/agent-context.py` (not an older `scripts/...` path).
+  - Description doc reflects the current public surface and current SHA256 fingerprint.
+  - Error report documents current limitations and failure modes.
+
+## Suggested next improvements
+
+- Make extension handling explicit:
+
+  - `_validate_file_extension()` currently does not warn; emit a warning when the
+    input is not a `.description.md` file.
+  - Consider making the recognized source extensions configurable.
+
+- Improve source-file read diagnostics:
+
+  - When reading the derived source file fails (e.g. `OSError`,
+    `UnicodeDecodeError`), log a debug/warn message so failures are explainable.
+
+- Fix default template placeholder expansion:
+
+  - `_get_default_content()` currently returns a template containing `{filename}`
+    without formatting; format it consistently with `apply_template()`.
+
+- Replace magic numbers with named constants:
+
+  - The source truncation length (~8000 chars) should be a named constant and
+    ideally configurable.
+
+- Clarify validation semantics:
+
+  - `validate_content()` treats non-required rules as warnings when matched;
+    document the intent and consider making rule behavior more explicit.
 
 ## Notes
-- File: `scripts/agent/agent-context.py`
-- Created as part of comprehensive agent framework improvements
-- All improvements validated through unit and integration tests
-- Session 6 adds professional-grade context management tooling
+
+- File: `src/agent-context.py`

@@ -1,12 +1,14 @@
 # Errors: `generate_agent_reports.py`
 
 ## Scan scope
-- Static scan (AST parse) + lightweight compile/syntax check
+- Static scan (AST parse) + lightweight syntax check
 - VS Code/Pylance Problems are not embedded by this script
 
 ## Syntax / compile
-- `py_compile` equivalent: OK (AST parse succeeded)
+- This script treats a successful AST parse as syntax OK.
 
 ## Known issues / hazards
-- Runs `git` via `subprocess`; will fail if git is not installed or repo has no remote.
-- Invokes `copilot` CLI; will be a no-op/fallback if Copilot CLI is not installed.
+- Overwrites `src/<stem>.{description,errors,improvements}.md` for processed files.
+- Incremental skipping relies on reading a SHA prefix from `src/<stem>.description.md`; if that fingerprint line is missing/edited, files will be re-processed.
+- Heuristic checks in report rendering (e.g., “uses subprocess”, “uses argparse”) are string matches against the target file’s source and can be wrong.
+- Generated markdown headings currently include leading spaces (e.g., `"  # ..."`), which may violate markdown lint rules depending on configuration.

@@ -1,10 +1,31 @@
 # Changelog
 
+## [2025-12-18] - Static typing + optional dependency cleanup
+
+### Changed (2025-12-18)
+
+- Optional imports were made single-assignment and type-checker friendly:
+
+  - `requests` guarded by `HAS_REQUESTS: Final[bool]`.
+  - `tqdm` guarded by `HAS_TQDM: Final[bool]` with a typed fallback.
+
+- Dataclass defaults were updated to use typed `default_factory` helpers to
+  avoid `list[Unknown]` / `dict[Unknown, Unknown]` propagation.
+- Dynamic markdown fixer loader `_load_fix_markdown_content()` was typed to
+
+  return `Callable[[str], str]` and a typed no-op fallback is used when missing.
+
+### Notes
+
+- This update is focused on static analysis correctness and does not intend to
+  change runtime behavior.
+
 ## [2025-01-16] - Session 9
 
 ### Added - Phase 9: Agent Chaining, Branch Processing, and Advanced Features
 
 #### Agent Chaining
+
 - `AgentChainStep`: Dataclass for chain steps with input/output transforms
 - `AgentChain`: Chain multiple agents for sequential execution
 - `add_step()`: Add step with transforms and conditions
@@ -12,12 +33,14 @@
 - `get_results()`: Get results from last execution
 
 #### Git Branch-Based Processing
+
 - `GitBranchProcessor`: Process files changed in specific git branches
 - `get_changed_files()`: Get files changed between branches
 - `get_current_branch()`: Get current git branch name
 - `list_branches()`: List branches with optional pattern filtering
 
 #### Custom Validation Rules
+
 - `ValidationRule`: Dataclass for custom validation rules
 - `ValidationRuleManager`: Manage custom validation rules per file type
 - `add_rule()`, `remove_rule()`: Rule management
@@ -25,12 +48,14 @@
 - `get_rules_for_file()`: Get rules applicable to a file
 
 #### Agent Priority Queue
+
 - `AgentPriorityQueue`: Priority queue for ordered agent execution
 - `add_agent()`: Add agent with priority and dependencies
 - `remove_agent()`: Remove agent from queue
 - `get_execution_order()`: Get agents in execution order with dependency resolution
 
 #### Telemetry and Observability
+
 - `TelemetrySpan`: Dataclass for tracing spans (OpenTelemetry-compatible)
 - `TelemetryCollector`: Collect telemetry data for observability
 - `span()`: Context manager for creating spans
@@ -38,6 +63,7 @@
 - `export_json()`: Export spans as JSON
 
 #### Conditional Agent Execution
+
 - `ExecutionCondition`: Dataclass for execution conditions
 - `ConditionalExecutor`: Execute agents based on file content conditions
 - `add_condition()`: Add condition with check function
@@ -45,6 +71,7 @@
 - `should_execute()`: Check if agent should execute for file
 
 #### Agent Templates
+
 - `AgentTemplate`: Dataclass for agent templates
 - `TemplateManager`: Manage agent templates for common use cases
 - Default templates: python_full, markdown_docs, quick_fix
@@ -52,24 +79,28 @@
 - `list_templates()`: List available templates
 
 #### Agent Dependency Resolution
+
 - `DependencyGraph`: Resolve agent dependencies for ordered execution
 - `add_node()`, `add_dependency()`: Build dependency graph
 - `resolve()`: Topological sort for execution order
 - Circular dependency detection
 
 #### Agent Execution Profiles
+
 - `ExecutionProfile`: Dataclass for execution settings
 - `ProfileManager`: Manage agent execution profiles
 - Default profiles: default, fast, ci
 - `activate()`, `get_active_config()`: Profile activation
 
 #### Agent Result Caching
+
 - `CachedResult`: Dataclass for cached agent results
 - `ResultCache`: Cache agent results for reuse with TTL
 - `get()`, `set()`: Cache operations
 - `invalidate()`: Invalidate cache for file
 
 #### Agent Execution Scheduling
+
 - `ScheduledExecution`: Dataclass for scheduled executions
 - `ExecutionScheduler`: Schedule agent executions
 - `add_schedule()`: Add schedule (hourly, daily, weekly, HH:MM)
@@ -80,6 +111,7 @@
 ### Added - Phase 6: Plugin System, Rate Limiting, and Advanced Features
 
 #### Enums for Type Safety
+
 - `AgentExecutionState`: PENDING, RUNNING, COMPLETED, FAILED, CANCELLED, PAUSED
 - `RateLimitStrategy`: FIXED_WINDOW, SLIDING_WINDOW, TOKEN_BUCKET, LEAKY_BUCKET
 - `ConfigFormat`: YAML, TOML, JSON, INI
@@ -89,6 +121,7 @@
 - `HealthStatus`: HEALTHY, DEGRADED, UNHEALTHY, UNKNOWN
 
 #### Dataclasses for Data Structures
+
 - `RateLimitConfig`: Rate limiting configuration with requests_per_second, burst_size
 - `AgentPluginConfig`: Plugin configuration with name, module_path, entry_point
 - `FileLock`: File lock information with path, type, owner, timestamps
@@ -99,6 +132,7 @@
 - `AgentConfig`: Full agent configuration loaded from config files
 
 #### Plugin System
+
 - `AgentPluginBase`: Abstract base class for custom agent plugins
 - `register_plugin()`: Register third-party agent plugins
 - `unregister_plugin()`: Remove plugins by name
@@ -107,12 +141,14 @@
 - `load_plugins_from_config()`: Load plugins from YAML/TOML config
 
 #### Rate Limiting
+
 - `RateLimiter`: Token bucket implementation with thread-safe token acquisition
 - `enable_rate_limiting()`: Enable rate limiting on agent
 - `get_rate_limit_stats()`: Get current rate limiter statistics
 - `--rate-limit` CLI argument for configuring requests per second
 
 #### Configuration File Support
+
 - `ConfigLoader`: Load and parse YAML/TOML/JSON config files
 - `Agent.from_config_file()`: Create agent from configuration file
 - `Agent.auto_configure()`: Auto-detect and load config from repository
@@ -120,6 +156,7 @@
 - Support for agent.yaml, agent.toml, agent.json naming conventions
 
 #### File Locking
+
 - `FileLockManager`: Thread-safe file lock management with timeouts
 - `acquire_lock()`: Acquire exclusive or shared file locks
 - `release_lock()`: Release held locks
@@ -128,6 +165,7 @@
 - Automatic cleanup of expired locks
 
 #### Diff Preview Mode
+
 - `DiffGenerator`: Generate and format diffs in multiple formats
 - `preview_changes()`: Preview file changes without applying
 - `show_pending_diffs()`: Show all pending diffs in dry-run mode
@@ -136,6 +174,7 @@
 - Colorized console output with ANSI escape codes
 
 #### Graceful Shutdown
+
 - `GracefulShutdown`: Signal handler with state persistence
 - `install_handlers()`: Install SIGINT/SIGTERM handlers
 - `should_continue()`: Check if processing should continue
@@ -146,6 +185,7 @@
 - `--graceful-shutdown` and `--resume` CLI arguments
 
 #### Incremental Processing
+
 - `IncrementalProcessor`: Track file modification times and content hashes
 - `get_changed_files()`: Get files changed since last run
 - `mark_processed()`: Mark file as processed with hash
@@ -156,6 +196,7 @@
 - `--incremental` CLI argument
 
 #### Health Checks
+
 - `HealthChecker`: Run health checks on all agent components
 - `check_python()`: Check Python environment
 - `check_git()`: Check git availability
@@ -168,6 +209,7 @@
 - `--health-check` CLI argument
 
 #### Test Coverage
+
 - 60+ new tests for Phase 6 features
 - TestAgentExecutionStateEnum, TestRateLimitStrategyEnum, TestConfigFormatEnum
 - TestLockTypeEnum, TestDiffOutputFormatEnum, TestAgentPriorityEnum, TestHealthStatusEnum
@@ -183,7 +225,7 @@
 
 ## [2025-12-16]
 
-### Added
+### Added (2025-12-16)
 
 - Refactor: File split into `agent_orchestrator.py`, `agent_processor.py`, `agent_reporter.py`. (Fixed)
 - Configurable timeout values per agent type. (Fixed)
@@ -214,7 +256,7 @@
 
 ## [1.0.1] - 2025-12-15
 
-### Changed
+### Changed (1.0.1)
 
 - Improved Windows robustness for subprocess output decoding in `BaseAgent`.
 - Expanded agent test coverage (unit tests under `tests/` plus legacy `scripts/agent/test_*.py`).
@@ -224,7 +266,7 @@
 
 ## [1.0.0] - 2025-12-14
 
-### Added
+### Added (1.0.0)
 
 - Initial implementation of the Agent orchestrator
 - Support for multiple specialized sub-agents

@@ -1,31 +1,40 @@
 # Description: `generate_agent_reports.py`
 
 ## Module purpose
-Generate per-file agent reports.
 
-For every Python file under `scripts/agent/*.py`, this script writes:
+`generate_agent_reports.py` generates simple per-file reports for Python sources in `src/`.
+
+For each `src/*.py`, it writes three markdown files into `src/`:
+
 - `<stem>.description.md`
 - `<stem>.errors.md`
 - `<stem>.improvements.md`
 
-The output is intentionally lightweight and based on static inspection and
-basic syntax/compile checks.
+Reports are based on static inspection (AST parse, top-level def discovery, import listing) plus a lightweight syntax check.
 
 ## Location
-- Path: `scripts/agent/generate_agent_reports.py`
+
+- Path: `src/generate_agent_reports.py`
 
 ## Public surface
-- Classes: CompileResult
-- Functions: _read_text, _sha256_text, _try_parse_python, _compile_check, _is_pytest_test_file, _looks_like_pytest_import_problem, _find_top_level_defs, _find_imports, _detect_cli_entry, _detect_argparse, _placeholder_test_note, _write_md, _rel, render_description, render_errors, _find_issues, render_improvements, iter_agent_py_files, _get_existing_sha, main
+
+- Primary entrypoint: `main(argv: Sequence[str]) -> int`
+- File iteration: `iter_agent_py_files() -> Iterable[Path]` (currently `src/*.py`)
+- Report renderers: `render_description(...)`, `render_errors(...)`, `render_improvements(...)`
+
+Note: The file also contains many report-system enums/dataclasses that are not currently used by `main()`.
 
 ## Behavior summary
+
 - Has a CLI entrypoint (`__main__`).
-- Uses `argparse` for CLI parsing.
-- Invokes external commands via `subprocess`.
-- Mutates `sys.path` to import sibling modules.
+- Does not currently parse CLI flags; `argv` is accepted but unused.
+- Skips unchanged files by comparing the first 16 hex chars of `SHA256(source)` against the value embedded in the existing `<stem>.description.md`.
+- Normalizes output newlines to `\n` and enforces a single trailing newline.
 
 ## Key dependencies
+
 - Top imports: `__future__`, `ast`, `hashlib`, `re`, `sys`, `dataclasses`, `pathlib`, `typing`
 
 ## File fingerprint
-- SHA256(source): `c1e014861e009e6c…`
+
+- SHA256(source): `C58832E7DC7CF6F71652659FF372A3D266CC1891AD513CE72CAB98C9D9C8C663`
