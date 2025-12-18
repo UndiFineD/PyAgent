@@ -70,9 +70,9 @@ class ChangelogEntry:
     date: str = ""
     priority: int = 0  # Higher=more important
     severity: str = "normal"  # low, normal, high, critical
-    tags: List[str] = field(default_factory=list)
-    linked_issues: List[str] = field(default_factory=list)
-    linked_commits: List[str] = field(default_factory=list)
+    tags: List[str] = field(default_factory=lambda: [])
+    linked_issues: List[str] = field(default_factory=lambda: [])
+    linked_commits: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
@@ -137,8 +137,6 @@ class GroupingStrategy(Enum):
 
 
 # ========== Session 6 Dataclasses ==========
-
-
 @dataclass
 class LocalizedEntry:
     """A changelog entry with localization support.
@@ -151,7 +149,7 @@ class LocalizedEntry:
     """
     original_text: str
     language: LocalizationLanguage = LocalizationLanguage.ENGLISH
-    translations: Dict[str, str] = field(default_factory=dict)
+    translations: Dict[str, str] = field(default_factory=lambda: {})
     auto_translated: bool = False
 
 
@@ -166,9 +164,9 @@ class DiffResult:
         unchanged: Lines unchanged.
         similarity_score: Percentage of similarity (0 - 100).
     """
-    additions: List[str] = field(default_factory=list)
-    deletions: List[str] = field(default_factory=list)
-    modifications: List[Tuple[str, str]] = field(default_factory=list)
+    additions: List[str] = field(default_factory=lambda: [])
+    deletions: List[str] = field(default_factory=lambda: [])
+    modifications: List[Tuple[str, str]] = field(default_factory=lambda: [])
     unchanged: int = 0
     similarity_score: float = 0.0
 
@@ -192,7 +190,7 @@ class ImportedEntry:
     description: str
     author: str = ""
     created_at: str = ""
-    labels: List[str] = field(default_factory=list)
+    labels: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
@@ -239,7 +237,7 @@ class MonorepoEntry:
     """
     package_name: str
     version: str
-    entries: List[ChangelogEntry] = field(default_factory=list)
+    entries: List[ChangelogEntry] = field(default_factory=lambda: [])
     path: str = ""
 
 
@@ -258,8 +256,8 @@ class ReleaseNote:
     version: str
     title: str
     summary: str
-    highlights: List[str] = field(default_factory=list)
-    breaking_changes: List[str] = field(default_factory=list)
+    highlights: List[str] = field(default_factory=lambda: [])
+    breaking_changes: List[str] = field(default_factory=lambda: [])
     full_changelog: str = ""
 
 
@@ -275,8 +273,8 @@ class ComplianceResult:
     """
     category: ComplianceCategory
     passed: bool
-    issues: List[str] = field(default_factory=list)
-    recommendations: List[str] = field(default_factory=list)
+    issues: List[str] = field(default_factory=lambda: [])
+    recommendations: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
@@ -291,13 +289,11 @@ class EntryTemplate:
     """
     name: str
     template_text: str
-    placeholders: List[str] = field(default_factory=list)
+    placeholders: List[str] = field(default_factory=lambda: [])
     description: str = ""
 
 
 # ========== Session 6 Helper Classes ==========
-
-
 class ChangelogLocalizer:
     """Handles changelog localization to multiple languages.
 
@@ -365,7 +361,7 @@ class ChangelogLocalizer:
         Returns:
             Changelog text in the specified language.
         """
-        result = []
+        result: List[str] = []
         for entry in self.entries:
             if language.value in entry.translations:
                 result.append(entry.translations[language.value])
@@ -431,7 +427,7 @@ class DiffVisualizer:
 
     def _render_unified(self, result: DiffResult) -> str:
         """Render unified diff view."""
-        lines = []
+        lines: List[str] = []
         lines.append("<div class='diff-unified'>")
         for line in result.deletions:
             lines.append(f"<span class='deletion'>- {line}</span>")
@@ -516,7 +512,7 @@ class ExternalImporter:
         Returns:
             List of ChangelogEntry instances.
         """
-        result = []
+        result: List[ChangelogEntry] = []
         for imported in self.imported_entries:
             result.append(ChangelogEntry(
                 category="Added",
@@ -547,16 +543,14 @@ class ChangelogSearcher:
         Returns:
             List of search results.
         """
-        results = []
+        results: List[SearchResult] = []
         lines = content.split('\n')
         current_version = "Unknown"
-
         for i, line in enumerate(lines, 1):
             # Track current version
             version_match = re.match(r"##\s*\[?(\d+\.\d+\.\d+|\d{4}\.\d{2}\.\d{2})\]?", line)
             if version_match:
                 current_version = version_match.group(1)
-
             # Search for query
             if query.lower() in line.lower():
                 results.append(SearchResult(
@@ -565,7 +559,6 @@ class ChangelogSearcher:
                     context=line.strip(),
                     match_score=self._calculate_score(query, line)
                 ))
-
         return sorted(results, key=lambda r: r.match_score, reverse=True)
 
     def _calculate_score(self, query: str, text: str) -> float:
@@ -580,15 +573,12 @@ class ChangelogSearcher:
         """
         query_lower = query.lower()
         text_lower = text.lower()
-
         # Exact match gets highest score
         if query_lower == text_lower:
             return 1.0
-
         # Word boundary match
         if re.search(rf'\b{re.escape(query_lower)}\b', text_lower):
             return 0.8
-
         # Substring match
         return 0.5
 
@@ -791,7 +781,7 @@ class ReleaseNotesGenerator:
             summary += f" with {len(breaking)} breaking change(s)"
 
         # Format full changelog
-        changelog_lines = []
+        changelog_lines: List[str] = []
         by_category: Dict[str, List[str]] = {}
         for entry in entries:
             if entry.category not in by_category:
@@ -888,11 +878,11 @@ class FeedGenerator:
 
     def _generate_json(self, entries: List[ChangelogEntry], project_name: str) -> str:
         """Generate JSON Feed."""
-        items = [
+        items: List[Dict[str, str]] = [
             {"title": f"[{e.category}] {e.description[:50]}", "content_text": e.description}
             for e in entries[:20]
         ]
-        feed = {
+        feed: Dict[str, Any] = {
             "version": "https://jsonfeed.org / version / 1.1",
             "title": f"{project_name} Changelog",
             "items": items
@@ -923,9 +913,8 @@ class ComplianceChecker:
         Returns:
             ComplianceResult for security category.
         """
-        issues = []
-        recommendations = []
-
+        issues: List[str] = []
+        recommendations: List[str] = []
         # Check for security entries without proper categorization
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.SECURITY_KEYWORDS):
@@ -935,7 +924,6 @@ class ComplianceChecker:
                         f"{entry.description[:50]}"
                     )
                     recommendations.append("Move security-related entries to the Security section")
-
         return ComplianceResult(
             category=ComplianceCategory.SECURITY,
             passed=len(issues) == 0,
@@ -952,15 +940,13 @@ class ComplianceChecker:
         Returns:
             ComplianceResult for legal category.
         """
-        issues = []
-        recommendations = []
-
+        issues: List[str] = []
+        recommendations: List[str] = []
         # Check for entries that may need legal review
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.LEGAL_KEYWORDS):
                 issues.append(f"Entry may need legal review: {entry.description[:50]}")
                 recommendations.append("Have legal team review license / copyright changes")
-
         return ComplianceResult(
             category=ComplianceCategory.LEGAL,
             passed=len(issues) == 0,
@@ -1310,24 +1296,22 @@ class ChangesAgent(BaseAgent):
             "preview": content[:500] + "..." if len(content) > 500 else content
         }
 
-    def update_file(self) -> bool:
+    def update_file(self) -> None:
         """Override update_file to support preview mode."""
         if self._preview_mode:
             logging.info("Preview mode: changes not written to file")
-            return True
+            return
         return super().update_file()
 
     # ========== Merge Detection ==========
-
-    def detect_merge_conflicts(self, content: str) -> List[Dict[str, str]]:
+    def detect_merge_conflicts(self, content: str) -> List[Dict[str, Any]]:
         """Detect merge conflict markers in the content."""
-        conflicts = []
+        conflicts: List[Dict[str, Any]] = []
         lines = content.split('\n')
         in_conflict = False
         conflict_start = 0
-        ours: list[str] = []
-        theirs: list[str] = []
-
+        ours: List[str] = []
+        theirs: List[str] = []
         for i, line in enumerate(lines):
             if line.startswith('<<<<<<<'):
                 in_conflict = True
@@ -1350,7 +1334,6 @@ class ChangesAgent(BaseAgent):
                     ours.append(line)
                 else:
                     theirs.append(line)
-
         return conflicts
 
     def resolve_merge_conflict(
@@ -1364,12 +1347,12 @@ class ChangesAgent(BaseAgent):
             content: Content with merge conflicts
             resolution: 'ours', 'theirs', or 'both'
         """
-        result = []
+        result: List[str] = []
         lines = content.split('\n')
         in_conflict = False
         ours_section = True
-        ours: list[str] = []
-        theirs: list[str] = []
+        ours: List[str] = []
+        theirs: List[str] = []
 
         for line in lines:
             if line.startswith('<<<<<<<'):
@@ -1396,19 +1379,16 @@ class ChangesAgent(BaseAgent):
                     theirs.append(line)
             else:
                 result.append(line)
-
         return '\n'.join(result)
 
     # ========== Entry Validation ==========
-
     def add_validation_rule(self, rule: ValidationRule) -> None:
         """Add a custom validation rule."""
         self._validation_rules.append(rule)
 
     def validate_entry(self, entry: ChangelogEntry) -> List[Dict[str, str]]:
         """Validate a changelog entry against all rules."""
-        issues = []
-
+        issues: List[Dict[str, str]] = []
         # Validate version format
         if entry.version:
             version_rule = next(
@@ -1421,7 +1401,6 @@ class ChangesAgent(BaseAgent):
                     "message": version_rule.message,
                     "severity": version_rule.severity
                 })
-
         # Validate date format
         if entry.date:
             date_rule = next(
@@ -1434,7 +1413,6 @@ class ChangesAgent(BaseAgent):
                     "message": date_rule.message,
                     "severity": date_rule.severity
                 })
-
         # Validate entry description
         entry_rule = next(
             (r for r in self._validation_rules if r.name == "entry_not_empty"),
@@ -1446,13 +1424,11 @@ class ChangesAgent(BaseAgent):
                 "message": entry_rule.message,
                 "severity": entry_rule.severity
             })
-
         return issues
 
     def validate_changelog(self, content: str) -> List[Dict[str, Any]]:
         """Validate the entire changelog content."""
-        all_issues = []
-
+        all_issues: List[Dict[str, Any]] = []
         # Check for merge conflicts
         conflicts = self.detect_merge_conflicts(content)
         if conflicts:
@@ -1462,7 +1438,6 @@ class ChangesAgent(BaseAgent):
                 "severity": "error",
                 "message": f"Found {len(conflicts)} unresolved merge conflict(s)"
             })
-
         # Check for required sections
         if self._template:
             for section in self._template.sections:
@@ -1473,47 +1448,39 @@ class ChangesAgent(BaseAgent):
                         "severity": "warning",
                         "message": f"Missing recommended section: {section}"
                     })
-
         return all_issues
 
     # ========== Statistics ==========
-
     def calculate_statistics(self) -> Dict[str, Any]:
         """Calculate statistics for the changelog."""
         content = self.current_content or self.previous_content
-
         # Count versions
         version_pattern = r"##\s*\[?(\d+\.\d+\.\d+|\d{4}\.\d{2}\.\d{2})\]?"
         versions = re.findall(version_pattern, content)
-
         # Count entries per category
-        categories = {}
+        categories: Dict[str, int] = {}
         for section in ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]:
             pattern = rf"###\s*{section}\s*\n(.*?)(?=###|\Z)"
             matches = re.findall(pattern, content, re.DOTALL)
             if matches:
                 entries = [line for line in matches[0].split('\n') if line.strip().startswith('-')]
                 categories[section] = len(entries)
-
         # Count contributors (if mentioned)
         contributor_pattern = r"@(\w+)"
         contributors = set(re.findall(contributor_pattern, content))
-
         self._statistics = {
             "version_count": len(versions),
             "latest_version": versions[0] if versions else None,
             "entries_by_category": categories,
-            "total_entries": sum(categories.values()),
+            "total_entries": sum(categories.values()) if categories else 0,
             "contributor_count": len(contributors),
             "contributors": list(contributors),
             "line_count": len(content.split('\n')),
             "character_count": len(content)
         }
-
         return self._statistics
 
     # ========== Entry Management ==========
-
     def add_entry(
         self,
         category: str,
@@ -1534,13 +1501,11 @@ class ChangesAgent(BaseAgent):
             tags=tags or [],
             linked_issues=linked_issues or []
         )
-
         # Validate before adding
         issues = self.validate_entry(entry)
         if any(i["severity"] == "error" for i in issues):
             logging.error(f"Entry validation failed: {issues}")
             raise ValueError(f"Entry validation failed: {issues}")
-
         self._entries.append(entry)
         return entry
 
@@ -1555,10 +1520,9 @@ class ChangesAgent(BaseAgent):
 
     def deduplicate_entries(self) -> int:
         """Remove duplicate entries, returns count of removed."""
-        seen = set()
-        unique = []
+        seen: set[str] = set()
+        unique: list[ChangelogEntry] = []
         removed = 0
-
         for entry in self._entries:
             key = hashlib.md5(
                 f"{entry.category}:{entry.description}".encode()
@@ -1568,7 +1532,6 @@ class ChangesAgent(BaseAgent):
                 unique.append(entry)
             else:
                 removed += 1
-
         self._entries = unique
         return removed
 
@@ -1576,7 +1539,6 @@ class ChangesAgent(BaseAgent):
         """Format all entries as markdown changelog."""
         if not self._entries:
             return ""
-
         # Group by version
         by_version: Dict[str, List[ChangelogEntry]] = {}
         for entry in self._entries:
@@ -1584,19 +1546,16 @@ class ChangesAgent(BaseAgent):
             if version not in by_version:
                 by_version[version] = []
             by_version[version].append(entry)
-
-        result = []
+        result: List[str] = []
         for version, entries in by_version.items():
             date = entries[0].date if entries else datetime.now().strftime("%Y-%m-%d")
             result.append(f"## [{version}] - {date}\n")
-
             # Group by category
             by_category: Dict[str, List[ChangelogEntry]] = {}
             for entry in entries:
                 if entry.category not in by_category:
                     by_category[entry.category] = []
                 by_category[entry.category].append(entry)
-
             sections = self.get_template_sections()
             for category in sections:
                 if category in by_category:
@@ -1609,7 +1568,6 @@ class ChangesAgent(BaseAgent):
                             line += f" ({', '.join(entry.linked_issues)})"
                         result.append(line)
                     result.append("")
-
         return '\n'.join(result)
 
     def _get_default_content(self) -> str:
