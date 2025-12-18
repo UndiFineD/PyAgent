@@ -1292,7 +1292,7 @@ class ResultAggregator:
         summary = self.get_summary()
         failed = summary.get("failed", 0)
         passed = summary.get("passed", 0)
-        
+
         return {
             "total_passed": passed,
             "total_failed": failed,
@@ -1308,22 +1308,28 @@ class ResultAggregator:
         """
         if len(self.results) < 2:
             return {"pass_rate_trend": "stable"}
-        
+
         # Calculate pass rates over time
         mid_point = len(self.results) // 2
         earlier_results = self.results[:mid_point]
         later_results = self.results[mid_point:]
-        
-        earlier_rate = sum(1 for r in earlier_results if r.status == TestStatus.PASSED) / len(earlier_results) if earlier_results else 0
-        later_rate = sum(1 for r in later_results if r.status == TestStatus.PASSED) / len(later_results) if later_results else 0
-        
+
+        earlier_rate = (
+            sum(1 for r in earlier_results if r.status == TestStatus.PASSED) /
+            len(earlier_results) if earlier_results else 0
+        )
+        later_rate = (
+            sum(1 for r in later_results if r.status == TestStatus.PASSED) /
+            len(later_results) if later_results else 0
+        )
+
         if later_rate > earlier_rate:
             trend = "improving"
         elif later_rate < earlier_rate:
             trend = "declining"
         else:
             trend = "stable"
-        
+
         return {"pass_rate_trend": trend}
 
 
@@ -1499,7 +1505,7 @@ class MutationRunner:
             )
             mut.killed = killed
             self.tester.mutations.append(mut)
-        
+
         # Record in results
         self.tester.record_kill(mutation_id, killed)
 
@@ -2737,23 +2743,23 @@ class DIContainer:
 
 class TestPrioritizer:
     """Prioritizes tests based on various strategies."""
-    
+
     def __init__(self) -> None:
         """Initialize test prioritizer."""
         self.tests: Dict[str, Dict[str, Any]] = {}
-    
+
     def add_test(self, name: str, recent_changes: int = 0, failure_rate: float = 0.0) -> None:
         """Add test for prioritization."""
         self.tests[name] = {"recent_changes": recent_changes, "failure_rate": failure_rate}
-    
+
     def prioritize_by_recent_changes(self) -> List[str]:
         """Prioritize by recent changes."""
         return sorted(self.tests.keys(), key=lambda t: self.tests[t]["recent_changes"], reverse=True)
-    
+
     def prioritize_by_failure_history(self) -> List[str]:
         """Prioritize by failure history."""
         return sorted(self.tests.keys(), key=lambda t: self.tests[t]["failure_rate"], reverse=True)
-    
+
     def prioritize_combined(self) -> List[str]:
         """Prioritize with combined strategy."""
         scores = {}
@@ -2764,17 +2770,17 @@ class TestPrioritizer:
 
 class FlakinessDetector:
     """Detects flaky tests."""
-    
+
     def __init__(self) -> None:
         """Initialize flakiness detector."""
         self.test_runs: Dict[str, List[bool]] = {}
-    
+
     def add_run(self, test_name: str, passed: bool) -> None:
         """Add a test run result."""
         if test_name not in self.test_runs:
             self.test_runs[test_name] = []
         self.test_runs[test_name].append(passed)
-    
+
     def is_flaky(self, test_name: str) -> bool:
         """Detect if test is flaky."""
         if test_name not in self.test_runs or len(self.test_runs[test_name]) < 2:
@@ -2787,19 +2793,19 @@ class FlakinessDetector:
 
 class QuarantineManager:
     """Manages quarantined flaky tests."""
-    
+
     def __init__(self) -> None:
         """Initialize quarantine manager."""
         self.quarantined: Set[str] = set()
-    
+
     def quarantine(self, test_name: str) -> None:
         """Quarantine a test."""
         self.quarantined.add(test_name)
-    
+
     def release(self, test_name: str) -> None:
         """Release a quarantined test."""
         self.quarantined.discard(test_name)
-    
+
     def is_quarantined(self, test_name: str) -> bool:
         """Check if test is quarantined."""
         return test_name in self.quarantined
@@ -2807,17 +2813,17 @@ class QuarantineManager:
 
 class ImpactAnalyzer:
     """Analyzes test impact of code changes."""
-    
+
     def __init__(self) -> None:
         """Initialize impact analyzer."""
         self.dependencies: Dict[str, Set[str]] = {}
-    
+
     def add_dependency(self, test: str, depends_on: str) -> None:
         """Add dependency between test and code."""
         if test not in self.dependencies:
             self.dependencies[test] = set()
         self.dependencies[test].add(depends_on)
-    
+
     def get_impacted_tests(self, changed_files: List[str]) -> Set[str]:
         """Get tests impacted by file changes."""
         impacted = set()
@@ -2825,7 +2831,7 @@ class ImpactAnalyzer:
             if any(f in deps for f in changed_files):
                 impacted.add(test)
         return impacted
-    
+
     def build_dependency_graph(self) -> Dict[str, Set[str]]:
         """Build dependency graph."""
         return dict(self.dependencies)
@@ -2833,21 +2839,21 @@ class ImpactAnalyzer:
 
 class DataFactory:
     """Factory for creating test data."""
-    
+
     def __init__(self) -> None:
         """Initialize data factory."""
         self.defaults: Dict[str, Any] = {}
-    
+
     def set_default(self, key: str, value: Any) -> None:
         """Set default value."""
         self.defaults[key] = value
-    
+
     def create(self, **overrides: Any) -> Dict[str, Any]:
         """Create data with defaults and overrides."""
         result = dict(self.defaults)
         result.update(overrides)
         return result
-    
+
     def create_batch(self, count: int, **overrides: Any) -> List[Dict[str, Any]]:
         """Create batch of data."""
         return [self.create(**overrides) for _ in range(count)]
@@ -2855,11 +2861,11 @@ class DataFactory:
 
 class ParallelizationStrategy:
     """Strategy for parallel test execution."""
-    
+
     def __init__(self, strategy_type: str = "round_robin") -> None:
         """Initialize strategy."""
         self.strategy_type = strategy_type
-    
+
     def distribute(self, tests: List[str], workers: int) -> List[List[str]]:
         """Distribute tests across workers."""
         if self.strategy_type == "round_robin":
@@ -2878,27 +2884,27 @@ class ParallelizationStrategy:
 
 class CoverageGapAnalyzer:
     """Analyzes coverage gaps."""
-    
+
     def __init__(self) -> None:
         """Initialize analyzer."""
         self.covered: Set[str] = set()
         self.total: Set[str] = set()
-    
+
     def add_covered(self, item: str) -> None:
         """Mark item as covered."""
         self.covered.add(item)
         self.total.add(item)
-    
+
     def add_uncovered(self, item: str) -> None:
         """Mark item as uncovered."""
         self.total.add(item)
-    
+
     def get_coverage_percentage(self) -> float:
         """Get coverage percentage."""
         if not self.total:
             return 0.0
         return (len(self.covered) / len(self.total)) * 100
-    
+
     def find_uncovered(self) -> List[str]:
         """Find uncovered items."""
         return list(self.total - self.covered)
@@ -2906,22 +2912,16 @@ class CoverageGapAnalyzer:
 
 class ContractValidator:
     """Validates test contracts."""
-    
+
     def validate(self, contract: Dict[str, Any]) -> bool:
         """Validate contract specification."""
         required = {"name", "preconditions", "postconditions"}
         return all(k in contract for k in required)
 
 
-
-
-
-
-
-
 class TestRecorder:
     """Records test execution."""
-    
+
     def record(self, test_name: str, result: bool) -> None:
         """Record test execution."""
         pass
@@ -2929,7 +2929,7 @@ class TestRecorder:
 
 class TestReplayer:
     """Replays recorded tests."""
-    
+
     def replay(self, recording: Dict[str, Any]) -> bool:
         """Replay recorded test."""
         return True
@@ -2937,23 +2937,23 @@ class TestReplayer:
 
 class TestDocGenerator:
     """Generates documentation from tests."""
-    
+
     def __init__(self) -> None:
         """Initialize doc generator."""
         self.tests: List[Dict[str, Any]] = []
-    
+
     def add_test(self, name: str, module: str) -> None:
         """Add test for documentation."""
         self.tests.append({"name": name, "module": module})
-    
+
     def generate_grouped(self) -> Dict[str, List[Dict[str, Any]]]:
         """Generate documentation grouped by module."""
         return self.group_by_module(self.tests)
-    
+
     def extract_examples(self, test_code: str) -> List[Dict[str, str]]:
         """Extract examples from test code."""
         return [{"example": "example_code"}]
-    
+
     def group_by_module(self, tests: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
         """Group tests by module."""
         result: Dict[str, List[Dict[str, Any]]] = {}
