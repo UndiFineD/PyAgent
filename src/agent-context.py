@@ -75,7 +75,7 @@ class ContextTemplate:
     file_type: str
     sections: List[str]
     template_content: str
-    required_fields: List[str] = field(default_factory=list)
+    required_fields: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
@@ -93,7 +93,7 @@ class ContextVersion:
     version: str
     timestamp: str
     content_hash: str
-    changes: List[str] = field(default_factory=list)
+    changes: List[str] = field(default_factory=lambda: [])
     author: str = ""
 
 
@@ -340,9 +340,9 @@ class CrossRepoContext:
     """
     repo_name: str
     repo_url: str
-    related_files: List[str] = field(default_factory=list)
+    related_files: List[str] = field(default_factory=lambda: [])
     similarity_score: float = 0.0
-    common_patterns: List[str] = field(default_factory=list)
+    common_patterns: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
@@ -359,9 +359,9 @@ class ContextDiff:
     """
     version_from: str
     version_to: str
-    added_sections: List[str] = field(default_factory=list)
-    removed_sections: List[str] = field(default_factory=list)
-    modified_sections: List[str] = field(default_factory=list)
+    added_sections: List[str] = field(default_factory=lambda: [])
+    removed_sections: List[str] = field(default_factory=lambda: [])
+    modified_sections: List[str] = field(default_factory=lambda: [])
     change_summary: str = ""
 
 
@@ -376,9 +376,9 @@ class InheritedContext:
         overrides: Sections that override parent.
     """
     parent_path: str
-    inherited_sections: List[str] = field(default_factory=list)
+    inherited_sections: List[str] = field(default_factory=lambda: [])
     mode: InheritanceMode = InheritanceMode.MERGE
-    overrides: List[str] = field(default_factory=list)
+    overrides: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
@@ -393,7 +393,7 @@ class NLQueryResult:
     """
     query: str
     answer: str
-    relevant_contexts: List[str] = field(default_factory=list)
+    relevant_contexts: List[str] = field(default_factory=lambda: [])
     confidence: float = 0.0
 
 
@@ -409,7 +409,7 @@ class ExportedContext:
     """
     format: ExportFormat
     content: str
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=lambda: {})
     created_at: str = ""
 
 
@@ -424,7 +424,7 @@ class ContextRecommendation:
         confidence: Recommendation confidence.
     """
     source_file: str
-    suggested_sections: List[str] = field(default_factory=list)
+    suggested_sections: List[str] = field(default_factory=lambda: [])
     reason: str = ""
     confidence: float = 0.0
 
@@ -441,7 +441,7 @@ class GeneratedCode:
     """
     language: str
     code: str
-    context_used: List[str] = field(default_factory=list)
+    context_used: List[str] = field(default_factory=lambda: [])
     description: str = ""
 
 
@@ -457,7 +457,7 @@ class RefactoringSuggestion:
     """
     suggestion_type: str
     description: str
-    affected_files: List[str] = field(default_factory=list)
+    affected_files: List[str] = field(default_factory=lambda: [])
     estimated_impact: str = "medium"
 
 
@@ -472,8 +472,8 @@ class VisualizationData:
         layout: Layout algorithm to use.
     """
     viz_type: VisualizationType
-    nodes: List[Dict[str, Any]] = field(default_factory=list)
-    edges: List[Tuple[str, str]] = field(default_factory=list)
+    nodes: List[Dict[str, Any]] = field(default_factory=lambda: [])
+    edges: List[Tuple[str, str]] = field(default_factory=lambda: [])
     layout: str = "hierarchical"
 
 
@@ -490,7 +490,7 @@ class SharedContext:
     """
     context_id: str
     owner: str
-    shared_with: List[str] = field(default_factory=list)
+    shared_with: List[str] = field(default_factory=lambda: [])
     permission: SharingPermission = SharingPermission.READ_ONLY
     last_sync: str = ""
 
@@ -524,9 +524,9 @@ class BranchComparison:
     """
     branch_a: str
     branch_b: str
-    files_only_in_a: List[str] = field(default_factory=list)
-    files_only_in_b: List[str] = field(default_factory=list)
-    modified_files: List[str] = field(default_factory=list)
+    files_only_in_a: List[str] = field(default_factory=lambda: [])
+    files_only_in_b: List[str] = field(default_factory=lambda: [])
+    modified_files: List[str] = field(default_factory=lambda: [])
 
 
 # ========== Session 6 Helper Classes ==========
@@ -598,7 +598,6 @@ class SemanticSearchEngine:
                     content_snippet=f"Content from {file_path}",
                     similarity_score=min(score, 1.0)
                 ))
-
         return sorted(self.results, key=lambda r: r.similarity_score, reverse=True)
 
 
@@ -617,7 +616,7 @@ class CrossRepoAnalyzer:
     def __init__(self) -> None:
         """Initialize the cross-repo analyzer."""
         self.repositories: Dict[str, CrossRepoContext] = {}
-        self.repos: Dict[str, dict] = {}  # Add repos attribute
+        self.repos: Dict[str, Dict[str, str]] = {}  # Add repos attribute
 
     def add_repo(self, name: str, url: str) -> None:
         """Add a repository."""
@@ -650,8 +649,8 @@ class CrossRepoAnalyzer:
         Returns:
             List of related cross - repo contexts.
         """
-        results = []
-        for name, repo in self.repositories.items():
+        results: List[CrossRepoContext] = []
+        for repo in self.repositories.values():
             # Simplified matching
             repo.similarity_score = 0.5
             repo.related_files.append(file_path)
@@ -702,19 +701,16 @@ class ContextDiffer:
             ContextDiff with changes.
         """
         # Extract sections
-        sections_from = set(re.findall(r"##\s+(\w+)", content_from))
-        sections_to = set(re.findall(r"##\s+(\w+)", content_to))
-
-        added = list(sections_to - sections_from)
-        removed = list(sections_from - sections_to)
-        modified = []
-
+        sections_from: set[str] = set(re.findall(r"##\s+(\w+)", content_from))
+        sections_to: set[str] = set(re.findall(r"##\s+(\w+)", content_to))
+        added: List[str] = list(sections_to - sections_from)
+        removed: List[str] = list(sections_from - sections_to)
+        modified: List[str] = []
         # Check for modified content in common sections
         common = sections_from & sections_to
         for section in common:
             if content_from.count(section) != content_to.count(section):
                 modified.append(section)
-
         return ContextDiff(
             version_from=version_from,
             version_to=version_to,
@@ -848,14 +844,12 @@ class NLQueryEngine:
             NLQueryResult with answer.
         """
         # Simplified NL query - in production, use LLM
-        relevant = []
+        relevant: List[str] = []
         keywords = question.lower().split()
-
         for path, content in contexts.items():
             content_lower = content.lower()
             if any(kw in content_lower for kw in keywords):
                 relevant.append(path)
-
         return NLQueryResult(
             query=question,
             answer=f"Found {len(relevant)} relevant context files",
@@ -885,12 +879,10 @@ class ContextExporter:
             ExportedContext with exported content.
         """
         exported_content = content
-
         if format == ExportFormat.HTML:
             exported_content = self._to_html(content)
         elif format == ExportFormat.RST:
             exported_content = self._to_rst(content)
-
         return ExportedContext(
             format=format,
             content=exported_content,
@@ -941,17 +933,15 @@ class ContextRecommender:
         Returns:
             List of recommendations.
         """
-        recommendations = []
-
+        recommendations: List[ContextRecommendation] = []
         # Analyze common sections in similar files
         section_counts: Dict[str, int] = {}
         for _, content in similar_contexts.items():
             sections = re.findall(r"##\s+(\w+)", content)
             for section in sections:
                 section_counts[section] = section_counts.get(section, 0) + 1
-
         # Recommend most common sections
-        common_sections = sorted(section_counts.items(), key=lambda x: x[1], reverse=True)
+        common_sections: List[Tuple[str, int]] = sorted(section_counts.items(), key=lambda x: x[1], reverse=True)
         if common_sections:
             recommendations.append(ContextRecommendation(
                 source_file=list(similar_contexts.keys())[0] if similar_contexts else "",
@@ -959,7 +949,6 @@ class ContextRecommender:
                 reason="Common sections in similar files",
                 confidence=0.8
             ))
-
         return recommendations
 
 
@@ -1024,18 +1013,16 @@ class RefactoringAdvisor:
         Returns:
             List of refactoring suggestions.
         """
-        suggestions = []
-
+        suggestions: List[RefactoringSuggestion] = []
         # Look for duplicate descriptions (indicating code duplication)
         descriptions: Dict[str, List[str]] = {}
         for path, content in contexts.items():
-            purpose = re.search(r"##\s * Purpose\s*\n(.+?)(?=##|\Z)", content, re.DOTALL)
+            purpose = re.search(r"##\s*Purpose\s*\n(.+?)(?=##|\Z)", content, re.DOTALL)
             if purpose:
                 desc = purpose.group(1).strip()[:100]
                 if desc not in descriptions:
                     descriptions[desc] = []
                 descriptions[desc].append(path)
-
         for desc, files in descriptions.items():
             if len(files) > 1:
                 suggestions.append(RefactoringSuggestion(
@@ -1044,7 +1031,6 @@ class RefactoringAdvisor:
                     affected_files=files,
                     estimated_impact="medium"
                 ))
-
         return suggestions
 
 
@@ -1067,19 +1053,16 @@ class ContextVisualizer:
         Returns:
             VisualizationData for rendering.
         """
-        nodes = []
-        edges = []
-
+        nodes: List[Dict[str, str]] = []
+        edges: List[Tuple[str, str]] = []
         for path, content in contexts.items():
             nodes.append({"id": path, "label": Path(path).name})
-
             # Find references to other files
             for other_path in contexts.keys():
                 if other_path != path:
                     other_name = Path(other_path).stem
                     if other_name in content:
                         edges.append((path, other_path))
-
         return VisualizationData(
             viz_type=VisualizationType.DEPENDENCY_GRAPH,
             nodes=nodes,
@@ -1095,12 +1078,10 @@ class ContextVisualizer:
         Returns:
             VisualizationData for rendering.
         """
-        nodes = []
-        edges: list[dict[str, str]] = []
-
+        nodes: List[Dict[str, str]] = []
+        edges: List[Tuple[str, str]] = []
         for path in contexts.keys():
             nodes.append({"id": path, "label": Path(path).name})
-
         return VisualizationData(
             viz_type=VisualizationType.CALL_HIERARCHY,
             nodes=nodes,
@@ -1183,16 +1164,14 @@ class MergeConflictResolver:
         Returns:
             List of detected conflicts.
         """
-        conflicts = []
+        conflicts: List[MergeConflict] = []
         pattern = r"<<<<<<<[^\n]*\n(.*?)\n=======\n(.*?)\n>>>>>>>"
-
         for match in re.finditer(pattern, content, re.DOTALL):
             conflicts.append(MergeConflict(
                 section="conflict",
                 ours=match.group(1),
                 theirs=match.group(2)
             ))
-
         return conflicts
 
     def resolve(self, conflict: MergeConflict, strategy: ConflictResolution) -> str:
@@ -1245,12 +1224,10 @@ class BranchComparer:
         """
         files_a = set(contexts_a.keys())
         files_b = set(contexts_b.keys())
-
-        modified = []
+        modified: List[str] = []
         for f in files_a & files_b:
             if contexts_a[f] != contexts_b[f]:
                 modified.append(f)
-
         return BranchComparison(
             branch_a=branch_a,
             branch_b=branch_b,
@@ -1306,7 +1283,7 @@ class ContextAgent(BaseAgent):
         logging.warning(f"Template '{template_name}' not found")
         return False
 
-    def get_template(self, template_name: str) -> Optional[ContextTemplate]:
+    def get_template_by_name(self, template_name: str) -> Optional[ContextTemplate]:
         """Get a template by name."""
         return self._templates.get(template_name)
 
@@ -1642,7 +1619,7 @@ class ContextAgent(BaseAgent):
 
     def export_metadata(self) -> str:
         """Export metadata as JSON."""
-        data = {
+        data: Dict[str, Any] = {
             "priority": self._priority.value,
             "category": self._category.value,
             "tags": [t.name for t in self._tags.values()],
@@ -1653,7 +1630,6 @@ class ContextAgent(BaseAgent):
         return json.dumps(data, indent=2)
 
     # ========== Core Methods ==========
-
     def _get_default_content(self) -> str:
         """Return rich, structured template for new descriptions."""
         self.file_path.name.replace('.description.md', '')

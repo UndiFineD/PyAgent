@@ -125,8 +125,8 @@ class TestCase:
     last_run: str = ""
     run_count: int = 0
     failure_count: int = 0
-    tags: List[str] = field(default_factory=list)
-    dependencies: List[str] = field(default_factory=list)
+    tags: List[str] = field(default_factory=lambda: [])
+    dependencies: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
@@ -140,7 +140,7 @@ class TestRun:
     skipped: int = 0
     errors: int = 0
     duration_ms: float = 0.0
-    test_results: Dict[str, TestStatus] = field(default_factory=dict)
+    test_results: Dict[str, TestStatus] = field(default_factory=lambda: {})
 
 
 @dataclass
@@ -158,7 +158,7 @@ class TestFactory:
     """A test data factory for generating test data."""
     name: str
     return_type: str
-    parameters: Dict[str, str] = field(default_factory=dict)
+    parameters: Dict[str, str] = field(default_factory=lambda: {})
     generator: str = ""  # Code snippet or function name
 
 
@@ -172,7 +172,7 @@ class VisualRegressionConfig:
     diff_threshold: float = 0.01
     browsers: List[BrowserType] = field(default_factory=lambda: [BrowserType.CHROME])
     viewport_sizes: List[Tuple[int, int]] = field(default_factory=lambda: [(1920, 1080)])
-    ignore_regions: List[Tuple[int, int, int, int]] = field(default_factory=list)
+    ignore_regions: List[Tuple[int, int, int, int]] = field(default_factory=lambda: [])
 
 
 @dataclass
@@ -181,8 +181,8 @@ class ContractTest:
     consumer: str
     provider: str
     endpoint: str
-    request_schema: Dict[str, Any] = field(default_factory=dict)
-    response_schema: Dict[str, Any] = field(default_factory=dict)
+    request_schema: Dict[str, Any] = field(default_factory=lambda: {})
+    response_schema: Dict[str, Any] = field(default_factory=lambda: {})
     status_code: int = 200
 
 
@@ -191,10 +191,10 @@ class TestEnvironment:
     """Test environment configuration."""
     name: str
     base_url: str = ""
-    variables: Dict[str, str] = field(default_factory=dict)
-    fixtures: List[str] = field(default_factory=list)
-    setup_commands: List[str] = field(default_factory=list)
-    teardown_commands: List[str] = field(default_factory=list)
+    variables: Dict[str, str] = field(default_factory=lambda: {})
+    fixtures: List[str] = field(default_factory=lambda: [])
+    setup_commands: List[str] = field(default_factory=lambda: [])
+    teardown_commands: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
@@ -202,8 +202,8 @@ class ExecutionTrace:
     """Test execution trace for replay."""
     test_id: str
     timestamp: str
-    steps: List[Dict[str, Any]] = field(default_factory=list)
-    variables: Dict[str, Any] = field(default_factory=dict)
+    steps: List[Dict[str, Any]] = field(default_factory=lambda: [])
+    variables: Dict[str, Any] = field(default_factory=lambda: {})
     stdout: str = ""
     stderr: str = ""
 
@@ -235,7 +235,7 @@ class AggregatedResult:
     status: TestStatus
     duration_ms: float
     timestamp: str
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=lambda: {})
 
 
 @dataclass
@@ -276,14 +276,12 @@ class ScheduleSlot:
     """A scheduled time slot for test execution."""
     start_time: str
     end_time: str
-    tests: List[str] = field(default_factory=list)
+    tests: List[str] = field(default_factory=lambda: [])
     workers: int = 1
     priority: TestPriority = TestPriority.MEDIUM
 
 
 # ========== Session 7 Helper Classes ==========
-
-
 class VisualRegressionTester:
     """Visual regression testing for UI components.
 
@@ -344,16 +342,14 @@ class VisualRegressionTester:
         """
         baseline = self.baselines.get(component_id)
         if not baseline:
-            return {"error": "No baseline found", "passed": False}
+            return {"error": "No baseline found", "passed": False}  # type: ignore
 
         # Simulated comparison
         current_hash = hashlib.md5(current_screenshot.encode()).hexdigest()
         diff = 0.0 if current_hash == baseline else 0.05  # Simulated diff
-
         self._diffs[component_id] = diff
         passed = diff <= self.config.diff_threshold
-
-        result = {
+        result: Dict[str, Any] = {
             "component_id": component_id,
             "diff_percentage": diff,
             "threshold": self.config.diff_threshold,
@@ -370,19 +366,15 @@ class VisualRegressionTester:
         """
         report = ["# Visual Regression Report\n"]
         report.append(f"Threshold: {self.config.diff_threshold * 100}%\n")
-
         passed = [r for r in self.results if r.get("passed")]
         failed = [r for r in self.results if not r.get("passed")]
-
         report.append(f"## Summary: {len(passed)} passed, {len(failed)} failed\n")
-
         if failed:
             report.append("## Failed Components\n")
             for r in failed:
                 report.append(
                     f"- **{r['component_id']}**: {r['diff_percentage'] * 100:.2f}% diff"
                 )
-
         return "\n".join(report)
 
     def run_for_browsers(self, component_id: str) -> List[Dict[str, Any]]:
@@ -394,9 +386,9 @@ class VisualRegressionTester:
         Returns:
             Results for each browser.
         """
-        results = []
+        results: List[Dict[str, Any]] = []
         for browser in self.config.browsers:
-            result = {
+            result: Dict[str, Any] = {
                 "browser": browser.value,
                 "component_id": component_id,
                 "passed": True  # Simulated
@@ -471,15 +463,14 @@ class ContractTestRunner:
         """
         contract = self.contracts.get(contract_id)
         if not contract:
-            return {"error": "Contract not found", "valid": False}
+            return {"error": "Contract not found", "valid": False}  # type: ignore
 
         # Simple schema validation (in real impl use jsonschema)
         valid = all(
             k in actual_request
             for k in contract.request_schema.keys()
         )
-
-        result = {
+        result: Dict[str, Any] = {
             "contract_id": contract_id,
             "side": "consumer",
             "valid": valid
@@ -505,15 +496,13 @@ class ContractTestRunner:
         """
         contract = self.contracts.get(contract_id)
         if not contract:
-            return {"error": "Contract not found", "valid": False}
-
+            return {"error": "Contract not found", "valid": False}  # type: ignore
         status_match = actual_status == contract.status_code
         schema_valid = all(
             k in actual_response
             for k in contract.response_schema.keys()
         )
-
-        result = {
+        result: Dict[str, Any] = {
             "contract_id": contract_id,
             "side": "provider",
             "valid": status_match and schema_valid,
@@ -543,7 +532,7 @@ class ContractTestRunner:
             JSON string in Pact format.
         """
         contracts = self.get_contracts_for_consumer(consumer)
-        pact = {
+        pact: Dict[str, Any] = {
             "consumer": {"name": consumer},
             "provider": {"name": contracts[0].provider if contracts else ""},
             "interactions": [{
@@ -602,18 +591,15 @@ class TestSuiteOptimizer:
         Returns:
             List of redundant test IDs.
         """
-        redundant = []
-
+        redundant: List[str] = []
         for test_id, coverage in self.coverage_map.items():
             # Check if this test's coverage is subset of others combined
             other_coverage: Set[str] = set()
             for other_id, other_cov in self.coverage_map.items():
                 if other_id != test_id:
                     other_coverage |= other_cov
-
             if coverage <= other_coverage:
                 redundant.append(test_id)
-
         return redundant
 
     def find_overlapping_tests(self) -> List[Tuple[str, str, float]]:
@@ -622,23 +608,18 @@ class TestSuiteOptimizer:
         Returns:
             List of (test_a, test_b, overlap_percentage) tuples.
         """
-        overlaps = []
-
+        overlaps: List[Tuple[str, str, float]] = []
         test_ids = list(self.coverage_map.keys())
         for i, id_a in enumerate(test_ids):
             for id_b in test_ids[i + 1:]:
                 cov_a = self.coverage_map[id_a]
                 cov_b = self.coverage_map[id_b]
-
                 if not cov_a or not cov_b:
                     continue
-
                 intersection = cov_a & cov_b
                 overlap = len(intersection) / min(len(cov_a), len(cov_b))
-
                 if overlap > 0.8:  # 80% overlap threshold
                     overlaps.append((id_a, id_b, overlap))
-
         return overlaps
 
     def suggest_removals(self) -> List[Dict[str, Any]]:
@@ -647,8 +628,7 @@ class TestSuiteOptimizer:
         Returns:
             List of removal suggestions with reasons.
         """
-        suggestions = []
-
+        suggestions: List[Dict[str, Any]] = []
         # Redundant tests
         for test_id in self.find_redundant_tests():
             suggestions.append({
@@ -656,19 +636,16 @@ class TestSuiteOptimizer:
                 "reason": "fully_redundant",
                 "confidence": 0.9
             })
-
         # High overlap tests (keep the one with more coverage)
         for id_a, id_b, overlap in self.find_overlapping_tests():
             cov_a = len(self.coverage_map.get(id_a, set()))
             cov_b = len(self.coverage_map.get(id_b, set()))
             remove = id_a if cov_a < cov_b else id_b
-
             suggestions.append({
                 "test_id": remove,
                 "reason": f"overlaps {overlap * 100:.0f}% with {id_a if remove == id_b else id_b}",
                 "confidence": 0.7
             })
-
         return suggestions
 
 
@@ -738,18 +715,14 @@ class EnvironmentProvisioner:
             name_key = json.dumps(name, sort_keys=True)
         else:
             name_key = name
-            
         env = self.environments.get(name_key)
         if not env:
             return {"error": "Environment not found", "success": False}
-
         if self.active.get(name_key):
             return {"warning": "Already active", "success": True}
-
         # Run setup commands (simulated)
         for cmd in env.setup_commands:
             self._setup_logs[name].append(f"Executed: {cmd}")
-
         self.active[name] = True
         return {
             "environment": name,
@@ -769,11 +742,9 @@ class EnvironmentProvisioner:
         env = self.environments.get(name)
         if not env:
             return {"error": "Environment not found", "success": False}
-
         # Run teardown commands (simulated)
         for cmd in env.teardown_commands:
             self._setup_logs[name].append(f"Teardown: {cmd}")
-
         self.active[name] = False
         return {"environment": name, "success": True}
 
@@ -1321,7 +1292,7 @@ class ResultAggregator:
         summary = self.get_summary()
         failed = summary.get("failed", 0)
         passed = summary.get("passed", 0)
-        
+
         return {
             "total_passed": passed,
             "total_failed": failed,
@@ -1337,22 +1308,28 @@ class ResultAggregator:
         """
         if len(self.results) < 2:
             return {"pass_rate_trend": "stable"}
-        
+
         # Calculate pass rates over time
         mid_point = len(self.results) // 2
         earlier_results = self.results[:mid_point]
         later_results = self.results[mid_point:]
-        
-        earlier_rate = sum(1 for r in earlier_results if r.status == TestStatus.PASSED) / len(earlier_results) if earlier_results else 0
-        later_rate = sum(1 for r in later_results if r.status == TestStatus.PASSED) / len(later_results) if later_results else 0
-        
+
+        earlier_rate = (
+            sum(1 for r in earlier_results if r.status == TestStatus.PASSED) /
+            len(earlier_results) if len(earlier_results) > 0 else 0
+        )
+        later_rate = (
+            sum(1 for r in later_results if r.status == TestStatus.PASSED) /
+            len(later_results) if len(later_results) > 0 else 0
+        )
+
         if later_rate > earlier_rate:
             trend = "improving"
         elif later_rate < earlier_rate:
             trend = "declining"
         else:
             trend = "stable"
-        
+
         return {"pass_rate_trend": trend}
 
 
@@ -1528,7 +1505,7 @@ class MutationRunner:
             )
             mut.killed = killed
             self.tester.mutations.append(mut)
-        
+
         # Record in results
         self.tester.record_kill(mutation_id, killed)
 
@@ -2766,23 +2743,23 @@ class DIContainer:
 
 class TestPrioritizer:
     """Prioritizes tests based on various strategies."""
-    
+
     def __init__(self) -> None:
         """Initialize test prioritizer."""
         self.tests: Dict[str, Dict[str, Any]] = {}
-    
+
     def add_test(self, name: str, recent_changes: int = 0, failure_rate: float = 0.0) -> None:
         """Add test for prioritization."""
         self.tests[name] = {"recent_changes": recent_changes, "failure_rate": failure_rate}
-    
+
     def prioritize_by_recent_changes(self) -> List[str]:
         """Prioritize by recent changes."""
         return sorted(self.tests.keys(), key=lambda t: self.tests[t]["recent_changes"], reverse=True)
-    
+
     def prioritize_by_failure_history(self) -> List[str]:
         """Prioritize by failure history."""
         return sorted(self.tests.keys(), key=lambda t: self.tests[t]["failure_rate"], reverse=True)
-    
+
     def prioritize_combined(self) -> List[str]:
         """Prioritize with combined strategy."""
         scores = {}
@@ -2793,17 +2770,17 @@ class TestPrioritizer:
 
 class FlakinessDetector:
     """Detects flaky tests."""
-    
+
     def __init__(self) -> None:
         """Initialize flakiness detector."""
         self.test_runs: Dict[str, List[bool]] = {}
-    
+
     def add_run(self, test_name: str, passed: bool) -> None:
         """Add a test run result."""
         if test_name not in self.test_runs:
             self.test_runs[test_name] = []
         self.test_runs[test_name].append(passed)
-    
+
     def is_flaky(self, test_name: str) -> bool:
         """Detect if test is flaky."""
         if test_name not in self.test_runs or len(self.test_runs[test_name]) < 2:
@@ -2816,19 +2793,19 @@ class FlakinessDetector:
 
 class QuarantineManager:
     """Manages quarantined flaky tests."""
-    
+
     def __init__(self) -> None:
         """Initialize quarantine manager."""
         self.quarantined: Set[str] = set()
-    
+
     def quarantine(self, test_name: str) -> None:
         """Quarantine a test."""
         self.quarantined.add(test_name)
-    
+
     def release(self, test_name: str) -> None:
         """Release a quarantined test."""
         self.quarantined.discard(test_name)
-    
+
     def is_quarantined(self, test_name: str) -> bool:
         """Check if test is quarantined."""
         return test_name in self.quarantined
@@ -2836,17 +2813,17 @@ class QuarantineManager:
 
 class ImpactAnalyzer:
     """Analyzes test impact of code changes."""
-    
+
     def __init__(self) -> None:
         """Initialize impact analyzer."""
         self.dependencies: Dict[str, Set[str]] = {}
-    
+
     def add_dependency(self, test: str, depends_on: str) -> None:
         """Add dependency between test and code."""
         if test not in self.dependencies:
             self.dependencies[test] = set()
         self.dependencies[test].add(depends_on)
-    
+
     def get_impacted_tests(self, changed_files: List[str]) -> Set[str]:
         """Get tests impacted by file changes."""
         impacted = set()
@@ -2854,7 +2831,7 @@ class ImpactAnalyzer:
             if any(f in deps for f in changed_files):
                 impacted.add(test)
         return impacted
-    
+
     def build_dependency_graph(self) -> Dict[str, Set[str]]:
         """Build dependency graph."""
         return dict(self.dependencies)
@@ -2862,21 +2839,21 @@ class ImpactAnalyzer:
 
 class DataFactory:
     """Factory for creating test data."""
-    
+
     def __init__(self) -> None:
         """Initialize data factory."""
         self.defaults: Dict[str, Any] = {}
-    
+
     def set_default(self, key: str, value: Any) -> None:
         """Set default value."""
         self.defaults[key] = value
-    
+
     def create(self, **overrides: Any) -> Dict[str, Any]:
         """Create data with defaults and overrides."""
         result = dict(self.defaults)
         result.update(overrides)
         return result
-    
+
     def create_batch(self, count: int, **overrides: Any) -> List[Dict[str, Any]]:
         """Create batch of data."""
         return [self.create(**overrides) for _ in range(count)]
@@ -2884,11 +2861,11 @@ class DataFactory:
 
 class ParallelizationStrategy:
     """Strategy for parallel test execution."""
-    
+
     def __init__(self, strategy_type: str = "round_robin") -> None:
         """Initialize strategy."""
         self.strategy_type = strategy_type
-    
+
     def distribute(self, tests: List[str], workers: int) -> List[List[str]]:
         """Distribute tests across workers."""
         if self.strategy_type == "round_robin":
@@ -2907,27 +2884,27 @@ class ParallelizationStrategy:
 
 class CoverageGapAnalyzer:
     """Analyzes coverage gaps."""
-    
+
     def __init__(self) -> None:
         """Initialize analyzer."""
         self.covered: Set[str] = set()
         self.total: Set[str] = set()
-    
+
     def add_covered(self, item: str) -> None:
         """Mark item as covered."""
         self.covered.add(item)
         self.total.add(item)
-    
+
     def add_uncovered(self, item: str) -> None:
         """Mark item as uncovered."""
         self.total.add(item)
-    
+
     def get_coverage_percentage(self) -> float:
         """Get coverage percentage."""
         if not self.total:
             return 0.0
         return (len(self.covered) / len(self.total)) * 100
-    
+
     def find_uncovered(self) -> List[str]:
         """Find uncovered items."""
         return list(self.total - self.covered)
@@ -2935,41 +2912,16 @@ class CoverageGapAnalyzer:
 
 class ContractValidator:
     """Validates test contracts."""
-    
+
     def validate(self, contract: Dict[str, Any]) -> bool:
         """Validate contract specification."""
         required = {"name", "preconditions", "postconditions"}
         return all(k in contract for k in required)
 
 
-class TestSuiteOptimizer:
-    """Optimizes test suites."""
-    
-    def __init__(self, tests: List[Dict[str, Any]]) -> None:
-        """Initialize optimizer."""
-        self.tests = tests
-    
-    def optimize(self) -> List[Dict[str, Any]]:
-        """Optimize test suite."""
-        # Remove redundant tests (stub implementation)
-        return self.tests
-
-
-class EnvironmentProvisioner:
-    """Provisions test environments."""
-    
-    def provision(self) -> Dict[str, Any]:
-        """Provision a test environment."""
-        return {"status": "ready", "id": "env_1"}
-    
-    def cleanup(self, env: Dict[str, Any]) -> None:
-        """Clean up environment."""
-        pass
-
-
 class TestRecorder:
     """Records test execution."""
-    
+
     def record(self, test_name: str, result: bool) -> None:
         """Record test execution."""
         pass
@@ -2977,7 +2929,7 @@ class TestRecorder:
 
 class TestReplayer:
     """Replays recorded tests."""
-    
+
     def replay(self, recording: Dict[str, Any]) -> bool:
         """Replay recorded test."""
         return True
@@ -2985,23 +2937,23 @@ class TestReplayer:
 
 class TestDocGenerator:
     """Generates documentation from tests."""
-    
+
     def __init__(self) -> None:
         """Initialize doc generator."""
         self.tests: List[Dict[str, Any]] = []
-    
+
     def add_test(self, name: str, module: str) -> None:
         """Add test for documentation."""
         self.tests.append({"name": name, "module": module})
-    
+
     def generate_grouped(self) -> Dict[str, List[Dict[str, Any]]]:
         """Generate documentation grouped by module."""
         return self.group_by_module(self.tests)
-    
+
     def extract_examples(self, test_code: str) -> List[Dict[str, str]]:
         """Extract examples from test code."""
         return [{"example": "example_code"}]
-    
+
     def group_by_module(self, tests: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
         """Group tests by module."""
         result: Dict[str, List[Dict[str, Any]]] = {}
