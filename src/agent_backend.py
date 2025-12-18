@@ -14,6 +14,7 @@
 Agent Backend: Handles communication with AI backends.
 
 This module provides the infrastructure for communicating with various AI backends:
+- OpenAI Codex CLI (npm package @openai/codex)
 - GitHub Copilot CLI (local command - line tool)
 - GitHub Copilot via gh CLI
 - GitHub Models API (OpenAI - compatible endpoint)
@@ -22,7 +23,7 @@ Supports automatic backend selection with fallback mechanisms.
 Configurable via environment variables for flexibility in CI / CD and development.
 
 Environment Variables:
-    DV_AGENT_BACKEND: Selected backend ('auto', 'copilot', 'gh', 'github-models')
+    DV_AGENT_BACKEND: Selected backend ('auto', 'codex', 'copilot', 'gh', 'github-models')
     DV_AGENT_REPO_ROOT: Override repository root detection
     DV_AGENT_MAX_CONTEXT_CHARS: Max chars to include as context (default: 12000)
     DV_AGENT_MODEL: Model name for GitHub Models backend
@@ -62,6 +63,7 @@ except ImportError:
 class BackendType(Enum):
     """Types of AI backends available."""
 
+    CODEX = "codex"
     COPILOT_CLI = "copilot"
     GH_COPILOT = "gh"
     GITHUB_MODELS = "github-models"
@@ -1418,10 +1420,11 @@ def run_subagent(description: str, prompt: str, original_content: str = "") -> O
 
     Attempts to run a task using available AI backends with automatic selection
     and fallback mechanisms. Tries backends in order of preference:
-    1. GitHub Copilot CLI (if DV_AGENT_BACKEND=copilot)
-    2. GitHub Models API (if configured)
-    3. gh copilot (if available)
-    4. Falls back gracefully if no backend available
+    1. OpenAI Codex CLI (if DV_AGENT_BACKEND=codex or auto default)
+    2. GitHub Copilot CLI (if DV_AGENT_BACKEND=copilot)
+    3. GitHub Models API (if configured)
+    4. gh copilot (if available)
+    5. Falls back gracefully if no backend available
 
     Args:
         description: Human - readable task description (e.g., "Improve code quality").
@@ -1447,7 +1450,7 @@ def run_subagent(description: str, prompt: str, original_content: str = "") -> O
             print("No AI backend available")
 
     Environment Variables:
-        DV_AGENT_BACKEND: Force specific backend ('copilot', 'gh', 'github-models', or 'auto').
+        DV_AGENT_BACKEND: Force specific backend ('codex', 'copilot', 'gh', 'github-models', or 'auto').
         DV_AGENT_MAX_CONTEXT_CHARS: Maximum context size (default 12000).
 
     Note:
@@ -1468,6 +1471,56 @@ def run_subagent(description: str, prompt: str, original_content: str = "") -> O
             "Context (existing file content):\n"
             f"{trimmed_original}"
         ).strip()
+
+    def _try_codex_cli() -> Optional[str]:
+        if not _command_available('codex'):
+            logging.debug("Codex CLI not available")
+            return None
+        full_prompt = _build_full_prompt()
+        repo_root = _resolve_repo_root()
+        try:
+            logging.debug("Attempting to use Codex CLI backend")
+            result = subprocess.run(
+                [
+                    'codex',
+                    '--prompt',
+                    full_prompt,
+                    '--no-color',
+                    '--log-level',
+                    'error',
+                    '--add-dir',
+                    str(repo_root),
+                    '--allow-all-tools',
+                    '--disable-parallel-tools-execution',
+                    '--deny-tool',
+                    'write',
+                    '--deny-tool',
+                    'shell',
+                    '--silent',
+                    '--stream',
+                    'off',
+                ],
+                capture_output=True,
+                text=True,
+                encoding='utf-8',
+                errors='replace',
+                timeout=180,
+                cwd=str(repo_root),
+                check=False
+            )
+            stdout = (result.stdout or "").strip()
+            if result.returncode == 0 and stdout:
+                logging.info("Codex CLI backend succeeded")
+                return stdout
+            if result.returncode != 0:
+                logging.debug(f"Codex CLI failed (code {result.returncode}): {result.stderr}")
+        except subprocess.TimeoutExpired:
+            logging.warning("Codex CLI timed out")
+            return None
+        except Exception as e:
+            logging.warning(f"Codex CLI error: {e}")
+            return None
+        return None
 
     def _try_copilot_cli() -> Optional[str]:
         if not _command_available('copilot'):
@@ -1623,6 +1676,12 @@ def run_subagent(description: str, prompt: str, original_content: str = "") -> O
     backend = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()
     logging.debug(f"Using backend: {backend}")
 
+    if backend in {"codex", "codex-cli"}:
+        result = _try_codex_cli()
+        if result is None:
+            raise RuntimeError(
+                "Requested DV_AGENT_BACKEND=codex but local 'codex' CLI is unavailable")
+        return result
     if backend in {"copilot", "local", "copilot-cli"}:
         result = _try_copilot_cli()
         if result is None:
@@ -1645,8 +1704,11 @@ def run_subagent(description: str, prompt: str, original_content: str = "") -> O
             )
         return result
 
-    # auto (default)
-    logging.debug("Trying backends in order: copilot, github-models, gh")
+    # auto (default) - codex is now the first choice
+    logging.debug("Trying backends in order: codex, copilot, github-models, gh")
+    result = _try_codex_cli()
+    if result is not None:
+        return result
     result = _try_copilot_cli()
     if result is not None:
         return result
@@ -1755,10 +1817,10 @@ def get_backend_status() -> dict:
 
     Returns:
         dict: Status information including:
-            - selected_backend: Current backend choice (auto, copilot, gh, etc.)
+            - selected_backend: Current backend choice (auto, codex, copilot, gh, etc.)
             - repo_root: Detected repository root directory
             - max_context_chars: Maximum context size to include
-            - commands: Dict with availability of 'copilot' and 'gh' CLIs
+            - commands: Dict with availability of 'codex', 'copilot' and 'gh' CLIs
             - github_models: Dict with GitHub Models configuration status
 
     Example:
@@ -1789,6 +1851,7 @@ def get_backend_status() -> dict:
         "repo_root": repo_root,
         "max_context_chars": max_context_chars,
         "commands": {
+            "codex": _command_available("codex"),
             "copilot": _command_available("copilot"),
             "gh": _command_available("gh"),
         },
@@ -1818,6 +1881,7 @@ def describe_backends() -> str:
         # Backend diagnostics:
         # - selected: auto
         # - repo_root: /home / user / project
+        # - codex CLI available: yes
         # - local copilot CLI available: yes
         # - gh CLI available: yes
         # - github - models configured: yes
@@ -1840,6 +1904,7 @@ def describe_backends() -> str:
             f"- selected: {status['selected_backend']}",
             f"- repo_root: {status['repo_root']}",
             f"- max_context_chars: {status['max_context_chars']}",
+            f"- codex CLI available: {yn(bool(cmd.get('codex')))}",
             f"- local copilot CLI available: {yn(bool(cmd.get('copilot')))}",
             f"- gh CLI available: {yn(bool(cmd.get('gh')))}",
             "- github-models configured:",
