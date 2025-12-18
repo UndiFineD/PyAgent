@@ -2256,7 +2256,7 @@ message="Hello %s" % name
         agent = mod.CoderAgent(str(target))
         content = agent.read_previous_content()
 
-        assert '"%s"' in content
+        assert '"Hello %s"' in content
 
     def test_detect_python2_syntax(self, tmp_path: Path) -> None:
         """Test detecting Python 2 style syntax."""
@@ -2371,8 +2371,8 @@ class TestCodeFormatting(unittest.TestCase):
 
     def test_black_format_detection(self):
         """Test detection of black formatting violations."""
-        unformatted = "x=1 + 2"
-        formatted = "x=1 + 2"
+        unformatted = "x=1+2"
+        formatted = "x = 1 + 2"
         assert unformatted != formatted
 
     def test_autopep8_integration(self):

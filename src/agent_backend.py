@@ -3140,12 +3140,12 @@ class ABTester:
         variant_a = ABTestVariant(
             name="A",
             backend=backend_a,
-            weight=weight_a,
+            weight=round(weight_a, 6),
         )
         variant_b = ABTestVariant(
             name="B",
             backend=backend_b,
-            weight=1.0 - weight_a,
+            weight=round(1.0 - weight_a, 6),
         )
 
         with self._lock:

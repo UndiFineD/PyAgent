@@ -1010,11 +1010,11 @@ class TestTestPrioritizationAlgorithms:
         TestPrioritizer = tests_module.TestPrioritizer
 
         prioritizer = TestPrioritizer()
-        prioritizer.add_test("test1", changed_recently=True)
-        prioritizer.add_test("test2", changed_recently=False)
-        prioritizer.add_test("test3", changed_recently=True)
+        prioritizer.add_test("test1", recent_changes=1)
+        prioritizer.add_test("test2", recent_changes=0)
+        prioritizer.add_test("test3", recent_changes=1)
 
-        ordered = prioritizer.prioritize_by_changes()
+        ordered = prioritizer.prioritize_by_recent_changes()
         # Recently changed tests should come first
         assert ordered[0] in ["test1", "test3"]
 
@@ -1027,7 +1027,7 @@ class TestTestPrioritizationAlgorithms:
         prioritizer.add_test("test2", failure_rate=0.1)
         prioritizer.add_test("test3", failure_rate=0.5)
 
-        ordered = prioritizer.prioritize_by_failure_rate()
+        ordered = prioritizer.prioritize_by_failure_history()
         assert ordered[0] == "test1"  # Highest failure rate first
 
     def test_prioritizer_combined_strategy(self, tests_module: Any) -> None:
@@ -1035,10 +1035,10 @@ class TestTestPrioritizationAlgorithms:
         TestPrioritizer = tests_module.TestPrioritizer
 
         prioritizer = TestPrioritizer()
-        prioritizer.add_test("test1", changed_recently=False, failure_rate=0.9)
-        prioritizer.add_test("test2", changed_recently=True, failure_rate=0.1)
+        prioritizer.add_test("test1", recent_changes=0, failure_rate=0.9)
+        prioritizer.add_test("test2", recent_changes=1, failure_rate=0.1)
 
-        ordered = prioritizer.prioritize_combined(change_weight=0.5, failure_weight=0.5)
+        ordered = prioritizer.prioritize_combined()
         assert len(ordered) == 2
 
 
@@ -1051,10 +1051,10 @@ class TestFlakinessDetectionAndQuarantine:
 
         detector = FlakinessDetector()
         # Add inconsistent results
-        detector.record_result("test1", passed=True)
-        detector.record_result("test1", passed=False)
-        detector.record_result("test1", passed=True)
-        detector.record_result("test1", passed=False)
+        detector.add_run("test1", passed=True)
+        detector.add_run("test1", passed=False)
+        detector.add_run("test1", passed=True)
+        detector.add_run("test1", passed=False)
 
         assert detector.is_flaky("test1")
 
@@ -1064,7 +1064,7 @@ class TestFlakinessDetectionAndQuarantine:
 
         detector = FlakinessDetector()
         for _ in range(10):
-            detector.record_result("test_stable", passed=True)
+            detector.add_run("test_stable", passed=True)
 
         assert not detector.is_flaky("test_stable")
 

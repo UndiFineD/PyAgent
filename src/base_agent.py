@@ -918,8 +918,6 @@ class BaseAgent:
             full_prompt = self._build_prompt_with_history(prompt)
 
             improvement = self.run_subagent(description, full_prompt, self.previous_content)
-
-            # Apply post - processors
             for processor in self._post_processors:
                 improvement = processor(improvement)
 
@@ -930,7 +928,7 @@ class BaseAgent:
             if quality.value <= ResponseQuality.POOR.value and self._config.retry_count > 0:
                 logging.warning(f"Response quality {quality.name}, retrying...")
                 for attempt in range(self._config.retry_count):
-                    improvement = self.run_subagent(description, full_prompt, self.previous_content)
+                    improvement = self.run_subagent(description, prompt, self.previous_content)
                     quality = self._score_response_quality(improvement)
                     if quality.value >= ResponseQuality.ACCEPTABLE.value:
                         break
@@ -2405,7 +2403,7 @@ class ContextWindow:
         """Add a message to the window."""
         self.messages.append(message)
         self.token_counts.append(token_count)
-        
+
         # Truncate if necessary
         while self.used_tokens > self.max_tokens and self.messages:
             self.messages.pop(0)
@@ -2461,7 +2459,7 @@ class ResponseCache:
         """Cache a response."""
         key = self._get_cache_key(prompt)
         self.cache_data[key] = response
-        
+
         # Also write to disk
         cache_file = self.cache_dir / f"{key}.json"
         cache_file.write_text(json.dumps({"prompt": prompt, "response": response}))
@@ -2471,21 +2469,21 @@ class ResponseCache:
         key = self._get_cache_key(prompt)
         if key in self.cache_data:
             return self.cache_data[key]
-        
+
         # Try to load from disk
         cache_file = self.cache_dir / f"{key}.json"
         if cache_file.exists():
             data = json.loads(cache_file.read_text())
             self.cache_data[key] = data["response"]
             return data["response"]
-        
+
         return None
 
     def invalidate(self, prompt: str) -> None:
         """Invalidate cached response."""
         key = self._get_cache_key(prompt)
         self.cache_data.pop(key, None)
-        
+
         cache_file = self.cache_dir / f"{key}.json"
         if cache_file.exists():
             cache_file.unlink()
@@ -2545,10 +2543,10 @@ class AgentRouter:
         for condition, handler in self.routes:
             if condition(data):
                 return handler(data)
-        
+
         if self.default_handler:
             return self.default_handler(data)
-        
+
         return data
 
 
@@ -2596,7 +2594,7 @@ class StatePersistence:
             backup_file = self.state_file.parent / f"{self.state_file.stem}.{self.backup_count}.bak"
             self.state_file.rename(backup_file)
             self.backup_count += 1
-        
+
         self.state_file.parent.mkdir(parents=True, exist_ok=True)
         self.state_file.write_text(json.dumps(state))
 
@@ -2604,7 +2602,7 @@ class StatePersistence:
         """Load state from file."""
         if self.state_file.exists():
             return json.loads(self.state_file.read_text())
-        
+
         return default or {}
 
 
@@ -2622,7 +2620,7 @@ class ModelConfig:
 class ModelSelector:
     """Selects models for different agent types."""
     models: Dict[str, ModelConfig] = field(default_factory=dict)
-    
+
     def __post_init__(self) -> None:
         """Initialize with default model."""
         if "default" not in self.models:
@@ -2658,19 +2656,19 @@ class AuthManager:
     def get_headers(self) -> Dict[str, str]:
         """Get authentication headers."""
         headers = dict(self.custom_headers)
-        
+
         # Convert enum to string if needed
         method = self.method
         if isinstance(method, AuthMethod):
             method = method.value
-        
+
         if method == "api_key" and "api_key" in self.credentials:
             headers["X-API-Key"] = self.credentials["api_key"]
         elif method == "token" and "token" in self.credentials:
             headers["Authorization"] = f"Bearer {self.credentials['token']}"
         elif method == "bearer_token" and "token" in self.credentials:
             headers["Authorization"] = f"Bearer {self.credentials['token']}"
-        
+
         return headers
 
 
@@ -2691,15 +2689,15 @@ class QualityScorer:
             # Default: score based on length
             length_score = min(1.0, len(text) / 200.0)
             return length_score
-        
+
         total_weight = 0.0
         total_score = 0.0
-        
+
         for func, weight in self.criteria.values():
             score = func(text)
             total_score += score * weight
             total_weight += weight
-        
+
         return total_score / total_weight if total_weight > 0 else 0.0
 
 
@@ -2717,7 +2715,7 @@ class ABTest:
         """Initialize variant counts."""
         for variant in self.variants:
             self.variant_counts[variant] = 0
-        
+
         # Normalize weights if not provided
         if not self.weights:
             self.weights = [1.0 / len(self.variants)] * len(self.variants)
@@ -2803,10 +2801,10 @@ class HealthChecker:
             "status": "healthy",
             "components": {}
         }
-        
+
         for name, check_func in self.checks.items():
             result["components"][name] = check_func()
-        
+
         return result
 
     def record_request(self, success: bool, latency_ms: int) -> None:
@@ -2820,7 +2818,7 @@ class HealthChecker:
         """Get health metrics."""
         error_rate = self.error_count / self.request_count if self.request_count > 0 else 0
         avg_latency = self.total_latency / self.request_count if self.request_count > 0 else 0
-        
+
         return {
             "total_requests": self.request_count,
             "error_count": self.error_count,
@@ -2869,17 +2867,16 @@ class ProfileManager:
         """Get setting from active profile with inheritance."""
         if not self.active:
             return default
-        
+
         # Check active profile
         if key in self.active.settings:
             return self.active.settings[key]
-        
+
         # Check parent
         if self.active.parent and self.active.parent in self.profiles:
             parent = self.profiles[self.active.parent]
             if key in parent.settings:
                 return parent.settings[key]
-        
         return default
 
 

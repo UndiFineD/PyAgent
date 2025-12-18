@@ -101,12 +101,13 @@ class TrendDirection(Enum):
 @dataclass
 class ErrorEntry:
     """A single error entry."""
-    id: str
-    message: str
-    file_path: str
-    line_number: int
+    id: str = ""
+    message: str = ""
+    file_path: str = ""
+    line_number: int = 0
     severity: ErrorSeverity = ErrorSeverity.MEDIUM
     category: ErrorCategory = ErrorCategory.OTHER
+    error_type: str = ""
     timestamp: str = ""
     stack_trace: str = ""
     suggested_fix: str = ""

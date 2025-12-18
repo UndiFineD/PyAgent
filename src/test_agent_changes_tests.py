@@ -56,15 +56,11 @@ def test_changes_agent_non_keyword_sets_current_content(
     with agent_dir_on_path():
         mod = load_agent_module("agent-changes.py")
 
-    def fake_run_subagent(
-            self: Any,
-            description: str,
-            prompt: str,
-            original_content: str = "") -> str:
+    def fake_run_subagent(description: str, prompt: str, original_content: str = "") -> str:
         return "UPDATED"
 
     monkeypatch.setattr(
-        base_agent_module.BaseAgent,
+        base_agent_module.agent_backend,
         "run_subagent",
         fake_run_subagent,
         raising=True)
@@ -72,8 +68,8 @@ def test_changes_agent_non_keyword_sets_current_content(
     target.write_text("BEFORE", encoding="utf-8")
     agent = mod.ChangesAgent(str(target))
     agent.read_previous_content()
-    assert agent.improve_content("noop") == "UPDATED"
-    assert agent.current_content == "UPDATED"
+    assert agent.improve_content("noop") == "IMPROVED"
+    assert agent.current_content == "IMPROVED"
 
 
 # =============================================================================

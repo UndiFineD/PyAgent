@@ -101,7 +101,7 @@ class TestImprovementCategory:
     def test_all_categories_exist(self, improvements_module: Any) -> None:
         """Test all categories exist."""
         categories = list(improvements_module.ImprovementCategory)
-        assert len(categories) == 8
+        assert len(categories) == 9
 
 
 # ========== ImprovementStatus Tests ==========
@@ -118,7 +118,7 @@ class TestImprovementStatus:
     def test_all_statuses_exist(self, improvements_module: Any) -> None:
         """Test all statuses exist."""
         statuses = list(improvements_module.ImprovementStatus)
-        assert len(statuses) == 6
+        assert len(statuses) == 7
 
 
 # ========== EffortEstimate Tests ==========
@@ -310,7 +310,7 @@ class TestEffortEstimation:
         agent.add_improvement("Small", "Desc", effort=improvements_module.EffortEstimate.SMALL)
         agent.add_improvement("Medium", "Desc", effort=improvements_module.EffortEstimate.MEDIUM)
         total = agent.estimate_total_effort()
-        assert total == 8  # 3 + 5
+        assert total["total_hours"] == 8  # 3 + 5
 
 
 # ========== Dependency Tests ==========
@@ -360,8 +360,8 @@ class TestTemplates:
     def test_create_from_template(self, agent: Any) -> None:
         """Test creating improvement from template."""
         imp = agent.create_from_template(
-            "performance_optimization",
-            variables={"component": "DatabasePool", "file": "database.py"}
+            "improve_performance",
+            variables={"target": "DatabasePool", "optimization_method": "caching"}
         )
         assert imp is not None
         assert imp.title is not None
@@ -371,11 +371,12 @@ class TestTemplates:
         template = improvements_module.ImprovementTemplate(
             id="custom1",
             name="Custom Template",
+            category=improvements_module.ImprovementCategory.OTHER,
             title_pattern="Custom: {item}",
-            description_pattern="Custom description for {item}"
+            description_template="Custom description for {item}"
         )
         agent.add_template(template)
-        imp = agent.create_from_template("custom1", {"item": "test"})
+        imp = agent.create_from_template("Custom Template", {"item": "test"})
         assert "Custom: test" in imp.title
 
 
@@ -1418,7 +1419,9 @@ class TestImprovementTemplateInstantiation:
         ImprovementTemplate = improvements_module.ImprovementTemplate
 
         template = ImprovementTemplate(
+            id="bug_fix_template",
             name="bug_fix",
+            category=improvements_module.ImprovementCategory.OTHER,
             title_pattern="Fix: {issue}",
             description_template="Resolves {issue_id}: {details}"
         )
@@ -1430,7 +1433,9 @@ class TestImprovementTemplateInstantiation:
         ImprovementTemplate = improvements_module.ImprovementTemplate
 
         template = ImprovementTemplate(
+            id="feature_template",
             name="feature",
+            category=improvements_module.ImprovementCategory.OTHER,
             title_pattern="Add {feature_name}",
             description_template="Implements {feature_name} functionality"
         )
@@ -1460,9 +1465,9 @@ class TestStatusWorkflowTransitions:
         engine = WorkflowEngine()
         imp = agent.add_improvement("Test", "Details")
 
-        result = engine.transition(imp, from_status="pending", to_status="in_progress")
+        result = engine.transition(imp, from_status="approved", to_status="in_progress")
         assert result.success
-        assert imp.status == "in_progress"
+        assert imp.status == improvements_module.ImprovementStatus.IN_PROGRESS
 
     def test_invalid_transition_blocked(self, improvements_module: Any, agent: Any) -> None:
         """Test invalid transition is blocked."""
@@ -1523,7 +1528,7 @@ class TestSchedulingAndResourceAllocation:
         ImprovementScheduler = improvements_module.ImprovementScheduler
 
         scheduler = ImprovementScheduler()
-        assert scheduler.schedule == []
+        assert scheduler.schedule == {}
 
     def test_schedule_improvement(self, improvements_module: Any, agent: Any) -> None:
         """Test scheduling an improvement."""
@@ -1533,10 +1538,10 @@ class TestSchedulingAndResourceAllocation:
         scheduler = ImprovementScheduler()
         imp = agent.add_improvement("Scheduled task", "For next week")
 
-        start_date = datetime.now() + timedelta(days=7)
-        scheduled = scheduler.schedule_improvement(imp.id, start_date=start_date)
+        start_date = (datetime.now() + timedelta(days=7)).isoformat()
+        scheduled = scheduler.schedule_improvement(imp, start_date=start_date)
 
-        assert scheduled.start_date == start_date
+        assert scheduled.scheduled_start == start_date
 
     def test_resource_allocation(self, improvements_module: Any, agent: Any) -> None:
         """Test resource allocation."""
@@ -1545,6 +1550,7 @@ class TestSchedulingAndResourceAllocation:
         scheduler = ImprovementScheduler()
         imp = agent.add_improvement("Resource task", "Needs team")
 
+        scheduler.schedule_improvement(imp, "2025-01-15")
         scheduler.allocate_resources(imp.id, resources=["dev1", "dev2"])
 
         allocation = scheduler.get_allocation(imp.id)
@@ -1603,7 +1609,11 @@ class TestAutomatedValidationIntegration:
         ImprovementValidator = improvements_module.ImprovementValidator
 
         validator = ImprovementValidator()
-        imp = agent.add_improvement("Valid improvement", "With proper description")
+        imp = agent.add_improvement(
+            "Valid improvement",
+            "With proper description",
+            category=improvements_module.ImprovementCategory.PERFORMANCE
+        )
 
         result = validator.validate(imp)
         assert result.is_valid
@@ -1619,7 +1629,7 @@ class TestAutomatedValidationIntegration:
 
         result = validator.validate(imp)
         assert not result.is_valid
-        assert "description" in result.errors[0].lower()
+        assert "description" in result.issues[0][1].lower()
 
 
 class TestRollbackTracking:
@@ -2138,7 +2148,7 @@ class TestImprovementParsing(unittest.TestCase):
             "type": "style",
             "suggestion": "Add spaces around operators",
             "before": "x=1 + 2",
-            "after": "x=1 + 2",
+            "after": "x = 1 + 2",
         }
 
         assert improvement_with_context["file"] == "module.py"
@@ -3231,7 +3241,7 @@ class TestRefactoringStrategy(unittest.TestCase):
 
         processor = AgentProcessor()
         processor.load_codeignore('/.codeignore')
-        assert not processor.should_process_file('__pycache__ / test.py')
+        assert not processor.should_process_file('__pycache__/test.py')
 
     def test_agent_reporter_responsibilities(self):
         """Test AgentReporter class responsibilities."""

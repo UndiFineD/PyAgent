@@ -448,7 +448,8 @@ class FixtureFactory:
         """
         self.base_dir = base_dir or Path.cwd()
 
-    def create_agent_fixture(self, name: str, config: Optional[Dict[str, Any]] = None, dependencies: Optional[List[Any]] = None) -> Any:
+    def create_agent_fixture(self, name: str, config: Optional[Dict[str, Any]] = None,
+                             dependencies: Optional[List[Any]] = None) -> Any:
         """Create an agent fixture.
 
         Args:
@@ -503,10 +504,9 @@ class TestDataSeeder:
             seed: Random seed for reproducibility.
         """
         self.seed = seed
-        if seed is not None:
-            random.seed(seed)
-            if np:
-                np.random.seed(seed)
+        self.random = random.Random(seed) if seed is not None else random.Random()
+        if seed is not None and np:
+            np.random.seed(seed)
 
     def generate_metric_data(self, count: int = 10) -> List[Dict[str, float]]:
         """Generate metric data for testing.
@@ -520,7 +520,7 @@ class TestDataSeeder:
         return [
             {
                 "metric": f"metric_{i}",
-                "value": random.uniform(0, 100),
+                "value": self.random.uniform(0, 100),
                 "timestamp": time.time() + i
             }
             for i in range(count)
@@ -539,8 +539,8 @@ class TestDataSeeder:
         return [
             {
                 "test_name": f"test_{i}",
-                "status": "PASSED" if random.random() < pass_rate else "FAILED",
-                "duration_ms": random.uniform(10, 5000)
+                "status": "PASSED" if self.random.random() < pass_rate else "FAILED",
+                "duration_ms": self.random.uniform(10, 5000)
             }
             for i in range(count)
         ]
@@ -555,9 +555,9 @@ class TestDataSeeder:
             Generated file content.
         """
         # Use a deterministic return value based on seed for reproducibility
-        func_id = self.seed if self.seed is not None else random.randint(1, 100)
-        return_val = random.randint(1, 100)
-        
+        func_id = self.seed if self.seed is not None else self.random.randint(1, 100)
+        return_val = self.random.randint(1, 100)
+
         if language == "python":
             return f'# Python file\ndef func_{func_id}():\n    return {return_val}\n'
         elif language == "javascript":
@@ -685,7 +685,6 @@ class TestOutputFormatter:
             "failed": failed,
             "total": total
         }
-
 
 
 class AssertionHelpers:
@@ -1263,7 +1262,7 @@ class SnapshotManager:
 
         path = self._get_snapshot_path(name)
         path.write_text(content_str, encoding="utf-8")
-        
+
         snapshot = TestSnapshot(name=name, content=snapshot_content)
         self._snapshots[name] = snapshot
         return snapshot
@@ -1397,7 +1396,8 @@ class TestResultAggregator:
         """Initialize result aggregator."""
         self._results: List[TestResult] = []
 
-    def add_result(self, result: Union[TestResult, str], test_name: Optional[str] = None, status: Optional[str] = None) -> None:
+    def add_result(self, result: Union[TestResult, str], test_name: Optional[str] = None,
+                   status: Optional[str] = None) -> None:
         """Add a test result.
 
         Args:
@@ -1410,9 +1410,8 @@ class TestResultAggregator:
         elif isinstance(result, str) and test_name and status:
             # Support add_result(suite, test_name, status) style
             test_result = TestResult(
-                name=f"{result}/{test_name}",
+                test_name=f"{result}/{test_name}",
                 status=TestStatus[status.upper()] if hasattr(TestStatus, status.upper()) else TestStatus.PASSED,
-                suite=result,
                 duration_ms=0.0
             )
             self._results.append(test_result)
@@ -1447,6 +1446,36 @@ class TestResultAggregator:
             "total_duration_ms": sum(durations),
             "avg_duration_ms": sum(durations) / len(durations) if durations else 0,
         }
+
+    def get_summary(self) -> Dict[str, Any]:
+        """Get summary of test results."""
+        return self.get_report()
+
+    def get_by_suite(self) -> Dict[str, Dict[str, Any]]:
+        """Get results grouped by suite."""
+        suites: Dict[str, List[TestResult]] = {}
+        for result in self._results:
+            # Extract suite from test_name (format: "suite/test_name")
+            if "/" in result.test_name:
+                suite, _ = result.test_name.split("/", 1)
+            else:
+                suite = "default"
+            if suite not in suites:
+                suites[suite] = []
+            suites[suite].append(result)
+
+        result = {}
+        for suite, results in suites.items():
+            total = len(results)
+            passed = sum(1 for r in results if r.status == TestStatus.PASSED)
+            failed = sum(1 for r in results if r.status == TestStatus.FAILED)
+            result[suite] = {
+                "total": total,
+                "passed": passed,
+                "failed": failed,
+                "pass_rate": passed / total if total > 0 else 0.0,
+            }
+        return result
 
     def get_failures(self) -> List[TestResult]:
         """Get failed tests."""
@@ -2282,26 +2311,26 @@ class ParallelTestRunner:
             List of results from test functions.
         """
         from concurrent.futures import ThreadPoolExecutor, as_completed
-        
+
         self.success_count = 0
         self.failure_count = 0
         results = []
-        
+
         with ThreadPoolExecutor(max_workers=self.workers) as executor:
             futures = {executor.submit(test_fn): i for i, test_fn in enumerate(test_functions)}
-            
+
             for future in as_completed(futures):
                 try:
                     result = future.result()
                     results.append(result)
                     self.success_count += 1
-                except Exception as e:
+                except Exception:
                     self.failure_count += 1
                     if fail_fast:
                         executor.shutdown(wait=False)
                         raise
                     results.append(None)
-        
+
         return results
 
     def _run_test(
@@ -2819,11 +2848,13 @@ class EnvironmentDetector:
         """Detect environment information."""
         import platform
         import os
-        
-        is_ci = any(env in os.environ for env in ['CI', 'CONTINUOUS_INTEGRATION', 'BUILD_ID', 'GITHUB_ACTIONS'])
+
+        is_ci = any(env in os.environ for env in ['CI', 'CONTINUOUS_INTEGRATION',
+                                                  'BUILD_ID', 'GITHUB_ACTIONS'])
         system = platform.system().lower()
-        os_name = 'windows' if system == 'windows' else 'darwin' if system == 'darwin' else 'linux' if system == 'linux' else 'unknown'
-        
+        os_name = ('windows' if system == 'windows' else 'darwin' if system == 'darwin'
+                   else 'linux' if system == 'linux' else 'unknown')
+
         return {
             'is_ci': is_ci,
             'os': os_name,
@@ -2842,6 +2873,15 @@ class LogCapturer:
         self.handler = logging.Handler()
         self.handler.emit = lambda record: self.logs.append(record)
 
+    def __enter__(self) -> 'LogCapturer':
+        """Enter context manager."""
+        self.start()
+        return self
+
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+        """Exit context manager."""
+        self.stop()
+
     def start(self) -> None:
         """Start capturing logs."""
         root_logger = logging.getLogger()
@@ -2859,31 +2899,32 @@ class LogCapturer:
         return [record.getMessage() for record in self.logs if record.levelno >= level]
 
 
-class TestConfigLoader:
-    """Loads test configuration from files."""
+class RetryHelper:
+    """Helper for retrying operations."""
 
-    def __init__(self, config_path: Optional[Path] = None) -> None:
-        """Initialize config loader."""
-        self.config_path = config_path or Path("test_config.json")
-        self.config: Dict[str, Any] = {}
+    def __init__(self, max_retries: int) -> None:
+        """Initialize retry helper."""
+        self.max_retries = max_retries
 
-    def load(self) -> Dict[str, Any]:
-        """Load configuration."""
-        if self.config_path.exists():
-            with open(self.config_path) as f:
-                self.config = json.load(f)
-        return self.config
-
-    def get(self, key: str, default: Any = None) -> Any:
-        """Get configuration value."""
-        return self.config.get(key, default)
+    def retry(self, func: Callable[[], Any]) -> Any:
+        """Retry function on failure."""
+        last_exception = None
+        for attempt in range(self.max_retries + 1):
+            try:
+                return func()
+            except Exception as e:
+                last_exception = e
+                if attempt == self.max_retries:
+                    raise last_exception
+        raise last_exception
 
 
 class TestReportGenerator:
     """Generates test reports in various formats."""
 
-    def __init__(self) -> None:
+    def __init__(self, output_dir: Optional[Path] = None) -> None:
         """Initialize report generator."""
+        self.output_dir = output_dir or Path(".")
         self.results: List[Dict[str, Any]] = []
 
     def add_result(self, test_name: str, passed: bool, duration_ms: float) -> None:
@@ -2894,14 +2935,26 @@ class TestReportGenerator:
             'duration_ms': duration_ms
         })
 
-    def generate_html(self) -> str:
+    def add_test_result(self, test_name: str, status: str, duration_ms: float, error: Optional[str] = None) -> None:
+        """Add test result with status string."""
+        passed = status.lower() == "passed"
+        result = {
+            'test_name': test_name,
+            'passed': passed,
+            'duration_ms': duration_ms
+        }
+        if error:
+            result['error'] = error
+        self.results.append(result)
+
+    def generate_html(self) -> Path:
         """Generate HTML report."""
         rows = ''
         for r in self.results:
             status = 'PASSED' if r['passed'] else 'FAILED'
             rows += f"<tr><td>{r['test_name']}</td><td>{status}</td><td>{r['duration_ms']:.2f}ms</td></tr>"
-        
-        return f"""
+
+        html_content = f"""
         <html>
         <head><title>Test Report</title></head>
         <body>
@@ -2914,9 +2967,16 @@ class TestReportGenerator:
         </html>
         """
 
-    def generate_json(self) -> str:
+        report_path = self.output_dir / "test_report.html"
+        report_path.write_text(html_content)
+        return report_path
+
+    def generate_json(self) -> Path:
         """Generate JSON report."""
-        return json.dumps(self.results, indent=2)
+        json_content = json.dumps({"results": self.results}, indent=2)
+        report_path = self.output_dir / "test_report.json"
+        report_path.write_text(json_content)
+        return report_path
 
 
 class CleanupManager:
@@ -2929,6 +2989,10 @@ class CleanupManager:
     def add_hook(self, hook: Callable[[], None]) -> None:
         """Add cleanup hook."""
         self.hooks.append(hook)
+
+    def register(self, hook: Callable[[], None]) -> None:
+        """Register cleanup hook."""
+        self.add_hook(hook)
 
     def cleanup(self) -> None:
         """Execute all cleanup hooks."""
@@ -2951,6 +3015,17 @@ class DependencyResolver:
         if test not in self.dependencies:
             self.dependencies[test] = []
         self.dependencies[test].append(depends_on)
+
+    def add_test(self, test: str, depends_on: List[str]) -> None:
+        """Add test with dependencies."""
+        for dep in depends_on:
+            self.add_dependency(test, dep)
+
+    def resolve(self) -> List[str]:
+        """Resolve execution order."""
+        if self.detect_cycle():
+            raise ValueError("Circular dependency detected")
+        return self.resolve_order()
 
     def resolve_order(self) -> List[str]:
         """Resolve execution order (topological sort)."""
@@ -3000,30 +3075,118 @@ class ResourcePool:
         """Initialize resource pool."""
         self.max_resources = max_resources
         self.available = max_resources
+        self.allocated: Dict[str, bool] = {}
         self.lock = threading.Lock()
 
-    def acquire(self, count: int = 1) -> bool:
-        """Acquire resources."""
+    def acquire(self, resource_name: str, timeout: float = 0.0) -> Optional[str]:
+        """Acquire a named resource."""
         with self.lock:
-            if self.available >= count:
-                self.available -= count
-                return True
-            return False
+            if resource_name in self.allocated:
+                return None  # Already allocated
+            if len(self.allocated) < self.max_resources:
+                self.allocated[resource_name] = True
+                self.available -= 1
+                return resource_name
+            return None
 
-    def release(self, count: int = 1) -> None:
-        """Release resources."""
+    def release(self, resource_name: str) -> None:
+        """Release a named resource."""
         with self.lock:
-            self.available = min(self.available + count, self.max_resources)
+            if resource_name in self.allocated:
+                del self.allocated[resource_name]
+                self.available += 1
 
-    def wait_available(self, count: int = 1, timeout: float = 10.0) -> bool:
-        """Wait for resources to be available."""
+    def wait_available(self, resource_name: str, timeout: float = 10.0) -> bool:
+        """Wait for a named resource to be available."""
         import time as time_module
         start = time_module.time()
         while time_module.time() - start < timeout:
-            if self.acquire(count):
+            if self.acquire(resource_name):
                 return True
             time_module.sleep(0.1)
         return False
+
+
+class CoverageTracker:
+    """Tracks test coverage for functions."""
+
+    def __init__(self) -> None:
+        """Initialize coverage tracker."""
+        self.hits: Dict[str, int] = {}
+        self.targets: Set[str] = set()
+
+    def record_hit(self, function_name: str) -> None:
+        """Record a hit for a function."""
+        self.hits[function_name] = self.hits.get(function_name, 0) + 1
+
+    def get_hits(self) -> Dict[str, int]:
+        """Get all recorded hits."""
+        return self.hits.copy()
+
+    def register_target(self, function_name: str) -> None:
+        """Register a target function for coverage."""
+        self.targets.add(function_name)
+
+    def get_percentage(self) -> float:
+        """Get coverage percentage."""
+        if not self.targets:
+            return 0.0
+        covered = len(self.targets.intersection(self.hits.keys()))
+        return (covered / len(self.targets)) * 100.0
+
+
+class EnvironmentIsolator:
+    """Isolates environment variable changes."""
+
+    def __init__(self) -> None:
+        """Initialize environment isolator."""
+        self.original_env: Dict[str, str] = {}
+        self.modified_vars: Set[str] = set()
+
+    def __enter__(self) -> 'EnvironmentIsolator':
+        """Enter context manager."""
+        return self
+
+    def __exit__(self, exc_type: Any, exc_val: Any, exc_tb: Any) -> None:
+        """Exit context manager and restore environment."""
+        import os
+        for var in self.modified_vars:
+            if var in self.original_env:
+                os.environ[var] = self.original_env[var]
+            elif var in os.environ:
+                del os.environ[var]
+
+    def set_env(self, key: str, value: str) -> None:
+        """Set environment variable."""
+        import os
+        if key not in self.original_env:
+            self.original_env[key] = os.environ.get(key, "")
+        os.environ[key] = value
+        self.modified_vars.add(key)
+
+
+class TestConfigLoader:
+    """Loads test configuration from files."""
+
+    def __init__(self, config_path: Optional[Path] = None) -> None:
+        """Initialize config loader."""
+        self.config_path = config_path or Path("test_config.json")
+        self.config: Dict[str, Any] = {}
+
+    def load(self, config_path: Optional[Path] = None, defaults: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Load configuration."""
+        path = config_path or self.config_path
+        config = defaults or {}
+        if path.exists():
+            with open(path) as f:
+                loaded_config = json.load(f)
+                config.update(loaded_config)
+        self.config = config
+        return self.config
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Get configuration value."""
+        return self.config.get(key, default)
 
 
 def get_base_agent_module() -> ModuleType:

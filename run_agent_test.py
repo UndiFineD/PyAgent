@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 """Test script to run agent on src directory"""
-import sys
 import logging
+
+from src.agent import Agent
 
 # Set up logging before importing agent
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
-
-from src.agent import Agent
 
 # Initialize agent for src directory only, max 3 files, 1 loop
 print("Starting agent run on src/ directory...")
@@ -26,7 +25,7 @@ agent = Agent(
 # Get files to process
 files = agent.find_code_files()
 print(f"Found {len(files)} Python files in src/")
-print(f"Processing first 3 files:")
+print("Processing first 3 files:")
 for f in files[:3]:
     print(f"  - {f.name}")
 
@@ -37,7 +36,7 @@ print("-" * 60)
 print("Agent run completed!")
 
 # Print summary
-print(f"\nMetrics:")
+print("\nMetrics:")
 print(f"  Processed: {agent.metrics.get('processed_files', 0)}")
 print(f"  Improved: {agent.metrics.get('improved_files', 0)}")
 print(f"  Errors: {agent.metrics.get('errors', 0)}")

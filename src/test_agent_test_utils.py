@@ -1009,7 +1009,7 @@ class TestSnapshotComparisonUtilities:
         manager.save_snapshot("test_snapshot", data)
 
         loaded = manager.load_snapshot("test_snapshot")
-        assert loaded == data
+        assert loaded.content == data
 
     def test_snapshot_comparison_matches(self, utils_module: Any, tmp_path: Path) -> None:
         """Test snapshot comparison when matching."""

@@ -1,0 +1,4 @@
+flake8.checker            MainProcess    412 INFO     Making checkers
+flake8.main.application   MainProcess   3946 INFO     Finished running
+flake8.main.application   MainProcess   3947 INFO     Reporting errors
+flake8.main.application   MainProcess   3947 INFO     Found a total of 52 violations and reported 0 

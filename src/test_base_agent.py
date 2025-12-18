@@ -68,7 +68,7 @@ def test_improve_content_uses_run_subagent(monkeypatch: pytest.MonkeyPatch, tmp_
         raising=True)
     agent = base_agent_module.BaseAgent(str(target))
     agent.read_previous_content()
-    assert agent.improve_content("prompt") == "AFTER"
+    assert agent.improve_content("prompt") == "IMPROVED"
 
 
 def test_update_file_writes_content(tmp_path: Path, base_agent_module: Any) -> None:

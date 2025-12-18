@@ -1,0 +1,166 @@
+src\agent-stats.py:51: error: Cannot find implementation or library stub for module named "matplotlib.pyplot"  [import-not-found]
+src\agent-stats.py:51: error: Cannot find implementation or library stub for module named "matplotlib"  [import-not-found]
+src\base_agent.py:34: error: Skipping analyzing "scripts.agent": module is installed, but missing library stubs or py.typed marker  [import-untyped]
+src\base_agent.py:948: error: Argument "role" to "ConversationMessage" has incompatible type "str"; expected "MessageRole"  [arg-type]
+src\base_agent.py:950: error: Argument "role" to "ConversationMessage" has incompatible type "str"; expected "MessageRole"  [arg-type]
+src\base_agent.py:1168: error: Argument "role" to "ConversationMessage" has incompatible type "str"; expected "MessageRole"  [arg-type]
+src\base_agent.py:1565: error: Argument "file_path" to "BatchResult" has incompatible type "Path | None"; expected "Path"  [arg-type]
+src\base_agent.py:1576: error: Argument "file_path" to "BatchResult" has incompatible type "Path | None"; expected "Path"  [arg-type]
+src\base_agent.py:2631: error: Incompatible return value type (got "ModelConfig | None", expected "ModelConfig")  [return-value]
+src\base_agent.py:2756: error: Too few arguments  [call-arg]
+src\base_agent.py:2806: error: Unsupported target for indexed assignment ("Collection[str]")  [index]
+src\agent-tests.py:695: error: Incompatible default for argument "dependencies" (default has type "None", argument has type "list[str]")  [assignment]
+src\agent-tests.py:695: note: PEP 484 prohibits implicit Optional. Accordingly, mypy has changed its default to no_implicit_optional=True
+src\agent-tests.py:695: note: Use https://github.com/hauntsaninja/no_implicit_optional to automatically upgrade your codebase
+src\agent-tests.py:793: error: Incompatible types in assignment (expression has type "TestEnvironment | None", variable has type "TestEnvironment")  [assignment]
+src\agent-tests.py:2970: error: Incompatible types in assignment (expression has type "int", target has type "str")  [assignment]
+src\agent-tests.py:2972: error: Incompatible types in assignment (expression has type "int", target has type "str")  [assignment]
+src\agent-tests.py:3009: error: Argument "key" to "min" has incompatible type overloaded function; expected "Callable[[int], SupportsDunderLT[Any] | SupportsDunderGT[Any]]"  [arg-type]
+src\agent-tests.py:3119: error: Argument 1 to "Recording" has incompatible type "str | None"; expected "str"  [arg-type]
+src\agent-improvements.py:169: error: Dict entry 2 has incompatible type "str": "ImprovementCategory"; expected "str": "str"  [dict-item]
+src\agent-improvements.py:170: error: Dict entry 3 has incompatible type "str": "ImprovementPriority"; expected "str": "str"  [dict-item]
+src\agent-improvements.py:171: error: Dict entry 4 has incompatible type "str": "EffortEstimate"; expected "str": "str"  [dict-item]
+src\agent-improvements.py:892: error: No overload variant of "__sub__" of "datetime" matches argument type "str"  [operator]
+src\agent-improvements.py:892: note: Possible overload variants:
+src\agent-improvements.py:892: note:     def __sub__(self, datetime, /) -> timedelta
+src\agent-improvements.py:892: note:     def __sub__(self, timedelta, /) -> datetime
+src\agent-improvements.py:1919: error: Missing return statement  [return]
+src\agent-improvements.py:2248: error: Incompatible types in assignment (expression has type "RollbackPoint", target has type "dict[str, Any]")  [assignment]
+src\agent-improvements.py:2343: error: "str" has no attribute "isoformat"  [attr-defined]
+src\agent-context.py:560: error: Incompatible types in assignment (expression has type "str", variable has type "SearchAlgorithm")  [assignment]
+src\agent-context.py:1130: error: Unexpected keyword argument "file_path" for "RefactoringSuggestion"  [call-arg]
+src\agent-context.py:1130: error: Unexpected keyword argument "line_number" for "RefactoringSuggestion"  [call-arg]
+src\agent-context.py:1130: error: Unexpected keyword argument "confidence" for "RefactoringSuggestion"  [call-arg]
+src\agent-context.py:1152: error: "RefactoringSuggestion" has no attribute "confidence"  [attr-defined]
+src\agent-context.py:1248: error: Argument "edges" to "VisualizationData" has incompatible type "list[dict[str, str]]"; expected "list[tuple[str, str]]"  [arg-type]
+src\agent-context.py:1492: error: Return type "ContextTemplate | None" of "get_template" incompatible with return type "PromptTemplate | None" in supertype "base_agent.BaseAgent"  [override]
+src\agent-coder.py:870: error: "AST" has no attribute "name"  [attr-defined]
+src\agent-coder.py:1005: error: Argument 1 to "_analyze_function" of "ProfilingAdvisor" has incompatible type "FunctionDef | AsyncFunctionDef"; expected "FunctionDef"  [arg-type]
+src\agent-coder.py:1884: error: Unsupported operand types for - ("None" and "int")  [operator]
+src\agent-coder.py:1884: note: Left operand is of type "int | None"
+src\agent-coder.py:1964: error: Unsupported operand types for - ("None" and "int")  [operator]
+src\agent-coder.py:1964: note: Left operand is of type "int | None"
+src\agent-changes.py:1313: error: Return type "bool" of "update_file" incompatible with return type "None" in supertype "base_agent.BaseAgent"  [override]
+src\agent-changes.py:1318: error: Incompatible return value type (got "None", expected "bool")  [return-value]
+src\agent-changes.py:1354: error: Incompatible return value type (got "list[dict[str, object]]", expected "list[dict[str, str]]")  [return-value]
+src\agent.py:65: error: Library stubs not installed for "tqdm"  [import-untyped]
+src\agent.py:65: note: Hint: "python3 -m pip install types-tqdm"
+src\agent.py:65: note: (or run "mypy --install-types" to install all missing stub packages)
+src\agent.py:65: note: See https://mypy.readthedocs.io/en/stable/running_mypy.html#missing-imports
+src\agent.py:855: error: Incompatible types in assignment (expression has type "Callable[[int, FrameType | None], Any] | int | None", variable has type "None")  [assignment]
+src\agent.py:857: error: Incompatible types in assignment (expression has type "Callable[[int, FrameType | None], Any] | int | None", variable has type "None")  [assignment]
+src\agent.py:1026: error: Library stubs not installed for "toml"  [import-untyped]
+src\agent.py:1026: note: Hint: "python3 -m pip install types-toml"
+src\agent.py:2964: error: Unsupported left operand type for - ("object")  [operator]
+src\agent.py:2975: error: "object" has no attribute "items"  [attr-defined]
+src\agent.py:3003: error: Unsupported left operand type for - ("object")  [operator]
+src\agent.py:3011: error: No overload variant of "max" matches argument types "object", "int"  [call-overload]
+src\agent.py:3011: note: Possible overload variants:
+src\agent.py:3011: note:     def [SupportsRichComparisonT: SupportsDunderLT[Any] | SupportsDunderGT[Any]] max(SupportsRichComparisonT, SupportsRichComparisonT, /, *_args: SupportsRichComparisonT, key: None = ...) -> SupportsRichComparisonT
+src\agent.py:3011: note:     def [_T] max(_T, _T, /, *_args: _T, key: Callable[[_T], SupportsDunderLT[Any] | SupportsDunderGT[Any]]) -> _T
+src\agent.py:3011: note:     def [SupportsRichComparisonT: SupportsDunderLT[Any] | SupportsDunderGT[Any]] max(Iterable[SupportsRichComparisonT], /, *, key: None = ...) -> SupportsRichComparisonT
+src\agent.py:3011: note:     def [_T] max(Iterable[_T], /, *, key: Callable[[_T], SupportsDunderLT[Any] | SupportsDunderGT[Any]]) -> _T
+src\agent.py:3011: note:     def [SupportsRichComparisonT: SupportsDunderLT[Any] | SupportsDunderGT[Any], _T] max(Iterable[SupportsRichComparisonT], /, *, key: None = ..., default: _T) -> SupportsRichComparisonT | _T
+src\agent.py:3011: note:     def [_T1, _T2] max(Iterable[_T1], /, *, key: Callable[[_T1], SupportsDunderLT[Any] | SupportsDunderGT[Any]], default: _T2) -> _T1 | _T2
+src\agent.py:3013: error: No overload variant of "dict" matches argument type "object"  [call-overload]
+src\agent.py:3013: note: Possible overload variants:
+src\agent.py:3013: note:     def [_KT, _VT] dict(self) -> dict[_KT, _VT]
+src\agent.py:3013: note:     def [_KT, _VT] dict(self, **kwargs: _VT) -> dict[str, _VT]
+src\agent.py:3013: note:     def [_KT, _VT] dict(self, SupportsKeysAndGetItem[_KT, _VT], /) -> dict[_KT, _VT]
+src\agent.py:3013: note:     def [_KT, _VT] dict(self, SupportsKeysAndGetItem[str, _VT], /, **kwargs: _VT) -> dict[str, _VT]
+src\agent.py:3013: note:     def [_KT, _VT] dict(self, Iterable[tuple[_KT, _VT]], /) -> dict[_KT, _VT]
+src\agent.py:3013: note:     def [_KT, _VT] dict(self, Iterable[tuple[str, _VT]], /, **kwargs: _VT) -> dict[str, _VT]
+src\agent.py:3013: note:     def [_KT, _VT] dict(self, Iterable[list[str]], /) -> dict[str, str]
+src\agent.py:3013: note:     def [_KT, _VT] dict(self, Iterable[list[bytes]], /) -> dict[bytes, bytes]
+src\agent.py:3054: error: Unsupported left operand type for - ("object")  [operator]
+src\agent.py:3066: error: No overload variant of "dict" matches argument type "object"  [call-overload]
+src\agent.py:3066: note: Possible overload variants:
+src\agent.py:3066: note:     def [_KT, _VT] dict(self) -> dict[_KT, _VT]
+src\agent.py:3066: note:     def [_KT, _VT] dict(self, **kwargs: _VT) -> dict[str, _VT]
+src\agent.py:3066: note:     def [_KT, _VT] dict(self, SupportsKeysAndGetItem[_KT, _VT], /) -> dict[_KT, _VT]
+src\agent.py:3066: note:     def [_KT, _VT] dict(self, SupportsKeysAndGetItem[str, _VT], /, **kwargs: _VT) -> dict[str, _VT]
+src\agent.py:3066: note:     def [_KT, _VT] dict(self, Iterable[tuple[_KT, _VT]], /) -> dict[_KT, _VT]
+src\agent.py:3066: note:     def [_KT, _VT] dict(self, Iterable[tuple[str, _VT]], /, **kwargs: _VT) -> dict[str, _VT]
+src\agent.py:3066: note:     def [_KT, _VT] dict(self, Iterable[list[str]], /) -> dict[str, str]
+src\agent.py:3066: note:     def [_KT, _VT] dict(self, Iterable[list[bytes]], /) -> dict[bytes, bytes]
+src\agent.py:3098: error: "object" has no attribute "values"  [attr-defined]
+src\agent.py:3107: error: No overload variant of "dict" matches argument type "object"  [call-overload]
+src\agent.py:3107: note: Possible overload variants:
+src\agent.py:3107: note:     def [_KT, _VT] dict(self) -> dict[_KT, _VT]
+src\agent.py:3107: note:     def [_KT, _VT] dict(self, **kwargs: _VT) -> dict[str, _VT]
+src\agent.py:3107: note:     def [_KT, _VT] dict(self, SupportsKeysAndGetItem[_KT, _VT], /) -> dict[_KT, _VT]
+src\agent.py:3107: note:     def [_KT, _VT] dict(self, SupportsKeysAndGetItem[str, _VT], /, **kwargs: _VT) -> dict[str, _VT]
+src\agent.py:3107: note:     def [_KT, _VT] dict(self, Iterable[tuple[_KT, _VT]], /) -> dict[_KT, _VT]
+src\agent.py:3107: note:     def [_KT, _VT] dict(self, Iterable[tuple[str, _VT]], /, **kwargs: _VT) -> dict[str, _VT]
+src\agent.py:3107: note:     def [_KT, _VT] dict(self, Iterable[list[str]], /) -> dict[str, str]
+src\agent.py:3107: note:     def [_KT, _VT] dict(self, Iterable[list[bytes]], /) -> dict[bytes, bytes]
+src\agent.py:3112: error: No overload variant of "max" matches argument types "object", "int"  [call-overload]
+src\agent.py:3112: note: Possible overload variants:
+src\agent.py:3112: note:     def [SupportsRichComparisonT: SupportsDunderLT[Any] | SupportsDunderGT[Any]] max(SupportsRichComparisonT, SupportsRichComparisonT, /, *_args: SupportsRichComparisonT, key: None = ...) -> SupportsRichComparisonT
+src\agent.py:3112: note:     def [_T] max(_T, _T, /, *_args: _T, key: Callable[[_T], SupportsDunderLT[Any] | SupportsDunderGT[Any]]) -> _T
+src\agent.py:3112: note:     def [SupportsRichComparisonT: SupportsDunderLT[Any] | SupportsDunderGT[Any]] max(Iterable[SupportsRichComparisonT], /, *, key: None = ...) -> SupportsRichComparisonT
+src\agent.py:3112: note:     def [_T] max(Iterable[_T], /, *, key: Callable[[_T], SupportsDunderLT[Any] | SupportsDunderGT[Any]]) -> _T
+src\agent.py:3112: note:     def [SupportsRichComparisonT: SupportsDunderLT[Any] | SupportsDunderGT[Any], _T] max(Iterable[SupportsRichComparisonT], /, *, key: None = ..., default: _T) -> SupportsRichComparisonT | _T
+src\agent.py:3112: note:     def [_T1, _T2] max(Iterable[_T1], /, *, key: Callable[[_T1], SupportsDunderLT[Any] | SupportsDunderGT[Any]], default: _T2) -> _T1 | _T2
+src\agent.py:4027: error: Unsupported operand types for + ("object" and "int")  [operator]
+src\agent.py:4121: error: Incompatible return value type (got "None", expected "Path")  [return-value]
+src\agent.py:4334: error: Unsupported target for indexed assignment ("object")  [index]
+src\agent.py:4335: error: "object" has no attribute "get"  [attr-defined]
+src\agent_test_utils.py:522: error: Dict entry 0 has incompatible type "str": "str"; expected "str": "float"  [dict-item]
+src\agent_test_utils.py:747: error: Exception type must be derived from BaseException (or be a tuple of exception classes)  [misc]
+src\agent_test_utils.py:1467: error: Incompatible types in assignment (expression has type "dict[Never, Never]", variable has type "TestResult")  [assignment]
+src\agent_test_utils.py:1472: error: Unsupported target for indexed assignment ("TestResult")  [index]
+src\agent_test_utils.py:1478: error: Incompatible return value type (got "TestResult", expected "dict[str, dict[str, Any]]")  [return-value]
+src\agent_test_utils.py:1989: error: Argument 1 to "append" of "list" has incompatible type "tuple[Path, bool]"; expected "Path"  [arg-type]
+src\agent_test_utils.py:2031: error: "Path" object is not iterable  [misc]
+src\agent_test_utils.py:2033: error: Cannot determine type of "path"  [has-type]
+src\agent_test_utils.py:2034: error: Cannot determine type of "recursive"  [has-type]
+src\agent_test_utils.py:2035: error: Cannot determine type of "path"  [has-type]
+src\agent_test_utils.py:2037: error: Cannot determine type of "path"  [has-type]
+src\agent_test_utils.py:2040: error: Cannot determine type of "path"  [has-type]
+src\agent_test_utils.py:2874: error: Cannot assign to a method  [method-assign]
+src\agent_test_utils.py:2919: error: Exception must be derived from BaseException  [misc]
+src\test_generate_agent_reports.py:2393: error: Value of type "Collection[str]" is not indexable  [index]
+src\test_generate_agent_reports.py:2394: error: Value of type "Collection[str]" is not indexable  [index]
+src\test_generate_agent_reports.py:2407: error: Value of type "Collection[str]" is not indexable  [index]
+src\test_generate_agent_reports.py:2408: error: Value of type "Collection[str]" is not indexable  [index]
+src\test_generate_agent_reports.py:2809: error: Generator has incompatible item type "object"; expected "bool"  [misc]
+src\test_generate_agent_reports.py:2826: error: Invalid index type "object" for "dict[str, list[int]]"; expected type "str"  [index]
+src\test_generate_agent_reports.py:2827: error: Invalid index type "object" for "dict[str, list[int]]"; expected type "str"  [index]
+src\test_generate_agent_reports.py:2827: error: Argument 1 to "append" of "list" has incompatible type "object"; expected "int"  [arg-type]
+src\test_generate_agent_reports.py:2894: error: Argument 1 to "len" has incompatible type "object"; expected "Sized"  [arg-type]
+src\test_generate_agent_reports.py:2916: error: Value of type "Collection[str]" is not indexable  [index]
+src\test_generate_agent_reports.py:2954: error: Value of type "object" is not indexable  [index]
+src\test_generate_agent_reports.py:3191: error: Unsupported operand types for > ("int" and "object")  [operator]
+src\test_generate_agent_reports.py:3241: error: Unsupported operand types for - ("int" and "object")  [operator]
+src\test_generate_agent_reports.py:3241: error: Unsupported operand types for < ("int" and "object")  [operator]
+src\test_generate_agent_reports.py:3259: error: Incompatible types in assignment (expression has type "None", target has type "dict[str, str]")  [assignment]
+src\test_generate_agent_reports.py:3349: error: Unsupported operand types for < ("int" and "object")  [operator]
+src\test_generate_agent_reports.py:3382: error: Argument 1 to "len" has incompatible type "object"; expected "Sized"  [arg-type]
+src\test_generate_agent_reports.py:3383: error: Argument 1 to "len" has incompatible type "object"; expected "Sized"  [arg-type]
+src\test_generate_agent_reports.py:3397: error: Argument 1 to "len" has incompatible type "object"; expected "Sized"  [arg-type]
+src\test_generate_agent_reports.py:3398: error: Value of type "object" is not indexable  [index]
+src\test_generate_agent_reports.py:3408: error: No overload variant of "sum" matches argument type "object"  [call-overload]
+src\test_generate_agent_reports.py:3408: note: Possible overload variants:
+src\test_generate_agent_reports.py:3408: note:     def sum(Iterable[bool], /, start: int = ...) -> int
+src\test_generate_agent_reports.py:3408: note:     def [_SupportsSumNoDefaultT: _SupportsSumWithNoDefaultGiven] sum(Iterable[_SupportsSumNoDefaultT], /) -> _SupportsSumNoDefaultT | Literal[0]
+src\test_generate_agent_reports.py:3408: note:     def [_AddableT1: SupportsAdd[Any, Any], _AddableT2: SupportsAdd[Any, Any]] sum(Iterable[_AddableT1], /, start: _AddableT2) -> _AddableT1 | _AddableT2
+src\test_generate_agent_reports.py:3639: error: Unsupported left operand type for - ("object")  [operator]
+src\test_generate_agent_reports.py:3685: error: Unsupported left operand type for - ("object")  [operator]
+src\test_generate_agent_reports.py:3824: error: Value of type "object" is not indexable  [index]
+src\test_generate_agent_reports.py:3847: error: Argument 1 to "len" has incompatible type "object"; expected "Sized"  [arg-type]
+src\test_generate_agent_reports.py:3895: error: Unsupported operand types for > ("int" and "object")  [operator]
+src\test_generate_agent_reports.py:3920: error: Unsupported operand types for < ("int" and "object")  [operator]
+src\test_agent_stats.py:360: error: Cannot find implementation or library stub for module named "matplotlib"  [import-not-found]
+src\test_agent_improvements.py:1077: error: Need type annotation for "source" (hint: "source: dict[<type>, <type>] = ...")  [var-annotated]
+src\test_agent_backend.py:931: error: Function "builtins.any" is not valid as a type  [valid-type]
+src\test_agent_backend.py:931: note: Perhaps you meant "typing.Any" instead of "any"?
+src\test_agent_backend.py:933: error: any? has no attribute "AuditLogger"  [attr-defined]
+src\test_agent_backend.py:950: error: Function "builtins.any" is not valid as a type  [valid-type]
+src\test_agent_backend.py:950: note: Perhaps you meant "typing.Any" instead of "any"?
+src\test_agent_backend.py:952: error: any? has no attribute "AuditLogger"  [attr-defined]
+src\test_agent_backend.py:1014: error: Function "builtins.any" is not valid as a type  [valid-type]
+src\test_agent_backend.py:1014: note: Perhaps you meant "typing.Any" instead of "any"?
+src\test_agent_backend.py:1016: error: any? has no attribute "RequestTracer"  [attr-defined]
+src\test_agent_backend.py:1017: error: any? has no attribute "AuditLogger"  [attr-defined]
+Found 106 errors in 13 files (checked 25 source files)

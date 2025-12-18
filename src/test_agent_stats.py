@@ -309,7 +309,7 @@ class TestCompression:
         original = [(datetime.now().isoformat(), i) for i in range(10)]
         agent._metric_history["decompress_test"] = original
         compressed = agent.compress_metrics("decompress_test")
-        decompressed = agent.decompress_metrics(compressed)
+        decompressed = agent.decompress_metrics(compressed, "decompress_test")
         assert len(decompressed) == len(original)
 
 
@@ -355,18 +355,23 @@ class TestStatsAgent(unittest.TestCase):
         self.agent.track_code_coverage('coverage.json')
         self.assertEqual(self.agent.stats['code_coverage'], 85)
 
-    @patch('matplotlib.pyplot.show')
-    def test_visualize_stats(self, mock_show):
-        self.agent.stats = {
-            'total_files': 2,
-            'files_with_context': 1,
-            'files_with_changes': 1,
-            'files_with_errors': 0,
-            'files_with_improvements': 2,
-            'files_with_tests': 1
-        }
-        self.agent.visualize_stats()
-        mock_show.assert_called_once()
+    def test_visualize_stats(self):
+        try:
+            import matplotlib  # noqa: F401
+            from unittest.mock import patch
+            with patch('matplotlib.pyplot.show') as mock_show:
+                self.agent.stats = {
+                    'total_files': 2,
+                    'files_with_context': 1,
+                    'files_with_changes': 1,
+                    'files_with_errors': 0,
+                    'files_with_improvements': 2,
+                    'files_with_tests': 1
+                }
+                self.agent.visualize_stats()
+                mock_show.assert_called_once()
+        except ImportError:
+            self.skipTest("matplotlib not available")
 
     @patch('builtins.open', new_callable=mock_open, read_data='{"total_files": 2}')
     def test_generate_comparison_report(self, mock_file):
@@ -2372,7 +2377,8 @@ class TestExportFormatsAdvanced(unittest.TestCase):
 
     def test_export_to_html(self):
         """Test exporting to HTML."""
-        html = """
+        stats = {"files": 100, "errors": 50}
+        html = f"""
         <table>
             <tr><td>Files</td><td>{stats['files']}</td></tr>
             <tr><td>Errors</td><td>{stats['errors']}</td></tr>
@@ -2554,9 +2560,9 @@ class TestFiltering(unittest.TestCase):
     def test_filter_by_file_pattern(self):
         """Test filtering by file pattern."""
         stats = [
-            {"file": "src / main.py", "errors": 5},
-            {"file": "src / utils.py", "errors": 2},
-            {"file": "tests / test.py", "errors": 1},
+            {"file": "src/main.py", "errors": 5},
+            {"file": "src/utils.py", "errors": 2},
+            {"file": "tests/test.py", "errors": 1},
         ]
 
         src_only = [s for s in stats if s["file"].startswith("src/")]

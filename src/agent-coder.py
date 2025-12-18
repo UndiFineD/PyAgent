@@ -112,13 +112,18 @@ class CodeSmell:
 @dataclass
 class QualityScore:
     """Code quality score with breakdown."""
-    overall_score: float = 0.0
+    score: float = 0.0
     maintainability: float = 0.0
     readability: float = 0.0
     complexity: float = 0.0
     documentation: float = 0.0
     test_coverage: float = 0.0
     issues: List[str] = field(default_factory=list)
+
+    @property
+    def overall_score(self) -> float:
+        """Alias for score."""
+        return self.score
 
 
 @dataclass
@@ -1531,7 +1536,7 @@ class AccessibilityAnalyzer:
                 ))
 
         # Check for div / span used as interactive elements
-        interactive_div = r'<div[^>] * onClick'
+        interactive_div = r'<div\s+onClick'
         for match in re.finditer(interactive_div, content, re.IGNORECASE):
             line_num = content[:match.start()].count('\n') + 1
             context = match.group()
@@ -1744,6 +1749,10 @@ class CoderAgent(BaseAgent):
         """Get the detected language."""
         return self._language
 
+    def detect_language(self) -> CodeLanguage:
+        """Detect the programming language from file extension."""
+        return self._detect_language()
+
     @property
     def _is_python_file(self) -> bool:
         """Check if the file is a Python file."""
@@ -1918,7 +1927,7 @@ class CoderAgent(BaseAgent):
         # Test coverage placeholder (would need integration with coverage tools)
         score.test_coverage = 0  # Unknown without coverage data
         # Overall score (weighted average)
-        score.overall_score = (
+        score.score = (
             score.maintainability * 0.25 +
             score.readability * 0.25 +
             score.complexity * 0.25 +
