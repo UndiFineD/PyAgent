@@ -38,6 +38,8 @@ from typing import Any, Callable, Dict, Iterator, List, Optional, Set, Tuple, Ty
 
 import random
 
+T = TypeVar("T")
+
 try:
     import numpy as np
 except ImportError:
@@ -47,8 +49,6 @@ except ImportError:
 # ============================================================================
 # Type - Safe Enums for Test Utilities
 # ============================================================================
-
-
 class TestStatus(Enum):
     """Status of a test execution."""
 
@@ -109,8 +109,6 @@ class CleanupStrategy(Enum):
 # ============================================================================
 # Dataclasses for Structured Test Data
 # ============================================================================
-
-
 @dataclass
 class TestFixture:
     """A test fixture with setup and teardown.
@@ -219,7 +217,7 @@ class TestEnvironment:
     """
 
     name: str
-    env_vars: Dict[str, str] = field(default_factory=dict)
+    env_vars: Dict[str, str] = field(default_factory=lambda: {})
     temp_dir: Optional[Path] = None
     isolation_level: IsolationLevel = IsolationLevel.TEMP_DIR
     cleanup: CleanupStrategy = CleanupStrategy.IMMEDIATE
@@ -246,7 +244,10 @@ class TestSnapshot:
     def __post_init__(self) -> None:
         """Compute content hash if not provided."""
         # Convert content to string if it's a dict or other type
-        content_str = self.content if isinstance(self.content, str) else json.dumps(self.content)
+        if isinstance(self.content, dict):
+            content_str = json.dumps(self.content)
+        else:
+            content_str = str(self.content)
         if not self.content_hash:
             self.content_hash = hashlib.sha256(
                 content_str.encode("utf-8")
@@ -276,11 +277,11 @@ class SnapshotComparisonResult:
             return None
 
         if isinstance(self.expected, dict) and isinstance(self.actual, dict):
-            expected_str = json.dumps(self.expected, indent=2)
-            actual_str = json.dumps(self.actual, indent=2)
+            expected_str = json.dumps(self.expected, indent=2, default=str)  # type: ignore[arg-type]
+            actual_str = json.dumps(self.actual, indent=2, default=str)  # type: ignore[arg-type]
         else:
-            expected_str = str(self.expected)
-            actual_str = str(self.actual)
+            expected_str = str(self.expected)  # type: ignore[arg-type]
+            actual_str = str(self.actual)  # type: ignore[arg-type]
 
         return f"Expected:\n{expected_str}\n\nActual:\n{actual_str}"
 
@@ -310,8 +311,6 @@ AGENT_DIR = Path(__file__).resolve().parent
 # ============================================================================
 # Mock AI Backend
 # ============================================================================
-
-
 class MockAIBackend:
     """Mock AI backend for testing.
 
@@ -431,8 +430,6 @@ class MockAIBackend:
 # ============================================================================
 # Test Fixture Generator
 # ============================================================================
-
-
 class FixtureFactory:
     """Factory for creating test fixtures.
 
@@ -448,7 +445,12 @@ class FixtureFactory:
         """
         self.base_dir = base_dir or Path.cwd()
 
-    def create_agent_fixture(self, name: str, config: Optional[Dict[str, Any]] = None, dependencies: Optional[List[Any]] = None) -> Any:
+    def create_agent_fixture(
+        self,
+        name: str,
+        config: Optional[Dict[str, Any]] = None,
+        dependencies: Optional[List[Any]] = None,
+    ) -> Any:
         """Create an agent fixture.
 
         Args:
@@ -508,7 +510,7 @@ class TestDataSeeder:
             if np:
                 np.random.seed(seed)
 
-    def generate_metric_data(self, count: int = 10) -> List[Dict[str, float]]:
+    def generate_metric_data(self, count: int = 10) -> List[Dict[str, Union[str, float]]]:
         """Generate metric data for testing.
 
         Args:
@@ -557,7 +559,6 @@ class TestDataSeeder:
         # Use a deterministic return value based on seed for reproducibility
         func_id = self.seed if self.seed is not None else random.randint(1, 100)
         return_val = random.randint(1, 100)
-        
         if language == "python":
             return f'# Python file\ndef func_{func_id}():\n    return {return_val}\n'
         elif language == "javascript":
@@ -687,7 +688,6 @@ class TestOutputFormatter:
         }
 
 
-
 class AssertionHelpers:
     """Helper functions for common assertions in tests."""
 
@@ -727,7 +727,12 @@ class AssertionHelpers:
         return True
 
     @staticmethod
-    def assert_raises_with_message(fn: Callable, exception_type: type, message: str, *args: Any) -> bool:
+    def assert_raises_with_message(
+        fn: Callable[..., Any],
+        exception_type: type[BaseException],
+        message: str,
+        *args: Any,
+    ) -> bool:
         """Assert that a function raises an exception with a specific message.
 
         Args:
@@ -745,9 +750,11 @@ class AssertionHelpers:
         try:
             fn(*args)
             raise AssertionError(f"Expected {exception_type.__name__} but no exception was raised")
-        except exception_type as e:
-            assert message in str(e), f"Exception message '{str(e)}' does not contain '{message}'"
-            return True
+        except BaseException as e:
+            if isinstance(e, exception_type):
+                assert message in str(e), f"Exception message '{str(e)}' does not contain '{message}'"
+                return True
+            raise
 
 
 class TestTimer:
@@ -788,7 +795,7 @@ class Benchmarker:
         """Initialize benchmarker."""
         self.timings: List[float] = []
 
-    def run(self, fn: Callable, iterations: int = 5) -> Dict[str, float]:
+    def run(self, fn: Callable[[], None], iterations: int = 5) -> Dict[str, float]:
         """Run a function multiple times and collect timing statistics.
 
         Args:
@@ -917,8 +924,6 @@ class FixtureGenerator:
 # ============================================================================
 # Test Data Factory
 # ============================================================================
-
-
 class TestDataGenerator:
     """Generates realistic test data for agent testing.
 
@@ -984,25 +989,21 @@ class TestDataGenerator:
         Returns:
             str: Generated markdown.
         """
-        lines = []
-
+        lines: List[str] = []
         if with_headers:
             lines.append("# Test Document")
             lines.append("")
-
         for i in range(num_sections):
             if with_headers:
                 lines.append(f"## Section {i}")
             lines.append("")
             lines.append(f"This is section {i} content.")
             lines.append("")
-
             if with_code_blocks:
                 lines.append("```python")
                 lines.append(f"print('Section {i}')")
                 lines.append("```")
                 lines.append("")
-
         return "\n".join(lines)
 
     def generate_json(
@@ -1042,8 +1043,6 @@ class TestDataGenerator:
 # ============================================================================
 # File System Isolation
 # ============================================================================
-
-
 class FileSystemIsolator:
     """Isolates file system operations for testing.
 
@@ -1124,8 +1123,6 @@ class FileSystemIsolator:
 # ============================================================================
 # Performance Tracker
 # ============================================================================
-
-
 class PerformanceTracker:
     """Tracks test execution performance.
 
@@ -1219,8 +1216,6 @@ class PerformanceTracker:
 # ============================================================================
 # Snapshot Testing
 # ============================================================================
-
-
 class SnapshotManager:
     """Manages snapshots for snapshot testing.
 
@@ -1263,7 +1258,6 @@ class SnapshotManager:
 
         path = self._get_snapshot_path(name)
         path.write_text(content_str, encoding="utf-8")
-        
         snapshot = TestSnapshot(name=name, content=snapshot_content)
         self._snapshots[name] = snapshot
         return snapshot
@@ -1365,11 +1359,9 @@ class SnapshotManager:
             List[str]: Diff lines.
         """
         import difflib
-
         expected = self.load_snapshot(name)
         if expected is None:
             return ["No snapshot exists"]
-
         return list(difflib.unified_diff(
             expected.content.splitlines(),
             actual.splitlines(),
@@ -1382,8 +1374,6 @@ class SnapshotManager:
 # ============================================================================
 # Test Result Aggregator
 # ============================================================================
-
-
 class TestResultAggregator:
     """Aggregates test results for reporting.
 
@@ -1397,7 +1387,12 @@ class TestResultAggregator:
         """Initialize result aggregator."""
         self._results: List[TestResult] = []
 
-    def add_result(self, result: Union[TestResult, str], test_name: Optional[str] = None, status: Optional[str] = None) -> None:
+    def add_result(
+        self,
+        result: Union[TestResult, str],
+        test_name: Optional[str] = None,
+        status: Optional[str] = None,
+    ) -> None:
         """Add a test result.
 
         Args:
@@ -1407,12 +1402,11 @@ class TestResultAggregator:
         """
         if isinstance(result, TestResult):
             self._results.append(result)
-        elif isinstance(result, str) and test_name and status:
+        elif test_name and status:
             # Support add_result(suite, test_name, status) style
             test_result = TestResult(
-                name=f"{result}/{test_name}",
+                test_name=f"{result}/{test_name}",
                 status=TestStatus[status.upper()] if hasattr(TestStatus, status.upper()) else TestStatus.PASSED,
-                suite=result,
                 duration_ms=0.0
             )
             self._results.append(test_result)
@@ -1434,7 +1428,6 @@ class TestResultAggregator:
         failed = sum(1 for r in self._results if r.status == TestStatus.FAILED)
         skipped = sum(1 for r in self._results if r.status == TestStatus.SKIPPED)
         errors = sum(1 for r in self._results if r.status == TestStatus.ERROR)
-
         durations = [r.duration_ms for r in self._results]
 
         return {
@@ -1460,8 +1453,6 @@ class TestResultAggregator:
 # ============================================================================
 # Test Assertion Helpers
 # ============================================================================
-
-
 class AgentAssertions:
     """Custom assertion helpers for agent testing.
 
@@ -1545,14 +1536,11 @@ class AgentAssertions:
         Returns:
             bool: True if structure matches.
         """
-        issues = []
-
+        issues: List[str] = []
         if headers and not re.search(r"^#+\s", content, re.MULTILINE):
             issues.append("missing headers")
-
         if code_blocks and "```" not in content:
             issues.append("missing code blocks")
-
         passed = len(issues) == 0
         assertion = TestAssertion(
             name="markdown_structure",
@@ -1561,7 +1549,6 @@ class AgentAssertions:
             passed=passed,
         )
         self._assertions.append(assertion)
-
         if not passed:
             raise AssertionError(f"Markdown structure issues: {', '.join(issues)}")
         return True
@@ -1603,8 +1590,6 @@ class AgentAssertions:
 # ============================================================================
 # Parameterized Test Generator
 # ============================================================================
-
-
 @dataclass
 class ParameterizedTestCase:
     """A parameterized test case.
@@ -1619,7 +1604,7 @@ class ParameterizedTestCase:
     name: str
     params: Dict[str, Any]
     expected: Any
-    tags: List[str] = field(default_factory=list)
+    tags: List[str] = field(default_factory=lambda: [])
 
 
 class ParameterizedTestGenerator:
@@ -1677,13 +1662,10 @@ class ParameterizedTestGenerator:
         """
         if not self._parameters:
             return []
-
         import itertools
-
         keys = list(self._parameters.keys())
         values = [self._parameters[k] for k in keys]
-
-        cases = []
+        cases: List[ParameterizedTestCase] = []
         for i, combo in enumerate(itertools.product(*values)):
             params = dict(zip(keys, combo))
             expected = self._expected_fn(params) if self._expected_fn else None
@@ -1693,15 +1675,12 @@ class ParameterizedTestGenerator:
                 expected=expected,
             )
             cases.append(case)
-
         return cases
 
 
 # ============================================================================
 # Test Dependency Injection
 # ============================================================================
-
-
 class DependencyContainer:
     """Container for test dependency injection.
 
@@ -1762,7 +1741,6 @@ class DependencyContainer:
         """
         if name in self._dependencies:
             return self._dependencies[name]
-
         if name in self._factories:
             factory, singleton = self._factories[name]
             if singleton and name in self._singletons:
@@ -1771,7 +1749,6 @@ class DependencyContainer:
             if singleton:
                 self._singletons[name] = instance
             return instance
-
         raise KeyError(f"Dependency not found: {name}")
 
     def inject(self, fn: Callable[..., T]) -> Callable[..., T]:
@@ -1791,7 +1768,6 @@ class DependencyContainer:
                 if param.name not in kwargs and param.name in self._dependencies:
                     kwargs[param.name] = self.resolve(param.name)
             return fn(*args, **kwargs)
-
         return wrapper
 
     def clear(self) -> None:
@@ -1801,14 +1777,9 @@ class DependencyContainer:
         self._singletons.clear()
 
 
-T = TypeVar("T")
-
-
 # ============================================================================
 # Test Flakiness Detection
 # ============================================================================
-
-
 @dataclass
 class FlakinessReport:
     """Report of test flakiness analysis.
@@ -1827,7 +1798,7 @@ class FlakinessReport:
     passes: int
     failures: int
     flakiness_score: float
-    failure_messages: List[str] = field(default_factory=list)
+    failure_messages: List[str] = field(default_factory=lambda: [])
 
 
 class FlakinessDetector:
@@ -1914,7 +1885,7 @@ class FlakinessDetector:
 
     def get_flaky_tests(self, threshold: float = 0.1) -> List[str]:
         """Get tests that exceed flakiness threshold."""
-        flaky = []
+        flaky: List[str] = []
         for name, reports in self._history.items():
             if reports and reports[-1].flakiness_score > threshold:
                 flaky.append(name)
@@ -1924,8 +1895,6 @@ class FlakinessDetector:
 # ============================================================================
 # Test Data Cleanup Utilities
 # ============================================================================
-
-
 class TestDataCleaner:
     """Utilities for cleaning up test data.
 
@@ -1945,7 +1914,7 @@ class TestDataCleaner:
             strategy: Default cleanup strategy.
         """
         self.strategy = strategy
-        self._paths: List[Path] = []
+        self._paths: List[Tuple[Path, bool]] = []
         self._files: List[Path] = []
         self._callbacks: List[Callable[[], None]] = []
         self._cleanup_done = False
@@ -2034,8 +2003,6 @@ class TestDataCleaner:
 # ============================================================================
 # Cross - Platform Test Helpers
 # ============================================================================
-
-
 class CrossPlatformHelper:
     """Helpers for cross-platform testing.
 
@@ -2114,8 +2081,6 @@ class CrossPlatformHelper:
 # ============================================================================
 # Test Logging and Debugging
 # ============================================================================
-
-
 @dataclass
 class TestLogEntry:
     """A test log entry.
@@ -2132,7 +2097,7 @@ class TestLogEntry:
     message: str
     timestamp: float = field(default_factory=time.time)
     test_name: Optional[str] = None
-    extra: Dict[str, Any] = field(default_factory=dict)
+    extra: Dict[str, Any] = field(default_factory=lambda: {})
 
 
 class TestLogger:
@@ -2217,8 +2182,6 @@ class TestLogger:
 # ============================================================================
 # Test Parallelization Helpers
 # ============================================================================
-
-
 @dataclass
 class ParallelTestResult:
     """Result from parallel test execution.
@@ -2282,26 +2245,22 @@ class ParallelTestRunner:
             List of results from test functions.
         """
         from concurrent.futures import ThreadPoolExecutor, as_completed
-        
         self.success_count = 0
         self.failure_count = 0
-        results = []
-        
+        results: List[Any] = []
         with ThreadPoolExecutor(max_workers=self.workers) as executor:
             futures = {executor.submit(test_fn): i for i, test_fn in enumerate(test_functions)}
-            
             for future in as_completed(futures):
                 try:
                     result = future.result()
                     results.append(result)
                     self.success_count += 1
-                except Exception as e:
+                except Exception:
                     self.failure_count += 1
                     if fail_fast:
                         executor.shutdown(wait=False)
                         raise
                     results.append(None)
-        
         return results
 
     def _run_test(
@@ -2335,19 +2294,19 @@ class ParallelTestRunner:
         Returns:
             List of test results.
         """
-        from concurrent.futures import ThreadPoolExecutor, as_completed
+        from concurrent.futures import ThreadPoolExecutor, as_completed, Future
 
         self._results = []
 
         with ThreadPoolExecutor(max_workers=self.workers) as executor:
-            futures = {}
+            futures: Dict[Future[ParallelTestResult], str] = {}
             for i, (name, test_fn) in enumerate(self._tests.items()):
                 worker_id = i % self.workers
                 future = executor.submit(self._run_test, name, test_fn, worker_id)
                 futures[future] = name
 
             for future in as_completed(futures):
-                result = future.result()
+                result: ParallelTestResult = future.result()
                 self._results.append(result)
 
         return self._results
@@ -2367,8 +2326,6 @@ class ParallelTestRunner:
 # ============================================================================
 # Test Recording and Replay
 # ============================================================================
-
-
 @dataclass
 class RecordedInteraction:
     """A recorded test interaction.
@@ -2385,7 +2342,7 @@ class RecordedInteraction:
     call_type: str
     call_name: str
     args: Tuple[Any, ...] = ()
-    kwargs: Dict[str, Any] = field(default_factory=dict)
+    kwargs: Dict[str, Any] = field(default_factory=lambda: {})
     result: Any = None
     timestamp: float = field(default_factory=time.time)
 
@@ -2489,7 +2446,7 @@ class TestRecorder:
 
     def save(self, path: Path) -> None:
         """Save recordings to file."""
-        data = []
+        data: List[Dict[str, Any]] = []
         for r in self._recordings:
             data.append({
                 "call_type": r.call_type,
@@ -2522,8 +2479,6 @@ class TestRecorder:
 # ============================================================================
 # Test Baseline Management
 # ============================================================================
-
-
 @dataclass
 class TestBaseline:
     """A test baseline for comparison.
@@ -2667,15 +2622,13 @@ class BaselineManager:
         return {
             "baseline_version": baseline.version,
             "diffs": diffs,
-            "passed": len(diffs) == 0,
+            "passed": len(diffs) == 0,  # type: ignore[arg-type]
         }
 
 
 # ============================================================================
 # Test Configuration Profiles
 # ============================================================================
-
-
 @dataclass
 class TestProfile:
     """A test configuration profile.
@@ -2688,8 +2641,8 @@ class TestProfile:
     """
 
     name: str
-    settings: Dict[str, Any] = field(default_factory=dict)
-    env_vars: Dict[str, str] = field(default_factory=dict)
+    settings: Dict[str, Any] = field(default_factory=lambda: {})
+    env_vars: Dict[str, str] = field(default_factory=lambda: {})
     enabled: bool = True
 
 
@@ -2792,8 +2745,6 @@ class TestProfileManager:
 # ============================================================================
 # Legacy Functions (Preserved)
 # ============================================================================
-
-
 @contextmanager
 def agent_dir_on_path() -> Iterator[None]:
     """Temporarily add the agent directory to sys.path.
@@ -2811,7 +2762,6 @@ def agent_dir_on_path() -> Iterator[None]:
 
 
 # ========== Additional Test Utilities Classes ==========
-
 class EnvironmentDetector:
     """Detects and reports test environment information."""
 
@@ -2819,11 +2769,19 @@ class EnvironmentDetector:
         """Detect environment information."""
         import platform
         import os
-        
-        is_ci = any(env in os.environ for env in ['CI', 'CONTINUOUS_INTEGRATION', 'BUILD_ID', 'GITHUB_ACTIONS'])
+        is_ci = any(
+            env in os.environ
+            for env in ['CI', 'CONTINUOUS_INTEGRATION', 'BUILD_ID', 'GITHUB_ACTIONS']
+        )
         system = platform.system().lower()
-        os_name = 'windows' if system == 'windows' else 'darwin' if system == 'darwin' else 'linux' if system == 'linux' else 'unknown'
-        
+        if system == 'windows':
+            os_name = 'windows'
+        elif system == 'darwin':
+            os_name = 'darwin'
+        elif system == 'linux':
+            os_name = 'linux'
+        else:
+            os_name = 'unknown'
         return {
             'is_ci': is_ci,
             'os': os_name,
@@ -2900,7 +2858,6 @@ class TestReportGenerator:
         for r in self.results:
             status = 'PASSED' if r['passed'] else 'FAILED'
             rows += f"<tr><td>{r['test_name']}</td><td>{status}</td><td>{r['duration_ms']:.2f}ms</td></tr>"
-        
         return f"""
         <html>
         <head><title>Test Report</title></head>

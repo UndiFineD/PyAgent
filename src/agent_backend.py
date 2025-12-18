@@ -42,7 +42,7 @@ import threading
 import uuid
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timezone
 from enum import Enum
 from pathlib import Path
 from queue import PriorityQueue
@@ -57,8 +57,6 @@ except ImportError:
 # ============================================================================
 # Type - Safe Enums for Backend System
 # ============================================================================
-
-
 class BackendType(Enum):
     """Types of AI backends available."""
 
@@ -116,8 +114,6 @@ class LoadBalanceStrategy(Enum):
 # ============================================================================
 # Dataclasses for Structured Data
 # ============================================================================
-
-
 @dataclass
 class BackendConfig:
     """Configuration for a single backend.
@@ -157,7 +153,7 @@ class RequestContext:
     correlation_id: Optional[str] = None
     priority: RequestPriority = RequestPriority.NORMAL
     created_at: float = field(default_factory=time.time)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=lambda: {})
 
 
 @dataclass
@@ -268,7 +264,6 @@ class UsageQuota:
 # ============================================================================
 # Response Cache and Metrics
 # ============================================================================
-
 _response_cache: Dict[str, str] = {}
 _metrics: Dict[str, Any] = {
     "requests": 0,
@@ -282,8 +277,6 @@ _metrics: Dict[str, Any] = {
 # ============================================================================
 # Abstract Base Class for Response Transformers
 # ============================================================================
-
-
 class ResponseTransformerBase(ABC):
     """Abstract base class for response transformers.
 
@@ -373,8 +366,6 @@ class ExtractJsonTransformer(ResponseTransformerBase):
 # ============================================================================
 # Request Priority Queue
 # ============================================================================
-
-
 class RequestQueue:
     """Priority queue for backend requests.
 
@@ -425,7 +416,6 @@ class RequestQueue:
         with self._lock:
             self._queue.put(request)
             self._pending[request_id] = request
-
         logging.debug(f"Queued request {request_id} with priority {priority.name}")
         return request_id
 
@@ -463,8 +453,6 @@ class RequestQueue:
 # ============================================================================
 # Request Batching
 # ============================================================================
-
-
 class RequestBatcher:
     """Batches multiple requests for efficient processing.
 
@@ -542,8 +530,6 @@ class RequestBatcher:
 # ============================================================================
 # Backend Health Monitor
 # ============================================================================
-
-
 class BackendHealthMonitor:
     """Monitors backend health and manages failover.
 
@@ -686,8 +672,6 @@ class BackendHealthMonitor:
 # ============================================================================
 # Load Balancer
 # ============================================================================
-
-
 class LoadBalancer:
     """Load balancer for multiple backend endpoints.
 
@@ -766,16 +750,13 @@ class LoadBalancer:
             enabled = [b for b in self._backends if b.enabled]
             if not enabled:
                 return None
-
             if self.strategy == LoadBalanceStrategy.ROUND_ROBIN:
                 backend = enabled[self._index % len(enabled)]
                 self._index += 1
                 return backend
-
             elif self.strategy == LoadBalanceStrategy.LEAST_CONNECTIONS:
                 backend = min(enabled, key=lambda b: self._connections.get(b.name, 0))
                 return backend
-
             elif self.strategy == LoadBalanceStrategy.WEIGHTED:
                 # Weighted round robin
                 total_weight = sum(b.weight for b in enabled)
@@ -789,7 +770,6 @@ class LoadBalancer:
                         self._index += 1
                         return backend
                 return enabled[-1]
-
             else:  # FAILOVER
                 return enabled[0]
 
@@ -807,8 +787,6 @@ class LoadBalancer:
 # ============================================================================
 # Usage Quota Manager
 # ============================================================================
-
-
 class UsageQuotaManager:
     """Manages usage quotas and limits.
 
@@ -841,12 +819,10 @@ class UsageQuotaManager:
     def _check_reset(self) -> None:
         """Check and reset counters if needed."""
         now = time.time()
-
         # Reset hourly
         if now - self._quota.reset_hourly_at >= 3600:
             self._quota.current_hourly = 0
             self._quota.reset_hourly_at = now
-
         # Reset daily
         if now - self._quota.reset_daily_at >= 86400:
             self._quota.current_daily = 0
@@ -893,8 +869,6 @@ class UsageQuotaManager:
 # ============================================================================
 # Request Tracing
 # ============================================================================
-
-
 class RequestTracer:
     """Traces requests with correlation IDs.
 
@@ -959,7 +933,6 @@ class RequestTracer:
         """
         with self._lock:
             context = self._traces.pop(request_id, None)
-
         if not context:
             return None
 
@@ -979,8 +952,6 @@ class RequestTracer:
 # ============================================================================
 # Audit Logger
 # ============================================================================
-
-
 class AuditLogger:
     """Logs backend requests for audit and compliance.
 
@@ -1022,8 +993,9 @@ class AuditLogger:
             request_id: Optional request ID.
             metadata: Additional metadata.
         """
-        entry = {
-            "timestamp": datetime.utcnow().isoformat(),
+
+        entry: Dict[str, Any] = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "request_id": request_id or str(uuid.uuid4()),
             "backend": backend,
             "prompt_length": len(prompt),
@@ -1033,7 +1005,6 @@ class AuditLogger:
             "success": success,
             "metadata": metadata or {},
         }
-
         with self._lock:
             if self.log_file:
                 try:
@@ -1041,7 +1012,6 @@ class AuditLogger:
                         f.write(json.dumps(entry) + "\n")
                 except IOError as e:
                     logging.warning(f"Failed to write audit log: {e}")
-
             logging.debug(f"Audit: {entry['request_id']} - {backend} - {latency_ms}ms")
 
     def get_recent_entries(self, count: int = 100) -> List[Dict[str, Any]]:
@@ -1141,7 +1111,6 @@ def _command_available(command: str) -> bool:
 # ============================================================================
 # Caching and Metrics Functions
 # ============================================================================
-
 def _get_cache_key(prompt: str, model: str) -> str:
     """Generate a cache key for a prompt-model combination."""
     content = f"{prompt}:{model}".encode('utf-8')
@@ -1182,31 +1151,28 @@ def reset_metrics() -> None:
     logging.debug("Metrics reset")
 
 
-def validate_response_content(response: str, content_types: Optional[list] = None) -> bool:
+def validate_response_content(response: str, content_types: Optional[List[str]] = None) -> bool:
     """Validate that AI response contains expected content types.
 
     Args:
         response: The AI response text to validate.
-        content_types: List of expected content type strings (e.g., ['code', 'explanation']).
-                      If None, performs basic non - empty check.
+        content_types:
+        List of expected content type strings (e.g., ['code', 'explanation']).
+        If None, performs basic non - empty check.
 
     Returns:
         bool: True if response is valid, False otherwise.
     """
-    if not response or not isinstance(response, str):
+    if not response:
         return False
-
     response_lower = response.lower()
-
     if not content_types:
         # Basic validation: non - empty, not just whitespace
         return bool(response.strip())
-
     # Check if response contains any expected content type keywords
     for content_type in content_types:
         if content_type.lower() in response_lower:
             return True
-
     logging.warning(f"Response validation failed: expected {content_types}, got partial match")
     return True  # Don't fail hard on content validation
 
@@ -1316,24 +1282,20 @@ def llm_chat_via_github_models(
     """
     if requests is None:
         raise RuntimeError("Missing dependency: install 'requests' to use GitHub Models backend")
-
     # Check cache first
     cache_key = _get_cache_key(prompt, model)
     if use_cache and cache_key in _response_cache:
         _metrics["cache_hits"] += 1
         logging.debug(f"Cache hit for prompt hash: {cache_key}")
         return _response_cache[cache_key]
-
     resolved_token = token or os.environ.get("GITHUB_TOKEN")
     if not resolved_token:
         raise RuntimeError("Missing token: set GITHUB_TOKEN env var or pass token=")
-
     resolved_base_url = (base_url or os.environ.get("GITHUB_MODELS_BASE_URL") or "").strip()
     if not resolved_base_url:
         raise RuntimeError(
             "Missing base URL: set GITHUB_MODELS_BASE_URL env var or pass base_url="
         )
-
     url = resolved_base_url.rstrip("/") + " / v1 / chat / completions"
     payload: Dict[str, Any] = {
         "model": model,
@@ -1346,16 +1308,13 @@ def llm_chat_via_github_models(
     # Add streaming support if requested
     if stream:
         payload["stream"] = True
-
     headers = {
         "Authorization": f"Bearer {resolved_token}",
         "Content-Type": "application / json",
     }
-
     last_error = None
     start_time = time.time()
     _metrics["requests"] += 1
-
     for attempt in range(max_retries + 1):
         try:
             logging.debug(
@@ -1370,19 +1329,15 @@ def llm_chat_via_github_models(
             data = response.json()
             try:
                 result = (data["choices"][0]["message"]["content"] or "").strip()
-
                 # Validate response if requested
                 if validate_content and not validate_response_content(result):
                     logging.warning("Response validation failed, but continuing")
-
                 # Cache the response
                 if use_cache:
                     _response_cache[cache_key] = result
-
                 # Track metrics
                 latency_ms = int((time.time() - start_time) * 1000)
                 _metrics["total_latency_ms"] += latency_ms
-
                 logging.debug(
                     f"Received {len(result)} bytes from GitHub Models "
                     f"API ({latency_ms}ms)"
@@ -1406,10 +1361,8 @@ def llm_chat_via_github_models(
             _metrics["errors"] += 1
             logging.error(f"GitHub Models API request failed: {e}")
             raise
-
     if last_error:
         raise last_error
-
     raise RuntimeError("GitHub Models API request failed: no response after retries")
 
 
@@ -1426,8 +1379,9 @@ def run_subagent(description: str, prompt: str, original_content: str = "") -> O
     Args:
         description: Human - readable task description (e.g., "Improve code quality").
         prompt: The specific prompt / task to send to the AI backend.
-        original_content: Current file content for context (limited by DV_AGENT_MAX_CONTEXT_CHARS).
-                         Defaults to empty string.
+        original_content:
+        Current file content for context (limited by DV_AGENT_MAX_CONTEXT_CHARS).
+        Defaults to empty string.
 
     Returns:
         Optional[str]: The AI backend's response, or None if all backends fail.
@@ -1667,7 +1621,6 @@ def run_subagent(description: str, prompt: str, original_content: str = "") -> O
 # ============================================================================
 # Circuit Breaker Pattern for Failing Backends
 # ============================================================================
-
 class CircuitBreaker:
     """Circuit breaker pattern for failing backends.
 
@@ -1747,14 +1700,14 @@ class CircuitBreaker:
             )
 
 
-def get_backend_status() -> dict:
+def get_backend_status() -> Dict[str, Any]:
     """Return a diagnostic snapshot of backend availability and configuration.
 
     Checks which AI backends are available and configured on the system.
     Used for diagnostics and debugging backend selection issues.
 
     Returns:
-        dict: Status information including:
+        Dict[str, Any]: Status information including:
             - selected_backend: Current backend choice (auto, copilot, gh, etc.)
             - repo_root: Detected repository root directory
             - max_context_chars: Maximum context size to include
@@ -1856,8 +1809,6 @@ def describe_backends() -> str:
 # ============================================================================
 # Session 9: Request Signing and Verification
 # ============================================================================
-
-
 class RequestSigner:
     """Signs and verifies requests for integrity and authenticity.
 
@@ -1928,8 +1879,6 @@ class RequestSigner:
 # ============================================================================
 # Session 9: Request Deduplication
 # ============================================================================
-
-
 class RequestDeduplicator:
     """Deduplicates concurrent requests with identical prompts.
 
@@ -2030,17 +1979,15 @@ class RequestDeduplicator:
 # ============================================================================
 # Session 9: Backend Version Negotiation
 # ============================================================================
-
-
 @dataclass
 class BackendVersion:
     """Version information for a backend."""
 
     backend: str
     version: str
-    capabilities: List[str] = field(default_factory=list)
+    capabilities: List[str] = field(default_factory=lambda: [])
     api_version: str = "v1"
-    deprecated_features: List[str] = field(default_factory=list)
+    deprecated_features: List[str] = field(default_factory=lambda: [])
 
 
 class VersionNegotiator:
@@ -2121,8 +2068,6 @@ class VersionNegotiator:
 # ============================================================================
 # Session 9: Backend Capability Discovery
 # ============================================================================
-
-
 @dataclass
 class BackendCapability:
     """A capability supported by a backend."""
@@ -2130,7 +2075,7 @@ class BackendCapability:
     name: str
     description: str
     enabled: bool = True
-    parameters: Dict[str, Any] = field(default_factory=dict)
+    parameters: Dict[str, Any] = field(default_factory=lambda: {})
 
 
 class CapabilityDiscovery:
@@ -2221,8 +2166,6 @@ class CapabilityDiscovery:
 # ============================================================================
 # Session 9: Request Replay
 # ============================================================================
-
-
 @dataclass
 class RecordedRequest:
     """A recorded request for replay."""
@@ -2234,7 +2177,7 @@ class RecordedRequest:
     response: Optional[str] = None
     latency_ms: int = 0
     success: bool = True
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: Dict[str, Any] = field(default_factory=lambda: {})
 
 
 class RequestRecorder:
@@ -2349,7 +2292,7 @@ class RequestRecorder:
             str: JSON string of recordings.
         """
         with self._lock:
-            data = [
+            data: List[Dict[str, Any]] = [
                 {
                     "request_id": r.request_id,
                     "timestamp": r.timestamp,
@@ -2379,8 +2322,6 @@ class RequestRecorder:
 # ============================================================================
 # Session 9: Configuration Hot - Reloading
 # ============================================================================
-
-
 class ConfigHotReloader:
     """Hot-reloads backend configuration without restart.
 
@@ -2489,8 +2430,6 @@ class ConfigHotReloader:
 # ============================================================================
 # Session 9: Request Compression
 # ============================================================================
-
-
 class RequestCompressor:
     """Compresses and decompresses request payloads.
 
@@ -2575,8 +2514,6 @@ class RequestCompressor:
 # ============================================================================
 # Session 9: Backend Analytics and Usage Reporting
 # ============================================================================
-
-
 @dataclass
 class UsageRecord:
     """A usage record for analytics."""
@@ -2713,8 +2650,6 @@ class BackendAnalytics:
 # ============================================================================
 # Session 9: Connection Pooling
 # ============================================================================
-
-
 class ConnectionPool:
     """Manages a pool of reusable connections.
 
@@ -2834,8 +2769,6 @@ class ConnectionPool:
 # ============================================================================
 # Session 9: Request Throttling
 # ============================================================================
-
-
 class RequestThrottler:
     """Throttles requests to prevent overloading backends.
 
@@ -2938,8 +2871,6 @@ class RequestThrottler:
 # ============================================================================
 # Session 9: Response Caching with TTL
 # ============================================================================
-
-
 @dataclass
 class CachedResponse:
     """A cached response with expiration."""
@@ -3083,8 +3014,6 @@ class TTLCache:
 # ============================================================================
 # Session 9: Backend A / B Testing
 # ============================================================================
-
-
 @dataclass
 class ABTestVariant:
     """A variant in an A / B test."""
@@ -3092,7 +3021,7 @@ class ABTestVariant:
     name: str
     backend: str
     weight: float = 0.5
-    metrics: Dict[str, float] = field(default_factory=dict)
+    metrics: Dict[str, float] = field(default_factory=lambda: {})
     sample_count: int = 0
 
 
