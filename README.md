@@ -52,6 +52,18 @@ cd pyagent
 python -m pip install -e .
 ```
 
+### Installing AI Backend (Optional)
+
+To use the Codex backend (default), install the OpenAI Codex CLI:
+
+```bash
+npm install -g @openai/codex
+```
+
+For other backends:
+- **GitHub Copilot CLI**: [Installation Guide](https://docs.github.com/en/copilot/using-github-copilot/using-github-copilot-in-the-command-line)
+- **gh CLI**: [GitHub CLI Installation](https://cli.github.com/)
+
 ## Usage
 
 ### Command Line Interface
@@ -60,7 +72,10 @@ python -m pip install -e .
 # Improve a single file
 python -m agent --context src/module.py --prompt "Improve code quality and add type hints"
 
-# Run with specific backend
+# Run with specific backend (codex is the default)
+python -m agent --context src/ --backend codex --prompt "Refactor for readability"
+
+# Use copilot backend instead
 python -m agent --context src/ --backend copilot --prompt "Refactor for readability"
 
 # Increase verbosity
@@ -97,7 +112,7 @@ print(diff)
 ### Agent System
 - **BaseAgent**: Foundation class with common functionality for all agents
 - **Agent**: Main orchestrator coordinating all sub-agents
-- **AgentBackend**: Interface to AI backends (GitHub Copilot, Claude, etc.)
+- **AgentBackend**: Interface to AI backends (OpenAI Codex, GitHub Copilot, Claude, etc.)
 
 ### Report Generation
 - **ReportGenerator**: Creates detailed improvement reports
@@ -121,7 +136,7 @@ Create a `.agent.yml` file in your project root:
 ```yaml
 # Agent Configuration
 agent:
-  backend: "copilot"
+  backend: "codex"  # Options: "codex" (default), "copilot", "gh", "github-models", "auto"
   timeout: 30
   retries: 3
 
@@ -264,7 +279,7 @@ Licensed under the Apache License, Version 2.0. See LICENSE file for details.
 
 ## Acknowledgments
 
-Built with ❤️ for the Python community. Powered by AI backends including GitHub Copilot, Claude, and other LLM providers.
+Built with ❤️ for the Python community. Powered by AI backends including OpenAI Codex, GitHub Copilot, Claude, and other LLM providers.
 
 ## Status
 
