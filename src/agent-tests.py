@@ -1316,11 +1316,11 @@ class ResultAggregator:
 
         earlier_rate = (
             sum(1 for r in earlier_results if r.status == TestStatus.PASSED) /
-            len(earlier_results) if earlier_results else 0
+            len(earlier_results) if len(earlier_results) > 0 else 0
         )
         later_rate = (
             sum(1 for r in later_results if r.status == TestStatus.PASSED) /
-            len(later_results) if later_results else 0
+            len(later_results) if len(later_results) > 0 else 0
         )
 
         if later_rate > earlier_rate:
