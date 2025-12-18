@@ -112,7 +112,7 @@ class ErrorEntry:
     suggested_fix: str = ""
     resolved: bool = False
     resolution_timestamp: str = ""
-    tags: List[str] = field(default_factory=list)
+    tags: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
@@ -121,7 +121,7 @@ class ErrorCluster:
     id: str
     name: str
     pattern: str
-    error_ids: List[str] = field(default_factory=list)
+    error_ids: List[str] = field(default_factory=lambda: [])
     description: str = ""
 
 
@@ -177,9 +177,9 @@ class ErrorImpact:
         impact_score: Overall impact score (0 - 100).
     """
     error_id: str
-    affected_files: List[str] = field(default_factory=list)
-    affected_functions: List[str] = field(default_factory=list)
-    downstream_effects: List[str] = field(default_factory=list)
+    affected_files: List[str] = field(default_factory=lambda: [])
+    affected_functions: List[str] = field(default_factory=lambda: [])
+    downstream_effects: List[str] = field(default_factory=lambda: [])
     impact_score: float = 0.0
 
 
@@ -263,8 +263,8 @@ class TrendData:
         prediction: Predicted next value.
     """
     metric_name: str
-    values: List[float] = field(default_factory=list)
-    timestamps: List[str] = field(default_factory=list)
+    values: List[float] = field(default_factory=lambda: [])
+    timestamps: List[str] = field(default_factory=lambda: [])
     direction: TrendDirection = TrendDirection.STABLE
     prediction: Optional[float] = None
 
@@ -300,9 +300,9 @@ class BranchComparison:
     """
     branch_a: str
     branch_b: str
-    errors_only_in_a: List[str] = field(default_factory=list)
-    errors_only_in_b: List[str] = field(default_factory=list)
-    common_errors: List[str] = field(default_factory=list)
+    errors_only_in_a: List[str] = field(default_factory=lambda: [])
+    errors_only_in_b: List[str] = field(default_factory=lambda: [])
+    common_errors: List[str] = field(default_factory=lambda: [])
 
 
 # Default error patterns
@@ -486,7 +486,7 @@ class ImpactAnalyzer:
 
     def _find_affected_files(self, file_path: str) -> List[str]:
         """Find files that depend on the given file."""
-        affected = []
+        affected: List[str] = []
         for file, deps in self.file_dependencies.items():
             if file_path in deps:
                 affected.append(file)
@@ -719,7 +719,7 @@ class AutoFixSuggester:
         self, errors: List[ErrorEntry]
     ) -> List[FixSuggestion]:
         """Generate suggestions for multiple errors."""
-        suggestions = []
+        suggestions: List[FixSuggestion] = []
         for error in errors:
             sugg = self.suggest(error)
             if sugg:
@@ -929,29 +929,24 @@ class TrendAnalyzer:
         """
         if metric not in self.data_points:
             return TrendData(metric_name=metric)
-
         data = self.data_points[metric]
         if len(data.values) < 2:
             data.direction = TrendDirection.STABLE
             return data
-
         # Calculate direction
         recent = data.values[-5:] if len(data.values) >= 5 else data.values
         avg_change = sum(
             recent[i] - recent[i - 1]
             for i in range(1, len(recent))
         ) / (len(recent) - 1)
-
         if avg_change > 0.1:
             data.direction = TrendDirection.INCREASING
         elif avg_change < -0.1:
             data.direction = TrendDirection.DECREASING
         else:
             data.direction = TrendDirection.STABLE
-
         # Simple prediction
         data.prediction = data.values[-1] + avg_change
-
         return data
 
     def predict(self, metric: str, periods: int = 1) -> List[float]:
@@ -967,8 +962,7 @@ class TrendAnalyzer:
         data = self.analyze(metric)
         if not data.values:
             return []
-
-        predictions = []
+        predictions: List[float] = []
         last_value = data.values[-1]
         avg_change = 0.0
         if len(data.values) >= 2:
@@ -977,10 +971,8 @@ class TrendAnalyzer:
                 for i in range(1, len(data.values))
             ]
             avg_change = sum(changes) / len(changes)
-
         for i in range(periods):
             predictions.append(last_value + avg_change * (i + 1))
-
         return predictions
 
 
@@ -1479,7 +1471,7 @@ class ErrorsAgent(BaseAgent):
     def export_errors(self, format: str = "json") -> str:
         """Export errors to various formats."""
         if format == "json":
-            data = [{
+            data: List[Dict[str, Any]] = [{
                 "id": e.id,
                 "message": e.message,
                 "file": e.file_path,

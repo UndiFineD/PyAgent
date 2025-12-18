@@ -45,13 +45,14 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 
 try:
     import matplotlib.pyplot as plt
-    HAS_MATPLOTLIB = True
+    has_matplotlib = True
 except ImportError:
-    HAS_MATPLOTLIB = False
+    plt = None  # type: ignore
+    has_matplotlib = False
 
 
 class MetricType(Enum):
@@ -72,8 +73,6 @@ class AlertSeverity(Enum):
 
 
 # ========== Session 7 Enums ==========
-
-
 class StreamingProtocol(Enum):
     """Protocols for real-time stats streaming."""
     WEBSOCKET = "websocket"
@@ -118,7 +117,7 @@ class Metric:
     metric_type: MetricType
     timestamp: str = ""
     namespace: str = "default"
-    tags: Dict[str, str] = field(default_factory=dict)
+    tags: Dict[str, str] = field(default_factory=lambda: {})
 
 
 @dataclass
@@ -128,21 +127,20 @@ class MetricSnapshot:
     id: str
     timestamp: str
     metrics: Dict[str, float]
-    tags: Dict[str, str] = field(default_factory=dict)
+    tags: Dict[str, str] = field(default_factory=lambda: {})
 
 
-@dataclass
 @dataclass
 class Threshold:
     """Threshold configuration for alerting."""
     metric_name: str
     min_value: Optional[float] = None
     max_value: Optional[float] = None
-    severity: AlertSeverity = None  # Will be set to MEDIUM (3) by default
+    severity: Optional[AlertSeverity] = None  # Will be set to MEDIUM (3) by default
     message: str = ""
     operator: str = ""  # For backwards compatibility
     value: float = 0.0  # For backwards compatibility
-    
+
     def __post_init__(self) -> None:
         if self.severity is None:
             self.severity = AlertSeverity.MEDIUM
@@ -161,8 +159,6 @@ class Alert:
 
 
 @dataclass
-@dataclass
-@dataclass
 class RetentionPolicy:
     """Policy for data retention."""
     name: str = ""  # Changed from metric_name to name for constructor
@@ -176,8 +172,6 @@ class RetentionPolicy:
 
 
 # ========== Session 7 Dataclasses ==========
-
-
 @dataclass
 class StreamingConfig:
     """Configuration for real-time stats streaming."""
@@ -196,7 +190,7 @@ class MetricNamespace:
     name: str
     description: str = ""
     parent: Optional[str] = None
-    tags: Dict[str, str] = field(default_factory=dict)
+    tags: Dict[str, str] = field(default_factory=lambda: {})
     retention_days: int = 30
 
 
@@ -226,8 +220,8 @@ class ABComparison:
     id: str
     version_a: str
     version_b: str
-    metrics_a: Dict[str, float] = field(default_factory=dict)
-    metrics_b: Dict[str, float] = field(default_factory=dict)
+    metrics_a: Dict[str, float] = field(default_factory=lambda: {})
+    metrics_b: Dict[str, float] = field(default_factory=lambda: {})
     winner: str = ""
     confidence: float = 0.0
 
@@ -288,7 +282,6 @@ class StatsAgent:
         self.files = [Path(f) for f in files]
         self.stats: Dict[str, Any] = {}
         self._validate_files()
-
         # New features
         self._metrics: Dict[str, List[Metric]] = {}
         self._custom_metrics: Dict[str, Callable[[], float]] = {}
@@ -303,18 +296,15 @@ class StatsAgent:
         """Validate input files."""
         if not self.files:
             raise ValueError("No files provided")
-
         invalid = [f for f in self.files if not f.exists()]
         if invalid:
             logging.warning(f"Files not found: {', '.join(map(str, invalid))}")
             # Filter out invalid files
             self.files = [f for f in self.files if f.exists()]
-
         if not self.files:
             raise ValueError("No valid files found after filtering")
 
     # ========== Custom Metrics ==========
-
     def register_custom_metric(
         self,
         name: str,
@@ -323,8 +313,7 @@ class StatsAgent:
     ) -> Metric:
         """Register a custom metric type."""
         if name not in self._custom_metrics:
-            self._custom_metrics[name] = metric_type
-        
+            self._custom_metrics[name] = lambda: 0.0
         # Return a Metric object for the custom metric
         return Metric(
             name=name,
@@ -336,17 +325,21 @@ class StatsAgent:
     def get_metric(self, name: str) -> Optional[Metric]:
         """Get a registered metric by name."""
         if name in self._custom_metrics:
+            if name in self._metrics and self._metrics[name]:
+                value = self._metrics[name][-1].value
+            else:
+                value = 0.0
             return Metric(
                 name=name,
-                value=0.0 if name not in self._metrics else self._metrics[name][-1].value if self._metrics[name] else 0.0,
-                metric_type=self._custom_metrics[name],
+                value=value,
+                metric_type=MetricType.GAUGE,
                 timestamp=datetime.now().isoformat()
             )
         return None
 
     def collect_custom_metrics(self) -> Dict[str, float]:
         """Collect all custom metrics."""
-        results = {}
+        results: Dict[str, float] = {}
         for name in self._custom_metrics:
             if name in self._metrics and self._metrics[name]:
                 # Get the latest value for this metric
@@ -371,14 +364,11 @@ class StatsAgent:
             namespace=namespace,
             tags=tags or {}
         )
-
         if name not in self._metrics:
             self._metrics[name] = []
         self._metrics[name].append(metric)
-
         # Check thresholds
         self._check_thresholds(metric)
-
         return metric
 
     def get_metric_history(
@@ -391,7 +381,6 @@ class StatsAgent:
         return metrics[-limit:]
 
     # ========== Anomaly Detection ==========
-
     def detect_anomaly(
         self,
         metric_name: str,
@@ -400,18 +389,15 @@ class StatsAgent:
     ) -> Union[bool, Tuple[bool, float]]:
         """Detect if a value is anomalous using standard deviation."""
         history = self._metrics.get(metric_name, [])
-        
         # If no value provided, check the latest metric in history
         if value is None:
             if len(history) < 2:
                 return False
             value = history[-1].value
             history = history[:-1]  # Use history without the latest for comparison
-            
             # Lower minimum to 2 values instead of 10
             if len(history) < 2:
                 return False
-            
             values = [m.value for m in history]
             mean = sum(values) / len(values)
             variance = sum((x - mean) ** 2 for x in values) / len(values)
@@ -419,24 +405,20 @@ class StatsAgent:
             z_score = abs((value - mean) / std)
             is_anomaly = z_score > threshold_std
             return is_anomaly
-        
+
         # Original behavior when value is provided
         if len(history) < 10:
             return False, 0.0
-
         values = [m.value for m in history]
         mean = sum(values) / len(values)
         variance = sum((x - mean) ** 2 for x in values) / len(values)
         std = math.sqrt(variance) if variance > 0 else 0.001
-
         z_score = abs(value - mean) / std
         is_anomaly = z_score > threshold_std
-
         # Track anomaly scores
         if metric_name not in self._anomaly_scores:
             self._anomaly_scores[metric_name] = []
         self._anomaly_scores[metric_name].append(z_score)
-
         return is_anomaly, z_score
 
     def get_anomaly_scores(self, metric_name: str) -> List[float]:
@@ -444,13 +426,12 @@ class StatsAgent:
         return self._anomaly_scores.get(metric_name, [])
 
     # ========== Thresholds & Alerting ==========
-
     def add_threshold(
         self,
         metric_name: str,
         min_value: Optional[float] = None,
         max_value: Optional[float] = None,
-        severity: AlertSeverity = None,
+        severity: Optional[AlertSeverity] = None,
         message: str = "",
         operator: str = "",  # deprecated, for backwards compatibility
         value: float = 0.0   # deprecated, for backwards compatibility
@@ -481,7 +462,6 @@ class StatsAgent:
         for threshold in self._thresholds:
             if threshold.metric_name != metric.name:
                 continue
-
             breached = False
             if threshold.operator == ">" and metric.value > threshold.value:
                 breached = True
@@ -493,7 +473,6 @@ class StatsAgent:
                 breached = True
             elif threshold.operator == "==" and metric.value == threshold.value:
                 breached = True
-
             if breached:
                 self._create_alert(metric, threshold)
 
@@ -506,7 +485,7 @@ class StatsAgent:
             metric_name=metric.name,
             current_value=metric.value,
             threshold_value=threshold.value,
-            severity=threshold.severity,
+            severity=threshold.severity or AlertSeverity.MEDIUM,
             message=threshold.message,
             timestamp=datetime.now().isoformat()
         )
@@ -530,18 +509,15 @@ class StatsAgent:
         return count
 
     # ========== Snapshots ==========
-
     def create_snapshot(
         self,
         name: str = "",
         tags: Optional[Dict[str, str]] = None
     ) -> MetricSnapshot:
         """Create a snapshot of current metrics."""
-        current_stats = self.calculate_stats()
-        custom = self.collect_custom_metrics()
-
-        metrics = {**current_stats, **custom}
-
+        current_stats: Dict[str, float] = {k: float(v) for k, v in self.calculate_stats().items()}
+        custom: Dict[str, float] = self.collect_custom_metrics()
+        metrics: Dict[str, float] = {**current_stats, **custom}
         snapshot = MetricSnapshot(
             name=name or f"snapshot_{len(self._snapshots)}",
             id=hashlib.md5(datetime.now().isoformat().encode()).hexdigest()[:8],
@@ -564,17 +540,14 @@ class StatsAgent:
         self,
         snapshot1_name: str,
         snapshot2_name: str
-    ) -> Dict[str, Dict[str, float]]:
+    ) -> Dict[str, Dict[str, Union[float, int]]]:
         """Compare two snapshots."""
         s1 = next((s for s in self._snapshots if s.name == snapshot1_name), None)
         s2 = next((s for s in self._snapshots if s.name == snapshot2_name), None)
-
         if not s1 or not s2:
             return {}
-
-        comparison = {}
+        comparison: Dict[str, Dict[str, Union[float, int]]] = {}
         all_keys = set(s1.metrics.keys()) | set(s2.metrics.keys())
-
         for key in all_keys:
             v1 = s1.metrics.get(key, 0)
             v2 = s2.metrics.get(key, 0)
@@ -584,11 +557,9 @@ class StatsAgent:
                 "difference": v2 - v1,
                 "percentage_change": ((v2 - v1) / v1 * 100) if v1 != 0 else 0
             }
-
         return comparison
 
     # ========== Retention Policies ==========
-
     def add_retention_policy(
         self,
         metric_name: Optional[str] = None,
@@ -600,7 +571,6 @@ class StatsAgent:
         """Add a retention policy."""
         # Support both metric_name and namespace parameters
         actual_namespace = metric_name or namespace or ""
-        
         policy = RetentionPolicy(
             metric_name=metric_name,
             namespace=actual_namespace,
@@ -615,15 +585,12 @@ class StatsAgent:
         """Apply retention policies and return count of removed items."""
         removed = 0
         now = datetime.now()
-
         for metric_name, metrics in list(self._metrics.items()):
             # Get namespace from first metric
             namespace = metrics[0].namespace if metrics else "default"
             policy = self._retention_policies.get(namespace)
-
             if not policy:
                 continue
-
             # Remove old metrics
             cutoff = now - timedelta(days=policy.max_age_days)
             original_count = len(metrics)
@@ -632,15 +599,12 @@ class StatsAgent:
                 if datetime.fromisoformat(m.timestamp) > cutoff
             ]
             removed += original_count - len(self._metrics[metric_name])
-
             # Apply max points limit
             if policy.max_points > 0 and len(self._metrics[metric_name]) > policy.max_points:
                 self._metrics[metric_name] = self._metrics[metric_name][-policy.max_points:]
-
         return removed
 
     # ========== Forecasting ==========
-
     def forecast(
         self,
         metric_name: str,
@@ -650,40 +614,31 @@ class StatsAgent:
         history = self._metrics.get(metric_name, [])
         if len(history) < 3:
             return []
-
         values = [m.value for m in history]
         n = len(values)
-
         # Simple linear regression
         x_mean = (n - 1) / 2
         y_mean = sum(values) / n
-
         numerator = sum((i - x_mean) * (values[i] - y_mean) for i in range(n))
         denominator = sum((i - x_mean) ** 2 for i in range(n))
-
         if denominator == 0:
             return [y_mean] * periods
-
         slope = numerator / denominator
         intercept = y_mean - slope * x_mean
-
         # Forecast future values
         return [slope * (n + i) + intercept for i in range(periods)]
 
     # ========== Data Compression ==========
-
     def compress_metrics(self, metric_name: str) -> bytes:
         """Compress metric history."""
         history = self._metrics.get(metric_name, [])
         if not history:
             return b''
-
         data = json.dumps([{
             "value": m.value,
             "timestamp": m.timestamp,
             "tags": m.tags
         } for m in history])
-
         return zlib.compress(data.encode())
 
     def decompress_metrics(
@@ -696,7 +651,6 @@ class StatsAgent:
         """Decompress metric data."""
         if not compressed:
             return []
-
         data = json.loads(zlib.decompress(compressed).decode())
         return [
             Metric(
@@ -711,7 +665,6 @@ class StatsAgent:
         ]
 
     # ========== Original Methods ==========
-
     def get_missing_items(self) -> Dict[str, List[str]]:
         """Identify files missing specific auxiliary components."""
         missing: Dict[str, List[str]] = {
@@ -744,7 +697,6 @@ class StatsAgent:
         files_with_errors = 0
         files_with_improvements = 0
         files_with_tests = 0
-
         for file_path in self.files:
             base = file_path.stem
             dir_path = file_path.parent
@@ -770,7 +722,7 @@ class StatsAgent:
 
     def add_trend_analysis(self, previous_stats: Dict[str, int]) -> Dict[str, str]:
         """Compare current stats with previous run and calculate deltas."""
-        deltas = {}
+        deltas: Dict[str, str] = {}
         for key, current_value in self.stats.items():
             previous_value = previous_stats.get(key, 0)
             delta = current_value - previous_value
@@ -780,19 +732,19 @@ class StatsAgent:
 
     def visualize_stats(self) -> None:
         """Generate CLI graphs for stats visualization."""
-        if not HAS_MATPLOTLIB:
+        if not has_matplotlib:
             logging.warning("matplotlib not available for visualization")
             return
-
+        # matplotlib is available, now use it
         labels = list(self.stats.keys())
         values = list(self.stats.values())
-        plt.bar(labels, values, color='skyblue')
-        plt.xlabel('Metrics')
-        plt.ylabel('Values')
-        plt.title('Stats Visualization')
-        plt.xticks(rotation=45, ha='right')
-        plt.tight_layout()
-        plt.show()
+        plt.bar(labels, values, color='skyblue')  # type: ignore
+        plt.xlabel('Metrics')  # type: ignore
+        plt.ylabel('Values')  # type: ignore
+        plt.title('Stats Visualization')  # type: ignore
+        plt.xticks(rotation=45, ha='right')  # type: ignore
+        plt.tight_layout()  # type: ignore
+        plt.show()  # type: ignore
 
     def track_code_coverage(self, coverage_report: str) -> None:
         """Track code coverage metrics from a coverage report."""
@@ -980,7 +932,7 @@ class StatsStreamer:
             Number of subscribers notified.
         """
         notified = 0
-        for subscriber in self.subscribers:
+        for _ in self.subscribers:
             if self.stream_metric(metric):
                 notified += 1
         return notified
@@ -1009,7 +961,13 @@ class StatsFederation:
         self.aggregated: Dict[str, List[float]] = {}
         self._last_sync: Dict[str, datetime] = {}
 
-    def add_source(self, name: str, endpoint: Optional[str] = None, data: Optional[Dict[str, float]] = None, healthy: bool = True) -> None:
+    def add_source(
+        self,
+        name: str,
+        endpoint: Optional[str] = None,
+        data: Optional[Dict[str, float]] = None,
+        healthy: bool = True
+    ) -> None:
         """Add a federated source.
 
         Args:
@@ -1018,20 +976,17 @@ class StatsFederation:
             data: Optional data dictionary from the source.
             healthy: Whether the source is healthy.
         """
-        # Create a simple object to hold source info
-        class Source:
-            def __init__(self, name: str, endpoint: str, enabled: bool):
-                self.name = name
-                self.endpoint = endpoint
-                self.enabled = enabled
-        
-        source = Source(name=name, endpoint=endpoint or "", enabled=healthy)
+        source = FederatedSource(
+            repo_url=name,
+            api_endpoint=endpoint or "",
+            enabled=healthy
+        )
         self.sources[name] = source
         self._last_sync[name] = datetime.min
-        
+
         # Store data if provided
         if data:
-            self.aggregated[name] = data
+            self.aggregated[name] = [data.get(k, 0) for k in sorted(data.keys())]
 
     def remove_source(self, name: str) -> bool:
         """Remove a federated source.
@@ -1075,7 +1030,7 @@ class StatsFederation:
         Returns:
             Dictionary of metrics per source.
         """
-        results = {}
+        results: Dict[str, Dict[str, float]] = {}
         for name in self.sources:
             results[name] = self.sync_source(name)
         return results
@@ -1094,37 +1049,36 @@ class StatsFederation:
         Returns:
             Dictionary with aggregation results.
         """
-        values = []
+        values: List[float] = []
         failed_sources = 0
-        
         # Collect values from all sources
         for source_name, source in self.sources.items():
             if not source.enabled:
                 failed_sources += 1
-            elif source_name in self.aggregated and isinstance(self.aggregated[source_name], dict):
-                if metric_name in self.aggregated[source_name]:
-                    values.append(self.aggregated[source_name][metric_name])
-        
+            elif source_name in self.aggregated:
+                agg_source = self.aggregated[source_name]
+                # agg_source is always a list of floats based on the type hint
+                if agg_source:
+                    values.extend(agg_source)
         total = 0.0
         if values:
             if aggregation == AggregationType.SUM:
                 total = sum(values)
             elif aggregation == AggregationType.AVG:
                 total = sum(values) / len(values)
-        
         return {
             "total": total,
             "failed_sources": failed_sources,
             "source_count": len(self.sources)
         }
 
-    def get_federation_status(self) -> Dict[str, Any]:
+    def get_federation_status(self) -> Dict[str, Dict[str, Union[bool, str]]]:
         """Get status of all federated sources.
 
         Returns:
             Status information per source.
         """
-        status = {}
+        status: Dict[str, Dict[str, Union[bool, str]]] = {}
         for name, source in self.sources.items():
             status[name] = {
                 "enabled": source.enabled,
@@ -1342,12 +1296,11 @@ class AnnotationManager:
             JSON string of annotations.
         """
         if metric_name:
-            data = self.annotations.get(metric_name, [])
+            data: List[MetricAnnotation] = self.annotations.get(metric_name, [])
         else:
             data = []
             for ann_values in self.annotations.values():
                 data.extend(ann_values)
-
         return json.dumps([{
             "metric_name": a.metric_name,
             "timestamp": a.timestamp,
@@ -1450,29 +1403,24 @@ class SubscriptionManager:
         Returns:
             List of subscription IDs that were notified.
         """
-        notified = []
+        notified: List[str] = []
         now = datetime.now()
-
         for sub_id, sub in self.subscriptions.items():
             if event_type not in sub.notify_on:
                 continue
-
             if not self._matches_pattern(metric_name, sub.metric_pattern):
                 continue
-
             # Check minimum interval
             last = self.last_notification.get(sub_id)
             if last:
                 elapsed = (now - last).total_seconds()
                 if elapsed < sub.min_interval_seconds:
                     continue
-
             # Send notification (simulated)
             self.last_notification[sub_id] = now
             self._notification_count[sub_id] += 1
             notified.append(sub_id)
             logging.info(f"Notified {sub_id}: {metric_name}={value} ({event_type})")
-
         return notified
 
     def get_stats(self) -> Dict[str, Any]:
@@ -1550,9 +1498,7 @@ class CloudExporter:
         """
         if not self.export_queue:
             return 0
-
         count = len(self.export_queue)
-
         # Format metrics for destination
         if self.destination == ExportDestination.DATADOG:
             self._export_datadog()
@@ -1560,7 +1506,6 @@ class CloudExporter:
             self._export_prometheus()
         else:
             self._export_generic()
-
         self._export_count += count
         self._last_export = datetime.now()
         self.export_queue.clear()
@@ -1568,7 +1513,7 @@ class CloudExporter:
 
     def _export_datadog(self) -> None:
         """Export in Datadog format."""
-        payload = {
+        payload: Dict[str, list[Dict[str, Any]]] = {
             "series": [{
                 "metric": m.name,
                 "points": [[int(datetime.now().timestamp()), m.value]],
@@ -1580,7 +1525,7 @@ class CloudExporter:
 
     def _export_prometheus(self) -> None:
         """Export in Prometheus format."""
-        lines = []
+        lines: List[str] = []
         for m in self.export_queue:
             tags = ",".join(f'{k}="{v}"' for k, v in m.tags.items())
             lines.append(f"{m.name}{{{tags}}} {m.value}")
@@ -1588,7 +1533,7 @@ class CloudExporter:
 
     def _export_generic(self) -> None:
         """Generic export format."""
-        data = [{
+        data: List[Dict[str, Any]] = [{
             "name": m.name,
             "value": m.value,
             "timestamp": m.timestamp,
@@ -1947,7 +1892,7 @@ class DerivedMetricCalculator:
         Returns:
             Dictionary of all calculated derived metrics.
         """
-        results = {}
+        results: Dict[str, float] = {}
         for name in self.derived_metrics:
             value = self.calculate(name, metric_values)
             if value is not None:
@@ -2033,16 +1978,13 @@ class StatsRollup:
         config = self.configs.get(name)
         if not config:
             return []
-
         # Collect all values for source metrics
         all_values: List[float] = []
         for metric in config.source_metrics:
             values = self._raw_data.get(metric, [])
             all_values.extend(v for _, v in values)
-
         if not all_values:
             return []
-
         # Apply aggregation
         if config.aggregation == AggregationType.SUM:
             result = sum(all_values)
@@ -2065,20 +2007,17 @@ class StatsRollup:
             result = sorted_vals[int(len(sorted_vals) * 0.99)]
         else:
             result = sum(all_values) / len(all_values)
-
-        rollup_entry = {
+        rollup_entry: Dict[str, Any] = {
             "timestamp": datetime.now().isoformat(),
             "value": result,
             "sample_count": len(all_values),
             "aggregation": config.aggregation.value
         }
         self.rollups[name].append(rollup_entry)
-
         # Clear raw data if not keeping
         if not config.keep_raw:
             for metric in config.source_metrics:
                 self._raw_data[metric] = []
-
         return self.rollups[name]
 
     def get_rollup_history(self, name: str, limit: int = 100) -> List[Dict[str, Any]]:
@@ -2227,11 +2166,11 @@ class StatsStream:
         self.buffer_size = buffer_size
         self.buffer: List[Any] = []
         self.active = True
-    
+
     def get_latest(self, count: int = 1) -> List[Any]:
         """Get latest data points."""
         return self.buffer[-count:] if self.buffer else []
-    
+
     def add_data(self, data: Any) -> None:
         """Add data to stream."""
         self.buffer.append(data)
@@ -2245,32 +2184,32 @@ class StatsStreamManager:
     def __init__(self, config: Optional[StreamingConfig] = None) -> None:
         self.config = config
         self.streams: Dict[str, StatsStream] = {}
-        self.subscribers: Dict[str, List[Callable]] = {}
-    
+        self.subscribers: Dict[str, List[Callable[[Any], None]]] = {}
+
     def create_stream(self, name: str, buffer_size: int = 1000) -> StatsStream:
         """Create a new stream."""
         stream = StatsStream(name=name, buffer_size=buffer_size)
         self.streams[name] = stream
         self.subscribers[name] = []
         return stream
-    
+
     def get_latest(self, name: str, count: int = 1) -> List[Any]:
         """Get latest data from stream."""
         if name not in self.streams:
             return []
         return self.streams[name].get_latest(count)
-    
-    def subscribe(self, stream_name: str, callback: Callable) -> None:
+
+    def subscribe(self, stream_name: str, callback: Callable[[Any], None]) -> None:
         """Subscribe to stream updates."""
         if stream_name not in self.subscribers:
             self.subscribers[stream_name] = []
         self.subscribers[stream_name].append(callback)
-    
+
     def publish(self, stream_name: str, data: Any) -> None:
         """Publish data to stream."""
         if stream_name in self.streams:
             self.streams[stream_name].add_data(data)
-        
+
         # Notify subscribers
         if stream_name in self.subscribers:
             for callback in self.subscribers[stream_name]:
@@ -2291,25 +2230,23 @@ class FormulaEngine:
     """Processes metric formulas and calculations."""
     def __init__(self) -> None:
         self.formulas: Dict[str, str] = {}
-    
+
     def define(self, name: str, formula: str) -> None:
         """Define a formula."""
         self.formulas[name] = formula
-    
+
     def define_formula(self, name: str, formula: str) -> None:
         """Define a formula (backward compat)."""
         self.define(name, formula)
-    
+
     def calculate(self, formula_or_name: str, variables: Optional[Dict[str, Any]] = None) -> float:
         """Calculate formula result."""
         variables = variables or {}
-        
         # If formula_or_name is in formulas dict, use stored formula
         if formula_or_name in self.formulas:
             formula = self.formulas[formula_or_name]
         else:
             formula = formula_or_name
-        
         # Handle special functions like AVG
         if "AVG(" in formula:
             import re
@@ -2317,28 +2254,28 @@ class FormulaEngine:
             if match:
                 var_name = match.group(1)
                 if var_name in variables:
-                    values = variables[var_name]
-                    if isinstance(values, list) and values:
+                    values: List[float] = variables[var_name]
+                    if values:
                         return sum(values) / len(values)
             return 0.0
-        
+
         try:
             # Replace {variable} with actual values
             eval_formula = formula
             for var_name, var_value in variables.items():
                 eval_formula = eval_formula.replace(f"{{{var_name}}}", str(var_value))
-            
+
             return float(eval(eval_formula, {"__builtins__": {}}))
         except Exception:
             return 0.0
-    
+
     def validate(self, formula: str) -> FormulaValidation:
         """Validate formula syntax."""
         try:
             # Basic validation - check for invalid operators
             if "+++" in formula or "***" in formula or "---" in formula:
                 return FormulaValidation(is_valid=False, error="Invalid operator sequence")
-            
+
             # Handle template formulas with variables
             if "{" in formula and "}" in formula:
                 test_formula = formula
@@ -2347,17 +2284,17 @@ class FormulaEngine:
                 vars_found = re.findall(r'\{(\w+)\}', formula)
                 for var in vars_found:
                     test_formula = test_formula.replace(f"{{{var}}}", "1")
-                
+
                 # Try to compile the test formula
                 compile(test_formula, '<string>', 'eval')
             else:
                 # Direct formula validation
                 compile(formula, '<string>', 'eval')
-            
+
             return FormulaValidation(is_valid=True)
         except (SyntaxError, ValueError) as e:
             return FormulaValidation(is_valid=False, error=str(e))
-    
+
     def validate_formula(self, formula: str) -> bool:
         """Validate formula syntax (backward compat)."""
         return self.validate(formula).is_valid
@@ -2367,15 +2304,15 @@ class ABComparator:
     """Compares A/B test metrics."""
     def __init__(self) -> None:
         self.results: List[Dict[str, Any]] = []
-    
+
     def compare(self, a_data: List[float], b_data: List[float]) -> Dict[str, float]:
         """Compare two datasets."""
         if not a_data or not b_data:
             return {"p_value": 1.0, "significant": False}
-        
+
         mean_a = sum(a_data) / len(a_data)
         mean_b = sum(b_data) / len(b_data)
-        
+
         return {
             "p_value": 0.05 if abs(mean_a - mean_b) > 10 else 0.5,
             "significant": abs(mean_a - mean_b) > 10,
@@ -2389,17 +2326,17 @@ class StatsForecaster:
     def __init__(self, window_size: int = 10) -> None:
         self.window_size = window_size
         self.history: List[float] = []
-    
+
     def add_value(self, value: float) -> None:
         """Add a value to history."""
         self.history.append(value)
-    
+
     def predict_next(self) -> float:
         """Predict next value using simple average."""
         if not self.history:
             return 0.0
         return sum(self.history[-self.window_size:]) / min(len(self.history), self.window_size)
-    
+
     def confidence_interval(self) -> Tuple[float, float]:
         """Return confidence interval for prediction."""
         prediction = self.predict_next()
@@ -2411,20 +2348,20 @@ class StatsSnapshotManager:
     """Manages snapshots of stats state."""
     def __init__(self) -> None:
         self.snapshots: Dict[str, Dict[str, Any]] = {}
-    
+
     def create_snapshot(self, name: str, data: Dict[str, Any]) -> None:
         """Create a snapshot."""
         self.snapshots[name] = {
             "data": data,
             "timestamp": datetime.now().isoformat()
         }
-    
+
     def restore_snapshot(self, name: str) -> Optional[Dict[str, Any]]:
         """Restore a snapshot."""
         if name in self.snapshots:
             return self.snapshots[name]["data"]
         return None
-    
+
     def list_snapshots(self) -> List[str]:
         """List all snapshots."""
         return list(self.snapshots.keys())
@@ -2434,22 +2371,24 @@ class ThresholdAlertManager:
     """Manages threshold-based alerting."""
     def __init__(self) -> None:
         self.alerts: List[Dict[str, Any]] = []
-        self.thresholds: Dict[str, Dict[str, float]] = {}
-    
+        self.thresholds: Dict[str, Dict[str, Optional[float]]] = {}
+
     def set_threshold(self, metric: str, min_val: Optional[float] = None, max_val: Optional[float] = None) -> None:
         """Set a threshold for a metric."""
         self.thresholds[metric] = {"min": min_val, "max": max_val}
-    
+
     def check_value(self, metric: str, value: float) -> bool:
         """Check if value exceeds threshold."""
         if metric not in self.thresholds:
             return False
-        
+
         thresh = self.thresholds[metric]
-        if thresh["min"] is not None and value < thresh["min"]:
+        min_threshold = thresh.get("min")
+        max_threshold = thresh.get("max")
+        if min_threshold is not None and value < min_threshold:
             self.alerts.append({"metric": metric, "value": value, "type": "below_min"})
             return True
-        if thresh["max"] is not None and value > thresh["max"]:
+        if max_threshold is not None and value > max_threshold:
             self.alerts.append({"metric": metric, "value": value, "type": "above_max"})
             return True
         return False
@@ -2460,38 +2399,33 @@ class RetentionEnforcer:
     def __init__(self) -> None:
         self.policies: Dict[str, RetentionPolicy] = {}
         self.data: Dict[str, List[Dict[str, Any]]] = {}
-    
+
     def set_policy(self, metric_pattern: str, policy: RetentionPolicy) -> None:
         """Set a retention policy for metrics matching pattern."""
         self.policies[metric_pattern] = policy
-    
+
     def add_policy(self, metric: str, max_age_days: int, max_points: int) -> None:
         """Add a retention policy (backward compat)."""
-        policy = RetentionPolicy(name=metric, retention_days=max_age_days)
+        policy = RetentionPolicy(name=metric, retention_days=max_age_days, max_points=max_points)
         self.policies[metric] = policy
-    
+
     def add_data(self, metric_name: str, timestamp: float, value: Any) -> None:
         """Add data point to a metric."""
         if metric_name not in self.data:
             self.data[metric_name] = []
         self.data[metric_name].append({"timestamp": timestamp, "value": value})
-    
+
     def enforce(self) -> int:
         """Enforce retention policies, return count of removed items."""
-        from datetime import datetime, timedelta
-        import time
-        
+        from datetime import datetime
         removed_count = 0
         now = datetime.now().timestamp()
-        
         for metric_pattern, policy in self.policies.items():
             # Find matching metrics
             matching_metrics = [m for m in self.data.keys() if metric_pattern.replace("*", "") in m]
-            
             for metric in matching_metrics:
                 if metric in self.data:
                     original_count = len(self.data[metric])
-                    
                     # Apply retention days policy
                     if policy.retention_days > 0:
                         cutoff_time = now - (policy.retention_days * 86400)  # days to seconds
@@ -2499,14 +2433,12 @@ class RetentionEnforcer:
                             d for d in self.data[metric]
                             if d["timestamp"] > cutoff_time
                         ]
-                    
                     removed_count += original_count - len(self.data[metric])
-        
         return removed_count
-    
+
     def apply_policies(self, metrics: Dict[str, List[Any]]) -> Dict[str, List[Any]]:
         """Apply retention policies to metrics."""
-        result = {}
+        result: Dict[str, List[Any]] = {}
         for metric, values in metrics.items():
             policy = self.policies.get(metric)
             if policy:
@@ -2525,21 +2457,21 @@ class StatsNamespace:
         self.name = name
         self.metrics: Dict[str, List[Metric]] = {}
         self.metric_values: Dict[str, float] = {}  # Direct metric values for set_metric/get_metric
-    
+
     def add_metric(self, metric: Metric) -> None:
         """Add a metric to namespace."""
         if metric.name not in self.metrics:
             self.metrics[metric.name] = []
         self.metrics[metric.name].append(metric)
-    
+
     def set_metric(self, name: str, value: float) -> None:
         """Set a metric value."""
         self.metric_values[name] = value
-    
+
     def get_metric(self, name: str) -> Optional[float]:
         """Get a metric value."""
         return self.metric_values.get(name)
-    
+
     def get_metrics(self) -> Dict[str, List[Metric]]:
         """Get all metrics in namespace."""
         return self.metrics
@@ -2549,17 +2481,17 @@ class StatsNamespaceManager:
     """Manages multiple namespaces."""
     def __init__(self) -> None:
         self.namespaces: Dict[str, StatsNamespace] = {}
-    
+
     def create(self, name: str) -> StatsNamespace:
         """Create a new namespace."""
         ns = StatsNamespace(name)
         self.namespaces[name] = ns
         return ns
-    
+
     def create_namespace(self, name: str) -> StatsNamespace:
         """Create a new namespace (backward compat)."""
         return self.create(name)
-    
+
     def get_namespace(self, name: str) -> Optional[StatsNamespace]:
         """Get a namespace."""
         return self.namespaces.get(name)
@@ -2569,13 +2501,13 @@ class StatsExporter:
     """Exports stats in various formats."""
     def __init__(self) -> None:
         self.format = "json"
-    
+
     def export(self, metrics: Dict[str, Any], format: str = "json") -> str:
         """Export metrics in specified format."""
         if format == "json":
             return json.dumps(metrics)
         elif format == "prometheus":
-            lines = []
+            lines: List[str] = []
             for name, value in metrics.items():
                 lines.append(f"{name} {value}")
             return "\n".join(lines)
@@ -2585,14 +2517,14 @@ class StatsExporter:
 class StatsSubscriptionManager:
     """Manages metric subscriptions."""
     def __init__(self) -> None:
-        self.subscribers: Dict[str, List[Callable]] = {}
-    
-    def subscribe(self, metric: str, callback: Callable) -> None:
+        self.subscribers: Dict[str, List[Callable[[float], None]]] = {}
+
+    def subscribe(self, metric: str, callback: Callable[[float], None]) -> None:
         """Subscribe to metric updates."""
         if metric not in self.subscribers:
             self.subscribers[metric] = []
         self.subscribers[metric].append(callback)
-    
+
     def notify(self, metric: str, value: float) -> None:
         """Notify subscribers of metric update."""
         if metric in self.subscribers:
@@ -2607,13 +2539,13 @@ class StatsAnnotationManager:
     """Manages annotations on metrics."""
     def __init__(self) -> None:
         self.annotations: Dict[str, List[MetricAnnotation]] = {}
-    
+
     def add_annotation(self, metric: str, annotation: MetricAnnotation) -> None:
         """Add annotation to metric."""
         if metric not in self.annotations:
             self.annotations[metric] = []
         self.annotations[metric].append(annotation)
-    
+
     def get_annotations(self, metric: str) -> List[MetricAnnotation]:
         """Get annotations for metric."""
         return self.annotations.get(metric, [])
@@ -2624,19 +2556,19 @@ class StatsChangeDetector:
     def __init__(self, threshold: float = 0.1) -> None:
         self.threshold = threshold
         self.previous_values: Dict[str, float] = {}
-    
+
     def detect_change(self, metric: str, value: float) -> bool:
         """Detect if metric has significantly changed."""
         if metric not in self.previous_values:
             self.previous_values[metric] = value
             return False
-        
+
         prev = self.previous_values[metric]
         if prev == 0:
             change = abs(value - prev) > 0
         else:
             change = abs((value - prev) / prev) > self.threshold
-        
+
         self.previous_values[metric] = value
         return change
 
@@ -2646,7 +2578,7 @@ class StatsCompressor:
     def compress(self, data: bytes) -> bytes:
         """Compress data."""
         return zlib.compress(data)
-    
+
     def decompress(self, data: bytes) -> bytes:
         """Decompress data."""
         return zlib.decompress(data)
@@ -2656,12 +2588,11 @@ class StatsRollupCalculator:
     """Calculates metric rollups."""
     def __init__(self) -> None:
         self.rollups: Dict[str, List[float]] = {}
-    
+
     def calculate_rollup(self, metrics: List[float], aggregation_type: AggregationType) -> float:
         """Calculate rollup with specified aggregation."""
         if not metrics:
             return 0.0
-        
         if aggregation_type == AggregationType.SUM:
             return sum(metrics)
         elif aggregation_type == AggregationType.AVG:
@@ -2679,13 +2610,13 @@ class StatsQueryEngine:
     """Queries metrics with time range and aggregation."""
     def __init__(self) -> None:
         self.metrics: Dict[str, List[Metric]] = {}
-    
+
     def query(self, metric_name: str, start_time: Optional[str] = None, end_time: Optional[str] = None) -> List[Metric]:
         """Query metrics within time range."""
         if metric_name not in self.metrics:
             return []
         return self.metrics[metric_name]
-    
+
     def add_metric(self, name: str, metric: Metric) -> None:
         """Add metric to query engine."""
         if name not in self.metrics:
@@ -2697,13 +2628,13 @@ class StatsAccessController:
     """Controls access to stats."""
     def __init__(self) -> None:
         self.permissions: Dict[str, Dict[str, str]] = {}
-    
+
     def grant_access(self, user: str, resource: str, permission: str) -> None:
         """Grant access to user."""
         if user not in self.permissions:
             self.permissions[user] = {}
         self.permissions[user][resource] = permission
-    
+
     def has_access(self, user: str, resource: str) -> bool:
         """Check if user has access."""
         return user in self.permissions and resource in self.permissions[user]
@@ -2713,20 +2644,20 @@ class StatsBackupManager:
     """Manages backups of stats."""
     def __init__(self) -> None:
         self.backups: Dict[str, Dict[str, Any]] = {}
-    
+
     def create_backup(self, name: str, data: Dict[str, Any]) -> None:
         """Create a backup."""
         self.backups[name] = {
             "data": data,
             "timestamp": datetime.now().isoformat()
         }
-    
+
     def restore_backup(self, name: str) -> Optional[Dict[str, Any]]:
         """Restore from backup."""
         if name in self.backups:
             return self.backups[name]["data"]
         return None
-    
+
     def list_backups(self) -> List[str]:
         """List all backups."""
         return list(self.backups.keys())
@@ -2773,7 +2704,7 @@ def main() -> None:
                 baseline_stats = json.load(baseline_file)
             agent.generate_comparison_report(baseline_stats)
         agent.report_stats(output_format=args.format)
-        if HAS_MATPLOTLIB:
+        if has_matplotlib:
             agent.visualize_stats()
     except ValueError as e:
         logging.error(str(e))

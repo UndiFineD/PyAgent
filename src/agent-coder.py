@@ -118,7 +118,7 @@ class QualityScore:
     complexity: float = 0.0
     documentation: float = 0.0
     test_coverage: float = 0.0
-    issues: List[str] = field(default_factory=list)
+    issues: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
@@ -367,7 +367,7 @@ class TestGap:
     file_path: str
     line_number: int
     complexity: int
-    suggested_tests: List[str] = field(default_factory=list)
+    suggested_tests: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
@@ -417,14 +417,12 @@ class DependencyNode:
     """
     name: str
     type: DependencyType
-    depends_on: List[str] = field(default_factory=list)
-    depended_by: List[str] = field(default_factory=list)
+    depends_on: List[str] = field(default_factory=lambda: [])
+    depended_by: List[str] = field(default_factory=lambda: [])
     file_path: str = ""
 
 
 # ========== Session 6 Helper Classes ==========
-
-
 class MigrationManager:
     """Manages code migration from old APIs to new ones.
 
@@ -808,21 +806,17 @@ class TestGapAnalyzer:
             List of test coverage gaps.
         """
         self.gaps = []
-
         try:
             tree = ast.parse(content)
         except SyntaxError:
             return self.gaps
-
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 # Skip private and dunder methods
                 if node.name.startswith('_') and not node.name.startswith('__'):
                     continue
-
                 complexity = self._calculate_complexity(node)
                 suggested_tests = self._suggest_tests(node)
-
                 self.gaps.append(TestGap(
                     function_name=node.name,
                     file_path=file_path,
@@ -830,7 +824,6 @@ class TestGapAnalyzer:
                     complexity=complexity,
                     suggested_tests=suggested_tests
                 ))
-
         return self.gaps
 
     def _calculate_complexity(self, node: ast.AST) -> int:
@@ -845,7 +838,7 @@ class TestGapAnalyzer:
         complexity = 1
         for child in ast.walk(node):
             if isinstance(child, (ast.If, ast.While, ast.For, ast.ExceptHandler,
-                                  ast.With, ast.Assert, ast.comprehension)):
+                    ast.With, ast.Assert, ast.comprehension)):
                 complexity += 1
             elif isinstance(child, ast.BoolOp):
                 complexity += len(child.values) - 1
@@ -860,19 +853,18 @@ class TestGapAnalyzer:
         Returns:
             List of suggested test case descriptions.
         """
-        func_node = node  # type: ignore
         suggestions: List[str] = []
-        name = func_node.name
-
+        # Type guard: ensure node is a function definition
+        if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            return suggestions
+        name = node.name
         suggestions.append(f"test_{name}_returns_expected_result")
         suggestions.append(f"test_{name}_handles_edge_cases")
-
         # Check for exception handling
         for child in ast.walk(node):
             if isinstance(child, ast.Raise):
                 suggestions.append(f"test_{name}_raises_expected_exception")
                 break
-
         return suggestions
 
 
@@ -903,13 +895,10 @@ class ConsistencyChecker:
             List of consistency issues.
         """
         self.issues = []
-
         # Check naming conventions
         self._check_naming_consistency(file_contents)
-
         # Check import styles
         self._check_import_consistency(file_contents)
-
         return self.issues
 
     def _check_naming_consistency(self, file_contents: Dict[str, str]) -> None:
@@ -920,7 +909,6 @@ class ConsistencyChecker:
         """
         snake_case_files: List[str] = []
         camel_case_files: List[str] = []
-
         for path, content in file_contents.items():
             funcs = re.findall(r"def\s+([a-zA-Z_]\w*)", content)
             for func in funcs:
@@ -928,7 +916,6 @@ class ConsistencyChecker:
                     snake_case_files.append(f"{path}:{func}")
                 elif func[0].isupper() or (func[0].islower() and any(c.isupper() for c in func)):
                     camel_case_files.append(f"{path}:{func}")
-
         if snake_case_files and camel_case_files:
             self.issues.append(ConsistencyIssue(
                 issue_type="naming_convention",
@@ -945,13 +932,11 @@ class ConsistencyChecker:
         """
         absolute_imports: List[str] = []
         relative_imports: List[str] = []
-
         for path, content in file_contents.items():
             if re.search(r"^from\s+\.", content, re.M):
                 relative_imports.append(path)
             if re.search(r"^from\s+[a-zA-Z]", content, re.M):
                 absolute_imports.append(path)
-
         if absolute_imports and relative_imports:
             self.issues.append(ConsistencyIssue(
                 issue_type="import_style",
@@ -989,19 +974,19 @@ class ProfilingAdvisor:
             List of profiling suggestions.
         """
         self.suggestions = []
-
         try:
             tree = ast.parse(content)
         except SyntaxError:
             return self.suggestions
-
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 self._analyze_function(node)
-
         return self.suggestions
 
-    def _analyze_function(self, node: ast.FunctionDef) -> None:
+    def _analyze_function(
+        self,
+        node: Any
+    ) -> None:
         """Analyze a function for profiling needs.
 
         Args:
@@ -1010,7 +995,6 @@ class ProfilingAdvisor:
         has_loop = False
         has_io = False
         has_network = False
-
         for child in ast.walk(node):
             if isinstance(child, (ast.For, ast.While)):
                 has_loop = True
@@ -1021,7 +1005,6 @@ class ProfilingAdvisor:
                         has_io = True
                     if name in ('get', 'post', 'request', 'connect'):
                         has_network = True
-
         if has_loop:
             self.suggestions.append(ProfilingSuggestion(
                 category=ProfilingCategory.CPU_BOUND,
@@ -1030,7 +1013,6 @@ class ProfilingAdvisor:
                 estimated_impact="medium",
                 profiling_approach="Use cProfile or line_profiler"
             ))
-
         if has_io:
             self.suggestions.append(ProfilingSuggestion(
                 category=ProfilingCategory.IO_BOUND,
@@ -1039,7 +1021,6 @@ class ProfilingAdvisor:
                 estimated_impact="high",
                 profiling_approach="Use async profiling or io tracing"
             ))
-
         if has_network:
             self.suggestions.append(ProfilingSuggestion(
                 category=ProfilingCategory.NETWORK_BOUND,
@@ -1083,7 +1064,6 @@ class DependencyAnalyzer:
             tree = ast.parse(content)
         except SyntaxError:
             return self.nodes
-
         # Analyze imports
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
@@ -1092,7 +1072,6 @@ class DependencyAnalyzer:
             elif isinstance(node, ast.ImportFrom):
                 module = node.module or ""
                 self._add_dependency(module, DependencyType.IMPORT, file_path)
-
         # Analyze class inheritance
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):
@@ -1103,7 +1082,6 @@ class DependencyAnalyzer:
                             DependencyType.CLASS_INHERITANCE,
                             file_path
                         )
-
         return self.nodes
 
     def _add_dependency(self, name: str, dep_type: DependencyType, file_path: str) -> None:
@@ -1134,7 +1112,7 @@ class DependencyAnalyzer:
             'pathlib', 'typing', 'dataclasses', 'enum', 'subprocess',
             'tempfile', 'shutil', 'math', 'collections', 'functools'
         }
-        external = []
+        external: List[str] = []
         for name, node in self.nodes.items():
             if node.type == DependencyType.IMPORT:
                 base_module = name.split('.')[0]
@@ -1241,13 +1219,13 @@ class AccessibilityReport:
         recommendations: High - level recommendations.
     """
     file_path: str
-    issues: List[AccessibilityIssue] = field(default_factory=list)
+    issues: List[AccessibilityIssue] = field(default_factory=lambda: [])
     total_elements: int = 0
     wcag_level: WCAGLevel = WCAGLevel.AA
     compliance_score: float = 100.0
     critical_count: int = 0
     serious_count: int = 0
-    recommendations: List[str] = field(default_factory=list)
+    recommendations: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
@@ -1264,15 +1242,13 @@ class ARIAAttribute:
     name: str
     value: str = ""
     is_valid: bool = True
-    allowed_values: List[str] = field(default_factory=list)
+    allowed_values: List[str] = field(default_factory=lambda: [])
     suggestion: Optional[str] = None
 
 
 # =============================================================================
 # Session 8 Helper Classes
 # =============================================================================
-
-
 class AccessibilityAnalyzer:
     """Analyzer for accessibility issues in UI code.
 
@@ -1311,7 +1287,7 @@ class AccessibilityAnalyzer:
         Args:
             target_level: Target WCAG conformance level.
         """
-        self.target_level = target_level
+        self.target_level: WCAGLevel = target_level
         self.issues: List[AccessibilityIssue] = []
         self.rules: Dict[str, bool] = {rule: True for rule in self.WCAG_CRITERIA}
         logging.debug(f"AccessibilityAnalyzer initialized with level {target_level.value}")
@@ -1327,12 +1303,9 @@ class AccessibilityAnalyzer:
         """
         self.issues.clear()
         path = Path(file_path)
-
         if not path.exists():
             return AccessibilityReport(file_path=file_path)
-
         content = path.read_text(encoding="utf-8")
-
         # Analyze based on file type
         if path.suffix in (".html", ".htm"):
             self._analyze_html(content)
@@ -1340,7 +1313,6 @@ class AccessibilityAnalyzer:
             self._analyze_python_ui(content)
         elif path.suffix in (".js", ".jsx", ".ts", ".tsx"):
             self._analyze_javascript_ui(content)
-
         return self._generate_report(file_path)
 
     def analyze_content(self, content: str, file_type: str = "html") -> AccessibilityReport:
@@ -1354,14 +1326,12 @@ class AccessibilityAnalyzer:
             Accessibility report.
         """
         self.issues.clear()
-
         if file_type == "html":
             self._analyze_html(content)
         elif file_type == "python":
             self._analyze_python_ui(content)
         elif file_type in ("javascript", "react"):
             self._analyze_javascript_ui(content)
-
         return self._generate_report("content")
 
     def _analyze_html(self, content: str) -> None:
@@ -1375,21 +1345,20 @@ class AccessibilityAnalyzer:
         for match in re.finditer(img_pattern, content, re.IGNORECASE):
             if 'alt=' not in match.group().lower():
                 line_num = content[:match.start()].count('\n') + 1
-                self.issues.append(
-                    AccessibilityIssue(
-                        issue_type=AccessibilityIssueType.MISSING_ALT_TEXT,
-                        severity=AccessibilitySeverity.CRITICAL,
-                        wcag_level=WCAGLevel.A,
-                        wcag_criterion="1.1.1",
-                        description="Image missing alt attribute",
-                        element=match.group()[:50],
-                        line_number=line_num,
-                        suggested_fix=(
-                            'Add alt="" for decorative or alt="description" '
-                            'for meaningful images'
-                        ),
-                        auto_fixable=False))
-
+                issue: AccessibilityIssue = AccessibilityIssue(
+                    issue_type=AccessibilityIssueType.MISSING_ALT_TEXT,
+                    severity=AccessibilitySeverity.CRITICAL,
+                    wcag_level=WCAGLevel.A,
+                    wcag_criterion="1.1.1",
+                    description="Image missing alt attribute",
+                    element=match.group()[:50],
+                    line_number=line_num,
+                    suggested_fix=(
+                        'Add alt="" for decorative or alt="description" '
+                        'for meaningful images'
+                    ),
+                    auto_fixable=False)
+                self.issues.append(issue)
         # Check for form inputs without labels
         input_pattern = r'<input\s+[^>]*?>'
         for match in re.finditer(input_pattern, content, re.IGNORECASE):
@@ -1412,11 +1381,12 @@ class AccessibilityAnalyzer:
                             suggested_fix=f'Add <label for="{input_id}">Label text</label>',
                             auto_fixable=False
                         ))
-
         # Check for missing ARIA landmarks
         landmarks = ['main', 'nav', 'header', 'footer', 'aside']
-        has_landmark = any(f'<{tag}' in content.lower() or f'role="{tag}"' in content.lower()
-                           for tag in landmarks)
+        has_landmark = any(
+            f'<{tag}' in content.lower() or f'role="{tag}"' in content.lower()
+            for tag in landmarks
+        )
         if not has_landmark and '<body' in content.lower():
             self.issues.append(
                 AccessibilityIssue(
@@ -1430,13 +1400,13 @@ class AccessibilityAnalyzer:
                         "Add semantic HTML5 elements (main, nav, header, "
                         "footer) or ARIA landmarks"
                     ),
-                    auto_fixable=False))
-
+                    auto_fixable=False
+                )
+            )
         # Check heading hierarchy
-        heading_levels = []
+        heading_levels: List[int] = []
         for match in re.finditer(r'<h([1-6])', content, re.IGNORECASE):
             heading_levels.append(int(match.group(1)))
-
         if heading_levels:
             if heading_levels[0] != 1:
                 self.issues.append(AccessibilityIssue(
@@ -1449,7 +1419,6 @@ class AccessibilityAnalyzer:
                     suggested_fix="Start page with <h1> element",
                     auto_fixable=False
                 ))
-
             # Check for skipped levels
             for i in range(1, len(heading_levels)):
                 if heading_levels[i] > heading_levels[i - 1] + 1:
@@ -1480,17 +1449,14 @@ class AccessibilityAnalyzer:
             (r'Entry\s*\([^)]*\)', "Entry"),
             (r'Canvas\s*\([^)]*\)', "Canvas"),
         ]
-
         for pattern, widget_name in widget_patterns:
             for match in re.finditer(pattern, content):
                 widget_call = match.group()
                 line_num = content[:match.start()].count('\n') + 1
-
                 # Check for keyboard bindings
                 if 'bind' not in content[match.end():match.end() + 200]:
                     # Check if there's a bind call near this widget
                     pass  # More complex analysis would be needed
-
                 # Check for tooltips / accessibility text
                 if 'tooltip' not in widget_call.lower() and 'help' not in widget_call.lower():
                     self.issues.append(AccessibilityIssue(
@@ -1619,7 +1585,6 @@ class AccessibilityAnalyzer:
         """
         critical_count = sum(1 for i in self.issues if i.severity == AccessibilitySeverity.CRITICAL)
         serious_count = sum(1 for i in self.issues if i.severity == AccessibilitySeverity.SERIOUS)
-
         # Calculate compliance score (100 - weighted issues)
         score = 100.0
         for issue in self.issues:
@@ -1632,16 +1597,14 @@ class AccessibilityAnalyzer:
             else:
                 score -= 2
         score = max(0, score)
-
         # Generate recommendations
-        recommendations = []
+        recommendations: List[str] = []
         if critical_count > 0:
             recommendations.append("Address critical accessibility issues immediately")
         if serious_count > 0:
             recommendations.append("Fix serious issues to improve basic accessibility")
         if not self.issues:
             recommendations.append("Continue to test with screen readers and keyboard navigation")
-
         return AccessibilityReport(
             file_path=file_path,
             issues=list(self.issues),
@@ -1780,7 +1743,7 @@ class CoderAgent(BaseAgent):
 
     def check_style(self, content: str) -> List[Dict[str, Any]]:
         """Check code against all enabled style rules."""
-        violations = []
+        violations: List[Dict[str, Any]] = []
         lines = content.split('\n')
         for rule in self._style_rules:
             if not rule.enabled:
@@ -1869,9 +1832,7 @@ class CoderAgent(BaseAgent):
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef) or isinstance(node, ast.AsyncFunctionDef):
                 metrics.function_count += 1
-                has_lineno = hasattr(node, 'end_lineno') and hasattr(node, 'lineno')
-                lineno_not_none = node.end_lineno is not None and node.lineno is not None
-                if has_lineno and lineno_not_none:
+                if hasattr(node, 'end_lineno') and node.end_lineno is not None:
                     length = node.end_lineno - node.lineno + 1
                     function_lengths.append(length)
                     # Calculate cyclomatic complexity for this function
@@ -1949,9 +1910,8 @@ class CoderAgent(BaseAgent):
         for node in ast.walk(tree):
             # Long method detection
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                has_lineno = hasattr(node, 'end_lineno') and hasattr(node, 'lineno')
-                lineno_not_none = node.end_lineno is not None and node.lineno is not None
-                if has_lineno and lineno_not_none:
+                if (hasattr(node, 'end_lineno') and node.end_lineno is not None
+                        and hasattr(node, 'lineno')):
                     length = node.end_lineno - node.lineno + 1
                     threshold = CODE_SMELL_PATTERNS["long_method"]["threshold"]
                     if length > threshold:
@@ -2051,8 +2011,7 @@ class CoderAgent(BaseAgent):
                     "occurrences": len(line_numbers),
                     "lines": line_numbers,
                     "preview": '\n'.join(
-                        lines[line_numbers[0] - 1:
-                              line_numbers[0] - 1 + min_lines]
+                        lines[line_numbers[0] - 1:line_numbers[0] - 1 + min_lines]
                     )[:100]
                 })
         return duplicates

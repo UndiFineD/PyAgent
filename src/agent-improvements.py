@@ -215,11 +215,11 @@ class ValidationResult:
     improvement_id: str
     is_valid: bool = True
     issues: List[Tuple[ValidationSeverity, str]] = field(
-        default_factory=list
-    )  # type: ignore[assignment]
+        default_factory=lambda: []
+    )
     test_results: Dict[str, bool] = field(
-        default_factory=dict
-    )  # type: ignore[assignment]
+        default_factory=lambda: {}  # type: ignore[assignment]
+    )
 
 
 @dataclass
@@ -457,7 +457,7 @@ class ImprovementScheduler:
 
     def get_overdue(self, current_date: str) -> List[ScheduledImprovement]:
         """Get overdue scheduled items."""
-        overdue = []
+        overdue: List[ScheduledImprovement] = []
         for item in self.schedule.values():
             if (item.status not in [ScheduleStatus.UNSCHEDULED] and
                     item.scheduled_end < current_date):
@@ -717,6 +717,7 @@ class ToolIntegration:
 
     Attributes:
         tool_configs: Configuration for each tool.
+        suggestions: List of tool suggestions.
     """
 
     def __init__(self) -> None:
@@ -744,7 +745,7 @@ class ToolIntegration:
 
     def parse_pylint_output(self, output: str) -> List[ToolSuggestion]:
         """Parse pylint output into suggestions."""
-        suggestions = []
+        suggestions: List[ToolSuggestion] = []
         for line in output.split('\n'):
             match = re.match(
                 r'(.+):(\d+):\d+: (\w+): (.+)',
@@ -763,7 +764,7 @@ class ToolIntegration:
 
     def parse_mypy_output(self, output: str) -> List[ToolSuggestion]:
         """Parse mypy output into suggestions."""
-        suggestions = []
+        suggestions: List[ToolSuggestion] = []
         for line in output.split('\n'):
             match = re.match(r'(.+):(\d+): error: (.+)', line)
             if match:
@@ -910,7 +911,7 @@ class MergeDetector:
         Returns:
             List of merge candidates.
         """
-        candidates = []
+        candidates: List[MergeCandidate] = []
         for i, imp1 in enumerate(improvements):
             for imp2 in improvements[i + 1:]:
                 similarity = self._calculate_similarity(imp1, imp2)
@@ -951,7 +952,7 @@ class MergeDetector:
         self, imp1: Improvement, imp2: Improvement
     ) -> str:
         """Generate merge reason."""
-        reasons = []
+        reasons: List[str] = []
         if imp1.category == imp2.category:
             reasons.append(f"same category ({imp1.category.value})")
         if imp1.file_path == imp2.file_path:
@@ -1054,7 +1055,7 @@ class ImprovementArchive:
         Returns:
             Matching archived improvements.
         """
-        results = []
+        results: List[ArchivedImprovement] = []
         for archived in self.archive:
             imp = archived.improvement
             if category and imp.category != category:
@@ -1860,11 +1861,10 @@ class ImprovementsAgent(BaseAgent):
         return self._analytics
 
     # ========== Export ==========
-
     def export_improvements(self, format: str = "json") -> str:
         """Export improvements to various formats."""
         if format == "json":
-            data = [{
+            data: List[Dict[str, Any]] = [{
                 "id": i.id,
                 "title": i.title,
                 "description": i.description,
@@ -1893,31 +1893,25 @@ class ImprovementsAgent(BaseAgent):
         return ""
 
     # ========== Documentation Generation ==========
-
     def generate_documentation(self) -> str:
         """Generate documentation for all improvements."""
         analytics = self.calculate_analytics()
-
         docs = ["# Improvement Documentation\n"]
         docs.append("## Summary\n")
         docs.append(f"- Total Improvements: {analytics['total']}")
         docs.append(f"- Completion Rate: {analytics['completion_rate']:.1f}%")
         docs.append(
             f"- Total Effort: {analytics['effort_estimation']['estimated_days']:.1f} days\n")
-
         docs.append("## By Status\n")
         for status, count in analytics['by_status'].items():
             if count > 0:
                 docs.append(f"- {status}: {count}")
-
         docs.append("\n## Prioritized List\n")
         for imp in self.prioritize_improvements()[:10]:
             docs.append(f"- [{imp.priority.name}] {imp.title} (Score: {imp.impact_score:.1f})")
-
         return '\n'.join(docs)
 
     # ========== Core Methods ==========
-
     def _get_default_content(self) -> str:
         """Return default content for new improvement files."""
         return "# Improvements\n\nNo improvements suggested.\n"
@@ -1948,12 +1942,11 @@ class ImprovementsAgent(BaseAgent):
 
 
 # ========== Missing Classes (Session continuation) ==========
-
 class ImpactScorer:
     """Scores improvements based on impact metrics."""
     def __init__(self) -> None:
         self.scores: Dict[str, float] = {}
-    
+
     def score(self, improvement: Improvement) -> float:
         """Score an improvement."""
         score = improvement.priority.value * 20
@@ -1968,30 +1961,30 @@ class ImpactScorer:
 
 class DependencyResolver:
     """Resolves improvement dependencies."""
+
     def __init__(self) -> None:
         self.graph: Dict[str, List[str]] = {}
-    
+
     def add_dependency(self, source: str, target: str) -> None:
         """Add a dependency edge."""
         if source not in self.graph:
             self.graph[source] = []
         self.graph[source].append(target)
-    
+
     def resolve_order(self) -> List[str]:
         """Resolve dependency order using topological sort."""
-        visited = set()
-        stack = []
-        
+        visited: set[str] = set()
+        stack: List[str] = []
+
         def visit(node: str) -> None:
             if node not in visited:
                 visited.add(node)
                 for dep in self.graph.get(node, []):
                     visit(dep)
                 stack.append(node)
-        
+
         for node in self.graph:
             visit(node)
-        
         return stack
 
 
@@ -1999,7 +1992,7 @@ class EffortEstimator:
     """Estimates effort for improvements."""
     def __init__(self) -> None:
         self.historical_data: Dict[str, List[float]] = {}
-    
+
     def estimate(self, improvement: Improvement) -> int:
         """Estimate effort in hours."""
         effort_map = {
@@ -2017,7 +2010,7 @@ class WorkflowEngine:
     def __init__(self) -> None:
         self.transitions: Dict[str, List[str]] = {}
         self._setup_default_transitions()
-    
+
     def _setup_default_transitions(self) -> None:
         """Setup default state transitions."""
         self.transitions = {
@@ -2029,7 +2022,7 @@ class WorkflowEngine:
             "REJECTED": [],
             "DEFERRED": ["IN_PROGRESS"]
         }
-    
+
     def can_transition(self, from_status: str, to_status: str) -> bool:
         """Check if transition is allowed."""
         return to_status in self.transitions.get(from_status, [])
@@ -2039,7 +2032,7 @@ class VotingSystem:
     """Manages voting on improvements."""
     def __init__(self) -> None:
         self.votes: Dict[str, List[str]] = {}
-    
+
     def cast_vote(self, improvement_id: str, voter: str) -> bool:
         """Cast a vote for an improvement."""
         if improvement_id not in self.votes:
@@ -2048,7 +2041,7 @@ class VotingSystem:
             self.votes[improvement_id].append(voter)
             return True
         return False
-    
+
     def get_vote_count(self, improvement_id: str) -> int:
         """Get vote count for improvement."""
         return len(self.votes.get(improvement_id, []))
