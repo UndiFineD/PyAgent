@@ -365,6 +365,19 @@ class AgentConfig:
     plugins: list[AgentPluginConfig] = field(default_factory=_empty_plugin_config_list)
     selective_agents: list[str] = field(default_factory=_empty_list_str)
     timeout_per_agent: dict[str, int] = field(default_factory=_empty_dict_str_int)
+    # Additional CLI-equivalent settings
+    enable_async: bool = False
+    enable_multiprocessing: bool = False
+    max_workers: int = 4
+    strategy: str = 'direct'
+    enable_file_locking: bool = False
+    incremental: bool = False
+    graceful_shutdown: bool = False
+    health_check: bool = False
+    resume: bool = False
+    diff_preview: bool = False
+    webhook: list[str] = field(default_factory=_empty_list_str)
+    models: dict[str, Any] = field(default_factory=_empty_dict_str_any)
 
 
 # =============================================================================
@@ -1115,7 +1128,19 @@ class ConfigLoader:
             rate_limit=rate_limit,
             plugins=plugins,
             selective_agents=data.get('selective_agents', []),
-            timeout_per_agent=data.get('timeout_per_agent', {})
+            timeout_per_agent=data.get('timeout_per_agent', {}),
+            enable_async=data.get('enable_async', False),
+            enable_multiprocessing=data.get('enable_multiprocessing', False),
+            max_workers=data.get('workers', data.get('max_workers', 4)),
+            strategy=data.get('strategy', 'direct'),
+            enable_file_locking=data.get('enable_file_locking', False),
+            incremental=data.get('incremental', False),
+            graceful_shutdown=data.get('graceful_shutdown', False),
+            health_check=data.get('health_check', False),
+            resume=data.get('resume', False),
+            diff_preview=data.get('diff_preview', False),
+            webhook=data.get('webhook', []),
+            models=data.get('models', {})
         )
 
     @staticmethod
@@ -3407,6 +3432,30 @@ Agents applied:
                     # Ensure child receives a --no-cascade flag to disable spawning
                     if '--no-cascade' not in local_cmd:
                         local_cmd = local_cmd[:2] + ['--no-cascade'] + local_cmd[2:]
+                    # Inject per-agent model/provider settings from Agent.models
+                    try:
+                        script_name = Path(local_cmd[1]).name
+                        # script pattern: agent-<name>.py
+                        if script_name.startswith('agent-') and script_name.endswith('.py'):
+                            agent_name = script_name[len('agent-'):-3]
+                        else:
+                            agent_name = None
+                    except Exception:
+                        agent_name = None
+
+                    model_spec = None
+                    if hasattr(self, 'models') and agent_name:
+                        model_spec = self.models.get(agent_name) or self.models.get('default')
+
+                    if model_spec and isinstance(model_spec, dict):
+                        if 'provider' in model_spec:
+                            env['DV_AGENT_MODEL_PROVIDER'] = str(model_spec.get('provider', ''))
+                        if 'model' in model_spec:
+                            env['DV_AGENT_MODEL_NAME'] = str(model_spec.get('model', ''))
+                        if 'temperature' in model_spec:
+                            env['DV_AGENT_MODEL_TEMPERATURE'] = str(model_spec.get('temperature', ''))
+                        if 'max_tokens' in model_spec:
+                            env['DV_AGENT_MODEL_MAX_TOKENS'] = str(model_spec.get('max_tokens', ''))
 
                 result = subprocess.run(
                     local_cmd,
@@ -3445,6 +3494,43 @@ Agents applied:
             result = attempt_command()
 
         return result
+
+    @contextmanager
+    def _with_agent_env(self, agent_name: str):
+        """Temporarily set environment variables for a specific agent.
+
+        Sets DV_AGENT_MODEL_* env vars from self.models[agent_name] (or default)
+        for the duration of the context manager, then restores previous values.
+        """
+        prev: dict[str, str | None] = {}
+        keys = ['DV_AGENT_MODEL_PROVIDER', 'DV_AGENT_MODEL_NAME',
+                'DV_AGENT_MODEL_TEMPERATURE', 'DV_AGENT_MODEL_MAX_TOKENS']
+        try:
+            spec = None
+            if hasattr(self, 'models') and isinstance(self.models, dict):
+                spec = self.models.get(agent_name) or self.models.get('default')
+
+            for k in keys:
+                prev[k] = os.environ.get(k)
+
+            if spec and isinstance(spec, dict):
+                if 'provider' in spec:
+                    os.environ['DV_AGENT_MODEL_PROVIDER'] = str(spec.get('provider', ''))
+                if 'model' in spec:
+                    os.environ['DV_AGENT_MODEL_NAME'] = str(spec.get('model', ''))
+                if 'temperature' in spec:
+                    os.environ['DV_AGENT_MODEL_TEMPERATURE'] = str(spec.get('temperature', ''))
+                if 'max_tokens' in spec:
+                    os.environ['DV_AGENT_MODEL_MAX_TOKENS'] = str(spec.get('max_tokens', ''))
+
+            yield
+        finally:
+            # restore previous values
+            for k, v in prev.items():
+                if v is None:
+                    os.environ.pop(k, None)
+                else:
+                    os.environ[k] = v
 
     def _find_repo_root(self, start_path: Path) -> Path:
         """Find the repository root by looking for repository markers.
@@ -3621,7 +3707,8 @@ Agents applied:
             '--prompt', prompt,
             '--strategy', self.strategy
         ]
-        result = self._run_command(cmd)
+        with self._with_agent_env('errors'):
+            result = self._run_command(cmd)
 
         # Check if changes were made based on output
         stdout_ok = result.stdout and "No changes made" not in result.stdout
@@ -3647,7 +3734,8 @@ Agents applied:
             '--prompt', prompt,
             '--strategy', self.strategy
         ]
-        result = self._run_command(cmd)
+        with self._with_agent_env('improvements'):
+            result = self._run_command(cmd)
 
         # Check if changes were made based on output
         stdout_ok = result.stdout and "No changes made" not in result.stdout
@@ -3771,7 +3859,8 @@ Agents applied:
             '--prompt', prompt,
             '--strategy', self.strategy
         ]
-        result = self._run_command(cmd, timeout=300)
+        with self._with_agent_env('coder'):
+            result = self._run_command(cmd, timeout=300)
 
         # Check if changes were made based on output
         stdout_ok = result.stdout and "No changes made" not in result.stdout
@@ -3807,7 +3896,8 @@ Agents applied:
             '--prompt', prompt,
             '--strategy', self.strategy
         ]
-        result = self._run_command(cmd)
+        with self._with_agent_env('changes'):
+            result = self._run_command(cmd)
 
         # Check if changes were made based on output
         stdout_ok = result.stdout and "No changes made" not in result.stdout
@@ -3830,7 +3920,8 @@ Agents applied:
             '--prompt', prompt,
             '--strategy', self.strategy
         ]
-        result = self._run_command(cmd)
+        with self._with_agent_env('context'):
+            result = self._run_command(cmd)
         if result.stdout and "No changes made" not in result.stdout and (
                 not result.stderr or "No changes made" not in result.stderr):
             changes_made = True
@@ -3866,7 +3957,8 @@ def test_placeholder():
             '--prompt', prompt,
             '--strategy', self.strategy
         ]
-        result = self._run_command(cmd)
+        with self._with_agent_env('tests'):
+            result = self._run_command(cmd)
         if result.stdout and "No changes made" not in result.stdout and (
                 not result.stderr or "No changes made" not in result.stderr):
             changes_made = True
@@ -4683,12 +4775,32 @@ def test_placeholder():
             dry_run=config.dry_run,
             no_git=config.no_git,
             selective_agents=config.selective_agents or None,
-            timeout_per_agent=config.timeout_per_agent or None
+            timeout_per_agent=config.timeout_per_agent or None,
+            enable_async=config.enable_async,
+            enable_multiprocessing=config.enable_multiprocessing,
+            max_workers=config.max_workers,
+            strategy=config.strategy
         )
 
         # Apply rate limiting if configured
         if config.rate_limit:
             agent.enable_rate_limiting(config.rate_limit)
+
+        # Apply file locking if requested
+        if config.enable_file_locking:
+            agent.enable_file_locking()
+
+        # Enable incremental processing if requested
+        if config.incremental:
+            agent.enable_incremental_processing()
+
+        # Register webhooks
+        if config.webhook:
+            for url in config.webhook:
+                agent.register_webhook(url)
+
+        # Attach per-agent models mapping
+        agent.models = config.models or {}
 
         # Load plugins if configured
         if config.plugins:
@@ -4786,6 +4898,14 @@ def main() -> None:
     # Phase 6: New feature arguments
     parser.add_argument('--config', type=str, metavar='FILE',
                         help='Path to configuration file (YAML / TOML / JSON)')
+    parser.add_argument('--agent-models', type=str,
+                        help='JSON string mapping agent->model spec (e.g. "{\"coder\": {\"provider\": \"google\", \"model\": \"gemini-3\"}}")')
+    parser.add_argument('--model-coder', type=str,
+                        help='Quick override for coder model. Format: "provider:model" or just "model"')
+    parser.add_argument('--model-improvements', type=str,
+                        help='Quick override for improvements model. Format: "provider:model" or just "model"')
+    parser.add_argument('--n8n', type=str, metavar='URL',
+                        help='Register an n8n webhook URL to receive agent notifications')
     parser.add_argument('--rate-limit', type=float, metavar='RPS',
                         help='Rate limit API calls to RPS requests per second')
     parser.add_argument('--enable-file-locking', action='store_true',
@@ -4804,6 +4924,30 @@ def main() -> None:
     args = parser.parse_args()
     setup_logging(args.verbose)
     os.environ['DV_AGENT_VERBOSITY'] = args.verbose
+    # Parse CLI model overrides
+    cli_models: dict[str, dict] = {}
+    if getattr(args, 'agent_models', None):
+        try:
+            import json as _json
+            raw = _json.loads(args.agent_models)
+            if isinstance(raw, dict):
+                cli_models.update(raw)
+        except Exception:
+            logging.warning('Failed to parse --agent-models JSON; ignoring')
+
+    def _parse_quick_flag(val: str) -> dict:
+        # format 'provider:model' or 'model'
+        if not val:
+            return {}
+        if ':' in val:
+            provider, model = val.split(':', 1)
+            return {'provider': provider, 'model': model}
+        return {'model': val}
+
+    if getattr(args, 'model_coder', None):
+        cli_models.setdefault('coder', {}).update(_parse_quick_flag(args.model_coder))
+    if getattr(args, 'model_improvements', None):
+        cli_models.setdefault('improvements', {}).update(_parse_quick_flag(args.model_improvements))
 
     # Health check mode
     if args.health_check:
@@ -4837,6 +4981,20 @@ def main() -> None:
             max_workers=args.workers,
             strategy=args.strategy
         )
+
+    # Merge CLI-provided model overrides into agent.models
+    if hasattr(agent, 'models'):
+        try:
+            existing = getattr(agent, 'models', {}) or {}
+            # CLI overrides win
+            merged = {**existing, **cli_models}
+            agent.models = merged
+        except Exception:
+            logging.debug('Failed to merge CLI model overrides')
+
+    # If n8n URL provided, register it as a webhook
+    if getattr(args, 'n8n', None):
+        agent.register_webhook(args.n8n)
 
     # Register webhooks if provided
     if args.webhook:

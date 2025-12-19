@@ -1,0 +1,30 @@
+# Per-agent model/provider configuration
+# NOTE: Do NOT place API keys here. Keep provider credentials in environment variables
+#       (e.g. DV_OPENAI_API_KEY, DV_GOOGLE_API_KEY, DV_ANTHROPIC_API_KEY).
+
+repo_root: src
+dry_run: true
+
+models:
+  coder:
+    provider: google
+    model: gemini-3-pro-preview
+    temperature: 0.0
+    max_tokens: 60000
+  improvements:
+    provider: openai
+    model: gpt-5.2
+    temperature: 0.2
+    max_tokens: 60000
+  tests:
+    provider: openai
+    model: gpt-5-mini
+    temperature: 0.0
+    max_tokens: 1000
+  default:
+    provider: anthropic
+    model: claude-haiku-4.5
+    temperature: 0.0
+    max_tokens: 1000
+
+# Usage: `python src/agent.py --config config/models.yaml`
