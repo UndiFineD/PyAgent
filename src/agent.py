@@ -2873,7 +2873,15 @@ class Agent:
             Supports context manager protocol via __enter__ and __exit__.
         """
         logging.info(f"Initializing Agent with repo_root={repo_root}")
-        self.repo_root = self._find_repo_root(Path(repo_root))
+        # If the user explicitly provided a directory (not the default '.'),
+        # respect that path and do NOT search upward for repository markers.
+        provided_path = Path(repo_root)
+        if str(repo_root) and str(repo_root) != '.':
+            # Use the exact provided directory (resolved to absolute path)
+            self.repo_root = provided_path.resolve()
+        else:
+            # No explicit path provided (or default '.'), try to detect repo root
+            self.repo_root = self._find_repo_root(provided_path)
         if not self.repo_root.exists():
             raise FileNotFoundError(f"Repository root not found: {self.repo_root}")
         self.agents_only = agents_only
@@ -3379,15 +3387,37 @@ Agents applied:
         def attempt_command() -> subprocess.CompletedProcess[str]:
             logging.debug(f"Running command: {' '.join(cmd[:3])}... (timeout={timeout}s)")
             try:
+                # Copy command so we don't mutate caller's list
+                local_cmd = list(cmd)
+                env = os.environ.copy()
+
+                # Detect python-invoked agent scripts (e.g., python <...>/agent-*.py)
+                try:
+                    is_agent_script = (
+                        len(local_cmd) > 1 and
+                        local_cmd[0] == sys.executable and
+                        Path(local_cmd[1]).name.startswith('agent-')
+                    )
+                except Exception:
+                    is_agent_script = False
+
+                if is_agent_script:
+                    # Mark child so it can avoid cascading further invocations
+                    env['DV_AGENT_PARENT'] = '1'
+                    # Ensure child receives a --no-cascade flag to disable spawning
+                    if '--no-cascade' not in local_cmd:
+                        local_cmd = local_cmd[:2] + ['--no-cascade'] + local_cmd[2:]
+
                 result = subprocess.run(
-                    cmd,
+                    local_cmd,
                     cwd=self.repo_root,
                     capture_output=True,
                     text=True,
                     timeout=timeout,
                     encoding='utf-8',
                     errors='replace',
-                    check=False
+                    check=False,
+                    env=env,
                 )
                 logging.debug(f"Command completed with returncode={result.returncode}")
                 return result
@@ -3469,17 +3499,38 @@ Agents applied:
             - Returns sorted list for reproducibility
             - Limited by max_files parameter if set
         """
+        print("DEBUG: Entering find_code_files", file=sys.stderr)
         logging.info("Searching for code files...")
         code_files: list[Path] = []
         for ext in self.SUPPORTED_EXTENSIONS:
+            print(f"DEBUG: Searching for *{ext}", file=sys.stderr)
             code_files.extend(self.repo_root.rglob(f'*{ext}'))
         logging.debug(f"Found {len(code_files)} files with supported extensions")
+        print(f"DEBUG: Found {len(code_files)} files", file=sys.stderr)
 
-        # Filter to scripts / agent directory if agents_only is True
+        # Filter to agent-related files if agents_only is True
         if self.agents_only:
-            scripts_agent_dir = self.repo_root / 'scripts' / 'agent'
-            code_files = [f for f in code_files if f.is_relative_to(scripts_agent_dir)]
-            logging.info(f"Filtered to scripts / agent directory: {len(code_files)} files")
+            logging.debug("agents_only=True: filtering to agent-related files")
+            allowed_extra = {
+                'base_agent.py',
+                'generate_agent_reports.py',
+                'agent_backend.py',
+                'agent_test_utils.py',
+                'agent.py'
+            }
+            def is_agent_file(p: Path) -> bool:
+                name = p.name
+                # Exclude test files explicitly
+                if name.startswith('test'):
+                    return False
+                # Accept files starting with 'agent' or 'agent-'
+                if name.startswith('agent') or name.startswith('agent-'):
+                    return True
+                # Accept a small set of helper filenames used by the agent system
+                return name in allowed_extra
+
+            code_files = [f for f in code_files if is_agent_file(f)]
+            logging.info(f"Filtered to agent-related files: {len(code_files)} files")
 
         # Apply ignore patterns
         code_files = sorted([f for f in code_files if not self._is_ignored(f)])
@@ -3843,8 +3894,11 @@ def test_placeholder():
     def _perform_iteration(self, code_file: Path) -> bool:
         """Perform one iteration of improvements on the code file."""
         changes_made = False
-        # Give a Stats update
-        self.run_stats_update([code_file])
+        # Note: stats update should be done once per loop iteration, not per-file.
+        # The call to `run_stats_update` was previously here which caused the
+        # stats agent to be invoked for every file in the loop. We intentionally
+        # avoid calling it here to prevent repeated counting; stats are updated
+        # once per loop in `run_with_parallel_execution`.
         # Run the Tests on the Codefile
         if not self.skip_code_update:
             self.run_tests(code_file)
