@@ -3024,6 +3024,11 @@ def create_main_function(
             default=0,
             help='Increase verbosity (can be used multiple times, e.g. -vv)',
         )
+        parser.add_argument(
+            '--no-cascade',
+            action='store_true',
+            help='Prevent this agent from launching other agents (internal use)',
+        )
         parser.add_argument('--context', required=True, help=context_help)
         parser.add_argument('--prompt', required=True, help='Prompt for improving the content')
         args = parser.parse_args()
@@ -3034,6 +3039,10 @@ def create_main_function(
             print(agent_class.describe_backends())
             return
         agent = agent_class(args.context)
+        # Honor parent/guard flag to avoid cascading agent invocations
+        if getattr(args, 'no_cascade', False) or os.environ.get('DV_AGENT_PARENT'):
+            agent._no_cascade = True
+            logging.info('No-cascade mode enabled for this agent (prevents spawning other agents)')
         
         # Set strategy based on argument
         if args.strategy == 'cot':
