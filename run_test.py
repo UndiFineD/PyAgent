@@ -19,8 +19,6 @@ def run_command(command):
 
 if __name__ == "__main__":
     # Run agent on test_e2e.py
-    # We need to be careful with paths.
-    # Assuming we are in repo root.
-    cmd = "python src/agent.py --dir . --dry-run --strategy cot --only-agents coder --verbose normal"
+    cmd = "python src/agent.py --dir . --dry-run --strategy cot --only-agents coder --verbose elaborate --max-files 1"
     print(f"Running: {cmd}")
     run_command(cmd)
