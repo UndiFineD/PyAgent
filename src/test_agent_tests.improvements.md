@@ -1,6 +1,7 @@
 # Improvements: `test_agent_tests.py`
 
 ## Suggested improvements
+
 - [x] FIXED: [2025-06-14] Add tests for test prioritization algorithms.
 - [x] FIXED: [2025-06-14] Test flakiness detection and quarantine.
 - [x] FIXED: [2025-06-14] Add tests for test impact analysis.
@@ -23,6 +24,7 @@
 - [x] FIXED: [2025-06-14] Test test baseline management.
 
 ## Fixed (Moved to test_agent_tests.changes.md)
+
 - Add tests for parametrized test generation. (Fixed)
 - Test fixture and mock generation. (Fixed)
 - Add tests for coverage-guided test generation. (Fixed)
@@ -40,6 +42,6 @@
 - Add integration tests with real codebases. (Fixed)
 
 ## Notes
+
 - These are suggestions based on static inspection; validate behavior with tests/runs.
 - File: `src/test_agent_tests.py`
-

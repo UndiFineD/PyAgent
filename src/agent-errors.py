@@ -66,6 +66,8 @@ class ErrorCategory(Enum):
     PERFORMANCE = "performance"
     STYLE = "style"
     DEPRECATION = "deprecation"
+    VALUE = "value"
+    IMPORT = "import"
     OTHER = "other"
 
 

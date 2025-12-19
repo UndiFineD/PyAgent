@@ -7,6 +7,7 @@
 ## Session 9 - 2025-01-16
 
 ### Added - Agent Tests (20 test classes)
+
 - `TestPluginBasedAgentLoading` - Tests for plugin-based agent loading and discovery
 - `TestAgentCommunication` - Tests for agent communication and message passing
 - `TestAgentStateSerialization` - Tests for agent state serialization and restore
@@ -35,6 +36,7 @@
 - 2025-12-15: Added coverage for `agents_only`, `max_files`, ignore matching, and subprocess invocation wiring.
 
 ## [2025-12-15]
+
 - Add robust subprocess error handling (`check=True`, timeouts, clearer stderr reporting). (Fixed)
 - Consider using `logging` instead of `print` for controllable verbosity. (False Positive)
 - Function `agent_module` is missing type annotations. (Fixed)

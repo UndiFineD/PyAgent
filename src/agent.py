@@ -1178,7 +1178,7 @@ class HealthChecker:
             AgentHealthCheck result.
         """
         start_time = time.time()
-        script_path = self.repo_root / 'scripts' / 'agent' / f'agent-{agent_name}.py'
+        script_path = Path(__file__).parent / f'agent-{agent_name}.py'
 
         if not script_path.exists():
             return AgentHealthCheck(
@@ -2835,7 +2835,8 @@ class Agent:
                                                   int]] = None,
                  enable_async: bool = False,
                  enable_multiprocessing: bool = False,
-                 max_workers: int = 4) -> None:
+                 max_workers: int = 4,
+                 strategy: str = 'direct') -> None:
         """Initialize the Agent with repository configuration.
 
         Args:
@@ -2859,6 +2860,8 @@ class Agent:
                 Defaults to False.
             max_workers: Maximum number of worker threads / processes.
                 Defaults to 4.
+            strategy: Reasoning strategy to use (direct, cot, reflexion).
+                Defaults to 'direct'.
 
         Raises:
             FileNotFoundError: If repo_root doesn't exist.
@@ -2884,6 +2887,7 @@ class Agent:
         self.enable_async = enable_async
         self.enable_multiprocessing = enable_multiprocessing
         self.max_workers = max_workers
+        self.strategy = strategy
         self.ignored_patterns = load_codeignore(self.repo_root)
 
         # Webhook support
@@ -3522,7 +3526,7 @@ Agents applied:
         file_paths = [str(f) for f in files]
         cmd = [
             sys.executable,
-            str(self.repo_root / 'scripts / agent / agent-stats.py'),
+            str(Path(__file__).parent / 'agent-stats.py'),
             '--files'] + file_paths
         self._run_command(cmd)
 
@@ -3561,9 +3565,10 @@ Agents applied:
         prompt = f"Analyze and improve the error report for {code_file.name}"
         cmd = [
             sys.executable,
-            str(self.repo_root / 'scripts / agent / agent-errors.py'),
+            str(Path(__file__).parent / 'agent-errors.py'),
             '--context', str(errors_file),
-            '--prompt', prompt
+            '--prompt', prompt,
+            '--strategy', self.strategy
         ]
         result = self._run_command(cmd)
 
@@ -3586,9 +3591,10 @@ Agents applied:
         prompt = f"Suggest and improve improvements for {code_file.name}"
         cmd = [
             sys.executable,
-            str(self.repo_root / 'scripts / agent / agent-improvements.py'),
+            str(Path(__file__).parent / 'agent-improvements.py'),
             '--context', str(improvements_file),
-            '--prompt', prompt
+            '--prompt', prompt,
+            '--strategy', self.strategy
         ]
         result = self._run_command(cmd)
 
@@ -3709,9 +3715,10 @@ Agents applied:
                 f"errors, and improvements")
         cmd = [
             sys.executable,
-            str(self.repo_root / 'scripts / agent / agent-coder.py'),
+            str(Path(__file__).parent / 'agent-coder.py'),
             '--context', str(code_file),
-            '--prompt', prompt
+            '--prompt', prompt,
+            '--strategy', self.strategy
         ]
         result = self._run_command(cmd, timeout=300)
 
@@ -3744,9 +3751,10 @@ Agents applied:
         prompt = f"Update the changelog for {code_file.name} with recent changes"
         cmd = [
             sys.executable,
-            str(self.repo_root / 'scripts / agent / agent-changes.py'),
+            str(Path(__file__).parent / 'agent-changes.py'),
             '--context', str(changes_file),
-            '--prompt', prompt
+            '--prompt', prompt,
+            '--strategy', self.strategy
         ]
         result = self._run_command(cmd)
 
@@ -3766,9 +3774,10 @@ Agents applied:
         prompt = f"Update the description for {code_file.name} based on current code"
         cmd = [
             sys.executable,
-            str(self.repo_root / 'scripts / agent / agent-context.py'),
+            str(Path(__file__).parent / 'agent-context.py'),
             '--context', str(context_file),
-            '--prompt', prompt
+            '--prompt', prompt,
+            '--strategy', self.strategy
         ]
         result = self._run_command(cmd)
         if result.stdout and "No changes made" not in result.stdout and (
@@ -3801,9 +3810,10 @@ def test_placeholder():
             prompt = f"Update and expand the test suite for {code_file.name}"
         cmd = [
             sys.executable,
-            str(self.repo_root / 'scripts / agent / agent-tests.py'),
+            str(Path(__file__).parent / 'agent-tests.py'),
             '--context', str(test_file_to_update),
             '--prompt', prompt,
+            '--strategy', self.strategy
         ]
         result = self._run_command(cmd)
         if result.stdout and "No changes made" not in result.stdout and (
@@ -4033,24 +4043,28 @@ def test_placeholder():
             - Modified files are tracked in metrics
         """
         modified_files: list[Path] = []
+        import concurrent.futures
 
-        async def process_file_async(file_path: Path) -> None:
-            """Process a single file asynchronously."""
-            try:
-                logging.debug(f"[async] Processing {file_path.name}")
-                self.process_file(file_path)
-                modified_files.append(file_path)
-                self.metrics['files_processed'] += 1
-                logging.info(f"[async] Completed {file_path.name}")
-            except Exception as e:
-                logging.error(f"[async] Failed to process {file_path.name}: {e}")
+        loop = asyncio.get_running_loop()
 
-        # Create tasks for all files
-        tasks = [process_file_async(f) for f in files]
+        with concurrent.futures.ThreadPoolExecutor(max_workers=self.max_workers) as executor:
+            async def process_file_async(file_path: Path) -> None:
+                """Process a single file asynchronously."""
+                try:
+                    logging.debug(f"[async] Processing {file_path.name}")
+                    await loop.run_in_executor(executor, self.process_file, file_path)
+                    modified_files.append(file_path)
+                    self.metrics['files_processed'] += 1
+                    logging.info(f"[async] Completed {file_path.name}")
+                except Exception as e:
+                    logging.error(f"[async] Failed to process {file_path.name}: {e}")
 
-        # Run tasks concurrently
-        if tasks:
-            await asyncio.gather(*tasks)
+            # Create tasks for all files
+            tasks = [process_file_async(f) for f in files]
+
+            # Run tasks concurrently
+            if tasks:
+                await asyncio.gather(*tasks)
 
         return modified_files
 
@@ -4657,11 +4671,13 @@ def test_placeholder():
         Uses parallel execution if enabled, otherwise sequential processing.
         Triggers webhooks and callbacks on completion.
         """
+        print("Entering agent.run()", file=sys.stderr)
         if self.enable_async or self.enable_multiprocessing:
             self.run_with_parallel_execution()
         else:
             # Sequential execution (original behavior)
             code_files = self.find_code_files()
+            print(f"Found {len(code_files)} code files to process", file=sys.stderr)
             logging.info(f"Found {len(code_files)} code files to process")
             for loop_iteration in range(1, self.loop + 1):
                 logging.info(f"Starting loop iteration {loop_iteration}/{self.loop}")
@@ -4702,6 +4718,8 @@ def main() -> None:
         help='Comma-separated list of agents to execute (e.g., coder,tests,documentation)')
     parser.add_argument('--timeout', type=int, metavar='SECONDS', default=120,
                         help='Default timeout per agent in seconds (default: 120)')
+    parser.add_argument('--strategy', choices=['direct', 'cot', 'reflexion'], default='direct',
+                        help='Reasoning strategy to use (direct, cot, reflexion)')
     # Phase 4c: Parallel execution arguments
     parser.add_argument('--async', dest='enable_async', action='store_true',
                         help='Enable async file processing for concurrent I / O')
@@ -4762,7 +4780,8 @@ def main() -> None:
             timeout_per_agent={'coder': args.timeout, 'tests': args.timeout},
             enable_async=args.enable_async,
             enable_multiprocessing=args.enable_multiprocessing,
-            max_workers=args.workers
+            max_workers=args.workers,
+            strategy=args.strategy
         )
 
     # Register webhooks if provided
@@ -4811,3 +4830,7 @@ def main() -> None:
         # Save incremental processing state
         if hasattr(agent, 'incremental_processor'):
             agent.incremental_processor.complete_run()
+
+
+if __name__ == "__main__":
+    main()

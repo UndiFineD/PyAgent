@@ -28,4 +28,3 @@
 - [x] FIXED: [2025-06-14] Test stats backup and restore.
 - These are suggestions based on static inspection; validate behavior with tests/runs.
 - File: `src/test_agent_stats.py`
-

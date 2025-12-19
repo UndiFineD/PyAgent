@@ -9,12 +9,14 @@ An intelligent orchestration system that coordinates specialized AI agents to au
 ## Key Features
 
 ### 🎯 Multi-Agent Coordination
+
 - **Agent Orchestration**: Central `Agent` coordinates work among specialized sub-agents
 - **Task Distribution**: Intelligently assigns improvement tasks to appropriate agents
 - **Progress Tracking**: Monitors and reports on improvement metrics across all agents
 - **Dependency Management**: Handles inter-agent dependencies and coordination
 
 ### 🔧 Specialized Agent Modules
+
 - **Code Improvement**: Automatic code quality enhancements
 - **Documentation Generation**: Creates and updates documentation
 - **Test Management**: Generates, improves, and validates test suites
@@ -24,6 +26,7 @@ An intelligent orchestration system that coordinates specialized AI agents to au
 - **Metrics Reporting**: Generates comprehensive improvement reports
 
 ### 📊 Advanced Capabilities
+
 - **Report Generation**: Creates detailed before/after comparison reports
 - **Quality Metrics**: Tracks code quality improvements with metrics
 - **Version Control Integration**: Manages changes across codebase
@@ -32,7 +35,8 @@ An intelligent orchestration system that coordinates specialized AI agents to au
 - **Annotation System**: Adds detailed annotations to reports for collaboration
 
 ### 🚀 Architecture
-```
+
+```text
 Agent (Orchestrator)
 ├── Agent-Tests       → Test suite management
 ├── Agent-Coder      → Code improvement
@@ -61,6 +65,7 @@ npm install -g @openai/codex
 ```
 
 For other backends:
+
 - **GitHub Copilot CLI**: [Installation Guide](https://docs.github.com/en/copilot/using-github-copilot/using-github-copilot-in-the-command-line)
 - **gh CLI**: [GitHub CLI Installation](https://cli.github.com/)
 
@@ -83,6 +88,22 @@ python -m agent -vv --context src/ --prompt "Generate docstrings"
 
 # List available backends
 python -m agent --describe-backends
+
+### Advanced Usage
+
+```bash
+# Run with specific reasoning strategy
+python src/agent.py --dir . --strategy cot  # Chain-of-Thought
+python src/agent.py --dir . --strategy reflexion  # Self-correction loop
+
+# Run specific agents only
+python src/agent.py --dir . --only-agents coder,tests
+
+# Parallel execution
+python src/agent.py --dir . --multiprocessing --workers 4
+
+# Async I/O
+python src/agent.py --dir . --async
 ```
 
 ### Programmatic Usage
@@ -110,11 +131,13 @@ print(diff)
 ## Core Components
 
 ### Agent System
+
 - **BaseAgent**: Foundation class with common functionality for all agents
 - **Agent**: Main orchestrator coordinating all sub-agents
 - **AgentBackend**: Interface to AI backends (OpenAI Codex, GitHub Copilot, Claude, etc.)
 
 ### Report Generation
+
 - **ReportGenerator**: Creates detailed improvement reports
 - **ReportComparison**: Compares before/after code states
 - **ReportValidator**: Ensures report quality and completeness
@@ -122,6 +145,7 @@ print(diff)
 - **ReportAnnotationManager**: Adds and manages report annotations
 
 ### Advanced Features
+
 - **ContextWindow**: Manages token budgets for LLM interactions
 - **ResponseCache**: Caches AI responses for performance
 - **TokenBudget**: Tracks and allocates token usage
@@ -176,7 +200,7 @@ python -m pytest src/test_agent.py::TestAgentOrchestration::test_agent_coordinat
 
 ## Project Structure
 
-```
+```text
 pyagent/
 ├── src/
 │   ├── agent.py                      # Main orchestrator
@@ -200,7 +224,9 @@ pyagent/
 ## Features in Detail
 
 ### Multi-Agent Orchestration
+
 The main `Agent` class coordinates work by:
+
 1. Analyzing the codebase structure
 2. Identifying improvement opportunities
 3. Delegating tasks to specialized agents
@@ -208,19 +234,23 @@ The main `Agent` class coordinates work by:
 5. Generating reports on changes
 
 ### Report Generation System
+
 Generate comprehensive reports including:
+
 - **HTML Reports**: Interactive, styled reports with side-by-side comparisons
 - **CSV Exports**: Structured data for analysis and spreadsheets
 - **JSON Format**: Machine-readable reports for integration
 - **Annotated Reports**: Add custom notes and metadata
 
 ### Token Budget Management
+
 - Tracks LLM token usage across all agents
 - Prevents budget overruns with allocation limits
 - Provides metrics on token consumption per task
 - Supports dynamic token reallocation
 
 ### Health Monitoring
+
 - System health checks and diagnostics
 - Performance metrics collection
 - Error rate tracking and reporting
@@ -229,6 +259,7 @@ Generate comprehensive reports including:
 ## API Reference
 
 ### Main Agent
+
 ```python
 class Agent:
     def read_previous_content() -> None
@@ -237,7 +268,8 @@ class Agent:
     def get_diff() -> str
 ```
 
-### Report Generation
+### Report Generation API
+
 ```python
 class ReportGenerator:
     def generate(improvements: List[str]) -> Report
@@ -247,6 +279,7 @@ class ReportGenerator:
 ```
 
 ### Utilities
+
 ```python
 class ContextWindow:
     def add(message: str, token_count: int) -> None

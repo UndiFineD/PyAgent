@@ -28,6 +28,13 @@ wrapper for agents.
 """
 
 import argparse
+from typing import Any, Callable, Optional
+try:
+    import agent_strategies
+except ImportError:
+    sys.path.append(str(Path(__file__).parent))
+    import agent_strategies
+
 import difflib
 import json
 import logging
@@ -806,6 +813,9 @@ class BaseAgent:
         self.file_path = Path(file_path)
         self.previous_content = ""
         self.current_content = ""
+        
+        # Strategy for agent execution
+        self.strategy: agent_strategies.AgentStrategy = agent_strategies.DirectStrategy()
 
         # New attributes for enhanced functionality
         self._state = AgentState.INITIALIZED
@@ -835,6 +845,15 @@ class BaseAgent:
             cache_enabled=os.environ.get("DV_AGENT_CACHE", "true").lower() == "true",
             token_budget=int(os.environ.get("DV_AGENT_TOKEN_BUDGET", "100000")),
         )
+
+    def set_strategy(self, strategy: agent_strategies.AgentStrategy) -> None:
+        """Set the reasoning strategy for the agent.
+
+        Args:
+            strategy: An instance of AgentStrategy (e.g., DirectStrategy, ChainOfThoughtStrategy).
+        """
+        self.strategy = strategy
+        logging.info(f"Agent strategy set to {strategy.__class__.__name__}")
 
     @property
     def state(self) -> AgentState:
@@ -980,7 +999,16 @@ class BaseAgent:
             # Add conversation context if available
             full_prompt = self._build_prompt_with_history(prompt)
 
-            improvement = self.run_subagent(description, full_prompt, self.previous_content)
+            # Define backend callable for strategy
+            def backend_callable(p: str, sp: Optional[str] = None, h: Optional[List[Dict[str, str]]] = None) -> str:
+                return self.run_subagent(description, p, self.previous_content)
+
+            # Execute strategy
+            improvement = self.strategy.execute(
+                prompt=full_prompt,
+                context=self.previous_content,
+                backend_call=backend_callable
+            )
 
             # Apply post - processors
             for processor in self._post_processors:
@@ -2514,7 +2542,6 @@ class MultimodalBuilder:
 
 
 # ========== Response Caching ==========
-
 @dataclass
 class ResponseCache:
     """Caches responses based on prompts."""
@@ -2985,6 +3012,12 @@ def create_main_function(
             help='Select backend (overrides DV_AGENT_BACKEND for this run only)',
         )
         parser.add_argument(
+            '--strategy',
+            choices=['direct', 'cot', 'reflexion'],
+            default='direct',
+            help='Select reasoning strategy (direct, cot, reflexion)',
+        )
+        parser.add_argument(
             '--verbose',
             '-v',
             action='count',
@@ -3001,6 +3034,15 @@ def create_main_function(
             print(agent_class.describe_backends())
             return
         agent = agent_class(args.context)
+        
+        # Set strategy based on argument
+        if args.strategy == 'cot':
+            agent.set_strategy(agent_strategies.ChainOfThoughtStrategy())
+        elif args.strategy == 'reflexion':
+            agent.set_strategy(agent_strategies.ReflexionStrategy())
+        else:
+            agent.set_strategy(agent_strategies.DirectStrategy())
+            
         agent.read_previous_content()
         agent.improve_content(args.prompt)
         agent.update_file()

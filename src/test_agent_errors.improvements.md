@@ -5,6 +5,7 @@
 (All items implemented - see Fixed section below)
 
 ## Fixed (Moved to test_agent_errors.changes.md)
+
 - [x] FIXED: [2025-01-16] Add tests for error correlation across multiple runs.
 - [x] FIXED: [2025-01-16] Test root cause analysis with stack traces.
 - [x] FIXED: [2025-01-16] Add tests for error clustering algorithms.
@@ -42,6 +43,6 @@
 - Add integration tests with real error logs. (Fixed)
 
 ## Notes
+
 - These are suggestions based on static inspection; validate behavior with tests/runs.
 - File: `src/test_agent_errors.py`
-

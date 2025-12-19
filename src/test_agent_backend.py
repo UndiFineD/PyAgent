@@ -436,7 +436,6 @@ class TestBackendTypeEnum:
         assert len(list(BackendType)) == 5
 
 
-
 class TestBackendStateEnum:
     """Tests for BackendState enum."""
 

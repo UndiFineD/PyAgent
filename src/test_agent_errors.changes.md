@@ -7,6 +7,7 @@
 ## Session 9 - 2025-01-16
 
 ### Added - Error Tests (20 test classes)
+
 - `TestErrorCorrelation` - Tests for error correlation across multiple runs
 - `TestRootCauseAnalysis` - Tests for root cause analysis with stack traces
 - `TestErrorClustering` - Tests for error clustering algorithms
@@ -30,13 +31,15 @@
 
 ---
 
-- Initial version of test_agent-errors.py
+- Initial version of `test_agent-errors.py`
 - 2025-12-15: Replaced placeholder-only tests with real coverage for `BaseAgent` delegation.
 
 ## [2025-12-15]
+
 - Rename the file to be pytest-importable (avoid '-' and extra '.'), then update references. (Fixed)
 
 ## Fixed Improvements (from test_agent_errors.improvements.md)
+
 - Add tests for error log parsing from various sources.
 - Test error categorization and grouping.
 - Add tests for error deduplication logic.
@@ -52,4 +55,3 @@
 - Add tests for error report formatting.
 - Test error acknowledgment tracking states.
 - Add integration tests with real error logs.
-

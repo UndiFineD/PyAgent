@@ -11,6 +11,7 @@
 ## Session 9 - 2025-01-16
 
 ### Added - Changelog Tests (20 test classes)
+
 - `TestVersionRangeQueries` - Tests for changelog version range queries
 - `TestChangelogKeywordSearch` - Tests for changelog entry search by keyword
 - `TestChangelogExportFormats` - Tests for changelog export to different formats
@@ -38,9 +39,11 @@
 - 2025-12-15: Replaced placeholder-only tests with real coverage for keyword fallback vs `BaseAgent` delegation.
 
 ## [2025-12-15]
+
 - Rename the file to be pytest-importable (avoid '-' and extra '.'), then update references. (Fixed)
 
 ## [2025-12-16] Fixed Improvements
+
 - Add tests for Keep a Changelog format validation.
 - Test version parsing and semantic versioning.
 - Add tests for git history integration.
@@ -54,4 +57,3 @@
 - Test date format validation in version headers.
 - Test changelog merging and conflict resolution.
 - Add tests for custom changelog templates.
-

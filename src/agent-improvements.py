@@ -46,7 +46,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple, cast
 from base_agent import BaseAgent, create_main_function
 
 
@@ -428,8 +428,6 @@ DEFAULT_TEMPLATES: List[ImprovementTemplate] = [
 
 
 # ========== Session 7 Helper Classes ==========
-
-
 class _ScheduleStore:
     """Mapping wrapper that compares equal to {} and [] when empty."""
 
@@ -1739,7 +1737,6 @@ class ImprovementsAgent(BaseAgent):
         return [i for i in self._improvements if i.priority == priority]
 
     # ========== Impact Scoring ==========
-
     def calculate_impact_score(self, improvement: Improvement) -> float:
         """Calculate impact score for an improvement."""
         score = improvement.priority.value * 20
@@ -1774,8 +1771,7 @@ class ImprovementsAgent(BaseAgent):
         )
 
     # ========== Effort Estimation ==========
-
-    def estimate_total_effort(self) -> Dict[str, Any]:
+    def estimate_total_effort(self) -> int:
         """Return the total effort score for non-completed improvements.
 
         Tests expect this to be an integer sum of `EffortEstimate` values.
@@ -1806,7 +1802,6 @@ class ImprovementsAgent(BaseAgent):
         }
 
     # ========== Dependencies ==========
-
     def add_dependency(
         self,
         improvement_id: str,
@@ -2369,7 +2364,8 @@ class DocGenerator:
             meta = getattr(improvement, "metadata", None)
             if isinstance(meta, dict) and meta:
                 base += "\n## Metadata\n"
-                for k, v in meta.items():
+                meta_dict = cast(Dict[str, Any], meta)
+                for k, v in meta_dict.items():
                     base += f"- {k}: {v}\n"
         return base
 

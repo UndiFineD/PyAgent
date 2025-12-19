@@ -11,6 +11,7 @@
 ## Session 8 [2025-12-16]
 
 ### Added - Session 8 Enums
+
 - `SubscriptionFrequency` enum: IMMEDIATE, HOURLY, DAILY, WEEKLY
 - `PermissionLevel` enum: NONE, READ, WRITE, ADMIN
 - `ExportFormat` enum: JSON, HTML, PDF, CSV
@@ -18,6 +19,7 @@
 - `AuditAction` enum: CREATE, READ, UPDATE, DELETE, EXPORT
 
 ### Added - Session 8 Dataclasses
+
 - `ReportSubscription`: Subscription for report delivery with frequency, email, patterns
 - `ArchivedReport`: Archived report with retention policy and metadata
 - `ReportAnnotation`: Annotation on report with author, content, line_number
@@ -30,6 +32,7 @@
 - `AggregatedReport`: Combined report from multiple sources
 
 ### Added - Session 8 Helper Classes
+
 - `SubscriptionManager`: Manager for subscriptions and scheduled delivery
 - `ReportArchiver`: Archive manager with retention policies
 - `AnnotationManager`: Manager for report annotations and comments
@@ -47,12 +50,14 @@
 ## Session 6 [2025-01-13]
 
 ### Added - Type-Safe Enums
+
 - `ReportType` enum: DESCRIPTION, ERRORS, IMPROVEMENTS, SUMMARY
 - `ReportFormat` enum: MARKDOWN, JSON, HTML
 - `SeverityLevel` enum: INFO, WARNING, ERROR, CRITICAL
 - `IssueCategory` enum: SYNTAX, TYPE_ANNOTATION, STYLE, SECURITY, PERFORMANCE, DOCUMENTATION
 
 ### Added - Dataclasses for Structured Data
+
 - `CodeIssue` dataclass: Issue with message, category, severity, line_number, file_path
 - `ReportMetadata` dataclass: Metadata with path, generated_at, content_hash, version
 - `ReportTemplate` dataclass: Template with name, sections, include_metadata, include_summary
@@ -61,6 +66,7 @@
 - `FilterCriteria` dataclass: Filter with categories, min_severity, date_from, date_to, file_patterns
 
 ### Added - ReportCacheManager Class
+
 - `_load_cache()`: Load cache from disk
 - `_save_cache()`: Persist cache to disk
 - `get()`: Get cached report if valid (not expired)
@@ -68,14 +74,17 @@
 - `invalidate()`: Invalidate cache entries by path or pattern
 
 ### Added - ReportComparator Class
+
 - `compare()`: Compare two report versions and generate diff
 - `_extract_items()`: Extract list items from markdown content for comparison
 
 ### Added - ReportFilter Class
+
 - `matches()`: Check if issue matches filter criteria
 - `filter_issues()`: Filter list of issues by criteria
 
 ## [2025-12-16]
+
 - Add logging for all major actions. (Fixed)
 - Add type hints for all methods. (Fixed)
 - Add comprehensive docstrings for all methods following Google style format. (Fixed)
@@ -100,6 +109,7 @@
 - Support team-level reporting: aggregate metrics across developers. (Fixed)
 
 ## [2025-12-15]
+
 - Added detailed logging for report generation process.
 - Added explicit type hints to `main`.
 - Add `--help` examples and validate CLI args (paths, required files). (Fixed)

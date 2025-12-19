@@ -2503,10 +2503,6 @@ class StatsForecaster:
         }
 
 
-class StatsSnapshotManager:
-    """Manages snapshots of stats state."""
-
-
 @dataclass
 class StatsSnapshot:
     """A persisted snapshot for StatsSnapshotManager."""
@@ -2882,10 +2878,16 @@ class StatsSubscription:
 
 class StatsAnnotationManager:
     """Manages annotations on metrics."""
+
     def __init__(self) -> None:
         self.annotations: Dict[str, List[MetricAnnotation]] = {}
 
-    def add_annotation(self, metric: str, annotation: Optional[MetricAnnotation] = None, **kwargs: Any) -> MetricAnnotation:
+    def add_annotation(
+        self,
+        metric: str,
+        annotation: Optional[MetricAnnotation] = None,
+        **kwargs: Any,
+    ) -> MetricAnnotation:
         """Add annotation to metric.
 
         Compatibility:
@@ -2951,7 +2953,7 @@ class StatsChangeDetector:
                 change_percent = 100.0 if new_val != 0.0 else 0.0
             else:
                 change_percent = abs((new_val - old_val) / old_val) * 100.0
-            change_info = {
+            change_info: Dict[str, Any] = {
                 "metric": metric,
                 "old": old_val,
                 "new": new_val,
@@ -3193,10 +3195,6 @@ class StatsAccessController:
         return user in self.permissions and resource in self.permissions[user]
 
 
-class StatsBackupManager:
-    """Manages backups of stats."""
-
-
 @dataclass
 class StatsBackup:
     """A persisted backup entry for StatsBackupManager."""
@@ -3233,7 +3231,7 @@ class StatsBackupManager:
         self.backups[name] = {"data": data, "timestamp": timestamp}
 
         path = self._backup_path(name) or Path(f"{self._safe_backup_name(name)}.json")
-        payload = {"name": name, "timestamp": timestamp, "data": data}
+        payload: Dict[str, Any] = {"name": name, "timestamp": timestamp, "data": data}
         if self.backup_dir is not None:
             path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
 
@@ -3260,7 +3258,9 @@ class StatsBackupManager:
     def restore_backup(self, name: str) -> Optional[Dict[str, Any]]:
         """Restore from in-memory backup."""
         if name in self.backups:
-            return self.backups[name]["data"]
+            val = self.backups[name]["data"]
+            if isinstance(val, dict):
+                return val  # type: ignore
         return None
 
     def list_backups(self) -> List[str]:

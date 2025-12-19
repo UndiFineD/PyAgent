@@ -1,6 +1,7 @@
 # Improvements: `test_agent_changes.py`
 
 ## Status
+
 All previous fixed items have been moved to `test_agent_changes.changes.md`.
 
 ## Suggested improvements
@@ -8,6 +9,7 @@ All previous fixed items have been moved to `test_agent_changes.changes.md`.
 (All items implemented - see Fixed section below)
 
 ## Fixed (Moved to test_agent_changes.changes.md)
+
 - [x] FIXED: [2025-01-16] Add tests for changelog version range queries.
 - [x] FIXED: [2025-01-16] Test changelog entry search by keyword.
 - [x] FIXED: [2025-01-16] Add tests for changelog export to different formats.
@@ -43,5 +45,6 @@ All previous fixed items have been moved to `test_agent_changes.changes.md`.
 - Add tests for custom changelog templates. (Fixed)
 
 ## Notes
+
 - These are suggestions based on static inspection; validate behavior with tests/runs.
 - File: `src/test_agent_changes.py`
