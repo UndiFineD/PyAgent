@@ -1,10 +1,10 @@
-# Description: `test_agent-coder.py`
+# Description: `test_agent_coder.py`
 
 ## Module purpose
 Legacy tests for agent-coder.py.
 
 ## Location
-- Path: `scripts/agent/test_agent-coder.py`
+- Path: `src/test_agent_coder.py`
 
 ## Public surface
 - Classes: (none)
@@ -17,4 +17,4 @@ Legacy tests for agent-coder.py.
 - Top imports: `__future__`, `pathlib`, `typing`, `pytest`, `agent_test_utils`, `base_agent`
 
 ## File fingerprint
-- SHA256(source): `98ff6c02b063107e…`
+- SHA256(source): `A673CB75F972629250015AF3F3E3F55449A4747661928F66D72E2EDA1C2E6FBE`

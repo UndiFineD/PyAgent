@@ -1,10 +1,10 @@
-# Description: `test_agent-context.py`
+# Description: `test_agent_context.py`
 
 ## Module purpose
 Legacy tests for agent-context.py.
 
 ## Location
-- Path: `scripts/agent/test_agent-context.py`
+- Path: `src/test_agent_context.py`
 
 ## Public surface
 - Classes: (none)
@@ -17,4 +17,4 @@ Legacy tests for agent-context.py.
 - Top imports: `__future__`, `pathlib`, `typing`, `pytest`, `agent_test_utils`, `base_agent`
 
 ## File fingerprint
-- SHA256(source): `ff877c3b2f3dcada…`
+- SHA256(source): `FD267A3DE1F0BDB38AD58FDB75CBD7A0AAF8358B0B53F895C93FD63908D3DE72`

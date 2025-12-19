@@ -2372,12 +2372,13 @@ class TestExportFormatsAdvanced(unittest.TestCase):
 
     def test_export_to_html(self):
         """Test exporting to HTML."""
-        html = """
-        <table>
-            <tr><td>Files</td><td>{stats['files']}</td></tr>
-            <tr><td>Errors</td><td>{stats['errors']}</td></tr>
-        </table>
-        """
+        stats = {"files": 100, "errors": 0}
+        html = (
+            "<table>\n"
+            "    <tr><td>Files</td><td>{files}</td></tr>\n"
+            "    <tr><td>Errors</td><td>{errors}</td></tr>\n"
+            "</table>\n"
+        ).format(files=stats["files"], errors=stats["errors"])
 
         assert "<table>" in html
         assert "100" in html
@@ -2554,9 +2555,9 @@ class TestFiltering(unittest.TestCase):
     def test_filter_by_file_pattern(self):
         """Test filtering by file pattern."""
         stats = [
-            {"file": "src / main.py", "errors": 5},
-            {"file": "src / utils.py", "errors": 2},
-            {"file": "tests / test.py", "errors": 1},
+            {"file": "src/main.py", "errors": 5},
+            {"file": "src/utils.py", "errors": 2},
+            {"file": "tests/test.py", "errors": 1},
         ]
 
         src_only = [s for s in stats if s["file"].startswith("src/")]

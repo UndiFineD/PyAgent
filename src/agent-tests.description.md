@@ -32,4 +32,4 @@ To locate the source file being tested, `TestsAgent` attempts:
 - `hashlib` (IDs for internal test records)
 
 ## File fingerprint
-- SHA256(source): `DF0ECD6E7A860E65AAB51AF415B4C854D5AF04BF24BDF346AA6D661BD6E427FB`
+- SHA256(source): `60429DF051E5EEE8E9BE332C1F4FDC3E3651DC2C5D7F14431C1A147EC525A061`

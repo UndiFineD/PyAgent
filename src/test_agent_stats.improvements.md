@@ -27,5 +27,5 @@
 - [x] FIXED: [2025-06-14] Add tests for stats access control.
 - [x] FIXED: [2025-06-14] Test stats backup and restore.
 - These are suggestions based on static inspection; validate behavior with tests/runs.
-- File: `scripts/agent/test_agent_stats.py`
+- File: `src/test_agent_stats.py`
 

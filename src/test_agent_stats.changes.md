@@ -1,5 +1,9 @@
 # AI Changelog Improvement Suggestions
 
+## [2025-12-19] - Documentation refresh
+
+- Refreshed companion docs to match `src/test_agent_stats.py` and updated SHA256 fingerprint.
+
 ## Description: Improve the changelog for test_agent-stats
 
 ## Suggestions for improving changelogs

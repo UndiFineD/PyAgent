@@ -1,6 +1,14 @@
 # Changelog
 
-- Initial version of test_agent-improvements.py
+## [2025-12-19] - Documentation refresh
+
+- Refreshed companion docs to match `src/test_agent_improvements.py` and updated SHA256 fingerprint.
+
+## [2025-12-18] - Documentation refresh
+
+- Refreshed companion docs to match `src/test_agent_improvements.py` and updated SHA256 fingerprint.
+
+- Initial version of test_agent_improvements.py
 - 2025-12-15: Replaced placeholder-only tests with real coverage for `BaseAgent` delegation.
 
 ## [2025-12-15]

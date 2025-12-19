@@ -267,6 +267,19 @@ class TestSnapshot:
                 content_str.encode("utf-8")
             ).hexdigest()
 
+    def __eq__(self, other: object) -> bool:
+        # Compatibility: some tests compare a loaded snapshot directly
+        # to a raw content object (e.g. dict).
+        if isinstance(other, (dict, list, str, int, float, bool)):
+            return self.content == other
+        if isinstance(other, TestSnapshot):
+            return (
+                self.name == other.name
+                and self.content == other.content
+                and self.content_hash == other.content_hash
+            )
+        return False
+
 
 @dataclass
 class SnapshotComparisonResult:
@@ -519,10 +532,10 @@ class TestDataSeeder:
             seed: Random seed for reproducibility.
         """
         self.seed = seed
-        if seed is not None:
-            random.seed(seed)
-            if np:
-                np.random.seed(seed)
+        # Use an instance RNG to avoid global-random interference across tests.
+        self._rng = random.Random(seed)
+        if seed is not None and np:
+            np.random.seed(seed)
 
     def generate_metric_data(self, count: int = 10) -> List[Dict[str, Union[str, float]]]:
         """Generate metric data for testing.
@@ -536,7 +549,7 @@ class TestDataSeeder:
         return [
             {
                 "metric": f"metric_{i}",
-                "value": random.uniform(0, 100),
+                "value": self._rng.uniform(0, 100),
                 "timestamp": time.time() + i
             }
             for i in range(count)
@@ -555,8 +568,8 @@ class TestDataSeeder:
         return [
             {
                 "test_name": f"test_{i}",
-                "status": "PASSED" if random.random() < pass_rate else "FAILED",
-                "duration_ms": random.uniform(10, 5000)
+                "status": "PASSED" if self._rng.random() < pass_rate else "FAILED",
+                "duration_ms": self._rng.uniform(10, 5000)
             }
             for i in range(count)
         ]
@@ -571,8 +584,8 @@ class TestDataSeeder:
             Generated file content.
         """
         # Use a deterministic return value based on seed for reproducibility
-        func_id = self.seed if self.seed is not None else random.randint(1, 100)
-        return_val = random.randint(1, 100)
+        func_id = self.seed if self.seed is not None else self._rng.randint(1, 100)
+        return_val = self._rng.randint(1, 100)
         if language == "python":
             return f'# Python file\ndef func_{func_id}():\n    return {return_val}\n'
         elif language == "javascript":
@@ -1455,6 +1468,36 @@ class TestResultAggregator:
             "avg_duration_ms": sum(durations) / len(durations) if durations else 0,
         }
 
+    def get_summary(self) -> Dict[str, Any]:
+        """Compatibility alias used by some tests."""
+        report = self.get_report()
+        return {
+            "total": report.get("total", 0),
+            "passed": report.get("passed", 0),
+            "failed": report.get("failed", 0),
+            "skipped": report.get("skipped", 0),
+            "errors": report.get("errors", 0),
+        }
+
+    def get_by_suite(self) -> Dict[str, Dict[str, int]]:
+        """Group results by suite prefix ("suite/test")."""
+        by_suite: Dict[str, Dict[str, int]] = {}
+        for r in self._results:
+            suite = "unknown"
+            if "/" in r.test_name:
+                suite = r.test_name.split("/", 1)[0]
+            by_suite.setdefault(suite, {"total": 0, "passed": 0, "failed": 0, "skipped": 0, "errors": 0})
+            by_suite[suite]["total"] += 1
+            if r.status == TestStatus.PASSED:
+                by_suite[suite]["passed"] += 1
+            elif r.status == TestStatus.FAILED:
+                by_suite[suite]["failed"] += 1
+            elif r.status == TestStatus.SKIPPED:
+                by_suite[suite]["skipped"] += 1
+            elif r.status == TestStatus.ERROR:
+                by_suite[suite]["errors"] += 1
+        return by_suite
+
     def get_failures(self) -> List[TestResult]:
         """Get failed tests."""
         return [r for r in self._results if r.status == TestStatus.FAILED]
@@ -1462,6 +1505,29 @@ class TestResultAggregator:
     def clear(self) -> None:
         """Clear all results."""
         self._results.clear()
+
+
+class CoverageTracker:
+    """Lightweight coverage hit tracker used by tests."""
+
+    def __init__(self) -> None:
+        self._hits: Dict[str, int] = {}
+        self._targets: Set[str] = set()
+
+    def register_target(self, name: str) -> None:
+        self._targets.add(name)
+
+    def record_hit(self, name: str) -> None:
+        self._hits[name] = self._hits.get(name, 0) + 1
+
+    def get_hits(self) -> Dict[str, int]:
+        return dict(self._hits)
+
+    def get_percentage(self) -> float:
+        if not self._targets:
+            return 0.0
+        covered = sum(1 for t in self._targets if self._hits.get(t, 0) > 0)
+        return (covered / len(self._targets)) * 100.0
 
 
 # ============================================================================
@@ -2814,6 +2880,13 @@ class LogCapturer:
         self.handler = logging.Handler()
         self.handler.emit = lambda record: self.logs.append(record)
 
+    def __enter__(self) -> "LogCapturer":
+        self.start()
+        return self
+
+    def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> None:
+        self.stop()
+
     def start(self) -> None:
         """Start capturing logs."""
         root_logger = logging.getLogger()
@@ -2839,11 +2912,28 @@ class TestConfigLoader:
         self.config_path = config_path or Path("test_config.json")
         self.config: Dict[str, Any] = {}
 
-    def load(self) -> Dict[str, Any]:
-        """Load configuration."""
+    def load(self, path: Optional[Path] = None, defaults: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Load configuration.
+
+        Compatibility:
+        - Tests pass a `Path` to load.
+        - Tests may pass `defaults=` to be merged.
+        """
+        if path is not None:
+            self.config_path = Path(path)
+
+        loaded: Dict[str, Any] = {}
         if self.config_path.exists():
-            with open(self.config_path) as f:
-                self.config = json.load(f)
+            with open(self.config_path, encoding="utf-8") as f:
+                loaded = json.load(f)
+
+        if defaults:
+            merged = dict(defaults)
+            merged.update(loaded)
+            self.config = merged
+        else:
+            self.config = loaded
+
         return self.config
 
     def get(self, key: str, default: Any = None) -> Any:
@@ -2854,40 +2944,64 @@ class TestConfigLoader:
 class TestReportGenerator:
     """Generates test reports in various formats."""
 
-    def __init__(self) -> None:
+    def __init__(self, output_dir: Optional[Union[str, Path]] = None) -> None:
         """Initialize report generator."""
+        self.output_dir = Path(output_dir) if output_dir is not None else None
+        if self.output_dir is not None:
+            self.output_dir.mkdir(parents=True, exist_ok=True)
         self.results: List[Dict[str, Any]] = []
 
     def add_result(self, test_name: str, passed: bool, duration_ms: float) -> None:
-        """Add test result."""
+        """Add test result (legacy API)."""
         self.results.append({
-            'test_name': test_name,
-            'passed': passed,
-            'duration_ms': duration_ms
+            "test_name": test_name,
+            "status": "passed" if passed else "failed",
+            "duration_ms": float(duration_ms),
         })
 
-    def generate_html(self) -> str:
-        """Generate HTML report."""
-        rows = ''
-        for r in self.results:
-            status = 'PASSED' if r['passed'] else 'FAILED'
-            rows += f"<tr><td>{r['test_name']}</td><td>{status}</td><td>{r['duration_ms']:.2f}ms</td></tr>"
-        return f"""
-        <html>
-        <head><title>Test Report</title></head>
-        <body>
-        <h1>Test Results</h1>
-        <table border="1">
-        <tr><th>Test</th><th>Status</th><th>Duration</th></tr>
-        {rows}
-        </table>
-        </body>
-        </html>
-        """
+    def add_test_result(self, test_name: str, status: str, duration_ms: float, error: str = "") -> None:
+        """Add test result (test compatibility API)."""
+        self.results.append({
+            "test_name": test_name,
+            "status": status,
+            "duration_ms": float(duration_ms),
+            "error": error,
+        })
 
-    def generate_json(self) -> str:
-        """Generate JSON report."""
-        return json.dumps(self.results, indent=2)
+    def _render_html(self) -> str:
+        rows = ""
+        for r in self.results:
+            status = str(r.get("status", ""))
+            duration = float(r.get("duration_ms", 0.0))
+            error = str(r.get("error", ""))
+            rows += (
+                f"<tr><td>{r.get('test_name','')}</td><td>{status}</td><td>{duration:.2f}ms</td>"
+                f"<td>{error}</td></tr>"
+            )
+        return (
+            "<html><head><title>Test Report</title></head><body>"
+            "<h1>Test Results</h1>"
+            "<table border=\"1\">"
+            "<tr><th>Test</th><th>Status</th><th>Duration</th><th>Error</th></tr>"
+            f"{rows}</table></body></html>"
+        )
+
+    def generate_html(self) -> Path:
+        """Generate HTML report file."""
+        if self.output_dir is None:
+            self.output_dir = Path.cwd()
+        path = self.output_dir / "test_report.html"
+        path.write_text(self._render_html(), encoding="utf-8")
+        return path
+
+    def generate_json(self) -> Path:
+        """Generate JSON report file."""
+        if self.output_dir is None:
+            self.output_dir = Path.cwd()
+        path = self.output_dir / "test_report.json"
+        payload = {"results": self.results}
+        path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+        return path
 
 
 class CleanupManager:
@@ -2900,6 +3014,10 @@ class CleanupManager:
     def add_hook(self, hook: Callable[[], None]) -> None:
         """Add cleanup hook."""
         self.hooks.append(hook)
+
+    def register(self, hook: Callable[[], None]) -> None:
+        """Compatibility alias for add_hook."""
+        self.add_hook(hook)
 
     def cleanup(self) -> None:
         """Execute all cleanup hooks."""
@@ -2917,11 +3035,40 @@ class DependencyResolver:
         """Initialize resolver."""
         self.dependencies: Dict[str, List[str]] = {}
 
+    def add_test(self, name: str, depends_on: List[str]) -> None:
+        """Register a test and its dependencies (test compatibility API)."""
+        self.dependencies[name] = list(depends_on)
+
     def add_dependency(self, test: str, depends_on: str) -> None:
         """Add dependency."""
         if test not in self.dependencies:
             self.dependencies[test] = []
         self.dependencies[test].append(depends_on)
+
+    def resolve(self) -> List[str]:
+        """Resolve execution order or raise on circular dependencies."""
+        visiting: Set[str] = set()
+        visited: Set[str] = set()
+        order: List[str] = []
+
+        def visit(node: str) -> None:
+            if node in visited:
+                return
+            if node in visiting:
+                raise ValueError("Circular dependency detected")
+            visiting.add(node)
+            for dep in self.dependencies.get(node, []):
+                visit(dep)
+            visiting.remove(node)
+            visited.add(node)
+            order.append(node)
+
+        nodes: Set[str] = set(self.dependencies.keys())
+        for deps in self.dependencies.values():
+            nodes.update(deps)
+        for n in sorted(nodes):
+            visit(n)
+        return order
 
     def resolve_order(self) -> List[str]:
         """Resolve execution order (topological sort)."""
@@ -2964,6 +3111,13 @@ class DependencyResolver:
         return False
 
 
+@dataclass(frozen=True)
+class ResourceHandle:
+    """A handle representing an acquired resource from ResourcePool."""
+
+    name: str
+
+
 class ResourcePool:
     """Manages resource allocation for tests."""
 
@@ -2972,29 +3126,92 @@ class ResourcePool:
         self.max_resources = max_resources
         self.available = max_resources
         self.lock = threading.Lock()
+        self._allocations: Dict[str, int] = {}
 
-    def acquire(self, count: int = 1) -> bool:
-        """Acquire resources."""
+    def acquire(self, count: Union[int, str] = 1, timeout: float = 10.0) -> Optional[ResourceHandle]:
+        """Acquire a resource.
+
+        Compatibility:
+        - Tests call `acquire("test_name", timeout=...)` and expect a handle or None.
+        - Legacy code may call `acquire(count)`.
+        """
+        if isinstance(count, str):
+            name = count
+            start = time.time()
+            while time.time() - start < timeout:
+                with self.lock:
+                    if self.available >= 1:
+                        self.available -= 1
+                        self._allocations[name] = self._allocations.get(name, 0) + 1
+                        return ResourceHandle(name=name)
+                time.sleep(0.01)
+            return None
+
         with self.lock:
-            if self.available >= count:
-                self.available -= count
-                return True
-            return False
+            if self.available >= int(count):
+                self.available -= int(count)
+                return ResourceHandle(name=f"count:{int(count)}")
+            return None
 
-    def release(self, count: int = 1) -> None:
+    def release(self, handle: Union[int, ResourceHandle] = 1) -> None:
         """Release resources."""
         with self.lock:
-            self.available = min(self.available + count, self.max_resources)
+            if isinstance(handle, ResourceHandle):
+                self.available = min(self.available + 1, self.max_resources)
+                self._allocations[handle.name] = max(0, self._allocations.get(handle.name, 0) - 1)
+                return
+            self.available = min(self.available + int(handle), self.max_resources)
 
     def wait_available(self, count: int = 1, timeout: float = 10.0) -> bool:
         """Wait for resources to be available."""
         import time as time_module
         start = time_module.time()
         while time_module.time() - start < timeout:
-            if self.acquire(count):
+            if self.acquire(count) is not None:
                 return True
             time_module.sleep(0.1)
         return False
+
+
+class EnvironmentIsolator:
+    """Context manager that restores environment variables on exit."""
+
+    def __init__(self) -> None:
+        self._original: Dict[str, str] = {}
+
+    def __enter__(self) -> "EnvironmentIsolator":
+        self._original = dict(os.environ)
+        return self
+
+    def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> None:
+        os.environ.clear()
+        os.environ.update(self._original)
+
+    def set_env(self, key: str, value: str) -> None:
+        os.environ[str(key)] = str(value)
+
+
+class RetryHelper:
+    """Simple retry helper for flaky operations."""
+
+    def __init__(self, max_retries: int = 3, delay_seconds: float = 0.0) -> None:
+        self.max_retries = int(max_retries)
+        self.delay_seconds = float(delay_seconds)
+
+    def retry(self, fn: Callable[[], T]) -> T:
+        last_exc: Optional[BaseException] = None
+        for attempt in range(self.max_retries):
+            try:
+                return fn()
+            except Exception as exc:  # noqa: BLE001
+                last_exc = exc
+                if attempt == self.max_retries - 1:
+                    raise
+                if self.delay_seconds > 0:
+                    time.sleep(self.delay_seconds)
+        if last_exc is not None:
+            raise last_exc
+        raise RuntimeError("RetryHelper failed without exception")
 
 
 def get_base_agent_module() -> ModuleType:

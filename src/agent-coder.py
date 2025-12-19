@@ -109,6 +109,15 @@ class QualityScore:
     test_coverage: float = 0.0
     issues: List[str] = field(default_factory=lambda: [])
 
+    @property
+    def score(self) -> float:
+        """Compatibility alias for overall_score."""
+        return self.overall_score
+
+    @score.setter
+    def score(self, value: float) -> None:
+        self.overall_score = value
+
 
 @dataclass
 class RefactoringPattern:
@@ -1486,11 +1495,12 @@ class AccessibilityAnalyzer:
                 ))
 
         # Check for div / span used as interactive elements
-        interactive_div = r'<div[^>] * onClick'
+        interactive_div = r'<div\b[^>]*\bonClick\s*=\s*\{[^}]+\}[^>]*>'
         for match in re.finditer(interactive_div, content, re.IGNORECASE):
             line_num = content[:match.start()].count('\n') + 1
             context = match.group()
-            if 'role=' not in context and 'tabIndex' not in context:
+            context_lower = context.lower()
+            if 'role=' not in context_lower and 'tabindex' not in context_lower:
                 self.issues.append(AccessibilityIssue(
                     issue_type=AccessibilityIssueType.SEMANTIC_HTML,
                     severity=AccessibilitySeverity.SERIOUS,
@@ -1690,6 +1700,15 @@ class CoderAgent(BaseAgent):
         """Detect the programming language from file extension."""
         ext = self.file_path.suffix.lower()
         return self.LANGUAGE_EXTENSIONS.get(ext, CodeLanguage.UNKNOWN)
+
+    def detect_language(self) -> CodeLanguage:
+        """Public wrapper to detect and return the file language.
+
+        Returns:
+            The detected CodeLanguage based on file extension.
+        """
+        self._language = self._detect_language()
+        return self._language
 
     @property
     def language(self) -> CodeLanguage:

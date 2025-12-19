@@ -1,4 +1,4 @@
-# Errors: `test_agent_changes.py`
+# Errors: `test_agent_backend.py`
 
 ## Scan scope
 - Static scan (AST parse) + lightweight compile/syntax check
@@ -8,4 +8,4 @@
 - `py_compile` equivalent: OK (AST parse succeeded)
 
 ## Known issues / hazards
-- None currently noted during documentation refresh.
+- External HTTP calls are mocked; failures are most likely due to mismatched mock expectations or API shape drift.

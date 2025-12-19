@@ -1,5 +1,9 @@
 # Changelog
 
+## [2025-12-19] - Documentation refresh
+
+- Refreshed companion docs to match `src/test_agent.py` and updated SHA256 fingerprint.
+
 ## Session 9 - 2025-01-16
 
 ### Added - Agent Tests (20 test classes)

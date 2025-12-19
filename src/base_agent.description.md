@@ -27,4 +27,4 @@ Note: This module contains many supporting enums/dataclasses/utilities (template
 - Optional dependency: markdown fixer (`scripts.fix.fix_markdown_lint` or `fix/fix_markdown_lint.py`)
 
 ## File fingerprint
-- SHA256(source): `F8793A413520CFB7C3D15BA4A66166FD1BD2A9B3D4AEC91FB139C2B31B92E453`
+- SHA256(source): `49f35f6c430130c8f7c79fb93bbdfbac2214b026d57276362d33a4aaf1413978`

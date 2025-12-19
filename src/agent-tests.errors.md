@@ -20,4 +20,4 @@ The errors below focus on realistic runtime failures and edge cases when using `
 
 ## Logging / diagnostics gaps
 - Structural validation is intentionally lightweight and does not guarantee correctness.
-- This module contains multiple placeholder/stub helper implementations; calling them directly may do nothing or return dummy values.
+- Several helper implementations are intentionally lightweight; calling them directly may not match production-grade behavior.

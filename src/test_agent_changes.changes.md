@@ -1,5 +1,13 @@
 # Changelog
 
+## [2025-12-19] - Documentation refresh
+
+- Refreshed companion docs to match `src/test_agent_changes.py` and updated SHA256 fingerprint.
+
+## [2025-12-18] - Documentation refresh
+
+- Refreshed companion docs to match `src/test_agent_changes.py` and updated SHA256 fingerprint.
+
 ## Session 9 - 2025-01-16
 
 ### Added - Changelog Tests (20 test classes)
@@ -26,7 +34,7 @@
 
 ---
 
-- Initial version of test_agent-changes.py
+- Initial version of test_agent_changes.py
 - 2025-12-15: Replaced placeholder-only tests with real coverage for keyword fallback vs `BaseAgent` delegation.
 
 ## [2025-12-15]
