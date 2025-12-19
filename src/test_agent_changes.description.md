@@ -1,24 +1,28 @@
-# Description: `test_agent-changes.py`
+# Description: `test_agent_changes.py`
 
 ## Module purpose
-Legacy tests for agent-changes.py.
 
-Run directly via:
-
-    pytest scripts/agent/test_agent-changes.py
+Pytest suite covering `agent-changes.py` / `ChangesAgent` behaviors (parsing, changelog manipulation utilities, preview mode behavior, and delegation paths).
 
 ## Location
-- Path: `scripts/agent/test_agent-changes.py`
+
+- Path: `src/test_agent_changes.py`
 
 ## Public surface
-- Classes: (none)
-- Functions: base_agent_module, test_changes_agent_keyword_prompt_generates_suggestions, test_changes_agent_non_keyword_delegates_to_base
+
+- Test classes: multiple `Test*` classes grouped by feature area
+- Fixtures/helpers: provided via `pytest` + `agent_test_utils`
 
 ## Behavior summary
-- Pure module (no obvious CLI/side effects).
+
+- Pure test module (no CLI/side effects).
 
 ## Key dependencies
-- Top imports: `__future__`, `pathlib`, `typing`, `pytest`, `agent_test_utils`, `base_agent`
+
+- `pytest`
+- `pathlib`, `typing`
+- `agent_test_utils` (dynamic import helpers)
 
 ## File fingerprint
-- SHA256(source): `8f3c5d0da71477a6…`
+
+- SHA256(source): `54F99F434340536B5764D40FE2A37EE6BEEBB66EE8BBB8E2AFEFECFEC1F2058E`

@@ -44,4 +44,4 @@ All previous fixed items have been moved to `test_agent_changes.changes.md`.
 
 ## Notes
 - These are suggestions based on static inspection; validate behavior with tests/runs.
-- File: `scripts/agent/test_agent_changes.py`
+- File: `src/test_agent_changes.py`

@@ -2,7 +2,7 @@
 
 ## Documentation notes
 This module is very large and mixes the `TestsAgent` CLI with many supporting types and utilities.
-Some helper classes near the end are placeholders (e.g., `TestRecorder`) and do not yet implement real behavior.
+Some helper classes near the end are lightweight compatibility implementations (e.g., `TestRecorder`, `DataFactory`) intended to satisfy the unit-test surface; they may not be production-ready.
 
 ## Suggested improvements
 - Split the module into smaller units (e.g., `tests_agent.py`, `models.py`, `scheduling.py`) to reduce maintenance risk.

@@ -5,6 +5,7 @@
 - Updated module docstring and companion documentation to match current `TestsAgent` behavior.
 - Corrected paths to use `src/agent-tests.py` and refreshed the SHA256 fingerprint in the description doc.
 - Normalized markdown formatting (blank lines around headings/lists).
+- Added compatibility APIs for test-prioritization, impact analysis, parallelization, coverage gaps, contract validation, environment provisioning, recording/replay, and documentation generation.
 
 ## [2025-01-16] - Session 7 Implementation
 

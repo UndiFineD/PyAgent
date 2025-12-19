@@ -1,10 +1,10 @@
-# Description: `test_agent-tests.py`
+# Description: `test_agent_tests.py`
 
 ## Module purpose
 Legacy tests for agent-tests.py.
 
 ## Location
-- Path: `scripts/agent/test_agent-tests.py`
+- Path: `src/test_agent_tests.py`
 
 ## Public surface
 - Classes: (none)
@@ -17,4 +17,4 @@ Legacy tests for agent-tests.py.
 - Top imports: `__future__`, `pathlib`, `agent_test_utils`
 
 ## File fingerprint
-- SHA256(source): `6aecca472acda46e…`
+- SHA256(source): `BE8381071B1EBA8ABDB4C78C9C05708C6D7016D5A4FE1E42E0F1A9A5143BC82C`

@@ -12,9 +12,9 @@
 
 """Legacy tests for base_agent.py.
 
-These live next to the agent scripts so they can be run directly via:
+These live next to the implementation under `src/` and can be run directly via:
 
-    pytest scripts / agent / test_base_agent.py
+    pytest src/test_base_agent.py
 """
 
 from __future__ import annotations
@@ -50,6 +50,11 @@ def test_improve_content_uses_run_subagent(monkeypatch: pytest.MonkeyPatch, tmp_
                                            base_agent_module: Any):
     target = tmp_path / "x.md"
     target.write_text("BEFORE", encoding="utf-8")
+
+    # BaseAgent uses a class-level response cache by default. Disable caching
+    # for this test so we reliably exercise the patched `run_subagent`.
+    monkeypatch.setenv("DV_AGENT_CACHE", "false")
+    base_agent_module.BaseAgent._response_cache.clear()
 
     def fake_run_subagent(
             self: Any,
@@ -90,67 +95,34 @@ def test_get_diff_contains_unified_markers(tmp_path: Path, base_agent_module: An
     assert "+++ current" in diff
 
 
-def test_run_subagent_prefers_local_copilot_cli(
+def test_run_subagent_delegates_to_agent_backend(
         monkeypatch: pytest.MonkeyPatch,
         base_agent_module: Any) -> None:
-    calls: list[list[str]] = []
+    """BaseAgent.run_subagent delegates backend selection to agent_backend."""
 
-    class Result:
-        def __init__(self, returncode: int, stdout: str = "", stderr: str = "") -> None:
-            self.returncode = returncode
-            self.stdout = stdout
-            self.stderr = stderr
+    calls: list[tuple[str, str, str]] = []
 
-    def fake_run(args: List[str], **kwargs: Any) -> Result:
-        # Record args only (not env / token).
-        calls.append(list(args))
-        # "copilot --version" probe succeeds.
-        if args[:2] == ["copilot", "--version"]:
-            return Result(0, "copilot 1.2.3")
-        # Actual copilot invocation returns a response.
-        if args and args[0] == "copilot":
-            assert "--prompt" in args
-            assert "--deny-tool" in args
-            assert "--silent" in args
-            return Result(0, "OK_FROM_COPILOT")
-        raise AssertionError(f"Unexpected subprocess call: {args}")
-    monkeypatch.delenv("DV_AGENT_BACKEND", raising=False)
-    monkeypatch.setattr(base_agent_module.agent_backend.subprocess, "run", fake_run)
+    def fake_backend_run_subagent(description: str, prompt: str, original_content: str = "") -> str:
+        calls.append((description, prompt, original_content))
+        return "OK"
+
+    monkeypatch.setattr(base_agent_module.agent_backend, "run_subagent", fake_backend_run_subagent)
     agent = base_agent_module.BaseAgent("x.md")
     out = agent.run_subagent("desc", "prompt", "ORIG")
-    assert out == "OK_FROM_COPILOT"
-    assert calls[0][:2] == ["copilot", "--version"]
+    assert out == "OK"
+    assert calls == [("desc", "prompt", "ORIG")]
 
 
-def test_run_subagent_falls_back_to_gh_copilot_explain(
+def test_run_subagent_falls_back_to_original_content_when_backend_returns_none(
         monkeypatch: pytest.MonkeyPatch,
         base_agent_module: Any) -> None:
-    calls: list[list[str]] = []
+    def fake_backend_run_subagent(description: str, prompt: str, original_content: str = "") -> None:
+        return None
 
-    class Result:
-        def __init__(self, returncode: int, stdout: str = "", stderr: str = "") -> None:
-            self.returncode = returncode
-            self.stdout = stdout
-            self.stderr = stderr
-
-    def fake_run(args: List[str], **kwargs: Any) -> Result:
-        calls.append(list(args))
-        # "copilot" missing.
-        if args[:2] == ["copilot", "--version"]:
-            raise FileNotFoundError("copilot not found")
-        # "gh" is present.
-        if args[:2] == ["gh", "--version"]:
-            return Result(0, "gh version 2.x")
-        # gh copilot explain returns text.
-        if args[:3] == ["gh", "copilot", "explain"]:
-            return Result(0, "EXPLAINED")
-        raise AssertionError(f"Unexpected subprocess call: {args}")
-    monkeypatch.delenv("DV_AGENT_BACKEND", raising=False)
-    monkeypatch.setattr(base_agent_module.agent_backend.subprocess, "run", fake_run)
+    monkeypatch.setattr(base_agent_module.agent_backend, "run_subagent", fake_backend_run_subagent)
     agent = base_agent_module.BaseAgent("x.md")
-    out = agent.run_subagent("desc", "git status", "ORIG")
-    assert "EXPLAINED" in out
-    assert any(c[:3] == ["gh", "copilot", "explain"] for c in calls)
+    out = agent.run_subagent("desc", "prompt", "ORIG")
+    assert out == "ORIG"
 
 
 def test_llm_chat_via_github_models_builds_request_and_parses_response(
@@ -167,7 +139,7 @@ def test_llm_chat_via_github_models_builds_request_and_parses_response(
 
     def fake_post(url: str,
                   headers: Optional[Dict[str,
-                                         str]] = None,
+                  str]] = None,
                   data: Optional[str] = None,
                   timeout: Optional[int] = None) -> FakeResponse:
         posted["url"] = url
@@ -225,7 +197,7 @@ def test_run_subagent_uses_github_models_backend(
 
     def fake_post(url: str,
                   headers: Optional[Dict[str,
-                                         str]] = None,
+                  str]] = None,
                   data: Optional[str] = None,
                   timeout: Optional[int] = None) -> FakeResponse:
         assert url == "https://example.test / v1 / chat / completions"
@@ -268,7 +240,6 @@ def test_run_subagent_handles_subprocess_failures_gracefully(
 # ============================================================================
 # New tests for suggested improvements
 # ============================================================================
-
 def test_read_file_with_utf8_bom_encoding(tmp_path: Path, base_agent_module: Any) -> None:
     """Test file reading with UTF-8 BOM encoding."""
     target = tmp_path / "bom.md"
@@ -303,7 +274,6 @@ def test_backend_selection_via_env_var(
         monkeypatch.setenv("GITHUB_TOKEN", "TOKEN")
     else:
         monkeypatch.setenv("DV_AGENT_BACKEND", backend)
-
     agent = base_agent_module.BaseAgent("x.md")
     assert agent is not None
 
@@ -331,7 +301,6 @@ def test_subprocess_timeout_handling(
 
     monkeypatch.delenv("DV_AGENT_BACKEND", raising=False)
     monkeypatch.setattr(base_agent_module.agent_backend.subprocess, "run", fake_run_with_timeout)
-
     agent = base_agent_module.BaseAgent("x.md")
     agent.run_subagent("desc", "prompt", "ORIG")
     # Timeout handling should be present in implementation
@@ -362,7 +331,6 @@ def test_error_recovery_on_write_failure(
     """Test error recovery when file write fails."""
     target = tmp_path / "readonly.md"
     target.write_text("INITIAL", encoding="utf-8")
-
     agent = base_agent_module.BaseAgent(str(target))
     agent.current_content = "NEW"
 
@@ -424,7 +392,6 @@ def test_missing_backend_availability(
 def test_concurrent_agent_operations(tmp_path: Path, base_agent_module: Any) -> None:
     """Test concurrent operations with multiple agent instances."""
     import threading
-
     results = []
 
     def create_agent(suffix: int) -> None:
@@ -450,11 +417,9 @@ def test_markdown_preservation_non_markdown_files(tmp_path: Path, base_agent_mod
     target = tmp_path / "script.py"
     original = "def hello():\n    return 'world'\n"
     target.write_text(original, encoding="utf-8")
-
     agent = base_agent_module.BaseAgent(str(target))
     agent.current_content = original
     agent.update_file()
-
     # Content should remain unchanged (no markdown fixing for .py)
     assert target.read_text(encoding="utf-8") == original
 
@@ -465,7 +430,6 @@ def test_large_file_handling(tmp_path: Path, base_agent_module: Any) -> None:
     # Create 2MB file
     large_content = "x" * (2 * 1024 * 1024)
     target.write_text(large_content, encoding="utf-8")
-
     agent = base_agent_module.BaseAgent(str(target))
     content = agent.read_previous_content()
     assert content is not None
@@ -517,12 +481,10 @@ def test_integration_real_file_io_operations(
     target = tmp_path / "integration_test.md"
     initial_content = "# Original\n\nThis is original content."
     target.write_text(initial_content, encoding="utf-8")
-
     # Create agent and verify read
     agent = base_agent_module.BaseAgent(str(target))
     read_content = agent.read_previous_content()
     assert "Original" in read_content
-
     # Mock the run_subagent to avoid actual API calls
     def fake_run_subagent(
             self: Any,
@@ -536,20 +498,16 @@ def test_integration_real_file_io_operations(
         "run_subagent",
         fake_run_subagent,
         raising=True)
-
     # Improve content
     agent.current_content = agent.improve_content("prompt")
-
     # Update file
     agent.update_file()
-
     # Verify file was updated
     final_content = target.read_text(encoding="utf-8")
     assert "Updated" in final_content or "original content" in final_content
 
 
 # ========== Tests for New Enums ==========
-
 class TestAgentState:
     """Tests for AgentState enum."""
 
@@ -584,7 +542,6 @@ class TestEventType:
 
 
 # ========== Tests for Dataclasses ==========
-
 class TestPromptTemplate:
     """Tests for PromptTemplate dataclass."""
 
@@ -623,7 +580,6 @@ class TestHealthCheckResult:
 
 
 # ========== Tests for Prompt Templates ==========
-
 class TestPromptTemplates:
     """Tests for prompt template functionality."""
 
@@ -660,28 +616,23 @@ class TestConversationHistory:
         target = tmp_path / "test.md"
         target.write_text("content", encoding="utf-8")
         agent = base_agent_module.BaseAgent(str(target))
-
         agent.add_to_history("user", "Hello")
         agent.add_to_history("assistant", "Hi there")
-
         history = agent.get_history()
         assert len(history) == 2
-        assert history[0].role == "user"
+        assert history[0].role.value == "user"
 
     def test_clear_history(self, tmp_path: Path, base_agent_module: Any) -> None:
         """Test clearing history."""
         target = tmp_path / "test.md"
         target.write_text("content", encoding="utf-8")
         agent = base_agent_module.BaseAgent(str(target))
-
         agent.add_to_history("user", "Hello")
         agent.clear_history()
-
         assert len(agent.get_history()) == 0
 
 
 # ========== Tests for Post-Processors ==========
-
 class TestPostProcessors:
     """Tests for response post-processors."""
 
@@ -702,15 +653,12 @@ class TestPostProcessors:
         target = tmp_path / "test.md"
         target.write_text("content", encoding="utf-8")
         agent = base_agent_module.BaseAgent(str(target))
-
         agent.add_post_processor(lambda x: x)
         agent.clear_post_processors()
-
         assert len(agent._post_processors) == 0
 
 
 # ========== Tests for Cache Management ==========
-
 class TestCacheManagement:
     """Tests for response caching."""
 
@@ -719,11 +667,9 @@ class TestCacheManagement:
         target = tmp_path / "test.md"
         target.write_text("content", encoding="utf-8")
         agent = base_agent_module.BaseAgent(str(target))
-
         key1 = agent._generate_cache_key("prompt", "content")
         key2 = agent._generate_cache_key("prompt", "content")
         key3 = agent._generate_cache_key("different", "content")
-
         assert key1 == key2
         assert key1 != key3
 
@@ -741,7 +687,6 @@ class TestCacheManagement:
 
 
 # ========== Tests for Token Budget ==========
-
 class TestTokenBudget:
     """Tests for token budget management."""
 
@@ -759,13 +704,11 @@ class TestTokenBudget:
         target = tmp_path / "test.md"
         target.write_text("content", encoding="utf-8")
         agent = base_agent_module.BaseAgent(str(target))
-
         # Should have budget available
         assert agent.check_token_budget(1000) is True
 
 
 # ========== Tests for Event Hooks ==========
-
 class TestEventHooks:
     """Tests for event hook system."""
 
@@ -800,7 +743,6 @@ class TestEventHooks:
 
 
 # ========== Tests for Health Checks ==========
-
 class TestHealthChecks:
     """Tests for health check functionality."""
 
@@ -813,7 +755,6 @@ class TestHealthChecks:
 
 
 # ========== Tests for State Persistence ==========
-
 class TestStatePersistence:
     """Tests for state persistence."""
 
@@ -851,7 +792,6 @@ class TestStatePersistence:
 
 
 # ========== Tests for Context Window Management ==========
-
 class TestContextWindow:
     """Tests for context window management."""
 
@@ -884,7 +824,6 @@ class TestContextWindow:
 
 
 # ========== Tests for Model Selection ==========
-
 class TestModelSelection:
     """Tests for model selection."""
 
@@ -909,7 +848,6 @@ class TestModelSelection:
 
 
 # ========== Tests for Plugin System ==========
-
 class TestPluginSystem:
     """Tests for plugin system."""
 
@@ -931,7 +869,6 @@ class TestPluginSystem:
 
 
 # ========== Tests for Response Quality Scoring ==========
-
 class TestResponseQualityScoring:
     """Tests for response quality scoring."""
 
@@ -956,7 +893,6 @@ class TestResponseQualityScoring:
 
 
 # ========== Session 8 Tests ==========
-
 class TestSession8Enums:
     """Tests for Session 8 enums."""
 
@@ -1437,8 +1373,6 @@ class TestFilePriorityManager:
 # =============================================================================
 # Session 8: Test File Improvement Tests
 # =============================================================================
-
-
 class TestPromptTemplatingSystem:
     """Tests for prompt templating system."""
 

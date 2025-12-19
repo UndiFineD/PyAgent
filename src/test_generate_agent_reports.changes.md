@@ -1,5 +1,9 @@
 # Changes: `test_generate_agent_reports.py`
 
+## [2025-12-19] - Documentation refresh
+
+- Refreshed companion docs to match `src/test_generate_agent_reports.py` and updated SHA256 fingerprint.
+
 ## Session 8 - Test File Improvements (2025-06-14)
 
 ### Added 20 Comprehensive Test Classes

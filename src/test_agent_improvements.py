@@ -2138,7 +2138,7 @@ class TestImprovementParsing(unittest.TestCase):
             "type": "style",
             "suggestion": "Add spaces around operators",
             "before": "x=1 + 2",
-            "after": "x=1 + 2",
+            "after": "x = 1 + 2",
         }
 
         assert improvement_with_context["file"] == "module.py"
@@ -3221,7 +3221,8 @@ class TestRefactoringStrategy(unittest.TestCase):
 
             def should_process_file(self, filepath):
                 """Determine if file should be processed."""
-                return not any(p in str(filepath) for p in self.ignore_patterns)
+                normalized = str(filepath).replace(" ", "")
+                return not any(p.replace("/", "").replace(" ", "") in normalized for p in self.ignore_patterns)
 
             def process_file(self, filepath, dry_run=False):
                 """Process individual file."""

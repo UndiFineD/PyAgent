@@ -1,5 +1,9 @@
 # Changelog
 
+## [2025-12-19] - Documentation refresh
+
+- Refreshed companion docs to match `src/test_agent_changes_tests.py` and updated SHA256 fingerprint.
+
 ## Session 9 - 2025-01-16
 
 ### Added - Changelog Tests (20 test classes)
@@ -27,3 +31,4 @@
 ---
 
 - 2025-12-15: Added pytest-friendly replacement for the prior dotted filename (`test_agent-changes.tests.py`) to avoid pytest import/collection hazards.
+- [2025-12-18] - Documentation refresh

@@ -1999,7 +1999,7 @@ class TestContextNotification:
 
         content = "> ⚠️ WARNING: This module is deprecated."
         target = tmp_path / "test.description.md"
-        target.write_text(content)
+        target.write_text(content, encoding="utf-8")
 
         agent = mod.ContextAgent(str(target))
         previous = agent.read_previous_content()

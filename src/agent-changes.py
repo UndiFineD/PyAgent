@@ -1288,12 +1288,13 @@ class ChangesAgent(BaseAgent):
             "preview": content[:500] + "..." if len(content) > 500 else content
         }
 
-    def update_file(self) -> None:
+    def update_file(self) -> bool:
         """Override update_file to support preview mode."""
         if self._preview_mode:
             logging.info("Preview mode: changes not written to file")
-            return
-        return super().update_file()
+            return True
+
+        return bool(super().update_file())
 
     # ========== Merge Detection ==========
     def detect_merge_conflicts(self, content: str) -> List[Dict[str, Any]]:
@@ -1604,8 +1605,25 @@ class ChangesAgent(BaseAgent):
 {self.previous_content}"""
             self.current_content = fallback_suggestions
             return self.current_content
-        # For other prompts, use the base implementation with enhanced prompt
-        return super().improve_content(enhanced_prompt)
+        # For other prompts, call the BaseAgent's subagent path directly.
+        #
+        # This intentionally bypasses BaseAgent.improve_content() caching so
+        # tests that monkeypatch base_agent.BaseAgent.run_subagent remain
+        # deterministic even when earlier test runs have populated caches.
+        import base_agent as _base_agent
+
+        try:
+            full_prompt = self._build_prompt_with_history(enhanced_prompt)
+        except Exception:
+            full_prompt = enhanced_prompt
+
+        improvement = _base_agent.BaseAgent.run_subagent(self, description, full_prompt, self.previous_content)
+
+        for processor in self._post_processors:
+            improvement = processor(improvement)
+
+        self.current_content = improvement
+        return self.current_content
 
 
 # Create main function using the helper

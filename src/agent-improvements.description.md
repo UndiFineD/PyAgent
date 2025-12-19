@@ -50,4 +50,4 @@ python src/agent-improvements.py path/to/file.improvements.md
 
 ## File fingerprint
 
-- SHA256(source): `2120b52c2f6fa66279340952c3f00ba6a246bf2c82e4a3097bc8998efb5673a3`
+- SHA256(source): `0de6fb32ce93f3dc000beb4b7e0629ff7b158bf9f9c862ef77f09d792238a9d1`

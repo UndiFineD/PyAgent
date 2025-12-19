@@ -41,4 +41,4 @@
 
 ## Notes
 - These are suggestions based on static inspection; validate behavior with tests/runs.
-- File: `scripts/agent/test_generate_agent_reports.py`
+- File: `src/test_generate_agent_reports.py`

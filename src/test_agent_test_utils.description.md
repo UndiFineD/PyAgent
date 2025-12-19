@@ -4,7 +4,7 @@
 Tests for agent_test_utils.py.
 
 ## Location
-- Path: `scripts/agent/test_agent_test_utils.py`
+- Path: `src/test_agent_test_utils.py`
 
 ## Public surface
 - Classes: (none)
@@ -17,4 +17,4 @@ Tests for agent_test_utils.py.
 - Top imports: `__future__`, `sys`, `pathlib`, `pytest`, `agent_test_utils`
 
 ## File fingerprint
-- SHA256(source): `24e36173bf49f2f9…`
+- SHA256(source): `E33D42AB7787FD5392A7489C9A0C68962B4DBD4F3754F72A749E9B15066CEEA5`

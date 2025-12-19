@@ -1,20 +1,29 @@
-# Description: `test_agent-improvements.py`
+# Description: `test_agent_improvements.py`
 
 ## Module purpose
-Legacy tests for agent-improvements.py.
+
+Pytest suite covering `agent-improvements.py` improvement-management APIs (enums, templates, scheduling, validation, workflow, voting, analytics, export, and related helpers).
 
 ## Location
-- Path: `scripts/agent/test_agent-improvements.py`
+
+- Path: `src/test_agent_improvements.py`
 
 ## Public surface
-- Classes: (none)
-- Functions: base_agent_module, test_improvements_agent_delegates_to_base
+
+- Test classes: multiple `Test*` classes grouped by feature area
+- Fixtures/helpers: provided via `pytest` + `agent_test_utils`
 
 ## Behavior summary
-- Pure module (no obvious CLI/side effects).
+
+- Pure test module (no CLI/side effects).
+- Exercises `ImprovementsAgent` plus a set of compatibility APIs expected by the tests.
 
 ## Key dependencies
-- Top imports: `__future__`, `pathlib`, `typing`, `pytest`, `agent_test_utils`, `base_agent`
+
+- `pytest`
+- `typing`, `datetime`
+- `agent_test_utils` (dynamic import helpers)
 
 ## File fingerprint
-- SHA256(source): `b60047058651f667…`
+
+- SHA256(source): `0B3F08D689607CAD5666E2F4F28FD7238C468F914271D200EEEA1FF777932234`

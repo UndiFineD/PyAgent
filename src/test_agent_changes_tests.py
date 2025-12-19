@@ -17,7 +17,7 @@ cannot import reliably because of the extra dot in the basename.
 
 Run directly via:
 
-    pytest scripts / agent / test_agent_changes_tests.py
+    pytest src/test_agent_changes_tests.py
 """
 
 from __future__ import annotations

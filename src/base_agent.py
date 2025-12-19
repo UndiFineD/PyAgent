@@ -1104,14 +1104,14 @@ class BaseAgent:
             "# npm: npm install -g @github / copilot\n"
         )
 
-    def update_file(self) -> None:
+    def update_file(self) -> bool:
         """Write the improved content back to the file.
 
         Writes current_content to disk, with special handling for markdown files
         which get normalized / fixed using the fix_markdown_content function.
 
         Returns:
-            None.
+            bool: True if the file was written successfully.
 
         Raises:
             OSError: If file write fails.
@@ -1140,6 +1140,7 @@ class BaseAgent:
         # Ensure parent directory exists
         self.file_path.parent.mkdir(parents=True, exist_ok=True)
         self.file_path.write_text(content_to_write, encoding='utf-8')
+        return True
 
     def get_diff(self) -> str:
         """Get the diff between previous and current content.

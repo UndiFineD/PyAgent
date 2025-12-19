@@ -1,10 +1,10 @@
-# Description: `test_agent-errors.py`
+# Description: `test_agent_errors.py`
 
 ## Module purpose
 Legacy tests for agent-errors.py.
 
 ## Location
-- Path: `scripts/agent/test_agent-errors.py`
+- Path: `src/test_agent_errors.py`
 
 ## Public surface
 - Classes: (none)
@@ -17,4 +17,4 @@ Legacy tests for agent-errors.py.
 - Top imports: `__future__`, `pathlib`, `typing`, `pytest`, `agent_test_utils`, `base_agent`
 
 ## File fingerprint
-- SHA256(source): `dea6f0d6d7d1f1fa…`
+- SHA256(source): `65635915249584BCF4CBA92A9CFF0CAD427FA5242C6F5B7FBEA2CE8D0E01BDE5`

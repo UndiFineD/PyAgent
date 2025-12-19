@@ -1,5 +1,9 @@
 # Changelog
 
+## [2025-12-19] - Documentation refresh
+
+- Refreshed companion docs to match `src/test_base_agent.py` and updated SHA256 fingerprint.
+
 - Initial version of test_base_agent.py
 - 2025-12-15: Replaced placeholder-only tests with real unit tests for `BaseAgent` behaviors.
 

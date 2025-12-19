@@ -236,7 +236,7 @@ DEFAULT_TEMPLATES: Dict[str, ContextTemplate] = {
 DEFAULT_VALIDATION_RULES: List[ValidationRule] = [
     ValidationRule(
         name="has_purpose",
-        pattern=r"##\s * Purpose",
+        pattern=r"##\s*Purpose\b",
         message="Context should have a Purpose section",
         severity="error",
         required=True
@@ -551,16 +551,24 @@ class SemanticSearchEngine:
         """Initialize the semantic search engine."""
         self.results: List[SemanticSearchResult] = []
         self.index: Dict[str, List[float]] = {}
-        self.algorithm: str = "cosine"  # Add algorithm attribute
+        self.algorithm: SearchAlgorithm = SearchAlgorithm.KEYWORD
+        self.similarity_metric: str = "cosine"
         self.documents: Dict[str, str] = {}  # Add documents storage
 
-    def set_algorithm(self, algorithm: str) -> None:
+    def set_algorithm(self, algorithm: SearchAlgorithm) -> None:
         """Set the search algorithm."""
         self.algorithm = algorithm
 
     def add_document(self, doc_id: str, content: str) -> None:
         """Add a document to the search index."""
         self.documents[doc_id] = content
+        self.index_content(doc_id, content)
+
+    def clear(self) -> None:
+        """Clear all indexed documents and results."""
+        self.results.clear()
+        self.index.clear()
+        self.documents.clear()
 
     def index_content(self, file_path: str, content: str) -> None:
         """Index content for searching.
@@ -589,15 +597,19 @@ class SemanticSearchEngine:
         self.results = []
         query_words = set(query.lower().split())
 
-        for file_path, _ in self.index.items():
-            # Simplified similarity calculation
-            score = len(query_words) / 10
-            if score > 0.1:
-                self.results.append(SemanticSearchResult(
-                    file_path=file_path,
-                    content_snippet=f"Content from {file_path}",
-                    similarity_score=min(score, 1.0)
-                ))
+        for file_path, content in self.documents.items():
+            content_words = set(content.lower().split())
+            overlap = query_words & content_words
+            if not overlap:
+                continue
+
+            score = len(overlap) / max(1, len(query_words))
+            self.results.append(SemanticSearchResult(
+                file_path=file_path,
+                content_snippet=content[:80],
+                similarity_score=min(score, 1.0)
+            ))
+
         return sorted(self.results, key=lambda r: r.similarity_score, reverse=True)
 
 
@@ -621,6 +633,13 @@ class CrossRepoAnalyzer:
     def add_repo(self, name: str, url: str) -> None:
         """Add a repository."""
         self.repos[name] = {"name": name, "url": url}
+
+    def analyze(self, file_path: str) -> List[CrossRepoContext]:
+        """Analyze a file path across configured repositories.
+
+        Compatibility wrapper used by tests.
+        """
+        return self.find_related_contexts(file_path)
 
     def find_common_patterns(self) -> List[str]:
         """Find common patterns across repos."""
@@ -672,15 +691,25 @@ class ContextDiffer:
         """Initialize context differ."""
         self.diffs: List[str] = []
 
-    def compute_diff(self, content_from: str, content_to: str) -> List[str]:
-        """Compute diff between two contents."""
-        from_lines = content_from.split('\n')
-        to_lines = content_to.split('\n')
-        return [f"Line {i+1}: {to_lines[i]}" for i in range(min(len(from_lines), len(to_lines)))]
+    def compute_diff(self, content_from: str, content_to: str) -> ContextDiff:
+        """Compute a structured diff between two context contents."""
+        return self.diff_versions(content_from, content_to)
 
-    def get_section_changes(self, section: str) -> List[str]:
-        """Get changes in a specific section."""
-        return []
+    def get_section_changes(self, content_from: str, content_to: str) -> Dict[str, List[str]]:
+        """Return section-level changes between two contents."""
+        diff = self.diff_versions(content_from, content_to)
+        return {
+            "added": diff.added_sections,
+            "removed": diff.removed_sections,
+            "modified": diff.modified_sections,
+        }
+
+    def summarize_diff(self, diff: ContextDiff) -> str:
+        """Summarize a ContextDiff into a human-readable sentence."""
+        return diff.change_summary or (
+            f"Added {len(diff.added_sections)}, removed {len(diff.removed_sections)}, "
+            f"modified {len(diff.modified_sections)} sections"
+        )
 
     def diff_versions(
         self,
@@ -737,24 +766,24 @@ class ContextInheritance:
     def __init__(self) -> None:
         """Initialize context inheritance manager."""
         self.inheritance_map: Dict[str, InheritedContext] = {}
-        self.mode: str = "merge"  # Add mode attribute
-        self.parent: Optional[str] = None  # Add parent attribute
+        self.mode: InheritanceMode = InheritanceMode.MERGE
+        self.parent_path: Optional[str] = None
 
-    def set_mode(self, mode: str) -> None:
+    def set_mode(self, mode: InheritanceMode) -> None:
         """Set inheritance mode."""
         self.mode = mode
 
     def set_parent(self, parent_path: str) -> None:
         """Set parent context."""
-        self.parent = parent_path
+        self.parent_path = parent_path
 
-    def apply(self) -> Dict[str, Any]:
-        """Apply inheritance."""
-        return {}
+    def apply(self, child_content: str, parent_content: str) -> str:
+        """Apply the currently configured inheritance mode."""
+        return self.resolve_inheritance(parent_content, child_content, self.mode)
 
     def get_hierarchy(self) -> List[str]:
         """Get inheritance hierarchy."""
-        return [self.parent] if self.parent else []
+        return [self.parent_path] if self.parent_path else []
 
     def inherit_from(
         self,
@@ -833,12 +862,13 @@ class NLQueryEngine:
         """Extract keywords from query."""
         return query.lower().split()
 
-    def query(self, question: str, contexts: Dict[str, str]) -> NLQueryResult:
+    def query(self, question: str, contexts: Optional[Dict[str, str]] = None) -> NLQueryResult:
         """Query contexts with natural language.
 
         Args:
             question: Natural language question.
-            contexts: Dictionary of context file paths to contents.
+            contexts: Optional dictionary of context file paths to contents.
+                      If omitted, uses contexts added via add_context().
 
         Returns:
             NLQueryResult with answer.
@@ -846,7 +876,8 @@ class NLQueryEngine:
         # Simplified NL query - in production, use LLM
         relevant: List[str] = []
         keywords = question.lower().split()
-        for path, content in contexts.items():
+        active_contexts = contexts if contexts is not None else self.contexts
+        for path, content in active_contexts.items():
             content_lower = content.lower()
             if any(kw in content_lower for kw in keywords):
                 relevant.append(path)
@@ -868,23 +899,36 @@ class ContextExporter:
         >>> exported=exporter.export(content, ExportFormat.HTML)
     """
 
-    def export(self, content: str, format: ExportFormat) -> ExportedContext:
+    def __init__(self, default_format: ExportFormat = ExportFormat.MARKDOWN) -> None:
+        self.default_format: ExportFormat = default_format
+
+    def set_format(self, format: ExportFormat) -> None:
+        """Set the default export format."""
+        self.default_format = format
+
+    def get_supported_formats(self) -> List[ExportFormat]:
+        """Return all supported export formats."""
+        return list(ExportFormat)
+
+    def export(self, content: str, format: Optional[ExportFormat] = None) -> ExportedContext:
         """Export context to specified format.
 
         Args:
             content: Context content to export.
-            format: Target export format.
+            format: Target export format. If omitted, uses default_format.
 
         Returns:
             ExportedContext with exported content.
         """
+        fmt = format if format is not None else self.default_format
+
         exported_content = content
-        if format == ExportFormat.HTML:
+        if fmt == ExportFormat.HTML:
             exported_content = self._to_html(content)
-        elif format == ExportFormat.RST:
+        elif fmt == ExportFormat.RST:
             exported_content = self._to_rst(content)
         return ExportedContext(
-            format=format,
+            format=fmt,
             content=exported_content,
             created_at=datetime.now().isoformat()
         )
@@ -919,36 +963,60 @@ class ContextRecommender:
         >>> recommendations=recommender.recommend("auth.py", similar_contexts)
     """
 
+    def __init__(self) -> None:
+        self.reference_files: Dict[str, str] = {}
+
+    def add_reference(self, file_name: str, content: str) -> None:
+        """Add a reference context file used for recommendations."""
+        self.reference_files[file_name] = content
+
+    def find_similar(self, query: str) -> List[str]:
+        """Find reference files that look similar to the query."""
+        query_words = set(query.lower().split())
+        matches: List[str] = []
+        for name, content in self.reference_files.items():
+            content_words = set(content.lower().split())
+            if query_words & content_words:
+                matches.append(name)
+        return matches
+
     def recommend(
         self,
-        target_file: str,
-        similar_contexts: Dict[str, str]
+        content_or_target_file: str,
+        similar_contexts: Optional[Dict[str, str]] = None
     ) -> List[ContextRecommendation]:
-        """Generate recommendations for a file.
+        """Generate context recommendations.
 
-        Args:
-            target_file: File to get recommendations for.
-            similar_contexts: Dictionary of similar context files.
-
-        Returns:
-            List of recommendations.
+        Compatibility behavior:
+        - If similar_contexts is provided, it is treated as the corpus.
+        - Otherwise, content_or_target_file is treated as the target content
+          and reference_files are used as the corpus.
         """
+        corpus = similar_contexts if similar_contexts is not None else self.reference_files
+        target_content = content_or_target_file
+
         recommendations: List[ContextRecommendation] = []
-        # Analyze common sections in similar files
+        if not corpus:
+            return recommendations
+
+        target_sections = set(re.findall(r"##\s+(\w+)", target_content))
+
         section_counts: Dict[str, int] = {}
-        for _, content in similar_contexts.items():
+        for _, content in corpus.items():
             sections = re.findall(r"##\s+(\w+)", content)
             for section in sections:
                 section_counts[section] = section_counts.get(section, 0) + 1
-        # Recommend most common sections
+
         common_sections: List[Tuple[str, int]] = sorted(section_counts.items(), key=lambda x: x[1], reverse=True)
-        if common_sections:
+        suggested = [name for name, _ in common_sections if name not in target_sections][:5]
+        if suggested:
             recommendations.append(ContextRecommendation(
-                source_file=list(similar_contexts.keys())[0] if similar_contexts else "",
-                suggested_sections=[s[0] for s in common_sections[:5]],
+                source_file=list(corpus.keys())[0],
+                suggested_sections=suggested,
                 reason="Common sections in similar files",
                 confidence=0.8
             ))
+
         return recommendations
 
 
@@ -962,35 +1030,85 @@ class CodeGenerator:
         >>> code=generator.generate("Create a login function", context)
     """
 
+    def __init__(self) -> None:
+        self.language: str = "python"
+        self.contexts: Dict[str, str] = {}
+
+    def set_language(self, language: str) -> None:
+        """Set the default target language for generated code."""
+        if not isinstance(language, str):
+            raise TypeError("language must be a string")
+        self.language = language
+
+    def add_context(self, name: str, content: str) -> None:
+        """Add a named context document that can be referenced later."""
+        if not isinstance(name, str):
+            raise TypeError("name must be a string")
+        if not isinstance(content, str):
+            raise TypeError("content must be a string")
+        self.contexts[name] = content
+
+    def get_supported_languages(self) -> List[str]:
+        """Return supported target languages."""
+        return [
+            "python",
+            "javascript",
+            "typescript",
+            "java",
+            "csharp",
+            "go",
+            "rust",
+        ]
+
     def generate(
         self,
         prompt: str,
-        context: str,
-        language: str = "python"
+        context: str = "",
+        language: Optional[str] = None,
+        *,
+        context_files: Optional[List[str]] = None,
     ) -> GeneratedCode:
-        """Generate code based on context.
+        """Generate code based on stored context.
 
-        Args:
-            prompt: What code to generate.
-            context: Context to use for generation.
-            language: Target programming language.
+        Backwards compatible with the older signature:
+            generate(prompt, context, language="python")
 
-        Returns:
-            GeneratedCode with generated content.
+        Newer API (used by tests):
+            set_language(...), add_context(...), generate(prompt, context_files=[...])
         """
-        # Simplified generation - in production, use LLM
+        if not isinstance(prompt, str):
+            raise TypeError("prompt must be a string")
+
+        resolved_language = language or self.language or "python"
+
+        used_contexts: List[str] = []
+        context_snippets: List[str] = []
+
+        if context_files:
+            for name in context_files:
+                if name in self.contexts:
+                    used_contexts.append(name)
+                    context_snippets.append(self.contexts[name])
+        elif context:
+            # Inline context (legacy usage)
+            used_contexts.append(context[:50] + ("..." if len(context) > 50 else ""))
+            context_snippets.append(context)
+
+        # Simplified generation - in production, use an LLM.
+        context_header = "" if not used_contexts else f"# Context used: {', '.join(used_contexts)}\n"
         code = (
             f"# Generated for: {prompt}\n"
-            f"# Based on context\n"
+            f"{context_header}"
             f"def generated_function():\n"
-            f"    pass"
+            f"    \"\"\"Auto-generated stub.\"\"\"\n"
+            f"    pass\n"
         )
 
         return GeneratedCode(
-            language=language,
+            language=resolved_language,
             code=code,
-            context_used=[context[:50] + "..."] if context else [],
-            description=prompt
+            context_used=used_contexts,
+            description=prompt,
         )
 
 
@@ -1004,19 +1122,62 @@ class RefactoringAdvisor:
         >>> suggestions=advisor.analyze(contexts)
     """
 
-    def analyze(self, contexts: Dict[str, str]) -> List[RefactoringSuggestion]:
+    def __init__(self) -> None:
+        self.patterns: Dict[str, Dict[str, str]] = {}
+
+    def add_pattern(self, name: str, pattern: str, description: str) -> None:
+        """Add a custom refactoring pattern.
+
+        Args:
+            name: Pattern identifier.
+            pattern: Regex pattern to search for.
+            description: Human-readable suggestion description.
+        """
+        if not isinstance(name, str):
+            raise TypeError("name must be a string")
+        if not isinstance(pattern, str):
+            raise TypeError("pattern must be a string")
+        if not isinstance(description, str):
+            raise TypeError("description must be a string")
+        self.patterns[name] = {"pattern": pattern, "description": description}
+
+    def analyze(self, contexts: Any) -> List[RefactoringSuggestion]:
         """Analyze contexts for refactoring opportunities.
 
         Args:
-            contexts: Dictionary of context file paths to contents.
+            contexts: Either a single context string or a dictionary of
+                context file paths to contents.
 
         Returns:
             List of refactoring suggestions.
         """
+        if isinstance(contexts, str):
+            context_map: Dict[str, str] = {"inline": contexts}
+        elif isinstance(contexts, dict):
+            context_map = contexts
+        else:
+            raise TypeError("contexts must be a string or a dict")
+
         suggestions: List[RefactoringSuggestion] = []
+
+        # Apply custom patterns first.
+        for path, content in context_map.items():
+            for name, spec in self.patterns.items():
+                try:
+                    if re.search(spec["pattern"], content):
+                        suggestions.append(RefactoringSuggestion(
+                            suggestion_type=name,
+                            description=spec.get("description", ""),
+                            affected_files=[path],
+                            estimated_impact="low",
+                        ))
+                except re.error:
+                    # Invalid user-provided regex; ignore for robustness.
+                    continue
+
         # Look for duplicate descriptions (indicating code duplication)
         descriptions: Dict[str, List[str]] = {}
-        for path, content in contexts.items():
+        for path, content in context_map.items():
             purpose = re.search(r"##\s*Purpose\s*\n(.+?)(?=##|\Z)", content, re.DOTALL)
             if purpose:
                 desc = purpose.group(1).strip()[:100]
@@ -1033,6 +1194,22 @@ class RefactoringAdvisor:
                 ))
         return suggestions
 
+    def prioritize(self, suggestions: List[RefactoringSuggestion]) -> List[RefactoringSuggestion]:
+        """Prioritize refactoring suggestions.
+
+        Args:
+            suggestions: Suggestions to prioritize.
+
+        Returns:
+            Suggestions sorted by estimated impact.
+        """
+        impact_rank = {"high": 0, "medium": 1, "low": 2}
+
+        def rank(s: RefactoringSuggestion) -> int:
+            return impact_rank.get(getattr(s, "estimated_impact", "medium"), 1)
+
+        return sorted(list(suggestions), key=rank)
+
 
 class ContextVisualizer:
     """Visualizes context relationships.
@@ -1043,6 +1220,43 @@ class ContextVisualizer:
         >>> visualizer=ContextVisualizer()
         >>> data=visualizer.create_dependency_graph(contexts)
     """
+
+    def __init__(self, viz_type: VisualizationType = VisualizationType.DEPENDENCY_GRAPH) -> None:
+        self.viz_type: VisualizationType = viz_type
+        self.nodes: List[Dict[str, Any]] = []
+        self.edges: List[Tuple[str, str]] = []
+        self.layout: str = "hierarchical"
+
+    def set_type(self, viz_type: VisualizationType) -> None:
+        if not isinstance(viz_type, VisualizationType):
+            raise TypeError("viz_type must be a VisualizationType")
+        self.viz_type = viz_type
+
+    def add_node(self, node_id: str, metadata: Optional[Dict[str, Any]] = None) -> None:
+        if metadata is None:
+            metadata = {}
+        self.nodes.append({"id": node_id, **metadata})
+
+    def add_edge(self, source: str, target: str) -> None:
+        self.edges.append((source, target))
+
+    def generate(self) -> VisualizationData:
+        return VisualizationData(
+            viz_type=self.viz_type,
+            nodes=self.nodes,
+            edges=self.edges,
+            layout=self.layout,
+        )
+
+    def export_json(self) -> str:
+        data = self.generate()
+        payload = {
+            "viz_type": data.viz_type.value if isinstance(data.viz_type, VisualizationType) else str(data.viz_type),
+            "nodes": data.nodes,
+            "edges": data.edges,
+            "layout": data.layout,
+        }
+        return json.dumps(payload)
 
     def create_dependency_graph(self, contexts: Dict[str, str]) -> VisualizationData:
         """Create dependency graph visualization.
@@ -1100,9 +1314,56 @@ class ContextSharingManager:
         >>> shared=manager.share("context.md", ["user1", "user2"])
     """
 
-    def __init__(self) -> None:
+    def __init__(self, owner: str = "current_user") -> None:
         """Initialize sharing manager."""
+        self.owner: str = owner
         self.shared_contexts: Dict[str, SharedContext] = {}
+        self._contents: Dict[str, str] = {}
+
+    def create_shared(
+        self,
+        content: str,
+        context_id: Optional[str] = None,
+        permission: SharingPermission = SharingPermission.READ_ONLY,
+    ) -> SharedContext:
+        if context_id is None:
+            context_id = f"context_{len(self.shared_contexts) + 1}"
+        shared = SharedContext(
+            context_id=context_id,
+            owner=self.owner,
+            shared_with=[],
+            permission=permission,
+            last_sync=datetime.now().isoformat(),
+        )
+        self.shared_contexts[context_id] = shared
+        self._contents[context_id] = content
+        return shared
+
+    def share_with(self, context_id: str, user: str) -> None:
+        shared = self.shared_contexts.get(context_id)
+        if not shared:
+            raise KeyError(f"Unknown context_id: {context_id}")
+        if user not in shared.shared_with:
+            shared.shared_with.append(user)
+        shared.last_sync = datetime.now().isoformat()
+
+    def set_permission(self, context_id: str, permission: SharingPermission) -> None:
+        shared = self.shared_contexts.get(context_id)
+        if not shared:
+            raise KeyError(f"Unknown context_id: {context_id}")
+        shared.permission = permission
+        shared.last_sync = datetime.now().isoformat()
+
+    def revoke_access(self, context_id: str, user: str) -> None:
+        shared = self.shared_contexts.get(context_id)
+        if not shared:
+            raise KeyError(f"Unknown context_id: {context_id}")
+        if user in shared.shared_with:
+            shared.shared_with.remove(user)
+        shared.last_sync = datetime.now().isoformat()
+
+    def get_shared_contexts(self) -> List[SharedContext]:
+        return list(self.shared_contexts.values())
 
     def share(
         self,
@@ -1122,14 +1383,11 @@ class ContextSharingManager:
         Returns:
             SharedContext configuration.
         """
-        shared = SharedContext(
-            context_id=context_id,
-            owner=owner,
-            shared_with=users,
-            permission=permission,
-            last_sync=datetime.now().isoformat()
-        )
-        self.shared_contexts[context_id] = shared
+        # Backwards compatible API: keep accepting explicit owner/users.
+        self.owner = owner
+        shared = self.create_shared("", context_id=context_id, permission=permission)
+        for user in users:
+            self.share_with(shared.context_id, user)
         return shared
 
     def get_shared_users(self, context_id: str) -> List[str]:
@@ -1155,43 +1413,76 @@ class MergeConflictResolver:
         >>> resolved=resolver.resolve(conflict, ConflictResolution.OURS)
     """
 
-    def detect_conflicts(self, content: str) -> List[MergeConflict]:
-        """Detect merge conflicts in content.
+    def __init__(self, strategy: ConflictResolution = ConflictResolution.AUTO) -> None:
+        self.strategy: ConflictResolution = strategy
 
-        Args:
-            content: Content to check for conflicts.
+    def set_strategy(self, strategy: ConflictResolution) -> None:
+        if not isinstance(strategy, ConflictResolution):
+            raise TypeError("strategy must be a ConflictResolution")
+        self.strategy = strategy
 
-        Returns:
-            List of detected conflicts.
+    def detect_conflicts(self, ours: str, theirs: Optional[str] = None) -> List[MergeConflict]:
+        """Detect merge conflicts.
+
+        Supports two modes:
+        - detect_conflicts(content_with_markers)
+        - detect_conflicts(ours, theirs)
         """
-        conflicts: List[MergeConflict] = []
-        pattern = r"<<<<<<<[^\n]*\n(.*?)\n=======\n(.*?)\n>>>>>>>"
-        for match in re.finditer(pattern, content, re.DOTALL):
-            conflicts.append(MergeConflict(
-                section="conflict",
-                ours=match.group(1),
-                theirs=match.group(2)
-            ))
-        return conflicts
+        if theirs is None:
+            content = ours
+            conflicts: List[MergeConflict] = []
+            pattern = r"<<<<<<<[^\n]*\n(.*?)\n=======\n(.*?)\n>>>>>>>"
+            for match in re.finditer(pattern, content, re.DOTALL):
+                conflicts.append(MergeConflict(
+                    section="conflict",
+                    ours=match.group(1),
+                    theirs=match.group(2)
+                ))
+            return conflicts
 
-    def resolve(self, conflict: MergeConflict, strategy: ConflictResolution) -> str:
+        if ours == theirs:
+            return []
+
+        def _section_name(text: str) -> str:
+            first = text.strip().splitlines()[0] if text.strip() else ""
+            if first.startswith("##"):
+                return first.lstrip("#").strip() or "section"
+            return "content"
+
+        return [MergeConflict(section=_section_name(ours), ours=ours, theirs=theirs)]
+
+    def resolve(self, conflict: MergeConflict, strategy: Optional[ConflictResolution] = None) -> str:
         """Resolve a merge conflict.
 
         Args:
             conflict: Conflict to resolve.
-            strategy: Resolution strategy.
+            strategy: Optional resolution strategy (defaults to current strategy).
 
         Returns:
             Resolved content.
         """
-        if strategy == ConflictResolution.OURS:
+        effective = strategy or self.strategy
+        if effective == ConflictResolution.OURS:
+            conflict.resolution = effective
             return conflict.ours
-        elif strategy == ConflictResolution.THEIRS:
+        if effective == ConflictResolution.THEIRS:
+            conflict.resolution = effective
             return conflict.theirs
-        elif strategy == ConflictResolution.AUTO:
+        if effective == ConflictResolution.AUTO:
             # Auto: prefer longer content
+            conflict.resolution = effective
             return conflict.ours if len(conflict.ours) >= len(conflict.theirs) else conflict.theirs
+
+        conflict.resolution = ConflictResolution.MANUAL
         return f"MANUAL RESOLUTION NEEDED:\n{conflict.ours}\n---\n{conflict.theirs}"
+
+    def resolve_all(
+        self,
+        conflicts: List[MergeConflict],
+        strategy: Optional[ConflictResolution] = None,
+    ) -> str:
+        """Resolve all conflicts and join results."""
+        return "\n".join(self.resolve(c, strategy=strategy) for c in conflicts)
 
 
 class BranchComparer:
@@ -1204,37 +1495,66 @@ class BranchComparer:
         >>> comparison=comparer.compare("main", "feature")
     """
 
+    def __init__(self) -> None:
+        self.branch_a: str = ""
+        self.branch_b: str = ""
+        self._last_comparison: Optional[BranchComparison] = None
+
+    def set_branches(self, branch_a: str, branch_b: str) -> None:
+        self.branch_a = branch_a
+        self.branch_b = branch_b
+
+    def get_modified_files(self) -> List[str]:
+        if not self._last_comparison:
+            return []
+        return list(self._last_comparison.modified_files)
+
+    def summarize(self, comparison: BranchComparison) -> str:
+        return (
+            f"Compare {comparison.branch_a} -> {comparison.branch_b}: "
+            f"only_in_a={len(comparison.files_only_in_a)}, "
+            f"only_in_b={len(comparison.files_only_in_b)}, "
+            f"modified={len(comparison.modified_files)}"
+        )
+
     def compare(
         self,
-        branch_a: str,
-        branch_b: str,
-        contexts_a: Dict[str, str],
-        contexts_b: Dict[str, str]
+        branch_a: Optional[str] = None,
+        branch_b: Optional[str] = None,
+        contexts_a: Optional[Dict[str, str]] = None,
+        contexts_b: Optional[Dict[str, str]] = None,
     ) -> BranchComparison:
         """Compare contexts between branches.
 
         Args:
-            branch_a: First branch name.
-            branch_b: Second branch name.
-            contexts_a: Contexts from branch A.
-            contexts_b: Contexts from branch B.
+            branch_a: First branch name (optional; defaults to stored branches).
+            branch_b: Second branch name (optional; defaults to stored branches).
+            contexts_a: Contexts from branch A (optional; defaults to empty).
+            contexts_b: Contexts from branch B (optional; defaults to empty).
 
         Returns:
             BranchComparison with differences.
         """
-        files_a = set(contexts_a.keys())
-        files_b = set(contexts_b.keys())
+        resolved_a = branch_a if branch_a is not None else self.branch_a
+        resolved_b = branch_b if branch_b is not None else self.branch_b
+        ctx_a = contexts_a or {}
+        ctx_b = contexts_b or {}
+
+        files_a = set(ctx_a.keys())
+        files_b = set(ctx_b.keys())
         modified: List[str] = []
         for f in files_a & files_b:
-            if contexts_a[f] != contexts_b[f]:
+            if ctx_a[f] != ctx_b[f]:
                 modified.append(f)
-        return BranchComparison(
-            branch_a=branch_a,
-            branch_b=branch_b,
+        comparison = BranchComparison(
+            branch_a=resolved_a,
+            branch_b=resolved_b,
             files_only_in_a=list(files_a - files_b),
             files_only_in_b=list(files_b - files_a),
             modified_files=modified
         )
+        self._last_comparison = comparison
+        return comparison
 
 
 class ContextAgent(BaseAgent):
@@ -1267,7 +1587,11 @@ class ContextAgent(BaseAgent):
         if self.file_path.name.endswith('.description.md'):
             stem = self.file_path.name.replace('.description.md', '')
             # Try common extensions
-            for ext in ['.py', '.js', '.ts', '.go', '.rs', '.java', '.sh']:
+            for ext in [
+                '.py', '.js', '.ts', '.go', '.rs', '.java', '.sh',
+                '.json', '.yaml', '.yml', '.toml', '.ini', '.cfg',
+                '.md', '.rst', '.txt'
+            ]:
                 source = self.file_path.parent / f"{stem}{ext}"
                 if source.exists():
                     return source
@@ -1285,7 +1609,15 @@ class ContextAgent(BaseAgent):
 
     def get_template_by_name(self, template_name: str) -> Optional[ContextTemplate]:
         """Get a template by name."""
-        return self._templates.get(template_name)
+        return self._templates.get(template_name.lower())
+
+    def get_template(self, template_name: str) -> Optional[ContextTemplate]:
+        """Compatibility alias: get a template by name.
+
+        Tests and older callers use get_template(...); internally this agent
+        stores templates in the _templates mapping.
+        """
+        return self._templates.get(template_name.lower())
 
     def add_template(self, template: ContextTemplate) -> None:
         """Add a custom template."""
@@ -1428,17 +1760,20 @@ class ContextAgent(BaseAgent):
 
         return zlib.decompress(compressed).decode()
 
-    def get_compression_ratio(self) -> float:
-        """Get the compression ratio."""
-        content = self.current_content or self.previous_content or ""
-        if not content:
-            return 0.0
+    def get_compression_ratio(self, content: Optional[str] = None) -> float:
+        """Get compression ratio (space savings) for the current/previous content."""
+        if content is None:
+            content = self.current_content or self.previous_content or ""
 
         original_size = len(content.encode())
-        compressed = self.compress_content(content)
-        compressed_size = len(compressed)
+        if original_size == 0:
+            return 0.0
 
-        return 1 - (compressed_size / original_size) if original_size > 0 else 0.0
+        compressed = self._compressed_content
+        if compressed is None:
+            compressed = self.compress_content(content)
+        compressed_size = len(compressed)
+        return 1 - (compressed_size / original_size)
 
     # ========== Validation ==========
 

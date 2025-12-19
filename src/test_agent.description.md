@@ -1,14 +1,14 @@
 # Description: `test_agent.py`
 
 ## Module purpose
-Legacy tests for scripts/agent/agent.py.
+Tests for `src/agent.py`.
 
-These tests live next to the agent scripts so they can be run directly via:
+Run directly via:
 
-    pytest scripts/agent/test_agent.py
+    pytest src/test_agent.py
 
 ## Location
-- Path: `scripts/agent/test_agent.py`
+- Path: `src/test_agent.py`
 
 ## Public surface
 - Classes: (none)
@@ -21,4 +21,4 @@ These tests live next to the agent scripts so they can be run directly via:
 - Top imports: `__future__`, `importlib`, `pathlib`, `pytest`, `agent_test_utils`, `agent`
 
 ## File fingerprint
-- SHA256(source): `1a01518c077111e6…`
+- SHA256(source): `FFA6BF5CD0EFABA20EBDBD2A728EF98C8ABB31BF183543730D87DC1F49ADAD1B`
