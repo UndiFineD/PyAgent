@@ -1,9 +1,11 @@
 # Improvements: `test_base_agent.py`
 
 ## Fixed
+
 - Security: Use `check=True` or `check=False` explicitly in `subprocess.run`. (Fixed - verified in agent_backend.py)
 
 ## Suggested improvements
+
 - [x] FIXED: [2025-06-14] Add tests for prompt templating system.
 - [x] FIXED: [2025-06-14] Test conversation history management.
 - [x] FIXED: [2025-06-14] Add tests for response post-processing hooks.
@@ -26,6 +28,7 @@
 - [x] FIXED: [2025-06-14] Test agent configuration profiles.
 
 ## Fixed (Moved to test_base_agent.changes.md)
+
 - Add tests for file encoding edge cases. (Fixed)
 - Test all backend selection scenarios. (Fixed)
 - Add tests for timeout handling. (Fixed)
@@ -43,5 +46,6 @@
 - Add integration tests with real I/O. (Fixed)
 
 ## Notes
+
 - These are suggestions based on static inspection; validate behavior with tests/runs.
 - File: `src/test_base_agent.py`

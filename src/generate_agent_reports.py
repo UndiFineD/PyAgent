@@ -44,6 +44,7 @@ REPO_ROOT = AGENT_DIR.parents[1]
 # Enums for Type Safety
 # =============================================================================
 
+
 class ReportType(Enum):
     """Type of report to generate."""
 
@@ -52,12 +53,14 @@ class ReportType(Enum):
     IMPROVEMENTS = "improvements"
     SUMMARY = "summary"
 
+
 class ReportFormat(Enum):
     """Output format for reports."""
 
     MARKDOWN = "markdown"
     JSON = "json"
     HTML = "html"
+
 
 class SeverityLevel(Enum):
     """Severity level for issues."""
@@ -66,6 +69,7 @@ class SeverityLevel(Enum):
     WARNING = 2
     ERROR = 3
     CRITICAL = 4
+
 
 class IssueCategory(Enum):
     """Category of code issue."""
@@ -77,6 +81,7 @@ class IssueCategory(Enum):
     PERFORMANCE = "performance"
     DOCUMENTATION = "documentation"
 
+
 class SubscriptionFrequency(Enum):
     """Frequency for report subscriptions."""
 
@@ -84,6 +89,7 @@ class SubscriptionFrequency(Enum):
     HOURLY = "hourly"
     DAILY = "daily"
     WEEKLY = "weekly"
+
 
 class PermissionLevel(Enum):
     """Permission levels for report access."""
@@ -93,6 +99,7 @@ class PermissionLevel(Enum):
     WRITE = 2
     ADMIN = 3
 
+
 class ExportFormat(Enum):
     """Export formats for reports."""
 
@@ -100,6 +107,7 @@ class ExportFormat(Enum):
     HTML = "html"
     PDF = "pdf"
     CSV = "csv"
+
 
 class LocaleCode(Enum):
     """Supported locales for reports."""
@@ -109,6 +117,7 @@ class LocaleCode(Enum):
     FR_FR = "fr-FR"
     ES_ES = "es-ES"
 
+
 class AuditAction(Enum):
     """Actions for audit logging."""
 
@@ -117,10 +126,13 @@ class AuditAction(Enum):
     UPDATE = "update"
     DELETE = "delete"
     EXPORT = "export"
+
+
 # =============================================================================
 
 # Dataclasses for Data Structures
 # =============================================================================
+
 
 @dataclass(frozen=True)
 class CompileResult:
@@ -129,7 +141,6 @@ class CompileResult:
     ok: bool
     error: Optional[str] = None
 
-@dataclass
 
 @dataclass
 class CodeIssue:
@@ -150,6 +161,7 @@ class CodeIssue:
     file_path: Optional[str] = None
     function_name: Optional[str] = None
 
+
 @dataclass
 class ReportMetadata:
     """Metadata for a generated report.
@@ -164,6 +176,7 @@ class ReportMetadata:
     generated_at: str
     content_hash: str
     version: str
+
 
 @dataclass
 class ReportTemplate:
@@ -182,7 +195,6 @@ class ReportTemplate:
     include_metadata: bool = True
     include_summary: bool = True
 
-@dataclass
 
 @dataclass
 class ReportCache:
@@ -200,6 +212,7 @@ class ReportCache:
     content: str = ""
     created_at: float = 0.0
     ttl_seconds: int = 3600
+
 
 @dataclass
 class ReportComparison:
@@ -220,6 +233,7 @@ class ReportComparison:
     changed: List[tuple] = field(default_factory=list)  # type: ignore[assignment]
     unchanged_count: int = 0
 
+
 @dataclass
 class FilterCriteria:
     """Criteria for filtering reports.
@@ -236,6 +250,7 @@ class FilterCriteria:
     min_severity: Optional[SeverityLevel] = None
     categories: Optional[List[IssueCategory]] = None
     file_patterns: Optional[List[str]] = None
+
 
 @dataclass
 class ReportSubscription:
@@ -256,6 +271,7 @@ class ReportSubscription:
     file_patterns: List[str] = field(default_factory=list)  # type: ignore[assignment]
     enabled: bool = True
 
+
 @dataclass
 class ArchivedReport:
     """Archived report with retention info.
@@ -274,6 +290,7 @@ class ArchivedReport:
     archived_at: float = field(default_factory=time.time)  # type: ignore[assignment]
     retention_days: int = 90
     metadata: Dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]
+
 
 @dataclass
 class ReportAnnotation:
@@ -294,6 +311,7 @@ class ReportAnnotation:
     line_number: Optional[int] = None
     created_at: float = field(default_factory=time.time)  # type: ignore[assignment]
 
+
 @dataclass
 class ReportSearchResult:
     """Result from report search.
@@ -310,6 +328,7 @@ class ReportSearchResult:
     match_text: str
     line_number: int
     score: float = 1.0
+
 
 @dataclass
 class ReportMetric:
@@ -328,6 +347,7 @@ class ReportMetric:
     threshold: Optional[float] = None
     trend: str = "="
 
+
 @dataclass
 class ReportPermission:
     """Permission for report access.
@@ -344,6 +364,7 @@ class ReportPermission:
     level: PermissionLevel = PermissionLevel.READ
     granted_by: str = ""
     expires_at: Optional[float] = None
+
 
 @dataclass
 class AuditEntry:
@@ -364,6 +385,7 @@ class AuditEntry:
     report_id: str
     details: Dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]
 
+
 @dataclass
 class LocalizedString:
     """Localized string with translations.
@@ -376,6 +398,7 @@ class LocalizedString:
     key: str
     translations: Dict[str, str] = field(default_factory=dict)  # type: ignore[assignment]
     default: str = ""
+
 
 @dataclass
 class ValidationResult:
@@ -391,6 +414,7 @@ class ValidationResult:
     errors: List[str] = field(default_factory=list)  # type: ignore[assignment]
     warnings: List[str] = field(default_factory=list)  # type: ignore[assignment]
     checksum: str = ""
+
 
 @dataclass
 class AggregatedReport:
@@ -410,6 +434,7 @@ class AggregatedReport:
 
 # Report Cache Manager
 # =============================================================================
+
 
 class ReportCacheManager:
     """Manages report caching with invalidation strategies.
@@ -510,6 +535,7 @@ class ReportCacheManager:
 # Report Comparator
 # =============================================================================
 
+
 class ReportComparator:
     """Compares report versions to show differences.
     Attributes:
@@ -565,6 +591,7 @@ class ReportComparator:
 # Report Filter
 # =============================================================================
 
+
 class ReportFilter:
     """Filters reports based on criteria.
     Attributes:
@@ -608,6 +635,7 @@ class ReportFilter:
 
 # Session 8 Helper Classes
 # =============================================================================
+
 
 class SubscriptionManager:
     """Manager for report subscriptions and scheduled delivery.
@@ -688,6 +716,7 @@ class SubscriptionManager:
         processed = len(self.delivery_queue)
         self.delivery_queue.clear()
         return processed
+
 
 class ReportArchiver:
     """Manager for report archiving with retention policies.
@@ -781,6 +810,7 @@ class ReportArchiver:
             self.archives[file_path] = valid
         return removed
 
+
 class AnnotationManager:
     """Manager for report annotations and comments.
     Handles adding, retrieving, and managing annotations on reports.
@@ -854,6 +884,7 @@ class AnnotationManager:
                     self.annotations[report_id].pop(i)
                     return True
         return False
+
 
 class ReportSearchEngine:
     """Search engine for reports.
@@ -931,6 +962,7 @@ class ReportSearchEngine:
                 score=float(score)
             ))
         return results
+
 
 class MetricsCollector:
     """Collector for custom report metrics and KPIs.
@@ -1013,6 +1045,7 @@ class MetricsCollector:
             "total_metrics": total_metrics,
             "averages": avg_summary
         }
+
 
 class AccessController:
     """Controller for report access permissions.
@@ -1101,6 +1134,7 @@ class AccessController:
                     return True
         return False
 
+
 class ReportExporter:
     """Exporter for various report formats.
     Exports reports to different formats including PDF, PPT, CSV.
@@ -1177,6 +1211,7 @@ class ReportExporter:
             output_path.write_text(result, encoding="utf-8")
         return result
 
+
 class AuditLogger:
     """Logger for report audit trail.
     Records all actions performed on reports for compliance.
@@ -1242,6 +1277,7 @@ class AuditLogger:
 
         return [e for e in self.entries if e.user_id == user_id]
 
+
 class ReportValidator:
     """Validator for report data integrity.
     Validates report structure, content, and checksums.
@@ -1296,6 +1332,7 @@ class ReportValidator:
 
         actual = hashlib.sha256(content.encode()).hexdigest()[:16]
         return actual == expected
+
 
 class ReportLocalizer:
     """Localizer for report internationalization.
@@ -1366,6 +1403,7 @@ class ReportLocalizer:
         """
 
         self.current_locale = locale
+
 
 class ReportAPI:
     """API for programmatic report access.
@@ -1443,6 +1481,7 @@ class ReportAPI:
         except Exception:
             return False
 
+
 class ReportScheduler:
     """Scheduler for report generation.
     Handles scheduling report generation with cron - like expressions.
@@ -1510,6 +1549,7 @@ class ReportScheduler:
         if name in self.schedules:
             self.schedules[name]["last_run"] = time.time()
 
+
 class ReportAggregator:
     """Aggregator for combining reports from multiple sources.
     Combines and summarizes reports across files.
@@ -1572,11 +1612,14 @@ class ReportAggregator:
 # Helper Functions
 # =============================================================================
 
+
 def _read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8", errors="replace")
 
+
 def _sha256_text(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8", errors="replace")).hexdigest()
+
 
 def _try_parse_python(source: str, filename: str) -> Tuple[Optional[ast.AST], Optional[str]]:
     try:
@@ -1584,6 +1627,7 @@ def _try_parse_python(source: str, filename: str) -> Tuple[Optional[ast.AST], Op
     except SyntaxError as exc:
         location = f"{exc.filename}:{exc.lineno}:{exc.offset}" if exc.lineno else exc.filename
         return None, f"SyntaxError at {location}: {exc.msg}"
+
 
 def _compile_check(path: Path) -> CompileResult:
     source = _read_text(path)
@@ -1593,8 +1637,10 @@ def _compile_check(path: Path) -> CompileResult:
     # If AST parse succeeded, consider syntax check OK.
     return CompileResult(ok=True)
 
+
 def _is_pytest_test_file(path: Path) -> bool:
     return path.name.startswith("test_") and path.suffix == ".py"
+
 
 def _looks_like_pytest_import_problem(path: Path) -> Optional[str]:
     # pytest imports test modules; hyphens / dots in the filename make import fail.
@@ -1608,6 +1654,7 @@ def _looks_like_pytest_import_problem(path: Path) -> Optional[str]:
         )
     return None
 
+
 def _find_top_level_defs(tree: ast.AST) -> Tuple[List[str], List[str]]:
     functions: List[str] = []
     classes: List[str] = []
@@ -1619,6 +1666,7 @@ def _find_top_level_defs(tree: ast.AST) -> Tuple[List[str], List[str]]:
         elif isinstance(node, ast.ClassDef):
             classes.append(node.name)
     return functions, classes
+
 
 def _find_imports(tree: ast.AST) -> List[str]:
     imports: List[str] = []
@@ -1638,11 +1686,14 @@ def _find_imports(tree: ast.AST) -> List[str]:
             out.append(item)
     return out
 
+
 def _detect_cli_entry(source: str) -> bool:
     return "if __name__ == '__main__'" in source or 'if __name__ == "__main__"' in source
 
+
 def _detect_argparse(source: str) -> bool:
     return "argparse" in source
+
 
 def _placeholder_test_note(path: Path, source: str) -> Optional[str]:
     if not _is_pytest_test_file(path):
@@ -1651,15 +1702,18 @@ def _placeholder_test_note(path: Path, source: str) -> Optional[str]:
         return "Test file only contains a placeholder test (no real assertions / coverage)."
     return None
 
+
 def _write_md(path: Path, content: str) -> None:
     # Normalize newlines for Windows repos.
     path.write_text(content.replace("\r\n", "\n").rstrip() + "\n", encoding="utf-8")
+
 
 def _rel(path: Path) -> str:
     try:
         return str(path.relative_to(REPO_ROOT)).replace("\\", "/")
     except ValueError:
         return str(path).replace("\\", "/")
+
 
 def render_description(py_path: Path, source: str, tree: ast.AST) -> str:
     doc = ast.get_docstring(cast(ast.Module, tree)) or ""
@@ -1712,6 +1766,7 @@ def render_description(py_path: Path, source: str, tree: ast.AST) -> str:
     lines.append(f"- SHA256(source): `{_sha256_text(source)[:16]}…`")
     return "\n".join(lines)
 
+
 def render_errors(py_path: Path, source: str, compile_result: CompileResult) -> str:
     lines: List[str] = []
     lines.append(f"  # Errors: `{py_path.name}`")
@@ -1752,6 +1807,7 @@ def render_errors(py_path: Path, source: str, compile_result: CompileResult) -> 
         lines.append("- None detected by the lightweight scan")
     return "\n".join(lines)
 
+
 def _find_issues(tree: ast.AST, source: str) -> List[str]:
     issues: List[str] = []
     # 1. Mutable defaults
@@ -1785,6 +1841,7 @@ def _find_issues(tree: ast.AST, source: str) -> List[str]:
     if "TODO" in source or "FIXME" in source:
         issues.append("Contains TODO or FIXME comments.")
     return issues
+
 
 def render_improvements(py_path: Path, source: str, tree: ast.AST) -> str:
     _, classes = _find_top_level_defs(tree)
@@ -1841,8 +1898,10 @@ def render_improvements(py_path: Path, source: str, tree: ast.AST) -> str:
     lines.append(f"- File: `{_rel(py_path)}`")
     return "\n".join(lines)
 
+
 def iter_agent_py_files() -> Iterable[Path]:
     return sorted(AGENT_DIR.glob("*.py"))
+
 
 def _get_existing_sha(stem: str) -> Optional[str]:
     desc_path = AGENT_DIR / f"{stem}.description.md"
@@ -1851,6 +1910,7 @@ def _get_existing_sha(stem: str) -> Optional[str]:
     content = _read_text(desc_path)
     match = re.search(r"- SHA256\(source\): `([a-f0-9]+)", content)
     return match.group(1) if match else None
+
 
 def main(argv: Sequence[str]) -> int:
     logging.basicConfig(
@@ -1905,5 +1965,7 @@ def main(argv: Sequence[str]) -> int:
             errors_count += 1
     logging.info(f"Processed {count} files, skipped {skipped} unchanged, {errors_count} errors.")
     return 0 if errors_count == 0 else 1
+
+
 if __name__ == "__main__":
     raise SystemExit(main(sys.argv))

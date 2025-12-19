@@ -5,6 +5,6 @@
 - Added missing companion docs for `src/test_agent_backend.py`.
 - Recorded SHA256 fingerprint in the description doc.
 
-## Changelog
+## [Previous]
 
 - Initial version of `test_agent_backend.py`.

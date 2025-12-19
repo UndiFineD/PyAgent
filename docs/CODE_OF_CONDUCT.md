@@ -1,150 +1,262 @@
-# Contributor Covenant Code of Conduct\n\n## Our Pledge\n\nWe as members, contributors
+# Contributor Covenant Code of Conduct
 
-and leaders
+## Our Pledge
 
-pledge to make participation in our\ncommunity a harassment-free experience for
-everyone,
-regardless
-of age, body\nsize, visible or invisible disability, ethnicity, sex, gender
-characteristics,\ngender
-identity and expression, level of experience, education, socio-economic\nstatus,
-nationality,
-personal appearance, race, caste, color, religion, or\nsexual identity and
-orientation.\nWe pledge
-to act and interact in ways that contribute to an open, welcoming,\ndiverse,
-inclusive,
-and healthy
-community.\n\n## Our Standards\n\nExamples of behavior that contributes to a
-positive
-environment
-for our\ncommunity include:\n\n- Demonstrating empathy and kindness toward other
-people\n\n- Being
-respectful of differing opinions, viewpoints, and experiences\n\n- Giving and
-gracefully
-accepting
-constructive feedback\n\n- Accepting responsibility and apologizing to those
-affected by
-our
-mistakes,\n\n and learning from the experience\n\n- Focusing on what is best not
-just for
-us as
-individuals, but for the\n\n overall community\nExamples of unacceptable
-behavior
-include:\n\n- The
-use of sexualized language or imagery, and sexual attention or\n\n advances of
-any
-kind\n\n-
-Trolling, insulting or derogatory comments, and personal or political
-attacks\n\n- Public
-or private
-harassment\n\n- Publishing others' private information, such as a physical or
-email\n\n
-address,
-without their explicit permission\n\n- Other conduct which could reasonably be
-considered
-inappropriate in a\n\n professional setting\n\n## Enforcement
-Responsibilities\n\nCommunity leaders
-are responsible for clarifying and enforcing our standards of\nacceptable
-behavior and
-will take
-appropriate and fair corrective action in\nresponse to any behavior that they
-deem
-inappropriate,
-threatening, offensive,\nor harmful.\nCommunity leaders have the right and
-responsibility
-to remove,
-edit, or reject\ncomments, commits, code, wiki edits, issues, and other
-contributions that
-are\nnot
-aligned to this Code of Conduct, and will communicate reasons for
-moderation\ndecisions
-when
-appropriate.\n\n## Scope\n\nThis Code of Conduct applies within all community
-spaces, and
-also
-applies when\nan individual is officially representing the community in public
-spaces.\nExamples of
-representing our community include using an official e-mail address,\nposting
-via an
-official social
-media account, or acting as an appointed\nrepresentative at an online or offline
-event.\n\n##
-Enforcement\n\nInstances of abusive, harassing, or otherwise unacceptable
-behavior may
-be\nreported
-to the community leaders responsible for enforcement at\n\nAll
-complaints
-will be reviewed and investigated promptly and fairly.\nAll community leaders
-are
-obligated to
-respect the privacy and security of the\nreporter of any incident.\n\n##
-Enforcement
-Guidelines\n\nCommunity leaders will follow these Community Impact Guidelines in
-determining\nthe
-consequences for any action they deem in violation of this Code of
-Conduct:\n\n### 1.
-Correction\n\n- *Community Impact**: Use of inappropriate language or other
-behavior
-deemed\n\nunprofessional or unwelcome in the community.\n\n- *Consequence**: A
-private,
-written
-warning from community leaders, providing\n\nclarity around the nature of the
-violation
-and an
-explanation of why the\nbehavior was inappropriate. A public apology may be
-requested.\n\n### 2.
-Warning\n\n- *Community Impact**: A violation through a single incident or
-series
-of\n\nactions.\n\n- *Consequence**: A warning with consequences for continued
-behavior.
-No\n\ninteraction with the people involved, including unsolicited interaction
-with\nthose
-enforcing
-the Code of Conduct, for a specified period of time. This\nincludes avoiding
-interactions
-in
-community spaces as well as external channels\nlike social media. Violating
-these terms
-may lead to
-a temporary or\npermanent ban.\n\n### 3. Temporary Ban\n\n- *Community Impact**:
-A serious
-violation
-of community standards, including\n\nsustained inappropriate behavior.\n\n-
-*Consequence**: A
-temporary ban from any sort of interaction or public\n\ncommunication with the
-community
-for a
-specified period of time. No public or\nprivate interaction with the people
-involved,
-including
-unsolicited interaction\nwith those enforcing the Code of Conduct, is allowed
-during this
-period.\nViolating these terms may lead to a permanent ban.\n\n### 4. Permanent
-Ban\n\n-
-*Community
-Impact**: Demonstrating a pattern of violation of community\n\nstandards,
-including
-sustained
-inappropriate behavior, harassment of an\nindividual, or aggression toward or
-disparagement of
-classes of individuals.\n\n- *Consequence**: A permanent ban from any sort of
-interaction
-or
-public\n\ncommunication with the community.\n\n## Attribution\n\nThis Code of
-Conduct is
-adapted
-from the [Contributor Covenant][homepage],\nversion 2.1, available
-at\n[[[https://www.contributor-covenant.org/version/2/1/code_of_conduct.html][v2.1].\nCommunity](https://www.contributor-covenant.org/version/2/1/code_of_conduct.html][v2.1].\nCommunit](https://www.contributor-covenant.org/version/2/1/code_of_conduct.html][v2.1].\nCommunity](https://www.contributor-covenant.org/version/2/1/code_of_conduct.html][v2.1].\nCommunit)y)
-Impact
-Guidelines were inspired by\n[Mozilla's code of conduct enforcement
-ladder][mozilla].\nFor
-answers
-to common questions about this code of conduct, see the FAQ
-at\n[[[https://www.contributor-covenant.org/faq][FAQ].](https://www.contributor-covenant.org/faq][FAQ]](https://www.contributor-covenant.org/faq][FAQ].](https://www.contributor-covenant.org/faq][FAQ]).) Translations are
-available\nat
-[[[https://www.contributor-covenant.org/translations][translations].\n[homepage]:](https://www.contributor-covenant.org/translations][translations].\n[homepage]](https://www.contributor-covenant.org/translations][translations].\n[homepage]:](https://www.contributor-covenant.org/translations][translations].\n[homepage]):)
-\n[v2.1]:>][)v)2).)1)]([[[https://www.contributor-covenant.org>\n[v2.1]:]([https://www.contributor-covenant.org>\n[v2.1]]([https://www.contributor-covenant.org>\n[v2.1]([https://www.contributor-covenant.org>\n[v2.]([https://www.contributor-covenant.org>\n[v2]([https://www.contributor-covenant.org>\n[v]([https://www.contributor-covenant.org>\n[]([https://www.contributor-covenant.org>\n]([https://www.contributor-covenant.org>\]([https://www.contributor-covenant.org>]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co]([https://www.c]([https://www.]([https://www]([https://ww]([https://w](https://](https://www.contributor-covenant.org>\n[v2.1]:]([https://www.contributor-covenant.org>\n[v2.1]]([https://www.contributor-covenant.org>\n[v2.1]([https://www.contributor-covenant.org>\n[v2.]([https://www.contributor-covenant.org>\n[v2]([https://www.contributor-covenant.org>\n[v]([https://www.contributor-covenant.org>\n[]([https://www.contributor-covenant.org>\n]([https://www.contributor-covenant.org>\]([https://www.contributor-covenant.org>]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co]([https://www.c]([https://www.]([https://www]([https://ww]([https://w](https:/](https://www.contributor-covenant.org>\n[v2.1]:]([https://www.contributor-covenant.org>\n[v2.1]]([https://www.contributor-covenant.org>\n[v2.1]([https://www.contributor-covenant.org>\n[v2.]([https://www.contributor-covenant.org>\n[v2]([https://www.contributor-covenant.org>\n[v]([https://www.contributor-covenant.org>\n[]([https://www.contributor-covenant.org>\n]([https://www.contributor-covenant.org>\]([https://www.contributor-covenant.org>]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co]([https://www.c]([https://www.]([https://www]([https://ww]([https://w](https://](https://www.contributor-covenant.org>\n[v2.1]:]([https://www.contributor-covenant.org>\n[v2.1]]([https://www.contributor-covenant.org>\n[v2.1]([https://www.contributor-covenant.org>\n[v2.]([https://www.contributor-covenant.org>\n[v2]([https://www.contributor-covenant.org>\n[v]([https://www.contributor-covenant.org>\n[]([https://www.contributor-covenant.org>\n]([https://www.contributor-covenant.org>\]([https://www.contributor-covenant.org>]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co]([https://www.c]([https://www.]([https://www]([https://ww]([https://w](https:/)/)w)w)w).)c)o)n)t)r)i)b)u)t)o)r)-)c)o)v)e)n)a)n)t).)o)r)g)>)\)n)):)>)
-\n[mozilla]:>][)m)o)z)i)l)l)a)]([[[https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozilla]:]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozilla]]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozilla]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozill]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozil]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozi]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[moz]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mo]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[m]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.htm]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.ht]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.h]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.]([https://www.contributor-covenant.org/version/2/1/code_of_conduct]([https://www.contributor-covenant.org/version/2/1/code_of_conduc]([https://www.contributor-covenant.org/version/2/1/code_of_condu]([https://www.contributor-covenant.org/version/2/1/code_of_cond]([https://www.contributor-covenant.org/version/2/1/code_of_con]([https://www.contributor-covenant.org/version/2/1/code_of_co]([https://www.contributor-covenant.org/version/2/1/code_of_c]([https://www.contributor-covenant.org/version/2/1/code*of*]([https://www.contributor-covenant.org/version/2/1/code*of]([https://www.contributor-covenant.org/version/2/1/code*o]([https://www.contributor-covenant.org/version/2/1/code*]([https://www.contributor-covenant.org/version/2/1/code]([https://www.contributor-covenant.org/version/2/1/cod]([https://www.contributor-covenant.org/version/2/1/co]([https://www.contributor-covenant.org/version/2/1/c]([https://www.contributor-covenant.org/version/2/1/]([https://www.contributor-covenant.org/version/2/1]([https://www.contributor-covenant.org/version/2/]([https://www.contributor-covenant.org/version/2]([https://www.contributor-covenant.org/version/]([https://www.contributor-covenant.org/version]([https://www.contributor-covenant.org/versio]([https://www.contributor-covenant.org/versi]([https://www.contributor-covenant.org/vers]([https://www.contributor-covenant.org/ver]([https://www.contributor-covenant.org/ve]([https://www.contributor-covenant.org/v]([https://www.contributor-covenant.org/]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co](https://www.c](https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozilla]:]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozilla]]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozilla]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozill]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozil]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozi]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[moz]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mo]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[m]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.htm]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.ht]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.h]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.]([https://www.contributor-covenant.org/version/2/1/code_of_conduct]([https://www.contributor-covenant.org/version/2/1/code_of_conduc]([https://www.contributor-covenant.org/version/2/1/code_of_condu]([https://www.contributor-covenant.org/version/2/1/code_of_cond]([https://www.contributor-covenant.org/version/2/1/code_of_con]([https://www.contributor-covenant.org/version/2/1/code_of_co]([https://www.contributor-covenant.org/version/2/1/code_of_c]([https://www.contributor-covenant.org/version/2/1/code*of*]([https://www.contributor-covenant.org/version/2/1/code*of]([https://www.contributor-covenant.org/version/2/1/code*o]([https://www.contributor-covenant.org/version/2/1/code*]([https://www.contributor-covenant.org/version/2/1/code]([https://www.contributor-covenant.org/version/2/1/cod]([https://www.contributor-covenant.org/version/2/1/co]([https://www.contributor-covenant.org/version/2/1/c]([https://www.contributor-covenant.org/version/2/1/]([https://www.contributor-covenant.org/version/2/1]([https://www.contributor-covenant.org/version/2/]([https://www.contributor-covenant.org/version/2]([https://www.contributor-covenant.org/version/]([https://www.contributor-covenant.org/version]([https://www.contributor-covenant.org/versio]([https://www.contributor-covenant.org/versi]([https://www.contributor-covenant.org/vers]([https://www.contributor-covenant.org/ver]([https://www.contributor-covenant.org/ve]([https://www.contributor-covenant.org/v]([https://www.contributor-covenant.org/]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co](https://www.](https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozilla]:]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozilla]]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozilla]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozill]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozil]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozi]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[moz]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mo]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[m]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.htm]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.ht]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.h]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.]([https://www.contributor-covenant.org/version/2/1/code_of_conduct]([https://www.contributor-covenant.org/version/2/1/code_of_conduc]([https://www.contributor-covenant.org/version/2/1/code_of_condu]([https://www.contributor-covenant.org/version/2/1/code_of_cond]([https://www.contributor-covenant.org/version/2/1/code_of_con]([https://www.contributor-covenant.org/version/2/1/code_of_co]([https://www.contributor-covenant.org/version/2/1/code_of_c]([https://www.contributor-covenant.org/version/2/1/code*of*]([https://www.contributor-covenant.org/version/2/1/code*of]([https://www.contributor-covenant.org/version/2/1/code*o]([https://www.contributor-covenant.org/version/2/1/code*]([https://www.contributor-covenant.org/version/2/1/code]([https://www.contributor-covenant.org/version/2/1/cod]([https://www.contributor-covenant.org/version/2/1/co]([https://www.contributor-covenant.org/version/2/1/c]([https://www.contributor-covenant.org/version/2/1/]([https://www.contributor-covenant.org/version/2/1]([https://www.contributor-covenant.org/version/2/]([https://www.contributor-covenant.org/version/2]([https://www.contributor-covenant.org/version/]([https://www.contributor-covenant.org/version]([https://www.contributor-covenant.org/versio]([https://www.contributor-covenant.org/versi]([https://www.contributor-covenant.org/vers]([https://www.contributor-covenant.org/ver]([https://www.contributor-covenant.org/ve]([https://www.contributor-covenant.org/v]([https://www.contributor-covenant.org/]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co](https://www.c](https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozilla]:]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozilla]]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozilla]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozill]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozil]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mozi]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[moz]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[mo]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[m]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n[]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\n]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>\]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html>]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.html]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.htm]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.ht]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.h]([https://www.contributor-covenant.org/version/2/1/code_of_conduct.]([https://www.contributor-covenant.org/version/2/1/code_of_conduct]([https://www.contributor-covenant.org/version/2/1/code_of_conduc]([https://www.contributor-covenant.org/version/2/1/code_of_condu]([https://www.contributor-covenant.org/version/2/1/code_of_cond]([https://www.contributor-covenant.org/version/2/1/code_of_con]([https://www.contributor-covenant.org/version/2/1/code_of_co]([https://www.contributor-covenant.org/version/2/1/code_of_c]([https://www.contributor-covenant.org/version/2/1/code*of*]([https://www.contributor-covenant.org/version/2/1/code*of]([https://www.contributor-covenant.org/version/2/1/code*o]([https://www.contributor-covenant.org/version/2/1/code*]([https://www.contributor-covenant.org/version/2/1/code]([https://www.contributor-covenant.org/version/2/1/cod]([https://www.contributor-covenant.org/version/2/1/co]([https://www.contributor-covenant.org/version/2/1/c]([https://www.contributor-covenant.org/version/2/1/]([https://www.contributor-covenant.org/version/2/1]([https://www.contributor-covenant.org/version/2/]([https://www.contributor-covenant.org/version/2]([https://www.contributor-covenant.org/version/]([https://www.contributor-covenant.org/version]([https://www.contributor-covenant.org/versio]([https://www.contributor-covenant.org/versi]([https://www.contributor-covenant.org/vers]([https://www.contributor-covenant.org/ver]([https://www.contributor-covenant.org/ve]([https://www.contributor-covenant.org/v]([https://www.contributor-covenant.org/]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co](https://www.)c)o)n)t)r)i)b)u)t)o)r)-)c)o)v)e)n)a)n)t).)o)r)g)/)v)e)r)s)i)o)n)/)2)/)1)/)c)o)d)e)*)o)f)*)c)o)n)d)u)c)t).)h)t)m)l)>)\)n)):)>)
-\n[FAQ]:>][)F)A)Q)]([[[https://github.com/mozilla/diversity>\n[FAQ]:]([https://github.com/mozilla/diversity>\n[FAQ]]([https://github.com/mozilla/diversity>\n[FAQ]([https://github.com/mozilla/diversity>\n[FA]([https://github.com/mozilla/diversity>\n[F]([https://github.com/mozilla/diversity>\n[]([https://github.com/mozilla/diversity>\n]([https://github.com/mozilla/diversity>\]([https://github.com/mozilla/diversity>]([https://github.com/mozilla/diversity]([https://github.com/mozilla/diversit]([https://github.com/mozilla/diversi]([https://github.com/mozilla/divers]([https://github.com/mozilla/diver]([https://github.com/mozilla/dive]([https://github.com/mozilla/div]([https://github.com/mozilla/di]([https://github.com/mozilla/d]([https://github.com/mozilla/]([https://github.com/mozilla]([https://github.com/mozill]([https://github.com/mozil]([https://github.com/mozi]([https://github.com/moz]([https://github.com/mo]([https://github.com/m]([https://github.com/]([https://github.com]([https://github.co]([https://github.c]([https://github.]([https://github]([https://githu]([https://gith]([https://git]([https://gi]([https://g](https://](https://github.com/mozilla/diversity>\n[FAQ]:]([https://github.com/mozilla/diversity>\n[FAQ]]([https://github.com/mozilla/diversity>\n[FAQ]([https://github.com/mozilla/diversity>\n[FA]([https://github.com/mozilla/diversity>\n[F]([https://github.com/mozilla/diversity>\n[]([https://github.com/mozilla/diversity>\n]([https://github.com/mozilla/diversity>\]([https://github.com/mozilla/diversity>]([https://github.com/mozilla/diversity]([https://github.com/mozilla/diversit]([https://github.com/mozilla/diversi]([https://github.com/mozilla/divers]([https://github.com/mozilla/diver]([https://github.com/mozilla/dive]([https://github.com/mozilla/div]([https://github.com/mozilla/di]([https://github.com/mozilla/d]([https://github.com/mozilla/]([https://github.com/mozilla]([https://github.com/mozill]([https://github.com/mozil]([https://github.com/mozi]([https://github.com/moz]([https://github.com/mo]([https://github.com/m]([https://github.com/]([https://github.com]([https://github.co]([https://github.c]([https://github.]([https://github]([https://githu]([https://gith]([https://git]([https://gi]([https://g](https:/](https://github.com/mozilla/diversity>\n[FAQ]:]([https://github.com/mozilla/diversity>\n[FAQ]]([https://github.com/mozilla/diversity>\n[FAQ]([https://github.com/mozilla/diversity>\n[FA]([https://github.com/mozilla/diversity>\n[F]([https://github.com/mozilla/diversity>\n[]([https://github.com/mozilla/diversity>\n]([https://github.com/mozilla/diversity>\]([https://github.com/mozilla/diversity>]([https://github.com/mozilla/diversity]([https://github.com/mozilla/diversit]([https://github.com/mozilla/diversi]([https://github.com/mozilla/divers]([https://github.com/mozilla/diver]([https://github.com/mozilla/dive]([https://github.com/mozilla/div]([https://github.com/mozilla/di]([https://github.com/mozilla/d]([https://github.com/mozilla/]([https://github.com/mozilla]([https://github.com/mozill]([https://github.com/mozil]([https://github.com/mozi]([https://github.com/moz]([https://github.com/mo]([https://github.com/m]([https://github.com/]([https://github.com]([https://github.co]([https://github.c]([https://github.]([https://github]([https://githu]([https://gith]([https://git]([https://gi]([https://g](https://](https://github.com/mozilla/diversity>\n[FAQ]:]([https://github.com/mozilla/diversity>\n[FAQ]]([https://github.com/mozilla/diversity>\n[FAQ]([https://github.com/mozilla/diversity>\n[FA]([https://github.com/mozilla/diversity>\n[F]([https://github.com/mozilla/diversity>\n[]([https://github.com/mozilla/diversity>\n]([https://github.com/mozilla/diversity>\]([https://github.com/mozilla/diversity>]([https://github.com/mozilla/diversity]([https://github.com/mozilla/diversit]([https://github.com/mozilla/diversi]([https://github.com/mozilla/divers]([https://github.com/mozilla/diver]([https://github.com/mozilla/dive]([https://github.com/mozilla/div]([https://github.com/mozilla/di]([https://github.com/mozilla/d]([https://github.com/mozilla/]([https://github.com/mozilla]([https://github.com/mozill]([https://github.com/mozil]([https://github.com/mozi]([https://github.com/moz]([https://github.com/mo]([https://github.com/m]([https://github.com/]([https://github.com]([https://github.co]([https://github.c]([https://github.]([https://github]([https://githu]([https://gith]([https://git]([https://gi]([https://g](https:/)/)g)i)t)h)u)b).)c)o)m)/)m)o)z)i)l)l)a)/)d)i)v)e)r)s)i)t)y)>)\)n)):)>)
-\n[translations]:>][)t)r)a)n)s)l)a)t)i)o)n)s)]([[[https://www.contributor-covenant.org/faq>\n[translations]:]([https://www.contributor-covenant.org/faq>\n[translations]]([https://www.contributor-covenant.org/faq>\n[translations]([https://www.contributor-covenant.org/faq>\n[translation]([https://www.contributor-covenant.org/faq>\n[translatio]([https://www.contributor-covenant.org/faq>\n[translati]([https://www.contributor-covenant.org/faq>\n[translat]([https://www.contributor-covenant.org/faq>\n[transla]([https://www.contributor-covenant.org/faq>\n[transl]([https://www.contributor-covenant.org/faq>\n[trans]([https://www.contributor-covenant.org/faq>\n[tran]([https://www.contributor-covenant.org/faq>\n[tra]([https://www.contributor-covenant.org/faq>\n[tr]([https://www.contributor-covenant.org/faq>\n[t]([https://www.contributor-covenant.org/faq>\n[]([https://www.contributor-covenant.org/faq>\n]([https://www.contributor-covenant.org/faq>\]([https://www.contributor-covenant.org/faq>]([https://www.contributor-covenant.org/faq]([https://www.contributor-covenant.org/fa]([https://www.contributor-covenant.org/f]([https://www.contributor-covenant.org/]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co]([https://www.c]([https://www.]([https://www]([https://ww]([https://w](https://](https://www.contributor-covenant.org/faq>\n[translations]:]([https://www.contributor-covenant.org/faq>\n[translations]]([https://www.contributor-covenant.org/faq>\n[translations]([https://www.contributor-covenant.org/faq>\n[translation]([https://www.contributor-covenant.org/faq>\n[translatio]([https://www.contributor-covenant.org/faq>\n[translati]([https://www.contributor-covenant.org/faq>\n[translat]([https://www.contributor-covenant.org/faq>\n[transla]([https://www.contributor-covenant.org/faq>\n[transl]([https://www.contributor-covenant.org/faq>\n[trans]([https://www.contributor-covenant.org/faq>\n[tran]([https://www.contributor-covenant.org/faq>\n[tra]([https://www.contributor-covenant.org/faq>\n[tr]([https://www.contributor-covenant.org/faq>\n[t]([https://www.contributor-covenant.org/faq>\n[]([https://www.contributor-covenant.org/faq>\n]([https://www.contributor-covenant.org/faq>\]([https://www.contributor-covenant.org/faq>]([https://www.contributor-covenant.org/faq]([https://www.contributor-covenant.org/fa]([https://www.contributor-covenant.org/f]([https://www.contributor-covenant.org/]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co]([https://www.c]([https://www.]([https://www]([https://ww]([https://w](https:/](https://www.contributor-covenant.org/faq>\n[translations]:]([https://www.contributor-covenant.org/faq>\n[translations]]([https://www.contributor-covenant.org/faq>\n[translations]([https://www.contributor-covenant.org/faq>\n[translation]([https://www.contributor-covenant.org/faq>\n[translatio]([https://www.contributor-covenant.org/faq>\n[translati]([https://www.contributor-covenant.org/faq>\n[translat]([https://www.contributor-covenant.org/faq>\n[transla]([https://www.contributor-covenant.org/faq>\n[transl]([https://www.contributor-covenant.org/faq>\n[trans]([https://www.contributor-covenant.org/faq>\n[tran]([https://www.contributor-covenant.org/faq>\n[tra]([https://www.contributor-covenant.org/faq>\n[tr]([https://www.contributor-covenant.org/faq>\n[t]([https://www.contributor-covenant.org/faq>\n[]([https://www.contributor-covenant.org/faq>\n]([https://www.contributor-covenant.org/faq>\]([https://www.contributor-covenant.org/faq>]([https://www.contributor-covenant.org/faq]([https://www.contributor-covenant.org/fa]([https://www.contributor-covenant.org/f]([https://www.contributor-covenant.org/]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co]([https://www.c]([https://www.]([https://www]([https://ww]([https://w](https://](https://www.contributor-covenant.org/faq>\n[translations]:]([https://www.contributor-covenant.org/faq>\n[translations]]([https://www.contributor-covenant.org/faq>\n[translations]([https://www.contributor-covenant.org/faq>\n[translation]([https://www.contributor-covenant.org/faq>\n[translatio]([https://www.contributor-covenant.org/faq>\n[translati]([https://www.contributor-covenant.org/faq>\n[translat]([https://www.contributor-covenant.org/faq>\n[transla]([https://www.contributor-covenant.org/faq>\n[transl]([https://www.contributor-covenant.org/faq>\n[trans]([https://www.contributor-covenant.org/faq>\n[tran]([https://www.contributor-covenant.org/faq>\n[tra]([https://www.contributor-covenant.org/faq>\n[tr]([https://www.contributor-covenant.org/faq>\n[t]([https://www.contributor-covenant.org/faq>\n[]([https://www.contributor-covenant.org/faq>\n]([https://www.contributor-covenant.org/faq>\]([https://www.contributor-covenant.org/faq>]([https://www.contributor-covenant.org/faq]([https://www.contributor-covenant.org/fa]([https://www.contributor-covenant.org/f]([https://www.contributor-covenant.org/]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co]([https://www.c]([https://www.]([https://www]([https://ww]([https://w](https:/)/)w)w)w).)c)o)n)t)r)i)b)u)t)o)r)-)c)o)v)e)n)a)n)t).)o)r)g)/)f)a)q)>)\)n)):)>)
-\n>\n]([[[https://www.contributor-covenant.org/translations>\n>\]([https://www.contributor-covenant.org/translations>\n>]([https://www.contributor-covenant.org/translations>\n]([https://www.contributor-covenant.org/translations>\]([https://www.contributor-covenant.org/translations>]([https://www.contributor-covenant.org/translations]([https://www.contributor-covenant.org/translation]([https://www.contributor-covenant.org/translatio]([https://www.contributor-covenant.org/translati]([https://www.contributor-covenant.org/translat]([https://www.contributor-covenant.org/transla]([https://www.contributor-covenant.org/transl]([https://www.contributor-covenant.org/trans]([https://www.contributor-covenant.org/tran]([https://www.contributor-covenant.org/tra]([https://www.contributor-covenant.org/tr]([https://www.contributor-covenant.org/t]([https://www.contributor-covenant.org/]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co]([https://www.c]([https://www.]([https://www]([https://ww]([https://w](https://](https://www.contributor-covenant.org/translations>\n>\]([https://www.contributor-covenant.org/translations>\n>]([https://www.contributor-covenant.org/translations>\n]([https://www.contributor-covenant.org/translations>\]([https://www.contributor-covenant.org/translations>]([https://www.contributor-covenant.org/translations]([https://www.contributor-covenant.org/translation]([https://www.contributor-covenant.org/translatio]([https://www.contributor-covenant.org/translati]([https://www.contributor-covenant.org/translat]([https://www.contributor-covenant.org/transla]([https://www.contributor-covenant.org/transl]([https://www.contributor-covenant.org/trans]([https://www.contributor-covenant.org/tran]([https://www.contributor-covenant.org/tra]([https://www.contributor-covenant.org/tr]([https://www.contributor-covenant.org/t]([https://www.contributor-covenant.org/]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co]([https://www.c]([https://www.]([https://www]([https://ww]([https://w](https:/](https://www.contributor-covenant.org/translations>\n>\]([https://www.contributor-covenant.org/translations>\n>]([https://www.contributor-covenant.org/translations>\n]([https://www.contributor-covenant.org/translations>\]([https://www.contributor-covenant.org/translations>]([https://www.contributor-covenant.org/translations]([https://www.contributor-covenant.org/translation]([https://www.contributor-covenant.org/translatio]([https://www.contributor-covenant.org/translati]([https://www.contributor-covenant.org/translat]([https://www.contributor-covenant.org/transla]([https://www.contributor-covenant.org/transl]([https://www.contributor-covenant.org/trans]([https://www.contributor-covenant.org/tran]([https://www.contributor-covenant.org/tra]([https://www.contributor-covenant.org/tr]([https://www.contributor-covenant.org/t]([https://www.contributor-covenant.org/]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co]([https://www.c]([https://www.]([https://www]([https://ww]([https://w](https://](https://www.contributor-covenant.org/translations>\n>\]([https://www.contributor-covenant.org/translations>\n>]([https://www.contributor-covenant.org/translations>\n]([https://www.contributor-covenant.org/translations>\]([https://www.contributor-covenant.org/translations>]([https://www.contributor-covenant.org/translations]([https://www.contributor-covenant.org/translation]([https://www.contributor-covenant.org/translatio]([https://www.contributor-covenant.org/translati]([https://www.contributor-covenant.org/translat]([https://www.contributor-covenant.org/transla]([https://www.contributor-covenant.org/transl]([https://www.contributor-covenant.org/trans]([https://www.contributor-covenant.org/tran]([https://www.contributor-covenant.org/tra]([https://www.contributor-covenant.org/tr]([https://www.contributor-covenant.org/t]([https://www.contributor-covenant.org/]([https://www.contributor-covenant.org]([https://www.contributor-covenant.or]([https://www.contributor-covenant.o]([https://www.contributor-covenant.]([https://www.contributor-covenant]([https://www.contributor-covenan]([https://www.contributor-covena]([https://www.contributor-coven]([https://www.contributor-cove]([https://www.contributor-cov]([https://www.contributor-co]([https://www.contributor-c]([https://www.contributor-]([https://www.contributor]([https://www.contributo]([https://www.contribut]([https://www.contribu]([https://www.contrib]([https://www.contri]([https://www.contr]([https://www.cont]([https://www.con]([https://www.co]([https://www.c]([https://www.]([https://www]([https://ww]([https://w](https:/)/)w)w)w).)c)o)n)t)r)i)b)u)t)o)r)-)c)o)v)e)n)a)n)t).)o)r)g)/)t)r)a)n)s)l)a)t)i)o)n)s)>)\)n)>)\)n)
+We as members, contributors, and leaders pledge to make participation in our
+community a harassment-free experience for everyone, regardless of age, body
+size, visible or invisible disability, ethnicity, sex, gender characteristics,
+gender identity and expression, level of experience, education, socio-economic
+status, nationality, personal appearance, race, caste, color, religion, or
+sexual identity and orientation.
+
+We pledge to act and interact in ways that contribute to an open, welcoming,
+diverse, inclusive, and healthy community.
+
+## Our Standards
+
+Examples of behavior that contributes to a positive environment for our
+community include:
+
+* Demonstrating empathy and kindness toward other people
+* Being respectful of differing opinions, viewpoints, and experiences
+* Giving and gracefully accepting constructive feedback
+* Accepting responsibility and apologizing to those affected by our mistakes,
+  and learning from the experience
+* Focusing on what is best not just for us as individuals, but for the
+  overall community
+
+Examples of unacceptable behavior include:
+
+* The use of sexualized language or imagery, and sexual attention or
+  advances of any kind
+* Trolling, insulting or derogatory comments, and personal or political attacks
+* Public or private harassment
+* Publishing others' private information, such as a physical or email
+  address, without their explicit permission
+* Other conduct which could reasonably be considered inappropriate in a
+  professional setting
+
+## Enforcement Responsibilities
+
+Community leaders are responsible for clarifying and enforcing our standards of
+acceptable behavior and will take appropriate and fair corrective action in
+response to any behavior that they deem inappropriate, threatening, offensive,
+or harmful.
+
+Community leaders have the right and responsibility to remove, edit, or reject
+comments, commits, code, wiki edits, issues, and other contributions that are
+not aligned to this Code of Conduct, and will communicate reasons for moderation
+decisions when appropriate.
+
+## Scope
+
+This Code of Conduct applies within all community spaces, and also applies when
+an individual is officially representing the community in public spaces.
+Examples of representing our community include using an official e-mail address,
+posting via an official social media account, or acting as an appointed
+representative at an online or offline event.
+
+## Enforcement
+
+Instances of abusive, harassing, or otherwise unacceptable behavior may be
+reported to the community leaders responsible for enforcement.
+All complaints will be reviewed and investigated promptly and fairly.
+
+All community leaders are obligated to respect the privacy and security of the
+reporter of any incident.
+
+## Enforcement Guidelines
+
+Community leaders will follow these Community Impact Guidelines in determining
+the consequences for any action they deem in violation of this Code of Conduct:
+
+### 1. Correction
+
+**Community Impact**: Use of inappropriate language or other behavior deemed
+unprofessional or unwelcome in the community.
+
+**Consequence**: A private, written warning from community leaders, providing
+clarity around the nature of the violation and an explanation of why the
+behavior was inappropriate. A public apology may be requested.
+
+### 2. Warning
+
+**Community Impact**: A violation through a single incident or series of
+actions.
+
+**Consequence**: A warning with consequences for continued behavior. No
+interaction with the people involved, including unsolicited interaction with
+those enforcing the Code of Conduct, for a specified period of time. This
+includes avoiding interactions in community spaces as well as external channels
+like social media. Violating these terms may lead to a temporary or
+permanent ban.
+
+### 3. Temporary Ban
+
+**Community Impact**: A serious violation of community standards, including
+sustained inappropriate behavior.
+
+**Consequence**: A temporary ban from any sort of interaction or public
+communication with the community for a specified period of time. No public or
+private interaction with the people involved, including unsolicited interaction
+with those enforcing the Code of Conduct, is allowed during this period.
+Violating these terms may lead to a permanent ban.
+
+### 4. Permanent Ban
+
+**Community Impact**: Demonstrating a pattern of violation of community
+standards, including sustained inappropriate behavior, harassment of an
+individual, or aggression toward or disparagement of classes of individuals.
+
+**Consequence**: A permanent ban from any sort of interaction or public
+communication with the community.
+
+## Attribution
+
+This Code of Conduct is adapted from the [Contributor Covenant][homepage],
+version 2.1, available at
+[https://www.contributor-covenant.org/version/2/1/code_of_conduct.html][v2.1].
+
+Community Impact Guidelines were inspired by
+[Mozilla's code of conduct enforcement ladder][mozilla].
+
+For answers to common questions about this code of conduct, see the FAQ at
+[https://www.contributor-covenant.org/faq][FAQ]. Translations are available
+at [https://www.contributor-covenant.org/translations][translations].
+
+[homepage]: https://www.contributor-covenant.org
+[v2.1]: https://www.contributor-covenant.org/version/2/1/code_of_conduct.html
+[mozilla]: https://github.com/mozilla/diversity
+[FAQ]: https://www.contributor-covenant.org/faq
+[translations]: https://www.contributor-covenant.org/translations# filepath: docs/CODE_OF_CONDUCT.md
+# Contributor Covenant Code of Conduct
+
+## Our Pledge
+
+We as members, contributors, and leaders pledge to make participation in our
+community a harassment-free experience for everyone, regardless of age, body
+size, visible or invisible disability, ethnicity, sex, gender characteristics,
+gender identity and expression, level of experience, education, socio-economic
+status, nationality, personal appearance, race, caste, color, religion, or
+sexual identity and orientation.
+
+We pledge to act and interact in ways that contribute to an open, welcoming,
+diverse, inclusive, and healthy community.
+
+## Our Standards
+
+Examples of behavior that contributes to a positive environment for our
+community include:
+
+* Demonstrating empathy and kindness toward other people
+* Being respectful of differing opinions, viewpoints, and experiences
+* Giving and gracefully accepting constructive feedback
+* Accepting responsibility and apologizing to those affected by our mistakes,
+  and learning from the experience
+* Focusing on what is best not just for us as individuals, but for the
+  overall community
+
+Examples of unacceptable behavior include:
+
+* The use of sexualized language or imagery, and sexual attention or
+  advances of any kind
+* Trolling, insulting or derogatory comments, and personal or political attacks
+* Public or private harassment
+* Publishing others' private information, such as a physical or email
+  address, without their explicit permission
+* Other conduct which could reasonably be considered inappropriate in a
+  professional setting
+
+## Enforcement Responsibilities
+
+Community leaders are responsible for clarifying and enforcing our standards of
+acceptable behavior and will take appropriate and fair corrective action in
+response to any behavior that they deem inappropriate, threatening, offensive,
+or harmful.
+
+Community leaders have the right and responsibility to remove, edit, or reject
+comments, commits, code, wiki edits, issues, and other contributions that are
+not aligned to this Code of Conduct, and will communicate reasons for moderation
+decisions when appropriate.
+
+## Scope
+
+This Code of Conduct applies within all community spaces, and also applies when
+an individual is officially representing the community in public spaces.
+Examples of representing our community include using an official e-mail address,
+posting via an official social media account, or acting as an appointed
+representative at an online or offline event.
+
+## Enforcement
+
+Instances of abusive, harassing, or otherwise unacceptable behavior may be
+reported to the community leaders responsible for enforcement.
+All complaints will be reviewed and investigated promptly and fairly.
+
+All community leaders are obligated to respect the privacy and security of the
+reporter of any incident.
+
+## Enforcement Guidelines
+
+Community leaders will follow these Community Impact Guidelines in determining
+the consequences for any action they deem in violation of this Code of Conduct:
+
+### 1. Correction
+
+**Community Impact**: Use of inappropriate language or other behavior deemed
+unprofessional or unwelcome in the community.
+
+**Consequence**: A private, written warning from community leaders, providing
+clarity around the nature of the violation and an explanation of why the
+behavior was inappropriate. A public apology may be requested.
+
+### 2. Warning
+
+**Community Impact**: A violation through a single incident or series of
+actions.
+
+**Consequence**: A warning with consequences for continued behavior. No
+interaction with the people involved, including unsolicited interaction with
+those enforcing the Code of Conduct, for a specified period of time. This
+includes avoiding interactions in community spaces as well as external channels
+like social media. Violating these terms may lead to a temporary or
+permanent ban.
+
+### 3. Temporary Ban
+
+**Community Impact**: A serious violation of community standards, including
+sustained inappropriate behavior.
+
+**Consequence**: A temporary ban from any sort of interaction or public
+communication with the community for a specified period of time. No public or
+private interaction with the people involved, including unsolicited interaction
+with those enforcing the Code of Conduct, is allowed during this period.
+Violating these terms may lead to a permanent ban.
+
+### 4. Permanent Ban
+
+**Community Impact**: Demonstrating a pattern of violation of community
+standards, including sustained inappropriate behavior, harassment of an
+individual, or aggression toward or disparagement of classes of individuals.
+
+**Consequence**: A permanent ban from any sort of interaction or public
+communication with the community.
+
+## Attribution
+
+This Code of Conduct is adapted from the [Contributor Covenant][homepage],
+version 2.1, available at
+[https://www.contributor-covenant.org/version/2/1/code_of_conduct.html][v2.1].
+
+Community Impact Guidelines were inspired by
+[Mozilla's code of conduct enforcement ladder][mozilla].
+
+For answers to common questions about this code of conduct, see the FAQ at
+[https://www.contributor-covenant.org/faq][FAQ]. Translations are available
+at [https://www.contributor-covenant.org/translations][translations].
+
+[homepage]: https://www.contributor-covenant.org
+[v2.1]: https://www.contributor-covenant.org/version/2/1/code_of_conduct.html
+[mozilla]: https://github.com/mozilla/diversity
+[FAQ]: https://www.contributor-covenant.org/faq
+[translations]: https://www.contributor-covenant.org/translations

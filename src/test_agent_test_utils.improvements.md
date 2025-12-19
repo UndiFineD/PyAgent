@@ -1,6 +1,7 @@
 # Improvements: `test_agent_test_utils.py`
 
 ## Suggested improvements
+
 - [x] FIXED: [2025-06-14] Add tests for mock backend response generation.
 - [x] FIXED: [2025-06-14] Test fixture factory patterns for agents.
 - [x] FIXED: [2025-06-14] Add tests for test data seeding utilities.
@@ -23,6 +24,7 @@
 - [x] FIXED: [2025-06-14] Test test resource allocation.
 
 ## Fixed (Moved to test_agent_test_utils.changes.md)
+
 - Add tests for mock agent creation and configuration. (Fixed)
 - Test fixture cleanup and teardown operations. (Fixed)
 - Add tests for temporary directory management. (Fixed)
@@ -40,5 +42,6 @@
 - Add performance benchmarks for test utilities. (Fixed)
 
 ## Notes
+
 - These are suggestions based on static inspection; validate behavior with tests/runs.
 - File: `src/test_agent_test_utils.py`

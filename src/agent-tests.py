@@ -40,8 +40,24 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Set, Tuple
+from typing import Any, Callable, Dict, List, Optional, Set, Tuple, cast
 from base_agent import BaseAgent, create_main_function
+
+
+# Typed default factories help Pylance infer concrete container element types
+# when used with dataclasses.field(default_factory=...).
+
+
+def _empty_str_list() -> list[str]:
+    return []
+
+
+def _empty_dict_any() -> dict[str, Any]:
+    return {}
+
+
+def _empty_action_list() -> list[dict[str, Any]]:
+    return []
 
 
 class TestPriority(Enum):
@@ -695,8 +711,8 @@ class EnvironmentProvisioner:
     class ProvisionedEnvironment:
         status: str
         python_version: str = ""
-        dependencies: List[str] = field(default_factory=list)
-        config: Dict[str, Any] = field(default_factory=dict)
+        dependencies: list[str] = field(default_factory=_empty_str_list)
+        config: dict[str, Any] = field(default_factory=_empty_dict_any)
 
     def register_environment(
         self,
@@ -2502,9 +2518,10 @@ class TestsAgent(BaseAgent):
         self._validate_test_structure(new_content)
         return new_content
 
-    def update_file(self) -> None:
+    def update_file(self) -> bool:
         """Write the improved content back to the file (no markdown fixing for test files)."""
         self.file_path.write_text(self.current_content, encoding='utf-8')
+        return True
 
 
 class TestMetricsCollector:
@@ -2758,7 +2775,11 @@ class TestPrioritizer:
 
     def prioritize_by_recent_changes(self) -> List[str]:
         """Prioritize by recent changes."""
-        return sorted(self.tests.keys(), key=lambda t: self.tests[t]["recent_changes"], reverse=True)
+        return sorted(
+            self.tests.keys(),
+            key=lambda t: self.tests[t]["recent_changes"],
+            reverse=True,
+        )
 
     def prioritize_by_failure_history(self) -> List[str]:
         """Prioritize by failure history."""
@@ -2768,11 +2789,17 @@ class TestPrioritizer:
         """Prioritize by failure rate (compat alias)."""
         return self.prioritize_by_failure_history()
 
-    def prioritize_combined(self, change_weight: float = 1.0, failure_weight: float = 1.0) -> List[str]:
+    def prioritize_combined(
+        self,
+        change_weight: float = 1.0,
+        failure_weight: float = 1.0,
+    ) -> List[str]:
         """Prioritize with combined strategy."""
         scores: Dict[str, float] = {}
         for test, data in self.tests.items():
-            scores[test] = (data["recent_changes"] * float(change_weight)) + (data["failure_rate"] * float(failure_weight))
+            scores[test] = (data["recent_changes"] * float(change_weight)) + (
+                data["failure_rate"] * float(failure_weight)
+            )
         return sorted(scores.keys(), key=lambda t: scores[t], reverse=True)
 
 
@@ -3033,12 +3060,18 @@ class ContractValidator:
     @dataclass
     class ValidationResult:
         valid: bool
-        errors: List[str] = field(default_factory=list)
+        errors: list[str] = field(default_factory=_empty_str_list)
 
-    def validate(self, contract: Dict[str, Any], actual_response: Optional[Dict[str, Any]] = None) -> "ContractValidator.ValidationResult":
+    def validate(
+        self,
+        contract: Dict[str, Any],
+        actual_response: Optional[Dict[str, Any]] = None,
+    ) -> "ContractValidator.ValidationResult":
         """Validate a contract against an actual response."""
-        errors: List[str] = []
-        expected_resp = contract.get("response") or {}
+        errors: list[str] = []
+
+        expected_resp_raw = contract.get("response")
+        expected_resp: Dict[str, Any] = cast(Dict[str, Any], expected_resp_raw) if isinstance(expected_resp_raw, dict) else {}
         expected_status = expected_resp.get("status")
         if expected_status is None:
             errors.append("missing_expected_status")
@@ -3050,7 +3083,8 @@ class ContractValidator:
         if expected_status is not None and actual_status != expected_status:
             errors.append("status_mismatch")
 
-        expected_body = expected_resp.get("body") or {}
+        expected_body_raw = expected_resp.get("body")
+        expected_body: Dict[str, Any] = cast(Dict[str, Any], expected_body_raw) if isinstance(expected_body_raw, dict) else {}
         expected_type = expected_body.get("type")
         if expected_type == "array":
             if not isinstance(actual_response.get("body"), list):
@@ -3065,7 +3099,7 @@ class TestRecorder:
     @dataclass
     class Recording:
         test_name: str
-        actions: List[Dict[str, Any]] = field(default_factory=list)
+        actions: list[dict[str, Any]] = field(default_factory=_empty_action_list)
 
     def __init__(self) -> None:
         self._active: Optional[TestRecorder.Recording] = None
@@ -3098,7 +3132,7 @@ class TestReplayer:
     @dataclass
     class ReplayResult:
         success: bool
-        errors: List[str] = field(default_factory=list)
+        errors: list[str] = field(default_factory=_empty_str_list)
 
     def replay(self, recording: Any) -> "TestReplayer.ReplayResult":
         """Replay a recording.

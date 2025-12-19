@@ -1,17 +1,19 @@
 # Improvements: `test_agent.py`
 
 ## Fixed
+
 - Security: Use `check=True` or `check=False` explicitly in `subprocess.run`. (Fixed - verified in agent.py)
 - Add comprehensive error case testing (missing files, permission denied, git not found). (Fixed) [2025-12-16]
-  * test_agent_edge_cases.py: 26 comprehensive edge case and error scenario tests
+  - test_agent_edge_cases.py: 26 comprehensive edge case and error scenario tests
 - Test edge cases: empty codeignore files, malformed ignore patterns. (Fixed) [2025-12-16]
-  * TestCodeignoreCache: Tests for missing files, comments, empty lines
+  - TestCodeignoreCache: Tests for missing files, comments, empty lines
 
 ## Suggested improvements
 
 (All items implemented - see Fixed section below)
 
 ## Session 9 - Fixed (Moved to test_agent.changes.md)
+
 - [x] FIXED: [2025-01-16] Add tests for plugin-based agent loading and discovery.
 - [x] FIXED: [2025-01-16] Test agent communication and message passing.
 - [x] FIXED: [2025-01-16] Add tests for agent state serialization and restore.
@@ -34,5 +36,6 @@
 - [x] FIXED: [2025-01-16] Test agent result caching.
 
 ## Notes
+
 - These are suggestions based on static inspection; validate behavior with tests/runs.
 - File: `src/test_agent.py`

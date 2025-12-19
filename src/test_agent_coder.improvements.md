@@ -5,6 +5,7 @@
 (All items implemented - see Fixed section below)
 
 ## Fixed (Moved to test_agent_coder.changes.md)
+
 - [x] FIXED: [2025-01-16] Add tests for code refactoring suggestions and application.
 - [x] FIXED: [2025-01-16] Test code generation for multiple programming languages.
 - [x] FIXED: [2025-01-16] Add tests for code comment and documentation generation.
@@ -27,6 +28,6 @@
 - [x] FIXED: [2025-01-16] Test code migration automation.
 
 ## Notes
+
 - These are suggestions based on static inspection; validate behavior with tests/runs.
 - File: `src/test_agent_coder.py`
-

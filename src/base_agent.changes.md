@@ -9,12 +9,14 @@
 ## [2025-12-16] - Session 8 Implementation
 
 ### Added Enums
+
 - `AuthMethod` enum: NONE, API_KEY, BEARER_TOKEN, BASIC_AUTH, OAUTH2, CUSTOM
 - `SerializationFormat` enum: JSON, YAML, MSGPACK, PICKLE, PROTOBUF
 - `FilePriority` enum: CRITICAL, HIGH, NORMAL, LOW, BACKGROUND
 - `InputType` enum: TEXT, IMAGE, DIAGRAM, CODE, AUDIO, VIDEO
 
 ### Added Dataclasses
+
 - `AuthConfig`: Authentication configuration with method, api_key, token, username, password, oauth credentials, custom_headers
 - `BatchRequest`: Request for batch processing with file_path, prompt, priority, callback
 - `BatchResult`: Result of batch processing with success, content, error, processing_time
@@ -25,6 +27,7 @@
 - `FilePriorityConfig`: File priority config with path_patterns, extension_priorities, default_priority
 
 ### Added Helper Classes
+
 - `RequestBatcher`: Batch processor for multiple files with priority ordering and parallel execution
 - `AuthenticationManager`: Manager for authentication methods (API keys, bearer tokens, OAuth2, custom)
 - `PromptVersionManager`: Manager for prompt versioning and A/B testing with metrics tracking
@@ -35,12 +38,14 @@
 
 ## [2025-12-16] - Session 6 Implementation
 
-### Added Enums
+### Added Enums (Session 6)
+
 - `AgentState` enum: INITIALIZED, READING, PROCESSING, WRITING, COMPLETED, ERROR
 - `ResponseQuality` enum: EXCELLENT, GOOD, ACCEPTABLE, POOR, INVALID
 - `EventType` enum: PRE_READ, POST_READ, PRE_IMPROVE, POST_IMPROVE, PRE_WRITE, POST_WRITE, ERROR
 
-### Added Dataclasses
+### Added Dataclasses (Session 6)
+
 - `PromptTemplate`: Reusable prompt template with id, name, template, description, version, tags
 - `ConversationMessage`: Message in conversation history with role, content, timestamp
 - `CacheEntry`: Cached response entry with key, response, timestamp, hit_count, quality_score
@@ -48,9 +53,11 @@
 - `HealthCheckResult`: Health check result with healthy, backend_available, memory_ok, disk_ok, details
 
 ### Added Constants
+
 - `DEFAULT_PROMPT_TEMPLATES`: Pre-defined templates for improve_code, add_docstrings, fix_bugs, add_tests
 
 ### Added Methods
+
 - `_load_config()`: Load configuration from environment variables
 - `set_model()`, `get_model()`: Model selection per agent
 - `register_template()`, `get_template()`, `improve_with_template()`: Prompt template system
@@ -66,6 +73,7 @@
 - `estimate_tokens()`, `truncate_for_context()`: Context window management
 
 ## [Previous]
+
 - Initial version of base_agent.py
 - 2025-12-15: Force UTF-8 decoding for `subprocess` output to avoid Windows `cp1252` decode failures.
 - 2025-12-15: Add multi-backend AI routing (`DV_AGENT_BACKEND`) supporting local `copilot` CLI, `gh copilot`, and GitHub Models.
@@ -73,6 +81,7 @@
 - 2025-12-15: Move token access out of import-time code paths; treat missing/invalid configuration as a recoverable condition in `auto` mode.
 
 ## [2025-12-16]
+
 - Improved `agent_backend` import logic. (Fixed)
 - Added type hints for all methods. (Fixed)
 - Add logging for all major actions. (Fixed)
@@ -94,6 +103,7 @@
 - Add integration tests with real AI backends for end-to-end validation. (Fixed)
 
 ## [2025-12-15]
+
 - Added robust file reading with error handling in `read_previous_content`.
 - Added explicit type hints to `__init__`.
 - Add robust subprocess error handling (`check=True`, timeouts, clearer stderr reporting). (Fixed)

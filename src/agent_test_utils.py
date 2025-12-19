@@ -2975,7 +2975,7 @@ class TestReportGenerator:
             duration = float(r.get("duration_ms", 0.0))
             error = str(r.get("error", ""))
             rows += (
-                f"<tr><td>{r.get('test_name','')}</td><td>{status}</td><td>{duration:.2f}ms</td>"
+                f"<tr><td>{r.get('test_name', '')}</td><td>{status}</td><td>{duration:.2f}ms</td>"
                 f"<td>{error}</td></tr>"
             )
         return (

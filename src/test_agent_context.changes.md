@@ -7,6 +7,7 @@
 ## Session 9 - 2025-01-16
 
 ### Added - Context Tests (20 test classes)
+
 - `TestSemanticSearch` - Tests for semantic search using embeddings
 - `TestCrossRepositoryContext` - Tests for cross-repository context analysis
 - `TestContextDiffing` - Tests for context diffing between versions
@@ -34,9 +35,11 @@
 - 2025-12-15: Replaced placeholder-only tests with real coverage for `BaseAgent` delegation.
 
 ## [2025-12-15]
+
 - Rename the file to be pytest-importable (avoid '-' and extra '.'), then update references. (Fixed)
 
 ## Fixed Improvements (from test_agent_context.improvements.md)
+
 - Add tests for AST parsing of signatures.
 - Test git history extraction and formatting.
 - Add tests for dependency graph analysis.
@@ -52,4 +55,3 @@
 - Add tests for context prioritization logic.
 - Test sensitive data filtering.
 - Add integration tests with real Python files.
-

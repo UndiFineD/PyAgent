@@ -8,6 +8,7 @@
 - 2025-12-15: Replaced placeholder-only tests with real unit tests for `BaseAgent` behaviors.
 
 ## [2025-12-15]
+
 - Add robust subprocess error handling (`check=True`, timeouts, clearer stderr reporting). (Fixed)
 
 ## Session 8 - Test File Improvements (2025-06-14)

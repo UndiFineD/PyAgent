@@ -5,6 +5,7 @@
 (All items implemented - see Fixed section below)
 
 ## Fixed (Moved to test_agent_changes_tests.changes.md)
+
 - [x] FIXED: [2025-01-16] Add tests for changelog entry priority and importance ranking.
 - [x] FIXED: [2025-01-16] Test changelog cross-referencing with git commits.
 - [x] FIXED: [2025-01-16] Add tests for changelog conflict resolution.
@@ -42,5 +43,6 @@
 - Add integration tests with real code changes. (Fixed)
 
 ## Notes
+
 - These are suggestions based on static inspection; validate behavior with tests/runs.
 - File: `src/test_agent_changes_tests.py`

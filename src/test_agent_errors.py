@@ -109,7 +109,7 @@ class TestErrorCategory:
     def test_all_categories_exist(self, errors_module: Any) -> None:
         """Test all categories exist."""
         categories = list(errors_module.ErrorCategory)
-        assert len(categories) == 9
+        assert len(categories) == 11
 
 
 # ========== ErrorEntry Tests ==========

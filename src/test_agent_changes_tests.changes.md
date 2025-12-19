@@ -7,6 +7,7 @@
 ## Session 9 - 2025-01-16
 
 ### Added - Changelog Tests (20 test classes)
+
 - `TestChangelogEntryPriority` - Tests for changelog entry priority and importance ranking
 - `TestChangelogCrossReference` - Tests for changelog cross-referencing with git commits
 - `TestChangelogConflictResolution` - Tests for changelog conflict resolution

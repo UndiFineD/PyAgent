@@ -1,9 +1,37 @@
-# Maintainers\n\nThis project is maintained by the DebVisor core team.\n\n## Current
+# Maintainers
 
-Maintainers\n\n- **DebVisor Core Team**\n\n- Email: \n\n-
-GitHub:
-[UndiFineD]([[[https://github.com/UndiFine]([https://github.com/UndiFin]([https://github.com/UndiFi]([https://github.com/UndiF]([https://github.com/Undi]([https://github.com/Und]([https://github.com/Un]([https://github.com/U]([https://github.com/]([https://github.com]([https://github.co]([https://github.c]([https://github.]([https://github]([https://githu]([https://gith]([https://git]([https://gi]([https://g](https://](https://github.com/UndiFine]([https://github.com/UndiFin]([https://github.com/UndiFi]([https://github.com/UndiF]([https://github.com/Undi]([https://github.com/Und]([https://github.com/Un]([https://github.com/U]([https://github.com/]([https://github.com]([https://github.co]([https://github.c]([https://github.]([https://github]([https://githu]([https://gith]([https://git]([https://gi]([https://g](https:/](https://github.com/UndiFine]([https://github.com/UndiFin]([https://github.com/UndiFi]([https://github.com/UndiF]([https://github.com/Undi]([https://github.com/Und]([https://github.com/Un]([https://github.com/U]([https://github.com/]([https://github.com]([https://github.co]([https://github.c]([https://github.]([https://github]([https://githu]([https://gith]([https://git]([https://gi]([https://g](https://](https://github.com/UndiFine]([https://github.com/UndiFin]([https://github.com/UndiFi]([https://github.com/UndiF]([https://github.com/Undi]([https://github.com/Und]([https://github.com/Un]([https://github.com/U]([https://github.com/]([https://github.com]([https://github.co]([https://github.c]([https://github.]([https://github]([https://githu]([https://gith]([https://git]([https://gi]([https://g](https:/)/)g)i)t)h)u)b).)c)o)m)/)U)n)d)i)F)i)n)e)D)##
-Emeritus Maintainers\n\n- None\n\n## Becoming a Maintainer\n\nContributions are
-welcome!
-Please see
-[CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute.\n\n
+This project is maintained by the PyAgent core team.
+
+## Current Maintainers
+
+- **PyAgent Core Team**
+  - Email: maintainers@pyagent.dev
+  - GitHub: [PyAgent Organization](https://github.com/pyagent)
+
+## Emeritus Maintainers
+
+- None
+
+## Becoming a Maintainer
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute.
+Active contributors who consistently provide high-quality code and reviews may be invited to join the maintain# filepath: docs/MAINTAINERS.md
+# Maintainers
+
+This project is maintained by the PyAgent core team.
+
+## Current Maintainers
+
+- **PyAgent Core Team**
+  - Email: maintainers@pyagent.dev
+  - GitHub: [PyAgent Organization](https://github.com/UndiFineD/PyAgent)
+
+## Emeritus Maintainers
+
+- None
+
+## Becoming a Maintainer
+
+Contributions are welcome!
+Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute.
+Active contributors who consistently provide high-quality code and reviews may be invited to join the maintainer team.

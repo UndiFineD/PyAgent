@@ -137,11 +137,12 @@ def test_llm_chat_via_github_models_builds_request_and_parses_response(
         def json(self) -> Dict[str, Any]:
             return {"choices": [{"message": {"content": "  hello  "}}]}
 
-    def fake_post(url: str,
-                  headers: Optional[Dict[str,
-                  str]] = None,
-                  data: Optional[str] = None,
-                  timeout: Optional[int] = None) -> FakeResponse:
+    def fake_post(
+        url: str,
+        headers: Optional[Dict[str, str]] = None,
+        data: Optional[str] = None,
+        timeout: Optional[int] = None,
+    ) -> FakeResponse:
         posted["url"] = url
         posted["headers"] = headers
         posted["data"] = data
@@ -195,11 +196,12 @@ def test_run_subagent_uses_github_models_backend(
         def json(self) -> Dict[str, Any]:
             return {"choices": [{"message": {"content": "OK_FROM_MODELS"}}]}
 
-    def fake_post(url: str,
-                  headers: Optional[Dict[str,
-                  str]] = None,
-                  data: Optional[str] = None,
-                  timeout: Optional[int] = None) -> FakeResponse:
+    def fake_post(
+        url: str,
+        headers: Optional[Dict[str, str]] = None,
+        data: Optional[str] = None,
+        timeout: Optional[int] = None,
+    ) -> FakeResponse:
         assert url == "https://example.test / v1 / chat / completions"
         assert headers is not None and headers["Authorization"] == "Bearer TOKEN"
         assert data is not None and '"model": "unit-test-model"' in data
@@ -486,6 +488,7 @@ def test_integration_real_file_io_operations(
     read_content = agent.read_previous_content()
     assert "Original" in read_content
     # Mock the run_subagent to avoid actual API calls
+
     def fake_run_subagent(
             self: Any,
             description: str,

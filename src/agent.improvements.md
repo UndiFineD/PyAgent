@@ -5,6 +5,7 @@ If you want a feature roadmap, track that separately from this static-analysis
 and documentation log.
 
 ## Updated in this pass (2025-12-18)
+
 - Static typing cleanup to reduce Pylance “Unknown” propagation:
   - Typed `default_factory` helpers for common empty containers.
   - Typed optional dependency guards (`HAS_REQUESTS`, `HAS_TQDM`) and a typed
@@ -14,6 +15,7 @@ and documentation log.
   - The description includes an updated SHA256 fingerprint.
 
 ## Suggested next improvements
+
 - Runtime correctness: the project’s pytest suite currently has widespread
   failures (not caused by the typing-only changes). Decide whether to align
   tests to current behavior or restore older APIs.
@@ -26,4 +28,5 @@ and documentation log.
   - If they are required, prefer making them hard dependencies.
 
 ## Notes
+
 - File: `src/agent.py`

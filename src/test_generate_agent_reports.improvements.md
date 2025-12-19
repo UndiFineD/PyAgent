@@ -1,6 +1,7 @@
 # Improvements: `test_generate_agent_reports.py`
 
 ## Suggested improvements
+
 - [x] FIXED: [2025-06-14] Add tests for report subscription and delivery.
 - [x] FIXED: [2025-06-14] Test report archiving with retention policies.
 - [x] FIXED: [2025-06-14] Add tests for report annotation persistence.
@@ -23,6 +24,7 @@
 - [x] FIXED: [2025-06-14] Test report permission management.
 
 ## Fixed (Moved to test_generate_agent_reports.changes.md)
+
 - Add tests for report generation with various stat formats. (Fixed)
 - Test HTML report generation and styling. (Fixed)
 - Add tests for Markdown report generation. (Fixed)
@@ -40,5 +42,6 @@
 - Add integration tests with real reports. (Fixed)
 
 ## Notes
+
 - These are suggestions based on static inspection; validate behavior with tests/runs.
 - File: `src/test_generate_agent_reports.py`

@@ -7,6 +7,7 @@
 ## Session 9 - 2025-01-16
 
 ### Added - Coder Tests (20 test classes)
+
 - `TestCodeRefactoring` - Tests for code refactoring suggestions and application
 - `TestMultiLanguageCodeGeneration` - Tests for code generation for multiple programming languages
 - `TestCodeDocumentationGeneration` - Tests for code comment and documentation generation
@@ -34,4 +35,5 @@
 - 2025-12-15: Replaced placeholder-only tests with real coverage for keyword fallback vs `BaseAgent` delegation.
 
 ## [2025-12-15]
+
 - Rename the file to be pytest-importable (avoid '-' and extra '.'), then update references. (Fixed)

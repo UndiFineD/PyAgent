@@ -1036,16 +1036,10 @@ class CodeGenerator:
 
     def set_language(self, language: str) -> None:
         """Set the default target language for generated code."""
-        if not isinstance(language, str):
-            raise TypeError("language must be a string")
         self.language = language
 
     def add_context(self, name: str, content: str) -> None:
         """Add a named context document that can be referenced later."""
-        if not isinstance(name, str):
-            raise TypeError("name must be a string")
-        if not isinstance(content, str):
-            raise TypeError("content must be a string")
         self.contexts[name] = content
 
     def get_supported_languages(self) -> List[str]:
@@ -1076,9 +1070,6 @@ class CodeGenerator:
         Newer API (used by tests):
             set_language(...), add_context(...), generate(prompt, context_files=[...])
         """
-        if not isinstance(prompt, str):
-            raise TypeError("prompt must be a string")
-
         resolved_language = language or self.language or "python"
 
         used_contexts: List[str] = []
@@ -1133,12 +1124,6 @@ class RefactoringAdvisor:
             pattern: Regex pattern to search for.
             description: Human-readable suggestion description.
         """
-        if not isinstance(name, str):
-            raise TypeError("name must be a string")
-        if not isinstance(pattern, str):
-            raise TypeError("pattern must be a string")
-        if not isinstance(description, str):
-            raise TypeError("description must be a string")
         self.patterns[name] = {"pattern": pattern, "description": description}
 
     def analyze(self, contexts: Any) -> List[RefactoringSuggestion]:
@@ -1151,10 +1136,11 @@ class RefactoringAdvisor:
         Returns:
             List of refactoring suggestions.
         """
+        context_map: Dict[str, str]
         if isinstance(contexts, str):
-            context_map: Dict[str, str] = {"inline": contexts}
+            context_map = {"inline": contexts}
         elif isinstance(contexts, dict):
-            context_map = contexts
+            context_map = contexts  # type: ignore
         else:
             raise TypeError("contexts must be a string or a dict")
 
@@ -1228,8 +1214,6 @@ class ContextVisualizer:
         self.layout: str = "hierarchical"
 
     def set_type(self, viz_type: VisualizationType) -> None:
-        if not isinstance(viz_type, VisualizationType):
-            raise TypeError("viz_type must be a VisualizationType")
         self.viz_type = viz_type
 
     def add_node(self, node_id: str, metadata: Optional[Dict[str, Any]] = None) -> None:
@@ -1250,8 +1234,8 @@ class ContextVisualizer:
 
     def export_json(self) -> str:
         data = self.generate()
-        payload = {
-            "viz_type": data.viz_type.value if isinstance(data.viz_type, VisualizationType) else str(data.viz_type),
+        payload: Dict[str, Any] = {
+            "viz_type": data.viz_type.value,
             "nodes": data.nodes,
             "edges": data.edges,
             "layout": data.layout,
@@ -1417,8 +1401,6 @@ class MergeConflictResolver:
         self.strategy: ConflictResolution = strategy
 
     def set_strategy(self, strategy: ConflictResolution) -> None:
-        if not isinstance(strategy, ConflictResolution):
-            raise TypeError("strategy must be a ConflictResolution")
         self.strategy = strategy
 
     def detect_conflicts(self, ours: str, theirs: Optional[str] = None) -> List[MergeConflict]:

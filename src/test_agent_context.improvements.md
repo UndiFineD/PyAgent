@@ -5,6 +5,7 @@
 (All items implemented - see Fixed section below)
 
 ## Fixed (Moved to test_agent_context.changes.md)
+
 - [x] FIXED: [2025-01-16] Add tests for semantic search using embeddings.
 - [x] FIXED: [2025-01-16] Test cross-repository context analysis.
 - [x] FIXED: [2025-01-16] Add tests for context diffing between versions.
@@ -42,6 +43,6 @@
 - Add integration tests with real Python files. (Fixed)
 
 ## Notes
+
 - These are suggestions based on static inspection; validate behavior with tests/runs.
 - File: `src/test_agent_context.py`
-
