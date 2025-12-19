@@ -4906,6 +4906,8 @@ def main() -> None:
                         help='Quick override for improvements model. Format: "provider:model" or just "model"')
     parser.add_argument('--n8n', type=str, metavar='URL',
                         help='Register an n8n webhook URL to receive agent notifications')
+    parser.add_argument('--model', action='append', metavar='AGENT=SPEC',
+                        help='Repeatable. Specify per-agent model overrides. Format: agent=provider:model or agent=model')
     parser.add_argument('--rate-limit', type=float, metavar='RPS',
                         help='Rate limit API calls to RPS requests per second')
     parser.add_argument('--enable-file-locking', action='store_true',
@@ -4941,13 +4943,41 @@ def main() -> None:
             return {}
         if ':' in val:
             provider, model = val.split(':', 1)
-            return {'provider': provider, 'model': model}
-        return {'model': val}
+            return {'provider': provider.strip(), 'model': model.strip()}
+        return {'model': val.strip()}
+
+    def parse_model_overrides(raw_list: list[str] | None) -> dict[str, dict]:
+        """Parse repeatable `--model` entries of form `agent=provider:model` or `agent=model`.
+
+        Returns mapping agent -> spec dict.
+        """
+        out: dict[str, dict] = {}
+        if not raw_list:
+            return out
+        for entry in raw_list:
+            try:
+                if '=' not in entry:
+                    logging.warning(f"Ignoring malformed --model entry: {entry}")
+                    continue
+                agent_key, spec = entry.split('=', 1)
+                agent_key = agent_key.strip()
+                if ':' in spec:
+                    provider, model = spec.split(':', 1)
+                    out[agent_key] = {'provider': provider.strip(), 'model': model.strip()}
+                else:
+                    out[agent_key] = {'model': spec.strip()}
+            except Exception:
+                logging.warning(f"Failed to parse --model entry: {entry}")
+        return out
 
     if getattr(args, 'model_coder', None):
         cli_models.setdefault('coder', {}).update(_parse_quick_flag(args.model_coder))
     if getattr(args, 'model_improvements', None):
         cli_models.setdefault('improvements', {}).update(_parse_quick_flag(args.model_improvements))
+    # Parse repeatable --model flags
+    if getattr(args, 'model', None):
+        parsed = parse_model_overrides(args.model)
+        cli_models.update(parsed)
 
     # Health check mode
     if args.health_check:
@@ -4987,6 +5017,18 @@ def main() -> None:
         try:
             existing = getattr(agent, 'models', {}) or {}
             # CLI overrides win
+            # Validate providers for simple known list
+            allowed_providers = {'openai', 'google', 'anthropic'}
+            def _validate_spec(spec: dict) -> bool:
+                prov = spec.get('provider')
+                if prov and prov not in allowed_providers:
+                    logging.warning(f"Unknown provider '{prov}' in model spec; continuing")
+                return True
+
+            for k, v in cli_models.items():
+                if isinstance(v, dict):
+                    _validate_spec(v)
+
             merged = {**existing, **cli_models}
             agent.models = merged
         except Exception:
