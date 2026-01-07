@@ -1,0 +1,138 @@
+#!/usr/bin/env python3
+
+"""Auto-extracted class from agent.py"""
+
+from __future__ import annotations
+
+from abc import ABC, abstractmethod
+from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from pathlib import Path
+from types import TracebackType
+from typing import List, Set, Optional, Dict, Any, Callable, Iterable, TypeVar, cast, Final
+import argparse
+import asyncio
+import difflib
+import fnmatch
+import functools
+import hashlib
+import importlib.util
+import json
+import logging
+import os
+import signal
+import subprocess
+import sys
+import threading
+import time
+import uuid
+
+class GitBranchProcessor:
+    """Process files changed in a specific git branch.
+
+    Example:
+        processor=GitBranchProcessor(repo_root)
+        changed_files=processor.get_changed_files("feature-branch")
+        for file in changed_files:
+            process(file)
+    """
+
+    def __init__(self, repo_root: Path) -> None:
+        """Initialize processor.
+
+        Args:
+            repo_root: Repository root directory.
+        """
+        self.repo_root = repo_root
+
+    def get_changed_files(
+        self,
+        branch: str,
+        base_branch: str = "main",
+        extensions: Optional[List[str]] = None,
+    ) -> List[Path]:
+        """Get files changed in branch compared to base.
+
+        Args:
+            branch: Branch to check.
+            base_branch: Base branch for comparison.
+            extensions: File extensions to include (e.g., [".py", ".md"]).
+
+        Returns:
+            List of changed file paths.
+        """
+        try:
+            result = subprocess.run(
+                ["git", "diff", "--name-only", f"{base_branch}...{branch}"],
+                cwd=self.repo_root,
+                capture_output=True,
+                text=True,
+                timeout=30,
+            )
+
+            if result.returncode != 0:
+                logging.warning(f"Git diff failed: {result.stderr}")
+                return []
+
+            files: list[Path] = []
+            for line in result.stdout.strip().split("\n"):
+                if not line:
+                    continue
+                file_path = self.repo_root / line
+                if extensions:
+                    if file_path.suffix in extensions:
+                        files.append(file_path)
+                else:
+                    files.append(file_path)
+
+            return files
+
+        except Exception as e:
+            logging.error(f"Error getting branch changes: {e}")
+            return []
+
+    def get_current_branch(self) -> Optional[str]:
+        """Get current git branch name."""
+        try:
+            result = subprocess.run(
+                ["git", "branch", "--show-current"],
+                cwd=self.repo_root,
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+            return result.stdout.strip() if result.returncode == 0 else None
+        except Exception:
+            return None
+
+    def list_branches(self, pattern: Optional[str] = None) -> List[str]:
+        """List branches, optionally filtered by pattern.
+
+        Args:
+            pattern: Glob pattern to match branch names.
+
+        Returns:
+            List of branch names.
+        """
+        try:
+            result = subprocess.run(
+                ["git", "branch", "--list", "--format=%(refname:short)"],
+                cwd=self.repo_root,
+                capture_output=True,
+                text=True,
+                timeout=10,
+            )
+
+            if result.returncode != 0:
+                return []
+
+            branches = result.stdout.strip().split("\n")
+            if pattern:
+                branches = [b for b in branches if fnmatch.fnmatch(b, pattern)]
+
+            return branches
+
+        except Exception:
+            return []

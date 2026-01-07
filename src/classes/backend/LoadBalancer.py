@@ -1,0 +1,137 @@
+#!/usr/bin/env python3
+
+"""Auto-extracted class from agent_backend.py"""
+
+from __future__ import annotations
+
+from .BackendConfig import BackendConfig
+from .BackendType import BackendType
+from .LoadBalanceStrategy import LoadBalanceStrategy
+
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from enum import Enum
+from pathlib import Path
+from queue import PriorityQueue
+from typing import Any, Callable, Dict, List, Optional, Tuple
+import hashlib
+import json
+import logging
+import os
+import re
+import subprocess
+import threading
+import time
+import uuid
+
+class LoadBalancer:
+    """Load balancer for multiple backend endpoints.
+
+    Distributes requests across backends using configurable strategies.
+
+    Example:
+        lb=LoadBalancer(LoadBalanceStrategy.ROUND_ROBIN)
+        lb.add_backend("backend1", weight=2)
+        lb.add_backend("backend2", weight=1)
+        backend=lb.next()
+    """
+
+    def __init__(self, strategy: LoadBalanceStrategy = LoadBalanceStrategy.ROUND_ROBIN) -> None:
+        """Initialize load balancer.
+
+        Args:
+            strategy: Load balancing strategy to use.
+        """
+        self.strategy = strategy
+        self._backends: List[BackendConfig] = []
+        self._index = 0
+        self._connections: Dict[str, int] = {}
+        self._lock = threading.Lock()
+
+    def add_backend(
+        self,
+        name: str,
+        backend_type: BackendType = BackendType.GITHUB_MODELS,
+        weight: int = 1,
+        **kwargs: Any,
+    ) -> None:
+        """Add backend to load balancer.
+
+        Args:
+            name: Backend identifier.
+            backend_type: Type of backend.
+            weight: Weight for weighted strategy.
+            **kwargs: Additional backend config.
+        """
+        config = BackendConfig(
+            name=name,
+            backend_type=backend_type,
+            weight=weight,
+            **kwargs,
+        )
+        with self._lock:
+            self._backends.append(config)
+            self._connections[name] = 0
+        logging.debug(f"Added backend '{name}' to load balancer")
+
+    def remove_backend(self, name: str) -> bool:
+        """Remove backend from load balancer.
+
+        Args:
+            name: Backend name to remove.
+
+        Returns:
+            bool: True if removed, False if not found.
+        """
+        with self._lock:
+            for i, backend in enumerate(self._backends):
+                if backend.name == name:
+                    self._backends.pop(i)
+                    self._connections.pop(name, None)
+                    logging.debug(f"Removed backend '{name}' from load balancer")
+                    return True
+            return False
+
+    def next(self) -> Optional[BackendConfig]:
+        """Get next backend to use.
+
+        Returns:
+            Optional[BackendConfig]: Next backend or None if empty.
+        """
+        with self._lock:
+            enabled = [b for b in self._backends if b.enabled]
+            if not enabled:
+                return None
+            if self.strategy == LoadBalanceStrategy.ROUND_ROBIN:
+                backend = enabled[self._index % len(enabled)]
+                self._index += 1
+                return backend
+            elif self.strategy == LoadBalanceStrategy.LEAST_CONNECTIONS:
+                backend = min(enabled, key=lambda b: self._connections.get(b.name, 0))
+                return backend
+            elif self.strategy == LoadBalanceStrategy.WEIGHTED:
+                # Weighted round robin
+                total_weight = sum(b.weight for b in enabled)
+                if total_weight == 0:
+                    return enabled[0]
+                target = self._index % total_weight
+                current = 0
+                for backend in enabled:
+                    current += backend.weight
+                    if target < current:
+                        self._index += 1
+                        return backend
+                return enabled[-1]
+            else:  # FAILOVER
+                return enabled[0]
+
+    def mark_connection_start(self, name: str) -> None:
+        """Mark connection started for backend."""
+        with self._lock:
+            self._connections[name] = self._connections.get(name, 0) + 1
+
+    def mark_connection_end(self, name: str) -> None:
+        """Mark connection ended for backend."""
+        with self._lock:
+            self._connections[name] = max(0, self._connections.get(name, 0) - 1)

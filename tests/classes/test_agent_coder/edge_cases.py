@@ -1,0 +1,154 @@
+# -*- coding: utf-8 -*-
+"""Test classes from test_agent_coder.py - edge_cases module."""
+
+from __future__ import annotations
+import unittest
+from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
+from unittest.mock import MagicMock, Mock, patch, call, ANY
+import time
+import json
+from datetime import datetime
+import pytest
+import logging
+from pathlib import Path
+import sys
+import os
+import tempfile
+import shutil
+import subprocess
+import threading
+import asyncio
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+
+# Try to import test utilities
+try:
+    from tests.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+except ImportError:
+    # Fallback
+    AGENT_DIR = Path(__file__).parent.parent.parent / 'src'
+    
+    class agent_sys_path:
+        def __enter__(self): 
+            sys.path.insert(0, str(AGENT_DIR))
+            return self
+        def __exit__(self, *args): 
+            sys.path.remove(str(AGENT_DIR))
+
+# Import from src if needed
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / 'src'))
+
+
+class TestErrorRecovery(unittest.TestCase):
+    """Tests for error recovery with retries."""
+
+    def test_retry_on_failure(self):
+        """Test retry mechanism on failure."""
+        attempts = []
+        max_retries = 3
+
+        def flaky_operation():
+            attempts.append(1)
+            if len(attempts) < 2:
+                raise ValueError("First attempt fails")
+            return "success"
+
+        for attempt in range(max_retries):
+            try:
+                result = flaky_operation()
+                if result == "success":
+                    break
+            except ValueError:
+                if attempt == max_retries - 1:
+                    raise
+
+        assert len(attempts) == 2
+
+    def test_exponential_backoff(self):
+        """Test exponential backoff in retries."""
+
+        delays = []
+        for attempt in range(3):
+            delay = min(2 ** attempt, 60)  # Exponential with cap
+            delays.append(delay)
+
+        assert delays == [1, 2, 4]
+
+
+
+class TestAIRetryAndErrorRecovery(unittest.TestCase):
+    """Test AI retry and error recovery mechanisms."""
+
+    def test_multi_attempt_retry_on_validation_failure(self):
+        """Test multi-attempt retry when syntax validation fails."""
+        class RetryMechanism:
+            def __init__(self, max_retries=3):
+                self.max_retries = max_retries
+                self.attempt_count = 0
+
+            def attempt_fix(self):
+                self.attempt_count += 1
+                if self.attempt_count < 2:  # Fix on second attempt
+                    raise SyntaxError("Invalid syntax")
+                return "fixed code"
+
+        retry = RetryMechanism(max_retries=3)
+        for _ in range(3):
+            try:
+                retry.attempt_fix()
+                break
+            except SyntaxError:
+                pass
+
+        self.assertEqual(retry.attempt_count, 2)
+
+    def test_ai_powered_syntax_error_autofix(self):
+        """Test AI-powered syntax error auto-fix."""
+        syntax_errors = [
+            {'error': 'missing colon', 'fix': 'add colon to if statement'},
+            {'error': 'unmatched parenthesis', 'fix': 'add closing parenthesis'},
+            {'error': 'invalid indentation', 'fix': 'fix indentation'}
+        ]
+        self.assertEqual(len(syntax_errors), 3)
+
+    def test_fallback_chain(self):
+        """Test fallback chain: syntax fix -> style fix -> revert."""
+        fallback_chain = [
+            'syntax_fix',
+            'style_fix',
+            'revert_to_original'
+        ]
+        self.assertEqual(fallback_chain[0], 'syntax_fix')
+        self.assertEqual(fallback_chain[-1], 'revert_to_original')
+
+    def test_retry_attempt_logging(self):
+        """Test logging of all retry attempts with error context."""
+        retry_log = [
+            {
+                'attempt': 1,
+                'error': 'SyntaxError: invalid syntax',
+                'timestamp': '2025-12-16T10:00:00'
+            },
+            {
+                'attempt': 2,
+                'error': 'SyntaxError: missing colon',
+                'timestamp': '2025-12-16T10:00:01'
+            },
+            {
+                'attempt': 3,
+                'error': 'Success',
+                'timestamp': '2025-12-16T10:00:02'
+            }
+        ]
+        self.assertEqual(len(retry_log), 3)
+
+    def test_configurable_retry_timeout(self):
+        """Test configurable timeout for AI retry operations."""
+        retry_config = {
+            'max_retries': 3,
+            'timeout_seconds': 30,
+            'backoff_multiplier': 2.0
+        }
+        self.assertEqual(retry_config['timeout_seconds'], 30)
+
+
+

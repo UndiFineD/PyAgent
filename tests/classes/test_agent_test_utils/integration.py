@@ -1,0 +1,143 @@
+# -*- coding: utf-8 -*-
+"""Test classes from test_agent_test_utils.py - integration module."""
+
+from __future__ import annotations
+import unittest
+from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
+from unittest.mock import MagicMock, Mock, patch, call, ANY
+import time
+import json
+from datetime import datetime
+import pytest
+import logging
+from pathlib import Path
+import sys
+import os
+import tempfile
+import shutil
+import subprocess
+import threading
+import asyncio
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+
+# Try to import test utilities
+try:
+    from tests.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+except ImportError:
+    # Fallback
+    AGENT_DIR = Path(__file__).parent.parent.parent / 'src'
+    
+    class agent_sys_path:
+        def __enter__(self): 
+            sys.path.insert(0, str(AGENT_DIR))
+            return self
+        def __exit__(self, *args): 
+            sys.path.remove(str(AGENT_DIR))
+
+# Import from src if needed
+sys.path.insert(0, str(Path(__file__).parent.parent.parent / 'src'))
+
+
+class TestPhase6Integration:
+    """Integration tests for Phase 6 features."""
+
+    def test_mock_with_tracker(self, utils_module: Any) -> None:
+        """Test mock backend with performance tracking."""
+        MockAIBackend = utils_module.MockAIBackend
+        MockResponse = utils_module.MockResponse
+        PerformanceTracker = utils_module.PerformanceTracker
+
+        mock = MockAIBackend()
+        mock.set_default_response(MockResponse(content="response", latency_ms=0))
+        tracker = PerformanceTracker()
+
+        with tracker.track("mock_call"):
+            result = mock.call("test prompt")
+
+        assert result == "response"
+        metrics = tracker.get_metrics()
+        assert len(metrics) == 1
+
+    def test_fixture_with_isolation(self, utils_module: Any, tmp_path: Path) -> None:
+        """Test fixture generator with file system isolation."""
+        FixtureGenerator = utils_module.FixtureGenerator
+        FileSystemIsolator = utils_module.FileSystemIsolator
+
+        with FileSystemIsolator() as fs:
+            temp_dir = fs.get_temp_dir()
+            gen = FixtureGenerator(base_dir=temp_dir)
+
+            fixture = gen.create_python_file_fixture("test.py", "print('test')")
+            path = fixture.setup_fn()
+
+            assert path.exists()
+            assert "print" in path.read_text()
+
+    def test_assertions_with_generated_data(self, utils_module: Any) -> None:
+        """Test assertions with generated test data."""
+        TestDataGenerator = utils_module.TestDataGenerator
+        AgentAssertions = utils_module.AgentAssertions
+
+        gen = TestDataGenerator()
+        assertions = AgentAssertions()
+
+        # Generate and validate Python code
+        code = gen.generate_python_code(with_errors=False)
+        assertions.assert_valid_python(code)
+
+        # Generate and validate JSON
+        json_data = gen.generate_json()
+        assertions.assert_json_valid(json_data)
+
+        all_assertions = assertions.get_assertions()
+        assert len(all_assertions) == 2
+        assert all(a.passed for a in all_assertions)
+
+
+# =============================================================================
+# Session 8: Test File Improvement Tests
+# =============================================================================
+
+
+
+class TestIntegration(unittest.TestCase):
+    """Integration tests for test utilities."""
+
+    def test_end_to_end_test_workflow(self) -> None:
+        """Test end-to-end test workflow."""
+        test_data = [1, 2, 3]
+
+        result = sum(test_data)
+
+        self.assertEqual(result, 6)
+        self.assertEqual(len(test_data), 3)
+
+    def test_complex_mock_scenario(self) -> None:
+        """Test complex mock scenario."""
+        from unittest.mock import MagicMock
+        mock_service = MagicMock()
+        mock_service.fetch_data.return_value = {"status": "ok"}
+        mock_service.process_data.return_value = True
+
+        data = mock_service.fetch_data()
+        processed = mock_service.process_data(data)
+
+        self.assertEqual(data["status"], "ok")
+        self.assertTrue(processed)
+        self.assertEqual(mock_service.fetch_data.call_count, 1)
+
+    def test_integration_with_fixtures(self) -> None:
+        """Test integration with fixtures."""
+        with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+            f.write("test data")
+            filename = f.name
+
+        try:
+            with open(filename, 'r') as f:
+                content = f.read()
+
+            self.assertEqual(content, "test data")
+        finally:
+            os.unlink(filename)
+
+

@@ -1,0 +1,104 @@
+#!/usr/bin/env python3
+
+"""Auto-extracted class from agent_backend.py"""
+
+from __future__ import annotations
+
+from .RequestContext import RequestContext
+from .RequestPriority import RequestPriority
+
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from enum import Enum
+from pathlib import Path
+from queue import PriorityQueue
+from typing import Any, Callable, Dict, List, Optional, Tuple
+import hashlib
+import json
+import logging
+import os
+import re
+import subprocess
+import threading
+import time
+import uuid
+
+class RequestTracer:
+    """Traces requests with correlation IDs.
+
+    Provides distributed tracing capabilities for debugging
+    and monitoring request flow.
+
+    Example:
+        tracer=RequestTracer()
+        context=tracer.start_trace("my-request")
+        # Do work
+        tracer.end_trace(context.request_id, success=True)
+    """
+
+    def __init__(self) -> None:
+        """Initialize request tracer."""
+        self._traces: Dict[str, RequestContext] = {}
+        self._lock = threading.Lock()
+
+    def start_trace(
+        self,
+        description: str,
+        correlation_id: Optional[str] = None,
+        priority: RequestPriority = RequestPriority.NORMAL,
+    ) -> RequestContext:
+        """Start a new trace.
+
+        Args:
+            description: Trace description.
+            correlation_id: Optional correlation ID for linking traces.
+            priority: Request priority.
+
+        Returns:
+            RequestContext: Context for this trace.
+        """
+        context = RequestContext(
+            correlation_id=correlation_id or str(uuid.uuid4()),
+            priority=priority,
+            metadata={"description": description},
+        )
+
+        with self._lock:
+            self._traces[context.request_id] = context
+
+        logging.debug(f"Started trace {context.request_id} (correlation: {context.correlation_id})")
+        return context
+
+    def end_trace(
+        self,
+        request_id: str,
+        success: bool,
+        response_size: int = 0,
+    ) -> Optional[float]:
+        """End a trace and return duration.
+
+        Args:
+            request_id: Request ID to end.
+            success: Whether request succeeded.
+            response_size: Size of response.
+
+        Returns:
+            Optional[float]: Duration in seconds, or None if not found.
+        """
+        with self._lock:
+            context = self._traces.pop(request_id, None)
+        if not context:
+            return None
+
+        duration = time.time() - context.created_at
+        logging.debug(
+            f"Ended trace {request_id}: success={success}, "
+            f"duration={duration:.3f}s, size={response_size}"
+        )
+        return duration
+
+    def get_active_traces(self) -> List[RequestContext]:
+        """Get all active traces."""
+        with self._lock:
+            return list(self._traces.values())

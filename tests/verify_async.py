@@ -1,5 +1,6 @@
 import asyncio
 import time
+import pytest
 from pathlib import Path
 from unittest.mock import MagicMock
 import sys
@@ -14,6 +15,7 @@ except ImportError as e:
     print(f"Could not import Agent: {e}")
     sys.exit(1)
 
+@pytest.mark.anyio
 async def test_async_concurrency():
     agent = Agent(repo_root=".")
     agent.enable_async = True

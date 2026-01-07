@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+
+"""Auto-extracted class from agent_test_utils.py"""
+
+from __future__ import annotations
+
+from pathlib import Path
+from typing import Any, Dict, Optional
+import json
+
+class TestConfigLoader:
+    __test__ = False
+    """Loads test configuration from files."""
+
+    def __init__(self, config_path: Optional[Path] = None) -> None:
+        """Initialize config loader."""
+        self.config_path = config_path or Path("test_config.json")
+        self.config: Dict[str, Any] = {}
+
+    def load(self, path: Optional[Path] = None, defaults: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+        """Load configuration.
+
+        Compatibility:
+        - Tests pass a `Path` to load.
+        - Tests may pass `defaults=` to be merged.
+        """
+        if path is not None:
+            self.config_path = Path(path)
+
+        loaded: Dict[str, Any] = {}
+        if self.config_path.exists():
+            with open(self.config_path, encoding="utf-8") as f:
+                loaded = json.load(f)
+
+        if defaults:
+            merged = dict(defaults)
+            merged.update(loaded)
+            self.config = merged
+        else:
+            self.config = loaded
+
+        return self.config
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Get configuration value."""
+        return self.config.get(key, default)

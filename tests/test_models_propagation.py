@@ -28,17 +28,17 @@ def test_model_env_injected(monkeypatch, tmp_path):
 
     captured = {}
 
-    def fake_run(cmd, cwd, capture_output, text, timeout, encoding, errors, check, env):
+    def fake_run(cmd, cwd=None, capture_output=False, text=False, timeout=None, encoding=None, errors=None, check=False, env=None):
         # record env and return success
         captured['cmd'] = cmd
         captured['env'] = env
         return subprocess.CompletedProcess(cmd, 0, stdout='ok', stderr='')
 
-    monkeypatch.setattr(agent_mod.subprocess, 'run', fake_run)
+    monkeypatch.setattr(subprocess, 'run', fake_run)
 
-    # Call _run_command simulating running agent-coder.py
+    # Call _run_command simulating running agent_coder.py
     python = sys.executable
-    script = str(Path('src') / 'agent-coder.py')
+    script = str(Path('src') / 'agent_coder.py')
     res = agent._run_command([python, script, '--context'], timeout=1)
 
     assert res.returncode == 0

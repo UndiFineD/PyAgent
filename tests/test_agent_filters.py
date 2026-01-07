@@ -15,12 +15,12 @@ def load_agent_module():
 def test_agents_only_filters_agent_files(tmp_path):
     # Create a small repo tree in tmp_path
     files = [
-        'agent-changes.py',
-        'agent-coder.py',
-        'agent-context.py',
-        'agent-errors.py',
-        'agent-improvements.py',
-        'agent-stats.py',
+        'agent_changes.py',
+        'agent_coder.py',
+        'agent_context.py',
+        'agent_errors.py',
+        'agent_improvements.py',
+        'agent_stats.py',
         'agent.py',
         'base_agent.py',
         'generate_agent_reports.py',
@@ -43,12 +43,12 @@ def test_agents_only_filters_agent_files(tmp_path):
     found_names = {p.name for p in found}
 
     expected = {
-        'agent-changes.py',
-        'agent-coder.py',
-        'agent-context.py',
-        'agent-errors.py',
-        'agent-improvements.py',
-        'agent-stats.py',
+        'agent_changes.py',
+        'agent_coder.py',
+        'agent_context.py',
+        'agent_errors.py',
+        'agent_improvements.py',
+        'agent_stats.py',
         'agent.py',
         'base_agent.py',
         'generate_agent_reports.py',

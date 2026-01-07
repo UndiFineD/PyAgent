@@ -1,0 +1,142 @@
+#!/usr/bin/env python3
+
+"""Auto-extracted class from agent.py"""
+
+from __future__ import annotations
+
+from .AgentChainStep import AgentChainStep
+
+from abc import ABC, abstractmethod
+from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from pathlib import Path
+from types import TracebackType
+from typing import List, Set, Optional, Dict, Any, Callable, Iterable, TypeVar, cast, Final
+import argparse
+import asyncio
+import difflib
+import fnmatch
+import functools
+import hashlib
+import importlib.util
+import json
+import logging
+import os
+import signal
+import subprocess
+import sys
+import threading
+import time
+import uuid
+
+class AgentChain:
+    """Chain multiple agents for sequential execution.
+
+    Allows output of one agent to be used as input to the next.
+
+    Example:
+        chain=AgentChain()
+        chain.add_step("coder", output_transform=extract_code)
+        chain.add_step("tests", input_transform=prepare_for_tests)
+        results=chain.execute(initial_input)
+    """
+
+    def __init__(self, name: str = "default_chain") -> None:
+        """Initialize agent chain.
+
+        Args:
+            name: Chain name for identification.
+        """
+        self.name = name
+        self._steps: List[AgentChainStep] = []
+        self._results: List[Dict[str, Any]] = []
+
+    def add_step(
+        self,
+        agent_name: str,
+        input_transform: Optional[Callable[[Any], Any]] = None,
+        output_transform: Optional[Callable[[Any], Any]] = None,
+        condition: Optional[Callable[[Any], bool]] = None,
+    ) -> "AgentChain":
+        """Add a step to the chain.
+
+        Args:
+            agent_name: Name of agent to execute.
+            input_transform: Transform input before agent.
+            output_transform: Transform output after agent.
+            condition: Condition to check before execution.
+
+        Returns:
+            Self for chaining.
+        """
+        step = AgentChainStep(
+            agent_name=agent_name,
+            input_transform=input_transform,
+            output_transform=output_transform,
+            condition=condition,
+        )
+        self._steps.append(step)
+        return self
+
+    def execute(self, initial_input: Any, agent_executor: Callable[[
+                str, Any], Any]) -> List[Dict[str, Any]]:
+        """Execute the chain.
+
+        Args:
+            initial_input: Input to first agent.
+            agent_executor: Function to execute an agent.
+
+        Returns:
+            List of results from each step.
+        """
+        self._results = []
+        current_input = initial_input
+
+        for step in self._steps:
+            if not step.enabled:
+                continue
+
+            # Check condition
+            if step.condition and not step.condition(current_input):
+                self._results.append({
+                    "agent": step.agent_name,
+                    "skipped": True,
+                    "reason": "condition not met",
+                })
+                continue
+
+            # Transform input
+            if step.input_transform:
+                current_input = step.input_transform(current_input)
+
+            # Execute agent
+            try:
+                output = agent_executor(step.agent_name, current_input)
+
+                # Transform output
+                if step.output_transform:
+                    output = step.output_transform(output)
+
+                self._results.append({
+                    "agent": step.agent_name,
+                    "success": True,
+                    "output": output,
+                })
+
+                current_input = output
+
+            except Exception as e:
+                self._results.append({
+                    "agent": step.agent_name,
+                    "success": False,
+                    "error": str(e),
+                })
+                break
+
+        return self._results
+
+    def get_results(self) -> List[Dict[str, Any]]:
+        """Get results from last execution."""
+        return self._results

@@ -1,0 +1,229 @@
+#!/usr/bin/env python3
+# Copyright (c) 2025 DebVisor contributors
+# Licensed under the Apache License, Version 2.0 (the "License");
+
+"""Debugging utilities for test execution."""
+
+import json
+from dataclasses import dataclass, field
+from datetime import datetime
+from typing import Any, Dict, List, Optional
+
+from .enums import ExecutionMode
+from .models import ExecutionTrace
+
+
+def _empty_str_list() -> List[str]:
+    return []
+
+
+def _empty_action_list() -> List[dict[str, Any]]:
+    return []
+
+
+class ExecutionReplayer:
+    """Replay test execution for debugging."""
+
+    def __init__(self) -> None:
+        """Initialize execution replayer."""
+        self.traces: Dict[str, ExecutionTrace] = {}
+        self._current_recording: Optional[str] = None
+        self._step_index: Dict[str, int] = {}
+
+    def start_recording(self, test_id: str) -> ExecutionTrace:
+        """Start recording test execution."""
+        trace = ExecutionTrace(
+            test_id=test_id,
+            timestamp=datetime.now().isoformat()
+        )
+        self.traces[test_id] = trace
+        self._current_recording = test_id
+        return trace
+
+    def record_step(
+        self,
+        action: str,
+        data: Optional[Dict[str, Any]] = None
+    ) -> None:
+        """Record an execution step."""
+        if not self._current_recording:
+            return
+
+        trace = self.traces.get(self._current_recording)
+        if trace:
+            step: Dict[str, Any] = {
+                "index": len(trace.steps),
+                "timestamp": datetime.now().isoformat(),
+                "action": action,
+                "data": data or {}
+            }
+            trace.steps.append(step)
+
+    def stop_recording(self) -> Optional[ExecutionTrace]:
+        """Stop recording and return the trace."""
+        if not self._current_recording:
+            return None
+
+        trace = self.traces.get(self._current_recording)
+        self._current_recording = None
+        return trace
+
+    def replay(
+        self,
+        test_id: str,
+        mode: ExecutionMode = ExecutionMode.FULL_REPLAY,
+        breakpoint_step: int = -1
+    ) -> List[Dict[str, Any]]:
+        """Replay a recorded execution."""
+        trace = self.traces.get(test_id)
+        if not trace:
+            return []
+        replayed: List[Dict[str, Any]] = []
+        for i, step in enumerate(trace.steps):
+            if mode == ExecutionMode.BREAKPOINT and i == breakpoint_step:
+                break
+            replayed.append({
+                "step": i,
+                "action": step["action"],
+                "replayed": True
+            })
+            if mode == ExecutionMode.STEP_BY_STEP:
+                pass
+        return replayed
+
+    def get_step(self, test_id: str, step_index: int) -> Optional[Dict[str, Any]]:
+        """Get a specific step from a trace."""
+        trace = self.traces.get(test_id)
+        if trace and 0 <= step_index < len(trace.steps):
+            return trace.steps[step_index]
+        return None
+
+    def export_trace(self, test_id: str) -> str:
+        """Export a trace to JSON."""
+        trace = self.traces.get(test_id)
+        if not trace:
+            return "{}"
+
+        return json.dumps({
+            "test_id": trace.test_id,
+            "timestamp": trace.timestamp,
+            "steps": trace.steps,
+            "variables": trace.variables
+        }, indent=2)
+
+
+class TestProfiler:
+    """Runtime profiling for tests."""
+
+    def __init__(self) -> None:
+        """Initialize test profiler."""
+        from .models import TestProfile
+        self.profiles: Dict[str, TestProfile] = {}
+        self._start_times: Dict[str, float] = {}
+
+    def start_profiling(self, test_id: str) -> None:
+        """Start profiling a test."""
+        import time
+        self._start_times[test_id] = time.time()
+
+    def stop_profiling(
+        self,
+        test_id: str,
+        memory_peak_mb: float = 0.0,
+        io_operations: int = 0,
+        function_calls: int = 0
+    ) -> Any:
+        """Stop profiling and record results."""
+        import time
+        from .models import TestProfile
+        start = self._start_times.pop(test_id, time.time())
+        cpu_time = (time.time() - start) * 1000
+        profile = TestProfile(
+            test_id=test_id,
+            cpu_time_ms=cpu_time,
+            memory_peak_mb=memory_peak_mb,
+            io_operations=io_operations,
+            function_calls=function_calls,
+            timestamp=datetime.now().isoformat()
+        )
+        self.profiles[test_id] = profile
+        return profile
+
+    def get_slowest_tests(self, limit: int = 10) -> List[Any]:
+        """Get the slowest tests."""
+        sorted_profiles = sorted(
+            self.profiles.values(),
+            key=lambda p: p.cpu_time_ms,
+            reverse=True
+        )
+        return sorted_profiles[:limit]
+
+    def get_memory_heavy_tests(self, limit: int = 10) -> List[Any]:
+        """Get tests with highest memory usage."""
+        sorted_profiles = sorted(
+            self.profiles.values(),
+            key=lambda p: p.memory_peak_mb,
+            reverse=True
+        )
+        return sorted_profiles[:limit]
+
+    def generate_report(self) -> str:
+        """Generate profiling report."""
+        report = ["# Test Profiling Report\n"]
+        report.append(f"Total profiled: {len(self.profiles)}\n")
+        report.append("## Slowest Tests\n")
+        for profile in self.get_slowest_tests(5):
+            report.append(
+                f"- `{profile.test_id}`: {profile.cpu_time_ms:.2f}ms, "
+                f"{profile.memory_peak_mb:.1f}MB"
+            )
+        return "\n".join(report)
+
+
+class TestRecorder:
+    """Records test execution."""
+
+    def __init__(self) -> None:
+        self._active: Optional["TestRecorder.Recording"] = None
+
+    @dataclass
+    class Recording:
+        test_name: str
+        actions: List[dict[str, Any]] = field(default_factory=_empty_action_list)
+
+    def start_recording(self, test_name: str) -> None:
+        self._active = TestRecorder.Recording(test_name=test_name)
+
+    def record_action(self, action_type: str, data: Dict[str, Any]) -> None:
+        if self._active is None:
+            raise RuntimeError("Recording not started")
+        self._active.actions.append({"type": action_type, "data": dict(data)})
+
+    def stop_recording(self) -> "TestRecorder.Recording":
+        if self._active is None:
+            raise RuntimeError("Recording not started")
+        recording = self._active
+        self._active = None
+        return recording
+
+    def record(self, test_name: str, result: bool) -> None:
+        """Legacy record API."""
+        if self._active is None:
+            self.start_recording(test_name)
+        self.record_action("result", {"passed": bool(result)})
+
+
+class TestReplayer:
+    """Replays recorded tests."""
+
+    @dataclass
+    class ReplayResult:
+        success: bool
+        errors: List[str] = field(default_factory=_empty_str_list)
+
+    def replay(self, recording: Any) -> "TestReplayer.ReplayResult":
+        """Replay a recording."""
+        actions = getattr(recording, "actions", None)
+        if actions is None:
+            return TestReplayer.ReplayResult(success=False, errors=["missing_actions"])
+        return TestReplayer.ReplayResult(success=True)

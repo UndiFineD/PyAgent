@@ -1,0 +1,20 @@
+# PyAgent Ignore patterns
+# Used by load_codeignore in src/classes/agent/utils.py
+
+# Directories
+__pycache__/
+.git/
+.venv/
+.pytest_cache/
+.agent_cache/
+node_modules/
+dist/
+build/
+*.egg-info/
+
+# Files
+.DS_Store
+*.log
+*.pyc
+.env
+.codeignore
