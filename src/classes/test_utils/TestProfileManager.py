@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+
+"""Auto-extracted class from agent_test_utils.py"""
+
+from __future__ import annotations
+
+from .TestProfile import TestProfile
+
+from typing import Any, Dict, Optional
+import logging
+import os
+
+class TestProfileManager:
+    __test__ = False
+    """Manages test configuration profiles.
+
+    Allows switching between test configurations easily.
+
+    Example:
+        manager=TestProfileManager()
+        manager.add_profile(TestProfile("ci", settings={"timeout": 60}))
+        manager.add_profile(TestProfile("local", settings={"timeout": 300}))
+
+        manager.activate("ci")
+        timeout=manager.get_setting("timeout")  # 60
+    """
+
+    def __init__(self) -> None:
+        """Initialize profile manager."""
+        self._profiles: Dict[str, TestProfile] = {}
+        self._active: Optional[str] = None
+        self._original_env: Dict[str, Optional[str]] = {}
+
+    def add_profile(self, profile: TestProfile) -> None:
+        """Add a profile.
+
+        Args:
+            profile: Profile to add.
+        """
+        self._profiles[profile.name] = profile
+
+    def get_profile(self, name: str) -> Optional[TestProfile]:
+        """Get a profile by name."""
+        return self._profiles.get(name)
+
+    def activate(self, name: str) -> None:
+        """Activate a profile.
+
+        Args:
+            name: Profile name.
+
+        Raises:
+            KeyError: If profile not found.
+        """
+        if name not in self._profiles:
+            raise KeyError(f"Profile not found: {name}")
+
+        # Deactivate current
+        if self._active:
+            self.deactivate()
+
+        profile = self._profiles[name]
+
+        # Set environment variables
+        for key, value in profile.env_vars.items():
+            self._original_env[key] = os.environ.get(key)
+            os.environ[key] = value
+
+        self._active = name
+        logging.info(f"Activated test profile: {name}")
+
+    def deactivate(self) -> None:
+        """Deactivate current profile."""
+        if not self._active:
+            return
+
+        # Restore environment
+        for key, value in self._original_env.items():
+            if value is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = value
+
+        self._original_env.clear()
+        self._active = None
+
+    def get_setting(self, key: str, default: Any = None) -> Any:
+        """Get setting from active profile.
+
+        Args:
+            key: Setting key.
+            default: Default value.
+
+        Returns:
+            Setting value.
+        """
+        if not self._active:
+            return default
+
+        profile = self._profiles[self._active]
+        return profile.settings.get(key, default)
+
+    def get_active_profile(self) -> Optional[TestProfile]:
+        """Get currently active profile."""
+        if self._active:
+            return self._profiles[self._active]
+        return None

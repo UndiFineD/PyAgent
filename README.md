@@ -10,42 +10,34 @@ An intelligent orchestration system that coordinates specialized AI agents to au
 
 ### 🎯 Multi-Agent Coordination
 
-- **Agent Orchestration**: Central `Agent` coordinates work among specialized sub-agents
-- **Task Distribution**: Intelligently assigns improvement tasks to appropriate agents
-- **Progress Tracking**: Monitors and reports on improvement metrics across all agents
-- **Dependency Management**: Handles inter-agent dependencies and coordination
+- **Agent Orchestration**: Central `Agent` coordinates work among specialized sub-agents.
+- **Task Distribution**: Intelligently assigns improvement tasks to appropriate agents.
+- **Progress Tracking**: Monitors and reports on improvement metrics.
+- **Smart Memory**: Agents retain "useful facts" across sessions and can "forget" bad choices to optimize context window.
 
 ### 🔧 Specialized Agent Modules
 
-- **Code Improvement**: Automatic code quality enhancements
-- **Documentation Generation**: Creates and updates documentation
-- **Test Management**: Generates, improves, and validates test suites
-- **Code Analysis**: Analyzes code for improvements and issues
-- **Refactoring Advice**: Provides actionable refactoring recommendations
-- **Error Detection**: Identifies and reports code issues
-- **Metrics Reporting**: Generates comprehensive improvement reports
+- All agents (Coder, Tests, Context, Changes, Errors, Stats) are now modular classes found in `src/classes/`.
+- **Legacy Compatibility**: Original entry points in `src/*.py` are now wrappers around the modular framework.
 
 ### 📊 Advanced Capabilities
 
-- **Report Generation**: Creates detailed before/after comparison reports
-- **Quality Metrics**: Tracks code quality improvements with metrics
-- **Version Control Integration**: Manages changes across codebase
-- **Access Control**: Implements security controls for report access
-- **Multi-Format Exports**: HTML, CSV, and JSON export capabilities
-- **Annotation System**: Adds detailed annotations to reports for collaboration
+- **Hybrid Caching**: High-performance in-memory cache coupled with persistent disk-based caching for all AI responses.
+- **Configurable Backends**: Support for Codex, Copilot CLI, gh copilot, and GitHub Models.
+- **Configuration Management**: New global settings for GitHub tokens, model defaults, and caching behavior.
+- **Smart Memory & History**: Agents now retain conversation history during GUI sessions, allowing for multi-turn iterative improvements.
+- **BMAD V6 Methodology**: Native support for the "Build More, Architect Dreams" method, featuring dynamic tracks (Quick, BMad, Enterprise) and phased workflows.
 
 ### 🚀 Architecture
 
 ```text
-Agent (Orchestrator)
-├── Agent-Tests       → Test suite management
-├── Agent-Coder      → Code improvement
-├── Agent-Context    → Code understanding & context
-├── Agent-Changes    → Change tracking
-├── Agent-Errors     → Error detection
-├── Agent-Stats      → Metrics collection
-├── Agent-Improvements → Improvement recommendations
-└── BaseAgent        → Shared functionality & patterns
+src/
+├── classes/          → Modular, class-based core logic
+│   ├── base_agent/   → Foundation, Memory, and CLI utilities
+│   ├── backend/      → Multi-backend runner with disk caching
+│   └── [agent_name]/ → Specialized agent implementations
+├── agent.py          → Orchestrator wrapper
+└── agent_gui.py      → New interactive multi-agent dashboard
 ```
 
 ## Installation
@@ -53,41 +45,25 @@ Agent (Orchestrator)
 ```bash
 git clone https://github.com/debvisor/pyagent
 cd pyagent
-python -m pip install -e .
+python -m pip install -r requirements.txt
 ```
 
-### Installing AI Backend (Optional)
+### GUI Dashboard (Experimental)
 
-To use the Codex backend (default), install the OpenAI Codex CLI:
+Launch the new interactive control center:
 
 ```bash
-npm install -g @openai/codex
+python src/agent_gui.py
 ```
-
-For other backends:
-
-- **GitHub Copilot CLI**: [Installation Guide](https://docs.github.com/en/copilot/using-github-copilot/using-github-copilot-in-the-command-line)
-- **gh CLI**: [GitHub CLI Installation](https://cli.github.com/)
 
 ## Usage
 
 ### Command Line Interface
 
 ```bash
-# Improve a single file
-python -m agent --context src/module.py --prompt "Improve code quality and add type hints"
-
-# Run with specific backend (codex is the default)
-python -m agent --context src/ --backend codex --prompt "Refactor for readability"
-
-# Use copilot backend instead
-python -m agent --context src/ --backend copilot --prompt "Refactor for readability"
-
-# Increase verbosity
-python -m agent -vv --context src/ --prompt "Generate docstrings"
-
-# List available backends
-python -m agent --describe-backends
+# Improve a file using specific strategy and JSON output for automation
+python src/agent.py --context src/module.py --prompt "Refactor for speed" --strategy cot --json
+```
 
 ### Advanced Usage
 
@@ -186,16 +162,13 @@ Run the comprehensive test suite:
 
 ```bash
 # Run all tests
-python -m pytest src/ -v
-
-# Run specific test class
-python -m pytest src/test_base_agent.py::TestContextWindowManagement -v
+python -m pytest tests/ -v
 
 # Run with coverage
-python -m pytest src/ --cov=src --cov-report=html
+python -m pytest tests/ --cov=src --cov-report=html
 
-# Run specific test with output
-python -m pytest src/test_agent.py::TestAgentOrchestration::test_agent_coordinates_subagents -xvs
+# Run specific test file
+python -m pytest tests/test_cli_wrappers.py -v
 ```
 
 ## Project Structure
@@ -203,29 +176,28 @@ python -m pytest src/test_agent.py::TestAgentOrchestration::test_agent_coordinat
 ```text
 pyagent/
 ├── src/
-│   ├── agent.py                      # Main orchestrator
-│   ├── base_agent.py                 # Base class & utilities
-│   ├── agent-tests.py                # Test management agent
-│   ├── agent-coder.py                # Code improvement agent
-│   ├── agent-context.py              # Context analysis agent
-│   ├── agent-changes.py              # Change tracking agent
-│   ├── agent-errors.py               # Error detection agent
-│   ├── agent-stats.py                # Metrics agent
-│   ├── agent-improvements.py         # Improvement recommendations
-│   ├── agent_backend.py              # AI backend integration
-│   ├── generate_agent_reports.py     # Report generation
-│   ├── agent_test_utils.py           # Test utilities
-│   └── test_*.py                     # Test files
-├── docs/                             # Documentation
-├── README.md                         # This file
-└── pyproject.toml                    # Project configuration
+│   ├── classes/                      # Modular class-based logic
+│   │   ├── base_agent/               # Foundation & utilities
+│   │   ├── agent/                    # Orchestration logic
+│   │   ├── coder/                    # Coder, MarkdownAgent, etc.
+│   │   ├── context/                  # KnowledgeAgent, ContextAgent
+│   │   └── ...                       # Other specialist agents
+│   ├── agent.py                      # Main orchestrator wrapper
+│   ├── agent_gui.py                  # Interactive dashboard
+│   ├── agent_coder.py                # Specialized CLI wrappers
+│   ├── agent_knowledge.py            # Workspace knowledge manager
+│   └── ...                           # Legacy/wrapper entry points
+├── tests/                            # Unit and integration tests
+├── docs/                             # Project documentation
+├── .codeignore                       # Patterns to skip during scan
+└── README.md                         # This file
 ```
 
 ## Features in Detail
 
 ### Multi-Agent Orchestration
 
-The main `Agent` class coordinates work by:
+The `DirectorAgent` (coordinated via `agent.py`) manages work by:
 
 1. Analyzing the codebase structure
 2. Identifying improvement opportunities
@@ -318,4 +290,4 @@ Built with ❤️ for the Python community. Powered by AI backends including Ope
 
 **Current Version**: 1.0.0  
 **Test Coverage**: 87% (2,352 passing tests)  
-**Last Updated**: December 2025
+**Last Updated**: January 2026

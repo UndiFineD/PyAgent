@@ -1,0 +1,121 @@
+#!/usr/bin/env python3
+
+"""Auto-extracted class from agent.py"""
+
+from __future__ import annotations
+
+from abc import ABC, abstractmethod
+from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from pathlib import Path
+from types import TracebackType
+from typing import List, Set, Optional, Dict, Any, Callable, Iterable, TypeVar, cast, Final
+import argparse
+import asyncio
+import difflib
+import fnmatch
+import functools
+import hashlib
+import importlib.util
+import json
+import logging
+import os
+import signal
+import subprocess
+import sys
+import threading
+import time
+import uuid
+
+class AgentPriorityQueue:
+    """Priority queue for ordered agent execution.
+
+    Executes agents in priority order with support for dependencies.
+
+    Example:
+        queue=AgentPriorityQueue()
+        queue.add_agent("critical_fix", priority=1)
+        queue.add_agent("tests", priority=5, depends_on=["critical_fix"])
+        queue.add_agent("docs", priority=10)
+
+        for agent in queue.get_execution_order():
+            execute(agent)
+    """
+
+    def __init__(self) -> None:
+        """Initialize priority queue."""
+        self._agents: Dict[str, Dict[str, Any]] = {}
+
+    def add_agent(
+        self,
+        name: str,
+        priority: int = 5,
+        depends_on: Optional[List[str]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
+    ) -> None:
+        """Add agent to queue.
+
+        Args:
+            name: Agent name.
+            priority: Priority (lower=higher priority).
+            depends_on: List of agents this depends on.
+            metadata: Optional metadata.
+        """
+        self._agents[name] = {
+            "priority": priority,
+            "depends_on": depends_on or [],
+            "metadata": metadata or {},
+        }
+
+    def remove_agent(self, name: str) -> bool:
+        """Remove agent from queue.
+
+        Args:
+            name: Agent name.
+
+        Returns:
+            True if removed, False if not found.
+        """
+        if name in self._agents:
+            del self._agents[name]
+            return True
+        return False
+
+    def get_execution_order(self) -> List[str]:
+        """Get agents in execution order.
+
+        Returns:
+            List of agent names in order.
+        """
+        # Topological sort with priority
+        executed: set[str] = set()
+        order: list[str] = []
+
+        while len(order) < len(self._agents):
+            available: list[tuple[int, str]] = []
+
+            for name, info in self._agents.items():
+                if name in executed:
+                    continue
+
+                # Check if all dependencies are met
+                deps_met = all(d in executed for d in info["depends_on"])
+                if deps_met:
+                    available.append((info["priority"], name))
+
+            if not available:
+                # Cycle detected or error
+                remaining = [n for n in self._agents if n not in executed]
+                logging.warning(f"Dependency cycle detected, adding remaining: {remaining}")
+                order.extend(sorted(remaining))
+                break
+
+            # Sort by priority and take the highest priority
+            available.sort()
+            _, next_agent = available[0]
+            order.append(next_agent)
+            executed.add(next_agent)
+
+        return order

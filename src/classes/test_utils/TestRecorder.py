@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+
+"""Auto-extracted class from agent_test_utils.py"""
+
+from __future__ import annotations
+
+from .RecordedInteraction import RecordedInteraction
+
+from contextlib import contextmanager
+from pathlib import Path
+from typing import Any, Dict, Iterator, List, Optional, Tuple
+import json
+
+class TestRecorder:
+    __test__ = False
+    """Records and replays test interactions.
+
+    Useful for recording external calls and replaying in tests.
+
+    Example:
+        recorder=TestRecorder()
+
+        # Recording mode
+        with recorder.record():
+            result=api_call("data")  # Records the call
+        recorder.save("test_recording.json")
+
+        # Replay mode
+        recorder.load("test_recording.json")
+        with recorder.replay():
+            result=api_call("data")  # Returns recorded result
+    """
+
+    def __init__(self) -> None:
+        """Initialize recorder."""
+        self._recordings: List[RecordedInteraction] = []
+        self._replay_index = 0
+        self._mode: str = "normal"  # "record", "replay", "normal"
+
+    def record_interaction(
+        self,
+        call_type: str,
+        call_name: str,
+        args: Tuple[Any, ...],
+        kwargs: Dict[str, Any],
+        result: Any,
+    ) -> None:
+        """Record an interaction.
+
+        Args:
+            call_type: Type of call.
+            call_name: Name of the call.
+            args: Arguments.
+            kwargs: Keyword arguments.
+            result: Result of the call.
+        """
+        if self._mode == "record":
+            interaction = RecordedInteraction(
+                call_type=call_type,
+                call_name=call_name,
+                args=args,
+                kwargs=kwargs,
+                result=result,
+            )
+            self._recordings.append(interaction)
+
+    def get_replay_result(
+        self,
+        call_type: str,
+        call_name: str,
+    ) -> Optional[Any]:
+        """Get replayed result for a call.
+
+        Args:
+            call_type: Type of call.
+            call_name: Name of the call.
+
+        Returns:
+            Recorded result or None.
+        """
+        if self._mode != "replay":
+            return None
+
+        if self._replay_index < len(self._recordings):
+            recording = self._recordings[self._replay_index]
+            if recording.call_type == call_type and recording.call_name == call_name:
+                self._replay_index += 1
+                return recording.result
+
+        return None
+
+    @contextmanager
+    def record(self) -> Iterator["TestRecorder"]:
+        """Context manager for recording mode."""
+        self._mode = "record"
+        self._recordings = []
+        try:
+            yield self
+        finally:
+            self._mode = "normal"
+
+    @contextmanager
+    def replay(self) -> Iterator["TestRecorder"]:
+        """Context manager for replay mode."""
+        self._mode = "replay"
+        self._replay_index = 0
+        try:
+            yield self
+        finally:
+            self._mode = "normal"
+
+    def save(self, path: Path) -> None:
+        """Save recordings to file."""
+        data: List[Dict[str, Any]] = []
+        for r in self._recordings:
+            data.append({
+                "call_type": r.call_type,
+                "call_name": r.call_name,
+                "args": list(r.args),
+                "kwargs": r.kwargs,
+                "result": r.result,
+                "timestamp": r.timestamp,
+            })
+        with open(path, "w") as f:
+            json.dump(data, f, indent=2, default=str)
+
+    def load(self, path: Path) -> None:
+        """Load recordings from file."""
+        with open(path) as f:
+            data = json.load(f)
+        self._recordings = [
+            RecordedInteraction(
+                call_type=d["call_type"],
+                call_name=d["call_name"],
+                args=tuple(d["args"]),
+                kwargs=d["kwargs"],
+                result=d["result"],
+                timestamp=d["timestamp"],
+            )
+            for d in data
+        ]

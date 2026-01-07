@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+
+"""Auto-extracted class from agent_test_utils.py"""
+
+from __future__ import annotations
+
+from .TestLogEntry import TestLogEntry
+
+from contextlib import contextmanager
+from typing import Any, Dict, Iterator, List, Optional
+
+class TestLogger:
+    __test__ = False
+    """Logger for test debugging.
+
+    Captures logs during test execution for debugging.
+
+    Example:
+        logger=TestLogger()
+        with logger.capture("test_name"):
+            logger.info("Test started")
+            # ... test code ...
+        logs=logger.get_logs("test_name")
+    """
+
+    def __init__(self) -> None:
+        """Initialize logger."""
+        self._logs: Dict[str, List[TestLogEntry]] = {}
+        self._current_test: Optional[str] = None
+
+    def _log(self, level: str, message: str, **extra: Any) -> None:
+        """Internal log method."""
+        entry = TestLogEntry(
+            level=level,
+            message=message,
+            test_name=self._current_test,
+            extra=extra,
+        )
+
+        if self._current_test:
+            if self._current_test not in self._logs:
+                self._logs[self._current_test] = []
+            self._logs[self._current_test].append(entry)
+
+    def debug(self, message: str, **extra: Any) -> None:
+        """Log debug message."""
+        self._log("DEBUG", message, **extra)
+
+    def info(self, message: str, **extra: Any) -> None:
+        """Log info message."""
+        self._log("INFO", message, **extra)
+
+    def warning(self, message: str, **extra: Any) -> None:
+        """Log warning message."""
+        self._log("WARNING", message, **extra)
+
+    def error(self, message: str, **extra: Any) -> None:
+        """Log error message."""
+        self._log("ERROR", message, **extra)
+
+    @contextmanager
+    def capture(self, test_name: str) -> Iterator["TestLogger"]:
+        """Context manager to capture logs for a test.
+
+        Args:
+            test_name: Name of the test.
+
+        Yields:
+            Self for logging.
+        """
+        old_test = self._current_test
+        self._current_test = test_name
+        self._logs[test_name] = []
+        try:
+            yield self
+        finally:
+            self._current_test = old_test
+
+    def get_logs(self, test_name: str) -> List[TestLogEntry]:
+        """Get logs for a test."""
+        return self._logs.get(test_name, [])
+
+    def get_errors(self, test_name: str) -> List[TestLogEntry]:
+        """Get error logs for a test."""
+        return [entry for entry in self.get_logs(test_name) if entry.level == "ERROR"]
+
+    def clear(self) -> None:
+        """Clear all logs."""
+        self._logs.clear()

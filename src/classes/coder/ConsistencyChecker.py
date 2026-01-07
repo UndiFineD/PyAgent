@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+
+"""Auto-extracted class from agent_coder.py"""
+
+from __future__ import annotations
+
+from .ConsistencyIssue import ConsistencyIssue
+
+from base_agent import BaseAgent
+from dataclasses import dataclass, field
+from enum import Enum
+from pathlib import Path
+from typing import Any, Callable, Dict, List, Optional, Tuple
+import ast
+import hashlib
+import logging
+import math
+import re
+import shutil
+import subprocess
+import tempfile
+
+class ConsistencyChecker:
+    """Checks code consistency across the codebase.
+
+    Identifies inconsistencies in naming, formatting, and patterns.
+
+    Attributes:
+        issues: List of consistency issues.
+
+    Example:
+        >>> checker=ConsistencyChecker()
+        >>> issues=checker.check(["file1.py", "file2.py"], {})
+    """
+
+    def __init__(self) -> None:
+        """Initialize the consistency checker."""
+        self.issues: List[ConsistencyIssue] = []
+
+    def check(self, file_contents: Dict[str, str]) -> List[ConsistencyIssue]:
+        """Check for consistency issues across files.
+
+        Args:
+            file_contents: Dictionary mapping file paths to contents.
+
+        Returns:
+            List of consistency issues.
+        """
+        self.issues = []
+        # Check naming conventions
+        self._check_naming_consistency(file_contents)
+        # Check import styles
+        self._check_import_consistency(file_contents)
+        return self.issues
+
+    def _check_naming_consistency(self, file_contents: Dict[str, str]) -> None:
+        """Check naming convention consistency.
+
+        Args:
+            file_contents: Dictionary mapping file paths to contents.
+        """
+        snake_case_files: List[str] = []
+        camel_case_files: List[str] = []
+        for path, content in file_contents.items():
+            funcs = re.findall(r"def\s+([a-zA-Z_]\w*)", content)
+            for func in funcs:
+                if '_' in func and func[0].islower():
+                    snake_case_files.append(f"{path}:{func}")
+                elif func[0].isupper() or (func[0].islower() and any(c.isupper() for c in func)):
+                    camel_case_files.append(f"{path}:{func}")
+        if snake_case_files and camel_case_files:
+            self.issues.append(ConsistencyIssue(
+                issue_type="naming_convention",
+                description="Mixed naming conventions detected",
+                occurrences=snake_case_files[:3] + camel_case_files[:3],
+                recommended_style="snake_case for functions (PEP 8)"
+            ))
+
+    def _check_import_consistency(self, file_contents: Dict[str, str]) -> None:
+        """Check import statement consistency.
+
+        Args:
+            file_contents: Dictionary mapping file paths to contents.
+        """
+        absolute_imports: List[str] = []
+        relative_imports: List[str] = []
+        for path, content in file_contents.items():
+            if re.search(r"^from\s+\.", content, re.M):
+                relative_imports.append(path)
+            if re.search(r"^from\s+[a-zA-Z]", content, re.M):
+                absolute_imports.append(path)
+        if absolute_imports and relative_imports:
+            self.issues.append(ConsistencyIssue(
+                issue_type="import_style",
+                description="Mixed import styles (absolute and relative)",
+                occurrences=absolute_imports[:3] + relative_imports[:3],
+                recommended_style="Prefer absolute imports (PEP 8)"
+            ))

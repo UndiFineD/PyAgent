@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+
+"""Auto-extracted class from agent_test_utils.py"""
+
+from __future__ import annotations
+
+from .ParallelTestResult import ParallelTestResult
+
+from typing import Any, Callable, Dict, List
+import time
+
+class ParallelTestRunner:
+    """Helper for parallel test execution.
+
+    Manages parallel execution of tests with worker pools.
+
+    Example:
+        runner=ParallelTestRunner(workers=4)
+        runner.add_test("test1", test_func1)
+        runner.add_test("test2", test_func2)
+        results=runner.run_all()
+    """
+
+    def __init__(self, workers: int = 4) -> None:
+        """Initialize runner.
+
+        Args:
+            workers: Number of worker threads.
+        """
+        self.workers = workers
+        self._tests: Dict[str, Callable[[], None]] = {}
+        self._results: List[ParallelTestResult] = []
+        self.success_count = 0
+        self.failure_count = 0
+
+    def add_test(self, name: str, test_fn: Callable[[], None]) -> None:
+        """Add test to run.
+
+        Args:
+            name: Test name.
+            test_fn: Test function.
+        """
+        self._tests[name] = test_fn
+
+    def run(self, test_functions: List[Callable[[], Any]], fail_fast: bool = True) -> List[Any]:
+        """Run tests in parallel.
+
+        Args:
+            test_functions: List of test functions to run.
+            fail_fast: Stop on first failure.
+
+        Returns:
+            List of results from test functions.
+        """
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        self.success_count = 0
+        self.failure_count = 0
+        results: List[Any] = []
+        with ThreadPoolExecutor(max_workers=self.workers) as executor:
+            futures = {executor.submit(test_fn): i for i, test_fn in enumerate(test_functions)}
+            for future in as_completed(futures):
+                try:
+                    result = future.result()
+                    results.append(result)
+                    self.success_count += 1
+                except Exception:
+                    self.failure_count += 1
+                    if fail_fast:
+                        executor.shutdown(wait=False)
+                        raise
+                    results.append(None)
+        return results
+
+    def _run_test(
+        self,
+        name: str,
+        test_fn: Callable[[], None],
+        worker_id: int,
+    ) -> ParallelTestResult:
+        """Run a single test."""
+        start = time.time()
+        try:
+            test_fn()
+            return ParallelTestResult(
+                test_name=name,
+                passed=True,
+                duration_ms=(time.time() - start) * 1000,
+                worker_id=worker_id,
+            )
+        except Exception as e:
+            return ParallelTestResult(
+                test_name=name,
+                passed=False,
+                duration_ms=(time.time() - start) * 1000,
+                error=str(e),
+                worker_id=worker_id,
+            )
+
+    def run_all(self) -> List[ParallelTestResult]:
+        """Run all tests in parallel.
+
+        Returns:
+            List of test results.
+        """
+        from concurrent.futures import ThreadPoolExecutor, as_completed, Future
+
+        self._results = []
+
+        with ThreadPoolExecutor(max_workers=self.workers) as executor:
+            futures: Dict[Future[ParallelTestResult], str] = {}
+            for i, (name, test_fn) in enumerate(self._tests.items()):
+                worker_id = i % self.workers
+                future = executor.submit(self._run_test, name, test_fn, worker_id)
+                futures[future] = name
+
+            for future in as_completed(futures):
+                result: ParallelTestResult = future.result()
+                self._results.append(result)
+
+        return self._results
+
+    def get_summary(self) -> Dict[str, Any]:
+        """Get summary of parallel test execution."""
+        total = len(self._results)
+        passed = sum(1 for r in self._results if r.passed)
+        return {
+            "total": total,
+            "passed": passed,
+            "failed": total - passed,
+            "total_duration_ms": sum(r.duration_ms for r in self._results),
+        }

@@ -1,0 +1,164 @@
+#!/usr/bin/env python3
+# Copyright (c) 2025 DebVisor contributors
+# Licensed under the Apache License, Version 2.0 (the "License");
+
+"""Cross-browser and scheduling functionality."""
+
+from typing import Any, Callable, Dict, List, Optional
+
+from .enums import BrowserType
+from .models import CrossBrowserConfig, ScheduleSlot, TestPriority
+
+
+class CrossBrowserRunner:
+    """Cross-browser testing configuration and execution."""
+
+    def __init__(self, config: CrossBrowserConfig) -> None:
+        """Initialize cross-browser runner."""
+        self.config = config
+        self.results: Dict[BrowserType, List[Dict[str, Any]]] = {
+            b: [] for b in config.browsers
+        }
+        self._drivers: Dict[BrowserType, bool] = {}
+
+    def setup_driver(self, browser: BrowserType) -> bool:
+        """Setup browser driver."""
+        self._drivers[browser] = True
+        return True
+
+    def teardown_driver(self, browser: BrowserType) -> None:
+        """Teardown browser driver."""
+        self._drivers[browser] = False
+
+    def run_test(
+        self,
+        test_name: str,
+        test_code: Callable[[], bool]
+    ) -> Dict[BrowserType, Dict[str, Any]]:
+        """Run a test across all browsers."""
+        results: Dict[BrowserType, Dict[str, Any]] = {}
+        for browser in self.config.browsers:
+            self.setup_driver(browser)
+            retries = 0
+            passed = False
+            while retries <= self.config.retries and not passed:
+                try:
+                    passed = test_code()
+                except Exception:
+                    retries += 1
+            result: Dict[str, Any] = {
+                "test": test_name,
+                "passed": passed,
+                "retries": retries,
+                "headless": self.config.headless
+            }
+            results[browser] = result
+            self.results[browser].append(result)
+            self.teardown_driver(browser)
+        return results
+
+    def get_summary(self) -> Dict[str, Any]:
+        """Get summary of all test runs."""
+        summary: Dict[str, Any] = {"browsers": {}}
+
+        for browser, results in self.results.items():
+            passed = sum(1 for r in results if r.get("passed"))
+            browser_summary: Dict[str, int] = {
+                "total": len(results),
+                "passed": passed,
+                "failed": len(results) - passed
+            }
+            summary["browsers"][browser.value] = browser_summary
+
+        return summary
+
+
+class TestScheduler:
+    """Test scheduling and load balancing."""
+
+    def __init__(self, num_workers: int = 4) -> None:
+        """Initialize test scheduler."""
+        self.num_workers = num_workers
+        self.schedule: List[ScheduleSlot] = []
+        self._test_durations: Dict[str, float] = {}
+
+    def add_duration_estimate(self, test_id: str, duration_ms: float) -> None:
+        """Add estimated duration for a test."""
+        self._test_durations[test_id] = duration_ms
+
+    def create_schedule(
+        self,
+        tests: List[str],
+        start_time: str,
+        strategy: str = "load_balanced"
+    ) -> List[ScheduleSlot]:
+        """Create a test execution schedule."""
+        if strategy == "load_balanced":
+            return self._schedule_load_balanced(tests, start_time)
+        elif strategy == "sequential":
+            return self._schedule_sequential(tests, start_time)
+        else:
+            return self._schedule_load_balanced(tests, start_time)
+
+    def _schedule_load_balanced(
+        self,
+        tests: List[str],
+        start_time: str
+    ) -> List[ScheduleSlot]:
+        """Create load-balanced schedule."""
+        sorted_tests = sorted(
+            tests,
+            key=lambda t: self._test_durations.get(t, 1000),
+            reverse=True
+        )
+        worker_loads: List[List[str]] = [[] for _ in range(self.num_workers)]
+        worker_times = [0.0] * self.num_workers
+        for test in sorted_tests:
+            min_worker = worker_times.index(min(worker_times))
+            worker_loads[min_worker].append(test)
+            worker_times[min_worker] += self._test_durations.get(test, 1000)
+        self.schedule = []
+        for tests_for_worker in worker_loads:
+            if tests_for_worker:
+                slot = ScheduleSlot(
+                    start_time=start_time,
+                    end_time="",
+                    tests=tests_for_worker,
+                    workers=1
+                )
+                self.schedule.append(slot)
+        return self.schedule
+
+    def _schedule_sequential(
+        self,
+        tests: List[str],
+        start_time: str
+    ) -> List[ScheduleSlot]:
+        """Create sequential schedule."""
+        slot = ScheduleSlot(
+            start_time=start_time,
+            end_time="",
+            tests=tests,
+            workers=1
+        )
+        self.schedule = [slot]
+        return self.schedule
+
+    def estimate_total_duration(self) -> float:
+        """Estimate total schedule duration."""
+        if not self.schedule:
+            return 0.0
+        max_duration = 0.0
+        for slot in self.schedule:
+            slot_duration = sum(
+                self._test_durations.get(t, 1000) for t in slot.tests
+            )
+            max_duration = max(max_duration, slot_duration)
+        return max_duration
+
+    def get_worker_assignments(self) -> Dict[int, List[str]]:
+        """Get test assignments per worker."""
+        assignments: Dict[int, List[str]] = {}
+        for i, slot in enumerate(self.schedule):
+            assignments[i] = slot.tests
+        return assignments
