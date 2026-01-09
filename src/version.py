@@ -3,9 +3,9 @@ PyAgent SDK Version Info and Stability Gates.
 """
 
 # PyAgent SDK Version Info (Core/Fleet Version)
-VERSION = "2.1.3-stable"
+VERSION = "2.1.4-stable"
 SDK_VERSION = "3.0.0"
-EVOLUTION_PHASE = 108
+EVOLUTION_PHASE = 115
 STABILITY_SCORE = 1.0  # Phase 108: Multi-Agent Logic Harvesting and Rust-Readiness verified
 COMPATIBLE_CORE_VERSIONS = ["3.0.0", "2.2.0", "2.1.0", "2.0.0"]
 
