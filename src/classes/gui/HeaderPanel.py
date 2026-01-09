@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -18,7 +18,7 @@ from .TemplateManager import TemplateManager
 
 class HeaderPanel:
     """Handles project root selection and global context input."""
-    def __init__(self, parent, project_root_var, callbacks):
+    def __init__(self, parent, project_root_var, callbacks) -> None:
         self.frame = ttk.Frame(parent, padding=5)
         self.project_root_var = project_root_var
         self.callbacks = callbacks

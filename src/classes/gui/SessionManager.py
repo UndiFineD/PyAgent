@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -18,10 +18,10 @@ from tkinter import filedialog, messagebox
 
 class SessionManager:
     """Handles saving and loading of the GUI state."""
-    def __init__(self, default_filename="gui_session.json"):
+    def __init__(self, default_filename="gui_session.json") -> None:
         self.default_filename = default_filename
 
-    def save_session(self, data):
+    def save_session(self, data) -> bool:
         """Saves session data to a JSON file."""
         filepath = filedialog.asksaveasfilename(
             initialfile=self.default_filename,

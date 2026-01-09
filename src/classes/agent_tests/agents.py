@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0
 
 """Main TestsAgent class for test suite improvement."""
@@ -233,7 +233,7 @@ class TestsAgent(BaseAgent):
         params = ", ".join(f"{k}: {v}" for k, v in factory.parameters.items())
         return (
             f"def {factory.name}({params}) -> {factory.return_type}:\n"
-            f"    \"\"\"Factory for creating {factory.return_type} instances.\"\"\"\n"
+            f'    """Factory for creating {factory.return_type} instances."""\n'
             f"    {factory.generator or 'pass'}\n"
         )
 
@@ -529,3 +529,4 @@ class TestsAgent(BaseAgent):
 if __name__ == '__main__':
     # CLI interface would be implemented here if needed
     pass
+

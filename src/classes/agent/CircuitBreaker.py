@@ -42,7 +42,7 @@ class CircuitBreaker:
     """
 
     def __init__(self, name: str, failure_threshold: int = 5,
-                 recovery_timeout: int = 60, backoff_multiplier: float = 2.0):
+                 recovery_timeout: int = 60, backoff_multiplier: float = 2.0) -> None:
         """Initialize circuit breaker.
 
         Args:

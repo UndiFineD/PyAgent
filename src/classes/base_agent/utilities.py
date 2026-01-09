@@ -42,6 +42,11 @@ def setup_logging(verbosity_arg: int = 0) -> None:
     )
 
 
+def as_tool(func: Callable) -> Callable:
+    """Decorator to mark a method as a tool for the ToolRegistry."""
+    func._is_tool = True
+    return func
+
 def create_main_function(
     agent_class: Type[BaseAgent],
     description: str,

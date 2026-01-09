@@ -25,3 +25,5 @@ class GoAgent(CoderAgent):
 if __name__ == "__main__":
     main = create_main_function(GoAgent, "Go Agent", "Path to Go file (.go)")
     main()
+
+

@@ -43,7 +43,7 @@ class RateLimiter:
         last_refill: Timestamp of last token refill.
     """
 
-    def __init__(self, config: Optional[RateLimitConfig] = None):
+    def __init__(self, config: Optional[RateLimitConfig] = None) -> bool:
         """Initialize the rate limiter.
 
         Args:

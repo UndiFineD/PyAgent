@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -17,7 +17,7 @@ import os
 
 class ConfigurationManager:
     """Handles loading and saving global configuration settings."""
-    def __init__(self, config_file="config/gui_settings.json"):
+    def __init__(self, config_file="config/gui_settings.json") -> None:
         self.config_file = config_file
         self.settings = {
             "github_token_file": r"C:\DEV\github-gat.txt",

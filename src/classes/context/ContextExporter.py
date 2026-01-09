@@ -7,7 +7,7 @@ from __future__ import annotations
 from .ExportFormat import ExportFormat
 from .ExportedContext import ExportedContext
 
-from base_agent import BaseAgent
+from src.classes.base_agent import BaseAgent
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

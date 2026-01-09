@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -11,6 +11,8 @@
 # limitations under the License.
 
 """BaseAgent main class and core agent logic."""
+
+from __future__ import annotations
 
 import argparse
 import difflib
@@ -25,12 +27,9 @@ from datetime import datetime
 from enum import Enum
 from pathlib import Path
 from types import TracebackType
-from typing import Any, Callable, Dict, List, Optional, Type, cast
+from typing import Any, Callable, Dict, List, Optional, Type, cast, TYPE_CHECKING
 
-try:
-    import agent_strategies
-except ImportError:
-    sys.path.append(str(Path(__file__).parent.parent.parent))
+if TYPE_CHECKING:
     import agent_strategies
 
 from .models import (
@@ -60,6 +59,17 @@ from .models import (
     SerializationFormat,
     TokenBudget,
 )
+from .core import BaseCore
+
+# Advanced components (Lazy loaded or optional)
+try:
+    from src.classes.agent.LongTermMemory import LongTermMemory
+    from src.classes.orchestration.SignalRegistry import SignalRegistry
+    from src.classes.orchestration.ToolRegistry import ToolRegistry
+except (ImportError, ValueError):
+    LongTermMemory = None
+    SignalRegistry = None
+    ToolRegistry = None
 
 
 def fix_markdown_content(content: str) -> str:
@@ -103,9 +113,10 @@ def setup_logging(verbosity_arg: int = 0) -> None:
     }
     # Determine level from environment
     if env_verbosity:
-        level = levels.get(env_verbosity.lower(), logging.INFO)
+        level = levels.get(env_verbosity.lower(), logging.WARNING)
     else:
-        level = logging.INFO
+        # Default to WARNING to reduce noise, as requested by self-improvement phase
+        level = logging.WARNING
     # If argument is provided, it forces DEBUG (elaborate)
     if verbosity_arg > 0:
         level = logging.DEBUG
@@ -174,7 +185,7 @@ class BaseAgent:
 
     Example:
         class MyAgent(BaseAgent):
-            def _get_default_content(self):
+            def _get_default_content(self) -> bool:
                 return "# New File\\n"
 
         with MyAgent('path/to/file.md') as agent:
@@ -210,6 +221,7 @@ class BaseAgent:
         self.current_content = ""
         
         # Strategy for agent execution
+        import agent_strategies
         self.strategy: agent_strategies.AgentStrategy = agent_strategies.DirectStrategy()
 
         # New attributes for enhanced functionality
@@ -221,10 +233,82 @@ class BaseAgent:
         self._post_processors: List[Callable[[str], str]] = []
         self._model: Optional[str] = None
         self._is_stop_requested = False
+        
+        # Initialize Core Logic (Potential Rust Target)
+        self.core = BaseCore(workspace_root=str(self.file_path.parent.parent.parent))
 
-        logging.debug(f"Initializing {self.__class__.__name__} for {file_path}")
-        self.read_previous_content()
-        self._state = AgentState.INITIALIZED
+        # Advanced features
+        self.memory = LongTermMemory() if LongTermMemory else None
+        self.registry = SignalRegistry() if SignalRegistry else None
+        self.tool_registry = ToolRegistry() if ToolRegistry else None
+        
+        # Initialize Global Context
+        self._workspace_root = str(self.file_path.parent.parent.parent)
+        self._local_global_context = None
+
+    @property
+    def global_context(self) -> str:
+        """Lazy-loaded GlobalContextEngine, preferring Fleet's shared instance."""
+        # Prefer fleet-injected context
+        if hasattr(self, 'fleet') and self.fleet and hasattr(self.fleet, 'global_context'):
+            return self.fleet.global_context
+            
+        # Fallback to local lazy loading
+        if self._local_global_context is None:
+             try:
+                from src.classes.context.GlobalContextEngine import GlobalContextEngine
+                self._local_global_context = GlobalContextEngine(self._workspace_root)
+             except (ImportError, ValueError):
+                pass
+        return self._local_global_context
+
+    @global_context.setter
+    def global_context(self, value):
+        self._local_global_context = value
+
+    def register_tools(self, registry: 'ToolRegistry') -> None:
+        """
+        Registers all methods decorated with @as_tool with the provided registry.
+        """
+        if not registry:
+            return
+
+        import inspect
+        for name, method in inspect.getmembers(self, predicate=inspect.ismethod):
+            if hasattr(method, '_is_tool') and method._is_tool:
+                # Default category from class name (e.g. LinguisticAgent -> linguistic)
+                category = self.__class__.__name__.replace('Agent', '').lower()
+                
+                # Check for explicit category overridden on method
+                if hasattr(method, '_tool_category'):
+                    category = method._tool_category
+                    
+                registry.register_tool(
+                    func=method,
+                    owner_name=self.__class__.__name__,
+                    category=category
+                )
+                logging.debug(f"Registered tool {name} for {self.__class__.__name__}")
+
+    def _register_tools(self):
+        """Automatically registers public methods with the ToolRegistry."""
+        if not self.tool_registry:
+            return
+            
+        agent_name = self.__class__.__name__
+        # Register standard improve_content
+        self.tool_registry.register_tool(agent_name, self.improve_content, category="core")
+        
+        # Register other public methods specifically marked or common ones
+        for attr_name in dir(self):
+            if attr_name.startswith('_') or attr_name in ['improve_content', 'registry', 'tool_registry', 'read_previous_content']:
+                continue
+            
+            attr = getattr(self, attr_name)
+            # Check both the attribute and the underlying function (for bound methods)
+            is_tool = hasattr(attr, '_is_tool') or hasattr(getattr(attr, '__func__', None), '_is_tool')
+            if callable(attr) and is_tool:
+                self.tool_registry.register_tool(agent_name, attr, category="specialized")
 
     def _load_config(self) -> AgentConfig:
         """Load agent configuration from environment variables.
@@ -265,6 +349,14 @@ class BaseAgent:
         """
         self._model = model
         logging.debug(f"Model set to: {model}")
+
+    def _track_tokens(self, input_tokens: int, output_tokens: int):
+        """Simulates recording token usage for telemetry."""
+        self._last_token_usage = {
+            "input": input_tokens,
+            "output": output_tokens,
+            "model": self.get_model() or "gpt-4o"
+        }
 
     def get_model(self) -> Optional[str]:
         """Get the currently configured model."""
@@ -381,13 +473,38 @@ class BaseAgent:
 
         Example:
             class TestsAgent(BaseAgent):
-                def _get_default_content(self):
+                def _get_default_content(self) -> bool:
                     return "# Tests\\n\\n# Add tests here\\n"
 
         Note:
             Called automatically by read_previous_content() for missing files.
         """
         return "# Default content\n\n# Add content here\n"
+
+    def think(self, prompt: str, system_prompt: Optional[str] = None) -> str:
+        """
+        Generic reasoning method that doesn't involve file updates.
+        Useful for planning, data generation, or internal reasoning.
+        """
+        self._state = AgentState.THINKING
+        
+        # Broadcast thought to SignalBus if available
+        if hasattr(self, 'registry') and self.registry:
+            try:
+                # We can't use self.signal_bus directly here easily as it's in FleetManager usually
+                # But we can emit a signal via the registry if it exists
+                self.registry.emit("thought_stream", {
+                    "agent": self.__class__.__name__,
+                    "thought": prompt[:100] + "..."
+                })
+            except:
+                pass
+
+        description = f"Reasoning for {self.__class__.__name__}"
+        result = self.run_subagent(description, prompt, system_prompt or self._system_prompt)
+        
+        self._state = AgentState.IDLE
+        return result
 
     def improve_content(self, prompt: str) -> str:
         """Use AI to improve the content.
@@ -431,8 +548,20 @@ class BaseAgent:
         try:
             logging.info(f"Improving content with prompt: {prompt[:50]}...")
 
+            # Integrate Long-Term Memory
+            memory_context = ""
+            if self.memory:
+                try:
+                    memories = self.memory.query(prompt, n_results=3)
+                    if memories:
+                        memory_docs = [m.get("content", "") for m in memories]
+                        memory_context = "\n\n### Related Past Memories\n" + "\n".join(memory_docs)
+                        logging.info(f"Found {len(memories)} relevant memories for context.")
+                except Exception as me:
+                    logging.warning(f"Memory retrieval failed: {me}")
+
             # Add conversation context if available
-            full_prompt = self._build_prompt_with_history(prompt)
+            full_prompt = self._build_prompt_with_history(prompt) + memory_context
 
             # Define backend callable for strategy
             def backend_callable(p: str, sp: Optional[str] = None, h: Optional[List[Dict[str, str]]] = None) -> str:
@@ -479,9 +608,41 @@ class BaseAgent:
 
             logging.info(f"Content improved successfully ({len(improvement)} bytes)")
             self._trigger_event(EventType.POST_IMPROVE, {"quality": quality.name})
+            
+            # Emit signal for success
+            if self.registry:
+                try:
+                    self.registry.emit("improvement_ready", self.__class__.__name__, {
+                        "file": str(self.file_path),
+                        "prompt": prompt[:100]
+                    })
+                except Exception as se:
+                    logging.warning(f"Signal emission failed: {se}")
+            
+            # Save to memory if significant
+            if self.memory and len(self.current_content) > 100:
+                try:
+                    self.memory.store(
+                        f"Agent {self.__class__.__name__} improved {self.file_path.name} based on prompt: {prompt[:100]}",
+                        {"file": str(self.file_path), "action": "improve"}
+                    )
+                except Exception as me:
+                    logging.warning(f"Memory storage failed: {me}")
+
             return self.current_content
         except Exception as e:
             logging.warning(f"Failed to improve content: {e}")
+            
+            # Emit signal for failure
+            if self.registry:
+                try:
+                    self.registry.emit("agent_fail", self.__class__.__name__, {
+                        "file": str(self.file_path),
+                        "error": str(e)
+                    })
+                except Exception as se:
+                    pass
+
             self.current_content = self.previous_content
             return self.current_content
 
@@ -592,16 +753,11 @@ class BaseAgent:
         Returns:
             str: Unified diff string.
         """
-        if not self.previous_content or not self.current_content:
-            return ""
-            
-        diff = difflib.unified_diff(
-            self.previous_content.splitlines(keepends=True),
-            self.current_content.splitlines(keepends=True),
-            fromfile=f"a/{self.file_path}",
-            tofile=f"b/{self.file_path}"
+        return self.core.calculate_diff(
+            self.previous_content,
+            self.current_content,
+            filename=str(self.file_path)
         )
-        return "".join(diff)
 
     def update_file(self) -> bool:
         """Write the improved content back to the file.
@@ -633,13 +789,23 @@ class BaseAgent:
             '.md', '.markdown'} or self.file_path.name.lower().endswith('.plan.md')
         if is_markdown:
             logging.debug(f"Applying markdown formatting to {self.file_path.name}")
-            content_to_write = fix_markdown_content(content_to_write)
+            content_to_write = self.core.fix_markdown(content_to_write)
+
+        # Security Check: Validate content safety before writing (Phase 108)
+        if not self.core.validate_content_safety(content_to_write):
+            logging.error(f"Security violation detected in content for {self.file_path.name}. Write aborted!")
+            return False
 
         logging.info(f"Writing {len(content_to_write)} bytes to {self.file_path.name}")
         # Ensure parent directory exists
-        self.file_path.parent.mkdir(parents=True, exist_ok=True)
-        self.file_path.write_text(content_to_write, encoding='utf-8')
-        return True
+        try:
+            self.file_path.parent.mkdir(parents=True, exist_ok=True)
+            self.file_path.write_text(content_to_write, encoding='utf-8')
+            return True
+        except Exception as e:
+            logging.error(f"Self-Healing: File write failed for {self.file_path.name}: {e}")
+            # Potential self-healing: Try to clear locks or use a temp file
+            return False
 
     def get_diff(self) -> str:
         """Get the diff between previous and current content.
@@ -664,13 +830,11 @@ class BaseAgent:
             - Empty string indicates no changes between versions
         """
         logging.debug("Generating diff between previous and current content")
-        diff = difflib.unified_diff(
-            self.previous_content.splitlines(keepends=True),
-            self.current_content.splitlines(keepends=True),
-            fromfile='previous',
-            tofile='current'
+        diff_str = self.core.calculate_diff(
+            self.previous_content,
+            self.current_content,
+            filename=self.file_path.name
         )
-        diff_str = ''.join(diff)
         if diff_str:
             logging.debug(f"Generated {len(diff_str)} bytes of diff")
         else:

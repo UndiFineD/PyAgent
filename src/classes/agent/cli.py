@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -96,7 +96,7 @@ def main() -> None:
     parser.add_argument('--config', type=str, metavar='FILE',
                         help='Path to configuration file (YAML / TOML / JSON)')
     parser.add_argument('--agent-models', type=str,
-                        help='JSON string mapping agent->model spec (e.g. "{\"coder\": {\"provider\": \"google\", \"model\": \"gemini-3\"}}")')
+                        help='JSON string mapping agent->model spec (e.g. "{"coder": {"provider": "google", "model": "gemini-3"}}")')
     parser.add_argument('--model-coder', type=str,
                         help='Quick override for coder model. Format: "provider:model" or just "model"')
     parser.add_argument('--model-improvements', type=str,
@@ -248,3 +248,4 @@ def main() -> None:
         # Save incremental processing state
         if hasattr(agent, 'incremental_processor'):
             agent.incremental_processor.complete_run()
+

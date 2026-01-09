@@ -47,11 +47,11 @@ class TestReportGenerator:
                 f"<td>{error}</td></tr>"
             )
         return (
-            "<html><head><title>Test Report</title></head><body>"
-            "<h1>Test Results</h1>"
-            "<table border=\"1\">"
-            "<tr><th>Test</th><th>Status</th><th>Duration</th><th>Error</th></tr>"
-            f"{rows}</table></body></html>"
+            '<html><head><title>Test Report</title></head><body>'
+            '<h1>Test Results</h1>'
+            '<table border="1">'
+            '<tr><th>Test</th><th>Status</th><th>Duration</th><th>Error</th></tr>'
+            f'{rows}</table></body></html>'
         )
 
     def generate_html(self) -> Path:
@@ -70,3 +70,4 @@ class TestReportGenerator:
         payload = {"results": self.results}
         path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
         return path
+

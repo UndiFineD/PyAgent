@@ -24,3 +24,4 @@ class BashAgent(CoderAgent):
 if __name__ == "__main__":
     main = create_main_function(BashAgent, "Bash Agent", "Path to shell script")
     main()
+

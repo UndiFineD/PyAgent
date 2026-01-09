@@ -18,6 +18,12 @@ class DirectorAgent(BaseAgent):
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.status = StatusManager()
+        
+        # Subscribe to signals to adjust coordination
+        if self.registry:
+            self.registry.subscribe("agent_fail", self._handle_agent_failure)
+            self.registry.subscribe("improvement_ready", self._handle_agent_success)
+
         self._system_prompt = (
             "You are the Director Agent (Orchestrator). "
             "Your goal is to manage complex multi-file projects. "
@@ -45,6 +51,19 @@ class DirectorAgent(BaseAgent):
             if p.name != "BaseAgent.py":
                 agents.append(p.stem)
         return sorted(list(set(agents)))
+
+    def _handle_agent_failure(self, event: dict) -> str:
+        """React to agent failures broadcast on the signal registry."""
+        sender = event.get("sender")
+        data = event.get("data", {})
+        logging.warning(f"Director received FAILURE signal from {sender}: {data}")
+        # In the future, this could trigger a retry with a different agent or strategy
+
+    def _handle_agent_success(self, event: dict) -> str:
+        """React to agent successes broadcast on the signal registry."""
+        sender = event.get("sender")
+        data = event.get("data", {})
+        logging.info(f"Director received SUCCESS signal from {sender}: {data}")
 
     def execute_project_plan(self, high_level_goal: str) -> str:
         """Decomposes a goal and executes delegations."""

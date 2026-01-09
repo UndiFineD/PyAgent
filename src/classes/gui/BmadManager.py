@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -19,7 +19,7 @@ from .Constants import BMAD_AGENTS, BMAD_TRACKS, BMAD_PHASES, DEFAULT_INSTRUCTIO
 
 class BmadManager:
     """Manages the BMAD workflow for deploying agents at scale across the project."""
-    def __init__(self, parent, callbacks):
+    def __init__(self, parent, callbacks) -> None:
         self.parent = parent
         self.callbacks = callbacks
         self.frame = ttk.LabelFrame(parent, text="BMAD - Bulk Multi-Agent Deployment", padding=10)

@@ -20,8 +20,10 @@ class CPlusPlusAgent(CoderAgent):
         )
 
     def _get_default_content(self) -> str:
-        return "#include <iostream>\n\nint main() {\n    std::cout << \"Hello, C++!\" << std::endl;\n    return 0;\n}\n"
+        return "#include <iostream>\n\nint main() {\n    std::cout << 'Hello, C++!' << std::endl;\n    return 0;\n}\n"
 
 if __name__ == "__main__":
     main = create_main_function(CPlusPlusAgent, "C++ Agent", "Path to C++ file (.cpp, .hpp, .cc)")
     main()
+
+

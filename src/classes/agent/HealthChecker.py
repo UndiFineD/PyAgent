@@ -43,7 +43,7 @@ class HealthChecker:
         results: Dict of health check results.
     """
 
-    def __init__(self, repo_root: Path):
+    def __init__(self, repo_root: Path) -> None:
         """Initialize the health checker.
 
         Args:

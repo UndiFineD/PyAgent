@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -17,7 +17,7 @@ import tkinter as tk
 
 class WidgetLogger(logging.Handler):
     """Logging handler that redirects formatted log records to a Tkinter Text widget."""
-    def __init__(self, widget, thread_id=None):
+    def __init__(self, widget, thread_id=None) -> None:
         super().__init__()
         self.widget = widget
         self.thread_id = thread_id

@@ -7,7 +7,7 @@ from __future__ import annotations
 from .ConflictResolution import ConflictResolution
 from .MergeConflict import MergeConflict
 
-from base_agent import BaseAgent
+from src.classes.base_agent import BaseAgent
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

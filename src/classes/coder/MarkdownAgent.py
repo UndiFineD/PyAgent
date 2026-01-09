@@ -37,7 +37,7 @@ class MarkdownAgent(CoderAgent):
         """Converts [Text](Link.md) to [[Link|Text]] or [[Link]] if text matches."""
         # Simple regex for markdown links
         pattern = r"\[([^\]]+)\]\(([^)]+)\.md\)"
-        def replace(match):
+        def replace(match) -> str:
             text, link = match.groups()
             if text == link:
                 return f"[[{link}]]"
@@ -111,3 +111,4 @@ class MarkdownAgent(CoderAgent):
 if __name__ == "__main__":
     main = create_main_function(MarkdownAgent, "Markdown Agent", "Path to Markdown file (.md)")
     main()
+

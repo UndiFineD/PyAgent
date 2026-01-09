@@ -1,0 +1,30 @@
+{
+    "FutureOrchestrator": [
+        "plugins.future_orc",
+        "FutureOrchestrator",
+        true,
+        null,
+        "3.0.0"
+    ],
+    "LegacyOrchestrator": [
+        "plugins.legacy_orc",
+        "LegacyOrchestrator",
+        true,
+        null,
+        "1.0.0"
+    ],
+    "CommunityDemoOrc": [
+        "plugins.community_demo.CommunityOrchestrator",
+        "CommunityOrchestrator",
+        true,
+        null,
+        "2.1.0"
+    ],
+    "MockOrc": [
+        "plugins.mock_plugin.MockOrchestrator",
+        "MockOrchestrator",
+        true,
+        null,
+        "2.2.0"
+    ]
+}

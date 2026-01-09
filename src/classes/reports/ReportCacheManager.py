@@ -27,7 +27,7 @@ class ReportCacheManager:
         _cache: Current cache data mapping (path, hash) -> (content, ttl_end).
     """
 
-    def __init__(self, cache_file: Optional[Path] = None):
+    def __init__(self, cache_file: Optional[Path] = None) -> None:
         """Initialize cache manager.
         Args:
             cache_file: Path to cache file. Defaults to .report_cache.json.

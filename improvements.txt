@@ -1,22 +1,13 @@
 # PyAgent Improvement Roadmap
 
-## Phase 1: Modularization & Stability (COMPLETED)
-- [x] Extract classes from monolithic modules into `src/classes/`
-- [x] Maintain backward compatibility via `src/*.py` stubs
-- [x] Fix test regressions and achieve 100% pass rate
+## 🚀 Active Roadmap
 
-## Phase 2: Advanced Agent Operations (ONGOING)
+### Phase 96: Swarm Explainability & Traceability v1
+- Implement ExplainabilityAgent for autonomous tracing and justification of multi-agent reasoning chains across the fleet.
+- Establish ReasoningChainLogger for persistent storage of agent decision paths.
+- Integrate with FleetManager for real-time query of "Why did the fleet take this action?".
 
-### Improvements Agent (READY)
-- [x] **Parse `.improvements.md` into structured data** (COMPLETED)
-- [x] **Robust Associated-File Discovery** (COMPLETED - searches parent and adjacent src/lib/app dirs)
-- [x] **LLM Output Validation** (COMPLETED - added basic checkbox/header verification)
+---
 
-### Context & Search Agent (ONGOING)
-- [x] **Native Semantic Search** (COMPLETED - integrated ChromaDB & SentenceTransformers)
-- [x] **Explicit Extension Handling & Warnings** (COMPLETED - environment and extension warnings added)
-- [x] **Configurable Source Extensions** (COMPLETED - moved to `ContextAgent.config`)
+## 🔍 Research Completed
 
-### Global Improvements
-- [~] **Type Safety Polish** (IN PROGRESS - resolved major `StatsFederation` type issues, cleaned up common `/classes/` ignores)
-- [x] **Diagnostic Logging** (COMPLETED - enhanced `BaseAgent` file operation diagnostics)
