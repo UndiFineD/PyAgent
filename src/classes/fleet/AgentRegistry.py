@@ -44,11 +44,15 @@ class LazyAgentMap(dict):
             search_root = self.workspace_root / subdir
             if not search_root.exists():
                 continue
+            # Phase 116: Fast Scan Logic
+            # Optimization: Only list files to avoid deep recursion if not needed,
+            # but keep os.walk for legacy plugin support.
             for root, _, files in os.walk(search_root):
                 for file in files:
-                    full_path = Path(root) / file
-                    rel_path = full_path.relative_to(self.workspace_root)
-                    found_paths.append(str(rel_path))
+                    if "Agent" in file or "Orchestrator" in file:
+                        full_path = Path(root) / file
+                        rel_path = full_path.relative_to(self.workspace_root)
+                        found_paths.append(str(rel_path))
         return found_paths
 
     def _load_manifests(self) -> Dict[str, tuple]:

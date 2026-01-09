@@ -13,6 +13,7 @@ from src.classes.base_agent.utilities import as_tool
 from src.classes.coder.SecurityGuardAgent import SecurityGuardAgent
 from src.classes.base_agent.ConnectivityManager import ConnectivityManager
 from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+from src.classes.specialized.WebCore import WebCore
 
 class WebAgent(BaseAgent):
     """Enables the fleet to perform autonomous research and interact with web services."""
@@ -30,12 +31,13 @@ class WebAgent(BaseAgent):
         work_root = getattr(self, "_workspace_root", None)
         self.connectivity = ConnectivityManager(work_root)
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
+        self.core = WebCore()
 
     def _record(self, url: str, content: str) -> None:
         """Harvest web extraction logic for future self-improvement."""
         if self.recorder:
             try:
-                meta = {"phase": 108, "type": "web_fetch", "timestamp": time.time()}
+                meta = {"phase": 116, "type": "web_fetch", "timestamp": time.time()}
                 self.recorder.record_interaction("web", url, "fetch_page_content", content[:1000], meta=meta)
             except Exception as e:
                 logging.error(f"WebAgent: Transcription error: {e}")
@@ -52,41 +54,32 @@ class WebAgent(BaseAgent):
         logging.info(f"WebAgent fetching URL: {url}")
         try:
             # Use a session to limit redirects and enforce security (Phase 115 Security Patch)
-            session = requests.Session()
-            session.max_redirects = 10
-            response = session.get(url, timeout=15, stream=True)
-            
-            # Decompression bomb safeguard: check content length if available
-            content_length = response.headers.get('Content-Length')
-            if content_length and int(content_length) > 10 * 1024 * 1024:  # 10MB limit
-                 return f"ERROR: Page content too large ({content_length} bytes). Aborting for safety."
+            with requests.Session() as session:
+                session.max_redirects = 10
+                response = session.get(url, timeout=15, stream=True)
+                
+                # Decompression bomb safeguard: check content length if available
+                content_length = response.headers.get('Content-Length')
+                if content_length and int(content_length) > 10 * 1024 * 1024:  # 10MB limit
+                     return f"ERROR: Page content too large ({content_length} bytes). Aborting for safety."
 
-            response.raise_for_status()
-            
-            # Update connectivity status on success
-            self.connectivity.update_status(domain, True)
-            
-            soup = BeautifulSoup(response.text, 'html.parser')
-            
-            # Remove scripts and styles
-            for script in soup(["script", "style"]):
-                script.decompose()
-            
-            text = soup.get_text()
-            # Clean up whitespace
-            lines = (line.strip() for line in text.splitlines())
-            chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-            text = '\n'.join(chunk for chunk in chunks if chunk)
-            
-            # Safety Scan
-            injections = self.security_guard.scan_for_injection(text)
-            if injections:
-                logging.warning(f"WebAgent blocked content from {url} due to safety risks: {injections}")
-                return f"ERROR: Content from {url} was blocked for safety reasons: {', '.join(injections)}"
-            
-            extracted = text[:5000]
-            self._record(url, extracted)
-            return extracted # Limit to avoid context overflow
+                response.raise_for_status()
+                
+                # Update connectivity status on success
+                self.connectivity.update_status(domain, True)
+                
+                # Use Core for cleaning
+                text = self.core.clean_html(response.text)
+                
+                # Safety Scan
+                injections = self.security_guard.scan_for_injection(text)
+                if injections:
+                    logging.warning(f"WebAgent blocked content from {url} due to safety risks: {injections}")
+                    return f"ERROR: Content from {url} was blocked for safety reasons: {', '.join(injections)}"
+                
+                extracted = text[:5000]
+                self._record(url, extracted)
+                return extracted # Limit to avoid context overflow
         except Exception as e:
             self.connectivity.update_status(domain, False)
             return f"Error fetching {url}: {e}"
