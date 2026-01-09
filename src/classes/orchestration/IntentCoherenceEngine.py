@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+
+from __future__ import annotations
+import logging
+from typing import Dict, List, Any, Optional, TYPE_CHECKING
+from datetime import datetime
+
+if TYPE_CHECKING:
+    from src.classes.fleet.FleetManager import FleetManager
+
+class IntentCoherenceEngine:
+    """
+    Implements Swarm Consciousness (Phase 30).
+    Maintains a unified 'Intent' layer that synchronizes all agent goals
+    without necessitating explicit task decomposition.
+    """
+    
+    def __init__(self, fleet: FleetManager) -> None:
+        self.fleet = fleet
+        self.global_intent: Optional[str] = None
+        self.intent_priority: int = 0
+        self.sub_intents: List[Dict[str, Any]] = []
+
+    def broadcast_intent(self, intent: str, priority: int = 10) -> Dict[str, Any]:
+        """
+        Sets the global coherent objective for the entire swarm.
+        """
+        logging.info(f"IntentCoherenceEngine: Broadcasting global intent: {intent}")
+        self.global_intent = intent
+        self.intent_priority = priority
+        
+        # Emit signal via the signal bus
+        if hasattr(self.fleet, 'signals'):
+            self.fleet.signals.emit("COHERENT_INTENT_ESTABLISHED", {
+                "intent": intent,
+                "priority": priority,
+                "timestamp": datetime.now().isoformat()
+            }, sender="IntentCoherenceEngine")
+            
+        return {
+            "status": "synchronized",
+            "global_intent": self.global_intent,
+            "priority": self.intent_priority
+        }
+
+    def align_agent(self, agent_name: str, local_task: str) -> str:
+        """
+        Re-aligns an agent's local task with the global coherent intent.
+        """
+        if not self.global_intent:
+            return local_task
+            
+        logging.info(f"IntentCoherenceEngine: Aligning {agent_name} with global intent.")
+        
+        # In a real implementation, we'd use an LLM or vector similarity to 
+        # project the local task into the global intent space.
+        alignment_prompt = (
+            f"Global Objective: {self.global_intent}\n"
+            f"Agent {agent_name} is performing: {local_task}\n"
+            "Adjust the local task to ensure it best serves the Global Objective. "
+            "Return the optimized task description."
+        )
+        
+        # For simulation, we'll just prepend the global context
+        aligned_task = f"[Aligned with: {self.global_intent}] {local_task}"
+        return aligned_task
+
+    def get_current_intent(self) -> Optional[str]:
+        return self.global_intent
