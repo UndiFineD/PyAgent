@@ -19,14 +19,14 @@ class ScalingManager:
         self.fleet = fleet_manager
         self.core = ScalingCore(scale_threshold=5.0, window_size=10)
         
-    def record_metric(self, agent_name: str, latency: float):
+    def record_metric(self, agent_name: str, latency: float) -> None:
         """Records the latency and checks if scaling is required."""
         self.core.add_metric(agent_name, latency)
         
         if self.core.should_scale(agent_name):
             self._execute_scale_out(agent_name)
 
-    def _execute_scale_out(self, agent_name: str):
+    def _execute_scale_out(self, agent_name: str) -> None:
         """Spawns a new instance of an agent if latency is too high."""
         avg_latency = self.core.get_avg_latency(agent_name)
         logging.warning(f"SCALING: High latency ({avg_latency:.2f}s) detected for {agent_name}. Spawning replica.")

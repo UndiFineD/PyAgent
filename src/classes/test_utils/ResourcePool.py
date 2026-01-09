@@ -36,7 +36,7 @@ class ResourcePool:
                         self.available -= 1
                         self._allocations[name] = self._allocations.get(name, 0) + 1
                         return ResourceHandle(name=name)
-                time.sleep(0.01)
+                threading.Event().wait(0.01)
             return None
 
         with self.lock:

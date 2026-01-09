@@ -14,7 +14,7 @@ class ResourcePredictorAgent(BaseAgent):
         self.usage_history: List[Dict[str, Any]] = []
         self.prediction_window = 10 # Number of steps to look ahead
 
-    def ingest_metrics(self, metrics: List[Any]):
+    def ingest_metrics(self, metrics: List[Any]) -> None:
         """Ingests recent agent metrics for analysis."""
         for m in metrics:
             # We assume 'm' is an AgentMetric-like object or dict

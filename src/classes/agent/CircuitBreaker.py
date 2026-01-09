@@ -91,7 +91,7 @@ class CircuitBreaker:
             self.on_failure()
             raise
 
-    def on_success(self):
+    def on_success(self) -> None:
         """Record successful call."""
         self.failure_count = 0
 
@@ -101,7 +101,7 @@ class CircuitBreaker:
                 self.state = "CLOSED"
                 logging.info(f"Circuit breaker '{self.name}' closed (recovered)")
 
-    def on_failure(self):
+    def on_failure(self) -> None:
         """Record failed call."""
         self.failure_count += 1
         self.last_failure_time = time.time()

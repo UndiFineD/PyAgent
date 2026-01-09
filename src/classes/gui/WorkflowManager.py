@@ -18,11 +18,11 @@ from tkinter import ttk, messagebox
 class WorkflowManager:
     """Manages the lifecycle of a complex development workflow."""
     def __init__(self, callbacks) -> None:
-        self.callbacks = callbacks
+        self.callbacks: Any = callbacks
         self.current_step_index = 0
         self.workflow_active = False
         
-    def start_workflow(self, track_name, targets):
+    def start_workflow(self, track_name, targets) -> None:
         """Starts a predefined workflow based on the track."""
         from .Constants import BMAD_TRACKS
         track = BMAD_TRACKS.get(track_name)
@@ -36,7 +36,7 @@ class WorkflowManager:
         
         self.execute_current_phase()
 
-    def execute_current_phase(self):
+    def execute_current_phase(self) -> None:
         """Executes the current phase of the workflow."""
         if self.current_step_index >= len(self.phases):
             self.finish_workflow()
@@ -46,7 +46,7 @@ class WorkflowManager:
         self.callbacks["set_status"](f"Workflow: {phase} Phase starting...")
         
         # Decide which agents to deploy based on phase
-        agents = self.get_agents_for_phase(phase)
+        agents: list[str] = self.get_agents_for_phase(phase)
         
         for target in self.targets:
             for agent in agents:
@@ -55,9 +55,9 @@ class WorkflowManager:
                 col.phase_var.set(phase)
                 col.local_context.insert("1.0", f"--- BMAD {phase.upper()} PHASE ---\nExecute {phase} tasks for {target}.")
 
-    def get_agents_for_phase(self, phase):
+    def get_agents_for_phase(self, phase) -> list[str]:
         """Returns a list of agent names needed for a specific phase."""
-        mapping = {
+        mapping: dict[str, list[str]] = {
             "Analysis": ["Analyst", "PM"],
             "Planning": ["PM", "Architect"],
             "Solutioning": ["Architect", "UX Designer"],
@@ -68,14 +68,14 @@ class WorkflowManager:
         }
         return mapping.get(phase, ["Developer"])
 
-    def next_phase(self):
+    def next_phase(self) -> None:
         """Moves to the next phase in the workflow."""
         if not self.workflow_active:
             return
         self.current_step_index += 1
         self.execute_current_phase()
 
-    def finish_workflow(self):
+    def finish_workflow(self) -> None:
         """Clean up after workflow completion."""
         self.workflow_active = False
         self.callbacks["set_status"]("Workflow completed successfully.")

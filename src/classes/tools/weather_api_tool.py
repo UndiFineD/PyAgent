@@ -8,7 +8,7 @@ class Weather_APITool:
         self.name = 'Weather_API'
 
     @as_tool
-    def get_weather(self, **kwargs):
+    def get_weather(self, **kwargs) -> dict:
         """Get weather"""
         logging.info(f'Calling GET /weather with {kwargs}')
         return {'path': '/weather', 'method': 'GET', 'result': 'Mocked'}

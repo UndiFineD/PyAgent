@@ -42,7 +42,7 @@ class EvolutionEngine:
         """
         return self.core.compute_mutations(fleet_stats)
 
-    def register_generated_agent(self, fleet_manager: Any, name: str, path: str):
+    def register_generated_agent(self, fleet_manager: Any, name: str, path: str) -> str:
         """Dynamically loads and registers the generated agent into the fleet."""
         # For simulation, we'll just mock the dynamic import or use standard registration
         # In a real system, we'd use importlib.util.spec_from_file_location

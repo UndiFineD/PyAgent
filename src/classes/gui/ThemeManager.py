@@ -18,10 +18,10 @@ from tkinter import ttk
 class ThemeManager:
     """Handles switching between light and dark themes for the GUI."""
     def __init__(self, root) -> None:
-        self.root = root
+        self.root: Any = root
         self.is_dark_mode = True
 
-    def apply_theme(self):
+    def apply_theme(self) -> None:
         style = ttk.Style()
         if self.is_dark_mode:
             bg, fg = "#2d2d2d", "#ffffff"
@@ -41,14 +41,14 @@ class ThemeManager:
         
         self.refresh_widgets(self.root)
 
-    def toggle_theme(self):
-        self.is_dark_mode = not self.is_dark_mode
+    def toggle_theme(self) -> None:
+        self.is_dark_mode: bool = not self.is_dark_mode
         self.apply_theme()
 
-    def refresh_widgets(self, parent):
-        bg = "#2d2d2d" if self.is_dark_mode else "#f0f0f0"
-        fg = "white" if self.is_dark_mode else "black"
-        text_bg = "#1e1e1e" if self.is_dark_mode else "white"
+    def refresh_widgets(self, parent) -> None:
+        bg: str = "#2d2d2d" if self.is_dark_mode else "#f0f0f0"
+        fg: str = "white" if self.is_dark_mode else "black"
+        text_bg: str = "#1e1e1e" if self.is_dark_mode else "white"
         
         for child in parent.winfo_children():
             if isinstance(child, tk.Text):

@@ -16,7 +16,7 @@ class SignalRegistry:
     
     _instance = None
     
-    def __new__(cls):
+    def __new__(cls) -> "SignalRegistry":
         if cls._instance is None:
             cls._instance = super(SignalRegistry, cls).__new__(cls)
             cls._instance.subscribers = {} # signal_name -> list of callbacks
@@ -24,14 +24,14 @@ class SignalRegistry:
             cls._instance.core = SignalCore()
         return cls._instance
 
-    def subscribe(self, signal_name: str, callback: Callable[[Any], None]):
+    def subscribe(self, signal_name: str, callback: Callable[[Any], None]) -> None:
         """Subscribe a callback to a signal."""
         if signal_name not in self.subscribers:
             self.subscribers[signal_name] = []
         self.subscribers[signal_name].append(callback)
         logging.debug(f"Subscribed callback to signal: {signal_name}")
 
-    def emit(self, signal_name: str, data: Any = None, sender: str = "system"):
+    def emit(self, signal_name: str, data: Any = None, sender: str = "system") -> None:
         """Emit a signal to all subscribers."""
         event = self.core.create_event(signal_name, data, sender)
         self.history.append(event)

@@ -20,9 +20,9 @@ class Metric:
     tags: Dict[str, str] = field(default_factory=lambda: {})
 
     # Compatibility: some tests treat history entries as (timestamp, value) tuples.
-    def __iter__(self):
+    def __iter__(self) -> Any:
         yield self.timestamp
         yield self.value
 
-    def __getitem__(self, index: int):
+    def __getitem__(self, index: int) -> Any:
         return (self.timestamp, self.value)[index]

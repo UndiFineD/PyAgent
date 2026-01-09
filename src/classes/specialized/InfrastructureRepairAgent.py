@@ -38,10 +38,13 @@ class InfrastructureRepairAgent(BaseAgent):
         if issue["type"] == "missing_package":
             package = issue["package"]
             logging.info(f"Environment: Attempting to install {package}...")
+            cmd_str = f"pip install {package}"
             try:
                 subprocess.check_call([sys.executable, "-m", "pip", "install", package])
+                self._record(cmd_str, "Success", provider="Shell", model="pip")
                 return f"Successfully installed {package}."
             except Exception as e:
+                self._record(cmd_str, f"Failed: {str(e)}", provider="Shell", model="pip")
                 return f"Failed to install {package}: {e}"
         
         return "Unknown issue type."

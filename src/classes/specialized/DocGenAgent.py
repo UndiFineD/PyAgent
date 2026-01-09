@@ -55,7 +55,7 @@ class DocGenAgent(BaseAgent):
         except Exception as e:
             return f"Error extracting docs: {str(e)}"
 
-    def generate_documentation_site(self, output_dir: str):
+    def generate_documentation_site(self, output_dir: str) -> int:
         """Generates documentation files for all modules in the registry."""
         if not os.path.exists(output_dir):
             os.makedirs(output_dir)

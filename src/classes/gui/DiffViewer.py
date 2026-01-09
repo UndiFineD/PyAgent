@@ -18,10 +18,10 @@ import difflib
 
 class DiffViewer:
     """A window for viewing differences between original and changed files."""
-    def __init__(self, parent) -> None:
+    def __init__(self, parent: Any) -> None:
         self.parent = parent
 
-    def show_diff(self, original_path, changed_content, title="Changes Preview"):
+    def show_diff(self, original_path: str, changed_content: str, title: str = "Changes Preview") -> None:
         if not original_path:
             messagebox.showwarning("Warning", "No original file specified.")
             return

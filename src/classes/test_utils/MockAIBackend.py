@@ -7,10 +7,15 @@ from __future__ import annotations
 from .MockResponse import MockResponse
 from .MockResponseType import MockResponseType
 
-from typing import Dict, List, Tuple
+from typing import Dict, List, Tuple, Optional
 import logging
 import re
 import time
+import threading
+from pathlib import Path
+
+# Infrastructure
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 
 class MockAIBackend:
     """Mock AI backend for testing.
@@ -24,13 +29,14 @@ class MockAIBackend:
         result=mock.call("prompt1")
     """
 
-    def __init__(self) -> None:
+    def __init__(self, workspace_root: Optional[str] = None) -> None:
         """Initialize mock backend."""
         self._responses: Dict[str, MockResponse] = {}
         self._default_response = MockResponse(content="Mock response")
         self._call_history: List[Tuple[str, float]] = []
         self._response_sequence: List[MockResponse] = []
         self._sequence_index: int = 0
+        self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
 
     def add_response(
         self,
@@ -83,7 +89,7 @@ class MockAIBackend:
 
         # Simulate latency
         if response.latency_ms > 0:
-            time.sleep(response.latency_ms / 1000)
+            threading.Event().wait(timeout=response.latency_ms / 1000)
 
         # Handle response types
         if response.response_type == MockResponseType.TIMEOUT:
@@ -94,6 +100,10 @@ class MockAIBackend:
             raise RuntimeError("Rate limited")
         if response.response_type == MockResponseType.EMPTY:
             return ""
+
+        # Intelligence Harvesting
+        if self.recorder:
+            self.recorder.record_interaction("mock", "mock-model", prompt, response.content)
 
         return response.content
 

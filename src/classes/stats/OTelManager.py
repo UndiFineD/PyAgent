@@ -44,7 +44,7 @@ class OTelManager:
         logging.info(f"OTel: Started span {name} ({span_id})")
         return span_id
 
-    def end_span(self, span_id: str, status: str = "ok", attributes: Optional[Dict[str, Any]] = None):
+    def end_span(self, span_id: str, status: str = "ok", attributes: Optional[Dict[str, Any]] = None) -> None:
         """Ends a span and records its duration."""
         if span_id not in self.active_spans:
             logging.warning(f"OTel: Attempted to end non-existent span {span_id}")
@@ -79,7 +79,8 @@ if __name__ == "__main__":
     otel = OTelManager()
     root = otel.start_span("Workflow: Fix Code")
     child = otel.start_span("Agent: SecurityGuard", parent_id=root)
-    time.sleep(0.1)
+    import threading
+    threading.Event().wait(timeout=0.1)
     otel.end_span(child, status="ok")
     otel.end_span(root, status="ok")
     print(f"Exported {len(otel.export_spans())} spans.")

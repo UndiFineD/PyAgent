@@ -43,14 +43,21 @@ class HealthChecker:
         results: Dict of health check results.
     """
 
-    def __init__(self, repo_root: Path) -> None:
+    def __init__(self, repo_root: Path, recorder: Any = None) -> None:
         """Initialize the health checker.
 
         Args:
             repo_root: Repository root directory.
+            recorder: Optional LocalContextRecorder.
         """
         self.repo_root = repo_root
+        self.recorder = recorder
         self.results: Dict[str, AgentHealthCheck] = {}
+
+    def _record(self, action: str, result: str) -> None:
+        """Record health check activities."""
+        if self.recorder:
+            self.recorder.record_interaction("HealthCheck", "CLI", action, result)
 
     def check_agent_script(self, agent_name: str) -> AgentHealthCheck:
         """Check if an agent script exists and is valid.

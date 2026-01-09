@@ -27,7 +27,7 @@ class ProjectExplorer:
         self.frame = ttk.Frame(parent)
         self.setup_ui()
         
-    def setup_ui(self):
+    def setup_ui(self) -> None:
         header_frame = ttk.Frame(self.frame)
         header_frame.pack(fill=tk.X, padx=5, pady=2)
         ttk.Label(header_frame, text="Project Explorer").pack(side=tk.LEFT)
@@ -58,7 +58,7 @@ class ProjectExplorer:
         
         self.refresh_tree()
 
-    def show_context_menu(self, event):
+    def show_context_menu(self, event: tk.Event) -> None:
         item_id = self.tree.identify_row(event.y)
         if item_id:
             self.tree.selection_set(item_id)
@@ -67,28 +67,28 @@ class ProjectExplorer:
             menu.add_command(label="Copy Path", command=self.copy_path)
             menu.tk_popup(event.x_root, event.y_root)
 
-    def send_to_agent(self):
+    def send_to_agent(self) -> None:
         selected = self.tree.selection()
         if selected:
             abspath = self.tree.item(selected[0], "values")[0]
             if not os.path.isdir(abspath):
                 self.on_double_click_callback(abspath)
 
-    def copy_path(self):
+    def copy_path(self) -> None:
         selected = self.tree.selection()
         if selected:
             abspath = self.tree.item(selected[0], "values")[0]
             self.parent.clipboard_clear()
             self.parent.clipboard_append(abspath)
 
-    def refresh_tree(self):
+    def refresh_tree(self) -> None:
         for i in self.tree.get_children():
             self.tree.delete(i)
         root_path = self.project_root_var.get()
         if os.path.exists(root_path):
             self.populate_tree("", root_path)
 
-    def populate_tree(self, parent, path):
+    def populate_tree(self, parent: str, path: str) -> None:
         try:
             items = sorted(os.listdir(path), key=lambda x: (not os.path.isdir(os.path.join(path, x)), x.lower()))
             for item in items:
@@ -104,7 +104,7 @@ class ProjectExplorer:
         except Exception as e:
             logging.error(f"Error populating tree: {e}")
 
-    def on_tree_open(self, event):
+    def on_tree_open(self, event: tk.Event) -> None:
         item_id = self.tree.focus()
         abspath = self.tree.item(item_id, "values")[0]
         if os.path.isdir(abspath):
@@ -112,7 +112,7 @@ class ProjectExplorer:
                 self.tree.delete(child)
             self.populate_tree(item_id, abspath)
 
-    def on_double_click(self, event):
+    def on_double_click(self, event: tk.Event) -> None:
         selected = self.tree.selection()
         if not selected:
             return
@@ -120,14 +120,14 @@ class ProjectExplorer:
         abspath = self.tree.item(item_id, "values")[0]
         self.on_double_click_callback(abspath)
 
-    def get_selected_path(self):
+    def get_selected_path(self) -> Optional[str]:
         """Returns the absolute path of the currently selected item in the tree."""
         selected = self.tree.selection()
         if not selected:
             return None
         return self.tree.item(selected[0], "values")[0]
 
-    def filter_tree(self):
+    def filter_tree(self) -> None:
         query = self.search_var.get().lower()
         if not query:
             self.refresh_tree()

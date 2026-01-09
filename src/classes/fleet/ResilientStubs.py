@@ -9,7 +9,7 @@ import logging
 import importlib
 from typing import Any, Dict, List, Optional, Callable
 
-def resilient_import(module_name: str, class_name: Optional[str] = None):
+def resilient_import(module_name: str, class_name: Optional[str] = None) -> Any:
     """
     Decorator/Utility to import a module or class resiliently.
     Returns a ResilientStub if the import fails.
@@ -30,14 +30,14 @@ class ResilientStub:
         self._error = error
         logging.error(f"STUB ACTIVE: Component '{name}' failed to load. Reason: {error}")
 
-    def __getattr__(self, name: str):
-        def _stub_method(*args, **kwargs):
+    def __getattr__(self, name: str) -> Callable:
+        def _stub_method(*args: Any, **kwargs: Any) -> str:
             msg = f"Cannot call '{name}' on component '{self._name}': it failed to load. Error: {self._error}"
             logging.error(msg)
             return f"ERROR: {msg}"
         return _stub_method
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: Any, **kwargs: Any) -> str:
         msg = f"Cannot invoke component '{self._name}': it failed to load. Error: {self._error}"
         logging.error(msg)
         return f"ERROR: {msg}"
@@ -51,5 +51,5 @@ class ResilientStub:
     def improve_content(self, prompt: str) -> str:
         return f"ERROR: Component '{self._name}' failed to load. {self._error}"
 
-    def calculate_metrics(self, *args, **kwargs):
+    def calculate_metrics(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
         return {}

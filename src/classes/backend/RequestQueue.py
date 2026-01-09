@@ -24,6 +24,9 @@ import threading
 import time
 import uuid
 
+# Infrastructure
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+
 class RequestQueue:
     """Priority queue for backend requests.
 
@@ -36,13 +39,15 @@ class RequestQueue:
         request=queue.dequeue()
     """
 
-    def __init__(self, max_size: int = 1000) -> None:
+    def __init__(self, max_size: int = 1000, recorder: Optional[LocalContextRecorder] = None) -> None:
         """Initialize request queue.
 
         Args:
             max_size: Maximum queue size.
+            recorder: Infrastructure recorder for intelligence harvesting.
         """
         self._queue: PriorityQueue[QueuedRequest] = PriorityQueue(maxsize=max_size)
+        self.recorder = recorder
         self._lock = threading.Lock()
         self._pending: Dict[str, QueuedRequest] = {}
 
@@ -74,6 +79,10 @@ class RequestQueue:
         with self._lock:
             self._queue.put(request)
             self._pending[request_id] = request
+            
+        if self.recorder:
+            self.recorder.record_lesson("request_queued", {"id": request_id, "priority": priority.name})
+            
         logging.debug(f"Queued request {request_id} with priority {priority.name}")
         return request_id
 

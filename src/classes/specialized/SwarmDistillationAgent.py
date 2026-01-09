@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Dict, List, Any
 
 class SwarmDistillationAgent:
     """
@@ -10,7 +11,7 @@ class SwarmDistillationAgent:
         self.workspace_path = Path(workspace_path)
         self.master_context = {}
 
-    def distill_agent_knowledge(self, agent_id, knowledge_data):
+    def distill_agent_knowledge(self, agent_id, knowledge_data) -> Dict[str, Any]:
         """
         Extracts key insights from an agent's specialized knowledge.
         """
@@ -25,7 +26,7 @@ class SwarmDistillationAgent:
         self.master_context[agent_id] = distilled
         return distilled
 
-    def get_unified_context(self):
+    def get_unified_context(self) -> Dict[str, Any]:
         """
         Returns the distilled knowledge from all registered agents.
         """
@@ -35,7 +36,7 @@ class SwarmDistillationAgent:
             "master_map": self.master_context
         }
 
-    def prune_master_context(self, threshold=0.5):
+    def prune_master_context(self, threshold=0.5) -> Dict[str, Any]:
         """
         Removes outdated or low-importance knowledge from the master map.
         """

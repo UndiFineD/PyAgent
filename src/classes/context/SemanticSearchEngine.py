@@ -44,7 +44,7 @@ class SemanticSearchEngine:
         self._client = None
         self._collection = None
 
-    def _get_collection(self):
+    def _get_collection(self) -> Any:
         """Lazy initialization of ChromaDB collection."""
         if self._collection is None:
             try:

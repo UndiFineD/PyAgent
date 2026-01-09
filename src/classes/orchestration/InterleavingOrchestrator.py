@@ -89,7 +89,7 @@ class InterleavingOrchestrator:
                 ]
             }
             
-    def record_tier_performance(self, task_id: str, tier: str, latency: float, success: bool):
+    def record_tier_performance(self, task_id: str, tier: str, latency: float, success: bool) -> None:
         """
         Saves performance data to refine future interleaving decisions (Reinforcement Learning signal).
         """

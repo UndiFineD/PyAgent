@@ -49,7 +49,7 @@ class ExperimentOrchestrator(BaseAgent):
         self.log_experiment(results)
         return results
 
-    def log_experiment(self, data: Dict[str, Any]) -> str:
+    def log_experiment(self, data: Dict[str, Any]) -> None:
         """Persists experiment data to the registry."""
         # Simple implementation for now
         logging.info(f"Experiment Logged: {data['experiment_id']}")

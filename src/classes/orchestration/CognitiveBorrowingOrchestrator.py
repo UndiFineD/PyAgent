@@ -31,7 +31,7 @@ class CognitiveBorrowingOrchestrator:
         # In a real system, this would query the source agent's cognitive profile
         return f"PATTERN: {skill_description.upper()} execution logic from {source}."
 
-    def dissolve_bridge(self, agent_name: str):
+    def dissolve_bridge(self, agent_name: str) -> None:
         """Removes an active cognitive bridge."""
         if agent_name in self.active_bridges:
             del self.active_bridges[agent_name]

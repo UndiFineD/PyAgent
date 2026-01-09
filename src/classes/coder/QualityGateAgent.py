@@ -37,6 +37,9 @@ class QualityGateAgent(BaseAgent):
             # Use sys.executable to be robust
             import sys
             res = subprocess.run([sys.executable, "-m", "pytest", "--version"], capture_output=True) 
+            # Phase 108: Record validation
+            self._record("check_gates", "Initiated", provider="Internal", model="Gatekeeper")
+            
             # In a real scenario, we'd run: ["python", "-m", "pytest", "tests/"]
             # To keep this fast for the dashboard, we check if test_results.txt exists
             test_results = self.workspace_root / "test_results.txt"

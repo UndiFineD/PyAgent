@@ -39,13 +39,25 @@ class GitBranchProcessor:
             process(file)
     """
 
-    def __init__(self, repo_root: Path) -> None:
+    def __init__(self, repo_root: Path, recorder: Any = None) -> None:
         """Initialize processor.
 
         Args:
             repo_root: Repository root directory.
+            recorder: Optional LocalContextRecorder.
         """
         self.repo_root = repo_root
+        self.recorder = recorder
+
+    def _record(self, action: str, result: str) -> None:
+        """Record git operations if recorder is available."""
+        if self.recorder:
+            self.recorder.record_interaction(
+                provider="Git",
+                model="cli",
+                prompt=action,
+                result=result
+            )
 
     def get_changed_files(
         self,
@@ -74,8 +86,10 @@ class GitBranchProcessor:
 
             if result.returncode != 0:
                 logging.warning(f"Git diff failed: {result.stderr}")
+                self._record(f"git diff {base_branch}...{branch}", f"Failed: {result.stderr}")
                 return []
 
+            self._record(f"git diff {base_branch}...{branch}", f"Success: {len(result.stdout.strip().splitlines())} files")
             files: list[Path] = []
             for line in result.stdout.strip().split("\n"):
                 if not line:

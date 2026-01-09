@@ -28,9 +28,15 @@ class BlameTracker:
         blame_cache: Cache of blame information.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, recorder: Any = None) -> None:
         """Initialize the blame tracker."""
         self.blame_cache: Dict[str, BlameInfo] = {}
+        self.recorder = recorder
+
+    def _record(self, action: str, result: str) -> None:
+        """Record blame operations."""
+        if self.recorder:
+            self.recorder.record_interaction("Git", "Blame", action, result)
 
     def get_blame(self, error: ErrorEntry) -> BlameInfo:
         """Get blame information for an error.

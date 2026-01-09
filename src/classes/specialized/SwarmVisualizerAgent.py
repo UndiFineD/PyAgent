@@ -12,7 +12,7 @@ class SwarmVisualizerAgent:
         self.interaction_log = [] # List of (from_agent, to_agent, message_type, timestamp)
         self.agent_positions = {} # agent_id -> (x, y)
 
-    def log_interaction(self, from_agent: str, to_agent: str, message_type: str):
+    def log_interaction(self, from_agent: str, to_agent: str, message_type: str) -> None:
         """Logs an interaction between two agents."""
         self.interaction_log.append({
             "from": from_agent,
@@ -45,7 +45,7 @@ class SwarmVisualizerAgent:
             "complexity_score": len(edges) / max(1, len(nodes))
         }
 
-    def update_agent_position(self, agent_id: str, x: float, y: float):
+    def update_agent_position(self, agent_id: str, x: float, y: float) -> None:
         """Updates the visual position of an agent in the topology."""
         self.agent_positions[agent_id] = {"x": x, "y": y}
 

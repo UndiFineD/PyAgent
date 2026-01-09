@@ -98,7 +98,8 @@ class RequestThrottler:
         while time.time() - start < timeout:
             if self.allow_request(backend):
                 return True
-            time.sleep(0.1)
+            import threading
+            threading.Event().wait(timeout=0.1)
 
         return False
 

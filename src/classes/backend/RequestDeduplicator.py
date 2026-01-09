@@ -21,6 +21,9 @@ import threading
 import time
 import uuid
 
+# Infrastructure
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+
 class RequestDeduplicator:
     """Deduplicates concurrent requests with identical prompts.
 
@@ -36,13 +39,15 @@ class RequestDeduplicator:
             dedup.store_result("prompt", result)
     """
 
-    def __init__(self, ttl_seconds: float = 60.0) -> None:
+    def __init__(self, ttl_seconds: float = 60.0, recorder: Optional[LocalContextRecorder] = None) -> None:
         """Initialize deduplicator.
 
         Args:
             ttl_seconds: Time - to - live for pending requests.
+            recorder: Interaction recorder for logic harvesting.
         """
         self.ttl_seconds = ttl_seconds
+        self.recorder = recorder
         self._pending: Dict[str, float] = {}  # hash -> start_time
         self._results: Dict[str, str] = {}
         self._lock = threading.Lock()
@@ -73,6 +78,8 @@ class RequestDeduplicator:
                 self._results.pop(k, None)
 
             if key in self._pending:
+                if self.recorder:
+                    self.recorder.record_lesson("duplicate_detected", {"hash": key})
                 return True
 
             # Mark as pending
