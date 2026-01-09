@@ -1,26 +1,5 @@
 ﻿# PyAgent Improvement Research & Roadmap
 
-## 🧠 Fleet & Agent Improvements
-
-### 1. High Complexity Modules (Refactoring Target)
-- **LLMClient.py (High Complexity)**: Centralized backend logic is growing.
-  - *Action*: Planning to shard by provider (vLLM, Ollama, GitHub).
-- **SecurityCore.py**: Needs final audit to ensure `LocalContextRecorder` initialization doesn't violate pure core rules.
-
-### 2. Documentation & Traceability
-- **Docstring Quality**: Many classes have auto-generated headers with little value.
-  - *Action*: FLEET_AUTO_DOC.md is now being generated autonomously by the swarm.
-
-## 🚀 Trillion-Parameter Context Recording Strategy (Phase 108 Optimized)
-
-### 1. Massively Parallel Context Storage
-- **Adler-32 Sharding**: Interaction memory is partitioned into 256 shards using stable hashing. This allows the fleet to scale to billions of interactions without JSON lock contention.
-- **Monthly Partitions**: interactions_YEAR_MONTH.jsonl.gz provides temporal sharding and high compression (Zlib).
-
-### 2. Relational Intelligence Overlay
-- **SQL Metadata (WAL Mode)**: Every shard interaction is indexed in a high-performance SQLite database.
-- **Automated Intelligence Harvesting**: The orchestrators autonomously query failure patterns ("lessons") to refine future logic.
-
 ## 🛡️ Core/Shell Architecture Design (Phase 114+)
 
 To facilitate the migration of performance-critical logic to Rust, the codebase is being refactored into a **Core/Shell** pattern:
@@ -37,20 +16,45 @@ To facilitate the migration of performance-critical logic to Rust, the codebase 
 ### 2. The I/O Shell (`Agent.py`, `Manager.py`, `Registry.py`, `Engine.py`)
 - **Responsibility**: State management, File I/O, Database calls, Network requests.
 
-## 🚀 Recent Autonomous Findings
+## 🚀 Phase 115: Ecosystem Performance & Context Optimization
 
-### Current Mission: Phase 114 Finalization
-- **Target**: 100% type safety and Rust readiness for context engines.
-- **Status**: **COMPLETE**.
-- **Outcomes**: 
-  - `GraphCore.py` and `KnowledgeCore.py` side-effect-free.
-  - `ConnectivityManager` singleton consolidation.
-  - 836/836 files scanned by self-improvement swarm.
+### 1. Native Acceleration Preparation
+- **ContextCompressorCore (Target)**: Move AST parsing and regex summary logic to a pure core. This is a high-frequency operation during swarm cycles.
+- **GlobalContextCore Audit**: Verify state-less logic for environment variable resolution and workspace scanning.
 
-#### 🔍 Top Issues Discovered
-- **Redundancy**: Multiple `ConnectivityManager` classes caused fragmented health tracking. Resolved.
-- **Side-Effect Seep**: Resolved in `GraphContextEngine` by extracting logic into `GraphCore`.
+### 2. Strength in Typing
+- **Refactoring Requirement**: All classes in `src/classes/context` and `src/classes/cognitive` must achieve 100% Type Hint coverage.
+- **Null Safety**: Implementation of `Optional` guards for all dictionary lookups in core logic.
+
+### 3. Memory Shard Efficiency
+- **Shard Balancing**: Refine the Adler-32 sharding algorithm to ensure even distribution across 256 shards.
+- **Fast Similarity Logic**: Extract similarity score calculation into `KnowledgeCore` for potential Rust `ndarray` acceleration.
+
+## 🛡️ Security & Dependency Hardening (Patch 115.1)
+
+### 1. urllib3 Vulnerability Mitigation
+- **Upgrade**: Bumped `urllib3` to `2.4.2` to resolve high-severity vulnerabilities (#3, #4, #5, #6, #7).
+- **Decompression Bomb Protection**: Updated `WebAgent` to use `requests.Session` with `max_redirects=10` and explicit size checks on incoming streams.
+- **Redirect Control**: Centralized redirect limits to prevent unbounded decompression chains in web-crawling sub-tasks.
+
 
 ### 🧠 AI Lessons Derived from Deep Shard Analysis (Phase 108)
-- Intelligence Shard 27: Persistent connection pooling reduces latency by 40% in dense agent swarms.
-- Intelligence Shard 114: Recursion observed in lazy registries when configs are unreachable. Resolved by attribute guarding.
+- Intelligence Shard 27: 
+- Intelligence Shard 29: 
+- Intelligence Shard 102: 
+- Intelligence Shard 114: Unknown failure
+- Intelligence Shard 114: Unknown failure
+- Intelligence Shard 146: 
+- Intelligence Shard 199: 
+
+
+## 🚀 Recent Autonomous Findings
+
+### Latest Autonomous Scan (2026-01-09)
+- **Files Scanned**: 840
+- **Issues Identified**: 1
+- **Autonomous Fixes**: 1
+- **Stability Gate Status**: OPEN (Green)
+
+#### Top Issues Discovered
+- `src\classes\context\ContextCompressorCore.py`: 1 issues found.
