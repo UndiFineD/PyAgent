@@ -30,7 +30,9 @@ class FormulaEngineCore:
     def _eval_node(self, node: ast.AST) -> float:
         """Recursively evaluate an AST node."""
         if isinstance(node, ast.Constant):
-            return float(node.value)
+            if isinstance(node.value, (int, float)):
+                return float(node.value)
+            raise TypeError(f"Constant of type {type(node.value)} is not a number")
         elif hasattr(ast, "Num") and isinstance(node, ast.Num): # type: ignore
              return float(node.n) # type: ignore
         elif isinstance(node, ast.BinOp):
