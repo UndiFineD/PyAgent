@@ -51,7 +51,7 @@ class SecretManager:
             
         return None
 
-    def set_secret(self, key: str, value: str):
+    def set_secret(self, key: str, value: str) -> None:
         """Sets a secret (mocked)."""
         self._cache[key] = value
         logging.info(f"Secret {key} stored in {self.provider} cache.")

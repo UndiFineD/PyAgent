@@ -54,6 +54,9 @@ class MetaOrchestratorAgent(BaseAgent):
             
         logging.info(f"Orchestrator tackling objective (Depth {depth}): {objective}")
         
+        # Intelligence Harvesting (Phase 108)
+        self.recorder.record_lesson("meta_planning_init", {"objective": objective, "depth": depth})
+        
         # 1. Update Global Context with the new objective
         self.global_context.add_insight(f"Objective depth {depth}: {objective}", "MetaOrchestrator")
         
@@ -69,7 +72,11 @@ class MetaOrchestratorAgent(BaseAgent):
             plan_json_start = plan_report.find("```json") + 7
             plan_json_end = plan_report.rfind("```")
             plan_data = json.loads(plan_report[plan_json_start:plan_json_end].strip())
+            
+            # Record successful planning logic
+            self.recorder.record_lesson("meta_plan_received", {"plan": plan_data, "objective": objective})
         except Exception as e:
+            self.recorder.record_lesson("meta_plan_parsing_error", {"error": str(e), "report_preview": plan_report[:500]})
             return f"Error: Failed to parse plan from TaskPlanner: {e}"
             
         # 3. Execution Phase

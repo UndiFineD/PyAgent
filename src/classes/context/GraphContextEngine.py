@@ -19,17 +19,17 @@ class CodeGraphVisitor(ast.NodeVisitor):
         self.calls: Set[str] = set()
         self.bases: Dict[str, List[str]] = {}
 
-    def visit_Import(self, node):
+    def visit_Import(self, node: ast.Import) -> None:
         for alias in node.names:
             self.imports.add(alias.name)
         self.generic_visit(node)
 
-    def visit_ImportFrom(self, node):
+    def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
         if node.module:
             self.imports.add(node.module)
         self.generic_visit(node)
 
-    def visit_ClassDef(self, node):
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
         self.classes.append(node.name)
         bases = []
         for base in node.bases:
@@ -40,7 +40,7 @@ class CodeGraphVisitor(ast.NodeVisitor):
         self.bases[node.name] = bases
         self.generic_visit(node)
 
-    def visit_Call(self, node):
+    def visit_Call(self, node: ast.Call) -> None:
         if isinstance(node.func, ast.Name):
             self.calls.add(node.func.id)
         elif isinstance(node.func, ast.Attribute):
@@ -58,7 +58,7 @@ class GraphContextEngine:
         self.persist_file = self.workspace_root / ".agent_graph.json"
         self.load()
 
-    def add_edge(self, source: str, target: str, relationship: str = "imports"):
+    def add_edge(self, source: str, target: str, relationship: str = "imports") -> None:
         """Add a directed edge to the graph."""
         if source not in self.graph:
             self.graph[source] = set()
@@ -67,7 +67,7 @@ class GraphContextEngine:
         key = f"{source}->{target}"
         self.metadata[key] = {"type": relationship}
 
-    def scan_project(self, start_path: Optional[Path] = None):
+    def scan_project(self, start_path: Optional[Path] = None) -> None:
         """Scans files using AST to build a detailed relationship graph."""
         target = start_path or self.workspace_root
         logging.info(f"Scanning project graph from {target}")
@@ -127,7 +127,7 @@ class GraphContextEngine:
                     
         return affected
 
-    def save(self):
+    def save(self) -> None:
         """Serialize graph to disk."""
         data = {
             "graph": {k: list(v) for k, v in self.graph.items()},
@@ -137,7 +137,7 @@ class GraphContextEngine:
         with open(self.persist_file, "w") as f:
             json.dump(data, f, indent=2)
 
-    def load(self):
+    def load(self) -> None:
         """Load graph from disk."""
         if self.persist_file.exists():
             try:

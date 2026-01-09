@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
+"""
+Knowledge Agent: Manages workspace knowledge and backlinks.
+"""
+
 import sys
 import argparse
 import logging
@@ -15,7 +19,7 @@ if str(root / "src") not in sys.path:
 
 from src.classes.context.KnowledgeAgent import KnowledgeAgent
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description='Knowledge Agent: Manages workspace knowledge and backlinks')
     parser.add_argument('--dir', default='.', help='Directory to scan/update')
     parser.add_argument('--build-index', action='store_true', help='Rebuild the knowledge index')

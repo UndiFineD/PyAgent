@@ -1,7 +1,11 @@
 import re
 import json
+import logging
+import time
+from pathlib import Path
 from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 
 class ComplianceAgent(BaseAgent):
     """
@@ -17,6 +21,19 @@ class ComplianceAgent(BaseAgent):
             "credit_card": r"\b\d{4}-\d{4}-\d{4}-\d{4}\b",
             "phone": r"\b\d{3}-\d{3}-\d{4}\b"
         }
+        
+        # Phase 108: Intelligence Recording
+        work_root = getattr(self, "_workspace_root", None)
+        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
+
+    def _record(self, action: str, findings: Any) -> None:
+        """Records compliance events for the collective intelligence pool."""
+        if self.recorder:
+            try:
+                meta = {"phase": 108, "type": "compliance", "timestamp": time.time()}
+                self.recorder.record_interaction("compliance", "pii_scan", action, str(findings), meta=meta)
+            except Exception as e:
+                logging.debug(f"ComplianceAgent: Recording failed: {e}")
 
     def scan_shard(self, shard_data: str) -> Dict[str, Any]:
         """Scans a data string for PII patterns."""
@@ -26,11 +43,16 @@ class ComplianceAgent(BaseAgent):
             if matches:
                 findings.append({"type": label, "count": len(matches)})
                 
-        return {
+        res = {
             "pii_detected": len(findings) > 0,
             "findings": findings,
             "compliant": len(findings) == 0
         }
+        
+        if res["pii_detected"]:
+            self._record("pii_detected", findings)
+            
+        return res
 
     def mask_pii(self, shard_data: str) -> str:
         """Masks detected PII patterns in the data."""

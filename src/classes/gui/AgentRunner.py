@@ -22,21 +22,21 @@ from src.classes.gui.WidgetLogger import WidgetLogger
 class AgentRunner:
     """Manages background threads and execution lifecycle for agents."""
     def __init__(self, callbacks) -> None:
-        self.callbacks = callbacks
+        self.callbacks: Any = callbacks
         self.history = {} # Store history per agent instance
 
-    def run_agent(self, column):
+    def run_agent(self, column) -> None:
         cfg = column.get_config()
         agent_type = cfg["type"]
         backend = cfg["backend"]
-        agent_id = id(column)
+        agent_id: int = id(column)
         
         # Initialize history for this instance if not present
         if agent_id not in self.history:
             self.history[agent_id] = []
             
         # Get content from callbacks
-        global_ctx = ""
+        global_ctx: str = ""
         if "get_global_context" in self.callbacks:
             global_ctx = self.callbacks["get_global_context"]()
             
@@ -44,13 +44,13 @@ class AgentRunner:
         column.stop_event = threading.Event()
         
         # Setup specific logger
-        logger_name = f"agent_{agent_id}"
-        logger = logging.getLogger(logger_name)
+        logger_name: str = f"agent_{agent_id}"
+        logger: logging.Logger = logging.getLogger(logger_name)
         logger.setLevel(logging.INFO)
         for h in logger.handlers[:]: logger.removeHandler(h)
         logger.addHandler(WidgetLogger(column.log_text, thread_id=None)) 
 
-        def task():
+        def task() -> None:
             try:
                 # Add current request to history
                 prompt = column.prompt_text.get("1.0", tk.END).strip()
@@ -58,11 +58,11 @@ class AgentRunner:
 
                 # Truncate memory based on model limits
                 from .Constants import MODEL_TOKENS
-                limit = MODEL_TOKENS.get(cfg["model"], MODEL_TOKENS["default"])
+                limit: int = MODEL_TOKENS.get(cfg["model"], MODEL_TOKENS["default"])
                 self.optimize_memory(agent_id, limit)
 
                 # Dynamic import implementation
-                module_map = {
+                module_map: dict[str, str] = {
                     "Coder": "src.agent_coder", 
                     "Developer": "src.agent_coder",
                     "Architect": "src.agent_architect",
@@ -75,7 +75,7 @@ class AgentRunner:
                     "Scrum Master": "src.agent_pm",
                     "Security Auditor": "src.agent_security"
                 }
-                module_path = module_map.get(agent_type, "src.agent_coder")
+                module_path: str = module_map.get(agent_type, "src.agent_coder")
                 
                 logger.info(f"Initialized {agent_type} agent on thread.")
                 logger.info(f"Target Scope: {cfg['file'] or 'Workspace'}")
@@ -90,10 +90,10 @@ class AgentRunner:
                         logger.warning("Execution aborted by user.")
                         return
                     logger.info(f"Processing chunk {i+1}/5...")
-                    time.sleep(1.0)
+                    column.stop_event.wait(timeout=1.0)
                 
                 # Update history with a mock response
-                mock_response = f"Simulated response from {agent_type}."
+                mock_response: str = f"Simulated response from {agent_type}."
                 self.history[agent_id].append({"role": "assistant", "content": mock_response})
 
                 logger.info("Agent execution completed successfully.")
@@ -108,32 +108,32 @@ class AgentRunner:
         column.running_thread = thread
         thread.start()
 
-    def stop_agent(self, column, reset_history=False):
+    def stop_agent(self, column, reset_history=False) -> None:
         if hasattr(column, 'stop_event') and column.stop_event:
             column.stop_event.set()
             if "set_status" in self.callbacks:
                 self.callbacks["set_status"]("Stopping agent...")
         
         if reset_history:
-            agent_id = id(column)
+            agent_id: int = id(column)
             if agent_id in self.history:
                 self.history[agent_id] = []
 
-    def get_history(self, column):
+    def get_history(self, column: Any) -> List[Dict[str, Any]]:
         """Returns the conversation history for a specific agent column."""
         return self.history.get(id(column), [])
 
-    def set_history(self, column, new_history):
+    def set_history(self, column, new_history) -> None:
         """Updates the conversation history for a specific agent column."""
         self.history[id(column)] = new_history
 
-    def optimize_memory(self, agent_id, token_limit):
+    def optimize_memory(self, agent_id, token_limit) -> None:
         """Truncates history if it exceeds estimated token limit, preserving marked messages."""
         chars_per_token = 4 # Simple heuristic
         char_limit = token_limit * chars_per_token
         
         current_history = self.history.get(agent_id, [])
-        total_chars = sum(len(m["content"]) for m in current_history)
+        total_chars: int = sum(len(m["content"]) for m in current_history)
         
         # Start dropping from the beginning, but skip "keep" messages
         i = 0

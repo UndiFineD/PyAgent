@@ -2,19 +2,20 @@ import time
 import json
 import random
 from pathlib import Path
+from typing import Dict, List, Any, Optional
 
 class MemoryReplayAgent:
     """
     Simulates "sleep cycles" for agents where they replay episodic memories
     to consolidate knowledge, identify patterns, and prune low-utility data.
     """
-    def __init__(self, workspace_path) -> None:
+    def __init__(self, workspace_path: str) -> None:
         self.workspace_path = Path(workspace_path)
-        self.is_sleeping = False
-        self.replay_buffer = []
-        self.consolidated_insights = []
+        self.is_sleeping: bool = False
+        self.replay_buffer: List[Any] = []
+        self.consolidated_insights: List[Dict[str, Any]] = []
 
-    def start_sleep_cycle(self, episodic_memories):
+    def start_sleep_cycle(self, episodic_memories: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
         Begins a period of autonomous memory replay and consolidation.
         """
@@ -45,7 +46,7 @@ class MemoryReplayAgent:
         results["duration"] = results["end_ts"] - results["start_ts"]
         return results
 
-    def _evaluate_utility(self, memory):
+    def _evaluate_utility(self, memory: Dict[str, Any]) -> float:
         """
         Assigns a utility score to a memory based on simulated heuristic.
         """
@@ -59,7 +60,7 @@ class MemoryReplayAgent:
             
         return score
 
-    def get_dream_log(self):
+    def get_dream_log(self) -> Dict[str, Any]:
         """
         Returns a log of patterns discovered during sleep cycles.
         """

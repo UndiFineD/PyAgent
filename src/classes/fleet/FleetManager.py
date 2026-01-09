@@ -202,17 +202,26 @@ class FleetManager:
             # Silent failure for non-critical logging
             pass
 
-    def _record_failure(self, prompt: str, error: str, model: str) -> str:
-        """Records only errors, failure, and mistakes for auditing."""
+    def _record_failure(self, prompt: str, error: str, model: str) -> None:
+        """Records errors, failures, and mistakes for collective intelligence (Phase 108)."""
         try:
+            # Use the sharded recorder for centralized intelligence harvesting
+            self.recorder.record_interaction(
+                provider="fleet_internal",
+                model=model,
+                prompt=prompt,
+                result=f"ERROR: {error}",
+                meta={"status": "failed"}
+            )
+            
+            # Persistent audit log
             failure_log = self.workspace_root / "logs" / "fleet_failures.jsonl"
             failure_log.parent.mkdir(parents=True, exist_ok=True)
-            import json
             from datetime import datetime
             record = {
                 "timestamp": datetime.now().isoformat(),
                 "model": model,
-                "prompt": prompt[:500], # Trucate long prompts for failure logs
+                "prompt": prompt[:500],
                 "error": error
             }
             with open(failure_log, "a", encoding="utf-8") as f:
@@ -504,7 +513,8 @@ class FleetManager:
                             logging.warning(f"Retrying {agent_name} with fallback model: {next_model}")
                             agent.set_model(next_model)
                             self.signals.emit("STEP_RETRYING", {"agent": agent_name, "fallback_model": next_model}, sender="FleetManager")
-                            time.sleep(1)
+                            import threading
+                            threading.Event().wait(timeout=1.0)
                             continue
 
                     self.state.errors.append(f"{agent_name}.{action_name}: {error_msg}")

@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
+"""
+Context Agent: Maintains and improves context/description files.
+"""
+
 import sys
 from pathlib import Path
 

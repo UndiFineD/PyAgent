@@ -36,7 +36,7 @@ class ObservabilityEngine:
         self.log_buffer: List[Dict[str, Any]] = []
         self.load()
 
-    def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO"):
+    def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:
         """Logs a system event in a structured format for ELK.
         
         Args:
@@ -79,7 +79,7 @@ class ObservabilityEngine:
         """Returns Prometheus scrape response."""
         return self.metrics_exporter.get_prometheus_payload()
 
-    def start_trace(self, trace_id: str):
+    def start_trace(self, trace_id: str) -> None:
         """Start timing an operation."""
         self._start_times[trace_id] = time.time()
         # Also start OTel span and store its UUID
@@ -88,7 +88,7 @@ class ObservabilityEngine:
 
     def end_trace(self, trace_id: str, agent_name: str, operation: str, status: str = "success", 
                   input_tokens: int = 0, output_tokens: int = 0, model: str = "unknown",
-                  metadata: Optional[Dict[str, Any]] = None):
+                  metadata: Optional[Dict[str, Any]] = None) -> None:
         """End timing and record metric with cost estimation."""
         if trace_id not in self._start_times:
             logging.warning(f"No start trace found for {trace_id}")
@@ -98,7 +98,7 @@ class ObservabilityEngine:
         
         # End OTel span using the stored span_id
         otel_span_id = self._otel_spans.pop(trace_id, None)
-        if otel_span_id:
+        if ot_span_id:
             self.otel.end_span(otel_span_id, status=status, attributes=metadata)
         
         # Calculate cost
@@ -123,7 +123,7 @@ class ObservabilityEngine:
         self.prometheus.record_metric("agent_cost_usd", metric.estimated_cost, {"agent": agent_name})
         self.save()
 
-    def trace_workflow(self, workflow_name: str, duration: float):
+    def trace_workflow(self, workflow_name: str, duration: float) -> None:
         """Records a workflow trace for OpenTelemetry visualization."""
         self.prometheus.record_metric(
             "workflow_duration_seconds",
@@ -162,7 +162,7 @@ class ObservabilityEngine:
             
         return summary
 
-    def save(self):
+    def save(self) -> None:
         """Persist telemetry to disk."""
         try:
             data = [asdict(m) for m in self.metrics]
@@ -170,7 +170,7 @@ class ObservabilityEngine:
         except Exception as e:
             logging.error(f"Failed to save telemetry: {e}")
 
-    def load(self):
+    def load(self) -> None:
         """Load telemetry from disk."""
         if self.telemetry_file.exists():
             try:

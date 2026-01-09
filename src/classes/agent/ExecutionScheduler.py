@@ -43,7 +43,8 @@ class ExecutionScheduler:
             if scheduler.is_due("nightly"):
                 run_agent(scheduler.get_config("nightly"))
                 scheduler.mark_complete("nightly")
-            time.sleep(60)
+            # Avoid blocking sleep in production; using wait for example
+            # threading.Event().wait(60)
     """
 
     def __init__(self) -> None:

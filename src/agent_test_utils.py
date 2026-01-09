@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
+"""
+Test Utils: Common utilities for agent and backend unit tests.
+"""
+
 import sys
 from pathlib import Path
 from contextlib import contextmanager

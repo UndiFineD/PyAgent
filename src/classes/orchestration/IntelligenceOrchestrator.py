@@ -17,7 +17,7 @@ class IntelligenceOrchestrator:
         from src.classes.backend.LLMClient import LLMClient
         self.ai = LLMClient(requests, workspace_root=str(fleet_manager.workspace_root))
 
-    def contribute_insight(self, agent_name: str, insight: str, confidence: float):
+    def contribute_insight(self, agent_name: str, insight: str, confidence: float) -> None:
         """Contributes a single agent's insight to the swarm pool."""
         self.insight_pool.append({
             "agent": agent_name,

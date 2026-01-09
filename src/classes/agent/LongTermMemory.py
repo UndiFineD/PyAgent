@@ -46,7 +46,7 @@ class LongTermMemory:
             self._enabled = False
             return False
 
-    def store(self, content: str, metadata: Optional[Dict[str, Any]] = None, tags: Optional[List[str]] = None):
+    def store(self, content: str, metadata: Optional[Dict[str, Any]] = None, tags: Optional[List[str]] = None) -> None:
         """Store a thought, observation, or interaction in memory."""
         if not self._init_db():
             return
@@ -98,7 +98,7 @@ class LongTermMemory:
             logging.error(f"Error querying memory: {e}")
             return []
 
-    def clear(self):
+    def clear(self) -> None:
         """Clear all stored memories."""
         if not self._init_db():
             return

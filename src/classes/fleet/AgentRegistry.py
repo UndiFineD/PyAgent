@@ -6,7 +6,7 @@ import importlib
 import logging
 import os
 import json
-from typing import Dict, Any, Type, Optional, Callable
+from typing import Dict, Any, Tuple, Type, Optional, Callable, List
 from pathlib import Path
 from .ResilientStubs import ResilientStub
 from src.classes.specialized.MCPAgent import MCPAgent
@@ -23,7 +23,7 @@ class LazyAgentMap(dict):
     """A dictionary that instantiates agents only when they are first accessed."""
     def __init__(self, workspace_root: Path, registry_configs: Dict[str, tuple] = None, fleet_instance=None) -> None:
         super().__init__()
-        self.workspace_root = workspace_root
+        self.workspace_root: Path = workspace_root
         self.registry_configs = registry_configs or BOOTSTRAP_AGENTS
         self.fleet = fleet_instance
         self._instances: Dict[str, Any] = {}
@@ -35,14 +35,14 @@ class LazyAgentMap(dict):
         
         # 2. Dynamic Discovery (The most lazy/flexible)
         # Pre-scan ensures we know what's available without guessing inside __getitem__
-        self._discovered_configs = self.core.scan_directory_for_agents(str(self.workspace_root))
+        self._discovered_configs: Dict[str, Tuple[str, str, str | None]] = self.core.scan_directory_for_agents(str(self.workspace_root))
         logging.info(f"Registry: Discovered {len(self._discovered_configs)} agents dynamically.")
 
     def _load_manifests(self) -> Dict[str, tuple]:
         """Loads additional configurations from plugins/manifest.json or similar."""
         manifest_configs = {}
         # Support both manifest.json and agent_manifest.json
-        manifest_paths = [
+        manifest_paths: List[Path] = [
             self.workspace_root / "plugins" / "manifest.json",
             self.workspace_root / "plugins" / "agent_manifest.json"
         ]
@@ -51,7 +51,7 @@ class LazyAgentMap(dict):
                 try:
                     with open(m_path, 'r') as f:
                         data = json.load(f)
-                        configs = self.core.parse_manifest(data)
+                        configs: Dict[str, Tuple[str, str, str | None]] = self.core.parse_manifest(data)
                         manifest_configs.update(configs)
                 except Exception as e:
                     logging.error(f"Failed to load plugin manifest {m_path}: {e}")
@@ -71,7 +71,7 @@ class LazyAgentMap(dict):
                 pass
         return False
 
-    def __getitem__(self, key):
+    def __getitem__(self, key: str) -> Any:
         if key in self._instances:
             return self._instances[key]
         
@@ -95,7 +95,7 @@ class LazyAgentMap(dict):
 
         raise KeyError(f"Agent '{key}' not found in registry (including dynamic scans).")
 
-    def _instantiate(self, key, config):
+    def _instantiate(self, key: str, config: Tuple[str, str, Optional[str]]) -> Any:
         """Standard instantiation logic with dependency injection and version checks."""
         module_path, class_name, arg_path_suffix = config
         
@@ -112,12 +112,12 @@ class LazyAgentMap(dict):
                 return stub
 
         try:
-            module = importlib.import_module(module_path)
+            module: importlib.ModuleType = importlib.import_module(module_path)
             
             # Version Gatekeeping (Shell layer check using Core logic)
-            min_sdk = getattr(module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0"))
+            min_sdk: Any | str = getattr(module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0"))
             if not self.core.is_compatible(min_sdk):
-                error_msg = f"Agent '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}."
+                error_msg: str = f"Agent '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}."
                 logging.warning(error_msg)
                 stub = ResilientStub(key, error_msg)
                 self._instances[key] = stub
@@ -163,62 +163,17 @@ class LazyAgentMap(dict):
             logging.error(f"Failed to lazy-load agent {key} from {module_path}: {e}")
             return None
 
-    def get(self, key, default=None):
+    def get(self, key: str, default: Any = None) -> Any:
         try:
             return self[key]
         except KeyError:
             return default
-            
-            # Version Gatekeeping
-            min_sdk = getattr(module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0"))
-            if hasattr(self.core, 'is_compatible') and not self.core.is_compatible(min_sdk):
-                error_msg = f"Agent '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}."
-                logging.warning(error_msg)
-                stub = ResilientStub(key, error_msg)
-                self._instances[key] = stub
-                return stub
 
-            agent_class = getattr(module, class_name)
-            
-            # Construct the argument path if provided
-            arg = None
-            if arg_path_suffix:
-                if (self.workspace_root / arg_path_suffix).exists():
-                    arg = str(self.workspace_root / arg_path_suffix)
-                else:
-                    # Might be an absolute path or relative to python path
-                    arg = arg_path_suffix
-            
-            instance = agent_class(arg) if arg else agent_class()
-            
-            # Inject fleet reference and register tools if possible
-            if self.fleet:
-                if hasattr(instance, 'fleet') and instance.fleet is None:
-                    instance.fleet = self.fleet
-                
-                if hasattr(instance, 'register_tools') and self.fleet.registry:
-                    try:
-                        instance.register_tools(self.fleet.registry)
-                        logging.debug(f"Registered tools for {key}")
-                    except Exception as e:
-                        logging.warning(f"Failed to register tools for {key}: {e}")
-
-            self._instances[key] = instance
-            return instance
-        except (ImportError, SyntaxError) as e:
-            logging.error(f"Critical load error for agent {key} from {module_path}: {e}")
-            stub = ResilientStub(key, str(e))
-            self._instances[key] = stub
-            return stub
-        except Exception as e:
-            logging.error(f"Failed to lazy-load agent {key} from {module_path}: {e}")
-            return None
-
-    def update(self, other):
+    def update(self, other: Dict[str, Any]) -> None:
         # Allow manual overrides or additions (like SignalBus)
         self._instances.update(other)
 
-    def __contains__(self, key):
+    def __contains__(self, key: object) -> bool:
         return (key in self._instances or 
                 key in self.registry_configs or 
                 key in self._manifest_configs or 

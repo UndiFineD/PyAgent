@@ -1,16 +1,17 @@
 import time
 import random
+from typing import Dict, List, Any, Optional
 
 class CooperativeCommunication:
     """
     Manages high-speed thought sharing and signal synchronization 
     between sibling agent nodes in the fleet.
     """
-    def __init__(self, workspace_path) -> None:
+    def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.active_channels = {} # node_id -> channel_metadata
+        self.active_channels: Dict[str, Any] = {} # node_id -> channel_metadata
 
-    def establish_p2p_channel(self, node_a, node_b):
+    def establish_p2p_channel(self, node_a: str, node_b: str) -> Dict[str, Any]:
         """
         Creates a dedicated sub-millisecond link between two nodes.
         """
@@ -22,7 +23,7 @@ class CooperativeCommunication:
         }
         return {"channel_id": channel_id, "latency": self.active_channels[channel_id]["latency_ms"]}
 
-    def broadcast_thought_packet(self, origin_node, thought_payload):
+    def broadcast_thought_packet(self, origin_node: str, thought_payload: Any) -> Dict[str, Any]:
         """
         Multicasts a thought packet to all connected nodes.
         """
@@ -34,7 +35,7 @@ class CooperativeCommunication:
             "timestamp": time.time()
         }
 
-    def synchronize_state(self, fleet_state):
+    def synchronize_state(self, fleet_state: Any) -> Dict[str, Any]:
         """
         Ensures all nodes are aligned on the global fleet context.
         """

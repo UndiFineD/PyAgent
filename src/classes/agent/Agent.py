@@ -43,6 +43,8 @@ from .AgentCore import AgentCore
 from .ParallelProcessor import ParallelProcessor
 from .NotificationManager import NotificationManager
 from .AgentUpdateManager import AgentUpdateManager
+from ..backend.LocalContextRecorder import LocalContextRecorder
+from ..backend.ConnectivityManager import ConnectivityManager
 
 class Agent:
     """Main agent that orchestrates sub-agents for code improvement.
@@ -97,15 +99,20 @@ class Agent:
         self.strategy = strategy
         self.models = models_config or {}
         
+        # Intelligence & Resilience Layer (Phase 108)
+        self.recorder = LocalContextRecorder(workspace_root=self.repo_root)
+        self.connectivity = ConnectivityManager()
+        
         # Delegated Managers
         self.core = AgentCore()
         self.metrics_manager = AgentMetrics()
-        self.git_handler = AgentGitHandler(self.repo_root, no_git)
+        self.git_handler = AgentGitHandler(self.repo_root, no_git, recorder=self.recorder)
         self.file_manager = AgentFileManager(self.repo_root, agents_only)
-        self.command_handler = AgentCommandHandler(self.repo_root, self.models)
+        self.command_handler = AgentCommandHandler(self.repo_root, self.models, recorder=self.recorder)
         self.update_manager = AgentUpdateManager(
             self.repo_root, self.models, self.strategy, 
-            self.command_handler, self.file_manager, self.core
+            self.command_handler, self.file_manager, self.core,
+            recorder=self.recorder
         )
         self.parallel_processor = ParallelProcessor(max_workers=max_workers)
         self.notifications = NotificationManager(workspace_root=str(self.repo_root))

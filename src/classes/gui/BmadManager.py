@@ -22,10 +22,16 @@ class BmadManager:
     def __init__(self, parent, callbacks) -> None:
         self.parent = parent
         self.callbacks = callbacks
+        self.recorder = None # Phase 108: Optional recorder
         self.frame = ttk.LabelFrame(parent, text="BMAD - Bulk Multi-Agent Deployment", padding=10)
         self.setup_ui()
 
-    def setup_ui(self):
+    def _record(self, action: str, result: str) -> None:
+        """Record BMAD operations."""
+        if self.recorder:
+            self.recorder.record_interaction("BMAD", "GUI", action, result)
+
+    def setup_ui(self) -> None:
         # 1. Methodology Selection
         method_frame = ttk.Frame(self.frame)
         method_frame.pack(fill=tk.X, pady=5)
@@ -86,13 +92,13 @@ class BmadManager:
         ttk.Button(btn_frame, text="🔄 START BMAD WORKFLOW", command=self.start_workflow_action).pack(fill=tk.X, pady=2)
         ttk.Button(btn_frame, text="⚡ Workflow-Init", command=self.workflow_init).pack(fill=tk.X, pady=2)
 
-    def on_track_change(self, event):
+    def on_track_change(self, event: tk.Event) -> None:
         track = self.track_var.get()
         track_info = BMAD_TRACKS.get(track, {})
         self.track_desc.config(text=track_info.get("desc", ""))
         self.refresh_phase_buttons()
 
-    def refresh_phase_buttons(self):
+    def refresh_phase_buttons(self) -> None:
         # Clear existing buttons
         for widget in self.phase_sel_container.winfo_children():
             widget.destroy()
@@ -107,15 +113,15 @@ class BmadManager:
         for phase in phases:
             ttk.Radiobutton(self.phase_sel_container, text=phase, variable=self.phase_var, value=phase).pack(side=tk.LEFT, padx=2)
 
-    def set_all_agents(self, value):
+    def set_all_agents(self, value: bool) -> None:
         for var in self.agents_to_run.values():
             var.set(value)
 
-    def workflow_init(self):
+    def workflow_init(self) -> None:
         """Analyzes project and recommends track."""
         messagebox.showinfo("Workflow-Init", "Analyzing project structure...\nRecommending 'BMad Method' track based on codebase complexity.")
 
-    def start_workflow_action(self):
+    def start_workflow_action(self) -> None:
         """Triggers the step-by-step workflow manager."""
         targets = self.get_targets()
         if not targets:
@@ -125,7 +131,7 @@ class BmadManager:
         if messagebox.askyesno("Confirm Workflow", f"Start a step-by-step {track} workflow for {len(targets)} files?"):
             self.callbacks["get_workflow_manager"]().start_workflow(track, targets)
 
-    def get_targets(self):
+    def get_targets(self) -> list[str]:
         mode = self.target_mode.get()
         targets = []
         
@@ -159,7 +165,7 @@ class BmadManager:
                 return []
         return targets
 
-    def deploy_bulk(self):
+    def deploy_bulk(self) -> None:
         targets = self.get_targets()
         if not targets:
             return

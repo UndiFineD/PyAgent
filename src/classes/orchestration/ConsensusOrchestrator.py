@@ -39,7 +39,7 @@ class ConsensusOrchestrator:
         
         return final_decision
 
-    def verify_state_block(self, task: str, decision: str) -> str:
+    def verify_state_block(self, task: str, decision: str) -> None:
         """
         Phase 55: Distributed Byzantine Fault Tolerance (DBFT).
         Simulates signing a state block after consensus to ensure data integrity
@@ -98,7 +98,7 @@ class ConsensusOrchestrator:
             current_proposals = new_proposals
         return current_proposals
 
-    def _weighted_vote(self, proposals: List[Dict[Dict[str, Any]]]) -> str:
+    def _weighted_vote(self, proposals: List[Dict[str, Any]]) -> str:
         if not proposals:
             return "Consensus failed: No proposals."
             
@@ -108,7 +108,7 @@ class ConsensusOrchestrator:
         logging.info(f"Consensus reached. Winner: {best_proposal['agent']} with weight {best_proposal['weight']}")
         return best_proposal["content"]
 
-    def update_reputation(self, agent_name: str, feedback_score: float):
+    def update_reputation(self, agent_name: str, feedback_score: float) -> None:
         """
         Updates agent reputation based on external feedback (0.0 to 1.0).
         """

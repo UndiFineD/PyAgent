@@ -11,17 +11,23 @@ from typing import Dict, List, Any, Optional, Callable
 class MCPConnector:
     """Manages the lifecycle and JSON-RPC communication with an MCP server."""
     
-    def __init__(self, name: str, command: List[str], env: Optional[Dict[str, str]] = None) -> None:
+    def __init__(self, name: str, command: List[str], env: Optional[Dict[str, str]] = None, recorder: Any = None) -> None:
         self.name = name
         self.command = command
         self.env = env
+        self.recorder = recorder
         self.process: Optional[subprocess.Popen] = None
         self.request_id = 0
         self.pending_requests: Dict[int, Any] = {}
         self._lock = threading.Lock()
         self.is_running = False
 
-    def start(self):
+    def _record(self, action: str, result: str) -> None:
+        """Record MCP operations."""
+        if self.recorder:
+            self.recorder.record_interaction("MCP", self.name, action, result)
+
+    def start(self) -> None:
         """Launches the MCP server process."""
         try:
             logging.info(f"Starting MCP server '{self.name}' with command: {' '.join(self.command)}")
@@ -41,7 +47,7 @@ class MCPConnector:
             logging.error(f"Failed to start MCP server {self.name}: {e}")
             self.is_running = False
 
-    def _read_stderr(self):
+    def _read_stderr(self) -> None:
         """Logs stderr from the MCP server."""
         if not self.process or not self.process.stderr:
             return
@@ -87,7 +93,7 @@ class MCPConnector:
             logging.error(f"Error calling MCP server {self.name}: {e}")
             return {"error": str(e)}
 
-    def stop(self):
+    def stop(self) -> None:
         """Gracefully shuts down the MCP server."""
         if self.process:
             self.process.terminate()

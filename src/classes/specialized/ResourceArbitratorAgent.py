@@ -1,17 +1,18 @@
 import time
 import uuid
+from typing import Dict, List, Any, Optional
 
 class ResourceArbitratorAgent:
     """
     Arbitrates the allocation of compute resources (CPU, GPU, Memory)
     using a priority-based internal market system.
     """
-    def __init__(self, workspace_path) -> None:
+    def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.resource_ledger = {} # task_id -> {type, amount, bid, timestamp}
+        self.resource_ledger: Dict[str, Any] = {} # task_id -> {type, amount, bid, timestamp}
         self.available_credits = 10000.0 # Virtual credits for the swarm
         
-    def submit_bid(self, agent_id, resource_type, amount, bid_price):
+    def submit_bid(self, agent_id: str, resource_type: str, amount: float, bid_price: float) -> Dict[str, Any]:
         """
         Allows an agent to bid for a slice of the resource pool.
         """
@@ -34,7 +35,7 @@ class ResourceArbitratorAgent:
             entry["status"] = "queued"
             return {"task_id": task_id, "status": "queued", "message": "Bid too low, waiting for lower demand."}
 
-    def get_resource_usage_report(self):
+    def get_resource_usage_report(self) -> Dict[str, Any]:
         """
         Returns a summary of resource allocation across the fleet.
         """
@@ -46,7 +47,7 @@ class ResourceArbitratorAgent:
             "backlog": len(queued)
         }
 
-    def preempt_low_priority_task(self, min_bid):
+    def preempt_low_priority_task(self, min_bid: float) -> Dict[str, Any]:
         """
         Reclaims resources from tasks with lower bids.
         """

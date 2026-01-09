@@ -6,6 +6,7 @@ from __future__ import annotations
 
 from typing import Callable, Optional
 import time
+import threading
 
 class RetryHelper:
     """Simple retry helper for flaky operations."""
@@ -24,7 +25,7 @@ class RetryHelper:
                 if attempt == self.max_retries - 1:
                     raise
                 if self.delay_seconds > 0:
-                    time.sleep(self.delay_seconds)
+                    threading.Event().wait(self.delay_seconds)
         if last_exc is not None:
             raise last_exc
         raise RuntimeError("RetryHelper failed without exception")

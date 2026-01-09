@@ -1,18 +1,19 @@
 import os
 import hashlib
 import time
+from typing import Dict, List, Any, Optional
 
 class CoreEvolutionGuard:
     """
     Monitors and validates changes to the agent's core source code.
     Prevents unintended mutations or malicious injections into the agent logic.
     """
-    def __init__(self, workspace_path) -> None:
+    def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.code_fingerprints = {} # path -> hash
+        self.code_fingerprints: Dict[str, str] = {} # path -> hash
         self.security_threshold = 0.8
         
-    def hash_file(self, file_path):
+    def hash_file(self, file_path: str) -> Optional[str]:
         """Calculates SHA256 hash of a file."""
         hasher = hashlib.sha256()
         try:
@@ -23,7 +24,7 @@ class CoreEvolutionGuard:
         except FileNotFoundError:
             return None
 
-    def snapshot_core_logic(self, core_paths):
+    def snapshot_core_logic(self, core_paths: List[str]) -> Dict[str, Any]:
         """
         Creates a baseline of hashes for critical agent files.
         """
@@ -38,7 +39,7 @@ class CoreEvolutionGuard:
 
         return {"monitored_files": len(self.code_fingerprints)}
 
-    def validate_code_integrity(self, file_path):
+    def validate_code_integrity(self, file_path: str) -> Dict[str, Any]:
         """
         Validates if a change to a file is "safe" or needs human review.
         """
@@ -71,7 +72,7 @@ class CoreEvolutionGuard:
             "file": rel_path
         }
 
-    def generate_hardening_report(self):
+    def generate_hardening_report(self) -> Dict[str, Any]:
         """Returns a summary of the self-evolution guard status."""
         return {
             "uptime_integrity": 1.0,

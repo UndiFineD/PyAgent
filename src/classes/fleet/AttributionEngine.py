@@ -24,7 +24,7 @@ class AttributionEngine:
                 return json.load(f)
         return []
 
-    def record_attribution(self, agent_id: str, content: str, task_context: str):
+    def record_attribution(self, agent_id: str, content: str, task_context: str) -> None:
         """Creates a record of content generation."""
         content_hash = hashlib.sha256(content.encode()).hexdigest()
         record = {
@@ -40,7 +40,7 @@ class AttributionEngine:
         self.records.append(record)
         self._save()
 
-    def _save(self):
+    def _save(self) -> None:
         with open(self.log_file, "w") as f:
             json.dump(self.records, f, indent=2)
 
