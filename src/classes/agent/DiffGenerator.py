@@ -44,7 +44,7 @@ class DiffGenerator:
     """
 
     def __init__(self, output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED,
-                 context_lines: int = 3):
+                 context_lines: int = 3) -> str:
         """Initialize the diff generator.
 
         Args:

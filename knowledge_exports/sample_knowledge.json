@@ -1,0 +1,9 @@
+{
+    "source": "sample.pdf",
+    "content": "Error: pypdf library not installed. Please install it to use this tool.",
+    "tags": [
+        "ingested",
+        "doc_inference"
+    ],
+    "type": "unstructured_to_knowledge"
+}

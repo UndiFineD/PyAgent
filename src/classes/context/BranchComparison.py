@@ -4,12 +4,13 @@
 
 from __future__ import annotations
 
-from base_agent import BaseAgent
+from typing import Any, Dict, List, Optional, Tuple, TYPE_CHECKING
+if TYPE_CHECKING:
+    from src.classes.base_agent import BaseAgent
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
 import hashlib
 import json
 import logging

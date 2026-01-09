@@ -85,7 +85,7 @@ def _find_issues(tree: ast.AST, source: str) -> List[str]:
     for node in ast.walk(tree):
         if isinstance(node, ast.ExceptHandler) and node.type is None:
             issues.append(
-                "Contains bare `except:` clause (catches SystemExit / "
+                "Contains bare `except Exception:` clause (catches SystemExit / "
                 "KeyboardInterrupt)."
             )
     # 3. Missing type hints
@@ -102,3 +102,4 @@ def _find_issues(tree: ast.AST, source: str) -> List[str]:
     if "TODO" in source or "FIXME" in source:
         issues.append("Contains TODO or FIXME comments.")
     return issues
+

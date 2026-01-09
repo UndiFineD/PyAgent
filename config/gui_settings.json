@@ -2,5 +2,7 @@
     "github_token_file": "C:\\DEV\\github-gat.txt",
     "default_model": "gpt-4o",
     "cache_enabled": true,
-    "monitor_scaling": 1.0
+    "monitor_scaling": 1.0,
+    "theme_mode": "dark",
+    "theme_color": "grey"
 }

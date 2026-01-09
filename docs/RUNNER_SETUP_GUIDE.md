@@ -12,7 +12,7 @@ This guide explains how to configure and run the PyAgent orchestration system.
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/debvisor/pyagent
+   git clone https://github.com/pyagent/pyagent
    cd pyagent
    ```
 

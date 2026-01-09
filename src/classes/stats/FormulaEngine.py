@@ -8,10 +8,24 @@ from .FormulaValidation import FormulaValidation
 
 from typing import Any, Dict, List, Optional
 
+import ast
+import operator
+import logging
+
 class FormulaEngine:
-    """Processes metric formulas and calculations."""
+    """Processes metric formulas and calculations using safe AST evaluation."""
     def __init__(self) -> None:
         self.formulas: Dict[str, str] = {}
+        self.operators = {
+            ast.Add: operator.add,
+            ast.Sub: operator.sub,
+            ast.Mult: operator.mul,
+            ast.Div: operator.truediv,
+            ast.Pow: operator.pow,
+            ast.BitXor: operator.xor,
+            ast.USub: operator.neg,
+            ast.UAdd: operator.pos
+        }
 
     def define(self, name: str, formula: str) -> None:
         """Define a formula."""
@@ -21,6 +35,19 @@ class FormulaEngine:
         """Define a formula (backward compat)."""
         self.define(name, formula)
 
+    def _eval_node(self, node: ast.AST) -> float:
+        """Recursively evaluate an AST node."""
+        if isinstance(node, ast.Constant):  # Python 3.8+
+            return float(node.value)
+        elif isinstance(node, ast.Num):  # Python < 3.8
+            return float(node.n)
+        elif isinstance(node, ast.BinOp):
+            return self.operators[type(node.op)](self._eval_node(node.left), self._eval_node(node.right))
+        elif isinstance(node, ast.UnaryOp):
+            return self.operators[type(node.op)](self._eval_node(node.operand))
+        else:
+            raise TypeError(f"Unsupported operation: {type(node)}")
+
     def calculate(self, formula_or_name: str, variables: Optional[Dict[str, Any]] = None) -> float:
         """Calculate formula result."""
         variables = variables or {}
@@ -29,6 +56,7 @@ class FormulaEngine:
             formula = self.formulas[formula_or_name]
         else:
             formula = formula_or_name
+            
         # Handle special functions like AVG
         if "AVG(" in formula:
             import re
@@ -46,10 +74,14 @@ class FormulaEngine:
             eval_formula = formula
             for var_name, var_value in variables.items():
                 eval_formula = eval_formula.replace(f"{{{var_name}}}", str(var_value))
-
-            return float(eval(eval_formula, {"__builtins__": {}}))
-        except Exception:
+            
+            # Use safe AST evaluation
+            tree = ast.parse(eval_formula, mode='eval')
+            return self._eval_node(tree.body)
+        except Exception as e:
+            logging.error(f"Formula calculation failed: {e}")
             return 0.0
+
 
     def validate(self, formula: str) -> FormulaValidation:
         """Validate formula syntax."""

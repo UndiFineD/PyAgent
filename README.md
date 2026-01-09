@@ -8,6 +8,14 @@ An intelligent orchestration system that coordinates specialized AI agents to au
 
 ## Key Features
 
+### 🛠 Evolution Phase 108: Autonomous Self-Improvement
+
+The project has entered an autonomous maintenance phase where the system refactors and optimizes its own source code:
+- **Relational Metadata Mapping**: Sharded interaction data (Zlib-compressed) is indexed into a relational SQL layer for meta-analysis at trillion-parameter scales.
+- **AI-Driven Self-Healing**: The system identifies and fixes security vulnerabilities, performance bottlenecks, and robustness issues automatically.
+- **Rust-Readiness Pipeline**: Automated type hint injection (Local-first AI assisted) is preparing the core logic for high-performance Rust FFI porting.
+- **Gatekeeping**: `version.py` enforces maturity requirements to ensure stability during deep refactoring cycles.
+
 ### 🎯 Multi-Agent Coordination
 
 - **Agent Orchestration**: Central `Agent` coordinates work among specialized sub-agents.
@@ -15,7 +23,14 @@ An intelligent orchestration system that coordinates specialized AI agents to au
 - **Progress Tracking**: Monitors and reports on improvement metrics.
 - **Smart Memory**: Agents retain "useful facts" across sessions and can "forget" bad choices to optimize context window.
 
-### 🔧 Specialized Agent Modules
+### � Extensions & Community Plugins (SDK v2.1.0)
+
+- **Manifest-Based Loading**: Community members can drop plugins into `plugins/` with a `manifest.json`.
+- **SDK Version Guard**: Automatic gatekeeping (Major match, Minor >=) to ensure compatibility.
+- **Fault-Tolerant Registry**: Broken plugins (syntax/import errors) are automatically isolated into `ResilientStubs`, preventing system crashes.
+- **Core/Shell Architecture**: Most system logic has been extracted into "Cores" for streamlined performance and future cross-language porting.
+
+### �🔧 Specialized Agent Modules
 
 - All agents (Coder, Tests, Context, Changes, Errors, Stats) are now modular classes found in `src/classes/`.
 - **Legacy Compatibility**: Original entry points in `src/*.py` are now wrappers around the modular framework.
@@ -43,7 +58,7 @@ src/
 ## Installation
 
 ```bash
-git clone https://github.com/debvisor/pyagent
+git clone https://github.com/PyAgent/pyagent
 cd pyagent
 python -m pip install -r requirements.txt
 ```
@@ -291,3 +306,4 @@ Built with ❤️ for the Python community. Powered by AI backends including Ope
 **Current Version**: 1.0.0  
 **Test Coverage**: 87% (2,352 passing tests)  
 **Last Updated**: January 2026
+

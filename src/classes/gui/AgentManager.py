@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -18,7 +18,7 @@ from .AgentColumn import AgentColumn
 
 class AgentManager:
     """Manages the lifecycle and state of agent columns."""
-    def __init__(self, main_app, columns_container):
+    def __init__(self, main_app, columns_container) -> None:
         self.main_app = main_app
         self.container = columns_container
         self.agent_columns = []

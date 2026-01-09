@@ -100,6 +100,50 @@ class ProgressDashboard:
                         if i.status == ImprovementStatus.COMPLETED])
         return (completed / total) * 100
 
+    def generate_bmad_strategic_grid(self, root_path: Path) -> str:
+        """Generates a 3x3 strategic grid inspired by the BMAD Method.
+        
+        Checks for project artifacts and quality indicators.
+        """
+        # Planning Indicators
+        has_prd = any((root_path / p).exists() for p in ["docs/PRD.md", "prd.md", "docs/stories"])
+        has_arch = any((root_path / p).exists() for p in ["docs/architecture.md", "architecture.md", "docs/CODE_OF_CONDUCT.md"])
+        has_backlog = (root_path / "improvements.txt").exists()
+        
+        # Development Indicators
+        has_git = (root_path / ".git").exists()
+        has_readme = (root_path / "README.md").exists()
+        
+        # Quality Indicators
+        has_tests = (root_path / "tests").exists()
+        has_results = (root_path / "test_results.txt").exists()
+        has_errors = (root_path / "errors.txt").exists() and (root_path / "errors.txt").stat().st_size > 0
+
+        # Mapping to Grid
+        p_prd = "✅" if has_prd else "❌"
+        p_arch = "✅" if has_arch else "❌"
+        p_backlog = "✅" if has_backlog else "❌"
+        
+        d_code = "✅" if has_readme else "⏳"
+        d_git = "✅" if has_git else "❌"
+        d_stories = "⏳" # Placeholder for story-level tracking
+
+        q_tests = "✅" if has_tests else "❌"
+        q_results = "✅" if has_results else "⏳"
+        q_health = "❌" if has_errors else "✅"
+
+        grid = [
+            "## 🗺️ Strategic Development Grid (BMAD Pattern)",
+            "| Phase | Planning | Development | Quality |",
+            "| :--- | :---: | :---: | :---: |",
+            f"| **Strategy** | {p_backlog} Backlog | {d_git} Repo | {q_health} Health |",
+            f"| **Definition** | {p_prd} PRD/Stories | {d_code} Codebase | {q_results} Results |",
+            f"| **Structure** | {p_arch} Architecture | {d_stories} Flows | {q_tests} Tests |",
+            "\n"
+        ]
+        return "\n".join(grid)
+        return (completed / total) * 100
+
     def export_dashboard(self, improvements: List[Improvement]) -> str:
         """Export dashboard as markdown."""
         report = self.generate_report(improvements)

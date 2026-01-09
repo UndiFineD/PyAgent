@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 
 import sys
 from pathlib import Path
@@ -28,8 +28,15 @@ def main():
     generator = ReportGenerator(args.dir)
     report = generator.generate_full_report()
     
+    output_dir = Path(args.output)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    
     exporter = ReportExporter()
-    exporter.export(report, args.output)
+    # Export as HTML to the output directory
+    exporter.export(report, ExportFormat.HTML, output_dir / "report.html")
+    # Also save the markdown version as the progress dashboard
+    (output_dir / "PROGRESS_DASHBOARD.md").write_text(report, encoding="utf-8")
+    
     print(f"Reports generated in {args.output}")
 
 if __name__ == '__main__':

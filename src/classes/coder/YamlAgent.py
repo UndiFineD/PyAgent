@@ -25,3 +25,4 @@ class YamlAgent(CoderAgent):
 if __name__ == "__main__":
     main = create_main_function(YamlAgent, "YAML Agent", "Path to YAML file (.yaml, .yml)")
     main()
+

@@ -937,10 +937,10 @@ class TestCustomTemplatesUnittest(unittest.TestCase):
 Repository: {repo}
 """
         rendered = template.format(
-            project="DebVisor",
-            repo="https://github.com / org / debvisor"
+            project="PyAgent",
+            repo="https://github.com / org / pyagent"
         )
-        assert "DebVisor" in rendered
+        assert "PyAgent" in rendered
         assert "github.com" in rendered
 
 

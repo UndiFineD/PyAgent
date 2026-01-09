@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 """Test management and baseline utilities."""
@@ -98,7 +98,7 @@ class DIContainer:
         from contextlib import contextmanager
 
         @contextmanager
-        def override_context():
+        def override_context() -> bool:
             old_override = self._overrides.get(name)
             self._overrides[name] = factory
             try:

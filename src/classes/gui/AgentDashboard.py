@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -17,7 +17,7 @@ from tkinter import ttk
 
 class AgentDashboard:
     """Manages the agent columns container and provides controls to add agents."""
-    def __init__(self, parent, callbacks):
+    def __init__(self, parent, callbacks) -> None:
         self.frame = ttk.Frame(parent)
         self.callbacks = callbacks
         self.setup_ui()

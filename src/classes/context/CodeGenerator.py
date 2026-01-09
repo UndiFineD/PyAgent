@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from .GeneratedCode import GeneratedCode
 
-from base_agent import BaseAgent
+from src.classes.base_agent import BaseAgent
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -89,7 +89,7 @@ class CodeGenerator:
             f"# Generated for: {prompt}\n"
             f"{context_header}"
             f"def generated_function():\n"
-            f"    \"\"\"Auto-generated stub.\"\"\"\n"
+            f"    '''Auto-generated stub.'''\n"
             f"    pass\n"
         )
 
@@ -99,3 +99,4 @@ class CodeGenerator:
             context_used=used_contexts,
             description=prompt,
         )
+

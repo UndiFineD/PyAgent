@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+
+"""Agent specializing in architectural analysis and decoupled system design."""
+
+import logging
+from pathlib import Path
+from typing import Dict, List, Any, Optional, Set
+from src.classes.base_agent import BaseAgent
+from src.classes.base_agent.utilities import create_main_function
+from src.classes.context.GraphContextEngine import GraphContextEngine
+
+class ArchAdvisorAgent(BaseAgent):
+    """Analyzes codebase coupling and suggests architectural refactors."""
+    
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self.workspace_root = self.file_path.parent.parent.parent
+        self.graph_engine = GraphContextEngine(str(self.workspace_root))
+        self._system_prompt = (
+            "You are the Architectural Advisor Agent. "
+            "Your role is to identify 'God Classes', circular dependencies, and high-coupling hotspots. "
+            "Suggest where to apply design patterns (Factory, Strategy, Observer) to improve modularity."
+        )
+
+    def _get_default_content(self) -> str:
+        return "# Architectural Analysis\n\n## Summary\nWaiting for scan...\n"
+
+    def analyze_coupling(self) -> str:
+        """Identifies modules with too many outgoing or incoming dependencies."""
+        self.graph_engine.scan_project()
+        graph = self.graph_engine.graph
+        
+        # Calculate In-degree and Out-degree
+        out_degree = {k: len(v) for k, v in graph.items()}
+        in_degree = {}
+        for src, targets in graph.items():
+            for t in targets:
+                in_degree[t] = in_degree.get(t, 0) + 1
+        
+        report = ["## Architectural Coupling Analysis\n"]
+        
+        # Hotspots (High Out-degree)
+        top_out = sorted(out_degree.items(), key=lambda x: x[1], reverse=True)[:5]
+        report.append("### 🚩 Dependency Hotspots (High Out-degree)")
+        report.append("These files depend on many other things and might be too complex:")
+        for node, degree in top_out:
+            report.append(f"- **{node}**: {degree} dependencies")
+        
+        # Central Hubs (High In-degree)
+        top_in = sorted(in_degree.items(), key=lambda x: x[1], reverse=True)[:5]
+        report.append("\n### 🏗️ Central Hubs (High In-degree)")
+        report.append("These files are used by many other modules. Changes here have high impact:")
+        for node, degree in top_in:
+            report.append(f"- **{node}**: {degree} dependers")
+            
+        return "\n".join(report)
+
+    def improve_content(self, prompt: str) -> str:
+        """Perform architectural review."""
+        return self.analyze_coupling()
+
+if __name__ == "__main__":
+    main = create_main_function(ArchAdvisorAgent, "ArchAdvisor Agent", "Task")
+    main()
+

@@ -83,22 +83,10 @@ def load_codeignore(root: Path) -> Set[str]:
     return set()
 
 
-def setup_logging(verbosity: str) -> None:
+def setup_logging(verbosity: Optional[str] = None) -> None:
     """Configure logging based on verbosity level.
-
-    Args:
-        verbosity: Verbosity level as string ('quiet', 'minimal', 'normal', 'elaborate'
-                  or '0', '1', '2', '3'). Defaults to 'INFO' level.
-
-    Returns:
-        None. Configures the root logger with the specified level.
-
-    Example:
-        setup_logging('elaborate')  # Sets DEBUG level
-
-    Note:
-        This function configures the global logging system. Should be called
-        once at application startup before other logging calls.
+    
+    Defaults to WARNING to capture only errors and failures as requested.
     """
     levels = {
         'quiet': logging.ERROR,
@@ -110,13 +98,17 @@ def setup_logging(verbosity: str) -> None:
         '2': logging.INFO,
         '3': logging.DEBUG,
     }
-    level = levels.get(verbosity.lower(), logging.INFO)
+    
+    # Determine level from environment or argument
+    level = levels.get(str(verbosity).lower(), logging.WARNING) if verbosity else logging.WARNING
+    
     logging.basicConfig(
         level=level,
         format='%(asctime)s - %(levelname)s - %(message)s',
         datefmt='%H:%M:%S'
     )
-    logging.debug(f"Logging configured at level: {logging.getLevelName(level)}")
+    if level <= logging.DEBUG:
+        logging.debug(f"Logging configured at level: {logging.getLevelName(level)}")
 
 
 def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Optional[Path]:

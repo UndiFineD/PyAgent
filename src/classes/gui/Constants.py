@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -46,6 +46,10 @@ BMAD_TRACKS = {
     "Enterprise": {
         "desc": "Compliance, scale (Full governance suite, < 30 mins)",
         "phases": ["Governance", "Analysis", "Planning", "Solutioning", "Implementation", "Quality", "Compliance"]
+    },
+    "Vibe Coding (2025)": {
+        "desc": "Research-driven AI workflow (Research/Define/Design/Prep/Build)",
+        "phases": ["Research", "Define", "Design", "Agent Prep", "Build", "Validation"]
     }
 }
 
