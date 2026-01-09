@@ -1,0 +1,2 @@
+{"instruction": "Write a complex SQL query", "output": "SELECT * FROM agents JOIN capabilities..."}
+{"instruction": "Optimize for performance", "output": "Using indexed search..."}

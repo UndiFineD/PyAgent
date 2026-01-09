@@ -43,7 +43,7 @@ class FileLockManager:
         lock_timeout: Default lock timeout in seconds.
     """
 
-    def __init__(self, lock_timeout: float = 300.0):
+    def __init__(self, lock_timeout: float = 300.0) -> bool:
         """Initialize the lock manager.
 
         Args:

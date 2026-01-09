@@ -39,7 +39,7 @@ class ModernizationAdvisor:
         (r"from\s+collections\s+import\s+.*\bMapping\b",
          "collections.abc.Mapping", "3.3", "3.10",
          "Use collections.abc instead of collections for ABCs"),
-        (r"\.encode\s*\(\s*['\"]hex['\"]\s*\)",
+        (r'\.encode\s*\(\s*[\'"]hex[\'"]\s*\)',
          "binascii.hexlify()", "3.0", None,
          "Use binascii.hexlify() instead of .encode('hex')"),
         (r"asyncio\.get_event_loop\(\)",
@@ -73,3 +73,4 @@ class ModernizationAdvisor:
                 ))
 
         return self.suggestions
+

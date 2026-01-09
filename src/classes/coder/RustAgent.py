@@ -20,8 +20,10 @@ class RustAgent(CoderAgent):
         )
 
     def _get_default_content(self) -> str:
-        return "fn main() {\n    println!(\"Hello, Rust!\");\n}\n"
+        return 'fn main() {\n    println!("Hello, Rust!");\n}\n'
 
 if __name__ == "__main__":
     main = create_main_function(RustAgent, "Rust Agent", "Path to Rust file (.rs)")
     main()
+
+

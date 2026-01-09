@@ -22,42 +22,66 @@ import time
 import uuid
 
 class ConnectionPool:
-    """Manages a pool of reusable connections.
-
-    Reduces connection overhead by reusing connections across requests.
-
-    Example:
-        pool=ConnectionPool(max_connections=10)
-        conn=pool.acquire("github-models")
-        try:
-            # Use connection
-            pass
-        finally:
-            pool.release("github-models", conn)
+    """
+    Manages a pool of reusable connections with Phase 108 status caching.
+    Reduces connection overhead and prevents repeated failure pings by
+    caching 'working' status for 15 minutes.
     """
 
-    def __init__(self, max_connections: int = 10, timeout_s: float = 30.0) -> None:
-        """Initialize connection pool.
-
-        Args:
-            max_connections: Maximum connections per backend.
-            timeout_s: Connection timeout.
-        """
+    def __init__(self, max_connections: int = 10, timeout_s: float = 30.0, cache_file: Optional[str] = None) -> None:
+        """Initialize connection pool."""
         self.max_connections = max_connections
         self.timeout_s = timeout_s
         self._pools: Dict[str, List[Any]] = {}
         self._in_use: Dict[str, int] = {}
         self._lock = threading.Lock()
+        
+        # Phase 108: Status Caching (15 minute TTL)
+        self.status_cache: Dict[str, Dict[str, Any]] = {}
+        self.cache_ttl = 900 # 15 minutes
+        self.cache_file = Path(cache_file) if cache_file else None
+        self._load_status_cache()
+
+    def _load_status_cache(self) -> None:
+        if self.cache_file and self.cache_file.exists():
+            try:
+                self.status_cache = json.loads(self.cache_file.read_text())
+            except Exception:
+                pass
+
+    def _save_status_cache(self) -> None:
+        if self.cache_file:
+            try:
+                self.cache_file.parent.mkdir(parents=True, exist_ok=True)
+                self.cache_file.write_text(json.dumps(self.status_cache))
+            except Exception:
+                pass
+
+    def is_backend_working(self, backend: str) -> bool:
+        """Checks if the backend is cached as working within the last 15 minutes."""
+        with self._lock:
+            status = self.status_cache.get(backend)
+            if status:
+                elapsed = time.time() - status.get("timestamp", 0)
+                if elapsed < self.cache_ttl:
+                    return status.get("working", False)
+        return True # Default to True if no cache or expired
+
+    def set_backend_status(self, backend: str, working: bool) -> None:
+        """Updates the working status of a backend."""
+        with self._lock:
+            self.status_cache[backend] = {
+                "working": working,
+                "timestamp": time.time()
+            }
+            self._save_status_cache()
 
     def acquire(self, backend: str) -> Any:
-        """Acquire a connection from pool.
+        """Acquire a connection, respecting the status cache (Phase 108)."""
+        if not self.is_backend_working(backend):
+            logging.debug(f"ConnectionPool: Skipping '{backend}' (cached as non-working)")
+            return None
 
-        Args:
-            backend: Backend identifier.
-
-        Returns:
-            Any: Connection object (placeholder for actual implementation).
-        """
         with self._lock:
             if backend not in self._pools:
                 self._pools[backend] = []

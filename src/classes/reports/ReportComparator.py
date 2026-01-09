@@ -28,7 +28,7 @@ class ReportComparator:
         reports_dir: Directory containing reports.
     """
 
-    def __init__(self, reports_dir: Path = AGENT_DIR):
+    def __init__(self, reports_dir: Path = AGENT_DIR) -> None:
         """Initialize comparator.
         Args:
             reports_dir: Directory containing report files.

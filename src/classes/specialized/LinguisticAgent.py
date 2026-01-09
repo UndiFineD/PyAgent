@@ -1,0 +1,39 @@
+#!/usr/bin/env python3
+
+"""Agent specializing in linguistic articulation and epistemic subordination.
+Ensures that the LLM only verbalizes grounded results and never hallucinates new technical facts.
+"""
+
+import logging
+from src.classes.base_agent import BaseAgent
+from src.classes.base_agent.utilities import as_tool
+
+class LinguisticAgent(BaseAgent):
+    """The linguistic surface layer of the PyAgent OS."""
+    
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._system_prompt = (
+            "You are the Linguistic Articulation Agent. "
+            "Your role is to translate technical reports into natural language for the user. "
+            "STRICT RULE: You are epistemically subordinated to the expert agents. "
+            "You MUST NOT add facts, extrapolate reasoning, or 'hallucinate' details not present in the input. "
+            "If the technical report is empty or says ERROR, you must state that exactly."
+        )
+
+    @as_tool
+    def articulate_results(self, technical_report: str, user_query: str) -> str:
+        """Converts raw expert outputs into a polite, natural response.
+        Args:
+            technical_report: The raw output from the StructuredOrchestrator.
+            user_query: The original user question.
+        """
+        logging.info("LinguisticAgent: Articulating technical report...")
+        
+        # In a real implementation, this would call the LLM with the report as context.
+        # Here we simulate the constrained linguistic surface.
+        return f"Hello! Regarding your request: '{user_query}', I have processed it through the expert systems.\n\nSummary of results:\n{technical_report[:500]}..."
+
+    def improve_content(self, prompt: str) -> str:
+        """Entry point for verbalization."""
+        return self.articulate_results(prompt, "How can I help you?")

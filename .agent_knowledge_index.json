@@ -1,4 +1,150 @@
 {
+    "link:\"How many calories in an egg\", \"There are on average between 55 and 80 calories in an egg depending on its size.\"], [\"How many calories in an egg\", \"Egg whites are very low in calories, have no fat, no cholesterol, and are loaded with protein.\"], [\"How many calories in an egg\", \"Most of the calories in an egg come from the yellow yolk in the center.\"": [
+        ".venv\\Lib\\site-packages\\sentence_transformers\\cross_encoder\\model_card_template.md",
+        ".venv\\Lib\\site-packages\\sentence_transformers\\cross_encoder\\model_card_template.md"
+    ],
+    "test_cognitive_features": [
+        "debug_cognitive.py"
+    ],
+    "test_ecosystem_features": [
+        "debug_ecosystem.py"
+    ],
+    "test_evolution_and_repair": [
+        "debug_evolution.py"
+    ],
+    "test_market_features": [
+        "debug_market.py"
+    ],
+    "test_ethics_and_safety": [
+        "debug_phase_15.py"
+    ],
+    "test_phase_16": [
+        "debug_phase_16.py"
+    ],
+    "test_phase_17": [
+        "debug_phase_17.py"
+    ],
+    "test_sql_and_adversarial": [
+        "debug_phase_18_19.py"
+    ],
+    "test_visualization_and_memory": [
+        "debug_phase_20_21.py"
+    ],
+    "test_observability": [
+        "debug_phase_20_21.py"
+    ],
+    "test_gui_backend": [
+        "debug_phase_20_21.py"
+    ],
+    "test_production_features": [
+        "debug_production.py"
+    ],
+    "test_swarm_features": [
+        "debug_swarm.py"
+    ],
+    "main": [
+        "mock_mcp_server.py",
+        "src\\agent_gui.py",
+        "src\\agent_knowledge.py",
+        "src\\agent_stats.py",
+        "src\\generate_agent_reports.py",
+        "tests\\classes\\test_agent\\legacy.py",
+        "tests\\classes\\test_agent\\legacy.py",
+        "tests\\classes\\test_agent\\legacy.py",
+        "src\\classes\\agent\\cli.py",
+        "src\\classes\\agent_tests\\agents.py",
+        "src\\classes\\base_agent\\utilities.py",
+        "src\\classes\\gui\\MainApp.py",
+        "src\\classes\\stats\\utils.py"
+    ],
+    "test_phase19": [
+        "test_phase19.py"
+    ],
+    "mock_subscriber": [
+        "test_phase19.py"
+    ],
+    "test_phase21": [
+        "test_phase21.py"
+    ],
+    "test_phase22": [
+        "test_phase22.py"
+    ],
+    "test_phase23": [
+        "test_phase23.py"
+    ],
+    "test_phase24": [
+        "test_phase24.py"
+    ],
+    "test_phase25": [
+        "test_phase25.py"
+    ],
+    "test_phase26": [
+        "test_phase26.py"
+    ],
+    "test_phase27": [
+        "test_phase27.py"
+    ],
+    "test_phase33": [
+        "test_phase33.py"
+    ],
+    "test_phase34": [
+        "test_phase34.py"
+    ],
+    "test_phase35": [
+        "test_phase35.py"
+    ],
+    "test_phase36": [
+        "test_phase36.py"
+    ],
+    "add": [
+        "test_phase36.py",
+        "tests\\classes\\test_agent_coder\\core.py",
+        "tests\\classes\\test_agent_coder\\core.py",
+        "tests\\classes\\test_agent_coder\\core.py",
+        "tests\\classes\\test_agent_context\\core.py",
+        "tests\\classes\\test_agent_tests\\core.py",
+        "tests\\classes\\test_agent_tests\\integration.py",
+        "src\\classes\\backend\\RequestBatcher.py",
+        "src\\classes\\base_agent\\managers.py",
+        "src\\classes\\base_agent\\managers.py",
+        "src\\classes\\base_agent\\models.py",
+        "src\\classes\\base_agent\\models.py",
+        "src\\classes\\base_agent\\models.py",
+        "src\\classes\\base_agent\\models.py"
+    ],
+    "test_phase37": [
+        "test_phase37.py"
+    ],
+    "test_phase38": [
+        "test_phase38.py"
+    ],
+    "test_phase39": [
+        "test_phase39.py"
+    ],
+    "TestPhase40": [
+        "test_phase40.py"
+    ],
+    "setUp": [
+        "test_phase40.py",
+        "tests\\test_agent_integration.py",
+        "tests\\test_cli_wrappers.py",
+        "tests\\test_gui_integration.py",
+        "tests\\test_gui_modular.py",
+        "tests\\test_improvements_final.py",
+        "tests\\test_strategies.py",
+        "tests\\classes\\test_agent_improvements\\integration.py",
+        "tests\\classes\\test_agent_stats\\core.py",
+        "tests\\classes\\test_agent_test_utils\\core.py"
+    ],
+    "test_auto_debugger_syntax_check": [
+        "test_phase40.py"
+    ],
+    "test_neural_pruning_performance": [
+        "test_phase40.py"
+    ],
+    "test_auto_debugger_repair_trigger": [
+        "test_phase40.py"
+    ],
     "_resolve_repo_root": [
         "src\\agent_backend.py",
         "src\\classes\\backend\\SubagentRunner.py"
@@ -22,6 +168,7 @@
         "src\\classes\\backend\\SubagentRunner.py",
         "src\\classes\\base_agent\\managers.py",
         "src\\classes\\reports\\MetricsCollector.py",
+        "src\\classes\\stats\\ObservabilityEngine.py",
         "src\\classes\\stats\\StatsNamespace.py",
         "src\\classes\\test_utils\\PerformanceTracker.py"
     ],
@@ -64,19 +211,6 @@
         "src\\agent_backend.py",
         "src\\classes\\backend\\SubagentRunner.py",
         "src\\classes\\base_agent\\agent.py"
-    ],
-    "main": [
-        "src\\agent_gui.py",
-        "src\\agent_knowledge.py",
-        "src\\generate_agent_reports.py",
-        "tests\\classes\\test_agent\\legacy.py",
-        "tests\\classes\\test_agent\\legacy.py",
-        "tests\\classes\\test_agent\\legacy.py",
-        "src\\classes\\agent\\cli.py",
-        "src\\classes\\agent_tests\\agents.py",
-        "src\\classes\\base_agent\\utilities.py",
-        "src\\classes\\gui\\MainApp.py",
-        "src\\classes\\stats\\utils.py"
     ],
     "agent_dir_on_path": [
         "src\\agent_test_utils.py",
@@ -134,9 +268,42 @@
     "hierarchy": [
         "src\\base_agent.py"
     ],
+    "get_status": [
+        "src\\dashboard_server.py",
+        "src\\classes\\backend\\BackendHealthMonitor.py",
+        "src\\classes\\backend\\RequestThrottler.py"
+    ],
+    "get_thoughts": [
+        "src\\dashboard_server.py"
+    ],
+    "list_artifacts": [
+        "src\\dashboard_server.py"
+    ],
     "_sha256_text": [
         "src\\generate_agent_reports.py",
         "src\\classes\\reports\\ReportGenerator.py"
+    ],
+    "init_openspec": [
+        "src\\mcp_server.py",
+        "src\\classes\\specialized\\SpecToolAgent.py"
+    ],
+    "create_sdd_spec": [
+        "src\\mcp_server.py"
+    ],
+    "confirm_proceed": [
+        "src\\mcp_server.py",
+        "src\\classes\\specialized\\SpecToolAgent.py"
+    ],
+    "create_task": [
+        "src\\mcp_server.py",
+        "src\\classes\\specialized\\GraphMemoryAgent.py"
+    ],
+    "store_memory": [
+        "src\\mcp_server.py",
+        "src\\classes\\specialized\\HierarchicalMemoryAgent.py"
+    ],
+    "interfaces": [
+        "src\\prompt_templates.py"
     ],
     "_load_src_utils": [
         "tests\\agent_test_utils.py"
@@ -153,16 +320,6 @@
     ],
     "TestAgentIntegration": [
         "tests\\test_agent_integration.py"
-    ],
-    "setUp": [
-        "tests\\test_agent_integration.py",
-        "tests\\test_cli_wrappers.py",
-        "tests\\test_gui_integration.py",
-        "tests\\test_gui_modular.py",
-        "tests\\test_strategies.py",
-        "tests\\classes\\test_agent_improvements\\integration.py",
-        "tests\\classes\\test_agent_stats\\core.py",
-        "tests\\classes\\test_agent_test_utils\\core.py"
     ],
     "test_strategy_flag_passed_to_subagent": [
         "tests\\test_agent_integration.py"
@@ -235,6 +392,24 @@
     ],
     "test_agent_column_data_retrieval": [
         "tests\\test_gui_modular.py"
+    ],
+    "TestImprovements": [
+        "tests\\test_improvements_final.py"
+    ],
+    "test_data_science_agent": [
+        "tests\\test_improvements_final.py"
+    ],
+    "test_doc_inference_pdf": [
+        "tests\\test_improvements_final.py"
+    ],
+    "test_auto_debugger": [
+        "tests\\test_improvements_final.py"
+    ],
+    "broken": [
+        "tests\\test_improvements_final.py"
+    ],
+    "test_swarm_pruning": [
+        "tests\\test_improvements_final.py"
     ],
     "test_model_env_injected": [
         "tests\\test_models_propagation.py"
@@ -1822,6 +1997,7 @@
         "src\\classes\\agent\\GracefulShutdown.py",
         "src\\classes\\agent\\HealthChecker.py",
         "src\\classes\\agent\\IncrementalProcessor.py",
+        "src\\classes\\agent\\LongTermMemory.py",
         "src\\classes\\agent\\ProfileManager.py",
         "src\\classes\\agent\\RateLimiter.py",
         "src\\classes\\agent\\ResultCache.py",
@@ -1859,6 +2035,9 @@
         "src\\classes\\agent_tests\\test_management.py",
         "src\\classes\\agent_tests\\test_management.py",
         "src\\classes\\agent_tests\\test_management.py",
+        "src\\classes\\api\\FleetLoadBalancer.py",
+        "src\\classes\\api\\PublicAPIEngine.py",
+        "src\\classes\\api\\SaaSGateway.py",
         "src\\classes\\backend\\ABTester.py",
         "src\\classes\\backend\\AuditLogger.py",
         "src\\classes\\backend\\BackendAnalytics.py",
@@ -1907,29 +2086,47 @@
         "src\\classes\\changes\\ReferenceLinkManager.py",
         "src\\classes\\changes\\TemplateManager.py",
         "src\\classes\\coder\\AccessibilityAnalyzer.py",
+        "src\\classes\\coder\\ArchAdvisorAgent.py",
         "src\\classes\\coder\\BashAgent.py",
         "src\\classes\\coder\\CoderAgent.py",
         "src\\classes\\coder\\CodeReviewer.py",
         "src\\classes\\coder\\ConsistencyChecker.py",
         "src\\classes\\coder\\CPlusPlusAgent.py",
         "src\\classes\\coder\\DependencyAnalyzer.py",
+        "src\\classes\\coder\\DocumentationAgent.py",
+        "src\\classes\\coder\\EthicsGuardrailAgent.py",
         "src\\classes\\coder\\GoAgent.py",
+        "src\\classes\\coder\\LintingAgent.py",
         "src\\classes\\coder\\MarkdownAgent.py",
         "src\\classes\\coder\\MigrationManager.py",
         "src\\classes\\coder\\ModernizationAdvisor.py",
         "src\\classes\\coder\\PerformanceOptimizer.py",
         "src\\classes\\coder\\PowershellAgent.py",
         "src\\classes\\coder\\ProfilingAdvisor.py",
+        "src\\classes\\coder\\QualityGateAgent.py",
+        "src\\classes\\coder\\ReasoningAgent.py",
         "src\\classes\\coder\\RustAgent.py",
+        "src\\classes\\coder\\SandboxAgent.py",
         "src\\classes\\coder\\SecurityAgent.py",
+        "src\\classes\\coder\\SecurityAuditManager.py",
+        "src\\classes\\coder\\SecurityGuardAgent.py",
         "src\\classes\\coder\\SecurityScanner.py",
+        "src\\classes\\coder\\SelfHealingAgent.py",
+        "src\\classes\\coder\\SelfOptimizerAgent.py",
         "src\\classes\\coder\\SqlAgent.py",
         "src\\classes\\coder\\SvgAgent.py",
+        "src\\classes\\coder\\TestAgent.py",
         "src\\classes\\coder\\TestGapAnalyzer.py",
+        "src\\classes\\coder\\TypeSafetyAgent.py",
         "src\\classes\\coder\\YamlAgent.py",
+        "src\\classes\\cognitive\\MemoryConsolidator.py",
+        "src\\classes\\cognitive\\MetacognitiveMonitor.py",
+        "src\\classes\\cognitive\\TheoryOfMind.py",
         "src\\classes\\context\\BranchComparer.py",
         "src\\classes\\context\\CodeGenerator.py",
         "src\\classes\\context\\ContextAgent.py",
+        "src\\classes\\context\\ContextCompressor.py",
+        "src\\classes\\context\\ContextCompressor.py",
         "src\\classes\\context\\ContextDiffer.py",
         "src\\classes\\context\\ContextExporter.py",
         "src\\classes\\context\\ContextInheritance.py",
@@ -1937,8 +2134,14 @@
         "src\\classes\\context\\ContextSharingManager.py",
         "src\\classes\\context\\ContextVisualizer.py",
         "src\\classes\\context\\CrossRepoAnalyzer.py",
+        "src\\classes\\context\\GlobalContextEngine.py",
+        "src\\classes\\context\\GraphContextEngine.py",
+        "src\\classes\\context\\GraphContextEngine.py",
         "src\\classes\\context\\KnowledgeAgent.py",
+        "src\\classes\\context\\MemoryConsolidationAgent.py",
+        "src\\classes\\context\\MemoryEngine.py",
         "src\\classes\\context\\MergeConflictResolver.py",
+        "src\\classes\\context\\NetworkContextAgent.py",
         "src\\classes\\context\\NLQueryEngine.py",
         "src\\classes\\context\\RefactoringAdvisor.py",
         "src\\classes\\context\\SemanticSearchEngine.py",
@@ -1953,6 +2156,31 @@
         "src\\classes\\errors\\RegressionDetector.py",
         "src\\classes\\errors\\TimelineTracker.py",
         "src\\classes\\errors\\TrendAnalyzer.py",
+        "src\\classes\\fleet\\AgentEconomy.py",
+        "src\\classes\\fleet\\AgentStore.py",
+        "src\\classes\\fleet\\AsyncFleetManager.py",
+        "src\\classes\\fleet\\AttributionEngine.py",
+        "src\\classes\\fleet\\CloudSwarmManager.py",
+        "src\\classes\\fleet\\CollaborationMarketplace.py",
+        "src\\classes\\fleet\\DeploymentManager.py",
+        "src\\classes\\fleet\\EvolutionEngine.py",
+        "src\\classes\\fleet\\EvolutionEngine.py",
+        "src\\classes\\fleet\\FleetManager.py",
+        "src\\classes\\fleet\\FleetWebUI.py",
+        "src\\classes\\fleet\\GPUScalingManager.py",
+        "src\\classes\\fleet\\HITLConnector.py",
+        "src\\classes\\fleet\\KnowledgeTransferEngine.py",
+        "src\\classes\\fleet\\KubernetesManager.py",
+        "src\\classes\\fleet\\MCPConnector.py",
+        "src\\classes\\fleet\\PluginManager.py",
+        "src\\classes\\fleet\\RemoteAgentProxy.py",
+        "src\\classes\\fleet\\SafetyAuditTrail.py",
+        "src\\classes\\fleet\\ScalingManager.py",
+        "src\\classes\\fleet\\SchemaManager.py",
+        "src\\classes\\fleet\\SecretManager.py",
+        "src\\classes\\fleet\\TaskPlannerAgent.py",
+        "src\\classes\\fleet\\TenantManager.py",
+        "src\\classes\\generated\\testgenerated_agent.py",
         "src\\classes\\gui\\AgentColumn.py",
         "src\\classes\\gui\\AgentDashboard.py",
         "src\\classes\\gui\\AgentManager.py",
@@ -1998,8 +2226,48 @@
         "src\\classes\\improvements\\VotingSystem.py",
         "src\\classes\\improvements\\WorkflowEngine.py",
         "src\\classes\\improvements\\_ScheduleStore.py",
+        "src\\classes\\orchestration\\AutoDebuggerOrchestrator.py",
+        "src\\classes\\orchestration\\BlackboardManager.py",
+        "src\\classes\\orchestration\\CognitiveBorrowingOrchestrator.py",
+        "src\\classes\\orchestration\\ConsensusEngine.py",
+        "src\\classes\\orchestration\\ConsensusOrchestrator.py",
         "src\\classes\\orchestration\\DirectorAgent.py",
+        "src\\classes\\orchestration\\DreamStateOrchestrator.py",
+        "src\\classes\\orchestration\\EmotionalRegulationOrchestrator.py",
+        "src\\classes\\orchestration\\EntanglementOrchestrator.py",
+        "src\\classes\\orchestration\\FleetTelemetryVisualizer.py",
+        "src\\classes\\orchestration\\FractalKnowledgeOrchestrator.py",
+        "src\\classes\\orchestration\\FractalOrchestrator.py",
+        "src\\classes\\orchestration\\HeartbeatOrchestrator.py",
+        "src\\classes\\orchestration\\HolographicStateOrchestrator.py",
+        "src\\classes\\orchestration\\ImmunizationOrchestrator.py",
+        "src\\classes\\orchestration\\IntentCoherenceEngine.py",
+        "src\\classes\\orchestration\\InterFleetBridgeOrchestrator.py",
+        "src\\classes\\orchestration\\InterleavingOrchestrator.py",
+        "src\\classes\\orchestration\\LatentSignalBus.py",
+        "src\\classes\\orchestration\\MetaOrchestratorAgent.py",
+        "src\\classes\\orchestration\\ModalTeleportationOrchestrator.py",
+        "src\\classes\\orchestration\\NeuralBridgeOrchestrator.py",
+        "src\\classes\\orchestration\\ObservabilityEngine.py",
+        "src\\classes\\orchestration\\ProbabilisticExecutionOrchestrator.py",
+        "src\\classes\\orchestration\\ResourcePredictorOrchestrator.py",
+        "src\\classes\\orchestration\\RLSelector.py",
+        "src\\classes\\orchestration\\SelfHealingEngine.py",
+        "src\\classes\\orchestration\\ServiceMesh.py",
+        "src\\classes\\orchestration\\SignalAgent.py",
+        "src\\classes\\orchestration\\SignalBusOrchestrator.py",
+        "src\\classes\\orchestration\\SovereigntyOrchestrator.py",
+        "src\\classes\\orchestration\\SpeciationOrchestrator.py",
         "src\\classes\\orchestration\\StatusManager.py",
+        "src\\classes\\orchestration\\StructuredOrchestrator.py",
+        "src\\classes\\orchestration\\SubSwarmSpawner.py",
+        "src\\classes\\orchestration\\SubSwarmSpawner.py",
+        "src\\classes\\orchestration\\SwarmOptimizer.py",
+        "src\\classes\\orchestration\\SwarmPruningOrchestrator.py",
+        "src\\classes\\orchestration\\SwarmPruningOrchestrator.py",
+        "src\\classes\\orchestration\\TaskDecomposer.py",
+        "src\\classes\\orchestration\\TemporalSyncOrchestrator.py",
+        "src\\classes\\orchestration\\ToolRegistry.py",
         "src\\classes\\reports\\AccessController.py",
         "src\\classes\\reports\\AnnotationManager.py",
         "src\\classes\\reports\\AuditLogger.py",
@@ -2019,8 +2287,77 @@
         "src\\classes\\reports\\SubscriptionManager.py",
         "src\\classes\\review\\ModeratorAgent.py",
         "src\\classes\\search\\SearchAgent.py",
+        "src\\classes\\specialized\\AndroidAgent.py",
+        "src\\classes\\specialized\\ArchitectAgent.py",
+        "src\\classes\\specialized\\AttentionBufferAgent.py",
+        "src\\classes\\specialized\\BenchmarkAgent.py",
+        "src\\classes\\specialized\\BrowsingAgent.py",
+        "src\\classes\\specialized\\ConfigAgent.py",
+        "src\\classes\\specialized\\CoreExpansionAgent.py",
         "src\\classes\\specialized\\CsvAgent.py",
+        "src\\classes\\specialized\\DashboardAgent.py",
+        "src\\classes\\specialized\\DataAgent.py",
+        "src\\classes\\specialized\\DataScienceAgent.py",
+        "src\\classes\\specialized\\DocInferenceAgent.py",
+        "src\\classes\\specialized\\DocumentationIndexerAgent.py",
+        "src\\classes\\specialized\\DynamicDecomposerAgent.py",
+        "src\\classes\\specialized\\EternalAuditAgent.py",
+        "src\\classes\\specialized\\EvolutionaryPromptAgent.py",
+        "src\\classes\\specialized\\ExcelAgent.py",
+        "src\\classes\\specialized\\ExternalAIRecorderAgent.py",
         "src\\classes\\specialized\\FinancialAgent.py",
+        "src\\classes\\specialized\\GeneticHardeningAgent.py",
+        "src\\classes\\specialized\\GraphMemoryAgent.py",
+        "src\\classes\\specialized\\HandyAgent.py",
+        "src\\classes\\specialized\\HierarchicalMemoryAgent.py",
+        "src\\classes\\specialized\\HolographicContextAgent.py",
+        "src\\classes\\specialized\\IdiomExtractorAgent.py",
+        "src\\classes\\specialized\\ImmuneSystemAgent.py",
+        "src\\classes\\specialized\\InfrastructureManagerAgent.py",
+        "src\\classes\\specialized\\InfrastructureRepairAgent.py",
+        "src\\classes\\specialized\\KernelAgent.py",
+        "src\\classes\\specialized\\KnowledgeFusionAgent.py",
+        "src\\classes\\specialized\\LinguisticAgent.py",
+        "src\\classes\\specialized\\MCPAgent.py",
+        "src\\classes\\specialized\\MemoRAGAgent.py",
+        "src\\classes\\specialized\\MessagingAgent.py",
+        "src\\classes\\specialized\\ModelForgeAgent.py",
+        "src\\classes\\specialized\\ModelOptimizerAgent.py",
+        "src\\classes\\specialized\\MorphologicalEvolutionAgent.py",
+        "src\\classes\\specialized\\MultiModalContextAgent.py",
+        "src\\classes\\specialized\\NASAgent.py",
+        "src\\classes\\specialized\\NeuralAnchorAgent.py",
+        "src\\classes\\specialized\\NeuralPruningEngine.py",
+        "src\\classes\\specialized\\NeuroSymbolicAgent.py",
+        "src\\classes\\specialized\\PersonalityCoreAgent.py",
+        "src\\classes\\specialized\\PRAgent.py",
+        "src\\classes\\specialized\\ProactiveAgent.py",
+        "src\\classes\\specialized\\QuantumMemoryAgent.py",
+        "src\\classes\\specialized\\QuantumReasonerAgent.py",
+        "src\\classes\\specialized\\RealityAnchorAgent.py",
+        "src\\classes\\specialized\\RealityGraftingAgent.py",
+        "src\\classes\\specialized\\ReasoningAgent.py",
+        "src\\classes\\specialized\\RefinementAgent.py",
+        "src\\classes\\specialized\\ReflectionAgent.py",
+        "src\\classes\\specialized\\ResearchAgent.py",
+        "src\\classes\\specialized\\ResilienceManagerAgent.py",
+        "src\\classes\\specialized\\SelfArchivingAgent.py",
+        "src\\classes\\specialized\\SelfSearchAgent.py",
+        "src\\classes\\specialized\\SpeciationAgent.py",
+        "src\\classes\\specialized\\SpecToolAgent.py",
+        "src\\classes\\specialized\\SpecToolAgent.py",
+        "src\\classes\\specialized\\SQLAgent.py",
+        "src\\classes\\specialized\\StructuredOrchestrator.py",
+        "src\\classes\\specialized\\SynthesisAgent.py",
+        "src\\classes\\specialized\\SyntheticDataAgent.py",
+        "src\\classes\\specialized\\TemporalPredictorAgent.py",
+        "src\\classes\\specialized\\TemporalShardAgent.py",
+        "src\\classes\\specialized\\ToolEvolutionAgent.py",
+        "src\\classes\\specialized\\TopologicalNavigator.py",
+        "src\\classes\\specialized\\VisualizerAgent.py",
+        "src\\classes\\specialized\\VoiceAgent.py",
+        "src\\classes\\specialized\\WebAgent.py",
+        "src\\classes\\specialized\\WorldModelAgent.py",
         "src\\classes\\stats\\ABComparator.py",
         "src\\classes\\stats\\ABComparisonEngine.py",
         "src\\classes\\stats\\AnnotationManager.py",
@@ -2029,6 +2366,13 @@
         "src\\classes\\stats\\DerivedMetricCalculator.py",
         "src\\classes\\stats\\FormulaEngine.py",
         "src\\classes\\stats\\MetricNamespaceManager.py",
+        "src\\classes\\stats\\MetricsExporter.py",
+        "src\\classes\\stats\\ModelFallbackEngine.py",
+        "src\\classes\\stats\\ObservabilityEngine.py",
+        "src\\classes\\stats\\OTelManager.py",
+        "src\\classes\\stats\\PrometheusExporter.py",
+        "src\\classes\\stats\\ReportingAgent.py",
+        "src\\classes\\stats\\ResourceMonitor.py",
         "src\\classes\\stats\\RetentionEnforcer.py",
         "src\\classes\\stats\\StatsAccessController.py",
         "src\\classes\\stats\\StatsAgent.py",
@@ -2051,6 +2395,7 @@
         "src\\classes\\stats\\StatsSubscriptionManager.py",
         "src\\classes\\stats\\SubscriptionManager.py",
         "src\\classes\\stats\\ThresholdAlertManager.py",
+        "src\\classes\\stats\\TransparencyAgent.py",
         "src\\classes\\test_utils\\AgentAssertions.py",
         "src\\classes\\test_utils\\BaselineManager.py",
         "src\\classes\\test_utils\\Benchmarker.py",
@@ -2085,7 +2430,8 @@
         "src\\classes\\test_utils\\TestRecorder.py",
         "src\\classes\\test_utils\\TestReportGenerator.py",
         "src\\classes\\test_utils\\TestResultAggregator.py",
-        "src\\classes\\test_utils\\TestTimer.py"
+        "src\\classes\\test_utils\\TestTimer.py",
+        "src\\classes\\tools\\weather_api_tool.py"
     ],
     "build_headers": [
         "tests\\classes\\test_agent_backend\\core.py"
@@ -2210,6 +2556,7 @@
     "call": [
         "tests\\classes\\test_agent_backend\\integration.py",
         "src\\classes\\agent\\CircuitBreaker.py",
+        "src\\classes\\fleet\\MCPConnector.py",
         "src\\classes\\test_utils\\MockAIBackend.py"
     ],
     "execute_with_retry": [
@@ -3431,7 +3778,8 @@
         "tests\\classes\\test_agent_changes_tests\\core.py"
     ],
     "send_notification": [
-        "tests\\classes\\test_agent_changes_tests\\core.py"
+        "tests\\classes\\test_agent_changes_tests\\core.py",
+        "src\\classes\\specialized\\MessagingAgent.py"
     ],
     "test_notification_filters": [
         "tests\\classes\\test_agent_changes_tests\\core.py"
@@ -3745,21 +4093,6 @@
     "test_detect_missing_type_hints": [
         "tests\\classes\\test_agent_coder\\core.py"
     ],
-    "add": [
-        "tests\\classes\\test_agent_coder\\core.py",
-        "tests\\classes\\test_agent_coder\\core.py",
-        "tests\\classes\\test_agent_coder\\core.py",
-        "tests\\classes\\test_agent_context\\core.py",
-        "tests\\classes\\test_agent_tests\\core.py",
-        "tests\\classes\\test_agent_tests\\integration.py",
-        "src\\classes\\backend\\RequestBatcher.py",
-        "src\\classes\\base_agent\\managers.py",
-        "src\\classes\\base_agent\\managers.py",
-        "src\\classes\\base_agent\\models.py",
-        "src\\classes\\base_agent\\models.py",
-        "src\\classes\\base_agent\\models.py",
-        "src\\classes\\base_agent\\models.py"
-    ],
     "test_detect_existing_type_hints": [
         "tests\\classes\\test_agent_coder\\core.py"
     ],
@@ -3964,7 +4297,8 @@
         "tests\\classes\\test_agent_coder\\core.py"
     ],
     "MyClass": [
-        "tests\\classes\\test_agent_coder\\core.py"
+        "tests\\classes\\test_agent_coder\\core.py",
+        "src\\classes\\context\\ContextCompressor.py"
     ],
     "method": [
         "tests\\classes\\test_agent_coder\\core.py"
@@ -4433,7 +4767,8 @@
         "tests\\classes\\test_agent_context\\core.py"
     ],
     "definition": [
-        "tests\\classes\\test_agent_context\\core.py"
+        "tests\\classes\\test_agent_context\\core.py",
+        "src\\classes\\specialized\\SpeciationAgent.py"
     ],
     "DataProcessor": [
         "tests\\classes\\test_agent_context\\core.py"
@@ -4598,7 +4933,8 @@
         "tests\\classes\\test_agent_context\\core.py"
     ],
     "name": [
-        "tests\\classes\\test_agent_context\\core.py"
+        "tests\\classes\\test_agent_context\\core.py",
+        "src\\classes\\specialized\\SynthesisAgent.py"
     ],
     "extract": [
         "tests\\classes\\test_agent_context\\core.py"
@@ -4679,6 +5015,18 @@
     ],
     "test_knowledge_graph": [
         "tests\\classes\\test_agent_context\\test_knowledge_graph.py"
+    ],
+    "test_semantic_search_engine_integration": [
+        "tests\\classes\\test_agent_context\\test_semantic.py"
+    ],
+    "calculate_risk": [
+        "tests\\classes\\test_agent_context\\test_semantic.py"
+    ],
+    "save_user_profile": [
+        "tests\\classes\\test_agent_context\\test_semantic.py"
+    ],
+    "test_semantic_search_clear": [
+        "tests\\classes\\test_agent_context\\test_semantic.py"
     ],
     "TestErrorLogParsingComprehensive": [
         "tests\\classes\\test_agent_errors\\advanced.py"
@@ -6497,7 +6845,8 @@
         "tests\\classes\\test_agent_improvements\\core.py"
     ],
     "register_agent": [
-        "tests\\classes\\test_agent_improvements\\core.py"
+        "tests\\classes\\test_agent_improvements\\core.py",
+        "src\\classes\\fleet\\FleetManager.py"
     ],
     "execute_agents": [
         "tests\\classes\\test_agent_improvements\\core.py"
@@ -6545,7 +6894,8 @@
         "src\\classes\\agent_tests\\mutation_testing.py",
         "src\\classes\\backend\\BackendAnalytics.py",
         "src\\classes\\base_agent\\managers.py",
-        "src\\classes\\improvements\\ProgressDashboard.py"
+        "src\\classes\\improvements\\ProgressDashboard.py",
+        "src\\classes\\specialized\\BenchmarkAgent.py"
     ],
     "test_import_dependencies_after_refactoring": [
         "tests\\classes\\test_agent_improvements\\core.py"
@@ -6726,6 +7076,12 @@
     "test_improvements_agent_delegates_to_base": [
         "tests\\classes\\test_agent_improvements\\legacy.py"
     ],
+    "test_improvements_agent_round_trip": [
+        "tests\\classes\\test_agent_improvements\\test_io.py"
+    ],
+    "test_improvements_agent_discovery": [
+        "tests\\classes\\test_agent_improvements\\test_io.py"
+    ],
     "TestTrendAnalysisAdvanced": [
         "tests\\classes\\test_agent_stats\\advanced.py"
     ],
@@ -6824,6 +7180,7 @@
     "get_stats": [
         "tests\\classes\\test_agent_stats\\advanced.py",
         "src\\classes\\agent\\RateLimiter.py",
+        "src\\classes\\api\\FleetLoadBalancer.py",
         "src\\classes\\backend\\ConnectionPool.py",
         "src\\classes\\backend\\RequestCompressor.py",
         "src\\classes\\backend\\TTLCache.py",
@@ -10748,6 +11105,9 @@
     "test_performance_comparison_over_time": [
         "tests\\classes\\test_generate_agent_reports\\performance.py"
     ],
+    "sample_automated_task": [
+        "src\\tools\\evolved\\sampletask.py"
+    ],
     "from": [
         "src\\classes\\agent\\Agent.py",
         "src\\classes\\agent\\AgentChain.py",
@@ -11090,6 +11450,7 @@
         "src\\classes\\stats\\CloudExporter.py",
         "src\\classes\\stats\\CorrelationAnalyzer.py",
         "src\\classes\\stats\\DerivedMetric.py",
+        "src\\classes\\stats\\DerivedMetric.py",
         "src\\classes\\stats\\DerivedMetricCalculator.py",
         "src\\classes\\stats\\ExportDestination.py",
         "src\\classes\\stats\\FederatedSource.py",
@@ -11106,11 +11467,14 @@
         "src\\classes\\stats\\MetricType.py",
         "src\\classes\\stats\\RetentionEnforcer.py",
         "src\\classes\\stats\\RetentionPolicy.py",
+        "src\\classes\\stats\\RetentionPolicy.py",
+        "src\\classes\\stats\\RollupConfig.py",
         "src\\classes\\stats\\RollupConfig.py",
         "src\\classes\\stats\\StatsAccessController.py",
         "src\\classes\\stats\\StatsAgent.py",
         "src\\classes\\stats\\StatsAnnotationManager.py",
         "src\\classes\\stats\\StatsAPIServer.py",
+        "src\\classes\\stats\\StatsBackup.py",
         "src\\classes\\stats\\StatsBackup.py",
         "src\\classes\\stats\\StatsBackupManager.py",
         "src\\classes\\stats\\StatsChangeDetector.py",
@@ -11124,6 +11488,7 @@
         "src\\classes\\stats\\StatsRollup.py",
         "src\\classes\\stats\\StatsRollupCalculator.py",
         "src\\classes\\stats\\StatsSnapshot.py",
+        "src\\classes\\stats\\StatsSnapshot.py",
         "src\\classes\\stats\\StatsSnapshotManager.py",
         "src\\classes\\stats\\StatsStream.py",
         "src\\classes\\stats\\StatsStreamer.py",
@@ -11133,6 +11498,7 @@
         "src\\classes\\stats\\StreamingConfig.py",
         "src\\classes\\stats\\StreamingProtocol.py",
         "src\\classes\\stats\\SubscriptionManager.py",
+        "src\\classes\\stats\\Threshold.py",
         "src\\classes\\stats\\Threshold.py",
         "src\\classes\\stats\\ThresholdAlert.py",
         "src\\classes\\stats\\ThresholdAlertManager.py",
@@ -11161,7 +11527,9 @@
         "src\\classes\\test_utils\\LogCapturer.py",
         "src\\classes\\test_utils\\MockAIBackend.py",
         "src\\classes\\test_utils\\MockResponse.py",
+        "src\\classes\\test_utils\\MockResponse.py",
         "src\\classes\\test_utils\\MockResponseType.py",
+        "src\\classes\\test_utils\\ParallelTestResult.py",
         "src\\classes\\test_utils\\ParallelTestResult.py",
         "src\\classes\\test_utils\\ParallelTestRunner.py",
         "src\\classes\\test_utils\\ParameterizedTestCase.py",
@@ -11174,16 +11542,20 @@
         "src\\classes\\test_utils\\ResourcePool.py",
         "src\\classes\\test_utils\\RetryHelper.py",
         "src\\classes\\test_utils\\SnapshotComparisonResult.py",
+        "src\\classes\\test_utils\\SnapshotComparisonResult.py",
         "src\\classes\\test_utils\\SnapshotManager.py",
+        "src\\classes\\test_utils\\TestAssertion.py",
         "src\\classes\\test_utils\\TestAssertion.py",
         "src\\classes\\test_utils\\TestBaseline.py",
         "src\\classes\\test_utils\\TestConfigLoader.py",
         "src\\classes\\test_utils\\TestDataCleaner.py",
         "src\\classes\\test_utils\\TestDataFactory.py",
+        "src\\classes\\test_utils\\TestDataFactory.py",
         "src\\classes\\test_utils\\TestDataGenerator.py",
         "src\\classes\\test_utils\\TestDataSeeder.py",
         "src\\classes\\test_utils\\TestDataType.py",
         "src\\classes\\test_utils\\TestEnvironment.py",
+        "src\\classes\\test_utils\\TestFixture.py",
         "src\\classes\\test_utils\\TestFixture.py",
         "src\\classes\\test_utils\\TestLogEntry.py",
         "src\\classes\\test_utils\\TestLogger.py",
@@ -11253,7 +11625,8 @@
         "src\\classes\\agent\\Agent.py"
     ],
     "run_tests": [
-        "src\\classes\\agent\\Agent.py"
+        "src\\classes\\agent\\Agent.py",
+        "src\\classes\\coder\\TestAgent.py"
     ],
     "update_errors_improvements": [
         "src\\classes\\agent\\Agent.py"
@@ -11558,6 +11931,7 @@
         "src\\classes\\errors\\SuppressionRule.py",
         "src\\classes\\errors\\TimelineEvent.py",
         "src\\classes\\errors\\TrendData.py",
+        "src\\classes\\fleet\\WorkflowState.py",
         "src\\classes\\improvements\\ArchivedImprovement.py",
         "src\\classes\\improvements\\BranchComparison.py",
         "src\\classes\\improvements\\BulkOperationResult.py",
@@ -11608,6 +11982,8 @@
         "src\\classes\\stats\\MetricNamespace.py",
         "src\\classes\\stats\\MetricSnapshot.py",
         "src\\classes\\stats\\MetricSubscription.py",
+        "src\\classes\\stats\\ObservabilityEngine.py",
+        "src\\classes\\stats\\OTelManager.py",
         "src\\classes\\stats\\RetentionPolicy.py",
         "src\\classes\\stats\\RollupConfig.py",
         "src\\classes\\stats\\StatsBackup.py",
@@ -11712,7 +12088,12 @@
     "load": [
         "src\\classes\\agent\\ConfigLoader.py",
         "src\\classes\\base_agent\\managers.py",
+        "src\\classes\\context\\GlobalContextEngine.py",
+        "src\\classes\\context\\GraphContextEngine.py",
+        "src\\classes\\context\\MemoryEngine.py",
         "src\\classes\\gui\\ConfigurationManager.py",
+        "src\\classes\\improvements\\ImprovementsAgent.py",
+        "src\\classes\\stats\\ObservabilityEngine.py",
         "src\\classes\\test_utils\\TestConfigLoader.py",
         "src\\classes\\test_utils\\TestRecorder.py"
     ],
@@ -11738,6 +12119,7 @@
         "src\\classes\\errors\\ImpactAnalyzer.py",
         "src\\classes\\improvements\\DependencyResolver.py",
         "src\\classes\\improvements\\ImprovementsAgent.py",
+        "src\\classes\\specialized\\GraphMemoryAgent.py",
         "src\\classes\\test_utils\\DependencyResolver.py"
     ],
     "resolve": [
@@ -11885,6 +12267,42 @@
     "LockType": [
         "src\\classes\\agent\\LockType.py"
     ],
+    "LongTermMemory": [
+        "src\\classes\\agent\\LongTermMemory.py"
+    ],
+    "_init_db": [
+        "src\\classes\\agent\\LongTermMemory.py",
+        "src\\classes\\context\\MemoryEngine.py"
+    ],
+    "store": [
+        "src\\classes\\agent\\LongTermMemory.py"
+    ],
+    "query": [
+        "src\\classes\\agent\\LongTermMemory.py",
+        "src\\classes\\context\\NLQueryEngine.py",
+        "src\\classes\\stats\\StatsQueryEngine.py"
+    ],
+    "clear": [
+        "src\\classes\\agent\\LongTermMemory.py",
+        "src\\classes\\agent\\ResultCache.py",
+        "src\\classes\\agent\\TelemetryCollector.py",
+        "src\\classes\\backend\\DiskCache.py",
+        "src\\classes\\backend\\RequestRecorder.py",
+        "src\\classes\\backend\\TTLCache.py",
+        "src\\classes\\base_agent\\managers.py",
+        "src\\classes\\base_agent\\managers.py",
+        "src\\classes\\base_agent\\models.py",
+        "src\\classes\\base_agent\\models.py",
+        "src\\classes\\context\\MemoryEngine.py",
+        "src\\classes\\context\\SemanticSearchEngine.py",
+        "src\\classes\\errors\\TimelineTracker.py",
+        "src\\classes\\reports\\ReportAggregator.py",
+        "src\\classes\\test_utils\\DependencyContainer.py",
+        "src\\classes\\test_utils\\MockAIBackend.py",
+        "src\\classes\\test_utils\\PerformanceTracker.py",
+        "src\\classes\\test_utils\\TestLogger.py",
+        "src\\classes\\test_utils\\TestResultAggregator.py"
+    ],
     "ProfileManager": [
         "src\\classes\\agent\\ProfileManager.py"
     ],
@@ -11926,8 +12344,10 @@
         "src\\classes\\backend\\TTLCache.py",
         "src\\classes\\base_agent\\managers.py",
         "src\\classes\\base_agent\\models.py",
+        "src\\classes\\fleet\\WorkflowState.py",
         "src\\classes\\gui\\ConfigurationManager.py",
         "src\\classes\\improvements\\_ScheduleStore.py",
+        "src\\classes\\orchestration\\BlackboardManager.py",
         "src\\classes\\reports\\ReportCacheManager.py",
         "src\\classes\\reports\\ReportLocalizer.py",
         "src\\classes\\test_utils\\TestConfigLoader.py"
@@ -11937,6 +12357,7 @@
         "src\\classes\\backend\\DiskCache.py",
         "src\\classes\\backend\\TTLCache.py",
         "src\\classes\\base_agent\\managers.py",
+        "src\\classes\\fleet\\WorkflowState.py",
         "src\\classes\\gui\\ConfigurationManager.py",
         "src\\classes\\reports\\ReportCacheManager.py"
     ],
@@ -11945,25 +12366,6 @@
         "src\\classes\\backend\\TTLCache.py",
         "src\\classes\\base_agent\\managers.py",
         "src\\classes\\reports\\ReportCacheManager.py"
-    ],
-    "clear": [
-        "src\\classes\\agent\\ResultCache.py",
-        "src\\classes\\agent\\TelemetryCollector.py",
-        "src\\classes\\backend\\DiskCache.py",
-        "src\\classes\\backend\\RequestRecorder.py",
-        "src\\classes\\backend\\TTLCache.py",
-        "src\\classes\\base_agent\\managers.py",
-        "src\\classes\\base_agent\\managers.py",
-        "src\\classes\\base_agent\\models.py",
-        "src\\classes\\base_agent\\models.py",
-        "src\\classes\\context\\SemanticSearchEngine.py",
-        "src\\classes\\errors\\TimelineTracker.py",
-        "src\\classes\\reports\\ReportAggregator.py",
-        "src\\classes\\test_utils\\DependencyContainer.py",
-        "src\\classes\\test_utils\\MockAIBackend.py",
-        "src\\classes\\test_utils\\PerformanceTracker.py",
-        "src\\classes\\test_utils\\TestLogger.py",
-        "src\\classes\\test_utils\\TestResultAggregator.py"
     ],
     "SpanContext": [
         "src\\classes\\agent\\SpanContext.py"
@@ -12005,7 +12407,8 @@
         "src\\classes\\context\\ContextAgent.py"
     ],
     "list_templates": [
-        "src\\classes\\agent\\TemplateManager.py"
+        "src\\classes\\agent\\TemplateManager.py",
+        "src\\classes\\fleet\\AgentStore.py"
     ],
     "setup_logging": [
         "src\\classes\\agent\\utils.py",
@@ -12188,22 +12591,35 @@
         "src\\classes\\base_agent\\agent.py",
         "src\\classes\\base_agent\\agent.py",
         "src\\classes\\changes\\ChangesAgent.py",
+        "src\\classes\\coder\\ArchAdvisorAgent.py",
         "src\\classes\\coder\\BashAgent.py",
         "src\\classes\\coder\\CoderAgent.py",
         "src\\classes\\coder\\CPlusPlusAgent.py",
+        "src\\classes\\coder\\DocumentationAgent.py",
         "src\\classes\\coder\\GoAgent.py",
+        "src\\classes\\coder\\LintingAgent.py",
         "src\\classes\\coder\\MarkdownAgent.py",
         "src\\classes\\coder\\PowershellAgent.py",
+        "src\\classes\\coder\\QualityGateAgent.py",
+        "src\\classes\\coder\\ReasoningAgent.py",
         "src\\classes\\coder\\RustAgent.py",
         "src\\classes\\coder\\SecurityAgent.py",
+        "src\\classes\\coder\\SecurityGuardAgent.py",
+        "src\\classes\\coder\\SelfHealingAgent.py",
+        "src\\classes\\coder\\SelfOptimizerAgent.py",
         "src\\classes\\coder\\SqlAgent.py",
         "src\\classes\\coder\\SvgAgent.py",
+        "src\\classes\\coder\\TypeSafetyAgent.py",
         "src\\classes\\coder\\YamlAgent.py",
         "src\\classes\\context\\ContextAgent.py",
-        "src\\classes\\context\\KnowledgeAgent.py",
+        "src\\classes\\context\\MemoryConsolidationAgent.py",
+        "src\\classes\\context\\NetworkContextAgent.py",
         "src\\classes\\errors\\ErrorsAgent.py",
+        "src\\classes\\fleet\\TaskPlannerAgent.py",
         "src\\classes\\improvements\\ImprovementsAgent.py",
         "src\\classes\\orchestration\\DirectorAgent.py",
+        "src\\classes\\orchestration\\MetaOrchestratorAgent.py",
+        "src\\classes\\orchestration\\SignalAgent.py",
         "src\\classes\\review\\ModeratorAgent.py",
         "src\\classes\\search\\SearchAgent.py",
         "src\\classes\\specialized\\CsvAgent.py",
@@ -12232,14 +12648,73 @@
         "src\\classes\\agent_tests\\agents.py",
         "src\\classes\\base_agent\\agent.py",
         "src\\classes\\changes\\ChangesAgent.py",
+        "src\\classes\\coder\\ArchAdvisorAgent.py",
         "src\\classes\\coder\\CoderAgent.py",
+        "src\\classes\\coder\\DocumentationAgent.py",
+        "src\\classes\\coder\\LintingAgent.py",
         "src\\classes\\coder\\MarkdownAgent.py",
+        "src\\classes\\coder\\QualityGateAgent.py",
+        "src\\classes\\coder\\ReasoningAgent.py",
+        "src\\classes\\coder\\SandboxAgent.py",
+        "src\\classes\\coder\\SecurityGuardAgent.py",
+        "src\\classes\\coder\\SelfHealingAgent.py",
+        "src\\classes\\coder\\SelfOptimizerAgent.py",
+        "src\\classes\\coder\\TestAgent.py",
+        "src\\classes\\coder\\TypeSafetyAgent.py",
         "src\\classes\\context\\ContextAgent.py",
         "src\\classes\\context\\KnowledgeAgent.py",
+        "src\\classes\\context\\MemoryConsolidationAgent.py",
         "src\\classes\\errors\\ErrorsAgent.py",
+        "src\\classes\\fleet\\RemoteAgentProxy.py",
+        "src\\classes\\fleet\\TaskPlannerAgent.py",
         "src\\classes\\improvements\\ImprovementsAgent.py",
         "src\\classes\\orchestration\\DirectorAgent.py",
-        "src\\classes\\search\\SearchAgent.py"
+        "src\\classes\\orchestration\\MetaOrchestratorAgent.py",
+        "src\\classes\\search\\SearchAgent.py",
+        "src\\classes\\specialized\\BrowsingAgent.py",
+        "src\\classes\\specialized\\ConfigAgent.py",
+        "src\\classes\\specialized\\DataAgent.py",
+        "src\\classes\\specialized\\DataScienceAgent.py",
+        "src\\classes\\specialized\\DocInferenceAgent.py",
+        "src\\classes\\specialized\\DocumentationIndexerAgent.py",
+        "src\\classes\\specialized\\DynamicDecomposerAgent.py",
+        "src\\classes\\specialized\\ExcelAgent.py",
+        "src\\classes\\specialized\\ExternalAIRecorderAgent.py",
+        "src\\classes\\specialized\\GraphMemoryAgent.py",
+        "src\\classes\\specialized\\HandyAgent.py",
+        "src\\classes\\specialized\\HierarchicalMemoryAgent.py",
+        "src\\classes\\specialized\\ImmuneSystemAgent.py",
+        "src\\classes\\specialized\\InfrastructureManagerAgent.py",
+        "src\\classes\\specialized\\KernelAgent.py",
+        "src\\classes\\specialized\\KnowledgeFusionAgent.py",
+        "src\\classes\\specialized\\LinguisticAgent.py",
+        "src\\classes\\specialized\\MCPAgent.py",
+        "src\\classes\\specialized\\MemoRAGAgent.py",
+        "src\\classes\\specialized\\ModelForgeAgent.py",
+        "src\\classes\\specialized\\ModelOptimizerAgent.py",
+        "src\\classes\\specialized\\MorphologicalEvolutionAgent.py",
+        "src\\classes\\specialized\\MultiModalContextAgent.py",
+        "src\\classes\\specialized\\NeuroSymbolicAgent.py",
+        "src\\classes\\specialized\\PRAgent.py",
+        "src\\classes\\specialized\\ProactiveAgent.py",
+        "src\\classes\\specialized\\QuantumMemoryAgent.py",
+        "src\\classes\\specialized\\RealityGraftingAgent.py",
+        "src\\classes\\specialized\\ReasoningAgent.py",
+        "src\\classes\\specialized\\RefinementAgent.py",
+        "src\\classes\\specialized\\ReflectionAgent.py",
+        "src\\classes\\specialized\\ResearchAgent.py",
+        "src\\classes\\specialized\\SelfArchivingAgent.py",
+        "src\\classes\\specialized\\SelfSearchAgent.py",
+        "src\\classes\\specialized\\SpecToolAgent.py",
+        "src\\classes\\specialized\\SQLAgent.py",
+        "src\\classes\\specialized\\StructuredOrchestrator.py",
+        "src\\classes\\specialized\\TemporalPredictorAgent.py",
+        "src\\classes\\specialized\\ToolEvolutionAgent.py",
+        "src\\classes\\specialized\\VisualizerAgent.py",
+        "src\\classes\\specialized\\VoiceAgent.py",
+        "src\\classes\\specialized\\WebAgent.py",
+        "src\\classes\\stats\\ReportingAgent.py",
+        "src\\classes\\stats\\TransparencyAgent.py"
     ],
     "update_file": [
         "src\\classes\\agent_tests\\agents.py",
@@ -12267,8 +12742,13 @@
         "src\\classes\\agent_tests\\scheduling.py",
         "src\\classes\\agent_tests\\testing_utils.py",
         "src\\classes\\coder\\CodeReviewer.py",
+        "src\\classes\\cognitive\\MetacognitiveMonitor.py",
+        "src\\classes\\context\\GlobalContextEngine.py",
+        "src\\classes\\fleet\\AttributionEngine.py",
+        "src\\classes\\fleet\\SafetyAuditTrail.py",
         "src\\classes\\reports\\MetricsCollector.py",
         "src\\classes\\stats\\ABComparisonEngine.py",
+        "src\\classes\\stats\\ObservabilityEngine.py",
         "src\\classes\\test_utils\\ParallelTestRunner.py",
         "src\\classes\\test_utils\\PerformanceTracker.py",
         "src\\classes\\test_utils\\TestOutputFormatter.py",
@@ -12612,6 +13092,9 @@
     "export_all": [
         "src\\classes\\agent_tests\\test_generation.py"
     ],
+    "generate_red_team_tests": [
+        "src\\classes\\agent_tests\\test_generation.py"
+    ],
     "TestCaseMinimizer": [
         "src\\classes\\agent_tests\\test_generation.py"
     ],
@@ -12740,6 +13223,33 @@
     "ContractValidator": [
         "src\\classes\\agent_tests\\test_management.py"
     ],
+    "FleetLoadBalancer": [
+        "src\\classes\\api\\FleetLoadBalancer.py"
+    ],
+    "balance_request": [
+        "src\\classes\\api\\FleetLoadBalancer.py"
+    ],
+    "PublicAPIEngine": [
+        "src\\classes\\api\\PublicAPIEngine.py"
+    ],
+    "generate_openapi_spec": [
+        "src\\classes\\api\\PublicAPIEngine.py"
+    ],
+    "register_external_tool": [
+        "src\\classes\\api\\PublicAPIEngine.py"
+    ],
+    "SaaSGateway": [
+        "src\\classes\\api\\SaaSGateway.py"
+    ],
+    "create_api_key": [
+        "src\\classes\\api\\SaaSGateway.py"
+    ],
+    "validate_request": [
+        "src\\classes\\api\\SaaSGateway.py"
+    ],
+    "get_quota_status": [
+        "src\\classes\\api\\SaaSGateway.py"
+    ],
     "ABTester": [
         "src\\classes\\backend\\ABTester.py"
     ],
@@ -12766,7 +13276,8 @@
         "src\\classes\\backend\\BackendAnalytics.py"
     ],
     "record_usage": [
-        "src\\classes\\backend\\BackendAnalytics.py"
+        "src\\classes\\backend\\BackendAnalytics.py",
+        "src\\classes\\specialized\\NeuralPruningEngine.py"
     ],
     "_cleanup_old_records": [
         "src\\classes\\backend\\BackendAnalytics.py"
@@ -12787,10 +13298,6 @@
     ],
     "_update_status": [
         "src\\classes\\backend\\BackendHealthMonitor.py"
-    ],
-    "get_status": [
-        "src\\classes\\backend\\BackendHealthMonitor.py",
-        "src\\classes\\backend\\RequestThrottler.py"
     ],
     "get_all_status": [
         "src\\classes\\backend\\BackendHealthMonitor.py"
@@ -13000,10 +13507,12 @@
         "src\\classes\\backend\\RequestTracer.py"
     ],
     "start_trace": [
-        "src\\classes\\backend\\RequestTracer.py"
+        "src\\classes\\backend\\RequestTracer.py",
+        "src\\classes\\stats\\ObservabilityEngine.py"
     ],
     "end_trace": [
-        "src\\classes\\backend\\RequestTracer.py"
+        "src\\classes\\backend\\RequestTracer.py",
+        "src\\classes\\stats\\ObservabilityEngine.py"
     ],
     "get_active_traces": [
         "src\\classes\\backend\\RequestTracer.py"
@@ -13044,6 +13553,12 @@
     "yn": [
         "src\\classes\\backend\\SubagentRunner.py"
     ],
+    "llm_chat_via_ollama": [
+        "src\\classes\\backend\\SubagentRunner.py"
+    ],
+    "llm_chat_via_vllm": [
+        "src\\classes\\backend\\SubagentRunner.py"
+    ],
     "TTLCache": [
         "src\\classes\\backend\\TTLCache.py"
     ],
@@ -13082,9 +13597,13 @@
         "src\\classes\\base_agent\\agent.py"
     ],
     "BaseAgent": [
-        "src\\classes\\base_agent\\agent.py"
+        "src\\classes\\base_agent\\agent.py",
+        "src\\classes\\specialized\\VisualizerAgent.py"
     ],
     "MyAgent": [
+        "src\\classes\\base_agent\\agent.py"
+    ],
+    "_register_tools": [
         "src\\classes\\base_agent\\agent.py"
     ],
     "_load_config": [
@@ -13101,15 +13620,22 @@
         "src\\classes\\base_agent\\agent.py",
         "src\\classes\\base_agent\\managers.py"
     ],
+    "_track_tokens": [
+        "src\\classes\\base_agent\\agent.py"
+    ],
     "get_model": [
         "src\\classes\\base_agent\\agent.py"
     ],
     "stop": [
         "src\\classes\\base_agent\\agent.py",
+        "src\\classes\\fleet\\MCPConnector.py",
         "src\\classes\\test_utils\\LogCapturer.py",
         "src\\classes\\test_utils\\TestTimer.py"
     ],
     "read_previous_content": [
+        "src\\classes\\base_agent\\agent.py"
+    ],
+    "think": [
         "src\\classes\\base_agent\\agent.py"
     ],
     "backend_callable": [
@@ -13135,6 +13661,7 @@
     "get_history": [
         "src\\classes\\base_agent\\agent.py",
         "src\\classes\\gui\\AgentRunner.py",
+        "src\\classes\\orchestration\\SignalRegistry.py",
         "src\\classes\\reports\\AuditLogger.py",
         "src\\classes\\test_utils\\FlakinessDetector.py"
     ],
@@ -13283,6 +13810,8 @@
     ],
     "record_metric": [
         "src\\classes\\base_agent\\managers.py",
+        "src\\classes\\fleet\\ScalingManager.py",
+        "src\\classes\\stats\\PrometheusExporter.py",
         "src\\classes\\test_utils\\PerformanceTracker.py"
     ],
     "get_best_version": [
@@ -13323,6 +13852,7 @@
     "visit": [
         "src\\classes\\base_agent\\managers.py",
         "src\\classes\\improvements\\DependencyResolver.py",
+        "src\\classes\\specialized\\TopologicalNavigator.py",
         "src\\classes\\test_utils\\DependencyResolver.py",
         "src\\classes\\test_utils\\DependencyResolver.py"
     ],
@@ -13373,7 +13903,12 @@
     ],
     "save": [
         "src\\classes\\base_agent\\managers.py",
+        "src\\classes\\context\\GlobalContextEngine.py",
+        "src\\classes\\context\\GraphContextEngine.py",
+        "src\\classes\\context\\MemoryEngine.py",
         "src\\classes\\gui\\ConfigurationManager.py",
+        "src\\classes\\improvements\\ImprovementsAgent.py",
+        "src\\classes\\stats\\ObservabilityEngine.py",
         "src\\classes\\test_utils\\TestRecorder.py"
     ],
     "select": [
@@ -13395,7 +13930,8 @@
     ],
     "emit": [
         "src\\classes\\base_agent\\managers.py",
-        "src\\classes\\gui\\WidgetLogger.py"
+        "src\\classes\\gui\\WidgetLogger.py",
+        "src\\classes\\orchestration\\SignalRegistry.py"
     ],
     "activate_all": [
         "src\\classes\\base_agent\\managers.py"
@@ -13502,6 +14038,9 @@
     ],
     "allocate": [
         "src\\classes\\base_agent\\models.py"
+    ],
+    "as_tool": [
+        "src\\classes\\base_agent\\utilities.py"
     ],
     "create_main_function": [
         "src\\classes\\base_agent\\utilities.py"
@@ -13718,7 +14257,8 @@
         "src\\classes\\coder\\AccessibilityAnalyzer.py"
     ],
     "analyze_file": [
-        "src\\classes\\coder\\AccessibilityAnalyzer.py"
+        "src\\classes\\coder\\AccessibilityAnalyzer.py",
+        "src\\classes\\coder\\TypeSafetyAgent.py"
     ],
     "analyze_content": [
         "src\\classes\\coder\\AccessibilityAnalyzer.py"
@@ -13761,6 +14301,12 @@
     ],
     "AccessibilitySeverity": [
         "src\\classes\\coder\\AccessibilitySeverity.py"
+    ],
+    "ArchAdvisorAgent": [
+        "src\\classes\\coder\\ArchAdvisorAgent.py"
+    ],
+    "analyze_coupling": [
+        "src\\classes\\coder\\ArchAdvisorAgent.py"
     ],
     "BashAgent": [
         "src\\classes\\coder\\BashAgent.py"
@@ -13817,7 +14363,8 @@
         "src\\classes\\coder\\CoderAgent.py"
     ],
     "or": [
-        "src\\classes\\coder\\CoderAgent.py"
+        "src\\classes\\coder\\CoderAgent.py",
+        "src\\classes\\context\\KnowledgeAgent.py"
     ],
     "detection": [
         "src\\classes\\coder\\CoderAgent.py"
@@ -13880,15 +14427,19 @@
         "src\\classes\\coder\\ModernizationAdvisor.py",
         "src\\classes\\coder\\PerformanceOptimizer.py",
         "src\\classes\\coder\\ProfilingAdvisor.py",
+        "src\\classes\\coder\\ReasoningAgent.py",
         "src\\classes\\coder\\TestGapAnalyzer.py",
         "src\\classes\\context\\CrossRepoAnalyzer.py",
         "src\\classes\\context\\RefactoringAdvisor.py",
         "src\\classes\\errors\\ImpactAnalyzer.py",
         "src\\classes\\errors\\TrendAnalyzer.py",
+        "src\\classes\\specialized\\ReasoningAgent.py",
         "src\\classes\\test_utils\\FlakinessDetector.py"
     ],
     "inheritance": [
-        "src\\classes\\coder\\DependencyAnalyzer.py"
+        "src\\classes\\coder\\DependencyAnalyzer.py",
+        "src\\classes\\context\\MemoryConsolidationAgent.py",
+        "src\\classes\\context\\NetworkContextAgent.py"
     ],
     "_add_dependency": [
         "src\\classes\\coder\\DependencyAnalyzer.py"
@@ -13899,8 +14450,38 @@
     "DependencyType": [
         "src\\classes\\coder\\DependencyType.py"
     ],
+    "DocumentationAgent": [
+        "src\\classes\\coder\\DocumentationAgent.py"
+    ],
+    "generate_reference": [
+        "src\\classes\\coder\\DocumentationAgent.py"
+    ],
+    "EthicsGuardrailAgent": [
+        "src\\classes\\coder\\EthicsGuardrailAgent.py"
+    ],
+    "monitor_swarm_decision": [
+        "src\\classes\\coder\\EthicsGuardrailAgent.py"
+    ],
+    "enforce_protocol": [
+        "src\\classes\\coder\\EthicsGuardrailAgent.py"
+    ],
+    "review_task": [
+        "src\\classes\\coder\\EthicsGuardrailAgent.py"
+    ],
+    "review_action": [
+        "src\\classes\\coder\\EthicsGuardrailAgent.py"
+    ],
     "GoAgent": [
         "src\\classes\\coder\\GoAgent.py"
+    ],
+    "LintingAgent": [
+        "src\\classes\\coder\\LintingAgent.py"
+    ],
+    "run_flake8": [
+        "src\\classes\\coder\\LintingAgent.py"
+    ],
+    "run_mypy": [
+        "src\\classes\\coder\\LintingAgent.py"
     ],
     "MarkdownAgent": [
         "src\\classes\\coder\\MarkdownAgent.py"
@@ -13968,14 +14549,76 @@
     "ProfilingCategory": [
         "src\\classes\\coder\\ProfilingCategory.py"
     ],
+    "QualityGateAgent": [
+        "src\\classes\\coder\\QualityGateAgent.py"
+    ],
+    "check_gates": [
+        "src\\classes\\coder\\QualityGateAgent.py"
+    ],
+    "validate_against_blueprint": [
+        "src\\classes\\coder\\QualityGateAgent.py"
+    ],
+    "validate_release": [
+        "src\\classes\\coder\\QualityGateAgent.py"
+    ],
+    "ReasoningAgent": [
+        "src\\classes\\coder\\ReasoningAgent.py",
+        "src\\classes\\specialized\\ReasoningAgent.py"
+    ],
+    "analyze_tot": [
+        "src\\classes\\coder\\ReasoningAgent.py"
+    ],
+    "under": [
+        "src\\classes\\coder\\ReasoningAgent.py"
+    ],
     "ReviewCategory": [
         "src\\classes\\coder\\ReviewCategory.py"
     ],
     "RustAgent": [
         "src\\classes\\coder\\RustAgent.py"
     ],
+    "SandboxAgent": [
+        "src\\classes\\coder\\SandboxAgent.py"
+    ],
+    "run_python_sandboxed": [
+        "src\\classes\\coder\\SandboxAgent.py"
+    ],
+    "dry_run_prediction": [
+        "src\\classes\\coder\\SandboxAgent.py"
+    ],
     "SecurityAgent": [
         "src\\classes\\coder\\SecurityAgent.py"
+    ],
+    "SecurityAuditManager": [
+        "src\\classes\\coder\\SecurityAuditManager.py"
+    ],
+    "rotate_certificates": [
+        "src\\classes\\coder\\SecurityAuditManager.py"
+    ],
+    "audit_agent_permissions": [
+        "src\\classes\\coder\\SecurityAuditManager.py"
+    ],
+    "enforce_policy": [
+        "src\\classes\\coder\\SecurityAuditManager.py"
+    ],
+    "SecurityGuardAgent": [
+        "src\\classes\\coder\\SecurityGuardAgent.py",
+        "src\\classes\\specialized\\VisualizerAgent.py"
+    ],
+    "scan_for_secrets": [
+        "src\\classes\\coder\\SecurityGuardAgent.py"
+    ],
+    "audit_command": [
+        "src\\classes\\coder\\SecurityGuardAgent.py"
+    ],
+    "validate_shell_script": [
+        "src\\classes\\coder\\SecurityGuardAgent.py"
+    ],
+    "scan_for_injection": [
+        "src\\classes\\coder\\SecurityGuardAgent.py"
+    ],
+    "detect_jailbreak": [
+        "src\\classes\\coder\\SecurityGuardAgent.py"
     ],
     "SecurityIssueType": [
         "src\\classes\\coder\\SecurityIssueType.py"
@@ -13989,6 +14632,18 @@
     "get_critical_count": [
         "src\\classes\\coder\\SecurityScanner.py"
     ],
+    "SelfHealingAgent": [
+        "src\\classes\\coder\\SelfHealingAgent.py"
+    ],
+    "scan_for_failures": [
+        "src\\classes\\coder\\SelfHealingAgent.py"
+    ],
+    "SelfOptimizerAgent": [
+        "src\\classes\\coder\\SelfOptimizerAgent.py"
+    ],
+    "analyze_roadmap": [
+        "src\\classes\\coder\\SelfOptimizerAgent.py"
+    ],
     "SqlAgent": [
         "src\\classes\\coder\\SqlAgent.py"
     ],
@@ -13997,6 +14652,12 @@
     ],
     "SvgAgent": [
         "src\\classes\\coder\\SvgAgent.py"
+    ],
+    "TestAgent": [
+        "src\\classes\\coder\\TestAgent.py"
+    ],
+    "run_file_tests": [
+        "src\\classes\\coder\\TestAgent.py"
     ],
     "TestGapAnalyzer": [
         "src\\classes\\coder\\TestGapAnalyzer.py"
@@ -14010,11 +14671,57 @@
     "_suggest_tests": [
         "src\\classes\\coder\\TestGapAnalyzer.py"
     ],
+    "TypeSafetyAgent": [
+        "src\\classes\\coder\\TypeSafetyAgent.py"
+    ],
+    "run_audit": [
+        "src\\classes\\coder\\TypeSafetyAgent.py"
+    ],
     "WCAGLevel": [
         "src\\classes\\coder\\WCAGLevel.py"
     ],
     "YamlAgent": [
         "src\\classes\\coder\\YamlAgent.py"
+    ],
+    "MemoryConsolidator": [
+        "src\\classes\\cognitive\\MemoryConsolidator.py"
+    ],
+    "record_interaction": [
+        "src\\classes\\cognitive\\MemoryConsolidator.py",
+        "src\\classes\\test_utils\\TestRecorder.py"
+    ],
+    "sleep_and_consolidate": [
+        "src\\classes\\cognitive\\MemoryConsolidator.py"
+    ],
+    "_load_memory": [
+        "src\\classes\\cognitive\\MemoryConsolidator.py"
+    ],
+    "_save_memory": [
+        "src\\classes\\cognitive\\MemoryConsolidator.py"
+    ],
+    "query_long_term_memory": [
+        "src\\classes\\cognitive\\MemoryConsolidator.py"
+    ],
+    "MetacognitiveMonitor": [
+        "src\\classes\\cognitive\\MetacognitiveMonitor.py"
+    ],
+    "evaluate_reasoning": [
+        "src\\classes\\cognitive\\MetacognitiveMonitor.py"
+    ],
+    "TheoryOfMind": [
+        "src\\classes\\cognitive\\TheoryOfMind.py"
+    ],
+    "update_model": [
+        "src\\classes\\cognitive\\TheoryOfMind.py"
+    ],
+    "estimate_knowledge": [
+        "src\\classes\\cognitive\\TheoryOfMind.py"
+    ],
+    "suggest_collaborator": [
+        "src\\classes\\cognitive\\TheoryOfMind.py"
+    ],
+    "get_mental_map": [
+        "src\\classes\\cognitive\\TheoryOfMind.py"
     ],
     "BranchComparer": [
         "src\\classes\\context\\BranchComparer.py",
@@ -14148,6 +14855,21 @@
     "export_metadata": [
         "src\\classes\\context\\ContextAgent.py"
     ],
+    "ContextCompressor": [
+        "src\\classes\\context\\ContextCompressor.py"
+    ],
+    "compress_python": [
+        "src\\classes\\context\\ContextCompressor.py"
+    ],
+    "summarize_markdown": [
+        "src\\classes\\context\\ContextCompressor.py"
+    ],
+    "compress_file": [
+        "src\\classes\\context\\ContextCompressor.py"
+    ],
+    "method_a": [
+        "src\\classes\\context\\ContextCompressor.py"
+    ],
     "ContextDiffer": [
         "src\\classes\\context\\ContextDiffer.py"
     ],
@@ -14253,7 +14975,8 @@
         "src\\classes\\context\\ContextVisualizer.py"
     ],
     "add_edge": [
-        "src\\classes\\context\\ContextVisualizer.py"
+        "src\\classes\\context\\ContextVisualizer.py",
+        "src\\classes\\context\\GraphContextEngine.py"
     ],
     "create_dependency_graph": [
         "src\\classes\\context\\ContextVisualizer.py"
@@ -14283,16 +15006,79 @@
     "FileCategory": [
         "src\\classes\\context\\FileCategory.py"
     ],
+    "GlobalContextEngine": [
+        "src\\classes\\context\\GlobalContextEngine.py"
+    ],
+    "add_fact": [
+        "src\\classes\\context\\GlobalContextEngine.py"
+    ],
+    "add_insight": [
+        "src\\classes\\context\\GlobalContextEngine.py"
+    ],
+    "add_constraint": [
+        "src\\classes\\context\\GlobalContextEngine.py"
+    ],
+    "add_entity_info": [
+        "src\\classes\\context\\GlobalContextEngine.py"
+    ],
+    "record_lesson": [
+        "src\\classes\\context\\GlobalContextEngine.py"
+    ],
+    "consolidate_episodes": [
+        "src\\classes\\context\\GlobalContextEngine.py"
+    ],
+    "CodeGraphVisitor": [
+        "src\\classes\\context\\GraphContextEngine.py"
+    ],
+    "visit_Import": [
+        "src\\classes\\context\\GraphContextEngine.py"
+    ],
+    "visit_ImportFrom": [
+        "src\\classes\\context\\GraphContextEngine.py"
+    ],
+    "visit_ClassDef": [
+        "src\\classes\\context\\GraphContextEngine.py"
+    ],
+    "visit_Call": [
+        "src\\classes\\context\\GraphContextEngine.py"
+    ],
+    "GraphContextEngine": [
+        "src\\classes\\context\\GraphContextEngine.py"
+    ],
+    "dependencies": [
+        "src\\classes\\context\\GraphContextEngine.py"
+    ],
+    "scan_project": [
+        "src\\classes\\context\\GraphContextEngine.py",
+        "src\\classes\\context\\NetworkContextAgent.py"
+    ],
+    "level": [
+        "src\\classes\\context\\GraphContextEngine.py"
+    ],
+    "get_impact_radius": [
+        "src\\classes\\context\\GraphContextEngine.py"
+    ],
     "InheritanceMode": [
         "src\\classes\\context\\InheritanceMode.py"
     ],
     "KnowledgeAgent": [
+        "src\\classes\\context\\KnowledgeAgent.py",
+        "src\\classes\\specialized\\VisualizerAgent.py"
+    ],
+    "_init_chroma": [
         "src\\classes\\context\\KnowledgeAgent.py"
     ],
     "build_index": [
+        "src\\classes\\context\\KnowledgeAgent.py",
+        "src\\classes\\specialized\\DocumentationIndexerAgent.py"
+    ],
+    "symbols": [
         "src\\classes\\context\\KnowledgeAgent.py"
     ],
-    "_init_chroma": [
+    "record_tier_memory": [
+        "src\\classes\\context\\KnowledgeAgent.py"
+    ],
+    "query_mirix": [
         "src\\classes\\context\\KnowledgeAgent.py"
     ],
     "build_vector_index": [
@@ -14313,6 +15099,36 @@
     "get_graph_mermaid": [
         "src\\classes\\context\\KnowledgeAgent.py"
     ],
+    "get_compressed_briefing": [
+        "src\\classes\\context\\KnowledgeAgent.py"
+    ],
+    "hybrid_search": [
+        "src\\classes\\context\\KnowledgeAgent.py"
+    ],
+    "query_knowledge": [
+        "src\\classes\\context\\KnowledgeAgent.py"
+    ],
+    "MemoryConsolidationAgent": [
+        "src\\classes\\context\\MemoryConsolidationAgent.py"
+    ],
+    "consolidate_all": [
+        "src\\classes\\context\\MemoryConsolidationAgent.py"
+    ],
+    "MemoryEngine": [
+        "src\\classes\\context\\MemoryEngine.py"
+    ],
+    "record_episode": [
+        "src\\classes\\context\\MemoryEngine.py"
+    ],
+    "update_utility": [
+        "src\\classes\\context\\MemoryEngine.py"
+    ],
+    "get_lessons_learned": [
+        "src\\classes\\context\\MemoryEngine.py"
+    ],
+    "search_memories": [
+        "src\\classes\\context\\MemoryEngine.py"
+    ],
     "MergeConflictResolver": [
         "src\\classes\\context\\MergeConflictResolver.py"
     ],
@@ -14326,15 +15142,27 @@
     "resolve_all": [
         "src\\classes\\context\\MergeConflictResolver.py"
     ],
+    "NetworkContextAgent": [
+        "src\\classes\\context\\NetworkContextAgent.py"
+    ],
+    "hierarchies": [
+        "src\\classes\\context\\NetworkContextAgent.py"
+    ],
+    "in": [
+        "src\\classes\\context\\NetworkContextAgent.py"
+    ],
+    "names": [
+        "src\\classes\\context\\NetworkContextAgent.py",
+        "src\\classes\\specialized\\SynthesisAgent.py"
+    ],
+    "analyze_impact": [
+        "src\\classes\\context\\NetworkContextAgent.py"
+    ],
     "NLQueryEngine": [
         "src\\classes\\context\\NLQueryEngine.py"
     ],
     "extract_keywords": [
         "src\\classes\\context\\NLQueryEngine.py"
-    ],
-    "query": [
-        "src\\classes\\context\\NLQueryEngine.py",
-        "src\\classes\\stats\\StatsQueryEngine.py"
     ],
     "RefactoringAdvisor": [
         "src\\classes\\context\\RefactoringAdvisor.py"
@@ -14351,6 +15179,9 @@
         "src\\classes\\context\\SearchAlgorithm.py"
     ],
     "SemanticSearchEngine": [
+        "src\\classes\\context\\SemanticSearchEngine.py"
+    ],
+    "_get_collection": [
         "src\\classes\\context\\SemanticSearchEngine.py"
     ],
     "set_algorithm": [
@@ -14589,6 +15420,327 @@
     "TrendDirection": [
         "src\\classes\\errors\\TrendDirection.py"
     ],
+    "AgentEconomy": [
+        "src\\classes\\fleet\\AgentEconomy.py"
+    ],
+    "_initialize_genesis_block": [
+        "src\\classes\\fleet\\AgentEconomy.py"
+    ],
+    "_hash_block": [
+        "src\\classes\\fleet\\AgentEconomy.py"
+    ],
+    "get_balance": [
+        "src\\classes\\fleet\\AgentEconomy.py"
+    ],
+    "transfer_credits": [
+        "src\\classes\\fleet\\AgentEconomy.py"
+    ],
+    "_record_transaction": [
+        "src\\classes\\fleet\\AgentEconomy.py"
+    ],
+    "place_bid": [
+        "src\\classes\\fleet\\AgentEconomy.py"
+    ],
+    "AgentStore": [
+        "src\\classes\\fleet\\AgentStore.py"
+    ],
+    "purchase_template": [
+        "src\\classes\\fleet\\AgentStore.py"
+    ],
+    "AsyncFleetManager": [
+        "src\\classes\\fleet\\AsyncFleetManager.py"
+    ],
+    "execute_workflow_async": [
+        "src\\classes\\fleet\\AsyncFleetManager.py"
+    ],
+    "_run_single_step": [
+        "src\\classes\\fleet\\AsyncFleetManager.py"
+    ],
+    "AttributionEngine": [
+        "src\\classes\\fleet\\AttributionEngine.py"
+    ],
+    "_load": [
+        "src\\classes\\fleet\\AttributionEngine.py"
+    ],
+    "record_attribution": [
+        "src\\classes\\fleet\\AttributionEngine.py"
+    ],
+    "_save": [
+        "src\\classes\\fleet\\AttributionEngine.py"
+    ],
+    "get_lineage": [
+        "src\\classes\\fleet\\AttributionEngine.py"
+    ],
+    "CloudSwarmManager": [
+        "src\\classes\\fleet\\CloudSwarmManager.py"
+    ],
+    "provision_resource": [
+        "src\\classes\\fleet\\CloudSwarmManager.py"
+    ],
+    "deploy_agent_to_cloud": [
+        "src\\classes\\fleet\\CloudSwarmManager.py"
+    ],
+    "list_cloud_resources": [
+        "src\\classes\\fleet\\CloudSwarmManager.py"
+    ],
+    "terminate_cloud_resource": [
+        "src\\classes\\fleet\\CloudSwarmManager.py"
+    ],
+    "CollaborationMarketplace": [
+        "src\\classes\\fleet\\CollaborationMarketplace.py"
+    ],
+    "request_bids": [
+        "src\\classes\\fleet\\CollaborationMarketplace.py"
+    ],
+    "type": [
+        "src\\classes\\fleet\\CollaborationMarketplace.py"
+    ],
+    "reward_collaboration": [
+        "src\\classes\\fleet\\CollaborationMarketplace.py"
+    ],
+    "get_marketplace_summary": [
+        "src\\classes\\fleet\\CollaborationMarketplace.py"
+    ],
+    "DeploymentManager": [
+        "src\\classes\\fleet\\DeploymentManager.py"
+    ],
+    "generate_docker_manifest": [
+        "src\\classes\\fleet\\DeploymentManager.py"
+    ],
+    "generate_compose_orchestration": [
+        "src\\classes\\fleet\\DeploymentManager.py"
+    ],
+    "get_deployment_status": [
+        "src\\classes\\fleet\\DeploymentManager.py"
+    ],
+    "EvolutionEngine": [
+        "src\\classes\\fleet\\EvolutionEngine.py"
+    ],
+    "generate_agent": [
+        "src\\classes\\fleet\\EvolutionEngine.py"
+    ],
+    "file": [
+        "src\\classes\\fleet\\EvolutionEngine.py",
+        "src\\classes\\specialized\\SpeciationAgent.py"
+    ],
+    "perform_specialized_task": [
+        "src\\classes\\fleet\\EvolutionEngine.py",
+        "src\\classes\\generated\\testgenerated_agent.py"
+    ],
+    "register_generated_agent": [
+        "src\\classes\\fleet\\EvolutionEngine.py"
+    ],
+    "FleetManager": [
+        "src\\classes\\fleet\\FleetManager.py",
+        "src\\classes\\specialized\\VisualizerAgent.py"
+    ],
+    "execute_reliable_task": [
+        "src\\classes\\fleet\\FleetManager.py"
+    ],
+    "register_remote_node": [
+        "src\\classes\\fleet\\FleetManager.py"
+    ],
+    "call_by_capability": [
+        "src\\classes\\fleet\\FleetManager.py"
+    ],
+    "cell_divide": [
+        "src\\classes\\fleet\\FleetManager.py"
+    ],
+    "cell_differentiate": [
+        "src\\classes\\fleet\\FleetManager.py"
+    ],
+    "cell_apoptosis": [
+        "src\\classes\\fleet\\FleetManager.py"
+    ],
+    "execute_workflow": [
+        "src\\classes\\fleet\\FleetManager.py"
+    ],
+    "FleetWebUI": [
+        "src\\classes\\fleet\\FleetWebUI.py"
+    ],
+    "register_generative_component": [
+        "src\\classes\\fleet\\FleetWebUI.py"
+    ],
+    "suggest_ui_components": [
+        "src\\classes\\fleet\\FleetWebUI.py"
+    ],
+    "get_fleet_topology": [
+        "src\\classes\\fleet\\FleetWebUI.py"
+    ],
+    "generate_workflow_graph": [
+        "src\\classes\\fleet\\FleetWebUI.py"
+    ],
+    "get_metrics_snapshot": [
+        "src\\classes\\fleet\\FleetWebUI.py"
+    ],
+    "list_workspace_files": [
+        "src\\classes\\fleet\\FleetWebUI.py"
+    ],
+    "_get_preview": [
+        "src\\classes\\fleet\\FleetWebUI.py"
+    ],
+    "get_workflow_designer_state": [
+        "src\\classes\\fleet\\FleetWebUI.py"
+    ],
+    "get_multi_fleet_manager": [
+        "src\\classes\\fleet\\FleetWebUI.py"
+    ],
+    "GPUScalingManager": [
+        "src\\classes\\fleet\\GPUScalingManager.py"
+    ],
+    "monitor_memory_pressure": [
+        "src\\classes\\fleet\\GPUScalingManager.py"
+    ],
+    "get_resource_summary": [
+        "src\\classes\\fleet\\GPUScalingManager.py"
+    ],
+    "HITLConnector": [
+        "src\\classes\\fleet\\HITLConnector.py"
+    ],
+    "request_approval": [
+        "src\\classes\\fleet\\HITLConnector.py"
+    ],
+    "check_approval_status": [
+        "src\\classes\\fleet\\HITLConnector.py"
+    ],
+    "get_pending_summary": [
+        "src\\classes\\fleet\\HITLConnector.py"
+    ],
+    "KnowledgeTransferEngine": [
+        "src\\classes\\fleet\\KnowledgeTransferEngine.py"
+    ],
+    "export_knowledge": [
+        "src\\classes\\fleet\\KnowledgeTransferEngine.py"
+    ],
+    "import_knowledge": [
+        "src\\classes\\fleet\\KnowledgeTransferEngine.py"
+    ],
+    "merge_lessons": [
+        "src\\classes\\fleet\\KnowledgeTransferEngine.py"
+    ],
+    "KubernetesManager": [
+        "src\\classes\\fleet\\KubernetesManager.py"
+    ],
+    "deploy_agent_pod": [
+        "src\\classes\\fleet\\KubernetesManager.py"
+    ],
+    "scale_deployment": [
+        "src\\classes\\fleet\\KubernetesManager.py"
+    ],
+    "get_cluster_status": [
+        "src\\classes\\fleet\\KubernetesManager.py"
+    ],
+    "MCPConnector": [
+        "src\\classes\\fleet\\MCPConnector.py"
+    ],
+    "start": [
+        "src\\classes\\fleet\\MCPConnector.py",
+        "src\\classes\\test_utils\\LogCapturer.py",
+        "src\\classes\\test_utils\\TestTimer.py"
+    ],
+    "_read_stderr": [
+        "src\\classes\\fleet\\MCPConnector.py"
+    ],
+    "PluginManager": [
+        "src\\classes\\fleet\\PluginManager.py"
+    ],
+    "discover_plugins": [
+        "src\\classes\\fleet\\PluginManager.py"
+    ],
+    "load_plugin": [
+        "src\\classes\\fleet\\PluginManager.py"
+    ],
+    "get_plugin_summary": [
+        "src\\classes\\fleet\\PluginManager.py"
+    ],
+    "RemoteAgentProxy": [
+        "src\\classes\\fleet\\RemoteAgentProxy.py"
+    ],
+    "call_remote_tool": [
+        "src\\classes\\fleet\\RemoteAgentProxy.py"
+    ],
+    "SafetyAuditTrail": [
+        "src\\classes\\fleet\\SafetyAuditTrail.py"
+    ],
+    "_load_log": [
+        "src\\classes\\fleet\\SafetyAuditTrail.py"
+    ],
+    "log_violation": [
+        "src\\classes\\fleet\\SafetyAuditTrail.py"
+    ],
+    "_save_log": [
+        "src\\classes\\fleet\\SafetyAuditTrail.py"
+    ],
+    "ScalingManager": [
+        "src\\classes\\fleet\\ScalingManager.py"
+    ],
+    "_check_and_scale": [
+        "src\\classes\\fleet\\ScalingManager.py"
+    ],
+    "get_scaling_status": [
+        "src\\classes\\fleet\\ScalingManager.py"
+    ],
+    "SchemaManager": [
+        "src\\classes\\fleet\\SchemaManager.py"
+    ],
+    "register_schema": [
+        "src\\classes\\fleet\\SchemaManager.py"
+    ],
+    "get_context_for_agent": [
+        "src\\classes\\fleet\\SchemaManager.py"
+    ],
+    "list_known_databases": [
+        "src\\classes\\fleet\\SchemaManager.py"
+    ],
+    "SecretManager": [
+        "src\\classes\\fleet\\SecretManager.py"
+    ],
+    "_fetch_local": [
+        "src\\classes\\fleet\\SecretManager.py"
+    ],
+    "_fetch_azure": [
+        "src\\classes\\fleet\\SecretManager.py"
+    ],
+    "_fetch_vault": [
+        "src\\classes\\fleet\\SecretManager.py"
+    ],
+    "get_secret": [
+        "src\\classes\\fleet\\SecretManager.py"
+    ],
+    "set_secret": [
+        "src\\classes\\fleet\\SecretManager.py"
+    ],
+    "TaskPlannerAgent": [
+        "src\\classes\\fleet\\TaskPlannerAgent.py",
+        "src\\classes\\specialized\\VisualizerAgent.py"
+    ],
+    "generate_shared_dependencies": [
+        "src\\classes\\fleet\\TaskPlannerAgent.py"
+    ],
+    "create_plan": [
+        "src\\classes\\fleet\\TaskPlannerAgent.py"
+    ],
+    "TenantManager": [
+        "src\\classes\\fleet\\TenantManager.py"
+    ],
+    "create_tenant": [
+        "src\\classes\\fleet\\TenantManager.py"
+    ],
+    "delete_tenant": [
+        "src\\classes\\fleet\\TenantManager.py"
+    ],
+    "get_isolated_path": [
+        "src\\classes\\fleet\\TenantManager.py"
+    ],
+    "get_tenancy_report": [
+        "src\\classes\\fleet\\TenantManager.py"
+    ],
+    "add_history": [
+        "src\\classes\\fleet\\WorkflowState.py"
+    ],
+    "TestGeneratedAgent": [
+        "src\\classes\\generated\\testgenerated_agent.py"
+    ],
     "AgentColumn": [
         "src\\classes\\gui\\AgentColumn.py"
     ],
@@ -14599,6 +15751,9 @@
         "src\\classes\\gui\\HeaderPanel.py",
         "src\\classes\\gui\\MainApp.py",
         "src\\classes\\gui\\ProjectExplorer.py"
+    ],
+    "toggle_minimize": [
+        "src\\classes\\gui\\AgentColumn.py"
     ],
     "remove_callback": [
         "src\\classes\\gui\\AgentColumn.py"
@@ -14626,6 +15781,12 @@
         "src\\classes\\gui\\DialogManager.py"
     ],
     "AgentDashboard": [
+        "src\\classes\\gui\\AgentDashboard.py"
+    ],
+    "collapse_all": [
+        "src\\classes\\gui\\AgentDashboard.py"
+    ],
+    "expand_all": [
         "src\\classes\\gui\\AgentDashboard.py"
     ],
     "AgentManager": [
@@ -14797,6 +15958,15 @@
         "src\\classes\\gui\\MainApp.py"
     ],
     "ProjectExplorer": [
+        "src\\classes\\gui\\ProjectExplorer.py"
+    ],
+    "show_context_menu": [
+        "src\\classes\\gui\\ProjectExplorer.py"
+    ],
+    "send_to_agent": [
+        "src\\classes\\gui\\ProjectExplorer.py"
+    ],
+    "copy_path": [
         "src\\classes\\gui\\ProjectExplorer.py"
     ],
     "refresh_tree": [
@@ -15048,6 +16218,9 @@
     "ImprovementsAgent": [
         "src\\classes\\improvements\\ImprovementsAgent.py"
     ],
+    "parse_markdown": [
+        "src\\classes\\improvements\\ImprovementsAgent.py"
+    ],
     "get_improvements": [
         "src\\classes\\improvements\\ImprovementsAgent.py"
     ],
@@ -15118,6 +16291,9 @@
     "export_improvements": [
         "src\\classes\\improvements\\ImprovementsAgent.py"
     ],
+    "validate_improved_content": [
+        "src\\classes\\improvements\\ImprovementsAgent.py"
+    ],
     "ImprovementScheduler": [
         "src\\classes\\improvements\\ImprovementScheduler.py"
     ],
@@ -15174,6 +16350,8 @@
     ],
     "subscribe": [
         "src\\classes\\improvements\\NotificationManager.py",
+        "src\\classes\\orchestration\\SignalBusOrchestrator.py",
+        "src\\classes\\orchestration\\SignalRegistry.py",
         "src\\classes\\stats\\StatsStreamManager.py",
         "src\\classes\\stats\\StatsSubscriptionManager.py",
         "src\\classes\\stats\\SubscriptionManager.py"
@@ -15197,6 +16375,9 @@
         "src\\classes\\improvements\\ProgressDashboard.py"
     ],
     "get_completion_rate": [
+        "src\\classes\\improvements\\ProgressDashboard.py"
+    ],
+    "generate_bmad_strategic_grid": [
         "src\\classes\\improvements\\ProgressDashboard.py"
     ],
     "export_dashboard": [
@@ -15319,14 +16500,392 @@
     "values": [
         "src\\classes\\improvements\\_ScheduleStore.py"
     ],
+    "AutoDebuggerOrchestrator": [
+        "src\\classes\\orchestration\\AutoDebuggerOrchestrator.py"
+    ],
+    "validate_and_repair": [
+        "src\\classes\\orchestration\\AutoDebuggerOrchestrator.py"
+    ],
+    "run_fleet_self_audit": [
+        "src\\classes\\orchestration\\AutoDebuggerOrchestrator.py"
+    ],
+    "BlackboardManager": [
+        "src\\classes\\orchestration\\BlackboardManager.py"
+    ],
+    "post": [
+        "src\\classes\\orchestration\\BlackboardManager.py"
+    ],
+    "list_keys": [
+        "src\\classes\\orchestration\\BlackboardManager.py"
+    ],
+    "CognitiveBorrowingOrchestrator": [
+        "src\\classes\\orchestration\\CognitiveBorrowingOrchestrator.py"
+    ],
+    "establish_bridge": [
+        "src\\classes\\orchestration\\CognitiveBorrowingOrchestrator.py",
+        "src\\classes\\orchestration\\NeuralBridgeOrchestrator.py"
+    ],
+    "borrow_skill": [
+        "src\\classes\\orchestration\\CognitiveBorrowingOrchestrator.py"
+    ],
+    "dissolve_bridge": [
+        "src\\classes\\orchestration\\CognitiveBorrowingOrchestrator.py"
+    ],
+    "ConsensusEngine": [
+        "src\\classes\\orchestration\\ConsensusEngine.py"
+    ],
+    "request_consensus": [
+        "src\\classes\\orchestration\\ConsensusEngine.py"
+    ],
+    "get_consensus_report": [
+        "src\\classes\\orchestration\\ConsensusEngine.py"
+    ],
+    "ConsensusOrchestrator": [
+        "src\\classes\\orchestration\\ConsensusOrchestrator.py"
+    ],
+    "resolve_conflict": [
+        "src\\classes\\orchestration\\ConsensusOrchestrator.py"
+    ],
+    "_collect_proposals": [
+        "src\\classes\\orchestration\\ConsensusOrchestrator.py"
+    ],
+    "_conduct_debate": [
+        "src\\classes\\orchestration\\ConsensusOrchestrator.py"
+    ],
+    "_weighted_vote": [
+        "src\\classes\\orchestration\\ConsensusOrchestrator.py"
+    ],
+    "update_reputation": [
+        "src\\classes\\orchestration\\ConsensusOrchestrator.py"
+    ],
     "DirectorAgent": [
         "src\\classes\\orchestration\\DirectorAgent.py"
     ],
     "_get_available_agents": [
         "src\\classes\\orchestration\\DirectorAgent.py"
     ],
+    "_handle_agent_failure": [
+        "src\\classes\\orchestration\\DirectorAgent.py"
+    ],
+    "_handle_agent_success": [
+        "src\\classes\\orchestration\\DirectorAgent.py"
+    ],
     "execute_project_plan": [
         "src\\classes\\orchestration\\DirectorAgent.py"
+    ],
+    "DreamStateOrchestrator": [
+        "src\\classes\\orchestration\\DreamStateOrchestrator.py"
+    ],
+    "initiate_dream_cycle": [
+        "src\\classes\\orchestration\\DreamStateOrchestrator.py"
+    ],
+    "EmotionalRegulationOrchestrator": [
+        "src\\classes\\orchestration\\EmotionalRegulationOrchestrator.py"
+    ],
+    "set_vibe": [
+        "src\\classes\\orchestration\\EmotionalRegulationOrchestrator.py"
+    ],
+    "determine_execution_path": [
+        "src\\classes\\orchestration\\EmotionalRegulationOrchestrator.py"
+    ],
+    "get_token_budget_multiplier": [
+        "src\\classes\\orchestration\\EmotionalRegulationOrchestrator.py"
+    ],
+    "EntanglementOrchestrator": [
+        "src\\classes\\orchestration\\EntanglementOrchestrator.py"
+    ],
+    "update_state": [
+        "src\\classes\\orchestration\\EntanglementOrchestrator.py"
+    ],
+    "get_state": [
+        "src\\classes\\orchestration\\EntanglementOrchestrator.py"
+    ],
+    "_handle_sync_signal": [
+        "src\\classes\\orchestration\\EntanglementOrchestrator.py"
+    ],
+    "get_all_state": [
+        "src\\classes\\orchestration\\EntanglementOrchestrator.py"
+    ],
+    "FleetTelemetryVisualizer": [
+        "src\\classes\\orchestration\\FleetTelemetryVisualizer.py"
+    ],
+    "log_signal_flow": [
+        "src\\classes\\orchestration\\FleetTelemetryVisualizer.py"
+    ],
+    "generate_mermaid_flow": [
+        "src\\classes\\orchestration\\FleetTelemetryVisualizer.py"
+    ],
+    "identify_bottlenecks": [
+        "src\\classes\\orchestration\\FleetTelemetryVisualizer.py"
+    ],
+    "FractalKnowledgeOrchestrator": [
+        "src\\classes\\orchestration\\FractalKnowledgeOrchestrator.py"
+    ],
+    "synthesize": [
+        "src\\classes\\orchestration\\FractalKnowledgeOrchestrator.py"
+    ],
+    "FractalOrchestrator": [
+        "src\\classes\\orchestration\\FractalOrchestrator.py"
+    ],
+    "execute_fractal_task": [
+        "src\\classes\\orchestration\\FractalOrchestrator.py"
+    ],
+    "HeartbeatOrchestrator": [
+        "src\\classes\\orchestration\\HeartbeatOrchestrator.py"
+    ],
+    "record_heartbeat": [
+        "src\\classes\\orchestration\\HeartbeatOrchestrator.py"
+    ],
+    "_monitor_heartbeats": [
+        "src\\classes\\orchestration\\HeartbeatOrchestrator.py"
+    ],
+    "shutdown": [
+        "src\\classes\\orchestration\\HeartbeatOrchestrator.py",
+        "src\\classes\\orchestration\\SignalBusOrchestrator.py"
+    ],
+    "HolographicStateOrchestrator": [
+        "src\\classes\\orchestration\\HolographicStateOrchestrator.py"
+    ],
+    "shard_state": [
+        "src\\classes\\orchestration\\HolographicStateOrchestrator.py"
+    ],
+    "reconstruct_state": [
+        "src\\classes\\orchestration\\HolographicStateOrchestrator.py"
+    ],
+    "ImmunizationOrchestrator": [
+        "src\\classes\\orchestration\\ImmunizationOrchestrator.py"
+    ],
+    "scan_for_threats": [
+        "src\\classes\\orchestration\\ImmunizationOrchestrator.py"
+    ],
+    "immunize": [
+        "src\\classes\\orchestration\\ImmunizationOrchestrator.py"
+    ],
+    "get_audit_trail": [
+        "src\\classes\\orchestration\\ImmunizationOrchestrator.py"
+    ],
+    "IntentCoherenceEngine": [
+        "src\\classes\\orchestration\\IntentCoherenceEngine.py"
+    ],
+    "broadcast_intent": [
+        "src\\classes\\orchestration\\IntentCoherenceEngine.py"
+    ],
+    "align_agent": [
+        "src\\classes\\orchestration\\IntentCoherenceEngine.py"
+    ],
+    "get_current_intent": [
+        "src\\classes\\orchestration\\IntentCoherenceEngine.py"
+    ],
+    "InterFleetBridgeOrchestrator": [
+        "src\\classes\\orchestration\\InterFleetBridgeOrchestrator.py"
+    ],
+    "connect_to_peer": [
+        "src\\classes\\orchestration\\InterFleetBridgeOrchestrator.py"
+    ],
+    "broadcast_state": [
+        "src\\classes\\orchestration\\InterFleetBridgeOrchestrator.py"
+    ],
+    "sync_external_state": [
+        "src\\classes\\orchestration\\InterFleetBridgeOrchestrator.py"
+    ],
+    "query_global_intelligence": [
+        "src\\classes\\orchestration\\InterFleetBridgeOrchestrator.py"
+    ],
+    "InterleavingOrchestrator": [
+        "src\\classes\\orchestration\\InterleavingOrchestrator.py"
+    ],
+    "execute_interleaved_task": [
+        "src\\classes\\orchestration\\InterleavingOrchestrator.py"
+    ],
+    "_assess_complexity": [
+        "src\\classes\\orchestration\\InterleavingOrchestrator.py"
+    ],
+    "_select_strategy": [
+        "src\\classes\\orchestration\\InterleavingOrchestrator.py"
+    ],
+    "record_tier_performance": [
+        "src\\classes\\orchestration\\InterleavingOrchestrator.py"
+    ],
+    "LatentSignalBus": [
+        "src\\classes\\orchestration\\LatentSignalBus.py"
+    ],
+    "transmit_latent": [
+        "src\\classes\\orchestration\\LatentSignalBus.py"
+    ],
+    "receive_latent": [
+        "src\\classes\\orchestration\\LatentSignalBus.py"
+    ],
+    "list_active_channels": [
+        "src\\classes\\orchestration\\LatentSignalBus.py"
+    ],
+    "MetaOrchestratorAgent": [
+        "src\\classes\\orchestration\\MetaOrchestratorAgent.py"
+    ],
+    "execute_by_goal": [
+        "src\\classes\\orchestration\\MetaOrchestratorAgent.py"
+    ],
+    "solve_complex_objective": [
+        "src\\classes\\orchestration\\MetaOrchestratorAgent.py"
+    ],
+    "_enrich_args": [
+        "src\\classes\\orchestration\\MetaOrchestratorAgent.py"
+    ],
+    "recursive_solve": [
+        "src\\classes\\orchestration\\MetaOrchestratorAgent.py"
+    ],
+    "ModalTeleportationOrchestrator": [
+        "src\\classes\\orchestration\\ModalTeleportationOrchestrator.py"
+    ],
+    "teleport_state": [
+        "src\\classes\\orchestration\\ModalTeleportationOrchestrator.py"
+    ],
+    "identify_optimal_target": [
+        "src\\classes\\orchestration\\ModalTeleportationOrchestrator.py"
+    ],
+    "NeuralBridgeOrchestrator": [
+        "src\\classes\\orchestration\\NeuralBridgeOrchestrator.py"
+    ],
+    "sync_state": [
+        "src\\classes\\orchestration\\NeuralBridgeOrchestrator.py"
+    ],
+    "pull_state": [
+        "src\\classes\\orchestration\\NeuralBridgeOrchestrator.py"
+    ],
+    "get_bridge_topology": [
+        "src\\classes\\orchestration\\NeuralBridgeOrchestrator.py"
+    ],
+    "ObservabilityEngine": [
+        "src\\classes\\orchestration\\ObservabilityEngine.py",
+        "src\\classes\\stats\\ObservabilityEngine.py"
+    ],
+    "log_event": [
+        "src\\classes\\orchestration\\ObservabilityEngine.py",
+        "src\\classes\\specialized\\EternalAuditAgent.py",
+        "src\\classes\\stats\\ObservabilityEngine.py"
+    ],
+    "export_to_elk": [
+        "src\\classes\\orchestration\\ObservabilityEngine.py",
+        "src\\classes\\stats\\ObservabilityEngine.py"
+    ],
+    "get_metrics_endpoint": [
+        "src\\classes\\orchestration\\ObservabilityEngine.py"
+    ],
+    "trace_workflow": [
+        "src\\classes\\orchestration\\ObservabilityEngine.py",
+        "src\\classes\\stats\\ObservabilityEngine.py"
+    ],
+    "ProbabilisticExecutionOrchestrator": [
+        "src\\classes\\orchestration\\ProbabilisticExecutionOrchestrator.py"
+    ],
+    "execute_with_confidence": [
+        "src\\classes\\orchestration\\ProbabilisticExecutionOrchestrator.py"
+    ],
+    "_collapse": [
+        "src\\classes\\orchestration\\ProbabilisticExecutionOrchestrator.py"
+    ],
+    "_calculate_confidence": [
+        "src\\classes\\orchestration\\ProbabilisticExecutionOrchestrator.py"
+    ],
+    "ResourcePredictorOrchestrator": [
+        "src\\classes\\orchestration\\ResourcePredictorOrchestrator.py"
+    ],
+    "forecast_and_allocate": [
+        "src\\classes\\orchestration\\ResourcePredictorOrchestrator.py"
+    ],
+    "report_actual_usage": [
+        "src\\classes\\orchestration\\ResourcePredictorOrchestrator.py"
+    ],
+    "RLSelector": [
+        "src\\classes\\orchestration\\RLSelector.py"
+    ],
+    "update_stats": [
+        "src\\classes\\orchestration\\RLSelector.py"
+    ],
+    "select_best_tool": [
+        "src\\classes\\orchestration\\RLSelector.py"
+    ],
+    "get_policy_summary": [
+        "src\\classes\\orchestration\\RLSelector.py"
+    ],
+    "SelfHealingEngine": [
+        "src\\classes\\orchestration\\SelfHealingEngine.py"
+    ],
+    "handle_failure": [
+        "src\\classes\\orchestration\\SelfHealingEngine.py"
+    ],
+    "get_healing_stats": [
+        "src\\classes\\orchestration\\SelfHealingEngine.py"
+    ],
+    "ServiceMesh": [
+        "src\\classes\\orchestration\\ServiceMesh.py"
+    ],
+    "_on_tool_registered": [
+        "src\\classes\\orchestration\\ServiceMesh.py"
+    ],
+    "_broadcast_capability": [
+        "src\\classes\\orchestration\\ServiceMesh.py"
+    ],
+    "sync_with_remote": [
+        "src\\classes\\orchestration\\ServiceMesh.py"
+    ],
+    "remote_proxy": [
+        "src\\classes\\orchestration\\ServiceMesh.py"
+    ],
+    "get_mesh_status": [
+        "src\\classes\\orchestration\\ServiceMesh.py"
+    ],
+    "SignalAgent": [
+        "src\\classes\\orchestration\\SignalAgent.py"
+    ],
+    "on_agent_fail": [
+        "src\\classes\\orchestration\\SignalAgent.py"
+    ],
+    "on_improvement_ready": [
+        "src\\classes\\orchestration\\SignalAgent.py"
+    ],
+    "get_signal_summary": [
+        "src\\classes\\orchestration\\SignalAgent.py"
+    ],
+    "SignalBusOrchestrator": [
+        "src\\classes\\orchestration\\SignalBusOrchestrator.py"
+    ],
+    "publish": [
+        "src\\classes\\orchestration\\SignalBusOrchestrator.py",
+        "src\\classes\\stats\\StatsStreamManager.py"
+    ],
+    "_process_bus": [
+        "src\\classes\\orchestration\\SignalBusOrchestrator.py"
+    ],
+    "SignalRegistry": [
+        "src\\classes\\orchestration\\SignalRegistry.py"
+    ],
+    "__new__": [
+        "src\\classes\\orchestration\\SignalRegistry.py",
+        "src\\classes\\orchestration\\ToolRegistry.py"
+    ],
+    "SovereigntyOrchestrator": [
+        "src\\classes\\orchestration\\SovereigntyOrchestrator.py"
+    ],
+    "register_peer_swarm": [
+        "src\\classes\\orchestration\\SovereigntyOrchestrator.py"
+    ],
+    "propose_federated_task": [
+        "src\\classes\\orchestration\\SovereigntyOrchestrator.py"
+    ],
+    "negotiate_privacy_boundaries": [
+        "src\\classes\\orchestration\\SovereigntyOrchestrator.py"
+    ],
+    "finalize_federated_agreement": [
+        "src\\classes\\orchestration\\SovereigntyOrchestrator.py"
+    ],
+    "SpeciationOrchestrator": [
+        "src\\classes\\orchestration\\SpeciationOrchestrator.py"
+    ],
+    "speciate": [
+        "src\\classes\\orchestration\\SpeciationOrchestrator.py"
+    ],
+    "get_sub_fleet": [
+        "src\\classes\\orchestration\\SpeciationOrchestrator.py"
     ],
     "StatusManager": [
         "src\\classes\\orchestration\\StatusManager.py"
@@ -15348,6 +16907,119 @@
     ],
     "_write": [
         "src\\classes\\orchestration\\StatusManager.py"
+    ],
+    "StructuredOrchestrator": [
+        "src\\classes\\orchestration\\StructuredOrchestrator.py",
+        "src\\classes\\specialized\\StructuredOrchestrator.py"
+    ],
+    "execute_task": [
+        "src\\classes\\orchestration\\StructuredOrchestrator.py",
+        "src\\classes\\specialized\\StructuredOrchestrator.py"
+    ],
+    "_phase_observe": [
+        "src\\classes\\orchestration\\StructuredOrchestrator.py"
+    ],
+    "_phase_think": [
+        "src\\classes\\orchestration\\StructuredOrchestrator.py"
+    ],
+    "_phase_plan": [
+        "src\\classes\\orchestration\\StructuredOrchestrator.py"
+    ],
+    "_phase_build": [
+        "src\\classes\\orchestration\\StructuredOrchestrator.py"
+    ],
+    "_phase_execute": [
+        "src\\classes\\orchestration\\StructuredOrchestrator.py"
+    ],
+    "_phase_verify": [
+        "src\\classes\\orchestration\\StructuredOrchestrator.py"
+    ],
+    "_phase_learn": [
+        "src\\classes\\orchestration\\StructuredOrchestrator.py"
+    ],
+    "SubSwarm": [
+        "src\\classes\\orchestration\\SubSwarmSpawner.py"
+    ],
+    "execute_mini_task": [
+        "src\\classes\\orchestration\\SubSwarmSpawner.py"
+    ],
+    "SubSwarmSpawner": [
+        "src\\classes\\orchestration\\SubSwarmSpawner.py"
+    ],
+    "spawn_sub_swarm": [
+        "src\\classes\\orchestration\\SubSwarmSpawner.py"
+    ],
+    "list_sub_swarms": [
+        "src\\classes\\orchestration\\SubSwarmSpawner.py"
+    ],
+    "get_sub_swarm": [
+        "src\\classes\\orchestration\\SubSwarmSpawner.py"
+    ],
+    "SwarmOptimizer": [
+        "src\\classes\\orchestration\\SwarmOptimizer.py"
+    ],
+    "monitor_efficiency": [
+        "src\\classes\\orchestration\\SwarmOptimizer.py"
+    ],
+    "apply_optimizations": [
+        "src\\classes\\orchestration\\SwarmOptimizer.py"
+    ],
+    "SwarmPruningOrchestrator": [
+        "src\\classes\\orchestration\\SwarmPruningOrchestrator.py"
+    ],
+    "run_pruning_cycle": [
+        "src\\classes\\orchestration\\SwarmPruningOrchestrator.py"
+    ],
+    "record_node_performance": [
+        "src\\classes\\orchestration\\SwarmPruningOrchestrator.py"
+    ],
+    "get_audit_summary": [
+        "src\\classes\\orchestration\\SwarmPruningOrchestrator.py"
+    ],
+    "MockFleet": [
+        "src\\classes\\orchestration\\SwarmPruningOrchestrator.py"
+    ],
+    "TaskDecomposer": [
+        "src\\classes\\orchestration\\TaskDecomposer.py"
+    ],
+    "decompose": [
+        "src\\classes\\orchestration\\TaskDecomposer.py"
+    ],
+    "get_plan_summary": [
+        "src\\classes\\orchestration\\TaskDecomposer.py"
+    ],
+    "TemporalSyncOrchestrator": [
+        "src\\classes\\orchestration\\TemporalSyncOrchestrator.py"
+    ],
+    "report_activity": [
+        "src\\classes\\orchestration\\TemporalSyncOrchestrator.py"
+    ],
+    "get_current_metabolism": [
+        "src\\classes\\orchestration\\TemporalSyncOrchestrator.py"
+    ],
+    "sync_wait": [
+        "src\\classes\\orchestration\\TemporalSyncOrchestrator.py"
+    ],
+    "set_sprint_mode": [
+        "src\\classes\\orchestration\\TemporalSyncOrchestrator.py"
+    ],
+    "ToolMetadata": [
+        "src\\classes\\orchestration\\ToolRegistry.py"
+    ],
+    "ToolRegistry": [
+        "src\\classes\\orchestration\\ToolRegistry.py"
+    ],
+    "register_tool": [
+        "src\\classes\\orchestration\\ToolRegistry.py"
+    ],
+    "list_tools": [
+        "src\\classes\\orchestration\\ToolRegistry.py"
+    ],
+    "get_tool": [
+        "src\\classes\\orchestration\\ToolRegistry.py"
+    ],
+    "call_tool": [
+        "src\\classes\\orchestration\\ToolRegistry.py"
     ],
     "revoke": [
         "src\\classes\\reports\\AccessController.py"
@@ -15459,6 +17131,12 @@
         "src\\classes\\reports\\ReportGenerator.py"
     ],
     "process_all_files": [
+        "src\\classes\\reports\\ReportGenerator.py"
+    ],
+    "generate_full_report": [
+        "src\\classes\\reports\\ReportGenerator.py"
+    ],
+    "render_3x3_grid": [
         "src\\classes\\reports\\ReportGenerator.py"
     ],
     "iter_agent_py_files": [
@@ -15604,11 +17282,841 @@
     "perform_search": [
         "src\\classes\\search\\SearchAgent.py"
     ],
+    "AndroidAgent": [
+        "src\\classes\\specialized\\AndroidAgent.py"
+    ],
+    "dump_accessibility_tree": [
+        "src\\classes\\specialized\\AndroidAgent.py"
+    ],
+    "execute_mobile_action": [
+        "src\\classes\\specialized\\AndroidAgent.py"
+    ],
+    "run_mobile_workflow": [
+        "src\\classes\\specialized\\AndroidAgent.py"
+    ],
+    "ArchitectAgent": [
+        "src\\classes\\specialized\\ArchitectAgent.py"
+    ],
+    "suggest_architectural_pivot": [
+        "src\\classes\\specialized\\ArchitectAgent.py"
+    ],
+    "AttentionBufferAgent": [
+        "src\\classes\\specialized\\AttentionBufferAgent.py"
+    ],
+    "push_attention_point": [
+        "src\\classes\\specialized\\AttentionBufferAgent.py"
+    ],
+    "get_attention_summary": [
+        "src\\classes\\specialized\\AttentionBufferAgent.py"
+    ],
+    "clear_stale_attention": [
+        "src\\classes\\specialized\\AttentionBufferAgent.py"
+    ],
+    "BenchmarkAgent": [
+        "src\\classes\\specialized\\BenchmarkAgent.py"
+    ],
+    "run_sgi_benchmark": [
+        "src\\classes\\specialized\\BenchmarkAgent.py"
+    ],
+    "validate_scientific_hypothesis": [
+        "src\\classes\\specialized\\BenchmarkAgent.py"
+    ],
+    "evaluate_model_on_benchmark": [
+        "src\\classes\\specialized\\BenchmarkAgent.py"
+    ],
+    "run_benchmark": [
+        "src\\classes\\specialized\\BenchmarkAgent.py"
+    ],
+    "BrowsingAgent": [
+        "src\\classes\\specialized\\BrowsingAgent.py"
+    ],
+    "search_and_summarize": [
+        "src\\classes\\specialized\\BrowsingAgent.py"
+    ],
+    "extract_api_spec": [
+        "src\\classes\\specialized\\BrowsingAgent.py"
+    ],
+    "files": [
+        "src\\classes\\specialized\\CognitiveSuperAgent.py",
+        "src\\classes\\specialized\\SynthesisAgent.py"
+    ],
+    "ConfigAgent": [
+        "src\\classes\\specialized\\ConfigAgent.py"
+    ],
+    "validate_env": [
+        "src\\classes\\specialized\\ConfigAgent.py"
+    ],
+    "validate_models_yaml": [
+        "src\\classes\\specialized\\ConfigAgent.py"
+    ],
+    "CoreExpansionAgent": [
+        "src\\classes\\specialized\\CoreExpansionAgent.py"
+    ],
+    "install_missing_dependency": [
+        "src\\classes\\specialized\\CoreExpansionAgent.py"
+    ],
+    "audit_environment": [
+        "src\\classes\\specialized\\CoreExpansionAgent.py",
+        "src\\classes\\specialized\\InfrastructureRepairAgent.py"
+    ],
     "CsvAgent": [
         "src\\classes\\specialized\\CsvAgent.py"
     ],
+    "DashboardAgent": [
+        "src\\classes\\specialized\\DashboardAgent.py"
+    ],
+    "generate_component": [
+        "src\\classes\\specialized\\DashboardAgent.py"
+    ],
+    "update_dashboard_layout": [
+        "src\\classes\\specialized\\DashboardAgent.py"
+    ],
+    "DataAgent": [
+        "src\\classes\\specialized\\DataAgent.py"
+    ],
+    "connect": [
+        "src\\classes\\specialized\\DataAgent.py",
+        "src\\classes\\stats\\StatsStreamer.py"
+    ],
+    "execute_sql": [
+        "src\\classes\\specialized\\DataAgent.py"
+    ],
+    "get_schema": [
+        "src\\classes\\specialized\\DataAgent.py"
+    ],
+    "query_to_csv": [
+        "src\\classes\\specialized\\DataAgent.py"
+    ],
+    "DataScienceAgent": [
+        "src\\classes\\specialized\\DataScienceAgent.py"
+    ],
+    "analyze_dataset": [
+        "src\\classes\\specialized\\DataScienceAgent.py"
+    ],
+    "run_statistical_test": [
+        "src\\classes\\specialized\\DataScienceAgent.py"
+    ],
+    "build_forecast_model": [
+        "src\\classes\\specialized\\DataScienceAgent.py"
+    ],
+    "DocInferenceAgent": [
+        "src\\classes\\specialized\\DocInferenceAgent.py"
+    ],
+    "parse_pdf_text": [
+        "src\\classes\\specialized\\DocInferenceAgent.py"
+    ],
+    "ingest_document_to_knowledge": [
+        "src\\classes\\specialized\\DocInferenceAgent.py"
+    ],
+    "process_document": [
+        "src\\classes\\specialized\\DocInferenceAgent.py"
+    ],
+    "extract_form_data": [
+        "src\\classes\\specialized\\DocInferenceAgent.py"
+    ],
+    "transcribe_handwriting": [
+        "src\\classes\\specialized\\DocInferenceAgent.py"
+    ],
+    "DocumentationIndexerAgent": [
+        "src\\classes\\specialized\\DocumentationIndexerAgent.py"
+    ],
+    "get_semantic_pointers": [
+        "src\\classes\\specialized\\DocumentationIndexerAgent.py"
+    ],
+    "DynamicDecomposerAgent": [
+        "src\\classes\\specialized\\DynamicDecomposerAgent.py"
+    ],
+    "decompose_task_v2": [
+        "src\\classes\\specialized\\DynamicDecomposerAgent.py"
+    ],
+    "balance_swarm_load": [
+        "src\\classes\\specialized\\DynamicDecomposerAgent.py"
+    ],
+    "EternalAuditAgent": [
+        "src\\classes\\specialized\\EternalAuditAgent.py"
+    ],
+    "_initialize_last_hash": [
+        "src\\classes\\specialized\\EternalAuditAgent.py"
+    ],
+    "verify_audit_trail": [
+        "src\\classes\\specialized\\EternalAuditAgent.py"
+    ],
+    "EvolutionaryPromptAgent": [
+        "src\\classes\\specialized\\EvolutionaryPromptAgent.py"
+    ],
+    "initialize_population": [
+        "src\\classes\\specialized\\EvolutionaryPromptAgent.py"
+    ],
+    "record_fitness": [
+        "src\\classes\\specialized\\EvolutionaryPromptAgent.py"
+    ],
+    "evolve_generation": [
+        "src\\classes\\specialized\\EvolutionaryPromptAgent.py"
+    ],
+    "get_best_prompt": [
+        "src\\classes\\specialized\\EvolutionaryPromptAgent.py"
+    ],
+    "ExcelAgent": [
+        "src\\classes\\specialized\\ExcelAgent.py"
+    ],
+    "extract_structured_data": [
+        "src\\classes\\specialized\\ExcelAgent.py"
+    ],
+    "generate_markdown_summary": [
+        "src\\classes\\specialized\\ExcelAgent.py"
+    ],
+    "ExternalAIRecorderAgent": [
+        "src\\classes\\specialized\\ExternalAIRecorderAgent.py"
+    ],
+    "record_external_interaction": [
+        "src\\classes\\specialized\\ExternalAIRecorderAgent.py"
+    ],
+    "synthesize_local_knowledge": [
+        "src\\classes\\specialized\\ExternalAIRecorderAgent.py"
+    ],
     "FinancialAgent": [
         "src\\classes\\specialized\\FinancialAgent.py"
+    ],
+    "plan_research": [
+        "src\\classes\\specialized\\FinancialAgent.py"
+    ],
+    "validate_sufficiency": [
+        "src\\classes\\specialized\\FinancialAgent.py"
+    ],
+    "analyze_market_trend": [
+        "src\\classes\\specialized\\FinancialAgent.py"
+    ],
+    "GeneticHardeningAgent": [
+        "src\\classes\\specialized\\GeneticHardeningAgent.py"
+    ],
+    "analyze_fragility": [
+        "src\\classes\\specialized\\GeneticHardeningAgent.py"
+    ],
+    "apply_genetic_refactor": [
+        "src\\classes\\specialized\\GeneticHardeningAgent.py"
+    ],
+    "GraphMemoryAgent": [
+        "src\\classes\\specialized\\GraphMemoryAgent.py"
+    ],
+    "_load_beads": [
+        "src\\classes\\specialized\\GraphMemoryAgent.py"
+    ],
+    "_save_bead": [
+        "src\\classes\\specialized\\GraphMemoryAgent.py"
+    ],
+    "store_mirix_memory": [
+        "src\\classes\\specialized\\GraphMemoryAgent.py"
+    ],
+    "decay_memories": [
+        "src\\classes\\specialized\\GraphMemoryAgent.py"
+    ],
+    "record_outcome": [
+        "src\\classes\\specialized\\GraphMemoryAgent.py"
+    ],
+    "compact_memory": [
+        "src\\classes\\specialized\\GraphMemoryAgent.py"
+    ],
+    "add_entity": [
+        "src\\classes\\specialized\\GraphMemoryAgent.py"
+    ],
+    "add_relationship": [
+        "src\\classes\\specialized\\GraphMemoryAgent.py"
+    ],
+    "query_relationships": [
+        "src\\classes\\specialized\\GraphMemoryAgent.py"
+    ],
+    "HandyAgent": [
+        "src\\classes\\specialized\\HandyAgent.py"
+    ],
+    "fast_find": [
+        "src\\classes\\specialized\\HandyAgent.py"
+    ],
+    "terminal_slash_command": [
+        "src\\classes\\specialized\\HandyAgent.py"
+    ],
+    "execute_with_diagnosis": [
+        "src\\classes\\specialized\\HandyAgent.py"
+    ],
+    "HierarchicalMemoryAgent": [
+        "src\\classes\\specialized\\HierarchicalMemoryAgent.py"
+    ],
+    "promote_memories": [
+        "src\\classes\\specialized\\HierarchicalMemoryAgent.py"
+    ],
+    "hierarchical_query": [
+        "src\\classes\\specialized\\HierarchicalMemoryAgent.py"
+    ],
+    "HolographicContextAgent": [
+        "src\\classes\\specialized\\HolographicContextAgent.py"
+    ],
+    "create_hologram": [
+        "src\\classes\\specialized\\HolographicContextAgent.py"
+    ],
+    "view_perspective": [
+        "src\\classes\\specialized\\HolographicContextAgent.py"
+    ],
+    "list_holograms": [
+        "src\\classes\\specialized\\HolographicContextAgent.py"
+    ],
+    "IdiomExtractorAgent": [
+        "src\\classes\\specialized\\IdiomExtractorAgent.py"
+    ],
+    "extract_idioms": [
+        "src\\classes\\specialized\\IdiomExtractorAgent.py"
+    ],
+    "get_current_idioms": [
+        "src\\classes\\specialized\\IdiomExtractorAgent.py"
+    ],
+    "ImmuneSystemAgent": [
+        "src\\classes\\specialized\\ImmuneSystemAgent.py"
+    ],
+    "scan_for_injections": [
+        "src\\classes\\specialized\\ImmuneSystemAgent.py"
+    ],
+    "monitor_swarm_behavior": [
+        "src\\classes\\specialized\\ImmuneSystemAgent.py"
+    ],
+    "quarantine_node": [
+        "src\\classes\\specialized\\ImmuneSystemAgent.py"
+    ],
+    "sanitize_input": [
+        "src\\classes\\specialized\\ImmuneSystemAgent.py"
+    ],
+    "InfrastructureManagerAgent": [
+        "src\\classes\\specialized\\InfrastructureManagerAgent.py"
+    ],
+    "list_proxmox_vms": [
+        "src\\classes\\specialized\\InfrastructureManagerAgent.py"
+    ],
+    "control_homeassistant_device": [
+        "src\\classes\\specialized\\InfrastructureManagerAgent.py"
+    ],
+    "get_system_metrics": [
+        "src\\classes\\specialized\\InfrastructureManagerAgent.py"
+    ],
+    "InfrastructureRepairAgent": [
+        "src\\classes\\specialized\\InfrastructureRepairAgent.py"
+    ],
+    "repair_issue": [
+        "src\\classes\\specialized\\InfrastructureRepairAgent.py"
+    ],
+    "auto_repair": [
+        "src\\classes\\specialized\\InfrastructureRepairAgent.py"
+    ],
+    "KernelAgent": [
+        "src\\classes\\specialized\\KernelAgent.py"
+    ],
+    "get_system_info": [
+        "src\\classes\\specialized\\KernelAgent.py"
+    ],
+    "check_disk_space": [
+        "src\\classes\\specialized\\KernelAgent.py"
+    ],
+    "execute_shell": [
+        "src\\classes\\specialized\\KernelAgent.py"
+    ],
+    "list_processes": [
+        "src\\classes\\specialized\\KernelAgent.py"
+    ],
+    "KnowledgeFusionAgent": [
+        "src\\classes\\specialized\\KnowledgeFusionAgent.py"
+    ],
+    "_load_global_graph": [
+        "src\\classes\\specialized\\KnowledgeFusionAgent.py"
+    ],
+    "_save_global_graph": [
+        "src\\classes\\specialized\\KnowledgeFusionAgent.py"
+    ],
+    "fuse_memory_shards": [
+        "src\\classes\\specialized\\KnowledgeFusionAgent.py"
+    ],
+    "resolve_conflicts": [
+        "src\\classes\\specialized\\KnowledgeFusionAgent.py"
+    ],
+    "LinguisticAgent": [
+        "src\\classes\\specialized\\LinguisticAgent.py"
+    ],
+    "articulate_results": [
+        "src\\classes\\specialized\\LinguisticAgent.py"
+    ],
+    "MCPAgent": [
+        "src\\classes\\specialized\\MCPAgent.py"
+    ],
+    "list_mcp_servers": [
+        "src\\classes\\specialized\\MCPAgent.py"
+    ],
+    "call_mcp_tool": [
+        "src\\classes\\specialized\\MCPAgent.py"
+    ],
+    "initialize_mcp_server": [
+        "src\\classes\\specialized\\MCPAgent.py"
+    ],
+    "MemoRAGAgent": [
+        "src\\classes\\specialized\\MemoRAGAgent.py"
+    ],
+    "memorize": [
+        "src\\classes\\specialized\\MemoRAGAgent.py"
+    ],
+    "recall_clues": [
+        "src\\classes\\specialized\\MemoRAGAgent.py"
+    ],
+    "MessagingAgent": [
+        "src\\classes\\specialized\\MessagingAgent.py"
+    ],
+    "format_for_mobile": [
+        "src\\classes\\specialized\\MessagingAgent.py"
+    ],
+    "ModelForgeAgent": [
+        "src\\classes\\specialized\\ModelForgeAgent.py"
+    ],
+    "prepare_dataset": [
+        "src\\classes\\specialized\\ModelForgeAgent.py"
+    ],
+    "start_finetuning": [
+        "src\\classes\\specialized\\ModelForgeAgent.py"
+    ],
+    "evaluate_adapter": [
+        "src\\classes\\specialized\\ModelForgeAgent.py"
+    ],
+    "list_available_adapters": [
+        "src\\classes\\specialized\\ModelForgeAgent.py"
+    ],
+    "ModelOptimizerAgent": [
+        "src\\classes\\specialized\\ModelOptimizerAgent.py"
+    ],
+    "select_optimization_strategy": [
+        "src\\classes\\specialized\\ModelOptimizerAgent.py"
+    ],
+    "run_tinyml_benchmark": [
+        "src\\classes\\specialized\\ModelOptimizerAgent.py"
+    ],
+    "get_fastflow_command": [
+        "src\\classes\\specialized\\ModelOptimizerAgent.py"
+    ],
+    "get_airllm_setup_code": [
+        "src\\classes\\specialized\\ModelOptimizerAgent.py"
+    ],
+    "MorphologicalEvolutionAgent": [
+        "src\\classes\\specialized\\MorphologicalEvolutionAgent.py"
+    ],
+    "structures": [
+        "src\\classes\\specialized\\MorphologicalEvolutionAgent.py"
+    ],
+    "analyze_api_morphology": [
+        "src\\classes\\specialized\\MorphologicalEvolutionAgent.py"
+    ],
+    "MultiModalContextAgent": [
+        "src\\classes\\specialized\\MultiModalContextAgent.py"
+    ],
+    "capture_screen": [
+        "src\\classes\\specialized\\MultiModalContextAgent.py"
+    ],
+    "analyze_screenshot": [
+        "src\\classes\\specialized\\MultiModalContextAgent.py"
+    ],
+    "extract_text_from_image": [
+        "src\\classes\\specialized\\MultiModalContextAgent.py"
+    ],
+    "gui_action": [
+        "src\\classes\\specialized\\MultiModalContextAgent.py"
+    ],
+    "start_gui_recording": [
+        "src\\classes\\specialized\\MultiModalContextAgent.py"
+    ],
+    "on_click": [
+        "src\\classes\\specialized\\MultiModalContextAgent.py"
+    ],
+    "on_press": [
+        "src\\classes\\specialized\\MultiModalContextAgent.py"
+    ],
+    "stop_gui_recording": [
+        "src\\classes\\specialized\\MultiModalContextAgent.py"
+    ],
+    "replay_gui_interaction": [
+        "src\\classes\\specialized\\MultiModalContextAgent.py"
+    ],
+    "NASAgent": [
+        "src\\classes\\specialized\\NASAgent.py"
+    ],
+    "search_optimal_architecture": [
+        "src\\classes\\specialized\\NASAgent.py"
+    ],
+    "NeuralAnchorAgent": [
+        "src\\classes\\specialized\\NeuralAnchorAgent.py"
+    ],
+    "load_anchor_source": [
+        "src\\classes\\specialized\\NeuralAnchorAgent.py"
+    ],
+    "validate_claim": [
+        "src\\classes\\specialized\\NeuralAnchorAgent.py"
+    ],
+    "anchor_reasoning_step": [
+        "src\\classes\\specialized\\NeuralAnchorAgent.py"
+    ],
+    "NeuralPruningEngine": [
+        "src\\classes\\specialized\\NeuralPruningEngine.py"
+    ],
+    "record_performance": [
+        "src\\classes\\specialized\\NeuralPruningEngine.py"
+    ],
+    "prune_underutilized": [
+        "src\\classes\\specialized\\NeuralPruningEngine.py"
+    ],
+    "get_firing_priority": [
+        "src\\classes\\specialized\\NeuralPruningEngine.py"
+    ],
+    "optimize_inference": [
+        "src\\classes\\specialized\\NeuralPruningEngine.py"
+    ],
+    "NeuroSymbolicAgent": [
+        "src\\classes\\specialized\\NeuroSymbolicAgent.py"
+    ],
+    "verify_and_correct": [
+        "src\\classes\\specialized\\NeuroSymbolicAgent.py"
+    ],
+    "PersonalityCoreAgent": [
+        "src\\classes\\specialized\\PersonalityCoreAgent.py"
+    ],
+    "set_vibe_track": [
+        "src\\classes\\specialized\\PersonalityCoreAgent.py",
+        "src\\classes\\specialized\\StructuredOrchestrator.py"
+    ],
+    "get_track_guidance": [
+        "src\\classes\\specialized\\PersonalityCoreAgent.py",
+        "src\\classes\\specialized\\StructuredOrchestrator.py"
+    ],
+    "PRAgent": [
+        "src\\classes\\specialized\\PRAgent.py"
+    ],
+    "get_diff_summary": [
+        "src\\classes\\specialized\\PRAgent.py"
+    ],
+    "analyze_commit_history": [
+        "src\\classes\\specialized\\PRAgent.py"
+    ],
+    "create_patch_branch": [
+        "src\\classes\\specialized\\PRAgent.py"
+    ],
+    "stage_all_and_commit": [
+        "src\\classes\\specialized\\PRAgent.py"
+    ],
+    "generate_pr_description": [
+        "src\\classes\\specialized\\PRAgent.py"
+    ],
+    "review_changes": [
+        "src\\classes\\specialized\\PRAgent.py"
+    ],
+    "ProactiveAgent": [
+        "src\\classes\\specialized\\ProactiveAgent.py"
+    ],
+    "schedule_task": [
+        "src\\classes\\specialized\\ProactiveAgent.py"
+    ],
+    "scan_for_triggers": [
+        "src\\classes\\specialized\\ProactiveAgent.py"
+    ],
+    "get_habit_recommendation": [
+        "src\\classes\\specialized\\ProactiveAgent.py"
+    ],
+    "QuantumMemoryAgent": [
+        "src\\classes\\specialized\\QuantumMemoryAgent.py"
+    ],
+    "compress_context": [
+        "src\\classes\\specialized\\QuantumMemoryAgent.py"
+    ],
+    "hyper_context_query": [
+        "src\\classes\\specialized\\QuantumMemoryAgent.py"
+    ],
+    "export_context_knowledge_graph": [
+        "src\\classes\\specialized\\QuantumMemoryAgent.py"
+    ],
+    "QuantumReasonerAgent": [
+        "src\\classes\\specialized\\QuantumReasonerAgent.py"
+    ],
+    "reason_with_superposition": [
+        "src\\classes\\specialized\\QuantumReasonerAgent.py"
+    ],
+    "_generate_reasoning_branch": [
+        "src\\classes\\specialized\\QuantumReasonerAgent.py"
+    ],
+    "collapse_quantum_states": [
+        "src\\classes\\specialized\\QuantumReasonerAgent.py"
+    ],
+    "RealityAnchorAgent": [
+        "src\\classes\\specialized\\RealityAnchorAgent.py"
+    ],
+    "verify_claim": [
+        "src\\classes\\specialized\\RealityAnchorAgent.py"
+    ],
+    "anchor_context": [
+        "src\\classes\\specialized\\RealityAnchorAgent.py"
+    ],
+    "RealityGraftingAgent": [
+        "src\\classes\\specialized\\RealityGraftingAgent.py"
+    ],
+    "graft_skill": [
+        "src\\classes\\specialized\\RealityGraftingAgent.py"
+    ],
+    "RefinementAgent": [
+        "src\\classes\\specialized\\RefinementAgent.py"
+    ],
+    "analyze_performance_gaps": [
+        "src\\classes\\specialized\\RefinementAgent.py"
+    ],
+    "propose_prompt_update": [
+        "src\\classes\\specialized\\RefinementAgent.py"
+    ],
+    "to": [
+        "src\\classes\\specialized\\RefinementAgent.py"
+    ],
+    "update_agent_source": [
+        "src\\classes\\specialized\\RefinementAgent.py"
+    ],
+    "ReflectionAgent": [
+        "src\\classes\\specialized\\ReflectionAgent.py"
+    ],
+    "critique": [
+        "src\\classes\\specialized\\ReflectionAgent.py"
+    ],
+    "ResearchAgent": [
+        "src\\classes\\specialized\\ResearchAgent.py"
+    ],
+    "dcap_research": [
+        "src\\classes\\specialized\\ResearchAgent.py"
+    ],
+    "ingest_paper": [
+        "src\\classes\\specialized\\ResearchAgent.py"
+    ],
+    "generate_tool_from_research": [
+        "src\\classes\\specialized\\ResearchAgent.py"
+    ],
+    "research_driven_logic": [
+        "src\\classes\\specialized\\ResearchAgent.py"
+    ],
+    "ResilienceManagerAgent": [
+        "src\\classes\\specialized\\ResilienceManagerAgent.py"
+    ],
+    "trigger_failover": [
+        "src\\classes\\specialized\\ResilienceManagerAgent.py"
+    ],
+    "optimize_resource_allocation": [
+        "src\\classes\\specialized\\ResilienceManagerAgent.py"
+    ],
+    "SelfArchivingAgent": [
+        "src\\classes\\specialized\\SelfArchivingAgent.py"
+    ],
+    "identify_archivable_targets": [
+        "src\\classes\\specialized\\SelfArchivingAgent.py"
+    ],
+    "archive_targets": [
+        "src\\classes\\specialized\\SelfArchivingAgent.py"
+    ],
+    "SelfSearchAgent": [
+        "src\\classes\\specialized\\SelfSearchAgent.py"
+    ],
+    "generate_search_structure": [
+        "src\\classes\\specialized\\SelfSearchAgent.py"
+    ],
+    "perform_internal_search": [
+        "src\\classes\\specialized\\SelfSearchAgent.py"
+    ],
+    "SpeciationAgent": [
+        "src\\classes\\specialized\\SpeciationAgent.py"
+    ],
+    "evolve_specialized_agent": [
+        "src\\classes\\specialized\\SpeciationAgent.py"
+    ],
+    "SpecToolAgent": [
+        "src\\classes\\specialized\\SpecToolAgent.py"
+    ],
+    "generate_sdd_spec": [
+        "src\\classes\\specialized\\SpecToolAgent.py"
+    ],
+    "create_proposal": [
+        "src\\classes\\specialized\\SpecToolAgent.py"
+    ],
+    "archive_change": [
+        "src\\classes\\specialized\\SpecToolAgent.py"
+    ],
+    "generate_tool_from_spec": [
+        "src\\classes\\specialized\\SpecToolAgent.py"
+    ],
+    "SQLAgent": [
+        "src\\classes\\specialized\\SQLAgent.py"
+    ],
+    "unify_sources": [
+        "src\\classes\\specialized\\SQLAgent.py"
+    ],
+    "connect_mcp_datasource": [
+        "src\\classes\\specialized\\SQLAgent.py"
+    ],
+    "connect_local": [
+        "src\\classes\\specialized\\SQLAgent.py"
+    ],
+    "execute_query": [
+        "src\\classes\\specialized\\SQLAgent.py"
+    ],
+    "get_table_schema": [
+        "src\\classes\\specialized\\SQLAgent.py"
+    ],
+    "orchestrate_supervisor": [
+        "src\\classes\\specialized\\StructuredOrchestrator.py"
+    ],
+    "orchestrate_debate": [
+        "src\\classes\\specialized\\StructuredOrchestrator.py"
+    ],
+    "orchestrate_consensus_voting": [
+        "src\\classes\\specialized\\StructuredOrchestrator.py"
+    ],
+    "orchestrate_pipeline": [
+        "src\\classes\\specialized\\StructuredOrchestrator.py"
+    ],
+    "SynthesisAgent": [
+        "src\\classes\\specialized\\SynthesisAgent.py"
+    ],
+    "fuse_agents": [
+        "src\\classes\\specialized\\SynthesisAgent.py"
+    ],
+    "analyze_fusion_candidates": [
+        "src\\classes\\specialized\\SynthesisAgent.py"
+    ],
+    "SyntheticDataAgent": [
+        "src\\classes\\specialized\\SyntheticDataAgent.py"
+    ],
+    "generate_training_data": [
+        "src\\classes\\specialized\\SyntheticDataAgent.py"
+    ],
+    "augment_existing_data": [
+        "src\\classes\\specialized\\SyntheticDataAgent.py"
+    ],
+    "TemporalPredictorAgent": [
+        "src\\classes\\specialized\\TemporalPredictorAgent.py"
+    ],
+    "_load_history": [
+        "src\\classes\\specialized\\TemporalPredictorAgent.py"
+    ],
+    "_save_history": [
+        "src\\classes\\specialized\\TemporalPredictorAgent.py"
+    ],
+    "record_execution_event": [
+        "src\\classes\\specialized\\TemporalPredictorAgent.py"
+    ],
+    "predict_next_failure": [
+        "src\\classes\\specialized\\TemporalPredictorAgent.py"
+    ],
+    "suggest_preemptive_fix": [
+        "src\\classes\\specialized\\TemporalPredictorAgent.py"
+    ],
+    "TemporalShardAgent": [
+        "src\\classes\\specialized\\TemporalShardAgent.py"
+    ],
+    "retrieve_temporal_context": [
+        "src\\classes\\specialized\\TemporalShardAgent.py"
+    ],
+    "create_temporal_anchor": [
+        "src\\classes\\specialized\\TemporalShardAgent.py"
+    ],
+    "ToolEvolutionAgent": [
+        "src\\classes\\specialized\\ToolEvolutionAgent.py"
+    ],
+    "analyze_gui_recording_for_automation": [
+        "src\\classes\\specialized\\ToolEvolutionAgent.py"
+    ],
+    "implement_and_save_tool": [
+        "src\\classes\\specialized\\ToolEvolutionAgent.py"
+    ],
+    "scan_logs_for_repetitive_commands": [
+        "src\\classes\\specialized\\ToolEvolutionAgent.py"
+    ],
+    "TopologicalNavigator": [
+        "src\\classes\\specialized\\TopologicalNavigator.py"
+    ],
+    "_get_entity_id": [
+        "src\\classes\\specialized\\TopologicalNavigator.py"
+    ],
+    "build_dependency_map": [
+        "src\\classes\\specialized\\TopologicalNavigator.py"
+    ],
+    "_parse_file": [
+        "src\\classes\\specialized\\TopologicalNavigator.py"
+    ],
+    "as": [
+        "src\\classes\\specialized\\TopologicalNavigator.py"
+    ],
+    "federate_with_external_project": [
+        "src\\classes\\specialized\\TopologicalNavigator.py"
+    ],
+    "find_impact_zone": [
+        "src\\classes\\specialized\\TopologicalNavigator.py"
+    ],
+    "_build_reverse_graph": [
+        "src\\classes\\specialized\\TopologicalNavigator.py"
+    ],
+    "get_topological_order": [
+        "src\\classes\\specialized\\TopologicalNavigator.py"
+    ],
+    "VisualizerAgent": [
+        "src\\classes\\specialized\\VisualizerAgent.py"
+    ],
+    "export_visual_workflow": [
+        "src\\classes\\specialized\\VisualizerAgent.py"
+    ],
+    "import_visual_workflow": [
+        "src\\classes\\specialized\\VisualizerAgent.py"
+    ],
+    "set_memory_agent": [
+        "src\\classes\\specialized\\VisualizerAgent.py"
+    ],
+    "visualize_knowledge_graph": [
+        "src\\classes\\specialized\\VisualizerAgent.py"
+    ],
+    "generate_fleet_map": [
+        "src\\classes\\specialized\\VisualizerAgent.py"
+    ],
+    "diagram": [
+        "src\\classes\\specialized\\VisualizerAgent.py"
+    ],
+    "generate_call_graph": [
+        "src\\classes\\specialized\\VisualizerAgent.py"
+    ],
+    "VoiceAgent": [
+        "src\\classes\\specialized\\VoiceAgent.py"
+    ],
+    "synthesize_advanced_speech": [
+        "src\\classes\\specialized\\VoiceAgent.py"
+    ],
+    "inject_speaker_embedding": [
+        "src\\classes\\specialized\\VoiceAgent.py"
+    ],
+    "transcribe_audio": [
+        "src\\classes\\specialized\\VoiceAgent.py"
+    ],
+    "apply_voice_activity_detection": [
+        "src\\classes\\specialized\\VoiceAgent.py"
+    ],
+    "generate_speech": [
+        "src\\classes\\specialized\\VoiceAgent.py"
+    ],
+    "WebAgent": [
+        "src\\classes\\specialized\\WebAgent.py"
+    ],
+    "fetch_page_content": [
+        "src\\classes\\specialized\\WebAgent.py"
+    ],
+    "search_web": [
+        "src\\classes\\specialized\\WebAgent.py"
+    ],
+    "WorldModelAgent": [
+        "src\\classes\\specialized\\WorldModelAgent.py"
+    ],
+    "predict_action_outcome": [
+        "src\\classes\\specialized\\WorldModelAgent.py"
+    ],
+    "simulate_workspace_state": [
+        "src\\classes\\specialized\\WorldModelAgent.py"
+    ],
+    "simulate_agent_interaction": [
+        "src\\classes\\specialized\\WorldModelAgent.py"
     ],
     "ABComparator": [
         "src\\classes\\stats\\ABComparator.py"
@@ -15728,8 +18236,74 @@
     "get_full_path": [
         "src\\classes\\stats\\MetricNamespaceManager.py"
     ],
+    "MetricsExporter": [
+        "src\\classes\\stats\\MetricsExporter.py"
+    ],
+    "record_agent_call": [
+        "src\\classes\\stats\\MetricsExporter.py"
+    ],
+    "record_resource_usage": [
+        "src\\classes\\stats\\MetricsExporter.py"
+    ],
+    "get_prometheus_payload": [
+        "src\\classes\\stats\\MetricsExporter.py"
+    ],
+    "export_to_grafana": [
+        "src\\classes\\stats\\MetricsExporter.py"
+    ],
     "MetricType": [
         "src\\classes\\stats\\MetricType.py"
+    ],
+    "ModelFallbackEngine": [
+        "src\\classes\\stats\\ModelFallbackEngine.py"
+    ],
+    "get_fallback_model": [
+        "src\\classes\\stats\\ModelFallbackEngine.py"
+    ],
+    "get_cheapest_model": [
+        "src\\classes\\stats\\ModelFallbackEngine.py"
+    ],
+    "OTelManager": [
+        "src\\classes\\stats\\OTelManager.py"
+    ],
+    "start_span": [
+        "src\\classes\\stats\\OTelManager.py"
+    ],
+    "end_span": [
+        "src\\classes\\stats\\OTelManager.py"
+    ],
+    "export_spans": [
+        "src\\classes\\stats\\OTelManager.py"
+    ],
+    "get_trace_context": [
+        "src\\classes\\stats\\OTelManager.py"
+    ],
+    "PrometheusExporter": [
+        "src\\classes\\stats\\PrometheusExporter.py"
+    ],
+    "generate_scrape_response": [
+        "src\\classes\\stats\\PrometheusExporter.py"
+    ],
+    "get_grafana_info": [
+        "src\\classes\\stats\\PrometheusExporter.py"
+    ],
+    "ReportingAgent": [
+        "src\\classes\\stats\\ReportingAgent.py"
+    ],
+    "generate_dashboard": [
+        "src\\classes\\stats\\ReportingAgent.py"
+    ],
+    "ResourceMonitor": [
+        "src\\classes\\stats\\ResourceMonitor.py"
+    ],
+    "get_current_stats": [
+        "src\\classes\\stats\\ResourceMonitor.py"
+    ],
+    "save_stats": [
+        "src\\classes\\stats\\ResourceMonitor.py"
+    ],
+    "get_execution_recommendation": [
+        "src\\classes\\stats\\ResourceMonitor.py"
     ],
     "RetentionEnforcer": [
         "src\\classes\\stats\\RetentionEnforcer.py"
@@ -16003,9 +18577,6 @@
     "StatsStreamer": [
         "src\\classes\\stats\\StatsStreamer.py"
     ],
-    "connect": [
-        "src\\classes\\stats\\StatsStreamer.py"
-    ],
     "disconnect": [
         "src\\classes\\stats\\StatsStreamer.py"
     ],
@@ -16028,9 +18599,6 @@
         "src\\classes\\stats\\StatsStreamManager.py"
     ],
     "create_stream": [
-        "src\\classes\\stats\\StatsStreamManager.py"
-    ],
-    "publish": [
         "src\\classes\\stats\\StatsStreamManager.py"
     ],
     "StatsSubscriptionManager": [
@@ -16059,6 +18627,21 @@
     ],
     "check_value": [
         "src\\classes\\stats\\ThresholdAlertManager.py"
+    ],
+    "TokenCostEngine": [
+        "src\\classes\\stats\\TokenCostEngine.py"
+    ],
+    "calculate_cost": [
+        "src\\classes\\stats\\TokenCostEngine.py"
+    ],
+    "get_supported_models": [
+        "src\\classes\\stats\\TokenCostEngine.py"
+    ],
+    "TransparencyAgent": [
+        "src\\classes\\stats\\TransparencyAgent.py"
+    ],
+    "generate_audit_trail": [
+        "src\\classes\\stats\\TransparencyAgent.py"
     ],
     "AgentStrategy": [
         "src\\classes\\strategies\\AgentStrategy.py"
@@ -16229,10 +18812,6 @@
     ],
     "LogCapturer": [
         "src\\classes\\test_utils\\LogCapturer.py"
-    ],
-    "start": [
-        "src\\classes\\test_utils\\LogCapturer.py",
-        "src\\classes\\test_utils\\TestTimer.py"
     ],
     "MockAIBackend": [
         "src\\classes\\test_utils\\MockAIBackend.py"
@@ -16418,9 +18997,6 @@
     "get_active_profile": [
         "src\\classes\\test_utils\\TestProfileManager.py"
     ],
-    "record_interaction": [
-        "src\\classes\\test_utils\\TestRecorder.py"
-    ],
     "get_replay_result": [
         "src\\classes\\test_utils\\TestRecorder.py"
     ],
@@ -16447,5 +19023,11 @@
     ],
     "elapsed_ms": [
         "src\\classes\\test_utils\\TestTimer.py"
+    ],
+    "Weather_APITool": [
+        "src\\classes\\tools\\weather_api_tool.py"
+    ],
+    "get_weather": [
+        "src\\classes\\tools\\weather_api_tool.py"
     ]
 }

@@ -42,7 +42,7 @@ class IncrementalProcessor:
         state: Current incremental processing state.
     """
 
-    def __init__(self, repo_root: Path, state_file: str = ".agent_state.json"):
+    def __init__(self, repo_root: Path, state_file: str = ".agent_state.json") -> str:
         """Initialize the incremental processor.
 
         Args:

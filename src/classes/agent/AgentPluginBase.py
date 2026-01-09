@@ -46,7 +46,7 @@ class AgentPluginBase(ABC):
     """
 
     def __init__(self, name: str, priority: AgentPriority = AgentPriority.NORMAL,
-                 config: Optional[Dict[str, Any]] = None):
+                 config: Optional[Dict[str, Any]] = None) -> None:
         """Initialize the plugin.
 
         Args:

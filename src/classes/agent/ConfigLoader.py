@@ -53,7 +53,7 @@ class ConfigLoader:
         '.ini': ConfigFormat.INI,
     }
 
-    def __init__(self, config_path: Optional[Path] = None):
+    def __init__(self, config_path: Optional[Path] = None) -> None:
         """Initialize the config loader.
 
         Args:
