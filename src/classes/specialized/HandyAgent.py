@@ -7,9 +7,12 @@ Inspired by the Handy pattern (Rust terminal agent) and GitHub Copilot CLI.
 import os
 import subprocess
 import shutil
+import time
+from pathlib import Path
 from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 
 class HandyAgent(BaseAgent):
     """Provides a terminal-native interface for the agent to interact with the OS."""
@@ -21,6 +24,19 @@ class HandyAgent(BaseAgent):
             "Your role is to act as an 'Agentic Bash' – a terminal shell that understands codebase context. "
             "You provide tools for intelligent file search, system diagnosis, and command execution."
         )
+        
+        # Phase 108: Intelligence Harvesting
+        work_root = getattr(self, "_workspace_root", None)
+        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
+
+    def _record(self, tool_name: str, input: Any, output: str) -> None:
+        """Archiving shell interaction for fleet intelligence."""
+        if self.recorder:
+            try:
+                meta = {"phase": 108, "type": "shell", "timestamp": time.time()}
+                self.recorder.record_interaction("handy", "bash", str(input), output, meta=meta)
+            except Exception:
+                pass
 
     @as_tool
     def fast_find(self, query: str, path: str = ".") -> str:
@@ -45,14 +61,18 @@ class HandyAgent(BaseAgent):
     @as_tool
     def terminal_slash_command(self, command: str, args: List[str]) -> str:
         """Handles agentic slash commands like /fix, /test, /summarize directly from a CLI."""
+        res = ""
         if command == "/fix":
-            return f"### 🔧 Triggered /fix for {args}\nAnalyzing errors and proposing patches..."
+            res = f"### 🔧 Triggered /fix for {args}\nAnalyzing errors and proposing patches..."
         elif command == "/test":
-            return f"### 🧪 Triggered /test for {args}\nRunning pytest and coverage analysis..."
+            res = f"### 🧪 Triggered /test for {args}\nRunning pytest and coverage analysis..."
         elif command == "/summarize":
-            return f"### 📝 Triggered /summarize for {args}\nGenerating high-level architectural overview..."
+            res = f"### 📝 Triggered /summarize for {args}\nGenerating high-level architectural overview..."
         else:
-            return f"Unknown slash command: {command}. Available: /fix, /test, /summarize"
+            res = f"Unknown slash command: {command}. Available: /fix, /test, /summarize"
+        
+        self._record("slash_command", {"cmd": command, "args": args}, res)
+        return res
 
     @as_tool
     def execute_with_diagnosis(self, command: str) -> str:
@@ -67,25 +87,34 @@ class HandyAgent(BaseAgent):
             "chmod -R 777 /", ":(){ :|:& };:", "del /s /q c:\\", "format c:"
         ]
         if any(b in command.lower() for b in blocklist):
-            return "### ⚠️ Security Block: Potentially catastrophic command detected."
+            msg = "### ⚠️ Security Block: Potentially catastrophic command detected."
+            self._record("execute_fail", command, msg)
+            return msg
 
         try:
             # shell=True is kept for compatibility with pipes/redirects,
             # but we use a timeout for robustness.
             result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=60) # nosec
             if result.returncode == 0:
-                return f"### ✅ Success:\n```text\n{result.stdout[:1000]}\n```"
+                stdout = result.stdout[:1000]
+                self._record("execute_success", command, stdout)
+                return f"### ✅ Success:\n```text\n{stdout}\n```"
             else:
+                stderr = result.stderr[:500]
                 analysis = [
                     f"### ❌ Command Failed (Code {result.returncode}):",
-                    f"**Stderr**: `{result.stderr[:500]}`",
+                    f"**Stderr**: `{stderr}`",
                     "\n**Handy Diagnosis**:",
                     "- Suggested Fix: Check if dependencies are installed or if paths are correct.",
                     "- Context: This error often occurs when the environment is misconfigured."
                 ]
-                return "\n".join(analysis)
+                res = "\n".join(analysis)
+                self._record("execute_fail", command, res)
+                return res
         except Exception as e:
-            return f"Execution error: {e}"
+            err_msg = f"Execution error: {e}"
+            self._record("execute_error", command, err_msg)
+            return err_msg
 
     def improve_content(self, prompt: str) -> str:
         """Evaluates a terminal-oriented request."""

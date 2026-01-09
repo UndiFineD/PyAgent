@@ -51,9 +51,9 @@ class SecurityAuditAgent(BaseAgent):
             
             # Check for insecure patterns (e.g., eval, subprocess shell=True)
             # Use regex to find actual calls, not just strings
-            if re.search(r"\b" + "ev" + "al\s*\(", content) and "SecurityAuditAgent" not in content and "SecurityScanner" not in content:
+            if re.search(r"\b" + "ev" + r"al\s*\(", content) and "SecurityAuditAgent" not in content and "SecurityScanner" not in content:
                 # Basic check: skip if line contains # nosec (Phase 105)
-                eval_match = re.search(r".*\b" + "ev" + "al\s*\(.*", content)
+                eval_match = re.search(r".*\b" + "ev" + r"al\s*\(.*", content)
                 if eval_match and "# nosec" not in eval_match.group(0):
                     findings.append({
                         "file": file_path,

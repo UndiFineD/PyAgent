@@ -43,6 +43,14 @@ The project has entered an autonomous maintenance phase where the system refacto
 - **Smart Memory & History**: Agents now retain conversation history during GUI sessions, allowing for multi-turn iterative improvements.
 - **BMAD V6 Methodology**: Native support for the "Build More, Architect Dreams" method, featuring dynamic tracks (Quick, BMad, Enterprise) and phased workflows.
 
+### 🌐 Interfaces
+
+PyAgent now supports a unified multi-interface architecture connected via a central **Fleet Load Balancer**:
+- **GUI**: Comprehensive desktop control center ([MainApp.py](src/classes/gui/MainApp.py)).
+- **Mobile**: Flutter-based mobile companion.
+- **Web**: FastAPI-powered web interface.
+- **CLI**: A new high-performance Command Line Interface ([pyagent_cli.py](src/pyagent_cli.py)) for terminal-based automation.
+
 ### 🚀 Architecture
 
 ```text

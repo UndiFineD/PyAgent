@@ -19,10 +19,10 @@ class AgentDashboard:
     """Manages the agent columns container and provides controls to add agents."""
     def __init__(self, parent, callbacks) -> None:
         self.frame = ttk.Frame(parent)
-        self.callbacks = callbacks
+        self.callbacks: Any = callbacks
         self.setup_ui()
 
-    def setup_ui(self):
+    def setup_ui(self) -> None:
         canvas = tk.Canvas(self.frame)
         v_scrollbar = ttk.Scrollbar(self.frame, orient="vertical", command=canvas.yview)
         self.dash_content = ttk.Frame(canvas)
@@ -34,7 +34,7 @@ class AgentDashboard:
         # Ensure dash_content matches canvas width
         canvas.bind('<Configure>', lambda e: canvas.itemconfig(canvas_window, width=e.width))
         
-        canvas_window = canvas.create_window((0, 0), window=self.dash_content, anchor="nw")
+        canvas_window: int = canvas.create_window((0, 0), window=self.dash_content, anchor="nw")
         canvas.configure(yscrollcommand=v_scrollbar.set)
         
         v_scrollbar.pack(side="right", fill="y")
@@ -58,10 +58,10 @@ class AgentDashboard:
         self.columns_container = ttk.Frame(self.dash_content)
         self.columns_container.pack(fill=tk.BOTH, expand=True)
 
-    def collapse_all(self):
+    def collapse_all(self) -> None:
         if "collapse_all" in self.callbacks:
             self.callbacks["collapse_all"]()
 
-    def expand_all(self):
+    def expand_all(self) -> None:
         if "expand_all" in self.callbacks:
             self.callbacks["expand_all"]()

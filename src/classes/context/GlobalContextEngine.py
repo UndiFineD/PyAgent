@@ -35,10 +35,10 @@ class GlobalContextEngine:
         self._loaded_shards = set()
         self.load()
 
-    def _ensure_shard_loaded(self, category: str) -> str:
+    def _ensure_shard_loaded(self, category: str) -> None:
         """Lazy load a specific shard or sub-shards if they exist."""
         if category in self._loaded_shards:
-            return
+            return None
             
         # Check for sub-shards (Phase 104)
         shard_files = list(self.shard_dir.glob(f"{category}_*.json"))
@@ -71,7 +71,7 @@ class GlobalContextEngine:
             return data.get(key)
         return data
 
-    def load(self) -> str:
+    def load(self) -> None:
         """Loads default context state."""
         if self.context_file.exists():
             try:
@@ -82,7 +82,7 @@ class GlobalContextEngine:
             except Exception as e:
                 logging.error(f"Failed to load GlobalContext: {e}")
 
-    def save(self) -> str:
+    def save(self) -> None:
         """Saves context to disk with optimization for large datasets."""
         try:
             # Logic for sharding large datasets (Phase 101)
@@ -103,13 +103,13 @@ class GlobalContextEngine:
             logging.error(f"Failed to save GlobalContext: {e}")
 
 
-    def add_fact(self, key: str, value: Any) -> str:
+    def add_fact(self, key: str, value: Any) -> None:
         """Adds or updates a project fact."""
         self._ensure_shard_loaded("facts")
         self.memory["facts"][key] = self.core.prepare_fact(key, value)
         self.save()
 
-    def add_insight(self, insight: str, source_agent: str) -> str:
+    def add_insight(self, insight: str, source_agent: str) -> None:
         """Adds a high-level insight learned from tasks."""
         self._ensure_shard_loaded("insights")
         entry = self.core.prepare_insight(insight, source_agent)
@@ -118,19 +118,19 @@ class GlobalContextEngine:
             self.memory["insights"].append(entry)
             self.save()
 
-    def add_constraint(self, constraint: str) -> str:
+    def add_constraint(self, constraint: str) -> None:
         """Adds a project constraint."""
         if constraint not in self.memory["constraints"]:
             self.memory["constraints"].append(constraint)
             self.save()
 
-    def add_entity_info(self, entity_name: str, attributes: Dict[str, Any]) -> str:
+    def add_entity_info(self, entity_name: str, attributes: Dict[str, Any]) -> None:
         """Tracks specific entities (files, classes, modules) and their metadata."""
         existing = self.memory["entities"].get(entity_name, {})
         self.memory["entities"][entity_name] = self.core.merge_entity_info(existing, attributes)
         self.save()
 
-    def record_lesson(self, failure_context: str, correction: str, agent: str) -> str:
+    def record_lesson(self, failure_context: str, correction: str, agent: str) -> None:
         """Records a learned lesson to prevent future errors."""
         lesson = {
             "failure": failure_context,
@@ -168,7 +168,7 @@ class GlobalContextEngine:
                 
         return "\n".join(summary)
 
-    def consolidate_episodes(self, episodes: List[Dict[str, Any]]):
+    def consolidate_episodes(self, episodes: List[Dict[str, Any]]) -> None:
         """Analyzes episodic memories to extract long-term insights."""
         # This would typically use an LLM to find patterns.
         # For now, we look for repeated failures or success patterns.

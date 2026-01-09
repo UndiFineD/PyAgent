@@ -1,34 +1,41 @@
+"""
+FastAPI-based API gateway for the PyAgent fleet.
+"""
+
 import asyncio
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from pydantic import BaseModel
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import json
 import time
 from src.classes.fleet.FleetManager import FleetManager
+from src.classes.api.FleetLoadBalancer import FleetLoadBalancer
 
 app = FastAPI(title="PyAgent Unified API")
 
-# Global fleet instance
+# Global instances
 workspace_root = "c:/DEV/PyAgent"
 fleet = FleetManager(workspace_root)
+load_balancer = FleetLoadBalancer(fleet)
 
 class TaskRequest(BaseModel):
     agent_id: str
     task: str
     context: Dict[str, Any] = {}
+    interface: Optional[str] = "Web" # Default to web if not specified
 
 class TelemetryManger:
     def __init__(self) -> None:
         self.active_connections: List[WebSocket] = []
 
-    async def connect(self, websocket: WebSocket):
+    async def connect(self, websocket: WebSocket) -> None:
         await websocket.accept()
         self.active_connections.append(websocket)
 
-    def disconnect(self, websocket: WebSocket):
+    def disconnect(self, websocket: WebSocket) -> None:
         self.active_connections.remove(websocket)
 
-    async def broadcast(self, message: str):
+    async def broadcast(self, message: str) -> None:
         for connection in self.active_connections:
             try:
                 await connection.send_text(message)
@@ -38,11 +45,16 @@ class TelemetryManger:
 telemetry = TelemetryManger()
 
 @app.get("/")
-async def root():
-    return {"status": "online", "version": "1.5.0", "fleet_size": len(fleet.agents)}
+async def root() -> Dict[str, Any]:
+    return {
+        "status": "online", 
+        "version": "2.0.0", 
+        "fleet_size": len(fleet.agents),
+        "lb_stats": load_balancer.get_stats()
+    }
 
 @app.get("/agents")
-async def list_agents():
+async def list_agents() -> Dict[str, Any]:
     return {
         "agents": [
             {"id": k, "type": type(v).__name__} for k, v in fleet.agents.items()
@@ -50,12 +62,19 @@ async def list_agents():
     }
 
 @app.post("/task")
-async def dispatch_task(request: TaskRequest):
+async def dispatch_task(request: TaskRequest) -> Dict[str, Any]:
+    # Route through Load Balancer
+    lb_result = load_balancer.balance_request(request.interface, request.task)
+    if lb_result.get("status") == "REJECTED":
+        return {"status": "error", "message": lb_result.get("reason"), "code": 429}
+
     # Log task start to telemetry
     await telemetry.broadcast(json.dumps({
         "type": "task_started",
         "agent": request.agent_id,
-        "timestamp": time.time()
+        "interface": request.interface,
+        "timestamp": time.time(),
+        "lb_metadata": lb_result
     }))
     
     # Simulate routing to agent
@@ -75,7 +94,7 @@ async def dispatch_task(request: TaskRequest):
         return {"status": "error", "message": str(e)}
 
 @app.websocket("/ws/telemetry")
-async def websocket_endpoint(websocket: WebSocket):
+async def websocket_endpoint(websocket: WebSocket) -> None:
     await telemetry.connect(websocket)
     try:
         while True:

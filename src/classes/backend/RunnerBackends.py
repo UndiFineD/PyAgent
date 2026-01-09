@@ -29,7 +29,7 @@ class BackendHandlers:
         ).strip()
 
     @staticmethod
-    def try_codex_cli(full_prompt: str, repo_root: Path) -> Optional[str]:
+    def try_codex_cli(full_prompt: str, repo_root: Path, recorder=None) -> Optional[str]:
         try:
             logging.debug("Attempting to use Codex CLI backend")
             result = subprocess.run(
@@ -39,6 +39,11 @@ class BackendHandlers:
                 capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=180, cwd=str(repo_root), check=False
             )
             stdout = (result.stdout or "").strip()
+            
+            # Phase 108: Recording
+            if recorder:
+                recorder.record_interaction("codex", "cli", full_prompt[:200], stdout[:1000] if result.returncode == 0 else "FAILED")
+
             if result.returncode == 0 and stdout:
                 logging.info("Codex CLI backend succeeded")
                 return stdout

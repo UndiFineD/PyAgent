@@ -14,17 +14,17 @@ class AgentMetrics:
     start_time: float = field(default_factory=time.time)
     end_time: float = None
 
-    def record_file_processed(self, modified: bool = False):
+    def record_file_processed(self, modified: bool = False) -> None:
         """Record a file as processed."""
         self.files_processed += 1
         if modified:
             self.files_modified += 1
 
-    def record_agent_applied(self, agent_name: str):
+    def record_agent_applied(self, agent_name: str) -> None:
         """Record an agent application."""
         self.agents_applied[agent_name] = self.agents_applied.get(agent_name, 0) + 1
 
-    def finalize(self):
+    def finalize(self) -> None:
         """Finalize metrics collection."""
         self.end_time = time.time()
 

@@ -23,6 +23,9 @@ import threading
 import time
 import uuid
 
+# Infrastructure
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+
 class RequestBatcher:
     """Batches multiple requests for efficient processing.
 
@@ -40,15 +43,18 @@ class RequestBatcher:
         self,
         batch_size: int = 10,
         timeout_s: float = 5.0,
+        recorder: Optional[LocalContextRecorder] = None,
     ) -> None:
         """Initialize request batcher.
 
         Args:
             batch_size: Requests per batch.
             timeout_s: Max wait time before processing partial batch.
+            recorder: Infrastructure recorder for intelligence harvesting.
         """
         self.batch_size = batch_size
         self.timeout_s = timeout_s
+        self.recorder = recorder
         self._buffer: List[str] = []
         self._lock = threading.Lock()
         self._batch_start: Optional[float] = None
@@ -86,6 +92,10 @@ class RequestBatcher:
         with self._lock:
             if not self._buffer:
                 return None
+            
+            if self.recorder:
+                self.recorder.record_lesson("batch_created", {"size": len(self._buffer)})
+                
             batch = BatchRequest(requests=self._buffer.copy())
             self._buffer.clear()
             self._batch_start = None

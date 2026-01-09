@@ -31,6 +31,7 @@ class CoreExpansionAgent(BaseAgent):
         
         try:
             # Use subprocess to run pip
+            cmd_str = f"{sys.executable} -m pip install {package_name}"
             result = subprocess.run(
                 [sys.executable, "-m", "pip", "install", package_name],
                 capture_output=True,
@@ -38,10 +39,19 @@ class CoreExpansionAgent(BaseAgent):
                 check=True
             )
             logging.info(f"CoreExpansionAgent: Successfully installed {package_name}")
+            
+            # Phase 108: Record intelligence for future dependency graph learning
+            self._record(cmd_str, f"Success\n{result.stdout}", provider="Shell", model="pip")
+            
             return f"Success: {package_name} installed.\nStdout: {result.stdout}"
         except subprocess.CalledProcessError as e:
-            logging.error(f"CoreExpansionAgent: Failed to install {package_name}. Error: {e.stderr}")
-            return f"Error: Failed to install {package_name}. Details: {e.stderr}"
+            err_msg = e.stderr or str(e)
+            logging.error(f"CoreExpansionAgent: Failed to install {package_name}. Error: {err_msg}")
+            
+            # Phase 108: Record failure as a lesson
+            self._record(f"pip install {package_name}", f"Failed: {err_msg}", provider="Shell", model="pip")
+            
+            return f"Error: Failed to install {package_name}. Details: {err_msg}"
 
     @as_tool
     def audit_environment(self) -> List[str]:

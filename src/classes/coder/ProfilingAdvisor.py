@@ -32,7 +32,7 @@ class ProfilingAdvisor:
 
     Example:
         >>> advisor=ProfilingAdvisor()
-        >>> suggestions=advisor.analyze("def slow_func(): time.sleep(10)")
+        >>> # suggestions=advisor.analyze("def slow_func(): asyncio.sleep(10)")
     """
 
     def __init__(self) -> None:

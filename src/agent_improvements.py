@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
+"""
+Improvements Agent: Maintains and improves improvement suggestions.
+"""
+
 import sys
 from pathlib import Path
 

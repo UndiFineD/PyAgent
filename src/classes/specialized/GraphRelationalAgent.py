@@ -27,7 +27,7 @@ class GraphRelationalAgent(BaseAgent):
             "questions about how components interact."
         )
 
-    def _load_graph(self):
+    def _load_graph(self) -> None:
         if self.graph_store_path.exists():
             try:
                 with open(self.graph_store_path, "r") as f:
@@ -37,7 +37,7 @@ class GraphRelationalAgent(BaseAgent):
             except Exception as e:
                 logging.error(f"GraphRelationalAgent: Failed to load graph: {e}")
 
-    def _save_graph(self):
+    def _save_graph(self) -> None:
         try:
             self.graph_store_path.parent.mkdir(parents=True, exist_ok=True)
             with open(self.graph_store_path, "w") as f:

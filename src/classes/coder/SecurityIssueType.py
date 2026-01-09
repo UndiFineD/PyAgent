@@ -27,3 +27,5 @@ class SecurityIssueType(Enum):
     PATH_TRAVERSAL = "path_traversal"
     COMMAND_INJECTION = "command_injection"
     INSECURE_RANDOM = "insecure_random"
+    INJECTION_ATTEMPT = "injection_attempt"
+    OTHER = "other"

@@ -175,6 +175,12 @@ class CoderAgent(BaseAgent):
                 )
                 # Parse output for percentage (e.g., TOTAL 10 2 80%)
                 match = re.search(r'TOTAL.*?\s+(\d+)%', result.stdout)
+                
+                # Phase 108: Record coverage intelligence
+                self._record(f"pytest --cov on {self.file_path.name}", 
+                             f"Coverage: {match.group(1)}%" if match else "No match",
+                             provider="Shell", model="pytest")
+                
                 if match:
                     return float(match.group(1))
             except Exception as e:
@@ -380,7 +386,10 @@ class CoderAgent(BaseAgent):
             )
             if result.returncode != 0:
                 logging.warning(f"flake8 validation failed:\n{result.stdout}")
+                self._record(f"flake8 on {self.file_path.name}", f"Failed:\n{result.stdout}", provider="Shell", model="flake8")
                 return False  # Soft validation failure
+            
+            self._record(f"flake8 on {self.file_path.name}", "Clean", provider="Shell", model="flake8")
             return True
         finally:
             try:

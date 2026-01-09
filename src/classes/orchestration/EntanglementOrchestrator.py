@@ -20,7 +20,7 @@ class EntanglementOrchestrator:
         # Subscribe to entanglement sync signals
         self.signal_bus.subscribe("entanglement_sync", self._handle_sync_signal)
 
-    def update_state(self, key: str, value: Any, propagate: bool = True):
+    def update_state(self, key: str, value: Any, propagate: bool = True) -> None:
         """Updates local state and optionally propagates to the swarm."""
         with self._lock:
             self.shared_state[key] = value
@@ -34,7 +34,7 @@ class EntanglementOrchestrator:
         with self._lock:
             return self.shared_state.get(key)
 
-    def _handle_sync_signal(self, payload: Any, sender: str):
+    def _handle_sync_signal(self, payload: Any, sender: str) -> None:
         """Internal handler for incoming state synchronization signals."""
         if sender == "EntanglementOrchestrator":
             return # Ignore local propagation

@@ -3,9 +3,12 @@
 import logging
 import json
 import subprocess
+import time
+from pathlib import Path
 from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 
 class AndroidAgent(BaseAgent):
     """
@@ -21,6 +24,19 @@ class AndroidAgent(BaseAgent):
             "to find structured UI elements (buttons, text, coordinates). "
             "Focus on efficiency and low latency. Use ADB for actions."
         )
+        
+        # Phase 108: Intelligence Harvesting
+        work_root = getattr(self, "_workspace_root", None)
+        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
+
+    def _record(self, action: str, details: str) -> None:
+        """Record mobile automation logic for the collective intelligence pool."""
+        if self.recorder:
+            try:
+                meta = {"phase": 108, "type": "mobile_automation", "timestamp": time.time()}
+                self.recorder.record_interaction("android", "local_device", action, details, meta=meta)
+            except Exception as e:
+                logging.error(f"AndroidAgent: Recording error: {e}")
 
     @as_tool
     def dump_accessibility_tree(self) -> Dict[str, Any]:
@@ -54,12 +70,15 @@ class AndroidAgent(BaseAgent):
         else:
             return f"Action {action_type} not supported."
             
-        return f"SUCCESS: Executed '{cmd}' on device."
+        result = f"SUCCESS: Executed '{cmd}' on device."
+        self._record(action_type, f"Params: {params} | Cmd: {cmd}")
+        return result
 
     @as_tool
     def run_mobile_workflow(self, goal: str) -> str:
         """Executes a high-level mobile goal using the Perception-Reasoning-Action loop."""
         logging.info(f"Starting mobile workflow for goal: {goal}")
+        self._record("workflow_start", f"Goal: {goal}")
         # Phase 1: Perception
         state = self.dump_accessibility_tree()
         
@@ -72,4 +91,6 @@ class AndroidAgent(BaseAgent):
             coords = target["bounds"][:2] # [x, y]
             return self.execute_mobile_action("tap", {"coords": coords})
         
-        return "ERROR: Could not find target element to complete goal."
+        err = "ERROR: Could not find target element to complete goal."
+        self._record("workflow_error", err)
+        return err

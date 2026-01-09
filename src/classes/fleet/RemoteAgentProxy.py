@@ -11,6 +11,7 @@ import os
 import time
 from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
+from src.classes.base_agent.ConnectivityManager import ConnectivityManager
 
 class RemoteAgentProxy(BaseAgent):
     """Encapsulates a remote agent accessible via HTTP/JSON-RPC.
@@ -19,56 +20,23 @@ class RemoteAgentProxy(BaseAgent):
     Intelligence (Phase 108): Records remote interactions to local shards.
     """
     
-    STATUS_CACHE_FILE = "remote_node_status.json"
-    CACHE_TTL_SECONDS = 900  # 15 minutes
-
     def __init__(self, file_path: str, node_url: str, agent_name: str) -> None:
         super().__init__(file_path)
         self.node_url = node_url.rstrip("/")
         self.agent_name = agent_name
         self._system_prompt = f"Proxy for remote agent '{agent_name}' at {node_url}"
         
-        # Determine paths for caching (Phase 108)
-        self.workspace_root = os.getcwd()
-        self.cache_path = os.path.join(self.workspace_root, "agent_store", self.STATUS_CACHE_FILE)
-        os.makedirs(os.path.dirname(self.cache_path), exist_ok=True)
+        # Phase 108: Centralized Resilience management
+        work_root = getattr(self, "_workspace_root", os.getcwd())
+        self.connectivity = ConnectivityManager(work_root)
 
     def _is_node_working(self) -> bool:
         """Checks if the remote node is known to be working via cache (Phase 108)."""
-        if not os.path.exists(self.cache_path):
-            return True
-            
-        try:
-            with open(self.cache_path, "r") as f:
-                cache = json.load(f)
-                
-            status = cache.get(self.node_url)
-            if status and status["state"] == "down":
-                if time.time() - status["timestamp"] < self.CACHE_TTL_SECONDS:
-                    logging.warning(f"Remote node {self.node_url} is marked DOWN in cache. Skipping call.")
-                    return False
-        except Exception as e:
-            logging.debug(f"Error reading node status cache: {e}")
-            
-        return True
+        return self.connectivity.is_endpoint_available(self.node_url)
 
     def _update_node_status(self, is_up: bool) -> None:
         """Updates the node status in the persistent cache (Phase 108)."""
-        try:
-            cache = {}
-            if os.path.exists(self.cache_path):
-                with open(self.cache_path, "r") as f:
-                    cache = json.load(f)
-            
-            cache[self.node_url] = {
-                "state": "up" if is_up else "down",
-                "timestamp": time.time()
-            }
-            
-            with open(self.cache_path, "w") as f:
-                json.dump(cache, f, indent=2)
-        except Exception as e:
-            logging.error(f"Error updating node status cache: {e}")
+        self.connectivity.update_status(self.node_url, is_up)
 
     def call_remote_tool(self, tool_name: str, **kwargs) -> str:
         """Calls a tool on the remote node with resilience and intelligence (Phase 108)."""

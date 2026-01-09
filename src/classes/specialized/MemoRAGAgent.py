@@ -27,7 +27,7 @@ class MemoRAGAgent(BaseAgent):
         )
 
     @as_tool
-    def memorise_to_shard(self, context: str, shard_name: str = "global"):
+    def memorise_to_shard(self, context: str, shard_name: str = "global") -> None:
         """Stores context into a specific memory shard."""
         shard_file = self.shard_dir / f"{shard_name}.txt"
         with open(shard_file, "a", encoding="utf-8") as f:

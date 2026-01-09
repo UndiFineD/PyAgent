@@ -53,7 +53,7 @@ class LazyOrchestratorMap:
                     logging.error(f"Failed to load orchestrator manifest {m_path}: {e}")
         return manifest_configs
 
-    def __getattr__(self, name):
+    def __getattr__(self, name) -> Any:
         if name in self._instances:
             return self._instances[name]
         
@@ -68,7 +68,7 @@ class LazyOrchestratorMap:
 
         raise AttributeError(f"Orchestrator '{name}' not found.")
 
-    def _instantiate(self, key, config):
+    def _instantiate(self, key, config) -> Any:
         module_path, class_name, needs_fleet, arg_path_suffix = config
         try:
             import importlib
@@ -114,14 +114,14 @@ class LazyOrchestratorMap:
             logging.error(f"Failed to lazy-load orchestrator {key} from {module_path}: {e}")
             return None
 
-    def keys(self):
+    def keys(self) -> List[str]:
         """Returns list of available orchestrators."""
         return list(self._configs.keys())
 
-    def __contains__(self, key):
+    def __contains__(self, key) -> bool:
         return key in self._configs
 
 class OrchestratorRegistry:
     @staticmethod
-    def get_orchestrator_map(fleet_instance):
+    def get_orchestrator_map(fleet_instance) -> "LazyOrchestratorMap":
         return LazyOrchestratorMap(fleet_instance)

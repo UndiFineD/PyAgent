@@ -16,7 +16,7 @@ class BlackboardManager:
     def __init__(self) -> None:
         self.core = BlackboardCore()
 
-    def post(self, key: str, value: Any, agent_name: str):
+    def post(self, key: str, value: Any, agent_name: str) -> None:
         """Post data to the blackboard."""
         logging.info(f"Blackboard: Agent {agent_name} posted to {key}")
         self.core.process_post(key, value, agent_name)

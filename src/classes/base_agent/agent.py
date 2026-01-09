@@ -29,6 +29,12 @@ from pathlib import Path
 from types import TracebackType
 from typing import Any, Callable, Dict, List, Optional, Type, cast, TYPE_CHECKING
 
+from src.classes.agent.LongTermMemory import LongTermMemory
+
+from src.classes.orchestration.SignalRegistry import SignalRegistry
+
+from src.classes.orchestration.ToolRegistry import ToolRegistry
+
 if TYPE_CHECKING:
     import agent_strategies
 
@@ -71,6 +77,8 @@ except (ImportError, ValueError):
     SignalRegistry = None
     ToolRegistry = None
 
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+
 
 def fix_markdown_content(content: str) -> str:
     """Fix markdown formatting in content."""
@@ -100,8 +108,8 @@ def setup_logging(verbosity_arg: int = 0) -> None:
         - Environment variable is used as fallback
         - Defaults to INFO level if neither is set
     """
-    env_verbosity = os.environ.get('DV_AGENT_VERBOSITY')
-    levels = {
+    env_verbosity: str | None = os.environ.get('DV_AGENT_VERBOSITY')
+    levels: Dict[str, int] = {
         'quiet': logging.ERROR,
         'minimal': logging.WARNING,
         'normal': logging.INFO,
@@ -113,13 +121,13 @@ def setup_logging(verbosity_arg: int = 0) -> None:
     }
     # Determine level from environment
     if env_verbosity:
-        level = levels.get(env_verbosity.lower(), logging.WARNING)
+        level: int = levels.get(env_verbosity.lower(), logging.WARNING)
     else:
         # Default to WARNING to reduce noise, as requested by self-improvement phase
-        level = logging.WARNING
+        level: int = logging.WARNING
     # If argument is provided, it forces DEBUG (elaborate)
     if verbosity_arg > 0:
-        level = logging.DEBUG
+        level: int = logging.DEBUG
     logging.basicConfig(
         level=level,
         format='%(asctime)s - %(levelname)s - %(message)s',
@@ -217,34 +225,51 @@ class BaseAgent:
             Supports context manager protocol via __enter__ and __exit__.
         """
         self.file_path = Path(file_path)
-        self.previous_content = ""
-        self.current_content = ""
+        self.previous_content: str = ""
+        self.current_content: str = ""
         
         # Strategy for agent execution
         import agent_strategies
         self.strategy: agent_strategies.AgentStrategy = agent_strategies.DirectStrategy()
 
         # New attributes for enhanced functionality
-        self._state = AgentState.INITIALIZED
+        self._state: AgentState = AgentState.INITIALIZED
         self._conversation_history: List[ConversationMessage] = []
-        self._config = self._load_config()
+        self._config: AgentConfig = self._load_config()
         self._token_usage = 0
         self._state_data: Dict[str, Any] = {}
         self._post_processors: List[Callable[[str], str]] = []
         self._model: Optional[str] = None
         self._is_stop_requested = False
         
+        # Determine Workspace Root (Phase 108: Robust detection)
+        self._workspace_root = os.environ.get("PYAGENT_WORKSPACE_ROOT")
+        if not self._workspace_root:
+            # Fallback heuristic: search upwards for .git or requirements.txt
+            curr = self.file_path.absolute()
+            for _ in range(5):
+                if (curr / ".git").exists() or (curr / "requirements.txt").exists() or (curr / "README.md").exists():
+                    self._workspace_root = str(curr)
+                    break
+                if curr.parent == curr: break
+                curr = curr.parent
+        
+        if not self._workspace_root:
+            # Last fallback: legacy logic (3 parents up from file_path)
+            self._workspace_root = str(self.file_path.parent.parent.parent)
+            
+        self._local_global_context = None
+
         # Initialize Core Logic (Potential Rust Target)
-        self.core = BaseCore(workspace_root=str(self.file_path.parent.parent.parent))
+        self.core = BaseCore(workspace_root=self._workspace_root)
 
         # Advanced features
-        self.memory = LongTermMemory() if LongTermMemory else None
-        self.registry = SignalRegistry() if SignalRegistry else None
-        self.tool_registry = ToolRegistry() if ToolRegistry else None
-        
-        # Initialize Global Context
-        self._workspace_root = str(self.file_path.parent.parent.parent)
-        self._local_global_context = None
+        self.memory: LongTermMemory | None = LongTermMemory() if LongTermMemory else None
+        self.registry: SignalRegistry | None = SignalRegistry() if SignalRegistry else None
+        self.tool_registry: ToolRegistry | None = ToolRegistry() if ToolRegistry else None
+
+        # Intelligence Harvesting (Phase 108)
+        self.recorder = LocalContextRecorder(Path(self._workspace_root), f"{self.__class__.__name__}_Agent")
 
     @property
     def global_context(self) -> str:
@@ -263,7 +288,7 @@ class BaseAgent:
         return self._local_global_context
 
     @global_context.setter
-    def global_context(self, value):
+    def global_context(self, value: Any) -> None:
         self._local_global_context = value
 
     def register_tools(self, registry: 'ToolRegistry') -> None:
@@ -277,7 +302,7 @@ class BaseAgent:
         for name, method in inspect.getmembers(self, predicate=inspect.ismethod):
             if hasattr(method, '_is_tool') and method._is_tool:
                 # Default category from class name (e.g. LinguisticAgent -> linguistic)
-                category = self.__class__.__name__.replace('Agent', '').lower()
+                category: str = self.__class__.__name__.replace('Agent', '').lower()
                 
                 # Check for explicit category overridden on method
                 if hasattr(method, '_tool_category'):
@@ -290,12 +315,12 @@ class BaseAgent:
                 )
                 logging.debug(f"Registered tool {name} for {self.__class__.__name__}")
 
-    def _register_tools(self):
+    def _register_tools(self) -> None:
         """Automatically registers public methods with the ToolRegistry."""
         if not self.tool_registry:
             return
             
-        agent_name = self.__class__.__name__
+        agent_name: str = self.__class__.__name__
         # Register standard improve_content
         self.tool_registry.register_tool(agent_name, self.improve_content, category="core")
         
@@ -306,7 +331,7 @@ class BaseAgent:
             
             attr = getattr(self, attr_name)
             # Check both the attribute and the underlying function (for bound methods)
-            is_tool = hasattr(attr, '_is_tool') or hasattr(getattr(attr, '__func__', None), '_is_tool')
+            is_tool: bool = hasattr(attr, '_is_tool') or hasattr(getattr(attr, '__func__', None), '_is_tool')
             if callable(attr) and is_tool:
                 self.tool_registry.register_tool(agent_name, attr, category="specialized")
 
@@ -350,7 +375,7 @@ class BaseAgent:
         self._model = model
         logging.debug(f"Model set to: {model}")
 
-    def _track_tokens(self, input_tokens: int, output_tokens: int):
+    def _track_tokens(self, input_tokens: int, output_tokens: int) -> None:
         """Simulates recording token usage for telemetry."""
         self._last_token_usage = {
             "input": input_tokens,
@@ -383,10 +408,10 @@ class BaseAgent:
         logging.debug(f"{self.__class__.__name__} exiting context manager")
         if exc_type is not None:
             logging.error(f"Agent context error: {exc_type.__name__}: {exc_val}")
-            self._state = AgentState.ERROR
+            self._state: AgentState = AgentState.ERROR
             self._trigger_event(EventType.ERROR, {"exception": exc_val})
         else:
-            self._state = AgentState.COMPLETED
+            self._state: AgentState = AgentState.COMPLETED
         return False  # Don't suppress exceptions
 
     def stop(self) -> None:
@@ -428,13 +453,13 @@ class BaseAgent:
             - Handles missing files gracefully
             - Automatically handles encoding errors
         """
-        self._state = AgentState.READING
+        self._state: AgentState = AgentState.READING
         self._trigger_event(EventType.PRE_READ, {"file_path": str(self.file_path)})
 
         if self.file_path.is_file():
             try:
                 logging.debug(f"Reading content from {self.file_path}")
-                self.previous_content = self.file_path.read_text(encoding='utf-8')
+                self.previous_content: str = self.file_path.read_text(encoding='utf-8')
                 logging.info(f"Read {len(self.previous_content)} bytes from {self.file_path.name}")
             except Exception as e:
                 # Diagnostic logging for file read failures
@@ -442,22 +467,22 @@ class BaseAgent:
                 if not os.access(self.file_path, os.R_OK):
                     error_info.append("Permission denied (Read)")
                 try:
-                    stats = self.file_path.stat()
+                    stats: os.stat_result = self.file_path.stat()
                     error_info.append(f"Size: {stats.st_size} bytes")
                 except Exception:
                     pass
                 
-                diag_msg = f"Failed to read file {self.file_path}: {e}"
+                diag_msg: str = f"Failed to read file {self.file_path}: {e}"
                 if error_info:
                     diag_msg += f" ({'; '.join(error_info)})"
                 logging.error(diag_msg)
-                self.previous_content = ""
+                self.previous_content: str = ""
         elif self.file_path.is_dir():
             logging.debug(f"Target path {self.file_path} is a directory, using default content.")
-            self.previous_content = self._get_default_content()
+            self.previous_content: str = self._get_default_content()
         else:
             logging.debug(f"File does not exist, using default content: {self.file_path}")
-            self.previous_content = self._get_default_content()
+            self.previous_content: str = self._get_default_content()
 
         self._trigger_event(EventType.POST_READ, {"content_length": len(self.previous_content)})
         return self.previous_content
@@ -486,7 +511,7 @@ class BaseAgent:
         Generic reasoning method that doesn't involve file updates.
         Useful for planning, data generation, or internal reasoning.
         """
-        self._state = AgentState.THINKING
+        self._state: AgentState = AgentState.THINKING
         
         # Broadcast thought to SignalBus if available
         if hasattr(self, 'registry') and self.registry:
@@ -497,13 +522,13 @@ class BaseAgent:
                     "agent": self.__class__.__name__,
                     "thought": prompt[:100] + "..."
                 })
-            except:
+            except Exception:
                 pass
 
-        description = f"Reasoning for {self.__class__.__name__}"
-        result = self.run_subagent(description, prompt, system_prompt or self._system_prompt)
+        description: str = f"Reasoning for {self.__class__.__name__}"
+        result: str = self.run_subagent(description, prompt, system_prompt or self._system_prompt)
         
-        self._state = AgentState.IDLE
+        self._state: AgentState = AgentState.IDLE
         return result
 
     def improve_content(self, prompt: str) -> str:
@@ -531,44 +556,44 @@ class BaseAgent:
             - Logs warnings on failure but doesn't raise
             - Falls back to original content if improvement fails
         """
-        self._state = AgentState.PROCESSING
+        self._state: AgentState = AgentState.PROCESSING
         self._trigger_event(EventType.PRE_IMPROVE, {"prompt": prompt})
 
         # Check cache first if enabled
-        cache_key = self._generate_cache_key(prompt, self.previous_content)
+        cache_key: str = self._generate_cache_key(prompt, self.previous_content)
         if self._config.cache_enabled and cache_key in BaseAgent._response_cache:
-            cached = BaseAgent._response_cache[cache_key]
+            cached: CacheEntry = BaseAgent._response_cache[cache_key]
             cached.hit_count += 1
             logging.debug(f"Cache hit for prompt (hits: {cached.hit_count})")
-            self.current_content = cached.response
+            self.current_content: str = cached.response
             return self.current_content
 
-        class_name = self.__class__.__name__.replace('Agent', '').lower()
-        description = f"Improve the {class_name} for {self.file_path.stem}"
+        class_name: str = self.__class__.__name__.replace('Agent', '').lower()
+        description: str = f"Improve the {class_name} for {self.file_path.stem}"
         try:
             logging.info(f"Improving content with prompt: {prompt[:50]}...")
 
             # Integrate Long-Term Memory
-            memory_context = ""
+            memory_context: str = ""
             if self.memory:
                 try:
-                    memories = self.memory.query(prompt, n_results=3)
+                    memories: List[Dict[str, Any]] = self.memory.query(prompt, n_results=3)
                     if memories:
-                        memory_docs = [m.get("content", "") for m in memories]
-                        memory_context = "\n\n### Related Past Memories\n" + "\n".join(memory_docs)
+                        memory_docs: List[Any] = [m.get("content", "") for m in memories]
+                        memory_context: str = "\n\n### Related Past Memories\n" + "\n".join(memory_docs)
                         logging.info(f"Found {len(memories)} relevant memories for context.")
                 except Exception as me:
                     logging.warning(f"Memory retrieval failed: {me}")
 
             # Add conversation context if available
-            full_prompt = self._build_prompt_with_history(prompt) + memory_context
+            full_prompt: str = self._build_prompt_with_history(prompt) + memory_context
 
             # Define backend callable for strategy
             def backend_callable(p: str, sp: Optional[str] = None, h: Optional[List[Dict[str, str]]] = None) -> str:
                 return self.run_subagent(description, p, self.previous_content)
 
             # Execute strategy
-            improvement = self.strategy.execute(
+            improvement: str = self.strategy.execute(
                 prompt=full_prompt,
                 context=self.previous_content,
                 backend_call=backend_callable
@@ -576,21 +601,21 @@ class BaseAgent:
 
             # Apply post-processors
             for processor in self._post_processors:
-                improvement = processor(improvement)
+                improvement: str = processor(improvement)
 
             # Score response quality
-            quality = self._score_response_quality(improvement)
+            quality: ResponseQuality = self._score_response_quality(improvement)
 
             # Retry if quality is poor
             if quality.value <= ResponseQuality.POOR.value and self._config.retry_count > 0:
                 logging.warning(f"Response quality {quality.name}, retrying...")
                 for _ in range(self._config.retry_count):
-                    improvement = self.run_subagent(description, full_prompt, self.previous_content)
-                    quality = self._score_response_quality(improvement)
+                    improvement: str = self.run_subagent(description, full_prompt, self.previous_content)
+                    quality: ResponseQuality = self._score_response_quality(improvement)
                     if quality.value >= ResponseQuality.ACCEPTABLE.value:
                         break
 
-            self.current_content = improvement
+            self.current_content: str = improvement
 
             # Cache the response
             if self._config.cache_enabled:
@@ -629,6 +654,14 @@ class BaseAgent:
                 except Exception as me:
                     logging.warning(f"Memory storage failed: {me}")
 
+            # Phase 108: Record interaction for logic harvesting
+            self._record(
+                prompt=f"Task: {description}\nContext: {prompt}\nMem: {memory_context[:100]}",
+                result=self.current_content[:1000] + ("..." if len(self.current_content) > 1000 else ""),
+                provider="AI-Backend",
+                model=self.__class__.__name__
+            )
+
             return self.current_content
         except Exception as e:
             logging.warning(f"Failed to improve content: {e}")
@@ -643,7 +676,7 @@ class BaseAgent:
                 except Exception as se:
                     pass
 
-            self.current_content = self.previous_content
+            self.current_content: str = self.previous_content
             return self.current_content
 
     def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str:
@@ -781,15 +814,15 @@ class BaseAgent:
             agent.current_content="# Improved Content"
             agent.update_file()  # Writes to agent.file_path
         """
-        content_to_write = self.current_content
+        content_to_write: str = self.current_content
         # Only run the markdown fixer on markdown-like files. Applying markdown
         # normalization to source code can corrupt it.
-        suffix = self.file_path.suffix.lower()
-        is_markdown = suffix in {
+        suffix: str = self.file_path.suffix.lower()
+        is_markdown: bool = suffix in {
             '.md', '.markdown'} or self.file_path.name.lower().endswith('.plan.md')
         if is_markdown:
             logging.debug(f"Applying markdown formatting to {self.file_path.name}")
-            content_to_write = self.core.fix_markdown(content_to_write)
+            content_to_write: str = self.core.fix_markdown(content_to_write)
 
         # Security Check: Validate content safety before writing (Phase 108)
         if not self.core.validate_content_safety(content_to_write):
@@ -830,7 +863,7 @@ class BaseAgent:
             - Empty string indicates no changes between versions
         """
         logging.debug("Generating diff between previous and current content")
-        diff_str = self.core.calculate_diff(
+        diff_str: str = self.core.calculate_diff(
             self.previous_content,
             self.current_content,
             filename=self.file_path.name
@@ -878,11 +911,11 @@ class BaseAgent:
         Raises:
             ValueError: If template not found.
         """
-        template = self.get_template(template_id)
+        template: PromptTemplate | None = self.get_template(template_id)
         if not template:
             raise ValueError(f"Template not found: {template_id}")
 
-        prompt = template.template.format(**variables, content=self.previous_content)
+        prompt: str = template.template.format(**variables, content=self.previous_content)
         return self.improve_content(prompt)
 
     # ========== Conversation History ==========
@@ -894,11 +927,11 @@ class BaseAgent:
             role: Message role (user, assistant, system).
             content: Message content.
         """
-        role_value = role.strip().lower()
+        role_value: str = role.strip().lower()
         try:
             role_enum = MessageRole(role_value)
         except ValueError:
-            role_enum = MessageRole.SYSTEM
+            role_enum: MessageRole = MessageRole.SYSTEM
         self._conversation_history.append(ConversationMessage(role=role_enum, content=content))
 
     def clear_history(self) -> None:
@@ -923,7 +956,7 @@ class BaseAgent:
             return prompt
 
         # Include last few messages for context
-        recent = self._conversation_history[-6:]  # Last 3 exchanges
+        recent: List[ConversationMessage] = self._conversation_history[-6:]  # Last 3 exchanges
         context_lines: List[str] = []
         for msg in recent:
             context_lines.append(f"[{msg.role}]: {msg.content[:200]}...")
@@ -969,7 +1002,7 @@ class BaseAgent:
             score -= 1
 
         # Check for error indicators
-        error_indicators = ["error", "failed", "unavailable", "unable"]
+        error_indicators: List[str] = ["error", "failed", "unavailable", "unable"]
         if any(ind in response.lower() for ind in error_indicators):
             score -= 1
 
@@ -991,7 +1024,7 @@ class BaseAgent:
         Returns:
             SHA256 hash key.
         """
-        combined = f"{prompt}:{content}:{self._model or ''}"
+        combined: str = f"{prompt}:{content}:{self._model or ''}"
         return hashlib.sha256(combined.encode()).hexdigest()[:16]
 
     @classmethod
@@ -1007,8 +1040,8 @@ class BaseAgent:
         Returns:
             Dictionary with cache stats.
         """
-        total_hits = sum(e.hit_count for e in cls._response_cache.values())
-        avg_quality = sum(
+        total_hits: int = sum(e.hit_count for e in cls._response_cache.values())
+        avg_quality: float = sum(
             e.quality_score for e in cls._response_cache.values()
         ) / max(len(cls._response_cache), 1)
         return {
@@ -1110,8 +1143,8 @@ class BaseAgent:
         Returns:
             HealthCheckResult with diagnostic information.
         """
-        backend_status = cls.get_backend_status()
-        backend_available = any(
+        backend_status: Dict[str, Any] = cls.get_backend_status()
+        backend_available: bool = any(
             cast(Dict[str, Any], v).get("available", False)
             for v in backend_status.values()
             if isinstance(v, dict)
@@ -1135,7 +1168,7 @@ class BaseAgent:
         Args:
             path: Path to save state file. Defaults to {file_path}.state.json.
         """
-        state_path = path or self.file_path.with_suffix(".state.json")
+        state_path: Path = path or self.file_path.with_suffix(".state.json")
         state: Dict[str, Any] = {
             "file_path": str(self.file_path),
             "state": self._state.value,
@@ -1155,7 +1188,7 @@ class BaseAgent:
         Returns:
             True if state loaded successfully.
         """
-        state_path = path or self.file_path.with_suffix(".state.json")
+        state_path: Path = path or self.file_path.with_suffix(".state.json")
         if not state_path.exists():
             return False
 
@@ -1193,7 +1226,7 @@ class BaseAgent:
         Returns:
             Truncated text with ellipsis if truncated.
         """
-        max_chars = max_tokens * 4
+        max_chars: int = max_tokens * 4
         if len(text) <= max_chars:
             return text
         return text[:max_chars - 20] + "\n... [truncated]"
@@ -1218,17 +1251,17 @@ class BaseAgent:
         logging.info(f"Delegating task to {agent_type} for {target_file or self.file_path}")
         
         # Determine the target file
-        target_path = Path(target_file) if target_file else self.file_path
+        target_path: Path = Path(target_file) if target_file else self.file_path
         
         try:
             # Dynamic discovery of agent classes
             # Expected pattern: src.classes.<type_lower>.<type>Agent
             # e.g. src.classes.coder.CoderAgent
-            type_clean = agent_type.replace("Agent", "").lower()
-            module_name = f"src.classes.{type_clean}.{agent_type}"
+            type_clean: str = agent_type.replace("Agent", "").lower()
+            module_name: str = f"src.classes.{type_clean}.{agent_type}"
             
             import importlib
-            module = importlib.import_module(module_name)
+            module: sys.ModuleType = importlib.import_module(module_name)
             agent_class = getattr(module, agent_type)
             
             # Instantiate and run the agent

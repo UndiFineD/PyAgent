@@ -20,12 +20,23 @@ from .CompileResult import CompileResult
 class ReportGenerator:
     """Generates quality reports (description, errors, improvements) for agent files."""
 
-    def __init__(self, agent_dir: Optional[Path | str] = None) -> None:
-        """Initialize with directory containing agent scripts."""
+    def __init__(self, agent_dir: Optional[Path | str] = None, recorder: Any = None) -> None:
+        """Initialize with directory containing agent scripts.
+        
+        Args:
+            agent_dir: Directory containing agent scripts.
+            recorder: Optional LocalContextRecorder.
+        """
+        self.recorder = recorder
         if agent_dir:
             self.agent_dir = Path(agent_dir)
         else:
             self.agent_dir = Path(__file__).resolve().parent.parent.parent
+
+    def _record(self, action: str, result: str) -> None:
+        """Record report generation activities."""
+        if self.recorder:
+            self.recorder.record_interaction("Reporting", "ReportGenerator", action, result)
 
     def process_all_files(self) -> Dict[str, Any]:
         """Process all .py files in agent_dir and generate reports."""
