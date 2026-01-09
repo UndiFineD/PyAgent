@@ -14,21 +14,23 @@ from pathlib import Path
 from typing import Optional, List, Dict
 from src.classes.base_agent.ConnectivityManager import ConnectivityManager
 from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+from .SearchCore import SearchCore
 
 class SearchAgent(BaseAgent):
     """Agent that specializes in researching topics via web search."""
 
     def __init__(self, context: str) -> None:
         super().__init__(context)
-        self.bing_api_key = os.environ.get("BING_SEARCH_V7_SUBSCRIPTION_KEY")
-        self.bing_endpoint = os.environ.get("BING_SEARCH_V7_ENDPOINT", "https://api.bing.microsoft.com/v7.0/search")
-        self.google_api_key = os.environ.get("GOOGLE_SEARCH_API_KEY")
-        self.google_cse_id = os.environ.get("GOOGLE_SEARCH_CSE_ID")
+        self.bing_api_key: Optional[str] = os.environ.get("BING_SEARCH_V7_SUBSCRIPTION_KEY")
+        self.bing_endpoint: str = os.environ.get("BING_SEARCH_V7_ENDPOINT", "https://api.bing.microsoft.com/v7.0/search")
+        self.google_api_key: Optional[str] = os.environ.get("GOOGLE_SEARCH_API_KEY")
+        self.google_cse_id: Optional[str] = os.environ.get("GOOGLE_SEARCH_CSE_ID")
         
         # Phase 108: Robustness and Intelligence Harvesting
         work_root = getattr(self, "_workspace_root", None)
-        self.connectivity = ConnectivityManager(work_root)
-        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
+        self.connectivity: ConnectivityManager = ConnectivityManager(work_root)
+        self.recorder: Optional[LocalContextRecorder] = LocalContextRecorder(Path(work_root)) if work_root else None
+        self.core: SearchCore = SearchCore()
         
         logging.info(f"SearchAgent initialized for topic: {context}")
 
@@ -39,31 +41,32 @@ class SearchAgent(BaseAgent):
         """Harvest search logic for future self-improvement."""
         if self.recorder:
             try:
-                meta = {"phase": 108, "type": "search", "timestamp": time.time()}
-                self.recorder.record_interaction(provider, "search-v1", query, result, meta=meta)
+                meta = {"phase": 116, "type": "search", "timestamp": time.time()}
+                self.recorder.record_interaction(provider, "search-v2", query, result, meta=meta)
             except Exception as e:
                 logging.error(f"SearchAgent: Transcription error: {e}")
 
     def _search_duckduckgo(self, query: str, max_results: int = 5) -> str:
         """Fallback/Default search using DuckDuckGo."""
         if not self.connectivity.is_endpoint_available("duckduckgo"):
-            return "DuckDuckGo skipped due to connection cache."
+            return "DuckDuckGo skipped due to connection cache (offline)."
 
         try:
             from duckduckgo_search import DDGS
             logging.info(f"Performing DuckDuckGo search for: {query}")
-            results = []
-            with DDGS() as ddgs:
-                for r in ddgs.text(query, max_results=max_results):
-                    results.append(f"### {r['title']}\nURL: {r['href']}\n{r['body']}\n")
             
-            res_str = "\n".join(results) if results else "No DDG results found."
+            with DDGS() as ddgs:
+                raw_results = list(ddgs.text(query, max_results=max_results))
+                results = self.core.parse_ddg_results(raw_results)
+            
+            res_str = self.core.format_results_block(results, "DDG")
             self.connectivity.update_status("duckduckgo", True)
             self._record("duckduckgo", query, res_str)
             return res_str
         except Exception as e:
             self.connectivity.update_status("duckduckgo", False)
-            return f"DDG search failed: {e}"
+            logging.error(f"DDG search failed: {e}")
+            return f"DDG search failed (offline or rate-limited): {e}"
 
     def _search_bing(self, query: str, max_results: int = 5) -> str:
         """Native Bing Search API."""
@@ -71,28 +74,27 @@ class SearchAgent(BaseAgent):
             return "Bing API key not configured."
         
         if not self.connectivity.is_endpoint_available("bing"):
-            return "Bing skipped due to connection cache."
+            return "Bing skipped due to connection cache (offline)."
         
         try:
             # Use a session with limited redirects for security (Phase 115 Patch)
             with requests.Session() as session:
                 session.max_redirects = 5
-                headers = {"Ocp-Apim-Subscription-Key": self.bing_api_key}
+                headers = {"Ocp-Apim-Subscription-Key": self.bing_api_key or ""}
                 params = {"q": query, "textDecorations": True, "textFormat": "HTML", "count": max_results}
                 response = session.get(self.bing_endpoint, headers=headers, params=params, timeout=10)
                 response.raise_for_status()
                 search_results = response.json()
             
-            results = []
-            for v in search_results.get("webPages", {}).get("value", []):
-                results.append(f"### {v['name']}\nURL: {v['url']}\n{v['snippet']}\n")
+            results = self.core.parse_bing_results(search_results)
+            res_str = self.core.format_results_block(results, "Bing")
             
-            res_str = "\n".join(results) if results else "No Bing results found."
             self.connectivity.update_status("bing", True)
             self._record("bing", query, res_str)
             return res_str
         except Exception as e:
             self.connectivity.update_status("bing", False)
+            logging.error(f"Bing search failed: {e}")
             return f"Bing search failed: {e}"
 
     def _search_google(self, query: str, max_results: int = 5) -> str:
@@ -101,7 +103,7 @@ class SearchAgent(BaseAgent):
             return "Google API credentials not configured."
         
         if not self.connectivity.is_endpoint_available("google"):
-            return "Google skipped due to connection cache."
+            return "Google skipped due to connection cache (offline)."
         
         try:
             url = "https://www.googleapis.com/customsearch/v1"
@@ -112,16 +114,15 @@ class SearchAgent(BaseAgent):
                 response.raise_for_status()
                 search_results = response.json()
             
-            results = []
-            for item in search_results.get("items", []):
-                results.append(f"### {item['title']}\nURL: {item['link']}\n{item['snippet']}\n")
+            results = self.core.parse_google_results(search_results)
+            res_str = self.core.format_results_block(results, "Google")
             
-            res_str = "\n".join(results) if results else "No Google results found."
             self.connectivity.update_status("google", True)
             self._record("google", query, res_str)
             return res_str
         except Exception as e:
             self.connectivity.update_status("google", False)
+            logging.error(f"Google search failed: {e}")
             return f"Google search failed: {e}"
 
     def perform_search(self, query: str) -> str:

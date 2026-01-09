@@ -38,6 +38,9 @@ This document tracks modules that have been audited, decoupled from side-effects
 | [src/classes/stats/TokenCostCore.py](src/classes/stats/TokenCostCore.py) | Multi-model pricing and usage estimation | READY | Low | 100% |
 | [plugins/community_demo/CommunityCore.py](plugins/community_demo/CommunityCore.py) | Example community-contributed logic unit | READY | Low | 100% |
 | [plugins/mock_plugin/MockCore.py](plugins/mock_plugin/MockCore.py) | Logic unit for mock plugin demonstrations | READY | Low | 100% |
+| [src/classes/search/SearchCore.py](src/classes/search/SearchCore.py) | Pure logic for search result parsing and Markdown formatting | READY | Medium | 100% |
+| [src/classes/agent/NotificationCore.py](src/classes/agent/NotificationCore.py) | Event payload formatting and domain resolution | READY | Low | 100% |
+| [src/classes/specialized/WebCore.py](src/classes/specialized/WebCore.py) | Pure logic for HTML cleaning and link extraction | READY | Low | 100% |
 
 ## 🛠️ Performance-Critical Targets (High Priority)
 

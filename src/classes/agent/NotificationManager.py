@@ -11,6 +11,7 @@ from typing import List, Dict, Any, Callable, Optional
 # Infrastructure
 from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 from src.classes.base_agent.ConnectivityManager import ConnectivityManager
+from src.classes.agent.NotificationCore import NotificationCore
 
 # Optional dependency
 try:
@@ -30,16 +31,15 @@ class NotificationManager:
         self.workspace_root = workspace_root
         self.recorder = recorder
         self.connectivity = ConnectivityManager(workspace_root)
+        self.core = NotificationCore()
 
     def _is_webhook_working(self, url: str) -> bool:
-        import urllib.parse
-        domain = urllib.parse.urlparse(url).netloc
-        return self.connectivity.is_endpoint_available(domain or url)
+        domain = self.core.get_domain_from_url(url)
+        return self.connectivity.is_endpoint_available(domain)
 
     def _update_status(self, url: str, working: bool) -> None:
-        import urllib.parse
-        domain = urllib.parse.urlparse(url).netloc
-        self.connectivity.update_status(domain or url, working)
+        domain = self.core.get_domain_from_url(url)
+        self.connectivity.update_status(domain, working)
 
     def register_webhook(self, url: str) -> None:
         self.webhooks.append(url)
@@ -52,6 +52,10 @@ class NotificationManager:
 
     def notify(self, event_name: str, event_data: Dict[str, Any]) -> None:
         """Executes callbacks and sends webhooks for an event."""
+        if not self.core.validate_event_data(event_data):
+            logging.debug(f"Invalid event data for {event_name}")
+            return
+
         if self.recorder:
             self.recorder.record_lesson("event_notify", {"event": event_name, "data_keys": list(event_data.keys())})
         self._execute_callbacks(event_name, event_data)
@@ -68,11 +72,7 @@ class NotificationManager:
         if not HAS_REQUESTS or requests is None or not self.webhooks:
             return
 
-        payload = {
-            'event': event_name,
-            'timestamp': time.time(),
-            'data': event_data
-        }
+        payload = self.core.construct_payload(event_name, event_data)
 
         for url in self.webhooks:
             if not self._is_webhook_working(url):
