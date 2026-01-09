@@ -26,7 +26,7 @@ class AgentRegistryCore:
             file = os.path.basename(rel_path)
             if (file.endswith("Agent.py") or file.endswith("Orchestrator.py")) and not file.startswith("__"):
                 agent_name: str = file[:-3]
-                module_path: str = rel_path.replace(os.sep, ".").replace(".py", "")
+                module_path: str = rel_path.replace(os.path.sep, ".").replace("/", ".").replace(".py", "")
                 
                 # Phase 105: Discovered agents should not default to their own file path as arg
                 discovered[agent_name] = (module_path, agent_name, None)
