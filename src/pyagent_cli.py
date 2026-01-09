@@ -15,14 +15,20 @@ PyAgent CLI Interface.
 Connects to the Fleet Load Balancer via the Agent API Server.
 """
 
-from functools import lru_cache
+from src.version import VERSION
+# from functools import lru_cache
+
 import sys
 import json
 import requests
 import argparse
-import time
+# import time
+
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+# # # from typing import Dict, Any, List, Optional
+
+
+
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel

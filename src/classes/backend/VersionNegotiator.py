@@ -23,6 +23,8 @@ import threading
 import time
 import uuid
 
+from src.version import SDK_VERSION
+
 class VersionNegotiator:
     """Negotiates API versions with backends.
 
@@ -38,7 +40,7 @@ class VersionNegotiator:
     def __init__(self) -> None:
         """Initialize version negotiator."""
         self._versions: Dict[str, BackendVersion] = {}
-        self._client_version = "1.0"
+        self._client_version = SDK_VERSION
 
     def register_backend(
         self,

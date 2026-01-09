@@ -5,6 +5,7 @@
 Knowledge Agent: Manages workspace knowledge and backlinks.
 """
 
+from src.version import VERSION
 import sys
 import argparse
 import logging
