@@ -1,13 +1,19 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import lru_cache
+from functools import lru_cache
+import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import List, Dict, Any
 import json
-import os
+# import os
+
 from pathlib import Path
 
 app = FastAPI(title="PyAgent Unified Desktop API")
 
 # Enable CORS for frontend interaction
+
+from src.version import VERSION
+__logic_category__ = "General"
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

@@ -596,7 +596,7 @@ class TestDeadCodeDetection:
             mod = load_agent_module("agent_coder.py")
 
         code = """
-import os
+        import os
 import sys
 
 print("hello")
@@ -1147,7 +1147,7 @@ class TestImportOrganization(unittest.TestCase):
     def test_organize_imports(self):
         """Test import organization."""
         unorganized = """import z
-import a
+        import a
 from module import foo
 """
         # isort would organize to: a, z, then from imports
@@ -1157,8 +1157,8 @@ from module import foo
     def test_separate_import_groups(self):
         """Test separation of import groups."""
         imports = """import os
-import sys
-from typing import Dict
+        import sys
+        from typing import Dict
 from mymodule import func
 """
         lines = imports.split("\n")
@@ -1170,8 +1170,8 @@ from mymodule import func
     def test_remove_duplicate_imports(self):
         """Test removal of duplicate imports."""
         code = """import os
-import os
-from sys import argv
+        import os
+        from sys import argv
 from sys import argv
 """
         # Should be deduplicated

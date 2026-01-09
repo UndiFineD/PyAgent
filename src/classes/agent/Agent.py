@@ -44,7 +44,8 @@ from .ParallelProcessor import ParallelProcessor
 from .NotificationManager import NotificationManager
 from .AgentUpdateManager import AgentUpdateManager
 from ..backend.LocalContextRecorder import LocalContextRecorder
-from ..backend.ConnectivityManager import ConnectivityManager
+from ..base_agent.ConnectivityManager import ConnectivityManager
+from ..base_agent.core import BaseCore
 
 class Agent:
     """Main agent that orchestrates sub-agents for code improvement.
@@ -77,10 +78,14 @@ class Agent:
         """Initialize the Agent with repository configuration."""
         logging.info(f"Initializing Agent with repo_root={repo_root}")
         provided_path = Path(repo_root)
+        
+        # Temp core for initial workspace detection
+        temp_core = BaseCore()
+        
         if str(repo_root) and str(repo_root) != '.':
             self.repo_root = provided_path.resolve()
         else:
-            self.repo_root = self._find_repo_root(provided_path)
+            self.repo_root = Path(temp_core.detect_workspace_root(provided_path))
 
         if not self.repo_root.exists():
             raise FileNotFoundError(f"Repository root not found: {self.repo_root}")
@@ -104,7 +109,10 @@ class Agent:
         self.connectivity = ConnectivityManager()
         
         # Delegated Managers
-        self.core = AgentCore()
+        self.core = AgentCore(workspace_root=str(self.repo_root))
+        # Alias for backward compatibility/base access
+        self.base_core = self.core
+        
         self.metrics_manager = AgentMetrics()
         self.git_handler = AgentGitHandler(self.repo_root, no_git, recorder=self.recorder)
         self.file_manager = AgentFileManager(self.repo_root, agents_only)
@@ -281,39 +289,6 @@ class Agent:
         """
         with self.command_handler.with_agent_env(agent_name):
             yield
-
-    def _find_repo_root(self, start_path: Path) -> Path:
-        """Find the repository root by looking for repository markers.
-
-        Walks up the directory tree from the start path looking for markers
-        that indicate a repository root (.git, README.md, package.json).
-
-        Args:
-            start_path: Starting directory path to search from.
-
-        Returns:
-            Path: Repository root directory, or start_path if no markers found.
-
-        Example:
-            root=agent._find_repo_root(Path('/some / nested / dir'))
-            # Returns Path to repo root if .git found in parents
-
-        Note:
-            - Checks the starting path first, then walks up to parents
-            - Uses multiple markers to identify repo roots
-            - Returns start_path if no markers found (doesn't raise error)
-        """
-        current = start_path.resolve()
-        logging.debug(f"Searching for repository root from {current}")
-        # Walk up the directory tree looking for repository markers
-        for path in [current] + list(current.parents):
-            if (path / '.git').exists() or (path / 'README.md').exists() or \
-                    (path / 'package.json').exists():
-                logging.info(f"Found repository root at {path}")
-                return path
-        # If no markers found, return the original path
-        logging.debug(f"No repository markers found, using {start_path} as root")
-        return start_path
 
     def find_code_files(self) -> List[Path]:
         """Recursively find all supported code files in the repository.

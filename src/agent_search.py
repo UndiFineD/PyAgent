@@ -5,6 +5,7 @@
 Search Agent: Perform deep research and search operations across the workspace.
 """
 
+from src.version import VERSION
 import sys
 from pathlib import Path
 
@@ -15,7 +16,7 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-from src.classes.search.SearchAgent import SearchAgent
+    from src.classes.search.SearchAgent import SearchAgent
 from src.base_agent import create_main_function
 
 if __name__ == "__main__":

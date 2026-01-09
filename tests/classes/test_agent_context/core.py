@@ -1011,10 +1011,10 @@ class TestDependencyGraphAnalysis(unittest.TestCase):
     def test_import_extraction(self):
         """Test extracting imports from module."""
         code = """
-import os
-from pathlib import Path
-from typing import Dict, List
-import numpy as np
+        import os
+        from pathlib import Path
+        from typing import Dict, List
+        import numpy as np
         """
         tree = ast.parse(code)
         imports = [

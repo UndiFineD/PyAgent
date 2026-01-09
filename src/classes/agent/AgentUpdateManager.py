@@ -7,15 +7,7 @@ import subprocess
 import sys
 from pathlib import Path
 from typing import List, Dict, Any, Optional
-
-# Version Gatekeeping (Phase 108)
-import sys
-sys.path.append(str(Path(__file__).parent.parent.parent.parent))
-try:
-    from version import is_gate_open, EVOLUTION_PHASE
-except ImportError:
-    def is_gate_open(phase) -> bool: return True
-    EVOLUTION_PHASE = 0
+from src.version import is_gate_open, EVOLUTION_PHASE
 
 class AgentUpdateManager:
     """
@@ -63,13 +55,14 @@ class AgentUpdateManager:
             
         # Update errors
         prompt = f"Analyze and improve the error report for {code_file.name}"
-        cmd = [
+        script_path = str(Path(__file__).parent.parent.parent / 'agent_errors.py')
+        cmd = self.core.get_agent_command(
             sys.executable,
-            str(Path(__file__).parent.parent.parent / 'agent_errors.py'),
-            '--context', str(errors_file),
-            '--prompt', prompt,
-            '--strategy', self.strategy
-        ]
+            script_path,
+            str(errors_file),
+            prompt,
+            self.strategy
+        )
         with self.command_handler.with_agent_env('errors'):
             result = self.command_handler.run_command(cmd)
 
@@ -86,13 +79,14 @@ class AgentUpdateManager:
             
         # Update improvements
         prompt = f"Suggest and improve improvements for {code_file.name}"
-        cmd = [
+        script_path = str(Path(__file__).parent.parent.parent / 'agent_improvements.py')
+        cmd = self.core.get_agent_command(
             sys.executable,
-            str(Path(__file__).parent.parent.parent / 'agent_improvements.py'),
-            '--context', str(improvements_file),
-            '--prompt', prompt,
-            '--strategy', self.strategy
-        ]
+            script_path,
+            str(improvements_file),
+            prompt,
+            self.strategy
+        )
         with self.command_handler.with_agent_env('improvements'):
             result = self.command_handler.run_command(cmd)
 
@@ -156,13 +150,14 @@ class AgentUpdateManager:
 
         # Update changelog agent
         prompt = f"Update the changelog for {code_file.name} with recent changes"
-        cmd = [
+        script_path = str(Path(__file__).parent.parent.parent / 'agent_changes.py')
+        cmd = self.core.get_agent_command(
             sys.executable,
-            str(Path(__file__).parent.parent.parent / 'agent_changes.py'),
-            '--context', str(changes_file),
-            '--prompt', prompt,
-            '--strategy', self.strategy
-        ]
+            script_path,
+            str(changes_file),
+            prompt,
+            self.strategy
+        )
         with self.command_handler.with_agent_env('changes'):
             result = self.command_handler.run_command(cmd)
         if result.stdout and "No changes made" not in result.stdout:
@@ -175,52 +170,14 @@ class AgentUpdateManager:
             changes_made = True
 
         prompt = f"Update the description for {code_file.name} based on current code"
-        cmd = [
+        script_path = str(Path(__file__).parent.parent.parent / 'agent_context.py')
+        cmd = self.core.get_agent_command(
             sys.executable,
-            str(Path(__file__).parent.parent.parent / 'agent_context.py'),
-            '--context', str(context_file),
-            '--prompt', prompt,
-            '--strategy', self.strategy
-        ]
-        with self.command_handler.with_agent_env('context'):
-            result = self.command_handler.run_command(cmd)
-        if result.stdout and "No changes made" not in result.stdout:
-            changes_made = True
-
-        return changes_made
-        if not changes_file.exists():
-            content = f"# Changelog\n\n- Initial version of {code_file.name}\n"
-            changes_file.write_text(fix_markdown_content(content), encoding='utf-8')
-            changes_made = True
-
-        # Update changelog agent
-        prompt = f"Update the changelog for {code_file.name} with recent changes"
-        cmd = [
-            sys.executable,
-            str(Path(__file__).parent.parent.parent / 'agent_changes.py'),
-            '--context', str(changes_file),
-            '--prompt', prompt,
-            '--strategy', self.strategy
-        ]
-        with self.command_handler.with_agent_env('changes'):
-            result = self.command_handler.run_command(cmd)
-        if result.stdout and "No changes made" not in result.stdout:
-            changes_made = True
-
-        # Update context/description
-        if not context_file.exists():
-            content = f"# Description\n\n{code_file.name} - Description to be added.\n"
-            context_file.write_text(fix_markdown_content(content), encoding='utf-8')
-            changes_made = True
-
-        prompt = f"Update the description for {code_file.name} based on current code"
-        cmd = [
-            sys.executable,
-            str(Path(__file__).parent.parent.parent / 'agent_context.py'),
-            '--context', str(context_file),
-            '--prompt', prompt,
-            '--strategy', self.strategy
-        ]
+            script_path,
+            str(context_file),
+            prompt,
+            self.strategy
+        )
         with self.command_handler.with_agent_env('context'):
             result = self.command_handler.run_command(cmd)
         if result.stdout and "No changes made" not in result.stdout:

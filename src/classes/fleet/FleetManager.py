@@ -18,20 +18,16 @@ if TYPE_CHECKING:
     from src.classes.orchestration.SignalRegistry import SignalRegistry
     from src.classes.stats.ModelFallbackEngine import ModelFallbackEngine
     from src.classes.context.GlobalContextEngine import GlobalContextEngine
+    from src.classes.orchestration.SelfHealingOrchestrator import SelfHealingOrchestrator
+    from src.classes.orchestration.SelfImprovementOrchestrator import SelfImprovementOrchestrator
 
 # Core Components
 from src.classes.base_agent import BaseAgent
 from src.classes.fleet.WorkflowState import WorkflowState
-from src.classes.orchestration.ToolRegistry import ToolRegistry
-from src.classes.orchestration.SignalRegistry import SignalRegistry
-from src.classes.stats.ObservabilityEngine import ObservabilityEngine
-from src.classes.stats.ModelFallbackEngine import ModelFallbackEngine
-from src.classes.context.GlobalContextEngine import GlobalContextEngine
 
 # Registry and Orchestrators
 from src.classes.fleet.AgentRegistry import AgentRegistry
 from src.classes.fleet.OrchestratorRegistry import OrchestratorRegistry
-from src.classes.fleet.FleetCore import FleetCore
 
 class FleetManager:
     """
@@ -61,27 +57,12 @@ class FleetManager:
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
         
-        # Lazy Loading Backing Fields
-        self._telemetry = None
-        self._registry = None
-        self._signals = None
-        self._global_context = None
-        self._fallback_engine = None
-        self._core = None
-        self._recorder = None
-        self._sql_metadata = None
-        
         # New: Lazy Orchestrators (replaces ~50 direct instantiations)
         self.orchestrators = OrchestratorRegistry.get_orchestrator_map(self)
         
         # Load agents from registry (also lazy)
         # Pass self so agents can register utils/tools upon lazy instantiation
         self.agents = AgentRegistry.get_agent_map(self.workspace_root, fleet_instance=self)
-        
-        # Specific mappings using the registry now
-        self.rl_selector = getattr(self.orchestrators, "r_l_selector", None) or getattr(self.orchestrators, "rl_selector", None)
-
-        self.self_healing = self.orchestrators.self_healing
         
         # Capability Hints for Lazy Loading (Core Agents)
         self._capability_hints = {
@@ -99,60 +80,48 @@ class FleetManager:
         self.kill_switch = False # Emergency termination
 
     @property
-    def telemetry(self) -> 'ObservabilityEngine':
-        if self._telemetry is None:
-            from src.classes.stats.ObservabilityEngine import ObservabilityEngine
-            self._telemetry = ObservabilityEngine(str(self.workspace_root))
-        return self._telemetry
+    def telemetry(self) -> "ObservabilityEngine":
+        return self.orchestrators.telemetry
 
     @property
-    def registry(self) -> 'ToolRegistry':
-        if self._registry is None:
-            from src.classes.orchestration.ToolRegistry import ToolRegistry
-            self._registry = ToolRegistry()
-        return self._registry
+    def registry(self) -> "ToolRegistry":
+        return self.orchestrators.registry
 
     @property
-    def signals(self) -> 'SignalRegistry':
-        if self._signals is None:
-            from src.classes.orchestration.SignalRegistry import SignalRegistry
-            self._signals = SignalRegistry()
-        return self._signals
+    def signals(self) -> "SignalRegistry":
+        return self.orchestrators.signals
 
     @property
-    def recorder(self) -> 'LocalContextRecorder':
-        if self._recorder is None:
-            from src.classes.backend.LocalContextRecorder import LocalContextRecorder
-            self._recorder = LocalContextRecorder(self.workspace_root)
-        return self._recorder
+    def recorder(self) -> "LocalContextRecorder":
+        return self.orchestrators.recorder
 
     @property
-    def sql_metadata(self) -> 'SqlAgent':
-        if self._sql_metadata is None:
-            from src.classes.backend.SqlAgent import SqlAgent
-            self._sql_metadata = SqlAgent(shards_dir=str(self.recorder.log_dir))
-        return self._sql_metadata
+    def sql_metadata(self) -> "SqlAgent":
+        return self.orchestrators.sql_metadata
 
     @property
-    def global_context(self) -> 'GlobalContextEngine':
-        if self._global_context is None:
-            from src.classes.context.GlobalContextEngine import GlobalContextEngine
-            self._global_context = GlobalContextEngine(str(self.workspace_root))
-        return self._global_context
+    def self_healing(self) -> "SelfHealingOrchestrator":
+        return self.orchestrators.self_healing
 
     @property
-    def fallback_engine(self) -> 'ModelFallbackEngine':
-        if self._fallback_engine is None:
-            from src.classes.stats.ModelFallbackEngine import ModelFallbackEngine
-            self._fallback_engine = ModelFallbackEngine(cost_engine=self.telemetry.cost_engine)
-        return self._fallback_engine
+    def self_improvement(self) -> "SelfImprovementOrchestrator":
+        return self.orchestrators.self_improvement
 
     @property
-    def core(self) -> 'FleetCore':
-        if self._core is None:
-            from src.classes.fleet.FleetCore import FleetCore
-            self._core = FleetCore()
-        return self._core
+    def global_context(self) -> "GlobalContextEngine":
+        return self.orchestrators.global_context
+
+    @property
+    def fallback(self) -> "ModelFallbackEngine":
+        return self.orchestrators.fallback_engine
+
+    @property
+    def core(self) -> Any:
+        return self.orchestrators.core
+
+    @property
+    def rl_selector(self) -> Any:
+        return getattr(self.orchestrators, "r_l_selector", None) or getattr(self.orchestrators, "rl_selector", None)
 
     def execute_reliable_task(self, task: str) -> str:
         """Executes a task using the 7-phase inner loop and linguistic articulation."""

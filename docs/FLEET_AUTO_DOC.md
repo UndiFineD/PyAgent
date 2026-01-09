@@ -19,9 +19,12 @@ Delegate to orchestrators and agents for lazy loading support.
 ### Method: `signals`
 ### Method: `recorder`
 ### Method: `sql_metadata`
+### Method: `self_healing`
+### Method: `self_improvement`
 ### Method: `global_context`
-### Method: `fallback_engine`
+### Method: `fallback`
 ### Method: `core`
+### Method: `rl_selector`
 ### Method: `execute_reliable_task`
 Executes a task using the 7-phase inner loop and linguistic articulation.
 

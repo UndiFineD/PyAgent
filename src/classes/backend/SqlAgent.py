@@ -13,9 +13,13 @@ from typing import List, Dict, Any, Optional
 class SqlAgent:
     """Relational metadata overlay for compressed interaction shards."""
 
-    def __init__(self, db_path: str = "agent_store/metadata.db", shards_dir: str = "agent_store/memory_shards") -> None:
+    def __init__(self, db_path: str = "agent_store/metadata.db", shards_dir: str = "agent_store/memory_shards", fleet: Optional[Any] = None) -> None:
+        if fleet and hasattr(fleet, "recorder") and shards_dir == "agent_store/memory_shards":
+            self.shards_dir = str(fleet.recorder.log_dir)
+        else:
+            self.shards_dir = shards_dir
+        
         self.db_path = db_path
-        self.shards_dir = shards_dir
         self._init_db()
 
     def _init_db(self) -> None:

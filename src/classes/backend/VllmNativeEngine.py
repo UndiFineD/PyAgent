@@ -44,9 +44,16 @@ class VllmNativeEngine:
         
         if self._llm is None:
             try:
-                # Force CPU mode as default for Phase 108 stability on diverse environments
+                import torch
+                # Phase 108: Dynamic hardware detection
+                # Default to CUDA if available for high-performance 'Own AI'
                 if "VLLM_TARGET_DEVICE" not in os.environ:
-                    os.environ["VLLM_TARGET_DEVICE"] = "cpu"
+                    if torch.cuda.is_available():
+                        os.environ["VLLM_TARGET_DEVICE"] = "cuda"
+                        logging.info("vLLM: CUDA detected. Using GPU for native inference.")
+                    else:
+                        os.environ["VLLM_TARGET_DEVICE"] = "cpu"
+                        logging.warning("vLLM: No CUDA detected. Using CPU mode (Lower performance).")
                 
                 logging.info(f"Initializing Native vLLM: {self.model_name} (Device: {os.environ.get('VLLM_TARGET_DEVICE', 'auto')})...")
                 

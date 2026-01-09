@@ -8,6 +8,7 @@ import hashlib
 from pathlib import Path
 from typing import Set, List, Optional, Dict
 from .utils import load_codeignore
+from src.classes.base_agent.core import BaseCore
 
 class AgentFileManager:
     """Manages file discovery, filtering, and snapshots for the Agent."""
@@ -18,32 +19,15 @@ class AgentFileManager:
         self.repo_root = repo_root
         self.agents_only = agents_only
         self.ignored_patterns = ignored_patterns or load_codeignore(repo_root)
+        self.core = BaseCore(workspace_root=str(repo_root))
 
     def is_ignored(self, path: Path) -> bool:
         """Check if a path should be ignored based on .codeignore patterns."""
-        try:
-            relative_path = str(path.relative_to(self.repo_root)).replace('\\', '/')
-        except ValueError:
-            # Path not in repo_root
-            return True
-        
-        # Check against ignored patterns
-        for pattern in self.ignored_patterns:
-            if fnmatch.fnmatch(relative_path, pattern) or \
-               fnmatch.fnmatch(relative_path.split('/')[0], pattern):
-                return True
-        
-        # Default ignores for common directories if not specified
-        default_ignores = {'.git', '__pycache__', 'node_modules', '.venv', 'venv', 'env', '.agent_cache', '.agent_snapshots'}
-        parts = relative_path.split('/')
-        if any(part in default_ignores for part in parts):
-            return True
-            
-        return False
+        return self.core.is_path_ignored(path, self.repo_root, self.ignored_patterns)
 
     def find_code_files(self, max_files: Optional[int] = None) -> List[Path]:
         """Find code files in the repository, respecting filters and ignore patterns."""
-        code_files = []
+        all_potential_files = []
         
         search_root = self.repo_root
         if self.agents_only:
@@ -58,12 +42,18 @@ class AgentFileManager:
         
         for root, _, files in os.walk(search_root):
             for file in files:
-                file_path = Path(root) / file
-                if file_path.suffix in self.SUPPORTED_EXTENSIONS:
-                    if not self.is_ignored(file_path):
-                        code_files.append(file_path)
-                        if max_files and len(code_files) >= max_files:
-                            return code_files
+                all_potential_files.append(Path(root) / file)
+
+        # Delegate filtering to core logic
+        code_files = self.core.filter_code_files(
+            all_potential_files, 
+            self.repo_root, 
+            self.ignored_patterns, 
+            self.SUPPORTED_EXTENSIONS
+        )
+
+        if max_files:
+            return code_files[:max_files]
                             
         return code_files
 

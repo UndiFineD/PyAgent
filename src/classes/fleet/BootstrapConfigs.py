@@ -41,5 +41,33 @@ BOOTSTRAP_ORCHESTRATORS = {
     "self_improvement": (
         "src.classes.orchestration.SelfImprovementOrchestrator",
         "SelfImprovementOrchestrator"
+    ),
+    "registry": (
+        "src.classes.orchestration.ToolRegistry",
+        "ToolRegistry"
+    ),
+    "signals": (
+        "src.classes.orchestration.SignalRegistry",
+        "SignalRegistry"
+    ),
+    "recorder": (
+        "src.classes.backend.LocalContextRecorder",
+        "LocalContextRecorder"
+    ),
+    "sql_metadata": (
+        "src.classes.backend.SqlAgent",
+        "SqlAgent"
+    ),
+    "global_context": (
+        "src.classes.context.GlobalContextEngine",
+        "GlobalContextEngine"
+    ),
+    "fallback_engine": (
+        "src.classes.stats.ModelFallbackEngine",
+        "ModelFallbackEngine"
+    ),
+    "core": (
+        "src.classes.fleet.FleetCore",
+        "FleetCore"
     )
 }
