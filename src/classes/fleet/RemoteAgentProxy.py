@@ -52,8 +52,11 @@ class RemoteAgentProxy(BaseAgent):
         
         try:
             logging.info(f"Calling remote tool {tool_name} on {self.node_url}")
-            response = requests.post(endpoint, json=payload, timeout=60)
-            response.raise_for_status()
+            # Security Patch 115.1: Limit redirects for remote proxy calls
+            with requests.Session() as session:
+                session.max_redirects = 3
+                response = session.post(endpoint, json=payload, timeout=60)
+                response.raise_for_status()
             
             result = response.json().get("result", "No result returned.")
             self._update_node_status(True)

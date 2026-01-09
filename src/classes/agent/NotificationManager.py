@@ -80,9 +80,12 @@ class NotificationManager:
 
             try:
                 # Fire and forget (ideally should be async or in a thread)
-                response = requests.post(url, json=payload, timeout=5)
-                response.raise_for_status()
-                self._update_status(url, True)
+                # Security Patch 115.1: Limit redirects for webhook calls
+                with requests.Session() as session:
+                    session.max_redirects = 2
+                    response = session.post(url, json=payload, timeout=5)
+                    response.raise_for_status()
+                    self._update_status(url, True)
             except Exception as e:
                 logging.warning(f"Webhook failed for {url}: {e}")
                 self._update_status(url, False)
