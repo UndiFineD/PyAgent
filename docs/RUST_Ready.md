@@ -11,7 +11,7 @@ This document tracks modules that have been audited, decoupled from side-effects
 | [src/classes/fleet/EvolutionCore.py](src/classes/fleet/EvolutionCore.py) | Genetic algorithms for fleet adaptation | READY | Medium | 100% |
 | [src/classes/api/APICore.py](src/classes/api/APICore.py) | OpenAPI spec generation and contract validation | READY | Low | 100% |
 | [src/classes/orchestration/ToolCore.py](src/classes/orchestration/ToolCore.py) | Argument filtering and metadata extraction logic | READY | Low | 100% |
-| [src/classes/stats/FormulaEngine.py](src/classes/stats/FormulaEngine.py) | AST-based mathematical expression evaluator | READY | High | 100% |
+| [src/classes/stats/FormulaEngineCore.py](src/classes/stats/FormulaEngineCore.py) | AST-based mathematical expression evaluator | READY | High | 100% |
 | [src/classes/context/GraphCore.py](src/classes/context/GraphCore.py) | AST-based code relationship analysis | READY | Medium | 100% |
 | [src/classes/context/KnowledgeCore.py](src/classes/context/KnowledgeCore.py) | Indexing and search logic for knowledge graph | READY | High | 100% |
 | [src/classes/context/GlobalContextCore.py](src/classes/context/GlobalContextCore.py) | Stable sub-sharding and cognitive summary logic | READY | Medium | 100% |
@@ -29,6 +29,10 @@ This document tracks modules that have been audited, decoupled from side-effects
 | [src/classes/fleet/EvolutionCore.py](src/classes/fleet/EvolutionCore.py) | Genetic algorithms for fleet adaptation | READY | Medium | 100% |
 | [src/classes/fleet/FleetCore.py](src/classes/fleet/FleetCore.py) | Tool scoring and state transition logic | READY | Medium | 100% |
 | [src/classes/context/MemoryCore.py](src/classes/context/MemoryCore.py) | Episode scoring and utility decay logic | READY | Low | 100% |
+| [src/classes/cognitive/MemoryConsolidatorCore.py](src/classes/cognitive/MemoryConsolidatorCore.py) | Logic for distilling interactions into insights | READY | Medium | 100% |
+| [src/classes/cognitive/MetacognitiveCore.py](src/classes/cognitive/MetacognitiveCore.py) | Reasoning certainty and consistency logic | READY | Low | 100% |
+| [src/classes/cognitive/TheoryOfMindCore.py](src/classes/cognitive/TheoryOfMindCore.py) | Agent modeling and collaborator ranking logic | READY | Medium | 100% |
+| [src/classes/context/ContextCompressorCore.py](src/classes/context/ContextCompressorCore.py) | AST-based signature extraction and summary logic | READY | Medium | 100% |
 | [src/classes/coder/SecurityCore.py](src/classes/coder/SecurityCore.py) | Regex scanning & Auditing | READY | Medium | 100% |
 | [src/classes/orchestration/SignalCore.py](src/classes/orchestration/SignalCore.py) | Event broadcasting and history windowing | READY | Low | 100% |
 | [src/classes/stats/TokenCostCore.py](src/classes/stats/TokenCostCore.py) | Multi-model pricing and usage estimation | READY | Low | 100% |
