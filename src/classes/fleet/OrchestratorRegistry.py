@@ -42,11 +42,13 @@ class LazyOrchestratorMap:
             search_root = self.workspace_root / subdir
             if not search_root.exists():
                 continue
+            # Phase 116: Performance Optimization
             for root, _, files in os.walk(search_root):
                 for file in files:
-                    full_path = Path(root) / file
-                    rel_path = full_path.relative_to(self.workspace_root)
-                    found_paths.append(str(rel_path))
+                    if "Orchestrator" in file:
+                        full_path = Path(root) / file
+                        rel_path = full_path.relative_to(self.workspace_root)
+                        found_paths.append(str(rel_path))
         return found_paths
 
     def _load_manifests(self) -> Dict[str, tuple]:

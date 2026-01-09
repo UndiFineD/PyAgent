@@ -46,16 +46,6 @@ class FormulaEngine:
             error=result["error"]
         )
 
-                # Try to compile the test formula
-                compile(test_formula, '<string>', 'eval')
-            else:
-                # Direct formula validation
-                compile(formula, '<string>', 'eval')
-
-            return FormulaValidation(is_valid=True)
-        except (SyntaxError, ValueError) as e:
-            return FormulaValidation(is_valid=False, error=str(e))
-
     def validate_formula(self, formula: str) -> bool:
         """Validate formula syntax (backward compat)."""
         return self.validate(formula).is_valid
