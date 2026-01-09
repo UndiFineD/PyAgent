@@ -22,6 +22,8 @@ class LLMClient:
         # Phase 108: Persistent Session for connection pooling
         if hasattr(requests_lib, 'Session'):
             self.session = requests_lib.Session()
+            # Security Patch 115.1: Harden session against decompression bombs and redirect chains
+            self.session.max_redirects = 5
         else:
             self.session = requests_lib # Fallback if someone passed a mock
             
