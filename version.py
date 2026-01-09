@@ -1,8 +1,8 @@
 # PyAgent Versioning Gatekeeper
 # This file serves as the source of truth for the project's current maturity level.
 
-VERSION = "2.1.2-stable"
-EVOLUTION_PHASE = 108
+VERSION = "2.1.5-stable"
+EVOLUTION_PHASE = 116
 STABILITY_SCORE = 1.0  # Phase 108: Multi-Agent Logic Harvesting and Rust-Readiness verified
 
 def is_gate_open(required_phase: int) -> bool:
