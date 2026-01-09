@@ -50,7 +50,7 @@ class SwarmPruningOrchestrator:
             "estimated_cost_reduction": "30%" # As per roadmap goal
         }
 
-    def record_node_performance(self, node_id: str, success: bool, tokens: int):
+    def record_node_performance(self, node_id: str, success: bool, tokens: int) -> None:
         """Proxy to record performance in the underlying engine."""
         self.pruning_engine.record_performance(node_id, success, float(tokens))
 

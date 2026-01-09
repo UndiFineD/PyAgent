@@ -7,14 +7,26 @@ import subprocess
 import time
 import contextlib
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Iterator
 
 class AgentCommandHandler:
     """Handles command execution for the Agent, including sub-agent orchestration."""
     
-    def __init__(self, repo_root: Path, models_config: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(self, repo_root: Path, models_config: Optional[Dict[str, Any]] = None, recorder=None) -> None:
         self.repo_root = repo_root
         self.models = models_config or {}
+        self.recorder = recorder
+
+    def _record(self, action: str, result: str, meta: Optional[Dict[str, Any]] = None) -> None:
+        """Internal helper to record shell operations if recorder is available."""
+        if self.recorder:
+            self.recorder.record_interaction(
+                provider="Shell",
+                model="subprocess",
+                prompt=action,
+                result=result,
+                meta=meta
+            )
 
     def run_command(self, cmd: List[str], timeout: int = 120, max_retries: int = 1) -> subprocess.CompletedProcess[str]:
         """Run a command with timeout, error handling, retry logic, and logging."""
@@ -71,13 +83,16 @@ class AgentCommandHandler:
                     env=env,
                 )
                 logging.debug(f"Command completed with returncode={result.returncode}")
+                self._record(" ".join(cmd), f"RC={result.returncode}\n{result.stdout[:1000]}")
                 return result
             except subprocess.TimeoutExpired:
                 logging.error(f"Command timed out after {timeout}s: {' '.join(cmd[:3])}...")
+                self._record(" ".join(cmd), "Error: TimeoutExpired")
                 return subprocess.CompletedProcess(
                     cmd, returncode=-1, stdout="", stderr="Timeout expired")
             except OSError as e:
                 logging.error(f"Command failed to start: {e}")
+                self._record(" ".join(cmd), f"Error: OSError {str(e)}")
                 return subprocess.CompletedProcess(
                     cmd, returncode=-2, stdout="", stderr=str(e))
 
@@ -87,14 +102,43 @@ class AgentCommandHandler:
             if res.returncode == 0 or i == max_retries - 1:
                 return res
             
-            wait_time = 2 ** i
+            wait_time = float(2 ** i)
             logging.warning(f"Command failed (rc={res.returncode}). Retrying in {wait_time}s... (Attempt {i+1}/{max_retries})")
-            time.sleep(wait_time)
+            # Use threading.Event().wait for better interruptibility than time.sleep
+            import threading
+            threading.Event().wait(timeout=wait_time)
             
         return res
 
     @contextlib.contextmanager
-    def with_agent_env(self, agent_name: str):
+    def with_agent_env(self, agent_name: str) -> Iterator[None]:
+        """Temporarily set environment variables for a specific agent."""
+        prev: Dict[str, Optional[str]] = {}
+        keys = ['DV_AGENT_MODEL_PROVIDER', 'DV_AGENT_MODEL_NAME',
+                'DV_AGENT_MODEL_TEMPERATURE', 'DV_AGENT_MODEL_MAX_TOKENS']
+        try:
+            spec = self.models.get(agent_name) or self.models.get('default')
+
+            for k in keys:
+                prev[k] = os.environ.get(k)
+
+            if spec and isinstance(spec, dict):
+                if 'provider' in spec:
+                    os.environ['DV_AGENT_MODEL_PROVIDER'] = str(spec.get('provider', ''))
+                if 'model' in spec:
+                    os.environ['DV_AGENT_MODEL_NAME'] = str(spec.get('model', ''))
+                if 'temperature' in spec:
+                    os.environ['DV_AGENT_MODEL_TEMPERATURE'] = str(spec.get('temperature', ''))
+                if 'max_tokens' in spec:
+                    os.environ['DV_AGENT_MODEL_MAX_TOKENS'] = str(spec.get('max_tokens', ''))
+
+            yield
+        finally:
+            for k, v in prev.items():
+                if v is None:
+                    os.environ.pop(k, None)
+                else:
+                    os.environ[k] = v
         """Temporarily set environment variables for a specific agent."""
         prev: Dict[str, Optional[str]] = {}
         keys = ['DV_AGENT_MODEL_PROVIDER', 'DV_AGENT_MODEL_NAME',

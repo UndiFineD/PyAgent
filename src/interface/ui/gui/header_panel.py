@@ -20,11 +20,11 @@ class HeaderPanel:
     """Handles project root selection and global context input."""
     def __init__(self, parent, project_root_var, callbacks) -> None:
         self.frame = ttk.Frame(parent, padding=5)
-        self.project_root_var = project_root_var
-        self.callbacks = callbacks
+        self.project_root_var: Any = project_root_var
+        self.callbacks: Any = callbacks
         self.setup_ui()
 
-    def setup_ui(self):
+    def setup_ui(self) -> None:
         root_frame = ttk.Frame(self.frame)
         root_frame.pack(fill=tk.X)
         
@@ -34,7 +34,7 @@ class HeaderPanel:
         ttk.Button(root_frame, text="Refresh", command=self.callbacks.get("refresh_explorer")).pack(side=tk.LEFT, padx=5)
 
         # Global Prompt Frame
-        prompt_frame = ttk.LabelFrame(self.frame, text="Global Context / Task Description", padding=5)
+        prompt_frame: ttk.Labelframe = ttk.LabelFrame(self.frame, text="Global Context / Task Description", padding=5)
         prompt_frame.pack(fill=tk.X, pady=5)
         
         template_frame = ttk.Frame(prompt_frame)
@@ -56,6 +56,6 @@ class HeaderPanel:
         ttk.Label(meta_frame, text="Methodology: BMAD V6", font=("Segoe UI", 8, "italic")).pack(side=tk.LEFT)
         ttk.Label(meta_frame, text="| Tracks: Quick, Standard, Enterprise", font=("Segoe UI", 8)).pack(side=tk.LEFT, padx=10)
 
-    def on_template_selected(self, event):
+    def on_template_selected(self, event) -> None:
         TemplateManager.apply_template(self.global_context, self.template_var.get())
 

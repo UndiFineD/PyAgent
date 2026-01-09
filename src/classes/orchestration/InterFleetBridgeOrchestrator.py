@@ -17,22 +17,22 @@ class InterFleetBridgeOrchestrator:
         self.shared_state_cache: Dict[str, Any] = {}
         self.fleet_id = str(uuid.uuid4())[:8]
 
-    def connect_to_peer(self, peer_id: str, endpoint: str) -> bool:
+    def connect_to_peer(self, peer_id: str, endpoint: str) -> None:
         """Simulates establishing a telepathic link with another fleet."""
         self.connected_fleets[peer_id] = endpoint
         logging.info(f"InterFleetBridge: Established link with peer fleet {peer_id} at {endpoint}")
 
-    def broadcast_state(self, key: str, value: Any) -> bool:
+    def broadcast_state(self, key: str, value: Any) -> None:
         """Simulates broadcasting local state to all connected peers."""
         self.shared_state_cache[key] = value
         logging.info(f"InterFleetBridge: Broadcasting state '{key}' to {len(self.connected_fleets)} peers.")
         # In a real system, this would send packets over WebSocket/Bridge
 
-    def broadcast_signal(self, signal_name: str, payload: Dict[str, Any]) -> bool:
+    def broadcast_signal(self, signal_name: str, payload: Dict[str, Any]) -> None:
         """Alias for broadcasting signals across fleet boundaries."""
         self.broadcast_state(f"SIGNAL_{signal_name}", payload)
 
-    def sync_external_state(self, peer_id: str, state_diff: Dict[str, Any]) -> bool:
+    def sync_external_state(self, peer_id: str, state_diff: Dict[str, Any]) -> None:
         """Callback for receiving state updates from a peer."""
         logging.info(f"InterFleetBridge: Received telepathic sync from {peer_id}: {list(state_diff.keys())}")
         self.shared_state_cache.update(state_diff)
@@ -43,7 +43,7 @@ class InterFleetBridgeOrchestrator:
         # Return state if found in cache, else simulate a 'miss'
         return self.shared_state_cache.get(query)
 
-    def send_signal(self, peer_id: str, signal_type: str, payload: Any) -> bool:
+    def send_signal(self, peer_id: str, signal_type: str, payload: Any) -> Dict[str, Any]:
         """Sends a specific signal to a peer. (Phase 35/41 integration)"""
         logging.info(f"InterFleetBridge: Sending signal '{signal_type}' to peer {peer_id}.")
         return {"status": "success", "peer": peer_id, "signal": signal_type}
@@ -55,7 +55,7 @@ class InterFleetBridgeOrchestrator:
         # High-throughput mock: in real life, this would be a raw socket write
         return True
 
-    def toggle_quantum_sync(self, enabled: bool):
+    def toggle_quantum_sync(self, enabled: bool) -> None:
         """Enables/Disables instant quantum state sharding through the bridge."""
         logging.info(f"InterFleetBridge: Quantum sync set to {enabled}")
         self.quantum_enabled = enabled

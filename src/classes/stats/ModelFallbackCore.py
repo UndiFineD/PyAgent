@@ -30,7 +30,7 @@ class ModelFallbackCore:
 
     def rank_models_by_cost(self, models: List[str], model_price_map: Dict[str, Dict[str, float]]) -> List[str]:
         """Ranks models from cheapest to most expensive."""
-        def get_cost(m):
+        def get_cost(m: str) -> float:
             return model_price_map.get(m, {}).get("total", 999.0)
             
         return sorted(models, key=get_cost)

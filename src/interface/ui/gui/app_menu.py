@@ -19,11 +19,11 @@ class AppMenu:
     """Handles the creation and command routing for the application menu bar."""
     def __init__(self, master, callbacks) -> None:
         self.menubar = tk.Menu(master)
-        self.callbacks = callbacks
+        self.callbacks: Any = callbacks
         self.setup_menus()
         master.config(menu=self.menubar)
 
-    def setup_menus(self):
+    def setup_menus(self) -> None:
         # File Menu
         file_menu = tk.Menu(self.menubar, tearoff=0)
         file_menu.add_command(label="New Session", command=self.callbacks.get("new_session"))

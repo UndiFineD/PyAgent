@@ -1,34 +1,36 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
 
+from .SpanContext import SpanContext
+from .TelemetrySpan import TelemetrySpan
+
+from abc import ABC, abstractmethod
+from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from pathlib import Path
+from types import TracebackType
+from typing import List, Set, Optional, Dict, Any, Callable, Iterable, TypeVar, cast, Final, Iterator
+import argparse
+import asyncio
+import difflib
+import fnmatch
+import functools
+import hashlib
+import importlib.util
 import json
+import logging
+import os
+import signal
+import subprocess
+import sys
+import threading
 import time
 import uuid
-from collections.abc import Iterator
-from contextlib import contextmanager
-from typing import Any
-
-from src.core.base.common.models import SpanContext, TelemetrySpan
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
 
 class TelemetryCollector:
     """Collect telemetry data for observability.
@@ -52,11 +54,11 @@ class TelemetryCollector:
             service_name: Service name for tracing.
         """
         self.service_name = service_name
-        self._spans: list[TelemetrySpan] = []
-        self._current_span: TelemetrySpan | None = None
+        self._spans: List[TelemetrySpan] = []
+        self._current_span: Optional[TelemetrySpan] = None
 
     @contextmanager
-    def span(self, name: str, attributes: dict[str, Any] | None = None) -> Iterator[SpanContext]:
+    def span(self, name: str, attributes: Optional[Dict[str, Any]] = None) -> Iterator[SpanContext]:
         """Create a telemetry span.
 
         Args:
@@ -83,7 +85,7 @@ class TelemetryCollector:
 
         try:
             yield context
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             context.add_event("exception", {"message": str(e)})
             raise
         finally:
@@ -91,7 +93,7 @@ class TelemetryCollector:
             self._spans.append(span)
             self._current_span = old_current
 
-    def get_spans(self) -> list[TelemetrySpan]:
+    def get_spans(self) -> List[TelemetrySpan]:
         """Get all collected spans."""
         return list(self._spans)
 
@@ -103,19 +105,17 @@ class TelemetryCollector:
         """
         spans_data: list[dict[str, Any]] = []
         for span in self._spans:
-            spans_data.append(
-                {
-                    "name": span.name,
-                    "trace_id": span.trace_id,
-                    "span_id": span.span_id,
-                    "parent_id": span.parent_id,
-                    "start_time": span.start_time,
-                    "end_time": span.end_time,
-                    "duration_ms": (span.end_time - span.start_time) * 1000 if span.end_time else None,
-                    "attributes": span.attributes,
-                    "events": span.events,
-                }
-            )
+            spans_data.append({
+                "name": span.name,
+                "trace_id": span.trace_id,
+                "span_id": span.span_id,
+                "parent_id": span.parent_id,
+                "start_time": span.start_time,
+                "end_time": span.end_time,
+                "duration_ms": (span.end_time - span.start_time) * 1000 if span.end_time else None,
+                "attributes": span.attributes,
+                "events": span.events,
+            })
         return json.dumps(spans_data, indent=2)
 
     def clear(self) -> None:

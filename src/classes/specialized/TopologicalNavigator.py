@@ -50,7 +50,7 @@ class TopologicalNavigator(BaseAgent):
 
         return f"Dependency map built successfully. Indexed {count} files. Total nodes: {len(self.graph)}"
 
-    def _parse_file(self, file_path: Path):
+    def _parse_file(self, file_path: Path) -> None:
         """Extracts imports and class/function definitions from a file."""
         try:
             with open(file_path, "r", encoding="utf-8") as f:
@@ -138,7 +138,7 @@ class TopologicalNavigator(BaseAgent):
             "total_affected": len(affected)
         }
 
-    def _build_reverse_graph(self):
+    def _build_reverse_graph(self) -> None:
         """Constructs the reverse dependency graph (A depends on B -> B is used by A)."""
         self.reverse_graph = {}
         for source, dependencies in self.graph.items():
@@ -153,7 +153,7 @@ class TopologicalNavigator(BaseAgent):
         visited = set()
         stack = []
 
-        def visit(node):
+        def visit(node: str) -> None:
             if node not in visited:
                 visited.add(node)
                 for dep in self.graph.get(node, set()):

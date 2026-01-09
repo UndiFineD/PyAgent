@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
+"""
+Internal managers for prompt, conversation, auth, and batch processing.
+"""
+
 from .PromptManagers import PromptTemplateManager, PromptVersion, PromptVersionManager
 from .ConversationManagers import ConversationHistory
 from .AuthManagers import AuthenticationManager, AuthManager

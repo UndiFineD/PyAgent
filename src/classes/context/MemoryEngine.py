@@ -27,7 +27,7 @@ class MemoryEngine:
         self.core = MemoryCore()
         self.load()
 
-    def _init_db(self):
+    def _init_db(self) -> Any:
         if not HAS_CHROMA: return None
         if self._collection: return self._collection
         try:
@@ -38,7 +38,7 @@ class MemoryEngine:
             logging.error(f"Memory DB init error: {e}")
             return None
 
-    def record_episode(self, agent_name: str, task: str, outcome: str, success: bool, metadata: Optional[Dict[str, Any]] = None):
+    def record_episode(self, agent_name: str, task: str, outcome: str, success: bool, metadata: Optional[Dict[str, Any]] = None) -> None:
         """Records an agent's experience with semantic indexing and utility scoring."""
         episode = self.core.create_episode(agent_name, task, outcome, success, metadata)
         self.episodes.append(episode)
@@ -63,7 +63,7 @@ class MemoryEngine:
                 
         self.save()
 
-    def update_utility(self, memory_id: str, increment: float):
+    def update_utility(self, memory_id: str, increment: float) -> None:
         """Updates the utility score of a specific memory episode."""
         collection = self._init_db()
         if not collection: return
@@ -153,14 +153,14 @@ class MemoryEngine:
             logging.error(f"search_memories error: {e}")
             return []
 
-    def save(self):
+    def save(self) -> None:
         """Persist memory to disk."""
         try:
             self.memory_file.write_text(json.dumps(self.episodes, indent=2))
         except Exception as e:
             logging.error(f"Failed to save memory: {e}")
 
-    def load(self):
+    def load(self) -> None:
         """Load memory from disk."""
         if self.memory_file.exists():
             try:
@@ -169,7 +169,7 @@ class MemoryEngine:
                 logging.error(f"Failed to load memory: {e}")
                 self.episodes = []
 
-    def clear(self):
+    def clear(self) -> None:
         """Wipe memory."""
         self.episodes = []
         if self.memory_file.exists():

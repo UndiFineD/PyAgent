@@ -19,7 +19,7 @@ class MemoryConsolidator:
         self.long_term_memory_file = self.storage_path / "long_term_memory.json"
         self.daily_buffer: List[Dict[str, Any]] = []
 
-    def record_interaction(self, agent: str, task: str, outcome: str) -> str:
+    def record_interaction(self, agent: str, task: str, outcome: str) -> None:
         """Adds an interaction to the temporary daily buffer."""
         self.daily_buffer.append({
             "timestamp": time.time(),
@@ -67,7 +67,7 @@ class MemoryConsolidator:
                 return json.load(f)
         return []
 
-    def _save_memory(self, memory: List[Dict[str, Any]]):
+    def _save_memory(self, memory: List[Dict[str, Any]]) -> None:
         with open(self.long_term_memory_file, 'w') as f:
             json.dump(memory, f, indent=2)
             

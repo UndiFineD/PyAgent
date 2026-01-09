@@ -1,3 +1,7 @@
+"""
+Core class hierarchy for the PyAgent ecosystem.
+"""
+
 # Classes package initialization
 
 from .base_agent import BaseAgent

@@ -18,9 +18,9 @@ from tkinter import ttk
 class StatusBar:
     """Handles status messages and UI feedback in the footer."""
     def __init__(self, parent, status_var) -> None:
-        self.status_var = status_var
+        self.status_var: Any = status_var
         self.label = ttk.Label(parent, textvariable=self.status_var, relief=tk.SUNKEN, anchor="w", padding=2)
         self.label.pack(side=tk.BOTTOM, fill=tk.X)
 
-    def set_status(self, message):
+    def set_status(self, message) -> None:
         self.status_var.set(message)

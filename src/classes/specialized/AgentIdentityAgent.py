@@ -2,6 +2,7 @@ import hashlib
 import time
 import json
 import uuid
+from typing import Dict, List, Any, Optional
 
 class AgentIdentityAgent:
     """
@@ -12,7 +13,7 @@ class AgentIdentityAgent:
         self.workspace_path = workspace_path
         self.identity_registry = {} # agent_id -> DID document
         
-    def create_agent_did(self, agent_name, fleet_id="fleet-01"):
+    def create_agent_did(self, agent_name: str, fleet_id: str = "fleet-01") -> str:
         """
         Creates a new DID for an agent.
         Format: did:pyagent:<fleet_id>:<unique_hash>
@@ -36,7 +37,7 @@ class AgentIdentityAgent:
         self.identity_registry[agent_name] = doc
         return did
 
-    def issue_verifiable_credential(self, issuer_did, subject_did, claim_type, claim_value):
+    def issue_verifiable_credential(self, issuer_did: str, subject_did: str, claim_type: str, claim_value: Any) -> Dict[str, Any]:
         """
         Issues a simulated VC for an agent.
         """
@@ -58,7 +59,7 @@ class AgentIdentityAgent:
         }
         return vc
 
-    def verify_credential(self, vc):
+    def verify_credential(self, vc: Dict[str, Any]) -> Dict[str, Any]:
         """
         Verifies the integrity of a credential.
         """

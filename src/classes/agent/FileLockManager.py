@@ -43,7 +43,7 @@ class FileLockManager:
         lock_timeout: Default lock timeout in seconds.
     """
 
-    def __init__(self, lock_timeout: float = 300.0) -> bool:
+    def __init__(self, lock_timeout: float = 300.0) -> None:
         """Initialize the lock manager.
 
         Args:
@@ -52,6 +52,7 @@ class FileLockManager:
         self.locks: Dict[str, FileLock] = {}
         self.lock_timeout = lock_timeout
         self._lock = threading.Lock()
+        self._condition = threading.Condition(self._lock)
         self._owner_id = f"{os.getpid()}_{threading.current_thread().ident}"
 
     def acquire_lock(self, file_path: Path,
@@ -71,8 +72,8 @@ class FileLockManager:
         timeout = timeout or self.lock_timeout
         start_time = time.time()
 
-        while True:
-            with self._lock:
+        with self._condition:
+            while True:
                 # Check for expired locks
                 self._cleanup_expired_locks()
 
@@ -95,12 +96,14 @@ class FileLockManager:
                     # Shared locks can coexist
                     return existing_lock
 
-            # Check timeout
-            if (time.time() - start_time) >= timeout:
-                logging.warning(f"Timeout acquiring lock on {file_path}")
-                return None
+                # Check timeout
+                elapsed = time.time() - start_time
+                if elapsed >= timeout:
+                    logging.warning(f"Timeout acquiring lock on {file_path}")
+                    return None
 
-            time.sleep(0.1)
+                # Wait for condition signal instead of blocking sleep
+                self._condition.wait(timeout=min(0.1, timeout - elapsed))
 
     def release_lock(self, file_path: Path) -> bool:
         """Release a lock on a file.
@@ -113,11 +116,12 @@ class FileLockManager:
         """
         path_str = str(file_path.resolve())
 
-        with self._lock:
+        with self._condition:
             lock = self.locks.get(path_str)
             if lock and lock.owner == self._owner_id:
                 del self.locks[path_str]
                 logging.debug(f"Released lock on {file_path}")
+                self._condition.notify_all()
                 return True
             return False
 

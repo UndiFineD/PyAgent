@@ -25,14 +25,14 @@ class ToolRegistry:
     
     _instance = None
     
-    def __new__(cls, *args, **kwargs):
+    def __new__(cls, *args, **kwargs) -> "ToolRegistry":
         if not cls._instance:
             cls._instance = super(ToolRegistry, cls).__new__(cls)
             cls._instance.tools = {}
             cls._instance.core = ToolCore()
         return cls._instance
 
-    def register_tool(self, owner_name: str, func: Callable, category: str = "general"):
+    def register_tool(self, owner_name: str, func: Callable, category: str = "general") -> None:
         """Registers a function as a tool."""
         metadata = self.core.extract_metadata(owner_name, func, category)
         self.tools[metadata.name] = {

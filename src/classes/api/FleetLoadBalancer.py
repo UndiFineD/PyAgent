@@ -27,6 +27,14 @@ class FleetLoadBalancer:
         """
         logging.info(f"LoadBalancer: Incoming request from {interface}: {command[:30]}...")
         
+        # Intelligence Harvesting (Phase 108)
+        if hasattr(self.fleet, 'recorder'):
+            self.fleet.recorder.record_lesson("lb_request_entry", {
+                "interface": interface,
+                "command_len": len(command),
+                "queue_depth": len(self.request_queue)
+            })
+
         # Simple simulation: If queue is large, increase latency or reject
         if len(self.request_queue) > 100:
             return {"status": "REJECTED", "reason": "High Traffic Load"}
@@ -48,7 +56,7 @@ class FleetLoadBalancer:
             "estimated_wait_ms": len(self.request_queue) * 10
         }
 
-    def get_stats(self):
+    def get_stats(self) -> Dict[str, Any]:
         return {
             "queue_depth": len(self.request_queue),
             "interface_diversity": list(set(r["interface"] for r in self.request_queue))

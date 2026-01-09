@@ -1,22 +1,23 @@
 import json
 from pathlib import Path
+from typing import Dict, List, Any, Union
 
 class FleetEconomyAgent:
     """
     Manages internal agent "wallets", credits, and resource bidding mechanisms
     to prioritize compute-heavy tasks within the fleet.
     """
-    def __init__(self, workspace_path) -> None:
+    def __init__(self, workspace_path: Union[str, Path]) -> None:
         self.workspace_path = Path(workspace_path)
-        self.wallets = {} # agent_id -> credits
-        self.current_bids = {} # task_id -> bid_info
+        self.wallets: Dict[str, float] = {} # agent_id -> credits
+        self.current_bids: Dict[str, Dict[str, Any]] = {} # task_id -> bid_info
 
-    def deposit_credits(self, agent_id, amount):
+    def deposit_credits(self, agent_id: str, amount: float) -> Dict[str, Any]:
         """Funds an agent's wallet."""
         self.wallets[agent_id] = self.wallets.get(agent_id, 0.0) + amount
         return {"agent": agent_id, "balance": self.wallets[agent_id]}
 
-    def place_bid(self, agent_id, task_id, bid_amount, priority=1):
+    def place_bid(self, agent_id: str, task_id: str, bid_amount: float, priority: int = 1) -> Dict[str, Any]:
         """Places a bid for compute resources."""
         balance = self.wallets.get(agent_id, 0.0)
         if balance < bid_amount:
@@ -31,7 +32,7 @@ class FleetEconomyAgent:
         }
         return {"status": "bid_placed", "task_id": task_id, "remaining_balance": self.wallets[agent_id]}
 
-    def resolve_bids(self):
+    def resolve_bids(self) -> Dict[str, Any]:
         """
         Highest bidders and priority tasks get allocated first.
         """
@@ -49,5 +50,5 @@ class FleetEconomyAgent:
         
         return {"allocated_tasks": allocation, "total": len(allocation)}
 
-    def get_wallet_summary(self):
+    def get_wallet_summary(self) -> Dict[str, float]:
         return self.wallets

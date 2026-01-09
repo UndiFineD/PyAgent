@@ -18,11 +18,11 @@ app.add_middleware(
 LOG_FILE = Path("logs/episodic_memory.jsonl")
 
 @app.get("/api/status")
-async def get_status():
+async def get_status() -> Dict[str, Any]:
     return {"status": "online", "agent": "PyAgent", "version": "2026.1.0"}
 
 @app.get("/api/thoughts")
-async def get_thoughts(limit: int = 50):
+async def get_thoughts(limit: int = 50) -> List[Dict[str, Any]]:
     """Retrieve the latest episodic memories (agent thoughts/actions)."""
     if not LOG_FILE.exists():
         return []
@@ -39,7 +39,7 @@ async def get_thoughts(limit: int = 50):
     return thoughts[::-1] # Return newest first
 
 @app.get("/api/artifacts")
-async def list_artifacts():
+async def list_artifacts() -> List[Dict[str, Any]]:
     """List files in the 'src/classes/generated' or 'logs/screenshots' folders."""
     artifacts = []
     paths = [Path("src/classes/generated"), Path("logs/screenshots")]

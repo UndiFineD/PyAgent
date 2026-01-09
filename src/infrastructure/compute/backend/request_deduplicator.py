@@ -1,33 +1,28 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from enum import Enum
+from pathlib import Path
+from queue import PriorityQueue
+from typing import Any, Callable, Dict, List, Optional, Tuple
 import hashlib
+import json
+import logging
+import os
+import re
+import subprocess
 import threading
 import time
-
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import \
-    LocalContextRecorder
+import uuid
 
 # Infrastructure
-__version__ = VERSION
-
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 
 class RequestDeduplicator:
     """Deduplicates concurrent requests with identical prompts.
@@ -44,7 +39,7 @@ class RequestDeduplicator:
             dedup.store_result("prompt", result)
     """
 
-    def __init__(self, ttl_seconds: float = 60.0, recorder: LocalContextRecorder | None = None) -> None:
+    def __init__(self, ttl_seconds: float = 60.0, recorder: Optional[LocalContextRecorder] = None) -> None:
         """Initialize deduplicator.
 
         Args:
@@ -53,10 +48,10 @@ class RequestDeduplicator:
         """
         self.ttl_seconds = ttl_seconds
         self.recorder = recorder
-        self._pending: dict[str, float] = {}  # hash -> start_time
-        self._results: dict[str, str] = {}
+        self._pending: Dict[str, float] = {}  # hash -> start_time
+        self._results: Dict[str, str] = {}
         self._lock = threading.Lock()
-        self._events: dict[str, threading.Event] = {}
+        self._events: Dict[str, threading.Event] = {}
 
     def _get_key(self, prompt: str) -> str:
         """Generate deduplication key for prompt."""
@@ -92,7 +87,7 @@ class RequestDeduplicator:
             self._events[key] = threading.Event()
             return False
 
-    def wait_for_result(self, prompt: str, timeout: float = 60.0) -> str | None:
+    def wait_for_result(self, prompt: str, timeout: float = 60.0) -> Optional[str]:
         """Wait for result of duplicate request.
 
         Args:

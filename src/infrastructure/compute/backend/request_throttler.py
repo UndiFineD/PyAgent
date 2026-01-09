@@ -1,30 +1,25 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from enum import Enum
+from pathlib import Path
+from queue import PriorityQueue
+from typing import Any, Callable, Dict, List, Optional, Tuple
+import hashlib
+import json
+import logging
+import os
+import re
+import subprocess
 import threading
 import time
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
+import uuid
 
 class RequestThrottler:
     """Throttles requests to prevent overloading backends.
@@ -52,8 +47,8 @@ class RequestThrottler:
         """
         self.requests_per_second = requests_per_second
         self.burst_size = burst_size
-        self._buckets: dict[str, float] = {}  # backend -> tokens
-        self._last_update: dict[str, float] = {}
+        self._buckets: Dict[str, float] = {}  # backend -> tokens
+        self._last_update: Dict[str, float] = {}
         self._lock = threading.Lock()
 
     def allow_request(self, backend: str) -> bool:
@@ -77,7 +72,7 @@ class RequestThrottler:
             elapsed = now - self._last_update[backend]
             self._buckets[backend] = min(
                 self.burst_size,
-                self._buckets[backend] + elapsed * self.requests_per_second,
+                self._buckets[backend] + elapsed * self.requests_per_second
             )
             self._last_update[backend] = now
 
@@ -104,12 +99,11 @@ class RequestThrottler:
             if self.allow_request(backend):
                 return True
             import threading
-
             threading.Event().wait(timeout=0.1)
 
         return False
 
-    def get_status(self, backend: str) -> dict[str, Any]:
+    def get_status(self, backend: str) -> Dict[str, Any]:
         """Get throttle status for backend.
 
         Args:

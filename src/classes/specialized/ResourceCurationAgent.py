@@ -56,7 +56,7 @@ class ResourceCurationAgent(BaseAgent):
         with open(self.library_path, "r", encoding="utf-8") as f:
             return json.load(f)
 
-    def _save_library(self, data: List[Dict[str, Any]]):
+    def _save_library(self, data: List[Dict[str, Any]]) -> None:
         with open(self.library_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4)
 

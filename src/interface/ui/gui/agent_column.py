@@ -12,13 +12,15 @@
 
 """Agent Column component for the PyAgent GUI."""
 
+from __future__ import annotations
 import tkinter as tk
 from tkinter import ttk, messagebox
 import logging
+from typing import Dict, Any, Optional
 
 class AgentColumn:
     """A vertical column representing a single agent's controls and logs."""
-    def __init__(self, parent, agent_name, callbacks) -> None:
+    def __init__(self, parent: tk.Widget, agent_name: str, callbacks: Dict[str, Any]) -> None:
         self.agent_name = agent_name
         self.callbacks = callbacks
         
@@ -41,7 +43,7 @@ class AgentColumn:
         
         self.setup_ui()
 
-    def setup_ui(self):
+    def setup_ui(self) -> None:
         # Header
         header_frame = ttk.Frame(self.frame)
         header_frame.pack(fill=tk.X, padx=2, pady=2)
@@ -137,7 +139,7 @@ class AgentColumn:
         self.voice_btn = ttk.Button(action_bar, text="🎤", width=3, command=lambda: self.voice_callback(self.prompt_text))
         self.voice_btn.pack(side=tk.RIGHT, padx=1)
 
-    def toggle_minimize(self):
+    def toggle_minimize(self) -> None:
         """Collapses or expands the agent's content."""
         if self.is_minimized:
             self.content_frame.pack(fill=tk.BOTH, expand=True)
@@ -147,17 +149,17 @@ class AgentColumn:
             self.min_btn.config(text="▶")
         self.is_minimized = not self.is_minimized
 
-    def remove_callback(self, frame, name):
+    def remove_callback(self, frame: tk.Widget, name: str) -> None:
         """Standard remove method."""
         pass # Placeholder as we usually use the one from AgentManager
 
-    def reset_memory(self):
+    def reset_memory(self) -> None:
         """Clears the conversation history for this agent."""
         if messagebox.askyesno("Reset Memory", "Clear conversation history for this agent?"):
             self.stop_callback(self.agent_name, reset_history=True)
             self.log_text.insert(tk.END, "\n[Memory Reset]\n")
 
-    def show_delegate_menu(self):
+    def show_delegate_menu(self) -> None:
         """Shows a menu to delegate the current result to another agent."""
         from .Constants import BMAD_AGENTS
         menu = tk.Menu(self.frame, tearoff=0)
@@ -170,7 +172,7 @@ class AgentColumn:
         finally:
             menu.grab_release()
 
-    def delegate_to(self, target_agent):
+    def delegate_to(self, target_agent: str) -> None:
         """Passes the current log output as context to a new agent."""
         content = self.log_text.get("1.0", tk.END).strip()
         if not content:
@@ -185,13 +187,13 @@ class AgentColumn:
         if hasattr(self, 'delegate_callback') and self.delegate_callback:
             self.delegate_callback(target_agent, content, self.file_var.get())
 
-    def toggle_context(self):
+    def toggle_context(self) -> None:
         if self.local_context.winfo_viewable():
             self.local_context.pack_forget()
         else:
             self.local_context.pack(fill=tk.X, padx=2, pady=2, after=self.ctx_toggle)
 
-    def get_data(self):
+    def get_data(self) -> dict:
         return {
             "name": self.agent_name,
             "file": self.file_var.get(),
@@ -201,7 +203,7 @@ class AgentColumn:
             "prompt": self.prompt_text.get("1.0", tk.END).strip()
         }
 
-    def set_data(self, data):
+    def set_data(self, data: dict) -> None:
         self.file_var.set(data.get("file", ""))
         self.backend_cb.set(data.get("backend", "auto"))
         self.model_cb.set(data.get("model", "default"))
@@ -210,7 +212,7 @@ class AgentColumn:
         self.prompt_text.delete("1.0", tk.END)
         self.prompt_text.insert("1.0", data.get("prompt", ""))
 
-    def get_config(self):
+    def get_config(self) -> dict:
         return {
             "type": self.agent_name,
             "backend": self.backend_cb.get(),
@@ -218,14 +220,14 @@ class AgentColumn:
             "file": self.file_var.get()
         }
 
-    def on_start(self):
+    def on_start(self) -> None:
         self.is_running = True
         self.run_btn.config(state=tk.DISABLED)
         self.stop_btn.config(state=tk.NORMAL)
         self.progress.pack(fill=tk.X, padx=2, pady=2, after=self.log_text)
         self.progress.start()
 
-    def on_finish(self):
+    def on_finish(self) -> None:
         self.is_running = False
         self.run_btn.config(state=tk.NORMAL)
         self.stop_btn.config(state=tk.DISABLED)

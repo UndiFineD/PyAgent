@@ -19,11 +19,11 @@ from tkinter import filedialog, messagebox
 class SessionManager:
     """Handles saving and loading of the GUI state."""
     def __init__(self, default_filename="gui_session.json") -> None:
-        self.default_filename = default_filename
+        self.default_filename: str = default_filename
 
     def save_session(self, data) -> bool:
         """Saves session data to a JSON file."""
-        filepath = filedialog.asksaveasfilename(
+        filepath: str = filedialog.asksaveasfilename(
             initialfile=self.default_filename,
             defaultextension=".json", 
             filetypes=[("JSON", "*.json")]
@@ -37,9 +37,9 @@ class SessionManager:
                 messagebox.showerror("Save Error", f"Failed to save session: {e}")
         return False
 
-    def load_session(self):
+    def load_session(self) -> None | json.Any:
         """Loads session data from a JSON file."""
-        filepath = filedialog.askopenfilename(filetypes=[("JSON", "*.json")])
+        filepath: str = filedialog.askopenfilename(filetypes=[("JSON", "*.json")])
         if not filepath:
             return None
             

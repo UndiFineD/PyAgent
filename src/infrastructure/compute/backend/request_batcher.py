@@ -1,34 +1,30 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
 
+from .BatchRequest import BatchRequest
+
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from enum import Enum
+from pathlib import Path
+from queue import PriorityQueue
+from typing import Any, Callable, Dict, List, Optional, Tuple
+import hashlib
+import json
+import logging
+import os
+import re
+import subprocess
 import threading
 import time
-
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import \
-    LocalContextRecorder
-
-from .batch_request import BatchRequest
+import uuid
 
 # Infrastructure
-__version__ = VERSION
-
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 
 class RequestBatcher:
     """Batches multiple requests for efficient processing.
@@ -47,7 +43,7 @@ class RequestBatcher:
         self,
         batch_size: int = 10,
         timeout_s: float = 5.0,
-        recorder: LocalContextRecorder | None = None,
+        recorder: Optional[LocalContextRecorder] = None,
     ) -> None:
         """Initialize request batcher.
 
@@ -59,9 +55,9 @@ class RequestBatcher:
         self.batch_size = batch_size
         self.timeout_s = timeout_s
         self.recorder = recorder
-        self._buffer: list[str] = []
+        self._buffer: List[str] = []
         self._lock = threading.Lock()
-        self._batch_start: float | None = None
+        self._batch_start: Optional[float] = None
 
     def add(self, prompt: str) -> bool:
         """Add request to current batch.
@@ -87,7 +83,7 @@ class RequestBatcher:
                 return bool(self._buffer)
             return False
 
-    def get_batch(self) -> BatchRequest | None:
+    def get_batch(self) -> Optional[BatchRequest]:
         """Get current batch and reset buffer.
 
         Returns:
@@ -96,10 +92,10 @@ class RequestBatcher:
         with self._lock:
             if not self._buffer:
                 return None
-
+            
             if self.recorder:
                 self.recorder.record_lesson("batch_created", {"size": len(self._buffer)})
-
+                
             batch = BatchRequest(requests=self._buffer.copy())
             self._buffer.clear()
             self._batch_start = None

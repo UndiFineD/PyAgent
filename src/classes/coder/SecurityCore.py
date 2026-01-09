@@ -8,9 +8,12 @@ This is designed for high-performance static analysis and future Rust migration.
 
 import re
 import logging
+import time
+from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 from .SecurityIssueType import SecurityIssueType
 from .SecurityVulnerability import SecurityVulnerability
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 
 class SecurityCore:
     """Pure logic core for security and safety validation."""
@@ -44,6 +47,20 @@ class SecurityCore:
 
     def __init__(self, workspace_root: Optional[str] = None) -> None:
         self.workspace_root = workspace_root
+        self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
+
+    def _record_finding(self, issue_type: str, severity: str, desc: str) -> None:
+        """Records security findings for fleet intelligence (Phase 108)."""
+        if self.recorder:
+            try:
+                self.recorder.record_lesson("security_vulnerability", {
+                    "type": issue_type,
+                    "severity": severity,
+                    "description": desc,
+                    "timestamp": time.time()
+                })
+            except Exception as e:
+                logging.debug(f"SecurityCore: Failed to record finding: {e}")
 
     def scan_content(self, content: str) -> List[SecurityVulnerability]:
         """Performs a comprehensive scan of the provided content."""
@@ -53,24 +70,27 @@ class SecurityCore:
         for i, line in enumerate(lines, 1):
             for pattern, issue_type, severity, desc, fix in self.SECURITY_PATTERNS:
                 if re.search(pattern, line):
-                    vulnerabilities.append(SecurityVulnerability(
+                    vuln = SecurityVulnerability(
                         type=issue_type,
                         severity=severity,
                         description=desc,
                         line_number=i,
                         fix_suggestion=fix
-                    ))
+                    )
+                    vulnerabilities.append(vuln)
+                    self._record_finding(issue_type.value, severity, desc)
         
         # Add injection scanning
         injection_findings = self.scan_for_injection(content)
         for inf in injection_findings:
              vulnerabilities.append(SecurityVulnerability(
-                type=SecurityIssueType.OTHER, # Could add INJECTION_ATTEMPT to SecurityIssueType
+                type=SecurityIssueType.INJECTION_ATTEMPT,
                 severity="high",
                 description=inf,
                 line_number=0,
                 fix_suggestion="Sanitize all inputs and wrap specialized instructions in strict boundaries."
             ))
+             self._record_finding(SecurityIssueType.INJECTION_ATTEMPT.value, "high", inf)
             
         return vulnerabilities
 

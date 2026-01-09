@@ -8,6 +8,9 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 from ..models import FilePriority, BatchResult
 
+# Infrastructure
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+
 if TYPE_CHECKING:
     from ..agent import BaseAgent
 
@@ -45,9 +48,10 @@ class BatchRequest:
 class RequestBatcher:
     """Batch processor for multiple file requests."""
 
-    def __init__(self, batch_size: int = 10, max_concurrent: int = 4) -> None:
+    def __init__(self, batch_size: int = 10, max_concurrent: int = 4, recorder: Optional[LocalContextRecorder] = None) -> None:
         self.batch_size = batch_size
         self.max_concurrent = max_concurrent
+        self.recorder = recorder
         self.queue: List[BatchRequest] = []
         self.results: List[BatchResult] = []
         logging.debug(f"RequestBatcher initialized with batch_size={batch_size}")
@@ -71,6 +75,10 @@ class RequestBatcher:
         sorted_requests = self._sort_by_priority()
         batch = sorted_requests[:self.batch_size]
         results: List[BatchResult] = []
+        
+        if self.recorder:
+            self.recorder.record_lesson("batch_processing_start", {"batch_size": len(batch)})
+            
         for request in batch:
             start_time = time.time()
             try:

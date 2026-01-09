@@ -1,38 +1,21 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
 
+from .MockResponse import MockResponse
+from .MockResponseType import MockResponseType
+
+from typing import Dict, List, Tuple, Optional
 import logging
 import re
-import threading
 import time
+import threading
 from pathlib import Path
 
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.compute.backend.local_context_recorder import \
-    LocalContextRecorder
-
-from .mock_response import MockResponse
-from .mock_response_type import MockResponseType
-
 # Infrastructure
-__version__ = VERSION
-
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 
 class MockAIBackend:
     """Mock AI backend for testing.
@@ -46,12 +29,12 @@ class MockAIBackend:
         result=mock.call("prompt1")
     """
 
-    def __init__(self, workspace_root: str | None = None) -> None:
+    def __init__(self, workspace_root: Optional[str] = None) -> None:
         """Initialize mock backend."""
-        self._responses: dict[str, MockResponse] = {}
+        self._responses: Dict[str, MockResponse] = {}
         self._default_response = MockResponse(content="Mock response")
-        self._call_history: list[tuple[str, float]] = []
-        self._response_sequence: list[MockResponse] = []
+        self._call_history: List[Tuple[str, float]] = []
+        self._response_sequence: List[MockResponse] = []
         self._sequence_index: int = 0
         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
 
@@ -124,7 +107,7 @@ class MockAIBackend:
 
         return response.content
 
-    def add_response_sequence(self, responses: list[MockResponse]) -> None:
+    def add_response_sequence(self, responses: List[MockResponse]) -> None:
         """Add a sequence of responses for sequential calls.
 
         Args:
@@ -140,9 +123,12 @@ class MockAIBackend:
             response_type: Type of error response.
             message: Error message.
         """
-        self._default_response = MockResponse(response_type=response_type, error_message=message)
+        self._default_response = MockResponse(
+            response_type=response_type,
+            error_message=message
+        )
 
-    def get_call_history(self) -> list[tuple[str, float]]:
+    def get_call_history(self) -> List[Tuple[str, float]]:
         """Get history of calls made."""
         return list(self._call_history)
 

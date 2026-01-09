@@ -74,10 +74,19 @@ class KernelAgent(BaseAgent):
             output = f"STDOUT:\n{result.stdout}\n"
             if result.stderr:
                 output += f"STDERR:\n{result.stderr}\n"
+            
+            # Intelligence Harvesting (Phase 108)
+            if self.recorder:
+                self.recorder.record_lesson("kernel_shell_exec", {"command": command, "exit_code": result.returncode})
+                
             return output
         except subprocess.TimeoutExpired:
+            if self.recorder:
+                self.recorder.record_lesson("kernel_shell_timeout", {"command": command})
             return "Error: Command timed out after 30 seconds."
         except Exception as e:
+            if self.recorder:
+                self.recorder.record_lesson("kernel_shell_error", {"command": command, "error": str(e)})
             return f"Error executing command: {e}"
 
     @as_tool

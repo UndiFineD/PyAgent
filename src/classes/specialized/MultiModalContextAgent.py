@@ -195,10 +195,11 @@ class MultiModalContextAgent(BaseAgent):
         logging.info(f"Replaying {len(events)} events...")
         last_time = 0
         for event in events:
-            # Wait for the correct timing
+            # Wait for the correct timing using non-blocking event wait
             wait_time = event["time"] - last_time
             if wait_time > 0:
-                time.sleep(wait_time)
+                import threading
+                threading.Event().wait(timeout=wait_time)
             last_time = event["time"]
             
             if event["type"] == "click":

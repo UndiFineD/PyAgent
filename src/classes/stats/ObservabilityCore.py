@@ -30,7 +30,7 @@ class ObservabilityCore:
     def __init__(self) -> None:
         self.metrics_history: List[AgentMetric] = []
 
-    def process_metric(self, metric: AgentMetric):
+    def process_metric(self, metric: AgentMetric) -> None:
         """Standardizes a metric entry."""
         self.metrics_history.append(metric)
 

@@ -8,11 +8,23 @@ from typing import List, Optional
 class AgentGitHandler:
     """Handles git operations for the Agent."""
     
-    def __init__(self, repo_root: Path, no_git: bool = False) -> None:
+    def __init__(self, repo_root: Path, no_git: bool = False, recorder=None) -> None:
         self.repo_root = repo_root
         self.no_git = no_git
+        self.recorder = recorder
 
-    def commit_changes(self, message: str, files: Optional[List[str]] = None):
+    def _record(self, action: str, result: str, meta: Optional[dict] = None) -> None:
+        """Internal helper to record git operations if recorder is available."""
+        if self.recorder:
+            self.recorder.record_interaction(
+                provider="Git",
+                model="cli",
+                prompt=action,
+                result=result,
+                meta=meta
+            )
+
+    def commit_changes(self, message: str, files: Optional[List[str]] = None) -> None:
         """Commit changes to the repository."""
         if self.no_git:
             logging.info(f"Skipping git commit: no_git=True. Message: {message}")
@@ -33,12 +45,16 @@ class AgentGitHandler:
 
             subprocess.run(["git", "commit", "-m", message], cwd=self.repo_root, check=True, capture_output=True)
             logging.info(f"Successfully committed changes: {message}")
+            self._record(f"commit: {message}", "success", {"files": files})
         except subprocess.CalledProcessError as e:
-            logging.error(f"Git commit failed: {e.stderr.strip() if e.stderr else e}")
+            err_msg = e.stderr.strip() if e.stderr else str(e)
+            logging.error(f"Git commit failed: {err_msg}")
+            self._record(f"commit: {message}", f"failed: {err_msg}")
         except Exception as e:
             logging.error(f"Error during git commit: {e}")
+            self._record(f"commit: {message}", f"error: {str(e)}")
 
-    def create_branch(self, branch_name: str):
+    def create_branch(self, branch_name: str) -> None:
         """Create and switch to a new branch."""
         if self.no_git: return
         try:
