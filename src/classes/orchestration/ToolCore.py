@@ -9,6 +9,7 @@ class ToolMetadata(BaseModel):
     parameters: Dict[str, Any]
     owner: str # Name of the agent providing this tool
     category: str = "general"
+    priority: int = 0
 
 class ToolCore:
     """
@@ -16,7 +17,7 @@ class ToolCore:
     Handles parameter introspection and argument filtering.
     """
 
-    def extract_metadata(self, owner_name: str, func: Callable, category: str) -> ToolMetadata:
+    def extract_metadata(self, owner_name: str, func: Callable, category: str, priority: int = 0) -> ToolMetadata:
         """Extracts ToolMetadata from a function signature."""
         name: str = func.__name__
         doc: str = func.__doc__ or "No description provided."
@@ -33,7 +34,8 @@ class ToolCore:
             description=doc.split('\n')[0].strip(),
             parameters=params,
             owner=owner_name,
-            category=category
+            category=category,
+            priority=priority
         )
 
     def filter_arguments(self, func: Callable, args_dict: Dict[str, Any]) -> Dict[str, Any]:

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
+from src.version import VERSION
 import sys
 from pathlib import Path
 

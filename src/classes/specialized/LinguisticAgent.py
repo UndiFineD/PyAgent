@@ -27,6 +27,8 @@ class LinguisticAgent(BaseAgent):
         Args:
             technical_report: The raw output from the StructuredOrchestrator.
             user_query: The original user question.
+        Return:
+            A natural language summary.
         """
         logging.info("LinguisticAgent: Articulating technical report...")
         

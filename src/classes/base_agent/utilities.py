@@ -42,10 +42,60 @@ def setup_logging(verbosity_arg: int = 0) -> None:
     )
 
 
-def as_tool(func: Callable) -> Callable:
-    """Decorator to mark a method as a tool for the ToolRegistry."""
-    func._is_tool = True
-    return func
+def as_tool(priority: int = 0, category: Optional[str] = None) -> Callable:
+    """Decorator to mark a method as a tool for the ToolRegistry.
+    Automatically records tool interactions to the fleet context shards for autonomous learning.
+    Can be used as @as_tool or @as_tool(priority=10).
+    """
+    from functools import wraps
+    import time
+
+    def decorator(func: Callable) -> Callable:
+        @wraps(func)
+        def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
+            # Phase 108: Enhanced Traceability
+            logging.debug(f"Executing tool {func.__name__} on {self.__class__.__name__}")
+            
+            result = func(self, *args, **kwargs)
+            
+            # Autonomous Logic Harvesting:
+            if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
+                try:
+                    shard_result = str(result)
+                    if len(shard_result) > 2000:
+                        shard_result = shard_result[:2000] + "... [TRUNCATED]"
+                    
+                    prompt_trace = f"TOOL_EXECUTION: {func.__name__}\nArgs: {args}\nKwargs: {kwargs}"
+                    
+                    self.fleet.recorder.record_interaction(
+                        provider="agent_tool",
+                        model=self.__class__.__name__,
+                        prompt=prompt_trace,
+                        result=shard_result,
+                        meta={
+                            "tool": func.__name__,
+                            "agent": self.__class__.__name__,
+                            "timestamp_ms": int(time.time() * 1000)
+                        }
+                    )
+                except Exception as e:
+                    logging.debug(f"Failed to record tool interaction: {e}")
+                    
+            return result
+
+        wrapper._is_tool = True
+        wrapper._tool_priority = priority
+        if category:
+            wrapper._tool_category = category
+        return wrapper
+
+    # Support @as_tool without parentheses
+    if callable(priority):
+        f = priority
+        priority = 0
+        return decorator(f)
+        
+    return decorator
 
 def create_main_function(
     agent_class: Type[BaseAgent],

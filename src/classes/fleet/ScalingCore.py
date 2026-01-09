@@ -13,7 +13,7 @@ class ScalingCore:
         self.window_size = window_size
         self.load_metrics: Dict[str, List[float]] = {}
 
-    def add_metric(self, key: str, value: float) -> bool:
+    def add_metric(self, key: str, value: float) -> None:
         if key not in self.load_metrics:
             self.load_metrics[key] = []
         self.load_metrics[key].append(value)

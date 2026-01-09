@@ -1,3 +1,6 @@
+# from src.version import VERSION
+
+__logic_category__ = "General"
 """Vibe-Coding (2025) Specialized Prompt Templates."""
 
 VIBE_CODING_2025_TRACKS = {

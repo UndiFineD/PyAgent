@@ -8,8 +8,10 @@ Pure logic for OpenAPI spec generation and tool contract validation.
 import json
 from typing import Dict, List, Any
 
+from src.version import SDK_VERSION
+
 class APICore:
-    def __init__(self, version: str = "1.0.0") -> None:
+    def __init__(self, version: str = SDK_VERSION) -> None:
         self.version = version
 
     def build_openapi_json(self, tool_definitions: List[Dict[str, Any]]) -> str:

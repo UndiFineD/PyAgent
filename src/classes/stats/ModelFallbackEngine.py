@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import logging
-from typing import List, Optional, Dict
+from typing import List, Optional, Dict, Any
 from src.classes.stats.TokenCostEngine import TokenCostEngine
 from .ModelFallbackCore import ModelFallbackCore
 
@@ -11,8 +11,11 @@ class ModelFallbackEngine:
     Shell for ModelFallbackCore.
     """
 
-    def __init__(self, cost_engine: Optional[TokenCostEngine] = None) -> None:
-        self.cost_engine = cost_engine
+    def __init__(self, cost_engine: Optional[TokenCostEngine] = None, fleet: Optional[Any] = None) -> None:
+        if fleet and hasattr(fleet, "telemetry") and not cost_engine:
+            self.cost_engine = fleet.telemetry.cost_engine
+        else:
+            self.cost_engine = cost_engine
         self.core = ModelFallbackCore()
         self.max_retries = 3
 

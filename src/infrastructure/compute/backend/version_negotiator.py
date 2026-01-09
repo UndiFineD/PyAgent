@@ -1,30 +1,29 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
 
+from .BackendVersion import BackendVersion
+
+from abc import ABC, abstractmethod
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from enum import Enum
+from pathlib import Path
+from queue import PriorityQueue
+from typing import Any, Callable, Dict, List, Optional, Tuple
+import hashlib
+import json
 import logging
+import os
+import re
+import subprocess
+import threading
+import time
+import uuid
 
-from src.core.base.lifecycle.version import SDK_VERSION, VERSION
-
-from .system_version import SystemVersion
-
-__version__ = VERSION
-
+from src.version import SDK_VERSION
 
 class VersionNegotiator:
     """Negotiates API versions with backends.
@@ -40,16 +39,16 @@ class VersionNegotiator:
 
     def __init__(self) -> None:
         """Initialize version negotiator."""
-        self._versions: dict[str, SystemVersion] = {}
+        self._versions: Dict[str, BackendVersion] = {}
         self._client_version = SDK_VERSION
 
     def register_backend(
         self,
         backend: str,
         version: str,
-        capabilities: list[str] | None = None,
+        capabilities: Optional[List[str]] = None,
         api_version: str = "v1",
-    ) -> SystemVersion:
+    ) -> BackendVersion:
         """Register backend version information.
 
         Args:
@@ -59,10 +58,10 @@ class VersionNegotiator:
             api_version: API version string.
 
         Returns:
-            SystemVersion: Registered version info.
+            BackendVersion: Registered version info.
         """
-        backend_version = SystemVersion(
-            component=backend,
+        backend_version = BackendVersion(
+            backend=backend,
             version=version,
             capabilities=capabilities or [],
             api_version=api_version,
@@ -73,8 +72,8 @@ class VersionNegotiator:
     def negotiate(
         self,
         backend: str,
-        required: list[str] | None = None,
-    ) -> SystemVersion | None:
+        required: Optional[List[str]] = None,
+    ) -> Optional[BackendVersion]:
         """Negotiate version with backend.
 
         Args:
@@ -82,7 +81,7 @@ class VersionNegotiator:
             required: Required capabilities.
 
         Returns:
-            Optional[SystemVersion]: Negotiated version or None if incompatible.
+            Optional[BackendVersion]: Negotiated version or None if incompatible.
         """
         version = self._versions.get(backend)
         if not version:
@@ -96,6 +95,6 @@ class VersionNegotiator:
 
         return version
 
-    def get_all_versions(self) -> dict[str, SystemVersion]:
+    def get_all_versions(self) -> Dict[str, BackendVersion]:
         """Get all registered backend versions."""
         return dict(self._versions)

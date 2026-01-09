@@ -5,47 +5,9 @@
 import os
 import json
 import logging
-import re
-import ast
 from pathlib import Path
 from typing import Dict, List, Set, Any, Optional
-
-class CodeGraphVisitor(ast.NodeVisitor):
-    """AST visitor to extract imports, classes, and function calls."""
-    def __init__(self, file_path: str) -> None:
-        self.file_path = file_path
-        self.imports: Set[str] = set()
-        self.classes: List[str] = []
-        self.calls: Set[str] = set()
-        self.bases: Dict[str, List[str]] = {}
-
-    def visit_Import(self, node: ast.Import) -> None:
-        for alias in node.names:
-            self.imports.add(alias.name)
-        self.generic_visit(node)
-
-    def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
-        if node.module:
-            self.imports.add(node.module)
-        self.generic_visit(node)
-
-    def visit_ClassDef(self, node: ast.ClassDef) -> None:
-        self.classes.append(node.name)
-        bases = []
-        for base in node.bases:
-            if isinstance(base, ast.Name):
-                bases.append(base.id)
-            elif isinstance(base, ast.Attribute):
-                bases.append(base.attr)
-        self.bases[node.name] = bases
-        self.generic_visit(node)
-
-    def visit_Call(self, node: ast.Call) -> None:
-        if isinstance(node.func, ast.Name):
-            self.calls.add(node.func.id)
-        elif isinstance(node.func, ast.Attribute):
-            self.calls.add(node.func.attr)
-        self.generic_visit(node)
+from .GraphCore import GraphCore
 
 class GraphContextEngine:
     """Manages an adjacency list of file and class dependencies."""
@@ -56,6 +18,7 @@ class GraphContextEngine:
         self.metadata: Dict[str, Any] = {}
         self.symbols: Dict[str, Any] = {}
         self.persist_file = self.workspace_root / ".agent_graph.json"
+        self.core = GraphCore()
         self.load()
 
     def add_edge(self, source: str, target: str, relationship: str = "imports") -> None:
@@ -78,28 +41,25 @@ class GraphContextEngine:
             
             rel_path = str(py_file.relative_to(self.workspace_root))
             try:
-                tree = ast.parse(py_file.read_text(encoding="utf-8"))
-                visitor = CodeGraphVisitor(rel_path)
-                visitor.visit(tree)
-                
-                # Add file level dependencies
-                for imp in visitor.imports:
-                    self.add_edge(rel_path, imp, "imports")
+                content = py_file.read_text(encoding="utf-8")
+                analysis = self.core.parse_python_content(rel_path, content)
                 
                 # Store symbol info
                 self.symbols[rel_path] = {
-                    "classes": visitor.classes,
-                    "inherits": visitor.bases,
-                    "calls": list(visitor.calls)
+                    "classes": analysis["classes"],
+                    "inherits": analysis["inherits"],
+                    "calls": analysis["calls"]
                 }
-                
-                # Add class level edges
-                for cls, bases in visitor.bases.items():
-                    for base in bases:
-                        self.add_edge(f"{rel_path}::{cls}", base, "inherits")
+
+                # Build and add edges
+                edges = self.core.build_edges(analysis)
+                for source, target, rel in edges:
+                    self.add_edge(source, target, rel)
 
             except Exception as e:
-                logging.debug(f"Could not scan {rel_path}: {e}")
+                logging.error(f"GraphContextEngine: Failed to scan {rel_path}: {e}")
+        
+        self.save()
 
     def get_impact_radius(self, node: str, max_depth: int = 3) -> Set[str]:
         """Find all nodes that depend on the given node (inverse of graph)."""

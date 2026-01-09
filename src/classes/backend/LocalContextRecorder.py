@@ -11,8 +11,14 @@ class LocalContextRecorder:
     Optimized for trillion-parameter data harvesting (Phase 105).
     """
 
-    def __init__(self, workspace_root: Path, user_context: str = "System") -> None:
-        self.workspace_root = Path(workspace_root)
+    def __init__(self, workspace_root: Path = None, user_context: str = "System", fleet: Any = None) -> None:
+        if fleet and hasattr(fleet, "workspace_root"):
+            self.workspace_root = Path(fleet.workspace_root)
+        elif workspace_root:
+            self.workspace_root = Path(workspace_root)
+        else:
+            self.workspace_root = Path(".")
+            
         self.user_context = user_context
         self.log_dir = self.workspace_root / "logs" / "external_ai_learning"
         self.log_dir.mkdir(parents=True, exist_ok=True)

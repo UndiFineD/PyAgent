@@ -11,7 +11,7 @@ from typing import Any
 class CommunityOrchestrator:
     """Mock orchestrator that coordinates between agents."""
     
-    def __init__(self, fleet: Any = None):
+    def __init__(self, fleet: Any = None) -> None:
         self.fleet = fleet
         self.name = "CommunityOrchestrator"
         logging.info(f"{self.name} initialized.")

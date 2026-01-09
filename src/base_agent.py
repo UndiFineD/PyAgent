@@ -1,3 +1,4 @@
+__logic_category__ = "General"
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
@@ -5,6 +6,8 @@
 Base Agent Module: Core agent functionality and CLI entry points.
 """
 
+
+from src.version import VERSION
 import sys
 from pathlib import Path
 
@@ -16,7 +19,8 @@ if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
 # Modular imports from the new class hierarchy
-import agent_backend
+# import agent_backend
+
 from src.classes.base_agent import *
 
 # Shared CLI helper instance
@@ -28,4 +32,3 @@ main = create_main_function(
 
 if __name__ == "__main__":
     main()
-

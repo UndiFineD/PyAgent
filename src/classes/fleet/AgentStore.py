@@ -13,7 +13,7 @@ class AgentStore:
     """Marketplace for agent templates and specialized configurations."""
 
     def __init__(self, store_path: str) -> None:
-        self.store_path = Path(store_path)
+        self.store_path: Path = Path(store_path)
         self.store_path.mkdir(parents=True, exist_ok=True)
         self.templates: Dict[str, Dict[str, Any]] = {
             "SqlExpert": {
@@ -36,10 +36,10 @@ class AgentStore:
         if template_name not in self.templates:
             return None
             
-        template = self.templates[template_name]
-        price = template["price"]
+        template: Dict[str, Any] = self.templates[template_name]
+        price: float = float(template["price"])
         
-        if economy.transfer_credits(agent_id, "STORE", price, f"Purchase template: {template_name}"):
+        if hasattr(economy, "transfer_credits") and economy.transfer_credits(agent_id, "STORE", price, f"Purchase template: {template_name}"):
             logging.info(f"{agent_id} purchased {template_name} for {price} credits.")
             return template
             

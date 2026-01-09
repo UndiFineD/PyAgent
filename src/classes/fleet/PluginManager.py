@@ -13,10 +13,7 @@ from typing import Dict, List, Any, Optional
 from .VersionGate import VersionGate
 
 # Import local version for gatekeeping
-try:
-    from src.version import SDK_VERSION
-except ImportError:
-    SDK_VERSION = "1.0.0"
+from src.version import SDK_VERSION
 
 class PluginManager:
     """

@@ -8,11 +8,13 @@ Ready for conversion to a Rust library with strong typing.
 
 import re
 from typing import List, Dict, Any, Optional
+from ..base_agent.core import BaseCore
 
-class AgentCore:
+class AgentCore(BaseCore):
     """Logic-only core for managing improvement tasks and state."""
 
-    def __init__(self, settings: Optional[Dict[str, Any]] = None) -> None:
+    def __init__(self, workspace_root: Optional[str] = None, settings: Optional[Dict[str, Any]] = None) -> None:
+        super().__init__(workspace_root=workspace_root)
         self.settings = settings or {}
 
     def parse_improvements_content(self, content: str) -> List[str]:
@@ -101,3 +103,23 @@ class AgentCore:
                 remaining.append(item)
                 
         return prioritized + remaining
+
+    def get_agent_command(self, python_exe: str, script_name: str, context_file: str, prompt: str, strategy: str) -> List[str]:
+        """
+        Pure logic for generating agent execution commands.
+        """
+        import sys
+        from pathlib import Path
+        
+        # Calculate script path logic (pure path manipulation)
+        # Note: script_name is like 'agent_errors.py'
+        
+        # We assume the script is in the root's parent of classes (src/)
+        # But since this is pure logic, we just return the calculated list.
+        return [
+            python_exe,
+            script_name,
+            '--context', context_file,
+            '--prompt', prompt,
+            '--strategy', strategy
+        ]
