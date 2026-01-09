@@ -5,6 +5,7 @@
 Test Utils: Common utilities for agent and backend unit tests.
 """
 
+from src.version import VERSION
 import sys
 from pathlib import Path
 from contextlib import contextmanager

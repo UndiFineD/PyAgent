@@ -3,115 +3,60 @@
 """
 KnowledgeCore logic for specialized workspace analysis.
 Contains pure regex and indexing logic for fast symbol discovery.
+This file is optimized for Rust migration (Phase 114).
 """
 
 import re
-import json
 import logging
-import sqlite3
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, Tuple
 
 class KnowledgeCore:
     """
-    KnowledgeCore logic for specialized workspace analysis.
-    Uses SQLite FTS5 for extreme scalability (Trillion-Parameter compatible).
+    KnowledgeCore performs pure computational analysis of workspace symbols.
+    No I/O or database operations are allowed here to ensure Rust portability.
     """
     
-    def __init__(self, workspace_root: Optional[str] = None) -> None:
-        self.workspace_root = Path(workspace_root) if workspace_root else None
-        self.db_path = self.workspace_root / "agent_store" / "knowledge_graph.db" if self.workspace_root else None
-        self._init_db()
+    def __init__(self, fleet: Optional[Any] = None) -> None:
+        self.fleet = fleet
 
-    def _init_db(self) -> None:
-        """Initializes the SQLite FTS5 database for high-performance indexing."""
-        if not self.db_path:
-            return
-        
-        self.db_path.parent.mkdir(parents=True, exist_ok=True)
-        try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            # FTS5 table for fast symbol/content search
-            cursor.execute("""
-                CREATE VIRTUAL TABLE IF NOT EXISTS symbols_idx USING fts5(
-                    symbol, file_path, category, content UNINDEXED
-                )
-            """)
-            # Interaction storage for AI lessons (Phase 108)
-            cursor.execute("""
-                CREATE TABLE IF NOT EXISTS ai_lessons (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    prompt_hash TEXT UNIQUE,
-                    lesson TEXT,
-                    importance REAL,
-                    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
-                )
-            """)
-            conn.commit()
-            conn.close()
-        except Exception as e:
-            logging.error(f"Failed to initialize KnowledgeCore DB: {e}")
+    def extract_symbols(self, content: str, pattern: str) -> List[str]:
+        """Generic symbol extractor using optimized regex."""
+        if not content:
+            return []
+        return re.findall(pattern, content)
 
-    def extract_symbols_from_python(self, content: str) -> List[str]:
+    def extract_python_symbols(self, content: str) -> List[str]:
         """Extracts class and function names from Python content."""
-        if not content:
-            return []
-        return re.findall(r"(?:class|def)\s+([a-zA-Z_][a-zA-Z0-9_]*)", content)
+        return self.extract_symbols(content, r"(?:class|def)\s+([a-zA-Z_][a-zA-Z0-9_]*)")
 
-    def extract_backlinks_from_markdown(self, content: str) -> List[str]:
+    def extract_markdown_backlinks(self, content: str) -> List[str]:
         """Extracts [[WikiStyle]] backlinks from markdown content."""
-        if not content:
-            return []
-        return re.findall(r"\[\[(.*?)\]\]", content)
+        return self.extract_symbols(content, r"\[\[(.*?)\]\]")
 
-    def build_symbol_map(self, root: Path, extension_patterns: Dict[str, str]) -> Dict[str, List[str]]:
+    def process_file_content(self, rel_path: str, content: str, extension: str) -> List[Tuple[str, str, str, str]]:
         """
-        Scans a directory and indexes symbols in SQLite for fast retrieval.
-        Optimized for massive datasets with transaction batching.
+        Parses content and returns a list of (symbol, path, category, snippet) tuples.
+        This is a pure function ready for Rust conversion.
         """
-        symbol_map = {}
-        if not self.db_path:
-            return {}
+        results: List[Tuple[str, str, str, str]] = []
+        
+        if extension == ".py":
+            symbols = self.extract_python_symbols(content)
+            for s in symbols:
+                results.append((s, rel_path, "python_symbol", content[:500]))
+        elif extension == ".md":
+            links = self.extract_markdown_backlinks(content)
+            for l in links:
+                results.append((f"link:{l}", rel_path, "markdown_link", content[:500]))
+        
+        return results
 
-        try:
-            conn = sqlite3.connect(self.db_path)
-            cursor = conn.cursor()
-            cursor.execute("DELETE FROM symbols_idx") # Refresh index
-            
-            batch_data = []
-            for ext, pattern in extension_patterns.items():
-                for p in root.rglob(f"*{ext}"):
-                    if any(part in str(p) for part in ["__pycache__", "venv", ".git", "node_modules"]):
-                        continue
-                    try:
-                        content = p.read_text(encoding="utf-8")
-                        matches = re.findall(pattern, content)
-                        rel_path = str(p.relative_to(root))
-                        
-                        for match in matches:
-                            key = match if ext != ".md" else f"link:{match}"
-                            category = "python_symbol" if ext == ".py" else "markdown_link"
-                            batch_data.append((key, rel_path, category, content[:1000]))
-                            
-                            if key not in symbol_map: 
-                                symbol_map[key] = []
-                            symbol_map[key].append(rel_path)
-                            
-                        # Commit in batches of 500 records
-                        if len(batch_data) >= 500:
-                            cursor.executemany("INSERT INTO symbols_idx VALUES (?, ?, ?, ?)", batch_data)
-                            batch_data = []
-                            
-                    except Exception as e:
-                        logging.debug(f"Failed to scan {p}: {e}")
-            
-            if batch_data:
-                cursor.executemany("INSERT INTO symbols_idx VALUES (?, ?, ?, ?)", batch_data)
-                
-            conn.commit()
-            conn.close()
-        except Exception as e:
-            logging.error(f"KnowledgeCore indexing failed: {e}")
-            
-        return symbol_map
+    def compute_similarity(self, text_a: str, text_b: str) -> float:
+        """Computes basic string similarity (Jaccard) for symbol matching."""
+        set_a = set(re.findall(r"\w+", text_a.lower()))
+        set_b = set(re.findall(r"\w+", text_b.lower()))
+        if not set_a or not set_b:
+            return 0.0
+        intersection = len(set_a.intersection(set_b))
+        union = len(set_a.union(set_b))
+        return float(intersection) / union

@@ -44,6 +44,7 @@ class SelfHealingCore:
             status.error_count = max(0, status.error_count - 1)
         
         status.is_alive = (status.error_count < self.max_errors)
+        return status.is_alive
 
     def detect_failures(self) -> List[str]:
         """Returns a list of agent names that are considered failed."""

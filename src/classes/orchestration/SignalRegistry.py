@@ -16,7 +16,7 @@ class SignalRegistry:
     
     _instance = None
     
-    def __new__(cls) -> "SignalRegistry":
+    def __new__(cls, *args, **kwargs) -> "SignalRegistry":
         if cls._instance is None:
             cls._instance = super(SignalRegistry, cls).__new__(cls)
             cls._instance.subscribers = {} # signal_name -> list of callbacks

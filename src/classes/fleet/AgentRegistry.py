@@ -14,10 +14,7 @@ from .AgentRegistryCore import AgentRegistryCore
 from .BootstrapConfigs import BOOTSTRAP_AGENTS
 
 # Import local version for gatekeeping
-try:
-    from src.version import SDK_VERSION
-except ImportError:
-    SDK_VERSION = "1.0.0"
+from src.version import SDK_VERSION
 
 class LazyAgentMap(dict):
     """A dictionary that instantiates agents only when they are first accessed."""
@@ -35,8 +32,24 @@ class LazyAgentMap(dict):
         
         # 2. Dynamic Discovery (The most lazy/flexible)
         # Pre-scan ensures we know what's available without guessing inside __getitem__
-        self._discovered_configs: Dict[str, Tuple[str, str, str | None]] = self.core.scan_directory_for_agents(str(self.workspace_root))
+        discovered_files = self._scan_workspace_for_agents()
+        self._discovered_configs: Dict[str, Tuple[str, str, str | None]] = self.core.process_discovered_files(discovered_files)
         logging.info(f"Registry: Discovered {len(self._discovered_configs)} agents dynamically.")
+
+    def _scan_workspace_for_agents(self) -> List[str]:
+        """Performs the I/O-bound scanning of the workspace."""
+        subdirs = ["src/classes/specialized", "src/classes/coder", "src/classes/fleet", "src/classes/context", "plugins"]
+        found_paths = []
+        for subdir in subdirs:
+            search_root = self.workspace_root / subdir
+            if not search_root.exists():
+                continue
+            for root, _, files in os.walk(search_root):
+                for file in files:
+                    full_path = Path(root) / file
+                    rel_path = full_path.relative_to(self.workspace_root)
+                    found_paths.append(str(rel_path))
+        return found_paths
 
     def _load_manifests(self) -> Dict[str, tuple]:
         """Loads additional configurations from plugins/manifest.json or similar."""

@@ -19,8 +19,14 @@ class GlobalContextEngine:
     Shell for GlobalContextCore.
     """
     
-    def __init__(self, workspace_root: str) -> None:
-        self.workspace_root = Path(workspace_root)
+    def __init__(self, workspace_root: str = None, fleet: Any = None) -> None:
+        if fleet and hasattr(fleet, "workspace_root"):
+            self.workspace_root = Path(fleet.workspace_root)
+        elif workspace_root:
+            self.workspace_root = Path(workspace_root)
+        else:
+            self.workspace_root = Path(".")
+            
         self.context_file = self.workspace_root / ".agent_global_context.json"
         self.shard_dir = self.workspace_root / ".agent_shards"
         self.core = GlobalContextCore()

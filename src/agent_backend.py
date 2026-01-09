@@ -3,6 +3,7 @@
 
 """Multi-backend execution engine with fallback and caching capabilities."""
 
+from src.version import VERSION
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -16,7 +17,8 @@ if str(root / "src") not in sys.path:
 
 # Modular imports
 import requests
-import subprocess
+# import subprocess
+
 from src.classes.backend import *
 
 # Shared runner instance for functional compatibility

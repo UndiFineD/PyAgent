@@ -22,8 +22,14 @@ MetricsExporter = resilient_import("src.classes.stats.MetricsExporter", "Metrics
 class ObservabilityEngine:
     """Provides telemetry and performance tracking for the agent fleet."""
     
-    def __init__(self, workspace_root: str) -> None:
-        self.workspace_root = Path(workspace_root)
+    def __init__(self, workspace_root: str = None, fleet: Any = None) -> None:
+        if fleet and hasattr(fleet, "workspace_root"):
+            self.workspace_root = Path(fleet.workspace_root)
+        elif workspace_root:
+            self.workspace_root = Path(workspace_root)
+        else:
+            self.workspace_root = Path(".")
+            
         self.telemetry_file = self.workspace_root / ".agent_telemetry.json"
         self.core = ObservabilityCore()
         self.metrics: List[AgentMetric] = []

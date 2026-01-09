@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from dataclasses import dataclass, field
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 import time
 import logging
 
@@ -12,7 +12,7 @@ class AgentMetrics:
     files_modified: int = 0
     agents_applied: Dict[str, int] = field(default_factory=dict)
     start_time: float = field(default_factory=time.time)
-    end_time: float = None
+    end_time: Optional[float] = None
 
     def record_file_processed(self, modified: bool = False) -> None:
         """Record a file as processed."""

@@ -7,6 +7,9 @@ app = FastAPI(title="PyAgent MCP Server")
 mcp = FastApiMCP(app)
 
 # Initialize agents
+
+from src.version import VERSION
+__logic_category__ = "General"
 spec_agent = SpecToolAgent("spec_agent")
 memory_agent = GraphMemoryAgent("memory_agent")
 

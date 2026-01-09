@@ -8,44 +8,34 @@ class OrchestratorRegistryCore:
     """
     
     def __init__(self, current_sdk_version: str) -> None:
-        self.sdk_version = current_sdk_version
+        self.sdk_version: str = current_sdk_version
 
-    def scan_for_orchestrators(self, root_path: str, subdirs: List[str] = None) -> Dict[str, Tuple[str, str, bool, Optional[str]]]:
+    def process_discovered_files(self, file_paths: List[str]) -> Dict[str, Tuple[str, str, bool, Optional[str]]]:
         """
-        Scans directories for classes ending in 'Orchestrator'.
-        Returns compatible config dict.
+        Processes a list of file paths and extracts orchestrator configurations.
+        Expects relative paths from workspace root.
         """
-        discovered = {}
-        subdirs = subdirs or ["src/classes/orchestration", "src/classes/cognitive", "src/classes/fleet"]
+        discovered: Dict[str, Tuple[str, str, bool, Optional[str]]] = {}
         
-        for subdir in subdirs:
-            search_root = os.path.join(root_path, subdir)
-            if not os.path.exists(search_root):
-                continue
+        for rel_path in file_paths:
+            file = os.path.basename(rel_path)
+            if file.endswith(".py") and not file.startswith("__"):
+                class_name: str = file[:-3]
                 
-            for root, _, files in os.walk(search_root):
-                for file in files:
-                    if file.endswith(".py") and not file.startswith("__"):
-                        # Check content (heuristic) or name
-                        # Heuristic: file name typically matches class name
-                        class_name = file[:-3]
-                        
-                        if any(x in class_name for x in ["Orchestrator", "Manager", "Selector", "Engine", "Spawner", "Bridge"]):
-                             # Calculate module path
-                            full_path = os.path.join(root, file)
-                            rel_path = os.path.relpath(full_path, root_path)
-                            module_path = rel_path.replace(os.sep, ".").replace(".py", "")
-                            
-                            # Convert ClassName -> snake_case key
-                            # "SelfHealingOrchestrator" -> "self_healing"
-                            key = self._to_snake_case(class_name.replace("Orchestrator", ""))
-                            if not key: key = self._to_snake_case(class_name)
+                if any(x in class_name for x in ["Orchestrator", "Manager", "Selector", "Engine", "Spawner", "Bridge"]):
+                     # Calculate module path
+                    module_path: str = rel_path.replace(os.sep, ".").replace(".py", "")
+                    
+                    # Convert ClassName -> snake_case key
+                    # "SelfHealingOrchestrator" -> "self_healing"
+                    key: str = self._to_snake_case(class_name.replace("Orchestrator", ""))
+                    if not key: key = self._to_snake_case(class_name)
 
-                            # Default heuristic for 'needs_fleet'
-                            needs_fleet = any(x in class_name for x in ["Orchestrator", "Spawner", "Bridge", "Selector", "Engine"])
-                            
-                            # (module, class, needs_fleet, arg_path)
-                            discovered[key] = (module_path, class_name, needs_fleet, None)
+                    # Default heuristic for 'needs_fleet'
+                    needs_fleet: bool = any(x in class_name for x in ["Orchestrator", "Spawner", "Bridge", "Selector", "Engine"])
+                    
+                    # (module, class, needs_fleet, arg_path)
+                    discovered[key] = (module_path, class_name, needs_fleet, None)
 
         return discovered
 
@@ -59,16 +49,16 @@ class OrchestratorRegistryCore:
         Parses the raw manifest dictionary and filters incompatible plugins.
         Returns a dict of {Name: (module, class, needs_fleet, arg_path)}.
         """
-        valid_configs = {}
+        valid_configs: Dict[str, Tuple[str, str, bool, Optional[str]]] = {}
         for key, cfg in raw_manifest.items():
             # Expecting: "Name": ["module.path", "ClassName", needs_fleet, "arg_path", "min_sdk_version"]
             if isinstance(cfg, list) and len(cfg) >= 2:
                 # Version gate
-                min_sdk = cfg[4] if len(cfg) > 4 else "1.0.0"
+                min_sdk: str = cfg[4] if len(cfg) > 4 else "1.0.0"
                 
                 if self.is_compatible(min_sdk):
-                    needs_fleet = cfg[2] if len(cfg) > 2 else False
-                    arg_path = cfg[3] if len(cfg) > 3 else None
+                    needs_fleet: bool = cfg[2] if len(cfg) > 2 else False
+                    arg_path: Optional[str] = cfg[3] if len(cfg) > 3 else None
                     valid_configs[key] = (cfg[0], cfg[1], needs_fleet, arg_path)
                 
         return valid_configs

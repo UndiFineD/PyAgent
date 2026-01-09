@@ -29,12 +29,6 @@ from pathlib import Path
 from types import TracebackType
 from typing import Any, Callable, Dict, List, Optional, Type, cast, TYPE_CHECKING
 
-from src.classes.agent.LongTermMemory import LongTermMemory
-
-from src.classes.orchestration.SignalRegistry import SignalRegistry
-
-from src.classes.orchestration.ToolRegistry import ToolRegistry
-
 if TYPE_CHECKING:
     import agent_strategies
 
@@ -242,22 +236,9 @@ class BaseAgent:
         self._model: Optional[str] = None
         self._is_stop_requested = False
         
-        # Determine Workspace Root (Phase 108: Robust detection)
-        self._workspace_root = os.environ.get("PYAGENT_WORKSPACE_ROOT")
-        if not self._workspace_root:
-            # Fallback heuristic: search upwards for .git or requirements.txt
-            curr = self.file_path.absolute()
-            for _ in range(5):
-                if (curr / ".git").exists() or (curr / "requirements.txt").exists() or (curr / "README.md").exists():
-                    self._workspace_root = str(curr)
-                    break
-                if curr.parent == curr: break
-                curr = curr.parent
+        # Determine Workspace Root (Phase 108: Robust detection delegated to Core)
+        self._workspace_root = BaseCore.detect_workspace_root(self.file_path)
         
-        if not self._workspace_root:
-            # Last fallback: legacy logic (3 parents up from file_path)
-            self._workspace_root = str(self.file_path.parent.parent.parent)
-            
         self._local_global_context = None
 
         # Initialize Core Logic (Potential Rust Target)
@@ -307,33 +288,29 @@ class BaseAgent:
                 # Check for explicit category overridden on method
                 if hasattr(method, '_tool_category'):
                     category = method._tool_category
+                
+                # Check for priority
+                priority: int = getattr(method, '_tool_priority', 0)
                     
                 registry.register_tool(
                     func=method,
                     owner_name=self.__class__.__name__,
-                    category=category
+                    category=category,
+                    priority=priority
                 )
-                logging.debug(f"Registered tool {name} for {self.__class__.__name__}")
+                logging.debug(f"Registered tool {name} for {self.__class__.__name__} (Priority: {priority})")
 
     def _register_tools(self) -> None:
         """Automatically registers public methods with the ToolRegistry."""
         if not self.tool_registry:
             return
             
-        agent_name: str = self.__class__.__name__
-        # Register standard improve_content
-        self.tool_registry.register_tool(agent_name, self.improve_content, category="core")
+        self.register_tools(self.tool_registry)
         
-        # Register other public methods specifically marked or common ones
-        for attr_name in dir(self):
-            if attr_name.startswith('_') or attr_name in ['improve_content', 'registry', 'tool_registry', 'read_previous_content']:
-                continue
-            
-            attr = getattr(self, attr_name)
-            # Check both the attribute and the underlying function (for bound methods)
-            is_tool: bool = hasattr(attr, '_is_tool') or hasattr(getattr(attr, '__func__', None), '_is_tool')
-            if callable(attr) and is_tool:
-                self.tool_registry.register_tool(agent_name, attr, category="specialized")
+        # Also register the core capability if not already there
+        agent_name: str = self.__class__.__name__
+        if not self.tool_registry.get_tool(agent_name):
+             self.tool_registry.register_tool(agent_name, self.improve_content, category="core", priority=-1)
 
     def _load_config(self) -> AgentConfig:
         """Load agent configuration from environment variables.
@@ -498,13 +475,13 @@ class BaseAgent:
 
         Example:
             class TestsAgent(BaseAgent):
-                def _get_default_content(self) -> bool:
-                    return "# Tests\\n\\n# Add tests here\\n"
+                def _get_default_content(self) -> str:
+                    return "# Tests\n\n# Add tests here\n"
 
         Note:
             Called automatically by read_previous_content() for missing files.
         """
-        return "# Default content\n\n# Add content here\n"
+        return self.core.get_default_content(filename=self.file_path.name)
 
     def think(self, prompt: str, system_prompt: Optional[str] = None) -> str:
         """
@@ -989,28 +966,8 @@ class BaseAgent:
         Returns:
             Quality score enum value.
         """
-        if not response or response.isspace():
-            return ResponseQuality.INVALID
-
-        # Basic quality heuristics
-        score = 3  # Start at ACCEPTABLE
-
-        # Longer responses generally better (to a point)
-        if len(response) > 100:
-            score += 1
-        if len(response) < 20:
-            score -= 1
-
-        # Check for error indicators
-        error_indicators: List[str] = ["error", "failed", "unavailable", "unable"]
-        if any(ind in response.lower() for ind in error_indicators):
-            score -= 1
-
-        # Check for actual content
-        if response.strip().startswith("#") or "def " in response or "class " in response:
-            score += 1
-
-        return ResponseQuality(min(max(score, 1), 5))
+        score: int = self.core.score_response_quality(response)
+        return ResponseQuality(score)
 
     # ========== Cache Management ==========
 
@@ -1024,8 +981,7 @@ class BaseAgent:
         Returns:
             SHA256 hash key.
         """
-        combined: str = f"{prompt}:{content}:{self._model or ''}"
-        return hashlib.sha256(combined.encode()).hexdigest()[:16]
+        return self.core.generate_cache_key(prompt, content, model=self._model or "")
 
     @classmethod
     def clear_cache(cls) -> None:
@@ -1213,8 +1169,7 @@ class BaseAgent:
         Returns:
             Estimated token count (rough approximation).
         """
-        # Rough estimate: ~4 characters per token
-        return len(text) // 4
+        return self.core.estimate_tokens(text)
 
     def truncate_for_context(self, text: str, max_tokens: int) -> str:
         """Truncate text to fit within token limit.
@@ -1226,10 +1181,7 @@ class BaseAgent:
         Returns:
             Truncated text with ellipsis if truncated.
         """
-        max_chars: int = max_tokens * 4
-        if len(text) <= max_chars:
-            return text
-        return text[:max_chars - 20] + "\n... [truncated]"
+        return self.core.truncate_for_context(text, max_tokens)
 
     # ========== Agent Delegation ==========
 

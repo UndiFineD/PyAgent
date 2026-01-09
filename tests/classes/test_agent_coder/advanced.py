@@ -53,9 +53,9 @@ class TestAdvancedCodeFormatting(unittest.TestCase):
     def test_isort_import_organization(self):
         """Test isort for import statement organization."""
         _ = """import os
-import sys
-from typing import List
-import requests
+        import sys
+        from typing import List
+        import requests
 from pathlib import Path
 """  # noqa: F841
         # isort would organize these

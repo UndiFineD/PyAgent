@@ -3,6 +3,7 @@
 import importlib
 import logging
 import json
+import os
 from typing import Dict, Any, Optional, List
 from pathlib import Path
 from .ResilientStubs import ResilientStub
@@ -10,10 +11,7 @@ from .OrchestratorRegistryCore import OrchestratorRegistryCore
 from .BootstrapConfigs import BOOTSTRAP_ORCHESTRATORS
 
 # Import local version for gatekeeping
-try:
-    from src.version import SDK_VERSION
-except ImportError:
-    SDK_VERSION = "1.0.0"
+from src.version import SDK_VERSION
 
 class LazyOrchestratorMap:
     """A dictionary-like object that instantiates orchestrators only when accessed."""
@@ -21,19 +19,35 @@ class LazyOrchestratorMap:
         self.fleet = fleet_instance
         self.workspace_root = Path(fleet_instance.workspace_root)
         self._instances = {}
-        self.core = OrchestratorRegistryCore(SDK_VERSION)
+        self._registry_core = OrchestratorRegistryCore(SDK_VERSION)
         
         # 1. Manifest
         self._manifest_configs = self._load_manifests()
         
         # 2. Dynamic Discovery
-        self._discovered_configs = self.core.scan_for_orchestrators(str(self.workspace_root))
+        discovered_files = self._scan_workspace_for_orchestrators()
+        self._discovered_configs = self._registry_core.process_discovered_files(discovered_files)
         logging.info(f"Registry: Discovered {len(self._discovered_configs)} orchestrators.")
-
+        
         # Combined map: Bootstrap > Manifest > Discovery
         # Convert BOOTSTRAP_ORCHESTRATORS to the 4-tuple format (module, class, needs_fleet, arg)
         boot_configs = {k: (v[0], v[1], True, None) for k, v in BOOTSTRAP_ORCHESTRATORS.items()}
         self._configs = {**self._discovered_configs, **self._manifest_configs, **boot_configs}
+
+    def _scan_workspace_for_orchestrators(self) -> List[str]:
+        """Performs the I/O-bound scanning of the workspace."""
+        subdirs = ["src/classes/orchestration", "src/classes/cognitive", "src/classes/fleet"]
+        found_paths = []
+        for subdir in subdirs:
+            search_root = self.workspace_root / subdir
+            if not search_root.exists():
+                continue
+            for root, _, files in os.walk(search_root):
+                for file in files:
+                    full_path = Path(root) / file
+                    rel_path = full_path.relative_to(self.workspace_root)
+                    found_paths.append(str(rel_path))
+        return found_paths
 
     def _load_manifests(self) -> Dict[str, tuple]:
         """Loads orchestrator configurations from plugin manifests."""
@@ -47,7 +61,7 @@ class LazyOrchestratorMap:
                 try:
                     with open(m_path, 'r') as f:
                         data = json.load(f)
-                        configs = self.core.parse_manifest(data)
+                        configs = self._registry_core.parse_manifest(data)
                         manifest_configs.update(configs)
                 except Exception as e:
                     logging.error(f"Failed to load orchestrator manifest {m_path}: {e}")
@@ -76,7 +90,7 @@ class LazyOrchestratorMap:
             
             # Version Gatekeeping
             min_sdk = getattr(module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0"))
-            if not self.core.is_compatible(min_sdk):
+            if not self._registry_core.is_compatible(min_sdk):
                 error_msg = f"Orchestrator '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}."
                 logging.warning(error_msg)
                 stub = ResilientStub(key, error_msg)
