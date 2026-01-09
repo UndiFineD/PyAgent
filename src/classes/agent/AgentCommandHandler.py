@@ -12,10 +12,10 @@ from typing import List, Dict, Any, Optional, Iterator
 class AgentCommandHandler:
     """Handles command execution for the Agent, including sub-agent orchestration."""
     
-    def __init__(self, repo_root: Path, models_config: Optional[Dict[str, Any]] = None, recorder=None) -> None:
-        self.repo_root = repo_root
-        self.models = models_config or {}
-        self.recorder = recorder
+    def __init__(self, repo_root: Path, models_config: Optional[Dict[str, Any]] = None, recorder: Any = None) -> None:
+        self.repo_root: Path = repo_root
+        self.models: Dict[str, Any] = models_config or {}
+        self.recorder: Any = recorder
 
     def _record(self, action: str, result: str, meta: Optional[Dict[str, Any]] = None) -> None:
         """Internal helper to record shell operations if recorder is available."""
@@ -112,33 +112,6 @@ class AgentCommandHandler:
 
     @contextlib.contextmanager
     def with_agent_env(self, agent_name: str) -> Iterator[None]:
-        """Temporarily set environment variables for a specific agent."""
-        prev: Dict[str, Optional[str]] = {}
-        keys = ['DV_AGENT_MODEL_PROVIDER', 'DV_AGENT_MODEL_NAME',
-                'DV_AGENT_MODEL_TEMPERATURE', 'DV_AGENT_MODEL_MAX_TOKENS']
-        try:
-            spec = self.models.get(agent_name) or self.models.get('default')
-
-            for k in keys:
-                prev[k] = os.environ.get(k)
-
-            if spec and isinstance(spec, dict):
-                if 'provider' in spec:
-                    os.environ['DV_AGENT_MODEL_PROVIDER'] = str(spec.get('provider', ''))
-                if 'model' in spec:
-                    os.environ['DV_AGENT_MODEL_NAME'] = str(spec.get('model', ''))
-                if 'temperature' in spec:
-                    os.environ['DV_AGENT_MODEL_TEMPERATURE'] = str(spec.get('temperature', ''))
-                if 'max_tokens' in spec:
-                    os.environ['DV_AGENT_MODEL_MAX_TOKENS'] = str(spec.get('max_tokens', ''))
-
-            yield
-        finally:
-            for k, v in prev.items():
-                if v is None:
-                    os.environ.pop(k, None)
-                else:
-                    os.environ[k] = v
         """Temporarily set environment variables for a specific agent."""
         prev: Dict[str, Optional[str]] = {}
         keys = ['DV_AGENT_MODEL_PROVIDER', 'DV_AGENT_MODEL_NAME',

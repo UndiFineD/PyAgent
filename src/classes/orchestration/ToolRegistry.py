@@ -5,16 +5,6 @@
 import inspect
 import logging
 from typing import Dict, List, Any, Callable, Optional, Type
-from pydantic import BaseModel, Field
-
-class ToolMetadata(BaseModel):
-    """Metadata for a registered tool."""
-    name: str
-    description: str
-    parameters: Dict[str, Any]
-    owner: str # Name of the agent providing this tool
-    category: str = "general"
-
 from .ToolCore import ToolCore, ToolMetadata
 
 class ToolRegistry:
@@ -25,35 +15,43 @@ class ToolRegistry:
     
     _instance = None
     
-    def __new__(cls, *args, **kwargs) -> "ToolRegistry":
+    def __new__(cls, *args: Any, **kwargs: Any) -> "ToolRegistry":
         if not cls._instance:
             cls._instance = super(ToolRegistry, cls).__new__(cls)
-            cls._instance.tools = {}
+            cls._instance.tools: Dict[str, List[Dict[str, Any]]] = {}
             cls._instance.core = ToolCore()
         return cls._instance
 
-    def register_tool(self, owner_name: str, func: Callable, category: str = "general") -> None:
-        """Registers a function as a tool."""
-        metadata = self.core.extract_metadata(owner_name, func, category)
-        self.tools[metadata.name] = {
+    def register_tool(self, owner_name: str, func: Callable, category: str = "general", priority: int = 0) -> None:
+        """Registers a function as a tool with priority scoring."""
+        metadata = self.core.extract_metadata(owner_name, func, category, priority)
+        
+        if metadata.name not in self.tools:
+            self.tools[metadata.name] = []
+            
+        self.tools[metadata.name].append({
             "metadata": metadata,
             "function": func
-        }
-        logging.info(f"Tool registered: {owner_name}.{metadata.name}")
+        })
+        # Sort by priority descending
+        self.tools[metadata.name].sort(key=lambda x: x["metadata"].priority, reverse=True)
+        
+        logging.info(f"Tool registered: {owner_name}.{metadata.name} (Priority: {priority})")
 
     def list_tools(self, category: Optional[str] = None) -> List[ToolMetadata]:
         """Lists all registered tools."""
         results = []
-        for t in self.tools.values():
-            meta = t["metadata"]
-            if category is None or meta.category == category:
-                results.append(meta)
+        for tool_list in self.tools.values():
+            for t in tool_list:
+                meta = t["metadata"]
+                if category is None or meta.category == category:
+                    results.append(meta)
         return results
 
     def get_tool(self, name: str) -> Optional[Callable]:
-        """Retrieves a tool function by name."""
-        if name in self.tools:
-            return self.tools[name]["function"]
+        """Retrieves the highest priority tool function by name."""
+        if name in self.tools and self.tools[name]:
+            return self.tools[name][0]["function"]
         return None
 
     def call_tool(self, name: str, **kwargs) -> Any:

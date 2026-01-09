@@ -37,6 +37,7 @@ class DataAgent(BaseAgent):
     @as_tool
     def execute_sql(self, sql: str) -> str:
         """Executes a SQL query and returns the result as a formatted string."""
+        import pandas as pd
         if not self.conn:
             return "Error: No database connection. Call 'connect' first."
         
@@ -81,6 +82,7 @@ class DataAgent(BaseAgent):
     @as_tool
     def query_to_csv(self, sql: str, output_path: str) -> str:
         """Executes a query and saves the result to a CSV file."""
+        import pandas as pd
         if not self.conn:
             return "Error: No database connection."
         

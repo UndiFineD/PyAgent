@@ -5,9 +5,11 @@
 Strategies Module: Unified interface for agent decision-making strategies.
 """
 
+from src.version import VERSION
 import sys
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Callable
+# from typing import Any, Dict, List, Optional, Callable
+
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).parent.parent

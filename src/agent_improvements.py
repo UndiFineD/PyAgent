@@ -5,6 +5,7 @@
 Improvements Agent: Maintains and improves improvement suggestions.
 """
 
+from src.version import VERSION
 import sys
 from pathlib import Path
 
@@ -15,7 +16,7 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-from src.base_agent import create_main_function
+    from src.base_agent import create_main_function
 from src.classes.improvements import *
 
 # Create main function using the helper

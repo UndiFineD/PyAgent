@@ -1,0 +1,39 @@
+import os
+import re
+
+def fix_file(file_path):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+    
+    changed = False
+    new_lines = []
+    for line in lines:
+        # Match common commented out standard imports with any number of # and spaces
+        if (re.search(r'(from|import)\s+(typing|dataclasses|pathlib|enum|abc|json|logging|argparse|os|sys|time|datetime|functools|itertools|re|inspect|threading|collections)', line)):
+            if '#' in line:
+                # Only check if the import part itself is commented out
+                if re.match(r'^\s*[#\s]+(from|import)', line):
+                    new_line = re.sub(r'^\s*[#\s]+', '', line)
+                    new_lines.append(new_line)
+                    changed = True
+                else:
+                    new_lines.append(line)
+            else:
+                new_lines.append(line)
+        else:
+            new_lines.append(line)
+            
+    if changed:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.writelines(new_lines)
+        print(f"Fixed {file_path}")
+
+def walk_dir(path):
+    for root, dirs, files in os.walk(path):
+        for file in files:
+            if file.endswith('.py'):
+                fix_file(os.path.join(root, file))
+
+if __name__ == "__main__":
+    walk_dir('src')
+    walk_dir('tests')

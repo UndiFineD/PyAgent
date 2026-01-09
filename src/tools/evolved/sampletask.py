@@ -1,5 +1,6 @@
 """A sample automated GUI task."""
 
+from src.version import VERSION
 import pyautogui
 from src.classes.base_agent.utilities import as_tool
 

@@ -43,7 +43,21 @@ def main():
     else:
         print("\nAll scanned issues have been autonomously addressed.")
 
-    # 3. Documentation Research (Phase 88 integration)
+    # 3. Documentation & Research Summary (Phase 112)
+    print("\n[Research] Summarizing codebase intelligence...")
+    library_path = os.path.join(root, "knowledge_exports", "research_library.json")
+    if os.path.exists(library_path):
+        with open(library_path, "r") as f:
+            library = json.load(f)
+        print(f" - Fleet Intelligence Library contains {len(library)} indexed agents.")
+        
+        # Performance/Complexity check
+        high_comp = [e for e in library if e.get("taxonomy", {}).get("logic_complexity") == "High"]
+        if high_comp:
+            print(f" - WARNING: {len(high_comp)} files identified with HIGH logic complexity.")
+            for e in high_comp[:3]:
+                print(f"    * {e['title']}")
+
     print("\n[Documentation] Generating updated docs for improvements...")
     doc_res = fleet.doc_gen_agent.extract_docs(os.path.join(root, "src/classes/fleet/FleetManager.py"))
     doc_path = os.path.join(root, "docs/FLEET_AUTO_DOC.md")

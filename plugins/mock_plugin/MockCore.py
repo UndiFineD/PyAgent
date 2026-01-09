@@ -11,9 +11,9 @@ from typing import Dict, Any, List
 class MockCore:
     """Pure logic for the MockPlugin."""
     
-    def __init__(self, multiplier: float = 1.0):
-        self.multiplier = multiplier
-        self.processed_count = 0
+    def __init__(self, multiplier: float = 1.0) -> None:
+        self.multiplier: float = multiplier
+        self.processed_count: int = 0
 
     def calculate_dummy_value(self, input_val: float) -> float:
         """Example pure calculation."""

@@ -12,7 +12,7 @@ import logging
 class CommunityAgent(BaseAgent):
     """A flexible agent shell that uses CommunityCore for logic."""
     
-    def __init__(self, path: str = None):
+    def __init__(self, path: str = None) -> None:
         super().__init__(path)
         self.name = "CommunityAgent"
         self.core = CommunityCore()

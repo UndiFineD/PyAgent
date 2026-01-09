@@ -12,13 +12,23 @@ from typing import Dict, Any, Optional
 
 class ConnectivityManager:
     """Manages connection status for external APIs with persistent 15-minute TTL caching."""
+    _instance = None
+
+    def __new__(cls, *args, **kwargs) -> ConnectivityManager:
+        if cls._instance is None:
+            cls._instance = super(ConnectivityManager, cls).__new__(cls)
+        return cls._instance
 
     def __init__(self, workspace_root: Optional[str] = None) -> None:
+        # Only init once if it's a singleton
+        if hasattr(self, "_initialized") and self._initialized:
+            return
         self.workspace_root = Path(workspace_root) if workspace_root else None
         self._conn_status_file = self.workspace_root / "logs" / "connectivity_status.json" if self.workspace_root else None
         self._ttl = 900  # 15 minutes
         self._cache: Dict[str, Any] = self._load_status()
         self._preferred_cache: Dict[str, str] = self._cache.get("__preferred__", {})
+        self._initialized = True
 
     def _load_status(self) -> Dict[str, Any]:
         """Loads the connection status from disk."""
@@ -73,6 +83,14 @@ class ConnectivityManager:
             "timestamp": time.time()
         }
         self._save_status()
+
+    def is_online(self, endpoint: str) -> bool:
+        """Compatibility alias for is_endpoint_available."""
+        return self.is_endpoint_available(endpoint)
+
+    def set_status(self, endpoint: str, online: bool) -> None:
+        """Compatibility alias for update_status."""
+        self.update_status(endpoint, online)
 
     def check_and_execute(self, endpoint_id: str, func: callable, *args, **kwargs) -> Any:
         """Executes a function only if endpoint is available, updating status on failure."""

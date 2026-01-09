@@ -15,35 +15,31 @@ class AgentRegistryCore:
     def __init__(self, current_sdk_version: str) -> None:
         self.sdk_version: str = current_sdk_version
 
-    def scan_directory_for_agents(self, root_path: str, subdirs: Optional[List[str]] = None) -> Dict[str, Tuple[str, str, Optional[str]]]:
+    def process_discovered_files(self, file_paths: List[str]) -> Dict[str, Tuple[str, str, Optional[str]]]:
         """
-        Scans specified subdirectories for files that look like Agents.
-        Returns a dict compatible with registry configs: {Name: (module_path, class_name, arg_path)}
+        Processes a list of file paths and extracts agent/orchestrator configurations.
+        Expects relative paths from workspace root.
         """
         discovered: Dict[str, Tuple[str, str, Optional[str]]] = {}
-        subdirs = subdirs or ["src/classes/specialized", "src/classes/coder", "src/classes/fleet", "src/classes/context", "plugins"]
         
-        for subdir in subdirs:
-            search_root = os.path.join(root_path, subdir)
-            if not os.path.exists(search_root):
-                continue
+        for rel_path in file_paths:
+            file = os.path.basename(rel_path)
+            if (file.endswith("Agent.py") or file.endswith("Orchestrator.py")) and not file.startswith("__"):
+                agent_name: str = file[:-3]
+                module_path: str = rel_path.replace(os.sep, ".").replace(".py", "")
                 
-            for root, _, files in os.walk(search_root):
-                for file in files:
-                    if file.endswith("Agent.py") and not file.startswith("__"):
-                        agent_name: str = file[:-3]
-                        full_path: str = os.path.join(root, file)
-                        rel_path: str = os.path.relpath(full_path, root_path)
-                        module_path: str = rel_path.replace(os.sep, ".").replace(".py", "")
-                        
-                        # Phase 105: Discovered agents should not default to their own file path as arg
-                        discovered[agent_name] = (module_path, agent_name, None)
-                        
-                        # Add short name (e.g. "Coder" for "CoderAgent")
-                        if agent_name.endswith("Agent"):
-                            short_name: str = agent_name[:-5]
-                            if short_name and short_name not in discovered:
-                                discovered[short_name] = (module_path, agent_name, None)
+                # Phase 105: Discovered agents should not default to their own file path as arg
+                discovered[agent_name] = (module_path, agent_name, None)
+                
+                # Add short name (e.g. "Coder" for "CoderAgent")
+                if agent_name.endswith("Agent"):
+                    short_name: str = agent_name[:-5]
+                    if short_name and short_name not in discovered:
+                        discovered[short_name] = (module_path, agent_name, None)
+                elif agent_name.endswith("Orchestrator"):
+                    short_name: str = agent_name[:-12]
+                    if short_name and short_name not in discovered:
+                        discovered[short_name] = (module_path, agent_name, None)
         return discovered
 
     def parse_manifest(self, raw_manifest: Dict[str, Any]) -> Dict[str, Tuple[str, str, Optional[str]]]:

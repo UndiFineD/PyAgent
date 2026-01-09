@@ -3,6 +3,7 @@
 
 """Agent specializing in collecting and reporting project development statistics."""
 
+from src.version import VERSION
 import sys
 import argparse
 from pathlib import Path
