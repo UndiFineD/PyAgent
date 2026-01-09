@@ -134,7 +134,7 @@ PyJWT==2.10.1
 PyMsgBox==2.0.1
 pynput==1.8.1
 pyparsing==3.3.1
-pypdf==6.5.0
+pypdf==6.6.0
 pyperclip==1.11.0
 PyPika==0.48.9
 pyproject_hooks==1.2.0
