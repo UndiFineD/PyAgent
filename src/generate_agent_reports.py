@@ -18,7 +18,7 @@ def _sha256_text(text: str) -> str:
     import hashlib
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
-def main():
+def main() -> None:
     import argparse
     parser = argparse.ArgumentParser(description='Generate Agent Reports')
     parser.add_argument('--dir', default='.', help='Directory to scan')

@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
+"""
+Strategies Module: Unified interface for agent decision-making strategies.
+"""
+
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Callable

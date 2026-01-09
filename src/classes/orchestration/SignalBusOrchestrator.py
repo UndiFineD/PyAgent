@@ -19,18 +19,18 @@ class SignalBusOrchestrator:
         self._thread = threading.Thread(target=self._process_bus, daemon=True)
         self._thread.start()
 
-    def subscribe(self, signal_type: str, callback: Callable):
+    def subscribe(self, signal_type: str, callback: Callable) -> None:
         """Registers a callback for a specific signal type."""
         if signal_type not in self._subscribers:
             self._subscribers[signal_type] = []
         self._subscribers[signal_type].append(callback)
         logging.debug(f"SignalBus: Subscribed to '{signal_type}'")
 
-    def publish(self, signal_type: str, payload: Any, sender: str = "System"):
+    def publish(self, signal_type: str, payload: Any, sender: str = "System") -> None:
         """Publishes a signal to the bus."""
         self._queue.put({"type": signal_type, "payload": payload, "sender": sender})
 
-    def _process_bus(self):
+    def _process_bus(self) -> None:
         """Internal loop to process signals asynchronously."""
         while self._running:
             try:
@@ -46,7 +46,7 @@ class SignalBusOrchestrator:
             except queue.Empty:
                 continue
 
-    def shutdown(self):
+    def shutdown(self) -> None:
         """Stops the signal bus."""
         self._running = False
         self._thread.join()

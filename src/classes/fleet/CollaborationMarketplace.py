@@ -37,7 +37,7 @@ class CollaborationMarketplace:
         bids.sort(key=lambda x: x["confidence"], reverse=True)
         return bids
 
-    def reward_collaboration(self, winner: str, task_id: str):
+    def reward_collaboration(self, winner: str, task_id: str) -> None:
         """Records a successful transaction in the marketplace."""
         self.transactions.append({"winner": winner, "task_id": task_id})
         logging.info(f"MARKETPLACE: Agent {winner} rewarded for task {task_id}")

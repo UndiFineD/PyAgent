@@ -14,7 +14,7 @@ class HolographicStateOrchestrator:
         self.fleet = fleet
         self.shards: Dict[str, List[Dict[str, Any]]] = {} # key -> list of shards
 
-    def shard_state(self, key: str, value: Any, redundant_factor: int = 3):
+    def shard_state(self, key: str, value: Any, redundant_factor: int = 3) -> None:
         """
         Shards a state value and distributes it across the fleet.
         In this simulation, we 'distribute' by assigning shards to different agent names.

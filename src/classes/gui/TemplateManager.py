@@ -15,7 +15,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-BMAD_TEMPLATES = {
+BMAD_TEMPLATES: dict[str, str] = {
     "Select Template...": "",
     "Quick Spec (⚡)": """# QUICK SPEC: [Feature/Bug Name]
 ## Problem Description
@@ -74,12 +74,12 @@ BMAD_TEMPLATES = {
 class TemplateManager:
     """Manages insertion of BMAD-standard templates into text widgets."""
     @staticmethod
-    def get_template_names():
+    def get_template_names() -> list[str]:
         return list(BMAD_TEMPLATES.keys())
 
     @staticmethod
-    def apply_template(text_widget, template_name):
-        template = BMAD_TEMPLATES.get(template_name, "")
+    def apply_template(text_widget, template_name) -> None:
+        template: str = BMAD_TEMPLATES.get(template_name, "")
         if template:
             text_widget.delete("1.0", tk.END)
             text_widget.insert("1.0", template)

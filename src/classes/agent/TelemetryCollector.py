@@ -14,7 +14,7 @@ from dataclasses import dataclass, field
 from enum import Enum, auto
 from pathlib import Path
 from types import TracebackType
-from typing import List, Set, Optional, Dict, Any, Callable, Iterable, TypeVar, cast, Final
+from typing import List, Set, Optional, Dict, Any, Callable, Iterable, TypeVar, cast, Final, Iterator
 import argparse
 import asyncio
 import difflib
@@ -58,7 +58,7 @@ class TelemetryCollector:
         self._current_span: Optional[TelemetrySpan] = None
 
     @contextmanager
-    def span(self, name: str, attributes: Optional[Dict[str, Any]] = None):
+    def span(self, name: str, attributes: Optional[Dict[str, Any]] = None) -> Iterator[SpanContext]:
         """Create a telemetry span.
 
         Args:

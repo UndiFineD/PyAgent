@@ -28,7 +28,7 @@ class AgentEconomy:
         self.blockchain.append(genesis)
 
     def _hash_block(self, block: Dict[str, Any]) -> str:
-        block_string = json.dumps(block, sort_keys=True).encode()
+        block_string: bytes = json.dumps(block, sort_keys=True).encode()
         return hashlib.sha256(block_string).hexdigest()
 
     def get_balance(self, agent_id: str) -> float:
@@ -36,7 +36,7 @@ class AgentEconomy:
 
     def transfer_credits(self, sender: str, receiver: str, amount: float, reason: str) -> bool:
         """Executes a secure transfer of credits between agents."""
-        s_bal = self.get_balance(sender)
+        s_bal: float = self.get_balance(sender)
         if s_bal < amount:
             logging.warning(f"Transfer failed: {sender} has insufficient funds ({s_bal} < {amount})")
             return False
@@ -48,7 +48,7 @@ class AgentEconomy:
         self._record_transaction(sender, receiver, amount, reason)
         return True
 
-    def _record_transaction(self, sender: str, receiver: str, amount: float, reason: str):
+    def _record_transaction(self, sender: str, receiver: str, amount: float, reason: str) -> None:
         transaction = {
             "sender": sender,
             "receiver": receiver,
@@ -57,7 +57,7 @@ class AgentEconomy:
             "timestamp": time.time()
         }
         
-        prev_block = self.blockchain[-1]
+        prev_block: Dict[str, Any] = self.blockchain[-1]
         new_block = {
             "index": len(self.blockchain),
             "timestamp": time.time(),

@@ -19,16 +19,16 @@ class WidgetLogger(logging.Handler):
     """Logging handler that redirects formatted log records to a Tkinter Text widget."""
     def __init__(self, widget, thread_id=None) -> None:
         super().__init__()
-        self.widget = widget
+        self.widget: Any = widget
         self.thread_id = thread_id
 
-    def emit(self, record):
+    def emit(self, record) -> None:
         # Filter by thread if ID is provided
         if self.thread_id and record.thread != self.thread_id:
             return
             
-        msg = self.format(record)
-        def append():
+        msg: str = self.format(record)
+        def append() -> None:
             try:
                 self.widget.insert(tk.END, msg + "\n")
                 self.widget.see(tk.END)

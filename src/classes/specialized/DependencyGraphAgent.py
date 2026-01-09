@@ -1,17 +1,18 @@
 import os
 import ast
 from pathlib import Path
+from typing import Dict, List, Set, Any, Union
 
 class DependencyGraphAgent:
     """
     Maps and analyzes dependencies between agent modules and classes.
     Helps in understanding the impact of changes and optimizing imports.
     """
-    def __init__(self, workspace_path) -> None:
+    def __init__(self, workspace_path: Union[str, Path]) -> None:
         self.workspace_path = Path(workspace_path)
-        self.dependency_map = {} # module -> set of imports
+        self.dependency_map: Dict[str, List[str]] = {} # module -> list of imports
 
-    def scan_dependencies(self, start_dir="src"):
+    def scan_dependencies(self, start_dir: str = "src") -> Dict[str, Any]:
         """
         Scans a directory for Python files and extracts their imports.
         """
@@ -31,8 +32,8 @@ class DependencyGraphAgent:
         
         return {"modules_scanned": len(self.dependency_map)}
 
-    def _extract_imports(self, file_path):
-        imports = set()
+    def _extract_imports(self, file_path: Path) -> List[str]:
+        imports: Set[str] = set()
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 tree = ast.parse(f.read())
@@ -48,7 +49,7 @@ class DependencyGraphAgent:
             pass
         return list(imports)
 
-    def get_impact_scope(self, module_name):
+    def get_impact_scope(self, module_name: str) -> List[str]:
         """
         Identifies which modules depend on a given module.
         """
@@ -61,7 +62,7 @@ class DependencyGraphAgent:
                     break
         return dependents
 
-    def generate_graph_stats(self):
+    def generate_graph_stats(self) -> Dict[str, Any]:
         """Returns complexity metrics for the dependency graph."""
         total_links = sum(len(imps) for imps in self.dependency_map.values())
         return {

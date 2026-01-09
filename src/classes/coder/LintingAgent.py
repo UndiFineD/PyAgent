@@ -32,6 +32,9 @@ class LintingAgent(BaseAgent):
                 capture_output=True,
                 text=True
             )
+            # Phase 108: Record linting result
+            self._record(f"flake8 {target_path}", f"RC={result.returncode}\n{result.stdout[:500]}", provider="Shell", model="flake8")
+
             if not result.stdout:
                 return "✅ No linting issues found by flake8."
             return f"### Flake8 Issues\n```plaintext\n{result.stdout}\n```"

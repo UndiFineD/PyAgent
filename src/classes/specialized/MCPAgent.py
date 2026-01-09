@@ -54,10 +54,16 @@ class MCPAgent(BaseAgent):
             # For this demo, we assume we can find the server config
             return f"Error: MCP Server '{server_name}' not initialized. Call 'initialize_mcp_server' first."
         
+        # Intelligence Harvesting (Phase 108)
+        if self.recorder:
+            self.recorder.record_lesson("mcp_tool_call", {"server": server_name, "tool": tool_name})
+            
         connector = self.connectors[server_name]
         response = connector.call("tools/call", {"name": tool_name, "arguments": arguments})
         
         if "error" in response:
+            if self.recorder:
+                self.recorder.record_lesson("mcp_tool_error", {"server": server_name, "tool": tool_name, "error": response["error"]})
             return f"MCP Error: {response['error']}"
         
         return json.dumps(response.get("result", {}), indent=2)
@@ -69,8 +75,12 @@ class MCPAgent(BaseAgent):
         connector.start()
         if connector.is_running:
             self.connectors[name] = connector
+            if self.recorder:
+                self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "success"})
             return f"Successfully started MCP server '{name}'"
         else:
+            if self.recorder:
+                self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "failed"})
             return f"Failed to start MCP server '{name}'"
 
     def improve_content(self, prompt: str) -> str:

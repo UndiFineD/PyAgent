@@ -29,7 +29,7 @@ class ImmunizationOrchestrator:
                 return True
         return False
 
-    def immunize(self, adversarial_example: str, label: str):
+    def immunize(self, adversarial_example: str, label: str) -> str:
         """
         Develops a new signature from an adversarial example.
         """

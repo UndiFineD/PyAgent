@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
+"""
+Base Agent Module: Core agent functionality and CLI entry points.
+"""
+
 import sys
 from pathlib import Path
 

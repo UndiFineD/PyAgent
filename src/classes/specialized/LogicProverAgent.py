@@ -1,14 +1,15 @@
 import json
+from typing import Dict, List, Any, Optional
 
 class LogicProverAgent:
     """
     Formally verifies agent reasoning chains and solves complex 
     spatial/temporal constraints.
     """
-    def __init__(self, workspace_path) -> None:
+    def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
         
-    def verify_reasoning_step(self, hypothesis, evidence, conclusion):
+    def verify_reasoning_step(self, hypothesis: str, evidence: List[str], conclusion: str) -> Dict[str, Any]:
         """
         Simulates formal logic verification (TPTP-like).
         """
@@ -23,7 +24,7 @@ class LogicProverAgent:
             
         return {"status": "verified", "proof_confidence": 0.5}
 
-    def solve_scheduling_constraints(self, tasks, deadlines):
+    def solve_scheduling_constraints(self, tasks: List[str], deadlines: Dict[str, float]) -> Dict[str, Any]:
         """
         Solves for an optimal schedule using simulated constraint satisfaction (CSP).
         """
@@ -45,7 +46,7 @@ class LogicProverAgent:
             "total_latency": len(tasks) * 1.0
         }
 
-    def generate_formal_proof_log(self, reasoning_chain):
+    def generate_formal_proof_log(self, reasoning_chain: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
         Exports a log of verified steps for auditing.
         """

@@ -40,7 +40,7 @@ class ResourcePredictorOrchestrator:
             "allocation": allocation
         }
 
-    def report_actual_usage(self, task: str, usage_data: Dict[str, float]):
+    def report_actual_usage(self, task: str, usage_data: Dict[str, float]) -> None:
         """Logs actual usage to improve future predictions."""
         logging.info(f"ResourcePredictor: Recording actual usage for task mapping: {usage_data}")
         # In a real system, this would update a neural weights for the predictor

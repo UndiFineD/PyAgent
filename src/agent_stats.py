@@ -16,7 +16,7 @@ if str(root / "src") not in sys.path:
 
 from src.classes.stats.StatsAgent import StatsAgent
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description='Stats Agent: Reports statistics on file update progress')
     parser.add_argument('--files', nargs='+', help='List of files to analyze')
     parser.add_argument('--dir', help='Directory to analyze (recursive)')

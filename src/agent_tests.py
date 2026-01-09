@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
+"""
+Tests Agent: Maintains and updates test suites for the workspace.
+"""
+
 import sys
 from pathlib import Path
 

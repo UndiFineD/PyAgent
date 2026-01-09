@@ -4,11 +4,15 @@
 
 import logging
 import requests
+import time
+from pathlib import Path
 from bs4 import BeautifulSoup
 from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
 from src.classes.coder.SecurityGuardAgent import SecurityGuardAgent
+from src.classes.base_agent.ConnectivityManager import ConnectivityManager
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 
 class WebAgent(BaseAgent):
     """Enables the fleet to perform autonomous research and interact with web services."""
@@ -21,14 +25,38 @@ class WebAgent(BaseAgent):
             "Your role is to browse the internet, extract relevant information, and interact with web forms. "
             "Prioritize accuracy and safety when crawling untrusted sites."
         )
+        
+        # Phase 108: Robustness and Intelligence Harvesting
+        work_root = getattr(self, "_workspace_root", None)
+        self.connectivity = ConnectivityManager(work_root)
+        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
+
+    def _record(self, url: str, content: str) -> None:
+        """Harvest web extraction logic for future self-improvement."""
+        if self.recorder:
+            try:
+                meta = {"phase": 108, "type": "web_fetch", "timestamp": time.time()}
+                self.recorder.record_interaction("web", url, "fetch_page_content", content[:1000], meta=meta)
+            except Exception as e:
+                logging.error(f"WebAgent: Transcription error: {e}")
 
     @as_tool
     def fetch_page_content(self, url: str) -> str:
         """Fetches and simplifies content from a URL with safety scanning."""
+        import urllib.parse
+        domain = urllib.parse.urlparse(url).netloc
+        
+        if not self.connectivity.is_endpoint_available(domain):
+            return f"ERROR: Connection to {domain} skipped due to connection cache (offline)."
+
         logging.info(f"WebAgent fetching URL: {url}")
         try:
             response = requests.get(url, timeout=15)
             response.raise_for_status()
+            
+            # Update connectivity status on success
+            self.connectivity.update_status(domain, True)
+            
             soup = BeautifulSoup(response.text, 'html.parser')
             
             # Remove scripts and styles
@@ -47,8 +75,11 @@ class WebAgent(BaseAgent):
                 logging.warning(f"WebAgent blocked content from {url} due to safety risks: {injections}")
                 return f"ERROR: Content from {url} was blocked for safety reasons: {', '.join(injections)}"
             
-            return text[:5000] # Limit to avoid context overflow
+            extracted = text[:5000]
+            self._record(url, extracted)
+            return extracted # Limit to avoid context overflow
         except Exception as e:
+            self.connectivity.update_status(domain, False)
             return f"Error fetching {url}: {e}"
 
     @as_tool

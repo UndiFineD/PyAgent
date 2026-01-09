@@ -6,10 +6,12 @@ Inspired by PR-Agent and GitHub CLI.
 
 import logging
 import subprocess
+import time
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from src.classes.base_agent import BaseAgent
 from src.classes.base_agent.utilities import as_tool
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
 
 class PRAgent(BaseAgent):
     """Analyzes differences in the codebase and generates summaries or review comments."""
@@ -22,6 +24,19 @@ class PRAgent(BaseAgent):
             "Identify impacted modules, potential breaking changes, and suggest improvements. "
             "Output clear Markdown reports for code reviews."
         )
+        
+        # Phase 108: Intelligence Harvesting
+        work_root = getattr(self, "_workspace_root", None)
+        self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
+
+    def _record(self, action: str, details: Any, result: str) -> None:
+        """Archiving git/PR interactions for fleet intelligence."""
+        if self.recorder:
+            try:
+                meta = {"phase": 108, "type": "git_pr", "timestamp": time.time()}
+                self.recorder.record_interaction("pra", "git", action, result, meta=meta)
+            except Exception:
+                pass
 
     @as_tool
     def get_diff_summary(self, branch: str = "main") -> str:
@@ -41,9 +56,13 @@ class PRAgent(BaseAgent):
                 for f in files[:10]: # Limit to top 10
                     report.append(f"- `{f}`")
             
-            return "\n".join(report)
+            res = "\n".join(report)
+            self._record("diff_summary", {"branch": branch}, res)
+            return res
         except Exception as e:
-            return f"Error analyzing git diff: {e}"
+            err = f"Error analyzing git diff: {e}"
+            self._record("diff_error", {"branch": branch}, err)
+            return err
 
     @as_tool
     def analyze_commit_history(self, limit: int = 5) -> str:
@@ -104,9 +123,13 @@ class PRAgent(BaseAgent):
                 f"{diff[:1000]}...",
                 "```"
             ]
-            return "\n".join(description)
+            res = "\n".join(description)
+            self._record("pr_description", {"branch": branch}, res)
+            return res
         except Exception as e:
-            return f"Error generating PR description: {e}"
+            err = f"Error generating PR description: {e}"
+            self._record("pr_desc_error", {"branch": branch}, err)
+            return err
 
     @as_tool
     def review_changes(self) -> str:

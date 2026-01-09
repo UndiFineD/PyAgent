@@ -29,6 +29,10 @@ class SandboxAgent(BaseAgent):
         In production, this would use a Docker container or gVisor.
         """
         logging.info("Executing code in sandbox...")
+        
+        # Phase 108: Record sandboxed execution intent
+        self._record(f"Sandbox run: {code[:100]}", "Simulated Success", provider="Sandbox", model="Docker-Mock")
+        
         # Simulated execution
         return "Execution Output: Success\n(Simulated Output)"
 

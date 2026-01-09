@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 
+"""
+Computational core for code analysis, metrics, and quality assessment.
+Designed for high-performance rule checking with future Rust integration.
+"""
+
 from .CodeLanguage import CodeLanguage
 from .CodeMetrics import CodeMetrics
 from .CodeSmell import CodeSmell

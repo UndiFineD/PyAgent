@@ -16,20 +16,20 @@ class SelfHealingOrchestrator:
         self.state_backups: Dict[str, Any] = {}    # agent_name -> state_snapshot
         self.recovery_logs: List[Dict[str, Any]] = []
 
-    def register_heartbeat(self, agent_name: str, state: Optional[Dict[str, Any]] = None, latency: float = 0.0, error: bool = False):
+    def register_heartbeat(self, agent_name: str, state: Optional[Dict[str, Any]] = None, latency: float = 0.0, error: bool = False) -> None:
         """Signals that an agent is alive and optionally backs up its state."""
         self.core.update_health(agent_name, latency=latency, error=error)
         if state:
             self.state_backups[agent_name] = state
 
-    def check_fleet_health(self):
+    def check_fleet_health(self) -> None:
         """Scans the fleet for agents that have stopped responding."""
         failed_agents = self.core.detect_failures()
         
         for agent_name in failed_agents:
             self.attempt_recovery(agent_name)
 
-    def attempt_recovery(self, agent_name: str):
+    def attempt_recovery(self, agent_name: str) -> None:
         """Attempts to restart a failed agent and restore its last known state."""
         action = self.core.get_recovery_action(agent_name)
         logging.info(f"Self-Healing: Recovery action '{action}' triggered for {agent_name}")
@@ -69,7 +69,7 @@ class SelfHealingOrchestrator:
             "recent_actions": self.recovery_logs[-5:]
         }
 
-    def review_recovery_lessons(self):
+    def review_recovery_lessons(self) -> None:
         """
         Reviews recent recovery logs to identify recurring patterns of failure.
         Feeds these back into the SelfImprovementOrchestrator for source-level fixes.

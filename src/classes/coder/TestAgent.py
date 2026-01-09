@@ -35,6 +35,11 @@ class TestAgent(BaseAgent):
             cmd = [sys.executable, "-m", "pytest", path, "--tb=short", "--maxfail=5"]
             result = subprocess.run(cmd, shell=False, capture_output=True, text=True)
             
+            # Phase 108: Record test execution patterns
+            self._record(f"pytest {path}", 
+                         f"RC={result.returncode}\n{result.stdout[-1000:]}",
+                         provider="Shell", model="pytest")
+            
             report = ["## 🧪 Test Execution Report\n"]
             if result.returncode == 0:
                 report.append("✅ **Status**: All tests passed.")

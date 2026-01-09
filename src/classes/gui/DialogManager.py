@@ -12,20 +12,22 @@
 
 """Dialog and interaction management for the PyAgent GUI."""
 
+from __future__ import annotations
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
+from typing import Any, Callable, Dict, List, Optional, Union
 
 class DialogManager:
     """Handles modal dialogs and interactive prompts."""
-    def __init__(self, root) -> None:
-        self.root = root
+    def __init__(self, root: tk.Tk) -> None:
+        self.root: tk.Tk = root
 
-    def show_voice_input(self, text_widget):
+    def show_voice_input(self, text_widget: tk.Text) -> None:
         """Displays a voice input mockup."""
         messagebox.showinfo("Voice Input", "Voice recognition (Whisper/System) would activate here.\nListening for instructions...")
         # In a real impl, we'd update text_widget.insert(tk.END, recognized_text)
 
-    def show_custom_agent_dialog(self, callback):
+    def show_custom_agent_dialog(self, callback: Callable[[str], Any]) -> None:
         """Shows a dialog to create a custom agent."""
         dialog = tk.Toplevel(self.root)
         dialog.title("Add Custom Agent")
@@ -39,8 +41,8 @@ class DialogManager:
         entry.pack(pady=5, padx=20, fill=tk.X)
         entry.focus()
 
-        def on_ok():
-            name = name_var.get().strip()
+        def on_ok() -> None:
+            name: str = name_var.get().strip()
             if name:
                 callback(name)
                 dialog.destroy()
@@ -48,19 +50,19 @@ class DialogManager:
         ttk.Button(dialog, text="OK", command=on_ok).pack(side=tk.LEFT, padx=30, pady=10)
         ttk.Button(dialog, text="Cancel", command=dialog.destroy).pack(side=tk.RIGHT, padx=30, pady=10)
 
-    def browse_file(self, initial_dir=None):
+    def browse_file(self, initial_dir: Optional[str] = None) -> str:
         """Standard file browser dialog."""
         return filedialog.askopenfilename(initialdir=initial_dir)
 
-    def browse_directory(self, initial_dir=None):
+    def browse_directory(self, initial_dir: Optional[str] = None) -> str:
         """Standard directory browser dialog."""
         return filedialog.askdirectory(initialdir=initial_dir)
 
-    def confirm_action(self, title, message):
+    def confirm_action(self, title: str, message: str) -> bool:
         """Standard confirmation dialog."""
         return messagebox.askyesno(title, message)
 
-    def show_settings_dialog(self, config_manager):
+    def show_settings_dialog(self, config_manager: Any) -> None:
         """Displays a dialog to configure global settings."""
         dialog = tk.Toplevel(self.root)
         dialog.title("Global Settings")
@@ -77,13 +79,13 @@ class DialogManager:
         token_var = tk.StringVar(value=config_manager.get("github_token_file"))
         ttk.Entry(token_frame, textvariable=token_var).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
         
-        def browse_token():
-            f = filedialog.askopenfilename()
+        def browse_token() -> None:
+            f: str = filedialog.askopenfilename()
             if f: token_var.set(f)
         ttk.Button(token_frame, text="...", width=3, command=browse_token).pack(side=tk.RIGHT)
 
         # Other settings
-        options_frame = ttk.LabelFrame(dialog, text="Preferences", padding=10)
+        options_frame: ttk.Labelframe = ttk.LabelFrame(dialog, text="Preferences", padding=10)
         options_frame.pack(fill=tk.BOTH, expand=True, pady=10, padx=10)
 
         cache_var = tk.BooleanVar(value=config_manager.get("cache_enabled"))
@@ -95,7 +97,7 @@ class DialogManager:
         model_var = tk.StringVar(value=config_manager.get("default_model"))
         ttk.Combobox(model_label_frame, textvariable=model_var, values=["gpt-4o", "gpt-3.5-turbo", "claude-3-5-sonnet"]).pack(side=tk.LEFT, padx=5)
 
-        def on_save():
+        def on_save() -> None:
             config_manager.set("github_token_file", token_var.get())
             config_manager.set("cache_enabled", cache_var.get())
             config_manager.set("default_model", model_var.get())
@@ -104,7 +106,7 @@ class DialogManager:
 
         ttk.Button(dialog, text="SAVE SETTINGS", style="Accent.TButton", command=on_save).pack(pady=10)
 
-    def show_bmad_wizard(self, setup_callback):
+    def show_bmad_wizard(self, setup_callback: Callable[[Dict[str, Any]], Any]) -> None:
         """Displays a wizard to initialize a project using BMAD tracks."""
         wizard = tk.Toplevel(self.root)
         wizard.title("BMAD Project Wizard")
@@ -126,11 +128,11 @@ class DialogManager:
         desc_lbl = ttk.Label(info_frame, text=BMAD_TRACKS["BMad Method"]["desc"], wraplength=450)
         desc_lbl.pack(fill=tk.X, pady=5)
         
-        def update_desc(event):
+        def update_desc(event: Any) -> None:
             desc_lbl.config(text=BMAD_TRACKS[track_var.get()]["desc"])
         track_cb.bind("<<ComboboxSelected>>", update_desc)
 
-        options_frame = ttk.LabelFrame(info_frame, text="Inclusions")
+        options_frame: ttk.Labelframe = ttk.LabelFrame(info_frame, text="Inclusions")
         options_frame.pack(fill=tk.BOTH, expand=True, pady=10)
         
         prd_var = tk.BooleanVar(value=True)
@@ -140,7 +142,7 @@ class DialogManager:
         tests_var = tk.BooleanVar(value=True)
         ttk.Checkbutton(options_frame, text="Initialize tests/ folder", variable=tests_var).pack(anchor=tk.W, padx=5)
 
-        def on_finish():
+        def on_finish() -> None:
             config = {
                 "track": track_var.get(),
                 "prd": prd_var.get(),
@@ -152,7 +154,7 @@ class DialogManager:
 
         ttk.Button(wizard, text="FINISH & SETUP", style="Accent.TButton", command=on_finish).pack(pady=10)
 
-    def show_memory_dialog(self, agent_name, history, save_callback):
+    def show_memory_dialog(self, agent_name: str, history: List[Dict[str, Any]], save_callback: Callable[[List[Dict[str, Any]]], Any]) -> None:
         """Displays a dialog to manage agent memory (forget/retain)."""
         dialog = tk.Toplevel(self.root)
         dialog.title(f"Memory Management - {agent_name}")
@@ -179,26 +181,26 @@ class DialogManager:
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
-        temp_history = list(history)
+        temp_history: List[Dict[str, Any]] = list(history)
 
-        def forget_msg(idx):
+        def forget_msg(idx: int) -> None:
             temp_history.pop(idx)
             redraw()
 
-        def toggle_keep(idx):
-            msg = temp_history[idx]
+        def toggle_keep(idx: int) -> None:
+            msg: Dict[str, Any] = temp_history[idx]
             if "metadata" not in msg:
                 msg["metadata"] = {}
             msg["metadata"]["keep"] = not msg["metadata"].get("keep", False)
             redraw()
 
-        def redraw():
+        def redraw() -> None:
             for widget in scrollable_frame.winfo_children():
                 widget.destroy()
             
             for i, msg in enumerate(temp_history):
                 role = msg["role"]
-                f = ttk.LabelFrame(scrollable_frame, text=role.capitalize())
+                f: ttk.Labelframe = ttk.LabelFrame(scrollable_frame, text=role.capitalize())
                 f.pack(fill=tk.X, pady=5, padx=5)
                 
                 txt = tk.Text(f, height=3, font=("Consolas", 9), wrap=tk.WORD)
@@ -212,7 +214,7 @@ class DialogManager:
                            command=lambda idx=i: forget_msg(idx)).pack(side=tk.RIGHT, padx=5)
                 
                 is_kept = msg.get("metadata", {}).get("keep", False)
-                keep_text = "Retained ✅" if is_kept else "Retain fact"
+                keep_text: str = "Retained ✅" if is_kept else "Retain fact"
                 ttk.Button(btn_bar, text=keep_text, width=12,
                            command=lambda idx=i: toggle_keep(idx)).pack(side=tk.RIGHT, padx=5)
 
@@ -221,7 +223,7 @@ class DialogManager:
         footer = ttk.Frame(dialog, padding=10)
         footer.pack(fill=tk.X)
         
-        def on_save():
+        def on_save() -> None:
             save_callback(temp_history)
             dialog.destroy()
 

@@ -37,7 +37,7 @@ class EntropyGuardAgent(BaseAgent):
         encrypted = bytes([b ^ mask[i % len(mask)] for i, b in enumerate(data_bytes)])
         return encrypted
 
-    def rotate_entropy_pool(self):
+    def rotate_entropy_pool(self) -> None:
         """Refreshes the global entropy pool to maintain forward secrecy."""
         self.entropy_pool = os.urandom(64)
         logging.warning("EntropyGuard: Global entropy pool rotated.")

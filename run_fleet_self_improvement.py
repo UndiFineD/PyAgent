@@ -2,6 +2,7 @@
 import os
 import sys
 import json
+import time
 from pathlib import Path
 
 # Ensure the project root is in PYTHONPATH
@@ -46,9 +47,17 @@ def main():
     print("\n[Documentation] Generating updated docs for improvements...")
     doc_res = fleet.doc_gen_agent.extract_docs(os.path.join(root, "src/classes/fleet/FleetManager.py"))
     doc_path = os.path.join(root, "docs/FLEET_AUTO_DOC.md")
+    # Using 'a' to preserve maintenance summary if it exists, or handling intelligently
     with open(doc_path, "w", encoding="utf-8") as f:
         f.write("# Swarm Auto-Generated Documentation\n\n")
         f.write(doc_res)
+    
+    # Re-trigger maintenance log if it was overwritten
+    maintenance_summary = f"\n## {time.strftime('%Y-%m-%d')} - Maintenance Cycle Summary\n"
+    maintenance_summary += f"The fleet's SelfImprovementOrchestrator completed a cycle over {stats['files_scanned']} files. Re-stabilization phase engaged.\n"
+    with open(doc_path, "a", encoding="utf-8") as f:
+        f.write(maintenance_summary)
+        
     print(f" - Updated documentation logged to {doc_path}")
 
     # 4. Explainability Log

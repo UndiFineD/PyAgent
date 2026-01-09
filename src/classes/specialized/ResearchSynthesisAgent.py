@@ -12,7 +12,7 @@ class ResearchSynthesisAgent(BaseAgent):
         self.workspace_path = workspace_path
         self.research_library = {} # topic -> research_summary
 
-    def conduct_research(self, topic: str, focus_areas: List[str]):
+    def conduct_research(self, topic: str, focus_areas: List[str]) -> Dict[str, Any]:
         """Conducts a simulated research session on a given topic."""
         print(f"Conducting research on: {topic}")
         research_id = f"R-{hash(topic) % 1000}"

@@ -43,7 +43,7 @@ class RateLimiter:
         last_refill: Timestamp of last token refill.
     """
 
-    def __init__(self, config: Optional[RateLimitConfig] = None) -> bool:
+    def __init__(self, config: Optional[RateLimitConfig] = None) -> None:
         """Initialize the rate limiter.
 
         Args:
@@ -53,6 +53,7 @@ class RateLimiter:
         self.tokens = float(self.config.burst_size)
         self.last_refill = time.time()
         self._lock = threading.Lock()
+        self._condition = threading.Condition(self._lock)
         self._request_timestamps: List[float] = []
 
     def _refill_tokens(self) -> None:
@@ -60,7 +61,7 @@ class RateLimiter:
         now = time.time()
         elapsed = now - self.last_refill
         refill_amount = elapsed * self.config.requests_per_second
-        self.tokens = min(self.config.burst_size, self.tokens + refill_amount)
+        self.tokens = min(float(self.config.burst_size), self.tokens + refill_amount)
         self.last_refill = now
 
     def acquire(self, timeout: Optional[float] = None) -> bool:
@@ -76,8 +77,8 @@ class RateLimiter:
         """
         start_time = time.time()
 
-        while True:
-            with self._lock:
+        with self._condition:
+            while True:
                 self._refill_tokens()
 
                 if self.tokens >= 1.0:
@@ -90,12 +91,18 @@ class RateLimiter:
                     ]
                     return True
 
-            # Check timeout
-            if timeout is not None and (time.time() - start_time) >= timeout:
-                return False
+                # Calculate wait time for at least 1 token
+                wait_time = (1.0 - self.tokens) / self.config.requests_per_second
 
-            # Wait before retry
-            time.sleep(self.config.cooldown_seconds)
+                # Check timeout
+                elapsed = time.time() - start_time
+                if timeout is not None:
+                    if elapsed >= timeout:
+                        return False
+                    wait_time = min(wait_time, timeout - elapsed)
+
+                # Wait before retry using condition, avoiding blocking sleep
+                self._condition.wait(timeout=max(wait_time, 0.01))
 
     def get_stats(self) -> Dict[str, Any]:
         """Get rate limiter statistics.

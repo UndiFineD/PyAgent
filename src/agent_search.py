@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # Copyright (c) 2025 PyAgent contributors
 
+"""
+Search Agent: Perform deep research and search operations across the workspace.
+"""
+
 import sys
 from pathlib import Path
 

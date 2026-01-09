@@ -13,7 +13,7 @@ class TheoryOfMind:
     def __init__(self) -> None:
         self.agent_profiles: Dict[str, Dict[str, Any]] = {}
 
-    def update_model(self, agent_name: str, observations: Dict[str, Any]):
+    def update_model(self, agent_name: str, observations: Dict[str, Any]) -> None:
         """Updates the internal model of another agent based on observed behavior."""
         if agent_name not in self.agent_profiles:
             self.agent_profiles[agent_name] = {

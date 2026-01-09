@@ -37,7 +37,7 @@ class NeuralBridgeOrchestrator:
             return True
         return False
 
-    def sync_state(self, key: str, value: Any):
+    def sync_state(self, key: str, value: Any) -> None:
         """
         Synchronizes a piece of state across the neural bridge.
         """

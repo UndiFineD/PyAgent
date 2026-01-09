@@ -16,6 +16,7 @@ from typing import Any, Dict, List, Optional, Tuple
 from .DiskCache import DiskCache
 from .RunnerBackends import BackendHandlers
 from .LLMClient import LLMClient
+from .LocalContextRecorder import LocalContextRecorder
 
 try:
     import requests
@@ -71,6 +72,9 @@ class SubagentRunner:
         # Disk cache initialization
         repo_root = self._resolve_repo_root()
         self.disk_cache = DiskCache(repo_root / ".agent_cache", ttl_seconds=60*60*24*7) # 7 days default
+        
+        # Phase 108: Recording Intelligence
+        self.recorder = LocalContextRecorder(workspace_root=repo_root)
         
         self._metrics: Dict[str, Any] = {
             "requests": 0,
@@ -271,6 +275,15 @@ class SubagentRunner:
         if res and use_cache:
             self._response_cache[cache_key] = res
             self.disk_cache.set(cache_key, res)
+        
+        # Phase 108: Record AI interaction
+        if self.recorder:
+            self.recorder.record_interaction(
+                provider="SubagentRunner",
+                model=backend_env,
+                prompt=prompt,
+                result=res or "FAILED"
+            )
             
         return res
 

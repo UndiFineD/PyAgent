@@ -40,14 +40,21 @@ class BranchComparer:
             print(f"{diff.diff_type.value}: {diff.improvement_id}")
     """
 
-    def __init__(self, repo_path: Optional[str] = None) -> None:
+    def __init__(self, repo_path: Optional[str] = None, recorder: Any = None) -> None:
         """Initialize branch comparer.
 
         Args:
             repo_path: Path to git repository. Defaults to current directory.
+            recorder: Optional LocalContextRecorder.
         """
         self.repo_path = Path(repo_path) if repo_path else Path.cwd()
+        self.recorder = recorder
         self.comparisons: List[BranchComparison] = []
+
+    def _record(self, action: str, result: str) -> None:
+        """Record branch comparison activities."""
+        if self.recorder:
+            self.recorder.record_interaction("Git", "BranchComparer", action, result)
         logging.debug(f"BranchComparer initialized for {self.repo_path}")
 
     def compare(

@@ -27,7 +27,7 @@ class QuantumShardOrchestrator(BaseAgent):
             "entire 'entangled' network."
         )
 
-    def _sync_to_disk(self):
+    def _sync_to_disk(self) -> None:
         """Simulates 'instant' broadcast by writing to a shared file (the 'quantum field')."""
         try:
             current_field = {}

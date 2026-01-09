@@ -3,6 +3,7 @@
 """Centralized LLM client for various backends."""
 
 from __future__ import annotations
+from functools import lru_cache
 
 import json
 import logging
@@ -11,18 +12,23 @@ import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from .LocalContextRecorder import LocalContextRecorder
+from ..base_agent.ConnectivityManager import ConnectivityManager
 
 class LLMClient:
     """Handles direct HTTP calls to LLM providers."""
 
     def __init__(self, requests_lib: Any, workspace_root: Optional[str] = None) -> None:
         self.requests = requests_lib
+        # Phase 108: Persistent Session for connection pooling
+        if hasattr(requests_lib, 'Session'):
+            self.session = requests_lib.Session()
+        else:
+            self.session = requests_lib # Fallback if someone passed a mock
+            
         # Auto-init recorder if workspace provided, else None
         self.workspace_root = workspace_root
         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
-        self._conn_status_file = Path(workspace_root) / "logs" / "ai_connection_status.json" if workspace_root else None
-        self._conn_cache_ttl = 900  # 15 minutes
-        self._conn_status_cache: Dict[str, Dict[str, Any]] = self._load_conn_status()
+        self.connectivity = ConnectivityManager(workspace_root)
         
         # Phase 108: Result Caching (Speed optimization for repeated calls)
         self._result_cache: Dict[str, str] = {}
@@ -34,44 +40,20 @@ class LLMClient:
         return hashlib.sha256(combined.encode()).hexdigest()
 
     def _load_conn_status(self) -> Dict[str, Dict[str, Any]]:
-        """Loads the connection status from disk."""
-        if self._conn_status_file and self._conn_status_file.exists():
-            try:
-                with open(self._conn_status_file, "r") as f:
-                    return json.load(f)
-            except Exception:
-                return {}
+        # Redundant logic for backward compatibility
         return {}
 
     def _save_conn_status(self) -> None:
-        """Saves the connection status to disk."""
-        if self._conn_status_file:
-            try:
-                os.makedirs(self._conn_status_file.parent, exist_ok=True)
-                with open(self._conn_status_file, "w") as f:
-                    json.dump(self._conn_status_cache, f)
-            except Exception as e:
-                logging.error(f"Failed to save connection status: {e}")
+        # Redundant logic for backward compatibility
+        pass
 
     def _is_connection_working(self, provider_id: str) -> bool:
-        """Checks if the connection is known to be working based on cache (15m TTL)."""
-        status = self._conn_status_cache.get(provider_id)
-        if status:
-            elapsed = time.time() - status.get("timestamp", 0)
-            if elapsed < self._conn_cache_ttl:
-                is_working = status.get("working", False)
-                if not is_working:
-                    logging.debug(f"LLMClient: Skipping '{provider_id}' (cached offline for next {int(self._conn_cache_ttl - elapsed)}s)")
-                return is_working
-        return True  # Assume working if no cache or expired
+        """Checks if the connection is known to be working via central ConnectivityManager."""
+        return self.connectivity.is_endpoint_available(provider_id)
 
     def _update_connection_status(self, provider_id: str, working: bool) -> None:
-        """Updates the connection status cache and persists to disk."""
-        self._conn_status_cache[provider_id] = {
-            "working": working,
-            "timestamp": time.time()
-        }
-        self._save_conn_status()
+        """Updates the connection status via central ConnectivityManager."""
+        self.connectivity.update_status(provider_id, working)
 
     def _record(self, provider: str, model: str, prompt: str, result: str, system_prompt: str = "") -> str:
         """
@@ -157,7 +139,7 @@ class LLMClient:
         
         for attempt in range(max_retries + 1):
             try:
-                response = self.requests.post(url, headers=headers, json=payload, timeout=timeout_s)
+                response = self.session.post(url, headers=headers, json=payload, timeout=timeout_s)
                 # If 401, don't retry - it's a token issue
                 if response.status_code == 401:
                     logging.error("GitHub Models: Unauthorized (401). Check GITHUB_TOKEN.")
@@ -173,7 +155,8 @@ class LLMClient:
             except Exception as e:
                 if attempt < max_retries:
                     logging.warning(f"GitHub Models attempt {attempt+1} failed: {e}. Retrying...")
-                    time.sleep(min(2 ** attempt, 10))
+                    import threading
+                    threading.Event().wait(timeout=min(2 ** attempt, 10))
                 else:
                     logging.error(f"LLM call failed after {max_retries} retries: {e}")
                     self._update_connection_status("github_models", False)
@@ -208,7 +191,7 @@ class LLMClient:
         }
         
         try:
-            response = self.requests.post(url, json=payload, timeout=timeout_s)
+            response = self.session.post(url, json=payload, timeout=timeout_s)
             response.raise_for_status()
             content = response.json().get("response", "")
             self._record("ollama", model, prompt, content, system_prompt=system_prompt)
@@ -248,7 +231,7 @@ class LLMClient:
         }
         
         try:
-            response = self.requests.post(url, headers={"Content-Type": "application/json"}, json=payload, timeout=timeout_s)
+            response = self.session.post(url, headers={"Content-Type": "application/json"}, json=payload, timeout=timeout_s)
             response.raise_for_status()
             content = response.json()["choices"][0]["message"]["content"]
             self._record("vllm", model, prompt, content, system_prompt=system_prompt)
@@ -305,6 +288,17 @@ class LLMClient:
             logging.debug("LLMClient: Cache hit for smart_chat.")
             return self._result_cache[cache_key]
 
+        # Phase 108: Check for Preferred working endpoint first (15m TTL)
+        preferred = self.connectivity.get_preferred_endpoint("llm_backends")
+        if preferred:
+            result = getattr(self, f"llm_chat_via_{preferred}")(prompt, model=local_model if "local" in preferred else external_model, system_prompt=system_prompt)
+            if result:
+                self._result_cache[cache_key] = result
+                return result
+            else:
+                # If preferred failed, mark it unavailable and fallback to full list
+                self.connectivity.update_status(preferred, False)
+
         result = ""
         used_provider = "none"
         used_model = "none"
@@ -337,6 +331,10 @@ class LLMClient:
         if not result:
             logging.warning("All AI backends failed or were unreachable.")
             return ""
+
+        # Phase 108: Update Preferred Endpoint Cache
+        if used_provider != "none":
+            self.connectivity.set_preferred_endpoint("llm_backends", used_provider)
 
         # Phase 108: Store in result cache
         if len(self._result_cache) < self._max_cache_size:

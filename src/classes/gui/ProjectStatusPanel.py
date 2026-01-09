@@ -1,3 +1,4 @@
+from io import TextIOWrapper
 import tkinter as tk
 from tkinter import ttk
 import json
@@ -7,7 +8,7 @@ class ProjectStatusPanel:
     """A panel that displays the current orchestration status from status.json."""
     
     def __init__(self, parent) -> None:
-        self.frame = ttk.LabelFrame(parent, text="Orchestration Status", padding=10)
+        self.frame: ttk.Labelframe = ttk.LabelFrame(parent, text="Orchestration Status", padding=10)
         self.status_file = Path("src/classes/orchestration/status.json")
         
         self.goal_label = ttk.Label(self.frame, text="Active Project: None", font=("Segoe UI", 10, "bold"))
@@ -22,7 +23,7 @@ class ProjectStatusPanel:
         
         self.refresh()
 
-    def refresh(self):
+    def refresh(self) -> None:
         """Polls the status file and updates the UI."""
         if self.status_file.exists():
             try:
@@ -33,8 +34,8 @@ class ProjectStatusPanel:
                 self.goal_label.config(text=f"Active Project: {goal}")
                 
                 steps = data.get("steps", [])
-                completed = sum(1 for s in steps if s.get("status") == "Completed")
-                total = len(steps)
+                completed: int = sum(1 for s in steps if s.get("status") == "Completed")
+                total: int = len(steps)
                 
                 if total > 0:
                     self.progress_var.set((completed / total) * 100)

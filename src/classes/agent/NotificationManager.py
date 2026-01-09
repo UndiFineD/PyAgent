@@ -8,6 +8,10 @@ import os
 from pathlib import Path
 from typing import List, Dict, Any, Callable, Optional
 
+# Infrastructure
+from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+from src.classes.base_agent.ConnectivityManager import ConnectivityManager
+
 # Optional dependency
 try:
     import requests
@@ -19,44 +23,23 @@ except ImportError:
 class NotificationManager:
     """Manages event notifications via webhooks and internal callbacks."""
 
-    def __init__(self, workspace_root: Optional[str] = None) -> None:
+    def __init__(self, workspace_root: Optional[str] = None, recorder: Optional[LocalContextRecorder] = None) -> None:
         self.webhooks: List[str] = []
         self.callbacks: List[Callable[[str, Dict[str, Any]], None]] = []
-        # Phase 108: Resilience Cache for Webhooks
+        # Phase 108: Resilience management
         self.workspace_root = workspace_root
-        self._status_file = Path(workspace_root) / "logs" / "webhook_status.json" if workspace_root else None
-        self._cache_ttl = 900 # 15 minutes
-        self._status_cache: Dict[str, Dict[str, Any]] = self._load_status()
-
-    def _load_status(self) -> Dict[str, Any]:
-        if self._status_file and self._status_file.exists():
-            try:
-                with open(self._status_file, "r") as f:
-                    return json.load(f)
-            except Exception:
-                return {}
-        return {}
-
-    def _save_status(self) -> None:
-        if self._status_file:
-            try:
-                os.makedirs(self._status_file.parent, exist_ok=True)
-                with open(self._status_file, "w") as f:
-                    json.dump(self._status_cache, f)
-            except Exception:
-                pass
+        self.recorder = recorder
+        self.connectivity = ConnectivityManager(workspace_root)
 
     def _is_webhook_working(self, url: str) -> bool:
-        status = self._status_cache.get(url)
-        if status:
-            elapsed = time.time() - status.get("timestamp", 0)
-            if elapsed < self._cache_ttl:
-                return status.get("working", True)
-        return True
+        import urllib.parse
+        domain = urllib.parse.urlparse(url).netloc
+        return self.connectivity.is_endpoint_available(domain or url)
 
     def _update_status(self, url: str, working: bool) -> None:
-        self._status_cache[url] = {"working": working, "timestamp": time.time()}
-        self._save_status()
+        import urllib.parse
+        domain = urllib.parse.urlparse(url).netloc
+        self.connectivity.update_status(domain or url, working)
 
     def register_webhook(self, url: str) -> None:
         self.webhooks.append(url)
@@ -69,6 +52,8 @@ class NotificationManager:
 
     def notify(self, event_name: str, event_data: Dict[str, Any]) -> None:
         """Executes callbacks and sends webhooks for an event."""
+        if self.recorder:
+            self.recorder.record_lesson("event_notify", {"event": event_name, "data_keys": list(event_data.keys())})
         self._execute_callbacks(event_name, event_data)
         self._send_webhooks(event_name, event_data)
 
@@ -101,3 +86,5 @@ class NotificationManager:
             except Exception as e:
                 logging.warning(f"Webhook failed for {url}: {e}")
                 self._update_status(url, False)
+                if self.recorder:
+                    self.recorder.record_lesson("webhook_failure", {"url": url, "error": str(e)})
