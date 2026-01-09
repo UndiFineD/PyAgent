@@ -1,0 +1,8 @@
+{
+  "lessons": [
+    {
+      "failure_context": "API timeout",
+      "correction": "Increase retries"
+    }
+  ]
+}

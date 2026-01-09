@@ -1,31 +1,35 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
 
+from .RateLimitConfig import RateLimitConfig
+
+from abc import ABC, abstractmethod
+from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from pathlib import Path
+from types import TracebackType
+from typing import List, Set, Optional, Dict, Any, Callable, Iterable, TypeVar, cast, Final
+import argparse
+import asyncio
+import difflib
+import fnmatch
+import functools
+import hashlib
+import importlib.util
+import json
+import logging
+import os
+import signal
+import subprocess
+import sys
 import threading
 import time
-from typing import Any
-
-from src.core.base.common.models import RateLimitConfig
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
+import uuid
 
 class RateLimiter:
     """Rate limiter for API calls using token bucket algorithm.
@@ -39,7 +43,7 @@ class RateLimiter:
         last_refill: Timestamp of last token refill.
     """
 
-    def __init__(self, config: RateLimitConfig | None = None) -> None:
+    def __init__(self, config: Optional[RateLimitConfig] = None) -> bool:
         """Initialize the rate limiter.
 
         Args:
@@ -49,18 +53,17 @@ class RateLimiter:
         self.tokens = float(self.config.burst_size)
         self.last_refill = time.time()
         self._lock = threading.Lock()
-        self._condition = threading.Condition(self._lock)
-        self._request_timestamps: list[float] = []
+        self._request_timestamps: List[float] = []
 
     def _refill_tokens(self) -> None:
         """Refill tokens based on elapsed time."""
         now = time.time()
         elapsed = now - self.last_refill
         refill_amount = elapsed * self.config.requests_per_second
-        self.tokens = min(float(self.config.burst_size), self.tokens + refill_amount)
+        self.tokens = min(self.config.burst_size, self.tokens + refill_amount)
         self.last_refill = now
 
-    def acquire(self, timeout: float | None = None) -> bool:
+    def acquire(self, timeout: Optional[float] = None) -> bool:
         """Acquire a token for making an API call.
 
         Blocks until a token is available or timeout expires.
@@ -73,8 +76,8 @@ class RateLimiter:
         """
         start_time = time.time()
 
-        with self._condition:
-            while True:
+        while True:
+            with self._lock:
                 self._refill_tokens()
 
                 if self.tokens >= 1.0:
@@ -82,23 +85,19 @@ class RateLimiter:
                     self._request_timestamps.append(time.time())
                     # Clean old timestamps
                     cutoff = time.time() - 60
-                    self._request_timestamps = [t for t in self._request_timestamps if t > cutoff]
+                    self._request_timestamps = [
+                        t for t in self._request_timestamps if t > cutoff
+                    ]
                     return True
 
-                # Calculate wait time for at least 1 token
-                wait_time = (1.0 - self.tokens) / self.config.requests_per_second
+            # Check timeout
+            if timeout is not None and (time.time() - start_time) >= timeout:
+                return False
 
-                # Check timeout
-                elapsed = time.time() - start_time
-                if timeout is not None:
-                    if elapsed >= timeout:
-                        return False
-                    wait_time = min(wait_time, timeout - elapsed)
+            # Wait before retry
+            time.sleep(self.config.cooldown_seconds)
 
-                # Wait before retry using condition, avoiding blocking sleep
-                self._condition.wait(timeout=max(wait_time, 0.01))
-
-    def get_stats(self) -> dict[str, Any]:
+    def get_stats(self) -> Dict[str, Any]:
         """Get rate limiter statistics.
 
         Returns:

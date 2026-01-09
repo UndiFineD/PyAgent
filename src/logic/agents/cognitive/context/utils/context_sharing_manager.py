@@ -1,35 +1,23 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
 
-
-"""Context sharing and synchronization for Cognitive agents.
-
-This module manages permissions and sharing of context objects across
-different users and agents within the team.
-"""
+"""Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
+
+from .SharedContext import SharedContext
+from .SharingPermission import SharingPermission
+
+from src.classes.base_agent import BaseAgent
+from dataclasses import dataclass, field
 from datetime import datetime
-
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.models.shared_context import SharedContext
-from src.logic.agents.cognitive.context.models.sharing_permission import (
-    SharingPermission,
-)
-
-__version__ = VERSION
-
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+import hashlib
+import json
+import logging
+import re
+import zlib
 
 class ContextSharingManager:
     """Manages context sharing across team members.
@@ -37,36 +25,22 @@ class ContextSharingManager:
     Provides functionality for sharing and synchronizing context.
 
     Example:
-        >>> manager = ContextSharingManager()
-        >>> shared = manager.create_shared("content", "my_context")
+        >>> manager=ContextSharingManager()
+        >>> shared=manager.share("context.md", ["user1", "user2"])
     """
 
     def __init__(self, owner: str = "current_user") -> None:
-        """Initialize sharing manager.
-
-        Args:
-            owner: The user ID that owns the shared contexts.
-        """
+        """Initialize sharing manager."""
         self.owner: str = owner
-        self.shared_contexts: dict[str, SharedContext] = {}
-        self._contents: dict[str, str] = {}
+        self.shared_contexts: Dict[str, SharedContext] = {}
+        self._contents: Dict[str, str] = {}
 
     def create_shared(
         self,
         content: str,
-        context_id: str | None = None,
+        context_id: Optional[str] = None,
         permission: SharingPermission = SharingPermission.READ_ONLY,
     ) -> SharedContext:
-        """Create a new shared context.
-
-        Args:
-            content: The content to be shared.
-            context_id: Optional unique identifier for the context.
-            permission: Default sharing permission.
-
-        Returns:
-            The created SharedContext object.
-        """
         if context_id is None:
             context_id = f"context_{len(self.shared_contexts) + 1}"
         shared = SharedContext(
@@ -81,15 +55,6 @@ class ContextSharingManager:
         return shared
 
     def share_with(self, context_id: str, user: str) -> None:
-        """Share a context with a specific user.
-
-        Args:
-            context_id: The ID of the context to share.
-            user: The ID of the user to share with.
-
-        Raises:
-            KeyError: If the context_id is not found.
-        """
         shared = self.shared_contexts.get(context_id)
         if not shared:
             raise KeyError(f"Unknown context_id: {context_id}")
@@ -98,15 +63,6 @@ class ContextSharingManager:
         shared.last_sync = datetime.now().isoformat()
 
     def set_permission(self, context_id: str, permission: SharingPermission) -> None:
-        """Set permissions for a shared context.
-
-        Args:
-            context_id: The ID of the context.
-            permission: The new permission level.
-
-        Raises:
-            KeyError: If the context_id is not found.
-        """
         shared = self.shared_contexts.get(context_id)
         if not shared:
             raise KeyError(f"Unknown context_id: {context_id}")
@@ -114,15 +70,6 @@ class ContextSharingManager:
         shared.last_sync = datetime.now().isoformat()
 
     def revoke_access(self, context_id: str, user: str) -> None:
-        """Revoke a user's access to a shared context.
-
-        Args:
-            context_id: The ID of the context.
-            user: The ID of the user whose access is being revoked.
-
-        Raises:
-            KeyError: If the context_id is not found.
-        """
         shared = self.shared_contexts.get(context_id)
         if not shared:
             raise KeyError(f"Unknown context_id: {context_id}")
@@ -130,20 +77,15 @@ class ContextSharingManager:
             shared.shared_with.remove(user)
         shared.last_sync = datetime.now().isoformat()
 
-    def get_shared_contexts(self) -> list[SharedContext]:
-        """Return a list of all shared contexts managed by this instance.
-
-        Returns:
-            List of SharedContext objects.
-        """
+    def get_shared_contexts(self) -> List[SharedContext]:
         return list(self.shared_contexts.values())
 
     def share(
         self,
         context_id: str,
-        users: list[str],
+        users: List[str],
         owner: str = "current_user",
-        permission: SharingPermission = SharingPermission.READ_ONLY,
+        permission: SharingPermission = SharingPermission.READ_ONLY
     ) -> SharedContext:
         """Share context with users.
 
@@ -163,7 +105,7 @@ class ContextSharingManager:
             self.share_with(shared.context_id, user)
         return shared
 
-    def get_shared_users(self, context_id: str) -> list[str]:
+    def get_shared_users(self, context_id: str) -> List[str]:
         """Get users a context is shared with.
 
         Args:

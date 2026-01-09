@@ -1,0 +1,13 @@
+[
+    {
+        "url": "https://example.com/fsdp-paper",
+        "title": "FSDP: Distributed Training at Scale",
+        "summary": "Paper on Fully Sharded Data Parallelism implementation",
+        "tags": [
+            "MLOps",
+            "Distributed",
+            "Infrastructure"
+        ],
+        "status": "Archived"
+    }
+]

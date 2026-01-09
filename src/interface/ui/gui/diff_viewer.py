@@ -1,51 +1,35 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
-#
 #     http://www.apache.org/licenses/LICENSE-2.0
-#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
 """Diff Viewer component for the PyAgent GUI."""
 
-from __future__ import annotations
-
-import difflib
 import tkinter as tk
-from tkinter import messagebox, ttk
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
+from tkinter import ttk, messagebox
+import difflib
 
 class DiffViewer:
     """A window for viewing differences between original and changed files."""
-
-    def __init__(self, parent: Any) -> None:
+    def __init__(self, parent) -> None:
         self.parent = parent
 
-    def show_diff(self, original_path: str, changed_content: str, title: str = "Changes Preview") -> None:
+    def show_diff(self, original_path, changed_content, title="Changes Preview"):
         if not original_path:
             messagebox.showwarning("Warning", "No original file specified.")
             return
 
         try:
-            with open(original_path, encoding="utf-8") as f:
+            with open(original_path, 'r', encoding='utf-8') as f:
                 original_content = f.read()
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             messagebox.showerror("Error", f"Failed to read original file: {e}")
             return
 
@@ -54,9 +38,9 @@ class DiffViewer:
             changed_content.splitlines(),
             fromfile="Original",
             tofile="Proposed",
-            lineterm="",
+            lineterm=""
         )
-
+        
         diff_text = "\n".join(list(diff))
         if not diff_text:
             messagebox.showinfo("No Changes", "The proposed content is identical to the original.")
@@ -76,11 +60,11 @@ class DiffViewer:
         text.tag_configure("header", foreground="blue", font=("Segoe UI", 10, "bold"))
 
         for line in diff_text.splitlines():
-            if line.startswith("+") and not line.startswith("+++"):
+            if line.startswith('+') and not line.startswith('+++'):
                 text.insert(tk.END, line + "\n", "add")
-            elif line.startswith("-") and not line.startswith("---"):
+            elif line.startswith('-') and not line.startswith('---'):
                 text.insert(tk.END, line + "\n", "remove")
-            elif line.startswith("@@") or line.startswith("---") or line.startswith("+++"):
+            elif line.startswith('@@') or line.startswith('---') or line.startswith('+++'):
                 text.insert(tk.END, line + "\n", "header")
             else:
                 text.insert(tk.END, line + "\n")
@@ -89,6 +73,6 @@ class DiffViewer:
         h_scroll = ttk.Scrollbar(win, orient=tk.HORIZONTAL, command=text.xview)
         v_scroll = ttk.Scrollbar(win, orient=tk.VERTICAL, command=text.yview)
         text.configure(xscrollcommand=h_scroll.set, yscrollcommand=v_scroll.set)
-
+        
         h_scroll.pack(side=tk.BOTTOM, fill=tk.X)
         v_scroll.pack(side=tk.RIGHT, fill=tk.Y)

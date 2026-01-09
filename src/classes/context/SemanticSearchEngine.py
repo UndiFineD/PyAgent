@@ -1,0 +1,170 @@
+#!/usr/bin/env python3
+
+"""Auto-extracted class from agent_context.py"""
+
+from __future__ import annotations
+
+from .SearchAlgorithm import SearchAlgorithm
+from .SemanticSearchResult import SemanticSearchResult
+
+from src.classes.base_agent import BaseAgent
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+import hashlib
+import json
+import logging
+import re
+import zlib
+
+class SemanticSearchEngine:
+    """Performs semantic code search using embeddings.
+
+    Provides functionality to search code using semantic similarity
+    rather than just keyword matching.
+
+    Attributes:
+        results: List of search results.
+        index: Index of embedded content.
+
+    Example:
+        >>> engine=SemanticSearchEngine()
+        >>> results=engine.search("function that handles authentication")
+    """
+
+    def __init__(self, persist_directory: Optional[str] = None) -> None:
+        """Initialize the semantic search engine."""
+        self.results: List[SemanticSearchResult] = []
+        self.algorithm: SearchAlgorithm = SearchAlgorithm.KEYWORD
+        self.similarity_metric: str = "cosine"
+        self.documents: Dict[str, str] = {}
+        self.persist_directory = persist_directory
+        self._client = None
+        self._collection = None
+
+    def _get_collection(self):
+        """Lazy initialization of ChromaDB collection."""
+        if self._collection is None:
+            try:
+                import chromadb
+                from chromadb.utils import embedding_functions
+                
+                if self.persist_directory:
+                    self._client = chromadb.PersistentClient(path=self.persist_directory)
+                else:
+                    self._client = chromadb.EphemeralClient()
+                
+                emb_fn = embedding_functions.SentenceTransformerEmbeddingFunction(
+                    model_name="all-MiniLM-L6-v2"
+                )
+                
+                self._collection = self._client.get_or_create_collection(
+                    name="pyagent_code",
+                    embedding_function=emb_fn,
+                    metadata={"hnsw:space": self.similarity_metric}
+                )
+            except Exception as e:
+                logging.warning(f"Failed to initialize ChromaDB: {e}. Falling back to keyword search.")
+                return None
+        return self._collection
+
+    def set_algorithm(self, algorithm: SearchAlgorithm) -> None:
+        """Set the search algorithm."""
+        self.algorithm = algorithm
+
+    def add_document(self, doc_id: str, content: str) -> None:
+        """Add a document to the search index."""
+        self.documents[doc_id] = content
+        self.index_content(doc_id, content)
+
+    def clear(self) -> None:
+        """Clear all indexed documents and results."""
+        self.results.clear()
+        self.documents.clear()
+        collection = self._get_collection()
+        if collection:
+            # Delete all items in collection by fetching all IDs
+            existing_ids = collection.get().get('ids', [])
+            if existing_ids:
+                collection.delete(ids=existing_ids)
+
+    def index_content(self, file_path: str, content: str) -> None:
+        """Index content for searching.
+
+        Args:
+            file_path: Path to the file.
+            content: File content to index.
+        """
+        # Update documents storage
+        self.documents[file_path] = content
+        
+        collection = self._get_collection()
+        if collection:
+            # Upsert into Chroma
+            collection.upsert(
+                documents=[content],
+                ids=[file_path],
+                metadatas=[{"path": file_path}]
+            )
+
+    def search(
+            self,
+            query: str,
+            algorithm: Optional[SearchAlgorithm] = None) -> List[SemanticSearchResult]:
+        """Search for related code.
+
+        Args:
+            query: Search query.
+            algorithm: Search algorithm to use (uses self.algorithm if None).
+
+        Returns:
+            List of search results.
+        """
+        search_algo = algorithm or self.algorithm
+        self.results = []
+
+        if search_algo == SearchAlgorithm.SEMANTIC:
+            collection = self._get_collection()
+            if collection:
+                results = collection.query(
+                    query_texts=[query],
+                    n_results=10
+                )
+                
+                if results and 'documents' in results and results['documents']:
+                    for i in range(len(results['ids'][0])):
+                        file_path = results['ids'][0][i]
+                        content = results['documents'][0][i]
+                        # Chroma distances: smaller is better for cosine if it's 1-cosine
+                        # But Chroma cosine space is usually 1 - cosine similarity
+                        # Score: 1.0 - distance
+                        distance = results['distances'][0][i] if 'distances' in results else 0.5
+                        score = max(0.0, min(1.0, 1.0 - distance))
+                        
+                        self.results.append(SemanticSearchResult(
+                            file_path=file_path,
+                            content_snippet=content[:200], # Longer snippet for semantic
+                            similarity_score=score
+                        ))
+                return sorted(self.results, key=lambda r: r.similarity_score, reverse=True)
+
+        # Fallback to keyword search (original logic)
+        query_words = set(query.lower().split())
+
+        for file_path, content in self.documents.items():
+            content_lower = content.lower()
+            # Better keyword match: check if ANY query word is in content
+            matches = [w for w in query_words if w in content_lower]
+            if not matches:
+                continue
+
+            score = len(matches) / max(1, len(query_words))
+            self.results.append(SemanticSearchResult(
+                file_path=file_path,
+                content_snippet=content[:80],
+                similarity_score=min(score, 1.0)
+            ))
+
+        return sorted(self.results, key=lambda r: r.similarity_score, reverse=True)

@@ -1,167 +1,122 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """Data models for test agent functionality."""
 
-from __future__ import annotations
-
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Dict, List, Tuple
 
-from src.core.base.lifecycle.version import VERSION
-
-from .enums import (BrowserType, CoverageType, MutationOperator, TestPriority,
-                    TestSourceType, TestStatus)
-
-__version__ = VERSION
+from .enums import TestPriority, TestStatus, CoverageType, BrowserType, TestSourceType, MutationOperator
 
 
-def _empty_str_list() -> list[str]:
+def _empty_str_list() -> List[str]:
     return []
 
 
-def _empty_dict_any() -> dict[str, Any]:
+def _empty_dict_any() -> Dict[str, Any]:
     return {}
 
 
-def _empty_dict_str_status() -> dict[str, TestStatus]:
+def _empty_dict_str_status() -> Dict[str, TestStatus]:
     return {}
 
 
-def _empty_action_list() -> list[dict[str, Any]]:
+def _empty_action_list() -> List[Dict[str, Any]]:
     return []
 
 
 @dataclass
 class TestCase:
     """Represents a single test case."""
-
     __test__ = False
-
     id: str
     name: str
     file_path: str
-
     line_number: int
     priority: TestPriority = TestPriority.MEDIUM
-
     status: TestStatus = TestStatus.PASSED
-
     duration_ms: float = 0.0
-
     flakiness_score: float = 0.0
     last_run: str = ""
     run_count: int = 0
     failure_count: int = 0
-    tags: list[str] = field(default_factory=lambda: [])
-
-    dependencies: list[str] = field(default_factory=lambda: [])
+    tags: List[str] = field(default_factory=lambda: [])
+    dependencies: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
 class TestRun:
     """A test execution run."""
-
-    __test__ = False
-
     id: str
     timestamp: str
-
     total_tests: int = 0
     passed: int = 0
     failed: int = 0
-
     skipped: int = 0
     errors: int = 0
-
     duration_ms: float = 0.0
-
-    test_results: dict[str, TestStatus] = field(default_factory=lambda: {})
+    test_results: Dict[str, TestStatus] = field(default_factory=lambda: {})
 
 
 @dataclass
 class CoverageGap:
     """Represents a gap in test coverage."""
-
     file_path: str
     line_start: int
     line_end: int
     coverage_type: CoverageType
-
     suggestion: str = ""
 
 
 @dataclass
 class TestFactory:
     """A test data factory for generating test data."""
-
-    __test__ = False
     name: str
     return_type: str
-    parameters: dict[str, str] = field(default_factory=lambda: {})
-
+    parameters: Dict[str, str] = field(default_factory=lambda: {})
     generator: str = ""  # Code snippet or function name
 
 
 @dataclass
 class VisualRegressionConfig:
     """Configuration for visual regression testing."""
-
     baseline_dir: str
-
     diff_threshold: float = 0.01
-    browsers: list[BrowserType] = field(default_factory=lambda: [BrowserType.CHROME])
-    viewport_sizes: list[tuple[int, int]] = field(default_factory=lambda: [(1920, 1080)])
-
-    ignore_regions: list[tuple[int, int, int, int]] = field(default_factory=lambda: [])
+    browsers: List[BrowserType] = field(default_factory=lambda: [BrowserType.CHROME])
+    viewport_sizes: List[Tuple[int, int]] = field(default_factory=lambda: [(1920, 1080)])
+    ignore_regions: List[Tuple[int, int, int, int]] = field(default_factory=lambda: [])
 
 
 @dataclass
 class ContractTest:
     """A contract test for API boundaries."""
-
     consumer: str
     provider: str
     endpoint: str
-    request_schema: dict[str, Any] = field(default_factory=lambda: {})
-    response_schema: dict[str, Any] = field(default_factory=lambda: {})
+    request_schema: Dict[str, Any] = field(default_factory=lambda: {})
+    response_schema: Dict[str, Any] = field(default_factory=lambda: {})
     status_code: int = 200
 
 
 @dataclass
 class TestEnvironment:
     """Test environment configuration."""
-
-    __test__ = False
     name: str
-
     base_url: str = ""
-    variables: dict[str, str] = field(default_factory=lambda: {})
-    fixtures: list[str] = field(default_factory=lambda: [])
-    setup_commands: list[str] = field(default_factory=lambda: [])
-    teardown_commands: list[str] = field(default_factory=lambda: [])
+    variables: Dict[str, str] = field(default_factory=lambda: {})
+    fixtures: List[str] = field(default_factory=lambda: [])
+    setup_commands: List[str] = field(default_factory=lambda: [])
+    teardown_commands: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
 class ExecutionTrace:
     """Test execution trace for replay."""
-
     test_id: str
     timestamp: str
-    steps: list[dict[str, Any]] = field(default_factory=lambda: [])
-    variables: dict[str, Any] = field(default_factory=lambda: {})
+    steps: List[Dict[str, Any]] = field(default_factory=lambda: [])
+    variables: Dict[str, Any] = field(default_factory=lambda: {})
     stdout: str = ""
     stderr: str = ""
 
@@ -169,8 +124,6 @@ class ExecutionTrace:
 @dataclass
 class TestDependency:
     """A dependency for test injection."""
-
-    __test__ = False
     name: str
     dependency_type: str
     implementation: str = ""
@@ -180,8 +133,7 @@ class TestDependency:
 @dataclass
 class CrossBrowserConfig:
     """Cross-browser testing configuration."""
-
-    browsers: list[BrowserType]
+    browsers: List[BrowserType]
     parallel: bool = True
     headless: bool = True
     timeout_seconds: int = 30
@@ -191,19 +143,17 @@ class CrossBrowserConfig:
 @dataclass
 class AggregatedResult:
     """Aggregated test result from multiple sources."""
-
     source: TestSourceType
     test_name: str
     status: TestStatus
     duration_ms: float
     timestamp: str
-    metadata: dict[str, Any] = field(default_factory=lambda: {})
+    metadata: Dict[str, Any] = field(default_factory=lambda: {})
 
 
 @dataclass
 class Mutation:
     """A code mutation for mutation testing."""
-
     id: str
     file_path: str
     line_number: int
@@ -216,7 +166,6 @@ class Mutation:
 @dataclass
 class GeneratedTest:
     """A test generated from specification."""
-
     name: str
     specification: str
     generated_code: str
@@ -227,8 +176,6 @@ class GeneratedTest:
 @dataclass
 class TestProfile:
     """Runtime profiling data for a test."""
-
-    __test__ = False
     test_id: str
     cpu_time_ms: float
     memory_peak_mb: float
@@ -240,10 +187,9 @@ class TestProfile:
 @dataclass
 class ScheduleSlot:
     """A scheduled time slot for test execution."""
-
     start_time: str
     end_time: str
-    tests: list[str] = field(default_factory=lambda: [])
+    tests: List[str] = field(default_factory=lambda: [])
     workers: int = 1
     priority: TestPriority = TestPriority.MEDIUM
 
@@ -251,32 +197,28 @@ class ScheduleSlot:
 @dataclass
 class ProvisionedEnvironment:
     """A provisioned test environment."""
-
     status: str
     python_version: str = ""
-    dependencies: list[str] = field(default_factory=lambda: [])
-    config: dict[str, Any] = field(default_factory=lambda: {})
+    dependencies: List[str] = field(default_factory=lambda: [])
+    config: Dict[str, Any] = field(default_factory=lambda: {})
 
 
 @dataclass
 class ValidationResult:
     """Result of a validation operation."""
-
     valid: bool
-    errors: list[str] = field(default_factory=lambda: [])
+    errors: List[str] = field(default_factory=lambda: [])
 
 
 @dataclass
 class Recording:
     """A recording of test execution."""
-
     test_name: str
-    actions: list[dict[str, Any]] = field(default_factory=lambda: [])
+    actions: List[Dict[str, Any]] = field(default_factory=lambda: [])
 
 
 @dataclass
 class ReplayResult:
     """Result of replaying a recorded test."""
-
     success: bool
-    errors: list[str] = field(default_factory=lambda: [])
+    errors: List[str] = field(default_factory=lambda: [])

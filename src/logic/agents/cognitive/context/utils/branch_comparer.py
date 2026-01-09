@@ -1,28 +1,22 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.models.branch_comparison import BranchComparison
 
-__version__ = VERSION
+from .BranchComparison import BranchComparison
 
-__version__ = VERSION
-
+from src.classes.base_agent import BaseAgent
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+import hashlib
+import json
+import logging
+import re
+import zlib
 
 class BranchComparer:
     """Compares context across git branches.
@@ -37,21 +31,18 @@ class BranchComparer:
     def __init__(self) -> None:
         self.branch_a: str = ""
         self.branch_b: str = ""
-        self._last_comparison: BranchComparison | None = None
+        self._last_comparison: Optional[BranchComparison] = None
 
     def set_branches(self, branch_a: str, branch_b: str) -> None:
-        """Sets the branches to compare."""
         self.branch_a = branch_a
         self.branch_b = branch_b
 
-    def get_modified_files(self) -> list[str]:
-        """Returns the list of modified files from the last comparison."""
+    def get_modified_files(self) -> List[str]:
         if not self._last_comparison:
             return []
         return list(self._last_comparison.modified_files)
 
     def summarize(self, comparison: BranchComparison) -> str:
-        """Return a string summary of the comparison."""
         return (
             f"Compare {comparison.branch_a} -> {comparison.branch_b}: "
             f"only_in_a={len(comparison.files_only_in_a)}, "
@@ -61,10 +52,10 @@ class BranchComparer:
 
     def compare(
         self,
-        branch_a: str | None = None,
-        branch_b: str | None = None,
-        contexts_a: dict[str, str] | None = None,
-        contexts_b: dict[str, str] | None = None,
+        branch_a: Optional[str] = None,
+        branch_b: Optional[str] = None,
+        contexts_a: Optional[Dict[str, str]] = None,
+        contexts_b: Optional[Dict[str, str]] = None,
     ) -> BranchComparison:
         """Compare contexts between branches.
 
@@ -84,7 +75,7 @@ class BranchComparer:
 
         files_a = set(ctx_a.keys())
         files_b = set(ctx_b.keys())
-        modified: list[str] = []
+        modified: List[str] = []
         for f in files_a & files_b:
             if ctx_a[f] != ctx_b[f]:
                 modified.append(f)
@@ -93,7 +84,7 @@ class BranchComparer:
             branch_b=resolved_b,
             files_only_in_a=list(files_a - files_b),
             files_only_in_b=list(files_b - files_a),
-            modified_files=modified,
+            modified_files=modified
         )
         self._last_comparison = comparison
         return comparison

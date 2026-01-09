@@ -1,29 +1,12 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """Dependency injection for tests."""
 
-from __future__ import annotations
-
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
+from typing import Any, Dict, Optional
 
 from .models import TestDependency
-
-__version__ = VERSION
 
 
 class DependencyInjector:
@@ -31,9 +14,9 @@ class DependencyInjector:
 
     def __init__(self) -> None:
         """Initialize dependency injector."""
-        self.dependencies: dict[str, TestDependency] = {}
-        self.overrides: dict[str, Any] = {}
-        self._scopes: dict[str, str] = {}
+        self.dependencies: Dict[str, TestDependency] = {}
+        self.overrides: Dict[str, Any] = {}
+        self._scopes: Dict[str, str] = {}
 
     def register(
         self,
@@ -41,14 +24,14 @@ class DependencyInjector:
         dependency_type: str,
         implementation: str = "",
         mock_behavior: str = "",
-        scope: str = "function",
+        scope: str = "function"
     ) -> TestDependency:
         """Register a dependency."""
         dep = TestDependency(
             name=name,
             dependency_type=dependency_type,
             implementation=implementation,
-            mock_behavior=mock_behavior,
+            mock_behavior=mock_behavior
         )
         self.dependencies[name] = dep
         self._scopes[name] = scope
@@ -65,7 +48,7 @@ class DependencyInjector:
             return True
         return False
 
-    def resolve(self, name: str) -> Any | None:
+    def resolve(self, name: str) -> Optional[Any]:
         """Resolve a dependency."""
         if name in self.overrides:
             return self.overrides[name]
@@ -93,3 +76,4 @@ class DependencyInjector:
         for name in self.dependencies:
             fixtures.append(self.get_fixture_code(name))
         return "\n".join(fixtures)
+

@@ -1,212 +1,47 @@
-# PyAgent Requirements (Federated)
-# Optimized for Python 3.12
-# Main entry point - includes all sub-requirements
-Jinja2==3.1.6
-MarkupSafe==3.0.3
-MouseInfo==0.1.3
-PyAutoGUI==0.9.54
-PyYAML==6.0.3
-aiofiles==25.1.0
-aiohappyeyeballs==2.6.1
-aiohttp==3.13.3
-aiosignal==1.4.0
-annotated-doc==0.0.4
-annotated-types==0.7.0
-anthropic==0.71.0
-anyio==4.12.1
-arxiv==2.4.0
-attrs==25.4.0
-# PyAgent Requirements (Federated)
-# Optimized for Python 3.12
-# Main entry point - includes all sub-requirements
-Jinja2==3.1.6
-MarkupSafe==3.0.3
-MouseInfo==0.1.3
-PyAutoGUI==0.9.54
-PyYAML==6.0.3
-aiofiles==25.1.0
-aiohappyeyeballs==2.6.1
-aiohttp==3.13.3
-aiosignal==1.4.0
-annotated-doc==0.0.4
-annotated-types==0.7.0
-anthropic==0.71.0
-anyio==4.12.1
-arxiv==2.4.0
-attrs==25.4.0
-backoff==2.2.1
-blake3==1.0.8
-build==1.4.0
-cachetools==6.2.4
-cbor2==5.8.0
-certifi==2026.1.4
-cffi==2.0.0
-charset-normalizer==3.4.4
-chromadb==1.4.1
-click==8.3.1
-cloudpickle==3.1.2
-colorama==0.4.6
-compressed-tensors==0.12.2
-contourpy==1.3.3
-coverage==7.13.1
-cryptography==46.0.3
-cycler==0.12.1
-dill==0.4.0
-diskcache==5.6.3
-distro==1.9.0
-dnspython==2.8.0
-docstring_parser==0.17.0
-einops==0.8.1
-email-validator==2.3.0
-fastapi==0.128.0
-filelock==3.20.3
-flatbuffers==25.12.19
-fonttools==4.61.1
-frozenlist==1.8.0
-fsspec==2026.1.0
-gguf==0.17.1
-google-auth==2.47.0
-googleapis-common-protos==1.72.0
-grpcio==1.76.0
-h11==0.16.0
-httpcore==1.0.9
-httptools==0.7.1
-httpx-sse==0.4.3
-httpx==0.28.1
-beautifulsoup4==4.12.2
-huggingface-hub==0.36.0
-humanfriendly==10.0
-hypothesis==6.115.0
-idna==3.11
-ijson==3.4.0.post0
-importlib_metadata==8.7.1
-importlib_resources==6.5.2
-iniconfig==2.3.0
-jiter==0.12.0
-jmespath==1.0.1
-joblib==1.5.3
-jsonschema-specifications==2025.9.1
-jsonschema==4.26.0
-kiwisolver==1.4.9
-kubernetes==34.1.0
-lark==1.2.2
-lm-format-enforcer==0.11.3
-loguru==0.7.3
-markdown
-markdown-it-py==4.0.0
-matplotlib==3.10.8
-mcp==1.25.0
-mdurl==0.1.2
-mmh3==5.2.0
-model-hosting-container-standards==0.1.12
-mpmath==1.3.0
-msgspec==0.20.0
-networkx==3.6.1
-ninja==1.13.0
-nvidia-ml-py==13.590.44
-ollama
-openai==2.14.0
-opentelemetry-api==1.39.1
-opentelemetry-exporter-otlp-proto-common==1.39.1
-opentelemetry-exporter-otlp-proto-grpc==1.39.1
-opentelemetry-proto==1.39.1
-opentelemetry-sdk==1.39.1
-opentelemetry-semantic-conventions==0.60b1
-orjson==3.11.5
-# outlines_core requires building Rust native extensions and the `aws-lc-sys`
-# dependency needs `cmake` and a C toolchain available during build. On many
-# Windows hosts this fails in CI or clean venvs. Commenting out to allow
-# environment installation; re-enable after installing system `cmake` and a
-# Rust toolchain, or provide a prebuilt wheel for your platform.
-# outlines_core==0.2.11
-overrides==7.7.0
-packaging==25.0
-pandas==3.0.0
-pillow==12.1.0
-pluggy==1.6.0
-posthog==5.4.0
-prometheus-fastapi-instrumentator==7.1.0
-prometheus_client==0.23.1
-psutil==7.2.1
-py-cpuinfo==9.0.0
-pydantic==2.12.5
-pygments==2.19.2
-pymupdf==1.26.7
-pynput==1.8.1
-pypdf==6.6.2
-pyproject_hooks==1.2.0
-pytest-anyio==0.0.0
-pytest-asyncio
-pytest-cov==7.0.0
-pytest==9.0.2
-python-dotenv==1.2.1
-pytz==2025.2
-pyzmq==27.1.0
-referencing==0.37.0
+# PyAgent Requirements
+# Optimized for Python 3.12 (VLLM Stability)
+
+# Core
 requests==2.32.5
-rich==14.2.0
-rignore==0.7.6
-rpds-py==0.30.0
-rsa==4.9.1
-safetensors==0.7.0
-scikit-learn==1.8.0
-scipy==1.17.0
-sentence-transformers==5.2.2
-sentencepiece==0.2.1
-sentry-sdk==2.49.0
-setproctitle==1.3.7
-setuptools==80.9.0
-sniffio==1.3.1
-sse-starlette==3.1.2
-starlette==0.50.0
-supervisor==4.3.0
-sympy==1.14.0
-tenacity==9.1.2
-tiktoken==0.12.0
-tokenizers==0.22.2
-torch==2.9.1
-tqdm==4.67.1
-transformers==4.57.3
-typer==0.21.1
-tzdata==2025.3
+httpx==0.28.1
+fastapi==0.128.0
 uvicorn==0.40.0
-watchfiles==1.1.1
-websocket-client==1.9.0
-websockets==15.0.1
-win32_setctime==1.2.0
-yarl==1.22.0
-zeroconf==0.148.0
-zipp==3.23.0
+pydantic==2.12.5
+pydantic-settings==2.12.0
+python-dotenv==1.2.1
+PyYAML==6.0.3
+toml==0.10.2
+tqdm==4.67.1
+psutil==7.2.1
+rich==14.2.0
+tenacity==9.1.2
+Jinja2==3.1.6
+pandas==2.3.3
+numpy==2.2.6
+pypdf==6.5.0
+pillow==12.1.0
 
-# --- Conflict / commented entries moved here ---
-# The pinned `mistral_common==1.8.8` previously caused "No matching distribution"
-# errors on this environment (Python/platform). Commenting out so `pip install`
-# can proceed; please pin to a compatible version or provide a platform wheel
-# if you need exact reproducibility.
-# mistral_common==1.8.8
+# AI & Machine Learning
+vllm==0.13.0
+torch==2.9.1
+openai==2.14.0
+anthropic==0.71.0
+transformers==4.57.3
+sentence-transformers==5.2.0
+tiktoken==0.12.0
+mcp==1.25.0
 
-# Some packages require `numpy` 2.x but `opencv-python-headless` requires
-# `numpy<2.3.0`. Pin `numpy` to a 2.x release that satisfies those constraints.
-# Adjust if your target runtime prefers a different set of binaries.
-numpy==2.4.1
+# UI / Local Automation
+matplotlib==3.10.8
+PyAutoGUI==0.9.54
+pynput==1.8.1
 
-# Pin `onnxruntime` to a version available on PyPI for this Python build.
-# 1.23.2 wasn't available on this platform; 1.24.2 is compatible and present.
-onnxruntime==1.24.2
+# Database & Memory
+chromadb==1.4.0
 
-# `opencv-python-headless` causes a numpy version conflict on Python 3.14
-# with `pandas==3.0.0`. Commenting out to allow installation. Re-enable when
-# you have a compatible numpy/opencv pairing for your platform.
-# opencv-python-headless==4.12.0.88
+# Testing
+pytest==9.0.2
+pytest-cov==7.0.0
 
-# `kubernetes==34.1.0` requires `urllib3<2.4.0`; 2.6.3 conflicts and may not have
-# builds for this Python. Pinning to a compatible release under 2.4.0 to satisfy
-# `kubernetes` while keeping broad compatibility. Adjust if you have stricter
-# constraints.
-urllib3==2.3.0
-
-# vllm currently requires building from source and pulls a build-time dependency
-# on `torch==2.6.0` which is not available for this Python/platform. Commenting
-# out `vllm` to allow the rest of the environment to install. Re-enable or pin
-# to a prebuilt wheel when a compatible release is available for your runtime.
-# vllm==0.8.3
+# Note: Dependency tree resolved and frozen in .venv
+# Use 'pip install -r requirements.txt' to replicate.

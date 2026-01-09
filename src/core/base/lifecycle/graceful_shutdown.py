@@ -1,34 +1,35 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
 
+from .ShutdownState import ShutdownState
+
+from abc import ABC, abstractmethod
+from concurrent.futures import ThreadPoolExecutor
+from contextlib import contextmanager
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from pathlib import Path
+from types import TracebackType
+from typing import List, Set, Optional, Dict, Any, Callable, Iterable, TypeVar, cast, Final
+import argparse
+import asyncio
+import difflib
+import fnmatch
+import functools
+import hashlib
+import importlib.util
 import json
 import logging
+import os
 import signal
+import subprocess
+import sys
+import threading
 import time
-from pathlib import Path
-from typing import Any, cast
-
-from src.core.base.common.models import ShutdownState
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
+import uuid
 
 class GracefulShutdown:
     """Handles graceful shutdown with state persistence.
@@ -41,15 +42,15 @@ class GracefulShutdown:
         state_file: Path to state persistence file.
     """
 
-    def __init__(self, repo_root: Path | str, state_file: str = ".agent_shutdown.json") -> None:
+    def __init__(self, repo_root: Path, state_file: str = ".agent_shutdown.json") -> None:
         """Initialize graceful shutdown handler.
 
         Args:
             repo_root: Repository root directory.
             state_file: Name of state file.
         """
-        self.repo_root = Path(repo_root)
-        self.state_file = self.repo_root / state_file
+        self.repo_root = repo_root
+        self.state_file = repo_root / state_file
         self.state = ShutdownState()
         self._original_sigint = None
         self._original_sigterm = None
@@ -57,7 +58,7 @@ class GracefulShutdown:
     def install_handlers(self) -> None:
         """Install signal handlers for graceful shutdown."""
         self._original_sigint = signal.signal(signal.SIGINT, self._handle_signal)
-        if hasattr(signal, "SIGTERM"):
+        if hasattr(signal, 'SIGTERM'):
             self._original_sigterm = signal.signal(signal.SIGTERM, self._handle_signal)
         logging.debug("Installed graceful shutdown handlers")
 
@@ -65,14 +66,14 @@ class GracefulShutdown:
         """Restore original signal handlers."""
         if self._original_sigint:
             signal.signal(signal.SIGINT, self._original_sigint)
-        if self._original_sigterm and hasattr(signal, "SIGTERM"):
+        if self._original_sigterm and hasattr(signal, 'SIGTERM'):
             signal.signal(signal.SIGTERM, self._original_sigterm)
         logging.debug("Restored original signal handlers")
 
-    def _handle_signal(self, signum: int, _frame: Any) -> None:
+    def _handle_signal(self, signum: int, frame: Any) -> None:
         """Handle shutdown signal."""
         signal_name = signal.Signals(signum).name
-        logging.warning("Received %s, initiating graceful shutdown...", signal_name)
+        logging.warning(f"Received {signal_name}, initiating graceful shutdown...")
         self.state.shutdown_requested = True
         self._save_state()
 
@@ -84,7 +85,7 @@ class GracefulShutdown:
         """
         return not self.state.shutdown_requested
 
-    def set_current_file(self, file_path: Path | None) -> None:
+    def set_current_file(self, file_path: Optional[Path]) -> None:
         """Set the currently processing file.
 
         Args:
@@ -102,7 +103,7 @@ class GracefulShutdown:
         if str(file_path) in self.state.pending_files:
             self.state.pending_files.remove(str(file_path))
 
-    def set_pending_files(self, files: list[Path]) -> None:
+    def set_pending_files(self, files: List[Path]) -> None:
         """Set the list of pending files.
 
         Args:
@@ -114,17 +115,17 @@ class GracefulShutdown:
         """Save shutdown state to disk."""
         try:
             data: dict[str, Any] = {
-                "shutdown_requested": self.state.shutdown_requested,
-                "current_file": self.state.current_file,
-                "completed_files": self.state.completed_files,
-                "pending_files": self.state.pending_files,
-                "start_time": self.state.start_time,
+                'shutdown_requested': self.state.shutdown_requested,
+                'current_file': self.state.current_file,
+                'completed_files': self.state.completed_files,
+                'pending_files': self.state.pending_files,
+                'start_time': self.state.start_time
             }
             self.state_file.write_text(json.dumps(data, indent=2))
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error("Failed to save shutdown state: %s", e)
+        except Exception as e:
+            logging.error(f"Failed to save shutdown state: {e}")
 
-    def load_resume_state(self) -> ShutdownState | None:
+    def load_resume_state(self) -> Optional[ShutdownState]:
         """Load state for resuming an interrupted run.
 
         Returns:
@@ -138,17 +139,16 @@ class GracefulShutdown:
             data: dict[str, Any] = cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
             state = ShutdownState(
                 shutdown_requested=False,  # Reset for resume
-                current_file=data.get("current_file"),
-                completed_files=data.get("completed_files", []),
-                pending_files=data.get("pending_files", []),
-                start_time=data.get("start_time", time.time()),
+                current_file=data.get('current_file'),
+                completed_files=data.get('completed_files', []),
+                pending_files=data.get('pending_files', []),
+                start_time=data.get('start_time', time.time())
             )
-            logging.info(
-                "Loaded resume state: %s completed, %s pending", len(state.completed_files), len(state.pending_files)
-            )
+            logging.info(f"Loaded resume state: {len(state.completed_files)} completed, "
+                         f"{len(state.pending_files)} pending")
             return state
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.warning("Failed to load resume state: %s", e)
+        except Exception as e:
+            logging.warning(f"Failed to load resume state: {e}")
             return None
 
     def cleanup(self) -> None:

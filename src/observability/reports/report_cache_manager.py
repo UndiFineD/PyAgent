@@ -1,36 +1,24 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
 
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple, cast
+import ast
+import hashlib
 import json
 import logging
+import re
+import sys
 import time
-from pathlib import Path
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
 
 # Define AGENT_DIR for default parameter
-
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
-
 
 class ReportCacheManager:
     """Manages report caching with invalidation strategies.
@@ -39,14 +27,14 @@ class ReportCacheManager:
         _cache: Current cache data mapping (path, hash) -> (content, ttl_end).
     """
 
-    def __init__(self, cache_file: Path | None = None) -> None:
+    def __init__(self, cache_file: Optional[Path] = None) -> None:
         """Initialize cache manager.
         Args:
             cache_file: Path to cache file. Defaults to .report_cache.json.
         """
 
         self.cache_file = cache_file or AGENT_DIR / ".report_cache.json"
-        self._cache: dict[str, Any] = {}
+        self._cache: Dict[str, Any] = {}
         self._load_cache()
 
     def _load_cache(self) -> None:
@@ -55,20 +43,22 @@ class ReportCacheManager:
         if self.cache_file.exists():
             try:
                 data = json.loads(self.cache_file.read_text())
-                self._cache = data.get("cache", {})
-            except (IOError, OSError, json.JSONDecodeError, UnicodeDecodeError) as e:
+                self._cache = data.get('cache', {})
+            except Exception as e:
                 logging.warning(f"Failed to load cache: {e}")
 
     def _save_cache(self) -> None:
         """Save cache to disk."""
 
         try:
-            data: dict[str, Any] = {"cache": self._cache}
+            data: Dict[str, Any] = {
+                'cache': self._cache
+            }
             self.cache_file.write_text(json.dumps(data, indent=2))
-        except (IOError, OSError, TypeError, UnicodeEncodeError) as e:
+        except Exception as e:
             logging.warning(f"Failed to save cache: {e}")
 
-    def get(self, file_path: str, content_hash: str) -> str | None:
+    def get(self, file_path: str, content_hash: str) -> Optional[str]:
         """Get cached report if valid.
         Args:
             file_path: Path to source file.
@@ -82,9 +72,9 @@ class ReportCacheManager:
             return None
         entry = self._cache[cache_key]
         # Check if expired
-        if time.time() > entry.get("expires_at", 0):
+        if time.time() > entry.get('expires_at', 0):
             return None
-        return entry.get("content")
+        return entry.get('content')
 
     def set(self, file_path: str, content_hash: str, content: str, ttl: int = 3600) -> None:
         """Cache report content.
@@ -96,7 +86,10 @@ class ReportCacheManager:
         """
 
         cache_key = f"{file_path}:{content_hash}"
-        self._cache[cache_key] = {"content": content, "expires_at": time.time() + ttl}
+        self._cache[cache_key] = {
+            'content': content,
+            'expires_at': time.time() + ttl
+        }
         self._save_cache()
 
     def invalidate_by_path(self, file_path: str) -> None:
@@ -110,7 +103,7 @@ class ReportCacheManager:
             del self._cache[key]
         self._save_cache()
 
-    def invalidate(self, file_path: str | None = None) -> None:
+    def invalidate(self, file_path: Optional[str] = None) -> None:
         """Invalidate cache entries.
         Args:
             file_path: Path to invalidate. If None, clears all.

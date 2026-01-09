@@ -1,28 +1,22 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
+
+from .ContextDiff import ContextDiff
+
+from src.classes.base_agent import BaseAgent
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+import hashlib
+import json
+import logging
 import re
-
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.models.context_diff import ContextDiff
-
-__version__ = VERSION
-
+import zlib
 
 class ContextDiffer:
     """Shows changes in context between versions.
@@ -36,15 +30,13 @@ class ContextDiffer:
 
     def __init__(self) -> None:
         """Initialize context differ."""
-        self.diffs: list[str] = []
+        self.diffs: List[str] = []
 
     def compute_diff(self, content_from: str, content_to: str) -> ContextDiff:
         """Compute a structured diff between two context contents."""
         return self.diff_versions(content_from, content_to)
 
-    def get_section_changes(
-        self, content_from: str, content_to: str
-    ) -> dict[str, list[str]]:
+    def get_section_changes(self, content_from: str, content_to: str) -> Dict[str, List[str]]:
         """Return section-level changes between two contents."""
         diff = self.diff_versions(content_from, content_to)
         return {
@@ -65,7 +57,7 @@ class ContextDiffer:
         content_from: str,
         content_to: str,
         version_from: str = "v1",
-        version_to: str = "v2",
+        version_to: str = "v2"
     ) -> ContextDiff:
         """Create diff between two content versions.
 
@@ -81,9 +73,9 @@ class ContextDiffer:
         # Extract sections
         sections_from: set[str] = set(re.findall(r"##\s+(\w+)", content_from))
         sections_to: set[str] = set(re.findall(r"##\s+(\w+)", content_to))
-        added: list[str] = list(sections_to - sections_from)
-        removed: list[str] = list(sections_from - sections_to)
-        modified: list[str] = []
+        added: List[str] = list(sections_to - sections_from)
+        removed: List[str] = list(sections_from - sections_to)
+        modified: List[str] = []
         # Check for modified content in common sections
         common = sections_from & sections_to
         for section in common:
@@ -98,5 +90,4 @@ class ContextDiffer:
             change_summary=(
                 f"Added {len(added)}, removed {len(removed)}, "
                 f"modified {len(modified)} sections"
-            ),
-        )
+            ))

@@ -1,108 +1,309 @@
-# 🤖 PyAgent: The Autonomous Swarm Intelligence (v4.0.0-VOYAGER)
+# PyAgent: AI-Powered Code Improvement Orchestration
 
-PyAgent is a high-performance, multi-agent swarm system optimized for autonomous code improvement, reasoning, and fleet-wide orchestration. It leverages a **Rust-accelerated core** and a **decentralized mixin architecture** to provide a secure, transactionally safe environment for agentic self-evolution.
+An intelligent orchestration system that coordinates specialized AI agents to automatically improve code quality, documentation, testing, and code artifacts across Python projects.
 
----
+## Overview
 
-## 🚀 The Core Pillars
+**PyAgent** is a comprehensive framework for multi-agent code improvement. It coordinates various specialized agents that work together to enhance code quality, generate documentation, improve tests, and maintain code artifacts. The system acts as an intelligent project manager, delegating specific improvement tasks to domain-expert agents while tracking progress and managing dependencies.
 
-### ⚡ Rust-Native Acceleration
-Computationally intensive tasks are delegated to a high-throughput **Rust FFI bridge** (`rust_core`).
-- **41% Performance Gain**: Offloads metrics calculation, complexity analysis, and regex FSM decoding to native code.
-- **DFA-Based Constraints**: LLM structured output decoding is accelerated via Rust-managed state machines and vectorized bitmasking.
-- **Fast Diffs & Patching**: Native Myers diff engine for high-speed code modification and transactional integrity.
+## Key Features
 
-### 🐝 Swarm-Mixin Architecture
-PyAgent avoids monolithic design by utilizing a **Synaptic Modularization** pattern. Agents are composed of specialized mixins and categorized into functional swarms:
-- **Specialized Agents**:
-  - **Quantum Scaling Coder**: Optimizes code for extreme performance and scalability.
-  - **Legal Audit**: Ensures compliance and legal safety in autonomous operations.
-  - **Operational Cost**: Monitored resource utilization and token efficiency.
-- **Mixins**:
-  - **ReflectionMixin**: Enables autonomous self-critique and logic verification.
-- **KnowledgeMixin**: Accesses the "Knowledge Trinity" (Structured, Semantic, and Relational memory).
-- **IdentityMixin**: Decouples agent identity from implementation, enabling anonymous peer-to-peer transport.
-- **PersistenceMixin**: Manages atomic state serialization and binary shard snapshots (msgpack/blake3).
+### 🛠 Evolution Phase 108: Autonomous Self-Improvement
 
-### 🛡️ Transactional FS & Security
-PyAgent operates with a **Safety-First** philosophy:
-- **State Transactions**: Every file modification is atomic. Automatic rollbacks are triggered if a reasoning chain fails or a collision is detected.
-- **Cascading Context**: Prevents infinite recursion and ensures task lineage (Task Parentage -> Result Attribution).
-- **Environment Sandbox**: Strict allow-list protocols for external shell operations and PII redaction.
+The project has entered an autonomous maintenance phase where the system refactors and optimizes its own source code:
+- **Relational Metadata Mapping**: Sharded interaction data (Zlib-compressed) is indexed into a relational SQL layer for meta-analysis at trillion-parameter scales.
+- **AI-Driven Self-Healing**: The system identifies and fixes security vulnerabilities, performance bottlenecks, and robustness issues automatically.
+- **Rust-Readiness Pipeline**: Automated type hint injection (Local-first AI assisted) is preparing the core logic for high-performance Rust FFI porting.
+- **Gatekeeping**: `version.py` enforces maturity requirements to ensure stability during deep refactoring cycles.
 
-### 🧠 Advanced LLM Engine (v0.14.0+)
-Fully integrated with **vLLM** and custom inference kernels:
-- **Speculative Decoding**: Multi-generational token prediction (Medusa/Eagle patterns).
-- **Grammar Constraints**: Pydantic-to-Regex-to-FSM conversion for 100% valid JSON/JSONSchema outputs.
-- **KV Cache Offloading**: Rust-accelerated RDMA transfer logic for disaggregated prefill/decode.
-- **Paged Attention**: Block-based KV management for handling extreme sequence lengths.
+### 🎯 Multi-Agent Coordination
 
----
+- **Agent Orchestration**: Central `Agent` coordinates work among specialized sub-agents.
+- **Task Distribution**: Intelligently assigns improvement tasks to appropriate agents.
+- **Progress Tracking**: Monitors and reports on improvement metrics.
+- **Smart Memory**: Agents retain "useful facts" across sessions and can "forget" bad choices to optimize context window.
 
-## 🛠️ Project Ecosystem
+### � Extensions & Community Plugins (SDK v2.1.0)
 
-| Core Layer | Path | Description |
-| :--- | :--- | :--- |
-| **Swarm** | `src/logic/agents/` | Specialized agents (Coder, Analyst, **Quantum Scaling Coder**, etc.) |
-| **Logic** | `src/logic/` | Shared reasoning cores and metrics engines |
-| **Inference** | `src/inference/` | vLLM connectors, streaming, and decoding constraints |
-| **Core** | `src/core/base/` | Mixins, state managers, and transactional FS |
-| **Acceleration**| `rust_core/` | Native PyO3 modules (Performance Kernels) |
-| **Observability**| `src/observability/`| Prometheus metrics, stats, and health monitoring |
+- **Manifest-Based Loading**: Community members can drop plugins into `plugins/` with a `manifest.json`.
+- **SDK Version Guard**: Automatic gatekeeping (Major match, Minor >=) to ensure compatibility.
+- **Fault-Tolerant Registry**: Broken plugins (syntax/import errors) are automatically isolated into `ResilientStubs`, preventing system crashes.
+- **Core/Shell Architecture**: Most system logic has been extracted into "Cores" for streamlined performance and future cross-language porting.
 
----
+### �🔧 Specialized Agent Modules
 
-## 📦 Installation
+- All agents (Coder, Tests, Context, Changes, Errors, Stats) are now modular classes found in `src/classes/`.
+- **Legacy Compatibility**: Original entry points in `src/*.py` are now wrappers around the modular framework.
 
-PyAgent requires **Python 3.12+** and a C++ compiler for the Rust bridge (Maturin).
+### 📊 Advanced Capabilities
 
-```powershell
-# Clone the fleet
-git clone https://github.com/UndiFineD/PyAgent
-cd PyAgent
+- **Hybrid Caching**: High-performance in-memory cache coupled with persistent disk-based caching for all AI responses.
+- **Configurable Backends**: Support for Codex, Copilot CLI, gh copilot, and GitHub Models.
+- **Configuration Management**: New global settings for GitHub tokens, model defaults, and caching behavior.
+- **Smart Memory & History**: Agents now retain conversation history during GUI sessions, allowing for multi-turn iterative improvements.
+- **BMAD V6 Methodology**: Native support for the "Build More, Architect Dreams" method, featuring dynamic tracks (Quick, BMad, Enterprise) and phased workflows.
 
-# Initialize Environment
-python -m venv .venv
-.venv\Scripts\Activate.ps1
+### 🚀 Architecture
 
-# Install Dependencies (Secure Stack)
-pip install -r requirements.txt
+```text
+src/
+├── classes/          → Modular, class-based core logic
+│   ├── base_agent/   → Foundation, Memory, and CLI utilities
+│   ├── backend/      → Multi-backend runner with disk caching
+│   └── [agent_name]/ → Specialized agent implementations
+├── agent.py          → Orchestrator wrapper
+└── agent_gui.py      → New interactive multi-agent dashboard
 ```
 
-### 🔧 Building the Rust Core
-```powershell
-cd rust_core
-maturin develop --release
+## Installation
+
+```bash
+git clone https://github.com/PyAgent/pyagent
+cd pyagent
+python -m pip install -r requirements.txt
 ```
 
----
+### GUI Dashboard (Experimental)
 
-## 🚦 Quick Start
+Launch the new interactive control center:
 
-### Start the Fleet Load Balancer (FastAPI)
-```powershell
-python -m src.interface.ui.web.py_agent_web --port 8000
+```bash
+python src/agent_gui.py
 ```
 
-### Run an Autonomous Task (CLI)
-```powershell
-python -m src.interface.ui.cli.pyagent_cli --task "Analyze dependencies and optimize imports" --priority HIGHEST
+## Usage
+
+### Command Line Interface
+
+```bash
+# Improve a file using specific strategy and JSON output for automation
+python src/agent.py --context src/module.py --prompt "Refactor for speed" --strategy cot --json
 ```
 
-### Run Health Audit
-```powershell
-python -m pytest tests/unit/
+### Advanced Usage
+
+```bash
+# Run with specific reasoning strategy
+python src/agent.py --dir . --strategy cot  # Chain-of-Thought
+python src/agent.py --dir . --strategy reflexion  # Self-correction loop
+
+# Run specific agents only
+python src/agent.py --dir . --only-agents coder,tests
+
+# Parallel execution
+python src/agent.py --dir . --multiprocessing --workers 4
+
+# Async I/O
+python src/agent.py --dir . --async
 ```
 
----
+### Programmatic Usage
 
-## 🗺️ Roadmap "VOYAGER"
-- [x] **Decentralized Transport**: Zero-broker P2P swarms with mDNS discovery.
-- [x] **Synaptic Pruning**: Exponential knowledge decay for high-efficiency memory.
-- [x] **Holographic Memory**: Distributed vector weights across the fleet.
-- [ ] **MARKOV Decision Processes**: Implementation of RL environments for self-optimization.
-- [ ] **Multi-Model Speculation**: Federated speculative decoding across multiple nodes.
+```python
+from src.agent import Agent
 
----
-*Locked under GOLDEN_MASTER_SEAL (v4.0.0-VOYAGER)*
+# Create agent for code improvement
+agent = Agent("path/to/file.py")
+
+# Read and analyze content
+agent.read_previous_content()
+
+# Request improvements
+agent.improve_content("Add comprehensive docstrings and type hints")
+
+# Apply and save changes
+agent.update_file()
+
+# Review changes
+diff = agent.get_diff()
+print(diff)
+```
+
+## Core Components
+
+### Agent System
+
+- **BaseAgent**: Foundation class with common functionality for all agents
+- **Agent**: Main orchestrator coordinating all sub-agents
+- **AgentBackend**: Interface to AI backends (OpenAI Codex, GitHub Copilot, Claude, etc.)
+
+### Report Generation
+
+- **ReportGenerator**: Creates detailed improvement reports
+- **ReportComparison**: Compares before/after code states
+- **ReportValidator**: Ensures report quality and completeness
+- **ReportAccessControl**: Manages access permissions for reports
+- **ReportAnnotationManager**: Adds and manages report annotations
+
+### Advanced Features
+
+- **ContextWindow**: Manages token budgets for LLM interactions
+- **ResponseCache**: Caches AI responses for performance
+- **TokenBudget**: Tracks and allocates token usage
+- **EventManager**: Implements event-driven architecture
+- **HealthChecker**: Monitors system health and performance
+- **ConfigProfile**: Manages configuration profiles
+
+## Configuration
+
+Create a `.agent.yml` file in your project root:
+
+```yaml
+# Agent Configuration
+agent:
+  backend: "codex"  # Options: "codex" (default), "copilot", "gh", "github-models", "auto"
+  timeout: 30
+  retries: 3
+
+# Model Selection
+models:
+  code_review:
+    model_id: "gpt-4"
+    temperature: 0.7
+    max_tokens: 2000
+
+# Feature Flags
+features:
+  async_execution: true
+  report_generation: true
+  annotation_support: true
+  html_export: true
+  csv_export: true
+```
+
+## Testing
+
+Run the comprehensive test suite:
+
+```bash
+# Run all tests
+python -m pytest tests/ -v
+
+# Run with coverage
+python -m pytest tests/ --cov=src --cov-report=html
+
+# Run specific test file
+python -m pytest tests/test_cli_wrappers.py -v
+```
+
+## Project Structure
+
+```text
+pyagent/
+├── src/
+│   ├── classes/                      # Modular class-based logic
+│   │   ├── base_agent/               # Foundation & utilities
+│   │   ├── agent/                    # Orchestration logic
+│   │   ├── coder/                    # Coder, MarkdownAgent, etc.
+│   │   ├── context/                  # KnowledgeAgent, ContextAgent
+│   │   └── ...                       # Other specialist agents
+│   ├── agent.py                      # Main orchestrator wrapper
+│   ├── agent_gui.py                  # Interactive dashboard
+│   ├── agent_coder.py                # Specialized CLI wrappers
+│   ├── agent_knowledge.py            # Workspace knowledge manager
+│   └── ...                           # Legacy/wrapper entry points
+├── tests/                            # Unit and integration tests
+├── docs/                             # Project documentation
+├── .codeignore                       # Patterns to skip during scan
+└── README.md                         # This file
+```
+
+## Features in Detail
+
+### Multi-Agent Orchestration
+
+The `DirectorAgent` (coordinated via `agent.py`) manages work by:
+
+1. Analyzing the codebase structure
+2. Identifying improvement opportunities
+3. Delegating tasks to specialized agents
+4. Collecting and merging improvements
+5. Generating reports on changes
+
+### Report Generation System
+
+Generate comprehensive reports including:
+
+- **HTML Reports**: Interactive, styled reports with side-by-side comparisons
+- **CSV Exports**: Structured data for analysis and spreadsheets
+- **JSON Format**: Machine-readable reports for integration
+- **Annotated Reports**: Add custom notes and metadata
+
+### Token Budget Management
+
+- Tracks LLM token usage across all agents
+- Prevents budget overruns with allocation limits
+- Provides metrics on token consumption per task
+- Supports dynamic token reallocation
+
+### Health Monitoring
+
+- System health checks and diagnostics
+- Performance metrics collection
+- Error rate tracking and reporting
+- Request latency monitoring
+
+## API Reference
+
+### Main Agent
+
+```python
+class Agent:
+    def read_previous_content() -> None
+    def improve_content(prompt: str) -> None
+    def update_file() -> None
+    def get_diff() -> str
+```
+
+### Report Generation API
+
+```python
+class ReportGenerator:
+    def generate(improvements: List[str]) -> Report
+    def to_html() -> str
+    def to_csv() -> str
+    def to_json() -> Dict
+```
+
+### Utilities
+
+```python
+class ContextWindow:
+    def add(message: str, token_count: int) -> None
+    def clear() -> None
+
+class TokenBudget:
+    def allocate(name: str, tokens: int) -> None
+    def release(name: str) -> None
+```
+
+## Performance Metrics
+
+- **Token Efficiency**: ~95% utilization of allocated token budget
+- **Success Rate**: Typical 87%+ test pass rate on improvements
+- **Processing Speed**: Batch processing multiple files in parallel
+- **Cache Hit Rate**: 60%+ reduction in API calls with response caching
+
+## Contributing
+
+Contributions are welcome! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Add tests for new functionality
+4. Submit a pull request
+
+## License
+
+Licensed under the Apache License, Version 2.0. See LICENSE file for details.
+
+## Acknowledgments
+
+Built with ❤️ for the Python community. Powered by AI backends including OpenAI Codex, GitHub Copilot, Claude, and other LLM providers.
+
+## Status
+
+**Current Version**: 1.0.0  
+**Test Coverage**: 87% (2,352 passing tests)  
+**Last Updated**: January 2026
 

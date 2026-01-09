@@ -1,26 +1,22 @@
 #!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.models.generated_code import GeneratedCode
 
-__version__ = VERSION
+from .GeneratedCode import GeneratedCode
 
+from src.classes.base_agent import BaseAgent
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+import hashlib
+import json
+import logging
+import re
+import zlib
 
 class CodeGenerator:
     """Generates code based on context.
@@ -34,7 +30,7 @@ class CodeGenerator:
 
     def __init__(self) -> None:
         self.language: str = "python"
-        self.contexts: dict[str, str] = {}
+        self.contexts: Dict[str, str] = {}
 
     def set_language(self, language: str) -> None:
         """Set the default target language for generated code."""
@@ -44,7 +40,7 @@ class CodeGenerator:
         """Add a named context document that can be referenced later."""
         self.contexts[name] = content
 
-    def get_supported_languages(self) -> list[str]:
+    def get_supported_languages(self) -> List[str]:
         """Return supported target languages."""
         return [
             "python",
@@ -60,9 +56,9 @@ class CodeGenerator:
         self,
         prompt: str,
         context: str = "",
-        language: str | None = None,
+        language: Optional[str] = None,
         *,
-        context_files: list[str] | None = None,
+        context_files: Optional[List[str]] = None,
     ) -> GeneratedCode:
         """Generate code based on stored context.
 
@@ -74,8 +70,8 @@ class CodeGenerator:
         """
         resolved_language = language or self.language or "python"
 
-        used_contexts: list[str] = []
-        context_snippets: list[str] = []
+        used_contexts: List[str] = []
+        context_snippets: List[str] = []
 
         if context_files:
             for name in context_files:
@@ -88,9 +84,7 @@ class CodeGenerator:
             context_snippets.append(context)
 
         # Simplified generation - in production, use an LLM.
-        context_header = (
-            "" if not used_contexts else f"# Context used: {', '.join(used_contexts)}\n"
-        )
+        context_header = "" if not used_contexts else f"# Context used: {', '.join(used_contexts)}\n"
         code = (
             f"# Generated for: {prompt}\n"
             f"{context_header}"
@@ -105,3 +99,4 @@ class CodeGenerator:
             context_used=used_contexts,
             description=prompt,
         )
+
