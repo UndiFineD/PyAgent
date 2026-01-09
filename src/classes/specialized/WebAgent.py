@@ -51,7 +51,16 @@ class WebAgent(BaseAgent):
 
         logging.info(f"WebAgent fetching URL: {url}")
         try:
-            response = requests.get(url, timeout=15)
+            # Use a session to limit redirects and enforce security (Phase 115 Security Patch)
+            session = requests.Session()
+            session.max_redirects = 10
+            response = session.get(url, timeout=15, stream=True)
+            
+            # Decompression bomb safeguard: check content length if available
+            content_length = response.headers.get('Content-Length')
+            if content_length and int(content_length) > 10 * 1024 * 1024:  # 10MB limit
+                 return f"ERROR: Page content too large ({content_length} bytes). Aborting for safety."
+
             response.raise_for_status()
             
             # Update connectivity status on success
