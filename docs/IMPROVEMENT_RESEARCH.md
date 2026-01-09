@@ -33,9 +33,10 @@ To facilitate the migration of performance-critical logic to Rust, the codebase 
 ## 🛡️ Security & Dependency Hardening (Patch 115.1)
 
 ### 1. urllib3 Vulnerability Mitigation
-- **Upgrade**: Bumped `urllib3` to `2.4.2` to resolve high-severity vulnerabilities (#3, #4, #5, #6, #7).
-- **Decompression Bomb Protection**: Updated `WebAgent` to use `requests.Session` with `max_redirects=10` and explicit size checks on incoming streams.
-- **Redirect Control**: Centralized redirect limits to prevent unbounded decompression chains in web-crawling sub-tasks.
+- **Upgrade**: Bumped `urllib3` to `2.6.3` to resolve high-severity vulnerabilities (#3, #4, #5, #6, #7).
+- **Session Isolation**: Refactored all HTTP-capable agents (`WebAgent`, `SearchAgent`, `LLMClient`, `NotificationManager`, `RemoteAgentProxy`) to use `requests.Session` with strictly limited `max_redirects`.
+- **Decompression Bomb Protection**: Implemented streaming size checks in `WebAgent` to abort downloads exceeding 10MB, preventing memory exhaustion from malicious compressed payloads.
+- **Redirect Control**: Centralized redirect limits (max 2-10) to prevent unbounded decompression chains in web-crawling and remote proxy tasks.
 
 
 ### 🧠 AI Lessons Derived from Deep Shard Analysis (Phase 108)
