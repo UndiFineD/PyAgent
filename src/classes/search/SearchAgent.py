@@ -74,11 +74,14 @@ class SearchAgent(BaseAgent):
             return "Bing skipped due to connection cache."
         
         try:
-            headers = {"Ocp-Apim-Subscription-Key": self.bing_api_key}
-            params = {"q": query, "textDecorations": True, "textFormat": "HTML", "count": max_results}
-            response = requests.get(self.bing_endpoint, headers=headers, params=params, timeout=10)
-            response.raise_for_status()
-            search_results = response.json()
+            # Use a session with limited redirects for security (Phase 115 Patch)
+            with requests.Session() as session:
+                session.max_redirects = 5
+                headers = {"Ocp-Apim-Subscription-Key": self.bing_api_key}
+                params = {"q": query, "textDecorations": True, "textFormat": "HTML", "count": max_results}
+                response = session.get(self.bing_endpoint, headers=headers, params=params, timeout=10)
+                response.raise_for_status()
+                search_results = response.json()
             
             results = []
             for v in search_results.get("webPages", {}).get("value", []):
@@ -103,9 +106,11 @@ class SearchAgent(BaseAgent):
         try:
             url = "https://www.googleapis.com/customsearch/v1"
             params = {"key": self.google_api_key, "cx": self.google_cse_id, "q": query, "num": max_results}
-            response = requests.get(url, params=params, timeout=10)
-            response.raise_for_status()
-            search_results = response.json()
+            with requests.Session() as session:
+                session.max_redirects = 5
+                response = session.get(url, params=params, timeout=10)
+                response.raise_for_status()
+                search_results = response.json()
             
             results = []
             for item in search_results.get("items", []):
