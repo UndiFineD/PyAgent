@@ -7,7 +7,7 @@ from __future__ import annotations
 from .SharedContext import SharedContext
 from .SharingPermission import SharingPermission
 
-from base_agent import BaseAgent
+from src.classes.base_agent import BaseAgent
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum

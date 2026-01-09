@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
+
+"""Central orchestrator for coordinating specialized AI agents in code improvement workflows."""
 
 import sys
 from pathlib import Path

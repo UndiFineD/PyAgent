@@ -1,0 +1,56 @@
+import unittest
+import os
+from src.classes.fleet.FleetManager import FleetManager
+
+class TestPhases53_55(unittest.TestCase):
+    def setUp(self):
+        self.workspace = "c:/DEV/PyAgent"
+        self.fleet = FleetManager(self.workspace)
+
+    def test_resource_prediction(self):
+        print("\nTesting Phase 53: Predictive Resource Forecasting...")
+        # Mock some metrics
+        from src.classes.stats.ObservabilityEngine import AgentMetric
+        metrics = [
+            AgentMetric("AgentA", "task", 100.0, token_count=1000),
+            AgentMetric("AgentA", "task", 110.0, token_count=1500),
+            AgentMetric("AgentA", "task", 120.0, token_count=2000),
+            AgentMetric("AgentA", "task", 130.0, token_count=3000),
+            AgentMetric("AgentA", "task", 140.0, token_count=4000)
+        ]
+        self.fleet.resource_predictor.ingest_metrics(metrics)
+        
+        forecast = self.fleet.resource_predictor.forecast_usage()
+        print(f"Forecast: {forecast}")
+        self.assertGreater(forecast["forecasted_tokens"], 2000)
+        
+        scaling = self.fleet.resource_predictor.evaluate_scaling_needs(2)
+        print(f"Scaling Recommendation: {scaling}")
+        self.assertTrue(scaling["trigger_scaling"])
+
+    def test_ui_architecture(self):
+        print("\nTesting Phase 54: Generative UI Architecture...")
+        layout = self.fleet.ui_architect.design_dashboard_layout("Code Refactor", ["AgentA", "AgentB", "AgentC", "AgentD", "AgentE", "AgentF"])
+        print(f"Layout Panels: {len(layout['panels'])}")
+        # Should have 'Agent Heatmap' because list > 5
+        panel_titles = [p["title"] for p in layout["panels"]]
+        self.assertIn("Agent Heatmap", panel_titles)
+        
+        manifest = self.fleet.ui_architect.generate_ui_manifest("Let's run some SQL queries and plot the results.")
+        print(f"UI Manifest Plugins: {manifest['requested_plugins']}")
+        self.assertIn("SQL_Explorer", manifest["requested_plugins"])
+        self.assertIn("Data_Visualizer", manifest["requested_plugins"])
+
+    def test_dbft_consensus(self):
+        print("\nTesting Phase 55: DBFT Consensus...")
+        # Testing verify_state_block directly
+        # This will also trigger the inter-fleet bridge broadcast
+        self.fleet.consensus_orchestrator.verify_state_block("Refactor UI", "Change button color to blue")
+        
+        # Check if the signal was 'broadcast' (simulated in InterFleetBridge shared_state_cache)
+        bridge = self.fleet.inter_fleet_bridge
+        self.assertIn("SIGNAL_CONSENSUS_CRYPTO_VERIFIED", bridge.shared_state_cache)
+        print("DBFT Signal successfully broadcast to bridge.")
+
+if __name__ == "__main__":
+    unittest.main()

@@ -64,7 +64,7 @@ class CodeReviewer:
                 ))
 
             # Security checks
-            if re.search(r"password\s*=\s*['\"][^'\"]+['\"]", line, re.I):
+            if re.search(r'password\s*=\s*[\'"][^\'"]+[\'"]', line, re.I):
                 self.findings.append(ReviewFinding(
                     category=ReviewCategory.SECURITY,
                     message="Potential hardcoded password",
@@ -111,3 +111,4 @@ class CodeReviewer:
             cat = finding.category.value
             summary[cat] = summary.get(cat, 0) + 1
         return summary
+

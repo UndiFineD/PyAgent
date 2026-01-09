@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
+
+"""Agent specializing in tracking, summarizing, and documenting code changes."""
 
 import sys
 from pathlib import Path

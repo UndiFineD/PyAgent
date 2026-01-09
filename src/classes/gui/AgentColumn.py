@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -18,7 +18,7 @@ import logging
 
 class AgentColumn:
     """A vertical column representing a single agent's controls and logs."""
-    def __init__(self, parent, agent_name, callbacks):
+    def __init__(self, parent, agent_name, callbacks) -> None:
         self.agent_name = agent_name
         self.callbacks = callbacks
         

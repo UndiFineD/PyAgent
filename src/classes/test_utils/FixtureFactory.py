@@ -39,7 +39,7 @@ class FixtureFactory:
             Agent fixture object with name, config and dependencies attributes.
         """
         class AgentFixture:
-            def __init__(self, name: str, config: Optional[Dict[str, Any]], dependencies: Optional[List[Any]]):
+            def __init__(self, name: str, config: Optional[Dict[str, Any]], dependencies: Optional[List[Any]]) -> None:
                 self.name = name
                 self.config = config or {}
                 self.dependencies = dependencies or []
@@ -57,7 +57,7 @@ class FixtureFactory:
             File fixture object with setup_fn method.
         """
         class FileFixture:
-            def __init__(self, base_dir: Path, name: str, content: str):
+            def __init__(self, base_dir: Path, name: str, content: str) -> None:
                 self.base_dir = base_dir
                 self.name = name
                 self.content = content

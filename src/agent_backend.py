@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
+
+"""Multi-backend execution engine with fallback and caching capabilities."""
 
 import sys
 from pathlib import Path

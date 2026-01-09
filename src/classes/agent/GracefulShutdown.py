@@ -42,7 +42,7 @@ class GracefulShutdown:
         state_file: Path to state persistence file.
     """
 
-    def __init__(self, repo_root: Path, state_file: str = ".agent_shutdown.json"):
+    def __init__(self, repo_root: Path, state_file: str = ".agent_shutdown.json") -> None:
         """Initialize graceful shutdown handler.
 
         Args:

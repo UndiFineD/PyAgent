@@ -24,3 +24,4 @@ class SecurityAgent(BaseAgent):
 if __name__ == "__main__":
     main = create_main_function(SecurityAgent, "Security Agent", "File to audit for security")
     main()
+

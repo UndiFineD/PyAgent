@@ -1,0 +1,2 @@
+{"timestamp": 1767863418.956928, "agent": "SecurityGuard", "action": "scan_started", "details": {"target": "kernel"}, "previous_hash": "0000000000000000000000000000000000000000000000000000000000000000", "hash": "1200b0aa2db8fbedc089bfddb3a296a0c5ea8c5373f1004c4025882608bbfa14"}
+{"timestamp": 1767863418.958299, "agent": "SecurityGuard", "action": "vulnerability_found", "details": {"severity": "HIGH", "id": "CVE-X"}, "previous_hash": "1200b0aa2db8fbedc089bfddb3a296a0c5ea8c5373f1004c4025882608bbfa14", "hash": "282013c2b420301fdf908fca26f9e5cf83dfc8fa3f117e05996624a034a90597"}

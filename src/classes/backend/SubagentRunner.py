@@ -14,6 +14,8 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from .DiskCache import DiskCache
+from .RunnerBackends import BackendHandlers
+from .LLMClient import LLMClient
 
 try:
     import requests
@@ -23,44 +25,43 @@ except ImportError:
 
 class SubagentRunner:
     """Handles running subagents with multiple backend support and fallback logic."""
+    
+    _command_cache: Dict[str, bool] = {}
 
     @staticmethod
     def _resolve_repo_root() -> Path:
-        """Resolve the repository root directory."""
+        """Resolve the repository root directory (Phase 108)."""
         env_root = os.environ.get("DV_AGENT_REPO_ROOT")
         if env_root:
-            logging.debug(f"Using DV_AGENT_REPO_ROOT: {env_root}")
             return Path(env_root).expanduser().resolve()
-        # Try to find .git directory by walking up from current file
         here = Path(__file__).resolve()
         for parent in [here.parent, *here.parents]:
             if (parent / ".git").exists():
-                logging.debug(f"Found repo root at {parent}")
                 return parent
-        logging.debug(f"No repo root found, using CWD: {Path.cwd()}")
         return Path.cwd()
 
     @staticmethod
     def _command_available(command: str) -> bool:
-        """Check if a command is available in PATH.
-
-        Attempts to run command with --version flag to verify availability.
-        """
+        """Check if a command is available in PATH with result caching (Phase 108)."""
+        if command in SubagentRunner._command_cache:
+            return SubagentRunner._command_cache[command]
+            
         try:
             logging.debug(f"Checking if command is available: {command}")
+            # Use 'which' on Linux/Mac or 'where' on Windows for faster checks
             subprocess.run(
-                [command, '--version'],
+                ['where' if os.name == 'nt' else 'which', command],
                 capture_output=True,
                 text=True,
-                encoding='utf-8',
-                errors='replace',
-                timeout=5,
+                timeout=2,
                 check=True,
             )
             logging.debug(f"Command available: {command}")
+            SubagentRunner._command_cache[command] = True
             return True
         except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired):
             logging.debug(f"Command not available: {command}")
+            SubagentRunner._command_cache[command] = False
             return False
 
     def __init__(self) -> None:
@@ -79,6 +80,7 @@ class SubagentRunner:
             "total_latency_ms": 0,
         }
         self.requests = requests
+        self.llm_client = LLMClient(requests)
 
     def clear_response_cache(self) -> None:
         """Clear the response cache."""
@@ -151,101 +153,46 @@ class SubagentRunner:
         stream: bool = False,
         validate_content: bool = True,
     ) -> str:
-        """Call a GitHub Models OpenAI-compatible chat endpoint."""
-        if self.requests is None:
-            raise RuntimeError("Missing dependency: install 'requests' to use GitHub Models backend")
-
+        """Call a GitHub Models OpenAI-compatible chat endpoint with caching."""
         cache_key = self._get_cache_key(prompt, model)
         if use_cache:
-            # Check in-memory first
             if cache_key in self._response_cache:
                 self._metrics["cache_hits"] += 1
-                logging.debug(f"In-memory cache hit for prompt hash: {cache_key}")
                 return self._response_cache[cache_key]
-            
-            # Check disk cache
             cached_val = self.disk_cache.get(cache_key)
             if cached_val:
                 self._metrics["cache_hits"] += 1
-                logging.debug(f"Disk cache hit for prompt hash: {cache_key}")
                 self._response_cache[cache_key] = cached_val
                 return cached_val
 
-        resolved_token = token or os.environ.get("GITHUB_TOKEN")
-        
-        # Fallback to token file if not set
-        if not resolved_token:
-            token_file = os.environ.get("DV_GITHUB_TOKEN_FILE")
-            if token_file:
-                token_path = Path(token_file)
-                if token_path.exists():
-                    try:
-                        logging.debug(f"Reading GitHub token from {token_path}")
-                        resolved_token = token_path.read_text(encoding="utf-8").strip()
-                    except Exception as e:
-                        logging.warning(f"Failed to read token from {token_path}: {e}")
-
-        if not resolved_token:
-            raise RuntimeError("Missing token: set GITHUB_TOKEN env var, provide DV_GITHUB_TOKEN_FILE, or pass token=")
-        
-        resolved_base_url = (base_url or os.environ.get("GITHUB_MODELS_BASE_URL") or "").strip()
-        if not resolved_base_url:
-            raise RuntimeError("Missing base URL: set GITHUB_MODELS_BASE_URL env var or pass base_url=")
-        
-        url = resolved_base_url.rstrip("/") + "/v1/chat/completions"
-        payload: Dict[str, Any] = {
-            "model": model,
-            "messages": [
-                {"role": "system", "content": system_prompt},
-                {"role": "user", "content": prompt},
-            ],
-        }
-        if stream:
-            payload["stream"] = True
-        
-        headers = {
-            "Authorization": f"Bearer {resolved_token}",
-            "Content-Type": "application/json",
-        }
-        
-        last_error = None
-        start_time = time.time()
         self._metrics["requests"] += 1
-        
-        for attempt in range(max_retries + 1):
-            try:
-                logging.debug(f"Making GitHub Models API request (attempt {attempt + 1}/{max_retries + 1})")
-                response = self.requests.post(url, headers=headers, data=json.dumps(payload), timeout=timeout_s)
-                response.raise_for_status()
-                data = response.json()
-                try:
-                    result = (data["choices"][0]["message"]["content"] or "").strip()
-                    if validate_content and not self.validate_response_content(result):
-                        logging.warning("Response validation failed, but continuing")
-                    if use_cache:
-                        self._response_cache[cache_key] = result
-                        self.disk_cache.set(cache_key, result)
-                    latency_ms = int((time.time() - start_time) * 1000)
-                    self._metrics["total_latency_ms"] += latency_ms
-                    return result
-                except (KeyError, IndexError, TypeError) as e:
-                    raise RuntimeError(f"Unexpected response shape from LLM endpoint: {data!r}") from e
-            except (self.requests.Timeout, self.requests.ConnectionError) as e:
-                last_error = e
-                self._metrics["timeouts"] += 1
-                if attempt < max_retries:
-                    delay = min(2 ** attempt, 30)
-                    time.sleep(delay)
-                else:
-                    self._metrics["errors"] += 1
-                    raise
-            except self.requests.RequestException as e:
-                self._metrics["errors"] += 1
-                logging.error(f"GitHub Models API request failed: {e}")
-                raise
-        if last_error:
-            raise last_error
-        raise RuntimeError("GitHub Models API request failed")
+        start_time = time.time()
+        try:
+            result = self.llm_client.llm_chat_via_github_models(
+                prompt=prompt,
+                model=model,
+                system_prompt=system_prompt,
+                base_url=base_url,
+                token=token,
+                timeout_s=timeout_s,
+                max_retries=max_retries,
+                stream=stream
+            )
+            
+            if result:
+                if validate_content and not self.validate_response_content(result):
+                    logging.warning("Response validation failed")
+                if use_cache:
+                    self._response_cache[cache_key] = result
+                    self.disk_cache.set(cache_key, result)
+                latency_ms = int((time.time() - start_time) * 1000)
+                self._metrics["total_latency_ms"] += latency_ms
+                return result
+            return ""
+        except Exception as e:
+            self._metrics["errors"] += 1
+            logging.error(f"GitHub Models call failed: {e}")
+            raise
 
     def _looks_like_command(self, text: str) -> bool:
         """Helper to decide if a prompt is command-like."""
@@ -258,210 +205,82 @@ class SubagentRunner:
 
     def run_subagent(self, description: str, prompt: str, original_content: str = "") -> Optional[str]:
         """Run a subagent using available backends."""
-        
         backend_env = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()
         use_cache = os.environ.get("DV_AGENT_CACHE", "true").lower() == "true"
         
-        # Determine "model" name for caching based on backend
         cache_model = backend_env if backend_env != "auto" else "subagent_auto"
         cache_key = self._get_cache_key(f"{description}:{prompt}:{original_content}", cache_model)
 
         if use_cache:
             if cache_key in self._response_cache:
                 self._metrics["cache_hits"] += 1
-                logging.debug(f"In-memory cache hit for subagent: {description}")
                 return self._response_cache[cache_key]
-            
             cached_val = self.disk_cache.get(cache_key)
             if cached_val:
                 self._metrics["cache_hits"] += 1
-                logging.debug(f"Disk cache hit for subagent: {description}")
                 self._response_cache[cache_key] = cached_val
                 return cached_val
 
-        def _build_full_prompt() -> str:
-            try:
-                max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))
-            except ValueError:
-                max_context_chars = 12_000
-            trimmed_original = (original_content or "")[:max_context_chars]
-            return (
-                f"Task: {description}\n\n"
-                f"Prompt:\n{prompt}\n\n"
-                "Context (existing file content):\n"
-                f"{trimmed_original}"
-            ).strip()
+        full_prompt = BackendHandlers.build_full_prompt(description, prompt, original_content)
+        repo_root = self._resolve_repo_root()
 
         def _try_codex_cli() -> Optional[str]:
-            if not self._command_available('codex'):
-                logging.debug("Codex CLI not available")
-                return None
-            full_prompt = _build_full_prompt()
-            repo_root = self._resolve_repo_root()
-            try:
-                logging.debug("Attempting to use Codex CLI backend")
-                result = subprocess.run(
-                    ['codex', '--prompt', full_prompt, '--no-color', '--log-level', 'error', '--add-dir', str(repo_root),
-                     '--allow-all-tools', '--disable-parallel-tools-execution', '--deny-tool', 'write', '--deny-tool', 'shell',
-                     '--silent', '--stream', 'off'],
-                    capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=180, cwd=str(repo_root), check=False
-                )
-                stdout = (result.stdout or "").strip()
-                if result.returncode == 0 and stdout:
-                    logging.info("Codex CLI backend succeeded")
-                    return stdout
-                if result.returncode != 0:
-                    logging.debug(f"Codex CLI failed (code {result.returncode}): {result.stderr}")
-            except subprocess.TimeoutExpired:
-                logging.warning("Codex CLI timed out")
-            except Exception as e:
-                logging.warning(f"Codex CLI error: {e}")
-            return None
+            if not self._command_available('codex'): return None
+            return BackendHandlers.try_codex_cli(full_prompt, repo_root)
 
         def _try_copilot_cli() -> Optional[str]:
-            if not self._command_available('copilot'):
-                logging.debug("Copilot CLI not available")
-                return None
-            full_prompt = _build_full_prompt()
-            repo_root = self._resolve_repo_root()
-            try:
-                logging.debug("Attempting to use Copilot CLI backend")
-                result = subprocess.run(
-                    ['copilot', '--prompt', full_prompt, '--no-color', '--log-level', 'error', '--add-dir', str(repo_root),
-                     '--allow-all-tools', '--disable-parallel-tools-execution', '--deny-tool', 'write', '--deny-tool', 'shell',
-                     '--silent', '--stream', 'off'],
-                    capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=180, cwd=str(repo_root), check=False
-                )
-                stdout = (result.stdout or "").strip()
-                if result.returncode == 0 and stdout:
-                    logging.info("Copilot CLI backend succeeded")
-                    return stdout
-                if result.returncode != 0:
-                    logging.debug(f"Copilot CLI failed (code {result.returncode}): {result.stderr}")
-            except subprocess.TimeoutExpired:
-                logging.warning("Copilot CLI timed out")
-            except Exception as e:
-                logging.warning(f"Copilot CLI error: {e}")
-            return None
+            if not self._command_available('copilot'): return None
+            return BackendHandlers.try_copilot_cli(full_prompt, repo_root)
 
-        def _try_gh_copilot(allow_non_command_prompt: bool) -> Optional[str]:
-            if not self._command_available('gh'):
-                logging.debug("gh CLI not available")
-                return None
-            if not allow_non_command_prompt and not self._looks_like_command(prompt):
-                logging.debug("Prompt doesn't look like a command, skipping gh copilot")
-                return None
-            
-            p = prompt[:2000] if len(prompt) > 2000 else prompt
-            try:
-                logging.debug("Attempting to use gh copilot backend")
-                result = subprocess.run(
-                    ['gh', 'copilot', 'explain', p],
-                    capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=30, cwd=str(self._resolve_repo_root()), check=False
-                )
-                if result.returncode == 0 and result.stdout.strip():
-                    logging.info("gh copilot backend succeeded")
-                    return f"# GitHub Copilot (gh) Explanation:\n{result.stdout.strip()}"
-                if result.returncode != 0:
-                    logging.debug(f"gh copilot failed (code {result.returncode}): {result.stderr}")
-            except subprocess.TimeoutExpired:
-                logging.warning("gh copilot timed out")
-            except Exception as e:
-                logging.warning(f"gh copilot error: {e}")
-            return None
+        def _try_gh_copilot(allow_non_command: bool) -> Optional[str]:
+            if not self._command_available('gh'): return None
+            if not allow_non_command and not self._looks_like_command(prompt): return None
+            return BackendHandlers.try_gh_copilot(full_prompt, repo_root, allow_non_command)
 
         def _try_github_models() -> Optional[str]:
-            model = (os.environ.get("DV_AGENT_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "").strip()
-            if not model:
-                logging.debug("No model specified for GitHub Models")
-                return None
-            base_url = os.environ.get("GITHUB_MODELS_BASE_URL")
-            
-            # Resolve token using the same logic logic as llm_chat_via_github_models
-            token = os.environ.get("GITHUB_TOKEN")
-            if not token:
-                token_file = os.environ.get("DV_GITHUB_TOKEN_FILE")
-                if token_file:
-                    token_path = Path(token_file)
-                    if token_path.exists():
-                        try:
-                            token = token_path.read_text(encoding="utf-8").strip()
-                        except Exception:
-                            pass
+            return BackendHandlers.try_github_models(full_prompt, self.requests)
 
-            if not base_url or not token:
-                logging.debug("GitHub Models not fully configured")
-                return None
-            full_prompt = _build_full_prompt()
-            try:
-                logging.debug("Attempting to use GitHub Models backend")
-                return self.llm_chat_via_github_models(prompt=full_prompt, model=model, base_url=base_url, token=token)
-            except Exception as e:
-                logging.warning(f"GitHub Models backend error: {e}")
-                return None
+        def _try_vllm() -> Optional[str]:
+            return self.llm_client.llm_chat_via_vllm(full_prompt, model="llama3")
+
+        def _try_ollama() -> Optional[str]:
+            return self.llm_client.llm_chat_via_ollama(full_prompt, model="llama3")
 
         def _try_openai_api() -> Optional[str]:
-            api_key = os.environ.get("OPENAI_API_KEY")
-            if not api_key:
-                logging.debug("OpenAI API key not set")
-                return None
-            
-            model = os.environ.get("DV_AGENT_MODEL") or os.environ.get("OPENAI_MODEL") or "gpt-4"
-            base_url = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com")
-            full_prompt = _build_full_prompt()
-            
-            try:
-                logging.debug(f"Attempting to use OpenAI API backend with model {model}")
-                return self.llm_chat_via_github_models(
-                    prompt=full_prompt, 
-                    model=model, 
-                    base_url=base_url, 
-                    token=api_key,
-                    system_prompt="You are an expert software developer and security auditor."
-                )
-            except Exception as e:
-                logging.warning(f"OpenAI API backend error: {e}")
-                return None
-
-        backend = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()
-        logging.debug(f"Using backend: {backend}")
+            return BackendHandlers.try_openai_api(full_prompt, self.requests)
 
         res = None
-        if backend in {"codex", "codex-cli"}:
+        if backend_env in {"codex", "codex-cli"}:
             res = _try_codex_cli()
-            if res is None: raise RuntimeError("Requested codex backend unavailable")
-        elif backend in {"copilot", "local", "copilot-cli"}:
-            res = _try_copilot_cli()
-            if res is None: raise RuntimeError("Requested copilot backend unavailable")
-        elif backend in {"gh", "gh-copilot"}:
-            res = _try_gh_copilot(allow_non_command_prompt=True)
-            if res is None: raise RuntimeError("Requested gh backend unavailable")
-        elif backend in {"github-models", "github_models", "models"}:
+        elif backend_env in {"vllm"}:
+            res = _try_vllm()
+        elif backend_env in {"ollama"}:
+            res = _try_ollama()
+        elif backend_env in {"copilot", "local", "copilot-cli"}:
+            res = _try_codex_cli() or _try_vllm() or _try_ollama() or _try_copilot_cli()
+        elif backend_env in {"gh", "gh-copilot"}:
+            res = _try_gh_copilot(allow_non_command=True)
+        elif backend_env in {"github-models", "github_models", "models"}:
             res = _try_github_models()
-            if res is None: raise RuntimeError("Requested github-models backend unconfigured")
-        elif backend in {"openai", "gpt", "localai", "huggingface"}:
+        elif backend_env in {"openai", "gpt", "localai", "huggingface"}:
             res = _try_openai_api()
-            if res is None: raise RuntimeError(f"Requested {backend} backend unconfigured (check OPENAI_API_KEY/BASE_URL)")
         else:
-            # auto (default) logic
-            logging.debug("Trying backends in order: codex, copilot, github-models, openai, gh")
-            res = _try_codex_cli()
-            if not res:
-                res = _try_copilot_cli()
-            if not res:
-                try:
-                    res = _try_github_models()
-                except Exception: pass
-            if not res:
-                res = _try_openai_api()
-            if not res:
-                res = _try_gh_copilot(allow_non_command_prompt=False)
+            # auto (default) logic: Priority on local high-performance backends (Phase 108)
+            res = _try_vllm() or _try_ollama() or _try_codex_cli() or _try_copilot_cli() or _try_github_models() or _try_openai_api() or _try_gh_copilot(allow_non_command=False)
 
         if res and use_cache:
             self._response_cache[cache_key] = res
             self.disk_cache.set(cache_key, res)
             
         return res
+
+    def llm_chat_via_ollama(self, *args, **kwargs) -> str:
+        """Proxy to LLMClient."""
+        return self.llm_client.llm_chat_via_ollama(*args, **kwargs)
+
+    def llm_chat_via_vllm(self, *args, **kwargs) -> str:
+        """Proxy to LLMClient."""
+        return self.llm_client.llm_chat_via_vllm(*args, **kwargs)
 
     def get_backend_status(self) -> Dict[str, Any]:
         """Return diagnostic snapshot of backend availability."""

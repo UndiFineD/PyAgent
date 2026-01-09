@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -19,7 +19,7 @@ import logging
 
 class ProjectExplorer:
     """A tree-view based file explorer for the PyAgent workspace."""
-    def __init__(self, parent, project_root_var, on_double_click_callback):
+    def __init__(self, parent, project_root_var, on_double_click_callback) -> None:
         self.parent = parent
         self.project_root_var = project_root_var
         self.on_double_click_callback = on_double_click_callback

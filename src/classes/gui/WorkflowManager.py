@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -17,7 +17,7 @@ from tkinter import ttk, messagebox
 
 class WorkflowManager:
     """Manages the lifecycle of a complex development workflow."""
-    def __init__(self, callbacks):
+    def __init__(self, callbacks) -> None:
         self.callbacks = callbacks
         self.current_step_index = 0
         self.workflow_active = False

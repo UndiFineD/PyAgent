@@ -1,0 +1,72 @@
+import time
+from typing import Dict, List, Any, Optional
+
+class ConsensusConflictAgent:
+    """
+    Arbitrates disagreements and resolves conflicts between agents in the swarm.
+    Uses voting systems and consensus mechanisms to reach a final decision.
+    """
+    def __init__(self, workspace_path: str) -> None:
+        self.workspace_path = workspace_path
+        self.active_disputes = {} # dispute_id -> {options, votes, status}
+
+    def initiate_dispute(self, dispute_id: str, context: str, options: List[str]):
+        """Starts a new consensus round for a disagreement."""
+        self.active_disputes[dispute_id] = {
+            "context": context,
+            "options": options,
+            "votes": {}, # agent_id -> option_index
+            "status": "voting",
+            "start_time": time.time()
+        }
+        return {"status": "dispute_initiated", "dispute_id": dispute_id}
+
+    def cast_vote(self, dispute_id: str, agent_id: str, option_index: int, reasoning: str):
+        """Allows an agent to vote on a specific option with reasoning."""
+        if dispute_id not in self.active_disputes:
+            return {"status": "error", "message": "Dispute not found"}
+        
+        dispute = self.active_disputes[dispute_id]
+        if option_index >= len(dispute["options"]):
+            return {"status": "error", "message": "Invalid option index"}
+            
+        dispute["votes"][agent_id] = {
+            "choice": option_index,
+            "reasoning": reasoning,
+            "timestamp": time.time()
+        }
+        return {"status": "vote_cast", "dispute_id": dispute_id}
+
+    def resolve_dispute(self, dispute_id: str) -> Dict[str, Any]:
+        """Resolves a dispute based on the majority of votes."""
+        if dispute_id not in self.active_disputes:
+            return {"status": "error", "message": "Dispute not found"}
+            
+        dispute = self.active_disputes[dispute_id]
+        if not dispute["votes"]:
+            return {"status": "error", "message": "No votes cast"}
+            
+        vote_counts = {}
+        for vote in dispute["votes"].values():
+            choice = vote["choice"]
+            vote_counts[choice] = vote_counts.get(choice, 0) + 1
+            
+        # Find option with most votes
+        winner_index = max(vote_counts, key=vote_counts.get)
+        dispute["status"] = "resolved"
+        dispute["winner"] = dispute["options"][winner_index]
+        
+        return {
+            "status": "resolved",
+            "winner": dispute["winner"],
+            "vote_counts": vote_counts,
+            "total_votes": len(dispute["votes"])
+        }
+
+    def get_conflict_summary(self) -> Dict[str, Any]:
+        """Returns statistics on handled conflicts."""
+        return {
+            "total_disputes": len(self.active_disputes),
+            "resolved_disputes": len([d for d in self.active_disputes.values() if d["status"] == "resolved"]),
+            "pending_disputes": len([d for d in self.active_disputes.values() if d["status"] == "voting"])
+        }

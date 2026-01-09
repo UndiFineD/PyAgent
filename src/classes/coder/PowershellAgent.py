@@ -24,3 +24,4 @@ class PowershellAgent(CoderAgent):
 if __name__ == "__main__":
     main = create_main_function(PowershellAgent, "PowerShell Agent", "Path to .ps1 file")
     main()
+

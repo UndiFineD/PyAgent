@@ -6,7 +6,7 @@ from datetime import datetime
 class StatusManager:
     """Manages project execution status for the DirectorAgent and GUI."""
     
-    def __init__(self):
+    def __init__(self) -> None:
         self.status_file = Path("src/classes/orchestration/status.json")
         self.clear_status()
 

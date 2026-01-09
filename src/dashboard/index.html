@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyAgent Unified Desktop</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #0f172a; color: #f8fafc; font-family: 'Inter', sans-serif; }
+        .artifact-card:hover { transform: translateY(-2px); transition: all 0.2s; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1e293b; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function Dashboard() {
+            const [thoughts, setThoughts] = useState([]);
+            const [artifacts, setArtifacts] = useState([]);
+            const [activeTab, setActiveTab] = useState('thoughts');
+
+            useEffect(() => {
+                fetchData();
+                const interval = setInterval(fetchData, 5000);
+                return () => clearInterval(interval);
+            }, []);
+
+            const fetchData = async () => {
+                try {
+                    const tRes = await fetch('http://localhost:8000/api/thoughts');
+                    const aRes = await fetch('http://localhost:8000/api/artifacts');
+                    setThoughts(await tRes.json());
+                    setArtifacts(await aRes.json());
+                } catch (e) {
+                    console.error("Link to dashboard_server.py failed. Make sure it is running.");
+                }
+            };
+
+            return (
+                <div className="flex flex-col h-screen">
+                    {/* Header */}
+                    <header className="bg-slate-900 border-b border-slate-800 p-4 flex justify-between items-center">
+                        <div className="flex items-center gap-2">
+                            <i className="fas fa-robot text-blue-500 text-2xl"></i>
+                            <h1 className="text-xl font-bold tracking-tight">PyAgent <span className="text-slate-500 font-light">Unified Desktop</span></h1>
+                        </div>
+                        <div className="flex gap-4">
+                            <button onClick={() => setActiveTab('thoughts')} className={`px-4 py-2 rounded-lg ${activeTab === 'thoughts' ? 'bg-blue-600' : 'bg-slate-800'}`}>
+                                <i className="fas fa-brain mr-2"></i> Thoughts
+                            </button>
+                            <button onClick={() => setActiveTab('artifacts')} className={`px-4 py-2 rounded-lg ${activeTab === 'artifacts' ? 'bg-blue-600' : 'bg-slate-800'}`}>
+                                <i className="fas fa-box-open mr-2"></i> Artifacts
+                            </button>
+                        </div>
+                    </header>
+
+                    {/* Main Content */}
+                    <main className="flex-1 overflow-auto p-6 bg-slate-950">
+                        {activeTab === 'thoughts' ? (
+                            <div className="space-y-4 max-w-4xl mx-auto">
+                                {thoughts.length > 0 ? thoughts.map((t, i) => (
+                                    <div key={i} className="bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-lg">
+                                        <div className="flex justify-between text-xs text-slate-500 mb-2">
+                                            <span>{new Date(t.timestamp * 1000).toLocaleTimeString()}</span>
+                                            <span className="uppercase tracking-widest">{t.action || 'THOUGHT'}</span>
+                                        </div>
+                                        <p className="text-slate-200 leading-relaxed">{t.content || t.message || JSON.stringify(t)}</p>
+                                    </div>
+                                )) : (
+                                    <div className="text-center py-20 text-slate-500">
+                                        <i className="fas fa-ghost text-4xl mb-4"></i>
+                                        <p>No thoughts recorded yet. Run PyAgent to populate.</p>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                                {artifacts.map((a, i) => (
+                                    <div key={i} className="artifact-card bg-slate-900 border border-slate-800 p-4 rounded-xl shadow-lg">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            <i className={`fas ${a.name.endsWith('.png') ? 'fa-image text-purple-400' : 'fa-file-code text-blue-400'} text-xl`}></i>
+                                            <span className="font-medium truncate">{a.name}</span>
+                                        </div>
+                                        <div className="text-xs text-slate-500 flex justify-between">
+                                            <span>{(a.size / 1024).toFixed(1)} KB</span>
+                                            <span>{new Date(a.modified * 1000).toLocaleDateString()}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </main>
+
+                    {/* Footer / Status */}
+                    <footer className="bg-slate-900 border-t border-slate-800 p-2 text-[10px] text-slate-500 flex justify-between px-6">
+                        <span>PyAgent Core v2026.1.0</span>
+                        <span className="flex items-center gap-1">
+                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> SYSTEM READY
+                        </span>
+                    </footer>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<Dashboard />);
+    </script>
+</body>
+</html>

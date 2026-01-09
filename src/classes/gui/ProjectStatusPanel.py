@@ -6,7 +6,7 @@ from pathlib import Path
 class ProjectStatusPanel:
     """A panel that displays the current orchestration status from status.json."""
     
-    def __init__(self, parent):
+    def __init__(self, parent) -> None:
         self.frame = ttk.LabelFrame(parent, text="Orchestration Status", padding=10)
         self.status_file = Path("src/classes/orchestration/status.json")
         

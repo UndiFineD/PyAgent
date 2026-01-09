@@ -26,7 +26,7 @@ class ReportFilter:
         criteria: Filter criteria to apply.
     """
 
-    def __init__(self, criteria: Optional[FilterCriteria] = None):
+    def __init__(self, criteria: Optional[FilterCriteria] = None) -> None:
         """Initialize filter.
         Args:
             criteria: Filter criteria. Uses defaults if not provided.

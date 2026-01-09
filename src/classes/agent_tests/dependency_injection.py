@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 DebVisor contributors
+# Copyright (c) 2025 PyAgent contributors
 # Licensed under the Apache License, Version 2.0 (the "License");
 
 """Dependency injection for tests."""
@@ -66,7 +66,7 @@ class DependencyInjector:
         return (
             f"@pytest.fixture(scope='{scope}')\n"
             f"def {name}() -> {dep.dependency_type}:\n"
-            f"    \"\"\"{name} fixture.\"\"\"\n"
+            f'    """{name} fixture."""\n'
             f"    {dep.implementation or 'pass'}\n"
         )
 
@@ -76,3 +76,4 @@ class DependencyInjector:
         for name in self.dependencies:
             fixtures.append(self.get_fixture_code(name))
         return "\n".join(fixtures)
+

@@ -12,6 +12,7 @@ from .RefactoringPattern import RefactoringPattern
 from .StyleRule import StyleRule
 from .StyleRuleSeverity import StyleRuleSeverity
 
+from .CoderCore import CoderCore, DEFAULT_PYTHON_STYLE_RULES, CODE_SMELL_PATTERNS
 from src.classes.base_agent import BaseAgent
 from dataclasses import dataclass, field
 from enum import Enum
@@ -25,67 +26,6 @@ import re
 import shutil
 import subprocess
 import tempfile
-
-# Default style rules for Python
-DEFAULT_PYTHON_STYLE_RULES: List[StyleRule] = [
-    StyleRule(
-        name="line_length",
-        pattern=r"^.{89,}$",
-        message="Line exceeds 88 characters",
-        severity=StyleRuleSeverity.WARNING,
-        language=CodeLanguage.PYTHON
-    ),
-    StyleRule(
-        name="trailing_whitespace",
-        pattern=r"[ \t]+$",
-        message="Trailing whitespace detected",
-        severity=StyleRuleSeverity.WARNING,
-        language=CodeLanguage.PYTHON
-    ),
-    StyleRule(
-        name="multiple_blank_lines",
-        pattern=r"\n{4,}",
-        message="More than 2 consecutive blank lines",
-        severity=StyleRuleSeverity.INFO,
-        language=CodeLanguage.PYTHON
-    ),
-    StyleRule(
-        name="missing_docstring",
-        pattern=r"^def\s+\w+\([^)]*\):\s*\n\s+(?!\"\"\")",
-        message="Function missing docstring",
-        severity=StyleRuleSeverity.WARNING,
-        language=CodeLanguage.PYTHON
-    ),
-]
-
-# Common code smells patterns
-CODE_SMELL_PATTERNS: Dict[str, Dict[str, Any]] = {
-    "long_method": {
-        "threshold": 50,
-        "message": "Method is too long (>{threshold} lines)",
-        "category": "complexity"
-    },
-    "too_many_parameters": {
-        "threshold": 5,
-        "message": "Function has too many parameters (>{threshold})",
-        "category": "complexity"
-    },
-    "duplicate_code": {
-        "threshold": 3,
-        "message": "Duplicate code detected ({count} occurrences)",
-        "category": "duplication"
-    },
-    "deep_nesting": {
-        "threshold": 4,
-        "message": "Code is too deeply nested (>{threshold} levels)",
-        "category": "complexity"
-    },
-    "god_class": {
-        "threshold": 20,
-        "message": "Class has too many methods (>{threshold})",
-        "category": "design"
-    },
-}
 
 class CoderAgent(BaseAgent):
     """Updates code files using AI assistance.
@@ -112,7 +52,13 @@ class CoderAgent(BaseAgent):
     }
 
     def __init__(self, file_path: str) -> None:
+        self.file_path = Path(file_path)
+        self._language = self._detect_language()
         super().__init__(file_path)
+        
+        # New: Delegate core logic to CoderCore (Rust-ready component)
+        self.core = CoderCore(self._language)
+        
         # Create copies of style rules to avoid cross-instance state leakage
         self._style_rules: List[StyleRule] = [
             StyleRule(
@@ -125,7 +71,6 @@ class CoderAgent(BaseAgent):
                 auto_fix=r.auto_fix
             ) for r in DEFAULT_PYTHON_STYLE_RULES
         ]
-        self._language: CodeLanguage = self._detect_language()
         self._metrics: Optional[CodeMetrics] = None
         self._quality_score: Optional[QualityScore] = None
         self._code_smells: List[CodeSmell] = []
@@ -144,6 +89,7 @@ class CoderAgent(BaseAgent):
             The detected CodeLanguage based on file extension.
         """
         self._language = self._detect_language()
+        self.core.language = self._language  # Sync core
         return self._language
 
     @property
@@ -187,129 +133,19 @@ class CoderAgent(BaseAgent):
 
     def check_style(self, content: str) -> List[Dict[str, Any]]:
         """Check code against all enabled style rules."""
-        violations: List[Dict[str, Any]] = []
-        lines = content.split('\n')
-        for rule in self._style_rules:
-            if not rule.enabled:
-                continue
-            if rule.language and rule.language != self._language:
-                continue
-            
-            # Check multiline patterns if they contain \n or start with ^ in multiline mode
-            if '\n' in rule.pattern or rule.pattern.startswith('^'):
-                for match in re.finditer(rule.pattern, content, re.MULTILINE):
-                    # Calculate line number
-                    line_no = content.count('\n', 0, match.start()) + 1
-                    violations.append({
-                        "rule": rule.name,
-                        "message": rule.message,
-                        "severity": rule.severity.value,
-                        "line": line_no,
-                        "content": match.group(0).split('\n')[0][:80]
-                    })
-            else:
-                # Line-by-line check for simple patterns
-                for i, line in enumerate(lines, 1):
-                    if re.search(rule.pattern, line):
-                        violations.append({
-                            "rule": rule.name,
-                            "message": rule.message,
-                            "severity": rule.severity.value,
-                            "line": i,
-                            "content": line[:80]
-                        })
-        return violations
+        return self.core.check_style(content, self._style_rules)
 
     def auto_fix_style(self, content: str) -> Tuple[str, int]:
         """Apply auto-fixes for style violations."""
-        fixed_content = content
-        fix_count = 0
-        for rule in self._style_rules:
-            if not rule.enabled or not rule.auto_fix:
-                continue
-            if rule.language and rule.language != self._language:
-                continue
-            new_content = rule.auto_fix(fixed_content)
-            if new_content != fixed_content:
-                fix_count += 1
-                fixed_content = new_content
-        # Built - in fixes
-        # Remove trailing whitespace
-        lines = fixed_content.split('\n')
-        cleaned = [line.rstrip() for line in lines]
-        if cleaned != lines:
-            fix_count += 1
-        fixed_content = '\n'.join(cleaned)
-        return fixed_content, fix_count
+        return self.core.auto_fix_style(content, self._style_rules)
 
     # ========== Code Metrics ==========
     def calculate_metrics(self, content: Optional[str] = None) -> CodeMetrics:
         """Calculate code metrics for the content."""
         if content is None:
             content = self.current_content or self.previous_content or ""
-        lines = content.split('\n')
-        metrics = CodeMetrics()
-        # Basic line counts
-        for line in lines:
-            stripped = line.strip()
-            if not stripped:
-                metrics.blank_lines += 1
-            elif stripped.startswith('#') or stripped.startswith('//'):
-                metrics.lines_of_comments += 1
-            else:
-                metrics.lines_of_code += 1
-        # Python - specific metrics
-        if self._is_python_file:
-            try:
-                tree = ast.parse(content)
-                metrics = self._analyze_python_ast(tree, metrics)
-            except SyntaxError:
-                pass
-        # Calculate maintainability index (simplified formula)
-        if metrics.lines_of_code > 0:
-            halstead_volume = metrics.lines_of_code * math.log2(
-                max(1, metrics.function_count + metrics.class_count + 1))
-            cc = max(1, metrics.cyclomatic_complexity)
-            loc = metrics.lines_of_code
-            cm = metrics.lines_of_comments
-            # Simplified maintainability index
-            metrics.maintainability_index = max(
-                0, min(
-                    100,
-                    171 - 5.2 * math.log(halstead_volume + 1) -
-                    0.23 * cc -
-                    16.2 * math.log(loc + 1) +
-                    50 * math.sin(math.sqrt(2.4 * (cm / (loc + cm + 1))))
-                )
-            )
-        self._metrics = metrics
-        return metrics
-
-    def _analyze_python_ast(self, tree: ast.AST, metrics: CodeMetrics) -> CodeMetrics:
-        """Analyze Python AST for metrics."""
-        function_lengths: List[int] = []
-        for node in ast.walk(tree):
-            if isinstance(node, ast.FunctionDef) or isinstance(node, ast.AsyncFunctionDef):
-                metrics.function_count += 1
-                if hasattr(node, 'end_lineno') and node.end_lineno is not None:
-                    length = node.end_lineno - node.lineno + 1
-                    function_lengths.append(length)
-                    # Calculate cyclomatic complexity for this function
-                    cc = 1  # Base complexity
-                    for child in ast.walk(node):
-                        if isinstance(child, (ast.If, ast.While, ast.For, ast.ExceptHandler)):
-                            cc += 1
-                        elif isinstance(child, ast.BoolOp):
-                            cc += len(child.values) - 1
-                    metrics.cyclomatic_complexity += cc
-            elif isinstance(node, ast.ClassDef):
-                metrics.class_count += 1
-            elif isinstance(node, (ast.Import, ast.ImportFrom)):
-                metrics.import_count += 1
-        if function_lengths:
-            metrics.average_function_length = sum(function_lengths) / len(function_lengths)
-            metrics.max_function_length = max(function_lengths)
-        return metrics
+        self._metrics = self.core.calculate_metrics(content)
+        return self._metrics
 
     def _get_test_coverage(self) -> float:
         """Attempt to calculate test coverage for the current file."""
@@ -354,146 +190,18 @@ class CoderAgent(BaseAgent):
         metrics = self.calculate_metrics(content)
         style_violations = self.check_style(content)
         code_smells = self.detect_code_smells(content)
-        score = QualityScore()
-        # Maintainability score (from maintainability index)
-        score.maintainability = min(100, metrics.maintainability_index)
-        # Readability score
-        readability_deductions = len(style_violations) * 5
-        score.readability = max(0, 100 - readability_deductions)
-        # Complexity score (inverse of cyclomatic complexity)
-        if metrics.function_count > 0:
-            avg_cc = metrics.cyclomatic_complexity / metrics.function_count
-            score.complexity = max(0, 100 - (avg_cc - 1) * 10)
-        else:
-            score.complexity = 100
-        # Documentation score
-        if metrics.lines_of_code > 0:
-            comment_ratio = metrics.lines_of_comments / metrics.lines_of_code
-            score.documentation = min(100, comment_ratio * 200)
+        coverage = self._get_test_coverage()
         
-        # Real test coverage calculation
-        score.test_coverage = self._get_test_coverage()
-        
-        # Overall score (weighted average)
-        score.overall_score = (
-            score.maintainability * 0.25 +
-            score.readability * 0.25 +
-            score.complexity * 0.25 +
-            score.documentation * 0.15 +
-            score.test_coverage * 0.10
-        )
-        # Add issues
-        for violation in style_violations[:5]:
-            score.issues.append(f"Style: {violation['message']} (line {violation['line']})")
-        for smell in code_smells[:5]:
-            score.issues.append(f"Smell: {smell.description}")
-        self._quality_score = score
-        return score
+        self._quality_score = self.core.calculate_quality_score(metrics, style_violations, code_smells, coverage)
+        return self._quality_score
 
     # ========== Code Smell Detection ==========
     def detect_code_smells(self, content: Optional[str] = None) -> List[CodeSmell]:
         """Detect code smells in the content."""
         if content is None:
             content = self.current_content or self.previous_content or ""
-        smells: List[CodeSmell] = []
-        if not self._is_python_file:
-            return smells
-        try:
-            tree = ast.parse(content)
-        except SyntaxError:
-            return smells
-        lines = content.split('\n')
-        for node in ast.walk(tree):
-            # Long method detection
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                if (hasattr(node, 'end_lineno') and node.end_lineno is not None
-                        and hasattr(node, 'lineno')):
-                    length = node.end_lineno - node.lineno + 1
-                    threshold = CODE_SMELL_PATTERNS["long_method"]["threshold"]
-                    if length > threshold:
-                        smells.append(
-                            CodeSmell(
-                                name="long_method",
-                                description=(
-                                    f"Method '{node.name}' is {length} "
-                                    f"lines (>{threshold})"
-                                ),
-                                severity="warning",
-                                line_number=node.lineno,
-                                suggestion=(
-                                    f"Consider breaking down '{node.name}' "
-                                    f"into smaller functions"
-                                ),
-                                category="complexity"))
-                # Too many parameters
-                param_count = len(node.args.args)
-                threshold = CODE_SMELL_PATTERNS["too_many_parameters"]["threshold"]
-                if param_count > threshold:
-                    smells.append(
-                        CodeSmell(
-                            name="too_many_parameters",
-                            description=(
-                                f"Function '{node.name}' has {param_count} "
-                                f"parameters (>{threshold})"
-                            ),
-                            severity="warning",
-                            line_number=node.lineno,
-                            suggestion="Consider using a data class or dictionary for parameters",
-                            category="complexity"))
-            # God class detection
-            if isinstance(node, ast.ClassDef):
-                method_count = sum(
-                    1 for n in node.body if isinstance(
-                        n, (ast.FunctionDef, ast.AsyncFunctionDef)))
-                threshold = CODE_SMELL_PATTERNS["god_class"]["threshold"]
-                if method_count > threshold:
-                    smells.append(
-                        CodeSmell(
-                            name="god_class",
-                            description=f"Class '{node.name}' has {method_count} methods (>{threshold})",
-                            severity="warning",
-                            line_number=node.lineno,
-                            suggestion="Consider splitting the class into smaller, more focused classes.",
-                            category="design"))
-
-        # Deep nesting detection
-        for i, line in enumerate(lines, 1):
-            indent = len(line) - len(line.lstrip())
-            spaces_per_level = 4
-            nesting = indent // spaces_per_level
-            threshold = CODE_SMELL_PATTERNS["deep_nesting"]["threshold"]
-            if nesting > threshold and line.strip():
-                smells.append(CodeSmell(
-                    name="deep_nesting",
-                    description=f"Code at line {i} has {nesting} levels of nesting (>{threshold})",
-                    severity="info",
-                    line_number=i,
-                    suggestion="Consider early returns or extracting nested logic",
-                    category="complexity"
-                ))
-        
-        # Duplicate code detection
-        smells.extend(self._detect_duplicate_code(content))
-        self._code_smells = smells
-        return smells
-
-    def _detect_duplicate_code(self, content: str) -> List[CodeSmell]:
-        """Simple heuristic for duplicate line detection."""
-        smells = []
-        lines = [line.strip() for line in content.split('\n') if len(line.strip()) > 30] # Significant lines only
-        from collections import Counter
-        counts = Counter(lines)
-        for line, count in counts.items():
-            if count >= 3:
-                smells.append(CodeSmell(
-                    name="duplicate_code",
-                    description=f"Potential duplicate code detected ({count} occurrences of long lines)",
-                    severity="info",
-                    line_number=0,
-                    suggestion="Consider extracting common logic into a shared helper or utility.",
-                    category="duplication"
-                ))
-        return smells
+        self._code_smells = self.core.detect_code_smells(content)
+        return self._code_smells
 
     # ========== Code Deduplication ==========
     def find_duplicate_code(
@@ -504,32 +212,7 @@ class CoderAgent(BaseAgent):
         """Find duplicate code blocks."""
         if content is None:
             content = self.current_content or self.previous_content or ""
-        lines = content.split('\n')
-        duplicates: List[Dict[str, Any]] = []
-        self._duplicate_hashes = {}
-        # Create hashes for consecutive line blocks
-        for i in range(len(lines) - min_lines + 1):
-            block = '\n'.join(lines[i:i + min_lines])
-            # Normalize whitespace for comparison
-            normalized = re.sub(r'\s+', ' ', block.strip())
-            if len(normalized) < 20:  # Skip very short blocks
-                continue
-            block_hash = hashlib.md5(normalized.encode()).hexdigest()
-            if block_hash not in self._duplicate_hashes:
-                self._duplicate_hashes[block_hash] = []
-            self._duplicate_hashes[block_hash].append(i + 1)
-        # Find actual duplicates
-        for block_hash, line_numbers in self._duplicate_hashes.items():
-            if len(line_numbers) > 1:
-                duplicates.append({
-                    "hash": block_hash,
-                    "occurrences": len(line_numbers),
-                    "lines": line_numbers,
-                    "preview": '\n'.join(
-                        lines[line_numbers[0] - 1:line_numbers[0] - 1 + min_lines]
-                    )[:100]
-                    })
-        return duplicates
+        return self.core.find_duplicate_code(content, min_lines)
 
     def get_duplicate_ratio(self, content: Optional[str] = None) -> float:
         """Calculate the ratio of duplicate code."""
@@ -722,3 +405,5 @@ class CoderAgent(BaseAgent):
         else:
             logging.debug("Style validation passed")
         return new_content
+
+

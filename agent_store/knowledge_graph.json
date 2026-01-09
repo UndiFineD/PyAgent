@@ -1,0 +1,21 @@
+{
+    "entities": {
+        "ByzantineJudge": {
+            "type": "SpecializedAgent",
+            "properties": {
+                "logic": "AI-Voting"
+            }
+        },
+        "FleetManager": {
+            "type": "Coordinator",
+            "properties": {}
+        }
+    },
+    "relations": [
+        {
+            "source": "FleetManager",
+            "type": "manages",
+            "target": "ByzantineJudge"
+        }
+    ]
+}
