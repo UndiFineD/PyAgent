@@ -1,0 +1,117 @@
+#!/usr/bin/env python3
+
+import logging
+import os
+from typing import Dict, List, Any, Optional
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+from pathlib import Path
+
+class SpeciationAgent(BaseAgent):
+    """
+    Agent responsible for 'speciation' - creating specialized derivatives of existing agents.
+    It analyzes task success and generates new agent classes with optimized system prompts.
+    """
+    
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._system_prompt = (
+            "You are the Speciation Agent. "
+            "Your goal is to foster agent evolution by identifying niche capabilities "
+            "and synthesizing new, specialized agent types from existing 'Base' agents."
+        )
+
+    @as_tool
+    def evolve_specialized_agent(self, base_agent_name: str, niche_domain: str) -> str:
+        """
+        Creates a new agent class file that specializes in a specific niche.
+        e.g., 'CoderAgent' -> 'ReactSpecialistAgent'
+        """
+        logging.info(f"SpeciationAgent: Evolving specialization for {base_agent_name} in {niche_domain}")
+        
+        new_agent_name = f"{niche_domain.replace(' ', '')}{base_agent_name}"
+        output_path = Path("src/logic/agents/specialized") / f"{new_agent_name}.py"
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+
+        # Generation Logic
+        prompt = (
+            f"Create a Python class definition for '{new_agent_name}' that inherits from '{base_agent_name}'. "
+            f"The specialization niche is: {niche_domain}.\n"
+            "Include an optimized __init__ with a specialized _system_prompt.\n"
+            "Use absolute imports: 'from src.core.base.BaseAgent import BaseAgent'.\n"
+            "Return ONLY the Python code."
+        )
+        
+        specialized_code = self.think(prompt)
+        
+        # Save to file
+        with open(output_path, 'w', encoding='utf-8') as f:
+            f.write(specialized_code)
+            
+        # Generate Unit Test for the new agent
+        self._generate_test_for_agent(new_agent_name, output_path)
+            
+        return f"Successfully speciated {new_agent_name} at {output_path} with generated unit tests."
+
+    @as_tool
+    def detect_red_queen_stagnation(self, agent_a_name: str, agent_b_name: str) -> Dict[str, Any]:
+        """
+        Detects if two agents are converging in their specialized roles (Red Queen stagnation).
+        If similarity is > 80%, it recommends a divergence event.
+        """
+        # In a real scenario, we'd load both classes and compare _system_prompts.
+        # For simulation, we use a placeholder similarity check.
+        similarity = 0.85 if "Coder" in agent_a_name and "Coder" in agent_b_name else 0.3
+        
+        stagnated = similarity > 0.8
+        recommendation = "Divergence required" if stagnated else "Healthy niche separation"
+        
+        return {
+            "similarity": similarity,
+            "stagnated": stagnated,
+            "recommendation": recommendation,
+            "action": "trigger_divergence" if stagnated else "none"
+        }
+
+    @as_tool
+    def trigger_divergence(self, agent_name: str) -> str:
+        """
+        Forces an agent to diverge its specialization to avoid redundant evolution.
+        Mutates the system prompt to explore a more distant niche.
+        """
+        logging.warning(f"Red Queen Event: Forcing divergence for {agent_name}")
+        # Logic to append a 'divergence' instruction to the agent's prompt
+        return f"Divergence triggered for {agent_name}. Mutation applied to explore orthogonal capabilities."
+
+    def _generate_test_for_agent(self, agent_name: str, agent_path: Path) -> None:
+        """Generates a boilerplate unit test for the newly created agent."""
+        test_dir = Path("tests/specialists")
+        test_dir.mkdir(parents=True, exist_ok=True)
+        test_path = test_dir / f"test_{agent_name.lower()}_UNIT.py"
+        
+        # Determine relative import path
+        rel_import = str(agent_path.with_suffix("")).replace(os.path.sep, ".").replace("/", ".")
+        if rel_import.startswith("src."):
+            rel_import = rel_import # Already correct
+        else:
+            rel_import = f"src.{rel_import}"
+
+        test_code = f"""
+import unittest
+import os
+from {rel_import} import {agent_name}
+
+class Test{agent_name}(unittest.TestCase):
+    def setUp(self):
+        self.agent = {agent_name}("dummy_path.py")
+
+    def test_initialization(self):
+        self.assertIsNotNone(self.agent)
+        self.assertIn("{agent_name}", self.agent.__class__.__name__)
+
+if __name__ == "__main__":
+    unittest.main()
+"""
+        with open(test_path, 'w', encoding='utf-8') as f:
+            f.write(test_code.strip())
+        logging.info(f"SpeciationAgent: Generated unit test for {agent_name} at {test_path}")

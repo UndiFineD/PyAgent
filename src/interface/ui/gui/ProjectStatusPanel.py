@@ -1,0 +1,56 @@
+from io import TextIOWrapper
+import tkinter as tk
+from tkinter import ttk
+import json
+from pathlib import Path
+
+class ProjectStatusPanel:
+    """A panel that displays the current orchestration status from status.json."""
+    
+    def __init__(self, parent) -> None:
+        self.frame: ttk.Labelframe = ttk.LabelFrame(parent, text="Orchestration Status", padding=10)
+        self.status_file = Path("src/infrastructure/orchestration/status.json")
+        
+        self.goal_label = ttk.Label(self.frame, text="Active Project: None", font=("Segoe UI", 10, "bold"))
+        self.goal_label.pack(anchor="w")
+        
+        self.progress_var = tk.DoubleVar(value=0)
+        self.progress_bar = ttk.Progressbar(self.frame, variable=self.progress_var, maximum=100)
+        self.progress_bar.pack(fill=tk.X, pady=5)
+        
+        self.steps_text = tk.Text(self.frame, height=8, width=50, font=("Consolas", 9))
+        self.steps_text.pack(fill=tk.BOTH, expand=True)
+        
+        self.refresh()
+
+    def refresh(self) -> None:
+        """Polls the status file and updates the UI."""
+        if self.status_file.exists():
+            try:
+                with open(self.status_file, "r") as f:
+                    data = json.load(f)
+                
+                goal = data.get("active_project", "None") or "None"
+                self.goal_label.config(text=f"Active Project: {goal}")
+                
+                steps = data.get("steps", [])
+                completed: int = sum(1 for s in steps if s.get("status") == "Completed")
+                total: int = len(steps)
+                
+                if total > 0:
+                    self.progress_var.set((completed / total) * 100)
+                else:
+                    self.progress_var.set(0)
+                
+                self.steps_text.delete("1.0", tk.END)
+                for i, step in enumerate(steps):
+                    status = step.get("status", "Pending")
+                    agent = step.get("agent", "Unknown")
+                    file = step.get("file", "unknown")
+                    self.steps_text.insert(tk.END, f"[{i+1}/{total}] {status:10} | {agent} -> {file}\n")
+                    
+            except Exception as e:
+                self.steps_text.delete("1.0", tk.END)
+                self.steps_text.insert(tk.END, f"Error reading status: {e}")
+        
+        self.frame.after(2000, self.refresh) # Polling every 2s

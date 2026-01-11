@@ -1,0 +1,24 @@
+# Description: `VllmNativeBackend.py`
+
+## Module purpose
+
+(No module docstring found)
+
+## Location
+- Path: `infrastructure\backend\llm_backends\VllmNativeBackend.py`
+
+## Public surface
+- Classes: VllmNativeBackend
+- Functions: (none)
+
+## Behavior summary
+- Pure module (no obvious CLI / side effects).
+
+## Key dependencies
+- Top imports: `__future__`, `logging`, `typing`, `LLMBackend`, `VllmNativeEngine`
+
+## Metadata
+
+- SHA256(source): `83deade8fe464517`
+- Last updated: `2026-01-11 12:53:12`
+- File: `infrastructure\backend\llm_backends\VllmNativeBackend.py`

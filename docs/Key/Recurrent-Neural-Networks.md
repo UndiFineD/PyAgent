@@ -1,7 +1,7 @@
 # Recurrent Neural Networks (RNNs)
 
 ## What is an RNN?
-A Recurrent Neural Network (RNN) is a type of neural network designed for sequential data (Time Series, Text, Audio). Unlike Feedforward networks, RNNs have a "memory" (hidden state) that captures information about what has been calculated so far.
+A Recurrent Neural Network (RNN) is a type of neural network designed for sequential data (Time Series, Text, Audio). Unlike Feedforward networks, RNNs have a "data/memory" (hidden state) that captures information about what has been calculated so far.
 
 ## The Loop
 In a standard neural network, inputs are independent. In an RNN, the output of step $t-1$ is fed back into the network as input for step $t$.

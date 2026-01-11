@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+
+"""Auto-extracted class from agent_context.py"""
+
+from __future__ import annotations
+
+from src.logic.agents.cognitive.context.models.BranchComparison import BranchComparison
+
+from src.core.base.BaseAgent import BaseAgent
+from dataclasses import dataclass, field
+from datetime import datetime
+from enum import Enum
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
+import hashlib
+import json
+import logging
+import re
+import zlib
+
+class BranchComparer:
+    """Compares context across git branches.
+
+    Provides functionality to compare context files between branches.
+
+    Example:
+        >>> comparer=BranchComparer()
+        >>> comparison=comparer.compare("main", "feature")
+    """
+
+    def __init__(self) -> None:
+        self.branch_a: str = ""
+        self.branch_b: str = ""
+        self._last_comparison: Optional[BranchComparison] = None
+
+    def set_branches(self, branch_a: str, branch_b: str) -> None:
+        self.branch_a = branch_a
+        self.branch_b = branch_b
+
+    def get_modified_files(self) -> List[str]:
+        if not self._last_comparison:
+            return []
+        return list(self._last_comparison.modified_files)
+
+    def summarize(self, comparison: BranchComparison) -> str:
+        return (
+            f"Compare {comparison.branch_a} -> {comparison.branch_b}: "
+            f"only_in_a={len(comparison.files_only_in_a)}, "
+            f"only_in_b={len(comparison.files_only_in_b)}, "
+            f"modified={len(comparison.modified_files)}"
+        )
+
+    def compare(
+        self,
+        branch_a: Optional[str] = None,
+        branch_b: Optional[str] = None,
+        contexts_a: Optional[Dict[str, str]] = None,
+        contexts_b: Optional[Dict[str, str]] = None,
+    ) -> BranchComparison:
+        """Compare contexts between branches.
+
+        Args:
+            branch_a: First branch name (optional; defaults to stored branches).
+            branch_b: Second branch name (optional; defaults to stored branches).
+            contexts_a: Contexts from branch A (optional; defaults to empty).
+            contexts_b: Contexts from branch B (optional; defaults to empty).
+
+        Returns:
+            BranchComparison with differences.
+        """
+        resolved_a = branch_a if branch_a is not None else self.branch_a
+        resolved_b = branch_b if branch_b is not None else self.branch_b
+        ctx_a = contexts_a or {}
+        ctx_b = contexts_b or {}
+
+        files_a = set(ctx_a.keys())
+        files_b = set(ctx_b.keys())
+        modified: List[str] = []
+        for f in files_a & files_b:
+            if ctx_a[f] != ctx_b[f]:
+                modified.append(f)
+        comparison = BranchComparison(
+            branch_a=resolved_a,
+            branch_b=resolved_b,
+            files_only_in_a=list(files_a - files_b),
+            files_only_in_b=list(files_b - files_a),
+            modified_files=modified
+        )
+        self._last_comparison = comparison
+        return comparison

@@ -1,0 +1,24 @@
+# Description: `FileCategory.py`
+
+## Module purpose
+
+Auto-extracted class from agent_context.py
+
+## Location
+- Path: `src\logic\agents\cognitive\context\models\FileCategory.py`
+
+## Public surface
+- Classes: FileCategory
+- Functions: (none)
+
+## Behavior summary
+- Pure module (no obvious CLI / side effects).
+
+## Key dependencies
+- Top imports: `__future__`, `src.core.base.BaseAgent`, `dataclasses`, `datetime`, `enum`, `pathlib`, `typing`, `hashlib`, `json`, `logging`, `re`, `zlib`
+
+## Metadata
+
+- SHA256(source): `ae3f30c72eac502d`
+- Last updated: `2026-01-11 10:16:05`
+- File: `src\logic\agents\cognitive\context\models\FileCategory.py`
