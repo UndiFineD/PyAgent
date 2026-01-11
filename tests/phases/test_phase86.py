@@ -17,7 +17,7 @@ class TestSelfHealing(unittest.TestCase):
         self.mock_fleet.agents.try_reload.return_value = True
         self.orchestrator = SelfHealingOrchestrator(self.mock_fleet)
 
-    def test_heartbeat_and_recovery(self):
+    def test_heartbeat_and_recovery(self) -> None:
         # Register a healthy agent
         self.orchestrator.register_heartbeat("AgentX", {"key": "value"})
         self.assertIn("AgentX", self.orchestrator.health_registry)
@@ -33,7 +33,7 @@ class TestSelfHealing(unittest.TestCase):
         self.assertEqual(status['recent_actions'][0]['agent'], "AgentX")
         self.assertTrue(status['recent_actions'][0]['state_restored'])
 
-    def test_no_recovery_for_healthy_agent(self):
+    def test_no_recovery_for_healthy_agent(self) -> None:
         self.orchestrator.register_heartbeat("AgentY")
         self.orchestrator.check_fleet_health()
         

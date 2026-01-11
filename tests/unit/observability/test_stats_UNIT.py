@@ -136,7 +136,7 @@ class TestAnomalyDetection:
     def test_detect_anomaly_with_data(self, agent: Any, stats_module: Any) -> None:
         """Test anomaly detection with normal data."""
         agent.register_custom_metric("stable", stats_module.MetricType.GAUGE)
-        for v: int in [10, 10, 10, 10, 10]:
+        for v in [10, 10, 10, 10, 10]:
             agent.add_metric("stable", v)
         result = agent.detect_anomaly("stable")
         assert result is False  # All values are the same
@@ -144,7 +144,7 @@ class TestAnomalyDetection:
     def test_detect_anomaly_outlier(self, agent: Any, stats_module: Any) -> None:
         """Test anomaly detection with outlier."""
         agent.register_custom_metric("anomalous", stats_module.MetricType.GAUGE)
-        for v: int in [10, 10, 10, 10, 10]:
+        for v in [10, 10, 10, 10, 10]:
             agent.add_metric("anomalous", v)
         agent.add_metric("anomalous", 1000)  # Big outlier
         result = agent.detect_anomaly("anomalous")
@@ -244,7 +244,7 @@ class TestRetentionPolicies:
         """Test applying retention policies."""
         agent.register_custom_metric("expire_test", stats_module.MetricType.COUNTER)
         agent.add_retention_policy("expire_test", max_points=5)
-        for i: int in range(10):
+        for i in range(10):
             agent.add_metric("expire_test", i)
         agent.apply_retention_policies()
         history = agent.get_metric_history("expire_test")
@@ -267,7 +267,7 @@ class TestForecasting:
     def test_forecast_with_data(self, agent: Any, stats_module: Any) -> None:
         """Test forecasting with sufficient data."""
         agent.register_custom_metric("trend", stats_module.MetricType.GAUGE)
-        for i: int in range(10):
+        for i in range(10):
             agent.add_metric("trend", i * 10)  # Linear trend
         forecast = agent.forecast("trend", periods=3)
         if forecast:
@@ -283,7 +283,7 @@ class TestCompression:
     def test_compress_metrics(self, agent: Any, stats_module: Any) -> None:
         """Test compressing metric data."""
         agent.register_custom_metric("compress_test", stats_module.MetricType.GAUGE)
-        for i: int in range(100):
+        for i in range(100):
             agent.add_metric("compress_test", i)
         compressed = agent.compress_metrics("compress_test")
         assert compressed is not None
@@ -292,7 +292,7 @@ class TestCompression:
     def test_decompress_metrics(self, agent: Any, stats_module: Any) -> None:
         """Test decompressing metric data."""
         agent.register_custom_metric("decompress_test", stats_module.MetricType.GAUGE)
-        original: List[Tuple[str | int]] = [(datetime.now().isoformat(), i) for i: int in range(10)]
+        original: List[Tuple[str | int]] = [(datetime.now().isoformat(), i) for i in range(10)]
         agent._metric_history["decompress_test"] = original
         compressed = agent.compress_metrics("decompress_test")
         decompressed = agent.decompress_metrics(compressed)
@@ -313,7 +313,7 @@ class TestStatsAgent(unittest.TestCase):
             os.path.join(self.temp_dir, 'file1.py'),
             os.path.join(self.temp_dir, 'file2.py')
         ]
-        for f: str in self.files:
+        for f in self.files:
             Path(f).write_text("# test file\n", encoding="utf-8")
         self.agent = StatsAgent(self.files)
 
@@ -361,7 +361,7 @@ class TestStatsAgent(unittest.TestCase):
             'total_files': 1,
             'files_with_context': 0
         }
-        with patch('builtins.print') as mock_print: MagicMock | AsyncMock:
+        with patch('builtins.print') as mock_print:
             self.agent.generate_comparison_report(baseline_stats)
             mock_print.assert_called()
 
@@ -861,7 +861,7 @@ class TestCorrelationAnalyzer:
     def test_compute_correlation(self, stats_module: Any) -> None:
         """Test computing correlation."""
         analyzer = stats_module.CorrelationAnalyzer()
-        for i: int in range(10):
+        for i in range(10):
             analyzer.record_value("cpu", float(i))
             analyzer.record_value("data/memory", float(i * 2))
         corr = analyzer.compute_correlation("cpu", "data/memory")
@@ -871,7 +871,7 @@ class TestCorrelationAnalyzer:
     def test_find_strong_correlations(self, stats_module: Any) -> None:
         """Test finding strong correlations."""
         analyzer = stats_module.CorrelationAnalyzer()
-        for i: int in range(10):
+        for i in range(10):
             analyzer.record_value("a", float(i))
             analyzer.record_value("b", float(i))
         analyzer.compute_correlation("a", "b")
@@ -1496,7 +1496,7 @@ class TestStatsRollupCalculations:
         calculator = StatsRollupCalculator()
 
         # Add minute-level data
-        for i: int in range(60):
+        for i in range(60):
             calculator.add_point("cpu", timestamp=i * 60, value=50 + i % 10)
 
         hourly = calculator.rollup("cpu", interval="1h")
@@ -1509,7 +1509,7 @@ class TestStatsRollupCalculations:
         calculator = StatsRollupCalculator()
 
         # Add hourly data for a day
-        for i: int in range(24):
+        for i in range(24):
             calculator.add_point("data/memory", timestamp=i * 3600, value=60)
 
         daily = calculator.rollup("data/memory", interval="1d")
@@ -1764,7 +1764,7 @@ class TestStatisticalSummaries(unittest.TestCase):
         """Test standard deviation calculation."""
         values: List[int] = [1, 2, 3, 4, 5]
         mean: float = sum(values) / len(values)
-        variance: float = sum((x - mean) ** 2 for x: int in values) / len(values)
+        variance: float = sum((x - mean) ** 2 for x in values) / len(values)
         stddev = variance ** 0.5
         assert stddev > 0
 
@@ -1856,7 +1856,7 @@ class TestMetricFiltering(unittest.TestCase):
 
         start = datetime(2024, 12, 15)
         end = datetime(2024, 12, 17)
-        filtered: List[Dict[str, datetime]] = [s for s: Dict[str, datetime] in stats if start <= s["date"] <= end]
+        filtered: List[Dict[str, datetime]] = [s for s in stats if start <= s["date"] <= end]
         assert len(filtered) == 1
 
     def test_select_top_metrics(self) -> None:
@@ -1882,13 +1882,13 @@ class TestTimeSeries(unittest.TestCase):
             {"timestamp": "2024-12-16T11:00:00", "value": 105},
         ]
 
-        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f: tempfile._TemporaryFileWrapper[str]:
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f:
             json.dump(data, f)
             f.flush()
             fname: str = f.name
 
         try:
-            with open(fname) as f: logging.TextIOWrapper[_WrappedBuffer]:
+            with open(fname) as f:
                 loaded = json.load(f)
             assert len(loaded) == 2
             assert loaded[0]["value"] == 100
@@ -1920,7 +1920,7 @@ class TestValidation(unittest.TestCase):
         """Test detecting anomalies."""
         values: List[int] = [100, 105, 103, 102, 200]  # Last value is anomaly
         mean: float = sum(values) / len(values)
-        variance: float = sum((x - mean) ** 2 for x: int in values) / len(values)
+        variance: float = sum((x - mean) ** 2 for x in values) / len(values)
         variance ** 0.5
 
         # The last value (200) is significantly higher than mean
@@ -1945,7 +1945,7 @@ class TestCaching(unittest.TestCase):
         """Test caching stat computation results."""
         cache = {}
 
-        def get_stat(key):
+        def get_stat(key: str) -> int:
             if key not in cache:
                 # Expensive computation
                 cache[key] = sum(range(1000))
@@ -2094,7 +2094,7 @@ class TestPathLibUsage(unittest.TestCase):
         from pathlib import Path
 
         paths: List[Path] = [Path("a.py"), Path("b.py"), Path("c.txt")]
-        py_files: List[Path] = [p for p: Path in paths if p.suffix == ".py"]
+        py_files: List[Path] = [p for p in paths if p.suffix == ".py"]
 
         assert len(py_files) == 2
 
@@ -2104,7 +2104,7 @@ class TestPathLibUsage(unittest.TestCase):
 
         # Simulated file system
         files: List[Path] = [Path("src / main.py"), Path("src / utils.py"), Path("tests / test.py")]
-        py_files: List[Path] = [f for f: Path in files if f.suffix == ".py"]
+        py_files: List[Path] = [f for f in files if f.suffix == ".py"]
 
         assert len(py_files) == 3
 
@@ -2119,7 +2119,7 @@ class TestTimeSeriesStorage(unittest.TestCase):
 
         history = []
 
-        for i: int in range(5):
+        for i in range(5):
             timestamp: datetime = datetime.now() - timedelta(days=5 - i)
             history.append({
                 "timestamp": timestamp.isoformat(),

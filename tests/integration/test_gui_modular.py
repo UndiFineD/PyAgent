@@ -23,7 +23,7 @@ from src.interface.ui.gui.AgentColumn import AgentColumn
 
 class TestGUIModular(unittest.TestCase):
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         try:
             cls.root = tk.Tk()
             cls.root.withdraw() # Hide window during tests
@@ -32,16 +32,16 @@ class TestGUIModular(unittest.TestCase):
             logging.warning(f"Skipping GUI tests: Tkinter not available: {e}")
             cls._tk_available = False
 
-    def setUp(self):
+    def setUp(self) -> None:
         if not self._tk_available:
             self.skipTest("Tkinter not available in this environment")
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         if cls._tk_available:
             cls.root.destroy()
 
-    def test_widget_logger(self):
+    def test_widget_logger(self) -> None:
         text = tk.Text(self.root)
         logger = WidgetLogger(text)
         record = logging.LogRecord("test", logging.INFO, "test.py", 10, "Test Log message", (), None)
@@ -50,14 +50,14 @@ class TestGUIModular(unittest.TestCase):
         content = text.get("1.0", tk.END).strip()
         self.assertIn("Test Log message", content)
 
-    def test_project_explorer_init(self):
+    def test_project_explorer_init(self) -> None:
         frame = ttk.Frame(self.root)
         root_var = tk.StringVar(value=os.getcwd())
-        def dummy_cb(*args): pass
+        def dummy_cb(*args: Any) -> None: pass
         explorer = ProjectExplorer(frame, root_var, on_double_click_callback=dummy_cb)
         self.assertIsNotNone(explorer.tree)
 
-    def test_widget_logger_filtering(self):
+    def test_widget_logger_filtering(self) -> None:
         text = tk.Text(self.root)
         # Logger with specific thread ID
         logger = WidgetLogger(text, thread_id=123)
@@ -77,7 +77,7 @@ class TestGUIModular(unittest.TestCase):
         self.assertIn("Thread 123 message", content)
         self.assertNotIn("Thread 456 message", content)
 
-    def test_project_explorer_search(self):
+    def test_project_explorer_search(self) -> None:
         frame = ttk.Frame(self.root)
         root_var = tk.StringVar(value=os.getcwd())
         explorer = ProjectExplorer(frame, root_var, on_double_click_callback=lambda x: None)
@@ -92,9 +92,9 @@ class TestGUIModular(unittest.TestCase):
         found = any("agent_gui.py" in t for t in texts)
         self.assertTrue(found)
 
-    def test_agent_column_data_retrieval(self):
+    def test_agent_column_data_retrieval(self) -> None:
         frame = ttk.Frame(self.root)
-        def dummy_cb(*args): pass
+        def dummy_cb(*args: Any) -> None: pass
         callbacks = {
             "execute": dummy_cb,
             "stop": dummy_cb,

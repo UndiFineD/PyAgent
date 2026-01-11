@@ -4,7 +4,7 @@
 import logging
 from pathlib import Path
 from src.infrastructure.fleet.FleetManager import FleetManager
-from src.infrastructure.fleet.AgentRegistry import AgentRegistry
+from src.infrastructure.fleet.AgentRegistry import AgentRegistry, LazyAgentMap
 from src.infrastructure.fleet.ResilientStubs import ResilientStub
 
 def test_version_gate() -> None:
@@ -17,7 +17,7 @@ def test_version_gate() -> None:
     # But AgentRegistryCore does scan plugins.
     
     # Let's instantiate the Registry directly to test logic
-    registry = AgentRegistry.get_agent_map(workspace_root)
+    registry: LazyAgentMap = AgentRegistry.get_agent_map(workspace_root)
     
     # FutureAgent should be discovered
     if "FutureAgent" in registry:

@@ -5,7 +5,7 @@ sys.path.append(str(Path(__file__).resolve().parents[2] / "src"))
 from src.infrastructure.fleet.FleetManager import FleetManager
 import time
 
-def test_phase25():
+def test_phase25() -> None:
     print("--- Phase 25 Verification: Quantum Entanglement & Reality Anchoring ---")
     workspace_root = Path(__file__).resolve().parents[2]
     fleet = FleetManager(str(workspace_root))

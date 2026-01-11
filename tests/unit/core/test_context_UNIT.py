@@ -262,7 +262,7 @@ class TestContextCompression:
         with agent_dir_on_path():
             mod: sys.ModuleType = load_agent_module("agent_context.py")
 
-        content: str = "\n".join([f"Line {i}: Description text" for i: int in range(100)])
+        content: str = "\n".join([f"Line {i}: Description text" for i in range(100)])
         target: Path = tmp_path / "large.description.md"
         target.write_text(content)
 
@@ -573,7 +573,7 @@ class TestContextNotification:
 class TestContextCreation(unittest.TestCase):
     """Tests for context creation and initialization."""
 
-    def test_create_context_basic(self) -> str:
+    def test_create_context_basic(self) -> None:
         """Test creating a basic context."""
         context = {
             "user_id": "user123",
@@ -585,7 +585,7 @@ class TestContextCreation(unittest.TestCase):
         assert context["session_id"] == "sess123"
         assert context["timestamp"] is not None
 
-    def test_create_context_with_defaults(self) -> bool:
+    def test_create_context_with_defaults(self) -> None:
         """Test creating context with default values."""
         context = {
             "user_id": "user123",
@@ -599,7 +599,7 @@ class TestContextCreation(unittest.TestCase):
         assert context["retries"] == 3
         assert context["debug"] is False
 
-    def test_create_context_nested(self) -> str:
+    def test_create_context_nested(self) -> None:
         """Test creating nested context."""
         context = {
             "user": {
@@ -616,7 +616,7 @@ class TestContextCreation(unittest.TestCase):
         assert context["user"]["id"] == "user123"
         assert context["environment"]["stage"] == "production"
 
-    def test_create_context_with_metadata(self) -> bool:
+    def test_create_context_with_metadata(self) -> None:
         """Test creating context with metadata."""
         context = {
             "id": "ctx123",
@@ -634,18 +634,18 @@ class TestContextCreation(unittest.TestCase):
 class TestContextStateTracking(unittest.TestCase):
     """Tests for context state tracking."""
 
-    def test_track_context_state_transitions(self) -> str:
+    def test_track_context_state_transitions(self) -> None:
         """Test tracking context state transitions."""
         states: List[str] = ["initialized", "processing", "completed"]
         state_history = []
 
-        for state: str in states:
+        for state in states:
             state_history.append(state)
 
         assert len(state_history) == 3
         assert state_history[-1] == "completed"
 
-    def test_track_modified_fields(self) -> bool:
+    def test_track_modified_fields(self) -> None:
         """Test tracking modified fields."""
         context: Dict[str, int] = {"value": 10}
         modifications = []
@@ -656,7 +656,7 @@ class TestContextStateTracking(unittest.TestCase):
         assert len(modifications) == 1
         assert modifications[0][2] == 20
 
-    def test_track_context_dirty_state(self) -> str:
+    def test_track_context_dirty_state(self) -> None:
         """Test tracking dirty state."""
         context = {"name": "Alice", "_dirty": False}
 
@@ -665,7 +665,7 @@ class TestContextStateTracking(unittest.TestCase):
 
         assert context["_dirty"] is True
 
-    def test_track_context_read_only_fields(self) -> bool:
+    def test_track_context_read_only_fields(self) -> None:
         """Test tracking read-only field violations."""
         context = {"id": "ctx123", "_read_only": ["id"]}
         violations = []
@@ -681,7 +681,7 @@ class TestContextStateTracking(unittest.TestCase):
 class TestContextLifecycle(unittest.TestCase):
     """Tests for context lifecycle management."""
 
-    def test_context_creation_lifecycle(self) -> str:
+    def test_context_creation_lifecycle(self) -> None:
         """Test context creation lifecycle."""
         lifecycle = []
 
@@ -699,7 +699,7 @@ class TestContextLifecycle(unittest.TestCase):
 
         assert lifecycle == ["created", "initialized", "cleaned"]
 
-    def test_context_timeout_lifecycle(self) -> bool:
+    def test_context_timeout_lifecycle(self) -> None:
         """Test context timeout lifecycle."""
         context = {
             "created_at": datetime.now(),
@@ -714,7 +714,7 @@ class TestContextLifecycle(unittest.TestCase):
         context["status"] = "expired"
         assert context["status"] == "expired"
 
-    def test_context_resource_management(self) -> str:
+    def test_context_resource_management(self) -> None:
         """Test context resource management."""
         resources = []
 
@@ -728,7 +728,7 @@ class TestContextLifecycle(unittest.TestCase):
         resources.clear()
         assert len(resources) == 0
 
-    def test_context_cleanup_on_exception(self) -> bool:
+    def test_context_cleanup_on_exception(self) -> None:
         """Test context cleanup on exception."""
         context: Dict[str, bool] = {"active": True}
         cleanup_called = False
@@ -747,28 +747,28 @@ class TestContextLifecycle(unittest.TestCase):
 class TestContextStorage(unittest.TestCase):
     """Tests for context storage and retrieval."""
 
-    def test_store_context_value(self) -> str:
+    def test_store_context_value(self) -> None:
         """Test storing context value."""
         context = {}
         context["key1"] = "value1"
 
         assert context["key1"] == "value1"
 
-    def test_retrieve_context_value(self) -> bool:
+    def test_retrieve_context_value(self) -> None:
         """Test retrieving context value."""
         context: Dict[str, str] = {"key1": "value1", "key2": "value2"}
 
         value: str | None = context.get("key1")
         assert value == "value1"
 
-    def test_retrieve_nonexistent_with_default(self) -> str:
+    def test_retrieve_nonexistent_with_default(self) -> None:
         """Test retrieving nonexistent with default."""
         context: Dict[str, str] = {"key1": "value1"}
 
         value: str = context.get("missing", "default")
         assert value == "default"
 
-    def test_store_complex_object(self) -> bool:
+    def test_store_complex_object(self) -> None:
         """Test storing complex object."""
         context = {
             "user": {
@@ -786,27 +786,27 @@ class TestContextStorage(unittest.TestCase):
 class TestContextVariables(unittest.TestCase):
     """Tests for context-local variables."""
 
-    def test_set_context_variable(self) -> str:
+    def test_set_context_variable(self) -> None:
         """Test setting context variable."""
         context = {}
         context["var1"] = "value1"
 
         assert "var1" in context
 
-    def test_get_context_variable(self) -> bool:
+    def test_get_context_variable(self) -> None:
         """Test getting context variable."""
         context: Dict[str, str] = {"var1": "value1"}
 
         assert context["var1"] == "value1"
 
-    def test_delete_context_variable(self) -> str:
+    def test_delete_context_variable(self) -> None:
         """Test deleting context variable."""
         context: Dict[str, str] = {"var1": "value1"}
         del context["var1"]
 
         assert "var1" not in context
 
-    def test_context_variable_isolation(self) -> bool:
+    def test_context_variable_isolation(self) -> None:
         """Test context variable isolation."""
         ctx1_vars: Dict[str, str] = {"var": "ctx1_value"}
         ctx2_vars: Dict[str, str] = {"var": "ctx2_value"}
@@ -818,7 +818,7 @@ class TestContextVariables(unittest.TestCase):
 class TestContextPropagation(unittest.TestCase):
     """Tests for context propagation through call chains."""
 
-    def test_propagate_context_to_function(self) -> str:
+    def test_propagate_context_to_function(self) -> None:
         """Test propagating context to function."""
         context: Dict[str, str] = {"user_id": "user1"}
 
@@ -828,7 +828,7 @@ class TestContextPropagation(unittest.TestCase):
         result: bool = process(context)
         assert result == "user1"
 
-    def test_propagate_through_nested_calls(self) -> str:
+    def test_propagate_through_nested_calls(self) -> None:
         """Test propagating through nested calls."""
         context: Dict[str, int] = {"value": 10}
 
@@ -844,7 +844,7 @@ class TestContextPropagation(unittest.TestCase):
         result: bool = level1(context)
         assert result == 10
 
-    def test_propagate_to_async_context(self) -> str:
+    def test_propagate_to_async_context(self) -> None:
         """Test propagating to async context."""
         context: Dict[str, str] = {"async_id": "async1"}
 
@@ -853,7 +853,7 @@ class TestContextPropagation(unittest.TestCase):
 
         assert async_contexts[0]["async_id"] == "async1"
 
-    def test_propagate_with_implicit_context(self) -> bool:
+    def test_propagate_with_implicit_context(self) -> None:
         """Test propagating with implicit context."""
         context_stack: List[Dict[str, int]] = [{"level": 1}]
 
@@ -867,7 +867,7 @@ class TestContextPropagation(unittest.TestCase):
 class TestContextMerging(unittest.TestCase):
     """Tests for context merging."""
 
-    def test_merge_contexts(self) -> str:
+    def test_merge_contexts(self) -> None:
         """Test merging two contexts."""
         ctx1: Dict[str, str] = {"key1": "value1"}
         ctx2: Dict[str, str] = {"key2": "value2"}
@@ -877,7 +877,7 @@ class TestContextMerging(unittest.TestCase):
         assert merged["key1"] == "value1"
         assert merged["key2"] == "value2"
 
-    def test_merge_with_override(self) -> bool:
+    def test_merge_with_override(self) -> None:
         """Test merging with override."""
         ctx1: Dict[str, str] = {"shared": "original", "unique1": "value1"}
         ctx2: Dict[str, str] = {"shared": "override", "unique2": "value2"}
@@ -888,7 +888,7 @@ class TestContextMerging(unittest.TestCase):
         assert merged["unique1"] == "value1"
         assert merged["unique2"] == "value2"
 
-    def test_merge_nested_contexts(self) -> str:
+    def test_merge_nested_contexts(self) -> None:
         """Test merging nested contexts."""
         ctx1: Dict[str, Dict[str, int]] = {"data": {"a": 1}}
         ctx2: Dict[str, Dict[str, int]] = {"data": {"b": 2}}
@@ -897,7 +897,7 @@ class TestContextMerging(unittest.TestCase):
         merged: Dict[str, Dict[str, int]] = {**ctx1, **ctx2}
         assert merged["data"]["b"] == 2
 
-    def test_merge_empty_context(self) -> bool:
+    def test_merge_empty_context(self) -> None:
         """Test merging empty context."""
         ctx: Dict[str, str] = {"key": "value"}
         empty = {}
@@ -910,7 +910,7 @@ class TestContextMerging(unittest.TestCase):
 class TestContextSerialization(unittest.TestCase):
     """Tests for context serialization."""
 
-    def test_serialize_context_to_dict(self) -> str:
+    def test_serialize_context_to_dict(self) -> None:
         """Test serializing context to dict."""
         context: Dict[str, str] = {
             "id": "ctx1",
@@ -922,7 +922,7 @@ class TestContextSerialization(unittest.TestCase):
         assert isinstance(serialized, dict)
         assert serialized["id"] == "ctx1"
 
-    def test_serialize_context_to_json(self) -> bool:
+    def test_serialize_context_to_json(self) -> None:
         """Test serializing context to JSON."""
         import json
         context: Dict[str, str] = {"id": "ctx1", "name": "test"}
@@ -930,7 +930,7 @@ class TestContextSerialization(unittest.TestCase):
         json_str: str = json.dumps(context)
         assert "ctx1" in json_str
 
-    def test_deserialize_context(self) -> str:
+    def test_deserialize_context(self) -> None:
         """Test deserializing context."""
         import json
         json_str = '{"id": "ctx1", "name": "test"}'
@@ -938,7 +938,7 @@ class TestContextSerialization(unittest.TestCase):
         context = json.loads(json_str)
         assert context["id"] == "ctx1"
 
-    def test_serialize_with_nested_structures(self) -> bool:
+    def test_serialize_with_nested_structures(self) -> None:
         """Test serializing with nested structures."""
         import json
         context = {
@@ -955,7 +955,7 @@ class TestContextSerialization(unittest.TestCase):
 class TestASTSignatureExtraction(unittest.TestCase):
     """Test extracting class and function signatures using AST."""
 
-    def test_function_signature_extraction(self) -> str:
+    def test_function_signature_extraction(self) -> None:
         """Test extracting function signature from AST."""
         code = """
 def calculate(x: int, y: int) -> int:
@@ -969,14 +969,14 @@ def calculate(x: int, y: int) -> int:
         self.assertEqual(func_def.name, 'calculate')
         self.assertEqual(len(func_def.args.args), 2)
 
-    def test_class_signature_extraction(self) -> bool:
+    def test_class_signature_extraction(self) -> None:
         """Test extracting class definition from AST."""
         code = """
 class DataProcessor:
     def __init__(self, name: str) -> str:
         self.name=name
 
-    def process(self, data):
+    def process(self, data) -> Any:
         return data
         """
         tree: ast.Module = ast.parse(code)
@@ -1017,7 +1017,7 @@ import numpy as np
 """
         tree: ast.Module = ast.parse(code)
         imports: List[ast.Import | ast.ImportFrom] = [
-            node for node: ast.AST in ast.walk(tree) if isinstance(
+            node for node in ast.walk(tree) if isinstance(
                 node, (ast.Import, ast.ImportFrom))]
 
         self.assertEqual(len(imports), 4)
@@ -1032,7 +1032,7 @@ import numpy as np
         }
 
         # Check depth
-        def max_depth(node, deps, visited=None):
+        def max_depth(node: str, deps: Dict[str, List[str]], visited: Optional[Set[str]] = None) -> int:
             if visited is None:
                 visited = set()
             if node in visited:
@@ -1138,7 +1138,7 @@ class TestRelatedFilesDetection(unittest.TestCase):
 
         # Find files importing module_a
         importers: List[str] = [f for f, imports in file_structure.items()
-                     if any('module_a' in i for i: str in imports)]
+                     if any('module_a' in i for i in imports)]
 
         self.assertIn('test_module_a.py', importers)
         self.assertIn('module_c.py', importers)
@@ -1163,27 +1163,27 @@ class TestAPIDocumentationExtraction(unittest.TestCase):
     def test_public_api_extraction(self) -> None:
         """Test extracting public API functions."""
         code = """
-def public_function():
+def public_function() -> None:
     '''Public API function.'''
     pass
 
-def _private_function():
+def _private_function() -> None:
     '''Private helper function.'''
     pass
 
 class PublicClass:
     '''Public API class.'''
-    def public_method(self):
+    def public_method(self) -> None:
         '''Public method.'''
         pass
 
-    def _private_method(self):
+    def _private_method(self) -> None:
         '''Private method.'''
         pass
         """
 
         tree: ast.Module = ast.parse(code)
-        public_items = [node.name for node: ast.stmt in tree.body
+        public_items = [node.name for node in tree.body
                         if hasattr(node, 'name') and not node.name.startswith('_')]
 
         self.assertIn('public_function', public_items)
@@ -1245,15 +1245,15 @@ class TestCodeMetrics(unittest.TestCase):
     def test_lines_of_code_calculation(self) -> None:
         """Test calculating lines of code."""
         code = """
-def calculate(x, y):
+def calculate(x, y) -> Any:
     result=x + y
     return result
         """
 
-        lines: List[str] = [line.strip() for line: str in code.split('\n') if line.strip()
+        lines: List[str] = [line.strip() for line in code.split('\n') if line.strip()
                  and not line.strip().startswith('#')]
         # Excluding docstrings
-        loc: int = len([line for line: str in lines if line and '"""' not in line])
+        loc: int = len([line for line in lines if line and '"""' not in line])
 
         self.assertGreater(loc, 0)
 
@@ -1275,7 +1275,7 @@ else:
         """
 
         complexity = 1  # base
-        for condition: str in conditions:
+        for condition in conditions:
             complexity += code.count(condition)
 
         self.assertGreater(complexity, 1)
@@ -1321,7 +1321,7 @@ class TestCodeSmellDetection(unittest.TestCase):
             'for item in items: do_something(item)'
         ]
 
-        duplicates: List[str] = [code_blocks[0] for i: int in range(len(code_blocks))
+        duplicates: List[str] = [code_blocks[0] for i in range(len(code_blocks))
                       if code_blocks[0] == code_blocks[i]]
 
         self.assertEqual(len(duplicates), 2)
@@ -1338,7 +1338,7 @@ if a:
         """
 
         # Count opening braces / indents
-        for line: str in code_snippet.split('\n'):
+        for line in code_snippet.split('\n'):
             if line.strip().startswith('if'):
                 nesting_levels += 1
 
@@ -1403,7 +1403,7 @@ class TestChangeStatistics(unittest.TestCase):
             'charlie': {'commits': 5, 'changes': 20}
         }
 
-        total_commits: int = sum(c['commits'] for c: Dict[str, int] in contributors.values())
+        total_commits: int = sum(c['commits'] for c in contributors.values())
         self.assertEqual(total_commits, 45)
 
 
@@ -1420,7 +1420,7 @@ class TestPluginSystem(unittest.TestCase):
             def register(self, name, provider) -> None:
                 self.providers[name] = provider
 
-            def get_provider(self, name):
+            def get_provider(self, name) -> Any:
                 return self.providers.get(name)
 
         registry = PluginRegistry()
@@ -1447,7 +1447,7 @@ class TestContextCachingImprovements(unittest.TestCase):
         """Test caching extracted context."""
         cache = {}
 
-        def get_context(file_path):
+        def get_context(file_path) -> Any:
             if file_path in cache:
                 return cache[file_path]
 
@@ -1497,7 +1497,7 @@ class TestContextPrioritization(unittest.TestCase):
             {'priority': 'low', 'content': 'old_comments'}
         ]
 
-        truncated: List[Dict[str, str]] = [c for c: Dict[str, str] in context if c['priority'] != 'low']
+        truncated: List[Dict[str, str]] = [c for c in context if c['priority'] != 'low']
         self.assertEqual(len(truncated), 3)
 
 
@@ -1550,7 +1550,7 @@ class TestContextFiltering(unittest.TestCase):
         ]
 
         code = "API_KEY='secret123'"
-        has_sensitive: bool = any(pattern in code for pattern: str in sensitive_patterns)
+        has_sensitive: bool = any(pattern in code for pattern in sensitive_patterns)
         self.assertTrue(has_sensitive)
 
     def test_filtering_sensitive_content(self) -> None:
@@ -1564,7 +1564,7 @@ class TestContextFiltering(unittest.TestCase):
         # Filter code containing sensitive patterns
         sensitive_keywords: List[str] = ['API_KEY', 'PASSWORD', 'SECRET']
         filtered_code = context['code']
-        for keyword: str in sensitive_keywords:
+        for keyword in sensitive_keywords:
             if keyword in context['code']:
                 filtered_code = '[REDACTED]'
 

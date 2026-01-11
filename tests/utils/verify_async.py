@@ -16,7 +16,7 @@ except ImportError as e:
     sys.exit(1)
 
 @pytest.mark.anyio
-async def test_async_concurrency():
+async def test_async_concurrency() -> None:
     agent = Agent(repo_root=".")
     agent.enable_async = True
     

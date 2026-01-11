@@ -12,7 +12,7 @@ class TestPhase46(unittest.TestCase):
         if os.path.exists(self.state_file):
             os.remove(self.state_file)
 
-    def test_quantum_entanglement(self):
+    def test_quantum_entanglement(self) -> None:
         print("\nTesting Quantum Shard Entanglement...")
         # Shard A updates state
         resA = self.fleet.quantum_shard.update_entangled_state("consensus_protocol", "BFT-2.1")
@@ -23,7 +23,7 @@ class TestPhase46(unittest.TestCase):
         print(f"Shard B measurement: {valB}")
         self.assertEqual(valB, "BFT-2.1")
 
-    def test_binary_bridge_transmission(self):
+    def test_binary_bridge_transmission(self) -> None:
         print("\nTesting High-Throughput Bridge...")
         dummy_packet = b"\x00\xFF\xAA\x55" * 1024 # 4KB bin packet
         success = self.fleet.inter_fleet_bridge.transmit_binary_packet(dummy_packet)

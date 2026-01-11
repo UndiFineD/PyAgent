@@ -18,12 +18,12 @@ class TestTechDebt(unittest.TestCase):
         if os.path.exists(self.test_file):
             os.remove(self.test_file)
 
-    def test_analyze_file(self):
+    def test_analyze_file(self) -> None:
         report = self.agent.analyze_file(self.test_file)
         self.assertEqual(report['file'], self.test_file)
         self.assertTrue(any(i['type'] == 'Missing Docstring' for i in report['issues']))
 
-    def test_analyze_workspace(self):
+    def test_analyze_workspace(self) -> None:
         result = self.agent.analyze_workspace()
         self.assertTrue(result['total_issues'] > 0)
         self.assertTrue(len(result['hotspots']) > 0)

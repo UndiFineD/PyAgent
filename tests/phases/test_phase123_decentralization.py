@@ -31,7 +31,7 @@ class TestPhase123Decentralization(unittest.TestCase):
         if os.path.exists(self.test_dir):
             shutil.rmtree(self.test_dir)
 
-    def test_dynamic_committee_formation(self):
+    def test_dynamic_committee_formation(self) -> None:
         # Test that FleetManager can form a committee if none provided
         task = "Fix a bug in the quantum logic"
         available = ["Coder", "SpecialistA", "SpecialistB", "Research"]
@@ -41,13 +41,13 @@ class TestPhase123Decentralization(unittest.TestCase):
         self.assertTrue(len(committee) > 0)
         self.assertTrue(all(a in available for a in committee))
 
-    def test_messaging_polling_structure(self):
+    def test_messaging_polling_structure(self) -> None:
         # Test that MessagingAgent has poll_for_replies
         msg_agent = MessagingAgent(f"{self.root}/src/agents/MessagingAgent.py")
         replies = msg_agent.poll_for_replies("slack")
         self.assertIsInstance(replies, list)
 
-    def test_bayesian_belief_update(self):
+    def test_bayesian_belief_update(self) -> None:
         # Test that BayesianReasoningAgent updates beliefs correctly
         bayesian = BayesianReasoningAgent(f"{self.root}/src/agents/BayesianReasoningAgent.py")
         # Scenario: 50% chance of server up. Evidence: Ping successful (Likelihood 0.9)
@@ -57,7 +57,7 @@ class TestPhase123Decentralization(unittest.TestCase):
         res2 = bayesian.update_belief("server_up", "ping_success_2", 0.9)
         self.assertGreater(res2["posterior"], res["posterior"])
 
-    def test_bayesian_rl_selector(self):
+    def test_bayesian_rl_selector(self) -> None:
         # Test RLSelector Bayesian logic
         selector = RLSelector()
         selector.update_stats("tool_x", True)
@@ -65,7 +65,7 @@ class TestPhase123Decentralization(unittest.TestCase):
         self.assertIn("Bayesian Thompson Sampling", summary)
         self.assertIn("tool_x", summary)
 
-    def test_distributed_logging(self):
+    def test_distributed_logging(self) -> None:
         log_file = os.path.join(self.test_dir, "logging_agent.py")
         with open(log_file, "w") as f: f.write("#")
         agent = LoggingAgent(log_file)
@@ -90,7 +90,7 @@ class TestPhase123Decentralization(unittest.TestCase):
         logs = logging_agent.get_aggregated_logs()
         self.assertTrue(any(l["message"] == "Alert message" for l in logs))
 
-    def test_did_sovereign_identity(self):
+    def test_did_sovereign_identity(self) -> None:
         id_file = os.path.join(self.test_dir, "identity_agent.py")
         with open(id_file, "w") as f: f.write("#")
         agent = AgentIdentityAgent(id_file)

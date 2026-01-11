@@ -35,7 +35,7 @@ if __name__ == "__main__":
     try:
         test_knowledge_graph()
         print("\nKnowledgeAgent Graph/Backlinks Sanity Check: PASSED")
-    except Exception as e: Exception:
+    except Exception as e:
         print(f"\nKnowledgeAgent Graph/Backlinks Sanity Check: FAILED: {e}")
         import traceback
         traceback.print_exc()

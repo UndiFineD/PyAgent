@@ -4,11 +4,13 @@ import subprocess
 import sys
 from pathlib import Path
 from typing import Any
+from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
 class TestCLIWrappers(unittest.TestCase):
     def setUp(self) -> None:
         self.python: str = sys.executable
         self.src_dir: Path = Path(__file__).parent.parent.parent / "src"
+        self.recorder = LocalContextRecorder(self.src_dir.parent, "TestRunner")
         
     def run_agent_help(self, script_name: str) -> subprocess.CompletedProcess[str]:
         script_path: Path = self.src_dir / script_name
@@ -16,6 +18,13 @@ class TestCLIWrappers(unittest.TestCase):
             [self.python, str(script_path), "--help"],
             capture_output=True,
             text=True
+        )
+        # Intelligence Gap: Record shell operation context for logic harvesting
+        self.recorder.record_interaction(
+            provider="shell",
+            model="python_subprocess",
+            prompt=f"Run helper: {script_name} --help",
+            result=result.stdout[:1000] # Record first 1k chars of help output
         )
         return result
 

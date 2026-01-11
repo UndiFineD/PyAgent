@@ -3,7 +3,7 @@
 import pytest
 from src.logic.agents.security.ByzantineConsensusAgent import ByzantineConsensusAgent
 
-def test_red_queen_adversarial_flow():
+def test_red_queen_adversarial_flow() -> None:
     """
     Validates that the swarm can detect and reject low-quality (adversarial) proposals.
     Phase 128: Digital Red Queen / Adversarial Evolution test.

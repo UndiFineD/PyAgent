@@ -1,3 +1,4 @@
+"""Legacy unit tests for the coder module."""
 import pytest
 from pathlib import Path
 from typing import Any, List, Dict, Optional

@@ -233,11 +233,11 @@ class TestReportIntegration(unittest.TestCase):
         """Test multi-format export workflow."""
         content = "# Report\n\nContent"
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f: tempfile._TemporaryFileWrapper[str]:
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
             f.write(content)
             md_file: str = f.name
 
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f: tempfile._TemporaryFileWrapper[str]:
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.txt', delete=False) as f:
             f.write(content)
             txt_file: str = f.name
 
@@ -252,7 +252,7 @@ class TestReportIntegration(unittest.TestCase):
         """Test batch report generation."""
         reports = []
 
-        for i: int in range(5):
+        for i in range(5):
             report = {
                 "id": i,
                 "title": f"Report {i}",
@@ -277,7 +277,7 @@ class TestGitIntegration(unittest.TestCase):
             {'hash': 'ghi789', 'author': 'Alice', 'date': '2024-01-13'}
         ]
 
-        authors: Set[str] = set(c['author'] for c: Dict[str, str] in commits)
+        authors: Set[str] = set(c['author'] for c in commits)
         self.assertIn('Alice', authors)
         self.assertIn('Bob', authors)
 

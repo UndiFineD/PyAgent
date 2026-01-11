@@ -6,7 +6,7 @@ class TestPhase77(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_fleet_economy_agent(self):
+    def test_fleet_economy_agent(self) -> None:
         print("\nTesting Phase 77: Autonomous Agent Financials & Bidding...")
         
         # Setup wallets

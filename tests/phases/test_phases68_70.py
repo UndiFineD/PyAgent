@@ -8,7 +8,7 @@ class TestPhases68_70(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_intention_prediction(self):
+    def test_intention_prediction(self) -> None:
         print("\nTesting Phase 68: Multi-Agent Theory of Mind (ToM) v3...")
         agent_id = "CoderAgent"
         # Log some actions
@@ -24,7 +24,7 @@ class TestPhases68_70(unittest.TestCase):
         print(f"Thought Signal: {signal}")
         self.assertTrue(signal["latency_ms"] < 1.0)
 
-    def test_immune_response_and_honeypot(self):
+    def test_immune_response_and_honeypot(self) -> None:
         print("\nTesting Phase 69: Fleet-Wide Immune Response & Honeypot...")
         # Rapid patch
         patch_res = self.fleet.immune_orchestrator.deploy_rapid_patch("CVE-2026-001", "import os; ...")
@@ -44,7 +44,7 @@ class TestPhases68_70(unittest.TestCase):
         self.assertTrue(check_safe["safe"])
         self.assertFalse(check_unsafe["safe"])
 
-    def test_logic_prover(self):
+    def test_logic_prover(self) -> None:
         print("\nTesting Phase 70: Neuro-Symbolic Logic Prover...")
         # Verification
         hyp = "Found a bug"

@@ -25,7 +25,7 @@ class TestPhase123FinalRealization(unittest.TestCase):
         self.fleet.register_agent("Deployer", FleetDeployerAgent, f"{self.root}/src/agents/swarm/FleetDeployerAgent.py")
         self.fleet.register_agent("Decomposer", DynamicDecomposerAgent, f"{self.root}/src/agents/cognitive/DynamicDecomposerAgent.py")
 
-    def test_privacy_integration(self):
+    def test_privacy_integration(self) -> None:
         """Tests that MessagingAgent blocks PII via DataPrivacyGuard."""
         messaging = self.fleet.agents["Messaging"]
         
@@ -39,7 +39,7 @@ class TestPhase123FinalRealization(unittest.TestCase):
         self.assertIn("SAFETY ERROR", result)
         self.assertIn("blocked", result.lower())
 
-    def test_task_decomposition_llm_logic(self):
+    def test_task_decomposition_llm_logic(self) -> None:
         """Tests that DynamicDecomposerAgent uses LLM for decomposition."""
         decomposer = self.fleet.agents["Decomposer"]
         result = decomposer.decompose_task_v2("Build a website and deploy it", ["Coder", "Deployer"])
@@ -47,7 +47,7 @@ class TestPhase123FinalRealization(unittest.TestCase):
         self.assertIn("Optimized Task Decomposition", result)
         self.assertIn("```json", result)
 
-    def test_consensus_deployment(self):
+    def test_consensus_deployment(self) -> None:
         """Tests that Deployer uses consensus loop."""
         deployer = self.fleet.agents["Deployer"]
         # Use a fake agent_type
@@ -56,7 +56,7 @@ class TestPhase123FinalRealization(unittest.TestCase):
         # Since we haven't provided proposals, it might reject or use the judge's default
         self.assertTrue("rejected" in result.lower() or "initialized" in result.lower() or "consensus" in result.lower())
 
-    def test_neural_pruning_memory(self):
+    def test_neural_pruning_memory(self) -> None:
         """Tests that NeuralPruningEngine triggers memory cleanup."""
         # Need an instance of PruningEngine
         pruner = NeuralPruningEngine(self.fleet)
@@ -73,7 +73,7 @@ class TestPhase123FinalRealization(unittest.TestCase):
         if hasattr(self.fleet.memory, "deleted"):
             self.assertEqual(len(self.fleet.memory.deleted), 110) # 10% of 1100
 
-    def test_bootstrap_overlay(self):
+    def test_bootstrap_overlay(self) -> None:
         """Tests that RegistryOverlay is utilized."""
         from src.infrastructure.fleet.RegistryOverlay import RegistryOverlay
         overlay = RegistryOverlay(Path("data/memory/agent_store/test_overlay.json"))

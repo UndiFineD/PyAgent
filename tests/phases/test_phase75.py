@@ -7,7 +7,7 @@ class TestPhase75(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_memory_replay_agent(self):
+    def test_memory_replay_agent(self) -> None:
         print("\nTesting Phase 75: Bio-Mimetic Memory Replay...")
         
         # Simulated episodic memories

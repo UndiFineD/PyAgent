@@ -50,7 +50,7 @@ class TestContextIntegration(unittest.TestCase):
         context["request_id"] = "req1"
 
         # Validate
-        assert all(k in context for k: str in ["user_id", "session_id", "request_id"])
+        assert all(k in context for k in ["user_id", "session_id", "request_id"])
 
         # Cleanup
         context.clear()
@@ -61,7 +61,7 @@ class TestContextIntegration(unittest.TestCase):
         contexts = []
 
         # Create multiple
-        for i: int in range(3):
+        for i in range(3):
             contexts.append({"id": f"ctx{i}"})
 
         assert len(contexts) == 3
@@ -132,7 +132,7 @@ class TestGitHistoryIntegration(unittest.TestCase):
             {'hash': 'ghi789', 'message': 'Refactor: extract utilities to separate module'}
         ]
 
-        fix_commits: List[Dict[str, str]] = [c for c: Dict[str, str] in commits if c['message'].startswith('Fix')]
+        fix_commits: List[Dict[str, str]] = [c for c in commits if c['message'].startswith('Fix')]
         self.assertEqual(len(fix_commits), 1)
 
     def test_contributor_extraction(self) -> None:
