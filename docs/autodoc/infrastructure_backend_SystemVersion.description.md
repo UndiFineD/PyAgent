@@ -1,0 +1,24 @@
+# Description: `SystemVersion.py`
+
+## Module purpose
+
+Auto-extracted class from agent_backend.py
+
+## Location
+- Path: `infrastructure\backend\SystemVersion.py`
+
+## Public surface
+- Classes: SystemVersion
+- Functions: (none)
+
+## Behavior summary
+- Invokes external commands via `subprocess`.
+
+## Key dependencies
+- Top imports: `__future__`, `abc`, `dataclasses`, `datetime`, `enum`, `pathlib`, `queue`, `typing`, `hashlib`, `json`, `logging`, `os` ...
+
+## Metadata
+
+- SHA256(source): `8170a67e126617a0`
+- Last updated: `2026-01-11 12:53:17`
+- File: `infrastructure\backend\SystemVersion.py`

@@ -1,0 +1,57 @@
+#!/usr/bin/env python3
+
+"""Agent specializing in messaging platform integration (WhatsApp, Slack, Discord).
+Provides a unified interface for external communications.
+"""
+
+import logging
+from typing import Dict, List, Any, Optional
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+
+class MessagingAgent(BaseAgent):
+    """Integrates with messaging platforms for fleet notifications."""
+    
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._system_prompt = (
+            "You are the Messaging Agent. "
+            "Your role is to handle communications via external platforms like WhatsApp and Slack. "
+            "You format reports for mobile reading and handle incoming alerts."
+        )
+
+    @as_tool
+    def send_notification(self, platform: str, recipient: str, message: str) -> str:
+        """Sends a message to a specific platform/recipient. (SKELETON)"""
+        logging.info(f"Sending {platform} message to {recipient}: {message}")
+        
+        # Phase 125: Privacy Guard Integration
+        # We simulate checking via capability or direct agent call if fleet is present
+        if hasattr(self, "fleet") and self.fleet:
+            privacy_guard = self.fleet.agents.get("PrivacyGuard")
+            if privacy_guard and hasattr(privacy_guard, "verify_message_safety"):
+                check_result = privacy_guard.verify_message_safety(message)
+                if not check_result.get("safe", True):
+                    return f"SAFETY ERROR: Message blocked. Reason: {check_result.get('reason')}"
+
+        # In a real implementation, use Twilio API, Slack Webhooks, or Discord bots
+        return f"Message sent to {recipient} via {platform} (Simulated)"
+
+    @as_tool
+    def poll_for_replies(self, platform: str) -> List[Dict[str, Any]]:
+        """Polls for new messages on a specific platform."""
+        logging.info(f"Polling {platform} for new messages...")
+        return [] # Return empty list for now
+
+    @as_tool
+    def format_for_mobile(self, report: str) -> str:
+        """Truncates and formats a long report for messaging platforms."""
+        return report[:500] + "..." if len(report) > 500 else report
+
+if __name__ == "__main__":
+    from src.core.base.utilities import create_main_function
+    main = create_main_function(MessagingAgent, "Messaging Agent", "Messaging history path")
+    main()

@@ -1,2 +1,0 @@
-
-[MEM] Refactoring the consensus module

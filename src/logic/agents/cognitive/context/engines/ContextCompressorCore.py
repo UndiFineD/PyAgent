@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+
+"""
+ContextCompressorCore logic for PyAgent.
+Pure logic for reducing the size of source files while preserving structural context.
+No I/O or side effects.
+"""
+
+from __future__ import annotations
+
+import re
+import ast
+from typing import Dict, List, Any, Optional, Set
+
+class ContextCompressorCore:
+    """Pure logic core for code and document compression."""
+    
+    @staticmethod
+    def compress_python(content: str) -> str:
+        """Removes function bodies and keeps only class/function signatures using AST."""
+        try:
+            tree = ast.parse(content)
+            compressed_lines: List[str] = []
+            
+            # Use a visitor pattern for cleaner separation if needed, 
+            # but for simple signature extraction, a walk is acceptable 
+            # as long as we maintain some structure.
+            
+            for node in ast.walk(tree):
+                if isinstance(node, ast.ClassDef):
+                    bases_str = ""
+                    if node.bases:
+                        try:
+                            bases_str = f"({', '.join([ast.unparse(b) for b in node.bases])})"
+                        except Exception:
+                            bases_str = "(...)"
+                    compressed_lines.append(f"class {node.name}{bases_str}:")
+                        
+                elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                    try:
+                        args_str = ast.unparse(node.args)
+                    except Exception:
+                        args_str = "..."
+                    
+                    prefix = "async " if isinstance(node, ast.AsyncFunctionDef) else ""
+                    # Note: Detecting indentation level in a walk is hard. 
+                    # We'll just list them as signatures for now.
+                    compressed_lines.append(f"{prefix}def {node.name}({args_str}): ...")
+            
+            # Deduplicate and sort to provide a stable signature
+            unique_signatures = sorted(list(set(compressed_lines)))
+            return "\n".join(unique_signatures)
+            
+        except Exception:
+            # Fallback to simple regex if AST fails (e.g. invalid syntax)
+            return ContextCompressorCore.regex_fallback_compress(content)
+
+    @staticmethod
+    def regex_fallback_compress(content: str) -> str:
+        """Simple regex-based signature extraction for Python."""
+        signatures = re.findall(r"^\s*(?:async\s+)?(?:def|class)\s+[a-zA-Z_][a-zA-Z0-9_]*.*?:", content, re.MULTILINE)
+        return "\n".join([s.strip() for s in signatures])
+
+    @staticmethod
+    def summarize_markdown(content: str) -> str:
+        """Keeps only headers from markdown files."""
+        headers = re.findall(r"^(#+ .*)$", content, re.MULTILINE)
+        return "\n".join(headers)
+
+    @staticmethod
+    def get_summary_header(filename: str, mode: str) -> str:
+        """Logic for formatting summary headers."""
+        return f"### {filename} ({mode})\n"
+
+    @staticmethod
+    def decide_compression_mode(filename: str) -> str:
+        """Determines logic mode based on file extension."""
+        if filename.endswith(".py"):
+            return "python"
+        elif filename.endswith(".md"):
+            return "markdown"
+        return "head"

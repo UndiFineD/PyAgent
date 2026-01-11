@@ -1,0 +1,25 @@
+# SWARM STRATEGIC DIRECTIVE - PHASE 140
+# Items will be DELETED once verified clean.
+
+
+@python: """
+import os
+# Example: Automated cleanup of legacy error logs
+log_dir = os.path.join(root, 'data/logs')
+if os.path.exists(log_dir):
+    for f in os.listdir(log_dir):
+        if f.startswith('legacy_') and f.endswith('.log'):
+            os.remove(os.path.join(log_dir, f))
+            print(f' - Cleaned legacy log: {f}')
+"""
+
+# Structural Reorganization:
+- Move all logic from root level to `temp/` or appropriate subdirs.
+- Fix any broken imports resulting from moves.
+- Update `docs/work/directories.txt` with the intended schema.
+
+# Data Optimization (Trillion Parameter Planning):
+- Divvy knowledge bytes per agent name within `data/agents/`.
+
+# Documentation:
+- Repair `docs/autodoc` generation.

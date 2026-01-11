@@ -4,13 +4,11 @@
 # Directories
 __pycache__/
 .git/
-.venv/
-.pytest_cache/
 .agent_cache/
-node_modules/
-dist/
-build/
-*.egg-info/
+.beads/
+.github/
+.pytest_cache/
+.venv/
 
 # Files
 .DS_Store
@@ -18,3 +16,4 @@ build/
 *.pyc
 .env
 .codeignore
+.flake8

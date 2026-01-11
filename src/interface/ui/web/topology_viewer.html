@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PyAgent Swarm Topology 3D</title>
+    <script src="https://unpkg.com/3d-force-graph"></script>
+    <style>
+        body { margin: 0; background-color: #000; color: #fff; font-family: sans-serif; overflow: hidden; }
+        #info { position: absolute; top: 10px; left: 10px; z-index: 10; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <div id="info">
+        <h1>PyAgent Swarm Topology</h1>
+        <p>Nodes: <span id="node-count">0</span> | Links: <span id="link-count">0</span></p>
+    </div>
+    <div id="3d-graph"></div>
+
+    <script>
+        // Load the topology data from the recorded JSON
+        fetch('../../../../data/logs/topology.json')
+            .then(res => res.json())
+            .then(data => {
+                document.getElementById('node-count').textContent = data.nodes.length;
+                document.getElementById('link-count').textContent = data.links.length;
+
+                const Graph = ForceGraph3D()
+                    (document.getElementById('3d-graph'))
+                    .graphData(data)
+                    .nodeLabel('id')
+                    .nodeAutoColorBy('group')
+                    .linkWidth('value')
+                    .linkDirectionalArrowLength(3.5)
+                    .linkDirectionalArrowRelPos(1);
+            })
+            .catch(err => {
+                console.error("Failed to load topology data:", err);
+                document.getElementById('info').innerHTML = "<h1>Error</h1><p>Could not find data/logs/topology.json. Please run the SwarmTopologyReporter first.</p>";
+            });
+    </script>
+</body>
+</html>
