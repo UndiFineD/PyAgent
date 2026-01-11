@@ -1,0 +1,24 @@
+# Description: `OptimizationType.py`
+
+## Module purpose
+
+Auto-extracted class from agent_coder.py
+
+## Location
+- Path: `logic\coder\models\OptimizationType.py`
+
+## Public surface
+- Classes: OptimizationType
+- Functions: (none)
+
+## Behavior summary
+- Invokes external commands via `subprocess`.
+
+## Key dependencies
+- Top imports: `__future__`, `src.core.base.BaseAgent`, `dataclasses`, `enum`, `pathlib`, `typing`, `ast`, `hashlib`, `logging`, `math`, `re`, `shutil` ...
+
+## Metadata
+
+- SHA256(source): `a1872f299c10986c`
+- Last updated: `2026-01-11 12:55:02`
+- File: `logic\coder\models\OptimizationType.py`

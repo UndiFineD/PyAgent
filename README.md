@@ -51,32 +51,43 @@ PyAgent now supports a unified multi-interface architecture connected via a cent
 - **Web**: FastAPI-powered web interface.
 - **CLI**: A new high-performance Command Line Interface ([pyagent_cli.py](src/pyagent_cli.py)) for terminal-based automation.
 
-### 🚀 Architecture
+### 🚀 Architecture (Jan 2026 - Tiered Evolution)
+
+The project follows a **5-Tiered Architecture** designed for high-performance orchestration and trillion-parameter knowledge isolation:
 
 ```text
 src/
-├── classes/          → Modular, class-based core logic
-│   ├── base_agent/   → Foundation, Memory, and CLI utilities
-│   ├── backend/      → Multi-backend runner with disk caching
-│   └── [agent_name]/ → Specialized agent implementations
-├── agent.py          → Orchestrator wrapper
-└── agent_gui.py      → New interactive multi-agent dashboard
+├── core/             → Primitives, Knowledge Trinity (B-Tree, Vector, Graph)
+├── logic/            → Swarm Intelligence, Specialized Agents, Reasoning Strategies
+├── infrastructure/   → Fleet Management, Economy, API Wrappers, Orchestration
+├── interface/        → Multi-UI layer (CLI, GUI, Web, Mobile)
+└── observability/    → Telemetry, Stats, Reporting, Audit Trails
 ```
+
+## 🧠 Knowledge Trinity & Data Sharding
+
+To support trillion-parameter scaling, knowledge is isolated per agent in `data/agents/{id}/`:
+- **Structured (B-Tree)**: 2-tier MD5 sharding for $O(1)$ filesystem lookups.
+- **Semantic (Vector)**: Isolated ChromaDB indices for similarity-based memory.
+- **Relational (Graph)**: Ontological links tracked via S-P-O triples.
 
 ## Installation
 
 ```bash
-git clone https://github.com/PyAgent/pyagent
-cd pyagent
-python -m pip install -r requirements.txt
+git clone https://github.com/UndiFineD/PyAgent
+cd PyAgent
+# Configure your virtual environment
+python -m venv .venv
+. .venv/bin/activate  # Or your platform equivalent
+pip install -r requirements.txt
 ```
 
-### GUI Dashboard (Experimental)
+### GUI Dashboard (Production Ready)
 
-Launch the new interactive control center:
+Launch the interactive 5-tier dashboard:
 
 ```bash
-python src/agent_gui.py
+python -m src.interface.ui.gui.MainApp
 ```
 
 ## Usage
@@ -84,19 +95,9 @@ python src/agent_gui.py
 ### Command Line Interface
 
 ```bash
-# Improve a file using specific strategy and JSON output for automation
-python src/agent.py --context src/module.py --prompt "Refactor for speed" --strategy cot --json
+# High-performance CLI entrypoint
+python -m src.interface.ui.cli.pyagent_cli --task "Analyze codebase" --strategy cot
 ```
-
-### Advanced Usage
-
-```bash
-# Run with specific reasoning strategy
-python src/agent.py --dir . --strategy cot  # Chain-of-Thought
-python src/agent.py --dir . --strategy reflexion  # Self-correction loop
-
-# Run specific agents only
-python src/agent.py --dir . --only-agents coder,tests
 
 # Parallel execution
 python src/agent.py --dir . --multiprocessing --workers 4

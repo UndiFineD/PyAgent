@@ -1,19 +1,15 @@
-# PyAgent Versioning Gatekeeper
-# This file serves as the source of truth for the project's current maturity level.
+"""
+Unified Version Gatekeeper for PyAgent.
+Redirects to the core versioning logic in src/core/base/version.py.
+"""
 
-VERSION = "2.1.5-stable"
-EVOLUTION_PHASE = 116
-STABILITY_SCORE = 1.0  # Phase 108: Multi-Agent Logic Harvesting and Rust-Readiness verified
+from src.core.base.version import (
+    VERSION,
+    SDK_VERSION,
+    EVOLUTION_PHASE,
+    STABILITY_SCORE,
+    COMPATIBLE_CORE_VERSIONS,
+    is_gate_open
+)
 
-def is_gate_open(required_phase: int) -> bool:
-    """Gatekeeping: Returns True if the system maturity allows for the required phase."""
-    return EVOLUTION_PHASE >= required_phase
-
-def get_version_info():
-    """Returns detailed version and phase information for orchestrators."""
-    return {
-        "version": VERSION,
-        "phase": EVOLUTION_PHASE,
-        "stability": STABILITY_SCORE,
-        "rust_readiness": "Protocol typing > 80%, LogicCore isolation complete"
-    }
+__version__ = VERSION

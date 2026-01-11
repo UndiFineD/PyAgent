@@ -1,0 +1,50 @@
+# SWARM STRATEGIC DIRECTIVE - PHASE 131
+# Optimization: Reducing cycle time via targeted focus and pre-emptive commands.
+
+@focus: src/core, src/infrastructure/fleet, src/logic/agents
+@cmd: python temp/fix_headers.py
+@cmd: python temp/verify_imports.py
+
+# High-Level Instructions:
+please **improve the directory structure** to sort the different type of files, 
+and reorder all the files fix the imports and test the whole. 
+do not put code files in the root folder but use temp . 
+use temp to create temporary scripts.
+record the desired directory structure in docs\work\directories.txt
+
+It might be a good idea to **pay special attention to data** 
+as i suspect that specific knowledge can better be stored per agent, 
+we are expectiong a trillion parameters, 
+so we better be smart in dividing and writing and accessing data 
+(btrees and vectors and graphs)
+record the needed changes in docs\work\datastructures.md
+
+maybe some **source files should be renamed to better reflect their function** 
+record the needed filename changes in docs\work\filenamechanges.txt 
+original path and new path on the same line.
+
+**tests probably needs a directory structure** to make it clear 
+what part we are testing with more pytest and unittest
+record test structure in docs\work\teststructure.md
+
+**implement fixes for** docs\work\Improvements_needed.md docs\work\IMPROVEMENT_RESEARCH.md
+remove those that have been fixed and tested
+Scan codebase in src and plugins for remaining things to do
+and add them to docs\work\Improvements_needed.md
+
+**Rust Transition**: maintain docs\work\RUST_Ready.md
+**repair docs\autodoc**: make sure docs\autodoc documents 
+and others not yet created are still being generated
+**create more docs\Key documents**: do research on docs\work\IMPROVEMENT_RESEARCH.md 
+and, create and maintain more documents, 
+mention writers, original date and source links, the usual for reseacrh documents.
+
+remove deploy folder from code
+
+move config to data\config also in code
+move models to data\models also in code
+move plugins to src\plugins for community changes
+
+see if we can reuse code in temp in other parts of the program 
+to improve robustness stability or testing 
+and eliminate those code files in temp when no longer in use

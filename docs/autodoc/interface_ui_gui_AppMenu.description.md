@@ -1,0 +1,24 @@
+# Description: `AppMenu.py`
+
+## Module purpose
+
+(No module docstring found)
+
+## Location
+- Path: `interface\ui\gui\AppMenu.py`
+
+## Public surface
+- Classes: AppMenu
+- Functions: (none)
+
+## Behavior summary
+- Pure module (no obvious CLI / side effects).
+
+## Key dependencies
+- Top imports: `typing`, `tkinter`, `Constants`
+
+## Metadata
+
+- SHA256(source): `33a6ecacec1493bf`
+- Last updated: `2026-01-11 12:54:05`
+- File: `interface\ui\gui\AppMenu.py`
