@@ -1,0 +1,37 @@
+PyAgent Trillion-Parameter Scale Architecture (5-Tier Model)
+
+1. CORE (Primitives & Foundational Logic)
+   - src/core/base/: Base classes (BaseAgent, Manager patterns)
+   - src/core/knowledge/: The Knowledge Trinity (B-Tree, Vector, Graph stores)
+   - src/core/utils/: Essential shared utilities
+   - src/core/base/types/: Domain data models (AccessibilityIssue, CodeMetrics, etc.)
+
+2. LOGIC (Cognitive & Agentic Layer)
+   - src/logic/agents/: Specialist agent clusters (Development, Security, Swarm)
+   - src/logic/cognitive/: Memory, Reasoning, and Context engines
+   - src/logic/strategies/: Problem-solving patterns
+   - src/logic/tools/: Dynamic tool synthesis and evolution
+
+3. INFRASTRUCTURE (System & Scale Layer)
+   - src/infrastructure/fleet/: Multi-agent orchestration and coordination
+   - src/infrastructure/backend/: LLM providers and server logic
+   - src/infrastructure/plugins/: Plugin loading and sandboxing
+   - src/infrastructure/simulation/: Environment mockups for testing
+
+4. INTERFACE (Interaction Layer)
+   - src/interface/ui/cli/: Command-line power-user interface
+   - src/interface/ui/gui/: Interactive dashboard
+   - src/interface/ui/web/: Remote access portal
+   - src/interface/ui/mobile/: Flutter-based mobile companion
+
+5. OBSERVABILITY (Monitoring & Quality Layer)
+   - src/observability/stats/: Performance and usage metrics
+   - src/observability/reports/: Automated documentation and release notes
+   - src/observability/errors/: Self-healing and error tracking
+   - src/observability/improvements/: Strategy optimization tracking
+
+Data Persistence Strategy:
+- data/db/tenants/: Multi-tenant shard isolation
+- data/logs/: Centralized audit trail
+- data/memory/: Volatile long-term context storage
+- data/search_results.csv: Cache for external queries

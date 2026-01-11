@@ -1,0 +1,24 @@
+# Description: `FixtureFactory.py`
+
+## Module purpose
+
+Auto-extracted class from agent_test_utils.py
+
+## Location
+- Path: `src\infrastructure\dev\test_utils\FixtureFactory.py`
+
+## Public surface
+- Classes: FixtureFactory
+- Functions: (none)
+
+## Behavior summary
+- Pure module (no obvious CLI / side effects).
+
+## Key dependencies
+- Top imports: `__future__`, `pathlib`, `typing`
+
+## Metadata
+
+- SHA256(source): `ce0ca5ab264a8b57`
+- Last updated: `2026-01-11 10:15:33`
+- File: `src\infrastructure\dev\test_utils\FixtureFactory.py`

@@ -1,0 +1,24 @@
+# Description: `AgentFileManager.py`
+
+## Module purpose
+
+(No module docstring found)
+
+## Location
+- Path: `core\base\utils\AgentFileManager.py`
+
+## Public surface
+- Classes: AgentFileManager
+- Functions: (none)
+
+## Behavior summary
+- Pure module (no obvious CLI / side effects).
+
+## Key dependencies
+- Top imports: `os`, `logging`, `fnmatch`, `time`, `hashlib`, `pathlib`, `typing`, `src.core.base.utils.core_utils`, `src.core.base.core`
+
+## Metadata
+
+- SHA256(source): `c83cc426ffef651c`
+- Last updated: `2026-01-11 12:52:59`
+- File: `core\base\utils\AgentFileManager.py`

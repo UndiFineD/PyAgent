@@ -1,0 +1,66 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.12, pytest-9.0.2, pluggy-1.6.0 -- C:\DEV\PyAgent\.venv\Scripts\python.exe
+cachedir: .pytest_cache
+rootdir: C:\DEV\PyAgent
+plugins: anyio-4.12.1, cov-7.0.0
+collecting ... collected 0 items
+
+============================== warnings summary ===============================
+src\infrastructure\dev\agent_tests\enums.py:10
+  C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\enums.py:10: PytestCollectionWarning: cannot collect test class 'TestPriority' because it has a __init__ constructor (from: src/infrastructure/dev/agent_tests/test_runner.py)
+    class TestPriority(Enum):
+
+src\infrastructure\dev\agent_tests\enums.py:19
+  C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\enums.py:19: PytestCollectionWarning: cannot collect test class 'TestStatus' because it has a __init__ constructor (from: src/infrastructure/dev/agent_tests/test_runner.py)
+    class TestStatus(Enum):
+
+src\infrastructure\dev\agent_tests\enums.py:45
+  C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\enums.py:45: PytestCollectionWarning: cannot collect test class 'TestSourceType' because it has a __init__ constructor (from: src/infrastructure/dev/agent_tests/test_runner.py)
+    class TestSourceType(Enum):
+
+src\infrastructure\dev\agent_tests\models.py:48
+  C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\models.py:48: PytestCollectionWarning: cannot collect test class 'TestRun' because it has a __init__ constructor (from: src/infrastructure/dev/agent_tests/test_runner.py)
+    @dataclass
+
+src\infrastructure\dev\agent_tests\models.py:72
+  C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\models.py:72: PytestCollectionWarning: cannot collect test class 'TestFactory' because it has a __init__ constructor (from: src/infrastructure/dev/agent_tests/test_runner.py)
+    @dataclass
+
+src\infrastructure\dev\agent_tests\models.py:102
+  C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\models.py:102: PytestCollectionWarning: cannot collect test class 'TestEnvironment' because it has a __init__ constructor (from: src/infrastructure/dev/agent_tests/test_runner.py)
+    @dataclass
+
+src\infrastructure\dev\agent_tests\models.py:124
+  C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\models.py:124: PytestCollectionWarning: cannot collect test class 'TestDependency' because it has a __init__ constructor (from: src/infrastructure/dev/agent_tests/test_runner.py)
+    @dataclass
+
+src\infrastructure\dev\agent_tests\models.py:176
+  C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\models.py:176: PytestCollectionWarning: cannot collect test class 'TestProfile' because it has a __init__ constructor (from: src/infrastructure/dev/agent_tests/test_runner.py)
+    @dataclass
+
+src\infrastructure\dev\agent_tests\testing_utils.py:327
+  C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\testing_utils.py:327: PytestCollectionWarning: cannot collect test class 'TestMetricsCollector' because it has a __init__ constructor (from: src/infrastructure/dev/agent_tests/test_runner.py)
+    class TestMetricsCollector:
+
+src\infrastructure\dev\agent_tests\optimization.py:12
+  C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\optimization.py:12: PytestCollectionWarning: cannot collect test class 'TestSuiteOptimizer' because it has a __init__ constructor (from: src/infrastructure/dev/agent_tests/test_runner.py)
+    class TestSuiteOptimizer:
+
+src\infrastructure\dev\agent_tests\debugging.py:115
+  C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\debugging.py:115: PytestCollectionWarning: cannot collect test class 'TestProfiler' because it has a __init__ constructor (from: src/infrastructure/dev/agent_tests/test_runner.py)
+    class TestProfiler:
+
+src\infrastructure\dev\agent_tests\debugging.py:183
+  C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\debugging.py:183: PytestCollectionWarning: cannot collect test class 'TestRecorder' because it has a __init__ constructor (from: src/infrastructure/dev/agent_tests/test_runner.py)
+    class TestRecorder:
+
+src\infrastructure\dev\agent_tests\scheduling.py:76
+  C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\scheduling.py:76: PytestCollectionWarning: cannot collect test class 'TestScheduler' because it has a __init__ constructor (from: src/infrastructure/dev/agent_tests/test_runner.py)
+    class TestScheduler:
+
+src\infrastructure\dev\agent_tests\agents.py:32
+  C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\agents.py:32: PytestCollectionWarning: cannot collect test class 'TestsAgent' because it has a __init__ constructor (from: src/infrastructure/dev/agent_tests/test_runner.py)
+    class TestsAgent(BaseAgent):
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+============================ 14 warnings in 2.51s =============================

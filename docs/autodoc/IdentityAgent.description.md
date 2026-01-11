@@ -1,0 +1,24 @@
+# Description: `IdentityAgent.py`
+
+## Module purpose
+
+(No module docstring found)
+
+## Location
+- Path: `src\logic\agents\system\IdentityAgent.py`
+
+## Public surface
+- Classes: IdentityAgent
+- Functions: (none)
+
+## Behavior summary
+- Pure module (no obvious CLI / side effects).
+
+## Key dependencies
+- Top imports: `hashlib`, `time`, `json`, `uuid`, `os`, `typing`, `src.core.base.BaseAgent`, `src.infrastructure.fleet.SecretManager`
+
+## Metadata
+
+- SHA256(source): `90b6cb4ba11d1856`
+- Last updated: `2026-01-11 10:16:33`
+- File: `src\logic\agents\system\IdentityAgent.py`
