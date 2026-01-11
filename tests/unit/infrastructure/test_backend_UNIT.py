@@ -390,9 +390,9 @@ class TestSystemHealthMonitor:
         monitor = SystemHealthMonitor(health_threshold=0.8, window_size=10)
 
         # Record mostly failures
-        for _: int in range(8):
+        for _ in range(8):
             monitor.record_failure("test-backend")
-        for _: int in range(2):
+        for _ in range(2):
             monitor.record_success("test-backend", 100)
 
         # Success rate is 20%, should be unhealthy
@@ -404,9 +404,9 @@ class TestSystemHealthMonitor:
         monitor = SystemHealthMonitor()
 
         # Record mixed results
-        for _: int in range(5):
+        for _ in range(5):
             monitor.record_success("backend1", 100)
-        for _: int in range(5):
+        for _ in range(5):
             monitor.record_failure("backend2")
 
         healthiest = monitor.get_healthiest(["backend1", "backend2"])
@@ -1206,7 +1206,7 @@ class TestABTester:
 class TestCustomModelEndpoints(unittest.TestCase):
     """Test support for custom model endpoints and authentication."""
 
-    def test_custom_endpoint_configuration(self) -> bool:
+    def test_custom_endpoint_configuration(self) -> None:
         """Test configuring custom model endpoints."""
         custom_endpoints: Dict[str, str] = {
             "local_llm": "http://localhost:8000 / v1",
@@ -1220,7 +1220,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
         self.assertIn("local_llm", custom_endpoints)
         self.assertEqual(custom_endpoints["ollama"], "http://localhost:11434 / api")
 
-    def test_custom_authentication_methods(self) -> bool:
+    def test_custom_authentication_methods(self) -> None:
         """Test different authentication methods for custom endpoints."""
         auth_methods: Dict[str, Dict[str, str]] = {
             "api_key": {
@@ -1249,7 +1249,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
         self.assertEqual(auth_methods["api_key"]["type"], "api_key")
         self.assertEqual(auth_methods["bearer_token"]["format"], "Bearer {token}")
 
-    def test_build_custom_endpoint_request(self) -> bool:
+    def test_build_custom_endpoint_request(self) -> None:
         """Test building requests to custom endpoints."""
         class CustomEndpointClient:
             def __init__(self, endpoint_url, auth_config) -> bool:
@@ -1279,7 +1279,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
         request: bool = client.build_request([{"role": "user", "content": "Hi"}])
         self.assertEqual(request["headers"]["X-API-Key"], "key123")
 
-    def test_custom_endpoint_response_parsing(self) -> bool:
+    def test_custom_endpoint_response_parsing(self) -> None:
         """Test parsing responses from custom endpoints."""
         # Different response formats from different providers
         response_formats = {
@@ -1319,7 +1319,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
         )
         self.assertEqual(openai_response, "response")
 
-    def test_custom_endpoint_fallback_chain(self) -> bool:
+    def test_custom_endpoint_fallback_chain(self) -> None:
         """Test fallback chain when multiple custom endpoints available."""
         endpoints = [
             {"name": "primary", "url": "https://primary.example.com", "available": False},
@@ -1336,7 +1336,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
         selected: bool = select_available_endpoint(endpoints)
         self.assertEqual(selected["name"], "secondary")
 
-    def test_custom_endpoint_ssl_verification(self) -> bool:
+    def test_custom_endpoint_ssl_verification(self) -> None:
         """Test SSL verification for custom endpoints."""
         endpoint_config = {
             "url": "https://secure.example.com",
@@ -1347,7 +1347,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
         self.assertTrue(endpoint_config["verify_ssl"])
         self.assertIn("ca_bundle_path", endpoint_config)
 
-    def test_custom_endpoint_request_timeout_config(self) -> bool:
+    def test_custom_endpoint_request_timeout_config(self) -> None:
         """Test configuring timeout for custom endpoint requests."""
         endpoint_timeouts: Dict[str, int] = {
             "local_llm": 5,
@@ -1358,7 +1358,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
         self.assertEqual(endpoint_timeouts["local_llm"], 5)
         self.assertEqual(endpoint_timeouts["slow_inference"], 120)
 
-    def test_custom_endpoint_parameter_mapping(self) -> bool:
+    def test_custom_endpoint_parameter_mapping(self) -> None:
         """Test mapping parameters between different endpoint formats."""
         class ParameterMapper:
             """Maps request parameters to different endpoint formats."""
@@ -1397,7 +1397,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
         self.assertEqual(openai_params["model"], "gpt-4")
         self.assertEqual(openai_params["temperature"], 0.5)
 
-    def test_custom_endpoint_cost_tracking(self) -> bool:
+    def test_custom_endpoint_cost_tracking(self) -> None:
         """Test tracking costs for custom endpoints."""
         class CostTracker:
             def __init__(self) -> None:

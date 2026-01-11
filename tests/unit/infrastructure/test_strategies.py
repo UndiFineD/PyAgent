@@ -32,7 +32,7 @@ class TestStrategies(unittest.TestCase):
         if os.path.exists("test_file.txt"):
             os.remove("test_file.txt")
 
-    def test_direct_strategy(self) -> str:
+    def test_direct_strategy(self) -> None:
         self.agent.set_strategy(DirectStrategy())
         self.agent.improve_content("Fix bugs")
         
@@ -43,7 +43,7 @@ class TestStrategies(unittest.TestCase):
         # prompt is at index 1
         self.assertIn("Fix bugs", args[0][1]) 
 
-    def test_cot_strategy(self) -> str:
+    def test_cot_strategy(self) -> None:
         self.agent.set_strategy(ChainOfThoughtStrategy())
         self.agent.improve_content("Fix bugs")
         
@@ -58,7 +58,7 @@ class TestStrategies(unittest.TestCase):
         args2 = self.agent.run_subagent.call_args_list[1]
         self.assertIn("Based on the following reasoning", args2[0][1])
 
-    def test_reflexion_strategy(self) -> str:
+    def test_reflexion_strategy(self) -> None:
         self.agent.set_strategy(ReflexionStrategy())
         # Mock run_subagent to return different values based on prompt
         def side_effect(desc, prompt, content) -> str:

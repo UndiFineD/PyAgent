@@ -126,7 +126,7 @@ class TestVisualizationAdvanced(unittest.TestCase):
 
         sparkline: str = "".join(
             sparkline_chars[int((v - min_val) * (len(sparkline_chars) - 1) / range_val)]
-            for v: int in values
+            for v in values
         )
 
         assert len(sparkline) == len(values)
@@ -146,7 +146,7 @@ class TestVisualizationAdvanced(unittest.TestCase):
         previous: Dict[str, int] = {"metric_a": 80, "metric_b": 90}
 
         comparison = {}
-        for key: str in current:
+        for key in current:
             current_val: int = current[key]
             prev_val: int = previous[key]
             percent: float | int = ((current_val - prev_val) / prev_val) * 100 if prev_val else 0
@@ -375,7 +375,7 @@ class TestCachingAdvanced(unittest.TestCase):
         """Test caching computed statistics."""
         cache = {}
 
-        def get_stats(file_id):
+        def get_stats(file_id: str) -> Dict[str, int]:
             if file_id in cache:
                 return cache[file_id]
 

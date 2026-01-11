@@ -15,7 +15,7 @@ class TestPhase78(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_inter_fleet_identity(self):
+    def test_inter_fleet_identity(self) -> None:
         print("\nTesting Phase 78: Federated Identity & Inter-Fleet Bridge v2...")
         
         # 1. Generate handshake

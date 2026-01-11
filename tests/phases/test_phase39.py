@@ -10,7 +10,7 @@ sys.path.append(str(Path(__file__).resolve().parents[2]))
 
 from src.infrastructure.fleet.FleetManager import FleetManager
 
-def test_phase39():
+def test_phase39() -> None:
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
     workspace_root = os.getcwd()
     fleet = FleetManager(workspace_root)

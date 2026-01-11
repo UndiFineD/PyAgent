@@ -28,10 +28,10 @@ except ImportError:
     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
     
     class agent_sys_path:
-        def __enter__(self) -> Self: 
+        def __enter__(self) -> agent_sys_path: 
             sys.path.insert(0, str(AGENT_DIR))
             return self
-        def __exit__(self, *args) -> None: 
+        def __exit__(self, *args: Any) -> None: 
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
@@ -94,7 +94,7 @@ class TestContextValidationComprehensive(unittest.TestCase):
         context: Dict[str, str] = {"user_id": "user1", "session_id": "sess1"}
         required: List[str] = ["user_id", "session_id"]
 
-        valid: bool = all(field in context for field: str in required)
+        valid: bool = all(field in context for field in required)
         assert valid
 
     def test_validate_field_types(self) -> None:

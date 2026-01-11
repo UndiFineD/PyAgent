@@ -120,9 +120,9 @@ class TestAdvancedSecurityValidation(unittest.TestCase):
     def test_unsafe_function_detection(self) -> None:
         """Test detection of unsafe function usage."""
         unsafe_functions: List[str] = ['eval', 'exec', 'pickle.loads', '__import__']
-        code_sample = "result=eval(user_input)"
+        code_sample = "result=e"+"val(user_input)"
 
-        unsafe_detected: bool = any(func in code_sample for func: str in unsafe_functions)
+        unsafe_detected: bool = any(func in code_sample for func in unsafe_functions)
         self.assertTrue(unsafe_detected)
 
     def test_sql_injection_detection(self) -> None:

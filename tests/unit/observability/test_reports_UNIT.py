@@ -1645,7 +1645,7 @@ class TestReportAnnotationPersistence:
         AnnotationManager = report_module.AnnotationManager
 
         manager = AnnotationManager()
-        for i: int in range(10):
+        for i in range(10):
             manager.add_annotation("report1", f"user{i}", f"Note {i}")
 
         annotations = manager.get_annotations("report1")
@@ -1675,7 +1675,7 @@ class TestReportSearchAcrossHistoricalData:
         ReportType = report_module.ReportType
 
         engine = ReportSearchEngine()
-        for i: int in range(50):
+        for i in range(50):
             engine.index_report(f"file{i}.py", ReportType.ERRORS, f"Error number {i}")
 
         results = engine.search("error", max_results=5)
@@ -2320,7 +2320,7 @@ Content 2
         """Test formatting markdown list."""
         items: List[str] = ["Item 1", "Item 2", "Item 3"]
         markdown: str = ""
-        for item: str in items:
+        for item in items:
             markdown += f"- {item}\n"
 
         assert markdown.count("-") == 3
@@ -2471,7 +2471,7 @@ class TestCSVReportFormatting(unittest.TestCase):
         ]
 
         csv_lines: List[str] = [",".join(headers)]
-        for row: List[str] in rows:
+        for row in rows:
             csv_lines.append(",".join(row))
 
         csv_content: str = "\n".join(csv_lines)
@@ -2483,7 +2483,7 @@ class TestCSVReportFormatting(unittest.TestCase):
             ['Item "A"', 'Value "B"'],
         ]
 
-        csv_line: str = ','.join([f'"{item}"' for item: str in data[0]])
+        csv_line: str = ','.join([f'"{item}"' for item in data[0]])
         assert '"Item' in csv_line
 
     def test_format_csv_escaping(self) -> None:
@@ -2530,7 +2530,7 @@ class TestReportTemplates(unittest.TestCase):
         items: List[str] = ["Item 1", "Item 2", "Item 3"]
 
         content = "Items:\n"
-        for item: str in items:
+        for item in items:
             content += f"  - {item}\n"
 
         assert "- Item 1" in content
@@ -2584,8 +2584,8 @@ class TestMetricsCollection(unittest.TestCase):
         ]
 
         metrics: Dict[str, int] = {
-            "success": sum(1 for i: Dict[str, str] in items if i["status"] == "success"),
-            "failed": sum(1 for i: Dict[str, str] in items if i["status"] == "failed"),
+            "success": sum(1 for i in items if i["status"] == "success"),
+            "failed": sum(1 for i in items if i["status"] == "failed"),
         }
 
         assert metrics["success"] == 2
@@ -2610,13 +2610,12 @@ class TestReportExport(unittest.TestCase):
 
     def test_export_to_file(self) -> None:
         """Test exporting report to file."""
-        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as f: tempfile._TemporaryFileWrapper[str]:
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as f:
             f.write("Report content")
             temp_file: str = f.name
 
         try:
-            with open(temp_file, 'r') as f: logging.TextIOWrapper[_WrappedBuffer]:
-                content: str = f.read()
+            with open(temp_file, 'r') as f: str = f.read()
 
             assert content == "Report content"
         finally:
@@ -2626,7 +2625,7 @@ class TestReportExport(unittest.TestCase):
         """Test exporting markdown file."""
         content = "# Title\n\nContent"
 
-        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.md') as f: tempfile._TemporaryFileWrapper[str]:
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.md') as f:
             f.write(content)
             filename: str = f.name
 
@@ -2639,12 +2638,12 @@ class TestReportExport(unittest.TestCase):
         """Test exporting JSON file."""
         data = {"title": "Report", "items": [1, 2, 3]}
 
-        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f: tempfile._TemporaryFileWrapper[str]:
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f:
             json.dump(data, f)
             filename: str = f.name
 
         try:
-            with open(filename, 'r') as f: logging.TextIOWrapper[_WrappedBuffer]:
+            with open(filename, 'r') as f:
                 restored = json.load(f)
 
             assert restored["title"] == "Report"
@@ -2657,7 +2656,7 @@ class TestReportExport(unittest.TestCase):
         formats: List[str] = ["md", "json", "csv"]
 
         exported = {}
-        for fmt: str in formats:
+        for fmt in formats:
             if fmt == "json":
                 exported[fmt] = json.dumps(data)
             else:
@@ -2732,7 +2731,7 @@ class TestReportValidation(unittest.TestCase):
         }
 
         required: List[str] = ["title", "timestamp"]
-        valid: bool = all(field in report for field: str in required)
+        valid: bool = all(field in report for field in required)
 
         assert valid
 
@@ -2744,7 +2743,7 @@ class TestReportValidation(unittest.TestCase):
             "data": {},
         }
 
-        structure_valid: bool = all(k in report for k: str in ["metadata", "sections", "data"])
+        structure_valid: bool = all(k in report for k in ["metadata", "sections", "data"])
         assert structure_valid
 
     def test_validate_data_types(self) -> None:
@@ -2934,7 +2933,7 @@ class TestIncrementalGeneration(unittest.TestCase):
         }
 
         changed_files: List[str] = [
-            f for f: str in current_files
+            f for f in current_files
             if current_files[f]['hash'] != baseline_files.get(f, {}).get('hash')
         ]
 
@@ -3075,7 +3074,7 @@ class TestReportCustomization(unittest.TestCase):
 
         custom_selection: List[str] = ['test_coverage', 'security_issues', 'warnings']
 
-        selected: List[str] = [m for m: str in all_metrics if m in custom_selection]
+        selected: List[str] = [m for m in all_metrics if m in custom_selection]
         self.assertEqual(len(selected), 3)
 
     def test_report_template_customization(self) -> None:
@@ -3179,7 +3178,7 @@ class TestVisualReportGeneration(unittest.TestCase):
         """Test saving generated charts as image files."""
         image_formats: List[str] = ['png', 'pdf', 'svg', 'jpg']
 
-        for fmt: str in image_formats:
+        for fmt in image_formats:
             filepath: str = f"/reports/chart.{fmt}"
             self.assertTrue(filepath.endswith(f".{fmt}"))
 
@@ -3380,7 +3379,7 @@ class TestRecommendationGeneration(unittest.TestCase):
         """Test generating recommendations for coverage improvement."""
         uncovered_files: List[str] = ['agent.py', 'base_agent/entrypoint.py']
         recommendations: List[str] = [
-            f"Add tests for {f}" for f: str in uncovered_files if 'agent' in f
+            f"Add tests for {f}" for f in uncovered_files if 'agent' in f
         ]
 
         self.assertGreaterEqual(len(recommendations), 1)
@@ -3469,7 +3468,7 @@ class TestReportVersioning(unittest.TestCase):
         v1: Dict[str, int] = {'coverage': 75, 'warnings': 20, 'errors': 5}
         v2: Dict[str, int] = {'coverage': 85, 'warnings': 15, 'errors': 2}
 
-        diff: Dict[str, int] = {k: v2[k] - v1[k] for k: str in v1}
+        diff: Dict[str, int] = {k: v2[k] - v1[k] for k in v1}
 
         self.assertEqual(diff['coverage'], 10)
         self.assertEqual(diff['errors'], -3)
@@ -3588,8 +3587,8 @@ class TestTeamLevelReporting(unittest.TestCase):
             'agent3': {'files': 45, 'coverage': 88}
         }
 
-        total_files: int = sum(m['files'] for m: Dict[str, int] in agent_metrics.values())
-        avg_coverage: float = sum(m['coverage'] for m: Dict[str, int] in agent_metrics.values()) / len(agent_metrics)
+        total_files: int = sum(m['files'] for m in agent_metrics.values())
+        avg_coverage: float = sum(m['coverage'] for m in agent_metrics.values()) / len(agent_metrics)
 
         self.assertEqual(total_files, 170)
         self.assertAlmostEqual(avg_coverage, 85, places=1)

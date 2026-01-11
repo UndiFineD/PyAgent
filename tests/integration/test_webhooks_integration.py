@@ -1,9 +1,10 @@
+"""Integration tests for agent webhooks."""
 import importlib.util
 import sys
 from pathlib import Path
 
 
-def load_agent_module():
+def load_agent_module() -> Any:
     repo_root = Path(__file__).resolve().parents[2]
     if str(repo_root) not in sys.path:
         sys.path.insert(0, str(repo_root))
@@ -12,7 +13,7 @@ def load_agent_module():
     return agent_module
 
 
-def test_webhooks_sent_on_run(monkeypatch, tmp_path):
+def test_webhooks_sent_on_run(monkeypatch, tmp_path) -> None:
     agent_mod = load_agent_module()
     Agent = getattr(agent_mod, 'BaseAgent')
 
@@ -23,7 +24,7 @@ def test_webhooks_sent_on_run(monkeypatch, tmp_path):
     # register a webhook
     calls = []
 
-    def fake_post(url, json, timeout):
+    def fake_post(url: str, json: Dict[str, Any], timeout: int) -> MagicMock:
         calls.append({'url': url, 'payload': json})
         class R: pass
         r = R()

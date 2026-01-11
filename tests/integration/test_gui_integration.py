@@ -27,7 +27,7 @@ class TestGUIIntegration(unittest.TestCase):
             cls.root = tk.Tk()
             cls.root.withdraw()
             cls._tk_available = True
-        except Exception as e: Exception:
+        except Exception as e:
             logging.warning(f"Skipping GUI tests: Tkinter not available: {e}")
             cls._tk_available = False
 

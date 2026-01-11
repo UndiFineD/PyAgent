@@ -197,7 +197,7 @@ class TestGitHubModelsIntegration(unittest.TestCase):
 
         # Aggregate stream chunks
         content: str = ""
-        for chunk: str in stream_chunks:
+        for chunk in stream_chunks:
             data = json.loads(chunk)
             if data["choices"][0].get("delta", {}).get("content"):
                 content += data["choices"][0]["delta"]["content"]
@@ -245,7 +245,7 @@ class TestGitHubModelsIntegration(unittest.TestCase):
         """Test handling concurrent requests to GitHub Models."""
         import concurrent.futures
 
-        def make_request(request_id):
+        def make_request(request_id: int) -> Dict[str, Any]:
             """Simulate API request."""
             return {
                 "request_id": request_id,
@@ -253,8 +253,8 @@ class TestGitHubModelsIntegration(unittest.TestCase):
                 "response": f"Response to request {request_id}"
             }
 
-        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor: ThreadPoolExecutor:
-            futures = [executor.submit(make_request, i) for i: int in range(5)]
+        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
+            futures = [executor.submit(make_request, i) for i in range(5)]
             results = [f.result() for f in concurrent.futures.as_completed(futures)]
 
         self.assertEqual(len(results), 5)
@@ -289,7 +289,7 @@ class TestGitHubModelsIntegration(unittest.TestCase):
                 return {"status": "success"}
 
             def execute_with_retry(self) -> Dict[str, str] | None:
-                for attempt: int in range(self.max_retries):
+                for attempt in range(self.max_retries):
                     try:
                         return self.call()
                     except ConnectionError:

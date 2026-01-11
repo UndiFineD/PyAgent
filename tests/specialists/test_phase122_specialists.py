@@ -26,7 +26,7 @@ class TestPhase122Specialists(unittest.TestCase):
         if os.path.exists(self.vault_file):
             os.remove(self.vault_file)
 
-    def test_secret_manager_persistence(self):
+    def test_secret_manager_persistence(self) -> None:
         """Test that secrets are persisted to the local file vault."""
         self.sm.set_secret("TEST_KEY", "secret_value", persist=True)
         
@@ -34,7 +34,7 @@ class TestPhase122Specialists(unittest.TestCase):
         sm2 = SecretManager(provider="file", vault_path=self.vault_file)
         self.assertEqual(sm2.get_secret("TEST_KEY"), "secret_value")
 
-    def test_visualizer_3d_data(self):
+    def test_visualizer_3d_data(self) -> None:
         """Test that VisualizerAgent generates correct 3D schema."""
         va = VisualizerAgent("dummy.py")
         data = va.generate_3d_swarm_data()
@@ -43,7 +43,7 @@ class TestPhase122Specialists(unittest.TestCase):
         self.assertTrue(len(data["links"]) > 0)
 
     @patch("src.core.base.BaseAgent.BaseAgent.think")
-    def test_immune_system_patching(self, mock_think):
+    def test_immune_system_patching(self, mock_think) -> None:
         """Test that ImmuneSystemAgent can propose a patch via LLM."""
         mock_think.return_value = "FIXED_CODE_HERE"
         isa = ImmuneSystemAgent("dummy.py")
@@ -52,7 +52,7 @@ class TestPhase122Specialists(unittest.TestCase):
         self.assertIn("### Autonomous Security Patch Proposal", patch_code)
         mock_think.assert_called_once()
 
-    def test_agent_identity_with_secrets(self):
+    def test_agent_identity_with_secrets(self) -> None:
         """Test that AgentIdentityAgent uses SecretManager for VCs."""
         aia = AgentIdentityAgent("dummy.py")
         # Set a custom secret in the manager AIA uses

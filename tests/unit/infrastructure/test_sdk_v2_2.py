@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Unit tests for the SDK V2.2 components."""
 
 import logging
 from pathlib import Path
@@ -20,7 +21,7 @@ def test_v2_2_plugin_loading() -> None:
         response = mock_agent.run("Hello World")
         print(f"Mock Agent Response: {response}")
         assert "MOCK-CORE-V1" in response
-    except Exception as e: Exception:
+    except Exception as e:
         print(f"FAILED to load Mock Agent: {e}")
 
     # 2. Test Mock Orchestrator loading (Lazy via OrchestratorRegistry)
@@ -32,7 +33,7 @@ def test_v2_2_plugin_loading() -> None:
         ritual = mock_orc.coordinate_mock_ritual("Alpha Phase")
         print(f"Orchestrator Ritual Result: {ritual}")
         assert "ritual" in ritual.lower()
-    except Exception as e: Exception:
+    except Exception as e:
         print(f"FAILED to load Mock Orchestrator: {e}")
 
     # 3. Test Version Gatekeeping (FutureAgent should fail if we didn't bump enough, but it requires 3.0.0)
