@@ -10,7 +10,7 @@ class TestPhase45(unittest.TestCase):
         self.fleet = FleetManager(self.workspace)
         os.makedirs(os.path.join(self.workspace, "agent_store/memory_shards"), exist_ok=True)
 
-    def test_graph_relational(self):
+    def test_graph_relational(self) -> None:
         print("\nTesting Graph Relational Agent...")
         self.fleet.graph_relational.add_entity("ByzantineJudge", "SpecializedAgent", {"logic": "AI-Voting"})
         self.fleet.graph_relational.add_entity("FleetManager", "Coordinator")
@@ -22,7 +22,7 @@ class TestPhase45(unittest.TestCase):
         self.assertEqual(len(rels), 1)
         self.assertEqual(rels[0]["target"], "ByzantineJudge")
 
-    def test_memorag_sharding(self):
+    def test_memorag_sharding(self) -> None:
         print("\nTesting MemoRAG Sharding...")
         self.fleet.memorag.memorise_to_shard("Refactoring the consensus module", "cons_v2")
         shards = self.fleet.memorag.list_shards()

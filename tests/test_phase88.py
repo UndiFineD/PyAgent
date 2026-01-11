@@ -21,13 +21,13 @@ class TestDocGen(unittest.TestCase):
             import shutil
             shutil.rmtree("docs_output")
 
-    def test_extract_docs(self):
+    def test_extract_docs(self) -> None:
         content = self.agent.extract_docs(self.test_file)
         self.assertIn("Module docstring", content)
         self.assertIn("Class: `MyClass`", content)
         self.assertIn("Method: `my_method`", content)
 
-    def test_generate_site(self):
+    def test_generate_site(self) -> None:
         self.agent.extract_docs(self.test_file)
         count = self.agent.generate_documentation_site("docs_output")
         self.assertEqual(count, 1)

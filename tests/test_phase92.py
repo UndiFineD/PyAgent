@@ -12,7 +12,7 @@ class TestResourceForecasting(unittest.TestCase):
     def setUp(self):
         self.agent = ResourceForecastingAgent(os.getcwd())
 
-    def test_log_and_predict(self):
+    def test_log_and_predict(self) -> None:
         # Log some data points
         self.agent.log_usage_snapshot(10.0, 100.0, 50.0)
         time.sleep(0.1)
@@ -23,7 +23,7 @@ class TestResourceForecasting(unittest.TestCase):
         self.assertTrue(forecast['prediction']['compute'] > 12.0)
         self.assertTrue(forecast['prediction']['storage'] > 105.0)
 
-    def test_scaling_recommendation(self):
+    def test_scaling_recommendation(self) -> None:
         # Trigger SCALE_UP
         self.agent.log_usage_snapshot(80.0, 400.0, 200.0)
         time.sleep(0.1)

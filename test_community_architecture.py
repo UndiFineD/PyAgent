@@ -11,7 +11,7 @@ from src.classes.fleet.AgentRegistry import AgentRegistry
 from src.classes.orchestration.SelfHealingOrchestrator import SelfHealingOrchestrator
 from src.version import SDK_VERSION
 
-def test_community_loading_workflow():
+def test_community_loading_workflow() -> None:
     print(f"--- Testing Community Plugin Workflow (SDK {SDK_VERSION}) ---")
     workspace = Path('.').resolve()
     

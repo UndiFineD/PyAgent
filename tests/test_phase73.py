@@ -7,7 +7,7 @@ class TestPhase73(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_dependency_graph_agent(self):
+    def test_dependency_graph_agent(self) -> None:
         print("\nTesting Phase 73: Semantic Versioning & Dependency Graphing...")
         
         # Scan a small subset for speed in test

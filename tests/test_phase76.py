@@ -6,7 +6,7 @@ class TestPhase76(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_swarm_distillation_agent(self):
+    def test_swarm_distillation_agent(self) -> None:
         print("\nTesting Phase 76: Neural Swarm Compression & Distillation...")
         
         # Knowledge data from agents

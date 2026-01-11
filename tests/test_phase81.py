@@ -11,7 +11,7 @@ class TestResearchSynthesis(unittest.TestCase):
     def setUp(self):
         self.agent = ResearchSynthesisAgent(os.getcwd())
 
-    def test_research_cycle(self):
+    def test_research_cycle(self) -> None:
         topic = "Quantum Computing in 2025"
         focus = ["Error Correction", "Room Temp Qubits", "Cloud Access"]
         
@@ -26,7 +26,7 @@ class TestResearchSynthesis(unittest.TestCase):
         self.assertTrue(len(query_results) >= 1)
         self.assertEqual(query_results[0]['topic'], topic)
 
-    def test_metrics(self):
+    def test_metrics(self) -> None:
         self.agent.conduct_research("AI Safety", ["Alignment", "Oversight"])
         metrics = self.agent.get_research_metrics()
         self.assertEqual(metrics['topics_researched'], 1)

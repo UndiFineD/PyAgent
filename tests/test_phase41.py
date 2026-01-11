@@ -15,7 +15,7 @@ class TestPhase41(unittest.TestCase):
         self.workspace = os.getcwd()
         self.fleet = FleetManager(self.workspace)
 
-    def test_byzantine_consensus(self):
+    def test_byzantine_consensus(self) -> None:
         print("\nTesting ByzantineConsensusAgent...")
         judge = self.fleet.byzantine_judge
         proposals = {
@@ -28,14 +28,14 @@ class TestPhase41(unittest.TestCase):
         self.assertIn(result["winner"], ["AgentA", "AgentB"])
         self.assertTrue(result["consensus_stats"]["avg_integrity"] > 0.5)
 
-    def test_federated_knowledge(self):
+    def test_federated_knowledge(self) -> None:
         print("\nTesting FederatedKnowledgeOrchestrator...")
         fk = self.fleet.federated_knowledge
         result = fk.run_fleet_wide_sync()
         self.assertEqual(result["status"], "success")
         self.assertTrue(result["fused_insights"] > 0)
         
-    def test_sql_bug_fix(self):
+    def test_sql_bug_fix(self) -> None:
         print("\nTesting SQLAgent bug fix...")
         sql_agent = self.fleet.sql
         # Should not raise AttributeError now

@@ -5,7 +5,7 @@ class TestPhase51(unittest.TestCase):
     def setUp(self):
         self.fleet = FleetManager("c:/DEV/PyAgent")
 
-    def test_tenant_isolation(self):
+    def test_tenant_isolation(self) -> None:
         print("\nTesting Phase 51: Multi-Tenant Fleet Isolation & Privacy...")
         tenant_a = "Client_A"
         tenant_b = "Client_B"

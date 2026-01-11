@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""Unit tests for the SDK V2.2 components."""
 
 import logging
 from pathlib import Path

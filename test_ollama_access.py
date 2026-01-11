@@ -1,36 +1,59 @@
 
+"""Unit tests for local Ollama API connectivity."""
 import logging
 import sys
 import os
+from pathlib import Path
+from requests import Response
 
-# Add src to sys.path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
+# Infrastructure
+from src.infrastructure.backend.LLMClient import LLMClient
+from src.core.base.ConnectivityManager import ConnectivityManager
+from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
-from src.classes.backend.LLMClient import LLMClient
-
-def test_ollama():
+def test_ollama() -> None:
     logging.basicConfig(level=logging.DEBUG)
     import requests
+    
+    workspace_root = Path("c:/DEV/PyAgent")
+    conn_manager = ConnectivityManager(str(workspace_root))
+    recorder = LocalContextRecorder(workspace_root, "TestRunner")
+    
     client = LLMClient(requests_lib=requests)
     
     print("Testing Ollama connectivity...")
-    # Try a simple prompt. We know 'llama3' was mentioned in SubagentRunner,
-    # but the 'tags' API showed empty models. Let's try to pull 'tinyllama' if it fails,
-    # or just report the failure.
     
+    # Resilience: Check if Ollama is online using ConnectivityManager (15m TTL)
+    endpoint = "http://localhost:11434/api/tags"
+    if not conn_manager.is_endpoint_available(endpoint):
+        print("Skipping Ollama test: cached offline.")
+        return
+
     # Actually, let's just try to call it.
-    res = client.llm_chat_via_ollama(prompt="hi", model="tinyllama")
-    if res:
-        print(f"Ollama Success! Response: {res}")
-    else:
-        print("Ollama failed to respond (maybe model not downloaded?).")
+    prompt = "hi"
+    model = "tinyllama"
+    try:
+        res: str = client.llm_chat_via_ollama(prompt=prompt, model=model)
+        if res:
+            print(f"Ollama Success! Response: {res}")
+            # Intelligence Gap: Record the interaction
+            recorder.record_interaction("ollama", model, prompt, res)
+            conn_manager.update_status(endpoint, True)
+        else:
+            print("Ollama failed to respond (maybe model not downloaded?).")
+            conn_manager.update_status(endpoint, False)
+    except Exception as e:
+        print(f"Ollama error: {e}")
+        conn_manager.update_status(endpoint, False)
+        
         print("Checking if we can reach the server at all...")
-        import requests
         try:
-            resp = requests.get("http://localhost:11434/api/tags")
+            resp: Response = requests.get(endpoint, timeout=5)
             print(f"Tags response: {resp.json()}")
-        except Exception as e:
-            print(f"Could not reach Ollama server: {e}")
+            conn_manager.update_status(endpoint, True)
+        except Exception as e2:
+            print(f"Could not reach Ollama server: {e2}")
+            conn_manager.update_status(endpoint, False)
 
 if __name__ == "__main__":
     test_ollama()

@@ -1,11 +1,13 @@
 
+"""Unit test for verifying version gatekeeping in agent loading."""
+
 import logging
 from pathlib import Path
-from src.classes.fleet.FleetManager import FleetManager
-from src.classes.fleet.AgentRegistry import AgentRegistry
-from src.classes.fleet.ResilientStubs import ResilientStub
+from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.AgentRegistry import AgentRegistry, LazyAgentMap
+from src.infrastructure.fleet.ResilientStubs import ResilientStub
 
-def test_version_gate():
+def test_version_gate() -> None:
     logging.basicConfig(level=logging.INFO)
     workspace_root = Path("c:/DEV/PyAgent")
     
@@ -15,7 +17,7 @@ def test_version_gate():
     # But AgentRegistryCore does scan plugins.
     
     # Let's instantiate the Registry directly to test logic
-    registry = AgentRegistry.get_agent_map(workspace_root)
+    registry: LazyAgentMap = AgentRegistry.get_agent_map(workspace_root)
     
     # FutureAgent should be discovered
     if "FutureAgent" in registry:

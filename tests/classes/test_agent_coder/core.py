@@ -2,6 +2,8 @@
 """Test classes from test_agent_coder.py - core module."""
 
 from __future__ import annotations
+from _thread import LockType
+from _thread import LockType
 import unittest
 from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
 from unittest.mock import MagicMock, Mock, patch, call, ANY
@@ -18,25 +20,25 @@ import shutil
 import subprocess
 import threading
 import asyncio
-from tests.agent_test_utils import *  # Added for modular test support
+from tests.utils.agent_test_utils import *  # Added for modular test support
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
-    from tests.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path, load_agent_module
+    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path, load_agent_module
 except ImportError:
     # Fallback
-    AGENT_DIR = Path(__file__).parent.parent.parent / 'src'
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
     
     class agent_sys_path:
-        def __enter__(self): 
+        def __enter__(self) -> str: 
             sys.path.insert(0, str(AGENT_DIR))
             return self
-        def __exit__(self, *args): 
+        def __exit__(self, *args) -> str: 
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
-sys.path.insert(0, str(Path(__file__).parent.parent.parent / 'src'))
+sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
 
 
 class TestAccessibilityIssueTypeEnum:
@@ -45,7 +47,7 @@ class TestAccessibilityIssueTypeEnum:
     def test_enum_values(self) -> None:
         """Test enum has expected values."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         assert mod.AccessibilityIssueType.MISSING_ALT_TEXT.value == "missing_alt_text"
         assert mod.AccessibilityIssueType.LOW_COLOR_CONTRAST.value == "low_color_contrast"
         assert mod.AccessibilityIssueType.MISSING_LABEL.value == "missing_label"
@@ -54,8 +56,8 @@ class TestAccessibilityIssueTypeEnum:
     def test_all_members(self) -> None:
         """Test all enum members exist."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
-        members = list(mod.AccessibilityIssueType)
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
+        members: List[Any] = list(mod.AccessibilityIssueType)
         assert len(members) == 10
 
 
@@ -66,7 +68,7 @@ class TestAccessibilitySeverityEnum:
     def test_enum_values(self) -> None:
         """Test enum has expected values."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         assert mod.AccessibilitySeverity.CRITICAL.value == 4
         assert mod.AccessibilitySeverity.SERIOUS.value == 3
         assert mod.AccessibilitySeverity.MODERATE.value == 2
@@ -75,7 +77,7 @@ class TestAccessibilitySeverityEnum:
     def test_severity_ordering(self) -> None:
         """Test severity values are ordered correctly."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         assert mod.AccessibilitySeverity.MINOR.value < mod.AccessibilitySeverity.MODERATE.value
         assert mod.AccessibilitySeverity.MODERATE.value < mod.AccessibilitySeverity.SERIOUS.value
         assert mod.AccessibilitySeverity.SERIOUS.value < mod.AccessibilitySeverity.CRITICAL.value
@@ -88,7 +90,7 @@ class TestWCAGLevelEnum:
     def test_enum_values(self) -> None:
         """Test enum has expected values."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         assert mod.WCAGLevel.A.value == "A"
         assert mod.WCAGLevel.AA.value == "AA"
         assert mod.WCAGLevel.AAA.value == "AAA"
@@ -96,7 +98,7 @@ class TestWCAGLevelEnum:
     def test_all_levels(self) -> None:
         """Test all WCAG levels exist."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         assert len(list(mod.WCAGLevel)) == 3
 
 
@@ -107,7 +109,7 @@ class TestAccessibilityIssueDataclass:
     def test_creation(self) -> None:
         """Test creating AccessibilityIssue."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         issue = mod.AccessibilityIssue(
             issue_type=mod.AccessibilityIssueType.MISSING_ALT_TEXT,
             severity=mod.AccessibilitySeverity.CRITICAL,
@@ -125,7 +127,7 @@ class TestAccessibilityIssueDataclass:
     def test_defaults(self) -> None:
         """Test AccessibilityIssue defaults."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         issue = mod.AccessibilityIssue(
             issue_type=mod.AccessibilityIssueType.ARIA_MISSING,
             severity=mod.AccessibilitySeverity.MODERATE,
@@ -146,7 +148,7 @@ class TestColorContrastResultDataclass:
     def test_creation(self) -> None:
         """Test creating ColorContrastResult."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         result = mod.ColorContrastResult(
             foreground="#000000",
             background="#FFFFFF",
@@ -166,7 +168,7 @@ class TestAccessibilityReportDataclass:
     def test_creation(self) -> None:
         """Test creating AccessibilityReport."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         report = mod.AccessibilityReport(
             file_path="test.html",
             issues=[],
@@ -182,7 +184,7 @@ class TestAccessibilityReportDataclass:
     def test_defaults(self) -> None:
         """Test AccessibilityReport defaults."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         report = mod.AccessibilityReport(file_path="test.html")
         assert report.issues == []
         assert report.total_elements == 0
@@ -196,7 +198,7 @@ class TestARIAAttributeDataclass:
     def test_creation(self) -> None:
         """Test creating ARIAAttribute."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         attr = mod.ARIAAttribute(
             name="aria-label",
             value="Submit button",
@@ -214,7 +216,7 @@ class TestAccessibilityAnalyzer:
     def test_initialization(self) -> None:
         """Test AccessibilityAnalyzer initialization."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer(mod.WCAGLevel.AA)
         assert analyzer.target_level == mod.WCAGLevel.AA
         assert analyzer.issues == []
@@ -222,74 +224,74 @@ class TestAccessibilityAnalyzer:
     def test_analyze_html_missing_alt(self) -> None:
         """Test detecting missing alt text in HTML."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         html_content = '<html><body><img src="test.jpg"></body></html>'
         report = analyzer.analyze_content(html_content, "html")
-        alt_issues = [i for i in report.issues
+        alt_issues: List[Any] = [i for i in report.issues
                       if i.issue_type == mod.AccessibilityIssueType.MISSING_ALT_TEXT]
         assert len(alt_issues) > 0
 
     def test_analyze_html_with_alt(self) -> None:
         """Test HTML with proper alt text has no alt issues."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         html_content = '<html><body><img src="test.jpg" alt="Test image"></body></html>'
         report = analyzer.analyze_content(html_content, "html")
-        alt_issues = [i for i in report.issues
+        alt_issues: List[Any] = [i for i in report.issues
                       if i.issue_type == mod.AccessibilityIssueType.MISSING_ALT_TEXT]
         assert len(alt_issues) == 0
 
     def test_analyze_html_missing_label(self) -> None:
         """Test detecting missing form labels in HTML."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         html_content = '<html><body><input type="text" id="name"></body></html>'
         report = analyzer.analyze_content(html_content, "html")
-        label_issues = [i for i in report.issues
+        label_issues: List[Any] = [i for i in report.issues
                         if i.issue_type == mod.AccessibilityIssueType.MISSING_LABEL]
         assert len(label_issues) > 0
 
     def test_analyze_html_heading_hierarchy(self) -> None:
         """Test detecting heading hierarchy issues."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         # Page starts with h2 instead of h1
         html_content = '<html><body><h2>Title</h2></body></html>'
         report = analyzer.analyze_content(html_content, "html")
-        heading_issues = [i for i in report.issues
+        heading_issues: List[Any] = [i for i in report.issues
                           if i.issue_type == mod.AccessibilityIssueType.HEADING_HIERARCHY]
         assert len(heading_issues) > 0
 
     def test_analyze_javascript_click_without_keyboard(self) -> None:
         """Test detecting click handlers without keyboard support."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         js_content = '<button onClick={handleClick}>Click me</button>'
         report = analyzer.analyze_content(js_content, "javascript")
-        keyboard_issues = [i for i in report.issues
+        keyboard_issues: List[Any] = [i for i in report.issues
                            if i.issue_type == mod.AccessibilityIssueType.KEYBOARD_NAVIGATION]
         assert len(keyboard_issues) > 0
 
     def test_analyze_javascript_interactive_div(self) -> None:
         """Test detecting interactive divs without proper roles."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         js_content = '<div onClick={handleClick}>Clickable</div>'
         report = analyzer.analyze_content(js_content, "javascript")
-        semantic_issues = [i for i in report.issues
+        semantic_issues: List[Any] = [i for i in report.issues
                            if i.issue_type == mod.AccessibilityIssueType.SEMANTIC_HTML]
         assert len(semantic_issues) > 0
 
     def test_check_color_contrast_high(self) -> None:
         """Test color contrast check with high contrast."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         result = analyzer.check_color_contrast("#000000", "#FFFFFF")
         assert result.contrast_ratio == 21.0
@@ -299,7 +301,7 @@ class TestAccessibilityAnalyzer:
     def test_check_color_contrast_low(self) -> None:
         """Test color contrast check with low contrast."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         result = analyzer.check_color_contrast("#777777", "#999999")
         assert result.passes_aa is False
@@ -307,7 +309,7 @@ class TestAccessibilityAnalyzer:
     def test_check_color_contrast_large_text(self) -> None:
         """Test color contrast check with large text requirements."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         result = analyzer.check_color_contrast("#555555", "#FFFFFF", is_large_text=True)
         # Large text has lower requirements (3:1 for AA)
@@ -316,7 +318,7 @@ class TestAccessibilityAnalyzer:
     def test_get_issues_by_severity(self) -> None:
         """Test filtering issues by severity."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         html_content = '<html><body><img src="test.jpg"></body></html>'
         analyzer.analyze_content(html_content, "html")
@@ -329,7 +331,7 @@ class TestAccessibilityAnalyzer:
     def test_get_issues_by_wcag_level(self) -> None:
         """Test filtering issues by WCAG level."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         html_content = '<html><body><img src="test.jpg"></body></html>'
         analyzer.analyze_content(html_content, "html")
@@ -339,7 +341,7 @@ class TestAccessibilityAnalyzer:
     def test_enable_disable_rules(self) -> None:
         """Test enabling and disabling rules."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         analyzer.disable_rule("1.1.1")
         assert analyzer.rules.get("1.1.1") is False
@@ -349,7 +351,7 @@ class TestAccessibilityAnalyzer:
     def test_compliance_score_calculation(self) -> None:
         """Test compliance score is calculated correctly."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         # Clean HTML should have high score
         html_content = '''
@@ -368,7 +370,7 @@ class TestAccessibilityAnalyzer:
     def test_analyze_file_nonexistent(self, tmp_path: Path) -> None:
         """Test analyzing nonexistent file returns empty report."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         report = analyzer.analyze_file(str(tmp_path / "nonexistent.html"))
         assert report.issues == []
@@ -377,8 +379,8 @@ class TestAccessibilityAnalyzer:
     def test_analyze_file_html(self, tmp_path: Path) -> None:
         """Test analyzing HTML file."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
-        html_file = tmp_path / "test.html"
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
+        html_file: Path = tmp_path / "test.html"
         html_file.write_text('<html><body><img src="x.jpg"></body></html>')
         analyzer = mod.AccessibilityAnalyzer()
         report = analyzer.analyze_file(str(html_file))
@@ -387,7 +389,7 @@ class TestAccessibilityAnalyzer:
     def test_analyze_python_ui(self) -> None:
         """Test analyzing Python UI code."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         python_content = '''
 from tkinter import Button, Label
@@ -400,7 +402,7 @@ label=Label(root, text="Info")
     def test_recommendations_generated(self) -> None:
         """Test that recommendations are generated."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
         analyzer = mod.AccessibilityAnalyzer()
         html_content = '<html><body><img src="test.jpg"></body></html>'
         report = analyzer.analyze_content(html_content, "html")
@@ -420,17 +422,17 @@ class TestCodeRefactoring:
     def test_detect_refactoring_opportunity(self, tmp_path: Path) -> None:
         """Test detecting refactoring opportunities."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
-def process(data):
+def process(data) -> str:
     result=[]
     for item in data:
         if item > 0:
             result.append(item * 2)
     return result
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -442,10 +444,10 @@ def process(data):
     def test_suggest_simplification(self, tmp_path: Path) -> None:
         """Test suggesting code simplification."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = "x=True if condition else False"
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -466,9 +468,9 @@ class TestMultiLanguageCodeGeneration:
     def test_generate_python_code(self, tmp_path: Path) -> None:
         """Test generating Python code."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text("# Python code")
 
         agent = mod.CoderAgent(str(target))
@@ -479,9 +481,9 @@ class TestMultiLanguageCodeGeneration:
     def test_generate_javascript_code(self, tmp_path: Path) -> None:
         """Test generating JavaScript code."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
-        target = tmp_path / "test.js"
+        target: Path = tmp_path / "test.js"
         target.write_text("// JavaScript code")
 
         agent = mod.CoderAgent(str(target))
@@ -502,13 +504,13 @@ class TestCodeDocumentationGeneration:
     def test_detect_missing_docstring(self, tmp_path: Path) -> None:
         """Test detecting missing docstrings."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
-def my_function(x, y):
+def my_function(x, y) -> str:
     return x + y
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -519,14 +521,14 @@ def my_function(x, y):
     def test_detect_existing_docstring(self, tmp_path: Path) -> None:
         """Test detecting existing docstrings."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = '''
-def documented_function(x, y):
+def documented_function(x, y) -> str:
     """Add two numbers."""
     return x + y
 '''
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -547,14 +549,14 @@ class TestCodeOptimizationPatterns:
     def test_detect_inefficient_loop(self, tmp_path: Path) -> None:
         """Test detecting inefficient loop patterns."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
 result=[]
 for i in range(len(items)):
     result.append(items[i] * 2)
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -565,14 +567,14 @@ for i in range(len(items)):
     def test_detect_list_comprehension_opportunity(self, tmp_path: Path) -> None:
         """Test detecting list comprehension opportunities."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
 result=[]
 for x in data:
     result.append(x * 2)
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -593,7 +595,7 @@ class TestDeadCodeDetection:
     def test_detect_unused_import(self, tmp_path: Path) -> None:
         """Test detecting unused imports."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
         import os
@@ -601,7 +603,7 @@ import sys
 
 print("hello")
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -612,14 +614,14 @@ print("hello")
     def test_detect_unused_variable(self, tmp_path: Path) -> None:
         """Test detecting unused variables."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
-def func():
+def func() -> str:
     unused=42
     return "result"
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -640,14 +642,14 @@ class TestDependencyInjectionPatterns:
     def test_detect_hardcoded_dependency(self, tmp_path: Path) -> None:
         """Test detecting hardcoded dependencies."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
 class Service:
-    def __init__(self):
+    def __init__(self) -> str:
         self.db=Database()  # Hardcoded
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -668,11 +670,11 @@ class TestCodeSplitting:
     def test_detect_large_function(self, tmp_path: Path) -> None:
         """Test detecting functions that should be split."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
-        code = "\n".join([f"    line{i} = {i}" for i in range(50)])
-        code = f"def large_function():\n{code}\n    return None"
-        target = tmp_path / "test.py"
+        code: str = "\n".join([f"    line{i} = {i}" for i in range(50)])
+        code: str = f"def large_function():\n{code}\n    return None"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -693,16 +695,16 @@ class TestCodeConsistency:
     def test_detect_naming_inconsistency(self, tmp_path: Path) -> None:
         """Test detecting naming inconsistencies."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
-def camelCase():
+def camelCase() -> str:
     pass
 
-def snake_case():
+def snake_case() -> str:
     pass
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -724,15 +726,15 @@ class TestCodeTemplates:
     def test_read_template_file(self, tmp_path: Path) -> None:
         """Test reading template-like code."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
 # Template: {name}
 class {ClassName}:
-    def __init__(self):
+    def __init__(self) -> str:
         pass
 """
-        target = tmp_path / "template.py"
+        target: Path = tmp_path / "template.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -753,13 +755,13 @@ class TestTypeAnnotationInference:
     def test_detect_missing_type_hints(self, tmp_path: Path) -> None:
         """Test detecting missing type hints."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
-def add(x, y):
+def add(x, y) -> str:
     return x + y
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -770,13 +772,13 @@ def add(x, y):
     def test_detect_existing_type_hints(self, tmp_path: Path) -> None:
         """Test detecting existing type hints."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
 def add(x: int, y: int) -> int:
     return x + y
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -797,13 +799,13 @@ class TestStyleUnification:
     def test_detect_mixed_quotes(self, tmp_path: Path) -> None:
         """Test detecting mixed quote styles."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = '''
 x="double"
 y='single'
 '''
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -825,7 +827,7 @@ class TestMergeConflictResolution:
     def test_detect_merge_markers(self, tmp_path: Path) -> None:
         """Test detecting merge conflict markers."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
 <<<<<<< HEAD
@@ -834,7 +836,7 @@ x=1
 x=2
 >>>>>>> branch
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -855,13 +857,13 @@ class TestAPICompatibility:
     def test_detect_api_signature(self, tmp_path: Path) -> None:
         """Test detecting API signatures."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
-def public_api(arg1, arg2, *, keyword=None):
+def public_api(arg1, arg2, *, keyword=None) -> str:
     pass
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -882,10 +884,10 @@ class TestIncrementalImprovement:
     def test_small_improvement_applied(self, tmp_path: Path) -> None:
         """Test small improvements are detected."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = "x=1\ny=2"  # Missing spaces
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -906,14 +908,14 @@ class TestQualityGates:
     def test_quality_score_calculation(self, tmp_path: Path) -> None:
         """Test quality score is calculated."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = '''
 def good_function(x: int) -> int:
     """Return double of x."""
     return x * 2
 '''
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -935,12 +937,12 @@ class TestSecurityScanning:
     def test_detect_hardcoded_secret(self, tmp_path: Path) -> None:
         """Test detecting hardcoded secrets."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = '''
 API_KEY="sk_live_xxxxxxxxxxxx"
 '''
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -961,17 +963,17 @@ class TestComplexityAnalysis:
     def test_calculate_cyclomatic_complexity(self, tmp_path: Path) -> None:
         """Test calculating cyclomatic complexity."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
-def complex_function(x):
+def complex_function(x) -> str:
     if x > 0:
         if x > 10:
             return "big"
         return "small"
     return "negative"
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -992,13 +994,13 @@ class TestCoverageGapDetection:
     def test_detect_untested_function(self, tmp_path: Path) -> None:
         """Test detecting untested functions."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
-def untested_function():
+def untested_function() -> str:
     return 42
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -1019,13 +1021,13 @@ class TestMigrationAutomation:
     def test_detect_deprecated_syntax(self, tmp_path: Path) -> None:
         """Test detecting deprecated syntax."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
 # Old-style string formatting
 message="Hello %s" % name
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -1036,13 +1038,13 @@ message="Hello %s" % name
     def test_detect_python2_syntax(self, tmp_path: Path) -> None:
         """Test detecting Python 2 style syntax."""
         with agent_dir_on_path():
-            mod = load_agent_module("agent_coder.py")
+            mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = """
 class OldStyle:
     pass
 """
-        target = tmp_path / "test.py"
+        target: Path = tmp_path / "test.py"
         target.write_text(code)
 
         agent = mod.CoderAgent(str(target))
@@ -1059,9 +1061,9 @@ class OldStyle:
 class TestSyntaxValidation(unittest.TestCase):
     """Tests for Python syntax validation."""
 
-    def test_validate_valid_python_syntax(self):
+    def test_validate_valid_python_syntax(self) -> None:
         """Test validation of syntactically correct code."""
-        code = """def hello(name):
+        code = """def hello(name) -> str:
     return f"Hello, {name}!"
 """
         # Try to compile - no SyntaxError
@@ -1072,7 +1074,7 @@ class TestSyntaxValidation(unittest.TestCase):
             is_valid = False
         assert is_valid
 
-    def test_detect_syntax_error(self):
+    def test_detect_syntax_error(self) -> None:
         """Test detection of syntax errors."""
         code = "def hello(name)\n    return name"
         try:
@@ -1082,7 +1084,7 @@ class TestSyntaxValidation(unittest.TestCase):
             is_valid = False
         assert not is_valid
 
-    def test_validate_complex_syntax(self):
+    def test_validate_complex_syntax(self) -> None:
         """Test validation with complex Python features."""
         code = """
 @decorator
@@ -1097,9 +1099,9 @@ async def process_data(items: list[str]) -> dict[str, int]:
             is_valid = False
         assert is_valid
 
-    def test_detect_indentation_error(self):
+    def test_detect_indentation_error(self) -> None:
         """Test detection of indentation errors."""
-        code = """def func():
+        code = """def func() -> str:
 return "error"
 """
         try:
@@ -1114,13 +1116,13 @@ return "error"
 class TestCodeFormatting(unittest.TestCase):
     """Tests for code formatting integration."""
 
-    def test_black_format_detection(self):
+    def test_black_format_detection(self) -> None:
         """Test detection of black formatting violations."""
         unformatted = "x=1+2"
         formatted = "x = 1 + 2"
         assert unformatted != formatted
 
-    def test_autopep8_integration(self):
+    def test_autopep8_integration(self) -> None:
         """Test autopep8 formatting."""
         code = "x=1"  # Extra spaces
         # autopep8 would fix to: x=1
@@ -1128,15 +1130,15 @@ class TestCodeFormatting(unittest.TestCase):
         assert "=" in code
         assert "=" in expected
 
-    def test_whitespace_normalization(self):
+    def test_whitespace_normalization(self) -> None:
         """Test whitespace normalization."""
         code = "def  func( x , y ):\n    return x + y"
         # Should normalize spaces
         assert "  " in code  # Double space exists in original
 
-    def test_line_length_handling(self):
+    def test_line_length_handling(self) -> None:
         """Test line length compliance."""
-        long_line = "x=" + "a" * 100
+        long_line: str = "x=" + "a" * 100
         assert len(long_line) > 88  # Black default max line length
 
 
@@ -1144,7 +1146,7 @@ class TestCodeFormatting(unittest.TestCase):
 class TestImportOrganization(unittest.TestCase):
     """Tests for import organization (isort)."""
 
-    def test_organize_imports(self):
+    def test_organize_imports(self) -> None:
         """Test import organization."""
         unorganized = """import z
         import a
@@ -1154,20 +1156,20 @@ from module import foo
         assert "import z" in unorganized
         assert "import a" in unorganized
 
-    def test_separate_import_groups(self):
+    def test_separate_import_groups(self) -> None:
         """Test separation of import groups."""
         imports = """import os
         import sys
         from typing import Dict
 from mymodule import func
 """
-        lines = imports.split("\n")
-        stdlib_imports = [line for line in lines if "os" in line or "sys" in line]
-        local_imports = [line for line in lines if "mymodule" in line]
+        lines: List[sys.LiteralString] = imports.split("\n")
+        stdlib_imports: List[str] = [line for line in lines if "os" in line or "sys" in line]
+        local_imports: List[str] = [line for line in lines if "mymodule" in line]
         assert len(stdlib_imports) > 0
         assert len(local_imports) > 0
 
-    def test_remove_duplicate_imports(self):
+    def test_remove_duplicate_imports(self) -> None:
         """Test removal of duplicate imports."""
         code = """import os
         import os
@@ -1182,7 +1184,7 @@ from sys import argv
 class TestDiffApplication(unittest.TestCase):
     """Tests for diff-based vs full file modifications."""
 
-    def test_apply_diff_patch(self):
+    def test_apply_diff_patch(self) -> None:
         """Test applying diff patch."""
         original = "line 1\nline 2\nline 3"
         modified = "line 1\nline 2 modified\nline 3"
@@ -1190,18 +1192,18 @@ class TestDiffApplication(unittest.TestCase):
         assert original != modified
         assert "modified" in modified
 
-    def test_full_file_rewrite(self):
+    def test_full_file_rewrite(self) -> None:
         """Test full file rewrite."""
         original = "old code"
         new = "new code"
         assert original != new
 
-    def test_minimal_changes_strategy(self):
+    def test_minimal_changes_strategy(self) -> None:
         """Test preserving minimal changes."""
-        original = """def func():
+        original = """def func() -> str:
     return 1
 """
-        modified = """def func():
+        modified = """def func() -> str:
     return 2
 """
         # Only 1 line changed
@@ -1212,7 +1214,7 @@ class TestDiffApplication(unittest.TestCase):
 class TestCodeComplexity(unittest.TestCase):
     """Tests for code complexity metrics."""
 
-    def test_cyclomatic_complexity(self):
+    def test_cyclomatic_complexity(self) -> None:
         """Test cyclomatic complexity calculation."""
         simple = "x=1"
         complex_code = """
@@ -1224,13 +1226,13 @@ if x:
         # Complex code has higher cyclomatic complexity
         assert complex_code.count("if") > simple.count("if")
 
-    def test_line_complexity(self):
+    def test_line_complexity(self) -> None:
         """Test line count as complexity metric."""
         short_func = "def f(): return 1"
         long_func = "def f():\n    x=1\n    y=2\n    return x + y"
         assert len(long_func) > len(short_func)
 
-    def test_nesting_depth(self):
+    def test_nesting_depth(self) -> None:
         """Test nesting depth calculation."""
         shallow = "if x: pass"
         deep = "if a:\n  if b:\n    if c:\n      pass"
@@ -1241,16 +1243,16 @@ if x:
 class TestBackupCreation(unittest.TestCase):
     """Tests for backup creation before modifications."""
 
-    def test_create_backup_before_modification(self):
+    def test_create_backup_before_modification(self) -> None:
         """Test backup is created before modification."""
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.py') as f:
             f.write("original content")
             f.flush()
-            original_file = f.name
+            original_file: str = f.name
 
         try:
             # Create backup
-            backup_file = original_file + ".bak"
+            backup_file: str = original_file + ".bak"
             import shutil
             shutil.copy(original_file, backup_file)
 
@@ -1262,10 +1264,10 @@ class TestBackupCreation(unittest.TestCase):
             Path(original_file).unlink(missing_ok=True)
             Path(backup_file).unlink(missing_ok=True)
 
-    def test_backup_content_integrity(self):
+    def test_backup_content_integrity(self) -> None:
         """Test backup preserves original content."""
-        original = "def func():\n    pass"
-        backup = original
+        original = "def func() -> str:\n    pass"
+        backup: str = original
         assert backup == original
 
 
@@ -1273,7 +1275,7 @@ class TestBackupCreation(unittest.TestCase):
 class TestRollback(unittest.TestCase):
     """Tests for rollback functionality."""
 
-    def test_rollback_on_syntax_error(self):
+    def test_rollback_on_syntax_error(self) -> None:
         """Test rollback when syntax error occurs."""
         broken = "def func(: pass"  # Syntax error
 
@@ -1286,7 +1288,7 @@ class TestRollback(unittest.TestCase):
 
         assert needs_rollback
 
-    def test_rollback_on_test_failure(self):
+    def test_rollback_on_test_failure(self) -> None:
         """Test rollback when tests fail."""
 
         # Would fail test expecting sum
@@ -1297,14 +1299,14 @@ class TestRollback(unittest.TestCase):
 class TestConcurrency(unittest.TestCase):
     """Tests for concurrent code generation."""
 
-    def test_concurrent_file_generation(self):
+    def test_concurrent_file_generation(self) -> None:
         """Test generating multiple files concurrently."""
         import threading
 
         generated_files = []
-        lock = threading.Lock()
+        lock: LockType = threading.Lock()
 
-        def generate_file(name):
+        def generate_file(name) -> None:
             with lock:
                 generated_files.append(name)
 
@@ -1319,18 +1321,18 @@ class TestConcurrency(unittest.TestCase):
 
         assert len(generated_files) == 5
 
-    def test_concurrent_modifications(self):
+    def test_concurrent_modifications(self) -> None:
         """Test concurrent code modifications."""
         import threading
 
-        counter = {"value": 0}
-        lock = threading.Lock()
+        counter: Dict[str, int] = {"value": 0}
+        lock: LockType = threading.Lock()
 
-        def modify():
+        def modify() -> None:
             with lock:
                 counter["value"] += 1
 
-        threads = [threading.Thread(target=modify) for _ in range(10)]
+        threads: List[threading.Thread] = [threading.Thread(target=modify) for _ in range(10)]
         for t in threads:
             t.start()
         for t in threads:
@@ -1343,25 +1345,24 @@ class TestConcurrency(unittest.TestCase):
 class TestLargeFileHandling(unittest.TestCase):
     """Tests for handling large files."""
 
-    def test_large_file_processing(self):
+    def test_large_file_processing(self) -> None:
         """Test processing files with many lines."""
-        large_code = "\n".join([f"x{i} = {i}" for i in range(10000)])
-        lines = large_code.split("\n")
+        large_code: str = "\n".join([f"x{i} = {i}" for i in range(10000)])
+        lines: List[str] = large_code.split("\n")
         assert len(lines) == 10000
 
-    def test_memory_efficiency(self):
+    def test_memory_efficiency(self) -> None:
         """Test memory-efficient processing."""
         # Stream processing instead of loading entire file
         with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
             for i in range(1000):
                 f.write(f"line {i}\n")
             f.flush()
-            fname = f.name
+            fname: str = f.name
 
         try:
             line_count = 0
             with open(fname) as f:
-                for line in f:
                     line_count += 1
             assert line_count == 1000
         finally:
@@ -1372,7 +1373,7 @@ class TestLargeFileHandling(unittest.TestCase):
 class TestCodeMetrics(unittest.TestCase):
     """Tests for code metrics extraction."""
 
-    def test_extract_function_count(self):
+    def test_extract_function_count(self) -> None:
         """Test counting functions in code."""
         code = """
 def func1():
@@ -1385,10 +1386,10 @@ class MyClass:
     def method(self):
         pass
 """
-        func_count = code.count("def ")
+        func_count: int = code.count("def ")
         assert func_count == 3
 
-    def test_extract_class_count(self):
+    def test_extract_class_count(self) -> None:
         """Test counting classes in code."""
         code = """
 class A:
@@ -1397,18 +1398,18 @@ class A:
 class B:
     pass
 """
-        class_count = code.count("class ")
+        class_count: int = code.count("class ")
         assert class_count == 2
 
-    def test_calculate_lines_of_code(self):
+    def test_calculate_lines_of_code(self) -> None:
         """Test LOC calculation."""
         code = """
-def func():
+def func() -> str:
     x=1
     y=2
     return x + y
 """
-        non_empty_lines = [line for line in code.split("\n") if line.strip()]
+        non_empty_lines: List[str] = [line for line in code.split("\n") if line.strip()]
         assert len(non_empty_lines) > 0
 
 
@@ -1416,7 +1417,7 @@ def func():
 class TestDocstringGeneration(unittest.TestCase):
     """Tests for automatic docstring generation."""
 
-    def test_function_docstring_generation(self):
+    def test_function_docstring_generation(self) -> None:
         """Test generating docstrings for functions."""
 
         # Generated docstring would be:
@@ -1432,10 +1433,10 @@ class TestDocstringGeneration(unittest.TestCase):
         assert "Add" in docstring
         assert "Args" in docstring
 
-    def test_preserve_existing_docstrings(self):
+    def test_preserve_existing_docstrings(self) -> None:
         """Test that existing docstrings are preserved."""
         code = '''
-def func():
+def func() -> str:
     """This is an existing docstring."""
     pass
 '''
@@ -1446,51 +1447,51 @@ def func():
 class TestCodeQualityValidation(unittest.TestCase):
     """Test code quality validation improvements."""
 
-    def test_mypy_type_checking_integration(self):
+    def test_mypy_type_checking_integration(self) -> None:
         """Test mypy type checking for generated code."""
-        mypy_config = {
+        mypy_config: Dict[str, bool] = {
             'enabled': True,
             'strict': False,
             'ignore_missing_imports': True
         }
         self.assertTrue(mypy_config['enabled'])
 
-    def test_pylint_support_with_strictness_levels(self):
+    def test_pylint_support_with_strictness_levels(self) -> None:
         """Test pylint with configurable strictness levels."""
-        strictness_levels = {
+        strictness_levels: Dict[str, float] = {
             'lenient': 7.0,  # Allow code quality 7 / 10+
             'moderate': 8.0,  # Require 8 / 10+
             'strict': 9.0    # Require 9 / 10+
         }
         self.assertEqual(len(strictness_levels), 3)
 
-    def test_bandit_security_scanning(self):
+    def test_bandit_security_scanning(self) -> None:
         """Test bandit security scanning for generated code."""
-        security_issues = [
+        security_issues: List[Dict[str, str]] = [
             {'type': 'hardcoded_sql_string', 'severity': 'high'},
             {'type': 'hardcoded_password', 'severity': 'critical'},
             {'type': 'insecure_random', 'severity': 'medium'}
         ]
-        critical_issues = [i for i in security_issues if i['severity'] == 'critical']
+        critical_issues: List[Dict[str, str]] = [i for i in security_issues if i['severity'] == 'critical']
         self.assertEqual(len(critical_issues), 1)
 
-    def test_cyclomatic_complexity_validation(self):
+    def test_cyclomatic_complexity_validation(self) -> None:
         """Test cyclomatic complexity metrics validation."""
-        complexity_limits = {
+        complexity_limits: Dict[str, int] = {
             'function': 10,
             'class': 15,
             'module': 30
         }
         self.assertLessEqual(complexity_limits['function'], complexity_limits['class'])
 
-    def test_incremental_validation(self):
+    def test_incremental_validation(self) -> None:
         """Test validating only changed sections."""
-        file_changes = {
+        file_changes: Dict[str, List[str]] = {
             'unchanged_functions': ['func_a', 'func_b'],
             'changed_functions': ['func_c'],
             'new_functions': ['func_d']
         }
-        to_validate = file_changes['changed_functions'] + file_changes['new_functions']
+        to_validate: List[str] = file_changes['changed_functions'] + file_changes['new_functions']
         self.assertEqual(len(to_validate), 2)
 
 

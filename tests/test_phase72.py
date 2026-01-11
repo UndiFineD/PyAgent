@@ -8,7 +8,7 @@ class TestPhase72(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_core_evolution_guard(self):
+    def test_core_evolution_guard(self) -> None:
         print("\nTesting Phase 72: Agentic Self-Evolution & Core Hardening...")
         
         # Test file

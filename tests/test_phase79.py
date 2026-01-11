@@ -14,7 +14,7 @@ class TestPhase79(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_swarm_visualizer(self):
+    def test_swarm_visualizer(self) -> None:
         print("\nTesting Phase 79: Neural Network Topology & Swarm Visualization...")
         
         # 1. Log interactions

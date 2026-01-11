@@ -15,7 +15,7 @@ class TestPhase42(unittest.TestCase):
         self.workspace = os.getcwd()
         self.fleet = FleetManager(self.workspace)
 
-    def test_reward_model_ranking(self):
+    def test_reward_model_ranking(self) -> None:
         print("\nTesting RewardModelAgent...")
         rm = self.fleet.reward_model
         proposals = {
@@ -28,7 +28,7 @@ class TestPhase42(unittest.TestCase):
         # In our simulated logic, Good should be higher
         self.assertGreater(result["scores"].get("Agent_Good", 0), result["scores"].get("Agent_Bad", 10))
 
-    def test_byzantine_consensus_real(self):
+    def test_byzantine_consensus_real(self) -> None:
         print("\nTesting ByzantineConsensus with real AI scoring...")
         judge = self.fleet.byzantine_judge
         proposals = {
@@ -42,7 +42,7 @@ class TestPhase42(unittest.TestCase):
         self.assertNotEqual(result["winner"], "Broken")
         self.assertTrue(result["confidence"] > 0)
 
-    def test_federated_knowledge_broadcast(self):
+    def test_federated_knowledge_broadcast(self) -> None:
         print("\nTesting Federated Knowledge broadcast...")
         fk = self.fleet.federated_knowledge
         res = fk.broadcast_lesson("test_lesson", {"agent": "Tester", "task_type": "unit_test", "success": True, "fix": "Fixed bug X"})

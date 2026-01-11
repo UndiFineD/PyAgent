@@ -7,7 +7,7 @@ class TestPhase74(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_tool_synthesis_agent(self):
+    def test_tool_synthesis_agent(self) -> None:
         print("\nTesting Phase 74: Dynamic Tool Synthesis...")
         
         # Synthesize

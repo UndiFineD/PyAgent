@@ -8,7 +8,7 @@ class TestPhases71(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_process_synthesizer(self):
+    def test_process_synthesizer(self) -> None:
         print("\nTesting Phase 71: Neural Process Orchestration...")
         goal = "Fix authentication bug in dashboard"
         reqs = ["Secure session handling", "JWT validation"]
@@ -26,7 +26,7 @@ class TestPhases71(unittest.TestCase):
         print(f"Workflow Telemetry: {telemetry}")
         self.assertEqual(telemetry["status"], "active")
 
-    def test_cooperative_comm(self):
+    def test_cooperative_comm(self) -> None:
         print("\nTesting Cooperative Communication Integration...")
         chan_res = self.fleet.cooperative_comm.establish_p2p_channel("Agent1", "Agent2")
         print(f"Channel Result: {chan_res}")

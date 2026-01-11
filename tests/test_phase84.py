@@ -19,12 +19,12 @@ class TestSecurityAudit(unittest.TestCase):
         if os.path.exists(self.test_file):
             os.remove(self.test_file)
 
-    def test_scan_file(self):
+    def test_scan_file(self) -> None:
         findings = self.agent.scan_file(self.test_file)
         self.assertTrue(any(f['type'] == 'Hardcoded Secret' for f in findings))
         self.assertTrue(any(f['type'] == 'Insecure Pattern' and 'eval' in f['detail'] for f in findings))
 
-    def test_audit_workspace(self):
+    def test_audit_workspace(self) -> None:
         # Full scan might take time but should return findings due to our test file
         result = self.agent.audit_workspace()
         self.assertEqual(result['status'], "Complete")

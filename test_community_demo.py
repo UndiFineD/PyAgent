@@ -9,7 +9,7 @@ sys.path.append(str(Path('.').resolve()))
 from src.classes.fleet.AgentRegistry import AgentRegistry
 from src.version import SDK_VERSION
 
-def test_community_demo():
+def test_community_demo() -> None:
     print(f"--- Running Community Demo Test (SDK {SDK_VERSION}) ---")
     workspace = Path('.').resolve()
     

@@ -11,7 +11,7 @@ class TestIntelligence(unittest.TestCase):
     def setUp(self):
         self.orchestrator = IntelligenceOrchestrator(None)
 
-    def test_synthesis(self):
+    def test_synthesis(self) -> None:
         self.orchestrator.contribute_insight("AgentA", "Detected quantum fluctuation in memory", 0.9)
         self.orchestrator.contribute_insight("AgentB", "Quantum patterns appearing in the shard", 0.8)
         

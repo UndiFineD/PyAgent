@@ -21,7 +21,7 @@ class TestPhase40(unittest.TestCase):
         self.workspace_root = os.getcwd()
         logging.basicConfig(level=logging.DEBUG)
 
-    def test_auto_debugger_syntax_check(self):
+    def test_auto_debugger_syntax_check(self) -> None:
         """Tests that the AutoDebugger can identify syntax errors."""
         orchestrator = AutoDebuggerOrchestrator(self.workspace_root)
         
@@ -29,7 +29,7 @@ class TestPhase40(unittest.TestCase):
         result = orchestrator.validate_and_repair(__file__)
         self.assertEqual(result["status"], "success")
 
-    def test_neural_pruning_performance(self):
+    def test_neural_pruning_performance(self) -> None:
         """Tests the Neural Pruning logic with performance tracking."""
         mock_fleet = MagicMock()
         engine = NeuralPruningEngine(mock_fleet)
@@ -59,7 +59,7 @@ class TestPhase40(unittest.TestCase):
         self.assertNotIn("EfficientAgent", result["pruned_nodes"])
 
     @patch('subprocess.run')
-    def test_auto_debugger_repair_trigger(self, mock_run):
+    def test_auto_debugger_repair_trigger(self, mock_run) -> None:
         """Tests that repair is triggered on syntax error."""
         from subprocess import CalledProcessError
         

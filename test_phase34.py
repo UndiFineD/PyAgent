@@ -11,7 +11,7 @@ sys.path.append(str(Path(__file__).parent))
 
 from src.classes.fleet.FleetManager import FleetManager
 
-def test_phase34():
+def test_phase34() -> None:
     logging.basicConfig(level=logging.INFO)
     print("🚀 Starting Phase 34 Verification...")
     

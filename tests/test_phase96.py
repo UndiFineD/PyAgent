@@ -11,7 +11,7 @@ class TestExplainability(unittest.TestCase):
     def setUp(self):
         self.fleet = FleetManager(os.getcwd())
 
-    def test_explainability_trace(self):
+    def test_explainability_trace(self) -> None:
         workflow = [
             {"agent": "PrivacyGuard", "action": "scan_and_redact", "args": ["My email is test@example.com"]}
         ]
@@ -29,7 +29,7 @@ class TestExplainability(unittest.TestCase):
         self.assertIn("PrivacyGuard.scan_and_redact", explanation)
         self.assertIn("GDPR compliance", explanation) # From our mock justification
 
-    def test_justification_logic(self):
+    def test_justification_logic(self) -> None:
         agent_name = "SecurityAudit"
         action = "scan_file"
         justification = self.fleet.explainability.justify_action(agent_name, action, {})

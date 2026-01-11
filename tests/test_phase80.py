@@ -14,7 +14,7 @@ class TestPhase80(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_consensus_conflict_agent(self):
+    def test_consensus_conflict_agent(self) -> None:
         print("\nTesting Phase 80: Multi-Agent Consensus & Conflict Resolution v2...")
         
         # 1. Initiate dispute

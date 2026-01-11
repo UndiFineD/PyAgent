@@ -13,7 +13,7 @@ class MockFleet:
     def __init__(self, root: Path):
         self.workspace_root = root
 
-def test_community_orchestrator():
+def test_community_orchestrator() -> None:
     print(f"--- Running Community Orchestrator Test (SDK {SDK_VERSION}) ---")
     workspace = Path('.').resolve()
     fleet = MockFleet(workspace)

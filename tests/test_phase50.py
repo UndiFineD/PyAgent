@@ -6,7 +6,7 @@ class TestPhase50(unittest.TestCase):
     def setUp(self):
         self.client = TestClient(app)
 
-    def test_api_endpoints(self):
+    def test_api_endpoints(self) -> None:
         print("\nTesting Phase 50: API Endpoints (TestClient)...")
         # Test Root
         res = self.client.get("/")

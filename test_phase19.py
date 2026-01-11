@@ -5,7 +5,7 @@ sys.path.append(str(Path(__file__).parent / "src"))
 from classes.fleet.FleetManager import FleetManager
 import time
 
-def test_phase19():
+def test_phase19() -> None:
     print("--- Phase 19 Verification: Synthetic Data & Signal Bus ---")
     workspace_root = Path(__file__).parent
     fleet = FleetManager(str(workspace_root))

@@ -11,7 +11,7 @@ class TestPerformanceProfiling(unittest.TestCase):
     def setUp(self):
         self.agent = PerformanceProfilingAgent(os.getcwd())
 
-    def test_profiling_and_analysis(self):
+    def test_profiling_and_analysis(self) -> None:
         agents = ["AgentA", "AgentB", "AgentC"]
         
         # Capture snapshot

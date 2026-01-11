@@ -8,7 +8,7 @@ class TestPhases59_61(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_legal_and_smart_contract_audit(self):
+    def test_legal_and_smart_contract_audit(self) -> None:
         print("\nTesting Phase 59: Legal & Smart Contract Auditing...")
         # Licensing scan
         content = "This project uses the GPL v3 license."
@@ -33,7 +33,7 @@ class TestPhases59_61(unittest.TestCase):
         print(f"Liability Report: {report}")
         self.assertIn("WARNING", report)
 
-    def test_quantum_resistant_crypto(self):
+    def test_quantum_resistant_crypto(self) -> None:
         print("\nTesting Phase 60: Quantum-Resistant Cryptographic Layer...")
         fleet_b = "RemoteFleet_Alpha"
         
@@ -53,7 +53,7 @@ class TestPhases59_61(unittest.TestCase):
         self.fleet.entropy_guard.rotate_entropy_pool()
         self.assertNotEqual(old_pool, self.fleet.entropy_guard.entropy_pool)
 
-    def test_empathy_and_sentiment(self):
+    def test_empathy_and_sentiment(self) -> None:
         print("\nTesting Phase 61: Emotional Intelligence...")
         
         # Sentiment

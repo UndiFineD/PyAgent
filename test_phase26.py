@@ -4,7 +4,7 @@ sys.path.append(str(Path(__file__).parent / "src"))
 
 from classes.fleet.FleetManager import FleetManager
 
-def test_phase26():
+def test_phase26() -> None:
     print("--- Phase 26 Verification: Neural Symbiosis & Autonomous Infrastructure ---")
     workspace_root = Path(__file__).parent
     fleet = FleetManager(str(workspace_root))
