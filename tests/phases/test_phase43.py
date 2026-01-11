@@ -11,7 +11,7 @@ class TestPhase43(unittest.TestCase):
         os.makedirs(os.path.join(self.workspace, "data/memory/agent_store/features"), exist_ok=True)
         os.makedirs(os.path.join(self.workspace, "data/memory/knowledge_exports"), exist_ok=True)
 
-    def test_feature_store(self):
+    def test_feature_store(self) -> None:
         print("\nTesting Feature Store...")
         res = self.fleet.feature_store.register_feature(
             "dist_training_config", 
@@ -24,7 +24,7 @@ class TestPhase43(unittest.TestCase):
         val = self.fleet.feature_store.get_feature("dist_training_config")
         self.assertEqual(val["strategy"], "FSDP")
 
-    def test_experiment_orchestration(self):
+    def test_experiment_orchestration(self) -> None:
         print("\nTesting Experiment Orchestration...")
         res = self.fleet.experiment_orchestrator.run_benchmark_experiment(
             "Phase-43-Suite", ["LinguisticAgent", "ReasoningAgent"]
@@ -33,7 +33,7 @@ class TestPhase43(unittest.TestCase):
         self.assertEqual(res["status"], "COMPLETED")
         self.assertEqual(len(res["agents"]), 2)
 
-    def test_resource_curation(self):
+    def test_resource_curation(self) -> None:
         print("\nTesting Resource Curation...")
         res = self.fleet.resource_curator.add_resource(
             "https://example.com/fsdp-paper",

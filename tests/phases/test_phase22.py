@@ -4,7 +4,7 @@ sys.path.append(str(Path(__file__).resolve().parents[2] / "src"))
 
 from src.infrastructure.fleet.FleetManager import FleetManager
 
-def test_phase22():
+def test_phase22() -> None:
     print("--- Phase 22 Verification: Federated Sovereignty & Recursive World Modeling ---")
     workspace_root = Path(__file__).resolve().parents[2]
     fleet = FleetManager(str(workspace_root))

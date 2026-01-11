@@ -652,7 +652,7 @@ class TestParallelTestExecutionHelpers:
 
         results: list[str] = []
 
-        def test_fn(name: str) -> str:
+        def test_fn(name: str) -> None:
             results.append(name)
             return f"done_{name}"
 
@@ -920,7 +920,7 @@ class TestTestLogCaptureUtilities:
         import logging
 
         with LogCapturer() as capturer:
-            logger: logging.Logger = logging.getLogger("test_logger")
+            logger = logging.getLogger("test_logger")
             logger.warning("Test warning message")
 
         logs = capturer.get_logs()
@@ -932,7 +932,7 @@ class TestTestLogCaptureUtilities:
         import logging
 
         with LogCapturer(level=logging.ERROR) as capturer:
-            logger: logging.Logger = logging.getLogger("test_filter")
+            logger = logging.getLogger("test_filter")
             logger.warning("Warning")
             logger.error("Error")
 
@@ -1555,7 +1555,7 @@ class TestParallelTestRunner:
 
         runner = ParallelTestRunner()
         runner.add_test("pass", lambda: None)
-        runner.add_test("fail", lambda: (_ for _: Never in ()).throw(AssertionError("fail")))
+        runner.add_test("fail", lambda: (_ for _ in ()).throw(AssertionError("fail")))
 
         results = runner.run_all()
 
@@ -1786,7 +1786,7 @@ class TestAssertionHelpers(unittest.TestCase):
         items: List[str] = ["a", "b", "c", "d"]
         required: List[str] = ["a", "c"]
 
-        for req: str in required:
+        for req in required:
             self.assertIn(req, items)
 
     def test_assert_no_duplicates(self) -> None:
@@ -1800,7 +1800,7 @@ class TestAssertionHelpers(unittest.TestCase):
         text = "The error occurred in module xyz"
         patterns: List[str] = ["error", "warning", "exception"]
 
-        found: bool = any(p in text for p: str in patterns)
+        found: bool = any(p in text for p in patterns)
         self.assertTrue(found)
 
 
@@ -1821,7 +1821,7 @@ class TestFixtureHelpers(unittest.TestCase):
     def test_create_temp_file(self) -> None:
         """Test creating temporary file."""
         temp_file: str = os.path.join(self.temp_dir, "test.txt")
-        with open(temp_file, "w") as f: logging.TextIOWrapper[_WrappedBuffer]:
+        with open(temp_file, "w") as f:
             f.write("test content")
 
         self.assertTrue(os.path.exists(temp_file))
@@ -1835,7 +1835,7 @@ class TestFixtureHelpers(unittest.TestCase):
             }
         }
 
-        for dirname: str in ["subdir1", "subdir2"]:
+        for dirname in ["subdir1", "subdir2"]:
             os.makedirs(os.path.join(self.temp_dir, dirname), exist_ok=True)
 
         self.assertTrue(os.path.exists(os.path.join(self.temp_dir, "subdir1")))
@@ -1843,7 +1843,7 @@ class TestFixtureHelpers(unittest.TestCase):
 
     def test_fixture_with_context_manager(self) -> None:
         """Test fixture with context manager."""
-        with tempfile.NamedTemporaryFile(mode='w', delete=False) as f: tempfile._TemporaryFileWrapper[str]:
+        with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
             f.write("content")
             temp_name: str = f.name
 
@@ -1941,15 +1941,15 @@ class TestContextManagers(unittest.TestCase):
 
     def test_nested_context_managers(self) -> None:
         """Test nested context managers."""
-        with tempfile.NamedTemporaryFile() as f1: tempfile._TemporaryFileWrapper[bytes]:
-            with tempfile.NamedTemporaryFile() as f2: tempfile._TemporaryFileWrapper[bytes]:
+        with tempfile.NamedTemporaryFile() as f1:
+            with tempfile.NamedTemporaryFile() as f2:
                 self.assertIsNotNone(f1.name)
                 self.assertIsNotNone(f2.name)
 
     def test_context_manager_with_patch(self) -> None:
         """Test context manager with patch."""
         from unittest.mock import patch
-        with patch('os.path.exists') as mock_exists: MagicMock | AsyncMock:
+        with patch('os.path.exists') as mock_exists:
             mock_exists.return_value = True
             result: bool = os.path.exists('/fake/path')
             self.assertTrue(result)
@@ -2003,7 +2003,7 @@ class TestParametrization(unittest.TestCase):
             ("string", TypeError),
         ]
 
-        def divide_by_value(x):
+        def divide_by_value(x: Any) -> float:
             return 10 / x
 
         for value, expected_error in error_cases[:2]:
@@ -2017,7 +2017,7 @@ class TestDataGenerators(unittest.TestCase):
 
     def test_generate_numeric_data(self) -> None:
         """Test generating numeric data."""
-        data: List[int] = [i for i: int in range(10)]
+        data: List[int] = [i for i in range(10)]
 
         self.assertEqual(len(data), 10)
         self.assertEqual(data[0], 0)
@@ -2025,10 +2025,10 @@ class TestDataGenerators(unittest.TestCase):
 
     def test_generate_string_data(self) -> None:
         """Test generating string data."""
-        data: List[str] = [f"string_{i}" for i: int in range(5)]
+        data: List[str] = [f"string_{i}" for i in range(5)]
 
         self.assertEqual(len(data), 5)
-        self.assertTrue(all(isinstance(s, str) for s: str in data))
+        self.assertTrue(all(isinstance(s, str) for s in data))
 
     def test_generate_complex_objects(self) -> None:
         """Test generating complex objects."""
@@ -2066,7 +2066,7 @@ class TestExceptionHandling(unittest.TestCase):
         def raise_error() -> sys.NoReturn:
             raise ValueError("Specific error")
 
-        with self.assertRaises(ValueError) as context: _AssertRaisesContext[ValueError]:
+        with self.assertRaises(ValueError) as context:
             raise_error()
 
         self.assertIn("Specific", str(context.exception))
@@ -2084,7 +2084,7 @@ class TestExceptionHandling(unittest.TestCase):
 
     def test_multiple_exception_types(self) -> None:
         """Test handling multiple exception types."""
-        def process(value):
+        def process(value: Optional[int]) -> int:
             if value is None:
                 raise TypeError("None not allowed")
             if value < 0:

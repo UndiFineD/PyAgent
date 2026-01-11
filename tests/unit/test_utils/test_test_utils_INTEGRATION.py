@@ -128,13 +128,12 @@ class TestIntegration(unittest.TestCase):
 
     def test_integration_with_fixtures(self) -> None:
         """Test integration with fixtures."""
-        with tempfile.NamedTemporaryFile(mode='w', delete=False) as f: tempfile._TemporaryFileWrapper[str]:
+        with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
             f.write("test data")
             filename: str = f.name
 
         try:
-            with open(filename, 'r') as f: logging.TextIOWrapper[_WrappedBuffer]:
-                content: str = f.read()
+            with open(filename, 'r') as f: str = f.read()
 
             self.assertEqual(content, "test data")
         finally:

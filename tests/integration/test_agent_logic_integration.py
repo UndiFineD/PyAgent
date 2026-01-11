@@ -41,7 +41,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
 class TestPhase5Integration:
     """Integration tests for Phase 5 features."""
 
-    def test_circuit_breaker_with_agent_execution(self, tmp_path: Path, agent_module) -> bool:
+    def test_circuit_breaker_with_agent_execution(self, tmp_path: Path, agent_module) -> None:
         """Test circuit breaker integration with agent."""
         agent = agent_module.Agent(repo_root=str(tmp_path))
 
@@ -55,7 +55,7 @@ class TestPhase5Integration:
         assert 'summary' in report
         assert cb.state == "CLOSED"
 
-    def test_full_phase5_workflow(self, tmp_path: Path, agent_module) -> bool:
+    def test_full_phase5_workflow(self, tmp_path: Path, agent_module) -> None:
         """Test complete Phase 5 workflow."""
         agent = agent_module.Agent(repo_root=str(tmp_path), dry_run=False)
 
@@ -73,8 +73,8 @@ class TestPhase5Integration:
         assert 'summary' in report
 
         # Benchmark
-        files: List[Path] = [tmp_path / f'test{i}.py' for i: int in range(10)]
-        for f: Path in files:
+        files: List[Path] = [tmp_path / f'test{i}.py' for i in range(10)]
+        for f in files:
             f.write_text('# test')
         benchmark = agent.benchmark_execution(files)
         assert 'average_per_file' in benchmark
@@ -92,7 +92,7 @@ class TestPhase5Integration:
 class TestPhase6Integration:
     """Integration tests for Phase 6 features."""
 
-    def test_full_phase6_workflow(self, tmp_path: Path, agent_module) -> bool:
+    def test_full_phase6_workflow(self, tmp_path: Path, agent_module) -> None:
         """Test complete Phase 6 workflow."""
         (tmp_path / ".git").mkdir()
 
@@ -111,7 +111,7 @@ class TestPhase6Integration:
         assert hasattr(agent, 'incremental_processor')
         assert hasattr(agent, 'shutdown_handler')
 
-    def test_config_with_rate_limiting(self, tmp_path: Path, agent_module) -> bool:
+    def test_config_with_rate_limiting(self, tmp_path: Path, agent_module) -> None:
         """Test config file with rate limiting."""
         config_path: Path = tmp_path / "agent.json"
         config_content = '''
@@ -132,7 +132,7 @@ class TestPhase6Integration:
         assert hasattr(agent, 'rate_limiter')
         assert agent.rate_limiter.config.requests_per_second == 2.0
 
-    def test_plugin_execution_with_rate_limiting(self, tmp_path: Path, agent_module) -> bool:
+    def test_plugin_execution_with_rate_limiting(self, tmp_path: Path, agent_module) -> None:
         """Test plugins execute with rate limiting."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))

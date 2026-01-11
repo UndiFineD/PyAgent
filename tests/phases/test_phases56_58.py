@@ -8,7 +8,7 @@ class TestPhases56_58(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_cloud_infrastructure(self):
+    def test_cloud_infrastructure(self) -> None:
         print("\nTesting Phase 56: Multi-Cloud Infrastructure (IaC)...")
         # Configure AWS
         res = self.fleet.cloud_provider.configure_provider("aws", {"api_key": "mock_key"})
@@ -26,7 +26,7 @@ class TestPhases56_58(unittest.TestCase):
         print(f"Optimal Region: {region}")
         self.assertEqual(region, "eu-west-1")
 
-    def test_data_compliance(self):
+    def test_data_compliance(self) -> None:
         print("\nTesting Phase 57: Data Privacy & Compliance...")
         sensitive_doc = "User email: john.doe@example.com, Phone: 123-456-7890. SSN: 123-45-6789."
         
@@ -48,7 +48,7 @@ class TestPhases56_58(unittest.TestCase):
         print(f"ZK Fusion Audit: {is_safe}")
         self.assertTrue(is_safe)
 
-    def test_multimedia_grounding(self):
+    def test_multimedia_grounding(self) -> None:
         print("\nTesting Phase 58: Multimedia Grounding (Audio/Video)...")
         
         # Audio
