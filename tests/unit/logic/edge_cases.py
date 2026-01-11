@@ -41,7 +41,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
 class TestErrorRecovery(unittest.TestCase):
     """Tests for error recovery with retries."""
 
-    def test_retry_on_failure(self) -> str:
+    def test_retry_on_failure(self) -> None:
         """Test retry mechanism on failure."""
         attempts = []
         max_retries = 3
@@ -52,7 +52,7 @@ class TestErrorRecovery(unittest.TestCase):
                 raise ValueError("First attempt fails")
             return "success"
 
-        for attempt: int in range(max_retries):
+        for attempt in range(max_retries):
             try:
                 result: str = flaky_operation()
                 if result == "success":
@@ -63,11 +63,11 @@ class TestErrorRecovery(unittest.TestCase):
 
         assert len(attempts) == 2
 
-    def test_exponential_backoff(self) -> str:
+    def test_exponential_backoff(self) -> None:
         """Test exponential backoff in retries."""
 
         delays = []
-        for attempt: int in range(3):
+        for attempt in range(3):
             delay = min(2 ** attempt, 60)  # Exponential with cap
             delays.append(delay)
 
@@ -78,7 +78,7 @@ class TestErrorRecovery(unittest.TestCase):
 class TestAIRetryAndErrorRecovery(unittest.TestCase):
     """Test AI retry and error recovery mechanisms."""
 
-    def test_multi_attempt_retry_on_validation_failure(self) -> str:
+    def test_multi_attempt_retry_on_validation_failure(self) -> None:
         """Test multi-attempt retry when syntax validation fails."""
         class RetryMechanism:
             def __init__(self, max_retries=3) -> None:
@@ -92,7 +92,7 @@ class TestAIRetryAndErrorRecovery(unittest.TestCase):
                 return "fixed code"
 
         retry = RetryMechanism(max_retries=3)
-        for _: int in range(3):
+        for _ in range(3):
             try:
                 retry.attempt_fix()
                 break

@@ -5,7 +5,7 @@ class TestPhase52(unittest.TestCase):
     def setUp(self):
         self.fleet = FleetManager("c:/DEV/PyAgent")
 
-    def test_neuro_optimization(self):
+    def test_neuro_optimization(self) -> None:
         print("\nTesting Phase 52: Evolutionary Neuro-Optimization...")
         # Mock fleet stats
         stats = {

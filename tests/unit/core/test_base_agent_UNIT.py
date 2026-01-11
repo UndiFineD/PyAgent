@@ -567,7 +567,7 @@ class TestRequestBatcher:
         batcher = base_agent_module.RequestBatcher(batch_size=10)
         requests: List[Any] = [
             base_agent_module.BatchRequest(file_path=tmp_path / f"test{i}.py", prompt="Improve")
-            for i: int in range(5)
+            for i in range(5)
         ]
         batcher.add_requests(requests)
         assert batcher.get_queue_size() == 5
@@ -1013,7 +1013,7 @@ class TestConversationHistoryManagement:
         MessageRole = base_agent_module.MessageRole
 
         history = ConversationHistory(max_messages=5)
-        for i: int in range(10):
+        for i in range(10):
             history.add(MessageRole.USER, f"Message {i}")
 
         context = history.get_context()
@@ -1269,7 +1269,7 @@ class TestContextWindowManagement:
         ContextWindow = base_agent_module.ContextWindow
 
         window = ContextWindow(max_tokens=100)
-        for i: int in range(20):
+        for i in range(20):
             window.add(f"Message {i}", token_count=10)
 
         # Should have truncated old messages
@@ -1629,7 +1629,7 @@ class TestAgentHealthDiagnostics:
 
         checker = HealthChecker()
 
-        for _: int in range(5):
+        for _ in range(5):
             checker.record_request(success=True, latency_ms=100)
         checker.record_request(success=False, latency_ms=500)
 

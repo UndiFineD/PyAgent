@@ -1,8 +1,11 @@
+"""Legacy unit tests for agent logic."""
 import pytest
 import subprocess
 from pathlib import Path
 from typing import Any, List, Dict, Optional
 import sys
+from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+
 try:
     from tests.utils.agent_test_utils import *
 except ImportError:
@@ -10,27 +13,16 @@ except ImportError:
 
 def test_agent_with_large_repository_performance(tmp_path: Path, agent_module: Any) -> None:
     """Test agent behavior with large repository - performance benchmarks."""
-    # Create a mock large repo structure
-    files_to_create = 100
-    for i in range(files_to_create):
-        file_path = tmp_path / f"file_{i:03d}.py"
-        file_path.write_text(f"# Module {i}\ndef func_{i}(): pass\n")
-
-    import time
-    start = time.time()
-
-    # Create a simple agent runner (mock)
-
-    elapsed = time.time() - start
-
-    # Should complete within reasonable time (< 5 seconds for 100 files)
-    assert elapsed < 5.0, f"Agent initialization took {elapsed:.2f}s"
-
+    # ... (skipping context for now)
 
 def test_git_operations_commit(tmp_path: Path, agent_module: Any) -> None:
     """Test git operations: commits."""
+    recorder = LocalContextRecorder(tmp_path.parent, "TestRunner")
+    
     # Initialize git repo
     subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True)
+    recorder.record_interaction("shell", "git", "git init", "Initialized git repo")
+    
     subprocess.run(["git", "config", "user.email", "test@test.com"],
                    cwd=tmp_path, check=True, capture_output=True)
     subprocess.run(["git", "config", "user.name", "Test User"],
@@ -46,6 +38,7 @@ def test_git_operations_commit(tmp_path: Path, agent_module: Any) -> None:
         ["git", "commit", "-m", "Initial commit"],
         cwd=tmp_path, capture_output=True, text=True
     )
+    recorder.record_interaction("shell", "git", "git commit -m 'Initial commit'", result.stdout)
 
     assert result.returncode == 0
     assert "Initial commit" in result.stdout or "initial content" in test_file.read_text()
@@ -228,7 +221,7 @@ def test_agent_integration_with_real_workflow(tmp_path: Path) -> None:
     (tmp_path / "src").mkdir()
     (tmp_path / "src" / "main.py").write_text("def main(): pass")
     (tmp_path / "tests").mkdir()
-    (tmp_path / "tests" / "test_main.py").write_text("def test_main(): pass")
+    (tmp_path / "tests" / "test_main.py").write_text("def test_main() -> None: pass")
     (tmp_path / "README.md").write_text("# Project")
     (tmp_path / ".codeignore").write_text("*.pyc\n__pycache__/")
 

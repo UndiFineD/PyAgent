@@ -8,7 +8,7 @@ class TestPhases65_67(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_semantic_search_mesh(self):
+    def test_semantic_search_mesh(self) -> None:
         print("\nTesting Phase 65: Fleet-Wide Semantic Search Mesh...")
         # Register shard
         reg = self.fleet.search_mesh.register_shard("shard-01", {"domain": "python_docs"})
@@ -25,7 +25,7 @@ class TestPhases65_67(unittest.TestCase):
         print(f"Sync: {sync}")
         self.assertEqual(sync["status"], "synchronized")
 
-    def test_policy_enforcement(self):
+    def test_policy_enforcement(self) -> None:
         print("\nTesting Phase 66: Autonomous Policy Enforcement...")
         # Evaluation ok
         ok_res = self.fleet.policy_enforcement.evaluate_action("AgentA", "read_file", {"path": "test.txt"})
@@ -42,7 +42,7 @@ class TestPhases65_67(unittest.TestCase):
         print(f"Quarantine: {q_res}")
         self.assertTrue(self.fleet.policy_enforcement.is_agent_quarantined("AgentA"))
 
-    def test_dynamic_model_routing(self):
+    def test_dynamic_model_routing(self) -> None:
         print("\nTesting Phase 67: Dynamic Model Routing...")
         # Routing
         p1 = self.fleet.model_router.determine_optimal_provider("high_reasoning")

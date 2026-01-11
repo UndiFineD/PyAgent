@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
+"""Integration tests for the agent interaction pipeline."""
 
 import os
 from src.infrastructure.fleet.FleetManager import FleetManager
 
-def test_pipeline():
+def test_pipeline() -> None:
     print("=== Testing Interaction Harvesting Pipeline ===")
     fleet = FleetManager(".")
     

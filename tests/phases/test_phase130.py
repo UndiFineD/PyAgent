@@ -5,14 +5,14 @@ from src.logic.agents.cognitive.LatentReasoningAgent import LatentReasoningAgent
 from src.logic.agents.system.ModelOptimizerAgent import ModelOptimizerAgent
 from src.infrastructure.fleet.ShardingOrchestrator import ShardingOrchestrator
 
-def test_phase130_structure_verification():
+def test_phase130_structure_verification() -> None:
     """Verify the 5-tier architecture is physically present."""
     base_dir = Path("c:/DEV/PyAgent/src")
     expected_tiers = ["core", "logic", "infrastructure", "interface", "observability"]
     for tier in expected_tiers:
         assert (base_dir / tier).is_dir(), f"Tier {tier} is missing from src/"
 
-def test_phase130_btree_sharding():
+def test_phase130_btree_sharding() -> None:
     """Verify B-Tree 2-tier MD5 sharding logic."""
     store = BTreeKnowledgeStore(agent_id="test_agent", storage_path=Path("c:/DEV/PyAgent/data/test_shards"))
     key = "test_trillion_scale_key_2026"
@@ -24,7 +24,7 @@ def test_phase130_btree_sharding():
     assert len(shard_path.parts[-2]) == 2
     assert shard_path.name == f"{key}.json"
 
-def test_phase130_agent_integration():
+def test_phase130_agent_integration() -> None:
     """Basic sanity check for specialized agents."""
     latent_agent = LatentReasoningAgent(file_path="src/core/base/BaseAgent.py")
     # Corrected method based on actual code
@@ -35,7 +35,7 @@ def test_phase130_agent_integration():
     strategy = optimizer.select_optimization_strategy(70, 24, ["h100"])
     assert "FP8" in strategy.get("quantization", "") or strategy.get("hopper_optimized")
 
-def test_phase130_sharding_orchestrator():
+def test_phase130_sharding_orchestrator() -> None:
     """Verify the clustering logic."""
     root = Path("c:/DEV/PyAgent")
     orchestrator = ShardingOrchestrator(workspace_root=root, interaction_threshold=5)

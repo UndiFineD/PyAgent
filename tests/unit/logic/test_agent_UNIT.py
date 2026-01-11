@@ -41,19 +41,19 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
 class TestDryRunMode:
     """Test dry-run mode functionality."""
 
-    def test_dry_run_flag_set_on_init(self, tmp_path: Path, agent_module) -> bool:
+    def test_dry_run_flag_set_on_init(self, tmp_path: Path, agent_module) -> None:
         """Verify dry_run flag is set correctly on Agent initialization."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path), dry_run=True)
         assert agent.dry_run is True
 
-    def test_dry_run_false_by_default(self, tmp_path: Path, agent_module) -> str:
+    def test_dry_run_false_by_default(self, tmp_path: Path, agent_module) -> None:
         """Verify dry_run is False by default."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
         assert agent.dry_run is False
 
-    def test_dry_run_mode_logged(self, tmp_path: Path, agent_module, caplog) -> bool:
+    def test_dry_run_mode_logged(self, tmp_path: Path, agent_module, caplog) -> None:
         """Verify dry-run mode is logged when enabled."""
         (tmp_path / ".git").mkdir()
         with caplog.at_level(logging.INFO):
@@ -66,7 +66,7 @@ class TestDryRunMode:
 class TestSelectiveAgentExecution:
     """Test selective agent execution (--only-agents)."""
 
-    def test_selective_agents_stored_as_set(self, tmp_path: Path, agent_module) -> str:
+    def test_selective_agents_stored_as_set(self, tmp_path: Path, agent_module) -> None:
         """Verify selective agents are stored as a set."""
         (tmp_path / ".git").mkdir()
         agents: List[str] = ['coder', 'tests']
@@ -77,13 +77,13 @@ class TestSelectiveAgentExecution:
         assert isinstance(agent.selective_agents, set)
         assert agent.selective_agents == {'coder', 'tests'}
 
-    def test_selective_agents_none_by_default(self, tmp_path: Path, agent_module) -> bool:
+    def test_selective_agents_none_by_default(self, tmp_path: Path, agent_module) -> None:
         """Verify selective_agents is empty set by default."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
         assert agent.selective_agents == set()
 
-    def test_should_execute_agent_returns_true_when_no_filter(self, tmp_path: Path, agent_module) -> str:
+    def test_should_execute_agent_returns_true_when_no_filter(self, tmp_path: Path, agent_module) -> None:
         """Verify all agents execute when no selective filter applied."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
@@ -92,7 +92,7 @@ class TestSelectiveAgentExecution:
         assert agent.should_execute_agent('tests') is True
         assert agent.should_execute_agent('documentation') is True
 
-    def test_should_execute_agent_respects_filter(self, tmp_path: Path, agent_module) -> bool:
+    def test_should_execute_agent_respects_filter(self, tmp_path: Path, agent_module) -> None:
         """Verify selective filter is respected."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(
@@ -104,7 +104,7 @@ class TestSelectiveAgentExecution:
         assert agent.should_execute_agent('tests') is True
         assert agent.should_execute_agent('documentation') is False
 
-    def test_should_execute_agent_case_insensitive(self, tmp_path: Path, agent_module) -> str:
+    def test_should_execute_agent_case_insensitive(self, tmp_path: Path, agent_module) -> None:
         """Verify agent name matching is case-insensitive."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(
@@ -121,7 +121,7 @@ class TestSelectiveAgentExecution:
 class TestConfigurableTimeouts:
     """Test per-agent timeout configuration."""
 
-    def test_timeout_per_agent_stored(self, tmp_path: Path, agent_module) -> bool:
+    def test_timeout_per_agent_stored(self, tmp_path: Path, agent_module) -> None:
         """Verify timeout_per_agent dict is stored correctly."""
         (tmp_path / ".git").mkdir()
         timeouts: Dict[str, int] = {'coder': 60, 'tests': 300}
@@ -131,13 +131,13 @@ class TestConfigurableTimeouts:
         )
         assert agent.timeout_per_agent == timeouts
 
-    def test_timeout_per_agent_defaults_to_empty_dict(self, tmp_path: Path, agent_module) -> str:
+    def test_timeout_per_agent_defaults_to_empty_dict(self, tmp_path: Path, agent_module) -> None:
         """Verify timeout_per_agent defaults to empty dict."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
         assert agent.timeout_per_agent == {}
 
-    def test_get_timeout_for_agent_returns_configured_value(self, tmp_path: Path, agent_module) -> bool:
+    def test_get_timeout_for_agent_returns_configured_value(self, tmp_path: Path, agent_module) -> None:
         """Verify configured timeout is returned."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(
@@ -146,7 +146,7 @@ class TestConfigurableTimeouts:
         )
         assert agent.get_timeout_for_agent('coder') == 60
 
-    def test_get_timeout_for_agent_returns_default(self, tmp_path: Path, agent_module) -> str:
+    def test_get_timeout_for_agent_returns_default(self, tmp_path: Path, agent_module) -> None:
         """Verify default timeout returned for unconfigured agent."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(
@@ -160,7 +160,7 @@ class TestConfigurableTimeouts:
 class TestMetricsTracking:
     """Test metrics collection and reporting."""
 
-    def test_metrics_initialized(self, tmp_path: Path, agent_module) -> bool:
+    def test_metrics_initialized(self, tmp_path: Path, agent_module) -> None:
         """Verify metrics dict is initialized."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
@@ -170,7 +170,7 @@ class TestMetricsTracking:
         assert 'agents_applied' in agent.metrics
         assert 'start_time' in agent.metrics
 
-    def test_metrics_counters_start_at_zero(self, tmp_path: Path, agent_module) -> str:
+    def test_metrics_counters_start_at_zero(self, tmp_path: Path, agent_module) -> None:
         """Verify metrics counters initialized to zero."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
@@ -179,7 +179,7 @@ class TestMetricsTracking:
         assert agent.metrics['files_modified'] == 0
         assert agent.metrics['agents_applied'] == {}
 
-    def test_print_metrics_summary_sets_end_time(self, tmp_path: Path, agent_module, capsys) -> bool:
+    def test_print_metrics_summary_sets_end_time(self, tmp_path: Path, agent_module, capsys) -> None:
         """Verify print_metrics_summary sets end_time."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
@@ -196,7 +196,7 @@ class TestMetricsTracking:
 class TestFileSnapshots:
     """Test file snapshot creation and restoration."""
 
-    def test_create_file_snapshot_returns_snapshot_id(self, tmp_path: Path, agent_module) -> str:
+    def test_create_file_snapshot_returns_snapshot_id(self, tmp_path: Path, agent_module) -> None:
         """Verify snapshot creation returns a snapshot ID."""
         (tmp_path / ".git").mkdir()
         file_path: Path = tmp_path / "test.py"
@@ -208,7 +208,7 @@ class TestFileSnapshots:
         assert snapshot_id is not None
         assert isinstance(snapshot_id, str)
 
-    def test_create_file_snapshot_creates_snapshot_directory(self, tmp_path: Path, agent_module) -> bool:
+    def test_create_file_snapshot_creates_snapshot_directory(self, tmp_path: Path, agent_module) -> None:
         """Verify .agent_snapshots directory is created."""
         (tmp_path / ".git").mkdir()
         file_path: Path = tmp_path / "test.py"
@@ -238,7 +238,7 @@ class TestFileSnapshots:
 class TestCascadingCodeignore:
     """Test cascading .codeignore pattern loading."""
 
-    def test_load_cascading_codeignore_loads_root_patterns(self, tmp_path: Path, agent_module) -> bool:
+    def test_load_cascading_codeignore_loads_root_patterns(self, tmp_path: Path, agent_module) -> None:
         """Verify root .codeignore patterns are loaded."""
         (tmp_path / ".git").mkdir()
         (tmp_path / ".codeignore").write_text("*.log\n__pycache__/\n", encoding="utf-8")
@@ -274,7 +274,7 @@ class TestCascadingCodeignore:
 class TestAsyncFileProcessing:
     """Test async file processing."""
 
-    def test_enable_async_flag(self, tmp_path: Path, agent_module) -> bool:
+    def test_enable_async_flag(self, tmp_path: Path, agent_module) -> None:
         """Verify enable_async flag can be set."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path), enable_async=True)
@@ -285,14 +285,14 @@ class TestAsyncFileProcessing:
 class TestMultiprocessingExecution:
     """Test multiprocessing file processing."""
 
-    def test_process_files_multiprocessing_exists(self, tmp_path: Path, agent_module) -> str:
+    def test_process_files_multiprocessing_exists(self, tmp_path: Path, agent_module) -> None:
         """Verify process_files_multiprocessing method exists."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
         assert hasattr(agent, 'process_files_multiprocessing')
         assert callable(agent.process_files_multiprocessing)
 
-    def test_multiprocessing_flag(self, tmp_path: Path, agent_module) -> bool:
+    def test_multiprocessing_flag(self, tmp_path: Path, agent_module) -> None:
         """Verify multiprocessing flag can be set."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path), enable_multiprocessing=True)
@@ -303,7 +303,7 @@ class TestMultiprocessingExecution:
 class TestWebhookSupport:
     """Test webhook functionality."""
 
-    def test_register_webhook(self, tmp_path: Path, agent_module) -> str:
+    def test_register_webhook(self, tmp_path: Path, agent_module) -> None:
         """Verify webhook registration works."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
@@ -311,7 +311,7 @@ class TestWebhookSupport:
         agent.register_webhook("https://example.com / webhook")
         assert "https://example.com / webhook" in agent.webhooks
 
-    def test_send_webhook_notification_exists(self, tmp_path: Path, agent_module) -> bool:
+    def test_send_webhook_notification_exists(self, tmp_path: Path, agent_module) -> None:
         """Verify send_webhook_notification method exists."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
@@ -322,7 +322,7 @@ class TestWebhookSupport:
 class TestCallbackSupport:
     """Test callback functionality."""
 
-    def test_register_callback(self, tmp_path: Path, agent_module) -> str:
+    def test_register_callback(self, tmp_path: Path, agent_module) -> None:
         """Verify callback registration works."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
@@ -333,7 +333,7 @@ class TestCallbackSupport:
         agent.register_callback(my_callback)
         assert len(agent.callbacks) > 0
 
-    def test_execute_callbacks_exists(self, tmp_path: Path, agent_module) -> str:
+    def test_execute_callbacks_exists(self, tmp_path: Path, agent_module) -> None:
         """Verify execute_callbacks method exists."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
@@ -348,7 +348,7 @@ class TestCallbackSupport:
 class TestCircuitBreaker:
     """Tests for CircuitBreaker class."""
 
-    def test_circuit_breaker_initialization(self, agent_module) -> bool:
+    def test_circuit_breaker_initialization(self, agent_module) -> None:
         """Test circuit breaker initialization with defaults."""
         cb = agent_module.CircuitBreaker("test_backend")
 
@@ -356,7 +356,7 @@ class TestCircuitBreaker:
         assert cb.state == "CLOSED"
         assert cb.failure_count == 0
 
-    def test_circuit_breaker_custom_parameters(self, agent_module) -> str:
+    def test_circuit_breaker_custom_parameters(self, agent_module) -> None:
         """Test circuit breaker with custom parameters."""
         cb = agent_module.CircuitBreaker(
             "service",
@@ -369,7 +369,7 @@ class TestCircuitBreaker:
         assert cb.recovery_timeout == 30
         assert cb.backoff_multiplier == 1.5
 
-    def test_circuit_breaker_success_call(self, agent_module) -> bool:
+    def test_circuit_breaker_success_call(self, agent_module) -> None:
         """Test successful call through circuit breaker."""
         cb = agent_module.CircuitBreaker("test")
 
@@ -382,7 +382,7 @@ class TestCircuitBreaker:
         assert cb.state == "CLOSED"
         assert cb.failure_count == 0
 
-    def test_circuit_breaker_failure_call(self, agent_module) -> bool:
+    def test_circuit_breaker_failure_call(self, agent_module) -> None:
         """Test failed call through circuit breaker."""
         cb = agent_module.CircuitBreaker("test", failure_threshold=3)
 
@@ -395,7 +395,7 @@ class TestCircuitBreaker:
         assert cb.failure_count == 1
         assert cb.state == "CLOSED"
 
-    def test_circuit_breaker_opens_after_threshold(self, agent_module) -> bool:
+    def test_circuit_breaker_opens_after_threshold(self, agent_module) -> None:
         """Test circuit opens after failure threshold exceeded."""
         cb = agent_module.CircuitBreaker("test", failure_threshold=2)
 
@@ -412,7 +412,7 @@ class TestCircuitBreaker:
             cb.call(failing_func)
         assert cb.state == "OPEN"
 
-    def test_circuit_breaker_fast_fail_when_open(self, agent_module) -> str:
+    def test_circuit_breaker_fast_fail_when_open(self, agent_module) -> None:
         """Test circuit fails immediately when open."""
         cb = agent_module.CircuitBreaker("test", failure_threshold=1)
 
@@ -437,7 +437,7 @@ class TestCircuitBreaker:
 
         assert call_count == 0  # Function never called
 
-    def test_circuit_breaker_recovery(self, agent_module) -> str:
+    def test_circuit_breaker_recovery(self, agent_module) -> None:
         """Test circuit breaker recovery from OPEN to CLOSED."""
         cb = agent_module.CircuitBreaker("test", failure_threshold=1, recovery_timeout=1)
 
@@ -469,7 +469,7 @@ class TestCircuitBreaker:
 class TestReportGeneration:
     """Tests for improvement report generation."""
 
-    def test_generate_improvement_report(self, tmp_path: Path, agent_module) -> bool:
+    def test_generate_improvement_report(self, tmp_path: Path, agent_module) -> None:
         """Test basic improvement report generation."""
         agent = agent_module.Agent(repo_root=str(tmp_path))
         agent.metrics = {
@@ -487,7 +487,7 @@ class TestReportGeneration:
         assert 'coder' in report['agents']
         assert report['summary']['modification_rate'] == 50.0
 
-    def test_generate_improvement_report_includes_mode_info(self, tmp_path: Path, agent_module) -> bool:
+    def test_generate_improvement_report_includes_mode_info(self, tmp_path: Path, agent_module) -> None:
         """Test report includes execution mode information."""
         agent = agent_module.Agent(repo_root=str(tmp_path), dry_run=True, enable_async=True)
         agent.metrics = {
@@ -508,7 +508,7 @@ class TestReportGeneration:
 class TestCostAnalysis:
     """Tests for cost analysis."""
 
-    def test_cost_analysis_basic(self, tmp_path: Path, agent_module) -> bool:
+    def test_cost_analysis_basic(self, tmp_path: Path, agent_module) -> None:
         """Test basic cost analysis."""
         agent = agent_module.Agent(repo_root=str(tmp_path))
         agent.metrics = {
@@ -524,7 +524,7 @@ class TestCostAnalysis:
         assert analysis['files_processed'] == 10
         assert analysis['total_agent_runs'] == 15
 
-    def test_cost_analysis_different_backend(self, tmp_path: Path, agent_module) -> bool:
+    def test_cost_analysis_different_backend(self, tmp_path: Path, agent_module) -> None:
         """Test cost analysis with different backend pricing."""
         agent = agent_module.Agent(repo_root=str(tmp_path))
         agent.metrics = {
@@ -544,7 +544,7 @@ class TestCostAnalysis:
 class TestSnapshotCleanup:
     """Tests for snapshot cleanup functionality."""
 
-    def test_cleanup_old_snapshots_no_directory(self, tmp_path: Path, agent_module) -> bool:
+    def test_cleanup_old_snapshots_no_directory(self, tmp_path: Path, agent_module) -> None:
         """Test cleanup handles missing snapshot directory gracefully."""
         agent = agent_module.Agent(repo_root=str(tmp_path))
 
@@ -553,7 +553,7 @@ class TestSnapshotCleanup:
 
         assert cleaned == 0
 
-    def test_cleanup_old_snapshots_empty_directory(self, tmp_path: Path, agent_module) -> bool:
+    def test_cleanup_old_snapshots_empty_directory(self, tmp_path: Path, agent_module) -> None:
         """Test cleanup with empty snapshot directory."""
         agent = agent_module.Agent(repo_root=str(tmp_path))
         agent.repo_root = tmp_path
@@ -565,7 +565,7 @@ class TestSnapshotCleanup:
 
         assert cleaned == 0
 
-    def test_cleanup_old_snapshots_removes_old_files(self, tmp_path: Path, agent_module) -> bool:
+    def test_cleanup_old_snapshots_removes_old_files(self, tmp_path: Path, agent_module) -> None:
         """Test cleanup removes snapshots older than threshold."""
         agent = agent_module.Agent(repo_root=str(tmp_path))
         agent.repo_root = tmp_path
@@ -599,7 +599,7 @@ class TestSnapshotCleanup:
 class TestAgentExecutionStateEnum:
     """Test AgentExecutionState enum."""
 
-    def test_enum_values_exist(self, agent_module) -> bool:
+    def test_enum_values_exist(self, agent_module) -> None:
         """Verify all execution state values exist."""
         states = agent_module.AgentExecutionState
         assert states.PENDING is not None
@@ -609,7 +609,7 @@ class TestAgentExecutionStateEnum:
         assert states.CANCELLED is not None
         assert states.PAUSED is not None
 
-    def test_enum_values_are_unique(self, agent_module) -> bool:
+    def test_enum_values_are_unique(self, agent_module) -> None:
         """Verify enum values are unique."""
         states = agent_module.AgentExecutionState
         values = [s.value for s in states]
@@ -620,7 +620,7 @@ class TestAgentExecutionStateEnum:
 class TestRateLimitStrategyEnum:
     """Test RateLimitStrategy enum."""
 
-    def test_all_strategies_exist(self, agent_module) -> bool:
+    def test_all_strategies_exist(self, agent_module) -> None:
         """Verify all rate limit strategies exist."""
         strategies = agent_module.RateLimitStrategy
         assert strategies.FIXED_WINDOW is not None
@@ -633,7 +633,7 @@ class TestRateLimitStrategyEnum:
 class TestConfigFormatEnum:
     """Test ConfigFormat enum."""
 
-    def test_all_formats_exist(self, agent_module) -> bool:
+    def test_all_formats_exist(self, agent_module) -> None:
         """Verify all config formats exist."""
         formats = agent_module.ConfigFormat
         assert formats.YAML is not None
@@ -646,7 +646,7 @@ class TestConfigFormatEnum:
 class TestLockTypeEnum:
     """Test LockType enum."""
 
-    def test_all_lock_types_exist(self, agent_module) -> bool:
+    def test_all_lock_types_exist(self, agent_module) -> None:
         """Verify all lock types exist."""
         locks = agent_module.LockType
         assert locks.SHARED is not None
@@ -658,7 +658,7 @@ class TestLockTypeEnum:
 class TestDiffOutputFormatEnum:
     """Test DiffOutputFormat enum."""
 
-    def test_all_formats_exist(self, agent_module) -> bool:
+    def test_all_formats_exist(self, agent_module) -> None:
         """Verify all diff output formats exist."""
         formats = agent_module.DiffOutputFormat
         assert formats.UNIFIED is not None
@@ -671,7 +671,7 @@ class TestDiffOutputFormatEnum:
 class TestAgentPriorityEnum:
     """Test AgentPriority enum."""
 
-    def test_all_priorities_exist(self, agent_module) -> bool:
+    def test_all_priorities_exist(self, agent_module) -> None:
         """Verify all priority levels exist."""
         priorities = agent_module.AgentPriority
         assert priorities.CRITICAL is not None
@@ -680,7 +680,7 @@ class TestAgentPriorityEnum:
         assert priorities.LOW is not None
         assert priorities.BACKGROUND is not None
 
-    def test_priority_ordering(self, agent_module) -> bool:
+    def test_priority_ordering(self, agent_module) -> None:
         """Verify priority ordering is correct."""
         priorities = agent_module.AgentPriority
         assert priorities.CRITICAL.value < priorities.HIGH.value
@@ -693,7 +693,7 @@ class TestAgentPriorityEnum:
 class TestHealthStatusEnum:
     """Test HealthStatus enum."""
 
-    def test_all_statuses_exist(self, agent_module) -> bool:
+    def test_all_statuses_exist(self, agent_module) -> None:
         """Verify all health statuses exist."""
         statuses = agent_module.HealthStatus
         assert statuses.HEALTHY is not None
@@ -706,7 +706,7 @@ class TestHealthStatusEnum:
 class TestRateLimitConfigDataclass:
     """Test RateLimitConfig dataclass."""
 
-    def test_default_values(self, agent_module) -> bool:
+    def test_default_values(self, agent_module) -> None:
         """Verify default values are set correctly."""
         config = agent_module.RateLimitConfig()
         assert config.requests_per_second == 10.0
@@ -714,7 +714,7 @@ class TestRateLimitConfigDataclass:
         assert config.burst_size == 10
         assert config.cooldown_seconds == 1.0
 
-    def test_custom_values(self, agent_module) -> bool:
+    def test_custom_values(self, agent_module) -> None:
         """Verify custom values can be set."""
         config = agent_module.RateLimitConfig(
             requests_per_second=5.0,
@@ -732,7 +732,7 @@ class TestRateLimitConfigDataclass:
 class TestAgentPluginConfigDataclass:
     """Test AgentPluginConfig dataclass."""
 
-    def test_required_fields(self, agent_module) -> bool:
+    def test_required_fields(self, agent_module) -> None:
         """Verify required fields are enforced."""
         config = agent_module.AgentPluginConfig(
             name="test_plugin",
@@ -743,7 +743,7 @@ class TestAgentPluginConfigDataclass:
         assert config.entry_point == "run"
         assert config.enabled is True
 
-    def test_custom_priority(self, agent_module) -> bool:
+    def test_custom_priority(self, agent_module) -> None:
         """Verify custom priority can be set."""
         config = agent_module.AgentPluginConfig(
             name="critical_plugin",
@@ -757,7 +757,7 @@ class TestAgentPluginConfigDataclass:
 class TestFileLockDataclass:
     """Test FileLock dataclass."""
 
-    def test_file_lock_creation(self, tmp_path: Path, agent_module) -> bool:
+    def test_file_lock_creation(self, tmp_path: Path, agent_module) -> None:
         """Verify FileLock can be created."""
         lock = agent_module.FileLock(
             file_path=tmp_path / "test.py",
@@ -775,7 +775,7 @@ class TestFileLockDataclass:
 class TestDiffResultDataclass:
     """Test DiffResult dataclass."""
 
-    def test_diff_result_creation(self, tmp_path: Path, agent_module) -> bool:
+    def test_diff_result_creation(self, tmp_path: Path, agent_module) -> None:
         """Verify DiffResult can be created."""
         result = agent_module.DiffResult(
             file_path=tmp_path / "test.py",
@@ -793,7 +793,7 @@ class TestDiffResultDataclass:
 class TestIncrementalStateDataclass:
     """Test IncrementalState dataclass."""
 
-    def test_default_values(self, agent_module) -> bool:
+    def test_default_values(self, agent_module) -> None:
         """Verify default values are set correctly."""
         state = agent_module.IncrementalState()
         assert state.last_run_timestamp == 0.0
@@ -806,7 +806,7 @@ class TestIncrementalStateDataclass:
 class TestAgentHealthCheckDataclass:
     """Test AgentHealthCheck dataclass."""
 
-    def test_health_check_creation(self, agent_module) -> bool:
+    def test_health_check_creation(self, agent_module) -> None:
         """Verify AgentHealthCheck can be created."""
         check = agent_module.AgentHealthCheck(
             agent_name="coder",
@@ -823,7 +823,7 @@ class TestAgentHealthCheckDataclass:
 class TestShutdownStateDataclass:
     """Test ShutdownState dataclass."""
 
-    def test_default_values(self, agent_module) -> bool:
+    def test_default_values(self, agent_module) -> None:
         """Verify default values are set correctly."""
         state = agent_module.ShutdownState()
         assert state.shutdown_requested is False
@@ -836,19 +836,19 @@ class TestShutdownStateDataclass:
 class TestRateLimiter:
     """Test RateLimiter class."""
 
-    def test_rate_limiter_creation(self, agent_module) -> bool:
+    def test_rate_limiter_creation(self, agent_module) -> None:
         """Verify RateLimiter can be created."""
         limiter = agent_module.RateLimiter()
         assert limiter.config is not None
         assert limiter.tokens > 0
 
-    def test_acquire_token(self, agent_module) -> bool:
+    def test_acquire_token(self, agent_module) -> None:
         """Verify token can be acquired."""
         limiter = agent_module.RateLimiter()
         result = limiter.acquire(timeout=1.0)
         assert result is True
 
-    def test_get_stats(self, agent_module) -> bool:
+    def test_get_stats(self, agent_module) -> None:
         """Verify stats can be retrieved."""
         limiter = agent_module.RateLimiter()
         stats = limiter.get_stats()
@@ -857,7 +857,7 @@ class TestRateLimiter:
         assert 'requests_per_second' in stats
         assert 'burst_size' in stats
 
-    def test_custom_config(self, agent_module) -> bool:
+    def test_custom_config(self, agent_module) -> None:
         """Verify custom config is applied."""
         config = agent_module.RateLimitConfig(
             requests_per_second=1.0,
@@ -872,13 +872,13 @@ class TestRateLimiter:
 class TestFileLockManager:
     """Test FileLockManager class."""
 
-    def test_lock_manager_creation(self, agent_module) -> bool:
+    def test_lock_manager_creation(self, agent_module) -> None:
         """Verify FileLockManager can be created."""
         manager = agent_module.FileLockManager()
         assert manager.lock_timeout == 300.0
         assert manager.locks == {}
 
-    def test_acquire_and_release_lock(self, tmp_path: Path, agent_module) -> bool:
+    def test_acquire_and_release_lock(self, tmp_path: Path, agent_module) -> None:
         """Verify lock can be acquired and released."""
         manager = agent_module.FileLockManager()
         test_file: Path = tmp_path / "test.py"
@@ -891,7 +891,7 @@ class TestFileLockManager:
         result = manager.release_lock(test_file)
         assert result is True
 
-    def test_shared_lock_allows_multiple(self, tmp_path: Path, agent_module) -> bool:
+    def test_shared_lock_allows_multiple(self, tmp_path: Path, agent_module) -> None:
         """Verify shared locks can coexist."""
         manager = agent_module.FileLockManager()
         test_file: Path = tmp_path / "test.py"
@@ -908,13 +908,13 @@ class TestFileLockManager:
 class TestDiffGenerator:
     """Test DiffGenerator class."""
 
-    def test_diff_generator_creation(self, agent_module) -> bool:
+    def test_diff_generator_creation(self, agent_module) -> None:
         """Verify DiffGenerator can be created."""
         generator = agent_module.DiffGenerator()
         assert generator.output_format == agent_module.DiffOutputFormat.UNIFIED
         assert generator.context_lines == 3
 
-    def test_generate_diff(self, tmp_path: Path, agent_module) -> bool:
+    def test_generate_diff(self, tmp_path: Path, agent_module) -> None:
         """Verify diff can be generated."""
         generator = agent_module.DiffGenerator()
         test_file: Path = tmp_path / "test.py"
@@ -929,7 +929,7 @@ class TestDiffGenerator:
         assert result.additions > 0 or result.deletions > 0
         assert len(result.diff_lines) > 0
 
-    def test_format_diff_unified(self, tmp_path: Path, agent_module) -> bool:
+    def test_format_diff_unified(self, tmp_path: Path, agent_module) -> None:
         """Verify unified diff format works."""
         generator = agent_module.DiffGenerator()
         test_file: Path = tmp_path / "test.py"
@@ -943,7 +943,7 @@ class TestDiffGenerator:
         formatted = generator.format_diff(diff_result)
         assert isinstance(formatted, str)
 
-    def test_format_diff_html(self, tmp_path: Path, agent_module) -> bool:
+    def test_format_diff_html(self, tmp_path: Path, agent_module) -> None:
         """Verify HTML diff format works."""
         generator = agent_module.DiffGenerator()
         test_file: Path = tmp_path / "test.py"
@@ -965,13 +965,13 @@ class TestDiffGenerator:
 class TestIncrementalProcessor:
     """Test IncrementalProcessor class."""
 
-    def test_processor_creation(self, tmp_path: Path, agent_module) -> bool:
+    def test_processor_creation(self, tmp_path: Path, agent_module) -> None:
         """Verify IncrementalProcessor can be created."""
         processor = agent_module.IncrementalProcessor(tmp_path)
         assert processor.repo_root == tmp_path
         assert processor.state is not None
 
-    def test_get_changed_files_all_new(self, tmp_path: Path, agent_module) -> bool:
+    def test_get_changed_files_all_new(self, tmp_path: Path, agent_module) -> None:
         """Verify all files are returned when none processed."""
         processor = agent_module.IncrementalProcessor(tmp_path)
 
@@ -983,7 +983,7 @@ class TestIncrementalProcessor:
         changed = processor.get_changed_files([file1, file2])
         assert len(changed) == 2
 
-    def test_mark_processed(self, tmp_path: Path, agent_module) -> bool:
+    def test_mark_processed(self, tmp_path: Path, agent_module) -> None:
         """Verify file can be marked as processed."""
         processor = agent_module.IncrementalProcessor(tmp_path)
         test_file: Path = tmp_path / "test.py"
@@ -994,7 +994,7 @@ class TestIncrementalProcessor:
         assert str(test_file) in processor.state.processed_files
         assert str(test_file) in processor.state.file_hashes
 
-    def test_reset_state(self, tmp_path: Path, agent_module) -> bool:
+    def test_reset_state(self, tmp_path: Path, agent_module) -> None:
         """Verify state can be reset."""
         processor = agent_module.IncrementalProcessor(tmp_path)
         test_file: Path = tmp_path / "test.py"
@@ -1011,18 +1011,18 @@ class TestIncrementalProcessor:
 class TestGracefulShutdown:
     """Test GracefulShutdown class."""
 
-    def test_shutdown_creation(self, tmp_path: Path, agent_module) -> bool:
+    def test_shutdown_creation(self, tmp_path: Path, agent_module) -> None:
         """Verify GracefulShutdown can be created."""
         handler = agent_module.GracefulShutdown(tmp_path)
         assert handler.repo_root == tmp_path
         assert handler.state.shutdown_requested is False
 
-    def test_should_continue_initially(self, tmp_path: Path, agent_module) -> bool:
+    def test_should_continue_initially(self, tmp_path: Path, agent_module) -> None:
         """Verify should_continue returns True initially."""
         handler = agent_module.GracefulShutdown(tmp_path)
         assert handler.should_continue() is True
 
-    def test_set_current_file(self, tmp_path: Path, agent_module) -> bool:
+    def test_set_current_file(self, tmp_path: Path, agent_module) -> None:
         """Verify current file can be set."""
         handler = agent_module.GracefulShutdown(tmp_path)
         test_file: Path = tmp_path / "test.py"
@@ -1033,7 +1033,7 @@ class TestGracefulShutdown:
         handler.set_current_file(None)
         assert handler.state.current_file is None
 
-    def test_mark_completed(self, tmp_path: Path, agent_module) -> bool:
+    def test_mark_completed(self, tmp_path: Path, agent_module) -> None:
         """Verify file can be marked as completed."""
         handler = agent_module.GracefulShutdown(tmp_path)
         test_file: Path = tmp_path / "test.py"
@@ -1041,7 +1041,7 @@ class TestGracefulShutdown:
         handler.mark_completed(test_file)
         assert str(test_file) in handler.state.completed_files
 
-    def test_set_pending_files(self, tmp_path: Path, agent_module) -> bool:
+    def test_set_pending_files(self, tmp_path: Path, agent_module) -> None:
         """Verify pending files can be set."""
         handler = agent_module.GracefulShutdown(tmp_path)
         files: List[Path] = [tmp_path / "test1.py", tmp_path / "test2.py"]
@@ -1054,24 +1054,24 @@ class TestGracefulShutdown:
 class TestConfigLoader:
     """Test ConfigLoader class."""
 
-    def test_loader_creation_without_path(self, agent_module) -> bool:
+    def test_loader_creation_without_path(self, agent_module) -> None:
         """Verify ConfigLoader can be created without path."""
         loader = agent_module.ConfigLoader()
         assert loader.config_path is None
 
-    def test_loader_creation_with_json_path(self, tmp_path: Path, agent_module) -> bool:
+    def test_loader_creation_with_json_path(self, tmp_path: Path, agent_module) -> None:
         """Verify ConfigLoader detects JSON format."""
         config_path: Path = tmp_path / "config.json"
         loader = agent_module.ConfigLoader(config_path)
         assert loader.format == agent_module.ConfigFormat.JSON
 
-    def test_loader_creation_with_yaml_path(self, tmp_path: Path, agent_module) -> bool:
+    def test_loader_creation_with_yaml_path(self, tmp_path: Path, agent_module) -> None:
         """Verify ConfigLoader detects YAML format."""
         config_path: Path = tmp_path / "config.yaml"
         loader = agent_module.ConfigLoader(config_path)
         assert loader.format == agent_module.ConfigFormat.YAML
 
-    def test_load_json_config(self, tmp_path: Path, agent_module) -> bool:
+    def test_load_json_config(self, tmp_path: Path, agent_module) -> None:
         """Verify JSON config can be loaded."""
         config_path: Path = tmp_path / "config.json"
         config_path.write_text('{"repo_root": ".", "dry_run": true, "loop": 3}')
@@ -1082,7 +1082,7 @@ class TestConfigLoader:
         assert config.dry_run is True
         assert config.loop == 3
 
-    def test_find_config_file(self, tmp_path: Path, agent_module) -> bool:
+    def test_find_config_file(self, tmp_path: Path, agent_module) -> None:
         """Verify config file can be found."""
         config_path: Path = tmp_path / "agent.json"
         config_path.write_text('{}')
@@ -1090,7 +1090,7 @@ class TestConfigLoader:
         found = agent_module.ConfigLoader.find_config_file(tmp_path)
         assert found == config_path
 
-    def test_find_config_file_not_found(self, tmp_path: Path, agent_module) -> bool:
+    def test_find_config_file_not_found(self, tmp_path: Path, agent_module) -> None:
         """Verify None returned when no config found."""
         found = agent_module.ConfigLoader.find_config_file(tmp_path)
         assert found is None
@@ -1100,13 +1100,13 @@ class TestConfigLoader:
 class TestHealthChecker:
     """Test HealthChecker class."""
 
-    def test_checker_creation(self, tmp_path: Path, agent_module) -> bool:
+    def test_checker_creation(self, tmp_path: Path, agent_module) -> None:
         """Verify HealthChecker can be created."""
         checker = agent_module.HealthChecker(tmp_path)
         assert checker.repo_root == tmp_path
         assert checker.results == {}
 
-    def test_check_python(self, tmp_path: Path, agent_module) -> bool:
+    def test_check_python(self, tmp_path: Path, agent_module) -> None:
         """Verify Python check returns healthy."""
         checker = agent_module.HealthChecker(tmp_path)
         result = checker.check_python()
@@ -1115,7 +1115,7 @@ class TestHealthChecker:
         assert result.status == agent_module.HealthStatus.HEALTHY
         assert 'version' in result.details
 
-    def test_check_git(self, tmp_path: Path, agent_module) -> bool:
+    def test_check_git(self, tmp_path: Path, agent_module) -> None:
         """Verify git check runs."""
         checker = agent_module.HealthChecker(tmp_path)
         result = checker.check_git()
@@ -1127,7 +1127,7 @@ class TestHealthChecker:
             agent_module.HealthStatus.UNHEALTHY
         ]
 
-    def test_run_all_checks(self, tmp_path: Path, agent_module) -> bool:
+    def test_run_all_checks(self, tmp_path: Path, agent_module) -> None:
         """Verify all checks can be run."""
         checker = agent_module.HealthChecker(tmp_path)
         results = checker.run_all_checks()
@@ -1142,7 +1142,7 @@ class TestHealthChecker:
 class TestAgentPluginSystem:
     """Test Agent plugin system methods."""
 
-    def test_register_plugin(self, tmp_path: Path, agent_module) -> bool:
+    def test_register_plugin(self, tmp_path: Path, agent_module) -> None:
         """Verify plugin can be registered."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
@@ -1157,7 +1157,7 @@ class TestAgentPluginSystem:
 
         assert "test_plugin" in agent.plugins
 
-    def test_unregister_plugin(self, tmp_path: Path, agent_module) -> bool:
+    def test_unregister_plugin(self, tmp_path: Path, agent_module) -> None:
         """Verify plugin can be unregistered."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
@@ -1173,7 +1173,7 @@ class TestAgentPluginSystem:
         assert result is True
         assert "test_plugin" not in agent.plugins
 
-    def test_get_plugin(self, tmp_path: Path, agent_module) -> bool:
+    def test_get_plugin(self, tmp_path: Path, agent_module) -> None:
         """Verify plugin can be retrieved."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
@@ -2096,7 +2096,7 @@ class TestAgentProfiling:
 
         start: float = time.perf_counter()
         # Simulate work
-        _: List[int] = [i * 2 for i: int in range(100)]
+        _: List[int] = [i * 2 for i in range(100)]
         end: float = time.perf_counter()
 
         assert end >= start
@@ -2172,10 +2172,10 @@ class TestAgentConcurrentExecution:
         """Test concurrent task concept."""
         from concurrent.futures import ThreadPoolExecutor
 
-        def task(x):
+        def task(x: int) -> int:
             return x * 2
 
-        with ThreadPoolExecutor(max_workers=2) as executor: ThreadPoolExecutor:
+        with ThreadPoolExecutor(max_workers=2) as executor:
             results = list(executor.map(task, [1, 2, 3]))
 
         assert results == [2, 4, 6]

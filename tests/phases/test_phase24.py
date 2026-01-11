@@ -4,7 +4,7 @@ sys.path.append(str(Path(__file__).resolve().parents[2] / "src"))
 
 from src.infrastructure.fleet.FleetManager import FleetManager
 
-def test_phase24():
+def test_phase24() -> None:
     print("--- Phase 24 Verification: Swarm Immortality & Temporal Sharding ---")
     workspace_root = Path(__file__).resolve().parents[2]
     fleet = FleetManager(str(workspace_root))

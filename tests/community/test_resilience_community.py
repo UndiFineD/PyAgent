@@ -8,7 +8,7 @@ sys.path.append(str(Path('.').resolve()))
 
 from src.infrastructure.fleet.AgentRegistry import AgentRegistry
 
-def test_broken_community_plugin():
+def test_broken_community_plugin() -> None:
     print(f"--- Running Broken Plugin Resilience Test ---")
     workspace = Path('.').resolve()
     agents = AgentRegistry.get_agent_map(workspace)

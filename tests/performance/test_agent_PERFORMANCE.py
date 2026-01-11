@@ -41,7 +41,7 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
 class TestBenchmarking:
     """Tests for execution benchmarking."""
 
-    def test_benchmark_execution(self, tmp_path: Path, agent_module):
+    def test_benchmark_execution(self, tmp_path: Path, agent_module) -> None:
         """Test execution benchmarking."""
         agent = agent_module.Agent(repo_root=str(tmp_path))
         agent.metrics = {

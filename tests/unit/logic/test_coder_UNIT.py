@@ -672,7 +672,7 @@ class TestCodeSplitting:
         with agent_dir_on_path():
             mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
-        code: str = "\n".join([f"    line{i} = {i}" for i: int in range(50)])
+        code: str = "\n".join([f"    line{i} = {i}" for i in range(50)])
         code: str = f"def large_function():\n{code}\n    return None"
         target: Path = tmp_path / "test.py"
         target.write_text(code)
@@ -1061,7 +1061,7 @@ class OldStyle:
 class TestSyntaxValidation(unittest.TestCase):
     """Tests for Python syntax validation."""
 
-    def test_validate_valid_python_syntax(self) -> str:
+    def test_validate_valid_python_syntax(self) -> None:
         """Test validation of syntactically correct code."""
         code = """def hello(name) -> str:
     return f"Hello, {name}!"
@@ -1074,7 +1074,7 @@ class TestSyntaxValidation(unittest.TestCase):
             is_valid = False
         assert is_valid
 
-    def test_detect_syntax_error(self) -> str:
+    def test_detect_syntax_error(self) -> None:
         """Test detection of syntax errors."""
         code = "def hello(name)\n    return name"
         try:
@@ -1084,7 +1084,7 @@ class TestSyntaxValidation(unittest.TestCase):
             is_valid = False
         assert not is_valid
 
-    def test_validate_complex_syntax(self) -> str:
+    def test_validate_complex_syntax(self) -> None:
         """Test validation with complex Python features."""
         code = """
 @decorator
@@ -1099,7 +1099,7 @@ async def process_data(items: list[str]) -> dict[str, int]:
             is_valid = False
         assert is_valid
 
-    def test_detect_indentation_error(self) -> str:
+    def test_detect_indentation_error(self) -> None:
         """Test detection of indentation errors."""
         code = """def func() -> str:
 return "error"
@@ -1164,8 +1164,8 @@ from module import foo
 from mymodule import func
 """
         lines: List[sys.LiteralString] = imports.split("\n")
-        stdlib_imports: List[str] = [line for line: str in lines if "os" in line or "sys" in line]
-        local_imports: List[str] = [line for line: str in lines if "mymodule" in line]
+        stdlib_imports: List[str] = [line for line in lines if "os" in line or "sys" in line]
+        local_imports: List[str] = [line for line in lines if "mymodule" in line]
         assert len(stdlib_imports) > 0
         assert len(local_imports) > 0
 
@@ -1245,7 +1245,7 @@ class TestBackupCreation(unittest.TestCase):
 
     def test_create_backup_before_modification(self) -> None:
         """Test backup is created before modification."""
-        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.py') as f: tempfile._TemporaryFileWrapper[str]:
+        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.py') as f:
             f.write("original content")
             f.flush()
             original_file: str = f.name
@@ -1258,7 +1258,7 @@ class TestBackupCreation(unittest.TestCase):
 
             # Verify backup exists
             assert Path(backup_file).exists()
-            with open(backup_file) as bf: logging.TextIOWrapper[_WrappedBuffer]:
+            with open(backup_file) as bf:
                 assert bf.read() == "original content"
         finally:
             Path(original_file).unlink(missing_ok=True)
@@ -1311,7 +1311,7 @@ class TestConcurrency(unittest.TestCase):
                 generated_files.append(name)
 
         threads = []
-        for i: int in range(5):
+        for i in range(5):
             t = threading.Thread(target=generate_file, args=(f"file{i}",))
             threads.append(t)
             t.start()
@@ -1332,10 +1332,10 @@ class TestConcurrency(unittest.TestCase):
             with lock:
                 counter["value"] += 1
 
-        threads: List[threading.Thread] = [threading.Thread(target=modify) for _: int in range(10)]
-        for t: threading.Thread in threads:
+        threads: List[threading.Thread] = [threading.Thread(target=modify) for _ in range(10)]
+        for t in threads:
             t.start()
-        for t: threading.Thread in threads:
+        for t in threads:
             t.join()
 
         assert counter["value"] == 10
@@ -1347,23 +1347,22 @@ class TestLargeFileHandling(unittest.TestCase):
 
     def test_large_file_processing(self) -> None:
         """Test processing files with many lines."""
-        large_code: str = "\n".join([f"x{i} = {i}" for i: int in range(10000)])
+        large_code: str = "\n".join([f"x{i} = {i}" for i in range(10000)])
         lines: List[str] = large_code.split("\n")
         assert len(lines) == 10000
 
     def test_memory_efficiency(self) -> None:
         """Test memory-efficient processing."""
         # Stream processing instead of loading entire file
-        with tempfile.NamedTemporaryFile(mode='w', delete=False) as f: tempfile._TemporaryFileWrapper[str]:
-            for i: int in range(1000):
+        with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+            for i in range(1000):
                 f.write(f"line {i}\n")
             f.flush()
             fname: str = f.name
 
         try:
             line_count = 0
-            with open(fname) as f: logging.TextIOWrapper[_WrappedBuffer]:
-                for line: str in f:
+            with open(fname) as f:
                     line_count += 1
             assert line_count == 1000
         finally:
@@ -1410,7 +1409,7 @@ def func() -> str:
     y=2
     return x + y
 """
-        non_empty_lines: List[str] = [line for line: str in code.split("\n") if line.strip()]
+        non_empty_lines: List[str] = [line for line in code.split("\n") if line.strip()]
         assert len(non_empty_lines) > 0
 
 
@@ -1473,7 +1472,7 @@ class TestCodeQualityValidation(unittest.TestCase):
             {'type': 'hardcoded_password', 'severity': 'critical'},
             {'type': 'insecure_random', 'severity': 'medium'}
         ]
-        critical_issues: List[Dict[str, str]] = [i for i: Dict[str, str] in security_issues if i['severity'] == 'critical']
+        critical_issues: List[Dict[str, str]] = [i for i in security_issues if i['severity'] == 'critical']
         self.assertEqual(len(critical_issues), 1)
 
     def test_cyclomatic_complexity_validation(self) -> None:

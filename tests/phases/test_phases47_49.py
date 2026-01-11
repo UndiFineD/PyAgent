@@ -11,7 +11,7 @@ class TestPhases47_49(unittest.TestCase):
         os.makedirs(os.path.join(self.workspace, "data/memory/agent_store/governance/proposals"), exist_ok=True)
         os.makedirs(os.path.join(self.workspace, "deploy"), exist_ok=True)
 
-    def test_governance_and_dao(self):
+    def test_governance_and_dao(self) -> None:
         print("\nTesting Phase 47: Governance & DAO...")
         # Submit proposal
         proposal_id = self.fleet.governance.submit_proposal(
@@ -35,7 +35,7 @@ class TestPhases47_49(unittest.TestCase):
         print(dao_res)
         self.assertIn("allocation plan successfully applied", dao_res)
 
-    def test_multi_modal_grounding(self):
+    def test_multi_modal_grounding(self) -> None:
         print("\nTesting Phase 48: Multi-Modal Action Grounding...")
         # Spatial reasoning
         objects = [{"id": "AgentA", "position": [1, 2, 0]}, {"id": "ToolB", "position": [5, 2, 0]}]
@@ -51,7 +51,7 @@ class TestPhases47_49(unittest.TestCase):
         # It's an AI tool so verdict depends on model, but we check key presence
         self.assertIn("feasible", physics_res)
 
-    def test_self_replicating_fleet(self):
+    def test_self_replicating_fleet(self) -> None:
         print("\nTesting Phase 49: Self-Replicating Fleet Infrastructure...")
         # Dockerfile gen
         path = self.fleet.fleet_deployer.generate_dockerfile("SQLAgent")

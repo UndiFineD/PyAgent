@@ -8,7 +8,7 @@ class TestPhases62_64(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_resource_arbitration(self):
+    def test_resource_arbitration(self) -> None:
         print("\nTesting Phase 62: Autonomous Resource Arbitrator...")
         # Submit high bid
         res_high = self.fleet.resource_arbitrator.submit_bid("CoderAgent", "GPU", 1, 100)
@@ -30,7 +30,7 @@ class TestPhases62_64(unittest.TestCase):
         print(f"Preemption: {preempt}")
         self.assertEqual(preempt["count"], 1)
 
-    def test_agent_did_identity(self):
+    def test_agent_did_identity(self) -> None:
         print("\nTesting Phase 63: Cross-Chain Agent Identity (DID)...")
         # Create DID
         did = self.fleet.agent_identity.create_agent_did("SecurityAgent", "fleet-beta")
@@ -50,7 +50,7 @@ class TestPhases62_64(unittest.TestCase):
         print(f"Verification: {verification}")
         self.assertEqual(verification["status"], "verified")
 
-    def test_neural_memory_pruning(self):
+    def test_neural_memory_pruning(self) -> None:
         print("\nTesting Phase 64: Neural Memory Pruning...")
         memories = [
             {"id": "mem_01", "content": "Critical error fixed in main.py", "timestamp": 100, "access_count": 50}, # Strong

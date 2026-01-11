@@ -18,17 +18,17 @@ class TestCodeQuality(unittest.TestCase):
         if os.path.exists(self.py_file):
             os.remove(self.py_file)
 
-    def test_python_quality(self):
+    def test_python_quality(self) -> None:
         report = self.agent.analyze_file_quality(self.py_file)
         self.assertEqual(report['file'], self.py_file)
         self.assertTrue(any("too long" in i['message'] for i in report['issues']))
         self.assertTrue(report['score'] < 100)
 
-    def test_rust_quality(self):
+    def test_rust_quality(self) -> None:
         report = self.agent.analyze_file_quality("main.rs")
         self.assertTrue(any("clippy" in i['message'].lower() or "Suggestion" in i['type'] for i in report['issues']))
 
-    def test_aggregate_score(self):
+    def test_aggregate_score(self) -> None:
         self.agent.analyze_file_quality(self.py_file)
         score = self.agent.get_aggregate_score()
         self.assertTrue(score < 100)

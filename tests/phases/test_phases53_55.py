@@ -7,7 +7,7 @@ class TestPhases53_55(unittest.TestCase):
         self.workspace = "c:/DEV/PyAgent"
         self.fleet = FleetManager(self.workspace)
 
-    def test_resource_prediction(self):
+    def test_resource_prediction(self) -> None:
         print("\nTesting Phase 53: Predictive Resource Forecasting...")
         # Mock some metrics
         from src.observability.stats.ObservabilityEngine import AgentMetric
@@ -28,7 +28,7 @@ class TestPhases53_55(unittest.TestCase):
         print(f"Scaling Recommendation: {scaling}")
         self.assertTrue(scaling["trigger_scaling"])
 
-    def test_ui_architecture(self):
+    def test_ui_architecture(self) -> None:
         print("\nTesting Phase 54: Generative UI Architecture...")
         layout = self.fleet.ui_architect.design_dashboard_layout("Code Refactor", ["AgentA", "AgentB", "AgentC", "AgentD", "AgentE", "AgentF"])
         print(f"Layout Panels: {len(layout['panels'])}")
@@ -41,7 +41,7 @@ class TestPhases53_55(unittest.TestCase):
         self.assertIn("SQL_Explorer", manifest["requested_plugins"])
         self.assertIn("Data_Visualizer", manifest["requested_plugins"])
 
-    def test_dbft_consensus(self):
+    def test_dbft_consensus(self) -> None:
         print("\nTesting Phase 55: DBFT Consensus...")
         # Testing verify_state_block directly
         # This will also trigger the inter-fleet bridge broadcast

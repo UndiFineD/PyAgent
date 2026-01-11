@@ -48,7 +48,7 @@ class TestStatsQueryPerformance:
         engine = StatsQueryEngine()
 
         # Add data
-        for i: int in range(100):
+        for i in range(100):
             engine.insert("metric1", timestamp=i * 1000, value=i)
 
         result = engine.query("metric1", start=10000, end=50000)
