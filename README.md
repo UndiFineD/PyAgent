@@ -1,4 +1,4 @@
-# PyAgent: AI-Powered Code Improvement Orchestration
+# PyAgent: AI-Powered Code Improvement Orchestration (v3.3.0-GOLD)
 
 An intelligent orchestration system that coordinates specialized AI agents to automatically improve code quality, documentation, testing, and code artifacts across Python projects.
 
@@ -8,13 +8,23 @@ An intelligent orchestration system that coordinates specialized AI agents to au
 
 ## Key Features
 
-### 🛠 Evolution Phase 108: Autonomous Self-Improvement
+### 🏆 Evolution Phase 230: Project "PROXIMA" Gold Master 
 
-The project has entered an autonomous maintenance phase where the system refactors and optimizes its own source code:
-- **Relational Metadata Mapping**: Sharded interaction data (Zlib-compressed) is indexed into a relational SQL layer for meta-analysis at trillion-parameter scales.
-- **AI-Driven Self-Healing**: The system identifies and fixes security vulnerabilities, performance bottlenecks, and robustness issues automatically.
-- **Rust-Readiness Pipeline**: Automated type hint injection (Local-first AI assisted) is preparing the core logic for high-performance Rust FFI porting.
-- **Gatekeeping**: `version.py` enforces maturity requirements to ensure stability during deep refactoring cycles.
+The fleet has achieved **Critical Autonomy Level 4**:
+- **Consolidated Sovereignty**: Unified infrastructure, logic, and observability cores.
+- **Trillion-Parameter Knowledge Sharding**: High-concurrency B-Tree storage with Parquet export.
+- **Synchronized Convergence**: Integrated CBOR serialization and binary logic gateways.
+- **Autonomous Healing**: The swarm now autonomously manages its own technical debt and evolutionary roadmap.
+- **Rust Core Ready**: Primary logic cores audited and ready for high-performance Rust transition.
+
+### 🛠 Evolution Phase 150: Federated Fleet & Trillion-Parameter Sharding
+
+The project has achieved a "debt-free" architectural baseline for autonomous self-improvement:
+- **Trillion-Parameter Sharding**: Data is distributed across 1,024 virtual shards with O(1) B-Tree indexing.
+- **Gemini 3 Flash Native**: Fully migrated to Gemini 3 Flash (Preview) for high-reasoning/low-latency orchestration.
+- **Federated Infrastructure**: Requirements are split into `base`, `dev`, and `ml` tiers for minimal edge deployment.
+- **Event-Driven Resilience**: Replaced polling loops with `watchfiles` event-reactors and automated GitHub auth healing.
+- **Continuous Integration**: Maintaining a 1,300+ test baseline with 100% collection health.
 
 ### 🎯 Multi-Agent Coordination
 
@@ -51,32 +61,43 @@ PyAgent now supports a unified multi-interface architecture connected via a cent
 - **Web**: FastAPI-powered web interface.
 - **CLI**: A new high-performance Command Line Interface ([pyagent_cli.py](src/pyagent_cli.py)) for terminal-based automation.
 
-### 🚀 Architecture
+### 🚀 Architecture (Jan 2026 - Tiered Evolution)
+
+The project follows a **5-Tiered Architecture** designed for high-performance orchestration and trillion-parameter knowledge isolation:
 
 ```text
 src/
-├── classes/          → Modular, class-based core logic
-│   ├── base_agent/   → Foundation, Memory, and CLI utilities
-│   ├── backend/      → Multi-backend runner with disk caching
-│   └── [agent_name]/ → Specialized agent implementations
-├── agent.py          → Orchestrator wrapper
-└── agent_gui.py      → New interactive multi-agent dashboard
+├── core/             → Primitives, Knowledge Trinity (B-Tree, Vector, Graph)
+├── logic/            → Swarm Intelligence, Specialized Agents, Reasoning Strategies
+├── infrastructure/   → Fleet Management, Economy, API Wrappers, Orchestration
+├── interface/        → Multi-UI layer (CLI, GUI, Web, Mobile)
+└── observability/    → Telemetry, Stats, Reporting, Audit Trails
 ```
+
+## 🧠 Knowledge Trinity & Data Sharding
+
+To support trillion-parameter scaling, knowledge is isolated per agent in `data/agents/{id}/`:
+- **Structured (B-Tree)**: 2-tier MD5 sharding for $O(1)$ filesystem lookups.
+- **Semantic (Vector)**: Isolated ChromaDB indices for similarity-based memory.
+- **Relational (Graph)**: Ontological links tracked via S-P-O triples.
 
 ## Installation
 
 ```bash
-git clone https://github.com/PyAgent/pyagent
-cd pyagent
-python -m pip install -r requirements.txt
+git clone https://github.com/UndiFineD/PyAgent
+cd PyAgent
+# Configure your virtual environment
+python -m venv .venv
+. .venv/bin/activate  # Or your platform equivalent
+pip install -r requirements.txt
 ```
 
-### GUI Dashboard (Experimental)
+### GUI Dashboard (Production Ready)
 
-Launch the new interactive control center:
+Launch the interactive 5-tier dashboard:
 
 ```bash
-python src/agent_gui.py
+python -m src.interface.ui.gui.MainApp
 ```
 
 ## Usage
@@ -84,19 +105,9 @@ python src/agent_gui.py
 ### Command Line Interface
 
 ```bash
-# Improve a file using specific strategy and JSON output for automation
-python src/agent.py --context src/module.py --prompt "Refactor for speed" --strategy cot --json
+# High-performance CLI entrypoint
+python -m src.interface.ui.cli.pyagent_cli --task "Analyze codebase" --strategy cot
 ```
-
-### Advanced Usage
-
-```bash
-# Run with specific reasoning strategy
-python src/agent.py --dir . --strategy cot  # Chain-of-Thought
-python src/agent.py --dir . --strategy reflexion  # Self-correction loop
-
-# Run specific agents only
-python src/agent.py --dir . --only-agents coder,tests
 
 # Parallel execution
 python src/agent.py --dir . --multiprocessing --workers 4

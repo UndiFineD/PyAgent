@@ -1,25 +1,47 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 PyAgent contributors
+# Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """BaseAgent main class and core agent logic."""
 
-from __future__ import annotations
 
 import argparse
 import difflib
 import hashlib
 import json
 import logging
+from src.core.base.ConnectivityManager import ConnectivityManager
 import os
+import subprocess
 import sys
 import time
 from dataclasses import dataclass, field
@@ -29,15 +51,20 @@ from pathlib import Path
 from types import TracebackType
 from typing import Any, Callable, Dict, List, Optional, Type, cast, TYPE_CHECKING
 
-if TYPE_CHECKING:
-    import agent_strategies
+try:
+    import requests
+    HAS_REQUESTS = True
+except ImportError:
+    requests = None
+    HAS_REQUESTS = False
 
-from .models import (
+from src.core.base.models import (
     AgentConfig,
     AgentState,
+    AgentType,
+    AgentEvent,
     AuthConfig,
     AuthMethod,
-    BatchRequest,
     CacheEntry,
     ConversationHistory,
     ConversationMessage,
@@ -51,27 +78,64 @@ from .models import (
     ModelConfig,
     MultimodalInput,
     PromptTemplate,
-    PromptTemplateManager,
-    PromptVersion,
-    ResponsePostProcessor,
     ResponseQuality,
     SerializationConfig,
     SerializationFormat,
     TokenBudget,
+    BatchResult,
+    ComposedAgent,
+    ContextWindow,
+    MultimodalBuilder,
+    AgentPipeline,
+    AgentParallel,
+    AgentRouter,
+    ConfigProfile,
 )
-from .core import BaseCore
+from src.core.base.managers import (
+    PromptTemplateManager,
+    PromptVersion,
+    PromptVersionManager,
+    BatchRequest,
+    RequestBatcher,
+    AuthenticationManager,
+    AuthManager,
+    ResponsePostProcessor,
+    MultimodalProcessor,
+    AgentComposer,
+    SerializationManager,
+    FilePriorityManager,
+    ResponseCache,
+    StatePersistence,
+    ModelSelector,
+    QualityScorer,
+    ABTest,
+    EventManager,
+    HealthChecker,
+    PluginManager,
+    ProfileManager,
+)
+
+from src.core.base.AgentCore import BaseCore
+from src.core.base.registry import AgentRegistry
+from src.core.base.ShardedKnowledgeCore import ShardedKnowledgeCore
+from src.core.base.state import AgentStateManager
+from src.core.base.verification import AgentVerifier
+from src.core.base.delegation import AgentDelegator
+from src.core.base.shell import ShellExecutor
 
 # Advanced components (Lazy loaded or optional)
 try:
-    from src.classes.agent.LongTermMemory import LongTermMemory
-    from src.classes.orchestration.SignalRegistry import SignalRegistry
-    from src.classes.orchestration.ToolRegistry import ToolRegistry
+    from src.logic.agents.cognitive.LongTermMemory import LongTermMemory
+    from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+    from src.infrastructure.orchestration.ToolRegistry import ToolRegistry
 except (ImportError, ValueError):
     LongTermMemory = None
     SignalRegistry = None
     ToolRegistry = None
 
-from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+from .logging_config import setup_logging
+from .defaults import DEFAULT_PROMPT_TEMPLATES
 
 
 def fix_markdown_content(content: str) -> str:
@@ -80,86 +144,7 @@ def fix_markdown_content(content: str) -> str:
     return content
 
 
-def setup_logging(verbosity_arg: int = 0) -> None:
-    """Configure logging based on environment variable and argument.
-
-    Sets up Python's logging system with level determined by environment
-    variable (DV_AGENT_VERBOSITY) and / or command - line argument.
-
-    Args:
-        verbosity_arg: Verbosity level from --verbose argument (0-3).
-                      Levels: 0=ERROR, 1=WARNING, 2=INFO, 3=DEBUG.
-                      Defaults to 0 (ERROR).
-
-    Returns:
-        None. Configures the global logging system.
-
-    Environment Variables:
-        DV_AGENT_VERBOSITY: Can be set to 'quiet', 'minimal', 'normal', or 'elaborate'.
-
-    Note:
-        - verbosity_arg takes precedence when provided and forces DEBUG level
-        - Environment variable is used as fallback
-        - Defaults to INFO level if neither is set
-    """
-    env_verbosity: str | None = os.environ.get('DV_AGENT_VERBOSITY')
-    levels: Dict[str, int] = {
-        'quiet': logging.ERROR,
-        'minimal': logging.WARNING,
-        'normal': logging.INFO,
-        'elaborate': logging.DEBUG,
-        '0': logging.ERROR,
-        '1': logging.WARNING,
-        '2': logging.INFO,
-        '3': logging.DEBUG,
-    }
-    # Determine level from environment
-    if env_verbosity:
-        level: int = levels.get(env_verbosity.lower(), logging.WARNING)
-    else:
-        # Default to WARNING to reduce noise, as requested by self-improvement phase
-        level: int = logging.WARNING
-    # If argument is provided, it forces DEBUG (elaborate)
-    if verbosity_arg > 0:
-        level: int = logging.DEBUG
-    logging.basicConfig(
-        level=level,
-        format='%(asctime)s - %(levelname)s - %(message)s',
-        datefmt='%H:%M:%S'
-    )
-    logging.debug(f"Logging configured at level: {logging.getLevelName(level)}")
-
-
-DEFAULT_PROMPT_TEMPLATES: List[PromptTemplate] = [
-    PromptTemplate(
-        id="improve_code",
-        name="Code Improvement",
-        template="Improve the following code:\n\n{content}\n\nFocus on: {focus}",
-        description="General code improvement template",
-        tags=["code", "improvement"]
-    ),
-    PromptTemplate(
-        id="add_docstrings",
-        name="Add Docstrings",
-        template="Add comprehensive docstrings to all functions and classes:\n\n{content}",
-        description="Template for adding documentation",
-        tags=["documentation"]
-    ),
-    PromptTemplate(
-        id="fix_bugs",
-        name="Bug Fix",
-        template="Analyze and fix bugs in this code:\n\n{content}\n\nKnown issues: {issues}",
-        description="Template for bug fixing",
-        tags=["bugs", "fix"]
-    ),
-    PromptTemplate(
-        id="add_tests",
-        name="Generate Tests",
-        template="Generate comprehensive tests for:\n\n{content}\n\nCoverage focus: {coverage}",
-        description="Template for test generation",
-        tags=["tests", "coverage"]
-    ),
-]
+# Advanced components (Lazy loaded or optional)
 
 
 class BaseAgent:
@@ -221,20 +206,50 @@ class BaseAgent:
         self.file_path = Path(file_path)
         self.previous_content: str = ""
         self.current_content: str = ""
+        self.fleet: Any = None # FleetManager reference
+        self.capabilities: List[str] = ["base"] # Phase 241: Default capabilities
         
-        # Strategy for agent execution
-        import agent_strategies
-        self.strategy: agent_strategies.AgentStrategy = agent_strategies.DirectStrategy()
+        # Knowledge Trinity initialization (Phase 126)
+        try:
+            from src.core.knowledge.knowledge_engine import KnowledgeEngine
+            agent_name = self.__class__.__name__.lower().replace("agent", "") or "base"
+            self.knowledge = KnowledgeEngine(agent_id=agent_name, base_path=Path("data/agents"))
+        except (ImportError, ModuleNotFoundError):
+            self.knowledge = None
+        
+        # Phase 241: Auto-register capabilities if SignalRegistry is available
+        self._register_capabilities()
+        
+        # Strategy for agent execution (Phase 130: Lazy-loaded to avoid core-on-logic dependency)
+        self._strategy: Optional[Any] = None
+
+    def _register_capabilities(self) -> None:
+        """Emits a signal with agent capabilities for discovery."""
+        try:
+            from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+            signals = SignalRegistry()
+            signals.emit("agent_capability_registration", {
+                "agent": self.__class__.__name__,
+                "capabilities": self.get_capabilities()
+            })
+        except Exception:
+            pass
+
+    def get_capabilities(self) -> List[str]:
+        """Phase 241: Returns a list of strings representing agent capabilities."""
+        return self.capabilities
 
         # New attributes for enhanced functionality
         self._state: AgentState = AgentState.INITIALIZED
         self._conversation_history: List[ConversationMessage] = []
+        self._scratchpad: List[str] = [] # Confucius-style persistent notes (Phase 128)
         self._config: AgentConfig = self._load_config()
         self._token_usage = 0
         self._state_data: Dict[str, Any] = {}
         self._post_processors: List[Callable[[str], str]] = []
         self._model: Optional[str] = None
         self._is_stop_requested = False
+        self._system_prompt: str = "You are a helpful AI assistant."
         
         # Determine Workspace Root (Phase 108: Robust detection delegated to Core)
         self._workspace_root = BaseCore.detect_workspace_root(self.file_path)
@@ -245,12 +260,47 @@ class BaseAgent:
         self.core = BaseCore(workspace_root=self._workspace_root)
 
         # Advanced features
-        self.memory: LongTermMemory | None = LongTermMemory() if LongTermMemory else None
+        # Derive agent name for data isolation (e.g., CoderAgent -> "coder")
+        self.agent_name = self.__class__.__name__.lower().replace("agent", "") or "base"
+        self.memory: LongTermMemory | None = LongTermMemory(agent_name=self.agent_name) if LongTermMemory else None
+        
+        # Phase 143: Sharded Knowledge initialization
+        self.sharded_knowledge = ShardedKnowledgeCore(base_path=Path("data/agents"))
+
         self.registry: SignalRegistry | None = SignalRegistry() if SignalRegistry else None
         self.tool_registry: ToolRegistry | None = ToolRegistry() if ToolRegistry else None
 
         # Intelligence Harvesting (Phase 108)
         self.recorder = LocalContextRecorder(Path(self._workspace_root), f"{self.__class__.__name__}_Agent")
+
+    @property
+    def strategy(self) -> Any:
+        """Strategy for agent execution (Phase 130: Lazy-loaded to avoid core-on-logic dependency)."""
+        if not hasattr(self, "_strategy") or self._strategy is None:
+            # Deferred import to break core-on-logic dependency
+            try:
+                from src.logic.strategies import plan_executor as agent_strategies
+                self._strategy = agent_strategies.DirectStrategy()
+            except (ImportError, ModuleNotFoundError):
+                # Fallback if logic is not available
+                self._strategy = None
+        return self._strategy
+
+    @strategy.setter
+    def strategy(self, value: Any) -> None:
+        self._strategy = value
+
+    def _run_command(self, cmd: List[str], timeout: int = 120, max_retries: int = 1) -> subprocess.CompletedProcess[str]:
+        """Run a command with timeout, error handling, retry logic, and logging."""
+        return ShellExecutor.run_command(
+            cmd=cmd,
+            workspace_root=self._workspace_root,
+            agent_name=self.__class__.__name__,
+            models_config=getattr(self, 'models', None),
+            recorder=getattr(self, 'recorder', None),
+            timeout=timeout,
+            max_retries=max_retries
+        )
 
     @property
     def global_context(self) -> str:
@@ -262,7 +312,7 @@ class BaseAgent:
         # Fallback to local lazy loading
         if self._local_global_context is None:
              try:
-                from src.classes.context.GlobalContextEngine import GlobalContextEngine
+                from src.logic.agents.cognitive.context.engines.GlobalContextEngine import GlobalContextEngine
                 self._local_global_context = GlobalContextEngine(self._workspace_root)
              except (ImportError, ValueError):
                 pass
@@ -298,26 +348,51 @@ class BaseAgent:
                     category=category,
                     priority=priority
                 )
-                logging.debug(f"Registered tool {name} for {self.__class__.__name__} (Priority: {priority})")
 
-    def _register_tools(self) -> None:
-        """Automatically registers public methods with the ToolRegistry."""
-        if not self.tool_registry:
-            return
+    def calculate_anchoring_strength(self, result: str) -> float:
+        """
+        Calculates the 'Anchoring Strength' metric (Stanford Research 2025).
+        Measures how well the output is anchored to the provided context/grounding.
+        Returns a score between 0.0 and 1.0.
+        """
+        if not hasattr(self, 'context_pool') or not self.context_pool:
+            return 0.5 # Default middle-ground if no context
             
-        self.register_tools(self.tool_registry)
+        context_text = " ".join([str(v) for v in self.context_pool.values()])
+        if not context_text:
+            return 0.5
+            
+        # Basic implementation: calculate keyword overlap or semantic proximity
+        # For Phase 126, we use a simple N-gram overlap as a proxy for anchoring.
+        context_words = set(context_text.lower().split())
+        result_words = result.lower().split()
+        if not result_words:
+            return 0.0
+            
+        overlap = [word in context_words for word in result_words]
+        score = sum(overlap) / len(result_words)
         
-        # Also register the core capability if not already there
-        agent_name: str = self.__class__.__name__
-        if not self.tool_registry.get_tool(agent_name):
-             self.tool_registry.register_tool(agent_name, self.improve_content, category="core", priority=-1)
+        # Adjust for length - very short responses are often "unanchored" chat
+        if len(result_words) < 5:
+            score *= 0.5
+            
+        return min(1.0, score * 1.5) # Amplify slightly as non-context words are expected
+
+    def calculate_anchoring_strength(self, result: str) -> float:
+        """
+        Calculates the 'Anchoring Strength' metric (Stanford Research 2025).
+        """
+        return AgentVerifier.calculate_anchoring_strength(result, getattr(self, 'context_pool', {}))
+
+    def verify_self(self, result: str) -> tuple[bool, str]:
+        """
+        Self-verification layer (inspired by Keio University 2026 research).
+        """
+        anchoring_score = self.calculate_anchoring_strength(result)
+        return AgentVerifier.verify_self(result, anchoring_score)
 
     def _load_config(self) -> AgentConfig:
-        """Load agent configuration from environment variables.
-
-        Returns:
-            AgentConfig: Configuration object with settings from env vars.
-        """
+        """Load agent configuration from environment variables."""
         return AgentConfig(
             backend=os.environ.get("DV_AGENT_BACKEND", "auto"),
             model=os.environ.get("DV_AGENT_MODEL", ""),
@@ -329,7 +404,7 @@ class BaseAgent:
             token_budget=int(os.environ.get("DV_AGENT_TOKEN_BUDGET", "100000")),
         )
 
-    def set_strategy(self, strategy: agent_strategies.AgentStrategy) -> None:
+    def set_strategy(self, strategy: Any) -> None:
         """Set the reasoning strategy for the agent.
 
         Args:
@@ -367,6 +442,7 @@ class BaseAgent:
     def __enter__(self) -> "BaseAgent":
         """Context manager entry. Returns self for use in 'with' statement."""
         logging.debug(f"{self.__class__.__name__} entering context manager")
+        AgentRegistry().register(self)
         return self
 
     def __exit__(
@@ -383,6 +459,7 @@ class BaseAgent:
             - Can be overridden in subclasses for custom cleanup
         """
         logging.debug(f"{self.__class__.__name__} exiting context manager")
+        AgentRegistry().unregister(self.agent_name)
         if exc_type is not None:
             logging.error(f"Agent context error: {exc_type.__name__}: {exc_val}")
             self._state: AgentState = AgentState.ERROR
@@ -395,6 +472,13 @@ class BaseAgent:
         """Request the agent to stop its current operation."""
         logging.info(f"Stop requested for {self.__class__.__name__}")
         self._is_stop_requested = True
+
+    def register_webhook(self, url: str) -> None:
+        """Registers a webhook URL for notifications."""
+        if not hasattr(self, '_webhooks'):
+             self._webhooks = []
+        if url not in self._webhooks:
+            self._webhooks.append(url)
 
     def run(self, prompt: str = "") -> None:
         """Standard execution loop for the agent.
@@ -409,6 +493,23 @@ class BaseAgent:
                 self.update_file()
             else:
                 logging.info(f"Update skipped for {self.__class__.__name__} due to stop request.")
+            
+            # Phase 123: Trigger completion event for webhooks
+            event_data = {
+                "event": "agent_complete",
+                "status": "success",
+                "file": str(self.file_path),
+                "timestamp": time.time()
+            }
+            webhooks = getattr(self, '_webhooks', [])
+            for url in webhooks:
+                try:
+                    if HAS_REQUESTS and requests:
+                        requests.post(url, json=event_data, timeout=5)
+                        logging.info(f"Webhook sent to {url}")
+                except Exception as e:
+                    logging.error(f"Failed to send webhook to {url}: {e}")
+                    
         except Exception as e:
             logging.error(f"Error running {self.__class__.__name__}: {e}")
             raise
@@ -447,7 +548,7 @@ class BaseAgent:
                     stats: os.stat_result = self.file_path.stat()
                     error_info.append(f"Size: {stats.st_size} bytes")
                 except Exception:
-                    pass
+                    logging.warning(f"Could not retrieve additional stats for {self.file_path}")
                 
                 diag_msg: str = f"Failed to read file {self.file_path}: {e}"
                 if error_info:
@@ -500,7 +601,7 @@ class BaseAgent:
                     "thought": prompt[:100] + "..."
                 })
             except Exception:
-                pass
+                logging.debug("Registry signal emission failed in think().")
 
         description: str = f"Reasoning for {self.__class__.__name__}"
         result: str = self.run_subagent(description, prompt, system_prompt or self._system_prompt)
@@ -682,14 +783,15 @@ class BaseAgent:
         logging.debug(f"Running subagent: {description}")
         # Deferred import to avoid circular dependency
         try:
-            import agent_backend as ab
+            from src.infrastructure.backend import execution_engine as ab
         except ImportError:
             sys.path.append(str(Path(__file__).parent.parent.parent))
-            import agent_backend as ab
+            from src.infrastructure.backend import execution_engine as ab
         
         result: Optional[str] = ab.run_subagent(description, prompt, original_content)
         if result is None:
-            logging.warning("Subagent returned None, using fallback response")
+            # Lowered logging level to INFO (Phase 123)
+            logging.info("Subagent returned None, using fallback response")
             return original_content or self._get_fallback_response()
         return result
 
@@ -709,10 +811,10 @@ class BaseAgent:
         logging.debug("Fetching backend status")
         # Deferred import to avoid circular dependency
         try:
-            import agent_backend as ab
+            from src.infrastructure.backend import execution_engine as ab
         except ImportError:
             sys.path.append(str(Path(__file__).parent.parent.parent))
-            import agent_backend as ab
+            from src.infrastructure.backend import execution_engine as ab
         return ab.get_backend_status()
 
     @staticmethod
@@ -730,10 +832,10 @@ class BaseAgent:
         logging.debug("Describing backend configuration")
         # Deferred import to avoid circular dependency
         try:
-            import agent_backend as ab
+            from src.infrastructure.backend import execution_engine as ab
         except ImportError:
             sys.path.append(str(Path(__file__).parent.parent.parent))
-            import agent_backend as ab
+            from src.infrastructure.backend import execution_engine as ab
         return ab.describe_backends()
 
     def _get_fallback_response(self) -> str:
@@ -932,13 +1034,8 @@ class BaseAgent:
         if not self._conversation_history:
             return prompt
 
-        # Include last few messages for context
-        recent: List[ConversationMessage] = self._conversation_history[-6:]  # Last 3 exchanges
-        context_lines: List[str] = []
-        for msg in recent:
-            context_lines.append(f"[{msg.role}]: {msg.content[:200]}...")
-
-        return f"Previous context:\n{''.join(context_lines)}\n\nCurrent request:\n{prompt}"
+        history = [{"role": m.role.value, "content": m.content} for m in self._conversation_history]
+        return self.core.build_prompt_with_history(prompt, history)
 
     # ========== Response Post-Processing ==========
 
@@ -950,6 +1047,28 @@ class BaseAgent:
         """
         self._post_processors.append(processor)
         logging.debug(f"Added post-processor: {processor.__name__}")
+
+    def take_note(self, note: str) -> str:
+        """
+        Record a persistent note into the internal scratchpad.
+        Useful for modular thinking across multiple tool calls.
+        """
+        timestamp = datetime.now().strftime("%H:%M:%S")
+        formatted_note = f"[{timestamp}] {note}"
+        self._scratchpad.append(formatted_note)
+        logging.info(f"Agent {self.__class__.__name__} took a note: {note}")
+        return f"Note recorded: {note}"
+
+    def get_notes(self) -> str:
+        """Retrieves all notes from the persistent scratchpad."""
+        if not self._scratchpad:
+            return "No notes recorded yet."
+        return "\n".join(self._scratchpad)
+
+    def clear_notes(self) -> str:
+        """Clears the persistent scratchpad."""
+        self._scratchpad = []
+        return "Scratchpad cleared."
 
     def clear_post_processors(self) -> None:
         """Clear all post-processors."""
@@ -1049,6 +1168,20 @@ class BaseAgent:
         if event in cls._event_hooks and callback in cls._event_hooks[event]:
             cls._event_hooks[event].remove(callback)
 
+    def _record(self, prompt: str, result: str, provider: str = "auto", model: str = "auto", meta: Dict[str, Any] = None) -> None:
+        """Helper to record interactions to the LocalContextRecorder (Phase 108)."""
+        try:
+            if hasattr(self, "recorder") and self.recorder:
+                self.recorder.record_interaction(
+                    provider=provider,
+                    model=model,
+                    prompt=prompt,
+                    result=result,
+                    meta=meta
+                )
+        except Exception as e:
+            logging.debug(f"Interaction recording failed: {e}")
+
     def _trigger_event(self, event: EventType, data: Dict[str, Any]) -> None:
         """Trigger an event and invoke all registered hooks.
 
@@ -1119,125 +1252,44 @@ class BaseAgent:
     # ========== State Persistence ==========
 
     def save_state(self, path: Optional[Path] = None) -> None:
-        """Save agent state to disk.
-
-        Args:
-            path: Path to save state file. Defaults to {file_path}.state.json.
-        """
-        state_path: Path = path or self.file_path.with_suffix(".state.json")
-        state: Dict[str, Any] = {
-            "file_path": str(self.file_path),
-            "state": self._state.value,
-            "token_usage": self._token_usage,
-            "state_data": self._state_data,
-            "history_length": len(self._conversation_history),
-        }
-        state_path.write_text(json.dumps(state, indent=2), encoding="utf-8")
-        logging.debug(f"State saved to {state_path}")
+        """Save agent state to disk."""
+        AgentStateManager.save_state(
+            file_path=self.file_path,
+            current_state=self._state.value,
+            token_usage=self._token_usage,
+            state_data=self._state_data,
+            history_len=len(self._conversation_history),
+            path=path
+        )
 
     def load_state(self, path: Optional[Path] = None) -> bool:
-        """Load agent state from disk.
-
-        Args:
-            path: Path to state file. Defaults to {file_path}.state.json.
-
-        Returns:
-            True if state loaded successfully.
-        """
-        state_path: Path = path or self.file_path.with_suffix(".state.json")
-        if not state_path.exists():
-            return False
-
-        try:
-            state = json.loads(state_path.read_text(encoding="utf-8"))
+        """Load agent state from disk."""
+        state = AgentStateManager.load_state(self.file_path, path)
+        if state:
             self._token_usage = state.get("token_usage", 0)
             self._state_data = state.get("state_data", {})
-            logging.debug(f"State loaded from {state_path}")
             return True
-        except Exception as e:
-            logging.warning(f"Failed to load state: {e}")
-            return False
+        return False
 
     # ========== Context Window Management ==========
 
     def estimate_tokens(self, text: str) -> int:
-        """Estimate token count for text.
-
-        Args:
-            text: Text to estimate.
-
-        Returns:
-            Estimated token count (rough approximation).
-        """
+        """Estimate token count for text."""
         return self.core.estimate_tokens(text)
 
     def truncate_for_context(self, text: str, max_tokens: int) -> str:
-        """Truncate text to fit within token limit.
-
-        Args:
-            text: Text to truncate.
-            max_tokens: Maximum tokens allowed.
-
-        Returns:
-            Truncated text with ellipsis if truncated.
-        """
+        """Truncate text to fit within token limit."""
         return self.core.truncate_for_context(text, max_tokens)
 
     # ========== Agent Delegation ==========
 
     def delegate_to(self, agent_type: str, prompt: str, target_file: Optional[str] = None) -> str:
-        """Launches another agent to perform a sub-task.
-        
-        Args:
-            agent_type: Type of agent to delegate to (e.g. 'CoderAgent', 'SearchAgent').
-            prompt: The specific task or instruction for the sub-agent.
-            target_file: Optional target file path (defaults to current agent's file).
-            
-        Returns:
-            The result of the sub-agent's execution or an error message.
-        """
-        if getattr(self, "_no_cascade", False) or os.environ.get("DV_AGENT_PARENT"):
-            logging.warning(f"Delegation to {agent_type} blocked by no-cascade setting.")
-            return "Error: Delegation blocked by no-cascade policy."
-
-        logging.info(f"Delegating task to {agent_type} for {target_file or self.file_path}")
-        
-        # Determine the target file
-        target_path: Path = Path(target_file) if target_file else self.file_path
-        
-        try:
-            # Dynamic discovery of agent classes
-            # Expected pattern: src.classes.<type_lower>.<type>Agent
-            # e.g. src.classes.coder.CoderAgent
-            type_clean: str = agent_type.replace("Agent", "").lower()
-            module_name: str = f"src.classes.{type_clean}.{agent_type}"
-            
-            import importlib
-            module: sys.ModuleType = importlib.import_module(module_name)
-            agent_class = getattr(module, agent_type)
-            
-            # Instantiate and run the agent
-            # We set a parent environment variable to prevent infinite loops
-            os.environ["DV_AGENT_PARENT"] = self.__class__.__name__
-            
-            try:
-                with agent_class(str(target_path)) as sub_agent:
-                    # Sync common configurations
-                    if self.get_model():
-                        sub_agent.set_model(self.get_model())
-                    
-                    # Run the sub-task
-                    # Note: We use the prompt as context/input
-                    result = sub_agent.improve_content(prompt)
-                    sub_agent.update_file()
-                    
-                    logging.info(f"Delegation to {agent_type} completed successfully.")
-                    return result
-            finally:
-                # Clear parent flag
-                if os.environ.get("DV_AGENT_PARENT") == self.__class__.__name__:
-                    del os.environ["DV_AGENT_PARENT"]
-                
-        except Exception as e:
-            logging.error(f"Delegation to {agent_type} failed: {e}")
-            return f"Error: Delegation failed - {str(e)}"
+        """Launches another agent to perform a sub-task."""
+        return AgentDelegator.delegate(
+            agent_type=agent_type,
+            prompt=prompt,
+            current_agent_name=self.__class__.__name__,
+            current_file_path=self.file_path,
+            current_model=self.get_model(),
+            target_file=target_file
+        )

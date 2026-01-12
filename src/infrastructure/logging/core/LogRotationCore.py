@@ -11,7 +11,7 @@ class LogRotationCore:
     It isolates the logic from the logging framework itself for future Rust migration.
     """
 
-    def __init__(self, log_dir: str, max_size_bytes: int = 10 * 1024 * 1024):
+    def __init__(self, log_dir: str, max_size_bytes: int = 10 * 1024 * 1024) -> None:
         self.log_dir = log_dir
         self.max_size_bytes = max_size_bytes
 

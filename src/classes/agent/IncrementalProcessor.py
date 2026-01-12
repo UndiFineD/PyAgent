@@ -30,19 +30,23 @@ import sys
 import threading
 import time
 import uuid
+import mmap
+import blake3
+import orjson
 
 class IncrementalProcessor:
     """Processes only files changed since last run.
 
     Tracks file modification times and content hashes to enable
     incremental processing, avoiding reprocessing unchanged files.
+    Phases 233: Uses BLAKE3 and orjson with memory-mapping for performance.
 
     Attributes:
         state_file: Path to state persistence file.
         state: Current incremental processing state.
     """
 
-    def __init__(self, repo_root: Path, state_file: str = ".agent_state.json") -> str:
+    def __init__(self, repo_root: Path, state_file: str = ".agent_state.json") -> None:
         """Initialize the incremental processor.
 
         Args:
@@ -55,26 +59,29 @@ class IncrementalProcessor:
         self._load_state()
 
     def _load_state(self) -> None:
-        """Load state from disk."""
+        """Load state from disk using memory-mapped orjson (Phase 233)."""
         if self.state_file.exists():
             try:
-                raw = json.loads(self.state_file.read_text())
-                if isinstance(raw, dict):
-                    data: dict[str, Any] = cast(dict[str, Any], raw)
-                else:
-                    data = {}
+                with open(self.state_file, "rb") as f:
+                    size = os.path.getsize(self.state_file)
+                    if size == 0:
+                        return
+                        
+                    with mmap.mmap(f.fileno(), 0, access=mmap.ACCESS_READ) as mm:
+                        data = orjson.loads(mm)
+                
                 self.state = IncrementalState(
                     last_run_timestamp=data.get('last_run_timestamp', 0),
                     processed_files=data.get('processed_files', {}),
                     file_hashes=data.get('file_hashes', {}),
                     pending_files=data.get('pending_files', [])
                 )
-                logging.debug(f"Loaded incremental state from {self.state_file}")
+                logging.info(f"Loaded incremental state (BLAKE3) from {self.state_file}")
             except Exception as e:
-                logging.warning(f"Failed to load state: {e}")
+                logging.warning(f"Failed to load state with mmap/orjson: {e}")
 
     def _save_state(self) -> None:
-        """Save state to disk."""
+        """Save state to disk using optimized orjson (Phase 233)."""
         try:
             data: dict[str, Any] = {
                 'last_run_timestamp': self.state.last_run_timestamp,
@@ -82,16 +89,17 @@ class IncrementalProcessor:
                 'file_hashes': self.state.file_hashes,
                 'pending_files': self.state.pending_files
             }
-            self.state_file.write_text(json.dumps(data, indent=2))
-            logging.debug(f"Saved incremental state to {self.state_file}")
+            # orjson.dumps returns bytes
+            self.state_file.write_bytes(orjson.dumps(data, option=orjson.OPT_INDENT_2))
+            logging.debug(f"Saved incremental state using orjson to {self.state_file}")
         except Exception as e:
             logging.warning(f"Failed to save state: {e}")
 
     def _compute_file_hash(self, file_path: Path) -> str:
-        """Compute MD5 hash of file content."""
+        """Compute BLAKE3 hash of file content (Phase 233)."""
         try:
             content = file_path.read_bytes()
-            return hashlib.md5(content).hexdigest()
+            return blake3.blake3(content).hexdigest()
         except Exception:
             return ""
 
