@@ -12,27 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 
 """Agent specializing in Bash and shell scripting."""
 
-# pylint: disable=too-many-ancestors
 
-from __future__ import annotations
 
-from src.core.base.common.base_utilities import as_tool, create_main_function
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.development.coder_agent import CoderAgent
-from src.logic.agents.development.core.bash_core import BashCore
 
-__version__ = VERSION
-
+from src.logic.agents.development.CoderAgent import CoderAgent
+from src.core.base.utilities import create_main_function, as_tool
+from src.logic.agents.development.core.BashCore import BashCore
+import logging
 
 class BashAgent(CoderAgent):
     """Agent for shell scripts (Phase 175 enhanced)."""
-
+    
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.capabilities.extend(["bash", "shell-scripting", "posix-compliance"])  # Phase 241
         self._language = "bash"
         self.core = BashCore()
         self._system_prompt = (
@@ -45,24 +52,22 @@ class BashAgent(CoderAgent):
     def lint_generated_script(self, script_path: str) -> str:
         """Lints a bash script using shellcheck and returns high-level report."""
         print(f"[BASH] Linting script: {script_path}...")
-
         results = self.core.lint_script(script_path)
         if "error" in results:
             return f"LINT ERROR: {results['error']}"
         if results["valid"]:
             return "SUCCESS: No issues found by shellcheck."
-
+        
         issues = results["issues"]
         report = [f"Found {len(issues)} issues:"]
-        for issue in issues[:5]:  # Top 5
+        for issue in issues[:5]: # Top 5
             report.append(f" - Line {issue.get('line')}: {issue.get('message')} ({issue.get('code')})")
-
         return "\n".join(report)
 
     def _get_default_content(self) -> str:
         return "#!/bin/bash\nset -euo pipefail\necho 'Hello World'\n"
 
-
 if __name__ == "__main__":
     main = create_main_function(BashAgent, "Bash Agent", "Path to shell script")
     main()
+

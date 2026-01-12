@@ -1,17 +1,28 @@
 import time
 import uuid
 from typing import Dict, List, Any, Optional
+from src.logic.agents.swarm.core.AuctionCore import AuctionCore
 
 class ResourceArbitratorAgent:
     """
     Arbitrates the allocation of compute resources (CPU, GPU, Memory)
-    using a priority-based internal market system.
+    using a priority-based internal market system (Phase 184 VCG).
     """
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
         self.resource_ledger: Dict[str, Any] = {} # task_id -> {type, amount, bid, timestamp}
         self.available_credits = 10000.0 # Virtual credits for the swarm
+        self.core = AuctionCore()
+        self.vram_total = 80.0 # GB (e.g., A100)
         
+    def submit_vcg_bid(self, bids: List[Dict[str, Any]], slots: int = 1) -> List[Dict[str, Any]]:
+        """Executes a VCG auction for the provided bids."""
+        return self.core.calculate_vcg_auction(bids, slots)
+
+    def check_vram_limit(self, agent_request_gb: float) -> bool:
+        """Enforces VRAM quotas (Phase 184)."""
+        return self.core.enforce_vram_quota(agent_request_gb, self.vram_total)
+
     def submit_bid(self, agent_id: str, resource_type: str, amount: float, bid_price: float) -> Dict[str, Any]:
         """
         Allows an agent to bid for a slice of the resource pool.

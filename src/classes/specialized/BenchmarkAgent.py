@@ -1,21 +1,52 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 
 """Agent specializing in automated benchmarking of other agents.
 Measures latency, accuracy, and cost.
 """
 
+
+
 import time
 import logging
 from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+from src.logic.agents.development.core.BenchmarkCore import BenchmarkCore, BenchmarkResult
 
 class BenchmarkAgent(BaseAgent):
-    """Benchmarks the performance of the agent fleet including SGI-Bench Scientific metrics."""
+    """Benchmarks the performance of the agent fleet.
+    Integrated with BenchmarkCore for regression testing and baseline tracking.
+    """
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.results: List[Dict[str, Any]] = []
+        self.core = BenchmarkCore()
+        self.benchmark_results: List[BenchmarkResult] = []
         self._system_prompt = (
             "You are the Benchmark Agent. "
             "You follow the SGI-Bench (Scientific General Intelligence) standard.\n"
@@ -105,6 +136,19 @@ class BenchmarkAgent(BaseAgent):
         return f"Benchmark completed for {agent_name}. Latency: {duration:.2f}s"
 
     @as_tool
+    def check_for_performance_regression(self, agent_id: str, current_latency: float) -> str:
+        """Checks if an agent's current performance has regressed vs the fleet baseline."""
+        baseline = self.core.calculate_baseline(self.benchmark_results)
+        regression = self.core.check_regression(current_latency, baseline)
+        
+        if regression["regression"]:
+            msg = f"REGRESSION DETECTED: {agent_id} is {regression['delta_percentage']:.1f}% slower than baseline."
+            logging.error(msg)
+            return msg
+            
+        return f"SUCCESS: {agent_id} is within performance limits."
+
+    @as_tool
     def generate_report(self) -> str:
         """Generates a summary report of all benchmark runs."""
         if not self.results:
@@ -117,6 +161,6 @@ class BenchmarkAgent(BaseAgent):
         return "\n".join(report)
 
 if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
+    from src.core.base.utilities import create_main_function
     main = create_main_function(BenchmarkAgent, "Benchmark Agent", "Benchmark history path")
     main()

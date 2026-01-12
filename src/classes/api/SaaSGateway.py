@@ -6,14 +6,39 @@ import logging
 import time
 import uuid
 from typing import Dict, List, Any, Optional
+from src.infrastructure.api.core.GatewayCore import GatewayCore
 
 class SaaSGateway:
-    """Provides usage control and authentication for the fleet as a service."""
+    """Provides usage control and authentication for the fleet as a service.
+    Integrated with GatewayCore for external SaaS orchestration.
+    """
     
     def __init__(self) -> None:
         self.api_keys: Dict[str, Dict[str, Any]] = {} # key -> {tenant, quota}
         self.usage_logs: List[Dict[str, Any]] = []
         self.rate_limits: Dict[str, List[float]] = {} # key -> [timestamps]
+        self.core = GatewayCore()
+
+    def call_external_saas(self, api_key: str, service: str, action: str, params: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Proxies a request to an external SaaS service (Jira/Slack/Trello).
+        """
+        if not self.validate_request(api_key):
+             return {"error": "unauthorized"}
+             
+        endpoint = self.core.get_service_endpoint(service)
+        if not endpoint:
+            return {"error": f"Service {service} not registered"}
+            
+        request_obj = self.core.format_saas_request(service, action, params)
+        logging.info(f"SaaSGateway: Forwarding to {endpoint}{action}...")
+        
+        # Simulated response
+        return {
+            "status": "success",
+            "service": service,
+            "data": f"Simulated response from {service} for action {action}"
+        }
 
     def create_api_key(self, tenant_id: str, daily_quota: int = 1000) -> str:
         """Generates a new API key for a tenant."""

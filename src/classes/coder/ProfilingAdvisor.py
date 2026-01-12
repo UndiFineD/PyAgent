@@ -1,13 +1,39 @@
 #!/usr/bin/env python3
-
-"""Auto-extracted class from agent_coder.py"""
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 from __future__ import annotations
 
-from .ProfilingCategory import ProfilingCategory
-from .ProfilingSuggestion import ProfilingSuggestion
+from src.core.base.version import VERSION
+__version__ = VERSION
 
-from base_agent import BaseAgent
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+
+"""Auto-extracted class from agent_coder.py"""
+
+
+
+
+from src.core.base.types.ProfilingCategory import ProfilingCategory
+from src.core.base.types.ProfilingSuggestion import ProfilingSuggestion
+
+from src.core.base.BaseAgent import BaseAgent
 from dataclasses import dataclass, field
 from enum import Enum
 from pathlib import Path
@@ -16,47 +42,30 @@ import ast
 import hashlib
 import logging
 import math
-import re
-import shutil
-import subprocess
-import tempfile
+import pstats
+from src.core.base.BaseAgent import BaseAgent
+from src.observability.stats.core.ProfilingCore import ProfilingCore, ProfileStats
 
-class ProfilingAdvisor:
+class ProfilingAgent:
     """Provides code profiling suggestions.
-
-    Analyzes code to identify functions that would benefit
-    from profiling.
-
-    Attributes:
-        suggestions: List of profiling suggestions.
-
-    Example:
-        >>> advisor=ProfilingAdvisor()
-        >>> # suggestions=advisor.analyze("def slow_func(): asyncio.sleep(10)")
+    Integrated with ProfilingCore for cProfile analysis and bottleneck detection.
     """
 
     def __init__(self) -> None:
         """Initialize the profiling advisor."""
         self.suggestions: List[ProfilingSuggestion] = []
+        self.core = ProfilingCore()
 
-    def analyze(self, content: str) -> List[ProfilingSuggestion]:
-        """Analyze code for profiling opportunities.
-
-        Args:
-            content: Source code to analyze.
-
-        Returns:
-            List of profiling suggestions.
-        """
-        self.suggestions = []
-        try:
-            tree = ast.parse(content)
-        except SyntaxError:
-            return self.suggestions
-        for node in ast.walk(tree):
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                self._analyze_function(node)
-        return self.suggestions
+    def analyze_pstats(self, pstats_filepath: str) -> List[ProfileStats]:
+        """Analyzes a binary pstats file and returns optimization priorities."""
+        stats = pstats.Stats(pstats_filepath)
+        results = self.core.analyze_stats(stats)
+        
+        bottlenecks = self.core.identify_bottlenecks(results)
+        if bottlenecks:
+            logging.warning(f"ProfilingAgent: Detected {len(bottlenecks)} bottlenecks.")
+            
+        return results
 
     def _analyze_function(
         self,

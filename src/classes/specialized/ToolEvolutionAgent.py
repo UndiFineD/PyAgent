@@ -1,22 +1,52 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 
 """Agent specializing in self-evolution and automated tool creation.
 Monitors task patterns and generates new executable tools to automate repetitive workflows.
 """
+
+
 
 import logging
 import json
 import time
 from pathlib import Path
 from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+from src.logic.agents.development.core.ToolDraftingCore import ToolDraftingCore, ToolDefinition
+
 
 class ToolEvolutionAgent(BaseAgent):
     """Detects automation opportunities and writes its own toolsets."""
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
+        self.core = ToolDraftingCore()
         self.evolved_tools_dir = Path("src/tools/evolved")
         self.evolved_tools_dir.mkdir(parents=True, exist_ok=True)
         (self.evolved_tools_dir / "__init__.py").touch(exist_ok=True)
@@ -53,7 +83,7 @@ class ToolEvolutionAgent(BaseAgent):
         
         code_lines = [
             "import pyautogui",
-            "from src.classes.base_agent.utilities import as_tool",
+            "from src.core.base.utilities import as_tool",
             "",
             "@as_tool",
             f"def {tool_name}():",
@@ -92,17 +122,34 @@ class ToolEvolutionAgent(BaseAgent):
             return f"ERROR: Failed to save evolved tool: {e}"
 
     @as_tool
-    def scan_logs_for_repetitive_commands(self, days: int = 1) -> str:
-        """Scans command logs to suggest tools for repetitive terminal tasks."""
-        # Mock logic for scanning bash_history or agent_logs
-        return "### Repetitive Task Detection\n\nFound 12 instances of `docker-compose down && docker-compose up -d`. \nProposal: Create `refresh_containers` tool."
+    def generate_tool_contract(self, name: str, description: str, endpoint: str) -> str:
+        """Generates an OpenAPI 3.0 contract for a drafted tool.
+        Args:
+            name: Technical identifier for the tool.
+            description: Concise explanation of the tool's usage.
+            endpoint: The API path where this tool is exposed.
+        """
+        if not self.core.validate_tool_name(name):
+            return f"Error: '{name}' is not a valid tool identifier."
+            
+        tool_def = ToolDefinition(
+            name=name,
+            description=description,
+            parameters={"type": "object", "properties": {"input": {"type": "string"}}},
+            endpoint=endpoint
+        )
+        
+        spec = self.core.generate_openapi_spec([tool_def])
+        logging.info(f"ToolEvolution: Generated contract for {name}")
+        return f"### OpenAPI Contract for '{name}'\n\n```json\n{spec}\n```"
 
+    @as_tool
     def improve_content(self, prompt: str) -> str:
         """General evolution logic."""
         return "I am scanning for ways to improve my own capabilities."
 
 if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
+    from src.core.base.utilities import create_main_function
     main = create_main_function(ToolEvolutionAgent, "Tool Evolution Agent", "Self-evolving tool creator")
     main()
 

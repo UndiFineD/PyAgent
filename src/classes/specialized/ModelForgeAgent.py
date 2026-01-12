@@ -1,16 +1,45 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 
 """Model Forge Agent for PyAgent.
 Specializes in local fine-tuning and model optimization (LoRA/QLoRA).
 """
+
+
 
 import logging
 import os
 import json
 from pathlib import Path
 from typing import Dict, Any, List, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+from src.logic.agents.system.core.ModelRegistryCore import ModelRegistryCore
+
 
 class ModelForgeAgent(BaseAgent):
     """Orchestrates local model fine-tuning and adapter management."""
@@ -24,13 +53,25 @@ class ModelForgeAgent(BaseAgent):
         self.adapters_dir.mkdir(parents=True, exist_ok=True)
         self.datasets_dir = self.forge_dir / "datasets"
         self.datasets_dir.mkdir(parents=True, exist_ok=True)
+        
+        self.registry = ModelRegistryCore()
+        # Simulated quality history for agents
+        self.agent_quality_history: Dict[str, List[float]] = {}
 
-        self._system_prompt = (
-            "You are the Model Forge Agent. Your specialty is the Neural Forge Pattern. "
-            "You manage local fine-tuning processes, dataset preparation for LoRA, "
-            "and model optimization. You can trigger fine-tuning jobs, evaluate adapters, "
-            "and select the best niche models for specific tasks."
-        )
+    def monitor_agent_quality(self, agent_name: str, last_score: float) -> str:
+        """Monitors agent response quality and triggers fine-tuning if needed."""
+        if agent_name not in self.agent_quality_history:
+            self.agent_quality_history[agent_name] = []
+        
+        self.agent_quality_history[agent_name].append(last_score)
+        
+        if self.registry.should_trigger_finetuning(self.agent_quality_history[agent_name]):
+            logging.warning(f"ModelForge: Triggering autonomous fine-tuning for {agent_name} due to low quality scores.")
+            self.start_finetuning(f"fix_{agent_name.lower()}")
+
+    def get_adapter_for_task(self, task_type: str) -> Optional[str]:
+        """Exposes the registry for picking expert adapters."""
+        return self.registry.get_adapter_for_task(task_type)
 
     @as_tool
     def prepare_dataset(self, task_name: str, examples: List[Dict[str, str]]) -> str:
@@ -58,6 +99,9 @@ class ModelForgeAgent(BaseAgent):
         dataset_path = self.datasets_dir / f"{task_name}.jsonl"
         if not dataset_path.exists():
             return f"Error: Dataset {dataset_path} not found."
+
+        if self.recorder:
+            self.recorder.record_lesson("model_forge_finetune", {"task": task_name, "base": base_model})
 
         logging.info(f"ModelForge: Starting fine-tuning for '{task_name}' on '{base_model}'...")
         
@@ -118,6 +162,6 @@ class ModelForgeAgent(BaseAgent):
         return "I am ready to forge new neural pathways. Suggest a task for local fine-tuning."
 
 if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
+    from src.core.base.utilities import create_main_function
     main = create_main_function(ModelForgeAgent, "Model Forge Agent", "Neural fine-tuning orchestration")
     main()

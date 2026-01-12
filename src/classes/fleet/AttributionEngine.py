@@ -7,15 +7,20 @@ Tracks the lineage and provenance of every generated piece of content or code.
 import hashlib
 import time
 import json
+import os
+import logging
 from pathlib import Path
 from typing import Dict, List, Any
+from src.infrastructure.fleet.core.AttributionCore import AttributionCore
 
 class AttributionEngine:
-    """Records the 'who, when, and how' for all system outputs."""
+    """Records the 'who, when, and how' for all system outputs (Phase 185)."""
 
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
-        self.log_file = self.workspace_root / "attribution_log.json"
+        self.log_file = self.workspace_root / "data/fleet/attribution_log.json"
+        self.core = AttributionCore()
+        os.makedirs(self.log_file.parent, exist_ok=True)
         self.records: List[Dict[str, Any]] = self._load()
 
     def _load(self) -> List[Dict[str, Any]]:
@@ -23,6 +28,22 @@ class AttributionEngine:
             with open(self.log_file, "r") as f:
                 return json.load(f)
         return []
+
+    def apply_licensing(self, file_path: str):
+        """Ensures the file has the correct license header (Phase 185)."""
+        path = Path(file_path)
+        if not path.exists():
+            return
+            
+        with open(path, "r", encoding="utf-8") as f:
+            content = f.read()
+            
+        new_content = self.core.ensure_license_header(content)
+        
+        if new_content != content:
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(new_content)
+            logging.info(f"AttributionEngine: Applied license header to {file_path}")
 
     def record_attribution(self, agent_id: str, content: str, task_context: str) -> None:
         """Creates a record of content generation."""

@@ -1,28 +1,68 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+
 
 import logging
 import json
 import os
 import random
 from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore
+
 
 class SyntheticDataAgent(BaseAgent):
     """
     Agent specializing in generating high-fidelity synthetic training data.
     Used to create datasets for fine-tuning local models (ModelForge).
+    Integrated with SynthesisCore for edge-case generation.
     """
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.output_dir = "logs/synthetic_data"
+        self.output_dir = "data/logs/synthetic_data"
         os.makedirs(self.output_dir, exist_ok=True)
-        self._system_prompt = (
-            "You are the Synthetic Data Forge Agent. "
-            "Your goal is to generate diverse and high-quality instruction-following pairs "
-            "related to coding, debugging, and project management for fine-tuning purposes."
-        )
+        self.core = SynthesisCore()
+
+    @as_tool
+    def generate_edge_case_dataset(self, count: int = 100) -> str:
+        """
+        Generates a massive dataset of synthetic Python edge cases for model hardening.
+        """
+        logging.info(f"SyntheticDataAgent: Generating {count} edge cases...")
+        snippets = self.core.generate_python_edge_cases(count)
+        
+        filepath = os.path.join(self.output_dir, "python_edge_cases.jsonl")
+        with open(filepath, 'w', encoding='utf-8') as f:
+            for s in snippets:
+                f.write(json.dumps({"instruction": "Complete or explain this code", "output": s}) + "\n")
+                
+        return f"Generated {count} edge cases in {filepath}"
 
     @as_tool
     def generate_training_data(self, topic: str, count: int = 5) -> str:

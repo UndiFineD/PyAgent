@@ -1,14 +1,43 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 
 """Distributed tracing for the PyAgent fleet using OpenTelemetry standards.
 Allows visualization of agent chains and request propagation across nodes.
 """
+
+
 
 import logging
 import time
 import uuid
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
+from src.observability.stats.core.TracingCore import TracingCore
+
 
 @dataclass
 class Span:
@@ -22,11 +51,30 @@ class Span:
     status: str = "unset"
 
 class OTelManager:
-    """Manages OTel-compatible spans and traces for cross-fleet observability."""
+    """Manages OTel-compatible spans and traces for cross-fleet observability.
+    Integrated with TracingCore for latency analysis and OTel formatting.
+    """
     
     def __init__(self) -> None:
         self.active_spans: Dict[str, Span] = {}
         self.completed_spans: List[Span] = []
+        self.core = TracingCore()
+
+    def end_span(self, span_id: str, status: str = "ok", network_latency_sec: float = 0.0) -> None:
+        """Ends a span and calculates latency breakdown via Core."""
+        span = self.active_spans.pop(span_id, None)
+        if not span:
+            return
+            
+        span.end_time = time.time()
+        span.status = status
+        
+        total_latency = span.end_time - span.start_time
+        breakdown = self.core.calculate_latency_breakdown(total_latency, network_latency_sec)
+        span.attributes.update(breakdown)
+        
+        self.completed_spans.append(span)
+        logging.info(f"OTel: Span {span.name} ended. Thinking time: {breakdown['agent_thinking_ms']:.2f}ms")
 
     def start_span(self, name: str, parent_id: Optional[str] = None, attributes: Optional[Dict[str, Any]] = None) -> str:
         """Starts a new tracing span and returns its ID."""
@@ -44,11 +92,7 @@ class OTelManager:
         logging.info(f"OTel: Started span {name} ({span_id})")
         return span_id
 
-<<<<<<< HEAD
-    def end_span(self, span_id: str, status: str = "ok", attributes: Optional[Dict[str, Any]] = None):
-=======
     def end_span(self, span_id: str, status: str = "ok", attributes: Optional[Dict[str, Any]] = None) -> None:
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         """Ends a span and records its duration."""
         if span_id not in self.active_spans:
             logging.warning(f"OTel: Attempted to end non-existent span {span_id}")
@@ -83,12 +127,8 @@ if __name__ == "__main__":
     otel = OTelManager()
     root = otel.start_span("Workflow: Fix Code")
     child = otel.start_span("Agent: SecurityGuard", parent_id=root)
-<<<<<<< HEAD
-    time.sleep(0.1)
-=======
     import threading
     threading.Event().wait(timeout=0.1)
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
     otel.end_span(child, status="ok")
     otel.end_span(root, status="ok")
     print(f"Exported {len(otel.export_spans())} spans.")

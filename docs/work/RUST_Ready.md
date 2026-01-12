@@ -1,317 +1,101 @@
-# Rust Conversion Readiness - PyAgent Core Modules
+﻿# Rust Conversion Readiness Manifest
 
-This document tracks Python files that are ready or nearly ready for Rust conversion. These files typically contain pure logic, minimal I/O, clear interfaces, and high computational value.
+This document tracks modules that have been audited, decoupled from side-effects (IO/Network), and are ready for conversion to Rust (via PyO3 or FFI) using the Core/Shell pattern.
 
-**Last Updated**: January 17, 2026 (Phase 17 Complete)
-**Total Accelerated Functions**: 111
+## 💎 Primary Core Candidates
 
-## Status Legend
-- ✅ **OPTIMIZED** - Already integrated with rust_core (PyO3)
-- 🚀 **READY** - Pure logic, no I/O, well-typed, ready for conversion
-- 🔄 **NEAR-READY** - Minimal I/O or dependencies, needs minor cleanup
-- ⚠️ **NEEDS-WORK** - Has I/O or complex dependencies, requires refactoring first
-- 📊 **HIGH-VALUE** - Performance-critical, would benefit most from Rust
+| Module | Purpose | Status | Complexity | Typing |
+|--------|---------|--------|------------|--------|
+| [src/observability/core/LoggingCore.py](src/observability/core/LoggingCore.py) | **High-throughput log masking & RFC3339 formatting (Phase 227)** | READY | Low | 100% |
+| [src/infrastructure/fleet/core/GPUMonitorCore.py](src/infrastructure/fleet/core/GPUMonitorCore.py) | **GPU Telemetry, Memory Tracking, and VRAM pressure logic (Phase 227)** | READY | Medium | 100% |
+| [src/core/base/managers/PluginManager.py](src/core/base/managers/PluginManager.py) | **Plugin discovery, manifest enforcement, and health check logic (Phase 226)** | READY | Medium | 100% |
+| [src/observability/stats/observability_core.py](src/observability/stats/observability_core.py) | **Consolidated observability logic & telemetry aggregation (Phase 224)** | READY | Medium | 100% |
+| [version.py](version.py) | **Evolution Phase 223: Proxima Edition Gold Master** | READY | Low | 100% |
+| [src/core/base/](src/core/base/) | **Global Type Conformance & Future Annotations (Phase 221)** | READY | Low | 100% |
+| [src/core/base/ShardedKnowledgeCore.py](src/core/base/ShardedKnowledgeCore.py) | **Adler-32 sharding & Parquet export logic (Phase 220)** | READY | High | 100% |
+| [src/logic/agents/cognitive/core/MemoryConsolidatorCore.py](src/logic/agents/cognitive/core/MemoryConsolidatorCore.py) | **Logic for distilling interactions into insights (Phase 219)** | READY | Medium | 100% |
+| [src/core/base/managers/ProcessorManagers.py](src/core/base/managers/ProcessorManagers.py) | **Binary serialization (CBOR/Pickle) & compression logic (Phase 218)** | READY | Medium | 100% |
+| [src/infrastructure/dev/scripts/FleetHarness.py](src/infrastructure/dev/scripts/FleetHarness.py) | **Unified command management for fleet operations (Phase 217)** | READY | Low | 100% |
+| [src/core/knowledge/btree_store.py](src/core/knowledge/btree_store.py) | **Concurrent B-Link Tree & Mmap caching (Phase 216)** | READY | High | 100% |
+| [src/core/knowledge/storage_base.py](src/core/knowledge/storage_base.py) | **Abstract storage interface for knowledge sharding (Phase 216)** | READY | Low | 100% |
+| [src/logic/cognitive/prompt_templates.py](src/logic/cognitive/prompt_templates.py) | **Vibe-Coding 2025 track logic & persona mapping (Phase 215)** | READY | Low | 100% |
+| [src/core/base/core/PruningCore.py](src/core/base/core/PruningCore.py) | **Decay & Synaptic weight logic (Phase 214)** | READY | High | 100% |
+| [src/logic/agents/development/core/BenchmarkCore.py](src/logic/agents/development/core/BenchmarkCore.py) | **Latency regression gate logic (Phase 213)** | READY | Low | 100% |
+| [src/observability/stats/core/TracingCore.py](src/observability/stats/core/TracingCore.py) | **OTel span logic & Thinking/Network latency (Phase 201)** | READY | Low | 100% |
+| [src/infrastructure/sandbox/core/SandboxCore.py](src/infrastructure/sandbox/core/SandboxCore.py) | **Container isolation & resource limits (Phase 202)** | READY | Low | 100% |
+| [src/logic/agents/compliance/core/ComplianceCore.py](src/logic/agents/compliance/core/ComplianceCore.py) | **Continuous compliance & regulatory scanning (Phase 203)** | READY | Low | 100% |
+| [src/logic/agents/development/core/ToolDraftingCore.py](src/logic/agents/development/core/ToolDraftingCore.py) | **Dynamic OpenAPI tool generation (Phase 204)** | READY | Medium | 100% |
+| [src/infrastructure/fleet/core/LoadBalancerCore.py](src/infrastructure/fleet/core/LoadBalancerCore.py) | **Cognitive load balancing & pressure scaling (Phase 205)** | READY | Low | 100% |
+| [src/logic/agents/swarm/core/LessonCore.py](src/logic/agents/swarm/core/LessonCore.py) | **Cross-fleet lesson bloom filters (Phase 206)** | READY | Medium | 100% |
+| [src/core/base/core/IdentityCore.py](src/core/base/core/IdentityCore.py) | **Decentralized Agent ID & signing (Phase 207)** | READY | Low | 100% |
+| [src/core/base/core/AuthCore.py](src/core/base/core/AuthCore.py) | **Zero-knowledge agent authentication (Phase 208)** | READY | Medium | 100% |
+| [src/logic/agents/cognitive/core/LocalRAGCore.py](src/logic/agents/cognitive/core/LocalRAGCore.py) | **Localized vector sharding (Phase 209)** | READY | High | 100% |
+| [src/observability/stats/core/StabilityCore.py](src/observability/stats/core/StabilityCore.py) | **Fleet stability & coherence heuristics (Phase 210)** | READY | Medium | 100% |
+| [src/logic/agents/security/core/RedQueenCore.py](src/logic/agents/security/core/RedQueenCore.py) | **Adversarial prompt evolution (Phase 211)** | READY | High | 100% |
+| [src/observability/stats/core/ProfilingCore.py](src/observability/stats/core/ProfilingCore.py) | **cProfile aggregation & bottleneck logic (Phase 212)** | READY | Low | 100% |
+| [src/core/base/core/AutonomyCore.py](src/core/base/core/AutonomyCore.py) | **Agent self-model and autonomy daemon (Phase 200)** | READY | Low | 100% |
+| [src/interface/core/InterfaceSyncCore.py](src/interface/core/InterfaceSyncCore.py) | **Unified interface theme and sync (Phase 199)** | READY | Low | 100% |
+| [src/logic/agents/system/core/ConfigHygieneCore.py](src/logic/agents/system/core/ConfigHygieneCore.py) | **JSON Schema validation and env mapping (Phase 174)** | READY | Low | 100% |
+| [src/logic/agents/documentation/core/TopologyCore.py](src/logic/agents/documentation/core/TopologyCore.py) | **Mermaid.js graph generation logic (Phase 169)** | READY | Low | 100% |
+| [src/logic/agents/security/core/ByzantineCore.py](src/logic/agents/security/core/ByzantineCore.py) | **Consensus voting and agreement logic (Phase 168)** | READY | Low | 100% |
+| [src/logic/agents/cognitive/core/VisionCore.py](src/logic/agents/cognitive/core/VisionCore.py) | **Visual processing and glitch detection (Phase 167)** | READY | Medium | 100% |
+| [src/logic/agents/cognitive/core/MemoryConsolidatorCore.py](src/logic/agents/cognitive/core/MemoryConsolidatorCore.py) | **Logic for distilling interactions into insights (Phase 165)** | READY | Medium | 100% |
+| [src/infrastructure/orchestration/HolographicStateOrchestrator.py](src/infrastructure/orchestration/HolographicStateOrchestrator.py) | **State sharding and reconstruction via bit-packing (Phase 162)** | READY | High | 100% |
+| [src/infrastructure/orchestration/TaskDecomposerCore.py](src/infrastructure/orchestration/TaskDecomposerCore.py) | **Heuristic planning and dependency analysis** | READY | Medium | 100% |
+| [src/infrastructure/fleet/AgentEconomy.py](src/infrastructure/fleet/AgentEconomy.py) | **Market Pricing & Agent Accounting Engine** | READY | Low | 100% |
+| [src/core/base/acceleration.py](src/core/base/acceleration.py) | **Calculate Synaptic Weight (NeuralPruningEngine)** | READY | High | 100% |
+| [src/core/base/BaseAgent.py](src/core/base/BaseAgent.py) | Foundation for all agents (workspace root, path logic, diffs) | READY | Medium | 100% |
+| [src/infrastructure/fleet/EvolutionCore.py](src/infrastructure/fleet/EvolutionCore.py) | Genetic algorithms for fleet adaptation | READY | Medium | 100% |
+| [src/infrastructure/api/APICore.py](src/infrastructure/api/APICore.py) | OpenAPI spec generation and contract validation | READY | Low | 100% |
+| [src/infrastructure/orchestration/ToolCore.py](src/infrastructure/orchestration/ToolCore.py) | Argument filtering and metadata extraction logic | READY | Low | 100% |
+| [src/observability/stats/FormulaEngineCore.py](src/observability/stats/FormulaEngineCore.py) | AST-based mathematical expression evaluator | READY | High | 100% |
+| [src/logic/agents/cognitive/context/engines/GraphCore.py](src/logic/agents/cognitive/context/engines/GraphCore.py) | AST-based code relationship analysis | READY | Medium | 100% |
+| [src/logic/agents/cognitive/context/engines/KnowledgeCore.py](src/logic/agents/cognitive/context/engines/KnowledgeCore.py) | Indexing and search logic for knowledge graph | READY | High | 100% |
+| [src/logic/agents/cognitive/context/engines/GlobalContextCore.py](src/logic/agents/cognitive/context/engines/GlobalContextCore.py) | Stable sub-sharding and conflict resolution logic | READY | Medium | 100% |
+| [src/infrastructure/fleet/AgentRegistryCore.py](src/infrastructure/fleet/AgentRegistryCore.py) | Manifest parsing and circular dependency detection | READY | Medium | 100% |
+| [src/infrastructure/fleet/ScalingCore.py](src/infrastructure/fleet/ScalingCore.py) | Proactive multi-resource scaling and anti-flapping | READY | Medium | 100% |
+| [src/logic/agents/cognitive/context/engines/MemoryCore.py](src/logic/agents/cognitive/context/engines/MemoryCore.py) | Episode scoring and utility decay logic | READY | Low | 100% |
+| [src/logic/agents/cognitive/core/MetacognitiveCore.py](src/logic/agents/cognitive/core/MetacognitiveCore.py) | Reasoning certainty and consistency logic | READY | Low | 100% |
+| [src/logic/agents/cognitive/core/TheoryOfMindCore.py](src/logic/agents/cognitive/core/TheoryOfMindCore.py) | Agent modeling and collaborator ranking logic | READY | Medium | 100% |
+| [src/logic/agents/cognitive/context/engines/ContextCompressorCore.py](src/logic/agents/cognitive/context/engines/ContextCompressorCore.py) | AST-based signature extraction and summary logic | READY | Medium | 100% |
+| [src/logic/agents/development/SecurityCore.py](src/logic/agents/development/SecurityCore.py) | Regex scanning & Auditing | READY | Medium | 100% |
+| [src/infrastructure/orchestration/SignalCore.py](src/infrastructure/orchestration/SignalCore.py) | Event broadcasting and history windowing | READY | Low | 100% |
+| [src/observability/stats/TokenCostCore.py](src/observability/stats/TokenCostCore.py) | Multi-model pricing and usage estimation | READY | Low | 100% |
+| [src/logic/agents/intelligence/SearchCore.py](src/logic/agents/intelligence/SearchCore.py) | Pure logic for search result parsing and Markdown formatting | READY | Medium | 100% |
+| [src/logic/agents/intelligence/WebCore.py](src/logic/agents/intelligence/WebCore.py) | Pure logic for HTML cleaning and link extraction | READY | Low | 100% |
+| [src/logic/agents/development/DependencyCore.py](src/logic/agents/development/DependencyCore.py) | AST-based dependency and inheritance analysis | READY | Medium | 100% |
+| [src/logic/agents/development/ArchCore.py](src/logic/agents/development/ArchCore.py) | Architectural metrics and coupling calculations | READY | Low | 100% |
+| [src/infrastructure/orchestration/ConsensusCore.py](src/infrastructure/orchestration/ConsensusCore.py) | Weighted voting and agreement score calculation | READY | Low | 100% |
+| [src/infrastructure/orchestration/SelfHealingCore.py](src/infrastructure/orchestration/SelfHealingCore.py) | Anomaly detection and recovery state logic | READY | Medium | 100% |
+| [src/infrastructure/fleet/KnowledgeTransferCore.py](src/infrastructure/fleet/KnowledgeTransferCore.py) | Lesson dataset merging and deduplication logic | READY | Low | 100% |
+| [src/logic/agents/development/DocGenCore.py](src/logic/agents/development/DocGenCore.py) | AST-based documentation extraction and formatting | READY | Medium | 100% |
+| [src/logic/agents/intelligence/ResearchCore.py](src/logic/agents/intelligence/ResearchCore.py) | SGI-Bench DCAP cycle logic and tool drafting | READY | Medium | 100% |
+| [src/logic/agents/development/CodeQualityCore.py](src/logic/agents/development/CodeQualityCore.py) | Pure logic for cross-language quality checks | READY | Low | 100% |
+| [src/logic/agents/development/TechDebtCore.py](src/logic/agents/development/TechDebtCore.py) | AST-based technical debt analysis and hotspotting | READY | Medium | 100% |
 
----
 
-## 📊 FUNCTION INVENTORY (72 Total)
+## 🔥 Performance-Critical Targets (High Priority)
 
-### Security Module (8 functions)
-| Function | Purpose |
-|----------|---------|
-| `scan_code_vulnerabilities_rust` | Scan code for security vulnerabilities |
-| `scan_injections_rust` | Detect injection attack patterns |
-| `scan_pii_rust` | Find personally identifiable information |
-| `analyze_thought_rust` | Analyze agent thought patterns |
-| `scan_hardcoded_secrets_rust` | Find hardcoded secrets/credentials |
-| `scan_insecure_patterns_rust` | Detect insecure coding patterns |
-| `scan_optimization_patterns_rust` | Find optimization opportunities |
-| `scan_secrets_rust` | General secrets scanning |
+1.  **[src/core/base/core/PruningCore.py](src/core/base/core/PruningCore.py)**: Bio-digital synaptic decay logic. Essential for swarm stability and performance under high cognitive pressure.
+2.  **[src/logic/agents/security/core/RedQueenCore.py](src/logic/agents/security/core/RedQueenCore.py)**: Adversarial mutation logic. Core security loop for evolving against prompt injection.
+3.  **[src/core/knowledge/btree_store.py](src/core/knowledge/btree_store.py)**: Sharded B-Tree logic. MD5 path calculation and page sharding math.
+4.  **[src/core/knowledge/graph_store.py](src/core/knowledge/graph_store.py)**: Sharded ontological graph. Node-level MD5 sharding and triple store lookups.
+5.  **[src/infrastructure/fleet/ShardingOrchestrator.py](src/infrastructure/fleet/ShardingOrchestrator.py)**: Dynamic clustering algorithms for trillion-parameter data isolation.
+6.  **[src/logic/agents/intelligence/LatentReasoningAgent.py](src/logic/agents/intelligence/LatentReasoningAgent.py)**: Chain-of-thought verification logic and linguistics auditing.
+7.  **[src/logic/agents/system/ModelOptimizerAgent.py](src/logic/agents/system/ModelOptimizerAgent.py)**: Quantization (FP8/Hopper) logic and cost/latency trade-off simulations.
 
-### Statistics Module (4 functions)
-| Function | Purpose |
-|----------|---------|
-| `calculate_pearson_correlation` | Compute Pearson correlation coefficient |
-| `predict_linear` | Linear prediction extrapolation |
-| `predict_with_confidence_rust` | Predictions with confidence intervals |
-| `aggregate_score_rust` | Aggregate compliance scores |
+## 🧪 Audit Criteria
+- [x] **Pure Functions**: No direct calls to os (except path math), requests, or db.
+- [x] **Explicit State**: Data must be passed in as arguments or held in dataclasses.
+- [x] **Strong Typing**: 100% return type hints and parameter annotations.
+- [x] **PyO3 Compatibility**: Struct-based layout ready for Rust transition.
 
-### Neural Module (1 function)
-| Function | Purpose |
-|----------|---------|
-| `cluster_interactions_rust` | Cluster agent interactions |
+## 🚀 Recent Audits (Phase 130)
+- **BTreeKnowledgeStore**: Verified MD5 sharding purity for high-scale isolation.
+- **LatentReasoningAgent**: Audited the reasoning audit hook for side-effect isolation.
+- **ModelOptimizerAgent**: Validated Hopper simulation logic for 100% typing.
 
-### Base Module (1 function)
-| Function | Purpose |
-|----------|---------|
-| `is_response_valid_rust` | Validate response content |
-
-### Text Processing Module (58 functions)
-
-#### Core Text Operations
-| Function | Purpose |
-|----------|---------|
-| `tokenize_and_index_rust` | Tokenize and build inverted index |
-| `tokenize_query_rust` | Tokenize search queries |
-| `calculate_text_similarity_rust` | Jaccard text similarity |
-| `find_similar_pairs_rust` | Find similar text pairs |
-| `bulk_tokenize_rust` | Batch tokenization |
-| `word_frequencies_rust` | Calculate word frequencies |
-| `deduplicate_strings_rust` | Deduplicate string collections |
-
-#### Pattern Matching
-| Function | Purpose |
-|----------|---------|
-| `match_patterns_rust` | Match against pattern list |
-| `bulk_match_patterns_rust` | Batch pattern matching |
-| `check_suppression_rust` | Check suppression patterns |
-| `scan_lines_multi_pattern_rust` | Multi-pattern line scanner |
-| `apply_patterns_rust` | Apply pattern transformations |
-| `analyze_security_patterns_rust` | Security pattern analysis |
-
-#### Search & Filtering
-| Function | Purpose |
-|----------|---------|
-| `search_content_scored_rust` | Scored content search |
-| `search_with_tags_rust` | Tag-based search |
-| `filter_memory_by_query_rust` | Memory filtering |
-| `search_blocks_rust` | Block-based search |
-
-#### Vector Operations
-| Function | Purpose |
-|----------|---------|
-| `cosine_similarity_rust` | Cosine similarity calculation |
-| `batch_cosine_similarity_rust` | Batch cosine similarity |
-| `find_strong_correlations_rust` | Find correlated vectors |
-
-#### Code Analysis
-| Function | Purpose |
-|----------|---------|
-| `extract_versions_rust` | Extract version strings |
-| `batch_scan_files_rust` | Batch file scanning |
-| `find_dependents_rust` | Find module dependents |
-| `match_policies_rust` | Policy pattern matching |
-| `calculate_coupling_rust` | Calculate module coupling |
-| `topological_sort_rust` | Topological sort for dependencies |
-| `count_untyped_functions_rust` | Count untyped functions |
-| `build_graph_edges_rust` | Build dependency graph edges |
-| `find_duplicate_code_rust` | Find duplicate code blocks |
-| `check_style_patterns_rust` | Check style guide compliance |
-| `scan_compliance_patterns_rust` | Scan for compliance issues |
-| `analyze_tech_debt_rust` | Analyze technical debt |
-
-#### Infrastructure Operations
-| Function | Purpose |
-|----------|---------|
-| `partition_to_shards_rust` | Partition data to shards |
-| `linear_forecast_rust` | Linear time series forecast |
-| `normalize_and_hash_rust` | Normalize and hash content |
-| `generate_unified_diff_rust` | Generate unified diffs |
-| `calculate_jaccard_set_rust` | Jaccard set similarity |
-| `fast_cache_key_rust` | Fast cache key generation |
-| `fast_prefix_key_rust` | Fast prefix-based key |
-| `select_best_agent_rust` | Select optimal agent |
-| `aggregate_file_metrics_rust` | Aggregate file metrics |
-
-#### Phase 12: Healing & Resilience
-| Function | Purpose |
-|----------|---------|
-| `calculate_weighted_load_rust` | Calculate weighted load metrics |
-| `detect_failed_agents_rust` | Detect failed agents |
-| `calculate_variance_rust` | Calculate statistical variance |
-| `validate_semver_rust` | Validate semantic versioning |
-| `analyze_failure_strategy_rust` | Analyze failure recovery strategy |
-
-#### Phase 13: Stats & Knowledge
-| Function | Purpose |
-|----------|---------|
-| `calculate_sum_rust` | Fast sum calculation |
-| `calculate_avg_rust` | Fast average calculation |
-| `calculate_min_rust` | Fast minimum finding |
-| `calculate_max_rust` | Fast maximum finding |
-| `calculate_median_rust` | Fast median (P50) |
-| `calculate_p95_rust` | 95th percentile |
-| `calculate_p99_rust` | 99th percentile |
-| `calculate_stddev_rust` | Standard deviation |
-| `calculate_pearson_correlation_rust` | Pearson correlation (new) |
-| `calculate_shard_id_rust` | Adler32 hash sharding |
-| `merge_knowledge_rust` | JSON dict merging |
-| `filter_stable_knowledge_rust` | Confidence filtering |
-
-#### Phase 17: vLLM-Inspired Utilities (11 functions)
-| Function | Purpose |
-|----------|---------|
-| `cdiv_rust` | Ceiling division without floating point |
-| `next_power_of_2_rust` | Smallest power of 2 >= n |
-| `prev_power_of_2_rust` | Largest power of 2 <= n |
-| `round_up_rust` | Round up to nearest multiple |
-| `round_down_rust` | Round down to nearest multiple |
-| `atomic_counter_add_rust` | Atomic counter addition |
-| `xxhash_rust` | Fast non-cryptographic hashing |
-| `fast_cache_hash_rust` | Cache key hashing with prefix |
-| `cache_hit_ratio_rust` | Calculate cache hit ratio |
-| `batch_cdiv_rust` | Batch ceiling division |
-| `batch_next_power_of_2_rust` | Batch power-of-2 calculation |
-
----
-
-## TIER 1: OPTIMIZED (72 files/functions)
-
-### Core Infrastructure
-1. ✅ **SecurityCore.py** - Integrated with scan_code_vulnerabilities_rust, scan_injections_rust
-2. ✅ **ObservabilityCore.py** - Integrated with calculate_pearson_correlation, predict_linear
-3. ✅ **ReportSearchEngine.py** - Integrated with tokenize_and_index_rust, search_content_scored_rust
-4. ✅ **MergeDetector.py** - Integrated with calculate_text_similarity_rust, find_similar_pairs_rust
-5. ✅ **SuppressionEngine.py** - Integrated with check_suppression_rust, scan_lines_multi_pattern_rust
-6. ✅ **PrivacyCore.py** - Integrated with scan_pii_rust
-7. ✅ **DependencyCore.py** - Integrated with find_dependents_rust, calculate_coupling_rust
-8. ✅ **PolicyCore.py** - Integrated with match_policies_rust
-9. ✅ **QuantumShardOrchestrator.py** - Integrated with partition_to_shards_rust
-10. ✅ **TypeCoverageCore.py** - Integrated with count_untyped_functions_rust
-11. ✅ **ModuleGraphCore.py** - Integrated with build_graph_edges_rust, topological_sort_rust
-
-### Agent Logic
-12. ✅ **CoderCore.py** - Integrated with check_style_patterns_rust, find_duplicate_code_rust
-13. ✅ **ComplianceCore.py** - Integrated with scan_compliance_patterns_rust
-14. ✅ **LessonCore.py** - Integrated with normalize_and_hash_rust
-15. ✅ **DiffGenerator.py** - Integrated with generate_unified_diff_rust
-16. ✅ **MorphologyCore.py** - Integrated with calculate_jaccard_set_rust
-17. ✅ **ResponseCache.py** - Integrated with fast_cache_key_rust, fast_prefix_key_rust
-18. ✅ **LoadBalancerCore.py** - Integrated with select_best_agent_rust
-19. ✅ **EntropyCore.py** - Integrated with aggregate_file_metrics_rust
-20. ✅ **ScalingCore.py** - Integrated with calculate_weighted_load_rust
-21. ✅ **SelfHealingCore.py** - Integrated with detect_failed_agents_rust, validate_semver_rust
-22. ✅ **StabilityCore.py** - Integrated with calculate_variance_rust
-23. ✅ **SelfHealingEngineCore.py** - Integrated with analyze_failure_strategy_rust
-24. ✅ **TechDebtCore.py** - Integrated with analyze_tech_debt_rust
-
-### Stats & Metrics
-25. ✅ **MetricsCore.py (StatsRollupCore)** - Integrated with calculate_sum/avg/min/max/median/stddev_rust
-26. ✅ **MetricsCore.py (CorrelationCore)** - Integrated with calculate_pearson_correlation_rust
-27. ✅ **ShardedKnowledgeCore.py** - Integrated with calculate_shard_id_rust, merge_knowledge_rust
-
-### Previous Phases (1-9)
-28-72. ✅ **[Previous 44 files]** - See Phase 1-9 documentation
-
----
-
-## 🔧 PROFILING TOOLS
-
-### RustProfiler (New)
-Location: `src/observability/profiling/RustProfiler.py`
-
-**Features:**
-- Real-time call tracking with nanosecond precision
-- Thread-safe singleton design
-- Python fallback detection
-- Source location tracking
-- JSON report export
-
-**Usage:**
-```python
-from src.observability.profiling.RustProfiler import RustProfiler, RustUsageScanner
-
-# Get profiler instance
-profiler = RustProfiler.get_instance()
-
-# Scan codebase for Rust usage
-scanner = RustUsageScanner()
-report = scanner.generate_report(Path("src"), Path("tests"))
-
-# Print runtime statistics
-profiler.print_report()
-```
-
-**CLI Usage:**
-```bash
-python src/observability/profiling/RustProfiler.py --src src --tests tests -o report.json -v
-```
-
----
-
-## TIER 2: READY FOR CONVERSION (0 files)
-
-(All Tier 2 candidates migrated to Tier 1/Optimized)
-
----
-
-## TIER 3: NEAR-READY (Needs Minor Cleanup)
-
-| File | Reason | Blocker |
-|------|--------|---------|
-| `ContextBuilderCore.py` | Text processing heavy | Needs prompt_path I/O separation |
-| `FederatedSearchCore.py` | Result aggregation | Has rust_core fallback, needs full integration |
-
----
-
-## 📈 MIGRATION HISTORY
-
-| Phase | Date | Functions Added | Total |
-|-------|------|-----------------|-------|
-| 1-9 | Dec 2025 | 43 | 43 |
-| 10 | Jan 10, 2026 | 5 | 48 |
-| 11 | Jan 12, 2026 | 6 | 54 |
-| 12 | Jan 14, 2026 | 6 | 60 |
-| 13 | Jan 16, 2026 | 12 | 72 |
-| 14 | Jan 17, 2026 | 8 | 80 |
-| 15 | Jan 17, 2026 | 8 | 88 |
-| 16 | Jan 17, 2026 | 12 | 100 |
-
----
-
-## 📊 PHASE 14: COGNITIVE & BUFFER ACCELERATION (8 Functions)
-
-| Function | Purpose | Module |
-|----------|---------|--------|
-| `count_hedge_words_rust` | Multi-pattern hedge word detection | MetacognitiveCore |
-| `predict_intent_rust` | Pattern-based intent classification | MetacognitiveCore |
-| `top_k_indices_rust` | O(n) top-K selection for activations | InterpretableCore |
-| `decompose_activations_rust` | Vectorized SAE decomposition | InterpretableCore |
-| `sort_buffer_by_priority_rust` | Priority-timestamp composite sorting | AttentionBufferAgent |
-| `filter_stale_entries_rust` | Timestamp-based entry filtering | AttentionBufferAgent |
-| `calculate_statistical_significance` | T-test significance calculation | ABTestCore |
-| `calculate_sample_size` | Power analysis sample size | ABTestCore |
-
----
-
-## 📊 PHASE 15: CORE & INFRASTRUCTURE ACCELERATION (8 Functions)
-
-| Function | Purpose | Module |
-|----------|---------|--------|
-| `analyze_structure_rust` | Fast line/word/token counting | AgentCore |
-| `estimate_tokens_rust` | BPE-approximated token estimation | SubagentRunner |
-| `detect_cycles_rust` | DFS-based cycle detection in graphs | AgentRegistryCore |
-| `validate_response_rust` | Vectorized content validation | SubagentRunner |
-| `process_text_rust` | Fast text normalization | AgentCore |
-| `exponential_forecast_rust` | Exponential smoothing forecasts | ObservabilityCore |
-| `batch_token_count_rust` | Batch token counting | ExecutionEngine |
-| `graph_bfs_rust` | BFS graph traversal | DependencyCore |
-
----
-
-## 🎯 NEXT TARGETS (Phase 17+)
-
-1. **ContextBuilder** - Context window pruning and optimization
-2. **FederatedSearch** - Distributed search aggregation
-3. **WorkflowEngine** - Workflow state machine transitions
-4. **MetricAggregator** - Real-time metric aggregation
-5. **GraphContextEngine** - Graph traversal and pathfinding
-
----
-
-## 📊 PHASE 16: VECTOR MATH & AGGREGATION (12 Functions)
-
-| Function | Purpose | Module |
-|----------|---------|--------|
-| `compute_embedding_stats_rust` | Mean, variance, norm, sparsity, percentiles | DimensionalityAgent |
-| `kmeans_cluster_rust` | K-means clustering with iterative refinement | DimensionalityAgent |
-| `compute_similarity_matrix_rust` | Cosine similarity matrix with top-K pairs | DimensionalityAgent |
-| `pca_reduce_rust` | PCA-like dimensionality reduction | DimensionalityAgent |
-| `random_projection_rust` | Random projection for dimension reduction | DimensionalityAgent |
-| `compress_json_rust` | JSON serialization + zlib compression | StorageEngine |
-| `decompress_json_rust` | Zlib decompression + JSON parsing | StorageEngine |
-| `weighted_random_select_rust` | Weighted random selection for A/B testing | PromptManagers |
-| `keyword_search_score_rust` | Batch keyword matching with scoring | SemanticSearchEngine |
-| `calculate_ttest_rust` | Welch's t-test for A/B significance | ABEngine |
-| `batch_aggregate_rust` | Batch aggregation (sum/avg/min/max) | RollupEngine |
-| `rolling_window_rust` | Rolling window statistics | RollupEngine |
+## 🚀 Recent Audits (Phase 114)
+- **BaseAgent**: Verified side-effect free path calculation.
+- **ToolCore**: Audited parameter filtering logic for registry isolation.
+- **EvolutionCore**: Verified pure mutation algorithms.

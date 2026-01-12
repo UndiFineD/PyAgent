@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple, cast
 
 from .CompileResult import CompileResult
+from .core.DeduplicationCore import DeduplicationCore
 
 class ReportGenerator:
     """Generates quality reports (description, errors, improvements) for agent files."""
@@ -60,6 +61,14 @@ class ReportGenerator:
         
         logging.info(f"Processed {count} files, skipped {skipped} unchanged, {errors_count} errors.")
         return {"count": count, "skipped": skipped, "errors": errors_count}
+
+    def export_jsonl_report(self, items: List[Dict[str, Any]], filename: str = "audit_log.jsonl"):
+        """Exports report items to JSONL format (Phase 183)."""
+        output_path = self.output_dir / filename
+        # Deduplicate before export
+        unique_items = DeduplicationCore.deduplicate_items(items)
+        DeduplicationCore.export_to_jsonl(unique_items, str(output_path))
+        print(f"[REPORT] Exported {len(unique_items)} deduplicated items to {output_path}")
 
     def generate_full_report(self) -> str:
         """Generate a comprehensive project report including the dashboard grid."""

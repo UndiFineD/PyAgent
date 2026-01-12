@@ -74,6 +74,21 @@ class AgentPluginBase(ABC):
     def setup(self) -> None:
         """Called once when plugin is loaded. Override for initialization."""
 
+    @abstractmethod
+    def health_check(self) -> AgentHealthCheck:
+        """Verify plugin health and dependency status.
+
+        Returns:
+            AgentHealthCheck: Health status and details.
+        """
+        raise NotImplementedError()
+
+    @abstractmethod
+    def shutdown(self) -> None:
+        """Handle graceful shutdown, cleanup resources, and terminate processes."""
+        raise NotImplementedError()
+        pass
+
     def teardown(self) -> None:
         """Called once when plugin is unloaded. Override for cleanup."""
 

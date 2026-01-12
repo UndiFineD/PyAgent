@@ -1,11 +1,38 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+
 
 import logging
 import json
 import random
 from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+from src.logic.agents.cognitive.core.EvolutionCore import EvolutionCore
 
 class EvolutionaryPromptAgent(BaseAgent):
     """
@@ -18,6 +45,7 @@ class EvolutionaryPromptAgent(BaseAgent):
         self.population: List[Dict[str, Any]] = []
         self.generation = 0
         self.population_size = 10
+        self.core = EvolutionCore()
         self._system_prompt = (
             "You are the Evolutionary Prompt Agent. "
             "Your mission is to optimize agent performance by evolving system prompts. "
@@ -55,23 +83,37 @@ class EvolutionaryPromptAgent(BaseAgent):
     @as_tool
     def evolve_generation(self) -> Dict[str, Any]:
         """
-        Performs selection, crossover, and mutation to create the next generation of prompts.
+        Performs selection, crossover, and mutation to create next generation (Phase 182).
         """
         if not self.population:
             return {"error": "Population not initialized."}
 
-        # 1. Selection (Tournament Selection)
-        self.population.sort(key=lambda x: x["fitness"], reverse=True)
+        # 1. Selection
+        self.population.sort(key=lambda x: x.get("fitness", 0), reverse=True)
         winners = self.population[:self.population_size // 2]
         
-        # 2. Crossover & Mutation
         new_population = []
         for i in range(self.population_size):
             parent1 = random.choice(winners)
             parent2 = random.choice(winners)
             
-            # Crossover (Simplified: mix chunks of strings)
-            p1_lines = parent1["prompt"].split("\n")
+            # Crossover & Mutation using Core
+            child_prompt = self.core.prompt_crossover(parent1["prompt"], parent2["prompt"])
+            child_prompt = self.core.mutate_prompt(child_prompt)
+            
+            # Lineage Tracking
+            sha = self.core.calculate_prompt_sha(child_prompt)
+            new_population.append({
+                "prompt": child_prompt,
+                "sha": sha,
+                "parents": [parent1.get("sha"), parent2.get("sha")],
+                "fitness": 0.0,
+                "generation": self.generation + 1
+            })
+            
+        self.population = new_population
+        self.generation += 1
+        return {"generation": self.generation, "top_fitness": winners[0].get("fitness")}
             p2_lines = parent2["prompt"].split("\n")
             crossover_point = len(p1_lines) // 2
             child_prompt = "\n".join(p1_lines[:crossover_point] + p2_lines[crossover_point:])

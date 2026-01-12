@@ -2,25 +2,28 @@ import time
 import hashlib
 import uuid
 from typing import Dict, Any, List
+from src.core.base.core.IdentityCore import IdentityCore, AgentIdentity
 
 class InterFleetIdentityAgent:
     """
     Manages federated identities for agents across multiple fleets.
-    Handles secure authorization, state sharing, and inter-fleet handshakes.
+    Integrated with IdentityCore for cryptographic payload signing and DID.
     """
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
+        self.core = IdentityCore()
         self.fleet_id = str(uuid.uuid4())
         self.known_fleets = {} # fleet_id -> {pub_key, metadata}
         self.authorized_agents = {} # agent_id -> {fleet_id, permissions}
         self.session_tokens = {} # token -> {agent_id, expiry}
 
-    def generate_fleet_handshake(self) -> Dict[str, str]:
-        """Generates a handshake packet to introduce this fleet to others."""
+    def secure_handshake(self, payload: str, secret: str) -> Dict[str, str]:
+        """Signs a handshake payload using IdentityCore."""
+        signature = self.core.sign_payload(payload, secret)
         return {
             "fleet_id": self.fleet_id,
-            "timestamp": str(time.time()),
-            "capabilities": "federated_auth,state_sync_v2"
+            "payload": payload,
+            "signature": signature
         }
 
     def register_remote_fleet(self, fleet_id: str, metadata: Dict[str, Any]) -> bool:

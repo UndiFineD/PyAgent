@@ -1,11 +1,37 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 
 """Shell for MetacognitiveMonitor, handling logging and alerting."""
 
+
+
 import logging
 from typing import Dict, Any, List, Optional
-
-from src.classes.cognitive.MetacognitiveCore import MetacognitiveCore
+from src.logic.agents.cognitive.core.MetacognitiveCore import MetacognitiveCore
 
 class MetacognitiveMonitor:
     """Evaluates the internal consistency and certainty of agent reasoning.
@@ -16,6 +42,17 @@ class MetacognitiveMonitor:
     def __init__(self) -> None:
         self.uncertainty_log: List[Dict[str, Any]] = []
         self.core = MetacognitiveCore()
+        # Track weights for agents reporting to this monitor
+        self.agent_weights: Dict[str, float] = {}
+
+    def calibrate_agent(self, agent_name: str, reported_conf: float, actual_correct: bool):
+        """Calibrates an agent's consensus weight based on performance."""
+        current_weight = self.agent_weights.get(agent_name, 1.0)
+        new_weight = self.core.calibrate_confidence_weight(reported_conf, actual_correct, current_weight)
+        self.agent_weights[agent_name] = new_weight
+        
+        if new_weight < current_weight:
+            logging.info(f"Metacognitive: Penalized {agent_name} weight to {new_weight:.2f} due to overconfidence.")
 
     def evaluate_reasoning(self, agent_name: str, task: str, reasoning_chain: str) -> Dict[str, Any]:
         """Analyzes a reasoning chain via core and handles alerts."""

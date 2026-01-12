@@ -1,24 +1,70 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+
 
 import logging
 import json
 from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+from src.logic.agents.system.core.MorphologyCore import MorphologyCore
+
 
 class MorphologicalEvolutionAgent(BaseAgent):
     """
     Phase 37: Morphological Code Generation.
     Analyzes API usage patterns and evolves the fleet's class structures.
+    Integrated with MorphologyCore for Agent DNA and Splitting/Merging logic.
     """
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._system_prompt = (
-            "You are the Morphological Evolution Agent. "
-            "You study the usage patterns of other agents and propose structural changes "
-            "to their codebases to improve efficiency, reduce latency, or simplify interfaces."
+        self.core = MorphologyCore()
+
+    def generate_agent_dna(self, agent_instance: BaseAgent) -> str:
+        """
+        Generates DNA for an agent instance for persistence and replication.
+        """
+        return self.core.encode_agent_dna(
+            name=agent_instance.__class__.__name__,
+            tools=[t["name"] for t in (getattr(agent_instance, "tools", []) or [])],
+            prompt=getattr(agent_instance, "_system_prompt", ""),
+            model="gpt-4o" # Default
         )
+
+    def check_for_merge_opportunity(self, agent_a_paths: List[str], agent_b_paths: List[str]) -> bool:
+        """
+        Checks if two agents should merge based on path overlap.
+        """
+        overlap = self.core.calculate_path_overlap(agent_a_paths, agent_b_paths)
+        if overlap > 0.8:
+            logging.warning(f"MorphologicalEvolution: High overlap ({overlap:.2f}) detected. MERGE recommended.")
+            return True
+        return False
 
     @as_tool
     def analyze_api_morphology(self, agent_name: str, call_logs: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -39,7 +85,7 @@ class MorphologicalEvolutionAgent(BaseAgent):
             proposals.append({
                 "type": "INTERFACE_FLATTENING",
                 "description": f"Convert high-frequency calls in {agent_name} to specialized micro-tools.",
-                "target_file": f"src/classes/specialized/{agent_name}.py"
+                "target_file": f"src/logic/agents/specialized/{agent_name}.py"
             })
             
         return {

@@ -12,38 +12,36 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-"""Lifecycle definitions for core modules."""
-
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from typing import Any
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 
-class BaseModule(ABC):
-    """
-    Base class for all core modules in the swarm.
-    Standardizes the lifecycle of global specialized logic.
-    """
+"""
+Internal managers for prompt, conversation, auth, and batch processing.
+"""
 
-    def __init__(self, config: dict[str, Any] | None = None) -> None:
-        self.config = config or {}
-        self.initialized = False
 
-    def initialize(self) -> bool:
-        """Sets up the module resources."""
-        self.initialized = True
-        return True
 
-    @abstractmethod
-    def execute(self, *args: Any, **kwargs: Any) -> Any:
-        """Main entry point for module logic."""
 
-    def shutdown(self) -> bool:
-        """Cleans up the module resources."""
-        self.initialized = False
-        return True
+from .PromptManagers import PromptTemplateManager, PromptVersion, PromptVersionManager
+from .ConversationManagers import ConversationHistory
+from .AuthManagers import AuthenticationManager, AuthManager
+from .BatchManagers import BatchRequest, RequestBatcher
+from .ProcessorManagers import ResponsePostProcessor, MultimodalProcessor, SerializationManager
+from .OrchestrationManagers import AgentComposer, ModelSelector, QualityScorer, ABTest
+from .PluginManager import PluginManager, PluginMetadata
+from .SystemManagers import (
+    FilePriorityManager, ResponseCache, StatePersistence, 
+    EventManager, HealthChecker, ProfileManager
+)
+
+

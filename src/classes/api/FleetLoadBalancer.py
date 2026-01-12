@@ -3,56 +3,45 @@
 import logging
 import random
 from typing import Dict, List, Any, Optional
+from src.infrastructure.api.core.GatewayCore import GatewayCore
+from src.infrastructure.fleet.core.LoadBalancerCore import LoadBalancerCore, AgentMetrics
 
 class FleetLoadBalancer:
     """
     GUI Improvements: Load Balancer for multi-interface traffic.
-    Handles requests from CLI, GUI, Mobile (Flutter), and Web.
-    Ensures agents remain responsive under high load by distributing requests.
+    Integrated with LoadBalancerCore for cognitive pressure distribution.
     """
     
     def __init__(self, fleet) -> None:
         self.fleet = fleet
-        self.interface_weights = {
-            "CLI": 1.0,
-            "GUI": 1.5,
-            "Mobile": 2.0,
-            "Web": 2.0
-        }
+        self.gateway_core = GatewayCore()
+        self.lb_core = LoadBalancerCore()
         self.request_queue: List[Dict[str, Any]] = []
+        self.agent_metrics: Dict[str, AgentMetrics] = {}
 
     def balance_request(self, interface: str, command: str) -> Dict[str, Any]:
         """
         Routes the request to the most available resource or queues it.
+        Assigns model based on Interface Affinity.
         """
         logging.info(f"LoadBalancer: Incoming request from {interface}: {command[:30]}...")
         
-        # Intelligence Harvesting (Phase 108)
-        if hasattr(self.fleet, 'recorder'):
-            self.fleet.recorder.record_lesson("lb_request_entry", {
-                "interface": interface,
-                "command_len": len(command),
-                "queue_depth": len(self.request_queue)
-            })
-
+        assigned_model = self.core.resolve_model_by_affinity(interface)
+        
         # Simple simulation: If queue is large, increase latency or reject
         if len(self.request_queue) > 100:
             return {"status": "REJECTED", "reason": "High Traffic Load"}
             
-        # Priority based on interface weight
-        priority = self.interface_weights.get(interface, 1.0)
-        
         self.request_queue.append({
             "interface": interface,
             "command": command,
-            "priority": priority
+            "model": assigned_model
         })
         
-        # In a real system, this would trigger an async task on a specific worker agent
         return {
             "status": "ACCEPTED",
             "interface": interface,
-            "assigned_worker": "Dynamic_Agent_Pool",
+            "assigned_model": assigned_model,
             "estimated_wait_ms": len(self.request_queue) * 10
         }
 

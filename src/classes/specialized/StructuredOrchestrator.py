@@ -1,38 +1,86 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 
 """Agent specializing in structured multi-agent orchestration patterns.
 Supports Supervisor, Debate, Voting, Pipeline, and MapReduce patterns.
 Inspired by multi-agent-generator and LangGraph.
 """
 
+
+
 import logging
 from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
-from src.prompt_templates import VIBE_CODING_2025_TRACKS
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+from src.core.base.version import EVOLUTION_PHASE
+from src.logic.cognitive.prompt_templates import VIBE_CODING_2025_TRACKS
 
-class StructuredOrchestrator(BaseAgent):
+class PatternOrchestrator(BaseAgent):
     """Orchestrates multi-agent teams using battle-tested coordination patterns."""
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.active_track = "BUILD"
+        # Unify active track with global EVOLUTION_PHASE (Phase 215)
+        self.active_track = self._determine_track_from_phase(EVOLUTION_PHASE)
+        self._apply_vibe_persona()
+
+    def _determine_track_from_phase(self, phase: int) -> str:
+        """Determines the appropriate vibe track based on the current evolution phase."""
+        for name, track in VIBE_CODING_2025_TRACKS.items():
+            low, high = track.get("phase_range", (0, 0))
+            if low <= phase < high:
+                return name
+        return "BUILD"  # Default
+
+    def _apply_vibe_persona(self) -> None:
+        """Applies the current vibe persona to the system prompt."""
+        track_info = VIBE_CODING_2025_TRACKS.get(self.active_track, {})
+        persona = track_info.get("persona", "Lead Orchestrator")
+        workflow = track_info.get("workflow", "Multi-agent coordination")
+        
         self._system_prompt = (
-            "You are the Structured Orchestrator. "
+            f"You are the Pattern Orchestrator (Vibe: {self.active_track}).\n"
+            f"PERSONA: {persona}\n"
+            f"WORKFLOW: {workflow}\n\n"
             "You manage agent teams using the following patterns:\n"
             "1. Supervisor: A central agent delegates subtasks to specialists.\n"
             "2. Debate: Multiple agents argue different sides of a problem to reach consensus.\n"
             "3. Voting: Agents provide individual answers, and the majority/weighted best is chosen.\n"
             "4. Pipeline: Sequential processing where output of A is input to B.\n"
             "5. MapReduce: Parallel processing of shards followed by aggregation.\n"
-            "6. Vibe-Coding (2025): Phase-specific personas (RESEARCH, DEFINE, DESIGN, BUILD, VALIDATE)."
+            "6. Vibe-Coding (2025): Phase-specific personas synchronized with EVOLUTION_PHASE."
         )
 
     @as_tool
     def set_vibe_track(self, track_name: str) -> str:
-        """Sets the active Vibe-Coding 2025 track (Phase-specific state)."""
+        """Sets the active Vibe-Coding 2025 track (Overrides phase-based defaults)."""
         if track_name.upper() in VIBE_CODING_2025_TRACKS:
             self.active_track = track_name.upper()
+            self._apply_vibe_persona()
             return f"Vibe-Coding track set to {self.active_track}. Persona: {VIBE_CODING_2025_TRACKS[self.active_track]['persona'][:100]}..."
         return f"Error: Track '{track_name}' not found. Available: {list(VIBE_CODING_2025_TRACKS.keys())}"
 
@@ -104,12 +152,12 @@ class StructuredOrchestrator(BaseAgent):
     def execute_task(self, task: str) -> str:
         """Standard task execution interface for the FleetManager."""
         logging.info(f"ORCHESTRATOR: Executing task '{task}'")
-        return f"Technical report for task '{task}': Validated and processed via StructuredOrchestrator logic."
+        return f"Technical report for task '{task}': Validated and processed via PatternOrchestrator logic."
 
     def improve_content(self, prompt: str) -> str:
-        return f"StructuredOrchestrator ready to route: {prompt}"
+        return f"PatternOrchestrator ready to route: {prompt}"
 
 if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
-    main = create_main_function(StructuredOrchestrator, "Structured Orchestrator", "Orchestration logs")
+    from src.core.base.utilities import create_main_function
+    main = create_main_function(PatternOrchestrator, "Pattern Orchestrator", "Orchestration logs")
     main()

@@ -59,30 +59,58 @@ class MultimodalProcessor:
         self.processed = ""
 
 class SerializationManager:
-    """Manager for custom serialization formats."""
+    """Manager for custom serialization formats (Binary/JSON)."""
     def __init__(self, config: Optional[SerializationConfig] = None) -> None:
         self.config = config or SerializationConfig()
+    
     def serialize(self, data: Any) -> bytes:
-        if self.config.format == SerializationFormat.JSON: result = json.dumps(data, indent=2).encode("utf-8")
+        """Serializes data using the configured format (JSON, PICKLE, CBOR)."""
+        if self.config.format == SerializationFormat.JSON:
+            result = json.dumps(data, indent=2).encode("utf-8")
         elif self.config.format == SerializationFormat.PICKLE:
             import pickle
             result = pickle.dumps(data)
-        else: result = json.dumps(data).encode("utf-8")
+        elif self.config.format == SerializationFormat.CBOR:
+            try:
+                import cbor2
+                result = cbor2.dumps(data)
+            except ImportError:
+                logging.warning("cbor2 not installed. Falling back to JSON.")
+                result = json.dumps(data).encode("utf-8")
+        else:
+            result = json.dumps(data).encode("utf-8")
+
         if self.config.compression:
             import zlib
             result = zlib.compress(result)
         return result
+
     def deserialize(self, data: bytes) -> Any:
+        """Deserializes data using the configured format."""
         if self.config.compression:
             import zlib
             data = zlib.decompress(data)
-        if self.config.format == SerializationFormat.JSON: return json.loads(data.decode("utf-8"))
+
+        if self.config.format == SerializationFormat.JSON:
+            return json.loads(data.decode("utf-8"))
         elif self.config.format == SerializationFormat.PICKLE:
             import pickle
             return pickle.loads(data)
-        else: return json.loads(data.decode("utf-8"))
+        elif self.config.format == SerializationFormat.CBOR:
+            try:
+                import cbor2
+                return cbor2.loads(data)
+            except (ImportError, ValueError):
+                # Fallback to JSON if CBOR fails or is missing
+                try:
+                    return json.loads(data.decode("utf-8"))
+                except Exception:
+                    raise ValueError("Deserialization failed for CBOR and JSON fallback.")
+        return json.loads(data.decode("utf-8"))
+
     def save_to_file(self, data: Any, path: Path) -> None:
         path.write_bytes(self.serialize(data))
+
     def load_from_file(self, path: Path) -> Any:
         return self.deserialize(path.read_bytes())
 

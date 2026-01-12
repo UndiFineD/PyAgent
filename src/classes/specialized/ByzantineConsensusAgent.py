@@ -1,36 +1,68 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 
 """ByzantineConsensusAgent for PyAgent.
 Ensures high-integrity changes by requiring 2/3 agreement from a committee of agents.
 Used for critical infrastructure or security logic changes.
 """
 
+
+
 import logging
 from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+from src.logic.agents.security.core.ByzantineCore import ByzantineCore
+
 
 class ByzantineConsensusAgent(BaseAgent):
     """Orchestrates 'Fault-Tolerant' decision making across multiple specialized agents."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._system_prompt = (
-            "You are the Byzantine Consensus Judge. "
-            "Your role is to strictly evaluate proposals from multiple agents. "
-            "You identify adversarial or low-quality outputs and ensure that only "
-            "high-integrity, majority-verified solutions are accepted for critical paths."
-        )
+        self.core = ByzantineCore()
+        # Simulated historic reliability tracker
+        self.reliability_scores: Dict[str, float] = {}
+
+    def select_committee(self, task: str, available_agents: List[str]) -> List[str]:
+        """Selects a subset of agents best suited for a task based on reliability."""
+        # Ensure registry is populated
+        for agent in available_agents:
+            if agent not in self.reliability_scores:
+                self.reliability_scores[agent] = 0.9 # High default for new agents
+                
+        return self.core.select_committee(self.reliability_scores)
 
     @as_tool
-    def run_committee_vote(self, task: str, proposals: Dict[str, str]) -> Dict[str, Any]:
-        """Evaluates a set of proposals and determines the winner via AI-powered scoring.
-        
-        Args:
-            task: The original task description.
-            proposals: Mapping of agent names to their proposed code/text.
-        """
+    def run_committee_vote(self, task: str, proposals: Dict[str, str], change_type: str = "default") -> Dict[str, Any]:
+        """Evaluates a set of proposals and determines the winner via AI-powered scoring."""
         logging.info(f"ByzantineConsensus: Evaluating {len(proposals)} proposals for task: {task[:30]}...")
+        
+        quorum_req = self.core.get_required_quorum(change_type)
         
         # 1. AI-Powered Scoring
         scores: Dict[str, float] = {}
@@ -45,6 +77,8 @@ class ByzantineConsensusAgent(BaseAgent):
                 # Use subagent logic to get a score
                 # Note: We use a simplified regex-based score extraction from the AI response
                 score_response = self.run_subagent(f"Evaluation of {agent_name}", evaluation_prompt, "").strip()
+                # Phase 108: Record the evaluation context
+                self._record(evaluation_prompt, score_response, provider="ByzantineConsensus", model="Evaluator", meta={"agent": agent_name})
                 import re
                 match = re.search(r"(\d+\.\d+)", score_response)
                 score = float(match.group(1)) if match else 0.7 # Fallback to reasonable default
@@ -88,6 +122,6 @@ class ByzantineConsensusAgent(BaseAgent):
         return f"Byzantine Evaluation: Content integrity verified at 94% confidence level. Ready for deployment."
 
 if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
+    from src.core.base.utilities import create_main_function
     main = create_main_function(ByzantineConsensusAgent, "Byzantine Consensus Agent", "Path to evaluator log")
     main()

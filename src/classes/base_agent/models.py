@@ -73,6 +73,7 @@ class SerializationFormat(Enum):
     MSGPACK = "msgpack"
     PICKLE = "pickle"
     PROTOBUF = "protobuf"
+    CBOR = "cbor"
 
 
 class FilePriority(Enum):
