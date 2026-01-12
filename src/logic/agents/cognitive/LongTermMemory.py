@@ -1,113 +1,165 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-"""Long-term memory for agents using vector storage."""
+from __future__ import annotations
 
-import logging
-from typing import Dict, List, Any, Optional
-from datetime import datetime
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+"""Advanced long-term memory using federated DiskCache shards for RAG."""
+
+import hashlib
 import json
+import logging
+import os
+import time
+from datetime import datetime
 from pathlib import Path
+from typing import Any, Dict, List, Optional, Tuple
 
 try:
-    import chromadb
-    from chromadb.config import Settings
-    HAS_CHROMADB = True
+    import diskcache
+    import numpy as np
+    from sentence_transformers import SentenceTransformer
+    HAS_RAG_DEPS = True
 except ImportError:
-    HAS_CHROMADB = False
+    HAS_RAG_DEPS = False
 
 class LongTermMemory:
-    """Manages persistent conversational and factual memory for agents."""
+    """Manages persistent conversational and factual memory using DiskCache shards."""
     
-    def __init__(self, agent_name: str = "default_agent", collection_name: str = None, persist_directory: str = None) -> None:
+    _model = None  # Singleton model for embeddings
+
+    def __init__(self, agent_name: str = "default_agent", base_dir: str = "data/memory/shards") -> None:
         self.agent_name = agent_name
-        self.persist_directory = persist_directory or f"data/agents/{agent_name}/memory"
-        self.collection_name = collection_name or f"memory_{agent_name}"
-        self._client = None
-        self._collection = None
-        self._enabled = HAS_CHROMADB
+        self.base_dir = Path(base_dir)
+        # Sharding: hash the agent name to pick a subdirectory
+        self.shard_id = hashlib.md5(agent_name.encode()).hexdigest()[:8]
+        self.persist_directory = self.base_dir / self.shard_id
+        
+        self._enabled = HAS_RAG_DEPS
+        self._cache = None
         
         if not self._enabled:
-            logging.warning("ChromaDB not available. Long-term memory will be disabled.")
+            logging.warning("DiskCache or RAG dependencies missing. Long-term memory logic will be limited.")
+        else:
+            self._ensure_dirs()
+            self._cache = diskcache.Cache(str(self.persist_directory))
 
-    def _init_db(self) -> bool:
-        """Initialize the ChromaDB client and collection."""
-        if not self._enabled:
-            return False
-            
-        try:
-            if self._client is None:
-                self._client = chromadb.PersistentClient(path=self.persist_directory)
-                self._collection = self._client.get_or_create_collection(
-                    name=self.collection_name,
-                    metadata={"hnsw:space": "cosine"}
-                )
-            return True
-        except Exception as e:
-            logging.error(f"LongTermMemory init error: {e}")
-            self._enabled = False
-            return False
+    def _ensure_dirs(self) -> None:
+        """Ensure the shard directory exists."""
+        self.persist_directory.mkdir(parents=True, exist_ok=True)
 
-    def store(self, content: str, metadata: Optional[Dict[str, Any]] = None, tags: Optional[List[str]] = None) -> None:
-        """Store a thought, observation, or interaction in memory."""
-        if not self._init_db():
-            return
+    @classmethod
+    def _get_embedding_model(cls) -> str:
+        """Lazy load the embedding model."""
+        if cls._model is None and HAS_RAG_DEPS:
+            cls._model = SentenceTransformer("all-MiniLM-L6-v2")
+        return cls._model
+
+    def store(self, content: str, metadata: Optional[Dict[str, Any]] = None, tags: Optional[List[str]] = None) -> str:
+        """Store a thought or interaction in the local DiskCache shard."""
+        if not self._enabled or not self._cache:
+            return ""
             
-        mem_id = f"mem_{datetime.now().timestamp()}"
+        mem_id = f"mem_{int(time.time() * 1000)}"
+        model = self._get_embedding_model()
+        embedding = model.encode(content) if model else None
+        
         meta = metadata or {}
-        meta["timestamp"] = str(datetime.now().isoformat())
+        meta["timestamp"] = datetime.now().isoformat()
+        meta["agent"] = self.agent_name
         if tags:
-            meta["tags"] = ",".join(tags)
+            meta["tags"] = tags
             
-        try:
-            self._collection.add(
-                documents=[content],
-                metadatas=[meta],
-                ids=[mem_id]
-            )
-        except Exception as e:
-            logging.error(f"Error storing memory: {e}")
+        entry = {
+            "content": content,
+            "metadata": meta,
+            "embedding": embedding.tolist() if embedding is not None else None
+        }
+        
+        self._cache.set(mem_id, entry)
+        return mem_id
 
-    def query(self, query_text: str, n_results: int = 5, filter_tags: Optional[List[str]] = None) -> List[Dict[str, Any]]:
-        """Retrieve relevant memories for a given query."""
-        if not self._init_db():
+    def query(self, query_text: str, n_results: int = 5) -> List[Dict[str, Any]]:
+        """Retrieve relevant memories from the local shard using cosine similarity."""
+        return self._search_shard(self._cache, query_text, n_results)
+
+    def _search_shard(self, cache: diskcache.Cache, query_text: str, n_results: int) -> List[Dict[str, Any]]:
+        """Internal helper to search a specific diskcache instance."""
+        if not HAS_RAG_DEPS or not cache:
             return []
             
-        where = {}
-        if filter_tags:
-            # Simple tag filtering (requires exact match or contains logic if metadata supports it)
-            # Here we assume direct metadata filtering for simplicity
-            if len(filter_tags) == 1:
-                where = {"tags": {"$contains": filter_tags[0]}}
+        model = self._get_embedding_model()
+        if not model:
+            return []
+            
+        query_emb = model.encode(query_text)
+        results = []
+        
+        # We iterate over the cache keys for RAG (sharding keeps this small)
+        for key in cache:
+            entry = cache.get(key)
+            if not entry or "embedding" not in entry or entry["embedding"] is None:
+                continue
                 
-        try:
-            results = self._collection.query(
-                query_texts=[query_text],
-                n_results=n_results,
-                where=where if where else None
-            )
+            doc_emb = np.array(entry["embedding"])
+            # Cosine similarity
+            similarity = np.dot(query_emb, doc_emb) / (np.linalg.norm(query_emb) * np.linalg.norm(doc_emb))
             
-            output = []
-            if results and 'documents' in results and results['documents']:
-                for i in range(len(results['documents'][0])):
-                    output.append({
-                        "content": results['documents'][0][i],
-                        "metadata": results['metadatas'][0][i],
-                        "distance": results['distances'][0][i] if 'distances' in results else None
-                    })
-            return output
-        except Exception as e:
-            logging.error(f"Error querying memory: {e}")
+            results.append({
+                "id": key,
+                "content": entry["content"],
+                "metadata": entry["metadata"],
+                "score": float(similarity)
+            })
+            
+        results.sort(key=lambda x: x["score"], reverse=True)
+        return results[:n_results]
+
+    def federated_query(self, query_text: str, n_results: int = 5) -> List[Dict[str, Any]]:
+        """Search across ALL available memory shards (federation)."""
+        if not HAS_RAG_DEPS:
             return []
+            
+        all_results = []
+        # Find all shard directories
+        if not self.base_dir.exists():
+            return self.query(query_text, n_results)
+            
+        for shard_path in self.base_dir.iterdir():
+            if shard_path.is_dir():
+                try:
+                    shard_cache = diskcache.Cache(str(shard_path))
+                    shard_results = self._search_shard(shard_cache, query_text, n_results)
+                    all_results.extend(shard_results)
+                    shard_cache.close()
+                except Exception as e:
+                    logging.error(f"Failed to query shard {shard_path}: {e}")
+                    
+        all_results.sort(key=lambda x: x["score"], reverse=True)
+        return all_results[:n_results]
 
     def clear(self) -> None:
-        """Clear all stored memories."""
-        if not self._init_db():
-            return
-        try:
-            # Chroma delete with empty where is not always supported or recommended
-            # We fetch IDs and then delete
-            ids = self._collection.get()['ids']
-            if ids:
-                self._collection.delete(ids=ids)
-        except Exception as e:
-            logging.error(f"Error clearing memory: {e}")
+        """Clear the local shard."""
+        if self._cache:
+            self._cache.clear()
+
+    def __del__(self) -> None:
+        """Cleanup cache connection."""
+        if hasattr(self, "_cache") and self._cache:
+            try:
+                self._cache.close()
+            except Exception:
+                pass

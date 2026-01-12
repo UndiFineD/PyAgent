@@ -1,18 +1,38 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 PyAgent contributors
+# Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 """BaseAgent main class and core agent logic."""
 
-from __future__ import annotations
 
 import argparse
 import difflib
@@ -95,7 +115,9 @@ from src.core.base.managers import (
     ProfileManager,
 )
 
-from src.core.base.core import BaseCore
+from src.core.base.AgentCore import BaseCore
+from src.core.base.registry import AgentRegistry
+from src.core.base.ShardedKnowledgeCore import ShardedKnowledgeCore
 from src.core.base.state import AgentStateManager
 from src.core.base.verification import AgentVerifier
 from src.core.base.delegation import AgentDelegator
@@ -219,9 +241,12 @@ class BaseAgent:
 
         # Advanced features
         # Derive agent name for data isolation (e.g., CoderAgent -> "coder")
-        agent_name = self.__class__.__name__.lower().replace("agent", "") or "base"
-        self.memory: LongTermMemory | None = LongTermMemory(agent_name=agent_name) if LongTermMemory else None
+        self.agent_name = self.__class__.__name__.lower().replace("agent", "") or "base"
+        self.memory: LongTermMemory | None = LongTermMemory(agent_name=self.agent_name) if LongTermMemory else None
         
+        # Phase 143: Sharded Knowledge initialization
+        self.sharded_knowledge = ShardedKnowledgeCore(base_path=Path("data/agents"))
+
         self.registry: SignalRegistry | None = SignalRegistry() if SignalRegistry else None
         self.tool_registry: ToolRegistry | None = ToolRegistry() if ToolRegistry else None
 
@@ -397,6 +422,7 @@ class BaseAgent:
     def __enter__(self) -> "BaseAgent":
         """Context manager entry. Returns self for use in 'with' statement."""
         logging.debug(f"{self.__class__.__name__} entering context manager")
+        AgentRegistry().register(self)
         return self
 
     def __exit__(
@@ -413,6 +439,7 @@ class BaseAgent:
             - Can be overridden in subclasses for custom cleanup
         """
         logging.debug(f"{self.__class__.__name__} exiting context manager")
+        AgentRegistry().unregister(self.agent_name)
         if exc_type is not None:
             logging.error(f"Agent context error: {exc_type.__name__}: {exc_val}")
             self._state: AgentState = AgentState.ERROR

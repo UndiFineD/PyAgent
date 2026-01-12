@@ -1,8 +1,34 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 
 """Centralized connectivity management with TTL-based status caching."""
 
-from __future__ import annotations
+
+
 import json
 import logging
 import time
@@ -82,11 +108,42 @@ class ConnectivityManager:
 
     def update_status(self, endpoint_id: str, working: bool) -> None:
         """Updates and persists the status for an endpoint."""
-        self._cache[endpoint_id] = {
+        status = self._cache.get(endpoint_id, {})
+        status.update({
             "working": working,
             "timestamp": time.time()
-        }
+        })
+        self._cache[endpoint_id] = status
         self._save_status()
+
+    def track_tps(self, endpoint_id: str, token_count: int, duration: float) -> None:
+        """Tracks tokens per second for an endpoint (Phase 144)."""
+        if duration <= 0:
+            return
+        
+        tps = token_count / duration
+        status = self._cache.get(endpoint_id, {})
+        
+        # Simple moving average (alpha 0.3)
+        old_tps = status.get("avg_tps", tps)
+        new_tps = (0.7 * old_tps) + (0.3 * tps)
+        
+        status["avg_tps"] = round(new_tps, 2)
+        status["last_tps"] = round(tps, 2)
+        status["total_tokens"] = status.get("total_tokens", 0) + token_count
+        
+        self._cache[endpoint_id] = status
+        logging.debug(f"ConnectivityManager: Endpoint '{endpoint_id}' TPS tracked: {status['last_tps']} (avg: {status['avg_tps']})")
+        self._save_status()
+
+    def get_tps_stats(self, endpoint_id: str) -> Dict[str, Any]:
+        """Returns TPS statistics for an endpoint."""
+        status = self._cache.get(endpoint_id, {})
+        return {
+            "avg_tps": status.get("avg_tps", 0),
+            "last_tps": status.get("last_tps", 0),
+            "total_tokens": status.get("total_tokens", 0)
+        }
 
     def is_online(self, endpoint: str) -> bool:
         """Compatibility alias for is_endpoint_available."""
