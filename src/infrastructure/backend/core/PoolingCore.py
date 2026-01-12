@@ -8,7 +8,7 @@ class PoolingCore:
     It prepares requests for faster TTFT (Time to First Token).
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Stop words and redundant phrases for prompt compression
         self.compression_patterns = [
             (r"\bplease\b", ""),

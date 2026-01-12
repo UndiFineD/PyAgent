@@ -8,7 +8,7 @@ class ConvergenceCore:
     It identifies if all registered agents are passing health checks and generates summaries.
     """
 
-    def __init__(self, workspace_root: str):
+    def __init__(self, workspace_root: str) -> None:
         self.workspace_root = workspace_root
 
     def verify_fleet_health(self, agent_reports: Dict[str, bool]) -> Dict[str, Any]:

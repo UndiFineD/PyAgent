@@ -14,60 +14,64 @@
 
 from __future__ import annotations
 
-from src.core.base.version import VERSION
-__version__ = VERSION
-
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
-
-
+import asyncio
 import logging
 import json
+import os
 from typing import Dict, List, Any, Optional, TYPE_CHECKING
 
+from src.core.base.version import VERSION
+
 if TYPE_CHECKING:
-    from src.infrastructure.fleet.FleetManager import FleetManager
+    from src.infrastructure.fleet.AsyncFleetManager import AsyncFleetManager
+
+__version__ = VERSION
 
 class DreamStateOrchestrator:
     """
-    Implements Recursive Skill Synthesis (Phase 29).
+    Implements Recursive Skill Synthesis (Phase 237).
     Orchestrates synthetic 'dreams' where agents practice tasks in simulated environments
-    to discover new tools or optimize existing ones.
+    to discover new tools or optimize existing ones. (v3.3.0-DREAM)
     """
-    
-    def __init__(self, fleet: FleetManager) -> None:
-        self.fleet = fleet
 
-    def initiate_dream_cycle(self, focus_area: str) -> Dict[str, Any]:
+    def __init__(self, fleet: AsyncFleetManager) -> None:
+        self.fleet = fleet
+        self.dream_log_path = os.path.join("data", "dreams")
+        os.makedirs(self.dream_log_path, exist_ok=True)
+
+    async def initiate_dream_cycle(self, focus_area: str) -> Dict[str, Any]:
         """
-        Starts a simulation cycle to evolve skills in a specific area.
+        Starts an async simulation cycle to evolve skills in a specific area.
         """
         logging.info(f"DreamStateOrchestrator: Initiating dream cycle focal point: {focus_area}")
-        
+
         # 1. Generate Synthetic Scenarios
-        scenarios = self.fleet.call_by_capability("generate_training_data", context=focus_area)
-        
+        scenarios = await self.fleet.call_by_capability("generate_training_data", context=focus_area)
+
         # 2. Simulate outcomes across variations
-        # We use WorldModelAgent to predict what would happen
-        simulation_results = []
-        for i in range(2): # Run a few simulations
-            res = self.fleet.call_by_capability("predict_action_outcome", action=f"Optimize {focus_area}", environment=scenarios)
-            simulation_results.append(res)
-            
-        # 3. Analyze patterns and suggest a new 'skill' (tool spec)
-        dream_synthesis = self.fleet.call_by_capability("analyze", 
+        tasks = [
+            self.fleet.call_by_capability("predict_action_outcome", 
+                                        action=f"Optimize {focus_area}", 
+                                        environment=scenarios)
+            for i in range(2)
+        ]
+        simulation_results = await asyncio.gather(*tasks)
+
+        # 3. Analyze patterns and synthesize a new 'skill' spec
+        dream_synthesis = await self.fleet.call_by_capability("analyze", 
             input_text=f"Simulation results for {focus_area}: {simulation_results}")
-            
-        logging.info("Dream cycle complete. New skill pattern synthesized.")
-        
-        return {
+
+        dream_id = f"dream_{int(asyncio.get_event_loop().time())}"
+        result = {
+            "dream_id": dream_id,
             "status": "success",
             "focus": focus_area,
             "simulations_run": len(simulation_results),
             "synthesized_intelligence": dream_synthesis
         }
+
+        with open(os.path.join(self.dream_log_path, f"{dream_id}.json"), "w") as f:
+            json.dump(result, f, indent=4)
+
+        logging.info("Dream cycle complete. New skill pattern synthesized.")
+        return result

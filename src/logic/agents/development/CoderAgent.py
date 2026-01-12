@@ -81,6 +81,7 @@ class CoderAgent(BaseAgent):
         self.file_path = Path(file_path)
         self._language = self._detect_language()
         super().__init__(file_path)
+        self.capabilities.extend(["python", "javascript", "code-refactor"]) # Phase 241
         
         # New: Delegate core logic to CoderCore (Rust-ready component)
         self.core = CoderCore(self._language)
