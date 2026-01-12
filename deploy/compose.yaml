@@ -1,0 +1,35 @@
+services:
+  pyagent:
+    build:
+      context: ..
+      dockerfile: src/infrastructure/docker/Dockerfile
+      target: ${PYAGENT_TARGET:-cpu-runtime}
+    volumes:
+      - ../data:/app/data
+      - ../config:/app/config
+    environment:
+      - PYAGENT_BACKEND=${PYAGENT_BACKEND:-github}
+      - PYAGENT_MODEL=${PYAGENT_MODEL:-gpt-4o}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - AZURE_OPENAI_API_KEY=${AZURE_OPENAI_API_KEY}
+      - AZURE_OPENAI_ENDPOINT=${AZURE_OPENAI_ENDPOINT}
+      - OLLAMA_HOST=http://ollama:11434
+    depends_on:
+      - ollama
+
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+volumes:
+  ollama_data:

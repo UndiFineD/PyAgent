@@ -8,7 +8,7 @@ from pathlib import Path
 # Add src to path
 sys.path.append(str(Path(__file__).parent.parent / "src"))
 
-from src.core.base.entrypoint import BaseAgent
+from src.core.base.BaseAgent import BaseAgent
 from src.logic.strategies.plan_executor import DirectStrategy, ChainOfThoughtStrategy, ReflexionStrategy
 
 class TestStrategies(unittest.TestCase):

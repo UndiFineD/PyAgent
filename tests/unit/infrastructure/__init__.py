@@ -41,4 +41,4 @@ __all__ = [
 ]
 
 from .test_backend_UNIT import *  # noqa: F401, F403
-from .test_backend_INTEGRATION import *  # noqa: F401, F403
+from .test_backend_CORE_UNIT import *  # noqa: F401, F403

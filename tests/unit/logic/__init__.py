@@ -52,5 +52,9 @@ __all__ = [
 ]
 
 from .test_coder_UNIT import *  # noqa: F401, F403
+from .test_coder_CORE_UNIT import *  # noqa: F401, F403
+from .test_agent_UNIT import *  # noqa: F401, F403
+from .test_agent_CORE_UNIT import *  # noqa: F401, F403
+from .test_agent_ADVANCED_UNIT import *  # noqa: F401, F403
 from .advanced import *  # noqa: F401, F403
 from .edge_cases import *  # noqa: F401, F403

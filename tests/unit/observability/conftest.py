@@ -25,3 +25,17 @@ def agent(stats_module: Any, tmp_path: Path) -> Any:
     test_file = tmp_path / "test_stats.md"
     test_file.write_text("# Test Stats\n")
     return StatsAgent(str(test_file))
+
+
+@pytest.fixture
+def report_module() -> Any:
+    """Fixture to provide the report generation module."""
+    try:
+        import src.observability.reports as reports
+        return reports
+    except ImportError:
+        # Fallback to loading it manually if path setup is tricky
+        AGENT_DIR = Path(__file__).parent.parent.parent.parent / 'src'
+        sys.path.insert(0, str(AGENT_DIR))
+        import observability.reports as reports
+        return reports

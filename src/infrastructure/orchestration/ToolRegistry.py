@@ -1,54 +1,67 @@
 #!/usr/bin/env python3
-
-"""Central registry for all agent tools and capabilities."""
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 from __future__ import annotations
 
-import inspect
 import logging
-from typing import Dict, List, Any, Callable, Optional, Type
-from .ToolCore import ToolCore, ToolMetadata
+import asyncio
+from typing import Dict, List, Any, Callable, Optional, TYPE_CHECKING
+from .ToolCore import ToolCore
+
+if TYPE_CHECKING:
+    from ..fleet.FleetManager import FleetManager
 
 class ToolRegistry:
-    """
-    A registry that allows agents to discover and invoke tools across the fleet.
-    Shell for ToolCore.
-    """
+    """Central registry for managing and invoking PyAgent tools across all specialists."""
     
-    _instance = None
-    
-    def __new__(cls, *args: Any, **kwargs: Any) -> "ToolRegistry":
-        if not cls._instance:
-            cls._instance = super(ToolRegistry, cls).__new__(cls)
-            cls._instance.tools: Dict[str, List[Dict[str, Any]]] = {}
-            cls._instance.core = ToolCore()
-        return cls._instance
+    def __init__(self, fleet: Optional[FleetManager] = None) -> None:
+        self.fleet = fleet
+        self.tools: Dict[str, List[Dict[str, Any]]] = {}
+        self.core = ToolCore()
 
-    def register_tool(self, owner_name: str, func: Callable, category: str = "general", priority: int = 0) -> None:
-        """Registers a function as a tool with priority scoring."""
-        metadata = self.core.extract_metadata(owner_name, func, category, priority)
+    def register_tool(self, owner_name: str, func: Callable, category: str = "general", priority: int = 1) -> None:
+        """Adds a tool function to the registry."""
+        name = func.__name__
+        if name not in self.tools:
+            self.tools[name] = []
         
-        if metadata.name not in self.tools:
-            self.tools[metadata.name] = []
-            
-        self.tools[metadata.name].append({
-            "metadata": metadata,
-            "function": func
+        # Check for duplicates
+        if any(t["owner"] == owner_name for t in self.tools[name]):
+            logging.debug(f"Tool {name} already registered for {owner_name}. Skipping.")
+            return
+
+        self.tools[name].append({
+            "owner": owner_name,
+            "function": func,
+            "category": category,
+            "priority": priority,
+            "sync": not asyncio.iscoroutinefunction(func)
         })
-        # Sort by priority descending
-        self.tools[metadata.name].sort(key=lambda x: x["metadata"].priority, reverse=True)
-        
-        logging.info(f"Tool registered: {owner_name}.{metadata.name} (Priority: {priority})")
+        # Sort by priority desc
+        self.tools[name].sort(key=lambda x: x["priority"], reverse=True)
+        logging.debug(f"Registered tool: {name} from {owner_name} (Priority: {priority})")
 
-    def list_tools(self, category: Optional[str] = None) -> List[ToolMetadata]:
-        """Lists all registered tools."""
-        results = []
-        for tool_list in self.tools.values():
-            for t in tool_list:
-                meta = t["metadata"]
-                if category is None or meta.category == category:
-                    results.append(meta)
-        return results
+    def list_tools(self) -> List[Any]:
+        """Returns metadata for all registered tools."""
+        from collections import namedtuple
+        ToolMeta = namedtuple("ToolMeta", ["name", "owner", "category", "priority", "sync"])
+        
+        meta = []
+        for name, variations in self.tools.items():
+            for v in variations:
+                meta.append(ToolMeta(name, v["owner"], v["category"], v["priority"], v.get("sync", True)))
+        return meta
 
     def get_tool(self, name: str) -> Optional[Callable]:
         """Retrieves the highest priority tool function by name."""
@@ -56,7 +69,7 @@ class ToolRegistry:
             return self.tools[name][0]["function"]
         return None
 
-    def call_tool(self, name: str, **kwargs) -> Any:
+    async def call_tool(self, name: str, **kwargs) -> Any:
         """Invoking a tool by name with provided arguments, filtering for supported ones."""
         tool = self.get_tool(name)
         if not tool:
@@ -64,4 +77,9 @@ class ToolRegistry:
         
         filtered_kwargs = self.core.filter_arguments(tool, kwargs)
         logging.info(f"Invoking tool: {name} with filtered {filtered_kwargs}")
-        return tool(**filtered_kwargs)
+        
+        if asyncio.iscoroutinefunction(tool):
+            return await tool(**filtered_kwargs)
+        else:
+            loop = asyncio.get_running_loop()
+            return await loop.run_in_executor(None, lambda: tool(**filtered_kwargs))

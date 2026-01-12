@@ -1,11 +1,38 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 
 """Coordinator for deploying and aggregating results from multiple agents."""
 
-from __future__ import annotations
+
+
 import logging
 import json
 import time
+import asyncio
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Type, TYPE_CHECKING
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
@@ -197,11 +224,11 @@ class FleetManager:
     def rl_selector(self) -> Any:
         return getattr(self.orchestrators, "r_l_selector", None) or getattr(self.orchestrators, "rl_selector", None)
 
-    def execute_reliable_task(self, task: str) -> str:
+    async def execute_reliable_task(self, task: str) -> str:
         """Executes a task using the 7-phase inner loop and linguistic articulation."""
-        return self.execution_core.execute_reliable_task(task)
+        return await self.execution_core.execute_reliable_task(task)
 
-    def _record_success(self, res_or_prompt: Any, *args, **kwargs) -> None:
+    async def _record_success(self, res_or_prompt: Any, *args, **kwargs) -> None:
         """Records the success of a workflow step including Explainability and Telemetry."""
         # Detect calling convention (New: 8 parameters total, Legacy: 3)
         # In *args, New convention has exactly 7 items.
@@ -261,10 +288,14 @@ class FleetManager:
         except Exception:
             pass
 
-    def _record_failure(self, prompt: str, error: str, model: str) -> None:
+    async def _record_failure(self, prompt: str, error: str, model: str) -> None:
         """Records errors, failures, and mistakes for collective intelligence (Phase 108)."""
         try:
+            # Phase 152: Use aiofiles for non-blocking IO
+            import aiofiles
+            
             # Use the sharded recorder for centralized intelligence harvesting
+            # We assume recorder supports async or we offload it
             self.recorder.record_interaction(
                 provider="fleet_internal",
                 model=model,
@@ -283,8 +314,8 @@ class FleetManager:
                 "prompt": prompt[:500],
                 "error": error
             }
-            with open(failure_log, "a", encoding="utf-8") as f:
-                f.write(json.dumps(record) + "\n")
+            async with aiofiles.open(failure_log, "a", encoding="utf-8") as f:
+                await f.write(json.dumps(record) + "\n")
         except Exception:
             logging.error("Failed to write to fleet_failures.jsonl log.")
 
@@ -311,7 +342,7 @@ class FleetManager:
             self.agents[f"remote_{name}"] = proxy
             logging.info(f"Registered remote agent proxy: remote_{name} at {node_url}")
 
-    def call_by_capability(self, goal: str, **kwargs) -> str:
+    async def call_by_capability(self, goal: str, **kwargs) -> str:
         """Finds an agent with the required capability and executes it with RL optimization."""
         # Report activity to TemporalSync
         if hasattr(self, 'temporal_sync'):
@@ -362,30 +393,38 @@ class FleetManager:
             logging.info(f"Fleet: RLSelector missing or incompatible. Defaulting to first candidate '{best_tool}' for goal '{goal}'")
         
         # Determine if tool is essential (Bootstrap)
-        # Tool owner is typical the agent name.
         owner = next((t.owner for t in tools if t.name == best_tool), None)
         is_essential = owner in self.agents.registry_configs if owner else False
         
         start_time = time.time()
         try:
+            import asyncio
+            async def run_tool() -> str:
+                if asyncio.iscoroutinefunction(self.registry.call_tool):
+                    return await self.registry.call_tool(best_tool, **kwargs)
+                else:
+                    loop = asyncio.get_running_loop()
+                    return await loop.run_in_executor(None, self.registry.call_tool, best_tool, **kwargs)
+
             if is_essential:
-                res = self.registry.call_tool(best_tool, **kwargs)
+                res = await run_tool()
             else:
-                # Non-essential components have a 5-second timeout (Phase 104)
-                with ThreadPoolExecutor(max_workers=1) as executor:
-                    future = executor.submit(self.registry.call_tool, best_tool, **kwargs)
-                    try:
-                        res = future.result(timeout=5.0)
-                    except TimeoutError:
-                        error_msg = f"Non-essential tool '{best_tool}' (owner: {owner}) timed out after 5 seconds."
-                        logging.warning(error_msg)
-                        return error_msg
+                try:
+                    res = await asyncio.wait_for(run_tool(), timeout=5.0)
+                except asyncio.TimeoutError:
+                    error_msg = f"Non-essential tool '{best_tool}' (owner: {owner}) timed out after 5 seconds."
+                    logging.warning(error_msg)
+                    return error_msg
 
             # Phase 123: Security Audit Feedback Loop
             audit_passed = True
             if "ImmuneSystem" in self.agents:
                 try:
-                    audit_passed = self.agents["ImmuneSystem"].perform_security_audit(best_tool, str(res))
+                    immune = self.agents["ImmuneSystem"]
+                    if asyncio.iscoroutinefunction(immune.perform_security_audit):
+                        audit_passed = await immune.perform_security_audit(best_tool, str(res))
+                    else:
+                        audit_passed = immune.perform_security_audit(best_tool, str(res))
                 except Exception:
                     pass
             
@@ -396,18 +435,19 @@ class FleetManager:
 
             if self.rl_selector: self.rl_selector.update_stats(best_tool, success=True)
             # Record for future improvements
-            self._record_success(f"Capability call: {goal} with {kwargs}", str(res), "internal_ai")
+            await self._record_success(f"Capability call: {goal} with {kwargs}", str(res), "internal_ai")
             return res
         except Exception as e:
             if self.rl_selector: self.rl_selector.update_stats(best_tool, success=False)
             logging.error(f"Error executing tool {best_tool}: {e}")
             # Self-healing attempt
             if self.self_healing:
-                # Use owner of the tool for repair if possible, else the tool name
                 target_agent = owner if owner else best_tool
-                # Avoid passing redundant kwargs that might clash with positional args
                 clean_kwargs = {k: v for k, v in kwargs.items() if k != "agent_name"}
-                return self.self_healing.attempt_repair(target_agent, e, **clean_kwargs)
+                if asyncio.iscoroutinefunction(self.self_healing.attempt_repair):
+                    return await self.self_healing.attempt_repair(target_agent, e, **clean_kwargs)
+                else:
+                    return self.self_healing.attempt_repair(target_agent, e, **clean_kwargs)
             return f"Error executing tool {best_tool}: {e}"
         finally:
             if hasattr(self, 'telemetry'):
@@ -431,9 +471,9 @@ class FleetManager:
         """Cleanly shuts down and removes an agent."""
         return self.lifecycle_manager.cell_apoptosis(agent_name)
 
-    def execute_workflow(self, task: str, workflow_steps: List[Dict[str, Any]]) -> str:
+    async def execute_workflow(self, task: str, workflow_steps: List[Dict[str, Any]]) -> str:
         """Runs a sequence of agent actions with shared state and signals."""
-        return self.execution_core.execute_workflow(task, workflow_steps)
+        return await self.execution_core.execute_workflow(task, workflow_steps)
 
     def execute_with_consensus(self, task: str, primary_agent: str = None, secondary_agents: List[str] = None) -> Dict[str, Any]:
         """

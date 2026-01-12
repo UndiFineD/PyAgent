@@ -5,7 +5,7 @@ import sys
 # Ensure the project root is in PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src.core.base.PerformanceProfilingAgent import PerformanceProfilingAgent
+from src.logic.agents.system.PerformanceProfilingAgent import PerformanceProfilingAgent
 
 class TestPerformanceProfiling(unittest.TestCase):
     def setUp(self):

@@ -1,6 +1,31 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+
+
 import logging
 import os
 from pathlib import Path
@@ -96,14 +121,22 @@ class GitHubModelsBackend(LLMBackend):
                     logging.warning(f"GitHub Models: Unauthorized (401) on attempt {attempt+1}. Refreshing token...")
                     try:
                         import subprocess
+                        # Phase 149: Hardened self-healing. Try to refresh via GH CLI.
                         res = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True, check=False)
-                        if res.returncode == 0 and res.stdout.strip():
-                            token = res.stdout.strip()
+                        new_token = res.stdout.strip() if res.returncode == 0 else ""
+                        
+                        if new_token and new_token != token:
+                            logging.info("GitHub Models: New token obtained via GitHub CLI. Retrying...")
+                            token = new_token
                             # Sticky token for session (Phase 141)
                             os.environ["GITHUB_TOKEN"] = token 
                             headers["Authorization"] = f"Bearer {token}"
                             # Retry immediately with new token
                             response = self.session.post(url, headers=headers, data=json.dumps(payload), timeout=timeout_s)
+                        elif res.returncode != 0:
+                            logging.error("GitHub Models: 'gh auth token' failed. Manual 'gh auth login' may be required.")
+                        else:
+                            logging.warning("GitHub Models: Token refresh returned identical token. Authorization likely revoked.")
                     except Exception as e:
                         logging.debug(f"GitHub Models token refresh error: {e}")
                 
