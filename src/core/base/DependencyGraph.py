@@ -70,16 +70,22 @@ class DependencyGraph:
         """Initialize dependency graph."""
         self._nodes: Set[str] = set()
         self._edges: Dict[str, Set[str]] = {}  # node -> dependencies
+        self._resources: Dict[str, Set[str]] = {} # node -> set of resource URIs
 
-    def add_node(self, name: str) -> None:
+    def add_node(self, name: str, resources: Optional[List[str]] = None) -> None:
         """Add a node.
 
         Args:
             name: Node name.
+            resources: Optional list of resource URIs this node requires.
         """
         self._nodes.add(name)
         if name not in self._edges:
             self._edges[name] = set()
+        if resources:
+            if name not in self._resources:
+                self._resources[name] = set()
+            self._resources[name].update(resources)
 
     def add_dependency(self, node: str, depends_on: str) -> None:
         """Add a dependency.
@@ -122,15 +128,46 @@ class DependencyGraph:
             if not current_batch:
                 break
                 
-            batches.append(current_batch)
-            visited_count += len(current_batch)
-            
-            # Reduce in-degree for all nodes that depend on this batch
-            for node in current_batch:
-                for dependent in reverse[node]:
-                    in_degree[dependent] -= 1
+            # Phase 242: Refine batch based on resource collisions
+            refined_batches = self._refine_batch_by_resources(current_batch)
+            for rb in refined_batches:
+                batches.append(rb)
+                visited_count += len(rb)
+                
+                # Reduce in-degree for all nodes that depend on this batch
+                for node in rb:
+                    for dependent in reverse[node]:
+                        in_degree[dependent] -= 1
 
         if visited_count != len(self._nodes):
-            raise ValueError("Circular dependency detected")
+            raise ValueError("Circular dependency detected or inaccessible nodes in graph.")
 
         return batches
+
+    def _refine_batch_by_resources(self, batch: List[str]) -> List[List[str]]:
+        """Splits a batch into multiple sequential sub-batches to avoid resource collisions."""
+        refined: List[List[str]] = []
+        
+        for node in batch:
+            node_resources = self._resources.get(node, set())
+            
+            # Find the first batch where this node doesn't collide
+            placed = False
+            for sub_batch in refined:
+                # Check for collision with any node in this sub_batch
+                collision = False
+                for other_node in sub_batch:
+                    other_resources = self._resources.get(other_node, set())
+                    if node_resources.intersection(other_resources):
+                        collision = True
+                        break
+                
+                if not collision:
+                    sub_batch.append(node)
+                    placed = True
+                    break
+            
+            if not placed:
+                refined.append([node])
+                
+        return refined

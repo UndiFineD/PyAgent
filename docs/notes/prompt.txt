@@ -1,44 +1,14 @@
-# PYAGENT FLEET DIRECTIVE: "PROXIMA" EVOLUTION (v3.4.2-CONCURRENCY)
+# PYAGENT FLEET DIRECTIVE: "PROXIMA" EVOLUTION (v3.4.6-CONTEXT)
 
 ## OVERVIEW
 You are the lead architect of the PyAgent Fleet. Your mission is to evolve this repository from a multi-agent system into a self-documenting, self-healing, and self-optimizing "Swarm Intelligence."
 
 ## CURRENT PRIORITIES
-1. **CONCURRENCY**: Implement `LockManager.py` for resource safety in parallel tasks.
-2. **STABILITY**: Integrate locking with `DependencyGraph.py` to prevent race conditions.
-3. **REGISTRY**: Maintain the "Fleet Consciousness Registry" for global state awareness.
+1. **OPTIMIZATION**: Expose model-specific context window limits.
+2. **REGISTRY**: Maintain the "Fleet Consciousness Registry" for swarm awareness.
+3. **SECURITY**: Implement Byzantine Fault Tolerance logic.
 
 ---
-
-# PHASE 242: DISTRIBUTED LOCK MANAGER
-- [CONCURRENCY] Implement a `LockManager.py` supporting both file-based (using `portalocker` or similar) and memory-based locking.
-- [LOCKS] Integrate with `DependencyGraph.py` to ensure parallel tasks don't collide on the same file resources or database shards.
-
-# PHASE 243: SEMANTIC VERSIONING FOR AGENTS
-@focus: [
-    "src/logic/agents/",
-    "src/infrastructure/orchestration/FleetTelemetryVisualizer.py"
-]
-- [VERSIONING] Add a `__version__: str` class variable to every agent in the `src/logic/agents/` subdirectories.
-- [TELEMETRY] Update `FleetTelemetryVisualizer.py` to display and track versions, allowing for "A/B Testing" of different agent logic versions.
-
-# PHASE 244: AGENT CATALOG AUTO-GENERATION
-@focus: [
-    "src/infrastructure/dev/scripts/generate_agent_catalog.py"
-]
-@python: """
-import os
-# Auto-generate documentation for all 100+ agents
-# Extract docstrings and __version__ to create docs/AGENTS.md
-"""
-- [CATALOG] Create a script that scans `src/logic/agents/`, extracts metadata, and generates `docs/AGENTS.md` with a structured table of every specialized agent's purpose and status.
-
-# PHASE 245: RESOURCE QUOTAS & BUDGETS
-@focus: [
-    "src/core/base/managers/ResourceQuotaManager.py"
-]
-- [QUOTAS] Implement thresholds for maximum token usage and wall-clock execution time per agent session.
-- [ENFORCEMENT] Integrate quotas into the `BaseAgent` main loop, triggering a `CycleInterrupt` or "Graceful Shutdown" if exceeded.
 
 # PHASE 246: CONTEXT WINDOW OPTIMIZATION
 @focus: [

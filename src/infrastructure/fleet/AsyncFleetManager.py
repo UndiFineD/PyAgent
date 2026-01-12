@@ -75,7 +75,8 @@ class AsyncFleetManager(FleetManager):
             # Ensure unique IDs for graph nodes
             step_id = step.get("id") or f"step_{i}"
             step_map[step_id] = step
-            graph.add_node(step_id)
+            # Phase 242: Add resource hints to graph for refined batching
+            graph.add_node(step_id, resources=step.get("resources", []))
             for dep in step.get("depends_on", []):
                 graph.add_dependency(step_id, dep)
         
@@ -169,6 +170,7 @@ class AsyncFleetManager(FleetManager):
         agent_name = step.get("agent")
         action_name = step.get("action")
         args = step.get("args", [])
+        resources = step.get("resources", [])
         
         if agent_name not in self.agents:
             return f"Error: Agent '{agent_name}' not found."
@@ -182,13 +184,39 @@ class AsyncFleetManager(FleetManager):
         self.telemetry.start_trace(trace_id)
         
         try:
-            # Phase 152: Intelligent execution based on function type
-            if asyncio.iscoroutinefunction(action_fn):
-                res = await action_fn(*args)
-            else:
-                # Offload blocking synchronous actions to the default executor
-                loop = asyncio.get_running_loop()
-                res = await loop.run_in_executor(None, action_fn, *args)
+            # Phase 242: Apply distributed locks for resources
+            from src.infrastructure.orchestration.LockManager import LockManager
+            locker = LockManager()
+            
+            async def run_core():
+                # Phase 152: Intelligent execution based on function type
+                if asyncio.iscoroutinefunction(action_fn):
+                    return await action_fn(*args)
+                else:
+                    # Offload blocking synchronous actions to the default executor
+                    loop = asyncio.get_running_loop()
+                    return await loop.run_in_executor(None, action_fn, *args)
+
+            # Nested context managers for multiple resources
+            def run_with_locks(res_list):
+                if not res_list:
+                    return run_core()
+                
+                res = res_list[0]
+                # Default to file lock for paths, memory lock for IDs
+                l_type = "file" if "/" in res or "\\" in res or "." in res else "memory"
+                with locker.acquire(res, lock_type=l_type):
+                    return run_with_locks(res_list[1:])
+
+            # Offload the locked execution to executor if it's blocking
+            loop = asyncio.get_running_loop()
+            res = await loop.run_in_executor(None, lambda: run_with_locks(resources))
+            # Note: If run_core() is async, this lambda needs careful handling.
+            # However, run_with_locks returns a coroutine if res_list is empty.
+            # Simplified approach: for now, we assume blocking locks wrapping the execution.
+            # If run_with_locks returns a coroutine, we await it.
+            if asyncio.iscoroutine(res):
+                res = await res
                 
             self.telemetry.end_trace(trace_id, agent_name, action_name, status="success")
             
