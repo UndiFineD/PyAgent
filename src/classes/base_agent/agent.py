@@ -17,6 +17,8 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 __version__ = VERSION
 
+from src.core.base.exceptions import CycleInterrupt
+
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -223,22 +225,6 @@ class BaseAgent:
         # Strategy for agent execution (Phase 130: Lazy-loaded to avoid core-on-logic dependency)
         self._strategy: Optional[Any] = None
 
-    def _register_capabilities(self) -> None:
-        """Emits a signal with agent capabilities for discovery."""
-        try:
-            from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
-            signals = SignalRegistry()
-            signals.emit("agent_capability_registration", {
-                "agent": self.__class__.__name__,
-                "capabilities": self.get_capabilities()
-            })
-        except Exception:
-            pass
-
-    def get_capabilities(self) -> List[str]:
-        """Phase 241: Returns a list of strings representing agent capabilities."""
-        return self.capabilities
-
         # New attributes for enhanced functionality
         self._state: AgentState = AgentState.INITIALIZED
         self._conversation_history: List[ConversationMessage] = []
@@ -250,6 +236,14 @@ class BaseAgent:
         self._model: Optional[str] = None
         self._is_stop_requested = False
         self._system_prompt: str = "You are a helpful AI assistant."
+        
+        # Phase 245: RESOURCE QUOTAS & BUDGETS
+        self.quotas = ResourceQuotaManager(
+            config=QuotaConfig(
+                max_tokens=getattr(self._config, 'max_tokens_per_session', None),
+                max_time_seconds=getattr(self._config, 'max_time_per_session', None)
+            )
+        )
         
         # Determine Workspace Root (Phase 108: Robust detection delegated to Core)
         self._workspace_root = BaseCore.detect_workspace_root(self.file_path)
@@ -272,6 +266,22 @@ class BaseAgent:
 
         # Intelligence Harvesting (Phase 108)
         self.recorder = LocalContextRecorder(Path(self._workspace_root), f"{self.__class__.__name__}_Agent")
+
+    def _register_capabilities(self) -> None:
+        """Emits a signal with agent capabilities for discovery."""
+        try:
+            from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+            signals = SignalRegistry()
+            signals.emit("agent_capability_registration", {
+                "agent": self.__class__.__name__,
+                "capabilities": self.get_capabilities()
+            })
+        except Exception:
+            pass
+
+    def get_capabilities(self) -> List[str]:
+        """Phase 241: Returns a list of strings representing agent capabilities."""
+        return self.capabilities
 
     @property
     def strategy(self) -> Any:
@@ -636,6 +646,9 @@ class BaseAgent:
         """
         self._state: AgentState = AgentState.PROCESSING
         self._trigger_event(EventType.PRE_IMPROVE, {"prompt": prompt})
+        
+        # Phase 245: Increment cycle count
+        self.quotas.update_usage(cycles=1)
 
         # Check cache first if enabled
         cache_key: str = self._generate_cache_key(prompt, self.previous_content)
@@ -780,6 +793,12 @@ class BaseAgent:
             - Supports multiple backends: copilot, GitHub Models, local
             - Returns original_content as fallback if backend unavailable
         """
+        # Phase 245: Check quotas before execution
+        exceeded, reason = self.quotas.check_quotas()
+        if exceeded:
+            logging.error(f"[QUOTA EXCEEDED] {reason}")
+            raise CycleInterrupt(reason)
+
         logging.debug(f"Running subagent: {description}")
         # Deferred import to avoid circular dependency
         try:
@@ -789,6 +808,13 @@ class BaseAgent:
             from src.infrastructure.backend import execution_engine as ab
         
         result: Optional[str] = ab.run_subagent(description, prompt, original_content)
+
+        # Update quota usage (estimated tokens)
+        self.quotas.update_usage(
+            tokens_input=len(prompt) // 4,
+            tokens_output=len(result or "") // 4 if result else 0
+        )
+
         if result is None:
             # Lowered logging level to INFO (Phase 123)
             logging.info("Subagent returned None, using fallback response")

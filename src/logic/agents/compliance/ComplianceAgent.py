@@ -1,3 +1,6 @@
+from src.core.base.version import VERSION
+__version__ = VERSION
+
 import logging
 from typing import List, Dict, Any
 from src.logic.agents.compliance.core.ComplianceCore import ComplianceCore, ComplianceIssue

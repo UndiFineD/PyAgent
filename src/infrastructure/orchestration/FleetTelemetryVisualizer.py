@@ -58,3 +58,25 @@ class FleetTelemetryVisualizer:
         total = sum(traffic.values())
         if total == 0: return []
         return [k for k, v in traffic.items() if v / total >= 0.39]
+
+    def get_fleet_version_map(self) -> Dict[str, str]:
+        """Phase 243: Returns a map of all registered agents and their current versions."""
+        version_map = {}
+        for name, agent in self.fleet.agents.items():
+            # Check for class attribute __version__
+            version = getattr(agent, "__version__", "0.0.0-UNKNOWN")
+            version_map[name] = version
+        return version_map
+
+    def get_version_drift_report(self) -> str:
+        """Phase 243: Identifies agents running on legacy versions compared to core VERSION."""
+        from src.core.base.version import VERSION
+        drift = []
+        v_map = self.get_fleet_version_map()
+        for name, ver in v_map.items():
+            if ver != VERSION:
+                drift.append(f"- {name}: {ver} (Core: {VERSION})")
+        
+        if not drift:
+            return "All agents are synchronized with core version."
+        return f"VERSION DRIFT DETECTED:\n" + "\n".join(drift)
