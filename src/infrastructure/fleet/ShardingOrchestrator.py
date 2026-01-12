@@ -33,12 +33,17 @@ Optimizes swarm latency by clustering frequently interacting agents.
 
 import logging
 import json
+import numpy as np
 from pathlib import Path
-from typing import Dict, List, Any, Set
+from typing import Dict, List, Any, Set, Optional
 from collections import Counter
+from sklearn.cluster import DBSCAN
+from sklearn.preprocessing import StandardScaler
 
 class ShardingOrchestrator:
-    """Analyzes agent interactions and suggests/implements logical grouping."""
+    """Analyzes agent interactions and suggests/implements logical grouping.
+    Phase 234: Implements Dynamic Shard Rebalancing via DBSCAN and Live Migration.
+    """
 
     def __init__(self, workspace_root: Path, interaction_threshold: int = 1000) -> None:
         self.workspace_root = workspace_root
@@ -46,47 +51,88 @@ class ShardingOrchestrator:
         self.interaction_log = workspace_root / "data/logs/interaction_matrix.json"
         self.shard_mapping_path = workspace_root / "config/shard_mapping.json"
         self._counts: Counter = Counter()
+        self._agent_vram: Dict[str, float] = {} # agent -> VRAM usage in MB
         self._total_interactions = 0
+        self._current_mapping: Dict[str, str] = {} # agent -> shard_id
 
-    def record_interaction(self, agent_a: str, agent_b: str) -> None:
-        """Records a communication event between two agents."""
+    def record_interaction(self, agent_a: str, agent_b: str, vram_a: float = 512.0, vram_b: float = 512.0) -> None:
+        """Records a communication event and updates VRAM telemetry (Phase 234)."""
         pair = tuple(sorted([agent_a, agent_b]))
         self._counts[pair] += 1
+        self._agent_vram[agent_a] = vram_a
+        self._agent_vram[agent_b] = vram_b
         self._total_interactions += 1
         
         if self._total_interactions >= self.threshold:
             self.rebalance_shards()
             self._total_interactions = 0
 
+    def migrate_agent(self, agent_name: str, target_shard_id: str) -> None:
+        """Performs 'Live Migration' of an agent to a new shard (Phase 234)."""
+        old_shard = self._current_mapping.get(agent_name, "None")
+        if old_shard == target_shard_id:
+            return
+
+        logging.info(f"ShardingOrchestrator: MIGRATING '{agent_name}' from {old_shard} to {target_shard_id}")
+        # In a real system, this would involve updating the AgentRegistry 
+        # or notifying the FleetManager to update the agent's signal bus.
+        self._current_mapping[agent_name] = target_shard_id
+        self._sync_mapping_to_disk()
+
     def rebalance_shards(self) -> None:
-        """Clusters agents into logical shards based on interaction frequency."""
-        logging.info("ShardingOrchestrator: Rebalancing logical shards...")
+        """Clusters agents using DBSCAN based on interaction density and VRAM (Phase 234)."""
+        logging.info("ShardingOrchestrator: Performing Robust DBSCAN Rebalancing...")
         
-        # Simple Clustering: Agents with > 10% of total interactions go in the same shard
-        clusters: List[Set[str]] = []
-        for (a, b), count in self._counts.most_common():
-            if count < (self.threshold * 0.05): # 5% threshold
-                break
-            
-            # Find if either agent is already in a cluster
-            found_a = next((c for c in clusters if a in c), None)
-            found_b = next((c for c in clusters if b in c), None)
-            
-            if found_a and found_b:
-                if found_a is not found_b:
-                    found_a.update(found_b)
-                    clusters.remove(found_b)
-            elif found_a:
-                found_a.add(b)
-            elif found_b:
-                found_b.add(a)
-            else:
-                clusters.append({a, b})
-        
-        # Persist mapping
-        mapping = {f"shard_{i}": list(c) for i, c in enumerate(clusters)}
-        self._save_mapping(mapping)
-        logging.info(f"ShardingOrchestrator: Created {len(mapping)} logical clusters.")
+        agents = sorted(list(self._agent_vram.keys()))
+        if not agents:
+            return
+
+        # Build feature matrix: [VRAM, Total Interactions]
+        # For simplicity, we create an adjacency-like interaction score per agent
+        agent_interaction_scores = {a: 0 for a in agents}
+        for (a, b), count in self._counts.items():
+            if a in agent_interaction_scores: agent_interaction_scores[a] += count
+            if b in agent_interaction_scores: agent_interaction_scores[b] += count
+
+        features = []
+        for a in agents:
+            features.append([self._agent_vram.get(a, 0), agent_interaction_scores[a]])
+
+        X = np.array(features)
+        X_scaled = StandardScaler().fit_transform(X)
+
+        # DBSCAN: eps determines distance, min_samples determines cluster density
+        db = DBSCAN(eps=0.5, min_samples=2).fit(X_scaled)
+        labels = db.labels_
+
+        new_mapping: Dict[str, List[str]] = {}
+        for idx, label in enumerate(labels):
+            shard_id = f"shard_{label}" if label != -1 else "shard_outliers"
+            if shard_id not in new_mapping:
+                new_mapping[shard_id] = []
+            new_mapping[shard_id].append(agents[idx])
+
+        # Execute Live Migrations
+        for shard_id, agent_list in new_mapping.items():
+            for agent in agent_list:
+                self.migrate_agent(agent, shard_id)
+
+        logging.info(f"ShardingOrchestrator: Rebalancing complete. {len(new_mapping)} shards active.")
+
+    def _sync_mapping_to_disk(self) -> None:
+        """Internal helper to persist current mapping."""
+        # Convert flat mapping back to grouped for compatibility
+        grouped: Dict[str, List[str]] = {}
+        for agent, shard in self._current_mapping.items():
+            if shard not in grouped:
+                grouped[shard] = []
+            grouped[shard].append(agent)
+        self._save_mapping(grouped)
+
+    def _save_mapping(self, mapping: Dict[str, List[str]]) -> None:
+        self.shard_mapping_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(self.shard_mapping_path, "w") as f:
+            json.dump(mapping, f, indent=4)
 
     def _save_mapping(self, mapping: Dict[str, List[str]]) -> None:
         self.shard_mapping_path.parent.mkdir(parents=True, exist_ok=True)

@@ -43,6 +43,7 @@ class SecurityGuardAgent(BaseAgent):
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
+        self.capabilities.extend(["security-audit", "secret-scanning", "vulnerability-detection"]) # Phase 241
         self.security_core = SecurityCore(workspace_root=str(self.file_path.parent.parent.parent))
         self._system_prompt = (
             "You are the Security Guard Agent. "

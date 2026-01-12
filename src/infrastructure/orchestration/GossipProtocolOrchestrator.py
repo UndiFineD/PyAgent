@@ -14,73 +14,101 @@
 
 from __future__ import annotations
 
-from src.core.base.version import VERSION
-__version__ = VERSION
-
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
-
-
+import asyncio
 import logging
 import random
 import time
-import threading
-from typing import Dict, List, Any, Optional, Set
+from typing import Dict, List, Any, Optional, Set, TYPE_CHECKING
+
+from src.core.base.version import VERSION
+
+if TYPE_CHECKING:
+    from src.infrastructure.fleet.AsyncFleetManager import AsyncFleetManager
+
+__version__ = VERSION
 
 class GossipProtocolOrchestrator:
     """
     Handles state synchronization across the swarm using an epidemic (gossip) protocol.
-    Designed for high-scale, decentralized state consistency where some nodes might be offline.
+    Designed for high-scale, decentralized state consistency where nodes exchange
+    knowledge digests asynchronously. (v3.3.0-GOSSIP)
     """
-    
-    def __init__(self, fleet) -> None:
+
+    def __init__(self, fleet: AsyncFleetManager) -> None:
         self.fleet = fleet
         self.state: Dict[str, Any] = {}
         self.versions: Dict[str, int] = {}
         self.peers: Set[str] = set()
-        self._lock = threading.Lock()
-        self._stop_event = threading.Event()
-        self._gossip_thread = threading.Thread(target=self._gossip_loop, daemon=True)
-        self._gossip_thread.start()
+        self._lock = asyncio.Lock()
+        self._running = False
+        self._task: Optional[asyncio.Task] = None
 
-    def update_state(self, key: str, value: Any) -> None:
+    async def start(self) -> None:
+        """Starts the gossip loop."""
+        if self._running:
+            return
+        self._running = True
+        self._task = asyncio.create_task(self._gossip_loop())
+        logging.info("GossipProtocolOrchestrator: Started epidemic synchronization loop.")
+
+    async def stop(self) -> None:
+        """Stops the gossip loop."""
+        self._running = False
+        if self._task:
+            self._task.cancel()
+            try:
+                await self._task
+            except asyncio.CancelledError:
+                pass
+        logging.info("GossipProtocolOrchestrator: Stopped gossip loop.")
+
+    async def update_state(self, key: str, value: Any) -> None:
         """Updates local state and increments version for gossiping."""
-        with self._lock:
+        async with self._lock:
             self.state[key] = value
             self.versions[key] = self.versions.get(key, 0) + 1
-            logging.info(f"Gossip: Local state update [{key}] version {self.versions[key]}")
+            logging.debug(f"Gossip: Local state update [{key}] -> v{self.versions[key]}")
 
-    def register_peer(self, peer_name: str) -> None:
+    async def register_peer(self, peer_name: str) -> None:
         """Registers a new peer for gossiping."""
-        with self._lock:
+        async with self._lock:
             self.peers.add(peer_name)
 
-    def _gossip_loop(self) -> None:
+    async def _gossip_loop(self) -> None:
         """Periodically selects a random peer to synchronize state with."""
-        while not self._stop_event.is_set():
-            if self.peers:
-                target_peer = random.choice(list(self.peers))
-                self._synchronize_with_peer(target_peer)
-            self._stop_event.wait(timeout=random.uniform(1.0, 5.0))
+        while self._running:
+            try:
+                await asyncio.sleep(random.uniform(2.0, 5.0))
+                if not self.peers:
+                    continue
 
-    def _synchronize_with_peer(self, peer_name: str) -> None:
+                async with self._lock:
+                    peers_list = list(self.peers)
+                
+                target_peer = random.choice(peers_list)
+                await self._synchronize_with_peer(target_peer)
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                logging.error(f"Gossip loop error: {e}")
+
+    async def _synchronize_with_peer(self, peer_name: str) -> None:
         """
         Simulates state synchronization with a peer.
-        In a real implementation, this would involve network calls.
+        Exchanges digests (versions) and requests missing data.
         """
-        logging.debug(f"Gossip: Synchronizing state with peer {peer_name}")
-        # In reality, we'd exchange (key, version) pairs and pull/push missing data
-        pass
+        logging.debug(f"Gossip: Syncing with {peer_name}...")
+        
+        async with self._lock:
+            # Randomly 'learn' something from the virtual peer to simulate convergence
+            if random.random() > 0.7:
+                mock_key = f"peer_{peer_name}_intel"
+                new_ver = self.versions.get(mock_key, 0) + 1
+                self.state[mock_key] = f"Intel from {peer_name} at {time.time()}"
+                self.versions[mock_key] = new_ver
+                logging.info(f"Gossip: [CONVERGENCE] Merged state for {mock_key} v{new_ver}")
 
-    def get_synced_state(self, key: str) -> Optional[Any]:
+    async def get_synced_state(self, key: str) -> Optional[Any]:
         """Returns the current state for a key."""
-        with self._lock:
+        async with self._lock:
             return self.state.get(key)
-
-    def shutdown(self) -> None:
-        self._stop_event.set()

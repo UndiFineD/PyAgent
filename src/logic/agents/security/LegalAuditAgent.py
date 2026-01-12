@@ -46,6 +46,23 @@ class LegalAuditAgent(BaseAgent):
             "MIT": r"MIT License",
             "Apache": r"Apache License 2\.0"
         }
+        self.license_blacklist = ["GPL", "AGPL"] # Blacklist for non-copyleft projects (Phase 238)
+
+    def check_license_compliance(self, content: str, project_license: str = "MIT") -> Dict[str, Any]:
+        """
+        Phase 238: Check generated code against a license blacklist to prevent 
+        GPL/AGPL contamination in permissive projects.
+        """
+        scan = self.scan_licensing(content)
+        violations = [l for l in scan["detected_licenses"] if l in self.license_blacklist]
+        
+        is_compliant = len(violations) == 0
+        return {
+            "is_compliant": is_compliant,
+            "detected_licenses": scan["detected_licenses"],
+            "violations": violations,
+            "action_required": "Block / Rewrite" if not is_compliant else "None"
+        }
 
     def scan_licensing(self, content: str) -> Dict[str, Any]:
         """Identifies licenses and flags copyleft risks."""

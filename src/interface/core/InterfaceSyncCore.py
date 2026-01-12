@@ -7,7 +7,7 @@ class InterfaceSyncCore:
     It manages the central state and 'Theme Engine' propagation.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.themes: Dict[str, Dict[str, str]] = {
             "dark": {
                 "background": "#1e1e1e",

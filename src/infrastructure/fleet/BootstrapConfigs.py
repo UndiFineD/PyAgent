@@ -60,6 +60,11 @@ def get_bootstrap_agents() -> Dict[str, Tuple[str, str, Optional[str]]]:
             "EternalAuditAgent",
             None
         ),
+        "LegalAudit": (
+            "src.logic.agents.security.LegalAuditAgent",
+            "LegalAuditAgent",
+            None
+        ),
         "Logging": (
             "src.logic.agents.system.LoggingAgent",
             "LoggingAgent",
@@ -191,5 +196,9 @@ BOOTSTRAP_ORCHESTRATORS = {
     "fleet_telemetry": (
         "src.infrastructure.orchestration.FleetTelemetryVisualizer",
         "FleetTelemetryVisualizer"
+    ),
+    "consciousness": (
+        "src.infrastructure.fleet.ConsciousnessRegistry",
+        "ConsciousnessRegistry"
     )
 }

@@ -92,45 +92,45 @@ class DependencyGraph:
         self.add_node(depends_on)
         self._edges[node].add(depends_on)
 
-    def resolve(self) -> List[str]:
-        """Resolve execution order.
+    def resolve(self) -> List[List[str]]:
+        """Resolve execution order into parallel batches.
+
+        Each inner list contains nodes that can be executed simultaneously.
+        Example: [["coder"], ["tests", "linter"], ["docs"]]
 
         Returns:
-            List of nodes in execution order.
-
+            List of batches, where each batch is a list of node names.
         Raises:
             ValueError: If circular dependency detected.
         """
-        in_degree = {n: 0 for n in self._nodes}
-
-        for node, deps in self._edges.items():
-            for dep in deps:
-                # This is reverse - we need nodes with deps to have higher in_degree
-                pass  # Actually, we track outgoing
-
-        # Build reverse graph for topological sort
-        reverse: dict[str, set[str]] = {n: set() for n in self._nodes}
+        # Node -> count of remaining dependencies it has
+        in_degree = {n: len(self._edges.get(n, set())) for n in self._nodes}
+        
+        # Build reverse graph: node -> nodes that depend on it
+        reverse: Dict[str, Set[str]] = {n: set() for n in self._nodes}
         for node, deps in self._edges.items():
             for dep in deps:
                 reverse[dep].add(node)
 
-        # Calculate in - degree based on dependencies
-        in_degree = {n: len(self._edges.get(n, set())) for n in self._nodes}
+        batches: List[List[str]] = []
+        visited_count = 0
 
-        # Start with nodes that have no dependencies
-        queue: list[str] = [n for n in self._nodes if in_degree[n] == 0]
-        result: list[str] = []
+        while True:
+            # Nodes with no dependencies are ready for next batch
+            current_batch = [n for n in self._nodes if in_degree[n] == 0 and n not in [item for sublist in batches for item in sublist]]
+            
+            if not current_batch:
+                break
+                
+            batches.append(current_batch)
+            visited_count += len(current_batch)
+            
+            # Reduce in-degree for all nodes that depend on this batch
+            for node in current_batch:
+                for dependent in reverse[node]:
+                    in_degree[dependent] -= 1
 
-        while queue:
-            node = queue.pop(0)
-            result.append(node)
-
-            for dependent in reverse[node]:
-                in_degree[dependent] -= 1
-                if in_degree[dependent] == 0:
-                    queue.append(dependent)
-
-        if len(result) != len(self._nodes):
+        if visited_count != len(self._nodes):
             raise ValueError("Circular dependency detected")
 
-        return result
+        return batches

@@ -8,7 +8,7 @@ class AutonomyCore:
     It allows agents to autonomously review their own performance and 'sleep' when optimized.
     """
 
-    def __init__(self, agent_id: str):
+    def __init__(self, agent_id: str) -> None:
         self.agent_id = agent_id
         self.performance_history: List[float] = []
 
