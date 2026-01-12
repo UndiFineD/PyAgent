@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -32,3 +33,11 @@ __all__ = [
     "OTelManager",
     "Span",
 ]
+=======
+# Exporters package
+from .MetricsExporter import *
+from .StatsExporter import *
+from .PrometheusExporter import *
+from .CloudExporter import *
+from .OTelManager import *
+>>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
