@@ -29,8 +29,8 @@ __version__ = VERSION
 
 
 
-from .ExportDestination import ExportDestination
-from .Metric import Metric
+from ..observability_core import ExportDestination
+from ..observability_core import Metric
 
 from datetime import datetime
 from typing import Any, Dict, List, Optional

@@ -14,8 +14,8 @@ from tests.utils.agent_test_utils import agent_dir_on_path, load_agent_module
 @pytest.fixture
 def stats_module() -> Any:
     """Load and return the stats module."""
-    with agent_dir_on_path():
-        return load_agent_module("stats/metrics_collector.py")
+    import src.observability.stats as stats
+    return stats
 
 
 @pytest.fixture
