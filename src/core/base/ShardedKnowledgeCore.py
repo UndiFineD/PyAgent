@@ -102,3 +102,44 @@ class ShardedKnowledgeCore:
             if confidence >= threshold_confidence:
                 stable[k] = v
         return stable
+
+    def export_to_parquet(self, shard_id: int, output_path: Path) -> bool:
+        """Exports a JSON shard to Apache Parquet for large-scale training ingestion (Phase 220)."""
+        try:
+            import pandas as pd
+            import pyarrow as pa
+            import pyarrow.parquet as pq
+            
+            # Load the shard (blocking load for this utility move)
+            source_path = self.get_shard_path(shard_id)
+            if not source_path.exists():
+                return False
+                
+            with open(source_path, "rb") as f:
+                data = orjson.loads(f.read())
+            
+            if not data:
+                return False
+            
+            # Convert dict to flat list of records if possible
+            records = []
+            for key, val in data.items():
+                if isinstance(val, dict):
+                    rec = {"entity": key}
+                    rec.update(val)
+                    records.append(rec)
+                else:
+                    records.append({"entity": key, "value": val})
+            
+            df = pd.DataFrame(records)
+            table = pa.Table.from_pandas(df)
+            
+            output_path.parent.mkdir(parents=True, exist_ok=True)
+            pq.write_table(table, str(output_path), compression='zstd')
+            return True
+        except ImportError:
+            logging.error("Parquet export failed: pandas/pyarrow not installed.")
+            return False
+        except Exception as e:
+            logging.error(f"Parquet export error: {e}")
+            return False

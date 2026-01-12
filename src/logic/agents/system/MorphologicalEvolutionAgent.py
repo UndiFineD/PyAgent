@@ -31,21 +31,40 @@ import json
 from typing import Dict, List, Any, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.logic.agents.system.core.MorphologyCore import MorphologyCore
 
 
 class MorphologicalEvolutionAgent(BaseAgent):
     """
     Phase 37: Morphological Code Generation.
     Analyzes API usage patterns and evolves the fleet's class structures.
+    Integrated with MorphologyCore for Agent DNA and Splitting/Merging logic.
     """
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._system_prompt = (
-            "You are the Morphological Evolution Agent. "
-            "You study the usage patterns of other agents and propose structural changes "
-            "to their codebases to improve efficiency, reduce latency, or simplify interfaces."
+        self.core = MorphologyCore()
+
+    def generate_agent_dna(self, agent_instance: BaseAgent) -> str:
+        """
+        Generates DNA for an agent instance for persistence and replication.
+        """
+        return self.core.encode_agent_dna(
+            name=agent_instance.__class__.__name__,
+            tools=[t["name"] for t in (getattr(agent_instance, "tools", []) or [])],
+            prompt=getattr(agent_instance, "_system_prompt", ""),
+            model="gpt-4o" # Default
         )
+
+    def check_for_merge_opportunity(self, agent_a_paths: List[str], agent_b_paths: List[str]) -> bool:
+        """
+        Checks if two agents should merge based on path overlap.
+        """
+        overlap = self.core.calculate_path_overlap(agent_a_paths, agent_b_paths)
+        if overlap > 0.8:
+            logging.warning(f"MorphologicalEvolution: High overlap ({overlap:.2f}) detected. MERGE recommended.")
+            return True
+        return False
 
     @as_tool
     def analyze_api_morphology(self, agent_name: str, call_logs: List[Dict[str, Any]]) -> Dict[str, Any]:

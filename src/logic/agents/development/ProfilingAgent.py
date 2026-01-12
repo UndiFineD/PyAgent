@@ -42,47 +42,30 @@ import ast
 import hashlib
 import logging
 import math
-import re
-import shutil
-import subprocess
-import tempfile
+import pstats
+from src.core.base.BaseAgent import BaseAgent
+from src.observability.stats.core.ProfilingCore import ProfilingCore, ProfileStats
 
 class ProfilingAgent:
     """Provides code profiling suggestions.
-
-    Analyzes code to identify functions that would benefit
-    from profiling.
-
-    Attributes:
-        suggestions: List of profiling suggestions.
-
-    Example:
-        >>> advisor=ProfilingAgent()
-        >>> # suggestions=advisor.analyze("def slow_func(): asyncio.sleep(10)")
+    Integrated with ProfilingCore for cProfile analysis and bottleneck detection.
     """
 
     def __init__(self) -> None:
         """Initialize the profiling advisor."""
         self.suggestions: List[ProfilingSuggestion] = []
+        self.core = ProfilingCore()
 
-    def analyze(self, content: str) -> List[ProfilingSuggestion]:
-        """Analyze code for profiling opportunities.
-
-        Args:
-            content: Source code to analyze.
-
-        Returns:
-            List of profiling suggestions.
-        """
-        self.suggestions = []
-        try:
-            tree = ast.parse(content)
-        except SyntaxError:
-            return self.suggestions
-        for node in ast.walk(tree):
-            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                self._analyze_function(node)
-        return self.suggestions
+    def analyze_pstats(self, pstats_filepath: str) -> List[ProfileStats]:
+        """Analyzes a binary pstats file and returns optimization priorities."""
+        stats = pstats.Stats(pstats_filepath)
+        results = self.core.analyze_stats(stats)
+        
+        bottlenecks = self.core.identify_bottlenecks(results)
+        if bottlenecks:
+            logging.warning(f"ProfilingAgent: Detected {len(bottlenecks)} bottlenecks.")
+            
+        return results
 
     def _analyze_function(
         self,

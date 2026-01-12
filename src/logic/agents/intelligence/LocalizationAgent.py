@@ -31,17 +31,41 @@ import json
 import logging
 from typing import Dict, List, Any, Optional
 from src.core.base.BaseAgent import BaseAgent
+from src.logic.agents.intelligence.core.LocalizationCore import LocalizationCore
 
 
 class LocalizationAgent(BaseAgent):
     """
     Handles localization and internationalization (i18n) tasks.
-    Helps in extracting translatable strings and managing translation files.
+    Integrated with LocalizationCore for cultural guardrails and multi-lang support.
     """
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
-        self.supported_locales = ["en", "es", "fr", "de", "zh"]
+        self.core = LocalizationCore()
+        self.supported_locales = self.core.get_supported_locales()
+
+    def check_cultural_compliance(self, text: str) -> Dict[str, Any]:
+        """
+        Runs cultural guardrails on agent communication.
+        """
+        issues = self.core.detect_cultural_issues(text)
+        return {
+            "compliant": len(issues) == 0,
+            "issues": issues,
+            "count": len(issues)
+        }
+
+    def translate_comment(self, text: str, target_lang: str) -> str:
+        """
+        Translates a single agent comment using the core's formatting.
+        """
+        if target_lang not in self.supported_locales:
+             logging.warning(f"Target language {target_lang} not in core supported list.")
+             
+        request = self.core.format_translation_request(text, target_lang)
+        # In a real scenario, this would call self.improve_content or an API
+        return self.solve_translation_task(request)
 
     def extract_strings(self, file_path: str) -> List[str]:
         """Extracts potential user-facing strings for translation."""

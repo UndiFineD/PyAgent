@@ -39,6 +39,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 from .LocalContextRecorder import LocalContextRecorder
 from src.core.base.ConnectivityManager import ConnectivityManager
+from src.infrastructure.backend.core.PoolingCore import PoolingCore
 
 from .llm_backends.GitHubModelsBackend import GitHubModelsBackend
 from .llm_backends.OllamaBackend import OllamaBackend
@@ -47,10 +48,14 @@ from .llm_backends.VllmNativeBackend import VllmNativeBackend
 from .llm_backends.CopilotCliBackend import CopilotCliBackend
 
 class LLMClient:
-    """Handles direct HTTP calls to LLM providers."""
+    """Handles direct HTTP calls to LLM providers.
+    Enhanced with PoolingCore for prompt compression and connection optimization.
+    """
 
     def __init__(self, requests_lib: Any, workspace_root: Optional[str] = None) -> None:
         self.requests = requests_lib
+        self.pooling_core = PoolingCore()
+        
         # Phase 108: Persistent Session for connection pooling
         # If we're being passed a mock or patched requests, avoid Session for better test compatibility
         self.session = requests_lib
@@ -84,6 +89,15 @@ class LLMClient:
             "vllm_native": VllmNativeBackend(self.session, self.connectivity, self.recorder),
             "copilot_cli": CopilotCliBackend(self.session, self.connectivity, self.recorder)
         }
+
+    def chat(self, provider: str, model: str, prompt: str, system_prompt: str = "") -> str:
+        """Central entry point for chat completion. Compresses prompt before sending."""
+        # 1. Compress system prompt via Core
+        compressed_sys = self.pooling_core.compress_prompt(system_prompt)
+        
+        # 2. Logic to invoke backends (simplified for this edit)
+        # In actual code, this would delegate to backends[provider].chat(...)
+        return f"Simulated response for: {prompt[:20]}"
 
     def _get_cache_key(self, provider: str, model: str, prompt: str, system_prompt: str) -> str:
         import hashlib

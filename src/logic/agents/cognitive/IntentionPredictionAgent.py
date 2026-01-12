@@ -27,17 +27,37 @@ __version__ = VERSION
 
 import time
 import random
+import logging
 from typing import Dict, List, Any, Optional
+from src.logic.agents.cognitive.core.MetacognitiveCore import MetacognitiveCore
 
 class IntentionPredictionAgent:
     """
-    Predicts the future actions and goals of peer agents in the fleet
-    to optimize synchronization and minimize communication overhead.
+    Predicts the future actions and goals of peer agents in the fleet.
+    Integrated with MetacognitiveCore for intent prediction and pre-warming.
     """
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
         self.agent_histories: Dict[str, List[Dict[str, Any]]] = {} # agent_id -> [action_logs]
+        self.core = MetacognitiveCore()
         
+    def predict_and_prewarm(self, agent_id: str) -> Dict[str, Any]:
+        """
+        Predicts next intent and identifies agents to pre-warm.
+        """
+        history = self.agent_histories.get(agent_id, [])
+        intent = self.core.predict_next_intent(history)
+        prewarm_targets = self.core.get_prewarm_targets(intent)
+        
+        if prewarm_targets:
+            logging.info(f"IntentionPrediction: Pre-warming {prewarm_targets} for predicted intent: {intent}")
+            
+        return {
+            "predicted_intent": intent,
+            "prewarm_targets": prewarm_targets,
+            "confidence": 0.75 if intent != "CONTINUATION" else 0.3
+        }
+
     def log_agent_action(self, agent_id: str, action_type: str, metadata: Dict[str, Any]) -> None:
         """
         Record an action for better future prediction.

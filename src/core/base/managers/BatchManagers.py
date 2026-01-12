@@ -32,11 +32,9 @@ from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 from src.core.base.models import FilePriority, BatchResult
 
-# Infrastructure
-from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
-
 if TYPE_CHECKING:
     from ..agent import BaseAgent
+    from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
 class BatchRequest:
     """Request in a batch processing queue."""

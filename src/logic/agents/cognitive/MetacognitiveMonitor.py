@@ -31,8 +31,7 @@ __version__ = VERSION
 
 import logging
 from typing import Dict, Any, List, Optional
-
-from src.logic.cognitive.MetacognitiveCore import MetacognitiveCore
+from src.logic.agents.cognitive.core.MetacognitiveCore import MetacognitiveCore
 
 class MetacognitiveMonitor:
     """Evaluates the internal consistency and certainty of agent reasoning.
@@ -43,6 +42,17 @@ class MetacognitiveMonitor:
     def __init__(self) -> None:
         self.uncertainty_log: List[Dict[str, Any]] = []
         self.core = MetacognitiveCore()
+        # Track weights for agents reporting to this monitor
+        self.agent_weights: Dict[str, float] = {}
+
+    def calibrate_agent(self, agent_name: str, reported_conf: float, actual_correct: bool):
+        """Calibrates an agent's consensus weight based on performance."""
+        current_weight = self.agent_weights.get(agent_name, 1.0)
+        new_weight = self.core.calibrate_confidence_weight(reported_conf, actual_correct, current_weight)
+        self.agent_weights[agent_name] = new_weight
+        
+        if new_weight < current_weight:
+            logging.info(f"Metacognitive: Penalized {agent_name} weight to {new_weight:.2f} due to overconfidence.")
 
     def evaluate_reasoning(self, agent_name: str, task: str, reasoning_chain: str) -> Dict[str, Any]:
         """Analyzes a reasoning chain via core and handles alerts."""

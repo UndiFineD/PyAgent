@@ -36,13 +36,17 @@ import logging
 from typing import Dict, List, Any, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.logic.agents.development.core.BenchmarkCore import BenchmarkCore, BenchmarkResult
 
 class BenchmarkAgent(BaseAgent):
-    """Benchmarks the performance of the agent fleet including SGI-Bench Scientific metrics."""
+    """Benchmarks the performance of the agent fleet.
+    Integrated with BenchmarkCore for regression testing and baseline tracking.
+    """
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.results: List[Dict[str, Any]] = []
+        self.core = BenchmarkCore()
+        self.benchmark_results: List[BenchmarkResult] = []
         self._system_prompt = (
             "You are the Benchmark Agent. "
             "You follow the SGI-Bench (Scientific General Intelligence) standard.\n"
@@ -130,6 +134,19 @@ class BenchmarkAgent(BaseAgent):
         self.results.append(result)
         
         return f"Benchmark completed for {agent_name}. Latency: {duration:.2f}s"
+
+    @as_tool
+    def check_for_performance_regression(self, agent_id: str, current_latency: float) -> str:
+        """Checks if an agent's current performance has regressed vs the fleet baseline."""
+        baseline = self.core.calculate_baseline(self.benchmark_results)
+        regression = self.core.check_regression(current_latency, baseline)
+        
+        if regression["regression"]:
+            msg = f"REGRESSION DETECTED: {agent_id} is {regression['delta_percentage']:.1f}% slower than baseline."
+            logging.error(msg)
+            return msg
+            
+        return f"SUCCESS: {agent_id} is within performance limits."
 
     @as_tool
     def generate_report(self) -> str:
