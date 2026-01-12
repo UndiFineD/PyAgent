@@ -1,8 +1,33 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 PyAgent contributors
+# Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
 
 """Data models for test agent functionality."""
+
+
 
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Tuple
@@ -48,6 +73,7 @@ class TestCase:
 @dataclass
 class TestRun:
     """A test execution run."""
+    __test__ = False
     id: str
     timestamp: str
     total_tests: int = 0
@@ -72,6 +98,7 @@ class CoverageGap:
 @dataclass
 class TestFactory:
     """A test data factory for generating test data."""
+    __test__ = False
     name: str
     return_type: str
     parameters: Dict[str, str] = field(default_factory=lambda: {})
@@ -102,6 +129,7 @@ class ContractTest:
 @dataclass
 class TestEnvironment:
     """Test environment configuration."""
+    __test__ = False
     name: str
     base_url: str = ""
     variables: Dict[str, str] = field(default_factory=lambda: {})
@@ -124,6 +152,7 @@ class ExecutionTrace:
 @dataclass
 class TestDependency:
     """A dependency for test injection."""
+    __test__ = False
     name: str
     dependency_type: str
     implementation: str = ""
@@ -176,6 +205,7 @@ class GeneratedTest:
 @dataclass
 class TestProfile:
     """Runtime profiling data for a test."""
+    __test__ = False
     test_id: str
     cpu_time_ms: float
     memory_peak_mb: float

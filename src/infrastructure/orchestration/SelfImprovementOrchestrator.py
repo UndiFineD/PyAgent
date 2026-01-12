@@ -1,4 +1,29 @@
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 from __future__ import annotations
+
+from src.core.base.version import VERSION
+__version__ = VERSION
+
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+
 
 import os
 import json
@@ -16,9 +41,13 @@ class SelfImprovementOrchestrator(BaseAgent):
     Orchestrates the fleet's self-improvement cycle: scanning for tech debt, 
     security leaks, and quality issues, and applying autonomous fixes.
     """
-    def __init__(self, fleet_manager) -> None:
+    def __init__(self, fleet_manager=None) -> None:
         # Phase 125: Handle polymorphic initialization (Fleet or Path string)
-        if isinstance(fleet_manager, str) or isinstance(fleet_manager, Path):
+        if not fleet_manager:
+            # Fallback to current working directory
+            self.workspace_root = os.getcwd()
+            self.fleet = None
+        elif isinstance(fleet_manager, str) or isinstance(fleet_manager, Path):
             self.workspace_root = str(fleet_manager)
             self.fleet = None # Will be set by registry if possible
         else:
@@ -271,10 +300,10 @@ class SelfImprovementOrchestrator(BaseAgent):
             })
 
         # 6. Speed & Efficiency: Performance Bottlenecks
-        if "time.sleep(" in content and "test" not in file_path.lower() and "SelfImprovementOrchestrator.py" not in file_path:
+        if re.search(r"^[^\#]*time\.sleep\(", content, re.MULTILINE) and "test" not in file_path.lower() and "SelfImprovementOrchestrator.py" not in file_path:
             findings.append({
                 "type": "Performance Warning",
-                "message": "Found time.sleep() in non-test code. Possible blocking bottleneck.",
+                "message": "Found active time.sleep() in non-test code. Possible blocking bottleneck.",
                 "file": file_path
             })
         
