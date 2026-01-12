@@ -33,23 +33,36 @@ import random
 from typing import Dict, List, Any, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore
 
 
 class SyntheticDataAgent(BaseAgent):
     """
     Agent specializing in generating high-fidelity synthetic training data.
     Used to create datasets for fine-tuning local models (ModelForge).
+    Integrated with SynthesisCore for edge-case generation.
     """
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.output_dir = "data/logs/synthetic_data"
         os.makedirs(self.output_dir, exist_ok=True)
-        self._system_prompt = (
-            "You are the Synthetic Data Forge Agent. "
-            "Your goal is to generate diverse and high-quality instruction-following pairs "
-            "related to coding, debugging, and project management for fine-tuning purposes."
-        )
+        self.core = SynthesisCore()
+
+    @as_tool
+    def generate_edge_case_dataset(self, count: int = 100) -> str:
+        """
+        Generates a massive dataset of synthetic Python edge cases for model hardening.
+        """
+        logging.info(f"SyntheticDataAgent: Generating {count} edge cases...")
+        snippets = self.core.generate_python_edge_cases(count)
+        
+        filepath = os.path.join(self.output_dir, "python_edge_cases.jsonl")
+        with open(filepath, 'w', encoding='utf-8') as f:
+            for s in snippets:
+                f.write(json.dumps({"instruction": "Complete or explain this code", "output": s}) + "\n")
+                
+        return f"Generated {count} edge cases in {filepath}"
 
     @as_tool
     def generate_training_data(self, topic: str, count: int = 5) -> str:

@@ -36,6 +36,7 @@ import logging
 from typing import Dict, List, Any, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.logic.agents.security.core.ByzantineCore import ByzantineCore
 
 
 class ByzantineConsensusAgent(BaseAgent):
@@ -43,27 +44,25 @@ class ByzantineConsensusAgent(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._system_prompt = (
-            "You are the Byzantine Consensus Judge. "
-            "Your role is to strictly evaluate proposals from multiple agents. "
-            "You identify adversarial or low-quality outputs and ensure that only "
-            "high-integrity, majority-verified solutions are accepted for critical paths."
-        )
+        self.core = ByzantineCore()
+        # Simulated historic reliability tracker
+        self.reliability_scores: Dict[str, float] = {}
 
     def select_committee(self, task: str, available_agents: List[str]) -> List[str]:
-        """Selects a subset of agents best suited for a task."""
-        # Simple implementation: select up to 3 agents
-        return available_agents[:3]
+        """Selects a subset of agents best suited for a task based on reliability."""
+        # Ensure registry is populated
+        for agent in available_agents:
+            if agent not in self.reliability_scores:
+                self.reliability_scores[agent] = 0.9 # High default for new agents
+                
+        return self.core.select_committee(self.reliability_scores)
 
     @as_tool
-    def run_committee_vote(self, task: str, proposals: Dict[str, str]) -> Dict[str, Any]:
-        """Evaluates a set of proposals and determines the winner via AI-powered scoring.
-        
-        Args:
-            task: The original task description.
-            proposals: Mapping of agent names to their proposed code/text.
-        """
+    def run_committee_vote(self, task: str, proposals: Dict[str, str], change_type: str = "default") -> Dict[str, Any]:
+        """Evaluates a set of proposals and determines the winner via AI-powered scoring."""
         logging.info(f"ByzantineConsensus: Evaluating {len(proposals)} proposals for task: {task[:30]}...")
+        
+        quorum_req = self.core.get_required_quorum(change_type)
         
         # 1. AI-Powered Scoring
         scores: Dict[str, float] = {}

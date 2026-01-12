@@ -28,31 +28,48 @@ __version__ = VERSION
 
 import logging
 import random
+import time
 from typing import Dict, List, Any, Optional, TYPE_CHECKING
+from src.core.base.core.PruningCore import PruningCore, SynapticWeight
 
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
 
 class NeuralPruningEngine:
     """
-    Implements Bio-Digital Integration (Phase 31).
-    Emulates biological neural pruning to optimize model inference costs by
-    identifying and 'pruning' underutilized or redundant reasoning paths.
+    Implements Bio-Digital Integration.
+    Integrated with PruningCore for synaptic decay and refractory periods.
     """
     
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
+        self.core = PruningCore()
+        self.weights: Dict[str, SynapticWeight] = {} # path_id -> weight dataclass
         self.usage_statistics: Dict[str, int] = {} # path_id -> hits
         self.cost_statistics: Dict[str, float] = {} # path_id -> total_tokens
         self.performance_statistics: Dict[str, List[bool]] = {} # path_id -> success/fail history
-        self.active_synapses: Dict[str, float] = {} # path_id -> weight
+
+    def _get_or_create_weight(self, path_id: str) -> SynapticWeight:
+        if path_id not in self.weights:
+            self.weights[path_id] = SynapticWeight(agent_id=path_id, weight=1.0, last_fired=time.time())
+        return self.weights[path_id]
 
     def record_usage(self, path_id: str) -> str:
         """Records the usage of a specific reasoning path or tool."""
         self.usage_statistics[path_id] = self.usage_statistics.get(path_id, 0) + 1
-        # Update synapse weight based on usage
-        current_weight = self.active_synapses.get(path_id, 1.0)
-        self.active_synapses[path_id] = min(current_weight * 1.05, 10.0) # Strengthen
+        weight_obj = self._get_or_create_weight(path_id)
+        
+        # Check refractory
+        if self.core.is_in_refractory(weight_obj):
+            logging.warning(f"PruningEngine: Path {path_id} is in refractory period.")
+            
+        new_weight = self.core.update_weight_on_fire(weight_obj.weight, True)
+        self.weights[path_id] = SynapticWeight(
+            agent_id=path_id, 
+            weight=new_weight, 
+            last_fired=time.time(),
+            refractory_until=time.time() + 5.0 # 5s refractory
+        )
 
     def record_performance(self, path_id: str, success: bool, cost: float = 0.0) -> str:
         """Records performance and cost for a path, adjusting synaptic weight.

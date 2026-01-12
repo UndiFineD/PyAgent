@@ -39,6 +39,7 @@ from src.logic.agents.cognitive.context.models.FileCategory import FileCategory
 from src.core.base.models import ValidationRule
 
 from src.core.base.BaseAgent import BaseAgent
+from src.logic.agents.cognitive.core.LocalRAGCore import LocalRAGCore, RAGShard
 from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
@@ -192,6 +193,8 @@ class ContextAgent(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
+        self.rag_core = LocalRAGCore()
+        self.rag_shards: List[RAGShard] = []
         
         # Configuration
         self.config = {
@@ -215,6 +218,13 @@ class ContextAgent(BaseAgent):
         self._category: FileCategory = FileCategory.OTHER
         self._compressed_content: Optional[bytes] = None
         self._metadata: Dict[str, Any] = {}
+
+    def shard_selection(self, query: str) -> List[str]:
+        """Selects the best vector shards based on file path and query sentiment."""
+        active_path = str(self.file_path)
+        selected = self.rag_core.route_query_to_shards(query, active_path, self.rag_shards)
+        logging.info(f"ContextAgent: Query '{query}' routed to {len(selected)} shards.")
+        return selected
 
     def _validate_file_extension(self) -> None:
         """Validate that the file has the correct extension."""

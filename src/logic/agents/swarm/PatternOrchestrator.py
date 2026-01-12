@@ -36,6 +36,7 @@ import logging
 from typing import Dict, List, Any, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.core.base.version import EVOLUTION_PHASE
 from src.logic.cognitive.prompt_templates import VIBE_CODING_2025_TRACKS
 
 class PatternOrchestrator(BaseAgent):
@@ -43,23 +44,43 @@ class PatternOrchestrator(BaseAgent):
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.active_track = "BUILD"
+        # Unify active track with global EVOLUTION_PHASE (Phase 215)
+        self.active_track = self._determine_track_from_phase(EVOLUTION_PHASE)
+        self._apply_vibe_persona()
+
+    def _determine_track_from_phase(self, phase: int) -> str:
+        """Determines the appropriate vibe track based on the current evolution phase."""
+        for name, track in VIBE_CODING_2025_TRACKS.items():
+            low, high = track.get("phase_range", (0, 0))
+            if low <= phase < high:
+                return name
+        return "BUILD"  # Default
+
+    def _apply_vibe_persona(self) -> None:
+        """Applies the current vibe persona to the system prompt."""
+        track_info = VIBE_CODING_2025_TRACKS.get(self.active_track, {})
+        persona = track_info.get("persona", "Lead Orchestrator")
+        workflow = track_info.get("workflow", "Multi-agent coordination")
+        
         self._system_prompt = (
-            "You are the Pattern Orchestrator. "
+            f"You are the Pattern Orchestrator (Vibe: {self.active_track}).\n"
+            f"PERSONA: {persona}\n"
+            f"WORKFLOW: {workflow}\n\n"
             "You manage agent teams using the following patterns:\n"
             "1. Supervisor: A central agent delegates subtasks to specialists.\n"
             "2. Debate: Multiple agents argue different sides of a problem to reach consensus.\n"
             "3. Voting: Agents provide individual answers, and the majority/weighted best is chosen.\n"
             "4. Pipeline: Sequential processing where output of A is input to B.\n"
             "5. MapReduce: Parallel processing of shards followed by aggregation.\n"
-            "6. Vibe-Coding (2025): Phase-specific personas (RESEARCH, DEFINE, DESIGN, BUILD, VALIDATE)."
+            "6. Vibe-Coding (2025): Phase-specific personas synchronized with EVOLUTION_PHASE."
         )
 
     @as_tool
     def set_vibe_track(self, track_name: str) -> str:
-        """Sets the active Vibe-Coding 2025 track (Phase-specific state)."""
+        """Sets the active Vibe-Coding 2025 track (Overrides phase-based defaults)."""
         if track_name.upper() in VIBE_CODING_2025_TRACKS:
             self.active_track = track_name.upper()
+            self._apply_vibe_persona()
             return f"Vibe-Coding track set to {self.active_track}. Persona: {VIBE_CODING_2025_TRACKS[self.active_track]['persona'][:100]}..."
         return f"Error: Track '{track_name}' not found. Available: {list(VIBE_CODING_2025_TRACKS.keys())}"
 

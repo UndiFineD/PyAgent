@@ -6,6 +6,44 @@ This document tracks modules that have been audited, decoupled from side-effects
 
 | Module | Purpose | Status | Complexity | Typing |
 |--------|---------|--------|------------|--------|
+| [src/observability/core/LoggingCore.py](src/observability/core/LoggingCore.py) | **High-throughput log masking & RFC3339 formatting (Phase 227)** | READY | Low | 100% |
+| [src/infrastructure/fleet/core/GPUMonitorCore.py](src/infrastructure/fleet/core/GPUMonitorCore.py) | **GPU Telemetry, Memory Tracking, and VRAM pressure logic (Phase 227)** | READY | Medium | 100% |
+| [src/core/base/managers/PluginManager.py](src/core/base/managers/PluginManager.py) | **Plugin discovery, manifest enforcement, and health check logic (Phase 226)** | READY | Medium | 100% |
+| [src/observability/stats/observability_core.py](src/observability/stats/observability_core.py) | **Consolidated observability logic & telemetry aggregation (Phase 224)** | READY | Medium | 100% |
+| [version.py](version.py) | **Evolution Phase 223: Proxima Edition Gold Master** | READY | Low | 100% |
+| [src/core/base/](src/core/base/) | **Global Type Conformance & Future Annotations (Phase 221)** | READY | Low | 100% |
+| [src/core/base/ShardedKnowledgeCore.py](src/core/base/ShardedKnowledgeCore.py) | **Adler-32 sharding & Parquet export logic (Phase 220)** | READY | High | 100% |
+| [src/logic/agents/cognitive/core/MemoryConsolidatorCore.py](src/logic/agents/cognitive/core/MemoryConsolidatorCore.py) | **Logic for distilling interactions into insights (Phase 219)** | READY | Medium | 100% |
+| [src/core/base/managers/ProcessorManagers.py](src/core/base/managers/ProcessorManagers.py) | **Binary serialization (CBOR/Pickle) & compression logic (Phase 218)** | READY | Medium | 100% |
+| [src/infrastructure/dev/scripts/FleetHarness.py](src/infrastructure/dev/scripts/FleetHarness.py) | **Unified command management for fleet operations (Phase 217)** | READY | Low | 100% |
+| [src/core/knowledge/btree_store.py](src/core/knowledge/btree_store.py) | **Concurrent B-Link Tree & Mmap caching (Phase 216)** | READY | High | 100% |
+| [src/core/knowledge/storage_base.py](src/core/knowledge/storage_base.py) | **Abstract storage interface for knowledge sharding (Phase 216)** | READY | Low | 100% |
+| [src/logic/cognitive/prompt_templates.py](src/logic/cognitive/prompt_templates.py) | **Vibe-Coding 2025 track logic & persona mapping (Phase 215)** | READY | Low | 100% |
+| [src/core/base/core/PruningCore.py](src/core/base/core/PruningCore.py) | **Decay & Synaptic weight logic (Phase 214)** | READY | High | 100% |
+| [src/logic/agents/development/core/BenchmarkCore.py](src/logic/agents/development/core/BenchmarkCore.py) | **Latency regression gate logic (Phase 213)** | READY | Low | 100% |
+| [src/observability/stats/core/TracingCore.py](src/observability/stats/core/TracingCore.py) | **OTel span logic & Thinking/Network latency (Phase 201)** | READY | Low | 100% |
+| [src/infrastructure/sandbox/core/SandboxCore.py](src/infrastructure/sandbox/core/SandboxCore.py) | **Container isolation & resource limits (Phase 202)** | READY | Low | 100% |
+| [src/logic/agents/compliance/core/ComplianceCore.py](src/logic/agents/compliance/core/ComplianceCore.py) | **Continuous compliance & regulatory scanning (Phase 203)** | READY | Low | 100% |
+| [src/logic/agents/development/core/ToolDraftingCore.py](src/logic/agents/development/core/ToolDraftingCore.py) | **Dynamic OpenAPI tool generation (Phase 204)** | READY | Medium | 100% |
+| [src/infrastructure/fleet/core/LoadBalancerCore.py](src/infrastructure/fleet/core/LoadBalancerCore.py) | **Cognitive load balancing & pressure scaling (Phase 205)** | READY | Low | 100% |
+| [src/logic/agents/swarm/core/LessonCore.py](src/logic/agents/swarm/core/LessonCore.py) | **Cross-fleet lesson bloom filters (Phase 206)** | READY | Medium | 100% |
+| [src/core/base/core/IdentityCore.py](src/core/base/core/IdentityCore.py) | **Decentralized Agent ID & signing (Phase 207)** | READY | Low | 100% |
+| [src/core/base/core/AuthCore.py](src/core/base/core/AuthCore.py) | **Zero-knowledge agent authentication (Phase 208)** | READY | Medium | 100% |
+| [src/logic/agents/cognitive/core/LocalRAGCore.py](src/logic/agents/cognitive/core/LocalRAGCore.py) | **Localized vector sharding (Phase 209)** | READY | High | 100% |
+| [src/observability/stats/core/StabilityCore.py](src/observability/stats/core/StabilityCore.py) | **Fleet stability & coherence heuristics (Phase 210)** | READY | Medium | 100% |
+| [src/logic/agents/security/core/RedQueenCore.py](src/logic/agents/security/core/RedQueenCore.py) | **Adversarial prompt evolution (Phase 211)** | READY | High | 100% |
+| [src/observability/stats/core/ProfilingCore.py](src/observability/stats/core/ProfilingCore.py) | **cProfile aggregation & bottleneck logic (Phase 212)** | READY | Low | 100% |
+| [src/core/base/core/AutonomyCore.py](src/core/base/core/AutonomyCore.py) | **Agent self-model and autonomy daemon (Phase 200)** | READY | Low | 100% |
+| [src/interface/core/InterfaceSyncCore.py](src/interface/core/InterfaceSyncCore.py) | **Unified interface theme and sync (Phase 199)** | READY | Low | 100% |
+| [src/logic/agents/system/core/ConfigHygieneCore.py](src/logic/agents/system/core/ConfigHygieneCore.py) | **JSON Schema validation and env mapping (Phase 174)** | READY | Low | 100% |
+| [src/logic/agents/documentation/core/TopologyCore.py](src/logic/agents/documentation/core/TopologyCore.py) | **Mermaid.js graph generation logic (Phase 169)** | READY | Low | 100% |
+| [src/logic/agents/security/core/ByzantineCore.py](src/logic/agents/security/core/ByzantineCore.py) | **Consensus voting and agreement logic (Phase 168)** | READY | Low | 100% |
+| [src/logic/agents/cognitive/core/VisionCore.py](src/logic/agents/cognitive/core/VisionCore.py) | **Visual processing and glitch detection (Phase 167)** | READY | Medium | 100% |
+| [src/logic/agents/cognitive/core/MemoryConsolidatorCore.py](src/logic/agents/cognitive/core/MemoryConsolidatorCore.py) | **Logic for distilling interactions into insights (Phase 165)** | READY | Medium | 100% |
+| [src/infrastructure/orchestration/HolographicStateOrchestrator.py](src/infrastructure/orchestration/HolographicStateOrchestrator.py) | **State sharding and reconstruction via bit-packing (Phase 162)** | READY | High | 100% |
+| [src/infrastructure/orchestration/TaskDecomposerCore.py](src/infrastructure/orchestration/TaskDecomposerCore.py) | **Heuristic planning and dependency analysis** | READY | Medium | 100% |
+| [src/infrastructure/fleet/AgentEconomy.py](src/infrastructure/fleet/AgentEconomy.py) | **Market Pricing & Agent Accounting Engine** | READY | Low | 100% |
+| [src/core/base/acceleration.py](src/core/base/acceleration.py) | **Calculate Synaptic Weight (NeuralPruningEngine)** | READY | High | 100% |
 | [src/core/base/BaseAgent.py](src/core/base/BaseAgent.py) | Foundation for all agents (workspace root, path logic, diffs) | READY | Medium | 100% |
 | [src/infrastructure/fleet/EvolutionCore.py](src/infrastructure/fleet/EvolutionCore.py) | Genetic algorithms for fleet adaptation | READY | Medium | 100% |
 | [src/infrastructure/api/APICore.py](src/infrastructure/api/APICore.py) | OpenAPI spec generation and contract validation | READY | Low | 100% |
@@ -17,7 +55,6 @@ This document tracks modules that have been audited, decoupled from side-effects
 | [src/infrastructure/fleet/AgentRegistryCore.py](src/infrastructure/fleet/AgentRegistryCore.py) | Manifest parsing and circular dependency detection | READY | Medium | 100% |
 | [src/infrastructure/fleet/ScalingCore.py](src/infrastructure/fleet/ScalingCore.py) | Proactive multi-resource scaling and anti-flapping | READY | Medium | 100% |
 | [src/logic/agents/cognitive/context/engines/MemoryCore.py](src/logic/agents/cognitive/context/engines/MemoryCore.py) | Episode scoring and utility decay logic | READY | Low | 100% |
-| [src/logic/agents/cognitive/core/MemoryConsolidatorCore.py](src/logic/agents/cognitive/core/MemoryConsolidatorCore.py) | Logic for distilling interactions into insights | READY | Medium | 100% |
 | [src/logic/agents/cognitive/core/MetacognitiveCore.py](src/logic/agents/cognitive/core/MetacognitiveCore.py) | Reasoning certainty and consistency logic | READY | Low | 100% |
 | [src/logic/agents/cognitive/core/TheoryOfMindCore.py](src/logic/agents/cognitive/core/TheoryOfMindCore.py) | Agent modeling and collaborator ranking logic | READY | Medium | 100% |
 | [src/logic/agents/cognitive/context/engines/ContextCompressorCore.py](src/logic/agents/cognitive/context/engines/ContextCompressorCore.py) | AST-based signature extraction and summary logic | READY | Medium | 100% |
@@ -28,7 +65,6 @@ This document tracks modules that have been audited, decoupled from side-effects
 | [src/logic/agents/intelligence/WebCore.py](src/logic/agents/intelligence/WebCore.py) | Pure logic for HTML cleaning and link extraction | READY | Low | 100% |
 | [src/logic/agents/development/DependencyCore.py](src/logic/agents/development/DependencyCore.py) | AST-based dependency and inheritance analysis | READY | Medium | 100% |
 | [src/logic/agents/development/ArchCore.py](src/logic/agents/development/ArchCore.py) | Architectural metrics and coupling calculations | READY | Low | 100% |
-| [src/infrastructure/orchestration/TaskDecomposerCore.py](src/infrastructure/orchestration/TaskDecomposerCore.py) | Heuristic planning and dependency analysis | READY | Medium | 100% |
 | [src/infrastructure/orchestration/ConsensusCore.py](src/infrastructure/orchestration/ConsensusCore.py) | Weighted voting and agreement score calculation | READY | Low | 100% |
 | [src/infrastructure/orchestration/SelfHealingCore.py](src/infrastructure/orchestration/SelfHealingCore.py) | Anomaly detection and recovery state logic | READY | Medium | 100% |
 | [src/infrastructure/fleet/KnowledgeTransferCore.py](src/infrastructure/fleet/KnowledgeTransferCore.py) | Lesson dataset merging and deduplication logic | READY | Low | 100% |
@@ -40,11 +76,13 @@ This document tracks modules that have been audited, decoupled from side-effects
 
 ## 🔥 Performance-Critical Targets (High Priority)
 
-1.  **[src/core/knowledge/btree_store.py](src/core/knowledge/btree_store.py)**: Sharded B-Tree logic. MD5 path calculation and page sharding math.
-2.  **[src/core/knowledge/graph_store.py](src/core/knowledge/graph_store.py)**: Sharded ontological graph. Node-level MD5 sharding and triple store lookups.
-3.  **[src/infrastructure/fleet/ShardingOrchestrator.py](src/infrastructure/fleet/ShardingOrchestrator.py)**: Dynamic clustering algorithms for trillion-parameter data isolation.
-3.  **[src/logic/agents/intelligence/LatentReasoningAgent.py](src/logic/agents/intelligence/LatentReasoningAgent.py)**: Chain-of-thought verification logic and linguistics auditing.
-4.  **[src/logic/agents/system/ModelOptimizerAgent.py](src/logic/agents/system/ModelOptimizerAgent.py)**: Quantization (FP8/Hopper) logic and cost/latency trade-off simulations.
+1.  **[src/core/base/core/PruningCore.py](src/core/base/core/PruningCore.py)**: Bio-digital synaptic decay logic. Essential for swarm stability and performance under high cognitive pressure.
+2.  **[src/logic/agents/security/core/RedQueenCore.py](src/logic/agents/security/core/RedQueenCore.py)**: Adversarial mutation logic. Core security loop for evolving against prompt injection.
+3.  **[src/core/knowledge/btree_store.py](src/core/knowledge/btree_store.py)**: Sharded B-Tree logic. MD5 path calculation and page sharding math.
+4.  **[src/core/knowledge/graph_store.py](src/core/knowledge/graph_store.py)**: Sharded ontological graph. Node-level MD5 sharding and triple store lookups.
+5.  **[src/infrastructure/fleet/ShardingOrchestrator.py](src/infrastructure/fleet/ShardingOrchestrator.py)**: Dynamic clustering algorithms for trillion-parameter data isolation.
+6.  **[src/logic/agents/intelligence/LatentReasoningAgent.py](src/logic/agents/intelligence/LatentReasoningAgent.py)**: Chain-of-thought verification logic and linguistics auditing.
+7.  **[src/logic/agents/system/ModelOptimizerAgent.py](src/logic/agents/system/ModelOptimizerAgent.py)**: Quantization (FP8/Hopper) logic and cost/latency trade-off simulations.
 
 ## 🧪 Audit Criteria
 - [x] **Pure Functions**: No direct calls to os (except path math), requests, or db.
