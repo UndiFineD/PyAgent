@@ -98,10 +98,25 @@ class ShardedKnowledgeCore:
         """Filters knowledge that is considered stable enough."""
         stable = {}
         for k, v in data.items():
-            confidence = v.get("confidence", 1.0) if isinstance(v, dict) else 1.0
-            if confidence >= threshold_confidence:
+            if isinstance(v, dict) and v.get("confidence", 0) >= threshold_confidence:
                 stable[k] = v
         return stable
+
+    async def right_to_be_forgotten(self, entity_name: str) -> bool:
+        """
+        Phase 238: Prunes all knowledge associated with a specific entity (user/project)
+        to comply with privacy regulations (GDPR/CCPA).
+        """
+        shard_id = self.get_shard_id(entity_name)
+        logging.info(f"Compliance: Executing 'Right to be Forgotten' for entity '{entity_name}' in shard {shard_id}")
+        
+        shard_data = await self.load_shard(shard_id)
+        if entity_name in shard_data:
+            del shard_data[entity_name]
+            return await self.save_shard(shard_id, shard_data)
+        
+        logging.warning(f"Compliance: Entity '{entity_name}' not found in knowledge store.")
+        return False
 
     def export_to_parquet(self, shard_id: int, output_path: Path) -> bool:
         """Exports a JSON shard to Apache Parquet for large-scale training ingestion (Phase 220)."""

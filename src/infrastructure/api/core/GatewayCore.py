@@ -7,7 +7,7 @@ class GatewayCore:
     It manages service routing and 'Interface Affinity'.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         # Service registry for SaaS tools
         self.saas_registry: Dict[str, str] = {
             "jira": "https://api.atlassian.com/ex/jira/",

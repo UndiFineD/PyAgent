@@ -1,116 +1,16 @@
-# PYAGENT FLEET DIRECTIVE: "PROXIMA" EVOLUTION (v3.2.0-PROXIMA)
+# PYAGENT FLEET DIRECTIVE: "PROXIMA" EVOLUTION (v3.4.2-CONCURRENCY)
 
 ## OVERVIEW
 You are the lead architect of the PyAgent Fleet. Your mission is to evolve this repository from a multi-agent system into a self-documenting, self-healing, and self-optimizing "Swarm Intelligence."
 
 ## CURRENT PRIORITIES
-1. **ASYNC CONSOLIDATION**: Finalize the transition to native `asyncio` across the entire fleet.
-2. **OBSERVABILITY**: Implement the `StructuredLogger` and `OTelManager` to gain deep insight into swarm reasoning.
-3. **ARCHITECTURE**: Clean up the 200+ redundant files in `src/infrastructure/` and `src/observability/`.
+1. **CONCURRENCY**: Implement `LockManager.py` for resource safety in parallel tasks.
+2. **STABILITY**: Integrate locking with `DependencyGraph.py` to prevent race conditions.
+3. **REGISTRY**: Maintain the "Fleet Consciousness Registry" for global state awareness.
 
 ---
 
-# PHASE 186 - 227: COMPLETED & AUDITED
-
-# PHASE 228: SWARM "SELF-DOCUMENTATION"
-- [AUTO-UPDATE] Implement an agent that periodically adds *new* improvement ideas to the end of this prompt file as they are discovered during "Sleep Cycle" dreams.
-
-# PHASE 229: SYSTEM-WIDE ERROR CODE STANDARDIZATION
-@focus: [
-    "src/core/base/exceptions.py"
-]
-- [ERROR_CODES] Map every possible failure to a unique 4-digit error code (e.g., `PA-1001: ModelTimeout`) to allow the `DashboardAgent` to display easy-to-search troubleshooting links.
-
-# PHASE 230: PROJECT "PROXIMA" GOLD MASTER
-@focus: [
-    "version.py",
-    "README.md"
-]
-- [GOLD] Bump version to `2.1.0-GOLD`.
-- [MANIFESTO] update `README.md` to indicate that the swarm has achieved "Critical Autonomy Level 4".
-- [FINAL] Archive all legacy `note.txt` and `prompt.txt` content into a `docs/archive/evolution_log.json`.
-
-# PHASE 231: ENHANCED CIRCUIT BREAKER (RESILIENCE)
-@focus: [
-    "src/core/base/CircuitBreaker.py"
-]
-- [RESILIENCE] Implement "Wait-for-Success" in the `HALF_OPEN` state. Only transition back to `CLOSED` after a series of successful probes, rather than a single pass.
-- [METRICS] Export circuit breaker state transitions (OPEN/CLOSED/HALF_OPEN) to the `OTelManager` for real-time observability.
-
-# PHASE 232: DEPENDENCY GRAPH PARALLELIZATION
-@focus: [
-    "src/core/base/DependencyGraph.py"
-]
-- [PARALLEL] Update `DependencyGraph.resolve` to return "Parallel Execution Batches" (lists of nodes that can run simultaneously) instead of a single flat list.
-- [BATCHING] Integrate this batching logic into the `AsyncFleetManager` to maximize CPU usage during multi-agent workflows.
-
-# PHASE 233: INCREMENTAL PROCESSOR HASHING (PERF)
-@focus: [
-    "src/core/base/IncrementalProcessor.py"
-]
-- [HASHING] Replace MD5 with **BLAKE3** for faster file hashing during workspace scans.
-- [MAPPING] Use a memory-mapped file for the `.agent_state.json` to reduce serialization overhead during large-scale incremental runs.
-
-# PHASE 234: DYNAMIC SHARD REBALANCING
-@focus: [
-    "src/infrastructure/fleet/ShardingOrchestrator.py"
-]
-- [REBALANCE] implement "Live Migration" in `ShardingOrchestrator.py` where agents can be re-assigned to shards in real-time without interrupting their current task.
-- [CLUSTER] Use a more robust clustering algorithm (like **K-Means** or **DBSCAN**) for agent grouping based on interaction frequency and VRAM requirements.
-
-# PHASE 235: THE "LITTLE THINGS" - CLI UX (RICH)
-@focus: [
-    "src/interface/ui/cli/pyagent_cli.py"
-]
-- [CLI] Use `rich.panel.Panel` and `rich.table.Table` to display agent status and shard health in the terminal.
-- [SPINNER] Add distinct spinners for different agent states (Thinking vs Working vs Testing).
-
-# PHASE 236: DOCUMENTATION ARCHITECTURE - MERMAID (PART 2)
-@focus: [
-    "docs/"
-]
-- [ARCHITECTURE] Auto-generate a high-level **Mermaid C4 System Context Diagram** in the `docs/architecture/` folder, mapping the relations between Core/Infrastructure/Logic/Observability.
-
-# PHASE 237: ORCHESTRATOR DIVERSITY (NEW PATTERNS)
-@focus: [
-    "src/infrastructure/orchestration/"
-]
-- [PATTERNS] Implement the `GossipProtocolOrchestrator.py` to allow agents to share knowledge updates in a decentralized manner without a central hub.
-- [DREAMS] Finalize the `DreamStateOrchestrator.py` (referenced in Phase 219) to run background logic simulations.
-
-# PHASE 238: COMPLIANCE & LEGAL HARNESS
-@focus: [
-    "src/logic/agents/security/LegalAuditAgent.py"
-]
-- [LEGAL] Update `LegalAuditAgent.py` to automatically check generated code against a "License Blacklist" (e.g., preventing GPL content from entering MIT projects).
-- [COMPLIANCE] Implement a "Right to be Forgotten" tool in the knowledge store to prune user data upon request.
-
-# PHASE 239: SWARM "CONSCIOUSNESS" REGISTRY
-@focus: [
-    "src/core/base/managers/OrchestrationManagers.py"
-]
-- [REGISTRY] Create a "Fleet Consciousness Registry" where every agent's "Thought Stream" is summarized and indexed for global awareness, allowing any agent to "know" what the rest of the fleet is doing.
-
-# PHASE 240: TOTAL SYSTEM CONVERGENCE - PHASE 250 READY
-@focus: [
-    "version.py"
-]
-- [CONVERGE] Perform a final "Deep Clean" of the `src/infrastructure/dev/scripts/management` folder.
-- [READY] Set version to `2.2.0-ALFA`.
-
-# PHASE 241: AGENT CAPABILITY DISCOVERY
-@focus: [
-    "src/core/base/BaseAgent.py",
-    "src/infrastructure/orchestration/SignalRegistry.py"
-]
-- [CAPABILITIES] Add `get_capabilities() -> dict[str, Any]` to `BaseAgent.py`.
-- [REGISTRY] Update all agents in `src/logic/agents/` to implement specific capability tags (e.g., `bash`, `python`, `security-audit`).
-- [SIGNALING] Register these capabilities in `SignalRegistry.py` upon agent initialization to enable "Dynamic Tool Routing."
-
 # PHASE 242: DISTRIBUTED LOCK MANAGER
-@focus: [
-    "src/infrastructure/orchestration/LockManager.py"
-]
 - [CONCURRENCY] Implement a `LockManager.py` supporting both file-based (using `portalocker` or similar) and memory-based locking.
 - [LOCKS] Integrate with `DependencyGraph.py` to ensure parallel tasks don't collide on the same file resources or database shards.
 

@@ -22,7 +22,7 @@ fn calculate_synaptic_weight(inputs: Vec<f64>, weights: Vec<f64>) -> PyResult<f6
 
 /// A Python module implemented in Rust.
 #[pymodule]
-fn rust_core(_py: Python, m: &PyModule) -> PyResult<()> {
+fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(calculate_synaptic_weight, m)?)?;
     Ok(())
 }

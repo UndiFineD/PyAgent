@@ -40,6 +40,7 @@ class BashAgent(CoderAgent):
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
+        self.capabilities.extend(["bash", "shell-scripting", "posix-compliance"]) # Phase 241
         self._language = "bash"
         self.core = BashCore()
         self._system_prompt = (
