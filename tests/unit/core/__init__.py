@@ -50,3 +50,6 @@ __all__ = [
 ]
 
 from .test_base_agent_UNIT import *  # noqa: F401, F403
+from .test_base_agent_CORE_UNIT import *  # noqa: F401, F403
+from .test_context_UNIT import *  # noqa: F401, F403
+from .test_context_CORE_UNIT import *  # noqa: F401, F403

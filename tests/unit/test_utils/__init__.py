@@ -62,5 +62,7 @@ __all__ = [
 ]
 
 from .test_test_utils_UNIT import *  # noqa: F401, F403
+from .test_test_utils_CORE_UNIT import *  # noqa: F401, F403
+from .test_test_utils_COMPREHENSIVE_UNIT import *  # noqa: F401, F403
 from .test_test_utils_INTEGRATION import *  # noqa: F401, F403
 from .test_test_utils_PERFORMANCE import *  # noqa: F401, F403

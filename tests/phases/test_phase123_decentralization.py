@@ -8,7 +8,7 @@ from src.infrastructure.fleet.FleetManager import FleetManager
 from src.logic.agents.security.ByzantineConsensusAgent import ByzantineConsensusAgent
 from src.logic.agents.system.MessagingAgent import MessagingAgent
 from src.logic.agents.cognitive.BayesianReasoningAgent import BayesianReasoningAgent
-from src.core.base.LoggingAgent import LoggingAgent
+from src.logic.agents.system.LoggingAgent import LoggingAgent
 from src.logic.agents.system.IdentityAgent import IdentityAgent as AgentIdentityAgent
 from src.infrastructure.orchestration.RLSelector import RLSelector
 from pathlib import Path

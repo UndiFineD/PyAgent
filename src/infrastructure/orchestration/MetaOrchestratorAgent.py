@@ -1,93 +1,58 @@
 #!/usr/bin/env python3
-
-"""High-level goal manager and recursive orchestrator.
-Manages complex objectives by breaking them down into sub-goals and delegating to specialized agents.
-"""
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 from __future__ import annotations
 
 import logging
 import json
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any, Optional, TYPE_CHECKING
 from src.core.base.BaseAgent import BaseAgent
-from src.infrastructure.fleet.FleetManager import FleetManager
-from src.infrastructure.orchestration.ToolRegistry import ToolRegistry
-from src.logic.agents.cognitive.context.engines.GlobalContextEngine import GlobalContextEngine
+
+if TYPE_CHECKING:
+    from src.infrastructure.fleet.FleetManager import FleetManager
+    from src.core.knowledge.GlobalContext import GlobalContext
 
 class MetaOrchestratorAgent(BaseAgent):
-    """The 'Brain' of the Agent OS. Manages goals, resources, and fleet coordination."""
-    
-    def __init__(self, file_path: str) -> None:
-        super().__init__(file_path)
-        self.workspace_root = self.file_path.parent.parent.parent
-        self.fleet = FleetManager(str(self.workspace_root))
-        self.registry = ToolRegistry()
-        self.global_context = GlobalContextEngine(str(self.workspace_root))
-        
-        self._system_prompt = (
-            "You are the Meta-Orchestrator Agent. "
-            "Your goal is to manage the entire lifecycle of a project request. "
-            "1. Decompose high-level goals into atomic tasks. "
-            "2. Assign tasks to agents based on their registered capabilities. "
-            "3. Monitor progress and resolve conflicts or failures. "
-            "4. Maintain a consistent project context via Long-Term Memory."
-        )
+    """
+    Expert orchestrator that can decompose high-level objectives into 
+    multi-agent workflows and manage recursive resolution.
+    """
 
-    def _get_default_content(self) -> str:
-        return "# Meta-Orchestration Log\n\n## Current Goal\nNone.\n"
+    def __init__(self, fleet: FleetManager, global_context: GlobalContext) -> None:
+        super().__init__("MetaOrchestrator", "Orchestrates complex decompositions.")
+        self.fleet = fleet
+        self.global_context = global_context
+        self.max_depth = 5
 
-    def execute_by_goal(self, goal: str) -> str:
-        """Determines which tool to use for a specific goal and executes it."""
-        tools = self.registry.list_tools()
-        # In a real scenario, we'd use semantic search / LLM to match goal to tool
-        # For now, simple keyword matching for demo
-        for tool_meta in tools:
-            if tool_meta.name.lower() in goal.lower() or any(k in goal.lower() for k in tool_meta.description.lower().split()):
-                logging.info(f"Orchestrator matched goal '{goal}' to tool '{tool_meta.name}'")
-                return self.registry.call_tool(tool_meta.name, query=goal)
-        
-        return f"No direct tool found for goal: {goal}. Falling back to standard objective solver."
+    async def solve_complex_objective(self, objective: str, depth: int = 0) -> str:
+        """
+        Decomposes an objective and executes it, handling sub-goals 
+        recursively if necessary.
+        """
+        if depth > self.max_depth:
+            return f"Error: Maximum recursion depth ({self.max_depth}) exceeded for objective: {objective}"
 
-    def solve_complex_objective(self, objective: str, depth: int = 0) -> str:
-        """Solves a large objective by orchestrating multiple agent workflows with recursion support."""
-        if depth > 3:
-            return "Recursion limit reached for objective decomposition."
-            
-        logging.info(f"Orchestrator tackling objective (Depth {depth}): {objective}")
+        logging.info(f"MetaOrchestrator: Decomposing objective (Depth {depth}): {objective[:50]}...")
         
-        # Intelligence Harvesting (Phase 108)
-        self.recorder.record_lesson("meta_planning_init", {"objective": objective, "depth": depth})
+        # Phase 1: Decomposition
+        plan = await self._decompose_objective(objective)
         
-        # 1. Update Global Context with the new objective
-        self.global_context.add_insight(f"Objective depth {depth}: {objective}", "MetaOrchestrator")
-        
-        # 2. Planning Phase
-        planner = self.fleet.agents.get("Planner")
-        if not planner:
-            return "Error: TaskPlannerAgent not registered in fleet."
-            
-        plan_report = planner.improve_content(objective)
-        
-        # Handle recursive sub-objectives if found in plan
-        try:
-            plan_json_start = plan_report.find("```json") + 7
-            plan_json_end = plan_report.rfind("```")
-            plan_data = json.loads(plan_report[plan_json_start:plan_json_end].strip())
-            
-            # Record successful planning logic
-            self.recorder.record_lesson("meta_plan_received", {"plan": plan_data, "objective": objective})
-        except Exception as e:
-            self.recorder.record_lesson("meta_plan_parsing_error", {"error": str(e), "report_preview": plan_report[:500]})
-            return f"Error: Failed to parse plan from TaskPlanner: {e}"
-            
-        # 3. Execution Phase
         results = []
-        for step in plan_data:
-            if step.get("type") == "complex_goal":
-                # RECURSIVE CALL
+        for step in plan:
+            if step.get("type") == "complex":
                 logging.info(f"Decomposing complex sub-goal: {step.get('goal')}")
-                res = self.solve_complex_objective(step.get("goal"), depth + 1)
+                res = await self.solve_complex_objective(step.get("goal"), depth + 1)
                 results.append(res)
                 continue
 
@@ -95,11 +60,41 @@ class MetaOrchestratorAgent(BaseAgent):
             action = step.get("action")
             args = step.get("args", [])
             
-            # Execute via FleetManager
-            res = self.fleet.execute_workflow(objective, [{"agent": agent_name, "action": action, "args": args}])
+            # Execute via FleetManager (Phase 152: await)
+            res = await self.fleet.execute_workflow(objective, [{"agent": agent_name, "action": action, "args": args}])
             results.append(res)
             
         return f"# Objective Resolution Report (Depth {depth})\n\n" + "\n".join(results)
+
+    async def _decompose_objective(self, objective: str) -> List[Dict[str, Any]]:
+        """Uses a LLM to break down the objective into discrete steps."""
+        prompt = f"""
+        Break down the following high-level objective into a JSON list of steps.
+        Objective: {objective}
+        
+        Each step should have:
+        - "type": "simple" or "complex"
+        - "agent": Optional, for simple steps (e.g., "Reasoning", "Coder", "Memory")
+        - "action": Optional, for simple steps
+        - "args": List of arguments for simple steps
+        - "goal": Required for complex steps (a sub-objective string)
+        
+        Return ONLY valid JSON.
+        """
+        
+        # Use an available agent for decomposition or internal logic
+        res = await self.fleet.call_by_capability("Security.improve_content", prompt=prompt)
+        
+        try:
+            # Simple extractor for markdown
+            if "```json" in res:
+                res = res.split("```json")[-1].split("```")[0].strip()
+            elif "```" in res:
+                res = res.split("```")[-1].split("```")[0].strip()
+            return json.loads(res)
+        except Exception as e:
+            logging.error(f"MetaOrchestrator failed to parse decomposition JSON: {e}")
+            return [{"type": "simple", "agent": "Reasoning", "action": "analyze_tot", "args": [objective]}]
 
     def _enrich_args(self, args: List[Any]) -> List[Any]:
         """Injects global context into agent arguments."""
@@ -107,27 +102,12 @@ class MetaOrchestratorAgent(BaseAgent):
         context_brief = self.global_context.get_summary()
         
         for arg in args:
-            if isinstance(arg, str):
-                # If arg is a string, we might append context if it seems broadly descriptive
-                if len(arg) > 50: 
-                    arg += f"\n\n[GLOBAL CONTEXT]\n{context_brief}"
-            enriched.append(arg)
+            if isinstance(arg, str) and "{context}" in arg:
+                enriched.append(arg.replace("{context}", context_brief))
+            else:
+                enriched.append(arg)
         return enriched
 
-    def recursive_solve(self, objective: str, depth: int = 0) -> str:
-        """Recursively solves an objective by breaking it down further if needed."""
-        if depth > 3: # Prevention of infinite loops
-            return "Error: Maximum recursion depth reached for task decomposition."
-            
-        logging.info(f"Recursive check for: {objective} (Depth: {depth})")
-        
-        # Simple heuristic: if objective contains "and", "then", or is very long, decompose it.
-        if " and " in objective or " then " in objective or len(objective) > 100:
-            logging.info("Objective identified as complex. Spawning sub-planner.")
-            return self.solve_complex_objective(objective)
-        else:
-            return self.execute_by_goal(objective)
-
-    def improve_content(self, prompt: str) -> str:
-        """Entry point for fulfilling complex user requests."""
-        return self.recursive_solve(prompt)
+    async def run(self, objective: str) -> str:
+        """Entry point for the MetaOrchestrator agent."""
+        return await self.solve_complex_objective(objective)
