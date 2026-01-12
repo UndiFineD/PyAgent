@@ -1,1 +1,4 @@
+from src.core.base.version import VERSION
+__version__ = VERSION
+
 # Copyright 2026 PyAgent Authors\nfrom src.core.base.BaseAgent import BaseAgent\n\nclass RLPriorityAgent(BaseAgent):\n    \"\"\"Dynamically adjusts task priority using reinforcement learning.\"\"\"\n    def __init__(self, workspace_root: str):\n        super().__init__(workspace_root)\n        self.reward_model = []\n\n    def tune_priority(self, task_metadata: dict) -> float:\n        return 0.95\n

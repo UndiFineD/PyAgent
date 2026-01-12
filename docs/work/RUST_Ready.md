@@ -1,6 +1,10 @@
 # Rust Conversion Readiness Manifest
 
 ## 🛠️ RUST IMPLEMENTATION PROMPT LIST (Priority Queue)
+- [ ] **[src/core/base/managers/ResourceQuotaManager.py](src/core/base/managers/ResourceQuotaManager.py)** (High-speed resource budgeting & cycle interruption)
+- [ ] **[src/infrastructure/dev/scripts/generate_agent_catalog.py](src/infrastructure/dev/scripts/generate_agent_catalog.py)** (Fast AST-based Metadata Extraction & Documentation Generator)
+- [ ] **[src/infrastructure/orchestration/FleetTelemetryVisualizer.py](src/infrastructure/orchestration/FleetTelemetryVisualizer.py)** (High-frequency Event Processing & Version Drift Analysis)
+- [ ] **[src/infrastructure/fleet/ConsciousnessRegistry.py](src/infrastructure/fleet/ConsciousnessRegistry.py)** (Global Thought Index & State Synchronization)
 - [ ] **[src/infrastructure/orchestration/LockManager.py](src/infrastructure/orchestration/LockManager.py)** (Distributed Locking & Multiprocess Sync)
 - [ ] **[src/infrastructure/orchestration/SignalRegistry.py](src/infrastructure/orchestration/SignalRegistry.py)** (Event-driven Concurrency & Capability Discovery)
 - [ ] **[src/infrastructure/fleet/AsyncFleetManager.py](src/infrastructure/fleet/AsyncFleetManager.py)** (Sync/Async Workflow Orchestration & Migration)
