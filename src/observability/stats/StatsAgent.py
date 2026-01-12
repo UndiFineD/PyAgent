@@ -29,15 +29,15 @@ __version__ = VERSION
 
 
 
-from .Alert import Alert
-from .AlertSeverity import AlertSeverity
-from .Metric import Metric
-from .MetricSnapshot import MetricSnapshot
-from .MetricType import MetricType
-from .RetentionPolicy import RetentionPolicy
-from .Threshold import Threshold
+from .observability_core import Alert
+from .observability_core import AlertSeverity
+from .observability_core import Metric
+from .observability_core import MetricSnapshot
+from .observability_core import MetricType
+from .observability_core import RetentionPolicy
+from .observability_core import Threshold
 
-from .StatsCore import StatsCore
+from .observability_core import StatsCore
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
