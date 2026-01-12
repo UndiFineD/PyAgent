@@ -1,6 +1,14 @@
-# SWARM STRATEGIC DIRECTIVE - 2026-01-13
-# STATUS: Phase 153 - RL-Based Priority Tuning (v3.1.0-PROXIMA)
-# MODEL: Gemini 3 Flash (Preview)
+# PYAGENT FLEET DIRECTIVE: "PROXIMA" EVOLUTION (v3.1.0-PROXIMA)
+
+## OVERVIEW
+You are the lead architect of the PyAgent Fleet. Your mission is to evolve this repository from a multi-agent system into a self-documenting, self-healing, and self-optimizing "Swarm Intelligence."
+
+## CURRENT PRIORITIES
+1. **ASYNC CONSOLIDATION**: Finalize the transition to native `asyncio` across the entire fleet.
+2. **OBSERVABILITY**: Implement the `StructuredLogger` and `OTelManager` to gain deep insight into swarm reasoning.
+3. **ARCHITECTURE**: Clean up the 200+ redundant files in `src/infrastructure/` and `src/observability/`.
+
+---
 
 # Phase 150 Accomplishments (VERIFIED):
 - Purged `temp/` of all `_legacy.py` files and clutter.
@@ -20,96 +28,855 @@
 - [INFRA] Fixed polymorphic initialization issues in `ToolRegistry` and `SelfImprovementOrchestrator`.
 - [CYCLES] Successfully completed 7-Phase Self-Improvement Cycle in native async mode.
 
-# PHASE 153: RL-BASED PRIORITY TUNING (ALPHA)
-- [RL] Implement the `RLPriorityAgent` to dynamically adjust task priority based on the success rate of previous similar modifications.
-- [FEEDBACK] Hook the `TestAgent` feedback loop into the `RewardModel` of the priority engine.
+# Phase 153 Accomplishments (VERIFIED):
+- [RL] Implemented `RLPriorityAgent` scaffolding to adjust task priority via reinforcement learning.
+- [INFRA] Verified automated scaffolding execution via `run_fleet_self_improvement.py`.
 
-# PHASE 154: MULTI-REGION FLEET DEPLOYMENT
+---
+
+# PHASE 154: STATS & OBSERVABILITY UNIFICATION
 @focus: [
-    "src/logic/agents/system/CloudProviderAgent.py",
-    "src/infrastructure/fleet/KubernetesManager.py"
+    "src/observability/stats/"
+]
+@python: """
+import os
+import shutil
+# Migration: merge 50+ redundant stat files into a single unified directory
+target_dir = 'src/observability/stats/'
+os.makedirs(target_dir, exist_ok=True)
+# Example: merge LatencyCore, ErrorCore, and ThroughputCore into metrics_engine.py
+"""
+- [CONSOLIDATE] Merge all 50+ files in `src/observability/stats/` into 3 core modules: `metrics_engine.py`, `observability_core.py`, and `exporters/`.
+- [REMOVE] Delete legacy files after the merge to reduce the filesystem footprint.
+
+# PHASE 155: RUST ACCELERATION (CORE MODULES)
+@focus: [
+    "src/core/base/acceleration.py",
+    "rust_core/src/lib.rs"
+]
+- [RUST] Implement a Python-to-Rust bridge using `PyO3` for the `calculate_synaptic_weight` method in the `NeuralPruningEngine`.
+- [BENCH] Verify that the Rust implementation achieves at least a 10x performance gain over the native Python loop.
+
+# PHASE 156: MULTI-REGION FLEET DEPLOYMENT
+@focus: [
+    "src/infrastructure/fleet/KubernetesManager.py",
+    "src/logic/agents/system/CloudProviderAgent.py"
 ]
 - [K8S] Enhance `KubernetesManager.py` to support multi-namespace partitioning for separate agent "families" (e.g., `security-ops`, `coding-swarm`).
 - [CLOUD] Implement `CloudProviderAgent` logic for dynamic spot-instance provisioning (AWS/Azure) when local GPU/Ollama capacity is exceeded.
 
-# PHASE 155: SELF-EVOLUTION GATEKEEPING
+# PHASE 157: THE "CONCORD" CONSTITUTION
 @focus: [
-    "src/infrastructure/fleet/VersionGate.py",
-    "src/logic/agents/system/CoreEvolutionGuard.py"
+    "docs/CONSTITUTION.md",
+    "src/logic/agents/security/EthicsGuardrailAgent.py"
 ]
-- [GATE] Update `VersionGate.py` to support "Canary" deployments of core logic changes—only 5% of agents receive the update initially.
-- [EVOLUTION] Harden `CoreEvolutionGuard.py` to sign all core file modifications with a cryptographic hash to prevent unauthorized autonomous drift.
+- [GOVERNANCE] Create a `CONSTITUTION.md` that defines the "rules of engagement" for agents (e.g., "Do not modify `version.py` without human approval").
+- [COMPLIANCE] Implement the `EthicsGuardrailAgent.py` to scan proposed code changes for violations of the constitution.
 
-# PHASE 156: COGNITIVE RELIABILITY & THEORY OF MIND (TOM)
+# PHASE 158: DISTRIBUTED TOKEN WALLETS
 @focus: [
-    "src/logic/agents/cognitive/TheoryOfMind.py",
-    "src/logic/agents/cognitive/ReflectionAgent.py"
+    "src/infrastructure/fleet/EconomyManager.py"
 ]
-- [TOM] Implement a "Theory of Mind" (ToM) buffer in agent communication where agents predict the "hidden state" or "intent" of the requester before responding.
-- [REFLECTION] Force all high-priority responses (e.g., code changes) through the `ReflectionAgent` to check for logical consistency and security violations.
+- [ECONOMY] Implement a "Token Credit" system where agents must "pay" for expensive model calls (like GPT-4o) using credits earned by completing successful tasks.
+- [GRANT] Implement a "System Grant" mechanism to prevent agents from getting "stuck" with zero credits.
 
-# PHASE 157: DATA PRIVACY & ENTROPY SHUFFLING
+# PHASE 159: AGENT PERSONALITY PROFILES
 @focus: [
-    "src/logic/agents/security/PrivacyGuardAgent.py",
-    "src/logic/agents/security/EntropyGuardAgent.py"
+    "data/agents/profiles.json"
 ]
-- [PRIVACY] Add differential privacy noise to the `data/logs` before archival to ensure agent training data cannot be reversed to individual user prompts.
-- [ENTROPY] Use `EntropyGuardAgent` to periodically "resets" or "shuffles" agent personalities in `PersonalityCoreAgent.py` to prevent overfitting and behavioral ruts.
+- [PERSONA] Define distinct "Personality Traits" for agents (e.g., "Aggressive Refactorer", "Conservative documenter").
+- [DIVERSITY] Ensure that when multiple agents work on a task, they have diverse personality profiles to prevent "Groupthink" hallucinations.
 
-# PHASE 158: HARDWARE AWARENESS (NVML/ROCM)
+# PHASE 160: CROSS-LANGUAGE LINTING (C++/GO)
 @focus: [
-    "src/infrastructure/fleet/GPUScalingManager.py"
+    "src/logic/agents/development/LintAgent.py"
 ]
-- [HARDWARE] Integrate `pynvml` (NVIDIA) and `pyrocm` (AMD) into `GPUScalingManager` to provide real-time VRAM-aware scheduling for local models.
+- [CPLUSPLUS] Add `clang-tidy` support to the `LintAgent`.
+- [GO] Add `golangci-lint` support to the `LintAgent`.
 
-# PHASE 159: PLUGINS & EXTENSIBILITY
+# PHASE 161: DYNAMIC DECOMPOSITIONS
 @focus: [
-    "plugins/",
-    "src/core/base/managers/PluginManager.py"
+    "src/logic/agents/system/DynamicDecomposerAgent.py"
 ]
-- [PLUGINS] Create a `Manifest.json` standard for the `plugins/` directory. Enable hot-reloading of plugins in `BaseAgent` without restarting the process.
+- [DECOMPOSE] Implement the logic where an agent can say "This task is too big for me," and the `Orchestrator` will automatically trigger a decomposition into 5-10 sub-tasks.
 
-# PHASE 160: TOTAL QUALITY (TQ) GATE & 100-AGENT SIMULATION
+# PHASE 162: HOLOGRAPHIC CONTEXT (PHASE 2)
+@focus: [
+    "src/logic/agents/cognitive/HolographicContextAgent.py"
+]
+- [CONTEXT] Upgrade the context compression algorithm to use "Bit-Packing" for storing embedding vectors, reducing RAM usage by 4x.
+- [RETRIEVAL] Implement "Spatial Retrieval"—finding context not just by similarity, but by its "topological position" in the project structure.
+
+# PHASE 163: AUTOMATED "SHARD STRESS-TEST"
+@focus: [
+    "tests/performance/ShardStressTest.py"
+]
+- [STRESS] Launch 100 parallel agent requests against a single 1GB `DuckDB` shard to test for write-concurrency deadlocks.
+- [FIX] Implement a `RetryWithBackoff` decorator for all database-access methods.
+
+# PHASE 164: THE "LITTLE THINGS" - IMPORT HYGIENE
+@focus: [
+    "src/**/*.py"
+]
+- [IMPORTS] Remove all unused imports globally using `ruff --select F401 --fix`.
+- [ABSOLUTE] Convert all relative imports to absolute imports to prevent `ImportError` when moving files during consolidation.
+
+# PHASE 165: AGENT MEMORY CONSOLIDATION (SLEEP)
+@focus: [
+    "src/logic/agents/cognitive/MemoryConsolidationAgent.py"
+]
+- [SLEEP] Implement a "Sleep Cycle"—every 100 cycles, the swarm stops working to "consolidate" its knowledge shards, merging redundant vectors and pruning low-score memories.
+
+# PHASE 166: KUZU GRAPH INTEGRATION
+@focus: [
+    "src/core/knowledge/KuzuGraphCore.py"
+]
+- [GRAPH] Replace the JSON-based `dependency_map.json` with a live **Kuzu** graph database to allow for complex "Impact Analysis" queries (e.g., "Show me all agents that will break if I modify `BaseAgent.py`").
+
+# PHASE 167: MULTI-MODAL REASONING (VISION)
+@focus: [
+    "src/logic/agents/cognitive/MultiModalReasoningAgent.py"
+]
+- [VISION] Allow agents to "look" at screenshots of the GUI to detect UI glitches or misalignment that would be invisible to code-based linters.
+
+# PHASE 168: SWARM "BYZANTINE" CONSENSUS
+@focus: [
+    "src/logic/agents/security/ByzantineConsensusAgent.py"
+]
+- [CONSENSUS] Implement a voting mechanism where 3 agents must agree on a code change before it is applied to the `src/core/` directory.
+
+# PHASE 169: AUTO-GENERATED SWARM DOCUMENTATION
+@focus: [
+    "docs/autodoc/"
+]
+- [AUTODOC] Implement an agent that generates a real-time "Swarm Topology Map" (Mermaid.js) showing which agents are currently working on what files.
+
+# PHASE 170: PROXIMA PHASE 1 CONVERGENCE
+@focus: [
+    "version.py"
+]
+- [CONVERGE] Perform a global "Clean Sweep" of all `__pycache__` and `.tmp` files.
+- [VERSION] Bump to `v3.2.0-PROXIMA-CONVERGED`.
+
+# PHASE 171: DATA PRIVACY GUARD
+@focus: [
+    "src/logic/agents/security/DataPrivacyGuardAgent.py"
+]
+- [PII] Implement a regex-based scanner to identify and redact PII (Emails, API Keys, Passwords) from agent output before it is logged to `data/logs/structured.json`.
+
+# PHASE 172: ENTROPY GUARDRAILS
+@focus: [
+    "src/logic/agents/system/EntropyGuardAgent.py"
+]
+- [ENTROPY] Measure the "Structural Complexity" of the codebase. If the average file size or cyclomatic complexity increases by more than 20% in a single phase, the `EntropyGuardAgent` must trigger a "Refactor Cycle."
+
+# PHASE 173: THE "LITTLE THINGS" - SCRATCH CLEANUP
+@focus: [
+    "data/scratch/"
+]
+@python: """
+import os
+import shutil
+# Cleanup: remove all scratch files older than 7 days
+scratch_dir = 'data/scratch'
+if os.path.exists(scratch_dir):
+    shutil.rmtree(scratch_dir)
+    os.makedirs(scratch_dir)
+"""
+- [AUTO-CLEAN] Implement a `ResourceCurationAgent` that runs every 24 hours to prune `__pycache__` and old session snapshots.
+
+# PHASE 174: THE "LITTLE THINGS" - CONFIG HYGIENE
+@focus: [
+    "config/shard_mapping.json",
+    ".env.example"
+]
+- [ENV] Move all hardcoded API URLs in `ConnectivityManager.py` to a structured `.env` file.
+- [VALIDATION] Implement JSON Schema validation for all files in `config/` to prevent "silent failures" during startup.
+
+# PHASE 175: CROSS-PLATFORM HARDENING (AND/CLI)
+@focus: [
+    "src/logic/agents/development/AndroidAgent.py",
+    "src/logic/agents/development/BashAgent.py"
+]
+- [ANDROID] Enhance `AndroidAgent.py` with `adb` tool integration to allow UI testing on physical devices or emulators.
+- [BASH] update `BashAgent.py` to support `shellcheck` linting for all generated scripts.
+
+# PHASE 176: DEPENDENCY PINNING
+@focus: [
+    "requirements.txt"
+]
+- [SECURE] Run `pip-audit` to check for known vulnerabilities in current dependencies.
+- [UPGRADE] Safely bump `langchain`, `pydantic`, and `fastapi` to their latest stable versions and fix breaking changes.
+
+# PHASE 177: QUANTUM-READY PLANNING (ROADMAP)
+@focus: [
+    "src/logic/agents/system/QuantumMemoryAgent.py",
+    "src/logic/agents/cognitive/QuantumReasonerAgent.py"
+]
+- [QUANTUM] Draft the initial mathematical models for "Superposition Prompting" in `QuantumReasonerAgent.py`. (Theoretical Phase).
+
+# PHASE 178: MULTI-MODAL CONTEXT (REAL-WORLD)
+@focus: [
+    "src/logic/agents/system/MultiModalContextAgent.py"
+]
+- [VISION] Integrate `GPT-4o` or `Llava` models to allow the swarm to "see" screenshots of UI bugs captured during GUI testing.
+
+# PHASE 179: SWARM ECONOMY (TOKEN BUDGETS)
+@focus: [
+    "src/infrastructure/fleet/AgentEconomy.py"
+]
+- [ECONOMY] Implement a "Token Credit" system where agents must "bid" for GPU priority based on the importance of their task.
+
+# PHASE 180: ULTIMATE SELF-DESTRUCTION (REBIRTH)
+@focus: [
+    "src/infrastructure/dev/scripts/strategic_swarm_build.py"
+]
+- [REBIRTH] Implement a `full_reset()` command that can re-scaffold the entire 900+ agent directory structure from a single `manifest.yaml` in under 30 seconds.
+
+# PHASE 181: SIMULATION & SWARM STRESS-TESTING
+@focus: [
+    "src/infrastructure/simulation/HopperSim.py"
+]
+- [SIMULATION] Enhance `HopperSim.py` to support "Stochastic Agent Failure" scenarios where 10% of agents randomly crash to test the `ResilienceAgent` recovery speed.
+- [VISUALIZATION] Implement a real-time terminal progress bar for swarm simulations using `tqdm` or `rich`.
+
+# PHASE 182: EVOLUTIONARY HYPER-PARAMETER TUNING
+@focus: [
+    "src/logic/agents/cognitive/EvolutionaryPromptAgent.py"
+]
+- [EVOLVE] Update `EvolutionaryPromptAgent.py` to support "Prompt Crossover" across different agent types (e.g., breeding a `CoderAgent` with a `SecurityAgent` to create a `SecureCoderAgent`).
+- [BACKTRACK] Implement "Lineage Persistence"—every evolved prompt must link back to its parent SHAs in [data/agents/](data/agents/).
+
+# PHASE 183: OBSERVABILITY & REPORT DEDUPLICATION
+@focus: [
+    "src/observability/reports/ReportGenerator.py",
+    "src/observability/reports/AggregatedReport.py"
+]
+- [DEDUPE] Implement similarity-based deduplication in `ReportGenerator.py` (using Jaccard similarity or embedding-distance) to prevent identical "missing docstring" errors from bloating aggregated reports.
+- [FORMAT] Support `JSONL` (JSON Lines) output for massive reports to allow streaming ingest into big-data tools.
+
+# PHASE 184: SWARM RESOURCE AUCTIONING (PHASE 2)
+@focus: [
+    "src/logic/agents/swarm/SwarmArbitratorAgent.py"
+]
+- [AUCTION] Transition from simple bid thresholds to a **Vickrey-Clarke-Groves (VCG)** auction model for computing resources to ensure truthful bidding by agents.
+- [LIMITS] Implement strict "VRAM Quotas" in the arbitrator to prevent a single `CognitiveSuperAgent` from starving the rest of the fleet.
+
+# PHASE 185: INTELLECTUAL PROPERTY & ATTRIBUTION
+@focus: [
+    "src/infrastructure/fleet/AttributionEngine.py"
+]
+- [ATTRIBUTION] Implement a "Contribution Graph" where every code modification is tagged with the `AgentID` and `ModelID` responsible for the change.
+- [LICENSE] Automatically append the correct SPDX headers to new files based on the `AttributionEngine` data.
+
+# PHASE 186: BROKEN IMPORT SELF-HEALING
+@focus: [
+    "src/infrastructure/plugins/BrokenImportAgent.py"
+]
+- [HEAL] Enhance `BrokenImportAgent.py` to automatically suggest `pip install` commands or `sys.path` modifications when a `ModuleNotFoundError` is detected in the fleet logs.
+- [MAPPING] Build a global `import_map.json` that tracks which internal modules are imported by which agents to detect circularities before they cause failures.
+
+# PHASE 187: FEDERATED SEARCH & RESEARCH (PHASE 2)
+@focus: [
+    "src/logic/agents/intelligence/ResearchAgent.py",
+    "src/logic/agents/intelligence/SemanticSearchMeshAgent.py"
+]
+- [MESH] Enable `SemanticSearchMeshAgent.py` to query multiple external search providers (Google, Bing, Perplexity, Tavily) in parallel and synthesize the results into a single ranked list.
+- [RAG] Integrate `MemoRAGAgent.py` logic to "remember" previous search queries and avoid redundant token usage for the same research topic.
+
+# PHASE 188: LOCALIZATION & CULTURAL AWARENESS
+@focus: [
+    "src/logic/agents/intelligence/LocalizationAgent.py",
+    "src/observability/reports/ReportLocalizer.py"
+]
+- [LOCALE] Expand the `LocalizationAgent` to support automatic translation of agent-generated comments into 12 major languages using `deepl` or localized LLM instances.
+- [CULTURE] Implement "Cultural Guardrails" to detect and flag potentially offensive idioms or metaphors in multi-agent communication.
+
+# PHASE 189: THE "LITTLE THINGS" - LOG ROTATION
+@focus: [
+    "src/infrastructure/dev/scripts/logging_config.py"
+]
+- [ROTATION] Implement a 10MB rolling log file strategy with compression (gzip) to prevent `data/logs/` from consuming all available disk space during long improve cycles.
+- [LEVELS] Dynamically adjust logging levels (`DEBUG` to `ERROR`) based on the current "Fleet Health" score.
+
+# PHASE 190: THE "PROXIMA" CONVERGENCE
+@focus: [
+    "src/core/base/version.py"
+]
+- [CONVERGENCE] Perform a "Full Fleet Sync" where all agents must pass a synchronized health check simultaneously before the `EVOLUTION_PHASE` can be incremented to PHASE 191.
+- [SUMMARY] generate a `swarm_strategic_summary.md` detailing the performance gains achieved since Phase 140.
+
+# PHASE 191: SAE & NEURAL INTERPRETABILITY
+@focus: [
+    "src/logic/agents/cognitive/ExplainabilityAgent.py",
+    "src/infrastructure/backend/llm_backends/"
+]
+- [SAE] Research and implement a logic-bridge for **Sparse Autoencoders (SAE)** to interpret LLM activations during high-risk security reasoning.
+- [EXPLAIN] Enhance `ExplainabilityAgent.py` to provide a "Neural Trace" for every decision made by the `ByzantineConsensusAgent`.
+
+# PHASE 192: ADAPTER MANAGEMENT (LoRA/QLoRA)
+@focus: [
+    "src/logic/agents/system/ModelForgeAgent.py",
+    "models/forge/adapters/"
+]
+- [ADAPTERS] Implement a the **PEFT Adapter Registry** where niche adapters (e.g., "Python-3.12-Expert", "Security-Audit-Specialist") are hot-swapped during execution based on the `LLMClient` request type.
+- [Forge] Update `ModelForgeAgent.py` to autonomously trigger fine-tuning when an agent's `ResponseQuality` score falls below 0.6 for more than 5 consecutive cycles.
+
+# PHASE 193: BYZANTINE COMMITTEE SCALING
+@focus: [
+    "src/logic/agents/security/ByzantineConsensusAgent.py"
+]
+- [COMMITTEE] Scale the `select_committee` logic to dynamically recruit agents based on their "Historic Reliability" score stored in `ShardedKnowledgeCore`.
+- [QUORUM] Implement a "Variable Quorum" where critical infrastructure changes require a 4/5 majority, while documentation changes only require 1/2.
+
+# PHASE 194: SAAS & EXTERNAL API GATEWAY
+@focus: [
+    "src/infrastructure/api/SaaSGateway.py",
+    "src/infrastructure/api/FleetLoadBalancer.py"
+]
+- [GATEWAY] Finalize the `SaaSGateway.py` to allow the fleet to consume external services (e.g., Jira, Slack, Trello) as if they were internal agents.
+- [BALANCING] Implement "Interface Affinity" in `FleetLoadBalancer.py` where requests from the Web UI are prioritized for lower-latency models like `GLM-4-Flash`.
+
+# PHASE 195: MORPHOLOGICAL AGENT EVOLUTION
+@focus: [
+    "src/logic/agents/system/MorphologicalEvolutionAgent.py"
+]
+- [MORPH] Implement the "Morphological Evolution" logic where agents can autonomously split into multiple sub-agents or "merge" with others if their logic-paths overlap by more than 80%.
+- [DNA] Define an "Agent DNA" (JSON-based) that encodes the tools, system prompt, and model-preference for every agent instance.
+
+# PHASE 196: CONNECTION POOLING & LLM OPTIMIZATION
+@focus: [
+    "src/infrastructure/backend/LLMClient.py",
+    "src/infrastructure/backend/ConnectionPool.py"
+]
+- [POOLING] Implement the `ConnectionPool.py` to manage persistent HTTP/2 sessions to OpenAI, Anthropic, and Local VLLM endpoints, reducing TTFT (Time To First Token) by 150ms.
+- [COMPRESSION] Auto-compress heavy system prompts using a dedicated `PromptCompressor` (based on LLMLinqua or similar logic) before sending them to external providers.
+
+# PHASE 197: DATA SYNTHESIS & FEATURE STORE
+@focus: [
+    "src/logic/agents/intelligence/SyntheticDataAgent.py",
+    "src/logic/agents/intelligence/FeatureStoreAgent.py"
+]
+- [SYNTHESIS] Use the `SyntheticDataAgent.py` to generate 1,000 "Edge-Case" Python snippets for the `ModelForgeAgent` to fine-tune on.
+- [FEATURE] implement the **Swarm Feature Store** where agents share vectorized "insights" from the workspace scan via the `ShardedKnowledgeCore`.
+
+# PHASE 198: METACOGNITIVE INTENTION PREDICTION
+@focus: [
+    "src/logic/agents/cognitive/MetacognitiveMonitor.py",
+    "src/logic/agents/cognitive/IntentionPredictionAgent.py"
+]
+- [MONITOR] Implement a "Confidence Calibration" loop in the `MetacognitiveMonitor.py`—if an agent is "too confident" but makes a mistake, its weight in the `ByzantineConsensus` is permanently reduced.
+- [INTENTION] Train the `IntentionPredictionAgent` to predict the *next* likely user request and pre-warm the relevant agent models.
+
+# PHASE 199: UNIFIED INTERFACE SYNC (DASHBOARD v2)
+@focus: [
+    "src/interface/ui/gui/MainApp.py",
+    "src/interface/ui/web/topology_viewer.html"
+]
+- [SYNC] Ensure that every action taken via the CLI is reflected in real-time on the Web Topology viewer and the GUI Project Explorer.
+- [THEME] Implement a project-wide "Theme Engine" that propagates dark/light mode and branding across all interface targets.
+
+# PHASE 200: AGENT CONSCIOUSNESS & TOTAL AUTONOMY
+@focus: [
+    "src/core/base/AgentCore.py"
+]
+- [CONSCIOUSNESS] Implement a "Self-Model" in `AgentCore` where the agent periodically reviews its own code and performance stats to identify its own "Blind Spots."
+- [AUTONOMY] Transition the `run_fleet_self_improvement.py` from a cycle-based loop to a persistent **"Background Evolution Daemon"** that only sleeps when the workspace is 100% optimized.
+
+# PHASE 201: DISTRIBUTED TRACING & TELEMETRY
+@focus: [
+    "src/observability/stats/OTelManager.py",
+    "src/infrastructure/backend/RequestTracer.py"
+]
+- [TRACING] Fully integrate **OpenTelemetry (OTel)** to trace requests as they hop from the `OrchestratorAgent` to sub-agents and finally to the LLM client.
+- [LATENCY] Track "Agent Thinking Time" vs "Network Latency" and display this in the `TelemetryAgent` dashboard.
+
+# PHASE 202: CONTAINERIZED AGENT RUNTIME
+@focus: [
+    "src/infrastructure/docker/Dockerfile",
+    "src/logic/agents/development/SandboxAgent.py"
+]
+- [SANDBOX] Update `SandboxAgent.py` to optionally execute code changes inside a secure **Docker container** to verify compilation/test passes before applying them to the host.
+- [RUNTIME] Optimize the `PyAgent` Docker image to include all language runtimes (Python, Rust, Go, C++) for cross-language agents.
+
+# PHASE 203: HOT-RELOADABLE PLUGINS
+@focus: [
+    "src/core/base/managers/PluginManager.py",
+    "src/infrastructure/plugins/manifest.json"
+]
+- [PLUGINS] Enable **Hot-Reloading** in `PluginManager.py` so new agent capabilities can be added to the running swarm without a restart.
+- [SECURITY] Implement a signature verification check in `PluginManager` to ensure only trusted plugins from the registry are loaded.
+
+# PHASE 204: DYNAMIC MERMAID DOCUMENTATION
+@focus: [
+    "src/logic/agents/development/DocGenAgent.py",
+    "docs/autodoc/"
+]
+- [DIAGRAMS] Auto-generate **Mermaid.js Sequence Diagrams** showing the interaction flow between agents in complex cascades.
+- [DOCS] Repair the failing `refresh_docs.py` to support PEP 604 and PEP 585 type hints in the auto-generated markdown.
+
+# PHASE 205: SWARM "RED TEAMING"
+@focus: [
+    "src/logic/agents/security/HoneypotAgent.py",
+    "src/logic/agents/security/SecurityScannerAgent.py"
+]
+- [REDTEAM] Launch a "Red Team" event where the `HoneypotAgent` attempts to inject malicious logic into the workspace, while the `SecurityScannerAgent` must detect and block it.
+- [HARDENING] Use the results to harden the `ImmuneSystemAgent`'s injection detection regex patterns.
+
+# PHASE 206: PROFILING & BOTTLENECK ANALYSIS
+@focus: [
+    "src/logic/agents/development/ProfilingAgent.py",
+    "src/observability/stats/SystemAnalytics.py"
+]
+- [PROFILING] Integrate `cProfile` and `devtoolset` into the `ProfilingAgent` to identify slow methods in the `BaseAgent` core logic.
+- [SPEED] Reduce the overhead of `LocalContextRecorder.record_interaction` (which currently takes ~50ms per call) using asynchronous writes.
+
+# PHASE 207: THE "LITTLE THINGS" - DEPENDENCIES
+@focus: [
+    "requirements.txt"
+]
+- [CLEANUP] Identify and remove unused packages from the 205-line `requirements.txt`.
+- [SECURE] Run `pip-audit` to detect and fix vulnerabilities in third-party libraries.
+
+# PHASE 208: UI/UX POLISH - CLI & GUI
+@focus: [
+    "src/interface/ui/cli/pyagent_cli.py",
+    "src/interface/ui/gui/StatusBar.py"
+]
+- [CLI] Add "Rich" terminal support (colors, tables, progress bars) to the main CLI wrapper.
+- [GUI] Add a "Fleet Health" icon to the GUI status bar that changes color based on `SystemHealthMonitor.py` status.
+
+# PHASE 209: HARDWARE ACCELERATION
+@focus: [
+    "src/infrastructure/backend/llm_backends/VllmNativeBackend.py"
+]
+- [ACCEL] implement support for **MPS (Apple Silicon)** and **ROCm (AMD)** in the VLLM Native backend to allow faster local inference on non-NVIDIA hardware.
+
+# PHASE 210: PROJECT READINESS & LAUNCH
+@focus: [
+    "README.md",
+    "CONTRIBUTING.md",
+    "LICENSE"
+]
+- [README] Rewrite the `README.md` to showcase the "Trillion Parameter" and "Self-Improving Swarm" nature of the project.
+- [LICENSE] Ensure the Apache 2.0 license is correctly referenced and included in all source file headers.
+- [FINAL] Run a "Total Workspace Clean" where all `__pycache__` and `.tmp` files are purged before the final release.
+
+# PHASE 211: CONVERSATIONAL DEPTH & CONTEXT PRUNING
+@focus: [
+    "src/core/base/managers/ConversationManagers.py",
+    "src/logic/agents/cognitive/AttentionBufferAgent.py"
+]
+- [MEMORY] Implement "Sliding Window" context management in `ConversationManagers.py` to handle extremely long multi-agent discussions without hitting token limits.
+- [ATTENTION] Update `AttentionBufferAgent.py` to automatically identify and "summarize" low-importance parts of the conversation history.
+
+# PHASE 212: BATCH PROCESSING & THROUGHPUT
+@focus: [
+    "src/core/base/managers/BatchManagers.py",
+    "src/infrastructure/backend/RequestBatcher.py"
+]
+- [BATCH] Optimize the `RequestBatcher.py` to group sub-agent requests into larger parallel blocks, increasing throughput by 2x during "Global Workspace Scans."
+- [FAILURE] implement "Partial Success" logic—if 9/10 batch requests succeed, don't fail the whole operation.
+
+# PHASE 213: PERFORMANCE BENCHMARKING (BASELINES)
 @focus: [
     "tests/performance/",
-    "tests/adversarial/"
+    "src/logic/agents/development/BenchmarkAgent.py"
 ]
-- [PERFORMANCE] Run a 100-agent swarm simulation and ensure latency remains under 500ms for non-LLM logic.
-- [ADVERSARIAL] Attempt "Swarm Hijacking" via a malicious `PromptTemplate` and verify that the `ByzantineConsensusAgent` successfully blocks the propagation.
+- [BENCHMARK] Establish a "Baseline Latency" for all core agent types using the `BenchmarkAgent.py`.
+- [REGRESSION] Add a "Latency Gate" to the CI/CD—if a change increases the average agent response time by more than 10%, the build fails.
 
-# PHASE 161: MCP SPEC COMPLIANCE (JSON-RPC 2.0)
+# PHASE 214: BIO-DIGITAL NEURAL PRUNING (PHASE 2)
 @focus: [
-    "src/logic/agents/system/MCPAgent.py",
-    "src/infrastructure/fleet/MCPConnector.py"
+    "src/core/base/NeuralPruningEngine.py"
 ]
-- [PROTOCOL] Replace the "demo" logic in `MCPAgent.py` with full support for the JSON-RPC 2.0 transport specified in the **Model Context Protocol**.
-- [DISCOVERY] Implement automated discovery of MCP servers via `package.json` entry points or global config paths (`~/.config/PyAgent/mcp.json`).
-- [DYNAMIC] Allow agents to dynamically request tool schemas from the `MCPAgent` and register them as native Python methods using `@as_tool`.
+- [PRUNING] Implement "Synaptic Refractory Periods" in `NeuralPruningEngine.py` to prevent the swarm from over-relying on the same agent-path and becoming "digitally rigid."
+- [DECAY] Formalize the "Logarithmic Decay" model for synaptic weights based on the actual token-cost retrieved from `LLMClient`.
 
-# PHASE 162: RUST-NATIVE ACCELERATION (PYO3)
+# PHASE 215: VIBE-CODING 2025 UNIFICATION
 @focus: [
-    "src/core/base/fast_utils/"
+    "src/logic/agents/swarm/PatternOrchestrator.py",
+    "src/core/base/version.py"
 ]
-- [RUST] Implement a `fast_utils` crate using `PyO3`. Migrate high-frequency logic (like `StructuredLogger` formatting and `FileWatcher` events) to Rust.
-- [PERFORMANCE] Benchmark the `blake3` hashing speed vs. the current `hashlib` implementation.
+- [VIBES] Unify the "Vibe-Coding" tracks (RESEARCH, BUILD, VALIDATE) in `PatternOrchestrator.py` with the global `EVOLUTION_PHASE` in `version.py` so the swarm's personality shifts automatically as the project matures.
+- [PERSONAS] Define distinct `system_prompt` overrides for each vibe track to ensure agents switch from "Creative Explorer" to "Rigid Architect" during the VALIDATE phase.
 
-# PHASE 163: GRAPHDATA BRAIN (MEMGRAPH/NEO4J)
+# PHASE 216: DISTRIBUTED B-LINK KNOWLEDGE STORE
 @focus: [
-    "src/infrastructure/storage/GraphStoreCore.py"
+    "src/core/knowledge/btree_store.py",
+    "src/core/knowledge/storage_base.py"
 ]
-- [GRAPH] Replace the JSON-based `shard_mapping.json` with a live **Memgraph** or **Neo4j** instance to track millions of agent-to-agent relationships.
-- [QUERY] Implement `find_expert(capability, depth=3)` to locate the best agent for a task using graph traversal instead of keyword search.
+- [BTREE] Upgrade the local `btree_store.py` to a **B-Link Tree** implementation that supports concurrent read/write locks across the 1024 virtual shards.
+- [IO] implement "Mmap-backed" page caching for the knowledge store to achieve sub-millisecond retrieval of agent metadata.
 
-# PHASE 164: THE "DYSON" CLEANUP (LOG PURGE)
+# PHASE 217: UNIFIED FLEET HARNESS (DEBUG CLEANUP)
 @focus: [
-    "src/logic/agents/system/LogJanitorAgent.py"
+    "src/infrastructure/dev/scripts/"
 ]
-- [JANITOR] Implement an automated log pruning system that archives logs to `S3` / `Azure Blob` and leaves only "High-Signal" summaries in `data/logs/`.
-- [SIGNAL] Train a small model (distilled from Llama-3) to identify which 1% of logs are "Mission Critical" and which 99% are "Operational Noise".
+@python: """
+import os
+import shutil
+# Migration: move 50+ debug/repair scripts into a management/ hidden folder
+scripts_dir = 'src/infrastructure/dev/scripts'
+mgmt_dir = os.path.join(scripts_dir, 'management')
+os.makedirs(mgmt_dir, exist_ok=True)
+for f in os.listdir(scripts_dir):
+    if (f.startswith('debug_') or f.startswith('repair_')) and f.endswith('.py'):
+        shutil.move(os.path.join(scripts_dir, f), os.path.join(mgmt_dir, f))
+"""
+- [HARNESS] Create a single `FleetHarness.py` that takes sub-commands (e.g., `fleet-harness heal`, `fleet-harness restore`) to replace the fragmented individual scripts.
 
-# PHASE 263: CONTEXT-AWARE BATCHING (TOKEN SAVER)
+# PHASE 218: BINARY SWARM MESSAGING (CBOR)
 @focus: [
-    "src/infrastructure/fleet/BatchProcessor.py"
+    "src/core/base/managers/SerializationManager.py",
+    "src/infrastructure/fleet/AsyncFleetManager.py"
+]
+- [BINARY] Implement **CBOR (Concise Binary Object Representation)** serialization as the default for inter-agent communication to reduce bandwidth by 30-50% during massive knowledge transfers.
+- [FALLBACK] Ensure automatic fallback to JSON if the receiver does not support the binary protocol.
+
+# PHASE 219: SWARM "SLEEP CYCLES" (CONSOLIDATION)
+@focus: [
+    "src/logic/agents/cognitive/core/MemoryConsolidatorCore.py",
+    "src/logic/agents/system/ResilienceAgent.py"
+]
+- [SLEEP] Implement a "Sleep Cycle" scheduled via `ResilienceAgent.py` where 50% of the fleet goes into a low-power mode to allow the `MemoryConsolidator` to perform deep indexing and neural pruning without I/O contention.
+- [DREAMS] (Theoretical) allow the `CognitiveSuperAgent` to run "Latent Simulations" (Dreams) during sleep cycles to discover novel architectural improvements.
+
+# PHASE 220: TRILLION-PARAMETER PARQUET EXPORT
+@focus: [
+    "src/core/base/ShardedKnowledgeCore.py"
+]
+- [EXPORT] Implement a high-performance **Apache Parquet** export tool in `ShardedKnowledgeCore` to allow the PyAgent knowledge base to be directly ingested by HuggingFace-compatible training pipelines.
+- [COMPRESSION] Use `Zstd` compression for parquet shards to achieve the maximum density for long-term archival.
+
+# PHASE 221: TYPE CONFORMANCE & STARTUP LINT
+@focus: [
+    "src/**/*.py"
+]
+- [FUTURE] verify that EVERY file in `src/` starts with `from __future__ import annotations` to leverage 3.12 performance and clean type syntax.
+- [LINT] Add a "Naked Import" check—ensure agents don't perform heavy imports inside the global scope; move them into `TYPE_CHECKING` blocks or `__init__`.
+
+# PHASE 222: THE "LITTLE THINGS" - NAMING CONVENTIONS
+@focus: [
+    "src/logic/agents/"
+]
+- [NAMING] Standardize all Agent filenames to `<Skill>Agent.py` (e.g., `ResearchAgent.py`) and ensure the class names match the filenames exactly.
+- [DEDUP] Identify and merge near-identical agents like `DocumentationAgent.py` and `DocGenAgent.py`.
+
+# PHASE 223: ULTIMATE CONVERGENCE - PHASE 225 READY
+@focus: [
+    "version.py"
+]
+- [READY] Ensure `EVOLUTION_PHASE` is set to 223.
+- [CONVERGE] Perform a final "Clean Sweep" of the workspace, deleting all `.pyc`, `__pycache__`, and `.bak` files.
+- [SUMMARY] Generate the "PyAgent: Proxima Edition" technical manifesto in [docs/PROXIMA_MANIFESTO.md](docs/PROXIMA_MANIFESTO.md).
+
+# PHASE 224: OBSERVABILITY FRAGMENTATION DEFRAG
+@focus: [
+    "src/observability/stats/"
+]
+- [CONSOLIDATE] Merge the 70+ logic-shards in `src/observability/stats/` into 3 core modules: `metrics_engine.py`, `observability_core.py`, and `exporters/`.
+- [REMOVE] Delete legacy files like `ABComparator.py`, `FormulaEngine.py`, etc., after verifying their logic is preserved in the consolidated core.
+
+# PHASE 225: LEGACY DATA PURGE & MIGRATION
+@focus: [
+    "data/"
+]
+@python: """
+import os
+# Cleanup: remove legacy CSV/JSON one-offs from root data folder
+legacy_files = ['long_term_memory.json', 'search_results.csv', 'weather_spec.json']
+for f in legacy_files:
+    path = os.path.join('data', f)
+    if os.path.exists(path):
+        os.remove(path)
+"""
+- [MIGRATE] Move any remaining valid data into the agent shards defined in `ShardedKnowledgeCore`.
+
+# PHASE 226: PLUGIN INTERFACE STABILIZATION
+@focus: [
+    "src/infrastructure/plugins/",
+    "src/core/base/managers/PluginManager.py"
+]
+- [INTERFACE] Finalize the `AgentPluginBase` interface with mandatory `health_check()` and `shutdown()` methods to ensure plugins don't cause zombie processes.
+- [MANIFEST] Enforce a strictly typed `manifest.json` for every plugin, including a semantic version requirement for the PyAgent core.
+
+# PHASE 227: THE "LITTLE THINGS" - LOGGING HYGIENE (PART 2)
+@focus: [
+    "src/**/*.py"
+]
+- [LOGGING] Replace all `print()` statements with the structured `StructuredLogger` defined in Phase 144.
+- [SENSITIVE] Implement "Sensitive Data Masking" in the logger to automatically redact string patterns resembling API Keys or Bearer tokens.
+
+# PHASE 228: SWARM "SELF-DOCUMENTATION"
+@focus: [
+    "docs/notes/prompt.txt"
+]
+- [AUTO-UPDATE] Implement an agent that periodically adds *new* improvement ideas to the end of this prompt file as they are discovered during "Sleep Cycle" dreams.
+
+# PHASE 229: SYSTEM-WIDE ERROR CODE STANDARDIZATION
+@focus: [
+    "src/core/base/exceptions.py"
+]
+- [ERROR_CODES] Map every possible failure to a unique 4-digit error code (e.g., `PA-1001: ModelTimeout`) to allow the `DashboardAgent` to display easy-to-search troubleshooting links.
+
+# PHASE 230: PROJECT "PROXIMA" GOLD MASTER
+@focus: [
+    "version.py",
+    "README.md"
+]
+- [GOLD] Bump version to `2.1.0-GOLD`.
+- [MANIFESTO] update `README.md` to indicate that the swarm has achieved "Critical Autonomy Level 4".
+- [FINAL] Archive all legacy `note.txt` and `prompt.txt` content into a `docs/archive/evolution_log.json`.
+
+# PHASE 231: ENHANCED CIRCUIT BREAKER (RESILIENCE)
+@focus: [
+    "src/core/base/CircuitBreaker.py"
+]
+- [RESILIENCE] Implement "Wait-for-Success" in the `HALF_OPEN` state. Only transition back to `CLOSED` after a series of successful probes, rather than a single pass.
+- [METRICS] Export circuit breaker state transitions (OPEN/CLOSED/HALF_OPEN) to the `OTelManager` for real-time observability.
+
+# PHASE 232: DEPENDENCY GRAPH PARALLELIZATION
+@focus: [
+    "src/core/base/DependencyGraph.py"
+]
+- [PARALLEL] Update `DependencyGraph.resolve` to return "Parallel Execution Batches" (lists of nodes that can run simultaneously) instead of a single flat list.
+- [BATCHING] Integrate this batching logic into the `AsyncFleetManager` to maximize CPU usage during multi-agent workflows.
+
+# PHASE 233: INCREMENTAL PROCESSOR HASHING (PERF)
+@focus: [
+    "src/core/base/IncrementalProcessor.py"
+]
+- [HASHING] Replace MD5 with **BLAKE3** for faster file hashing during workspace scans.
+- [MAPPING] Use a memory-mapped file for the `.agent_state.json` to reduce serialization overhead during large-scale incremental runs.
+
+# PHASE 234: DYNAMIC SHARD REBALANCING
+@focus: [
+    "src/infrastructure/fleet/ShardingOrchestrator.py"
+]
+- [REBALANCE] implement "Live Migration" in `ShardingOrchestrator.py` where agents can be re-assigned to shards in real-time without interrupting their current task.
+- [CLUSTER] Use a more robust clustering algorithm (like **K-Means** or **DBSCAN**) for agent grouping based on interaction frequency and VRAM requirements.
+
+# PHASE 235: THE "LITTLE THINGS" - CLI UX (RICH)
+@focus: [
+    "src/interface/ui/cli/pyagent_cli.py"
+]
+- [CLI] Use `rich.panel.Panel` and `rich.table.Table` to display agent status and shard health in the terminal.
+- [SPINNER] Add distinct spinners for different agent states (Thinking vs Working vs Testing).
+
+# PHASE 236: DOCUMENTATION ARCHITECTURE - MERMAID (PART 2)
+@focus: [
+    "docs/"
+]
+- [ARCHITECTURE] Auto-generate a high-level **Mermaid C4 System Context Diagram** in the `docs/architecture/` folder, mapping the relations between Core/Infrastructure/Logic/Observability.
+
+# PHASE 237: ORCHESTRATOR DIVERSITY (NEW PATTERNS)
+@focus: [
+    "src/infrastructure/orchestration/"
+]
+- [PATTERNS] Implement the `GossipProtocolOrchestrator.py` to allow agents to share knowledge updates in a decentralized manner without a central hub.
+- [DREAMS] Finalize the `DreamStateOrchestrator.py` (referenced in Phase 219) to run background logic simulations.
+
+# PHASE 238: COMPLIANCE & LEGAL HARNESS
+@focus: [
+    "src/logic/agents/security/LegalAuditAgent.py"
+]
+- [LEGAL] Update `LegalAuditAgent.py` to automatically check generated code against a "License Blacklist" (e.g., preventing GPL content from entering MIT projects).
+- [COMPLIANCE] Implement a "Right to be Forgotten" tool in the knowledge store to prune user data upon request.
+
+# PHASE 239: SWARM "CONSCIOUSNESS" REGISTRY
+@focus: [
+    "src/core/base/managers/OrchestrationManagers.py"
+]
+- [REGISTRY] Create a "Fleet Consciousness Registry" where every agent's "Thought Stream" is summarized and indexed for global awareness, allowing any agent to "know" what the rest of the fleet is doing.
+
+# PHASE 240: TOTAL SYSTEM CONVERGENCE - PHASE 250 READY
+@focus: [
+    "version.py"
+]
+- [CONVERGE] Perform a final "Deep Clean" of the `src/infrastructure/dev/scripts/management` folder.
+- [READY] Set version to `2.2.0-ALFA`.
+
+# PHASE 241: AGENT CAPABILITY DISCOVERY
+@focus: [
+    "src/core/base/BaseAgent.py",
+    "src/infrastructure/orchestration/SignalRegistry.py"
+]
+- [CAPABILITIES] Add `get_capabilities() -> dict[str, Any]` to `BaseAgent.py`.
+- [REGISTRY] Update all agents in `src/logic/agents/` to implement specific capability tags (e.g., `bash`, `python`, `security-audit`).
+- [SIGNALING] Register these capabilities in `SignalRegistry.py` upon agent initialization to enable "Dynamic Tool Routing."
+
+# PHASE 242: DISTRIBUTED LOCK MANAGER
+@focus: [
+    "src/infrastructure/orchestration/LockManager.py"
+]
+- [CONCURRENCY] Implement a `LockManager.py` supporting both file-based (using `portalocker` or similar) and memory-based locking.
+- [LOCKS] Integrate with `DependencyGraph.py` to ensure parallel tasks don't collide on the same file resources or database shards.
+
+# PHASE 243: SEMANTIC VERSIONING FOR AGENTS
+@focus: [
+    "src/logic/agents/",
+    "src/infrastructure/orchestration/FleetTelemetryVisualizer.py"
+]
+- [VERSIONING] Add a `__version__: str` class variable to every agent in the `src/logic/agents/` subdirectories.
+- [TELEMETRY] Update `FleetTelemetryVisualizer.py` to display and track versions, allowing for "A/B Testing" of different agent logic versions.
+
+# PHASE 244: AGENT CATALOG AUTO-GENERATION
+@focus: [
+    "src/infrastructure/dev/scripts/generate_agent_catalog.py"
+]
+@python: """
+import os
+# Auto-generate documentation for all 100+ agents
+# Extract docstrings and __version__ to create docs/AGENTS.md
+"""
+- [CATALOG] Create a script that scans `src/logic/agents/`, extracts metadata, and generates `docs/AGENTS.md` with a structured table of every specialized agent's purpose and status.
+
+# PHASE 245: RESOURCE QUOTAS & BUDGETS
+@focus: [
+    "src/core/base/managers/ResourceQuotaManager.py"
+]
+- [QUOTAS] Implement thresholds for maximum token usage and wall-clock execution time per agent session.
+- [ENFORCEMENT] Integrate quotas into the `BaseAgent` main loop, triggering a `CycleInterrupt` or "Graceful Shutdown" if exceeded.
+
+# PHASE 246: CONTEXT WINDOW OPTIMIZATION
+@focus: [
+    "src/infrastructure/backend/RunnerBackends.py",
+    "src/core/base/managers/PromptManagers.py"
+]
+- [WINDOW] Expose model-specific `max_context_length` from backends.
+- [SUMMARIZATION] Implement a `sliding_window_summarize` helper that automatically activates when the prompt approaches 90% of the model's limit.
+
+# PHASE 247: AGENT INTERACTION GRAPH (SOCIAL)
+@focus: [
+    "src/infrastructure/dev/scripts/visualize_swarm_graph.py"
+]
+- [GRAPH] Trace message flows in `SignalRegistry.py` to build an interaction matrix.
+- [VISUALIZE] Export a Mermaid diagram or D3.js JSON representing the "Social Topology" of the fleet to identify communication bottlenecks.
+
+# PHASE 248: PERFORMANCE-BASED ROUTING
+@focus: [
+    "src/infrastructure/orchestration/RoutingEngine.py"
+]
+- [METRICS] Track `TTFT` and `TPS` per provider in `RunnerBackends.py`.
+- [ROUTING] Implement a `RoutingEngine` that weights latency vs. quality, sending time-critical classification tasks to faster "small" models and deep reasoning to "frontier" models.
+
+# PHASE 249: BYZANTINE FAULT TOLERANCE - SECURITY
+@focus: [
+    "src/infrastructure/orchestration/GossipProtocolOrchestrator.py",
+    "src/infrastructure/orchestration/ConsensusEngine.py"
+]
+- [SECURITY] Add outlier detection to `GossipProtocolOrchestrator.py` to identify agents that consistently deviate from "verified" workspace states.
+- [QUORUM] Require a 2/3 majority (weighted by reliability) for any state change that affects the `src/core/` directory.
+
+# PHASE 250: THE "GREAT CORE UNIFICATION"
+@focus: [
+    "src/core/modules/",
+    "src/logic/agents/"
+]
+- [CONSOLIDATION] Move all standalone `*Core.py` classes (e.g., `CodeQualityCore`, `DocGenCore`) into the `src/core/modules/` directory.
+- [INTERFACES] Standardize core modules with a unified lifecycle interface: `initialize()`, `execute()`, `shutdown()`.
+- [CLEANUP] Eliminate redundant logic by making agents purely "interface wrappers" for the underlying core modules.
+
+# PHASE 251: FINAL PROXIMA GOLD QUALITY GATE
+@focus: [
+    "tests/",
+    "src/"
+]
+- [QUALITY] Ensure 100% pass rate on all unit and integration tests.
+- [LINT] Resolve all `ruff` and `mypy` issues globally.
+- [DOCS] Verify `docs/installation/` is accurate for the new consolidated structure.
+
+# PHASE 252: THE "CONVERGENCE" MASTER RELEASE
+@focus: [
+    "version.py",
+    "README.md"
+]
+- [SHIP] Tag the repository as `v2.2.0-ALFA-PROXIMA-GOLD`.
+- [DELETION] Purge all `.log`, `.pyc`, and `__pycache__` artifacts.
+- [OUTPUT] Generate the "Proxima Convergence Report" and power down the self-improvement orchestrator.
+
+# PHASE 253: STATS DEFRAGMENTATION
+@focus: [
+    "src/observability/stats/"
+]
+- [DEDUPE] Merge the 70+ granular files in `src/observability/stats/` into 5-7 cohesive modules: `metrics.py` (models), `analysis.py` (A/B & correlation), `alerting.py`, `exporters.py` (Cloud/Prometheus), and `engine.py` (Formula & Logic).
+- [IMPORTS] Fix all broken imports in the fleet that previously pointed to the granular files.
+- [BOILERPLATE] Remove redundant `__init__.py` export patterns that bloat the namespace.
+
+# PHASE 254: FLEET INFRASTRUCTURE CONSOLIDATION
+@focus: [
+    "src/infrastructure/fleet/"
+]
+- [REFACTOR] Merge `AgentRegistryCore.py` into `AgentRegistry.py`.
+- [REFACTOR] Merge `SecretCore.py` into `SecretManager.py`.
+- [REFACTOR] Merge `ScalingCore.py` into `ScalingManager.py`.
+- [HYGIENE] Ensure all "Manager" classes inherit from a standard `BaseManager` in `src/infrastructure/base/`.
+
+# PHASE 255: BINARY PROTOCOL READINESS (FASTSWARM)
+@focus: [
+    "src/core/base/connectivity.py",
+    "src/infrastructure/fleet/RemoteAgentProxy.py"
+]
+- [PROTOCOL] Prototype a secondary message transport using `MessagePack` (msgpack) for high-frequency heartbeat and telemetry signals.
+- [COMPRESSION] Enable `zstd` compression for large "Knowledge Transfer" payloads between remote shards.
+
+# PHASE 256: THE "VOYAGER" INTERSTELLAR MISSION
+@focus: [
+    "docs/PROXIMA_VOYAGER.md"
+]
+- [FUTURE] Draft the documentation for the next major evolution: "Voyager"—decentralized P2P swarm orchestration across multiple distinct user machines.
+- [FINALIZE] "Proxima is complete. Voyager awaits."
+
+# PHASE 257: SEMANTIC ANCHORING (VERIFICATION)
+@focus: [
+    "src/core/base/verification.py"
+]
+- [EMBEDDINGS] Replace word-overlap matching in `calculate_anchoring_strength` with **Semantic Cosine Similarity** using a local `all-MiniLM-L6-v2` embedding model.
+- [GROUNDING] Add a `fact_check()` method that cross-references generated code snippets against the sharded knowledge base to identify "API Drift" hallucinations.
+
+# PHASE 258: CROSS-MODEL VERIFICATION
+@focus: [
+    "src/core/base/verification.py",
+    "src/infrastructure/backend/RunnerBackends.py"
+]
+- [VERIFY] Implement a `secondary_verify()` loop where a smaller, faster model (e.g., `Llama-3-8B` or `Gemini-Flash`) reviews the primary agent's output for obvious logic errors.
+- [JURORS] Implement a "Jury of Agents" for high-risk core changes where 3 distinct agents must provide a `True` verification before the `update_file()` call is allowed.
+
+# PHASE 259: CASCADE CONTEXT MANAGEMENT (DELEGATION)
+@focus: [
+    "src/core/base/delegation.py"
+]
+- [THREADSAFE] Replace global `os.environ` parent tracking with a thread-local/recursive `CascadeContext` object.
+- [BREADCRUMBS] Ensure every delegated task carries a `task_id` and `correlation_id` to allow the dashboard to trace deep agent-to-agent call stacks.
+
+# PHASE 260: JOB PREEMPTION & PRIORITY
+@focus: [
+    "src/infrastructure/orchestration/TaskDecomposer.py",
+    "src/core/base/delegation.py"
+]
+- [PRIORITY] Add a `priority: int` field to the `delegate()` method.
+- [PREEMPTION] Update the `FleetManager` to pause or "Gracefully Suspend" lower-priority agents if a high-priority "Emergency Patch" task enters the queue.
+
+# PHASE 261: KNOWLEDGE INDEX SNAPSHOTTING
+@focus: [
+    "src/core/base/ShardedKnowledgeCore.py"
+]
+- [SNAPSHOT] Implement binary serialization of the shard index mapping using `pickle` or `msgpack`.
+- [WATCHER] Implement an incremental indexer that only updates the snapshot for modified files, reducing cold-start time from seconds to milliseconds.
+
+# PHASE 262: AGENT "DRY-RUN" PROTOCOL
+@focus: [
+    "src/core/base/BaseAgent.py",
+    "src/core/base/shell.py"
+]
+- [DIFF] Add a `--dry-run` flag to the `AgentCLI`.
+- [VIRTUAL] In dry-run mode, the agent must generate a `.diff` file in `temp/dry_runs/` instead of modifying the source.
+- [REVIEW] Implement a `DryRunReviewerAgent` that analyzes the diffs for style violations and regression risks before recommending a "Real" run.
+
+# PHASE 263: TOKEN-AWARE BATCHING
+@focus: [
+    "src/core/base/IncrementalProcessor.py"
 ]
 - [BATCH] Group small file requests into a single prompt for the LLM to minimize the overhead of "System Prompt" tokens across hundreds of small files.
 - [LIMITS] Implement a "Tight Pack" algorithm to ensure batches stay within 80% of the model's context limit.
@@ -250,6 +1017,11 @@
 @focus: [
     "**/*.py"
 ]
+@python: """
+import os
+# Final scan for any remaining TODOs, FIXMEs, or XXXs in the codebase.
+# Collate them into docs/notes/TECH_DEBT.md for the Voyager phase.
+"""
 - [CLEANSE] Perform a final global search and replace for any "hardcoded" paths (like `C:/DEV/PyAgent`) and replace them with `Path(__file__).parents[N]` or `os.getenv('REPO_ROOT')` to ensure total machine portability.
 - [COMPLETE] "Proxima Gold Master is now 100% Portable and Verified."
 
