@@ -50,7 +50,24 @@ class SignalRegistry:
             cls._instance.subscribers = {} # signal_name -> list of callbacks
             cls._instance.history = []
             cls._instance.core = SignalCore()
+            cls._instance.capabilities: Dict[str, List[str]] = {} # Phase 241: agent_name -> capabilities
+            
+            # Phase 241: Automatically subscribe to capability registration
+            cls._instance.subscribe("agent_capability_registration", cls._instance._on_capability_registration)
         return cls._instance
+
+    def _on_capability_registration(self, event: Dict[str, Any]) -> None:
+        """Phase 241: Handles capability registration signals."""
+        data = event.get("data", {})
+        agent = data.get("agent")
+        caps = data.get("capabilities", [])
+        if agent:
+            self.capabilities[agent] = caps
+            logging.debug(f"SignalRegistry: Registered capabilities for {agent}: {caps}")
+
+    def get_agent_by_capability(self, capability: str) -> List[str]:
+        """Phase 241: Returns a list of agents that possess a specific capability."""
+        return [agent for agent, caps in self.capabilities.items() if capability in caps]
 
     def subscribe(self, signal_name: str, callback: Callable[[Any], None]) -> None:
         """Subscribe a callback to a signal."""

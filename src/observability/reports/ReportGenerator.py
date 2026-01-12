@@ -95,7 +95,7 @@ class ReportGenerator:
         logging.info(f"Processed {count} files, skipped {skipped} unchanged, {errors_count} errors.")
         return {"count": count, "skipped": skipped, "errors": errors_count}
 
-    def export_jsonl_report(self, items: List[Dict[str, Any]], filename: str = "audit_log.jsonl"):
+    def export_jsonl_report(self, items: List[Dict[str, Any]], filename: str = "audit_log.jsonl") -> bool:
         """Exports report items to JSONL format (Phase 183)."""
         output_path = self.output_dir / filename
         # Deduplicate before export

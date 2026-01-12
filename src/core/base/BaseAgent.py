@@ -207,6 +207,7 @@ class BaseAgent:
         self.previous_content: str = ""
         self.current_content: str = ""
         self.fleet: Any = None # FleetManager reference
+        self.capabilities: List[str] = ["base"] # Phase 241: Default capabilities
         
         # Knowledge Trinity initialization (Phase 126)
         try:
@@ -216,8 +217,27 @@ class BaseAgent:
         except (ImportError, ModuleNotFoundError):
             self.knowledge = None
         
+        # Phase 241: Auto-register capabilities if SignalRegistry is available
+        self._register_capabilities()
+        
         # Strategy for agent execution (Phase 130: Lazy-loaded to avoid core-on-logic dependency)
         self._strategy: Optional[Any] = None
+
+    def _register_capabilities(self) -> None:
+        """Emits a signal with agent capabilities for discovery."""
+        try:
+            from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+            signals = SignalRegistry()
+            signals.emit("agent_capability_registration", {
+                "agent": self.__class__.__name__,
+                "capabilities": self.get_capabilities()
+            })
+        except Exception:
+            pass
+
+    def get_capabilities(self) -> List[str]:
+        """Phase 241: Returns a list of strings representing agent capabilities."""
+        return self.capabilities
 
         # New attributes for enhanced functionality
         self._state: AgentState = AgentState.INITIALIZED

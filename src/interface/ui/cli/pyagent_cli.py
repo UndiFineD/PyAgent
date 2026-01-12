@@ -52,6 +52,9 @@ from pathlib import Path
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
+from rich.live import Live
+from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
+from rich.columns import Columns
 
 # Infrastructure
 from src.core.base.ConnectivityManager import ConnectivityManager
@@ -81,19 +84,51 @@ def check_server() -> bool:
         return False
 
 def list_agents() -> None:
-    """Get list of active agents from the fleet."""
+    """Get list of active agents and shard distribution from the fleet (Phase 235)."""
     try:
         response = session.get(f"{API_BASE_URL}/agents")
         if response.status_code == 200:
-            agents = response.json().get("agents", [])
-            table = Table(title="PyAgent Fleet: Active Agents")
-            table.add_column("Agent ID", style="cyan")
-            table.add_column("Type", style="magenta")
+            data = response.json()
+            agents = data.get("agents", [])
+            shards = data.get("shards", {}) # Phase 234 capability
+            
+            # Agent Table
+            agent_table = Table(title="PyAgent Fleet: Active Agents", border_style="cyan")
+            agent_table.add_column("Agent ID", style="bold cyan")
+            agent_table.add_column("Type", style="magenta")
+            agent_table.add_column("Shard", style="green")
+            agent_table.add_column("Status", style="yellow")
             
             for agent in agents:
-                table.add_row(agent["id"], agent["type"])
+                status = "[green]● Ready[/green]" if agent.get("status") == "idle" else "[yellow]● Busy[/yellow]"
+                agent_table.add_row(
+                    agent["id"], 
+                    agent["type"], 
+                    agent.get("shard_id", "default"),
+                    status
+                )
             
-            console.print(table)
+            # Shard Health Panel
+            shard_table = Table(title="Logical Shard Health", box=None)
+            shard_table.add_column("Shard Name")
+            shard_table.add_column("Load", width=20)
+            shard_table.add_column("VRAM")
+
+            for s_name, s_data in shards.items():
+                load_pct = s_data.get("load_percent", 0)
+                vram_pct = s_data.get("vram_percent", 0)
+                shard_table.add_row(
+                    s_name,
+                    f"[bar.finished]{'|' * int(load_pct/5)}[/bar.finished] {load_pct}%",
+                    f"{'[red]' if vram_pct > 90 else '[green]'}{vram_pct}%[/]"
+                )
+
+            console.print(Panel(
+                Columns([agent_table, shard_table]),
+                title="Swarm Topology (v3.3.0)",
+                subtitle="DBSCAN Clustering Active",
+                border_style="blue"
+            ))
             
             # Intelligence Harvesting
             recorder.record_lesson("cli_list_agents", {"count": len(agents)})
@@ -103,7 +138,7 @@ def list_agents() -> None:
         console.print(f"[red]Connection failed: {e}[/red]")
 
 def run_task(agent_id: str, task: str) -> None:
-    """Dispatch a task to a specific agent via the Load Balancer."""
+    """Dispatch a task with intelligent state spinners (Phase 235)."""
     payload = {
         "agent_id": agent_id,
         "task": task,
@@ -111,28 +146,41 @@ def run_task(agent_id: str, task: str) -> None:
         "context": {}
     }
     
-    console.print(f"[yellow]Dispatching task to {agent_id} via Load Balancer...[/yellow]")
-    
-    # Intelligence Harvesting
-    recorder.record_lesson("cli_task_dispatch", payload)
-    
-    try:
-        response = session.post(f"{API_BASE_URL}/task", json=payload)
-        data = response.json()
+    # Progress/Spinner management for Phase 235
+    with Progress(
+        SpinnerColumn(spinner_name="dots"), # Thinking spinner
+        TextColumn("[progress.description]{task_description}"),
+        BarColumn(),
+        TaskProgressColumn(),
+        console=console,
+        transient=True
+    ) as progress:
         
-        if response.status_code == 200 and data.get("status") == "success":
-            console.print(Panel(data["result"], title="Task Result", border_style="green"))
-            recorder.record_lesson("cli_task_success", {"result": data["result"]})
-        elif data.get("code") == 429:
-            console.print(f"[bold red]Load Balancer Rejected Request: {data.get('message')}[/bold red]")
-            recorder.record_lesson("cli_task_rejected", {"reason": data.get("message")})
-        else:
-            console.print(f"[red]Error: {data.get('message', 'Unknown error')}[/red]")
-            recorder.record_lesson("cli_task_error", {"error": data.get("message")})
+        # 1. Thinking phase
+        thinking = progress.add_task(f"[cyan]Agent {agent_id} Reasoning...", total=100)
+        recorder.record_lesson("cli_task_dispatch", payload)
+        
+        try:
+            response = session.post(f"{API_BASE_URL}/task", json=payload)
+            data = response.json()
             
-    except Exception as e:
-        console.print(f"[red]Connection failed: {e}[/red]")
-        recorder.record_lesson("cli_task_network_failure", {"exception": str(e)})
+            # 2. Working/Updating progress
+            progress.update(thinking, advance=50, description=f"[yellow]Agent {agent_id} Executing...")
+            
+            if response.status_code == 200 and data.get("status") == "success":
+                progress.update(thinking, completed=100, description="[green]Success")
+                console.print(Panel(data["result"], title=f"Result: {agent_id}", border_style="green"))
+                recorder.record_lesson("cli_task_success", {"result": data["result"]})
+            elif data.get("code") == 429:
+                console.print(f"[bold red]Load Balancer Rejected Request: {data.get('message')}[/bold red]")
+                recorder.record_lesson("cli_task_rejected", {"reason": data.get('message')})
+            else:
+                console.print(f"[red]Error: {data.get('message', 'Unknown error')}[/red]")
+                recorder.record_lesson("cli_task_error", {"error": data.get('message')})
+                
+        except Exception as e:
+            console.print(f"[red]Connection failed: {e}[/red]")
+            recorder.record_lesson("cli_task_network_failure", {"exception": str(e)})
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="PyAgent Command Line Interface")

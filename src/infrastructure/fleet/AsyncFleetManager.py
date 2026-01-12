@@ -37,41 +37,132 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Type
 
 from .FleetManager import FleetManager
+from src.core.base.DependencyGraph import DependencyGraph
 
 class AsyncFleetManager(FleetManager):
-    """Executes agent workflows in parallel using native asyncio."""
+    """Executes agent workflows in parallel using native asyncio.
+    Supports dependency-aware batching for optimized execution (Phase 232).
+    """
     
     def __init__(self, workspace_root: str, max_workers: int = 4) -> None:
         super().__init__(workspace_root)
         self.max_workers = max_workers
+        self.active_workflows: Dict[str, WorkflowState] = {}
+        self._migration_events: Dict[str, asyncio.Event] = {}
 
-    async def execute_workflow_async(self, task: str, workflow_steps: List[Dict[str, Any]]) -> str:
-        """Runs multiple agent steps in parallel using native asyncio orchestration."""
+    async def execute_workflow_async(self, task: str, workflow_steps: List[Dict[str, Any]], workflow_id: Optional[str] = None) -> str:
+        """Runs multiple agent steps in parallel with dependency-aware batching (Phase 232)."""
         logging.info(f"Starting parallel workflow: {task} with {len(workflow_steps)} steps.")
         
-        workflow_id = f"async_wf_{int(time.time())}"
+        if not workflow_id:
+            workflow_id = f"async_wf_{int(time.time())}"
         
-        # Schedule all steps as concurrent coroutines
-        tasks = [
-            self._run_single_step(step, workflow_id) 
-            for step in workflow_steps
-        ]
+        # Phase 239: Initialize or retrieve workflow state
+        if workflow_id in self.active_workflows:
+            state = self.active_workflows[workflow_id]
+            logging.info(f"Resuming workflow {workflow_id} from step index {state.get('next_batch_idx', 0)}")
+        else:
+            state = WorkflowState(task_id=workflow_id, original_request=task)
+            state.set("next_batch_idx", 0)
+            state.set("all_results", [])
+            self.active_workflows[workflow_id] = state
         
-        responses = await asyncio.gather(*tasks, return_exceptions=True)
+        # 1. Build Dependency Graph
+        graph = DependencyGraph()
+        step_map: Dict[str, Dict[str, Any]] = {}
         
-        results = []
-        for i, res in enumerate(responses):
-            step = workflow_steps[i]
-            agent_name = step.get("agent")
-            action_name = step.get("action")
+        for i, step in enumerate(workflow_steps):
+            # Ensure unique IDs for graph nodes
+            step_id = step.get("id") or f"step_{i}"
+            step_map[step_id] = step
+            graph.add_node(step_id)
+            for dep in step.get("depends_on", []):
+                graph.add_dependency(step_id, dep)
+        
+        # 2. Resolve Batches
+        try:
+            batches = graph.resolve()
+        except ValueError as e:
+            logging.error(f"Workflow dependency resolution failed: {e}")
+            return f"Error: Invalid workflow graph - {e}"
             
-            if isinstance(res, Exception):
-                logging.error(f"Async failed for {agent_name}: {res}")
-                results.append(f"### Error from {agent_name}\n{str(res)}\n")
-            else:
-                results.append(f"### Results from {agent_name} ({action_name})\n{res}\n")
-                    
-        return f"# Parallel Workflow Summary: {task}\n\n" + "\n".join(results)
+        logging.info(f"Resolved workflow into {len(batches)} parallel execution batches.")
+        
+        all_results = state.get("all_results")
+        start_idx = state.get("next_batch_idx")
+        
+        # 3. Execute Batches Sequentially (Internal parallelism per batch)
+        for batch_idx in range(start_idx, len(batches)):
+            batch = batches[batch_idx]
+            
+            # Phase 239: Check for migration signal
+            if state.get("migration_pending"):
+                logging.info(f"Migration signal received for {workflow_id}. Suspending at batch {batch_idx}.")
+                state.set("next_batch_idx", batch_idx)
+                if workflow_id in self._migration_events:
+                    self._migration_events[workflow_id].set()
+                return f"WORKFLOW_SUSPENDED: {workflow_id} at batch {batch_idx}"
+
+            logging.info(f"Executing batch {batch_idx + 1}/{len(batches)}: {batch}")
+            tasks = [
+                self._run_single_step(step_map[step_id], workflow_id) 
+                for step_id in batch
+            ]
+            
+            responses = await asyncio.gather(*tasks, return_exceptions=True)
+            
+            for i, res in enumerate(responses):
+                step_id = batch[i]
+                agent_name = step_map[step_id].get("agent")
+                
+                if isinstance(res, Exception):
+                    logging.error(f"Async failure in batch {batch_idx+1} for {agent_name}: {res}")
+                    all_results.append(f"### Error from {agent_name} ({step_id})\n{str(res)}\n")
+                else:
+                    all_results.append(f"### Results from {agent_name} ({step_id})\n{res}\n")
+        
+        # Cleanup on completion
+        if workflow_id in self.active_workflows:
+            del self.active_workflows[workflow_id]
+            
+        return f"# Parallel Workflow Summary: {task}\n\n" + "\n".join(all_results)
+
+    async def migrate_workflow(self, workflow_id: str, remote_manager: AsyncFleetManager) -> bool:
+        """Phase 239: Migrates an active workflow to another manager without downtime."""
+        if workflow_id not in self.active_workflows:
+            logging.error(f"Cannot migrate {workflow_id}: Not found.")
+            return False
+            
+        state = self.active_workflows[workflow_id]
+        state.set("migration_pending", True)
+        
+        # Create an event to wait for batch completion
+        event = asyncio.Event()
+        self._migration_events[workflow_id] = event
+        
+        logging.info(f"Waiting for workflow {workflow_id} to suspend...")
+        await event.wait()
+        
+        # Workflow is now suspended. Move state to remote.
+        success = await remote_manager.handoff_state(state)
+        
+        if success:
+            logging.info(f"Workflow {workflow_id} successfully migrated.")
+            del self.active_workflows[workflow_id]
+            del self._migration_events[workflow_id]
+            return True
+        else:
+            logging.error(f"Migration of {workflow_id} failed during handoff.")
+            state.set("migration_pending", False)
+            return False
+
+    async def handoff_state(self, state: WorkflowState) -> bool:
+        """Phase 239: Receives a migrated workflow state and prepares for resumption."""
+        logging.info(f"Received handoff for workflow {state.task_id}")
+        state.set("migration_pending", False)
+        self.active_workflows[state.task_id] = state
+        # In a real system, we'd trigger execute_workflow_async here or wait for a signal
+        return True
 
     async def _run_single_step(self, step: Dict[str, Any], workflow_id: str) -> str:
         """Internal helper to execute a single agent step within the asyncio event loop."""
@@ -100,10 +191,44 @@ class AsyncFleetManager(FleetManager):
                 res = await loop.run_in_executor(None, action_fn, *args)
                 
             self.telemetry.end_trace(trace_id, agent_name, action_name, status="success")
+            
+            # Phase 240: Legal Audit Integration
+            if isinstance(res, str):
+                res = await self._pre_commit_audit(res, agent_name)
+                
             return res
         except Exception as e:
             self.telemetry.end_trace(trace_id, agent_name, action_name, status="error", metadata={"error": str(e)})
             raise e
+
+    async def _pre_commit_audit(self, content: str, agent_name: str) -> str:
+        """Phase 240: Runs legal and compliance audits before finalizing output."""
+        if agent_name == "LegalAuditAgent":
+            return content
+            
+        try:
+            # Check if LegalAuditAgent is available
+            audit_agent = self.agents.get("LegalAudit")
+            if not audit_agent:
+                return content
+
+            # 1. License Check (Phase 238)
+            compliance = audit_agent.check_license_compliance(content)
+            if not compliance["is_compliant"]:
+                logging.warning(f"Legal Violation in {agent_name} output: {compliance['violations']}")
+                return f"[LEGAL_BLOCK]: Output from {agent_name} contains blacklisted licenses ({', '.join(compliance['violations'])}). REDACTED."
+            
+            # 2. Liability Check
+            liability = audit_agent.generate_liability_report(content)
+            if "WARNING" in liability:
+                logging.warning(f"Liability Risk in {agent_name} output: {liability}")
+                # Append disclaimer instead of blocking
+                return content + "\n\n---\n*DISCLAIMER: This output contains language flagged for liability risk and has not been verified for legal accuracy.*"
+                
+        except Exception as e:
+            logging.debug(f"Audit failed (Agent likely not found or errored): {e}")
+            
+        return content
 
 if __name__ == "__main__":
     # Test script
