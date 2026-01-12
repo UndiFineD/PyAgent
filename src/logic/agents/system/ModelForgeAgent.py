@@ -38,6 +38,7 @@ from pathlib import Path
 from typing import Dict, Any, List, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.logic.agents.system.core.ModelRegistryCore import ModelRegistryCore
 
 
 class ModelForgeAgent(BaseAgent):
@@ -52,13 +53,25 @@ class ModelForgeAgent(BaseAgent):
         self.adapters_dir.mkdir(parents=True, exist_ok=True)
         self.datasets_dir = self.forge_dir / "datasets"
         self.datasets_dir.mkdir(parents=True, exist_ok=True)
+        
+        self.registry = ModelRegistryCore()
+        # Simulated quality history for agents
+        self.agent_quality_history: Dict[str, List[float]] = {}
 
-        self._system_prompt = (
-            "You are the Model Forge Agent. Your specialty is the Neural Forge Pattern. "
-            "You manage local fine-tuning processes, dataset preparation for LoRA, "
-            "and model optimization. You can trigger fine-tuning jobs, evaluate adapters, "
-            "and select the best niche models for specific tasks."
-        )
+    def monitor_agent_quality(self, agent_name: str, last_score: float) -> str:
+        """Monitors agent response quality and triggers fine-tuning if needed."""
+        if agent_name not in self.agent_quality_history:
+            self.agent_quality_history[agent_name] = []
+        
+        self.agent_quality_history[agent_name].append(last_score)
+        
+        if self.registry.should_trigger_finetuning(self.agent_quality_history[agent_name]):
+            logging.warning(f"ModelForge: Triggering autonomous fine-tuning for {agent_name} due to low quality scores.")
+            self.start_finetuning(f"fix_{agent_name.lower()}")
+
+    def get_adapter_for_task(self, task_type: str) -> Optional[str]:
+        """Exposes the registry for picking expert adapters."""
+        return self.registry.get_adapter_for_task(task_type)
 
     @as_tool
     def prepare_dataset(self, task_name: str, examples: List[Dict[str, str]]) -> str:

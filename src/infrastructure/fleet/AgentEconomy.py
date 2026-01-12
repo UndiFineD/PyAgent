@@ -35,7 +35,9 @@ Manages credits, bidding, and automated payments between agents.
 import logging
 import time
 import hashlib
+import json
 from typing import Dict, List, Any, Optional
+from src.infrastructure.fleet.core.EconomyCore import EconomyCore
 
 class MarketPricingEngine:
     """Calculates dynamic pricing based on system load and hardware specs."""
@@ -97,6 +99,21 @@ class AgentEconomy:
         # Record to immutable log
         self._record_transaction(sender, receiver, amount, reason)
         return True
+
+    def request_gpu_priority(self, agent_id: str, bid_amount: float, importance: float) -> bool:
+        """Process a bid for high-priority GPU access (Phase 179)."""
+        balance = self.get_balance(agent_id)
+        if bid_amount > balance:
+            return False
+            
+        priority = EconomyCore.calculate_bid_priority(bid_amount, importance, 0.5)
+        logging.info(f"AgentEconomy: Agent {agent_id} bidding {bid_amount} credits. Priority: {priority:.2f}")
+        
+        # Threshold for high priority
+        if priority > 100.0:
+            self.transfer_credits(agent_id, "SYSTEM_GPU_POOL", bid_amount, "GPU_PRIORITY_BID")
+            return True
+        return False
 
     def _record_transaction(self, sender: str, receiver: str, amount: float, reason: str) -> None:
         transaction = {

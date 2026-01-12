@@ -35,6 +35,7 @@ from typing import Dict, List, Any, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+from src.logic.agents.development.core.AndroidCore import AndroidCore
 
 class AndroidAgent(BaseAgent):
     """
@@ -44,6 +45,7 @@ class AndroidAgent(BaseAgent):
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
+        self.core = AndroidCore()
         self._system_prompt = (
             "You are the Android Automation Agent. "
             "You control mobile devices by parsing the Accessibility Tree (XML) "

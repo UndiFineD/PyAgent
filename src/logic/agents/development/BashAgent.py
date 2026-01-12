@@ -31,20 +31,38 @@ __version__ = VERSION
 
 
 from src.logic.agents.development.CoderAgent import CoderAgent
-from src.core.base.utilities import create_main_function
+from src.core.base.utilities import create_main_function, as_tool
+from src.logic.agents.development.core.BashCore import BashCore
 import logging
 
 class BashAgent(CoderAgent):
-    """Agent for shell scripts."""
+    """Agent for shell scripts (Phase 175 enhanced)."""
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._language = "bash"
+        self.core = BashCore()
         self._system_prompt = (
             "You are an Expert Shell Scripter. "
             "Focus on POSIX compliance, shell-check standards, error handling (set -e), "
             "and secure handling of variables."
         )
+
+    @as_tool
+    def lint_generated_script(self, script_path: str) -> str:
+        """Lints a bash script using shellcheck and returns high-level report."""
+        print(f"[BASH] Linting script: {script_path}...")
+        results = self.core.lint_script(script_path)
+        if "error" in results:
+            return f"LINT ERROR: {results['error']}"
+        if results["valid"]:
+            return "SUCCESS: No issues found by shellcheck."
+        
+        issues = results["issues"]
+        report = [f"Found {len(issues)} issues:"]
+        for issue in issues[:5]: # Top 5
+            report.append(f" - Line {issue.get('line')}: {issue.get('message')} ({issue.get('code')})")
+        return "\n".join(report)
 
     def _get_default_content(self) -> str:
         return "#!/bin/bash\nset -euo pipefail\necho 'Hello World'\n"

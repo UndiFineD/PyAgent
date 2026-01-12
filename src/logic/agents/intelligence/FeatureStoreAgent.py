@@ -39,20 +39,41 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore
 
 
 class FeatureStoreAgent(BaseAgent):
-    """Manages the lifecycle of high-utility context features for the fleet."""
+    """Manages the lifecycle of high-utility context features for the fleet.
+    Integrated with SynthesisCore for feature vectorization and insight merging.
+    """
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.feature_dir = Path("data/memory/agent_store/features")
         self.feature_dir.mkdir(parents=True, exist_ok=True)
-        self._system_prompt = (
-            "You are the Feature Store Agent. Your role is to serve high-utility 'Agentic Features' "
-            "to the rest of the fleet. You ensure that common code patterns, pre-validated logic blocks, "
-            "and performance characteristics are indexed and retrieved efficiently."
-        )
+        self.core = SynthesisCore()
+
+    @as_tool
+    def store_vectorized_insight(self, insight_text: str, tags: List[str]) -> str:
+        """
+        Vectorizes a text insight and stores it for swarm-wide retrieval.
+        """
+        vector = self.core.vectorize_insight(insight_text)
+        feature_name = f"insight_{hash(insight_text)}"
+        return self.register_feature(feature_name, vector, {"original_text": insight_text, "tags": tags})
+
+    @as_tool
+    def merge_swarm_insights(self, feature_names: List[str]) -> List[float]:
+        """
+        Merges multiple vectorized insights into a single 'Global Fleet Vector'.
+        """
+        vectors = []
+        for name in feature_names:
+            v = self.get_feature(name)
+            if v:
+                vectors.append(v)
+        
+        return self.core.merge_feature_vectors(vectors)
 
     @as_tool
     def register_feature(self, feature_name: str, value: Any, metadata: Optional[Dict[str, Any]] = None) -> str:
