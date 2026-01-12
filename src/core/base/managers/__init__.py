@@ -43,5 +43,6 @@ from .SystemManagers import (
     FilePriorityManager, ResponseCache, StatePersistence, 
     EventManager, HealthChecker, ProfileManager
 )
+from .ResourceQuotaManager import ResourceQuotaManager, QuotaConfig
 
 

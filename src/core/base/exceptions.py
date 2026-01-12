@@ -36,3 +36,6 @@ class ModelError(PyAgentException):
 
 class ConfigurationError(PyAgentException):
     """Errors in settings or manifest validation."""
+
+class CycleInterrupt(PyAgentException):
+    """Interruption of an agent cycle (e.g., quota exceeded)."""
