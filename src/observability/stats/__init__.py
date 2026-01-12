@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 """Lazy-loading entry point for observability.stats."""
 
 =======
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 from __future__ import annotations
 from typing import Any, TYPE_CHECKING
 from src.core.base.lifecycle.version import VERSION
@@ -58,6 +61,7 @@ if TYPE_CHECKING:
     from .streaming import StatsStreamManager, StatsStreamer
     from .transparency_agent import TransparencyAgent
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 _LAZY_REGISTRY = {
     "ABComparator": ("src.observability.stats.ab_engine", "ABComparator"),
@@ -136,10 +140,15 @@ def __getattr__(name: str) -> Any:
 
 __all__ = ["VERSION"] + list(_LAZY_REGISTRY.keys())
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 from .observability_core import *
 from .metrics_engine import *
 from .exporters import *
 from .StatsAgent import StatsAgent
 from .ReportingAgent import ReportingAgent
 from .TransparencyAgent import TransparencyAgent
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))

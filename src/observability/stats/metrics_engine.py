@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 <<<<<<< HEAD
+<<<<<<< HEAD
 from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Unified logic for metric calculation, processing, and management.
@@ -38,6 +39,8 @@ class ObservabilityEngine:
     """Provides telemetry and performance tracking for the agent fleet."""
 
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 # Copyright 2026 PyAgent Authors
 # Unified logic for metric calculation, processing, and management.
 from __future__ import annotations
@@ -61,7 +64,10 @@ logger = logging.getLogger(__name__)
 class ObservabilityEngine:
     """Provides telemetry and performance tracking for the agent fleet."""
     
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
     def __init__(self, workspace_root: str = None, fleet: Any = None) -> None:
         if fleet and hasattr(fleet, "workspace_root"):
             self.workspace_root = Path(fleet.workspace_root)
@@ -70,6 +76,7 @@ class ObservabilityEngine:
         else:
             self.workspace_root = Path(".")
 <<<<<<< HEAD
+<<<<<<< HEAD
 
         self.telemetry_file: Path = self.workspace_root / ".agent_telemetry.json"
         self.core = ObservabilityCore()
@@ -77,31 +84,44 @@ class ObservabilityEngine:
         self._start_times: dict[str, float] = {}
         self._otel_spans: dict[str, str] = {}  # Map trace_id -> tel_span_id
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
             
         self.telemetry_file = self.workspace_root / ".agent_telemetry.json"
         self.core = ObservabilityCore()
         self.metrics: List[AgentMetric] = []
         self._start_times: Dict[str, float] = {}
         self._otel_spans: Dict[str, str] = {} # Map trace_id -> tel_span_id
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         self.cost_engine = TokenCostEngine()
         self.prometheus = PrometheusExporter()
         self.otel = OTelManager()
         self.metrics_exporter = MetricsExporter()
 <<<<<<< HEAD
+<<<<<<< HEAD
         self.log_buffer: list[dict[str, Any]] = []
 =======
         self.log_buffer: List[Dict[str, Any]] = []
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+        self.log_buffer: List[Dict[str, Any]] = []
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         self.load()
 
     def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:
         """Logs a system event in a structured format for ELK.
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
         
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+        
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         Args:
             agent_id: The ID of the agent generating the event.
             event_type: The category of event (e.g., 'task_complete', 'error').
@@ -110,6 +130,7 @@ class ObservabilityEngine:
         """
         # Noise Reduction: Only store significant events in the persistent log buffer.
         # Metrics are still recorded for everything.
+<<<<<<< HEAD
 <<<<<<< HEAD
         important_types: list[str] = [
             "agent_failure",
@@ -121,11 +142,16 @@ class ObservabilityEngine:
 
         should_log: bool = level in important_levels or event_type in important_types
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         important_types = ["agent_failure", "security_alert", "workflow_error", "system_crash"]
         important_levels = ["ERROR", "WARNING", "CRITICAL"]
         
         should_log = level in important_levels or event_type in important_types
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 
         if should_log:
             event = {
@@ -134,16 +160,22 @@ class ObservabilityEngine:
                 "event_type": event_type,
                 "level": level,
 <<<<<<< HEAD
+<<<<<<< HEAD
                 "data": data,
             }
             self.log_buffer.append(event)
 
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
                 "data": data
             }
             self.log_buffer.append(event)
             
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         # Always record metrics regardless of log storage
         self.prometheus.record_metric("agent_events_total", 1.0, {"agent": agent_id, "type": event_type})
         self.metrics_exporter.record_agent_call(agent_id, 0.0, True)
@@ -151,16 +183,22 @@ class ObservabilityEngine:
     def export_to_elk(self) -> str:
         """Simulates exporting log buffer to ELK stack."""
 <<<<<<< HEAD
+<<<<<<< HEAD
         count: int = len(self.log_buffer)
         # In real scenario: push to Elasticsearch/Logstash
         json.dumps(self.log_buffer)
         self.log_buffer = []
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         count = len(self.log_buffer)
         # In real scenario: push to Elasticsearch/Logstash
         log_batch = json.dumps(self.log_buffer)
         self.log_buffer = [] 
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         self.metrics_exporter.export_to_grafana()
         return f"Exported {count} events to ELK/Logstash."
 
@@ -168,6 +206,7 @@ class ObservabilityEngine:
         """Returns Prometheus scrape response."""
         return self.metrics_exporter.get_prometheus_payload()
 
+<<<<<<< HEAD
 <<<<<<< HEAD
     def generate_dashboard(self, shard_name: str | None = None) -> str:
         """
@@ -181,6 +220,8 @@ class ObservabilityEngine:
         except RuntimeError as e:
             return f"Error: GrafanaDashboardGenerator not available: {e}"
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
     def generate_dashboard(self, shard_name: Optional[str] = None) -> str:
         """
         Triggers Grafana JSON dashboard generation (Phase 126).
@@ -191,12 +232,16 @@ class ObservabilityEngine:
                 return generator.generate_shard_obs(shard_name)
             return generator.generate_fleet_summary()
         return "Error: GrafanaGenerator not available."
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 
     def start_trace(self, trace_id: str) -> None:
         """Start timing an operation."""
         self._start_times[trace_id] = time.time()
         # Also start OTel span and store its UUID
+<<<<<<< HEAD
 <<<<<<< HEAD
         span_id: str = self.otel.start_span(trace_id)
         self._otel_spans[trace_id] = span_id
@@ -213,17 +258,23 @@ class ObservabilityEngine:
         metadata: dict[str, Any] | None = None,
     ) -> None:
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         span_id = self.otel.start_span(trace_id)
         self._otel_spans[trace_id] = span_id
 
     def end_trace(self, trace_id: str, agent_name: str, operation: str, status: str = "success", 
                   input_tokens: int = 0, output_tokens: int = 0, model: str = "unknown",
                   metadata: Optional[Dict[str, Any]] = None) -> None:
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         """End timing and record metric with cost estimation."""
         if trace_id not in self._start_times:
             logging.warning(f"No start trace found for {trace_id}")
             return
+<<<<<<< HEAD
 <<<<<<< HEAD
 
         _duration: float = (time.time() - self._start_times.pop(trace_id)) * 1000  # noqa: F841
@@ -270,6 +321,8 @@ class ObservabilityEngine:
 
     def get_reliability_weights(self, agent_names: list[str]) -> list[float]:
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
             
         duration = (time.time() - self._start_times.pop(trace_id)) * 1000
         
@@ -306,12 +359,16 @@ class ObservabilityEngine:
             self.metrics = self.metrics[-500:] # Prune memory
 
     def get_reliability_weights(self, agent_names: List[str]) -> List[float]:
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         """Exposes core reliability logic for consensus protocols."""
         return self.core.calculate_reliability_scores(agent_names)
 
     def trace_workflow(self, workflow_name: str, duration: float) -> None:
         """Records a workflow trace for OpenTelemetry visualization."""
+<<<<<<< HEAD
 <<<<<<< HEAD
         self.prometheus.record_metric("workflow_duration_seconds", duration, {"workflow": workflow_name})
         self.log_event(
@@ -354,6 +411,8 @@ class ObservabilityEngine:
             data["total_cost"] = round(data["cost"], 6)
         return agents
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         self.prometheus.record_metric(
             "workflow_duration_seconds",
             duration,
@@ -390,11 +449,15 @@ class ObservabilityEngine:
             del summary["agents"][agent]["cost"]
             
         return summary
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 
     def save(self) -> None:
         """Persist telemetry to disk."""
         try:
+<<<<<<< HEAD
 <<<<<<< HEAD
             data: list[dict[str, Any]] = [asdict(m) for m in self.metrics]
             self.telemetry_file.write_text(json.dumps(data, indent=2))
@@ -403,17 +466,23 @@ class ObservabilityEngine:
             import traceback
             traceback.print_exc()
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
             data = [asdict(m) for m in self.metrics]
             self.telemetry_file.write_text(json.dumps(data, indent=2))
         except Exception as e:
             logging.error(f"Failed to save telemetry: {e}")
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 
     def load(self) -> None:
         """Load telemetry from disk."""
         if self.telemetry_file.exists():
             try:
                 data = json.loads(self.telemetry_file.read_text())
+<<<<<<< HEAD
 <<<<<<< HEAD
 
                 self.metrics = [AgentMetric(**m) for m in data]
@@ -441,6 +510,8 @@ class ModelFallbackEngine:
     def get_fallback_model(self, current_model: str) -> str:
         return self.core.determine_next_model(current_model)
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
                 self.metrics = [AgentMetric(**m) for m in data]
             except Exception as e:
                 logging.error(f"Failed to load telemetry: {e}")
@@ -2963,4 +3034,7 @@ class MetricNamespaceManager:
         return " / ".join(self.get_namespace_hierarchy(namespace))
 
 
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))

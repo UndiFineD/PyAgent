@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,10 +35,15 @@ __all__ = [
     "Span",
 ]
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 # Exporters package
 from .MetricsExporter import *
 from .StatsExporter import *
 from .PrometheusExporter import *
 from .CloudExporter import *
 from .OTelManager import *
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))

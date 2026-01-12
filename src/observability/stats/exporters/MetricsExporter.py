@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,12 +17,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 
 """Exporter for high-level fleet metrics.
 Sends telemetry to specialized backends like Prometheus, InfluxDB, or Grafana Cloud.
 """
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 import logging
 import time
@@ -30,6 +37,8 @@ class MetricsExporter:
     """Consolidates all fleet telemetry and exposes it for external monitoring."""
     
 =======
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 from __future__ import annotations
 
 import logging
@@ -80,7 +89,10 @@ __version__ = VERSION
 class MetricsExporter:
     """Consolidates all fleet telemetry and exposes it for external monitoring."""
 
+<<<<<<< HEAD
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
     def __init__(self) -> None:
         self.prometheus = PrometheusExporter()
         self.last_export_time = time.time()
@@ -89,9 +101,13 @@ class MetricsExporter:
         """Records a single agent execution event."""
         labels = {"agent": agent_name, "status": "success" if success else "failure"}
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         self.prometheus.record_metric("agent_call_duration_ms", duration_ms, labels)
         self.prometheus.record_metric("agent_calls_total", 1.0, labels)
 
@@ -107,18 +123,26 @@ class MetricsExporter:
     def export_to_grafana(self) -> str:
         """Simulates pushing metrics to a Grafana Cloud API."""
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         payload = self.get_prometheus_payload()
         logging.info(f"MetricsExporter: Pushing batch to Grafana... ({len(payload)} bytes)")
         self.last_export_time = time.time()
         return "Export successful."
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+=======
+
+>>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 if __name__ == "__main__":
     exporter = MetricsExporter()
     exporter.record_agent_call("CoderAgent", 1500.0, True)
