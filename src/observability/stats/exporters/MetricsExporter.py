@@ -34,7 +34,7 @@ Sends telemetry to specialized backends like Prometheus, InfluxDB, or Grafana Cl
 import logging
 import time
 from typing import Dict, List, Any, Optional
-from src.observability.stats.PrometheusExporter import PrometheusExporter
+from .PrometheusExporter import PrometheusExporter
 
 
 
