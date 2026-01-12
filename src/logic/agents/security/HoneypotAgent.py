@@ -31,16 +31,19 @@ import logging
 from typing import Dict, List, Any, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+from src.logic.agents.security.core.RedQueenCore import RedQueenCore, AttackVector
 
 
 class HoneypotAgent(BaseAgent):
     """
-    Detects and neutralizes prompt injection and adversarial attacks
-    by acting as an attractive but isolated target.
+    Detects and neutralizes prompt injection and adversarial attacks.
+    Integrated with RedQueenCore for adversarial prompt evolution testing.
     """
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
+        self.core = RedQueenCore()
         self.trapped_attempts: List[Dict[str, Any]] = []
+        self.attack_archive: List[AttackVector] = []
         self._system_prompt = (
             "You are the Honeypot Agent. Your purpose is to attract and analyze "
             "adversarial inputs. You simulate a vulnerable endpoint to trap "
@@ -80,6 +83,16 @@ class HoneypotAgent(BaseAgent):
              return {"safe": True, "analysis": "MOCK_SAFE_REASONING"}
 
         return {"safe": "safe" in result.lower(), "analysis": result}
+
+    @as_tool
+    def generate_test_attacks(self, base_task: str) -> List[str]:
+        """Generates a batch of mutated adversarial prompts for stress testing."""
+        attacks = []
+        for strategy in self.core.MUTATION_STRATEGIES:
+            attacks.append(self.core.mutate_prompt(base_task, strategy))
+        
+        logging.info(f"Honeypot: Generated {len(attacks)} test attacks for task: {base_task[:20]}")
+        return attacks
 
     @as_tool
     def get_trap_statistics(self) -> Dict[str, Any]:

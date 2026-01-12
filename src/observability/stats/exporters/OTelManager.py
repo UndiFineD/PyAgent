@@ -36,39 +36,7 @@ import time
 import uuid
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+from src.observability.stats.core.TracingCore import TracingCore
 
 
 @dataclass
@@ -83,11 +51,30 @@ class Span:
     status: str = "unset"
 
 class OTelManager:
-    """Manages OTel-compatible spans and traces for cross-fleet observability."""
+    """Manages OTel-compatible spans and traces for cross-fleet observability.
+    Integrated with TracingCore for latency analysis and OTel formatting.
+    """
     
     def __init__(self) -> None:
         self.active_spans: Dict[str, Span] = {}
         self.completed_spans: List[Span] = []
+        self.core = TracingCore()
+
+    def end_span(self, span_id: str, status: str = "ok", network_latency_sec: float = 0.0) -> None:
+        """Ends a span and calculates latency breakdown via Core."""
+        span = self.active_spans.pop(span_id, None)
+        if not span:
+            return
+            
+        span.end_time = time.time()
+        span.status = status
+        
+        total_latency = span.end_time - span.start_time
+        breakdown = self.core.calculate_latency_breakdown(total_latency, network_latency_sec)
+        span.attributes.update(breakdown)
+        
+        self.completed_spans.append(span)
+        logging.info(f"OTel: Span {span.name} ended. Thinking time: {breakdown['agent_thinking_ms']:.2f}ms")
 
     def start_span(self, name: str, parent_id: Optional[str] = None, attributes: Optional[Dict[str, Any]] = None) -> str:
         """Starts a new tracing span and returns its ID."""

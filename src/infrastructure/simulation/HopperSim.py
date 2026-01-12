@@ -35,6 +35,8 @@ Part of the Phase 130 performance optimization suite.
 from dataclasses import dataclass
 from enum import Enum, auto
 import math
+import time
+from src.infrastructure.simulation.core.SimulationCore import SimulationCore
 
 class Precision(Enum):
     FP8 = auto()
@@ -94,10 +96,28 @@ class HopperSim:
         return max(theoretical_lat, memory_lat) * overhead_factor
 
     def simulate_distributed_training(self, batch_size: int, seq_len: int, d_model: int, num_gpus: int) -> dict:
-        """Basic simulation of transformer layer training step on N GPUs."""
         # QKV Projections: 3 * [B, S, D] * [D, D]
         m, n, k = batch_size * seq_len, d_model, d_model
         latency_qkv = self.estimate_matmul_latency(m, n, k) * 3
+        return {"qkv_latency_ms": latency_qkv}
+
+    def run_swarm_stress_test(self, agent_count: int, steps: int = 10):
+        """Runs a swarm stress test with stochastic failures (Phase 181)."""
+        print(f"=== SWARM STRESS TEST: {agent_count} AGENTS ===")
+        
+        core = SimulationCore()
+        active_agents = agent_count
+        
+        for step in range(1, steps + 1):
+            # Stochastic failures (10%)
+            failures = core.calculate_stochastic_failures(active_agents, 0.1)
+            active_agents -= len(failures)
+            
+            bar = core.format_progress_bar(step, steps)
+            print(f"Step {step:02d}: {bar} | Failed: {len(failures)} | Alive: {active_agents}")
+            time.sleep(0.1) # Simulate time passing
+            
+        print(f"=== TEST COMPLETE. Final Resilience: {active_agents/agent_count*100:.1f}% ===")
         
         # Attention: [B, S, S] * [S, D] (Simplified)
         latency_attn = self.estimate_matmul_latency(batch_size * seq_len, seq_len, d_model)

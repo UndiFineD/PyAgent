@@ -29,8 +29,29 @@ __version__ = VERSION
 
 
 from src.core.base.BaseAgent import BaseAgent
-import non_existent_package_123
+from src.infrastructure.plugins.core.ImportHealerCore import ImportHealerCore
+import logging
+import json
+import os
 
 class BrokenImportAgent(BaseAgent):
+    """
+    Agent designed to catch and heal broken imports in the fleet (Phase 186).
+    """
     def __init__(self, file_path) -> None:
         super().__init__(file_path)
+        self.core = ImportHealerCore()
+        self.import_map_file = "data/system/import_map.json"
+        os.makedirs(os.path.dirname(self.import_map_file), exist_ok=True)
+
+    def heal_import_error(self, error_msg: str):
+        fix = self.core.suggest_fix(error_msg)
+        print(f"[HEALER] Detected broken import. {fix}")
+        return fix
+
+    def update_global_import_map(self):
+        print("[HEALER] Updating global import map...")
+        imap = self.core.build_internal_import_map(os.path.join(self._workspace_root, "src"))
+        with open(self.import_map_file, "w") as f:
+            json.dump(imap, f, indent=2)
+        print(f"[HEALER] Map saved to {self.import_map_file}")
