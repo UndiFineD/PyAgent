@@ -16,7 +16,11 @@
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
+"""Documentation refresh and regeneration utility.
 
+Automatically regenerates project documentation based on current codebase state,
+including API docs, architecture diagrams, and status reports.
+"""
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
@@ -30,7 +34,7 @@ __version__ = VERSION
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout, format="%(levelname)s: %(message)s")
 
-def main():
+def main() -> None:
     agent_dir = Path("src")
     output_dir = Path("docs/autodoc")
     

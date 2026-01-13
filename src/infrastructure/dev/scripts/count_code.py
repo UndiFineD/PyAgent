@@ -16,7 +16,11 @@
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
+"""Code metrics and line counting utilities for analyzing PyAgent codebase.
 
+Provides functions to count lines of code, measure file sizes, and generate
+code statistics across the project.
+"""
 from __future__ import annotations
 from src.core.base.version import VERSION
 import os
@@ -24,7 +28,7 @@ import ast
 
 __version__ = VERSION
 
-def count_real_code(file_path):
+def count_real_code(file_path: str) -> int:
     if os.path.basename(file_path) == "__init__.py":
         return 1000 # Ignore in this filter
     

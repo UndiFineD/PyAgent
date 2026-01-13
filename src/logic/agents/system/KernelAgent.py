@@ -54,7 +54,7 @@ class KernelAgent(BaseAgent):
     @as_tool
     async def get_system_info(self) -> str:
         """Returns details about the current operating system and environment."""
-        def get_info():
+        def get_info() -> str:
             info = {
                 "os": platform.system(),
                 "version": platform.version(),

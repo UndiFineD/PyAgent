@@ -55,13 +55,13 @@ class StructuredLogger:
         self.log_file = Path(log_file)
         self._ensure_log_dir()
 
-    def _ensure_log_dir(self):
+    def _ensure_log_dir(self) -> None:
         self.log_file.parent.mkdir(parents=True, exist_ok=True)
         # Phase 277: Compress if > 100MB
         if self.log_file.exists() and self.log_file.stat().st_size > 100 * 1024 * 1024:
             self._compress_logs()
 
-    def _compress_logs(self):
+    def _compress_logs(self) -> None:
         """Compresses current log file to .json.gz (Phase 277)."""
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         compressed_file = self.log_file.with_name(f"{self.log_file.stem}_{timestamp}.json.gz")
@@ -82,7 +82,7 @@ class StructuredLogger:
             masked = pattern.sub("[REDACTED]", masked)
         return masked
 
-    def log(self, level: str, message: str, **kwargs):
+    def log(self, level: str, message: str, **kwargs: Any) -> None:
         """Log a structured entry."""
         # Clean sensitive data from message and kwargs
         clean_message = self._mask_sensitive(message)
@@ -108,17 +108,17 @@ class StructuredLogger:
         except Exception as e:
             logging.error(f"StructuredLogger failed to write: {e}")
 
-    def info(self, message: str, **kwargs):
+    def info(self, message: str, **kwargs: Any) -> None:
         self.log("info", message, **kwargs)
 
-    def error(self, message: str, **kwargs):
+    def error(self, message: str, **kwargs: Any) -> None:
         self.log("error", message, **kwargs)
 
-    def warning(self, message: str, **kwargs):
+    def warning(self, message: str, **kwargs: Any) -> None:
         self.log("warning", message, **kwargs)
 
-    def debug(self, message: str, **kwargs):
+    def debug(self, message: str, **kwargs: Any) -> None:
         self.log("debug", message, **kwargs)
 
-    def success(self, message: str, **kwargs):
+    def success(self, message: str, **kwargs: Any) -> None:
         self.log("success", message, **kwargs)

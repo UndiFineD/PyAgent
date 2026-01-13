@@ -23,14 +23,13 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from abc import ABC, abstractmethod
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
 __version__ = VERSION
-
-try:
-    from . import BackendFunction
-except ImportError:
-    from src.logic.strategies import BackendFunction
 
 class AgentStrategy(ABC):
     """Abstract base class for agent execution strategies."""

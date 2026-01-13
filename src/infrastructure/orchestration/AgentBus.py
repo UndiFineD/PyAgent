@@ -44,19 +44,19 @@ class AgentCommunicationBus:
         self.handlers: dict[str, list[Callable]] = {}
         self._running = False
 
-    async def broadcast(self, topic: str, message: dict[str, Any]):
+    async def broadcast(self, topic: str, message: dict[str, Any]) -> None:
         """Broadcasts a message to all agents subscribed to a topic."""
         payload = orjson.dumps({"topic": topic, "data": message})
         await self.publisher.send_multipart([topic.encode(), payload])
 
-    def subscribe(self, topic: str, handler: Callable[[dict[str, Any]], None]):
+    def subscribe(self, topic: str, handler: Callable[[dict[str, Any]], None]) -> None:
         """Subscribes a handler to a specific topic."""
         if topic not in self.handlers:
             self.handlers[topic] = []
             self.subscriber.setsockopt_string(zmq.SUBSCRIBE, topic)
         self.handlers[topic].append(handler)
 
-    async def start(self):
+    async def start(self) -> None:
         """Starts the listening loop."""
         self._running = True
         try:
@@ -77,7 +77,7 @@ class AgentCommunicationBus:
         finally:
             self.stop()
 
-    def stop(self):
+    def stop(self) -> None:
         """Stops the bus and cleans up sockets."""
         self._running = False
         self.publisher.close()
@@ -86,10 +86,10 @@ class AgentCommunicationBus:
 
 if __name__ == "__main__":
     # Example usage
-    async def run_example():
+    async def run_example() -> None:
         bus = AgentCommunicationBus()
         
-        def on_msg(data):
+        def on_msg(data: dict[str, Any]) -> None:
             print(f"Received: {data}")
             
         bus.subscribe("telemetry", on_msg)

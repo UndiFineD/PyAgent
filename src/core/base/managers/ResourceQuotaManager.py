@@ -32,13 +32,13 @@ class ResourceQuotaManager:
     Phase 245: RESOURCE QUOTAS & BUDGETS
     """
     
-    def __init__(self, config: QuotaConfig | None = None):
+    def __init__(self, config: QuotaConfig | None = None) -> None:
         self.config = config or QuotaConfig()
         self.usage = ResourceUsage()
         self._is_interrupted = False
         self._interrupt_reason: str | None = None
 
-    def update_usage(self, tokens_input: int = 0, tokens_output: int = 0, cycles: int = 0):
+    def update_usage(self, tokens_input: int = 0, tokens_output: int = 0, cycles: int = 0) -> bool:
         """Update current usage metrics."""
         self.usage.tokens_input += tokens_input
         self.usage.tokens_output += tokens_output

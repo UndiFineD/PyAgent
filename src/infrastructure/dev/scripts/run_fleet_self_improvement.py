@@ -24,9 +24,15 @@ Scans the workspace for issues, applies autonomous fixes, and harvests external 
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
 import os
 import sys
+
+# Ensure the project root is in PYTHONPATH before importing from src
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
+if project_root not in sys.path:
+    sys.path.insert(0, project_root)
+
+from src.core.base.version import VERSION
 import json
 import time
 import logging
@@ -44,14 +50,9 @@ try:
 except ImportError:
     pass
 
-# Ensure the project root is in PYTHONPATH before importing from src
-project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", ".."))
-if project_root not in sys.path:
-    sys.path.insert(0, project_root)
-
 __version__ = VERSION
 
-def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, current_cycle: int = 1, model_name: str = "gemini-3-flash") -> None:
+def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, context_path: str = None, current_cycle: int = 1, model_name: str = "gemini-3-flash") -> None:
     """Run a single improvement cycle."""
     start_time = time.time()
     print(f"\n--- CYCLE {current_cycle} STARTING ---")
@@ -60,57 +61,60 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, current_c
     # 0. Load Strategic Directive / Directives
     strategic_note = ""
     target_dirs = ["src"]
-    if prompt_path:
-        p_path = Path(prompt_path)
+    
+    # Load and merge both prompt and context files
+    directive_files = [f for f in [prompt_path, context_path] if f]
+    
+    for directive_file in directive_files:
+        p_path = Path(directive_file)
         if not p_path.is_absolute():
-            p_path = Path(root) / prompt_path
+            p_path = Path(root) / directive_file
         if p_path.exists():
             try:
-                strategic_note = p_path.read_text(encoding="utf-8")
-                # Parse @focus: markers to reduce scan surface (Cycle Time Optimization)
-                # Supports both simple comma-separated and JSON-style lists
-                # Improved multi-line @focus parsing (Phase 140 fix)
-                focus_match = re.search(r"@focus:\s*(\[.*?\]|.*?\n)", strategic_note, re.DOTALL | re.IGNORECASE)
-                if focus_match:
-                    focus_val = focus_match.group(1).strip()
-                    if focus_val.startswith("[") and focus_val.endswith("]"):
-                        try:
-                            # Clean up multi-line formatting inside the list
-                            clean_focus = re.sub(r'[\s\n]+', ' ', focus_val)
-                            target_dirs = json.loads(clean_focus.replace("'", "\""))
-                        except Exception:
-                            # Fallback for complex lists
-                            inner = focus_val[1:-1].split(",")
-                            target_dirs = [d.strip().strip('"').strip("'").strip() for d in inner if d.strip()]
-                    else:
-                        target_dirs = [d.strip() for d in focus_val.split(",") if d.strip()]
-                    print(f" - Directive Focus: {target_dirs}")
-                
-                # Parse and execute @cmd: markers (Proactive Fixes)
-                import shlex
-                cmd_matches = re.findall(r"@cmd:\s*(.*)", strategic_note, re.IGNORECASE)
-                for cmd in cmd_matches:
-                    clean_cmd = cmd.strip().strip('"').strip("'")
-                    print(f" - Executing Directive Command: {clean_cmd}")
-                    # Use shlex for safer execution (Phase 147 Security hardening)
-                    # We avoid shell=True to prevent command injection warnings and risks
-                    try:
-                        if any(c in clean_cmd for c in ["|", ">", "<", "&", ";", "*"]):
-                            # Minimal shell usage for pipes/redirects ONLY
-                            subprocess.run(clean_cmd, shell=True, cwd=root, check=False) # nosec
-                        else:
-                            # Direct execution for simple commands
-                            subprocess.run(shlex.split(clean_cmd), cwd=root, check=False)
-                    except Exception as e:
-                        print(f"   - Command failed: {e}")
-
-                # NEW: Parse and execute @python: blocks
-                python_blocks = re.findall(r"@python:\s*\"\"\"(.*?)\"\"\"", strategic_note, re.DOTALL | re.IGNORECASE)
-                for py_code in python_blocks:
-                    print(" - Executing Directive Python Block...")
-                    exec(py_code, {"fleet": fleet, "root": root, "os": os, "sys": sys, "Path": Path})
+                file_content = p_path.read_text(encoding="utf-8")
+                strategic_note += "\n" + file_content
             except Exception as e:
-                print(f" - Failed to parse directive: {e}")
+                print(f" - Failed to load {directive_file}: {e}")
+    
+    # Parse merged directives
+    if strategic_note:
+        # Parse @focus: markers to reduce scan surface (Cycle Time Optimization)
+        # Supports both simple comma-separated and JSON-style lists
+        # Improved multi-line @focus parsing (Phase 140 fix)
+        focus_match = re.search(r"@focus:\s*(\[.*?\]|.*?\n)", strategic_note, re.DOTALL | re.IGNORECASE)
+        if focus_match:
+            focus_val = focus_match.group(1).strip()
+            if focus_val.startswith("[") and focus_val.endswith("]"):
+                try:
+                    # Clean up multi-line formatting inside the list
+                    clean_focus = re.sub(r'[\s\n]+', ' ', focus_val)
+                    target_dirs = json.loads(clean_focus.replace("'", "\""))
+                except Exception:
+                    # Fallback for complex lists
+                    inner = focus_val[1:-1].split(",")
+                    target_dirs = [d.strip().strip('"').strip("'").strip() for d in inner if d.strip()]
+            else:
+                target_dirs = [d.strip() for d in focus_val.split(",") if d.strip()]
+            print(f" - Directive Focus: {target_dirs}")
+        
+        # Parse and execute @cmd: markers (Proactive Fixes)
+        import shlex
+        cmd_matches = re.findall(r"@cmd:\s*(.*)", strategic_note, re.IGNORECASE)
+        for cmd in cmd_matches:
+            clean_cmd = cmd.strip().strip('"').strip("'")
+            print(f" - Executing Directive Command: {clean_cmd}")
+            # Use shlex for safer execution (Phase 147 Security hardening)
+            # We avoid shell=True to prevent command injection warnings and risks
+            try:
+                # Use shlex.split for safe command execution (no shell=True)
+                # shlex properly handles quoted arguments and prevents injection
+                subprocess.run(shlex.split(clean_cmd), cwd=root, check=False)
+            except Exception as e:
+                print(f"   - Command failed: {e}")
+
+        # NOTE: Python code blocks in directives removed in Phase 2 (Security Hardening)
+        # exec() is a critical security vulnerability - arbitrary code execution risk
+        # Use subprocess.run with list arguments instead for safer external command execution
 
     # 1. Run the improvement cycle (Quality, Security, Tech Debt)
     combined_stats = {"files_scanned": 0, "issues_found": 0, "fixes_applied": 0, "details": []}
@@ -372,6 +376,7 @@ def main() -> None:
     parser.add_argument("--cycles", "-c", type=int, default=1, help="Number of improvement cycles to run (default: 1). Use 0 or -1 for infinite/continuous.")
     parser.add_argument("--delay", "-d", type=int, default=6, help="Delay in seconds between cycles (default: 6)")
     parser.add_argument("--prompt", "-p", type=str, help="Path to a strategic prompt/directive file (optional)")
+    parser.add_argument("--context", "-t", type=str, help="Path to a context file for additional directives (optional)")
     parser.add_argument("--model", "-m", type=str, default="gemini-3-flash", help="Model to use for external consultation (default: gemini-3-flash)")
     parser.add_argument("--dry-run", action="store_true", help="Initialize and verify fleet without running full cycle")
     args = parser.parse_args()
@@ -391,6 +396,7 @@ def main() -> None:
         num_cycles = args.cycles
         is_infinite = num_cycles <= 0
         prompt_path = args.prompt
+        context_path = args.context
         model_name = args.model
         
         # We need to track target_dirs across cycles for the watcher
@@ -398,7 +404,7 @@ def main() -> None:
         last_target_dirs = ["src"]
 
         if num_cycles == 1:
-            run_cycle(fleet, root, prompt_path=prompt_path, current_cycle=1, model_name=model_name)
+            run_cycle(fleet, root, prompt_path=prompt_path, context_path=context_path, current_cycle=1, model_name=model_name)
         else:
             current_cycle = 0
             if is_infinite:
@@ -431,7 +437,7 @@ def main() -> None:
                         except Exception:
                             pass
 
-                run_cycle(fleet, root, prompt_path=prompt_path, current_cycle=current_cycle, model_name=model_name)
+                run_cycle(fleet, root, prompt_path=prompt_path, context_path=context_path, current_cycle=current_cycle, model_name=model_name)
                 
                 if not is_infinite and current_cycle >= num_cycles:
                     break
