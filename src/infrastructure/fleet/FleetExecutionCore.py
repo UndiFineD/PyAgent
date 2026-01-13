@@ -23,7 +23,8 @@ from src.core.base.version import VERSION
 import logging
 import time
 from typing import Dict, List, Any, TYPE_CHECKING
-from src.core.base.models import WorkflowState, AgentPriority
+from src.core.base.models import AgentPriority
+from src.infrastructure.fleet.WorkflowState import WorkflowState
 
 __version__ = VERSION
 

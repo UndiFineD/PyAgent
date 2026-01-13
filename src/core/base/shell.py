@@ -86,7 +86,7 @@ class ShellExecutor:
             stdout_data = []
             stderr_data = []
 
-            async def stream_reader(pipe: asyncio.StreamReader, container: list[str], label: str):
+            async def stream_reader(pipe: asyncio.StreamReader, container: list[str], label: str) -> None:
                 while True:
                     line = await pipe.readline()
                     if not line:

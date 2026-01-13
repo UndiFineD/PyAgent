@@ -37,7 +37,7 @@ class FleetEconomyAgent:
         self.db_path = self.workspace_path / "data/db/swarm_economy.db"
         self._init_db()
 
-    def _init_db(self):
+    def _init_db(self) -> None:
         """Initializes the persistent fleet ledger (Phase 284)."""
         try:
             self.db_path.parent.mkdir(parents=True, exist_ok=True)

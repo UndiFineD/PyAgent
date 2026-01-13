@@ -58,7 +58,7 @@ UNUSED = {
     "win32_setctime", "yarl", "zipp"
 }
 
-def prune_requirements():
+def prune_requirements() -> None:
     req_path = Path("requirements")
     if not req_path.exists():
         req_path = Path(".") # Fallback to root

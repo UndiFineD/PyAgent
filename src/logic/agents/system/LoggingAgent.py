@@ -60,7 +60,7 @@ class LoggingAgent(BaseAgent):
         """
         self.log_aggregator_url = url
         if syslog_host:
-            def init_syslog():
+            def init_syslog() -> str:
                 try:
                     self.syslog_handler = logging.handlers.SysLogHandler(address=(syslog_host, syslog_port))
                     return f"LoggingAgent: Configured SysLog to {syslog_host}:{syslog_port} and Aggregator URL to {url}."
@@ -93,7 +93,7 @@ class LoggingAgent(BaseAgent):
         if len(self._internal_buffer) > 500:
             self._internal_buffer.pop(0)
             
-        def forward():
+        def forward() -> str:
             # 1. Forward to SysLog
             if self.syslog_handler:
                 lvl_const = getattr(logging, level.upper(), logging.INFO)

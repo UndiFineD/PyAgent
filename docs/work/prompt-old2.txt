@@ -12,27 +12,11 @@
 ✅ Added context recording to 4 Core files
 ✅ Fixed YAML security vulnerability
 
-### Cycle 5-10 Accomplishments (PHASE 4: DONE)
-✅ Decomposed BaseAgent.py (51.4 KB) → BaseAgent.py + BaseAgentCore.py (10.1 KB)
-✅ Extracted 13 pure logic methods to BaseAgentCore
-✅ Decomposed metrics_engine.py (95.3 KB) → metrics_engine.py + MetricsCore.py (14.1 KB)
-✅ Extracted 6 pure calculation classes to MetricsCore (381 lines)
-✅ Fleet validation: All imports working, zero regressions
-✅ Added 900+ lines of pure logic ready for Rust conversion
-
-### Cycle 11 Accomplishments (PHASE 2: DONE)
-✅ Fixed exec() vulnerability in run_fleet_self_improvement.py
-✅ Fixed shell=True in HandyAgent.py (now uses shlex.split)
-✅ Fixed os.popen() in EcosystemDiagnosticsAgent.py (now uses shutil.disk_usage)
-✅ Fleet validation: 991 files scanned, 4 issues found (no regressions)
-✅ Security hardening complete, ready for Phase 1 (Rust conversion)
-
-### Latest Status
-- Fleet scan: 991 files, 4 issues (2 auto-fixable)
-- Vulnerability count: Reduced from 4 to 0 (critical ones fixed)
+### Cycle 5 Status (CURRENT)
+- Latest fleet scan: 989 files, 4 issues found (2 auto-fixed)
 - Code quality: 99.6% Ruff compliance
 - Type coverage: ~70% of public APIs
-- Next focus: Phase 1 (Rust conversion) - Starting with Tier-1 files
+- Next focus: Rust conversion prep + security hardening
 
 ---
 
@@ -93,30 +77,27 @@ DeduplicationCore
 
 ---
 
-## PHASE 2: SECURITY HARDENING (COMPLETE ✅)
+## PHASE 2: SECURITY HARDENING (URGENT)
 
-### Critical Vulnerabilities Fixed (4/4 items)
-1. ✅ **exec() in run_fleet_self_improvement.py** (FIXED)
-   - Removed exec() call completely
-   - Python code blocks in directives now disabled
-   - Safer execution model: only subprocess.run() with validated arguments
-   - Status: COMPLETE
+### Critical Vulnerabilities (4 items)
+1. [ ] **exec() in run_fleet_self_improvement.py** (line 122)
+   - Remove exec() completely
+   - Use ast.literal_eval() for safe operations only
+   - Add explicit whitelist for directive operations
    
-2. ✅ **shell=True in subprocess** (FIXED - 2 instances)
-   - run_fleet_self_improvement.py: Now uses shlex.split() (safe)
-   - HandyAgent.py: Now uses shlex.split() (safe)
-   - Added proper command argument parsing
-   - Status: COMPLETE - Fleet cycle 11 validated
+2. [ ] **shell=True in subprocess** (2 instances)
+   - run_fleet_self_improvement.py line 111
+   - HandyAgent.py line 118
+   - Replace with list-based subprocess.run()
+   - Add input validation layer
    
-3. ⏳ **os.popen() in EcosystemDiagnosticsAgent.py** (FIXED)
-   - Replaced with shutil.disk_usage() (cross-platform, safe)
-   - No shell execution involved
-   - Status: COMPLETE - Works on Windows/Linux/macOS
-   
-4. ⏳ **Wildcard imports** (BACKLOG)
+3. [ ] **Wildcard imports** (1 instance)
    - management/final_fix.py line 46
-   - Will be addressed in Phase 3 (Code Quality)
-   - Low security risk (internal imports only)
+   - Replace with explicit imports
+   
+4. [ ] **Hardcoded paths** (ConfigurationManager.py)
+   - Move to environment variables
+   - Use pathlib.Path for cross-platform safety
 
 ### File I/O Atomicity (30+ files)
 **Pattern to implement:**

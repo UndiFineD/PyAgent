@@ -32,7 +32,7 @@ class RebirthCore:
         return count
 
     @staticmethod
-    def purge_pycache(root_dir: str):
+    def purge_pycache(root_dir: str) -> None:
         """
         Forcefully removes all __pycache__ folders.
         """

@@ -16,7 +16,11 @@
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
+"""Strategic swarm orchestration and build coordination.
 
+Orchestrates the deployment and coordination of agent swarms for system-wide
+optimization and strategic execution of complex workflows.
+"""
 from __future__ import annotations
 from src.core.base.version import VERSION
 import os
@@ -39,7 +43,7 @@ except ImportError as e:
     print(f"FAILED TO IMPORT: {e}")
     sys.exit(1)
 
-def main():
+def main() -> None:
     root = os.getcwd()
     print("=== STRATEGIC SWARM INITIALIZATION ===")
     print(f"Workspace Root: {root}")

@@ -28,6 +28,7 @@ import time
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Type, TYPE_CHECKING
 from src.core.base.BaseAgent import BaseAgent
+from src.core.base.models import AgentPriority
 from src.infrastructure.fleet.WorkflowState import WorkflowState
 from src.infrastructure.fleet.AgentRegistry import AgentRegistry
 from src.infrastructure.fleet.OrchestratorRegistry import OrchestratorRegistry

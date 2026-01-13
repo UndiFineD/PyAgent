@@ -44,7 +44,7 @@ class DeduplicationCore:
         return unique_items
 
     @staticmethod
-    def export_to_jsonl(items: list[dict[str, Any]], output_path: str):
+    def export_to_jsonl(items: list[dict[str, Any]], output_path: str) -> None:
         """
         Exports a list of dicts to a JSONL file.
         """

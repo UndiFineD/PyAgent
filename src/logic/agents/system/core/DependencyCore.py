@@ -7,25 +7,44 @@ Handles pip-audit execution and version pinning.
 import subprocess
 import os
 
+from src.core.base.interfaces import ContextRecorderInterface
+
 class DependencyCore:
     @staticmethod
-    def run_pip_audit() -> str:
+    def run_pip_audit(recorder: ContextRecorderInterface | None = None) -> str:
         """
         Runs pip-audit and returns the summary.
         """
         try:
             result = subprocess.run(["pip-audit", "--format", "plain"], capture_output=True, text=True)
-            return result.stdout or result.stderr
+            output = result.stdout or result.stderr
         except FileNotFoundError:
-            return "pip-audit not installed. Run 'pip install pip-audit' to enable."
+            output = "pip-audit not installed. Run 'pip install pip-audit' to enable."
+
+        if recorder:
+            recorder.record_interaction(
+                provider="python",
+                model="pip-audit",
+                prompt="pip-audit --format plain",
+                result=output[:2000]
+            )
+
+        return output
 
     @staticmethod
-    def pin_requirements(file_path: str) -> int:
+    def pin_requirements(file_path: str, recorder: ContextRecorderInterface | None = None) -> int:
         """
         Ensures all packages in a file are pinned with ==.
         Returns the number of lines modified.
         """
         if not os.path.exists(file_path):
+            if recorder:
+                recorder.record_interaction(
+                    provider="python",
+                    model="pip-freeze",
+                    prompt=f"pin {file_path}",
+                    result="file-not-found"
+                )
             return 0
             
         with open(file_path) as f:
@@ -49,5 +68,14 @@ class DependencyCore:
                 
         with open(file_path, "w") as f:
             f.writelines(new_lines)
-            
+
+        if recorder:
+            recorder.record_interaction(
+                provider="python",
+                model="pip-freeze",
+                prompt=f"pin {file_path}",
+                result=f"modified={modified}",
+                meta={"changes": modified}
+            )
+        
         return modified

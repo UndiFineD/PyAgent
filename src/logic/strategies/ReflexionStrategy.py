@@ -5,13 +5,12 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .AgentStrategy import AgentStrategy
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, TYPE_CHECKING
 import logging
 
-try:
-    from . import BackendFunction
-except ImportError:
-    from src.logic.strategies import BackendFunction
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
 __version__ = VERSION
 
@@ -46,5 +45,5 @@ class ReflexionStrategy(AgentStrategy):
             f"Critique:\n{critique}\n\n"
             "Please rewrite the implementation to address the critique. "
             "Output ONLY the final code/content."
-        
+        )
         return await backend_call(revision_prompt, system_prompt, history)

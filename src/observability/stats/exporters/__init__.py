@@ -1,64 +1,11 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """Metrics exporters for various monitoring and observability platforms.
 
 Provides exporters for Prometheus, CloudWatch, OpenTelemetry, and other
 monitoring systems.
 """
 
-from .cloud_exporter import CloudExporter  # noqa: F401
-from .metrics_exporter import MetricsExporter  # noqa: F401
-from .otel_manager import OTelManager, Span  # noqa: F401
-from .prometheus_exporter import PrometheusExporter  # noqa: F401
-from .stats_exporter import StatsExporter  # noqa: F401
-
-__all__ = [
-    "MetricsExporter",
-    "StatsExporter",
-    "PrometheusExporter",
-    "CloudExporter",
-    "OTelManager",
-    "Span",
-]
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-# Exporters package
-
-<<<<<<< HEAD
-<<<<<<< HEAD
-from .MetricsExporter import *
-from .StatsExporter import *
-from .PrometheusExporter import *
-from .CloudExporter import *
-from .OTelManager import *
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
-=======
->>>>>>> d6712a17b (phase 320)
 from .MetricsExporter import MetricsExporter as MetricsExporter
 from .StatsExporter import StatsExporter as StatsExporter
 from .PrometheusExporter import PrometheusExporter as PrometheusExporter
 from .CloudExporter import CloudExporter as CloudExporter
 from .OTelManager import OTelManager as OTelManager, Span as Span
-<<<<<<< HEAD
->>>>>>> 0777c397c (phase 320)
-=======
->>>>>>> d6712a17b (phase 320)
