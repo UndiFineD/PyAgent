@@ -18,7 +18,7 @@ production-grade, performant, secure platform through:
 - **Test Coverage**: ~85% unit test coverage
 
 ## PHASE 1: RUST CONVERSION STRATEGY
-**Goal**: Convert 18 Tier-1 Core files for immediate performance gains
+**Goal**: Convert 20 Tier-1 Core files for immediate performance gains
 
 ### Critical Path (Start Here)
 1. **FormulaEngineCore.py** - AST expression evaluation
@@ -55,35 +55,13 @@ production-grade, performant, secure platform through:
 7. Deploy to rust_core module
 8. Update Python imports
 
-## PHASE 2: SECURITY HARDENING
-**Goal**: Eliminate 4 critical vulnerabilities and harden file operations
+## PHASE 2: SECURITY HARDENING (COMPLETE ✅)
+**Goal**: Eliminate critical vulnerabilities and harden file operations
 
-### Critical Vulnerabilities
-1. **exec() in run_fleet_self_improvement.py** (line 122)
-   - Risk: Arbitrary code execution
-   - Fix: Use ast.literal_eval() or ast.safe_eval for safe operations
-   - Timeline: URGENT
-   
-2. **shell=True in subprocess calls** (2 instances)
-   - Risk: Shell injection attacks
-   - Fix: Migrate to list arguments, add input validation
-   - Timeline: URGENT
-   
-3. **Wildcard imports** (final_fix.py)
-   - Risk: Hidden dependencies, namespace pollution
-   - Fix: Replace with explicit imports
-   - Timeline: HIGH
-   
-4. **Hardcoded paths** (ConfigurationManager.py)
-   - Risk: Environmental fragility
-   - Fix: Use environment variables with Path objects
-   - Timeline: HIGH
-
-### File I/O Hardening (30+ files)
-- Pattern: Atomic writes (temp file + atomic rename)
-- Pattern: Read-verify-write transactions
-- Pattern: Permission checks before operations
-- Pattern: Comprehensive error handling with recovery
+- Completed: exec(), shell=True (2x), os.popen() vulnerabilities fixed and validated
+- Remaining backlog moved to Phase 3:
+  - Wildcard imports (management/final_fix.py)
+  - File I/O atomicity rollout (30+ files)
 
 ## PHASE 3: CODE QUALITY SYSTEMATIC IMPROVEMENTS
 
@@ -170,7 +148,7 @@ See `docs/work/prompt.txt` for complete breakdown:
 
 ## RUST CONVERSION READINESS
 See `docs/work/RUST_Ready.md` for detailed catalog:
-- **Tier 1 (Ready)**: 18 files, ~1500 LOC, zero refactoring needed
+- **Tier 1 (Ready)**: 20 files, ~1900 LOC, zero refactoring needed (includes BaseAgentCore, MetricsCore)
 - **Tier 2 (Near-Ready)**: 25 files, ~2000 LOC, minor cleanup required
 - **Tier 3 (Needs Work)**: 30+ files, requires I/O extraction first
 
