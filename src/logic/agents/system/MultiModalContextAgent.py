@@ -91,7 +91,7 @@ class MultiModalContextAgent(BaseAgent):
         
         try:
             with open(path, "rb") as image_file:
-                encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+                base64.b64encode(image_file.read()).decode('utf-8')
             
             # Phase 125: Integrated Vision Logic
             # If the backend supports multimodal (e.g., GPT-4o, Claude 3.5), we pass the image.
@@ -154,7 +154,7 @@ class MultiModalContextAgent(BaseAgent):
         
         try:
             with open(path, "rb") as image_file:
-                encoded_string = base64.b64encode(image_file.read()).decode('utf-8')
+                base64.b64encode(image_file.read()).decode('utf-8')
             
             # BaseAgent.think handles the multimodal context if the model supports it
             text_extraction = self.think(f"{ocr_prompt}\n[Image Data Attached]")
@@ -163,7 +163,7 @@ class MultiModalContextAgent(BaseAgent):
             return f"OCR Extraction Failed: {str(e)}"
 
     @as_tool
-    def gui_action(self, action: str, params: Dict[str, Any]) -> str:
+    def gui_action(self, action: str, params: dict[str, Any]) -> str:
         """SOC Pattern: Executes GUI actions based on visual coordinates.
         Args:
             action: 'click', 'type', 'scroll', 'drag', 'move'
@@ -264,7 +264,7 @@ class MultiModalContextAgent(BaseAgent):
         if not self.recording_file.exists():
             return f"No recording file found at {self.recording_file}."
             
-        with open(self.recording_file, "r") as f:
+        with open(self.recording_file) as f:
             events = json.load(f)
             
         if not events:

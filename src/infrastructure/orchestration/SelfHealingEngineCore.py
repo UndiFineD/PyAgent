@@ -29,7 +29,7 @@ class SelfHealingEngineCore:
     Decides what kind of fix is needed based on the traceback.
     """
     
-    def analyze_failure(self, agent_name: str, tool_name: str, error_msg: str, tb: str) -> Dict[str, Any]:
+    def analyze_failure(self, agent_name: str, tool_name: str, error_msg: str, tb: str) -> dict[str, Any]:
         """Analyzes a failure and suggests a strategy."""
         strategy = "manual_review"
         
@@ -50,6 +50,6 @@ class SelfHealingEngineCore:
             "is_critical": "Registry" in agent_name or "Fleet" in agent_name
         }
 
-    def format_healing_report(self, history: List[Dict[str, Any]]) -> str:
+    def format_healing_report(self, history: list[dict[str, Any]]) -> str:
         """Standardized reporting logic."""
         return f"Self-Healing Engine: {len(history)} failures detected and queued for repair."

@@ -29,7 +29,8 @@ import time
 import subprocess
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Dict, List, Optional
+from collections.abc import Callable
 from src.core.base.models import (
     FilePriority, FilePriorityConfig, AgentEvent, ConfigProfile, HealthStatus,
     AgentHealthCheck, ExecutionProfile,
@@ -48,7 +49,7 @@ __version__ = VERSION
 
 class FilePriorityManager:
     """Manager for file priority and request ordering."""
-    def __init__(self, config: Optional[FilePriorityConfig] = None) -> None:
+    def __init__(self, config: FilePriorityConfig | None = None) -> None:
         self.config = config or FilePriorityConfig()
         self._default_extensions = {
             ".py": FilePriority.HIGH, ".js": FilePriority.HIGH, ".ts": FilePriority.HIGH,
@@ -70,9 +71,9 @@ class FilePriorityManager:
         if ext in self._default_extensions:
             return self._default_extensions[ext]
         return self.config.default_priority
-    def sort_by_priority(self, paths: List[Path]) -> List[Path]:
+    def sort_by_priority(self, paths: list[Path]) -> list[Path]:
         return sorted(paths, key=lambda p: self.get_priority(p).value, reverse=True)
-    def filter_by_priority(self, paths: List[Path], min_priority: FilePriority = FilePriority.LOW) -> List[Path]:
+    def filter_by_priority(self, paths: list[Path], min_priority: FilePriority = FilePriority.LOW) -> list[Path]:
         return [p for p in paths if self.get_priority(p).value >= min_priority.value]
 
 @dataclass
@@ -82,8 +83,8 @@ class ResponseCache:
     Supports Prompt Caching (Phase 128) by identifying prefix reusable contexts.
     """
     cache_dir: Path
-    cache_data: Dict[str, str] = field(default_factory=_empty_dict_str_str)
-    prefix_map: Dict[str, str] = field(default_factory=_empty_dict_str_str)
+    cache_data: dict[str, str] = field(default_factory=_empty_dict_str_str)
+    prefix_map: dict[str, str] = field(default_factory=_empty_dict_str_str)
 
     def __post_init__(self) -> None:
         self.cache_dir.mkdir(parents=True, exist_ok=True)
@@ -106,7 +107,7 @@ class ResponseCache:
             "timestamp": "2026-01-11"
         }))
 
-    def get(self, prompt: str) -> Optional[str]:
+    def get(self, prompt: str) -> str | None:
         key = self._get_cache_key(prompt)
         if key in self.cache_data:
             return self.cache_data[key]
@@ -137,13 +138,13 @@ class StatePersistence:
     state_file: Path
     backup: bool = False
     backup_count: int = 0
-    def save(self, state: Dict[str, Any]) -> None:
+    def save(self, state: dict[str, Any]) -> None:
         if self.backup and self.state_file.exists():
             self.state_file.rename(self.state_file.parent / f"{self.state_file.stem}.{self.backup_count}.bak")
             self.backup_count += 1
         self.state_file.parent.mkdir(parents=True, exist_ok=True)
         self.state_file.write_text(json.dumps(state))
-    def load(self, default: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def load(self, default: dict[str, Any] | None = None) -> dict[str, Any]:
         if self.state_file.exists():
             return json.loads(self.state_file.read_text())
         return default or {}
@@ -151,7 +152,7 @@ class StatePersistence:
 @dataclass
 class EventManager:
     """Manages agent events."""
-    handlers: Dict[AgentEvent, List[Callable[..., None]]] = field(default_factory=_empty_agent_event_handlers)
+    handlers: dict[AgentEvent, list[Callable[..., None]]] = field(default_factory=_empty_agent_event_handlers)
     def on(self, event: AgentEvent, handler: Callable[..., None]) -> None:
         if event not in self.handlers:
             self.handlers[event] = []
@@ -167,17 +168,17 @@ class EventManager:
 class HealthChecker:
     """Performs health checks on agent components."""
 
-    def __init__(self, repo_root: Optional[Path] = None, recorder: Any = None) -> None:
+    def __init__(self, repo_root: Path | None = None, recorder: Any = None) -> None:
         self.repo_root = repo_root or Path.cwd()
         self.recorder = recorder
-        self.results: Dict[str, AgentHealthCheck] = {}
+        self.results: dict[str, AgentHealthCheck] = {}
         # Stub compatibility
-        self.checks: Dict[str, Callable[[], Dict[str, Any]]] = {}
+        self.checks: dict[str, Callable[[], dict[str, Any]]] = {}
         self.request_count: int = 0
         self.error_count: int = 0
         self.total_latency: int = 0
 
-    def add_check(self, name: str, check_func: Callable[[], Dict[str, Any]]) -> None:
+    def add_check(self, name: str, check_func: Callable[[], dict[str, Any]]) -> None:
         """Stub compatibility."""
         self.checks[name] = check_func
 
@@ -188,13 +189,13 @@ class HealthChecker:
         if not success:
             self.error_count += 1
 
-    def get_metrics(self) -> Dict[str, Any]:
+    def get_metrics(self) -> dict[str, Any]:
         """Stub compatibility."""
         error_rate = self.error_count / self.request_count if self.request_count > 0 else 0
         avg_latency = self.total_latency / self.request_count if self.request_count > 0 else 0
         return {"total_requests": self.request_count, "error_count": self.error_count, "error_rate": error_rate, "avg_latency_ms": avg_latency}
 
-    def check(self) -> Dict[str, Any]:
+    def check(self) -> dict[str, Any]:
         """Stub compatibility mixed with real check if results exist."""
         components = {name: func() for name, func in self.checks.items()}
         base_status = {"status": "healthy", "components": components}
@@ -255,7 +256,7 @@ class HealthChecker:
             details={'version': sys.version, 'executable': sys.executable}
         )
 
-    def run_all_checks(self) -> Dict[str, AgentHealthCheck]:
+    def run_all_checks(self) -> dict[str, AgentHealthCheck]:
         """Run all health checks."""
         agent_names = ['coder', 'tests', 'changes', 'context', 'errors', 'improvements', 'stats']
         self.results['python'] = self.check_python()
@@ -274,10 +275,10 @@ class ProfileManager:
     """Manages configuration profiles and execution profiles."""
     
     def __init__(self) -> None:
-        self._profiles: Dict[str, ExecutionProfile] = {}
-        self.profiles: Dict[str, ConfigProfile] = {} # Stub compatibility
-        self._active: Optional[str] = None
-        self.active_name: Optional[str] = None # Stub compatibility
+        self._profiles: dict[str, ExecutionProfile] = {}
+        self.profiles: dict[str, ConfigProfile] = {} # Stub compatibility
+        self._active: str | None = None
+        self.active_name: str | None = None # Stub compatibility
         self._register_defaults()
 
     def _register_defaults(self) -> None:
@@ -323,14 +324,14 @@ class ProfileManager:
         """Stub compatibility."""
         self.activate(name)
 
-    def get_active_config(self) -> Optional[ExecutionProfile]:
+    def get_active_config(self) -> ExecutionProfile | None:
         """Get active execution profile."""
         if self._active:
             return self._profiles[self._active]
         return None
 
     @property
-    def active(self) -> Optional[Any]:
+    def active(self) -> Any | None:
         """Get active profile (ConfigProfile takes priority for stub compatibility)."""
         if self.active_name and self.active_name in self.profiles:
             return self.profiles[self.active_name]

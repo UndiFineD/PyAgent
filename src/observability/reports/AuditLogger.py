@@ -44,7 +44,7 @@ class AuditLogger:
     def __init__(self) -> None:
         """Initialize audit logger."""
 
-        self.entries: List[AuditEntry] = []
+        self.entries: list[AuditEntry] = []
         logging.debug("AuditLogger initialized")
 
     def log(
@@ -52,7 +52,7 @@ class AuditLogger:
         action: AuditAction,
         user_id: str,
         report_id: str,
-        details: Optional[Dict[str, Any]] = None
+        details: dict[str, Any] | None = None
     ) -> AuditEntry:
         """Log an action.
         Args:
@@ -75,7 +75,7 @@ class AuditLogger:
         self.entries.append(entry)
         return entry
 
-    def get_history(self, report_id: str) -> List[AuditEntry]:
+    def get_history(self, report_id: str) -> list[AuditEntry]:
         """Get audit history for report.
         Args:
             report_id: Report ID.
@@ -85,7 +85,7 @@ class AuditLogger:
 
         return [e for e in self.entries if e.report_id == report_id]
 
-    def get_user_activity(self, user_id: str) -> List[AuditEntry]:
+    def get_user_activity(self, user_id: str) -> list[AuditEntry]:
         """Get activity for user.
         Args:
             user_id: User ID.

@@ -71,7 +71,7 @@ class ExternalReportingClient:
         # Actual implementation would send to the service
         return True
 
-    def report_batch(self, errors: List[ErrorEntry]) -> int:
+    def report_batch(self, errors: list[ErrorEntry]) -> int:
         """Report multiple errors.
 
         Args:
@@ -86,7 +86,7 @@ class ExternalReportingClient:
                 count += 1
         return count
 
-    def _build_payload(self, error: ErrorEntry) -> Dict[str, Any]:
+    def _build_payload(self, error: ErrorEntry) -> dict[str, Any]:
         """Build the payload for the external system."""
         return {
             "message": error.message,

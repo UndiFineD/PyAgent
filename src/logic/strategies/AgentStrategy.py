@@ -36,13 +36,13 @@ class AgentStrategy(ABC):
     """Abstract base class for agent execution strategies."""
 
     @abstractmethod
-    def execute(
+    async def execute(
         self,
         prompt: str,
         context: str,
         backend_call: BackendFunction,
-        system_prompt: Optional[str] = None,
-        history: Optional[List[Dict[str, str]]] = None
+        system_prompt: str | None = None,
+        history: list[dict[str, str]] | None = None
     ) -> str:
         """Execute the strategy to generate a response.
 

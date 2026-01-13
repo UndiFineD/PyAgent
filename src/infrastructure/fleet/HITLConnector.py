@@ -38,12 +38,12 @@ __version__ = VERSION
 class HITLConnector:
     """Manages external communication with humans for high-stakes approvals."""
 
-    def __init__(self, webhook_url: Optional[str] = None, workspace_root: Optional[str] = None) -> None:
+    def __init__(self, webhook_url: str | None = None, workspace_root: str | None = None) -> None:
         self.webhook_url = webhook_url
         self.workspace_root = workspace_root
         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
         self.connectivity = ConnectivityManager(workspace_root)
-        self.pending_approvals: Dict[str, Dict[str, Any]] = {}
+        self.pending_approvals: dict[str, dict[str, Any]] = {}
 
     def request_approval(self, agent_id: str, task: str, context: Any) -> str:
         """Sends a request for approval to the human operator."""
@@ -98,6 +98,6 @@ class HITLConnector:
             
         return "pending"
 
-    def get_pending_summary(self) -> Dict[str, Any]:
+    def get_pending_summary(self) -> dict[str, Any]:
         """Returns all pending requests."""
         return {k: v for k, v in self.pending_approvals.items() if v["status"] == "pending"}

@@ -40,9 +40,9 @@ class LatentSignalBus:
     
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
-        self.latent_space: Dict[str, Any] = {} # channel -> latent_vector
+        self.latent_space: dict[str, Any] = {} # channel -> latent_vector
 
-    def transmit_latent(self, channel: str, state_payload: Dict[str, Any]) -> str:
+    def transmit_latent(self, channel: str, state_payload: dict[str, Any]) -> str:
         """
         Compresses a complex state payload into a 'latent signal' and transmits it.
         """
@@ -68,7 +68,7 @@ class LatentSignalBus:
             
         return latent_vector
 
-    def receive_latent(self, channel: str) -> Optional[Dict[str, Any]]:
+    def receive_latent(self, channel: str) -> dict[str, Any] | None:
         """
         Retrieves and decompresses the latest latent signal from a channel.
         """
@@ -87,5 +87,5 @@ class LatentSignalBus:
             logging.error(f"LatentSignalBus: Decompression failed: {e}")
             return None
 
-    def list_active_channels(self) -> List[str]:
+    def list_active_channels(self) -> list[str]:
         return list(self.latent_space.keys())

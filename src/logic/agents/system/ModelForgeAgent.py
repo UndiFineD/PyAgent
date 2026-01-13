@@ -27,6 +27,8 @@ from src.core.base.version import VERSION
 import logging
 import os
 import json
+import asyncio
+import time
 from pathlib import Path
 from typing import Dict, Any, List, Optional
 from src.core.base.BaseAgent import BaseAgent
@@ -50,9 +52,9 @@ class ModelForgeAgent(BaseAgent):
         
         self.registry = ModelRegistryCore()
         # Simulated quality history for agents
-        self.agent_quality_history: Dict[str, List[float]] = {}
+        self.agent_quality_history: dict[str, list[float]] = {}
 
-    def monitor_agent_quality(self, agent_name: str, last_score: float) -> str:
+    async def monitor_agent_quality(self, agent_name: str, last_score: float) -> str:
         """Monitors agent response quality and triggers fine-tuning if needed."""
         if agent_name not in self.agent_quality_history:
             self.agent_quality_history[agent_name] = []
@@ -61,101 +63,68 @@ class ModelForgeAgent(BaseAgent):
         
         if self.registry.should_trigger_finetuning(self.agent_quality_history[agent_name]):
             logging.warning(f"ModelForge: Triggering autonomous fine-tuning for {agent_name} due to low quality scores.")
-            self.start_finetuning(f"fix_{agent_name.lower()}")
-
-    def get_adapter_for_task(self, task_type: str) -> Optional[str]:
-        """Exposes the registry for picking expert adapters."""
-        return self.registry.get_adapter_for_task(task_type)
+            return await self.start_finetuning(f"fix_{agent_name.lower()}")
+        return f"Quality for {agent_name} is acceptable."
 
     @as_tool
-    def prepare_dataset(self, task_name: str, examples: List[Dict[str, str]]) -> str:
+    async def prepare_dataset(self, task_name: str, examples: list[dict[str, str]]) -> str:
         """Prepares a JSONL dataset for fine-tuning.
         Args:
             task_name: Unique name for the fine-tuning task.
             examples: List of dictionaries with 'instruction' and 'output'.
         """
         output_path = self.datasets_dir / f"{task_name}.jsonl"
-        try:
+        
+        def write_dataset():
             with open(output_path, "w", encoding="utf-8") as f:
                 for ex in examples:
                     f.write(json.dumps(ex) + "\n")
+                    
+        try:
+            await asyncio.to_thread(write_dataset)
             return f"Dataset prepared at {output_path} with {len(examples)} examples."
         except Exception as e:
             return f"Failed to prepare dataset: {e}"
 
     @as_tool
-    def start_finetuning(self, task_name: str, base_model: str = "unsloth/llama-3-8b-bnb-4bit") -> str:
+    async def start_finetuning(self, task_name: str, base_model: str = "unsloth/llama-3-8b-bnb-4bit") -> str:
         """Simulates starting a LoRA fine-tuning session.
         Args:
             task_name: Name of the task/dataset to use.
             base_model: The base model to fine-tune.
         """
         dataset_path = self.datasets_dir / f"{task_name}.jsonl"
-        if not dataset_path.exists():
-            return f"Error: Dataset {dataset_path} not found."
+        
+        def setup_job():
+            if not dataset_path.exists():
+                return None
 
-        if self.recorder:
+            job_id = f"job_{task_name}_{int(time.time())}"
+            adapter_path = self.adapters_dir / task_name
+            adapter_path.mkdir(parents=True, exist_ok=True)
+            with open(adapter_path / "adapter_config.json", "w") as f:
+                json.dump({"base_model": base_model, "peft_type": "LORA", "job_id": job_id}, f)
+            return job_id
+
+        job_id = await asyncio.to_thread(setup_job)
+        if job_id is None:
+             return f"Error: Dataset {dataset_path} not found."
+
+        if hasattr(self, 'recorder') and self.recorder:
             self.recorder.record_lesson("model_forge_finetune", {"task": task_name, "base": base_model})
 
         logging.info(f"ModelForge: Starting fine-tuning for '{task_name}' on '{base_model}'...")
-        
-        job_id = f"job_{task_name}_{int(os.path.getmtime(dataset_path))}"
-        
-        # Simulate local folder for the adapter
-        adapter_path = self.adapters_dir / task_name
-        adapter_path.mkdir(parents=True, exist_ok=True)
-        with open(adapter_path / "adapter_config.json", "w") as f:
-            json.dump({"base_model": base_model, "peft_type": "LORA", "job_id": job_id}, f)
-
         return f"SUCCESS: Fine-tuning job '{job_id}' started. Monitoring progress at {self.forge_dir}/logs/{job_id}.log"
 
     @as_tool
-    def trigger_autonomous_tuning(self, agent_name: str, evolution_metadata: Dict[str, Any]) -> str:
-        """Triggers local fine-tuning based on evolution data or failure reports.
-        Args:
-            agent_name: Target agent that needs optimization.
-            evolution_metadata: Metadata from EvolutionEngine containing failure cases or goals.
-        """
-        task_name = f"opt_{agent_name}_{evolution_metadata.get('version', '01')}"
-        logging.info(f"ModelForge: Autonomous tuning triggered for {agent_name} - Task: {task_name}")
+    async def get_adapter_config(self, task_name: str) -> str:
+        """Retrieves config for a specific adapter."""
+        adapter_path = self.adapters_dir / task_name / "adapter_config.json"
+        if not adapter_path.exists():
+            return f"Error: Adapter '{task_name}' not found."
+            
+        def read_config():
+            with open(adapter_path) as f:
+                return f.read()
         
-        # 1. Gather failure cases/synthetic data from evolution_metadata
-        synthetic_data = evolution_metadata.get("synthetic_examples", [
-            {"instruction": "Optimize for specialized task", "output": "Reasoning with higher precision"}
-        ])
-        
-        # 2. Prepare dataset
-        prep_res = self.prepare_dataset(task_name, synthetic_data)
-        
-        # 3. Start tuning
-        tune_res = self.start_finetuning(task_name)
-        
-        return f"Autonomous Tuning Initialized for {agent_name}: {prep_res} | {tune_res}"
-
-    @as_tool
-    def evaluate_adapter(self, adapter_path: str, test_queries: List[str]) -> Dict[str, Any]:
-        """Evaluates a fine-tuned adapter against the base model for specific queries."""
-        logging.info(f"ModelForge: Evaluating adapter at {adapter_path}...")
-        # Mock evaluation results
-        results = {}
-        for query in test_queries:
-            results[query] = {
-                "base_score": 0.65,
-                "adapter_score": 0.88,
-                "improvement": "35%"
-            }
-        return results
-
-    @as_tool
-    def list_available_adapters(self) -> List[str]:
-        """Lists all locally saved model adapters."""
-        return [d.name for d in self.adapters_dir.iterdir() if d.is_dir()]
-
-    def improve_content(self, prompt: str) -> str:
-        """General model optimization guidance."""
-        return "I am ready to forge new neural pathways. Suggest a task for local fine-tuning."
-
-if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(ModelForgeAgent, "Model Forge Agent", "Neural fine-tuning orchestration")
-    main()
+        return await asyncio.to_thread(read_config)

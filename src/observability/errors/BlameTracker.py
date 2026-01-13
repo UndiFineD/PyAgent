@@ -42,7 +42,7 @@ class BlameTracker:
 
     def __init__(self, recorder: Any = None) -> None:
         """Initialize the blame tracker."""
-        self.blame_cache: Dict[str, BlameInfo] = {}
+        self.blame_cache: dict[str, BlameInfo] = {}
         self.recorder = recorder
 
     def _record(self, action: str, result: str) -> None:
@@ -110,8 +110,8 @@ class BlameTracker:
         return info
 
     def get_top_contributors(
-        self, errors: List[ErrorEntry], limit: int = 5
-    ) -> List[Tuple[str, int]]:
+        self, errors: list[ErrorEntry], limit: int = 5
+    ) -> list[tuple[str, int]]:
         """Get top contributors to errors.
 
         Args:
@@ -121,7 +121,7 @@ class BlameTracker:
         Returns:
             List of (author, count) tuples.
         """
-        author_counts: Dict[str, int] = {}
+        author_counts: dict[str, int] = {}
         for error in errors:
             blame = self.get_blame(error)
             if blame.author:

@@ -32,7 +32,7 @@ __version__ = VERSION
 def test_ethics_and_safety() -> None:
     """Validate ethics guardrails and kill switch features."""
     logging.basicConfig(level=logging.INFO)
-    root = Path("c:/DEV/PyAgent")
+    root = Path(str(Path(__file__).resolve().parents[5]) + "")
     fleet = FleetManager(str(root))
     fleet.register_agent("Knowledge", KnowledgeAgent)
     

@@ -32,7 +32,7 @@ def fix_future_ordering(directory: str) -> None:
             if file.endswith(".py"):
                 path = os.path.join(root, file)
                 try:
-                    with open(path, "r", encoding="utf-8") as f:
+                    with open(path, encoding="utf-8") as f:
                         content = f.read()
                     
                     if "from __future__" in content and "__logic_category__" in content:

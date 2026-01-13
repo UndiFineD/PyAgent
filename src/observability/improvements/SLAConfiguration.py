@@ -41,4 +41,4 @@ class SLAConfiguration:
     level: SLALevel
     max_hours: int
     escalation_hours: int
-    notification_emails: List[str] = field(default_factory=list)  # type: ignore[assignment]
+    notification_emails: list[str] = field(default_factory=list)  # type: ignore[assignment]

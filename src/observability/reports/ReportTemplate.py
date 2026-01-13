@@ -38,7 +38,7 @@ class ReportTemplate:
     """
 
     name: str
-    sections: List[str] = field(
+    sections: list[str] = field(
         default_factory=lambda: ["purpose", "location", "surface"]
     )  # type: ignore[assignment]
     include_metadata: bool = True

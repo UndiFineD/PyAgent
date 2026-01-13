@@ -37,7 +37,7 @@ class ProbabilisticExecutionOrchestrator:
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
-    def execute_with_confidence(self, task: str, variations: int = 3) -> Dict[str, Any]:
+    def execute_with_confidence(self, task: str, variations: int = 3) -> dict[str, Any]:
         """
         Executes a task multiple times and collapses the results into a single high-confidence output.
         """
@@ -72,7 +72,7 @@ class ProbabilisticExecutionOrchestrator:
             "confidence": confidence
         }
 
-    def _collapse(self, task: str, results: List[Any]) -> Any:
+    def _collapse(self, task: str, results: list[Any]) -> Any:
         """
         Selects the most optimal result from the set of variations.
         If RealityAnchorAgent is available, it uses it for verification.
@@ -108,7 +108,7 @@ class ProbabilisticExecutionOrchestrator:
 
         return results[0]
 
-    def _calculate_confidence(self, results: List[Any], winner: Any) -> float:
+    def _calculate_confidence(self, results: list[Any], winner: Any) -> float:
         """
         Calculates confidence score based on similarity between variations.
         """

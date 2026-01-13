@@ -47,7 +47,7 @@ class ResearchAgent(BaseAgent):
         )
 
     @as_tool
-    def dcap_research(self, topic: str, content: str) -> Dict[str, str]:
+    def dcap_research(self, topic: str, content: str) -> dict[str, str]:
         """Executes a full Deliberation-Conception-Action-Perception cycle on a topic."""
         logging.info(f"RESEARCH: Executing DCAP cycle for {topic}")
         
@@ -80,7 +80,7 @@ class ResearchAgent(BaseAgent):
         """Analyzes a research paper summary and identifies new capabilities."""
         logging.info(f"RESEARCH: Ingesting paper '{title}'")
         # In a real system, this would call an LLM to extract a 'Recipe'
-        analysis = f"Analysis of '{title}': Identifies core logic: {summary[:100]}..."
+        f"Analysis of '{title}': Identifies core logic: {summary[:100]}..."
         
         if self.memory and hasattr(self.memory, 'add_entity'):
             self.memory.add_entity(title, {"type": "paper", "summary": summary})

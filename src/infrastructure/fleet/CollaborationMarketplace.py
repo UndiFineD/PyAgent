@@ -34,9 +34,9 @@ class CollaborationMarketplace:
     
     def __init__(self, fleet_manager) -> None:
         self.fleet = fleet_manager
-        self.transactions: List[Dict[str, Any]] = []
+        self.transactions: list[dict[str, Any]] = []
 
-    def request_bids(self, task: str, required_capability: str) -> List[Dict[str, Any]]:
+    def request_bids(self, task: str, required_capability: str) -> list[dict[str, Any]]:
         """Broadcasts a task to the fleet and collects bids."""
         logging.info(f"MARKETPLACE: Auctioning task '{task}' requiring {required_capability}")
         bids = []

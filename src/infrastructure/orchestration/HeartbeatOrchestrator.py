@@ -35,7 +35,7 @@ class HeartbeatOrchestrator:
     
     def __init__(self, fleet) -> None:
         self.fleet = fleet
-        self.last_seen: Dict[str, float] = {}
+        self.last_seen: dict[str, float] = {}
         self._running = True
         self._stop_event = threading.Event()
         self._thread = threading.Thread(target=self._monitor_heartbeats, daemon=True)

@@ -26,6 +26,7 @@ Inspired by mcp-server-spec-driven-development and awesome-mcp-servers.
 from __future__ import annotations
 from src.core.base.version import VERSION
 import json
+import asyncio
 from pathlib import Path
 from typing import Dict, List, Any
 from src.core.base.BaseAgent import BaseAgent
@@ -40,7 +41,7 @@ class MCPAgent(BaseAgent):
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = Path(self.file_path).parent.parent.parent
-        self.connectors: Dict[str, MCPConnector] = {}
+        self.connectors: dict[str, MCPConnector] = {}
         self._system_prompt = (
             "You are the MCP Integration Agent. "
             "Your role is to manage connections to Model Context Protocol servers. "
@@ -49,62 +50,65 @@ class MCPAgent(BaseAgent):
         )
 
     @as_tool
-    def list_mcp_servers(self) -> str:
+    async def list_mcp_servers(self) -> str:
         """Discovers local MCP configuration files."""
-        mcp_configs = list(self.workspace_root.rglob("mcp.json"))
-        if not mcp_configs:
-            # Fallback to a mock for demo purposes if no file found
-            return "No local `mcp.json` configs found. Check common locations."
-        
-        report = ["## 🔌 Discovered MCP Servers"]
-        for cfg in mcp_configs:
-            try:
-                with open(cfg, 'r') as f:
-                    data = json.load(f)
-                    for server_name, server_config in data.get("mjs_servers", {}).items():
-                        report.append(f"- **{server_name}**: {server_config.get('command')}")
-            except Exception as e:
-                report.append(f"- Error reading `{cfg}`: {e}")
-        return "\n".join(report)
+        def discover():
+            mcp_configs = list(self.workspace_root.rglob("mcp.json"))
+            if not mcp_configs:
+                return "No local `mcp.json` configs found. Check common locations."
+            
+            report = ["## 🔌 Discovered MCP Servers"]
+            for cfg in mcp_configs:
+                try:
+                    with open(cfg) as f:
+                        data = json.load(f)
+                        for server_name, server_config in data.get("mjs_servers", {}).items():
+                            report.append(f"- **{server_name}**: {server_config.get('command')}")
+                except Exception as e:
+                    report.append(f"- Error reading `{cfg}`: {e}")
+            return "\n".join(report)
+            
+        return await asyncio.to_thread(discover)
 
     @as_tool
-    def call_mcp_tool(self, server_name: str, tool_name: str, arguments: Dict[str, Any]) -> str:
+    async def call_mcp_tool(self, server_name: str, tool_name: str, arguments: dict[str, Any]) -> str:
         """Calls an MCP tool via the live connector."""
         if server_name not in self.connectors:
-            # For this demo, we assume we can find the server config
             return f"Error: MCP Server '{server_name}' not initialized. Call 'initialize_mcp_server' first."
         
         # Intelligence Harvesting (Phase 108)
-        if self.recorder:
+        if hasattr(self, 'recorder') and self.recorder:
             self.recorder.record_lesson("mcp_tool_call", {"server": server_name, "tool": tool_name})
             
         connector = self.connectors[server_name]
-        response = connector.call("tools/call", {"name": tool_name, "arguments": arguments})
+        # MCPConnector might be sync, so wrap in thread
+        response = await asyncio.to_thread(connector.call, "tools/call", {"name": tool_name, "arguments": arguments})
         
         if "error" in response:
-            if self.recorder:
+            if hasattr(self, 'recorder') and self.recorder:
                 self.recorder.record_lesson("mcp_tool_error", {"server": server_name, "tool": tool_name, "error": response["error"]})
             return f"MCP Error: {response['error']}"
         
         return json.dumps(response.get("result", {}), indent=2)
 
     @as_tool
-    def initialize_mcp_server(self, name: str, command: List[str]) -> str:
+    async def initialize_mcp_server(self, name: str, command: list[str]) -> str:
         """Initializes and connects to a specific MCP server."""
         connector = MCPConnector(name, command)
-        connector.start()
+        await asyncio.to_thread(connector.start)
         if connector.is_running:
             self.connectors[name] = connector
-            if self.recorder:
+            if hasattr(self, 'recorder') and self.recorder:
                 self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "success"})
             return f"Successfully started MCP server '{name}'"
         else:
-            if self.recorder:
+            if hasattr(self, 'recorder') and self.recorder:
                 self.recorder.record_lesson("mcp_server_init", {"name": name, "status": "failed"})
             return f"Failed to start MCP server '{name}'"
 
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str) -> str:
         """Handle MCP-related requests."""
         if "list" in prompt.lower():
-            return self.list_mcp_servers()
-        return "MCP Agent ready. Specify a tool call or server discovery task."
+            return await self.list_mcp_servers()
+        # Fallback to base logic if needed
+        return await super().improve_content(prompt)

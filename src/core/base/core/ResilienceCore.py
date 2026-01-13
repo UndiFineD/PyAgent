@@ -28,21 +28,28 @@ class ResilienceCore:
         base_timeout: float,
         multiplier: float,
         max_timeout: float,
-        apply_jitter: bool = True
+        jitter_mode: str = "full"
     ) -> float:
-        """Calculates backoff with exponential multiplier and optional jitter."""
+        """
+        Phase 145: Enhanced backoff with Full Jitter.
+        Prevents thundering herd better than standard 10% jitter.
+        """
         if failure_count < threshold:
             return 0.0
         
         exponent = max(0, failure_count - threshold)
         backoff = min(max_timeout, base_timeout * (multiplier ** exponent))
         
-        if apply_jitter:
-            # 10% Jitter
+        if jitter_mode == "full":
+            # AWS style Full Jitter: random between 0 and exponential backoff
+            return random.uniform(base_timeout / 2, backoff)
+        elif jitter_mode == "equal":
+            # Half of backoff + random half
+            return (backoff / 2) + random.uniform(0, backoff / 2)
+        else:
+            # Legacy 10% jitter
             jitter = backoff * 0.1 * random.uniform(-1, 1)
-            backoff = max(base_timeout / 2, backoff + jitter)
-            
-        return backoff
+            return max(base_timeout / 2, backoff + jitter)
 
     @staticmethod
     def should_attempt_recovery(

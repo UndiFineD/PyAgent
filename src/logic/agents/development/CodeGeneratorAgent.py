@@ -24,7 +24,6 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import sys
 from pathlib import Path
-from src.logic.coder import *
 from src.logic.agents.development.CoderAgent import CoderAgent
 from src.core.base.entrypoint import create_main_function
 

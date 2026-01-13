@@ -86,7 +86,7 @@ class UsageQuotaManager:
             self._quota.current_daily += 1
             self._quota.current_hourly += 1
 
-    def get_remaining(self) -> Tuple[int, int]:
+    def get_remaining(self) -> tuple[int, int]:
         """Get remaining quota (daily, hourly)."""
         with self._lock:
             self._check_reset()
@@ -94,7 +94,7 @@ class UsageQuotaManager:
             hourly_remaining = max(0, self._quota.hourly_limit - self._quota.current_hourly)
             return daily_remaining, hourly_remaining
 
-    def get_usage_report(self) -> Dict[str, Any]:
+    def get_usage_report(self) -> dict[str, Any]:
         """Get usage report."""
         with self._lock:
             self._check_reset()

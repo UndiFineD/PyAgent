@@ -27,11 +27,11 @@ from .enums import (
     MutationOperator, ExecutionMode
 )
 from .models import (
-    TestCase, TestRun, CoverageGap, TestFactory, VisualRegressionConfig,
-    ContractTest, TestEnvironment, ExecutionTrace, TestDependency,
-    CrossBrowserConfig, AggregatedResult, Mutation, GeneratedTest,
-    TestProfile, ScheduleSlot, Recording, ReplayResult, ProvisionedEnvironment,
-    ValidationResult, _empty_str_list, _empty_dict_any, _empty_action_list
+    TestCase as TestCase, TestRun as TestRun, CoverageGap as CoverageGap, TestFactory as TestFactory, VisualRegressionConfig as VisualRegressionConfig,
+    ContractTest as ContractTest, TestEnvironment as TestEnvironment, ExecutionTrace as ExecutionTrace, TestDependency as TestDependency,
+    CrossBrowserConfig as CrossBrowserConfig, AggregatedResult as AggregatedResult, Mutation as Mutation, GeneratedTest as GeneratedTest,
+    TestProfile as TestProfile, ScheduleSlot as ScheduleSlot, Recording as Recording, ReplayResult as ReplayResult, ProvisionedEnvironment as ProvisionedEnvironment,
+    ValidationResult as ValidationResult, _empty_str_list as _empty_str_list, _empty_dict_any as _empty_dict_any, _empty_action_list as _empty_action_list
 )
 from .testing_utils import (
     VisualRegressionTester, ContractTestRunner, ResultAggregator,

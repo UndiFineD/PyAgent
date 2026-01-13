@@ -44,8 +44,8 @@ class ReportSearchEngine:
     def __init__(self) -> None:
         """Initialize search engine."""
 
-        self.index: Dict[str, List[Tuple[str, ReportType, int]]] = {}
-        self._reports: Dict[str, str] = {}
+        self.index: dict[str, list[tuple[str, ReportType, int]]] = {}
+        self._reports: dict[str, str] = {}
         logging.debug("ReportSearchEngine initialized")
 
     def index_report(
@@ -71,7 +71,7 @@ class ReportSearchEngine:
                     self.index[word] = []
                 self.index[word].append((file_path, report_type, line_num))
 
-    def search(self, query: str, max_results: int = 20) -> List[ReportSearchResult]:
+    def search(self, query: str, max_results: int = 20) -> list[ReportSearchResult]:
         """Search reports.
         Args:
             query: Search query.
@@ -81,13 +81,13 @@ class ReportSearchEngine:
         """
 
         words = re.findall(r'\w+', query.lower())
-        matches: Dict[str, int] = {}
+        matches: dict[str, int] = {}
         for word in words:
             if word in self.index:
                 for file_path, report_type, line_num in self.index[word]:
                     key = f"{file_path}:{report_type.name}:{line_num}"
                     matches[key] = matches.get(key, 0) + 1
-        results: List[ReportSearchResult] = []
+        results: list[ReportSearchResult] = []
         for key, score in sorted(matches.items(), key=lambda x: -x[1])[:max_results]:
             parts = key.split(":")
             file_path = parts[0]

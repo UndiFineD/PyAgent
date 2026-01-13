@@ -22,6 +22,7 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import time
+import random
 from typing import Dict, List, Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
@@ -37,7 +38,7 @@ class HolographicContextAgent(BaseAgent):
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.holograms: Dict[str, Dict[str, Any]] = {}
+        self.holograms: dict[str, dict[str, Any]] = {}
         self._system_prompt = (
             "You are the Holographic Context Agent. "
             "Your role is to maintain multi-perspective snapshots of the project. "
@@ -45,7 +46,7 @@ class HolographicContextAgent(BaseAgent):
         )
 
     @as_tool
-    def create_hologram(self, name: str, state_data: Dict[str, Any], angles: List[str] = ["security", "performance"]) -> str:
+    def create_hologram(self, name: str, state_data: dict[str, Any], angles: list[str] = ["security", "performance"]) -> str:
         """
         Creates a multi-angle 'hologram' of the provided state data.
         """
@@ -68,7 +69,7 @@ class HolographicContextAgent(BaseAgent):
         return f"Successfully created hologram '{name}'."
 
     @as_tool
-    def view_perspective(self, name: str, angle: str) -> Dict[str, Any]:
+    def view_perspective(self, name: str, angle: str) -> dict[str, Any]:
         """
         Returns a specific perspective from a named hologram.
         """
@@ -78,7 +79,7 @@ class HolographicContextAgent(BaseAgent):
         return {"error": f"Hologram '{name}' not found."}
 
     @as_tool
-    def list_holograms(self) -> List[str]:
+    def list_holograms(self) -> list[str]:
         """
         List all active context holograms.
         """

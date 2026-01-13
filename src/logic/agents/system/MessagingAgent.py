@@ -25,6 +25,7 @@ Provides a unified interface for external communications.
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
+import asyncio
 from typing import Dict, List, Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
@@ -43,16 +44,15 @@ class MessagingAgent(BaseAgent):
         )
 
     @as_tool
-    def send_notification(self, platform: str, recipient: str, message: str) -> str:
+    async def send_notification(self, platform: str, recipient: str, message: str) -> str:
         """Sends a message to a specific platform/recipient. (SKELETON)"""
         logging.info(f"Sending {platform} message to {recipient}: {message}")
         
         # Phase 125: Privacy Guard Integration
-        # We simulate checking via capability or direct agent call if fleet is present
         if hasattr(self, "fleet") and self.fleet:
             privacy_guard = self.fleet.agents.get("PrivacyGuard")
             if privacy_guard and hasattr(privacy_guard, "verify_message_safety"):
-                check_result = privacy_guard.verify_message_safety(message)
+                check_result = await privacy_guard.verify_message_safety(message)
                 if not check_result.get("safe", True):
                     return f"SAFETY ERROR: Message blocked. Reason: {check_result.get('reason')}"
 
@@ -60,13 +60,13 @@ class MessagingAgent(BaseAgent):
         return f"Message sent to {recipient} via {platform} (Simulated)"
 
     @as_tool
-    def poll_for_replies(self, platform: str) -> List[Dict[str, Any]]:
+    async def poll_for_replies(self, platform: str) -> list[dict[str, Any]]:
         """Polls for new messages on a specific platform."""
         logging.info(f"Polling {platform} for new messages...")
         return [] # Return empty list for now
 
     @as_tool
-    def format_for_mobile(self, report: str) -> str:
+    async def format_for_mobile(self, report: str) -> str:
         """Truncates and formats a long report for messaging platforms."""
         return report[:500] + "..." if len(report) > 500 else report
 

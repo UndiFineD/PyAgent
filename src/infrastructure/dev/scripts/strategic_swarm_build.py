@@ -66,7 +66,7 @@ def main():
         print(f"❌ Could not find {prompt_path}")
         return
         
-    with open(prompt_path, "r", encoding="utf-8") as f:
+    with open(prompt_path, encoding="utf-8") as f:
         strategic_prompt = f.read()
     
     print("\n--- INGESTING STRATEGIC PROMPT (note.txt) ---")
@@ -128,7 +128,7 @@ def main():
     print("Ready to implement changes from run_fleet_self_improvement.py? YES.")
     print("Architecture Tiers Validated? YES.")
     print("\n[Command to start autonomous build (Run 50 Cycles with strategic note)]:")
-    print("C:/DEV/PyAgent/.venv/Scripts/python.exe src/infrastructure/dev/scripts/run_fleet_self_improvement.py -c 50 -p docs\\notes\\note.txt")
+    print(str(Path(__file__).resolve().parents[4]) + "/.venv/Scripts/python.exe src/infrastructure/dev/scripts/run_fleet_self_improvement.py -c 50 -p docs\\notes\\note.txt")
 
 if __name__ == "__main__":
     main()

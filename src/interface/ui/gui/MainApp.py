@@ -44,7 +44,8 @@ from .DialogManager import DialogManager
 from .WorkflowManager import WorkflowManager
 from .ConfigurationManager import ConfigurationManager
 from .ProjectStatusPanel import ProjectStatusPanel
-from typing import Any, Callable, Dict
+from typing import Any, Dict, Self
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -62,7 +63,7 @@ class PyAgentGUI:
         # Managers
         self.config_manager = ConfigurationManager()
         self.dialogs = DialogManager(self.root)
-        self.workflow_manager: WorkflowManager[Dict[str, Callable[..., None] | Callable[..., Any]]] = WorkflowManager({
+        self.workflow_manager: WorkflowManager[dict[str, Callable[..., None] | Callable[..., Any]]] = WorkflowManager({
             "set_status": self.status_var.set,
             "add_agent": lambda name: self.agent_manager.add_column(name)
         })
@@ -71,7 +72,7 @@ class PyAgentGUI:
         self.session_manager = SessionManager("gui_session.json")
         self.theme_manager: ThemeManager[tk.Tk] = ThemeManager(self.root)
         self.diff_viewer: DiffViewer[tk.Tk] = DiffViewer(self.root)
-        self.agent_runner: AgentRunner[Dict[str, Callable[..., None] | Callable[[], str]]] = AgentRunner({
+        self.agent_runner: AgentRunner[dict[str, Callable[..., None] | Callable[[], str]]] = AgentRunner({
             "set_status": self.status_var.set,
             "get_global_context": lambda: self.global_context.get("1.0", tk.END).strip()
         })
@@ -97,18 +98,18 @@ class PyAgentGUI:
             "bmad_wizard": self.show_bmad_wizard,
             "set_track": lambda t: self.bmad.track_var.set(t)
         }
-        self.menu: AppMenu[tk.Tk, Dict[str, Any]] = AppMenu(self.root, menu_callbacks)
+        self.menu: AppMenu[tk.Tk, dict[str, Any]] = AppMenu(self.root, menu_callbacks)
 
         # Main PanedWindow (Vertical: Header | Center | Status)
         main_vpaned: ttk.Panedwindow = ttk.PanedWindow(self.root, orient=tk.VERTICAL)
         main_vpaned.pack(fill=tk.BOTH, expand=True)
 
         # 1. Selection & Header
-        header_callbacks: Dict[str, Callable[[], None]] = {
+        header_callbacks: dict[str, Callable[[], None]] = {
             "browse_root": self.browse_root,
             "refresh_explorer": lambda: self.explorer.refresh_tree()
         }
-        self.header: HeaderPanel[ttk.Panedwindow, tk.StringVar, Dict[str, Callable[[], None]]] = HeaderPanel(main_vpaned, self.project_root_var, header_callbacks)
+        self.header: HeaderPanel[ttk.Panedwindow, tk.StringVar, dict[str, Callable[[], None]]] = HeaderPanel(main_vpaned, self.project_root_var, header_callbacks)
         self.global_context: tk.Text = self.header.global_context
         main_vpaned.add(self.header.frame, weight=0)
 
@@ -135,7 +136,7 @@ class PyAgentGUI:
             "add_agent": self.add_agent_column,
             "get_workflow_manager": lambda: self.workflow_manager
         }
-        self.bmad: BmadManager[ttk.Frame, Dict[str, Any]] = BmadManager(side_panel, bmad_callbacks)
+        self.bmad: BmadManager[ttk.Frame, dict[str, Any]] = BmadManager(side_panel, bmad_callbacks)
         self.bmad.frame.pack(fill=tk.X, padx=5, pady=5)
 
         # Progress Dashboard
@@ -143,7 +144,7 @@ class PyAgentGUI:
         self.status_panel.frame.pack(fill=tk.X, padx=5, pady=5)
 
         # Dashboard (Scrolled Content)
-        self.dashboard: AgentDashboard[ttk.Panedwindow, Dict[str, Callable[..., Any] | Callable[[], None] | Callable[[], list]]] = AgentDashboard(main_hpaned, {
+        self.dashboard: AgentDashboard[ttk.Panedwindow, dict[str, Callable[..., Any] | Callable[[], None] | Callable[[], list]]] = AgentDashboard(main_hpaned, {
             "add_agent": self.add_agent_column,
             "add_custom": self.add_custom_agent_dialog,
             "collapse_all": lambda: [a.toggle_minimize() for a in self.agent_manager.agent_columns if not a.is_minimized],
@@ -190,7 +191,7 @@ class PyAgentGUI:
     def show_bmad_wizard(self) -> None:
         self.dialogs.show_bmad_wizard(self.apply_bmad_setup)
 
-    def apply_bmad_setup(self, config: Dict[str, Any]) -> None:
+    def apply_bmad_setup(self, config: dict[str, Any]) -> None:
         self.bmad.track_var.set(config["track"])
         self.status_var.set(f"BMAD: Applied {config['track']} setup.")
         

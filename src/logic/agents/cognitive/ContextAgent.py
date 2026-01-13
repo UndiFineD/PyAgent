@@ -43,7 +43,7 @@ import zlib
 __version__ = VERSION
 
 # Default templates for common file types
-DEFAULT_TEMPLATES: Dict[str, ContextTemplate] = {
+DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
     "python": ContextTemplate(
         name="Python Module",
         file_type=".py",
@@ -157,7 +157,7 @@ DEFAULT_TEMPLATES: Dict[str, ContextTemplate] = {
 }
 
 # Default validation rules
-DEFAULT_VALIDATION_RULES: List[ValidationRule] = [
+DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
     ValidationRule(
         name="has_purpose",
         pattern=r"##\s*Purpose\b",
@@ -185,7 +185,7 @@ class ContextAgent(BaseAgent):
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.rag_core = LocalRAGCore()
-        self.rag_shards: List[RAGShard] = []
+        self.rag_shards: list[RAGShard] = []
         
         # Configuration
         self.config = {
@@ -200,17 +200,17 @@ class ContextAgent(BaseAgent):
         self.source_path = self._derive_source_path()
 
         # New features
-        self._templates: Dict[str, ContextTemplate] = dict(DEFAULT_TEMPLATES)
-        self._tags: Dict[str, ContextTag] = {}
-        self._versions: List[ContextVersion] = []
-        self._validation_rules: List[ValidationRule] = list(DEFAULT_VALIDATION_RULES)
-        self._annotations: List[ContextAnnotation] = []
+        self._templates: dict[str, ContextTemplate] = dict(DEFAULT_TEMPLATES)
+        self._tags: dict[str, ContextTag] = {}
+        self._versions: list[ContextVersion] = []
+        self._validation_rules: list[ValidationRule] = list(DEFAULT_VALIDATION_RULES)
+        self._annotations: list[ContextAnnotation] = []
         self._priority: ContextPriority = ContextPriority.MEDIUM
         self._category: FileCategory = FileCategory.OTHER
-        self._compressed_content: Optional[bytes] = None
-        self._metadata: Dict[str, Any] = {}
+        self._compressed_content: bytes | None = None
+        self._metadata: dict[str, Any] = {}
 
-    def shard_selection(self, query: str) -> List[str]:
+    def shard_selection(self, query: str) -> list[str]:
         """Selects the best vector shards based on file path and query sentiment."""
         active_path = str(self.file_path)
         selected = self.rag_core.route_query_to_shards(query, active_path, self.rag_shards)
@@ -223,7 +223,7 @@ class ContextAgent(BaseAgent):
              logging.warning(f"File {self.file_path.name} does not end with .description.md. " 
                              "Context operations may be limited.")
 
-    def _derive_source_path(self) -> Optional[Path]:
+    def _derive_source_path(self) -> Path | None:
         """Derive source file path from .description.md filename."""
         if self.file_path.name.endswith('.description.md'):
             stem = self.file_path.name.replace('.description.md', '')
@@ -244,11 +244,11 @@ class ContextAgent(BaseAgent):
         logging.warning(f"Template '{template_name}' not found")
         return False
 
-    def get_template_by_name(self, template_name: str) -> Optional[ContextTemplate]:
+    def get_template_by_name(self, template_name: str) -> ContextTemplate | None:
         """Get a template by name."""
         return self._templates.get(template_name.lower())
 
-    def get_template(self, template_name: str) -> Optional[ContextTemplate]:
+    def get_template(self, template_name: str) -> ContextTemplate | None:
         """Compatibility alias: get a template by name.
 
         Tests and older callers use get_template(...); internally this agent
@@ -261,7 +261,7 @@ class ContextAgent(BaseAgent):
         self._templates[template.name.lower()] = template
         logging.info(f"Added template: {template.name}")
 
-    def get_template_for_file(self) -> Optional[ContextTemplate]:
+    def get_template_for_file(self) -> ContextTemplate | None:
         """Get the appropriate template for the current file."""
         if not self.source_path:
             return None
@@ -289,7 +289,7 @@ class ContextAgent(BaseAgent):
         template_name = ext_mapping.get(ext)
         return self._templates.get(template_name) if template_name else None
 
-    def apply_template(self, template_name: Optional[str] = None) -> str:
+    def apply_template(self, template_name: str | None = None) -> str:
         """Apply a template to generate initial content."""
         template = None
         if template_name:
@@ -316,7 +316,7 @@ class ContextAgent(BaseAgent):
             return True
         return False
 
-    def get_tags(self) -> List[ContextTag]:
+    def get_tags(self) -> list[ContextTag]:
         """Get all tags."""
         return list(self._tags.values())
 
@@ -324,7 +324,7 @@ class ContextAgent(BaseAgent):
         """Check if a tag exists."""
         return tag_name in self._tags
 
-    def get_tags_by_parent(self, parent_name: str) -> List[ContextTag]:
+    def get_tags_by_parent(self, parent_name: str) -> list[ContextTag]:
         """Get all tags with a specific parent."""
         return [t for t in self._tags.values() if t.parent == parent_name]
 
@@ -333,7 +333,7 @@ class ContextAgent(BaseAgent):
     def create_version(
         self,
         version: str,
-        changes: Optional[List[str]] = None,
+        changes: list[str] | None = None,
         author: str = ""
     ) -> ContextVersion:
         """Create a new version snapshot."""
@@ -352,15 +352,15 @@ class ContextAgent(BaseAgent):
         logging.info(f"Created version {version}")
         return version_obj
 
-    def get_versions(self) -> List[ContextVersion]:
+    def get_versions(self) -> list[ContextVersion]:
         """Get all versions."""
         return self._versions
 
-    def get_latest_version(self) -> Optional[ContextVersion]:
+    def get_latest_version(self) -> ContextVersion | None:
         """Get the latest version."""
         return self._versions[-1] if self._versions else None
 
-    def get_version_diff(self, v1: str, v2: str) -> Dict[str, Any]:
+    def get_version_diff(self, v1: str, v2: str) -> dict[str, Any]:
         """Get diff between two versions."""
         ver1 = next((v for v in self._versions if v.version == v1), None)
         ver2 = next((v for v in self._versions if v.version == v2), None)
@@ -379,7 +379,7 @@ class ContextAgent(BaseAgent):
 
     # ========== Compression ==========
 
-    def compress_content(self, content: Optional[str] = None) -> bytes:
+    def compress_content(self, content: str | None = None) -> bytes:
         """Compress content for storage."""
         if content is None:
             content = self.current_content or self.previous_content or ""
@@ -387,7 +387,7 @@ class ContextAgent(BaseAgent):
         self._compressed_content = zlib.compress(content.encode(), level=9)
         return self._compressed_content
 
-    def decompress_content(self, compressed: Optional[bytes] = None) -> str:
+    def decompress_content(self, compressed: bytes | None = None) -> str:
         """Decompress stored content."""
         if compressed is None:
             compressed = self._compressed_content
@@ -397,7 +397,7 @@ class ContextAgent(BaseAgent):
 
         return zlib.decompress(compressed).decode()
 
-    def get_compression_ratio(self, content: Optional[str] = None) -> float:
+    def get_compression_ratio(self, content: str | None = None) -> float:
         """Get compression ratio (space savings) for the current/previous content."""
         if content is None:
             content = self.current_content or self.previous_content or ""
@@ -418,12 +418,12 @@ class ContextAgent(BaseAgent):
         """Add a validation rule."""
         self._validation_rules.append(rule)
 
-    def validate_content(self, content: Optional[str] = None) -> List[Dict[str, Any]]:
+    def validate_content(self, content: str | None = None) -> list[dict[str, Any]]:
         """Validate content against all rules."""
         if content is None:
             content = self.current_content or self.previous_content or ""
 
-        issues: List[Dict[str, Any]] = []
+        issues: list[dict[str, Any]] = []
 
         for rule in self._validation_rules:
             if rule.required:
@@ -448,7 +448,7 @@ class ContextAgent(BaseAgent):
 
         return issues
 
-    def is_valid(self, content: Optional[str] = None) -> bool:
+    def is_valid(self, content: str | None = None) -> bool:
         """Check if content passes all required validations."""
         issues = self.validate_content(content)
         return not any(i.get("severity") == "error" for i in issues)
@@ -472,11 +472,11 @@ class ContextAgent(BaseAgent):
         self._annotations.append(annotation)
         return annotation
 
-    def get_annotations(self) -> List[ContextAnnotation]:
+    def get_annotations(self) -> list[ContextAnnotation]:
         """Get all annotations."""
         return self._annotations
 
-    def get_annotations_for_line(self, line_number: int) -> List[ContextAnnotation]:
+    def get_annotations_for_line(self, line_number: int) -> list[ContextAnnotation]:
         """Get annotations for a specific line."""
         return [a for a in self._annotations if a.line_number == line_number]
 
@@ -581,17 +581,17 @@ class ContextAgent(BaseAgent):
         """Set a metadata value."""
         self._metadata[key] = value
 
-    def get_metadata(self, key: str) -> Optional[Any]:
+    def get_metadata(self, key: str) -> Any | None:
         """Get a metadata value."""
         return self._metadata.get(key)
 
-    def get_all_metadata(self) -> Dict[str, Any]:
+    def get_all_metadata(self) -> dict[str, Any]:
         """Get all metadata."""
         return dict(self._metadata)
 
     def export_metadata(self) -> str:
         """Export metadata as JSON."""
-        data: Dict[str, Any] = {
+        data: dict[str, Any] = {
             "priority": self._priority.value,
             "category": self._category.value,
             "tags": [t.name for t in self._tags.values()],

@@ -26,19 +26,20 @@ import logging
 import subprocess
 import contextlib
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Iterator, Tuple
+from typing import List, Dict, Any, Optional, Tuple
+from collections.abc import Iterator
 
 __version__ = VERSION
 
 class AgentCommandHandler:
     """Handles command execution for the Agent, including sub-agent orchestration."""
     
-    def __init__(self, repo_root: Path, models_config: Optional[Dict[str, Any]] = None, recorder: Any = None) -> None:
+    def __init__(self, repo_root: Path, models_config: dict[str, Any] | None = None, recorder: Any = None) -> None:
         self.repo_root: Path = repo_root
-        self.models: Dict[str, Any] = models_config or {}
+        self.models: dict[str, Any] = models_config or {}
         self.recorder: Any = recorder
 
-    def _record(self, action: str, result: str, meta: Optional[Dict[str, Any]] = None) -> None:
+    def _record(self, action: str, result: str, meta: dict[str, Any] | None = None) -> None:
         """Internal helper to record shell operations if recorder is available."""
         if self.recorder:
             self.recorder.record_interaction(
@@ -49,7 +50,7 @@ class AgentCommandHandler:
                 meta=meta
             )
 
-    def run_command(self, cmd: List[str], timeout: int = 120, max_retries: int = 1) -> subprocess.CompletedProcess[str]:
+    def run_command(self, cmd: list[str], timeout: int = 120, max_retries: int = 1) -> subprocess.CompletedProcess[str]:
         """Run a command with timeout, error handling, retry logic, and logging."""
         def attempt_command() -> subprocess.CompletedProcess[str]:
             logging.debug(f"Running command: {' '.join(cmd[:3])}... (timeout={timeout}s)")
@@ -95,7 +96,7 @@ class AgentCommandHandler:
             
         return res
 
-    def _prepare_command_environment(self, cmd: List[str]) -> Tuple[List[str], Dict[str, str]]:
+    def _prepare_command_environment(self, cmd: list[str]) -> tuple[list[str], dict[str, str]]:
         """Prepares the command and environment for execution, detecting sub-agents."""
         local_cmd = list(cmd)
         env = os.environ.copy()
@@ -126,7 +127,7 @@ class AgentCommandHandler:
 
         return local_cmd, env
 
-    def _get_agent_env_vars(self, agent_name: str) -> Dict[str, str]:
+    def _get_agent_env_vars(self, agent_name: str) -> dict[str, str]:
         """Returns environment variables for a specific agent based on models config."""
         vars_to_set = {}
         spec = self.models.get(agent_name) or self.models.get('default')
@@ -147,7 +148,7 @@ class AgentCommandHandler:
     @contextlib.contextmanager
     def with_agent_env(self, agent_name: str) -> Iterator[None]:
         """Temporarily set environment variables for a specific agent."""
-        prev: Dict[str, Optional[str]] = {}
+        prev: dict[str, str | None] = {}
         keys = ['DV_AGENT_MODEL_PROVIDER', 'DV_AGENT_MODEL_NAME',
                 'DV_AGENT_MODEL_TEMPERATURE', 'DV_AGENT_MODEL_MAX_TOKENS']
         try:

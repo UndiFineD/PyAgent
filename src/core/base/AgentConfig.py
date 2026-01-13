@@ -47,12 +47,12 @@ class AgentConfig:
     """
     repo_root: str = "."
     agents_only: bool = False
-    max_files: Optional[int] = None
+    max_files: int | None = None
     loop: int = 1
     dry_run: bool = False
     no_git: bool = False
     verbosity: str = "normal"
-    rate_limit: Optional[RateLimitConfig] = None
+    rate_limit: RateLimitConfig | None = None
     plugins: list[AgentPluginConfig] = field(default_factory=_empty_plugin_config_list)
     selective_agents: list[str] = field(default_factory=_empty_list_str)
     timeout_per_agent: dict[str, int] = field(default_factory=_empty_dict_str_int)

@@ -41,7 +41,7 @@ class ReportComparison:
 
     old_path: str
     new_path: str
-    added: List[str] = field(default_factory=list)  # type: ignore[assignment]
-    removed: List[str] = field(default_factory=list)  # type: ignore[assignment]
-    changed: List[tuple] = field(default_factory=list)  # type: ignore[assignment]
+    added: list[str] = field(default_factory=list)  # type: ignore[assignment]
+    removed: list[str] = field(default_factory=list)  # type: ignore[assignment]
+    changed: list[tuple] = field(default_factory=list)  # type: ignore[assignment]
     unchanged_count: int = 0

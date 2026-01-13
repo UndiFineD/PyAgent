@@ -72,6 +72,6 @@ class VersionGate:
             return True
 
     @staticmethod
-    def filter_by_capability(available: List[str], required: List[str]) -> List[str]:
+    def filter_by_capability(available: list[str], required: list[str]) -> list[str]:
         """Filters a list of providers by required capabilities."""
         return [p for p in available if all(cap in p for cap in required)]

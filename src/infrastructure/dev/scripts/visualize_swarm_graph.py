@@ -20,8 +20,8 @@ def generate_swarm_graph(output_format:
     # Trace message flows: sender -> signal_name -> subscribers
     # Note: We need to see who is subscribed to what to form the edges.
     
-    nodes: Set[str] = set()
-    edges: List[tuple[str, str, str]] = [] # (sender, receiver, label)
+    nodes: set[str] = set()
+    edges: list[tuple[str, str, str]] = [] # (sender, receiver, label)
     
     # 1. Map subscribers back to agents
     sub_map = {} # signal_name -> list of subscriber names (inferred)

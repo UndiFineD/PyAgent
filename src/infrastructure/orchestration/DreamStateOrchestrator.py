@@ -37,7 +37,7 @@ class DreamStateOrchestrator:
         self.dream_log_path = os.path.join("data", "dreams")
         os.makedirs(self.dream_log_path, exist_ok=True)
 
-    async def initiate_dream_cycle(self, focus_area: str) -> Dict[str, Any]:
+    async def initiate_dream_cycle(self, focus_area: str) -> dict[str, Any]:
         """
         Starts an async simulation cycle to evolve skills in a specific area.
         """

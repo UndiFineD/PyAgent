@@ -21,7 +21,7 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import json
 import time
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Optional, List
 from pathlib import Path
 from src.core.base.ConnectivityManager import ConnectivityManager
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
@@ -31,7 +31,7 @@ __version__ = VERSION
 class TelemetryAgent:
     """Agent responsible for broadcasting fleet telemetry to the API server."""
     
-    def __init__(self, api_url: str = "http://localhost:8000", workspace_root: Optional[str] = None) -> None:
+    def __init__(self, api_url: str = "http://localhost:8000", workspace_root: str | None = None) -> None:
         self.api_url = api_url
         self.log_buffer = []
         
@@ -39,7 +39,7 @@ class TelemetryAgent:
         self.connectivity = ConnectivityManager(workspace_root)
         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
 
-    def _record(self, event_type: str, data: Dict[str, Any]) -> None:
+    def _record(self, event_type: str, data: dict[str, Any]) -> None:
         """Harvest telemetry logic for future self-improvement."""
         if self.recorder:
             try:
@@ -48,7 +48,7 @@ class TelemetryAgent:
             except Exception:
                 pass
 
-    def log_event(self, event_type: str, source: str, data: Dict[str, Any]) -> None:
+    def log_event(self, event_type: str, source: str, data: dict[str, Any]) -> None:
         event = {
             "type": event_type,
             "source": source,
@@ -72,5 +72,5 @@ class TelemetryAgent:
         if len(self.log_buffer) > 100:
             self.log_buffer.pop(0)
 
-    def get_recent_logs(self) -> List[Dict[str, Any]]:
+    def get_recent_logs(self) -> list[dict[str, Any]]:
         return self.log_buffer

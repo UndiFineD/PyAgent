@@ -7,22 +7,28 @@ from src.infrastructure.backend.RunnerBackends import BackendHandlers
 class RoutingEngine:
     """
     Phase 248: PERFORMANCE-BASED ROUTING
+    Phase 300: FEDERATED SOVEREIGNTY ROUTING
     Weights latency (TTFT/TPS) vs. quality to route tasks to the optimal provider.
+    Now supports routing to external federated clusters.
     """
 
     def __init__(self) -> None:
-        self.providers = ["github_models", "openai", "codex", "local"]
+        self.providers = ["github_models", "openai", "codex", "local", "federated_cluster"]
         logging.debug("RoutingEngine initialized")
 
-    def select_provider(self, task_type:
-        str = "general", priority: str = "balanced") -> str:
+    def select_provider(self, task_type: str = "general", priority: str = "balanced", federated: bool = False) -> str:
         """
         Selects the best provider based on task type and performance metrics.
         
         Args:
             task_type: "classification", "summarization", "coding", "reasoning"
             priority: "latency", "quality", "cost", "balanced"
+            federated: If True, prioritizes external swarm cooperation (Phase 300)
         """
+        if federated:
+            logging.info("RoutingEngine: Redirecting to federated cluster for sovereign negotiation.")
+            return "federated_cluster"
+
         report = BackendHandlers.get_performance_report()
         logging.debug(f"RoutingEngine: Performance Report: {report}")
 
@@ -51,7 +57,7 @@ class RoutingEngine:
         return preferred
 
     @staticmethod
-    def get_routing_stats() -> Dict[str, Any]:
+    def get_routing_stats() -> dict[str, Any]:
         """Returns statistics on routing decisions and provider health."""
         return {
             "active_metrics": BackendHandlers.get_performance_report(),

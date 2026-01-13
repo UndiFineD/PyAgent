@@ -39,6 +39,6 @@ class InheritedContext:
         overrides: Sections that override parent.
     """
     parent_path: str
-    inherited_sections: List[str] = field(default_factory=lambda: [])
+    inherited_sections: list[str] = field(default_factory=lambda: [])
     mode: InheritanceMode = InheritanceMode.MERGE
-    overrides: List[str] = field(default_factory=lambda: [])
+    overrides: list[str] = field(default_factory=lambda: [])

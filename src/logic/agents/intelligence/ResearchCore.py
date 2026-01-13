@@ -30,7 +30,7 @@ class ResearchCore:
     """
 
     @staticmethod
-    def execute_dcap_cycle(topic: str, content: str) -> Dict[str, str]:
+    def execute_dcap_cycle(topic: str, content: str) -> dict[str, str]:
         """
         Executes a full Deliberation-Conception-Action-Perception cycle on a topic.
         

@@ -42,10 +42,10 @@ class BayesianReasoningAgent(BaseAgent):
             "You quantify uncertainty and provide probabilistic insights into task success or system health."
         )
         # Internal belief store: {concept: {"prior": float, "likelihoods": {evidence: float}}}
-        self.beliefs: Dict[str, Any] = {}
+        self.beliefs: dict[str, Any] = {}
 
     @as_tool
-    def update_belief(self, concept: str, evidence_observed: str, likelihood: float) -> Dict[str, float]:
+    def update_belief(self, concept: str, evidence_observed: str, likelihood: float) -> dict[str, float]:
         """
         Updates the posterior probability of a concept given new evidence.
         Formula: P(H|E) = (P(E|H) * P(H)) / P(E)
@@ -72,7 +72,7 @@ class BayesianReasoningAgent(BaseAgent):
         return {"concept": concept, "posterior": posterior, "prior_was": prior}
 
     @as_tool
-    def calculate_expected_utility(self, actions: List[Dict[str, Any]]) -> str:
+    def calculate_expected_utility(self, actions: list[dict[str, Any]]) -> str:
         """
         Selects the action that maximizes expected utility.
         Input format: [{"name": str, "utility": float, "success_prob_concept": str}]

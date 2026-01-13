@@ -41,7 +41,7 @@ class AutoFixSuggester:
 
     def __init__(self) -> None:
         """Initialize the auto-fix suggester."""
-        self.fix_patterns: Dict[str, str] = {
+        self.fix_patterns: dict[str, str] = {
             r"NameError: name '(\w+)' is not defined":
                 "Define variable '{0}' before use or import it",
             r"ImportError: No module named '(\w+)'":
@@ -65,7 +65,7 @@ class AutoFixSuggester:
         """
         self.fix_patterns[pattern] = fix_template
 
-    def suggest(self, error: ErrorEntry) -> Optional[FixSuggestion]:
+    def suggest(self, error: ErrorEntry) -> FixSuggestion | None:
         """Generate a fix suggestion for an error.
 
         Args:
@@ -88,10 +88,10 @@ class AutoFixSuggester:
         return None
 
     def suggest_all(
-        self, errors: List[ErrorEntry]
-    ) -> List[FixSuggestion]:
+        self, errors: list[ErrorEntry]
+    ) -> list[FixSuggestion]:
         """Generate suggestions for multiple errors."""
-        suggestions: List[FixSuggestion] = []
+        suggestions: list[FixSuggestion] = []
         for error in errors:
             sugg = self.suggest(error)
             if sugg:

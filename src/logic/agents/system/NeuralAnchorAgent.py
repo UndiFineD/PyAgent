@@ -35,7 +35,7 @@ class NeuralAnchorAgent(BaseAgent):
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.anchors: Dict[str, Any] = {}
+        self.anchors: dict[str, Any] = {}
         self._system_prompt = (
             "You are the Neural Anchor Agent. "
             "Your mission is to prevent hallucination by strictly grounding agent reasoning in verified sources. "
@@ -55,7 +55,7 @@ class NeuralAnchorAgent(BaseAgent):
         return f"Source '{source_name}' loaded as an anchor."
 
     @as_tool
-    def validate_claim(self, claim: str, context_sources: List[str]) -> Dict[str, Any]:
+    def validate_claim(self, claim: str, context_sources: list[str]) -> dict[str, Any]:
         """
         Validates a specific claim against the loaded anchor sources.
         """
@@ -64,7 +64,6 @@ class NeuralAnchorAgent(BaseAgent):
             if src in self.anchors:
                 anchor = self.anchors[src]
                 # Simple keyword/regex check for validation in this stub
-                findings = []
                 keywords = re.findall(r'\b\w+\b', claim.lower())
                 matches = [k for k in keywords if k in anchor["content"].lower()]
                 
@@ -83,7 +82,7 @@ class NeuralAnchorAgent(BaseAgent):
         }
 
     @as_tool
-    def anchor_reasoning_step(self, reasoning_chain: List[str], sources: List[str]) -> List[Dict[str, Any]]:
+    def anchor_reasoning_step(self, reasoning_chain: list[str], sources: list[str]) -> list[dict[str, Any]]:
         """
         Iteratively validates a chain of reasoning steps.
         """

@@ -43,7 +43,7 @@ class RequestContext:
     """
 
     request_id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    correlation_id: Optional[str] = None
+    correlation_id: str | None = None
     priority: RequestPriority = RequestPriority.NORMAL
     created_at: float = field(default_factory=time.time)
-    metadata: Dict[str, Any] = field(default_factory=lambda: {})
+    metadata: dict[str, Any] = field(default_factory=lambda: {})

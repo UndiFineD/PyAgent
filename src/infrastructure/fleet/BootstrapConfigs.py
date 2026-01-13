@@ -32,7 +32,7 @@ __version__ = VERSION
 
 _overlay = RegistryOverlay()
 
-def get_bootstrap_agents() -> Dict[str, Tuple[str, str, Optional[str]]]:
+def get_bootstrap_agents() -> dict[str, tuple[str, str, str | None]]:
     """Returns the bootstrap agents with dynamic overrides applied."""
     defaults = {
         "Orchestrator": (

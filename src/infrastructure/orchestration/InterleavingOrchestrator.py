@@ -36,7 +36,7 @@ class InterleavingOrchestrator:
     
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
-        self.step_history: List[Dict[str, Any]] = []
+        self.step_history: list[dict[str, Any]] = []
 
     def execute_interleaved_task(self, task: str) -> str:
         """
@@ -81,7 +81,7 @@ class InterleavingOrchestrator:
             score += 3
         return min(score, 10)
 
-    def _select_strategy(self, score: int) -> Dict[str, Any]:
+    def _select_strategy(self, score: int) -> dict[str, Any]:
         """
         Maps complexity score to an interleaving strategy.
         """

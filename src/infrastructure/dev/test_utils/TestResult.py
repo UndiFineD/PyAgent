@@ -46,6 +46,6 @@ class TestResult:
     test_name: str
     status: TestStatus
     duration_ms: float = 0.0
-    error_message: Optional[str] = None
+    error_message: str | None = None
     assertions_count: int = 0
     timestamp: float = field(default_factory=time.time)

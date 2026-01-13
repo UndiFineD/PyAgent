@@ -25,7 +25,7 @@ import logging
 import time
 import hashlib
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Dict, List
 from src.core.base.utils.core_utils import load_codeignore
 from src.core.base.AgentCore import BaseCore
 
@@ -36,7 +36,7 @@ class AgentFileManager:
     
     SUPPORTED_EXTENSIONS = {'.py', '.sh', '.js', '.ts', '.go', '.rb'}
 
-    def __init__(self, repo_root: Path, agents_only: bool = False, ignored_patterns: Optional[set[str]] = None) -> None:
+    def __init__(self, repo_root: Path, agents_only: bool = False, ignored_patterns: set[str] | None = None) -> None:
         self.repo_root = repo_root
         self.agents_only = agents_only
         self.ignored_patterns = ignored_patterns or load_codeignore(repo_root)
@@ -46,7 +46,7 @@ class AgentFileManager:
         """Check if a path should be ignored based on .codeignore patterns."""
         return self.core.is_path_ignored(path, self.repo_root, self.ignored_patterns)
 
-    def find_code_files(self, max_files: Optional[int] = None) -> list[Path]:
+    def find_code_files(self, max_files: int | None = None) -> list[Path]:
         """Find code files in the repository, respecting filters and ignore patterns."""
         all_potential_files = []
         
@@ -86,7 +86,7 @@ class AgentFileManager:
                             
         return code_files
 
-    def load_cascading_codeignore(self, directory: Optional[Path] = None) -> set[str]:
+    def load_cascading_codeignore(self, directory: Path | None = None) -> set[str]:
         """Load .codeignore patterns with cascading support."""
         if directory is None:
             directory = self.repo_root
@@ -114,7 +114,7 @@ class AgentFileManager:
         logging.debug(f"Total cascading patterns from {directory}: {len(all_patterns)}")
         return all_patterns
 
-    def create_file_snapshot(self, file_path: Path) -> Optional[str]:
+    def create_file_snapshot(self, file_path: Path) -> str | None:
         """Create a snapshot of file content before modifications."""
         try:
             if not file_path.exists():
@@ -197,9 +197,9 @@ class AgentFileManager:
             logging.error(f"Failed to cleanup snapshots: {e}")
             return 0
 
-    def _group_snapshots_by_filename(self, snapshot_dir: Path) -> Dict[str, List[Path]]:
+    def _group_snapshots_by_filename(self, snapshot_dir: Path) -> dict[str, list[Path]]:
         """Helper to group snapshot files by their original filename."""
-        groups: Dict[str, List[Path]] = {}
+        groups: dict[str, list[Path]] = {}
         for snapshot_file in snapshot_dir.glob('*'):
             if snapshot_file.is_file():
                 parts = snapshot_file.name.split('_', 2)
@@ -210,7 +210,7 @@ class AgentFileManager:
                     groups[filename].append(snapshot_file)
         return groups
 
-    def _prune_snapshot_groups(self, groups: Dict[str, List[Path]], 
+    def _prune_snapshot_groups(self, groups: dict[str, list[Path]], 
                                current_time: float, 
                                max_age_seconds: int, 
                                max_count: int) -> int:

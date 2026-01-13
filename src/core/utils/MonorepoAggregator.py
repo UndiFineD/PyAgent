@@ -45,13 +45,13 @@ class MonorepoAggregator:
 
     def __init__(self) -> None:
         """Initialize the monorepo aggregator."""
-        self.packages: Dict[str, MonorepoEntry] = {}
+        self.packages: dict[str, MonorepoEntry] = {}
 
     def add_package(
         self,
         package_name: str,
         version: str,
-        entries: List[ChangelogEntry],
+        entries: list[ChangelogEntry],
         path: str = ""
     ) -> MonorepoEntry:
         """Add a package to the aggregator.

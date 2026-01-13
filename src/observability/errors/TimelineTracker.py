@@ -40,7 +40,7 @@ class TimelineTracker:
 
     def __init__(self) -> None:
         """Initialize the timeline tracker."""
-        self.events: List[TimelineEvent] = []
+        self.events: list[TimelineEvent] = []
 
     def record_event(
         self, error_id: str, event_type: str, details: str = ""
@@ -64,22 +64,22 @@ class TimelineTracker:
         self.events.append(event)
         return event
 
-    def get_events_for_error(self, error_id: str) -> List[TimelineEvent]:
+    def get_events_for_error(self, error_id: str) -> list[TimelineEvent]:
         """Get all events for a specific error."""
         return [e for e in self.events if e.error_id == error_id]
 
     def get_events_in_range(
         self, start: str, end: str
-    ) -> List[TimelineEvent]:
+    ) -> list[TimelineEvent]:
         """Get events within a time range."""
         return [
             e for e in self.events
             if start <= e.timestamp <= end
         ]
 
-    def generate_timeline_data(self) -> Dict[str, Any]:
+    def generate_timeline_data(self) -> dict[str, Any]:
         """Generate timeline data for visualization."""
-        by_date: Dict[str, int] = {}
+        by_date: dict[str, int] = {}
         for event in self.events:
             date = event.timestamp[:10]  # YYYY - MM - DD
             by_date[date] = by_date.get(date, 0) + 1

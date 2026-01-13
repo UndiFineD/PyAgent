@@ -40,5 +40,5 @@ class MonorepoEntry:
     """
     package_name: str
     version: str
-    entries: List[ChangelogEntry] = field(default_factory=lambda: [])
+    entries: list[ChangelogEntry] = field(default_factory=lambda: [])
     path: str = ""

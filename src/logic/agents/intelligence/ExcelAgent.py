@@ -41,7 +41,7 @@ class ExcelAgent(BaseAgent):
             "to provide a semantic understanding of the spreadsheet."
         )
 
-    def extract_structured_data(self, excel_path: str, mode: str = "standard") -> Dict[str, Any]:
+    def extract_structured_data(self, excel_path: str, mode: str = "standard") -> dict[str, Any]:
         """Performs deep structured extraction. Supports openpyxl if available."""
         logging.info(f"ExcelAgent: Extracting data from {excel_path} in '{mode}' mode.")
         
@@ -69,7 +69,7 @@ class ExcelAgent(BaseAgent):
         except Exception as e:
             return {"error": str(e)}
 
-    def generate_markdown_summary(self, extraction_result: Dict[str, Any]) -> str:
+    def generate_markdown_summary(self, extraction_result: dict[str, Any]) -> str:
         """Converts structured Excel JSON into an AI-readable Markdown summary."""
         summary = [f"# Excel Summary: {extraction_result.get('book_name')}"]
         

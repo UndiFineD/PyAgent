@@ -31,16 +31,16 @@ class RollbackManager:
     """Stores rollback points and can restore the latest state."""
 
     def __init__(self) -> None:
-        self.rollbacks: List[RollbackPoint] = []
-        self._by_id: Dict[str, List[RollbackPoint]] = {}
+        self.rollbacks: list[RollbackPoint] = []
+        self._by_id: dict[str, list[RollbackPoint]] = {}
 
-    def create_rollback_point(self, improvement_id: str, state: Dict[str, Any]) -> RollbackPoint:
+    def create_rollback_point(self, improvement_id: str, state: dict[str, Any]) -> RollbackPoint:
         point = RollbackPoint(improvement_id=improvement_id, state=dict(state))
         self.rollbacks.append(point)
         self._by_id.setdefault(improvement_id, []).append(point)
         return point
 
-    def rollback(self, improvement_id: str) -> Dict[str, Any]:
+    def rollback(self, improvement_id: str) -> dict[str, Any]:
         points = self._by_id.get(improvement_id, [])
         if not points:
             return {}

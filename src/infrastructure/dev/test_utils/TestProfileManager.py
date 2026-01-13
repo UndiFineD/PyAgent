@@ -46,9 +46,9 @@ class TestProfileManager:
 
     def __init__(self) -> None:
         """Initialize profile manager."""
-        self._profiles: Dict[str, TestProfile] = {}
-        self._active: Optional[str] = None
-        self._original_env: Dict[str, Optional[str]] = {}
+        self._profiles: dict[str, TestProfile] = {}
+        self._active: str | None = None
+        self._original_env: dict[str, str | None] = {}
 
     def add_profile(self, profile: TestProfile) -> None:
         """Add a profile.
@@ -58,7 +58,7 @@ class TestProfileManager:
         """
         self._profiles[profile.name] = profile
 
-    def get_profile(self, name: str) -> Optional[TestProfile]:
+    def get_profile(self, name: str) -> TestProfile | None:
         """Get a profile by name."""
         return self._profiles.get(name)
 
@@ -119,7 +119,7 @@ class TestProfileManager:
         profile = self._profiles[self._active]
         return profile.settings.get(key, default)
 
-    def get_active_profile(self) -> Optional[TestProfile]:
+    def get_active_profile(self) -> TestProfile | None:
         """Get currently active profile."""
         if self._active:
             return self._profiles[self._active]

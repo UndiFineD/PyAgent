@@ -29,18 +29,18 @@ class KnowledgeTransferCore:
     Handles merging of lesson datasets.
     """
 
-    def merge_lessons(self, current_lessons: List[Any], imported_lessons: List[Any]) -> List[Any]:
+    def merge_lessons(self, current_lessons: list[Any], imported_lessons: list[Any]) -> list[Any]:
         """Merges imported lessons into the current set, avoiding duplicates."""
         # Normalize to dicts only
-        valid_current = [l for l in current_lessons if isinstance(l, dict)]
-        valid_imported = [l for l in imported_lessons if isinstance(l, dict)]
+        valid_current = [lesson for lesson in current_lessons if isinstance(lesson, dict)]
+        valid_imported = [lesson for lesson in imported_lessons if isinstance(lesson, dict)]
         
         # Create a signature set for existing lessons
         # Signature = (failure_context, correction) usually unique enough
-        seen_signatures: Set[str] = set()
+        seen_signatures: set[str] = set()
         
-        for l in valid_current:
-            sig = f"{l.get('failure_context')}|{l.get('correction')}"
+        for lesson in valid_current:
+            sig = f"{lesson.get('failure_context')}|{lesson.get('correction')}"
             seen_signatures.add(sig)
             
         merged = list(valid_current) # Start with current

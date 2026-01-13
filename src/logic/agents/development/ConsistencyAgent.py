@@ -43,9 +43,9 @@ class ConsistencyAgent:
 
     def __init__(self) -> None:
         """Initialize the consistency checker."""
-        self.issues: List[ConsistencyIssue] = []
+        self.issues: list[ConsistencyIssue] = []
 
-    def check(self, file_contents: Dict[str, str]) -> List[ConsistencyIssue]:
+    def check(self, file_contents: dict[str, str]) -> list[ConsistencyIssue]:
         """Check for consistency issues across files.
 
         Args:
@@ -61,14 +61,14 @@ class ConsistencyAgent:
         self._check_import_consistency(file_contents)
         return self.issues
 
-    def _check_naming_consistency(self, file_contents: Dict[str, str]) -> None:
+    def _check_naming_consistency(self, file_contents: dict[str, str]) -> None:
         """Check naming convention consistency.
 
         Args:
             file_contents: Dictionary mapping file paths to contents.
         """
-        snake_case_files: List[str] = []
-        camel_case_files: List[str] = []
+        snake_case_files: list[str] = []
+        camel_case_files: list[str] = []
         for path, content in file_contents.items():
             funcs = re.findall(r"def\s+([a-zA-Z_]\w*)", content)
             for func in funcs:
@@ -84,14 +84,14 @@ class ConsistencyAgent:
                 recommended_style="snake_case for functions (PEP 8)"
             ))
 
-    def _check_import_consistency(self, file_contents: Dict[str, str]) -> None:
+    def _check_import_consistency(self, file_contents: dict[str, str]) -> None:
         """Check import statement consistency.
 
         Args:
             file_contents: Dictionary mapping file paths to contents.
         """
-        absolute_imports: List[str] = []
-        relative_imports: List[str] = []
+        absolute_imports: list[str] = []
+        relative_imports: list[str] = []
         for path, content in file_contents.items():
             if re.search(r"^from\s+\.", content, re.M):
                 relative_imports.append(path)

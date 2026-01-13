@@ -33,13 +33,13 @@ __version__ = VERSION
 class CloudSwarmManager:
     """Orchestrates resources and deployments across multiple cloud providers."""
 
-    def __init__(self, config_path: Optional[str] = None) -> None:
+    def __init__(self, config_path: str | None = None) -> None:
         self.config_path = Path(config_path) if config_path else None
         self.providers = ["aws", "azure", "gcp"]
-        self.active_deployments: Dict[str, Any] = {}
+        self.active_deployments: dict[str, Any] = {}
         self.logger = logging.getLogger(__name__)
 
-    def provision_resource(self, provider: str, resource_type: str, specs: Dict[str, Any]) -> str:
+    def provision_resource(self, provider: str, resource_type: str, specs: dict[str, Any]) -> str:
         """Provisions a resource on the specified cloud provider.
         
         Args:
@@ -79,7 +79,7 @@ class CloudSwarmManager:
         
         return f"SUCCESS: Agent '{agent_name}' is now active on {resource_id} ({deployment['provider']})."
 
-    def list_cloud_resources(self) -> Dict[str, Any]:
+    def list_cloud_resources(self) -> dict[str, Any]:
         """Returns a list of all active cloud resources and their status."""
         return self.active_deployments
 

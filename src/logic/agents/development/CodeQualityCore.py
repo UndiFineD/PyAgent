@@ -35,7 +35,7 @@ class CodeQualityCore:
         return max(0, 100 - (issues_count * 5))
 
     @staticmethod
-    def check_python_source_quality(source: str) -> List[Dict[str, Any]]:
+    def check_python_source_quality(source: str) -> list[dict[str, Any]]:
         """Analyzes Python source code for style issues (e.g., long lines)."""
         issues = []
         lines = source.splitlines()
@@ -49,7 +49,7 @@ class CodeQualityCore:
         return issues
 
     @staticmethod
-    def analyze_rust_source(source: str) -> List[Dict[str, Any]]:
+    def analyze_rust_source(source: str) -> list[dict[str, Any]]:
         """Analyzes Rust source for common patterns/issues."""
         issues = []
         if not source or len(source.strip()) < 5:
@@ -61,7 +61,7 @@ class CodeQualityCore:
         return issues
 
     @staticmethod
-    def analyze_js_source(source: str) -> List[Dict[str, Any]]:
+    def analyze_js_source(source: str) -> list[dict[str, Any]]:
         """Analyzes JavaScript source for common patterns/issues."""
         issues = []
         import re

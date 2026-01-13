@@ -51,7 +51,7 @@ def setup_logging(verbosity_arg: int = 0) -> None:
         - Defaults to INFO level if neither is set
     """
     env_verbosity: str | None = os.environ.get('DV_AGENT_VERBOSITY')
-    levels: Dict[str, int] = {
+    levels: dict[str, int] = {
         'quiet': logging.ERROR,
         'minimal': logging.WARNING,
         'normal': logging.INFO,

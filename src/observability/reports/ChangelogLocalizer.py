@@ -52,7 +52,7 @@ class ChangelogLocalizer:
         Args:
             default_language: Default language for entries.
         """
-        self.entries: List[LocalizedEntry] = []
+        self.entries: list[LocalizedEntry] = []
         self.default_language = default_language
 
     def create_entry(self, text: str) -> LocalizedEntry:
@@ -95,7 +95,7 @@ class ChangelogLocalizer:
         Returns:
             Changelog text in the specified language.
         """
-        result: List[str] = []
+        result: list[str] = []
         for entry in self.entries:
             if language.value in entry.translations:
                 result.append(entry.translations[language.value])

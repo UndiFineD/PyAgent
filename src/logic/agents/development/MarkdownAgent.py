@@ -27,6 +27,7 @@ from src.core.base.utilities import create_main_function
 from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
 import re
 import yaml
+from pathlib import Path
 
 __version__ = VERSION
 

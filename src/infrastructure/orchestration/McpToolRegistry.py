@@ -27,7 +27,7 @@ class McpToolRegistry(ToolRegistry):
         super().__init__(fleet)
         self.server_proxies = {}
 
-    def register_mcp_server(self, server_name: str, tools: List[Dict[str, Any]], call_handler) -> None:
+    def register_mcp_server(self, server_name: str, tools: list[dict[str, Any]], call_handler) -> None:
         """Dynamically registers tools from an MCP server."""
         logging.info(f"McpToolRegistry: Registering tools for server: {server_name}")
         

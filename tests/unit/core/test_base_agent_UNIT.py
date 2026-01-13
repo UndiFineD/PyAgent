@@ -19,7 +19,6 @@ import sys
 import os
 
 # Import from src
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
 
 class TestAgentStatePersistence:
     def test_state_save_and_load(self, tmp_path: Path, base_agent_module: Any) -> None:

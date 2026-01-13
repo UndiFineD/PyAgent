@@ -22,7 +22,7 @@ class AttributionCore:
 """
 
     @staticmethod
-    def generate_attribution_metadata(agent_id: str, model_id: str) -> Dict[str, Any]:
+    def generate_attribution_metadata(agent_id: str, model_id: str) -> dict[str, Any]:
         """
         Generates a standardized metadata block for code changes.
         """

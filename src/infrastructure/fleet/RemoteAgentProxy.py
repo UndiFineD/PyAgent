@@ -27,9 +27,10 @@ from src.core.base.version import VERSION
 import requests
 import logging
 import os
-from typing import Dict, Any
+from typing import Dict, Any, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.ConnectivityManager import ConnectivityManager
+from src.core.base.connectivity import BinaryTransport
 
 __version__ = VERSION
 
@@ -87,7 +88,40 @@ class RemoteAgentProxy(BaseAgent):
             self._update_node_status(False)
             return f"Error calling remote agent: {e}"
 
-    def _record_interaction(self, tool_name: str, payload: Dict[str, Any], response: str) -> None:
+    def call_remote_tool_binary(self, tool_name: str, compress: bool = True, **kwargs) -> Any:
+        """
+        Calls a tool on the remote node using high-performance binary transport (Phase 255).
+        """
+        if not self._is_node_working():
+            return None
+
+        endpoint = f"{self.node_url}/call_binary"
+        payload_data = {
+            "agent": self.agent_name,
+            "tool": tool_name,
+            "args": kwargs
+        }
+        
+        try:
+            packed_payload = BinaryTransport.pack(payload_data, compress=compress)
+            logging.info(f"Calling remote binary tool {tool_name} on {self.node_url} (Compressed: {compress})")
+            
+            headers = {"Content-Type": "application/octet-stream"}
+            if compress:
+                headers["Content-Encoding"] = "zstd"
+
+            response = requests.post(endpoint, data=packed_payload, headers=headers, timeout=60)
+            response.raise_for_status()
+            
+            result = BinaryTransport.unpack(response.content, compressed=compress)
+            self._update_node_status(True)
+            return result.get("result")
+        except Exception as e:
+            logging.error(f"Error in remote binary call: {e}")
+            self._update_node_status(False)
+            return None
+
+    def _record_interaction(self, tool_name: str, payload: dict[str, Any], response: str) -> None:
         """Records the interaction to a local shard for later intelligence harvesting (Phase 108)."""
         try:
             from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder

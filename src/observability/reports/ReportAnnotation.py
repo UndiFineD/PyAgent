@@ -44,5 +44,5 @@ class ReportAnnotation:
     report_id: str
     author: str
     content: str
-    line_number: Optional[int] = None
+    line_number: int | None = None
     created_at: float = field(default_factory=time.time)  # type: ignore[assignment]

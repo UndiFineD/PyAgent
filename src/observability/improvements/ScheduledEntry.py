@@ -34,4 +34,4 @@ class ScheduledEntry:
 
     improvement_id: str
     start_date: datetime
-    resources: List[str] = field(default_factory=list)  # type: ignore[assignment]
+    resources: list[str] = field(default_factory=list)  # type: ignore[assignment]

@@ -35,7 +35,7 @@ class SQLQueryAgent(BaseAgent):
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.connection: Optional[sqlite3.Connection] = None
+        self.connection: sqlite3.Connection | None = None
         self._system_prompt = (
             "You are the SQL Database Agent. "
             "Your role is to 'Connect, Unify, and Respond' from data sources. "
@@ -44,7 +44,7 @@ class SQLQueryAgent(BaseAgent):
         )
 
     @as_tool
-    def unify_sources(self, source_identities: List[str]) -> str:
+    def unify_sources(self, source_identities: list[str]) -> str:
         """Simulates unifying multiple data sources into a single queryable view (MindsDB Pattern)."""
         logging.info(f"Unifying data sources: {source_identities}")
         return f"Unified Knowledge Base created for: {', '.join(source_identities)}. Virtual Schema: AI_PUBLIC."
@@ -103,5 +103,5 @@ class SQLQueryAgent(BaseAgent):
 
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function
-    main = create_main_function(SQLAgent, "SQL Agent", "Database path")
+    main = create_main_function(SQLQueryAgent, "SQL Agent", "Database path")
     main()

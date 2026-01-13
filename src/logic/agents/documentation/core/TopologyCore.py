@@ -8,7 +8,7 @@ from typing import Dict, List
 
 class TopologyCore:
     @staticmethod
-    def generate_mermaid_graph(nodes: List[str], edges: List[Dict[str, str]], direction: str = "TD") -> str:
+    def generate_mermaid_graph(nodes: list[str], edges: list[dict[str, str]], direction: str = "TD") -> str:
         """
         Generates a Mermaid.js flowchart string.
         :param nodes: List of node names.
@@ -41,7 +41,7 @@ class TopologyCore:
         return "\n".join(lines)
 
     @staticmethod
-    def filter_active_relationships(all_deps: Dict[str, List[str]], focus_list: List[str]) -> Dict[str, List[str]]:
+    def filter_active_relationships(all_deps: dict[str, list[str]], focus_list: list[str]) -> dict[str, list[str]]:
         """
         Filters a dependency map to only include nodes relevant to the focus list.
         """

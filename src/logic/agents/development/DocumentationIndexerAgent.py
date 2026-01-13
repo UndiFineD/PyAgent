@@ -39,7 +39,7 @@ class DocumentationIndexerAgent(BaseAgent):
             "and provide semantic pointers to relevant sections when asked."
         )
 
-    def build_index(self, root_path: str) -> Dict[str, List[str]]:
+    def build_index(self, root_path: str) -> dict[str, list[str]]:
         """Crawls the workspace for markdown and text documentation."""
         index = {"docs": [], "source_comments": [], "readmes": []}
         root = Path(root_path)

@@ -48,7 +48,7 @@ class RequestBatcher:
         self,
         batch_size: int = 10,
         timeout_s: float = 5.0,
-        recorder: Optional[LocalContextRecorder] = None,
+        recorder: LocalContextRecorder | None = None,
     ) -> None:
         """Initialize request batcher.
 
@@ -60,9 +60,9 @@ class RequestBatcher:
         self.batch_size = batch_size
         self.timeout_s = timeout_s
         self.recorder = recorder
-        self._buffer: List[str] = []
+        self._buffer: list[str] = []
         self._lock = threading.Lock()
-        self._batch_start: Optional[float] = None
+        self._batch_start: float | None = None
 
     def add(self, prompt: str) -> bool:
         """Add request to current batch.
@@ -88,7 +88,7 @@ class RequestBatcher:
                 return bool(self._buffer)
             return False
 
-    def get_batch(self) -> Optional[BatchRequest]:
+    def get_batch(self) -> BatchRequest | None:
         """Get current batch and reset buffer.
 
         Returns:

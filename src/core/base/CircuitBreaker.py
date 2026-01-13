@@ -24,7 +24,9 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import time
-from typing import Any, Callable, Optional, Dict
+import asyncio
+from typing import Any, Optional, Dict
+from collections.abc import Callable
 from src.core.base.core.ResilienceCore import ResilienceCore
 from src.observability.stats.exporters.OTelManager import OTelManager
 
@@ -46,7 +48,7 @@ class CircuitBreaker:
 
     def __init__(self, name: str, failure_threshold: int = 5,
                  recovery_timeout: int = 60, backoff_multiplier: float = 1.5,
-                 otel_manager: Optional[OTelManager] = None) -> None:
+                 otel_manager: OTelManager | None = None) -> None:
         """Initialize circuit breaker.
 
         Args:
@@ -71,7 +73,7 @@ class CircuitBreaker:
         self.resilience_core = ResilienceCore()
         self.otel_manager = otel_manager
 
-    def _get_thresholds(self) -> Dict[str, Any]:
+    def _get_thresholds(self) -> dict[str, Any]:
         """Returns threshold config for ResilienceCore."""
         return {
             "failure_threshold": self.failure_threshold,
@@ -92,19 +94,48 @@ class CircuitBreaker:
         )
 
     def _export_to_otel(self, old_state: str, new_state: str) -> None:
-        """Exports state transition to OTel if manager is available."""
+        """Exports state transition to OTel and StructuredLogger (Phase 273)."""
+        logging.info(f"CircuitBreaker '{self.name}': Transition {old_state} -> {new_state}")
+        
         if self.otel_manager:
             span_id = self.otel_manager.start_span(
                 f"Resilience: {self.name} Transition",
                 attributes={
                     "resilience.breaker.name": self.name,
-                    "resilience.state.old": old_state,
-                    "resilience.state.new": new_state,
-                    "resilience.failures": self.failure_count,
-                    "resilience.successes": self.success_count
+                    "resilience.breaker.old_state": old_state,
+                    "resilience.breaker.new_state": new_state,
+                    "resilience.breaker.failure_count": self.failure_count
                 }
             )
             self.otel_manager.end_span(span_id)
+
+    async def probe(self, health_check_func: Callable[[], Any]) -> bool:
+        """
+        Periodically attempt a 'Wait-for-Success' probe (Phase 273).
+        Exits the OPEN state faster if the backend is healthy.
+        """
+        if self.state != "OPEN":
+            return True
+            
+        logging.debug(f"CircuitBreaker '{self.name}': Probing backend health...")
+        try:
+            # Perform the actual health check provided by the backend wrapper
+            if asyncio.iscoroutinefunction(health_check_func):
+                result = await health_check_func()
+            else:
+                result = health_check_func()
+            
+            if result:
+                logging.info(f"CircuitBreaker '{self.name}': Probe SUCCEEDED. Transitioning to HALF_OPEN early.")
+                old_state = self.state
+                self.state = "HALF_OPEN"
+                self.success_count = 1
+                self._export_to_otel(old_state, self.state)
+                return True
+        except Exception as e:
+            logging.debug(f"CircuitBreaker '{self.name}': Probe failed: {e}")
+            
+        return False
 
     def call(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
         """Execute function through circuit breaker."""

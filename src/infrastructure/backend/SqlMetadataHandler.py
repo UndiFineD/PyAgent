@@ -33,7 +33,7 @@ __version__ = VERSION
 class SqlMetadataHandler:
     """Relational metadata overlay for compressed interaction shards."""
 
-    def __init__(self, db_path: str = "data/memory/agent_store/metadata.db", shards_dir: str = "data/memory/agent_store/memory_shards", fleet: Optional[Any] = None) -> None:
+    def __init__(self, db_path: str = "data/memory/agent_store/metadata.db", shards_dir: str = "data/memory/agent_store/memory_shards", fleet: Any | None = None) -> None:
         if fleet and hasattr(fleet, "recorder") and shards_dir == "data/memory/agent_store/memory_shards":
             self.shards_dir = str(fleet.recorder.log_dir)
         else:
@@ -152,7 +152,7 @@ class SqlMetadataHandler:
             """, (interaction_id, text, category, time.time()))
             conn.commit()
 
-    def get_intelligence_summary(self) -> List[Dict[str, Any]]:
+    def get_intelligence_summary(self) -> list[dict[str, Any]]:
         """
         Generates a summary of harvested intelligence lessons.
         Optimized for high-scale analysis of trillion-parameter related interaction logs.
@@ -219,7 +219,7 @@ class SqlMetadataHandler:
             conn.commit()
         return indexed_count
 
-    def query_interactions(self, sql_where: str) -> List[Dict[str, Any]]:
+    def query_interactions(self, sql_where: str) -> list[dict[str, Any]]:
         """Query interactions using SQL syntax."""
         results = []
         with sqlite3.connect(self.db_path) as conn:
@@ -240,7 +240,7 @@ class SqlMetadataHandler:
             """, (file_path, issue_type, message, 1 if fixed else 0, time.time()))
             conn.commit()
 
-    def bulk_record_interactions(self, interaction_data: List[tuple]) -> int:
+    def bulk_record_interactions(self, interaction_data: list[tuple]) -> int:
         """
         Efficiently inserts multiple interactions in a single transaction.
         Essential for processing 'trillion-parameter' scale interaction datasets.

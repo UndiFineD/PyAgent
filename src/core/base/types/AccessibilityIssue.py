@@ -51,6 +51,6 @@ class AccessibilityIssue:
     wcag_criterion: str
     description: str
     element: str
-    line_number: Optional[int] = None
-    suggested_fix: Optional[str] = None
+    line_number: int | None = None
+    suggested_fix: str | None = None
     auto_fixable: bool = False

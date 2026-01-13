@@ -30,19 +30,19 @@ class DependencyResolver:
     """Resolves improvement dependencies."""
 
     def __init__(self) -> None:
-        self.dependencies: Dict[str, List[str]] = {}
+        self.dependencies: dict[str, list[str]] = {}
 
     def add_dependency(self, improvement_id: str, depends_on_id: str) -> None:
         self.dependencies.setdefault(improvement_id, []).append(depends_on_id)
 
-    def get_dependencies(self, improvement_id: str) -> List[str]:
+    def get_dependencies(self, improvement_id: str) -> list[str]:
         return list(self.dependencies.get(improvement_id, []))
 
-    def resolve_order(self, improvement_ids: List[str]) -> List[str]:
+    def resolve_order(self, improvement_ids: list[str]) -> list[str]:
         """Topologically sort the given ids so dependencies come first."""
         visited: set[str] = set()
         temp: set[str] = set()
-        ordered: List[str] = []
+        ordered: list[str] = []
 
         def visit(node: str) -> None:
             if node in visited:

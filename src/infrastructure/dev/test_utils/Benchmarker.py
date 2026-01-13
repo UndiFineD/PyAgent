@@ -23,7 +23,8 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .TestTimer import TestTimer
-from typing import Callable, Dict, List
+from typing import Dict, List
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -32,9 +33,9 @@ class Benchmarker:
 
     def __init__(self) -> None:
         """Initialize benchmarker."""
-        self.timings: List[float] = []
+        self.timings: list[float] = []
 
-    def run(self, fn: Callable[[], None], iterations: int = 5) -> Dict[str, float]:
+    def run(self, fn: Callable[[], None], iterations: int = 5) -> dict[str, float]:
         """Run a function multiple times and collect timing statistics.
 
         Args:

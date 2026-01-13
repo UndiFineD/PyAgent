@@ -55,7 +55,7 @@ API_BASE_URL = "http://localhost:8000"
 session = requests.Session()
 
 # Initializing infrastructure with generic workspace root
-WORKSPACE_ROOT = Path("c:/DEV/PyAgent")
+WORKSPACE_ROOT = Path(str(Path(__file__).resolve().parents[4]) + "")
 conn_manager = ConnectivityManager(str(WORKSPACE_ROOT))
 recorder = LocalContextRecorder(WORKSPACE_ROOT, "CLI_System")
 

@@ -34,7 +34,7 @@ class FractalOrchestrator:
     def __init__(self, fleet, depth: int = 0) -> None:
         self.fleet = fleet
         self.depth = depth
-        self.sub_orchestrators: List[FractalOrchestrator] = []
+        self.sub_orchestrators: list[FractalOrchestrator] = []
 
     def execute_fractal_task(self, task: str) -> str:
         """Executes a task by decomposing it into fractal sub-tasks if necessary."""

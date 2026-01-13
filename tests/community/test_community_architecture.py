@@ -5,7 +5,6 @@ import logging
 from pathlib import Path
 
 # Add project root to sys.path
-sys.path.append(str(Path('.').resolve()))
 
 from src.infrastructure.fleet.AgentRegistry import AgentRegistry
 from src.infrastructure.orchestration.SelfHealingOrchestrator import SelfHealingOrchestrator

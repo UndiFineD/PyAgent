@@ -41,10 +41,10 @@ class ImpactAnalyzer:
 
     def __init__(self) -> None:
         """Initialize the impact analyzer."""
-        self.file_dependencies: Dict[str, List[str]] = {}
-        self.function_map: Dict[str, List[str]] = {}
+        self.file_dependencies: dict[str, list[str]] = {}
+        self.function_map: dict[str, list[str]] = {}
 
-    def add_dependency(self, file: str, depends_on: List[str]) -> None:
+    def add_dependency(self, file: str, depends_on: list[str]) -> None:
         """Add file dependencies.
 
         Args:
@@ -53,7 +53,7 @@ class ImpactAnalyzer:
         """
         self.file_dependencies[file] = depends_on
 
-    def add_functions(self, file: str, functions: List[str]) -> None:
+    def add_functions(self, file: str, functions: list[str]) -> None:
         """Add functions in a file.
 
         Args:
@@ -89,23 +89,23 @@ class ImpactAnalyzer:
             impact_score=impact_score
         )
 
-    def _find_affected_files(self, file_path: str) -> List[str]:
+    def _find_affected_files(self, file_path: str) -> list[str]:
         """Find files that depend on the given file."""
-        affected: List[str] = []
+        affected: list[str] = []
         for file, deps in self.file_dependencies.items():
             if file_path in deps:
                 affected.append(file)
         return affected
 
-    def _find_downstream_effects(self, file_path: str) -> List[str]:
+    def _find_downstream_effects(self, file_path: str) -> list[str]:
         """Find downstream effects recursively."""
-        effects: List[str] = []
-        visited: Set[str] = set()
+        effects: list[str] = []
+        visited: set[str] = set()
         self._find_downstream_recursive(file_path, effects, visited)
         return effects
 
     def _find_downstream_recursive(
-        self, file_path: str, effects: List[str], visited: Set[str]
+        self, file_path: str, effects: list[str], visited: set[str]
     ) -> None:
         """Recursively find downstream effects."""
         if file_path in visited:

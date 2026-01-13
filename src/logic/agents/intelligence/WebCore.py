@@ -54,7 +54,7 @@ class WebCore:
         return '\n'.join(chunk for chunk in chunks if chunk)
 
     @staticmethod
-    def extract_links(html_content: str, base_url: Optional[str] = None) -> List[str]:
+    def extract_links(html_content: str, base_url: str | None = None) -> list[str]:
         """Extracts all absolute links from HTML content."""
         import urllib.parse
         if not html_content:

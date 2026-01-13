@@ -34,5 +34,5 @@ class ABTestVariant:
     name: str
     backend: str
     weight: float = 0.5
-    metrics: Dict[str, float] = field(default_factory=lambda: {})
+    metrics: dict[str, float] = field(default_factory=lambda: {})
     sample_count: int = 0

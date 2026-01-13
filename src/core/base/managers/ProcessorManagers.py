@@ -23,7 +23,8 @@ from src.core.base.version import VERSION
 import json
 import logging
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Dict, List, Optional
+from collections.abc import Callable
 from src.core.base.models import InputType, MultimodalInput, SerializationConfig, SerializationFormat
 
 __version__ = VERSION
@@ -31,7 +32,7 @@ __version__ = VERSION
 class ResponsePostProcessor:
     """Manages post-processing hooks for agent responses."""
     def __init__(self) -> None:
-        self.hooks: List[tuple[Callable[[str], str], int]] = []
+        self.hooks: list[tuple[Callable[[str], str], int]] = []
     def register(self, hook: Callable[[str], str], priority: int = 0) -> None:
         self.hooks.append((hook, priority))
     def process(self, text: str) -> str:
@@ -43,7 +44,7 @@ class ResponsePostProcessor:
 class MultimodalProcessor:
     """Processor for multimodal inputs."""
     def __init__(self) -> None:
-        self.inputs: List[MultimodalInput] = []
+        self.inputs: list[MultimodalInput] = []
         self.processed: str = ""
         logging.debug("MultimodalProcessor initialized")
     def add_input(self, input_data: MultimodalInput) -> None:
@@ -55,7 +56,7 @@ class MultimodalProcessor:
     def add_code(self, code: str, language: str = "python") -> None:
         self.add_input(MultimodalInput(InputType.CODE, code, metadata={"language": language}))
     def build_prompt(self) -> str:
-        parts: List[str] = []
+        parts: list[str] = []
         for inp in self.inputs:
             if inp.input_type == InputType.TEXT:
                 parts.append(inp.content)
@@ -68,8 +69,8 @@ class MultimodalProcessor:
                 parts.append(f"[Diagram: {inp.metadata.get('type', 'unknown')}]")
         self.processed = "\\n\\n".join(parts)
         return self.processed
-    def get_api_messages(self) -> List[Dict[str, Any]]:
-        messages: List[Dict[str, Any]] = []
+    def get_api_messages(self) -> list[dict[str, Any]]:
+        messages: list[dict[str, Any]] = []
         for inp in self.inputs:
             if inp.input_type == InputType.TEXT:
                 messages.append({"type": "text", "text": inp.content})
@@ -84,7 +85,7 @@ class MultimodalProcessor:
 
 class SerializationManager:
     """Manager for custom serialization formats (Binary/JSON)."""
-    def __init__(self, config: Optional[SerializationConfig] = None) -> None:
+    def __init__(self, config: SerializationConfig | None = None) -> None:
         self.config = config or SerializationConfig()
     
     def serialize(self, data: Any) -> bytes:

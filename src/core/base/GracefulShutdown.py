@@ -86,7 +86,7 @@ class GracefulShutdown:
         """
         return not self.state.shutdown_requested
 
-    def set_current_file(self, file_path: Optional[Path]) -> None:
+    def set_current_file(self, file_path: Path | None) -> None:
         """Set the currently processing file.
 
         Args:
@@ -104,7 +104,7 @@ class GracefulShutdown:
         if str(file_path) in self.state.pending_files:
             self.state.pending_files.remove(str(file_path))
 
-    def set_pending_files(self, files: List[Path]) -> None:
+    def set_pending_files(self, files: list[Path]) -> None:
         """Set the list of pending files.
 
         Args:
@@ -126,7 +126,7 @@ class GracefulShutdown:
         except Exception as e:
             logging.error(f"Failed to save shutdown state: {e}")
 
-    def load_resume_state(self) -> Optional[ShutdownState]:
+    def load_resume_state(self) -> ShutdownState | None:
         """Load state for resuming an interrupted run.
 
         Returns:

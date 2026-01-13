@@ -18,11 +18,12 @@ PyAgent SDK Version Info and Stability Gates.
 from __future__ import annotations
 
 # PyAgent SDK Version Info (Core/Fleet Version)
-VERSION = "3.4.0-LEGAL"
-SDK_VERSION = "3.4.0"
-EVOLUTION_PHASE = 240
-STABILITY_SCORE = 0.999
-COMPATIBLE_CORE_VERSIONS = ["3.4.0", "3.3.0", "3.2.0", "3.1.0", "3.0.0", "2.2.0", "2.1.0", "2.0.0"]
+VERSION = "3.5.0-GOLD"
+SDK_VERSION = "3.5.0"
+EVOLUTION_PHASE = 315
+STABILITY_SCORE = 1.000
+GOLDEN_MASTER_SEAL = True
+COMPATIBLE_CORE_VERSIONS = ["3.5.0", "3.4.0", "3.3.0", "3.2.0", "3.1.0", "3.0.0", "2.2.0"]
 
 def is_gate_open(required_phase: int) -> bool:
     """Gatekeeping: Returns True if the system maturity allows for the required phase."""

@@ -9,6 +9,7 @@ class SynapticWeight:
     agent_id: str
     weight: float  # 0.0 to 1.0
     last_fired: float
+    last_fired_cycle: int = 0
     refractory_until: float = 0.0
 
 class PruningCore:

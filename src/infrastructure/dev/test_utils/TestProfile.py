@@ -40,6 +40,6 @@ class TestProfile:
     """
 
     name: str
-    settings: Dict[str, Any] = field(default_factory=lambda: {})
-    env_vars: Dict[str, str] = field(default_factory=lambda: {})
+    settings: dict[str, Any] = field(default_factory=lambda: {})
+    env_vars: dict[str, str] = field(default_factory=lambda: {})
     enabled: bool = True

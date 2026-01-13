@@ -34,9 +34,9 @@ class FractalKnowledgeOrchestrator:
     
     def __init__(self, fleet) -> None:
         self.fleet = fleet
-        self.wisdom_cache: Dict[str, Any] = {}
+        self.wisdom_cache: dict[str, Any] = {}
 
-    def synthesize(self, topic: str, agent_names: List[str]) -> Dict[str, Any]:
+    def synthesize(self, topic: str, agent_names: list[str]) -> dict[str, Any]:
         """
         Gathers insights from specific agents and merges them into a fractal summary.
         """

@@ -44,5 +44,5 @@ class TestLogEntry:
     level: str
     message: str
     timestamp: float = field(default_factory=time.time)
-    test_name: Optional[str] = None
-    extra: Dict[str, Any] = field(default_factory=lambda: {})
+    test_name: str | None = None
+    extra: dict[str, Any] = field(default_factory=lambda: {})

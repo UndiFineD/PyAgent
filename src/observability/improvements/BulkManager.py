@@ -30,8 +30,8 @@ __version__ = VERSION
 class BulkManager:
     """Applies bulk operations to improvement IDs."""
 
-    def bulk_update_status(self, improvement_ids: List[str], new_status: str) -> BulkOperationResult:
+    def bulk_update_status(self, improvement_ids: list[str], new_status: str) -> BulkOperationResult:
         return BulkOperationResult(success_count=len(improvement_ids))
 
-    def bulk_assign(self, improvement_ids: List[str], assignee: str) -> BulkOperationResult:
+    def bulk_assign(self, improvement_ids: list[str], assignee: str) -> BulkOperationResult:
         return BulkOperationResult(success_count=len(improvement_ids))

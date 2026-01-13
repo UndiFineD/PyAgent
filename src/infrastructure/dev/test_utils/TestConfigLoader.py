@@ -32,12 +32,12 @@ class TestConfigLoader:
     __test__ = False
     """Loads test configuration from files."""
 
-    def __init__(self, config_path: Optional[Path] = None) -> None:
+    def __init__(self, config_path: Path | None = None) -> None:
         """Initialize config loader."""
         self.config_path = config_path or Path("test_config.json")
-        self.config: Dict[str, Any] = {}
+        self.config: dict[str, Any] = {}
 
-    def load(self, path: Optional[Path] = None, defaults: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def load(self, path: Path | None = None, defaults: dict[str, Any] | None = None) -> dict[str, Any]:
         """Load configuration.
 
         Compatibility:
@@ -47,7 +47,7 @@ class TestConfigLoader:
         if path is not None:
             self.config_path = Path(path)
 
-        loaded: Dict[str, Any] = {}
+        loaded: dict[str, Any] = {}
         if self.config_path.exists():
             with open(self.config_path, encoding="utf-8") as f:
                 loaded = json.load(f)

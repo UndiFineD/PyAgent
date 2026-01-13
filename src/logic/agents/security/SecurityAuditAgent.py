@@ -42,11 +42,11 @@ class SecurityAuditAgent(BaseAgent):
             r"(?i)auth[-_]?key"
         ]
 
-    def scan_file(self, file_path: str) -> List[Dict[str, Any]]:
+    def scan_file(self, file_path: str) -> list[dict[str, Any]]:
         """Scans a single file for security issues."""
         findings = []
         try:
-            with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+            with open(file_path, encoding="utf-8", errors="ignore") as f:
                 content = f.read()
                 lines = content.split('\n')
                 
@@ -110,7 +110,7 @@ class SecurityAuditAgent(BaseAgent):
 
         return findings
 
-    def audit_workspace(self) -> Dict[str, Any]:
+    def audit_workspace(self) -> dict[str, Any]:
         """Performs a comprehensive security audit of the entire workspace."""
         total_findings = []
         for root, dirs, files in os.walk(self.workspace_path):

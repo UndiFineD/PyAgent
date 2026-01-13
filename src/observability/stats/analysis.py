@@ -13,10 +13,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 from .metrics import (
-    ABComparisonResult,
-    ABSignificanceResult,
     DerivedMetric,
     MetricCorrelation,
+    ABComparisonResult,
+    ABSignificanceResult,
 )
 
 try:
@@ -56,7 +56,7 @@ class ProfileStats:
 class ProfilingCore:
     """Pure logic for cProfile aggregation and bottleneck analysis."""
     def analyze_stats(self, pstats_obj:
-        Any, limit: int = 10) -> List[ProfileStats]:
+        Any, limit: int = 10) -> list[ProfileStats]:
         results = []
         pstats_obj.sort_stats('cumulative')
         for func, (cc, nc, tt, ct, callers) in pstats_obj.stats.items():
@@ -71,7 +71,7 @@ class ProfilingCore:
         return results
 
     def identify_bottlenecks(self, stats:
-        List[ProfileStats], threshold_ms: float = 100.0) -> List[str]:
+        list[ProfileStats], threshold_ms: float = 100.0) -> list[str]:
         return [s.function_name for s in stats if s.total_time > (threshold_ms / 1000.0)]
 
     def calculate_optimization_priority(self, stats:
@@ -97,7 +97,7 @@ class StabilityCore:
         return min(max(score, 0.0), 1.0)
 
     def is_in_stasis(self, score_history:
-        List[float]) -> bool:
+        list[float]) -> bool:
         if len(score_history) < 10:
             return False
         avg = sum(score_history)/len(score_history)
@@ -113,11 +113,11 @@ class StabilityCore:
 class TracingCore:
     """distributed tracing and latency breakdown logic."""
     def create_span_context(self, trace_id:
-        str, span_id: str) -> Dict[str, str]:
+        str, span_id: str) -> dict[str, str]:
         return {"trace_id": trace_id, "span_id": span_id, "version": "OTel-1.1"}
 
     def calculate_latency_breakdown(self, total_time:
-        float, network_time: float) -> Dict[str, float]:
+        float, network_time: float) -> dict[str, float]:
         thinking_time = total_time - network_time
         return {
             "total_latency_ms": total_time * 1000,
@@ -127,14 +127,14 @@ class TracingCore:
         }
 
     def format_otel_log(self, name:
-        str, attributes: Dict[str, Any]) -> Dict[str, Any]:
+        str, attributes: dict[str, Any]) -> dict[str, Any]:
         return {"timestamp": time.time_ns(), "name": name, "attributes": attributes, "kind": "INTERNAL"}
 
 class DerivedMetricCalculator:
     """Calculate derived metrics from dependencies using safe AST evaluation."""
     def __init__(self) -> None:
-        self.derived_metrics: Dict[str, DerivedMetric] = {}
-        self._cache: Dict[str, float] = {}
+        self.derived_metrics: dict[str, DerivedMetric] = {}
+        self._cache: dict[str, float] = {}
         self.operators = {
             ast.Add: operator.add, ast.Sub: operator.sub, ast.Mult: operator.mul,
             ast.Div: operator.truediv, ast.Pow: operator.pow, ast.BitXor: operator.xor,
@@ -169,13 +169,13 @@ class DerivedMetricCalculator:
         raise TypeError(f"Unsupported operation: {type(node)}")
 
     def register_derived(self, name:
-        str, dependencies: List[str], formula: str, description: str = "") -> DerivedMetric:
+        str, dependencies: list[str], formula: str, description: str = "") -> DerivedMetric:
         derived = DerivedMetric(name=name, dependencies=dependencies, formula=formula, description=description)
         self.derived_metrics[name] = derived
         return derived
 
     def calculate(self, name:
-        str, metric_values: Dict[str, float]) -> Optional[float]:
+        str, metric_values: dict[str, float]) -> float | None:
         derived = self.derived_metrics.get(name)
         if not derived:
             return None
@@ -200,8 +200,8 @@ class DerivedMetricCalculator:
 class CorrelationAnalyzer:
     """Analyze correlations between metrics."""
     def __init__(self) -> None:
-        self.correlations: List[MetricCorrelation] = []
-        self._metric_history: Dict[str, List[float]] = {}
+        self.correlations: list[MetricCorrelation] = []
+        self._metric_history: dict[str, list[float]] = {}
 
     def record_value(self, metric_name:
         str, value: float) -> None:
@@ -210,7 +210,7 @@ class CorrelationAnalyzer:
         self._metric_history[metric_name].append(value)
 
     def compute_correlation(self, metric_a:
-        str, metric_b: str) -> Optional[MetricCorrelation]:
+        str, metric_b: str) -> MetricCorrelation | None:
         va, vb = self._metric_history.get(metric_a, []), self._metric_history.get(metric_b, [])
         n = min(len(va), len(vb))
         if n < 3:
@@ -248,7 +248,7 @@ class FormulaEngineCore:
         raise TypeError(f"Unsupported operation: {type(node)}")
 
     def calculate_logic(self, formula:
-        str, variables: Dict[str, Any]) -> float:
+        str, variables: dict[str, Any]) -> float:
         if "AVG(" in formula:
             match = re.search(r'AVG\(\{(\w+)\}\)', formula)
             if match and match.group(1) in variables:
@@ -266,7 +266,7 @@ class FormulaEngineCore:
             return 0.0
 
     def validate_logic(self, formula:
-        str) -> Dict[str, Any]:
+        str) -> dict[str, Any]:
         try:
             if any(s in formula for s in ["+++", "***", "---"]):
                 return {"is_valid": False, "error": "Invalid operator sequence"}
@@ -280,13 +280,13 @@ class FormulaEngineCore:
 
 class FormulaEngine:
     def __init__(self) -> None:
-        self.formulas: Dict[str, str] = {}
+        self.formulas: dict[str, str] = {}
         self.core = FormulaEngineCore()
     def define(self, name:
         str, formula: str) -> None:
         self.formulas[name] = formula
     def calculate(self, f_or_n:
-        str, variables: Optional[Dict[str, Any]] = None) -> float:
+        str, variables: dict[str, Any] | None = None) -> float:
         f = self.formulas.get(f_or_n, f_or_n)
         return self.core.calculate_logic(f, variables or {})
 
@@ -306,14 +306,14 @@ class TokenCostEngine:
 
 class ModelFallbackCore:
     def __init__(self, chains:
-        Optional[Dict[str, List[str]]] = None) -> None:
+        dict[str, list[str]] | None = None) -> None:
         self.chains = chains or {
             "high_performance": ["gpt-4o", "claude-3-5-sonnet", "gpt-4-turbo"],
             "balanced": ["claude-3-5-sonnet", "gpt-4o-mini", "gemini-1.5-pro"],
             "economy": ["gpt-4o-mini", "claude-3-haiku", "gemini-1.5-flash"]
         }
     def determine_next_model(self, cur:
-        str) -> Optional[str]:
+        str) -> str | None:
         for c in self.chains.values():
             if cur in c and c.index(cur)+1 < len(c):
                 return c[c.index(cur)+1]
@@ -321,23 +321,23 @@ class ModelFallbackCore:
 
 class ModelFallbackEngine:
     def __init__(self, cost_engine:
-        Optional[TokenCostEngine] = None) -> None:
+        TokenCostEngine | None = None) -> None:
         self.cost_engine = cost_engine
         self.core = ModelFallbackCore()
     def get_fallback_model(self, current_model:
-        str, research: str = "") -> Optional[str]:
+        str, research: str = "") -> str | None:
         return self.core.determine_next_model(current_model)
 
 class StatsRollupCalculator:
     def __init__(self) -> None:
-        self._points: Dict[str, List[Tuple[float, float]]] = {}
+        self._points: dict[str, list[tuple[float, float]]] = {}
     def add_point(self, m:
         str, ts: float, v: float) -> None:
         if m not in self._points:
             self._points[m] = []
         self._points[m].append((float(ts), float(v)))
     def rollup(self, m:
-        str, interval: str = "1h") -> List[float]:
+        str, interval: str = "1h") -> list[float]:
         pts = self._points.get(m, [])
         if not pts:
             return []
@@ -345,14 +345,14 @@ class StatsRollupCalculator:
         amt = int(interval[:-1]) if interval[:-1].isdigit() else 1
         mult = {"m": 60, "h": 3600, "d": 86400}.get(unit, 3600)
         bucket = mult * amt
-        bkts: Dict[int, List[float]] = {}
+        bkts: dict[int, list[float]] = {}
         for t, v in pts:
             bkts.setdefault(int(t)//int(bucket), []).append(float(v))
         return [sum(bkts[k])/len(bkts[k]) for k in sorted(bkts.keys())]
 
 class StatsForecaster:
     def predict(self, hist:
-        List[float], periods: int = 3) -> List[float]:
+        list[float], periods: int = 3) -> list[float]:
         if periods <= 0 or not hist:
             return []
         if len(hist) == 1:
@@ -363,12 +363,12 @@ class StatsForecaster:
 
 class ABComparator:
     def compare(self, a:
-        Dict[str, float], b: Dict[str, float]) -> ABComparisonResult:
+        dict[str, float], b: dict[str, float]) -> ABComparisonResult:
         common = sorted(set(a.keys()) & set(b.keys()))
         diffs = {k: float(b[k]) - float(a[k]) for k in common if isinstance(a[k], (int, float)) and isinstance(b[k], (int, float))}
         return ABComparisonResult(metrics_compared=len(common), differences=diffs)
     def calculate_significance(self, ctrl:
-        List[float], treat: List[float], alpha: float = 0.05) -> ABSignificanceResult:
+        list[float], treat: list[float], alpha: float = 0.05) -> ABSignificanceResult:
         if not ctrl or not treat:
             return ABSignificanceResult(1.0, False, 0.0)
         ma, mb = sum(ctrl)/len(ctrl), sum(treat)/len(treat)
@@ -380,7 +380,7 @@ class ResourceMonitor:
     def __init__(self, workspace_root:
         str) -> None:
         self.workspace_root = Path(workspace_root)
-    def get_current_stats(self) -> Dict[str, Any]:
+    def get_current_stats(self) -> dict[str, Any]:
         stats = {"cpu_usage_pct": 0, "memory_usage_pct": 0, "status": "HEALTHY"}
         if HAS_PSUTIL:
             stats["cpu_usage_pct"] = psutil.cpu_percent()

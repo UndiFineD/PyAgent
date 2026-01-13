@@ -22,7 +22,8 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Any, Callable, Dict, List
+from typing import Any, Dict, List
+from collections.abc import Callable
 from .enums import BrowserType
 from .models import CrossBrowserConfig, ScheduleSlot
 
@@ -34,10 +35,10 @@ class CrossBrowserRunner:
     def __init__(self, config: CrossBrowserConfig) -> None:
         """Initialize cross-browser runner."""
         self.config = config
-        self.results: Dict[BrowserType, List[Dict[str, Any]]] = {
+        self.results: dict[BrowserType, list[dict[str, Any]]] = {
             b: [] for b in config.browsers
         }
-        self._drivers: Dict[BrowserType, bool] = {}
+        self._drivers: dict[BrowserType, bool] = {}
 
     def setup_driver(self, browser: BrowserType) -> bool:
         """Setup browser driver."""
@@ -52,9 +53,9 @@ class CrossBrowserRunner:
         self,
         test_name: str,
         test_code: Callable[[], bool]
-    ) -> Dict[BrowserType, Dict[str, Any]]:
+    ) -> dict[BrowserType, dict[str, Any]]:
         """Run a test across all browsers."""
-        results: Dict[BrowserType, Dict[str, Any]] = {}
+        results: dict[BrowserType, dict[str, Any]] = {}
         for browser in self.config.browsers:
             self.setup_driver(browser)
             retries = 0
@@ -64,7 +65,7 @@ class CrossBrowserRunner:
                     passed = test_code()
                 except Exception:
                     retries += 1
-            result: Dict[str, Any] = {
+            result: dict[str, Any] = {
                 "test": test_name,
                 "passed": passed,
                 "retries": retries,
@@ -75,13 +76,13 @@ class CrossBrowserRunner:
             self.teardown_driver(browser)
         return results
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """Get summary of all test runs."""
-        summary: Dict[str, Any] = {"browsers": {}}
+        summary: dict[str, Any] = {"browsers": {}}
 
         for browser, results in self.results.items():
             passed = sum(1 for r in results if r.get("passed"))
-            browser_summary: Dict[str, int] = {
+            browser_summary: dict[str, int] = {
                 "total": len(results),
                 "passed": passed,
                 "failed": len(results) - passed
@@ -97,8 +98,8 @@ class TestScheduler:
     def __init__(self, num_workers: int = 4) -> None:
         """Initialize test scheduler."""
         self.num_workers = num_workers
-        self.schedule: List[ScheduleSlot] = []
-        self._test_durations: Dict[str, float] = {}
+        self.schedule: list[ScheduleSlot] = []
+        self._test_durations: dict[str, float] = {}
 
     def add_duration_estimate(self, test_id: str, duration_ms: float) -> None:
         """Add estimated duration for a test."""
@@ -106,10 +107,10 @@ class TestScheduler:
 
     def create_schedule(
         self,
-        tests: List[str],
+        tests: list[str],
         start_time: str,
         strategy: str = "load_balanced"
-    ) -> List[ScheduleSlot]:
+    ) -> list[ScheduleSlot]:
         """Create a test execution schedule."""
         if strategy == "load_balanced":
             return self._schedule_load_balanced(tests, start_time)
@@ -120,16 +121,16 @@ class TestScheduler:
 
     def _schedule_load_balanced(
         self,
-        tests: List[str],
+        tests: list[str],
         start_time: str
-    ) -> List[ScheduleSlot]:
+    ) -> list[ScheduleSlot]:
         """Create load-balanced schedule."""
         sorted_tests = sorted(
             tests,
             key=lambda t: self._test_durations.get(t, 1000),
             reverse=True
         )
-        worker_loads: List[List[str]] = [[] for _ in range(self.num_workers)]
+        worker_loads: list[list[str]] = [[] for _ in range(self.num_workers)]
         worker_times = [0.0] * self.num_workers
         for test in sorted_tests:
             min_worker = worker_times.index(min(worker_times))
@@ -149,9 +150,9 @@ class TestScheduler:
 
     def _schedule_sequential(
         self,
-        tests: List[str],
+        tests: list[str],
         start_time: str
-    ) -> List[ScheduleSlot]:
+    ) -> list[ScheduleSlot]:
         """Create sequential schedule."""
         slot = ScheduleSlot(
             start_time=start_time,
@@ -174,9 +175,9 @@ class TestScheduler:
             max_duration = max(max_duration, slot_duration)
         return max_duration
 
-    def get_worker_assignments(self) -> Dict[int, List[str]]:
+    def get_worker_assignments(self) -> dict[int, list[str]]:
         """Get test assignments per worker."""
-        assignments: Dict[int, List[str]] = {}
+        assignments: dict[int, list[str]] = {}
         for i, slot in enumerate(self.schedule):
             assignments[i] = slot.tests
         return assignments

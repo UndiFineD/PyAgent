@@ -35,7 +35,7 @@ class APICore:
     def __init__(self, version: str = SDK_VERSION) -> None:
         self.version = version
 
-    def build_openapi_json(self, tool_definitions: List[Dict[str, Any]]) -> str:
+    def build_openapi_json(self, tool_definitions: list[dict[str, Any]]) -> str:
         """Constructs an OpenAPI 3.0 string from tool metadata."""
         paths = {}
         for tool in tool_definitions:
@@ -70,6 +70,6 @@ class APICore:
         }
         return json.dumps(spec, indent=2)
 
-    def validate_tool_contract(self, spec: Dict[str, Any]) -> bool:
+    def validate_tool_contract(self, spec: dict[str, Any]) -> bool:
         """Checks if an external tool definition is valid."""
         return "name" in spec and ("endpoint" in spec or "implementation" in spec)

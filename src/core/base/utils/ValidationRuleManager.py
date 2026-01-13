@@ -45,7 +45,7 @@ class ValidationRuleManager:
 
     def __init__(self) -> None:
         """Initialize rule manager."""
-        self._rules: Dict[str, ValidationRule] = {}
+        self._rules: dict[str, ValidationRule] = {}
 
     def add_rule(self, rule: ValidationRule) -> None:
         """Add a validation rule.
@@ -69,7 +69,7 @@ class ValidationRuleManager:
             return True
         return False
 
-    def validate(self, file_path: Path, content: str) -> List[Dict[str, Any]]:
+    def validate(self, file_path: Path, content: str) -> list[dict[str, Any]]:
         """Validate content against applicable rules.
 
         Args:
@@ -101,7 +101,7 @@ class ValidationRuleManager:
 
         return results
 
-    def get_rules_for_file(self, file_path: Path) -> List[ValidationRule]:
+    def get_rules_for_file(self, file_path: Path) -> list[ValidationRule]:
         """Get rules applicable to a file.
 
         Args:

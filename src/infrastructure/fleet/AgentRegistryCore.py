@@ -37,12 +37,12 @@ class AgentRegistryCore:
     def __init__(self, current_sdk_version: str) -> None:
         self.sdk_version: str = current_sdk_version
 
-    def process_discovered_files(self, file_paths: List[str]) -> Dict[str, Tuple[str, str, Optional[str]]]:
+    def process_discovered_files(self, file_paths: list[str]) -> dict[str, tuple[str, str, str | None]]:
         """
         Processes a list of file paths and extracts agent/orchestrator configurations.
         Expects relative paths from workspace root.
         """
-        discovered: Dict[str, Tuple[str, str, Optional[str]]] = {}
+        discovered: dict[str, tuple[str, str, str | None]] = {}
         
         for rel_path in file_paths:
             file = os.path.basename(rel_path)
@@ -69,12 +69,12 @@ class AgentRegistryCore:
                         discovered[short_name] = (module_path, agent_name, None)
         return discovered
 
-    def parse_manifest(self, raw_manifest: Dict[str, Any]) -> Dict[str, Tuple[str, str, Optional[str]]]:
+    def parse_manifest(self, raw_manifest: dict[str, Any]) -> dict[str, tuple[str, str, str | None]]:
         """
         Parses the raw manifest dictionary and filters incompatible plugins.
         Returns a dict of {AgentName: (module, class, config)}.
         """
-        valid_configs: Dict[str, Tuple[str, str, Optional[str]]] = {}
+        valid_configs: dict[str, tuple[str, str, str | None]] = {}
         for key, cfg in raw_manifest.items():
             # Expecting: "AgentName": ["module.path", "ClassName", "arg_path", "min_sdk_version"]
             if isinstance(cfg, list) and len(cfg) >= 2:
@@ -82,7 +82,7 @@ class AgentRegistryCore:
                 min_sdk: str = cfg[3] if len(cfg) > 3 else "1.0.0"
                 
                 if self.is_compatible(min_sdk):
-                    config_path: Optional[str] = cfg[2] if len(cfg) > 2 else None
+                    config_path: str | None = cfg[2] if len(cfg) > 2 else None
                     valid_configs[key] = (cfg[0], cfg[1], config_path)
                 
         return valid_configs
@@ -93,7 +93,7 @@ class AgentRegistryCore:
         """
         return VersionGate.is_compatible(self.sdk_version, required_version)
 
-    def detect_circular_dependencies(self, dep_graph: Dict[str, List[str]]) -> List[List[str]]:
+    def detect_circular_dependencies(self, dep_graph: dict[str, list[str]]) -> list[list[str]]:
         """
         Logic for detecting circular dependencies in the agent graph.
         Useful for preventing init-loop during complex swarm orchestration.
@@ -128,7 +128,7 @@ class AgentRegistryCore:
         s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
         return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
-    def validate_agent_structure(self, agent_instance: Any, required_methods: List[str] = None) -> List[str]:
+    def validate_agent_structure(self, agent_instance: Any, required_methods: list[str] = None) -> list[str]:
         """
         Checks if an agent instance has the required methods.
         Returns a list of missing methods.
@@ -140,7 +140,7 @@ class AgentRegistryCore:
                 missing.append(method)
         return missing
 
-    def calculate_load_order(self, dep_graph: Dict[str, List[str]]) -> List[str]:
+    def calculate_load_order(self, dep_graph: dict[str, list[str]]) -> list[str]:
         """
         Calculates optimal load order for agents based on their dependencies.
         Ensures dependencies are loaded before agents that require them.

@@ -16,7 +16,7 @@ class ProfilingCore:
     Identifies slow methods and calculates optimization priority.
     """
     
-    def analyze_stats(self, pstats_obj: pstats.Stats, limit: int = 10) -> List[ProfileStats]:
+    def analyze_stats(self, pstats_obj: pstats.Stats, limit: int = 10) -> list[ProfileStats]:
         """Converts raw pstats into a list of pure ProfileStats dataclasses."""
         results = []
         pstats_obj.sort_stats('cumulative')
@@ -35,7 +35,7 @@ class ProfilingCore:
             
         return results
 
-    def identify_bottlenecks(self, stats: List[ProfileStats], threshold_ms: float = 100.0) -> List[str]:
+    def identify_bottlenecks(self, stats: list[ProfileStats], threshold_ms: float = 100.0) -> list[str]:
         """Identifies functions exceeding the time threshold."""
         return [s.function_name for s in stats if s.total_time > (threshold_ms / 1000.0)]
 

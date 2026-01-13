@@ -1,32 +1,35 @@
 """Import test utilities from src."""
+from __future__ import annotations
 import sys
 from pathlib import Path
 from typing import Union
+from src.infrastructure.dev.test_utils import (
+    FileSystemIsolator,
+    LogCapturer,
+    MockAIBackend,
+    ModuleLoader,
+    SnapshotManager,
+    MockResponse,
+    TestDataFactory,
+    TestEnvironment,
+    TestSnapshot,
+    PerformanceTracker,
+    TestStatus,
+    TestResult
+)
 
-# Add src to path so tests can import from there
-src_path = Path(__file__).parent.parent.parent / "src"
-if str(src_path) not in sys.path:
-    sys.path.insert(0, str(src_path))
+# Shared loader for constants
+_loader = ModuleLoader()
+AGENT_DIR = _loader.agent_dir
 
-# Use importlib to avoid shadowing if possible, or just rely on sys.path order
-# Actually, the simplest fix is to NOT name this file agent_test_utils.py if it's in tests/
-# But it's already there. Let's try to import directly from the src file.
-import importlib.util
+# Re-expose methods as expected by legacy tests
+load_module_from_path = _loader.load_module_from_path
 
-def _load_src_utils():
-    util_path = src_path / "core" / "utils" / "benchmarking.py"
-    spec = importlib.util.spec_from_file_location("agent_test_utils_src", str(util_path))
-    if spec and spec.loader:
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        return module
-    raise ImportError("Could not load src/agent_test_utils.py")
+def agent_dir_on_path():
+    return _loader.agent_dir_on_path()
 
-_src_utils = _load_src_utils()
-AGENT_DIR = _src_utils.AGENT_DIR
-agent_sys_path = _src_utils.agent_sys_path
-load_module_from_path = _src_utils.load_module_from_path
-agent_dir_on_path = getattr(_src_utils, 'agent_dir_on_path', None)
+def agent_sys_path():
+    return _loader.agent_sys_path()
 
 # Add the load_agent_module helper which is often used in conftest.py
 def load_agent_module(module_path: Union[str, Path]):
@@ -41,24 +44,7 @@ def load_agent_module(module_path: Union[str, Path]):
             module_path = potential_path
             
     name = module_path.stem.replace("-", "_")
-    spec = importlib.util.spec_from_file_location(name, str(module_path))
-    if spec and spec.loader:
-        module = importlib.util.module_from_spec(spec)
-        sys.modules[name] = module
-        spec.loader.exec_module(module)
-        return module
-    raise ImportError(f"Could not load module from {module_path}")
-
-TestStatus = getattr(_src_utils, 'TestStatus', None)
-TestResult = getattr(_src_utils, 'TestResult', None)
-MockResponse = getattr(_src_utils, 'MockResponse', None)
-TestDataFactory = getattr(_src_utils, 'TestDataFactory', None)
-TestEnvironment = getattr(_src_utils, 'TestEnvironment', None)
-TestSnapshot = getattr(_src_utils, 'TestSnapshot', None)
-MockAIBackend = getattr(_src_utils, 'MockAIBackend', None)
-FileSystemIsolator = getattr(_src_utils, 'FileSystemIsolator', None)
-PerformanceTracker = getattr(_src_utils, 'PerformanceTracker', None)
-SnapshotManager = getattr(_src_utils, 'SnapshotManager', None)
+    return _loader.load_module_from_path(name, module_path)
 
 __all__ = [
     "AGENT_DIR",

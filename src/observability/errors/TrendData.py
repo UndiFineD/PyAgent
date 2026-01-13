@@ -40,7 +40,7 @@ class TrendData:
         prediction: Predicted next value.
     """
     metric_name: str
-    values: List[float] = field(default_factory=lambda: [])
-    timestamps: List[str] = field(default_factory=lambda: [])
+    values: list[float] = field(default_factory=lambda: [])
+    timestamps: list[str] = field(default_factory=lambda: [])
     direction: TrendDirection = TrendDirection.STABLE
-    prediction: Optional[float] = None
+    prediction: float | None = None

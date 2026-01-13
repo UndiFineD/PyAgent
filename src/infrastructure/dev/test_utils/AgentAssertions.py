@@ -40,7 +40,7 @@ class AgentAssertions:
 
     def __init__(self) -> None:
         """Initialize assertion helpers."""
-        self._assertions: List[TestAssertion] = []
+        self._assertions: list[TestAssertion] = []
 
     def assert_valid_python(self, code: str) -> bool:
         """Assert code is valid Python.
@@ -112,7 +112,7 @@ class AgentAssertions:
         Returns:
             bool: True if structure matches.
         """
-        issues: List[str] = []
+        issues: list[str] = []
         if headers and not re.search(r"^#+\s", content, re.MULTILINE):
             issues.append("missing headers")
         if code_blocks and "```" not in content:
@@ -158,6 +158,6 @@ class AgentAssertions:
             self._assertions.append(assertion)
             raise AssertionError(f"Invalid JSON: {e}")
 
-    def get_assertions(self) -> List[TestAssertion]:
+    def get_assertions(self) -> list[TestAssertion]:
         """Get all recorded assertions."""
         return list(self._assertions)

@@ -47,7 +47,7 @@ class ConfigurationManager:
     def load(self) -> None:
         if os.path.exists(self.config_file):
             try:
-                with open(self.config_file, 'r') as f:
+                with open(self.config_file) as f:
                     disk_settings = json.load(f)
                     self.settings.update(disk_settings)
             except Exception:

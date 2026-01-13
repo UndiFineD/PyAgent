@@ -14,7 +14,6 @@ from src.logic.agents.cognitive.context.models.SemanticSearchResult import Seman
 from src.logic.agents.cognitive.context.models.SemanticSearchResult import SemanticSearchResult
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
 
 from src.logic.agents.cognitive.context.engines.SemanticSearchEngine import SemanticSearchEngine
 from src.logic.agents.cognitive.context.utils.SearchAlgorithm import SearchAlgorithm

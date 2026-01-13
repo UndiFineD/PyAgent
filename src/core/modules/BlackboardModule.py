@@ -21,10 +21,10 @@ class BlackboardModule(BaseModule):
     Migrated from BlackboardCore.
     """
     def __init__(self, config:
-        Optional[Dict[str, Any]] = None) -> None:
+        dict[str, Any] | None = None) -> None:
         super().__init__(config)
-        self.data: Dict[str, Any] = {}
-        self.history: List[Dict[str, Any]] = []
+        self.data: dict[str, Any] = {}
+        self.history: list[dict[str, Any]] = []
 
     def initialize(self) -> bool:
         """Initialize blackboard state."""
@@ -52,7 +52,7 @@ class BlackboardModule(BaseModule):
         return None
 
     def process_post(self, key:
-        str, value: Any, agent_name: str) -> Dict[str, Any]:
+        str, value: Any, agent_name: str) -> dict[str, Any]:
         """Core logic for posting data."""
         self.data[key] = value
         entry = {"agent": agent_name, "key": key, "value": value}
@@ -63,7 +63,7 @@ class BlackboardModule(BaseModule):
         str) -> Any:
         return self.data.get(key)
 
-    def get_all_keys(self) -> List[str]:
+    def get_all_keys(self) -> list[str]:
         return list(self.data.keys())
 
     def shutdown(self) -> bool:

@@ -41,7 +41,7 @@ class CapabilityDiscovery:
 
     def __init__(self) -> None:
         """Initialize capability discovery."""
-        self._capabilities: Dict[str, Dict[str, SystemCapability]] = {}
+        self._capabilities: dict[str, dict[str, SystemCapability]] = {}
 
     def register_capability(
         self,
@@ -49,7 +49,7 @@ class CapabilityDiscovery:
         name: str,
         description: str = "",
         enabled: bool = True,
-        parameters: Optional[Dict[str, Any]] = None,
+        parameters: dict[str, Any] | None = None,
     ) -> SystemCapability:
         """Register a backend capability.
 
@@ -89,7 +89,7 @@ class CapabilityDiscovery:
         cap = caps.get(name)
         return cap is not None and cap.enabled
 
-    def get_capabilities(self, backend: str) -> List[SystemCapability]:
+    def get_capabilities(self, backend: str) -> list[SystemCapability]:
         """Get all capabilities for backend.
 
         Args:
@@ -100,7 +100,7 @@ class CapabilityDiscovery:
         """
         return list(self._capabilities.get(backend, {}).values())
 
-    def discover_all(self) -> Dict[str, List[str]]:
+    def discover_all(self) -> dict[str, list[str]]:
         """Discover all capabilities across backends.
 
         Returns:

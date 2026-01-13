@@ -36,6 +36,6 @@ class ChangelogEntry:
     date: str = ""
     priority: int = 0  # Higher=more important
     severity: str = "normal"  # low, normal, high, critical
-    tags: List[str] = field(default_factory=lambda: [])
-    linked_issues: List[str] = field(default_factory=lambda: [])
-    linked_commits: List[str] = field(default_factory=lambda: [])
+    tags: list[str] = field(default_factory=lambda: [])
+    linked_issues: list[str] = field(default_factory=lambda: [])
+    linked_commits: list[str] = field(default_factory=lambda: [])

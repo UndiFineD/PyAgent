@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Any
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
 
 from tests.utils.agent_test_utils import agent_dir_on_path, load_agent_module
 

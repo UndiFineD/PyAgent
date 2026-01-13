@@ -22,7 +22,7 @@ class ErrorMappingCore:
     """
 
     # Primary Error Code Map
-    ERROR_CODES: Dict[str, str] = {
+    ERROR_CODES: dict[str, str] = {
         # 10xx: Infrastructure & I/O
         "FileSystemError": "PA-1001",
         "NetworkTimeout": "PA-1002",

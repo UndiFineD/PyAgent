@@ -40,7 +40,7 @@ class ExplainabilityAgent(BaseAgent):
         self.interpret_core = InterpretableCore()
         os.makedirs(os.path.dirname(self.log_path), exist_ok=True)
 
-    def generate_neural_trace(self, agent_name: str, decision_context: str) -> Dict[str, Any]:
+    def generate_neural_trace(self, agent_name: str, decision_context: str) -> dict[str, Any]:
         """
         Generates a synthetic neural trace for a decision using SAE logic.
         """
@@ -60,7 +60,7 @@ class ExplainabilityAgent(BaseAgent):
         }
 
     def log_reasoning_step(self, workflow_id: str, agent_name: str, action: str, 
-                           justification: str, context: Dict[str, Any]) -> str:
+                           justification: str, context: dict[str, Any]) -> str:
         """Logs a single reasoning step in the chain."""
         
         # Pruning logic: Only record if verbose is ON or if it's a failure/error
@@ -88,7 +88,7 @@ class ExplainabilityAgent(BaseAgent):
         if not os.path.exists(self.log_path):
             return "No reasoning logs found."
 
-        with open(self.log_path, "r", encoding="utf-8") as f:
+        with open(self.log_path, encoding="utf-8") as f:
             for line in f:
                 entry = json.loads(line)
                 if entry["workflow_id"] == workflow_id:

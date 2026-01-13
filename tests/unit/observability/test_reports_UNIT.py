@@ -22,8 +22,6 @@ except ImportError:
     AGENT_DIR = Path(__file__).parent.parent.parent.parent / 'src'
 
 # Import from src if needed
-sys.path.insert(0, str(AGENT_DIR))
-
 
 class TestReportGeneration(unittest.TestCase):
     """Tests for basic report generation."""

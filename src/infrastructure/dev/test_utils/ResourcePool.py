@@ -37,9 +37,9 @@ class ResourcePool:
         self.max_resources = max_resources
         self.available = max_resources
         self.lock = threading.Lock()
-        self._allocations: Dict[str, int] = {}
+        self._allocations: dict[str, int] = {}
 
-    def acquire(self, count: Union[int, str] = 1, timeout: float = 10.0) -> Optional[ResourceHandle]:
+    def acquire(self, count: int | str = 1, timeout: float = 10.0) -> ResourceHandle | None:
         """Acquire a resource.
 
         Compatibility:
@@ -64,7 +64,7 @@ class ResourcePool:
                 return ResourceHandle(name=f"count:{int(count)}")
             return None
 
-    def release(self, handle: Union[int, ResourceHandle] = 1) -> None:
+    def release(self, handle: int | ResourceHandle = 1) -> None:
         """Release resources."""
         with self.lock:
             if isinstance(handle, ResourceHandle):

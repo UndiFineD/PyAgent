@@ -31,8 +31,8 @@ class AssignmentManager:
     """Tracks assignees and ownership history."""
 
     def __init__(self) -> None:
-        self.assignments: Dict[str, str] = {}
-        self._history: Dict[str, List[Dict[str, Any]]] = {}
+        self.assignments: dict[str, str] = {}
+        self._history: dict[str, list[dict[str, Any]]] = {}
 
     def assign(self, improvement_id: str, assignee: str) -> None:
         self.assignments[improvement_id] = assignee
@@ -40,8 +40,8 @@ class AssignmentManager:
             {"assignee": assignee, "timestamp": datetime.now().isoformat()}
         )
 
-    def get_assignee(self, improvement_id: str) -> Optional[str]:
+    def get_assignee(self, improvement_id: str) -> str | None:
         return self.assignments.get(improvement_id)
 
-    def get_ownership_history(self, improvement_id: str) -> List[Dict[str, Any]]:
+    def get_ownership_history(self, improvement_id: str) -> list[dict[str, Any]]:
         return list(self._history.get(improvement_id, []))

@@ -51,10 +51,10 @@ class GraphMemoryAgent(BaseAgent):
             "resource": {},   # Links/Paths/Tools
             "knowledge": {}   # Synthesis/Insights
         }
-        self.entities: Dict[str, Dict[str, Any]] = {}
-        self.relationships: List[Dict[str, str]] = []
-        self.tasks: Dict[str, Dict[str, Any]] = self._load_beads()
-        self.outcomes: Dict[str, float] = {}
+        self.entities: dict[str, dict[str, Any]] = {}
+        self.relationships: list[dict[str, str]] = []
+        self.tasks: dict[str, dict[str, Any]] = self._load_beads()
+        self.outcomes: dict[str, float] = {}
         self._load_graph()
         self._system_prompt = (
             "You are the Graph Memory Agent. "
@@ -69,7 +69,7 @@ class GraphMemoryAgent(BaseAgent):
         """Loads entities and relationships from persistent storage."""
         if self.graph_store_path.exists():
             try:
-                with open(self.graph_store_path, "r", encoding="utf-8") as f:
+                with open(self.graph_store_path, encoding="utf-8") as f:
                     data = json.load(f)
                     self.entities.update(data.get("entities", {}))
                     # Convert 'relations' from GraphRelational format to 'relationships' if needed
@@ -100,12 +100,12 @@ class GraphMemoryAgent(BaseAgent):
         except Exception as e:
             logging.error(f"GraphMemoryAgent: Failed to save graph: {e}")
 
-    def _load_beads(self) -> Dict[str, Dict[str, Any]]:
+    def _load_beads(self) -> dict[str, dict[str, Any]]:
         """Loads tasks from .beads/ directory JSONL files."""
         tasks = {}
         task_file = self.beads_dir / "tasks.jsonl"
         if task_file.exists():
-            with open(task_file, "r", encoding="utf-8") as f:
+            with open(task_file, encoding="utf-8") as f:
                 for line in f:
                     try:
                         task = json.loads(line)
@@ -114,7 +114,7 @@ class GraphMemoryAgent(BaseAgent):
                         continue
         return tasks
 
-    def _save_bead(self, task_id: str, data: Dict[str, Any]) -> str:
+    def _save_bead(self, task_id: str, data: dict[str, Any]) -> str:
         """Persists a single task to the beads JSONL (Append-only)."""
         task_file = self.beads_dir / "tasks.jsonl"
         with open(task_file, "a", encoding="utf-8") as f:
@@ -186,7 +186,7 @@ class GraphMemoryAgent(BaseAgent):
         return f"Memory {entity_id} score updated to {self.outcomes[entity_id]} ({status})."
 
     @as_tool
-    def create_task(self, title: str, parent_id: Optional[str] = None, priority: int = 2) -> str:
+    def create_task(self, title: str, parent_id: str | None = None, priority: int = 2) -> str:
         """Creates a new task with optional parent for hierarchy (Beads pattern)."""
         task_count = len([t for t in self.tasks if not parent_id or t.startswith(f"{parent_id}.")])
         task_id = f"{parent_id}.{task_count + 1}" if parent_id else f"epic-{len(self.tasks) + 1}"
@@ -233,7 +233,7 @@ class GraphMemoryAgent(BaseAgent):
         return summary
 
     @as_tool
-    def add_entity(self, name: str, properties: Dict[str, Any], entity_type: Optional[str] = None) -> str:
+    def add_entity(self, name: str, properties: dict[str, Any], entity_type: str | None = None) -> str:
         """Adds or updates an entity in the graph."""
         if entity_type:
             properties["type"] = entity_type
@@ -264,7 +264,7 @@ class GraphMemoryAgent(BaseAgent):
         return "\n".join(matches)
 
     @as_tool
-    def hybrid_search(self, query: str) -> Dict[str, Any]:
+    def hybrid_search(self, query: str) -> dict[str, Any]:
         """Performs a combined vector-graph search (Simulated)."""
         # In a real system, this would call ChromaDB for vectors and then cross-reference with self.entities
         return {

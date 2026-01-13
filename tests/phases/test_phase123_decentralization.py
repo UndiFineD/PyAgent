@@ -15,7 +15,7 @@ from pathlib import Path
 
 class TestPhase123Decentralization(unittest.TestCase):
     def setUp(self):
-        self.root = "c:/DEV/PyAgent"
+        self.root = Path(__file__).resolve().parents[2]
         self.test_dir = os.path.join(self.root, "test_phase123_work")
         if os.path.exists(self.test_dir):
             shutil.rmtree(self.test_dir)

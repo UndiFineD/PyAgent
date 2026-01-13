@@ -46,7 +46,7 @@ class SwarmVisualizerAgent:
         if len(self.interaction_log) > 1000:
             self.interaction_log.pop(0)
 
-    def generate_topology_map(self) -> Dict[str, Any]:
+    def generate_topology_map(self) -> dict[str, Any]:
         """Generates a graph-based representation of the swarm topology."""
         nodes = set()
         edges = []
@@ -71,7 +71,7 @@ class SwarmVisualizerAgent:
         """Updates the visual position of an agent in the topology."""
         self.agent_positions[agent_id] = {"x": x, "y": y}
 
-    def get_visualization_data(self) -> Dict[str, Any]:
+    def get_visualization_data(self) -> dict[str, Any]:
         """Returns all data needed for a real-time visualization dashboard."""
         return {
             "topology": self.generate_topology_map(),

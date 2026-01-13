@@ -17,7 +17,7 @@ from typing import Optional
 
 class PyAgentException(Exception):
     """Base exception for all PyAgent errors."""
-    def __init__(self, message: str, error_code: Optional[str] = None) -> None:
+    def __init__(self, message: str, error_code: str | None = None) -> None:
         super().__init__(message)
         self.error_code = error_code
 

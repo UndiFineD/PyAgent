@@ -31,7 +31,7 @@ class ArchiveManager:
     """Archives completed improvements."""
 
     def __init__(self) -> None:
-        self.archived: List[Improvement] = []
+        self.archived: list[Improvement] = []
 
     def archive(self, improvement: Improvement) -> None:
         self.archived.append(improvement)

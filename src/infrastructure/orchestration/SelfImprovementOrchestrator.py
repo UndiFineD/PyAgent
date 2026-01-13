@@ -60,7 +60,7 @@ class SelfImprovementOrchestrator(BaseAgent):
         import requests
         self.ai = LLMClient(requests, workspace_root=self.workspace_root)
 
-    def run_improvement_cycle(self, target_dir: str = "src") -> Dict[str, Any]:
+    def run_improvement_cycle(self, target_dir: str = "src") -> dict[str, Any]:
         """Runs a full scan and fix cycle across the specified directory."""
         # Gatekeeping Check (Phase 108)
         from src.core.base.version import STABILITY_SCORE
@@ -152,12 +152,12 @@ class SelfImprovementOrchestrator(BaseAgent):
         
         return results
 
-    def update_research_report(self, results: Dict[str, Any], lessons: List[str] = None) -> str:
+    def update_research_report(self, results: dict[str, Any], lessons: list[str] = None) -> str:
         """Updates the IMPROVEMENT_RESEARCH.md and FLEET_AUTO_DOC.md based on latest scan findings."""
         if not os.path.exists(self.research_doc):
             return
 
-        with open(self.research_doc, "r", encoding="utf-8") as f:
+        with open(self.research_doc, encoding="utf-8") as f:
             content = f.read()
 
         # Generate a summary section
@@ -201,7 +201,7 @@ class SelfImprovementOrchestrator(BaseAgent):
         
         logging.info("Self-Improvement: Updated IMPROVEMENT_RESEARCH.md")
 
-    def _analyze_and_fix(self, file_path: str) -> List[Dict[str, Any]]:
+    def _analyze_and_fix(self, file_path: str) -> list[dict[str, Any]]:
         """Uses specialized agents to analyze and potentially fix a file."""
         findings = []
         
@@ -225,7 +225,7 @@ class SelfImprovementOrchestrator(BaseAgent):
             })
 
         # 2. Security (Phase 84 / 104)
-        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+        with open(file_path, encoding="utf-8", errors="ignore") as f:
             content = f.read()
             lines = content.split('\n')
             # Expanded security patterns
@@ -525,7 +525,7 @@ class SelfImprovementOrchestrator(BaseAgent):
 
         return findings
 
-    def _log_results(self, results: Dict[str, Any]) -> None:
+    def _log_results(self, results: dict[str, Any]) -> None:
         """Persists the improvement result to a log file."""
         entry = {
             "timestamp": time.strftime('%Y-%m-%d %H:%M:%S'),
@@ -538,7 +538,7 @@ class SelfImprovementOrchestrator(BaseAgent):
         with open(self.improvement_log, "a", encoding="utf-8") as f:
             f.write(json.dumps(entry) + "\n")
 
-    def _review_ai_lessons(self) -> List[str]:
+    def _review_ai_lessons(self) -> list[str]:
         """
         Scans sharded interaction history for patterns and failures.
         Extracts 'deep lessons' by reading the actual shard content (Phase 108).

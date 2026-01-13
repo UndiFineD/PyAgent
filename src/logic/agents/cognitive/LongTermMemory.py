@@ -65,7 +65,7 @@ class LongTermMemory:
             cls._model = SentenceTransformer("all-MiniLM-L6-v2")
         return cls._model
 
-    def store(self, content: str, metadata: Optional[Dict[str, Any]] = None, tags: Optional[List[str]] = None) -> str:
+    def store(self, content: str, metadata: dict[str, Any] | None = None, tags: list[str] | None = None) -> str:
         """Store a thought or interaction in the local DiskCache shard."""
         if not self._enabled or not self._cache:
             return ""
@@ -89,11 +89,11 @@ class LongTermMemory:
         self._cache.set(mem_id, entry)
         return mem_id
 
-    def query(self, query_text: str, n_results: int = 5) -> List[Dict[str, Any]]:
+    def query(self, query_text: str, n_results: int = 5) -> list[dict[str, Any]]:
         """Retrieve relevant memories from the local shard using cosine similarity."""
         return self._search_shard(self._cache, query_text, n_results)
 
-    def _search_shard(self, cache: diskcache.Cache, query_text: str, n_results: int) -> List[Dict[str, Any]]:
+    def _search_shard(self, cache: diskcache.Cache, query_text: str, n_results: int) -> list[dict[str, Any]]:
         """Internal helper to search a specific diskcache instance."""
         if not HAS_RAG_DEPS or not cache:
             return []
@@ -125,7 +125,7 @@ class LongTermMemory:
         results.sort(key=lambda x: x["score"], reverse=True)
         return results[:n_results]
 
-    def federated_query(self, query_text: str, n_results: int = 5) -> List[Dict[str, Any]]:
+    def federated_query(self, query_text: str, n_results: int = 5) -> list[dict[str, Any]]:
         """Search across ALL available memory shards (federation)."""
         if not HAS_RAG_DEPS:
             return []

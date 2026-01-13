@@ -23,7 +23,8 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .FlakinessReport import FlakinessReport
-from typing import Callable, Dict, List, Optional
+from typing import Dict, List, Optional
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -46,13 +47,13 @@ class FlakinessDetector:
             default_runs: Default number of test runs.
         """
         self.default_runs = default_runs
-        self._history: Dict[str, List[FlakinessReport]] = {}
+        self._history: dict[str, list[FlakinessReport]] = {}
 
     def analyze(
         self,
         test_fn: Callable[[], None],
-        runs: Optional[int] = None,
-        test_name: Optional[str] = None,
+        runs: int | None = None,
+        test_name: str | None = None,
     ) -> FlakinessReport:
         """Analyze test for flakiness.
 
@@ -69,7 +70,7 @@ class FlakinessDetector:
 
         passes = 0
         failures = 0
-        failure_messages: List[str] = []
+        failure_messages: list[str] = []
 
         for _ in range(runs):
             try:
@@ -105,13 +106,13 @@ class FlakinessDetector:
 
         return report
 
-    def get_history(self, test_name: str) -> List[FlakinessReport]:
+    def get_history(self, test_name: str) -> list[FlakinessReport]:
         """Get flakiness history for a test."""
         return self._history.get(test_name, [])
 
-    def get_flaky_tests(self, threshold: float = 0.1) -> List[str]:
+    def get_flaky_tests(self, threshold: float = 0.1) -> list[str]:
         """Get tests that exceed flakiness threshold."""
-        flaky: List[str] = []
+        flaky: list[str] = []
         for name, reports in self._history.items():
             if reports and reports[-1].flakiness_score > threshold:
                 flaky.append(name)

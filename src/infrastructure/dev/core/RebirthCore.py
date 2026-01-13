@@ -7,11 +7,11 @@ Handles mass directory scaffolding and cleanup.
 import os
 import shutil
 import yaml
-from typing import Dict
+from typing import Dict, Any
 
 class RebirthCore:
     @staticmethod
-    def scaffold_structure(root_dir: str, structure: Dict[str, Any]) -> int:
+    def scaffold_structure(root_dir: str, structure: dict[str, Any]) -> int:
         """
         Recursively creates a directory structure from a dictionary.
         Returns the number of directories created.
@@ -42,11 +42,11 @@ class RebirthCore:
                 dirs.remove("__pycache__")
 
     @staticmethod
-    def parse_manifest(manifest_path: str) -> Dict[str, Any]:
+    def parse_manifest(manifest_path: str) -> dict[str, Any]:
         """
         Parses the rebirth manifest.yaml.
         """
         if not os.path.exists(manifest_path):
             return {}
-        with open(manifest_path, "r", encoding="utf-8") as f:
+        with open(manifest_path, encoding="utf-8") as f:
             return yaml.safe_load(f)

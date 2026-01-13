@@ -54,7 +54,7 @@ class LazyOrchestratorMap:
         boot_configs = {k: (v[0], v[1], True, None) for k, v in BOOTSTRAP_ORCHESTRATORS.items()}
         self._configs = {**self._discovered_configs, **self._manifest_configs, **boot_configs}
 
-    def _scan_workspace_for_orchestrators(self) -> List[str]:
+    def _scan_workspace_for_orchestrators(self) -> list[str]:
         """Performs the I/O-bound scanning of the workspace."""
         subdirs = [
             "src/infrastructure/orchestration", 
@@ -77,7 +77,7 @@ class LazyOrchestratorMap:
                         found_paths.append(str(rel_path))
         return found_paths
 
-    def _load_manifests(self) -> Dict[str, tuple]:
+    def _load_manifests(self) -> dict[str, tuple]:
         """Loads orchestrator configurations from plugin manifests."""
         manifest_configs = {}
         manifest_paths = [
@@ -87,7 +87,7 @@ class LazyOrchestratorMap:
         for m_path in manifest_paths:
             if m_path.exists():
                 try:
-                    with open(m_path, 'r') as f:
+                    with open(m_path) as f:
                         data = json.load(f)
                         configs = self._registry_core.parse_manifest(data)
                         manifest_configs.update(configs)
@@ -200,7 +200,7 @@ class LazyOrchestratorMap:
             logging.error(f"Failed to lazy-load orchestrator {key} from {module_path}: {e}")
             return None
 
-    def keys(self) -> List[str]:
+    def keys(self) -> list[str]:
         """Returns list of available orchestrators."""
         return list(self._configs.keys())
 
@@ -209,5 +209,5 @@ class LazyOrchestratorMap:
 
 class OrchestratorRegistry:
     @staticmethod
-    def get_orchestrator_map(fleet_instance) -> "LazyOrchestratorMap":
+    def get_orchestrator_map(fleet_instance) -> LazyOrchestratorMap:
         return LazyOrchestratorMap(fleet_instance)

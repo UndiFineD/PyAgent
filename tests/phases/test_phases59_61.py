@@ -5,7 +5,7 @@ from src.infrastructure.fleet.FleetManager import FleetManager
 
 class TestPhases59_61(unittest.TestCase):
     def setUp(self):
-        self.workspace = "c:/DEV/PyAgent"
+        self.workspace = Path(__file__).resolve().parents[2]
         self.fleet = FleetManager(self.workspace)
 
     def test_legal_and_smart_contract_audit(self) -> None:

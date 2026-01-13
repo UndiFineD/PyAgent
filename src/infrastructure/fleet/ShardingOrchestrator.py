@@ -46,9 +46,9 @@ class ShardingOrchestrator:
         self.interaction_log = workspace_root / "data/logs/interaction_matrix.json"
         self.shard_mapping_path = workspace_root / "config/shard_mapping.json"
         self._counts: Counter = Counter()
-        self._agent_vram: Dict[str, float] = {} # agent -> VRAM usage in MB
+        self._agent_vram: dict[str, float] = {} # agent -> VRAM usage in MB
         self._total_interactions = 0
-        self._current_mapping: Dict[str, str] = {} # agent -> shard_id
+        self._current_mapping: dict[str, str] = {} # agent -> shard_id
 
     def record_interaction(self, agent_a: str, agent_b: str, vram_a: float = 512.0, vram_b: float = 512.0) -> None:
         """Records a communication event and updates VRAM telemetry (Phase 234)."""
@@ -102,7 +102,7 @@ class ShardingOrchestrator:
         db = DBSCAN(eps=0.5, min_samples=2).fit(X_scaled)
         labels = db.labels_
 
-        new_mapping: Dict[str, List[str]] = {}
+        new_mapping: dict[str, list[str]] = {}
         for idx, label in enumerate(labels):
             shard_id = f"shard_{label}" if label != -1 else "shard_outliers"
             if shard_id not in new_mapping:
@@ -119,26 +119,26 @@ class ShardingOrchestrator:
     def _sync_mapping_to_disk(self) -> None:
         """Internal helper to persist current mapping."""
         # Convert flat mapping back to grouped for compatibility
-        grouped: Dict[str, List[str]] = {}
+        grouped: dict[str, list[str]] = {}
         for agent, shard in self._current_mapping.items():
             if shard not in grouped:
                 grouped[shard] = []
             grouped[shard].append(agent)
         self._save_mapping(grouped)
 
-    def _save_mapping(self, mapping: Dict[str, List[str]]) -> None:
+    def _save_mapping(self, mapping: dict[str, list[str]]) -> None:
         self.shard_mapping_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.shard_mapping_path, "w") as f:
             json.dump(mapping, f, indent=4)
 
-    def _save_mapping(self, mapping: Dict[str, List[str]]) -> None:
+    def _save_mapping(self, mapping: dict[str, list[str]]) -> None:
         self.shard_mapping_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.shard_mapping_path, "w") as f:
             json.dump(mapping, f, indent=4)
 
-    def load_mapping(self) -> Dict[str, List[str]]:
+    def load_mapping(self) -> dict[str, list[str]]:
         if self.shard_mapping_path.exists():
-            with open(self.shard_mapping_path, "r") as f:
+            with open(self.shard_mapping_path) as f:
                 return json.load(f)
         return {}
 

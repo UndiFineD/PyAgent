@@ -33,8 +33,8 @@ class TestTimer:
 
     def __init__(self) -> None:
         """Initialize timer."""
-        self.start_time: Optional[float] = None
-        self.end_time: Optional[float] = None
+        self.start_time: float | None = None
+        self.end_time: float | None = None
 
     def start(self) -> None:
         """Start the timer."""

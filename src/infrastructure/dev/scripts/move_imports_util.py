@@ -28,7 +28,7 @@ __version__ = VERSION
 
 def fix_file(file_path: str) -> None:
     """Move standard library imports from TYPE_CHECKING to top-level."""
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, encoding='utf-8') as f:
         content = f.read()
     
     # regex to find if TYPE_CHECKING: block

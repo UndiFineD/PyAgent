@@ -97,7 +97,7 @@ class KnowledgeEngine:
             return self.graph.store(content, kwargs.get("target"), kwargs.get("relationship", "related_to"))
         return False
 
-    def query(self, query: Any, mode: str = "vector", limit: int = 5) -> List[Any]:
+    def query(self, query: Any, mode: str = "vector", limit: int = 5) -> list[Any]:
         self.pruning.log_access(str(query))
         if mode == "vector":
             return self.vector.retrieve(query, limit)

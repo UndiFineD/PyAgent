@@ -27,7 +27,7 @@ from .models import PromptTemplate
 
 __version__ = VERSION
 
-DEFAULT_PROMPT_TEMPLATES: List[PromptTemplate] = [
+DEFAULT_PROMPT_TEMPLATES: list[PromptTemplate] = [
     PromptTemplate(
         id="improve_code",
         name="Code Improvement",

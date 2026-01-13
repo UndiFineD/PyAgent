@@ -33,9 +33,9 @@ class CloudProviderAgent(BaseAgent):
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self.supported_providers = ["aws", "azure", "gcp"]
-        self.credentials: Dict[str, bool] = {p: False for p in self.supported_providers}
+        self.credentials: dict[str, bool] = {p: False for p in self.supported_providers}
 
-    def configure_provider(self, provider: str, credentials_mock: Dict[str, str]) -> str:
+    def configure_provider(self, provider: str, credentials_mock: dict[str, str]) -> str:
         """Mocks the configuration of a cloud provider."""
         if self.recorder:
             self.recorder.record_lesson("cloud_provider_config", {"provider": provider})
@@ -69,7 +69,7 @@ resource "{provider}_instance" "pyagent_node" {{
 """
         return template.strip()
 
-    def select_optimal_region(self, latency_data: Dict[str, float]) -> str:
+    def select_optimal_region(self, latency_data: dict[str, float]) -> str:
         """Selects the region with the lowest latency from a provided map."""
         if not latency_data:
             return "us-east-1" # Default

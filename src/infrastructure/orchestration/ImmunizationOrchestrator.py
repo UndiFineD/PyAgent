@@ -37,8 +37,8 @@ class ImmunizationOrchestrator:
     
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
-        self.threat_signatures: List[str] = [] # List of regex patterns
-        self.immunization_log: List[Dict[str, Any]] = []
+        self.threat_signatures: list[str] = [] # List of regex patterns
+        self.immunization_log: list[dict[str, Any]] = []
 
     def scan_for_threats(self, prompt: str) -> bool:
         """
@@ -77,5 +77,5 @@ class ImmunizationOrchestrator:
                 
         return pattern
 
-    def get_audit_trail(self) -> List[Dict[str, Any]]:
+    def get_audit_trail(self) -> list[dict[str, Any]]:
         return self.immunization_log

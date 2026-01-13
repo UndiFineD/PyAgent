@@ -39,8 +39,8 @@ class ScalingCore:
         self.scale_threshold = scale_threshold
         self.window_size = window_size
         self.backoff_seconds = backoff_seconds
-        self.load_metrics: Dict[str, Dict[str, List[float]]] = {}
-        self.last_scale_event: Dict[str, float] = {}
+        self.load_metrics: dict[str, dict[str, list[float]]] = {}
+        self.last_scale_event: dict[str, float] = {}
 
     def add_metric(self, key: str, value: float, metric_type: str = "latency") -> None:
         """Adds a metric value to the sliding window buffer."""

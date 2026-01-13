@@ -27,8 +27,14 @@ from src.core.base.version import VERSION
 import sys
 from pathlib import Path
 from contextlib import contextmanager
-from typing import Iterator
-from src.infrastructure.dev.test_utils import *
+from collections.abc import Iterator
+from src.infrastructure.dev.test_utils import (
+    FileSystemIsolator,
+    LogCapturer,
+    MockAIBackend,
+    ModuleLoader,
+    SnapshotManager,
+)
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[3]

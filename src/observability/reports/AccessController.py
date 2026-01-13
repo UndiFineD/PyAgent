@@ -45,7 +45,7 @@ class AccessController:
     def __init__(self) -> None:
         """Initialize access controller."""
 
-        self.permissions: List[ReportPermission] = []
+        self.permissions: list[ReportPermission] = []
         logging.debug("AccessController initialized")
 
     def grant(

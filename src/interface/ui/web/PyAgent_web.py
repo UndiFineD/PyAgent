@@ -27,6 +27,7 @@ from src.core.base.version import VERSION
 import json
 import logging
 from typing import Dict, List, Any
+from pathlib import Path
 
 __version__ = VERSION
 
@@ -35,9 +36,9 @@ class FleetWebUI:
 
     def __init__(self, fleet_manager: Any) -> None:
         self.fleet = fleet_manager
-        self.generative_registry: Dict[str, Dict[str, Any]] = {} # Tambo Pattern
+        self.generative_registry: dict[str, dict[str, Any]] = {} # Tambo Pattern
 
-    def register_generative_component(self, name: str, description: str, props_schema: Dict[str, Any]) -> str:
+    def register_generative_component(self, name: str, description: str, props_schema: dict[str, Any]) -> str:
         """Registers a UI component that the AI can choose to render dynamically (Tambo Pattern)."""
         self.generative_registry[name] = {
             "description": description,
@@ -46,7 +47,7 @@ class FleetWebUI:
         }
         logging.info(f"Registered generative UI component: {name}")
 
-    def suggest_ui_components(self, task_result: str) -> List[Dict[str, Any]]:
+    def suggest_ui_components(self, task_result: str) -> list[dict[str, Any]]:
         """AI decides which components to render based on the task output (Tambo Pattern)."""
         suggestions = []
         for name, metadata in self.generative_registry.items():
@@ -81,11 +82,11 @@ class FleetWebUI:
             
         return "\n".join(mermaid_lines)
 
-    def get_metrics_snapshot(self) -> Dict[str, Any]:
+    def get_metrics_snapshot(self) -> dict[str, Any]:
         """Returns a snapshot of fleet performance for real-time charts."""
         return self.fleet.telemetry.get_summary()
 
-    def list_workspace_files(self, sub_path: str = ".") -> Dict[str, Any]:
+    def list_workspace_files(self, sub_path: str = ".") -> dict[str, Any]:
         """Backend for the File Explorer with Preview.
         Returns directory structure and file metadata.
         """
@@ -105,17 +106,17 @@ class FleetWebUI:
             })
         return {"path": str(sub_path), "items": items}
 
-    def _get_preview(self, file_path: "Path") -> str:
+    def _get_preview(self, file_path: Path) -> str:
         """Generates a small text preview for files."""
         try:
             if file_path.suffix in [".py", ".md", ".txt", ".json", ".yaml"]:
-                with open(file_path, "r", encoding="utf-8") as f:
+                with open(file_path, encoding="utf-8") as f:
                     return f.read(500) + "..."
             return "[No Preview Available]"
         except Exception:
             return "[Error Reading Preview]"
 
-    def get_workflow_designer_state(self) -> Dict[str, Any]:
+    def get_workflow_designer_state(self) -> dict[str, Any]:
         """Returns the available nodes and signals for the Graphical Workflow Designer."""
         available_agents = []
         for name, agent in self.fleet.agents.items():
@@ -132,7 +133,7 @@ class FleetWebUI:
             "v_connectors": ["sequential", "parallel", "conditional"]
         }
 
-    def get_multi_fleet_manager(self) -> Dict[str, Any]:
+    def get_multi_fleet_manager(self) -> dict[str, Any]:
         """Returns status of multiple fleets (local and remote)."""
         return {
             "local_fleet": {

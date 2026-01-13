@@ -45,9 +45,9 @@ class CodeReviewer:
 
     def __init__(self) -> None:
         """Initialize the code reviewer."""
-        self.findings: List[ReviewFinding] = []
+        self.findings: list[ReviewFinding] = []
 
-    def review_code(self, content: str) -> List[ReviewFinding]:
+    def review_code(self, content: str) -> list[ReviewFinding]:
         """Perform automated code review.
 
         Args:
@@ -108,13 +108,13 @@ class CodeReviewer:
 
         return self.findings
 
-    def get_summary(self) -> Dict[str, int]:
+    def get_summary(self) -> dict[str, int]:
         """Get summary of findings by category.
 
         Returns:
             Dictionary mapping category to count.
         """
-        summary: Dict[str, int] = {}
+        summary: dict[str, int] = {}
         for finding in self.findings:
             cat = finding.category.value
             summary[cat] = summary.get(cat, 0) + 1

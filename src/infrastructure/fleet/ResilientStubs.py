@@ -27,11 +27,12 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import importlib
-from typing import Any, Dict, Optional, Callable
+from typing import Any, Dict, Optional
+from collections.abc import Callable
 
 __version__ = VERSION
 
-def resilient_import(module_name: str, class_name: Optional[str] = None) -> Any:
+def resilient_import(module_name: str, class_name: str | None = None) -> Any:
     """
     Decorator/Utility to import a module or class resiliently.
     Returns a ResilientStub if the import fails.
@@ -64,7 +65,7 @@ class ResilientStub:
         logging.error(msg)
         return f"ERROR: {msg}"
 
-    def get_status(self) -> Dict[str, Any]:
+    def get_status(self) -> dict[str, Any]:
         return {"status": "failed_to_load", "error": self._error, "name": self._name}
     
     def execute_task(self, task: str) -> str:
@@ -73,5 +74,5 @@ class ResilientStub:
     def improve_content(self, prompt: str) -> str:
         return f"ERROR: Component '{self._name}' failed to load. {self._error}"
 
-    def calculate_metrics(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
+    def calculate_metrics(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
         return {}

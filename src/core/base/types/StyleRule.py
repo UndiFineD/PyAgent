@@ -25,7 +25,8 @@ from src.core.base.version import VERSION
 from src.core.base.types.CodeLanguage import CodeLanguage
 from src.core.base.types.StyleRuleSeverity import StyleRuleSeverity
 from dataclasses import dataclass
-from typing import Callable, Optional
+from typing import Optional
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -37,5 +38,5 @@ class StyleRule:
     message: str
     severity: StyleRuleSeverity = StyleRuleSeverity.WARNING
     enabled: bool = True
-    language: Optional[CodeLanguage] = None
-    auto_fix: Optional[Callable[[str], str]] = None
+    language: CodeLanguage | None = None
+    auto_fix: Callable[[str], str] | None = None

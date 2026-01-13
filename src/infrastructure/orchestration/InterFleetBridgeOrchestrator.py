@@ -34,8 +34,8 @@ class InterFleetBridgeOrchestrator:
     
     def __init__(self, fleet) -> None:
         self.fleet = fleet
-        self.connected_fleets: Dict[str, str] = {} # fleet_id -> endpoint
-        self.shared_state_cache: Dict[str, Any] = {}
+        self.connected_fleets: dict[str, str] = {} # fleet_id -> endpoint
+        self.shared_state_cache: dict[str, Any] = {}
         self.fleet_id = str(uuid.uuid4())[:8]
 
     def connect_to_peer(self, peer_id: str, endpoint: str) -> None:
@@ -49,22 +49,22 @@ class InterFleetBridgeOrchestrator:
         logging.info(f"InterFleetBridge: Broadcasting state '{key}' to {len(self.connected_fleets)} peers.")
         # In a real system, this would send packets over WebSocket/Bridge
 
-    def broadcast_signal(self, signal_name: str, payload: Dict[str, Any]) -> None:
+    def broadcast_signal(self, signal_name: str, payload: dict[str, Any]) -> None:
         """Alias for broadcasting signals across fleet boundaries."""
         self.broadcast_state(f"SIGNAL_{signal_name}", payload)
 
-    def sync_external_state(self, peer_id: str, state_diff: Dict[str, Any]) -> None:
+    def sync_external_state(self, peer_id: str, state_diff: dict[str, Any]) -> None:
         """Callback for receiving state updates from a peer."""
         logging.info(f"InterFleetBridge: Received telepathic sync from {peer_id}: {list(state_diff.keys())}")
         self.shared_state_cache.update(state_diff)
         
-    def query_global_intelligence(self, query: str) -> Optional[Any]:
+    def query_global_intelligence(self, query: str) -> Any | None:
         """Queries the collective knowledge of all bridged fleets."""
         logging.info(f"InterFleetBridge: Querying global intelligence for: {query}")
         # Return state if found in cache, else simulate a 'miss'
         return self.shared_state_cache.get(query)
 
-    def send_signal(self, peer_id: str, signal_type: str, payload: Any) -> Dict[str, Any]:
+    def send_signal(self, peer_id: str, signal_type: str, payload: Any) -> dict[str, Any]:
         """Sends a specific signal to a peer. (Phase 35/41 integration)"""
         logging.info(f"InterFleetBridge: Sending signal '{signal_type}' to peer {peer_id}.")
         return {"status": "success", "peer": peer_id, "signal": signal_type}

@@ -40,6 +40,6 @@ class CrossRepoContext:
     """
     repo_name: str
     repo_url: str
-    related_files: List[str] = field(default_factory=lambda: [])
+    related_files: list[str] = field(default_factory=lambda: [])
     similarity_score: float = 0.0
-    common_patterns: List[str] = field(default_factory=lambda: [])
+    common_patterns: list[str] = field(default_factory=lambda: [])

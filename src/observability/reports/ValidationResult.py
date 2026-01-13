@@ -38,6 +38,6 @@ class ValidationResult:
     """
 
     valid: bool
-    errors: List[str] = field(default_factory=list)  # type: ignore[assignment]
-    warnings: List[str] = field(default_factory=list)  # type: ignore[assignment]
+    errors: list[str] = field(default_factory=list)  # type: ignore[assignment]
+    warnings: list[str] = field(default_factory=list)  # type: ignore[assignment]
     checksum: str = ""

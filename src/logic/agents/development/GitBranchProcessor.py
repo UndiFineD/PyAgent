@@ -64,8 +64,8 @@ class GitBranchProcessor:
         self,
         branch: str,
         base_branch: str = "main",
-        extensions: Optional[List[str]] = None,
-    ) -> List[Path]:
+        extensions: list[str] | None = None,
+    ) -> list[Path]:
         """Get files changed in branch compared to base.
 
         Args:
@@ -108,7 +108,7 @@ class GitBranchProcessor:
             logging.error(f"Error getting branch changes: {e}")
             return []
 
-    def get_current_branch(self) -> Optional[str]:
+    def get_current_branch(self) -> str | None:
         """Get current git branch name."""
         try:
             result = subprocess.run(
@@ -122,7 +122,7 @@ class GitBranchProcessor:
         except Exception:
             return None
 
-    def list_branches(self, pattern: Optional[str] = None) -> List[str]:
+    def list_branches(self, pattern: str | None = None) -> list[str]:
         """List branches, optionally filtered by pattern.
 
         Args:

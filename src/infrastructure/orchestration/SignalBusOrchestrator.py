@@ -23,7 +23,8 @@ from src.core.base.version import VERSION
 import logging
 import queue
 import threading
-from typing import Dict, List, Any, Callable
+from typing import Dict, List, Any
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -34,7 +35,7 @@ class SignalBusOrchestrator:
     """
     
     def __init__(self) -> None:
-        self._subscribers: Dict[str, List[Callable]] = {}
+        self._subscribers: dict[str, list[Callable]] = {}
         self._queue = queue.Queue()
         self._running = True
         self._thread = threading.Thread(target=self._process_bus, daemon=True)

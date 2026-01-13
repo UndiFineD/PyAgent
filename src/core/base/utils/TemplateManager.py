@@ -44,7 +44,7 @@ class TemplateManager:
 
     def __init__(self) -> None:
         """Initialize manager."""
-        self._templates: Dict[str, AgentTemplate] = {}
+        self._templates: dict[str, AgentTemplate] = {}
         self._register_defaults()
 
     def _register_defaults(self) -> None:
@@ -79,7 +79,7 @@ class TemplateManager:
         """
         self._templates[template.name] = template
 
-    def get_template(self, name: str) -> Optional[AgentTemplate]:
+    def get_template(self, name: str) -> AgentTemplate | None:
         """Get a template by name.
 
         Args:
@@ -90,6 +90,6 @@ class TemplateManager:
         """
         return self._templates.get(name)
 
-    def list_templates(self) -> List[str]:
+    def list_templates(self) -> list[str]:
         """List available template names."""
         return list(self._templates.keys())
