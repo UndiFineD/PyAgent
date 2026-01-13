@@ -44,7 +44,7 @@ class TestEnvironment:
     """
 
     name: str
-    env_vars: Dict[str, str] = field(default_factory=lambda: {})
-    temp_dir: Optional[Path] = None
+    env_vars: dict[str, str] = field(default_factory=lambda: {})
+    temp_dir: Path | None = None
     isolation_level: IsolationLevel = IsolationLevel.TEMP_DIR
     cleanup: CleanupStrategy = CleanupStrategy.IMMEDIATE

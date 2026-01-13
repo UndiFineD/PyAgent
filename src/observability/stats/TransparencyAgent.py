@@ -43,7 +43,7 @@ class TransparencyAgent(BaseAgent):
         )
 
     @as_tool
-    def generate_audit_trail(self, workflow_id: Optional[str] = None) -> str:
+    def generate_audit_trail(self, workflow_id: str | None = None) -> str:
         """Generates a detailed markdown report of recent agent interactions."""
         history = self.signals.get_history(limit=100)
         

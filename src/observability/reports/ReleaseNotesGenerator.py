@@ -41,8 +41,8 @@ class ReleaseNotesGenerator:
     def generate(
         self,
         version: str,
-        entries: List[ChangelogEntry],
-        title: Optional[str] = None
+        entries: list[ChangelogEntry],
+        title: str | None = None
     ) -> ReleaseNote:
         """Generate release notes from entries.
 
@@ -72,8 +72,8 @@ class ReleaseNotesGenerator:
             summary += f" with {len(breaking)} breaking change(s)"
 
         # Format full changelog
-        changelog_lines: List[str] = []
-        by_category: Dict[str, List[str]] = {}
+        changelog_lines: list[str] = []
+        by_category: dict[str, list[str]] = {}
         for entry in entries:
             if entry.category not in by_category:
                 by_category[entry.category] = []

@@ -26,7 +26,7 @@ from typing import Union
 
 __version__ = VERSION
 
-def create_inits(root_dir: Union[str, Path]) -> None:
+def create_inits(root_dir: str | Path) -> None:
     """Ensure all subdirectories contain a __init__.py file."""
     for root, dirs, files in os.walk(root_dir):
         if "__pycache__" in root or ".git" in root:
@@ -36,14 +36,14 @@ def create_inits(root_dir: Union[str, Path]) -> None:
             with open(os.path.join(root, "__init__.py"), "w") as f:
                 f.write('"""Package initialization."""\n')
 
-def fix_content(file_path: Union[str, Path]) -> bool:
+def fix_content(file_path: str | Path) -> bool:
     """Migrate legacy and test-specific imports to the src namespace in a file."""
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
     except Exception:
         try:
-            with open(file_path, "r", encoding="latin-1") as f:
+            with open(file_path, encoding="latin-1") as f:
                 content = f.read()
         except Exception:
             return False
@@ -102,7 +102,7 @@ def main() -> None:
     # backend/CircuitBreaker.py
     cb_path = Path("src/backend/CircuitBreaker.py")
     if cb_path.exists():
-        with open(cb_path, "r", encoding="utf-8") as f:
+        with open(cb_path, encoding="utf-8") as f:
             c = f.read()
         if "from src.agent.CircuitBreakerCore import CircuitBreakerCore" in c:
             c = c.replace("from src.agent.CircuitBreakerCore import CircuitBreakerCore", 

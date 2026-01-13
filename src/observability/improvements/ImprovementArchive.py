@@ -41,7 +41,7 @@ class ImprovementArchive:
 
     def __init__(self) -> None:
         """Initialize the archive."""
-        self.archive: List[ArchivedImprovement] = []
+        self.archive: list[ArchivedImprovement] = []
 
     def archive_improvement(
         self,
@@ -68,7 +68,7 @@ class ImprovementArchive:
         self.archive.append(archived)
         return archived
 
-    def restore(self, improvement_id: str) -> Optional[Improvement]:
+    def restore(self, improvement_id: str) -> Improvement | None:
         """Restore an archived improvement.
 
         Args:
@@ -87,8 +87,8 @@ class ImprovementArchive:
     def search_archive(
         self,
         query: str = "",
-        category: Optional[ImprovementCategory] = None
-    ) -> List[ArchivedImprovement]:
+        category: ImprovementCategory | None = None
+    ) -> list[ArchivedImprovement]:
         """Search the archive.
 
         Args:
@@ -98,7 +98,7 @@ class ImprovementArchive:
         Returns:
             Matching archived improvements.
         """
-        results: List[ArchivedImprovement] = []
+        results: list[ArchivedImprovement] = []
         for archived in self.archive:
             imp = archived.improvement
             if category and imp.category != category:
@@ -108,9 +108,9 @@ class ImprovementArchive:
             results.append(archived)
         return results
 
-    def get_archive_stats(self) -> Dict[str, Any]:
+    def get_archive_stats(self) -> dict[str, Any]:
         """Get archive statistics."""
-        by_category: Dict[str, int] = {}
+        by_category: dict[str, int] = {}
         for archived in self.archive:
             cat = archived.improvement.category.value
             by_category[cat] = by_category.get(cat, 0) + 1

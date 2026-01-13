@@ -27,16 +27,111 @@ from src.core.base.version import VERSION
 import os
 import subprocess
 import logging
-from typing import List, Any, Optional
+import asyncio
+from typing import List, Any, Optional, Dict
 
 __version__ = VERSION
+
+class EnvironmentSanitizer:
+    """Filters environment variables to prevent secret leakage (Phase 266)."""
+    
+    ALLOW_LIST = {
+        'PATH', 'PYTHONPATH', 'LANG', 'LC_ALL', 'LC_CTYPE',
+        'SYSTEMROOT', 'WINDIR', 'USERPROFILE', 'HOME',
+        'TEMP', 'TMP', 'HTTP_PROXY', 'HTTPS_PROXY', 'NO_PROXY',
+        'DV_AGENT_PARENT', 'AGENT_MODELS_CONFIG'
+    }
+
+    @classmethod
+    def sanitize(cls, env: dict[str, str]) -> dict[str, str]:
+        """Returns a copy of the environment containing only allow-listed variables."""
+        return {k: v for k, v in env.items() if k.upper() in cls.ALLOW_LIST}
 
 class ShellExecutor:
     """Safely executes shell commands and records outcomes."""
 
     @staticmethod
-    def run_command(cmd: List[str], workspace_root: str, agent_name: str, 
-                    models_config: Optional[Any] = None, recorder: Optional[Any] = None,
+    async def async_run_command(cmd: list[str], workspace_root: str, agent_name: str, 
+                               models_config: Any | None = None, recorder: Any | None = None,
+                               timeout: int = 120) -> subprocess.CompletedProcess[str]:
+        """Phase 266: Asynchronous subprocess execution with real-time streaming."""
+        logging.debug(f"Async-Running command: {' '.join(cmd[:3])}... (timeout={timeout}s)")
+        
+        env = os.environ.copy()
+        if models_config:
+            import json
+            env['AGENT_MODELS_CONFIG'] = json.dumps(models_config)
+            
+        env = EnvironmentSanitizer.sanitize(env)
+        
+        # Phase 132: Apply Sandbox if running in plugin directory
+        from src.core.base.sandbox import SandboxManager
+        if "plugins" in workspace_root or any("plugins" in c for c in cmd):
+            logging.info(f"ShellExecutor: Activating Sandbox Lockdown for {agent_name}")
+            env = SandboxManager.get_sandboxed_env(env)
+            
+        try:
+            # Phase 266/132: Start async subprocess with potential flags
+            creationflags = SandboxManager.apply_process_limits() if os.name == "nt" else 0
+            
+            process = await asyncio.create_subprocess_exec(
+                *cmd,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE,
+                env=env,
+                cwd=workspace_root,
+                creationflags=creationflags
+            )
+
+            stdout_data = []
+            stderr_data = []
+
+            async def stream_reader(pipe: asyncio.StreamReader, container: list[str], label: str):
+                while True:
+                    line = await pipe.readline()
+                    if not line:
+                        break
+                    line_str = line.decode('utf-8', errors='replace').rstrip()
+                    container.append(line_str)
+                    # Real-time streaming to StructuredLogger (simulated via logging)
+                    logging.debug(f"[{agent_name}][{label}] {line_str}")
+
+            # Read stdout and stderr concurrently
+            try:
+                await asyncio.wait_for(
+                    asyncio.gather(
+                        stream_reader(process.stdout, stdout_data, "STDOUT"),
+                        stream_reader(process.stderr, stderr_data, "STDERR")
+                    ),
+                    timeout=timeout
+                )
+            except asyncio.TimeoutExpired:
+                process.kill()
+                logging.error(f"Async shell command TIMEOUT after {timeout}s: {' '.join(cmd)}")
+                raise
+
+            returncode = await process.wait()
+            full_stdout = "\n".join(stdout_data)
+            full_stderr = "\n".join(stderr_data)
+
+            if recorder:
+                recorder.record_interaction(
+                    provider="ShellAsync",
+                    model="async_subprocess",
+                    prompt=" ".join(cmd),
+                    result=full_stdout + full_stderr,
+                    meta={"exit_code": returncode}
+                )
+
+            return subprocess.CompletedProcess(args=cmd, returncode=returncode, stdout=full_stdout, stderr=full_stderr)
+
+        except Exception as e:
+            logging.error(f"Async execution failure: {e}")
+            return subprocess.CompletedProcess(args=cmd, returncode=1, stdout="", stderr=str(e))
+
+    @staticmethod
+    def run_command(cmd: list[str], workspace_root: str, agent_name: str, 
+                    models_config: Any | None = None, recorder: Any | None = None,
                     timeout: int = 120, max_retries: int = 1) -> subprocess.CompletedProcess[str]:
         """Run a command with full environment and telemetry support."""
         logging.debug(f"Running command: {' '.join(cmd[:3])}... (timeout={timeout}s)")

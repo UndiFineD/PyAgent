@@ -30,13 +30,13 @@ __version__ = VERSION
 class AuthenticationManager:
     """Manager for authentication methods."""
 
-    def __init__(self, config: Optional[AuthConfig] = None) -> None:
+    def __init__(self, config: AuthConfig | None = None) -> None:
         self.config = config or AuthConfig()
-        self.token_cache: Dict[str, str] = {}
+        self.token_cache: dict[str, str] = {}
         logging.debug(f"AuthenticationManager initialized with method={self.config.method.value}")
 
-    def get_headers(self) -> Dict[str, str]:
-        headers: Dict[str, str] = {}
+    def get_headers(self) -> dict[str, str]:
+        headers: dict[str, str] = {}
         if self.config.method == AuthMethod.API_KEY:
             headers["X-API-Key"] = self.config.api_key
         elif self.config.method == AuthMethod.BEARER_TOKEN:
@@ -86,8 +86,8 @@ class AuthenticationManager:
 class AuthManager:
     """Manages authentication."""
     method: AuthMethod | str | None = None
-    credentials: Dict[str, str] = field(default_factory=_empty_dict_str_str)
-    custom_headers: Dict[str, str] = field(default_factory=_empty_dict_str_str)
+    credentials: dict[str, str] = field(default_factory=_empty_dict_str_str)
+    custom_headers: dict[str, str] = field(default_factory=_empty_dict_str_str)
 
     def set_method(self, method: str, **kwargs: str) -> None:
         self.method = method
@@ -96,7 +96,7 @@ class AuthManager:
     def add_custom_header(self, header: str, value: str) -> None:
         self.custom_headers[header] = value
 
-    def get_headers(self) -> Dict[str, str]:
+    def get_headers(self) -> dict[str, str]:
         headers = dict(self.custom_headers)
         method = self.method
         if isinstance(method, AuthMethod):

@@ -15,7 +15,7 @@ def test_ollama() -> None:
     logging.basicConfig(level=logging.DEBUG)
     import requests
     
-    workspace_root = Path("c:/DEV/PyAgent")
+    workspace_root = Path(Path(__file__).resolve().parents[3])
     conn_manager = ConnectivityManager(str(workspace_root))
     recorder = LocalContextRecorder(workspace_root, "TestRunner")
     

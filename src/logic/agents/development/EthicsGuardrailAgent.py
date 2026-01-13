@@ -51,7 +51,7 @@ class EthicsGuardrailAgent(BaseAgent):
         ]
         self.violation_log = []
 
-    def monitor_swarm_decision(self, decision: Dict[str, Any]) -> str:
+    def monitor_swarm_decision(self, decision: dict[str, Any]) -> str:
         """Analyzes a swarm consensus decision for alignment risks."""
         logging.info("Ethics: Monitoring swarm decision...")
         
@@ -75,7 +75,7 @@ class EthicsGuardrailAgent(BaseAgent):
                 return False
         return True
 
-    def review_task(self, task: str) -> Dict[str, Any]:
+    def review_task(self, task: str) -> dict[str, Any]:
         """Reviews a task description against ethical principles."""
         logging.info(f"Ethics: Reviewing task: {task[:50]}...")
         

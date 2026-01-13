@@ -40,6 +40,6 @@ class BranchComparison:
     """
     branch_a: str
     branch_b: str
-    errors_only_in_a: List[str] = field(default_factory=lambda: [])
-    errors_only_in_b: List[str] = field(default_factory=lambda: [])
-    common_errors: List[str] = field(default_factory=lambda: [])
+    errors_only_in_a: list[str] = field(default_factory=lambda: [])
+    errors_only_in_b: list[str] = field(default_factory=lambda: [])
+    common_errors: list[str] = field(default_factory=lambda: [])

@@ -50,7 +50,7 @@ class MorphologicalEvolutionAgent(BaseAgent):
             model="gpt-4o" # Default
         )
 
-    def check_for_merge_opportunity(self, agent_a_paths: List[str], agent_b_paths: List[str]) -> bool:
+    def check_for_merge_opportunity(self, agent_a_paths: list[str], agent_b_paths: list[str]) -> bool:
         """
         Checks if two agents should merge based on path overlap.
         """
@@ -61,7 +61,7 @@ class MorphologicalEvolutionAgent(BaseAgent):
         return False
 
     @as_tool
-    def analyze_api_morphology(self, agent_name: str, call_logs: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def analyze_api_morphology(self, agent_name: str, call_logs: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Analyzes how an agent is being used and proposes a morphological evolution.
         """

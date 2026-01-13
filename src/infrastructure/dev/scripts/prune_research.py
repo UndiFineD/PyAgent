@@ -27,7 +27,7 @@ __version__ = VERSION
 
 file_path = r"c:\DEV\PyAgent\docs\IMPROVEMENT_RESEARCH.md"
 if os.path.exists(file_path):
-    with open(file_path, "r", encoding="utf-8") as f:
+    with open(file_path, encoding="utf-8") as f:
         lines = f.readlines()
     
     new_lines = []

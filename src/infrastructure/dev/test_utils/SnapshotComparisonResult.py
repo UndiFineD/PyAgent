@@ -45,7 +45,7 @@ class SnapshotComparisonResult:
     snapshot_name: str
 
     @property
-    def diff(self) -> Optional[str]:
+    def diff(self) -> str | None:
         """Get a simple diff representation."""
         if self.matches:
             return None

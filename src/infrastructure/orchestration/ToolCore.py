@@ -21,7 +21,8 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import inspect
 import re
-from typing import Dict, List, Any, Callable, Tuple
+from typing import Dict, List, Any, Tuple
+from collections.abc import Callable
 from pydantic import BaseModel
 
 __version__ = VERSION
@@ -30,7 +31,7 @@ class ToolMetadata(BaseModel):
     """Metadata for a registered tool."""
     name: str
     description: str
-    parameters: Dict[str, Any]
+    parameters: dict[str, Any]
     owner: str # Name of the agent providing this tool
     category: str = "general"
     priority: int = 0
@@ -49,7 +50,7 @@ class ToolCore:
         
         # Simple parameter extraction
         sig = inspect.signature(func)
-        params: Dict[str, str] = {}
+        params: dict[str, str] = {}
         for p_name, param in sig.parameters.items():
             if p_name == 'self':
                 continue # Skip self
@@ -67,7 +68,7 @@ class ToolCore:
             priority=calc_priority
         )
 
-    def filter_arguments(self, func: Callable, args_dict: Dict[str, Any]) -> Dict[str, Any]:
+    def filter_arguments(self, func: Callable, args_dict: dict[str, Any]) -> dict[str, Any]:
         """Filters input dictionary to only include keys supported by the function."""
         sig = inspect.signature(func)
         has_kwargs: bool = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values())
@@ -120,7 +121,7 @@ class ToolCore:
             
         return metadata
 
-    def selection_tournament(self, candidates: List[Tuple[ToolMetadata, float]], tournament_size: int = 2) -> ToolMetadata:
+    def selection_tournament(self, candidates: list[tuple[ToolMetadata, float]], tournament_size: int = 2) -> ToolMetadata:
         """
         Selects the best tool from a set of candidates using stochastic tournament selection.
         Phase 120: Tool evolution.

@@ -44,7 +44,7 @@ class GeneticHardeningAgent(BaseAgent):
         )
 
     @as_tool
-    def analyze_fragility(self, code_snippet: str) -> List[Dict[str, Any]]:
+    def analyze_fragility(self, code_snippet: str) -> list[dict[str, Any]]:
         """
         Analyzes a code snippet for structural fragility.
         """
@@ -68,7 +68,7 @@ class GeneticHardeningAgent(BaseAgent):
         return vulnerabilities
 
     @as_tool
-    def apply_genetic_refactor(self, code: str, hardening_rules: List[str]) -> str:
+    def apply_genetic_refactor(self, code: str, hardening_rules: list[str]) -> str:
         """
         Applies hardening rules to the code to 'evolve' it into a more resilient version.
         """

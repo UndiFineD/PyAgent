@@ -41,5 +41,5 @@ class ARIAAttribute:
     name: str
     value: str = ""
     is_valid: bool = True
-    allowed_values: List[str] = field(default_factory=lambda: [])
-    suggestion: Optional[str] = None
+    allowed_values: list[str] = field(default_factory=lambda: [])
+    suggestion: str | None = None

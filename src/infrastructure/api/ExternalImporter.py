@@ -27,6 +27,7 @@ from .ImportSource import ImportSource
 from .ImportedEntry import ImportedEntry
 from typing import Optional, Dict, List, Any
 import logging
+from pathlib import Path
 from src.core.base.ConnectivityManager import ConnectivityManager
 import os
 import requests
@@ -43,9 +44,9 @@ class ExternalImporter:
         github_token: Optional token for Auth.
     """
 
-    def __init__(self, workspace_root: Optional[str] = None) -> None:
+    def __init__(self, workspace_root: str | None = None) -> None:
         """Initialize the external importer."""
-        self.imported_entries: List[ImportedEntry] = []
+        self.imported_entries: list[ImportedEntry] = []
         self.github_token = os.environ.get("GITHUB_TOKEN")
         self.conn_mgr = ConnectivityManager(workspace_root=workspace_root)
         try:
@@ -55,12 +56,12 @@ class ExternalImporter:
         except ImportError:
             self.recorder = None
 
-    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: Dict[str, Any] = None) -> None:
+    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] = None) -> None:
         """Record an interaction for intelligence harvesting (Phase 108)."""
         if self.recorder:
             self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
 
-    def import_github_releases(self, owner: str, repo: str, pages: int = 1) -> List[ImportedEntry]:
+    def import_github_releases(self, owner: str, repo: str, pages: int = 1) -> list[ImportedEntry]:
         """Import entries from GitHub releases using the official API (Simulated Tier 1).
 
         Args:
@@ -124,7 +125,7 @@ class ExternalImporter:
         
         return entries
 
-    def import_jira(self, project_key: str, max_results: int = 50) -> List[ImportedEntry]:
+    def import_jira(self, project_key: str, max_results: int = 50) -> list[ImportedEntry]:
         """Import entries from JIRA using REST API (v2 feature).
 
         Args:
@@ -177,13 +178,13 @@ class ExternalImporter:
             
         return entries
 
-    def convert_to_changelog_entries(self) -> List[ChangelogEntry]:
+    def convert_to_changelog_entries(self) -> list[ChangelogEntry]:
         """Convert imported entries to changelog entries.
 
         Returns:
             List of ChangelogEntry instances.
         """
-        result: List[ChangelogEntry] = []
+        result: list[ChangelogEntry] = []
         for imported in self.imported_entries:
             result.append(ChangelogEntry(
                 category="Added",

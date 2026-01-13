@@ -13,11 +13,11 @@ class ComplianceAgent:
     
     def __init__(self) -> None:
         self.core = ComplianceCore()
-        self.history: List[Dict[str, Any]] = []
+        self.history: list[dict[str, Any]] = []
 
-    def perform_audit(self, file_map: Dict[str, str]) -> Dict[str, Any]:
+    def perform_audit(self, file_map: dict[str, str]) -> dict[str, Any]:
         """Audits a map of file_paths to content."""
-        all_issues: List[ComplianceIssue] = []
+        all_issues: list[ComplianceIssue] = []
         
         for path, content in file_map.items():
             issues = self.core.audit_content(content, path)

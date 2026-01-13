@@ -49,7 +49,7 @@ class BranchComparison:
     target_branch: str
     file_path: str
     status: BranchComparisonStatus = BranchComparisonStatus.PENDING
-    diffs: List[ImprovementDiff] = field(default_factory=list)  # type: ignore[assignment]
+    diffs: list[ImprovementDiff] = field(default_factory=list)  # type: ignore[assignment]
     added_count: int = 0
     removed_count: int = 0
     modified_count: int = 0

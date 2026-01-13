@@ -33,5 +33,5 @@ class ErrorCluster:
     id: str
     name: str
     pattern: str
-    error_ids: List[str] = field(default_factory=lambda: [])
+    error_ids: list[str] = field(default_factory=lambda: [])
     description: str = ""

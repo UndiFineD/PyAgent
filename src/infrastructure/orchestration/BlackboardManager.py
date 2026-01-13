@@ -46,6 +46,6 @@ class BlackboardManager:
         """Retrieve data from the blackboard."""
         return self.core.get_value(key)
 
-    def list_keys(self) -> List[str]:
+    def list_keys(self) -> list[str]:
         """List all available keys on the blackboard."""
         return self.core.get_all_keys()

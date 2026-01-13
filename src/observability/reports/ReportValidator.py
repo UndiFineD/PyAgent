@@ -53,8 +53,8 @@ class ReportValidator:
             Validation result.
         """
 
-        errors: List[str] = []
-        warnings: List[str] = []
+        errors: list[str] = []
+        warnings: list[str] = []
         # Check for required sections
         if not re.search(r'^#+\s', content, re.MULTILINE):
             errors.append("Missing main heading")

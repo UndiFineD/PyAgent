@@ -23,7 +23,8 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from dataclasses import dataclass
-from typing import Optional, Any, Callable
+from typing import Optional, Any
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -40,7 +41,7 @@ class AgentChainStep:
     """
 
     agent_name: str
-    input_transform: Optional[Callable[[Any], Any]] = None
-    output_transform: Optional[Callable[[Any], Any]] = None
+    input_transform: Callable[[Any], Any] | None = None
+    output_transform: Callable[[Any], Any] | None = None
     enabled: bool = True
-    condition: Optional[Callable[[Any], bool]] = None
+    condition: Callable[[Any], bool] | None = None

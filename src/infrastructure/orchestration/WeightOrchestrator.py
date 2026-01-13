@@ -41,14 +41,14 @@ class WeightOrchestrator(BaseAgent):
         super().__init__(file_path)
         self.workspace_root = Path(file_path).parent
         self.weights_registry_path = self.workspace_root / "data/memory/agent_store/weights_registry.json"
-        self.active_adapters: Dict[str, str] = {} # agent_name -> adapter_name
+        self.active_adapters: dict[str, str] = {} # agent_name -> adapter_name
         self._load_registry()
         self._system_prompt = "You are the Weight Orchestrator. You manage model adapters and neural weights across the fleet."
 
     def _load_registry(self) -> bool:
         if self.weights_registry_path.exists():
             try:
-                with open(self.weights_registry_path, "r") as f:
+                with open(self.weights_registry_path) as f:
                     data = json.load(f)
                     self.active_adapters = data.get("active_adapters", {})
             except Exception as e:
@@ -72,7 +72,7 @@ class WeightOrchestrator(BaseAgent):
         return True
 
     @as_tool
-    def get_active_adapter(self, agent_name: str) -> Optional[str]:
+    def get_active_adapter(self, agent_name: str) -> str | None:
         """Returns the currently active adapter for an agent."""
         return self.active_adapters.get(agent_name)
 
@@ -86,7 +86,7 @@ class WeightOrchestrator(BaseAgent):
         return False
 
     @as_tool
-    def list_registrations(self) -> Dict[str, str]:
+    def list_registrations(self) -> dict[str, str]:
         """Returns all current agent-to-adapter mappings."""
         return self.active_adapters
 

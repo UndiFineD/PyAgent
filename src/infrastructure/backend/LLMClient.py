@@ -41,7 +41,7 @@ class LLMClient:
     Enhanced with PoolingCore for prompt compression and connection optimization.
     """
 
-    def __init__(self, requests_lib: Any, workspace_root: Optional[str] = None) -> None:
+    def __init__(self, requests_lib: Any, workspace_root: str | None = None) -> None:
         self.requests = requests_lib
         self.pooling_core = PoolingCore()
         
@@ -67,7 +67,7 @@ class LLMClient:
         self.connectivity = ConnectivityManager(workspace_root)
         
         # Phase 108: Result Caching (Speed optimization for repeated calls)
-        self._result_cache: Dict[str, str] = {}
+        self._result_cache: dict[str, str] = {}
         self._max_cache_size = 1000
 
         # Backend Registry (Phase 120 Extraction)
@@ -82,7 +82,7 @@ class LLMClient:
     def chat(self, provider: str, model: str, prompt: str, system_prompt: str = "") -> str:
         """Central entry point for chat completion. Compresses prompt before sending."""
         # 1. Compress system prompt via Core
-        compressed_sys = self.pooling_core.compress_prompt(system_prompt)
+        self.pooling_core.compress_prompt(system_prompt)
         
         # 2. Logic to invoke backends (simplified for this edit)
         # In actual code, this would delegate to backends[provider].chat(...)
@@ -93,7 +93,7 @@ class LLMClient:
         combined = f"{provider}:{model}:{system_prompt}:{prompt}"
         return hashlib.sha256(combined.encode()).hexdigest()
 
-    def _load_conn_status(self) -> Dict[str, Dict[str, Any]]:
+    def _load_conn_status(self) -> dict[str, dict[str, Any]]:
         # Redundant logic for backward compatibility
         return {}
 
@@ -217,39 +217,38 @@ class LLMClient:
 
         result = ""
         used_provider = "none"
-        used_model = "none"
 
         if preference == "local":
             # 0. Try Native vLLM Library (Highest Performance Local, Phase 108)
             if force_retry or self.connectivity.is_endpoint_available("vllm_native"):
                 result = self.llm_chat_via_vllm_native(prompt, system_prompt=system_prompt, model=local_model)
                 if result:
-                    used_provider, used_model = "vllm_native", local_model
+                    used_provider, _used_model = "vllm_native", local_model
 
             # 1. Try vLLM Server (Remote/Docker)
             if not result and (force_retry or self.connectivity.is_endpoint_available("vllm")):
                 result = self.llm_chat_via_vllm(prompt, model=local_model, system_prompt=system_prompt)
                 if result:
-                    used_provider, used_model = "vllm", local_model
+                    used_provider, _used_model = "vllm", local_model
 
             # 2. Try Ollama if vLLM failed
             if not result and (force_retry or self.connectivity.is_endpoint_available("ollama")):
                 result = self.llm_chat_via_ollama(prompt, model=local_model, system_prompt=system_prompt)
                 if result:
-                    used_provider, used_model = "ollama", local_model
+                    used_provider, _used_model = "ollama", local_model
             
             # 3. Try Copilot CLI if local servers failed
             if not result and (force_retry or self.connectivity.is_endpoint_available("copilot_cli")):
                 result = self.llm_chat_via_copilot_cli(prompt, system_prompt=system_prompt)
                 if result:
-                    used_provider, used_model = "copilot_cli", "gh-extension"
+                    used_provider, _used_model = "copilot_cli", "gh-extension"
 
         # 4. Fallback to GitHub Models (External)
         if not result and (force_retry or self.connectivity.is_endpoint_available("github_models")):
             logging.info(f"Checking external fallback ({external_model})...")
             result = self.llm_chat_via_github_models(prompt, model=external_model, system_prompt=system_prompt)
             if result:
-                used_provider, used_model = "github_models", external_model
+                used_provider, _used_model = "github_models", external_model
 
         if not result:
             logging.warning("All AI backends failed or were unreachable.")

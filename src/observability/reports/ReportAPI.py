@@ -50,7 +50,7 @@ class ReportAPI:
         self.reports_dir = reports_dir
         logging.debug(f"ReportAPI initialized for {reports_dir}")
 
-    def list_reports(self, file_pattern: str = "*.md") -> List[str]:
+    def list_reports(self, file_pattern: str = "*.md") -> list[str]:
         """List available reports.
         Args:
             file_pattern: Glob pattern.
@@ -60,7 +60,7 @@ class ReportAPI:
 
         return [str(p) for p in self.reports_dir.glob(file_pattern)]
 
-    def get_report(self, file_stem: str, report_type: ReportType) -> Optional[str]:
+    def get_report(self, file_stem: str, report_type: ReportType) -> str | None:
         """Get a specific report.
         Args:
             file_stem: File stem.

@@ -44,6 +44,6 @@ class ReportSubscription:
     subscriber_id: str
     email: str
     frequency: SubscriptionFrequency = SubscriptionFrequency.DAILY
-    report_types: List[ReportType] = field(default_factory=list)  # type: ignore[assignment]
-    file_patterns: List[str] = field(default_factory=list)  # type: ignore[assignment]
+    report_types: list[ReportType] = field(default_factory=list)  # type: ignore[assignment]
+    file_patterns: list[str] = field(default_factory=list)  # type: ignore[assignment]
     enabled: bool = True

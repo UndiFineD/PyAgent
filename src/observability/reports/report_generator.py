@@ -23,7 +23,9 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import sys
 from pathlib import Path
-from src.observability.reports import *
+from src.observability.reports.ReportGenerator import ReportGenerator
+from src.observability.reports.ReportExporter import ReportExporter
+from src.observability.reports.ExportFormat import ExportFormat
 
 root = Path(__file__).resolve().parents[2]
 if str(root) not in sys.path:

@@ -43,7 +43,7 @@ class ComplianceChecker:
     SECURITY_KEYWORDS = ["vulnerability", "cve", "security", "patch", "exploit"]
     LEGAL_KEYWORDS = ["license", "copyright", "trademark", "patent"]
 
-    def check_security_compliance(self, entries: List[ChangelogEntry]) -> ComplianceResult:
+    def check_security_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
         """Check security compliance.
 
         Args:
@@ -52,8 +52,8 @@ class ComplianceChecker:
         Returns:
             ComplianceResult for security category.
         """
-        issues: List[str] = []
-        recommendations: List[str] = []
+        issues: list[str] = []
+        recommendations: list[str] = []
         # Check for security entries without proper categorization
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.SECURITY_KEYWORDS):
@@ -70,7 +70,7 @@ class ComplianceChecker:
             recommendations=recommendations
         )
 
-    def check_legal_compliance(self, entries: List[ChangelogEntry]) -> ComplianceResult:
+    def check_legal_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
         """Check legal compliance.
 
         Args:
@@ -79,8 +79,8 @@ class ComplianceChecker:
         Returns:
             ComplianceResult for legal category.
         """
-        issues: List[str] = []
-        recommendations: List[str] = []
+        issues: list[str] = []
+        recommendations: list[str] = []
         # Check for entries that may need legal review
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.LEGAL_KEYWORDS):
@@ -93,7 +93,7 @@ class ComplianceChecker:
             recommendations=recommendations
         )
 
-    def check_all(self, entries: List[ChangelogEntry]) -> List[ComplianceResult]:
+    def check_all(self, entries: list[ChangelogEntry]) -> list[ComplianceResult]:
         """Run all compliance checks.
 
         Args:

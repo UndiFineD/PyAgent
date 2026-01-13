@@ -41,7 +41,7 @@ class GPUMonitorCore:
     """
 
     @staticmethod
-    def calculate_vram_pressure(metrics: List[GPUMetrics]) -> float:
+    def calculate_vram_pressure(metrics: list[GPUMetrics]) -> float:
         """
         Calculates the aggregate VRAM pressure across all GPUs.
         Pressure is defined as the maximum utilization of any single GPU's VRAM.
@@ -51,7 +51,7 @@ class GPUMonitorCore:
         return max(m.vram_percent for m in metrics)
 
     @staticmethod
-    def identify_optimal_gpu(metrics: List[GPUMetrics]) -> Optional[int]:
+    def identify_optimal_gpu(metrics: list[GPUMetrics]) -> int | None:
         """
         Identifies the best GPU index for a new workload based on free VRAM and low utilization.
         """

@@ -42,14 +42,14 @@ class ContextVisualizer:
 
     def __init__(self, viz_type: VisualizationType = VisualizationType.DEPENDENCY_GRAPH) -> None:
         self.viz_type: VisualizationType = viz_type
-        self.nodes: List[Dict[str, Any]] = []
-        self.edges: List[Tuple[str, str]] = []
+        self.nodes: list[dict[str, Any]] = []
+        self.edges: list[tuple[str, str]] = []
         self.layout: str = "hierarchical"
 
     def set_type(self, viz_type: VisualizationType) -> None:
         self.viz_type = viz_type
 
-    def add_node(self, node_id: str, metadata: Optional[Dict[str, Any]] = None) -> None:
+    def add_node(self, node_id: str, metadata: dict[str, Any] | None = None) -> None:
         if metadata is None:
             metadata = {}
         self.nodes.append({"id": node_id, **metadata})
@@ -67,7 +67,7 @@ class ContextVisualizer:
 
     def export_json(self) -> str:
         data = self.generate()
-        payload: Dict[str, Any] = {
+        payload: dict[str, Any] = {
             "viz_type": data.viz_type.value,
             "nodes": data.nodes,
             "edges": data.edges,
@@ -75,7 +75,7 @@ class ContextVisualizer:
         }
         return json.dumps(payload)
 
-    def create_dependency_graph(self, contexts: Dict[str, str]) -> VisualizationData:
+    def create_dependency_graph(self, contexts: dict[str, str]) -> VisualizationData:
         """Create dependency graph visualization.
 
         Args:
@@ -84,8 +84,8 @@ class ContextVisualizer:
         Returns:
             VisualizationData for rendering.
         """
-        nodes: List[Dict[str, str]] = []
-        edges: List[Tuple[str, str]] = []
+        nodes: list[dict[str, str]] = []
+        edges: list[tuple[str, str]] = []
         for path, content in contexts.items():
             nodes.append({"id": path, "label": Path(path).name})
             # Find references to other files
@@ -100,7 +100,7 @@ class ContextVisualizer:
             edges=edges
         )
 
-    def create_call_hierarchy(self, contexts: Dict[str, str]) -> VisualizationData:
+    def create_call_hierarchy(self, contexts: dict[str, str]) -> VisualizationData:
         """Create call hierarchy visualization.
 
         Args:
@@ -109,8 +109,8 @@ class ContextVisualizer:
         Returns:
             VisualizationData for rendering.
         """
-        nodes: List[Dict[str, str]] = []
-        edges: List[Tuple[str, str]] = []
+        nodes: list[dict[str, str]] = []
+        edges: list[tuple[str, str]] = []
         for path in contexts.keys():
             nodes.append({"id": path, "label": Path(path).name})
         return VisualizationData(

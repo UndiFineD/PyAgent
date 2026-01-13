@@ -52,7 +52,7 @@ class PublicAPIEngine:
         
         return self.core.build_openapi_json(raw_tools)
 
-    def register_external_tool(self, tool_spec: Dict[str, Any]) -> str:
+    def register_external_tool(self, tool_spec: dict[str, Any]) -> str:
         """Registers a tool from an external OpenAPI definition."""
         if not self.core.validate_tool_contract(tool_spec):
              return "Error: Invalid tool specification."

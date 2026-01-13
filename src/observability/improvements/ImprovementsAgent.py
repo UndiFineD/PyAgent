@@ -38,7 +38,7 @@ import re
 
 # Default templates
 
-DEFAULT_TEMPLATES: List[ImprovementTemplate] = [
+DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
     ImprovementTemplate(
         id="add_tests",
         name="add_tests",
@@ -96,12 +96,12 @@ class ImprovementsAgent(BaseAgent):
         self._check_associated_file()
 
         # Improvement management
-        self._improvements: List[Improvement] = []
-        self._templates: Dict[str, ImprovementTemplate] = {}
+        self._improvements: list[Improvement] = []
+        self._templates: dict[str, ImprovementTemplate] = {}
         for t in DEFAULT_TEMPLATES:
             self._templates[t.id] = t
             self._templates[t.name] = t
-        self._analytics: Dict[str, Any] = {}
+        self._analytics: dict[str, Any] = {}
 
     def _validate_file_extension(self) -> None:
         """Validate that the file has the correct extension."""
@@ -261,8 +261,8 @@ class ImprovementsAgent(BaseAgent):
         priority: ImprovementPriority = ImprovementPriority.MEDIUM,
         category: ImprovementCategory = ImprovementCategory.OTHER,
         effort: EffortEstimate = EffortEstimate.MEDIUM,
-        tags: Optional[List[str]] = None,
-        dependencies: Optional[List[str]] = None
+        tags: list[str] | None = None,
+        dependencies: list[str] | None = None
     ) -> Improvement:
         """Add a new improvement."""
         improvement_id = hashlib.md5(
@@ -286,11 +286,11 @@ class ImprovementsAgent(BaseAgent):
         self._improvements.append(improvement)
         return improvement
 
-    def get_improvements(self) -> List[Improvement]:
+    def get_improvements(self) -> list[Improvement]:
         """Get all improvements."""
         return self._improvements
 
-    def get_improvement_by_id(self, improvement_id: str) -> Optional[Improvement]:
+    def get_improvement_by_id(self, improvement_id: str) -> Improvement | None:
         """Get an improvement by ID."""
         return next((i for i in self._improvements if i.id == improvement_id), None)
 
@@ -310,21 +310,21 @@ class ImprovementsAgent(BaseAgent):
     def get_improvements_by_status(
         self,
         status: ImprovementStatus
-    ) -> List[Improvement]:
+    ) -> list[Improvement]:
         """Get improvements filtered by status."""
         return [i for i in self._improvements if i.status == status]
 
     def get_improvements_by_category(
         self,
         category: ImprovementCategory
-    ) -> List[Improvement]:
+    ) -> list[Improvement]:
         """Get improvements filtered by category."""
         return [i for i in self._improvements if i.category == category]
 
     def get_improvements_by_priority(
         self,
         priority: ImprovementPriority
-    ) -> List[Improvement]:
+    ) -> list[Improvement]:
         """Get improvements filtered by priority."""
         return [i for i in self._improvements if i.priority == priority]
 
@@ -351,7 +351,7 @@ class ImprovementsAgent(BaseAgent):
 
         return max(0, min(100, score))
 
-    def prioritize_improvements(self) -> List[Improvement]:
+    def prioritize_improvements(self) -> list[Improvement]:
         """Return improvements sorted by impact score."""
         for imp in self._improvements:
             imp.impact_score = self.calculate_impact_score(imp)
@@ -378,10 +378,10 @@ class ImprovementsAgent(BaseAgent):
                 total += 0
         return total
 
-    def _estimate_total_effort_breakdown(self) -> Dict[str, Any]:
+    def _estimate_total_effort_breakdown(self) -> dict[str, Any]:
         """Internal analytics-friendly effort breakdown."""
         total = int(self.estimate_total_effort())
-        by_category: Dict[str, int] = {}
+        by_category: dict[str, int] = {}
         for imp in self._improvements:
             if imp.status in (ImprovementStatus.COMPLETED, ImprovementStatus.REJECTED):
                 continue
@@ -408,29 +408,29 @@ class ImprovementsAgent(BaseAgent):
             return True
         return False
 
-    def get_dependencies(self, improvement_id: str) -> List[Improvement]:
+    def get_dependencies(self, improvement_id: str) -> list[Improvement]:
         """Get all dependencies for an improvement."""
         improvement = self.get_improvement_by_id(improvement_id)
         if not improvement:
             return []
 
-        dependencies: List[Improvement] = []
+        dependencies: list[Improvement] = []
         for dep_id in improvement.dependencies:
             dep = self.get_improvement_by_id(dep_id)
             if dep is not None:
                 dependencies.append(dep)
         return dependencies
 
-    def get_dependents(self, improvement_id: str) -> List[Improvement]:
+    def get_dependents(self, improvement_id: str) -> list[Improvement]:
         """Get all improvements that depend on this one."""
         return [
             i for i in self._improvements
             if improvement_id in i.dependencies
         ]
 
-    def get_ready_to_implement(self) -> List[Improvement]:
+    def get_ready_to_implement(self) -> list[Improvement]:
         """Get improvements that have all dependencies satisfied."""
-        ready: List[Improvement] = []
+        ready: list[Improvement] = []
         for imp in self._improvements:
             if imp.status == ImprovementStatus.APPROVED:
                 deps_satisfied = all(
@@ -449,16 +449,16 @@ class ImprovementsAgent(BaseAgent):
         self._templates[template.id] = template
         self._templates[template.name] = template
 
-    def get_templates(self) -> Dict[str, ImprovementTemplate]:
+    def get_templates(self) -> dict[str, ImprovementTemplate]:
         """Get all templates."""
         return self._templates
 
     def create_from_template(
         self,
         template_name: str,
-        variables: Dict[str, str],
+        variables: dict[str, str],
         file_path: str = ""
-    ) -> Optional[Improvement]:
+    ) -> Improvement | None:
         """Create an improvement from a template."""
         template = self._templates.get(template_name)
         if not template:
@@ -487,7 +487,7 @@ class ImprovementsAgent(BaseAgent):
             return True
         return False
 
-    def get_top_voted(self, limit: int = 10) -> List[Improvement]:
+    def get_top_voted(self, limit: int = 10) -> list[Improvement]:
         """Get top voted improvements."""
         return sorted(
             self._improvements,
@@ -517,7 +517,7 @@ class ImprovementsAgent(BaseAgent):
             return True
         return False
 
-    def get_by_assignee(self, assignee: str) -> List[Improvement]:
+    def get_by_assignee(self, assignee: str) -> list[Improvement]:
         """Get improvements assigned to a specific person."""
         return [i for i in self._improvements if i.assignee == assignee]
 
@@ -539,27 +539,27 @@ class ImprovementsAgent(BaseAgent):
             return True
         return False
 
-    def get_assigned_to(self, assignee: str) -> List[Improvement]:
+    def get_assigned_to(self, assignee: str) -> list[Improvement]:
         """Get improvements assigned to a specific person."""
         return [i for i in self._improvements if i.assignee == assignee]
 
     # ========== Analytics ==========
 
-    def calculate_analytics(self) -> Dict[str, Any]:
+    def calculate_analytics(self) -> dict[str, Any]:
         """Calculate analytics for improvements."""
         total = len(self._improvements)
         if total == 0:
             return {"total": 0}
 
-        by_status: Dict[str, int] = {}
+        by_status: dict[str, int] = {}
         for status in ImprovementStatus:
             by_status[status.name] = len(self.get_improvements_by_status(status))
 
-        by_category: Dict[str, int] = {}
+        by_category: dict[str, int] = {}
         for category in ImprovementCategory:
             by_category[category.name] = len(self.get_improvements_by_category(category))
 
-        by_priority: Dict[str, int] = {}
+        by_priority: dict[str, int] = {}
         for priority in ImprovementPriority:
             by_priority[priority.name] = len(self.get_improvements_by_priority(priority))
 
@@ -584,7 +584,7 @@ class ImprovementsAgent(BaseAgent):
     def export_improvements(self, format: str = "json") -> str:
         """Export improvements to various formats."""
         if format == "json":
-            data: List[Dict[str, Any]] = [{
+            data: list[dict[str, Any]] = [{
                 "id": i.id,
                 "title": i.title,
                 "description": i.description,

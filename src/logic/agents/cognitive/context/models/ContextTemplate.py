@@ -32,6 +32,6 @@ class ContextTemplate:
     """Template for context documentation."""
     name: str
     file_type: str
-    sections: List[str]
+    sections: list[str]
     template_content: str
-    required_fields: List[str] = field(default_factory=lambda: [])
+    required_fields: list[str] = field(default_factory=lambda: [])

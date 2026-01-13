@@ -22,7 +22,7 @@ class LogRotationCore:
             return False
         return os.path.getsize(file_path) > self.max_size_bytes
 
-    def rotate_and_compress(self, file_path: str) -> Optional[str]:
+    def rotate_and_compress(self, file_path: str) -> str | None:
         """
         Rotates the file by renaming it with a timestamp and compressing it via gzip.
         Returns the path to the compressed file.

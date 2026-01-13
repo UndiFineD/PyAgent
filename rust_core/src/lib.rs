@@ -20,9 +20,22 @@ fn calculate_synaptic_weight(inputs: Vec<f64>, weights: Vec<f64>) -> PyResult<f6
     Ok(result)
 }
 
+/// Fast hashing for shard lookup (Phase 131).
+/// Uses a simplified FNV-1a hash for sub-millisecond page access.
+#[pyfunction]
+fn fast_hash(key: &str) -> PyResult<String> {
+    let mut hash: u64 = 0xcbf29ce484222325;
+    for byte in key.as_bytes() {
+        hash ^= *byte as u64;
+        hash = hash.wrapping_mul(0x100000001b3);
+    }
+    Ok(format!("{:016x}", hash))
+}
+
 /// A Python module implemented in Rust.
 #[pymodule]
 fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(calculate_synaptic_weight, m)?)?;
+    m.add_function(wrap_pyfunction!(fast_hash, m)?)?;
     Ok(())
 }

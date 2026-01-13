@@ -1,27 +1,55 @@
 
 from __future__ import annotations
 from typing import Dict, List, Optional
+from pathlib import Path
+import logging
 
 class ModelRegistryCore:
     """
     ModelRegistryCore manages the PEFT (LoRA/QLoRA) adapter registry.
     It maps request types to specific expert adapters.
+    Phase 289: Model Registry Self-Healing.
     """
 
     def __init__(self) -> None:
         # Registry mapping intent/type to adapter path
-        self.adapter_registry: Dict[str, str] = {
+        self.adapter_registry: dict[str, str] = {
             "python_expert": "models/forge/adapters/python_312_lora",
             "security_audit": "models/forge/adapters/security_specialist_lora",
             "documentation": "models/forge/adapters/docgen_lora",
             "rust_developer": "models/forge/adapters/rust_migration_expert"
         }
+        self.unhealthy_entries: set[str] = set()
 
-    def get_adapter_for_task(self, task_type: str) -> Optional[str]:
+    def self_heal(self) -> int:
+        """
+        Phase 289: Detects missing adapter files and prunes or fixes the registry.
+        Returns the number of healed/removed entries.
+        """
+        healed_count = 0
+        current_adapters = list(self.adapter_registry.items())
+        
+        for name, path_str in current_adapters:
+            path = Path(path_str)
+            if not path.exists():
+                logging.warning(f"ModelRegistry: Adapter '{name}' path '{path_str}' is missing. Healing...")
+                del self.adapter_registry[name]
+                self.unhealthy_entries.add(name)
+                healed_count += 1
+                
+        if healed_count > 0:
+            logging.info(f"ModelRegistry: Self-healing complete. {healed_count} entries removed.")
+        return healed_count
+
+    def get_adapter_for_task(self, task_type: str) -> str | None:
         """Returns the adapter path for a given task type."""
-        return self.adapter_registry.get(task_type.lower())
+        adapter = self.adapter_registry.get(task_type.lower())
+        if adapter and not Path(adapter).exists():
+            self.self_heal()
+            return self.adapter_registry.get(task_type.lower())
+        return adapter
 
-    def should_trigger_finetuning(self, quality_history: List[float], threshold: float = 0.6) -> bool:
+    def should_trigger_finetuning(self, quality_history: list[float], threshold: float = 0.6) -> bool:
         """
         Determines if fine-tuning is needed (e.g., last 5 scores below threshold).
         """
@@ -35,6 +63,6 @@ class ModelRegistryCore:
         """Adds a new adapter to the registry."""
         self.adapter_registry[name.lower()] = path
 
-    def list_adapters(self) -> List[str]:
+    def list_adapters(self) -> list[str]:
         """Lists all registered expert adapters."""
         return list(self.adapter_registry.keys())

@@ -93,7 +93,18 @@ class HopperSim:
         # QKV Projections: 3 * [B, S, D] * [D, D]
         m, n, k = batch_size * seq_len, d_model, d_model
         latency_qkv = self.estimate_matmul_latency(m, n, k) * 3
-        return {"qkv_latency_ms": latency_qkv}
+        
+        # Attention: [B, S, S] * [S, D] (Simplified)
+        latency_attn = self.estimate_matmul_latency(batch_size * seq_len, seq_len, d_model)
+        
+        total_ms = (latency_qkv + latency_attn) / num_gpus # Simplified linear scaling
+        
+        return {
+            "qkv_latency_ms": latency_qkv,
+            "m_params": (d_model * d_model * 12) / 1e6, # Parameter count estimate
+            "est_step_ms": total_ms,
+            "tflops_utilization": 0.45 * 100 # Typical real-world efficiency
+        }
 
     def run_swarm_stress_test(self, agent_count: int, steps: int = 10):
         """Runs a swarm stress test with stochastic failures (Phase 181)."""
@@ -112,17 +123,6 @@ class HopperSim:
             time.sleep(0.1) # Simulate time passing
             
         print(f"=== TEST COMPLETE. Final Resilience: {active_agents/agent_count*100:.1f}% ===")
-        
-        # Attention: [B, S, S] * [S, D] (Simplified)
-        latency_attn = self.estimate_matmul_latency(batch_size * seq_len, seq_len, d_model)
-        
-        total_ms = (latency_qkv + latency_attn) / num_gpus # Simplified linear scaling
-        
-        return {
-            "m_params": (d_model * d_model * 12) / 1e6, # Parameter count estimate
-            "est_step_ms": total_ms,
-            "tflops_utilization": 0.45 * 100 # Typical real-world efficiency
-        }
 
 if __name__ == "__main__":
     sim = HopperSim()

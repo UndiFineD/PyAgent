@@ -44,7 +44,7 @@ class QuantumReasonerAgent(BaseAgent):
         )
 
     @as_tool
-    def reason_with_superposition(self, task: str, branch_count: int = 3) -> Dict[str, Any]:
+    def reason_with_superposition(self, task: str, branch_count: int = 3) -> dict[str, Any]:
         """
         Generates multiple reasoning branches for a task and selects the best one.
         """
@@ -87,7 +87,7 @@ class QuantumReasonerAgent(BaseAgent):
         prompt = f"Persona: {persona}\nTask: {task}\nProvide your reasoning path for this task."
         return self.think(prompt)
 
-    def _calculate_interference(self, hypothesis: str, counter_arguments: List[str]) -> float:
+    def _calculate_interference(self, hypothesis: str, counter_arguments: list[str]) -> float:
         """Calculates 'interference' (logical consistency score) between reasoning paths."""
         prompt = (
             f"Hypothesis: {hypothesis}\n"
@@ -102,7 +102,7 @@ class QuantumReasonerAgent(BaseAgent):
             return 0.5 # Default probability on failure
 
     @as_tool
-    def collapse_quantum_states(self, branches: List[Dict[str, Any]]) -> str:
+    def collapse_quantum_states(self, branches: list[dict[str, Any]]) -> str:
         """
         Manually collapses provided reasoning states into a single decision.
         """

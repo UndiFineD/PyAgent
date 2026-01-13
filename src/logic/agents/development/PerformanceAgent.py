@@ -43,7 +43,7 @@ class PerformanceAgent:
         >>> suggestions=optimizer.analyze("for i in range(len(items)):")
     """
 
-    OPTIMIZATION_PATTERNS: List[Tuple[str, OptimizationType, str, str]] = [
+    OPTIMIZATION_PATTERNS: list[tuple[str, OptimizationType, str, str]] = [
         (r"for\s+\w+\s+in\s+range\(len\((\w+)\)\)", OptimizationType.ALGORITHMIC,
          "Use enumerate() instead of range(len())",
          "for idx, item in enumerate({0}):"),
@@ -57,9 +57,9 @@ class PerformanceAgent:
 
     def __init__(self) -> None:
         """Initialize the performance optimizer."""
-        self.suggestions: List[OptimizationSuggestion] = []
+        self.suggestions: list[OptimizationSuggestion] = []
 
-    def analyze(self, content: str) -> List[OptimizationSuggestion]:
+    def analyze(self, content: str) -> list[OptimizationSuggestion]:
         """Analyze code for optimization opportunities.
 
         Args:

@@ -7,7 +7,6 @@ import logging
 from pathlib import Path
 
 # Add the workspace root to sys.path
-sys.path.append(str(Path(__file__).resolve().parents[2]))
 
 from src.infrastructure.fleet.FleetManager import FleetManager
 

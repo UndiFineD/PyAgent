@@ -40,15 +40,15 @@ class DependencyAgent:
 
     def __init__(self) -> None:
         """Initialize the dependency analyzer."""
-        self.nodes: Dict[str, DependencyNode] = {}
+        self.nodes: dict[str, DependencyNode] = {}
         self.core = DependencyCore()
 
-    def analyze(self, content: str, file_path: str = "") -> Dict[str, DependencyNode]:
+    def analyze(self, content: str, file_path: str = "") -> dict[str, DependencyNode]:
         """Analyze code dependencies."""
         self.nodes = self.core.parse_dependencies(content, file_path)
         return self.nodes
 
-    def get_external_dependencies(self) -> List[str]:
+    def get_external_dependencies(self) -> list[str]:
         """Get list of external (non-local) dependencies.
 
         Returns:
@@ -59,7 +59,7 @@ class DependencyAgent:
             'pathlib', 'typing', 'dataclasses', 'enum', 'subprocess',
             'tempfile', 'shutil', 'math', 'collections', 'functools'
         }
-        external: List[str] = []
+        external: list[str] = []
         for name, node in self.nodes.items():
             if node.type == DependencyType.IMPORT:
                 base_module = name.split('.')[0]

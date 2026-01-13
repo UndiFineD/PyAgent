@@ -46,8 +46,8 @@ class SubscriptionManager:
     def __init__(self) -> None:
         """Initialize subscription manager."""
 
-        self.subscriptions: Dict[str, ReportSubscription] = {}
-        self.delivery_queue: List[Dict[str, Any]] = []
+        self.subscriptions: dict[str, ReportSubscription] = {}
+        self.delivery_queue: list[dict[str, Any]] = []
         logging.debug("SubscriptionManager initialized")
 
     def add_subscription(self, subscription: ReportSubscription) -> None:
@@ -72,7 +72,7 @@ class SubscriptionManager:
             return True
         return False
 
-    def get_due_subscriptions(self) -> List[ReportSubscription]:
+    def get_due_subscriptions(self) -> list[ReportSubscription]:
         """Get subscriptions due for delivery.
         Returns:
             List of due subscriptions.

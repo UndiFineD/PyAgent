@@ -23,7 +23,8 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .Improvement import Improvement
-from typing import Callable, List
+from typing import List
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -31,8 +32,8 @@ class ImprovementDashboard:
     """Renders a lightweight dashboard and emits update callbacks."""
 
     def __init__(self) -> None:
-        self._callbacks: List[Callable[[], None]] = []
-        self._improvements: List[Improvement] = []
+        self._callbacks: list[Callable[[], None]] = []
+        self._improvements: list[Improvement] = []
 
     def on_update(self, callback: Callable[[], None]) -> None:
         self._callbacks.append(callback)
@@ -42,7 +43,7 @@ class ImprovementDashboard:
         for cb in list(self._callbacks):
             cb()
 
-    def render(self, improvements: List[Improvement]) -> str:
+    def render(self, improvements: list[Improvement]) -> str:
         lines = ["# Improvements Dashboard"]
         for imp in improvements:
             lines.append(f"- {imp.title}")

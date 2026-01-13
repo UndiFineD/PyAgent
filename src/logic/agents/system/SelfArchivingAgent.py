@@ -44,20 +44,20 @@ class SelfArchivingAgent(BaseAgent):
         )
 
     @as_tool
-    def identify_archivable_targets(self, threshold_days: int = 30) -> List[str]:
+    def identify_archivable_targets(self, threshold_days: int = 30) -> list[str]:
         """
         Scans for files or memory entries that haven't been accessed in the given threshold.
         """
         logging.info(f"SelfArchiving: Scanning for targets older than {threshold_days} days.")
         # Mock logic to 'find' some obsolete paths
         targets = [
-            "c:/DEV/PyAgent/logs/session_old_001.log",
-            "c:/DEV/PyAgent/memory/abandoned_plan_v1.json"
+            str(Path(__file__).resolve().parents[4]) + "/logs/session_old_001.log",
+            str(Path(__file__).resolve().parents[4]) + "/memory/abandoned_plan_v1.json"
         ]
         return targets
 
     @as_tool
-    def archive_targets(self, targets: List[str]) -> str:
+    def archive_targets(self, targets: list[str]) -> str:
         """
         'Compresses' the provided targets into the archive directory.
         """
@@ -66,7 +66,7 @@ class SelfArchivingAgent(BaseAgent):
             
         logging.info(f"SelfArchiving: Archiving {len(targets)} targets.")
         # Simplified simulation: just pretend we archived them
-        archive_path = os.path.join(os.path.dirname(self.file_path), "archives")
+        os.path.join(os.path.dirname(self.file_path), "archives")
         
         report = f"### Archiving Report\n- **Timestamp**: {datetime.now().isoformat()}\n"
         for t in targets:

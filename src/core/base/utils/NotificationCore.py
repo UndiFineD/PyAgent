@@ -36,7 +36,7 @@ class NotificationCore:
     """Pure logic core for notification management."""
 
     @staticmethod
-    def construct_payload(event_name: str, event_data: Dict[str, Any]) -> Dict[str, Any]:
+    def construct_payload(event_name: str, event_data: dict[str, Any]) -> dict[str, Any]:
         """Formats the JSON payload for webhook delivery."""
         return {
             'event': event_name,
@@ -55,7 +55,7 @@ class NotificationCore:
             return url
 
     @staticmethod
-    def validate_event_data(data: Dict[str, Any]) -> bool:
+    def validate_event_data(data: dict[str, Any]) -> bool:
         """Basic validation for event data structures."""
         # Ensure it's a non-empty dictionary
         return isinstance(data, dict) and len(data) > 0

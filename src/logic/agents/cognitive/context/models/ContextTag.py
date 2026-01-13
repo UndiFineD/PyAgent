@@ -33,4 +33,4 @@ class ContextTag:
     name: str
     description: str = ""
     color: str = "#666666"
-    parent: Optional[str] = None
+    parent: str | None = None

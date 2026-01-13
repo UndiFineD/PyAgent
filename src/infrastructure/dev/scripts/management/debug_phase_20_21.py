@@ -35,7 +35,7 @@ __version__ = VERSION
 
 def test_visualization_and_memory() -> None:
     print("\n--- Testing Phase 20: Visual & Multimodal ---")
-    root = Path("c:/DEV/PyAgent")
+    root = Path(str(Path(__file__).resolve().parents[5]) + "")
     viz = VisualizerAgent(str(root / "src/logic/agents/cognitive/VisualizerAgent.py"))
     mem = GraphMemoryAgent(str(root / "src/logic/agents/cognitive/GraphMemoryAgent.py"))
     
@@ -61,7 +61,7 @@ def test_visualization_and_memory() -> None:
 
 def test_observability() -> None:
     print("\n--- Testing Phase 21: Distributed Observability ---")
-    fleet = FleetManager("c:/DEV/PyAgent")
+    fleet = FleetManager(str(Path(__file__).resolve().parents[5]) + "")
     
     # Trigger tracing
     fleet.telemetry.start_trace("test_op")
@@ -79,7 +79,7 @@ def test_observability() -> None:
 
 def test_gui_backend() -> None:
     print("\n--- Testing Phase 22: GUI Backend ---")
-    fleet = FleetManager("c:/DEV/PyAgent")
+    fleet = FleetManager(str(Path(__file__).resolve().parents[5]) + "")
     ui = fleet.web_ui
     
     # File Explorer

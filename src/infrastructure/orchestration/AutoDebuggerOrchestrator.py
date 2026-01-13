@@ -39,7 +39,7 @@ __version__ = VERSION
 class AutoDebuggerOrchestrator:
     """Orchestrates recursive self-debugging and code repair."""
 
-    def __init__(self, workspace_root: Optional[str] = None) -> None:
+    def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root = workspace_root or os.getcwd()
         # Initialize specialized agents
         # Note: We use the actual source paths if we can find them, otherwise relative
@@ -48,10 +48,10 @@ class AutoDebuggerOrchestrator:
         
         self.immune_system = ImmuneSystemAgent(immune_path)
         self.coder = CoderAgent(coder_path)
-        self.repair_history: List[Dict[str, Any]] = []
+        self.repair_history: list[dict[str, Any]] = []
 
     @as_tool
-    def validate_and_repair(self, file_path: str) -> Dict[str, Any]:
+    def validate_and_repair(self, file_path: str) -> dict[str, Any]:
         """Validates a file and attempts automatic repair if it fails syntax check.
         
         Args:
@@ -84,7 +84,7 @@ class AutoDebuggerOrchestrator:
                     return {"status": "blocked", "message": "Infected code detected during validation. Quarantining fix."}
 
             # 3. Attempt Repair with CoderAgent
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 content = f.read()
 
             repair_prompt = (
@@ -97,7 +97,7 @@ class AutoDebuggerOrchestrator:
             # coder.improve_content(prompt) handles the actual update and self-validation
             from pathlib import Path
             self.coder.file_path = Path(file_path) # Target the coder to the broken file
-            fixed_content = self.coder.improve_content(repair_prompt)
+            self.coder.improve_content(repair_prompt)
             
             repair_record = {
                 "file": file_path,

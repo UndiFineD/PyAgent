@@ -39,10 +39,10 @@ class ProfilingAgent:
 
     def __init__(self) -> None:
         """Initialize the profiling advisor."""
-        self.suggestions: List[ProfilingSuggestion] = []
+        self.suggestions: list[ProfilingSuggestion] = []
         self.core = ProfilingCore()
 
-    def analyze_pstats(self, pstats_filepath: str) -> List[ProfileStats]:
+    def analyze_pstats(self, pstats_filepath: str) -> list[ProfileStats]:
         """Analyzes a binary pstats file and returns optimization priorities."""
         stats = pstats.Stats(pstats_filepath)
         results = self.core.analyze_stats(stats)

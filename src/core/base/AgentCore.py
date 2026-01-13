@@ -73,7 +73,7 @@ class LogicCore:
 class BaseCore(LogicCore):
     """Pure logic core providing foundation for all agents."""
 
-    def __init__(self, workspace_root: Optional[str] = None) -> None:
+    def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root = workspace_root
 
     @staticmethod
@@ -200,7 +200,7 @@ class BaseCore(LogicCore):
 class AgentCore(BaseCore):
     """Logic-only core for managing agent-specific data transformations."""
 
-    def __init__(self, workspace_root: Optional[str] = None, settings: Optional[dict[str, Any]] = None) -> None:
+    def __init__(self, workspace_root: str | None = None, settings: dict[str, Any] | None = None) -> None:
         super().__init__(workspace_root=workspace_root)
         self.settings = settings or {}
 

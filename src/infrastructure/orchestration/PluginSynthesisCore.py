@@ -29,7 +29,7 @@ class SynthesisResult(BaseModel):
     """Result of a tool/plugin synthesis operation."""
     code: str
     entry_point: str
-    imports: List[str]
+    imports: list[str]
     is_safe: bool = False
 
 class PluginSynthesisCore:
@@ -39,7 +39,7 @@ class PluginSynthesisCore:
     """
 
     @staticmethod
-    def generate_plugin_source(task_description: str, inputs: List[str], logic_template: str) -> SynthesisResult:
+    def generate_plugin_source(task_description: str, inputs: list[str], logic_template: str) -> SynthesisResult:
         """
         Synthesizes Python source code for a temporary plugin.
         
@@ -93,7 +93,7 @@ class PluginSynthesisCore:
             return False
 
     @staticmethod
-    def merge_imports(imports: List[str]) -> str:
+    def merge_imports(imports: list[str]) -> str:
         """Formats and deduplicates import statements."""
         unique_imports = sorted(list(set(imports)))
         return "\n".join([f"import {imp}" for imp in unique_imports])

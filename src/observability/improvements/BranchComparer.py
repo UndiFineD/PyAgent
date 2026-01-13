@@ -53,7 +53,7 @@ class BranchComparer:
             print(f"{diff.diff_type.value}: {diff.improvement_id}")
     """
 
-    def __init__(self, repo_path: Optional[str] = None, recorder: Any = None) -> None:
+    def __init__(self, repo_path: str | None = None, recorder: Any = None) -> None:
         """Initialize branch comparer.
 
         Args:
@@ -62,7 +62,7 @@ class BranchComparer:
         """
         self.repo_path = Path(repo_path) if repo_path else Path.cwd()
         self.recorder = recorder
-        self.comparisons: List[BranchComparison] = []
+        self.comparisons: list[BranchComparison] = []
 
     def _record(self, action: str, result: str) -> None:
         """Record branch comparison activities."""
@@ -149,7 +149,7 @@ class BranchComparer:
         except subprocess.CalledProcessError:
             return ""
 
-    def _parse_improvements(self, content: str) -> Dict[str, Improvement]:
+    def _parse_improvements(self, content: str) -> dict[str, Improvement]:
         """Parse improvements from markdown content.
 
         Args:
@@ -158,7 +158,7 @@ class BranchComparer:
         Returns:
             Dictionary mapping improvement IDs to Improvement objects.
         """
-        improvements: Dict[str, Improvement] = {}
+        improvements: dict[str, Improvement] = {}
 
         # Parse improvement items from markdown
         pattern = r'- \[[ x]\] (.+?)(?=\n- \[|\n##|\Z)'
@@ -179,9 +179,9 @@ class BranchComparer:
 
     def _calculate_diffs(
         self,
-        source: Dict[str, Improvement],
-        target: Dict[str, Improvement]
-    ) -> List[ImprovementDiff]:
+        source: dict[str, Improvement],
+        target: dict[str, Improvement]
+    ) -> list[ImprovementDiff]:
         """Calculate differences between two improvement sets.
 
         Args:
@@ -191,7 +191,7 @@ class BranchComparer:
         Returns:
             List of improvement differences.
         """
-        diffs: List[ImprovementDiff] = []
+        diffs: list[ImprovementDiff] = []
         all_ids = set(source.keys()) | set(target.keys())
 
         for imp_id in all_ids:
@@ -234,7 +234,7 @@ class BranchComparer:
     def get_added_improvements(
         self,
         comparison: BranchComparison
-    ) -> List[Improvement]:
+    ) -> list[Improvement]:
         """Get improvements added in target branch.
 
         Args:
@@ -251,7 +251,7 @@ class BranchComparer:
     def get_removed_improvements(
         self,
         comparison: BranchComparison
-    ) -> List[Improvement]:
+    ) -> list[Improvement]:
         """Get improvements removed in target branch.
 
         Args:
@@ -268,7 +268,7 @@ class BranchComparer:
     def get_modified_improvements(
         self,
         comparison: BranchComparison
-    ) -> List[Tuple[Improvement, Improvement]]:
+    ) -> list[tuple[Improvement, Improvement]]:
         """Get improvements modified between branches.
 
         Args:
@@ -290,7 +290,7 @@ class BranchComparer:
         branch1: str,
         branch2: str,
         file_path: str
-    ) -> List[ImprovementDiff]:
+    ) -> list[ImprovementDiff]:
         """Detect conflicting changes in a three-way comparison.
 
         Args:
@@ -367,7 +367,7 @@ class BranchComparer:
 
         return "\n".join(lines)
 
-    def get_comparison_history(self) -> List[BranchComparison]:
+    def get_comparison_history(self) -> list[BranchComparison]:
         """Get history of comparisons.
 
         Returns:

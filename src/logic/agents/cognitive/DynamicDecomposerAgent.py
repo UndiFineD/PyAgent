@@ -45,7 +45,7 @@ class DynamicDecomposerAgent(BaseAgent):
         )
 
     @as_tool
-    def decompose_task_v2(self, complex_task: str, available_agents: List[str]) -> str:
+    def decompose_task_v2(self, complex_task: str, available_agents: list[str]) -> str:
         """Splits a complex task into optimized sub-tasks for the swarm.
         Args:
             complex_task: The high-level user request.
@@ -69,7 +69,7 @@ class DynamicDecomposerAgent(BaseAgent):
         return f"### Optimized Task Decomposition\n\n```json\n{json.dumps(decomposition, indent=2)}\n```"
 
     @as_tool
-    def balance_swarm_load(self, pending_tasks: List[Dict[str, Any]]) -> str:
+    def balance_swarm_load(self, pending_tasks: list[dict[str, Any]]) -> str:
         """Re-routes tasks among agents to prevent bottlenecks."""
         return "Swarm load balancing: Workload evenly distributed. No re-routing necessary."
 

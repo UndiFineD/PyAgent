@@ -35,12 +35,18 @@ from src.logic.cognitive.prompt_templates import VIBE_CODING_2025_TRACKS
 __version__ = VERSION
 
 class PatternOrchestrator(BaseAgent):
-    """Orchestrates multi-agent teams using battle-tested coordination patterns."""
+    """Orchestrates multi-agent teams using battle-tested coordination patterns.
+    Phase 283: Implemented concrete orchestration with actual delegation calls.
+    """
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        # Unify active track with global EVOLUTION_PHASE (Phase 215)
-        self.active_track = self._determine_track_from_phase(EVOLUTION_PHASE)
+        # Phase 283: Persist active track across sessions
+        saved_track = self._state_data.get("active_track")
+        if saved_track:
+            self.active_track = saved_track
+        else:
+            self.active_track = self._determine_track_from_phase(EVOLUTION_PHASE)
         self._apply_vibe_persona()
 
     def _determine_track_from_phase(self, phase: int) -> str:
@@ -75,6 +81,7 @@ class PatternOrchestrator(BaseAgent):
         """Sets the active Vibe-Coding 2025 track (Overrides phase-based defaults)."""
         if track_name.upper() in VIBE_CODING_2025_TRACKS:
             self.active_track = track_name.upper()
+            self._state_data["active_track"] = self.active_track # Phase 283 Persistence
             self._apply_vibe_persona()
             return f"Vibe-Coding track set to {self.active_track}. Persona: {VIBE_CODING_2025_TRACKS[self.active_track]['persona'][:100]}..."
         return f"Error: Track '{track_name}' not found. Available: {list(VIBE_CODING_2025_TRACKS.keys())}"
@@ -90,36 +97,53 @@ class PatternOrchestrator(BaseAgent):
         )
 
     @as_tool
-    def orchestrate_supervisor(self, goal: str, specialists: List[str]) -> str:
-        """Runs the Supervisor pattern: delegates sub-goals to specialist agents."""
+    def orchestrate_supervisor(self, goal: str, specialists: list[str]) -> str:
+        """Runs the Supervisor pattern (Phase 283): delegates sub-goals to specialist agents."""
         logging.info(f"ORCHESTRATOR: Supervisor mode for goal: {goal}")
-        plan = [f"Supervisor delegating part of '{goal}' to {s}" for s in specialists]
-        return "\n".join(plan) + "\n\nResult synthesized from all specialists."
+        
+        from src.core.base.delegation import AgentDelegator
+        delegator = AgentDelegator(self)
+        results = []
+        
+        for agent_type in specialists:
+            logging.info(f"Supervisor: Delegating to {agent_type}")
+            try:
+                # Recursive call (Phase 283)
+                result = delegator.delegate(agent_type=agent_type, task=f"As Supervisor, I need you to address: {goal}")
+                results.append(f"[{agent_type}]: {result[:150]}...")
+            except Exception as e:
+                results.append(f"[{agent_type}]: FAILED - {e}")
+                
+        return f"Supervisor results for '{goal}':\n\n" + "\n".join(results)
 
     @as_tool
-    def orchestrate_debate(self, topic: str, pro_prompt: str, con_prompt: str) -> str:
-        """Runs the Debate pattern (SOTA): agents argue iterations to reach consensus."""
+    def orchestrate_debate(self, topic: str, pro_agent: str, con_agent: str) -> str:
+        """Runs the Debate pattern (Phase 283): agents argue iterations to reach consensus."""
         logging.info(f"ORCHESTRATOR: Debate mode for topic: {topic}")
         
-        # In a real multi-agent call, these would be separate LLM calls.
-        round_1 = [
-            f"Round 1 - Pro: Argument for '{topic}' emphasizing benefits.",
-            "Round 1 - Con: Counter-argument highlighting risks."
-        ]
-        round_2 = [
-            "Round 2 - Pro: Addresses risks with mitigation strategies.",
-            "Round 2 - Con: Acknowledges benefits but insists on secondary validation."
-        ]
+        from src.core.base.delegation import AgentDelegator
+        delegator = AgentDelegator(self)
         
-        consensus = (
-            f"Consensus reached after 2 rounds of debate on '{topic}':\n"
-            "Adopt the proposal with the specific safety guardrails identified in Round 2."
+        # Iterative debate (Phase 283)
+        logging.info(f"Debate: {pro_agent} vs {con_agent} on '{topic}'")
+        pro_arg = delegator.delegate(agent_type=pro_agent, task=f"Provide a strong technical argument FOR: {topic}")
+        con_arg = delegator.delegate(agent_type=con_agent, task=f"Provide a strong technical argument AGAINST: {topic}. Respond to: {pro_arg[:200]}")
+        
+        # Consensus
+        consensus = delegator.delegate(
+            agent_type="ArchitectAgent", 
+            task=f"Synthesize a final consensus for topic '{topic}' based on PRO ({pro_agent}): {pro_arg[:300]} and CON ({con_agent}): {con_arg[:300]}"
         )
         
-        return "\n".join(round_1 + round_2 + [consensus])
+        return (
+            f"Consensus reached after debate on '{topic}':\n\n"
+            f"PRO SUMMARY: {pro_arg[:150]}...\n"
+            f"CON SUMMARY: {con_arg[:150]}...\n\n"
+            f"FINAL RECOMMENDATION: {consensus}"
+        )
 
     @as_tool
-    def orchestrate_consensus_voting(self, task: str, solutions: List[str]) -> str:
+    def orchestrate_consensus_voting(self, task: str, solutions: list[str]) -> str:
         """Runs weighted voting to choose the best implementation path."""
         logging.info(f"ORCHESTRATOR: Voting mode for task: {task}")
         # Weighted Scoring (Hypothetical)
@@ -135,13 +159,42 @@ class PatternOrchestrator(BaseAgent):
         )
 
     @as_tool
-    def orchestrate_pipeline(self, data: str, chain: List[str]) -> str:
+    def orchestrate_pipeline(self, data: str, chain: list[str]) -> str:
         """Runs the Pipeline pattern: sequential transformation through agents."""
         logging.info(f"ORCHESTRATOR: Pipeline mode with chain: {' -> '.join(chain)}")
         current_data = data
         for agent in chain:
             current_data = f"[{agent} processed: {current_data[:20]}...]"
         return f"Final Pipeline Output: {current_data}"
+
+    @as_tool
+    def orchestrate_mapreduce(self, file_path: str, chunk_size: int = 1000) -> str:
+        """Runs MapReduce (Phase 283): splits file, processes in parallel, merges results."""
+        from src.core.base.delegation import AgentDelegator
+        import math
+        
+        path = Path(file_path)
+        if not path.exists():
+            return f"Error: File {file_path} not found."
+            
+        content = path.read_text(encoding="utf-8")
+        num_chunks = math.ceil(len(content) / chunk_size)
+        logging.info(f"MapReduce: Splitting {file_path} into {num_chunks} chunks.")
+        
+        delegator = AgentDelegator(self)
+        shards = []
+        for i in range(num_chunks):
+            chunk = content[i*chunk_size : (i+1)*chunk_size]
+            # Map phase
+            logging.info(f"MapReduce: Processing chunk {i+1}/{num_chunks}")
+            shard_res = delegator.delegate(agent_type="CoderAgent", task=f"Analyze this code shard for bugs: {chunk}")
+            shards.append(shard_res)
+            
+        # Reduce phase
+        logging.info("MapReduce: Reducing results.")
+        summary = delegator.delegate(agent_type="ArchitectAgent", task=f"Merge these {len(shards)} analysis shards into a final report: " + "\n---\n".join(shards)[:2000])
+        
+        return f"MapReduce Complete for {file_path}:\n\n{summary}"
 
     @as_tool
     def execute_task(self, task: str) -> str:

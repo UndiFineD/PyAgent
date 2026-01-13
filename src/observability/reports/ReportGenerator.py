@@ -30,7 +30,8 @@ import re
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Tuple, cast
+from typing import Any, Dict, List, Optional, Tuple, cast
+from collections.abc import Iterable
 from .CompileResult import CompileResult
 from .core.DeduplicationCore import DeduplicationCore
 
@@ -39,7 +40,7 @@ __version__ = VERSION
 class ReportGenerator:
     """Generates quality reports (description, errors, improvements) for agent files."""
 
-    def __init__(self, agent_dir: Optional[Path | str] = None, output_dir: Optional[Path | str] = None, recorder: Any = None) -> None:
+    def __init__(self, agent_dir: Path | str | None = None, output_dir: Path | str | None = None, recorder: Any = None) -> None:
         """Initialize with directory containing agent scripts.
         
         Args:
@@ -65,7 +66,7 @@ class ReportGenerator:
         if self.recorder:
             self.recorder.record_interaction("Reporting", "ReportGenerator", action, result)
 
-    def process_all_files(self) -> Dict[str, Any]:
+    def process_all_files(self) -> dict[str, Any]:
         """Process all .py files in agent_dir and generate reports."""
         py_files = list(self.iter_agent_py_files())
         if not py_files:
@@ -88,7 +89,7 @@ class ReportGenerator:
         logging.info(f"Processed {count} files, skipped {skipped} unchanged, {errors_count} errors.")
         return {"count": count, "skipped": skipped, "errors": errors_count}
 
-    def export_jsonl_report(self, items: List[Dict[str, Any]], filename: str = "audit_log.jsonl") -> bool:
+    def export_jsonl_report(self, items: list[dict[str, Any]], filename: str = "audit_log.jsonl") -> bool:
         """Exports report items to JSONL format (Phase 183)."""
         output_path = self.output_dir / filename
         # Deduplicate before export
@@ -201,7 +202,7 @@ class ReportGenerator:
             "## Behavior summary",
         ]
         
-        behavior_bits: List[str] = []
+        behavior_bits: list[str] = []
         if self._detect_cli_entry(source):
             behavior_bits.append("Has a CLI entrypoint (`__main__`).")
         if self._detect_argparse(source):
@@ -237,7 +238,7 @@ class ReportGenerator:
         ])
         return "\n".join(lines)
 
-    def render_errors(self, py_path: Path, source: str, compile_result: Optional[CompileResult | str]) -> str:
+    def render_errors(self, py_path: Path, source: str, compile_result: CompileResult | str | None) -> str:
         """Generate errors report."""
         lines = [
             f"# Errors: `{py_path.name}`",
@@ -268,7 +269,7 @@ class ReportGenerator:
             "## Known issues / hazards",
         ])
         
-        known: List[str] = []
+        known: list[str] = []
         if 'subprocess.run(["git"' in source or "subprocess.run(['git'" in source:
             known.append("Runs `git` via `subprocess`; will fail if git is not installed or repo has no remote.")
         if 'subprocess.run(["gh"' in source or "subprocess.run(['gh'" in source:
@@ -303,7 +304,7 @@ class ReportGenerator:
     def render_improvements(self, py_path: Path, source: str, tree: ast.AST) -> str:
         """Generate improvements report."""
         _, classes = self._find_top_level_defs(tree)
-        suggestions: List[str] = []
+        suggestions: list[str] = []
         suggestions.extend(self._find_issues(tree, source, py_path))
         
         # Generic quality improvements
@@ -334,7 +335,7 @@ class ReportGenerator:
         ])
         return "\n".join(lines)
 
-    def _find_top_level_defs(self, tree: ast.AST) -> Tuple[List[str], List[str]]:
+    def _find_top_level_defs(self, tree: ast.AST) -> tuple[list[str], list[str]]:
         funcs = []
         classes = []
         for node in tree.body:
@@ -344,8 +345,8 @@ class ReportGenerator:
                 classes.append(node.name)
         return funcs, classes
 
-    def _find_imports(self, tree: ast.AST) -> List[str]:
-        imports: List[str] = []
+    def _find_imports(self, tree: ast.AST) -> list[str]:
+        imports: list[str] = []
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 for alias in node.names:
@@ -355,14 +356,14 @@ class ReportGenerator:
                 imports.append(mod)
         # De-dupe while preserving order
         seen: set[str] = set()
-        out: List[str] = []
+        out: list[str] = []
         for item in imports:
             if item not in seen:
                 seen.add(item)
                 out.append(item)
         return out
 
-    def _find_issues(self, tree: ast.AST, source: str, py_path: Path) -> List[str]:
+    def _find_issues(self, tree: ast.AST, source: str, py_path: Path) -> list[str]:
         issues = []
         # 1. Mutable defaults
         for node in ast.walk(tree):
@@ -390,7 +391,6 @@ class ReportGenerator:
         if "subprocess.run" in source:
             issues.append("Add robust subprocess error handling (`check=True`, timeouts, clearer stderr reporting).")
         if self._detect_cli_entry(source) and self._detect_argparse(source):
-            suggestions = issues # reusing issues
             issues.append("Add `--help` examples and validate CLI args (paths, required files).")
         
         if self._is_pytest_test_file(py_path) and re.search(r"def\s+test_placeholder\s*\(", source):
@@ -412,7 +412,7 @@ class ReportGenerator:
     def _looks_like_pytest_import_problem(self, path: Path) -> bool:
         return "-" in path.name or path.name.count(".") > 1
 
-    def _try_parse_python(self, source: str, filename: str) -> Tuple[Optional[ast.AST], Optional[str]]:
+    def _try_parse_python(self, source: str, filename: str) -> tuple[ast.AST | None, str | None]:
         try:
             return ast.parse(source, filename), None
         except SyntaxError as e:
@@ -426,7 +426,7 @@ class ReportGenerator:
         except subprocess.CalledProcessError as e:
             return CompileResult(ok=False, error=e.stderr or e.stdout or str(e))
 
-    def _get_existing_sha(self, stem: str) -> Optional[str]:
+    def _get_existing_sha(self, stem: str) -> str | None:
         desc_path = self.output_dir / f"{stem}.description.md"
         if not desc_path.exists():
             return None

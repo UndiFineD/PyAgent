@@ -34,12 +34,12 @@ if TYPE_CHECKING:
 
 class AgentRegistry:
     """Singleton registry to track all active agents."""
-    _instance: Optional[AgentRegistry] = None
+    _instance: AgentRegistry | None = None
     _agents: dict[str, BaseAgent] = {}
 
     def __new__(cls) -> AgentRegistry:
         if cls._instance is None:
-            cls._instance = super(AgentRegistry, cls).__new__(cls)
+            cls._instance = super().__new__(cls)
         return cls._instance
 
     def register(self, agent: BaseAgent) -> None:
@@ -54,7 +54,7 @@ class AgentRegistry:
             del self._agents[name]
             logging.debug(f"Agent '{name}' unregistered.")
 
-    def get_agent(self, name: str) -> Optional[BaseAgent]:
+    def get_agent(self, name: str) -> BaseAgent | None:
         """Retrieve an agent by name."""
         return self._agents.get(name)
 

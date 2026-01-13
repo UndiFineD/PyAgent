@@ -56,7 +56,7 @@ class BaselineManager:
         """Get path for baseline file."""
         return self.baseline_dir / f"{name}.baseline.json"
 
-    def save_baseline(self, name: str, values: Dict[str, Any]) -> TestBaseline:
+    def save_baseline(self, name: str, values: dict[str, Any]) -> TestBaseline:
         """Save a baseline.
 
         Args:
@@ -81,7 +81,7 @@ class BaselineManager:
 
         return baseline
 
-    def load_baseline(self, name: str) -> Optional[TestBaseline]:
+    def load_baseline(self, name: str) -> TestBaseline | None:
         """Load a baseline.
 
         Args:
@@ -107,9 +107,9 @@ class BaselineManager:
     def compare(
         self,
         name: str,
-        current: Dict[str, Any],
+        current: dict[str, Any],
         tolerance: float = 0.1,
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Compare current values against baseline.
 
         Args:

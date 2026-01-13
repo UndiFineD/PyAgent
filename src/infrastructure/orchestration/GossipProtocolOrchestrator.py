@@ -34,12 +34,12 @@ class GossipProtocolOrchestrator:
 
     def __init__(self, fleet: AsyncFleetManager) -> None:
         self.fleet = fleet
-        self.state: Dict[str, Any] = {}
-        self.versions: Dict[str, int] = {}
-        self.peers: Set[str] = set()
+        self.state: dict[str, Any] = {}
+        self.versions: dict[str, int] = {}
+        self.peers: set[str] = set()
         self._lock = asyncio.Lock()
         self._running = False
-        self._task: Optional[asyncio.Task] = None
+        self._task: asyncio.Task | None = None
 
     async def start(self) -> None:
         """Starts the gossip loop."""
@@ -106,7 +106,7 @@ class GossipProtocolOrchestrator:
                 self.versions[mock_key] = new_ver
                 logging.info(f"Gossip: [CONVERGENCE] Merged state for {mock_key} v{new_ver}")
 
-    async def get_synced_state(self, key: str) -> Optional[Any]:
+    async def get_synced_state(self, key: str) -> Any | None:
         """Returns the current state for a key."""
         async with self._lock:
             return self.state.get(key)

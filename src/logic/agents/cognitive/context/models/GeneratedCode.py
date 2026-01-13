@@ -39,5 +39,5 @@ class GeneratedCode:
     """
     language: str
     code: str
-    context_used: List[str] = field(default_factory=lambda: [])
+    context_used: list[str] = field(default_factory=lambda: [])
     description: str = ""

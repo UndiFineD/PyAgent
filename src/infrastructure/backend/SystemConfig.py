@@ -48,4 +48,4 @@ class SystemConfig:
     weight: int = 1
     timeout_s: int = 60
     max_retries: int = 2
-    rate_limit_rpm: Optional[int] = None
+    rate_limit_rpm: int | None = None

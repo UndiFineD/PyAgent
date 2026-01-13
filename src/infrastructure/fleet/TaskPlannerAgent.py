@@ -62,7 +62,7 @@ class TaskPlannerAgent(BaseAgent):
     def _get_default_content(self) -> str:
         return "# Workspace Planning Log\n\n## Active Plans\nNone.\n"
 
-    def create_plan(self, user_request: str) -> List[Dict[str, Any]]:
+    def create_plan(self, user_request: str) -> list[dict[str, Any]]:
         """Generates a structured plan for the FleetManager following the scientific method."""
         plan = []
         req = user_request.lower()

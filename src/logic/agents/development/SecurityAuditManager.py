@@ -35,7 +35,7 @@ class SecurityAuditManager:
     """Manages fleet security including certificates and access control."""
     
     def __init__(self) -> None:
-        self.certificates: Dict[str, Dict[str, Any]] = {}
+        self.certificates: dict[str, dict[str, Any]] = {}
 
     def rotate_certificates(self, fleet_id: str) -> str:
         """Simulates automatic certificate rotation for a fleet."""
@@ -48,7 +48,7 @@ class SecurityAuditManager:
         }
         return f"Rotated certificates for fleet {fleet_id}. New Cert ID: {new_cert_id}"
 
-    def audit_agent_permissions(self, agent_id: str) -> List[str]:
+    def audit_agent_permissions(self, agent_id: str) -> list[str]:
         """Audits an agent's permissions against the security policy."""
         # Simulated audit
         violations = []

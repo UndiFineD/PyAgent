@@ -17,7 +17,7 @@ class EconomyCore:
         return (credits * importance) * (1.0 + urgency)
 
     @staticmethod
-    def select_winning_bids(bids: List[Dict[str, Any]], slots_available: int) -> List[Dict[str, Any]]:
+    def select_winning_bids(bids: list[dict[str, Any]], slots_available: int) -> list[dict[str, Any]]:
         """
         Selects the top N bids based on priority score.
         """

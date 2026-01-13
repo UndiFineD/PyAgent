@@ -22,12 +22,12 @@ class DeduplicationCore:
         return len(intersection) / len(union)
 
     @staticmethod
-    def deduplicate_items(items: List[Dict[str, Any]], key: str = "message", threshold: float = 0.8) -> List[Dict[str, Any]]:
+    def deduplicate_items(items: list[dict[str, Any]], key: str = "message", threshold: float = 0.8) -> list[dict[str, Any]]:
         """
         Removes items that are too similar to already seen items.
         """
         unique_items = []
-        seen_messages: List[str] = []
+        seen_messages: list[str] = []
         
         for item in items:
             msg = item.get(key, "")
@@ -44,7 +44,7 @@ class DeduplicationCore:
         return unique_items
 
     @staticmethod
-    def export_to_jsonl(items: List[Dict[str, Any]], output_path: str):
+    def export_to_jsonl(items: list[dict[str, Any]], output_path: str):
         """
         Exports a list of dicts to a JSONL file.
         """

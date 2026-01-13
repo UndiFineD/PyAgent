@@ -34,9 +34,9 @@ class ShardManager:
     
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
-        self.shards: Dict[str, Set[str]] = {} # Shard name to agent names
-        self.agent_to_shard: Dict[str, str] = {}
-        self.communication_log: Dict[frozenset[str], int] = {} # Pairs of agents to frequency
+        self.shards: dict[str, set[str]] = {} # Shard name to agent names
+        self.agent_to_shard: dict[str, str] = {}
+        self.communication_log: dict[frozenset[str], int] = {} # Pairs of agents to frequency
 
     def log_communication(self, agent_a: str, agent_b: str) -> None:
         """Records a communication event between two agents."""
@@ -64,11 +64,11 @@ class ShardManager:
         logging.info(f"ShardManager: Assigned agent {agent_name} to shard {shard_name}")
         return True
 
-    def get_shard_members(self, shard_name: str) -> List[str]:
+    def get_shard_members(self, shard_name: str) -> list[str]:
         """Returns all agents in a shard."""
         return list(self.shards.get(shard_name, set()))
 
-    def get_agent_shard(self, agent_name: str) -> Optional[str]:
+    def get_agent_shard(self, agent_name: str) -> str | None:
         """Gets the shard containing the specified agent."""
         return self.agent_to_shard.get(agent_name)
 
@@ -80,7 +80,7 @@ class ShardManager:
         logging.info("ShardManager: Running dynamic sharding optimization (Phase 128)...")
         
         # Identify high-frequency pairings
-        clusters: List[Set[str]] = []
+        clusters: list[set[str]] = []
         for pair, count in self.communication_log.items():
             if count >= threshold:
                 agent_list = list(pair)

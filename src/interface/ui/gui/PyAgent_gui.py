@@ -39,7 +39,7 @@ __version__ = VERSION
 
 def main() -> None:
     root = tk.Tk()
-    app = PyAgentGUI(root)
+    PyAgentGUI(root)
     root.mainloop()
 
 if __name__ == "__main__":

@@ -44,10 +44,10 @@ class SwarmInsight:
 class IntelligenceCore:
     """Logic-only core for swarm intelligence synthesis."""
 
-    def __init__(self, workspace_root: Optional[str] = None) -> None:
+    def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root = workspace_root
 
-    def filter_relevant_insights(self, pool: List[Dict[str, Any]], limit: int = 20) -> List[SwarmInsight]:
+    def filter_relevant_insights(self, pool: list[dict[str, Any]], limit: int = 20) -> list[SwarmInsight]:
         """Filters and converts raw insight dictionaries into SwarmInsight objects."""
         insights = []
         # Sort by confidence and recency
@@ -62,7 +62,7 @@ class IntelligenceCore:
             ))
         return insights
 
-    def generate_synthesis_prompt(self, insights: List[SwarmInsight], sql_lessons: List[Dict[str, Any]]) -> str:
+    def generate_synthesis_prompt(self, insights: list[SwarmInsight], sql_lessons: list[dict[str, Any]]) -> str:
         """Constructs a prompt for AI synthesis from collected insights."""
         lines = [i.format_for_pool() for i in insights]
         for lesson in sql_lessons:
@@ -71,7 +71,7 @@ class IntelligenceCore:
         pool_text = "\n".join(lines)
         return f"Analyze these swarm insights and relational lessons. Synthesize the top 3 high-level patterns or warnings:\n{pool_text}"
 
-    def extract_actionable_patterns(self, raw_patterns: List[str]) -> List[str]:
+    def extract_actionable_patterns(self, raw_patterns: list[str]) -> list[str]:
         """Filters raw AI output to ensure patterns are technically relevant."""
         valid_patterns = []
         keywords = ["error", "failure", "bottleneck", "missing", "security", "leak", "logic", "refactor", "quantum"]

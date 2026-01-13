@@ -41,6 +41,6 @@ class TestBaseline:
     """
 
     name: str
-    values: Dict[str, Any]
+    values: dict[str, Any]
     created_at: float = field(default_factory=time.time)
     version: int = 1

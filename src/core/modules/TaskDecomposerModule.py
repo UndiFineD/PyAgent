@@ -20,8 +20,8 @@ from src.core.base.modules import BaseModule
 class PlanStep:
     agent: str
     action: str
-    args: List[Any] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    args: list[Any] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 class TaskDecomposerModule(BaseModule):
     """
@@ -35,7 +35,7 @@ class TaskDecomposerModule(BaseModule):
         return super().initialize()
 
     def execute(self, request:
-        str) -> List[Dict[str, Any]]:
+        str) -> list[dict[str, Any]]:
         """
         Executes the planning logic for a given request.
         """
@@ -43,7 +43,7 @@ class TaskDecomposerModule(BaseModule):
             self.initialize()
             
         request_lower = request.lower()
-        steps: List[PlanStep] = []
+        steps: list[PlanStep] = []
         
         # 1. Research & Analysis Phase
         if any(w in request_lower for w in ["research", "search", "analyze", "find"]):
@@ -93,7 +93,7 @@ class TaskDecomposerModule(BaseModule):
         return [self._to_dict(s) for s in steps]
 
     def _to_dict(self, step:
-        PlanStep) -> Dict[str, Any]:
+        PlanStep) -> dict[str, Any]:
         return {
             "agent": step.agent,
             "action": step.action,
@@ -102,7 +102,7 @@ class TaskDecomposerModule(BaseModule):
         }
 
     def summarize_plan(self, steps:
-        List[Dict[str, Any]]) -> str:
+        list[dict[str, Any]]) -> str:
         """Core summary logic."""
         summary_lines = ["# 📋 Task Execution Plan"]
         for i, step in enumerate(steps):

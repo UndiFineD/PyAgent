@@ -52,18 +52,18 @@ class TemporalPredictorAgent(BaseAgent):
             "issues before they occur."
         )
 
-    def _load_history(self) -> List[Dict[str, Any]]:
+    def _load_history(self) -> list[dict[str, Any]]:
         """Loads historical execution data for analysis."""
         if not self.history_file.exists():
             return []
         try:
-            with open(self.history_file, "r", encoding="utf-8") as f:
+            with open(self.history_file, encoding="utf-8") as f:
                 return json.load(f)
         except Exception as e:
             logging.error(f"TemporalPredictor: Failed to load history: {e}")
             return []
 
-    def _save_history(self, history: List[Dict[str, Any]]) -> str:
+    def _save_history(self, history: list[dict[str, Any]]) -> str:
         """Saves updated history data."""
         try:
             with open(self.history_file, "w", encoding="utf-8") as f:
@@ -72,7 +72,7 @@ class TemporalPredictorAgent(BaseAgent):
             logging.error(f"TemporalPredictor: Failed to save history: {e}")
 
     @as_tool
-    def record_execution_event(self, event_type: str, status: str, metadata: Dict[str, Any]) -> str:
+    def record_execution_event(self, event_type: str, status: str, metadata: dict[str, Any]) -> str:
         """Records an execution event for future temporal analysis."""
         history = self._load_history()
         event = {
@@ -87,7 +87,7 @@ class TemporalPredictorAgent(BaseAgent):
         return f"Event '{event_type}' recorded successfully."
 
     @as_tool
-    def predict_next_failure(self) -> Dict[str, Any]:
+    def predict_next_failure(self) -> dict[str, Any]:
         """Analyzes history to predict the next likely failure point."""
         history = self._load_history()
         if not history:

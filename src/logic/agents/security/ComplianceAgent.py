@@ -57,7 +57,7 @@ class ComplianceAgent(BaseAgent):
             except Exception as e:
                 logging.debug(f"ComplianceAgent: Recording failed: {e}")
 
-    def scan_shard(self, shard_data: str) -> Dict[str, Any]:
+    def scan_shard(self, shard_data: str) -> dict[str, Any]:
         """Scans a data string for PII patterns."""
         findings = []
         for label, pattern in self.pii_patterns.items():
@@ -83,14 +83,14 @@ class ComplianceAgent(BaseAgent):
             masked_data = re.sub(pattern, f"[MASKED_{label.upper()}]", masked_data)
         return masked_data
 
-    def audit_zk_fusion(self, fusion_input: List[str]) -> bool:
+    def audit_zk_fusion(self, fusion_input: list[str]) -> bool:
         """Audits Zero-Knowledge fusion inputs for compliance before processing."""
         for item in fusion_input:
             if self.scan_shard(item)["pii_detected"]:
                 return False
         return True
 
-    def generate_privacy_impact_assessment(self, project_data: Dict[str, Any]) -> Dict[str, Any]:
+    def generate_privacy_impact_assessment(self, project_data: dict[str, Any]) -> dict[str, Any]:
         """Phase 240: Conducts a Privacy Impact Assessment (PIA).
         Analyzes data types, retention, and collection purposes.
         """
@@ -133,7 +133,7 @@ class ComplianceAgent(BaseAgent):
             "timestamp": time.time()
         }
 
-    def _get_pia_recommendations(self, risks: List[str]) -> List[str]:
+    def _get_pia_recommendations(self, risks: list[str]) -> list[str]:
         recommendations = []
         for risk in risks:
             if "encryption" in risk.lower():

@@ -67,7 +67,7 @@ class ReportExporter:
 <body>{html_content}</body>
 </html>"""
 
-    def to_csv(self, issues: List[CodeIssue]) -> str:
+    def to_csv(self, issues: list[CodeIssue]) -> str:
         """Export issues to CSV.
         Args:
             issues: List of issues.
@@ -87,7 +87,7 @@ class ReportExporter:
         self,
         content: str,
         format: ExportFormat,
-        output_path: Optional[Path] = None
+        output_path: Path | None = None
     ) -> str:
         """Export report to format.
         Args:

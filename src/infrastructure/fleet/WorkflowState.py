@@ -32,10 +32,10 @@ class WorkflowState:
     """Maintains context, variables, and history for a multi-agent session."""
     task_id: str
     original_request: str
-    variables: Dict[str, Any] = field(default_factory=dict)
-    history: List[Dict[str, Any]] = field(default_factory=list)
-    context_snippets: List[str] = field(default_factory=list)
-    errors: List[str] = field(default_factory=list)
+    variables: dict[str, Any] = field(default_factory=dict)
+    history: list[dict[str, Any]] = field(default_factory=list)
+    context_snippets: list[str] = field(default_factory=list)
+    errors: list[str] = field(default_factory=list)
     
     def set(self, key: str, value: Any) -> None:
         self.variables[key] = value

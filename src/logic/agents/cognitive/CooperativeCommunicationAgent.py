@@ -35,7 +35,7 @@ class CooperativeCommunicationAgent(BaseAgent):
     """
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.active_channels: Dict[str, Any] = {} # node_id -> channel_metadata
+        self.active_channels: dict[str, Any] = {} # node_id -> channel_metadata
         self._system_prompt = (
             "You are the Cooperative Communication Agent. "
             "Your role is to optimize peer-to-peer data transfers "
@@ -43,7 +43,7 @@ class CooperativeCommunicationAgent(BaseAgent):
         )
 
     @as_tool
-    def establish_p2p_channel(self, node_a: str, node_b: str) -> Dict[str, Any]:
+    def establish_p2p_channel(self, node_a: str, node_b: str) -> dict[str, Any]:
         """
         Creates a dedicated sub-millisecond link between two nodes.
         """
@@ -59,7 +59,7 @@ class CooperativeCommunicationAgent(BaseAgent):
         return {"channel_id": channel_id, "latency": self.active_channels[channel_id]["latency_ms"]}
 
     @as_tool
-    def broadcast_thought_packet(self, origin_node: str, thought_payload: Any) -> Dict[str, Any]:
+    def broadcast_thought_packet(self, origin_node: str, thought_payload: Any) -> dict[str, Any]:
         """
         Multicasts a thought packet to all connected nodes.
         """
@@ -74,7 +74,7 @@ class CooperativeCommunicationAgent(BaseAgent):
         }
 
     @as_tool
-    def synchronize_state(self, fleet_state: Any) -> Dict[str, Any]:
+    def synchronize_state(self, fleet_state: Any) -> dict[str, Any]:
         """
         Ensures all nodes are aligned on the global fleet context.
         Uses a real hash of the provided state.
@@ -91,7 +91,7 @@ class CooperativeCommunicationAgent(BaseAgent):
         }
 
     @as_tool
-    def optimize_bandwidth(self, active_tasks: List[str]) -> str:
+    def optimize_bandwidth(self, active_tasks: list[str]) -> str:
         """Uses LLM reasoning to suggest the most efficient communication topology."""
         prompt = (
             f"Analyze the following active fleet tasks: {active_tasks}\n\n"

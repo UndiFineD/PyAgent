@@ -41,5 +41,5 @@ class ModernizationSuggestion:
     old_api: str
     new_api: str
     deprecation_version: str
-    removal_version: Optional[str] = None
+    removal_version: str | None = None
     migration_guide: str = ""

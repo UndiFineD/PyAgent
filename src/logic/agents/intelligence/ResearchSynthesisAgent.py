@@ -34,7 +34,7 @@ class ResearchSynthesisAgent(BaseAgent):
         self.workspace_path = workspace_path
         self.research_library = {} # topic -> research_summary
 
-    def conduct_research(self, topic: str, focus_areas: List[str]) -> Dict[str, Any]:
+    def conduct_research(self, topic: str, focus_areas: list[str]) -> dict[str, Any]:
         """Conducts a simulated research session on a given topic."""
         print(f"Conducting research on: {topic}")
         research_id = f"R-{hash(topic) % 1000}"
@@ -58,14 +58,14 @@ class ResearchSynthesisAgent(BaseAgent):
             "summary": summary
         }
 
-    def _synthesize_findings(self, topic: str, findings: List[Dict[str, Any]]) -> str:
+    def _synthesize_findings(self, topic: str, findings: list[dict[str, Any]]) -> str:
         """Synthesizes raw findings into a cohesive summary."""
         summary = f"Synthesized research report on {topic}:\n"
         for finding in findings:
             summary += f"- {finding['area']}: {finding['data']} (Confidence: {finding['confidence']})\n"
         return summary
 
-    def query_library(self, topic_query: str) -> List[Dict[str, Any]]:
+    def query_library(self, topic_query: str) -> list[dict[str, Any]]:
         """Queries the research library for existing knowledge."""
         results = []
         for topic, summary in self.research_library.items():
@@ -73,7 +73,7 @@ class ResearchSynthesisAgent(BaseAgent):
                 results.append({"topic": topic, "summary": summary})
         return results
 
-    def get_research_metrics(self) -> Dict[str, Any]:
+    def get_research_metrics(self) -> dict[str, Any]:
         """Returns metrics on research productivity."""
         return {
             "topics_researched": len(self.research_library),

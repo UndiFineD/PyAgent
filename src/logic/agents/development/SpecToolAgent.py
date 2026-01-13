@@ -36,7 +36,7 @@ class SpecToolAgent(BaseAgent):
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self._pending_spec: Optional[str] = None
+        self._pending_spec: str | None = None
         self._system_prompt = (
             "You are the Spec-Tool Agent. "
             "Your role is to translate formal specifications into Python tools and manage OpenSpec workflows. "
@@ -144,7 +144,7 @@ class SpecToolAgent(BaseAgent):
             
             for path_val, methods in paths.items():
                 for method, details in methods.items():
-                    op_id = details.get("operationId", f"{method}_{path_val.strip('/').replace('/', '_')}")
+                    details.get("operationId", f"{method}_{path_val.strip('/').replace('/', '_')}")
                     summary = details.get("summary", "No summary")
                     
                     code.extend([

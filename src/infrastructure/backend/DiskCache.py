@@ -33,7 +33,7 @@ __version__ = VERSION
 class DiskCache:
     """A simple disk-based cache for persistent storage of AI responses."""
 
-    def __init__(self, cache_dir: Path, ttl_seconds: Optional[float] = None) -> None:
+    def __init__(self, cache_dir: Path, ttl_seconds: float | None = None) -> None:
         """Initialize disk cache.
 
         Args:
@@ -73,7 +73,7 @@ class DiskCache:
         except Exception as e:
             logging.warning(f"Failed to write cache file {file_path}: {e}")
 
-    def get(self, key: str) -> Optional[str]:
+    def get(self, key: str) -> str | None:
         """Get a cache entry.
 
         Args:

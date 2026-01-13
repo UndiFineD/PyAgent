@@ -57,7 +57,7 @@ class QualityGateAgent(BaseAgent):
             logging.info("Quality Gate: Running Pytest...")
             # Use sys.executable to be robust
             import sys
-            res = subprocess.run([sys.executable, "-m", "pytest", "--version"], capture_output=True) 
+            subprocess.run([sys.executable, "-m", "pytest", "--version"], capture_output=True) 
             # Phase 108: Record validation
             self._record("check_gates", "Initiated", provider="Internal", model="Gatekeeper")
             
@@ -78,7 +78,7 @@ class QualityGateAgent(BaseAgent):
             blocked = True
 
         # 2. Security Gate
-        security_agent = self.workspace_root / "src/logic/agents/development/SecurityGuardAgent.py"
+        self.workspace_root / "src/logic/agents/development/SecurityGuardAgent.py"
         # Since we are an agent, we can't easily 'summon' another unless we are the FleetManager, 
         # but we can look for the output of others.
         telemetry_file = self.workspace_root / ".agent_telemetry.json"
@@ -115,7 +115,7 @@ class QualityGateAgent(BaseAgent):
             return f"❌ Alignment mismatch: Result did not clearly address {len(objectives) - len(matches)} blueprint objectives."
 
     @as_tool
-    def validate_release(self, current_result: Optional[str] = None, reasoning_blueprint: Optional[str] = None) -> str:
+    def validate_release(self, current_result: str | None = None, reasoning_blueprint: str | None = None) -> str:
         """High-level validation including blueprint alignment and gates."""
         report = [self.check_gates()]
         
@@ -125,7 +125,7 @@ class QualityGateAgent(BaseAgent):
             
         return "\n".join(report)
 
-    def improve_content(self, prompt: Optional[str] = None) -> str:
+    def improve_content(self, prompt: str | None = None) -> str:
         """Perform a quality gate check."""
         return self.check_gates()
 

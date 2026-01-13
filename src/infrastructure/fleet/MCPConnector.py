@@ -33,14 +33,14 @@ __version__ = VERSION
 class MCPConnector:
     """Manages the lifecycle and JSON-RPC communication with an MCP server."""
     
-    def __init__(self, name: str, command: List[str], env: Optional[Dict[str, str]] = None, recorder: Any = None) -> None:
+    def __init__(self, name: str, command: list[str], env: dict[str, str] | None = None, recorder: Any = None) -> None:
         self.name = name
         self.command = command
         self.env = env
         self.recorder = recorder
-        self.process: Optional[subprocess.Popen] = None
+        self.process: subprocess.Popen | None = None
         self.request_id = 0
-        self.pending_requests: Dict[int, Any] = {}
+        self.pending_requests: dict[int, Any] = {}
         self._lock = threading.Lock()
         self.is_running = False
 
@@ -76,7 +76,7 @@ class MCPConnector:
         for line in self.process.stderr:
             logging.warning(f"[MCP:{self.name}:ERR] {line.strip()}")
 
-    def call(self, method: str, params: Dict[str, Any], timeout: int = 30) -> Dict[str, Any]:
+    def call(self, method: str, params: dict[str, Any], timeout: int = 30) -> dict[str, Any]:
         """Sends a JSON-RPC request and waits for the response."""
         if not self.is_running or not self.process or not self.process.stdin:
             return {"error": "MCP server not running"}

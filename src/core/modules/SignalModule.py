@@ -49,7 +49,7 @@ class SignalModule(BaseModule):
         return None
 
     def create_event(self, signal_name:
-        str, data: Any, sender: str) -> Dict[str, Any]:
+        str, data: Any, sender: str) -> dict[str, Any]:
         """Creates a standardized signal event object."""
         return {
             "signal": signal_name,
@@ -59,7 +59,7 @@ class SignalModule(BaseModule):
         }
 
     def prune_history(self, history:
-        List[Dict[str, Any]], limit: int) -> List[Dict[str, Any]]:
+        list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
         """Returns the last N events from the signal history."""
         return history[-limit:]
 

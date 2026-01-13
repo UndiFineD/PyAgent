@@ -40,7 +40,7 @@ def _is_pytest_test_file(path: Path) -> bool:
     """Check if file is a pytest test file."""
     return path.name.startswith("test_") and path.name.endswith(".py")
 
-def _looks_like_pytest_import_problem(path: Path) -> Optional[str]:
+def _looks_like_pytest_import_problem(path: Path) -> str | None:
     """Check if filename has characters that cause pytest import issues."""
     name = path.name
     if not _is_pytest_test_file(path):
@@ -52,9 +52,9 @@ def _looks_like_pytest_import_problem(path: Path) -> Optional[str]:
         )
     return None
 
-def _find_imports(tree: ast.AST) -> List[str]:
+def _find_imports(tree: ast.AST) -> list[str]:
     """Find all top-level imports in an AST."""
-    imports: List[str] = []
+    imports: list[str] = []
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for alias in node.names:
@@ -64,7 +64,7 @@ def _find_imports(tree: ast.AST) -> List[str]:
             imports.append(mod)
     # De-dupe while preserving order
     seen: set[str] = set()
-    out: List[str] = []
+    out: list[str] = []
     for item in imports:
         if item not in seen:
             seen.add(item)
@@ -75,7 +75,7 @@ def _detect_argparse(source: str) -> bool:
     """Check if source uses argparse."""
     return "argparse" in source
 
-def _placeholder_test_note(path: Path, source: str) -> Optional[str]:
+def _placeholder_test_note(path: Path, source: str) -> str | None:
     """Check if it's a placeholder test file."""
     if not _is_pytest_test_file(path):
         return None
@@ -90,9 +90,9 @@ def _rel(path: Path) -> str:
     except ValueError:
         return str(path).replace("\\", "/")
 
-def _find_issues(tree: ast.AST, source: str) -> List[str]:
+def _find_issues(tree: ast.AST, source: str) -> list[str]:
     """Find potential issues via lightweight static analysis."""
-    issues: List[str] = []
+    issues: list[str] = []
     # 1. Mutable defaults
     for node in ast.walk(tree):
         if isinstance(node, ast.FunctionDef):

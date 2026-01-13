@@ -42,6 +42,6 @@ class BranchComparison:
     """
     branch_a: str
     branch_b: str
-    files_only_in_a: List[str] = field(default_factory=lambda: [])
-    files_only_in_b: List[str] = field(default_factory=lambda: [])
-    modified_files: List[str] = field(default_factory=lambda: [])
+    files_only_in_a: list[str] = field(default_factory=lambda: [])
+    files_only_in_b: list[str] = field(default_factory=lambda: [])
+    modified_files: list[str] = field(default_factory=lambda: [])

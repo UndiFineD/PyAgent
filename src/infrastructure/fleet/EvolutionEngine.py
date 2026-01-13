@@ -56,7 +56,7 @@ class EvolutionEngine:
         logging.info(f"Evolution: Generated new agent {name} at {target_path}")
         return str(target_path)
 
-    def optimize_hyperparameters(self, fleet_stats: Dict[str, Any]) -> Dict[str, Any]:
+    def optimize_hyperparameters(self, fleet_stats: dict[str, Any]) -> dict[str, Any]:
         """
         Phase 52: Evolutionary Neuro-Optimization.
         Delegates strategy to EvolutionCore.

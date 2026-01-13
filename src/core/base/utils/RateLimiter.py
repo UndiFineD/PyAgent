@@ -41,7 +41,7 @@ class RateLimiter:
         last_refill: Timestamp of last token refill.
     """
 
-    def __init__(self, config: Optional[RateLimitConfig] = None) -> None:
+    def __init__(self, config: RateLimitConfig | None = None) -> None:
         """Initialize the rate limiter.
 
         Args:
@@ -52,7 +52,7 @@ class RateLimiter:
         self.last_refill = time.time()
         self._lock = threading.Lock()
         self._condition = threading.Condition(self._lock)
-        self._request_timestamps: List[float] = []
+        self._request_timestamps: list[float] = []
 
     def _refill_tokens(self) -> None:
         """Refill tokens based on elapsed time."""
@@ -62,7 +62,7 @@ class RateLimiter:
         self.tokens = min(float(self.config.burst_size), self.tokens + refill_amount)
         self.last_refill = now
 
-    def acquire(self, timeout: Optional[float] = None) -> bool:
+    def acquire(self, timeout: float | None = None) -> bool:
         """Acquire a token for making an API call.
 
         Blocks until a token is available or timeout expires.
@@ -102,7 +102,7 @@ class RateLimiter:
                 # Wait before retry using condition, avoiding blocking sleep
                 self._condition.wait(timeout=max(wait_time, 0.01))
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get rate limiter statistics.
 
         Returns:

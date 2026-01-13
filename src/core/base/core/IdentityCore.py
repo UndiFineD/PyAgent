@@ -9,14 +9,14 @@ from dataclasses import dataclass
 class AgentIdentity:
     agent_id: str
     public_key: str
-    claims: Dict[str, Any]
+    claims: dict[str, Any]
 
 class IdentityCore:
     """Pure logic for decentralized agent identity and payload signing.
     Handles cryptographic verification and agent-ID generation.
     """
     
-    def generate_agent_id(self, public_key: str, metadata: Dict[str, Any]) -> str:
+    def generate_agent_id(self, public_key: str, metadata: dict[str, Any]) -> str:
         """Generates a stable, unique agent identifier based on public key and metadata."""
         seed = f"{public_key}_{metadata.get('type', 'generic')}_{metadata.get('birth_cycle', 0)}"
         return hashlib.sha256(seed.encode()).hexdigest()[:16]

@@ -31,10 +31,10 @@ from .models import ExecutionTrace
 
 __version__ = VERSION
 
-def _empty_str_list() -> List[str]:
+def _empty_str_list() -> list[str]:
     return []
 
-def _empty_action_list() -> List[dict[str, Any]]:
+def _empty_action_list() -> list[dict[str, Any]]:
     return []
 
 class ExecutionReplayer:
@@ -42,9 +42,9 @@ class ExecutionReplayer:
 
     def __init__(self) -> None:
         """Initialize execution replayer."""
-        self.traces: Dict[str, ExecutionTrace] = {}
-        self._current_recording: Optional[str] = None
-        self._step_index: Dict[str, int] = {}
+        self.traces: dict[str, ExecutionTrace] = {}
+        self._current_recording: str | None = None
+        self._step_index: dict[str, int] = {}
 
     def start_recording(self, test_id: str) -> ExecutionTrace:
         """Start recording test execution."""
@@ -59,7 +59,7 @@ class ExecutionReplayer:
     def record_step(
         self,
         action: str,
-        data: Optional[Dict[str, Any]] = None
+        data: dict[str, Any] | None = None
     ) -> None:
         """Record an execution step."""
         if not self._current_recording:
@@ -67,7 +67,7 @@ class ExecutionReplayer:
 
         trace = self.traces.get(self._current_recording)
         if trace:
-            step: Dict[str, Any] = {
+            step: dict[str, Any] = {
                 "index": len(trace.steps),
                 "timestamp": datetime.now().isoformat(),
                 "action": action,
@@ -75,7 +75,7 @@ class ExecutionReplayer:
             }
             trace.steps.append(step)
 
-    def stop_recording(self) -> Optional[ExecutionTrace]:
+    def stop_recording(self) -> ExecutionTrace | None:
         """Stop recording and return the trace."""
         if not self._current_recording:
             return None
@@ -89,12 +89,12 @@ class ExecutionReplayer:
         test_id: str,
         mode: ExecutionMode = ExecutionMode.FULL_REPLAY,
         breakpoint_step: int = -1
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """Replay a recorded execution."""
         trace = self.traces.get(test_id)
         if not trace:
             return []
-        replayed: List[Dict[str, Any]] = []
+        replayed: list[dict[str, Any]] = []
         for i, step in enumerate(trace.steps):
             if mode == ExecutionMode.BREAKPOINT and i == breakpoint_step:
                 break
@@ -107,7 +107,7 @@ class ExecutionReplayer:
                 pass
         return replayed
 
-    def get_step(self, test_id: str, step_index: int) -> Optional[Dict[str, Any]]:
+    def get_step(self, test_id: str, step_index: int) -> dict[str, Any] | None:
         """Get a specific step from a trace."""
         trace = self.traces.get(test_id)
         if trace and 0 <= step_index < len(trace.steps):
@@ -134,8 +134,8 @@ class TestProfiler:
     def __init__(self) -> None:
         """Initialize test profiler."""
         from .models import TestProfile
-        self.profiles: Dict[str, TestProfile] = {}
-        self._start_times: Dict[str, float] = {}
+        self.profiles: dict[str, TestProfile] = {}
+        self._start_times: dict[str, float] = {}
 
     def start_profiling(self, test_id: str) -> None:
         """Start profiling a test."""
@@ -165,7 +165,7 @@ class TestProfiler:
         self.profiles[test_id] = profile
         return profile
 
-    def get_slowest_tests(self, limit: int = 10) -> List[Any]:
+    def get_slowest_tests(self, limit: int = 10) -> list[Any]:
         """Get the slowest tests."""
         sorted_profiles = sorted(
             self.profiles.values(),
@@ -174,7 +174,7 @@ class TestProfiler:
         )
         return sorted_profiles[:limit]
 
-    def get_memory_heavy_tests(self, limit: int = 10) -> List[Any]:
+    def get_memory_heavy_tests(self, limit: int = 10) -> list[Any]:
         """Get tests with highest memory usage."""
         sorted_profiles = sorted(
             self.profiles.values(),
@@ -200,22 +200,22 @@ class TestRecorder:
     __test__ = False
 
     def __init__(self) -> None:
-        self._active: Optional["TestRecorder.Recording"] = None
+        self._active: TestRecorder.Recording | None = None
 
     @dataclass
     class Recording:
         test_name: str
-        actions: List[dict[str, Any]] = field(default_factory=_empty_action_list)
+        actions: list[dict[str, Any]] = field(default_factory=_empty_action_list)
 
     def start_recording(self, test_name: str) -> None:
         self._active = TestRecorder.Recording(test_name=test_name)
 
-    def record_action(self, action_type: str, data: Dict[str, Any]) -> None:
+    def record_action(self, action_type: str, data: dict[str, Any]) -> None:
         if self._active is None:
             raise RuntimeError("Recording not started")
         self._active.actions.append({"type": action_type, "data": dict(data)})
 
-    def stop_recording(self) -> "TestRecorder.Recording":
+    def stop_recording(self) -> TestRecorder.Recording:
         if self._active is None:
             raise RuntimeError("Recording not started")
         recording = self._active
@@ -234,9 +234,9 @@ class TestReplayer:
     @dataclass
     class ReplayResult:
         success: bool
-        errors: List[str] = field(default_factory=_empty_str_list)
+        errors: list[str] = field(default_factory=_empty_str_list)
 
-    def replay(self, recording: Any) -> "TestReplayer.ReplayResult":
+    def replay(self, recording: Any) -> TestReplayer.ReplayResult:
         """Replay a recording."""
         actions = getattr(recording, "actions", None)
         if actions is None:

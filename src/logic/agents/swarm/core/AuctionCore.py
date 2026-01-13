@@ -8,7 +8,7 @@ from typing import List, Dict, Any
 
 class AuctionCore:
     @staticmethod
-    def calculate_vcg_auction(bids: List[Dict[str, Any]], slots: int) -> List[Dict[str, Any]]:
+    def calculate_vcg_auction(bids: list[dict[str, Any]], slots: int) -> list[dict[str, Any]]:
         """
         Simple VCG-inspired auction. 
         Winners are the top 'slots' bidders.

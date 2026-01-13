@@ -38,7 +38,7 @@ from src.core.base.managers import HealthChecker
 __version__ = VERSION
 
 # Absolute Workspace Configuration
-WORKSPACE_ROOT = Path("c:/DEV/PyAgent")
+WORKSPACE_ROOT = Path(str(Path(__file__).resolve().parents[4]) + "")
 LOG_DIR = WORKSPACE_ROOT / "data" / "logs"
 AGENT_LOG_FILE = LOG_DIR / "agent.log"
 EPISODIC_LOG_FILE = LOG_DIR / "episodic_memory.jsonl"
@@ -66,7 +66,7 @@ app.add_middleware(
 class ConnectionManager:
     """Manages active WebSocket connections for real-time telemetry."""
     def __init__(self) -> None:
-        self.active_connections: List[WebSocket] = []
+        self.active_connections: list[WebSocket] = []
 
     async def connect(self, websocket: WebSocket) -> None:
         await websocket.accept()
@@ -76,7 +76,7 @@ class ConnectionManager:
         if websocket in self.active_connections:
             self.active_connections.remove(websocket)
 
-    async def broadcast(self, message: Dict[str, Any]) -> None:
+    async def broadcast(self, message: dict[str, Any]) -> None:
         """Send a JSON broadcast to all connected clients."""
         payload = message # message is already a dict, send_json will handle it
         for connection in self.active_connections:
@@ -89,12 +89,12 @@ class ConnectionManager:
 manager = ConnectionManager()
 
 @app.get("/api/version")
-async def get_version() -> Dict[str, str]:
+async def get_version() -> dict[str, str]:
     """Returns the current PyAgent version."""
     return {"version": VERSION}
 
 @app.get("/api/health")
-async def get_health() -> Dict[str, Any]:
+async def get_health() -> dict[str, Any]:
     """Returns the system health status from the HealthChecker manager."""
     try:
         return health_checker.check()
@@ -102,7 +102,7 @@ async def get_health() -> Dict[str, Any]:
         raise HTTPException(status_code=500, detail=f"Health check failed: {str(e)}")
 
 @app.get("/api/status")
-async def get_status() -> Dict[str, Any]:
+async def get_status() -> dict[str, Any]:
     """Returns the current system status and metadata."""
     return {
         "status": "online",
@@ -113,7 +113,7 @@ async def get_status() -> Dict[str, Any]:
     }
 
 @app.get("/api/logs")
-async def get_logs(limit: int = 100) -> List[str]:
+async def get_logs(limit: int = 100) -> list[str]:
     """Retrieve the last N lines of the agent log file if it exists."""
     if not AGENT_LOG_FILE.exists():
         # Fallback to check episodic memory if agent.log is missing
@@ -122,21 +122,21 @@ async def get_logs(limit: int = 100) -> List[str]:
         return [f"Log file not found at {AGENT_LOG_FILE}."]
     
     try:
-        with open(AGENT_LOG_FILE, "r", encoding="utf-8") as f:
+        with open(AGENT_LOG_FILE, encoding="utf-8") as f:
             lines = f.readlines()
             return [line.strip() for line in lines[-limit:]]
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error reading logs: {str(e)}")
 
 @app.get("/api/thoughts")
-async def get_thoughts(limit: int = 50) -> List[Dict[str, Any]]:
+async def get_thoughts(limit: int = 50) -> list[dict[str, Any]]:
     """Retrieve the latest episodic memories (agent thoughts/actions)."""
     if not EPISODIC_LOG_FILE.exists():
         return []
     
     thoughts = []
     try:
-        with open(EPISODIC_LOG_FILE, "r", encoding="utf-8") as f:
+        with open(EPISODIC_LOG_FILE, encoding="utf-8") as f:
             lines = f.readlines()
             for line in lines[-limit:]:
                 if line.strip():
@@ -147,7 +147,7 @@ async def get_thoughts(limit: int = 50) -> List[Dict[str, Any]]:
     return thoughts[::-1] # Newest first
 
 @app.get("/api/artifacts")
-async def list_artifacts() -> List[Dict[str, Any]]:
+async def list_artifacts() -> list[dict[str, Any]]:
     """List files in the generated and screenshots directories."""
     artifacts = []
     monitored_paths = [

@@ -51,7 +51,7 @@ class MigrationManager:
 
     def __init__(self) -> None:
         """Initialize the migration manager."""
-        self.rules: List[MigrationRule] = []
+        self.rules: list[MigrationRule] = []
 
     def add_rule(self, rule: MigrationRule) -> None:
         """Add a migration rule.
@@ -61,7 +61,7 @@ class MigrationManager:
         """
         self.rules.append(rule)
 
-    def apply_migrations(self, content: str) -> Tuple[str, List[Dict[str, Any]]]:
+    def apply_migrations(self, content: str) -> tuple[str, list[dict[str, Any]]]:
         """Apply all migration rules to content.
 
         Args:
@@ -71,7 +71,7 @@ class MigrationManager:
             Tuple of migrated content and list of applied migrations.
         """
         result = content
-        applied: List[Dict[str, Any]] = []
+        applied: list[dict[str, Any]] = []
 
         for rule in self.rules:
             if rule.status == MigrationStatus.SKIPPED:
@@ -91,7 +91,7 @@ class MigrationManager:
 
         return result, applied
 
-    def get_pending_migrations(self) -> List[MigrationRule]:
+    def get_pending_migrations(self) -> list[MigrationRule]:
         """Get list of pending migration rules.
 
         Returns:

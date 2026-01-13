@@ -44,10 +44,10 @@ class AccessibilityReport:
         recommendations: High - level recommendations.
     """
     file_path: str
-    issues: List[AccessibilityIssue] = field(default_factory=lambda: [])
+    issues: list[AccessibilityIssue] = field(default_factory=lambda: [])
     total_elements: int = 0
     wcag_level: WCAGLevel = WCAGLevel.AA
     compliance_score: float = 100.0
     critical_count: int = 0
     serious_count: int = 0
-    recommendations: List[str] = field(default_factory=lambda: [])
+    recommendations: list[str] = field(default_factory=lambda: [])

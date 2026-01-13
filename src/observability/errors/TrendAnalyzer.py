@@ -41,7 +41,7 @@ class TrendAnalyzer:
 
     def __init__(self) -> None:
         """Initialize the trend analyzer."""
-        self.data_points: Dict[str, TrendData] = {}
+        self.data_points: dict[str, TrendData] = {}
 
     def record(self, metric: str, value: float) -> None:
         """Record a data point.
@@ -87,7 +87,7 @@ class TrendAnalyzer:
         data.prediction = data.values[-1] + avg_change
         return data
 
-    def predict(self, metric: str, periods: int = 1) -> List[float]:
+    def predict(self, metric: str, periods: int = 1) -> list[float]:
         """Predict future values.
 
         Args:
@@ -100,7 +100,7 @@ class TrendAnalyzer:
         data = self.analyze(metric)
         if not data.values:
             return []
-        predictions: List[float] = []
+        predictions: list[float] = []
         last_value = data.values[-1]
         avg_change = 0.0
         if len(data.values) >= 2:

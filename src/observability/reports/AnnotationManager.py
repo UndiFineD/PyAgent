@@ -42,7 +42,7 @@ class AnnotationManager:
     def __init__(self) -> None:
         """Initialize annotation manager."""
 
-        self.annotations: Dict[str, List[ReportAnnotation]] = {}
+        self.annotations: dict[str, list[ReportAnnotation]] = {}
         self._annotation_counter = 0
         logging.debug("AnnotationManager initialized")
 
@@ -51,7 +51,7 @@ class AnnotationManager:
         report_id: str,
         author: str,
         content: str,
-        line_number: Optional[int] = None
+        line_number: int | None = None
     ) -> ReportAnnotation:
         """Add an annotation.
         Args:
@@ -77,7 +77,7 @@ class AnnotationManager:
         self.annotations[report_id].append(annotation)
         return annotation
 
-    def get_annotations(self, report_id: str) -> List[ReportAnnotation]:
+    def get_annotations(self, report_id: str) -> list[ReportAnnotation]:
         """Get annotations for a report.
         Args:
             report_id: Report ID.

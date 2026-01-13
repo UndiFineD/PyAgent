@@ -42,5 +42,5 @@ class ParallelTestResult:
     test_name: str
     passed: bool
     duration_ms: float
-    error: Optional[str] = None
+    error: str | None = None
     worker_id: int = 0

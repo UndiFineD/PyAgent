@@ -23,7 +23,8 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import ast
-from typing import Any, Callable, List, Tuple
+from typing import Any, List, Tuple
+from collections.abc import Callable
 from .models import GeneratedTest
 
 __version__ = VERSION
@@ -34,7 +35,7 @@ class TestGenerator:
 
     def __init__(self) -> None:
         """Initialize test generator."""
-        self.generated: List[GeneratedTest] = []
+        self.generated: list[GeneratedTest] = []
         self._templates: dict[str, str] = {}
 
     def add_template(self, name: str, template: str) -> None:
@@ -81,7 +82,7 @@ class TestGenerator:
     def generate_parametrized(
         self,
         function_name: str,
-        test_cases: List[Tuple[Any, Any]]
+        test_cases: list[tuple[Any, Any]]
     ) -> GeneratedTest:
         """Generate parametrized test."""
         test_name = f"test_{function_name}_parametrized"
@@ -170,7 +171,7 @@ class TestCaseMinimizer:
 
     def __init__(self) -> None:
         """Initialize test case minimizer."""
-        self.history: List[dict[str, Any]] = []
+        self.history: list[dict[str, Any]] = []
 
     def minimize_string(
         self,
@@ -200,9 +201,9 @@ class TestCaseMinimizer:
 
     def minimize_list(
         self,
-        input_list: List[Any],
-        test_fn: Callable[[List[Any]], bool]
-    ) -> List[Any]:
+        input_list: list[Any],
+        test_fn: Callable[[list[Any]], bool]
+    ) -> list[Any]:
         """Minimize a list input by removing elements."""
         current = input_list.copy()
         i = 0
@@ -233,70 +234,13 @@ class TestCaseMinimizer:
             "total": len(self.history)
         }
 
-    def minimize_string(
-        self,
-        input_str: str,
-        test_fn: Callable[[str], bool]
-    ) -> str:
-        """Minimize a string input."""
-        current = input_str
-
-        while len(current) > 1:
-            mid = len(current) // 2
-            left = current[:mid]
-            right = current[mid:]
-            if test_fn(left):
-                current = left
-            elif test_fn(right):
-                current = right
-            else:
-                break
-        self.history.append({
-            "original": input_str,
-            "minimized": current,
-            "reduction": 1 - len(current) / len(input_str)
-        })
-        return current
-
-    def minimize_list(
-        self,
-        input_list: List[Any],
-        test_fn: Callable[[List[Any]], bool]
-    ) -> List[Any]:
-        """Minimize a list input."""
-        current = input_list.copy()
-
-        i = 0
-        while i < len(current):
-            candidate = current[:i] + current[i + 1:]
-            if test_fn(candidate):
-                current = candidate
-            else:
-                i += 1
-        self.history.append({
-            "original_length": len(input_list),
-            "minimized_length": len(current)
-        })
-        return current
-
-    def get_minimization_stats(self) -> dict[str, Any]:
-        """Get minimization statistics."""
-        if not self.history:
-            return {"total": 0}
-        reductions = [h.get("reduction", 0) for h in self.history if "reduction" in h]
-        avg_reduction = sum(reductions) / len(reductions) if reductions else 0
-        return {
-            "total_minimizations": len(self.history),
-            "average_reduction": avg_reduction
-        }
-
 class TestDocGenerator:
     """Generates documentation from tests."""
     __test__ = False
 
     def __init__(self) -> None:
         """Initialize doc generator."""
-        self.tests: List[dict[str, Any]] = []
+        self.tests: list[dict[str, Any]] = []
 
     def add_test(self, name: str, module: str = "unknown", docstring: str = "", code: str = "") -> None:
         """Add test for documentation."""
@@ -304,7 +248,7 @@ class TestDocGenerator:
 
     def generate(self) -> str:
         """Generate a human-readable documentation summary."""
-        parts: List[str] = []
+        parts: list[str] = []
         for test in self.tests:
             title = test.get("name", "")
             doc = test.get("docstring", "")
@@ -312,17 +256,17 @@ class TestDocGenerator:
             parts.append(f"{title}: {doc}\n{code}".strip())
         return "\n\n".join(parts)
 
-    def generate_grouped(self) -> dict[str, List[dict[str, Any]]]:
+    def generate_grouped(self) -> dict[str, list[dict[str, Any]]]:
         """Generate documentation grouped by module."""
         return self.group_by_module(self.tests)
 
-    def extract_examples(self, test_code: str) -> List[dict[str, str]]:
+    def extract_examples(self, test_code: str) -> list[dict[str, str]]:
         """Extract examples from test code."""
         return [{"example": test_code}] if test_code else []
 
-    def group_by_module(self, tests: List[dict[str, Any]]) -> dict[str, List[dict[str, Any]]]:
+    def group_by_module(self, tests: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
         """Group tests by module."""
-        result: dict[str, List[dict[str, Any]]] = {}
+        result: dict[str, list[dict[str, Any]]] = {}
         for test in tests:
             module = test.get("module", "unknown")
             if module not in result:

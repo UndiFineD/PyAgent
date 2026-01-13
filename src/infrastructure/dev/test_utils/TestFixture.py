@@ -23,7 +23,8 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from dataclasses import dataclass
-from typing import Any, Callable, Optional
+from typing import Any, Optional
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -41,7 +42,7 @@ class TestFixture:
     """
 
     name: str
-    setup_fn: Optional[Callable[[], Any]] = None
-    teardown_fn: Optional[Callable[[Any], None]] = None
+    setup_fn: Callable[[], Any] | None = None
+    teardown_fn: Callable[[Any], None] | None = None
     scope: str = "function"
     data: Any = None

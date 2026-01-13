@@ -39,7 +39,7 @@ class ErrorImpact:
         impact_score: Overall impact score (0 - 100).
     """
     error_id: str
-    affected_files: List[str] = field(default_factory=lambda: [])
-    affected_functions: List[str] = field(default_factory=lambda: [])
-    downstream_effects: List[str] = field(default_factory=lambda: [])
+    affected_files: list[str] = field(default_factory=lambda: [])
+    affected_functions: list[str] = field(default_factory=lambda: [])
+    downstream_effects: list[str] = field(default_factory=lambda: [])
     impact_score: float = 0.0

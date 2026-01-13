@@ -9,7 +9,7 @@ class SandboxConfig:
     cpu_limit: float = 0.5
     memory_mb: int = 512
     network_enabled: bool = False
-    read_only_paths: typing.List[str] = field(default_factory=list)
+    read_only_paths: list[str] = field(default_factory=list)
     timeout_sec: int = 30
 
 class SandboxCore:
@@ -17,7 +17,7 @@ class SandboxCore:
     Handles enforcement logic, quota calculations, and security constraints.
     """
     
-    def validate_code_execution(self, code: str, config: SandboxConfig) -> typing.Dict[str, typing.Any]:
+    def validate_code_execution(self, code: str, config: SandboxConfig) -> dict[str, typing.Any]:
         """Validates if code execution fits within sandbox constraints."""
         issues = []
         if "os.system" in code or "subprocess" in code:

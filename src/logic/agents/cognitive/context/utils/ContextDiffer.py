@@ -40,13 +40,13 @@ class ContextDiffer:
 
     def __init__(self) -> None:
         """Initialize context differ."""
-        self.diffs: List[str] = []
+        self.diffs: list[str] = []
 
     def compute_diff(self, content_from: str, content_to: str) -> ContextDiff:
         """Compute a structured diff between two context contents."""
         return self.diff_versions(content_from, content_to)
 
-    def get_section_changes(self, content_from: str, content_to: str) -> Dict[str, List[str]]:
+    def get_section_changes(self, content_from: str, content_to: str) -> dict[str, list[str]]:
         """Return section-level changes between two contents."""
         diff = self.diff_versions(content_from, content_to)
         return {
@@ -83,9 +83,9 @@ class ContextDiffer:
         # Extract sections
         sections_from: set[str] = set(re.findall(r"##\s+(\w+)", content_from))
         sections_to: set[str] = set(re.findall(r"##\s+(\w+)", content_to))
-        added: List[str] = list(sections_to - sections_from)
-        removed: List[str] = list(sections_from - sections_to)
-        modified: List[str] = []
+        added: list[str] = list(sections_to - sections_from)
+        removed: list[str] = list(sections_from - sections_to)
+        modified: list[str] = []
         # Check for modified content in common sections
         common = sections_from & sections_to
         for section in common:

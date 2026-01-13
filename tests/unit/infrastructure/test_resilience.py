@@ -5,7 +5,6 @@ import logging
 from pathlib import Path
 
 # Add the workspace root to sys.path
-sys.path.append(str(Path(__file__).parent))
 
 from src.infrastructure.fleet.AgentRegistry import AgentRegistry, LazyAgentMap
 

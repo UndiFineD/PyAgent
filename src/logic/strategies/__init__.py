@@ -21,7 +21,8 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION as VERSION
-from typing import Callable, Optional, List, Dict
+from typing import Optional, List, Dict
+from collections.abc import Callable
 from .AgentStrategy import AgentStrategy as AgentStrategy
 from .ChainOfThoughtStrategy import ChainOfThoughtStrategy as ChainOfThoughtStrategy
 from .DirectStrategy import DirectStrategy as DirectStrategy
@@ -29,6 +30,6 @@ from .ReflexionStrategy import ReflexionStrategy as ReflexionStrategy
 
 # Type alias for the backend function signature
 # (prompt, system_prompt, history) -> response
-BackendFunction = Callable[[str, Optional[str], Optional[List[Dict[str, str]]]], str]
+BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
 __version__ = VERSION

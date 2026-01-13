@@ -39,17 +39,17 @@ class NLQueryEngine:
 
     def __init__(self) -> None:
         """Initialize NL query engine."""
-        self.contexts: Dict[str, str] = {}
+        self.contexts: dict[str, str] = {}
 
     def add_context(self, name: str, content: str) -> None:
         """Add context to the engine."""
         self.contexts[name] = content
 
-    def extract_keywords(self, query: str) -> List[str]:
+    def extract_keywords(self, query: str) -> list[str]:
         """Extract keywords from query."""
         return query.lower().split()
 
-    def query(self, question: str, contexts: Optional[Dict[str, str]] = None) -> NLQueryResult:
+    def query(self, question: str, contexts: dict[str, str] | None = None) -> NLQueryResult:
         """Query contexts with natural language.
 
         Args:
@@ -61,7 +61,7 @@ class NLQueryEngine:
             NLQueryResult with answer.
         """
         # Simplified NL query - in production, use LLM
-        relevant: List[str] = []
+        relevant: list[str] = []
         keywords = question.lower().split()
         active_contexts = contexts if contexts is not None else self.contexts
         for path, content in active_contexts.items():

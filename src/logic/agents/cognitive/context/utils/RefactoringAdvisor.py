@@ -39,7 +39,7 @@ class RefactoringAdvisor:
     """
 
     def __init__(self) -> None:
-        self.patterns: Dict[str, Dict[str, str]] = {}
+        self.patterns: dict[str, dict[str, str]] = {}
 
     def add_pattern(self, name: str, pattern: str, description: str) -> None:
         """Add a custom refactoring pattern.
@@ -51,7 +51,7 @@ class RefactoringAdvisor:
         """
         self.patterns[name] = {"pattern": pattern, "description": description}
 
-    def analyze(self, contexts: Any) -> List[RefactoringSuggestion]:
+    def analyze(self, contexts: Any) -> list[RefactoringSuggestion]:
         """Analyze contexts for refactoring opportunities.
 
         Args:
@@ -61,7 +61,7 @@ class RefactoringAdvisor:
         Returns:
             List of refactoring suggestions.
         """
-        context_map: Dict[str, str]
+        context_map: dict[str, str]
         if isinstance(contexts, str):
             context_map = {"inline": contexts}
         elif isinstance(contexts, dict):
@@ -69,7 +69,7 @@ class RefactoringAdvisor:
         else:
             raise TypeError("contexts must be a string or a dict")
 
-        suggestions: List[RefactoringSuggestion] = []
+        suggestions: list[RefactoringSuggestion] = []
 
         # Apply custom patterns first.
         for path, content in context_map.items():
@@ -87,7 +87,7 @@ class RefactoringAdvisor:
                     continue
 
         # Look for duplicate descriptions (indicating code duplication)
-        descriptions: Dict[str, List[str]] = {}
+        descriptions: dict[str, list[str]] = {}
         for path, content in context_map.items():
             purpose = re.search(r"##\s*Purpose\s*\n(.+?)(?=##|\Z)", content, re.DOTALL)
             if purpose:
@@ -105,7 +105,7 @@ class RefactoringAdvisor:
                 ))
         return suggestions
 
-    def prioritize(self, suggestions: List[RefactoringSuggestion]) -> List[RefactoringSuggestion]:
+    def prioritize(self, suggestions: list[RefactoringSuggestion]) -> list[RefactoringSuggestion]:
         """Prioritize refactoring suggestions.
 
         Args:

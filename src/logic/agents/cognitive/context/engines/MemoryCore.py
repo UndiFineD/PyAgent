@@ -34,7 +34,7 @@ class MemoryCore:
     def __init__(self, baseline_utility: float = 0.5) -> None:
         self.baseline_utility = baseline_utility
 
-    def create_episode(self, agent_name: str, task: str, outcome: str, success: bool, metadata: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def create_episode(self, agent_name: str, task: str, outcome: str, success: bool, metadata: dict[str, Any] | None = None) -> dict[str, Any]:
         """Pure logic to construct an episode and calculate utility."""
         timestamp = datetime.now().isoformat()
         utility_score = self.baseline_utility
@@ -54,7 +54,7 @@ class MemoryCore:
             "metadata": metadata or {}
         }
 
-    def format_for_indexing(self, episode: Dict[str, Any]) -> str:
+    def format_for_indexing(self, episode: dict[str, Any]) -> str:
         """Standardized string representation for vector databases."""
         return (
             f"Agent: {episode['agent']}\n"
@@ -67,6 +67,6 @@ class MemoryCore:
         """Logic for utility score decay/boost."""
         return max(0.0, min(1.0, old_score + increment))
 
-    def filter_relevant_memories(self, memories: List[Dict[str, Any]], min_utility: float = 0.3) -> List[Dict[str, Any]]:
+    def filter_relevant_memories(self, memories: list[dict[str, Any]], min_utility: float = 0.3) -> list[dict[str, Any]]:
         """Filters memories by utility threshold."""
         return [m for m in memories if m.get('utility_score', 0.0) >= min_utility]

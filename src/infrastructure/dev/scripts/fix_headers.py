@@ -110,7 +110,7 @@ def process_directory(directory):
                     
                 print(f"Processing {filepath}")
                 try:
-                    with open(filepath, "r", encoding="utf-8") as f:
+                    with open(filepath, encoding="utf-8") as f:
                         lines = f.readlines()
                     
                     if not lines:
@@ -132,7 +132,7 @@ if __name__ == "__main__":
         filepath = os.path.join(r"c:\DEV\PyAgent", f)
         print(f"Processing root file {filepath}")
         try:
-            with open(filepath, "r", encoding="utf-8") as file_handle:
+            with open(filepath, encoding="utf-8") as file_handle:
                 lines = file_handle.readlines()
             if lines:
                 new_lines = fix_header(lines, filename=f)

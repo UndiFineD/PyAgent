@@ -71,7 +71,7 @@ class ResilienceAgent(BaseAgent):
         return True
 
     @as_tool
-    def optimize_resource_allocation(self) -> Dict[str, Any]:
+    def optimize_resource_allocation(self) -> dict[str, Any]:
         """
         Analyzes current swarm distribution and rebalances agent loads.
         """

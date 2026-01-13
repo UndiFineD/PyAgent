@@ -44,7 +44,7 @@ class CompressionAgent(BaseAgent):
         )
 
     @as_tool
-    def compress_history(self, history: List[Dict[str, str]], target_tokens: int = 500) -> str:
+    def compress_history(self, history: list[dict[str, str]], target_tokens: int = 500) -> str:
         """Compresses a conversation history into a dense summary block."""
         logging.info(f"CompressionAgent: Summarizing {len(history)} messages into ~{target_tokens} tokens.")
         

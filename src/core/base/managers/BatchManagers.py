@@ -23,7 +23,8 @@ from src.core.base.version import VERSION
 import logging
 import time
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
+from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from collections.abc import Callable
 from src.core.base.models import FilePriority, BatchResult
 
 __version__ = VERSION
@@ -37,18 +38,18 @@ class BatchRequest:
 
     def __init__(
         self,
-        file_path: Optional[Path] = None,
-        prompt: Optional[str] = None,
+        file_path: Path | None = None,
+        prompt: str | None = None,
         priority: FilePriority = FilePriority.NORMAL,
-        callback: Optional[Callable[[str], None]] = None,
-        max_size: Optional[int] = None
+        callback: Callable[[str], None] | None = None,
+        max_size: int | None = None
     ) -> None:
         self.file_path = file_path
         self.prompt = prompt or ""
         self.priority = priority
         self.callback = callback
         self.max_size = max_size
-        self.items: List[Any] = []
+        self.items: list[Any] = []
 
     def add(self, item: Any) -> None:
         if self.max_size is not None and len(self.items) >= self.max_size:
@@ -59,24 +60,24 @@ class BatchRequest:
     def size(self) -> int:
         return len(self.items)
 
-    def execute(self, processor: Callable[[List[Any]], List[Any]]) -> List[Any]:
+    def execute(self, processor: Callable[[list[Any]], list[Any]]) -> list[Any]:
         return processor(self.items)
 
 class RequestBatcher:
     """Batch processor for multiple file requests."""
 
-    def __init__(self, batch_size: int = 10, max_concurrent: int = 4, recorder: Optional[LocalContextRecorder] = None) -> None:
+    def __init__(self, batch_size: int = 10, max_concurrent: int = 4, recorder: LocalContextRecorder | None = None) -> None:
         self.batch_size = batch_size
         self.max_concurrent = max_concurrent
         self.recorder = recorder
-        self.queue: List[BatchRequest] = []
-        self.results: List[BatchResult] = []
+        self.queue: list[BatchRequest] = []
+        self.results: list[BatchResult] = []
         logging.debug(f"RequestBatcher initialized with batch_size={batch_size}")
 
     def add_request(self, request: BatchRequest) -> None:
         self.queue.append(request)
 
-    def add_requests(self, requests: List[BatchRequest]) -> None:
+    def add_requests(self, requests: list[BatchRequest]) -> None:
         self.queue.extend(requests)
 
     def get_queue_size(self) -> int:
@@ -85,13 +86,13 @@ class RequestBatcher:
     def clear_queue(self) -> None:
         self.queue.clear()
 
-    def _sort_by_priority(self) -> List[BatchRequest]:
+    def _sort_by_priority(self) -> list[BatchRequest]:
         return sorted(self.queue, key=lambda r: r.priority.value, reverse=True)
 
-    def process_batch(self, agent_factory: Callable[[str], BaseAgent]) -> List[BatchResult]:
+    def process_batch(self, agent_factory: Callable[[str], BaseAgent]) -> list[BatchResult]:
         sorted_requests = self._sort_by_priority()
         batch = sorted_requests[:self.batch_size]
-        results: List[BatchResult] = []
+        results: list[BatchResult] = []
         
         if self.recorder:
             self.recorder.record_lesson("batch_processing_start", {"batch_size": len(batch)})
@@ -122,14 +123,14 @@ class RequestBatcher:
         self.results.extend(results)
         return results
 
-    def process_all(self, agent_factory: Callable[[str], BaseAgent]) -> List[BatchResult]:
-        all_results: List[BatchResult] = []
+    def process_all(self, agent_factory: Callable[[str], BaseAgent]) -> list[BatchResult]:
+        all_results: list[BatchResult] = []
         while self.queue:
             batch_results = self.process_batch(agent_factory)
             all_results.extend(batch_results)
         return all_results
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         if not self.results:
             return {"processed": 0, "success_rate": 0.0, "avg_time": 0.0}
         successful = sum(1 for r in self.results if r.success)

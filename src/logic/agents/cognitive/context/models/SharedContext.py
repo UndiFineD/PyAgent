@@ -41,6 +41,6 @@ class SharedContext:
     """
     context_id: str
     owner: str
-    shared_with: List[str] = field(default_factory=lambda: [])
+    shared_with: list[str] = field(default_factory=lambda: [])
     permission: SharingPermission = SharingPermission.READ_ONLY
     last_sync: str = ""

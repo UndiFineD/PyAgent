@@ -32,9 +32,9 @@ class PrometheusExporter:
     """Formats fleet telemetry into Prometheus-compatible metrics."""
     
     def __init__(self) -> None:
-        self.metrics_registry: Dict[str, float] = {}
+        self.metrics_registry: dict[str, float] = {}
 
-    def record_metric(self, name: str, value: float, labels: Optional[Dict[str, str]] = None) -> str:
+    def record_metric(self, name: str, value: float, labels: dict[str, str] | None = None) -> str:
         """Records a metric with optional labels."""
         label_str = ""
         if labels:
@@ -52,7 +52,7 @@ class PrometheusExporter:
         
         return "\n".join(lines)
 
-    def get_grafana_info(self) -> Dict[str, Any]:
+    def get_grafana_info(self) -> dict[str, Any]:
         """Returns connection details for Grafana integration."""
         return {
             "datasource_type": "Prometheus",

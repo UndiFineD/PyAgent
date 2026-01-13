@@ -40,12 +40,12 @@ class TaskDecomposer:
         self.fleet = fleet_manager
         self.core = TaskDecomposerCore()
 
-    def decompose(self, request: str) -> List[Dict[str, Any]]:
+    def decompose(self, request: str) -> list[dict[str, Any]]:
         """Splits a request into a sequence of agent steps."""
         logging.info(f"Decomposing task: {request}")
         steps = self.core.generate_plan(request)
         logging.info(f"Generated {len(steps)} steps for task.")
         return steps
 
-    def get_plan_summary(self, steps: List[Dict[str, Any]]) -> str:
+    def get_plan_summary(self, steps: list[dict[str, Any]]) -> str:
         return self.core.summarize_plan(steps)

@@ -39,5 +39,5 @@ class EntryTemplate:
     """
     name: str
     template_text: str
-    placeholders: List[str] = field(default_factory=lambda: [])
+    placeholders: list[str] = field(default_factory=lambda: [])
     description: str = ""

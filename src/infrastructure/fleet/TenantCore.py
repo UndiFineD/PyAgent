@@ -48,6 +48,6 @@ class TenantCore:
             
         return target_path_abs
 
-    def get_required_dirs(self) -> List[str]:
+    def get_required_dirs(self) -> list[str]:
         """Standardised tenant folder structure."""
         return ["src", "data", "data/logs", "config"]

@@ -31,7 +31,7 @@ class DocGenerator:
     """Generates simple documentation text for improvements."""
 
     def __init__(self) -> None:
-        self.templates: Dict[str, str] = {
+        self.templates: dict[str, str] = {
             "default": "## {title}\n\n{description}\n",
         }
 
@@ -41,7 +41,7 @@ class DocGenerator:
             meta = getattr(improvement, "metadata", None)
             if isinstance(meta, dict) and meta:
                 base += "\n## Metadata\n"
-                meta_dict = cast(Dict[str, Any], meta)
+                meta_dict = cast(dict[str, Any], meta)
                 for k, v in meta_dict.items():
                     base += f"- {k}: {v}\n"
         return base

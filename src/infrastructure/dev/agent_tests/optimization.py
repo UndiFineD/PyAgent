@@ -33,26 +33,26 @@ class TestSuiteOptimizer:
 
     def __init__(self) -> None:
         """Initialize test suite optimizer."""
-        self.tests: List[TestCase] = []
-        self.coverage_map: Dict[str, Set[str]] = {}
+        self.tests: list[TestCase] = []
+        self.coverage_map: dict[str, set[str]] = {}
 
-    def add_test(self, test_id: str, covers: Set[str]) -> None:
+    def add_test(self, test_id: str, covers: set[str]) -> None:
         """Add a test with its coverage."""
         self.coverage_map[test_id] = covers
 
-    def load_tests(self, tests: List[TestCase]) -> None:
+    def load_tests(self, tests: list[TestCase]) -> None:
         """Load tests for optimization."""
         self.tests = tests
 
-    def add_coverage(self, test_id: str, covered_lines: Set[str]) -> None:
+    def add_coverage(self, test_id: str, covered_lines: set[str]) -> None:
         """Add coverage data for a test."""
         self.coverage_map[test_id] = covered_lines
 
-    def find_redundant_tests(self) -> List[str]:
+    def find_redundant_tests(self) -> list[str]:
         """Find tests whose coverage is fully covered by other tests."""
-        redundant: List[str] = []
+        redundant: list[str] = []
         for test_id, coverage in self.coverage_map.items():
-            other_coverage: Set[str] = set()
+            other_coverage: set[str] = set()
             for other_id, other_cov in self.coverage_map.items():
                 if other_id != test_id:
                     other_coverage |= other_cov
@@ -60,9 +60,9 @@ class TestSuiteOptimizer:
                 redundant.append(test_id)
         return redundant
 
-    def find_overlapping_tests(self) -> List[Tuple[str, str, float]]:
+    def find_overlapping_tests(self) -> list[tuple[str, str, float]]:
         """Find tests with significant overlap."""
-        overlaps: List[Tuple[str, str, float]] = []
+        overlaps: list[tuple[str, str, float]] = []
         test_ids = list(self.coverage_map.keys())
         for i, id_a in enumerate(test_ids):
             for id_b in test_ids[i + 1:]:
@@ -76,9 +76,9 @@ class TestSuiteOptimizer:
                     overlaps.append((id_a, id_b, overlap))
         return overlaps
 
-    def suggest_removals(self) -> List[Dict[str, Any]]:
+    def suggest_removals(self) -> list[dict[str, Any]]:
         """Suggest tests that could be removed."""
-        suggestions: List[Dict[str, Any]] = []
+        suggestions: list[dict[str, Any]] = []
         for test_id in self.find_redundant_tests():
             suggestions.append({
                 "test_id": test_id,
@@ -96,23 +96,23 @@ class TestSuiteOptimizer:
             })
         return suggestions
 
-    def get_coverage(self, test_id: str) -> Set[str]:
+    def get_coverage(self, test_id: str) -> set[str]:
         """Get the coverage set for a given test."""
         return set(self.coverage_map.get(test_id, set()))
 
-    def optimize(self) -> List[str]:
+    def optimize(self) -> list[str]:
         """Return a minimized set of tests while preserving overall coverage."""
         if not self.coverage_map:
             return []
 
-        all_coverage: Set[str] = set()
+        all_coverage: set[str] = set()
         for cov in self.coverage_map.values():
             all_coverage |= set(cov)
 
         redundant = set(self.find_redundant_tests())
         kept = [test_id for test_id in self.coverage_map.keys() if test_id not in redundant]
 
-        kept_coverage: Set[str] = set()
+        kept_coverage: set[str] = set()
         for test_id in kept:
             kept_coverage |= self.get_coverage(test_id)
 
@@ -126,10 +126,10 @@ class CoverageGapAnalyzer:
 
     def __init__(self) -> None:
         """Initialize analyzer."""
-        self._covered_lines: Dict[str, Set[int]] = {}
-        self._total_lines: Dict[str, int] = {}
+        self._covered_lines: dict[str, set[int]] = {}
+        self._total_lines: dict[str, int] = {}
 
-    def add_coverage_data(self, file_path: str, covered_lines: Set[int]) -> None:
+    def add_coverage_data(self, file_path: str, covered_lines: set[int]) -> None:
         """Record covered lines for a file."""
         self._covered_lines[file_path] = set(covered_lines)
 
@@ -137,7 +137,7 @@ class CoverageGapAnalyzer:
         """Set the total executable lines for a file."""
         self._total_lines[file_path] = int(total_lines)
 
-    def find_gaps(self, file_path: str) -> Set[int]:
+    def find_gaps(self, file_path: str) -> set[int]:
         """Find uncovered line numbers for a file."""
         total = self._total_lines.get(file_path, 0)
         covered = self._covered_lines.get(file_path, set())
@@ -170,6 +170,6 @@ class CoverageGapAnalyzer:
             return 0.0
         return (covered / total) * 100
 
-    def find_uncovered(self) -> List[str]:
+    def find_uncovered(self) -> list[str]:
         """Find uncovered items."""
         return []

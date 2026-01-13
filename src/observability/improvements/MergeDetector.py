@@ -42,8 +42,8 @@ class MergeDetector:
         self.similarity_threshold = similarity_threshold
 
     def find_similar(
-        self, improvements: List[Improvement]
-    ) -> List[MergeCandidate]:
+        self, improvements: list[Improvement]
+    ) -> list[MergeCandidate]:
         """Find similar improvements that could be merged.
 
         Args:
@@ -52,7 +52,7 @@ class MergeDetector:
         Returns:
             List of merge candidates.
         """
-        candidates: List[MergeCandidate] = []
+        candidates: list[MergeCandidate] = []
         for i, imp1 in enumerate(improvements):
             for imp2 in improvements[i + 1:]:
                 similarity = self._calculate_similarity(imp1, imp2)
@@ -93,7 +93,7 @@ class MergeDetector:
         self, imp1: Improvement, imp2: Improvement
     ) -> str:
         """Generate merge reason."""
-        reasons: List[str] = []
+        reasons: list[str] = []
         if imp1.category == imp2.category:
             reasons.append(f"same category ({imp1.category.value})")
         if imp1.file_path == imp2.file_path:

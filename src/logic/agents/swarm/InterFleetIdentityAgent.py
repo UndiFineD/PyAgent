@@ -40,7 +40,7 @@ class InterFleetIdentityAgent:
         self.authorized_agents = {} # agent_id -> {fleet_id, permissions}
         self.session_tokens = {} # token -> {agent_id, expiry}
 
-    def secure_handshake(self, payload: str, secret: str) -> Dict[str, str]:
+    def secure_handshake(self, payload: str, secret: str) -> dict[str, str]:
         """Signs a handshake payload using IdentityCore."""
         signature = self.core.sign_payload(payload, secret)
         return {
@@ -49,12 +49,12 @@ class InterFleetIdentityAgent:
             "signature": signature
         }
 
-    def register_remote_fleet(self, fleet_id: str, metadata: Dict[str, Any]) -> bool:
+    def register_remote_fleet(self, fleet_id: str, metadata: dict[str, Any]) -> bool:
         """Registers a remote fleet to enable inter-fleet communication."""
         self.known_fleets[fleet_id] = metadata
         return {"status": "registered", "fleet_id": fleet_id}
 
-    def authorize_remote_agent(self, agent_id: str, remote_fleet_id: str, permissions: List[str]) -> bool:
+    def authorize_remote_agent(self, agent_id: str, remote_fleet_id: str, permissions: list[str]) -> bool:
         """Authorizes an agent from a remote fleet with specific permissions."""
         if remote_fleet_id not in self.known_fleets:
             return {"status": "error", "message": "Unknown fleet ID"}
@@ -86,7 +86,7 @@ class InterFleetIdentityAgent:
             
         return True
 
-    def get_identity_report(self) -> Dict[str, Any]:
+    def get_identity_report(self) -> dict[str, Any]:
         """Returns a summary of the federated identity state."""
         return {
             "local_fleet_id": self.fleet_id,

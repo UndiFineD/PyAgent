@@ -44,5 +44,5 @@ class SQLCoderAgent(CoderAgent):
         return "-- SQL Script\nSELECT 1;\n"
 
 if __name__ == "__main__":
-    main = create_main_function(SqlAgent, "SQL Agent", "Path to SQL file")
+    main = create_main_function(SQLCoderAgent, "SQL Agent", "Path to SQL file")
     main()

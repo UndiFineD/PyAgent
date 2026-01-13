@@ -40,7 +40,7 @@ def main() -> None:
                 path = os.path.join(r, f)
                 # print(f"Checking {path}")
                 try:
-                    with open(path, "r", encoding="utf-8", errors="ignore") as file:
+                    with open(path, encoding="utf-8", errors="ignore") as file:
                         content = file.read()
                         if re.search(io_pattern, content):
                             if not any(x in content for x in ["_record", "record_lesson", "record_interaction"]):
@@ -53,5 +53,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-print("\n".join(findings))

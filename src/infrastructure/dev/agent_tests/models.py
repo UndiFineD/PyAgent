@@ -28,16 +28,16 @@ from .enums import TestPriority, TestStatus, CoverageType, BrowserType, TestSour
 
 __version__ = VERSION
 
-def _empty_str_list() -> List[str]:
+def _empty_str_list() -> list[str]:
     return []
 
-def _empty_dict_any() -> Dict[str, Any]:
+def _empty_dict_any() -> dict[str, Any]:
     return {}
 
-def _empty_dict_str_status() -> Dict[str, TestStatus]:
+def _empty_dict_str_status() -> dict[str, TestStatus]:
     return {}
 
-def _empty_action_list() -> List[Dict[str, Any]]:
+def _empty_action_list() -> list[dict[str, Any]]:
     return []
 
 @dataclass
@@ -55,8 +55,8 @@ class TestCase:
     last_run: str = ""
     run_count: int = 0
     failure_count: int = 0
-    tags: List[str] = field(default_factory=lambda: [])
-    dependencies: List[str] = field(default_factory=lambda: [])
+    tags: list[str] = field(default_factory=lambda: [])
+    dependencies: list[str] = field(default_factory=lambda: [])
 
 @dataclass
 class TestRun:
@@ -70,7 +70,7 @@ class TestRun:
     skipped: int = 0
     errors: int = 0
     duration_ms: float = 0.0
-    test_results: Dict[str, TestStatus] = field(default_factory=lambda: {})
+    test_results: dict[str, TestStatus] = field(default_factory=lambda: {})
 
 @dataclass
 class CoverageGap:
@@ -87,7 +87,7 @@ class TestFactory:
     __test__ = False
     name: str
     return_type: str
-    parameters: Dict[str, str] = field(default_factory=lambda: {})
+    parameters: dict[str, str] = field(default_factory=lambda: {})
     generator: str = ""  # Code snippet or function name
 
 @dataclass
@@ -95,9 +95,9 @@ class VisualRegressionConfig:
     """Configuration for visual regression testing."""
     baseline_dir: str
     diff_threshold: float = 0.01
-    browsers: List[BrowserType] = field(default_factory=lambda: [BrowserType.CHROME])
-    viewport_sizes: List[Tuple[int, int]] = field(default_factory=lambda: [(1920, 1080)])
-    ignore_regions: List[Tuple[int, int, int, int]] = field(default_factory=lambda: [])
+    browsers: list[BrowserType] = field(default_factory=lambda: [BrowserType.CHROME])
+    viewport_sizes: list[tuple[int, int]] = field(default_factory=lambda: [(1920, 1080)])
+    ignore_regions: list[tuple[int, int, int, int]] = field(default_factory=lambda: [])
 
 @dataclass
 class ContractTest:
@@ -105,8 +105,8 @@ class ContractTest:
     consumer: str
     provider: str
     endpoint: str
-    request_schema: Dict[str, Any] = field(default_factory=lambda: {})
-    response_schema: Dict[str, Any] = field(default_factory=lambda: {})
+    request_schema: dict[str, Any] = field(default_factory=lambda: {})
+    response_schema: dict[str, Any] = field(default_factory=lambda: {})
     status_code: int = 200
 
 @dataclass
@@ -115,18 +115,18 @@ class TestEnvironment:
     __test__ = False
     name: str
     base_url: str = ""
-    variables: Dict[str, str] = field(default_factory=lambda: {})
-    fixtures: List[str] = field(default_factory=lambda: [])
-    setup_commands: List[str] = field(default_factory=lambda: [])
-    teardown_commands: List[str] = field(default_factory=lambda: [])
+    variables: dict[str, str] = field(default_factory=lambda: {})
+    fixtures: list[str] = field(default_factory=lambda: [])
+    setup_commands: list[str] = field(default_factory=lambda: [])
+    teardown_commands: list[str] = field(default_factory=lambda: [])
 
 @dataclass
 class ExecutionTrace:
     """Test execution trace for replay."""
     test_id: str
     timestamp: str
-    steps: List[Dict[str, Any]] = field(default_factory=lambda: [])
-    variables: Dict[str, Any] = field(default_factory=lambda: {})
+    steps: list[dict[str, Any]] = field(default_factory=lambda: [])
+    variables: dict[str, Any] = field(default_factory=lambda: {})
     stdout: str = ""
     stderr: str = ""
 
@@ -142,7 +142,7 @@ class TestDependency:
 @dataclass
 class CrossBrowserConfig:
     """Cross-browser testing configuration."""
-    browsers: List[BrowserType]
+    browsers: list[BrowserType]
     parallel: bool = True
     headless: bool = True
     timeout_seconds: int = 30
@@ -156,7 +156,7 @@ class AggregatedResult:
     status: TestStatus
     duration_ms: float
     timestamp: str
-    metadata: Dict[str, Any] = field(default_factory=lambda: {})
+    metadata: dict[str, Any] = field(default_factory=lambda: {})
 
 @dataclass
 class Mutation:
@@ -194,7 +194,7 @@ class ScheduleSlot:
     """A scheduled time slot for test execution."""
     start_time: str
     end_time: str
-    tests: List[str] = field(default_factory=lambda: [])
+    tests: list[str] = field(default_factory=lambda: [])
     workers: int = 1
     priority: TestPriority = TestPriority.MEDIUM
 
@@ -203,23 +203,23 @@ class ProvisionedEnvironment:
     """A provisioned test environment."""
     status: str
     python_version: str = ""
-    dependencies: List[str] = field(default_factory=lambda: [])
-    config: Dict[str, Any] = field(default_factory=lambda: {})
+    dependencies: list[str] = field(default_factory=lambda: [])
+    config: dict[str, Any] = field(default_factory=lambda: {})
 
 @dataclass
 class ValidationResult:
     """Result of a validation operation."""
     valid: bool
-    errors: List[str] = field(default_factory=lambda: [])
+    errors: list[str] = field(default_factory=lambda: [])
 
 @dataclass
 class Recording:
     """A recording of test execution."""
     test_name: str
-    actions: List[Dict[str, Any]] = field(default_factory=lambda: [])
+    actions: list[dict[str, Any]] = field(default_factory=lambda: [])
 
 @dataclass
 class ReplayResult:
     """Result of replaying a recorded test."""
     success: bool
-    errors: List[str] = field(default_factory=lambda: [])
+    errors: list[str] = field(default_factory=lambda: [])

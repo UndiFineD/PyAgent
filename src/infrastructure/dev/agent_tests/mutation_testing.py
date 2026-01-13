@@ -34,12 +34,12 @@ class MutationTester:
 
     def __init__(self) -> None:
         """Initialize mutation tester."""
-        self.mutations: List[Mutation] = []
-        self.results: Dict[str, bool] = {}
+        self.mutations: list[Mutation] = []
+        self.results: dict[str, bool] = {}
 
-    def generate_mutations(self, source_code: str, file_path: str) -> List[Mutation]:
+    def generate_mutations(self, source_code: str, file_path: str) -> list[Mutation]:
         """Generate mutations for source code."""
-        mutations: List[Mutation] = []
+        mutations: list[Mutation] = []
         lines = source_code.split("\n")
         for i, line in enumerate(lines, 1):
             if "+" in line:
@@ -91,7 +91,7 @@ class MutationTester:
         killed = sum(1 for m in self.mutations if m.killed)
         return (killed / len(self.mutations)) * 100
 
-    def get_surviving_mutations(self) -> List[Mutation]:
+    def get_surviving_mutations(self) -> list[Mutation]:
         """Get mutations that survived (not killed)."""
         return [m for m in self.mutations if not m.killed]
 
@@ -120,7 +120,7 @@ class MutationRunner:
         self.tester = MutationTester()
         self.mutation_counter = 0
 
-    def generate_mutations(self, source_code: str) -> List[str]:
+    def generate_mutations(self, source_code: str) -> list[str]:
         """Generate mutations for source code."""
         mutations = self.tester.generate_mutations(source_code, "test.py")
         return [m.mutated_code for m in mutations]

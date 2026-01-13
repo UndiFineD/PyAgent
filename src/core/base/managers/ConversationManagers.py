@@ -29,7 +29,7 @@ class ConversationHistory:
     """Manages a conversation history with message storage and retrieval."""
 
     def __init__(self, max_messages: int = 100) -> None:
-        self.messages: List[ConversationMessage] = []
+        self.messages: list[ConversationMessage] = []
         self.max_messages = max_messages
 
     def add(self, role: MessageRole, content: str) -> None:
@@ -38,7 +38,7 @@ class ConversationHistory:
         if len(self.messages) > self.max_messages:
             self.messages = self.messages[-self.max_messages:]
 
-    def get_context(self) -> List[ConversationMessage]:
+    def get_context(self) -> list[ConversationMessage]:
         return self.messages.copy()
 
     def clear(self) -> None:

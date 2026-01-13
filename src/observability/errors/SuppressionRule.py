@@ -33,6 +33,6 @@ class SuppressionRule:
     id: str
     pattern: str
     reason: str
-    expires: Optional[str] = None
+    expires: str | None = None
     created_by: str = ""
     created_at: str = ""

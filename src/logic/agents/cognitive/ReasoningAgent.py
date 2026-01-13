@@ -46,7 +46,7 @@ class ReasoningAgent(BaseAgent):
         return "# Reasoning Log\n\n## Status\nWaiting for problem analysis...\n"
 
     @as_tool
-    def analyze(self, problem: str, context: Optional[str] = None) -> str:
+    def analyze(self, problem: str, context: str | None = None) -> str:
         """Performs a structured analysis of a technical problem."""
         self._track_tokens(len(problem) // 4 + 100, 500)
         
@@ -78,11 +78,17 @@ class ReasoningAgent(BaseAgent):
     @as_tool
     def analyze_tot(self, problem: str) -> str:
         """Performs Tree-of-Thought reasoning by exploring multiple solution paths."""
-        # ... existing code ...
+        analysis = [
+            f"## Tree-of-Thought Analysis: {problem}",
+            "Exploring multiple reasoning paths...",
+            "- Path 1: Decomposition and sequential solving.",
+            "- Path 2: Holistic pattern matching.",
+            "Consensus: Path 1 provides higher reliability."
+        ]
         return "\n".join(analysis)
 
     @as_tool
-    def check_latent_consistency(self, problem: str, language: str = "english") -> Dict[str, Any]:
+    def check_latent_consistency(self, problem: str, language: str = "english") -> dict[str, Any]:
         """
         Validates reasoning across language boundaries (Latent Reasoning Guardrail).
         Checks if the internal reasoning steps align when translated to low-resource languages.

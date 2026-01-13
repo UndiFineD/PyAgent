@@ -17,13 +17,13 @@ logger = logging.getLogger(__name__)
 class ObservabilityCore:
     """Pure logic for processing agent telemetry data."""
     def __init__(self) -> None:
-        self.metrics_history: List[AgentMetric] = []
+        self.metrics_history: list[AgentMetric] = []
 
     def process_metric(self, metric:
         AgentMetric) -> None:
         self.metrics_history.append(metric)
 
-    def summarize_performance(self) -> Dict[str, Any]:
+    def summarize_performance(self) -> dict[str, Any]:
         if not self.metrics_history:
             return {"count": 0, "avg_duration": 0, "total_cost": 0}
         total_d = sum(m.duration_ms for m in self.metrics_history)
@@ -34,7 +34,7 @@ class ObservabilityCore:
 class ObservabilityEngine:
     """Provides telemetry and performance tracking for the agent fleet."""
     def __init__(self, workspace_root:
-        Optional[str] = None) -> None:
+        str | None = None) -> None:
         self.workspace_root = Path(workspace_root or ".")
         self.telemetry_file = self.workspace_root / ".agent_telemetry.json"
         self.core = ObservabilityCore()
@@ -42,8 +42,8 @@ class ObservabilityEngine:
         self.prometheus = PrometheusExporter()
         self.otel = OTelManager()
         self.metrics_exporter = MetricsExporter()
-        self._start_times: Dict[str, float] = {}
-        self._otel_spans: Dict[str, str] = {}
+        self._start_times: dict[str, float] = {}
+        self._otel_spans: dict[str, str] = {}
 
     def start_trace(self, trace_id:
         str) -> None:
@@ -52,7 +52,7 @@ class ObservabilityEngine:
 
     def end_trace(self, trace_id:
         str, agent: str, op: str, status: str = "success",
-                  in_t: int = 0, out_t: int = 0, model: str = "unknown", metadata: Optional[Dict[str, Any]] = None) -> None:
+                  in_t: int = 0, out_t: int = 0, model: str = "unknown", metadata: dict[str, Any] | None = None) -> None:
         if trace_id not in self._start_times:
             return
         duration = (time.time() - self._start_times.pop(trace_id)) * 1000
@@ -69,7 +69,7 @@ class ObservabilityEngine:
 class StatsCore:
     """Core logic for statistics processing."""
     def __init__(self) -> None:
-        self.namespaces: Dict[str, List[Metric]] = {}
+        self.namespaces: dict[str, list[Metric]] = {}
         self.rollup = StatsRollupCalculator()
         self.query = StatsQueryEngine()
         self.alerts = ThresholdAlertManager()
@@ -87,7 +87,7 @@ class StatsCore:
 class StatsNamespaceManager:
     """Manages multiple namespaces (backward compat)."""
     def __init__(self) -> None:
-        self.namespaces: Dict[str, Any] = {}
+        self.namespaces: dict[str, Any] = {}
     def create(self, name:
         str) -> Any:
         from .metrics import StatsNamespace

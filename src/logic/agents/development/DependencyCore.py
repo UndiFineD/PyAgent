@@ -37,9 +37,9 @@ class DependencyCore:
     """Pure logic core for dependency analysis."""
 
     @staticmethod
-    def parse_dependencies(content: str, file_path: str = "") -> Dict[str, DependencyNode]:
+    def parse_dependencies(content: str, file_path: str = "") -> dict[str, DependencyNode]:
         """Parses imports and class inheritance from code content."""
-        nodes: Dict[str, DependencyNode] = {}
+        nodes: dict[str, DependencyNode] = {}
         
         try:
             tree = ast.parse(content)
@@ -62,7 +62,7 @@ class DependencyCore:
         return nodes
 
     @staticmethod
-    def _add_to_nodes(nodes: Dict[str, DependencyNode], name: str, dep_type: DependencyType, file_path: str) -> None:
+    def _add_to_nodes(nodes: dict[str, DependencyNode], name: str, dep_type: DependencyType, file_path: str) -> None:
         if name not in nodes:
             nodes[name] = DependencyNode(name=name, type=dep_type, file_path=file_path)
         else:
@@ -70,6 +70,6 @@ class DependencyCore:
                 nodes[name].depended_by.append(file_path)
 
     @staticmethod
-    def filter_external_deps(nodes: Dict[str, DependencyNode], stdlib_list: Set[str]) -> List[str]:
+    def filter_external_deps(nodes: dict[str, DependencyNode], stdlib_list: set[str]) -> list[str]:
         """Filters nodes to return only non-standard library dependencies."""
         return [name for name in nodes if name not in stdlib_list]

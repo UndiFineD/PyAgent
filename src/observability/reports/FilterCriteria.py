@@ -41,8 +41,8 @@ class FilterCriteria:
         file_patterns: Glob patterns for files.
     """
 
-    date_from: Optional[datetime] = None
-    date_to: Optional[datetime] = None
-    min_severity: Optional[SeverityLevel] = None
-    categories: Optional[List[IssueCategory]] = None
-    file_patterns: Optional[List[str]] = None
+    date_from: datetime | None = None
+    date_to: datetime | None = None
+    min_severity: SeverityLevel | None = None
+    categories: list[IssueCategory] | None = None
+    file_patterns: list[str] | None = None

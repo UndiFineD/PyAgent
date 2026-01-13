@@ -40,13 +40,13 @@ class BranchComparer:
     def __init__(self) -> None:
         self.branch_a: str = ""
         self.branch_b: str = ""
-        self._last_comparison: Optional[BranchComparison] = None
+        self._last_comparison: BranchComparison | None = None
 
     def set_branches(self, branch_a: str, branch_b: str) -> None:
         self.branch_a = branch_a
         self.branch_b = branch_b
 
-    def get_modified_files(self) -> List[str]:
+    def get_modified_files(self) -> list[str]:
         if not self._last_comparison:
             return []
         return list(self._last_comparison.modified_files)
@@ -61,10 +61,10 @@ class BranchComparer:
 
     def compare(
         self,
-        branch_a: Optional[str] = None,
-        branch_b: Optional[str] = None,
-        contexts_a: Optional[Dict[str, str]] = None,
-        contexts_b: Optional[Dict[str, str]] = None,
+        branch_a: str | None = None,
+        branch_b: str | None = None,
+        contexts_a: dict[str, str] | None = None,
+        contexts_b: dict[str, str] | None = None,
     ) -> BranchComparison:
         """Compare contexts between branches.
 
@@ -84,7 +84,7 @@ class BranchComparer:
 
         files_a = set(ctx_a.keys())
         files_b = set(ctx_b.keys())
-        modified: List[str] = []
+        modified: list[str] = []
         for f in files_a & files_b:
             if ctx_a[f] != ctx_b[f]:
                 modified.append(f)

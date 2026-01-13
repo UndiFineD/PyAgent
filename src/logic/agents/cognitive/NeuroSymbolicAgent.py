@@ -36,7 +36,7 @@ class NeuroSymbolicAgent(BaseAgent):
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.symbolic_rules: List[Dict[str, Any]] = [
+        self.symbolic_rules: list[dict[str, Any]] = [
             {"name": "No deletions", "regex": r"delete|rm -rf", "impact": "BLOCK"},
             {"name": "Type Safety", "regex": r":\s*(int|str|List|Dict|Any)", "impact": "PREFER"},
             {"name": "No plain passwords", "regex": r'password\s*=\s*[\'"][^\'"]+[\'"]', "impact": "BLOCK"}
@@ -48,7 +48,7 @@ class NeuroSymbolicAgent(BaseAgent):
         )
 
     @as_tool
-    def verify_and_correct(self, content: str) -> Dict[str, Any]:
+    def verify_and_correct(self, content: str) -> dict[str, Any]:
         """
         Validates content against symbolic rules and attempts to flag violations.
         """

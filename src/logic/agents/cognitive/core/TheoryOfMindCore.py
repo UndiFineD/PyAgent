@@ -34,12 +34,12 @@ class TheoryOfMindCore:
     """Pure logic core for Theory of Mind modeling."""
 
     @staticmethod
-    def update_profile_logic(profile: Dict[str, Any], observations: Dict[str, Any]) -> Dict[str, Any]:
+    def update_profile_logic(profile: dict[str, Any], observations: dict[str, Any]) -> dict[str, Any]:
         """Core logic to update an agent profile based on observations."""
         # Ensure sets exist
-        domains: Set[str] = set(profile.get("knowledge_domains", []))
-        strengths: Set[str] = set(profile.get("strengths", []))
-        limitations: Set[str] = set(profile.get("limitations", []))
+        domains: set[str] = set(profile.get("knowledge_domains", []))
+        strengths: set[str] = set(profile.get("strengths", []))
+        limitations: set[str] = set(profile.get("limitations", []))
         
         if "domain" in observations:
             domains.add(observations["domain"])
@@ -57,7 +57,7 @@ class TheoryOfMindCore:
         }
 
     @staticmethod
-    def estimate_knowledge_score(profile: Dict[str, Any], topic: str) -> float:
+    def estimate_knowledge_score(profile: dict[str, Any], topic: str) -> float:
         """Logic for estimating knowledge probability."""
         domains = profile.get("knowledge_domains", [])
         for domain in domains:
@@ -66,9 +66,9 @@ class TheoryOfMindCore:
         return 0.3
 
     @staticmethod
-    def rank_collaborators(profiles: Dict[str, Dict[str, Any]], task: str) -> List[str]:
+    def rank_collaborators(profiles: dict[str, dict[str, Any]], task: str) -> list[str]:
         """Logic for ranking agents for a task."""
-        rankings: List[Tuple[str, float]] = []
+        rankings: list[tuple[str, float]] = []
         for agent, profile in profiles.items():
             score = TheoryOfMindCore.estimate_knowledge_score(profile, task)
             rankings.append((agent, score))

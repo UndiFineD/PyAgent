@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import Any
 
 # Add src to path
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
 
 from tests.utils.agent_test_utils import agent_dir_on_path, load_agent_module
 
@@ -36,6 +35,6 @@ def report_module() -> Any:
     except ImportError:
         # Fallback to loading it manually if path setup is tricky
         AGENT_DIR = Path(__file__).parent.parent.parent.parent / 'src'
-        sys.path.insert(0, str(AGENT_DIR))
+
         import observability.reports as reports
         return reports

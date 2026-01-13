@@ -22,7 +22,8 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Any, Final, TypeVar, Iterable, TYPE_CHECKING
+from typing import Any, Final, TypeVar, TYPE_CHECKING
+from collections.abc import Iterable
 
 __version__ = VERSION
 
@@ -53,7 +54,7 @@ if _tqdm is not None:
     tqdm = _tqdm
 else:
 
-    def tqdm(iterable: Iterable[_T], *args: Any, **kwargs: Any) -> Iterable[_T]:
+    def tqdm[T](iterable: Iterable[_T], *args: Any, **kwargs: Any) -> Iterable[_T]:
         """Fallback if tqdm not available."""
         return iterable
 

@@ -23,6 +23,7 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from typing import List, Set, Optional, Dict
+import graphlib
 
 __version__ = VERSION
 
@@ -34,16 +35,16 @@ class DependencyGraph:
         graph.add_dependency("tests", "coder")  # tests depends on coder
         graph.add_dependency("docs", "tests")
 
-        order=graph.resolve()  # ["coder", "tests", "docs"]
+        order=graph.resolve()  # [["coder"], ["tests"], ["docs"]]
     """
 
     def __init__(self) -> None:
         """Initialize dependency graph."""
-        self._nodes: Set[str] = set()
-        self._edges: Dict[str, Set[str]] = {}  # node -> dependencies
-        self._resources: Dict[str, Set[str]] = {} # node -> set of resource URIs
+        self._nodes: set[str] = set()
+        self._edges: dict[str, set[str]] = {}  # node -> dependencies (must run first)
+        self._resources: dict[str, set[str]] = {} # node -> set of resource URIs
 
-    def add_node(self, name: str, resources: Optional[List[str]] = None) -> None:
+    def add_node(self, name: str, resources: list[str] | None = None) -> None:
         """Add a node.
 
         Args:
@@ -69,10 +70,10 @@ class DependencyGraph:
         self.add_node(depends_on)
         self._edges[node].add(depends_on)
 
-    def resolve(self) -> List[List[str]]:
-        """Resolve execution order into parallel batches.
+    def resolve(self) -> list[list[str]]:
+        """Resolve execution order into parallel batches using graphlib (Phase 272).
 
-        Each inner list contains nodes that can be executed simultaneously.
+        Each inner list contains nodes that can be executed simultaneously (Execution Tiers).
         Example: [["coder"], ["tests", "linter"], ["docs"]]
 
         Returns:
@@ -80,44 +81,30 @@ class DependencyGraph:
         Raises:
             ValueError: If circular dependency detected.
         """
-        # Node -> count of remaining dependencies it has
-        in_degree = {n: len(self._edges.get(n, set())) for n in self._nodes}
+        if not self._nodes:
+            return []
+
+        # TopologicalSorter expects {node: dependencies}
+        ts = graphlib.TopologicalSorter(self._edges)
         
-        # Build reverse graph: node -> nodes that depend on it
-        reverse: Dict[str, Set[str]] = {n: set() for n in self._nodes}
-        for node, deps in self._edges.items():
-            for dep in deps:
-                reverse[dep].add(node)
+        try:
+            ts.prepare()
+        except graphlib.CycleError as e:
+            raise ValueError(f"Circular dependency detected: {e}")
 
-        batches: List[List[str]] = []
-        visited_count = 0
-
-        while True:
-            # Nodes with no dependencies are ready for next batch
-            current_batch = [n for n in self._nodes if in_degree[n] == 0 and n not in [item for sublist in batches for item in sublist]]
-            
-            if not current_batch:
+        batches: list[list[str]] = []
+        while ts.is_active():
+            ready = list(ts.get_ready())
+            if not ready:
                 break
-                
-            # Phase 242: Refine batch based on resource collisions
-            refined_batches = self._refine_batch_by_resources(current_batch)
-            for rb in refined_batches:
-                batches.append(rb)
-                visited_count += len(rb)
-                
-                # Reduce in-degree for all nodes that depend on this batch
-                for node in rb:
-                    for dependent in reverse[node]:
-                        in_degree[dependent] -= 1
-
-        if visited_count != len(self._nodes):
-            raise ValueError("Circular dependency detected or inaccessible nodes in graph.")
-
+            batches.append(ready)
+            ts.done(*ready)
+            
         return batches
 
-    def _refine_batch_by_resources(self, batch: List[str]) -> List[List[str]]:
+    def _refine_batch_by_resources(self, batch: list[str]) -> list[list[str]]:
         """Splits a batch into multiple sequential sub-batches to avoid resource collisions."""
-        refined: List[List[str]] = []
+        refined: list[list[str]] = []
         
         for node in batch:
             node_resources = self._resources.get(node, set())

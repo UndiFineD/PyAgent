@@ -34,7 +34,7 @@ class FixtureFactory:
     files, and other resources with optional dependencies.
     """
 
-    def __init__(self, base_dir: Optional[Path] = None) -> None:
+    def __init__(self, base_dir: Path | None = None) -> None:
         """Initialize fixture factory.
 
         Args:
@@ -45,8 +45,8 @@ class FixtureFactory:
     def create_agent_fixture(
         self,
         name: str,
-        config: Optional[Dict[str, Any]] = None,
-        dependencies: Optional[List[Any]] = None,
+        config: dict[str, Any] | None = None,
+        dependencies: list[Any] | None = None,
     ) -> Any:
         """Create an agent fixture.
 
@@ -59,7 +59,7 @@ class FixtureFactory:
             Agent fixture object with name, config and dependencies attributes.
         """
         class AgentFixture:
-            def __init__(self, name: str, config: Optional[Dict[str, Any]], dependencies: Optional[List[Any]]) -> None:
+            def __init__(self, name: str, config: dict[str, Any] | None, dependencies: list[Any] | None) -> None:
                 self.name = name
                 self.config = config or {}
                 self.dependencies = dependencies or []

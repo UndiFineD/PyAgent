@@ -7,14 +7,14 @@ from src.infrastructure.fleet.ShardingOrchestrator import ShardingOrchestrator
 
 def test_phase130_structure_verification() -> None:
     """Verify the 5-tier architecture is physically present."""
-    base_dir = Path("c:/DEV/PyAgent/src")
+    base_dir = Path(str(Path(__file__).resolve().parents[2]) + "/src")
     expected_tiers = ["core", "logic", "infrastructure", "interface", "observability"]
     for tier in expected_tiers:
         assert (base_dir / tier).is_dir(), f"Tier {tier} is missing from src/"
 
 def test_phase130_btree_sharding() -> None:
     """Verify B-Tree 2-tier MD5 sharding logic."""
-    store = BTreeKnowledgeStore(agent_id="test_agent", storage_path=Path("c:/DEV/PyAgent/data/test_shards"))
+    store = BTreeKnowledgeStore(agent_id="test_agent", storage_path=Path(str(Path(__file__).resolve().parents[2]) + "/data/test_shards"))
     key = "test_trillion_scale_key_2026"
     shard_path = store._get_shard_path(key)
     # Expected: hash[:2]/hash[2:4]/key.json
@@ -37,7 +37,7 @@ def test_phase130_agent_integration() -> None:
 
 def test_phase130_sharding_orchestrator() -> None:
     """Verify the clustering logic."""
-    root = Path("c:/DEV/PyAgent")
+    root = Path(Path(__file__).resolve().parents[2])
     orchestrator = ShardingOrchestrator(workspace_root=root, interaction_threshold=5)
     orchestrator.record_interaction("agent_a", "agent_b")
     # Simulate high frequency to trigger rebalance

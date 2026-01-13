@@ -31,9 +31,9 @@ class SchemaManager:
     """Discovers and caches database schemas across the fleet."""
     
     def __init__(self) -> None:
-        self.schemas: Dict[str, Dict[str, Any]] = {} # db_path -> schema_map
+        self.schemas: dict[str, dict[str, Any]] = {} # db_path -> schema_map
 
-    def register_schema(self, db_id: str, tables: Dict[str, List[str]]) -> str:
+    def register_schema(self, db_id: str, tables: dict[str, list[str]]) -> str:
         """Registers a database schema (tables and columns)."""
         self.schemas[db_id] = tables
         logging.info(f"SchemaManager: Registered schema for {db_id} with {len(tables)} tables.")
@@ -48,6 +48,6 @@ class SchemaManager:
             summary.append(f"- Table: {table} (Columns: {', '.join(cols)})")
         return "\n".join(summary)
 
-    def list_known_databases(self) -> List[str]:
+    def list_known_databases(self) -> list[str]:
         """Returns IDs of all registered databases."""
         return list(self.schemas.keys())

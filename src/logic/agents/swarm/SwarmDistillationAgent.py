@@ -35,9 +35,9 @@ class SwarmDistillationAgent:
         self.workspace_path = Path(workspace_path)
         self.master_context = {}
         self.lesson_core = LessonCore()
-        self.lessons: List[Lesson] = []
+        self.lessons: list[Lesson] = []
 
-    def distill_agent_knowledge(self, agent_id, knowledge_data) -> Dict[str, Any]:
+    def distill_agent_knowledge(self, agent_id, knowledge_data) -> dict[str, Any]:
         """
         Extracts key insights from an agent's specialized knowledge.
         """
@@ -59,12 +59,12 @@ class SwarmDistillationAgent:
         self.lessons.append(lesson)
         return f_hash
 
-    def check_for_prior_art(self, error_msg: str) -> List[Dict[str, Any]]:
+    def check_for_prior_art(self, error_msg: str) -> list[dict[str, Any]]:
         """Checks if any other agent has already solved this error."""
         related = self.lesson_core.get_related_lessons(error_msg, self.lessons)
-        return [{"cause": l.cause, "solution": l.solution} for l in related]
+        return [{"cause": lesson.cause, "solution": lesson.solution} for lesson in related]
 
-    def get_unified_context(self) -> Dict[str, Any]:
+    def get_unified_context(self) -> dict[str, Any]:
         """
         Returns the distilled knowledge from all registered agents.
         """
@@ -74,7 +74,7 @@ class SwarmDistillationAgent:
             "master_map": self.master_context
         }
 
-    def prune_master_context(self, threshold=0.5) -> Dict[str, Any]:
+    def prune_master_context(self, threshold=0.5) -> dict[str, Any]:
         """
         Removes outdated or low-importance knowledge from the master map.
         """

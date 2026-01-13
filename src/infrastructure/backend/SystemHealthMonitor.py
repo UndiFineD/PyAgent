@@ -27,6 +27,7 @@ from .SystemState import SystemState
 from typing import Dict, List, Optional, Tuple
 import logging
 import threading
+from src.observability.stats.analysis import FleetMetrics
 
 __version__ = VERSION
 # from src.observability.stats.core.StabilityCore import StabilityCore, FleetMetrics
@@ -45,9 +46,9 @@ class SystemHealthMonitor:
         self.health_threshold = health_threshold
         self.window_size = window_size
         self.core = StabilityCore()
-        self.stability_history: List[float] = []
-        self._history: Dict[str, List[Tuple[bool, int]]] = {}
-        self._status: Dict[str, SystemHealthStatus] = {}
+        self.stability_history: list[float] = []
+        self._history: dict[str, list[tuple[bool, int]]] = {}
+        self._status: dict[str, SystemHealthStatus] = {}
         self._lock = threading.Lock()
 
     def record_success(self, backend: str, latency_ms: int) -> None:
@@ -120,17 +121,17 @@ class SystemHealthMonitor:
                 return True  # Unknown=assume healthy
             return status.state == SystemState.HEALTHY
 
-    def get_status(self, backend: str) -> Optional[SystemHealthStatus]:
+    def get_status(self, backend: str) -> SystemHealthStatus | None:
         """Get backend health status."""
         with self._lock:
             return self._status.get(backend)
 
-    def get_all_status(self) -> Dict[str, SystemHealthStatus]:
+    def get_all_status(self) -> dict[str, SystemHealthStatus]:
         """Get all backend health statuses."""
         with self._lock:
             return dict(self._status)
 
-    def get_healthiest(self, backends: List[str]) -> Optional[str]:
+    def get_healthiest(self, backends: list[str]) -> str | None:
         """Get healthiest backend from list.
 
         Args:
@@ -140,7 +141,7 @@ class SystemHealthMonitor:
             Optional[str]: Healthiest backend or None.
         """
         with self._lock:
-            best: Optional[str] = None
+            best: str | None = None
             best_score = -1.0
 
             for backend in backends:
@@ -168,7 +169,7 @@ class SystemHealthMonitor:
                 hist = self._history[b]
                 total_success += sum(1 for s, _ in hist if s)
                 total_requests += len(hist)
-                latencies.extend([l for _, l in hist])
+                latencies.extend([lat for _, lat in hist])
                 
             error_rate = 1.0 - (total_success / total_requests if total_requests > 0 else 0)
             avg_latency = sum(latencies) / len(latencies) if latencies else 0

@@ -25,7 +25,7 @@ class ComplianceCore:
 
     ALLOWED_LICENSES = ["MIT", "Apache-2.0", "BSD-3-Clause", "PSF-2.0"]
 
-    def audit_content(self, content: str, file_path: str) -> List[ComplianceIssue]:
+    def audit_content(self, content: str, file_path: str) -> list[ComplianceIssue]:
         """Scans content for common compliance and security violations."""
         issues = []
         
@@ -56,7 +56,7 @@ class ComplianceCore:
                 
         return issues
 
-    def aggregate_score(self, issues: List[ComplianceIssue]) -> float:
+    def aggregate_score(self, issues: list[ComplianceIssue]) -> float:
         """Calculates a compliance score from 0.0 to 1.0."""
         if not issues:
             return 1.0

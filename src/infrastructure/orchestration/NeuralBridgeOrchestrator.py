@@ -38,8 +38,8 @@ class NeuralBridgeOrchestrator:
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
         self.bridge_id = str(uuid.uuid4())
-        self.connected_nodes: List[str] = ["localhost"]
-        self.shared_consciousness: Dict[str, Any] = {} # Key-value store for global state
+        self.connected_nodes: list[str] = ["localhost"]
+        self.shared_consciousness: dict[str, Any] = {} # Key-value store for global state
 
     def establish_bridge(self, remote_node_url: str) -> bool:
         """
@@ -69,13 +69,13 @@ class NeuralBridgeOrchestrator:
         if hasattr(self.fleet, 'latent_bus'):
             self.fleet.latent_bus.transmit_latent(f"bridge_{key}", {"payload": value})
 
-    def pull_state(self, key: str) -> Optional[Any]:
+    def pull_state(self, key: str) -> Any | None:
         """
         Retrieves state from the shared consciousness.
         """
         return self.shared_consciousness.get(key)
 
-    def get_bridge_topology(self) -> Dict[str, Any]:
+    def get_bridge_topology(self) -> dict[str, Any]:
         """Returns the current layout of the neural bridge."""
         return {
             "bridge_id": self.bridge_id,

@@ -21,8 +21,6 @@ except ImportError:
     AGENT_DIR = Path(__file__).parent.parent.parent.parent / 'src'
 
 # Import from src if needed
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
-
 
 class TestReportCacheManager:
     """Tests for ReportCacheManager class."""

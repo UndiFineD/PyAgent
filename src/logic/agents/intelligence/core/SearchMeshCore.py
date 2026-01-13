@@ -8,7 +8,7 @@ class SearchMeshCore:
     It synthesizes results from multiple providers (Google, Bing, Perplexity, Tavily).
     """
 
-    def __init__(self, weights: Optional[Dict[str, float]] = None) -> None:
+    def __init__(self, weights: dict[str, float] | None = None) -> None:
         # Default relevance weights for different providers
         self.weights = weights or {
             "google": 1.2,
@@ -18,12 +18,12 @@ class SearchMeshCore:
             "generic": 1.0
         }
 
-    def aggregate_results(self, raw_results: Dict[str, List[Dict[str, Any]]]) -> List[Dict[str, Any]]:
+    def aggregate_results(self, raw_results: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:
         """
         Takes raw results from multiple providers and merges them into a ranked list.
         Each result should have: 'title', 'url', 'snippet', 'score' (optional).
         """
-        master_list: List[Dict[str, Any]] = []
+        master_list: list[dict[str, Any]] = []
         seen_urls: set[str] = set()
 
         # Step 1: Flatten and apply weights
@@ -60,13 +60,13 @@ class SearchMeshCore:
         master_list.sort(key=lambda x: x["total_score"], reverse=True)
         return master_list
 
-    def filter_redundant(self, results: List[Dict[str, Any]], remembered_urls: set[str]) -> List[Dict[str, Any]]:
+    def filter_redundant(self, results: list[dict[str, Any]], remembered_urls: set[str]) -> list[dict[str, Any]]:
         """
         Filters out results that have already been seen in previous search research sessions (MemoRAG integration).
         """
         return [res for res in results if res["url"] not in remembered_urls]
 
-    async def parallel_search_placeholder(self, providers: List[str], query: str) -> Dict[str, List[Dict[str, Any]]]:
+    async def parallel_search_placeholder(self, providers: list[str], query: str) -> dict[str, list[dict[str, Any]]]:
         """
         Generic structure for the Mesh agent to invoke search providers in parallel.
         (The Shell agent will provide the actual API implementation callbacks).

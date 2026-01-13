@@ -30,7 +30,7 @@ def is_gate_open(required_phase: int) -> bool:
     """Gatekeeping: Returns True if the system maturity allows for the required phase."""
     return EVOLUTION_PHASE >= required_phase
 
-def get_version_info() -> Dict[str, Any]:
+def get_version_info() -> dict[str, Any]:
     """Returns detailed version and phase information for orchestrators."""
     return {
         "version": VERSION,

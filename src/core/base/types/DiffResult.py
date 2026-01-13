@@ -38,8 +38,8 @@ class DiffResult:
         unchanged: Lines unchanged.
         similarity_score: Percentage of similarity (0 - 100).
     """
-    additions: List[str] = field(default_factory=lambda: [])
-    deletions: List[str] = field(default_factory=lambda: [])
-    modifications: List[Tuple[str, str]] = field(default_factory=lambda: [])
+    additions: list[str] = field(default_factory=lambda: [])
+    deletions: list[str] = field(default_factory=lambda: [])
+    modifications: list[tuple[str, str]] = field(default_factory=lambda: [])
     unchanged: int = 0
     similarity_score: float = 0.0

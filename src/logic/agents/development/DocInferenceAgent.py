@@ -28,6 +28,8 @@ import logging
 import json
 from pathlib import Path
 from typing import Dict, List, Any
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool, create_main_function
 
 __version__ = VERSION
 
@@ -36,8 +38,6 @@ try:
     HAS_PYPDF = True
 except ImportError:
     HAS_PYPDF = False
-
-    from src.core.base.BaseAgent import BaseAgent
 
 class DocInferenceAgent(BaseAgent):
     """Manages high-accuracy OCR and document layout reconstruction."""
@@ -76,7 +76,7 @@ class DocInferenceAgent(BaseAgent):
             return f"Error parsing PDF: {str(e)}"
 
     @as_tool
-    def ingest_document_to_knowledge(self, doc_path: str, tags: List[str] = None) -> Dict[str, Any]:
+    def ingest_document_to_knowledge(self, doc_path: str, tags: list[str] = None) -> dict[str, Any]:
         """Converts a document into context-aware Knowledge for the Fleet.
         
         Args:
@@ -119,7 +119,7 @@ class DocInferenceAgent(BaseAgent):
         return f"Successfully reconstructed {doc_path} as {format}. Tables extracted: 2, Handwriting detected: Yes."
 
     @as_tool
-    def extract_form_data(self, image_path: str) -> Dict[str, Any]:
+    def extract_form_data(self, image_path: str) -> dict[str, Any]:
         """Extracts key-value pairs and checkbox states from a form image."""
         logging.info(f"DocInference: Extracting form from {image_path}")
         return {

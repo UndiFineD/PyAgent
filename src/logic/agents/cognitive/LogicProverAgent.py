@@ -31,7 +31,7 @@ class LogicProverAgent:
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
         
-    def verify_reasoning_step(self, hypothesis: str, evidence: List[str], conclusion: str) -> Dict[str, Any]:
+    def verify_reasoning_step(self, hypothesis: str, evidence: list[str], conclusion: str) -> dict[str, Any]:
         """
         Simulates formal logic verification (TPTP-like).
         """
@@ -46,7 +46,7 @@ class LogicProverAgent:
             
         return {"status": "verified", "proof_confidence": 0.5}
 
-    def solve_scheduling_constraints(self, tasks: List[str], deadlines: Dict[str, float]) -> Dict[str, Any]:
+    def solve_scheduling_constraints(self, tasks: list[str], deadlines: dict[str, float]) -> dict[str, Any]:
         """
         Solves for an optimal schedule using simulated constraint satisfaction (CSP).
         """
@@ -68,7 +68,7 @@ class LogicProverAgent:
             "total_latency": len(tasks) * 1.0
         }
 
-    def generate_formal_proof_log(self, reasoning_chain: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def generate_formal_proof_log(self, reasoning_chain: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Exports a log of verified steps for auditing.
         """

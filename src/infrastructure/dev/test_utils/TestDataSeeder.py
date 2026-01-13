@@ -37,7 +37,7 @@ class TestDataSeeder:
     __test__ = False
     """Generates reproducible test data with optional seeding."""
 
-    def __init__(self, seed: Optional[int] = None) -> None:
+    def __init__(self, seed: int | None = None) -> None:
         """Initialize test data seeder.
 
         Args:
@@ -49,7 +49,7 @@ class TestDataSeeder:
         if seed is not None and np:
             np.random.seed(seed)
 
-    def generate_metric_data(self, count: int = 10) -> List[Dict[str, Union[str, float]]]:
+    def generate_metric_data(self, count: int = 10) -> list[dict[str, str | float]]:
         """Generate metric data for testing.
 
         Args:
@@ -67,7 +67,7 @@ class TestDataSeeder:
             for i in range(count)
         ]
 
-    def generate_test_results(self, count: int = 10, pass_rate: float = 0.8) -> List[Dict[str, Any]]:
+    def generate_test_results(self, count: int = 10, pass_rate: float = 0.8) -> list[dict[str, Any]]:
         """Generate test results for testing.
 
         Args:
@@ -113,7 +113,7 @@ class TestDataSeeder:
         """
         return f"id_{int(time.time() * 1000000)}_{random.randint(1000, 9999)}"
 
-    def generate_bulk_data(self, count: int = 10, data_type: str = "python_code") -> List[str]:
+    def generate_bulk_data(self, count: int = 10, data_type: str = "python_code") -> list[str]:
         """Generate bulk data.
 
         Args:

@@ -26,7 +26,6 @@ import sys
 from pathlib import Path
 from src.core.base.entrypoint import create_main_function
 from src.observability.errors import ErrorsAgent
-from src.observability.errors import *
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[2]

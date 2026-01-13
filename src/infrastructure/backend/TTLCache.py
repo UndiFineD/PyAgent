@@ -54,14 +54,14 @@ class TTLCache:
         """
         self.default_ttl_seconds = default_ttl_seconds
         self.max_entries = max_entries
-        self._cache: Dict[str, CachedResponse] = {}
+        self._cache: dict[str, CachedResponse] = {}
         self._lock = threading.Lock()
 
     def set(
         self,
         key: str,
         value: str,
-        ttl_seconds: Optional[float] = None,
+        ttl_seconds: float | None = None,
     ) -> None:
         """Set cache entry.
 
@@ -84,7 +84,7 @@ class TTLCache:
                 expires_at=now + ttl,
             )
 
-    def get(self, key: str) -> Optional[str]:
+    def get(self, key: str) -> str | None:
         """Get cache entry if not expired.
 
         Args:
@@ -143,7 +143,7 @@ class TTLCache:
             self._cache.clear()
         return count
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get cache statistics.
 
         Returns:

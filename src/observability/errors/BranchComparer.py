@@ -39,10 +39,10 @@ class BranchComparer:
 
     def __init__(self) -> None:
         """Initialize the branch comparer."""
-        self.branch_errors: Dict[str, Set[str]] = {}
+        self.branch_errors: dict[str, set[str]] = {}
 
     def set_branch_errors(
-        self, branch: str, error_ids: List[str]
+        self, branch: str, error_ids: list[str]
     ) -> None:
         """Set errors for a branch.
 
@@ -75,7 +75,7 @@ class BranchComparer:
 
     def get_new_errors(
         self, base_branch: str, feature_branch: str
-    ) -> List[str]:
+    ) -> list[str]:
         """Get errors introduced in feature branch.
 
         Args:
@@ -90,7 +90,7 @@ class BranchComparer:
 
     def get_fixed_errors(
         self, base_branch: str, feature_branch: str
-    ) -> List[str]:
+    ) -> list[str]:
         """Get errors fixed in feature branch.
 
         Args:

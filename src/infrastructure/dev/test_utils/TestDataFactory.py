@@ -43,4 +43,4 @@ class TestDataFactory:
     data_type: TestDataType
     template: str = ""
     variations: int = 1
-    seed: Optional[int] = None
+    seed: int | None = None
