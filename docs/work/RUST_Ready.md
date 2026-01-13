@@ -10,7 +10,7 @@ This document tracks Python files that are ready or nearly ready for Rust conver
 
 ---
 
-## TIER 1: READY FOR IMMEDIATE CONVERSION (18 files)
+## TIER 1: READY FOR IMMEDIATE CONVERSION (20 files)
 
 ### Core Base Logic (src/core/base/core/)
 1. ✅📊 **ErrorMappingCore.py** - Pure error code mapping
@@ -115,115 +115,127 @@ This document tracks Python files that are ready or nearly ready for Rust conver
     - Dependencies: Basic types
     - Rust benefit: Performance for large datasets
 
+19. ✅📊 **BaseAgentCore.py** - Agent validation and strategy logic
+    - Size: ~300 lines (pure logic extracted from BaseAgent.py)
+    - Dependencies: Standard library only
+    - Rust benefit: Faster anchoring/strategy calculations for agents
+    - Priority: HIGH
+
+20. ✅📊 **MetricsCore.py** - Metrics calculation engines
+    - Size: ~380 lines (TokenCost, ModelFallback, StatsRollup, ABTest)
+    - Dependencies: Standard library only
+    - Rust benefit: High-speed analytics and cost calculations
+    - Priority: HIGH
+
 ---
 
 ## TIER 2: NEAR-READY (Needs Minor Cleanup) (25 files)
 
 ### Context & Memory Engines (src/logic/agents/cognitive/context/engines/)
-19. 🔄 **MemoryCore.py** - Memory utility calculations
+- 🔄 **MemoryCore.py** - Memory utility calculations
     - Issue: May have some I/O for persistence
     - Fix: Extract pure logic to MemoryLogicCore
 
-20. 🔄 **KnowledgeCore.py** - Knowledge graph operations
+- 🔄 **KnowledgeCore.py** - Knowledge graph operations
     - Issue: Graph persistence
     - Fix: Separate computation from storage
 
-21. 🔄 **GraphCore.py** - Graph algorithms
+- 🔄 **GraphCore.py** - Graph algorithms
     - Issue: File I/O for graph storage
     - Fix: Extract pure graph algorithms
 
-22. 🔄 **ContextCompressorCore.py** - Context compression
+- 🔄 **ContextCompressorCore.py** - Context compression
     - Issue: May have encoding dependencies
     - Fix: Ensure pure compression logic
 
 ### Development Tools (src/logic/agents/development/core/)
-23. 🔄 **BashCore.py** - Bash script linting
+- 🔄 **BashCore.py** - Bash script linting
     - Issue: subprocess calls
     - Fix: Extract validation logic only
     - Note: Already has context recording added
 
-24. 🔄 **AndroidCore.py** - ADB command logic
+- 🔄 **AndroidCore.py** - ADB command logic
     - Issue: subprocess calls
     - Fix: Extract command building logic
     - Note: Already has context recording added
 
-25. 🔄 **ToolDraftingCore.py** - Tool synthesis logic
+- 🔄 **ToolDraftingCore.py** - Tool synthesis logic
     - Issue: Unknown dependencies
     - Fix: Review and extract pure logic
 
 ### System Cores (src/logic/agents/system/core/)
-26. 🔄 **EntropyCore.py** - Entropy calculations
+- 🔄 **EntropyCore.py** - Entropy calculations
     - Issue: Unknown dependencies
     - Rust benefit: Fast entropy computation
 
-27. 🔄 **ConfigHygieneCore.py** - Config validation
+- 🔄 **ConfigHygieneCore.py** - Config validation
     - Issue: File I/O likely
     - Fix: Extract validation logic
 
-28. 🔄 **CurationCore.py** - Content curation scoring
+- 🔄 **CurationCore.py** - Content curation scoring
     - Issue: Unknown dependencies
     - Fix: Review and extract
 
-29. 🔄 **ConvergenceCore.py** (system) - Convergence detection
+- 🔄 **ConvergenceCore.py** (system) - Convergence detection
     - Issue: May overlap with base ConvergenceCore
     - Fix: Consolidate or differentiate
 
-30. 🔄 **ModelRegistryCore.py** - Model registration logic
+- 🔄 **ModelRegistryCore.py** - Model registration logic
     - Issue: Likely has I/O
     - Fix: Extract registry operations logic
 
-31. 🔄 **MorphologyCore.py** - Agent morphology
+- 🔄 **MorphologyCore.py** - Agent morphology
     - Issue: Unknown
     - Fix: Review
 
-32. 🔄 **MultiModalCore.py** - Multi-modal processing
+- 🔄 **MultiModalCore.py** - Multi-modal processing
     - Issue: Unknown
     - Fix: Review
 
 ### Intelligence & Research (src/logic/agents/intelligence/)
-33. 🔄 **LocalizationCore.py** - Localization logic
+- 🔄 **LocalizationCore.py** - Localization logic
     - Issue: Unknown
     - Fix: Review
 
-34. 🔄 **SearchMeshCore.py** - Search mesh algorithms
+- 🔄 **SearchMeshCore.py** - Search mesh algorithms
     - Issue: Unknown
     - Fix: Review
 
-35. 🔄 **SynthesisCore.py** - Synthesis logic
+- 🔄 **SynthesisCore.py** - Synthesis logic
     - Issue: Unknown (exec usage noted in scan)
     - Fix: Remove exec, extract pure logic
 
-36. 🔄 **SearchCore.py** - Search algorithms
+- 🔄 **SearchCore.py** - Search algorithms
     - Issue: Likely has API calls
     - Fix: Extract ranking/scoring logic
 
-37. 🔄 **ResearchCore.py** - Research logic
+- 🔄 **ResearchCore.py** - Research logic
     - Issue: Likely has API calls
     - Fix: Extract analysis logic
 
-38. 🔄 **WebCore.py** - Web scraping logic
+- 🔄 **WebCore.py** - Web scraping logic
     - Issue: Network I/O
     - Fix: Extract parsing/analysis only
 
 ### Observability (src/observability/)
-39. 🔄 **LoggingCore.py** - Logging utilities
+- 🔄 **LoggingCore.py** - Logging utilities
     - Issue: File I/O
     - Fix: Extract formatting/filtering logic
 
 ### Infrastructure (src/infrastructure/)
-40. 🔄 **AttributionCore.py** - Attribution calculations
+- 🔄 **AttributionCore.py** - Attribution calculations
     - Issue: Unknown
     - Fix: Review
 
-41. 🔄 **EconomyCore.py** - Economy calculations
+- 🔄 **EconomyCore.py** - Economy calculations
     - Issue: Unknown
     - Fix: Review
 
-42. 🔄 **LoadBalancerCore.py** - Load balancing logic
+- 🔄 **LoadBalancerCore.py** - Load balancing logic
     - Issue: Unknown
     - Fix: Review
 
-43. 🔄 **GPUMonitorCore.py** - GPU metrics
+- 🔄 **GPUMonitorCore.py** - GPU metrics
     - Issue: System calls likely
     - Fix: Extract calculation logic
 
@@ -232,155 +244,155 @@ This document tracks Python files that are ready or nearly ready for Rust conver
 ## TIER 3: NEEDS WORK (Refactoring Required) (30+ files)
 
 ### Complex Agents with I/O
-44. ⚠️ **CoderCore.py** - Code generation
+- ⚠️ **CoderCore.py** - Code generation
     - Issue: Heavy LLM interaction
     - Fix: Extract validation/analysis logic only
 
-45. ⚠️ **CodeQualityCore.py** - Code quality checks
+- ⚠️ **CodeQualityCore.py** - Code quality checks
     - Issue: File I/O, subprocess
     - Fix: Extract scoring algorithms
 
-46. ⚠️ **DependencyCore.py** (both versions) - Dependency analysis
+- ⚠️ **DependencyCore.py** (both versions) - Dependency analysis
     - Issue: File I/O for requirements
     - Fix: Extract parsing/resolution logic
     - Note: Already has context recording added
 
-47. ⚠️ **SecurityCore.py** - Security scanning
+- ⚠️ **SecurityCore.py** - Security scanning
     - Issue: Pattern detection on files
     - Fix: Extract pattern matching logic
 
-48. ⚠️ **TechDebtCore.py** - Tech debt analysis
+- ⚠️ **TechDebtCore.py** - Tech debt analysis
     - Issue: File scanning
     - Fix: Extract scoring logic
 
-49. ⚠️ **DocGenCore.py** - Documentation generation
+- ⚠️ **DocGenCore.py** - Documentation generation
     - Issue: File I/O
     - Fix: Extract formatting logic
 
-50. ⚠️ **ArchCore.py** - Architecture analysis
+- ⚠️ **ArchCore.py** - Architecture analysis
     - Issue: File I/O
     - Fix: Extract graph analysis
 
 ### Cognitive & Learning
-51. ⚠️ **VisionCore.py** - Vision processing
+- ⚠️ **VisionCore.py** - Vision processing
     - Issue: TODO comment - needs implementation
     - Fix: Implement + extract pure vision logic
 
-52. ⚠️ **TheoryOfMindCore.py** - Theory of mind
+- ⚠️ **TheoryOfMindCore.py** - Theory of mind
     - Issue: Unknown complexity
     - Fix: Review
 
-53. ⚠️ **QuantumCore.py** - Quantum algorithms
+- ⚠️ **QuantumCore.py** - Quantum algorithms
     - Issue: Unknown complexity
     - Fix: Review
 
-54. ⚠️ **MetacognitiveCore.py** - Metacognition
+- ⚠️ **MetacognitiveCore.py** - Metacognition
     - Issue: Unknown
     - Fix: Review
 
-55. ⚠️ **MemoryConsolidatorCore.py** - Memory consolidation
+- ⚠️ **MemoryConsolidatorCore.py** - Memory consolidation
     - Issue: Likely has I/O
     - Fix: Extract consolidation algorithms
 
-56. ⚠️ **LocalRAGCore.py** - Local RAG
+- ⚠️ **LocalRAGCore.py** - Local RAG
     - Issue: Vector DB operations
     - Fix: Extract embedding/search logic
 
-57. ⚠️ **InterpretableCore.py** - Interpretability
+- ⚠️ **InterpretableCore.py** - Interpretability
     - Issue: Unknown
     - Fix: Review
 
-58. ⚠️ **EvolutionCore.py** - Evolution algorithms
+- ⚠️ **EvolutionCore.py** - Evolution algorithms
     - Issue: Unknown (perform_specialized_task missing type hints)
     - Fix: Add types, extract pure evolution logic
 
 ### Fleet & Orchestration
-59. ⚠️ **FleetCore.py** - Fleet management
+- ⚠️ **FleetCore.py** - Fleet management
     - Issue: Heavy I/O and orchestration
     - Fix: Extract coordination algorithms
 
-60. ⚠️ **FleetExecutionCore.py** - Fleet execution
+- ⚠️ **FleetExecutionCore.py** - Fleet execution
     - Issue: Execution + I/O
     - Fix: Extract scheduling logic
 
-61. ⚠️ **OrchestratorRegistryCore.py** - Orchestrator registry
+- ⚠️ **OrchestratorRegistryCore.py** - Orchestrator registry
     - Issue: Registry I/O
     - Fix: Extract lookup logic
 
-62. ⚠️ **ScalingCore.py** - Auto-scaling
+- ⚠️ **ScalingCore.py** - Auto-scaling
     - Issue: System metrics
     - Fix: Extract scaling algorithms
 
-63. ⚠️ **KnowledgeTransferCore.py** - Knowledge transfer
+- ⚠️ **KnowledgeTransferCore.py** - Knowledge transfer
     - Issue: Network + storage
     - Fix: Extract transfer protocols
 
-64. ⚠️ **IntelligenceCore.py** - Collective intelligence
+- ⚠️ **IntelligenceCore.py** - Collective intelligence
     - Issue: Complex coordination
     - Fix: Extract aggregation logic
 
-65. ⚠️ **ConsensusCore.py** - Consensus algorithms
+- ⚠️ **ConsensusCore.py** - Consensus algorithms
     - Issue: Network coordination
     - Fix: Extract consensus math
 
-66. ⚠️ **BlackboardCore.py** - Blackboard pattern
+- ⚠️ **BlackboardCore.py** - Blackboard pattern
     - Issue: Shared state management
     - Fix: Extract pattern matching
 
-67. ⚠️ **TaskDecomposerCore.py** - Task decomposition
+- ⚠️ **TaskDecomposerCore.py** - Task decomposition
     - Issue: Complex AI logic
     - Fix: Extract decomposition algorithms
 
-68. ⚠️ **SelfHealingCore.py** - Self-healing
+- ⚠️ **SelfHealingCore.py** - Self-healing
     - Issue: System interaction
     - Fix: Extract healing strategies
 
-69. ⚠️ **PluginSynthesisCore.py** - Plugin synthesis
+- ⚠️ **PluginSynthesisCore.py** - Plugin synthesis
     - Issue: Code generation
     - Fix: Extract template logic
 
-70. ⚠️ **ToolCore.py** - Tool management
+- ⚠️ **ToolCore.py** - Tool management
     - Issue: Tool execution
     - Fix: Extract tool discovery
 
-71. ⚠️ **SignalCore.py** - Signal handling
+- ⚠️ **SignalCore.py** - Signal handling
     - Issue: Event coordination
     - Fix: Extract signal logic
 
 ### Other Infrastructure
-72. ⚠️ **SandboxCore.py** - Sandbox execution
+- ⚠️ **SandboxCore.py** - Sandbox execution
     - Issue: Process management
     - Fix: Extract validation logic
 
-73. ⚠️ **SimulationCore.py** - Simulation
+- ⚠️ **SimulationCore.py** - Simulation
     - Issue: Complex state management
     - Fix: Extract simulation math
 
-74. ⚠️ **ImportHealerCore.py** - Import healing
+- ⚠️ **ImportHealerCore.py** - Import healing
     - Issue: AST manipulation + I/O
     - Fix: Extract import resolution logic
 
-75. ⚠️ **LogRotationCore.py** - Log rotation
+- ⚠️ **LogRotationCore.py** - Log rotation
     - Issue: File I/O
     - Fix: Extract rotation algorithms
 
-76. ⚠️ **RebirthCore.py** - Agent rebirth
+- ⚠️ **RebirthCore.py** - Agent rebirth
     - Issue: Unknown
     - Fix: Review
 
-77. ⚠️ **PoolingCore.py** - Connection pooling
+- ⚠️ **PoolingCore.py** - Connection pooling
     - Issue: Network management
     - Fix: Extract pooling algorithms
 
-78. ⚠️ **GatewayCore.py** - API gateway
+- ⚠️ **GatewayCore.py** - API gateway
     - Issue: HTTP handling
     - Fix: Extract routing logic
 
-79. ⚠️ **APICore.py** - API logic
+- ⚠️ **APICore.py** - API logic
     - Issue: HTTP/REST
     - Fix: Extract validation
 
-80. ⚠️ **InterfaceSyncCore.py** - Interface sync
+- ⚠️ **InterfaceSyncCore.py** - Interface sync
     - Issue: Unknown
     - Fix: Review
 
