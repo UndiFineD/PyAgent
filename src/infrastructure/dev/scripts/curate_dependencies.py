@@ -22,7 +22,7 @@ import os
 import re
 from pathlib import Path
 
-def curate_dependencies():
+def curate_dependencies() -> None:
     workspace_root = Path(".")
     src_dir = workspace_root / "src"
     requirements_file = workspace_root / "requirements.txt"

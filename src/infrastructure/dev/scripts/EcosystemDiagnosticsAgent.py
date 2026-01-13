@@ -25,18 +25,18 @@ from pathlib import Path
 from typing import Dict, List, Any
 
 class EcosystemDiagnosticsAgent:
-    def __init__(self, root_path: str = "."):
+    def __init__(self, root_path: str = ".") -> None:
         self.root_path = Path(root_path)
         self.results = {}
 
-    def run_all_checks(self):
+    def run_all_checks(self) -> None:
         print("--- Ecosystem Diagnostics Agent (Phase 309) ---")
         self.check_syntax_errors()
         self.check_import_health()
         self.check_system_resources()
         self.summarize()
 
-    def check_syntax_errors(self):
+    def check_syntax_errors(self) -> None:
         print("[CHECK] Validating Syntax in src/...")
         errors = []
         for py_file in (self.root_path / "src").rglob("*.py"):
@@ -51,22 +51,25 @@ class EcosystemDiagnosticsAgent:
         else:
             print(f"  - Warning: {len(errors)} syntax errors detected.")
 
-    def check_import_health(self):
+    def check_import_health(self) -> None:
         print("[CHECK] Checking Circular Imports and Missing References...")
         # Placeholder for complex import analysis
         # In a real scenario, this would use 'pylint' or custom graph analysis
         self.results['import_health'] = "Nominal"
 
-    def check_system_resources(self):
+    def check_system_resources(self) -> None:
         print("[CHECK] System Health...")
         try:
-            # Check disk space
-            total, used, free = os.popen("df -h .").read().split('\n')[1].split()[1:4]
-            self.results['disk_space'] = f"Free: {free} / {total}"
-        except:
-            self.results['disk_space'] = "Unknown (Windows/Other)"
+            # Check disk space using shutil.disk_usage (cross-platform, safe)
+            import shutil
+            usage = shutil.disk_usage(".")
+            total_gb = usage.total / (1024**3)
+            free_gb = usage.free / (1024**3)
+            self.results['disk_space'] = f"Free: {free_gb:.1f} GB / {total_gb:.1f} GB"
+        except Exception:
+            self.results['disk_space'] = "Unknown (Error reading disk info)"
 
-    def summarize(self):
+    def summarize(self) -> None:
         print("\n--- Diagnostic Summary ---")
         for key, val in self.results.items():
             if isinstance(val, list):

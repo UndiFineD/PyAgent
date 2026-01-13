@@ -5,12 +5,11 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .AgentStrategy import AgentStrategy
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, TYPE_CHECKING
 
-try:
-    from . import BackendFunction
-except ImportError:
-    from src.logic.strategies import BackendFunction
+if TYPE_CHECKING:
+    from collections.abc import Callable
+    BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
 __version__ = VERSION
 

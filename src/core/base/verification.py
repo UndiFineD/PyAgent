@@ -62,7 +62,7 @@ class AgentVerifier:
     _embedding_model = None
 
     @classmethod
-    def _get_embedding_model(cls):
+    def _get_embedding_model(cls) -> bool:
         """Lazy loading of the embedding model for semantic anchoring (Phase 257)."""
         if cls._embedding_model is None:
             try:

@@ -51,7 +51,7 @@ class AttributionEngine:
                 return json.load(f)
         return []
 
-    def apply_licensing(self, file_path: str):
+    def apply_licensing(self, file_path: str) -> None:
         """Ensures the file has the correct license header (Phase 185)."""
         path = Path(file_path)
         if not path.exists():

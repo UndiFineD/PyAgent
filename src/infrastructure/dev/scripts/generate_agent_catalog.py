@@ -16,7 +16,7 @@ import os
 import ast
 from pathlib import Path
 
-def generate_catalog():
+def generate_catalog() -> None:
     """Phase 244: Scans src/logic/agents and generates detailed documentation."""
     agents_dir = Path("src/logic/agents")
     output_file = Path("docs/AGENTS.md")

@@ -37,6 +37,15 @@ from .observability_core import (
     ThresholdAlert,
     DerivedMetric,
 )
+# Import pure calculation cores
+from .MetricsCore import (
+    TokenCostCore,
+    ModelFallbackCore,
+    DerivedMetricCalculator,
+    StatsRollupCore,
+    CorrelationCore,
+    ABTestCore,
+)
 try:
     from .analysis import MODEL_COSTS, HAS_PSUTIL
     import psutil
@@ -770,50 +779,27 @@ class RetentionEnforcer:
 class TokenCostEngine:
     """
     Calculates estimated costs for LLM tokens based on model variety.
-    Shell for TokenCostCore.
+    Shell wrapper for TokenCostCore (pure logic).
     """
     
     def __init__(self) -> None:
-        self.core = TokenCostCore()
-        # Keep global reference for backward compatibility if needed
-        self.MODEL_COSTS = MODEL_COSTS
+        self.core = TokenCostCore()  # Use imported pure logic core
 
     def calculate_cost(self, model: str, input_tokens: int = 0, output_tokens: int = 0) -> float:
-        """Returns the estimated cost in USD for the given token counts."""
-        return self.core.compute_usd(model, input_tokens, output_tokens)
+        """Returns the estimated cost in USD for the given token counts.
+        
+        Delegates to pure calculation core.
+        """
+        result = self.core.calculate_cost(input_tokens, output_tokens, model)
+        return result.total_cost
 
     def get_supported_models(self) -> list:
         """Returns list of models with explicit pricing."""
-        return self.core.list_models()
+        # Use core's model list
+        return list(self.core.MODEL_COSTS.keys())
 
-class TokenCostCore:
-    """
-    Pure logic for cost calculations.
-    No I/O or state management.
-    """
-
-    def compute_usd(self, model: str, input_tokens: int, output_tokens: int) -> float:
-        """Returns the estimated cost in USD."""
-        model_key = model.lower()
-        pricing = self._find_pricing(model_key)
-        
-        # Cost per 1k tokens
-        input_cost = (input_tokens / 1000) * pricing["input"]
-        output_cost = (output_tokens / 1000) * pricing["output"]
-        
-        return round(input_cost + output_cost, 6)
-
-    def _find_pricing(self, model_key: str) -> dict[str, float]:
-        """Heuristic for finding model pricing."""
-        pricing = MODEL_COSTS.get(model_key)
-        if not pricing:
-            for key in MODEL_COSTS:
-                if key != "default" and key in model_key:
-                    return MODEL_COSTS[key]
-        return pricing or MODEL_COSTS["default"]
-
-    def list_models(self) -> list[str]:
-        return list(MODEL_COSTS.keys())
+# TokenCostCore is now imported from MetricsCore module
+# Removed duplicate definition to use the pure logic version
 
 class ModelFallbackEngine:
     """
@@ -846,50 +832,15 @@ class ModelFallbackEngine:
         ranked = self.core.rank_models_by_cost(models, price_map)
         return ranked[0]
 
-if __name__ == "__main__":
-    cost_engine = TokenCostEngine()
-    fallback = ModelFallbackEngine(cost_engine)
-    
-    print(f"Fallback for gpt-4o: {fallback.get_fallback_model('gpt-4o')}")
-    print(f"Cheapest of [gpt-4o, gpt-4o-mini]: {fallback.get_cheapest_model(['gpt-4o', 'gpt-4o-mini'])}")
-
-class ModelFallbackCore:
-    """Pure logic core for model fallback strategies."""
-
-    def __init__(self, fallback_chains: dict[str, list[str]] | None = None) -> None:
-        self.fallback_chains = fallback_chains or {
-            "high_performance": ["gpt-4o", "claude-3-5-sonnet", "gpt-4-turbo"],
-            "balanced": ["claude-3-5-sonnet", "gpt-4o-mini", "gemini-1.5-pro"],
-            "economy": ["gpt-4o-mini", "claude-3-haiku", "gemini-1.5-flash"]
-        }
-
-    def determine_next_model(self, current_model: str) -> str | None:
-        """Logic to pick the next model in a chain."""
-        for chain_name, chain in self.fallback_chains.items():
-            if current_model in chain:
-                idx = chain.index(current_model)
-                if idx + 1 < len(chain):
-                    return chain[idx + 1]
-        
-        # Default fallback if not in a chain
-        return self.fallback_chains["economy"][0]
-
-    def rank_models_by_cost(self, models: list[str], model_price_map: dict[str, dict[str, float]]) -> list[str]:
-        """Ranks models from cheapest to most expensive."""
-        def get_cost(m: str) -> float:
-            return model_price_map.get(m, {}).get("total", 999.0)
-            
-        return sorted(models, key=get_cost)
-
-    def validate_retry_limit(self, current_retry: int, max_retries: int) -> bool:
-        """Logic for retry boundaries."""
-        return current_retry < max_retries
+# ModelFallbackCore is now imported from MetricsCore module
+# Removed duplicate definition to use the pure logic version
 
 class StatsRollupCalculator:
-    """Calculates metric rollups."""
+    """Calculates metric rollups using pure logic core."""
     def __init__(self) -> None:
         self.rollups: dict[str, list[float]] = {}
         self._points: dict[str, list[tuple[float, float]]] = {}
+        self.core = StatsRollupCore()  # Use imported pure logic core
 
     def add_point(self, metric: str, timestamp: float, value: float) -> None:
         """Add a data point for rollup calculation."""

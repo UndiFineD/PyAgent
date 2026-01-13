@@ -15,7 +15,7 @@ class PrivacyGuardAgent(BaseAgent):
     Scans for AWS keys, private tokens, and other secrets.
     """
 
-    def __init__(self, file_path: str = "security_scan.audit"):
+    def __init__(self, file_path: str = "security_scan.audit") -> None:
         super().__init__(file_path)
         self.secret_patterns = {
             "AWS_KEY": re.compile(r"(?i)AKIA[0-9A-Z]{16}"),
@@ -27,7 +27,7 @@ class PrivacyGuardAgent(BaseAgent):
     @as_tool
     async def scan_secrets(self, target_dir: str) -> list[dict[str, Any]]:
         """Scans directory for potential secrets."""
-        def run_scan():
+        def run_scan() -> list[dict[str, Any]]:
             leaks = []
             for root, _, files in os.walk(target_dir):
                 if ".git" in root or "__pycache__" in root:

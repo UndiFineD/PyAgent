@@ -120,7 +120,6 @@ class HopperSim:
             
             bar = core.format_progress_bar(step, steps)
             print(f"Step {step:02d}: {bar} | Failed: {len(failures)} | Alive: {active_agents}")
-            time.sleep(0.1) # Simulate time passing
             
         print(f"=== TEST COMPLETE. Final Resilience: {active_agents/agent_count*100:.1f}% ===")
 

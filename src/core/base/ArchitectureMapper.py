@@ -51,7 +51,7 @@ class ArchitectureMapper:
         ]
         return "\n".join(mermaid)
 
-    def run(self):
+    def run(self) -> None:
         """Generates and saves the markdown file."""
         print("[*] Mapping PyAgent architecture...")
         diagram = self.generate_diagram()

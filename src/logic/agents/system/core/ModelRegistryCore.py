@@ -59,7 +59,7 @@ class ModelRegistryCore:
         last_5 = quality_history[-5:]
         return all(q < threshold for q in last_5)
 
-    def register_new_adapter(self, name: str, path: str):
+    def register_new_adapter(self, name: str, path: str) -> None:
         """Adds a new adapter to the registry."""
         self.adapter_registry[name.lower()] = path
 

@@ -12,7 +12,7 @@ class FinancialAgent(BaseAgent):
     Estimates the real-world dollar cost of improvement cycles based on model usage.
     """
 
-    def __init__(self, file_path: str = "budget.audit"):
+    def __init__(self, file_path: str = "budget.audit") -> None:
         super().__init__(file_path)
         self.pricing = {
             "Ollama": 0.0,

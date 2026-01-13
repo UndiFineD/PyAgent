@@ -113,9 +113,11 @@ class HandyAgent(BaseAgent):
             return msg
 
         try:
-            # shell=True is kept for compatibility with pipes/redirects,
-            # but we use a timeout for robustness.
-            result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=60) # nosec
+            # Use shlex to safely split commands without shell=True
+            # This prevents command injection while supporting most use cases
+            import shlex
+            cmd_args = shlex.split(command)
+            result = subprocess.run(cmd_args, capture_output=True, text=True, timeout=60)
             if result.returncode == 0:
                 stdout = result.stdout[:1000]
                 self._record("execute_success", command, stdout)

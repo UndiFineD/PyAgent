@@ -15,7 +15,7 @@ COPYRIGHT_BLOCK = """# Copyright 2026 PyAgent Authors
 # limitations under the License.
 """
 
-def fix_header(lines, filename=""):
+def fix_header(lines: list[str], filename: str = "") -> list[str]:
     shebang = None
     _future = "from __future__ import annotations\n"
     _v_import = "from src.core.base.version import VERSION\n"
@@ -95,7 +95,7 @@ def fix_header(lines, filename=""):
         
     return new_lines
 
-def process_directory(directory):
+def process_directory(directory: str) -> None:
     for root, dirs, files in os.walk(directory):
         # Skip hidden and cache dirs
         if ".git" in root or "__pycache__" in root or ".venv" in root:

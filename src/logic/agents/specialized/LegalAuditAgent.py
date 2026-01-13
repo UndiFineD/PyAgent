@@ -26,7 +26,7 @@ class LegalAuditAgent(BaseAgent):
     license requirements (Apache 2.0 or MIT).
     """
 
-    def __init__(self, file_path: str = "project_compliance.audit"):
+    def __init__(self, file_path: str = "project_compliance.audit") -> None:
         super().__init__(file_path)
         self.allowed_licenses = [
             "Apache License, Version 2.0",
@@ -39,7 +39,7 @@ class LegalAuditAgent(BaseAgent):
     @as_tool
     async def run_audit(self, target_dir: str) -> dict[str, Any]:
         """Scans a directory for license compliance issues."""
-        def walk_and_check():
+        def walk_and_check() -> dict[str, Any]:
             results = {
                 "compliant": [],
                 "non_compliant": [],

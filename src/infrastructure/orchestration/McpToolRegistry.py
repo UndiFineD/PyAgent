@@ -36,7 +36,7 @@ class McpToolRegistry(ToolRegistry):
             description = tool_def.get("description", "")
             
             # Create a proxy function that calls the handler
-            def mcp_proxy_func(**kwargs):
+            def mcp_proxy_func(**kwargs: Any) -> Any:
                 return call_handler(tool_name, **kwargs)
             
             mcp_proxy_func.__name__ = tool_name
