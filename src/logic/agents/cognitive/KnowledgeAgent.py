@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,12 +18,10 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Agent specializing in Workspace Knowledge and Codebase Context (RAG-lite)."""
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import create_main_function, as_tool
 from src.logic.agents.cognitive.context.engines.GraphContextEngine import GraphContextEngine
@@ -37,12 +29,13 @@ from src.logic.agents.cognitive.context.engines.MemoryEngine import MemoryEngine
 from src.logic.agents.cognitive.context.engines.ContextCompressor import ContextCompressor
 from src.logic.agents.cognitive.context.engines.KnowledgeCore import KnowledgeCore
 import logging
-import os
 import json
 import re
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional
+
+__version__ = VERSION
 
 try:
     import chromadb
@@ -113,7 +106,8 @@ class KnowledgeAgent(BaseAgent):
         """Records a piece of knowledge into the MIRIX 6-tier architecture.
         Tiers: core, episodic, semantic, procedural, resource, knowledge.
         """
-        if not self._init_chroma(): return
+        if not self._init_chroma():
+            return
         
         valid_tiers = ["core", "episodic", "semantic", "procedural", "resource", "knowledge"]
         if tier.lower() not in valid_tiers:
@@ -134,7 +128,8 @@ class KnowledgeAgent(BaseAgent):
 
     def query_mirix(self, tier: str, query: str, limit: int = 3) -> str:
         """Queries a specific tier of memory for context."""
-        if not self._init_chroma(): return ""
+        if not self._init_chroma():
+            return ""
         
         try:
             results = self._mirix_collection.query(
@@ -273,7 +268,8 @@ class KnowledgeAgent(BaseAgent):
                         break
             except Exception:
                 pass
-            if len(context_snippets) > 5: break
+            if len(context_snippets) > 5:
+                break
 
         # 3. Semantic Search (ChromaDB)
         if HAS_CHROMADB:
@@ -300,7 +296,8 @@ class KnowledgeAgent(BaseAgent):
                                 break
                 except Exception:
                     pass
-                if len(context_snippets) > 10: break
+                if len(context_snippets) > 10:
+                    break
                 
         if not context_snippets:
             return f"No relevant context found for '{query}' in {root}."
@@ -418,7 +415,8 @@ class KnowledgeAgent(BaseAgent):
             symbols = re.findall(r"(?:class|def)\s+([a-zA-Z_][a-zA-Z0-9_]*)", match_text)
             
             for symbol in symbols:
-                if symbol in seen_nodes: continue
+                if symbol in seen_nodes:
+                    continue
                 seen_nodes.add(symbol)
                 neighbors = self.graph_engine.get_neighbors(symbol)
                 if neighbors:

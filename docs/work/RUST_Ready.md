@@ -1,6 +1,23 @@
-# Rust Conversion Readiness Manifest
+# 🦀 Project "Rust-Core" Readiness List (High-Frequency Logic)
 
 ## 🛠️ RUST IMPLEMENTATION PROMPT LIST (Priority Queue)
+- [ ] **Core Interface Logic ([src/core/base/modules.py](src/core/base/modules.py))**: "Implement the `BaseModule` abstract foundation and lifecycle management in Rust. Provide a high-performance trait system for initialization, execution, and shutdown that mirrors the Python implementation."
+- [ ] **Unified Core Logic ([src/core/modules/](src/core/modules/))**: "Implement the `BaseModule` extensions (TaskDecomposer, CodeQuality, Blackboard, Consensus, Signal, DocGen) in Rust using PyO3. Ensure zero-copy data passing for large AST/Blackboard state."
+- [ ] **Routing Engine ([src/infrastructure/orchestration/RoutingEngine.py](src/infrastructure/orchestration/RoutingEngine.py))**: "Port the latency-heuristic routing logic to Rust. Optimize the TTFT/TPS weighting calculation to run in <1ms."
+- [ ] **Consensus Engine ([src/infrastructure/orchestration/ConsensusEngine.py](src/infrastructure/orchestration/ConsensusEngine.py))**: "Implement the PBFT quorum verification in Rust. Handle async voting states and tie-breaking heuristics with minimal memory overhead."
+
+## 🎯 TOP PRIORITY: THE UNIFIED CORE
+- [ ] **[src/core/modules/](src/core/modules/)** (The entire unified logic core: TaskDecomposer, CodeQuality, Blackboard, Consensus, Signal, DocGen)
+- [ ] **[src/infrastructure/orchestration/RoutingEngine.py](src/infrastructure/orchestration/RoutingEngine.py)** (Directly utilizes backend performance metrics)
+- [ ] **[src/infrastructure/orchestration/ConsensusEngine.py](src/infrastructure/orchestration/ConsensusEngine.py)** (Enforces PBFT/Quorum logic)
+
+## 🏗️ INFRASTRUCTURE & ORCHESTRATION (Secondary List)
+- [ ] **[src/infrastructure/orchestration/GossipProtocolOrchestrator.py](src/infrastructure/orchestration/GossipProtocolOrchestrator.py)** (Decentralized state synchronization)
+- [ ] **[src/infrastructure/orchestration/RoutingEngine.py](src/infrastructure/orchestration/RoutingEngine.py)** (Heuristic Quality vs. Latency Performance Router)
+- [ ] **[src/infrastructure/dev/scripts/visualize_swarm_graph.py](src/infrastructure/dev/scripts/visualize_swarm_graph.py)** (Fast Social Topology Matrix & Mermaid Graph Generator)
+- [ ] **[src/core/base/managers/PromptManagers.py](src/core/base/managers/PromptManagers.py)** (Sliding window token summarization & Template rendering)
+- [ ] **[src/infrastructure/backend/RunnerBackends.py](src/infrastructure/backend/RunnerBackends.py)** (Fast Context Window Detection & High-throughput LLM Backend Routing)
+- [ ] **[src/core/base/BaseAgent.py](src/core/base/BaseAgent.py)** (Core Lifecycle, Registry Enforcement & Quota Management)
 - [ ] **[src/core/base/managers/ResourceQuotaManager.py](src/core/base/managers/ResourceQuotaManager.py)** (High-speed resource budgeting & cycle interruption)
 - [ ] **[src/infrastructure/dev/scripts/generate_agent_catalog.py](src/infrastructure/dev/scripts/generate_agent_catalog.py)** (Fast AST-based Metadata Extraction & Documentation Generator)
 - [ ] **[src/infrastructure/orchestration/FleetTelemetryVisualizer.py](src/infrastructure/orchestration/FleetTelemetryVisualizer.py)** (High-frequency Event Processing & Version Drift Analysis)

@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,16 +18,15 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Test generation and case minimization."""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import ast
 from typing import Any, Callable, List, Tuple
-
 from .models import GeneratedTest
 
+__version__ = VERSION
 
 class TestGenerator:
     """Generate tests from specifications."""
@@ -171,7 +164,6 @@ class TestGenerator:
         validated = [g for g in self.generated if g.validated]
         return "\n\n".join(g.generated_code for g in validated)
 
-
 class TestCaseMinimizer:
     """Minimize test cases for debugging."""
     __test__ = False
@@ -298,7 +290,6 @@ class TestCaseMinimizer:
             "average_reduction": avg_reduction
         }
 
-
 class TestDocGenerator:
     """Generates documentation from tests."""
     __test__ = False
@@ -338,4 +329,3 @@ class TestDocGenerator:
                 result[module] = []
             result[module].append(test)
         return result
-

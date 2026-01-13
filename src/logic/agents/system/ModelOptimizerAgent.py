@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,17 +18,13 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Agent specializing in model inference optimization and low-VRAM strategies."""
 
-
-
+from __future__ import annotations
 from src.core.base.BaseAgent import BaseAgent
 import logging
 import json
-from pathlib import Path
-from typing import Dict, List, Any, Optional
-
+from typing import Dict, List, Any
 
 class ModelOptimizerAgent(BaseAgent):
     """Optimizes LLM deployment and inference using patterns like AirLLM."""
@@ -133,6 +123,7 @@ class ModelOptimizerAgent(BaseAgent):
         """Generates boilerplate code for running large models via AirLLM."""
         return f"""
 from airllm import AutoModel
+__version__ = VERSION
 
 # Load large model {model_id} with {compression} compression
 # This allows running 70B+ models on low-VRAM consumer GPUs

@@ -1,3 +1,4 @@
+
 """
 Core logic for Resource Curation (Phase 173).
 Handles pruning of temporary directories and old files.

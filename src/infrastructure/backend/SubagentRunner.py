@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,33 +18,28 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Implementation of subagent running logic."""
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import hashlib
-import json
 import logging
 import os
 import subprocess
-import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
-
+from typing import Any, Dict, List, Optional
 from .DiskCache import DiskCache
-from .RunnerBackends import BackendHandlers
 from .LLMClient import LLMClient
 from .LocalContextRecorder import LocalContextRecorder
 from .SubagentCore import SubagentCore
 from .SubagentStatus import SubagentStatus
 
+__version__ = VERSION
+
 try:
     import requests
 except ImportError:
     requests = None  # type: ignore[assignment]
-
 
 class SubagentRunner:
     """Handles running subagents with multiple backend support and fallback logic."""
@@ -209,9 +198,12 @@ class SubagentRunner:
     def _looks_like_command(self, text: str) -> bool:
         """Helper to decide if a prompt is command-like."""
         t = (text or "").strip()
-        if not t: return False
-        if "\n" in t: return False
-        if any(op in t for op in ("|", "&&", ";")): return True
+        if not t:
+            return False
+        if "\n" in t:
+            return False
+        if any(op in t for op in ("|", "&&", ";")):
+            return True
         starters = ("git ", "gh ", "docker ", "kubectl ", "pip ", "python ", "npm ", "node ", "pwsh ", "powershell ", "Get-", "Set-", "New-")
         return t.startswith(starters)
 

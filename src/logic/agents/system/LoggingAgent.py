@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,22 +18,20 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Agent specializing in distributed logging and log aggregation.
 Supports forwarding logs to central aggregators via syslog or HTTP.
 """
 
-
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import logging.handlers
-import json
 import time
 from typing import Dict, List, Any, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+
+__version__ = VERSION
 
 class LoggingAgent(BaseAgent):
     """Manages distributed fleet logs and integrates with external aggregators."""

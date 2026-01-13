@@ -1,9 +1,10 @@
-from src.core.base.version import VERSION
-__version__ = VERSION
 
+from src.core.base.version import VERSION
 import logging
 from typing import List, Dict, Any
 from src.logic.agents.compliance.core.ComplianceCore import ComplianceCore, ComplianceIssue
+
+__version__ = VERSION
 
 class ComplianceAgent:
     """Shell agent for continuous compliance and regulatory auditing.

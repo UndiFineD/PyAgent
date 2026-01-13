@@ -13,13 +13,11 @@
 # limitations under the License.
 
 from __future__ import annotations
-
 import asyncio
 import logging
 import json
 import os
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
-
+from typing import Dict, Any, TYPE_CHECKING
 from src.core.base.version import VERSION
 
 if TYPE_CHECKING:

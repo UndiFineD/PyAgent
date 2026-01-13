@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,15 +18,13 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """
 Computational core for code analysis, metrics, and quality assessment.
 Designed for high-performance rule checking with future Rust integration.
 """
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from src.core.base.types.CodeLanguage import CodeLanguage
 from src.core.base.types.CodeMetrics import CodeMetrics
 from src.core.base.types.CodeSmell import CodeSmell
@@ -43,16 +35,15 @@ from src.core.base.AgentCore import LogicCore
 from typing import Any, Dict, List, Optional, Tuple
 import ast
 import hashlib
-import json
 import logging
 import math
 import os
 import re
 import shutil
 import subprocess
-import sys
 import tempfile
-from typing import Any, Dict, List, Optional, Tuple
+
+__version__ = VERSION
 
 # Logic extracted for future Rust migration (PyO3)
 # Goal: Isolate all "Computationally Expensive" or "Rule-Based" logic here.
@@ -203,8 +194,10 @@ class CoderCore(LogicCore):
         violations: List[Dict[str, Any]] = []
         lines = content.split('\n')
         for rule in rules:
-            if not rule.enabled: continue
-            if rule.language and rule.language != self.language: continue
+            if not rule.enabled:
+                continue
+            if rule.language and rule.language != self.language:
+                continue
             
             if '\n' in rule.pattern or rule.pattern.startswith('^'):
                 for match in re.finditer(rule.pattern, content, re.MULTILINE):
@@ -233,8 +226,10 @@ class CoderCore(LogicCore):
         fixed_content = content
         fix_count = 0
         for rule in rules:
-            if not rule.enabled or not rule.auto_fix: continue
-            if rule.language and rule.language != self.language: continue
+            if not rule.enabled or not rule.auto_fix:
+                continue
+            if rule.language and rule.language != self.language:
+                continue
             
             new_content = rule.auto_fix(fixed_content)
             if new_content != fixed_content:
@@ -331,7 +326,8 @@ class CoderCore(LogicCore):
         for i in range(len(lines) - min_lines + 1):
             block = '\n'.join(lines[i:i + min_lines])
             normalized = re.sub(r'\s+', ' ', block.strip())
-            if len(normalized) < 20: continue
+            if len(normalized) < 20:
+                continue
             
             block_hash = hashlib.md5(normalized.encode()).hexdigest()
             if block_hash not in hashes:

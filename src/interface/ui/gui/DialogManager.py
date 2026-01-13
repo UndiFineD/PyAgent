@@ -11,21 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
-
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,9 +24,13 @@ __version__ = VERSION
 
 """Dialog and interaction management for the PyAgent GUI."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Dict, List, Optional
+
+__version__ = VERSION
 
 class DialogManager:
     """Handles modal dialogs and interactive prompts."""
@@ -101,7 +96,8 @@ class DialogManager:
         
         def browse_token() -> None:
             f: str = filedialog.askopenfilename()
-            if f: token_var.set(f)
+            if f:
+                token_var.set(f)
         ttk.Button(token_frame, text="...", width=3, command=browse_token).pack(side=tk.RIGHT)
 
         # Other settings

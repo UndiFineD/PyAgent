@@ -11,35 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
-
-
 # -*- coding: utf-8 -*-
 
 """Utility classes for BaseAgent framework."""
 
-
-import hashlib
+from __future__ import annotations
+from src.core.base.version import VERSION
 import json
 import logging
 import argparse
 import os
 import sys
-from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Type, TYPE_CHECKING
+from typing import Any, Callable, Optional, Type, TYPE_CHECKING
 
 if TYPE_CHECKING:
     from .agent import BaseAgent
@@ -49,8 +39,7 @@ try:
 except ImportError:
     sys.path.append(str(Path(__file__).parent.parent.parent))
     from src.logic.strategies import plan_executor as agent_strategies
-from .models import AgentEvent, FilePriority, InputType, AgentState, ResponseQuality
-
+__version__ = VERSION
 
 def setup_logging(verbosity_arg: int = 0) -> None:
     """Configure logging based on verbosity level."""
@@ -65,7 +54,6 @@ def setup_logging(verbosity_arg: int = 0) -> None:
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         force=True
     )
-
 
 def as_tool(priority: int = 0, category: Optional[str] = None) -> Callable:
     """Decorator to mark a method as a tool for the ToolRegistry.

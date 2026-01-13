@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,13 +18,15 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import time
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, TYPE_CHECKING
 from src.core.base.models import FilePriority, BatchResult
+
+__version__ = VERSION
 
 if TYPE_CHECKING:
     from ..agent import BaseAgent
@@ -65,7 +61,6 @@ class BatchRequest:
 
     def execute(self, processor: Callable[[List[Any]], List[Any]]) -> List[Any]:
         return processor(self.items)
-
 
 class RequestBatcher:
     """Batch processor for multiple file requests."""
@@ -113,7 +108,8 @@ class RequestBatcher:
                     content=content,
                     processing_time=time.time() - start_time
                 )
-                if request.callback: request.callback(content)
+                if request.callback:
+                    request.callback(content)
             except Exception as e:
                 result = BatchResult(
                     file_path=request.file_path,
@@ -146,5 +142,3 @@ class RequestBatcher:
             "avg_time": total_time / len(self.results),
             "total_time": total_time,
         }
-
-

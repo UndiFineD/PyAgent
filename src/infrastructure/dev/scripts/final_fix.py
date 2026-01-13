@@ -10,12 +10,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -23,13 +17,14 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Script for applying final import formatting fixes across the workspace."""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import os
 import re
+
+__version__ = VERSION
 
 def fix() -> None:
     """Correct import indentation and leading whitespace errors."""
@@ -42,7 +37,8 @@ def fix() -> None:
                 try:
                     with open(path, "r", encoding="utf-8") as f:
                         lines = f.readlines()
-                except: continue
+                except:
+                    continue
                 
                 changed = False
                 new_lines = []
@@ -68,7 +64,8 @@ def fix() -> None:
                             if lines[j].strip():
                                 prev_line = lines[j].strip()
                                 m = re.match(r"^(\s+)", lines[j])
-                                if m: prev_indent = m.group(1)
+                                if m:
+                                    prev_indent = m.group(1)
                                 break
                         
                         if prev_line.endswith(":"):
@@ -84,7 +81,8 @@ def fix() -> None:
                             for j in range(i+1, len(lines)):
                                 if lines[j].strip():
                                     m = re.match(r"^(\s+)", lines[j])
-                                    if m: next_indent = m.group(1)
+                                    if m:
+                                        next_indent = m.group(1)
                                     break
                             if next_indent:
                                 line = next_indent + line

@@ -11,21 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
-
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,29 +27,28 @@ PyAgent CLI Interface.
 Connects to the Fleet Load Balancer via the Agent API Server.
 """
 
-# from functools import lru_cache
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import sys
-import json
 import requests
 import argparse
-# import time
-
 from pathlib import Path
-# # # from typing import Dict, Any, List, Optional
-
-
-
 from rich.console import Console
 from rich.table import Table
 from rich.panel import Panel
-from rich.live import Live
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, TaskProgressColumn
 from rich.columns import Columns
-
-# Infrastructure
 from src.core.base.ConnectivityManager import ConnectivityManager
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+
+# from functools import lru_cache
+
+# import time
+
+# # # from typing import Dict, Any, List, Optional
+
+# Infrastructure
+__version__ = VERSION
 
 console = Console()
 API_BASE_URL = "http://localhost:8000"

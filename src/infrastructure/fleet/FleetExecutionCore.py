@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,12 +18,14 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import time
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+from typing import Dict, List, Any, TYPE_CHECKING
 from .WorkflowState import WorkflowState
+
+__version__ = VERSION
 
 if TYPE_CHECKING:
     from .FleetManager import FleetManager
@@ -151,7 +147,8 @@ class FleetExecutionCore:
                     duration = time.time() - start_time
                     self.fleet.scaling.record_metric(agent_name, duration)
                     rl = self.fleet.rl_selector
-                    if rl: rl.update_stats(f"{agent_name}.{action_name}", success=True)
+                    if rl:
+                        rl.update_stats(f"{agent_name}.{action_name}", success=True)
                     
                     success = True
                     token_info = getattr(agent, "_last_token_usage", {"input": 0, "output": 0, "model": current_model or "unknown"})
@@ -160,7 +157,8 @@ class FleetExecutionCore:
                     self.fleet.telemetry.end_trace(trace_id, agent_name, action_name, status="success")
                 except Exception as e:
                     rl = self.fleet.rl_selector
-                    if rl: rl.update_stats(f"{agent_name}.{action_name}", success=False)
+                    if rl:
+                        rl.update_stats(f"{agent_name}.{action_name}", success=False)
                     logging.error(f"Fleet Execution Error (Attempt {attempts}): {e}")
                     error_msg = str(e)
 

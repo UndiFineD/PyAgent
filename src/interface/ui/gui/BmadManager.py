@@ -11,33 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
-
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-from typing import Optional
 """BMAD (Bulk Multi-Agent Deployment) component for the PyAgent GUI."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import tkinter as tk
 from tkinter import ttk, messagebox
 import os
 from .Constants import BMAD_AGENTS, BMAD_TRACKS, BMAD_PHASES, DEFAULT_INSTRUCTIONS
+
+__version__ = VERSION
 
 class BmadManager:
     """Manages the BMAD workflow for deploying agents at scale across the project."""
@@ -220,4 +214,3 @@ class BmadManager:
 
         # Final status update via callback if available
         # self.callbacks["set_status"](f"Deployed {total_instances} agents for {mode} targeting.")
-

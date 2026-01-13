@@ -13,26 +13,20 @@
 # limitations under the License.
 
 from __future__ import annotations
-
 from src.core.base.version import VERSION
+import random
+from typing import Dict, List, Any
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+from src.logic.agents.cognitive.core.EvolutionCore import EvolutionCore
+
 __version__ = VERSION
 
-# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
-
-
-import logging
-import json
-import random
-from typing import Dict, List, Any, Optional
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
-from src.logic.agents.cognitive.core.EvolutionCore import EvolutionCore
 
 class EvolutionaryPromptAgent(BaseAgent):
     """
@@ -109,24 +103,6 @@ class EvolutionaryPromptAgent(BaseAgent):
                 "parents": [parent1.get("sha"), parent2.get("sha")],
                 "fitness": 0.0,
                 "generation": self.generation + 1
-            })
-            
-        self.population = new_population
-        self.generation += 1
-        return {"generation": self.generation, "top_fitness": winners[0].get("fitness")}
-            p2_lines = parent2["prompt"].split("\n")
-            crossover_point = len(p1_lines) // 2
-            child_prompt = "\n".join(p1_lines[:crossover_point] + p2_lines[crossover_point:])
-            
-            # Mutation (Randomly append a new constraint or adjective)
-            if random.random() < 0.2:
-                mutations = ["Be extremely concise.", "Use modern Python idioms.", "Prioritize security above all.", "Explain every step."]
-                child_prompt += f"\n[Mutation: {random.choice(mutations)}]"
-                
-            new_population.append({
-                "prompt": child_prompt,
-                "fitness": 0.0,
-                "history": []
             })
             
         self.population = new_population

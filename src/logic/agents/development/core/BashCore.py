@@ -1,3 +1,4 @@
+
 """
 Core logic for Bash script analysis (Phase 175).
 Integrates shellcheck for linting generated scripts.

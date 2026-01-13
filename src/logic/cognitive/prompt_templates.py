@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
 """Vibe-Coding 2025 persona and track definitions."""
+
+from __future__ import annotations
 
 VIBE_CODING_2025_TRACKS = {
     "RESEARCH": {

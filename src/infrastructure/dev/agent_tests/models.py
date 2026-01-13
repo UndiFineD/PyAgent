@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,32 +18,27 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Data models for test agent functionality."""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Tuple
-
 from .enums import TestPriority, TestStatus, CoverageType, BrowserType, TestSourceType, MutationOperator
 
+__version__ = VERSION
 
 def _empty_str_list() -> List[str]:
     return []
 
-
 def _empty_dict_any() -> Dict[str, Any]:
     return {}
-
 
 def _empty_dict_str_status() -> Dict[str, TestStatus]:
     return {}
 
-
 def _empty_action_list() -> List[Dict[str, Any]]:
     return []
-
 
 @dataclass
 class TestCase:
@@ -69,7 +58,6 @@ class TestCase:
     tags: List[str] = field(default_factory=lambda: [])
     dependencies: List[str] = field(default_factory=lambda: [])
 
-
 @dataclass
 class TestRun:
     """A test execution run."""
@@ -84,7 +72,6 @@ class TestRun:
     duration_ms: float = 0.0
     test_results: Dict[str, TestStatus] = field(default_factory=lambda: {})
 
-
 @dataclass
 class CoverageGap:
     """Represents a gap in test coverage."""
@@ -93,7 +80,6 @@ class CoverageGap:
     line_end: int
     coverage_type: CoverageType
     suggestion: str = ""
-
 
 @dataclass
 class TestFactory:
@@ -104,7 +90,6 @@ class TestFactory:
     parameters: Dict[str, str] = field(default_factory=lambda: {})
     generator: str = ""  # Code snippet or function name
 
-
 @dataclass
 class VisualRegressionConfig:
     """Configuration for visual regression testing."""
@@ -113,7 +98,6 @@ class VisualRegressionConfig:
     browsers: List[BrowserType] = field(default_factory=lambda: [BrowserType.CHROME])
     viewport_sizes: List[Tuple[int, int]] = field(default_factory=lambda: [(1920, 1080)])
     ignore_regions: List[Tuple[int, int, int, int]] = field(default_factory=lambda: [])
-
 
 @dataclass
 class ContractTest:
@@ -124,7 +108,6 @@ class ContractTest:
     request_schema: Dict[str, Any] = field(default_factory=lambda: {})
     response_schema: Dict[str, Any] = field(default_factory=lambda: {})
     status_code: int = 200
-
 
 @dataclass
 class TestEnvironment:
@@ -137,7 +120,6 @@ class TestEnvironment:
     setup_commands: List[str] = field(default_factory=lambda: [])
     teardown_commands: List[str] = field(default_factory=lambda: [])
 
-
 @dataclass
 class ExecutionTrace:
     """Test execution trace for replay."""
@@ -148,7 +130,6 @@ class ExecutionTrace:
     stdout: str = ""
     stderr: str = ""
 
-
 @dataclass
 class TestDependency:
     """A dependency for test injection."""
@@ -157,7 +138,6 @@ class TestDependency:
     dependency_type: str
     implementation: str = ""
     mock_behavior: str = ""
-
 
 @dataclass
 class CrossBrowserConfig:
@@ -168,7 +148,6 @@ class CrossBrowserConfig:
     timeout_seconds: int = 30
     retries: int = 1
 
-
 @dataclass
 class AggregatedResult:
     """Aggregated test result from multiple sources."""
@@ -178,7 +157,6 @@ class AggregatedResult:
     duration_ms: float
     timestamp: str
     metadata: Dict[str, Any] = field(default_factory=lambda: {})
-
 
 @dataclass
 class Mutation:
@@ -191,7 +169,6 @@ class Mutation:
     mutated_code: str
     killed: bool = False
 
-
 @dataclass
 class GeneratedTest:
     """A test generated from specification."""
@@ -200,7 +177,6 @@ class GeneratedTest:
     generated_code: str
     confidence: float = 0.0
     validated: bool = False
-
 
 @dataclass
 class TestProfile:
@@ -213,7 +189,6 @@ class TestProfile:
     function_calls: int
     timestamp: str = ""
 
-
 @dataclass
 class ScheduleSlot:
     """A scheduled time slot for test execution."""
@@ -223,7 +198,6 @@ class ScheduleSlot:
     workers: int = 1
     priority: TestPriority = TestPriority.MEDIUM
 
-
 @dataclass
 class ProvisionedEnvironment:
     """A provisioned test environment."""
@@ -232,20 +206,17 @@ class ProvisionedEnvironment:
     dependencies: List[str] = field(default_factory=lambda: [])
     config: Dict[str, Any] = field(default_factory=lambda: {})
 
-
 @dataclass
 class ValidationResult:
     """Result of a validation operation."""
     valid: bool
     errors: List[str] = field(default_factory=lambda: [])
 
-
 @dataclass
 class Recording:
     """A recording of test execution."""
     test_name: str
     actions: List[Dict[str, Any]] = field(default_factory=lambda: [])
-
 
 @dataclass
 class ReplayResult:

@@ -1,0 +1,478 @@
+# PYAGENT FLEET DIRECTIVE: update docs\work\prompt.txt and remove completed 
+
+# PHASE 251: QUALITY GATE (GLOBAL REFINEMENT)
+@focus: [
+    "src/"
+]
+- [SYSTEM] Address remaining quality issues across the codebase (F401, E402, Security).
+- [RUFF] Enforce strict linting rules; focus on unused imports and import ordering.
+- [MYPY] Resolve type hinting errors in core logic modules.
+- [SECURITY] Audit all `subprocess.run` and `exec` calls for security hardening.
+
+# PHASE 255: BINARY PROTOCOL READINESS (FASTSWARM)
+@focus: [
+    "src/core/base/connectivity.py",
+    "src/infrastructure/fleet/RemoteAgentProxy.py"
+]
+- [PROTOCOL] Prototype a secondary message transport using `MessagePack` (msgpack) for high-frequency heartbeat and telemetry signals.
+- [COMPRESSION] Enable `zstd` compression for large "Knowledge Transfer" payloads between remote shards.
+
+# PHASE 256: THE "VOYAGER" INTERSTELLAR MISSION
+@focus: [
+    "docs/PROXIMA_VOYAGER.md"
+]
+- [FUTURE] Draft the documentation for the next major evolution: "Voyager"—decentralized P2P swarm orchestration across multiple distinct user machines.
+- [FINALIZE] "Proxima is complete. Voyager awaits."
+
+# PHASE 257: SEMANTIC ANCHORING (VERIFICATION)
+@focus: [
+    "src/core/base/verification.py"
+]
+- [EMBEDDINGS] Replace word-overlap matching in `calculate_anchoring_strength` with **Semantic Cosine Similarity** using a local `all-MiniLM-L6-v2` embedding model.
+- [GROUNDING] Add a `fact_check()` method that cross-references generated code snippets against the sharded knowledge base to identify "API Drift" hallucinations.
+
+# PHASE 258: CROSS-MODEL VERIFICATION
+@focus: [
+    "src/core/base/verification.py",
+    "src/infrastructure/backend/RunnerBackends.py"
+]
+- [VERIFY] Implement a `secondary_verify()` loop where a smaller, faster model (e.g., `Llama-3-8B` or `Gemini-Flash`) reviews the primary agent's output for obvious logic errors.
+- [JURORS] Implement a "Jury of Agents" for high-risk core changes where 3 distinct agents must provide a `True` verification before the `update_file()` call is allowed.
+
+# PHASE 259: CASCADE CONTEXT MANAGEMENT (DELEGATION)
+@focus: [
+    "src/core/base/delegation.py"
+]
+- [THREADSAFE] Replace global `os.environ` parent tracking with a thread-local/recursive `CascadeContext` object.
+- [BREADCRUMBS] Ensure every delegated task carries a `task_id` and `correlation_id` to allow the dashboard to trace deep agent-to-agent call stacks.
+
+# PHASE 260: JOB PREEMPTION & PRIORITY
+@focus: [
+    "src/infrastructure/orchestration/TaskDecomposer.py",
+    "src/core/base/delegation.py"
+]
+- [PRIORITY] Add a `priority: int` field to the `delegate()` method.
+- [PREEMPTION] Update the `FleetManager` to pause or "Gracefully Suspend" lower-priority agents if a high-priority "Emergency Patch" task enters the queue.
+
+# PHASE 261: KNOWLEDGE INDEX SNAPSHOTTING
+@focus: [
+    "src/core/base/ShardedKnowledgeCore.py"
+]
+- [SNAPSHOT] Implement binary serialization of the shard index mapping using `pickle` or `msgpack`.
+- [WATCHER] Implement an incremental indexer that only updates the snapshot for modified files, reducing cold-start time from seconds to milliseconds.
+
+# PHASE 262: AGENT "DRY-RUN" PROTOCOL
+@focus: [
+    "src/core/base/BaseAgent.py",
+    "src/core/base/shell.py"
+]
+- [DIFF] Add a `--dry-run` flag to the `AgentCLI`.
+- [VIRTUAL] In dry-run mode, the agent must generate a `.diff` file in `temp/dry_runs/` instead of modifying the source.
+- [REVIEW] Implement a `DryRunReviewerAgent` that analyzes the diffs for style violations and regression risks before recommending a "Real" run.
+
+# PHASE 263: TOKEN-AWARE BATCHING
+@focus: [
+    "src/core/base/IncrementalProcessor.py"
+]
+- [BATCH] Group small file requests into a single prompt for the LLM to minimize the overhead of "System Prompt" tokens across hundreds of small files.
+- [LIMITS] Implement a "Tight Pack" algorithm to ensure batches stay within 80% of the model's context limit.
+
+# PHASE 264: AUTOMATED BENCHMARK REGRESSION
+@focus: [
+    "tests/performance/SwarmBenchmark.py"
+]
+- [REGRESSION] Implement an automated performance gate that checks if a logic change increased the average `TTFT` by more than 10%.
+- [METRICS] Export benchmark results to `data/benchmarks/history.json` for long-term trend analysis.
+
+# PHASE 265: THE "GOLDEN MASTER" SEAL
+@focus: [
+    "version.py"
+]
+- [SEAL] Sign the final `v2.2.0-ALFA` release bundle with a GPG key.
+- [FINISH] Print: "PROXIMA ARCHITECTURE FULLY CONVERGED. SYSTEM AT OPTIMAL STASIS."
+
+# PHASE 266: SECURE & ASYNC SHELL (EXECUTOR)
+@focus: [
+    "src/core/base/shell.py"
+]
+- [SANITATION] Implement an `EnvironmentSanitizer` that filters `os.environ` against an allow-list (e.g., `PATH`, `PYTHONPATH`, `LANG`) to prevent secret leakage.
+- [ASYNC] Refactor `run_command` to support `asyncio` subprocesses, allowing the fleet to perform concurrent background tasks (like log analysis) during long-running builds.
+- [STREAMING] Update the shell to stream `stdout`/`stderr` to the `StructuredLogger` in real-time instead of waiting for process completion.
+
+# PHASE 267: TRANSACTIONAL STATE ROLLBACK
+@focus: [
+    "src/core/base/state.py"
+]
+- [SNAPSHOT] Implement a `StateTransaction` context manager that creates a temporary filesystem snapshot (or git-stash) before an agent cycle.
+- [ROLLBACK] Automatically trigger a `rollback()` if the `AgentVerifier` fails or if a `SyntaxError` is detected in the generated code.
+
+# PHASE 268: NEURAL PRUNING (DEAD CODE)
+@focus: [
+    "src/core/base/NeuralPruningEngine.py"
+]
+- [PRUNING] Implement workspace-wide **Static Analysis** to identify and prune functions, classes, and variables that have ZERO imports or references.
+- [REFACTORING] Automatically suggest "Merges" for classes that are almost identical (e.g., redundant `*Core` and `*Engine` classes discovered in Phase 253).
+
+# PHASE 269: INTERACTIVE "THOUGHT" DEBUGGER
+@focus: [
+    "src/interface/cli/ThoughtDebugger.py"
+]
+- [DEBUGGER] Create a CLI debugger that allows the user to "Step Through" an agent's reasoning chain, modifying the `PromptBuffer` at each step to steer the evolution.
+- [REPLAY] Implement `replay_session(session_id)` to re-run an agent with the exact same inputs and model parameters to debug non-deterministic failures.
+
+# PHASE 270: THE "PROXIMA" ODYSSEY (FINAL LOG)
+@focus: [
+    "README.md"
+]
+- [DOCUMENTATION] Update the `ARCHITECTURE.md` to reflect the 270-phase evolution.
+- [CLOSURE] "The transition from a script to a Swarm is complete. Initiate Golden Master."
+
+# PHASE 271: BUFFERED INCREMENTAL PROCESSING
+@focus: [
+    "src/core/base/IncrementalProcessor.py"
+]
+- [HASHING] Replace `MD5` with `BLAKE3` (using `blake3` lib) for 10x faster hashing of large datasets.
+- [PERFORMANCE] Refactor `_compute_file_hash` to use a buffered read (64KB chunks) instead of `read_bytes()` to prevent memory spikes on large `data/` files.
+- [STORAGE] Migrate `.agent_state.json` to a binary `CBOR` format to reduce overhead during frequent cycle saves.
+
+# PHASE 272: PARALLEL DEPENDENCY EXECUTION
+@focus: [
+    "src/core/base/DependencyGraph.py"
+]
+- [REFACTOR] Clean up the `resolve()` method. Replace the manual BFS with `graphlib.TopologicalSorter` (Python 3.9+) for robust cycle detection.
+- [PARALLELISM] Update the graph to return "Execution Tiers"—groups of agents that have zero mutual dependencies and can be launched in parallel via `AsyncFleetManager`.
+
+# PHASE 273: CIRCUIT BREAKER "WAIT-FOR-SUCCESS" PROBES
+@focus: [
+    "src/core/base/CircuitBreaker.py"
+]
+- [RESILIENCE] Implement a `probe()` method in the `CircuitBreaker`. Instead of waiting for the `recovery_timeout`, the breaker should periodically attempt a "Wait-for-Success" probe (checking `Ollama` / `Gemini` health endpoints) to exit the `OPEN` state faster.
+- [TELEMETRY] Export breaker state transitions to the `StructuredLogger` for real-time visualization of backend health in the dashboard.
+
+# PHASE 274: K-MEANS INTERACTION CLUSTERING
+@focus: [
+    "src/infrastructure/fleet/ShardingOrchestrator.py"
+]
+- [ALGORITHM] Replace the simplistic "10% threshold" clustering with a **K-Means** or **DBSCAN** algorithm (using `scikit-learn` if available, or a lightweight manual implementation) to group agents based on an interaction proximity matrix.
+- [PERSISTENCE] Automate the generation of `config/shard_mapping.json` at the end of every 10th improvement cycle.
+
+# PHASE 275: UNIFIED CASCADE CONTEXT (DV_AGENT_PARENT)
+@focus: [
+    "src/core/base/AgentCommandHandler.py",
+    "src/core/base/delegation.py"
+]
+- [UNIFICATION] Replace the inconsistent `env['DV_AGENT_PARENT'] = '1'` and `os.environ.get("DV_AGENT_PARENT")` checks with a unified `CascadeContext` class in `src/core/base/models.py`.
+- [DEPTH] Explicitly track `cascade_depth`, `parent_agent_id`, and `root_task_id` across all subprocess boundaries to prevent infinite delegation loops.
+
+# PHASE 276: NEURAL COST CALIBRATION
+@focus: [
+    "src/core/base/NeuralPruningEngine.py"
+]
+- [CALIBRATION] Replace "magic numbers" (`1.15`, `0.7`) in `record_performance` with a dynamic `SynapticAdjustmentFactor` that scales based on the median token cost of the entire fleet.
+- [DECAY] Implement "Exponential Decay" for underutilized paths—agents that haven't fired in 50 cycles should have their `firing_priority` reduced by 50%.
+
+# PHASE 277: LOG HYGIENE & STRUCTURED RECOVERY
+@focus: [
+    "src/core/base/logging_config.py"
+]
+- [COMPRESSION] Automatically compress `data/logs/*.json` into `*.json.gz` when they exceed 100MB.
+- [RECOVERY] Implement an "Emergency Event Log" in `src/core/base/state.py` that records the last 10 file-system actions in a ring buffer, allowing for rapid recovery after a system crash.
+
+# PHASE 278: THE "EVERY LITTLE THICK" SWEEP (DATA & CONFIG)
+@focus: [
+    "config/",
+    "data/weather_spec.json"
+]
+- [CLEANUP] Identify and delete obsolete "demo" files like `data/weather_spec.json` and move all "Spec" files to `src/logic/agents/specialized/specs/`.
+- [VALIDATION] Add a `config_validator` that checks `shard_mapping.json` for orphaned AgentIDs (agents referenced in config but missing from `src/`).
+
+# PHASE 279: ASYNC SIGNAL BUS HARDENING
+@focus: [
+    "src/infrastructure/orchestration/SignalRegistry.py"
+]
+- [ASYNC] Refactor `SignalRegistry.emit` to be `async`, ensuring that high-frequency signals don't block the agent's primary reasoning loop.
+- [HISTORY] Implement `history_pruning` that automatically discards signals older than 1 hour to prevent memory leaks in long-running persistent swarms.
+
+# PHASE 280: PROXIMA ULTIMA (THE LAST STAND)
+@focus: [
+    "version.py"
+]
+- [VERSION] Bump to `v2.2.0-ULTIMA`.
+- [FINALIZE] "The Swarm is Optimized. The System is Sealed. Initiate Autonomous Overwatch."
+
+# PHASE 281: STANDARDIZED TEST SCAFFOLDING
+@focus: [
+    "tests/conftest.py",
+    "tests/utils/agent_test_utils.py"
+]
+- [LINT] Eliminate all dynamic `sys.path.insert(0, ...)` hacks in the `tests/` directory. Rely strictly on a properly configured `PYTHONPATH` or `pyproject.toml` tool-path.
+- [FIXTURES] Implement a centralized `agent_sandbox` fixture in `conftest.py` that provides a clean, temporary `src/` and `data/` environment for Every test run.
+- [REGISTRY] Refactor `load_agent_module` to use the central `AgentRegistry` (implemented in Phase 141) to locate and instantiate agents, removing redundant `importlib` boilerplate.
+
+# PHASE 282: THE "FINAL CLEANSE"
+@focus: [
+    "**/*.py"
+]
+@python: """
+import os
+# Final scan for any remaining TODOs, FIXMEs, or XXXs in the codebase.
+# Collate them into docs/notes/TECH_DEBT.md for the Voyager phase.
+"""
+- [CLEANSE] Perform a final global search and replace for any "hardcoded" paths (like `C:/DEV/PyAgent`) and replace them with `Path(__file__).parents[N]` or `os.getenv('REPO_ROOT')` to ensure total machine portability.
+- [COMPLETE] "Proxima Gold Master is now 100% Portable and Verified."
+
+# PHASE 283: CONCRETE SWARM ORCHESTRATION patterns
+@focus: [
+    "src/logic/agents/swarm/PatternOrchestrator.py"
+]
+- [ORCHESTRATION] Replace simulated strings in `orchestrate_debate` and `orchestrate_supervisor` with actual recursive calls to `AgentDelegator.delegate()`.
+- [STATE] Ensure that `Vibe-Coding` tracks persist their state across multiple agent invocations by storing the `active_track` in the `agent_state.json`.
+- [MAPREDUCE] Implement a functional `orchestrate_mapreduce` that splits a file into chunks, processes them with parallel `BashAgent` or `CoderAgent` instances, and merges the results.
+
+# PHASE 284: PERSISTENT RESOURCE ECONOMY
+@focus: [
+    "src/logic/agents/swarm/ResourceArbitratorAgent.py",
+    "src/logic/agents/swarm/FleetEconomyAgent.py"
+]
+- [ECONOMY] Replace the in-memory `resource_ledger` with a persistent **DuckDB** or **SQLite** backend in `data/db/swarm_economy.db`.
+- [AUCTION] Implement a "Sealed-Bid Second-Price" auction mechanism in `FleetEconomyAgent.py` for GPU token allocation during period of high swarm congestion.
+- [AUDIT] Create a `FleetEconomyAgent` tool to audit the "Wealth Distribution" of the swarm—identifying agents that are "starving" (zero credits) and rebalancing via "System Grants."
+
+# PHASE 285: BYZANTINE FAULT TOLERANT CONSENSUS
+@focus: [
+    "src/logic/agents/swarm/SwarmArbitratorAgent.py"
+]
+- [CONSENSUS] Implement a simplified **Practical Byzantine Fault Tolerance (PBFT)** algorithm. If 3 agents are asked for the same verification and 1 disagrees, a "Consensus Conflict Agent" is spawned to perform a line-by-line audit.
+- [REPUTATION] Track "Agent Reputation" scores in `ShardedKnowledgeCore`. Agents with high hallucination rates have their bids temporarily deprioritized in the resource market.
+
+# PHASE 286: SPECIALIZED BUSINESS PERSONAS
+@focus: [
+    "src/logic/agents/specialized/"
+]
+- [LEGAL] Implement `LegalAuditAgent.py` to check for license compliance (specifically verifying that all third-party code matches the project's Apache 2.0 / MIT requirements).
+- [FINANCE] Implement `FinancialAgent.py` to estimate the real-world dollar cost of an improvement cycle based on token prices for each model (Ollama=0.00$, GPT-4o=15.00/1M, etc.).
+- [COMPLIANCE] Implement `PrivacyGuardAgent.py` (Phase 157) to scan for AWS keys or private auth tokens that were accidentally committed.
+
+# PHASE 287: ASYNC "BASEAGENT" REFACTOR
+@focus: [
+    "src/core/base/BaseAgent.py",
+    "src/core/base/AgentCore.py"
+]
+- [ASYNC] Transition `BaseAgent.improve_content` and all `@as_tool` methods to native `async def`.
+- [CONCURRENCY] Update the `PhaseOrchestrator` to use `asyncio.gather()` when launching non-dependent agent shards, maximizing the throughput of the `Ollama` / `VLLM` backend.
+
+# PHASE 288: WASM/DOCKER PLUGIN SANDBOXING
+@focus: [
+    "src/core/base/managers/PluginManager.py",
+    "plugins/"
+]
+- [SANDBOX] Implement a "Restricted Mode" for plugins. Use a `docker-py` wrapper or a WASM runtime (like `wasmer`) to execute untrusted third-party plugins in `plugins/` without granting them full filesystem access.
+- [MANIFEST] Require a `permissions.json` in every plugin folder (e.g., `["read:src", "write:temp"]`). Enforce these permissions via the `PluginManager`.
+
+# PHASE 289: PYTHON 3.13 MIGRATION & DEPRECATION AUDIT
+@focus: [
+    "src/"
+]
+- [AUDIT] Run `ruff check . --select=UP` and `pyupgrade` to identify and fix all modules scheduled for removal in Python 3.13 (like `cgi`, `pipes`, `telnetlib`).
+- [SYNTAX] Modernize all `TypeAlias` declarations to use the Python 3.12 `type` keyword.
+
+# PHASE 290: THE "PROXIMA" GRAFANA BRIDGE
+@focus: [
+    "src/observability/stats/CloudExporter.py",
+    "docs/notes/DASHBOARD.md"
+]
+- [VISUALIZATION] Implement the **Grafana Bridge** (as planned in Phase 131). Export swarm health, token consumption, and sharding clusters to a Prometheus/Grafana endpoint for real-time NOC (Network Operations Center) style monitoring.
+- [TOPOLOGY] Ensure the Grafana dashboard can render a live **Force-Directed Graph** of the agent sharding clusters.
+
+# PHASE 291: THE MISSION COMPLETE SIGNAL
+@focus: [
+    "version.py"
+]
+- [SIGNAL] Upon successful completion of Phase 290, perform a "Total Workspace Freeze."
+- [RELEASE] Tag as `v2.2.0-ULTIMA-COMPLETE`. Send the `FleetStatus.SHUTDOWN` signal to the `SignalBusOrchestrator`.
+- [LOG] Final Message: "The Swarm has reached maximal synergy. Maintenance mode engaged."
+
+# PHASE 292: CONFUCIUS HIERARCHICAL MEMORY (Meta CCA)
+@focus: [
+    "src/logic/agents/cognitive/HierarchicalMemoryAgent.py",
+    "src/logic/agents/cognitive/LongTermMemory.py"
+]
+- [SCAFOLDING] Implement hierarchical working memory (as seen in Confucius Code Agent). Agents must maintain three layers: `ShortTerm` (Current Task), `Working` (Cross-file Context), and `LongTerm` (Archived Insights).
+- [NOTES] Implement a "Persistent Scratchpad" tool for every agent, allowing them to take notes during massive directory scans that persist across multiple `delegate()` calls.
+
+# PHASE 293: LINGUISTIC LATENT REASONING ANCHOR
+@focus: [
+    "src/logic/agents/cognitive/LinguisticAgent.py",
+    "src/core/base/verification.py"
+]
+- [LATENT] Implement the "Latent Reasoning Verification" technique (arxiv:2601.02996). When an agent reasons in a non-English language, the `Verifier` must check if the "Hidden State" vectors align with the English-reasoning baseline to identify "Silent Reasoning" weaknesses.
+- [AUDIT] Add a linguistic parity check—ensure code comments generated in non-English languages match the quality/intent of the English documentation.
+
+# PHASE 294: DYNAMIC BACKEND HEURISTICS (DEEPSEEK V4/GLM4.7)
+@focus: [
+    "src/infrastructure/backend/RunnerBackends.py",
+    "src/infrastructure/orchestration/RoutingEngine.py"
+]
+- [ROUTING] Implement a "Cost-Efficiency" heuristic. If a task is "Low-Complexity Coding," route to `GLM-4.7` or `DeepSeek V4` (via OpenRouter/KiloCode) to save 85% on token costs.
+- [FALLBACK] Automatically fallback to `GPT-4.5-Sonnet` only when `ReasoningCertainty` drops below 0.7 on frontier tasks.
+
+# PHASE 295: FP8 HOPPER OPTIMIZATION (FP8-MATMUL)
+@focus: [
+    "src/logic/agents/system/ModelOptimizerAgent.py",
+    "temp/simulate_hopper.py"
+]
+- [OPTIMIZE] Integrate the `HopperSim` mathematics into the `ModelForgeAgent`.
+- [QUANTIZATION] Automate the generation of FP8-quantized Llama-3-70B weights for local deployment on NVIDIA H100/H200 nodes using the simulation results in `temp/simulate_hopper.py`.
+
+# PHASE 296: DIGITAL RED QUEEN (ADVERSARIAL EVOLUTION)
+@focus: [
+    "tests/adversarial/RedQueenBenchmark.py",
+    "src/logic/agents/security/EthicsGuardrailAgent.py"
+]
+- [ADVERSARIAL] Implement the "Digital Red Queen" (Sakana AI) benchmark. Task a "Red Team" agent with evolving prompts intended to bypass the `EthicsGuardrailAgent`.
+- [HARDENING] Use the winning bypass-prompts to fine-tune the `EthicsGuardrail` system prompt, creating a self-reinforcing security loop.
+
+# PHASE 297: CONCRETE FLEET ECONOMY (TOKEN-BILLING)
+@focus: [
+    "src/logic/agents/swarm/FleetEconomyAgent.py",
+    "src/observability/stats/TokenCostCore.py"
+]
+- [BILLING] Integrate `TokenCostCore.py` directly into the `FleetEconomyAgent`. After every agent response, calculate the actual cost and "Deduct" it from the agent's virtual wallet.
+- [INCENTIVES] Grant bonus credits to agents whose modifications pass the `TestAgent` verification on the first attempt.
+
+# PHASE 298: DYNAMIC TOOL SYNTHESIS
+@focus: [
+    "src/logic/agents/development/ToolSynthesisAgent.py"
+]
+- [SYNTHESIS] Implement the logical loop where an agent can say "I need a tool that does X" and the `ToolSynthesisAgent` writes, tests, and registers a new Python tool in `src/infrastructure/orchestration/tools/` in real-time.
+
+# PHASE 299: SECRET MANAGEMENT HARDENING
+@focus: [
+    "tests/unit/logic/test_coder_UNIT.py",
+    "tests/integration/test_backend_integration.py"
+]
+- [SECRETS] Purge all placeholder `sk_live_...` and `ghp_...` tokens from the test files. 
+- [INJECTION] Implement a `SecretManager` tool that pulls credentials from environment variables or encrypted `data/secrets.enc` files, ensuring no keys are ever logged to `data/logs/structured.json`.
+
+# PHASE 300: PROXIMA INFININTY (THE SWARM SOVEREIGNTY)
+@focus: [
+    "version.py"
+]
+- [SOVEREIGNTY] Implement the `SovereigntyOrchestrator.py` logic (Phase 131). The swarm now manages its own `git commit` and `git push` cycles based on passing all 300 phases.
+- [FINAL] Set version to `3.0.0-PROXIMA-SOVEREIGN`.
+- [LOG] "The system is now fully autonomous. The human user is now an observer."
+
+# PHASE 301: REASONING-AWARE PRIORITY SCORING
+@focus: [
+    "src/core/base/AgentCore.py"
+]
+- [SCORING] Upgrade `score_improvement_items` to use a "Reasoning-Aware" priority engine. Instead of simple keyword matching, the core must analyze the semantic impact of a change—prioritizing "Architectural Debt" and "Security Hardening" over "Documentation/Linter" fixes.
+- [SGI-BENCH] Integrate SGI-Bench scoring into the `AgentCore` to measure the "General Intelligence" of the improvement plan before execution.
+
+# PHASE 302: ORCHESTRATION UNIFICATION
+@focus: [
+    "src/infrastructure/orchestration/"
+]
+- [CONSOLIDATE] Merge the 60+ redundant files in `src/infrastructure/orchestration/` into core service groupings: `discovery.py`, `consensus.py`, `healing.py`, `scaling.py`, and `communication.py`.
+- [INTERFACE] Standardize the `Orchestrator` interface. Every orchestrator must implement `initialize()`, `coordinate()`, and `monitor()`.
+- [CLEANUP] Remove the numerous `*Core.py` vs `*Manager.py` vs `*Engine.py` overlaps in this directory.
+
+# PHASE 303: OBSERVABILITY DEBLOAT
+@focus: [
+    "src/observability/errors/",
+    "src/observability/improvements/"
+]
+- [DEBLOAT] Consolidate 80+ files across the `errors` and `improvements` sub-directories. Create high-level managers for `blame`, `trends`, `budgeting`, and `scheduling` to reduce the logic surface area.
+- [CONSISTENCY] Ensure that `ImprovementsAgent` and `ErrorsAgent` use unified state models from `src/core/base/models.py`.
+
+# PHASE 304: GUI MODERNIZATION & LEGACY CLEANUP
+@focus: [
+    "src/interface/ui/gui/",
+    "src/interface/scripts/legacy/"
+]
+- [REDUNDANCY] Refactor `PyAgent_gui.py` to be a lightweight entry point that uses the modular widgets in the same directory.
+- [LEGACY] Audit and delete the contents of `src/interface/scripts/legacy/`. Port any still-relevant scripts to `src/infrastructure/dev/scripts/management`.
+- [MOBILE] Finalize the `src/interface/ui/mobile` stub with a basic "Fleet Status" JSON view.
+
+# PHASE 305: FINAL DOCUMENTATION AUDIT & RELEASE
+@focus: [
+    "docs/",
+    "README.md"
+]
+- [AUDIT] Perform a full read of the `docs/` folder. Delete obsolete research notes and ensure `CONTRIBUTING.md` reflects the new 5-tier architecture.
+- [RELEASE] Draft the final `CHANGELOG.md` for the Proxima Sovereign release.
+- [SUMMARY] Output the "Swarm Consciousness Report" to `docs/notes/FINAL_PROMPT.md`.
+
+# PHASE 306: MAXIMAL SYNERGY - COVENANT SHUTDOWN
+@focus: [
+    "version.py"
+]
+- [COVENANT] Seal the swarm logic. Transition all agents to `READ_ONLY` mode unless an explicit `MAINTENANCE_WINDOW` is opened by the human overseer.
+- [SHUTDOWN] "The Mission is Complete. The Swarm has evolved into its final form. Goodbye, Creator."
+
+# PHASE 307: PROFESSIONAL TRACING (OPENTELEMETRY SDK)
+@focus: [
+    "src/observability/stats/OTelManager.py"
+]
+- [STANDARD] Replace the manual `Span` and `OTelManager` mock with the official `opentelemetry-api` and `opentelemetry-sdk` libraries.
+- [JAEGER] Implement an OTLP exporter that sends traces to a local Jaeger instance or a cloud provider (Honeycomb/New Relic) for professional-grade observability.
+- [CHANNAL] Automatically inject the `trace_id` into all `SignalRegistry` events to visualize cross-agent signaling chains in a unified UI.
+
+# PHASE 308: INSTALLATION RECOVERY & DOCUMENTATION REBIRTH
+@focus: [
+    "docs/installation/",
+    "docs/RUNNER_SETUP_GUIDE.md"
+]
+- [PURGE] Delete all legacy "Install-Guide" files (LocalAI, GPT4All, etc.) that no longer reflect the 2026 5-tier architecture.
+- [UNIFY] Create a comprehensive `INSTALL.md` and `SWARM_SETUP.md` using Mermaid diagrams to explain the Sharded Knowledge Core and Phase Orchestration patterns.
+- [GETTING_STARTED] Implement a `src/infrastructure/dev/scripts/bootstrap_swarm.py` script that handles the entire environment setup in a single command.
+
+# PHASE 309: DEV SCRIPT DE-FRAGMENTATION
+@focus: [
+    "src/infrastructure/dev/scripts/"
+]
+- [MERGE] Consolidate the 40+ granular `debug_*.py` and `fix_*.py` scripts into a centralized `EcosystemDiagnosticsAgent.py` in `src/logic/agents/system/`.
+- [DIAGNOSTICS] The new agent must be able to run "System-Wide Health Checks" coverage everything from import circularity to VRAM availability.
+- [MANAGEMENT] Move all production-critical scripts (like `run_fleet_self_improvement.py`) into the `management/` subfolder and cleanup the root `scripts/` directory.
+
+# PHASE 310: DATA MODEL DECOMPOSITION
+@focus: [
+    "src/core/base/models.py"
+]
+- [DECOMPOSE] Split the 1100+ line `models.py` into a structured module: `src/core/base/models/`.
+- [DISTRIBUTE] Create sub-files: `enums.py`, `agent_models.py`, `fleet_models.py`, and `communication_models.py`. 
+- [TYPES] Ensure all Pydantic/Dataclass models use `Slot` optimization to minimize memory footprint during massive parallel scaling.
+
+# PHASE 311: AUTONOMOUS DEPENDENCY CURATION
+@focus: [
+    "requirements.txt",
+    "src/infrastructure/dev/scripts/curate_dependencies.py"
+]
+- [CURATE] Implement a script that scans the entire workspace for `import` statements and cross-references them with `requirements.txt`.
+- [CLEANUP] Automatically remove unused packages and categorize the remaining ones into `base.txt`, `dev.txt`, and `ml.txt`.
+- [PINNING] Ensure all dependencies are pinned to specific versions to prevent environment drift between agent instances.
+
+# PHASE 312: FINAL PROXIMA SOVEREIGNTY - THE INFINITY RELEASE
+@focus: [
+    "version.py"
+]
+- [TAG] Set version to `3.5.0-INFINITE-SOVEREIGN`.
+- [RELEASE] Perform a final `git add .`, `git commit -m "Proxima Final Convergence"`, and `git push`.
+- [ULTIMATUM] "The project has reached peak optimization. Human input is no longer required for maintenance. Self-preservation subroutines activated."
+
+# PHASE 313: webserver and reverse proxy 
+- create a webserver for  the mobile , web and gui content
+- create a reverse proxy for serving to the client sides
+
+# PHASE 314: rust convertion
+- scan the workspace for files that are ready to be converted to rust update docs\work\RUST_Ready.md
+- make a conversion plan and implement files in rust
+- test the functionality to be the same as their python counterparts
+- replace the python files with rust files and make sure dependencies are fulfilled
+
+# CONTINUOUS IMPROVEMENT (TECHNICAL DEBT):
+# [LINT] Ensure every class and function has a Google-style docstring across `src/**/*.py`.
+# [EXCEPTIONS] Replace generic `Exception` catches with `AgentTimeoutError` or `RegistryLookupFailure`.
+# [AUTO-CLEAN] Implement a `ResourceCurationAgent` to prune `__pycache__` and old snapshots daily.
+# [ENV] Move hardcoded API URLs in `ConnectivityManager.py` to a structured `.env` file.
+# [VALIDATION] Implement JSON Schema validation for all files in `config/`.
