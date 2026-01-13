@@ -71,7 +71,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
         path = self.deploy_dir / f"Dockerfile.{agent_type}"
         # Phase 287: Use asyncio.to_thread for blocking I/O if needed, 
         # but small writes are usually fine. However, we'll be consistent.
-        def write_file():
+        def write_file() -> str:
             with open(path, "w", encoding="utf-8") as f:
                 f.write(dockerfile_content)
         
@@ -99,7 +99,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
         
         log_path = self.deploy_dir / "provisioning_logs.jsonl"
         
-        def append_log():
+        def append_log() -> str:
             with open(log_path, "a", encoding="utf-8") as f:
                 f.write(json.dumps(spawn_log) + "\n")
         
@@ -114,7 +114,7 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
         if not log_path.exists():
             return []
             
-        def read_logs():
+        def read_logs() -> str:
             nodes = []
             with open(log_path, encoding="utf-8") as f:
                 for line in f:

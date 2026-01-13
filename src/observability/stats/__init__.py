@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 
+"""Observability statistics and metrics collection module.
+
+Provides comprehensive metrics collection, aggregation, and analysis
+for monitoring PyAgent system performance and health.
+"""
+
 from __future__ import annotations
 from src.core.base.version import VERSION as VERSION
 from .observability_core import (

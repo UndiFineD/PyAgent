@@ -2,6 +2,9 @@
 
 # Documentation for FleetManager.py
 
+**Module Overview:**
+Coordinator for deploying and aggregating results from multiple agents.
+
 ## Class: `FleetManager`
 The central hub for the PyAgent ecosystem. Orchestrates a swarm of specialized
 agents to complete complex workflows, manages resource scaling, and ensures
@@ -22,6 +25,12 @@ Delegate to orchestrators and agents for lazy loading support.
 ### Method: `fallback`
 ### Method: `core`
 ### Method: `rl_selector`
+### Method: `preempt_lower_priority_tasks`
+Suspends all tasks with lower priority than the new high-priority task.
+
+### Method: `resume_tasks`
+Resumes all suspended tasks if no critical tasks are running.
+
 ### Method: `register_remote_node`
 Registers a remote node and its available agents.
 Uses VersionGate to ensure compatibility (Phase 104).
@@ -46,5 +55,5 @@ If agents are not specified, ByzantineConsensusAgent dynamically selects a commi
 Routes tasks based on system load and hardware availability (Phase 126).
 
 
-## 2026-01-12 - Maintenance Cycle Summary
-The fleet's SelfImprovementOrchestrator completed a cycle over 961 files. Re-stabilization phase engaged.
+## 2026-01-13 - Maintenance Cycle Summary
+The fleet's SelfImprovementOrchestrator completed a cycle over 991 files. Re-stabilization phase engaged.

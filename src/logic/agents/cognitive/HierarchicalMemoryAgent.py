@@ -105,11 +105,6 @@ class HierarchicalMemoryAgent(BaseAgent):
             except Exception as e:
                 logging.error(f"Failed to promote {mem_file}: {e}")
         
-        return f"Promoted {promoted_count} memories to higher tiers."
-                
-                mem_file.unlink()
-                promoted_count += 1
-                
         return f"Consolidation complete. Promoted {promoted_count} memory fragments."
 
     @as_tool

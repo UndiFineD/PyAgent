@@ -75,7 +75,7 @@ class ModelForgeAgent(BaseAgent):
         """
         output_path = self.datasets_dir / f"{task_name}.jsonl"
         
-        def write_dataset():
+        def write_dataset() -> None:
             with open(output_path, "w", encoding="utf-8") as f:
                 for ex in examples:
                     f.write(json.dumps(ex) + "\n")
@@ -95,7 +95,7 @@ class ModelForgeAgent(BaseAgent):
         """
         dataset_path = self.datasets_dir / f"{task_name}.jsonl"
         
-        def setup_job():
+        def setup_job() -> str | None:
             if not dataset_path.exists():
                 return None
 
@@ -123,7 +123,7 @@ class ModelForgeAgent(BaseAgent):
         if not adapter_path.exists():
             return f"Error: Adapter '{task_name}' not found."
             
-        def read_config():
+        def read_config() -> str:
             with open(adapter_path) as f:
                 return f.read()
         

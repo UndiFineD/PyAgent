@@ -42,7 +42,7 @@ class EmergencyEventLog:
         self.buffer = collections.deque(maxlen=10)
         self._load_buffer()
 
-    def _load_buffer(self):
+    def _load_buffer(self) -> None:
         if self.log_path.exists():
             try:
                 content = self.log_path.read_text(encoding="utf-8")
@@ -50,7 +50,7 @@ class EmergencyEventLog:
             except Exception:
                 pass
 
-    def record_action(self, action: str, details: str):
+    def record_action(self, action: str, details: str) -> None:
         event = f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {action}: {details}"
         self.buffer.append(event)
         try:

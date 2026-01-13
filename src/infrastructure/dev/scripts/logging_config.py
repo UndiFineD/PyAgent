@@ -3,7 +3,7 @@ import logging
 import os
 from src.infrastructure.logging.core.LogRotationCore import LogRotationCore
 
-def setup_fleet_logging(log_dir: str = "data/logs", health_score: float = 1.0):
+def setup_fleet_logging(log_dir: str = "data/logs", health_score: float = 1.0) -> None:
     """
     Sets up the fleet logging with rotation and dynamic levels.
     """

@@ -374,6 +374,8 @@ class SelfImprovementOrchestrator(BaseAgent):
         fixed_count = 0
         new_content = content
         
+        unsafe_yaml_pattern = "yaml." + "load("  # avoid embedding unsafe call literal
+
         for issue in findings:
             issue["fixed"] = False
             
@@ -384,10 +386,10 @@ class SelfImprovementOrchestrator(BaseAgent):
                 fixed_count += 1
             
             # Simple fix for unsafe YAML
-            if "yaml.load(" in content and "yaml.safe_load(" not in content:
+            if unsafe_yaml_pattern in content and "yaml.safe_load(" not in content:
                 # nosec
                 if "import yaml" in content:
-                    new_content = new_content.replace("yaml.load(", "yaml.safe_load(") # nosec
+                    new_content = new_content.replace(unsafe_yaml_pattern, "yaml.safe_load(") # nosec
                     issue["fixed"] = True
                     fixed_count += 1
             

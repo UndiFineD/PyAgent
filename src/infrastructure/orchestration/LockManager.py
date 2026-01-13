@@ -60,7 +60,7 @@ class LockManager:
         return self._async_mem_locks[resource_id]
 
     @asynccontextmanager
-    async def acquire_async(self, resource_id: str, lock_type: str = "memory", timeout: float = 10.0):
+    async def acquire_async(self, resource_id: str, lock_type: str = "memory", timeout: float = 10.0) -> AsyncGenerator[None, None]:
         """Phase 152: Async-native lock acquisition."""
         if lock_type == "file":
             # File locks are blocking, offload to executor
@@ -78,7 +78,7 @@ class LockManager:
             finally:
                 lock.release()
 
-    def _sync_file_lock_acquire(self, resource_path: str, timeout: float):
+    def _sync_file_lock_acquire(self, resource_path: str, timeout: float) -> None:
         lock_file = self.lock_dir / f"{os.path.basename(resource_path)}.lock"
         if HAS_PORTALOCKER:
             lock_obj = portalocker.Lock(str(lock_file), timeout=timeout)
@@ -91,7 +91,7 @@ class LockManager:
         else:
             self.get_memory_lock(resource_path).acquire()
 
-    def _sync_file_lock_release(self, resource_path: str):
+    def _sync_file_lock_release(self, resource_path: str) -> None:
         if HAS_PORTALOCKER and hasattr(self, '_active_file_locks'):
             lock_obj = self._active_file_locks.get(resource_path)
             if lock_obj:
@@ -127,7 +127,7 @@ class LockManager:
                     pass
 
     @contextmanager
-    def acquire(self, resource_id: str, lock_type: str = "memory", timeout: float = 10.0):
+    def acquire(self, resource_id: str, lock_type: str = "memory", timeout: float = 10.0) -> Generator[None, None, None]:
         """Generic lock acquisition helper."""
         if lock_type == "file":
             with self.file_lock(resource_id, timeout):

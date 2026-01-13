@@ -38,12 +38,12 @@ class BrokenImportAgent(BaseAgent):
         self.import_map_file = "data/system/import_map.json"
         os.makedirs(os.path.dirname(self.import_map_file), exist_ok=True)
 
-    def heal_import_error(self, error_msg: str):
+    def heal_import_error(self, error_msg: str) -> str:
         fix = self.core.suggest_fix(error_msg)
         print(f"[HEALER] Detected broken import. {fix}")
         return fix
 
-    def update_global_import_map(self):
+    def update_global_import_map(self) -> None:
         print("[HEALER] Updating global import map...")
         imap = self.core.build_internal_import_map(os.path.join(self._workspace_root, "src"))
         with open(self.import_map_file, "w") as f:

@@ -40,7 +40,7 @@ class MetacognitiveMonitor:
         # Track weights for agents reporting to this monitor
         self.agent_weights: dict[str, float] = {}
 
-    def calibrate_agent(self, agent_name: str, reported_conf: float, actual_correct: bool):
+    def calibrate_agent(self, agent_name: str, reported_conf: float, actual_correct: bool) -> None:
         """Calibrates an agent's consensus weight based on performance."""
         current_weight = self.agent_weights.get(agent_name, 1.0)
         new_weight = self.core.calibrate_confidence_weight(reported_conf, actual_correct, current_weight)

@@ -33,12 +33,15 @@ class ThoughtDebugger:
         self.active = True
         
         try:
-            # If we're the main entry point, block here
+            # If we're the main entry point, block here using event-driven approach
             if __name__ == "__main__":
-                while self.active:
-                    time.sleep(0.1)
+                import asyncio
+                loop = asyncio.new_event_loop()
+                loop.run_forever()
         except KeyboardInterrupt:
             self.stop()
+        finally:
+            pass
 
     def stop(self) -> None:
         """Stops the debugger session."""
