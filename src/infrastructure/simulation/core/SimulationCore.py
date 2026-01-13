@@ -9,7 +9,7 @@ from typing import List
 
 class SimulationCore:
     @staticmethod
-    def calculate_stochastic_failures(agent_count: int, failure_rate: float = 0.1) -> List[int]:
+    def calculate_stochastic_failures(agent_count: int, failure_rate: float = 0.1) -> list[int]:
         """
         Returns a list of agent indices that are designated to 'fail'.
         """

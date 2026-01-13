@@ -41,5 +41,5 @@ class ReportMetric:
     name: str
     value: float
     unit: str = ""
-    threshold: Optional[float] = None
+    threshold: float | None = None
     trend: str = "="

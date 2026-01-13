@@ -39,7 +39,6 @@ __version__ = VERSION
 
 try:
     import chromadb
-    from chromadb.config import Settings
     HAS_CHROMADB = True
 except ImportError:
     HAS_CHROMADB = False
@@ -102,7 +101,7 @@ class KnowledgeAgent(BaseAgent):
             json.dump(index, f, indent=4)
         logging.info(f"Knowledge index built at {self.index_file}")
 
-    def record_tier_memory(self, tier: str, content: str, metadata: Optional[Dict[str, Any]] = None) -> str:
+    def record_tier_memory(self, tier: str, content: str, metadata: dict[str, Any] | None = None) -> str:
         """Records a piece of knowledge into the MIRIX 6-tier architecture.
         Tiers: core, episodic, semantic, procedural, resource, knowledge.
         """
@@ -225,7 +224,7 @@ class KnowledgeAgent(BaseAgent):
             self.build_vector_index()
             
         try:
-            with open(self.index_file, "r") as f:
+            with open(self.index_file) as f:
                 index = json.load(f)
         except Exception:
             index = {}
@@ -244,9 +243,9 @@ class KnowledgeAgent(BaseAgent):
         lessons = self.memory_engine.get_lessons_learned(query)
         if lessons:
             mem_blocks = []
-            for l in lessons:
-                status = "✅" if l["success"] else "❌"
-                mem_blocks.append(f"> - {status} **{l['agent']}**: {l['task']} -> {l['outcome']}")
+            for lesson in lessons:
+                status = "✅" if lesson["success"] else "❌"
+                mem_blocks.append(f"> - {status} **{lesson['agent']}**: {lesson['task']} -> {lesson['outcome']}")
             context_snippets.append("> [!NOTE] Memory: Lessons from similar past tasks\n" + "\n".join(mem_blocks) + "\n")
 
         # 3. Check index first (Exact symbol/link matches)
@@ -304,13 +303,13 @@ class KnowledgeAgent(BaseAgent):
             
         return "## Gathered Context\n\n" + "\n".join(context_snippets)
 
-    def find_backlinks(self, file_name: str) -> List[str]:
+    def find_backlinks(self, file_name: str) -> list[str]:
         """Finds all notes that link to the specified file/note name."""
         if not self.index_file.exists():
             self.build_index()
             
         try:
-            with open(self.index_file, "r") as f:
+            with open(self.index_file) as f:
                 index = json.load(f)
         except Exception:
             index = {}
@@ -319,7 +318,7 @@ class KnowledgeAgent(BaseAgent):
         note_name = Path(file_name).stem
         return index.get(f"link:{note_name}", [])
 
-    def auto_update_backlinks(self, directory: Optional[str] = None) -> int:
+    def auto_update_backlinks(self, directory: str | None = None) -> int:
         """Updates all .md files in the directory with a Backlinks section."""
         root = Path(directory) if directory else self.file_path.parent
         if not root.is_dir():
@@ -359,7 +358,7 @@ class KnowledgeAgent(BaseAgent):
             self.build_index()
             
         try:
-            with open(self.index_file, "r") as f:
+            with open(self.index_file) as f:
                 index = json.load(f)
         except Exception:
             return "graph TD\n  Empty[No Index Found]"
@@ -381,7 +380,7 @@ class KnowledgeAgent(BaseAgent):
             
         return "graph TD\n" + "\n".join(edges)
 
-    def get_compressed_briefing(self, file_paths: List[str]) -> str:
+    def get_compressed_briefing(self, file_paths: list[str]) -> str:
         """Generates a summarized structural briefing of multiple files."""
         root = self.file_path.parent
         summaries = []
@@ -391,7 +390,7 @@ class KnowledgeAgent(BaseAgent):
                 summaries.append(self.compressor.compress_file(p))
         return "\n\n".join(summaries)
 
-    def hybrid_search(self, query: str, limit: int = 5) -> Dict[str, Any]:
+    def hybrid_search(self, query: str, limit: int = 5) -> dict[str, Any]:
         """Combines semantic search with graph-based dependency analysis."""
         results = {
             "query": query,

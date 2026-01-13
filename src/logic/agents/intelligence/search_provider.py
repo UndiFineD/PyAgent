@@ -24,6 +24,7 @@ Search Agent: Perform deep research and search operations across the workspace.
 
 from __future__ import annotations
 from src.core.base.version import VERSION
+from src.core.base.utilities import create_main_function
 import sys
 from pathlib import Path
 

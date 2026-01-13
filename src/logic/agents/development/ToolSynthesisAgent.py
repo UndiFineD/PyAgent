@@ -35,7 +35,7 @@ class ToolSynthesisAgent:
         self.tool_cache.mkdir(parents=True, exist_ok=True)
         self.synthesis_history = []
 
-    def synthesize_tool(self, task_pattern, requirements) -> Dict[str, Any]:
+    def synthesize_tool(self, task_pattern, requirements) -> dict[str, Any]:
         """
         Generates a new tool script for a specific pattern.
         """
@@ -54,11 +54,11 @@ class ToolSynthesisAgent:
         
         return {"tool_name": tool_name, "status": "synthesized"}
 
-    def get_available_tools(self) -> List[Dict[str, Any]]:
+    def get_available_tools(self) -> list[dict[str, Any]]:
         """Returns the list of synthesized tools."""
         return self.synthesis_history
 
-    def analyze_feedback(self, tool_name, feedback) -> Dict[str, Any]:
+    def analyze_feedback(self, tool_name, feedback) -> dict[str, Any]:
         """
         Refines a tool based on agent or human feedback.
         """

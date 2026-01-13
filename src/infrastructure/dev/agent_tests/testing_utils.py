@@ -38,9 +38,9 @@ class VisualRegressionTester:
     def __init__(self, config: VisualRegressionConfig) -> None:
         """Initialize visual regression tester."""
         self.config = config
-        self.baselines: Dict[str, str] = {}
-        self.results: List[Dict[str, Any]] = []
-        self._diffs: Dict[str, float] = {}
+        self.baselines: dict[str, str] = {}
+        self.results: list[dict[str, Any]] = []
+        self._diffs: dict[str, float] = {}
 
     def capture_baseline(self, component_id: str, screenshot_path: str) -> str:
         """Capture a baseline screenshot."""
@@ -50,7 +50,7 @@ class VisualRegressionTester:
         self.baselines[component_id] = image_hash
         return image_hash
 
-    def compare(self, component_id: str, current_screenshot: str) -> Dict[str, Any]:
+    def compare(self, component_id: str, current_screenshot: str) -> dict[str, Any]:
         """Compare current screenshot against baseline."""
         baseline = self.baselines.get(component_id)
         if not baseline:
@@ -60,7 +60,7 @@ class VisualRegressionTester:
         diff = 0.0 if current_hash == baseline else 0.05
         self._diffs[component_id] = diff
         passed = diff <= self.config.diff_threshold
-        result: Dict[str, Any] = {
+        result: dict[str, Any] = {
             "component_id": component_id,
             "diff_percentage": diff,
             "threshold": self.config.diff_threshold,
@@ -84,11 +84,11 @@ class VisualRegressionTester:
                 )
         return "\n".join(report)
 
-    def run_for_browsers(self, component_id: str) -> List[Dict[str, Any]]:
+    def run_for_browsers(self, component_id: str) -> list[dict[str, Any]]:
         """Run visual test across all configured browsers."""
-        results: List[Dict[str, Any]] = []
+        results: list[dict[str, Any]] = []
         for browser in self.config.browsers:
-            result: Dict[str, Any] = {
+            result: dict[str, Any] = {
                 "browser": browser.value,
                 "component_id": component_id,
                 "passed": True
@@ -101,16 +101,16 @@ class ContractTestRunner:
 
     def __init__(self) -> None:
         """Initialize contract test runner."""
-        self.contracts: Dict[str, ContractTest] = {}
-        self.results: List[Dict[str, Any]] = []
+        self.contracts: dict[str, ContractTest] = {}
+        self.results: list[dict[str, Any]] = []
 
     def add_contract(
         self,
         consumer: str,
         provider: str,
         endpoint: str,
-        request_schema: Optional[Dict[str, Any]] = None,
-        response_schema: Optional[Dict[str, Any]] = None,
+        request_schema: dict[str, Any] | None = None,
+        response_schema: dict[str, Any] | None = None,
         status_code: int = 200
     ) -> ContractTest:
         """Add a contract definition."""
@@ -129,8 +129,8 @@ class ContractTestRunner:
     def verify_consumer(
         self,
         contract_id: str,
-        actual_request: Dict[str, Any]
-    ) -> Dict[str, Any]:
+        actual_request: dict[str, Any]
+    ) -> dict[str, Any]:
         """Verify consumer sends correct request."""
         contract = self.contracts.get(contract_id)
         if not contract:
@@ -140,7 +140,7 @@ class ContractTestRunner:
             k in actual_request
             for k in contract.request_schema.keys()
         )
-        result: Dict[str, Any] = {
+        result: dict[str, Any] = {
             "contract_id": contract_id,
             "side": "consumer",
             "valid": valid
@@ -151,9 +151,9 @@ class ContractTestRunner:
     def verify_provider(
         self,
         contract_id: str,
-        actual_response: Dict[str, Any],
+        actual_response: dict[str, Any],
         actual_status: int
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Verify provider sends correct response."""
         contract = self.contracts.get(contract_id)
         if not contract:
@@ -163,7 +163,7 @@ class ContractTestRunner:
             k in actual_response
             for k in contract.response_schema.keys()
         )
-        result: Dict[str, Any] = {
+        result: dict[str, Any] = {
             "contract_id": contract_id,
             "side": "provider",
             "valid": status_match and schema_valid,
@@ -172,14 +172,14 @@ class ContractTestRunner:
         self.results.append(result)
         return result
 
-    def get_contracts_for_consumer(self, consumer: str) -> List[ContractTest]:
+    def get_contracts_for_consumer(self, consumer: str) -> list[ContractTest]:
         """Get all contracts for a consumer."""
         return [c for c in self.contracts.values() if c.consumer == consumer]
 
     def export_pact(self, consumer: str) -> str:
         """Export contracts in Pact format."""
         contracts = self.get_contracts_for_consumer(consumer)
-        pact: Dict[str, Any] = {
+        pact: dict[str, Any] = {
             "consumer": {"name": consumer},
             "provider": {"name": contracts[0].provider if contracts else ""},
             "interactions": [{
@@ -194,8 +194,8 @@ class ResultAggregator:
 
     def __init__(self) -> None:
         """Initialize result aggregator."""
-        self.results: List[AggregatedResult] = []
-        self._by_source: Dict[TestSourceType, List[AggregatedResult]] = {}
+        self.results: list[AggregatedResult] = []
+        self._by_source: dict[TestSourceType, list[AggregatedResult]] = {}
 
     def add_result(
         self,
@@ -203,7 +203,7 @@ class ResultAggregator:
         test_name: str,
         status: TestStatus,
         duration_ms: float,
-        metadata: Optional[Dict[str, Any]] = None
+        metadata: dict[str, Any] | None = None
     ) -> AggregatedResult:
         """Add a test result."""
         from datetime import datetime
@@ -223,7 +223,7 @@ class ResultAggregator:
 
         return result
 
-    def add_run(self, run_data: Dict[str, int]) -> None:
+    def add_run(self, run_data: dict[str, int]) -> None:
         """Add a test run with summary stats."""
         for _ in range(run_data.get("passed", 0)):
             self.add_result(
@@ -269,7 +269,7 @@ class ResultAggregator:
         except json.JSONDecodeError:
             return 0
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """Get aggregated summary."""
         total = len(self.results)
         passed = sum(1 for r in self.results if r.status == TestStatus.PASSED)
@@ -297,7 +297,7 @@ class ResultAggregator:
             } for r in self.results]
         }, indent=2)
 
-    def merge(self) -> Dict[str, Any]:
+    def merge(self) -> dict[str, Any]:
         """Merge all results into a single summary."""
         summary = self.get_summary()
         failed = summary.get("failed", 0)
@@ -310,7 +310,7 @@ class ResultAggregator:
             "total_duration_ms": summary.get("total_duration_ms", 0)
         }
 
-    def get_trend(self) -> Dict[str, Any]:
+    def get_trend(self) -> dict[str, Any]:
         """Analyze trend in test results."""
         if len(self.results) < 2:
             return {"pass_rate_trend": "stable"}
@@ -343,8 +343,8 @@ class TestMetricsCollector:
 
     def __init__(self) -> None:
         """Initialize metrics collector."""
-        self.executions: Dict[str, List[float]] = {}
-        self.flaky_tests: Dict[str, int] = {}
+        self.executions: dict[str, list[float]] = {}
+        self.flaky_tests: dict[str, int] = {}
 
     def record_execution(self, test_name: str, duration_ms: float) -> None:
         """Record test execution time."""
@@ -356,7 +356,7 @@ class TestMetricsCollector:
         """Record flaky test occurrence."""
         self.flaky_tests[test_name] = occurrences
 
-    def get_metrics(self) -> Dict[str, float]:
+    def get_metrics(self) -> dict[str, float]:
         """Get aggregated metrics."""
         total_duration = sum(sum(durations) for durations in self.executions.values())
         total_tests = sum(len(durations) for durations in self.executions.values())
@@ -366,6 +366,6 @@ class TestMetricsCollector:
             "average_duration_ms": avg_duration
         }
 
-    def get_flaky_tests(self) -> Dict[str, int]:
+    def get_flaky_tests(self) -> dict[str, int]:
         """Get flaky tests."""
         return self.flaky_tests.copy()

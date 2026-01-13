@@ -56,7 +56,7 @@ class MemoRAGAgent(BaseAgent):
         logging.info(f"MemoRAG: Shard '{shard_name}' updated.")
 
     @as_tool
-    def recall_clues_from_shard(self, query: str, shard_name: str = "global") -> List[str]:
+    def recall_clues_from_shard(self, query: str, shard_name: str = "global") -> list[str]:
         """Generates clues by scanning a specific memory shard."""
         shard_file = self.shard_dir / f"{shard_name}.txt"
         if not shard_file.exists():
@@ -69,11 +69,11 @@ class MemoRAGAgent(BaseAgent):
         ]
 
     @as_tool
-    def list_shards(self) -> List[str]:
+    def list_shards(self) -> list[str]:
         """Lists all existing memory shards."""
         return [f.stem for f in self.shard_dir.glob("*.txt")]
 
     def improve_content(self, prompt: str) -> str:
-        shards = self.list_shards()
+        self.list_shards()
         clues = self.recall_clues_from_shard(prompt, self.active_shard)
         return f"### MemoRAG Active Shard: {self.active_shard}\n" + "\n".join([f"- {c}" for c in clues])

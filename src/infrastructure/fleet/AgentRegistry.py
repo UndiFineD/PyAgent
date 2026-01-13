@@ -26,7 +26,8 @@ import importlib
 import logging
 import os
 import json
-from typing import Dict, Any, Tuple, Optional, List, Iterable
+from typing import Dict, Any, Tuple, Optional, List
+from collections.abc import Iterable
 from pathlib import Path
 from .ResilientStubs import ResilientStub
 from src.logic.agents.system.MCPAgent import MCPAgent
@@ -39,12 +40,12 @@ __version__ = VERSION
 
 class LazyAgentMap(dict):
     """A dictionary that instantiates agents only when they are first accessed."""
-    def __init__(self, workspace_root: Path, registry_configs: Dict[str, tuple] = None, fleet_instance=None) -> None:
+    def __init__(self, workspace_root: Path, registry_configs: dict[str, tuple] = None, fleet_instance=None) -> None:
         super().__init__()
         self.workspace_root: Path = workspace_root
         self.registry_configs = registry_configs or BOOTSTRAP_AGENTS
         self.fleet = fleet_instance
-        self._instances: Dict[str, Any] = {}
+        self._instances: dict[str, Any] = {}
         # Refactored: Logic delegated to Core (Rust-ready)
         self.core = AgentRegistryCore(SDK_VERSION)
         
@@ -54,10 +55,10 @@ class LazyAgentMap(dict):
         # 2. Dynamic Discovery (The most lazy/flexible)
         # Pre-scan ensures we know what's available without guessing inside __getitem__
         discovered_files = self._scan_workspace_for_agents()
-        self._discovered_configs: Dict[str, Tuple[str, str, str | None]] = self.core.process_discovered_files(discovered_files)
+        self._discovered_configs: dict[str, tuple[str, str, str | None]] = self.core.process_discovered_files(discovered_files)
         logging.info(f"Registry: Discovered {len(self._discovered_configs)} agents dynamically.")
 
-    def _scan_workspace_for_agents(self) -> List[str]:
+    def _scan_workspace_for_agents(self) -> list[str]:
         """Performs the I/O-bound scanning of the workspace."""
         subdirs = [
             "src/logic/agents/cognitive", 
@@ -85,20 +86,20 @@ class LazyAgentMap(dict):
                         found_paths.append(str(rel_path))
         return found_paths
 
-    def _load_manifests(self) -> Dict[str, tuple]:
+    def _load_manifests(self) -> dict[str, tuple]:
         """Loads additional configurations from plugins/manifest.json or similar."""
         manifest_configs = {}
         # Support both manifest.json and agent_manifest.json
-        manifest_paths: List[Path] = [
+        manifest_paths: list[Path] = [
             self.workspace_root / "plugins" / "manifest.json",
             self.workspace_root / "plugins" / "agent_manifest.json"
         ]
         for m_path in manifest_paths:
             if m_path.exists():
                 try:
-                    with open(m_path, 'r') as f:
+                    with open(m_path) as f:
                         data = json.load(f)
-                        configs: Dict[str, Tuple[str, str, str | None]] = self.core.parse_manifest(data)
+                        configs: dict[str, tuple[str, str, str | None]] = self.core.parse_manifest(data)
                         manifest_configs.update(configs)
                 except Exception as e:
                     logging.error(f"Failed to load plugin manifest {m_path}: {e}")
@@ -125,7 +126,7 @@ class LazyAgentMap(dict):
         """
         # Build dependency graph from all configs
         all_configs = {**self.registry_configs, **self._manifest_configs, **self._discovered_configs}
-        dep_graph: Dict[str, List[str]] = {}
+        dep_graph: dict[str, list[str]] = {}
         
         # Simple heuristic: look for agent names in the config string/list
         for agent_name, cfg in all_configs.items():
@@ -147,7 +148,7 @@ class LazyAgentMap(dict):
             return True
         return key in self.registry_configs or key in self._manifest_configs or key in self._discovered_configs
 
-    def keys(self) -> List[str]:
+    def keys(self) -> list[str]:
         # Combine all potential keys
         all_ks = set(super().keys())
         all_ks.update(self.registry_configs.keys())
@@ -161,10 +162,10 @@ class LazyAgentMap(dict):
     def __len__(self) -> int:
         return len(self.keys())
 
-    def items(self) -> List[Tuple[str, Any]]:
+    def items(self) -> list[tuple[str, Any]]:
         return [(k, self[k]) for k in self.keys()]
 
-    def values(self) -> List[Any]:
+    def values(self) -> list[Any]:
         return [self[k] for k in self.keys()]
 
     def __getitem__(self, key: str) -> Any:
@@ -196,7 +197,7 @@ class LazyAgentMap(dict):
 
         raise KeyError(f"Agent '{key}' not found in registry (including dynamic scans).")
 
-    def _instantiate(self, key: str, config: Tuple[str, str, Optional[str]]) -> Any:
+    def _instantiate(self, key: str, config: tuple[str, str, str | None]) -> Any:
         """Standard instantiation logic with dependency injection and version checks."""
         module_path, class_name, arg_path_suffix = config
         
@@ -280,15 +281,9 @@ class LazyAgentMap(dict):
         except KeyError:
             return default
 
-    def update(self, other: Dict[str, Any]) -> None:
+    def update(self, other: dict[str, Any]) -> None:
         # Allow manual overrides or additions (like SignalBus)
         self._instances.update(other)
-
-    def __contains__(self, key: object) -> bool:
-        return (key in self._instances or 
-                key in self.registry_configs or 
-                key in self._manifest_configs or 
-                key in self._discovered_configs)
 
 class AgentRegistry:
     """Registry for mapping agent names to their implementations via lazy loading."""

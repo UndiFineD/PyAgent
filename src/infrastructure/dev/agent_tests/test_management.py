@@ -25,43 +25,44 @@ from src.core.base.version import VERSION
 from dataclasses import dataclass, field
 from pathlib import Path
 import json
-from typing import Any, Dict, List, Optional, Set, Callable, cast
+from typing import Any, Dict, List, Optional, Set, cast
+from collections.abc import Callable
 from .models import TestCase
 
 __version__ = VERSION
 
-def _empty_str_list() -> List[str]:
+def _empty_str_list() -> list[str]:
     return []
 
 class BaselineComparisonResult:
     """Result of a baseline comparison."""
-    def __init__(self, matches: bool, differences: Optional[List[str]] = None) -> None:
+    def __init__(self, matches: bool, differences: list[str] | None = None) -> None:
         self.matches = matches
         self.differences = differences or []
 
 class BaselineManager:
     """Manage test baselines."""
 
-    def __init__(self, baseline_dir: Optional[Path] = None) -> None:
+    def __init__(self, baseline_dir: Path | None = None) -> None:
         """Initialize baseline manager."""
         self.baseline_dir = Path(baseline_dir) if baseline_dir else Path("./baselines")
         self.baseline_dir.mkdir(parents=True, exist_ok=True)
 
-    def save_baseline(self, name: str, data: Dict[str, Any]) -> None:
+    def save_baseline(self, name: str, data: dict[str, Any]) -> None:
         """Save a baseline."""
         baseline_path = self.baseline_dir / f"{name}.json"
         with open(baseline_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
 
-    def load_baseline(self, name: str) -> Dict[str, Any]:
+    def load_baseline(self, name: str) -> dict[str, Any]:
         """Load a baseline."""
         baseline_path = self.baseline_dir / f"{name}.json"
         if baseline_path.exists():
-            with open(baseline_path, "r", encoding="utf-8") as f:
+            with open(baseline_path, encoding="utf-8") as f:
                 return json.load(f)
         return {}
 
-    def compare(self, name: str, current: Dict[str, Any]) -> BaselineComparisonResult:
+    def compare(self, name: str, current: dict[str, Any]) -> BaselineComparisonResult:
         """Compare current data to baseline."""
         baseline = self.load_baseline(name)
         if baseline == current:
@@ -78,7 +79,7 @@ class BaselineManager:
         
         return BaselineComparisonResult(matches=False, differences=differences)
 
-    def update_baseline(self, name: str, data: Dict[str, Any]) -> None:
+    def update_baseline(self, name: str, data: dict[str, Any]) -> None:
         """Update a baseline."""
         self.save_baseline(name, data)
 
@@ -87,8 +88,8 @@ class DIContainer:
 
     def __init__(self) -> None:
         """Initialize DI container."""
-        self._dependencies: Dict[str, Any] = {}
-        self._overrides: Dict[str, Any] = {}
+        self._dependencies: dict[str, Any] = {}
+        self._overrides: dict[str, Any] = {}
 
     def register(self, name: str, factory: Callable[[], Any]) -> None:
         """Register a dependency."""
@@ -132,14 +133,14 @@ class TestPrioritizer:
 
     def __init__(self) -> None:
         """Initialize test prioritizer."""
-        self.tests: Dict[str, Dict[str, Any]] = {}
+        self.tests: dict[str, dict[str, Any]] = {}
 
     def add_test(
         self,
         name: str,
         recent_changes: int = 0,
         failure_rate: float = 0.0,
-        changed_recently: Optional[bool] = None,
+        changed_recently: bool | None = None,
     ) -> None:
         """Add a test for prioritization.
 
@@ -153,11 +154,11 @@ class TestPrioritizer:
             "failure_rate": float(failure_rate),
         }
 
-    def prioritize_by_changes(self) -> List[str]:
+    def prioritize_by_changes(self) -> list[str]:
         """Prioritize by recent changes (compat alias)."""
         return self.prioritize_by_recent_changes()
 
-    def prioritize_by_recent_changes(self) -> List[str]:
+    def prioritize_by_recent_changes(self) -> list[str]:
         """Prioritize by recent changes."""
         return sorted(
             self.tests.keys(),
@@ -165,11 +166,11 @@ class TestPrioritizer:
             reverse=True,
         )
 
-    def prioritize_by_failure_history(self) -> List[str]:
+    def prioritize_by_failure_history(self) -> list[str]:
         """Prioritize by failure history."""
         return sorted(self.tests.keys(), key=lambda t: self.tests[t]["failure_rate"], reverse=True)
 
-    def prioritize_by_failure_rate(self) -> List[str]:
+    def prioritize_by_failure_rate(self) -> list[str]:
         """Prioritize by failure rate (compat alias)."""
         return self.prioritize_by_failure_history()
 
@@ -177,16 +178,16 @@ class TestPrioritizer:
         self,
         change_weight: float = 1.0,
         failure_weight: float = 1.0,
-    ) -> List[str]:
+    ) -> list[str]:
         """Prioritize with combined strategy."""
-        scores: Dict[str, float] = {}
+        scores: dict[str, float] = {}
         for test, data in self.tests.items():
             scores[test] = (data["recent_changes"] * float(change_weight)) + (
                 data["failure_rate"] * float(failure_weight)
             )
         return sorted(scores.keys(), key=lambda t: scores[t], reverse=True)
 
-    def prioritize(self, tests: List[TestCase]) -> List[TestCase]:
+    def prioritize(self, tests: list[TestCase]) -> list[TestCase]:
         """Rank tests by priority."""
         return sorted(tests, key=lambda t: t.priority.value, reverse=True)
 
@@ -195,7 +196,7 @@ class FlakinessDetector:
 
     def __init__(self) -> None:
         """Initialize flakiness detector."""
-        self.test_runs: Dict[str, List[bool]] = {}
+        self.test_runs: dict[str, list[bool]] = {}
 
     def add_run(self, test_name: str, passed: bool) -> None:
         """Add a test run result."""
@@ -221,8 +222,8 @@ class QuarantineManager:
 
     def __init__(self) -> None:
         """Initialize quarantine manager."""
-        self.quarantined: Set[str] = set()
-        self.reasons: Dict[str, str] = {}
+        self.quarantined: set[str] = set()
+        self.reasons: dict[str, str] = {}
 
     def quarantine(self, test_name: str, reason: str = "") -> None:
         """Quarantine a test."""
@@ -244,10 +245,10 @@ class ImpactAnalyzer:
 
     def __init__(self) -> None:
         """Initialize impact analyzer."""
-        self._test_to_files: Dict[str, Set[str]] = {}
-        self._file_dependencies: Dict[str, Set[str]] = {}
+        self._test_to_files: dict[str, set[str]] = {}
+        self._file_dependencies: dict[str, set[str]] = {}
 
-    def map_test_to_files(self, test: str, files: List[str]) -> None:
+    def map_test_to_files(self, test: str, files: list[str]) -> None:
         """Map a test to the files it exercises."""
         self._test_to_files[test] = set(files)
 
@@ -255,9 +256,9 @@ class ImpactAnalyzer:
         """Declare a file dependency edge: ``file`` depends on ``depends_on``."""
         self._file_dependencies.setdefault(file, set()).add(depends_on)
 
-    def _expand_changed_files(self, changed_files: List[str]) -> Set[str]:
-        expanded: Set[str] = set(changed_files)
-        stack: List[str] = list(changed_files)
+    def _expand_changed_files(self, changed_files: list[str]) -> set[str]:
+        expanded: set[str] = set(changed_files)
+        stack: list[str] = list(changed_files)
         while stack:
             current = stack.pop()
             for dep in self._file_dependencies.get(current, set()):
@@ -266,20 +267,20 @@ class ImpactAnalyzer:
                     stack.append(dep)
         return expanded
 
-    def get_affected_tests(self, changed_files: List[str], include_dependencies: bool = False) -> Set[str]:
+    def get_affected_tests(self, changed_files: list[str], include_dependencies: bool = False) -> set[str]:
         """Get tests affected by changes in one or more files."""
         files = self._expand_changed_files(changed_files) if include_dependencies else set(changed_files)
-        affected: Set[str] = set()
+        affected: set[str] = set()
         for test, mapped in self._test_to_files.items():
             if mapped & files:
                 affected.add(test)
         return affected
 
-    def build_dependency_graph(self) -> Dict[str, Set[str]]:
+    def build_dependency_graph(self) -> dict[str, set[str]]:
         """Build dependency graph (compat)."""
         return {k: set(v) for k, v in self._file_dependencies.items()}
 
-    def get_impacted_tests(self, changed_files: List[str]) -> Set[str]:
+    def get_impacted_tests(self, changed_files: list[str]) -> set[str]:
         """Get impacted tests (compat alias)."""
         return self.get_affected_tests(changed_files=changed_files, include_dependencies=False)
 
@@ -289,18 +290,18 @@ class ContractValidator:
     @dataclass
     class ValidationResult:
         valid: bool
-        errors: List[str] = field(default_factory=list)
+        errors: list[str] = field(default_factory=list)
 
     def validate(
         self,
-        contract: Dict[str, Any],
-        actual_response: Optional[Dict[str, Any]] = None,
-    ) -> "ContractValidator.ValidationResult":
+        contract: dict[str, Any],
+        actual_response: dict[str, Any] | None = None,
+    ) -> ContractValidator.ValidationResult:
         """Validate a contract against an actual response."""
-        errors: List[str] = []
+        errors: list[str] = []
 
         expected_resp_raw = contract.get("response")
-        expected_resp: Dict[str, Any] = cast(Dict[str, Any], expected_resp_raw) if isinstance(expected_resp_raw, dict) else {}
+        expected_resp: dict[str, Any] = cast(dict[str, Any], expected_resp_raw) if isinstance(expected_resp_raw, dict) else {}
         expected_status = expected_resp.get("status")
         if expected_status is None:
             errors.append("missing_expected_status")
@@ -313,7 +314,7 @@ class ContractValidator:
             errors.append("status_mismatch")
 
         expected_body_raw = expected_resp.get("body")
-        expected_body: Dict[str, Any] = cast(Dict[str, Any], expected_body_raw) if isinstance(expected_body_raw, dict) else {}
+        expected_body: dict[str, Any] = cast(dict[str, Any], expected_body_raw) if isinstance(expected_body_raw, dict) else {}
         expected_type = expected_body.get("type")
         if expected_type == "array":
             if not isinstance(actual_response.get("body"), list):
@@ -327,7 +328,7 @@ class TestDocGenerator:
 
     def __init__(self) -> None:
         """Initialize doc generator."""
-        self.tests: List[Dict[str, Any]] = []
+        self.tests: list[dict[str, Any]] = []
 
     def add_test(self, name: str, module: str = "unknown", docstring: str = "", code: str = "") -> None:
         """Add test for documentation."""
@@ -335,7 +336,7 @@ class TestDocGenerator:
 
     def generate(self) -> str:
         """Generate a human-readable documentation summary."""
-        parts: List[str] = []
+        parts: list[str] = []
         for test in self.tests:
             title = test.get("name", "")
             doc = test.get("docstring", "")
@@ -343,17 +344,17 @@ class TestDocGenerator:
             parts.append(f"{title}: {doc}\n{code}".strip())
         return "\n\n".join(parts)
 
-    def generate_grouped(self) -> Dict[str, List[Dict[str, Any]]]:
+    def generate_grouped(self) -> dict[str, list[dict[str, Any]]]:
         """Generate documentation grouped by module."""
         return self.group_by_module(self.tests)
 
-    def extract_examples(self, test_code: str) -> List[Dict[str, str]]:
+    def extract_examples(self, test_code: str) -> list[dict[str, str]]:
         """Extract examples from test code."""
         return [{"example": test_code}] if test_code else []
 
-    def group_by_module(self, tests: List[Dict[str, Any]]) -> Dict[str, List[Dict[str, Any]]]:
+    def group_by_module(self, tests: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
         """Group tests by module."""
-        result: Dict[str, List[Dict[str, Any]]] = {}
+        result: dict[str, list[dict[str, Any]]] = {}
         for test in tests:
             module = test.get("module", "unknown")
             if module not in result:

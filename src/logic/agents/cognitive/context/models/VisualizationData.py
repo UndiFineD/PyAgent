@@ -39,6 +39,6 @@ class VisualizationData:
         layout: Layout algorithm to use.
     """
     viz_type: VisualizationType
-    nodes: List[Dict[str, Any]] = field(default_factory=lambda: [])
-    edges: List[Tuple[str, str]] = field(default_factory=lambda: [])
+    nodes: list[dict[str, Any]] = field(default_factory=lambda: [])
+    edges: list[tuple[str, str]] = field(default_factory=lambda: [])
     layout: str = "hierarchical"

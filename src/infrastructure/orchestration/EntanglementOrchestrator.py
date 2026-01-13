@@ -35,7 +35,7 @@ class EntanglementOrchestrator:
     def __init__(self, fleet) -> None:
         self.fleet = fleet
         self.signal_bus = fleet.signal_bus
-        self.shared_state: Dict[str, Any] = {}
+        self.shared_state: dict[str, Any] = {}
         self._lock = threading.Lock()
         
         # Subscribe to entanglement sync signals
@@ -68,7 +68,7 @@ class EntanglementOrchestrator:
                 self.shared_state[key] = value
                 logging.info(f"Entanglement: Synced state from {sender}: {key}={value}")
 
-    def get_all_state(self) -> Dict[str, Any]:
+    def get_all_state(self) -> dict[str, Any]:
         """Returns the entire entangled state snapshot."""
         with self._lock:
             return self.shared_state.copy()

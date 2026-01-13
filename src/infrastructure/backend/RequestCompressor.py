@@ -102,6 +102,6 @@ class RequestCompressor:
         # Uncompressed
         return payload.decode("utf-8")
 
-    def get_stats(self) -> Dict[str, int]:
+    def get_stats(self) -> dict[str, int]:
         """Get compression statistics."""
         return dict(self._stats)

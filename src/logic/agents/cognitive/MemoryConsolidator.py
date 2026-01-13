@@ -40,7 +40,7 @@ class MemoryConsolidator:
         self.storage_path = Path(storage_path)
         self.storage_path.mkdir(parents=True, exist_ok=True)
         self.long_term_memory_file = self.storage_path / "long_term_memory.json"
-        self.daily_buffer: List[Dict[str, Any]] = []
+        self.daily_buffer: list[dict[str, Any]] = []
         self.core = MemoryConsolidatorCore()
 
     def record_interaction(self, agent: str, task: str, outcome: str) -> None:
@@ -69,17 +69,17 @@ class MemoryConsolidator:
         self.daily_buffer = [] # Clear buffer
         return f"Consolidated {total_interactions} interactions into {len(consolidated_insights)} insights."
 
-    def _load_memory(self) -> List[Dict[str, Any]]:
+    def _load_memory(self) -> list[dict[str, Any]]:
         """I/O: Load memory from disk."""
         if self.long_term_memory_file.exists():
             try:
-                with open(self.long_term_memory_file, 'r', encoding='utf-8') as f:
+                with open(self.long_term_memory_file, encoding='utf-8') as f:
                     return json.load(f)
             except Exception as e:
                 logging.error(f"Failed to load memory: {e}")
         return []
 
-    def _save_memory(self, memory: List[Dict[str, Any]]) -> None:
+    def _save_memory(self, memory: list[dict[str, Any]]) -> None:
         """I/O: Save memory to disk."""
         try:
             with open(self.long_term_memory_file, 'w', encoding='utf-8') as f:
@@ -87,7 +87,7 @@ class MemoryConsolidator:
         except Exception as e:
             logging.error(f"Failed to save memory: {e}")
             
-    def query_long_term_memory(self, query: str) -> List[str]:
+    def query_long_term_memory(self, query: str) -> list[str]:
         """I/O and Core combined search."""
         memory = self._load_memory()
         return self.core.filter_memory_by_query(memory, query)

@@ -9,7 +9,7 @@ class TracingCore:
     It prepares trace data for OpenTelemetry (OTel) exporters.
     """
 
-    def create_span_context(self, trace_id: str, span_id: str) -> Dict[str, str]:
+    def create_span_context(self, trace_id: str, span_id: str) -> dict[str, str]:
         """Creates a standardized context for distributed tracing."""
         return {
             "trace_id": trace_id,
@@ -17,7 +17,7 @@ class TracingCore:
             "version": "OTel-1.1"
         }
 
-    def calculate_latency_breakdown(self, total_time: float, network_time: float) -> Dict[str, float]:
+    def calculate_latency_breakdown(self, total_time: float, network_time: float) -> dict[str, float]:
         """
         Calculates agent thinking time vs network latency.
         """
@@ -29,7 +29,7 @@ class TracingCore:
             "think_ratio": thinking_time / total_time if total_time > 0 else 0
         }
 
-    def format_otel_log(self, name: str, attributes: Dict[str, Any]) -> Dict[str, Any]:
+    def format_otel_log(self, name: str, attributes: dict[str, Any]) -> dict[str, Any]:
         """Formats a single telemetry event for OTel ingestion."""
         return {
             "timestamp": time.time_ns(),

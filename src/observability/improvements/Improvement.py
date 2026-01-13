@@ -45,7 +45,7 @@ class Improvement:
     impact_score: float = 50.0
     created_at: str = ""
     updated_at: str = ""
-    assignee: Optional[str] = None
-    tags: List[str] = field(default_factory=list)  # type: ignore[assignment]
-    dependencies: List[str] = field(default_factory=list)  # type: ignore[assignment]
+    assignee: str | None = None
+    tags: list[str] = field(default_factory=list)  # type: ignore[assignment]
+    dependencies: list[str] = field(default_factory=list)  # type: ignore[assignment]
     votes: int = 0

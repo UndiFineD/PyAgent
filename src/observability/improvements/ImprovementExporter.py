@@ -32,12 +32,12 @@ class ImprovementExporter:
     """Exports improvements to json/csv."""
 
     def __init__(self) -> None:
-        self.formats: List[str] = ["json", "csv"]
+        self.formats: list[str] = ["json", "csv"]
 
-    def export(self, improvements: List[Improvement], format: str = "json") -> str:
+    def export(self, improvements: list[Improvement], format: str = "json") -> str:
         fmt = format.lower()
         if fmt == "json":
-            rows: List[Dict[str, Any]] = []
+            rows: list[dict[str, Any]] = []
             for imp in improvements:
                 rows.append({
                     "id": imp.id,

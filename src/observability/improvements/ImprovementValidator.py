@@ -25,7 +25,8 @@ from src.core.base.version import VERSION
 from .Improvement import Improvement
 from .ValidationResult import ValidationResult
 from .ValidationSeverity import ValidationSeverity
-from typing import Any, Callable, List, Tuple
+from typing import Any, List, Tuple
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -40,7 +41,7 @@ class ImprovementValidator:
 
     def __init__(self) -> None:
         """Initialize the validator."""
-        self.rules: List[Callable[[Improvement], Tuple[bool, str]]] = []
+        self.rules: list[Callable[[Improvement], tuple[bool, str]]] = []
         self._setup_default_rules()
 
     def _setup_default_rules(self) -> None:
@@ -50,7 +51,7 @@ class ImprovementValidator:
 
     def _rule_has_description(
         self, imp: Improvement
-    ) -> Tuple[bool, str]:
+    ) -> tuple[bool, str]:
         """Check that improvement has a description."""
         if not imp.description or len(imp.description) < 10:
             return False, "Description too short or missing"
@@ -58,7 +59,7 @@ class ImprovementValidator:
 
     def _rule_valid_effort(
         self, imp: Improvement
-    ) -> Tuple[bool, str]:
+    ) -> tuple[bool, str]:
         """Check that effort estimate is reasonable."""
         return True, ""
 
@@ -76,7 +77,7 @@ class ImprovementValidator:
         if isinstance(rule, str) and rule == "min_description_length":
             min_length = int(kwargs.get("min_length", 0) or 0)
 
-            def _min_desc(imp: Improvement) -> Tuple[bool, str]:
+            def _min_desc(imp: Improvement) -> tuple[bool, str]:
                 if len(imp.description or "") < min_length:
                     return False, f"Description must be at least {min_length} characters"
                 return True, ""
@@ -105,6 +106,6 @@ class ImprovementValidator:
 
         return result
 
-    def validate_all(self, improvements: List[Improvement]) -> List[ValidationResult]:
+    def validate_all(self, improvements: list[Improvement]) -> list[ValidationResult]:
         """Validate multiple improvements."""
         return [self.validate(imp) for imp in improvements]

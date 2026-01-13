@@ -38,6 +38,6 @@ class ContextRecommendation:
         confidence: Recommendation confidence.
     """
     source_file: str
-    suggested_sections: List[str] = field(default_factory=lambda: [])
+    suggested_sections: list[str] = field(default_factory=lambda: [])
     reason: str = ""
     confidence: float = 0.0

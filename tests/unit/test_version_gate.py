@@ -9,7 +9,7 @@ from src.infrastructure.fleet.ResilientStubs import ResilientStub
 
 def test_version_gate() -> None:
     logging.basicConfig(level=logging.INFO)
-    workspace_root = Path("c:/DEV/PyAgent")
+    workspace_root = Path(Path(__file__).resolve().parents[2])
     
     print("--- Testing Version Gatekeeping ---")
     

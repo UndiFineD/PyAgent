@@ -32,7 +32,8 @@ from .observability_core import Threshold
 from .observability_core import StatsCore
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
+from collections.abc import Callable
 import csv
 import hashlib
 import json
@@ -45,19 +46,19 @@ __version__ = VERSION
 class StatsAgent:
     """Reports statistics on file update progress."""
 
-    def __init__(self, files: List[str]) -> None:
+    def __init__(self, files: list[str]) -> None:
         self.files = [Path(f) for f in files]
-        self.stats: Dict[str, Any] = {}
+        self.stats: dict[str, Any] = {}
         self._validate_files()
         # New features
-        self._metrics: Dict[str, List[Metric]] = {}
-        self._custom_metrics: Dict[str, Callable[[], float]] = {}
-        self._snapshots: List[MetricSnapshot] = []
-        self._thresholds: List[Threshold] = []
-        self._alerts: List[Alert] = []
-        self._retention_policies: Dict[str, RetentionPolicy] = {}
-        self._anomaly_scores: Dict[str, List[float]] = {}
-        self._metric_history: Dict[str, List[Tuple[str, float]]] = {}
+        self._metrics: dict[str, list[Metric]] = {}
+        self._custom_metrics: dict[str, Callable[[], float]] = {}
+        self._snapshots: list[MetricSnapshot] = []
+        self._thresholds: list[Threshold] = []
+        self._alerts: list[Alert] = []
+        self._retention_policies: dict[str, RetentionPolicy] = {}
+        self._anomaly_scores: dict[str, list[float]] = {}
+        self._metric_history: dict[str, list[tuple[str, float]]] = {}
 
     def _validate_files(self) -> None:
         """Validate input files."""
@@ -89,7 +90,7 @@ class StatsAgent:
             timestamp=datetime.now().isoformat()
         )
 
-    def get_metric(self, name: str) -> Optional[Metric]:
+    def get_metric(self, name: str) -> Metric | None:
         """Get a registered metric by name."""
         if name in self._custom_metrics:
             if name in self._metrics and self._metrics[name]:
@@ -104,9 +105,9 @@ class StatsAgent:
             )
         return None
 
-    def collect_custom_metrics(self) -> Dict[str, float]:
+    def collect_custom_metrics(self) -> dict[str, float]:
         """Collect all custom metrics."""
-        results: Dict[str, float] = {}
+        results: dict[str, float] = {}
         for name in self._custom_metrics:
             if name in self._metrics and self._metrics[name]:
                 # Get the latest value for this metric
@@ -120,7 +121,7 @@ class StatsAgent:
         value: float,
         metric_type: MetricType = MetricType.GAUGE,
         namespace: str = "default",
-        tags: Optional[Dict[str, str]] = None
+        tags: dict[str, str] | None = None
     ) -> Metric:
         """Add a metric value."""
         metric = Metric(
@@ -148,7 +149,7 @@ class StatsAgent:
         self,
         name: str,
         limit: int = 100
-    ) -> List[Metric]:
+    ) -> list[Metric]:
         """Get metric history."""
         metrics = self._metrics.get(name, [])
         return metrics[-limit:]
@@ -157,9 +158,9 @@ class StatsAgent:
     def detect_anomaly(
         self,
         metric_name: str,
-        value: Optional[float] = None,
+        value: float | None = None,
         threshold_std: float = 2.0
-    ) -> Union[bool, Tuple[bool, float]]:
+    ) -> bool | tuple[bool, float]:
         """Detect if a value is anomalous using standard deviation."""
         history = self._metrics.get(metric_name, [])
         if value is None:
@@ -176,7 +177,7 @@ class StatsAgent:
         self._anomaly_scores[metric_name].append(z_score)
         return is_anomaly, z_score
 
-    def get_anomaly_scores(self, metric_name: str) -> List[float]:
+    def get_anomaly_scores(self, metric_name: str) -> list[float]:
         """Get anomaly scores for a metric."""
         return self._anomaly_scores.get(metric_name, [])
 
@@ -184,9 +185,9 @@ class StatsAgent:
     def add_threshold(
         self,
         metric_name: str,
-        min_value: Optional[float] = None,
-        max_value: Optional[float] = None,
-        severity: Optional[AlertSeverity] = None,
+        min_value: float | None = None,
+        max_value: float | None = None,
+        severity: AlertSeverity | None = None,
         message: str = "",
         operator: str = "",  # deprecated, for backwards compatibility
         value: float = 0.0   # deprecated, for backwards compatibility
@@ -274,8 +275,8 @@ class StatsAgent:
 
     def get_alerts(
         self,
-        severity: Optional[AlertSeverity] = None
-    ) -> List[Alert]:
+        severity: AlertSeverity | None = None
+    ) -> list[Alert]:
         """Get alerts, optionally filtered by severity."""
         if severity:
             return [a for a in self._alerts if a.severity == severity]
@@ -291,12 +292,12 @@ class StatsAgent:
     def create_snapshot(
         self,
         name: str = "",
-        tags: Optional[Dict[str, str]] = None
+        tags: dict[str, str] | None = None
     ) -> MetricSnapshot:
         """Create a snapshot of current metrics."""
-        current_stats: Dict[str, float] = {k: float(v) for k, v in self.calculate_stats().items()}
-        custom: Dict[str, float] = self.collect_custom_metrics()
-        metrics: Dict[str, float] = {**current_stats, **custom}
+        current_stats: dict[str, float] = {k: float(v) for k, v in self.calculate_stats().items()}
+        custom: dict[str, float] = self.collect_custom_metrics()
+        metrics: dict[str, float] = {**current_stats, **custom}
         snapshot = MetricSnapshot(
             name=name or f"snapshot_{len(self._snapshots)}",
             id=hashlib.md5(datetime.now().isoformat().encode()).hexdigest()[:8],
@@ -307,11 +308,11 @@ class StatsAgent:
         self._snapshots.append(snapshot)
         return snapshot
 
-    def get_snapshot(self, name: str) -> Optional[MetricSnapshot]:
+    def get_snapshot(self, name: str) -> MetricSnapshot | None:
         """Get a snapshot by name."""
         return next((s for s in self._snapshots if s.name == name), None)
 
-    def get_snapshots(self, limit: int = 100) -> List[MetricSnapshot]:
+    def get_snapshots(self, limit: int = 100) -> list[MetricSnapshot]:
         """Get recent snapshots."""
         return self._snapshots[-limit:]
 
@@ -319,7 +320,7 @@ class StatsAgent:
         self,
         snapshot1_name: str,
         snapshot2_name: str
-    ) -> Dict[str, Dict[str, Union[float, int]]]:
+    ) -> dict[str, dict[str, float | int]]:
         """Compare two snapshots."""
         s1 = self.get_snapshot(snapshot1_name)
         s2 = self.get_snapshot(snapshot2_name)
@@ -330,8 +331,8 @@ class StatsAgent:
     # ========== Retention Policies ==========
     def add_retention_policy(
         self,
-        metric_name: Optional[str] = None,
-        namespace: Optional[str] = None,
+        metric_name: str | None = None,
+        namespace: str | None = None,
         max_age_days: int = 0,
         max_points: int = 0,
         compression_after_days: int = 7
@@ -353,7 +354,7 @@ class StatsAgent:
         return StatsCore.apply_retention(self._metrics, self._retention_policies)
 
     # ========== Forecasting ==========
-    def forecast(self, metric_name: str, periods: int = 5) -> List[float]:
+    def forecast(self, metric_name: str, periods: int = 5) -> list[float]:
         """Simple linear forecasting for a metric."""
         return StatsCore.forecast(self._metrics.get(metric_name, []), periods)
 
@@ -368,10 +369,10 @@ class StatsAgent:
     def decompress_metrics(
         self,
         compressed: bytes,
-        metric_name: Optional[str] = None,
+        metric_name: str | None = None,
         metric_type: MetricType = MetricType.GAUGE,
         namespace: str = "default"
-    ) -> List[Any]:
+    ) -> list[Any]:
         """Decompress metric data."""
         if not compressed:
             return []
@@ -391,9 +392,9 @@ class StatsAgent:
         ]
 
     # ========== Original Methods ==========
-    def get_missing_items(self) -> Dict[str, List[str]]:
+    def get_missing_items(self) -> dict[str, list[str]]:
         """Identify files missing specific auxiliary components."""
-        missing: Dict[str, List[str]] = {
+        missing: dict[str, list[str]] = {
             'context': [],
             'changes': [],
             'errors': [],
@@ -415,7 +416,7 @@ class StatsAgent:
                 missing['tests'].append(str(file_path))
         return missing
 
-    def calculate_stats(self) -> Dict[str, int]:
+    def calculate_stats(self) -> dict[str, int]:
         """Calculate statistics for each file."""
         total_files = len(self.files)
         files_with_context = 0
@@ -446,9 +447,9 @@ class StatsAgent:
         }
         return self.stats
 
-    def add_trend_analysis(self, previous_stats: Dict[str, int]) -> Dict[str, str]:
+    def add_trend_analysis(self, previous_stats: dict[str, int]) -> dict[str, str]:
         """Compare current stats with previous run and calculate deltas."""
-        deltas: Dict[str, str] = {}
+        deltas: dict[str, str] = {}
         for key, current_value in self.stats.items():
             previous_value = previous_stats.get(key, 0)
             delta = current_value - previous_value
@@ -462,11 +463,11 @@ class StatsAgent:
 
     def track_code_coverage(self, coverage_report: str) -> None:
         """Track code coverage metrics from a coverage report."""
-        with open(coverage_report, 'r') as file:
+        with open(coverage_report) as file:
             coverage_data = json.load(file)
         self.stats['code_coverage'] = coverage_data.get('total_coverage', 0)
 
-    def export_stats(self, output_path: str, formats: List[str]) -> None:
+    def export_stats(self, output_path: str, formats: list[str]) -> None:
         """Export stats to multiple formats."""
         for fmt in formats:
             if fmt == 'json':
@@ -494,7 +495,7 @@ class StatsAgent:
                 conn.commit()
                 conn.close()
 
-    def generate_comparison_report(self, baseline_stats: Dict[str, int]) -> None:
+    def generate_comparison_report(self, baseline_stats: dict[str, int]) -> None:
         """Generate a comparison report between current and baseline stats."""
         comparison = {}
         for key, current_value in self.stats.items():

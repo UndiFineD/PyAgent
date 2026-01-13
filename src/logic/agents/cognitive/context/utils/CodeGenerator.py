@@ -39,7 +39,7 @@ class CodeGenerator:
 
     def __init__(self) -> None:
         self.language: str = "python"
-        self.contexts: Dict[str, str] = {}
+        self.contexts: dict[str, str] = {}
 
     def set_language(self, language: str) -> None:
         """Set the default target language for generated code."""
@@ -49,7 +49,7 @@ class CodeGenerator:
         """Add a named context document that can be referenced later."""
         self.contexts[name] = content
 
-    def get_supported_languages(self) -> List[str]:
+    def get_supported_languages(self) -> list[str]:
         """Return supported target languages."""
         return [
             "python",
@@ -65,9 +65,9 @@ class CodeGenerator:
         self,
         prompt: str,
         context: str = "",
-        language: Optional[str] = None,
+        language: str | None = None,
         *,
-        context_files: Optional[List[str]] = None,
+        context_files: list[str] | None = None,
     ) -> GeneratedCode:
         """Generate code based on stored context.
 
@@ -79,8 +79,8 @@ class CodeGenerator:
         """
         resolved_language = language or self.language or "python"
 
-        used_contexts: List[str] = []
-        context_snippets: List[str] = []
+        used_contexts: list[str] = []
+        context_snippets: list[str] = []
 
         if context_files:
             for name in context_files:

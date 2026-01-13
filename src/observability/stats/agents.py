@@ -17,13 +17,13 @@ logger = logging.getLogger(__name__)
 class StatsAgent:
     """Agent that calculates statistics for fleet progress and file maintenance."""
     def __init__(self, files:
-        List[str]) -> None:
+        list[str]) -> None:
         self.files = [Path(f) for f in files if Path(f).exists()]
         self.core = StatsCore()
-        self._metrics: Dict[str, List[Metric]] = {}
-        self._thresholds: List[Threshold] = []
-        self._alerts: List[Alert] = []
-        self._snapshots: List[MetricSnapshot] = []
+        self._metrics: dict[str, list[Metric]] = {}
+        self._thresholds: list[Threshold] = []
+        self._alerts: list[Alert] = []
+        self._snapshots: list[MetricSnapshot] = []
 
     def add_metric(self, name:
         str, value: float, type: MetricType = MetricType.GAUGE) -> Metric:
@@ -34,7 +34,7 @@ class StatsAgent:
         self.core.record(m)
         return m
 
-    def calculate_stats(self) -> Dict[str, int]:
+    def calculate_stats(self) -> dict[str, int]:
         total = len(self.files)
         with_tests = sum(1 for f in self.files if (f.parent / f"test_{f.stem}.py").exists())
         return {"total_files": total, "files_with_tests": with_tests}

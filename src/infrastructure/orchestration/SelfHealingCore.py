@@ -47,7 +47,7 @@ class SelfHealingCore:
     def __init__(self, timeout_seconds: float = 30.0, max_errors: int = 5) -> None:
         self.timeout_seconds = timeout_seconds
         self.max_errors = max_errors
-        self.health_registry: Dict[str, HealthStatus] = {}
+        self.health_registry: dict[str, HealthStatus] = {}
 
     def update_health(self, agent_name: str, latency: float = 0.0, error: bool = False) -> bool:
         """Updates internal status for an agent."""
@@ -67,7 +67,7 @@ class SelfHealingCore:
         status.is_alive = (status.error_count < self.max_errors)
         return status.is_alive
 
-    def detect_failures(self) -> List[str]:
+    def detect_failures(self) -> list[str]:
         """Returns a list of agent names that are considered failed."""
         now = time.time()
         failed = []

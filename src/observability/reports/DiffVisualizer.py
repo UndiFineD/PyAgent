@@ -85,7 +85,7 @@ class DiffVisualizer:
 
     def _render_unified(self, result: DiffResult) -> str:
         """Render unified diff view."""
-        lines: List[str] = []
+        lines: list[str] = []
         lines.append("<div class='diff-unified'>")
         for line in result.deletions:
             lines.append(f"<span class='deletion'>- {line}</span>")

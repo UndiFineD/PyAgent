@@ -44,7 +44,7 @@ except ImportError:
 class SubagentRunner:
     """Handles running subagents with multiple backend support and fallback logic."""
     
-    _command_cache: Dict[str, bool] = {}
+    _command_cache: dict[str, bool] = {}
 
     @staticmethod
     def _resolve_repo_root() -> Path:
@@ -84,7 +84,7 @@ class SubagentRunner:
 
     def __init__(self) -> None:
         """Initialize the subagent runner with empty cache and metrics."""
-        self._response_cache: Dict[str, str] = {}
+        self._response_cache: dict[str, str] = {}
         
         # Disk cache initialization
         repo_root = self._resolve_repo_root()
@@ -93,7 +93,7 @@ class SubagentRunner:
         # Phase 108: Recording Intelligence
         self.recorder = LocalContextRecorder(workspace_root=repo_root)
         
-        self._metrics: Dict[str, Any] = {
+        self._metrics: dict[str, Any] = {
             "requests": 0,
             "errors": 0,
             "timeouts": 0,
@@ -123,7 +123,7 @@ class SubagentRunner:
     def llm_client(self, value: LLMClient) -> None:
         self._llm_client = value
 
-    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: Dict[str, Any] = None) -> None:
+    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] = None) -> None:
         """Record an interaction for intelligence harvesting (Phase 108)."""
         if self.recorder:
             self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
@@ -135,7 +135,7 @@ class SubagentRunner:
             self.disk_cache.clear()
         logging.debug("Response cache cleared")
 
-    def get_metrics(self) -> Dict[str, Any]:
+    def get_metrics(self) -> dict[str, Any]:
         """Get current metrics snapshot."""
         return {k: v for k, v in self._metrics.items()}
 
@@ -152,10 +152,10 @@ class SubagentRunner:
 
     def _get_cache_key(self, prompt: str, model: str) -> str:
         """Generate a cache key for a prompt-model combination."""
-        content = f"{prompt}:{model}".encode('utf-8')
+        content = f"{prompt}:{model}".encode()
         return hashlib.sha256(content).hexdigest()
 
-    def validate_response_content(self, response: str, content_types: Optional[List[str]] = None) -> bool:
+    def validate_response_content(self, response: str, content_types: list[str] | None = None) -> bool:
         """Validate that AI response contains expected content types."""
         if not response:
             return False
@@ -207,7 +207,7 @@ class SubagentRunner:
         starters = ("git ", "gh ", "docker ", "kubectl ", "pip ", "python ", "npm ", "node ", "pwsh ", "powershell ", "Get-", "Set-", "New-")
         return t.startswith(starters)
 
-    def run_subagent(self, description: str, prompt: str, original_content: str = "") -> Optional[str]:
+    def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str | None:
         """Run a subagent using available backends."""
         return self._core.run_subagent(description, prompt, original_content)
 
@@ -219,7 +219,7 @@ class SubagentRunner:
         """Proxy to LLMClient."""
         return self.llm_client.llm_chat_via_vllm(*args, **kwargs)
 
-    def get_backend_status(self) -> Dict[str, Any]:
+    def get_backend_status(self) -> dict[str, Any]:
         """Return diagnostic snapshot of backend availability."""
         return self._status_manager.get_backend_status()
 

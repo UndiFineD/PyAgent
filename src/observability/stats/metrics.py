@@ -26,7 +26,7 @@ class Metric:
     metric_type: MetricType
     timestamp: str = ""
     namespace: str = "default"
-    tags: Dict[str, str] = field(default_factory=dict)
+    tags: dict[str, str] = field(default_factory=dict)
 
     # Compatibility: some tests treat history entries as (timestamp, value) tuples.
     def __iter__(self) -> Any:
@@ -50,7 +50,7 @@ class AgentMetric:
     output_tokens: int = 0
     estimated_cost: float = 0.0
     model: str = "unknown"
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 @dataclass
 class MetricSnapshot:
@@ -58,8 +58,8 @@ class MetricSnapshot:
     name: str
     id: str
     timestamp: str
-    metrics: Dict[str, float]
-    tags: Dict[str, str] = field(default_factory=dict)
+    metrics: dict[str, float]
+    tags: dict[str, str] = field(default_factory=dict)
 
 class AggregationType(Enum):
     """Types of metric aggregation for rollups."""
@@ -72,7 +72,7 @@ class AggregationType(Enum):
     P95 = "percentile_95"
     P99 = "percentile_99"
 
-class AggregationResult(Dict[str, Any]):
+class AggregationResult(dict[str, Any]):
     """Compatibility class that behaves like both a dict and a float."""
     def __init__(self, value:
         float = 0.0, **kwargs: Any) -> None:
@@ -87,8 +87,8 @@ class MetricNamespace:
     """Namespace for organizing metrics."""
     name: str
     description: str = ""
-    parent: Optional[str] = None
-    tags: Dict[str, str] = field(default_factory=dict)
+    parent: str | None = None
+    tags: dict[str, str] = field(default_factory=dict)
     retention_days: int = 30
 
 @dataclass
@@ -115,15 +115,15 @@ class MetricSubscription:
     id: str
     metric_pattern: str  # glob pattern like "cpu.*"
     callback_url: str = ""
-    notify_on: List[str] = field(default_factory=lambda: ["threshold", "anomaly"])
+    notify_on: list[str] = field(default_factory=lambda: ["threshold", "anomaly"])
     min_interval_seconds: int = 60
 
 @dataclass
 class StatsNamespace:
     """Represents a namespace for metric isolation."""
     name: str
-    metrics: Dict[str, List[Metric]] = field(default_factory=dict)
-    metric_values: Dict[str, float] = field(default_factory=dict)
+    metrics: dict[str, list[Metric]] = field(default_factory=dict)
+    metric_values: dict[str, float] = field(default_factory=dict)
 
     def add_metric(self, metric:
         Metric) -> None:
@@ -136,14 +136,14 @@ class StatsNamespace:
         self.metric_values[name] = value
 
     def get_metric(self, name:
-        str) -> Optional[float]:
+        str) -> float | None:
         return self.metric_values.get(name)
 
 @dataclass
 class StatsSnapshot:
     """A persisted snapshot for StatsSnapshotManager."""
     name: str
-    data: Dict[str, Any]
+    data: dict[str, Any]
     timestamp: str
 
 @dataclass
@@ -159,7 +159,7 @@ class StatsSubscription:
 class DerivedMetric:
     """Definition for a metric calculated from other metrics."""
     name: str
-    dependencies: List[str]
+    dependencies: list[str]
     formula: str
     description: str = ""
 
@@ -169,8 +169,18 @@ class RetentionPolicy:
     name: str = ""
     retention_days: int = 0
     resolution: str = "1m"
-    metric_name: Optional[str] = None
+    metric_name: str | None = None
     namespace: str = ""
     max_age_days: int = 0
     max_points: int = 0
     compression_after_days: int = 7
+@dataclass
+class ABComparisonResult:
+    metrics_compared: int
+    differences: dict[str, float] = field(default_factory=dict)
+
+@dataclass
+class ABSignificanceResult:
+    p_value: float
+    is_significant: bool
+    effect_size: float = 0.0

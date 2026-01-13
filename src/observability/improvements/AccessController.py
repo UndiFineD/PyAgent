@@ -30,11 +30,11 @@ class AccessController:
     """Tracks per-improvement permissions and roles."""
 
     def __init__(self) -> None:
-        self.permissions: Dict[str, Dict[str, set[str]]] = {}
-        self._roles: Dict[str, List[str]] = {}
-        self._assigned_roles: Dict[str, Dict[str, str]] = {}
+        self.permissions: dict[str, dict[str, set[str]]] = {}
+        self._roles: dict[str, list[str]] = {}
+        self._assigned_roles: dict[str, dict[str, str]] = {}
 
-    def define_role(self, role: str, permissions: List[str]) -> None:
+    def define_role(self, role: str, permissions: list[str]) -> None:
         self._roles[role] = list(permissions)
 
     def assign_role(self, improvement_id: str, user: str, role: str) -> None:

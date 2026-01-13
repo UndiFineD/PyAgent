@@ -62,7 +62,7 @@ export default {name};
         return component
 
     @as_tool
-    def update_dashboard_layout(self, active_agents: List[str]) -> str:
+    def update_dashboard_layout(self, active_agents: list[str]) -> str:
         """Updates the dashboard layout with the current fleet status."""
         logging.info("Updating Dashboard Layout...")
         # In a real scenario, this might write to a JSON config for a Next.js frontend

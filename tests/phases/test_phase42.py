@@ -6,7 +6,6 @@ import unittest
 from pathlib import Path
 
 # Add src to path
-sys.path.append(os.getcwd())
 
 from src.infrastructure.fleet.FleetManager import FleetManager
 

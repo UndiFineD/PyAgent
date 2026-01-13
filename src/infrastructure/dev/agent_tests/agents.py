@@ -60,10 +60,10 @@ class TestsAgent(BaseAgent):
         super().__init__(file_path)
 
         # Test management
-        self._tests: List[TestCase] = []
-        self._test_runs: List[TestRun] = []
-        self._coverage_gaps: List[CoverageGap] = []
-        self._factories: Dict[str, TestFactory] = {}
+        self._tests: list[TestCase] = []
+        self._test_runs: list[TestRun] = []
+        self._coverage_gaps: list[CoverageGap] = []
+        self._factories: dict[str, TestFactory] = {}
 
         # Configuration
         self._flakiness_threshold: float = 0.1  # 10% failure rate=flaky
@@ -78,8 +78,8 @@ class TestsAgent(BaseAgent):
         file_path: str,
         line_number: int,
         priority: TestPriority = TestPriority.MEDIUM,
-        tags: Optional[List[str]] = None,
-        dependencies: Optional[List[str]] = None
+        tags: list[str] | None = None,
+        dependencies: list[str] | None = None
     ) -> TestCase:
         """Add a new test case."""
         test_id = hashlib.md5(f"{name}:{file_path}".encode()).hexdigest()[:8]
@@ -95,29 +95,29 @@ class TestsAgent(BaseAgent):
         self._tests.append(test)
         return test
 
-    def get_tests(self) -> List[TestCase]:
+    def get_tests(self) -> list[TestCase]:
         """Get all tests."""
         return self._tests
 
-    def get_test_by_id(self, test_id: str) -> Optional[TestCase]:
+    def get_test_by_id(self, test_id: str) -> TestCase | None:
         """Get test by ID."""
         return next((t for t in self._tests if t.id == test_id), None)
 
-    def get_test_by_name(self, name: str) -> Optional[TestCase]:
+    def get_test_by_name(self, name: str) -> TestCase | None:
         """Get test by name."""
         return next((t for t in self._tests if t.name == name), None)
 
-    def get_tests_by_priority(self, priority: TestPriority) -> List[TestCase]:
+    def get_tests_by_priority(self, priority: TestPriority) -> list[TestCase]:
         """Get tests filtered by priority."""
         return [t for t in self._tests if t.priority == priority]
 
-    def get_tests_by_tag(self, tag: str) -> List[TestCase]:
+    def get_tests_by_tag(self, tag: str) -> list[TestCase]:
         """Get tests with a specific tag."""
         return [t for t in self._tests if tag in t.tags]
 
     # ========== Test Prioritization ==========
 
-    def prioritize_tests(self) -> List[TestCase]:
+    def prioritize_tests(self) -> list[TestCase]:
         """Return tests sorted by priority (highest first)."""
         return sorted(
             self._tests,
@@ -143,7 +143,7 @@ class TestsAgent(BaseAgent):
 
         return max(0, min(100, score))
 
-    def get_critical_tests(self) -> List[TestCase]:
+    def get_critical_tests(self) -> list[TestCase]:
         """Get tests marked as critical."""
         return [t for t in self._tests if t.priority == TestPriority.CRITICAL]
 
@@ -157,9 +157,9 @@ class TestsAgent(BaseAgent):
         failure_rate = test.failure_count / test.run_count
         return failure_rate
 
-    def detect_flaky_tests(self) -> List[TestCase]:
+    def detect_flaky_tests(self) -> list[TestCase]:
         """Detect tests that are flaky."""
-        flaky: List[TestCase] = []
+        flaky: list[TestCase] = []
         for test in self._tests:
             score = self.calculate_flakiness(test)
             if score > self._flakiness_threshold:
@@ -202,11 +202,11 @@ class TestsAgent(BaseAgent):
         self._coverage_gaps.append(gap)
         return gap
 
-    def get_coverage_gaps(self) -> List[CoverageGap]:
+    def get_coverage_gaps(self) -> list[CoverageGap]:
         """Get all coverage gaps."""
         return self._coverage_gaps
 
-    def get_coverage_gaps_by_file(self, file_path: str) -> List[CoverageGap]:
+    def get_coverage_gaps_by_file(self, file_path: str) -> list[CoverageGap]:
         """Get coverage gaps for a specific file."""
         return [g for g in self._coverage_gaps if g.file_path == file_path]
 
@@ -228,7 +228,7 @@ class TestsAgent(BaseAgent):
         self,
         name: str,
         return_type: str,
-        parameters: Optional[Dict[str, str]] = None,
+        parameters: dict[str, str] | None = None,
         generator: str = ""
     ) -> TestFactory:
         """Add a test data factory."""
@@ -241,11 +241,11 @@ class TestsAgent(BaseAgent):
         self._factories[name] = factory
         return factory
 
-    def get_factory(self, name: str) -> Optional[TestFactory]:
+    def get_factory(self, name: str) -> TestFactory | None:
         """Get a factory by name."""
         return self._factories.get(name)
 
-    def get_factories(self) -> Dict[str, TestFactory]:
+    def get_factories(self) -> dict[str, TestFactory]:
         """Get all factories."""
         return self._factories
 
@@ -262,7 +262,7 @@ class TestsAgent(BaseAgent):
 
     def record_test_run(
         self,
-        test_results: Dict[str, TestStatus],
+        test_results: dict[str, TestStatus],
         duration_ms: float = 0.0
     ) -> TestRun:
         """Record a test execution run."""
@@ -299,11 +299,11 @@ class TestsAgent(BaseAgent):
 
         return run
 
-    def get_test_runs(self) -> List[TestRun]:
+    def get_test_runs(self) -> list[TestRun]:
         """Get all test runs."""
         return self._test_runs
 
-    def get_latest_run(self) -> Optional[TestRun]:
+    def get_latest_run(self) -> TestRun | None:
         """Get the most recent test run."""
         return self._test_runs[-1] if self._test_runs else None
 
@@ -322,14 +322,14 @@ class TestsAgent(BaseAgent):
         """Check if parallel execution is enabled."""
         return self._parallel_enabled
 
-    def get_parallel_groups(self) -> List[List[TestCase]]:
+    def get_parallel_groups(self) -> list[list[TestCase]]:
         """Group tests for parallel execution."""
         if not self._parallel_enabled:
             return [self._tests]
 
         # Group by dependencies - tests with same deps can't run in parallel
-        groups: List[List[TestCase]] = []
-        assigned: Set[str] = set()
+        groups: list[list[TestCase]] = []
+        assigned: set[str] = set()
 
         for test in self._tests:
             if test.id in assigned:
@@ -378,7 +378,7 @@ class TestsAgent(BaseAgent):
     def export_tests(self, format: str = "json") -> str:
         """Export tests to various formats."""
         if format == "json":
-            data: List[Dict[str, Any]] = [{
+            data: list[dict[str, Any]] = [{
                 "id": t.id,
                 "name": t.name,
                 "file": t.file_path,
@@ -392,7 +392,7 @@ class TestsAgent(BaseAgent):
         return ""
 
     # ========== Statistics ==========
-    def calculate_statistics(self) -> Dict[str, Any]:
+    def calculate_statistics(self) -> dict[str, Any]:
         """Calculate test statistics."""
         total = len(self._tests)
         if total == 0:
@@ -428,7 +428,7 @@ class TestsAgent(BaseAgent):
         return ("# AI Improvement Unavailable\n# GitHub CLI not found. Install from "
                 "https://cli.github.com/\n\n# Original test code preserved below:\n\n")
 
-    def _find_source_file(self) -> Optional[Path]:
+    def _find_source_file(self) -> Path | None:
         """Locate source file for test file (test_foo.py -> foo.py)."""
         if not self.file_path.name.startswith('test_'):
             return None
@@ -463,7 +463,7 @@ class TestsAgent(BaseAgent):
         """Validate pytest / unittest-specific patterns."""
         try:
             tree = ast.parse(content)
-            issues: List[str] = []
+            issues: list[str] = []
             # Check 1: All test functions follow naming convention
             for node in ast.walk(tree):
                 if isinstance(node, ast.FunctionDef):

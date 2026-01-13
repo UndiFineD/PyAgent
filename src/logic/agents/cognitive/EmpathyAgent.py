@@ -38,7 +38,7 @@ class EmpathyAgent(BaseAgent):
         self.interpersonal_resonance = 1.0
         self.interaction_history = []
 
-    def analyze_user_sentiment(self, message: str) -> Dict[str, Any]:
+    def analyze_user_sentiment(self, message: str) -> dict[str, Any]:
         """Specialized small-LLM (simulated via directed prompt) sentiment classification."""
         prompt = (
             f"Classify the sentiment of the following message: '{message}'\n"

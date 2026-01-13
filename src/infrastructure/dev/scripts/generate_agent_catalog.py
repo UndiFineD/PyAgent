@@ -28,7 +28,7 @@ def generate_catalog():
             if file.endswith(".py") and file != "__init__.py":
                 file_path = Path(root) / file
                 try:
-                    with open(file_path, "r", encoding="utf-8") as f:
+                    with open(file_path, encoding="utf-8") as f:
                         node = ast.parse(f.read())
                     
                     version = "0.0.0"

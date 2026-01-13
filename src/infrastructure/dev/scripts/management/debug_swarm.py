@@ -31,7 +31,7 @@ __version__ = VERSION
 def test_swarm_features() -> None:
     """Validate distributed swarm consensus and optimization features."""
     logging.basicConfig(level=logging.INFO)
-    root = Path("c:/DEV/PyAgent")
+    root = Path(str(Path(__file__).resolve().parents[5]) + "")
     fleet = FleetManager(str(root))
     
     print("--- Phase 13: Swarm Consensus ---")

@@ -28,7 +28,7 @@ class DependencyCore:
         if not os.path.exists(file_path):
             return 0
             
-        with open(file_path, "r") as f:
+        with open(file_path) as f:
             lines = f.readlines()
             
         new_lines = []

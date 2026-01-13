@@ -45,18 +45,18 @@ class ImprovementScheduler:
 
     def __init__(self) -> None:
         self.schedule: _ScheduleStore = _ScheduleStore()
-        self.sprints: Dict[str, List[str]] = {}
-        self.resources: Dict[str, List[str]] = {}
+        self.sprints: dict[str, list[str]] = {}
+        self.resources: dict[str, list[str]] = {}
 
-        self._entries_by_id: Dict[str, ScheduledEntry] = {}
-        self._entries: List[ScheduledEntry] = []
-        self._allocations: Dict[str, ResourceAllocation] = {}
+        self._entries_by_id: dict[str, ScheduledEntry] = {}
+        self._entries: list[ScheduledEntry] = []
+        self._allocations: dict[str, ResourceAllocation] = {}
 
     def schedule_improvement(
         self,
         improvement: Any,
         start_date: Any,
-        resources: Optional[List[str]] = None,
+        resources: list[str] | None = None,
         sprint_id: str = "",
         **_: Any,
     ) -> Any:
@@ -94,7 +94,7 @@ class ImprovementScheduler:
         self._entries.append(entry)
         return entry
 
-    def get_schedule(self, improvement_id: str) -> Optional[ScheduledImprovement]:
+    def get_schedule(self, improvement_id: str) -> ScheduledImprovement | None:
         return self.schedule.get(improvement_id)
 
     def update_status(self, improvement_id: str, status: ScheduleStatus) -> bool:
@@ -104,10 +104,10 @@ class ImprovementScheduler:
         item.status = status
         return True
 
-    def get_sprint_items(self, sprint_id: str) -> List[str]:
+    def get_sprint_items(self, sprint_id: str) -> list[str]:
         return self.sprints.get(sprint_id, [])
 
-    def allocate_resources(self, improvement_id: str, resources: List[str]) -> None:
+    def allocate_resources(self, improvement_id: str, resources: list[str]) -> None:
         self._allocations[improvement_id] = ResourceAllocation(
             improvement_id=improvement_id,
             resources=list(resources),

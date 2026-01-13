@@ -30,10 +30,10 @@ class ImmuneResponseOrchestrator:
     """
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.active_shields: List[str] = []
-        self.vulnerability_db: Dict[str, Any] = {} 
+        self.active_shields: list[str] = []
+        self.vulnerability_db: dict[str, Any] = {} 
 
-    def deploy_rapid_patch(self, vulnerability_id: str, patch_code: str) -> Dict[str, Any]:
+    def deploy_rapid_patch(self, vulnerability_id: str, patch_code: str) -> dict[str, Any]:
         """
         Simulates deploying a hot-patch to all running agent nodes.
         """
@@ -52,7 +52,7 @@ class ImmuneResponseOrchestrator:
 
         return {"vulnerability": vulnerability_id, "status": "remediated", "patch_applied": True}
 
-    def monitor_threat_vectors(self) -> Dict[str, Any]:
+    def monitor_threat_vectors(self) -> dict[str, Any]:
         """
         Scans for zero-day patterns in communication logs.
         """
@@ -70,9 +70,9 @@ class HoneypotAgent:
     """
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.trapped_attempts: List[Dict[str, Any]] = []
+        self.trapped_attempts: list[dict[str, Any]] = []
 
-    def verify_input_safety(self, prompt_input: str) -> Dict[str, Any]:
+    def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:
         """
         Inspects input for "ignore previous instruction" or similar patterns.
         """
@@ -87,7 +87,7 @@ class HoneypotAgent:
                 return {"safe": False, "threat_type": "injection_detected"}
         return {"safe": True}
 
-    def get_trap_statistics(self) -> Dict[str, Any]:
+    def get_trap_statistics(self) -> dict[str, Any]:
         return {
             "attempts_neutralized": len(self.trapped_attempts),
             "attacker_profiles_identified": 0

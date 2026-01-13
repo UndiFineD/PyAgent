@@ -49,7 +49,7 @@ class SystemAnalytics:
             retention_hours: Hours to retain records.
         """
         self.retention_hours = retention_hours
-        self._records: List[UsageRecord] = []
+        self._records: list[UsageRecord] = []
         self._lock = threading.Lock()
 
     def record_usage(
@@ -92,7 +92,7 @@ class SystemAnalytics:
         cutoff = time.time() - (self.retention_hours * 3600)
         self._records = [r for r in self._records if r.timestamp >= cutoff]
 
-    def generate_report(self, backend: Optional[str] = None) -> Dict[str, Any]:
+    def generate_report(self, backend: str | None = None) -> dict[str, Any]:
         """Generate usage report.
 
         Args:
@@ -132,9 +132,9 @@ class SystemAnalytics:
             "by_backend": self._group_by_backend(records),
         }
 
-    def _group_by_backend(self, records: List[UsageRecord]) -> Dict[str, Dict[str, Any]]:
+    def _group_by_backend(self, records: list[UsageRecord]) -> dict[str, dict[str, Any]]:
         """Group records by backend."""
-        by_backend: Dict[str, List[UsageRecord]] = {}
+        by_backend: dict[str, list[UsageRecord]] = {}
         for r in records:
             if r.backend not in by_backend:
                 by_backend[r.backend] = []

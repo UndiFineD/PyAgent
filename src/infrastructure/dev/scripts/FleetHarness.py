@@ -41,10 +41,10 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="Management commands")
 
     # Heal
-    heal_parser = subparsers.add_parser("heal", help="Run autonomous fleet healing")
+    subparsers.add_parser("heal", help="Run autonomous fleet healing")
     
     # Restore
-    restore_parser = subparsers.add_parser("restore", help="Restore fleet state")
+    subparsers.add_parser("restore", help="Restore fleet state")
     
     # Improve
     improve_parser = subparsers.add_parser("improve", help="Run self-improvement cycle")

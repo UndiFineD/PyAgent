@@ -85,13 +85,13 @@ class StatusManager:
         data["last_updated"] = datetime.now().isoformat()
         self._write(data)
 
-    def _read(self) -> Dict[str, Any]:
+    def _read(self) -> dict[str, Any]:
         if not self.status_file.exists():
             self.clear_status()
-        with open(self.status_file, "r") as f:
+        with open(self.status_file) as f:
             return json.load(f)
 
-    def _write(self, data: Dict[str, Any]) -> None:
+    def _write(self, data: dict[str, Any]) -> None:
         self.status_file.parent.mkdir(parents=True, exist_ok=True)
         with open(self.status_file, "w") as f:
             json.dump(data, f, indent=4)

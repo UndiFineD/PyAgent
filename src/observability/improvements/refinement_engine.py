@@ -27,7 +27,7 @@ from src.core.base.version import VERSION
 import sys
 from pathlib import Path
 from src.core.base.entrypoint import create_main_function
-from src.observability.improvements import *
+from src.observability.improvements.ImprovementsAgent import ImprovementsAgent
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).parent.parent

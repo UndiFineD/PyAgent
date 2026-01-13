@@ -35,7 +35,7 @@ class RecordedRequest:
     timestamp: float
     prompt: str
     backend: str
-    response: Optional[str] = None
+    response: str | None = None
     latency_ms: int = 0
     success: bool = True
-    metadata: Dict[str, Any] = field(default_factory=lambda: {})
+    metadata: dict[str, Any] = field(default_factory=lambda: {})

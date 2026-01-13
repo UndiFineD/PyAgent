@@ -39,5 +39,5 @@ class NLQueryResult:
     """
     query: str
     answer: str
-    relevant_contexts: List[str] = field(default_factory=lambda: [])
+    relevant_contexts: list[str] = field(default_factory=lambda: [])
     confidence: float = 0.0

@@ -26,65 +26,71 @@ from src.logic.agents.swarm.core.AuctionCore import AuctionCore
 
 __version__ = VERSION
 
-class ResourceArbitratorAgent:
+class SwarmArbitratorAgent:
     """
-    Arbitrates the allocation of compute resources (CPU, GPU, Memory)
-    using a priority-based internal market system (Phase 184 VCG).
+    Phase 285: Swarm Arbitration with PBFT (Practical Byzantine Fault Tolerance).
+    Manages consensus across multiple agents and tracks behavioral reputation.
     """
-    def __init__(self, workspace_path: str) -> None:
+
+    def __init__(self, workspace_path: str = "."):
         self.workspace_path = workspace_path
-        self.resource_ledger: Dict[str, Any] = {} # task_id -> {type, amount, bid, timestamp}
-        self.available_credits = 10000.0 # Virtual credits for the swarm
+        self.reputation_scores = {}
+        self.consensus_threshold = 0.66  # 2n/3 for PBFT
+        self.conflicts = []
         self.core = AuctionCore()
-        self.vram_total = 80.0 # GB (e.g., A100)
         
-    def submit_vcg_bid(self, bids: List[Dict[str, Any]], slots: int = 1) -> List[Dict[str, Any]]:
-        """Executes a VCG auction for the provided bids."""
-        return self.core.calculate_vcg_auction(bids, slots)
+    async def arbitrate_consensus(self, votes: list[dict[str, Any]]) -> dict[str, Any]:
+        """
+        PBFT-inspired consensus logic.
+        Requires at least 2/3 agreement to finalize a state change.
+        """
+        if not votes:
+            return {"status": "error", "message": "No votes provided"}
 
-    def check_vram_limit(self, agent_request_gb: float) -> bool:
-        """Enforces VRAM quotas (Phase 184)."""
-        return self.core.enforce_vram_quota(agent_request_gb, self.vram_total)
+        # Calculate frequency of each content hash
+        vote_counts = {}
+        for v in votes:
+            h = v.get("hash", "unknown")
+            vote_counts[h] = vote_counts.get(h, 0) + 1
 
-    def submit_bid(self, agent_id: str, resource_type: str, amount: float, bid_price: float) -> Dict[str, Any]:
-        """
-        Allows an agent to bid for a slice of the resource pool.
-        """
-        task_id = str(uuid.uuid4())[:8]
-        entry = {
-            "agent_id": agent_id,
-            "resource_type": resource_type,
-            "amount": amount,
-            "bid_price": bid_price,
-            "timestamp": time.time(),
-            "status": "pending"
-        }
-        self.resource_ledger[task_id] = entry
-        
-        # Simple arbitration: If bid is above threshold, auto-approve for simulation
-        if bid_price > 50:
-            entry["status"] = "allocated"
-            return {"task_id": task_id, "status": "allocated", "credits_reserved": bid_price}
-        else:
-            entry["status"] = "queued"
-            return {"task_id": task_id, "status": "queued", "message": "Bid too low, waiting for lower demand."}
+        # Check for consensus (2f + 1)
+        total_votes = len(votes)
+        for h, count in vote_counts.items():
+            if count / total_votes >= self.consensus_threshold:
+                # Reward agents who voted with majority
+                for v in votes:
+                    agent_id = v.get("agent_id")
+                    if v.get("hash") == h:
+                        self._update_reputation(agent_id, 0.1)
+                    else:
+                        self._update_reputation(agent_id, -0.2)
+                
+                return {
+                    "status": "success", 
+                    "winner_hash": h, 
+                    "confidence": round(count/total_votes, 2),
+                    "voters": total_votes
+                }
 
-    def get_resource_usage_report(self) -> Dict[str, Any]:
-        """
-        Returns a summary of resource allocation across the fleet.
-        """
-        allocated = [v for v in self.resource_ledger.values() if v["status"] == "allocated"]
-        queued = [v for v in self.resource_ledger.values() if v["status"] == "queued"]
+        # No consensus - trigger audit
+        self.conflicts.append(votes)
         return {
-            "total_credits_locked": sum(v["bid_price"] for v in allocated),
-            "allocation_count": len(allocated),
-            "backlog": len(queued)
+            "status": "conflict", 
+            "message": "PBFT Threshold not met. Consensus failed.",
+            "distribution": vote_counts
         }
 
-    def preempt_low_priority_task(self, min_bid: float) -> Dict[str, Any]:
-        """
-        Reclaims resources from tasks with lower bids.
-        """
+    def _update_reputation(self, agent_id: str, delta: float):
+        if not agent_id: return
+        self.reputation_scores[agent_id] = self.reputation_scores.get(agent_id, 1.0) + delta
+        # Clamp between 0.0 (Malicious/Incompetent) and 2.0 (Highly Trusted)
+        self.reputation_scores[agent_id] = max(0.0, min(2.0, self.reputation_scores[agent_id]))
+
+    def get_reputation_report(self) -> dict[str, float]:
+        """Returns the current reputation scores for all known agents."""
+        return self.reputation_scores
+
+
         preempted = []
         for tid, entry in self.resource_ledger.items():
             if entry["status"] == "allocated" and entry["bid_price"] < min_bid:

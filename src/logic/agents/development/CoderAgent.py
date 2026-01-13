@@ -36,6 +36,7 @@ import logging
 import re
 import shutil
 import subprocess
+import sys
 
 __version__ = VERSION
 
@@ -50,7 +51,7 @@ class CoderAgent(BaseAgent):
     """
 
     # Language extension mappings
-    LANGUAGE_EXTENSIONS: Dict[str, CodeLanguage] = {
+    LANGUAGE_EXTENSIONS: dict[str, CodeLanguage] = {
         ".py": CodeLanguage.PYTHON,
         ".js": CodeLanguage.JAVASCRIPT,
         ".ts": CodeLanguage.TYPESCRIPT,
@@ -73,7 +74,7 @@ class CoderAgent(BaseAgent):
         self.core = CoderCore(self._language)
         
         # Create copies of style rules to avoid cross-instance state leakage
-        self._style_rules: List[StyleRule] = [
+        self._style_rules: list[StyleRule] = [
             StyleRule(
                 name=r.name,
                 pattern=r.pattern,
@@ -84,11 +85,11 @@ class CoderAgent(BaseAgent):
                 auto_fix=r.auto_fix
             ) for r in DEFAULT_PYTHON_STYLE_RULES
         ]
-        self._metrics: Optional[CodeMetrics] = None
-        self._quality_score: Optional[QualityScore] = None
-        self._code_smells: List[CodeSmell] = []
-        self._refactoring_patterns: List[RefactoringPattern] = []
-        self._duplicate_hashes: Dict[str, List[int]] = {}
+        self._metrics: CodeMetrics | None = None
+        self._quality_score: QualityScore | None = None
+        self._code_smells: list[CodeSmell] = []
+        self._refactoring_patterns: list[RefactoringPattern] = []
+        self._duplicate_hashes: dict[str, list[int]] = {}
 
     def _detect_language(self) -> CodeLanguage:
         """Detect the programming language from file extension."""
@@ -144,16 +145,16 @@ class CoderAgent(BaseAgent):
                 return True
         return False
 
-    def check_style(self, content: str) -> List[Dict[str, Any]]:
+    def check_style(self, content: str) -> list[dict[str, Any]]:
         """Check code against all enabled style rules."""
         return self.core.check_style(content, self._style_rules)
 
-    def auto_fix_style(self, content: str) -> Tuple[str, int]:
+    def auto_fix_style(self, content: str) -> tuple[str, int]:
         """Apply auto-fixes for style violations."""
         return self.core.auto_fix_style(content, self._style_rules)
 
     # ========== Code Metrics ==========
-    def calculate_metrics(self, content: Optional[str] = None) -> CodeMetrics:
+    def calculate_metrics(self, content: str | None = None) -> CodeMetrics:
         """Calculate code metrics for the content."""
         if content is None:
             content = self.current_content or self.previous_content or ""
@@ -202,7 +203,7 @@ class CoderAgent(BaseAgent):
         return 0.0
 
     # ========== Code Quality Scoring ==========
-    def calculate_quality_score(self, content: Optional[str] = None) -> QualityScore:
+    def calculate_quality_score(self, content: str | None = None) -> QualityScore:
         """Calculate an overall code quality score."""
         if content is None:
             content = self.current_content or self.previous_content or ""
@@ -215,7 +216,7 @@ class CoderAgent(BaseAgent):
         return self._quality_score
 
     # ========== Code Smell Detection ==========
-    def detect_code_smells(self, content: Optional[str] = None) -> List[CodeSmell]:
+    def detect_code_smells(self, content: str | None = None) -> list[CodeSmell]:
         """Detect code smells in the content."""
         if content is None:
             content = self.current_content or self.previous_content or ""
@@ -225,15 +226,15 @@ class CoderAgent(BaseAgent):
     # ========== Code Deduplication ==========
     def find_duplicate_code(
         self,
-        content: Optional[str] = None,
+        content: str | None = None,
         min_lines: int = 4
-    ) -> List[Dict[str, Any]]:
+    ) -> list[dict[str, Any]]:
         """Find duplicate code blocks."""
         if content is None:
             content = self.current_content or self.previous_content or ""
         return self.core.find_duplicate_code(content, min_lines)
 
-    def get_duplicate_ratio(self, content: Optional[str] = None) -> float:
+    def get_duplicate_ratio(self, content: str | None = None) -> float:
         """Calculate the ratio of duplicate code."""
         if content is None:
             content = self.current_content or self.previous_content or ""
@@ -252,10 +253,10 @@ class CoderAgent(BaseAgent):
         """Add a refactoring pattern."""
         self._refactoring_patterns.append(pattern)
 
-    def apply_refactoring_patterns(self, content: str) -> Tuple[str, List[str]]:
+    def apply_refactoring_patterns(self, content: str) -> tuple[str, list[str]]:
         """Apply all registered refactoring patterns."""
         result = content
-        applied: List[str] = []
+        applied: list[str] = []
         for pattern in self._refactoring_patterns:
             if pattern.language != self._language:
                 continue
@@ -265,14 +266,14 @@ class CoderAgent(BaseAgent):
                 result = new_result
         return result, applied
 
-    def suggest_refactorings(self, content: Optional[str] = None) -> List[Dict[str, str]]:
+    def suggest_refactorings(self, content: str | None = None) -> list[dict[str, str]]:
         """Suggest possible refactorings based on code analysis."""
         if content is None:
             content = self.current_content or self.previous_content or ""
         return self.core.suggest_refactorings(content)
 
     # ========== Documentation Generation ==========
-    def generate_documentation(self, content: Optional[str] = None) -> str:
+    def generate_documentation(self, content: str | None = None) -> str:
         """Generate documentation from code."""
         if content is None:
             content = self.current_content or self.previous_content or ""

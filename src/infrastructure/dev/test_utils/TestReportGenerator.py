@@ -32,12 +32,12 @@ class TestReportGenerator:
     __test__ = False
     """Generates test reports in various formats."""
 
-    def __init__(self, output_dir: Optional[Union[str, Path]] = None) -> None:
+    def __init__(self, output_dir: str | Path | None = None) -> None:
         """Initialize report generator."""
         self.output_dir = Path(output_dir) if output_dir is not None else None
         if self.output_dir is not None:
             self.output_dir.mkdir(parents=True, exist_ok=True)
-        self.results: List[Dict[str, Any]] = []
+        self.results: list[dict[str, Any]] = []
 
     def add_result(self, test_name: str, passed: bool, duration_ms: float) -> None:
         """Add test result (legacy API)."""

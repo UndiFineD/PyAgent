@@ -31,5 +31,5 @@ __version__ = VERSION
 @dataclass
 class RollbackPoint:
     improvement_id: str
-    state: Dict[str, Any]
+    state: dict[str, Any]
     created_at: datetime = field(default_factory=datetime.now)

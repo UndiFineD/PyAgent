@@ -40,17 +40,14 @@ class InfrastructureRepairAgent(BaseAgent):
 
     def audit_environment(self) -> dict:
         """Checks for common environment issues."""
+        import importlib.util
         issues = []
         
         # Check for common packages
-        try:
-            import pandas
-        except ImportError:
+        if importlib.util.find_spec("pandas") is None:
             issues.append({"type": "missing_package", "package": "pandas"})
             
-        try:
-            import yaml
-        except ImportError:
+        if importlib.util.find_spec("yaml") is None:
             issues.append({"type": "missing_package", "package": "pyyaml"})
 
         return {"status": "clean" if not issues else "degraded", "issues": issues}

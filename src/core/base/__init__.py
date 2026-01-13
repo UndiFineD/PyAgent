@@ -24,7 +24,7 @@ Core primitives and base classes for PyAgent.
 from __future__ import annotations
 from src.core.base.version import VERSION as VERSION
 from .BaseAgent import BaseAgent as BaseAgent
-from .models import AgentConfig, AgentState, ResponseQuality, PromptTemplate
-from .interfaces import AgentInterface, OrchestratorInterface
+from .models import AgentConfig as AgentConfig, AgentState as AgentState, ResponseQuality as ResponseQuality, PromptTemplate as PromptTemplate
+from .interfaces import AgentInterface as AgentInterface, OrchestratorInterface as OrchestratorInterface
 
 __version__ = VERSION

@@ -25,8 +25,6 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from tests.utils.agent_test_utils import *
 
 # Import from src if needed
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
-
 
 # =============================================================================
 # Session 9: Context Notification Tests

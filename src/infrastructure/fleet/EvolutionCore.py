@@ -60,11 +60,11 @@ class {name}Agent(BaseAgent):
         return f"Result from generated agent {name} for task: {{capabilities}}"
 '''
 
-    def compute_mutations(self, fleet_stats: Dict[str, Dict[str, float]]) -> Dict[str, Dict[str, float]]:
+    def compute_mutations(self, fleet_stats: dict[str, dict[str, float]]) -> dict[str, dict[str, float]]:
         """
         Pure logic for evolutionary mutations of hyperparameters.
         """
-        refined_params: Dict[str, Dict[str, float]] = {}
+        refined_params: dict[str, dict[str, float]] = {}
         for agent_id, metrics in fleet_stats.items():
             success_rate = metrics.get("success_rate", 1.0)
             

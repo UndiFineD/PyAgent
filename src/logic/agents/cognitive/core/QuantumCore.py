@@ -9,7 +9,7 @@ from typing import List, Dict
 
 class QuantumCore:
     @staticmethod
-    def calculate_superposition_weights(prompts: List[str], constraints: Dict[str, float]) -> List[float]:
+    def calculate_superposition_weights(prompts: list[str], constraints: dict[str, float]) -> list[float]:
         r"""
         Calculates weights for multiple prompts being processed in "superposition".
         $W_i = \frac{e^{C_i}}{\sum e^{C_j}}$ where $C$ is the constraint score.
@@ -33,7 +33,7 @@ class QuantumCore:
         return [s / total for s in exp_scores]
 
     @staticmethod
-    def simulate_interference_pattern(weights: List[float]) -> float:
+    def simulate_interference_pattern(weights: list[float]) -> float:
         """
         Simulates the "Interference" between conflicting prompt intents.
         An entropy-based measure of reasoning decoherence.

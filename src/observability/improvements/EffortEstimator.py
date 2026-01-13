@@ -34,12 +34,12 @@ class EffortEstimator:
     """Estimates effort for improvements."""
 
     def __init__(self) -> None:
-        self.base_rates: Dict[str, float] = {
+        self.base_rates: dict[str, float] = {
             "low": 2.0,
             "medium": 6.0,
             "high": 16.0,
         }
-        self.historical_data: Dict[str, List[float]] = {}
+        self.historical_data: dict[str, list[float]] = {}
 
     def add_historical_data(self, category: str, actual_hours: float) -> None:
         self.historical_data.setdefault(category, []).append(float(actual_hours))

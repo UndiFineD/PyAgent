@@ -42,8 +42,8 @@ class VllmNativeEngine:
     Manages a local vLLM instance using the library directly.
     Preferred for 'Own AI' where local hardware is sufficient.
     """
-    _instance: Optional['VllmNativeEngine'] = None
-    _llm: Optional[Any] = None
+    _instance: VllmNativeEngine | None = None
+    _llm: Any | None = None
 
     def __init__(self, model_name: str = "meta-llama/Llama-3-8B-Instruct", 
                  gpu_memory_utilization: float = 0.8,
@@ -54,7 +54,7 @@ class VllmNativeEngine:
         self.enabled = HAS_VLLM
         
     @classmethod
-    def get_instance(cls, **kwargs) -> 'VllmNativeEngine':
+    def get_instance(cls, **kwargs) -> VllmNativeEngine:
         if cls._instance is None:
             cls._instance = VllmNativeEngine(**kwargs)
         return cls._instance

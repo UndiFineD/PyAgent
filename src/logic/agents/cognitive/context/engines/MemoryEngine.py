@@ -44,7 +44,7 @@ class MemoryEngine:
         self.workspace_root = Path(workspace_root)
         self.memory_file = self.workspace_root / ".agent_memory.json"
         self.db_path = self.workspace_root / "data/db/.agent_memory_db"
-        self.episodes: List[Dict[str, Any]] = []
+        self.episodes: list[dict[str, Any]] = []
         self._collection = None
         self.core = MemoryCore()
         self.load()
@@ -62,7 +62,7 @@ class MemoryEngine:
             logging.error(f"Memory DB init error: {e}")
             return None
 
-    def record_episode(self, agent_name: str, task: str, outcome: str, success: bool, metadata: Optional[Dict[str, Any]] = None) -> None:
+    def record_episode(self, agent_name: str, task: str, outcome: str, success: bool, metadata: dict[str, Any] | None = None) -> None:
         """Records an agent's experience with semantic indexing and utility scoring."""
         episode = self.core.create_episode(agent_name, task, outcome, success, metadata)
         self.episodes.append(episode)
@@ -114,7 +114,7 @@ class MemoryEngine:
         except Exception as e:
             logging.error(f"Failed to update utility for {memory_id}: {e}")
 
-    def get_lessons_learned(self, query: str = "", limit: int = 5, min_utility: float = 0.0) -> List[Dict[str, Any]]:
+    def get_lessons_learned(self, query: str = "", limit: int = 5, min_utility: float = 0.0) -> list[dict[str, Any]]:
         """Retrieves past episodes relevant to the query, filtered by high utility."""
         if not query:
             # Return recent high utility episodes
@@ -156,7 +156,7 @@ class MemoryEngine:
                 break
         return relevant
 
-    def search_memories(self, query: str, limit: int = 5) -> List[Dict[str, Any]]:
+    def search_memories(self, query: str, limit: int = 5) -> list[dict[str, Any]]:
         """Public interface for semantic search across episodic memories."""
         collection = self._init_db()
         if not collection:

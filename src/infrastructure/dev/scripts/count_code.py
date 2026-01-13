@@ -29,7 +29,7 @@ def count_real_code(file_path):
         return 1000 # Ignore in this filter
     
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        with open(file_path, encoding='utf-8') as f:
             content = f.read()
             if not content.strip():
                 return 0
@@ -50,7 +50,7 @@ def count_real_code(file_path):
     except Exception:
         return 1000
 
-src_path = "c:/DEV/PyAgent/src"
+src_path = str(Path(__file__).resolve().parents[4]) + "/src"
 stubs = []
 for root, dirs, files in os.walk(src_path):
     for file in files:

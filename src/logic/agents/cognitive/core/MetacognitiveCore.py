@@ -44,7 +44,7 @@ class MetacognitiveCore:
             return min(2.0, current_weight * 1.05) # Underconfidence reward
         return current_weight
 
-    def predict_next_intent(self, history: List[Dict[str, Any]]) -> str:
+    def predict_next_intent(self, history: list[dict[str, Any]]) -> str:
         """
         Heuristic-based intent prediction based on recent sequence.
         """
@@ -57,7 +57,7 @@ class MetacognitiveCore:
             return "REPORT_GENERATION"
         return "CONTINUATION"
 
-    def get_prewarm_targets(self, predicted_intent: str) -> List[str]:
+    def get_prewarm_targets(self, predicted_intent: str) -> list[str]:
         """Returns agent types that should be pre-warmed."""
         mapping = {
             "CODE_VALIDATION": ["LintingAgent", "UnitTestingAgent"],
@@ -66,7 +66,7 @@ class MetacognitiveCore:
         return mapping.get(predicted_intent, [])
 
     @staticmethod
-    def calculate_confidence(reasoning_chain: str) -> Dict[str, Any]:
+    def calculate_confidence(reasoning_chain: str) -> dict[str, Any]:
         """Analyzes a reasoning chain for hedge words and length patterns."""
         hedge_words = ["maybe", "perhaps", "i think", "not sure", "unclear", "likely"]
         count = sum(1 for word in hedge_words if word in reasoning_chain.lower())
@@ -82,7 +82,7 @@ class MetacognitiveCore:
         }
 
     @staticmethod
-    def aggregate_summary(uncertainty_log: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def aggregate_summary(uncertainty_log: list[dict[str, Any]]) -> dict[str, Any]:
         """Calculates average confidence and totals."""
         if not uncertainty_log:
             return {"avg_confidence": 1.0, "total_evaluations": 0}

@@ -6,7 +6,7 @@ import time
 
 class TestPhase123Discovery(unittest.TestCase):
     def setUp(self):
-        self.root = "c:/DEV/PyAgent"
+        self.root = Path(__file__).resolve().parents[2]
         self.fleet = FleetManager(self.root)
 
     def test_discovery_orchestrator_initialization(self) -> None:

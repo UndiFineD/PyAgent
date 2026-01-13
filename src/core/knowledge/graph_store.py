@@ -50,7 +50,7 @@ class GraphKnowledgeStore(KnowledgeStore):
         path = self._get_node_path(node)
         
         if path.exists():
-            with open(path, "r") as f:
+            with open(path) as f:
                 data = json.load(f)
         else:
             data = {"id": node, "edges": []}
@@ -61,10 +61,10 @@ class GraphKnowledgeStore(KnowledgeStore):
             json.dump(data, f)
         return True
 
-    def retrieve(self, node: str, limit: int = 5) -> List[Any]:
+    def retrieve(self, node: str, limit: int = 5) -> list[Any]:
         path = self._get_node_path(node)
         if path.exists():
-            with open(path, "r") as f:
+            with open(path) as f:
                 return json.load(f).get("edges", [])[:limit]
         return []
 

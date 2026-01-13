@@ -29,14 +29,12 @@ except ImportError:
     
     class agent_sys_path:
         def __enter__(self) -> Self: 
-            sys.path.insert(0, str(AGENT_DIR))
+
             return self
         def __exit__(self, *args) -> None: 
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
-
 
 class TestPhase6Integration:
     """Integration tests for Phase 6 features."""
@@ -132,7 +130,8 @@ class TestGitHubModelsIntegration(unittest.TestCase):
 
     def test_github_models_authentication_token(self) -> None:
         """Test authentication with GitHub Models."""
-        auth_token = "ghp_xxxxxxxxxxxxxxxxxxxx"
+        import os
+        auth_token = os.environ.get("GITHUB_TOKEN", "ghp_DUMMY_TOKEN_FOR_TESTS")
         headers: Dict[str, str] = {
             "Authorization": f"Bearer {auth_token}",
             "Content-Type": "application / json"

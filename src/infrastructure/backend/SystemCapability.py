@@ -34,4 +34,4 @@ class SystemCapability:
     name: str
     description: str
     enabled: bool = True
-    parameters: Dict[str, Any] = field(default_factory=lambda: {})
+    parameters: dict[str, Any] = field(default_factory=lambda: {})

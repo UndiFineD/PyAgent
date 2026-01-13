@@ -17,7 +17,7 @@ class LessonCore:
     """
     
     def __init__(self) -> None:
-        self.known_failures: Set[str] = set()
+        self.known_failures: set[str] = set()
 
     def generate_failure_hash(self, error_msg: str) -> str:
         """Generates a stable hash for an error message (ignoring line numbers/paths)."""
@@ -36,7 +36,7 @@ class LessonCore:
         self.known_failures.add(f_hash)
         return f_hash
 
-    def get_related_lessons(self, error_msg: str, all_lessons: List[Lesson]) -> List[Lesson]:
+    def get_related_lessons(self, error_msg: str, all_lessons: list[Lesson]) -> list[Lesson]:
         """Returns lessons that match the normalized error pattern."""
         target_hash = self.generate_failure_hash(error_msg)
-        return [l for l in all_lessons if self.generate_failure_hash(l.error_pattern) == target_hash]
+        return [lesson for lesson in all_lessons if self.generate_failure_hash(lesson.error_pattern) == target_hash]

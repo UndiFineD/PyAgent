@@ -40,7 +40,7 @@ class VectorKnowledgeStore(KnowledgeStore):
             self.client = None
             print("ChromaDB not installed, VectorKnowledgeStore will be disabled.")
 
-    def store(self, key: str, value: str, metadata: Optional[Dict[str, Any]] = None) -> bool:
+    def store(self, key: str, value: str, metadata: dict[str, Any] | None = None) -> bool:
         if not self.client:
             return False
         self.collection.add(
@@ -50,7 +50,7 @@ class VectorKnowledgeStore(KnowledgeStore):
         )
         return True
 
-    def retrieve(self, query: str, limit: int = 5) -> List[Any]:
+    def retrieve(self, query: str, limit: int = 5) -> list[Any]:
         if not self.client:
             return []
         results = self.collection.query(

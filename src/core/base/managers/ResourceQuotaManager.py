@@ -6,9 +6,9 @@ from dataclasses import dataclass, field
 @dataclass
 class QuotaConfig:
     """Configuration for agent resource quotas."""
-    max_tokens: Optional[int] = None
-    max_time_seconds: Optional[int] = None
-    max_cycles: Optional[int] = None
+    max_tokens: int | None = None
+    max_time_seconds: int | None = None
+    max_cycles: int | None = None
 
 @dataclass
 class ResourceUsage:
@@ -32,11 +32,11 @@ class ResourceQuotaManager:
     Phase 245: RESOURCE QUOTAS & BUDGETS
     """
     
-    def __init__(self, config: Optional[QuotaConfig] = None):
+    def __init__(self, config: QuotaConfig | None = None):
         self.config = config or QuotaConfig()
         self.usage = ResourceUsage()
         self._is_interrupted = False
-        self._interrupt_reason: Optional[str] = None
+        self._interrupt_reason: str | None = None
 
     def update_usage(self, tokens_input: int = 0, tokens_output: int = 0, cycles: int = 0):
         """Update current usage metrics."""
@@ -44,7 +44,7 @@ class ResourceQuotaManager:
         self.usage.tokens_output += tokens_output
         self.usage.cycles += cycles
 
-    def check_quotas(self) -> tuple[bool, Optional[str]]:
+    def check_quotas(self) -> tuple[bool, str | None]:
         """Check if any quotas have been exceeded.
         
         Returns:
@@ -72,10 +72,10 @@ class ResourceQuotaManager:
         return self._is_interrupted
 
     @property
-    def interrupt_reason(self) -> Optional[str]:
+    def interrupt_reason(self) -> str | None:
         return self._interrupt_reason
 
-    def get_report(self) -> Dict[str, Any]:
+    def get_report(self) -> dict[str, Any]:
         """Returns a summary of resource usage."""
         return {
             "tokens_input": self.usage.tokens_input,

@@ -42,11 +42,11 @@ class ProgressDashboard:
 
     def __init__(self) -> None:
         """Initialize the dashboard."""
-        self.reports: List[ProgressReport] = []
-        self.velocity_history: List[float] = []
+        self.reports: list[ProgressReport] = []
+        self.velocity_history: list[float] = []
 
     def generate_report(
-        self, improvements: List[Improvement]
+        self, improvements: list[Improvement]
     ) -> ProgressReport:
         """Generate a progress report.
 
@@ -91,8 +91,8 @@ class ProgressDashboard:
         return sum(completions) / len(completions) if completions else 0.0
 
     def generate_burndown(
-        self, improvements: List[Improvement]
-    ) -> List[Tuple[str, int]]:
+        self, improvements: list[Improvement]
+    ) -> list[tuple[str, int]]:
         """Generate burndown chart data."""
         remaining = len([i for i in improvements
                         if i.status not in [ImprovementStatus.COMPLETED,
@@ -100,7 +100,7 @@ class ProgressDashboard:
         return [(datetime.now().isoformat()[:10], remaining)]
 
     def get_completion_rate(
-        self, improvements: List[Improvement]
+        self, improvements: list[Improvement]
     ) -> float:
         """Calculate completion rate."""
         total = len(improvements)
@@ -152,9 +152,8 @@ class ProgressDashboard:
             "\n"
         ]
         return "\n".join(grid)
-        return (completed / total) * 100
 
-    def export_dashboard(self, improvements: List[Improvement]) -> str:
+    def export_dashboard(self, improvements: list[Improvement]) -> str:
         """Export dashboard as markdown."""
         report = self.generate_report(improvements)
         lines = [

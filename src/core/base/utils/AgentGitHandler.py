@@ -35,7 +35,7 @@ class AgentGitHandler:
         self.no_git: bool = no_git
         self.recorder: Any = recorder
 
-    def _record(self, action: str, result: str, meta: Optional[Dict[str, Any]] = None) -> None:
+    def _record(self, action: str, result: str, meta: dict[str, Any] | None = None) -> None:
         """Internal helper to record git operations if recorder is available."""
         if self.recorder:
             self.recorder.record_interaction(
@@ -46,7 +46,7 @@ class AgentGitHandler:
                 meta=meta
             )
 
-    def commit_changes(self, message: str, files: Optional[List[str]] = None) -> None:
+    def commit_changes(self, message: str, files: list[str] | None = None) -> None:
         """Commit changes to the repository."""
         if self.no_git:
             logging.info(f"Skipping git commit: no_git=True. Message: {message}")

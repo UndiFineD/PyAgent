@@ -81,7 +81,7 @@ def main() -> None:
         if args.export:
             agent.export_stats('stats_output', args.export)
         if args.baseline:
-            with open(args.baseline, 'r') as baseline_file:
+            with open(args.baseline) as baseline_file:
                 baseline_stats = json.load(baseline_file)
             agent.generate_comparison_report(baseline_stats)
         agent.report_stats(output_format=args.format)

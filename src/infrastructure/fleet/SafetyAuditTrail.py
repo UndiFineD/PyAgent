@@ -40,7 +40,7 @@ class SafetyAuditTrail:
     def _load_log(self) -> str:
         if self.log_path.exists():
             try:
-                with open(self.log_path, 'r') as f:
+                with open(self.log_path) as f:
                     self.violations = json.load(f)
             except Exception as e:
                 logging.error(f"SafetyAuditTrail: Error loading log: {e}")

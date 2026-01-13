@@ -63,7 +63,7 @@ class DirectorAgent(BaseAgent):
     def _get_default_content(self) -> str:
         return "# Project Orchestration Plan\n\n## Goal\n[Goal here]\n\n## Sequence\n- Pending planning...\n"
 
-    def _get_available_agents(self) -> List[str]:
+    def _get_available_agents(self) -> list[str]:
         """Scans the src/classes directory for available agent classes."""
         agents = []
         classes_path = Path(__file__).parent.parent

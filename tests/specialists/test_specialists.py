@@ -3,7 +3,6 @@ import os
 from pathlib import Path
 
 # Add src to path
-sys.path.append(str(Path(__file__).parent))
 
 from src.infrastructure.orchestration.DirectorAgent import DirectorAgent
 from src.logic.agents.development.RustAgent import RustAgent

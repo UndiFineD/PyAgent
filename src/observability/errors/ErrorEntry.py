@@ -46,11 +46,11 @@ class ErrorEntry:
     suggested_fix: str = ""
     resolved: bool = False
     resolution_timestamp: str = ""
-    tags: List[str] = field(default_factory=lambda: [])
+    tags: list[str] = field(default_factory=lambda: [])
 
     def __post_init__(self) -> None:
         if not self.id:
-            seed = f"{self.error_type}|{self.message}|{self.file_path}|{self.line_number}".encode("utf-8")
+            seed = f"{self.error_type}|{self.message}|{self.file_path}|{self.line_number}".encode()
             self.id = hashlib.sha256(seed).hexdigest()[:12]
 
         if self.error_type and self.category == ErrorCategory.OTHER:

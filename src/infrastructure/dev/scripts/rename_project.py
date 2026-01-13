@@ -30,7 +30,7 @@ __version__ = VERSION
 
 def replace_in_file(filepath: str) -> None:
     try:
-        with open(filepath, 'r', encoding='utf-8') as f:
+        with open(filepath, encoding='utf-8') as f:
             content = f.read()
         
         new_content = content.replace("DebVisor", "PyAgent").replace("debvisor", "pyagent")

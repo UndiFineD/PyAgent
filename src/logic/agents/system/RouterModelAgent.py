@@ -31,7 +31,7 @@ class RouterModelAgent(BaseAgent):
     """
     def __init__(self, path: str) -> None:
         super().__init__(path)
-        self.providers: Dict[str, Any] = {
+        self.providers: dict[str, Any] = {
             "internal_ai": {"cost": 0.0, "latency": 0.1, "capability": 0.75, "preference": 100}, # prioritized
             "glm_4_7": {"cost": 0.0006, "latency": 0.8, "capability": 0.9, "preference": 90},  # Phase 128: Cost efficiency
             "openai_gpt4": {"cost": 0.03, "latency": 1.5, "capability": 0.95, "preference": 30},
@@ -85,7 +85,7 @@ class RouterModelAgent(BaseAgent):
         compressed = long_prompt[:target_tokens//2] + "\n...[OMITTED]...\n" + long_prompt[-target_tokens//2:]
         return compressed
 
-    def get_routing_stats(self) -> Dict[str, Any]:
+    def get_routing_stats(self) -> dict[str, Any]:
         return {
             "total_routed_tasks": 150,
             "avg_latency": 0.85,

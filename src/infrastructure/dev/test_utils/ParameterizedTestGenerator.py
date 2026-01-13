@@ -23,7 +23,8 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .ParameterizedTestCase import ParameterizedTestCase
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Dict, List, Optional
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -46,10 +47,10 @@ class ParameterizedTestGenerator:
             test_name: Base name for generated tests.
         """
         self.test_name = test_name
-        self._parameters: Dict[str, List[Any]] = {}
-        self._expected_fn: Optional[Callable[..., Any]] = None
+        self._parameters: dict[str, list[Any]] = {}
+        self._expected_fn: Callable[..., Any] | None = None
 
-    def add_parameter(self, name: str, values: List[Any]) -> "ParameterizedTestGenerator":
+    def add_parameter(self, name: str, values: list[Any]) -> ParameterizedTestGenerator:
         """Add parameter with possible values.
 
         Args:
@@ -62,7 +63,7 @@ class ParameterizedTestGenerator:
         self._parameters[name] = values
         return self
 
-    def set_expected_fn(self, fn: Callable[..., Any]) -> "ParameterizedTestGenerator":
+    def set_expected_fn(self, fn: Callable[..., Any]) -> ParameterizedTestGenerator:
         """Set function to compute expected result.
 
         Args:
@@ -74,7 +75,7 @@ class ParameterizedTestGenerator:
         self._expected_fn = fn
         return self
 
-    def generate_cases(self) -> List[ParameterizedTestCase]:
+    def generate_cases(self) -> list[ParameterizedTestCase]:
         """Generate all test case combinations.
 
         Returns:
@@ -85,7 +86,7 @@ class ParameterizedTestGenerator:
         import itertools
         keys = list(self._parameters.keys())
         values = [self._parameters[k] for k in keys]
-        cases: List[ParameterizedTestCase] = []
+        cases: list[ParameterizedTestCase] = []
         for i, combo in enumerate(itertools.product(*values)):
             params = dict(zip(keys, combo))
             expected = self._expected_fn(params) if self._expected_fn else None

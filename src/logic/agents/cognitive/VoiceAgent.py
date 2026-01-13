@@ -44,7 +44,7 @@ class VoiceAgent(BaseAgent):
         )
 
     @as_tool
-    def synthesize_advanced_speech(self, text: str, reference_voice_path: Optional[str] = None, language_code: str = "en") -> str:
+    def synthesize_advanced_speech(self, text: str, reference_voice_path: str | None = None, language_code: str = "en") -> str:
         """
         Synthesizes speech with paralinguistic tags and multilingual support (Toucan Pattern).
         Supports expressive markers: [laugh], [chuckle], [sigh], [breath].

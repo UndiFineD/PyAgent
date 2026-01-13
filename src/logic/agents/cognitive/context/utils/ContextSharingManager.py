@@ -42,13 +42,13 @@ class ContextSharingManager:
     def __init__(self, owner: str = "current_user") -> None:
         """Initialize sharing manager."""
         self.owner: str = owner
-        self.shared_contexts: Dict[str, SharedContext] = {}
-        self._contents: Dict[str, str] = {}
+        self.shared_contexts: dict[str, SharedContext] = {}
+        self._contents: dict[str, str] = {}
 
     def create_shared(
         self,
         content: str,
-        context_id: Optional[str] = None,
+        context_id: str | None = None,
         permission: SharingPermission = SharingPermission.READ_ONLY,
     ) -> SharedContext:
         if context_id is None:
@@ -87,13 +87,13 @@ class ContextSharingManager:
             shared.shared_with.remove(user)
         shared.last_sync = datetime.now().isoformat()
 
-    def get_shared_contexts(self) -> List[SharedContext]:
+    def get_shared_contexts(self) -> list[SharedContext]:
         return list(self.shared_contexts.values())
 
     def share(
         self,
         context_id: str,
-        users: List[str],
+        users: list[str],
         owner: str = "current_user",
         permission: SharingPermission = SharingPermission.READ_ONLY
     ) -> SharedContext:
@@ -115,7 +115,7 @@ class ContextSharingManager:
             self.share_with(shared.context_id, user)
         return shared
 
-    def get_shared_users(self, context_id: str) -> List[str]:
+    def get_shared_users(self, context_id: str) -> list[str]:
         """Get users a context is shared with.
 
         Args:

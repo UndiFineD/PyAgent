@@ -34,11 +34,11 @@ class KnowledgeStore(ABC):
         self.storage_path.mkdir(parents=True, exist_ok=True)
 
     @abstractmethod
-    def store(self, key: str, value: Any, metadata: Optional[Dict[str, Any]] = None) -> bool:
+    def store(self, key: str, value: Any, metadata: dict[str, Any] | None = None) -> bool:
         raise NotImplementedError()
 
     @abstractmethod
-    def retrieve(self, query: Any, limit: int = 5) -> List[Any]:
+    def retrieve(self, query: Any, limit: int = 5) -> list[Any]:
         raise NotImplementedError()
 
     @abstractmethod

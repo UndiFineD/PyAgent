@@ -21,9 +21,9 @@ class ConfigHygieneCore:
             return False, "File or schema missing."
             
         try:
-            with open(data_path, "r", encoding="utf-8") as f:
+            with open(data_path, encoding="utf-8") as f:
                 data = json.load(f)
-            with open(schema_path, "r", encoding="utf-8") as f:
+            with open(schema_path, encoding="utf-8") as f:
                 schema = json.load(f)
                 
             # Basic structural validation (check keys)
@@ -37,7 +37,7 @@ class ConfigHygieneCore:
             return False, str(e)
 
     @staticmethod
-    def extract_env_vars(config_data: Dict[str, Any], prefix: str = "PYAGENT_") -> Dict[str, str]:
+    def extract_env_vars(config_data: dict[str, Any], prefix: str = "PYAGENT_") -> dict[str, str]:
         """
         Helper to flatten nested config into env-style key-value pairs.
         """

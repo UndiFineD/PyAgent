@@ -107,7 +107,7 @@ class WebAgent(BaseAgent):
             return f"Error fetching {url}: {e}"
 
     @as_tool
-    def search_web(self, query: str) -> List[str]:
+    def search_web(self, query: str) -> list[str]:
         """Simulates a web search and returns top results (stub for real API integration)."""
         logging.info(f"WebAgent searching for: {query}")
         # In a real implementation, this would call Google/DuckDuckGo/Serper

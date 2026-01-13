@@ -65,7 +65,7 @@ for root_dir in ['src', 'tests']:
             if file.endswith('.py'):
                 path = os.path.join(root, file)
                 try:
-                    with open(path, 'r', encoding='utf-8') as f:
+                    with open(path, encoding='utf-8') as f:
                         content = f.read()
                     
                     new_content = fix_imports(content)
@@ -80,7 +80,7 @@ for root_dir in ['src', 'tests']:
 # CircuitBreaker fix
 cb_path = os.path.join('src', 'backend', 'CircuitBreaker.py')
 if os.path.exists(cb_path):
-    with open(cb_path, 'r', encoding='utf-8') as f:
+    with open(cb_path, encoding='utf-8') as f:
         content = f.read()
     if 'src.agent.CircuitBreakerCore' in content or 'CircuitBreakerCore' in content:
         content = content.replace('from src.agent.CircuitBreakerCore import CircuitBreakerCore', 'from src.core.base.CircuitBreaker import CircuitBreaker as CircuitBreakerImpl')

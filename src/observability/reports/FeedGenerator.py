@@ -50,7 +50,7 @@ class FeedGenerator:
         """
         self.format = format
 
-    def generate(self, entries: List[ChangelogEntry], project_name: str) -> str:
+    def generate(self, entries: list[ChangelogEntry], project_name: str) -> str:
         """Generate feed from changelog entries.
 
         Args:
@@ -66,7 +66,7 @@ class FeedGenerator:
             return self._generate_json(entries, project_name)
         return self._generate_atom(entries, project_name)
 
-    def _generate_atom(self, entries: List[ChangelogEntry], project_name: str) -> str:
+    def _generate_atom(self, entries: list[ChangelogEntry], project_name: str) -> str:
         """Generate Atom 1.0 feed."""
         lines = [
             '<?xml version="1.0" encoding="utf-8"?>',
@@ -83,7 +83,7 @@ class FeedGenerator:
         lines.append('</feed>')
         return '\n'.join(lines)
 
-    def _generate_rss(self, entries: List[ChangelogEntry], project_name: str) -> str:
+    def _generate_rss(self, entries: list[ChangelogEntry], project_name: str) -> str:
         """Generate RSS 2.0 feed."""
         lines = [
             '<?xml version="1.0" encoding="utf-8"?>',
@@ -101,13 +101,13 @@ class FeedGenerator:
         lines.extend(['  </channel>', '</rss>'])
         return '\n'.join(lines)
 
-    def _generate_json(self, entries: List[ChangelogEntry], project_name: str) -> str:
+    def _generate_json(self, entries: list[ChangelogEntry], project_name: str) -> str:
         """Generate JSON Feed."""
-        items: List[Dict[str, str]] = [
+        items: list[dict[str, str]] = [
             {"title": f"[{e.category}] {e.description[:50]}", "content_text": e.description}
             for e in entries[:20]
         ]
-        feed: Dict[str, Any] = {
+        feed: dict[str, Any] = {
             "version": "https://jsonfeed.org / version / 1.1",
             "title": f"{project_name} Changelog",
             "items": items

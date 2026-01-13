@@ -45,7 +45,7 @@ class MergeConflictResolver:
     def set_strategy(self, strategy: ConflictResolution) -> None:
         self.strategy = strategy
 
-    def detect_conflicts(self, ours: str, theirs: Optional[str] = None) -> List[MergeConflict]:
+    def detect_conflicts(self, ours: str, theirs: str | None = None) -> list[MergeConflict]:
         """Detect merge conflicts.
 
         Supports two modes:
@@ -54,7 +54,7 @@ class MergeConflictResolver:
         """
         if theirs is None:
             content = ours
-            conflicts: List[MergeConflict] = []
+            conflicts: list[MergeConflict] = []
             pattern = r"<<<<<<<[^\n]*\n(.*?)\n=======\n(.*?)\n>>>>>>>"
             for match in re.finditer(pattern, content, re.DOTALL):
                 conflicts.append(MergeConflict(
@@ -75,7 +75,7 @@ class MergeConflictResolver:
 
         return [MergeConflict(section=_section_name(ours), ours=ours, theirs=theirs)]
 
-    def resolve(self, conflict: MergeConflict, strategy: Optional[ConflictResolution] = None) -> str:
+    def resolve(self, conflict: MergeConflict, strategy: ConflictResolution | None = None) -> str:
         """Resolve a merge conflict.
 
         Args:
@@ -102,8 +102,8 @@ class MergeConflictResolver:
 
     def resolve_all(
         self,
-        conflicts: List[MergeConflict],
-        strategy: Optional[ConflictResolution] = None,
+        conflicts: list[MergeConflict],
+        strategy: ConflictResolution | None = None,
     ) -> str:
         """Resolve all conflicts and join results."""
         return "\n".join(self.resolve(c, strategy=strategy) for c in conflicts)

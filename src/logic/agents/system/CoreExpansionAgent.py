@@ -76,7 +76,7 @@ class CoreExpansionAgent(BaseAgent):
             return f"Error: Failed to install {package_name}. Details: {err_msg}"
 
     @as_tool
-    def audit_environment(self) -> List[str]:
+    def audit_environment(self) -> list[str]:
         """
         Lists currently installed packages in the environment.
         """

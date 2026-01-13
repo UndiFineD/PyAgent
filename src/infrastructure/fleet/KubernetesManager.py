@@ -35,7 +35,7 @@ class KubernetesManager:
     
     def __init__(self, namespace: str = "pyagent-fleet") -> None:
         self.namespace = namespace
-        self.active_deployments: List[str] = []
+        self.active_deployments: list[str] = []
 
     def deploy_agent_pod(self, agent_name: str, image: str = "pyagent-worker:latest") -> str:
         """Generates a K8s Pod/Deployment manifest for a specialized agent."""

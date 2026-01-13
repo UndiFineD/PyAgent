@@ -31,7 +31,7 @@ class TechDebtCore:
     """
 
     @staticmethod
-    def analyze_ast_debt(tree: ast.AST) -> List[Dict[str, Any]]:
+    def analyze_ast_debt(tree: ast.AST) -> list[dict[str, Any]]:
         """
         Analyzes an AST tree for technical debt markers.
         
@@ -65,6 +65,6 @@ class TechDebtCore:
         return issues
 
     @staticmethod
-    def identify_hotspots(reports: List[Dict[str, Any]], limit: int = 5) -> List[Dict[str, Any]]:
+    def identify_hotspots(reports: list[dict[str, Any]], limit: int = 5) -> list[dict[str, Any]]:
         """Sorts and returns major technical debt hotspots."""
         return sorted(reports, key=lambda x: x.get('issue_count', 0), reverse=True)[:limit]

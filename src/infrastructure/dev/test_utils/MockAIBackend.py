@@ -47,12 +47,12 @@ class MockAIBackend:
         result=mock.call("prompt1")
     """
 
-    def __init__(self, workspace_root: Optional[str] = None) -> None:
+    def __init__(self, workspace_root: str | None = None) -> None:
         """Initialize mock backend."""
-        self._responses: Dict[str, MockResponse] = {}
+        self._responses: dict[str, MockResponse] = {}
         self._default_response = MockResponse(content="Mock response")
-        self._call_history: List[Tuple[str, float]] = []
-        self._response_sequence: List[MockResponse] = []
+        self._call_history: list[tuple[str, float]] = []
+        self._response_sequence: list[MockResponse] = []
         self._sequence_index: int = 0
         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
 
@@ -125,7 +125,7 @@ class MockAIBackend:
 
         return response.content
 
-    def add_response_sequence(self, responses: List[MockResponse]) -> None:
+    def add_response_sequence(self, responses: list[MockResponse]) -> None:
         """Add a sequence of responses for sequential calls.
 
         Args:
@@ -146,7 +146,7 @@ class MockAIBackend:
             error_message=message
         )
 
-    def get_call_history(self) -> List[Tuple[str, float]]:
+    def get_call_history(self) -> list[tuple[str, float]]:
         """Get history of calls made."""
         return list(self._call_history)
 

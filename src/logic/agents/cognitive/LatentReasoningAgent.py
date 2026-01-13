@@ -50,7 +50,7 @@ class LatentReasoningAgent(BaseAgent):
         )
 
     @as_tool
-    def audit_multilingual_output(self, task: str, response: str, language: str) -> Dict[str, Any]:
+    def audit_multilingual_output(self, task: str, response: str, language: str) -> dict[str, Any]:
         """
         Audits a response for latent reasoning consistency.
         Flags outputs where reasoning strength likely drops due to language-specific training gaps.
@@ -71,7 +71,7 @@ class LatentReasoningAgent(BaseAgent):
         }
 
     @as_tool
-    def verify_silent_steps(self, chain_of_thought: List[str], target_language: str) -> bool:
+    def verify_silent_steps(self, chain_of_thought: list[str], target_language: str) -> bool:
         """
         Verifies if each step of the reasoning chain holds up in the target language.
         """

@@ -40,9 +40,9 @@ class EntryReorderer:
 
     def reorder(
         self,
-        entries: List[ChangelogEntry],
+        entries: list[ChangelogEntry],
         strategy: GroupingStrategy
-    ) -> List[ChangelogEntry]:
+    ) -> list[ChangelogEntry]:
         """Reorder entries based on strategy.
 
         Args:
@@ -62,7 +62,7 @@ class EntryReorderer:
             return entries  # Would need author field
         return entries
 
-    def group_by_category(self, entries: List[ChangelogEntry]) -> Dict[str, List[ChangelogEntry]]:
+    def group_by_category(self, entries: list[ChangelogEntry]) -> dict[str, list[ChangelogEntry]]:
         """Group entries by category.
 
         Args:
@@ -71,7 +71,7 @@ class EntryReorderer:
         Returns:
             Dictionary mapping category to entries.
         """
-        result: Dict[str, List[ChangelogEntry]] = {}
+        result: dict[str, list[ChangelogEntry]] = {}
         for entry in entries:
             if entry.category not in result:
                 result[entry.category] = []

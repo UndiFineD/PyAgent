@@ -65,7 +65,7 @@ class MetaOrchestratorAgent(BaseAgent):
             
         return f"# Objective Resolution Report (Depth {depth})\n\n" + "\n".join(results)
 
-    async def _decompose_objective(self, objective: str) -> List[Dict[str, Any]]:
+    async def _decompose_objective(self, objective: str) -> list[dict[str, Any]]:
         """Uses a LLM to break down the objective into discrete steps."""
         prompt = f"""
         Break down the following high-level objective into a JSON list of steps.
@@ -95,7 +95,7 @@ class MetaOrchestratorAgent(BaseAgent):
             logging.error(f"MetaOrchestrator failed to parse decomposition JSON: {e}")
             return [{"type": "simple", "agent": "Reasoning", "action": "analyze_tot", "args": [objective]}]
 
-    def _enrich_args(self, args: List[Any]) -> List[Any]:
+    def _enrich_args(self, args: list[Any]) -> list[Any]:
         """Injects global context into agent arguments."""
         enriched = []
         context_brief = self.global_context.get_summary()

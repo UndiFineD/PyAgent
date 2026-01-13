@@ -36,7 +36,7 @@ class PerformanceProfilingAgent(BaseAgent):
         self.workspace_path = workspace_path
         self.metrics_history = []
 
-    def profile_fleet_usage(self, agent_ids: List[str]) -> Dict[str, Any]:
+    def profile_fleet_usage(self, agent_ids: list[str]) -> dict[str, Any]:
         """Profiles the performance of a list of agents."""
         snapshot = {
             "timestamp": time.time(),
@@ -55,7 +55,7 @@ class PerformanceProfilingAgent(BaseAgent):
         self.metrics_history.append(snapshot)
         return snapshot
 
-    def analyze_bottlenecks(self) -> List[Dict[str, Any]]:
+    def analyze_bottlenecks(self) -> list[dict[str, Any]]:
         """Analyzes history to find performance bottlenecks."""
         if not self.metrics_history:
             return []
@@ -81,7 +81,7 @@ class PerformanceProfilingAgent(BaseAgent):
                 
         return bottlenecks
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """Returns a high-level performance summary."""
         return {
             "snapshots_captured": len(self.metrics_history),

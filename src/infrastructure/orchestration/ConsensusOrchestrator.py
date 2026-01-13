@@ -36,9 +36,9 @@ class ConsensusOrchestrator:
     
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
-        self.reputation_scores: Dict[str, float] = {} # Agent name -> score (0.0 to 1.0)
+        self.reputation_scores: dict[str, float] = {} # Agent name -> score (0.0 to 1.0)
 
-    def resolve_conflict(self, task: str, agents: List[str]) -> str:
+    def resolve_conflict(self, task: str, agents: list[str]) -> str:
         """
         Orchestrates a debate and weighted vote to reach consensus on a task.
         """
@@ -78,7 +78,7 @@ class ConsensusOrchestrator:
                 {"task": task, "hash": block_hash}
             )
 
-    def _collect_proposals(self, task: str, agents: List[str]) -> List[Dict[str, Any]]:
+    def _collect_proposals(self, task: str, agents: list[str]) -> list[dict[str, Any]]:
         proposals = []
         for agent_name in agents:
             try:
@@ -93,7 +93,7 @@ class ConsensusOrchestrator:
                 logging.error(f"Agent {agent_name} failed to propose: {e}")
         return proposals
 
-    def _conduct_debate(self, task: str, proposals: List[Dict[str, Any]], rounds: int = 2) -> List[Dict[str, Any]]:
+    def _conduct_debate(self, task: str, proposals: list[dict[str, Any]], rounds: int = 2) -> list[dict[str, Any]]:
         """
         Agents review each other's proposals and refine their own.
         """
@@ -118,7 +118,7 @@ class ConsensusOrchestrator:
             current_proposals = new_proposals
         return current_proposals
 
-    def _weighted_vote(self, proposals: List[Dict[str, Any]]) -> str:
+    def _weighted_vote(self, proposals: list[dict[str, Any]]) -> str:
         if not proposals:
             return "Consensus failed: No proposals."
             

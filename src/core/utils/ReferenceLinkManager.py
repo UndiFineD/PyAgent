@@ -43,7 +43,7 @@ class ReferenceLinkManager:
 
     def __init__(self) -> None:
         """Initialize the reference link manager."""
-        self.references: Dict[str, List[LinkedReference]] = {}
+        self.references: dict[str, list[LinkedReference]] = {}
 
     def add_commit_reference(
         self,

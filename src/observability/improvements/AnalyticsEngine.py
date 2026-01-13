@@ -32,7 +32,7 @@ class AnalyticsEngine:
     """Very small analytics engine used by tests."""
 
     def __init__(self) -> None:
-        self._completed: List[Improvement] = []
+        self._completed: list[Improvement] = []
 
     def record_completion(self, improvement: Improvement) -> None:
         self._completed.append(improvement)

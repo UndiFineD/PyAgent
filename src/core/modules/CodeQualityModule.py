@@ -27,7 +27,7 @@ class CodeQualityModule(BaseModule):
         return super().initialize()
 
     def execute(self, source:
-        str, language: str = "python") -> List[Dict[str, Any]]:
+        str, language: str = "python") -> list[dict[str, Any]]:
         """
         Analyzes source code quality for a specific language.
         """
@@ -48,7 +48,7 @@ class CodeQualityModule(BaseModule):
         return max(0, 100 - (issues_count * 5))
 
     def check_python_source_quality(self, source:
-        str) -> List[Dict[str, Any]]:
+        str) -> list[dict[str, Any]]:
         """Analyzes Python source code for style issues."""
         issues = []
         lines = source.splitlines()
@@ -62,7 +62,7 @@ class CodeQualityModule(BaseModule):
         return issues
 
     def analyze_rust_source(self, source:
-        str) -> List[Dict[str, Any]]:
+        str) -> list[dict[str, Any]]:
         """Analyzes Rust source for common patterns/issues."""
         issues = []
         if not source or len(source.strip()) < 5:
@@ -74,7 +74,7 @@ class CodeQualityModule(BaseModule):
         return issues
 
     def analyze_js_source(self, source:
-        str) -> List[Dict[str, Any]]:
+        str) -> list[dict[str, Any]]:
         """Analyzes JavaScript source for common patterns/issues."""
         issues = []
         if re.search(r"\bvar\s+", source):

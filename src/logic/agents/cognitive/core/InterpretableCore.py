@@ -11,7 +11,7 @@ class InterpretableCore:
     def __init__(self, feature_count: int = 4096) -> None:
         self.feature_count = feature_count
 
-    def decompose_activations(self, mock_activations: List[float]) -> Dict[str, Any]:
+    def decompose_activations(self, mock_activations: list[float]) -> dict[str, Any]:
         """
         Simulates SAE decomposition.
         Identifies 'Active Neurons' and maps them to semantic labels.
@@ -35,7 +35,7 @@ class InterpretableCore:
             "active_features": active_features
         }
 
-    def simulate_neural_trace(self, agent_name: str, decision: str) -> List[str]:
+    def simulate_neural_trace(self, agent_name: str, decision: str) -> list[str]:
         """
         Generates a 'Neural Trace' trace-log explaining the logic path.
         """

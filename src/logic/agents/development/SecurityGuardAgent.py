@@ -46,24 +46,24 @@ class SecurityGuardAgent(BaseAgent):
     def _get_default_content(self) -> str:
         return "# Workspace Security Log\n\n## Status\nMonitoring active.\n"
 
-    def scan_for_secrets(self, content: str) -> List[str]:
+    def scan_for_secrets(self, content: str) -> list[str]:
         """Scans for secrets using the core logic."""
         vulns = self.security_core.scan_content(content)
         return [v.description for v in vulns if v.severity in ["high", "critical"]]
 
-    def audit_command(self, command: str) -> Tuple[str, str]:
+    def audit_command(self, command: str) -> tuple[str, str]:
         """Audits a shell command via the security core."""
         return self.security_core.audit_command(command)
 
-    def validate_shell_script(self, script_content: str) -> List[str]:
+    def validate_shell_script(self, script_content: str) -> list[str]:
         """Performs static analysis on shell scripts via the security core."""
         return self.security_core.validate_shell_script(script_content)
 
-    def scan_for_injection(self, content: str) -> List[str]:
+    def scan_for_injection(self, content: str) -> list[str]:
         """Scans for indirect prompt injection via the security core."""
         return self.security_core.scan_for_injection(content)
 
-    def generate_safety_report(self, task: str, code_changes: str, commands: List[str]) -> str:
+    def generate_safety_report(self, task: str, code_changes: str, commands: list[str]) -> str:
         """Generates a comprehensive safety audit report."""
         vulnerabilities = self.security_core.scan_content(code_changes)
         

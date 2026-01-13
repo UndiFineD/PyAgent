@@ -9,7 +9,7 @@ class InterfaceSyncCore:
     """
 
     def __init__(self) -> None:
-        self.themes: Dict[str, Dict[str, str]] = {
+        self.themes: dict[str, dict[str, str]] = {
             "dark": {
                 "background": "#1e1e1e",
                 "foreground": "#d4d4d4",
@@ -23,12 +23,12 @@ class InterfaceSyncCore:
         }
         self.current_theme = "dark"
 
-    def get_theme_payload(self, theme_name: Optional[str] = None) -> Dict[str, str]:
+    def get_theme_payload(self, theme_name: str | None = None) -> dict[str, str]:
         """Returns the color palette for a given theme."""
         name = theme_name or self.current_theme
         return self.themes.get(name, self.themes["dark"])
 
-    def broadcast_action(self, action_type: str, payload: Any) -> Dict[str, Any]:
+    def broadcast_action(self, action_type: str, payload: Any) -> dict[str, Any]:
         """
         Formats an action for broadcast to all interface targets.
         """
@@ -39,7 +39,7 @@ class InterfaceSyncCore:
             "timestamp": "2026-01-08" # Simulated
         }
 
-    def resolve_topology_state(self, agents: List[Dict[str, Any]], connections: List[tuple]) -> Dict[str, Any]:
+    def resolve_topology_state(self, agents: list[dict[str, Any]], connections: list[tuple]) -> dict[str, Any]:
         """
         Prepares a unified topology state for the Web viewer and GUI.
         """

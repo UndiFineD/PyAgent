@@ -24,7 +24,8 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .TestLogEntry import TestLogEntry
 from contextlib import contextmanager
-from typing import Any, Dict, Iterator, List, Optional
+from typing import Any, Dict, List, Optional
+from collections.abc import Iterator
 
 __version__ = VERSION
 
@@ -44,8 +45,8 @@ class TestLogger:
 
     def __init__(self) -> None:
         """Initialize logger."""
-        self._logs: Dict[str, List[TestLogEntry]] = {}
-        self._current_test: Optional[str] = None
+        self._logs: dict[str, list[TestLogEntry]] = {}
+        self._current_test: str | None = None
 
     def _log(self, level: str, message: str, **extra: Any) -> None:
         """Internal log method."""
@@ -78,7 +79,7 @@ class TestLogger:
         self._log("ERROR", message, **extra)
 
     @contextmanager
-    def capture(self, test_name: str) -> Iterator["TestLogger"]:
+    def capture(self, test_name: str) -> Iterator[TestLogger]:
         """Context manager to capture logs for a test.
 
         Args:
@@ -95,11 +96,11 @@ class TestLogger:
         finally:
             self._current_test = old_test
 
-    def get_logs(self, test_name: str) -> List[TestLogEntry]:
+    def get_logs(self, test_name: str) -> list[TestLogEntry]:
         """Get logs for a test."""
         return self._logs.get(test_name, [])
 
-    def get_errors(self, test_name: str) -> List[TestLogEntry]:
+    def get_errors(self, test_name: str) -> list[TestLogEntry]:
         """Get error logs for a test."""
         return [entry for entry in self.get_logs(test_name) if entry.level == "ERROR"]
 

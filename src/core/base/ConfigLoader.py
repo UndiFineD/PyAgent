@@ -50,14 +50,14 @@ class ConfigLoader:
         '.ini': ConfigFormat.INI,
     }
 
-    def __init__(self, config_path: Optional[Path] = None) -> None:
+    def __init__(self, config_path: Path | None = None) -> None:
         """Initialize the config loader.
 
         Args:
             config_path: Path to configuration file.
         """
         self.config_path = config_path
-        self.format: Optional[ConfigFormat] = None
+        self.format: ConfigFormat | None = None
 
         if config_path:
             ext = config_path.suffix.lower()
@@ -159,7 +159,7 @@ class ConfigLoader:
         )
 
     @staticmethod
-    def find_config_file(repo_root: Path) -> Optional[Path]:
+    def find_config_file(repo_root: Path) -> Path | None:
         """Find configuration file in repository.
 
         Args:

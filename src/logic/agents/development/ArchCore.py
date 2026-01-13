@@ -34,10 +34,10 @@ class ArchCore:
     """Pure logic core for architectural analysis."""
 
     @staticmethod
-    def calculate_coupling_metrics(graph: Dict[str, list]) -> Dict[str, Any]:
+    def calculate_coupling_metrics(graph: dict[str, list]) -> dict[str, Any]:
         """Calculates in-degree and out-degree metrics for a dependency graph."""
         out_degree = {k: len(v) for k, v in graph.items()}
-        in_degree: Dict[str, int] = {}
+        in_degree: dict[str, int] = {}
         
         for src, targets in graph.items():
             for t in targets:
@@ -49,7 +49,7 @@ class ArchCore:
         }
 
     @staticmethod
-    def identify_hotspots(metrics: Dict[str, Any], limit: int = 5) -> Tuple[List[Tuple[str, int]], List[Tuple[str, int]]]:
+    def identify_hotspots(metrics: dict[str, Any], limit: int = 5) -> tuple[list[tuple[str, int]], list[tuple[str, int]]]:
         """Identifies top hotspots (high out-degree) and hubs (high in-degree)."""
         out_degree = metrics.get("out_degree", {})
         in_degree = metrics.get("in_degree", {})
@@ -60,7 +60,7 @@ class ArchCore:
         return top_out, top_in
 
     @staticmethod
-    def suggest_patterns(module_name: str, out_degree: int, in_degree: int) -> List[str]:
+    def suggest_patterns(module_name: str, out_degree: int, in_degree: int) -> list[str]:
         """Suggests architectural patterns based on metrics."""
         suggestions = []
         if out_degree > 10:

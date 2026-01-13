@@ -39,7 +39,7 @@ class SubagentCore:
     def __init__(self, runner: SubagentRunner) -> None:
         self.runner = runner
 
-    def run_subagent(self, description: str, prompt: str, original_content: str = "") -> Optional[str]:
+    def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str | None:
         """Run a subagent using available backends."""
         backend_env = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()
         use_cache = os.environ.get("DV_AGENT_CACHE", "true").lower() == "true"
@@ -60,33 +60,33 @@ class SubagentCore:
         full_prompt = BackendHandlers.build_full_prompt(description, prompt, original_content)
         repo_root = self.runner._resolve_repo_root()
 
-        def _try_codex_cli() -> Optional[str]:
+        def _try_codex_cli() -> str | None:
             if not self.runner._command_available('codex'):
                 return None
             return BackendHandlers.try_codex_cli(full_prompt, repo_root)
 
-        def _try_copilot_cli() -> Optional[str]:
+        def _try_copilot_cli() -> str | None:
             if not self.runner._command_available('copilot'):
                 return None
             return BackendHandlers.try_copilot_cli(full_prompt, repo_root)
 
-        def _try_gh_copilot(allow_non_command: bool) -> Optional[str]:
+        def _try_gh_copilot(allow_non_command: bool) -> str | None:
             if not self.runner._command_available('gh'):
                 return None
             if not allow_non_command and not self.runner._looks_like_command(prompt):
                 return None
             return BackendHandlers.try_gh_copilot(full_prompt, repo_root, allow_non_command)
 
-        def _try_github_models() -> Optional[str]:
+        def _try_github_models() -> str | None:
             return BackendHandlers.try_github_models(full_prompt, self.runner.requests)
 
-        def _try_vllm() -> Optional[str]:
+        def _try_vllm() -> str | None:
             return self.runner.llm_client.llm_chat_via_vllm(full_prompt, model="llama3")
 
-        def _try_ollama() -> Optional[str]:
+        def _try_ollama() -> str | None:
             return self.runner.llm_client.llm_chat_via_ollama(full_prompt, model="llama3")
 
-        def _try_openai_api() -> Optional[str]:
+        def _try_openai_api() -> str | None:
             return BackendHandlers.try_openai_api(full_prompt, self.runner.requests)
 
         res = None
@@ -129,8 +129,8 @@ class SubagentCore:
         prompt: str,
         model: str,
         system_prompt: str = "You are a helpful assistant.",
-        base_url: Optional[str] = None,
-        token: Optional[str] = None,
+        base_url: str | None = None,
+        token: str | None = None,
         timeout_s: int = 60,
         max_retries: int = 2,
         use_cache: bool = True,

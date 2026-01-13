@@ -17,7 +17,7 @@ class MultiModalCore:
             return base64.b64encode(image_file.read()).decode('utf-8')
 
     @staticmethod
-    def construct_vision_payload(model: str, prompt: str, base64_image: str) -> Dict[str, Any]:
+    def construct_vision_payload(model: str, prompt: str, base64_image: str) -> dict[str, Any]:
         """
         Constructs a payload for a vision model (OpenAI-style).
         """
@@ -41,7 +41,7 @@ class MultiModalCore:
         }
 
     @staticmethod
-    def parse_bug_report(vision_response: str) -> Dict[str, Any]:
+    def parse_bug_report(vision_response: str) -> dict[str, Any]:
         """
         Simplifies vision response into a structured bug report.
         """

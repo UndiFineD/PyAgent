@@ -41,7 +41,7 @@ class PrivacyGuardAgent(BaseAgent):
         }
         self.redaction_logs = []
 
-    def scan_and_redact(self, text: str) -> Dict[str, Any]:
+    def scan_and_redact(self, text: str) -> dict[str, Any]:
         """Scans text for PII patterns and returns redacted version."""
         original_text = text
         redacted_text = text
@@ -70,7 +70,7 @@ class PrivacyGuardAgent(BaseAgent):
             "findings": findings
         }
 
-    def verify_message_safety(self, message: str) -> Dict[str, Any]:
+    def verify_message_safety(self, message: str) -> dict[str, Any]:
         """Returns safety report; 'safe': True if no PII is detected."""
         result = self.scan_and_redact(message)
         if result['pii_detected']:
@@ -80,7 +80,7 @@ class PrivacyGuardAgent(BaseAgent):
             }
         return {"safe": True}
 
-    def get_privacy_metrics(self) -> Dict[str, Any]:
+    def get_privacy_metrics(self) -> dict[str, Any]:
         """Returns summary metrics for privacy protection efforts."""
         return {
             "total_redactions": len(self.redaction_logs),

@@ -34,7 +34,7 @@ __version__ = VERSION
 
 class AgentColumn:
     """A vertical column representing a single agent's controls and logs."""
-    def __init__(self, parent: tk.Widget, agent_name: str, callbacks: Dict[str, Any]) -> None:
+    def __init__(self, parent: tk.Widget, agent_name: str, callbacks: dict[str, Any]) -> None:
         self.agent_name = agent_name
         self.callbacks = callbacks
         

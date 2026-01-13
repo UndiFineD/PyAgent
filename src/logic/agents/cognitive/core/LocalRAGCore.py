@@ -7,7 +7,7 @@ from dataclasses import dataclass
 class RAGShard:
     """Metadata for a localized vector shard."""
     path: str
-    tags: List[str]
+    tags: list[str]
     document_count: int
     last_updated: float
 
@@ -16,7 +16,7 @@ class LocalRAGCore:
     Handles shard selection, path-based routing, and context relevance.
     """
     
-    def route_query_to_shards(self, query: str, query_path: str, available_shards: List[RAGShard]) -> List[str]:
+    def route_query_to_shards(self, query: str, query_path: str, available_shards: list[RAGShard]) -> list[str]:
         """Routes a query to the most relevant localized shards based on file path."""
         # Preference: direct path match > parent path match > tag match
         selected = []
@@ -34,7 +34,7 @@ class LocalRAGCore:
         boost = 1.0 / (1.0 + path_proximity)
         return original_score * (1.0 + boost)
 
-    def extract_local_context_markers(self, content: str) -> List[str]:
+    def extract_local_context_markers(self, content: str) -> list[str]:
         """Identifies key symbols/imports to use as local context anchors."""
         markers = []
         if "import" in content:

@@ -18,7 +18,7 @@ class SynthesisCore:
             "class {name}(metaclass=Singleton): pass"
         ]
 
-    def generate_python_edge_cases(self, count: int) -> List[str]:
+    def generate_python_edge_cases(self, count: int) -> list[str]:
         """Generates synthetic Python snippets based on templates."""
         results = []
         for i in range(count):
@@ -26,7 +26,7 @@ class SynthesisCore:
             results.append(tpl.format(name=f"func_{i}", context=f"ctx_{i}"))
         return results
 
-    def vectorize_insight(self, insight: str) -> List[float]:
+    def vectorize_insight(self, insight: str) -> list[float]:
         """
         Simulated vectorization of a text insight.
         Returns a mock embedding vector.
@@ -37,7 +37,7 @@ class SynthesisCore:
         random.seed(seed)
         return [random.uniform(-1, 1) for _ in range(128)]
 
-    def merge_feature_vectors(self, vectors: List[List[float]]) -> List[float]:
+    def merge_feature_vectors(self, vectors: list[list[float]]) -> list[float]:
         """Averages multiple feature vectors into a single swarm insight."""
         if not vectors:
             return [0.0] * 128

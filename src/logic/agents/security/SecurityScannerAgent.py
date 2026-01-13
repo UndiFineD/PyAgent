@@ -42,7 +42,7 @@ class SecurityScanner:
         >>> vulns=scanner.scan("password='secret123'")
     """
 
-    SECURITY_PATTERNS: List[Tuple[str, SecurityIssueType, str, str, str]] = [
+    SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [
         (r'password\s*=\s*[\'"][^\'"]+[\'"]',
          SecurityIssueType.HARDCODED_SECRET, "high",
          "Hardcoded password detected",
@@ -71,9 +71,9 @@ class SecurityScanner:
 
     def __init__(self) -> None:
         """Initialize the security scanner."""
-        self.vulnerabilities: List[SecurityVulnerability] = []
+        self.vulnerabilities: list[SecurityVulnerability] = []
 
-    def scan(self, content: str) -> List[SecurityVulnerability]:
+    def scan(self, content: str) -> list[SecurityVulnerability]:
         """Scan code for security vulnerabilities.
 
         Args:

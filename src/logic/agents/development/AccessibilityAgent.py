@@ -54,7 +54,7 @@ class AccessibilityAgent:
     """
 
     # WCAG criterion to issue type mapping
-    WCAG_CRITERIA: Dict[str, Tuple[AccessibilityIssueType, str]] = {
+    WCAG_CRITERIA: dict[str, tuple[AccessibilityIssueType, str]] = {
         "1.1.1": (AccessibilityIssueType.MISSING_ALT_TEXT, "Non-text Content"),
         "1.3.1": (AccessibilityIssueType.SEMANTIC_HTML, "Info and Relationships"),
         "1.4.3": (AccessibilityIssueType.LOW_COLOR_CONTRAST, "Contrast (Minimum)"),
@@ -74,8 +74,8 @@ class AccessibilityAgent:
             target_level: Target WCAG conformance level.
         """
         self.target_level: WCAGLevel = target_level
-        self.issues: List[AccessibilityIssue] = []
-        self.rules: Dict[str, bool] = {rule: True for rule in self.WCAG_CRITERIA}
+        self.issues: list[AccessibilityIssue] = []
+        self.rules: dict[str, bool] = {rule: True for rule in self.WCAG_CRITERIA}
         logging.debug(f"AccessibilityAgent initialized with level {target_level.value}")
 
     def analyze_file(self, file_path: str) -> AccessibilityReport:
@@ -190,7 +190,7 @@ class AccessibilityAgent:
                 )
             )
         # Check heading hierarchy
-        heading_levels: List[int] = []
+        heading_levels: list[int] = []
         for match in re.finditer(r'<h([1-6])', content, re.IGNORECASE):
             heading_levels.append(int(match.group(1)))
         if heading_levels:
@@ -385,7 +385,7 @@ class AccessibilityAgent:
                 score -= 2
         score = max(0, score)
         # Generate recommendations
-        recommendations: List[str] = []
+        recommendations: list[str] = []
         if critical_count > 0:
             recommendations.append("Address critical accessibility issues immediately")
         if serious_count > 0:
@@ -406,7 +406,7 @@ class AccessibilityAgent:
     def get_issues_by_severity(
         self,
         severity: AccessibilitySeverity
-    ) -> List[AccessibilityIssue]:
+    ) -> list[AccessibilityIssue]:
         """Get issues filtered by severity.
 
         Args:
@@ -420,7 +420,7 @@ class AccessibilityAgent:
     def get_issues_by_wcag_level(
         self,
         level: WCAGLevel
-    ) -> List[AccessibilityIssue]:
+    ) -> list[AccessibilityIssue]:
         """Get issues filtered by WCAG level.
 
         Args:

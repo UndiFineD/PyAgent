@@ -50,7 +50,7 @@ class FileLockManager:
         Args:
             lock_timeout: Default lock timeout in seconds.
         """
-        self.locks: Dict[str, FileLock] = {}
+        self.locks: dict[str, FileLock] = {}
         self.lock_timeout = lock_timeout
         self._lock = threading.Lock()
         self._condition = threading.Condition(self._lock)
@@ -58,7 +58,7 @@ class FileLockManager:
 
     def acquire_lock(self, file_path: Path,
                      lock_type: LockType = LockType.EXCLUSIVE,
-                     timeout: Optional[float] = None) -> Optional[FileLock]:
+                     timeout: float | None = None) -> FileLock | None:
         """Acquire a lock on a file.
 
         Args:

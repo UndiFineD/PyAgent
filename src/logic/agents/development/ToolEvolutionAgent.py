@@ -63,7 +63,7 @@ class ToolEvolutionAgent(BaseAgent):
         if not path.exists():
             return f"Error: Recording at {recording_path} not found."
             
-        with open(path, "r") as f:
+        with open(path) as f:
             events = json.load(f)
             
         if not events:

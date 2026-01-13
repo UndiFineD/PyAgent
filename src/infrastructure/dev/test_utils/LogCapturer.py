@@ -33,11 +33,11 @@ class LogCapturer:
     def __init__(self, level: int = logging.INFO) -> None:
         """Initialize log capturer."""
         self.level = level
-        self.logs: List[logging.LogRecord] = []
+        self.logs: list[logging.LogRecord] = []
         self.handler = logging.Handler()
         self.handler.emit = lambda record: self.logs.append(record)
 
-    def __enter__(self) -> "LogCapturer":
+    def __enter__(self) -> LogCapturer:
         self.start()
         return self
 
@@ -54,7 +54,7 @@ class LogCapturer:
         """Stop capturing logs."""
         logging.getLogger().removeHandler(self.handler)
 
-    def get_logs(self, level: Optional[int] = None) -> List[str]:
+    def get_logs(self, level: int | None = None) -> list[str]:
         """Get captured log messages."""
         if level is None:
             return [record.getMessage() for record in self.logs]

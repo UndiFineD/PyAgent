@@ -29,7 +29,7 @@ class StabilityCore:
         
         return min(max(score, 0.0), 1.0)
 
-    def is_in_stasis(self, score_history: List[float]) -> bool:
+    def is_in_stasis(self, score_history: list[float]) -> bool:
         """Determines if the swarm is in 'Digital Stasis' (too rigid)."""
         if len(score_history) < 10:
             return False

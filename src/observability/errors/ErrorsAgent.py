@@ -38,7 +38,7 @@ import re
 
 # Default error patterns
 
-DEFAULT_ERROR_PATTERNS: List[ErrorPattern] = [
+DEFAULT_ERROR_PATTERNS: list[ErrorPattern] = [
     ErrorPattern(
         name="undefined_variable",
         regex=r"NameError: name '(\w+)' is not defined",
@@ -86,12 +86,12 @@ class ErrorsAgent(BaseAgent):
         self._validate_error_file_path()
         self._check_associated_file()
         # New features
-        self._errors: List[ErrorEntry] = []
-        self._clusters: Dict[str, ErrorCluster] = {}
-        self._patterns: List[ErrorPattern] = list(DEFAULT_ERROR_PATTERNS)
-        self._suppression_rules: List[SuppressionRule] = []
-        self._annotations: Dict[str, List[str]] = {}  # error_id -> annotations
-        self._statistics: Dict[str, Any] = {}
+        self._errors: list[ErrorEntry] = []
+        self._clusters: dict[str, ErrorCluster] = {}
+        self._patterns: list[ErrorPattern] = list(DEFAULT_ERROR_PATTERNS)
+        self._suppression_rules: list[SuppressionRule] = []
+        self._annotations: dict[str, list[str]] = {}  # error_id -> annotations
+        self._statistics: dict[str, Any] = {}
 
     def _validate_error_file_path(self) -> None:
         """Validate that the file has the correct extension."""
@@ -146,11 +146,11 @@ class ErrorsAgent(BaseAgent):
             self._auto_categorize_error(error)
         return error
 
-    def get_errors(self) -> List[ErrorEntry]:
+    def get_errors(self) -> list[ErrorEntry]:
         """Get all errors."""
         return self._errors
 
-    def get_error_by_id(self, error_id: str) -> Optional[ErrorEntry]:
+    def get_error_by_id(self, error_id: str) -> ErrorEntry | None:
         """Get an error by ID."""
         return next((e for e in self._errors if e.id == error_id), None)
 
@@ -165,15 +165,15 @@ class ErrorsAgent(BaseAgent):
             return True
         return False
 
-    def get_unresolved_errors(self) -> List[ErrorEntry]:
+    def get_unresolved_errors(self) -> list[ErrorEntry]:
         """Get all unresolved errors."""
         return [e for e in self._errors if not e.resolved]
 
-    def get_errors_by_severity(self, severity: ErrorSeverity) -> List[ErrorEntry]:
+    def get_errors_by_severity(self, severity: ErrorSeverity) -> list[ErrorEntry]:
         """Get errors filtered by severity."""
         return [e for e in self._errors if e.severity == severity]
 
-    def get_errors_by_category(self, category: ErrorCategory) -> List[ErrorEntry]:
+    def get_errors_by_category(self, category: ErrorCategory) -> list[ErrorEntry]:
         """Get errors filtered by category."""
         return [e for e in self._errors if e.category == category]
 
@@ -191,7 +191,7 @@ class ErrorsAgent(BaseAgent):
             base_score -= 50  # Already resolved
         return max(0, min(100, base_score))
 
-    def prioritize_errors(self) -> List[ErrorEntry]:
+    def prioritize_errors(self) -> list[ErrorEntry]:
         """Return errors sorted by priority (highest first)."""
         return sorted(
             self._errors,
@@ -200,9 +200,9 @@ class ErrorsAgent(BaseAgent):
         )
 
     # ========== Error Clustering ==========
-    def cluster_similar_errors(self) -> Dict[str, ErrorCluster]:
+    def cluster_similar_errors(self) -> dict[str, ErrorCluster]:
         """Cluster similar errors together."""
-        clusters: Dict[str, List[ErrorEntry]] = {}
+        clusters: dict[str, list[ErrorEntry]] = {}
         for error in self._errors:
             # Create cluster key from error pattern
             cluster_key = self._get_cluster_key(error)
@@ -230,11 +230,11 @@ class ErrorsAgent(BaseAgent):
         normalized = re.sub(r"\d+", "<num>", normalized)
         return f"{error.category.value}:{normalized}"
 
-    def get_cluster(self, cluster_id: str) -> Optional[ErrorCluster]:
+    def get_cluster(self, cluster_id: str) -> ErrorCluster | None:
         """Get a cluster by ID."""
         return self._clusters.get(cluster_id)
 
-    def get_errors_in_cluster(self, cluster_id: str) -> List[ErrorEntry]:
+    def get_errors_in_cluster(self, cluster_id: str) -> list[ErrorEntry]:
         """Get all errors in a cluster."""
         cluster = self._clusters.get(cluster_id)
         if not cluster:
@@ -246,7 +246,7 @@ class ErrorsAgent(BaseAgent):
         """Add a custom error pattern."""
         self._patterns.append(pattern)
 
-    def recognize_pattern(self, error: ErrorEntry) -> Optional[ErrorPattern]:
+    def recognize_pattern(self, error: ErrorEntry) -> ErrorPattern | None:
         """Recognize if an error matches a known pattern."""
         for pattern in self._patterns:
             if re.search(pattern.regex, error.message):
@@ -266,7 +266,7 @@ class ErrorsAgent(BaseAgent):
             if not error.suggested_fix:
                 error.suggested_fix = pattern.suggested_fix
 
-    def get_pattern_statistics(self) -> Dict[str, int]:
+    def get_pattern_statistics(self) -> dict[str, int]:
         """Get statistics on pattern occurrences."""
         return {p.name: p.occurrences for p in self._patterns}
 
@@ -275,7 +275,7 @@ class ErrorsAgent(BaseAgent):
         self,
         pattern: str,
         reason: str,
-        expires: Optional[str] = None,
+        expires: str | None = None,
         created_by: str = ""
     ) -> SuppressionRule:
         """Add a suppression rule."""
@@ -313,7 +313,7 @@ class ErrorsAgent(BaseAgent):
                 return True
         return False
 
-    def get_suppression_rules(self) -> List[SuppressionRule]:
+    def get_suppression_rules(self) -> list[SuppressionRule]:
         """Get all suppression rules."""
         return self._suppression_rules
 
@@ -328,15 +328,15 @@ class ErrorsAgent(BaseAgent):
         )
         return True
 
-    def get_annotations(self, error_id: str) -> List[str]:
+    def get_annotations(self, error_id: str) -> list[str]:
         """Get annotations for an error."""
         return self._annotations.get(error_id, [])
 
     # ========== Deduplication ==========
     def deduplicate_errors(self) -> int:
         """Remove duplicate errors, returns count removed."""
-        seen: Set[str] = set()
-        unique: List[ErrorEntry] = []
+        seen: set[str] = set()
+        unique: list[ErrorEntry] = []
         removed = 0
         for error in self._errors:
             key = f"{error.message}:{error.file_path}:{error.line_number}"
@@ -349,7 +349,7 @@ class ErrorsAgent(BaseAgent):
         return removed
 
     # ========== Statistics ==========
-    def calculate_statistics(self) -> Dict[str, Any]:
+    def calculate_statistics(self) -> dict[str, Any]:
         """Calculate error statistics."""
         total = len(self._errors)
         resolved = len([e for e in self._errors if e.resolved])
@@ -398,7 +398,7 @@ class ErrorsAgent(BaseAgent):
     def export_errors(self, format: str = "json") -> str:
         """Export errors to various formats."""
         if format == "json":
-            data: List[Dict[str, Any]] = [{
+            data: list[dict[str, Any]] = [{
                 "id": e.id,
                 "message": e.message,
                 "file": e.file_path,

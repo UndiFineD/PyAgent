@@ -43,7 +43,7 @@ class PersonalityCoreAgent(BaseAgent):
         self.current_vibe = "neutral"
 
     @as_tool
-    def set_vibe_track(self, user_input: str) -> Dict[str, Any]:
+    def set_vibe_track(self, user_input: str) -> dict[str, Any]:
         """
         Analyzes user input and sets the fleet-wide emotional/operational vibe.
         """

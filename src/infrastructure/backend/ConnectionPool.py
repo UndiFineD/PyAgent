@@ -39,16 +39,16 @@ class ConnectionPool:
     caching 'working' status for 15 minutes.
     """
 
-    def __init__(self, max_connections: int = 10, timeout_s: float = 30.0, cache_file: Optional[str] = None) -> None:
+    def __init__(self, max_connections: int = 10, timeout_s: float = 30.0, cache_file: str | None = None) -> None:
         """Initialize connection pool."""
         self.max_connections = max_connections
         self.timeout_s = timeout_s
-        self._pools: Dict[str, List[Any]] = {}
-        self._in_use: Dict[str, int] = {}
+        self._pools: dict[str, list[Any]] = {}
+        self._in_use: dict[str, int] = {}
         self._lock = threading.Lock()
         
         # Phase 108: Status Caching (15 minute TTL)
-        self.status_cache: Dict[str, Dict[str, Any]] = {}
+        self.status_cache: dict[str, dict[str, Any]] = {}
         self.cache_ttl = 900 # 15 minutes
         self.cache_file = Path(cache_file) if cache_file else None
         self._load_status_cache()
@@ -128,7 +128,7 @@ class ConnectionPool:
                 self._pools[backend].append(connection)
                 self._in_use[backend] = max(0, self._in_use.get(backend, 1) - 1)
 
-    def _create_connection(self, backend: str) -> Dict[str, Any]:
+    def _create_connection(self, backend: str) -> dict[str, Any]:
         """Create a new connection.
 
         Args:
@@ -143,7 +143,7 @@ class ConnectionPool:
             "id": str(uuid.uuid4()),
         }
 
-    def get_stats(self) -> Dict[str, Dict[str, int]]:
+    def get_stats(self) -> dict[str, dict[str, int]]:
         """Get pool statistics.
 
         Returns:

@@ -9,7 +9,7 @@ class MorphologyCore:
     It identifies logical overlap and proposes architectural shifts.
     """
 
-    def calculate_path_overlap(self, path_a: List[str], path_b: List[str]) -> float:
+    def calculate_path_overlap(self, path_a: list[str], path_b: list[str]) -> float:
         """
         Calculates Jaccard similarity between two agent logic paths.
         Overlap > 0.8 triggers a 'MERGE' proposal.
@@ -21,7 +21,7 @@ class MorphologyCore:
         union = len(set_a.union(set_b))
         return intersection / union
 
-    def encode_agent_dna(self, name: str, tools: List[str], prompt: str, model: str) -> str:
+    def encode_agent_dna(self, name: str, tools: list[str], prompt: str, model: str) -> str:
         """
         Encodes the agent's DNA into a JSON string.
         """
@@ -36,7 +36,7 @@ class MorphologyCore:
         }
         return json.dumps(dna)
 
-    def propose_split(self, load_stats: Dict[str, float]) -> List[str]:
+    def propose_split(self, load_stats: dict[str, float]) -> list[str]:
         """
         If an agent's load is too high, it proposes splitting into sub-specialists.
         """

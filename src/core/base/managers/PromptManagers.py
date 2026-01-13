@@ -34,7 +34,7 @@ class PromptTemplateManager:
 
     def __init__(self) -> None:
         """Initialize the template manager."""
-        self.templates: Dict[str, PromptTemplate] = {}
+        self.templates: dict[str, PromptTemplate] = {}
 
     def register(self, template: PromptTemplate) -> None:
         """Register a prompt template."""
@@ -50,14 +50,14 @@ class PromptVersion:
 
     def __init__(
         self,
-        version: Optional[str] = None,
-        content: Optional[str] = None,
+        version: str | None = None,
+        content: str | None = None,
         description: str = "",
         active: bool = True,
-        version_id: Optional[str] = None,
-        template_id: Optional[str] = None,
-        variant: Optional[str] = None,
-        prompt_text: Optional[str] = None,
+        version_id: str | None = None,
+        template_id: str | None = None,
+        variant: str | None = None,
+        prompt_text: str | None = None,
         weight: float = 1.0
     ) -> None:
         self.version = version or version_id or ""
@@ -65,7 +65,7 @@ class PromptVersion:
         self.description = description
         self.active = active
         self.created_at = datetime.now()
-        self.metrics: Dict[str, float] = {}
+        self.metrics: dict[str, float] = {}
         self.version_id = self.version
         self.template_id = template_id or ""
         self.variant = variant or ""
@@ -76,11 +76,11 @@ class PromptVersionManager:
     """Manager for prompt versioning and A/B testing."""
 
     def __init__(self) -> None:
-        self.versions: Dict[str, PromptVersion] = {}
-        self.active_version: Optional[str] = None
-        self.metrics: Dict[str, Dict[str, float]] = {}
-        self._old_api_versions: Dict[str, List[PromptVersion]] = {}
-        self.selection_history: List[Dict[str, Any]] = []
+        self.versions: dict[str, PromptVersion] = {}
+        self.active_version: str | None = None
+        self.metrics: dict[str, dict[str, float]] = {}
+        self._old_api_versions: dict[str, list[PromptVersion]] = {}
+        self.selection_history: list[dict[str, Any]] = []
         logging.debug("PromptVersionManager initialized")
 
     def register_version(self, version: PromptVersion) -> None:
@@ -102,17 +102,17 @@ class PromptVersionManager:
             self.active_version = version
             self.versions[version].active = True
 
-    def get_active(self) -> Optional[PromptVersion]:
+    def get_active(self) -> PromptVersion | None:
         if self.active_version and self.active_version in self.versions:
             return self.versions[self.active_version]
         return None
 
-    def get_versions(self, template_id: str = "") -> List[PromptVersion]:
+    def get_versions(self, template_id: str = "") -> list[PromptVersion]:
         if template_id:
             return self._old_api_versions.get(template_id, [])
         return list(self.versions.values())
 
-    def select_version(self, template_id: str = "") -> Optional[PromptVersion]:
+    def select_version(self, template_id: str = "") -> PromptVersion | None:
         versions = self.get_versions(template_id)
         if not versions:
             return None
@@ -144,11 +144,11 @@ class PromptVersionManager:
         if version_id in self.versions:
             self.versions[version_id].metrics[metric_name] = value
 
-    def get_best_version(self, template_id: str = "", metric: str = "quality") -> Optional[PromptVersion]:
+    def get_best_version(self, template_id: str = "", metric: str = "quality") -> PromptVersion | None:
         versions = self.get_versions(template_id) if template_id else list(self.versions.values())
         if not versions:
             return None
-        best: Optional[PromptVersion] = None
+        best: PromptVersion | None = None
         best_score = -float('inf')
         for version in versions:
             score = version.metrics.get(metric, 0)
@@ -157,8 +157,8 @@ class PromptVersionManager:
                 best = version
         return best
 
-    def generate_report(self, template_id: str = "") -> Dict[str, Any]:
-        report: Dict[str, Any] = {"total_versions": len(self.versions), "versions": {}}
+    def generate_report(self, template_id: str = "") -> dict[str, Any]:
+        report: dict[str, Any] = {"total_versions": len(self.versions), "versions": {}}
         for version_id, version in self.versions.items():
             report["versions"][version_id] = {
                 "content": version.content,
@@ -167,10 +167,10 @@ class PromptVersionManager:
             }
         return report
 
-    def get_ab_report(self, template_id: str) -> Dict[str, Any]:
+    def get_ab_report(self, template_id: str) -> dict[str, Any]:
         versions = self.get_versions(template_id)
         selections = [s for s in self.selection_history if s["template_id"] == template_id]
-        report: Dict[str, Any] = {"template_id": template_id, "total_selections": len(selections), "versions": {}}
+        report: dict[str, Any] = {"template_id": template_id, "total_selections": len(selections), "versions": {}}
         for version in versions:
             version_selections = [s for s in selections if s["version_id"] == version.version_id]
             report["versions"][version.version_id] = {

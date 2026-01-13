@@ -45,4 +45,4 @@ class ArchivedReport:
     content: str
     archived_at: float = field(default_factory=time.time)  # type: ignore[assignment]
     retention_days: int = 90
-    metadata: Dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]
+    metadata: dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]

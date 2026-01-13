@@ -47,13 +47,13 @@ class RequestTracer:
 
     def __init__(self) -> None:
         """Initialize request tracer."""
-        self._traces: Dict[str, RequestContext] = {}
+        self._traces: dict[str, RequestContext] = {}
         self._lock = threading.Lock()
 
     def start_trace(
         self,
         description: str,
-        correlation_id: Optional[str] = None,
+        correlation_id: str | None = None,
         priority: RequestPriority = RequestPriority.NORMAL,
     ) -> RequestContext:
         """Start a new trace.
@@ -83,7 +83,7 @@ class RequestTracer:
         request_id: str,
         success: bool,
         response_size: int = 0,
-    ) -> Optional[float]:
+    ) -> float | None:
         """End a trace and return duration.
 
         Args:
@@ -106,7 +106,7 @@ class RequestTracer:
         )
         return duration
 
-    def get_active_traces(self) -> List[RequestContext]:
+    def get_active_traces(self) -> list[RequestContext]:
         """Get all active traces."""
         with self._lock:
             return list(self._traces.values())

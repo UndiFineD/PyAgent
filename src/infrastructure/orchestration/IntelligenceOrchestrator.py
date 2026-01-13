@@ -35,8 +35,8 @@ class IntelligenceOrchestrator:
     def __init__(self, fleet_manager: Any) -> None:
         self.fleet_manager = fleet_manager
         self.workspace_root = str(getattr(fleet_manager, "workspace_root", "."))
-        self.insight_pool: List[Dict[str, Any]] = []
-        self.patterns: List[str] = []
+        self.insight_pool: list[dict[str, Any]] = []
+        self.patterns: list[str] = []
         self.core = IntelligenceCore(workspace_root=self.workspace_root)
         
         # Phase 108: Native AI for collective synthesis
@@ -53,7 +53,7 @@ class IntelligenceOrchestrator:
             "timestamp": time.time()
         })
 
-    def synthesize_collective_intelligence(self) -> List[str]:
+    def synthesize_collective_intelligence(self) -> list[str]:
         """Analyzes the pool and recent SQL lessons using local AI to find shared patterns."""
         # Delegate filtering to Core
         sql_lessons = []
@@ -98,7 +98,7 @@ class IntelligenceOrchestrator:
 
         return []
 
-    def get_intelligence_report(self) -> Dict[str, Any]:
+    def get_intelligence_report(self) -> dict[str, Any]:
         """Summarizes the current state of collective knowledge."""
         return {
             "insights_collected": len(self.insight_pool),
@@ -106,7 +106,7 @@ class IntelligenceOrchestrator:
             "top_patterns": self.patterns[:3]
         }
 
-    def get_actionable_improvement_tasks(self) -> List[Dict[str, Any]]:
+    def get_actionable_improvement_tasks(self) -> list[dict[str, Any]]:
         """
         Extracts specific, actionable coding tasks from the synthesized intelligence.
         Designed for the SelfImprovementOrchestrator to ingest (Phase 108).

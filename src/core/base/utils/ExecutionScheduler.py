@@ -46,13 +46,13 @@ class ExecutionScheduler:
 
     def __init__(self) -> None:
         """Initialize scheduler."""
-        self._schedules: Dict[str, ScheduledExecution] = {}
+        self._schedules: dict[str, ScheduledExecution] = {}
 
     def add_schedule(
         self,
         name: str,
         cron: str,
-        agent_config: Optional[Dict[str, Any]] = None,
+        agent_config: dict[str, Any] | None = None,
     ) -> None:
         """Add a schedule.
 
@@ -129,7 +129,7 @@ class ExecutionScheduler:
             schedule.last_run = time.time()
             schedule.next_run = self._calculate_next_run(schedule.cron)
 
-    def get_config(self, name: str) -> Dict[str, Any]:
+    def get_config(self, name: str) -> dict[str, Any]:
         """Get agent configuration for schedule.
 
         Args:

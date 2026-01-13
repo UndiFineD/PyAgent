@@ -46,7 +46,7 @@ class SnapshotManager:
         """
         self.snapshot_dir = snapshot_dir
         self.snapshot_dir.mkdir(parents=True, exist_ok=True)
-        self._snapshots: Dict[str, TestSnapshot] = {}
+        self._snapshots: dict[str, TestSnapshot] = {}
 
     def _get_snapshot_path(self, name: str) -> Path:
         """Get path for a snapshot."""
@@ -76,7 +76,7 @@ class SnapshotManager:
         self._snapshots[name] = snapshot
         return snapshot
 
-    def load_snapshot(self, name: str) -> Optional[TestSnapshot]:
+    def load_snapshot(self, name: str) -> TestSnapshot | None:
         """Load an existing snapshot.
 
         Args:
@@ -101,7 +101,7 @@ class SnapshotManager:
         self._snapshots[name] = snapshot
         return snapshot
 
-    def compare_snapshot(self, name: str, actual: Any) -> "SnapshotComparisonResult":
+    def compare_snapshot(self, name: str, actual: Any) -> SnapshotComparisonResult:
         """Compare actual content with a saved snapshot.
 
         Args:
@@ -162,7 +162,7 @@ class SnapshotManager:
 
         return False
 
-    def get_diff(self, name: str, actual: str) -> List[str]:
+    def get_diff(self, name: str, actual: str) -> list[str]:
         """Get diff between snapshot and actual.
 
         Args:

@@ -36,9 +36,9 @@ class EmotionalRegulationOrchestrator:
         self.fleet = fleet
         self.urgency = 0.5 # 0.0 to 1.0 (1.0 = immediate response needed)
         self.patience = 0.5 # 0.0 to 1.0 (1.0 = deep reasoning preferred)
-        self.vibe_history: List[Dict[str, float]] = []
+        self.vibe_history: list[dict[str, float]] = []
 
-    def set_vibe(self, urgency: Optional[float] = None, patience: Optional[float] = None) -> None:
+    def set_vibe(self, urgency: float | None = None, patience: float | None = None) -> None:
         """Adjusts the fleet's emotional state."""
         if urgency is not None:
             self.urgency = max(0.0, min(1.0, urgency))

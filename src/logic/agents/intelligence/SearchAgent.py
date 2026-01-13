@@ -41,15 +41,15 @@ class SearchAgent(BaseAgent):
 
     def __init__(self, context: str) -> None:
         super().__init__(context)
-        self.bing_api_key: Optional[str] = os.environ.get("BING_SEARCH_V7_SUBSCRIPTION_KEY")
+        self.bing_api_key: str | None = os.environ.get("BING_SEARCH_V7_SUBSCRIPTION_KEY")
         self.bing_endpoint: str = os.environ.get("BING_SEARCH_V7_ENDPOINT", "https://api.bing.microsoft.com/v7.0/search")
-        self.google_api_key: Optional[str] = os.environ.get("GOOGLE_SEARCH_API_KEY")
-        self.google_cse_id: Optional[str] = os.environ.get("GOOGLE_SEARCH_CSE_ID")
+        self.google_api_key: str | None = os.environ.get("GOOGLE_SEARCH_API_KEY")
+        self.google_cse_id: str | None = os.environ.get("GOOGLE_SEARCH_CSE_ID")
         
         # Phase 108: Robustness and Intelligence Harvesting
         work_root = getattr(self, "_workspace_root", None)
         self.connectivity: ConnectivityManager = ConnectivityManager(work_root)
-        self.recorder: Optional[LocalContextRecorder] = LocalContextRecorder(Path(work_root)) if work_root else None
+        self.recorder: LocalContextRecorder | None = LocalContextRecorder(Path(work_root)) if work_root else None
         self.core: SearchCore = SearchCore()
         
         logging.info(f"SearchAgent initialized for topic: {context}")

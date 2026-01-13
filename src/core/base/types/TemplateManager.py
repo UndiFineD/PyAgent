@@ -44,7 +44,7 @@ class TemplateManager:
 
     def __init__(self) -> None:
         """Initialize the template manager."""
-        self.templates: Dict[str, EntryTemplate] = {}
+        self.templates: dict[str, EntryTemplate] = {}
 
     def add_template(
         self,
@@ -74,7 +74,7 @@ class TemplateManager:
         self.templates[name] = template
         return template
 
-    def apply_template(self, name: str, values: Dict[str, str]) -> str:
+    def apply_template(self, name: str, values: dict[str, str]) -> str:
         """Apply a template with values.
 
         Args:
@@ -93,7 +93,7 @@ class TemplateManager:
             result = result.replace(f"{{{placeholder}}}", value)
         return result
 
-    def get_template_placeholders(self, name: str) -> List[str]:
+    def get_template_placeholders(self, name: str) -> list[str]:
         """Get placeholders for a template.
 
         Args:

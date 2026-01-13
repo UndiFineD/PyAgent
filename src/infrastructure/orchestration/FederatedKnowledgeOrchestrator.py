@@ -35,7 +35,7 @@ __version__ = VERSION
 class FederatedKnowledgeOrchestrator:
     """Orchestrates the synchronization of cognitive insights across distributed fleets."""
 
-    def __init__(self, fleet_manager: Optional[Any] = None, fleet: Optional[Any] = None) -> None:
+    def __init__(self, fleet_manager: Any | None = None, fleet: Any | None = None) -> None:
         self.fleet = fleet_manager or fleet
         if not self.fleet:
             # Fallback or stub if no fleet provided
@@ -53,9 +53,9 @@ class FederatedKnowledgeOrchestrator:
         if not self.knowledge:
              self.knowledge = KnowledgeAgent(workspace_root)
              
-        self.sync_history: List[Dict[str, Any]] = []
+        self.sync_history: list[dict[str, Any]] = []
 
-    def broadcast_lesson(self, lesson_id: str, lesson_data: Dict[str, Any]) -> Dict[str, Any]:
+    def broadcast_lesson(self, lesson_id: str, lesson_data: dict[str, Any]) -> dict[str, Any]:
         """Broadcasts a successful outcome/lesson to the federated network.
         
         Args:
@@ -86,7 +86,7 @@ class FederatedKnowledgeOrchestrator:
         self.sync_history.append({"id": lesson_id, "status": "broadcasted", "targets": peers})
         return {"status": "success", "peer_count": len(peers), "results": results}
 
-    def receive_and_fuse_knowledge(self, incoming_knowledge: List[Dict[str, Any]]) -> int:
+    def receive_and_fuse_knowledge(self, incoming_knowledge: list[dict[str, Any]]) -> int:
         """Fuses incoming lessons from external fleets into the local Knowledge agent.
         
         Args:
@@ -109,7 +109,7 @@ class FederatedKnowledgeOrchestrator:
             
         return fused_count
 
-    def run_fleet_wide_sync(self) -> Dict[str, Any]:
+    def run_fleet_wide_sync(self) -> dict[str, Any]:
         """Initiates a full sync request to peers by polling for new insights."""
         logging.info("FederatedKnowledge: Starting full peer sync request.")
         
