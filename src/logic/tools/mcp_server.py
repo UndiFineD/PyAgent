@@ -10,12 +10,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -23,12 +17,14 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from fastapi import FastAPI
 from fastapi_mcp import FastApiMCP
 from src.logic.agents.development.SpecToolAgent import SpecToolAgent
 from src.logic.agents.cognitive.GraphMemoryAgent import GraphMemoryAgent
+
+__version__ = VERSION
 
 app = FastAPI(title="PyAgent MCP Server")
 mcp = FastApiMCP(app)

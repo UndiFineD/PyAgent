@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,18 +18,18 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Engine for persistent episodic memory of agent actions and outcomes."""
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import json
 import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 from src.logic.agents.cognitive.context.engines.MemoryCore import MemoryCore
+
+__version__ = VERSION
 
 try:
     import chromadb
@@ -56,8 +50,10 @@ class MemoryEngine:
         self.load()
 
     def _init_db(self) -> Any:
-        if not HAS_CHROMA: return None
-        if self._collection: return self._collection
+        if not HAS_CHROMA:
+            return None
+        if self._collection:
+            return self._collection
         try:
             client = chromadb.PersistentClient(path=str(self.db_path))
             self._collection = client.get_or_create_collection(name="agent_memory")
@@ -94,7 +90,8 @@ class MemoryEngine:
     def update_utility(self, memory_id: str, increment: float) -> None:
         """Updates the utility score of a specific memory episode."""
         collection = self._init_db()
-        if not collection: return
+        if not collection:
+            return
         
         try:
             # Fetch existing metadata

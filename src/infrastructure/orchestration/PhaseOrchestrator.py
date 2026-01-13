@@ -13,7 +13,6 @@
 # limitations under the License.
 
 from __future__ import annotations
-
 import logging
 from typing import Dict, List, Any, TYPE_CHECKING
 

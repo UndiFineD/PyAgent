@@ -13,33 +13,24 @@
 # limitations under the License.
 
 from __future__ import annotations
-
 from src.core.base.version import VERSION
+import hashlib
+import json
+from typing import Any, Dict, List, Optional
+from .enums import TestSourceType
+from .models import (
+    AggregatedResult, ContractTest, TestStatus, VisualRegressionConfig
+)
+
 __version__ = VERSION
 
-# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Testing utilities for visual regression, contract testing, and results aggregation."""
-
-
-
-import hashlib
-import json
-import logging
-from typing import Any, Dict, List, Optional
-
-from .enums import TestSourceType
-from .models import (
-    AggregatedResult, ContractTest, TestStatus, VisualRegressionConfig,
-    BrowserType
-)
-
 
 class VisualRegressionTester:
     """Visual regression testing for UI components."""
@@ -104,7 +95,6 @@ class VisualRegressionTester:
             }
             results.append(result)
         return results
-
 
 class ContractTestRunner:
     """Contract testing for API boundaries."""
@@ -198,7 +188,6 @@ class ContractTestRunner:
             } for c in contracts]
         }
         return json.dumps(pact, indent=2)
-
 
 class ResultAggregator:
     """Aggregate test results from multiple sources."""
@@ -347,7 +336,6 @@ class ResultAggregator:
             trend = "stable"
 
         return {"pass_rate_trend": trend}
-
 
 class TestMetricsCollector:
     """Collect test execution metrics."""

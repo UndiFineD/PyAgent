@@ -10,9 +10,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -20,13 +17,10 @@ from __future__ import annotations
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Script for migrating hardcoded version strings to use the central VERSION import."""
 
-
-
+from __future__ import annotations
 import os
-import re
 
 src_path = r"c:\DEV\PyAgent\src"
 version_import = "from src.core.base.version import VERSION"

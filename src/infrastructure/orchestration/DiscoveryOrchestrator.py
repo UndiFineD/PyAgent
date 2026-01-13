@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,14 +18,16 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import socket
 import threading
 import time
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from zeroconf import IPVersion, ServiceInfo, Zeroconf, ServiceBrowser, ServiceListener
+
+__version__ = VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
@@ -70,7 +66,8 @@ class DiscoveryOrchestrator:
     def _check_circuit(self) -> bool:
         """Checks if the circuit is closed or if a retry is allowed."""
         if self._circuit_open:
-            if time.time() - self._last_retry > 60: # 1 minute cooldown
+            if time.time() - self._last_retry > 60:
+                # 1 minute cooldown
                 logging.info("Discovery: Circuit breaker HALF-OPEN, attempting retry...")
                 self._circuit_open = False
                 self._failure_count = 0
@@ -99,7 +96,8 @@ class DiscoveryOrchestrator:
             return
             
         now = time.time()
-        if now - self._last_advertisement < 30: # Max once every 30 seconds
+        if now - self._last_advertisement < 30:
+            # Max once every 30 seconds
             logging.debug("Discovery: Advertisement rate-limited (Skipping).")
             return
             

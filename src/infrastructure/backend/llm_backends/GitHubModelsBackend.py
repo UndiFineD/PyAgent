@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,13 +18,14 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import os
 from pathlib import Path
-from typing import Any, Dict, Optional
 from .LLMBackend import LLMBackend
+
+__version__ = VERSION
 
 class GitHubModelsBackend(LLMBackend):
     """GitHub Models LLM Backend."""
@@ -48,7 +43,8 @@ class GitHubModelsBackend(LLMBackend):
                 "github-token.txt"
             ]
             for path_str in search_paths:
-                if not path_str: continue
+                if not path_str:
+                    continue
                 path = Path(path_str)
                 if path.exists():
                     try:
@@ -56,7 +52,8 @@ class GitHubModelsBackend(LLMBackend):
                         if token: 
                             logging.debug(f"DEBUG: token found in file: {path}")
                             break
-                    except Exception: continue
+                    except Exception:
+                        continue
 
         # Phase 120: Fallback to GitHub CLI token if possible
         if not token:

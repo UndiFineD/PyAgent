@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,52 +18,25 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Auto-extracted class from agent_errors.py"""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from .ErrorCategory import ErrorCategory
 from .ErrorCluster import ErrorCluster
 from .ErrorEntry import ErrorEntry
 from .ErrorPattern import ErrorPattern
 from .ErrorSeverity import ErrorSeverity
 from .SuppressionRule import SuppressionRule
+from src.core.base.BaseAgent import BaseAgent
+from datetime import datetime
+from typing import Any, Dict, List, Optional, Set
+import hashlib
+import json
+import logging
+import re
 
 # Default error patterns
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 DEFAULT_ERROR_PATTERNS: List[ErrorPattern] = [
     ErrorPattern(
@@ -109,16 +76,7 @@ DEFAULT_ERROR_PATTERNS: List[ErrorPattern] = [
     ),
 ]
 
-from src.core.base.BaseAgent import BaseAgent
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from typing import Any, Dict, List, Optional, Set, Tuple
-import hashlib
-import json
-import logging
-import re
-import subprocess
+__version__ = VERSION
 
 class ErrorsAgent(BaseAgent):
     """Updates code file error reports using AI assistance."""
@@ -302,7 +260,8 @@ class ErrorsAgent(BaseAgent):
         if pattern:
             if error.category == ErrorCategory.OTHER:
                 error.category = pattern.category
-            if error.severity == ErrorSeverity.MEDIUM: # Update if default
+            if error.severity == ErrorSeverity.MEDIUM:
+                # Update if default
                 error.severity = pattern.severity
             if not error.suggested_fix:
                 error.suggested_fix = pattern.suggested_fix

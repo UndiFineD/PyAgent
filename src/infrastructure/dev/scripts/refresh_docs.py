@@ -10,12 +10,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -23,14 +17,16 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import sys
 import os
-os.environ["PYTHONPATH"] = "."
 from src.observability.reports.ReportGenerator import ReportGenerator
 from pathlib import Path
+
+os.environ["PYTHONPATH"] = "."
+__version__ = VERSION
 
 logging.basicConfig(level=logging.INFO, stream=sys.stdout, format="%(levelname)s: %(message)s")
 
@@ -45,4 +41,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

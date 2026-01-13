@@ -10,12 +10,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -23,11 +17,10 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Auto-generated module exports."""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from .AutoFixSuggester import AutoFixSuggester
 from .BlameInfo import BlameInfo
 from .BlameTracker import BlameTracker
@@ -58,36 +51,4 @@ from .TrendAnalyzer import TrendAnalyzer
 from .TrendData import TrendData
 from .TrendDirection import TrendDirection
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+__version__ = VERSION

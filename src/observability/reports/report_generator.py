@@ -11,58 +11,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
-
-
-import sys
-from pathlib import Path
-
 # Ensure project root and src are in path for modular imports
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
+import sys
+from pathlib import Path
+from src.observability.reports import *
 
 root = Path(__file__).resolve().parents[2]
 if str(root) not in sys.path:
@@ -70,7 +31,7 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-from src.observability.reports import *
+__version__ = VERSION
 
 def _sha256_text(text: str) -> str:
     """Helper for legacy tests."""

@@ -1,3 +1,4 @@
+
 """
 Core logic for Entropy Measurement (Phase 172).
 Calculates structural complexity metrics.

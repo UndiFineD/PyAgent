@@ -10,12 +10,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -23,10 +17,12 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import os
 import ast
+
+__version__ = VERSION
 
 def count_real_code(file_path):
     if os.path.basename(file_path) == "__init__.py":
@@ -41,7 +37,8 @@ def count_real_code(file_path):
             tree = ast.parse(content)
             
             real_stmts = 0
-            for node in tree.body: # Only top level
+            for node in tree.body:
+                # Only top level
                 if isinstance(node, (ast.Import, ast.ImportFrom)):
                     continue
                 if isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
@@ -60,7 +57,8 @@ for root, dirs, files in os.walk(src_path):
         if file.endswith(".py"):
             path = os.path.join(root, file)
             count = count_real_code(path)
-            if count <= 2: # Very few real statements
+            if count <= 2:
+                # Very few real statements
                 stubs.append((path, count))
 
 for path, count in sorted(stubs, key=lambda x: x[1]):

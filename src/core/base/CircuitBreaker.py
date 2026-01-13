@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,19 +18,17 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Auto-extracted class from agent.py"""
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
-import random
 import time
 from typing import Any, Callable, Optional, Dict
-
 from src.core.base.core.ResilienceCore import ResilienceCore
 from src.observability.stats.exporters.OTelManager import OTelManager
+
+__version__ = VERSION
 
 class CircuitBreaker:
     """Circuit breaker pattern for failing backends with Jittered Backoff.
@@ -131,7 +123,8 @@ class CircuitBreaker:
             result = func(*args, **kwargs)
             self.on_success()
             return result
-        except Exception:  # noqa: F841
+        except Exception:
+            # noqa: F841
             self.on_failure()
             raise
 

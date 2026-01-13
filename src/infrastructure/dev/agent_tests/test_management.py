@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,29 +18,26 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Test management and baseline utilities."""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from dataclasses import dataclass, field
 from pathlib import Path
 import json
 from typing import Any, Dict, List, Optional, Set, Callable, cast
-
 from .models import TestCase
 
+__version__ = VERSION
 
 def _empty_str_list() -> List[str]:
     return []
-
 
 class BaselineComparisonResult:
     """Result of a baseline comparison."""
     def __init__(self, matches: bool, differences: Optional[List[str]] = None) -> None:
         self.matches = matches
         self.differences = differences or []
-
 
 class BaselineManager:
     """Manage test baselines."""
@@ -91,7 +82,6 @@ class BaselineManager:
         """Update a baseline."""
         self.save_baseline(name, data)
 
-
 class DIContainer:
     """Dependency injection container."""
 
@@ -135,7 +125,6 @@ class DIContainer:
                     self._overrides.pop(name, None)
 
         return override_context()
-
 
 class TestPrioritizer:
     """Prioritizes tests based on various factors."""
@@ -201,7 +190,6 @@ class TestPrioritizer:
         """Rank tests by priority."""
         return sorted(tests, key=lambda t: t.priority.value, reverse=True)
 
-
 class FlakinessDetector:
     """Detects flaky tests."""
 
@@ -228,7 +216,6 @@ class FlakinessDetector:
         fails = len(results) - passes
         return passes > 0 and fails > 0
 
-
 class QuarantineManager:
     """Manages quarantined flaky tests."""
 
@@ -251,7 +238,6 @@ class QuarantineManager:
     def is_quarantined(self, test_name: str) -> bool:
         """Check if test is quarantined."""
         return test_name in self.quarantined
-
 
 class ImpactAnalyzer:
     """Analyzes impact of code changes on tests."""
@@ -297,7 +283,6 @@ class ImpactAnalyzer:
         """Get impacted tests (compat alias)."""
         return self.get_affected_tests(changed_files=changed_files, include_dependencies=False)
 
-
 class ContractValidator:
     """Validates API contracts."""
 
@@ -335,7 +320,6 @@ class ContractValidator:
                 errors.append("body_type_mismatch")
 
         return ContractValidator.ValidationResult(valid=(len(errors) == 0), errors=errors)
-
 
 class TestDocGenerator:
     """Generates documentation from tests."""
@@ -376,4 +360,3 @@ class TestDocGenerator:
                 result[module] = []
             result[module].append(test)
         return result
-

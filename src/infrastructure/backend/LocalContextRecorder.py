@@ -10,12 +10,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -23,14 +17,16 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import json
 import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, Any
 from src.core.base.interfaces import ContextRecorderInterface
+
+__version__ = VERSION
 
 class LocalContextRecorder(ContextRecorderInterface):
     """
@@ -114,7 +110,6 @@ class LocalContextRecorder(ContextRecorderInterface):
 
     def _update_index(self, prompt_hash: str, filename: str) -> None:
         """Simple index updates to avoid scanning all shards for a specific query."""
-        import os
         index_file = self.log_dir / "shards_lookup.index"
         try:
             # Atomic append for the index
@@ -122,4 +117,3 @@ class LocalContextRecorder(ContextRecorderInterface):
                 f.write(f"{prompt_hash}:{filename}\n")
         except Exception as e:
             logging.error(f"Failed to update shard index: {e}")
-

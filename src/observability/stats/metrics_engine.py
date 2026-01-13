@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Unified logic for metric calculation, processing, and management.
+
 from __future__ import annotations
 import json
 import logging
 import math
 import zlib
-import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime
 from dataclasses import dataclass, field, asdict
-from typing import Dict, List, Any, Optional, Tuple, Union, TYPE_CHECKING, Callable
+from typing import Dict, List, Any, Optional, Tuple, Union, Callable
 from pathlib import Path
-
 from .observability_core import *
-
 from src.core.base.version import VERSION
+
 __version__ = VERSION
 
 logger = logging.getLogger(__name__)
@@ -206,7 +205,6 @@ class ObservabilityEngine:
                 logging.error(f"Failed to load telemetry: {e}")
                 self.metrics = []
 
-
 class DerivedMetricCalculator:
     """Calculate derived metrics from dependencies using safe AST evaluation."""
 
@@ -240,11 +238,16 @@ class DerivedMetricCalculator:
             if isinstance(node.func, ast.Name):
                 func_name = node.func.id
                 args = [self._eval_node(a) for a in node.args]
-                if func_name == "abs": return abs(args[0])
-                if func_name == "max": return max(args)
-                if func_name == "min": return min(args)
-                if func_name == "sqrt": return math.sqrt(args[0])
-                if func_name == "pow": return math.pow(args[0], args[1])
+                if func_name == "abs":
+                    return abs(args[0])
+                if func_name == "max":
+                    return max(args)
+                if func_name == "min":
+                    return min(args)
+                if func_name == "sqrt":
+                    return math.sqrt(args[0])
+                if func_name == "pow":
+                    return math.pow(args[0], args[1])
             raise TypeError(f"Unsupported function: {node.func}")
         else:
             raise TypeError(f"Unsupported operation in formula: {type(node)}")
@@ -339,7 +342,6 @@ class DerivedMetricCalculator:
             if value is not None:
                 results[name] = value
         return results
-
 
 class CorrelationAnalyzer:
     """Analyze correlations between metrics.
@@ -449,7 +451,6 @@ class CorrelationAnalyzer:
 
         return matrix
 
-
 class FormulaEngine:
     """Processes metric formulas and calculations using safe AST evaluation.
     
@@ -492,7 +493,6 @@ class FormulaEngine:
         """Validate formula syntax (backward compat)."""
         return self.validate(formula).is_valid
 
-
 class FormulaEngineCore:
     """Pure logic core for formula calculations."""
 
@@ -514,7 +514,8 @@ class FormulaEngineCore:
             if isinstance(node.value, (int, float)):
                 return float(node.value)
             raise TypeError(f"Constant of type {type(node.value)} is not a number")
-        elif hasattr(ast, "Num") and isinstance(node, ast.Num): # type: ignore
+        elif hasattr(ast, "Num") and isinstance(node, ast.Num):
+            # type: ignore
              return float(node.n) # type: ignore
         elif isinstance(node, ast.BinOp):
             return self.operators[type(node.op)](self._eval_node(node.left), self._eval_node(node.right))
@@ -566,13 +567,11 @@ class FormulaEngineCore:
         except Exception as e:
             return {"is_valid": False, "error": str(e)}
 
-
 @dataclass
 class FormulaValidation:
     """Result of formula validation."""
     is_valid: bool = True
     error: str = ""
-
 
 class ResourceMonitor:
     """Monitors local system load to inform agent execution strategies."""
@@ -674,7 +673,6 @@ if __name__ == "__main__":
     print(json.dumps(mon.get_current_stats(), indent=2))
     print(f"Recommendation: {mon.get_execution_recommendation()}")
 
-
 class RetentionEnforcer:
     """Enforces retention policies on metrics."""
     def __init__(self) -> None:
@@ -731,7 +729,6 @@ class RetentionEnforcer:
                 result[metric] = values
         return result
 
-
 class TokenCostEngine:
     """
     Calculates estimated costs for LLM tokens based on model variety.
@@ -750,7 +747,6 @@ class TokenCostEngine:
     def get_supported_models(self) -> list:
         """Returns list of models with explicit pricing."""
         return self.core.list_models()
-
 
 class TokenCostCore:
     """
@@ -780,7 +776,6 @@ class TokenCostCore:
 
     def list_models(self) -> List[str]:
         return list(MODEL_COSTS.keys())
-
 
 class ModelFallbackEngine:
     """
@@ -820,7 +815,6 @@ if __name__ == "__main__":
     print(f"Fallback for gpt-4o: {fallback.get_fallback_model('gpt-4o')}")
     print(f"Cheapest of [gpt-4o, gpt-4o-mini]: {fallback.get_cheapest_model(['gpt-4o', 'gpt-4o-mini'])}")
 
-
 class ModelFallbackCore:
     """Pure logic core for model fallback strategies."""
 
@@ -852,7 +846,6 @@ class ModelFallbackCore:
     def validate_retry_limit(self, current_retry: int, max_retries: int) -> bool:
         """Logic for retry boundaries."""
         return current_retry < max_retries
-
 
 class StatsRollupCalculator:
     """Calculates metric rollups."""
@@ -919,7 +912,6 @@ class StatsRollupCalculator:
         elif aggregation_type == AggregationType.COUNT:
             return float(len(metrics))
         return 0.0
-
 
 class StatsRollup:
     """Aggregate metrics into rollup views.
@@ -1053,7 +1045,6 @@ class StatsRollup:
         """
         return self.rollups.get(name, [])[-limit:]
 
-
 class StatsChangeDetector:
     """Detects changes in metric values."""
     def __init__(self, threshold: float = 0.1, threshold_percent: Optional[float] = None) -> None:
@@ -1111,7 +1102,6 @@ class StatsChangeDetector:
     def get_changes(self) -> List[Dict[str, Any]]:
         """Return recorded changes."""
         return list(self._changes)
-
 
 class StatsForecaster:
     """Forecasts future metric values."""
@@ -1172,7 +1162,6 @@ class StatsForecaster:
             "confidence_lower": lower,
             "confidence_upper": upper,
         }
-
 
 class StatsQueryEngine:
     """Queries metrics with time range and aggregation."""
@@ -1245,7 +1234,6 @@ class StatsQueryEngine:
         if name not in self.metrics:
             self.metrics[name] = []
         self.metrics[name].append(metric)
-
 
 class ABComparisonEngine:
     """Compare stats between different code versions (A / B testing).
@@ -1380,7 +1368,6 @@ class ABComparisonEngine:
             "metrics_b_count": len(comp.metrics_b)
         }
 
-
 class ABComparator:
     """Compares A/B test metrics."""
     def __init__(self) -> None:
@@ -1418,14 +1405,12 @@ class ABComparator:
         p_value = 0.01 if abs(effect) >= 1.0 else 0.5
         return ABSignificanceResult(p_value=p_value, is_significant=p_value < alpha, effect_size=effect)
 
-
 @dataclass
 class ABComparisonResult:
     """Result of comparing two metric groups."""
 
     metrics_compared: int
     differences: Dict[str, float] = field(default_factory=lambda: {})
-
 
 @dataclass
 class ABSignificanceResult:
@@ -1434,7 +1419,6 @@ class ABSignificanceResult:
     p_value: float
     is_significant: bool
     effect_size: float = 0.0
-
 
 @dataclass
 class ABComparison:
@@ -1446,7 +1430,6 @@ class ABComparison:
     metrics_b: Dict[str, float] = field(default_factory=lambda: {})
     winner: str = ""
     confidence: float = 0.0
-
 
 class AnnotationManager:
     """Manage metric annotations and comments.
@@ -1555,7 +1538,6 @@ class AnnotationManager:
             "type": a.annotation_type
         } for a in data], indent=2)
 
-
 class StatsAnnotationManager:
     """Manages annotations on metrics."""
 
@@ -1595,7 +1577,6 @@ class StatsAnnotationManager:
     def get_annotations(self, metric: str) -> List[MetricAnnotation]:
         """Get annotations for metric."""
         return self.annotations.get(metric, [])
-
 
 class SubscriptionManager:
     """Manage metric subscriptions and change notifications.
@@ -1721,7 +1702,6 @@ class SubscriptionManager:
             "notification_counts": dict(self._notification_count)
         }
 
-
 class StatsSubscriptionManager:
     """Manages metric subscriptions."""
     def __init__(self) -> None:
@@ -1805,7 +1785,6 @@ class StatsSubscriptionManager:
                 except Exception:
                     logging.debug(f"Delivery handler {sub.delivery_method} failed for {metric}")
 
-
 class ThresholdAlertManager:
     """Manages threshold-based alerting."""
     def __init__(self) -> None:
@@ -1872,7 +1851,6 @@ class ThresholdAlertManager:
     def check_value(self, metric: str, value: float) -> bool:
         """Compatibility wrapper: return True if any alert triggered."""
         return len(self.check(metric, value)) > 0
-
 
 class StatsBackupManager:
     """Manages backups of stats."""
@@ -1942,7 +1920,6 @@ class StatsBackupManager:
                     names.add(candidate.stem)
         return sorted(names)
 
-
 @dataclass
 class StatsBackup:
     """A persisted backup entry for StatsBackupManager."""
@@ -1950,7 +1927,6 @@ class StatsBackup:
     name: str
     path: Path
     timestamp: str
-
 
 class StatsCompressor:
     """Compresses metric data."""
@@ -1981,7 +1957,6 @@ class StatsCompressor:
             return json.loads(payload.decode("utf-8"))
         except Exception:
             return payload
-
 
 class StatsSnapshotManager:
     """Manages snapshots of stats state.
@@ -2052,7 +2027,6 @@ class StatsSnapshotManager:
                     names.add(candidate.stem)
         return sorted(names)
 
-
 class StatsAccessController:
     """Controls access to stats."""
     def __init__(self) -> None:
@@ -2100,7 +2074,6 @@ class StatsAccessController:
         """Check if user has access."""
         return user in self.permissions and resource in self.permissions[user]
 
-
 class StatsStreamManager:
     """Manages real-time stats streaming."""
     def __init__(self, config: Optional[StreamingConfig] = None) -> None:
@@ -2139,7 +2112,6 @@ class StatsStreamManager:
                     callback(data)
                 except Exception:
                     logging.debug(f"Stream subscriber for {stream_name} failed.")
-
 
 class StatsStreamer:
     """Real-time stats streaming via WebSocket for live dashboards.
@@ -2255,7 +2227,6 @@ class StatsStreamer:
                 notified += 1
         return notified
 
-
 class StatsStream:
     """Represents a real-time stats stream."""
     def __init__(self, name: str, buffer_size: int = 1000) -> None:
@@ -2274,9 +2245,6 @@ class StatsStream:
         # Enforce buffer size limit
         if len(self.buffer) > self.buffer_size:
             self.buffer.pop(0)
-
-
-
 
 class AggregationResult(Dict[str, Any]):
     """Compatibility class that behaves like both a dict and a float."""
@@ -2474,7 +2442,6 @@ class StatsFederation:
             }
         return status
 
-
 class StatsAPIServer:
     """Stats API endpoint for programmatic access.
 
@@ -2598,7 +2565,6 @@ class StatsAPIServer:
 
         return json.dumps(docs, indent=2)
 
-
 @dataclass
 class APIEndpoint:
     """Stats API endpoint configuration."""
@@ -2607,7 +2573,6 @@ class APIEndpoint:
     auth_required: bool = True
     rate_limit: int = 100  # requests per minute
     cache_ttl: int = 60  # seconds
-
 
 class MetricNamespaceManager:
     """Manage metric namespaces for organizing large metric sets.
@@ -2721,5 +2686,3 @@ class MetricNamespaceManager:
             Full path string like "root / parent / child".
         """
         return " / ".join(self.get_namespace_hierarchy(namespace))
-
-

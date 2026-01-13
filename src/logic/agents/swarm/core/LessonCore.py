@@ -1,7 +1,8 @@
+
 from __future__ import annotations
 import hashlib
-from typing import List, Dict, Any, Set
-from dataclasses import dataclass, field
+from typing import List, Set
+from dataclasses import dataclass
 
 @dataclass
 class Lesson:

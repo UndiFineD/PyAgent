@@ -1,7 +1,8 @@
+
 import logging
 import time
-from typing import Dict, Any, Optional
-from src.core.base.core.AuthCore import AuthCore, AuthProof
+from typing import Dict
+from src.core.base.core.AuthCore import AuthCore
 
 class AuthManager:
     """Shell for agent authentication and access control.

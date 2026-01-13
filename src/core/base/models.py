@@ -11,21 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
-
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,7 +24,8 @@ __version__ = VERSION
 
 """Data models and structures for BaseAgent."""
 
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import time
 import uuid
 from dataclasses import dataclass, field
@@ -42,6 +34,7 @@ from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
+__version__ = VERSION
 
 # ========== Enums ==========
 class AgentState(Enum):
@@ -56,7 +49,6 @@ class AgentState(Enum):
     COMPLETED = "completed"
     ERROR = "error"
 
-
 class ResponseQuality(Enum):
     """AI response quality levels."""
     EXCELLENT = 5
@@ -64,7 +56,6 @@ class ResponseQuality(Enum):
     ACCEPTABLE = 3
     POOR = 2
     INVALID = 1
-
 
 class EventType(Enum):
     """Agent event types for hooks."""
@@ -76,7 +67,6 @@ class EventType(Enum):
     POST_WRITE = "post_write"
     ERROR = "error"
 
-
 class AuthMethod(Enum):
     """Authentication methods for backends."""
     NONE = "none"
@@ -87,7 +77,6 @@ class AuthMethod(Enum):
     OAUTH2 = "oauth2"
     CUSTOM = "custom"
 
-
 class SerializationFormat(Enum):
     """Custom serialization formats."""
     JSON = "json"
@@ -97,7 +86,6 @@ class SerializationFormat(Enum):
     PROTOBUF = "protobuf"
     CBOR = "cbor"
 
-
 class FilePriority(Enum):
     """File priority levels for request prioritization."""
     CRITICAL = 5
@@ -105,7 +93,6 @@ class FilePriority(Enum):
     NORMAL = 3
     LOW = 2
     BACKGROUND = 1
-
 
 class InputType(Enum):
     """Input types for multimodal support."""
@@ -116,7 +103,6 @@ class InputType(Enum):
     AUDIO = "audio"
     VIDEO = "video"
 
-
 class AgentType(Enum):
     """Agent type classifications."""
     GENERAL = "general"
@@ -125,20 +111,17 @@ class AgentType(Enum):
     TESTING = "testing"
     REFACTORING = "refactoring"
 
-
 class MessageRole(Enum):
     """Roles for conversation messages."""
     USER = "user"
     ASSISTANT = "assistant"
     SYSTEM = "system"
 
-
 class AgentEvent(Enum):
     """Agent event types."""
     START = "start"
     COMPLETE = "complete"
     ERROR = "error"
-
 
 class AgentExecutionState(Enum):
     """Execution state for an agent run."""
@@ -149,7 +132,6 @@ class AgentExecutionState(Enum):
     CANCELLED = auto()
     PAUSED = auto()
 
-
 class AgentPriority(Enum):
     """Priority level for agent execution."""
     CRITICAL = 1
@@ -158,14 +140,12 @@ class AgentPriority(Enum):
     LOW = 4
     BACKGROUND = 5
 
-
 class ConfigFormat(Enum):
     """Configuration file format."""
     YAML = auto()
     TOML = auto()
     JSON = auto()
     INI = auto()
-
 
 class DiffOutputFormat(Enum):
     """Output format for diff preview."""
@@ -174,7 +154,6 @@ class DiffOutputFormat(Enum):
     SIDE_BY_SIDE = auto()  # Side by side diff
     HTML = auto()         # HTML formatted diff
 
-
 class HealthStatus(Enum):
     """Health status for components."""
     HEALTHY = auto()
@@ -182,13 +161,11 @@ class HealthStatus(Enum):
     UNHEALTHY = auto()
     UNKNOWN = auto()
 
-
 class LockType(Enum):
     """File locking type."""
     SHARED = auto()       # Multiple readers allowed
     EXCLUSIVE = auto()    # Single writer only
     ADVISORY = auto()     # Advisory lock (not enforced by OS)
-
 
 class RateLimitStrategy(Enum):
     """Rate limiting strategy for API calls."""
@@ -197,71 +174,54 @@ class RateLimitStrategy(Enum):
     TOKEN_BUCKET = auto()      # Token bucket algorithm
     LEAKY_BUCKET = auto()      # Leaky bucket algorithm
 
-
 # ========== Utility Functions ==========
 def _empty_list_str() -> list[str]:
     return []
 
-
 def _empty_list_int() -> list[int]:
     return []
-
 
 def _empty_list_float() -> list[float]:
     return []
 
-
 def _empty_list_dict_str_any() -> list[dict[str, Any]]:
     return []
-
 
 def _empty_dict_str_float() -> dict[str, float]:
     return {}
 
-
 def _empty_dict_str_any() -> dict[str, Any]:
     return {}
-
 
 def _empty_dict_str_int() -> dict[str, int]:
     return {}
 
-
 def _empty_dict_str_str() -> dict[str, str]:
     return {}
-
 
 def _empty_dict_str_callable_any_any() -> dict[str, Callable[[Any], Any]]:
     return {}
 
-
 def _empty_dict_str_quality_criteria() -> dict[str, tuple[Callable[[str], float], float]]:
     return {}
-
 
 def _empty_dict_str_health_checks() -> dict[str, Callable[[], dict[str, Any]]]:
     return {}
 
-
 def _empty_dict_str_configprofile() -> dict[str, "ConfigProfile"]:
     return {}
-
 
 def _empty_routes_list() -> list[tuple[Callable[[Any], bool], Callable[[Any], Any]]]:
     return []
 
-
 def _empty_dict_str_filepriority() -> dict[str, "FilePriority"]:
     return {}
-
 
 def _empty_dict_str_modelconfig() -> dict[str, "ModelConfig"]:
     return {}
 
-
 def _empty_agent_event_handlers() -> dict[AgentEvent, list[Callable[..., None]]]:
     return {}
-
 
 # ========== Dataclasses ==========
 
@@ -297,7 +257,6 @@ class PromptTemplate:
         """
         return self.template.format(**kwargs)
 
-
 @dataclass
 class ConversationMessage:
     """A message in conversation history.
@@ -310,7 +269,6 @@ class ConversationMessage:
     role: MessageRole
     content: str
     timestamp: float = field(default_factory=time.time)
-
 
 class ConversationHistory:
     """Manages a conversation history with message storage and retrieval."""
@@ -350,7 +308,6 @@ class ConversationHistory:
         """Clear all messages from history."""
         self.messages.clear()
 
-
 class PromptTemplateManager:
     """Manages a collection of prompt templates."""
 
@@ -382,7 +339,6 @@ class PromptTemplateManager:
         template = self.templates[template_name]
         return template.render(**kwargs)
 
-
 class ResponsePostProcessor:
     """Manages post-processing hooks for agent responses."""
 
@@ -413,7 +369,6 @@ class ResponsePostProcessor:
         for hook, _ in sorted_hooks:
             text = hook(text)
         return text
-
 
 @dataclass
 class PromptVersion:
@@ -476,7 +431,6 @@ class PromptVersion:
         self.variant = variant or ""
         self.prompt_text = self.content
         self.weight = weight
-
 
 class BatchRequest:
     """Request in a batch processing queue.
@@ -548,7 +502,6 @@ class BatchRequest:
         """
         return processor(self.items)
 
-
 @dataclass
 class CacheEntry:
     """Cached response entry.
@@ -565,7 +518,6 @@ class CacheEntry:
     timestamp: float
     hit_count: int = 0
     quality_score: float = 0.0
-
 
 @dataclass
 class AgentConfig:
@@ -590,7 +542,6 @@ class AgentConfig:
     cache_enabled: bool = True
     token_budget: int = 100000
 
-
 @dataclass
 class HealthCheckResult:
     """Result of agent health check.
@@ -607,7 +558,6 @@ class HealthCheckResult:
     memory_ok: bool = True
     disk_ok: bool = True
     details: Dict[str, Any] = field(default_factory=_empty_dict_str_any)
-
 
 @dataclass
 class AuthConfig:
@@ -632,7 +582,6 @@ class AuthConfig:
     oauth_client_secret: str = ""
     custom_headers: Dict[str, str] = field(default_factory=_empty_dict_str_str)
 
-
 @dataclass
 class BatchResult:
     """Result of a batch processing request.
@@ -650,7 +599,6 @@ class BatchResult:
     error: str = ""
     processing_time: float = 0.0
 
-
 @dataclass
 class MultimodalInput:
     """Multimodal input for agents.
@@ -665,7 +613,6 @@ class MultimodalInput:
     content: str
     mime_type: str = ""
     metadata: Dict[str, Any] = field(default_factory=_empty_dict_str_any)
-
 
 @dataclass
 class ComposedAgent:
@@ -682,7 +629,6 @@ class ComposedAgent:
     order: int = 0
     depends_on: List[str] = field(default_factory=_empty_list_str)
 
-
 @dataclass
 class SerializationConfig:
     """Configuration for custom serialization.
@@ -698,7 +644,6 @@ class SerializationConfig:
     compression: bool = False
     encryption: bool = False
 
-
 @dataclass
 class FilePriorityConfig:
     """Configuration for file priority.
@@ -711,7 +656,6 @@ class FilePriorityConfig:
     path_patterns: Dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
     extension_priorities: Dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
     default_priority: FilePriority = FilePriority.NORMAL
-
 
 @dataclass
 class ContextWindow:
@@ -745,7 +689,6 @@ class ContextWindow:
         self.messages.clear()
         self.token_counts.clear()
 
-
 @dataclass
 class MultimodalBuilder:
     """Builds multimodal input sets."""
@@ -767,7 +710,6 @@ class MultimodalBuilder:
         """Build and return inputs."""
         return self.inputs
 
-
 @dataclass
 class AgentPipeline:
     """Chains agent steps sequentially."""
@@ -786,7 +728,6 @@ class AgentPipeline:
             result = self.steps[step_name](result)
         return result
 
-
 @dataclass
 class AgentParallel:
     """Executes agent branches in parallel conceptually."""
@@ -799,7 +740,6 @@ class AgentParallel:
     def execute(self, data: Any) -> Dict[str, Any]:
         """Execute all branches."""
         return {name: func(data) for name, func in self.branches.items()}
-
 
 @dataclass
 class AgentRouter:
@@ -825,7 +765,6 @@ class AgentRouter:
             return self.default_handler(data)
 
         return data
-
 
 @dataclass
 class TokenBudget:
@@ -853,7 +792,6 @@ class TokenBudget:
         """Release allocated tokens."""
         self.allocations.pop(name, None)
 
-
 @dataclass
 class ExecutionCondition:
     """A condition for agent execution.
@@ -867,7 +805,6 @@ class ExecutionCondition:
     name: str
     check: Callable[[Path, str], bool]
     description: str = ""
-
 
 @dataclass
 class IncrementalState:
@@ -883,7 +820,6 @@ class IncrementalState:
     processed_files: dict[str, float] = field(default_factory=_empty_dict_str_float)
     file_hashes: dict[str, str] = field(default_factory=_empty_dict_str_str)
     pending_files: list[str] = field(default_factory=_empty_list_str)
-
 
 @dataclass
 class RateLimitConfig:
@@ -902,7 +838,6 @@ class RateLimitConfig:
     strategy: RateLimitStrategy = RateLimitStrategy.TOKEN_BUCKET
     cooldown_seconds: float = 1.0
 
-
 @dataclass
 class ShutdownState:
     """State for graceful shutdown.
@@ -919,7 +854,6 @@ class ShutdownState:
     completed_files: list[str] = field(default_factory=_empty_list_str)
     pending_files: list[str] = field(default_factory=_empty_list_str)
     start_time: float = field(default_factory=time.time)
-
 
 @dataclass
 class ValidationRule:
@@ -938,7 +872,6 @@ class ValidationRule:
         if not self.file_pattern and self.pattern:
             self.file_pattern = self.pattern
 
-
 @dataclass
 class ModelConfig:
     """Model configuration."""
@@ -947,7 +880,6 @@ class ModelConfig:
     max_tokens: int = 2000
     enable_thinking: bool = False
     max_thinking_tokens: int = 2000
-
 
 @dataclass
 class ConfigProfile:
@@ -960,9 +892,7 @@ class ConfigProfile:
         """Get setting value."""
         return self.settings.get(key, default)
 
-
 EventHook = Callable[[dict[str, Any]], None]
-
 
 @dataclass
 class AgentHealthCheck:
@@ -983,7 +913,6 @@ class AgentHealthCheck:
     error_message: Optional[str] = None
     details: dict[str, Any] = field(default_factory=_empty_dict_str_any)
 
-
 @dataclass
 class AgentPluginConfig:
     """Configuration for an agent plugin.
@@ -1002,7 +931,6 @@ class AgentPluginConfig:
     priority: AgentPriority = AgentPriority.NORMAL
     enabled: bool = True
     config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
-
 
 @dataclass
 class CachedResult:
@@ -1023,7 +951,6 @@ class CachedResult:
     result: Any
     timestamp: float = field(default_factory=time.time)
     ttl_seconds: int = 3600
-
 
 @dataclass
 class DiffResult:
@@ -1046,7 +973,6 @@ class DiffResult:
     deletions: int = 0
     changes: int = 0
 
-
 @dataclass
 class ExecutionProfile:
     """A profile for agent execution settings.
@@ -1066,7 +992,6 @@ class ExecutionProfile:
     parallel: bool = False
     workers: int = 4
     dry_run: bool = False
-
 
 @dataclass
 class TelemetrySpan:
@@ -1091,7 +1016,6 @@ class TelemetrySpan:
     end_time: Optional[float] = None
     attributes: dict[str, Any] = field(default_factory=_empty_dict_str_any)
     events: list[dict[str, Any]] = field(default_factory=_empty_list_dict_str_any)
-
 
 class SpanContext:
     """Context for a telemetry span."""

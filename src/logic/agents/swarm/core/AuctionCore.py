@@ -1,3 +1,4 @@
+
 """
 Core logic for Swarm Resource Auctioning (Phase 184).
 Implements the VCG auction model for truthful bidding.

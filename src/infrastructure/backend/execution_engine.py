@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,14 +18,15 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Multi-backend execution engine with fallback and caching capabilities."""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
+import requests
+from src.infrastructure.backend import *
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[2]
@@ -41,10 +36,8 @@ if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
 # Modular imports
-import requests
-import subprocess
 
-from src.infrastructure.backend import *
+__version__ = VERSION
 
 # Shared runner instance for functional compatibility
 _runner = SubagentRunner()

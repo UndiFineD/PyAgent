@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,15 +18,16 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """
 Tests Agent: Maintains and updates test suites for the workspace.
 """
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import sys
 from pathlib import Path
+from src.core.base.utilities import create_main_function
+from src.infrastructure.dev.agent_tests import *
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[2]
@@ -41,8 +36,7 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-from src.core.base.utilities import create_main_function
-from src.infrastructure.dev.agent_tests import *
+__version__ = VERSION
 
 # Create main function using the helper
 main = create_main_function(

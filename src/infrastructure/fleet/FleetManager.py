@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,18 +18,21 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Coordinator for deploying and aggregating results from multiple agents."""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import json
 import time
-import asyncio
 from pathlib import Path
 from typing import Dict, List, Any, Optional, Type, TYPE_CHECKING
-from concurrent.futures import ThreadPoolExecutor, TimeoutError
+from src.core.base.BaseAgent import BaseAgent
+from src.infrastructure.fleet.WorkflowState import WorkflowState
+from src.infrastructure.fleet.AgentRegistry import AgentRegistry
+from src.infrastructure.fleet.OrchestratorRegistry import OrchestratorRegistry
+from src.infrastructure.fleet.FleetExecutionCore import FleetExecutionCore
+from src.infrastructure.fleet.FleetLifecycleManager import FleetLifecycleManager
 
 # Type Hinting Imports (Phase 106)
 if TYPE_CHECKING:
@@ -43,14 +40,9 @@ if TYPE_CHECKING:
     from src.infrastructure.backend.SqlMetadataHandler import SqlMetadataHandler
 
 # Core Components
-from src.core.base.BaseAgent import BaseAgent
-from src.infrastructure.fleet.WorkflowState import WorkflowState
 
 # Registry and Orchestrators
-from src.infrastructure.fleet.AgentRegistry import AgentRegistry
-from src.infrastructure.fleet.OrchestratorRegistry import OrchestratorRegistry
-from src.infrastructure.fleet.FleetExecutionCore import FleetExecutionCore
-from src.infrastructure.fleet.FleetLifecycleManager import FleetLifecycleManager
+__version__ = VERSION
 
 class FleetManager:
     """
@@ -430,15 +422,18 @@ class FleetManager:
             
             if not audit_passed:
                 logging.warning(f"Fleet: Security audit FAILED for tool '{best_tool}'. Penalizing RLSelector.")
-                if self.rl_selector: self.rl_selector.update_stats(best_tool, success=False)
+                if self.rl_selector:
+                    self.rl_selector.update_stats(best_tool, success=False)
                 return f"ERROR: Security audit failed for tool '{best_tool}'. Output blocked."
 
-            if self.rl_selector: self.rl_selector.update_stats(best_tool, success=True)
+            if self.rl_selector:
+                self.rl_selector.update_stats(best_tool, success=True)
             # Record for future improvements
             await self._record_success(f"Capability call: {goal} with {kwargs}", str(res), "internal_ai")
             return res
         except Exception as e:
-            if self.rl_selector: self.rl_selector.update_stats(best_tool, success=False)
+            if self.rl_selector:
+                self.rl_selector.update_stats(best_tool, success=False)
             logging.error(f"Error executing tool {best_tool}: {e}")
             # Self-healing attempt
             if self.self_healing:
@@ -495,7 +490,8 @@ class FleetManager:
                 # Attempt to find it by variant names
                 for name in ["byzantine_judge", "ByzantineConsensusAgent"]:
                     judge = getattr(self, name, None)
-                    if judge: break
+                    if judge:
+                        break
             
             if not judge:
                 return {"decision": "REJECTED", "reason": "ByzantineConsensus agent not available."}
@@ -567,7 +563,6 @@ class FleetManager:
         
         logging.info(f"Fleet: Routing {task_type} to standard CPU pool.")
         return "ROUTED:CPU:POOL"
-
 
 if __name__ == "__main__":
     # Test script for FleetManager

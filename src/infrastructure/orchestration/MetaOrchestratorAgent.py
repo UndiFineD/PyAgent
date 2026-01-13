@@ -13,10 +13,9 @@
 # limitations under the License.
 
 from __future__ import annotations
-
 import logging
 import json
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+from typing import Dict, List, Any, TYPE_CHECKING
 from src.core.base.BaseAgent import BaseAgent
 
 if TYPE_CHECKING:

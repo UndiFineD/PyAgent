@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,22 +18,21 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Advanced Long-Term Memory (LTM) for agents.
 Consolidates episodic memories into semantic knowledge and persistent preferences.
 Inspired by mem0 and BabyAGI patterns.
 """
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import json
 import logging
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from datetime import datetime
-
 from src.logic.agents.cognitive.context.engines.GlobalContextCore import GlobalContextCore
+
+__version__ = VERSION
 
 class GlobalContextEngine:
     """
@@ -77,7 +70,8 @@ class GlobalContextEngine:
         # Check for sub-shards (Phase 104)
         shard_files = list(self.shard_dir.glob(f"{category}_*.json"))
         if shard_files:
-            if category not in self.memory: self.memory[category] = {}
+            if category not in self.memory:
+                self.memory[category] = {}
             for s_file in shard_files:
                 try:
                     shard_data = json.loads(s_file.read_text(encoding="utf-8"))
@@ -154,7 +148,8 @@ class GlobalContextEngine:
             if len(shards) > 1:
                 self.shard_dir.mkdir(exist_ok=True)
                 for shard_name, shard_data in shards.items():
-                    if shard_name == "default": continue
+                    if shard_name == "default":
+                        continue
                     shard_file = self.shard_dir / f"{shard_name}.json"
                     shard_file.write_text(json.dumps(shard_data, indent=2), encoding="utf-8")
                     
@@ -165,7 +160,6 @@ class GlobalContextEngine:
         """Manually force a rebalancing of the context shards."""
         logging.info("CONTEXT: Triggering manual shard rebalancing...")
         self.save()
-
 
     def add_fact(self, key: str, value: Any) -> None:
         """Adds or updates a project fact."""

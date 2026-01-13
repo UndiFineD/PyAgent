@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Logic for core observability types and base classes.
+
 from __future__ import annotations
 import json
 import logging
@@ -8,11 +9,10 @@ import math
 import zlib
 from enum import Enum
 from datetime import datetime, timedelta
-from dataclasses import dataclass, field, asdict
-from typing import Dict, List, Any, Optional, Tuple, Union, TYPE_CHECKING, Callable
-from pathlib import Path
-
+from dataclasses import dataclass, field
+from typing import Dict, List, Any, Optional, Tuple, Union
 from src.core.base.version import VERSION
+
 __version__ = VERSION
 
 class MetricType(Enum):
@@ -21,7 +21,6 @@ class MetricType(Enum):
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
     SUMMARY = "summary"
-
 
 @dataclass
 class Metric:
@@ -41,7 +40,6 @@ class Metric:
     def __getitem__(self, index: int) -> Any:
         return (self.timestamp, self.value)[index]
 
-
 class AlertSeverity(Enum):
     """Alert severity levels."""
     CRITICAL = 5
@@ -49,7 +47,6 @@ class AlertSeverity(Enum):
     MEDIUM = 3
     LOW = 2
     INFO = 1
-
 
 @dataclass
 class Alert:
@@ -61,7 +58,6 @@ class Alert:
     severity: AlertSeverity
     message: str
     timestamp: str
-
 
 @dataclass
 class Threshold:
@@ -78,7 +74,6 @@ class Threshold:
         if self.severity is None:
             self.severity = AlertSeverity.MEDIUM
 
-
 @dataclass
 class RetentionPolicy:
     """Policy for data retention."""
@@ -91,7 +86,6 @@ class RetentionPolicy:
     max_points: int = 0
     compression_after_days: int = 7
 
-
 @dataclass
 class MetricSnapshot:
     """A snapshot of metrics at a point in time."""
@@ -100,7 +94,6 @@ class MetricSnapshot:
     timestamp: str
     metrics: Dict[str, float]
     tags: Dict[str, str] = field(default_factory=lambda: {})
-
 
 class AggregationType(Enum):
     """Types of metric aggregation for rollups."""
@@ -113,7 +106,6 @@ class AggregationType(Enum):
     P95 = "percentile_95"
     P99 = "percentile_99"
 
-
 @dataclass
 class MetricNamespace:
     """Namespace for organizing metrics."""
@@ -122,7 +114,6 @@ class MetricNamespace:
     parent: Optional[str] = None
     tags: Dict[str, str] = field(default_factory=lambda: {})
     retention_days: int = 30
-
 
 @dataclass
 class MetricAnnotation:
@@ -133,7 +124,6 @@ class MetricAnnotation:
     author: str = ""
     annotation_type: str = "info"  # info, warning, milestone
 
-
 @dataclass
 class MetricCorrelation:
     """Correlation between two metrics."""
@@ -142,7 +132,6 @@ class MetricCorrelation:
     correlation_coefficient: float
     sample_size: int
     significance: float = 0.0
-
 
 @dataclass
 class MetricSubscription:
@@ -153,7 +142,6 @@ class MetricSubscription:
     notify_on: List[str] = field(default_factory=lambda: ["threshold", "anomaly"])
     min_interval_seconds: int = 60
 
-
 class ExportDestination(Enum):
     """Cloud monitoring export destinations."""
     DATADOG = "datadog"
@@ -161,7 +149,6 @@ class ExportDestination(Enum):
     GRAFANA = "grafana"
     CLOUDWATCH = "cloudwatch"
     STACKDRIVER = "stackdriver"
-
 
 @dataclass
 class FederatedSource:
@@ -173,13 +160,11 @@ class FederatedSource:
     enabled: bool = True
     metrics: Dict[str, float] = field(default_factory=dict)
 
-
 class FederationMode(Enum):
     """Federation modes for multi-repo aggregation."""
     PULL = "pull"
     PUSH = "push"
     HYBRID = "hybrid"
-
 
 @dataclass
 class RollupConfig:
@@ -189,7 +174,6 @@ class RollupConfig:
     aggregation: AggregationType
     interval_minutes: int = 60
     keep_raw: bool = True
-
 
 @dataclass
 class StreamingConfig:
@@ -202,14 +186,12 @@ class StreamingConfig:
     reconnect_attempts: int = 3
     buffer_size: int = 1000
 
-
 class StreamingProtocol(Enum):
     """Protocols for real-time stats streaming."""
     WEBSOCKET = "websocket"
     SSE = "server_sent_events"
     GRPC = "grpc"
     MQTT = "mqtt"
-
 
 @dataclass
 class AgentMetric:
@@ -294,7 +276,6 @@ class ObservabilityCore:
                 scores.append(0.5)
                 
         return scores
-
 
 class StatsCore:
     """Core logic for statistics processing, separated from the Agent shell."""
@@ -402,7 +383,6 @@ class StatsCore:
                 metrics_dict[key] = metrics_dict[key][-policy.max_points:]
         return removed
 
-
 class StatsNamespace:
     """Represents a namespace for metric isolation."""
     def __init__(self, name: str) -> None:
@@ -428,7 +408,6 @@ class StatsNamespace:
         """Get all metrics in namespace."""
         return self.metrics
 
-
 class StatsNamespaceManager:
     """Manages multiple namespaces."""
     def __init__(self) -> None:
@@ -448,7 +427,6 @@ class StatsNamespaceManager:
         """Get a namespace."""
         return self.namespaces.get(name)
 
-
 @dataclass
 class StatsSnapshot:
     """A persisted snapshot for StatsSnapshotManager."""
@@ -456,7 +434,6 @@ class StatsSnapshot:
     name: str
     data: Dict[str, Any]
     timestamp: str
-
 
 @dataclass
 class StatsSubscription:
@@ -468,7 +445,6 @@ class StatsSubscription:
     delivery_method: str
     created_at: str
 
-
 @dataclass
 class ThresholdAlert:
     """A single threshold alert emitted by ThresholdAlertManager."""
@@ -477,8 +453,6 @@ class ThresholdAlert:
     value: float
     severity: str
     threshold: float
-
-
 
 @dataclass
 class DerivedMetric:

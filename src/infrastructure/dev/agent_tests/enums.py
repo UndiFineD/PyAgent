@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,13 +18,13 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Enums for test agent functionality."""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from enum import Enum
 
+__version__ = VERSION
 
 class TestPriority(Enum):
     """Test priority levels."""
@@ -41,7 +35,6 @@ class TestPriority(Enum):
     LOW = 2
     SKIP = 1
 
-
 class TestStatus(Enum):
     """Test execution status."""
     __test__ = False
@@ -51,14 +44,12 @@ class TestStatus(Enum):
     ERROR = "error"
     FLAKY = "flaky"
 
-
 class CoverageType(Enum):
     """Types of coverage to track."""
     LINE = "line"
     BRANCH = "branch"
     FUNCTION = "function"
     CLASS = "class"
-
 
 class BrowserType(Enum):
     """Browser types for cross-browser testing."""
@@ -67,7 +58,6 @@ class BrowserType(Enum):
     SAFARI = "safari"
     EDGE = "edge"
     IE = "ie"
-
 
 class TestSourceType(Enum):
     """Types of test result sources for aggregation."""
@@ -78,7 +68,6 @@ class TestSourceType(Enum):
     MOCHA = "mocha"
     JUNIT = "junit"
 
-
 class MutationOperator(Enum):
     """Mutation operators for mutation testing."""
     ARITHMETIC = "arithmetic"
@@ -86,7 +75,6 @@ class MutationOperator(Enum):
     LOGICAL = "logical"
     ASSIGNMENT = "assignment"
     RETURN_VALUE = "return_value"
-
 
 class ExecutionMode(Enum):
     """Test execution replay modes."""

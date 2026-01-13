@@ -1,5 +1,6 @@
+
 from __future__ import annotations
-from typing import Dict, List, Any, Optional
+from typing import List
 import random
 
 class SynthesisCore:
@@ -17,7 +18,7 @@ class SynthesisCore:
             "class {name}(metaclass=Singleton): pass"
         ]
 
-    def generate_python_edge_cases((self, count: int) -> List[str]:
+    def generate_python_edge_cases(self, count: int) -> List[str]:
         """Generates synthetic Python snippets based on templates."""
         results = []
         for i in range(count):

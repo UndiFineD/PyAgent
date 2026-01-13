@@ -11,21 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
-
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -33,12 +24,12 @@ __version__ = VERSION
 
 """Main application controller for PyAgent GUI."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import tkinter as tk
-from tkinter import ttk, messagebox, filedialog
+from tkinter import ttk
 import os
-
 from .ProjectExplorer import ProjectExplorer
-from .AgentColumn import AgentColumn
 from .SessionManager import SessionManager
 from .ThemeManager import ThemeManager
 from .DiffViewer import DiffViewer
@@ -53,7 +44,9 @@ from .DialogManager import DialogManager
 from .WorkflowManager import WorkflowManager
 from .ConfigurationManager import ConfigurationManager
 from .ProjectStatusPanel import ProjectStatusPanel
-from typing import Any, Callable, Dict, List, Optional, Union
+from typing import Any, Callable, Dict
+
+__version__ = VERSION
 
 class PyAgentGUI:
     """The main application window and controller."""
@@ -267,4 +260,3 @@ if __name__ == "__main__":
     root = tk.Tk()
     app = PyAgentGUI(root)
     root.mainloop()
-
