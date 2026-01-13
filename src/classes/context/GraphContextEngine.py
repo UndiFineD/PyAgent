@@ -35,9 +35,9 @@ class GraphContextEngine:
     
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
-        self.graph: Dict[str, Set[str]] = {}
-        self.metadata: Dict[str, Any] = {}
-        self.symbols: Dict[str, Any] = {}
+        self.graph: dict[str, set[str]] = {}
+        self.metadata: dict[str, Any] = {}
+        self.symbols: dict[str, Any] = {}
         self.persist_file = self.workspace_root / ".agent_graph.json"
         self.core = GraphCore()
         self.load()
@@ -51,7 +51,7 @@ class GraphContextEngine:
         key = f"{source}->{target}"
         self.metadata[key] = {"type": relationship}
 
-    def scan_project(self, start_path: Optional[Path] = None) -> None:
+    def scan_project(self, start_path: Path | None = None) -> None:
         """Scans files using AST to build a detailed relationship graph."""
         target = start_path or self.workspace_root
         logging.info(f"Scanning project graph from {target}")
@@ -82,13 +82,13 @@ class GraphContextEngine:
         
         self.save()
 
-    def get_impact_radius(self, node: str, max_depth: int = 3) -> Set[str]:
+    def get_impact_radius(self, node: str, max_depth: int = 3) -> set[str]:
         """Find all nodes that depend on the given node (inverse of graph)."""
         affected = set()
         to_visit = [(node, 0)]
         visited = {node}
         
-        inverse_graph: Dict[str, Set[str]] = {}
+        inverse_graph: dict[str, set[str]] = {}
         for src, targets in self.graph.items():
             for t in targets:
                 if t not in inverse_graph:
@@ -122,7 +122,7 @@ class GraphContextEngine:
         """Load graph from disk."""
         if self.persist_file.exists():
             try:
-                with open(self.persist_file, "r") as f:
+                with open(self.persist_file) as f:
                     data = json.load(f)
                 self.graph = {k: set(v) for k, v in data.get("graph", {}).items()}
                 self.metadata = data.get("metadata", {})

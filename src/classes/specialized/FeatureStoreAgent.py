@@ -48,7 +48,7 @@ class FeatureStoreAgent(BaseAgent):
         self.core = SynthesisCore()
 
     @as_tool
-    def store_vectorized_insight(self, insight_text: str, tags: List[str]) -> str:
+    def store_vectorized_insight(self, insight_text: str, tags: list[str]) -> str:
         """
         Vectorizes a text insight and stores it for swarm-wide retrieval.
         """
@@ -57,7 +57,7 @@ class FeatureStoreAgent(BaseAgent):
         return self.register_feature(feature_name, vector, {"original_text": insight_text, "tags": tags})
 
     @as_tool
-    def merge_swarm_insights(self, feature_names: List[str]) -> List[float]:
+    def merge_swarm_insights(self, feature_names: list[str]) -> list[float]:
         """
         Merges multiple vectorized insights into a single 'Global Fleet Vector'.
         """
@@ -70,7 +70,7 @@ class FeatureStoreAgent(BaseAgent):
         return self.core.merge_feature_vectors(vectors)
 
     @as_tool
-    def register_feature(self, feature_name: str, value: Any, metadata: Optional[Dict[str, Any]] = None) -> str:
+    def register_feature(self, feature_name: str, value: Any, metadata: dict[str, Any] | None = None) -> str:
         """Registers a new feature in the store.
         
         Args:
@@ -87,13 +87,13 @@ class FeatureStoreAgent(BaseAgent):
             return f"Failed to register feature: {e}"
 
     @as_tool
-    def get_feature(self, feature_name: str) -> Optional[Any]:
+    def get_feature(self, feature_name: str) -> Any | None:
         """Retrieves a feature from the store."""
         path = self.feature_dir / f"{feature_name}.json"
         if not path.exists():
             return None
         try:
-            with open(path, "r", encoding="utf-8") as f:
+            with open(path, encoding="utf-8") as f:
                 data = json.load(f)
                 return data.get("value")
         except Exception as e:
@@ -101,7 +101,7 @@ class FeatureStoreAgent(BaseAgent):
             return None
 
     @as_tool
-    def list_features(self) -> List[str]:
+    def list_features(self) -> list[str]:
         """Lists all available features in the store."""
         return [f.stem for f in self.feature_dir.glob("*.json")]
 

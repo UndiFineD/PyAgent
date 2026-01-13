@@ -27,7 +27,7 @@ from src.core.base.version import VERSION
 import sys
 from pathlib import Path
 from src.core.base.utilities import create_main_function
-from src.infrastructure.dev.agent_tests import *
+from src.infrastructure.dev.agent_tests.agents import TestsAgent
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[2]

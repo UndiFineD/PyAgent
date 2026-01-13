@@ -31,7 +31,7 @@ __version__ = VERSION
 def test_market_features() -> None:
     """Validate agent economy and blockchain features."""
     logging.basicConfig(level=logging.INFO)
-    root = Path("c:/DEV/PyAgent")
+    root = Path(str(Path(__file__).resolve().parents[5]) + "")
     fleet = FleetManager(str(root))
     
     print("--- Phase 11: Agent Economy ---")

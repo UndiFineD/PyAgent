@@ -37,10 +37,10 @@ class FleetLoadBalancer:
         self.fleet = fleet
         self.gateway_core = GatewayCore()
         self.lb_core = LoadBalancerCore()
-        self.request_queue: List[Dict[str, Any]] = []
-        self.agent_metrics: Dict[str, AgentMetrics] = {}
+        self.request_queue: list[dict[str, Any]] = []
+        self.agent_metrics: dict[str, AgentMetrics] = {}
 
-    def balance_request(self, interface: str, command: str) -> Dict[str, Any]:
+    def balance_request(self, interface: str, command: str) -> dict[str, Any]:
         """
         Routes the request to the most available resource or queues it.
         Assigns model based on Interface Affinity.
@@ -66,7 +66,7 @@ class FleetLoadBalancer:
             "estimated_wait_ms": len(self.request_queue) * 10
         }
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         return {
             "queue_depth": len(self.request_queue),
             "interface_diversity": list(set(r["interface"] for r in self.request_queue))

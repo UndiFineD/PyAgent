@@ -39,7 +39,7 @@ def fix_all() -> None:
             if file.endswith(".py"):
                 path = os.path.join(root, file)
                 try:
-                    with open(path, "r", encoding="utf-8") as f:
+                    with open(path, encoding="utf-8") as f:
                         lines = f.readlines()
                 except Exception:
                     continue

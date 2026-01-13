@@ -25,10 +25,10 @@ class ConsciousnessRegistry:
     """
     _instance = None
 
-    def __new__(cls, *args, **kwargs) -> "ConsciousnessRegistry":
+    def __new__(cls, *args, **kwargs) -> ConsciousnessRegistry:
         if cls._instance is None:
-            cls._instance = super(ConsciousnessRegistry, cls).__new__(cls)
-            cls._instance.thought_index: Dict[str, List[Dict[str, Any]]] = {} # Agent -> Thoughts
+            cls._instance = super().__new__(cls)
+            cls._instance.thought_index: dict[str, list[dict[str, Any]]] = {} # Agent -> Thoughts
             cls._instance.global_summary: str = "Fleet consciousness active. No thoughts yet."
             
             # Subscribe to signals
@@ -40,11 +40,11 @@ class ConsciousnessRegistry:
                 logging.debug(f"ConsciousnessRegistry: Failed to subscribe to signals: {e}")
         return cls._instance
 
-    def __init__(self, fleet: Optional[Any] = None) -> None:
+    def __init__(self, fleet: Any | None = None) -> None:
         self.fleet = fleet
         logging.info("ConsciousnessRegistry initialized.")
 
-    def _on_thought(self, event: Dict[str, Any]) -> None:
+    def _on_thought(self, event: dict[str, Any]) -> None:
         """Callback when a thought signal is emitted."""
         data = event.get("data", {})
         agent = data.get("agent", "Unknown")
@@ -65,12 +65,12 @@ class ConsciousnessRegistry:
         if len(self.thought_index[agent]) > 20:
             self.thought_index[agent].pop(0)
 
-    def get_agent_awareness(self, agent_name: str) -> List[str]:
+    def get_agent_awareness(self, agent_name: str) -> list[str]:
         """Returns the latest thoughts from a specific agent."""
         thoughts = self.thought_index.get(agent_name, [])
         return [t["thought"] for t in thoughts]
 
-    def get_global_awareness(self) -> Dict[str, str]:
+    def get_global_awareness(self) -> dict[str, str]:
         """Returns a map of agent names to their latest thought."""
         awareness = {}
         for agent, thoughts in self.thought_index.items():

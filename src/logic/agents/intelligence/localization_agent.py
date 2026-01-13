@@ -38,7 +38,7 @@ class LocalizationAgent(BaseAgent):
         self.core = LocalizationCore()
         self.supported_locales = self.core.get_supported_locales()
 
-    def check_cultural_compliance(self, text: str) -> Dict[str, Any]:
+    def check_cultural_compliance(self, text: str) -> dict[str, Any]:
         """
         Runs cultural guardrails on agent communication.
         """
@@ -60,13 +60,13 @@ class LocalizationAgent(BaseAgent):
         # In a real scenario, this would call self.improve_content or an API
         return self.solve_translation_task(request)
 
-    def extract_strings(self, file_path: str) -> List[str]:
+    def extract_strings(self, file_path: str) -> list[str]:
         """Extracts potential user-facing strings for translation."""
         # Simple heuristic for potential translatable strings
         # (e.g., strings in print() or gettext calls)
         found_strings = []
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
                 # Matches gettext style calls _("string") or _('string')
                 matches = re.finditer(r'_\(["\'](.*?)["\']\)', content)
@@ -76,7 +76,7 @@ class LocalizationAgent(BaseAgent):
             logging.error(f"LocalizationAgent: Error reading {file_path}: {e}")
         return found_strings
 
-    def generate_translation_file(self, locale: str, strings: List[str]) -> Dict[str, str]:
+    def generate_translation_file(self, locale: str, strings: list[str]) -> dict[str, str]:
         """Generates a JSON translation dictionary for a specific locale."""
         if locale not in self.supported_locales:
             logging.warning(f"Locale {locale} not officially supported.")

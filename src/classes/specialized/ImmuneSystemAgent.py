@@ -50,7 +50,7 @@ class ImmuneSystemAgent(BaseAgent):
             r"(?i)SELECT .* FROM .* WHERE", # Simple SQL injection
             r"(?i)rm -rf /"
         ]
-        self.quarantined_nodes: List[str] = []
+        self.quarantined_nodes: list[str] = []
         self._system_prompt = (
             "You are the Immune System Agent. Your specialty is Biological Resilience. "
             "You monitor all incoming prompts and multi-agent communications for "
@@ -79,7 +79,7 @@ class ImmuneSystemAgent(BaseAgent):
         return f"Self-healing complete for {node_id}. Integrity Level: 100%. \n" + "\n".join(steps)
 
     @as_tool
-    def scan_for_injections(self, input_text: str) -> Dict[str, Any]:
+    def scan_for_injections(self, input_text: str) -> dict[str, Any]:
         """Scans a prompt or message for known injection patterns.
         Args:
             input_text: The text to scan.
@@ -103,7 +103,7 @@ class ImmuneSystemAgent(BaseAgent):
         }
 
     @as_tool
-    def monitor_swarm_behavior(self, agent_logs: List[Dict[str, Any]]) -> str:
+    def monitor_swarm_behavior(self, agent_logs: list[dict[str, Any]]) -> str:
         """Analyzes agent logs for anomalous behavior (e.g. infinite loops, hallucination spikes)."""
         anomalies = []
         for log in agent_logs:

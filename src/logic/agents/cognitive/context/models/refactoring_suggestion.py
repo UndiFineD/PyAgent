@@ -39,5 +39,5 @@ class RefactoringSuggestion:
     """
     suggestion_type: str
     description: str
-    affected_files: List[str] = field(default_factory=lambda: [])
+    affected_files: list[str] = field(default_factory=lambda: [])
     estimated_impact: str = "medium"

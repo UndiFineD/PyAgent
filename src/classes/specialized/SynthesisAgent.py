@@ -47,7 +47,7 @@ class SynthesisAgent(BaseAgent):
         )
 
     @as_tool
-    def fuse_agents(self, agent_names: List[str], new_agent_name: str) -> Dict[str, Any]:
+    def fuse_agents(self, agent_names: list[str], new_agent_name: str) -> dict[str, Any]:
         """
         Creates a new agent that combines functionalities of multiple source agents.
         
@@ -102,7 +102,7 @@ class SynthesisAgent(BaseAgent):
             }
 
     @as_tool
-    def analyze_fusion_candidates(self, fleet_agents: List[str]) -> List[Dict[str, Any]]:
+    def analyze_fusion_candidates(self, fleet_agents: list[str]) -> list[dict[str, Any]]:
         """
         Analyzes the fleet to suggest which agents should be fused based on usage patterns.
         """

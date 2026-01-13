@@ -35,14 +35,14 @@ class TechDebtAgent(BaseAgent):
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
 
-    def analyze_file(self, file_path: str) -> Dict[str, Any]:
+    def analyze_file(self, file_path: str) -> dict[str, Any]:
         """Analyzes a single Python file for technical debt."""
         if not file_path.endswith('.py'):
             return {"file": file_path, "issues": []}
 
         issues = []
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 content = f.read()
                 
             tree = ast.parse(content)
@@ -79,7 +79,7 @@ class TechDebtAgent(BaseAgent):
             "issue_count": len(issues)
         }
 
-    def analyze_workspace(self) -> Dict[str, Any]:
+    def analyze_workspace(self) -> dict[str, Any]:
         """Runs technical debt analysis on the entire workspace."""
         total_issues = 0
         file_reports = []

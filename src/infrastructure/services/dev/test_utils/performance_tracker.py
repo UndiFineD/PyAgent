@@ -25,7 +25,8 @@ from src.core.base.version import VERSION
 from .PerformanceMetric import PerformanceMetric
 from .PerformanceMetricType import PerformanceMetricType
 from contextlib import contextmanager
-from typing import Any, Dict, Iterator, List
+from typing import Any, Dict, List
+from collections.abc import Iterator
 import time
 
 __version__ = VERSION
@@ -42,8 +43,8 @@ class PerformanceTracker:
 
     def __init__(self) -> None:
         """Initialize performance tracker."""
-        self._metrics: List[PerformanceMetric] = []
-        self._start_times: Dict[str, float] = {}
+        self._metrics: list[PerformanceMetric] = []
+        self._start_times: dict[str, float] = {}
 
     @contextmanager
     def track(self, test_name: str) -> Iterator[None]:
@@ -90,11 +91,11 @@ class PerformanceTracker:
         )
         self._metrics.append(metric)
 
-    def get_metrics(self) -> List[PerformanceMetric]:
+    def get_metrics(self) -> list[PerformanceMetric]:
         """Get all recorded metrics."""
         return list(self._metrics)
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """Get summary of performance metrics."""
         if not self._metrics:
             return {}

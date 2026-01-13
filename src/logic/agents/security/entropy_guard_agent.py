@@ -36,7 +36,7 @@ class EntropyGuardAgent(BaseAgent):
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self.entropy_pool = os.urandom(64)
-        self.pqc_keys: Dict[str, str] = {} # Simulated Kyber/Dilithium keys
+        self.pqc_keys: dict[str, str] = {} # Simulated Kyber/Dilithium keys
 
     def generate_pqc_keypair(self, fleet_id: str) -> str:
         """Simulates the generation of a Kyber-1024 public key."""

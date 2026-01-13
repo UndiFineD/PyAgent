@@ -3,7 +3,7 @@ from src.classes.fleet.FleetManager import FleetManager
 
 class TestPhase76(unittest.TestCase):
     def setUp(self):
-        self.workspace = "c:/DEV/PyAgent"
+        self.workspace = Path(__file__).resolve().parents[2]
         self.fleet = FleetManager(self.workspace)
 
     def test_swarm_distillation_agent(self) -> None:

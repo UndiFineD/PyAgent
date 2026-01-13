@@ -38,6 +38,12 @@ from src.infrastructure.fleet.FleetLifecycleManager import FleetLifecycleManager
 if TYPE_CHECKING:
     from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
     from src.infrastructure.backend.SqlMetadataHandler import SqlMetadataHandler
+    from src.observability.stats.metrics_engine import ObservabilityEngine, ModelFallbackEngine
+    from src.infrastructure.orchestration.ToolRegistry import ToolRegistry
+    from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+    from src.infrastructure.orchestration.SelfHealingOrchestrator import SelfHealingOrchestrator
+    from src.infrastructure.orchestration.SelfImprovementOrchestrator import SelfImprovementOrchestrator
+    from src.logic.agents.cognitive.context.engines.GlobalContextEngine import GlobalContextEngine
 
 # Core Components
 
@@ -157,10 +163,13 @@ class FleetManager:
             "inter_fleet_bridge": "InterFleetBridgeOrchestrator"
         }
         
-        self.remote_nodes: List[str] = []
-        self.state: Optional[WorkflowState] = None
-        self.action_history: List[str] = [] # For loop detection
+        self.remote_nodes: list[str] = []
+        self.state: WorkflowState | None = None
+        self.action_history: list[str] = [] # For loop detection
         self.kill_switch = False # Emergency termination
+        
+        # Phase 260: Preemption
+        self.active_tasks: dict[str, Any] = {} # task_id -> {priority, agent_instances}
 
         # Delegated Managers (Phase 120 Extraction)
         self.execution_core = FleetExecutionCore(self)
@@ -173,39 +182,39 @@ class FleetManager:
             logging.debug(f"Peer discovery initialization skipped or failed: {e}")
 
     @property
-    def telemetry(self) -> "ObservabilityEngine":
+    def telemetry(self) -> ObservabilityEngine:
         return self.orchestrators.telemetry
 
     @property
-    def registry(self) -> "ToolRegistry":
+    def registry(self) -> ToolRegistry:
         return self.orchestrators.registry
 
     @property
-    def signals(self) -> "SignalRegistry":
+    def signals(self) -> SignalRegistry:
         return self.orchestrators.signals
 
     @property
-    def recorder(self) -> "LocalContextRecorder":
+    def recorder(self) -> LocalContextRecorder:
         return self.orchestrators.recorder
 
     @property
-    def sql_metadata(self) -> "SqlMetadataHandler":
+    def sql_metadata(self) -> SqlMetadataHandler:
         return self.orchestrators.sql_metadata
 
     @property
-    def self_healing(self) -> "SelfHealingOrchestrator":
+    def self_healing(self) -> SelfHealingOrchestrator:
         return self.orchestrators.self_healing
 
     @property
-    def self_improvement(self) -> "SelfImprovementOrchestrator":
+    def self_improvement(self) -> SelfImprovementOrchestrator:
         return self.orchestrators.self_improvement
 
     @property
-    def global_context(self) -> "GlobalContextEngine":
+    def global_context(self) -> GlobalContextEngine:
         return self.orchestrators.global_context
 
     @property
-    def fallback(self) -> "ModelFallbackEngine":
+    def fallback(self) -> ModelFallbackEngine:
         return self.orchestrators.fallback_engine
 
     @property
@@ -216,9 +225,29 @@ class FleetManager:
     def rl_selector(self) -> Any:
         return getattr(self.orchestrators, "r_l_selector", None) or getattr(self.orchestrators, "rl_selector", None)
 
-    async def execute_reliable_task(self, task: str) -> str:
+    # PHASE 260: Preemption Logic
+    def preempt_lower_priority_tasks(self, new_priority: AgentPriority) -> None:
+        """Suspends all tasks with lower priority than the new high-priority task."""
+        for tid, data in self.active_tasks.items():
+            if data['priority'].value > new_priority.value:
+                logging.info(f"Preempting lower-priority task {tid} ({data['priority'].name})")
+                for agent in data.get('agents', []):
+                    if hasattr(agent, 'suspend'):
+                        agent.suspend()
+
+    def resume_tasks(self) -> None:
+        """Resumes all suspended tasks if no critical tasks are running."""
+        # Check if any Critical/High tasks are still active
+        critical_active = any(d['priority'].value < AgentPriority.NORMAL.value for d in self.active_tasks.values())
+        if not critical_active:
+            for tid, data in self.active_tasks.items():
+                for agent in data.get('agents', []):
+                    if hasattr(agent, 'resume'):
+                        agent.resume()
+
+    async def execute_reliable_task(self, task: str, priority: AgentPriority = AgentPriority.NORMAL) -> str:
         """Executes a task using the 7-phase inner loop and linguistic articulation."""
-        return await self.execution_core.execute_reliable_task(task)
+        return await self.execution_core.execute_reliable_task(task, priority=priority)
 
     async def _record_success(self, res_or_prompt: Any, *args, **kwargs) -> None:
         """Records the success of a workflow step including Explainability and Telemetry."""
@@ -311,7 +340,7 @@ class FleetManager:
         except Exception:
             logging.error("Failed to write to fleet_failures.jsonl log.")
 
-    def register_remote_node(self, node_url: str, agent_names: List[str], remote_version: str = "1.0.0") -> str:
+    def register_remote_node(self, node_url: str, agent_names: list[str], remote_version: str = "1.0.0") -> str:
         """
         Registers a remote node and its available agents.
         Uses VersionGate to ensure compatibility (Phase 104).
@@ -403,7 +432,7 @@ class FleetManager:
             else:
                 try:
                     res = await asyncio.wait_for(run_tool(), timeout=5.0)
-                except asyncio.TimeoutError:
+                except TimeoutError:
                     error_msg = f"Non-essential tool '{best_tool}' (owner: {owner}) timed out after 5 seconds."
                     logging.warning(error_msg)
                     return error_msg
@@ -448,7 +477,7 @@ class FleetManager:
             if hasattr(self, 'telemetry'):
                 self.telemetry.trace_workflow(f"tool_{best_tool}", time.time() - start_time)
         
-    def register_agent(self, name: str, agent_class: Type[BaseAgent], file_path: Optional[str] = None) -> str:
+    def register_agent(self, name: str, agent_class: type[BaseAgent], file_path: str | None = None) -> str:
         """Adds an agent to the fleet."""
         return self.lifecycle_manager.register_agent(name, agent_class, file_path)
 
@@ -466,11 +495,11 @@ class FleetManager:
         """Cleanly shuts down and removes an agent."""
         return self.lifecycle_manager.cell_apoptosis(agent_name)
 
-    async def execute_workflow(self, task: str, workflow_steps: List[Dict[str, Any]]) -> str:
+    async def execute_workflow(self, task: str, workflow_steps: list[dict[str, Any]], priority: AgentPriority = AgentPriority.NORMAL) -> str:
         """Runs a sequence of agent actions with shared state and signals."""
-        return await self.execution_core.execute_workflow(task, workflow_steps)
+        return await self.execution_core.execute_workflow(task, workflow_steps, priority=priority)
 
-    def execute_with_consensus(self, task: str, primary_agent: str = None, secondary_agents: List[str] = None) -> Dict[str, Any]:
+    def execute_with_consensus(self, task: str, primary_agent: str = None, secondary_agents: list[str] = None) -> dict[str, Any]:
         """
         Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner.
         If agents are not specified, ByzantineConsensusAgent dynamically selects a committee. (Phase 123)
@@ -503,7 +532,7 @@ class FleetManager:
             secondary_agents = committee[1:]
             logging.info(f"Fleet: Formed dynamic committee: {primary_agent}, {secondary_agents}")
 
-        proposals: Dict[str, str] = {}
+        proposals: dict[str, str] = {}
         all_agents = [primary_agent] + secondary_agents
         
         for agent_name in all_agents:
@@ -567,7 +596,7 @@ class FleetManager:
 if __name__ == "__main__":
     # Test script for FleetManager
     logging.basicConfig(level=logging.INFO)
-    root = Path("c:/DEV/PyAgent")
+    root = Path(str(Path(__file__).resolve().parents[3]) + "")
     fleet = FleetManager(str(root))
     
     # These agents are used for the demo below

@@ -44,7 +44,7 @@ class RewardModelAgent(BaseAgent):
         )
 
     @as_tool
-    def rank_proposals(self, task: str, proposals: Dict[str, str]) -> Dict[str, Any]:
+    def rank_proposals(self, task: str, proposals: dict[str, str]) -> dict[str, Any]:
         """Ranks a set of proposals from best to worst and provides reward scores.
         
         Args:

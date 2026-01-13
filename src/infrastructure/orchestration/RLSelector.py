@@ -36,7 +36,7 @@ class RLSelector:
     def __init__(self) -> None:
         # Bayesian parameters for Beta distribution: alpha (successes), beta (failures)
         # schema: {tool_name: {"alpha": float, "beta": float, "total_calls": int}}
-        self.tool_stats: Dict[str, Dict[str, Any]] = {}
+        self.tool_stats: dict[str, dict[str, Any]] = {}
 
     def update_stats(self, tool_name: str, success: bool) -> None:
         """Updates the posterior beliefs for a tool using Bayesian inference."""
@@ -54,7 +54,7 @@ class RLSelector:
         weight = stats["alpha"] / (stats["alpha"] + stats["beta"])
         logging.info(f"RL-SELECTOR: Updated Bayesian posterior for {tool_name} (Expected Success: {weight:.2f})")
 
-    def select_best_tool(self, candidate_tools: List[str]) -> str:
+    def select_best_tool(self, candidate_tools: list[str]) -> str:
         """
         Selects the optimal tool from a list of candidates using Thompson Sampling.
         Samples from each candidate's posterior Beta distribution and picks the max.

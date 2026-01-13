@@ -29,10 +29,10 @@ from .models import TestEnvironment
 
 __version__ = VERSION
 
-def _empty_str_list() -> List[str]:
+def _empty_str_list() -> list[str]:
     return []
 
-def _empty_dict_any() -> Dict[str, Any]:
+def _empty_dict_any() -> dict[str, Any]:
     return {}
 
 class EnvironmentProvisioner:
@@ -42,24 +42,24 @@ class EnvironmentProvisioner:
     class ProvisionedEnvironment:
         status: str
         python_version: str = ""
-        dependencies: List[str] = field(default_factory=_empty_str_list)
-        config: Dict[str, Any] = field(default_factory=_empty_dict_any)
+        dependencies: list[str] = field(default_factory=_empty_str_list)
+        config: dict[str, Any] = field(default_factory=_empty_dict_any)
 
     def __init__(self) -> None:
         """Initialize environment provisioner."""
-        self.environments: Dict[str, TestEnvironment] = {}
-        self.active: Dict[str, bool] = {}
-        self._setup_logs: Dict[str, List[str]] = {}
-        self._provisioned: List[EnvironmentProvisioner.ProvisionedEnvironment] = []
+        self.environments: dict[str, TestEnvironment] = {}
+        self.active: dict[str, bool] = {}
+        self._setup_logs: dict[str, list[str]] = {}
+        self._provisioned: list[EnvironmentProvisioner.ProvisionedEnvironment] = []
 
     def register_environment(
         self,
         name: str,
         base_url: str = "",
-        variables: Optional[Dict[str, str]] = None,
-        fixtures: Optional[List[str]] = None,
-        setup_commands: Optional[List[str]] = None,
-        teardown_commands: Optional[List[str]] = None
+        variables: dict[str, str] | None = None,
+        fixtures: list[str] | None = None,
+        setup_commands: list[str] | None = None,
+        teardown_commands: list[str] | None = None
     ) -> TestEnvironment:
         """Register a test environment."""
         env = TestEnvironment(
@@ -75,7 +75,7 @@ class EnvironmentProvisioner:
         self._setup_logs[name] = []
         return env
 
-    def provision(self, name: Dict[str, Any] | str) -> Dict[str, Any]:
+    def provision(self, name: dict[str, Any] | str) -> dict[str, Any]:
         """Provision an environment."""
         if isinstance(name, dict):
             env = EnvironmentProvisioner.ProvisionedEnvironment(
@@ -110,7 +110,7 @@ class EnvironmentProvisioner:
             except Exception:
                 pass
 
-    def teardown(self, name: str) -> Dict[str, Any]:
+    def teardown(self, name: str) -> dict[str, Any]:
         """Teardown an environment."""
         env = self.environments.get(name)
         if not env:
@@ -120,11 +120,11 @@ class EnvironmentProvisioner:
         self.active[name] = False
         return {"environment": name, "success": True}
 
-    def get_active_environments(self) -> List[str]:
+    def get_active_environments(self) -> list[str]:
         """Get list of active environments."""
         return [name for name, active in self.active.items() if active]
 
-    def get_logs(self, name: str) -> List[str]:
+    def get_logs(self, name: str) -> list[str]:
         """Get setup / teardown logs for an environment."""
         return self._setup_logs.get(name, [])
 
@@ -133,16 +133,16 @@ class DataFactory:
 
     def __init__(self, seed: int = 0) -> None:
         """Initialize data factory."""
-        self.defaults: Dict[str, Any] = {}
-        self._schemas: Dict[str, Dict[str, Any]] = {}
+        self.defaults: dict[str, Any] = {}
+        self._schemas: dict[str, dict[str, Any]] = {}
         self._rng = random.Random(seed)
-        self._auto_inc: Dict[str, int] = {}
+        self._auto_inc: dict[str, int] = {}
 
     def set_default(self, key: str, value: Any) -> None:
         """Set default value (legacy)."""
         self.defaults[key] = value
 
-    def register(self, kind: str, schema: Dict[str, Any]) -> None:
+    def register(self, kind: str, schema: dict[str, Any]) -> None:
         """Register a schema for a named kind."""
         self._schemas[kind] = dict(schema)
 
@@ -161,13 +161,13 @@ class DataFactory:
             return self._rng.randint(0, 1000)
         return spec
 
-    def create(self, *args: Any, **kwargs: Any) -> Dict[str, Any]:
+    def create(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
         """Create data."""
         if args and isinstance(args[0], str):
             kind: str = args[0]
-            overrides: Dict[str, Any] = kwargs.get("overrides") or {}
+            overrides: dict[str, Any] = kwargs.get("overrides") or {}
             schema = self._schemas.get(kind, {})
-            obj: Dict[str, Any] = {}
+            obj: dict[str, Any] = {}
             for field_name, spec in schema.items():
                 obj[field_name] = self._generate_value(kind, spec)
             obj.update(overrides)
@@ -177,6 +177,6 @@ class DataFactory:
         result.update(kwargs)
         return result
 
-    def create_batch(self, kind: str, count: int, overrides: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
+    def create_batch(self, kind: str, count: int, overrides: dict[str, Any] | None = None) -> list[dict[str, Any]]:
         """Create a batch of objects for a kind."""
         return [self.create(kind, overrides=overrides or {}) for _ in range(count)]

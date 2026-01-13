@@ -36,7 +36,7 @@ class EvolutionaryPromptAgent(BaseAgent):
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.population: List[Dict[str, Any]] = []
+        self.population: list[dict[str, Any]] = []
         self.generation = 0
         self.population_size = 10
         self.core = EvolutionCore()
@@ -75,7 +75,7 @@ class EvolutionaryPromptAgent(BaseAgent):
         return "Invalid prompt index."
 
     @as_tool
-    def evolve_generation(self) -> Dict[str, Any]:
+    def evolve_generation(self) -> dict[str, Any]:
         """
         Performs selection, crossover, and mutation to create next generation (Phase 182).
         """

@@ -34,9 +34,9 @@ class SearchCore:
     """Pure logic core for search result processing."""
 
     @staticmethod
-    def parse_bing_results(data: Dict[str, Any]) -> List[str]:
+    def parse_bing_results(data: dict[str, Any]) -> list[str]:
         """Parses Bing web search results into Markdown blocks."""
-        results: List[str] = []
+        results: list[str] = []
         for v in data.get("webPages", {}).get("value", []):
             name = v.get("name", "Untitled Result")
             url = v.get("url", "#")
@@ -45,9 +45,9 @@ class SearchCore:
         return results
 
     @staticmethod
-    def parse_google_results(data: Dict[str, Any]) -> List[str]:
+    def parse_google_results(data: dict[str, Any]) -> list[str]:
         """Parses Google Custom Search results into Markdown blocks."""
-        results: List[str] = []
+        results: list[str] = []
         for item in data.get("items", []):
             title = item.get("title", "Untitled Result")
             link = item.get("link", "#")
@@ -56,9 +56,9 @@ class SearchCore:
         return results
 
     @staticmethod
-    def parse_ddg_results(data: List[Dict[str, Any]]) -> List[str]:
+    def parse_ddg_results(data: list[dict[str, Any]]) -> list[str]:
         """Parses DuckDuckGo results from ddg_search library format."""
-        results: List[str] = []
+        results: list[str] = []
         for r in data:
             title = r.get("title", "Untitled Result")
             href = r.get("href", "#")
@@ -67,7 +67,7 @@ class SearchCore:
         return results
 
     @staticmethod
-    def format_results_block(results: List[str], provider: str) -> str:
+    def format_results_block(results: list[str], provider: str) -> str:
         """Combines list of results into a single string with a provider-specific indicator."""
         if not results:
             return f"No {provider} results found."

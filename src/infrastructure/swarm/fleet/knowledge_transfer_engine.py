@@ -44,7 +44,7 @@ class KnowledgeTransferEngine:
         self.export_path.mkdir(parents=True, exist_ok=True)
         self.core = KnowledgeTransferCore()
 
-    def export_knowledge(self, fleet_id: str, knowledge_data: Dict[str, Any]) -> str:
+    def export_knowledge(self, fleet_id: str, knowledge_data: dict[str, Any]) -> str:
         """Exports a fleet's knowledge (lessons, entities) to a shareable file."""
         export_file = self.export_path / f"knowledge_{fleet_id}.json"
         
@@ -54,18 +54,18 @@ class KnowledgeTransferEngine:
         logging.info(f"KnowledgeTransfer: Exported knowledge for {fleet_id} to {export_file}")
         return str(export_file)
 
-    def import_knowledge(self, source_file: str) -> Dict[str, Any]:
+    def import_knowledge(self, source_file: str) -> dict[str, Any]:
         """Imports knowledge from an external JSON file."""
         source_path = Path(source_file)
         if not source_path.exists():
             raise FileNotFoundError(f"Knowledge file not found: {source_file}")
             
-        with open(source_path, "r") as f:
+        with open(source_path) as f:
             data = json.load(f)
             
         logging.info(f"KnowledgeTransfer: Imported knowledge from {source_file}")
         return data
 
-    def merge_lessons(self, current_lessons: List[Any], imported_lessons: List[Any]) -> List[Any]:
+    def merge_lessons(self, current_lessons: list[Any], imported_lessons: list[Any]) -> list[Any]:
         """Merges imported lessons into the current set, avoiding duplicates."""
         return self.core.merge_lessons(current_lessons, imported_lessons)

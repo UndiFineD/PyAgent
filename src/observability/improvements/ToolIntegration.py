@@ -42,8 +42,8 @@ class ToolIntegration:
 
     def __init__(self) -> None:
         """Initialize tool integration."""
-        self.tool_configs: Dict[str, Dict[str, Any]] = {}
-        self.suggestions: List[ToolSuggestion] = []
+        self.tool_configs: dict[str, dict[str, Any]] = {}
+        self.suggestions: list[ToolSuggestion] = []
 
     def configure_tool(
         self,
@@ -63,9 +63,9 @@ class ToolIntegration:
             "command": command
         }
 
-    def parse_pylint_output(self, output: str) -> List[ToolSuggestion]:
+    def parse_pylint_output(self, output: str) -> list[ToolSuggestion]:
         """Parse pylint output into suggestions."""
-        suggestions: List[ToolSuggestion] = []
+        suggestions: list[ToolSuggestion] = []
         for line in output.split('\n'):
             match = re.match(
                 r'(.+):(\d+):\d+: (\w+): (.+)',
@@ -82,9 +82,9 @@ class ToolIntegration:
         self.suggestions.extend(suggestions)
         return suggestions
 
-    def parse_mypy_output(self, output: str) -> List[ToolSuggestion]:
+    def parse_mypy_output(self, output: str) -> list[ToolSuggestion]:
         """Parse mypy output into suggestions."""
-        suggestions: List[ToolSuggestion] = []
+        suggestions: list[ToolSuggestion] = []
         for line in output.split('\n'):
             match = re.match(r'(.+):(\d+): error: (.+)', line)
             if match:
@@ -99,8 +99,8 @@ class ToolIntegration:
         return suggestions
 
     def get_suggestions(
-        self, tool_type: Optional[AnalysisToolType] = None
-    ) -> List[ToolSuggestion]:
+        self, tool_type: AnalysisToolType | None = None
+    ) -> list[ToolSuggestion]:
         """Get all tool suggestions."""
         if tool_type:
             return [s for s in self.suggestions
@@ -108,8 +108,8 @@ class ToolIntegration:
         return self.suggestions
 
     def convert_to_improvements(
-        self, suggestions: List[ToolSuggestion]
-    ) -> List[Dict[str, Any]]:
+        self, suggestions: list[ToolSuggestion]
+    ) -> list[dict[str, Any]]:
         """Convert tool suggestions to improvement data."""
         return [{
             "title": f"Fix {s.tool_name} issue in {s.file_path}",

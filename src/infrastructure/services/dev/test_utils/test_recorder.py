@@ -25,7 +25,8 @@ from src.core.base.version import VERSION
 from .RecordedInteraction import RecordedInteraction
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, Iterator, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
+from collections.abc import Iterator
 import json
 
 __version__ = VERSION
@@ -52,7 +53,7 @@ class TestRecorder:
 
     def __init__(self) -> None:
         """Initialize recorder."""
-        self._recordings: List[RecordedInteraction] = []
+        self._recordings: list[RecordedInteraction] = []
         self._replay_index = 0
         self._mode: str = "normal"  # "record", "replay", "normal"
 
@@ -60,8 +61,8 @@ class TestRecorder:
         self,
         call_type: str,
         call_name: str,
-        args: Tuple[Any, ...],
-        kwargs: Dict[str, Any],
+        args: tuple[Any, ...],
+        kwargs: dict[str, Any],
         result: Any,
     ) -> None:
         """Record an interaction.
@@ -87,7 +88,7 @@ class TestRecorder:
         self,
         call_type: str,
         call_name: str,
-    ) -> Optional[Any]:
+    ) -> Any | None:
         """Get replayed result for a call.
 
         Args:
@@ -109,7 +110,7 @@ class TestRecorder:
         return None
 
     @contextmanager
-    def record(self) -> Iterator["TestRecorder"]:
+    def record(self) -> Iterator[TestRecorder]:
         """Context manager for recording mode."""
         self._mode = "record"
         self._recordings = []
@@ -119,7 +120,7 @@ class TestRecorder:
             self._mode = "normal"
 
     @contextmanager
-    def replay(self) -> Iterator["TestRecorder"]:
+    def replay(self) -> Iterator[TestRecorder]:
         """Context manager for replay mode."""
         self._mode = "replay"
         self._replay_index = 0
@@ -130,7 +131,7 @@ class TestRecorder:
 
     def save(self, path: Path) -> None:
         """Save recordings to file."""
-        data: List[Dict[str, Any]] = []
+        data: list[dict[str, Any]] = []
         for r in self._recordings:
             data.append({
                 "call_type": r.call_type,

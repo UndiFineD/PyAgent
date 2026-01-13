@@ -41,8 +41,8 @@ class RollbackTracker:
 
     def __init__(self) -> None:
         """Initialize the rollback tracker."""
-        self.rollbacks: List[RollbackRecord] = []
-        self.states: Dict[str, str] = {}  # improvement_id -> previous state
+        self.rollbacks: list[RollbackRecord] = []
+        self.states: dict[str, str] = {}  # improvement_id -> previous state
 
     def save_state(self, improvement: Improvement) -> None:
         """Save the current state before an improvement.
@@ -83,8 +83,8 @@ class RollbackTracker:
         return record
 
     def get_rollbacks(
-        self, improvement_id: Optional[str] = None
-    ) -> List[RollbackRecord]:
+        self, improvement_id: str | None = None
+    ) -> list[RollbackRecord]:
         """Get rollback records."""
         if improvement_id:
             return [r for r in self.rollbacks

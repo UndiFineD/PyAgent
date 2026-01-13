@@ -52,7 +52,7 @@ class SignalAgent(BaseAgent):
     def _get_default_content(self) -> str:
         return "# Signal Observation Log\n\n## Events\nNo recent events.\n"
 
-    def on_agent_fail(self, event: Dict[str, Any]) -> str:
+    def on_agent_fail(self, event: dict[str, Any]) -> str:
         """Handle an agent failure signal."""
         sender = event.get("sender")
         data = event.get("data")
@@ -60,7 +60,7 @@ class SignalAgent(BaseAgent):
         # Append to log
         self.append_to_file(f"\n- [!] {event['timestamp']} Agent **{sender}** failed: {data}")
 
-    def on_improvement_ready(self, event: Dict[str, Any]) -> str:
+    def on_improvement_ready(self, event: dict[str, Any]) -> str:
         """Handle a new improvement signal."""
         data = event.get("data")
         logging.info(f"SignalAgent noticing new improvement: {data}")

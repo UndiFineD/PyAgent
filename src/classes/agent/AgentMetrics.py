@@ -32,9 +32,9 @@ class AgentMetrics:
     """Manages execution metrics and statistics for an agent."""
     files_processed: int = 0
     files_modified: int = 0
-    agents_applied: Dict[str, int] = field(default_factory=dict)
+    agents_applied: dict[str, int] = field(default_factory=dict)
     start_time: float = field(default_factory=time.time)
-    end_time: Optional[float] = None
+    end_time: float | None = None
 
     def record_file_processed(self, modified: bool = False) -> None:
         """Record a file as processed."""
@@ -69,7 +69,7 @@ Agents applied:
             summary += f"  - {agent}: {count} files\n"
         return summary
 
-    def to_dict(self) -> Dict[str, Any]:
+    def to_dict(self) -> dict[str, Any]:
         """Convert metrics to a dictionary for reporting."""
         if not self.end_time:
             self.finalize()
@@ -87,7 +87,7 @@ Agents applied:
             'agents_applied': self.agents_applied
         }
 
-    def benchmark_execution(self, files: List[Any], total_time_provided: float = None) -> Dict[str, Any]:
+    def benchmark_execution(self, files: list[Any], total_time_provided: float = None) -> dict[str, Any]:
         """Benchmark execution time per file and per agent."""
         if not self.end_time:
             self.finalize()
@@ -96,7 +96,7 @@ Agents applied:
         files_count = len(files)
         avg_per_file = total_time / max(files_count, 1)
 
-        benchmarks: Dict[str, Any] = {
+        benchmarks: dict[str, Any] = {
             'total_time': total_time,
             'file_count': files_count,
             'average_per_file': avg_per_file,
@@ -111,7 +111,7 @@ Agents applied:
         return benchmarks
 
     def cost_analysis(self, backend: str = 'github-models',
-                      cost_per_request: float = 0.0001) -> Dict[str, Any]:
+                      cost_per_request: float = 0.0001) -> dict[str, Any]:
         """Analyze API usage cost for the agent execution."""
         total_agent_runs = sum(self.agents_applied.values())
 
@@ -119,7 +119,7 @@ Agents applied:
         estimated_requests = total_agent_runs
         estimated_cost = estimated_requests * cost_per_request
 
-        analysis: Dict[str, Any] = {
+        analysis: dict[str, Any] = {
             'backend': backend,
             'files_processed': self.files_processed,
             'agents_applied': dict(self.agents_applied),

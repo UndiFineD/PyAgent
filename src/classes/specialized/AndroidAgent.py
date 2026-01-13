@@ -61,7 +61,7 @@ class AndroidAgent(BaseAgent):
                 logging.error(f"AndroidAgent: Recording error: {e}")
 
     @as_tool
-    def dump_accessibility_tree(self) -> Dict[str, Any]:
+    def dump_accessibility_tree(self) -> dict[str, Any]:
         """Dumps and parses the current Android screen's accessibility tree (XML -> JSON)."""
         logging.info("Dumping Android accessibility tree via ADB...")
         # In a real environment, this would run: adb shell uiautomator dump /sdcard/view.xml
@@ -75,7 +75,7 @@ class AndroidAgent(BaseAgent):
         }
 
     @as_tool
-    def execute_mobile_action(self, action_type: str, params: Dict[str, Any]) -> str:
+    def execute_mobile_action(self, action_type: str, params: dict[str, Any]) -> str:
         """Executes a mobile action (tap, type, swipe, home) using ADB."""
         logging.info(f"Executing mobile action: {action_type} with {params}")
         

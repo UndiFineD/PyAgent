@@ -37,7 +37,7 @@ class ModelOptimizerAgent(BaseAgent):
             "Suggest the best 'Virtualization' strategy for large models (e.g., layered loading, 4-bit quantization)."
         )
 
-    def select_optimization_strategy(self, model_size_gb: float, available_vram_gb: float, hardware_features: List[str] = []) -> Dict[str, Any]:
+    def select_optimization_strategy(self, model_size_gb: float, available_vram_gb: float, hardware_features: list[str] = []) -> dict[str, Any]:
         """Calculates the best optimization strategy based on hardware constraints."""
         if self.recorder:
             self.recorder.record_lesson("model_optimization_request", {"size": model_size_gb, "vram": available_vram_gb, "hw": hardware_features})
@@ -82,7 +82,7 @@ class ModelOptimizerAgent(BaseAgent):
             
         return strategy
 
-    def run_tinyml_benchmark(self, model_id: str, hardware_target: str) -> Dict[str, Any]:
+    def run_tinyml_benchmark(self, model_id: str, hardware_target: str) -> dict[str, Any]:
         """
         Runs an energy and latency benchmark for a specific model on target hardware (MLSysBook Pattern).
         Analyzes batch size, precision (INT8/FP16), and memory constraints.
@@ -103,7 +103,7 @@ class ModelOptimizerAgent(BaseAgent):
         """Returns the CLI command for NPU acceleration via FastFlowLM."""
         return f"flm run {model_tag}"
 
-    def simulate_hopper_load(self, model_params_billions: float) -> Dict[str, Any]:
+    def simulate_hopper_load(self, model_params_billions: float) -> dict[str, Any]:
         """
         Simulates H100 (Hopper) performance using HopperSim logic (Phase 130).
         Calculates compute utilization and bandwidth requirements for FP8 kernels.

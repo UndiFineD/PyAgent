@@ -43,11 +43,11 @@ class AttributionEngine:
         self.log_file = self.workspace_root / "data/fleet/attribution_log.json"
         self.core = AttributionCore()
         os.makedirs(self.log_file.parent, exist_ok=True)
-        self.records: List[Dict[str, Any]] = self._load()
+        self.records: list[dict[str, Any]] = self._load()
 
-    def _load(self) -> List[Dict[str, Any]]:
+    def _load(self) -> list[dict[str, Any]]:
         if self.log_file.exists():
-            with open(self.log_file, "r") as f:
+            with open(self.log_file) as f:
                 return json.load(f)
         return []
 
@@ -57,7 +57,7 @@ class AttributionEngine:
         if not path.exists():
             return
             
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             content = f.read()
             
         new_content = self.core.ensure_license_header(content)
@@ -87,11 +87,11 @@ class AttributionEngine:
         with open(self.log_file, "w") as f:
             json.dump(self.records, f, indent=2)
 
-    def get_lineage(self, content_hash: str) -> List[Dict[str, Any]]:
+    def get_lineage(self, content_hash: str) -> list[dict[str, Any]]:
         """Retrieves the history of a specific piece of content based on its hash."""
         return [r for r in self.records if r["hash"] == content_hash]
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """Provides a summary of total attributions."""
         summary = {}
         for r in self.records:

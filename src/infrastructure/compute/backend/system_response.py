@@ -44,5 +44,5 @@ class SystemResponse:
     backend: str
     latency_ms: int = 0
     cached: bool = False
-    request_id: Optional[str] = None
+    request_id: str | None = None
     tokens_used: int = 0

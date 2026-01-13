@@ -22,8 +22,11 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Callable, Optional
+from typing import Optional, TypeVar
+from collections.abc import Callable
 import threading
+
+T = TypeVar("T")
 
 __version__ = VERSION
 
@@ -35,7 +38,7 @@ class RetryHelper:
         self.delay_seconds = float(delay_seconds)
 
     def retry(self, fn: Callable[[], T]) -> T:
-        last_exc: Optional[BaseException] = None
+        last_exc: BaseException | None = None
         for attempt in range(self.max_retries):
             try:
                 return fn()

@@ -33,9 +33,9 @@ class ResourcePredictorOrchestrator:
     
     def __init__(self, fleet) -> None:
         self.fleet = fleet
-        self.resource_map: Dict[str, Dict[str, float]] = {} # task_type -> resource_profile
+        self.resource_map: dict[str, dict[str, float]] = {} # task_type -> resource_profile
 
-    def forecast_usage(self, task: Optional[str] = None) -> Dict[str, Any]:
+    def forecast_usage(self, task: str | None = None) -> dict[str, Any]:
         """
         Phase 53: Forecasts resource requirements and token usage.
         """
@@ -64,11 +64,11 @@ class ResourcePredictorOrchestrator:
             "allocation": allocation
         }
 
-    def forecast_and_allocate(self, task: str) -> Dict[str, Any]:
+    def forecast_and_allocate(self, task: str) -> dict[str, Any]:
         """Legacy alias for Phase 38 compatibility."""
         return self.forecast_usage(task)
 
-    def evaluate_scaling_needs(self, current_nodes: int) -> Dict[str, Any]:
+    def evaluate_scaling_needs(self, current_nodes: int) -> dict[str, Any]:
         """Phase 53: Determine if the fleet needs to scale based on forecast."""
         logging.info(f"ResourcePredictor: Evaluating scaling for {current_nodes} nodes.")
         # Simple mock logic to satisfy test_phase53
@@ -78,12 +78,12 @@ class ResourcePredictorOrchestrator:
             "reason": "Token forecast exceeds threshold for current node count."
         }
 
-    def ingest_metrics(self, metrics: List[Any]) -> None:
+    def ingest_metrics(self, metrics: list[Any]) -> None:
         """Ingest metrics for prediction updates."""
         logging.info(f"ResourcePredictor: Ingesting {len(metrics)} metrics for model training.")
         # Placeholder for complex neural update logic
 
-    def report_actual_usage(self, task: str, usage_data: Dict[str, float]) -> None:
+    def report_actual_usage(self, task: str, usage_data: dict[str, float]) -> None:
         """Logs actual usage to improve future predictions."""
         logging.info(f"ResourcePredictor: Recording actual usage for task mapping: {usage_data}")
         # In a real system, this would update a neural weights for the predictor

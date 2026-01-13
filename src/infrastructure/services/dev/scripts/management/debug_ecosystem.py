@@ -31,7 +31,7 @@ __version__ = VERSION
 def test_ecosystem_features() -> None:
     """Validate Human-Agent Teaming and Web UI features."""
     logging.basicConfig(level=logging.INFO)
-    root = Path("c:/DEV/PyAgent")
+    root = Path(str(Path(__file__).resolve().parents[5]) + "")
     fleet = FleetManager(str(root))
     
     print("--- Phase 10: Human-Agent Teaming ---")

@@ -30,6 +30,6 @@ class SystemVersion:
 
     component: str
     version: str
-    capabilities: List[str] = field(default_factory=lambda: [])
+    capabilities: list[str] = field(default_factory=lambda: [])
     api_version: str = "v1"
-    deprecated_features: List[str] = field(default_factory=lambda: [])
+    deprecated_features: list[str] = field(default_factory=lambda: [])

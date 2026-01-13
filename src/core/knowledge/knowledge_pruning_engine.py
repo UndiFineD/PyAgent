@@ -21,6 +21,7 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
+import time
 from typing import List, Dict, Any, TYPE_CHECKING
 
 __version__ = VERSION
@@ -33,9 +34,9 @@ class KnowledgePruningEngine:
     Fosters 'Anchoring Strength' by preserving frequently accessed items
     and pruning redundant or stale data to optimize performance.
     """
-    def __init__(self, engine: 'KnowledgeEngine') -> None:
+    def __init__(self, engine: KnowledgeEngine) -> None:
         self.engine = engine
-        self.access_logs: Dict[str, Dict[str, Any]] = {} # id -> {"count": int, "last_access": float}
+        self.access_logs: dict[str, dict[str, Any]] = {} # id -> {"count": int, "last_access": float}
 
     def log_access(self, element_id: str) -> None:
         """Records an access event to an element and updates timestamps."""
@@ -64,7 +65,7 @@ class KnowledgePruningEngine:
         strength = log["count"] * math.exp(-decay_constant * age)
         return strength
 
-    def run_pruning_cycle(self, strength_threshold: float = 0.5, compression_threshold: float = 2.0) -> Dict[str, List[str]]:
+    def run_pruning_cycle(self, strength_threshold: float = 0.5, compression_threshold: float = 2.0) -> dict[str, list[str]]:
         """
         Executes a pruning cycle across all engine stores using anchoring strength.
         Items with strength < strength_threshold are considered candidates for eviction.

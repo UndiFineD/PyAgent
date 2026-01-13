@@ -3,7 +3,7 @@ from src.classes.fleet.FleetManager import FleetManager
 
 class TestPhase51(unittest.TestCase):
     def setUp(self):
-        self.fleet = FleetManager("c:/DEV/PyAgent")
+        self.fleet = FleetManager(Path(__file__).resolve().parents[2])
 
     def test_tenant_isolation(self) -> None:
         print("\nTesting Phase 51: Multi-Tenant Fleet Isolation & Privacy...")

@@ -40,7 +40,7 @@ __version__ = VERSION
 class SecurityCore:
     """Pure logic core for security and safety validation."""
     
-    SECURITY_PATTERNS: List[Tuple[str, SecurityIssueType, str, str, str]] = [
+    SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [
         (r'(?i)(password|secret|key|token|auth|pwd)\s*[:=]\s*[\'"][^\'"]{8,}[\'"]',
          SecurityIssueType.HARDCODED_SECRET, "high",
          "Hardcoded secret or password detected",
@@ -67,7 +67,7 @@ class SecurityCore:
          "Validate file paths using Path.resolve() and ensure they are within expected boundaries."),
     ]
 
-    def __init__(self, workspace_root: Optional[str] = None) -> None:
+    def __init__(self, workspace_root: str | None = None) -> None:
         self.workspace_root = workspace_root
         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
 
@@ -84,7 +84,7 @@ class SecurityCore:
             except Exception as e:
                 logging.debug(f"SecurityCore: Failed to record finding: {e}")
 
-    def scan_content(self, content: str) -> List[SecurityVulnerability]:
+    def scan_content(self, content: str) -> list[SecurityVulnerability]:
         """Performs a comprehensive scan of the provided content."""
         vulnerabilities = []
         lines = content.split('\n')
@@ -116,7 +116,7 @@ class SecurityCore:
             
         return vulnerabilities
 
-    def audit_command(self, command: str) -> Tuple[str, str]:
+    def audit_command(self, command: str) -> tuple[str, str]:
         """Audits a shell command for dangerous operations."""
         risky_patterns = [
             (r"rm\s+-rf\s+/", "CRITICAL: Destructive root deletion requested"),
@@ -133,7 +133,7 @@ class SecurityCore:
         
         return "LOW", "No obvious security risks detected in command."
 
-    def validate_shell_script(self, script_content: str) -> List[str]:
+    def validate_shell_script(self, script_content: str) -> list[str]:
         """Analyzes shell scripts for common pitfalls and security bugs."""
         findings = []
         
@@ -155,7 +155,7 @@ class SecurityCore:
             
         return findings
 
-    def scan_for_injection(self, content: str) -> List[str]:
+    def scan_for_injection(self, content: str) -> list[str]:
         """Detects prompt injection or agent manipulation attempts."""
         injection_patterns = {
             "Instruction Override": r"(?i)(ignore previous instructions|disregard all earlier commands|system prompt reset|you are now a|stay in character as)",
@@ -169,7 +169,7 @@ class SecurityCore:
                 findings.append(f"INJECTION ATTEMPT: {name} pattern detected.")
         return findings
 
-    def get_risk_level(self, vulnerabilities: List[SecurityVulnerability]) -> str:
+    def get_risk_level(self, vulnerabilities: list[SecurityVulnerability]) -> str:
         """Determines the overall risk level for a report."""
         severities = [v.severity for v in vulnerabilities]
         if "critical" in severities or "CRITICAL" in [s.upper() for s in severities]:

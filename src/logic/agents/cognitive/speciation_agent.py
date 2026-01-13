@@ -73,7 +73,7 @@ class SpeciationAgent(BaseAgent):
         return f"Successfully speciated {new_agent_name} at {output_path} with generated unit tests."
 
     @as_tool
-    def detect_red_queen_stagnation(self, agent_a_name: str, agent_b_name: str) -> Dict[str, Any]:
+    def detect_red_queen_stagnation(self, agent_a_name: str, agent_b_name: str) -> dict[str, Any]:
         """
         Detects if two agents are converging in their specialized roles (Red Queen stagnation).
         If similarity is > 80%, it recommends a divergence event.

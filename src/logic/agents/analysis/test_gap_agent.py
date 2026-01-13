@@ -44,9 +44,9 @@ class TestGapAgent:
 
     def __init__(self) -> None:
         """Initialize the test gap analyzer."""
-        self.gaps: List[TestGap] = []
+        self.gaps: list[TestGap] = []
 
-    def analyze(self, content: str, file_path: str) -> List[TestGap]:
+    def analyze(self, content: str, file_path: str) -> list[TestGap]:
         """Analyze code for test coverage gaps.
 
         Args:
@@ -95,7 +95,7 @@ class TestGapAgent:
                 complexity += len(child.values) - 1
         return complexity
 
-    def _suggest_tests(self, node: ast.AST) -> List[str]:
+    def _suggest_tests(self, node: ast.AST) -> list[str]:
         """Suggest test cases for a function.
 
         Args:
@@ -104,7 +104,7 @@ class TestGapAgent:
         Returns:
             List of suggested test case descriptions.
         """
-        suggestions: List[str] = []
+        suggestions: list[str] = []
         # Type guard: ensure node is a function definition
         if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
             return suggestions

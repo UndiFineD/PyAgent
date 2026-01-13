@@ -50,7 +50,7 @@ class SelfHealingAgent(BaseAgent):
     def scan_for_failures(self) -> str:
         """Analyzes telemetry for errors and suggests fixes."""
         self._track_tokens(200, 350)
-        summary = self.telemetry.get_summary()
+        self.telemetry.get_summary()
         metrics = self.telemetry.metrics
         
         errors = [m for m in metrics if m.status == "error"]
@@ -62,7 +62,7 @@ class SelfHealingAgent(BaseAgent):
         report.append(f"Detected **{len(errors)}** failures in recent operations.\n")
         
         # Categorize by agent
-        by_agent: Dict[str, List[Any]] = {}
+        by_agent: dict[str, list[Any]] = {}
         for e in errors:
             if e.agent_name not in by_agent:
                 by_agent[e.agent_name] = []

@@ -42,6 +42,6 @@ class ReleaseNote:
     version: str
     title: str
     summary: str
-    highlights: List[str] = field(default_factory=lambda: [])
-    breaking_changes: List[str] = field(default_factory=lambda: [])
+    highlights: list[str] = field(default_factory=lambda: [])
+    breaking_changes: list[str] = field(default_factory=lambda: [])
     full_changelog: str = ""

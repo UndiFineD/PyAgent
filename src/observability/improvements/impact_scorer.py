@@ -31,16 +31,16 @@ class ImpactScorer:
     """Scores improvements based on weighted impact factors."""
 
     def __init__(self) -> None:
-        self.weights: Dict[str, float] = {
+        self.weights: dict[str, float] = {
             "complexity": 0.34,
             "reach": 0.33,
             "urgency": 0.33,
         }
 
-    def set_weights(self, weights: Dict[str, float]) -> None:
+    def set_weights(self, weights: dict[str, float]) -> None:
         self.weights = dict(weights)
 
-    def calculate_weighted_score(self, factors: Dict[str, float]) -> float:
+    def calculate_weighted_score(self, factors: dict[str, float]) -> float:
         score = 0.0
         for key, weight in self.weights.items():
             score += float(factors.get(key, 0.0)) * float(weight)

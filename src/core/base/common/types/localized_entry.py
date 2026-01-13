@@ -40,5 +40,5 @@ class LocalizedEntry:
     """
     original_text: str
     language: LocalizationLanguage = LocalizationLanguage.ENGLISH
-    translations: Dict[str, str] = field(default_factory=lambda: {})
+    translations: dict[str, str] = field(default_factory=lambda: {})
     auto_translated: bool = False

@@ -43,7 +43,7 @@ class AgentRunner:
     def run_agent(self, column) -> None:
         cfg = column.get_config()
         agent_type = cfg["type"]
-        backend = cfg["backend"]
+        cfg["backend"]
         agent_id: int = id(column)
         
         # Initialize history for this instance if not present
@@ -91,7 +91,7 @@ class AgentRunner:
                     "Scrum Master": "src.agent_pm",
                     "Security Auditor": "src.agent_security"
                 }
-                module_path: str = module_map.get(agent_type, "src.agent_coder")
+                module_map.get(agent_type, "src.agent_coder")
                 
                 logger.info(f"Initialized {agent_type} agent on thread.")
                 logger.info(f"Target Scope: {cfg['file'] or 'Workspace'}")
@@ -135,7 +135,7 @@ class AgentRunner:
             if agent_id in self.history:
                 self.history[agent_id] = []
 
-    def get_history(self, column: Any) -> List[Dict[str, Any]]:
+    def get_history(self, column: Any) -> list[dict[str, Any]]:
         """Returns the conversation history for a specific agent column."""
         return self.history.get(id(column), [])
 

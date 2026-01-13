@@ -48,7 +48,8 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from pathlib import Path
 from types import TracebackType
-from typing import List, Set, Optional, Dict, Any, Callable
+from typing import List, Set, Optional, Dict, Any
+from collections.abc import Callable
 import asyncio
 import importlib.util
 import logging
@@ -84,19 +85,18 @@ class OrchestratorAgent:
     def __init__(self,
                  repo_root: str = '.',
                  agents_only: bool = False,
-                 max_files: Optional[int] = None,
+                 max_files: int | None = None,
                  loop: int = 1,
                  skip_code_update: bool = False,
                  no_git: bool = False,
                  dry_run: bool = False,
-                 selective_agents: Optional[List[str]] = None,
-                 timeout_per_agent: Optional[Dict[str,
-                                                  int]] = None,
+                 selective_agents: list[str] | None = None,
+                 timeout_per_agent: dict[str, int] | None = None,
                  enable_async: bool = False,
                  enable_multiprocessing: bool = False,
                  max_workers: int = 4,
                  strategy: str = 'direct',
-                 models_config: Optional[Dict[str, Any]] = None) -> None:
+                 models_config: dict[str, Any] | None = None) -> None:
         """Initialize the Agent with repository configuration."""
         logging.info(f"Initializing Agent with repo_root={repo_root}")
         provided_path = Path(repo_root)
@@ -161,7 +161,7 @@ class OrchestratorAgent:
             logging.info(f"Selective execution: agents={selective_agents}")
 
     @property
-    def metrics(self) -> Dict[str, Any]:
+    def metrics(self) -> dict[str, Any]:
         """Provides backward compatibility for the metrics attribute (flattened)."""
         d = self.metrics_manager.to_dict()
         summary = d.pop('summary', {})
@@ -169,7 +169,7 @@ class OrchestratorAgent:
         return d
 
     @metrics.setter
-    def metrics(self, value: Dict[str, Any]) -> None:
+    def metrics(self, value: dict[str, Any]) -> None:
         """Allow manual override of metrics (legacy support)."""
         if 'files_processed' in value:
             self.metrics_manager.files_processed = value['files_processed']
@@ -183,16 +183,16 @@ class OrchestratorAgent:
             self.metrics_manager.end_time = value['end_time']
 
     @property
-    def webhooks(self) -> List[str]:
+    def webhooks(self) -> list[str]:
         """Backward compatibility for webhooks list."""
         return self.notifications.webhooks
 
     @property
-    def callbacks(self) -> List[Callable]:
+    def callbacks(self) -> list[Callable]:
         """Backward compatibility for callbacks list."""
         return self.notifications.callbacks
 
-    def process_files_multiprocessing(self, files: List[Path]) -> None:
+    def process_files_multiprocessing(self, files: list[Path]) -> None:
         """Compatibility wrapper for multiprocessing file processing."""
         # Simple implementation for now as it's primarily used for testing presence
         # and basic functionality in this version's unit tests.
@@ -214,7 +214,7 @@ class OrchestratorAgent:
         if hasattr(self, 'command_handler'):
             self.command_handler.strategy = value
 
-    def __enter__(self) -> "OrchestratorAgent":
+    def __enter__(self) -> OrchestratorAgent:
         """Context manager entry. Returns self for use in 'with' statement."""
         logging.debug("OrchestratorAgent entering context manager")
         return self
@@ -277,7 +277,7 @@ class OrchestratorAgent:
         logging.info(summary)
         print(summary)
 
-    def generate_improvement_report(self) -> Dict[str, Any]:
+    def generate_improvement_report(self) -> dict[str, Any]:
         """Generate comprehensive improvement report.
         
         Delegates to AgentMetrics.
@@ -298,7 +298,7 @@ class OrchestratorAgent:
         logging.info(f"Generated improvement report: {files_proc} files processed, {files_mod} modified")
         return report
 
-    def benchmark_execution(self, files: List[Path]) -> Dict[str, Any]:
+    def benchmark_execution(self, files: list[Path]) -> dict[str, Any]:
         """Benchmark execution time per file and per agent.
         
         Delegates to AgentMetrics.
@@ -306,7 +306,7 @@ class OrchestratorAgent:
         return self.metrics_manager.benchmark_execution(files)
 
     def cost_analysis(self, backend: str = 'github-models',
-                      cost_per_request: float = 0.0001) -> Dict[str, Any]:
+                      cost_per_request: float = 0.0001) -> dict[str, Any]:
         """Analyze API usage cost for the agent execution.
         
         Delegates to AgentMetrics.
@@ -321,7 +321,7 @@ class OrchestratorAgent:
         """
         return self.file_manager.cleanup_old_snapshots(max_age_days, max_snapshots_per_file)
 
-    def create_file_snapshot(self, file_path: Path) -> Optional[str]:
+    def create_file_snapshot(self, file_path: Path) -> str | None:
         """Create a snapshot of file content before modifications.
         
         Delegates to AgentFileManager.
@@ -335,14 +335,14 @@ class OrchestratorAgent:
         """
         return self.file_manager.restore_from_snapshot(file_path, snapshot_id)
 
-    def load_cascading_codeignore(self, directory: Optional[Path] = None) -> Set[str]:
+    def load_cascading_codeignore(self, directory: Path | None = None) -> set[str]:
         """Load .codeignore patterns with cascading support.
         
         Delegates to AgentFileManager.
         """
         return self.file_manager.load_cascading_codeignore(directory)
 
-    def _run_command(self, cmd: List[str], timeout: int = 120,
+    def _run_command(self, cmd: list[str], timeout: int = 120,
                      max_retries: int = 1) -> subprocess.CompletedProcess[str]:
         """Run a command with timeout, error handling, retry logic, and logging.
         
@@ -359,7 +359,7 @@ class OrchestratorAgent:
         with self.command_handler.with_agent_env(agent_name):
             yield
 
-    def find_code_files(self) -> List[Path]:
+    def find_code_files(self) -> list[Path]:
         """Recursively find all supported code files in the repository.
         
         Delegates to AgentFileManager for file discovery and filtering.
@@ -379,7 +379,7 @@ class OrchestratorAgent:
         """
         return self.file_manager.is_ignored(path)
 
-    def run_stats_update(self, files: List[Path]) -> None:
+    def run_stats_update(self, files: list[Path]) -> None:
         """Run stats update."""
         file_paths = [str(f) for f in files]
         cmd = [
@@ -498,23 +498,23 @@ class OrchestratorAgent:
         """Register a webhook URL for event notifications."""
         self.notifications.register_webhook(webhook_url)
 
-    def register_callback(self, callback: Callable[[str, Dict[str, Any]], None]) -> None:
+    def register_callback(self, callback: Callable[[str, dict[str, Any]], None]) -> None:
         """Register a callback function for agent events."""
         self.notifications.register_callback(callback)
 
-    def send_webhook_notification(self, event_name: str, event_data: Dict[str, Any]) -> None:
+    def send_webhook_notification(self, event_name: str, event_data: dict[str, Any]) -> None:
         """Send notification to all registered webhooks."""
         self.notifications.notify(event_name, event_data)
 
-    def execute_callbacks(self, event_name: str, event_data: Dict[str, Any]) -> None:
+    def execute_callbacks(self, event_name: str, event_data: dict[str, Any]) -> None:
         """Execute all registered callback functions for an event."""
         self.notifications.notify(event_name, event_data)
 
-    async def async_process_files(self, files: List[Path]) -> List[Path]:
+    async def async_process_files(self, files: list[Path]) -> list[Path]:
         """Process multiple files concurrently using async / await."""
         return await self.parallel_processor.async_process_files(files, self.process_file)
 
-    def process_files_threaded(self, files: List[Path]) -> List[Path]:
+    def process_files_threaded(self, files: list[Path]) -> list[Path]:
         """Process multiple files using threading for concurrent I / O."""
         return self.parallel_processor.process_files_threaded(files, self.process_file)
 
@@ -585,7 +585,7 @@ class OrchestratorAgent:
             while not all_fixed and iteration < max_iterations:
                 iteration += 1
                 logging.debug(f"Iteration {iteration} for {code_file.name}")
-                files_ready = self._check_files_ready(code_file)
+                self._check_files_ready(code_file)
                 
                 try:
                     changes_made = self._perform_iteration(code_file)
@@ -636,7 +636,7 @@ class OrchestratorAgent:
             if hasattr(self, 'shutdown_handler'):
                 self.shutdown_handler.set_current_file(None)
 
-    def validate_with_consensus(self, task: str, proposals: Dict[str, str]) -> Dict[str, Any]:
+    def validate_with_consensus(self, task: str, proposals: dict[str, str]) -> dict[str, Any]:
         """
         Validates proposals using the ByzantineConsensusAgent.
         This provides a Phase 129 quality gate for critical changes.
@@ -668,7 +668,7 @@ class OrchestratorAgent:
             agent.register_plugin(MyPlugin("custom"))
         """
         if not hasattr(self, 'plugins'):
-            self.plugins: Dict[str, AgentPluginBase] = {}
+            self.plugins: dict[str, AgentPluginBase] = {}
 
         plugin.setup()
         self.plugins[plugin.name] = plugin
@@ -692,7 +692,7 @@ class OrchestratorAgent:
         logging.info(f"Unregistered plugin: {plugin_name}")
         return True
 
-    def get_plugin(self, plugin_name: str) -> Optional[AgentPluginBase]:
+    def get_plugin(self, plugin_name: str) -> AgentPluginBase | None:
         """Get a registered plugin by name.
 
         Args:
@@ -705,7 +705,7 @@ class OrchestratorAgent:
             return None
         return self.plugins.get(plugin_name)
 
-    def run_plugins(self, file_path: Path) -> Dict[str, bool]:
+    def run_plugins(self, file_path: Path) -> dict[str, bool]:
         """Run all registered plugins on a file.
 
         Args:
@@ -761,7 +761,7 @@ class OrchestratorAgent:
 
         return results
 
-    def load_plugins_from_config(self, plugin_configs: List[AgentPluginConfig]) -> None:
+    def load_plugins_from_config(self, plugin_configs: list[AgentPluginConfig]) -> None:
         """Load plugins from configuration.
 
         Args:
@@ -798,7 +798,7 @@ class OrchestratorAgent:
     # Rate Limiting Methods
     # =========================================================================
 
-    def enable_rate_limiting(self, config: Optional[RateLimitConfig] = None) -> None:
+    def enable_rate_limiting(self, config: RateLimitConfig | None = None) -> None:
         """Enable rate limiting for API calls.
 
         Args:
@@ -813,7 +813,7 @@ class OrchestratorAgent:
         self.rate_limiter = RateLimiter(config)
         logging.info(f"Rate limiting enabled: {config or 'default settings'}")
 
-    def get_rate_limit_stats(self) -> Dict[str, Any]:
+    def get_rate_limit_stats(self) -> dict[str, Any]:
         """Get current rate limiter statistics.
 
         Returns:
@@ -876,7 +876,7 @@ class OrchestratorAgent:
     def show_pending_diffs(self) -> None:
         """Show all pending diffs for dry-run mode."""
         if not hasattr(self, 'pending_diffs'):
-            self.pending_diffs: List[DiffResult] = []
+            self.pending_diffs: list[DiffResult] = []
 
         if not self.pending_diffs:
             print("No pending changes.")
@@ -908,7 +908,7 @@ class OrchestratorAgent:
         self.incremental_processor = IncrementalProcessor(self.repo_root)
         logging.info("Incremental processing enabled")
 
-    def get_changed_files(self, files: List[Path]) -> List[Path]:
+    def get_changed_files(self, files: list[Path]) -> list[Path]:
         """Get files that changed since last run.
 
         Args:
@@ -944,7 +944,7 @@ class OrchestratorAgent:
         self.shutdown_handler.install_handlers()
         logging.info("Graceful shutdown enabled")
 
-    def resume_from_shutdown(self) -> Optional[List[Path]]:
+    def resume_from_shutdown(self) -> list[Path] | None:
         """Resume processing from interrupted state.
 
         Returns:
@@ -962,7 +962,7 @@ class OrchestratorAgent:
     # Health Check Methods
     # =========================================================================
 
-    def run_health_checks(self) -> Dict[str, AgentHealthCheck]:
+    def run_health_checks(self) -> dict[str, AgentHealthCheck]:
         """Run health checks on all agent components.
 
         Returns:
@@ -996,7 +996,7 @@ class OrchestratorAgent:
     # =========================================================================
 
     @classmethod
-    def from_config_file(cls, config_path: Path) -> "Agent":
+    def from_config_file(cls, config_path: Path) -> OrchestratorAgent:
         """Create an Agent instance from a configuration file.
 
         Args:
@@ -1054,7 +1054,7 @@ class OrchestratorAgent:
         return agent
 
     @classmethod
-    def auto_configure(cls, repo_root: str = ".") -> "Agent":
+    def auto_configure(cls, repo_root: str = ".") -> OrchestratorAgent:
         """Auto-configure agent from config file if found.
 
         Args:

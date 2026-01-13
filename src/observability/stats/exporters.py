@@ -20,19 +20,19 @@ class Span:
     name: str
     trace_id: str
     span_id: str
-    parent_id: Optional[str] = None
+    parent_id: str | None = None
     start_time: float = field(default_factory=time.time)
-    end_time: Optional[float] = None
-    attributes: Dict[str, Any] = field(default_factory=dict)
+    end_time: float | None = None
+    attributes: dict[str, Any] = field(default_factory=dict)
     status: str = "unset"
 
 class PrometheusExporter:
     """Formats fleet telemetry into Prometheus-compatible metrics."""
     def __init__(self) -> None:
-        self.metrics_registry: Dict[str, float] = {}
+        self.metrics_registry: dict[str, float] = {}
 
     def record_metric(self, name:
-        str, value: float, labels: Optional[Dict[str, str]] = None) -> None:
+        str, value: float, labels: dict[str, str] | None = None) -> None:
         label_str = ""
         if labels:
             label_str = "{" + ",".join([f'{k}="{v}"' for k, v in labels.items()]) + "}"
@@ -44,12 +44,12 @@ class PrometheusExporter:
 class OTelManager:
     """Manages OTel-compatible spans and traces."""
     def __init__(self) -> None:
-        self.active_spans: Dict[str, Span] = {}
-        self.completed_spans: List[Span] = []
+        self.active_spans: dict[str, Span] = {}
+        self.completed_spans: list[Span] = []
         self.core = TracingCore()
 
     def start_span(self, name:
-        str, parent_id: Optional[str] = None, attributes: Optional[Dict[str, Any]] = None) -> str:
+        str, parent_id: str | None = None, attributes: dict[str, Any] | None = None) -> str:
         span_id = str(uuid.uuid4())
         trace_id = parent_id if parent_id else str(uuid.uuid4())
         span = Span(name=name, trace_id=trace_id, span_id=span_id, parent_id=parent_id, attributes=attributes or {})
@@ -57,7 +57,7 @@ class OTelManager:
         return span_id
 
     def end_span(self, span_id:
-        str, status: str = "ok", network_latency_sec: float = 0.0, attributes: Optional[Dict[str, Any]] = None) -> None:
+        str, status: str = "ok", network_latency_sec: float = 0.0, attributes: dict[str, Any] | None = None) -> None:
         span = self.active_spans.pop(span_id, None)
         if not span:
             return
@@ -71,7 +71,7 @@ class OTelManager:
         span.attributes.update(breakdown)
         self.completed_spans.append(span)
 
-    def export_spans(self) -> List[Dict[str, Any]]:
+    def export_spans(self) -> list[dict[str, Any]]:
         batch = [vars(s) for s in self.completed_spans]
         self.completed_spans = []
         return batch
@@ -83,7 +83,7 @@ class CloudExporter:
         self.destination = destination
         self.api_key = api_key
         self.endpoint = endpoint or self._get_default_endpoint()
-        self.export_queue: List[Metric] = []
+        self.export_queue: list[Metric] = []
 
     def _get_default_endpoint(self) -> str:
         defaults = {
@@ -124,6 +124,6 @@ class StatsExporter:
         str = "json") -> None:
         self.format = format
     def export(self, metrics:
-        Dict[str, Any], format: Optional[str] = None) -> str:
+        dict[str, Any], format: str | None = None) -> str:
         f = format or self.format
         return json.dumps(metrics) if f == "json" else ""

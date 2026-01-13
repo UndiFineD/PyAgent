@@ -6,13 +6,12 @@ from pathlib import Path
 # Ensure src is in sys.path
 root = Path(__file__).parent.parent
 if str(root) not in sys.path:
-    sys.path.append(str(root))
 
 from src.classes.fleet.FleetManager import FleetManager
 
 class TestPhase78(unittest.TestCase):
     def setUp(self):
-        self.workspace = "c:/DEV/PyAgent"
+        self.workspace = Path(__file__).resolve().parents[2]
         self.fleet = FleetManager(self.workspace)
 
     def test_inter_fleet_identity(self) -> None:

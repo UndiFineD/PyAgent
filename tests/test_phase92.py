@@ -4,7 +4,6 @@ import os
 import sys
 
 # Ensure the project root is in PYTHONPATH
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from src.classes.specialized.ResourceForecastingAgent import ResourceForecastingAgent
 

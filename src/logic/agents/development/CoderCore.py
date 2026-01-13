@@ -42,6 +42,7 @@ import re
 import shutil
 import subprocess
 import tempfile
+from pathlib import Path
 
 __version__ = VERSION
 
@@ -49,7 +50,7 @@ __version__ = VERSION
 # Goal: Isolate all "Computationally Expensive" or "Rule-Based" logic here.
 
 # Default style rules for Python (Re-declared here for Core access)
-DEFAULT_PYTHON_STYLE_RULES: List[StyleRule] = [
+DEFAULT_PYTHON_STYLE_RULES: list[StyleRule] = [
     StyleRule(
         name="line_length",
         pattern=r"^.{89,}$",
@@ -81,7 +82,7 @@ DEFAULT_PYTHON_STYLE_RULES: List[StyleRule] = [
 ]
 
 # Common code smells patterns
-CODE_SMELL_PATTERNS: Dict[str, Dict[str, Any]] = {
+CODE_SMELL_PATTERNS: dict[str, dict[str, Any]] = {
     "long_method": {
         "threshold": 50,
         "message": "Method is too long (>{threshold} lines)",
@@ -112,7 +113,7 @@ CODE_SMELL_PATTERNS: Dict[str, Dict[str, Any]] = {
 class CoderCore(LogicCore):
     """Core logic for CoderAgent, target for Rust conversion."""
     
-    def __init__(self, language: CodeLanguage, workspace_root: Optional[str] = None) -> None:
+    def __init__(self, language: CodeLanguage, workspace_root: str | None = None) -> None:
         self.language = language
         self.workspace_root = workspace_root
         try:
@@ -122,7 +123,7 @@ class CoderCore(LogicCore):
         except ImportError:
             self.recorder = None
 
-    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: Dict[str, Any] = None) -> None:
+    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] = None) -> None:
         """Record an interaction for intelligence harvesting (Phase 108)."""
         if self.recorder:
             self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
@@ -164,7 +165,7 @@ class CoderCore(LogicCore):
 
     def _analyze_python_ast(self, tree: ast.AST, metrics: CodeMetrics) -> CodeMetrics:
         """Deep AST analysis for Python."""
-        function_lengths: List[int] = []
+        function_lengths: list[int] = []
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                 metrics.function_count += 1
@@ -189,9 +190,9 @@ class CoderCore(LogicCore):
             
         return metrics
 
-    def check_style(self, content: str, rules: List[StyleRule]) -> List[Dict[str, Any]]:
+    def check_style(self, content: str, rules: list[StyleRule]) -> list[dict[str, Any]]:
         """Run regex-based style checks."""
-        violations: List[Dict[str, Any]] = []
+        violations: list[dict[str, Any]] = []
         lines = content.split('\n')
         for rule in rules:
             if not rule.enabled:
@@ -221,7 +222,7 @@ class CoderCore(LogicCore):
                         })
         return violations
 
-    def auto_fix_style(self, content: str, rules: List[StyleRule]) -> Tuple[str, int]:
+    def auto_fix_style(self, content: str, rules: list[StyleRule]) -> tuple[str, int]:
         """Apply rules that have auto-fix capabilities."""
         fixed_content = content
         fix_count = 0
@@ -245,9 +246,9 @@ class CoderCore(LogicCore):
             
         return fixed_content, fix_count
 
-    def detect_code_smells(self, content: str) -> List[CodeSmell]:
+    def detect_code_smells(self, content: str) -> list[CodeSmell]:
         """Detect common architectural code smells."""
-        smells: List[CodeSmell] = []
+        smells: list[CodeSmell] = []
         if self.language != CodeLanguage.PYTHON:
             return smells
             
@@ -317,11 +318,11 @@ class CoderCore(LogicCore):
         
         return smells
 
-    def find_duplicate_code(self, content: str, min_lines: int = 4) -> List[Dict[str, Any]]:
+    def find_duplicate_code(self, content: str, min_lines: int = 4) -> list[dict[str, Any]]:
         """Find duplicate code blocks using hashing."""
         lines = content.split('\n')
-        duplicates: List[Dict[str, Any]] = []
-        hashes: Dict[str, List[int]] = {}
+        duplicates: list[dict[str, Any]] = []
+        hashes: dict[str, list[int]] = {}
         
         for i in range(len(lines) - min_lines + 1):
             block = '\n'.join(lines[i:i + min_lines])
@@ -344,7 +345,7 @@ class CoderCore(LogicCore):
                 })
         return duplicates
 
-    def calculate_quality_score(self, metrics: CodeMetrics, violations: List[Dict[str, Any]], smells: List[CodeSmell], coverage: float) -> QualityScore:
+    def calculate_quality_score(self, metrics: CodeMetrics, violations: list[dict[str, Any]], smells: list[CodeSmell], coverage: float) -> QualityScore:
         """Aggregate all analysis into a single QualityScore."""
         score = QualityScore()
         score.maintainability = min(100, metrics.maintainability_index)
@@ -384,9 +385,9 @@ class CoderCore(LogicCore):
             
         return score
 
-    def suggest_refactorings(self, content: str) -> List[Dict[str, str]]:
+    def suggest_refactorings(self, content: str) -> list[dict[str, str]]:
         """Suggest possible refactorings based on code analysis."""
-        suggestions: List[Dict[str, str]] = []
+        suggestions: list[dict[str, str]] = []
         # Detect code smells and suggest refactorings
         smells = self.detect_code_smells(content)
         for smell in smells:
@@ -433,7 +434,7 @@ class CoderCore(LogicCore):
         except SyntaxError:
             return "# Documentation\n\nUnable to parse file for documentation."
             
-        docs: List[str] = ["# API Documentation\n"]
+        docs: list[str] = ["# API Documentation\n"]
         # Get module docstring
         module_doc = ast.get_docstring(tree)
         if module_doc:

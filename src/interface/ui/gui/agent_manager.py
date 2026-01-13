@@ -76,7 +76,7 @@ class AgentManager:
             col.frame.destroy()
         self.agent_columns = []
 
-    def get_agent_by_name(self, name: str) -> Optional[AgentColumn]:
+    def get_agent_by_name(self, name: str) -> AgentColumn | None:
         """Finds an agent column by its name."""
         return next((c for c in self.agent_columns if c.agent_name == name), None)
 
@@ -94,7 +94,7 @@ class AgentManager:
             assigned = True
         return assigned
 
-    def save_state(self) -> List[Dict[str, Any]]:
+    def save_state(self) -> list[dict[str, Any]]:
         """Returns a serializable state of all agents."""
         state = []
         for col in self.agent_columns:

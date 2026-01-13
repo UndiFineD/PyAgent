@@ -23,7 +23,8 @@ from src.core.base.version import VERSION
 import logging
 import random
 from dataclasses import dataclass, field
-from typing import Callable, Dict, List, TYPE_CHECKING
+from typing import Dict, List, TYPE_CHECKING
+from collections.abc import Callable
 from src.core.base.models import ModelConfig, ComposedAgent, _empty_list_float
 
 __version__ = VERSION
@@ -34,14 +35,14 @@ if TYPE_CHECKING:
 class AgentComposer:
     """Composer for multi-agent workflows."""
     def __init__(self) -> None:
-        self.agents: List[ComposedAgent] = []
-        self.results: Dict[str, str] = {}
-        self.execution_order: List[str] = []
+        self.agents: list[ComposedAgent] = []
+        self.results: dict[str, str] = {}
+        self.execution_order: list[str] = []
     def add_agent(self, agent: ComposedAgent) -> None:
         self.agents.append(agent)
         self._calculate_execution_order()
     def _calculate_execution_order(self) -> None:
-        sorted_agents: List[str] = []
+        sorted_agents: list[str] = []
         visited: set[str] = set()
         temp: set[str] = set()
         def visit(agent_type: str) -> None:
@@ -61,7 +62,7 @@ class AgentComposer:
             if agent.agent_type not in visited:
                 visit(agent.agent_type)
         self.execution_order = sorted_agents
-    def execute(self, file_path: str, prompt: str, agent_factory: Callable[[str, str], BaseAgent]) -> Dict[str, str]:
+    def execute(self, file_path: str, prompt: str, agent_factory: Callable[[str, str], BaseAgent]) -> dict[str, str]:
         self.results.clear()
         current_content = ""
         for agent_type in self.execution_order:
@@ -87,7 +88,7 @@ class AgentComposer:
 @dataclass
 class ModelSelector:
     """Selects models for different agent types. Supports GLM-4.7 and DeepSeek V4 (roadmap)."""
-    models: Dict[str, ModelConfig] = field(default_factory=lambda: {
+    models: dict[str, ModelConfig] = field(default_factory=lambda: {
         "default": ModelConfig(model_id="gpt-3.5-turbo"),
         "coding": ModelConfig(model_id="glm-4.7"),
         "reasoning": ModelConfig(model_id="deepseek-reasoner")
@@ -113,7 +114,7 @@ class ModelSelector:
 @dataclass
 class QualityScorer:
     """Scores response quality."""
-    criteria: Dict[str, tuple[Callable[[str], float], float]] = field(default_factory=dict)
+    criteria: dict[str, tuple[Callable[[str], float], float]] = field(default_factory=dict)
     def add_criterion(self, name: str, func: Callable[[str], float], weight: float = 1.0) -> None:
         self.criteria[name] = (func, weight)
     def score(self, text: str) -> float:
@@ -129,9 +130,9 @@ class QualityScorer:
 class ABTest:
     """A/B test for variants."""
     name: str
-    variants: List[str]
-    weights: List[float] = field(default_factory=_empty_list_float)
-    variant_counts: Dict[str, int] = field(default_factory=dict)
+    variants: list[str]
+    weights: list[float] = field(default_factory=_empty_list_float)
+    variant_counts: dict[str, int] = field(default_factory=dict)
     def __post_init__(self) -> None:
         for variant in self.variants:
             self.variant_counts[variant] = 0

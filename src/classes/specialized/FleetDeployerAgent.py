@@ -28,6 +28,7 @@ from src.core.base.version import VERSION
 import logging
 import os
 import json
+import asyncio
 from pathlib import Path
 from typing import Dict, List, Any
 from src.core.base.BaseAgent import BaseAgent
@@ -49,7 +50,7 @@ class FleetDeployerAgent(BaseAgent):
         )
 
     @as_tool
-    def generate_dockerfile(self, agent_type: str, python_version: str = "3.10-slim") -> str:
+    async def generate_dockerfile(self, agent_type: str, python_version: str = "3.10-slim") -> str:
         """Generates a specialized Dockerfile for an agent type.
         
         Args:
@@ -68,14 +69,19 @@ ENV AGENT_TYPE={agent_type}
 CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
 """
         path = self.deploy_dir / f"Dockerfile.{agent_type}"
-        with open(path, "w", encoding="utf-8") as f:
-            f.write(dockerfile_content)
+        # Phase 287: Use asyncio.to_thread for blocking I/O if needed, 
+        # but small writes are usually fine. However, we'll be consistent.
+        def write_file():
+            with open(path, "w", encoding="utf-8") as f:
+                f.write(dockerfile_content)
+        
+        await asyncio.to_thread(write_file)
             
         logging.info(f"FleetDeployer: Generated Dockerfile for {agent_type}")
         return str(path)
 
     @as_tool
-    def spawn_node(self, agent_name: str, agent_type: str) -> str:
+    async def spawn_node(self, agent_name: str, agent_type: str) -> str:
         """Simulates spawning a new agent node in the infrastructure.
         
         Args:
@@ -83,40 +89,49 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
             agent_type: The agent class to instantiate.
         """
         logging.info(f"FleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'")
-        # In a real system, this would call docker-compose or Kubernetes SDK
+        
         spawn_log = {
             "node_id": agent_name,
             "type": agent_type,
             "status": "provisioning",
-            "timestamp": os.path.getctime(self.file_path) # Mock time
+            "timestamp": time.time() if 'time' in globals() else 0
         }
         
         log_path = self.deploy_dir / "provisioning_logs.jsonl"
-        with open(log_path, "a", encoding="utf-8") as f:
-            f.write(json.dumps(spawn_log) + "\n")
+        
+        def append_log():
+            with open(log_path, "a", encoding="utf-8") as f:
+                f.write(json.dumps(spawn_log) + "\n")
+        
+        await asyncio.to_thread(append_log)
             
         return f"Node '{agent_name}' ({agent_type}) provisioning initialized."
 
     @as_tool
-    def list_deployments(self) -> List[Dict[str, Any]]:
-        """Lists active provisioning logs."""
+    async def list_active_nodes(self) -> list[str]:
+        """Lists nodes currently marked as active in the provisioning logs."""
         log_path = self.deploy_dir / "provisioning_logs.jsonl"
         if not log_path.exists():
             return []
-        with open(log_path, "r", encoding="utf-8") as f:
-            return [json.loads(line) for line in f]
+            
+        def read_logs():
+            nodes = []
+            with open(log_path, encoding="utf-8") as f:
+                for line in f:
+                    try:
+                        data = json.loads(line)
+                        nodes.append(data.get("node_id", "unknown"))
+                    except: continue
+            return nodes
+            
+        return await asyncio.to_thread(read_logs)
 
     @as_tool
-    def consensus_driven_deploy(self, agent_type: str, cluster_id: str) -> str:
-        """Executes a deployment only after a consensus cycle (Simulated)."""
-        logging.info(f"FleetDeployer: Initiating consensus-driven deployment for {agent_type} in {cluster_id}")
-        # In a real scenario, this would interact with ConsensusManager
-        return f"Consensus reached. {agent_type} deployed to {cluster_id}."
-
-    def improve_content(self, input_text: str) -> str:
-        return "The fleet grows through automated infrastructure."
-
-if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(FleetDeployerAgent, "Fleet Deployer Agent", "Swarm Infrastructure Deployment")
-    main()
+    async def scale_up(self, agent_type: str, count: int = 1) -> str:
+        """Scales up the number of instances for a specific agent type."""
+        results = []
+        for i in range(count):
+            node_name = f"{agent_type.lower()}-{i}-{os.urandom(2).hex()}"
+            res = await self.spawn_node(node_name, agent_type)
+            results.append(res)
+        return "\n".join(results)

@@ -24,7 +24,7 @@ class LoadBalancerCore:
         
         return min(max(score, 0.0), 1.0)
 
-    def select_best_agent(self, agents: Dict[str, AgentMetrics]) -> str:
+    def select_best_agent(self, agents: dict[str, AgentMetrics]) -> str:
         """Returns the Agent ID with the lowest cognitive pressure."""
         if not agents:
             return ""

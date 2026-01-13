@@ -15,7 +15,8 @@
 from __future__ import annotations
 import logging
 import asyncio
-from typing import Dict, List, Any, Callable, Optional, TYPE_CHECKING
+from typing import Dict, List, Any, Optional, TYPE_CHECKING
+from collections.abc import Callable
 from .ToolCore import ToolCore
 
 if TYPE_CHECKING:
@@ -24,9 +25,9 @@ if TYPE_CHECKING:
 class ToolRegistry:
     """Central registry for managing and invoking PyAgent tools across all specialists."""
     
-    def __init__(self, fleet: Optional[FleetManager] = None) -> None:
+    def __init__(self, fleet: FleetManager | None = None) -> None:
         self.fleet = fleet
-        self.tools: Dict[str, List[Dict[str, Any]]] = {}
+        self.tools: dict[str, list[dict[str, Any]]] = {}
         self.core = ToolCore()
 
     def register_tool(self, owner_name: str, func: Callable, category: str = "general", priority: int = 1) -> None:
@@ -51,7 +52,7 @@ class ToolRegistry:
         self.tools[name].sort(key=lambda x: x["priority"], reverse=True)
         logging.debug(f"Registered tool: {name} from {owner_name} (Priority: {priority})")
 
-    def list_tools(self) -> List[Any]:
+    def list_tools(self) -> list[Any]:
         """Returns metadata for all registered tools."""
         from collections import namedtuple
         ToolMeta = namedtuple("ToolMeta", ["name", "owner", "category", "priority", "sync"])
@@ -62,7 +63,7 @@ class ToolRegistry:
                 meta.append(ToolMeta(name, v["owner"], v["category"], v["priority"], v.get("sync", True)))
         return meta
 
-    def get_tool(self, name: str) -> Optional[Callable]:
+    def get_tool(self, name: str) -> Callable | None:
         """Retrieves the highest priority tool function by name."""
         if name in self.tools and self.tools[name]:
             return self.tools[name][0]["function"]

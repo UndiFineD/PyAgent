@@ -42,7 +42,7 @@ def main() -> None:
     for pf in privacy_files:
         path = os.path.join(root, pf)
         if os.path.exists(path):
-            with open(path, 'r', encoding='utf-8') as f:
+            with open(path, encoding='utf-8') as f:
                 content = f.read()
             res = fleet.privacy_guard.scan_and_redact(content)
             if res['pii_detected']:

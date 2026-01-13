@@ -39,7 +39,7 @@ class ChangelogSearcher:
         >>> results=searcher.search("bug fix", changelog_content)
     """
 
-    def search(self, query: str, content: str) -> List[SearchResult]:
+    def search(self, query: str, content: str) -> list[SearchResult]:
         """Search for query in changelog content.
 
         Args:
@@ -49,7 +49,7 @@ class ChangelogSearcher:
         Returns:
             List of search results.
         """
-        results: List[SearchResult] = []
+        results: list[SearchResult] = []
         lines = content.split('\n')
         current_version = "Unknown"
         for i, line in enumerate(lines, 1):

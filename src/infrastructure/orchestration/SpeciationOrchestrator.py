@@ -33,9 +33,9 @@ class SpeciationOrchestrator:
     
     def __init__(self, fleet) -> None:
         self.fleet = fleet
-        self.sub_fleets: Dict[str, List[str]] = {} # domain -> list of agent_names
+        self.sub_fleets: dict[str, list[str]] = {} # domain -> list of agent_names
 
-    def speciate(self, domain: str) -> Dict[str, Any]:
+    def speciate(self, domain: str) -> dict[str, Any]:
         """
         Creates a specialized sub-fleet for a given domain (e.g., 'Kubernetes-SRE').
         """
@@ -60,5 +60,5 @@ class SpeciationOrchestrator:
         speciator = self.fleet.agents["SpeciationAgent"]
         return speciator.evolve_specialized_agent(base_agent, niche)
 
-    def get_sub_fleet(self, domain: str) -> Optional[List[str]]:
+    def get_sub_fleet(self, domain: str) -> list[str] | None:
         return self.sub_fleets.get(domain)

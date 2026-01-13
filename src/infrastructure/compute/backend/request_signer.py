@@ -40,7 +40,7 @@ class RequestSigner:
         assert signer.verify("prompt data", signature)
     """
 
-    def __init__(self, secret_key: Optional[str] = None) -> None:
+    def __init__(self, secret_key: str | None = None) -> None:
         """Initialize request signer.
 
         Args:
@@ -49,9 +49,9 @@ class RequestSigner:
         import hmac
         self._hmac = hmac
         self.secret_key = (secret_key or os.environ.get("DV_AGENT_SIGNING_KEY", "")).encode()
-        self._signatures: Dict[str, str] = {}
+        self._signatures: dict[str, str] = {}
 
-    def sign(self, data: str, request_id: Optional[str] = None) -> str:
+    def sign(self, data: str, request_id: str | None = None) -> str:
         """Sign data and return signature.
 
         Args:
@@ -90,6 +90,6 @@ class RequestSigner:
 
         return self._hmac.compare_digest(expected, signature)
 
-    def get_stored_signature(self, request_id: str) -> Optional[str]:
+    def get_stored_signature(self, request_id: str) -> str | None:
         """Get stored signature by request ID."""
         return self._signatures.get(request_id)

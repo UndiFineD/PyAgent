@@ -41,7 +41,7 @@ class ModernizationAgent:
         >>> suggestions=advisor.analyze("import urllib2")
     """
 
-    DEPRECATIONS: List[Tuple[str, str, str, Optional[str], str]] = [
+    DEPRECATIONS: list[tuple[str, str, str, str | None, str]] = [
         (r"import\s+urllib2", "urllib.request", "2.7", "3.0",
          "https://docs.python.org/3/library/urllib.request.html"),
         (r"from\s+collections\s+import\s+.*\bMapping\b",
@@ -57,9 +57,9 @@ class ModernizationAgent:
 
     def __init__(self) -> None:
         """Initialize the modernization advisor."""
-        self.suggestions: List[ModernizationSuggestion] = []
+        self.suggestions: list[ModernizationSuggestion] = []
 
-    def analyze(self, content: str) -> List[ModernizationSuggestion]:
+    def analyze(self, content: str) -> list[ModernizationSuggestion]:
         """Analyze code for deprecated API usage.
 
         Args:

@@ -138,14 +138,17 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, current_c
     if broken_items:
         print("\n--- Remaining Technical Debt / Issues ---")
         for item in broken_items:
+            issues_to_print = item['remaining_issues']
             # Filter matches for the orchestrator itself if they are false positives (Phase 149)
             if "run_fleet_self_improvement.py" in item['file']:
-                remaining = [issue for issue in item['remaining_issues'] if "subprocess.run" not in str(issue) and "time.sleep" not in str(issue)]
-                if not remaining:
-                    continue
+                issues_to_print = [issue for issue in item['remaining_issues'] if "subprocess.run" not in str(issue) and "time.sleep" not in str(issue)]
             
-                issue_type = issue.get('type') or issue.get('message', 'Unknown Issue')
-                print(f"  - [ ] {issue_type}: {issue.get('detail') or issue.get('message', '')}")
+            if issues_to_print:
+                print(f"File: {item['file']}")
+                for issue in issues_to_print:
+                    issue_type = issue.get('type') or issue.get('message', 'Unknown Issue')
+                    detail_text = issue.get('detail') or issue.get('message', '')
+                    print(f"  - [ ] {issue_type}: {detail_text}")
     else:
         print("\nAll scanned issues have been autonomously addressed.")
 
@@ -153,7 +156,7 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, current_c
     print("\n[Research] Summarizing codebase intelligence...")
     library_path = os.path.join(root, "data/memory/knowledge_exports", "research_library.json")
     if os.path.exists(library_path):
-        with open(library_path, "r") as f:
+        with open(library_path) as f:
             library = json.load(f)
         print(f" - Fleet Intelligence Library contains {len(library)} indexed agents.")
         
@@ -241,7 +244,7 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, current_c
     duration = time.time() - start_time
     print(f"\n=== CYCLE {current_cycle} COMPLETE (Time spent: {duration:.2f}s) ===")
 
-def consult_external_models(fleet: FleetManager, broken_items: List[Dict[str, Any]], prompt_path: str = None, model_name: str = "gemini-3-flash") -> List[Dict[str, str]]:
+def consult_external_models(fleet: FleetManager, broken_items: list[dict[str, Any]], prompt_path: str = None, model_name: str = "gemini-3-flash") -> list[dict[str, str]]:
     """
     Queries external model backends (Ollama, Gemini, and Agentic Copilot) 
     to extract lessons for the fleet.
@@ -327,7 +330,7 @@ def consult_external_models(fleet: FleetManager, broken_items: List[Dict[str, An
             
     return lessons
 
-def _cycle_throttle(delay: int, root: str, target_dirs: List[str]) -> None:
+def _cycle_throttle(delay: int, root: str, target_dirs: list[str]) -> None:
     """
     Implement a controlled delay between improvement cycles.
     Uses 'watchfiles' for event-driven triggering if available (Phase 147).

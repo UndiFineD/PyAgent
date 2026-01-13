@@ -32,9 +32,9 @@ class DependencyInjector:
 
     def __init__(self) -> None:
         """Initialize dependency injector."""
-        self.dependencies: Dict[str, TestDependency] = {}
-        self.overrides: Dict[str, Any] = {}
-        self._scopes: Dict[str, str] = {}
+        self.dependencies: dict[str, TestDependency] = {}
+        self.overrides: dict[str, Any] = {}
+        self._scopes: dict[str, str] = {}
 
     def register(
         self,
@@ -66,7 +66,7 @@ class DependencyInjector:
             return True
         return False
 
-    def resolve(self, name: str) -> Optional[Any]:
+    def resolve(self, name: str) -> Any | None:
         """Resolve a dependency."""
         if name in self.overrides:
             return self.overrides[name]

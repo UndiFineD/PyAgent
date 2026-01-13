@@ -35,6 +35,7 @@ except ImportError:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+<<<<<<< HEAD
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
 
 
@@ -2216,6 +2217,8 @@ class TestReportPermissionManagement:
 # =============================================================================
 
 
+=======
+>>>>>>> 0777c397c (phase 320)
 
 class TestReportGeneration(unittest.TestCase):
     """Tests for basic report generation."""

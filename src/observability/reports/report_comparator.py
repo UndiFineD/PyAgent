@@ -73,10 +73,10 @@ class ReportComparator:
             unchanged_count=unchanged
         )
 
-    def _extract_items(self, content: str) -> List[str]:
+    def _extract_items(self, content: str) -> list[str]:
         """Extract list items from markdown content."""
 
-        items: List[str] = []
+        items: list[str] = []
         for line in content.split('\n'):
             line = line.strip()
             if line.startswith('- '):

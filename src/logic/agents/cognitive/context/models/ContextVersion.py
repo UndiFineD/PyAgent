@@ -30,5 +30,5 @@ class ContextVersion:
     version: str
     timestamp: str
     content_hash: str
-    changes: List[str] = field(default_factory=lambda: [])
+    changes: list[str] = field(default_factory=lambda: [])
     author: str = ""

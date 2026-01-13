@@ -38,7 +38,7 @@ class PrivacyCore:
         return redacted
 
     @classmethod
-    def scan_log_entry(cls, entry: Dict) -> Dict:
+    def scan_log_entry(cls, entry: dict) -> dict:
         """
         Recursively redacts sensitive info from a log dictionary.
         """

@@ -31,9 +31,9 @@ class EnvironmentIsolator:
     """Context manager that restores environment variables on exit."""
 
     def __init__(self) -> None:
-        self._original: Dict[str, str] = {}
+        self._original: dict[str, str] = {}
 
-    def __enter__(self) -> "EnvironmentIsolator":
+    def __enter__(self) -> EnvironmentIsolator:
         self._original = dict(os.environ)
         return self
 

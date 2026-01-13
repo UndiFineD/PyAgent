@@ -43,7 +43,7 @@ class AgentPluginBase(ABC):
     """
 
     def __init__(self, name: str, priority: AgentPriority = AgentPriority.NORMAL,
-                 config: Optional[Dict[str, Any]] = None) -> None:
+                 config: dict[str, Any] | None = None) -> None:
         """Initialize the plugin.
 
         Args:
@@ -57,7 +57,7 @@ class AgentPluginBase(ABC):
         self.logger = logging.getLogger(f"plugin.{name}")
 
     @abstractmethod
-    def run(self, file_path: Path, context: Dict[str, Any]) -> bool:
+    def run(self, file_path: Path, context: dict[str, Any]) -> bool:
         """Execute the plugin on a file.
 
         Args:
@@ -74,19 +74,9 @@ class AgentPluginBase(ABC):
         pass
 
     @abstractmethod
-    def health_check(self) -> AgentHealthCheck:
-        """Verify plugin health and dependency status.
-
-        Returns:
-            AgentHealthCheck: Health status and details.
-        """
-        raise NotImplementedError()
-
-    @abstractmethod
     def shutdown(self) -> None:
         """Handle graceful shutdown, cleanup resources, and terminate processes."""
         raise NotImplementedError()
-        pass
 
     def teardown(self) -> None:
         """Called once when plugin is unloaded. Override for cleanup."""

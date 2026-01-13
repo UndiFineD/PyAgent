@@ -30,14 +30,14 @@ class VotingSystem:
     """Manages voting on improvements."""
 
     def __init__(self) -> None:
-        self.votes: Dict[str, Dict[str, int]] = {}
+        self.votes: dict[str, dict[str, int]] = {}
 
     def cast_vote(
         self,
         improvement_id: str,
-        voter: Optional[str] = None,
+        voter: str | None = None,
         vote_value: int = 1,
-        voter_id: Optional[str] = None,
+        voter_id: str | None = None,
         **_: Any,
     ) -> None:
         voter_key = voter_id or voter or "anonymous"
@@ -47,7 +47,7 @@ class VotingSystem:
         votes = self.votes.get(improvement_id, {})
         return sum(1 for v in votes.values() if v > 0)
 
-    def get_prioritized_list(self, improvement_ids: List[str]) -> List[str]:
+    def get_prioritized_list(self, improvement_ids: list[str]) -> list[str]:
         return sorted(
             list(improvement_ids),
             key=lambda imp_id: self.get_vote_count(imp_id),

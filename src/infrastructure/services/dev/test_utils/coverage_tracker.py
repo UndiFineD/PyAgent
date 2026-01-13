@@ -30,8 +30,8 @@ class CoverageTracker:
     """Lightweight coverage hit tracker used by tests."""
 
     def __init__(self) -> None:
-        self._hits: Dict[str, int] = {}
-        self._targets: Set[str] = set()
+        self._hits: dict[str, int] = {}
+        self._targets: set[str] = set()
 
     def register_target(self, name: str) -> None:
         self._targets.add(name)
@@ -39,7 +39,7 @@ class CoverageTracker:
     def record_hit(self, name: str) -> None:
         self._hits[name] = self._hits.get(name, 0) + 1
 
-    def get_hits(self) -> Dict[str, int]:
+    def get_hits(self) -> dict[str, int]:
         return dict(self._hits)
 
     def get_percentage(self) -> float:

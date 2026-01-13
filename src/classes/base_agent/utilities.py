@@ -29,7 +29,8 @@ import argparse
 import os
 import sys
 from pathlib import Path
-from typing import Any, Callable, Optional, Type, TYPE_CHECKING
+from typing import Any, Optional, Type, TYPE_CHECKING
+from collections.abc import Callable
 
 if TYPE_CHECKING:
     from .agent import BaseAgent
@@ -55,7 +56,7 @@ def setup_logging(verbosity_arg: int = 0) -> None:
         force=True
     )
 
-def as_tool(priority: int = 0, category: Optional[str] = None) -> Callable:
+def as_tool(priority: int = 0, category: str | None = None) -> Callable:
     """Decorator to mark a method as a tool for the ToolRegistry.
     Automatically records tool interactions to the fleet context shards for autonomous learning.
     Can be used as @as_tool or @as_tool(priority=10).
@@ -111,7 +112,7 @@ def as_tool(priority: int = 0, category: Optional[str] = None) -> Callable:
     return decorator
 
 def create_main_function(
-    agent_class: Type[BaseAgent],
+    agent_class: type[BaseAgent],
     description: str,
     context_help: str) -> Callable[[],
                                    None]:

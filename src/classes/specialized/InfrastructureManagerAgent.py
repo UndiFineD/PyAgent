@@ -80,7 +80,7 @@ class InfrastructureManagerAgent(BaseAgent):
         return f"Successfully executed `{action}` for `{entity_id}` on HomeAssistant at {api_url}."
 
     @as_tool
-    def get_system_metrics(self, server_ip: str) -> Dict[str, Any]:
+    def get_system_metrics(self, server_ip: str) -> dict[str, Any]:
         """Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP."""
         logging.info(f"INFRA: Fetching metrics for {server_ip}")
         # Mock metrics

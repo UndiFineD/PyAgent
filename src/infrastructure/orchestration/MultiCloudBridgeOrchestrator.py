@@ -52,7 +52,7 @@ class MultiCloudBridgeOrchestrator:
         print(f"Bridge: Linked {node_id} on {provider} ({region})")
         return True
 
-    def sync_state_cross_cloud(self, state_data: Dict[str, Any], source_provider: str) -> Dict[str, Any]:
+    def sync_state_cross_cloud(self, state_data: dict[str, Any], source_provider: str) -> dict[str, Any]:
         """Synchronizes state data from a source provider to all other linked cloud providers."""
         print(f"Bridge: Initiating cross-cloud sync from {source_provider}...")
         
@@ -75,7 +75,7 @@ class MultiCloudBridgeOrchestrator:
         
         return sync_event
 
-    def get_bridge_topology(self) -> Dict[str, Any]:
+    def get_bridge_topology(self) -> dict[str, Any]:
         """Returns the current multi-cloud topology of the fleet."""
         return {
             "providers": list(self.cloud_nodes.keys()),

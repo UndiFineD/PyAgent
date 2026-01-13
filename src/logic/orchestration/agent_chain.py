@@ -23,7 +23,8 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from src.logic.orchestration.AgentChainStep import AgentChainStep
-from typing import List, Optional, Dict, Any, Callable
+from typing import List, Optional, Dict, Any
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -46,16 +47,16 @@ class AgentChain:
             name: Chain name for identification.
         """
         self.name = name
-        self._steps: List[AgentChainStep] = []
-        self._results: List[Dict[str, Any]] = []
+        self._steps: list[AgentChainStep] = []
+        self._results: list[dict[str, Any]] = []
 
     def add_step(
         self,
         agent_name: str,
-        input_transform: Optional[Callable[[Any], Any]] = None,
-        output_transform: Optional[Callable[[Any], Any]] = None,
-        condition: Optional[Callable[[Any], bool]] = None,
-    ) -> "AgentChain":
+        input_transform: Callable[[Any], Any] | None = None,
+        output_transform: Callable[[Any], Any] | None = None,
+        condition: Callable[[Any], bool] | None = None,
+    ) -> AgentChain:
         """Add a step to the chain.
 
         Args:
@@ -77,7 +78,7 @@ class AgentChain:
         return self
 
     def execute(self, initial_input: Any, agent_executor: Callable[[
-                str, Any], Any]) -> List[Dict[str, Any]]:
+                str, Any], Any]) -> list[dict[str, Any]]:
         """Execute the chain.
 
         Args:
@@ -133,6 +134,6 @@ class AgentChain:
 
         return self._results
 
-    def get_results(self) -> List[Dict[str, Any]]:
+    def get_results(self) -> list[dict[str, Any]]:
         """Get results from last execution."""
         return self._results

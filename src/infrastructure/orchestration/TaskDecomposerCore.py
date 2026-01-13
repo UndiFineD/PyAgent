@@ -28,8 +28,8 @@ __version__ = VERSION
 class PlanStep:
     agent: str
     action: str
-    args: List[Any] = field(default_factory=list)
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    args: list[Any] = field(default_factory=list)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 class TaskDecomposerCore:
     """
@@ -37,13 +37,13 @@ class TaskDecomposerCore:
     Handles heuristic-based planning and plan summarization.
     """
 
-    def generate_plan(self, request: str) -> List[Dict[str, Any]]:
+    def generate_plan(self, request: str) -> list[dict[str, Any]]:
         """
         Core planning logic.
         Uses expanded heuristics and dependency analysis (Phase 119).
         """
         request_lower = request.lower()
-        steps: List[PlanStep] = []
+        steps: list[PlanStep] = []
         
         # 1. Research & Analysis Phase
         if any(w in request_lower for w in ["research", "search", "analyze", "find"]):
@@ -93,7 +93,7 @@ class TaskDecomposerCore:
         # Convert dataclasses to dicts for shell compatibility
         return [self._to_dict(s) for s in steps]
 
-    def _to_dict(self, step: PlanStep) -> Dict[str, Any]:
+    def _to_dict(self, step: PlanStep) -> dict[str, Any]:
         return {
             "agent": step.agent,
             "action": step.action,
@@ -101,7 +101,7 @@ class TaskDecomposerCore:
             "metadata": step.metadata
         }
 
-    def summarize_plan(self, steps: List[Dict[str, Any]]) -> str:
+    def summarize_plan(self, steps: list[dict[str, Any]]) -> str:
         """Core summary logic."""
         summary_lines = ["# 📋 Task Execution Plan"]
         for i, step in enumerate(steps):

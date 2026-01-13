@@ -41,7 +41,7 @@ class BenchmarkAgent(BaseAgent):
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.core = BenchmarkCore()
-        self.benchmark_results: List[BenchmarkResult] = []
+        self.benchmark_results: list[BenchmarkResult] = []
         self._system_prompt = (
             "You are the Benchmark Agent. "
             "You follow the SGI-Bench (Scientific General Intelligence) standard.\n"
@@ -53,7 +53,7 @@ class BenchmarkAgent(BaseAgent):
         )
 
     @as_tool
-    def run_sgi_benchmark(self, agent_name: str, scientific_task: str) -> Dict[str, Any]:
+    def run_sgi_benchmark(self, agent_name: str, scientific_task: str) -> dict[str, Any]:
         """Runs an SGI-Bench scientific inquiry evaluation on an agent."""
         logging.info(f"BENCHMARK: Running SGI inquiry for {agent_name}")
         
@@ -94,7 +94,7 @@ class BenchmarkAgent(BaseAgent):
         )
 
     @as_tool
-    def evaluate_model_on_benchmark(self, model_name: str, benchmark_suite: str) -> Dict[str, Any]:
+    def evaluate_model_on_benchmark(self, model_name: str, benchmark_suite: str) -> dict[str, Any]:
         """Runs a standard benchmark suite (MMLU, GSM8K, SGI-Bench) against a specific model."""
         logging.info(f"BENCHMARK: Evaluating {model_name} on {benchmark_suite}")
         # Standard score ranges
@@ -107,7 +107,7 @@ class BenchmarkAgent(BaseAgent):
         }
 
     @as_tool
-    def run_benchmark(self, agent_name: str, task: str, expected_output: Optional[str] = None) -> str:
+    def run_benchmark(self, agent_name: str, task: str, expected_output: str | None = None) -> str:
         """Runs a task against an agent and measures performance."""
         # Note: In a real system, this would call the FleetManager
         start_time = time.time()

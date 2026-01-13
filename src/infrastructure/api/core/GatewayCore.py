@@ -10,21 +10,21 @@ class GatewayCore:
 
     def __init__(self) -> None:
         # Service registry for SaaS tools
-        self.saas_registry: Dict[str, str] = {
+        self.saas_registry: dict[str, str] = {
             "jira": "https://api.atlassian.com/ex/jira/",
             "slack": "https://slack.com/api/",
             "trello": "https://api.trello.com/1/"
         }
         
         # Interface affinity rules: interface -> model_preference
-        self.interface_affinity: Dict[str, str] = {
+        self.interface_affinity: dict[str, str] = {
             "web_ui": "glm-4-flash",
             "cli": "gpt-4o",
             "gui": "claude-3-haiku",
             "background": "llama-3-70b"
         }
 
-    def get_service_endpoint(self, service_name: str) -> Optional[str]:
+    def get_service_endpoint(self, service_name: str) -> str | None:
         """Returns the base URL for a registered SaaS service."""
         return self.saas_registry.get(service_name.lower())
 
@@ -35,7 +35,7 @@ class GatewayCore:
         """
         return self.interface_affinity.get(interface_type.lower(), "gpt-4o")
 
-    def format_saas_request(self, service: str, action: str, params: Dict[str, Any]) -> Dict[str, Any]:
+    def format_saas_request(self, service: str, action: str, params: dict[str, Any]) -> dict[str, Any]:
         """Constructs a standardized internal request for external SaaS consumption."""
         return {
             "service": service,

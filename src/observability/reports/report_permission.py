@@ -43,4 +43,4 @@ class ReportPermission:
     report_pattern: str
     level: PermissionLevel = PermissionLevel.READ
     granted_by: str = ""
-    expires_at: Optional[float] = None
+    expires_at: float | None = None

@@ -8,7 +8,7 @@ from dataclasses import dataclass
 class ToolDefinition:
     name: str
     description: str
-    parameters: Dict[str, Any]
+    parameters: dict[str, Any]
     endpoint: str
 
 class ToolDraftingCore:
@@ -16,7 +16,7 @@ class ToolDraftingCore:
     Handles schema drafting, parameter validation, and endpoint mapping.
     """
     
-    def generate_openapi_spec(self, tools: List[ToolDefinition]) -> str:
+    def generate_openapi_spec(self, tools: list[ToolDefinition]) -> str:
         """Converts internal tool definitions into a valid OpenAPI 3.0 spec."""
         paths = {}
         for tool in tools:

@@ -48,7 +48,7 @@ class ChangesAgent(BaseAgent):
     """
 
     # Default templates for different project types
-    DEFAULT_TEMPLATES: Dict[str, ChangelogTemplate] = {
+    DEFAULT_TEMPLATES: dict[str, ChangelogTemplate] = {
         "python": ChangelogTemplate(
             name="Python",
             project_type="python",
@@ -68,7 +68,7 @@ class ChangesAgent(BaseAgent):
     }
 
     # Default validation rules
-    DEFAULT_VALIDATION_RULES: List[ValidationRule] = [
+    DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
         ValidationRule(
             name="version_format",
             pattern=r"^\d+\.\d+\.\d+$",
@@ -93,13 +93,13 @@ class ChangesAgent(BaseAgent):
         super().__init__(file_path)
         self._validate_file_extension()
         self._check_associated_file()
-        self._template: Optional[ChangelogTemplate] = None
+        self._template: ChangelogTemplate | None = None
         self._versioning_strategy: VersioningStrategy = VersioningStrategy.SEMVER
-        self._validation_rules: List[ValidationRule] = self.DEFAULT_VALIDATION_RULES.copy()
+        self._validation_rules: list[ValidationRule] = self.DEFAULT_VALIDATION_RULES.copy()
         self._preview_mode: bool = False
         self._preview_content: str = ""
-        self._entries: List[ChangelogEntry] = []
-        self._statistics: Dict[str, Any] = {}
+        self._entries: list[ChangelogEntry] = []
+        self._statistics: dict[str, Any] = {}
 
     def _validate_file_extension(self) -> None:
         """Validate that the file has the correct extension."""
@@ -137,7 +137,7 @@ class ChangesAgent(BaseAgent):
         self,
         name: str,
         project_type: str,
-        sections: List[str],
+        sections: list[str],
         header_format: str = "## [{version}] - {date}",
         include_links: bool = True,
         include_contributors: bool = False
@@ -154,7 +154,7 @@ class ChangesAgent(BaseAgent):
         self._template = template
         return template
 
-    def get_template_sections(self) -> List[str]:
+    def get_template_sections(self) -> list[str]:
         """Get the sections for the current template."""
         if self._template:
             return self._template.sections
@@ -191,7 +191,7 @@ class ChangesAgent(BaseAgent):
                     return f"{major}.{minor}.{patch + 1}"
         return "0.1.0"  # Default starting version
 
-    def _extract_latest_version(self) -> Optional[str]:
+    def _extract_latest_version(self) -> str | None:
         """Extract the latest version from the changelog."""
         pattern = r"##\s*\[?(\d+\.\d+\.\d+)\]?"
         matches = re.findall(pattern, self.previous_content)
@@ -215,7 +215,7 @@ class ChangesAgent(BaseAgent):
         """Get the preview of changes without applying them."""
         return self._preview_content if self._preview_content else self.current_content
 
-    def preview_changes(self, content: str) -> Dict[str, Any]:
+    def preview_changes(self, content: str) -> dict[str, Any]:
         """Preview changes and return a summary."""
         self._preview_content = content
 
@@ -243,14 +243,14 @@ class ChangesAgent(BaseAgent):
         return bool(super().update_file())
 
     # ========== Merge Detection ==========
-    def detect_merge_conflicts(self, content: str) -> List[Dict[str, Any]]:
+    def detect_merge_conflicts(self, content: str) -> list[dict[str, Any]]:
         """Detect merge conflict markers in the content."""
-        conflicts: List[Dict[str, Any]] = []
+        conflicts: list[dict[str, Any]] = []
         lines = content.split('\n')
         in_conflict = False
         conflict_start = 0
-        ours: List[str] = []
-        theirs: List[str] = []
+        ours: list[str] = []
+        theirs: list[str] = []
         for i, line in enumerate(lines):
             if line.startswith('<<<<<<<'):
                 in_conflict = True
@@ -286,12 +286,12 @@ class ChangesAgent(BaseAgent):
             content: Content with merge conflicts
             resolution: 'ours', 'theirs', or 'both'
         """
-        result: List[str] = []
+        result: list[str] = []
         lines = content.split('\n')
         in_conflict = False
         ours_section = True
-        ours: List[str] = []
-        theirs: List[str] = []
+        ours: list[str] = []
+        theirs: list[str] = []
 
         for line in lines:
             if line.startswith('<<<<<<<'):
@@ -326,9 +326,9 @@ class ChangesAgent(BaseAgent):
         """Add a custom validation rule."""
         self._validation_rules.append(rule)
 
-    def validate_entry(self, entry: ChangelogEntry) -> List[Dict[str, str]]:
+    def validate_entry(self, entry: ChangelogEntry) -> list[dict[str, str]]:
         """Validate a changelog entry against all rules."""
-        issues: List[Dict[str, str]] = []
+        issues: list[dict[str, str]] = []
         # Validate version format
         if entry.version:
             version_rule = next(
@@ -366,9 +366,9 @@ class ChangesAgent(BaseAgent):
             })
         return issues
 
-    def validate_changelog(self, content: str) -> List[Dict[str, Any]]:
+    def validate_changelog(self, content: str) -> list[dict[str, Any]]:
         """Validate the entire changelog content."""
-        all_issues: List[Dict[str, Any]] = []
+        all_issues: list[dict[str, Any]] = []
         # Check for merge conflicts
         conflicts = self.detect_merge_conflicts(content)
         if conflicts:
@@ -391,14 +391,14 @@ class ChangesAgent(BaseAgent):
         return all_issues
 
     # ========== Statistics ==========
-    def calculate_statistics(self) -> Dict[str, Any]:
+    def calculate_statistics(self) -> dict[str, Any]:
         """Calculate statistics for the changelog."""
         content = self.current_content or self.previous_content
         # Count versions
         version_pattern = r"##\s*\[?(\d+\.\d+\.\d+|\d{4}\.\d{2}\.\d{2})\]?"
         versions = re.findall(version_pattern, content)
         # Count entries per category
-        categories: Dict[str, int] = {}
+        categories: dict[str, int] = {}
         for section in ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]:
             pattern = rf"###\s*{section}\s*\n(.*?)(?=###|\Z)"
             matches = re.findall(pattern, content, re.DOTALL)
@@ -427,8 +427,8 @@ class ChangesAgent(BaseAgent):
         description: str,
         priority: int = 0,
         severity: str = "normal",
-        tags: Optional[List[str]] = None,
-        linked_issues: Optional[List[str]] = None
+        tags: list[str] | None = None,
+        linked_issues: list[str] | None = None
     ) -> ChangelogEntry:
         """Add a new changelog entry."""
         entry = ChangelogEntry(
@@ -449,11 +449,11 @@ class ChangesAgent(BaseAgent):
         self._entries.append(entry)
         return entry
 
-    def get_entries_by_category(self, category: str) -> List[ChangelogEntry]:
+    def get_entries_by_category(self, category: str) -> list[ChangelogEntry]:
         """Get all entries for a specific category."""
         return [e for e in self._entries if e.category == category]
 
-    def get_entries_by_priority(self, min_priority: int = 0) -> List[ChangelogEntry]:
+    def get_entries_by_priority(self, min_priority: int = 0) -> list[ChangelogEntry]:
         """Get entries with priority >= min_priority, sorted by priority."""
         filtered = [e for e in self._entries if e.priority >= min_priority]
         return sorted(filtered, key=lambda e: e.priority, reverse=True)
@@ -480,18 +480,18 @@ class ChangesAgent(BaseAgent):
         if not self._entries:
             return ""
         # Group by version
-        by_version: Dict[str, List[ChangelogEntry]] = {}
+        by_version: dict[str, list[ChangelogEntry]] = {}
         for entry in self._entries:
             version = entry.version or "Unreleased"
             if version not in by_version:
                 by_version[version] = []
             by_version[version].append(entry)
-        result: List[str] = []
+        result: list[str] = []
         for version, entries in by_version.items():
             date = entries[0].date if entries else datetime.now().strftime("%Y-%m-%d")
             result.append(f"## [{version}] - {date}\n")
             # Group by category
-            by_category: Dict[str, List[ChangelogEntry]] = {}
+            by_category: dict[str, list[ChangelogEntry]] = {}
             for entry in entries:
                 if entry.category not in by_category:
                     by_category[entry.category] = []

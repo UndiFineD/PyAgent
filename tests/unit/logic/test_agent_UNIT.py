@@ -29,14 +29,12 @@ except ImportError:
     
     class agent_sys_path:
         def __enter__(self) -> bool: 
-            sys.path.insert(0, str(AGENT_DIR))
+
             return self
         def __exit__(self, *args) -> str: 
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
-sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
-
 
 class TestDryRunMode:
     """Test dry-run mode functionality."""

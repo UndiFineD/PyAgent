@@ -33,7 +33,7 @@ class HolographicStateOrchestrator:
     
     def __init__(self, fleet) -> None:
         self.fleet = fleet
-        self.shards: Dict[str, List[Dict[str, Any]]] = {} # key -> list of shards
+        self.shards: dict[str, list[dict[str, Any]]] = {} # key -> list of shards
 
     def shard_state(self, key: str, value: Any, redundant_factor: int = 3) -> None:
         """
@@ -62,7 +62,7 @@ class HolographicStateOrchestrator:
         self.shards[key] = shards
         logging.info(f"HolographicState: State '{key}' distributed across {redundant_factor} nodes.")
 
-    def reconstruct_state(self, key: str) -> Optional[str]:
+    def reconstruct_state(self, key: str) -> str | None:
         """
         Reconstructs the state from available shards.
         """

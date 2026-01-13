@@ -6,7 +6,7 @@ from src.classes.fleet.FleetManager import FleetManager
 
 class TestPhase45(unittest.TestCase):
     def setUp(self):
-        self.workspace = os.path.abspath("c:/DEV/PyAgent")
+        self.workspace = os.path.abspath(Path(__file__).resolve().parents[2])
         self.fleet = FleetManager(self.workspace)
         os.makedirs(os.path.join(self.workspace, "agent_store/memory_shards"), exist_ok=True)
 

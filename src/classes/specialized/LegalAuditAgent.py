@@ -41,13 +41,13 @@ class LegalAuditAgent(BaseAgent):
         }
         self.license_blacklist = ["GPL", "AGPL"] # Blacklist for non-copyleft projects (Phase 238)
 
-    def check_license_compliance(self, content: str, project_license: str = "MIT") -> Dict[str, Any]:
+    def check_license_compliance(self, content: str, project_license: str = "MIT") -> dict[str, Any]:
         """
         Phase 238: Check generated code against a license blacklist to prevent 
         GPL/AGPL contamination in permissive projects.
         """
         scan = self.scan_licensing(content)
-        violations = [l for l in scan["detected_licenses"] if l in self.license_blacklist]
+        violations = [license_name for license_name in scan["detected_licenses"] if license_name in self.license_blacklist]
         
         is_compliant = len(violations) == 0
         return {
@@ -57,7 +57,7 @@ class LegalAuditAgent(BaseAgent):
             "action_required": "Block / Rewrite" if not is_compliant else "None"
         }
 
-    def scan_licensing(self, content: str) -> Dict[str, Any]:
+    def scan_licensing(self, content: str) -> dict[str, Any]:
         """Identifies licenses and flags copyleft risks."""
         detected = []
         for name, pattern in self.license_patterns.items():
@@ -66,14 +66,14 @@ class LegalAuditAgent(BaseAgent):
         
         res = {
             "detected_licenses": detected,
-            "risk_level": "high" if any(l in ["GPL", "AGPL"] for l in detected) else "low",
+            "risk_level": "high" if any(license_name in ["GPL", "AGPL"] for license_name in detected) else "low",
             "summary": f"Detected: {', '.join(detected) if detected else 'None'}"
         }
         # Phase 108: Intelligence Recording
         self._record(content[:1000], str(res), provider="LegalAudit", model="LicenseScanner")
         return res
 
-    def verify_smart_contract(self, logic: str) -> Dict[str, Any]:
+    def verify_smart_contract(self, logic: str) -> dict[str, Any]:
         """Simulates auditing a smart contract for common vulnerabilities."""
         vulnerabilities = []
         if "reentrancy" in logic.lower() or ".call{value:" in logic:

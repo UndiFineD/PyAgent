@@ -26,6 +26,7 @@ Part of Phase 127 Swarm UX.
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
+from pathlib import Path
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 

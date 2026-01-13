@@ -40,10 +40,10 @@ class SelfHealingEngine:
     
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = workspace_root
-        self.failure_history: List[Dict[str, Any]] = []
+        self.failure_history: list[dict[str, Any]] = []
         self.core = SelfHealingEngineCore()
 
-    def handle_failure(self, agent: BaseAgent, tool_name: str, error: Exception, context: Dict[str, Any]) -> str:
+    def handle_failure(self, agent: BaseAgent, tool_name: str, error: Exception, context: dict[str, Any]) -> str:
         """Analyzes a failure and attempts to generate a fix."""
         tb = traceback.format_exc()
         agent_name = agent.__class__.__name__

@@ -40,7 +40,7 @@ class ContextCompressorCore:
         """Removes function bodies and keeps only class/function signatures using AST."""
         try:
             tree = ast.parse(content)
-            compressed_lines: List[str] = []
+            compressed_lines: list[str] = []
             
             # Use a visitor pattern for cleaner separation if needed, 
             # but for simple signature extraction, a walk is acceptable 

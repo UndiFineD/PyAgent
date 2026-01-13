@@ -45,7 +45,7 @@ class ResourceCurationAgent(BaseAgent):
         )
 
     @as_tool
-    def add_resource(self, url: str, title: str, summary: Optional[str] = None, tags: List[str] = None) -> str:
+    def add_resource(self, url: str, title: str, summary: str | None = None, tags: list[str] = None) -> str:
         """Adds a new research resource to the library."""
         resource = {
             "url": url,
@@ -64,19 +64,19 @@ class ResourceCurationAgent(BaseAgent):
             return f"Failed to add resource: {e}"
 
     @as_tool
-    def process_research_queue(self, urls: List[str]) -> str:
+    def process_research_queue(self, urls: list[str]) -> str:
         """Bulk processes a list of discovery URLs."""
         # Simulated extraction logic
         return f"Processed {len(urls)} research items. Recommendations sent to KnowledgeAgent."
 
-    def _load_library(self) -> List[Dict[str, Any]]:
+    def _load_library(self) -> list[dict[str, Any]]:
         import os
         if not os.path.exists(self.library_path):
             return []
-        with open(self.library_path, "r", encoding="utf-8") as f:
+        with open(self.library_path, encoding="utf-8") as f:
             return json.load(f)
 
-    def _save_library(self, data: List[Dict[str, Any]]) -> None:
+    def _save_library(self, data: list[dict[str, Any]]) -> None:
         with open(self.library_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=4)
 

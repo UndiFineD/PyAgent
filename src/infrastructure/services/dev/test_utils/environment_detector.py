@@ -29,7 +29,7 @@ __version__ = VERSION
 class EnvironmentDetector:
     """Detects and reports test environment information."""
 
-    def detect(self) -> Dict[str, Any]:
+    def detect(self) -> dict[str, Any]:
         """Detect environment information."""
         import platform
         import os

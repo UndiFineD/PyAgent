@@ -24,7 +24,8 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .CleanupStrategy import CleanupStrategy
 from pathlib import Path
-from typing import Any, Callable, List, Tuple
+from typing import Any, List, Tuple
+from collections.abc import Callable
 import logging
 import shutil
 
@@ -50,9 +51,9 @@ class TestDataCleaner:
             strategy: Default cleanup strategy.
         """
         self.strategy = strategy
-        self._paths: List[Tuple[Path, bool]] = []
-        self._files: List[Path] = []
-        self._callbacks: List[Callable[[], None]] = []
+        self._paths: list[tuple[Path, bool]] = []
+        self._files: list[Path] = []
+        self._callbacks: list[Callable[[], None]] = []
         self._cleanup_done = False
 
     def register_path(self, path: Path, recursive: bool = True) -> None:
@@ -126,7 +127,7 @@ class TestDataCleaner:
         self._cleanup_done = True
         return cleaned
 
-    def __enter__(self) -> "TestDataCleaner":
+    def __enter__(self) -> TestDataCleaner:
         """Context manager entry."""
         return self
 

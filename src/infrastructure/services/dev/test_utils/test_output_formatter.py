@@ -32,7 +32,7 @@ class TestOutputFormatter:
 
     def __init__(self) -> None:
         """Initialize formatter."""
-        self.results: List[Tuple[str, str, float]] = []
+        self.results: list[tuple[str, str, float]] = []
 
     @staticmethod
     def format_success(test_name: str, duration_ms: float) -> str:
@@ -107,7 +107,7 @@ class TestOutputFormatter:
         status_str = status.value if hasattr(status, 'value') else str(status)
         self.results.append((test_name, status_str, duration_ms))
 
-    def get_summary(self) -> Dict[str, int]:
+    def get_summary(self) -> dict[str, int]:
         """Get a summary of all results as a dict.
 
         Returns:

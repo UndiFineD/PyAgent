@@ -34,10 +34,10 @@ class MemoryReplayAgent:
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = Path(workspace_path)
         self.is_sleeping: bool = False
-        self.replay_buffer: List[Any] = []
-        self.consolidated_insights: List[Dict[str, Any]] = []
+        self.replay_buffer: list[Any] = []
+        self.consolidated_insights: list[dict[str, Any]] = []
 
-    def start_sleep_cycle(self, episodic_memories: List[Dict[str, Any]]) -> Dict[str, Any]:
+    def start_sleep_cycle(self, episodic_memories: list[dict[str, Any]]) -> dict[str, Any]:
         """
         Begins a period of autonomous memory replay and consolidation.
         """
@@ -68,7 +68,7 @@ class MemoryReplayAgent:
         results["duration"] = results["end_ts"] - results["start_ts"]
         return results
 
-    def _evaluate_utility(self, memory: Dict[str, Any]) -> float:
+    def _evaluate_utility(self, memory: dict[str, Any]) -> float:
         """
         Assigns a utility score to a memory based on simulated heuristic.
         """
@@ -82,7 +82,7 @@ class MemoryReplayAgent:
             
         return score
 
-    def get_dream_log(self) -> Dict[str, Any]:
+    def get_dream_log(self) -> dict[str, Any]:
         """
         Returns a log of patterns discovered during sleep cycles.
         """

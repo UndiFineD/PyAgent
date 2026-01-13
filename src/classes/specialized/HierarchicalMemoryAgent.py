@@ -34,30 +34,33 @@ from src.core.base.utilities import as_tool
 __version__ = VERSION
 
 class HierarchicalMemoryAgent(BaseAgent):
-    """Manages memory across multiple temporal and semantic resolutions."""
+    """Manages memory across multiple temporal and semantic resolutions.
+    Phase 290: Integrated with 3-layer system (ShortTerm, Working, LongTerm).
+    """
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.memory_root = Path("data/logs/memory_hierarchical")
-        self.tiers = ["short", "mid", "long", "archival"]
+        # Phase 290: Standardized 3-layer tiers + Archival
+        self.tiers = ["ShortTerm", "Working", "LongTerm", "Archival"]
         for tier in self.tiers:
             (self.memory_root / tier).mkdir(parents=True, exist_ok=True)
             
         self._system_prompt = (
             "You are the Hierarchical Memory Agent. "
             "Your role is to categorize and move information between different memory tiers. "
-            "Short-term memory contains recent raw telemetry. "
-            "Mid-term memory contains task-specific context. "
-            "Long-term memory contains distilled reusable knowledge. "
-            "Archival memory contains compressed historical logs."
+            "ShortTerm memory: Recent raw telemetry and episodic events. "
+            "Working memory: Task-specific context and scratchpad data. "
+            "LongTerm memory: Distilled semantic knowledge and reusable patterns. "
+            "Archival memory: Highly compressed historical logs for auditing."
         )
 
     @as_tool
-    def store_memory(self, content: str, importance: float = 0.5, tags: List[str] = None) -> str:
-        """Stores a new memory fragment into the short-term tier.
+    def store_memory(self, content: str, importance: float = 0.5, tags: list[str] = None) -> str:
+        """Stores a new memory fragment into the ShortTerm tier.
         Args:
             content: The actual memory text.
-            importance: 0.0 to 1.0 score. High importance may bypass mid-term.
+            importance: 0.0 to 1.0 score. High importance may bypass Working tier.
             tags: List of semantic tags for retrieval.
         """
         timestamp = int(time.time())
@@ -68,35 +71,41 @@ class HierarchicalMemoryAgent(BaseAgent):
             "content": content,
             "importance": importance,
             "tags": tags or [],
-            "status": "short"
+            "status": "ShortTerm"
         }
         
-        target_path = self.memory_root / "short" / f"{memory_id}.json"
-        with open(target_path, "w") as f:
-            json.dump(data, f, indent=2)
+        target_path = self.memory_root / "ShortTerm" / f"{memory_id}.json"
+        with open(target_path, "w") as f_out:
+            json.dump(data, f_out, indent=2)
             
-        return f"Memory {memory_id} stored in short-term tier."
+        return f"Memory {memory_id} stored in ShortTerm tier."
 
     @as_tool
     def promote_memories(self) -> str:
-        """Analyzes short and mid-term memories to move them to higher tiers."""
+        """Analyzes ShortTerm and Working memories to move them to higher tiers."""
         promoted_count = 0
-        # Simulated logic: memories older than 1 hour move to mid-term
         current_time = time.time()
         
-        short_dir = self.memory_root / "short"
+        # 1. Promote from ShortTerm to Working or LongTerm
+        short_dir = self.memory_root / "ShortTerm"
         for mem_file in short_dir.glob("*.json"):
-            with open(mem_file, "r") as f:
-                data = json.load(f)
-            
-            if current_time - data["timestamp"] > 3600 or data["importance"] > 0.8:
-                # Distill and promote to Long-term if high importance, else Mid-term
-                tier = "long" if data["importance"] > 0.8 else "mid"
-                data["status"] = tier
+            try:
+                with open(mem_file) as f_in:
+                    data = json.load(f_in)
                 
-                new_path = self.memory_root / tier / mem_file.name
-                with open(new_path, "w") as f:
-                    json.dump(data, f, indent=2)
+                if current_time - data["timestamp"] > 3600 or data["importance"] > 0.8:
+                    tier = "LongTerm" if data["importance"] > 0.9 else "Working"
+                    data["status"] = tier
+                    
+                    new_path = self.memory_root / tier / mem_file.name
+                    with open(new_path, "w") as f_out:
+                        json.dump(data, f_out, indent=2)
+                    mem_file.unlink()
+                    promoted_count += 1
+            except Exception as e:
+                logging.error(f"Failed to promote {mem_file}: {e}")
+        
+        return f"Promoted {promoted_count} memories to higher tiers."
                 
                 mem_file.unlink()
                 promoted_count += 1
@@ -118,7 +127,7 @@ class HierarchicalMemoryAgent(BaseAgent):
         for tier in search_tiers:
             tier_dir = self.memory_root / tier
             for mem_file in tier_dir.glob("*.json"):
-                with open(mem_file, "r") as f:
+                with open(mem_file) as f:
                     data = json.load(f)
                 if query.lower() in data["content"].lower() or any(query.lower() in t.lower() for t in data["tags"]):
                     results.append(f"[{tier.upper()}] {data['content'][:100]}...")

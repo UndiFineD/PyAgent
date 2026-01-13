@@ -32,13 +32,13 @@ class StatsExporter:
     def __init__(self, format: str = "json") -> None:
         self.format = format
 
-    def export(self, metrics: Dict[str, Any], format: Optional[str] = None) -> str:
+    def export(self, metrics: dict[str, Any], format: str | None = None) -> str:
         """Export metrics in specified format."""
         export_format = format or self.format
         if export_format == "json":
             return json.dumps(metrics)
         elif export_format == "prometheus":
-            lines: List[str] = []
+            lines: list[str] = []
             for name, value in metrics.items():
                 lines.append(f"{name} {value}")
             return "\n".join(lines)

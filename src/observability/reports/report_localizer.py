@@ -47,7 +47,7 @@ class ReportLocalizer:
             locale: Default locale.
         """
 
-        self.strings: Dict[str, LocalizedString] = {}
+        self.strings: dict[str, LocalizedString] = {}
         self.current_locale = locale
         self._init_defaults()
         logging.debug(f"ReportLocalizer initialized with {locale.value}")
@@ -66,7 +66,7 @@ class ReportLocalizer:
         for key, translations in defaults.items():
             self.add_string(key, translations)
 
-    def add_string(self, key: str, translations: Dict[str, str]) -> None:
+    def add_string(self, key: str, translations: dict[str, str]) -> None:
         """Add a localized string.
         Args:
             key: String key.
@@ -76,7 +76,7 @@ class ReportLocalizer:
         default = translations.get("en-US", list(translations.values())[0] if translations else "")
         self.strings[key] = LocalizedString(key=key, translations=translations, default=default)
 
-    def get(self, key: str, locale: Optional[LocaleCode] = None) -> str:
+    def get(self, key: str, locale: LocaleCode | None = None) -> str:
         """Get localized string.
         Args:
             key: String key.

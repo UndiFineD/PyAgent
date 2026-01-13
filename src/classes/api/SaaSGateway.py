@@ -36,12 +36,12 @@ class SaaSGateway:
     """
     
     def __init__(self) -> None:
-        self.api_keys: Dict[str, Dict[str, Any]] = {} # key -> {tenant, quota}
-        self.usage_logs: List[Dict[str, Any]] = []
-        self.rate_limits: Dict[str, List[float]] = {} # key -> [timestamps]
+        self.api_keys: dict[str, dict[str, Any]] = {} # key -> {tenant, quota}
+        self.usage_logs: list[dict[str, Any]] = []
+        self.rate_limits: dict[str, list[float]] = {} # key -> [timestamps]
         self.core = GatewayCore()
 
-    def call_external_saas(self, api_key: str, service: str, action: str, params: Dict[str, Any]) -> Dict[str, Any]:
+    def call_external_saas(self, api_key: str, service: str, action: str, params: dict[str, Any]) -> dict[str, Any]:
         """
         Proxies a request to an external SaaS service (Jira/Slack/Trello).
         """
@@ -52,7 +52,7 @@ class SaaSGateway:
         if not endpoint:
             return {"error": f"Service {service} not registered"}
             
-        request_obj = self.core.format_saas_request(service, action, params)
+        self.core.format_saas_request(service, action, params)
         logging.info(f"SaaSGateway: Forwarding to {endpoint}{action}...")
         
         # Simulated response
@@ -102,6 +102,6 @@ class SaaSGateway:
         })
         return True
 
-    def get_quota_status(self, api_key: str) -> Dict[str, Any]:
+    def get_quota_status(self, api_key: str) -> dict[str, Any]:
         """Returns the current quota status for a key."""
         return self.api_keys.get(api_key, {"error": "Invalid API Key"})

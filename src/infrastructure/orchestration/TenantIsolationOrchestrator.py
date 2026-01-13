@@ -33,8 +33,8 @@ class TenantIsolationOrchestrator:
     
     def __init__(self, tenant_manager: Any) -> None:
         self.tenant_manager = tenant_manager
-        self.resource_limits: Dict[str, Dict[str, float]] = {}
-        self.context_vaults: Dict[str, bytes] = {} # Simulated encrypted vaults
+        self.resource_limits: dict[str, dict[str, float]] = {}
+        self.context_vaults: dict[str, bytes] = {} # Simulated encrypted vaults
 
     def set_resource_limits(self, tenant_id: str, max_tokens: int, max_nodes: int) -> str:
         """Sets compute quotas for a specific tenant."""
@@ -52,7 +52,7 @@ class TenantIsolationOrchestrator:
         self.context_vaults[vault_id] = data.encode() # Mock storage
         return vault_id
 
-    def fuse_knowledge_zk(self, vault_ids: List[str]) -> str:
+    def fuse_knowledge_zk(self, vault_ids: list[str]) -> str:
         """
         Simulates Zero-Knowledge Knowledge Fusion.
         Aggregates insights without exposing the raw data of individual tenants.

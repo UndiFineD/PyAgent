@@ -46,7 +46,7 @@ class ResourceForecastingAgent(BaseAgent):
         self.usage_history.append(snapshot)
         return snapshot
 
-    def predict_future_needs(self, horizon_hours: int = 24) -> Dict[str, Any]:
+    def predict_future_needs(self, horizon_hours: int = 24) -> dict[str, Any]:
         """Predicts resource needs for the specified future horizon."""
         if len(self.usage_history) < 2:
             return {"status": "Incomplete Data", "prediction": None}

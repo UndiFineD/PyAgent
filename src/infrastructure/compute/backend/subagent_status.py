@@ -37,7 +37,7 @@ class SubagentStatus:
     def __init__(self, runner: SubagentRunner) -> None:
         self.runner = runner
 
-    def get_backend_status(self) -> Dict[str, Any]:
+    def get_backend_status(self) -> dict[str, Any]:
         """Return diagnostic snapshot of backend availability."""
         backend = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()
         repo_root = str(self.runner._resolve_repo_root())

@@ -43,10 +43,10 @@ class SLAManager:
 
     def __init__(self) -> None:
         """Initialize SLA manager."""
-        self.sla_configs: Dict[SLALevel, SLAConfiguration] = {}
-        self.tracked: Dict[str, Dict[str, Any]] = {}
+        self.sla_configs: dict[SLALevel, SLAConfiguration] = {}
+        self.tracked: dict[str, dict[str, Any]] = {}
         # Compatibility API expected by tests.
-        self.sla_policies: Dict[str, SLAPolicy] = {}
+        self.sla_policies: dict[str, SLAPolicy] = {}
         self._setup_default_slas()
 
     def set_policy(self, name: str, response_hours: int = 0, resolution_hours: int = 0) -> None:
@@ -57,21 +57,21 @@ class SLAManager:
             resolution_hours=int(resolution_hours or 0),
         )
 
-    def get_policy(self, name: str) -> Optional[SLAPolicy]:
+    def get_policy(self, name: str) -> SLAPolicy | None:
         """Get a named SLA policy (compatibility API)."""
         return self.sla_policies.get(name)
 
-    def check_violations(self, improvements: List[Improvement], priority: str) -> List[Improvement]:
+    def check_violations(self, improvements: list[Improvement], priority: str) -> list[Improvement]:
         """Return improvements that violate the given named SLA policy."""
         policy = self.sla_policies.get(priority)
         if not policy or policy.resolution_hours <= 0:
             return []
 
         now = datetime.now()
-        violating: List[Improvement] = []
+        violating: list[Improvement] = []
         for imp in improvements:
             created = getattr(imp, "created_at", "")
-            created_dt: Optional[datetime] = None
+            created_dt: datetime | None = None
             if isinstance(created, datetime):
                 created_dt = created
             else:
@@ -128,7 +128,7 @@ class SLAManager:
 
     def check_sla_status(
         self, improvement_id: str
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Check SLA status for an improvement."""
         if improvement_id not in self.tracked:
             return {"status": "not_tracked"}
@@ -143,7 +143,7 @@ class SLAManager:
         else:
             return {"status": "on_track", **tracking}
 
-    def get_breached(self) -> List[str]:
+    def get_breached(self) -> list[str]:
         """Get all breached improvement IDs."""
         now = datetime.now().isoformat()
         return [

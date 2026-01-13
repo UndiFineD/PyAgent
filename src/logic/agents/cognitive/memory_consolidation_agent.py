@@ -57,11 +57,11 @@ class MemoryConsolidationAgent(BaseAgent):
         new_insights = 0
         deduplicated = 0
         
-        seen_texts: Dict[str, str] = {}
+        seen_texts: dict[str, str] = {}
         
         for mem in recent_memories:
             content = mem["content"]
-            meta = mem.get("metadata", {})
+            mem.get("metadata", {})
             
             # Simple deduplication logic
             content_hash = hash(content)

@@ -34,7 +34,7 @@ class AgentStore:
     def __init__(self, store_path: str) -> None:
         self.store_path: Path = Path(store_path)
         self.store_path.mkdir(parents=True, exist_ok=True)
-        self.templates: Dict[str, Dict[str, Any]] = {
+        self.templates: dict[str, dict[str, Any]] = {
             "SqlExpert": {
                 "base": "DataAgent",
                 "config": {"mode": "sql_only", "engine": "sqlite"},
@@ -47,15 +47,15 @@ class AgentStore:
             }
         }
 
-    def list_templates(self) -> Dict[str, Dict[str, Any]]:
+    def list_templates(self) -> dict[str, dict[str, Any]]:
         return self.templates
 
-    def purchase_template(self, agent_id: str, template_name: str, economy: Any) -> Optional[Dict[str, Any]]:
+    def purchase_template(self, agent_id: str, template_name: str, economy: Any) -> dict[str, Any] | None:
         """Purchases a template using agent credits."""
         if template_name not in self.templates:
             return None
             
-        template: Dict[str, Any] = self.templates[template_name]
+        template: dict[str, Any] = self.templates[template_name]
         price: float = float(template["price"])
         
         if hasattr(economy, "transfer_credits") and economy.transfer_credits(agent_id, "STORE", price, f"Purchase template: {template_name}"):

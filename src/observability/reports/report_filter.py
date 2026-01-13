@@ -34,7 +34,7 @@ class ReportFilter:
         criteria: Filter criteria to apply.
     """
 
-    def __init__(self, criteria: Optional[FilterCriteria] = None) -> None:
+    def __init__(self, criteria: FilterCriteria | None = None) -> None:
         """Initialize filter.
         Args:
             criteria: Filter criteria. Uses defaults if not provided.
@@ -58,7 +58,7 @@ class ReportFilter:
             return False
         return True
 
-    def filter_issues(self, issues: List[CodeIssue]) -> List[CodeIssue]:
+    def filter_issues(self, issues: list[CodeIssue]) -> list[CodeIssue]:
         """Filter list of issues.
         Args:
             issues: List of issues to filter.

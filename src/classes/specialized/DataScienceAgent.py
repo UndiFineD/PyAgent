@@ -44,7 +44,7 @@ class DataScienceAgent(BaseAgent):
         )
 
     @as_tool
-    def analyze_dataset(self, data_path: str) -> Dict[str, Any]:
+    def analyze_dataset(self, data_path: str) -> dict[str, Any]:
         """Performs a comprehensive Exploratory Data Analysis (EDA) on a dataset.
         
         Args:
@@ -67,7 +67,7 @@ class DataScienceAgent(BaseAgent):
         }
 
     @as_tool
-    def run_statistical_test(self, group_a: List[float], group_b: List[float], test_type: str = "t-test") -> Dict[str, Any]:
+    def run_statistical_test(self, group_a: list[float], group_b: list[float], test_type: str = "t-test") -> dict[str, Any]:
         """Runs a statistical test between two groups of data.
         
         Args:
@@ -84,7 +84,7 @@ class DataScienceAgent(BaseAgent):
         }
 
     @as_tool
-    def build_forecast_model(self, time_series_data: Dict[str, float]) -> Dict[str, Any]:
+    def build_forecast_model(self, time_series_data: dict[str, float]) -> dict[str, Any]:
         """Builds a simple predictive forecast based on historical data.
         
         Args:

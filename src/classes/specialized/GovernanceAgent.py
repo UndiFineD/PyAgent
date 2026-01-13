@@ -51,7 +51,7 @@ class GovernanceAgent(BaseAgent):
         )
 
     @as_tool
-    def submit_proposal(self, title: str, description: str, creator: str, options: List[str] = None) -> str:
+    def submit_proposal(self, title: str, description: str, creator: str, options: list[str] = None) -> str:
         """Submits a new governance proposal for the fleet.
         
         Args:
@@ -96,7 +96,7 @@ class GovernanceAgent(BaseAgent):
         if not path.exists():
             return f"Error: Proposal {proposal_id} not found."
             
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             proposal = json.load(f)
             
         if proposal["status"] != "active":
@@ -126,13 +126,13 @@ class GovernanceAgent(BaseAgent):
         return f"Vote cast by {voter} on proposal {proposal_id}."
 
     @as_tool
-    def close_proposal(self, proposal_id: str) -> Dict[str, Any]:
+    def close_proposal(self, proposal_id: str) -> dict[str, Any]:
         """Closes a proposal and calculates the results."""
         path = self.proposals_dir / f"{proposal_id}.json"
         if not path.exists():
             return {"error": "Proposal not found"}
             
-        with open(path, "r", encoding="utf-8") as f:
+        with open(path, encoding="utf-8") as f:
             proposal = json.load(f)
             
         proposal["status"] = "closed"

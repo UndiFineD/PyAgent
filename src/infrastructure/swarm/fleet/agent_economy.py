@@ -35,7 +35,7 @@ class MarketPricingEngine:
     """Calculates dynamic pricing based on system load and hardware specs."""
     
     @staticmethod
-    def calculate_price(base_price: float, resource_stats: Dict[str, Any]) -> float:
+    def calculate_price(base_price: float, resource_stats: dict[str, Any]) -> float:
         """Applies multipliers based on CPU/GPU demand."""
         multiplier = 1.0
         
@@ -56,8 +56,8 @@ class AgentEconomy:
     """Manages internal marketplace credits and task bidding."""
 
     def __init__(self) -> None:
-        self.balances: Dict[str, float] = {}
-        self.blockchain: List[Dict[str, Any]] = []
+        self.balances: dict[str, float] = {}
+        self.blockchain: list[dict[str, Any]] = []
         self.pricing_engine = MarketPricingEngine()
         self._initialize_genesis_block()
 
@@ -71,7 +71,7 @@ class AgentEconomy:
         }
         self.blockchain.append(genesis)
 
-    def _hash_block(self, block: Dict[str, Any]) -> str:
+    def _hash_block(self, block: dict[str, Any]) -> str:
         block_string: bytes = json.dumps(block, sort_keys=True).encode()
         return hashlib.sha256(block_string).hexdigest()
 
@@ -116,7 +116,7 @@ class AgentEconomy:
             "timestamp": time.time()
         }
         
-        prev_block: Dict[str, Any] = self.blockchain[-1]
+        prev_block: dict[str, Any] = self.blockchain[-1]
         new_block = {
             "index": len(self.blockchain),
             "timestamp": time.time(),
@@ -127,7 +127,7 @@ class AgentEconomy:
         self.blockchain.append(new_block)
         logging.info(f"Transaction recorded: {sender} -> {receiver} ({amount} credits)")
 
-    def place_bid(self, agent_id: str, task_id: str, bid_amount: float) -> Dict[str, Any]:
+    def place_bid(self, agent_id: str, task_id: str, bid_amount: float) -> dict[str, Any]:
         """Submits a bid for a task."""
         return {
             "agent_id": agent_id,
@@ -141,9 +141,9 @@ class AuctionOrchestrator:
     
     def __init__(self, economy: AgentEconomy) -> None:
         self.economy = economy
-        self.active_auctions: Dict[str, Dict[str, Any]] = {}
+        self.active_auctions: dict[str, dict[str, Any]] = {}
 
-    def start_auction(self, task_id: str, requirements: Dict[str, Any], reserve_price: float = 10.0, auction_type: str = "vickrey") -> str:
+    def start_auction(self, task_id: str, requirements: dict[str, Any], reserve_price: float = 10.0, auction_type: str = "vickrey") -> str:
         """Starts a new auction (Vickrey or Dutch) for a task."""
         self.active_auctions[task_id] = {
             "requirements": requirements,
@@ -201,7 +201,7 @@ class AuctionOrchestrator:
         })
         return True
 
-    def start_bundle_auction(self, items: List[str], requirements: Dict[str, Any]) -> str:
+    def start_bundle_auction(self, items: list[str], requirements: dict[str, Any]) -> str:
         """Starts a combinatorial auction for a bundle of items/tasks."""
         bundle_id = f"bundle_{int(time.time())}"
         self.active_auctions[bundle_id] = {
@@ -213,7 +213,7 @@ class AuctionOrchestrator:
         }
         return bundle_id
 
-    def resolve_auction(self, task_id: str) -> Optional[Dict[str, Any]]:
+    def resolve_auction(self, task_id: str) -> dict[str, Any] | None:
         """Resolves the auction and returns the winner and the price to pay."""
         if task_id not in self.active_auctions:
             return None

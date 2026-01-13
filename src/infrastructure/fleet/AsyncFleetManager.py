@@ -27,6 +27,7 @@ import asyncio
 import time
 from typing import Dict, List, Any, Optional
 from .FleetManager import FleetManager
+from .WorkflowState import WorkflowState
 from src.core.base.DependencyGraph import DependencyGraph
 
 __version__ = VERSION
@@ -39,10 +40,10 @@ class AsyncFleetManager(FleetManager):
     def __init__(self, workspace_root: str, max_workers: int = 4) -> None:
         super().__init__(workspace_root)
         self.max_workers = max_workers
-        self.active_workflows: Dict[str, WorkflowState] = {}
-        self._migration_events: Dict[str, asyncio.Event] = {}
+        self.active_workflows: dict[str, WorkflowState] = {}
+        self._migration_events: dict[str, asyncio.Event] = {}
 
-    async def execute_workflow_async(self, task: str, workflow_steps: List[Dict[str, Any]], workflow_id: Optional[str] = None) -> str:
+    async def execute_workflow_async(self, task: str, workflow_steps: list[dict[str, Any]], workflow_id: str | None = None) -> str:
         """Runs multiple agent steps in parallel with dependency-aware batching (Phase 232)."""
         logging.info(f"Starting parallel workflow: {task} with {len(workflow_steps)} steps.")
         
@@ -61,7 +62,7 @@ class AsyncFleetManager(FleetManager):
         
         # 1. Build Dependency Graph
         graph = DependencyGraph()
-        step_map: Dict[str, Dict[str, Any]] = {}
+        step_map: dict[str, dict[str, Any]] = {}
         
         for i, step in enumerate(workflow_steps):
             # Ensure unique IDs for graph nodes
@@ -157,8 +158,8 @@ class AsyncFleetManager(FleetManager):
         # In a real system, we'd trigger execute_workflow_async here or wait for a signal
         return True
 
-    async def _run_single_step(self, step: Dict[str, Any], workflow_id: str) -> str:
-        """Internal helper to execute a single agent step within the asyncio event loop."""
+    async def _run_single_step(self, step: dict[str, Any], workflow_id: str) -> str:
+        """Phase 152 Refactor: Native asyncio orchestration with async locking."""
         agent_name = step.get("agent")
         action_name = step.get("action")
         args = step.get("args", [])
@@ -168,51 +169,35 @@ class AsyncFleetManager(FleetManager):
             return f"Error: Agent '{agent_name}' not found."
             
         agent = self.agents[agent_name]
-        if not hasattr(agent, action_name):
+        action_fn = getattr(agent, action_name, None)
+        if not action_fn:
             return f"Error: Action '{action_name}' not supported."
             
-        action_fn = getattr(agent, action_name)
         trace_id = f"{workflow_id}_{agent_name}_{action_name}"
         self.telemetry.start_trace(trace_id)
         
         try:
-            # Phase 242: Apply distributed locks for resources
             from src.infrastructure.orchestration.LockManager import LockManager
             locker = LockManager()
             
-            async def run_core():
-                # Phase 152: Intelligent execution based on function type
-                if asyncio.iscoroutinefunction(action_fn):
-                    return await action_fn(*args)
-                else:
-                    # Offload blocking synchronous actions to the default executor
-                    loop = asyncio.get_running_loop()
-                    return await loop.run_in_executor(None, action_fn, *args)
-
-            # Nested context managers for multiple resources
-            def run_with_locks(res_list):
+            # Phase 152: Recursive async lock acquisition
+            async def run_with_async_locks(res_list):
                 if not res_list:
-                    return run_core()
+                    # Execute task
+                    if asyncio.iscoroutinefunction(action_fn):
+                        return await action_fn(*args)
+                    else:
+                        loop = asyncio.get_running_loop()
+                        return await loop.run_in_executor(None, action_fn, *args)
                 
                 res = res_list[0]
-                # Default to file lock for paths, memory lock for IDs
-                l_type = "file" if "/" in res or "\\" in res or "." in res else "memory"
-                with locker.acquire(res, lock_type=l_type):
-                    return run_with_locks(res_list[1:])
+                l_type = "file" if any(c in res for c in "/\\.") else "memory"
+                async with locker.acquire_async(res, lock_type=l_type):
+                    return await run_with_async_locks(res_list[1:])
 
-            # Offload the locked execution to executor if it's blocking
-            loop = asyncio.get_running_loop()
-            res = await loop.run_in_executor(None, lambda: run_with_locks(resources))
-            # Note: If run_core() is async, this lambda needs careful handling.
-            # However, run_with_locks returns a coroutine if res_list is empty.
-            # Simplified approach: for now, we assume blocking locks wrapping the execution.
-            # If run_with_locks returns a coroutine, we await it.
-            if asyncio.iscoroutine(res):
-                res = await res
-                
+            res = await run_with_async_locks(resources)
             self.telemetry.end_trace(trace_id, agent_name, action_name, status="success")
             
-            # Phase 240: Legal Audit Integration
             if isinstance(res, str):
                 res = await self._pre_commit_audit(res, agent_name)
                 

@@ -4,7 +4,7 @@ from pathlib import Path
 from src.classes.fleet.FleetManager import FleetManager
 
 logging.basicConfig(level=logging.INFO)
-root = Path("c:/DEV/PyAgent")
+root = Path(Path(__file__).resolve().parents[3])
 
 try:
     print("Initializing FleetManager...")

@@ -24,7 +24,8 @@ import asyncio
 import logging
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
-from typing import List, Callable, Any
+from typing import List, Any
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -41,8 +42,8 @@ class ParallelProcessor:
         self.max_workers = max_workers
 
     def process_files_threaded(self, 
-                               files: List[Path], 
-                               worker_func: Callable[[Path], Any]) -> List[Any]:
+                               files: list[Path], 
+                               worker_func: Callable[[Path], Any]) -> list[Any]:
         """Process files using worker threads."""
         results = []
         with ThreadPoolExecutor(max_workers=self.max_workers) as executor:
@@ -53,8 +54,8 @@ class ParallelProcessor:
         return [r for r in results if r is not None]
 
     async def async_process_files(self, 
-                                files: List[Path], 
-                                worker_func: Callable[[Path], Any]) -> List[Any]:
+                                files: list[Path], 
+                                worker_func: Callable[[Path], Any]) -> list[Any]:
         """Process multiple files concurrently using async/await."""
         modified_results: list[Any] = []
         loop = asyncio.get_running_loop()

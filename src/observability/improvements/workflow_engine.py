@@ -32,13 +32,13 @@ class WorkflowEngine:
     """Manages improvement workflow transitions."""
 
     def __init__(self) -> None:
-        self.states: List[str] = [
+        self.states: list[str] = [
             "pending",
             "in_progress",
             "completed",
             "blocked",
         ]
-        self._transitions: Dict[str, List[str]] = {
+        self._transitions: dict[str, list[str]] = {
             "pending": ["in_progress", "blocked"],
             "in_progress": ["completed", "blocked"],
             "blocked": ["in_progress"],

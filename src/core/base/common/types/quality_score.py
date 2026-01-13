@@ -36,7 +36,7 @@ class QualityScore:
     complexity: float = 0.0
     documentation: float = 0.0
     test_coverage: float = 0.0
-    issues: List[str] = field(default_factory=lambda: [])
+    issues: list[str] = field(default_factory=lambda: [])
 
     @property
     def score(self) -> float:

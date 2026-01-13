@@ -42,7 +42,7 @@ class MetricsCollector:
     def __init__(self) -> None:
         """Initialize metrics collector."""
 
-        self.metrics: Dict[str, List[ReportMetric]] = {}
+        self.metrics: dict[str, list[ReportMetric]] = {}
         logging.debug("MetricsCollector initialized")
 
     def record(
@@ -51,7 +51,7 @@ class MetricsCollector:
         name: str,
         value: float,
         unit: str = "",
-        threshold: Optional[float] = None
+        threshold: float | None = None
     ) -> ReportMetric:
         """Record a metric.
         Args:
@@ -75,7 +75,7 @@ class MetricsCollector:
         self.metrics[file_path].append(metric)
         return metric
 
-    def get_metrics(self, file_path: str) -> List[ReportMetric]:
+    def get_metrics(self, file_path: str) -> list[ReportMetric]:
         """Get metrics for a file.
         Args:
             file_path: File path.
@@ -85,7 +85,7 @@ class MetricsCollector:
 
         return self.metrics.get(file_path, [])
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """Get summary of all metrics.
         Returns:
             Summary dictionary.
@@ -94,7 +94,7 @@ class MetricsCollector:
         total_files = len(self.metrics)
         total_metrics = sum(len(m) for m in self.metrics.values())
         # Calculate averages by metric name
-        averages: Dict[str, List[float]] = {}
+        averages: dict[str, list[float]] = {}
         for metrics in self.metrics.values():
             for metric in metrics:
                 if metric.name not in averages:

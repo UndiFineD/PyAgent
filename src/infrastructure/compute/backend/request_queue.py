@@ -25,7 +25,8 @@ from src.core.base.version import VERSION
 from .QueuedRequest import QueuedRequest
 from .RequestPriority import RequestPriority
 from queue import PriorityQueue
-from typing import Callable, Dict, Optional
+from typing import Dict, Optional
+from collections.abc import Callable
 import logging
 import threading
 import time
@@ -47,7 +48,7 @@ class RequestQueue:
         request=queue.dequeue()
     """
 
-    def __init__(self, max_size: int = 1000, recorder: Optional[LocalContextRecorder] = None) -> None:
+    def __init__(self, max_size: int = 1000, recorder: LocalContextRecorder | None = None) -> None:
         """Initialize request queue.
 
         Args:
@@ -57,13 +58,13 @@ class RequestQueue:
         self._queue: PriorityQueue[QueuedRequest] = PriorityQueue(maxsize=max_size)
         self.recorder = recorder
         self._lock = threading.Lock()
-        self._pending: Dict[str, QueuedRequest] = {}
+        self._pending: dict[str, QueuedRequest] = {}
 
     def enqueue(
         self,
         prompt: str,
         priority: RequestPriority = RequestPriority.NORMAL,
-        callback: Optional[Callable[[str], None]] = None,
+        callback: Callable[[str], None] | None = None,
     ) -> str:
         """Add request to queue.
 
@@ -94,7 +95,7 @@ class RequestQueue:
         logging.debug(f"Queued request {request_id} with priority {priority.name}")
         return request_id
 
-    def dequeue(self, timeout: Optional[float] = None) -> Optional[QueuedRequest]:
+    def dequeue(self, timeout: float | None = None) -> QueuedRequest | None:
         """Get next request from queue.
 
         Args:
@@ -119,7 +120,7 @@ class RequestQueue:
         """Check if queue is empty."""
         return self._queue.empty()
 
-    def get_pending(self, request_id: str) -> Optional[QueuedRequest]:
+    def get_pending(self, request_id: str) -> QueuedRequest | None:
         """Get pending request by ID."""
         with self._lock:
             return self._pending.get(request_id)

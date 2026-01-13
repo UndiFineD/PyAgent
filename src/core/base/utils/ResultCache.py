@@ -42,14 +42,14 @@ class ResultCache:
             cache.set("test.py", "coder", content_hash, result)
     """
 
-    def __init__(self, cache_dir: Optional[Path] = None) -> None:
+    def __init__(self, cache_dir: Path | None = None) -> None:
         """Initialize cache.
 
         Args:
             cache_dir: Directory for persistent cache.
         """
         self.cache_dir = cache_dir
-        self._memory_cache: Dict[str, CachedResult] = {}
+        self._memory_cache: dict[str, CachedResult] = {}
 
     def _make_key(self, file_path: str, agent_name: str, content_hash: str) -> str:
         """Create cache key."""
@@ -60,7 +60,7 @@ class ResultCache:
         file_path: str,
         agent_name: str,
         content_hash: str,
-    ) -> Optional[Any]:
+    ) -> Any | None:
         """Get cached result.
 
         Args:

@@ -43,6 +43,6 @@ class ScheduledImprovement:
     improvement_id: str
     scheduled_start: str = ""
     scheduled_end: str = ""
-    assigned_resources: List[str] = field(default_factory=list)  # type: ignore[assignment]
+    assigned_resources: list[str] = field(default_factory=list)  # type: ignore[assignment]
     status: ScheduleStatus = ScheduleStatus.UNSCHEDULED
     sprint_id: str = ""

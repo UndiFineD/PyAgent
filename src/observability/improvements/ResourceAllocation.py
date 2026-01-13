@@ -32,4 +32,4 @@ class ResourceAllocation:
     """Compatibility allocation record used by tests."""
 
     improvement_id: str
-    resources: List[str] = field(default_factory=list)  # type: ignore[assignment]
+    resources: list[str] = field(default_factory=list)  # type: ignore[assignment]

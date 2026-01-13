@@ -46,7 +46,7 @@ class RequestDeduplicator:
             dedup.store_result("prompt", result)
     """
 
-    def __init__(self, ttl_seconds: float = 60.0, recorder: Optional[LocalContextRecorder] = None) -> None:
+    def __init__(self, ttl_seconds: float = 60.0, recorder: LocalContextRecorder | None = None) -> None:
         """Initialize deduplicator.
 
         Args:
@@ -55,10 +55,10 @@ class RequestDeduplicator:
         """
         self.ttl_seconds = ttl_seconds
         self.recorder = recorder
-        self._pending: Dict[str, float] = {}  # hash -> start_time
-        self._results: Dict[str, str] = {}
+        self._pending: dict[str, float] = {}  # hash -> start_time
+        self._results: dict[str, str] = {}
         self._lock = threading.Lock()
-        self._events: Dict[str, threading.Event] = {}
+        self._events: dict[str, threading.Event] = {}
 
     def _get_key(self, prompt: str) -> str:
         """Generate deduplication key for prompt."""
@@ -94,7 +94,7 @@ class RequestDeduplicator:
             self._events[key] = threading.Event()
             return False
 
-    def wait_for_result(self, prompt: str, timeout: float = 60.0) -> Optional[str]:
+    def wait_for_result(self, prompt: str, timeout: float = 60.0) -> str | None:
         """Wait for result of duplicate request.
 
         Args:

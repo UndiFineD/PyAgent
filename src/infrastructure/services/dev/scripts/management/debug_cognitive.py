@@ -31,7 +31,7 @@ __version__ = VERSION
 def test_cognitive_features() -> None:
     """Validate metacognitive and Theory of Mind features."""
     logging.basicConfig(level=logging.INFO)
-    root = Path("c:/DEV/PyAgent")
+    root = Path(str(Path(__file__).resolve().parents[5]) + "")
     fleet = FleetManager(str(root))
     
     print("--- Phase 12: Metacognitive Monitoring ---")

@@ -34,7 +34,7 @@ from .ErrorEntry import ErrorEntry as ErrorEntry
 from .ErrorImpact import ErrorImpact as ErrorImpact
 from .ErrorPattern import ErrorPattern as ErrorPattern
 from .ErrorSeverity import ErrorSeverity as ErrorSeverity
-from .ErrorsAgent import ErrorsAgent, DEFAULT_ERROR_PATTERNS
+from .ErrorsAgent import ErrorsAgent as ErrorsAgent, DEFAULT_ERROR_PATTERNS as DEFAULT_ERROR_PATTERNS
 from .ExternalReporter import ExternalReporter as ExternalReporter
 from .ExternalReportingClient import ExternalReportingClient as ExternalReportingClient
 from .FixSuggestion import FixSuggestion as FixSuggestion

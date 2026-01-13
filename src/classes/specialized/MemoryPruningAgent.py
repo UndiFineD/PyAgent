@@ -32,7 +32,7 @@ class MemoryPruningAgent:
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
         
-    def rank_memory_importance(self, memory_entry: Dict[str, Any]) -> float:
+    def rank_memory_importance(self, memory_entry: dict[str, Any]) -> float:
         """
         Ranks a memory entry based on recency, frequency of access, and logical density.
         """
@@ -55,7 +55,7 @@ class MemoryPruningAgent:
             
         return round(score, 3)
 
-    def select_pruning_targets(self, memory_list: List[Dict[str, Any]], threshold: float = 0.2) -> List[Dict[str, Any]]:
+    def select_pruning_targets(self, memory_list: list[dict[str, Any]], threshold: float = 0.2) -> list[dict[str, Any]]:
         """
         Identifies entries that fall below the utility threshold.
         """
@@ -66,11 +66,11 @@ class MemoryPruningAgent:
                 targets.append({"index": i, "rank": rank, "id": entry.get("id")})
         return targets
 
-    def generate_archival_plan(self, memory_list: List[Dict[str, Any]]) -> Dict[str, List[str]]:
+    def generate_archival_plan(self, memory_list: list[dict[str, Any]]) -> dict[str, list[str]]:
         """
         Decides which memories to move to 'cold' storage vs 'delete'.
         """
-        plan: Dict[str, List[str]] = {"cold_storage": [], "delete": []}
+        plan: dict[str, list[str]] = {"cold_storage": [], "delete": []}
         for entry in memory_list:
             entry_id = entry.get("id")
             if not entry_id:

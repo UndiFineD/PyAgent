@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 
 def test_v2_2_plugin_loading():
     print("--- Running SDK v2.2.0 Verification ---")
-    workspace = Path("C:/DEV/PyAgent")
+    workspace = Path(Path(__file__).resolve().parents[3])
     fleet = FleetManager(str(workspace))
     
     # 1. Test Mock Agent loading (Dynamic via Manifest)

@@ -56,14 +56,14 @@ for root_dir in ['src', 'tests']:
             if file.endswith('.py'):
                 path = os.path.join(root, file)
                 try:
-                    with open(path, 'r', encoding='utf-8') as f:
+                    with open(path, encoding='utf-8') as f:
                         content = f.read()
                     new_content = fix_imports(content)
                     if new_content != content:
                         with open(path, 'w', encoding='utf-8') as f:
                             f.write(new_content)
                         updated_count += 1
-                except:
+                except Exception:
                     pass
 
 print(f"Updated {updated_count} files.")

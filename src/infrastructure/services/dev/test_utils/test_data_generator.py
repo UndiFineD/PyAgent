@@ -37,7 +37,7 @@ class TestDataGenerator:
         code=gen.generate_python_code(with_errors=False)
     """
 
-    def __init__(self, seed: Optional[int] = None) -> None:
+    def __init__(self, seed: int | None = None) -> None:
         """Initialize data generator.
 
         Args:
@@ -94,7 +94,7 @@ class TestDataGenerator:
         Returns:
             str: Generated markdown.
         """
-        lines: List[str] = []
+        lines: list[str] = []
         if with_headers:
             lines.append("# Test Document")
             lines.append("")
@@ -125,7 +125,7 @@ class TestDataGenerator:
         Returns:
             str: Generated JSON.
         """
-        data: Dict[str, Any] = {
+        data: dict[str, Any] = {
             "items": [
                 {
                     "id": i,

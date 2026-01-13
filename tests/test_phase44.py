@@ -6,7 +6,7 @@ from src.classes.fleet.FleetManager import FleetManager
 
 class TestPhase44(unittest.TestCase):
     def setUp(self):
-        self.workspace = os.path.abspath("c:/DEV/PyAgent")
+        self.workspace = os.path.abspath(Path(__file__).resolve().parents[2])
         self.fleet = FleetManager(self.workspace)
         # Ensure directories exist
         os.makedirs(os.path.join(self.workspace, "models/forge/datasets"), exist_ok=True)

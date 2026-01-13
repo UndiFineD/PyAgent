@@ -45,7 +45,7 @@ class MockCore:
         """Example pure string manipulation."""
         return f"[MOCK-CORE-V1] {original_text[::-1]}"
 
-    def get_metadata(self) -> Dict[str, Any]:
+    def get_metadata(self) -> dict[str, Any]:
         return {
             "version": "1.0.0",
             "author": "CommunityMember",

@@ -10,9 +10,9 @@ class SandboxRuntime:
     
     def __init__(self) -> None:
         self.core = SandboxCore()
-        self.active_containers: Dict[str, Any] = {}
+        self.active_containers: dict[str, Any] = {}
 
-    def run_isolated(self, agent_id: str, code: str, risk_level: str = "medium") -> Dict[str, Any]:
+    def run_isolated(self, agent_id: str, code: str, risk_level: str = "medium") -> dict[str, Any]:
         """Runs agent code in an isolated environment after validation."""
         config = self.core.get_security_profile(risk_level)
         validation = self.core.validate_code_execution(code, config)

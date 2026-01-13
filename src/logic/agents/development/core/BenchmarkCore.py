@@ -15,13 +15,13 @@ class BenchmarkCore:
     Calculates baselines and validates performance constraints.
     """
     
-    def calculate_baseline(self, results: List[BenchmarkResult]) -> float:
+    def calculate_baseline(self, results: list[BenchmarkResult]) -> float:
         """Calculates the mean latency from a set of benchmark results."""
         if not results:
             return 0.0
         return sum(r.latency_ms for r in results) / len(results)
 
-    def check_regression(self, current_latency: float, baseline: float, threshold: float = 0.1) -> Dict[str, Any]:
+    def check_regression(self, current_latency: float, baseline: float, threshold: float = 0.1) -> dict[str, Any]:
         """Checks if current latency exceeds the baseline by the given threshold."""
         if baseline <= 0:
             return {"regression": False, "delta": 0.0}

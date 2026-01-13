@@ -26,16 +26,19 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
+from src.core.base.utilities import as_tool
 from src.core.base.exceptions import CycleInterrupt
 import logging
 import os
+import asyncio
 import subprocess
 import sys
 import time
 from datetime import datetime
 from pathlib import Path
 from types import TracebackType
-from typing import Any, Callable, Dict, List, Optional, cast
+from typing import Any, Dict, List, Optional, cast
+from collections.abc import Callable
 from src.core.base.models import (
     AgentConfig,
     AgentState,
@@ -47,6 +50,7 @@ from src.core.base.models import (
     MessageRole,
     PromptTemplate,
     ResponseQuality,
+    AgentPriority,
 )
 from src.core.base.AgentCore import BaseCore
 from src.core.base.registry import AgentRegistry
@@ -55,7 +59,8 @@ from src.core.base.state import AgentStateManager
 from src.core.base.verification import AgentVerifier
 from src.core.base.delegation import AgentDelegator
 from src.core.base.shell import ShellExecutor
-from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+# from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder # Moved to __init__
+from src.core.base.managers.ResourceQuotaManager import ResourceQuotaManager, QuotaConfig
 
 try:
     import requests
@@ -118,15 +123,15 @@ class BaseAgent:
     Note:
         - Automatically detects markdown files for formatting cleanup
         - Provides fallback responses when AI backend unavailable
-        - Supports multiple AI backends via agent_backend module
+        - Supports multiple AI backends via execution_engine (Phase 314)
         - Can be used as context manager for automatic cleanup
     """
 
     # Class-level attributes for shared state
-    _prompt_templates: Dict[str, PromptTemplate] = {}
-    _response_cache: Dict[str, CacheEntry] = {}
-    _plugins: Dict[str, Any] = {}
-    _event_hooks: Dict[EventType, List[Callable[[Dict[str, Any]], None]]] = {}
+    _prompt_templates: dict[str, PromptTemplate] = {}
+    _response_cache: dict[str, CacheEntry] = {}
+    _plugins: dict[str, Any] = {}
+    _event_hooks: dict[EventType, list[Callable[[dict[str, Any]], None]]] = {}
 
     def __init__(self, file_path: str) -> None:
         """Initialize the BaseAgent with file path.
@@ -143,7 +148,11 @@ class BaseAgent:
         self.previous_content: str = ""
         self.current_content: str = ""
         self.fleet: Any = None # FleetManager reference
-        self.capabilities: List[str] = ["base"] # Phase 241: Default capabilities
+        self.capabilities: list[str] = ["base"] # Phase 241: Default capabilities
+        
+        # Phase 260: Priority and Preemption
+        self.priority: AgentPriority = AgentPriority.NORMAL
+        self._suspended: bool = False
         
         # Knowledge Trinity initialization (Phase 126)
         try:
@@ -157,17 +166,17 @@ class BaseAgent:
         self._register_capabilities()
         
         # Strategy for agent execution (Phase 130: Lazy-loaded to avoid core-on-logic dependency)
-        self._strategy: Optional[Any] = None
+        self._strategy: Any | None = None
 
         # New attributes for enhanced functionality
         self._state: AgentState = AgentState.INITIALIZED
-        self._conversation_history: List[ConversationMessage] = []
-        self._scratchpad: List[str] = [] # Confucius-style persistent notes (Phase 128)
+        self._conversation_history: list[ConversationMessage] = []
+        self._scratchpad: list[str] = [] # Confucius-style persistent notes (Phase 128)
         self._config: AgentConfig = self._load_config()
         self._token_usage = 0
-        self._state_data: Dict[str, Any] = {}
-        self._post_processors: List[Callable[[str], str]] = []
-        self._model: Optional[str] = None
+        self._state_data: dict[str, Any] = {}
+        self._post_processors: list[Callable[[str], str]] = []
+        self._model: str | None = None
         self._is_stop_requested = False
         self._system_prompt: str = "You are a helpful AI assistant."
         
@@ -199,6 +208,7 @@ class BaseAgent:
         self.tool_registry: ToolRegistry | None = ToolRegistry() if ToolRegistry else None
 
         # Intelligence Harvesting (Phase 108)
+        from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
         self.recorder = LocalContextRecorder(Path(self._workspace_root), f"{self.__class__.__name__}_Agent")
 
     def _register_capabilities(self) -> None:
@@ -213,7 +223,26 @@ class BaseAgent:
         except Exception:
             pass
 
-    def get_capabilities(self) -> List[str]:
+    # PHASE 260: Preemption Logic
+    def suspend(self) -> None:
+        """Gracefully suspends the agent's work."""
+        if not self._suspended:
+            logging.warning(f"Agent {self.__class__.__name__} SUSPENDED due to preemption.")
+            self._suspended = True
+
+    def resume(self) -> None:
+        """Resumes the agent's work."""
+        if self._suspended:
+            logging.info(f"Agent {self.__class__.__name__} RESUMED.")
+            self._suspended = False
+
+    async def _check_preemption(self) -> None:
+        """Wait while the agent is suspended."""
+        import asyncio
+        while self._suspended:
+            await asyncio.sleep(0.5)
+
+    def get_capabilities(self) -> list[str]:
         """Phase 241: Returns a list of strings representing agent capabilities."""
         return self.capabilities
 
@@ -234,7 +263,7 @@ class BaseAgent:
     def strategy(self, value: Any) -> None:
         self._strategy = value
 
-    def _run_command(self, cmd: List[str], timeout: int = 120, max_retries: int = 1) -> subprocess.CompletedProcess[str]:
+    def _run_command(self, cmd: list[str], timeout: int = 120, max_retries: int = 1) -> subprocess.CompletedProcess[str]:
         """Run a command with timeout, error handling, retry logic, and logging."""
         return ShellExecutor.run_command(
             cmd=cmd,
@@ -266,7 +295,7 @@ class BaseAgent:
     def global_context(self, value: Any) -> None:
         self._local_global_context = value
 
-    def register_tools(self, registry: 'ToolRegistry') -> None:
+    def register_tools(self, registry: ToolRegistry) -> None:
         """
         Registers all methods decorated with @as_tool with the provided registry.
         """
@@ -292,35 +321,6 @@ class BaseAgent:
                     category=category,
                     priority=priority
                 )
-
-    def calculate_anchoring_strength(self, result: str) -> float:
-        """
-        Calculates the 'Anchoring Strength' metric (Stanford Research 2025).
-        Measures how well the output is anchored to the provided context/grounding.
-        Returns a score between 0.0 and 1.0.
-        """
-        if not hasattr(self, 'context_pool') or not self.context_pool:
-            return 0.5 # Default middle-ground if no context
-            
-        context_text = " ".join([str(v) for v in self.context_pool.values()])
-        if not context_text:
-            return 0.5
-            
-        # Basic implementation: calculate keyword overlap or semantic proximity
-        # For Phase 126, we use a simple N-gram overlap as a proxy for anchoring.
-        context_words = set(context_text.lower().split())
-        result_words = result.lower().split()
-        if not result_words:
-            return 0.0
-            
-        overlap = [word in context_words for word in result_words]
-        score = sum(overlap) / len(result_words)
-        
-        # Adjust for length - very short responses are often "unanchored" chat
-        if len(result_words) < 5:
-            score *= 0.5
-            
-        return min(1.0, score * 1.5) # Amplify slightly as non-context words are expected
 
     def calculate_anchoring_strength(self, result: str) -> float:
         """
@@ -379,11 +379,11 @@ class BaseAgent:
             "model": self.get_model() or "gpt-4o"
         }
 
-    def get_model(self) -> Optional[str]:
+    def get_model(self) -> str | None:
         """Get the currently configured model."""
         return self._model or self._config.model or None
 
-    def __enter__(self) -> "BaseAgent":
+    def __enter__(self) -> BaseAgent:
         """Context manager entry. Returns self for use in 'with' statement."""
         logging.debug(f"{self.__class__.__name__} entering context manager")
         AgentRegistry().register(self)
@@ -528,7 +528,7 @@ class BaseAgent:
         """
         return self.core.get_default_content(filename=self.file_path.name)
 
-    def think(self, prompt: str, system_prompt: Optional[str] = None) -> str:
+    def think(self, prompt: str, system_prompt: str | None = None) -> str:
         """
         Generic reasoning method that doesn't involve file updates.
         Useful for planning, data generation, or internal reasoning.
@@ -553,33 +553,25 @@ class BaseAgent:
         self._state: AgentState = AgentState.IDLE
         return result
 
-    def improve_content(self, prompt: str) -> str:
-        """Use AI to improve the content.
-
-        Calls the agent_backend with the previous content and a prompt,
-        receives improved content, and stores it in current_content.
-
-        Args:
-            prompt: The prompt describing what improvements to make.
-                   e.g., "Add comprehensive docstrings to all functions"
-
-        Returns:
-            str: The improved content (same as current_content attribute).
-
-        Raises:
-            None. Falls back to previous_content on error.
-
-        Example:
-            agent.improve_content("Improve error handling")
-            print(agent.current_content)
-
-        Note:
-            - Overridable in subclasses for agent-specific behavior
-            - Logs warnings on failure but doesn't raise
-            - Falls back to original content if improvement fails
-        """
+    async def improve_content(self, prompt: str) -> str:
+        """Use AI to improve the content."""
         self._state: AgentState = AgentState.PROCESSING
         self._trigger_event(EventType.PRE_IMPROVE, {"prompt": prompt})
+
+        # Phase 279/278: Mutation detection (Validation before processing)
+        try:
+            from src.core.base.IncrementalProcessor import IncrementalProcessor
+            proc = IncrementalProcessor(repo_root=self._workspace_root)
+            mutated = proc.validate_hashes([self.file_path])
+            if mutated:
+                logging.warning(f"BaseAgent: Mutation detected in {self.file_path} during processing. Reloading content.")
+                if self.file_path.exists():
+                    self.previous_content = self.file_path.read_text(encoding="utf-8")
+        except Exception as e:
+            logging.debug(f"BaseAgent: Mutation check failed: {e}")
+
+        # Phase 260: Preemption check
+        await self._check_preemption()
         
         # Phase 245: Increment cycle count
         self.quotas.update_usage(cycles=1)
@@ -602,9 +594,9 @@ class BaseAgent:
             memory_context: str = ""
             if self.memory:
                 try:
-                    memories: List[Dict[str, Any]] = self.memory.query(prompt, n_results=3)
+                    memories: list[dict[str, Any]] = self.memory.query(prompt, n_results=3)
                     if memories:
-                        memory_docs: List[Any] = [m.get("content", "") for m in memories]
+                        memory_docs: list[Any] = [m.get("content", "") for m in memories]
                         memory_context: str = "\n\n### Related Past Memories\n" + "\n".join(memory_docs)
                         logging.info(f"Found {len(memories)} relevant memories for context.")
                 except Exception as me:
@@ -613,12 +605,12 @@ class BaseAgent:
             # Add conversation context if available
             full_prompt: str = self._build_prompt_with_history(prompt) + memory_context
 
-            # Define backend callable for strategy
-            def backend_callable(p: str, sp: Optional[str] = None, h: Optional[List[Dict[str, str]]] = None) -> str:
-                return self.run_subagent(description, p, self.previous_content)
+            # Define backend callable for strategy (Phase 287: Async refactor)
+            async def backend_callable(p: str, sp: str | None = None, h: list[dict[str, str]] | None = None) -> str:
+                return await self.run_subagent(description, p, self.previous_content)
 
             # Execute strategy
-            improvement: str = self.strategy.execute(
+            improvement: str = await self.strategy.execute(
                 prompt=full_prompt,
                 context=self.previous_content,
                 backend_call=backend_callable
@@ -635,7 +627,7 @@ class BaseAgent:
             if quality.value <= ResponseQuality.POOR.value and self._config.retry_count > 0:
                 logging.warning(f"Response quality {quality.name}, retrying...")
                 for _ in range(self._config.retry_count):
-                    improvement: str = self.run_subagent(description, full_prompt, self.previous_content)
+                    improvement: str = await self.run_subagent(description, full_prompt, self.previous_content)
                     quality: ResponseQuality = self._score_response_quality(improvement)
                     if quality.value >= ResponseQuality.ACCEPTABLE.value:
                         break
@@ -704,10 +696,10 @@ class BaseAgent:
             self.current_content: str = self.previous_content
             return self.current_content
 
-    def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str:
+    async def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str:
         """Run a subagent using one of several AI backends.
 
-        Delegates to agent_backend.run_subagent which selects the appropriate
+        Delegates to the execution_engine which selects the appropriate
         AI backend (copilot, GitHub Models, etc.) and executes the request.
 
         Args:
@@ -741,7 +733,7 @@ class BaseAgent:
             sys.path.append(str(Path(__file__).parent.parent.parent))
             from src.infrastructure.backend import execution_engine as ab
         
-        result: Optional[str] = ab.run_subagent(description, prompt, original_content)
+        result: str | None = await asyncio.to_thread(ab.run_subagent, description, prompt, original_content)
 
         # Update quota usage (estimated tokens)
         self.quotas.update_usage(
@@ -756,7 +748,7 @@ class BaseAgent:
         return result
 
     @staticmethod
-    def get_backend_status() -> Dict[str, Any]:
+    def get_backend_status() -> dict[str, Any]:
         """Return a diagnostic snapshot of backend availability and configuration.
 
         Returns:
@@ -868,6 +860,11 @@ class BaseAgent:
             logging.error(f"Security violation detected in content for {self.file_path.name}. Write aborted!")
             return False
 
+        # Phase 262: Dry-Run Protocol
+        if getattr(self._config, 'dry_run', False):
+            logging.info(f"DRY RUN: Skipping write to {self.file_path.name}. Diff saved to temp/dry_runs/")
+            return self._write_dry_run_diff()
+
         logging.info(f"Writing {len(content_to_write)} bytes to {self.file_path.name}")
         # Ensure parent directory exists
         try:
@@ -877,6 +874,28 @@ class BaseAgent:
         except Exception as e:
             logging.error(f"Self-Healing: File write failed for {self.file_path.name}: {e}")
             # Potential self-healing: Try to clear locks or use a temp file
+            return False
+
+    def _write_dry_run_diff(self) -> bool:
+        """Saves a diff to temp/dry_runs for verification instead of modifying the file."""
+        diff = self.get_diff()
+        if not diff:
+            return True
+            
+        dry_run_dir = Path("temp/dry_runs")
+        dry_run_dir.mkdir(parents=True, exist_ok=True)
+        
+        # Create a unique filename based on the original path
+        safe_name = str(self.file_path).replace("/", "_").replace("\\", "_").replace(":", "_")
+        timestamp = int(time.time())
+        diff_path = dry_run_dir / f"{safe_name}_{timestamp}.diff"
+        
+        try:
+            diff_path.write_text(diff, encoding='utf-8')
+            logging.info(f"Dry-run diff saved to {diff_path}")
+            return True
+        except Exception as e:
+            logging.error(f"Failed to save dry-run diff: {e}")
             return False
 
     def get_diff(self) -> str:
@@ -926,7 +945,7 @@ class BaseAgent:
         logging.debug(f"Registered template: {template.id}")
 
     @classmethod
-    def get_template(cls, template_id: str) -> Optional[PromptTemplate]:
+    def get_template(cls, template_id: str) -> PromptTemplate | None:
         """Get a registered prompt template by ID.
 
         Args:
@@ -937,7 +956,7 @@ class BaseAgent:
         """
         return cls._prompt_templates.get(template_id)
 
-    def improve_with_template(self, template_id: str, variables: Dict[str, str]) -> str:
+    def improve_with_template(self, template_id: str, variables: dict[str, str]) -> str:
         """Improve content using a registered template.
 
         Args:
@@ -978,7 +997,7 @@ class BaseAgent:
         self._conversation_history.clear()
         logging.debug("Conversation history cleared")
 
-    def get_history(self) -> List[ConversationMessage]:
+    def get_history(self) -> list[ConversationMessage]:
         """Get conversation history."""
         return self._conversation_history.copy()
 
@@ -1008,6 +1027,7 @@ class BaseAgent:
         self._post_processors.append(processor)
         logging.debug(f"Added post-processor: {processor.__name__}")
 
+    @as_tool(category="cognition", priority=5)
     def take_note(self, note: str) -> str:
         """
         Record a persistent note into the internal scratchpad.
@@ -1019,12 +1039,14 @@ class BaseAgent:
         logging.info(f"Agent {self.__class__.__name__} took a note: {note}")
         return f"Note recorded: {note}"
 
+    @as_tool(category="cognition")
     def get_notes(self) -> str:
         """Retrieves all notes from the persistent scratchpad."""
         if not self._scratchpad:
             return "No notes recorded yet."
         return "\n".join(self._scratchpad)
 
+    @as_tool(category="cognition")
     def clear_notes(self) -> str:
         """Clears the persistent scratchpad."""
         self._scratchpad = []
@@ -1069,7 +1091,7 @@ class BaseAgent:
         logging.debug("Response cache cleared")
 
     @classmethod
-    def get_cache_stats(cls) -> Dict[str, Any]:
+    def get_cache_stats(cls) -> dict[str, Any]:
         """Get cache statistics.
 
         Returns:
@@ -1128,7 +1150,7 @@ class BaseAgent:
         if event in cls._event_hooks and callback in cls._event_hooks[event]:
             cls._event_hooks[event].remove(callback)
 
-    def _record(self, prompt: str, result: str, provider: str = "auto", model: str = "auto", meta: Dict[str, Any] = None) -> None:
+    def _record(self, prompt: str, result: str, provider: str = "auto", model: str = "auto", meta: dict[str, Any] = None) -> None:
         """Helper to record interactions to the LocalContextRecorder (Phase 108)."""
         try:
             if hasattr(self, "recorder") and self.recorder:
@@ -1142,7 +1164,7 @@ class BaseAgent:
         except Exception as e:
             logging.debug(f"Interaction recording failed: {e}")
 
-    def _trigger_event(self, event: EventType, data: Dict[str, Any]) -> None:
+    def _trigger_event(self, event: EventType, data: dict[str, Any]) -> None:
         """Trigger an event and invoke all registered hooks.
 
         Args:
@@ -1172,7 +1194,7 @@ class BaseAgent:
         logging.debug(f"Registered plugin: {name}")
 
     @classmethod
-    def get_plugin(cls, name: str) -> Optional[Any]:
+    def get_plugin(cls, name: str) -> Any | None:
         """Get a registered plugin.
 
         Args:
@@ -1192,9 +1214,9 @@ class BaseAgent:
         Returns:
             HealthCheckResult with diagnostic information.
         """
-        backend_status: Dict[str, Any] = cls.get_backend_status()
+        backend_status: dict[str, Any] = cls.get_backend_status()
         backend_available: bool = any(
-            cast(Dict[str, Any], v).get("available", False)
+            cast(dict[str, Any], v).get("available", False)
             for v in backend_status.values()
             if isinstance(v, dict)
         )
@@ -1211,7 +1233,7 @@ class BaseAgent:
 
     # ========== State Persistence ==========
 
-    def save_state(self, path: Optional[Path] = None) -> None:
+    def save_state(self, path: Path | None = None) -> None:
         """Save agent state to disk."""
         AgentStateManager.save_state(
             file_path=self.file_path,
@@ -1222,7 +1244,7 @@ class BaseAgent:
             path=path
         )
 
-    def load_state(self, path: Optional[Path] = None) -> bool:
+    def load_state(self, path: Path | None = None) -> bool:
         """Load agent state from disk."""
         state = AgentStateManager.load_state(self.file_path, path)
         if state:
@@ -1243,7 +1265,7 @@ class BaseAgent:
 
     # ========== Agent Delegation ==========
 
-    def delegate_to(self, agent_type: str, prompt: str, target_file: Optional[str] = None) -> str:
+    def delegate_to(self, agent_type: str, prompt: str, target_file: str | None = None) -> str:
         """Launches another agent to perform a sub-task."""
         return AgentDelegator.delegate(
             agent_type=agent_type,

@@ -40,7 +40,7 @@ class ErrorBudgetManager:
 
     def __init__(self) -> None:
         """Initialize the error budget manager."""
-        self.budgets: Dict[str, ErrorBudget] = {}
+        self.budgets: dict[str, ErrorBudget] = {}
 
     def create_budget(
         self,

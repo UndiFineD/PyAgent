@@ -46,14 +46,14 @@ class ReportArchiver:
         old_reports=archiver.list_archives("file.py")
     """
 
-    def __init__(self, archive_dir: Optional[Path] = None) -> None:
+    def __init__(self, archive_dir: Path | None = None) -> None:
         """Initialize archiver.
         Args:
             archive_dir: Directory for archives.
         """
 
         self.archive_dir = archive_dir or AGENT_DIR / ".archives"
-        self.archives: Dict[str, List[ArchivedReport]] = {}
+        self.archives: dict[str, list[ArchivedReport]] = {}
         logging.debug(f"ReportArchiver initialized at {self.archive_dir}")
 
     def archive(
@@ -83,7 +83,7 @@ class ReportArchiver:
         self.archives[file_path].append(archived)
         return archived
 
-    def list_archives(self, file_path: str) -> List[ArchivedReport]:
+    def list_archives(self, file_path: str) -> list[ArchivedReport]:
         """List archives for a file.
         Args:
             file_path: File to list archives for.
@@ -93,7 +93,7 @@ class ReportArchiver:
 
         return self.archives.get(file_path, [])
 
-    def get_archive(self, report_id: str) -> Optional[ArchivedReport]:
+    def get_archive(self, report_id: str) -> ArchivedReport | None:
         """Get a specific archive.
         Args:
             report_id: Archive ID.
@@ -116,7 +116,7 @@ class ReportArchiver:
         removed = 0
         current_time = time.time()
         for file_path in list(self.archives.keys()):
-            valid: List[ArchivedReport] = []
+            valid: list[ArchivedReport] = []
             for archive in self.archives[file_path]:
                 expiry = archive.archived_at + (archive.retention_days * 86400)
                 if current_time < expiry:

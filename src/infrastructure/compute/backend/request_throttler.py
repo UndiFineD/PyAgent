@@ -54,8 +54,8 @@ class RequestThrottler:
         """
         self.requests_per_second = requests_per_second
         self.burst_size = burst_size
-        self._buckets: Dict[str, float] = {}  # backend -> tokens
-        self._last_update: Dict[str, float] = {}
+        self._buckets: dict[str, float] = {}  # backend -> tokens
+        self._last_update: dict[str, float] = {}
         self._lock = threading.Lock()
 
     def allow_request(self, backend: str) -> bool:
@@ -110,7 +110,7 @@ class RequestThrottler:
 
         return False
 
-    def get_status(self, backend: str) -> Dict[str, Any]:
+    def get_status(self, backend: str) -> dict[str, Any]:
         """Get throttle status for backend.
 
         Args:

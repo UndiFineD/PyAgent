@@ -31,16 +31,16 @@ class CodeAnalyzer:
     """Suggests analysis tools based on improvement content."""
 
     def __init__(self) -> None:
-        self.tools: List[str] = [
+        self.tools: list[str] = [
             "security scan",
             "linter",
             "type checker",
             "coverage",
         ]
 
-    def suggest_tools(self, improvement: Improvement) -> List[str]:
+    def suggest_tools(self, improvement: Improvement) -> list[str]:
         text = f"{improvement.title} {improvement.description}".lower()
-        suggestions: List[str] = []
+        suggestions: list[str] = []
         if "sql" in text or "injection" in text or "security" in text:
             suggestions.append("Security scan")
             suggestions.append("Dependency vulnerability scan")

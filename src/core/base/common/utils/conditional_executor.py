@@ -24,7 +24,8 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .ExecutionCondition import ExecutionCondition
 from pathlib import Path
-from typing import List, Dict, Any, Callable
+from typing import List, Dict, Any
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -42,8 +43,8 @@ class ConditionalExecutor:
 
     def __init__(self) -> None:
         """Initialize executor."""
-        self._conditions: Dict[str, ExecutionCondition] = {}
-        self._agent_conditions: Dict[str, Dict[str, Any]] = {}
+        self._conditions: dict[str, ExecutionCondition] = {}
+        self._agent_conditions: dict[str, dict[str, Any]] = {}
 
     def add_condition(
         self,
@@ -67,7 +68,7 @@ class ConditionalExecutor:
     def set_agent_conditions(
         self,
         agent_name: str,
-        conditions: List[str],
+        conditions: list[str],
         require_all: bool = False,
     ) -> None:
         """Set conditions for an agent.
@@ -102,7 +103,7 @@ class ConditionalExecutor:
             return True  # No conditions, always execute
 
         config = self._agent_conditions[agent_name]
-        condition_names: List[str] = config["conditions"]  # type: ignore
+        condition_names: list[str] = config["conditions"]  # type: ignore
         require_all = config["require_all"]
 
         results: list[bool] = []

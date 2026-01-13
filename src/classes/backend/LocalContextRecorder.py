@@ -51,7 +51,7 @@ class LocalContextRecorder(ContextRecorderInterface):
         self.current_month = datetime.now().strftime('%Y%m')
         self.use_compression = True # Save 70-80% space for massive datasets
 
-    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: Dict[str, Any] = None) -> None:
+    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] = None) -> None:
         """
         Appends a new interaction record.
         Includes unique context hashing for future deduplication and sharded storage.
@@ -98,7 +98,7 @@ class LocalContextRecorder(ContextRecorderInterface):
         except Exception as e:
             logging.error(f"Failed to record interaction to shard {shard_id}: {e}")
 
-    def record_lesson(self, tag: str, data: Dict[str, Any]) -> None:
+    def record_lesson(self, tag: str, data: dict[str, Any]) -> None:
         """Alias for general logic harvesting to satisfy intelligence scanners."""
         self.record_interaction(
             provider="Internal",

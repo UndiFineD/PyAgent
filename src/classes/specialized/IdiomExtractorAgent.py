@@ -67,7 +67,7 @@ class IdiomExtractorAgent(BaseAgent):
             for file in files:
                 if file.endswith(".py"):
                     try:
-                        with open(os.path.join(root, file), 'r', encoding='utf-8') as f:
+                        with open(os.path.join(root, file), encoding='utf-8') as f:
                             content = f.read()
                             
                             # Extract decorators
@@ -99,11 +99,11 @@ class IdiomExtractorAgent(BaseAgent):
         return f"Successfully extracted {len(idioms['common_decorators'])} decorators and {len(idioms['frequent_imports'])} common imports. Saved to {self.idioms_file}."
 
     @as_tool
-    def get_current_idioms(self) -> Dict[str, Any]:
+    def get_current_idioms(self) -> dict[str, Any]:
         """
         Returns the currently stored project idioms.
         """
         if os.path.exists(self.idioms_file):
-            with open(self.idioms_file, 'r', encoding='utf-8') as f:
+            with open(self.idioms_file, encoding='utf-8') as f:
                 return json.load(f)
         return {"error": "Idioms file not found. Run extract_idioms first."}

@@ -13,9 +13,43 @@ import time
 import zlib
 from datetime import datetime
 from dataclasses import dataclass, field, asdict
-from typing import Dict, List, Any, Optional, Tuple, Union, Callable
+from typing import Dict, List, Any, Optional, Tuple, Union, Type
+from collections.abc import Callable
 from pathlib import Path
-from .observability_core import *
+import hashlib
+import operator
+from .observability_core import (
+    Metric,
+    RetentionPolicy,
+    AggregationType,
+    MetricNamespace,
+    MetricAnnotation,
+    MetricCorrelation,
+    MetricSubscription,
+    FederatedSource,
+    FederationMode,
+    RollupConfig,
+    StreamingConfig,
+    AgentMetric,
+    ObservabilityCore,
+    StatsSnapshot,
+    StatsSubscription,
+    ThresholdAlert,
+    DerivedMetric,
+)
+try:
+    from .analysis import MODEL_COSTS, HAS_PSUTIL
+    import psutil
+except ImportError:
+    from .analysis import MODEL_COSTS, HAS_PSUTIL
+    psutil = None
+from .exporters import PrometheusExporter, OTelManager, MetricsExporter
+from src.core.base.ConnectivityManager import ConnectivityManager
+from .StatsAgent import StatsAgent
+try:
+    from src.observability.reports.GrafanaGenerator import GrafanaDashboardGenerator as GrafanaGenerator
+except ImportError:
+    GrafanaGenerator = None
 from src.core.base.version import VERSION
 
 __version__ = VERSION
@@ -35,14 +69,14 @@ class ObservabilityEngine:
             
         self.telemetry_file = self.workspace_root / ".agent_telemetry.json"
         self.core = ObservabilityCore()
-        self.metrics: List[AgentMetric] = []
-        self._start_times: Dict[str, float] = {}
-        self._otel_spans: Dict[str, str] = {} # Map trace_id -> tel_span_id
+        self.metrics: list[AgentMetric] = []
+        self._start_times: dict[str, float] = {}
+        self._otel_spans: dict[str, str] = {} # Map trace_id -> tel_span_id
         self.cost_engine = TokenCostEngine()
         self.prometheus = PrometheusExporter()
         self.otel = OTelManager()
         self.metrics_exporter = MetricsExporter()
-        self.log_buffer: List[Dict[str, Any]] = []
+        self.log_buffer: list[dict[str, Any]] = []
         self.load()
 
     def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:
@@ -79,7 +113,7 @@ class ObservabilityEngine:
         """Simulates exporting log buffer to ELK stack."""
         count = len(self.log_buffer)
         # In real scenario: push to Elasticsearch/Logstash
-        log_batch = json.dumps(self.log_buffer)
+        json.dumps(self.log_buffer)
         self.log_buffer = [] 
         self.metrics_exporter.export_to_grafana()
         return f"Exported {count} events to ELK/Logstash."
@@ -88,7 +122,7 @@ class ObservabilityEngine:
         """Returns Prometheus scrape response."""
         return self.metrics_exporter.get_prometheus_payload()
 
-    def generate_dashboard(self, shard_name: Optional[str] = None) -> str:
+    def generate_dashboard(self, shard_name: str | None = None) -> str:
         """
         Triggers Grafana JSON dashboard generation (Phase 126).
         """
@@ -108,7 +142,7 @@ class ObservabilityEngine:
 
     def end_trace(self, trace_id: str, agent_name: str, operation: str, status: str = "success", 
                   input_tokens: int = 0, output_tokens: int = 0, model: str = "unknown",
-                  metadata: Optional[Dict[str, Any]] = None) -> None:
+                  metadata: dict[str, Any] | None = None) -> None:
         """End timing and record metric with cost estimation."""
         if trace_id not in self._start_times:
             logging.warning(f"No start trace found for {trace_id}")
@@ -148,7 +182,7 @@ class ObservabilityEngine:
             self.save()
             self.metrics = self.metrics[-500:] # Prune memory
 
-    def get_reliability_weights(self, agent_names: List[str]) -> List[float]:
+    def get_reliability_weights(self, agent_names: list[str]) -> list[float]:
         """Exposes core reliability logic for consensus protocols."""
         return self.core.calculate_reliability_scores(agent_names)
 
@@ -161,7 +195,7 @@ class ObservabilityEngine:
         )
         self.log_event("system", "workflow_trace", {"workflow": workflow_name, "duration": duration})
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """Returns a summary of performance and cost metrics."""
         if not self.metrics:
             return {"status": "No data"}
@@ -214,8 +248,8 @@ class DerivedMetricCalculator:
 
     def __init__(self) -> None:
         """Initialize derived metric calculator."""
-        self.derived_metrics: Dict[str, DerivedMetric] = {}
-        self._cache: Dict[str, float] = {}
+        self.derived_metrics: dict[str, DerivedMetric] = {}
+        self._cache: dict[str, float] = {}
         # Safe operator mapping
         self.operators = {
             ast.Add: operator.add,
@@ -259,7 +293,7 @@ class DerivedMetricCalculator:
     def register_derived(
         self,
         name: str,
-        dependencies: List[str],
+        dependencies: list[str],
         formula: str,
         description: str = ""
     ) -> DerivedMetric:
@@ -286,8 +320,8 @@ class DerivedMetricCalculator:
     def calculate(
         self,
         name: str,
-        metric_values: Dict[str, float]
-    ) -> Optional[float]:
+        metric_values: dict[str, float]
+    ) -> float | None:
         """Calculate a derived metric value.
 
         Args:
@@ -330,8 +364,8 @@ class DerivedMetricCalculator:
 
     def get_all_derived(
         self,
-        metric_values: Dict[str, float]
-    ) -> Dict[str, float]:
+        metric_values: dict[str, float]
+    ) -> dict[str, float]:
         """Calculate all derived metrics.
 
         Args:
@@ -340,7 +374,7 @@ class DerivedMetricCalculator:
         Returns:
             Dictionary of all calculated derived metrics.
         """
-        results: Dict[str, float] = {}
+        results: dict[str, float] = {}
         for name in self.derived_metrics:
             value = self.calculate(name, metric_values)
             if value is not None:
@@ -359,8 +393,8 @@ class CorrelationAnalyzer:
 
     def __init__(self) -> None:
         """Initialize correlation analyzer."""
-        self.correlations: List[MetricCorrelation] = []
-        self._metric_history: Dict[str, List[float]] = {}
+        self.correlations: list[MetricCorrelation] = []
+        self._metric_history: dict[str, list[float]] = {}
 
     def record_value(self, metric_name: str, value: float) -> None:
         """Record a metric value for correlation analysis.
@@ -377,7 +411,7 @@ class CorrelationAnalyzer:
         self,
         metric_a: str,
         metric_b: str
-    ) -> Optional[MetricCorrelation]:
+    ) -> MetricCorrelation | None:
         """Compute correlation between two metrics.
 
         Args:
@@ -423,7 +457,7 @@ class CorrelationAnalyzer:
     def find_strong_correlations(
         self,
         threshold: float = 0.7
-    ) -> List[MetricCorrelation]:
+    ) -> list[MetricCorrelation]:
         """Find strongly correlated metric pairs.
 
         Args:
@@ -435,14 +469,14 @@ class CorrelationAnalyzer:
         return [c for c in self.correlations
                 if abs(c.correlation_coefficient) >= threshold]
 
-    def get_correlation_matrix(self) -> Dict[str, Dict[str, float]]:
+    def get_correlation_matrix(self) -> dict[str, dict[str, float]]:
         """Get correlation matrix for all metrics.
 
         Returns:
             Matrix of correlations.
         """
         metrics = list(self._metric_history.keys())
-        matrix: Dict[str, Dict[str, float]] = {}
+        matrix: dict[str, dict[str, float]] = {}
 
         for m1 in metrics:
             matrix[m1] = {}
@@ -461,7 +495,7 @@ class FormulaEngine:
     Acts as the I/O Shell for FormulaEngineCore.
     """
     def __init__(self) -> None:
-        self.formulas: Dict[str, str] = {}
+        self.formulas: dict[str, str] = {}
         self.core = FormulaEngineCore()
 
     def define(self, name: str, formula: str) -> None:
@@ -472,7 +506,7 @@ class FormulaEngine:
         """Define a formula (backward compat)."""
         self.define(name, formula)
 
-    def calculate(self, formula_or_name: str, variables: Optional[Dict[str, Any]] = None) -> float:
+    def calculate(self, formula_or_name: str, variables: dict[str, Any] | None = None) -> float:
         """Calculate formula result via Core."""
         variables = variables or {}
         
@@ -501,7 +535,7 @@ class FormulaEngineCore:
     """Pure logic core for formula calculations."""
 
     def __init__(self) -> None:
-        self.operators: Dict[Type[ast.AST], Any] = {
+        self.operators: dict[type[ast.AST], Any] = {
             ast.Add: operator.add,
             ast.Sub: operator.sub,
             ast.Mult: operator.mul,
@@ -528,7 +562,7 @@ class FormulaEngineCore:
         else:
             raise TypeError(f"Unsupported operation: {type(node)}")
 
-    def calculate_logic(self, formula: str, variables: Dict[str, Any]) -> float:
+    def calculate_logic(self, formula: str, variables: dict[str, Any]) -> float:
         """Core logic for calculating a formula result."""
         # Handle special functions like AVG
         if "AVG(" in formula:
@@ -554,14 +588,14 @@ class FormulaEngineCore:
             # Core returns a default value, Shell handles logging
             return 0.0
 
-    def validate_logic(self, formula: str) -> Dict[str, Any]:
+    def validate_logic(self, formula: str) -> dict[str, Any]:
         """Core logic for validating formula syntax."""
         try:
             if any(seq in formula for seq in ["+++", "***", "---"]):
                 return {"is_valid": False, "error": "Invalid operator sequence"}
 
             test_formula = formula
-            vars_found: List[str] = re.findall(r'\{(\w+)\}', formula)
+            vars_found: list[str] = re.findall(r'\{(\w+)\}', formula)
             for var in vars_found:
                 test_formula = test_formula.replace(f"{{{var}}}", "1")
             
@@ -584,7 +618,7 @@ class ResourceMonitor:
         self.workspace_root = Path(workspace_root)
         self.stats_file = self.workspace_root / ".system_stats.json"
 
-    def get_current_stats(self) -> Dict[str, Any]:
+    def get_current_stats(self) -> dict[str, Any]:
         """Collects current CPU, Memory, and Disk metrics."""
         stats = {
             "platform": platform.platform(),
@@ -623,7 +657,7 @@ class ResourceMonitor:
             
         return stats
 
-    def _detect_gpu(self) -> Dict[str, Any]:
+    def _detect_gpu(self) -> dict[str, Any]:
         """Detects if NVIDIA or AMD GPUs are available."""
         # Check for NVIDIA (via nvidia-smi if available)
         import shutil
@@ -673,15 +707,15 @@ class ResourceMonitor:
         return "PROCEED: System resources are sufficient."
 
 if __name__ == "__main__":
-    mon = ResourceMonitor("c:/DEV/PyAgent")
+    mon = ResourceMonitor(str(Path(__file__).resolve().parents[3]) + "")
     print(json.dumps(mon.get_current_stats(), indent=2))
     print(f"Recommendation: {mon.get_execution_recommendation()}")
 
 class RetentionEnforcer:
     """Enforces retention policies on metrics."""
     def __init__(self) -> None:
-        self.policies: Dict[str, RetentionPolicy] = {}
-        self.data: Dict[str, List[Dict[str, Any]]] = {}
+        self.policies: dict[str, RetentionPolicy] = {}
+        self.data: dict[str, list[dict[str, Any]]] = {}
 
     def set_policy(self, metric_pattern: str, policy: RetentionPolicy) -> None:
         """Set a retention policy for metrics matching pattern."""
@@ -719,9 +753,9 @@ class RetentionEnforcer:
                     removed_count += original_count - len(self.data[metric])
         return removed_count
 
-    def apply_policies(self, metrics: Dict[str, List[Any]]) -> Dict[str, List[Any]]:
+    def apply_policies(self, metrics: dict[str, list[Any]]) -> dict[str, list[Any]]:
         """Apply retention policies to metrics."""
-        result: Dict[str, List[Any]] = {}
+        result: dict[str, list[Any]] = {}
         for metric, values in metrics.items():
             policy = self.policies.get(metric)
             if policy:
@@ -769,7 +803,7 @@ class TokenCostCore:
         
         return round(input_cost + output_cost, 6)
 
-    def _find_pricing(self, model_key: str) -> Dict[str, float]:
+    def _find_pricing(self, model_key: str) -> dict[str, float]:
         """Heuristic for finding model pricing."""
         pricing = MODEL_COSTS.get(model_key)
         if not pricing:
@@ -778,7 +812,7 @@ class TokenCostCore:
                     return MODEL_COSTS[key]
         return pricing or MODEL_COSTS["default"]
 
-    def list_models(self) -> List[str]:
+    def list_models(self) -> list[str]:
         return list(MODEL_COSTS.keys())
 
 class ModelFallbackEngine:
@@ -787,7 +821,7 @@ class ModelFallbackEngine:
     Shell for ModelFallbackCore.
     """
 
-    def __init__(self, cost_engine: Optional[TokenCostEngine] = None, fleet: Optional[Any] = None) -> None:
+    def __init__(self, cost_engine: TokenCostEngine | None = None, fleet: Any | None = None) -> None:
         if fleet and hasattr(fleet, "telemetry") and not cost_engine:
             self.cost_engine = fleet.telemetry.cost_engine
         else:
@@ -795,7 +829,7 @@ class ModelFallbackEngine:
         self.core = ModelFallbackCore()
         self.max_retries = 3
 
-    def get_fallback_model(self, current_model: str, failure_reason: str = "") -> Optional[str]:
+    def get_fallback_model(self, current_model: str, failure_reason: str = "") -> str | None:
         """Determines the next model to use after a failure."""
         logging.warning(f"Fallback requested for {current_model}. Reason: {failure_reason}")
         next_model = self.core.determine_next_model(current_model)
@@ -803,7 +837,7 @@ class ModelFallbackEngine:
             logging.info(f"Stepping to next model: {next_model}")
         return next_model
 
-    def get_cheapest_model(self, models: List[str]) -> str:
+    def get_cheapest_model(self, models: list[str]) -> str:
         """Returns the cheapest model from the list based on the cost engine."""
         price_map = {}
         if self.cost_engine:
@@ -822,14 +856,14 @@ if __name__ == "__main__":
 class ModelFallbackCore:
     """Pure logic core for model fallback strategies."""
 
-    def __init__(self, fallback_chains: Optional[Dict[str, List[str]]] = None) -> None:
+    def __init__(self, fallback_chains: dict[str, list[str]] | None = None) -> None:
         self.fallback_chains = fallback_chains or {
             "high_performance": ["gpt-4o", "claude-3-5-sonnet", "gpt-4-turbo"],
             "balanced": ["claude-3-5-sonnet", "gpt-4o-mini", "gemini-1.5-pro"],
             "economy": ["gpt-4o-mini", "claude-3-haiku", "gemini-1.5-flash"]
         }
 
-    def determine_next_model(self, current_model: str) -> Optional[str]:
+    def determine_next_model(self, current_model: str) -> str | None:
         """Logic to pick the next model in a chain."""
         for chain_name, chain in self.fallback_chains.items():
             if current_model in chain:
@@ -840,7 +874,7 @@ class ModelFallbackCore:
         # Default fallback if not in a chain
         return self.fallback_chains["economy"][0]
 
-    def rank_models_by_cost(self, models: List[str], model_price_map: Dict[str, Dict[str, float]]) -> List[str]:
+    def rank_models_by_cost(self, models: list[str], model_price_map: dict[str, dict[str, float]]) -> list[str]:
         """Ranks models from cheapest to most expensive."""
         def get_cost(m: str) -> float:
             return model_price_map.get(m, {}).get("total", 999.0)
@@ -854,8 +888,8 @@ class ModelFallbackCore:
 class StatsRollupCalculator:
     """Calculates metric rollups."""
     def __init__(self) -> None:
-        self.rollups: Dict[str, List[float]] = {}
-        self._points: Dict[str, List[Tuple[float, float]]] = {}
+        self.rollups: dict[str, list[float]] = {}
+        self._points: dict[str, list[tuple[float, float]]] = {}
 
     def add_point(self, metric: str, timestamp: float, value: float) -> None:
         """Add a data point for rollup calculation."""
@@ -863,7 +897,7 @@ class StatsRollupCalculator:
             self._points[metric] = []
         self._points[metric].append((float(timestamp), float(value)))
 
-    def rollup(self, metric: str, interval: str = "1h") -> List[float]:
+    def rollup(self, metric: str, interval: str = "1h") -> list[float]:
         """Compute rollups for a metric at the given interval.
 
         Interval format examples: '1h', '1d', '15m'.
@@ -888,12 +922,12 @@ class StatsRollupCalculator:
         else:
             bucket = 3600 * amount
 
-        buckets: Dict[int, List[float]] = {}
+        buckets: dict[int, list[float]] = {}
         for ts, val in points:
             key = int(ts) // int(bucket)
             buckets.setdefault(key, []).append(float(val))
 
-        results: List[float] = []
+        results: list[float] = []
         for key in sorted(buckets.keys()):
             vals = buckets[key]
             results.append(sum(vals) / len(vals))
@@ -901,7 +935,7 @@ class StatsRollupCalculator:
         self.rollups[metric] = results
         return results
 
-    def calculate_rollup(self, metrics: List[float], aggregation_type: AggregationType) -> float:
+    def calculate_rollup(self, metrics: list[float], aggregation_type: AggregationType) -> float:
         """Calculate rollup with specified aggregation."""
         if not metrics:
             return 0.0
@@ -930,14 +964,14 @@ class StatsRollup:
 
     def __init__(self) -> None:
         """Initialize stats rollup."""
-        self.configs: Dict[str, RollupConfig] = {}
-        self.rollups: Dict[str, List[Dict[str, Any]]] = {}
-        self._raw_data: Dict[str, List[Tuple[datetime, float]]] = {}
+        self.configs: dict[str, RollupConfig] = {}
+        self.rollups: dict[str, list[dict[str, Any]]] = {}
+        self._raw_data: dict[str, list[tuple[datetime, float]]] = {}
 
     def configure_rollup(
         self,
         name: str,
-        source_metrics: List[str],
+        source_metrics: list[str],
         aggregation: AggregationType,
         interval_minutes: int = 60,
         keep_raw: bool = True
@@ -969,7 +1003,7 @@ class StatsRollup:
         self,
         metric_name: str,
         value: float,
-        timestamp: Optional[datetime] = None
+        timestamp: datetime | None = None
     ) -> None:
         """Add a value for rollup processing.
 
@@ -983,7 +1017,7 @@ class StatsRollup:
             self._raw_data[metric_name] = []
         self._raw_data[metric_name].append((ts, value))
 
-    def compute_rollup(self, name: str) -> List[Dict[str, Any]]:
+    def compute_rollup(self, name: str) -> list[dict[str, Any]]:
         """Compute rollup for a configuration.
 
         Args:
@@ -996,7 +1030,7 @@ class StatsRollup:
         if not config:
             return []
         # Collect all values for source metrics
-        all_values: List[float] = []
+        all_values: list[float] = []
         for metric in config.source_metrics:
             values = self._raw_data.get(metric, [])
             all_values.extend(v for _, v in values)
@@ -1024,7 +1058,7 @@ class StatsRollup:
             result = sorted_vals[int(len(sorted_vals) * 0.99)]
         else:
             result = sum(all_values) / len(all_values)
-        rollup_entry: Dict[str, Any] = {
+        rollup_entry: dict[str, Any] = {
             "timestamp": datetime.now().isoformat(),
             "value": result,
             "sample_count": len(all_values),
@@ -1037,7 +1071,7 @@ class StatsRollup:
                 self._raw_data[metric] = []
         return self.rollups[name]
 
-    def get_rollup_history(self, name: str, limit: int = 100) -> List[Dict[str, Any]]:
+    def get_rollup_history(self, name: str, limit: int = 100) -> list[dict[str, Any]]:
         """Get rollup history.
 
         Args:
@@ -1051,13 +1085,13 @@ class StatsRollup:
 
 class StatsChangeDetector:
     """Detects changes in metric values."""
-    def __init__(self, threshold: float = 0.1, threshold_percent: Optional[float] = None) -> None:
+    def __init__(self, threshold: float = 0.1, threshold_percent: float | None = None) -> None:
         if threshold_percent is not None:
             threshold = float(threshold_percent) / 100.0
         self.threshold = float(threshold)
-        self.previous_values: Dict[str, float] = {}
-        self._changes: List[Dict[str, Any]] = []
-        self._listeners: List[Callable[[Dict[str, Any]], None]] = []
+        self.previous_values: dict[str, float] = {}
+        self._changes: list[dict[str, Any]] = []
+        self._listeners: list[Callable[[dict[str, Any]], None]] = []
 
     def detect_change(self, metric: str, value: float) -> bool:
         """Detect if metric has significantly changed."""
@@ -1085,7 +1119,7 @@ class StatsChangeDetector:
                 change_percent = 100.0 if new_val != 0.0 else 0.0
             else:
                 change_percent = abs((new_val - old_val) / old_val) * 100.0
-            change_info: Dict[str, Any] = {
+            change_info: dict[str, Any] = {
                 "metric": metric,
                 "old": old_val,
                 "new": new_val,
@@ -1099,11 +1133,11 @@ class StatsChangeDetector:
                     logging.debug("Change listener failed.")
         return changed
 
-    def on_change(self, callback: Callable[[Dict[str, Any]], None]) -> None:
+    def on_change(self, callback: Callable[[dict[str, Any]], None]) -> None:
         """Register a callback for change events."""
         self._listeners.append(callback)
 
-    def get_changes(self) -> List[Dict[str, Any]]:
+    def get_changes(self) -> list[dict[str, Any]]:
         """Return recorded changes."""
         return list(self._changes)
 
@@ -1111,7 +1145,7 @@ class StatsForecaster:
     """Forecasts future metric values."""
     def __init__(self, window_size: int = 10) -> None:
         self.window_size = window_size
-        self.history: List[float] = []
+        self.history: list[float] = []
 
     def add_value(self, value: float) -> None:
         """Add a value to history."""
@@ -1123,13 +1157,13 @@ class StatsForecaster:
             return 0.0
         return sum(self.history[-self.window_size:]) / min(len(self.history), self.window_size)
 
-    def confidence_interval(self) -> Tuple[float, float]:
+    def confidence_interval(self) -> tuple[float, float]:
         """Return confidence interval for prediction."""
         prediction = self.predict_next()
         margin = prediction * 0.1  # 10% margin
         return (prediction - margin, prediction + margin)
 
-    def predict(self, historical: List[float], periods: int = 3) -> List[float]:
+    def predict(self, historical: list[float], periods: int = 3) -> list[float]:
         """Predict future values from a historical series."""
         if periods <= 0:
             return []
@@ -1147,7 +1181,7 @@ class StatsForecaster:
             delta = (window[-1] - window[0]) / max(1, (len(window) - 1))
         return [last + delta * (i + 1) for i in range(periods)]
 
-    def predict_with_confidence(self, historical: List[float], periods: int = 2) -> Dict[str, List[float]]:
+    def predict_with_confidence(self, historical: list[float], periods: int = 2) -> dict[str, list[float]]:
         """Predict future values and include naive confidence intervals."""
         preds = self.predict(historical, periods=periods)
         if not historical:
@@ -1170,9 +1204,9 @@ class StatsForecaster:
 class StatsQueryEngine:
     """Queries metrics with time range and aggregation."""
     def __init__(self) -> None:
-        self.metrics: Dict[str, List[Metric]] = {}
+        self.metrics: dict[str, list[Metric]] = {}
         # Lightweight query store used by tests.
-        self._rows: Dict[str, List[Dict[str, Any]]] = {}
+        self._rows: dict[str, list[dict[str, Any]]] = {}
 
     def insert(self, metric: str, timestamp: float, value: Any) -> None:
         """Insert a datapoint for querying."""
@@ -1183,10 +1217,10 @@ class StatsQueryEngine:
     def query(
         self,
         metric_name: str,
-        start_time: Optional[str] = None,
-        end_time: Optional[str] = None,
-        start: Optional[float] = None,
-        end: Optional[float] = None,
+        start_time: str | None = None,
+        end_time: str | None = None,
+        start: float | None = None,
+        end: float | None = None,
         aggregation: str = "",
     ) -> Any:
         """Query metrics within time range and/or aggregate.
@@ -1204,7 +1238,7 @@ class StatsQueryEngine:
                 rows = [r for r in rows if start_v <= float(r.get("timestamp", 0.0)) <= end_v]
 
             if aggregation:
-                values: List[float] = []
+                values: list[float] = []
                 for r in rows:
                     try:
                         values.append(float(r.get("value")))
@@ -1251,7 +1285,7 @@ class ABComparisonEngine:
 
     def __init__(self) -> None:
         """Initialize A / B comparison engine."""
-        self.comparisons: Dict[str, ABComparison] = {}
+        self.comparisons: dict[str, ABComparison] = {}
 
     def create_comparison(
         self,
@@ -1314,7 +1348,7 @@ class ABComparisonEngine:
         comparison_id: str,
         metric_name: str,
         higher_is_better: bool = True
-    ) -> Dict[str, Any]:
+    ) -> dict[str, Any]:
         """Calculate winner for a specific metric.
 
         Args:
@@ -1349,7 +1383,7 @@ class ABComparisonEngine:
             "improvement_percent": improvement
         }
 
-    def get_summary(self, comparison_id: str) -> Dict[str, Any]:
+    def get_summary(self, comparison_id: str) -> dict[str, Any]:
         """Get comparison summary.
 
         Args:
@@ -1375,12 +1409,12 @@ class ABComparisonEngine:
 class ABComparator:
     """Compares A/B test metrics."""
     def __init__(self) -> None:
-        self.results: List[Dict[str, Any]] = []
+        self.results: list[dict[str, Any]] = []
 
-    def compare(self, a_data: Dict[str, float], b_data: Dict[str, float]) -> ABComparisonResult:
+    def compare(self, a_data: dict[str, float], b_data: dict[str, float]) -> ABComparisonResult:
         """Compare two metric groups (A vs B)."""
         common = sorted(set(a_data.keys()) & set(b_data.keys()))
-        diffs: Dict[str, float] = {}
+        diffs: dict[str, float] = {}
         for key in common:
             try:
                 diffs[key] = float(b_data[key]) - float(a_data[key])
@@ -1391,8 +1425,8 @@ class ABComparator:
 
     def calculate_significance(
         self,
-        control_values: List[float],
-        treatment_values: List[float],
+        control_values: list[float],
+        treatment_values: list[float],
         alpha: float = 0.05,
     ) -> ABSignificanceResult:
         """Very lightweight significance heuristic for tests.
@@ -1414,7 +1448,7 @@ class ABComparisonResult:
     """Result of comparing two metric groups."""
 
     metrics_compared: int
-    differences: Dict[str, float] = field(default_factory=lambda: {})
+    differences: dict[str, float] = field(default_factory=lambda: {})
 
 @dataclass
 class ABSignificanceResult:
@@ -1430,8 +1464,8 @@ class ABComparison:
     id: str
     version_a: str
     version_b: str
-    metrics_a: Dict[str, float] = field(default_factory=lambda: {})
-    metrics_b: Dict[str, float] = field(default_factory=lambda: {})
+    metrics_a: dict[str, float] = field(default_factory=lambda: {})
+    metrics_b: dict[str, float] = field(default_factory=lambda: {})
     winner: str = ""
     confidence: float = 0.0
 
@@ -1447,7 +1481,7 @@ class AnnotationManager:
 
     def __init__(self) -> None:
         """Initialize annotation manager."""
-        self.annotations: Dict[str, List[MetricAnnotation]] = {}
+        self.annotations: dict[str, list[MetricAnnotation]] = {}
 
     def add_annotation(
         self,
@@ -1483,8 +1517,8 @@ class AnnotationManager:
     def get_annotations(
         self,
         metric_name: str,
-        annotation_type: Optional[str] = None
-    ) -> List[MetricAnnotation]:
+        annotation_type: str | None = None
+    ) -> list[MetricAnnotation]:
         """Get annotations for a metric.
 
         Args:
@@ -1519,7 +1553,7 @@ class AnnotationManager:
         ]
         return len(self.annotations[metric_name]) < original_count
 
-    def export_annotations(self, metric_name: Optional[str] = None) -> str:
+    def export_annotations(self, metric_name: str | None = None) -> str:
         """Export annotations to JSON.
 
         Args:
@@ -1529,7 +1563,7 @@ class AnnotationManager:
             JSON string of annotations.
         """
         if metric_name:
-            data: List[MetricAnnotation] = self.annotations.get(metric_name, [])
+            data: list[MetricAnnotation] = self.annotations.get(metric_name, [])
         else:
             data = []
             for ann_values in self.annotations.values():
@@ -1546,12 +1580,12 @@ class StatsAnnotationManager:
     """Manages annotations on metrics."""
 
     def __init__(self) -> None:
-        self.annotations: Dict[str, List[MetricAnnotation]] = {}
+        self.annotations: dict[str, list[MetricAnnotation]] = {}
 
     def add_annotation(
         self,
         metric: str,
-        annotation: Optional[MetricAnnotation] = None,
+        annotation: MetricAnnotation | None = None,
         **kwargs: Any,
     ) -> MetricAnnotation:
         """Add annotation to metric.
@@ -1578,7 +1612,7 @@ class StatsAnnotationManager:
         self.annotations[metric].append(annotation)
         return annotation
 
-    def get_annotations(self, metric: str) -> List[MetricAnnotation]:
+    def get_annotations(self, metric: str) -> list[MetricAnnotation]:
         """Get annotations for metric."""
         return self.annotations.get(metric, [])
 
@@ -1595,15 +1629,15 @@ class SubscriptionManager:
 
     def __init__(self) -> None:
         """Initialize subscription manager."""
-        self.subscriptions: Dict[str, MetricSubscription] = {}
-        self.last_notification: Dict[str, datetime] = {}
-        self._notification_count: Dict[str, int] = {}
+        self.subscriptions: dict[str, MetricSubscription] = {}
+        self.last_notification: dict[str, datetime] = {}
+        self._notification_count: dict[str, int] = {}
 
     def subscribe(
         self,
         metric_pattern: str,
         callback_url: str = "",
-        notify_on: Optional[List[str]] = None,
+        notify_on: list[str] | None = None,
         min_interval_seconds: int = 60
     ) -> MetricSubscription:
         """Create a new subscription.
@@ -1664,7 +1698,7 @@ class SubscriptionManager:
         metric_name: str,
         event_type: str,
         value: float
-    ) -> List[str]:
+    ) -> list[str]:
         """Send notifications for a metric event.
 
         Args:
@@ -1675,7 +1709,7 @@ class SubscriptionManager:
         Returns:
             List of subscription IDs that were notified.
         """
-        notified: List[str] = []
+        notified: list[str] = []
         now = datetime.now()
         for sub_id, sub in self.subscriptions.items():
             if event_type not in sub.notify_on:
@@ -1695,7 +1729,7 @@ class SubscriptionManager:
             logging.info(f"Notified {sub_id}: {metric_name}={value} ({event_type})")
         return notified
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         """Get subscription statistics.
 
         Returns:
@@ -1710,11 +1744,11 @@ class StatsSubscriptionManager:
     """Manages metric subscriptions."""
     def __init__(self) -> None:
         # Legacy exact-metric subscriptions: metric -> callbacks(value)
-        self.subscribers: Dict[str, List[Callable[[float], None]]] = {}
+        self.subscribers: dict[str, list[Callable[[float], None]]] = {}
 
         # New-style subscriptions used by tests: (subscriber_id, metric_pattern, delivery_method)
-        self._subscriptions: List[StatsSubscription] = []
-        self._delivery_handlers: Dict[str, Callable[[str], None]] = {}
+        self._subscriptions: list[StatsSubscription] = []
+        self._delivery_handlers: dict[str, Callable[[str], None]] = {}
 
     def subscribe(self, *args: Any, **kwargs: Any) -> Any:
         """Subscribe to updates.
@@ -1744,7 +1778,7 @@ class StatsSubscriptionManager:
 
         raise TypeError("subscribe() expects (metric, callback) or (subscriber_id, metric_pattern, delivery_method)")
 
-    def _subscribe_delivery(self, subscriber_id: str, metric_pattern: str, delivery_method: str) -> "StatsSubscription":
+    def _subscribe_delivery(self, subscriber_id: str, metric_pattern: str, delivery_method: str) -> StatsSubscription:
         sub_id = hashlib.md5(f"{subscriber_id}:{metric_pattern}:{delivery_method}".encode()).hexdigest()[:8]
         sub = StatsSubscription(
             id=sub_id,
@@ -1792,17 +1826,17 @@ class StatsSubscriptionManager:
 class ThresholdAlertManager:
     """Manages threshold-based alerting."""
     def __init__(self) -> None:
-        self.alerts: List[ThresholdAlert] = []
+        self.alerts: list[ThresholdAlert] = []
         # Each metric can have warning/critical thresholds and/or min/max thresholds.
-        self.thresholds: Dict[str, Dict[str, Optional[float]]] = {}
+        self.thresholds: dict[str, dict[str, float | None]] = {}
 
     def set_threshold(
         self,
         metric: str,
-        min_val: Optional[float] = None,
-        max_val: Optional[float] = None,
-        warning: Optional[float] = None,
-        critical: Optional[float] = None,
+        min_val: float | None = None,
+        max_val: float | None = None,
+        warning: float | None = None,
+        critical: float | None = None,
     ) -> None:
         """Set thresholds for a metric.
 
@@ -1817,13 +1851,13 @@ class ThresholdAlertManager:
             "critical": critical,
         }
 
-    def check(self, metric: str, value: float) -> List["ThresholdAlert"]:
+    def check(self, metric: str, value: float) -> list[ThresholdAlert]:
         """Check a value against thresholds and return any alerts."""
         if metric not in self.thresholds:
             return []
 
         thresh = self.thresholds[metric]
-        alerts: List[ThresholdAlert] = []
+        alerts: list[ThresholdAlert] = []
 
         # Warning/critical are treated as "value >= threshold".
         critical_threshold = thresh.get("critical")
@@ -1859,37 +1893,37 @@ class ThresholdAlertManager:
 class StatsBackupManager:
     """Manages backups of stats."""
 
-    def __init__(self, backup_dir: Optional[Union[str, Path]] = None) -> None:
-        self.backup_dir: Optional[Path] = Path(backup_dir) if backup_dir is not None else None
+    def __init__(self, backup_dir: str | Path | None = None) -> None:
+        self.backup_dir: Path | None = Path(backup_dir) if backup_dir is not None else None
         if self.backup_dir is not None:
             self.backup_dir.mkdir(parents=True, exist_ok=True)
 
-        self.backups: Dict[str, Dict[str, Any]] = {}
+        self.backups: dict[str, dict[str, Any]] = {}
 
     def _safe_backup_name(self, name: str) -> str:
         allowed = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_")
         safe = "".join(ch if ch in allowed else "_" for ch in name)
         return safe or "backup"
 
-    def _backup_path(self, name: str) -> Optional[Path]:
+    def _backup_path(self, name: str) -> Path | None:
         if self.backup_dir is None:
             return None
         safe_name = self._safe_backup_name(name)
         return self.backup_dir / f"{safe_name}.json"
 
-    def create_backup(self, name: str, data: Dict[str, Any]) -> StatsBackup:
+    def create_backup(self, name: str, data: dict[str, Any]) -> StatsBackup:
         """Create a backup and persist to disk when configured."""
         timestamp = datetime.now().isoformat()
         self.backups[name] = {"data": data, "timestamp": timestamp}
 
         path = self._backup_path(name) or Path(f"{self._safe_backup_name(name)}.json")
-        payload: Dict[str, Any] = {"name": name, "timestamp": timestamp, "data": data}
+        payload: dict[str, Any] = {"name": name, "timestamp": timestamp, "data": data}
         if self.backup_dir is not None:
             path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
 
         return StatsBackup(name=name, path=path, timestamp=timestamp)
 
-    def restore(self, name: str) -> Optional[Dict[str, Any]]:
+    def restore(self, name: str) -> dict[str, Any] | None:
         """Restore a backup by name (test compatibility)."""
         restored = self.restore_backup(name)
         if restored is not None:
@@ -1907,7 +1941,7 @@ class StatsBackupManager:
                 return None
         return None
 
-    def restore_backup(self, name: str) -> Optional[Dict[str, Any]]:
+    def restore_backup(self, name: str) -> dict[str, Any] | None:
         """Restore from in-memory backup."""
         if name in self.backups:
             val = self.backups[name]["data"]
@@ -1915,7 +1949,7 @@ class StatsBackupManager:
                 return val  # type: ignore
         return None
 
-    def list_backups(self) -> List[str]:
+    def list_backups(self) -> list[str]:
         """List all backups."""
         names = set(self.backups.keys())
         if self.backup_dir is not None:
@@ -1971,12 +2005,12 @@ class StatsSnapshotManager:
     - When `snapshot_dir` is provided, snapshots are persisted to JSON files.
     """
 
-    def __init__(self, snapshot_dir: Optional[Union[str, Path]] = None) -> None:
-        self.snapshot_dir: Optional[Path] = Path(snapshot_dir) if snapshot_dir is not None else None
+    def __init__(self, snapshot_dir: str | Path | None = None) -> None:
+        self.snapshot_dir: Path | None = Path(snapshot_dir) if snapshot_dir is not None else None
         if self.snapshot_dir is not None:
             self.snapshot_dir.mkdir(parents=True, exist_ok=True)
 
-        self.snapshots: Dict[str, StatsSnapshot] = {}
+        self.snapshots: dict[str, StatsSnapshot] = {}
 
     def _safe_snapshot_name(self, name: str) -> str:
         # Prevent path traversal and keep filenames portable.
@@ -1984,13 +2018,13 @@ class StatsSnapshotManager:
         safe = "".join(ch if ch in allowed else "_" for ch in name)
         return safe or "snapshot"
 
-    def _snapshot_path(self, name: str) -> Optional[Path]:
+    def _snapshot_path(self, name: str) -> Path | None:
         if self.snapshot_dir is None:
             return None
         safe_name = self._safe_snapshot_name(name)
         return self.snapshot_dir / f"{safe_name}.json"
 
-    def create_snapshot(self, name: str, data: Dict[str, Any]) -> StatsSnapshot:
+    def create_snapshot(self, name: str, data: dict[str, Any]) -> StatsSnapshot:
         """Create a snapshot."""
         snapshot = StatsSnapshot(name=name, data=data, timestamp=datetime.now().isoformat())
         self.snapshots[name] = snapshot
@@ -2002,7 +2036,7 @@ class StatsSnapshotManager:
 
         return snapshot
 
-    def restore_snapshot(self, name: str) -> Optional[Dict[str, Any]]:
+    def restore_snapshot(self, name: str) -> dict[str, Any] | None:
         """Restore a snapshot."""
         if name in self.snapshots:
             return self.snapshots[name].data
@@ -2022,7 +2056,7 @@ class StatsSnapshotManager:
 
         return None
 
-    def list_snapshots(self) -> List[str]:
+    def list_snapshots(self) -> list[str]:
         """List all snapshots."""
         names = set(self.snapshots.keys())
         if self.snapshot_dir is not None:
@@ -2034,7 +2068,7 @@ class StatsSnapshotManager:
 class StatsAccessController:
     """Controls access to stats."""
     def __init__(self) -> None:
-        self.permissions: Dict[str, Dict[str, str]] = {}
+        self.permissions: dict[str, dict[str, str]] = {}
 
     def grant(self, user: str, resource_pattern: str, level: str = "read") -> None:
         """Grant access level for a resource pattern.
@@ -2080,10 +2114,10 @@ class StatsAccessController:
 
 class StatsStreamManager:
     """Manages real-time stats streaming."""
-    def __init__(self, config: Optional[StreamingConfig] = None) -> None:
+    def __init__(self, config: StreamingConfig | None = None) -> None:
         self.config = config
-        self.streams: Dict[str, StatsStream] = {}
-        self.subscribers: Dict[str, List[Callable[[Any], None]]] = {}
+        self.streams: dict[str, StatsStream] = {}
+        self.subscribers: dict[str, list[Callable[[Any], None]]] = {}
 
     def create_stream(self, name: str, buffer_size: int = 1000) -> StatsStream:
         """Create a new stream."""
@@ -2092,7 +2126,7 @@ class StatsStreamManager:
         self.subscribers[name] = []
         return stream
 
-    def get_latest(self, name: str, count: int = 1) -> List[Any]:
+    def get_latest(self, name: str, count: int = 1) -> list[Any]:
         """Get latest data from stream."""
         if name not in self.streams:
             return []
@@ -2136,10 +2170,10 @@ class StatsStreamer:
             config: The streaming configuration.
         """
         self.config = config
-        self.subscribers: List[str] = []
-        self.buffer: List[Metric] = []
+        self.subscribers: list[str] = []
+        self.buffer: list[Metric] = []
         self._connected = False
-        self._last_heartbeat: Optional[datetime] = None
+        self._last_heartbeat: datetime | None = None
 
     def connect(self) -> bool:
         """Establish connection to streaming endpoint.
@@ -2236,10 +2270,10 @@ class StatsStream:
     def __init__(self, name: str, buffer_size: int = 1000) -> None:
         self.name = name
         self.buffer_size = buffer_size
-        self.buffer: List[Any] = []
+        self.buffer: list[Any] = []
         self.active = True
 
-    def get_latest(self, count: int = 1) -> List[Any]:
+    def get_latest(self, count: int = 1) -> list[Any]:
         """Get latest data points."""
         return self.buffer[-count:] if self.buffer else []
 
@@ -2250,7 +2284,7 @@ class StatsStream:
         if len(self.buffer) > self.buffer_size:
             self.buffer.pop(0)
 
-class AggregationResult(Dict[str, Any]):
+class AggregationResult(dict[str, Any]):
     """Compatibility class that behaves like both a dict and a float."""
     def __eq__(self, other: Any) -> bool:
         if isinstance(other, (int, float)):
@@ -2279,16 +2313,16 @@ class StatsFederation:
             mode: The federation mode to use.
         """
         self.mode = mode
-        self.sources: Dict[str, FederatedSource] = {}
-        self.aggregated: Dict[str, List[float]] = {}
-        self._last_sync: Dict[str, datetime] = {}
+        self.sources: dict[str, FederatedSource] = {}
+        self.aggregated: dict[str, list[float]] = {}
+        self._last_sync: dict[str, datetime] = {}
         self.connectivity = ConnectivityManager()
 
     def add_source(
         self,
         name: str,
-        endpoint: Optional[str] = None,
-        data: Optional[Dict[str, float]] = None,
+        endpoint: str | None = None,
+        data: dict[str, float] | None = None,
         healthy: bool = True
     ) -> None:
         """Add a federated source.
@@ -2327,7 +2361,7 @@ class StatsFederation:
             return True
         return False
 
-    def sync_source(self, name: str) -> Dict[str, float]:
+    def sync_source(self, name: str) -> dict[str, float]:
         """Sync metrics from a specific source.
 
         Args:
@@ -2371,13 +2405,13 @@ class StatsFederation:
         self._last_sync[name] = datetime.now()
         return {}
 
-    def sync_all(self) -> Dict[str, Dict[str, float]]:
+    def sync_all(self) -> dict[str, dict[str, float]]:
         """Sync metrics from all sources.
 
         Returns:
             Dictionary of metrics per source.
         """
-        results: Dict[str, Dict[str, float]] = {}
+        results: dict[str, dict[str, float]] = {}
         for name in self.sources:
             results[name] = self.sync_source(name)
         return results
@@ -2396,7 +2430,7 @@ class StatsFederation:
         Returns:
             AggregationResult behaving as both dict and float.
         """
-        values: List[float] = list(self.aggregated.get(metric_name, []))
+        values: list[float] = list(self.aggregated.get(metric_name, []))
         failed_sources = 0
         
         # Collect values from all sources
@@ -2431,13 +2465,13 @@ class StatsFederation:
             "metric_name": metric_name
         })
 
-    def get_federation_status(self) -> Dict[str, Dict[str, Union[bool, str]]]:
+    def get_federation_status(self) -> dict[str, dict[str, bool | str]]:
         """Get status of all federated sources.
 
         Returns:
             Status information per source.
         """
-        status: Dict[str, Dict[str, Union[bool, str]]] = {}
+        status: dict[str, dict[str, bool | str]] = {}
         for name, source in self.sources.items():
             status[name] = {
                 "enabled": source.enabled,
@@ -2457,15 +2491,15 @@ class StatsAPIServer:
         stats_agent: The stats agent to serve data from.
     """
 
-    def __init__(self, stats_agent: Optional[StatsAgent] = None) -> None:
+    def __init__(self, stats_agent: StatsAgent | None = None) -> None:
         """Initialize API server.
 
         Args:
             stats_agent: Optional stats agent instance.
         """
         self.stats_agent = stats_agent
-        self.endpoints: Dict[str, APIEndpoint] = {}
-        self._request_count: Dict[str, int] = {}
+        self.endpoints: dict[str, APIEndpoint] = {}
+        self._request_count: dict[str, int] = {}
         self._setup_default_endpoints()
 
     def _setup_default_endpoints(self) -> None:
@@ -2516,8 +2550,8 @@ class StatsAPIServer:
         self,
         path: str,
         method: str = "GET",
-        params: Optional[Dict[str, Any]] = None
-    ) -> Dict[str, Any]:
+        params: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         """Handle an API request.
 
         Args:
@@ -2552,7 +2586,7 @@ class StatsAPIServer:
         Returns:
             OpenAPI - style documentation.
         """
-        docs: Dict[str, Any] = {
+        docs: dict[str, Any] = {
             "openapi": "3.0.0",
             "info": {"title": "Stats API", "version": "1.0.0"},
             "paths": {}
@@ -2591,15 +2625,15 @@ class MetricNamespaceManager:
 
     def __init__(self) -> None:
         """Initialize namespace manager."""
-        self.namespaces: Dict[str, MetricNamespace] = {}
-        self.metrics_by_namespace: Dict[str, List[str]] = {}
+        self.namespaces: dict[str, MetricNamespace] = {}
+        self.metrics_by_namespace: dict[str, list[str]] = {}
 
     def create_namespace(
         self,
         name: str,
         description: str = "",
-        parent: Optional[str] = None,
-        tags: Optional[Dict[str, str]] = None
+        parent: str | None = None,
+        tags: dict[str, str] | None = None
     ) -> MetricNamespace:
         """Create a new namespace.
 
@@ -2663,7 +2697,7 @@ class MetricNamespaceManager:
             self.metrics_by_namespace[namespace].append(metric_name)
         return True
 
-    def get_namespace_hierarchy(self, name: str) -> List[str]:
+    def get_namespace_hierarchy(self, name: str) -> list[str]:
         """Get the namespace hierarchy from root to given namespace.
 
         Args:

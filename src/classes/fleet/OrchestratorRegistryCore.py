@@ -33,12 +33,12 @@ class OrchestratorRegistryCore:
     def __init__(self, current_sdk_version: str) -> None:
         self.sdk_version: str = current_sdk_version
 
-    def process_discovered_files(self, file_paths: List[str]) -> Dict[str, Tuple[str, str, bool, Optional[str]]]:
+    def process_discovered_files(self, file_paths: list[str]) -> dict[str, tuple[str, str, bool, str | None]]:
         """
         Processes a list of file paths and extracts orchestrator configurations.
         Expects relative paths from workspace root.
         """
-        discovered: Dict[str, Tuple[str, str, bool, Optional[str]]] = {}
+        discovered: dict[str, tuple[str, str, bool, str | None]] = {}
         
         for rel_path in file_paths:
             file = os.path.basename(rel_path)
@@ -72,12 +72,12 @@ class OrchestratorRegistryCore:
         s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
         return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
 
-    def parse_manifest(self, raw_manifest: Dict[str, Any]) -> Dict[str, Tuple[str, str, bool, Optional[str]]]:
+    def parse_manifest(self, raw_manifest: dict[str, Any]) -> dict[str, tuple[str, str, bool, str | None]]:
         """
         Parses the raw manifest dictionary and filters incompatible plugins.
         Returns a dict of {Name: (module, class, needs_fleet, arg_path)}.
         """
-        valid_configs: Dict[str, Tuple[str, str, bool, Optional[str]]] = {}
+        valid_configs: dict[str, tuple[str, str, bool, str | None]] = {}
         for key, cfg in raw_manifest.items():
             # Expecting: "Name": ["module.path", "ClassName", needs_fleet, "arg_path", "min_sdk_version"]
             if isinstance(cfg, list) and len(cfg) >= 2:
@@ -86,7 +86,7 @@ class OrchestratorRegistryCore:
                 
                 if self.is_compatible(min_sdk):
                     needs_fleet: bool = cfg[2] if len(cfg) > 2 else False
-                    arg_path: Optional[str] = cfg[3] if len(cfg) > 3 else None
+                    arg_path: str | None = cfg[3] if len(cfg) > 3 else None
                     valid_configs[key] = (cfg[0], cfg[1], needs_fleet, arg_path)
                 
         return valid_configs

@@ -34,7 +34,7 @@ class SwarmOptimizer:
     def __init__(self, fleet_manager: Any) -> None:
         self.fleet = fleet_manager
 
-    def monitor_efficiency(self) -> List[Dict[str, Any]]:
+    def monitor_efficiency(self) -> list[dict[str, Any]]:
         """Analyzes fleet telemetry and suggests optimizations."""
         summary = self.fleet.telemetry.get_summary()
         suggestions = []
@@ -59,7 +59,7 @@ class SwarmOptimizer:
             
         return suggestions
 
-    def apply_optimizations(self, suggestions: List[Dict[str, Any]]) -> str:
+    def apply_optimizations(self, suggestions: list[dict[str, Any]]) -> str:
         """Applies the suggested optimizations to the fleet."""
         results = []
         for sug in suggestions:

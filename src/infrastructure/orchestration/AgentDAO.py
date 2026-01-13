@@ -45,7 +45,7 @@ class AgentDAO(BaseAgent):
         )
 
     @as_tool
-    def execute_resource_allocation(self, allocation_plan: Dict[str, float]) -> str:
+    def execute_resource_allocation(self, allocation_plan: dict[str, float]) -> str:
         """Applies a resource allocation plan to the fleet.
         
         Args:
@@ -56,7 +56,7 @@ class AgentDAO(BaseAgent):
         return "Resource allocation plan successfully applied to swarm infrastructure."
 
     @as_tool
-    def prioritize_tasks(self, task_queue: List[str]) -> List[str]:
+    def prioritize_tasks(self, task_queue: list[str]) -> list[str]:
         """Re-orders a global task queue based on current DAO priorities."""
         # Simulated prioritization logic
         logging.info(f"AgentDAO: Prioritizing {len(task_queue)} tasks.")

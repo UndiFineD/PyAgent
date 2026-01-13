@@ -43,14 +43,14 @@ class VersionNegotiator:
 
     def __init__(self) -> None:
         """Initialize version negotiator."""
-        self._versions: Dict[str, SystemVersion] = {}
+        self._versions: dict[str, SystemVersion] = {}
         self._client_version = SDK_VERSION
 
     def register_backend(
         self,
         backend: str,
         version: str,
-        capabilities: Optional[List[str]] = None,
+        capabilities: list[str] | None = None,
         api_version: str = "v1",
     ) -> SystemVersion:
         """Register backend version information.
@@ -76,8 +76,8 @@ class VersionNegotiator:
     def negotiate(
         self,
         backend: str,
-        required: Optional[List[str]] = None,
-    ) -> Optional[SystemVersion]:
+        required: list[str] | None = None,
+    ) -> SystemVersion | None:
         """Negotiate version with backend.
 
         Args:
@@ -99,6 +99,6 @@ class VersionNegotiator:
 
         return version
 
-    def get_all_versions(self) -> Dict[str, SystemVersion]:
+    def get_all_versions(self) -> dict[str, SystemVersion]:
         """Get all registered backend versions."""
         return dict(self._versions)

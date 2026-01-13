@@ -30,7 +30,7 @@ class SignalCore:
     Handles event structure and history windowing.
     """
 
-    def create_event(self, signal_name: str, data: Any, sender: str) -> Dict[str, Any]:
+    def create_event(self, signal_name: str, data: Any, sender: str) -> dict[str, Any]:
         """Creates a standardized signal event object."""
         return {
             "signal": signal_name,
@@ -39,6 +39,6 @@ class SignalCore:
             "timestamp": datetime.now().isoformat()
         }
 
-    def prune_history(self, history: List[Dict[str, Any]], limit: int) -> List[Dict[str, Any]]:
+    def prune_history(self, history: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
         """Returns the last N events from the signal history."""
         return history[-limit:]

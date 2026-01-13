@@ -29,14 +29,15 @@ import sys
 from contextlib import contextmanager
 from pathlib import Path
 from types import ModuleType
-from typing import Iterator, Optional
+from typing import Optional
+from collections.abc import Iterator
 
 __version__ = VERSION
 
 class ModuleLoader:
     """Handles dynamic loading of agent modules and sys.path management."""
 
-    def __init__(self, agent_dir: Optional[Path] = None) -> None:
+    def __init__(self, agent_dir: Path | None = None) -> None:
         """Initialize with agent directory (defaults to src)."""
         # Search for 'src' folder by going up
         current = Path(__file__).resolve()
@@ -84,7 +85,7 @@ class ModuleLoader:
         spec.loader.exec_module(mod)
         return mod
 
-    def load_agent_module(self, filename: str, module_name: Optional[str] = None) -> ModuleType:
+    def load_agent_module(self, filename: str, module_name: str | None = None) -> ModuleType:
         """Load an agent module from scripts/agent by filename."""
         path = self.agent_dir / filename
         if not path.exists():

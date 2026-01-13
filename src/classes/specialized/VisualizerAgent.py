@@ -43,7 +43,7 @@ class VisualizerAgent(BaseAgent):
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
         self.graph_engine = GraphContextEngine(str(self.workspace_root))
-        self.memory_agent: Optional[GraphMemoryAgent] = None
+        self.memory_agent: GraphMemoryAgent | None = None
         
         self._system_prompt = (
             "You are the Fleet Visualizer Agent. "
@@ -52,7 +52,7 @@ class VisualizerAgent(BaseAgent):
         )
 
     @as_tool
-    def spatial_reasoning(self, objects: List[Dict[str, Any]], query: str) -> str:
+    def spatial_reasoning(self, objects: list[dict[str, Any]], query: str) -> str:
         """
         Performs spatial reasoning on a list of objects in a 2D/3D space.
         Args:
@@ -72,7 +72,7 @@ class VisualizerAgent(BaseAgent):
         return self.think(prompt)
 
     @as_tool
-    def video_grounding(self, frames: List[Dict[str, Any]], event_query: str) -> Dict[str, Any]:
+    def video_grounding(self, frames: list[dict[str, Any]], event_query: str) -> dict[str, Any]:
         """
         Phase 58: Video Grounding.
         Analyzes a sequence of video frames to identify events or temporal relationships.
@@ -93,7 +93,7 @@ class VisualizerAgent(BaseAgent):
         }
 
     @as_tool
-    def export_visual_workflow(self, workflow_name: str, tasks: List[Dict[str, Any]]) -> str:
+    def export_visual_workflow(self, workflow_name: str, tasks: list[dict[str, Any]]) -> str:
         """Exports a task sequence as a JSON visual workflow (cc-wf-studio format)."""
         logging.info(f"VISUALIZER: Exporting visual workflow '{workflow_name}'")
         
@@ -129,7 +129,7 @@ class VisualizerAgent(BaseAgent):
         return f"Successfully exported visual workflow to {output_path}"
 
     @as_tool
-    def import_visual_workflow(self, file_name: str) -> Dict[str, Any]:
+    def import_visual_workflow(self, file_name: str) -> dict[str, Any]:
         """Imports a JSON visual workflow and converts it to a Task Planner sequence."""
         logging.info(f"VISUALIZER: Importing visual workflow '{file_name}'")
         input_path = Path(str(self.workspace_root)) / "config" / file_name
@@ -137,7 +137,7 @@ class VisualizerAgent(BaseAgent):
         if not input_path.exists():
             return {"error": f"File {file_name} not found in config/"}
             
-        with open(input_path, 'r') as f:
+        with open(input_path) as f:
             data = json.load(f)
             
         # Convert canvas nodes to fleet tasks
@@ -218,7 +218,7 @@ class VisualizerAgent(BaseAgent):
                 
         return "## 🔗 Code Call Graph\n\n```mermaid\n" + "\n".join(lines) + "\n```"
 
-    def generate_3d_swarm_data(self) -> Dict[str, Any]:
+    def generate_3d_swarm_data(self) -> dict[str, Any]:
         """
         Generates a 3D-compatible dataset for force-directed swarm visualization.
         Schema compatible with Force-Directed Graph libraries.

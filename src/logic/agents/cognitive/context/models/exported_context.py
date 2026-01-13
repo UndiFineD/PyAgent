@@ -40,5 +40,5 @@ class ExportedContext:
     """
     format: ExportFormat
     content: str
-    metadata: Dict[str, Any] = field(default_factory=lambda: {})
+    metadata: dict[str, Any] = field(default_factory=lambda: {})
     created_at: str = ""

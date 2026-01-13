@@ -22,7 +22,9 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Callable, List
+from typing import List
+from collections.abc import Callable
+import logging
 
 __version__ = VERSION
 
@@ -31,7 +33,7 @@ class CleanupManager:
 
     def __init__(self) -> None:
         """Initialize cleanup manager."""
-        self.hooks: List[Callable[[], None]] = []
+        self.hooks: list[Callable[[], None]] = []
 
     def add_hook(self, hook: Callable[[], None]) -> None:
         """Add cleanup hook."""

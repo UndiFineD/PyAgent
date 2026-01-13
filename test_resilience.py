@@ -4,7 +4,6 @@ import logging
 from pathlib import Path
 
 # Add the workspace root to sys.path
-sys.path.append(str(Path(__file__).parent))
 
 from src.classes.fleet.AgentRegistry import AgentRegistry
 

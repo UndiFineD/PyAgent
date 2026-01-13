@@ -137,7 +137,7 @@ class ProjectExplorer:
         abspath = self.tree.item(item_id, "values")[0]
         self.on_double_click_callback(abspath)
 
-    def get_selected_path(self) -> Optional[str]:
+    def get_selected_path(self) -> str | None:
         """Returns the absolute path of the currently selected item in the tree."""
         selected = self.tree.selection()
         if not selected:

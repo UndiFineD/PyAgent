@@ -5,7 +5,7 @@ from src.classes.fleet.FleetManager import FleetManager
 
 class TestPhases71(unittest.TestCase):
     def setUp(self):
-        self.workspace = "c:/DEV/PyAgent"
+        self.workspace = Path(__file__).resolve().parents[2]
         self.fleet = FleetManager(self.workspace)
 
     def test_process_synthesizer(self) -> None:

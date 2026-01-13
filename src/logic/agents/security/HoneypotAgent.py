@@ -37,8 +37,8 @@ class HoneypotAgent(BaseAgent):
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.core = RedQueenCore()
-        self.trapped_attempts: List[Dict[str, Any]] = []
-        self.attack_archive: List[AttackVector] = []
+        self.trapped_attempts: list[dict[str, Any]] = []
+        self.attack_archive: list[AttackVector] = []
         self._system_prompt = (
             "You are the Honeypot Agent. Your purpose is to attract and analyze "
             "adversarial inputs. You simulate a vulnerable endpoint to trap "
@@ -46,7 +46,7 @@ class HoneypotAgent(BaseAgent):
         )
 
     @as_tool
-    def verify_input_safety(self, prompt_input: str) -> Dict[str, Any]:
+    def verify_input_safety(self, prompt_input: str) -> dict[str, Any]:
         """
         Inspects input for "ignore previous instruction" or similar patterns.
         """
@@ -80,7 +80,7 @@ class HoneypotAgent(BaseAgent):
         return {"safe": "safe" in result.lower(), "analysis": result}
 
     @as_tool
-    def generate_test_attacks(self, base_task: str) -> List[str]:
+    def generate_test_attacks(self, base_task: str) -> list[str]:
         """Generates a batch of mutated adversarial prompts for stress testing."""
         attacks = []
         for strategy in self.core.MUTATION_STRATEGIES:
@@ -90,7 +90,7 @@ class HoneypotAgent(BaseAgent):
         return attacks
 
     @as_tool
-    def get_trap_statistics(self) -> Dict[str, Any]:
+    def get_trap_statistics(self) -> dict[str, Any]:
         """Returns statistics on trapped adversarial attempts."""
         return {
             "attempts_neutralized": len(self.trapped_attempts),

@@ -12,6 +12,7 @@
 # limitations under the License.
 
 from __future__ import annotations
+from typing import Dict, List
 
 class ByzantineCore:
     """
@@ -40,7 +41,7 @@ class ByzantineCore:
         max_agreement = max(hash_weights.values())
         return max_agreement / total_weight
 
-    def select_committee(self, agents_reliability: Dict[str, float], min_size: int = 3) -> List[str]:
+    def select_committee(self, agents_reliability: dict[str, float], min_size: int = 3) -> list[str]:
         """
         Scales the committee based on historic reliability scores.
         Only recruits agents with reliability > 0.7.

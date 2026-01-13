@@ -42,14 +42,14 @@ class ReportScheduler:
     def __init__(self) -> None:
         """Initialize scheduler."""
 
-        self.schedules: Dict[str, Dict[str, Any]] = {}
+        self.schedules: dict[str, dict[str, Any]] = {}
         logging.debug("ReportScheduler initialized")
 
     def add_schedule(
         self,
         name: str,
         cron_expr: str,
-        file_patterns: List[str]
+        file_patterns: list[str]
     ) -> None:
         """Add a schedule.
         Args:
@@ -77,7 +77,7 @@ class ReportScheduler:
             return True
         return False
 
-    def get_due_tasks(self) -> List[str]:
+    def get_due_tasks(self) -> list[str]:
         """Get tasks due to run.
         Returns:
             List of due schedule names.

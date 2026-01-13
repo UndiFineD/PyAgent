@@ -41,14 +41,14 @@ class ReportCacheManager:
         _cache: Current cache data mapping (path, hash) -> (content, ttl_end).
     """
 
-    def __init__(self, cache_file: Optional[Path] = None) -> None:
+    def __init__(self, cache_file: Path | None = None) -> None:
         """Initialize cache manager.
         Args:
             cache_file: Path to cache file. Defaults to .report_cache.json.
         """
 
         self.cache_file = cache_file or AGENT_DIR / ".report_cache.json"
-        self._cache: Dict[str, Any] = {}
+        self._cache: dict[str, Any] = {}
         self._load_cache()
 
     def _load_cache(self) -> None:
@@ -65,14 +65,14 @@ class ReportCacheManager:
         """Save cache to disk."""
 
         try:
-            data: Dict[str, Any] = {
+            data: dict[str, Any] = {
                 'cache': self._cache
             }
             self.cache_file.write_text(json.dumps(data, indent=2))
         except Exception as e:
             logging.warning(f"Failed to save cache: {e}")
 
-    def get(self, file_path: str, content_hash: str) -> Optional[str]:
+    def get(self, file_path: str, content_hash: str) -> str | None:
         """Get cached report if valid.
         Args:
             file_path: Path to source file.
@@ -117,7 +117,7 @@ class ReportCacheManager:
             del self._cache[key]
         self._save_cache()
 
-    def invalidate(self, file_path: Optional[str] = None) -> None:
+    def invalidate(self, file_path: str | None = None) -> None:
         """Invalidate cache entries.
         Args:
             file_path: Path to invalidate. If None, clears all.

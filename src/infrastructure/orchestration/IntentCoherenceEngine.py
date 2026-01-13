@@ -38,11 +38,11 @@ class IntentCoherenceEngine:
     
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
-        self.global_intent: Optional[str] = None
+        self.global_intent: str | None = None
         self.intent_priority: int = 0
-        self.sub_intents: List[Dict[str, Any]] = []
+        self.sub_intents: list[dict[str, Any]] = []
 
-    def broadcast_intent(self, intent: str, priority: int = 10) -> Dict[str, Any]:
+    def broadcast_intent(self, intent: str, priority: int = 10) -> dict[str, Any]:
         """
         Sets the global coherent objective for the entire swarm.
         """
@@ -75,16 +75,10 @@ class IntentCoherenceEngine:
         
         # In a real implementation, we'd use an LLM or vector similarity to 
         # project the local task into the global intent space.
-        alignment_prompt = (
-            f"Global Objective: {self.global_intent}\n"
-            f"Agent {agent_name} is performing: {local_task}\n"
-            "Adjust the local task to ensure it best serves the Global Objective. "
-            "Return the optimized task description."
-        )
         
         # For simulation, we'll just prepend the global context
         aligned_task = f"[Aligned with: {self.global_intent}] {local_task}"
         return aligned_task
 
-    def get_current_intent(self) -> Optional[str]:
+    def get_current_intent(self) -> str | None:
         return self.global_intent

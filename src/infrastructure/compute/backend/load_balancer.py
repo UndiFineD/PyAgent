@@ -50,9 +50,9 @@ class LoadBalancer:
             strategy: Load balancing strategy to use.
         """
         self.strategy = strategy
-        self._backends: List[SystemConfig] = []
+        self._backends: list[SystemConfig] = []
         self._index = 0
-        self._connections: Dict[str, int] = {}
+        self._connections: dict[str, int] = {}
         self._lock = threading.Lock()
 
     def add_backend(
@@ -99,7 +99,7 @@ class LoadBalancer:
                     return True
             return False
 
-    def next(self) -> Optional[SystemConfig]:
+    def next(self) -> SystemConfig | None:
         """Get next backend to use.
 
         Returns:

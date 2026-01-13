@@ -21,7 +21,7 @@ class BaseModule(ABC):
     Standardizes the lifecycle of global specialized logic.
     """
     def __init__(self, config:
-        Optional[Dict[str, Any]] = None) -> None:
+        dict[str, Any] | None = None) -> None:
         self.config = config or {}
         self.initialized = False
 
