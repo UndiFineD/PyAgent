@@ -53,7 +53,7 @@ class ArchitectureMapper:
 
     def run(self):
         """Generates and saves the markdown file."""
-        print(f"[*] Mapping PyAgent architecture...")
+        print("[*] Mapping PyAgent architecture...")
         diagram = self.generate_diagram()
         
         md_content = f"""# Architecture: System Context

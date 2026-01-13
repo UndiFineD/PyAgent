@@ -27,7 +27,6 @@ from src.core.base.version import VERSION
 import logging
 from pathlib import Path
 from typing import Dict, Any, Optional
-from typing import Optional
 
 class AgentStore:
     """Marketplace for agent templates and specialized configurations."""

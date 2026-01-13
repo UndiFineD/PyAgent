@@ -99,7 +99,7 @@ class SelfOptimizerAgent(BaseAgent):
         telemetry = self.telemetry.get_summary()
         
         system_report = [
-            f"\n## System Health",
+            "\n## System Health",
             f"- **Status**: {stats.get('status', 'Unknown')}",
             f"- **CPU Usage**: {stats.get('cpu_usage_pct')}%",
             f"- **Memory Usage**: {stats.get('memory_usage_pct')}%",

@@ -23,9 +23,9 @@ Internal managers for prompt, conversation, auth, and batch processing.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.version import VERSION as VERSION
 from .PromptManagers import PromptTemplateManager, PromptVersion, PromptVersionManager
-from .ConversationManagers import ConversationHistory
+from .ConversationManagers import ConversationHistory as ConversationHistory
 from .AuthManagers import AuthenticationManager, AuthManager
 from .BatchManagers import BatchRequest, RequestBatcher
 from .ProcessorManagers import ResponsePostProcessor, MultimodalProcessor, SerializationManager

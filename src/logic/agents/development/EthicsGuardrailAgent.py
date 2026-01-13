@@ -53,7 +53,7 @@ class EthicsGuardrailAgent(BaseAgent):
 
     def monitor_swarm_decision(self, decision: Dict[str, Any]) -> str:
         """Analyzes a swarm consensus decision for alignment risks."""
-        logging.info(f"Ethics: Monitoring swarm decision...")
+        logging.info("Ethics: Monitoring swarm decision...")
         
         # Risk scoring
         risk_score = 0

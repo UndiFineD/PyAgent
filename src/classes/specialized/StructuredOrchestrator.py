@@ -104,7 +104,7 @@ class PatternOrchestrator(BaseAgent):
         # In a real multi-agent call, these would be separate LLM calls.
         round_1 = [
             f"Round 1 - Pro: Argument for '{topic}' emphasizing benefits.",
-            f"Round 1 - Con: Counter-argument highlighting risks."
+            "Round 1 - Con: Counter-argument highlighting risks."
         ]
         round_2 = [
             "Round 2 - Pro: Addresses risks with mitigation strategies.",

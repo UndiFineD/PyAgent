@@ -10,7 +10,7 @@ from typing import List, Dict
 class QuantumCore:
     @staticmethod
     def calculate_superposition_weights(prompts: List[str], constraints: Dict[str, float]) -> List[float]:
-        """
+        r"""
         Calculates weights for multiple prompts being processed in "superposition".
         $W_i = \frac{e^{C_i}}{\sum e^{C_j}}$ where $C$ is the constraint score.
         """

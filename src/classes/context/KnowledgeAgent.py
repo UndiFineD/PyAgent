@@ -247,7 +247,7 @@ class KnowledgeAgent(BaseAgent):
             for l in lessons:
                 status = "✅" if l["success"] else "❌"
                 mem_blocks.append(f"> - {status} **{l['agent']}**: {l['task']} -> {l['outcome']}")
-            context_snippets.append(f"> [!NOTE] Memory: Lessons from similar past tasks\n" + "\n".join(mem_blocks) + "\n")
+            context_snippets.append("> [!NOTE] Memory: Lessons from similar past tasks\n" + "\n".join(mem_blocks) + "\n")
 
         # 3. Check index first (Exact symbol/link matches)
         hits = index.get(query, [])
