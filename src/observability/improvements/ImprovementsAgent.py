@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,52 +18,25 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Auto-extracted class from agent_improvements.py"""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from .EffortEstimate import EffortEstimate
 from .Improvement import Improvement
 from .ImprovementCategory import ImprovementCategory
 from .ImprovementPriority import ImprovementPriority
 from .ImprovementStatus import ImprovementStatus
 from .ImprovementTemplate import ImprovementTemplate
+from src.core.base.BaseAgent import BaseAgent
+from datetime import datetime
+from typing import Any, Dict, List, Optional
+import hashlib
+import json
+import logging
+import re
 
 # Default templates
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 DEFAULT_TEMPLATES: List[ImprovementTemplate] = [
     ImprovementTemplate(
@@ -114,18 +81,7 @@ DEFAULT_TEMPLATES: List[ImprovementTemplate] = [
     ),
 ]
 
-from src.core.base.BaseAgent import BaseAgent
-from dataclasses import dataclass, field
-from datetime import datetime, timedelta
-from enum import Enum
-from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple, cast
-import hashlib
-import json
-import logging
-import re
-import subprocess
-import time
+__version__ = VERSION
 
 class ImprovementsAgent(BaseAgent):
     """Updates code file improvement suggestions using AI assistance.

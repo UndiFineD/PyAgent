@@ -12,24 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
-
 """Auto-extracted class from agent.py"""
 
-
-
-
+from __future__ import annotations
+from dataclasses import dataclass, field
+from typing import Optional, Any
 from src.core.base.models import AgentPluginConfig, RateLimitConfig
 from src.core.base.utils._helpers import (
     _empty_dict_str_any,
@@ -37,30 +24,9 @@ from src.core.base.utils._helpers import (
     _empty_list_str,
     _empty_dict_str_int,
 )
-from abc import ABC, abstractmethod
-from concurrent.futures import ThreadPoolExecutor
-from contextlib import contextmanager
-from dataclasses import dataclass, field
-from enum import Enum, auto
-from pathlib import Path
-from types import TracebackType
-from typing import List, Set, Optional, Dict, Any, Callable, Iterable, TypeVar, cast, Final
-import argparse
-import asyncio
-import difflib
-import fnmatch
-import functools
-import hashlib
-import importlib.util
-import json
-import logging
-import os
-import signal
-import subprocess
-import sys
-import threading
-import time
-import uuid
+from src.core.base.version import VERSION
+
+__version__ = VERSION
 
 @dataclass
 class AgentConfig:

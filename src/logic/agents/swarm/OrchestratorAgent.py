@@ -11,19 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 
 """
 OrchestratorAgent for PyAgent Swarm Management.
@@ -33,9 +26,8 @@ resource allocation, and final response synthesis. It implements advanced
 self-healing and multi-agent synergy protocols.
 """
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from src.core.base.AgentPluginBase import AgentPluginBase
 from src.core.base.ConfigLoader import ConfigLoader
 from src.core.base.utils.DiffGenerator import DiffGenerator
@@ -54,23 +46,17 @@ from src.core.base.models import HealthStatus
 from src.core.base.IncrementalProcessor import IncrementalProcessor
 from src.core.base.models import RateLimitConfig
 from src.core.base.utils.RateLimiter import RateLimiter
-from src.core.base.utils.core_utils import fix_markdown_content
-from src.core.base.utils._helpers import HAS_REQUESTS, requests
-
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from pathlib import Path
 from types import TracebackType
 from typing import List, Set, Optional, Dict, Any, Callable
 import asyncio
-import functools
 import importlib.util
 import logging
 import subprocess
 import sys
-import time
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
-
 from src.core.base.managers.AgentMetrics import AgentMetrics
 from src.core.base.utils.AgentFileManager import AgentFileManager
 from src.core.base.utils.AgentGitHandler import AgentGitHandler
@@ -82,6 +68,8 @@ from src.core.base.AgentUpdateManager import AgentUpdateManager
 from src.core.base.interfaces import ContextRecorderInterface
 from src.core.base.ConnectivityManager import ConnectivityManager
 from src.core.base.AgentCore import BaseCore
+
+__version__ = VERSION
 
 class OrchestratorAgent:
     """Main agent that orchestrates sub-agents for code improvement.
@@ -1116,4 +1104,3 @@ class OrchestratorAgent:
             # Trigger completion events
             self.execute_callbacks('agent_complete', self.metrics)
             self.send_webhook_notification('agent_complete', self.metrics)
-

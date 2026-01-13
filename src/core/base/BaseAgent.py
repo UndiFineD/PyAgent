@@ -11,23 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
-from src.core.base.exceptions import CycleInterrupt
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
-
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -35,88 +24,30 @@ from src.core.base.exceptions import CycleInterrupt
 
 """BaseAgent main class and core agent logic."""
 
-
-import argparse
-import difflib
-import hashlib
-import json
+from __future__ import annotations
+from src.core.base.version import VERSION
+from src.core.base.exceptions import CycleInterrupt
 import logging
-from src.core.base.ConnectivityManager import ConnectivityManager
 import os
 import subprocess
 import sys
 import time
-from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
 from pathlib import Path
 from types import TracebackType
-from typing import Any, Callable, Dict, List, Optional, Type, cast, TYPE_CHECKING
-
-try:
-    import requests
-    HAS_REQUESTS = True
-except ImportError:
-    requests = None
-    HAS_REQUESTS = False
-
+from typing import Any, Callable, Dict, List, Optional, cast
 from src.core.base.models import (
     AgentConfig,
     AgentState,
-    AgentType,
-    AgentEvent,
-    AuthConfig,
-    AuthMethod,
     CacheEntry,
-    ConversationHistory,
     ConversationMessage,
     EventHook,
     EventType,
-    FilePriority,
-    FilePriorityConfig,
     HealthCheckResult,
-    InputType,
     MessageRole,
-    ModelConfig,
-    MultimodalInput,
     PromptTemplate,
     ResponseQuality,
-    SerializationConfig,
-    SerializationFormat,
-    TokenBudget,
-    BatchResult,
-    ComposedAgent,
-    ContextWindow,
-    MultimodalBuilder,
-    AgentPipeline,
-    AgentParallel,
-    AgentRouter,
-    ConfigProfile,
 )
-from src.core.base.managers import (
-    PromptTemplateManager,
-    PromptVersion,
-    PromptVersionManager,
-    BatchRequest,
-    RequestBatcher,
-    AuthenticationManager,
-    AuthManager,
-    ResponsePostProcessor,
-    MultimodalProcessor,
-    AgentComposer,
-    SerializationManager,
-    FilePriorityManager,
-    ResponseCache,
-    StatePersistence,
-    ModelSelector,
-    QualityScorer,
-    ABTest,
-    EventManager,
-    HealthChecker,
-    PluginManager,
-    ProfileManager,
-)
-
 from src.core.base.AgentCore import BaseCore
 from src.core.base.registry import AgentRegistry
 from src.core.base.ShardedKnowledgeCore import ShardedKnowledgeCore
@@ -124,6 +55,14 @@ from src.core.base.state import AgentStateManager
 from src.core.base.verification import AgentVerifier
 from src.core.base.delegation import AgentDelegator
 from src.core.base.shell import ShellExecutor
+from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+
+try:
+    import requests
+    HAS_REQUESTS = True
+except ImportError:
+    requests = None
+    HAS_REQUESTS = False
 
 # Advanced components (Lazy loaded or optional)
 try:
@@ -135,19 +74,14 @@ except (ImportError, ValueError):
     SignalRegistry = None
     ToolRegistry = None
 
-from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
-from .logging_config import setup_logging
-from .defaults import DEFAULT_PROMPT_TEMPLATES
-
+__version__ = VERSION
 
 def fix_markdown_content(content: str) -> str:
     """Fix markdown formatting in content."""
     # Basic markdown fixes - can be extended
     return content
 
-
 # Advanced components (Lazy loaded or optional)
-
 
 class BaseAgent:
     """Base class for all AI-powered agents.

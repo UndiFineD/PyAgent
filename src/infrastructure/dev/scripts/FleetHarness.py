@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
+"""Unified Fleet Harness for repository management and repair."""
 
+from __future__ import annotations
 import argparse
 import subprocess
 import sys
 from pathlib import Path
-
-"""Unified Fleet Harness for repository management and repair."""
 
 SCRIPTS_DIR = Path(__file__).parent
 MGMT_DIR = SCRIPTS_DIR / "management"

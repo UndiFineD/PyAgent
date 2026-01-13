@@ -1,10 +1,11 @@
+
 """
 Core logic for Report Deduplication (Phase 183).
 Handles similarity calculations and JSONL export.
 """
 
 import json
-from typing import List, Dict, Any, Set
+from typing import List, Dict, Any
 
 class DeduplicationCore:
     @staticmethod

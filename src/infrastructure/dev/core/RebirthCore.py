@@ -1,3 +1,4 @@
+
 """
 Core logic for Swarm Rebirth (Phase 180).
 Handles mass directory scaffolding and cleanup.
@@ -6,7 +7,7 @@ Handles mass directory scaffolding and cleanup.
 import os
 import shutil
 import yaml
-from typing import List, Dict
+from typing import Dict
 
 class RebirthCore:
     @staticmethod

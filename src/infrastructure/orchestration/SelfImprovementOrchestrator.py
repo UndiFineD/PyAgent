@@ -10,12 +10,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -23,8 +17,8 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import os
 import json
 import logging
@@ -35,6 +29,8 @@ from typing import Dict, List, Any
 from src.core.base.BaseAgent import BaseAgent
 from src.infrastructure.backend.LLMClient import LLMClient
 from src.core.base.version import is_gate_open
+
+__version__ = VERSION
 
 class SelfImprovementOrchestrator(BaseAgent):
     """
@@ -388,7 +384,8 @@ class SelfImprovementOrchestrator(BaseAgent):
                 fixed_count += 1
             
             # Simple fix for unsafe YAML
-            if "yaml.load(" in content and "yaml.safe_load(" not in content: # nosec
+            if "yaml.load(" in content and "yaml.safe_load(" not in content:
+                # nosec
                 if "import yaml" in content:
                     new_content = new_content.replace("yaml.load(", "yaml.safe_load(") # nosec
                     issue["fixed"] = True

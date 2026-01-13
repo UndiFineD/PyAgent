@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,19 +18,18 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Agent specializing in automated quality gates and release validation."""
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import json
 import subprocess
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import create_main_function, as_tool
+
+__version__ = VERSION
 
 class QualityGateAgent(BaseAgent):
     """Enforces thresholds for code quality, test coverage, and security before deployment."""
@@ -136,8 +129,6 @@ class QualityGateAgent(BaseAgent):
         """Perform a quality gate check."""
         return self.check_gates()
 
-
 if __name__ == "__main__":
     main = create_main_function(QualityGateAgent, "QualityGate Agent", "Task (e.g. 'check')")
     main()
-

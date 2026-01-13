@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,13 +18,12 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Agent specializing in OS-level operations, environment management, and system diagnosis.
 Inspired by Open Interpreter and Openator.
 """
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import os
 import sys
 import json
@@ -38,11 +31,11 @@ import shutil
 import platform
 import logging
 import subprocess
-from typing import Dict, List, Any, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 from src.logic.agents.development.SecurityGuardAgent import SecurityGuardAgent
 
+__version__ = VERSION
 
 class KernelAgent(BaseAgent):
     """Interacts directly with the host OS to manage environments and perform diagnostics."""
@@ -128,4 +121,3 @@ class KernelAgent(BaseAgent):
     def improve_content(self, prompt: str) -> str:
         """Overridden to handle system-level requests."""
         return self.execute_shell(prompt)
-

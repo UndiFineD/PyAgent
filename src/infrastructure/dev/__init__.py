@@ -12,18 +12,14 @@
 # limitations under the License.
 
 from __future__ import annotations
-
 from src.core.base.version import VERSION
+
 __version__ = VERSION
 
-# you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Development scripts and stability tools for the PyAgent ecosystem."""
-
-

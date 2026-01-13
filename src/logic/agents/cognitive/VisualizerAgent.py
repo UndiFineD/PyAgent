@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,13 +18,12 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Agent specializing in mapping and visualizing the internal dependencies of the Agent OS.
 Inspired by system-design-visualizer and FalkorDB.
 """
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import time
 from pathlib import Path
@@ -40,6 +33,8 @@ from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 from src.logic.agents.cognitive.context.engines.GraphContextEngine import GraphContextEngine
 from src.logic.agents.cognitive.GraphMemoryAgent import GraphMemoryAgent
+
+__version__ = VERSION
 
 class VisualizerAgent(BaseAgent):
     """Maps relationships and handles Visual Workflow Export/Import (cc-wf-studio pattern)."""
@@ -216,7 +211,8 @@ class VisualizerAgent(BaseAgent):
             
             clean_file = file.replace("\\", "/").split("/")[-1]
             for call in data.get("calls", []):
-                if count > 20: break # Keep it readable
+                if count > 20:
+                    break # Keep it readable
                 lines.append(f"    {clean_file} --> {call}")
                 count += 1
                 
@@ -254,4 +250,3 @@ class VisualizerAgent(BaseAgent):
     def improve_content(self, prompt: str) -> str:
         """Visualizes the workspace by default."""
         return self.generate_call_graph()
-

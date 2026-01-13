@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,12 +18,10 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Agent for performing web searches and deep research."""
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import create_main_function
 import logging
@@ -37,10 +29,12 @@ import os
 import requests
 import time
 from pathlib import Path
-from typing import Optional, List, Dict
+from typing import Optional
 from src.core.base.ConnectivityManager import ConnectivityManager
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 from .SearchCore import SearchCore
+
+__version__ = VERSION
 
 class SearchAgent(BaseAgent):
     """Agent that specializes in researching topics via web search."""

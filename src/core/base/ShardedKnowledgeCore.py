@@ -11,19 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 
 """
 ShardedKnowledgeCore: Logic for managing a trillion-parameter scale knowledge graph.
@@ -32,16 +25,16 @@ Optimized for high-concurrency and massive data volume.
 Requires orjson and aiofiles for high-speed non-blocking I/O.
 """
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import zlib
-import os
 import logging
 from pathlib import Path
-from typing import Any, Optional
-
+from typing import Any
 import orjson
 import aiofiles
+
+__version__ = VERSION
 
 class ShardedKnowledgeCore:
     """Logic for sharding and asynchronously retrieving knowledge at scale."""

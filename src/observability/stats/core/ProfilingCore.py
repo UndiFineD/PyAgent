@@ -1,7 +1,7 @@
+
 from __future__ import annotations
 import pstats
-import io
-from typing import List, Dict, Any, Tuple
+from typing import List
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
@@ -24,7 +24,8 @@ class ProfilingCore:
         # pstats stores data in a complex tuple structure
         # (cc, nc, tt, ct, callers)
         for func, (cc, nc, tt, ct, callers) in pstats_obj.stats.items():
-            if len(results) >= limit: break
+            if len(results) >= limit:
+                break
             results.append(ProfileStats(
                 function_name=str(func),
                 call_count=cc,

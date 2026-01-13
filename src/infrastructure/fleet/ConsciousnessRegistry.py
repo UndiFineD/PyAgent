@@ -13,12 +13,10 @@
 # limitations under the License.
 
 from __future__ import annotations
-
 import logging
 from typing import Dict, List, Any, Optional
 from datetime import datetime
 from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
-
 
 class ConsciousnessRegistry:
     """Phase 240: Fleet Consciousness Registry.

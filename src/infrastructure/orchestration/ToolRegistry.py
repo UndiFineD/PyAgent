@@ -13,7 +13,6 @@
 # limitations under the License.
 
 from __future__ import annotations
-
 import logging
 import asyncio
 from typing import Dict, List, Any, Callable, Optional, TYPE_CHECKING

@@ -11,19 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
 
 """
 AgentCore: Pure logic component for the Agent system.
@@ -32,9 +25,8 @@ Ready for conversion to a Rust library with strong typing via PyO3.
 Zero external dependencies besides standard library and local models.
 """
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import difflib
 import fnmatch
 import hashlib
@@ -45,7 +37,7 @@ from pathlib import Path
 from typing import Any, Optional
 
 # Only internal imports allowed for Rust readiness
-from src.core.base.models import ResponseQuality
+__version__ = VERSION
 
 @dataclass
 class CodeQualityReport:
@@ -161,9 +153,12 @@ class BaseCore(LogicCore):
             return 1 # ResponseQuality.INVALID
 
         score = 3
-        if len(response) > 500: score += 1
-        if "```" in response: score += 1
-        if "error" in response.lower() and len(response) < 100: score -= 2
+        if len(response) > 500:
+            score += 1
+        if "```" in response:
+            score += 1
+        if "error" in response.lower() and len(response) < 100:
+            score -= 2
 
         return max(1, min(5, score))
 

@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,11 +18,10 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Auto-extracted class from agent_stats.py"""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from .observability_core import Alert
 from .observability_core import AlertSeverity
 from .observability_core import Metric
@@ -36,52 +29,18 @@ from .observability_core import MetricSnapshot
 from .observability_core import MetricType
 from .observability_core import RetentionPolicy
 from .observability_core import Threshold
-
 from .observability_core import StatsCore
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Tuple, Union
 import csv
 import hashlib
 import json
 import logging
-import math
 import sys
 import zlib
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+__version__ = VERSION
 
 class StatsAgent:
     """Reports statistics on file update progress."""
@@ -204,7 +163,8 @@ class StatsAgent:
         """Detect if a value is anomalous using standard deviation."""
         history = self._metrics.get(metric_name, [])
         if value is None:
-            if not history: return False
+            if not history:
+                return False
             val_to_check = history[-1].value
             hist_to_check = history[:-1]
             is_anom, _ = StatsCore.detect_anomaly(hist_to_check, val_to_check, threshold_std)
@@ -413,7 +373,8 @@ class StatsAgent:
         namespace: str = "default"
     ) -> List[Any]:
         """Decompress metric data."""
-        if not compressed: return []
+        if not compressed:
+            return []
         data = json.loads(zlib.decompress(compressed).decode("utf-8"))
         if not metric_name:
             return [(item.get("timestamp", ""), item.get("value", 0.0)) for item in data]

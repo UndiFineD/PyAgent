@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,13 +18,12 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Agent specializing in Graph-based memory and entity relationship tracking.
 Supports FalkorDB-style triple storage (Subject-Predicate-Object).
 """
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import json
 import time
@@ -38,6 +31,8 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+
+__version__ = VERSION
 
 class GraphMemoryAgent(BaseAgent):
     """Manages long-term memories with MIRIX 6-component architecture and Beads task tracking."""
@@ -115,7 +110,8 @@ class GraphMemoryAgent(BaseAgent):
                     try:
                         task = json.loads(line)
                         tasks[task["id"]] = task["data"]
-                    except Exception: continue
+                    except Exception:
+                        continue
         return tasks
 
     def _save_bead(self, task_id: str, data: Dict[str, Any]) -> str:

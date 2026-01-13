@@ -11,14 +11,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-import os
-import sys
-
 """
 Bridge for Rust Acceleration.
 Interfaces with rust_core via PyO3 or CFFI.
 """
+
+from __future__ import annotations
 
 class NeuralPruningEngine:
     """Core engine for pruning neural connections in the swarm."""

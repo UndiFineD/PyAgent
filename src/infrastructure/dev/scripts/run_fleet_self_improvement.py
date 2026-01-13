@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,14 +18,13 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """
 Autonomous Fleet Self-Improvement Loop.
 Scans the workspace for issues, applies autonomous fixes, and harvests external intelligence.
 """
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import os
 import sys
 import json
@@ -42,6 +35,7 @@ import subprocess
 import re
 from pathlib import Path
 from typing import List, Dict, Any
+from src.infrastructure.fleet.FleetManager import FleetManager
 
 # Phase 120: Load environment variables if available
 try:
@@ -55,8 +49,7 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from src.infrastructure.fleet.FleetManager import FleetManager
-
+__version__ = VERSION
 
 def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, current_cycle: int = 1, model_name: str = "gemini-3-flash") -> None:
     """Run a single improvement cycle."""
@@ -370,7 +363,6 @@ def _cycle_throttle(delay: int, root: str, target_dirs: List[str]) -> None:
         print(f" - [Throttle] Waiting {delay}s for next cycle...")
         # Use threading.Event to avoid synchronous wait performance warnings
         threading.Event().wait(timeout=float(delay))
-
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="PyAgent Fleet Self-Improvement Loop")

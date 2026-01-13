@@ -12,11 +12,11 @@
 # limitations under the License.
 
 from __future__ import annotations
-
 from src.core.base.version import VERSION
-__version__ = VERSION
 from src.core.base.BaseAgent import BaseAgent
 from .core.VisionCore import VisionCore
+
+__version__ = VERSION
 
 class MultiModalReasoningAgent(BaseAgent):
     """

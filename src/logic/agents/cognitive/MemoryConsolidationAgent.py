@@ -12,21 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 """Agent specializing in consolidating episodic memories into global project context."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
-import json
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict
 from src.core.base.BaseAgent import BaseAgent
 from src.logic.agents.cognitive.LongTermMemory import LongTermMemory
 from src.logic.agents.cognitive.context.engines.GlobalContextEngine import GlobalContextEngine
 from src.core.base.utilities import create_main_function, as_tool
+
+__version__ = VERSION
 
 class MemoryConsolidationAgent(BaseAgent):
     """Refines project knowledge by analyzing past interactions and outcomes from federated shards."""

@@ -1,8 +1,9 @@
+
 from __future__ import annotations
 import os
 import gzip
 import shutil
-from typing import List, Optional
+from typing import Optional
 from datetime import datetime
 
 class LogRotationCore:

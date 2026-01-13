@@ -10,12 +10,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -23,13 +17,14 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Script for final namespace correction and import migration."""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import os
 import re
+
+__version__ = VERSION
 
 def fix_imports(content: str) -> str:
     """Migrate legacy module names to the src namespace."""
@@ -55,7 +50,8 @@ def fix_imports(content: str) -> str:
 updated_count = 0
 for root_dir in ['src', 'tests']:
     for root, dirs, files in os.walk(root_dir):
-        if '__pycache__' in root or '.git' in root: continue
+        if '__pycache__' in root or '.git' in root:
+            continue
         for file in files:
             if file.endswith('.py'):
                 path = os.path.join(root, file)
@@ -67,6 +63,7 @@ for root_dir in ['src', 'tests']:
                         with open(path, 'w', encoding='utf-8') as f:
                             f.write(new_content)
                         updated_count += 1
-                except: pass
+                except:
+                    pass
 
 print(f"Updated {updated_count} files.")
