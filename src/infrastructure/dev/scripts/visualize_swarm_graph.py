@@ -77,7 +77,7 @@ def generate_swarm_graph(output_format:
 
     return ""
 
-def main():
+def main() -> None:
     print("=== SWARM INTERACTION GRAPH GENERATOR ===")
     mermaid_str = generate_swarm_graph(output_format="mermaid")
     

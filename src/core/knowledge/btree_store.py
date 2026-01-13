@@ -31,7 +31,7 @@ class BTreeKnowledgeStore(KnowledgeStore):
     Phase 144: Telemetry-Ready Access Patterns.
     """
     
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> bool:
         super().__init__(*args, **kwargs)
         self.logger = StructuredLogger(agent_id="BTreeStore")
     

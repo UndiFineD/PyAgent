@@ -29,6 +29,7 @@ from src.core.base.version import VERSION
 from src.core.base.utilities import as_tool
 from src.core.base.exceptions import CycleInterrupt
 import logging
+from src.core.base.ConnectivityManager import ConnectivityManager
 import os
 import asyncio
 import subprocess
@@ -53,6 +54,7 @@ from src.core.base.models import (
     AgentPriority,
 )
 from src.core.base.AgentCore import BaseCore
+from src.core.base.BaseAgentCore import BaseAgentCore
 from src.core.base.registry import AgentRegistry
 from src.core.base.ShardedKnowledgeCore import ShardedKnowledgeCore
 from src.core.base.state import AgentStateManager
@@ -195,6 +197,7 @@ class BaseAgent:
 
         # Initialize Core Logic (Potential Rust Target)
         self.core = BaseCore(workspace_root=self._workspace_root)
+        self.agent_logic_core = BaseAgentCore()  # Pure logic core (Rust-convertible)
 
         # Advanced features
         # Derive agent name for data isolation (e.g., CoderAgent -> "coder")
@@ -214,12 +217,25 @@ class BaseAgent:
     def _register_capabilities(self) -> None:
         """Emits a signal with agent capabilities for discovery."""
         try:
+            import asyncio
             from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
             signals = SignalRegistry()
-            signals.emit("agent_capability_registration", {
-                "agent": self.__class__.__name__,
-                "capabilities": self.get_capabilities()
-            })
+            # Schedule the async emit to run in the background
+            try:
+                loop = asyncio.get_event_loop()
+                if loop.is_running():
+                    asyncio.create_task(signals.emit("agent_capability_registration", {
+                        "agent": self.__class__.__name__,
+                        "capabilities": self.get_capabilities()
+                    }))
+                else:
+                    loop.run_until_complete(signals.emit("agent_capability_registration", {
+                        "agent": self.__class__.__name__,
+                        "capabilities": self.get_capabilities()
+                    }))
+            except RuntimeError:
+                # No event loop available, skip signal emission
+                pass
         except Exception:
             pass
 
@@ -325,15 +341,16 @@ class BaseAgent:
     def calculate_anchoring_strength(self, result: str) -> float:
         """
         Calculates the 'Anchoring Strength' metric (Stanford Research 2025).
+        Delegates to pure logic core.
         """
-        return AgentVerifier.calculate_anchoring_strength(result, getattr(self, 'context_pool', {}))
+        return self.agent_logic_core.calculate_anchoring_strength(result, getattr(self, 'context_pool', {}))
 
     def verify_self(self, result: str) -> tuple[bool, str]:
         """
         Self-verification layer (inspired by Keio University 2026 research).
+        Delegates to pure logic core.
         """
-        anchoring_score = self.calculate_anchoring_strength(result)
-        return AgentVerifier.verify_self(result, anchoring_score)
+        return self.agent_logic_core.verify_self(result)
 
     def _load_config(self) -> AgentConfig:
         """Load agent configuration from environment variables."""
@@ -355,7 +372,8 @@ class BaseAgent:
             strategy: An instance of AgentStrategy (e.g., DirectStrategy, ChainOfThoughtStrategy).
         """
         self.strategy = strategy
-        logging.info(f"Agent strategy set to {strategy.__class__.__name__}")
+        msg = self.agent_logic_core.set_strategy(strategy)
+        logging.info(msg)
 
     @property
     def state(self) -> AgentState:

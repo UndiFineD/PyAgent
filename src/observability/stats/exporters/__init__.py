@@ -1,4 +1,8 @@
-# Exporters package
+"""Metrics exporters for various monitoring and observability platforms.
+
+Provides exporters for Prometheus, CloudWatch, OpenTelemetry, and other
+monitoring systems.
+"""
 
 from .MetricsExporter import MetricsExporter as MetricsExporter
 from .StatsExporter import StatsExporter as StatsExporter

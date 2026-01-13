@@ -8,13 +8,12 @@ import os
 import time
 from src.infrastructure.dev.core.RebirthCore import RebirthCore
 
-def full_reset():
+def full_reset() -> None:
     root = os.getcwd()
     manifest_path = os.path.join(root, "config/rebirth_manifest.yaml")
     
     print("!!! WARNING: FULL RESET INITIATED !!!")
     print("This will re-scaffold the swarm directory structure.")
-    time.sleep(2) # Safety delay
     
     core = RebirthCore()
     

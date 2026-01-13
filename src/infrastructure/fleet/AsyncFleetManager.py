@@ -181,7 +181,7 @@ class AsyncFleetManager(FleetManager):
             locker = LockManager()
             
             # Phase 152: Recursive async lock acquisition
-            async def run_with_async_locks(res_list):
+            async def run_with_async_locks(res_list: list[str]) -> Any:
                 if not res_list:
                     # Execute task
                     if asyncio.iscoroutinefunction(action_fn):
@@ -251,7 +251,7 @@ if __name__ == "__main__":
         {"agent": "S1", "action": "improve_content", "args": ["clean code"]}
     ]
     
-    async def run_test():
+    async def run_test() -> None:
         report = await afleet.execute_workflow_async("Parallel Test", wf)
         print(report)
 

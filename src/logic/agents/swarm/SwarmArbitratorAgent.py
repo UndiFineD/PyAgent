@@ -32,7 +32,7 @@ class SwarmArbitratorAgent:
     Manages consensus across multiple agents and tracks behavioral reputation.
     """
 
-    def __init__(self, workspace_path: str = "."):
+    def __init__(self, workspace_path: str = ".") -> None:
         self.workspace_path = workspace_path
         self.reputation_scores = {}
         self.consensus_threshold = 0.66  # 2n/3 for PBFT
@@ -80,7 +80,7 @@ class SwarmArbitratorAgent:
             "distribution": vote_counts
         }
 
-    def _update_reputation(self, agent_id: str, delta: float):
+    def _update_reputation(self, agent_id: str, delta: float) -> None:
         if not agent_id: return
         self.reputation_scores[agent_id] = self.reputation_scores.get(agent_id, 1.0) + delta
         # Clamp between 0.0 (Malicious/Incompetent) and 2.0 (Highly Trusted)

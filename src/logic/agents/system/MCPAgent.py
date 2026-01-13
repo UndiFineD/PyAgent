@@ -52,7 +52,7 @@ class MCPAgent(BaseAgent):
     @as_tool
     async def list_mcp_servers(self) -> str:
         """Discovers local MCP configuration files."""
-        def discover():
+        def discover() -> str:
             mcp_configs = list(self.workspace_root.rglob("mcp.json"))
             if not mcp_configs:
                 return "No local `mcp.json` configs found. Check common locations."

@@ -1,142 +1,457 @@
-# 🦀 Project "Rust-Core" Readiness List (High-Frequency Logic)
+# Rust Conversion Readiness - PyAgent Core Modules
 
-## 🛠️ RUST IMPLEMENTATION PROMPT LIST (Priority Queue)
-- [ ] **Core Interface Logic ([src/core/base/modules.py](src/core/base/modules.py))**: "Implement the `BaseModule` abstract foundation and lifecycle management in Rust. Provide a high-performance trait system for initialization, execution, and shutdown that mirrors the Python implementation."
-- [ ] **Unified Core Logic ([src/core/modules/](src/core/modules/))**: "Implement the `BaseModule` extensions (TaskDecomposer, CodeQuality, Blackboard, Consensus, Signal, DocGen) in Rust using PyO3. Ensure zero-copy data passing for large AST/Blackboard state."
-- [ ] **Routing Engine ([src/infrastructure/orchestration/RoutingEngine.py](src/infrastructure/orchestration/RoutingEngine.py))**: "Port the latency-heuristic routing logic to Rust. Optimize the TTFT/TPS weighting calculation to run in <1ms."
-- [ ] **Consensus Engine ([src/infrastructure/orchestration/ConsensusEngine.py](src/infrastructure/orchestration/ConsensusEngine.py))**: "Implement the PBFT quorum verification in Rust. Handle async voting states and tie-breaking heuristics with minimal memory overhead."
+This document tracks Python files that are ready or nearly ready for Rust conversion. These files typically contain pure logic, minimal I/O, clear interfaces, and high computational value.
 
-## 🎯 TOP PRIORITY: THE UNIFIED CORE
-- [ ] **[src/core/modules/](src/core/modules/)** (The entire unified logic core: TaskDecomposer, CodeQuality, Blackboard, Consensus, Signal, DocGen)
-- [ ] **[src/infrastructure/orchestration/RoutingEngine.py](src/infrastructure/orchestration/RoutingEngine.py)** (Directly utilizes backend performance metrics)
-- [ ] **[src/infrastructure/orchestration/ConsensusEngine.py](src/infrastructure/orchestration/ConsensusEngine.py)** (Enforces PBFT/Quorum logic)
+## Status Legend
+- ✅ **READY** - Pure logic, no I/O, well-typed, good candidate
+- 🔄 **NEAR-READY** - Minimal I/O or dependencies, needs minor cleanup
+- ⚠️ **NEEDS-WORK** - Has I/O or complex dependencies, requires refactoring first
+- 📊 **HIGH-VALUE** - Performance-critical, would benefit most from Rust
 
-## 🏗️ INFRASTRUCTURE & ORCHESTRATION (Secondary List)
-- [ ] **[src/infrastructure/orchestration/GossipProtocolOrchestrator.py](src/infrastructure/orchestration/GossipProtocolOrchestrator.py)** (Decentralized state synchronization)
-- [ ] **[src/infrastructure/orchestration/RoutingEngine.py](src/infrastructure/orchestration/RoutingEngine.py)** (Heuristic Quality vs. Latency Performance Router)
-- [ ] **[src/infrastructure/dev/scripts/visualize_swarm_graph.py](src/infrastructure/dev/scripts/visualize_swarm_graph.py)** (Fast Social Topology Matrix & Mermaid Graph Generator)
-- [ ] **[src/core/base/managers/PromptManagers.py](src/core/base/managers/PromptManagers.py)** (Sliding window token summarization & Template rendering)
-- [ ] **[src/infrastructure/backend/RunnerBackends.py](src/infrastructure/backend/RunnerBackends.py)** (Fast Context Window Detection & High-throughput LLM Backend Routing)
-- [ ] **[src/core/base/BaseAgent.py](src/core/base/BaseAgent.py)** (Core Lifecycle, Registry Enforcement & Quota Management)
-- [ ] **[src/core/base/managers/ResourceQuotaManager.py](src/core/base/managers/ResourceQuotaManager.py)** (High-speed resource budgeting & cycle interruption)
-- [ ] **[src/infrastructure/dev/scripts/generate_agent_catalog.py](src/infrastructure/dev/scripts/generate_agent_catalog.py)** (Fast AST-based Metadata Extraction & Documentation Generator)
-- [ ] **[src/infrastructure/orchestration/FleetTelemetryVisualizer.py](src/infrastructure/orchestration/FleetTelemetryVisualizer.py)** (High-frequency Event Processing & Version Drift Analysis)
-- [ ] **[src/infrastructure/fleet/ConsciousnessRegistry.py](src/infrastructure/fleet/ConsciousnessRegistry.py)** (Global Thought Index & State Synchronization)
-- [ ] **[src/infrastructure/orchestration/LockManager.py](src/infrastructure/orchestration/LockManager.py)** (Distributed Locking & Multiprocess Sync)
-- [ ] **[src/infrastructure/orchestration/SignalRegistry.py](src/infrastructure/orchestration/SignalRegistry.py)** (Event-driven Concurrency & Capability Discovery)
-- [ ] **[src/infrastructure/fleet/AsyncFleetManager.py](src/infrastructure/fleet/AsyncFleetManager.py)** (Sync/Async Workflow Orchestration & Migration)
-- [ ] **[src/logic/agents/security/LegalAuditAgent.py](src/logic/agents/security/LegalAuditAgent.py)** (License & Contract Auditing)
-- [ ] **[src/core/base/ShardedKnowledgeCore.py](src/core/base/ShardedKnowledgeCore.py)** (High-speed Hashing & Sharding)
+---
 
-## 🛡️ Security Hardening (Phase 240)
-- [x] **PyO3 Security Patch**: Upgraded to `0.24.1` to mitigate RUSTSEC-2025-0020 (Buffer overflow in `PyString::from_object`).
-- [x] **Bound API Migration**: Ported `rust_core` to the modern `Bound` API for thread-safe memory management.
+## TIER 1: READY FOR IMMEDIATE CONVERSION (18 files)
 
-This document tracks modules that have been audited, decoupled from side-effects (IO/Network), and are ready for conversion to Rust (via PyO3 or FFI) using the Core/Shell pattern.
+### Core Base Logic (src/core/base/core/)
+1. ✅📊 **ErrorMappingCore.py** - Pure error code mapping
+   - Size: ~71 lines
+   - Dependencies: None (just dict mappings)
+   - Rust benefit: Type safety for error codes
+   - Priority: HIGH (used across entire system)
 
-## 💎 Primary Core Candidates
+2. ✅📊 **AutonomyCore.py** - Self-model and daemon sleep calculation
+   - Size: ~50 lines
+   - Dependencies: Basic types only
+   - Rust benefit: Performance for optimization scoring
+   - Priority: MEDIUM
 
-| Module | Purpose | Status | Complexity | Typing |
-|--------|---------|--------|------------|--------|
-| [src/infrastructure/fleet/AsyncFleetManager.py](src/infrastructure/fleet/AsyncFleetManager.py) | **Zero-Downtime Agent Migration & Parallel Workflow execution (Phase 239)** | READY | High | 100% |
-| [src/logic/agents/security/LegalAuditAgent.py](src/logic/agents/security/LegalAuditAgent.py) | **License Blacklist enforcement & Smart Contract auditing (Phase 238)** | READY | Medium | 100% |
-| [src/core/base/ShardedKnowledgeCore.py](src/core/base/ShardedKnowledgeCore.py) | **Adler-32 sharding & Right to be Forgotten pruning (Phase 238)** | READY | High | 100% |
-| [src/infrastructure/orchestration/DreamStateOrchestrator.py](src/infrastructure/orchestration/DreamStateOrchestrator.py) | **Recursive Skill Synthesis & Simulated Task Practice (Phase 237)** | READY | High | 100% |
-| [src/infrastructure/orchestration/GossipProtocolOrchestrator.py](src/infrastructure/orchestration/GossipProtocolOrchestrator.py) | **Epidemic Synchronization & Decentralized State Consistency (Phase 237)** | READY | Medium | 100% |
-| [src/core/base/ArchitectureMapper.py](src/core/base/ArchitectureMapper.py) | **Mermaid C4 System Context Generator (Phase 236)** | READY | Medium | 100% |
-| [src/core/base/IncrementalProcessor.py](src/core/base/IncrementalProcessor.py) | **BLAKE3 hashing & mmap-backed state serialization (Phase 233)** | READY | High | 100% |
-| [src/infrastructure/fleet/ShardingOrchestrator.py](src/infrastructure/fleet/ShardingOrchestrator.py) | **DBSCAN-based agent clustering & live migration logic (Phase 234)** | READY | High | 100% |
-| [version.py](version.py) | **Evolution Phase 235: Proxima Edition Gold Master** | READY | Low | 100% |
-| [src/interface/ui/cli/pyagent_cli.py](src/interface/ui/cli/pyagent_cli.py) | **Rich CLI with state-aware spinners & topology maps (Phase 235)** | READY | Medium | 100% |
-| [src/core/base/DependencyGraph.py](src/core/base/DependencyGraph.py) | **Topological batching & cycle detection (Phase 232)** | READY | Medium | 100% |
-| [src/observability/core/LoggingCore.py](src/observability/core/LoggingCore.py) | **High-throughput log masking & RFC3339 formatting (Phase 227)** | READY | Low | 100% |
-| [src/infrastructure/fleet/core/GPUMonitorCore.py](src/infrastructure/fleet/core/GPUMonitorCore.py) | **GPU Telemetry, Memory Tracking, and VRAM pressure logic (Phase 227)** | READY | Medium | 100% |
-| [src/core/base/managers/PluginManager.py](src/core/base/managers/PluginManager.py) | **Plugin discovery, manifest enforcement, and health check logic (Phase 226)** | READY | Medium | 100% |
-| [src/observability/stats/observability_core.py](src/observability/stats/observability_core.py) | **Consolidated observability logic & telemetry aggregation (Phase 224)** | READY | Medium | 100% |
-| [src/core/base/](src/core/base/) | **Global Type Conformance & Future Annotations (Phase 221)** | READY | Low | 100% |
-| [src/logic/agents/cognitive/core/MemoryConsolidatorCore.py](src/logic/agents/cognitive/core/MemoryConsolidatorCore.py) | **Logic for distilling interactions into insights (Phase 219)** | READY | Medium | 100% |
-| [src/core/base/managers/ProcessorManagers.py](src/core/base/managers/ProcessorManagers.py) | **Binary serialization (CBOR/Pickle) & compression logic (Phase 218)** | READY | Medium | 100% |
-| [src/infrastructure/dev/scripts/FleetHarness.py](src/infrastructure/dev/scripts/FleetHarness.py) | **Unified command management for fleet operations (Phase 217)** | READY | Low | 100% |
-| [src/core/knowledge/btree_store.py](src/core/knowledge/btree_store.py) | **Concurrent B-Link Tree & Mmap caching (Phase 216)** | READY | High | 100% |
-| [src/core/knowledge/storage_base.py](src/core/knowledge/storage_base.py) | **Abstract storage interface for knowledge sharding (Phase 216)** | READY | Low | 100% |
-| [src/logic/cognitive/prompt_templates.py](src/logic/cognitive/prompt_templates.py) | **Vibe-Coding 2025 track logic & persona mapping (Phase 215)** | READY | Low | 100% |
-| [src/core/base/core/PruningCore.py](src/core/base/core/PruningCore.py) | **Decay & Synaptic weight logic (Phase 214)** | READY | High | 100% |
-| [src/logic/agents/development/core/BenchmarkCore.py](src/logic/agents/development/core/BenchmarkCore.py) | **Latency regression gate logic (Phase 213)** | READY | Low | 100% |
-| [src/observability/stats/core/TracingCore.py](src/observability/stats/core/TracingCore.py) | **OTel span logic & Thinking/Network latency (Phase 201)** | READY | Low | 100% |
-| [src/infrastructure/sandbox/core/SandboxCore.py](src/infrastructure/sandbox/core/SandboxCore.py) | **Container isolation & resource limits (Phase 202)** | READY | Low | 100% |
-| [src/logic/agents/compliance/core/ComplianceCore.py](src/logic/agents/compliance/core/ComplianceCore.py) | **Continuous compliance & regulatory scanning (Phase 203)** | READY | Low | 100% |
-| [src/logic/agents/development/core/ToolDraftingCore.py](src/logic/agents/development/core/ToolDraftingCore.py) | **Dynamic OpenAPI tool generation (Phase 204)** | READY | Medium | 100% |
-| [src/infrastructure/fleet/core/LoadBalancerCore.py](src/infrastructure/fleet/core/LoadBalancerCore.py) | **Cognitive load balancing & pressure scaling (Phase 205)** | READY | Low | 100% |
-| [src/logic/agents/swarm/core/LessonCore.py](src/logic/agents/swarm/core/LessonCore.py) | **Cross-fleet lesson bloom filters (Phase 206)** | READY | Medium | 100% |
-| [src/core/base/core/IdentityCore.py](src/core/base/core/IdentityCore.py) | **Decentralized Agent ID & signing (Phase 207)** | READY | Low | 100% |
-| [src/core/base/core/AuthCore.py](src/core/base/core/AuthCore.py) | **Zero-knowledge agent authentication (Phase 208)** | READY | Medium | 100% |
-| [src/logic/agents/cognitive/core/LocalRAGCore.py](src/logic/agents/cognitive/core/LocalRAGCore.py) | **Localized vector sharding (Phase 209)** | READY | High | 100% |
-| [src/observability/stats/core/StabilityCore.py](src/observability/stats/core/StabilityCore.py) | **Fleet stability & coherence heuristics (Phase 210)** | READY | Medium | 100% |
-| [src/logic/agents/security/core/RedQueenCore.py](src/logic/agents/security/core/RedQueenCore.py) | **Adversarial prompt evolution (Phase 211)** | READY | High | 100% |
-| [src/observability/stats/core/ProfilingCore.py](src/observability/stats/core/ProfilingCore.py) | **cProfile aggregation & bottleneck logic (Phase 212)** | READY | Low | 100% |
-| [src/core/base/core/AutonomyCore.py](src/core/base/core/AutonomyCore.py) | **Agent self-model and autonomy daemon (Phase 200)** | READY | Low | 100% |
-| [src/interface/core/InterfaceSyncCore.py](src/interface/core/InterfaceSyncCore.py) | **Unified interface theme and sync (Phase 199)** | READY | Low | 100% |
-| [src/logic/agents/system/core/ConfigHygieneCore.py](src/logic/agents/system/core/ConfigHygieneCore.py) | **JSON Schema validation and env mapping (Phase 174)** | READY | Low | 100% |
-| [src/logic/agents/documentation/core/TopologyCore.py](src/logic/agents/documentation/core/TopologyCore.py) | **Mermaid.js graph generation logic (Phase 169)** | READY | Low | 100% |
-| [src/logic/agents/security/core/ByzantineCore.py](src/logic/agents/security/core/ByzantineCore.py) | **Consensus voting and agreement logic (Phase 168)** | READY | Low | 100% |
-| [src/logic/agents/cognitive/core/VisionCore.py](src/logic/agents/cognitive/core/VisionCore.py) | **Visual processing and glitch detection (Phase 167)** | READY | Medium | 100% |
-| [src/infrastructure/orchestration/HolographicStateOrchestrator.py](src/infrastructure/orchestration/HolographicStateOrchestrator.py) | **State sharding and reconstruction via bit-packing (Phase 162)** | READY | High | 100% |
-| [src/infrastructure/orchestration/TaskDecomposerCore.py](src/infrastructure/orchestration/TaskDecomposerCore.py) | **Heuristic planning and dependency analysis** | READY | Medium | 100% |
-| [src/infrastructure/fleet/AgentEconomy.py](src/infrastructure/fleet/AgentEconomy.py) | **Market Pricing & Agent Accounting Engine** | READY | Low | 100% |
-| [src/core/base/acceleration.py](src/core/base/acceleration.py) | **Calculate Synaptic Weight (NeuralPruningEngine)** | READY | High | 100% |
-| [src/core/base/BaseAgent.py](src/core/base/BaseAgent.py) | Foundation for all agents (workspace root, path logic, diffs) | READY | Medium | 100% |
-| [src/infrastructure/fleet/EvolutionCore.py](src/infrastructure/fleet/EvolutionCore.py) | Genetic algorithms for fleet adaptation | READY | Medium | 100% |
-| [src/infrastructure/api/APICore.py](src/infrastructure/api/APICore.py) | OpenAPI spec generation and contract validation | READY | Low | 100% |
-| [src/infrastructure/orchestration/ToolCore.py](src/infrastructure/orchestration/ToolCore.py) | Argument filtering and metadata extraction logic | READY | Low | 100% |
-| [src/observability/stats/FormulaEngineCore.py](src/observability/stats/FormulaEngineCore.py) | AST-based mathematical expression evaluator | READY | High | 100% |
-| [src/logic/agents/cognitive/context/engines/GraphCore.py](src/logic/agents/cognitive/context/engines/GraphCore.py) | AST-based code relationship analysis | READY | Medium | 100% |
-| [src/logic/agents/cognitive/context/engines/KnowledgeCore.py](src/logic/agents/cognitive/context/engines/KnowledgeCore.py) | Indexing and search logic for knowledge graph | READY | High | 100% |
-| [src/logic/agents/cognitive/context/engines/GlobalContextCore.py](src/logic/agents/cognitive/context/engines/GlobalContextCore.py) | Stable sub-sharding and conflict resolution logic | READY | Medium | 100% |
-| [src/infrastructure/fleet/AgentRegistryCore.py](src/infrastructure/fleet/AgentRegistryCore.py) | Manifest parsing and circular dependency detection | READY | Medium | 100% |
-| [src/infrastructure/fleet/ScalingCore.py](src/infrastructure/fleet/ScalingCore.py) | Proactive multi-resource scaling and anti-flapping | READY | Medium | 100% |
-| [src/logic/agents/cognitive/context/engines/MemoryCore.py](src/logic/agents/cognitive/context/engines/MemoryCore.py) | Episode scoring and utility decay logic | READY | Low | 100% |
-| [src/logic/agents/cognitive/core/MetacognitiveCore.py](src/logic/agents/cognitive/core/MetacognitiveCore.py) | Reasoning certainty and consistency logic | READY | Low | 100% |
-| [src/logic/agents/cognitive/core/TheoryOfMindCore.py](src/logic/agents/cognitive/core/TheoryOfMindCore.py) | Agent modeling and collaborator ranking logic | READY | Medium | 100% |
-| [src/logic/agents/cognitive/context/engines/ContextCompressorCore.py](src/logic/agents/cognitive/context/engines/ContextCompressorCore.py) | AST-based signature extraction and summary logic | READY | Medium | 100% |
-| [src/logic/agents/development/SecurityCore.py](src/logic/agents/development/SecurityCore.py) | Regex scanning & Auditing | READY | Medium | 100% |
-| [src/infrastructure/orchestration/SignalCore.py](src/infrastructure/orchestration/SignalCore.py) | Event broadcasting and history windowing | READY | Low | 100% |
-| [src/observability/stats/TokenCostCore.py](src/observability/stats/TokenCostCore.py) | Multi-model pricing and usage estimation | READY | Low | 100% |
-| [src/logic/agents/intelligence/SearchCore.py](src/logic/agents/intelligence/SearchCore.py) | Pure logic for search result parsing and Markdown formatting | READY | Medium | 100% |
-| [src/logic/agents/intelligence/WebCore.py](src/logic/agents/intelligence/WebCore.py) | Pure logic for HTML cleaning and link extraction | READY | Low | 100% |
-| [src/logic/agents/development/DependencyCore.py](src/logic/agents/development/DependencyCore.py) | AST-based dependency and inheritance analysis | READY | Medium | 100% |
-| [src/logic/agents/development/ArchCore.py](src/logic/agents/development/ArchCore.py) | Architectural metrics and coupling calculations | READY | Low | 100% |
-| [src/infrastructure/orchestration/ConsensusCore.py](src/infrastructure/orchestration/ConsensusCore.py) | Weighted voting and agreement score calculation | READY | Low | 100% |
-| [src/infrastructure/orchestration/SelfHealingCore.py](src/infrastructure/orchestration/SelfHealingCore.py) | Anomaly detection and recovery state logic | READY | Medium | 100% |
-| [src/infrastructure/fleet/KnowledgeTransferCore.py](src/infrastructure/fleet/KnowledgeTransferCore.py) | Lesson dataset merging and deduplication logic | READY | Low | 100% |
-| [src/logic/agents/development/DocGenCore.py](src/logic/agents/development/DocGenCore.py) | AST-based documentation extraction and formatting | READY | Medium | 100% |
-| [src/logic/agents/intelligence/ResearchCore.py](src/logic/agents/intelligence/ResearchCore.py) | SGI-Bench DCAP cycle logic and tool drafting | READY | Medium | 100% |
-| [src/logic/agents/development/CodeQualityCore.py](src/logic/agents/development/CodeQualityCore.py) | Pure logic for cross-language quality checks | READY | Low | 100% |
-| [src/logic/agents/development/TechDebtCore.py](src/logic/agents/development/TechDebtCore.py) | AST-based technical debt analysis and hotspotting | READY | Medium | 100% |
+3. ✅ **ConvergenceCore.py** - Convergence detection logic
+   - Size: Small
+   - Dependencies: Minimal
+   - Rust benefit: Fast convergence calculations
 
+4. ✅ **IdentityCore.py** - Agent identity and hashing
+   - Size: Small
+   - Dependencies: Minimal
+   - Rust benefit: Fast hash operations
 
-## 🔥 Performance-Critical Targets (High Priority)
+5. ✅ **PruningCore.py** - Agent pruning logic
+   - Size: Small
+   - Dependencies: Minimal
+   - Rust benefit: Performance for large fleets
 
-1.  **[src/infrastructure/fleet/AsyncFleetManager.py](src/infrastructure/fleet/AsyncFleetManager.py)**: Async migration and workflow orchestration. Critical for zero-downtime swarm intelligence.
-2.  **[src/core/base/core/PruningCore.py](src/core/base/core/PruningCore.py)**: Bio-digital synaptic decay logic. Essential for swarm stability and performance under high cognitive pressure.
-3.  **[src/logic/agents/security/core/RedQueenCore.py](src/logic/agents/security/core/RedQueenCore.py)**: Adversarial mutation logic. Core security loop for evolving against prompt injection.
-4.  **[src/core/knowledge/btree_store.py](src/core/knowledge/btree_store.py)**: Sharded B-Tree logic. MD5 path calculation and page sharding math.
-5.  **[src/core/knowledge/graph_store.py](src/core/knowledge/graph_store.py)**: Sharded ontological graph. Node-level MD5 sharding and triple store lookups.
-6.  **[src/infrastructure/fleet/ShardingOrchestrator.py](src/infrastructure/fleet/ShardingOrchestrator.py)**: Dynamic clustering algorithms for trillion-parameter data isolation.
-7.  **[src/logic/agents/intelligence/LatentReasoningAgent.py](src/logic/agents/intelligence/LatentReasoningAgent.py)**: Chain-of-thought verification logic and linguistics auditing.
-8.  **[src/logic/agents/system/ModelOptimizerAgent.py](src/logic/agents/system/ModelOptimizerAgent.py)**: Quantization (FP8/Hopper) logic and cost/latency trade-off simulations.
+6. ✅ **ResilienceCore.py** - Resilience scoring
+   - Size: Small
+   - Dependencies: Minimal
+   - Rust benefit: Fast resilience calculations
 
-## 🧪 Audit Criteria
-- [x] **Pure Functions**: No direct calls to os (except path math), requests, or db.
-- [x] **Explicit State**: Data must be passed in as arguments or held in dataclasses.
-- [x] **Strong Typing**: 100% return type hints and parameter annotations.
-- [x] **PyO3 Compatibility**: Struct-based layout ready for Rust transition.
+7. ✅ **AuthCore.py** - Authentication logic
+   - Size: Small
+   - Dependencies: Minimal (may need crypto library)
+   - Rust benefit: Security + performance
 
-## 🚀 Recent Audits (Phase 130)
-- **BTreeKnowledgeStore**: Verified MD5 sharding purity for high-scale isolation.
-- **LatentReasoningAgent**: Audited the reasoning audit hook for side-effect isolation.
-- **ModelOptimizerAgent**: Validated Hopper simulation logic for 100% typing.
+### Performance & Benchmarking (src/logic/agents/development/core/)
+8. ✅📊 **BenchmarkCore.py** - Benchmark calculations
+   - Size: ~50 lines
+   - Dependencies: dataclass only
+   - Rust benefit: HIGH - performance benchmarking should be fast
+   - Priority: HIGH
 
-## 🚀 Recent Audits (Phase 114)
-- **BaseAgent**: Verified side-effect free path calculation.
-- **ToolCore**: Audited parameter filtering logic for registry isolation.
-- **EvolutionCore**: Verified pure mutation algorithms."
+### Statistics & Analysis (src/observability/stats/)
+9. ✅📊 **FormulaEngineCore.py** - AST-based formula evaluation
+   - Size: ~150 lines
+   - Dependencies: ast, operator, math
+   - Rust benefit: VERY HIGH - computational core
+   - Priority: CRITICAL
+
+10. ✅📊 **TokenCostCore.py** - Token cost calculations
+    - Size: ~50 lines
+    - Dependencies: Basic math
+    - Rust benefit: HIGH - called frequently
+    - Priority: HIGH
+
+11. ✅📊 **ModelFallbackCore.py** - Model fallback logic
+    - Size: ~100 lines
+    - Dependencies: Basic types
+    - Rust benefit: Performance for model selection
+    - Priority: MEDIUM
+
+12. ✅📊 **ProfilingCore.py** - Profile analysis
+    - Size: ~80 lines
+    - Dependencies: Stats structures
+    - Rust benefit: HIGH - profiling should be fast
+    - Priority: HIGH
+
+13. ✅📊 **StabilityCore.py** - Stability scoring
+    - Size: ~100 lines
+    - Dependencies: Basic math
+    - Rust benefit: Performance for stability checks
+    - Priority: HIGH
+
+14. ✅📊 **TracingCore.py** - Distributed tracing logic
+    - Size: ~60 lines
+    - Dependencies: Basic types, time
+    - Rust benefit: LOW latency tracing
+    - Priority: HIGH
+
+### Agent Core Logic (src/logic/agents/)
+15. ✅ **AuctionCore.py** - Auction bid calculations
+    - Size: Small
+    - Dependencies: Minimal
+    - Rust benefit: Fast auction resolution
+
+16. ✅ **ByzantineCore.py** - Byzantine consensus
+    - Size: Small
+    - Dependencies: Minimal
+    - Rust benefit: Performance + security
+
+17. ✅ **PrivacyCore.py** - Privacy calculations
+    - Size: Small
+    - Dependencies: Minimal
+    - Rust benefit: Security + performance
+
+18. ✅ **DeduplicationCore.py** - Deduplication logic
+    - Size: Small (~50 lines)
+    - Dependencies: Basic types
+    - Rust benefit: Performance for large datasets
+
+---
+
+## TIER 2: NEAR-READY (Needs Minor Cleanup) (25 files)
+
+### Context & Memory Engines (src/logic/agents/cognitive/context/engines/)
+19. 🔄 **MemoryCore.py** - Memory utility calculations
+    - Issue: May have some I/O for persistence
+    - Fix: Extract pure logic to MemoryLogicCore
+
+20. 🔄 **KnowledgeCore.py** - Knowledge graph operations
+    - Issue: Graph persistence
+    - Fix: Separate computation from storage
+
+21. 🔄 **GraphCore.py** - Graph algorithms
+    - Issue: File I/O for graph storage
+    - Fix: Extract pure graph algorithms
+
+22. 🔄 **ContextCompressorCore.py** - Context compression
+    - Issue: May have encoding dependencies
+    - Fix: Ensure pure compression logic
+
+### Development Tools (src/logic/agents/development/core/)
+23. 🔄 **BashCore.py** - Bash script linting
+    - Issue: subprocess calls
+    - Fix: Extract validation logic only
+    - Note: Already has context recording added
+
+24. 🔄 **AndroidCore.py** - ADB command logic
+    - Issue: subprocess calls
+    - Fix: Extract command building logic
+    - Note: Already has context recording added
+
+25. 🔄 **ToolDraftingCore.py** - Tool synthesis logic
+    - Issue: Unknown dependencies
+    - Fix: Review and extract pure logic
+
+### System Cores (src/logic/agents/system/core/)
+26. 🔄 **EntropyCore.py** - Entropy calculations
+    - Issue: Unknown dependencies
+    - Rust benefit: Fast entropy computation
+
+27. 🔄 **ConfigHygieneCore.py** - Config validation
+    - Issue: File I/O likely
+    - Fix: Extract validation logic
+
+28. 🔄 **CurationCore.py** - Content curation scoring
+    - Issue: Unknown dependencies
+    - Fix: Review and extract
+
+29. 🔄 **ConvergenceCore.py** (system) - Convergence detection
+    - Issue: May overlap with base ConvergenceCore
+    - Fix: Consolidate or differentiate
+
+30. 🔄 **ModelRegistryCore.py** - Model registration logic
+    - Issue: Likely has I/O
+    - Fix: Extract registry operations logic
+
+31. 🔄 **MorphologyCore.py** - Agent morphology
+    - Issue: Unknown
+    - Fix: Review
+
+32. 🔄 **MultiModalCore.py** - Multi-modal processing
+    - Issue: Unknown
+    - Fix: Review
+
+### Intelligence & Research (src/logic/agents/intelligence/)
+33. 🔄 **LocalizationCore.py** - Localization logic
+    - Issue: Unknown
+    - Fix: Review
+
+34. 🔄 **SearchMeshCore.py** - Search mesh algorithms
+    - Issue: Unknown
+    - Fix: Review
+
+35. 🔄 **SynthesisCore.py** - Synthesis logic
+    - Issue: Unknown (exec usage noted in scan)
+    - Fix: Remove exec, extract pure logic
+
+36. 🔄 **SearchCore.py** - Search algorithms
+    - Issue: Likely has API calls
+    - Fix: Extract ranking/scoring logic
+
+37. 🔄 **ResearchCore.py** - Research logic
+    - Issue: Likely has API calls
+    - Fix: Extract analysis logic
+
+38. 🔄 **WebCore.py** - Web scraping logic
+    - Issue: Network I/O
+    - Fix: Extract parsing/analysis only
+
+### Observability (src/observability/)
+39. 🔄 **LoggingCore.py** - Logging utilities
+    - Issue: File I/O
+    - Fix: Extract formatting/filtering logic
+
+### Infrastructure (src/infrastructure/)
+40. 🔄 **AttributionCore.py** - Attribution calculations
+    - Issue: Unknown
+    - Fix: Review
+
+41. 🔄 **EconomyCore.py** - Economy calculations
+    - Issue: Unknown
+    - Fix: Review
+
+42. 🔄 **LoadBalancerCore.py** - Load balancing logic
+    - Issue: Unknown
+    - Fix: Review
+
+43. 🔄 **GPUMonitorCore.py** - GPU metrics
+    - Issue: System calls likely
+    - Fix: Extract calculation logic
+
+---
+
+## TIER 3: NEEDS WORK (Refactoring Required) (30+ files)
+
+### Complex Agents with I/O
+44. ⚠️ **CoderCore.py** - Code generation
+    - Issue: Heavy LLM interaction
+    - Fix: Extract validation/analysis logic only
+
+45. ⚠️ **CodeQualityCore.py** - Code quality checks
+    - Issue: File I/O, subprocess
+    - Fix: Extract scoring algorithms
+
+46. ⚠️ **DependencyCore.py** (both versions) - Dependency analysis
+    - Issue: File I/O for requirements
+    - Fix: Extract parsing/resolution logic
+    - Note: Already has context recording added
+
+47. ⚠️ **SecurityCore.py** - Security scanning
+    - Issue: Pattern detection on files
+    - Fix: Extract pattern matching logic
+
+48. ⚠️ **TechDebtCore.py** - Tech debt analysis
+    - Issue: File scanning
+    - Fix: Extract scoring logic
+
+49. ⚠️ **DocGenCore.py** - Documentation generation
+    - Issue: File I/O
+    - Fix: Extract formatting logic
+
+50. ⚠️ **ArchCore.py** - Architecture analysis
+    - Issue: File I/O
+    - Fix: Extract graph analysis
+
+### Cognitive & Learning
+51. ⚠️ **VisionCore.py** - Vision processing
+    - Issue: TODO comment - needs implementation
+    - Fix: Implement + extract pure vision logic
+
+52. ⚠️ **TheoryOfMindCore.py** - Theory of mind
+    - Issue: Unknown complexity
+    - Fix: Review
+
+53. ⚠️ **QuantumCore.py** - Quantum algorithms
+    - Issue: Unknown complexity
+    - Fix: Review
+
+54. ⚠️ **MetacognitiveCore.py** - Metacognition
+    - Issue: Unknown
+    - Fix: Review
+
+55. ⚠️ **MemoryConsolidatorCore.py** - Memory consolidation
+    - Issue: Likely has I/O
+    - Fix: Extract consolidation algorithms
+
+56. ⚠️ **LocalRAGCore.py** - Local RAG
+    - Issue: Vector DB operations
+    - Fix: Extract embedding/search logic
+
+57. ⚠️ **InterpretableCore.py** - Interpretability
+    - Issue: Unknown
+    - Fix: Review
+
+58. ⚠️ **EvolutionCore.py** - Evolution algorithms
+    - Issue: Unknown (perform_specialized_task missing type hints)
+    - Fix: Add types, extract pure evolution logic
+
+### Fleet & Orchestration
+59. ⚠️ **FleetCore.py** - Fleet management
+    - Issue: Heavy I/O and orchestration
+    - Fix: Extract coordination algorithms
+
+60. ⚠️ **FleetExecutionCore.py** - Fleet execution
+    - Issue: Execution + I/O
+    - Fix: Extract scheduling logic
+
+61. ⚠️ **OrchestratorRegistryCore.py** - Orchestrator registry
+    - Issue: Registry I/O
+    - Fix: Extract lookup logic
+
+62. ⚠️ **ScalingCore.py** - Auto-scaling
+    - Issue: System metrics
+    - Fix: Extract scaling algorithms
+
+63. ⚠️ **KnowledgeTransferCore.py** - Knowledge transfer
+    - Issue: Network + storage
+    - Fix: Extract transfer protocols
+
+64. ⚠️ **IntelligenceCore.py** - Collective intelligence
+    - Issue: Complex coordination
+    - Fix: Extract aggregation logic
+
+65. ⚠️ **ConsensusCore.py** - Consensus algorithms
+    - Issue: Network coordination
+    - Fix: Extract consensus math
+
+66. ⚠️ **BlackboardCore.py** - Blackboard pattern
+    - Issue: Shared state management
+    - Fix: Extract pattern matching
+
+67. ⚠️ **TaskDecomposerCore.py** - Task decomposition
+    - Issue: Complex AI logic
+    - Fix: Extract decomposition algorithms
+
+68. ⚠️ **SelfHealingCore.py** - Self-healing
+    - Issue: System interaction
+    - Fix: Extract healing strategies
+
+69. ⚠️ **PluginSynthesisCore.py** - Plugin synthesis
+    - Issue: Code generation
+    - Fix: Extract template logic
+
+70. ⚠️ **ToolCore.py** - Tool management
+    - Issue: Tool execution
+    - Fix: Extract tool discovery
+
+71. ⚠️ **SignalCore.py** - Signal handling
+    - Issue: Event coordination
+    - Fix: Extract signal logic
+
+### Other Infrastructure
+72. ⚠️ **SandboxCore.py** - Sandbox execution
+    - Issue: Process management
+    - Fix: Extract validation logic
+
+73. ⚠️ **SimulationCore.py** - Simulation
+    - Issue: Complex state management
+    - Fix: Extract simulation math
+
+74. ⚠️ **ImportHealerCore.py** - Import healing
+    - Issue: AST manipulation + I/O
+    - Fix: Extract import resolution logic
+
+75. ⚠️ **LogRotationCore.py** - Log rotation
+    - Issue: File I/O
+    - Fix: Extract rotation algorithms
+
+76. ⚠️ **RebirthCore.py** - Agent rebirth
+    - Issue: Unknown
+    - Fix: Review
+
+77. ⚠️ **PoolingCore.py** - Connection pooling
+    - Issue: Network management
+    - Fix: Extract pooling algorithms
+
+78. ⚠️ **GatewayCore.py** - API gateway
+    - Issue: HTTP handling
+    - Fix: Extract routing logic
+
+79. ⚠️ **APICore.py** - API logic
+    - Issue: HTTP/REST
+    - Fix: Extract validation
+
+80. ⚠️ **InterfaceSyncCore.py** - Interface sync
+    - Issue: Unknown
+    - Fix: Review
+
+---
+
+## CONVERSION PRIORITY MATRIX
+
+### CRITICAL (Start Here)
+1. **FormulaEngineCore.py** - Most computational, pure logic ⭐⭐⭐
+2. **ErrorMappingCore.py** - Used everywhere, simple ⭐⭐⭐
+3. **BenchmarkCore.py** - Performance testing should be fast ⭐⭐⭐
+4. **TokenCostCore.py** - Called frequently ⭐⭐
+5. **StabilityCore.py** - Core fleet health ⭐⭐
+6. **TracingCore.py** - Low-latency requirement ⭐⭐
+
+### HIGH VALUE (Next Wave)
+7. ProfilingCore.py
+8. ModelFallbackCore.py
+9. AutonomyCore.py
+10. DeduplicationCore.py
+11. ByzantineCore.py
+12. AuctionCore.py
+
+### MEDIUM VALUE (After Core)
+- All Tier 1 remaining files
+- Tier 2 files after cleanup
+
+### FUTURE (Complex Refactoring Required)
+- Tier 3 files requiring significant decomposition
+
+---
+
+## RUST CONVERSION CHECKLIST
+
+For each file marked ✅ READY:
+- [ ] Verify no hidden I/O operations
+- [ ] Check all dependencies are Rust-compatible
+- [ ] Add comprehensive type hints in Python version
+- [ ] Write property-based tests
+- [ ] Create Rust equivalent with PyO3 bindings
+- [ ] Benchmark Python vs Rust
+- [ ] Add to rust_core module
+- [ ] Update Python imports to use Rust version
+- [ ] Validate no performance regression
+- [ ] Document conversion in ARCHITECTURE.md
+
+---
+
+## ESTIMATED PERFORMANCE GAINS
+
+Based on typical Rust vs Python benchmarks:
+
+| File | Type | Expected Speedup | Impact |
+|------|------|------------------|--------|
+| FormulaEngineCore.py | CPU-intensive math | 10-50x | CRITICAL |
+| TokenCostCore.py | Repeated calculations | 5-20x | HIGH |
+| BenchmarkCore.py | Statistical analysis | 10-30x | HIGH |
+| StabilityCore.py | Scoring algorithms | 5-15x | HIGH |
+| TracingCore.py | High-frequency calls | 3-10x | MEDIUM |
+| ErrorMappingCore.py | Simple lookups | 2-5x | LOW |
+| DeduplicationCore.py | Hash operations | 5-15x | MEDIUM |
+
+---
+
+## TOTAL SUMMARY
+
+- **Tier 1 (Ready)**: 18 files
+- **Tier 2 (Near-ready)**: 25 files
+- **Tier 3 (Needs work)**: 30+ files
+- **Total Core files identified**: 94
+
+**Recommended First Phase**: Convert Tier 1 files (18 files, ~1500 lines total)
+**Expected overall performance gain**: 20-40% for computation-heavy workloads
+**Estimated development time**: 2-3 weeks for first phase

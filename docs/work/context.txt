@@ -1,0 +1,201 @@
+# PyAgent Fleet Self-Improvement Context
+# Last Updated: 2026-01-13
+# Purpose: Strategic directives for autonomous fleet improvement cycles
+
+## MISSION
+Transform PyAgent from a high-performing autonomous multi-agent system into a 
+production-grade, performant, secure platform through:
+1. Strategic Rust integration for computational cores (10-50x performance gains)
+2. Systematic code quality hardening (security, reliability, maintainability)
+3. Autonomous self-improvement capabilities (scaling across 989 files)
+
+## CODEBASE SNAPSHOT
+- **Size**: 989 Python files, ~500K LOC
+- **Architecture**: Core/Shell separation (pure logic vs I/O)
+- **Agents**: 100+ specialized agents across diverse domains
+- **Quality**: 99.6% Ruff compliance (4 refactor issues remaining)
+- **Type Coverage**: ~70% (all public APIs required)
+- **Test Coverage**: ~85% unit test coverage
+
+## PHASE 1: RUST CONVERSION STRATEGY
+**Goal**: Convert 18 Tier-1 Core files for immediate performance gains
+
+### Critical Path (Start Here)
+1. **FormulaEngineCore.py** - AST expression evaluation
+   - Current: Pure Python with ast/operator modules
+   - Target: Pure Rust with PyO3 bindings
+   - Expected: 10-50x speedup (CPU-intensive formula parsing)
+   - Complexity: MEDIUM
+   
+2. **ErrorMappingCore.py** - Error code standardization (PA-xxxx)
+   - Current: Dictionary-based error mappings
+   - Target: Pure Rust enum mapping
+   - Expected: 2-5x speedup (ultra-high call frequency)
+   - Complexity: LOW
+   
+3. **BenchmarkCore.py** - Performance metrics aggregation
+   - Current: Dataclass-based calculations
+   - Target: Pure Rust statistical engine
+   - Expected: 10-30x speedup (benchmark-heavy operations)
+   - Complexity: MEDIUM
+
+### High-Value Secondary Targets
+- TokenCostCore (token counting) → 5-20x speedup
+- StabilityCore (fleet health scoring) → 5-15x speedup
+- TracingCore (distributed tracing) → 3-10x speedup
+- ProfilingCore (profile analysis) → 10-30x speedup
+
+### Conversion Process per File
+1. Verify Python version has return type hints
+2. Write property-based tests in Python (hypothesis)
+3. Create equivalent Rust implementation
+4. Benchmark Python vs Rust
+5. Integrate via PyO3 bindings
+6. Validate test suite passes with Rust version
+7. Deploy to rust_core module
+8. Update Python imports
+
+## PHASE 2: SECURITY HARDENING
+**Goal**: Eliminate 4 critical vulnerabilities and harden file operations
+
+### Critical Vulnerabilities
+1. **exec() in run_fleet_self_improvement.py** (line 122)
+   - Risk: Arbitrary code execution
+   - Fix: Use ast.literal_eval() or ast.safe_eval for safe operations
+   - Timeline: URGENT
+   
+2. **shell=True in subprocess calls** (2 instances)
+   - Risk: Shell injection attacks
+   - Fix: Migrate to list arguments, add input validation
+   - Timeline: URGENT
+   
+3. **Wildcard imports** (final_fix.py)
+   - Risk: Hidden dependencies, namespace pollution
+   - Fix: Replace with explicit imports
+   - Timeline: HIGH
+   
+4. **Hardcoded paths** (ConfigurationManager.py)
+   - Risk: Environmental fragility
+   - Fix: Use environment variables with Path objects
+   - Timeline: HIGH
+
+### File I/O Hardening (30+ files)
+- Pattern: Atomic writes (temp file + atomic rename)
+- Pattern: Read-verify-write transactions
+- Pattern: Permission checks before operations
+- Pattern: Comprehensive error handling with recovery
+
+## PHASE 3: CODE QUALITY SYSTEMATIC IMPROVEMENTS
+
+### Logging Modernization (50+ files, 23 affected)
+- Replace all print() statements with StructuredLogger
+- Remove debug prints; preserve informational output
+- Add log levels: DEBUG, INFO, WARNING, ERROR
+- Standardize log message format
+
+### Exception Handling Specificity (30+ files)
+- Pattern: Replace `except Exception:` with specific types
+- Pattern: Add exception context via `from e`
+- Pattern: Use custom exception hierarchy (ErrorMappingCore codes)
+- Tool: Automated detection and safe refactoring
+
+### Docstring Completion (24 class docstrings)
+- Format: Google-style docstrings
+- Required: All public classes and public methods
+- Content: Purpose, parameters, returns, raises
+- Priority: Core classes first, then Agent classes
+
+## FLEET SCRIPT CAPABILITIES
+**Location**: `src/infrastructure/dev/scripts/run_fleet_self_improvement.py`
+
+### Dual Directive System
+```bash
+# Single directive
+python run_fleet_self_improvement.py -p docs/work/prompt.txt
+
+# Dual directives (merged)
+python run_fleet_self_improvement.py -p docs/work/prompt.txt -t docs/work/context.txt
+```
+
+### Auto-Fix Capabilities
+- Import organization (absolute/relative conversion)
+- Syntax fixes (E401, E402, E701)
+- Module docstring addition
+- Simple refactoring patterns
+
+### Manual Review Categories
+- Architectural changes (Core/Shell splits)
+- Security fixes (exec, shell=True)
+- Complex logic changes
+- Cross-file refactoring
+
+## ARCHITECTURAL CONSTRAINTS
+1. **Core/Shell Pattern is Mandatory**
+   - Core: Pure logic, deterministic, Rust-convertible
+   - Shell: I/O, orchestration, side effects
+   - Files >20KB must follow this pattern
+
+2. **Type Safety First**
+   - All public functions: Return type hints required
+   - All parameters: Type hints required
+   - Union types: Use `|` syntax (Python 3.10+)
+   - None checking: Explicit handling
+
+3. **Atomic Operations**
+   - File writes: Create temp → validate → atomic rename
+   - Multi-step operations: Rollback on error
+   - Configuration: Copy-on-write semantics
+
+4. **Context Recording**
+   - Use LocalContextRecorder for AI-driven decisions
+   - Record before side effects (file writes, API calls)
+   - Enable audit trails for debugging
+
+## SUCCESS METRICS
+- **Performance**: 20-40% overall speed gain from Rust conversions
+- **Security**: Zero critical vulnerabilities, 100% whitelist/validation
+- **Quality**: 100% Ruff compliance, 80%+ test coverage, 90%+ docstring coverage
+- **Maintainability**: All files <500 lines, clear Core/Shell separation
+- **Autonomy**: Fleet can fix 80%+ of identified issues without human review
+
+## IMPROVEMENT INVENTORY (140+ Items)
+See `docs/work/prompt.txt` for complete breakdown:
+- Priority 1: Bug fixes (6 items) - DONE
+- Priority 2: Code quality (40+ items) - IN PROGRESS
+- Priority 3: Performance (15+ items) - QUEUED
+- Priority 4: Architecture (20+ items) - QUEUED
+- Priority 5: Security (38 items) - URGENT
+- Priority 6: Consistency (10+ items) - QUEUED
+- Priority 7: Optimization (10+ items) - QUEUED
+
+## RUST CONVERSION READINESS
+See `docs/work/RUST_Ready.md` for detailed catalog:
+- **Tier 1 (Ready)**: 18 files, ~1500 LOC, zero refactoring needed
+- **Tier 2 (Near-Ready)**: 25 files, ~2000 LOC, minor cleanup required
+- **Tier 3 (Needs Work)**: 30+ files, requires I/O extraction first
+
+## TESTING STRATEGY
+- **Unit Tests**: Property-based (hypothesis) before Rust conversion
+- **Integration Tests**: Test Rust module alongside Python equivalents
+- **Performance Tests**: Benchmark Python vs Rust on representative data
+- **Regression Tests**: Ensure Rust version produces identical results
+
+## COMMUNICATION PATTERNS
+1. **For the Fleet Script**: Use this context file with `-t` parameter
+2. **For Humans**: Reference docs/work/prompt.txt for detailed item status
+3. **For Archives**: Update this file after each major milestone
+4. **For Continuity**: Maintain chronological improvement history
+
+
+
+
+
+scan the entire workspace 
+for all the improvements you want to make 
+and add them to docs\work\prompt.txt
+
+I would like to convert especially core files to rust, 
+register those files ready for conversion into docs\work\RUST_Ready.md
+
+remove fixed issues from docs\work\prompt.txt
+

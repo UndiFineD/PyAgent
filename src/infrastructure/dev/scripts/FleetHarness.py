@@ -20,23 +20,35 @@ import subprocess
 import sys
 from pathlib import Path
 
+from src.core.base.interfaces import ContextRecorderInterface
+from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+
 SCRIPTS_DIR = Path(__file__).parent
 MGMT_DIR = SCRIPTS_DIR / "management"
 
-def run_script(script_path: Path, args: list[str] = None):
-    """Executes a internal management script."""
+def run_script(script_path: Path, args: list[str] | None = None, recorder: ContextRecorderInterface | None = None) -> None:
+    """Executes an internal management script and records the invocation."""
     if not script_path.exists():
         print(f"Error: Script {script_path} not found.")
         return
     
     cmd = [sys.executable, str(script_path)] + (args or [])
     print(f"Executing: {' '.join(cmd)}")
+
+    if recorder:
+        recorder.record_interaction(
+            provider="fleet",
+            model="harness",
+            prompt=" ".join(cmd),
+            result="launched",
+            meta={"script": str(script_path), "args": args or []}
+        )
     try:
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as e:
         print(f"Error executing script: {e}")
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser(description="PyAgent Fleet Harness")
     subparsers = parser.add_subparsers(dest="command", help="Management commands")
 
@@ -52,13 +64,18 @@ def main():
     improve_parser.add_argument("-p", "--prompt", type=str, default="docs/notes/prompt.txt")
 
     args, unknown = parser.parse_known_args()
+    recorder: ContextRecorderInterface | None = LocalContextRecorder(Path.cwd())
 
     if args.command == "heal":
-        run_script(SCRIPTS_DIR / "run_autonomous_fleet_healing.py", unknown)
+        run_script(SCRIPTS_DIR / "run_autonomous_fleet_healing.py", unknown, recorder)
     elif args.command == "restore":
-        run_script(SCRIPTS_DIR / "fleet_restoration.py", unknown)
+        run_script(SCRIPTS_DIR / "fleet_restoration.py", unknown, recorder)
     elif args.command == "improve":
-        run_script(SCRIPTS_DIR / "run_fleet_self_improvement.py", ["-c", str(args.cycles), "-p", args.prompt] + unknown)
+        run_script(
+            SCRIPTS_DIR / "run_fleet_self_improvement.py",
+            ["-c", str(args.cycles), "-p", args.prompt] + unknown,
+            recorder,
+        )
     else:
         parser.print_help()
 
