@@ -139,6 +139,52 @@ fn score_efficiency(latency_ms: f64, token_count: i32) -> PyResult<f64> {
     Ok(latency_ms / token_count as f64)
 }
 
+/// Calculate priority score combining priority level and urgency.
+/// BaseAgentCore equivalent (pure calculation).
+#[pyfunction]
+fn calculate_priority_score(priority_base: f64, urgency: f64) -> PyResult<f64> {
+    // Blend priority with urgency (70% priority, 30% urgency)
+    Ok((priority_base * 0.7) + (urgency * 0.3))
+}
+
+/// Estimate token count from text (character-based approximation).
+#[pyfunction]
+fn calculate_token_estimate(text: &str, chars_per_token: f64) -> PyResult<i32> {
+    let token_count = (text.len() as f64 / chars_per_token).ceil() as i32;
+    Ok(token_count.max(1))
+}
+
+/// Deduplicate string entries while preserving order.
+#[pyfunction]
+fn deduplicate_entries(entries: Vec<String>) -> PyResult<Vec<String>> {
+    let mut seen = std::collections::HashSet::new();
+    let mut result = Vec::new();
+    
+    for entry in entries {
+        if seen.insert(entry.clone()) {
+            result.push(entry);
+        }
+    }
+    
+    Ok(result)
+}
+
+/// Normalize response text (strip, standardize line endings, collapse spaces).
+#[pyfunction]
+fn normalize_response(response: &str) -> PyResult<String> {
+    // Strip whitespace
+    let mut normalized = response.trim().to_string();
+    
+    // Normalize line endings
+    normalized = normalized.replace("\r\n", "\n");
+    
+    // Collapse multiple spaces
+    let words: Vec<&str> = normalized.split_whitespace().collect();
+    normalized = words.join(" ");
+    
+    Ok(normalized)
+}
+
 /// A Python module implemented in Rust.
 #[pymodule]
 fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
@@ -150,5 +196,9 @@ fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(calculate_baseline, m)?)?;
     m.add_function(wrap_pyfunction!(check_regression, m)?)?;
     m.add_function(wrap_pyfunction!(score_efficiency, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_priority_score, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_token_estimate, m)?)?;
+    m.add_function(wrap_pyfunction!(deduplicate_entries, m)?)?;
+    m.add_function(wrap_pyfunction!(normalize_response, m)?)?;
     Ok(())
 }
