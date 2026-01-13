@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,23 +18,18 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Centralized LLM client for various backends."""
 
-
-
-from functools import lru_cache
-
-import json
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import time
 import os
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 from .LocalContextRecorder import LocalContextRecorder
 from src.core.base.ConnectivityManager import ConnectivityManager
 from src.infrastructure.backend.core.PoolingCore import PoolingCore
-
 from .llm_backends.GitHubModelsBackend import GitHubModelsBackend
 from .llm_backends.OllamaBackend import OllamaBackend
 from .llm_backends.VllmBackend import VllmBackend
@@ -276,5 +265,4 @@ class LLMClient:
 
         return result
 
-import os
-
+__version__ = VERSION

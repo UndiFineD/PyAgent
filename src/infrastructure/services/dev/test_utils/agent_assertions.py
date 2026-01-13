@@ -11,21 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .TestAssertion import TestAssertion
+from typing import List
 import json
 import re
 
-from src.core.base.lifecycle.version import VERSION
-
-from .test_assertion import TestAssertion
-
 __version__ = VERSION
-
 
 class AgentAssertions:
     """Custom assertion helpers for agent testing.
@@ -38,7 +40,7 @@ class AgentAssertions:
 
     def __init__(self) -> None:
         """Initialize assertion helpers."""
-        self._assertions: list[TestAssertion] = []
+        self._assertions: List[TestAssertion] = []
 
     def assert_valid_python(self, code: str) -> bool:
         """Assert code is valid Python.
@@ -110,12 +112,12 @@ class AgentAssertions:
         Returns:
             bool: True if structure matches.
         """
-        issues: list[str] = []
+        issues: List[str] = []
         if headers and not re.search(r"^#+\s", content, re.MULTILINE):
             issues.append("missing headers")
         if code_blocks and "```" not in content:
             issues.append("missing code blocks")
-        passed = not issues
+        passed = len(issues) == 0
         assertion = TestAssertion(
             name="markdown_structure",
             expected="valid structure",
@@ -156,6 +158,6 @@ class AgentAssertions:
             self._assertions.append(assertion)
             raise AssertionError(f"Invalid JSON: {e}")
 
-    def get_assertions(self) -> list[TestAssertion]:
+    def get_assertions(self) -> List[TestAssertion]:
         """Get all recorded assertions."""
         return list(self._assertions)

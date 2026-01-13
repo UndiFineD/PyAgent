@@ -11,24 +11,26 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any, Dict, List, Optional
 import json
 import logging
 import threading
 import uuid
-from datetime import UTC, datetime
-from pathlib import Path
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 class AuditLogger:
     """Logs backend requests for audit and compliance.
@@ -41,7 +43,7 @@ class AuditLogger:
         audit.log_request("github-models", "prompt", "response", 150)
     """
 
-    def __init__(self, log_file: Path | None = None) -> None:
+    def __init__(self, log_file: Optional[Path] = None) -> None:
         """Initialize audit logger.
 
         Args:
@@ -57,8 +59,8 @@ class AuditLogger:
         response: str,
         latency_ms: int,
         success: bool = True,
-        request_id: str | None = None,
-        metadata: dict[str, Any] | None = None,
+        request_id: Optional[str] = None,
+        metadata: Optional[Dict[str, Any]] = None,
     ) -> None:
         """Log a request for audit.
 
@@ -72,8 +74,8 @@ class AuditLogger:
             metadata: Additional metadata.
         """
 
-        entry: dict[str, Any] = {
-            "timestamp": datetime.now(UTC).isoformat(),
+        entry: Dict[str, Any] = {
+            "timestamp": datetime.now(timezone.utc).isoformat(),
             "request_id": request_id or str(uuid.uuid4()),
             "backend": backend,
             "prompt_length": len(prompt),
@@ -88,11 +90,11 @@ class AuditLogger:
                 try:
                     with open(self.log_file, "a", encoding="utf-8") as f:
                         f.write(json.dumps(entry) + "\n")
-                except OSError as e:
+                except IOError as e:
                     logging.warning(f"Failed to write audit log: {e}")
             logging.debug(f"Audit: {entry['request_id']} - {backend} - {latency_ms}ms")
 
-    def get_recent_entries(self, count: int = 100) -> list[dict[str, Any]]:
+    def get_recent_entries(self, count: int = 100) -> List[Dict[str, Any]]:
         """Get recent audit log entries.
 
         Args:
@@ -104,16 +106,16 @@ class AuditLogger:
         if not self.log_file or not self.log_file.exists():
             return []
 
-        entries: list[dict[str, Any]] = []
+        entries: List[Dict[str, Any]] = []
         with self._lock:
             try:
-                with open(self.log_file, encoding="utf-8") as f:
+                with open(self.log_file, "r", encoding="utf-8") as f:
                     for line in f:
                         try:
                             entries.append(json.loads(line.strip()))
                         except json.JSONDecodeError:
                             continue
-            except OSError:
+            except IOError:
                 return []
 
         return entries[-count:]

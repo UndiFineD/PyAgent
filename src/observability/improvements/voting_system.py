@@ -11,31 +11,33 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.version import VERSION
+from typing import Any, Dict, List, Optional
 
 __version__ = VERSION
-
 
 class VotingSystem:
     """Manages voting on improvements."""
 
     def __init__(self) -> None:
-        self.votes: dict[str, dict[str, int]] = {}
+        self.votes: Dict[str, Dict[str, int]] = {}
 
     def cast_vote(
         self,
         improvement_id: str,
-        voter: str | None = None,
+        voter: Optional[str] = None,
         vote_value: int = 1,
-        voter_id: str | None = None,
+        voter_id: Optional[str] = None,
         **_: Any,
     ) -> None:
         voter_key = voter_id or voter or "anonymous"
@@ -45,7 +47,7 @@ class VotingSystem:
         votes = self.votes.get(improvement_id, {})
         return sum(1 for v in votes.values() if v > 0)
 
-    def get_prioritized_list(self, improvement_ids: list[str]) -> list[str]:
+    def get_prioritized_list(self, improvement_ids: List[str]) -> List[str]:
         return sorted(
             list(improvement_ids),
             key=lambda imp_id: self.get_vote_count(imp_id),

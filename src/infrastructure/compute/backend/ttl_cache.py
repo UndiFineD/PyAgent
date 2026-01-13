@@ -11,40 +11,34 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
-"""
-Cache with time-to-live expiration.
-(Facade for src.core.base.common.cache_core)
-"""
+"""Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .CachedResponse import CachedResponse
+from typing import Any, Dict, Optional
 import threading
 import time
-from dataclasses import dataclass
-from typing import Any
 
-from src.core.base.common.cache_core import CacheCore as StandardCacheCore
+__version__ = VERSION
 
+class TTLCache:
+    """Cache with time-to-live expiration.
 
-@dataclass
-class CachedResponse:
-    """Structure for a cached response with metadata."""
-
-    content: str
-    created_at: float
-    expires_at: float
-    hit_count: int = 0
-
-
-class TTLCache(StandardCacheCore):
-    """
     Caches responses with configurable TTL, automatically expiring stale entries.
 
     Example:
-        cache = TTLCache(default_ttl_seconds=300)
+        cache=TTLCache(default_ttl_seconds=300)
         cache.set("key", "value")
-        result = cache.get("key")  # Returns "value" if not expired
+
+        result=cache.get("key")  # Returns "value" if not expired
     """
 
     def __init__(
@@ -58,17 +52,16 @@ class TTLCache(StandardCacheCore):
             default_ttl_seconds: Default TTL for entries.
             max_entries: Maximum cache entries.
         """
-        super().__init__()
         self.default_ttl_seconds = default_ttl_seconds
         self.max_entries = max_entries
-        self._cache: dict[str, CachedResponse] = {}
+        self._cache: Dict[str, CachedResponse] = {}
         self._lock = threading.Lock()
 
     def set(
         self,
         key: str,
         value: str,
-        ttl_seconds: float | None = None,
+        ttl_seconds: Optional[float] = None,
     ) -> None:
         """Set cache entry.
 
@@ -91,7 +84,7 @@ class TTLCache(StandardCacheCore):
                 expires_at=now + ttl,
             )
 
-    def get(self, key: str) -> str | None:
+    def get(self, key: str) -> Optional[str]:
         """Get cache entry if not expired.
 
         Args:
@@ -150,7 +143,7 @@ class TTLCache(StandardCacheCore):
             self._cache.clear()
         return count
 
-    def get_stats(self) -> dict[str, Any]:
+    def get_stats(self) -> Dict[str, Any]:
         """Get cache statistics.
 
         Returns:

@@ -11,22 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .ParallelTestResult import ParallelTestResult
+from typing import Any, Callable, Dict, List
 import time
-from collections.abc import Callable
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .parallel_test_result import ParallelTestResult
 
 __version__ = VERSION
-
 
 class ParallelTestRunner:
     """Helper for parallel test execution.
@@ -47,8 +47,8 @@ class ParallelTestRunner:
             workers: Number of worker threads.
         """
         self.workers = workers
-        self._tests: dict[str, Callable[[], None]] = {}
-        self._results: list[ParallelTestResult] = []
+        self._tests: Dict[str, Callable[[], None]] = {}
+        self._results: List[ParallelTestResult] = []
         self.success_count = 0
         self.failure_count = 0
 
@@ -61,7 +61,7 @@ class ParallelTestRunner:
         """
         self._tests[name] = test_fn
 
-    def run(self, test_functions: list[Callable[[], Any]], fail_fast: bool = True) -> list[Any]:
+    def run(self, test_functions: List[Callable[[], Any]], fail_fast: bool = True) -> List[Any]:
         """Run tests in parallel.
 
         Args:
@@ -72,10 +72,9 @@ class ParallelTestRunner:
             List of results from test functions.
         """
         from concurrent.futures import ThreadPoolExecutor, as_completed
-
         self.success_count = 0
         self.failure_count = 0
-        results: list[Any] = []
+        results: List[Any] = []
         with ThreadPoolExecutor(max_workers=self.workers) as executor:
             futures = {executor.submit(test_fn): i for i, test_fn in enumerate(test_functions)}
             for future in as_completed(futures):
@@ -83,7 +82,7 @@ class ParallelTestRunner:
                     result = future.result()
                     results.append(result)
                     self.success_count += 1
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception:
                     self.failure_count += 1
                     if fail_fast:
                         executor.shutdown(wait=False)
@@ -107,7 +106,7 @@ class ParallelTestRunner:
                 duration_ms=(time.time() - start) * 1000,
                 worker_id=worker_id,
             )
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             return ParallelTestResult(
                 test_name=name,
                 passed=False,
@@ -116,18 +115,18 @@ class ParallelTestRunner:
                 worker_id=worker_id,
             )
 
-    def run_all(self) -> list[ParallelTestResult]:
+    def run_all(self) -> List[ParallelTestResult]:
         """Run all tests in parallel.
 
         Returns:
             List of test results.
         """
-        from concurrent.futures import Future, ThreadPoolExecutor, as_completed
+        from concurrent.futures import ThreadPoolExecutor, as_completed, Future
 
         self._results = []
 
         with ThreadPoolExecutor(max_workers=self.workers) as executor:
-            futures: dict[Future[ParallelTestResult], str] = {}
+            futures: Dict[Future[ParallelTestResult], str] = {}
             for i, (name, test_fn) in enumerate(self._tests.items()):
                 worker_id = i % self.workers
                 future = executor.submit(self._run_test, name, test_fn, worker_id)
@@ -139,7 +138,7 @@ class ParallelTestRunner:
 
         return self._results
 
-    def get_summary(self) -> dict[str, Any]:
+    def get_summary(self) -> Dict[str, Any]:
         """Get summary of parallel test execution."""
         total = len(self._results)
         passed = sum(1 for r in self._results if r.passed)

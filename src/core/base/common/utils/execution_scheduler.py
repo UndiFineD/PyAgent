@@ -11,20 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from src.core.base.utils.ScheduledExecution import ScheduledExecution
+from typing import Optional, Dict, Any
 import time
-from typing import Any
-
-from .scheduled_execution import ScheduledExecution
-from ...lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 class ExecutionScheduler:
     """Schedule agent executions.
@@ -44,13 +46,13 @@ class ExecutionScheduler:
 
     def __init__(self) -> None:
         """Initialize scheduler."""
-        self._schedules: dict[str, ScheduledExecution] = {}
+        self._schedules: Dict[str, ScheduledExecution] = {}
 
     def add_schedule(
         self,
         name: str,
         cron: str,
-        agent_config: dict[str, Any] | None = None,
+        agent_config: Optional[Dict[str, Any]] = None,
     ) -> None:
         """Add a schedule.
 
@@ -73,25 +75,27 @@ class ExecutionScheduler:
 
         if cron == "hourly":
             return now + 3600
-        if cron == "daily":
+        elif cron == "daily":
             return now + 86400
-        if cron == "weekly":
+        elif cron == "weekly":
             return now + 604800
-        if ":" in cron:
+        elif ":" in cron:
             # HH:MM format
             try:
                 hour, minute = map(int, cron.split(":"))
                 import datetime
-
                 today = datetime.date.today()
-                target = datetime.datetime.combine(today, datetime.time(hour, minute))
+                target = datetime.datetime.combine(
+                    today,
+                    datetime.time(hour, minute)
+                )
                 if target.timestamp() <= now:
                     target += datetime.timedelta(days=1)
                 return target.timestamp()
-            except (ValueError, TypeError, AttributeError):
+            except Exception:
                 return now + 86400
-
-        return now + 86400  # Default to daily
+        else:
+            return now + 86400  # Default to daily
 
     def is_due(self, name: str) -> bool:
         """Check if schedule is due.
@@ -125,7 +129,7 @@ class ExecutionScheduler:
             schedule.last_run = time.time()
             schedule.next_run = self._calculate_next_run(schedule.cron)
 
-    def get_config(self, name: str) -> dict[str, Any]:
+    def get_config(self, name: str) -> Dict[str, Any]:
         """Get agent configuration for schedule.
 
         Args:

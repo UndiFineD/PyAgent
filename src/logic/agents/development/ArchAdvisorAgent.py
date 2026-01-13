@@ -1,13 +1,33 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in architectural analysis and decoupled system design."""
 
-import logging
-from pathlib import Path
-from typing import Dict, List, Any, Optional, Set
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import create_main_function
-from src.classes.context.GraphContextEngine import GraphContextEngine
+from __future__ import annotations
+from src.core.base.version import VERSION
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import create_main_function
+from src.logic.agents.cognitive.context.engines.GraphContextEngine import GraphContextEngine
+from src.logic.agents.development.ArchCore import ArchCore
+
+__version__ = VERSION
 
 class ArchAdvisorAgent(BaseAgent):
     """Analyzes codebase coupling and suggests architectural refactors."""
@@ -16,6 +36,7 @@ class ArchAdvisorAgent(BaseAgent):
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
         self.graph_engine = GraphContextEngine(str(self.workspace_root))
+        self.arch_core = ArchCore()
         self._system_prompt = (
             "You are the Architectural Advisor Agent. "
             "Your role is to identify 'God Classes', circular dependencies, and high-coupling hotspots. "
@@ -30,24 +51,19 @@ class ArchAdvisorAgent(BaseAgent):
         self.graph_engine.scan_project()
         graph = self.graph_engine.graph
         
-        # Calculate In-degree and Out-degree
-        out_degree = {k: len(v) for k, v in graph.items()}
-        in_degree = {}
-        for src, targets in graph.items():
-            for t in targets:
-                in_degree[t] = in_degree.get(t, 0) + 1
+        # Calculate metrics via Core
+        metrics = self.arch_core.calculate_coupling_metrics(graph)
+        top_out, top_in = self.arch_core.identify_hotspots(metrics)
         
         report = ["## Architectural Coupling Analysis\n"]
         
         # Hotspots (High Out-degree)
-        top_out = sorted(out_degree.items(), key=lambda x: x[1], reverse=True)[:5]
         report.append("### 🚩 Dependency Hotspots (High Out-degree)")
         report.append("These files depend on many other things and might be too complex:")
         for node, degree in top_out:
             report.append(f"- **{node}**: {degree} dependencies")
         
         # Central Hubs (High In-degree)
-        top_in = sorted(in_degree.items(), key=lambda x: x[1], reverse=True)[:5]
         report.append("\n### 🏗️ Central Hubs (High In-degree)")
         report.append("These files are used by many other modules. Changes here have high impact:")
         for node, degree in top_in:
@@ -62,4 +78,3 @@ class ArchAdvisorAgent(BaseAgent):
 if __name__ == "__main__":
     main = create_main_function(ArchAdvisorAgent, "ArchAdvisor Agent", "Task")
     main()
-

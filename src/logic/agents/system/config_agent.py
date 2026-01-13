@@ -11,30 +11,31 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in configuration validation, secrets checking, and environment setup.
 Inspired by external-secrets and infrastructure-as-code patterns.
 """
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+import os
 import yaml
-
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.logic.core.validation import ValidationCore
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
-
 class ConfigAgent(BaseAgent):
     """Ensures the agent fleet has all necessary configurations and API keys."""
-
+    
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.validator = ValidationCore()
         self.workspace_root = self.file_path.parent.parent.parent
         self._system_prompt = (
             "You are the Config Agent. "
@@ -47,14 +48,14 @@ class ConfigAgent(BaseAgent):
     def validate_env(self) -> str:
         """Checks for required environment variables."""
         required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]
-        success, missing = self.validator.validate_env_vars(required)
-
+        missing = [key for key in required if key not in os.environ]
+        
         report = ["## ⚙️ Environment Validation\n"]
-        if success:
+        if not missing:
             report.append("✅ All required environment variables are set.")
         else:
             report.append(f"❌ **Missing variables**: {', '.join(missing)}")
-
+            
         return "\n".join(report)
 
     @as_tool
@@ -63,17 +64,18 @@ class ConfigAgent(BaseAgent):
         config_path = self.workspace_root / "config" / "models.yaml"
         if not config_path.exists():
             return "❌ `config/models.yaml` not found."
-
+            
         try:
-            with open(config_path, encoding='utf-8') as f:
+            with open(config_path, "r") as f:
                 data = yaml.safe_load(f)
-
+            
             # Simple structure check
             if "models" in data and isinstance(data["models"], list):
                 return f"✅ `models.yaml` is valid. Detected {len(data['models'])} models."
-            return "❌ `models.yaml` has invalid structure (missing 'models' list)."
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            else:
+                return "❌ `models.yaml` has invalid structure (missing 'models' list)."
+        except Exception as e:
             return f"❌ Error parsing `models.yaml`: {e}"
 
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    def improve_content(self, prompt: str) -> str:
         return self.validate_env()

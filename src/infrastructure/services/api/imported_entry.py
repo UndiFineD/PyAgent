@@ -11,20 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .ImportSource import ImportSource
 from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .import_source import ImportSource
+from typing import List
 
 __version__ = VERSION
-
 
 @dataclass
 class ImportedEntry:
@@ -39,11 +41,10 @@ class ImportedEntry:
         created_at: When the entry was created.
         labels: Labels / tags from the source.
     """
-
     source: ImportSource
     external_id: str
     title: str
     description: str
     author: str = ""
     created_at: str = ""
-    labels: list[str] = field(default_factory=lambda: [])
+    labels: List[str] = field(default_factory=lambda: [])

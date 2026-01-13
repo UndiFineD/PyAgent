@@ -11,26 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .CleanupStrategy import CleanupStrategy
+from pathlib import Path
+from typing import Any, Callable, List, Tuple
 import logging
 import shutil
-from collections.abc import Callable
-from pathlib import Path
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .cleanup_strategy import CleanupStrategy
 
 __version__ = VERSION
 
-
 class TestDataCleaner:
+    __test__ = False
     """Utilities for cleaning up test data.
 
     Manages cleanup of test artifacts with configurable strategies.
@@ -42,8 +43,6 @@ class TestDataCleaner:
         cleaner.cleanup_all()
     """
 
-    __test__ = False
-
     def __init__(self, strategy: CleanupStrategy = CleanupStrategy.IMMEDIATE) -> None:
         """Initialize cleaner.
 
@@ -51,9 +50,9 @@ class TestDataCleaner:
             strategy: Default cleanup strategy.
         """
         self.strategy = strategy
-        self._paths: list[tuple[Path, bool]] = []
-        self._files: list[Path] = []
-        self._callbacks: list[Callable[[], None]] = []
+        self._paths: List[Tuple[Path, bool]] = []
+        self._files: List[Path] = []
+        self._callbacks: List[Callable[[], None]] = []
         self._cleanup_done = False
 
     def register_path(self, path: Path, recursive: bool = True) -> None:
@@ -121,13 +120,13 @@ class TestDataCleaner:
             try:
                 callback()
                 cleaned += 1
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logging.warning(f"Cleanup callback failed: {e}")
 
         self._cleanup_done = True
         return cleaned
 
-    def __enter__(self) -> TestDataCleaner:
+    def __enter__(self) -> "TestDataCleaner":
         """Context manager entry."""
         return self
 

@@ -11,18 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-
-from src.core.base.lifecycle.version import VERSION
-
-from .branch_comparison import BranchComparison
+from src.core.base.version import VERSION
+from .BranchComparison import BranchComparison
+from typing import Dict, List, Set
 
 __version__ = VERSION
-
 
 class BranchComparer:
     """Compares errors across git branches.
@@ -36,9 +39,11 @@ class BranchComparer:
 
     def __init__(self) -> None:
         """Initialize the branch comparer."""
-        self.branch_errors: dict[str, set[str]] = {}
+        self.branch_errors: Dict[str, Set[str]] = {}
 
-    def set_branch_errors(self, branch: str, error_ids: list[str]) -> None:
+    def set_branch_errors(
+        self, branch: str, error_ids: List[str]
+    ) -> None:
         """Set errors for a branch.
 
         Args:
@@ -65,10 +70,12 @@ class BranchComparer:
             branch_b=branch_b,
             errors_only_in_a=list(errors_a - errors_b),
             errors_only_in_b=list(errors_b - errors_a),
-            common_errors=list(errors_a & errors_b),
+            common_errors=list(errors_a & errors_b)
         )
 
-    def get_new_errors(self, base_branch: str, feature_branch: str) -> list[str]:
+    def get_new_errors(
+        self, base_branch: str, feature_branch: str
+    ) -> List[str]:
         """Get errors introduced in feature branch.
 
         Args:
@@ -81,7 +88,9 @@ class BranchComparer:
         comparison = self.compare(base_branch, feature_branch)
         return comparison.errors_only_in_b
 
-    def get_fixed_errors(self, base_branch: str, feature_branch: str) -> list[str]:
+    def get_fixed_errors(
+        self, base_branch: str, feature_branch: str
+    ) -> List[str]:
         """Get errors fixed in feature branch.
 
         Args:

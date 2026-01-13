@@ -11,29 +11,30 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
-from collections.abc import Callable
-
-from src.core.base.lifecycle.version import VERSION
-
-from .test_timer import TestTimer
+from src.core.base.version import VERSION
+from .TestTimer import TestTimer
+from typing import Callable, Dict, List
 
 __version__ = VERSION
-
 
 class Benchmarker:
     """Runs benchmarks and collects statistics."""
 
     def __init__(self) -> None:
         """Initialize benchmarker."""
-        self.timings: list[float] = []
+        self.timings: List[float] = []
 
-    def run(self, fn: Callable[[], None], iterations: int = 5) -> dict[str, float]:
+    def run(self, fn: Callable[[], None], iterations: int = 5) -> Dict[str, float]:
         """Run a function multiple times and collect timing statistics.
 
         Args:
@@ -60,5 +61,5 @@ class Benchmarker:
             "min_ms": min(self.timings) * 1000,
             "max_ms": max(self.timings) * 1000,
             "average_ms": mean_seconds * 1000,
-            "iterations": iterations,
+            "iterations": iterations
         }

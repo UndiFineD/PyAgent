@@ -10,41 +10,57 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-Vector store.py module.
-"""
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 from __future__ import annotations
-
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
+from src.core.base.version import VERSION
 from .storage_base import KnowledgeStore
+from typing import Any, Dict, List, Optional
 
 __version__ = VERSION
 
-
 class VectorKnowledgeStore(KnowledgeStore):
     """
-    Handles vector-based knowledge storage.
-    Delegates to MemoryCore for unified semantic handling (Rust/ChromaDB).
+    Handles vector-based knowledge storage using ChromaDB.
+    Isolated per agent.
     """
+    
+    def __init__(self, agent_id: str, storage_path: Any) -> None:
+        super().__init__(agent_id, storage_path)
+        try:
+            import chromadb
+            self.client = chromadb.PersistentClient(path=str(self.storage_path))
+            self.collection = self.client.get_or_create_collection(name=f"{agent_id}_knowledge")
+        except ImportError:
+            self.client = None
+            print("ChromaDB not installed, VectorKnowledgeStore will be disabled.")
 
-    def store(self, key: str, value: str, metadata: dict[str, Any] | None = None) -> bool:
-        return self._memory_core.store_knowledge(
-            agent_id=self.agent_id, key=key, content=value, mode="semantic", metadata=metadata
+    def store(self, key: str, value: str, metadata: Optional[Dict[str, Any]] = None) -> bool:
+        if not self.client:
+            return False
+        self.collection.add(
+            documents=[value],
+            metadatas=[metadata] if metadata else [{}],
+            ids=[key]
         )
+        return True
 
-    def retrieve(self, query: str, limit: int = 5) -> list[Any]:
-        results = self._memory_core.retrieve_knowledge(
-            agent_id=self.agent_id, query=query, mode="semantic", limit=limit
+    def retrieve(self, query: str, limit: int = 5) -> List[Any]:
+        if not self.client:
+            return []
+        results = self.collection.query(
+            query_texts=[query],
+            n_results=limit
         )
-        # Extract content from standardized results
-        return [r["content"] for r in results if "content" in r]
+        return results.get("documents", [[]])[0]
 
     def delete(self, key: str) -> bool:
-        """Standardized deletion via MemoryCore."""
-        return self._memory_core.delete_knowledge(agent_id=self.agent_id, key=key, mode="semantic")
+        if not self.client:
+            return False
+        self.collection.delete(ids=[key])
+        return True

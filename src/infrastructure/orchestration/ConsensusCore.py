@@ -1,11 +1,33 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """
 ConsensusCore logic for multi-agent voting.
 Contains pure logic for tallying votes, handling ties, and selecting winners.
 """
 
-from typing import List, Dict, Any, Optional
+from __future__ import annotations
+from src.core.base.version import VERSION
+from typing import List, Dict, Optional
+
+__version__ = VERSION
 
 class ConsensusCore:
     """Pure logic core for consensus protocols."""
@@ -13,21 +35,26 @@ class ConsensusCore:
     def __init__(self, mode: str = "plurality") -> None:
         self.mode = mode
 
-    def calculate_winner(self, proposals: List[str]) -> str:
-        """Determines the winning proposal based on voting rules."""
+    def calculate_winner(self, proposals: List[str], weights: Optional[List[float]] = None) -> str:
+        """
+        Determines the winning proposal based on voting rules.
+        Phase 119: Supports weighted voting based on agent reliability.
+        """
         if not proposals:
             return ""
             
-        # Count identical proposals
-        counts: Dict[str, int] = {}
-        for p in proposals:
-            counts[p] = counts.get(p, 0) + 1
+        if weights and len(weights) != len(proposals):
+            weights = None # Fallback to unweighted if mismatch
+
+        # Count identical proposals with weights
+        counts: Dict[str, float] = {}
+        for idx, p in enumerate(proposals):
+            weight = weights[idx] if weights else 1.0
+            counts[p] = counts.get(p, 0) + weight
             
-        # Strategy: Most frequent, then longest as tie-breaker
-        # In the future, this logic could be replaced by a Rust library 
-        # for high-performance string hashing and comparison.
+        # Strategy: Most weighted, then longest as tie-breaker
         winner = sorted(
-            proposals, 
+            counts.keys(), 
             key=lambda x: (counts[x], len(x)), 
             reverse=True
         )[0]

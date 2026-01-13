@@ -11,27 +11,29 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Fleet-wide manager for database schema discovery and metadata storage."""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import logging
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
+from typing import Dict, List, Any
 
 __version__ = VERSION
 
-
 class SchemaManager:
     """Discovers and caches database schemas across the fleet."""
-
+    
     def __init__(self) -> None:
-        self.schemas: dict[str, dict[str, Any]] = {}  # db_path -> schema_map
+        self.schemas: Dict[str, Dict[str, Any]] = {} # db_path -> schema_map
 
-    def register_schema(self, db_id: str, tables: dict[str, list[str]]) -> str:
+    def register_schema(self, db_id: str, tables: Dict[str, List[str]]) -> str:
         """Registers a database schema (tables and columns)."""
         self.schemas[db_id] = tables
         logging.info(f"SchemaManager: Registered schema for {db_id} with {len(tables)} tables.")
@@ -40,12 +42,12 @@ class SchemaManager:
         """Generates a schema summary for an agent's system prompt."""
         if db_id not in self.schemas:
             return "No schema information available."
-
+        
         summary = [f"Database: {db_id}"]
         for table, cols in self.schemas[db_id].items():
             summary.append(f"- Table: {table} (Columns: {', '.join(cols)})")
         return "\n".join(summary)
 
-    def list_known_databases(self) -> list[str]:
+    def list_known_databases(self) -> List[str]:
         """Returns IDs of all registered databases."""
         return list(self.schemas.keys())

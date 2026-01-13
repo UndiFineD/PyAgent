@@ -11,26 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
-import logging
-from collections.abc import Callable
-
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.version import VERSION
+from typing import Callable, List
 
 __version__ = VERSION
-
 
 class CleanupManager:
     """Manages cleanup hooks for tests."""
 
     def __init__(self) -> None:
         """Initialize cleanup manager."""
-        self.hooks: list[Callable[[], None]] = []
+        self.hooks: List[Callable[[], None]] = []
 
     def add_hook(self, hook: Callable[[], None]) -> None:
         """Add cleanup hook."""
@@ -45,5 +46,5 @@ class CleanupManager:
         for hook in reversed(self.hooks):
             try:
                 hook()
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 logging.debug("Cleanup hook execution failed.")

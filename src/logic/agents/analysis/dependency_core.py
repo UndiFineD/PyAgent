@@ -11,7 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """
 DependencyCore logic for PyAgent.
@@ -20,24 +25,22 @@ No I/O or side effects.
 """
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import ast
-
-from src.core.base.common.types.dependency_node import DependencyNode
-from src.core.base.common.types.dependency_type import DependencyType
-from src.core.base.lifecycle.version import VERSION
+from typing import Dict, List, Set
+from src.core.base.types.DependencyType import DependencyType
+from src.core.base.types.DependencyNode import DependencyNode
 
 __version__ = VERSION
-
 
 class DependencyCore:
     """Pure logic core for dependency analysis."""
 
     @staticmethod
-    def parse_dependencies(content: str, file_path: str = "") -> dict[str, DependencyNode]:
+    def parse_dependencies(content: str, file_path: str = "") -> Dict[str, DependencyNode]:
         """Parses imports and class inheritance from code content."""
-        nodes: dict[str, DependencyNode] = {}
-
+        nodes: Dict[str, DependencyNode] = {}
+        
         try:
             tree = ast.parse(content)
         except SyntaxError:
@@ -55,16 +58,11 @@ class DependencyCore:
                 for base in node.bases:
                     if isinstance(base, ast.Name):
                         DependencyCore._add_to_nodes(nodes, base.id, DependencyType.CLASS_INHERITANCE, file_path)
-
+        
         return nodes
 
     @staticmethod
-    def _add_to_nodes(
-        nodes: dict[str, DependencyNode],
-        name: str,
-        dep_type: DependencyType,
-        file_path: str,
-    ) -> None:
+    def _add_to_nodes(nodes: Dict[str, DependencyNode], name: str, dep_type: DependencyType, file_path: str) -> None:
         if name not in nodes:
             nodes[name] = DependencyNode(name=name, type=dep_type, file_path=file_path)
         else:
@@ -72,6 +70,6 @@ class DependencyCore:
                 nodes[name].depended_by.append(file_path)
 
     @staticmethod
-    def filter_external_deps(nodes: dict[str, DependencyNode], stdlib_list: set[str]) -> list[str]:
+    def filter_external_deps(nodes: Dict[str, DependencyNode], stdlib_list: Set[str]) -> List[str]:
         """Filters nodes to return only non-standard library dependencies."""
         return [name for name in nodes if name not in stdlib_list]

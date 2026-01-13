@@ -11,20 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """
 Debug script to check for consistency in _record calls across the workspace.
 """
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import os
 
-from src.core.base.lifecycle.version import VERSION
-
 __version__ = VERSION
-
 
 def main() -> None:
     root = "src"
@@ -34,18 +36,15 @@ def main() -> None:
         for f in files:
             if f.endswith(".py"):
                 path = os.path.join(r, f)
-
                 try:
-                    with open(path, encoding="utf-8", errors="ignore") as file:
+                    with open(path, "r", encoding="utf-8", errors="ignore") as file:
                         content = file.read()
                         if "self._record(" in content and "def _record(" not in content:
                             findings.append(path)
-
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception:
                     pass
 
     print("\n".join(findings))
-
 
 if __name__ == "__main__":
     main()

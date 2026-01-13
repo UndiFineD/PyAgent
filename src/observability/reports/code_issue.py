@@ -11,21 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .IssueCategory import IssueCategory
+from .SeverityLevel import SeverityLevel
 from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
-
-from .issue_category import IssueCategory
-from .severity_level import SeverityLevel
+from typing import Optional
 
 __version__ = VERSION
-
 
 @dataclass
 class CodeIssue:
@@ -42,6 +44,6 @@ class CodeIssue:
     message: str
     category: IssueCategory
     severity: SeverityLevel = SeverityLevel.INFO
-    line_number: int | None = None
-    file_path: str | None = None
-    function_name: str | None = None
+    line_number: Optional[int] = None
+    file_path: Optional[str] = None
+    function_name: Optional[str] = None

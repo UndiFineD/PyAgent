@@ -11,20 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from src.core.base.models import LockType
 from dataclasses import dataclass
 from pathlib import Path
-
-from src.core.base.common.models import LockType
-from src.core.base.lifecycle.version import VERSION
+from typing import Optional
 
 __version__ = VERSION
-
 
 @dataclass
 class FileLock:
@@ -37,9 +40,8 @@ class FileLock:
         acquired_at: Timestamp when lock was acquired.
         expires_at: Timestamp when lock expires (optional).
     """
-
     file_path: Path
     lock_type: LockType
     owner: str
     acquired_at: float
-    expires_at: float | None = None
+    expires_at: Optional[float] = None

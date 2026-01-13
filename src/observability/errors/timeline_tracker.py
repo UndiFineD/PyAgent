@@ -11,21 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .TimelineEvent import TimelineEvent
 from datetime import datetime
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .timeline_event import TimelineEvent
+from typing import Any, Dict, List
 
 __version__ = VERSION
-
 
 class TimelineTracker:
     """Tracks error events over time.
@@ -39,9 +40,11 @@ class TimelineTracker:
 
     def __init__(self) -> None:
         """Initialize the timeline tracker."""
-        self.events: list[TimelineEvent] = []
+        self.events: List[TimelineEvent] = []
 
-    def record_event(self, error_id: str, event_type: str, details: str = "") -> TimelineEvent:
+    def record_event(
+        self, error_id: str, event_type: str, details: str = ""
+    ) -> TimelineEvent:
         """Record a timeline event.
 
         Args:
@@ -56,22 +59,27 @@ class TimelineTracker:
             timestamp=datetime.now().isoformat(),
             event_type=event_type,
             error_id=error_id,
-            details=details,
+            details=details
         )
         self.events.append(event)
         return event
 
-    def get_events_for_error(self, error_id: str) -> list[TimelineEvent]:
+    def get_events_for_error(self, error_id: str) -> List[TimelineEvent]:
         """Get all events for a specific error."""
         return [e for e in self.events if e.error_id == error_id]
 
-    def get_events_in_range(self, start: str, end: str) -> list[TimelineEvent]:
+    def get_events_in_range(
+        self, start: str, end: str
+    ) -> List[TimelineEvent]:
         """Get events within a time range."""
-        return [e for e in self.events if start <= e.timestamp <= end]
+        return [
+            e for e in self.events
+            if start <= e.timestamp <= end
+        ]
 
-    def generate_timeline_data(self) -> dict[str, Any]:
+    def generate_timeline_data(self) -> Dict[str, Any]:
         """Generate timeline data for visualization."""
-        by_date: dict[str, int] = {}
+        by_date: Dict[str, int] = {}
         for event in self.events:
             date = event.timestamp[:10]  # YYYY - MM - DD
             by_date[date] = by_date.get(date, 0) + 1
@@ -79,7 +87,7 @@ class TimelineTracker:
         return {
             "total_events": len(self.events),
             "events_by_date": by_date,
-            "event_types": list(set(e.event_type for e in self.events)),
+            "event_types": list(set(e.event_type for e in self.events))
         }
 
     def clear(self) -> None:

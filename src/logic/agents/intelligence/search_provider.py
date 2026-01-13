@@ -11,19 +11,32 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """
 Search Agent: Perform deep research and search operations across the workspace.
 """
 
 from __future__ import annotations
-
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.intelligence.search_agent import SearchAgent
+from src.core.base.version import VERSION
+import sys
+from pathlib import Path
 
 __version__ = VERSION
+
+# Ensure project root and src are in path for modular imports
+root = Path(__file__).parent.parent
+if str(root) not in sys.path:
+    sys.path.append(str(root))
+if str(root / "src") not in sys.path:
+    sys.path.append(str(root / "src"))
+
+    from src.logic.agents.intelligence.SearchAgent import SearchAgent
 
 if __name__ == "__main__":
     main = create_main_function(SearchAgent, "Research Agent", "Topic/File to research")

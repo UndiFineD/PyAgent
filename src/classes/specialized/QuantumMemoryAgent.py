@@ -1,22 +1,43 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in Quantum Context Compression and million-token reasoning.
 Uses hierarchical summarization and selective hydration to handle massive local context.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import json
 from pathlib import Path
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
+__version__ = VERSION
 
 class QuantumMemoryAgent(BaseAgent):
     """Manages massive context windows through compression and quantization."""
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.context_cache_dir = Path("logs/quantum_context")
+        self.context_cache_dir = Path("data/logs/quantum_context")
         self.context_cache_dir.mkdir(parents=True, exist_ok=True)
         self.active_context_blocks = []
         
@@ -79,6 +100,6 @@ class QuantumMemoryAgent(BaseAgent):
         return "I am optimizing the local memory pool. Memory fragments are being quantized for retrieval efficiency."
 
 if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
+    from src.core.base.utilities import create_main_function
     main = create_main_function(QuantumMemoryAgent, "Quantum Memory Agent", "Context compression tool")
     main()

@@ -11,19 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
-from typing import TYPE_CHECKING
+from src.core.base.version import VERSION
+from typing import List, TYPE_CHECKING
 from dataclasses import dataclass, field
 
 if TYPE_CHECKING:
     pass
 __version__ = VERSION
-
 
 @dataclass
 class BranchComparison:
@@ -36,9 +40,8 @@ class BranchComparison:
         files_only_in_b: Files only in branch B.
         modified_files: Files modified between branches.
     """
-
     branch_a: str
     branch_b: str
-    files_only_in_a: list[str] = field(default_factory=lambda: [])
-    files_only_in_b: list[str] = field(default_factory=lambda: [])
-    modified_files: list[str] = field(default_factory=lambda: [])
+    files_only_in_a: List[str] = field(default_factory=lambda: [])
+    files_only_in_b: List[str] = field(default_factory=lambda: [])
+    modified_files: List[str] = field(default_factory=lambda: [])

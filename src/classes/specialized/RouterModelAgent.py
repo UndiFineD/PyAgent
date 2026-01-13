@@ -1,18 +1,42 @@
-import time
-from typing import Dict, List, Any, Optional
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
-class RouterModelAgent:
+from __future__ import annotations
+from src.core.base.version import VERSION
+from typing import Dict, Any
+from src.core.base.BaseAgent import BaseAgent
+
+__version__ = VERSION
+
+class RouterModelAgent(BaseAgent):
     """
     Intelligently routes tasks to different LLMs based on cost, latency, 
     and task complexity.
     """
-    def __init__(self, workspace_path: str) -> None:
-        self.workspace_path = workspace_path
+    def __init__(self, path: str) -> None:
+        super().__init__(path)
         self.providers: Dict[str, Any] = {
             "internal_ai": {"cost": 0.0, "latency": 0.1, "capability": 0.75, "preference": 100}, # prioritized
-            "openai_gpt4": {"cost": 0.03, "latency": 1.5, "capability": 0.95, "preference": 10},
+            "glm_4_7": {"cost": 0.0006, "latency": 0.8, "capability": 0.9, "preference": 90},  # Phase 128: Cost efficiency
+            "openai_gpt4": {"cost": 0.03, "latency": 1.5, "capability": 0.95, "preference": 30},
             "anthropic_claude": {"cost": 0.02, "latency": 1.2, "capability": 0.9, "preference": 20},
-            "local_llama": {"cost": 0.0, "latency": 0.5, "capability": 0.7, "preference": 80}
+            "local_llama": {"cost": 0.0, "latency": 0.5, "capability": 0.7, "preference": 110}
         }
         
     def determine_optimal_provider(self, task_type: str, max_cost: float = 0.01, required_capability: float = 0.0) -> str:
@@ -20,6 +44,17 @@ class RouterModelAgent:
         Selects the best provider for a given task.
         Prioritizes 'internal_ai' unless capability requirements exceed it.
         """
+        if self.recorder:
+            self.recorder.record_lesson("router_decision_request", {"task": task_type, "max_cost": max_cost})
+
+        # Phase 120: Heuristic Risk/Capability Mapping
+        if "high_reasoning" in task_type.lower():
+            required_capability = 0.9
+            max_cost = 0.1  # Allow for GPT-4 costs
+        elif "simple" in task_type.lower():
+            required_capability = 0.0
+            max_cost = 0.01
+
         candidates = []
         
         # Filter by cost and capability

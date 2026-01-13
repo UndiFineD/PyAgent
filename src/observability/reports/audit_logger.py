@@ -11,23 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .AuditAction import AuditAction
+from .AuditEntry import AuditEntry
+from typing import Any, Dict, List, Optional
 import logging
 import time
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .audit_action import AuditAction
-from .audit_entry import AuditEntry
 
 __version__ = VERSION
-
 
 class AuditLogger:
     """Logger for report audit trail.
@@ -43,7 +44,7 @@ class AuditLogger:
     def __init__(self) -> None:
         """Initialize audit logger."""
 
-        self.entries: list[AuditEntry] = []
+        self.entries: List[AuditEntry] = []
         logging.debug("AuditLogger initialized")
 
     def log(
@@ -51,7 +52,7 @@ class AuditLogger:
         action: AuditAction,
         user_id: str,
         report_id: str,
-        details: dict[str, Any] | None = None,
+        details: Optional[Dict[str, Any]] = None
     ) -> AuditEntry:
         """Log an action.
         Args:
@@ -69,12 +70,12 @@ class AuditLogger:
             action=action,
             user_id=user_id,
             report_id=report_id,
-            details=details or {},
+            details=details or {}
         )
         self.entries.append(entry)
         return entry
 
-    def get_history(self, report_id: str) -> list[AuditEntry]:
+    def get_history(self, report_id: str) -> List[AuditEntry]:
         """Get audit history for report.
         Args:
             report_id: Report ID.
@@ -84,7 +85,7 @@ class AuditLogger:
 
         return [e for e in self.entries if e.report_id == report_id]
 
-    def get_user_activity(self, user_id: str) -> list[AuditEntry]:
+    def get_user_activity(self, user_id: str) -> List[AuditEntry]:
         """Get activity for user.
         Args:
             user_id: User ID.

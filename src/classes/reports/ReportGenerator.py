@@ -1,31 +1,50 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 PyAgent contributors
+# Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Report generation logic for agent source files."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import ast
 import hashlib
-import json
 import logging
 import os
 import re
 import sys
 import time
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple, cast
-
+from typing import Any, Dict, Iterable, List, Optional, Tuple, cast
 from .CompileResult import CompileResult
 from .core.DeduplicationCore import DeduplicationCore
+
+__version__ = VERSION
 
 class ReportGenerator:
     """Generates quality reports (description, errors, improvements) for agent files."""
 
-    def __init__(self, agent_dir: Optional[Path | str] = None, recorder: Any = None) -> None:
+    def __init__(self, agent_dir: Optional[Path | str] = None, output_dir: Optional[Path | str] = None, recorder: Any = None) -> None:
         """Initialize with directory containing agent scripts.
         
         Args:
             agent_dir: Directory containing agent scripts.
+            output_dir: Directory where reports should be written.
             recorder: Optional LocalContextRecorder.
         """
         self.recorder = recorder
@@ -33,6 +52,13 @@ class ReportGenerator:
             self.agent_dir = Path(agent_dir)
         else:
             self.agent_dir = Path(__file__).resolve().parent.parent.parent
+
+        if output_dir:
+            self.output_dir = Path(output_dir)
+        else:
+            self.output_dir = self.agent_dir
+
+        os.makedirs(self.output_dir, exist_ok=True)
 
     def _record(self, action: str, result: str) -> None:
         """Record report generation activities."""
@@ -112,7 +138,10 @@ class ReportGenerator:
         """Process a single file. Returns True if processed, False if skipped."""
         source = self._read_text(py_path)
         current_sha = self._sha256_text(source)[:16]
-        stem = py_path.stem
+        
+        # Generate a flattened relative path as stem to avoid collisions (e.g., __init__.py)
+        rel_path = py_path.relative_to(self.agent_dir)
+        stem = "_".join(rel_path.with_suffix("").parts)
 
         # Incremental check
         existing_sha = self._get_existing_sha(stem)
@@ -141,9 +170,9 @@ class ReportGenerator:
             errors = self.render_errors(py_path, source, compile_result)
             improvements = self.render_improvements(py_path, source, tree)
 
-        self._write_md(self.agent_dir / f"{stem}.description.md", description)
-        self._write_md(self.agent_dir / f"{stem}.errors.md", errors)
-        self._write_md(self.agent_dir / f"{stem}.improvements.md", improvements)
+        self._write_md(self.output_dir / f"{stem}.description.md", description)
+        self._write_md(self.output_dir / f"{stem}.errors.md", errors)
+        self._write_md(self.output_dir / f"{stem}.improvements.md", improvements)
         return True
 
     def iter_agent_py_files(self) -> Iterable[Path]:
@@ -398,7 +427,7 @@ class ReportGenerator:
             return CompileResult(ok=False, error=e.stderr or e.stdout or str(e))
 
     def _get_existing_sha(self, stem: str) -> Optional[str]:
-        desc_path = self.agent_dir / f"{stem}.description.md"
+        desc_path = self.output_dir / f"{stem}.description.md"
         if not desc_path.exists():
             return None
         content = self._read_text(desc_path)
@@ -416,7 +445,7 @@ class ReportGenerator:
 
     def _rel(self, path: Path) -> str:
         try:
-            return str(path.relative_to(self.agent_dir.parent))
+            # Show path relative to the workspace root if possible
+            return str(path.relative_to(self.agent_dir.parent if self.agent_dir.parent.parts else self.agent_dir))
         except ValueError:
             return str(path)
-

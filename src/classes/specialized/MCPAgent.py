@@ -1,18 +1,38 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in Model Context Protocol (MCP) integration.
 Acts as a bridge between the PyAgent fleet and external MCP servers.
 Inspired by mcp-server-spec-driven-development and awesome-mcp-servers.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import json
-import logging
-import subprocess
 from pathlib import Path
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
-from src.classes.fleet.MCPConnector import MCPConnector
+from typing import Dict, List, Any
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+from src.infrastructure.fleet.MCPConnector import MCPConnector
+
+__version__ = VERSION
 
 class MCPAgent(BaseAgent):
     """Enables the fleet to discover and utilize external tools via the MCP protocol."""

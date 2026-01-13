@@ -11,24 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
-import time
+from src.core.base.version import VERSION
+from .TestStatus import TestStatus
 from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .test_status import TestStatus
+from typing import Optional
+import time
 
 __version__ = VERSION
 
-
 @dataclass
 class TestResult:
+    __test__ = False
     """Result of a test execution.
 
     Attributes:
@@ -43,7 +46,6 @@ class TestResult:
     test_name: str
     status: TestStatus
     duration_ms: float = 0.0
-    error_message: str | None = None
+    error_message: Optional[str] = None
     assertions_count: int = 0
-    __test__ = False
     timestamp: float = field(default_factory=time.time)

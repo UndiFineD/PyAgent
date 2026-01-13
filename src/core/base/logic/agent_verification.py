@@ -12,21 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
-"""
-Verification logic for agent outputs.
-Implements Stanford Reseach 'Anchoring Strength' and Keio University 'Self-Verification' paths.
-"""
-
 from __future__ import annotations
-
-from src.core.base.lifecycle.version import VERSION
-
-# Phase 317: Modularized Verification Classes
-from .verification.agent_verifier import AgentVerifier
-from .verification.code_health_auditor import CodeHealthAuditor
-from .verification.code_integrity_verifier import CodeIntegrityVerifier
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
-__all__ = ["AgentVerifier", "CodeHealthAuditor", "CodeIntegrityVerifier"]
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""Plugin containing intentional syntax errors for resilience testing."""
+
+# DANGER: Intentional syntax error to test resilience
+class BrokenAgent:
+    def __init__(self) -> None:
+        # this is not valid python code !!!
+        pass

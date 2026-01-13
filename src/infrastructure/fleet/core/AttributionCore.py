@@ -3,7 +3,7 @@ Core logic for Code Attribution and Licensing (Phase 185).
 Handles SPDX header generation and contribution tagging.
 """
 
-from typing import Dict, Any, List
+from typing import Dict, Any
 import time
 
 class AttributionCore:

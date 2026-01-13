@@ -1,14 +1,35 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in automated quality gates and release validation."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import json
 import subprocess
-from pathlib import Path
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import create_main_function, as_tool
+from typing import Optional
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import create_main_function, as_tool
+
+__version__ = VERSION
 
 class QualityGateAgent(BaseAgent):
     """Enforces thresholds for code quality, test coverage, and security before deployment."""
@@ -37,6 +58,9 @@ class QualityGateAgent(BaseAgent):
             # Use sys.executable to be robust
             import sys
             res = subprocess.run([sys.executable, "-m", "pytest", "--version"], capture_output=True) 
+            # Phase 108: Record validation
+            self._record("check_gates", "Initiated", provider="Internal", model="Gatekeeper")
+            
             # In a real scenario, we'd run: ["python", "-m", "pytest", "tests/"]
             # To keep this fast for the dashboard, we check if test_results.txt exists
             test_results = self.workspace_root / "test_results.txt"
@@ -54,7 +78,7 @@ class QualityGateAgent(BaseAgent):
             blocked = True
 
         # 2. Security Gate
-        security_agent = self.workspace_root / "src/classes/coder/SecurityGuardAgent.py"
+        security_agent = self.workspace_root / "src/logic/agents/development/SecurityGuardAgent.py"
         # Since we are an agent, we can't easily 'summon' another unless we are the FleetManager, 
         # but we can look for the output of others.
         telemetry_file = self.workspace_root / ".agent_telemetry.json"
@@ -105,8 +129,6 @@ class QualityGateAgent(BaseAgent):
         """Perform a quality gate check."""
         return self.check_gates()
 
-
 if __name__ == "__main__":
     main = create_main_function(QualityGateAgent, "QualityGate Agent", "Task (e.g. 'check')")
     main()
-

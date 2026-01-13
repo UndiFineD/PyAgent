@@ -11,23 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .EffortEstimate import EffortEstimate
+from .ImprovementCategory import ImprovementCategory
+from .ImprovementPriority import ImprovementPriority
 from dataclasses import dataclass
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .effort_estimate import EffortEstimate
-from .improvement_category import ImprovementCategory
-from .improvement_priority import ImprovementPriority
+from typing import Any, Dict
 
 __version__ = VERSION
-
 
 @dataclass(init=False)
 class ImprovementTemplate:
@@ -73,7 +74,7 @@ class ImprovementTemplate:
         self.default_priority = default_priority
         self.default_effort = default_effort
 
-    def instantiate(self, variables: dict[str, str]) -> dict[str, str]:
+    def instantiate(self, variables: Dict[str, str]) -> Dict[str, str]:
         """Instantiate the template with variables."""
         return {
             "title": self.title_pattern.format(**variables),

@@ -11,22 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-
-import json
+from src.core.base.version import VERSION
+from .Improvement import Improvement
+from .RollbackRecord import RollbackRecord
 from datetime import datetime
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-from .rollback_record import RollbackRecord
+from typing import Dict, List, Optional
+import json
 
 __version__ = VERSION
-
 
 class RollbackTracker:
     """Tracks improvement rollbacks.
@@ -39,8 +41,8 @@ class RollbackTracker:
 
     def __init__(self) -> None:
         """Initialize the rollback tracker."""
-        self.rollbacks: list[RollbackRecord] = []
-        self.states: dict[str, str] = {}  # improvement_id -> previous state
+        self.rollbacks: List[RollbackRecord] = []
+        self.states: Dict[str, str] = {}  # improvement_id -> previous state
 
     def save_state(self, improvement: Improvement) -> None:
         """Save the current state before an improvement.
@@ -48,15 +50,18 @@ class RollbackTracker:
         Args:
             improvement: The improvement being applied.
         """
-        self.states[improvement.id] = json.dumps(
-            {
-                "status": improvement.status.value,
-                "updated_at": improvement.updated_at,
-                "votes": improvement.votes,
-            }
-        )
+        self.states[improvement.id] = json.dumps({
+            "status": improvement.status.value,
+            "updated_at": improvement.updated_at,
+            "votes": improvement.votes
+        })
 
-    def record_rollback(self, improvement: Improvement, reason: str, commit_hash: str = "") -> RollbackRecord:
+    def record_rollback(
+        self,
+        improvement: Improvement,
+        reason: str,
+        commit_hash: str = ""
+    ) -> RollbackRecord:
         """Record a rollback.
 
         Args:
@@ -72,15 +77,18 @@ class RollbackTracker:
             rollback_date=datetime.now().isoformat(),
             reason=reason,
             previous_state=self.states.get(improvement.id, ""),
-            rollback_commit=commit_hash,
+            rollback_commit=commit_hash
         )
         self.rollbacks.append(record)
         return record
 
-    def get_rollbacks(self, improvement_id: str | None = None) -> list[RollbackRecord]:
+    def get_rollbacks(
+        self, improvement_id: Optional[str] = None
+    ) -> List[RollbackRecord]:
         """Get rollback records."""
         if improvement_id:
-            return [r for r in self.rollbacks if r.improvement_id == improvement_id]
+            return [r for r in self.rollbacks
+                    if r.improvement_id == improvement_id]
         return self.rollbacks
 
     def get_rollback_rate(self, total_completed: int) -> float:

@@ -1,17 +1,39 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """QuantumShardOrchestrator for PyAgent.
 Simulates non-local state synchronization (Quantum Entanglement pattern).
 Provides "instant" state consistency for critical variables across distributed shards.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import json
 import uuid
 from pathlib import Path
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from typing import Dict, Any
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
+__version__ = VERSION
 
 class QuantumShardOrchestrator(BaseAgent):
     """Simulates distributed quantum-sharded state management."""
@@ -20,14 +42,14 @@ class QuantumShardOrchestrator(BaseAgent):
         super().__init__(file_path)
         self.shard_id = str(uuid.uuid4())[:8]
         self.shared_state: Dict[str, Any] = {}
-        self.state_file = Path("agent_store/quantum_state.json")
+        self.state_file = Path("data/memory/agent_store/quantum_state.json")
         self._system_prompt = (
             "You are the Quantum Shard Orchestrator. You ensure non-local state consistency. "
             "When a variable is updated in one shard, it is instantly reflected across the "
             "entire 'entangled' network."
         )
 
-    def _sync_to_disk(self):
+    def _sync_to_disk(self) -> None:
         """Simulates 'instant' broadcast by writing to a shared file (the 'quantum field')."""
         try:
             current_field = {}
@@ -59,13 +81,13 @@ class QuantumShardOrchestrator(BaseAgent):
                     data = json.load(f)
                     return data.get(key)
             except Exception:
-                pass
+                logging.debug("Failed to read quantum state file.")
         return self.shared_state.get(key)
 
     def improve_content(self, input_text: str) -> str:
         return f"Shard {self.shard_id} active. State coherency: 99.9%."
 
 if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
+    from src.core.base.utilities import create_main_function
     main = create_main_function(QuantumShardOrchestrator, "Quantum Shard Orchestrator", "Distributed state entanglement")
     main()

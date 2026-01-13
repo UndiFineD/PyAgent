@@ -11,20 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-
-import time
+from src.core.base.version import VERSION
 from dataclasses import dataclass, field
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
+from typing import Any, Dict
+import time
 
 __version__ = VERSION
-
 
 @dataclass
 class ArchivedReport:
@@ -43,4 +45,4 @@ class ArchivedReport:
     content: str
     archived_at: float = field(default_factory=time.time)  # type: ignore[assignment]
     retention_days: int = 90
-    metadata: dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]
+    metadata: Dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]

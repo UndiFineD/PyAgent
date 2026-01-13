@@ -11,19 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-
-from src.core.base.common.types.localization_language import \
-    LocalizationLanguage
-from src.core.base.common.types.localized_entry import LocalizedEntry
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.version import VERSION
+from .LocalizationLanguage import LocalizationLanguage
+from .LocalizedEntry import LocalizedEntry
+from typing import List
 
 __version__ = VERSION
-
 
 class ChangelogLocalizer:
     """Handles changelog localization to multiple languages.
@@ -41,13 +44,15 @@ class ChangelogLocalizer:
         >>> localizer.add_translation(entry, LocalizationLanguage.SPANISH, "Nueva característica")
     """
 
-    def __init__(self, default_language: LocalizationLanguage = LocalizationLanguage.ENGLISH) -> None:
+    def __init__(
+            self,
+            default_language: LocalizationLanguage = LocalizationLanguage.ENGLISH) -> None:
         """Initialize the changelog localizer.
 
         Args:
             default_language: Default language for entries.
         """
-        self.entries: list[LocalizedEntry] = []
+        self.entries: List[LocalizedEntry] = []
         self.default_language = default_language
 
     def create_entry(self, text: str) -> LocalizedEntry:
@@ -59,11 +64,19 @@ class ChangelogLocalizer:
         Returns:
             A new LocalizedEntry instance.
         """
-        entry = LocalizedEntry(original_text=text, language=self.default_language)
+        entry = LocalizedEntry(
+            original_text=text,
+            language=self.default_language
+        )
         self.entries.append(entry)
         return entry
 
-    def add_translation(self, entry: LocalizedEntry, language: LocalizationLanguage, translation: str) -> None:
+    def add_translation(
+        self,
+        entry: LocalizedEntry,
+        language: LocalizationLanguage,
+        translation: str
+    ) -> None:
         """Add a translation to an entry.
 
         Args:
@@ -82,10 +95,10 @@ class ChangelogLocalizer:
         Returns:
             Changelog text in the specified language.
         """
-        result: list[str] = []
+        result: List[str] = []
         for entry in self.entries:
             if language.value in entry.translations:
                 result.append(entry.translations[language.value])
             else:
                 result.append(entry.original_text)
-        return "\n".join(result)
+        return '\n'.join(result)

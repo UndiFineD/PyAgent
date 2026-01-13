@@ -11,25 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
-"""
-Validates improvements with automated testing.
-(Facade for src.core.base.common.validation_core)
-"""
+"""Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
+from src.core.base.version import VERSION
+from .Improvement import Improvement
+from .ValidationResult import ValidationResult
+from .ValidationSeverity import ValidationSeverity
+from typing import Any, Callable, List, Tuple
 
-from typing import Any, Callable
+__version__ = VERSION
 
-from src.core.base.common.validation_core import ValidationCore
+class ImprovementValidator:
+    """Validates improvements with automated testing.
 
-from .improvement import Improvement
-from .validation_result import ValidationResult
-from .validation_severity import ValidationSeverity
-
-
-class ImprovementValidator(ValidationCore):
-    """
     Runs validation rules and automated tests on improvements.
 
     Attributes:
@@ -38,7 +40,7 @@ class ImprovementValidator(ValidationCore):
 
     def __init__(self) -> None:
         """Initialize the validator."""
-        self.rules: list[Callable[[Improvement], tuple[bool, str]]] = []
+        self.rules: List[Callable[[Improvement], Tuple[bool, str]]] = []
         self._setup_default_rules()
 
     def _setup_default_rules(self) -> None:
@@ -46,13 +48,17 @@ class ImprovementValidator(ValidationCore):
         self.rules.append(self._rule_has_description)
         self.rules.append(self._rule_valid_effort)
 
-    def _rule_has_description(self, imp: Improvement) -> tuple[bool, str]:
+    def _rule_has_description(
+        self, imp: Improvement
+    ) -> Tuple[bool, str]:
         """Check that improvement has a description."""
         if not imp.description or len(imp.description) < 10:
             return False, "Description too short or missing"
         return True, ""
 
-    def _rule_valid_effort(self, imp: Improvement) -> tuple[bool, str]:
+    def _rule_valid_effort(
+        self, imp: Improvement
+    ) -> Tuple[bool, str]:
         """Check that effort estimate is reasonable."""
         return True, ""
 
@@ -70,12 +76,9 @@ class ImprovementValidator(ValidationCore):
         if isinstance(rule, str) and rule == "min_description_length":
             min_length = int(kwargs.get("min_length", 0) or 0)
 
-            def _min_desc(imp: Improvement) -> tuple[bool, str]:
+            def _min_desc(imp: Improvement) -> Tuple[bool, str]:
                 if len(imp.description or "") < min_length:
-                    return (
-                        False,
-                        f"Description must be at least {min_length} characters",
-                    )
+                    return False, f"Description must be at least {min_length} characters"
                 return True, ""
 
             self.rules.append(_min_desc)
@@ -102,6 +105,6 @@ class ImprovementValidator(ValidationCore):
 
         return result
 
-    def validate_all(self, improvements: list[Improvement]) -> list[ValidationResult]:
+    def validate_all(self, improvements: List[Improvement]) -> List[ValidationResult]:
         """Validate multiple improvements."""
         return [self.validate(imp) for imp in improvements]

@@ -1,4 +1,22 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """
 SelfHealingCore logic for fleet resilience.
@@ -6,10 +24,13 @@ Contains pure logic for health threshold calculation, anomaly detection,
 and recovery strategy selection.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import time
-import logging
-from typing import Dict, List, Any, Optional, Tuple
-from dataclasses import dataclass, field
+from typing import Dict, List
+from dataclasses import dataclass
+
+__version__ = VERSION
 
 @dataclass
 class HealthStatus:
@@ -44,6 +65,7 @@ class SelfHealingCore:
             status.error_count = max(0, status.error_count - 1)
         
         status.is_alive = (status.error_count < self.max_errors)
+        return status.is_alive
 
     def detect_failures(self) -> List[str]:
         """Returns a list of agent names that are considered failed."""
@@ -89,8 +111,10 @@ class SelfHealingCore:
             r_parts += [0] * (3 - len(r_parts))
             
             # Major must match exactly, Minor must be >=, Patch ignored for now
-            if p_parts[0] != r_parts[0]: return False
-            if p_parts[1] < r_parts[1]: return False
+            if p_parts[0] != r_parts[0]:
+                return False
+            if p_parts[1] < r_parts[1]:
+                return False
             return True
         except Exception:
             return False

@@ -11,23 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
-import inspect
+from src.core.base.version import VERSION
+from typing import Any, Callable, Dict, Tuple
 import logging
-from collections.abc import Callable
-from typing import Any, TypeVar
-
-from src.core.base.lifecycle.version import VERSION
-
-T = TypeVar("T")
 
 __version__ = VERSION
-
 
 class DependencyContainer:
     """Container for test dependency injection.
@@ -46,9 +44,9 @@ class DependencyContainer:
 
     def __init__(self) -> None:
         """Initialize dependency container."""
-        self._dependencies: dict[str, Any] = {}
-        self._factories: dict[str, tuple[Callable[[], Any], bool]] = {}
-        self._singletons: dict[str, Any] = {}
+        self._dependencies: Dict[str, Any] = {}
+        self._factories: Dict[str, Tuple[Callable[[], Any], bool]] = {}
+        self._singletons: Dict[str, Any] = {}
 
     def register(self, name: str, instance: Any) -> None:
         """Register a dependency instance.
@@ -108,6 +106,7 @@ class DependencyContainer:
         Returns:
             Wrapped function with injected dependencies.
         """
+        import inspect
         sig = inspect.signature(fn)
 
         def wrapper(*args: Any, **kwargs: Any) -> T:
@@ -115,7 +114,6 @@ class DependencyContainer:
                 if param.name not in kwargs and param.name in self._dependencies:
                     kwargs[param.name] = self.resolve(param.name)
             return fn(*args, **kwargs)
-
         return wrapper
 
     def clear(self) -> None:

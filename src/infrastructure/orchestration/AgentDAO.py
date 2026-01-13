@@ -1,14 +1,36 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """AgentDAO for PyAgent.
 Orchestration layer for Decentralized Autonomous Organization protocols.
 Manages resource allocation and task prioritization through agent deliberation.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 from typing import Dict, List, Any
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
+__version__ = VERSION
 
 class AgentDAO(BaseAgent):
     """Orchestrates resource and task governance across the fleet."""
@@ -44,6 +66,6 @@ class AgentDAO(BaseAgent):
         return "The DAO maintains the equilibrium of agent resource consumption."
 
 if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
+    from src.core.base.utilities import create_main_function
     main = create_main_function(AgentDAO, "AgentDAO", "Fleet Resource Governance")
     main()

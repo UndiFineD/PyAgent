@@ -11,24 +11,26 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .ReportComparison import ReportComparison
 from pathlib import Path
-
-from src.core.base.lifecycle.version import VERSION
-
-from .report_comparison import ReportComparison
+from typing import List
 
 __version__ = VERSION
 
 # Define AGENT_DIR for default parameter
 
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
-
 
 class ReportComparator:
     """Compares report versions to show differences.
@@ -68,15 +70,15 @@ class ReportComparator:
             added=added,
             removed=removed,
             changed=[],
-            unchanged_count=unchanged,
+            unchanged_count=unchanged
         )
 
-    def _extract_items(self, content: str) -> list[str]:
+    def _extract_items(self, content: str) -> List[str]:
         """Extract list items from markdown content."""
 
-        items: list[str] = []
-        for line in content.split("\n"):
+        items: List[str] = []
+        for line in content.split('\n'):
             line = line.strip()
-            if line.startswith("- "):
+            if line.startswith('- '):
                 items.append(line)
         return items

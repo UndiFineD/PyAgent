@@ -11,28 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
-"""Agent for integrating simulated logic paths into production codebases."""
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import logging
-
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import as_tool
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
-
-# pylint: disable=too-many-ancestors
 class RealityGraftingAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Reality Grafting Agent: Integrates successful
-    logic paths from simulations and experimental shards into production codebases.
+    Phase 34: Reality Grafting.
+    Automatically 'grafts' successful logic paths from DreamState simulations into production.
     """
-
+    
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -46,13 +45,11 @@ class RealityGraftingAgent(BaseAgent):
         """
         Takes synthesized intelligence from a dream cycle and implements it.
         """
-        logging.info(
-            f"RealityGrafting: Attempting to graft skill for '{focus_area}' into reality."
-        )
-
+        logging.info(f"RealityGrafting: Attempting to graft skill for '{focus_area}' into reality.")
+        
         # In a production system, this would call SpecToolAgent to generate code.
         # For this implementation, we formalize the 'grafting' into a persistent log.
-
+        
         report = (
             f"### Reality Grafting Report\n"
             f"- **Focus Area**: {focus_area}\n"
@@ -60,10 +57,10 @@ class RealityGraftingAgent(BaseAgent):
             f"- **Logic Grafted**: {dream_output[:100]}...\n"
             f"- **Result**: New capability identified and prepared for deployment."
         )
-
+        
         logging.info(f"Grafting successful for {focus_area}")
         return report
 
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    def improve_content(self, prompt: str) -> str:
         # Standard implementation for base agent compatibility
         return self.graft_skill("manual_graft", prompt)

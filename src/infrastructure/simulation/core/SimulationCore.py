@@ -1,10 +1,11 @@
+
 """
 Core logic for Swarm Simulation and Stress-Testing (Phase 181).
 Handles stochastic failure modeling and visualization progress hooks.
 """
 
 import random
-from typing import List, Dict, Any
+from typing import List
 
 class SimulationCore:
     @staticmethod

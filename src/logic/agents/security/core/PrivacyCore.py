@@ -1,10 +1,11 @@
+
 """
 Core logic for Data Privacy (Phase 171).
 Handles PII detection and redaction using regex.
 """
 
 import re
-from typing import Dict, List
+from typing import Dict
 
 class PrivacyCore:
     # Patterns for sensitive data

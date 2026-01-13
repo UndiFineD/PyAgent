@@ -11,27 +11,28 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-
-from collections.abc import Callable
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
+from src.core.base.version import VERSION
+from .Improvement import Improvement
+from typing import Callable, List
 
 __version__ = VERSION
-
 
 class ImprovementDashboard:
     """Renders a lightweight dashboard and emits update callbacks."""
 
     def __init__(self) -> None:
-        self._callbacks: list[Callable[[], None]] = []
-        self._improvements: list[Improvement] = []
+        self._callbacks: List[Callable[[], None]] = []
+        self._improvements: List[Improvement] = []
 
     def on_update(self, callback: Callable[[], None]) -> None:
         self._callbacks.append(callback)
@@ -41,7 +42,7 @@ class ImprovementDashboard:
         for cb in list(self._callbacks):
             cb()
 
-    def render(self, improvements: list[Improvement]) -> str:
+    def render(self, improvements: List[Improvement]) -> str:
         lines = ["# Improvements Dashboard"]
         for imp in improvements:
             lines.append(f"- {imp.title}")

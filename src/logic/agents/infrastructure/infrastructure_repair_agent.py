@@ -11,25 +11,26 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent for automated infrastructure and environment repair.
 Detects and fixes environment issues like missing dependencies or broken paths.
 """
 
 from __future__ import annotations
-
-import logging
+from src.core.base.version import VERSION
 import subprocess
+import logging
 import sys
-
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
-
-# pylint: disable=too-many-ancestors
 class InfrastructureRepairAgent(BaseAgent):
     """Monitors and repairs the agent's execution environment."""
 
@@ -39,15 +40,17 @@ class InfrastructureRepairAgent(BaseAgent):
 
     def audit_environment(self) -> dict:
         """Checks for common environment issues."""
-        import importlib.util
-
         issues = []
-
+        
         # Check for common packages
-        if importlib.util.find_spec("pandas") is None:
+        try:
+            import pandas
+        except ImportError:
             issues.append({"type": "missing_package", "package": "pandas"})
-
-        if importlib.util.find_spec("yaml") is None:
+            
+        try:
+            import yaml
+        except ImportError:
             issues.append({"type": "missing_package", "package": "pyyaml"})
 
         return {"status": "clean" if not issues else "degraded", "issues": issues}
@@ -62,10 +65,10 @@ class InfrastructureRepairAgent(BaseAgent):
                 subprocess.check_call([sys.executable, "-m", "pip", "install", package])
                 self._record(cmd_str, "Success", provider="Shell", model="pip")
                 return f"Successfully installed {package}."
-            except (subprocess.CalledProcessError, OSError) as e:
+            except Exception as e:
                 self._record(cmd_str, f"Failed: {str(e)}", provider="Shell", model="pip")
                 return f"Failed to install {package}: {e}"
-
+        
         return "Unknown issue type."
 
     def auto_repair(self) -> str:
@@ -73,10 +76,10 @@ class InfrastructureRepairAgent(BaseAgent):
         report = self.audit_environment()
         if report["status"] == "clean":
             return "Environment is healthy."
-
+            
         results = []
         for issue in report["issues"]:
             res = self.repair_issue(issue)
             results.append(res)
-
+            
         return "\n".join(results)

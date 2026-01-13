@@ -11,32 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_stats.py"""
 
 from __future__ import annotations
-
-<<<<<<<< HEAD:src/observability/stats/exporters/cloud_exporter.py
-========
-
+from src.core.base.version import VERSION
 from ..observability_core import ExportDestination
 from ..observability_core import Metric
-
 from datetime import datetime
 from typing import Any, Dict, List, Optional
->>>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules)):src/observability/stats/exporters/CloudExporter.py
 import json
 import logging
-from datetime import datetime
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from ..observability_core import ExportDestination, Metric
 
 __version__ = VERSION
-
 
 class CloudExporter:
     """Export stats to cloud monitoring services.
@@ -50,7 +43,12 @@ class CloudExporter:
         export_queue: Queued metrics for export.
     """
 
-    def __init__(self, destination: ExportDestination, api_key: str = "", endpoint: str = "") -> None:
+    def __init__(
+        self,
+        destination: ExportDestination,
+        api_key: str = "",
+        endpoint: str = ""
+    ) -> None:
         """Initialize cloud exporter.
 
         Args:
@@ -61,9 +59,9 @@ class CloudExporter:
         self.destination = destination
         self.api_key = api_key
         self.endpoint = endpoint or self._get_default_endpoint()
-        self.export_queue: list[Metric] = []
+        self.export_queue: List[Metric] = []
         self._export_count = 0
-        self._last_export: datetime | None = None
+        self._last_export: Optional[datetime] = None
 
     def _get_default_endpoint(self) -> str:
         """Get default endpoint for destination.
@@ -76,7 +74,7 @@ class CloudExporter:
             ExportDestination.PROMETHEUS: "http://localhost:9090 / api / v1 / write",
             ExportDestination.GRAFANA: "http://localhost:3000 / api / datasources",
             ExportDestination.CLOUDWATCH: "cloudwatch.amazonaws.com",
-            ExportDestination.STACKDRIVER: "monitoring.googleapis.com",
+            ExportDestination.STACKDRIVER: "monitoring.googleapis.com"
         }
         return defaults.get(self.destination, "")
 
@@ -111,53 +109,35 @@ class CloudExporter:
 
     def _export_datadog(self) -> None:
         """Export in Datadog format."""
-        payload: dict[str, list[dict[str, Any]]] = {
-            "series": [
-                {
-                    "metric": m.name,
-                    "points": [[int(datetime.now().timestamp()), m.value]],
-                    "type": m.metric_type.value,
-                    "tags": [f"{k}:{v}" for k, v in m.tags.items()],
-                }
-                for m in self.export_queue
-            ]
+        payload: Dict[str, list[Dict[str, Any]]] = {
+            "series": [{
+                "metric": m.name,
+                "points": [[int(datetime.now().timestamp()), m.value]],
+                "type": m.metric_type.value,
+                "tags": [f"{k}:{v}" for k, v in m.tags.items()]
+            } for m in self.export_queue]
         }
         logging.debug(f"Datadog export: {json.dumps(payload)}")
 
     def _export_prometheus(self) -> None:
-        """Export in Prometheus format (OpenMetrics)."""
-        metrics_file = "data/metrics/prometheus.metrics"
-        try:
-            import os
-
-            os.makedirs("data/metrics", exist_ok=True)
-
-            lines = []
-            for m in self.export_queue:
-                # Track specialized metrics as requested in Phase 290
-                # Success Rate (Counter/Gauge)
-                # Latency (Histogram/Summary)
-                # Token Burn Rate (Gauge)
-
-                tags = ",".join(f'{k}="{v}"' for k, v in m.tags.items())
-                tag_str = f"{{{tags}}}" if tags else ""
-                lines.append(f"{m.name}{tag_str} {m.value}")
-
-            with open(metrics_file, 'a', encoding='utf-8') as f:
-                f.write("\n".join(lines) + "\n")
-
-            logging.info(f"Prometheus export: Appended {len(lines)} metrics to {metrics_file}")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"Prometheus export failed: {e}")
+        """Export in Prometheus format."""
+        lines: List[str] = []
+        for m in self.export_queue:
+            tags = ",".join(f'{k}="{v}"' for k, v in m.tags.items())
+            lines.append(f"{m.name}{{{tags}}} {m.value}")
+        logging.debug("Prometheus export:\n" + "\n".join(lines))
 
     def _export_generic(self) -> None:
         """Generic export format."""
-        data: list[dict[str, Any]] = [
-            {"name": m.name, "value": m.value, "timestamp": m.timestamp, "tags": m.tags} for m in self.export_queue
-        ]
+        data: List[Dict[str, Any]] = [{
+            "name": m.name,
+            "value": m.value,
+            "timestamp": m.timestamp,
+            "tags": m.tags
+        } for m in self.export_queue]
         logging.debug(f"Generic export: {json.dumps(data)}")
 
-    def get_export_stats(self) -> dict[str, Any]:
+    def get_export_stats(self) -> Dict[str, Any]:
         """Get export statistics.
 
         Returns:
@@ -167,5 +147,5 @@ class CloudExporter:
             "destination": self.destination.value,
             "total_exported": self._export_count,
             "last_export": self._last_export.isoformat() if self._last_export else None,
-            "queue_size": len(self.export_queue),
+            "queue_size": len(self.export_queue)
         }

@@ -11,16 +11,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.version import VERSION
+from typing import Dict
 
 __version__ = VERSION
-
 
 class RequestCompressor:
     """Compresses and decompresses request payloads.
@@ -40,7 +44,6 @@ class RequestCompressor:
             compression_level: Compression level (1 - 9, default 6).
         """
         import zlib
-
         self._zlib = zlib
         self.compression_level = compression_level
         self._stats = {
@@ -99,6 +102,6 @@ class RequestCompressor:
         # Uncompressed
         return payload.decode("utf-8")
 
-    def get_stats(self) -> dict[str, int]:
+    def get_stats(self) -> Dict[str, int]:
         """Get compression statistics."""
         return dict(self._stats)

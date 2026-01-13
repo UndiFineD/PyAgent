@@ -11,24 +11,26 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .TestProfile import TestProfile
+from typing import Any, Dict, Optional
 import logging
 import os
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .test_profile import TestProfile
 
 __version__ = VERSION
 
-
 class TestProfileManager:
+    __test__ = False
     """Manages test configuration profiles.
 
     Allows switching between test configurations easily.
@@ -42,13 +44,11 @@ class TestProfileManager:
         timeout=manager.get_setting("timeout")  # 60
     """
 
-    __test__ = False
-
     def __init__(self) -> None:
         """Initialize profile manager."""
-        self._profiles: dict[str, TestProfile] = {}
-        self._active: str | None = None
-        self._original_env: dict[str, str | None] = {}
+        self._profiles: Dict[str, TestProfile] = {}
+        self._active: Optional[str] = None
+        self._original_env: Dict[str, Optional[str]] = {}
 
     def add_profile(self, profile: TestProfile) -> None:
         """Add a profile.
@@ -58,7 +58,7 @@ class TestProfileManager:
         """
         self._profiles[profile.name] = profile
 
-    def get_profile(self, name: str) -> TestProfile | None:
+    def get_profile(self, name: str) -> Optional[TestProfile]:
         """Get a profile by name."""
         return self._profiles.get(name)
 
@@ -119,7 +119,7 @@ class TestProfileManager:
         profile = self._profiles[self._active]
         return profile.settings.get(key, default)
 
-    def get_active_profile(self) -> TestProfile | None:
+    def get_active_profile(self) -> Optional[TestProfile]:
         """Get currently active profile."""
         if self._active:
             return self._profiles[self._active]

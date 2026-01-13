@@ -1,3 +1,4 @@
+
 """
 Core logic for Quantum-Ready Reasoning (Phase 177).
 Mathematical models for "Superposition Prompting" (Theoretical).
@@ -20,8 +21,10 @@ class QuantumCore:
         for p in prompts:
             # Simple heuristic: longer prompts with specific keywords get higher weight
             score = len(p) * 0.01
-            if "logic" in p.lower(): score += 0.5
-            if "efficiency" in p.lower(): score += 0.3
+            if "logic" in p.lower():
+                score += 0.5
+            if "efficiency" in p.lower():
+                score += 0.3
             scores.append(score)
             
         # Softmax normalization

@@ -1,4 +1,35 @@
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+from __future__ import annotations
+from src.core.base.version import VERSION
 from typing import List, Dict, Any
+from dataclasses import dataclass, field
+
+__version__ = VERSION
+
+@dataclass
+class PlanStep:
+    agent: str
+    action: str
+    args: List[Any] = field(default_factory=list)
+    metadata: Dict[str, Any] = field(default_factory=dict)
 
 class TaskDecomposerCore:
     """
@@ -7,29 +38,74 @@ class TaskDecomposerCore:
     """
 
     def generate_plan(self, request: str) -> List[Dict[str, Any]]:
-        """Core planning logic."""
+        """
+        Core planning logic.
+        Uses expanded heuristics and dependency analysis (Phase 119).
+        """
         request_lower = request.lower()
-        steps = []
+        steps: List[PlanStep] = []
         
-        # Heuristic rules
-        if "analyze" in request_lower or "data" in request_lower:
-            steps.append({"agent": "DataAgent", "action": "analyze_csv", "args": ["data.csv"]})
+        # 1. Research & Analysis Phase
+        if any(w in request_lower for w in ["research", "search", "analyze", "find"]):
+            steps.append(PlanStep(
+                agent="ResearchAgent", 
+                action="search_and_summarize", 
+                args=[request],
+                metadata={"priority": 1}
+            ))
             
-        if "code" in request_lower or "refactor" in request_lower:
-            steps.append({"agent": "CoderAgent", "action": "improve_content", "args": ["# code here"]})
+        # 2. Implementation Phase
+        if any(w in request_lower for w in ["code", "refactor", "fix", "implement"]):
+            steps.append(PlanStep(
+                agent="CoderAgent", 
+                action="improve_content", 
+                args=["# Implement request: " + request],
+                metadata={"priority": 2, "depends_on": "ResearchAgent"}
+            ))
             
-        if "research" in request_lower or "search" in request_lower:
-            steps.append({"agent": "ResearchAgent", "action": "search_and_summarize", "args": [request]})
+        # 3. Data/SQL Phase
+        if any(w in request_lower for w in ["data", "sql", "db", "database"]):
+            steps.append(PlanStep(
+                agent="SQLAgent", 
+                action="query_database", 
+                args=["SELECT * FROM relevant_tables WHERE context LIKE '%" + request[:20] + "%'"],
+                metadata={"priority": 2}
+            ))
+            
+        # 4. Final Review
+        if steps:
+            steps.append(PlanStep(
+                agent="LinguisticAgent", 
+                action="articulate", 
+                args=["Summarize the results of the task: " + request],
+                metadata={"priority": 10, "is_final": True}
+            ))
             
         # Default fallback
         if not steps:
-            steps.append({"agent": "KnowledgeAgent", "action": "scan_workspace", "args": ["/"]})
+            steps.append(PlanStep(
+                agent="KnowledgeAgent", 
+                action="scan_workspace", 
+                args=["/"],
+                metadata={"reason": "unrecognized request structure"}
+            ))
             
-        return steps
+        # Convert dataclasses to dicts for shell compatibility
+        return [self._to_dict(s) for s in steps]
+
+    def _to_dict(self, step: PlanStep) -> Dict[str, Any]:
+        return {
+            "agent": step.agent,
+            "action": step.action,
+            "args": step.args,
+            "metadata": step.metadata
+        }
 
     def summarize_plan(self, steps: List[Dict[str, Any]]) -> str:
         """Core summary logic."""
-        summary_lines = ["Plan:"]
+        summary_lines = ["# 📋 Task Execution Plan"]
         for i, step in enumerate(steps):
-            summary_lines.append(f"{i+1}. {step.get('agent')} -> {step.get('action')}")
+            meta = step.get('metadata', {})
+            pri = meta.get('priority', 5)
+            summary_lines.append(f"{i+1}. **{step.get('agent')}** :: `{step.get('action')}` (P{pri})")
         return "\n".join(summary_lines)

@@ -11,23 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from typing import Any, Callable, Dict, List, Optional
 import logging
 import os
 import threading
 import time
-from collections.abc import Callable
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 class ConfigHotReloader:
     """Hot-reloads backend configuration without restart.
@@ -45,9 +46,9 @@ class ConfigHotReloader:
 
     def __init__(self) -> None:
         """Initialize config hot reloader."""
-        self._config: dict[str, Any] = {}
-        self._env_watches: dict[str, str] = {}  # config_key -> env_var
-        self._callbacks: list[Callable[[str, Any], None]] = []
+        self._config: Dict[str, Any] = {}
+        self._env_watches: Dict[str, str] = {}  # config_key -> env_var
+        self._callbacks: List[Callable[[str, Any], None]] = []
         self._lock = threading.Lock()
         self._last_reload = time.time()
 
@@ -66,7 +67,7 @@ class ConfigHotReloader:
                 for callback in self._callbacks:
                     try:
                         callback(key, value)
-                    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                    except Exception as e:
                         logging.warning(f"Config callback error: {e}")
 
     def get_config(self, key: str, default: Any = None) -> Any:
@@ -84,7 +85,7 @@ class ConfigHotReloader:
         with self._lock:
             return self._config.get(key, default)
 
-    def watch_env(self, env_var: str, config_key: str | None = None) -> None:
+    def watch_env(self, env_var: str, config_key: Optional[str] = None) -> None:
         """Watch environment variable for changes.
 
         Args:

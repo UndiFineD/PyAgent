@@ -11,23 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .RequestPriority import RequestPriority
+from dataclasses import dataclass, field
+from typing import Any, Dict, Optional
 import time
 import uuid
-from dataclasses import dataclass, field
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .request_priority import RequestPriority
 
 __version__ = VERSION
-
 
 @dataclass
 class RequestContext:
@@ -42,7 +43,7 @@ class RequestContext:
     """
 
     request_id: str = field(default_factory=lambda: str(uuid.uuid4()))
-    correlation_id: str | None = None
+    correlation_id: Optional[str] = None
     priority: RequestPriority = RequestPriority.NORMAL
     created_at: float = field(default_factory=time.time)
-    metadata: dict[str, Any] = field(default_factory=lambda: {})
+    metadata: Dict[str, Any] = field(default_factory=lambda: {})

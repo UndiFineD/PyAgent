@@ -11,25 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-
-import logging
+from src.core.base.version import VERSION
+from .ReportType import ReportType
 from pathlib import Path
-
-from src.core.base.lifecycle.version import VERSION
-
-from .report_type import ReportType
+from typing import List, Optional
+import logging
 
 __version__ = VERSION
 
 # Define AGENT_DIR for default parameter
 
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
-
 
 class ReportAPI:
     """API for programmatic report access.
@@ -48,7 +50,7 @@ class ReportAPI:
         self.reports_dir = reports_dir
         logging.debug(f"ReportAPI initialized for {reports_dir}")
 
-    def list_reports(self, file_pattern: str = "*.md") -> list[str]:
+    def list_reports(self, file_pattern: str = "*.md") -> List[str]:
         """List available reports.
         Args:
             file_pattern: Glob pattern.
@@ -58,7 +60,7 @@ class ReportAPI:
 
         return [str(p) for p in self.reports_dir.glob(file_pattern)]
 
-    def get_report(self, file_stem: str, report_type: ReportType) -> str | None:
+    def get_report(self, file_stem: str, report_type: ReportType) -> Optional[str]:
         """Get a specific report.
         Args:
             file_stem: File stem.
@@ -78,7 +80,12 @@ class ReportAPI:
             return path.read_text(encoding="utf-8")
         return None
 
-    def create_report(self, file_stem: str, report_type: ReportType, content: str) -> bool:
+    def create_report(
+        self,
+        file_stem: str,
+        report_type: ReportType,
+        content: str
+    ) -> bool:
         """Create or update a report.
         Args:
             file_stem: File stem.
@@ -98,5 +105,5 @@ class ReportAPI:
         try:
             path.write_text(content, encoding="utf-8")
             return True
-        except (IOError, OSError, UnicodeEncodeError) as _e:
+        except Exception:
             return False

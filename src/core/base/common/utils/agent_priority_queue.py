@@ -11,19 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from typing import List, Optional, Dict, Any
 import logging
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 class AgentPriorityQueue:
     """Priority queue for ordered agent execution.
@@ -42,14 +44,14 @@ class AgentPriorityQueue:
 
     def __init__(self) -> None:
         """Initialize priority queue."""
-        self._agents: dict[str, dict[str, Any]] = {}
+        self._agents: Dict[str, Dict[str, Any]] = {}
 
     def add_agent(
         self,
         name: str,
         priority: int = 5,
-        depends_on: list[str] | None = None,
-        metadata: dict[str, Any] | None = None,
+        depends_on: Optional[List[str]] = None,
+        metadata: Optional[Dict[str, Any]] = None,
     ) -> None:
         """Add agent to queue.
 
@@ -79,7 +81,7 @@ class AgentPriorityQueue:
             return True
         return False
 
-    def get_execution_order(self) -> list[str]:
+    def get_execution_order(self) -> List[str]:
         """Get agents in execution order.
 
         Returns:

@@ -11,7 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """
 Unified Version Gatekeeper for PyAgent Fleet.
@@ -19,13 +24,11 @@ Handles semantic versioning checks and capability validation.
 """
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import logging
-
-from src.core.base.lifecycle.version import VERSION
+from typing import List
 
 __version__ = VERSION
-
 
 class VersionGate:
     """
@@ -40,35 +43,35 @@ class VersionGate:
         Major version must match or current must be higher (if backward compatible).
         """
         try:
-            curr_parts = [int(x) for x in current.split(".")]
-            req_parts = [int(x) for x in required.split(".")]
-
+            curr_parts = [int(x) for x in current.split('.')]
+            req_parts = [int(x) for x in required.split('.')]
+            
             # Pad to 3 parts (major, minor, patch)
             curr_parts += [0] * (3 - len(curr_parts))
             req_parts += [0] * (3 - len(req_parts))
-
+            
             # Major check: Breaking changes occur on major version bumps
             if curr_parts[0] > req_parts[0]:
-                # In this ecosystem, newer majors are generally backward compatible
+                # In this ecosystem, newer majors are generally backward compatible 
                 # unless explicitly flagged otherwise.
                 return True
             if curr_parts[0] < req_parts[0]:
                 return False
-
+                
             # Minor check: Feature match
             if curr_parts[1] > req_parts[1]:
                 return True
             if curr_parts[1] < req_parts[1]:
                 return False
-
+                
             # Patch check
             return curr_parts[2] >= req_parts[2]
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.debug(f"VersionGate: Failed to parse version '{current}' or '{required}': {e}")
             # Fail safe: if we can't parse, assume it's legacy (compatible)
             return True
 
     @staticmethod
-    def filter_by_capability(available: list[str], required: list[str]) -> list[str]:
+    def filter_by_capability(available: List[str], required: List[str]) -> List[str]:
         """Filters a list of providers by required capabilities."""
         return [p for p in available if all(cap in p for cap in required)]

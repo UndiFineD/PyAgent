@@ -11,40 +11,35 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-Core logic for conversation history and message management.
-"""
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 from typing import List
+from src.core.base.models import MessageRole, ConversationMessage
 
-from .base_core import BaseCore
-from .models import ConversationMessage, MessageRole
+__version__ = VERSION
 
-
-class ConversationCore(BaseCore):
-    """
-    Authoritative engine for conversation state.
-    """
+class ConversationHistory:
+    """Manages a conversation history with message storage and retrieval."""
 
     def __init__(self, max_messages: int = 100) -> None:
-        super().__init__()
         self.messages: List[ConversationMessage] = []
         self.max_messages = max_messages
 
-    def add_message(self, role: MessageRole, content: str) -> None:
-        """Add a new message to the conversation history."""
+    def add(self, role: MessageRole, content: str) -> None:
         msg = ConversationMessage(role=role, content=content)
         self.messages.append(msg)
         if len(self.messages) > self.max_messages:
-            self.messages = self.messages[-self.max_messages :]
+            self.messages = self.messages[-self.max_messages:]
 
-    def get_history(self) -> List[ConversationMessage]:
-        """Return a copy of the conversation history."""
+    def get_context(self) -> List[ConversationMessage]:
         return self.messages.copy()
 
     def clear(self) -> None:
-        """Clear the conversation history."""
         self.messages.clear()

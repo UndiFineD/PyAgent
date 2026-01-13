@@ -11,13 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Tool 1.py module.
-"""
-
 from __future__ import annotations
-
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -30,7 +25,6 @@ __version__ = VERSION
 """
 Generated tool for CSV Parsing
 """
-
 
 def run(data: str) -> str:
     """Read CSV and sum column A."""

@@ -1,0 +1,83 @@
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""Auto-generated module exports."""
+
+from __future__ import annotations
+from src.core.base.version import VERSION
+from .AgentAssertions import AgentAssertions
+from .AssertionHelpers import AssertionHelpers
+from .BaselineManager import BaselineManager
+from .Benchmarker import Benchmarker
+from .CleanupManager import CleanupManager
+from .CleanupStrategy import CleanupStrategy
+from .CoverageTracker import CoverageTracker
+from .CrossPlatformHelper import CrossPlatformHelper
+from .DependencyContainer import DependencyContainer
+from .DependencyResolver import DependencyResolver
+from .EnvironmentDetector import EnvironmentDetector
+from .EnvironmentIsolator import EnvironmentIsolator
+from .FileSystemIsolator import FileSystemIsolator
+from .FixtureFactory import FixtureFactory
+from .FixtureGenerator import FixtureGenerator
+from .FlakinessDetector import FlakinessDetector
+from .FlakinessReport import FlakinessReport
+from .IsolationLevel import IsolationLevel
+from .LogCapturer import LogCapturer
+from .MockAIBackend import MockAIBackend
+from .MockResponse import MockResponse
+from .MockResponseType import MockResponseType
+from .ModuleLoader import ModuleLoader
+from .ParallelTestResult import ParallelTestResult
+from .ParallelTestRunner import ParallelTestRunner
+from .ParameterizedTestCase import ParameterizedTestCase
+from .ParameterizedTestGenerator import ParameterizedTestGenerator
+from .PerformanceMetric import PerformanceMetric
+from .PerformanceMetricType import PerformanceMetricType
+from .PerformanceTracker import PerformanceTracker
+from .RecordedInteraction import RecordedInteraction
+from .ResourceHandle import ResourceHandle
+from .ResourcePool import ResourcePool
+from .RetryHelper import RetryHelper
+from .SnapshotComparisonResult import SnapshotComparisonResult
+from .SnapshotManager import SnapshotManager
+from .TestAssertion import TestAssertion
+from .TestBaseline import TestBaseline
+from .TestConfigLoader import TestConfigLoader
+from .TestDataCleaner import TestDataCleaner
+from .TestDataFactory import TestDataFactory
+from .TestDataGenerator import TestDataGenerator
+from .TestDataSeeder import TestDataSeeder
+from .TestDataType import TestDataType
+from .TestEnvironment import TestEnvironment
+from .TestFixture import TestFixture
+from .TestLogEntry import TestLogEntry
+from .TestLogger import TestLogger
+from .TestOutputFormatter import TestOutputFormatter
+from .TestProfile import TestProfile
+from .TestProfileManager import TestProfileManager
+from .TestRecorder import TestRecorder
+from .TestReportGenerator import TestReportGenerator
+from .TestResult import TestResult
+from .TestResultAggregator import TestResultAggregator
+from .TestSnapshot import TestSnapshot
+from .TestStatus import TestStatus
+from .TestTimer import TestTimer
+
+__version__ = VERSION

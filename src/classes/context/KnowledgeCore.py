@@ -1,4 +1,22 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """
 KnowledgeCore logic for specialized workspace analysis.
@@ -6,9 +24,13 @@ Contains pure regex and indexing logic for fast symbol discovery.
 This file is optimized for Rust migration (Phase 114).
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import re
 import logging
 from typing import Dict, List, Any, Optional, Tuple
+
+__version__ = VERSION
 
 class KnowledgeCore:
     """
@@ -32,6 +54,32 @@ class KnowledgeCore:
     def extract_markdown_backlinks(self, content: str) -> List[str]:
         """Extracts [[WikiStyle]] backlinks from markdown content."""
         return self.extract_symbols(content, r"\[\[(.*?)\]\]")
+
+    def build_symbol_map(self, root: Path, patterns: Dict[str, str]) -> Dict[str, List[Dict[str, Any]]]:
+        """
+        Builds a map of symbols and backlinks.
+        Note: This currently violates the 'No I/O' rule due to the existing KnowledgeAgent caller.
+        Will be moved to an 'I/O' layer in Phase 126.
+        """
+        symbol_map: Dict[str, List[Dict[str, Any]]] = {}
+        
+        for ext, pattern in patterns.items():
+            for file_path in root.rglob(f"*{ext}"):
+                try:
+                    rel_path = str(file_path.relative_to(root))
+                    content = file_path.read_text(encoding='utf-8', errors='ignore')
+                    symbols = re.findall(pattern, content)
+                    for sym in symbols:
+                        if sym not in symbol_map:
+                            symbol_map[sym] = []
+                        symbol_map[sym].append({
+                            "path": rel_path,
+                            "snippet": content[:200].replace("\n", " ").strip()
+                        })
+                except Exception as e:
+                    logging.warning(f"KnowledgeCore: Error indexing {file_path}: {e}")
+                    
+        return symbol_map
 
     def process_file_content(self, rel_path: str, content: str, extension: str) -> List[Tuple[str, str, str, str]]:
         """

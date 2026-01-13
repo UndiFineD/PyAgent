@@ -1,20 +1,41 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Registry for mapping agent names to their implementations and initialization logic."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import importlib
 import logging
 import os
 import json
-from typing import Dict, Any, Tuple, Type, Optional, Callable, List
+from typing import Dict, Any, Tuple, Optional, List, Iterable
 from pathlib import Path
 from .ResilientStubs import ResilientStub
-from src.classes.specialized.MCPAgent import MCPAgent
+from src.logic.agents.system.MCPAgent import MCPAgent
 from .AgentRegistryCore import AgentRegistryCore
 from .BootstrapConfigs import BOOTSTRAP_AGENTS
+from src.core.base.version import SDK_VERSION
 
 # Import local version for gatekeeping
-from src.version import SDK_VERSION
+__version__ = VERSION
 
 class LazyAgentMap(dict):
     """A dictionary that instantiates agents only when they are first accessed."""
@@ -38,7 +59,16 @@ class LazyAgentMap(dict):
 
     def _scan_workspace_for_agents(self) -> List[str]:
         """Performs the I/O-bound scanning of the workspace."""
-        subdirs = ["src/classes/specialized", "src/classes/coder", "src/classes/fleet", "src/classes/context", "plugins"]
+        subdirs = [
+            "src/logic/agents/cognitive", 
+            "src/logic/agents/development", 
+            "src/logic/agents/infrastructure",
+            "src/logic/agents/security",
+            "src/logic/agents/swarm",
+            "src/logic/agents/system",
+            "src/logic/agents/specialized",
+            "plugins"
+        ]
         found_paths = []
         for subdir in subdirs:
             search_root = self.workspace_root / subdir
@@ -49,7 +79,7 @@ class LazyAgentMap(dict):
             # but keep os.walk for legacy plugin support.
             for root, _, files in os.walk(search_root):
                 for file in files:
-                    if "Agent" in file or "Orchestrator" in file:
+                    if file.endswith(".py") and not file.startswith("__"):
                         full_path = Path(root) / file
                         rel_path = full_path.relative_to(self.workspace_root)
                         found_paths.append(str(rel_path))
@@ -88,11 +118,65 @@ class LazyAgentMap(dict):
                 pass
         return False
 
+    def check_for_registry_cycles(self) -> None:
+        """
+        Uses Core logic to ensure no circular dependencies exist in the registry's
+        known configurations.
+        """
+        # Build dependency graph from all configs
+        all_configs = {**self.registry_configs, **self._manifest_configs, **self._discovered_configs}
+        dep_graph: Dict[str, List[str]] = {}
+        
+        # Simple heuristic: look for agent names in the config string/list
+        for agent_name, cfg in all_configs.items():
+            deps = []
+            cfg_str = str(cfg).lower()
+            for other_name in all_configs:
+                if other_name.lower() in cfg_str and other_name != agent_name:
+                    deps.append(other_name)
+            dep_graph[agent_name] = deps
+            
+        cycles = self.core.detect_circular_dependencies(dep_graph)
+        if cycles:
+            for cycle in cycles:
+                logging.error(f"REGISTRY CRITICAL: Circular dependency detected: {' -> '.join(cycle)}")
+            raise RecursionError(f"Circular dependencies detected in Agent Registry: {cycles[0]}")
+
+    def __contains__(self, key: object) -> bool:
+        if super().__contains__(key):
+            return True
+        return key in self.registry_configs or key in self._manifest_configs or key in self._discovered_configs
+
+    def keys(self) -> List[str]:
+        # Combine all potential keys
+        all_ks = set(super().keys())
+        all_ks.update(self.registry_configs.keys())
+        all_ks.update(self._manifest_configs.keys())
+        all_ks.update(self._discovered_configs.keys())
+        return list(all_ks)
+
+    def __iter__(self) -> Iterable[str]:
+        return iter(self.keys())
+
+    def __len__(self) -> int:
+        return len(self.keys())
+
+    def items(self) -> List[Tuple[str, Any]]:
+        return [(k, self[k]) for k in self.keys()]
+
+    def values(self) -> List[Any]:
+        return [self[k] for k in self.keys()]
+
     def __getitem__(self, key: str) -> Any:
+        # 0. Check for manual overrides/instances first
         if key in self._instances:
             return self._instances[key]
         
-        # Priority 1: Hardcoded configs (Essential bootstrap functions)
+        # Also check dict itself (if manually assigned)
+        if super().__contains__(key):
+            return super().__getitem__(key)
+            
+        # 1. Priority 1: Hardcoded configs (Essential bootstrap functions)
         if key in self.registry_configs:
             return self._instantiate(key, self.registry_configs[key])
         
@@ -140,7 +224,17 @@ class LazyAgentMap(dict):
                 self._instances[key] = stub
                 return stub
 
-            agent_class = getattr(module, class_name)
+            # Try variants of class name
+            try:
+                agent_class = getattr(module, class_name)
+            except AttributeError:
+                try:
+                    agent_class = getattr(module, class_name + "Agent")
+                except AttributeError:
+                    try:
+                        agent_class = getattr(module, "Agent")
+                    except AttributeError:
+                        raise AttributeError(f"Module '{module_path}' has no attribute '{class_name}' or variants.")
             
             # Phase 105: Default to workspace root if no specific arg provided (BaseAgent compatibility)
             arg = None

@@ -1,11 +1,32 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import os
-import json
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from typing import Dict, List, Any
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
+__version__ = VERSION
 
 class SynthesisAgent(BaseAgent):
     """
@@ -15,7 +36,7 @@ class SynthesisAgent(BaseAgent):
     
     def __init__(self, workspace_root: str) -> None:
         # Initialize with a dummy path as base_agent needs a file path
-        dummy_path = os.path.join(workspace_root, "src/classes/specialized/SynthesisAgent.py")
+        dummy_path = os.path.join(workspace_root, "src/logic/agents/cognitive/SynthesisAgent.py")
         super().__init__(dummy_path)
         self.workspace_root = workspace_root
         self._system_prompt = (
@@ -57,7 +78,7 @@ class SynthesisAgent(BaseAgent):
             agent_code = agent_code.split("```")[1].split("```")[0].strip()
 
         # Step 3: Save the new agent file
-        target_dir = os.path.join(self.workspace_root, "src/classes/specialized")
+        target_dir = os.path.join(self.workspace_root, "src/agents")
         os.makedirs(target_dir, exist_ok=True)
         file_path = os.path.join(target_dir, f"{new_agent_name}.py")
         

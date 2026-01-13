@@ -11,30 +11,31 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-
-from collections.abc import Callable
+from src.core.base.version import VERSION
+from src.core.base.types.CodeLanguage import CodeLanguage
+from src.core.base.types.StyleRuleSeverity import StyleRuleSeverity
 from dataclasses import dataclass
-
-from src.core.base.common.types.code_language import CodeLanguage
-from src.core.base.common.types.style_rule_severity import StyleRuleSeverity
-from src.core.base.lifecycle.version import VERSION
+from typing import Callable, Optional
 
 __version__ = VERSION
-
 
 @dataclass
 class StyleRule:
     """A configurable code style rule."""
-
     name: str
     pattern: str
     message: str
     severity: StyleRuleSeverity = StyleRuleSeverity.WARNING
     enabled: bool = True
-    language: CodeLanguage | None = None
-    auto_fix: Callable[[str], str] | None = None
+    language: Optional[CodeLanguage] = None
+    auto_fix: Optional[Callable[[str], str]] = None

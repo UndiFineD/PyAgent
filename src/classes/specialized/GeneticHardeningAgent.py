@@ -1,9 +1,31 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from typing import Dict, List, Any
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
+__version__ = VERSION
 
 class GeneticHardeningAgent(BaseAgent):
     """
@@ -60,4 +82,6 @@ class GeneticHardeningAgent(BaseAgent):
         )
         
         evolved_code = self.think(prompt)
+        # Phase 108: Intelligence Recording
+        self._record(prompt, evolved_code, provider="GeneticHardening", model="EvolutionaryRefactor")
         return evolved_code

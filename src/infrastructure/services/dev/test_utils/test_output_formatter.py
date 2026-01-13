@@ -11,27 +11,28 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.version import VERSION
+from typing import Any, Dict, List, Tuple
 
 __version__ = VERSION
 
-
 class TestOutputFormatter:
-    """Formats test output and results for display."""
-
     __test__ = False
+    """Formats test output and results for display."""
 
     def __init__(self) -> None:
         """Initialize formatter."""
-        self.results: list[tuple[str, str, float]] = []
+        self.results: List[Tuple[str, str, float]] = []
 
     @staticmethod
     def format_success(test_name: str, duration_ms: float) -> str:
@@ -86,7 +87,7 @@ class TestOutputFormatter:
             Formatted result string.
         """
         # Handle TestStatus enum
-        status_str = status.value if hasattr(status, "value") else str(status)
+        status_str = status.value if hasattr(status, 'value') else str(status)
         status_str = status_str.lower()
 
         if "pass" in status_str:
@@ -103,10 +104,10 @@ class TestOutputFormatter:
             status: Status of the test.
             duration_ms: Duration in milliseconds.
         """
-        status_str = status.value if hasattr(status, "value") else str(status)
+        status_str = status.value if hasattr(status, 'value') else str(status)
         self.results.append((test_name, status_str, duration_ms))
 
-    def get_summary(self) -> dict[str, int]:
+    def get_summary(self) -> Dict[str, int]:
         """Get a summary of all results as a dict.
 
         Returns:
@@ -115,4 +116,8 @@ class TestOutputFormatter:
         passed = sum(1 for _, status, _ in self.results if "pass" in status.lower())
         failed = sum(1 for _, status, _ in self.results if "fail" in status.lower())
         total = len(self.results)
-        return {"passed": passed, "failed": failed, "total": total}
+        return {
+            "passed": passed,
+            "failed": failed,
+            "total": total
+        }

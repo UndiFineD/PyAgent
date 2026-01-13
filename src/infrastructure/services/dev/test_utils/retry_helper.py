@@ -11,22 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from typing import Callable, Optional
 import threading
-from collections.abc import Callable
-from typing import TypeVar
-
-from src.core.base.lifecycle.version import VERSION
-
-T = TypeVar("T")
 
 __version__ = VERSION
-
 
 class RetryHelper:
     """Simple retry helper for flaky operations."""
@@ -36,14 +35,13 @@ class RetryHelper:
         self.delay_seconds = float(delay_seconds)
 
     def retry(self, fn: Callable[[], T]) -> T:
-        """Retry a function multiple times."""
-        last_exc: BaseException | None = None
+        last_exc: Optional[BaseException] = None
         for attempt in range(self.max_retries):
             try:
                 return fn()
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as exc:
                 # noqa: BLE001
-                last_exc = e
+                last_exc = exc
                 if attempt == self.max_retries - 1:
                     raise
                 if self.delay_seconds > 0:

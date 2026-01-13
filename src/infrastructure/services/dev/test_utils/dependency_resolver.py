@@ -11,25 +11,29 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.version import VERSION
+from typing import Dict, List, Set
 
 __version__ = VERSION
-
 
 class DependencyResolver:
     """Resolves dependencies between tests."""
 
     def __init__(self) -> None:
         """Initialize resolver."""
-        self.dependencies: dict[str, list[str]] = {}
+        self.dependencies: Dict[str, List[str]] = {}
 
-    def add_test(self, name: str, depends_on: list[str]) -> None:
+    def add_test(self, name: str, depends_on: List[str]) -> None:
         """Register a test and its dependencies (test compatibility API)."""
         self.dependencies[name] = list(depends_on)
 
@@ -39,11 +43,11 @@ class DependencyResolver:
             self.dependencies[test] = []
         self.dependencies[test].append(depends_on)
 
-    def resolve(self) -> list[str]:
+    def resolve(self) -> List[str]:
         """Resolve execution order or raise on circular dependencies."""
-        visiting: set[str] = set()
-        visited: set[str] = set()
-        order: list[str] = []
+        visiting: Set[str] = set()
+        visited: Set[str] = set()
+        order: List[str] = []
 
         def visit(node: str) -> None:
             if node in visited:
@@ -57,17 +61,17 @@ class DependencyResolver:
             visited.add(node)
             order.append(node)
 
-        nodes: set[str] = set(self.dependencies.keys())
+        nodes: Set[str] = set(self.dependencies.keys())
         for deps in self.dependencies.values():
             nodes.update(deps)
         for n in sorted(nodes):
             visit(n)
         return order
 
-    def resolve_order(self) -> list[str]:
+    def resolve_order(self) -> List[str]:
         """Resolve execution order (topological sort)."""
-        visited: set[str] = set()
-        order: list[str] = []
+        visited: Set[str] = set()
+        order: List[str] = []
 
         def visit(node: str) -> None:
             if node in visited:
@@ -83,8 +87,8 @@ class DependencyResolver:
 
     def detect_cycle(self) -> bool:
         """Detect circular dependencies."""
-        visited: set[str] = set()
-        rec_stack: set[str] = set()
+        visited: Set[str] = set()
+        rec_stack: Set[str] = set()
 
         def has_cycle(node: str) -> bool:
             visited.add(node)

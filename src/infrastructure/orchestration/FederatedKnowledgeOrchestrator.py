@@ -1,22 +1,58 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """FederatedKnowledgeOrchestrator for PyAgent.
 Synchronizes learned insights ('Lessons Learned') between distributed fleet nodes.
 Uses InterFleetBridgeOrchestrator to transmit knowledge without raw data leakage.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 from typing import Dict, List, Any, Optional
-from src.classes.orchestration.InterFleetBridgeOrchestrator import InterFleetBridgeOrchestrator
-from src.classes.context.KnowledgeAgent import KnowledgeAgent
+from src.infrastructure.orchestration.InterFleetBridgeOrchestrator import InterFleetBridgeOrchestrator
+from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
+
+__version__ = VERSION
 
 class FederatedKnowledgeOrchestrator:
     """Orchestrates the synchronization of cognitive insights across distributed fleets."""
 
-    def __init__(self, fleet_manager) -> None:
-        self.fleet = fleet_manager
-        self.bridge = InterFleetBridgeOrchestrator(fleet_manager)
-        self.knowledge = fleet_manager.agents.get("Knowledge") or KnowledgeAgent(str(fleet_manager.workspace_root))
+    def __init__(self, fleet_manager: Optional[Any] = None, fleet: Optional[Any] = None) -> None:
+        self.fleet = fleet_manager or fleet
+        if not self.fleet:
+            # Fallback or stub if no fleet provided
+            logging.warning("FederatedKnowledgeOrchestrator initialized without fleet_manager.")
+            
+        self.bridge = InterFleetBridgeOrchestrator(self.fleet)
+        workspace_root = "."
+        if self.fleet and hasattr(self.fleet, "workspace_root"):
+             workspace_root = str(self.fleet.workspace_root)
+             
+        self.knowledge = None
+        if self.fleet and hasattr(self.fleet, "agents"):
+            self.knowledge = self.fleet.agents.get("Knowledge")
+            
+        if not self.knowledge:
+             self.knowledge = KnowledgeAgent(workspace_root)
+             
         self.sync_history: List[Dict[str, Any]] = []
 
     def broadcast_lesson(self, lesson_id: str, lesson_data: Dict[str, Any]) -> Dict[str, Any]:

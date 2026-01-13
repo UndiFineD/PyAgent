@@ -1,12 +1,32 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
-import json
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+from typing import Dict, List, Any, TYPE_CHECKING
+
+__version__ = VERSION
 
 if TYPE_CHECKING:
-    from src.classes.fleet.FleetManager import FleetManager
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
 class InterleavingOrchestrator:
     """
@@ -51,10 +71,14 @@ class InterleavingOrchestrator:
         Fast heuristic assessment of task complexity.
         """
         score = 1
-        if len(task) > 100: score += 1
-        if "implement" in task.lower() or "fix" in task.lower(): score += 2
-        if "refactor" in task.lower() or "architecture" in task.lower(): score += 4
-        if "security" in task.lower() or "quantum" in task.lower(): score += 3
+        if len(task) > 100:
+            score += 1
+        if "implement" in task.lower() or "fix" in task.lower():
+            score += 2
+        if "refactor" in task.lower() or "architecture" in task.lower():
+            score += 4
+        if "security" in task.lower() or "quantum" in task.lower():
+            score += 3
         return min(score, 10)
 
     def _select_strategy(self, score: int) -> Dict[str, Any]:
@@ -89,7 +113,7 @@ class InterleavingOrchestrator:
                 ]
             }
             
-    def record_tier_performance(self, task_id: str, tier: str, latency: float, success: bool):
+    def record_tier_performance(self, task_id: str, tier: str, latency: float, success: bool) -> None:
         """
         Saves performance data to refine future interleaving decisions (Reinforcement Learning signal).
         """

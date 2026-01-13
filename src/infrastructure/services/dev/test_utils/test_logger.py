@@ -11,24 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
-from collections.abc import Iterator
+from src.core.base.version import VERSION
+from .TestLogEntry import TestLogEntry
 from contextlib import contextmanager
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .test_log_entry import TestLogEntry
+from typing import Any, Dict, Iterator, List, Optional
 
 __version__ = VERSION
 
-
 class TestLogger:
+    __test__ = False
     """Logger for test debugging.
 
     Captures logs during test execution for debugging.
@@ -41,12 +42,10 @@ class TestLogger:
         logs=logger.get_logs("test_name")
     """
 
-    __test__ = False
-
     def __init__(self) -> None:
         """Initialize logger."""
-        self._logs: dict[str, list[TestLogEntry]] = {}
-        self._current_test: str | None = None
+        self._logs: Dict[str, List[TestLogEntry]] = {}
+        self._current_test: Optional[str] = None
 
     def _log(self, level: str, message: str, **extra: Any) -> None:
         """Internal log method."""
@@ -79,7 +78,7 @@ class TestLogger:
         self._log("ERROR", message, **extra)
 
     @contextmanager
-    def capture(self, test_name: str) -> Iterator[TestLogger]:
+    def capture(self, test_name: str) -> Iterator["TestLogger"]:
         """Context manager to capture logs for a test.
 
         Args:
@@ -96,11 +95,11 @@ class TestLogger:
         finally:
             self._current_test = old_test
 
-    def get_logs(self, test_name: str) -> list[TestLogEntry]:
+    def get_logs(self, test_name: str) -> List[TestLogEntry]:
         """Get logs for a test."""
         return self._logs.get(test_name, [])
 
-    def get_errors(self, test_name: str) -> list[TestLogEntry]:
+    def get_errors(self, test_name: str) -> List[TestLogEntry]:
         """Get error logs for a test."""
         return [entry for entry in self.get_logs(test_name) if entry.level == "ERROR"]
 

@@ -1,53 +1,77 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
-"""Auto-extracted class from agent.py"""
+"""
+OrchestratorAgent for PyAgent Swarm Management.
+
+This agent acts as the primary coordinator for sub-swarms, managing task delegation,
+resource allocation, and final response synthesis. It implements advanced 
+self-healing and multi-agent synergy protocols.
+"""
 
 from __future__ import annotations
-
-from .AgentHealthCheck import AgentHealthCheck
-from .AgentPluginBase import AgentPluginBase
-from .AgentPluginConfig import AgentPluginConfig
-from .ConfigLoader import ConfigLoader
-from .DiffGenerator import DiffGenerator
-from .DiffOutputFormat import DiffOutputFormat
-from .DiffResult import DiffResult
-from .FileLockManager import FileLockManager
-from .GracefulShutdown import GracefulShutdown
-from .HealthChecker import HealthChecker
-from .HealthStatus import HealthStatus
-from .IncrementalProcessor import IncrementalProcessor
-from .RateLimitConfig import RateLimitConfig
-from .RateLimiter import RateLimiter
-from .utils import fix_markdown_content
-from ._helpers import HAS_REQUESTS, requests
-
+from src.core.base.version import VERSION
+from src.core.base.AgentPluginBase import AgentPluginBase
+from src.core.base.ConfigLoader import ConfigLoader
+from src.core.base.utils.DiffGenerator import DiffGenerator
+from src.core.base.models import (
+    AgentHealthCheck,
+    AgentPluginConfig,
+    DiffOutputFormat,
+    DiffResult,
+    HealthStatus,
+    RateLimitConfig
+)
+from src.core.base.utils.FileLockManager import FileLockManager
+from src.core.base.GracefulShutdown import GracefulShutdown
+from src.core.base.managers import HealthChecker
+from src.core.base.models import HealthStatus
+from src.core.base.IncrementalProcessor import IncrementalProcessor
+from src.core.base.models import RateLimitConfig
+from src.core.base.utils.RateLimiter import RateLimiter
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
 from pathlib import Path
 from types import TracebackType
 from typing import List, Set, Optional, Dict, Any, Callable
 import asyncio
-import functools
 import importlib.util
 import logging
 import subprocess
 import sys
-import time
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
+from src.core.base.managers.AgentMetrics import AgentMetrics
+from src.core.base.utils.AgentFileManager import AgentFileManager
+from src.core.base.utils.AgentGitHandler import AgentGitHandler
+from src.core.base.AgentCommandHandler import AgentCommandHandler
+from src.core.base.AgentCore import AgentCore
+from src.core.base.utils.ParallelProcessor import ParallelProcessor
+from src.core.base.utils.NotificationManager import NotificationManager
+from src.core.base.AgentUpdateManager import AgentUpdateManager
+from src.core.base.interfaces import ContextRecorderInterface
+from src.core.base.ConnectivityManager import ConnectivityManager
+from src.core.base.AgentCore import BaseCore
 
-from .AgentMetrics import AgentMetrics
-from .AgentFileManager import AgentFileManager
-from .AgentGitHandler import AgentGitHandler
-from .AgentCommandHandler import AgentCommandHandler
-from .AgentCore import AgentCore
-from .ParallelProcessor import ParallelProcessor
-from .NotificationManager import NotificationManager
-from .AgentUpdateManager import AgentUpdateManager
-from ..backend.LocalContextRecorder import LocalContextRecorder
-from ..base_agent.ConnectivityManager import ConnectivityManager
-from ..base_agent.core import BaseCore
+__version__ = VERSION
 
-class Agent:
+class OrchestratorAgent:
     """Main agent that orchestrates sub-agents for code improvement.
     
     This class has been refactored to delegate logic to specialized managers:
@@ -101,39 +125,36 @@ class Agent:
         self.enable_async = enable_async
         self.enable_multiprocessing = enable_multiprocessing
         self.max_workers = max_workers
-        self.strategy = strategy
+        self._strategy = strategy
         self.models = models_config or {}
-        
+
         # Intelligence & Resilience Layer (Phase 108)
-        self.recorder = LocalContextRecorder(workspace_root=self.repo_root)
+        # Infrastructure bridge (Phase 130: evaluated moving to abstract providers)
+        from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+        self.recorder: ContextRecorderInterface = LocalContextRecorder(workspace_root=self.repo_root)
         self.connectivity = ConnectivityManager()
-        
+
         # Delegated Managers
         self.core = AgentCore(workspace_root=str(self.repo_root))
         # Alias for backward compatibility/base access
         self.base_core = self.core
-        
+
         self.metrics_manager = AgentMetrics()
         self.git_handler = AgentGitHandler(self.repo_root, no_git, recorder=self.recorder)
         self.file_manager = AgentFileManager(self.repo_root, agents_only)
         self.command_handler = AgentCommandHandler(self.repo_root, self.models, recorder=self.recorder)
         self.update_manager = AgentUpdateManager(
-            self.repo_root, self.models, self.strategy, 
-            self.command_handler, self.file_manager, self.core,
-            recorder=self.recorder
+            self.repo_root, self.models, self._strategy,
+            self.command_handler, self.file_manager, self.core
         )
         self.parallel_processor = ParallelProcessor(max_workers=max_workers)
         self.notifications = NotificationManager(workspace_root=str(self.repo_root))
-        
+
         # Compatibility layers
         self.ignored_patterns = self.file_manager.ignored_patterns
-        # We'll use a property for self.metrics to keep it in sync with metrics_manager
-        
-        self.webhooks: List[str] = []
-        self.callbacks: list[Callable[..., Any]] = []
 
         logging.info(
-            f"Agent initialized: repo={self.repo_root}, loop={loop}, "
+            f"Agent initialized: repo={self.repo_root}, "
             f"agents_only={agents_only}"
         )
         if dry_run:
@@ -143,12 +164,61 @@ class Agent:
 
     @property
     def metrics(self) -> Dict[str, Any]:
-        """Provides backward compatibility for the metrics attribute."""
-        return self.metrics_manager.to_dict()
+        """Provides backward compatibility for the metrics attribute (flattened)."""
+        d = self.metrics_manager.to_dict()
+        summary = d.pop('summary', {})
+        d.update(summary)
+        return d
 
-    def __enter__(self) -> "Agent":
+    @metrics.setter
+    def metrics(self, value: Dict[str, Any]) -> None:
+        """Allow manual override of metrics (legacy support)."""
+        if 'files_processed' in value:
+            self.metrics_manager.files_processed = value['files_processed']
+        if 'files_modified' in value:
+            self.metrics_manager.files_modified = value['files_modified']
+        if 'agents_applied' in value:
+            self.metrics_manager.agents_applied = value['agents_applied']
+        if 'start_time' in value:
+            self.metrics_manager.start_time = value['start_time']
+        if 'end_time' in value:
+            self.metrics_manager.end_time = value['end_time']
+
+    @property
+    def webhooks(self) -> List[str]:
+        """Backward compatibility for webhooks list."""
+        return self.notifications.webhooks
+
+    @property
+    def callbacks(self) -> List[Callable]:
+        """Backward compatibility for callbacks list."""
+        return self.notifications.callbacks
+
+    def process_files_multiprocessing(self, files: List[Path]) -> None:
+        """Compatibility wrapper for multiprocessing file processing."""
+        # Simple implementation for now as it's primarily used for testing presence
+        # and basic functionality in this version's unit tests.
+        from concurrent.futures import ProcessPoolExecutor
+        with ProcessPoolExecutor(max_workers=self.max_workers) as executor:
+            list(executor.map(self.process_file, files))
+
+    @property
+    def strategy(self) -> str:
+        """Returns the current execution strategy."""
+        return self._strategy
+
+    @strategy.setter
+    def strategy(self, value: str) -> None:
+        """Sets the execution strategy and propagates to managers."""
+        self._strategy = value
+        if hasattr(self, 'update_manager'):
+            self.update_manager.strategy = value
+        if hasattr(self, 'command_handler'):
+            self.command_handler.strategy = value
+
+    def __enter__(self) -> "OrchestratorAgent":
         """Context manager entry. Returns self for use in 'with' statement."""
-        logging.debug("Agent entering context manager")
+        logging.debug("OrchestratorAgent entering context manager")
         return self
 
     def __exit__(
@@ -220,6 +290,7 @@ class Agent:
             'async_enabled': self.enable_async,
             'multiprocessing_enabled': self.enable_multiprocessing,
         }
+        report['agents'] = report.get('agents_applied', {})
         
         files_proc = report['summary'].get('files_processed', 0)
         files_mod = report['summary'].get('files_modified', 0)
@@ -566,6 +637,16 @@ class Agent:
             # Clear current file
             if hasattr(self, 'shutdown_handler'):
                 self.shutdown_handler.set_current_file(None)
+
+    def validate_with_consensus(self, task: str, proposals: Dict[str, str]) -> Dict[str, Any]:
+        """
+        Validates proposals using the ByzantineConsensusAgent.
+        This provides a Phase 129 quality gate for critical changes.
+        """
+        from src.logic.agents.security.ByzantineConsensusAgent import ByzantineConsensusAgent
+        log_path = self.repo_root / "data" / "logs" / "consensus.log"
+        consensus_agent = ByzantineConsensusAgent(str(log_path))
+        return consensus_agent.run_committee_vote(task, proposals)
 
     # =========================================================================
     # Plugin System Methods
@@ -1023,4 +1104,3 @@ class Agent:
             # Trigger completion events
             self.execute_callbacks('agent_complete', self.metrics)
             self.send_webhook_notification('agent_complete', self.metrics)
-

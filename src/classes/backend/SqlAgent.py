@@ -1,20 +1,40 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 from __future__ import annotations
+from src.core.base.version import VERSION
 import sqlite3
 import json
 import os
 import gzip
 import logging
 import time
-from pathlib import Path
 from typing import List, Dict, Any, Optional
 
-class SqlAgent:
+__version__ = VERSION
+
+class SqlMetadataHandler:
     """Relational metadata overlay for compressed interaction shards."""
 
-    def __init__(self, db_path: str = "agent_store/metadata.db", shards_dir: str = "agent_store/memory_shards", fleet: Optional[Any] = None) -> None:
-        if fleet and hasattr(fleet, "recorder") and shards_dir == "agent_store/memory_shards":
+    def __init__(self, db_path: str = "data/memory/agent_store/metadata.db", shards_dir: str = "data/memory/agent_store/memory_shards", fleet: Optional[Any] = None) -> None:
+        if fleet and hasattr(fleet, "recorder") and shards_dir == "data/memory/agent_store/memory_shards":
             self.shards_dir = str(fleet.recorder.log_dir)
         else:
             self.shards_dir = shards_dir
@@ -115,11 +135,12 @@ class SqlAgent:
             logging.info(f"SQL Metadata DB optimized (Size: {db_size_mb:.1f}MB, WAL/VACUUM/ANALYZE/REINDEX).")
         
         # Phase 108: Scalability Gatekeeping (Prep for trillion-parameter community data)
-        if db_size_mb > 1024: # 1GB threshold for relational sharding
+        if db_size_mb > 1024:
+            # 1GB threshold for relational sharding
              logging.warning(f"SQL Metadata DB exceeds scale thresholds. Partitioning registry recommended.")
 
     def _rotate_metadata_shard(self) -> None:
-        """Placeholder for future metadata sharding/rotation logic."""
+        """Logic for metadata sharding/rotation."""
         pass
 
     def record_lesson(self, interaction_id: str, text: str, category: str = "General") -> None:

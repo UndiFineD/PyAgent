@@ -11,33 +11,36 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
+from src.core.base.version import VERSION
+from .Improvement import Improvement
+from typing import List
 
 __version__ = VERSION
-
 
 class CodeAnalyzer:
     """Suggests analysis tools based on improvement content."""
 
     def __init__(self) -> None:
-        self.tools: list[str] = [
+        self.tools: List[str] = [
             "security scan",
             "linter",
             "type checker",
             "coverage",
         ]
 
-    def suggest_tools(self, improvement: Improvement) -> list[str]:
+    def suggest_tools(self, improvement: Improvement) -> List[str]:
         text = f"{improvement.title} {improvement.description}".lower()
-        suggestions: list[str] = []
+        suggestions: List[str] = []
         if "sql" in text or "injection" in text or "security" in text:
             suggestions.append("Security scan")
             suggestions.append("Dependency vulnerability scan")

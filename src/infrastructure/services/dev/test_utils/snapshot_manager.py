@@ -11,23 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
-import json
+from src.core.base.version import VERSION
+from .SnapshotComparisonResult import SnapshotComparisonResult
+from .TestSnapshot import TestSnapshot
 from pathlib import Path
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .snapshot_comparison_result import SnapshotComparisonResult
-from .test_snapshot import TestSnapshot
+from typing import Any, Dict, List, Optional
+import json
 
 __version__ = VERSION
-
 
 class SnapshotManager:
     """Manages snapshots for snapshot testing.
@@ -45,7 +46,7 @@ class SnapshotManager:
         """
         self.snapshot_dir = snapshot_dir
         self.snapshot_dir.mkdir(parents=True, exist_ok=True)
-        self._snapshots: dict[str, TestSnapshot] = {}
+        self._snapshots: Dict[str, TestSnapshot] = {}
 
     def _get_snapshot_path(self, name: str) -> Path:
         """Get path for a snapshot."""
@@ -75,7 +76,7 @@ class SnapshotManager:
         self._snapshots[name] = snapshot
         return snapshot
 
-    def load_snapshot(self, name: str) -> TestSnapshot | None:
+    def load_snapshot(self, name: str) -> Optional[TestSnapshot]:
         """Load an existing snapshot.
 
         Args:
@@ -100,7 +101,7 @@ class SnapshotManager:
         self._snapshots[name] = snapshot
         return snapshot
 
-    def compare_snapshot(self, name: str, actual: Any) -> SnapshotComparisonResult:
+    def compare_snapshot(self, name: str, actual: Any) -> "SnapshotComparisonResult":
         """Compare actual content with a saved snapshot.
 
         Args:
@@ -113,7 +114,12 @@ class SnapshotManager:
         expected_snapshot = self.load_snapshot(name)
 
         if expected_snapshot is None:
-            return SnapshotComparisonResult(matches=False, expected=None, actual=actual, snapshot_name=name)
+            return SnapshotComparisonResult(
+                matches=False,
+                expected=None,
+                actual=actual,
+                snapshot_name=name
+            )
 
         # Compare the content
         matches = expected_snapshot.content == actual
@@ -121,7 +127,7 @@ class SnapshotManager:
             matches=matches,
             expected=expected_snapshot.content,
             actual=actual,
-            snapshot_name=name,
+            snapshot_name=name
         )
 
     def assert_match(
@@ -156,7 +162,7 @@ class SnapshotManager:
 
         return False
 
-    def get_diff(self, name: str, actual: str) -> list[str]:
+    def get_diff(self, name: str, actual: str) -> List[str]:
         """Get diff between snapshot and actual.
 
         Args:
@@ -167,16 +173,13 @@ class SnapshotManager:
             List[str]: Diff lines.
         """
         import difflib
-
         expected = self.load_snapshot(name)
         if expected is None:
             return ["No snapshot exists"]
-        return list(
-            difflib.unified_diff(
-                expected.content.splitlines(),
-                actual.splitlines(),
-                fromfile=f"snapshot/{name}",
-                tofile="actual",
-                lineterm="",
-            )
-        )
+        return list(difflib.unified_diff(
+            expected.content.splitlines(),
+            actual.splitlines(),
+            fromfile=f"snapshot/{name}",
+            tofile="actual",
+            lineterm="",
+        ))

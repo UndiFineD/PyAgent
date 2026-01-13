@@ -11,19 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-
-from src.core.base.common.types.changelog_entry import ChangelogEntry
-from src.core.base.lifecycle.version import VERSION
-
+from src.core.base.version import VERSION
+from .ChangelogEntry import ChangelogEntry
 from .GroupingStrategy import GroupingStrategy
+from typing import Dict, List
 
 __version__ = VERSION
-
 
 class EntryReorderer:
     """Reorders and groups changelog entries.
@@ -35,7 +38,11 @@ class EntryReorderer:
         >>> sorted_entries=reorderer.reorder(entries, GroupingStrategy.BY_PRIORITY)
     """
 
-    def reorder(self, entries: list[ChangelogEntry], strategy: GroupingStrategy) -> list[ChangelogEntry]:
+    def reorder(
+        self,
+        entries: List[ChangelogEntry],
+        strategy: GroupingStrategy
+    ) -> List[ChangelogEntry]:
         """Reorder entries based on strategy.
 
         Args:
@@ -55,7 +62,7 @@ class EntryReorderer:
             return entries  # Would need author field
         return entries
 
-    def group_by_category(self, entries: list[ChangelogEntry]) -> dict[str, list[ChangelogEntry]]:
+    def group_by_category(self, entries: List[ChangelogEntry]) -> Dict[str, List[ChangelogEntry]]:
         """Group entries by category.
 
         Args:
@@ -64,7 +71,7 @@ class EntryReorderer:
         Returns:
             Dictionary mapping category to entries.
         """
-        result: dict[str, list[ChangelogEntry]] = {}
+        result: Dict[str, List[ChangelogEntry]] = {}
         for entry in entries:
             if entry.category not in result:
                 result[entry.category] = []

@@ -11,25 +11,28 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in linguistic articulation and epistemic subordination.
 Ensures that the LLM only verbalizes grounded results and never hallucinates new technical facts.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
-
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import as_tool
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
-
-# pylint: disable=too-many-ancestors
 class LinguisticAgent(BaseAgent):
     """The linguistic surface layer of the PyAgent OS."""
-
+    
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -42,7 +45,7 @@ class LinguisticAgent(BaseAgent):
         self.notification_templates = {
             "whatsapp": "🔔 *Update*: {message}\n\n_Status_: {status}",
             "telegram": "🚀 <b>System Notification</b>\n\n{message}\n\n<code>Target: {target}</code>",
-            "slack": ":robot_face: *PyAgent Notification*\n> {message}",
+            "slack": ":robot_face: *PyAgent Notification*\n> {message}"
         }
 
     def format_notification(self, platform: str, message: str, **kwargs) -> str:
@@ -64,16 +67,11 @@ class LinguisticAgent(BaseAgent):
             A natural language summary.
         """
         logging.info("LinguisticAgent: Articulating technical report...")
-
+        
         # In a real implementation, this would call the LLM with the report as context.
         # Here we simulate the constrained linguistic surface.
-        resp = (
-            f"Hello! Regarding your request: '{user_query}', "
-            "I have processed it through the expert systems.\n\n"
-            f"Summary of results:\n{technical_report[:500]}..."
-        )
-        return resp
+        return f"Hello! Regarding your request: '{user_query}', I have processed it through the expert systems.\n\nSummary of results:\n{technical_report[:500]}..."
 
-    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+    def improve_content(self, prompt: str) -> str:
         """Entry point for verbalization."""
         return self.articulate_results(prompt, "How can I help you?")

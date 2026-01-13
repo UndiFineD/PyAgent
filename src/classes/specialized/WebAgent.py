@@ -1,19 +1,40 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in autonomous web navigation and information extraction."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import requests
 import time
 from pathlib import Path
-from bs4 import BeautifulSoup
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
-from src.classes.coder.SecurityGuardAgent import SecurityGuardAgent
-from src.classes.base_agent.ConnectivityManager import ConnectivityManager
-from src.classes.backend.LocalContextRecorder import LocalContextRecorder
-from src.classes.specialized.WebCore import WebCore
+from typing import List
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+from src.logic.agents.development.SecurityGuardAgent import SecurityGuardAgent
+from src.core.base.ConnectivityManager import ConnectivityManager
+from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+from src.logic.agents.intelligence.WebCore import WebCore
+
+__version__ = VERSION
 
 class WebAgent(BaseAgent):
     """Enables the fleet to perform autonomous research and interact with web services."""
@@ -60,7 +81,8 @@ class WebAgent(BaseAgent):
                 
                 # Decompression bomb safeguard: check content length if available
                 content_length = response.headers.get('Content-Length')
-                if content_length and int(content_length) > 10 * 1024 * 1024:  # 10MB limit
+                if content_length and int(content_length) > 10 * 1024 * 1024:
+                    # 10MB limit
                      return f"ERROR: Page content too large ({content_length} bytes). Aborting for safety."
 
                 response.raise_for_status()

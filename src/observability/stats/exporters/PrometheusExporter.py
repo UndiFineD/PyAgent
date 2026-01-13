@@ -1,9 +1,4 @@
 #!/usr/bin/env python3
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,20 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Exporter for fleet metrics in Prometheus/OpenMetrics format.
 Enables real-time dashboards in Grafana and ELK stack.
 """
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-import logging
-from typing import Dict, List, Any, Optional
+from __future__ import annotations
+from src.core.base.version import VERSION
+from typing import Dict, Any, Optional
+
+__version__ = VERSION
 
 class PrometheusExporter:
     """Formats fleet telemetry into Prometheus-compatible metrics."""
@@ -38,49 +35,13 @@ class PrometheusExporter:
         self.metrics_registry: Dict[str, float] = {}
 
     def record_metric(self, name: str, value: float, labels: Optional[Dict[str, str]] = None) -> str:
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-from __future__ import annotations
-
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
-
-class PrometheusExporter:
-    """Formats fleet telemetry into Prometheus-compatible metrics."""
-
-    def __init__(self) -> None:
-        self.metrics_registry: dict[str, float] = {}
-
-    def record_metric(self, name: str, value: float, labels: dict[str, str] | None = None) -> str:
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         """Records a metric with optional labels."""
         label_str = ""
         if labels:
             label_str = "{" + ",".join([f'{k}="{v}"' for k, v in labels.items()]) + "}"
-<<<<<<< HEAD
-<<<<<<< HEAD
         
         metric_key = f"{name}{label_str}"
         self.metrics_registry[metric_key] = value
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-
-        metric_key = f"{name}{label_str}"
-        self.metrics_registry[metric_key] = value
-        return metric_key
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 
     def generate_scrape_response(self) -> str:
         """Generates the text response for a Prometheus scrape endpoint."""
@@ -88,21 +49,10 @@ class PrometheusExporter:
         for key, value in self.metrics_registry.items():
             # Basic Prometheus format: metric_name{labels} value
             lines.append(f"pyagent_{key} {value}")
-<<<<<<< HEAD
-<<<<<<< HEAD
         
         return "\n".join(lines)
 
-    def get_grafana_info(self) -> str:
-        """Returns info for Grafana integration."""
-        return "Prometheus Exporter: Active on /metrics. Grafana Dashboard ID: 12345 (Simulated)"
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-
-        return "\n".join(lines)
-
-    def get_grafana_info(self) -> dict[str, Any]:
+    def get_grafana_info(self) -> Dict[str, Any]:
         """Returns connection details for Grafana integration."""
         return {
             "datasource_type": "Prometheus",
@@ -110,9 +60,5 @@ class PrometheusExporter:
             "endpoint": "/metrics",
             "suggested_dashboard_uid": "pyagent-swarm-health-main",
             "provisioning_status": "Ready",
-            "metric_prefix": "pyagent_",
+            "metric_prefix": "pyagent_"
         }
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))

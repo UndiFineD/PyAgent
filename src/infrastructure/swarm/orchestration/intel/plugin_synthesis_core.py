@@ -10,31 +10,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-Plugin synthesis core.py module.
-"""
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import ast
-
+from typing import List
 from pydantic import BaseModel
-
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
-
 class SynthesisResult(BaseModel):
     """Result of a tool/plugin synthesis operation."""
-
     code: str
     entry_point: str
-    imports: list[str]
+    imports: List[str]
     is_safe: bool = False
-
 
 class PluginSynthesisCore:
     """
@@ -43,36 +39,36 @@ class PluginSynthesisCore:
     """
 
     @staticmethod
-    def generate_plugin_source(task_description: str, inputs: list[str], logic_template: str) -> SynthesisResult:
+    def generate_plugin_source(task_description: str, inputs: List[str], logic_template: str) -> SynthesisResult:
         """
         Synthesizes Python source code for a temporary plugin.
-
+        
         Args:
             task_description: A human-readable description of the task.
             inputs: List of parameter names.
             logic_template: The core logic string (potentially provided by an LLM).
-
+            
         Returns:
             SynthesisResult containing the safe, formatted code.
         """
         # Sanitize task name for entry point
         safe_name = "".join([c if c.isalnum() else "_" for c in task_description[:30]]).strip("_").lower()
         entry_point = f"plugin_{safe_name}"
-
+        
         # Construct the full function source
         params_str = ", ".join(inputs)
         source = f"def {entry_point}({params_str}):\n"
-        source += f'    """{task_description}"""\n'
-
+        source += f"    \"\"\"{task_description}\"\"\"\n"
+        
         # Indent the logic template
         indented_logic = "\n".join([f"    {line}" for line in logic_template.strip().split("\n")])
         source += indented_logic
-
+        
         return SynthesisResult(
             code=source,
             entry_point=entry_point,
-            imports=["os", "sys", "json"],  # Default safe imports
-            is_safe=PluginSynthesisCore.verify_safety(source),
+            imports=["os", "sys", "json"], # Default safe imports
+            is_safe=PluginSynthesisCore.verify_safety(source)
         )
 
     @staticmethod
@@ -93,11 +89,11 @@ class PluginSynthesisCore:
                     if node.attr.startswith("__"):
                         return False
             return True
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:
             return False
 
     @staticmethod
-    def merge_imports(imports: list[str]) -> str:
+    def merge_imports(imports: List[str]) -> str:
         """Formats and deduplicates import statements."""
         unique_imports = sorted(list(set(imports)))
         return "\n".join([f"import {imp}" for imp in unique_imports])

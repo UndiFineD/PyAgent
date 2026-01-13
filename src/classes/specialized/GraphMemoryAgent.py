@@ -1,16 +1,38 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in Graph-based memory and entity relationship tracking.
 Supports FalkorDB-style triple storage (Subject-Predicate-Object).
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import json
 import time
 from pathlib import Path
 from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
+__version__ = VERSION
 
 class GraphMemoryAgent(BaseAgent):
     """Manages long-term memories with MIRIX 6-component architecture and Beads task tracking."""
@@ -19,6 +41,7 @@ class GraphMemoryAgent(BaseAgent):
         super().__init__(file_path)
         self.beads_dir = Path(".beads")
         self.beads_dir.mkdir(exist_ok=True)
+        self.graph_store_path = Path("data/memory/agent_store/knowledge_graph.json")
         # MIRIX 6-component memory categories
         self.memory_store = {
             "core": {},       # Human/Persona identities
@@ -32,13 +55,50 @@ class GraphMemoryAgent(BaseAgent):
         self.relationships: List[Dict[str, str]] = []
         self.tasks: Dict[str, Dict[str, Any]] = self._load_beads()
         self.outcomes: Dict[str, float] = {}
+        self._load_graph()
         self._system_prompt = (
             "You are the Graph Memory Agent. "
             "You follow the MIRIX 6-component memory architecture: "
             "Core, Episodic, Semantic, Procedural, Resource, Knowledge. "
             "You apply Memory Decay over time to maintain context relevance. "
-            "You manage task graphs using the Beads pattern (dependency-aware)."
+            "You manage task graphs using the Beads pattern (dependency-aware). "
+            "You also maintain a persistent knowledge graph of entities and relationships."
         )
+
+    def _load_graph(self) -> None:
+        """Loads entities and relationships from persistent storage."""
+        if self.graph_store_path.exists():
+            try:
+                with open(self.graph_store_path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+                    self.entities.update(data.get("entities", {}))
+                    # Convert 'relations' from GraphRelational format to 'relationships' if needed
+                    rels = data.get("relations", [])
+                    for r in rels:
+                        self.relationships.append({
+                            "subject": r.get("source", r.get("subject")),
+                            "predicate": r.get("type", r.get("predicate")),
+                            "object": r.get("target", r.get("object"))
+                        })
+                    # Also handle if it was already in GraphMemory format
+                    m_rels = data.get("relationships", [])
+                    for r in m_rels:
+                        if r not in self.relationships:
+                            self.relationships.append(r)
+            except Exception as e:
+                logging.error(f"GraphMemoryAgent: Failed to load graph: {e}")
+
+    def _save_graph(self) -> None:
+        """Persists entities and relationships to disk."""
+        try:
+            self.graph_store_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(self.graph_store_path, "w", encoding="utf-8") as f:
+                json.dump({
+                    "entities": self.entities,
+                    "relationships": self.relationships
+                }, f, indent=4)
+        except Exception as e:
+            logging.error(f"GraphMemoryAgent: Failed to save graph: {e}")
 
     def _load_beads(self) -> Dict[str, Dict[str, Any]]:
         """Loads tasks from .beads/ directory JSONL files."""
@@ -50,7 +110,8 @@ class GraphMemoryAgent(BaseAgent):
                     try:
                         task = json.loads(line)
                         tasks[task["id"]] = task["data"]
-                    except Exception: continue
+                    except Exception:
+                        continue
         return tasks
 
     def _save_bead(self, task_id: str, data: Dict[str, Any]) -> str:
@@ -119,6 +180,7 @@ class GraphMemoryAgent(BaseAgent):
         if self.outcomes[entity_id] < 0.3:
             if entity_id in self.entities:
                 del self.entities[entity_id]
+                self._save_graph()
             return f"Memory {entity_id} deleted due to consistently poor outcomes."
             
         return f"Memory {entity_id} score updated to {self.outcomes[entity_id]} ({status})."
@@ -171,9 +233,12 @@ class GraphMemoryAgent(BaseAgent):
         return summary
 
     @as_tool
-    def add_entity(self, name: str, properties: Dict[str, Any]) -> str:
+    def add_entity(self, name: str, properties: Dict[str, Any], entity_type: Optional[str] = None) -> str:
         """Adds or updates an entity in the graph."""
+        if entity_type:
+            properties["type"] = entity_type
         self.entities[name] = properties
+        self._save_graph()
         logging.info(f"GraphMemory: Added entity {name}")
         return f"Entity '{name}' cached in graph memory."
 
@@ -181,7 +246,9 @@ class GraphMemoryAgent(BaseAgent):
     def add_relationship(self, subject: str, predicate: str, object_: str) -> str:
         """Adds a directed relationship between two entities."""
         rel = {"subject": subject, "predicate": predicate, "object": object_}
-        self.relationships.append(rel)
+        if rel not in self.relationships:
+            self.relationships.append(rel)
+            self._save_graph()
         return f"Relationship: ({subject})--[{predicate}]-->({object_}) created."
 
     @as_tool
@@ -196,11 +263,21 @@ class GraphMemoryAgent(BaseAgent):
             return f"No relationships found for '{entity_name}'."
         return "\n".join(matches)
 
+    @as_tool
+    def hybrid_search(self, query: str) -> Dict[str, Any]:
+        """Performs a combined vector-graph search (Simulated)."""
+        # In a real system, this would call ChromaDB for vectors and then cross-reference with self.entities
+        return {
+            "query": query,
+            "vector_results": ["Related code snippet from repository"],
+            "graph_context": self.query_relationships(query) if query in self.entities else "No direct graph matches."
+        }
+
     def improve_content(self, prompt: str) -> str:
         """Graph-based reasoning helper."""
         return f"GraphMemory state: {len(self.entities)} entities, {len(self.relationships)} relationships."
 
 if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
+    from src.core.base.utilities import create_main_function
     main = create_main_function(GraphMemoryAgent, "Graph Memory Agent", "Memory storage path")
     main()

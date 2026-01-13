@@ -1,12 +1,32 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
-import json
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+from typing import Dict, List, Any, TYPE_CHECKING
+
+__version__ = VERSION
 
 if TYPE_CHECKING:
-    from src.classes.fleet.FleetManager import FleetManager
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
 class ConsensusOrchestrator:
     """
@@ -39,7 +59,7 @@ class ConsensusOrchestrator:
         
         return final_decision
 
-    def verify_state_block(self, task: str, decision: str) -> str:
+    def verify_state_block(self, task: str, decision: str) -> None:
         """
         Phase 55: Distributed Byzantine Fault Tolerance (DBFT).
         Simulates signing a state block after consensus to ensure data integrity
@@ -98,7 +118,7 @@ class ConsensusOrchestrator:
             current_proposals = new_proposals
         return current_proposals
 
-    def _weighted_vote(self, proposals: List[Dict[Dict[str, Any]]]) -> str:
+    def _weighted_vote(self, proposals: List[Dict[str, Any]]) -> str:
         if not proposals:
             return "Consensus failed: No proposals."
             
@@ -108,7 +128,7 @@ class ConsensusOrchestrator:
         logging.info(f"Consensus reached. Winner: {best_proposal['agent']} with weight {best_proposal['weight']}")
         return best_proposal["content"]
 
-    def update_reputation(self, agent_name: str, feedback_score: float):
+    def update_reputation(self, agent_name: str, feedback_score: float) -> None:
         """
         Updates agent reputation based on external feedback (0.0 to 1.0).
         """

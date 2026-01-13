@@ -1,19 +1,38 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Utility functions used by the Agent classes."""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import logging
 import importlib.util
 import sys
 from pathlib import Path
 from typing import Set, Optional, Any, Callable, cast
 
+__version__ = VERSION
+
 # Global cache for .codeignore patterns to avoid re-parsing
 _CODEIGNORE_CACHE: dict[str, set[str]] = {}
 _CODEIGNORE_CACHE_TIME: dict[str, float] = {}
-
 
 def load_codeignore(root: Path) -> Set[str]:
     """Load and parse ignore patterns from .codeignore file.
@@ -82,7 +101,6 @@ def load_codeignore(root: Path) -> Set[str]:
         logging.debug(f"No .codeignore file found at {codeignore_path}")
     return set()
 
-
 def setup_logging(verbosity: Optional[str] = None) -> None:
     """Configure logging based on verbosity level.
     
@@ -110,7 +128,6 @@ def setup_logging(verbosity: Optional[str] = None) -> None:
     if level <= logging.DEBUG:
         logging.debug(f"Logging configured at level: {logging.getLevelName(level)}")
 
-
 def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Optional[Path]:
     """Worker function for multiprocessing file processing.
 
@@ -124,7 +141,6 @@ def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Optional[Pa
     except Exception as e:
         logging.error(f"[worker] Failed: {e}")
         return None
-
 
 def _load_fix_markdown_content() -> Callable[[str], str]:
     """Load the markdown fixer module dynamically."""
@@ -152,6 +168,5 @@ def _load_fix_markdown_content() -> Callable[[str], str]:
         return text
 
     return _fallback
-
 
 fix_markdown_content: Callable[[str], str] = _load_fix_markdown_content()

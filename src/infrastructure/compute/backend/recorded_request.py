@@ -11,19 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 from dataclasses import dataclass, field
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
+from typing import Any, Dict, Optional
 
 __version__ = VERSION
-
 
 @dataclass
 class RecordedRequest:
@@ -33,7 +35,7 @@ class RecordedRequest:
     timestamp: float
     prompt: str
     backend: str
-    response: str | None = None
+    response: Optional[str] = None
     latency_ms: int = 0
     success: bool = True
-    metadata: dict[str, Any] = field(default_factory=lambda: {})
+    metadata: Dict[str, Any] = field(default_factory=lambda: {})

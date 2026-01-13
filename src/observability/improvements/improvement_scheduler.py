@@ -11,26 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .Improvement import Improvement
+from .ResourceAllocation import ResourceAllocation
+from .ScheduleStatus import ScheduleStatus
+from .ScheduledEntry import ScheduledEntry
+from .ScheduledImprovement import ScheduledImprovement
+from ._ScheduleStore import _ScheduleStore
 from datetime import datetime, timedelta
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-from .resource_allocation import ResourceAllocation
-from .schedule_status import ScheduleStatus
-from .schedule_store import _ScheduleStore
-from .scheduled_entry import ScheduledEntry
-from .scheduled_improvement import ScheduledImprovement
+from typing import Any, Dict, List, Optional
 
 __version__ = VERSION
-
 
 class ImprovementScheduler:
     """Manages improvement scheduling with resource allocation.
@@ -44,18 +45,18 @@ class ImprovementScheduler:
 
     def __init__(self) -> None:
         self.schedule: _ScheduleStore = _ScheduleStore()
-        self.sprints: dict[str, list[str]] = {}
-        self.resources: dict[str, list[str]] = {}
+        self.sprints: Dict[str, List[str]] = {}
+        self.resources: Dict[str, List[str]] = {}
 
-        self._entries_by_id: dict[str, ScheduledEntry] = {}
-        self._entries: list[ScheduledEntry] = []
-        self._allocations: dict[str, ResourceAllocation] = {}
+        self._entries_by_id: Dict[str, ScheduledEntry] = {}
+        self._entries: List[ScheduledEntry] = []
+        self._allocations: Dict[str, ResourceAllocation] = {}
 
     def schedule_improvement(
         self,
         improvement: Any,
         start_date: Any,
-        resources: list[str] | None = None,
+        resources: Optional[List[str]] = None,
         sprint_id: str = "",
         **_: Any,
     ) -> Any:
@@ -93,7 +94,7 @@ class ImprovementScheduler:
         self._entries.append(entry)
         return entry
 
-    def get_schedule(self, improvement_id: str) -> ScheduledImprovement | None:
+    def get_schedule(self, improvement_id: str) -> Optional[ScheduledImprovement]:
         return self.schedule.get(improvement_id)
 
     def update_status(self, improvement_id: str, status: ScheduleStatus) -> bool:
@@ -103,10 +104,10 @@ class ImprovementScheduler:
         item.status = status
         return True
 
-    def get_sprint_items(self, sprint_id: str) -> list[str]:
+    def get_sprint_items(self, sprint_id: str) -> List[str]:
         return self.sprints.get(sprint_id, [])
 
-    def allocate_resources(self, improvement_id: str, resources: list[str]) -> None:
+    def allocate_resources(self, improvement_id: str, resources: List[str]) -> None:
         self._allocations[improvement_id] = ResourceAllocation(
             improvement_id=improvement_id,
             resources=list(resources),

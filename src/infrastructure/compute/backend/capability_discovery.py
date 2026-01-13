@@ -11,20 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .system_capability import SystemCapability
+from src.core.base.version import VERSION
+from .SystemCapability import SystemCapability
+from typing import Any, Dict, List, Optional
 
 __version__ = VERSION
-
 
 class CapabilityDiscovery:
     """Discovers and tracks backend capabilities.
@@ -40,7 +41,7 @@ class CapabilityDiscovery:
 
     def __init__(self) -> None:
         """Initialize capability discovery."""
-        self._capabilities: dict[str, dict[str, SystemCapability]] = {}
+        self._capabilities: Dict[str, Dict[str, SystemCapability]] = {}
 
     def register_capability(
         self,
@@ -48,7 +49,7 @@ class CapabilityDiscovery:
         name: str,
         description: str = "",
         enabled: bool = True,
-        parameters: dict[str, Any] | None = None,
+        parameters: Optional[Dict[str, Any]] = None,
     ) -> SystemCapability:
         """Register a backend capability.
 
@@ -88,7 +89,7 @@ class CapabilityDiscovery:
         cap = caps.get(name)
         return cap is not None and cap.enabled
 
-    def get_capabilities(self, backend: str) -> list[SystemCapability]:
+    def get_capabilities(self, backend: str) -> List[SystemCapability]:
         """Get all capabilities for backend.
 
         Args:
@@ -99,10 +100,13 @@ class CapabilityDiscovery:
         """
         return list(self._capabilities.get(backend, {}).values())
 
-    def discover_all(self) -> dict[str, list[str]]:
+    def discover_all(self) -> Dict[str, List[str]]:
         """Discover all capabilities across backends.
 
         Returns:
             Dict[str, List[str]]: Backend -> capability names mapping.
         """
-        return {backend: [c.name for c in caps.values() if c.enabled] for backend, caps in self._capabilities.items()}
+        return {
+            backend: [c.name for c in caps.values() if c.enabled]
+            for backend, caps in self._capabilities.items()
+        }

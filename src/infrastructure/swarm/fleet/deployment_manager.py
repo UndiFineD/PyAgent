@@ -11,22 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Manager for automated deployment, containerization, and fleet-as-a-service scaling."""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 from pathlib import Path
-
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
-
 class DeploymentManager:
     """Automates the generation of infrastructure-as-code and container manifests for the fleet."""
-
+    
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
         self.deployment_dir = self.workspace_root / "deploy"
@@ -40,16 +42,16 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 ENV COMPONENT={component}
-CMD ["python", "src\agent_remote.py"]
+CMD ["python", "src/agent_remote.py"]
 """
         file_path = self.deployment_dir / f"Dockerfile.{component}"
-        with open(file_path, 'w', encoding='utf-8') as f:
+        with open(file_path, "w") as f:
             f.write(dockerfile_content)
         return str(file_path)
 
     def generate_compose_orchestration(self, num_replicas: int = 3) -> str:
         """Generates a docker-compose.yaml for multi-node fleet scaling."""
-        compose_content = """version: '3.8'
+        compose_content = f"""version: '3.8'
 services:
   fleet_master:
     build:
@@ -60,9 +62,8 @@ services:
     environment:
       - NODE_TYPE=MASTER
 """
-        agent_nodes = []
         for i in range(num_replicas):
-            node_block = f"""
+            compose_content += f"""
   agent_node_{i}:
     build:
       context: ..
@@ -71,11 +72,8 @@ services:
       - NODE_TYPE=WORKER
       - MASTER_URL=http://fleet_master:8000
 """
-            agent_nodes.append(node_block)
-
-        compose_content += "".join(agent_nodes)
         file_path = self.deployment_dir / "docker-compose.yaml"
-        with open(file_path, 'w', encoding='utf-8') as f:
+        with open(file_path, "w") as f:
             f.write(compose_content)
         return str(file_path)
 

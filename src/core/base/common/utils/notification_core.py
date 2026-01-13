@@ -11,7 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """
 NotificationCore logic for PyAgent.
@@ -20,27 +25,24 @@ No I/O or side effects.
 """
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import time
 import urllib.parse
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
+from typing import Dict, Any
 
 __version__ = VERSION
-
 
 class NotificationCore:
     """Pure logic core for notification management."""
 
     @staticmethod
-    def construct_payload(event_name: str, event_data: dict[str, Any]) -> dict[str, Any]:
+    def construct_payload(event_name: str, event_data: Dict[str, Any]) -> Dict[str, Any]:
         """Formats the JSON payload for webhook delivery."""
         return {
-            "event": event_name,
-            "timestamp": time.time(),
-            "data": event_data,
-            "version": "1.1.0",
+            'event': event_name,
+            'timestamp': time.time(),
+            'data': event_data,
+            'version': '1.1.0'
         }
 
     @staticmethod
@@ -49,12 +51,11 @@ class NotificationCore:
         try:
             domain = urllib.parse.urlparse(url).netloc
             return domain or url
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+        except Exception:
             return url
 
     @staticmethod
-    def validate_event_data(data: dict[str, Any]) -> bool:
+    def validate_event_data(data: Dict[str, Any]) -> bool:
         """Basic validation for event data structures."""
         # Ensure it's a non-empty dictionary
-        return isinstance(data, dict) and bool(data)
+        return isinstance(data, dict) and len(data) > 0

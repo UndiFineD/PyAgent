@@ -1,13 +1,34 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in Markdown documentation."""
 
-from .CoderAgent import CoderAgent
-from src.classes.base_agent.utilities import create_main_function
-from src.classes.context.KnowledgeAgent import KnowledgeAgent
-import logging
+from __future__ import annotations
+from src.core.base.version import VERSION
+from src.logic.agents.development.CoderAgent import CoderAgent
+from src.core.base.utilities import create_main_function
+from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
 import re
 import yaml
+
+__version__ = VERSION
 
 class MarkdownAgent(CoderAgent):
     """Agent for Markdown documentation improvement."""
@@ -85,6 +106,22 @@ class MarkdownAgent(CoderAgent):
         links_str = "\n".join([f"- [[{Path(b).stem}]]" for b in backlinks])
         return f"\n## Backlinks\n\n{links_str}\n"
 
+    def convert_to_callouts(self, content: str) -> str:
+        """Converts leading lines like 'TODO:' or 'WARNING:' to Obsidian Callouts."""
+        # Regex to match leading TODO:, WARNING:, INFO:, TIP: etc.
+        pattern = r"^(TODO|WARNING|INFO|TIP|ABSTRACT|QUOTE): (.*)$"
+        def replace(match) -> str:
+            ctype, ctext = match.groups()
+            return self.format_as_callout(ctext, ctype)
+        
+        # Apply line-by-line
+        lines = content.split("\n")
+        new_lines = []
+        for line in lines:
+            new_line = re.sub(pattern, replace, line, flags=re.IGNORECASE)
+            new_lines.append(new_line)
+        return "\n".join(new_lines)
+
     def improve_content(self, prompt: str) -> str:
         """Overrides improve_content to ensure Obsidian compatibility is applied."""
         # Check if user specifically wants a graph or backlinks
@@ -111,4 +148,3 @@ class MarkdownAgent(CoderAgent):
 if __name__ == "__main__":
     main = create_main_function(MarkdownAgent, "Markdown Agent", "Path to Markdown file (.md)")
     main()
-

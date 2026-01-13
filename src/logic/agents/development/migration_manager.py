@@ -11,23 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_coder.py"""
 
-# pylint: disable=too-many-ancestors
-
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from src.core.base.types.MigrationRule import MigrationRule
+from src.core.base.types.MigrationStatus import MigrationStatus
+from typing import Any, Dict, List, Tuple
 import re
-from typing import Any
-
-from src.core.base.common.types.migration_rule import MigrationRule
-from src.core.base.common.types.migration_status import MigrationStatus
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 class MigrationManager:
     """Manages code migration from old APIs to new ones.
@@ -51,7 +51,7 @@ class MigrationManager:
 
     def __init__(self) -> None:
         """Initialize the migration manager."""
-        self.rules: list[MigrationRule] = []
+        self.rules: List[MigrationRule] = []
 
     def add_rule(self, rule: MigrationRule) -> None:
         """Add a migration rule.
@@ -61,7 +61,7 @@ class MigrationManager:
         """
         self.rules.append(rule)
 
-    def apply_migrations(self, content: str) -> tuple[str, list[dict[str, Any]]]:
+    def apply_migrations(self, content: str) -> Tuple[str, List[Dict[str, Any]]]:
         """Apply all migration rules to content.
 
         Args:
@@ -71,7 +71,7 @@ class MigrationManager:
             Tuple of migrated content and list of applied migrations.
         """
         result = content
-        applied: list[dict[str, Any]] = []
+        applied: List[Dict[str, Any]] = []
 
         for rule in self.rules:
             if rule.status == MigrationStatus.SKIPPED:
@@ -79,13 +79,11 @@ class MigrationManager:
             rule.status = MigrationStatus.IN_PROGRESS
             new_result = re.sub(rule.old_pattern, rule.new_pattern, result)
             if new_result != result:
-                applied.append(
-                    {
-                        "rule": rule.name,
-                        "description": rule.description,
-                        "breaking_change": rule.breaking_change,
-                    }
-                )
+                applied.append({
+                    "rule": rule.name,
+                    "description": rule.description,
+                    "breaking_change": rule.breaking_change
+                })
                 rule.status = MigrationStatus.COMPLETED
                 result = new_result
             else:
@@ -93,7 +91,7 @@ class MigrationManager:
 
         return result, applied
 
-    def get_pending_migrations(self) -> list[MigrationRule]:
+    def get_pending_migrations(self) -> List[MigrationRule]:
         """Get list of pending migration rules.
 
         Returns:

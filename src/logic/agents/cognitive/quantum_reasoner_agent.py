@@ -11,99 +11,83 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-
-"""Agent for handling ambiguity using quantum-inspired parallel reasoning branches."""
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 from __future__ import annotations
-
-import json
+from src.core.base.version import VERSION
 import logging
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import as_tool
+import json
+from typing import Dict, List, Any
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
-
-# pylint: disable=too-many-ancestors
 class QuantumReasonerAgent(BaseAgent):
     """
     Agent that uses 'Quantum-Inspired Reasoning' to handle ambiguity.
-    It explores multiple 'superposition' states (plans) in parallel and
+    It explores multiple 'superposition' states (plans) in parallel and 
     collapses them into a single coherent execution path.
     """
-
+    
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
-            "You are the Quantum Reasoner Agent. Your goal is to handle task ambiguity "
-            "by generating multiple parallel reasoning paths (superposition states). "
-            "You then calculate probability amplitudes (scores) for each path "
-            "and collapse them into the optimal solution."
+            "You are the Quantum Reasoner Agent. "
+            "Your goal is to handle task ambiguity by generating multiple parallel reasoning paths (superposition states). "
+            "You then calculate probability amplitudes (scores) for each path and collapse them into the optimal solution."
         )
 
     @as_tool
-    async def reason_with_superposition(
-        self, task: str, branch_count: int = 3
-    ) -> dict[str, Any]:
+    def reason_with_superposition(self, task: str, branch_count: int = 3) -> Dict[str, Any]:
         """
         Generates multiple reasoning branches for a task and selects the best one.
         """
-        logging.info(
-            f"QuantumReasoner: Exploring {branch_count} parallel states for task: {task}"
-        )
-
+        logging.info(f"QuantumReasoner: Exploring {branch_count} parallel states for task: {task}")
+        
         # 1. Enter Superposition (Generate branches with divergent personas)
-        personas = [
-            "Conservative/Strict",
-            "Creative/Divergent",
-            "Empirical/Evidence-Based",
-        ]
+        personas = ["Conservative/Strict", "Creative/Divergent", "Empirical/Evidence-Based"]
         branches = []
         for i in range(min(branch_count, len(personas))):
-            branch_content = await self._generate_reasoning_branch(task, personas[i])
-            branches.append(
-                {
-                    "id": i,
-                    "persona": personas[i],
-                    "content": branch_content,
-                    "amplitude": 0.5,  # Initial neutral amplitude
-                }
-            )
-
+            branch_content = self._generate_reasoning_branch(task, personas[i])
+            branches.append({
+                "id": i,
+                "persona": personas[i],
+                "content": branch_content,
+                "amplitude": 0.5 # Initial neutral amplitude
+            })
+            
         # 2. Interference Pattern (Cross-evaluation)
         # Each branch reviews the others for logical consistency
         for i, branch in enumerate(branches):
             others = [b["content"] for j, b in enumerate(branches) if i != j]
-            interference_score = await self._calculate_interference(branch["content"], others)
+            interference_score = self._calculate_interference(branch["content"], others)
             branch["amplitude"] = interference_score
-
+            
         # 3. Wave Function Collapse (Pick highest amplitude)
         collapsed_state = max(branches, key=lambda x: x["amplitude"])
-
-        logging.info(
-            f"QuantumReasoner: Wave function collapsed to branch {collapsed_state['id']} ({collapsed_state['persona']})"
-        )
-
+        
+        logging.info(f"QuantumReasoner: Wave function collapsed to branch {collapsed_state['id']} ({collapsed_state['persona']})")
+        
         return {
             "task": task,
             "collapsed_decision": collapsed_state["content"],
             "selected_persona": collapsed_state["persona"],
             "confidence": collapsed_state["amplitude"],
-            "all_branches": branches,
+            "all_branches": branches
         }
 
-    async def _generate_reasoning_branch(self, task: str, persona: str) -> str:
+    def _generate_reasoning_branch(self, task: str, persona: str) -> str:
         """Generates reasoning using a specific persona constraint."""
         prompt = f"Persona: {persona}\nTask: {task}\nProvide your reasoning path for this task."
-        return await self.think(prompt)
+        return self.think(prompt)
 
-    async def _calculate_interference(
-        self, hypothesis: str, counter_arguments: list[str]
-    ) -> float:
+    def _calculate_interference(self, hypothesis: str, counter_arguments: List[str]) -> float:
         """Calculates 'interference' (logical consistency score) between reasoning paths."""
         prompt = (
             f"Hypothesis: {hypothesis}\n"
@@ -112,13 +96,13 @@ class QuantumReasonerAgent(BaseAgent):
             "Return ONLY the numeric score."
         )
         try:
-            score_str = await self.think(prompt)
+            score_str = self.think(prompt)
             return float(score_str)
-        except (ValueError, TypeError):
-            return 0.5  # Default probability on failure
+        except Exception:
+            return 0.5 # Default probability on failure
 
     @as_tool
-    def collapse_quantum_states(self, branches: list[dict[str, Any]]) -> str:
+    def collapse_quantum_states(self, branches: List[Dict[str, Any]]) -> str:
         """
         Manually collapses provided reasoning states into a single decision.
         """

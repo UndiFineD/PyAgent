@@ -1,13 +1,32 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in code quality, linting, and style enforcement."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import subprocess
-import logging
-from pathlib import Path
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import create_main_function
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import create_main_function
+
+__version__ = VERSION
 
 class LintingAgent(BaseAgent):
     """Ensures code adheres to quality standards by running linters."""
@@ -32,6 +51,9 @@ class LintingAgent(BaseAgent):
                 capture_output=True,
                 text=True
             )
+            # Phase 108: Record linting result
+            self._record(f"flake8 {target_path}", f"RC={result.returncode}\n{result.stdout[:500]}", provider="Shell", model="flake8")
+
             if not result.stdout:
                 return "✅ No linting issues found by flake8."
             return f"### Flake8 Issues\n```plaintext\n{result.stdout}\n```"
@@ -72,5 +94,3 @@ class LintingAgent(BaseAgent):
 if __name__ == "__main__":
     main = create_main_function(LintingAgent, "Linting Agent", "Path to audit")
     main()
-
-

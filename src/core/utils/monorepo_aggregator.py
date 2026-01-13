@@ -11,18 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-
-from src.core.base.common.types.changelog_entry import ChangelogEntry
-from src.core.base.common.types.monorepo_entry import MonorepoEntry
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.version import VERSION
+from .ChangelogEntry import ChangelogEntry
+from .MonorepoEntry import MonorepoEntry
+from typing import Dict, List
 
 __version__ = VERSION
-
 
 class MonorepoAggregator:
     """Aggregates changelogs for monorepo setups.
@@ -41,14 +45,14 @@ class MonorepoAggregator:
 
     def __init__(self) -> None:
         """Initialize the monorepo aggregator."""
-        self.packages: dict[str, MonorepoEntry] = {}
+        self.packages: Dict[str, MonorepoEntry] = {}
 
     def add_package(
         self,
         package_name: str,
         version: str,
-        entries: list[ChangelogEntry],
-        path: str = "",
+        entries: List[ChangelogEntry],
+        path: str = ""
     ) -> MonorepoEntry:
         """Add a package to the aggregator.
 
@@ -61,7 +65,12 @@ class MonorepoAggregator:
         Returns:
             The created MonorepoEntry.
         """
-        entry = MonorepoEntry(package_name=package_name, version=version, entries=entries, path=path)
+        entry = MonorepoEntry(
+            package_name=package_name,
+            version=version,
+            entries=entries,
+            path=path
+        )
         self.packages[package_name] = entry
         return entry
 
@@ -79,4 +88,4 @@ class MonorepoAggregator:
                 result.append(f"- [{entry.category}] {entry.description}")
             result.append("")
 
-        return "\n".join(result)
+        return '\n'.join(result)

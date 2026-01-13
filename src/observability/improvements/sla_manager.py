@@ -11,24 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .Improvement import Improvement
+from .SLAConfiguration import SLAConfiguration
+from .SLALevel import SLALevel
+from .SLAPolicy import SLAPolicy
 from datetime import datetime, timedelta
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-from .sla_configuration import SLAConfiguration
-from .sla_level import SLALevel
-from .sla_policy import SLAPolicy
+from typing import Any, Dict, List, Optional
 
 __version__ = VERSION
-
 
 class SLAManager:
     """Manages SLAs for improvements.
@@ -42,10 +43,10 @@ class SLAManager:
 
     def __init__(self) -> None:
         """Initialize SLA manager."""
-        self.sla_configs: dict[SLALevel, SLAConfiguration] = {}
-        self.tracked: dict[str, dict[str, Any]] = {}
+        self.sla_configs: Dict[SLALevel, SLAConfiguration] = {}
+        self.tracked: Dict[str, Dict[str, Any]] = {}
         # Compatibility API expected by tests.
-        self.sla_policies: dict[str, SLAPolicy] = {}
+        self.sla_policies: Dict[str, SLAPolicy] = {}
         self._setup_default_slas()
 
     def set_policy(self, name: str, response_hours: int = 0, resolution_hours: int = 0) -> None:
@@ -56,27 +57,27 @@ class SLAManager:
             resolution_hours=int(resolution_hours or 0),
         )
 
-    def get_policy(self, name: str) -> SLAPolicy | None:
+    def get_policy(self, name: str) -> Optional[SLAPolicy]:
         """Get a named SLA policy (compatibility API)."""
         return self.sla_policies.get(name)
 
-    def check_violations(self, improvements: list[Improvement], priority: str) -> list[Improvement]:
+    def check_violations(self, improvements: List[Improvement], priority: str) -> List[Improvement]:
         """Return improvements that violate the given named SLA policy."""
         policy = self.sla_policies.get(priority)
         if not policy or policy.resolution_hours <= 0:
             return []
 
         now = datetime.now()
-        violating: list[Improvement] = []
+        violating: List[Improvement] = []
         for imp in improvements:
             created = getattr(imp, "created_at", "")
-            created_dt: datetime | None = None
+            created_dt: Optional[datetime] = None
             if isinstance(created, datetime):
                 created_dt = created
             else:
                 try:
                     created_dt = datetime.fromisoformat(str(created))
-                except (ValueError, TypeError):
+                except Exception:
                     created_dt = None
 
             if not created_dt:
@@ -97,9 +98,15 @@ class SLAManager:
             (SLALevel.P4, 720, 480),
         ]
         for level, max_h, esc_h in defaults:
-            self.sla_configs[level] = SLAConfiguration(level=level, max_hours=max_h, escalation_hours=esc_h)
+            self.sla_configs[level] = SLAConfiguration(
+                level=level,
+                max_hours=max_h,
+                escalation_hours=esc_h
+            )
 
-    def assign_sla(self, improvement: Improvement, level: SLALevel) -> None:
+    def assign_sla(
+        self, improvement: Improvement, level: SLALevel
+    ) -> None:
         """Assign an SLA to an improvement.
 
         Args:
@@ -113,11 +120,15 @@ class SLAManager:
         self.tracked[improvement.id] = {
             "level": level,
             "start_time": datetime.now().isoformat(),
-            "deadline": (datetime.now() + timedelta(hours=config.max_hours)).isoformat(),
-            "escalation_time": (datetime.now() + timedelta(hours=config.escalation_hours)).isoformat(),
+            "deadline": (datetime.now() +
+                         timedelta(hours=config.max_hours)).isoformat(),
+            "escalation_time": (datetime.now() +
+                                timedelta(hours=config.escalation_hours)).isoformat()
         }
 
-    def check_sla_status(self, improvement_id: str) -> dict[str, Any]:
+    def check_sla_status(
+        self, improvement_id: str
+    ) -> Dict[str, Any]:
         """Check SLA status for an improvement."""
         if improvement_id not in self.tracked:
             return {"status": "not_tracked"}
@@ -132,10 +143,13 @@ class SLAManager:
         else:
             return {"status": "on_track", **tracking}
 
-    def get_breached(self) -> list[str]:
+    def get_breached(self) -> List[str]:
         """Get all breached improvement IDs."""
         now = datetime.now().isoformat()
-        return [imp_id for imp_id, tracking in self.tracked.items() if now > tracking["deadline"]]
+        return [
+            imp_id for imp_id, tracking in self.tracked.items()
+            if now > tracking["deadline"]
+        ]
 
     def get_sla_compliance_rate(self) -> float:
         """Calculate SLA compliance rate."""

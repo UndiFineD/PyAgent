@@ -1,20 +1,36 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 PyAgent contributors
+# Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
-"""Testing utilities for visual regression, contract testing, and results aggregation."""
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import hashlib
 import json
-import logging
 from typing import Any, Dict, List, Optional
-
 from .enums import TestSourceType
 from .models import (
-    AggregatedResult, ContractTest, TestStatus, VisualRegressionConfig,
-    BrowserType
+    AggregatedResult, ContractTest, TestStatus, VisualRegressionConfig
 )
 
+__version__ = VERSION
+
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""Testing utilities for visual regression, contract testing, and results aggregation."""
 
 class VisualRegressionTester:
     """Visual regression testing for UI components."""
@@ -79,7 +95,6 @@ class VisualRegressionTester:
             }
             results.append(result)
         return results
-
 
 class ContractTestRunner:
     """Contract testing for API boundaries."""
@@ -173,7 +188,6 @@ class ContractTestRunner:
             } for c in contracts]
         }
         return json.dumps(pact, indent=2)
-
 
 class ResultAggregator:
     """Aggregate test results from multiple sources."""
@@ -323,9 +337,9 @@ class ResultAggregator:
 
         return {"pass_rate_trend": trend}
 
-
 class TestMetricsCollector:
     """Collect test execution metrics."""
+    __test__ = False
 
     def __init__(self) -> None:
         """Initialize metrics collector."""

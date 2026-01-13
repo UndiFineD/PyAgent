@@ -1,17 +1,37 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Proxy for agents running on remote nodes.
 Allows FleetManager to transparently call tools on other machines.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import requests
-import json
 import logging
 import os
-import time
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.ConnectivityManager import ConnectivityManager
+from typing import Dict, Any
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.ConnectivityManager import ConnectivityManager
+
+__version__ = VERSION
 
 class RemoteAgentProxy(BaseAgent):
     """Encapsulates a remote agent accessible via HTTP/JSON-RPC.
@@ -70,7 +90,7 @@ class RemoteAgentProxy(BaseAgent):
     def _record_interaction(self, tool_name: str, payload: Dict[str, Any], response: str) -> None:
         """Records the interaction to a local shard for later intelligence harvesting (Phase 108)."""
         try:
-            from src.classes.backend.LocalContextRecorder import LocalContextRecorder
+            from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
             recorder = LocalContextRecorder()
             recorder.record_interaction(
                 agent_name=f"remote_{self.agent_name}",

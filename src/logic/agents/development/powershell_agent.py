@@ -11,27 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in PowerShell scripting."""
 
-# pylint: disable=too-many-ancestors
-
 from __future__ import annotations
-
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.development.coder_agent import CoderAgent
+from src.core.base.version import VERSION
+from src.logic.agents.development.CoderAgent import CoderAgent
+from src.core.base.utilities import create_main_function
 
 __version__ = VERSION
 
-
 class PowershellAgent(CoderAgent):
     """Agent for PowerShell scripts."""
-
+    
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-
         self._language = "powershell"
         self._system_prompt = (
             "You are an Expert PowerShell Scripter. "
@@ -41,7 +41,6 @@ class PowershellAgent(CoderAgent):
 
     def _get_default_content(self) -> str:
         return "# PowerShell Script\nWrite-Host 'Hello World'\n"
-
 
 if __name__ == "__main__":
     main = create_main_function(PowershellAgent, "PowerShell Agent", "Path to .ps1 file")

@@ -11,21 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .LocaleCode import LocaleCode
+from .LocalizedString import LocalizedString
+from typing import Dict, Optional
 import logging
 
-from src.core.base.lifecycle.version import VERSION
-
-from .locale_code import LocaleCode
-from .localized_string import LocalizedString
-
-__version__: str = VERSION
-
+__version__ = VERSION
 
 class ReportLocalizer:
     """Localizer for report internationalization.
@@ -45,15 +47,15 @@ class ReportLocalizer:
             locale: Default locale.
         """
 
-        self.strings: dict[str, LocalizedString] = {}
-        self.current_locale: LocaleCode = locale
+        self.strings: Dict[str, LocalizedString] = {}
+        self.current_locale = locale
         self._init_defaults()
         logging.debug(f"ReportLocalizer initialized with {locale.value}")
 
     def _init_defaults(self) -> None:
         """Initialize default strings."""
 
-        defaults: dict[str, dict[str, str]] = {
+        defaults = {
             "report.description": {"en-US": "Description", "de-DE": "Beschreibung"},
             "report.errors": {"en-US": "Errors", "de-DE": "Fehler"},
             "report.improvements": {"en-US": "Improvements", "de-DE": "Verbesserungen"},
@@ -64,17 +66,17 @@ class ReportLocalizer:
         for key, translations in defaults.items():
             self.add_string(key, translations)
 
-    def add_string(self, key: str, translations: dict[str, str]) -> None:
+    def add_string(self, key: str, translations: Dict[str, str]) -> None:
         """Add a localized string.
         Args:
             key: String key.
             translations: Locale to text mapping.
         """
 
-        default: str = translations.get("en-US", list(translations.values())[0] if translations else "")
+        default = translations.get("en-US", list(translations.values())[0] if translations else "")
         self.strings[key] = LocalizedString(key=key, translations=translations, default=default)
 
-    def get(self, key: str, locale: LocaleCode | None = None) -> str:
+    def get(self, key: str, locale: Optional[LocaleCode] = None) -> str:
         """Get localized string.
         Args:
             key: String key.
@@ -83,10 +85,10 @@ class ReportLocalizer:
             Localized text.
         """
 
-        loc: LocaleCode = locale or self.current_locale
+        loc = locale or self.current_locale
         if key not in self.strings:
             return key
-        string: LocalizedString = self.strings[key]
+        string = self.strings[key]
         return string.translations.get(loc.value, string.default)
 
     def set_locale(self, locale: LocaleCode) -> None:
@@ -95,4 +97,4 @@ class ReportLocalizer:
             locale: New locale.
         """
 
-        self.current_locale: LocaleCode = locale
+        self.current_locale = locale

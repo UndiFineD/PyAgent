@@ -10,25 +10,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-generated module exports."""
 
 from __future__ import annotations
-
-from collections.abc import Callable
-
-from src.core.base.lifecycle.version import VERSION
-
-from .agent_strategy import AgentStrategy  # noqa: F401
-from .chain_of_thought_strategy import (  # noqa: F401
-    ChainOfThoughtStrategy
-)
-from .direct_strategy import DirectStrategy  # noqa: F401
-from .reflexion_strategy import ReflexionStrategy  # noqa: F401
+from src.core.base.version import VERSION
+from typing import Callable, Optional, List, Dict
+from .AgentStrategy import AgentStrategy
+from .ChainOfThoughtStrategy import ChainOfThoughtStrategy
+from .DirectStrategy import DirectStrategy
+from .ReflexionStrategy import ReflexionStrategy
 
 # Type alias for the backend function signature
 # (prompt, system_prompt, history) -> response
-BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
+BackendFunction = Callable[[str, Optional[str], Optional[List[Dict[str, str]]]], str]
 
 __version__ = VERSION

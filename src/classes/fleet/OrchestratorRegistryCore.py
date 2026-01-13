@@ -1,5 +1,28 @@
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+from __future__ import annotations
+from src.core.base.version import VERSION
 import os
 from typing import Dict, List, Any, Tuple, Optional
+
+__version__ = VERSION
 
 class OrchestratorRegistryCore:
     """
@@ -28,14 +51,19 @@ class OrchestratorRegistryCore:
                     
                     # Convert ClassName -> snake_case key
                     # "SelfHealingOrchestrator" -> "self_healing"
-                    key: str = self._to_snake_case(class_name.replace("Orchestrator", ""))
-                    if not key: key = self._to_snake_case(class_name)
+                    short_key: str = self._to_snake_case(class_name.replace("Orchestrator", ""))
+                    full_key: str = self._to_snake_case(class_name)
 
                     # Default heuristic for 'needs_fleet'
                     needs_fleet: bool = any(x in class_name for x in ["Orchestrator", "Spawner", "Bridge", "Selector", "Engine"])
                     
                     # (module, class, needs_fleet, arg_path)
-                    discovered[key] = (module_path, class_name, needs_fleet, None)
+                    cfg = (module_path, class_name, needs_fleet, None)
+                    
+                    if short_key:
+                        discovered[short_key] = cfg
+                    discovered[full_key] = cfg
+                    discovered[class_name] = cfg # Also keep original class name for direct access
 
         return discovered
 
@@ -75,8 +103,10 @@ class OrchestratorRegistryCore:
             p_parts += [0] * (3 - len(p_parts))
             r_parts += [0] * (3 - len(r_parts))
             
-            if p_parts[0] > r_parts[0]: return True
-            if p_parts[0] < r_parts[0]: return False
+            if p_parts[0] > r_parts[0]:
+                return True
+            if p_parts[0] < r_parts[0]:
+                return False
             return p_parts[1] >= r_parts[1]
         except Exception:
             return True

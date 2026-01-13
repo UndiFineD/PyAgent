@@ -11,21 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .ReportType import ReportType
+from .SubscriptionFrequency import SubscriptionFrequency
 from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
-
-from .report_type import ReportType
-from .subscription_frequency import SubscriptionFrequency
+from typing import List
 
 __version__ = VERSION
-
 
 @dataclass
 class ReportSubscription:
@@ -42,6 +44,6 @@ class ReportSubscription:
     subscriber_id: str
     email: str
     frequency: SubscriptionFrequency = SubscriptionFrequency.DAILY
-    report_types: list[ReportType] = field(default_factory=list)  # type: ignore[assignment]
-    file_patterns: list[str] = field(default_factory=list)  # type: ignore[assignment]
+    report_types: List[ReportType] = field(default_factory=list)  # type: ignore[assignment]
+    file_patterns: List[str] = field(default_factory=list)  # type: ignore[assignment]
     enabled: bool = True

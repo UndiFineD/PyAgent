@@ -1,9 +1,27 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 PyAgent contributors
+# Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Module loading utilities for test environment."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import importlib.util
 import logging
 import re
@@ -13,12 +31,21 @@ from pathlib import Path
 from types import ModuleType
 from typing import Iterator, Optional
 
+__version__ = VERSION
+
 class ModuleLoader:
     """Handles dynamic loading of agent modules and sys.path management."""
 
     def __init__(self, agent_dir: Optional[Path] = None) -> None:
-        """Initialize with agent directory."""
-        self.agent_dir = agent_dir or Path(__file__).resolve().parent.parent.parent
+        """Initialize with agent directory (defaults to src)."""
+        # Search for 'src' folder by going up
+        current = Path(__file__).resolve()
+        src_found = None
+        for parent in current.parents:
+            if (parent / "src").is_dir():
+                src_found = parent / "src"
+                break
+        self.agent_dir = agent_dir or src_found or current.parents[2]
 
     @contextmanager
     def agent_dir_on_path(self) -> Iterator[None]:

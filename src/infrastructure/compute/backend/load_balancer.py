@@ -11,24 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .SystemConfig import SystemConfig
+from .ProviderType import ProviderType
+from .LoadBalanceStrategy import LoadBalanceStrategy
+from typing import Any, Dict, List, Optional
 import logging
 import threading
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .load_balance_strategy import LoadBalanceStrategy
-from .provider_type import ProviderType
-from .system_config import SystemConfig
 
 __version__ = VERSION
-
 
 class LoadBalancer:
     """Load balancer for multiple backend endpoints.
@@ -42,19 +43,16 @@ class LoadBalancer:
         backend=lb.next()
     """
 
-    def __init__(
-        self,
-        strategy: LoadBalanceStrategy = LoadBalanceStrategy.ROUND_ROBIN,
-    ) -> None:
+    def __init__(self, strategy: LoadBalanceStrategy = LoadBalanceStrategy.ROUND_ROBIN, *args, **kwargs) -> None:
         """Initialize load balancer.
 
         Args:
             strategy: Load balancing strategy to use.
         """
         self.strategy = strategy
-        self._backends: list[SystemConfig] = []
+        self._backends: List[SystemConfig] = []
         self._index = 0
-        self._connections: dict[str, int] = {}
+        self._connections: Dict[str, int] = {}
         self._lock = threading.Lock()
 
     def add_backend(
@@ -101,7 +99,7 @@ class LoadBalancer:
                     return True
             return False
 
-    def next(self) -> SystemConfig | None:
+    def next(self) -> Optional[SystemConfig]:
         """Get next backend to use.
 
         Returns:
@@ -115,10 +113,10 @@ class LoadBalancer:
                 backend = enabled[self._index % len(enabled)]
                 self._index += 1
                 return backend
-            if self.strategy == LoadBalanceStrategy.LEAST_CONNECTIONS:
+            elif self.strategy == LoadBalanceStrategy.LEAST_CONNECTIONS:
                 backend = min(enabled, key=lambda b: self._connections.get(b.name, 0))
                 return backend
-            if self.strategy == LoadBalanceStrategy.WEIGHTED:
+            elif self.strategy == LoadBalanceStrategy.WEIGHTED:
                 # Weighted round robin
                 total_weight = sum(b.weight for b in enabled)
                 if total_weight == 0:
@@ -131,9 +129,9 @@ class LoadBalancer:
                         self._index += 1
                         return backend
                 return enabled[-1]
-
-            # FAILOVER
-            return enabled[0]
+            else:
+                # FAILOVER
+                return enabled[0]
 
     def mark_connection_start(self, name: str) -> None:
         """Mark connection started for backend."""

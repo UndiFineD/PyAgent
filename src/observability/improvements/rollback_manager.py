@@ -11,35 +11,36 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .rollback_point import RollbackPoint
+from src.core.base.version import VERSION
+from .RollbackPoint import RollbackPoint
+from typing import Any, Dict, List
 
 __version__ = VERSION
-
 
 class RollbackManager:
     """Stores rollback points and can restore the latest state."""
 
     def __init__(self) -> None:
-        self.rollbacks: list[RollbackPoint] = []
-        self._by_id: dict[str, list[RollbackPoint]] = {}
+        self.rollbacks: List[RollbackPoint] = []
+        self._by_id: Dict[str, List[RollbackPoint]] = {}
 
-    def create_rollback_point(self, improvement_id: str, state: dict[str, Any]) -> RollbackPoint:
+    def create_rollback_point(self, improvement_id: str, state: Dict[str, Any]) -> RollbackPoint:
         point = RollbackPoint(improvement_id=improvement_id, state=dict(state))
         self.rollbacks.append(point)
         self._by_id.setdefault(improvement_id, []).append(point)
         return point
 
-    def rollback(self, improvement_id: str) -> dict[str, Any]:
+    def rollback(self, improvement_id: str) -> Dict[str, Any]:
         points = self._by_id.get(improvement_id, [])
         if not points:
             return {}

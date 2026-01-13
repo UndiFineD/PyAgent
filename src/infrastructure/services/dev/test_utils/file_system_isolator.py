@@ -11,24 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .IsolationLevel import IsolationLevel
+from pathlib import Path
+from typing import Any, List, Optional
 import os
 import shutil
 import tempfile
-from pathlib import Path
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .isolation_level import IsolationLevel
 
 __version__ = VERSION
-
 
 class FileSystemIsolator:
     """Isolates file system operations for testing.
@@ -49,11 +50,11 @@ class FileSystemIsolator:
             isolation_level: Level of isolation.
         """
         self.isolation_level = isolation_level
-        self._temp_dir: Path | None = None
-        self._original_cwd: str | None = None
-        self._created_files: list[Path] = []
+        self._temp_dir: Optional[Path] = None
+        self._original_cwd: Optional[str] = None
+        self._created_files: List[Path] = []
 
-    def __enter__(self) -> FileSystemIsolator:
+    def __enter__(self) -> "FileSystemIsolator":
         """Enter context and set up isolation."""
         if self.isolation_level == IsolationLevel.TEMP_DIR:
             self._temp_dir = Path(tempfile.mkdtemp())
@@ -102,6 +103,6 @@ class FileSystemIsolator:
             file_path = self._temp_dir / path
         return file_path.read_text(encoding="utf-8")
 
-    def get_temp_dir(self) -> Path | None:
+    def get_temp_dir(self) -> Optional[Path]:
         """Get the temporary directory."""
         return self._temp_dir

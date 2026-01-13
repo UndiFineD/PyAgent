@@ -11,20 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .ErrorBudget import ErrorBudget
 from datetime import datetime, timedelta
-
-from src.core.base.lifecycle.version import VERSION
-
-from .error_budget import ErrorBudget
+from typing import Dict
 
 __version__ = VERSION
-
 
 class ErrorBudgetManager:
     """Manages error budgets for SLO tracking.
@@ -38,9 +40,14 @@ class ErrorBudgetManager:
 
     def __init__(self) -> None:
         """Initialize the error budget manager."""
-        self.budgets: dict[str, ErrorBudget] = {}
+        self.budgets: Dict[str, ErrorBudget] = {}
 
-    def create_budget(self, name: str, total: float, period_days: int = 30) -> ErrorBudget:
+    def create_budget(
+        self,
+        name: str,
+        total: float,
+        period_days: int = 30
+    ) -> ErrorBudget:
         """Create an error budget.
 
         Args:
@@ -57,7 +64,7 @@ class ErrorBudgetManager:
             budget_name=name,
             total_budget=total,
             period_start=now.isoformat(),
-            period_end=end.isoformat(),
+            period_end=end.isoformat()
         )
         self.budgets[name] = budget
         return budget

@@ -1,17 +1,38 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Advanced Long-Term Memory (LTM) for agents.
 Consolidates episodic memories into semantic knowledge and persistent preferences.
 Inspired by mem0 and BabyAGI patterns.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import json
 import logging
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from datetime import datetime
+from src.logic.agents.cognitive.context.engines.GlobalContextCore import GlobalContextCore
 
-from .GlobalContextCore import GlobalContextCore
+__version__ = VERSION
 
 class GlobalContextEngine:
     """
@@ -49,7 +70,8 @@ class GlobalContextEngine:
         # Check for sub-shards (Phase 104)
         shard_files = list(self.shard_dir.glob(f"{category}_*.json"))
         if shard_files:
-            if category not in self.memory: self.memory[category] = {}
+            if category not in self.memory:
+                self.memory[category] = {}
             for s_file in shard_files:
                 try:
                     shard_data = json.loads(s_file.read_text(encoding="utf-8"))
@@ -77,6 +99,25 @@ class GlobalContextEngine:
             return data.get(key)
         return data
 
+    def set_with_conflict_resolution(self, category: str, key: str, value: Any, strategy: str = "latest") -> None:
+        """Sets a value in memory, resolving conflicts if the key already exists."""
+        self._ensure_shard_loaded(category)
+        if category not in self.memory:
+            self.memory[category] = {}
+        
+        if not isinstance(self.memory[category], dict):
+            # If it's not a dict, we can't key it, so we just overwrite it if possible or skip
+            self.memory[category] = {key: value}
+        else:
+            existing = self.memory[category].get(key)
+            if existing is not None:
+                resolved = self.core.resolve_conflict(existing, value, strategy)
+                self.memory[category][key] = resolved
+            else:
+                self.memory[category][key] = value
+        
+        self.save()
+
     def load(self) -> None:
         """Loads default context state."""
         if self.context_file.exists():
@@ -92,8 +133,14 @@ class GlobalContextEngine:
         """Saves context to disk with optimization for large datasets."""
         try:
             # Logic for sharding large datasets (Phase 101)
+            # Phase 119: Adaptive rebalancing automatically scales shard count
             shards = self.core.partition_memory(self.memory, max_entries_per_shard=2000)
             
+            # Phase 119: Check for shard bloat to notify system for potential migration
+            bloated = self.core.detect_shard_bloat(shards)
+            if bloated:
+                logging.warning(f"CONTEXT: Detected bloat in shards {bloated}. Adaptive rebalancing triggered.")
+
             # Save default state
             self.context_file.write_text(json.dumps(shards["default"], indent=2), encoding="utf-8")
             
@@ -101,13 +148,18 @@ class GlobalContextEngine:
             if len(shards) > 1:
                 self.shard_dir.mkdir(exist_ok=True)
                 for shard_name, shard_data in shards.items():
-                    if shard_name == "default": continue
+                    if shard_name == "default":
+                        continue
                     shard_file = self.shard_dir / f"{shard_name}.json"
                     shard_file.write_text(json.dumps(shard_data, indent=2), encoding="utf-8")
                     
         except Exception as e:
             logging.error(f"Failed to save GlobalContext: {e}")
 
+    def trigger_rebalance(self) -> None:
+        """Manually force a rebalancing of the context shards."""
+        logging.info("CONTEXT: Triggering manual shard rebalancing...")
+        self.save()
 
     def add_fact(self, key: str, value: Any) -> None:
         """Adds or updates a project fact."""
@@ -151,28 +203,6 @@ class GlobalContextEngine:
     def get_summary(self) -> str:
         """Returns a markdown summary of LTM for agent context."""
         return self.core.generate_markdown_summary(self.memory)
-                
-        if self.memory["constraints"]:
-            summary.append("\n## 🛡️ Active Constraints")
-            for c in self.memory["constraints"]:
-                summary.append(f"- {c}")
-                
-        if self.memory["insights"]:
-            summary.append("\n## 💡 Key Insights")
-            for i in self.memory["insights"][-5:]: # Show last 5
-                summary.append(f"- *[{i['source']}]*: {i['text']}")
-
-        if self.memory["entities"]:
-            summary.append("\n## 🏗️ Managed Entities")
-            for name, data in list(self.memory["entities"].items())[:5]:
-                summary.append(f"- **{name}**: {json.dumps(data)}")
-
-        if self.memory["lessons_learned"]:
-            summary.append("\n## 🎓 Lessons Learned")
-            for l in self.memory["lessons_learned"][-3:]:
-                summary.append(f"- **Issue**: {l['failure'][:50]}... -> **Fix**: {l['correction']}")
-                
-        return "\n".join(summary)
 
     def consolidate_episodes(self, episodes: List[Dict[str, Any]]) -> None:
         """Analyzes episodic memories to extract long-term insights."""

@@ -11,24 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .RecordedRequest import RecordedRequest
+from typing import Any, Dict, List, Optional
 import json
 import threading
 import time
 import uuid
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .recorded_request import RecordedRequest
 
 __version__ = VERSION
-
 
 class RequestRecorder:
     """Records and replays requests for debugging and testing.
@@ -52,17 +53,17 @@ class RequestRecorder:
             max_recordings: Maximum recordings to keep.
         """
         self.max_recordings = max_recordings
-        self._recordings: list[RecordedRequest] = []
+        self._recordings: List[RecordedRequest] = []
         self._lock = threading.Lock()
 
     def record(
         self,
         prompt: str,
         backend: str,
-        response: str | None = None,
+        response: Optional[str] = None,
         latency_ms: int = 0,
         success: bool = True,
-        metadata: dict[str, Any] | None = None,
+        metadata: Optional[Dict[str, Any]] = None,
     ) -> RecordedRequest:
         """Record a request.
 
@@ -92,15 +93,15 @@ class RequestRecorder:
             self._recordings.append(recording)
             # Trim to max size
             if len(self._recordings) > self.max_recordings:
-                self._recordings = self._recordings[-self.max_recordings :]
+                self._recordings = self._recordings[-self.max_recordings:]
 
         return recording
 
     def get_recordings(
         self,
-        backend: str | None = None,
+        backend: Optional[str] = None,
         success_only: bool = False,
-    ) -> list[RecordedRequest]:
+    ) -> List[RecordedRequest]:
         """Get recorded requests.
 
         Args:
@@ -120,7 +121,7 @@ class RequestRecorder:
 
         return recordings
 
-    def replay(self, request_id: str) -> RecordedRequest | None:
+    def replay(self, request_id: str) -> Optional[RecordedRequest]:
         """Get recording by ID for replay.
 
         Args:
@@ -142,7 +143,7 @@ class RequestRecorder:
             str: JSON string of recordings.
         """
         with self._lock:
-            data: list[dict[str, Any]] = [
+            data: List[Dict[str, Any]] = [
                 {
                     "request_id": r.request_id,
                     "timestamp": r.timestamp,

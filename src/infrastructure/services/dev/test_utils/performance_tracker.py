@@ -11,24 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
-import time
-from collections.abc import Iterator
+from src.core.base.version import VERSION
+from .PerformanceMetric import PerformanceMetric
+from .PerformanceMetricType import PerformanceMetricType
 from contextlib import contextmanager
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .performance_metric import PerformanceMetric
-from .performance_metric_type import PerformanceMetricType
+from typing import Any, Dict, Iterator, List
+import time
 
 __version__ = VERSION
-
 
 class PerformanceTracker:
     """Tracks test execution performance.
@@ -42,8 +42,8 @@ class PerformanceTracker:
 
     def __init__(self) -> None:
         """Initialize performance tracker."""
-        self._metrics: list[PerformanceMetric] = []
-        self._start_times: dict[str, float] = {}
+        self._metrics: List[PerformanceMetric] = []
+        self._start_times: Dict[str, float] = {}
 
     @contextmanager
     def track(self, test_name: str) -> Iterator[None]:
@@ -90,20 +90,26 @@ class PerformanceTracker:
         )
         self._metrics.append(metric)
 
-    def get_metrics(self) -> list[PerformanceMetric]:
+    def get_metrics(self) -> List[PerformanceMetric]:
         """Get all recorded metrics."""
         return list(self._metrics)
 
-    def get_summary(self) -> dict[str, Any]:
+    def get_summary(self) -> Dict[str, Any]:
         """Get summary of performance metrics."""
         if not self._metrics:
             return {}
 
-        execution_times = [m.value for m in self._metrics if m.metric_type == PerformanceMetricType.EXECUTION_TIME]
+        execution_times = [
+            m.value for m in self._metrics
+            if m.metric_type == PerformanceMetricType.EXECUTION_TIME
+        ]
 
         return {
             "total_metrics": len(self._metrics),
-            "avg_execution_time_ms": (sum(execution_times) / len(execution_times) if execution_times else 0),
+            "avg_execution_time_ms": (
+                sum(execution_times) / len(execution_times)
+                if execution_times else 0
+            ),
             "max_execution_time_ms": max(execution_times) if execution_times else 0,
             "min_execution_time_ms": min(execution_times) if execution_times else 0,
         }

@@ -11,20 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from typing import Any, Dict, List
 import logging
 import time
-from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-
-__version__: str = VERSION
-
+__version__ = VERSION
 
 class ReportScheduler:
     """Scheduler for report generation.
@@ -40,10 +42,15 @@ class ReportScheduler:
     def __init__(self) -> None:
         """Initialize scheduler."""
 
-        self.schedules: dict[str, dict[str, Any]] = {}
+        self.schedules: Dict[str, Dict[str, Any]] = {}
         logging.debug("ReportScheduler initialized")
 
-    def add_schedule(self, name: str, cron_expr: str, file_patterns: list[str]) -> None:
+    def add_schedule(
+        self,
+        name: str,
+        cron_expr: str,
+        file_patterns: List[str]
+    ) -> None:
         """Add a schedule.
         Args:
             name: Schedule name.
@@ -54,7 +61,7 @@ class ReportScheduler:
         self.schedules[name] = {
             "cron": cron_expr,
             "patterns": file_patterns,
-            "last_run": 0.0,
+            "last_run": 0.0
         }
 
     def remove_schedule(self, name: str) -> bool:
@@ -70,7 +77,7 @@ class ReportScheduler:
             return True
         return False
 
-    def get_due_tasks(self) -> list[str]:
+    def get_due_tasks(self) -> List[str]:
         """Get tasks due to run.
         Returns:
             List of due schedule names.

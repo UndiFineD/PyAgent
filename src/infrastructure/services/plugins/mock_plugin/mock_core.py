@@ -11,7 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """
 MockCore for a community-submitted plugin.
@@ -19,17 +24,14 @@ Demonstrates the 'Core/Shell' pattern for cross-language compatibility.
 """
 
 from __future__ import annotations
-
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.version import VERSION
+from typing import Dict, Any
 
 __version__ = VERSION
 
-
 class MockCore:
     """Pure logic for the MockPlugin."""
-
+    
     def __init__(self, multiplier: float = 1.0) -> None:
         self.multiplier: float = multiplier
         self.processed_count: int = 0
@@ -43,9 +45,9 @@ class MockCore:
         """Example pure string manipulation."""
         return f"[MOCK-CORE-V1] {original_text[::-1]}"
 
-    def get_metadata(self) -> dict[str, Any]:
+    def get_metadata(self) -> Dict[str, Any]:
         return {
             "version": "1.0.0",
             "author": "CommunityMember",
-            "calls_made": self.processed_count,
+            "calls_made": self.processed_count
         }

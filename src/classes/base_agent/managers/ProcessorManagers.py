@@ -1,12 +1,32 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 PyAgent contributors
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 from __future__ import annotations
+from src.core.base.version import VERSION
 import json
 import logging
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
-from ..models import InputType, MultimodalInput, SerializationConfig, SerializationFormat
+from src.core.base.models import InputType, MultimodalInput, SerializationConfig, SerializationFormat
+
+__version__ = VERSION
 
 class ResponsePostProcessor:
     """Manages post-processing hooks for agent responses."""
@@ -37,18 +57,22 @@ class MultimodalProcessor:
     def build_prompt(self) -> str:
         parts: List[str] = []
         for inp in self.inputs:
-            if inp.input_type == InputType.TEXT: parts.append(inp.content)
+            if inp.input_type == InputType.TEXT:
+                parts.append(inp.content)
             elif inp.input_type == InputType.CODE:
                 lang = inp.metadata.get("language", "")
                 parts.append(f"```{lang}\\n{inp.content}\\n```")
-            elif inp.input_type == InputType.IMAGE: parts.append(f"[Image: {inp.mime_type}]")
-            elif inp.input_type == InputType.DIAGRAM: parts.append(f"[Diagram: {inp.metadata.get('type', 'unknown')}]")
+            elif inp.input_type == InputType.IMAGE:
+                parts.append(f"[Image: {inp.mime_type}]")
+            elif inp.input_type == InputType.DIAGRAM:
+                parts.append(f"[Diagram: {inp.metadata.get('type', 'unknown')}]")
         self.processed = "\\n\\n".join(parts)
         return self.processed
     def get_api_messages(self) -> List[Dict[str, Any]]:
         messages: List[Dict[str, Any]] = []
         for inp in self.inputs:
-            if inp.input_type == InputType.TEXT: messages.append({"type": "text", "text": inp.content})
+            if inp.input_type == InputType.TEXT:
+                messages.append({"type": "text", "text": inp.content})
             elif inp.input_type == InputType.IMAGE:
                 messages.append({"type": "image_url", "image_url": {"url": f"data:{inp.mime_type};base64,{inp.content}"}})
             elif inp.input_type == InputType.CODE:
@@ -113,5 +137,3 @@ class SerializationManager:
 
     def load_from_file(self, path: Path) -> Any:
         return self.deserialize(path.read_bytes())
-
-

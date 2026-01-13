@@ -11,7 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """
 FleetCore logic for high-level fleet management.
@@ -19,19 +24,16 @@ Contains pure logic for tool scoring, capability mapping, and state transition v
 """
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from typing import Dict, List, Any, Optional, Tuple
 from functools import lru_cache
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 class FleetCore:
     """Pure logic core for the FleetManager."""
 
-    def __init__(self, fleet: Any | None = None, default_score_threshold: int = 10) -> None:
+    def __init__(self, fleet: Optional[Any] = None, default_score_threshold: int = 10) -> None:
         # Handle cases where registry injects fleet instance as first arg
         if not isinstance(default_score_threshold, (int, float)) and isinstance(fleet, (int, float)):
             self.default_score_threshold = fleet
@@ -39,7 +41,7 @@ class FleetCore:
             self.default_score_threshold = float(fleet)
         else:
             self.default_score_threshold = float(default_score_threshold)
-
+            
         self.fleet = fleet if not isinstance(fleet, (int, float)) else None
 
     @lru_cache(maxsize=128)
@@ -49,7 +51,7 @@ class FleetCore:
         g_low = goal.lower()
         n_low = tool_name.lower()
         o_low = tool_owner.lower()
-
+        
         if g_low == n_low:
             score += 100.0
         elif g_low in n_low:
@@ -59,30 +61,25 @@ class FleetCore:
             score += 100.0
         elif g_low in o_low:
             score += 50.0
-
+        
         return score
 
-    def score_tool_candidates(
-        self,
-        goal: str,
-        tools_metadata: list[dict[str, Any]],
-        provided_kwargs: dict[str, Any],
-    ) -> list[tuple[float, str]]:
+    def score_tool_candidates(self, goal: str, tools_metadata: List[Dict[str, Any]], provided_kwargs: Dict[str, Any]) -> List[Tuple[float, str]]:
         """
         Calculates match scores for tools based on a goal/capability.
         Returns a sorted list of (score, tool_name).
         """
-        goal.lower()
-        scored_candidates: list[tuple[float, str]] = []
+        g_low: str = goal.lower()
+        scored_candidates: List[Tuple[float, str]] = []
 
         for t in tools_metadata:
-            name = t.get("name", "")
-            owner = t.get("owner", "")
-
+            name = t.get('name', '')
+            owner = t.get('owner', '')
+            
             # Use cached core logic for speed (Phase 107 optimization)
             score = self.cached_logic_match(goal, name, owner)
-
-            params: dict[str, Any] = t.get("parameters", {})
+            
+            params: Dict[str, Any] = t.get('parameters', {})
 
             # Bonus for parameter intersection
             for param_name in provided_kwargs:
@@ -106,6 +103,6 @@ class FleetCore:
             "PLANNING": ["EXECUTING", "ERROR"],
             "EXECUTING": ["REVIEWING", "ERROR"],
             "REVIEWING": ["IDLE", "PLANNING", "ERROR"],
-            "ERROR": ["PLANNING", "IDLE"],
+            "ERROR": ["PLANNING", "IDLE"]
         }
         return next_state in allowed.get(current_state, [])

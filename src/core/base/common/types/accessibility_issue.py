@@ -11,23 +11,24 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from src.core.base.types.AccessibilityIssueType import AccessibilityIssueType
+from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity
+from src.core.base.types.WCAGLevel import WCAGLevel
 from dataclasses import dataclass
-
-from src.core.base.common.types.accessibility_issue_type import \
-    AccessibilityIssueType
-from src.core.base.common.types.accessibility_severity import \
-    AccessibilitySeverity
-from src.core.base.common.types.wcag_level import WCAGLevel
-from src.core.base.lifecycle.version import VERSION
+from typing import Optional
 
 __version__ = VERSION
-
 
 @dataclass
 class AccessibilityIssue:
@@ -44,13 +45,12 @@ class AccessibilityIssue:
         suggested_fix: Suggested fix for the issue.
         auto_fixable: Whether the issue can be auto - fixed.
     """
-
     issue_type: AccessibilityIssueType
     severity: AccessibilitySeverity
     wcag_level: WCAGLevel
     wcag_criterion: str
     description: str
     element: str
-    line_number: int | None = None
-    suggested_fix: str | None = None
+    line_number: Optional[int] = None
+    suggested_fix: Optional[str] = None
     auto_fixable: bool = False

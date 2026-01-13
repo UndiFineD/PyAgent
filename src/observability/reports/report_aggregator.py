@@ -11,21 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .AggregatedReport import AggregatedReport
+from .CodeIssue import CodeIssue
+from typing import Dict, List
 import logging
 
-from src.core.base.lifecycle.version import VERSION
-
-from .aggregated_report import AggregatedReport
-from .code_issue import CodeIssue
-
 __version__ = VERSION
-
 
 class ReportAggregator:
     """Aggregator for combining reports from multiple sources.
@@ -40,10 +42,10 @@ class ReportAggregator:
     def __init__(self) -> None:
         """Initialize aggregator."""
 
-        self.sources: dict[str, list[CodeIssue]] = {}
+        self.sources: Dict[str, List[CodeIssue]] = {}
         logging.debug("ReportAggregator initialized")
 
-    def add_source(self, file_path: str, issues: list[CodeIssue]) -> None:
+    def add_source(self, file_path: str, issues: List[CodeIssue]) -> None:
         """Add a source to aggregate.
         Args:
             file_path: Source file.
@@ -58,12 +60,12 @@ class ReportAggregator:
             Aggregated report.
         """
 
-        all_issues: list[CodeIssue] = []
+        all_issues: List[CodeIssue] = []
         for issues in self.sources.values():
             all_issues.extend(issues)
         # Calculate summary
-        by_severity: dict[str, int] = {}
-        by_category: dict[str, int] = {}
+        by_severity: Dict[str, int] = {}
+        by_category: Dict[str, int] = {}
         for issue in all_issues:
             sev = issue.severity.name
             cat = issue.category.name
@@ -76,8 +78,8 @@ class ReportAggregator:
                 "total_issues": len(all_issues),
                 "total_files": len(self.sources),
                 "by_severity": by_severity,
-                "by_category": by_category,
-            },
+                "by_category": by_category
+            }
         )
 
     def clear(self) -> None:

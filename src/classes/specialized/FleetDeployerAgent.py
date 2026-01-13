@@ -1,17 +1,39 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """FleetDeployerAgent for PyAgent.
 Specializes in autonomous containerization, Dockerfile generation, 
 and managing node spawning across environments.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import os
 import json
 from pathlib import Path
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from typing import Dict, List, Any
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
+__version__ = VERSION
 
 class FleetDeployerAgent(BaseAgent):
     """Manages the lifecycle of fleet nodes, including containerization and deployment."""
@@ -43,7 +65,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 
 ENV AGENT_TYPE={agent_type}
-CMD ["python", "src/classes/specialized/{agent_type}.py"]
+CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
 """
         path = self.deploy_dir / f"Dockerfile.{agent_type}"
         with open(path, "w", encoding="utf-8") as f:
@@ -84,10 +106,17 @@ CMD ["python", "src/classes/specialized/{agent_type}.py"]
         with open(log_path, "r", encoding="utf-8") as f:
             return [json.loads(line) for line in f]
 
+    @as_tool
+    def consensus_driven_deploy(self, agent_type: str, cluster_id: str) -> str:
+        """Executes a deployment only after a consensus cycle (Simulated)."""
+        logging.info(f"FleetDeployer: Initiating consensus-driven deployment for {agent_type} in {cluster_id}")
+        # In a real scenario, this would interact with ConsensusManager
+        return f"Consensus reached. {agent_type} deployed to {cluster_id}."
+
     def improve_content(self, input_text: str) -> str:
         return "The fleet grows through automated infrastructure."
 
 if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
+    from src.core.base.utilities import create_main_function
     main = create_main_function(FleetDeployerAgent, "Fleet Deployer Agent", "Swarm Infrastructure Deployment")
     main()

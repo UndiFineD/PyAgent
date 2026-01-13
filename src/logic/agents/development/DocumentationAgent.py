@@ -1,13 +1,33 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in automated documentation generation and maintenance."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
-from pathlib import Path
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import create_main_function
-from src.classes.context.KnowledgeAgent import KnowledgeAgent
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import create_main_function
+from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
+
+__version__ = VERSION
 
 class DocumentationAgent(BaseAgent):
     """Generates technical references and project OVERVIEW documents."""
@@ -15,7 +35,7 @@ class DocumentationAgent(BaseAgent):
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
-        self.knowledge = KnowledgeAgent(str(self.workspace_root / "src/classes/context/KnowledgeAgent.py"))
+        self.knowledge = KnowledgeAgent(str(self.workspace_root / "src/logic/agents/cognitive/KnowledgeAgent.py"))
         self._system_prompt = (
             "You are the Documentation Agent. "
             "Your role is to maintain clear, accurate technical documentation. "
@@ -64,4 +84,3 @@ class DocumentationAgent(BaseAgent):
 if __name__ == "__main__":
     main = create_main_function(DocumentationAgent, "Documentation Agent", "Task (e.g. 'generate')")
     main()
-

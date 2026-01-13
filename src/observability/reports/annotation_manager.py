@@ -11,20 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .ReportAnnotation import ReportAnnotation
+from typing import Dict, List, Optional
 import logging
 
-from src.core.base.lifecycle.version import VERSION
-
-from .report_annotation import ReportAnnotation
-
 __version__ = VERSION
-
 
 class AnnotationManager:
     """Manager for report annotations and comments.
@@ -40,12 +42,16 @@ class AnnotationManager:
     def __init__(self) -> None:
         """Initialize annotation manager."""
 
-        self.annotations: dict[str, list[ReportAnnotation]] = {}
+        self.annotations: Dict[str, List[ReportAnnotation]] = {}
         self._annotation_counter = 0
         logging.debug("AnnotationManager initialized")
 
     def add_annotation(
-        self, report_id: str, author: str, content: str, line_number: int | None = None
+        self,
+        report_id: str,
+        author: str,
+        content: str,
+        line_number: Optional[int] = None
     ) -> ReportAnnotation:
         """Add an annotation.
         Args:
@@ -64,14 +70,14 @@ class AnnotationManager:
             report_id=report_id,
             author=author,
             content=content,
-            line_number=line_number,
+            line_number=line_number
         )
         if report_id not in self.annotations:
             self.annotations[report_id] = []
         self.annotations[report_id].append(annotation)
         return annotation
 
-    def get_annotations(self, report_id: str) -> list[ReportAnnotation]:
+    def get_annotations(self, report_id: str) -> List[ReportAnnotation]:
         """Get annotations for a report.
         Args:
             report_id: Report ID.

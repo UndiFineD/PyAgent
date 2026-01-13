@@ -11,32 +11,33 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from typing import Any, Dict, List, Optional, Union
 import random
 import time
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 try:
     import numpy as np
 except ImportError:
-    np: Any = None
-
+    np = None
 
 class TestDataSeeder:
+    __test__ = False
     """Generates reproducible test data with optional seeding."""
 
-    __test__ = False
-
-    def __init__(self, seed: int | None = None) -> None:
+    def __init__(self, seed: Optional[int] = None) -> None:
         """Initialize test data seeder.
 
         Args:
@@ -48,7 +49,7 @@ class TestDataSeeder:
         if seed is not None and np:
             np.random.seed(seed)
 
-    def generate_metric_data(self, count: int = 10) -> list[dict[str, str | float]]:
+    def generate_metric_data(self, count: int = 10) -> List[Dict[str, Union[str, float]]]:
         """Generate metric data for testing.
 
         Args:
@@ -61,12 +62,12 @@ class TestDataSeeder:
             {
                 "metric": f"metric_{i}",
                 "value": self._rng.uniform(0, 100),
-                "timestamp": time.time() + i,
+                "timestamp": time.time() + i
             }
             for i in range(count)
         ]
 
-    def generate_test_results(self, count: int = 10, pass_rate: float = 0.8) -> list[dict[str, Any]]:
+    def generate_test_results(self, count: int = 10, pass_rate: float = 0.8) -> List[Dict[str, Any]]:
         """Generate test results for testing.
 
         Args:
@@ -80,7 +81,7 @@ class TestDataSeeder:
             {
                 "test_name": f"test_{i}",
                 "status": "PASSED" if self._rng.random() < pass_rate else "FAILED",
-                "duration_ms": self._rng.uniform(10, 5000),
+                "duration_ms": self._rng.uniform(10, 5000)
             }
             for i in range(count)
         ]
@@ -98,9 +99,9 @@ class TestDataSeeder:
         func_id = self.seed if self.seed is not None else self._rng.randint(1, 100)
         return_val = self._rng.randint(1, 100)
         if language == "python":
-            return f"# Python file\ndef func_{func_id}():\n    return {return_val}\n"
+            return f'# Python file\ndef func_{func_id}():\n    return {return_val}\n'
         elif language == "javascript":
-            return f"// JavaScript file\nfunction func_{func_id}() {{\n  return {return_val};\n}}\n"
+            return f'// JavaScript file\nfunction func_{func_id}() {{\n  return {return_val};\n}}\n'
         else:
             return f"// Generic content\nval_{func_id} = {return_val}\n"
 
@@ -112,7 +113,7 @@ class TestDataSeeder:
         """
         return f"id_{int(time.time() * 1000000)}_{random.randint(1000, 9999)}"
 
-    def generate_bulk_data(self, count: int = 10, data_type: str = "python_code") -> list[str]:
+    def generate_bulk_data(self, count: int = 10, data_type: str = "python_code") -> List[str]:
         """Generate bulk data.
 
         Args:

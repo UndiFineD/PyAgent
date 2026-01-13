@@ -11,18 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
+from typing import List, Tuple
 
 __version__ = VERSION
-
 
 @dataclass
 class ProgressReport:
@@ -36,10 +39,9 @@ class ProgressReport:
         velocity: Average improvements completed per week.
         burndown_data: Data for burndown chart.
     """
-
     report_date: str
     completed_count: int = 0
     in_progress_count: int = 0
     blocked_count: int = 0
     velocity: float = 0.0
-    burndown_data: list[tuple[str, int]] = field(default_factory=list)  # type: ignore[assignment]
+    burndown_data: List[Tuple[str, int]] = field(default_factory=list)  # type: ignore[assignment]

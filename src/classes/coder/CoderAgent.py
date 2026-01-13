@@ -1,31 +1,43 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-
-from .CodeLanguage import CodeLanguage
-from .CodeMetrics import CodeMetrics
-from .CodeSmell import CodeSmell
-from .QualityScore import QualityScore
-from .RefactoringPattern import RefactoringPattern
-from .StyleRule import StyleRule
-from .StyleRuleSeverity import StyleRuleSeverity
-
-from .CoderCore import CoderCore, DEFAULT_PYTHON_STYLE_RULES, CODE_SMELL_PATTERNS
-from src.classes.base_agent import BaseAgent
-from dataclasses import dataclass, field
-from enum import Enum
+from src.core.base.version import VERSION
+from src.core.base.types.CodeLanguage import CodeLanguage
+from src.core.base.types.CodeMetrics import CodeMetrics
+from src.core.base.types.CodeSmell import CodeSmell
+from src.core.base.types.QualityScore import QualityScore
+from src.core.base.types.RefactoringPattern import RefactoringPattern
+from src.core.base.types.StyleRule import StyleRule
+from src.logic.agents.development.CoderCore import CoderCore, DEFAULT_PYTHON_STYLE_RULES
+from src.core.base.BaseAgent import BaseAgent
 from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple
-import ast
-import hashlib
+from typing import Any, Dict, List, Optional, Tuple
 import logging
-import math
 import re
 import shutil
 import subprocess
-import tempfile
+
+__version__ = VERSION
 
 class CoderAgent(BaseAgent):
     """Updates code files using AI assistance.
@@ -257,89 +269,14 @@ class CoderAgent(BaseAgent):
         """Suggest possible refactorings based on code analysis."""
         if content is None:
             content = self.current_content or self.previous_content or ""
-        suggestions: List[Dict[str, str]] = []
-        # Detect code smells and suggest refactorings
-        smells = self.detect_code_smells(content)
-        for smell in smells:
-            if smell.name == "long_method":
-                suggestions.append({
-                    "type": "extract_method",
-                    "description": f"Extract parts of method at line {smell.line_number}",
-                    "reason": smell.description
-                })
-            elif smell.name == "too_many_parameters":
-                suggestions.append({
-                    "type": "introduce_parameter_object",
-                    "description": (
-                        f"Create a data class for parameters at "
-                        f"line {smell.line_number}"
-                    ),
-                    "reason": smell.description
-                })
-            elif smell.name == "god_class":
-                suggestions.append({
-                    "type": "extract_class",
-                    "description": f"Split class at line {smell.line_number} into focused classes",
-                    "reason": smell.description
-                })
-        # Check for duplicate code
-        duplicates = self.find_duplicate_code(content)
-        if duplicates:
-            suggestions.append({
-                "type": "extract_method",
-                "description": (
-                    f"Extract {len(duplicates)} duplicate code blocks "
-                    f"into shared methods"
-                ),
-                "reason": f"Found {len(duplicates)} duplicate code patterns"
-            })
-        return suggestions
+        return self.core.suggest_refactorings(content)
 
     # ========== Documentation Generation ==========
     def generate_documentation(self, content: Optional[str] = None) -> str:
         """Generate documentation from code."""
         if content is None:
             content = self.current_content or self.previous_content or ""
-        if not self._is_python_file:
-            return "# Documentation\n\nDocumentation generation is only supported for Python files."
-        try:
-            tree = ast.parse(content)
-        except SyntaxError:
-            return "# Documentation\n\nUnable to parse file for documentation."
-        docs: List[str] = ["# API Documentation\n"]
-        # Get module docstring
-        module_doc = ast.get_docstring(tree)
-        if module_doc:
-            docs.append(f"## Module\n\n{module_doc}\n")
-        # Document classes and functions
-        for node in ast.iter_child_nodes(tree):
-            if isinstance(node, ast.ClassDef):
-                docs.append(f"## Class: `{node.name}`\n")
-                class_doc = ast.get_docstring(node)
-                if class_doc:
-                    docs.append(f"{class_doc}\n")
-                # Document methods
-                for item in node.body:
-                    if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                        docs.append(f"### Method: `{item.name}`\n")
-                        method_doc = ast.get_docstring(item)
-                        if method_doc:
-                            docs.append(f"{method_doc}\n")
-                        # Document parameters
-                        params = [arg.arg for arg in item.args.args if arg.arg != 'self']
-                        if params:
-                            docs.append(f"**Parameters:** {', '.join(params)}\n")
-                docs.append("\n")
-            elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                docs.append(f"## Function: `{node.name}`\n")
-                func_doc = ast.get_docstring(node)
-                if func_doc:
-                    docs.append(f"{func_doc}\n")
-                params = [arg.arg for arg in node.args.args]
-                if params:
-                    docs.append(f"**Parameters:** {', '.join(params)}\n")
-                docs.append("\n")
-        return '\n'.join(docs)
+        return self.core.generate_documentation(content)
 
     # ========== Core Methods ==========
     def _get_default_content(self) -> str:
@@ -354,49 +291,11 @@ class CoderAgent(BaseAgent):
 
     def _validate_syntax(self, content: str) -> bool:
         """Validate Python syntax using ast."""
-        if not self._is_python_file:
-            return True
-        try:
-            ast.parse(content)
-            return True
-        except (SyntaxError, RecursionError, MemoryError) as e:
-            logging.error(f"Syntax error in generated code: {e}")
-            return False
+        return self.core.validate_syntax(content)
 
     def _validate_flake8(self, content: str) -> bool:
         """Validate Python code using flake8 if available."""
-        if not self._is_python_file:
-            return True
-        if not shutil.which('flake8'):
-            logging.warning("flake8 not found, skipping style validation")
-            return True
-        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as tmp:
-            tmp.write(content)
-            tmp_path = tmp.name
-        try:
-            # Run flake8 on the temporary file
-            # We ignore some common errors that might be acceptable in generated code
-            # E501: Line too long
-            # W293: Blank line contains whitespace
-            result = subprocess.run(
-                ['flake8', '--ignore=E501,W293', tmp_path],
-                capture_output=True,
-                text=True,
-                timeout=30,
-                check=False
-            )
-            if result.returncode != 0:
-                logging.warning(f"flake8 validation failed:\n{result.stdout}")
-                self._record(f"flake8 on {self.file_path.name}", f"Failed:\n{result.stdout}", provider="Shell", model="flake8")
-                return False  # Soft validation failure
-            
-            self._record(f"flake8 on {self.file_path.name}", "Clean", provider="Shell", model="flake8")
-            return True
-        finally:
-            try:
-                Path(tmp_path).unlink()
-            except OSError:
-                pass
+        return self.core.validate_flake8(content)
 
     def improve_content(self, prompt: str) -> str:
         """Use AI to improve the code with specific coding suggestions."""
@@ -415,5 +314,3 @@ class CoderAgent(BaseAgent):
         else:
             logging.debug("Style validation passed")
         return new_content
-
-

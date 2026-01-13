@@ -11,27 +11,32 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
-"""
-Sharding and partitioning logic.
-(Facade for src.core.base.common.shard_core)
-"""
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
+from typing import Dict, List, Optional, Set
 from pathlib import Path
 
-from src.core.base.common.shard_core import ShardCore as StandardShardCore
+__version__ = VERSION
 
-
-class ShardManager(StandardShardCore):
-    """Facade for ShardCore."""
-
-    def __init__(self, workspace_root: str):
-        super().__init__()
+class ShardManager:
+    """
+    Manages partitioning of large fleets into semi-autonomous clusters (shards).
+    This reduces broadcast noise and improves scalability for trillion-parameter systems.
+    """
+    
+    def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
-        self.shards: dict[str, set[str]] = {}  # Shard name to agent names
-        self.agent_to_shard: dict[str, str] = {}
-        self.communication_log: dict[frozenset[str], int] = {}  # Pairs of agents to frequency
+        self.shards: Dict[str, Set[str]] = {} # Shard name to agent names
+        self.agent_to_shard: Dict[str, str] = {}
+        self.communication_log: Dict[frozenset[str], int] = {} # Pairs of agents to frequency
 
     def log_communication(self, agent_a: str, agent_b: str) -> None:
         """Records a communication event between two agents."""
@@ -48,22 +53,22 @@ class ShardManager(StandardShardCore):
         """Assigns an agent to a specific shard."""
         if shard_name not in self.shards:
             self.create_shard(shard_name)
-
+        
         # Remove from old shard if exists
         if agent_name in self.agent_to_shard:
             old_shard = self.agent_to_shard[agent_name]
             self.shards[old_shard].discard(agent_name)
-
+            
         self.shards[shard_name].add(agent_name)
         self.agent_to_shard[agent_name] = shard_name
         logging.info(f"ShardManager: Assigned agent {agent_name} to shard {shard_name}")
         return True
 
-    def get_shard_members(self, shard_name: str) -> list[str]:
+    def get_shard_members(self, shard_name: str) -> List[str]:
         """Returns all agents in a shard."""
         return list(self.shards.get(shard_name, set()))
 
-    def get_agent_shard(self, agent_name: str) -> str | None:
+    def get_agent_shard(self, agent_name: str) -> Optional[str]:
         """Gets the shard containing the specified agent."""
         return self.agent_to_shard.get(agent_name)
 
@@ -73,9 +78,9 @@ class ShardManager(StandardShardCore):
         Nodes that talk to each other frequently (>= threshold) are clustered together.
         """
         logging.info("ShardManager: Running dynamic sharding optimization (Phase 128)...")
-
+        
         # Identify high-frequency pairings
-        clusters: list[set[str]] = []
+        clusters: List[Set[str]] = []
         for pair, count in self.communication_log.items():
             if count >= threshold:
                 agent_list = list(pair)
@@ -93,5 +98,5 @@ class ShardManager(StandardShardCore):
             shard_name = f"swarm_shard_{i}"
             for agent in cluster:
                 self.assign_agent(agent, shard_name)
-
+        
         logging.info(f"ShardManager: Optimization complete. Created {len(clusters)} tactical shards.")

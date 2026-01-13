@@ -11,25 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in Security Auditing and Vulnerability detection."""
 
 from __future__ import annotations
-
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.version import VERSION
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import create_main_function
 
 __version__ = VERSION
 
-
-class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+class SecurityAgent(BaseAgent):
     """Agent for security analysis of code and configuration."""
-
+    
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-
         self._system_prompt = (
             "You are a Senior Security Auditor. "
             "Scan the provided content for vulnerabilities, hardcoded secrets, "
@@ -39,7 +41,6 @@ class SecurityAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def _get_default_content(self) -> str:
         return "# Security Audit Report\n\n## Summary\nPending audit...\n"
-
 
 if __name__ == "__main__":
     main = create_main_function(SecurityAgent, "Security Agent", "File to audit for security")

@@ -11,25 +11,28 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-
-from src.core.base.lifecycle.version import VERSION
-
-from .completion_trend import CompletionTrend
-from .improvement import Improvement
+from src.core.base.version import VERSION
+from .CompletionTrend import CompletionTrend
+from .Improvement import Improvement
+from typing import List
 
 __version__ = VERSION
-
 
 class AnalyticsEngine:
     """Very small analytics engine used by tests."""
 
     def __init__(self) -> None:
-        self._completed: list[Improvement] = []
+        self._completed: List[Improvement] = []
 
     def record_completion(self, improvement: Improvement) -> None:
         self._completed.append(improvement)

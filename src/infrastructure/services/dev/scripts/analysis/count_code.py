@@ -10,57 +10,47 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""Code metrics and line counting utilities for analyzing PyAgent codebase.
-
-Provides functions to count lines of code, measure file sizes, and generate
-code statistics across the project.
-"""
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 from __future__ import annotations
-
-import ast
+from src.core.base.version import VERSION
 import os
-from pathlib import Path
-
-from src.core.base.lifecycle.version import VERSION
+import ast
 
 __version__ = VERSION
 
-
-def count_real_code(file_path: str) -> int:
+def count_real_code(file_path):
     if os.path.basename(file_path) == "__init__.py":
-        return 1000  # Ignore in this filter
-
+        return 1000 # Ignore in this filter
+    
     try:
-        with open(file_path, encoding="utf-8") as f:
+        with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read()
-
             if not content.strip():
                 return 0
-
+            
             tree = ast.parse(content)
-
+            
             real_stmts = 0
             for node in tree.body:
                 # Only top level
                 if isinstance(node, (ast.Import, ast.ImportFrom)):
                     continue
-                if (
-                    isinstance(node, ast.Expr)
-                    and isinstance(node.value, ast.Constant)
-                    and isinstance(node.value.value, str)
-                ):
-                    continue  # Docstrings
-
+                if isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
+                    continue # Docstrings
+                
                 real_stmts += 1
-
+            
             return real_stmts
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+    except Exception:
         return 1000
 
-
-src_path = str(Path(__file__).resolve().parents[4]) + "/src"
+src_path = "c:/DEV/PyAgent/src"
 stubs = []
 for root, dirs, files in os.walk(src_path):
     for file in files:

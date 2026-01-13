@@ -11,39 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Helper functions for dataclass default factories."""
 
 from __future__ import annotations
-
-from collections.abc import Iterable
-from typing import TYPE_CHECKING, Any, Final, TypeVar
-
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.models._factories import (
-    _empty_dict_str_any, _empty_dict_str_float, _empty_dict_str_int,
-    _empty_dict_str_str, _empty_list_dict_str_any, _empty_list_str)
+from src.core.base.version import VERSION
+from typing import Any, Final, TypeVar, Iterable, TYPE_CHECKING
 
 __version__ = VERSION
 
-__all__ = [
-    "VERSION",
-    "requests",
-    "HAS_REQUESTS",
-    "HAS_TQDM",
-    "tqdm",
-    "_empty_dict_str_any",
-    "_empty_dict_str_float",
-    "_empty_dict_str_int",
-    "_empty_dict_str_str",
-    "_empty_list_str",
-    "_empty_list_dict_str_any",
-    "_empty_plugin_config_list",
-]
-
 if TYPE_CHECKING:
-    from src.core.base.common.models.agent_models import AgentPluginConfig
+    from src.core.base.models import AgentPluginConfig
 
 # Import optional dependencies
 try:
@@ -66,15 +50,36 @@ HAS_TQDM: Final[bool] = _tqdm is not None
 _T = TypeVar("_T")
 
 if _tqdm is not None:
-    tqdm = _tqdm  # pylint: disable=invalid-name
+    tqdm = _tqdm
 else:
 
-    # pylint: disable=invalid-name
     def tqdm(iterable: Iterable[_T], *args: Any, **kwargs: Any) -> Iterable[_T]:
         """Fallback if tqdm not available."""
-        _ = args, kwargs
         return iterable
 
+def _empty_dict_str_any() -> dict[str, Any]:
+    """Helper function for default factory in dataclass fields."""
+    return {}
+
+def _empty_dict_str_float() -> dict[str, float]:
+    """Helper function for default factory in dataclass fields."""
+    return {}
+
+def _empty_dict_str_int() -> dict[str, int]:
+    """Helper function for default factory in dataclass fields."""
+    return {}
+
+def _empty_dict_str_str() -> dict[str, str]:
+    """Helper function for default factory in dataclass fields."""
+    return {}
+
+def _empty_list_str() -> list[str]:
+    """Helper function for default factory in dataclass fields."""
+    return []
+
+def _empty_list_dict_str_any() -> list[dict[str, Any]]:
+    """Helper function for default factory in dataclass fields."""
+    return []
 
 def _empty_plugin_config_list() -> list[AgentPluginConfig]:
     """Helper function for default factory in dataclass fields."""

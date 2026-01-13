@@ -1,12 +1,33 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in structured extraction from Excel files (ExStruct pattern)."""
 
-from src.classes.base_agent import BaseAgent
+from __future__ import annotations
+from src.core.base.version import VERSION
+from src.core.base.BaseAgent import BaseAgent
 import logging
-import json
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, Any
+
+__version__ = VERSION
 
 class ExcelAgent(BaseAgent):
     """Parses Excel workbooks into structured JSON (tables, shapes, charts)."""
@@ -21,21 +42,32 @@ class ExcelAgent(BaseAgent):
         )
 
     def extract_structured_data(self, excel_path: str, mode: str = "standard") -> Dict[str, Any]:
-        """Simulates the ExStruct extraction process."""
+        """Performs deep structured extraction. Supports openpyxl if available."""
         logging.info(f"ExcelAgent: Extracting data from {excel_path} in '{mode}' mode.")
         
-        # Placeholder for real exstruct.extract() call
-        return {
-            "book_name": Path(excel_path).name,
-            "sheets": {
-                "Sheet1": {
-                    "table_candidates": ["A1:D10"],
-                    "charts": [{"type": "Line", "title": "Sales Projection"}],
-                    "shapes": [{"text": "Start", "type": "FlowchartProcess"}],
-                    "rows_summary": "10 rows, 4 columns identified as a primary table."
+        try:
+            import openpyxl
+            wb = openpyxl.load_workbook(excel_path, data_only=True)
+            results = {"book_name": Path(excel_path).name, "sheets": {}}
+            
+            for sheet in wb.worksheets:
+                results["sheets"][sheet.title] = {
+                    "dimensions": sheet.dimensions,
+                    "merged_cells": len(sheet.merged_cells),
+                    "table_candidates": [t.name for t in getattr(sheet, '_tables', [])],
+                    "charts": len(getattr(sheet, '_charts', [])),
+                    "max_row": sheet.max_row,
+                    "max_col": sheet.max_column
                 }
+            return results
+        except ImportError:
+            logging.warning("openpyxl not found, falling back to basic metadata.")
+            return {
+                "book_name": Path(excel_path).name,
+                "sheets": {"Sheet1": {"note": "Install openpyxl for deep parsing"}}
             }
-        }
+        except Exception as e:
+            return {"error": str(e)}
 
     def generate_markdown_summary(self, extraction_result: Dict[str, Any]) -> str:
         """Converts structured Excel JSON into an AI-readable Markdown summary."""
@@ -60,6 +92,6 @@ class ExcelAgent(BaseAgent):
         return "ExcelAgent: Ready to parse spreadsheets."
 
 if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
+    from src.core.base.utilities import create_main_function
     main = create_main_function(ExcelAgent)
     main()

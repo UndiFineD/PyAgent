@@ -1,6 +1,6 @@
+
 from __future__ import annotations
-import math
-from typing import List, Dict, Any
+from typing import List
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
@@ -31,11 +31,13 @@ class StabilityCore:
 
     def is_in_stasis(self, score_history: List[float]) -> bool:
         """Determines if the swarm is in 'Digital Stasis' (too rigid)."""
-        if len(score_history) < 10: return False
+        if len(score_history) < 10:
+            return False
         variance = sum((x - sum(score_history)/len(score_history))**2 for x in score_history) / len(score_history)
         return variance < 0.0001 # Minimal change indicates stasis
 
     def get_healing_threshold(self, stability_score: float) -> float:
         """Returns the threshold for triggering self-healing subroutines."""
-        if stability_score < 0.3: return 0.9 # Aggressive healing
+        if stability_score < 0.3:
+            return 0.9 # Aggressive healing
         return 0.5

@@ -11,26 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
-import json
-from collections.abc import Iterator
+from src.core.base.version import VERSION
+from .RecordedInteraction import RecordedInteraction
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .recorded_interaction import RecordedInteraction
+from typing import Any, Dict, Iterator, List, Optional, Tuple
+import json
 
 __version__ = VERSION
 
-
 class TestRecorder:
+    __test__ = False
     """Records and replays test interactions.
 
     Useful for recording external calls and replaying in tests.
@@ -49,11 +50,9 @@ class TestRecorder:
             result=api_call("data")  # Returns recorded result
     """
 
-    __test__ = False
-
     def __init__(self) -> None:
         """Initialize recorder."""
-        self._recordings: list[RecordedInteraction] = []
+        self._recordings: List[RecordedInteraction] = []
         self._replay_index = 0
         self._mode: str = "normal"  # "record", "replay", "normal"
 
@@ -61,8 +60,8 @@ class TestRecorder:
         self,
         call_type: str,
         call_name: str,
-        args: tuple[Any, ...],
-        kwargs: dict[str, Any],
+        args: Tuple[Any, ...],
+        kwargs: Dict[str, Any],
         result: Any,
     ) -> None:
         """Record an interaction.
@@ -88,7 +87,7 @@ class TestRecorder:
         self,
         call_type: str,
         call_name: str,
-    ) -> Any | None:
+    ) -> Optional[Any]:
         """Get replayed result for a call.
 
         Args:
@@ -110,7 +109,7 @@ class TestRecorder:
         return None
 
     @contextmanager
-    def record(self) -> Iterator[TestRecorder]:
+    def record(self) -> Iterator["TestRecorder"]:
         """Context manager for recording mode."""
         self._mode = "record"
         self._recordings = []
@@ -120,7 +119,7 @@ class TestRecorder:
             self._mode = "normal"
 
     @contextmanager
-    def replay(self) -> Iterator[TestRecorder]:
+    def replay(self) -> Iterator["TestRecorder"]:
         """Context manager for replay mode."""
         self._mode = "replay"
         self._replay_index = 0
@@ -131,24 +130,22 @@ class TestRecorder:
 
     def save(self, path: Path) -> None:
         """Save recordings to file."""
-        data: list[dict[str, Any]] = []
+        data: List[Dict[str, Any]] = []
         for r in self._recordings:
-            data.append(
-                {
-                    "call_type": r.call_type,
-                    "call_name": r.call_name,
-                    "args": list(r.args),
-                    "kwargs": r.kwargs,
-                    "result": r.result,
-                    "timestamp": r.timestamp,
-                }
-            )
-        with open(path, 'w', encoding='utf-8') as f:
+            data.append({
+                "call_type": r.call_type,
+                "call_name": r.call_name,
+                "args": list(r.args),
+                "kwargs": r.kwargs,
+                "result": r.result,
+                "timestamp": r.timestamp,
+            })
+        with open(path, "w") as f:
             json.dump(data, f, indent=2, default=str)
 
     def load(self, path: Path) -> None:
         """Load recordings from file."""
-        with open(path, encoding='utf-8') as f:
+        with open(path) as f:
             data = json.load(f)
         self._recordings = [
             RecordedInteraction(

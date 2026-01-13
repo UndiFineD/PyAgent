@@ -11,31 +11,33 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """GPU scaling manager for specialized agents.
 Scales agent pools based on GPU memory pressure and latency.
 """
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import logging
 import random
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
+from typing import Dict, Any
 
 __version__ = VERSION
-
 
 class GPUScalingManager:
     """Monitors GPU resources and triggers scaling events."""
 
     def __init__(self, threshold_pct: float = 80.0) -> None:
         self.threshold = threshold_pct
-        self.gpu_state: dict[str, float] = {"gpu_0": 0.0, "gpu_1": 0.0}
+        self.gpu_state: Dict[str, float] = {"gpu_0": 0.0, "gpu_1": 0.0}
 
-    def monitor_memory_pressure(self) -> dict[str, str]:
+    def monitor_memory_pressure(self) -> Dict[str, str]:
         """Check current GPU memory and decide if scaling is needed."""
         # Simulated GPU pressure check
         actions = {}
@@ -43,19 +45,19 @@ class GPUScalingManager:
             # Simulate random load
             usage = random.uniform(50.0, 95.0)
             self.gpu_state[gpu_id] = usage
-
+            
             if usage > self.threshold:
                 actions[gpu_id] = "SCALE_UP_POD"
                 logging.warning(f"GPU high pressure detected: {gpu_id} at {usage}%. Action: {actions[gpu_id]}")
             else:
                 actions[gpu_id] = "STABLE"
-
+        
         return actions
 
-    def get_resource_summary(self) -> dict[str, Any]:
+    def get_resource_summary(self) -> Dict[str, Any]:
         """Returns the current state of GPU resources."""
         return {
             "gpus": self.gpu_state,
             "threshold": self.threshold,
-            "can_accept_load": all(u < self.threshold for u in self.gpu_state.values()),
+            "can_accept_load": all(u < self.threshold for u in self.gpu_state.values())
         }

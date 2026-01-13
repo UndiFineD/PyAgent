@@ -10,19 +10,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Script for applying final import formatting fixes across the workspace."""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import os
 import re
 
-from src.core.base.lifecycle.version import VERSION
-
 __version__ = VERSION
-
 
 def fix() -> None:
     """Correct import indentation and leading whitespace errors."""
@@ -33,11 +35,11 @@ def fix() -> None:
             if file.endswith(".py"):
                 path = os.path.join(root, file)
                 try:
-                    with open(path, encoding="utf-8") as f:
+                    with open(path, "r", encoding="utf-8") as f:
                         lines = f.readlines()
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except:
                     continue
-
+                
                 changed = False
                 new_lines = []
                 for i, line in enumerate(lines):
@@ -46,39 +48,37 @@ def fix() -> None:
                     if re.match(r"^\s+(from|import) ", line):
                         # check previous non-empty line
                         prev_line = ""
-                        for j in range(i - 1, -1, -1):
+                        for j in range(i-1, -1, -1):
                             if lines[j].strip():
                                 prev_line = lines[j].strip()
                                 break
                         if not prev_line.endswith(":"):
                             line = line.lstrip()
                             changed = True
-
+                    
                     # Fix 2: Indent imports that are at col 0 but SHOULD be in a block
                     if re.match(r"^(from|import) ", line):
                         prev_line = ""
                         prev_indent = ""
-                        for j in range(i - 1, -1, -1):
+                        for j in range(i-1, -1, -1):
                             if lines[j].strip():
                                 prev_line = lines[j].strip()
                                 m = re.match(r"^(\s+)", lines[j])
                                 if m:
                                     prev_indent = m.group(1)
                                 break
-
+                        
                         if prev_line.endswith(":"):
                             # It definitely should be indented
                             indent = prev_indent + "    " if prev_indent else "    "
                             line = indent + line
                             changed = True
-
                         elif prev_indent and i > 0:
-                            # If previous line was indented but didn't end in :,
+                            # If previous line was indented but didn't end in :, 
                             # and this line is an import at col 0, it MIGHT be mid-block.
-
                             # But to be safe, only do it if the line below is also indented.
                             next_indent = ""
-                            for j in range(i + 1, len(lines)):
+                            for j in range(i+1, len(lines)):
                                 if lines[j].strip():
                                     m = re.match(r"^(\s+)", lines[j])
                                     if m:
@@ -87,14 +87,13 @@ def fix() -> None:
                             if next_indent:
                                 line = next_indent + line
                                 changed = True
-
+                    
                     new_lines.append(line)
-
+                
                 if changed:
                     with open(path, "w", encoding="utf-8") as f:
                         f.writelines(new_lines)
                     print(f"Fixed {path}")
-
 
 if __name__ == "__main__":
     fix()

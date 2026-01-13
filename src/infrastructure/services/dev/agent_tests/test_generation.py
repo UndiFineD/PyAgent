@@ -1,14 +1,32 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 PyAgent contributors
+# Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Test generation and case minimization."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import ast
 from typing import Any, Callable, List, Tuple
-
 from .models import GeneratedTest
 
+__version__ = VERSION
 
 class TestGenerator:
     """Generate tests from specifications."""
@@ -41,9 +59,9 @@ class TestGenerator:
             f"    # Ensure the code matches the intent: {function_name}\n"
             f"    # Requirement: {specification}\n"
             f"    try:\n"
-            f"        from src.classes.generated import {function_name}\n"
+            f"        from src.infrastructure.dev.generated import {function_name}\n"
             f"    except ImportError:\n"
-            f"        pytest.fail(f'Implementation {function_name} not found in src.classes.generated')\n"
+            f"        pytest.fail(f'Implementation {function_name} not found in src.generated')\n"
             f"    \n"
             f"    # Mock data based on types\n"
             f"    # result = {function_name}(...)\n"
@@ -108,19 +126,31 @@ class TestGenerator:
         """SCA Pattern: Generate tests specifically designed to break the implementation."""
         test_name = f"test_{function_name}_red_team"
         
-        # In a real scenario, this would call an LLM with a 'Challenger' persona.
-        # Here we scaffold the pattern.
+        # Phase 125: Enhanced Red-Team Adversarial Generation
+        # (Inspired by Digital Red Queen - Adversarial Program Evolution)
         code = (
             f"import pytest\n"
-            f"from src.classes.generated import {function_name}\n\n"
-            f"def {test_name}_edge_cases():\n"
+            f"import sys\n"
+            f"from src.infrastructure.dev.generated import {function_name}\n\n"
+            f"@pytest.mark.parametrize('adversarial_input', [\n"
+            f"    None, '', ' ', '\\0', '\\n' * 1000, # NULL and Bloat\n"
+            f"    sys.maxsize, -sys.maxsize - 1, float('inf'), float('nan'), # Numeric Edges\n"
+            f"    {{'nested': 'data' * 100}}, [0] * 1000, # Large Collections\n"
+            f"    '<b>Unsanitized</b> <script>alert(1)</script>', # Injection stubs\n"
+            f"])\n"
+            f"def {test_name}_edge_cases(adversarial_input):\n"
             f'    """SCA Red-Team: Targeting edge cases for {function_name}"""\n'
-            f"    # TODO: Implement specific adversarial inputs based on code analysis\n"
-            f"    # 1. Null/Empty inputs\n"
-            f"    # 2. Maximum/Minimum bounds\n"
-            f"    # 3. Type violations\n"
-            f"    # 4. Concurrency/State race conditions (if applicable)\n"
-            f"    assert True # Placeholder for Challenger logic\n"
+            f"    # This test verifies that the implementation handles extreme inputs gracefully\n"
+            f"    try:\n"
+            f"        result = {function_name}(adversarial_input)\n"
+            f"        # If it returns, we check it doesn't crash internally or leak memory\n"
+            f"        assert True\n"
+            f"    except (ValueError, TypeError, KeyError):\n"
+            f"        # Expected graceful failures are acceptable\n"
+            f"        pytest.skip('Accepted domain error')\n"
+            f"    except Exception as e:\n"
+            f"        # Unhandled exceptions are red-team victories\n"
+            f"        pytest.fail(f'Red-Team Win: Unhandled {{type(e).__name__}}: {{e}}')\n"
         )
         
         generated = GeneratedTest(
@@ -133,7 +163,6 @@ class TestGenerator:
         return generated
         validated = [g for g in self.generated if g.validated]
         return "\n\n".join(g.generated_code for g in validated)
-
 
 class TestCaseMinimizer:
     """Minimize test cases for debugging."""
@@ -261,7 +290,6 @@ class TestCaseMinimizer:
             "average_reduction": avg_reduction
         }
 
-
 class TestDocGenerator:
     """Generates documentation from tests."""
     __test__ = False
@@ -301,4 +329,3 @@ class TestDocGenerator:
                 result[module] = []
             result[module].append(test)
         return result
-

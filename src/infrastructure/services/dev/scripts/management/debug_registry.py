@@ -10,16 +10,19 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Debug script for inspecting the agent registry."""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from src.infrastructure.fleet.FleetManager import FleetManager
 import os
-
-from src.core.base.lifecycle.version import VERSION
-from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
 

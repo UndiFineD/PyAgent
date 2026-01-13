@@ -11,23 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .PermissionLevel import PermissionLevel
+from .ReportPermission import ReportPermission
+from typing import List
 import logging
 import re
 import time
 
-from src.core.base.lifecycle.version import VERSION
-
-from .permission_level import PermissionLevel
-from .report_permission import ReportPermission
-
 __version__ = VERSION
-
 
 class AccessController:
     """Controller for report access permissions.
@@ -43,7 +45,7 @@ class AccessController:
     def __init__(self) -> None:
         """Initialize access controller."""
 
-        self.permissions: list[ReportPermission] = []
+        self.permissions: List[ReportPermission] = []
         logging.debug("AccessController initialized")
 
     def grant(
@@ -51,7 +53,7 @@ class AccessController:
         user_id: str,
         report_pattern: str,
         level: PermissionLevel,
-        granted_by: str = "system",
+        granted_by: str = "system"
     ) -> ReportPermission:
         """Grant permission to a user.
         Args:
@@ -67,7 +69,7 @@ class AccessController:
             user_id=user_id,
             report_pattern=report_pattern,
             level=level,
-            granted_by=granted_by,
+            granted_by=granted_by
         )
         self.permissions.append(permission)
         return permission
@@ -87,7 +89,12 @@ class AccessController:
                 return True
         return False
 
-    def check(self, user_id: str, report_path: str, required_level: PermissionLevel) -> bool:
+    def check(
+        self,
+        user_id: str,
+        report_path: str,
+        required_level: PermissionLevel
+    ) -> bool:
         """Check if user has permission.
         Args:
             user_id: User to check.
@@ -105,7 +112,7 @@ class AccessController:
             if perm.expires_at and time.time() > perm.expires_at:
                 continue
             # Normalize paths for comparison (remove extra spaces)
-            normalized_path = re.sub(r"\s+", "/", report_path)
+            normalized_path = re.sub(r'\s+', '/', report_path)
             if fnmatch.fnmatch(normalized_path, perm.report_pattern):
                 if perm.level.value >= required_level.value:
                     return True

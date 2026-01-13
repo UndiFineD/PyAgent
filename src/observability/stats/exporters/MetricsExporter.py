@@ -1,9 +1,4 @@
 #!/usr/bin/env python3
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,83 +11,28 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Exporter for high-level fleet metrics.
 Sends telemetry to specialized backends like Prometheus, InfluxDB, or Grafana Cloud.
 """
 
-<<<<<<< HEAD
-<<<<<<< HEAD
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import time
-from typing import Dict, List, Any, Optional
-from src.classes.stats.PrometheusExporter import PrometheusExporter
+from .PrometheusExporter import PrometheusExporter
+
+__version__ = VERSION
 
 class MetricsExporter:
     """Consolidates all fleet telemetry and exposes it for external monitoring."""
     
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-from __future__ import annotations
-
-import logging
-import time
-<<<<<<<< HEAD:src/observability/stats/exporters/metrics_exporter.py
-========
-from typing import Dict, List, Any, Optional
-from .PrometheusExporter import PrometheusExporter
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules)):src/observability/stats/exporters/MetricsExporter.py
-
-from src.core.base.lifecycle.version import VERSION
-
-from .prometheus_exporter import PrometheusExporter
-
-__version__ = VERSION
-
-
-class MetricsExporter:
-    """Consolidates all fleet telemetry and exposes it for external monitoring."""
-
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
     def __init__(self) -> None:
         self.prometheus = PrometheusExporter()
         self.last_export_time = time.time()
@@ -100,14 +40,6 @@ class MetricsExporter:
     def record_agent_call(self, agent_name: str, duration_ms: float, success: bool) -> str:
         """Records a single agent execution event."""
         labels = {"agent": agent_name, "status": "success" if success else "failure"}
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
-
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         self.prometheus.record_metric("agent_call_duration_ms", duration_ms, labels)
         self.prometheus.record_metric("agent_calls_total", 1.0, labels)
 
@@ -122,27 +54,11 @@ class MetricsExporter:
 
     def export_to_grafana(self) -> str:
         """Simulates pushing metrics to a Grafana Cloud API."""
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
-
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         payload = self.get_prometheus_payload()
         logging.info(f"MetricsExporter: Pushing batch to Grafana... ({len(payload)} bytes)")
         self.last_export_time = time.time()
         return "Export successful."
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
-
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 if __name__ == "__main__":
     exporter = MetricsExporter()
     exporter.record_agent_call("CoderAgent", 1500.0, True)

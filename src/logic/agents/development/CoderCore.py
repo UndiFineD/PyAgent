@@ -1,17 +1,49 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
-from .CodeLanguage import CodeLanguage
-from .CodeMetrics import CodeMetrics
-from .CodeSmell import CodeSmell
-from .QualityScore import QualityScore
-from .StyleRule import StyleRule
-from .StyleRuleSeverity import StyleRuleSeverity
-from src.classes.base_agent.core import LogicCore
+"""
+Computational core for code analysis, metrics, and quality assessment.
+Designed for high-performance rule checking with future Rust integration.
+"""
+
+from __future__ import annotations
+from src.core.base.version import VERSION
+from src.core.base.types.CodeLanguage import CodeLanguage
+from src.core.base.types.CodeMetrics import CodeMetrics
+from src.core.base.types.CodeSmell import CodeSmell
+from src.core.base.types.QualityScore import QualityScore
+from src.core.base.types.StyleRule import StyleRule
+from src.core.base.types.StyleRuleSeverity import StyleRuleSeverity
+from src.core.base.AgentCore import LogicCore
 from typing import Any, Dict, List, Optional, Tuple
 import ast
 import hashlib
+import logging
 import math
+import os
 import re
+import shutil
+import subprocess
+import tempfile
+
+__version__ = VERSION
 
 # Logic extracted for future Rust migration (PyO3)
 # Goal: Isolate all "Computationally Expensive" or "Rule-Based" logic here.
@@ -80,8 +112,20 @@ CODE_SMELL_PATTERNS: Dict[str, Dict[str, Any]] = {
 class CoderCore(LogicCore):
     """Core logic for CoderAgent, target for Rust conversion."""
     
-    def __init__(self, language: CodeLanguage) -> None:
+    def __init__(self, language: CodeLanguage, workspace_root: Optional[str] = None) -> None:
         self.language = language
+        self.workspace_root = workspace_root
+        try:
+            from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+            root = Path(workspace_root) if workspace_root else Path.cwd()
+            self.recorder = LocalContextRecorder(workspace_root=root)
+        except ImportError:
+            self.recorder = None
+
+    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: Dict[str, Any] = None) -> None:
+        """Record an interaction for intelligence harvesting (Phase 108)."""
+        if self.recorder:
+            self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
 
     def calculate_metrics(self, content: str) -> CodeMetrics:
         """Analyze code structure and compute metrics."""
@@ -150,8 +194,10 @@ class CoderCore(LogicCore):
         violations: List[Dict[str, Any]] = []
         lines = content.split('\n')
         for rule in rules:
-            if not rule.enabled: continue
-            if rule.language and rule.language != self.language: continue
+            if not rule.enabled:
+                continue
+            if rule.language and rule.language != self.language:
+                continue
             
             if '\n' in rule.pattern or rule.pattern.startswith('^'):
                 for match in re.finditer(rule.pattern, content, re.MULTILINE):
@@ -180,8 +226,10 @@ class CoderCore(LogicCore):
         fixed_content = content
         fix_count = 0
         for rule in rules:
-            if not rule.enabled or not rule.auto_fix: continue
-            if rule.language and rule.language != self.language: continue
+            if not rule.enabled or not rule.auto_fix:
+                continue
+            if rule.language and rule.language != self.language:
+                continue
             
             new_content = rule.auto_fix(fixed_content)
             if new_content != fixed_content:
@@ -278,7 +326,8 @@ class CoderCore(LogicCore):
         for i in range(len(lines) - min_lines + 1):
             block = '\n'.join(lines[i:i + min_lines])
             normalized = re.sub(r'\s+', ' ', block.strip())
-            if len(normalized) < 20: continue
+            if len(normalized) < 20:
+                continue
             
             block_hash = hashlib.md5(normalized.encode()).hexdigest()
             if block_hash not in hashes:
@@ -334,3 +383,128 @@ class CoderCore(LogicCore):
             score.issues.append(f"Smell: {smell.description}")
             
         return score
+
+    def suggest_refactorings(self, content: str) -> List[Dict[str, str]]:
+        """Suggest possible refactorings based on code analysis."""
+        suggestions: List[Dict[str, str]] = []
+        # Detect code smells and suggest refactorings
+        smells = self.detect_code_smells(content)
+        for smell in smells:
+            if smell.name == "long_method":
+                suggestions.append({
+                    "type": "extract_method",
+                    "description": f"Extract parts of method at line {smell.line_number}",
+                    "reason": smell.description
+                })
+            elif smell.name == "too_many_parameters":
+                suggestions.append({
+                    "type": "introduce_parameter_object",
+                    "description": (
+                        f"Create a data class for parameters at "
+                        f"line {smell.line_number}"
+                    ),
+                    "reason": smell.description
+                })
+            elif smell.name == "god_class":
+                suggestions.append({
+                    "type": "extract_class",
+                    "description": f"Split class at line {smell.line_number} into focused classes",
+                    "reason": smell.description
+                })
+        # Check for duplicate code
+        duplicates = self.find_duplicate_code(content)
+        if duplicates:
+            suggestions.append({
+                "type": "extract_method",
+                "description": (
+                    f"Extract {len(duplicates)} duplicate code blocks "
+                    f"into shared methods"
+                ),
+                "reason": f"Found {len(duplicates)} duplicate code patterns"
+            })
+        return suggestions
+
+    def generate_documentation(self, content: str) -> str:
+        """Generate documentation from code."""
+        if self.language != CodeLanguage.PYTHON:
+            return "# Documentation\n\nDocumentation generation is only supported for Python files."
+        try:
+            tree = ast.parse(content)
+        except SyntaxError:
+            return "# Documentation\n\nUnable to parse file for documentation."
+            
+        docs: List[str] = ["# API Documentation\n"]
+        # Get module docstring
+        module_doc = ast.get_docstring(tree)
+        if module_doc:
+            docs.append(f"## Module\n\n{module_doc}\n")
+        # Document classes and functions
+        for node in ast.iter_child_nodes(tree):
+            if isinstance(node, ast.ClassDef):
+                docs.append(f"## Class: `{node.name}`\n")
+                class_doc = ast.get_docstring(node)
+                if class_doc:
+                    docs.append(f"{class_doc}\n")
+                # Document methods
+                for item in node.body:
+                    if isinstance(item, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                        docs.append(f"### Method: `{item.name}`\n")
+                        method_doc = ast.get_docstring(item)
+                        if method_doc:
+                            docs.append(f"{method_doc}\n")
+                        # Document parameters
+                        params = [arg.arg for arg in item.args.args if arg.arg != 'self']
+                        if params:
+                            docs.append(f"**Parameters:** {', '.join(params)}\n")
+                docs.append("\n")
+            elif isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                docs.append(f"## Function: `{node.name}`\n")
+                func_doc = ast.get_docstring(node)
+                if func_doc:
+                    docs.append(f"{func_doc}\n")
+                params = [arg.arg for arg in node.args.args]
+                if params:
+                    docs.append(f"**Parameters:** {', '.join(params)}\n")
+                docs.append("\n")
+        return '\n'.join(docs)
+
+    def validate_syntax(self, content: str) -> bool:
+        """Validate Python syntax using ast."""
+        if self.language != CodeLanguage.PYTHON:
+            return True
+        try:
+            ast.parse(content)
+            return True
+        except (SyntaxError, RecursionError, MemoryError) as e:
+            logging.error(f"Syntax error in generated code: {e}")
+            return False
+
+    def validate_flake8(self, content: str) -> bool:
+        """Validate Python code using flake8 if available."""
+        if self.language != CodeLanguage.PYTHON:
+            return True
+        if not shutil.which('flake8'):
+            logging.warning("flake8 not found, skipping style validation")
+            return True
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as tmp:
+            tmp.write(content)
+            tmp_path = tmp.name
+        try:
+            # Run flake8 on the temporary file
+            result = subprocess.run(
+                ['flake8', '--ignore=E501,F401,W291,W293', tmp_path],
+                capture_output=True,
+                text=True,
+                check=False
+            )
+            
+            # Intelligence: Record shell-based code validation (Phase 108)
+            self.record_interaction("Shell", "Flake8", f"Validating code in {tmp_path}", str(result.stdout)[:500])
+
+            return result.returncode == 0
+        except Exception as e:
+            logging.error(f"flake8 validation failed: {e}")
+            return True
+        finally:
+            if os.path.exists(tmp_path):
+                os.unlink(tmp_path)

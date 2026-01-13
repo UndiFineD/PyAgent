@@ -1,10 +1,33 @@
-import re
-from typing import Dict, List, Any
-from src.classes.base_agent import BaseAgent
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
-class DataPrivacyGuardAgent(BaseAgent):
+from __future__ import annotations
+from src.core.base.version import VERSION
+import re
+from typing import Dict, Any
+from src.core.base.BaseAgent import BaseAgent
+
+__version__ = VERSION
+
+class PrivacyGuardAgent(BaseAgent):
     """
-    Data Privacy Guard Agent: Monitors fleet communications for PII (Personally 
+    Privacy Guard Agent: Monitors fleet communications for PII (Personally 
     Identifiable Information), performs redaction, and tracks compliance.
     """
     def __init__(self, workspace_path: str) -> None:
@@ -37,6 +60,8 @@ class DataPrivacyGuardAgent(BaseAgent):
                 "findings_count": len(findings),
                 "pii_types": list(set(f['type'] for f in findings))
             })
+            # Phase 108: Intelligence Recording
+            self._record(text[:500], redacted_text[:500], provider="PrivacyGuard", model="PIIScanner", meta={"findings_count": len(findings)})
 
         return {
             "original": original_text,
@@ -45,10 +70,15 @@ class DataPrivacyGuardAgent(BaseAgent):
             "findings": findings
         }
 
-    def verify_message_safety(self, message: str) -> bool:
-        """Returns True if no PII is detected, False otherwise."""
+    def verify_message_safety(self, message: str) -> Dict[str, Any]:
+        """Returns safety report; 'safe': True if no PII is detected."""
         result = self.scan_and_redact(message)
-        return not result['pii_detected']
+        if result['pii_detected']:
+            return {
+                "safe": False,
+                "reason": f"PII Detected: {', '.join(set(f['type'] for f in result['findings']))}"
+            }
+        return {"safe": True}
 
     def get_privacy_metrics(self) -> Dict[str, Any]:
         """Returns summary metrics for privacy protection efforts."""

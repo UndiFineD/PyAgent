@@ -1,27 +1,49 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """GovernanceAgent for PyAgent.
 Specializes in multi-agent proposal deliberation, voting, and fleet-wide policy management.
 Follows Decentralized Autonomous Organization (DAO) principles for agent swarms.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import json
 import uuid
 import time
 from pathlib import Path
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from typing import Dict, List, Any
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
+__version__ = VERSION
 
 class GovernanceAgent(BaseAgent):
     """Manages proposals, voting cycles, and governance policies for the fleet."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.proposals_dir = Path("agent_store/governance/proposals")
+        self.proposals_dir = Path("data/memory/agent_store/governance/proposals")
         self.proposals_dir.mkdir(parents=True, exist_ok=True)
-        self.policies_path = Path("agent_store/governance/policies.json")
+        self.policies_path = Path("data/memory/agent_store/governance/policies.json")
         self._system_prompt = (
             "You are the Governance Agent. Your role is to oversee the democratic processes "
             "of the fleet. You manage proposals for resource allocation, task prioritization, "
@@ -54,6 +76,9 @@ class GovernanceAgent(BaseAgent):
         with open(path, "w", encoding="utf-8") as f:
             json.dump(proposal, f, indent=4)
         
+        # Phase 108: Intelligence Recording
+        self._record(description, proposal_id, provider="Governance", model="ProposalSubmission", meta={"title": title, "creator": creator})
+
         logging.info(f"Governance: New proposal submitted: {title} ({proposal_id})")
         return proposal_id
 
@@ -95,6 +120,9 @@ class GovernanceAgent(BaseAgent):
         with open(path, "w", encoding="utf-8") as f:
             json.dump(proposal, f, indent=4)
             
+        # Phase 108: Intelligence Recording
+        self._record(f"{voter} voted {choice} on {proposal_id}", rationale, provider="Governance", model="Vote", meta={"proposal_id": proposal_id})
+
         return f"Vote cast by {voter} on proposal {proposal_id}."
 
     @as_tool
@@ -126,6 +154,6 @@ class GovernanceAgent(BaseAgent):
         return "Decentralized governance ensures fleet resilience and alignment."
 
 if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
+    from src.core.base.utilities import create_main_function
     main = create_main_function(GovernanceAgent, "Governance Agent", "Swarm DAO Management")
     main()

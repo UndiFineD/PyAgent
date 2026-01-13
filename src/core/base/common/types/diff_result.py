@@ -11,18 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
+from typing import List, Tuple
 
 __version__ = VERSION
-
 
 @dataclass
 class DiffResult:
@@ -35,9 +38,8 @@ class DiffResult:
         unchanged: Lines unchanged.
         similarity_score: Percentage of similarity (0 - 100).
     """
-
-    additions: list[str] = field(default_factory=lambda: [])
-    deletions: list[str] = field(default_factory=lambda: [])
-    modifications: list[tuple[str, str]] = field(default_factory=lambda: [])
+    additions: List[str] = field(default_factory=lambda: [])
+    deletions: List[str] = field(default_factory=lambda: [])
+    modifications: List[Tuple[str, str]] = field(default_factory=lambda: [])
     unchanged: int = 0
     similarity_score: float = 0.0

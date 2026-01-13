@@ -1,25 +1,33 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-
-from .SecurityIssueType import SecurityIssueType
-from .SecurityVulnerability import SecurityVulnerability
-
-from base_agent import BaseAgent
-from dataclasses import dataclass, field
-from enum import Enum
-from pathlib import Path
-from typing import Any, Callable, Dict, List, Optional, Tuple
-import ast
-import hashlib
-import logging
-import math
+from src.core.base.version import VERSION
+from src.core.base.types.SecurityIssueType import SecurityIssueType
+from src.core.base.types.SecurityVulnerability import SecurityVulnerability
+from typing import List, Tuple
 import re
-import shutil
-import subprocess
-import tempfile
+
+__version__ = VERSION
 
 class SecurityScanner:
     """Scans code for security vulnerabilities.
@@ -88,6 +96,14 @@ class SecurityScanner:
                         fix_suggestion=fix
                     ))
 
+        # Phase 108: Intelligence Recording
+        try:
+            from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+            recorder = LocalContextRecorder(user_context="SecurityScanner")
+            recorder.record_interaction("Internal", "SecurityScanner", "Source Scan", f"Detected {len(self.vulnerabilities)} vulnerabilities.")
+        except Exception:
+            pass
+
         return self.vulnerabilities
 
     def get_critical_count(self) -> int:
@@ -97,4 +113,3 @@ class SecurityScanner:
             Number of critical severity vulnerabilities.
         """
         return sum(1 for v in self.vulnerabilities if v.severity == "critical")
-

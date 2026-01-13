@@ -11,31 +11,34 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-
-from src.core.base.lifecycle.version import VERSION
-
-from .improvement import Improvement
-from .transition_result import TransitionResult
+from src.core.base.version import VERSION
+from .Improvement import Improvement
+from .TransitionResult import TransitionResult
+from typing import Dict, List
 
 __version__ = VERSION
-
 
 class WorkflowEngine:
     """Manages improvement workflow transitions."""
 
     def __init__(self) -> None:
-        self.states: list[str] = [
+        self.states: List[str] = [
             "pending",
             "in_progress",
             "completed",
             "blocked",
         ]
-        self._transitions: dict[str, list[str]] = {
+        self._transitions: Dict[str, List[str]] = {
             "pending": ["in_progress", "blocked"],
             "in_progress": ["completed", "blocked"],
             "blocked": ["in_progress"],

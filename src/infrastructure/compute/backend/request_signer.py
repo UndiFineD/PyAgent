@@ -11,19 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from typing import Dict, Optional
 import hashlib
 import os
 
-from src.core.base.lifecycle.version import VERSION
-
 __version__ = VERSION
-
 
 class RequestSigner:
     """Signs and verifies requests for integrity and authenticity.
@@ -37,19 +40,18 @@ class RequestSigner:
         assert signer.verify("prompt data", signature)
     """
 
-    def __init__(self, secret_key: str | None = None) -> None:
+    def __init__(self, secret_key: Optional[str] = None) -> None:
         """Initialize request signer.
 
         Args:
             secret_key: Secret key for signing. If None, uses environment variable.
         """
         import hmac
-
         self._hmac = hmac
         self.secret_key = (secret_key or os.environ.get("DV_AGENT_SIGNING_KEY", "")).encode()
-        self._signatures: dict[str, str] = {}
+        self._signatures: Dict[str, str] = {}
 
-    def sign(self, data: str, request_id: str | None = None) -> str:
+    def sign(self, data: str, request_id: Optional[str] = None) -> str:
         """Sign data and return signature.
 
         Args:
@@ -59,7 +61,11 @@ class RequestSigner:
         Returns:
             str: Hex - encoded signature.
         """
-        signature = self._hmac.new(self.secret_key, data.encode(), hashlib.sha256).hexdigest()
+        signature = self._hmac.new(
+            self.secret_key,
+            data.encode(),
+            hashlib.sha256
+        ).hexdigest()
 
         if request_id:
             self._signatures[request_id] = signature
@@ -76,10 +82,14 @@ class RequestSigner:
         Returns:
             bool: True if signature is valid.
         """
-        expected = self._hmac.new(self.secret_key, data.encode(), hashlib.sha256).hexdigest()
+        expected = self._hmac.new(
+            self.secret_key,
+            data.encode(),
+            hashlib.sha256
+        ).hexdigest()
 
         return self._hmac.compare_digest(expected, signature)
 
-    def get_stored_signature(self, request_id: str) -> str | None:
+    def get_stored_signature(self, request_id: str) -> Optional[str]:
         """Get stored signature by request ID."""
         return self._signatures.get(request_id)

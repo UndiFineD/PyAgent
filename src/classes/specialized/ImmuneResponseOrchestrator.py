@@ -1,5 +1,28 @@
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+from __future__ import annotations
+from src.core.base.version import VERSION
 import time
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any
+
+__version__ = VERSION
 
 class ImmuneResponseOrchestrator:
     """
@@ -19,6 +42,14 @@ class ImmuneResponseOrchestrator:
             "deployed_at": time.time(),
             "nodes_affected": "all"
         }
+        # Phase 108: Intelligence Recording
+        try:
+            from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+            recorder = LocalContextRecorder(user_context="ImmuneResponse")
+            recorder.record_interaction("Internal", "Shield", f"Patch deployment: {vulnerability_id}", "Deployed")
+        except Exception:
+            pass
+
         return {"vulnerability": vulnerability_id, "status": "remediated", "patch_applied": True}
 
     def monitor_threat_vectors(self) -> Dict[str, Any]:

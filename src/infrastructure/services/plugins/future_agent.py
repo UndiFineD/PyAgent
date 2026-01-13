@@ -11,13 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Future agent.py module.
-"""
-
 from __future__ import annotations
-
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
@@ -31,12 +26,9 @@ __version__ = VERSION
 
 SDK_REQUIRED = "10.0.0"
 
-
 class FutureAgent:
-    """Test agent for verifying forward compatibility with future SDK versions."""
-
     def __init__(self, *args) -> None:
         pass
-
+    
     def execute(self, task) -> str:
         return "I am from the future!"

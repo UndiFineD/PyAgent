@@ -11,23 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .test_result import TestResult
-from .test_status import TestStatus
+from src.core.base.version import VERSION
+from .TestResult import TestResult
+from .TestStatus import TestStatus
+from typing import Any, Dict, List, Optional, Union
 
 __version__ = VERSION
 
-
 class TestResultAggregator:
+    __test__ = False
     """Aggregates test results for reporting.
 
     Example:
@@ -36,17 +38,15 @@ class TestResultAggregator:
         report=agg.get_report()
     """
 
-    __test__ = False
-
     def __init__(self) -> None:
         """Initialize result aggregator."""
-        self._results: list[TestResult] = []
+        self._results: List[TestResult] = []
 
     def add_result(
         self,
-        result: TestResult | str,
-        test_name: str | None = None,
-        status: str | None = None,
+        result: Union[TestResult, str],
+        test_name: Optional[str] = None,
+        status: Optional[str] = None,
     ) -> None:
         """Add a test result.
 
@@ -62,17 +62,17 @@ class TestResultAggregator:
             test_result = TestResult(
                 test_name=f"{result}/{test_name}",
                 status=TestStatus[status.upper()] if hasattr(TestStatus, status.upper()) else TestStatus.PASSED,
-                duration_ms=0.0,
+                duration_ms=0.0
             )
             self._results.append(test_result)
         else:
             raise TypeError("Invalid arguments to add_result")
 
-    def get_results(self) -> list[TestResult]:
+    def get_results(self) -> List[TestResult]:
         """Get all results."""
         return list(self._results)
 
-    def get_report(self) -> dict[str, Any]:
+    def get_report(self) -> Dict[str, Any]:
         """Get aggregated report.
 
         Returns:
@@ -96,7 +96,7 @@ class TestResultAggregator:
             "avg_duration_ms": sum(durations) / len(durations) if durations else 0,
         }
 
-    def get_summary(self) -> dict[str, Any]:
+    def get_summary(self) -> Dict[str, Any]:
         """Compatibility alias used by some tests."""
         report = self.get_report()
         return {
@@ -107,9 +107,9 @@ class TestResultAggregator:
             "errors": report.get("errors", 0),
         }
 
-    def get_by_suite(self) -> dict[str, dict[str, int]]:
+    def get_by_suite(self) -> Dict[str, Dict[str, int]]:
         """Group results by suite prefix ("suite/test")."""
-        by_suite: dict[str, dict[str, int]] = {}
+        by_suite: Dict[str, Dict[str, int]] = {}
         for r in self._results:
             suite = "unknown"
             if "/" in r.test_name:
@@ -126,7 +126,7 @@ class TestResultAggregator:
                 by_suite[suite]["errors"] += 1
         return by_suite
 
-    def get_failures(self) -> list[TestResult]:
+    def get_failures(self) -> List[TestResult]:
         """Get failed tests."""
         return [r for r in self._results if r.status == TestStatus.FAILED]
 

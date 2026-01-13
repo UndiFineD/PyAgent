@@ -10,32 +10,29 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-Graph store.py module.
-"""
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import hashlib
-from pathlib import Path
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
 from .storage_base import KnowledgeStore
+from typing import Any, List
+import json
+from pathlib import Path
 
 __version__ = VERSION
-
 
 class GraphKnowledgeStore(KnowledgeStore):
     """
     Sharded Graph storage for relational and ontological knowledge.
     Scales to trillions of triples by sharding nodes across the filesystem.
-    Utilization of MemoryCore for standardized backend.
     """
-
+    
     def _hash_node(self, node_id: str) -> str:
         return hashlib.md5(node_id.encode()).hexdigest()
 
@@ -44,42 +41,35 @@ class GraphKnowledgeStore(KnowledgeStore):
         hash_val = self._hash_node(node_id)
         tier1 = hash_val[:2]
         tier2 = hash_val[2:4]
-
-        # Use MemoryCore via base class to ensure path alignment
+        
         shard_dir = self.storage_path / tier1 / tier2
         shard_dir.mkdir(exist_ok=True, parents=True)
         return shard_dir / f"{node_id}.json"
 
-    def store(self, key: str, value: Any, metadata: dict[str, Any] | None = None) -> bool:
-        path = self._get_node_path(key)
-
-        # Use memory_core.retrieve_knowledge logic or standardized load_json
-        # pylint: disable=protected-access
-        data = self._memory_core._storage.load_json(path)
-        if not data:
-            data = {"id": key, "edges": []}
-
-        relationship = "related_to"
-        if metadata and isinstance(metadata, dict):
-            relationship = metadata.get("relationship", "related_to")
-
-        data["edges"].append({"to": value, "type": relationship})
-
-        # Atomic write via storage core
-        # pylint: disable=protected-access
-        self._memory_core._storage.save_json(path, data)
+    def store(self, node: str, target: Any, relationship: str = "related_to") -> bool:
+        path = self._get_node_path(node)
+        
+        if path.exists():
+            with open(path, "r") as f:
+                data = json.load(f)
+        else:
+            data = {"id": node, "edges": []}
+            
+        data["edges"].append({"to": target, "type": relationship})
+        
+        with open(path, "w") as f:
+            json.dump(data, f)
         return True
 
-    def retrieve(self, query: Any, limit: int = 5) -> list[Any]:
-        path = self._get_node_path(str(query))
-        # pylint: disable=protected-access
-        data = self._memory_core._storage.load_json(path)
-        if data:
-            return data.get("edges", [])[:limit]
+    def retrieve(self, node: str, limit: int = 5) -> List[Any]:
+        path = self._get_node_path(node)
+        if path.exists():
+            with open(path, "r") as f:
+                return json.load(f).get("edges", [])[:limit]
         return []
 
-    def delete(self, key: str) -> bool:
-        path = self._get_node_path(key)
+    def delete(self, node: str) -> bool:
+        path = self._get_node_path(node)
         if path.exists():
             path.unlink()
             return True

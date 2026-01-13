@@ -11,36 +11,38 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_strategies.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING
-
-from src.core.base.lifecycle.version import VERSION
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
-
-    BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
+from typing import Dict, List, Optional
 
 __version__ = VERSION
 
+try:
+    from . import BackendFunction
+except ImportError:
+    from src.logic.strategies import BackendFunction
 
 class AgentStrategy(ABC):
     """Abstract base class for agent execution strategies."""
 
     @abstractmethod
-    async def execute(
+    def execute(
         self,
         prompt: str,
         context: str,
         backend_call: BackendFunction,
-        system_prompt: str | None = None,
-        history: list[dict[str, str]] | None = None,
+        system_prompt: Optional[str] = None,
+        history: Optional[List[Dict[str, str]]] = None
     ) -> str:
         """Execute the strategy to generate a response.
 
@@ -54,4 +56,4 @@ class AgentStrategy(ABC):
         Returns:
             The final generated content.
         """
-        ...
+        pass

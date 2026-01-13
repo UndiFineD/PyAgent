@@ -11,21 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .ReportMetric import ReportMetric
+from typing import Any, Dict, List, Optional
 import logging
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .report_metric import ReportMetric
 
 __version__ = VERSION
-
 
 class MetricsCollector:
     """Collector for custom report metrics and KPIs.
@@ -41,7 +42,7 @@ class MetricsCollector:
     def __init__(self) -> None:
         """Initialize metrics collector."""
 
-        self.metrics: dict[str, list[ReportMetric]] = {}
+        self.metrics: Dict[str, List[ReportMetric]] = {}
         logging.debug("MetricsCollector initialized")
 
     def record(
@@ -50,7 +51,7 @@ class MetricsCollector:
         name: str,
         value: float,
         unit: str = "",
-        threshold: float | None = None,
+        threshold: Optional[float] = None
     ) -> ReportMetric:
         """Record a metric.
         Args:
@@ -63,13 +64,18 @@ class MetricsCollector:
             Created metric.
         """
 
-        metric = ReportMetric(name=name, value=value, unit=unit, threshold=threshold)
+        metric = ReportMetric(
+            name=name,
+            value=value,
+            unit=unit,
+            threshold=threshold
+        )
         if file_path not in self.metrics:
             self.metrics[file_path] = []
         self.metrics[file_path].append(metric)
         return metric
 
-    def get_metrics(self, file_path: str) -> list[ReportMetric]:
+    def get_metrics(self, file_path: str) -> List[ReportMetric]:
         """Get metrics for a file.
         Args:
             file_path: File path.
@@ -79,7 +85,7 @@ class MetricsCollector:
 
         return self.metrics.get(file_path, [])
 
-    def get_summary(self) -> dict[str, Any]:
+    def get_summary(self) -> Dict[str, Any]:
         """Get summary of all metrics.
         Returns:
             Summary dictionary.
@@ -88,15 +94,18 @@ class MetricsCollector:
         total_files = len(self.metrics)
         total_metrics = sum(len(m) for m in self.metrics.values())
         # Calculate averages by metric name
-        averages: dict[str, list[float]] = {}
+        averages: Dict[str, List[float]] = {}
         for metrics in self.metrics.values():
             for metric in metrics:
                 if metric.name not in averages:
                     averages[metric.name] = []
                 averages[metric.name].append(metric.value)
-        avg_summary = {name: sum(vals) / len(vals) if vals else 0 for name, vals in averages.items()}
+        avg_summary = {
+            name: sum(vals) / len(vals) if vals else 0
+            for name, vals in averages.items()
+        }
         return {
             "total_files": total_files,
             "total_metrics": total_metrics,
-            "averages": avg_summary,
+            "averages": avg_summary
         }

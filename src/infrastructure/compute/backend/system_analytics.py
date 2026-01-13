@@ -11,22 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .UsageRecord import UsageRecord
+from typing import Any, Dict, List, Optional
 import threading
 import time
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .usage_record import UsageRecord
 
 __version__ = VERSION
-
 
 class SystemAnalytics:
     """Collects and reports backend usage analytics.
@@ -48,7 +49,7 @@ class SystemAnalytics:
             retention_hours: Hours to retain records.
         """
         self.retention_hours = retention_hours
-        self._records: list[UsageRecord] = []
+        self._records: List[UsageRecord] = []
         self._lock = threading.Lock()
 
     def record_usage(
@@ -91,7 +92,7 @@ class SystemAnalytics:
         cutoff = time.time() - (self.retention_hours * 3600)
         self._records = [r for r in self._records if r.timestamp >= cutoff]
 
-    def generate_report(self, backend: str | None = None) -> dict[str, Any]:
+    def generate_report(self, backend: Optional[str] = None) -> Dict[str, Any]:
         """Generate usage report.
 
         Args:
@@ -131,9 +132,9 @@ class SystemAnalytics:
             "by_backend": self._group_by_backend(records),
         }
 
-    def _group_by_backend(self, records: list[UsageRecord]) -> dict[str, dict[str, Any]]:
+    def _group_by_backend(self, records: List[UsageRecord]) -> Dict[str, Dict[str, Any]]:
         """Group records by backend."""
-        by_backend: dict[str, list[UsageRecord]] = {}
+        by_backend: Dict[str, List[UsageRecord]] = {}
         for r in records:
             if r.backend not in by_backend:
                 by_backend[r.backend] = []

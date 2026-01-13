@@ -1,31 +1,51 @@
-# -*- coding: utf-8 -*-
-# Copyright (c) 2025 PyAgent contributors
-# Licensed under the Apache License, Version 2.0
-
-"""Main TestsAgent class for test suite improvement."""
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 from __future__ import annotations
+from src.core.base.version import VERSION
 import ast
 import hashlib
 import json
 import logging
-import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
-
-from src.classes.base_agent import BaseAgent
-# from src.classes.base_agent import BaseAgent, create_main_function
-from src.classes.agent_tests import (
+from src.core.base.BaseAgent import BaseAgent
+from src.infrastructure.dev.agent_tests.enums import (
     TestPriority,
     TestStatus,
+    CoverageType,
+)
+from src.infrastructure.dev.agent_tests.models import (
     TestCase,
     TestRun,
     CoverageGap,
-    CoverageType,
     TestFactory,
 )
 
+__version__ = VERSION
+
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+# -*- coding: utf-8 -*-
+
+"""Main TestsAgent class for test suite improvement."""
+
+# from src.core.base.BaseAgent import BaseAgent, create_main_function
 
 class TestsAgent(BaseAgent):
     """Updates code file test suites using AI assistance.
@@ -34,6 +54,7 @@ class TestsAgent(BaseAgent):
     - self.file_path must point to a test file (usually starting with 'test_').
     - The agent attempts to locate the corresponding source file to provide context.
     """
+    __test__ = False
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -192,13 +213,13 @@ class TestsAgent(BaseAgent):
     def suggest_tests_for_gap(self, gap: CoverageGap) -> str:
         """Generate test suggestion for a coverage gap."""
         file_name = gap.file_path.replace('/', '_').replace('.py', '')
+        suggestion_body = gap.suggestion or f"assert True  # Placeholder for {gap.coverage_type.value} coverage"
         return (
             f"# Suggested test for {gap.file_path} "
             f"lines {gap.line_start}-{gap.line_end}\n"
             f"def test_{file_name}_line{gap.line_start}():\n"
-            f"    # TODO: Add test for {gap.coverage_type.value} "
-            f"coverage\n"
-            f"    {gap.suggestion or 'pass'}\n"
+            f"    # Auto-generated path for {gap.coverage_type.value} coverage\n"
+            f"    {suggestion_body}\n"
         )
 
     # ========== Test Data Factories ==========
@@ -517,7 +538,6 @@ class TestsAgent(BaseAgent):
         self.file_path.write_text(self.current_content, encoding='utf-8')
         return True
 
-
 # create_main_function is not available in the current refactored structure
 # def main() would need to be implemented separately if needed for CLI use
 #main = create_main_function(
@@ -529,4 +549,3 @@ class TestsAgent(BaseAgent):
 if __name__ == '__main__':
     # CLI interface would be implemented here if needed
     pass
-

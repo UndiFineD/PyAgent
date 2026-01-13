@@ -1,13 +1,35 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Engine for persistent episodic memory of agent actions and outcomes."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import json
 import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional
-from .MemoryCore import MemoryCore
+from src.logic.agents.cognitive.context.engines.MemoryCore import MemoryCore
+
+__version__ = VERSION
 
 try:
     import chromadb
@@ -21,15 +43,17 @@ class MemoryEngine:
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
         self.memory_file = self.workspace_root / ".agent_memory.json"
-        self.db_path = self.workspace_root / ".agent_memory_db"
+        self.db_path = self.workspace_root / "data/db/.agent_memory_db"
         self.episodes: List[Dict[str, Any]] = []
         self._collection = None
         self.core = MemoryCore()
         self.load()
 
     def _init_db(self) -> Any:
-        if not HAS_CHROMA: return None
-        if self._collection: return self._collection
+        if not HAS_CHROMA:
+            return None
+        if self._collection:
+            return self._collection
         try:
             client = chromadb.PersistentClient(path=str(self.db_path))
             self._collection = client.get_or_create_collection(name="agent_memory")
@@ -66,7 +90,8 @@ class MemoryEngine:
     def update_utility(self, memory_id: str, increment: float) -> None:
         """Updates the utility score of a specific memory episode."""
         collection = self._init_db()
-        if not collection: return
+        if not collection:
+            return
         
         try:
             # Fetch existing metadata

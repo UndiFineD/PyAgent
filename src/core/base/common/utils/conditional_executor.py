@@ -11,21 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-
-from collections.abc import Callable
+from src.core.base.version import VERSION
+from .ExecutionCondition import ExecutionCondition
 from pathlib import Path
-from typing import Any
-
-from ..models.base_models import ExecutionCondition
-from ...lifecycle.version import VERSION
+from typing import List, Dict, Any, Callable
 
 __version__ = VERSION
-
 
 class ConditionalExecutor:
     """Execute agents based on file content conditions.
@@ -41,8 +42,8 @@ class ConditionalExecutor:
 
     def __init__(self) -> None:
         """Initialize executor."""
-        self._conditions: dict[str, ExecutionCondition] = {}
-        self._agent_conditions: dict[str, dict[str, Any]] = {}
+        self._conditions: Dict[str, ExecutionCondition] = {}
+        self._agent_conditions: Dict[str, Dict[str, Any]] = {}
 
     def add_condition(
         self,
@@ -66,7 +67,7 @@ class ConditionalExecutor:
     def set_agent_conditions(
         self,
         agent_name: str,
-        conditions: list[str],
+        conditions: List[str],
         require_all: bool = False,
     ) -> None:
         """Set conditions for an agent.
@@ -101,7 +102,7 @@ class ConditionalExecutor:
             return True  # No conditions, always execute
 
         config = self._agent_conditions[agent_name]
-        condition_names: list[str] = config["conditions"]  # type: ignore
+        condition_names: List[str] = config["conditions"]  # type: ignore
         require_all = config["require_all"]
 
         results: list[bool] = []
@@ -111,8 +112,7 @@ class ConditionalExecutor:
             condition = self._conditions[cond_name]
             try:
                 results.append(condition.check(file_path, content))
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
- # pylint: disable=broad-exception-caught
+            except Exception:
                 results.append(False)
 
         if not results:
@@ -120,4 +120,5 @@ class ConditionalExecutor:
 
         if require_all:
             return all(results)
-        return any(results)
+        else:
+            return any(results)

@@ -11,18 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-
-from src.core.base.common.types.changelog_entry import ChangelogEntry
-from src.core.base.common.types.release_note import ReleaseNote
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.version import VERSION
+from .ChangelogEntry import ChangelogEntry
+from .ReleaseNote import ReleaseNote
+from typing import Optional, Dict, List
 
 __version__ = VERSION
-
 
 class ReleaseNotesGenerator:
     """Generates release notes from changelog entries.
@@ -34,7 +38,12 @@ class ReleaseNotesGenerator:
         >>> notes=generator.generate("1.0.0", entries)
     """
 
-    def generate(self, version: str, entries: list[ChangelogEntry], title: str | None = None) -> ReleaseNote:
+    def generate(
+        self,
+        version: str,
+        entries: List[ChangelogEntry],
+        title: Optional[str] = None
+    ) -> ReleaseNote:
         """Generate release notes from entries.
 
         Args:
@@ -46,10 +55,16 @@ class ReleaseNotesGenerator:
             Generated ReleaseNote.
         """
         # Extract highlights (high priority or high severity)
-        highlights = [e.description for e in entries if e.priority >= 2 or e.severity in ("high", "critical")]
+        highlights = [
+            e.description for e in entries
+            if e.priority >= 2 or e.severity in ("high", "critical")
+        ]
 
         # Extract breaking changes
-        breaking = [e.description for e in entries if "breaking" in e.description.lower() or "breaking" in e.tags]
+        breaking = [
+            e.description for e in entries
+            if "breaking" in e.description.lower() or "breaking" in e.tags
+        ]
 
         # Generate summary
         summary = f"Release {version} includes {len(entries)} changes"
@@ -57,8 +72,8 @@ class ReleaseNotesGenerator:
             summary += f" with {len(breaking)} breaking change(s)"
 
         # Format full changelog
-        changelog_lines: list[str] = []
-        by_category: dict[str, list[str]] = {}
+        changelog_lines: List[str] = []
+        by_category: Dict[str, List[str]] = {}
         for entry in entries:
             if entry.category not in by_category:
                 by_category[entry.category] = []
@@ -76,5 +91,5 @@ class ReleaseNotesGenerator:
             summary=summary,
             highlights=highlights[:5],  # Top 5 highlights
             breaking_changes=breaking,
-            full_changelog="\n".join(changelog_lines),
+            full_changelog='\n'.join(changelog_lines)
         )

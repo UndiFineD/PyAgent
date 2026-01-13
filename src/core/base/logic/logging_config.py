@@ -11,19 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Logging configuration for PyAgent."""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import logging
 import os
-
-from src.core.base.lifecycle.version import VERSION
+from typing import Dict
 
 __version__ = VERSION
-
 
 def setup_logging(verbosity_arg: int = 0) -> None:
     """Configure logging based on environment variable and argument.
@@ -47,16 +50,16 @@ def setup_logging(verbosity_arg: int = 0) -> None:
         - Environment variable is used as fallback
         - Defaults to INFO level if neither is set
     """
-    env_verbosity: str | None = os.environ.get("DV_AGENT_VERBOSITY")
-    levels: dict[str, int] = {
-        "quiet": logging.ERROR,
-        "minimal": logging.WARNING,
-        "normal": logging.INFO,
-        "elaborate": logging.DEBUG,
-        "0": logging.ERROR,
-        "1": logging.WARNING,
-        "2": logging.INFO,
-        "3": logging.DEBUG,
+    env_verbosity: str | None = os.environ.get('DV_AGENT_VERBOSITY')
+    levels: Dict[str, int] = {
+        'quiet': logging.ERROR,
+        'minimal': logging.WARNING,
+        'normal': logging.INFO,
+        'elaborate': logging.DEBUG,
+        '0': logging.ERROR,
+        '1': logging.WARNING,
+        '2': logging.INFO,
+        '3': logging.DEBUG,
     }
     # Determine level from environment
     if env_verbosity:
@@ -69,7 +72,7 @@ def setup_logging(verbosity_arg: int = 0) -> None:
         level: int = logging.DEBUG
     logging.basicConfig(
         level=level,
-        format="%(asctime)s - %(levelname)s - %(message)s",
-        datefmt="%H:%M:%S",
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        datefmt='%H:%M:%S'
     )
-    logging.debug("Logging configured at level: %s", logging.getLevelName(level))
+    logging.debug(f"Logging configured at level: {logging.getLevelName(level)}")

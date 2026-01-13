@@ -15,21 +15,21 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-
 from dataclasses import dataclass, field
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.common.models.agent_models import AgentPluginConfig
-from src.core.base.common.models.fleet_models import RateLimitConfig
-from .utils.helpers import (_empty_dict_str_any, _empty_dict_str_int,
-                            _empty_list_str, _empty_plugin_config_list)
+from typing import Optional, Any
+from src.core.base.models import AgentPluginConfig, RateLimitConfig
+from src.core.base.utils._helpers import (
+    _empty_dict_str_any,
+    _empty_plugin_config_list,
+    _empty_list_str,
+    _empty_dict_str_int,
+)
+from src.core.base.version import VERSION
 
 __version__ = VERSION
 
-
 @dataclass
-class AgentConfig:  # pylint: disable=too-many-instance-attributes
+class AgentConfig:
     """Full agent configuration loaded from config file.
 
     Attributes:
@@ -45,15 +45,14 @@ class AgentConfig:  # pylint: disable=too-many-instance-attributes
         selective_agents: Agents to execute.
         timeout_per_agent: Timeout settings per agent.
     """
-
     repo_root: str = "."
     agents_only: bool = False
-    max_files: int | None = None
+    max_files: Optional[int] = None
     loop: int = 1
     dry_run: bool = False
     no_git: bool = False
     verbosity: str = "normal"
-    rate_limit: RateLimitConfig | None = None
+    rate_limit: Optional[RateLimitConfig] = None
     plugins: list[AgentPluginConfig] = field(default_factory=_empty_plugin_config_list)
     selective_agents: list[str] = field(default_factory=_empty_list_str)
     timeout_per_agent: dict[str, int] = field(default_factory=_empty_dict_str_int)
@@ -61,7 +60,7 @@ class AgentConfig:  # pylint: disable=too-many-instance-attributes
     enable_async: bool = False
     enable_multiprocessing: bool = False
     max_workers: int = 4
-    strategy: str = "direct"
+    strategy: str = 'direct'
     enable_file_locking: bool = False
     incremental: bool = False
     graceful_shutdown: bool = False

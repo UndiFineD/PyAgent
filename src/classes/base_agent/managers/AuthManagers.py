@@ -1,11 +1,31 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 PyAgent contributors
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 from dataclasses import dataclass, field
 from typing import Dict, Optional
-from ..models import AuthConfig, AuthMethod, _empty_dict_str_str
+from src.core.base.models import AuthConfig, AuthMethod, _empty_dict_str_str
+
+__version__ = VERSION
 
 class AuthenticationManager:
     """Manager for authentication methods."""
@@ -36,7 +56,10 @@ class AuthenticationManager:
         cache_key = f"oauth_{self.config.oauth_client_id}"
         if cache_key in self.token_cache:
             return self.token_cache[cache_key]
-        token = self.config.token or "oauth_token_placeholder"
+        token = self.config.token
+        if not token:
+             logging.error(f"OAuth token missing for {cache_key}")
+             return ""
         self.token_cache[cache_key] = token
         return token
 
@@ -47,13 +70,17 @@ class AuthenticationManager:
         self.config.custom_headers[key] = value
 
     def validate(self) -> bool:
-        if self.config.method == AuthMethod.NONE: return True
-        if self.config.method == AuthMethod.API_KEY: return bool(self.config.api_key)
-        if self.config.method == AuthMethod.BEARER_TOKEN: return bool(self.config.token)
-        if self.config.method == AuthMethod.BASIC_AUTH: return bool(self.config.username and self.config.password)
-        if self.config.method == AuthMethod.OAUTH2: return bool(self.config.oauth_client_id and self.config.oauth_client_secret)
+        if self.config.method == AuthMethod.NONE:
+            return True
+        if self.config.method == AuthMethod.API_KEY:
+            return bool(self.config.api_key)
+        if self.config.method == AuthMethod.BEARER_TOKEN:
+            return bool(self.config.token)
+        if self.config.method == AuthMethod.BASIC_AUTH:
+            return bool(self.config.username and self.config.password)
+        if self.config.method == AuthMethod.OAUTH2:
+            return bool(self.config.oauth_client_id and self.config.oauth_client_secret)
         return True
-
 
 @dataclass
 class AuthManager:
@@ -72,11 +99,10 @@ class AuthManager:
     def get_headers(self) -> Dict[str, str]:
         headers = dict(self.custom_headers)
         method = self.method
-        if isinstance(method, AuthMethod): method = method.value
+        if isinstance(method, AuthMethod):
+            method = method.value
         if method == "api_key" and "api_key" in self.credentials:
             headers["X-API-Key"] = self.credentials["api_key"]
         elif method in ("token", "bearer_token") and "token" in self.credentials:
             headers["Authorization"] = f"Bearer {self.credentials['token']}"
         return headers
-
-

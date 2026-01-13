@@ -10,112 +10,89 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Script for reconciling workspace-wide module imports and missing __init__.py files."""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import os
 import re
 
-from src.core.base.lifecycle.version import VERSION
-
 __version__ = VERSION
-
 
 def fix_imports(content: str) -> str:
     """Correct legacy module imports to use the src prefix."""
-
     modules = [
-        "agent_backend",
-        "agent_changes",
-        "agent_coder",
-        "agent_context",
-        "agent_errors",
-        "agent_improvements",
-        "agent_knowledge",
-        "agent_search",
-        "agent_stats",
-        "agent_strategies",
-        "agent_tests",
-        "agent_test_utils",
+        'agent_backend', 'agent_changes', 'agent_coder', 'agent_context', 
+        'agent_errors', 'agent_improvements', 'agent_knowledge', 'agent_search', 
+        'agent_stats', 'agent_strategies', 'agent_tests', 'agent_test_utils'
     ]
-
+    
     for mod in modules:
         # Match from agent_X and import agent_X
         # Using \b to ensure we match the full module name
-        content = re.sub(
-            rf"^\s*from ({mod})(\b\s+import|\b\s+)",
-            r"from src.\1\2",
-            content,
-            flags=re.MULTILINE,
-        )
+        content = re.sub(rf'^\s*from ({mod})(\b\s+import|\b\s+)', r'from src.\1\2', content, flags=re.MULTILINE)
+        content = re.sub(rf'^\s*import ({mod})(\b\s*$)', r'from src import \1', content, flags=re.MULTILINE)
 
-        content = re.sub(
-            rf"^\s*import ({mod})(\b\s*$)",
-            r"from src import \1",
-            content,
-            flags=re.MULTILINE,
-        )
-
-    content = content.replace("from classes.", "from src.")
+    content = content.replace('from classes.', 'from src.')
     return content
-
 
 print("Starting fix script...")
 updated_count = 0
 inits_count = 0
 
-for root_dir in ["src", "tests"]:
+for root_dir in ['src', 'tests']:
     if not os.path.exists(root_dir):
         print(f"Directory {root_dir} not found")
         continue
     for root, dirs, files in os.walk(root_dir):
-        if "__pycache__" in root or ".git" in root:
+        if '__pycache__' in root or '.git' in root:
             continue
-
-        init_file = os.path.join(root, "__init__.py")
+        
+        init_file = os.path.join(root, '__init__.py')
         if not os.path.exists(init_file):
-            with open(init_file, "w", encoding="utf-8") as f:
-                f.write("")
+            with open(init_file, 'w', encoding='utf-8') as f:
+                f.write('')
             inits_count += 1
 
         for file in files:
-            if file.endswith(".py"):
+            if file.endswith('.py'):
                 path = os.path.join(root, file)
                 try:
-                    with open(path, encoding="utf-8") as f:
+                    with open(path, 'r', encoding='utf-8') as f:
                         content = f.read()
-
+                    
                     new_content = fix_imports(content)
-
+                    
                     if new_content != content:
-                        with open(path, "w", encoding="utf-8") as f:
+                        with open(path, 'w', encoding='utf-8') as f:
                             f.write(new_content)
                         updated_count += 1
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception as e:
                     print(f"Error in {path}: {e}")
 
 # CircuitBreaker fix
-cb_path = os.path.join("src", "backend", "CircuitBreaker.py")
+cb_path = os.path.join('src', 'backend', 'CircuitBreaker.py')
 if os.path.exists(cb_path):
-    with open(cb_path, encoding="utf-8") as f:
+    with open(cb_path, 'r', encoding='utf-8') as f:
         content = f.read()
-    if "src.agent.CircuitBreakerCore" in content or "CircuitBreakerCore" in content:
-        content = content.replace(
-            "from src.agent.CircuitBreakerCore import CircuitBreakerCore",
-            "from src.core.base.CircuitBreaker import CircuitBreaker as CircuitBreakerImpl",
-        )
-        content = content.replace("CircuitBreakerCore", "CircuitBreakerImpl")
-        with open(cb_path, "w", encoding="utf-8") as f:
+    if 'src.agent.CircuitBreakerCore' in content or 'CircuitBreakerCore' in content:
+        content = content.replace('from src.agent.CircuitBreakerCore import CircuitBreakerCore', 'from src.core.base.CircuitBreaker import CircuitBreaker as CircuitBreakerImpl')
+        content = content.replace('CircuitBreakerCore', 'CircuitBreakerImpl')
+        with open(cb_path, 'w', encoding='utf-8') as f:
             f.write(content)
         print("Fixed CircuitBreaker.py")
 
 # Rename agent.py to agent_facade.py if it exists in src/
-agent_path = os.path.join("src", "agent.py")
+agent_path = os.path.join('src', 'agent.py')
 if os.path.exists(agent_path):
-    os.rename(agent_path, os.path.join("src", "agent_facade.py"))
-    print("Renamed src\agent\\py to src\agent_facade.py")
+    os.rename(agent_path, os.path.join('src', 'agent_facade.py'))
+    print("Renamed src/agent.py to src/agent_facade.py")
 
 print(f"Finished. Created {inits_count} __init__.py files. Updated {updated_count} files.")

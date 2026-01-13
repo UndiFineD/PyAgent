@@ -1,10 +1,30 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
-import json
 import threading
-from typing import Dict, Any, List, Optional
-from src.classes.orchestration.SignalBusOrchestrator import SignalBusOrchestrator
+from typing import Dict, Any
+
+__version__ = VERSION
 
 class EntanglementOrchestrator:
     """
@@ -12,15 +32,16 @@ class EntanglementOrchestrator:
     Ensures that high-priority state changes in one node are mirrored to all entangled peers.
     """
     
-    def __init__(self, signal_bus: SignalBusOrchestrator) -> None:
-        self.signal_bus = signal_bus
+    def __init__(self, fleet) -> None:
+        self.fleet = fleet
+        self.signal_bus = fleet.signal_bus
         self.shared_state: Dict[str, Any] = {}
         self._lock = threading.Lock()
         
         # Subscribe to entanglement sync signals
         self.signal_bus.subscribe("entanglement_sync", self._handle_sync_signal)
 
-    def update_state(self, key: str, value: Any, propagate: bool = True):
+    def update_state(self, key: str, value: Any, propagate: bool = True) -> None:
         """Updates local state and optionally propagates to the swarm."""
         with self._lock:
             self.shared_state[key] = value
@@ -34,7 +55,7 @@ class EntanglementOrchestrator:
         with self._lock:
             return self.shared_state.get(key)
 
-    def _handle_sync_signal(self, payload: Any, sender: str):
+    def _handle_sync_signal(self, payload: Any, sender: str) -> None:
         """Internal handler for incoming state synchronization signals."""
         if sender == "EntanglementOrchestrator":
             return # Ignore local propagation

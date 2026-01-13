@@ -10,45 +10,37 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-Storage base.py module.
-"""
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 from abc import ABC, abstractmethod
+from typing import Any, Dict, List, Optional
 from pathlib import Path
-from typing import Any
-
-from src.core.base.common.memory_core import MemoryCore
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
-
 class KnowledgeStore(ABC):
     """Base interface for all knowledge storage types."""
-
+    
     def __init__(self, agent_id: str, storage_path: Path) -> None:
         self.agent_id = agent_id
         self.storage_path = storage_path
-        self._memory_core = MemoryCore()
-        # Initialize paths via standard core
         self.storage_path.mkdir(parents=True, exist_ok=True)
 
     @abstractmethod
-    def store(self, key: str, value: Any, metadata: dict[str, Any] | None = None) -> bool:
-        """Store a piece of knowledge."""
+    def store(self, key: str, value: Any, metadata: Optional[Dict[str, Any]] = None) -> bool:
         raise NotImplementedError()
 
     @abstractmethod
-    def retrieve(self, query: Any, limit: int = 5) -> list[Any]:
-        """Retrieve knowledge based on a query."""
+    def retrieve(self, query: Any, limit: int = 5) -> List[Any]:
         raise NotImplementedError()
 
     @abstractmethod
     def delete(self, key: str) -> bool:
-        """Delete a piece of knowledge by key."""
         raise NotImplementedError()

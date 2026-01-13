@@ -11,23 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .TestFixture import TestFixture
+from pathlib import Path
+from typing import Dict, Optional
 import logging
 import shutil
 import tempfile
-from pathlib import Path
-
-from src.core.base.lifecycle.version import VERSION
-
-from .test_fixture import TestFixture
 
 __version__ = VERSION
-
 
 class FixtureGenerator:
     """Generates test fixtures for common agent scenarios.
@@ -37,14 +39,14 @@ class FixtureGenerator:
         fixture=gen.create_python_file_fixture("test.py", "print('hello')")
     """
 
-    def __init__(self, base_dir: Path | None = None) -> None:
+    def __init__(self, base_dir: Optional[Path] = None) -> None:
         """Initialize fixture generator.
 
         Args:
             base_dir: Base directory for fixtures.
         """
         self.base_dir = base_dir or Path(tempfile.mkdtemp())
-        self._fixtures: dict[str, TestFixture] = {}
+        self._fixtures: Dict[str, TestFixture] = {}
 
     def create_python_file_fixture(
         self,
@@ -82,7 +84,7 @@ class FixtureGenerator:
     def create_directory_fixture(
         self,
         dirname: str,
-        files: dict[str, str],
+        files: Dict[str, str],
     ) -> TestFixture:
         """Create a directory fixture with files.
 
@@ -119,6 +121,6 @@ class FixtureGenerator:
             if fixture.teardown_fn and fixture.data:
                 try:
                     fixture.teardown_fn(fixture.data)
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception as e:
                     logging.warning(f"Failed to cleanup fixture {fixture.name}: {e}")
         self._fixtures.clear()

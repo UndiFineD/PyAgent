@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,12 +18,10 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Auto-extracted class from agent_context.py"""
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.ContextAnnotation import ContextAnnotation
 from src.logic.agents.cognitive.context.models.ContextPriority import ContextPriority
 from src.logic.agents.cognitive.context.models.ContextTag import ContextTag
@@ -37,19 +29,18 @@ from src.logic.agents.cognitive.context.models.ContextTemplate import ContextTem
 from src.logic.agents.cognitive.context.models.ContextVersion import ContextVersion
 from src.logic.agents.cognitive.context.models.FileCategory import FileCategory
 from src.core.base.models import ValidationRule
-
 from src.core.base.BaseAgent import BaseAgent
 from src.logic.agents.cognitive.core.LocalRAGCore import LocalRAGCore, RAGShard
-from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 import hashlib
 import json
 import logging
 import re
 import zlib
+
+__version__ = VERSION
 
 # Default templates for common file types
 DEFAULT_TEMPLATES: Dict[str, ContextTemplate] = {

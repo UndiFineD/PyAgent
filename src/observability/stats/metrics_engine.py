@@ -1,62 +1,19 @@
 #!/usr/bin/env python3
-<<<<<<< HEAD
-<<<<<<< HEAD
-from __future__ import annotations
 # Copyright 2026 PyAgent Authors
 # Unified logic for metric calculation, processing, and management.
 
-
-import json
-import logging
-import time
-from dataclasses import asdict
-from pathlib import Path
-from typing import Any
-
-from src.observability.reports.grafana_generator import GrafanaDashboardGenerator
-
-from src.observability.stats.metrics_core import TokenCostResult
-
-# Import pure calculation cores
-from .metrics_core import ModelFallbackCore, TokenCostCore
-from .observability_core import AgentMetric, ObservabilityCore
-
-try:
-    import rust_core as rc
-except ImportError:
-    rc = None
-
-from .exporters import MetricsExporter, OTelManager, PrometheusExporter
-from src.core.base.lifecycle.version import VERSION
-
-
-__version__: str = VERSION
-
-logger: logging.Logger = logging.getLogger(__name__)
-
-
-class ObservabilityEngine:
-    """Provides telemetry and performance tracking for the agent fleet."""
-
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-# Copyright 2026 PyAgent Authors
-# Unified logic for metric calculation, processing, and management.
 from __future__ import annotations
 import json
 import logging
 import math
 import zlib
-import asyncio
-from datetime import datetime, timedelta
+from datetime import datetime
 from dataclasses import dataclass, field, asdict
-from typing import Dict, List, Any, Optional, Tuple, Union, TYPE_CHECKING, Callable
+from typing import Dict, List, Any, Optional, Tuple, Union, Callable
 from pathlib import Path
-
 from .observability_core import *
-
 from src.core.base.version import VERSION
+
 __version__ = VERSION
 
 logger = logging.getLogger(__name__)
@@ -64,10 +21,6 @@ logger = logging.getLogger(__name__)
 class ObservabilityEngine:
     """Provides telemetry and performance tracking for the agent fleet."""
     
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
     def __init__(self, workspace_root: str = None, fleet: Any = None) -> None:
         if fleet and hasattr(fleet, "workspace_root"):
             self.workspace_root = Path(fleet.workspace_root)
@@ -75,53 +28,22 @@ class ObservabilityEngine:
             self.workspace_root = Path(workspace_root)
         else:
             self.workspace_root = Path(".")
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-        self.telemetry_file: Path = self.workspace_root / ".agent_telemetry.json"
-        self.core = ObservabilityCore()
-        self.metrics: list[AgentMetric] = []
-        self._start_times: dict[str, float] = {}
-        self._otel_spans: dict[str, str] = {}  # Map trace_id -> tel_span_id
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
             
         self.telemetry_file = self.workspace_root / ".agent_telemetry.json"
         self.core = ObservabilityCore()
         self.metrics: List[AgentMetric] = []
         self._start_times: Dict[str, float] = {}
         self._otel_spans: Dict[str, str] = {} # Map trace_id -> tel_span_id
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         self.cost_engine = TokenCostEngine()
         self.prometheus = PrometheusExporter()
         self.otel = OTelManager()
         self.metrics_exporter = MetricsExporter()
-<<<<<<< HEAD
-<<<<<<< HEAD
-        self.log_buffer: list[dict[str, Any]] = []
-=======
         self.log_buffer: List[Dict[str, Any]] = []
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
-        self.log_buffer: List[Dict[str, Any]] = []
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         self.load()
 
     def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:
         """Logs a system event in a structured format for ELK.
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
         
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
-        
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         Args:
             agent_id: The ID of the agent generating the event.
             event_type: The category of event (e.g., 'task_complete', 'error').
@@ -130,28 +52,10 @@ class ObservabilityEngine:
         """
         # Noise Reduction: Only store significant events in the persistent log buffer.
         # Metrics are still recorded for everything.
-<<<<<<< HEAD
-<<<<<<< HEAD
-        important_types: list[str] = [
-            "agent_failure",
-            "security_alert",
-            "workflow_error",
-            "system_crash",
-        ]
-        important_levels: list[str] = ["ERROR", "WARNING", "CRITICAL"]
-
-        should_log: bool = level in important_levels or event_type in important_types
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         important_types = ["agent_failure", "security_alert", "workflow_error", "system_crash"]
         important_levels = ["ERROR", "WARNING", "CRITICAL"]
         
         should_log = level in important_levels or event_type in important_types
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 
         if should_log:
             event = {
@@ -159,46 +63,20 @@ class ObservabilityEngine:
                 "agent_id": agent_id,
                 "event_type": event_type,
                 "level": level,
-<<<<<<< HEAD
-<<<<<<< HEAD
-                "data": data,
-            }
-            self.log_buffer.append(event)
-
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
                 "data": data
             }
             self.log_buffer.append(event)
             
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         # Always record metrics regardless of log storage
         self.prometheus.record_metric("agent_events_total", 1.0, {"agent": agent_id, "type": event_type})
         self.metrics_exporter.record_agent_call(agent_id, 0.0, True)
 
     def export_to_elk(self) -> str:
         """Simulates exporting log buffer to ELK stack."""
-<<<<<<< HEAD
-<<<<<<< HEAD
-        count: int = len(self.log_buffer)
-        # In real scenario: push to Elasticsearch/Logstash
-        json.dumps(self.log_buffer)
-        self.log_buffer = []
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         count = len(self.log_buffer)
         # In real scenario: push to Elasticsearch/Logstash
         log_batch = json.dumps(self.log_buffer)
         self.log_buffer = [] 
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         self.metrics_exporter.export_to_grafana()
         return f"Exported {count} events to ELK/Logstash."
 
@@ -206,22 +84,6 @@ class ObservabilityEngine:
         """Returns Prometheus scrape response."""
         return self.metrics_exporter.get_prometheus_payload()
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-    def generate_dashboard(self, shard_name: str | None = None) -> str:
-        """
-        Triggers Grafana JSON dashboard generation (Phase 126).
-        """
-        try:
-            generator = GrafanaDashboardGenerator(self.workspace_root / "deploy" / "grafana")
-            if shard_name:
-                return generator.generate_shard_obs(shard_name)
-            return generator.generate_fleet_summary()
-        except RuntimeError as e:
-            return f"Error: GrafanaDashboardGenerator not available: {e}"
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
     def generate_dashboard(self, shard_name: Optional[str] = None) -> str:
         """
         Triggers Grafana JSON dashboard generation (Phase 126).
@@ -232,97 +94,21 @@ class ObservabilityEngine:
                 return generator.generate_shard_obs(shard_name)
             return generator.generate_fleet_summary()
         return "Error: GrafanaGenerator not available."
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 
     def start_trace(self, trace_id: str) -> None:
         """Start timing an operation."""
         self._start_times[trace_id] = time.time()
         # Also start OTel span and store its UUID
-<<<<<<< HEAD
-<<<<<<< HEAD
-        span_id: str = self.otel.start_span(trace_id)
-        self._otel_spans[trace_id] = span_id
-
-    def end_trace(
-        self,
-        trace_id: str,
-        agent_name: str,  # noqa: ARG002
-        operation: str,  # noqa: ARG002
-        status: str = "success",
-        input_tokens: int = 0,  # noqa: ARG002
-        output_tokens: int = 0,  # noqa: ARG002
-        model: str = "unknown",  # noqa: ARG002
-        metadata: dict[str, Any] | None = None,
-    ) -> None:
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         span_id = self.otel.start_span(trace_id)
         self._otel_spans[trace_id] = span_id
 
     def end_trace(self, trace_id: str, agent_name: str, operation: str, status: str = "success", 
                   input_tokens: int = 0, output_tokens: int = 0, model: str = "unknown",
                   metadata: Optional[Dict[str, Any]] = None) -> None:
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         """End timing and record metric with cost estimation."""
         if trace_id not in self._start_times:
             logging.warning(f"No start trace found for {trace_id}")
             return
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-        _duration: float = (time.time() - self._start_times.pop(trace_id)) * 1000  # noqa: F841
-
-        # End OTel span using the stored span_id
-        otel_span_id: str | None = self._otel_spans.pop(trace_id, None)
-        if otel_span_id:
-            self.otel.end_span(otel_span_id, status=status, attributes=metadata)
-
-    def consolidate_telemetry(self) -> dict[str, float]:
-        """Aggregate metrics using Rust high-throughput engine."""
-        if rc and hasattr(rc, "aggregate_metrics_rust"):
-            data_map = self._build_data_map()
-            try:
-                aggregated_results = rc.aggregate_metrics_rust(data_map)  # type: ignore
-                return aggregated_results
-            except (AttributeError, RuntimeError) as e:  # pylint: disable=broad-exception-caught
-                logger.warning("Rust metric aggregation failed: %s", e)
-                import traceback
-                traceback.print_exc()
-        return self._python_aggregate_metrics()
-
-    def _build_data_map(self) -> dict[str, list[float]]:
-        data_map: dict[str, list[float]] = {}
-        for m in self.metrics:
-            key = f"{m.agent_name}:{m.operation}"
-            if key not in data_map:
-                data_map[key] = []
-            data_map[key].append(m.duration_ms)
-        return data_map
-
-    def _python_aggregate_metrics(self) -> dict[str, float]:
-        counts: dict[str, int] = {}
-        sums: dict[str, float] = {}
-        for m in self.metrics:
-            key = f"{m.agent_name}:{m.operation}"
-            counts[key] = counts.get(key, 0) + 1
-            sums[key] = sums.get(key, 0.0) + m.duration_ms
-        aggregated_results: dict[str, float] = {}
-        for key, total in sums.items():
-            if counts[key] > 0:
-                aggregated_results[key] = total / counts[key]
-        return aggregated_results
-
-    def get_reliability_weights(self, agent_names: list[str]) -> list[float]:
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
             
         duration = (time.time() - self._start_times.pop(trace_id)) * 1000
         
@@ -359,60 +145,11 @@ class ObservabilityEngine:
             self.metrics = self.metrics[-500:] # Prune memory
 
     def get_reliability_weights(self, agent_names: List[str]) -> List[float]:
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         """Exposes core reliability logic for consensus protocols."""
         return self.core.calculate_reliability_scores(agent_names)
 
     def trace_workflow(self, workflow_name: str, duration: float) -> None:
         """Records a workflow trace for OpenTelemetry visualization."""
-<<<<<<< HEAD
-<<<<<<< HEAD
-        self.prometheus.record_metric("workflow_duration_seconds", duration, {"workflow": workflow_name})
-        self.log_event(
-            "system",
-            "workflow_trace",
-            {"workflow": workflow_name, "duration": duration},
-        )
-
-    def get_summary(self) -> dict[str, Any]:
-        """Returns a summary of performance and cost metrics."""
-        if not self.metrics:
-            return {"status": "No data"}
-
-        count = len(self.metrics)
-        total_latency = sum(m.duration_ms for m in self.metrics)
-        success_count = sum(1 for m in self.metrics if m.status == "success")
-        agent_stats = self._aggregate_agent_stats()
-
-        summary = {
-            "total_calls": count,
-            "avg_latency_ms": round(total_latency / count, 2),
-            "success_rate": round(success_count / count * 100, 2),
-            "total_tokens": sum(m.token_count for m in self.metrics),
-            "total_cost_usd": round(sum(m.estimated_cost for m in self.metrics), 6),
-            "agents": agent_stats,
-        }
-        return summary
-
-    def _aggregate_agent_stats(self) -> dict[str, dict[str, float]]:
-        agents: dict[str, dict[str, float]] = {}
-        for m in self.metrics:
-            if m.agent_name not in agents:
-                agents[m.agent_name] = {"calls": 0, "latency": 0.0, "cost": 0.0}
-            a = agents[m.agent_name]
-            a["calls"] += 1
-            a["latency"] += m.duration_ms
-            a["cost"] += m.estimated_cost
-        for _name, data in agents.items():
-            data["avg_latency"] = round(data["latency"] / data["calls"], 2) if data["calls"] else 0.0
-            data["total_cost"] = round(data["cost"], 6)
-        return agents
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
         self.prometheus.record_metric(
             "workflow_duration_seconds",
             duration,
@@ -449,74 +186,24 @@ class ObservabilityEngine:
             del summary["agents"][agent]["cost"]
             
         return summary
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 
     def save(self) -> None:
         """Persist telemetry to disk."""
         try:
-<<<<<<< HEAD
-<<<<<<< HEAD
-            data: list[dict[str, Any]] = [asdict(m) for m in self.metrics]
-            self.telemetry_file.write_text(json.dumps(data, indent=2))
-        except (OSError, TypeError) as e:  # pylint: disable=broad-exception-caught, unused-variable
-            logging.error(f"Failed to save telemetry: {e}")
-            import traceback
-            traceback.print_exc()
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
             data = [asdict(m) for m in self.metrics]
             self.telemetry_file.write_text(json.dumps(data, indent=2))
         except Exception as e:
             logging.error(f"Failed to save telemetry: {e}")
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
 
     def load(self) -> None:
         """Load telemetry from disk."""
         if self.telemetry_file.exists():
             try:
                 data = json.loads(self.telemetry_file.read_text())
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-                self.metrics = [AgentMetric(**m) for m in data]
-            except (json.JSONDecodeError, TypeError, ValueError) as e:
-                logging.error(f"Failed to load telemetry: {e}")
-                import traceback
-                traceback.print_exc()
-                self.metrics = []
-
-
-class TokenCostEngine:
-    def __init__(self) -> None:
-        self.core = TokenCostCore()
-
-    def calculate_cost(self, model: str, input_tokens: int = 0, output_tokens: int = 0) -> float:
-        res: TokenCostResult = self.core.calculate_cost(input_tokens, output_tokens, model)
-        return res.total_cost
-
-
-class ModelFallbackEngine:
-    def __init__(self, cost_engine=None) -> None:
-        self.cost_engine = cost_engine
-        self.core = ModelFallbackCore()
-
-    def get_fallback_model(self, current_model: str) -> str:
-        return self.core.determine_next_model(current_model)
-=======
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
                 self.metrics = [AgentMetric(**m) for m in data]
             except Exception as e:
                 logging.error(f"Failed to load telemetry: {e}")
                 self.metrics = []
-
 
 class DerivedMetricCalculator:
     """Calculate derived metrics from dependencies using safe AST evaluation."""
@@ -551,11 +238,16 @@ class DerivedMetricCalculator:
             if isinstance(node.func, ast.Name):
                 func_name = node.func.id
                 args = [self._eval_node(a) for a in node.args]
-                if func_name == "abs": return abs(args[0])
-                if func_name == "max": return max(args)
-                if func_name == "min": return min(args)
-                if func_name == "sqrt": return math.sqrt(args[0])
-                if func_name == "pow": return math.pow(args[0], args[1])
+                if func_name == "abs":
+                    return abs(args[0])
+                if func_name == "max":
+                    return max(args)
+                if func_name == "min":
+                    return min(args)
+                if func_name == "sqrt":
+                    return math.sqrt(args[0])
+                if func_name == "pow":
+                    return math.pow(args[0], args[1])
             raise TypeError(f"Unsupported function: {node.func}")
         else:
             raise TypeError(f"Unsupported operation in formula: {type(node)}")
@@ -650,7 +342,6 @@ class DerivedMetricCalculator:
             if value is not None:
                 results[name] = value
         return results
-
 
 class CorrelationAnalyzer:
     """Analyze correlations between metrics.
@@ -760,7 +451,6 @@ class CorrelationAnalyzer:
 
         return matrix
 
-
 class FormulaEngine:
     """Processes metric formulas and calculations using safe AST evaluation.
     
@@ -803,7 +493,6 @@ class FormulaEngine:
         """Validate formula syntax (backward compat)."""
         return self.validate(formula).is_valid
 
-
 class FormulaEngineCore:
     """Pure logic core for formula calculations."""
 
@@ -825,7 +514,8 @@ class FormulaEngineCore:
             if isinstance(node.value, (int, float)):
                 return float(node.value)
             raise TypeError(f"Constant of type {type(node.value)} is not a number")
-        elif hasattr(ast, "Num") and isinstance(node, ast.Num): # type: ignore
+        elif hasattr(ast, "Num") and isinstance(node, ast.Num):
+            # type: ignore
              return float(node.n) # type: ignore
         elif isinstance(node, ast.BinOp):
             return self.operators[type(node.op)](self._eval_node(node.left), self._eval_node(node.right))
@@ -877,13 +567,11 @@ class FormulaEngineCore:
         except Exception as e:
             return {"is_valid": False, "error": str(e)}
 
-
 @dataclass
 class FormulaValidation:
     """Result of formula validation."""
     is_valid: bool = True
     error: str = ""
-
 
 class ResourceMonitor:
     """Monitors local system load to inform agent execution strategies."""
@@ -985,7 +673,6 @@ if __name__ == "__main__":
     print(json.dumps(mon.get_current_stats(), indent=2))
     print(f"Recommendation: {mon.get_execution_recommendation()}")
 
-
 class RetentionEnforcer:
     """Enforces retention policies on metrics."""
     def __init__(self) -> None:
@@ -1042,7 +729,6 @@ class RetentionEnforcer:
                 result[metric] = values
         return result
 
-
 class TokenCostEngine:
     """
     Calculates estimated costs for LLM tokens based on model variety.
@@ -1061,7 +747,6 @@ class TokenCostEngine:
     def get_supported_models(self) -> list:
         """Returns list of models with explicit pricing."""
         return self.core.list_models()
-
 
 class TokenCostCore:
     """
@@ -1091,7 +776,6 @@ class TokenCostCore:
 
     def list_models(self) -> List[str]:
         return list(MODEL_COSTS.keys())
-
 
 class ModelFallbackEngine:
     """
@@ -1131,7 +815,6 @@ if __name__ == "__main__":
     print(f"Fallback for gpt-4o: {fallback.get_fallback_model('gpt-4o')}")
     print(f"Cheapest of [gpt-4o, gpt-4o-mini]: {fallback.get_cheapest_model(['gpt-4o', 'gpt-4o-mini'])}")
 
-
 class ModelFallbackCore:
     """Pure logic core for model fallback strategies."""
 
@@ -1163,7 +846,6 @@ class ModelFallbackCore:
     def validate_retry_limit(self, current_retry: int, max_retries: int) -> bool:
         """Logic for retry boundaries."""
         return current_retry < max_retries
-
 
 class StatsRollupCalculator:
     """Calculates metric rollups."""
@@ -1230,7 +912,6 @@ class StatsRollupCalculator:
         elif aggregation_type == AggregationType.COUNT:
             return float(len(metrics))
         return 0.0
-
 
 class StatsRollup:
     """Aggregate metrics into rollup views.
@@ -1364,7 +1045,6 @@ class StatsRollup:
         """
         return self.rollups.get(name, [])[-limit:]
 
-
 class StatsChangeDetector:
     """Detects changes in metric values."""
     def __init__(self, threshold: float = 0.1, threshold_percent: Optional[float] = None) -> None:
@@ -1422,7 +1102,6 @@ class StatsChangeDetector:
     def get_changes(self) -> List[Dict[str, Any]]:
         """Return recorded changes."""
         return list(self._changes)
-
 
 class StatsForecaster:
     """Forecasts future metric values."""
@@ -1483,7 +1162,6 @@ class StatsForecaster:
             "confidence_lower": lower,
             "confidence_upper": upper,
         }
-
 
 class StatsQueryEngine:
     """Queries metrics with time range and aggregation."""
@@ -1556,7 +1234,6 @@ class StatsQueryEngine:
         if name not in self.metrics:
             self.metrics[name] = []
         self.metrics[name].append(metric)
-
 
 class ABComparisonEngine:
     """Compare stats between different code versions (A / B testing).
@@ -1691,7 +1368,6 @@ class ABComparisonEngine:
             "metrics_b_count": len(comp.metrics_b)
         }
 
-
 class ABComparator:
     """Compares A/B test metrics."""
     def __init__(self) -> None:
@@ -1729,14 +1405,12 @@ class ABComparator:
         p_value = 0.01 if abs(effect) >= 1.0 else 0.5
         return ABSignificanceResult(p_value=p_value, is_significant=p_value < alpha, effect_size=effect)
 
-
 @dataclass
 class ABComparisonResult:
     """Result of comparing two metric groups."""
 
     metrics_compared: int
     differences: Dict[str, float] = field(default_factory=lambda: {})
-
 
 @dataclass
 class ABSignificanceResult:
@@ -1745,7 +1419,6 @@ class ABSignificanceResult:
     p_value: float
     is_significant: bool
     effect_size: float = 0.0
-
 
 @dataclass
 class ABComparison:
@@ -1757,7 +1430,6 @@ class ABComparison:
     metrics_b: Dict[str, float] = field(default_factory=lambda: {})
     winner: str = ""
     confidence: float = 0.0
-
 
 class AnnotationManager:
     """Manage metric annotations and comments.
@@ -1866,7 +1538,6 @@ class AnnotationManager:
             "type": a.annotation_type
         } for a in data], indent=2)
 
-
 class StatsAnnotationManager:
     """Manages annotations on metrics."""
 
@@ -1906,7 +1577,6 @@ class StatsAnnotationManager:
     def get_annotations(self, metric: str) -> List[MetricAnnotation]:
         """Get annotations for metric."""
         return self.annotations.get(metric, [])
-
 
 class SubscriptionManager:
     """Manage metric subscriptions and change notifications.
@@ -2032,7 +1702,6 @@ class SubscriptionManager:
             "notification_counts": dict(self._notification_count)
         }
 
-
 class StatsSubscriptionManager:
     """Manages metric subscriptions."""
     def __init__(self) -> None:
@@ -2116,7 +1785,6 @@ class StatsSubscriptionManager:
                 except Exception:
                     logging.debug(f"Delivery handler {sub.delivery_method} failed for {metric}")
 
-
 class ThresholdAlertManager:
     """Manages threshold-based alerting."""
     def __init__(self) -> None:
@@ -2183,7 +1851,6 @@ class ThresholdAlertManager:
     def check_value(self, metric: str, value: float) -> bool:
         """Compatibility wrapper: return True if any alert triggered."""
         return len(self.check(metric, value)) > 0
-
 
 class StatsBackupManager:
     """Manages backups of stats."""
@@ -2253,7 +1920,6 @@ class StatsBackupManager:
                     names.add(candidate.stem)
         return sorted(names)
 
-
 @dataclass
 class StatsBackup:
     """A persisted backup entry for StatsBackupManager."""
@@ -2261,7 +1927,6 @@ class StatsBackup:
     name: str
     path: Path
     timestamp: str
-
 
 class StatsCompressor:
     """Compresses metric data."""
@@ -2292,7 +1957,6 @@ class StatsCompressor:
             return json.loads(payload.decode("utf-8"))
         except Exception:
             return payload
-
 
 class StatsSnapshotManager:
     """Manages snapshots of stats state.
@@ -2363,7 +2027,6 @@ class StatsSnapshotManager:
                     names.add(candidate.stem)
         return sorted(names)
 
-
 class StatsAccessController:
     """Controls access to stats."""
     def __init__(self) -> None:
@@ -2411,7 +2074,6 @@ class StatsAccessController:
         """Check if user has access."""
         return user in self.permissions and resource in self.permissions[user]
 
-
 class StatsStreamManager:
     """Manages real-time stats streaming."""
     def __init__(self, config: Optional[StreamingConfig] = None) -> None:
@@ -2450,7 +2112,6 @@ class StatsStreamManager:
                     callback(data)
                 except Exception:
                     logging.debug(f"Stream subscriber for {stream_name} failed.")
-
 
 class StatsStreamer:
     """Real-time stats streaming via WebSocket for live dashboards.
@@ -2566,7 +2227,6 @@ class StatsStreamer:
                 notified += 1
         return notified
 
-
 class StatsStream:
     """Represents a real-time stats stream."""
     def __init__(self, name: str, buffer_size: int = 1000) -> None:
@@ -2585,9 +2245,6 @@ class StatsStream:
         # Enforce buffer size limit
         if len(self.buffer) > self.buffer_size:
             self.buffer.pop(0)
-
-
-
 
 class AggregationResult(Dict[str, Any]):
     """Compatibility class that behaves like both a dict and a float."""
@@ -2785,7 +2442,6 @@ class StatsFederation:
             }
         return status
 
-
 class StatsAPIServer:
     """Stats API endpoint for programmatic access.
 
@@ -2909,7 +2565,6 @@ class StatsAPIServer:
 
         return json.dumps(docs, indent=2)
 
-
 @dataclass
 class APIEndpoint:
     """Stats API endpoint configuration."""
@@ -2918,7 +2573,6 @@ class APIEndpoint:
     auth_required: bool = True
     rate_limit: int = 100  # requests per minute
     cache_ttl: int = 60  # seconds
-
 
 class MetricNamespaceManager:
     """Manage metric namespaces for organizing large metric sets.
@@ -3032,9 +2686,3 @@ class MetricNamespaceManager:
             Full path string like "root / parent / child".
         """
         return " / ".join(self.get_namespace_hierarchy(namespace))
-
-
-<<<<<<< HEAD
->>>>>>> a0089ee17 (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))
-=======
->>>>>>> 97f058faa (Phase 154 Complete: Stats & Observability Consolidation (77 files -> 3 modules))

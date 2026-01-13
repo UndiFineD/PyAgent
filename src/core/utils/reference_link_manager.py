@@ -11,17 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-
-from src.core.base.common.types.linked_reference import LinkedReference
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.version import VERSION
+from .LinkedReference import LinkedReference
+from typing import Dict, List
 
 __version__ = VERSION
-
 
 class ReferenceLinkManager:
     """Manages links to commits and issues in changelog entries.
@@ -39,9 +43,15 @@ class ReferenceLinkManager:
 
     def __init__(self) -> None:
         """Initialize the reference link manager."""
-        self.references: dict[str, list[LinkedReference]] = {}
+        self.references: Dict[str, List[LinkedReference]] = {}
 
-    def add_commit_reference(self, entry_id: str, commit_sha: str, url: str = "", title: str = "") -> LinkedReference:
+    def add_commit_reference(
+        self,
+        entry_id: str,
+        commit_sha: str,
+        url: str = "",
+        title: str = ""
+    ) -> LinkedReference:
         """Add a commit reference to an entry.
 
         Args:
@@ -53,13 +63,24 @@ class ReferenceLinkManager:
         Returns:
             The created LinkedReference.
         """
-        ref = LinkedReference(ref_type="commit", ref_id=commit_sha[:7], url=url, title=title)
+        ref = LinkedReference(
+            ref_type="commit",
+            ref_id=commit_sha[:7],
+            url=url,
+            title=title
+        )
         if entry_id not in self.references:
             self.references[entry_id] = []
         self.references[entry_id].append(ref)
         return ref
 
-    def add_issue_reference(self, entry_id: str, issue_number: str, url: str = "", title: str = "") -> LinkedReference:
+    def add_issue_reference(
+        self,
+        entry_id: str,
+        issue_number: str,
+        url: str = "",
+        title: str = ""
+    ) -> LinkedReference:
         """Add an issue reference to an entry.
 
         Args:
@@ -71,7 +92,12 @@ class ReferenceLinkManager:
         Returns:
             The created LinkedReference.
         """
-        ref = LinkedReference(ref_type="issue", ref_id=f"#{issue_number}", url=url, title=title)
+        ref = LinkedReference(
+            ref_type="issue",
+            ref_id=f"#{issue_number}",
+            url=url,
+            title=title
+        )
         if entry_id not in self.references:
             self.references[entry_id] = []
         self.references[entry_id].append(ref)

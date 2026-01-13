@@ -11,21 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .ABTestVariant import ABTestVariant
+from typing import Any, Dict, Optional, Tuple
 import threading
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .ab_test_variant import ABTestVariant
 
 __version__ = VERSION
-
 
 class ABTester:
     """Conducts A / B tests across backends.
@@ -46,8 +47,8 @@ class ABTester:
 
     def __init__(self) -> None:
         """Initialize A / B tester."""
-        self._tests: dict[str, dict[str, ABTestVariant]] = {}
-        self._assignments: dict[str, dict[str, str]] = {}  # test -> user -> variant
+        self._tests: Dict[str, Dict[str, ABTestVariant]] = {}
+        self._assignments: Dict[str, Dict[str, str]] = {}  # test -> user -> variant
         self._lock = threading.Lock()
 
     def create_test(
@@ -56,7 +57,7 @@ class ABTester:
         backend_a: str,
         backend_b: str,
         weight_a: float = 0.5,
-    ) -> tuple[ABTestVariant, ABTestVariant]:
+    ) -> Tuple[ABTestVariant, ABTestVariant]:
         """Create an A / B test.
 
         Args:
@@ -92,7 +93,7 @@ class ABTester:
         self,
         test_name: str,
         user_id: str,
-    ) -> ABTestVariant | None:
+    ) -> Optional[ABTestVariant]:
         """Assign user to a variant.
 
         Args:
@@ -114,7 +115,6 @@ class ABTester:
 
             # Assign based on weights
             import random
-
             variant_a = test["A"]
             if random.random() < variant_a.weight:
                 variant_name = "A"
@@ -151,9 +151,11 @@ class ABTester:
                     variant.metrics[metric] = value
                 else:
                     n = variant.sample_count
-                    variant.metrics[metric] = (variant.metrics[metric] * (n - 1) + value) / n
+                    variant.metrics[metric] = (
+                        variant.metrics[metric] * (n - 1) + value
+                    ) / n
 
-    def get_results(self, test_name: str) -> dict[str, Any] | None:
+    def get_results(self, test_name: str) -> Optional[Dict[str, Any]]:
         """Get test results.
 
         Args:
@@ -185,7 +187,7 @@ class ABTester:
         test_name: str,
         metric: str,
         higher_is_better: bool = True,
-    ) -> str | None:
+    ) -> Optional[str]:
         """Determine winning variant.
 
         Args:
@@ -201,8 +203,8 @@ class ABTester:
             if not test:
                 return None
 
-            best_name: str | None = None
-            best_value: float | None = None
+            best_name: Optional[str] = None
+            best_value: Optional[float] = None
 
             for name, variant in test.items():
                 value = variant.metrics.get(metric)

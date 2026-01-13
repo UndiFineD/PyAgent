@@ -13,13 +13,11 @@
 # limitations under the License.
 
 from __future__ import annotations
-
 import os
-import time
 import logging
 import threading
 from pathlib import Path
-from typing import Dict, Any, Optional, ContextManager
+from typing import Dict, Optional, ContextManager
 from contextlib import contextmanager
 
 try:

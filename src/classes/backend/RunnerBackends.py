@@ -1,18 +1,69 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Backend implementation handlers for SubagentRunner."""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import logging
 import os
 import subprocess
 import json
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Optional
+
+__version__ = VERSION
 
 class BackendHandlers:
     """Namespace for backend execution logic."""
+
+    @staticmethod
+    def _parse_content(text: str) -> Any:
+        if "[IMAGE_DATA:" not in text:
+            return text
+            
+        parts = []
+        import re
+        # Find [IMAGE_DATA:base64]
+        pattern = r"\[IMAGE_DATA:([^\]\s]+)\]"
+        last_idx = 0
+        for match in re.finditer(pattern, text):
+            pre_text = text[last_idx:match.start()].strip()
+            if pre_text:
+                parts.append({"type": "text", "text": pre_text})
+            
+            image_data = match.group(1)
+            if not image_data.startswith("data:image"):
+                image_data = f"data:image/png;base64,{image_data}"
+                
+            parts.append({
+                "type": "image_url",
+                "image_url": {"url": image_data}
+            })
+            last_idx = match.end()
+            
+        remaining = text[last_idx:].strip()
+        if remaining:
+            parts.append({"type": "text", "text": remaining})
+            
+        return parts if parts else text
 
     @staticmethod
     def build_full_prompt(description: str, prompt: str, original_content: str) -> str:
@@ -126,6 +177,7 @@ class BackendHandlers:
 
         logging.debug(f"Attempting GitHub Models (model: {model})")
         try:
+            content = BackendHandlers._parse_content(full_prompt)
             headers = {
                 "Authorization": f"Bearer {token}",
                 "Content-Type": "application/json"
@@ -133,18 +185,20 @@ class BackendHandlers:
             payload = {
                 "messages": [
                     {"role": "system", "content": "You are a helpful coding assistant."},
-                    {"role": "user", "content": full_prompt}
+                    {"role": "user", "content": content}
                 ],
                 "model": model,
                 "temperature": 0.1,
                 "max_tokens": 4096
             }
-            response = requests_lib.post(f"{base_url}/chat/completions", headers=headers, json=payload, timeout=120)
+            url = f"{base_url}/v1/chat/completions"
+            response = requests_lib.post(url, headers=headers, data=json.dumps(payload), timeout=120)
             response.raise_for_status()
             data = response.json()
             return data["choices"][0]["message"]["content"].strip()
         except Exception as e:
-            logging.warning(f"GitHub Models error: {e}")
+            # Lowered logging level for fallback-friendly behavior (Phase 123)
+            logging.debug(f"GitHub Models error: {e}")
             return None
 
     @staticmethod
@@ -161,6 +215,7 @@ class BackendHandlers:
             return None
 
         try:
+            content = BackendHandlers._parse_content(full_prompt)
             headers = {
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json"
@@ -169,7 +224,7 @@ class BackendHandlers:
                 "model": model,
                 "messages": [
                     {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": full_prompt}
+                    {"role": "user", "content": content}
                 ],
                 "temperature": 0
             }
@@ -180,4 +235,3 @@ class BackendHandlers:
         except Exception as e:
             logging.warning(f"OpenAI API error: {e}")
             return None
-

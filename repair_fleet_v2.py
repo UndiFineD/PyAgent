@@ -1,7 +1,33 @@
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+"""Script for repairing specific import corruption patterns in the fleet."""
+
+from __future__ import annotations
+from src.core.base.version import VERSION
 import os
 import re
 
-def repair():
+__version__ = VERSION
+
+def repair() -> None:
+    """Repair multiple types of import and string formatting corruption."""
     for root, _, files in os.walk("src"):
         for file in files:
             if file.endswith(".py"):
@@ -24,7 +50,7 @@ def repair():
                     content = content.replace("from typing from functools import lru_cache", "from typing import Any, Dict, List\nfrom functools import lru_cache")
                     content = content.replace("from dataclasses from functools import lru_cache", "from dataclasses import dataclass\nfrom functools import lru_cache")
                     content = content.replace("from .CodeLanguage from functools import lru_cache", "from .CodeLanguage import CodeLanguage\nfrom functools import lru_cache")
-                    content = content.replace("from src.classes.base_agent from functools import lru_cache", "from src.classes.base_agent.agent import BaseAgent\nfrom functools import lru_cache")
+                    content = content.replace("from src.core.base.BaseAgent from functools import lru_cache", "from src.core.base.BaseAgent import BaseAgent\nfrom functools import lru_cache")
                     content = content.replace("from fastapi from functools import lru_cache", "from fastapi import FastAPI\nfrom functools import lru_cache")
 
                     # 2. Fix nested quotes in logging

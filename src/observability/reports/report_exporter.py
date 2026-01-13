@@ -11,24 +11,26 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .CodeIssue import CodeIssue
+from .ExportFormat import ExportFormat
+from pathlib import Path
+from typing import List, Optional
 import json
 import logging
 import re
-from pathlib import Path
-
-from src.core.base.lifecycle.version import VERSION
-
-from .code_issue import CodeIssue
-from .export_format import ExportFormat
 
 __version__ = VERSION
-
 
 class ReportExporter:
     """Exporter for various report formats.
@@ -55,17 +57,17 @@ class ReportExporter:
 
         # Simple markdown to HTML conversion
         html_content = content
-        html_content = re.sub(r"# (.+)$", r"<h1>\1</h1>", html_content, flags=re.MULTILINE)
-        html_content = re.sub(r"## (.+)$", r"<h2>\1</h2>", html_content, flags=re.MULTILINE)
-        html_content = re.sub(r"^- (.+)$", r"<li>\1</li>", html_content, flags=re.MULTILINE)
-        html_content = re.sub(r"`([^`]+)`", r"<code>\1</code>", html_content)
+        html_content = re.sub(r'# (.+)$', r'<h1>\1</h1>', html_content, flags=re.MULTILINE)
+        html_content = re.sub(r'## (.+)$', r'<h2>\1</h2>', html_content, flags=re.MULTILINE)
+        html_content = re.sub(r'^- (.+)$', r'<li>\1</li>', html_content, flags=re.MULTILINE)
+        html_content = re.sub(r'`([^`]+)`', r'<code>\1</code>', html_content)
         return f"""<!DOCTYPE html>
 <html>
 <head><title>{title}</title></head>
 <body>{html_content}</body>
 </html>"""
 
-    def to_csv(self, issues: list[CodeIssue]) -> str:
+    def to_csv(self, issues: List[CodeIssue]) -> str:
         """Export issues to CSV.
         Args:
             issues: List of issues.
@@ -81,7 +83,12 @@ class ReportExporter:
             )
         return "\n".join(lines)
 
-    def export(self, content: str, format: ExportFormat, output_path: Path | None = None) -> str:
+    def export(
+        self,
+        content: str,
+        format: ExportFormat,
+        output_path: Optional[Path] = None
+    ) -> str:
         """Export report to format.
         Args:
             content: Report content.

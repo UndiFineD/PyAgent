@@ -11,21 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
-import re
-from collections.abc import Callable
+from src.core.base.version import VERSION
 from pathlib import Path
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
+from typing import Any, Callable
+import re
 
 __version__ = VERSION
-
 
 class AssertionHelpers:
     """Helper functions for common assertions in tests."""
@@ -89,7 +90,7 @@ class AssertionHelpers:
         try:
             fn(*args)
             raise AssertionError(f"Expected {exception_type.__name__} but no exception was raised")
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except BaseException as e:
             if isinstance(e, exception_type):
                 assert message in str(e), f"Exception message '{str(e)}' does not contain '{message}'"
                 return True

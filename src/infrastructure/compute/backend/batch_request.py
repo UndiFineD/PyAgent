@@ -11,20 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from dataclasses import dataclass, field
+from typing import List
 import time
 import uuid
-from dataclasses import dataclass, field
-
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 @dataclass
 class BatchRequest:
@@ -37,7 +40,7 @@ class BatchRequest:
         processed_count: Number processed so far.
     """
 
-    requests: list[str]
+    requests: List[str]
     batch_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     created_at: float = field(default_factory=time.time)
     processed_count: int = 0

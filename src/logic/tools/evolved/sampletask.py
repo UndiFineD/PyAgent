@@ -10,24 +10,26 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """A sample automated GUI task."""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import pyautogui
-
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.utilities import as_tool
 
 __version__ = VERSION
-
 
 @as_tool
 def sample_automated_task() -> None:
     """Automated task from sample recording."""
     pyautogui.click(100, 200)
-    pyautogui.press("a")
-    pyautogui.press("enter")
+    pyautogui.press('a')
+    pyautogui.press('enter')
     pyautogui.click(150, 250)

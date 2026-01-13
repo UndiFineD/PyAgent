@@ -11,20 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in code generation, refactoring, and style enforcement."""
 
-# pylint: disable=too-many-ancestors
-
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import sys
 from pathlib import Path
-
-from src.core.base.common.base_utilities import create_main_function
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.development.coder_agent import CoderAgent
+from src.logic.coder import *
+from src.logic.agents.development.CoderAgent import CoderAgent
+from src.core.base.entrypoint import create_main_function
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[2]
@@ -35,15 +37,12 @@ if str(root / "src") not in sys.path:
 
 __version__ = VERSION
 
-
-class CodeGeneratorAgent(CoderAgent):
-    """Agent specializing in code generation."""
-
-
 # Create main function using the helper
+main = create_main_function(
+    CoderAgent,
+    'Coder Agent: Updates code files',
+    'Path to the code file'
+)
 
-
-main = create_main_function(CodeGeneratorAgent, "Coder Agent: Updates code files", "Path to the code file")
-
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

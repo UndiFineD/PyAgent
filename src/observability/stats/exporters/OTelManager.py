@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,13 +18,12 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Distributed tracing for the PyAgent fleet using OpenTelemetry standards.
 Allows visualization of agent chains and request propagation across nodes.
 """
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import time
 import uuid
@@ -38,6 +31,7 @@ from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from src.observability.stats.core.TracingCore import TracingCore
 
+__version__ = VERSION
 
 @dataclass
 class Span:

@@ -1,12 +1,34 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import ast
-import hashlib
 import re
 from pathlib import Path
-from typing import List, Optional, Tuple
+from typing import List, Optional
+
+__version__ = VERSION
 
 # Constants used by helpers
+
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent
 REPO_ROOT = AGENT_DIR.parent
 
@@ -102,4 +124,3 @@ def _find_issues(tree: ast.AST, source: str) -> List[str]:
     if "TODO" in source or "FIXME" in source:
         issues.append("Contains TODO or FIXME comments.")
     return issues
-

@@ -1,3 +1,4 @@
+
 """
 Core logic for Dependency Management (Phase 176).
 Handles pip-audit execution and version pinning.
@@ -5,7 +6,6 @@ Handles pip-audit execution and version pinning.
 
 import subprocess
 import os
-import re
 
 class DependencyCore:
     @staticmethod

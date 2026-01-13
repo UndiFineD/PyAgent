@@ -1,9 +1,31 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import subprocess
 import logging
 from pathlib import Path
 from typing import List, Optional, Any, Dict
+
+__version__ = VERSION
 
 class AgentGitHandler:
     """Handles git operations for the Agent."""
@@ -56,7 +78,8 @@ class AgentGitHandler:
 
     def create_branch(self, branch_name: str) -> bool:
         """Create and switch to a new branch."""
-        if self.no_git: return False
+        if self.no_git:
+            return False
         try:
             subprocess.run(["git", "checkout", "-b", branch_name], cwd=self.repo_root, check=True, capture_output=True)
             logging.info(f"Created branch: {branch_name}")

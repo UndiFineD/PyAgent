@@ -11,7 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """
 CommunityOrchestrator: A mock community-submitted orchestrator.
@@ -19,18 +24,15 @@ Demonstrates fleet interaction.
 """
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-
 __version__ = VERSION
-
 
 class CommunityOrchestrator:
     """Mock orchestrator that coordinates between agents."""
-
+    
     def __init__(self, fleet: Any = None) -> None:
         self.fleet = fleet
         self.name = "CommunityOrchestrator"

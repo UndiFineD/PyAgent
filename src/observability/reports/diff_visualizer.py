@@ -11,18 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-
-from src.core.base.common.types.diff_result import DiffResult
-from src.core.base.common.types.diff_view_mode import DiffViewMode
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.version import VERSION
+from .DiffResult import DiffResult
+from .DiffViewMode import DiffViewMode
+from typing import List
 
 __version__ = VERSION
-
 
 class DiffVisualizer:
     """Visualizes changelog differences with multiple view modes.
@@ -46,8 +50,8 @@ class DiffVisualizer:
         Returns:
             DiffResult with comparison details.
         """
-        old_lines = set(old_content.split("\n"))
-        new_lines = set(new_content.split("\n"))
+        old_lines = set(old_content.split('\n'))
+        new_lines = set(new_content.split('\n'))
 
         additions = list(new_lines - old_lines)
         deletions = list(old_lines - new_lines)
@@ -60,7 +64,7 @@ class DiffVisualizer:
             additions=additions,
             deletions=deletions,
             unchanged=unchanged,
-            similarity_score=similarity,
+            similarity_score=similarity
         )
 
     def render_html(self, result: DiffResult, mode: DiffViewMode) -> str:
@@ -81,14 +85,14 @@ class DiffVisualizer:
 
     def _render_unified(self, result: DiffResult) -> str:
         """Render unified diff view."""
-        lines: list[str] = []
+        lines: List[str] = []
         lines.append("<div class='diff-unified'>")
         for line in result.deletions:
             lines.append(f"<span class='deletion'>- {line}</span>")
         for line in result.additions:
             lines.append(f"<span class='addition'>+ {line}</span>")
         lines.append("</div>")
-        return "\n".join(lines)
+        return '\n'.join(lines)
 
     def _render_side_by_side(self, result: DiffResult) -> str:
         """Render side-by-side diff view."""

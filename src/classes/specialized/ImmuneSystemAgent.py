@@ -1,15 +1,37 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Immune System Agent for PyAgent.
 Specializes in biological resilience, detecting malicious prompt injections,
 and monitoring swarm health for corrupted nodes.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import re
-from typing import Dict, List, Any, Optional
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
+from typing import Dict, List, Any
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+
+__version__ = VERSION
 
 class ImmuneSystemAgent(BaseAgent):
     """Detects and mitigates security threats and prompt injections across the swarm."""
@@ -71,6 +93,9 @@ class ImmuneSystemAgent(BaseAgent):
         if status == "dangerous":
             logging.warning(f"ImmuneSystem: Detected potential injection: {findings}")
 
+        # Phase 108: Intelligence Recording
+        self._record(input_text, status, provider="ImmuneSystem", model="InjectionScanner", meta={"findings": findings})
+
         return {
             "status": status,
             "threat_level": "low" if not findings else "high",
@@ -111,11 +136,25 @@ class ImmuneSystemAgent(BaseAgent):
             sanitized = re.sub(pattern, "[CLEANSED]", sanitized)
         return sanitized
 
+    def propose_autonomous_patch(self, vulnerability: str, insecure_code: str) -> str:
+        """
+        Proposes a patch for a detected vulnerability using AI reasoning.
+        """
+        prompt = (
+            f"Vulnerability: {vulnerability}\n"
+            f"Insecure Code:\n{insecure_code}\n\n"
+            "Generate a secure patch to fix this vulnerability."
+        )
+        # Calls the inherited think() method (mocked in tests)
+        patch = self.think(prompt)
+        
+        return f"### Autonomous Security Patch Proposal\n\n{patch}"
+
     def improve_content(self, prompt: str) -> str:
         """General threat mitigation strategy."""
         return "The digital immune system is active. All node telemetry is within normal bounds."
 
 if __name__ == "__main__":
-    from src.classes.base_agent.utilities import create_main_function
+    from src.core.base.utilities import create_main_function
     main = create_main_function(ImmuneSystemAgent, "Immune System Agent", "Threat detection and mitigation")
     main()

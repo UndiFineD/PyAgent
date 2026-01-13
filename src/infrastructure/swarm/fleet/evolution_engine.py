@@ -11,24 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Engine for autonomous agent creation.
 Allows agents to generate new, specialized agent files to expand fleet capabilities.
 """
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import logging
 from pathlib import Path
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .evolution_core import EvolutionCore
+from typing import Dict, Any
+from .EvolutionCore import EvolutionCore
 
 __version__ = VERSION
-
 
 class EvolutionEngine:
     """
@@ -48,21 +49,21 @@ class EvolutionEngine:
         target_path = self.output_dir / agent_filename
 
         template = self.core.generate_agent_template(name, capabilities, base_type)
-
-        with open(target_path, 'w', encoding='utf-8') as f:
+        
+        with open(target_path, "w") as f:
             f.write(template)
-
+            
         logging.info(f"Evolution: Generated new agent {name} at {target_path}")
         return str(target_path)
 
-    def optimize_hyperparameters(self, fleet_stats: dict[str, Any]) -> dict[str, Any]:
+    def optimize_hyperparameters(self, fleet_stats: Dict[str, Any]) -> Dict[str, Any]:
         """
         Phase 52: Evolutionary Neuro-Optimization.
         Delegates strategy to EvolutionCore.
         """
         return self.core.compute_mutations(fleet_stats)
 
-    def register_generated_agent(self, _fleet_manager: Any, name: str, path: str) -> str:
+    def register_generated_agent(self, fleet_manager: Any, name: str, path: str) -> str:
         """Dynamically loads and registers the generated agent into the fleet."""
         # For simulation, we'll just mock the dynamic import or use standard registration
         # In a real system, we'd use importlib.util.spec_from_file_location

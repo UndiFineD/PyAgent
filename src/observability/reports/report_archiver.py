@@ -11,26 +11,28 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .ArchivedReport import ArchivedReport
+from pathlib import Path
+from typing import Dict, List, Optional
 import logging
 import time
-from pathlib import Path
-
-from src.core.base.lifecycle.version import VERSION
-
-from .archived_report import ArchivedReport
 
 __version__ = VERSION
 
 # Define AGENT_DIR for default parameter
 
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
-
 
 class ReportArchiver:
     """Manager for report archiving with retention policies.
@@ -44,17 +46,22 @@ class ReportArchiver:
         old_reports=archiver.list_archives("file.py")
     """
 
-    def __init__(self, archive_dir: Path | None = None) -> None:
+    def __init__(self, archive_dir: Optional[Path] = None) -> None:
         """Initialize archiver.
         Args:
             archive_dir: Directory for archives.
         """
 
         self.archive_dir = archive_dir or AGENT_DIR / ".archives"
-        self.archives: dict[str, list[ArchivedReport]] = {}
+        self.archives: Dict[str, List[ArchivedReport]] = {}
         logging.debug(f"ReportArchiver initialized at {self.archive_dir}")
 
-    def archive(self, file_path: str, content: str, retention_days: int = 90) -> ArchivedReport:
+    def archive(
+        self,
+        file_path: str,
+        content: str,
+        retention_days: int = 90
+    ) -> ArchivedReport:
         """Archive a report.
         Args:
             file_path: Source file path.
@@ -69,14 +76,14 @@ class ReportArchiver:
             report_id=report_id,
             file_path=file_path,
             content=content,
-            retention_days=retention_days,
+            retention_days=retention_days
         )
         if file_path not in self.archives:
             self.archives[file_path] = []
         self.archives[file_path].append(archived)
         return archived
 
-    def list_archives(self, file_path: str) -> list[ArchivedReport]:
+    def list_archives(self, file_path: str) -> List[ArchivedReport]:
         """List archives for a file.
         Args:
             file_path: File to list archives for.
@@ -86,7 +93,7 @@ class ReportArchiver:
 
         return self.archives.get(file_path, [])
 
-    def get_archive(self, report_id: str) -> ArchivedReport | None:
+    def get_archive(self, report_id: str) -> Optional[ArchivedReport]:
         """Get a specific archive.
         Args:
             report_id: Archive ID.
@@ -109,7 +116,7 @@ class ReportArchiver:
         removed = 0
         current_time = time.time()
         for file_path in list(self.archives.keys()):
-            valid: list[ArchivedReport] = []
+            valid: List[ArchivedReport] = []
             for archive in self.archives[file_path]:
                 expiry = archive.archived_at + (archive.retention_days * 86400)
                 if current_time < expiry:

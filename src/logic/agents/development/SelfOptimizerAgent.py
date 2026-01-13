@@ -1,15 +1,33 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in self-optimization and roadmap refinement."""
 
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import create_main_function
-from src.classes.stats.ResourceMonitor import ResourceMonitor
-from src.classes.stats.ObservabilityEngine import ObservabilityEngine
-import logging
-import os
-from pathlib import Path
-from typing import Dict, List, Any, Optional
+from __future__ import annotations
+from src.core.base.version import VERSION
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import create_main_function
+from src.observability.stats.ResourceMonitor import ResourceMonitor
+from src.observability.stats.ObservabilityEngine import ObservabilityEngine
+
+__version__ = VERSION
 
 class SelfOptimizerAgent(BaseAgent):
     """Analyses the workspace status and suggests strategic improvements."""
@@ -51,7 +69,8 @@ class SelfOptimizerAgent(BaseAgent):
             }
             
             for line in lines:
-                if not line.strip() or line.startswith("#"): continue
+                if not line.strip() or line.startswith("#"):
+                    continue
                 
                 low_line = line.lower()
                 if any(k in low_line for k in ["fix", "bug", "error", "crash", "stable"]):
@@ -94,4 +113,3 @@ class SelfOptimizerAgent(BaseAgent):
 if __name__ == "__main__":
     main = create_main_function(SelfOptimizerAgent, "SelfOptimizer Agent", "Query/Topic to optimize")
     main()
-

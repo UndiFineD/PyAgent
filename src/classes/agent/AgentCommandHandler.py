@@ -1,13 +1,34 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import os
 import sys
 import logging
 import subprocess
-import time
 import contextlib
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Iterator
+from typing import List, Dict, Any, Optional, Iterator, Tuple
+
+__version__ = VERSION
 
 class AgentCommandHandler:
     """Handles command execution for the Agent, including sub-agent orchestration."""
@@ -33,43 +54,7 @@ class AgentCommandHandler:
         def attempt_command() -> subprocess.CompletedProcess[str]:
             logging.debug(f"Running command: {' '.join(cmd[:3])}... (timeout={timeout}s)")
             try:
-                local_cmd = list(cmd)
-                env = os.environ.copy()
-
-                # Detect python-invoked agent scripts
-                try:
-                    is_agent_script = (
-                        len(local_cmd) > 1 and
-                        local_cmd[0] == sys.executable and
-                        Path(local_cmd[1]).name.startswith('agent_')
-                    )
-                except Exception:
-                    is_agent_script = False
-
-                if is_agent_script:
-                    env['DV_AGENT_PARENT'] = '1'
-                    if '--no-cascade' not in local_cmd:
-                        local_cmd = local_cmd[:2] + ['--no-cascade'] + local_cmd[2:]
-                    
-                    try:
-                        script_name = Path(local_cmd[1]).name
-                        agent_name = script_name[len('agent_'):-3] if script_name.endswith('.py') else None
-                    except Exception:
-                        agent_name = None
-
-                    model_spec = None
-                    if agent_name:
-                        model_spec = self.models.get(agent_name) or self.models.get('default')
-
-                    if model_spec and isinstance(model_spec, dict):
-                        if 'provider' in model_spec:
-                            env['DV_AGENT_MODEL_PROVIDER'] = str(model_spec.get('provider', ''))
-                        if 'model' in model_spec:
-                            env['DV_AGENT_MODEL_NAME'] = str(model_spec.get('model', ''))
-                        if 'temperature' in model_spec:
-                            env['DV_AGENT_MODEL_TEMPERATURE'] = str(model_spec.get('temperature', ''))
-                        if 'max_tokens' in model_spec:
-                            env['DV_AGENT_MODEL_MAX_TOKENS'] = str(model_spec.get('max_tokens', ''))
+                local_cmd, env = self._prepare_command_environment(list(cmd))
 
                 result = subprocess.run(
                     local_cmd,
@@ -104,11 +89,60 @@ class AgentCommandHandler:
             
             wait_time = float(2 ** i)
             logging.warning(f"Command failed (rc={res.returncode}). Retrying in {wait_time}s... (Attempt {i+1}/{max_retries})")
-            # Use threading.Event().wait for better interruptibility than time.sleep
+            # Use threading.Event().wait for better interruptibility than block-waits
             import threading
             threading.Event().wait(timeout=wait_time)
             
         return res
+
+    def _prepare_command_environment(self, cmd: List[str]) -> Tuple[List[str], Dict[str, str]]:
+        """Prepares the command and environment for execution, detecting sub-agents."""
+        local_cmd = list(cmd)
+        env = os.environ.copy()
+
+        # Detect python-invoked agent scripts
+        is_agent_script = False
+        try:
+            is_agent_script = (
+                len(local_cmd) > 1 and
+                local_cmd[0] == sys.executable and
+                Path(local_cmd[1]).name.startswith('agent_')
+            )
+        except Exception:
+            pass
+
+        if is_agent_script:
+            env['DV_AGENT_PARENT'] = '1'
+            if '--no-cascade' not in local_cmd:
+                local_cmd = local_cmd[:2] + ['--no-cascade'] + local_cmd[2:]
+            
+            try:
+                script_name = Path(local_cmd[1]).name
+                agent_name = script_name[len('agent_'):-3] if script_name.endswith('.py') else None
+                if agent_name:
+                    env.update(self._get_agent_env_vars(agent_name))
+            except Exception:
+                pass
+
+        return local_cmd, env
+
+    def _get_agent_env_vars(self, agent_name: str) -> Dict[str, str]:
+        """Returns environment variables for a specific agent based on models config."""
+        vars_to_set = {}
+        spec = self.models.get(agent_name) or self.models.get('default')
+
+        if spec and isinstance(spec, dict):
+            mapping = {
+                'provider': 'DV_AGENT_MODEL_PROVIDER',
+                'model': 'DV_AGENT_MODEL_NAME',
+                'temperature': 'DV_AGENT_MODEL_TEMPERATURE',
+                'max_tokens': 'DV_AGENT_MODEL_MAX_TOKENS'
+            }
+            for spec_key, env_key in mapping.items():
+                if spec_key in spec:
+                    vars_to_set[env_key] = str(spec.get(spec_key, ''))
+        
+        return vars_to_set
 
     @contextlib.contextmanager
     def with_agent_env(self, agent_name: str) -> Iterator[None]:

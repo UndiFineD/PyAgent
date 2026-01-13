@@ -1,21 +1,42 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import os
 import logging
-import fnmatch
 import time
 import hashlib
 from pathlib import Path
-from typing import Set, List, Optional, Dict
-from .utils import load_codeignore
-from src.classes.base_agent.core import BaseCore
+from typing import Optional
+from src.core.base.utils.core_utils import load_codeignore
+from src.core.base.AgentCore import BaseCore
+
+__version__ = VERSION
 
 class AgentFileManager:
     """Manages file discovery, filtering, and snapshots for the Agent."""
     
     SUPPORTED_EXTENSIONS = {'.py', '.sh', '.js', '.ts', '.go', '.rb'}
 
-    def __init__(self, repo_root: Path, agents_only: bool = False, ignored_patterns: Optional[Set[str]] = None) -> None:
+    def __init__(self, repo_root: Path, agents_only: bool = False, ignored_patterns: Optional[set[str]] = None) -> None:
         self.repo_root = repo_root
         self.agents_only = agents_only
         self.ignored_patterns = ignored_patterns or load_codeignore(repo_root)
@@ -25,14 +46,14 @@ class AgentFileManager:
         """Check if a path should be ignored based on .codeignore patterns."""
         return self.core.is_path_ignored(path, self.repo_root, self.ignored_patterns)
 
-    def find_code_files(self, max_files: Optional[int] = None) -> List[Path]:
+    def find_code_files(self, max_files: Optional[int] = None) -> list[Path]:
         """Find code files in the repository, respecting filters and ignore patterns."""
         all_potential_files = []
         
         search_root = self.repo_root
         if self.agents_only:
             # Look for agent-specific directories
-            for sub in ['scripts/agent', 'src/classes/agent', 'src/classes/specialized']:
+            for sub in ['scripts/agent', 'src/agent', 'src/agents']:
                 potential = self.repo_root / sub
                 if potential.exists():
                     search_root = potential
@@ -52,12 +73,20 @@ class AgentFileManager:
             self.SUPPORTED_EXTENSIONS
         )
 
+        # If agents_only is True and we're searching from the root, 
+        # further filter to only include files that appear to be part of the agent system
+        if self.agents_only and search_root == self.repo_root:
+            code_files = [
+                f for f in code_files 
+                if f.parent != self.repo_root or 'agent' in f.name.lower()
+            ]
+
         if max_files:
             return code_files[:max_files]
                             
         return code_files
 
-    def load_cascading_codeignore(self, directory: Optional[Path] = None) -> Set[str]:
+    def load_cascading_codeignore(self, directory: Optional[Path] = None) -> set[str]:
         """Load .codeignore patterns with cascading support."""
         if directory is None:
             directory = self.repo_root
@@ -152,42 +181,52 @@ class AgentFileManager:
         try:
             current_time = time.time()
             max_age_seconds = max_age_days * 24 * 60 * 60
-            snapshots_deleted = 0
+            
+            snapshots_by_file = self._group_snapshots_by_filename(snapshot_dir)
+            deleted_count = self._prune_snapshot_groups(
+                snapshots_by_file, 
+                current_time, 
+                max_age_seconds, 
+                max_snapshots_per_file
+            )
 
-            # Group snapshots by file
-            snapshots_by_file: Dict[str, List[Path]] = {}
-            for snapshot_file in snapshot_dir.glob('*'):
-                if snapshot_file.is_file():
-                    # Extract filename from snapshot name (format: timestamp_hash_filename)
-                    parts = snapshot_file.name.split('_', 2)
-                    if len(parts) >= 3:
-                        filename = parts[2]
-                        if filename not in snapshots_by_file:
-                            snapshots_by_file[filename] = []
-                        snapshots_by_file[filename].append(snapshot_file)
-
-            # Clean by age and count
-            for filename, snapshots in snapshots_by_file.items():
-                # Sort by modification time (newest first)
-                snapshots.sort(key=lambda x: x.stat().st_mtime, reverse=True)
-
-                for i, snapshot in enumerate(snapshots):
-                    # Delete if too old
-                    mtime = snapshot.stat().st_mtime
-                    age = current_time - mtime
-                    if age > max_age_seconds:
-                        snapshot.unlink()
-                        snapshots_deleted += 1
-                        logging.debug(f"Deleted old snapshot: {snapshot.name}")
-                    # Or if exceeds max count
-                    elif i >= max_snapshots_per_file:
-                        snapshot.unlink()
-                        snapshots_deleted += 1
-                        logging.debug(f"Deleted excess snapshot: {snapshot.name}")
-
-            logging.info(f"Cleaned up {snapshots_deleted} old snapshots")
-            return snapshots_deleted
+            logging.info(f"Cleaned up {deleted_count} old snapshots")
+            return deleted_count
 
         except Exception as e:
             logging.error(f"Failed to cleanup snapshots: {e}")
             return 0
+
+    def _group_snapshots_by_filename(self, snapshot_dir: Path) -> Dict[str, List[Path]]:
+        """Helper to group snapshot files by their original filename."""
+        groups: Dict[str, List[Path]] = {}
+        for snapshot_file in snapshot_dir.glob('*'):
+            if snapshot_file.is_file():
+                parts = snapshot_file.name.split('_', 2)
+                if len(parts) >= 3:
+                    filename = parts[2]
+                    if filename not in groups:
+                        groups[filename] = []
+                    groups[filename].append(snapshot_file)
+        return groups
+
+    def _prune_snapshot_groups(self, groups: Dict[str, List[Path]], 
+                               current_time: float, 
+                               max_age_seconds: int, 
+                               max_count: int) -> int:
+        """Helper to prune snapshot files based on age and count limits."""
+        deleted = 0
+        for filename, snapshots in groups.items():
+            # Sort by modification time (newest first)
+            snapshots.sort(key=lambda x: x.stat().st_mtime, reverse=True)
+
+            for i, snapshot in enumerate(snapshots):
+                mtime = snapshot.stat().st_mtime
+                if (current_time - mtime) > max_age_seconds or i >= max_count:
+                    try:
+                        snapshot.unlink()
+                        deleted += 1
+                        logging.debug(f"Deleted snapshot: {snapshot.name}")
+                    except Exception:
+                        pass
+        return deleted

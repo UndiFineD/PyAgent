@@ -10,16 +10,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Script for migrating hardcoded version strings to use the central VERSION import."""
 
 from __future__ import annotations
-
 import os
 
 src_path = r"c:\DEV\PyAgent\src"
-version_import = "from src.core.base.lifecycle.version import VERSION"
+version_import = "from src.core.base.version import VERSION"
 target_version = 'VERSION = "2.1.2-stable"'
 
 print(f"Starting version migration in: {src_path}")
@@ -33,9 +37,9 @@ for root, _, files in os.walk(src_path):
             files_processed += 1
             path = os.path.join(root, file)
             try:
-                with open(path, encoding="utf-8", errors="ignore") as f:
+                with open(path, "r", encoding="utf-8", errors="ignore") as f:
                     content = f.read()
-
+                
                 if target_version in content:
                     # Replace the hardcoded version with an import
                     # We look for the line and replace it
@@ -48,14 +52,14 @@ for root, _, files in os.walk(src_path):
                             modified = True
                         else:
                             new_lines.append(line)
-
+                    
                     if modified:
                         new_content = "\n".join(new_lines) + ("\n" if content.endswith("\n") else "")
                         with open(path, "w", encoding="utf-8") as f:
                             f.write(new_content)
                         print(f"  Migrated: {path}")
                         files_modified += 1
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 print(f"  Error processing {path}: {e}")
 
 print(f"\nFinished. Processed {files_processed} files, modified {files_modified} files.")

@@ -11,22 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
-import json
+from src.core.base.version import VERSION
+from .TestBaseline import TestBaseline
 from pathlib import Path
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .test_baseline import TestBaseline
+from typing import Any, Dict, Optional
+import json
 
 __version__ = VERSION
-
 
 class BaselineManager:
     """Manages test baselines for comparison.
@@ -55,7 +56,7 @@ class BaselineManager:
         """Get path for baseline file."""
         return self.baseline_dir / f"{name}.baseline.json"
 
-    def save_baseline(self, name: str, values: dict[str, Any]) -> TestBaseline:
+    def save_baseline(self, name: str, values: Dict[str, Any]) -> TestBaseline:
         """Save a baseline.
 
         Args:
@@ -70,21 +71,17 @@ class BaselineManager:
 
         baseline = TestBaseline(name=name, values=values, version=version)
 
-        with open(self._get_path(name), "w", encoding='utf-8') as f:
-            json.dump(
-                {
-                    "name": baseline.name,
-                    "values": baseline.values,
-                    "created_at": baseline.created_at,
-                    "version": baseline.version,
-                },
-                f,
-                indent=2,
-            )
+        with open(self._get_path(name), "w") as f:
+            json.dump({
+                "name": baseline.name,
+                "values": baseline.values,
+                "created_at": baseline.created_at,
+                "version": baseline.version,
+            }, f, indent=2)
 
         return baseline
 
-    def load_baseline(self, name: str) -> TestBaseline | None:
+    def load_baseline(self, name: str) -> Optional[TestBaseline]:
         """Load a baseline.
 
         Args:
@@ -97,7 +94,7 @@ class BaselineManager:
         if not path.exists():
             return None
 
-        with open(path, encoding='utf-8') as f:
+        with open(path) as f:
             data = json.load(f)
 
         return TestBaseline(
@@ -110,9 +107,9 @@ class BaselineManager:
     def compare(
         self,
         name: str,
-        current: dict[str, Any],
+        current: Dict[str, Any],
         tolerance: float = 0.1,
-    ) -> dict[str, Any]:
+    ) -> Dict[str, Any]:
         """Compare current values against baseline.
 
         Args:
@@ -158,5 +155,5 @@ class BaselineManager:
         return {
             "baseline_version": baseline.version,
             "diffs": diffs,
-            "passed": not diffs,  # type: ignore[arg-type]
+            "passed": len(diffs) == 0,  # type: ignore[arg-type]
         }

@@ -1,20 +1,41 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in Workspace Knowledge and Codebase Context (RAG-lite)."""
 
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import create_main_function, as_tool
-from src.classes.context.GraphContextEngine import GraphContextEngine
-from src.classes.context.MemoryEngine import MemoryEngine
-from src.classes.context.ContextCompressor import ContextCompressor
-from src.classes.context.KnowledgeCore import KnowledgeCore
+from __future__ import annotations
+from src.core.base.version import VERSION
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import create_main_function, as_tool
+from src.logic.agents.cognitive.context.engines.GraphContextEngine import GraphContextEngine
+from src.logic.agents.cognitive.context.engines.MemoryEngine import MemoryEngine
+from src.logic.agents.cognitive.context.engines.ContextCompressor import ContextCompressor
+from src.logic.agents.cognitive.context.engines.KnowledgeCore import KnowledgeCore
 import logging
-import os
 import json
 import re
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Any, Optional
+
+__version__ = VERSION
 
 try:
     import chromadb
@@ -26,18 +47,25 @@ except ImportError:
 class KnowledgeAgent(BaseAgent):
     """Agent that scans the workspace to provide deep context using MIRIX 6-tier memory."""
     
-    def __init__(self, file_path: str) -> None:
+    def __init__(self, file_path: str | None = None, fleet: Any | None = None) -> None:
+        # Phase 123: Robust initialization for dynamic discovery
+        if file_path is None:
+             if fleet and hasattr(fleet, "workspace_root"):
+                 file_path = str(fleet.workspace_root)
+             else:
+                 file_path = "."
+        
         super().__init__(file_path)
-        workspace_root = self.file_path.parent
+        workspace_root = self.file_path if self.file_path.is_dir() else self.file_path.parent
         self.index_file = workspace_root / ".agent_knowledge_index.json"
-        self.db_path = workspace_root / ".agent_chroma_db"
+        self.db_path = workspace_root / "data/db/.agent_chroma_db"
         self._chroma_client = None
         self._collection = None  # Standard Knowledge collection
         self._mirix_collection = None # MIRIX Tiered collection
         self.graph_engine = GraphContextEngine(str(workspace_root))
         self.memory_engine = MemoryEngine(str(workspace_root))
         self.compressor = ContextCompressor(str(workspace_root))
-        self.knowledge_core = KnowledgeCore(workspace_root=str(workspace_root))
+        self.knowledge_core = KnowledgeCore()
         
         self._system_prompt = (
             "You are the Knowledge Agent (MIRIX Memory Orchestrator). "
@@ -78,7 +106,8 @@ class KnowledgeAgent(BaseAgent):
         """Records a piece of knowledge into the MIRIX 6-tier architecture.
         Tiers: core, episodic, semantic, procedural, resource, knowledge.
         """
-        if not self._init_chroma(): return
+        if not self._init_chroma():
+            return
         
         valid_tiers = ["core", "episodic", "semantic", "procedural", "resource", "knowledge"]
         if tier.lower() not in valid_tiers:
@@ -99,7 +128,8 @@ class KnowledgeAgent(BaseAgent):
 
     def query_mirix(self, tier: str, query: str, limit: int = 3) -> str:
         """Queries a specific tier of memory for context."""
-        if not self._init_chroma(): return ""
+        if not self._init_chroma():
+            return ""
         
         try:
             results = self._mirix_collection.query(
@@ -131,7 +161,7 @@ class KnowledgeAgent(BaseAgent):
         for p in root.rglob("*"):
             if p.is_dir() or p.suffix not in [".py", ".md", ".txt"]:
                 continue
-            if any(part in str(p) for part in ["__pycache__", "venv", ".git", ".agent_chroma_db"]):
+            if any(part in str(p) for part in ["__pycache__", "venv", ".git", "data/db/.agent_chroma_db"]):
                 continue
             
             try:
@@ -221,7 +251,9 @@ class KnowledgeAgent(BaseAgent):
 
         # 3. Check index first (Exact symbol/link matches)
         hits = index.get(query, [])
-        for rel_path in hits:
+        for hit in hits:
+            # Handle both string (legacy) and dict (new) formats from KnowledgeCore
+            rel_path = hit["path"] if isinstance(hit, dict) else hit
             p = root / rel_path
             try:
                 content = p.read_text(encoding="utf-8")
@@ -236,7 +268,8 @@ class KnowledgeAgent(BaseAgent):
                         break
             except Exception:
                 pass
-            if len(context_snippets) > 5: break
+            if len(context_snippets) > 5:
+                break
 
         # 3. Semantic Search (ChromaDB)
         if HAS_CHROMADB:
@@ -263,7 +296,8 @@ class KnowledgeAgent(BaseAgent):
                                 break
                 except Exception:
                     pass
-                if len(context_snippets) > 10: break
+                if len(context_snippets) > 10:
+                    break
                 
         if not context_snippets:
             return f"No relevant context found for '{query}' in {root}."
@@ -381,7 +415,8 @@ class KnowledgeAgent(BaseAgent):
             symbols = re.findall(r"(?:class|def)\s+([a-zA-Z_][a-zA-Z0-9_]*)", match_text)
             
             for symbol in symbols:
-                if symbol in seen_nodes: continue
+                if symbol in seen_nodes:
+                    continue
                 seen_nodes.add(symbol)
                 neighbors = self.graph_engine.get_neighbors(symbol)
                 if neighbors:

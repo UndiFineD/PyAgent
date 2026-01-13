@@ -1,4 +1,22 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """
 SecurityCore logic for workspace safety.
@@ -6,11 +24,18 @@ Combines scanning for secrets, command auditing, shell script analysis, and inje
 This is designed for high-performance static analysis and future Rust migration.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import re
 import logging
-from typing import Dict, List, Any, Optional, Tuple
-from .SecurityIssueType import SecurityIssueType
-from .SecurityVulnerability import SecurityVulnerability
+import time
+from pathlib import Path
+from typing import List, Optional, Tuple
+from src.core.base.types.SecurityIssueType import SecurityIssueType
+from src.core.base.types.SecurityVulnerability import SecurityVulnerability
+from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+
+__version__ = VERSION
 
 class SecurityCore:
     """Pure logic core for security and safety validation."""
@@ -44,6 +69,20 @@ class SecurityCore:
 
     def __init__(self, workspace_root: Optional[str] = None) -> None:
         self.workspace_root = workspace_root
+        self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
+
+    def _record_finding(self, issue_type: str, severity: str, desc: str) -> None:
+        """Records security findings for fleet intelligence (Phase 108)."""
+        if self.recorder:
+            try:
+                self.recorder.record_lesson("security_vulnerability", {
+                    "type": issue_type,
+                    "severity": severity,
+                    "description": desc,
+                    "timestamp": time.time()
+                })
+            except Exception as e:
+                logging.debug(f"SecurityCore: Failed to record finding: {e}")
 
     def scan_content(self, content: str) -> List[SecurityVulnerability]:
         """Performs a comprehensive scan of the provided content."""
@@ -53,24 +92,27 @@ class SecurityCore:
         for i, line in enumerate(lines, 1):
             for pattern, issue_type, severity, desc, fix in self.SECURITY_PATTERNS:
                 if re.search(pattern, line):
-                    vulnerabilities.append(SecurityVulnerability(
+                    vuln = SecurityVulnerability(
                         type=issue_type,
                         severity=severity,
                         description=desc,
                         line_number=i,
                         fix_suggestion=fix
-                    ))
+                    )
+                    vulnerabilities.append(vuln)
+                    self._record_finding(issue_type.value, severity, desc)
         
         # Add injection scanning
         injection_findings = self.scan_for_injection(content)
         for inf in injection_findings:
              vulnerabilities.append(SecurityVulnerability(
-                type=SecurityIssueType.OTHER, # Could add INJECTION_ATTEMPT to SecurityIssueType
+                type=SecurityIssueType.INJECTION_ATTEMPT,
                 severity="high",
                 description=inf,
                 line_number=0,
                 fix_suggestion="Sanitize all inputs and wrap specialized instructions in strict boundaries."
             ))
+             self._record_finding(SecurityIssueType.INJECTION_ATTEMPT.value, "high", inf)
             
         return vulnerabilities
 

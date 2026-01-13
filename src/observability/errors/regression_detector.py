@@ -11,21 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
+from .ErrorEntry import ErrorEntry
+from .RegressionInfo import RegressionInfo
+from typing import Dict, List, Optional
 import re
 
-from src.core.base.lifecycle.version import VERSION
-
-from .error_entry import ErrorEntry
-from .regression_info import RegressionInfo
-
 __version__ = VERSION
-
 
 class RegressionDetector:
     """Detects error regressions.
@@ -39,8 +41,8 @@ class RegressionDetector:
 
     def __init__(self) -> None:
         """Initialize the regression detector."""
-        self.fixed_errors: dict[str, str] = {}  # signature -> fix_commit
-        self.regressions: list[RegressionInfo] = []
+        self.fixed_errors: Dict[str, str] = {}  # signature -> fix_commit
+        self.regressions: List[RegressionInfo] = []
 
     def record_fix(self, error: ErrorEntry, commit_hash: str) -> None:
         """Record that an error was fixed.
@@ -52,7 +54,9 @@ class RegressionDetector:
         signature = self._get_error_signature(error)
         self.fixed_errors[signature] = commit_hash
 
-    def check_regression(self, error: ErrorEntry, current_commit: str = "") -> RegressionInfo | None:
+    def check_regression(
+        self, error: ErrorEntry, current_commit: str = ""
+    ) -> Optional[RegressionInfo]:
         """Check if an error is a regression.
 
         Args:
@@ -67,7 +71,7 @@ class RegressionDetector:
             regression = RegressionInfo(
                 error_id=error.id,
                 original_fix_commit=self.fixed_errors[signature],
-                regression_commit=current_commit,
+                regression_commit=current_commit
             )
             # Check if already tracked
             for r in self.regressions:
@@ -83,7 +87,7 @@ class RegressionDetector:
         normalized = re.sub(r"\d+", "N", error.message)
         return f"{error.file_path}:{normalized}"
 
-    def get_regressions(self) -> list[RegressionInfo]:
+    def get_regressions(self) -> List[RegressionInfo]:
         """Get all detected regressions."""
         return self.regressions
 

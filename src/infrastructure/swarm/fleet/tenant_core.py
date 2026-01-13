@@ -11,7 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """
 TenantCore logic for workspace isolation.
@@ -19,17 +24,13 @@ Pure logic for path translation and security boundary enforcement.
 """
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 import os
-
-from src.core.base.lifecycle.version import VERSION
+from typing import List
 
 __version__ = VERSION
 
-
 class TenantCore:
-    """Core logic for tenant isolation and path security."""
-
     def __init__(self) -> None:
         pass
 
@@ -40,13 +41,13 @@ class TenantCore:
         """
         tenant_root_abs = os.path.abspath(tenant_root)
         target_path_abs = os.path.abspath(os.path.join(tenant_root_abs, relative_path))
-
+        
         # Security Boundary Check: Must start with tenant root
         if not target_path_abs.startswith(tenant_root_abs):
             raise PermissionError(f"Security Breach: Path {relative_path} escaped isolation boundary.")
-
+            
         return target_path_abs
 
-    def get_required_dirs(self) -> list[str]:
+    def get_required_dirs(self) -> List[str]:
         """Standardised tenant folder structure."""
         return ["src", "data", "data/logs", "config"]

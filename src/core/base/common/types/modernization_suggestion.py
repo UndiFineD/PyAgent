@@ -11,18 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-
+from src.core.base.version import VERSION
 from dataclasses import dataclass
-
-from src.core.base.lifecycle.version import VERSION
+from typing import Optional
 
 __version__ = VERSION
-
 
 @dataclass
 class ModernizationSuggestion:
@@ -35,9 +38,8 @@ class ModernizationSuggestion:
         removal_version: Version where it will be removed.
         migration_guide: URL or text explaining migration.
     """
-
     old_api: str
     new_api: str
     deprecation_version: str
-    removal_version: str | None = None
+    removal_version: Optional[str] = None
     migration_guide: str = ""

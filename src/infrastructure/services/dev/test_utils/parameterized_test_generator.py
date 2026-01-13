@@ -11,21 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-
-from collections.abc import Callable
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-
-from .parameterized_test_case import ParameterizedTestCase
+from src.core.base.version import VERSION
+from .ParameterizedTestCase import ParameterizedTestCase
+from typing import Any, Callable, Dict, List, Optional
 
 __version__ = VERSION
-
 
 class ParameterizedTestGenerator:
     """Generator for parameterized tests.
@@ -46,10 +46,10 @@ class ParameterizedTestGenerator:
             test_name: Base name for generated tests.
         """
         self.test_name = test_name
-        self._parameters: dict[str, list[Any]] = {}
-        self._expected_fn: Callable[..., Any] | None = None
+        self._parameters: Dict[str, List[Any]] = {}
+        self._expected_fn: Optional[Callable[..., Any]] = None
 
-    def add_parameter(self, name: str, values: list[Any]) -> ParameterizedTestGenerator:
+    def add_parameter(self, name: str, values: List[Any]) -> "ParameterizedTestGenerator":
         """Add parameter with possible values.
 
         Args:
@@ -62,7 +62,7 @@ class ParameterizedTestGenerator:
         self._parameters[name] = values
         return self
 
-    def set_expected_fn(self, fn: Callable[..., Any]) -> ParameterizedTestGenerator:
+    def set_expected_fn(self, fn: Callable[..., Any]) -> "ParameterizedTestGenerator":
         """Set function to compute expected result.
 
         Args:
@@ -74,7 +74,7 @@ class ParameterizedTestGenerator:
         self._expected_fn = fn
         return self
 
-    def generate_cases(self) -> list[ParameterizedTestCase]:
+    def generate_cases(self) -> List[ParameterizedTestCase]:
         """Generate all test case combinations.
 
         Returns:
@@ -83,10 +83,9 @@ class ParameterizedTestGenerator:
         if not self._parameters:
             return []
         import itertools
-
         keys = list(self._parameters.keys())
         values = [self._parameters[k] for k in keys]
-        cases: list[ParameterizedTestCase] = []
+        cases: List[ParameterizedTestCase] = []
         for i, combo in enumerate(itertools.product(*values)):
             params = dict(zip(keys, combo))
             expected = self._expected_fn(params) if self._expected_fn else None

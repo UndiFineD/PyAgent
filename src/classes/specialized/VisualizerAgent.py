@@ -1,17 +1,40 @@
 #!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Agent specializing in mapping and visualizing the internal dependencies of the Agent OS.
 Inspired by system-design-visualizer and FalkorDB.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
+import time
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 import json
-from src.classes.base_agent import BaseAgent
-from src.classes.base_agent.utilities import as_tool
-from src.classes.context.GraphContextEngine import GraphContextEngine
-from src.classes.specialized.GraphMemoryAgent import GraphMemoryAgent
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+from src.logic.agents.cognitive.context.engines.GraphContextEngine import GraphContextEngine
+from src.logic.agents.cognitive.GraphMemoryAgent import GraphMemoryAgent
+
+__version__ = VERSION
 
 class VisualizerAgent(BaseAgent):
     """Maps relationships and handles Visual Workflow Export/Import (cc-wf-studio pattern)."""
@@ -188,13 +211,42 @@ class VisualizerAgent(BaseAgent):
             
             clean_file = file.replace("\\", "/").split("/")[-1]
             for call in data.get("calls", []):
-                if count > 20: break # Keep it readable
+                if count > 20:
+                    break # Keep it readable
                 lines.append(f"    {clean_file} --> {call}")
                 count += 1
                 
         return "## 🔗 Code Call Graph\n\n```mermaid\n" + "\n".join(lines) + "\n```"
 
+    def generate_3d_swarm_data(self) -> Dict[str, Any]:
+        """
+        Generates a 3D-compatible dataset for force-directed swarm visualization.
+        Schema compatible with Force-Directed Graph libraries.
+        """
+        nodes = [
+            {"id": "FleetManager", "group": 1, "size": 10},
+            {"id": "SecurityAudit", "group": 2, "size": 5},
+            {"id": "PrivacyGuard", "group": 2, "size": 5},
+            {"id": "CoderAgent", "group": 3, "size": 7},
+            {"id": "ByzantineConsensus", "group": 4, "size": 6}
+        ]
+        links = [
+            {"source": "FleetManager", "target": "SecurityAudit", "value": 1},
+            {"source": "FleetManager", "target": "CoderAgent", "value": 1},
+            {"source": "SecurityAudit", "target": "PrivacyGuard", "value": 0.5},
+            {"source": "CoderAgent", "target": "ByzantineConsensus", "value": 0.8}
+        ]
+        
+        return {
+            "format": "v1-3d-swarm",
+            "nodes": nodes,
+            "links": links,
+            "metadata": {
+                "generated_at": time.time(),
+                "node_count": len(nodes)
+            }
+        }
+
     def improve_content(self, prompt: str) -> str:
         """Visualizes the workspace by default."""
         return self.generate_call_graph()
-

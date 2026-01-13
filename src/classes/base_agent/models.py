@@ -1,27 +1,42 @@
 #!/usr/bin/env python3
-# Copyright (c) 2025 PyAgent contributors
+# Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
+#
 #     http://www.apache.org/licenses/LICENSE-2.0
+#
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
 
 """Data models and structures for BaseAgent."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import time
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime
-from enum import Enum
+from enum import Enum, auto
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
+__version__ = VERSION
 
 # ========== Enums ==========
-
 class AgentState(Enum):
     """Agent lifecycle states."""
     INITIALIZED = "initialized"
@@ -34,7 +49,6 @@ class AgentState(Enum):
     COMPLETED = "completed"
     ERROR = "error"
 
-
 class ResponseQuality(Enum):
     """AI response quality levels."""
     EXCELLENT = 5
@@ -42,7 +56,6 @@ class ResponseQuality(Enum):
     ACCEPTABLE = 3
     POOR = 2
     INVALID = 1
-
 
 class EventType(Enum):
     """Agent event types for hooks."""
@@ -54,7 +67,6 @@ class EventType(Enum):
     POST_WRITE = "post_write"
     ERROR = "error"
 
-
 class AuthMethod(Enum):
     """Authentication methods for backends."""
     NONE = "none"
@@ -65,7 +77,6 @@ class AuthMethod(Enum):
     OAUTH2 = "oauth2"
     CUSTOM = "custom"
 
-
 class SerializationFormat(Enum):
     """Custom serialization formats."""
     JSON = "json"
@@ -75,7 +86,6 @@ class SerializationFormat(Enum):
     PROTOBUF = "protobuf"
     CBOR = "cbor"
 
-
 class FilePriority(Enum):
     """File priority levels for request prioritization."""
     CRITICAL = 5
@@ -83,7 +93,6 @@ class FilePriority(Enum):
     NORMAL = 3
     LOW = 2
     BACKGROUND = 1
-
 
 class InputType(Enum):
     """Input types for multimodal support."""
@@ -94,7 +103,6 @@ class InputType(Enum):
     AUDIO = "audio"
     VIDEO = "video"
 
-
 class AgentType(Enum):
     """Agent type classifications."""
     GENERAL = "general"
@@ -103,13 +111,11 @@ class AgentType(Enum):
     TESTING = "testing"
     REFACTORING = "refactoring"
 
-
 class MessageRole(Enum):
     """Roles for conversation messages."""
     USER = "user"
     ASSISTANT = "assistant"
     SYSTEM = "system"
-
 
 class AgentEvent(Enum):
     """Agent event types."""
@@ -117,64 +123,105 @@ class AgentEvent(Enum):
     COMPLETE = "complete"
     ERROR = "error"
 
+class AgentExecutionState(Enum):
+    """Execution state for an agent run."""
+    PENDING = auto()
+    RUNNING = auto()
+    COMPLETED = auto()
+    FAILED = auto()
+    CANCELLED = auto()
+    PAUSED = auto()
+
+class AgentPriority(Enum):
+    """Priority level for agent execution."""
+    CRITICAL = 1
+    HIGH = 2
+    NORMAL = 3
+    LOW = 4
+    BACKGROUND = 5
+
+class ConfigFormat(Enum):
+    """Configuration file format."""
+    YAML = auto()
+    TOML = auto()
+    JSON = auto()
+    INI = auto()
+
+class DiffOutputFormat(Enum):
+    """Output format for diff preview."""
+    UNIFIED = auto()      # Unified diff format
+    CONTEXT = auto()      # Context diff format
+    SIDE_BY_SIDE = auto()  # Side by side diff
+    HTML = auto()         # HTML formatted diff
+
+class HealthStatus(Enum):
+    """Health status for components."""
+    HEALTHY = auto()
+    DEGRADED = auto()
+    UNHEALTHY = auto()
+    UNKNOWN = auto()
+
+class LockType(Enum):
+    """File locking type."""
+    SHARED = auto()       # Multiple readers allowed
+    EXCLUSIVE = auto()    # Single writer only
+    ADVISORY = auto()     # Advisory lock (not enforced by OS)
+
+class RateLimitStrategy(Enum):
+    """Rate limiting strategy for API calls."""
+    FIXED_WINDOW = auto()      # Fixed time window rate limiting
+    SLIDING_WINDOW = auto()    # Sliding window rate limiting
+    TOKEN_BUCKET = auto()      # Token bucket algorithm
+    LEAKY_BUCKET = auto()      # Leaky bucket algorithm
 
 # ========== Utility Functions ==========
-
 def _empty_list_str() -> list[str]:
     return []
-
 
 def _empty_list_int() -> list[int]:
     return []
 
-
 def _empty_list_float() -> list[float]:
     return []
 
+def _empty_list_dict_str_any() -> list[dict[str, Any]]:
+    return []
+
+def _empty_dict_str_float() -> dict[str, float]:
+    return {}
 
 def _empty_dict_str_any() -> dict[str, Any]:
     return {}
 
-
 def _empty_dict_str_int() -> dict[str, int]:
     return {}
-
 
 def _empty_dict_str_str() -> dict[str, str]:
     return {}
 
-
 def _empty_dict_str_callable_any_any() -> dict[str, Callable[[Any], Any]]:
     return {}
-
 
 def _empty_dict_str_quality_criteria() -> dict[str, tuple[Callable[[str], float], float]]:
     return {}
 
-
 def _empty_dict_str_health_checks() -> dict[str, Callable[[], dict[str, Any]]]:
     return {}
-
 
 def _empty_dict_str_configprofile() -> dict[str, "ConfigProfile"]:
     return {}
 
-
 def _empty_routes_list() -> list[tuple[Callable[[Any], bool], Callable[[Any], Any]]]:
     return []
-
 
 def _empty_dict_str_filepriority() -> dict[str, "FilePriority"]:
     return {}
 
-
 def _empty_dict_str_modelconfig() -> dict[str, "ModelConfig"]:
     return {}
 
-
 def _empty_agent_event_handlers() -> dict[AgentEvent, list[Callable[..., None]]]:
     return {}
-
 
 # ========== Dataclasses ==========
 
@@ -184,7 +231,7 @@ class PromptTemplate:
 
     Attributes:
         name: Human-readable template name.
-        template: The prompt template with {placeholders}.
+        template: The prompt template with {variables}.
         variables: List of variable names in the template.
         id: Optional unique identifier for the template.
         description: Description of when to use this template.
@@ -210,7 +257,6 @@ class PromptTemplate:
         """
         return self.template.format(**kwargs)
 
-
 @dataclass
 class ConversationMessage:
     """A message in conversation history.
@@ -223,7 +269,6 @@ class ConversationMessage:
     role: MessageRole
     content: str
     timestamp: float = field(default_factory=time.time)
-
 
 class ConversationHistory:
     """Manages a conversation history with message storage and retrieval."""
@@ -263,7 +308,6 @@ class ConversationHistory:
         """Clear all messages from history."""
         self.messages.clear()
 
-
 class PromptTemplateManager:
     """Manages a collection of prompt templates."""
 
@@ -295,7 +339,6 @@ class PromptTemplateManager:
         template = self.templates[template_name]
         return template.render(**kwargs)
 
-
 class ResponsePostProcessor:
     """Manages post-processing hooks for agent responses."""
 
@@ -326,7 +369,6 @@ class ResponsePostProcessor:
         for hook, _ in sorted_hooks:
             text = hook(text)
         return text
-
 
 @dataclass
 class PromptVersion:
@@ -389,7 +431,6 @@ class PromptVersion:
         self.variant = variant or ""
         self.prompt_text = self.content
         self.weight = weight
-
 
 class BatchRequest:
     """Request in a batch processing queue.
@@ -461,7 +502,6 @@ class BatchRequest:
         """
         return processor(self.items)
 
-
 @dataclass
 class CacheEntry:
     """Cached response entry.
@@ -478,7 +518,6 @@ class CacheEntry:
     timestamp: float
     hit_count: int = 0
     quality_score: float = 0.0
-
 
 @dataclass
 class AgentConfig:
@@ -503,7 +542,6 @@ class AgentConfig:
     cache_enabled: bool = True
     token_budget: int = 100000
 
-
 @dataclass
 class HealthCheckResult:
     """Result of agent health check.
@@ -520,7 +558,6 @@ class HealthCheckResult:
     memory_ok: bool = True
     disk_ok: bool = True
     details: Dict[str, Any] = field(default_factory=_empty_dict_str_any)
-
 
 @dataclass
 class AuthConfig:
@@ -545,7 +582,6 @@ class AuthConfig:
     oauth_client_secret: str = ""
     custom_headers: Dict[str, str] = field(default_factory=_empty_dict_str_str)
 
-
 @dataclass
 class BatchResult:
     """Result of a batch processing request.
@@ -563,7 +599,6 @@ class BatchResult:
     error: str = ""
     processing_time: float = 0.0
 
-
 @dataclass
 class MultimodalInput:
     """Multimodal input for agents.
@@ -578,7 +613,6 @@ class MultimodalInput:
     content: str
     mime_type: str = ""
     metadata: Dict[str, Any] = field(default_factory=_empty_dict_str_any)
-
 
 @dataclass
 class ComposedAgent:
@@ -595,7 +629,6 @@ class ComposedAgent:
     order: int = 0
     depends_on: List[str] = field(default_factory=_empty_list_str)
 
-
 @dataclass
 class SerializationConfig:
     """Configuration for custom serialization.
@@ -611,7 +644,6 @@ class SerializationConfig:
     compression: bool = False
     encryption: bool = False
 
-
 @dataclass
 class FilePriorityConfig:
     """Configuration for file priority.
@@ -624,7 +656,6 @@ class FilePriorityConfig:
     path_patterns: Dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
     extension_priorities: Dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
     default_priority: FilePriority = FilePriority.NORMAL
-
 
 @dataclass
 class ContextWindow:
@@ -658,7 +689,6 @@ class ContextWindow:
         self.messages.clear()
         self.token_counts.clear()
 
-
 @dataclass
 class MultimodalBuilder:
     """Builds multimodal input sets."""
@@ -680,7 +710,6 @@ class MultimodalBuilder:
         """Build and return inputs."""
         return self.inputs
 
-
 @dataclass
 class AgentPipeline:
     """Chains agent steps sequentially."""
@@ -699,7 +728,6 @@ class AgentPipeline:
             result = self.steps[step_name](result)
         return result
 
-
 @dataclass
 class AgentParallel:
     """Executes agent branches in parallel conceptually."""
@@ -712,7 +740,6 @@ class AgentParallel:
     def execute(self, data: Any) -> Dict[str, Any]:
         """Execute all branches."""
         return {name: func(data) for name, func in self.branches.items()}
-
 
 @dataclass
 class AgentRouter:
@@ -738,7 +765,6 @@ class AgentRouter:
             return self.default_handler(data)
 
         return data
-
 
 @dataclass
 class TokenBudget:
@@ -766,6 +792,85 @@ class TokenBudget:
         """Release allocated tokens."""
         self.allocations.pop(name, None)
 
+@dataclass
+class ExecutionCondition:
+    """A condition for agent execution.
+
+    Attributes:
+        name: Condition name.
+        check: Function to check condition.
+        description: Human - readable description.
+    """
+
+    name: str
+    check: Callable[[Path, str], bool]
+    description: str = ""
+
+@dataclass
+class IncrementalState:
+    """State for incremental processing.
+
+    Attributes:
+        last_run_timestamp: Timestamp of last successful run.
+        processed_files: Dict of file paths to their last processed timestamp.
+        file_hashes: Dict of file paths to their content hashes.
+        pending_files: List of files pending processing.
+    """
+    last_run_timestamp: float = 0.0
+    processed_files: dict[str, float] = field(default_factory=_empty_dict_str_float)
+    file_hashes: dict[str, str] = field(default_factory=_empty_dict_str_str)
+    pending_files: list[str] = field(default_factory=_empty_list_str)
+
+@dataclass
+class RateLimitConfig:
+    """Configuration for rate limiting.
+
+    Attributes:
+        requests_per_second: Maximum requests per second.
+        requests_per_minute: Maximum requests per minute.
+        burst_size: Maximum burst size for token bucket.
+        strategy: Rate limiting strategy to use.
+        cooldown_seconds: Cooldown period after hitting limit.
+    """
+    requests_per_second: float = 10.0
+    requests_per_minute: int = 60
+    burst_size: int = 10
+    strategy: RateLimitStrategy = RateLimitStrategy.TOKEN_BUCKET
+    cooldown_seconds: float = 1.0
+
+@dataclass
+class ShutdownState:
+    """State for graceful shutdown.
+
+    Attributes:
+        shutdown_requested: Whether shutdown has been requested.
+        current_file: Currently processing file.
+        completed_files: List of completed files.
+        pending_files: List of pending files.
+        start_time: Processing start time.
+    """
+    shutdown_requested: bool = False
+    current_file: Optional[str] = None
+    completed_files: list[str] = field(default_factory=_empty_list_str)
+    pending_files: list[str] = field(default_factory=_empty_list_str)
+    start_time: float = field(default_factory=time.time)
+
+@dataclass
+class ValidationRule:
+    """Consolidated validation rule for Phase 126."""
+    name: str
+    pattern: str = ""
+    message: str = "Validation failed"
+    severity: str = "error" # error, warning, info
+    validator: Optional[Callable[[str, Path], bool]] = None
+    required: bool = False
+    file_pattern: str = "" # Alias for backward compatibility
+
+    def __post_init__(self) -> None:
+        if not self.pattern and self.file_pattern:
+            self.pattern = self.file_pattern
+        if not self.file_pattern and self.pattern:
+            self.file_pattern = self.pattern
 
 @dataclass
 class ModelConfig:
@@ -773,7 +878,8 @@ class ModelConfig:
     model_id: str
     temperature: float = 0.7
     max_tokens: int = 2000
-
+    enable_thinking: bool = False
+    max_thinking_tokens: int = 2000
 
 @dataclass
 class ConfigProfile:
@@ -786,5 +892,160 @@ class ConfigProfile:
         """Get setting value."""
         return self.settings.get(key, default)
 
-
 EventHook = Callable[[dict[str, Any]], None]
+
+@dataclass
+class AgentHealthCheck:
+    """Health check result for an agent.
+
+    Attributes:
+        agent_name: Name of the agent.
+        status: Health status.
+        response_time_ms: Response time in milliseconds.
+        last_check: Timestamp of last health check.
+        error_message: Error message if unhealthy.
+        details: Additional health details.
+    """
+    agent_name: str
+    status: HealthStatus
+    response_time_ms: float = 0.0
+    last_check: float = field(default_factory=time.time)
+    error_message: Optional[str] = None
+    details: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+
+@dataclass
+class AgentPluginConfig:
+    """Configuration for an agent plugin.
+
+    Attributes:
+        name: Unique plugin name.
+        module_path: Path to the plugin module.
+        entry_point: Entry point function name.
+        priority: Execution priority.
+        enabled: Whether the plugin is enabled.
+        config: Plugin - specific configuration.
+    """
+    name: str
+    module_path: str
+    entry_point: str = "run"
+    priority: AgentPriority = AgentPriority.NORMAL
+    enabled: bool = True
+    config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+
+@dataclass
+class CachedResult:
+    """A cached agent result.
+
+    Attributes:
+        file_path: File that was processed.
+        agent_name: Agent that produced result.
+        content_hash: Hash of input content.
+        result: The cached result.
+        timestamp: When cached.
+        ttl_seconds: Time to live.
+    """
+
+    file_path: str
+    agent_name: str
+    content_hash: str
+    result: Any
+    timestamp: float = field(default_factory=time.time)
+    ttl_seconds: int = 3600
+
+@dataclass
+class DiffResult:
+    """Result of a diff operation.
+
+    Attributes:
+        file_path: Path to the file.
+        original_content: Original file content.
+        modified_content: Modified content after changes.
+        diff_lines: List of diff lines.
+        additions: Number of lines added.
+        deletions: Number of lines deleted.
+        changes: Number of lines changed.
+    """
+    file_path: Path
+    original_content: str
+    modified_content: str
+    diff_lines: list[str] = field(default_factory=_empty_list_str)
+    additions: int = 0
+    deletions: int = 0
+    changes: int = 0
+
+@dataclass
+class ExecutionProfile:
+    """A profile for agent execution settings.
+
+    Attributes:
+        name: Profile name.
+        max_files: Maximum files to process.
+        timeout: Timeout per operation.
+        parallel: Enable parallel execution.
+        workers: Number of workers.
+        dry_run: Dry run mode.
+    """
+
+    name: str
+    max_files: Optional[int] = None
+    timeout: int = 120
+    parallel: bool = False
+    workers: int = 4
+    dry_run: bool = False
+
+@dataclass
+class TelemetrySpan:
+    """A telemetry span for tracing.
+
+    Attributes:
+        name: Span name.
+        trace_id: Trace identifier.
+        span_id: Span identifier.
+        parent_id: Parent span ID.
+        start_time: Start timestamp.
+        end_time: End timestamp.
+        attributes: Span attributes.
+        events: Span events.
+    """
+
+    name: str
+    trace_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    span_id: str = field(default_factory=lambda: str(uuid.uuid4())[:16])
+    parent_id: Optional[str] = None
+    start_time: float = field(default_factory=time.time)
+    end_time: Optional[float] = None
+    attributes: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+    events: list[dict[str, Any]] = field(default_factory=_empty_list_dict_str_any)
+
+class SpanContext:
+    """Context for a telemetry span."""
+
+    def __init__(self, span: TelemetrySpan) -> None:
+        """Initialize context.
+
+        Args:
+            span: The span to manage.
+        """
+        self._span = span
+
+    def set_attribute(self, key: str, value: Any) -> None:
+        """Set a span attribute.
+
+        Args:
+            key: Attribute key.
+            value: Attribute value.
+        """
+        self._span.attributes[key] = value
+
+    def add_event(self, name: str, attributes: Optional[Dict[str, Any]] = None) -> None:
+        """Add an event to the span.
+
+        Args:
+            name: Event name.
+            attributes: Event attributes.
+        """
+        self._span.events.append({
+            "name": name,
+            "timestamp": time.time(),
+            "attributes": attributes or {},
+        })
