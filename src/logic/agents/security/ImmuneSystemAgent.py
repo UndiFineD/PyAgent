@@ -71,9 +71,9 @@ class ImmuneSystemAgent(BaseAgent):
         # simulated healing steps
         steps = [
             f"Step 1: Snapshot and isolate {node_id}",
-            f"Step 2: Rollback to previous stable state (State: PRISTINE)",
-            f"Step 3: Verification via RealityAnchorAgent",
-            f"Step 4: Gradually restore node connections"
+            "Step 2: Rollback to previous stable state (State: PRISTINE)",
+            "Step 3: Verification via RealityAnchorAgent",
+            "Step 4: Gradually restore node connections"
         ]
         
         return f"Self-healing complete for {node_id}. Integrity Level: 100%. \n" + "\n".join(steps)

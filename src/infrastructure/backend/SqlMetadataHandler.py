@@ -137,7 +137,7 @@ class SqlMetadataHandler:
         # Phase 108: Scalability Gatekeeping (Prep for trillion-parameter community data)
         if db_size_mb > 1024:
             # 1GB threshold for relational sharding
-             logging.warning(f"SQL Metadata DB exceeds scale thresholds. Partitioning registry recommended.")
+             logging.warning("SQL Metadata DB exceeds scale thresholds. Partitioning registry recommended.")
 
     def _rotate_metadata_shard(self) -> None:
         """Logic for metadata sharding/rotation."""

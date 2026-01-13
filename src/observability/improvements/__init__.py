@@ -20,64 +20,64 @@
 """Auto-generated module exports."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .AccessController import AccessController
-from .AnalysisToolType import AnalysisToolType
-from .AnalyticsEngine import AnalyticsEngine
-from .ArchiveManager import ArchiveManager
-from .ArchivedImprovement import ArchivedImprovement
-from .AssignmentManager import AssignmentManager
-from .BranchComparer import BranchComparer
-from .BranchComparison import BranchComparison
-from .BranchComparisonStatus import BranchComparisonStatus
-from .BulkManager import BulkManager
-from .BulkOperationResult import BulkOperationResult
-from .CodeAnalyzer import CodeAnalyzer
-from .CompletionTrend import CompletionTrend
-from .ConflictResolution import ConflictResolution
-from .DependencyResolver import DependencyResolver
-from .DocGenerator import DocGenerator
-from .EffortEstimate import EffortEstimate
-from .EffortEstimateResult import EffortEstimateResult
-from .EffortEstimator import EffortEstimator
-from .ImpactScorer import ImpactScorer
-from .Improvement import Improvement
-from .ImprovementArchive import ImprovementArchive
-from .ImprovementCategory import ImprovementCategory
-from .ImprovementDashboard import ImprovementDashboard
-from .ImprovementDiff import ImprovementDiff
-from .ImprovementDiffType import ImprovementDiffType
-from .ImprovementExporter import ImprovementExporter
-from .ImprovementPriority import ImprovementPriority
-from .ImprovementScheduler import ImprovementScheduler
-from .ImprovementStatus import ImprovementStatus
-from .ImprovementTemplate import ImprovementTemplate
-from .ImprovementValidator import ImprovementValidator
+from src.core.base.version import VERSION as VERSION
+from .AccessController import AccessController as AccessController
+from .AnalysisToolType import AnalysisToolType as AnalysisToolType
+from .AnalyticsEngine import AnalyticsEngine as AnalyticsEngine
+from .ArchiveManager import ArchiveManager as ArchiveManager
+from .ArchivedImprovement import ArchivedImprovement as ArchivedImprovement
+from .AssignmentManager import AssignmentManager as AssignmentManager
+from .BranchComparer import BranchComparer as BranchComparer
+from .BranchComparison import BranchComparison as BranchComparison
+from .BranchComparisonStatus import BranchComparisonStatus as BranchComparisonStatus
+from .BulkManager import BulkManager as BulkManager
+from .BulkOperationResult import BulkOperationResult as BulkOperationResult
+from .CodeAnalyzer import CodeAnalyzer as CodeAnalyzer
+from .CompletionTrend import CompletionTrend as CompletionTrend
+from .ConflictResolution import ConflictResolution as ConflictResolution
+from .DependencyResolver import DependencyResolver as DependencyResolver
+from .DocGenerator import DocGenerator as DocGenerator
+from .EffortEstimate import EffortEstimate as EffortEstimate
+from .EffortEstimateResult import EffortEstimateResult as EffortEstimateResult
+from .EffortEstimator import EffortEstimator as EffortEstimator
+from .ImpactScorer import ImpactScorer as ImpactScorer
+from .Improvement import Improvement as Improvement
+from .ImprovementArchive import ImprovementArchive as ImprovementArchive
+from .ImprovementCategory import ImprovementCategory as ImprovementCategory
+from .ImprovementDashboard import ImprovementDashboard as ImprovementDashboard
+from .ImprovementDiff import ImprovementDiff as ImprovementDiff
+from .ImprovementDiffType import ImprovementDiffType as ImprovementDiffType
+from .ImprovementExporter import ImprovementExporter as ImprovementExporter
+from .ImprovementPriority import ImprovementPriority as ImprovementPriority
+from .ImprovementScheduler import ImprovementScheduler as ImprovementScheduler
+from .ImprovementStatus import ImprovementStatus as ImprovementStatus
+from .ImprovementTemplate import ImprovementTemplate as ImprovementTemplate
+from .ImprovementValidator import ImprovementValidator as ImprovementValidator
 from .ImprovementsAgent import ImprovementsAgent, DEFAULT_TEMPLATES
-from .MergeCandidate import MergeCandidate
-from .MergeDetector import MergeDetector
-from .NotificationManager import NotificationManager
-from .ProgressDashboard import ProgressDashboard
-from .ProgressReport import ProgressReport
-from .ResourceAllocation import ResourceAllocation
-from .RollbackManager import RollbackManager
-from .RollbackPoint import RollbackPoint
-from .RollbackRecord import RollbackRecord
-from .RollbackTracker import RollbackTracker
-from .SLAConfiguration import SLAConfiguration
-from .SLALevel import SLALevel
-from .SLAManager import SLAManager
-from .SLAPolicy import SLAPolicy
-from .ScheduleStatus import ScheduleStatus
-from .ScheduledEntry import ScheduledEntry
-from .ScheduledImprovement import ScheduledImprovement
-from .ToolIntegration import ToolIntegration
-from .ToolSuggestion import ToolSuggestion
-from .TransitionResult import TransitionResult
-from .ValidationResult import ValidationResult
-from .ValidationSeverity import ValidationSeverity
-from .VotingSystem import VotingSystem
-from .WorkflowEngine import WorkflowEngine
-from ._ScheduleStore import _ScheduleStore
+from .MergeCandidate import MergeCandidate as MergeCandidate
+from .MergeDetector import MergeDetector as MergeDetector
+from .NotificationManager import NotificationManager as NotificationManager
+from .ProgressDashboard import ProgressDashboard as ProgressDashboard
+from .ProgressReport import ProgressReport as ProgressReport
+from .ResourceAllocation import ResourceAllocation as ResourceAllocation
+from .RollbackManager import RollbackManager as RollbackManager
+from .RollbackPoint import RollbackPoint as RollbackPoint
+from .RollbackRecord import RollbackRecord as RollbackRecord
+from .RollbackTracker import RollbackTracker as RollbackTracker
+from .SLAConfiguration import SLAConfiguration as SLAConfiguration
+from .SLALevel import SLALevel as SLALevel
+from .SLAManager import SLAManager as SLAManager
+from .SLAPolicy import SLAPolicy as SLAPolicy
+from .ScheduleStatus import ScheduleStatus as ScheduleStatus
+from .ScheduledEntry import ScheduledEntry as ScheduledEntry
+from .ScheduledImprovement import ScheduledImprovement as ScheduledImprovement
+from .ToolIntegration import ToolIntegration as ToolIntegration
+from .ToolSuggestion import ToolSuggestion as ToolSuggestion
+from .TransitionResult import TransitionResult as TransitionResult
+from .ValidationResult import ValidationResult as ValidationResult
+from .ValidationSeverity import ValidationSeverity as ValidationSeverity
+from .VotingSystem import VotingSystem as VotingSystem
+from .WorkflowEngine import WorkflowEngine as WorkflowEngine
+from ._ScheduleStore import _ScheduleStore as _ScheduleStore
 
 __version__ = VERSION

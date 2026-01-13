@@ -11,6 +11,13 @@ from enum import Enum
 from datetime import datetime, timedelta
 from dataclasses import dataclass, field
 from typing import Dict, List, Any, Optional, Tuple, Union
+
+try:
+    import matplotlib.pyplot as plt
+    has_matplotlib = True
+except ImportError:
+    plt = None
+    has_matplotlib = False
 from src.core.base.version import VERSION
 
 __version__ = VERSION
