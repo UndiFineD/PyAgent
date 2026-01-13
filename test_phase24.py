@@ -1,9 +1,12 @@
 import sys
 from pathlib import Path
 <<<<<<< HEAD:test_phase24.py
+<<<<<<< HEAD:test_phase24.py
 sys.path.append(str(Path(__file__).parent / "src"))
 =======
 >>>>>>> 0777c397c (phase 320):tests/phases/test_phase24.py
+=======
+>>>>>>> d6712a17b (phase 320):tests/phases/test_phase24.py
 
 from classes.fleet.FleetManager import FleetManager
 

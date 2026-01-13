@@ -21,6 +21,7 @@ import asyncio
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Try to import test utilities
 try:
     from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
@@ -40,6 +41,9 @@ sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
 =======
 # Import from src
 >>>>>>> 0777c397c (phase 320)
+=======
+# Import from src
+>>>>>>> d6712a17b (phase 320)
 
 
 class TestAgentState:

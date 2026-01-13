@@ -38,7 +38,10 @@ except ImportError:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+<<<<<<< HEAD:tests/classes/test_agent_coder/core.py
 
+=======
+>>>>>>> d6712a17b (phase 320):tests/unit/logic/test_coder_CORE_UNIT.py
 
 class TestAccessibilityIssueTypeEnum:
     """Tests for AccessibilityIssueType enum."""

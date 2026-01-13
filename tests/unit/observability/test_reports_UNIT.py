@@ -36,8 +36,11 @@ except ImportError:
 
 # Import from src if needed
 <<<<<<< HEAD
+<<<<<<< HEAD
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent / 'src'))
 
+=======
+>>>>>>> d6712a17b (phase 320)
 
 class TestReportTypeEnum:
     """Tests for ReportType enum."""

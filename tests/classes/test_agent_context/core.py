@@ -25,6 +25,7 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 from tests.utils.agent_test_utils import *
 
 # Import from src if needed
+<<<<<<< HEAD:tests/classes/test_agent_context/core.py
 
 class TestSemanticSearch:
     """Tests for semantic search using embeddings."""
@@ -525,6 +526,8 @@ class TestContextSearchIndexing:
         assert "authentication" in previous
         assert "jwt" in previous
 
+=======
+>>>>>>> d6712a17b (phase 320):tests/unit/core/test_context_CORE_UNIT.py
 
 # =============================================================================
 # Session 9: Context Notification Tests

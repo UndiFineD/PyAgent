@@ -7,9 +7,12 @@ from pathlib import Path
 
 # Add project root to path
 <<<<<<< HEAD:test_phase38.py
+<<<<<<< HEAD:test_phase38.py
 sys.path.append(str(Path(__file__).parent))
 =======
 >>>>>>> 0777c397c (phase 320):tests/phases/test_phase38.py
+=======
+>>>>>>> d6712a17b (phase 320):tests/phases/test_phase38.py
 
 from src.classes.fleet.FleetManager import FleetManager
 

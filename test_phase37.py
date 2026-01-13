@@ -7,9 +7,12 @@ from pathlib import Path
 
 # Add the workspace root to sys.path
 <<<<<<< HEAD:test_phase37.py
+<<<<<<< HEAD:test_phase37.py
 sys.path.append(str(Path(__file__).parent))
 =======
 >>>>>>> 0777c397c (phase 320):tests/phases/test_phase37.py
+=======
+>>>>>>> d6712a17b (phase 320):tests/phases/test_phase37.py
 
 from src.classes.fleet.FleetManager import FleetManager
 
