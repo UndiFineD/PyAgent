@@ -95,7 +95,7 @@ class MarkdownAgent(CoderAgent):
     def insert_knowledge_graph(self) -> str:
         """Inserts a Mermaid representation of the workspace knowledge graph."""
         graph = self._knowledge_agent.get_graph_mermaid()
-        return f"\n## Workspace Knowledge Graph\n\n" + self.add_mermaid_diagram("", graph)
+        return "\n## Workspace Knowledge Graph\n\n" + self.add_mermaid_diagram("", graph)
 
     def insert_backlinks(self) -> str:
         """Inserts a list of notes linking to this one."""

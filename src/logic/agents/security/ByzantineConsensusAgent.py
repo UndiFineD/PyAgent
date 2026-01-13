@@ -113,7 +113,7 @@ class ByzantineConsensusAgent(BaseAgent):
 
     def improve_content(self, input_text: str) -> str:
         """Acts as a high-level evaluator for a single piece of content."""
-        return f"Byzantine Evaluation: Content integrity verified at 94% confidence level. Ready for deployment."
+        return "Byzantine Evaluation: Content integrity verified at 94% confidence level. Ready for deployment."
 
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function

@@ -102,4 +102,4 @@ class FleetTelemetryVisualizer:
         
         if not drift:
             return "All agents are synchronized with core version."
-        return f"VERSION DRIFT DETECTED:\n" + "\n".join(drift)
+        return "VERSION DRIFT DETECTED:\n" + "\n".join(drift)

@@ -20,51 +20,51 @@
 """Domain types for the PyAgent core architecture."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .AccessibilityIssue import AccessibilityIssue
-from .AccessibilityIssueType import AccessibilityIssueType
-from .AccessibilityReport import AccessibilityReport
-from .AccessibilitySeverity import AccessibilitySeverity
-from .ARIAAttribute import ARIAAttribute
-from .ChangelogEntry import ChangelogEntry
-from .CodeLanguage import CodeLanguage
-from .CodeMetrics import CodeMetrics
-from .CodeSmell import CodeSmell
-from .ColorContrastResult import ColorContrastResult
-from .ComplianceCategory import ComplianceCategory
-from .ComplianceResult import ComplianceResult
-from .ConsistencyIssue import ConsistencyIssue
-from .DependencyNode import DependencyNode
-from .DependencyType import DependencyType
-from .DiffResult import DiffResult
-from .DiffViewMode import DiffViewMode
-from .EntryTemplate import EntryTemplate
-from .FeedFormat import FeedFormat
-from .GroupingStrategy import GroupingStrategy
-from .LinkedReference import LinkedReference
-from .LocalizationLanguage import LocalizationLanguage
-from .LocalizedEntry import LocalizedEntry
-from .MigrationRule import MigrationRule
-from .MigrationStatus import MigrationStatus
-from .ModernizationSuggestion import ModernizationSuggestion
-from .MonorepoEntry import MonorepoEntry
-from .OptimizationSuggestion import OptimizationSuggestion
-from .OptimizationType import OptimizationType
-from .ProfilingCategory import ProfilingCategory
-from .ProfilingSuggestion import ProfilingSuggestion
-from .QualityScore import QualityScore
-from .RefactoringPattern import RefactoringPattern
-from .ReleaseNote import ReleaseNote
-from .ReviewCategory import ReviewCategory
-from .ReviewFinding import ReviewFinding
-from .SearchResult import SearchResult
-from .SecurityIssueType import SecurityIssueType
-from .SecurityVulnerability import SecurityVulnerability
-from .StyleRule import StyleRule
-from .StyleRuleSeverity import StyleRuleSeverity
-from .TemplateManager import TemplateManager
-from .TestGap import TestGap
-from .VersioningStrategy import VersioningStrategy
-from .WCAGLevel import WCAGLevel
+from src.core.base.version import VERSION as VERSION
+from .AccessibilityIssue import AccessibilityIssue as AccessibilityIssue
+from .AccessibilityIssueType import AccessibilityIssueType as AccessibilityIssueType
+from .AccessibilityReport import AccessibilityReport as AccessibilityReport
+from .AccessibilitySeverity import AccessibilitySeverity as AccessibilitySeverity
+from .ARIAAttribute import ARIAAttribute as ARIAAttribute
+from .ChangelogEntry import ChangelogEntry as ChangelogEntry
+from .CodeLanguage import CodeLanguage as CodeLanguage
+from .CodeMetrics import CodeMetrics as CodeMetrics
+from .CodeSmell import CodeSmell as CodeSmell
+from .ColorContrastResult import ColorContrastResult as ColorContrastResult
+from .ComplianceCategory import ComplianceCategory as ComplianceCategory
+from .ComplianceResult import ComplianceResult as ComplianceResult
+from .ConsistencyIssue import ConsistencyIssue as ConsistencyIssue
+from .DependencyNode import DependencyNode as DependencyNode
+from .DependencyType import DependencyType as DependencyType
+from .DiffResult import DiffResult as DiffResult
+from .DiffViewMode import DiffViewMode as DiffViewMode
+from .EntryTemplate import EntryTemplate as EntryTemplate
+from .FeedFormat import FeedFormat as FeedFormat
+from .GroupingStrategy import GroupingStrategy as GroupingStrategy
+from .LinkedReference import LinkedReference as LinkedReference
+from .LocalizationLanguage import LocalizationLanguage as LocalizationLanguage
+from .LocalizedEntry import LocalizedEntry as LocalizedEntry
+from .MigrationRule import MigrationRule as MigrationRule
+from .MigrationStatus import MigrationStatus as MigrationStatus
+from .ModernizationSuggestion import ModernizationSuggestion as ModernizationSuggestion
+from .MonorepoEntry import MonorepoEntry as MonorepoEntry
+from .OptimizationSuggestion import OptimizationSuggestion as OptimizationSuggestion
+from .OptimizationType import OptimizationType as OptimizationType
+from .ProfilingCategory import ProfilingCategory as ProfilingCategory
+from .ProfilingSuggestion import ProfilingSuggestion as ProfilingSuggestion
+from .QualityScore import QualityScore as QualityScore
+from .RefactoringPattern import RefactoringPattern as RefactoringPattern
+from .ReleaseNote import ReleaseNote as ReleaseNote
+from .ReviewCategory import ReviewCategory as ReviewCategory
+from .ReviewFinding import ReviewFinding as ReviewFinding
+from .SearchResult import SearchResult as SearchResult
+from .SecurityIssueType import SecurityIssueType as SecurityIssueType
+from .SecurityVulnerability import SecurityVulnerability as SecurityVulnerability
+from .StyleRule import StyleRule as StyleRule
+from .StyleRuleSeverity import StyleRuleSeverity as StyleRuleSeverity
+from .TemplateManager import TemplateManager as TemplateManager
+from .TestGap import TestGap as TestGap
+from .VersioningStrategy import VersioningStrategy as VersioningStrategy
+from .WCAGLevel import WCAGLevel as WCAGLevel
 
 __version__ = VERSION

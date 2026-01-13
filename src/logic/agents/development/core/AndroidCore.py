@@ -35,7 +35,7 @@ class AndroidCore:
         lines = output.splitlines()
         devices = []
         for line in lines[1:]: # Skip "List of devices attached"
-            if "device" in line and not "offline" in line:
+            if "device" in line and "offline" not in line:
                 devices.append(line.split()[0])
         return devices
 
