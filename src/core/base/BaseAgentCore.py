@@ -136,7 +136,7 @@ class BaseAgentCore:
             metadata: Optional metadata for assessment
             
         Returns:
-            ResponseQuality score
+            ResponseQuality enum value
         """
         if metadata is None:
             metadata = {}
@@ -159,11 +159,18 @@ class BaseAgentCore:
         if metadata.get("is_complete"):
             score += 0.1
         
-        return ResponseQuality(
-            score=min(1.0, score),
-            has_errors=False,
-            completeness=metadata.get("completeness", 0.8)
-        )
+        # Map score to enum value
+        final_score = min(1.0, score)
+        if final_score >= 0.9:
+            return ResponseQuality.EXCELLENT
+        elif final_score >= 0.7:
+            return ResponseQuality.GOOD
+        elif final_score >= 0.5:
+            return ResponseQuality.ACCEPTABLE
+        elif final_score >= 0.3:
+            return ResponseQuality.POOR
+        else:
+            return ResponseQuality.INVALID
 
     def filter_events(self, events: List[Dict[str, Any]], event_type: Optional[str] = None) -> List[Dict[str, Any]]:
         """Filter events based on type.
