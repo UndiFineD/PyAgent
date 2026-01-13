@@ -38,4 +38,4 @@ class TestGeneratedAgent(BaseAgent):
     def perform_specialized_task(self, *args, **kwargs) -> str:
         """Specialize this method based on: Perform complex math and string analysis"""
         logging.info(f"Generated agent TestGenerated performing task with args: {args}")
-        return f"Result from generated agent TestGenerated for task: specialized"
+        return "Result from generated agent TestGenerated for task: specialized"

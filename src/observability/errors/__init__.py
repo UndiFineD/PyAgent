@@ -20,35 +20,35 @@
 """Auto-generated module exports."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .AutoFixSuggester import AutoFixSuggester
-from .BlameInfo import BlameInfo
-from .BlameTracker import BlameTracker
-from .BranchComparer import BranchComparer
-from .BranchComparison import BranchComparison
-from .ErrorBudget import ErrorBudget
-from .ErrorBudgetManager import ErrorBudgetManager
-from .ErrorCategory import ErrorCategory
-from .ErrorCluster import ErrorCluster
-from .ErrorEntry import ErrorEntry
-from .ErrorImpact import ErrorImpact
-from .ErrorPattern import ErrorPattern
-from .ErrorSeverity import ErrorSeverity
+from src.core.base.version import VERSION as VERSION
+from .AutoFixSuggester import AutoFixSuggester as AutoFixSuggester
+from .BlameInfo import BlameInfo as BlameInfo
+from .BlameTracker import BlameTracker as BlameTracker
+from .BranchComparer import BranchComparer as BranchComparer
+from .BranchComparison import BranchComparison as BranchComparison
+from .ErrorBudget import ErrorBudget as ErrorBudget
+from .ErrorBudgetManager import ErrorBudgetManager as ErrorBudgetManager
+from .ErrorCategory import ErrorCategory as ErrorCategory
+from .ErrorCluster import ErrorCluster as ErrorCluster
+from .ErrorEntry import ErrorEntry as ErrorEntry
+from .ErrorImpact import ErrorImpact as ErrorImpact
+from .ErrorPattern import ErrorPattern as ErrorPattern
+from .ErrorSeverity import ErrorSeverity as ErrorSeverity
 from .ErrorsAgent import ErrorsAgent, DEFAULT_ERROR_PATTERNS
-from .ExternalReporter import ExternalReporter
-from .ExternalReportingClient import ExternalReportingClient
-from .FixSuggestion import FixSuggestion
-from .ImpactAnalyzer import ImpactAnalyzer
-from .NotificationChannel import NotificationChannel
-from .NotificationConfig import NotificationConfig
-from .NotificationManager import NotificationManager
-from .RegressionDetector import RegressionDetector
-from .RegressionInfo import RegressionInfo
-from .SuppressionRule import SuppressionRule
-from .TimelineEvent import TimelineEvent
-from .TimelineTracker import TimelineTracker
-from .TrendAnalyzer import TrendAnalyzer
-from .TrendData import TrendData
-from .TrendDirection import TrendDirection
+from .ExternalReporter import ExternalReporter as ExternalReporter
+from .ExternalReportingClient import ExternalReportingClient as ExternalReportingClient
+from .FixSuggestion import FixSuggestion as FixSuggestion
+from .ImpactAnalyzer import ImpactAnalyzer as ImpactAnalyzer
+from .NotificationChannel import NotificationChannel as NotificationChannel
+from .NotificationConfig import NotificationConfig as NotificationConfig
+from .NotificationManager import NotificationManager as NotificationManager
+from .RegressionDetector import RegressionDetector as RegressionDetector
+from .RegressionInfo import RegressionInfo as RegressionInfo
+from .SuppressionRule import SuppressionRule as SuppressionRule
+from .TimelineEvent import TimelineEvent as TimelineEvent
+from .TimelineTracker import TimelineTracker as TimelineTracker
+from .TrendAnalyzer import TrendAnalyzer as TrendAnalyzer
+from .TrendData import TrendData as TrendData
+from .TrendDirection import TrendDirection as TrendDirection
 
 __version__ = VERSION

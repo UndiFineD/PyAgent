@@ -41,7 +41,7 @@ class ReflectionAgent(BaseAgent):
     @as_tool
     def critique(self, work: str) -> str:
         """Analyzes work for flaws and suggests improvements."""
-        return f"### Critique\n1. Potential edge cases: Not handled.\n2. Inefficiency: The loop structure is O(n^2).\n3. Clarity: Variable names are ambiguous."
+        return "### Critique\n1. Potential edge cases: Not handled.\n2. Inefficiency: The loop structure is O(n^2).\n3. Clarity: Variable names are ambiguous."
 
     def improve_content(self, prompt: str) -> str:
         return self.critique(prompt)

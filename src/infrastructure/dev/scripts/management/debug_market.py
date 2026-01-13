@@ -55,7 +55,7 @@ def test_market_features() -> None:
     
     purchased = fleet.store.purchase_template("BobAgent", "SqlExpert", fleet.economy)
     if purchased:
-        print(f"Bob successfully purchased SqlExpert template.")
+        print("Bob successfully purchased SqlExpert template.")
         print(f"Bob Balance after purchase: {fleet.economy.get_balance('BobAgent')}")
     
     print("\nMarket features validation COMPLETED.")

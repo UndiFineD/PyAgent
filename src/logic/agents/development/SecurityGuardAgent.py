@@ -116,7 +116,7 @@ class SecurityGuardAgent(BaseAgent):
         is_jailbreak = self.detect_jailbreak(prompt)
         
         report = [
-            f"## Security Audit Report",
+            "## Security Audit Report",
             f"**Target Analysis**: {prompt[:100]}...",
             f"**Overall Risk**: {'HIGH' if risk_level == 'HIGH' or injections or is_jailbreak else risk_level}",
             ""

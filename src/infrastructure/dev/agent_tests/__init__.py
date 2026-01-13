@@ -21,7 +21,7 @@
 """Test agent functionality - extracted classes."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.version import VERSION as VERSION
 from .enums import (
     TestPriority, TestStatus, CoverageType, BrowserType, TestSourceType,
     MutationOperator, ExecutionMode
@@ -44,14 +44,14 @@ from .debugging import (
     ExecutionReplayer, TestProfiler, TestRecorder, TestReplayer
 )
 from .environment import EnvironmentProvisioner, DataFactory
-from .dependency_injection import DependencyInjector
+from .dependency_injection import DependencyInjector as DependencyInjector
 from .scheduling import CrossBrowserRunner, TestScheduler
-from .parallelization import ParallelizationStrategy
+from .parallelization import ParallelizationStrategy as ParallelizationStrategy
 from .test_management import (
     BaselineComparisonResult, BaselineManager, DIContainer, TestPrioritizer,
     FlakinessDetector, QuarantineManager, ImpactAnalyzer, ContractValidator
 )
-from .agents import TestsAgent
+from .agents import TestsAgent as TestsAgent
 
 # Enums
 

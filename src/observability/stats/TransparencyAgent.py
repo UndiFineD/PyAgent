@@ -51,7 +51,7 @@ class TransparencyAgent(BaseAgent):
             # Filter by workflow_id if it's in the data
             history = [e for e in history if e.get("data", {}).get("workflow_id") == workflow_id or workflow_id in str(e)]
 
-        report = [f"# fleet Transparency Audit Trail"]
+        report = ["# fleet Transparency Audit Trail"]
         if workflow_id:
             report.append(f"## Focus: Workflow {workflow_id}")
             

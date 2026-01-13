@@ -22,8 +22,8 @@ Agents specializing in swarm coordination and fleet-wide management.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from .OrchestratorAgent import OrchestratorAgent
+from src.core.base.version import VERSION as VERSION
+from .OrchestratorAgent import OrchestratorAgent as OrchestratorAgent
 
 __version__ = VERSION
 

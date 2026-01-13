@@ -42,9 +42,7 @@ from src.core.base.models import (
 from src.core.base.utils.FileLockManager import FileLockManager
 from src.core.base.GracefulShutdown import GracefulShutdown
 from src.core.base.managers import HealthChecker
-from src.core.base.models import HealthStatus
 from src.core.base.IncrementalProcessor import IncrementalProcessor
-from src.core.base.models import RateLimitConfig
 from src.core.base.utils.RateLimiter import RateLimiter
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import contextmanager
@@ -56,7 +54,7 @@ import importlib.util
 import logging
 import subprocess
 import sys
-from concurrent.futures import ThreadPoolExecutor, TimeoutError
+from concurrent.futures import TimeoutError
 from src.core.base.managers.AgentMetrics import AgentMetrics
 from src.core.base.utils.AgentFileManager import AgentFileManager
 from src.core.base.utils.AgentGitHandler import AgentGitHandler
