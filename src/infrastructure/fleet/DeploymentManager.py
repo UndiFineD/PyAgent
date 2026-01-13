@@ -51,7 +51,7 @@ CMD ["python", "src/agent_remote.py"]
 
     def generate_compose_orchestration(self, num_replicas: int = 3) -> str:
         """Generates a docker-compose.yaml for multi-node fleet scaling."""
-        compose_content = f"""version: '3.8'
+        compose_content = """version: '3.8'
 services:
   fleet_master:
     build:

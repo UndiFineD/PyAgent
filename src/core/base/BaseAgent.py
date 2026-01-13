@@ -698,7 +698,7 @@ class BaseAgent:
                         "file": str(self.file_path),
                         "error": str(e)
                     })
-                except Exception as se:
+                except Exception:
                     pass
 
             self.current_content: str = self.previous_content

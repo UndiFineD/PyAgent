@@ -41,7 +41,7 @@ except ImportError as e:
 
 def main():
     root = os.getcwd()
-    print(f"=== STRATEGIC SWARM INITIALIZATION ===")
+    print("=== STRATEGIC SWARM INITIALIZATION ===")
     print(f"Workspace Root: {root}")
     
     fleet = FleetManager(root)

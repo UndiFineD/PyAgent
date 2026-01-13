@@ -136,7 +136,7 @@ class MultiModalContextAgent(BaseAgent):
             reader = easyocr.Reader(['en'])
             result = reader.readtext(image_path, detail=0)
             if result:
-                return f"### OCR Results (EasyOCR)\n\n" + "\n".join(result)
+                return "### OCR Results (EasyOCR)\n\n" + "\n".join(result)
         except (ImportError, Exception):
             pass
 

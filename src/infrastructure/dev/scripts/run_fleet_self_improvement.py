@@ -107,7 +107,7 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, current_c
                 # NEW: Parse and execute @python: blocks
                 python_blocks = re.findall(r"@python:\s*\"\"\"(.*?)\"\"\"", strategic_note, re.DOTALL | re.IGNORECASE)
                 for py_code in python_blocks:
-                    print(f" - Executing Directive Python Block...")
+                    print(" - Executing Directive Python Block...")
                     exec(py_code, {"fleet": fleet, "root": root, "os": os, "sys": sys, "Path": Path})
             except Exception as e:
                 print(f" - Failed to parse directive: {e}")
@@ -123,7 +123,7 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, current_c
     
     stats = combined_stats
     
-    print(f"\nScan complete:")
+    print("\nScan complete:")
     print(f" - Files Scanned: {stats['files_scanned']}")
     print(f" - Issues Found: {stats['issues_found']}")
     print(f" - Autonomous Fixes Applied: {stats['fixes_applied']}")
@@ -187,7 +187,7 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, current_c
         "Autonomous fleet optimization maintains system health and security parity.",
         {"stats": stats}
     )
-    print(f"\nReasoning for this cycle logged to Explainability trace.")
+    print("\nReasoning for this cycle logged to Explainability trace.")
 
     # 5. Smart AI Recording Verification (Phase 107)
     print("\n[Intelligence] Verifying local interaction recording...")
@@ -353,7 +353,7 @@ def _cycle_throttle(delay: int, root: str, target_dirs: List[str]) -> None:
         # We'll wait for the first change.
         for changes in watch(*watch_paths):
             if changes:
-                print(f" - [Watcher] Change detected. Triggering next cycle.")
+                print(" - [Watcher] Change detected. Triggering next cycle.")
                 return
 
     except (ImportError, Exception) as e:
@@ -433,7 +433,7 @@ def main() -> None:
                 if not is_infinite and current_cycle >= num_cycles:
                     break
                     
-                print(f"\nWaiting before next cycle... (Press Ctrl+C to stop)")
+                print("\nWaiting before next cycle... (Press Ctrl+C to stop)")
                 _cycle_throttle(args.delay, root, last_target_dirs)
                 
     except KeyboardInterrupt:
