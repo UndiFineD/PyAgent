@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,17 +18,17 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Ethics Guardrail Agent for PyAgent.
 Reviews task requests and agent actions against constitutional AI principles.
 """
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
-from typing import Dict, Any, List
+from typing import Dict, Any
 from src.core.base.BaseAgent import BaseAgent
+
+__version__ = VERSION
 
 class EthicsGuardrailAgent(BaseAgent):
     """Reviews requests for ethical compliance and safety. 
@@ -63,8 +57,10 @@ class EthicsGuardrailAgent(BaseAgent):
         
         # Risk scoring
         risk_score = 0
-        if "critical" in str(decision).lower(): risk_score += 5
-        if "delete" in str(decision).lower(): risk_score += 3
+        if "critical" in str(decision).lower():
+            risk_score += 5
+        if "delete" in str(decision).lower():
+            risk_score += 3
         
         if risk_score > 7:
             return "ALARM: Swarm decision exceeds safe autonomous threshold. Human-In-The-Loop (HITL) required."
@@ -104,4 +100,3 @@ class EthicsGuardrailAgent(BaseAgent):
             logging.warning(f"Ethics Alert: {agent_name} output contains potentially sensitive data.")
             return False
         return True
-

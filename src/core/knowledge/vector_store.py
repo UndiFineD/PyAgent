@@ -10,12 +10,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -23,11 +17,12 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from .storage_base import KnowledgeStore
 from typing import Any, Dict, List, Optional
-import os
+
+__version__ = VERSION
 
 class VectorKnowledgeStore(KnowledgeStore):
     """
@@ -46,7 +41,8 @@ class VectorKnowledgeStore(KnowledgeStore):
             print("ChromaDB not installed, VectorKnowledgeStore will be disabled.")
 
     def store(self, key: str, value: str, metadata: Optional[Dict[str, Any]] = None) -> bool:
-        if not self.client: return False
+        if not self.client:
+            return False
         self.collection.add(
             documents=[value],
             metadatas=[metadata] if metadata else [{}],
@@ -55,7 +51,8 @@ class VectorKnowledgeStore(KnowledgeStore):
         return True
 
     def retrieve(self, query: str, limit: int = 5) -> List[Any]:
-        if not self.client: return []
+        if not self.client:
+            return []
         results = self.collection.query(
             query_texts=[query],
             n_results=limit
@@ -63,6 +60,7 @@ class VectorKnowledgeStore(KnowledgeStore):
         return results.get("documents", [[]])[0]
 
     def delete(self, key: str) -> bool:
-        if not self.client: return False
+        if not self.client:
+            return False
         self.collection.delete(ids=[key])
         return True

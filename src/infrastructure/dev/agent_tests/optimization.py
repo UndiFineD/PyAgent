@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,15 +18,14 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Test optimization and coverage analysis."""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from typing import List, Set, Tuple, Dict, Any
+from .models import TestCase
 
-from .models import TestCase, CoverageGap, CoverageType
-
+__version__ = VERSION
 
 class TestSuiteOptimizer:
     """Optimize test suites by removing redundant tests."""
@@ -127,7 +120,6 @@ class TestSuiteOptimizer:
             return list(self.coverage_map.keys())
 
         return kept
-
 
 class CoverageGapAnalyzer:
     """Analyzes coverage gaps."""

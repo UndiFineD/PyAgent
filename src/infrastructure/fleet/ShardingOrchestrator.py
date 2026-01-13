@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,21 +18,22 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Dynamic Communication Sharding Orchestrator (Phase 128).
 Optimizes swarm latency by clustering frequently interacting agents.
 """
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import json
 import numpy as np
 from pathlib import Path
-from typing import Dict, List, Any, Set, Optional
+from typing import Dict, List
 from collections import Counter
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
+
+__version__ = VERSION
 
 class ShardingOrchestrator:
     """Analyzes agent interactions and suggests/implements logical grouping.
@@ -91,8 +86,10 @@ class ShardingOrchestrator:
         # For simplicity, we create an adjacency-like interaction score per agent
         agent_interaction_scores = {a: 0 for a in agents}
         for (a, b), count in self._counts.items():
-            if a in agent_interaction_scores: agent_interaction_scores[a] += count
-            if b in agent_interaction_scores: agent_interaction_scores[b] += count
+            if a in agent_interaction_scores:
+                agent_interaction_scores[a] += count
+            if b in agent_interaction_scores:
+                agent_interaction_scores[b] += count
 
         features = []
         for a in agents:

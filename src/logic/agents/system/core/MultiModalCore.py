@@ -1,3 +1,4 @@
+
 """
 Core logic for Multi-Modal Context (Phase 178).
 Handles interactions with vision models for bug analysis.

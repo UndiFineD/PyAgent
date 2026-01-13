@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,25 +18,24 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Registry for mapping agent names to their implementations and initialization logic."""
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import importlib
 import logging
 import os
 import json
-from typing import Dict, Any, Tuple, Type, Optional, Callable, List, Iterable
+from typing import Dict, Any, Tuple, Optional, List, Iterable
 from pathlib import Path
 from .ResilientStubs import ResilientStub
 from src.logic.agents.system.MCPAgent import MCPAgent
 from .AgentRegistryCore import AgentRegistryCore
 from .BootstrapConfigs import BOOTSTRAP_AGENTS
+from src.core.base.version import SDK_VERSION
 
 # Import local version for gatekeeping
-from src.core.base.version import SDK_VERSION
+__version__ = VERSION
 
 class LazyAgentMap(dict):
     """A dictionary that instantiates agents only when they are first accessed."""
@@ -150,7 +143,8 @@ class LazyAgentMap(dict):
             raise RecursionError(f"Circular dependencies detected in Agent Registry: {cycles[0]}")
 
     def __contains__(self, key: object) -> bool:
-        if super().__contains__(key): return True
+        if super().__contains__(key):
+            return True
         return key in self.registry_configs or key in self._manifest_configs or key in self._discovered_configs
 
     def keys(self) -> List[str]:

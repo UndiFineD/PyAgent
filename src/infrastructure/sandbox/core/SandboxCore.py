@@ -1,3 +1,4 @@
+
 from __future__ import annotations
 import typing
 from dataclasses import dataclass, field
@@ -36,7 +37,8 @@ class SandboxCore:
 
     def calculate_resource_usage(self, start_cpu: float, end_cpu: float, duration: float) -> float:
         """Calculates normalized resource usage score."""
-        if duration <= 0: return 0.0
+        if duration <= 0:
+            return 0.0
         return (end_cpu - start_cpu) / duration
 
     def get_security_profile(self, risk_level: str) -> SandboxConfig:

@@ -11,14 +11,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
-
 """
 PyAgent SDK Version Info and Stability Gates.
 """
 
-
+from __future__ import annotations
 
 # PyAgent SDK Version Info (Core/Fleet Version)
 VERSION = "3.4.0-LEGAL"

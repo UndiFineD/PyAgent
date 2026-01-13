@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,18 +18,18 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """
 Resilient loading stubs for the PyAgent fleet.
 Provides stub objects when plugins fail to load due to missing dependencies.
 """
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import importlib
-from typing import Any, Dict, List, Optional, Callable
+from typing import Any, Dict, Optional, Callable
+
+__version__ = VERSION
 
 def resilient_import(module_name: str, class_name: Optional[str] = None) -> Any:
     """

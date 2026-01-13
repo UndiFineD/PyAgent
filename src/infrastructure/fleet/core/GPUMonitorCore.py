@@ -13,10 +13,8 @@
 # limitations under the License.
 
 from __future__ import annotations
-
-from dataclasses import dataclass, field
-from typing import Dict, List, Optional
-
+from dataclasses import dataclass
+from typing import List, Optional
 
 @dataclass(frozen=True)
 class GPUMetrics:
@@ -35,7 +33,6 @@ class GPUMetrics:
     @property
     def vram_percent(self) -> float:
         return (self.vram_used / self.vram_total) * 100 if self.vram_total > 0 else 0.0
-
 
 class GPUMonitorCore:
     """

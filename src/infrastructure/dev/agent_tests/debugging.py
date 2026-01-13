@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,27 +18,24 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Debugging utilities for test execution."""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-
 from .enums import ExecutionMode
 from .models import ExecutionTrace
 
+__version__ = VERSION
 
 def _empty_str_list() -> List[str]:
     return []
 
-
 def _empty_action_list() -> List[dict[str, Any]]:
     return []
-
 
 class ExecutionReplayer:
     """Replay test execution for debugging."""
@@ -136,7 +127,6 @@ class ExecutionReplayer:
             "variables": trace.variables
         }, indent=2)
 
-
 class TestProfiler:
     """Runtime profiling for tests."""
     __test__ = False
@@ -205,7 +195,6 @@ class TestProfiler:
             )
         return "\n".join(report)
 
-
 class TestRecorder:
     """Records test execution."""
     __test__ = False
@@ -238,7 +227,6 @@ class TestRecorder:
         if self._active is None:
             self.start_recording(test_name)
         self.record_action("result", {"passed": bool(result)})
-
 
 class TestReplayer:
     """Replays recorded tests."""

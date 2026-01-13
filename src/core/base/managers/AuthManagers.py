@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,12 +18,14 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 from dataclasses import dataclass, field
 from typing import Dict, Optional
 from src.core.base.models import AuthConfig, AuthMethod, _empty_dict_str_str
+
+__version__ = VERSION
 
 class AuthenticationManager:
     """Manager for authentication methods."""
@@ -74,13 +70,17 @@ class AuthenticationManager:
         self.config.custom_headers[key] = value
 
     def validate(self) -> bool:
-        if self.config.method == AuthMethod.NONE: return True
-        if self.config.method == AuthMethod.API_KEY: return bool(self.config.api_key)
-        if self.config.method == AuthMethod.BEARER_TOKEN: return bool(self.config.token)
-        if self.config.method == AuthMethod.BASIC_AUTH: return bool(self.config.username and self.config.password)
-        if self.config.method == AuthMethod.OAUTH2: return bool(self.config.oauth_client_id and self.config.oauth_client_secret)
+        if self.config.method == AuthMethod.NONE:
+            return True
+        if self.config.method == AuthMethod.API_KEY:
+            return bool(self.config.api_key)
+        if self.config.method == AuthMethod.BEARER_TOKEN:
+            return bool(self.config.token)
+        if self.config.method == AuthMethod.BASIC_AUTH:
+            return bool(self.config.username and self.config.password)
+        if self.config.method == AuthMethod.OAUTH2:
+            return bool(self.config.oauth_client_id and self.config.oauth_client_secret)
         return True
-
 
 @dataclass
 class AuthManager:
@@ -99,11 +99,10 @@ class AuthManager:
     def get_headers(self) -> Dict[str, str]:
         headers = dict(self.custom_headers)
         method = self.method
-        if isinstance(method, AuthMethod): method = method.value
+        if isinstance(method, AuthMethod):
+            method = method.value
         if method == "api_key" and "api_key" in self.credentials:
             headers["X-API-Key"] = self.credentials["api_key"]
         elif method in ("token", "bearer_token") and "token" in self.credentials:
             headers["Authorization"] = f"Bearer {self.credentials['token']}"
         return headers
-
-

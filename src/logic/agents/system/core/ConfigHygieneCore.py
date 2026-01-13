@@ -1,3 +1,4 @@
+
 """
 Core logic for Config Hygiene (Phase 174).
 Handles JSON Schema validation for configuration files.
@@ -5,7 +6,7 @@ Handles JSON Schema validation for configuration files.
 
 import json
 import os
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 
 class ConfigHygieneCore:
     @staticmethod

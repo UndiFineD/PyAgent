@@ -1,3 +1,4 @@
+
 """
 Core logic for Swarm Economy (Phase 179).
 Handles bidding and GPU priority allocation logic.

@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,60 +18,17 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Auto-extracted class from generate_agent_reports.py"""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from .AuditAction import AuditAction
 from .AuditEntry import AuditEntry
-
-from dataclasses import dataclass, field
-from datetime import datetime
-from enum import Enum
-from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple, cast
-import ast
-import hashlib
-import json
+from typing import Any, Dict, List, Optional
 import logging
-import re
-import sys
 import time
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+__version__ = VERSION
 
 class AuditLogger:
     """Logger for report audit trail.

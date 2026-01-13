@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,17 +18,17 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Core execution logic for SubagentRunner."""
 
-
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import os
 import time
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from typing import Optional, TYPE_CHECKING
 from .RunnerBackends import BackendHandlers
+
+__version__ = VERSION
 
 if TYPE_CHECKING:
     from .SubagentRunner import SubagentRunner
@@ -67,16 +61,20 @@ class SubagentCore:
         repo_root = self.runner._resolve_repo_root()
 
         def _try_codex_cli() -> Optional[str]:
-            if not self.runner._command_available('codex'): return None
+            if not self.runner._command_available('codex'):
+                return None
             return BackendHandlers.try_codex_cli(full_prompt, repo_root)
 
         def _try_copilot_cli() -> Optional[str]:
-            if not self.runner._command_available('copilot'): return None
+            if not self.runner._command_available('copilot'):
+                return None
             return BackendHandlers.try_copilot_cli(full_prompt, repo_root)
 
         def _try_gh_copilot(allow_non_command: bool) -> Optional[str]:
-            if not self.runner._command_available('gh'): return None
-            if not allow_non_command and not self.runner._looks_like_command(prompt): return None
+            if not self.runner._command_available('gh'):
+                return None
+            if not allow_non_command and not self.runner._looks_like_command(prompt):
+                return None
             return BackendHandlers.try_gh_copilot(full_prompt, repo_root, allow_non_command)
 
         def _try_github_models() -> Optional[str]:

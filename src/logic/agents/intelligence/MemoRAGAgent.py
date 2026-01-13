@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,21 +18,20 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Agent implementing MemoRAG patterns for global context understanding.
 Generates 'clues' from global memory to improve retrieval accuracy.
 Ref: https://github.com/qhjqhj00/MemoRAG
 """
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
-import json
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
+__version__ = VERSION
 
 class MemoRAGAgent(BaseAgent):
     """Memory-Augmented RAG agent for deep context discovery with sharding."""

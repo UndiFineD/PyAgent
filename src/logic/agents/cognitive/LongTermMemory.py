@@ -12,21 +12,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 """Advanced long-term memory using federated DiskCache shards for RAG."""
 
+from __future__ import annotations
+from src.core.base.version import VERSION
 import hashlib
-import json
 import logging
-import os
 import time
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
+
+__version__ = VERSION
 
 try:
     import diskcache

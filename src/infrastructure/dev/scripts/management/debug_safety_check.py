@@ -10,30 +10,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
+# Ensure the project root is in PYTHONPATH
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import os
 import sys
-import json
-from pathlib import Path
+from src.infrastructure.fleet.FleetManager import FleetManager
 
-# Ensure the project root is in PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
 
-from src.infrastructure.fleet.FleetManager import FleetManager
+__version__ = VERSION
 
 def main() -> None:
     """Perform a comprehensive safety and compliance audit."""

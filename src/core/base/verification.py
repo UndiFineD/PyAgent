@@ -10,12 +10,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -23,16 +17,16 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """
 Verification logic for agent outputs.
 Implements Stanford Reseach 'Anchoring Strength' and Keio University 'Self-Verification' paths.
 """
 
+from __future__ import annotations
+from src.core.base.version import VERSION
+from typing import Any, Dict
 
-
-import logging
-from typing import Any, Dict, List
+__version__ = VERSION
 
 class AgentVerifier:
     """Handles quality and anchoring verification of agent responses."""

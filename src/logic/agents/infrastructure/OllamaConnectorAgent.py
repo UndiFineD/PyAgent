@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,17 +18,14 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Agent for connecting to local Ollama instances on edge nodes (Phase 125)."""
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 from src.core.base.BaseAgent import BaseAgent
-import logging
-from src.core.base.ConnectivityManager import ConnectivityManager
-import json
 import requests
-from typing import Dict, List, Any, Optional
+
+__version__ = VERSION
 
 class OllamaConnectorAgent(BaseAgent):
     """Handles local inference requests via the Ollama API."""

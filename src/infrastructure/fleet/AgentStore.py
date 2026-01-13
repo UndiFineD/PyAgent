@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,18 +18,16 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
 """Agent Store for sharing specialized agent configurations and templates.
 Allows agents to 'buy' or download new capabilities.
 """
 
-
-
-
-import json
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, Any, Optional
+from typing import Optional
 
 class AgentStore:
     """Marketplace for agent templates and specialized configurations."""
@@ -73,4 +65,4 @@ class AgentStore:
             
         return None
 
-from typing import Optional
+__version__ = VERSION

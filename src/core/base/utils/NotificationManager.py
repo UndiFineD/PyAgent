@@ -11,32 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
-
-
-import logging
-import time
-import json
-import os
-from pathlib import Path
-from typing import List, Dict, Any, Callable, Optional
-
 # Infrastructure
+
+from __future__ import annotations
+from src.core.base.version import VERSION
+import logging
+from typing import List, Dict, Any, Callable, Optional
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 from src.core.base.ConnectivityManager import ConnectivityManager
 from src.core.base.utils.NotificationCore import NotificationCore
+
+__version__ = VERSION
 
 # Optional dependency
 try:

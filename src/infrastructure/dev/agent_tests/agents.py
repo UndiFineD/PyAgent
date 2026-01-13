@@ -12,34 +12,15 @@
 # limitations under the License.
 
 from __future__ import annotations
-
 from src.core.base.version import VERSION
-__version__ = VERSION
-
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
-
-
-
-# -*- coding: utf-8 -*-
-
-"""Main TestsAgent class for test suite improvement."""
-
 import ast
 import hashlib
 import json
 import logging
-import time
 from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
-
 from src.core.base.BaseAgent import BaseAgent
-# from src.core.base.BaseAgent import BaseAgent, create_main_function
 from src.infrastructure.dev.agent_tests.enums import (
     TestPriority,
     TestStatus,
@@ -52,6 +33,19 @@ from src.infrastructure.dev.agent_tests.models import (
     TestFactory,
 )
 
+__version__ = VERSION
+
+# You may obtain a copy of the License at
+#
+#
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# limitations under the License.
+
+# -*- coding: utf-8 -*-
+
+"""Main TestsAgent class for test suite improvement."""
+
+# from src.core.base.BaseAgent import BaseAgent, create_main_function
 
 class TestsAgent(BaseAgent):
     """Updates code file test suites using AI assistance.
@@ -544,7 +538,6 @@ class TestsAgent(BaseAgent):
         self.file_path.write_text(self.current_content, encoding='utf-8')
         return True
 
-
 # create_main_function is not available in the current refactored structure
 # def main() would need to be implemented separately if needed for CLI use
 #main = create_main_function(
@@ -556,4 +549,3 @@ class TestsAgent(BaseAgent):
 if __name__ == '__main__':
     # CLI interface would be implemented here if needed
     pass
-

@@ -11,47 +11,37 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
+# Optional import for PluginManager
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import hashlib
 import json
 import logging
-import os
 import sys
 import time
 import subprocess
-import importlib.util
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 from src.core.base.models import (
     FilePriority, FilePriorityConfig, AgentEvent, ConfigProfile, HealthStatus,
     AgentHealthCheck, ExecutionProfile,
-    _empty_dict_str_str, _empty_agent_event_handlers, _empty_dict_str_health_checks,
-    _empty_dict_str_any, _empty_dict_str_configprofile
+    _empty_dict_str_str, _empty_agent_event_handlers
 )
-from src.core.base.version import SDK_VERSION
 
-# Optional import for PluginManager
 try:
     from src.infrastructure.fleet.VersionGate import VersionGate
 except ImportError:
     VersionGate = None
 
-from .PluginManager import PluginManager
+__version__ = VERSION
 
 # Phase 108: Multi-Agent Logic Harvesting. 
 # Intelligence operations are recorded via record_interaction in Agent classes.
@@ -72,10 +62,13 @@ class FilePriorityManager:
         import fnmatch
         path_str = str(path)
         for pattern, priority in self.config.path_patterns.items():
-            if fnmatch.fnmatch(path_str, pattern): return priority
+            if fnmatch.fnmatch(path_str, pattern):
+                return priority
         ext = path.suffix.lower()
-        if ext in self.config.extension_priorities: return self.config.extension_priorities[ext]
-        if ext in self._default_extensions: return self._default_extensions[ext]
+        if ext in self.config.extension_priorities:
+            return self.config.extension_priorities[ext]
+        if ext in self._default_extensions:
+            return self._default_extensions[ext]
         return self.config.default_priority
     def sort_by_priority(self, paths: List[Path]) -> List[Path]:
         return sorted(paths, key=lambda p: self.get_priority(p).value, reverse=True)
@@ -115,7 +108,8 @@ class ResponseCache:
 
     def get(self, prompt: str) -> Optional[str]:
         key = self._get_cache_key(prompt)
-        if key in self.cache_data: return self.cache_data[key]
+        if key in self.cache_data:
+            return self.cache_data[key]
         
         # Check prefix map for partial hits (simulation of provider-side prompt caching)
         if len(prompt) > 500:
@@ -134,7 +128,8 @@ class ResponseCache:
         key = self._get_cache_key(prompt)
         self.cache_data.pop(key, None)
         cache_file = self.cache_dir / f"{key}.json"
-        if cache_file.exists(): cache_file.unlink()
+        if cache_file.exists():
+            cache_file.unlink()
 
 @dataclass
 class StatePersistence:
@@ -149,7 +144,8 @@ class StatePersistence:
         self.state_file.parent.mkdir(parents=True, exist_ok=True)
         self.state_file.write_text(json.dumps(state))
     def load(self, default: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-        if self.state_file.exists(): return json.loads(self.state_file.read_text())
+        if self.state_file.exists():
+            return json.loads(self.state_file.read_text())
         return default or {}
 
 @dataclass
@@ -157,13 +153,16 @@ class EventManager:
     """Manages agent events."""
     handlers: Dict[AgentEvent, List[Callable[..., None]]] = field(default_factory=_empty_agent_event_handlers)
     def on(self, event: AgentEvent, handler: Callable[..., None]) -> None:
-        if event not in self.handlers: self.handlers[event] = []
+        if event not in self.handlers:
+            self.handlers[event] = []
         self.handlers[event].append(handler)
     def emit(self, event: AgentEvent, data: Any = None) -> None:
         if event in self.handlers:
             for handler in self.handlers[event]:
-                if data is not None: handler(data)
-                else: handler()
+                if data is not None:
+                    handler(data)
+                else:
+                    handler()
 
 class HealthChecker:
     """Performs health checks on agent components."""
@@ -186,7 +185,8 @@ class HealthChecker:
         """Stub compatibility."""
         self.request_count += 1
         self.total_latency += latency_ms
-        if not success: self.error_count += 1
+        if not success:
+            self.error_count += 1
 
     def get_metrics(self) -> Dict[str, Any]:
         """Stub compatibility."""
@@ -266,7 +266,8 @@ class HealthChecker:
 
     def is_healthy(self) -> bool:
         """Check if all components are healthy."""
-        if not self.results: self.run_all_checks()
+        if not self.results:
+            self.run_all_checks()
         return all(r.status == HealthStatus.HEALTHY for r in self.results.values())
 
 class ProfileManager:
@@ -349,5 +350,3 @@ class ProfileManager:
             if key in parent.settings:
                 return parent.settings[key]
         return default
-
-

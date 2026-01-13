@@ -11,12 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -24,14 +18,16 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import logging
 import random
 import time
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-from src.core.base.models import PromptTemplate, PromptVersion as PromptVersionModel
+from src.core.base.models import PromptTemplate
+
+__version__ = VERSION
 
 class PromptTemplateManager:
     """Manages a collection of prompt templates."""
@@ -48,7 +44,6 @@ class PromptTemplateManager:
         """Render a template by name."""
         template = self.templates[template_name]
         return template.render(**kwargs)
-
 
 class PromptVersion:
     """Versioned prompt for A/B testing."""
@@ -76,7 +71,6 @@ class PromptVersion:
         self.variant = variant or ""
         self.prompt_text = self.content
         self.weight = weight
-
 
 class PromptVersionManager:
     """Manager for prompt versioning and A/B testing."""
@@ -185,5 +179,3 @@ class PromptVersionManager:
                 "metrics": self.metrics.get(version.version_id, {})
             }
         return report
-
-

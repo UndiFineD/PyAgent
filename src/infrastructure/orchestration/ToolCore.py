@@ -10,12 +10,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from __future__ import annotations
-
-from src.core.base.version import VERSION
-__version__ = VERSION
-
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
 #
@@ -23,12 +17,14 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
-
-
+from __future__ import annotations
+from src.core.base.version import VERSION
 import inspect
 import re
-from typing import Dict, List, Any, Callable, Optional, Tuple
-from pydantic import BaseModel, Field
+from typing import Dict, List, Any, Callable, Tuple
+from pydantic import BaseModel
+
+__version__ = VERSION
 
 class ToolMetadata(BaseModel):
     """Metadata for a registered tool."""
@@ -55,7 +51,8 @@ class ToolCore:
         sig = inspect.signature(func)
         params: Dict[str, str] = {}
         for p_name, param in sig.parameters.items():
-            if p_name == 'self': continue # Skip self
+            if p_name == 'self':
+                continue # Skip self
             params[p_name] = str(param.annotation) if param.annotation != inspect.Parameter.empty else "Any"
             
         # Phase 119: Dynamic priority based on docstring length and detail
