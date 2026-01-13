@@ -32,7 +32,7 @@ class ChangelogTemplate:
     """Template for changelog entries."""
     name: str
     project_type: str
-    sections: List[str] = field(default_factory=lambda: [
+    sections: list[str] = field(default_factory=lambda: [
         "Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"
     ])
     header_format: str = "## [{version}] - {date}"

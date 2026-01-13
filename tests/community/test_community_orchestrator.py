@@ -4,7 +4,6 @@ import logging
 from pathlib import Path
 
 # Add project root to sys.path
-sys.path.append(str(Path('.').resolve()))
 
 from src.infrastructure.fleet.OrchestratorRegistry import OrchestratorRegistry
 from src.core.base.version import SDK_VERSION

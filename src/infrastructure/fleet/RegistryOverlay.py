@@ -33,14 +33,14 @@ class RegistryOverlay:
     It allows the fleet to update its core agent map without modifying source code.
     """
     
-    def __init__(self, overlay_path: Optional[Path] = None) -> None:
+    def __init__(self, overlay_path: Path | None = None) -> None:
         if overlay_path is None:
             # Default to agent_store/registry_overlay.json
             self.overlay_path = Path("data/memory/agent_store/registry_overlay.json")
         else:
             self.overlay_path = overlay_path
             
-        self.overrides: Dict[str, Any] = {}
+        self.overrides: dict[str, Any] = {}
         self._load_overlay()
 
     def _load_overlay(self) -> None:
@@ -49,14 +49,14 @@ class RegistryOverlay:
             return
             
         try:
-            with open(self.overlay_path, "r", encoding="utf-8") as f:
+            with open(self.overlay_path, encoding="utf-8") as f:
                 data = json.load(f)
                 self.overrides = data.get("agents", {})
                 logging.info(f"RegistryOverlay: Loaded {len(self.overrides)} overrides from {self.overlay_path}")
         except Exception as e:
             logging.error(f"RegistryOverlay: Failed to load overlay: {e}")
 
-    def get_agent_config(self, agent_id: str, default: Tuple[str, str, Any]) -> Tuple[str, str, Any]:
+    def get_agent_config(self, agent_id: str, default: tuple[str, str, Any]) -> tuple[str, str, Any]:
         """Returns the overridden config or the default."""
         if agent_id in self.overrides:
             override = self.overrides[agent_id]

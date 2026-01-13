@@ -28,7 +28,7 @@ __version__ = VERSION
 
 def fix_file(file_path: str) -> None:
     """Uncomment standard library imports in a specific file."""
-    with open(file_path, 'r', encoding='utf-8') as f:
+    with open(file_path, encoding='utf-8') as f:
         lines = f.readlines()
     
     changed = False

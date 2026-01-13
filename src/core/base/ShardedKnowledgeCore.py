@@ -33,6 +33,8 @@ from pathlib import Path
 from typing import Any
 import orjson
 import aiofiles
+import msgpack
+import time
 
 __version__ = VERSION
 
@@ -42,6 +44,8 @@ class ShardedKnowledgeCore:
     def __init__(self, base_path: Path, shard_count: int = 1024) -> None:
         self.base_path = base_path
         self.shard_count = shard_count
+        self.index_path = base_path / "shard_index.msgpack"
+        self._index_cache: dict[str, Any] = {}
 
     def get_shard_id(self, entity_name: str) -> int:
         """Determines the shard ID for a given entity using stable hashing (Adler-32)."""
@@ -98,6 +102,58 @@ class ShardedKnowledgeCore:
     async def right_to_be_forgotten(self, entity_name: str) -> bool:
         """
         Phase 238: Prunes all knowledge associated with a specific entity (user/project)
+        """
+        shard_id = self.get_shard_id(entity_name)
+        data = await self.load_shard(shard_id)
+        if entity_name in data:
+            del data[entity_name]
+            return await self.save_shard(shard_id, data)
+        return False
+
+    # PHASE 261: KNOWLEDGE INDEX SNAPSHOTTING
+    async def create_index_snapshot(self) -> bool:
+        """Serializes the current index mapping to a binary snapshot."""
+        try:
+            async with aiofiles.open(self.index_path, mode='wb') as f:
+                packed = msgpack.packb({
+                    "version": __version__,
+                    "timestamp": time.time(),
+                    "index": self._index_cache
+                })
+                await f.write(packed)
+            logging.info(f"Knowledge index snapshot created at {self.index_path}")
+            return True
+        except Exception as e:
+            logging.error(f"Failed to create index snapshot: {e}")
+            return False
+
+    async def load_index_snapshot(self) -> bool:
+        """Loads the index mapping from a binary snapshot."""
+        if not self.index_path.exists():
+            return False
+        try:
+            async with aiofiles.open(self.index_path, mode='rb') as f:
+                content = await f.read()
+                data = msgpack.unpackb(content)
+                self._index_cache = data.get("index", {})
+            logging.info(f"Knowledge index snapshot loaded from {self.index_path}")
+            return True
+        except Exception as e:
+            logging.error(f"Failed to load index snapshot: {e}")
+            return False
+
+    async def incremental_reindex(self) -> None:
+        """Only updates the index for files modified since last snapshot."""
+        # This is a stub for the indexer that would scan the base_path
+        # and update self._index_cache based on file mtime.
+        # For now, we simulate a scan.
+        logging.info("ShardedKnowledgeCore: Performing incremental re-index...")
+        # (Actual scanning logic would go here)
+        await self.create_index_snapshot()
+
+    async def right_to_be_forgotten(self, entity_name: str) -> bool:
+        """
+        Removes an entity from the knowledge store across all shards 
         to comply with privacy regulations (GDPR/CCPA).
         """
         shard_id = self.get_shard_id(entity_name)

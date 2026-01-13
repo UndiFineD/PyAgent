@@ -45,4 +45,4 @@ class FlakinessReport:
     passes: int
     failures: int
     flakiness_score: float
-    failure_messages: List[str] = field(default_factory=lambda: [])
+    failure_messages: list[str] = field(default_factory=lambda: [])

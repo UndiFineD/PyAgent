@@ -47,11 +47,11 @@ class ContextExporter:
         """Set the default export format."""
         self.default_format = format
 
-    def get_supported_formats(self) -> List[ExportFormat]:
+    def get_supported_formats(self) -> list[ExportFormat]:
         """Return all supported export formats."""
         return list(ExportFormat)
 
-    def export(self, content: str, format: Optional[ExportFormat] = None) -> ExportedContext:
+    def export(self, content: str, format: ExportFormat | None = None) -> ExportedContext:
         """Export context to specified format.
 
         Args:

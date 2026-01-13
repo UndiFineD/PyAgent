@@ -50,11 +50,11 @@ class FileSystemIsolator:
             isolation_level: Level of isolation.
         """
         self.isolation_level = isolation_level
-        self._temp_dir: Optional[Path] = None
-        self._original_cwd: Optional[str] = None
-        self._created_files: List[Path] = []
+        self._temp_dir: Path | None = None
+        self._original_cwd: str | None = None
+        self._created_files: list[Path] = []
 
-    def __enter__(self) -> "FileSystemIsolator":
+    def __enter__(self) -> FileSystemIsolator:
         """Enter context and set up isolation."""
         if self.isolation_level == IsolationLevel.TEMP_DIR:
             self._temp_dir = Path(tempfile.mkdtemp())
@@ -103,6 +103,6 @@ class FileSystemIsolator:
             file_path = self._temp_dir / path
         return file_path.read_text(encoding="utf-8")
 
-    def get_temp_dir(self) -> Optional[Path]:
+    def get_temp_dir(self) -> Path | None:
         """Get the temporary directory."""
         return self._temp_dir

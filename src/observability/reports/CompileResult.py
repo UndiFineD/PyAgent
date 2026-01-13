@@ -32,4 +32,4 @@ class CompileResult:
     """Result of compile / syntax check."""
 
     ok: bool
-    error: Optional[str] = None
+    error: str | None = None

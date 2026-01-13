@@ -42,4 +42,4 @@ class TestGap:
     file_path: str
     line_number: int
     complexity: int
-    suggested_tests: List[str] = field(default_factory=lambda: [])
+    suggested_tests: list[str] = field(default_factory=lambda: [])

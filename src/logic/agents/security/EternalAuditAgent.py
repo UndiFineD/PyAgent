@@ -66,7 +66,7 @@ class EternalAuditAgent(BaseAgent):
                 pass
 
     @as_tool
-    def log_event(self, agent_name: str, action: str, details: Dict[str, Any]) -> str:
+    def log_event(self, agent_name: str, action: str, details: dict[str, Any]) -> str:
         """
         Records an event in the verifiable audit trail.
         """
@@ -103,7 +103,7 @@ class EternalAuditAgent(BaseAgent):
         return f"Event logged and verified. Hash: {current_hash[:16]}"
 
     @as_tool
-    def verify_audit_trail(self) -> Dict[str, Any]:
+    def verify_audit_trail(self) -> dict[str, Any]:
         """
         Verifies the integrity of the audit trail by re-calculating hashes.
         """
@@ -114,7 +114,7 @@ class EternalAuditAgent(BaseAgent):
         expected_prev_hash = "0" * 64
         count = 0
         
-        with open(self.current_shard, 'r', encoding='utf-8') as f:
+        with open(self.current_shard, encoding='utf-8') as f:
             for line in f:
                 count += 1
                 entry = json.loads(line)

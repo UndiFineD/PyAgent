@@ -39,14 +39,14 @@ class FixtureGenerator:
         fixture=gen.create_python_file_fixture("test.py", "print('hello')")
     """
 
-    def __init__(self, base_dir: Optional[Path] = None) -> None:
+    def __init__(self, base_dir: Path | None = None) -> None:
         """Initialize fixture generator.
 
         Args:
             base_dir: Base directory for fixtures.
         """
         self.base_dir = base_dir or Path(tempfile.mkdtemp())
-        self._fixtures: Dict[str, TestFixture] = {}
+        self._fixtures: dict[str, TestFixture] = {}
 
     def create_python_file_fixture(
         self,
@@ -84,7 +84,7 @@ class FixtureGenerator:
     def create_directory_fixture(
         self,
         dirname: str,
-        files: Dict[str, str],
+        files: dict[str, str],
     ) -> TestFixture:
         """Create a directory fixture with files.
 

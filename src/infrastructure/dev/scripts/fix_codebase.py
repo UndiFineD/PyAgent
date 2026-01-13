@@ -40,7 +40,7 @@ def uncomment_lines(root_dir: str) -> None:
             if file.endswith('.py'):
                 filepath = os.path.join(root, file)
                 try:
-                    with open(filepath, 'r', encoding='utf-8') as f:
+                    with open(filepath, encoding='utf-8') as f:
                         content = f.read()
                     
                     new_content = p_from.sub(r'\1', content)

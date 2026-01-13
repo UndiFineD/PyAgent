@@ -41,4 +41,4 @@ class MergeConflict:
     section: str
     ours: str
     theirs: str
-    resolution: Optional[ConflictResolution] = None
+    resolution: ConflictResolution | None = None

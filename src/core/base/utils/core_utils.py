@@ -26,7 +26,8 @@ import logging
 import importlib.util
 import sys
 from pathlib import Path
-from typing import Set, Optional, Any, Callable, cast
+from typing import Set, Optional, Any, cast
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -34,7 +35,7 @@ __version__ = VERSION
 _CODEIGNORE_CACHE: dict[str, set[str]] = {}
 _CODEIGNORE_CACHE_TIME: dict[str, float] = {}
 
-def load_codeignore(root: Path) -> Set[str]:
+def load_codeignore(root: Path) -> set[str]:
     """Load and parse ignore patterns from .codeignore file.
 
     Reads the .codeignore file from the repository root and extracts all
@@ -101,7 +102,7 @@ def load_codeignore(root: Path) -> Set[str]:
         logging.debug(f"No .codeignore file found at {codeignore_path}")
     return set()
 
-def setup_logging(verbosity: Optional[str] = None) -> None:
+def setup_logging(verbosity: str | None = None) -> None:
     """Configure logging based on verbosity level.
     
     Defaults to WARNING to capture only errors and failures as requested.
@@ -128,7 +129,7 @@ def setup_logging(verbosity: Optional[str] = None) -> None:
     if level <= logging.DEBUG:
         logging.debug(f"Logging configured at level: {logging.getLevelName(level)}")
 
-def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Optional[Path]:
+def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Path | None:
     """Worker function for multiprocessing file processing.
 
     This function must be at module level to be pickleable for multiprocessing.

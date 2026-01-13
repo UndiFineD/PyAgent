@@ -44,4 +44,4 @@ class ProgressReport:
     in_progress_count: int = 0
     blocked_count: int = 0
     velocity: float = 0.0
-    burndown_data: List[Tuple[str, int]] = field(default_factory=list)  # type: ignore[assignment]
+    burndown_data: list[tuple[str, int]] = field(default_factory=list)  # type: ignore[assignment]

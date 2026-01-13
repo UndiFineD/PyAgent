@@ -20,6 +20,7 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from typing import Dict, Any
+import logging
 from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
@@ -92,7 +93,7 @@ class CodeTranslationAgent(BaseAgent):
                 js_lines.append(line)
         return "\n".join(js_lines)
 
-    def get_translation_stats(self) -> Dict[str, Any]:
+    def get_translation_stats(self) -> dict[str, Any]:
         """Returns statistics on translation activities."""
         return {
             "total_translations": len(self.translation_history),

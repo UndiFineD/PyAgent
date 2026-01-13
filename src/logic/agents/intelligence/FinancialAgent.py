@@ -34,7 +34,7 @@ class FinancialAgent(BaseAgent):
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.research_plan: List[Dict[str, Any]] = []
+        self.research_plan: list[dict[str, Any]] = []
         self._system_prompt = (
             "You are an Autonomous Financial Research Agent (Dexter Pattern). "
             "You decompose complex financial queries into structured research tasks. "
@@ -55,7 +55,7 @@ class FinancialAgent(BaseAgent):
         return f"Research plan created with {len(self.research_plan)} tasks for: {query}"
 
     @as_tool
-    def validate_sufficiency(self, data: Dict[str, Any]) -> str:
+    def validate_sufficiency(self, data: dict[str, Any]) -> str:
         """Self-reflects on whether gathered data is enough to answer the query."""
         missing = [k for k, v in data.items() if v is None]
         if missing:
@@ -63,7 +63,7 @@ class FinancialAgent(BaseAgent):
         return "Validation passed. Proceeding to synthesis."
 
     @as_tool
-    def analyze_market_trend(self, tickers: List[str]) -> str:
+    def analyze_market_trend(self, tickers: list[str]) -> str:
         """Executes a trend analysis across multiple financial tickers."""
         logging.info(f"FinancialAgent: Analyzing trends for {tickers}")
         return f"Trend analysis for {tickers}: Bullish sentiment in tech, consolidated in energy."

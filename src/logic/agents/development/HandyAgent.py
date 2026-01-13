@@ -80,7 +80,7 @@ class HandyAgent(BaseAgent):
             return f"Search failed: {e}"
 
     @as_tool
-    def terminal_slash_command(self, command: str, args: List[str]) -> str:
+    def terminal_slash_command(self, command: str, args: list[str]) -> str:
         """Handles agentic slash commands like /fix, /test, /summarize directly from a CLI."""
         res = ""
         if command == "/fix":

@@ -42,10 +42,10 @@ class ReportAggregator:
     def __init__(self) -> None:
         """Initialize aggregator."""
 
-        self.sources: Dict[str, List[CodeIssue]] = {}
+        self.sources: dict[str, list[CodeIssue]] = {}
         logging.debug("ReportAggregator initialized")
 
-    def add_source(self, file_path: str, issues: List[CodeIssue]) -> None:
+    def add_source(self, file_path: str, issues: list[CodeIssue]) -> None:
         """Add a source to aggregate.
         Args:
             file_path: Source file.
@@ -60,12 +60,12 @@ class ReportAggregator:
             Aggregated report.
         """
 
-        all_issues: List[CodeIssue] = []
+        all_issues: list[CodeIssue] = []
         for issues in self.sources.values():
             all_issues.extend(issues)
         # Calculate summary
-        by_severity: Dict[str, int] = {}
-        by_category: Dict[str, int] = {}
+        by_severity: dict[str, int] = {}
+        by_category: dict[str, int] = {}
         for issue in all_issues:
             sev = issue.severity.name
             cat = issue.category.name

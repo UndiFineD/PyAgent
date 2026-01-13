@@ -46,14 +46,14 @@ class WorldModelAgent(BaseAgent):
             "potential errors, and outcome state as if it were executed."
         )
 
-    def analyze_ast_impact(self, file_path: str, proposed_change: str) -> List[str]:
+    def analyze_ast_impact(self, file_path: str, proposed_change: str) -> list[str]:
         """Performs AST-based dependency mapping to predict impact of a change."""
         impacted_symbols = []
         if not os.path.exists(file_path):
             return ["File non-existent"]
             
         try:
-            with open(file_path, 'r', encoding='utf-8') as f:
+            with open(file_path, encoding='utf-8') as f:
                 tree = ast.parse(f.read())
                 
             for node in ast.walk(tree):
@@ -65,7 +65,7 @@ class WorldModelAgent(BaseAgent):
         return impacted_symbols
 
     @as_tool
-    def predict_action_outcome(self, action_description: str, current_context: str) -> Dict[str, Any]:
+    def predict_action_outcome(self, action_description: str, current_context: str) -> dict[str, Any]:
         """
         Predicts the outcome of a proposed action based on current context.
         Returns a dictionary with predicted success, side effects, and risk level.
@@ -92,7 +92,7 @@ class WorldModelAgent(BaseAgent):
             }
 
     @as_tool
-    def simulate_workspace_state(self, hypothetical_changes: List[str]) -> str:
+    def simulate_workspace_state(self, hypothetical_changes: list[str]) -> str:
         """
         Simulates the state of the workspace after a set of hypothetical changes.
         Useful for 'what-if' analysis.
@@ -106,7 +106,7 @@ class WorldModelAgent(BaseAgent):
         return simulation
 
     @as_tool
-    def simulate_agent_interaction(self, agent_a: str, agent_b: str, shared_goal: str) -> Dict[str, Any]:
+    def simulate_agent_interaction(self, agent_a: str, agent_b: str, shared_goal: str) -> dict[str, Any]:
         """
         Recursive World Modeling: Simulates how two agents will interact to solve a goal.
         Predicts potential conflicts, cooperative strategies, and final throughput.

@@ -16,7 +16,7 @@ from pathlib import Path
 
 class TestPhase123FinalRealization(unittest.TestCase):
     def setUp(self):
-        self.root = "c:/DEV/PyAgent"
+        self.root = Path(__file__).resolve().parents[2]
         self.fleet = FleetManager(self.root)
         
         # Ensure we have the necessary agents registered

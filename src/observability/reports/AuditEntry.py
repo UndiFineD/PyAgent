@@ -45,4 +45,4 @@ class AuditEntry:
     action: AuditAction
     user_id: str
     report_id: str
-    details: Dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]
+    details: dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]

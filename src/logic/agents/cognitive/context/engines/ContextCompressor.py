@@ -35,8 +35,8 @@ class ContextCompressor:
     Acts as the I/O Shell for ContextCompressorCore.
     """
     
-    def __init__(self, workspace_root: Optional[str] = None) -> None:
-        self.workspace_root: Optional[Path] = Path(workspace_root) if workspace_root else None
+    def __init__(self, workspace_root: str | None = None) -> None:
+        self.workspace_root: Path | None = Path(workspace_root) if workspace_root else None
         self.core = ContextCompressorCore()
 
     def compress_file(self, file_path_raw: Any) -> str:

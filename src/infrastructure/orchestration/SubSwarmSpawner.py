@@ -31,11 +31,11 @@ if TYPE_CHECKING:
 
 class SubSwarm:
     """A lightweight sub-swarm with a subset of capabilities."""
-    def __init__(self, swarm_id: str, agents: List[str], parent_fleet: FleetManager) -> None:
+    def __init__(self, swarm_id: str, agents: list[str], parent_fleet: FleetManager) -> None:
         self.swarm_id = swarm_id
         self.agents = agents
         self.fleet = parent_fleet
-        self.task_log: List[str] = []
+        self.task_log: list[str] = []
 
     def execute_mini_task(self, task: str) -> str:
         logging.info(f"SubSwarm {self.swarm_id}: Executing mini-task: {task}")
@@ -60,9 +60,9 @@ class SubSwarmSpawner:
     
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
-        self.active_sub_swarms: Dict[str, SubSwarm] = {}
+        self.active_sub_swarms: dict[str, SubSwarm] = {}
 
-    def spawn_sub_swarm(self, capabilities: List[str]) -> str:
+    def spawn_sub_swarm(self, capabilities: list[str]) -> str:
         """
         Creates a new sub-swarm based on requested capabilities or agent names.
         """
@@ -82,8 +82,8 @@ class SubSwarmSpawner:
             
         return swarm_id
 
-    def list_sub_swarms(self) -> List[str]:
+    def list_sub_swarms(self) -> list[str]:
         return list(self.active_sub_swarms.keys())
 
-    def get_sub_swarm(self, swarm_id: str) -> Optional[SubSwarm]:
+    def get_sub_swarm(self, swarm_id: str) -> SubSwarm | None:
         return self.active_sub_swarms.get(swarm_id)

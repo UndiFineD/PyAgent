@@ -31,7 +31,7 @@ class _ScheduleStore:
     """Mapping wrapper that compares equal to {} and [] when empty."""
 
     def __init__(self) -> None:
-        self._data: Dict[str, ScheduledImprovement] = {}
+        self._data: dict[str, ScheduledImprovement] = {}
 
     def __eq__(self, other: object) -> bool:
         if isinstance(other, dict):
@@ -49,8 +49,8 @@ class _ScheduleStore:
     def __setitem__(self, key: str, value: ScheduledImprovement) -> None:
         self._data[key] = value
 
-    def get(self, key: str, default: Optional[ScheduledImprovement] = None) -> Optional[ScheduledImprovement]:
+    def get(self, key: str, default: ScheduledImprovement | None = None) -> ScheduledImprovement | None:
         return self._data.get(key, default)
 
-    def values(self) -> List[ScheduledImprovement]:
+    def values(self) -> list[ScheduledImprovement]:
         return list(self._data.values())

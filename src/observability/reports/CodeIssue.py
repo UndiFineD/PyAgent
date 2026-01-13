@@ -44,6 +44,6 @@ class CodeIssue:
     message: str
     category: IssueCategory
     severity: SeverityLevel = SeverityLevel.INFO
-    line_number: Optional[int] = None
-    file_path: Optional[str] = None
-    function_name: Optional[str] = None
+    line_number: int | None = None
+    file_path: str | None = None
+    function_name: str | None = None

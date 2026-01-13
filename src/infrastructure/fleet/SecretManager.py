@@ -55,7 +55,7 @@ class SecretManager:
         """Loads secrets from a local JSON file if it exists."""
         if os.path.exists(self.vault_path):
             try:
-                with open(self.vault_path, "r") as f:
+                with open(self.vault_path) as f:
                     self._cache.update(json.load(f))
                 logging.info(f"Loaded {len(self._cache)} secrets from {self.vault_path}")
             except Exception as e:
@@ -71,21 +71,21 @@ class SecretManager:
         except Exception as e:
             logging.error(f"Failed to save vault file: {e}")
 
-    def _fetch_local(self, key: str) -> Optional[str]:
+    def _fetch_local(self, key: str) -> str | None:
         return os.getenv(key)
 
-    def _fetch_file_vault(self, key: str) -> Optional[str]:
+    def _fetch_file_vault(self, key: str) -> str | None:
         return self._cache.get(key)
 
-    def _fetch_azure(self, key: str) -> Optional[str]:
+    def _fetch_azure(self, key: str) -> str | None:
         logging.info(f"{self.core.get_provider_prefix('azure')} Fetching {key}")
         return self._cache.get(key) or os.getenv(key)
 
-    def _fetch_vault(self, key: str) -> Optional[str]:
+    def _fetch_vault(self, key: str) -> str | None:
         logging.info(f"{self.core.get_provider_prefix('vault')} Fetching {key}")
         return self._cache.get(key) or os.getenv(key)
 
-    def get_secret(self, key: str, default: Optional[str] = None) -> Optional[str]:
+    def get_secret(self, key: str, default: str | None = None) -> str | None:
         """Retrieves a secret from the configured provider."""
         if key in self._cache:
             return self._cache[key]

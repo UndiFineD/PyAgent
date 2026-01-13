@@ -13,8 +13,8 @@ logger = logging.getLogger(__name__)
 class ThresholdAlertManager:
     """Manages threshold checking and alert emission."""
     def __init__(self) -> None:
-        self.thresholds: Dict[str, List[Threshold]] = {}
-        self.alerts: List[Alert] = []
+        self.thresholds: dict[str, list[Threshold]] = {}
+        self.alerts: list[Alert] = []
 
     def set_threshold(self, name:
         str, threshold: Threshold) -> None:
@@ -23,7 +23,7 @@ class ThresholdAlertManager:
         self.thresholds[name].append(threshold)
 
     def check(self, metric_name:
-        str, value: float) -> List[Alert]:
+        str, value: float) -> list[Alert]:
         triggered = []
         for t in self.thresholds.get(metric_name, []):
             is_breach = False
@@ -49,8 +49,8 @@ class ThresholdAlertManager:
 class RetentionEnforcer:
     """Enforces retention policies on metrics."""
     def __init__(self) -> None:
-        self.policies: Dict[str, RetentionPolicy] = {}
-        self.data: Dict[str, List[Dict[str, Any]]] = {}
+        self.policies: dict[str, RetentionPolicy] = {}
+        self.data: dict[str, list[dict[str, Any]]] = {}
 
     def set_policy(self, pattern:
         str, policy: RetentionPolicy) -> None:

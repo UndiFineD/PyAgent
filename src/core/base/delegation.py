@@ -27,8 +27,9 @@ from src.core.base.version import VERSION
 import os
 import logging
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Any
 from src.core.base.registry import AgentRegistry
+from src.core.base.models import CascadeContext, AgentPriority
 
 __version__ = VERSION
 
@@ -36,31 +37,38 @@ class AgentDelegator:
     """Handles cascading sub-tasks to other agents."""
 
     @staticmethod
-    def delegate(agent_type: str, prompt: str, current_agent_name: str, current_file_path: Path, 
-                 current_model: Optional[str] = None, target_file: Optional[str] = None) -> str:
+    def delegate(agent_type: str, 
+                 prompt: str, 
+                 current_agent_name: str, 
+                 current_file_path: Path, 
+                 current_model: str | None = None, 
+                 target_file: str | None = None,
+                 context: CascadeContext | None = None,
+                 priority: AgentPriority = AgentPriority.NORMAL) -> str:
         """Launches another agent to perform a sub-task."""
         
+        # Initialize or update context
+        if context is None:
+            context = CascadeContext()
+        else:
+            context.cascade_depth += 1
+            context.parent_id = context.task_id
+            
         # Check registry for existing instance of this type to avoid redundant spawns
         registry = AgentRegistry()
         type_clean = agent_type.replace("Agent", "").lower()
         
-        active_agents = registry.list_agents()
-        if type_clean in active_agents:
-            logging.info(f"Reusing active agent: {type_clean}")
-            # In a real system we might pass the task to the existing instance
-            # For now, we continue with spawning but acknowledge it.
-
-        if os.environ.get("DV_AGENT_PARENT"):
-             # Already in a cascade, limit depth
-             logging.warning(f"Delegation to {agent_type} blocked: depth limit.")
+        if context.cascade_depth > 5:
+             logging.warning(f"Delegation to {agent_type} blocked: depth limit ({context.cascade_depth}).")
              return "Error: Delegation depth limit reached."
 
-        logging.info(f"Delegating task to {agent_type} for {target_file or current_file_path}")
+        logging.info(f"Delegating task to {agent_type} [Priority: {priority.name}] for {target_file or current_file_path}")
         
         target_path: Path = Path(target_file) if target_file else current_file_path
         
         try:
             # Simple heuristic for discovery
+            # TODO: Move to centralized ModuleLoader
             if type_clean == "coder" or os.path.exists(os.path.join("src", "coder", "agents", f"{agent_type}.py")):
                 module_name = f"src.logic.agents.development.{agent_type}"
             else:
@@ -70,21 +78,28 @@ class AgentDelegator:
             module = importlib.import_module(module_name)
             agent_class = getattr(module, agent_type)
             
-            os.environ["DV_AGENT_PARENT"] = current_agent_name
-            
             try:
                 with agent_class(str(target_path)) as sub_agent:
                     if current_model:
                         sub_agent.set_model(current_model)
                     
+                    # Store context and priority in agent if supported
+                    if hasattr(sub_agent, 'context'):
+                        sub_agent.context = context
+                    if hasattr(sub_agent, 'priority'):
+                        sub_agent.priority = priority
+                    
                     result = sub_agent.improve_content(prompt)
                     sub_agent.update_file()
                     
-                    logging.info(f"Delegation to {agent_type} completed.")
+                    logging.info(f"Delegation to {agent_type} completed (Task: {context.task_id}).")
                     return result
             finally:
-                if os.environ.get("DV_AGENT_PARENT") == current_agent_name:
-                    del os.environ["DV_AGENT_PARENT"]
+                pass
+                
+        except Exception as e:
+            logging.error(f"Delegation to {agent_type} failed: {e}")
+            return f"Error: Delegation failed - {str(e)}"
                 
         except Exception as e:
             logging.error(f"Delegation to {agent_type} failed: {e}")

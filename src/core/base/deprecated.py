@@ -34,7 +34,7 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-    from src.logic.agents.swarm.OrchestratorAgent import *
-
 if __name__ == '__main__':
-    main()
+    # OrchestratorAgent does not have a main function. 
+    # This file is deprecated.
+    pass

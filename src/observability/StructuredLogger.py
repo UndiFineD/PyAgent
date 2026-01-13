@@ -29,6 +29,8 @@ import json
 import logging
 import re
 import time
+import gzip
+import shutil
 from datetime import datetime
 from pathlib import Path
 from typing import Optional
@@ -36,7 +38,9 @@ from typing import Optional
 __version__ = VERSION
 
 class StructuredLogger:
-    """JSON logger for PyAgent swarm observability."""
+    """JSON logger for PyAgent swarm observability.
+    Phase 277: Added log hygiene with automated GZIP compression.
+    """
     
     # regex for sensitive data masking (Phase 227)
     SENSITIVE_PATTERNS = [
@@ -45,7 +49,7 @@ class StructuredLogger:
         re.compile(r"gh[ps]_[a-zA-Z0-9]{36}") # GitHub Tokens
     ]
 
-    def __init__(self, agent_id: str, trace_id: Optional[str] = None, log_file: str = "data/logs/structured.json") -> None:
+    def __init__(self, agent_id: str, trace_id: str | None = None, log_file: str = "data/logs/structured.json") -> None:
         self.agent_id = agent_id
         self.trace_id = trace_id or f"trace_{int(time.time())}"
         self.log_file = Path(log_file)
@@ -53,6 +57,23 @@ class StructuredLogger:
 
     def _ensure_log_dir(self):
         self.log_file.parent.mkdir(parents=True, exist_ok=True)
+        # Phase 277: Compress if > 100MB
+        if self.log_file.exists() and self.log_file.stat().st_size > 100 * 1024 * 1024:
+            self._compress_logs()
+
+    def _compress_logs(self):
+        """Compresses current log file to .json.gz (Phase 277)."""
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        compressed_file = self.log_file.with_name(f"{self.log_file.stem}_{timestamp}.json.gz")
+        logging.info(f"StructuredLogger: Compressing log file ({self.log_file.name}) to {compressed_file.name}")
+        
+        try:
+            with open(self.log_file, 'rb') as f_in:
+                with gzip.open(compressed_file, 'wb') as f_out:
+                    shutil.copyfileobj(f_in, f_out)
+            self.log_file.unlink() # Delete original
+        except Exception as e:
+            logging.error(f"StructuredLogger compression failed: {e}")
 
     def _mask_sensitive(self, text: str) -> str:
         """Automated masking for API keys and tokens (Phase 227)."""

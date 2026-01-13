@@ -22,8 +22,12 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Any, Callable, Dict, Tuple
+from typing import Any, Dict, Tuple, TypeVar
+from collections.abc import Callable
 import logging
+import inspect
+
+T = TypeVar("T")
 
 __version__ = VERSION
 
@@ -44,9 +48,9 @@ class DependencyContainer:
 
     def __init__(self) -> None:
         """Initialize dependency container."""
-        self._dependencies: Dict[str, Any] = {}
-        self._factories: Dict[str, Tuple[Callable[[], Any], bool]] = {}
-        self._singletons: Dict[str, Any] = {}
+        self._dependencies: dict[str, Any] = {}
+        self._factories: dict[str, tuple[Callable[[], Any], bool]] = {}
+        self._singletons: dict[str, Any] = {}
 
     def register(self, name: str, instance: Any) -> None:
         """Register a dependency instance.
@@ -106,7 +110,6 @@ class DependencyContainer:
         Returns:
             Wrapped function with injected dependencies.
         """
-        import inspect
         sig = inspect.signature(fn)
 
         def wrapper(*args: Any, **kwargs: Any) -> T:

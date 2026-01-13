@@ -27,7 +27,7 @@ class ConsensusModule(BaseModule):
         return super().initialize()
 
     def execute(self, proposals:
-        List[str], weights: Optional[List[float]] = None) -> Dict[str, Any]:
+        list[str], weights: list[float] | None = None) -> dict[str, Any]:
         """
         Executes the consensus protocol to find a winner.
         """
@@ -44,7 +44,7 @@ class ConsensusModule(BaseModule):
         }
 
     def calculate_winner(self, proposals:
-        List[str], weights: Optional[List[float]] = None) -> str:
+        list[str], weights: list[float] | None = None) -> str:
         """Determines the winning proposal based on voting rules."""
         if not proposals:
             return ""
@@ -52,7 +52,7 @@ class ConsensusModule(BaseModule):
         if weights and len(weights) != len(proposals):
             weights = None
 
-        counts: Dict[str, float] = {}
+        counts: dict[str, float] = {}
         for idx, p in enumerate(proposals):
             weight = weights[idx] if weights else 1.0
             counts[p] = counts.get(p, 0) + weight
@@ -66,7 +66,7 @@ class ConsensusModule(BaseModule):
         return winner
 
     def get_agreement_score(self, proposals:
-        List[str], winner: str) -> float:
+        list[str], winner: str) -> float:
         """Calculates the percentage of agents that agreed with the winner."""
         if not proposals:
             return 0.0

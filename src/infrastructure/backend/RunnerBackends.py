@@ -80,7 +80,7 @@ class BackendHandlers:
         ).strip()
 
     @staticmethod
-    def try_codex_cli(full_prompt: str, repo_root: Path, recorder=None) -> Optional[str]:
+    def try_codex_cli(full_prompt: str, repo_root: Path, recorder=None) -> str | None:
         try:
             logging.debug("Attempting to use Codex CLI backend")
             result = subprocess.run(
@@ -107,7 +107,7 @@ class BackendHandlers:
         return None
 
     @staticmethod
-    def try_copilot_cli(full_prompt: str, repo_root: Path) -> Optional[str]:
+    def try_copilot_cli(full_prompt: str, repo_root: Path) -> str | None:
         try:
             logging.debug("Attempting to use local Copilot CLI backend")
             result = subprocess.run(
@@ -123,7 +123,7 @@ class BackendHandlers:
         return None
 
     @staticmethod
-    def try_gh_copilot(full_prompt: str, repo_root: Path, allow_non_command: bool = False) -> Optional[str]:
+    def try_gh_copilot(full_prompt: str, repo_root: Path, allow_non_command: bool = False) -> str | None:
         # Optimization: if not a command and not allowed, skip
         if not allow_non_command:
              # Basic heuristic: if it doesn't look like a command, skip gh copilot explain
@@ -145,7 +145,7 @@ class BackendHandlers:
         return None
 
     @staticmethod
-    def try_github_models(full_prompt: str, requests_lib: Any) -> Optional[str]:
+    def try_github_models(full_prompt: str, requests_lib: Any) -> str | None:
         if not requests_lib:
             return None
         
@@ -202,7 +202,7 @@ class BackendHandlers:
             return None
 
     @staticmethod
-    def try_openai_api(full_prompt: str, requests_lib: Any) -> Optional[str]:
+    def try_openai_api(full_prompt: str, requests_lib: Any) -> str | None:
         if not requests_lib:
             return None
             

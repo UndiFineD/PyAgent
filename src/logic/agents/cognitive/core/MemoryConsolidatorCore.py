@@ -35,7 +35,7 @@ class MemoryConsolidatorCore:
     """Pure logic core for memory consolidation."""
 
     @staticmethod
-    def create_interaction_entry(agent: str, task: str, outcome: str) -> Dict[str, Any]:
+    def create_interaction_entry(agent: str, task: str, outcome: str) -> dict[str, Any]:
         """Formats a single interaction for the buffer."""
         return {
             "timestamp": time.time(),
@@ -45,19 +45,19 @@ class MemoryConsolidatorCore:
         }
 
     @staticmethod
-    def distill_buffer(buffer: List[Dict[str, Any]]) -> List[str]:
+    def distill_buffer(buffer: list[dict[str, Any]]) -> list[str]:
         """Groups interactions and generates summary strings (insights)."""
         if not buffer:
             return []
             
-        summary: Dict[str, List[str]] = {}
+        summary: dict[str, list[str]] = {}
         for entry in buffer:
             agent = entry.get("agent", "Unknown")
             if agent not in summary:
                 summary[agent] = []
             summary[agent].append(entry.get("task", "Unknown Task"))
             
-        consolidated: List[str] = []
+        consolidated: list[str] = []
         for agent, tasks in summary.items():
             # In a real scenario, this might involve LLM calls (via the Shell)
             # but the logic of collation is here.
@@ -67,9 +67,9 @@ class MemoryConsolidatorCore:
         return consolidated
 
     @staticmethod
-    def filter_memory_by_query(memory: List[Dict[str, Any]], query: str) -> List[str]:
+    def filter_memory_by_query(memory: list[dict[str, Any]], query: str) -> list[str]:
         """Logic for keyword search across consolidated insights."""
-        matches: List[str] = []
+        matches: list[str] = []
         query_lower = query.lower()
         for day in memory:
             date_str = day.get("date", "Unknown Date")
@@ -79,7 +79,7 @@ class MemoryConsolidatorCore:
         return matches
 
     @staticmethod
-    def format_daily_memory(insights: List[str]) -> Dict[str, Any]:
+    def format_daily_memory(insights: list[str]) -> dict[str, Any]:
         """Prepares the daily record object."""
         return {
             "date": time.strftime("%Y-%m-%d"),

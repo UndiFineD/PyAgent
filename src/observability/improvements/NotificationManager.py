@@ -22,7 +22,8 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Any, Callable, Dict, List
+from typing import Any, Dict, List
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -30,18 +31,18 @@ class NotificationManager:
     """Notifies subscribers about improvement changes."""
 
     def __init__(self) -> None:
-        self.subscribers: List[str] = []
-        self._subscriptions: Dict[str, List[str]] = {}
-        self._callbacks: List[Callable[[Dict[str, Any]], None]] = []
+        self.subscribers: list[str] = []
+        self._subscriptions: dict[str, list[str]] = {}
+        self._callbacks: list[Callable[[dict[str, Any]], None]] = []
 
     def subscribe(self, improvement_id: str, subscriber: str) -> None:
         self.subscribers.append(subscriber)
         self._subscriptions.setdefault(improvement_id, []).append(subscriber)
 
-    def get_subscribers(self, improvement_id: str) -> List[str]:
+    def get_subscribers(self, improvement_id: str) -> list[str]:
         return list(self._subscriptions.get(improvement_id, []))
 
-    def on_notification(self, callback: Callable[[Dict[str, Any]], None]) -> None:
+    def on_notification(self, callback: Callable[[dict[str, Any]], None]) -> None:
         self._callbacks.append(callback)
 
     def notify_status_change(self, improvement_id: str, old_status: str, new_status: str) -> None:

@@ -31,6 +31,7 @@ import shutil
 import platform
 import logging
 import subprocess
+import asyncio
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 from src.logic.agents.development.SecurityGuardAgent import SecurityGuardAgent
@@ -51,36 +52,39 @@ class KernelAgent(BaseAgent):
         )
 
     @as_tool
-    def get_system_info(self) -> str:
+    async def get_system_info(self) -> str:
         """Returns details about the current operating system and environment."""
-        info = {
-            "os": platform.system(),
-            "version": platform.version(),
-            "machine": platform.machine(),
-            "python_version": sys.version,
-            "cwd": os.getcwd(),
-            "env_vars": list(os.environ.keys())[:10]  # First 10 for brevity
-        }
-        return json.dumps(info, indent=2)
+        def get_info():
+            info = {
+                "os": platform.system(),
+                "version": platform.version(),
+                "machine": platform.machine(),
+                "python_version": sys.version,
+                "cwd": os.getcwd(),
+                "env_vars": list(os.environ.keys())[:10]  # First 10 for brevity
+            }
+            return json.dumps(info, indent=2)
+            
+        return await asyncio.to_thread(get_info)
 
     @as_tool
-    def check_disk_space(self, path: str = ".") -> str:
+    async def check_disk_space(self, path: str = ".") -> str:
         """Checks available disk space at the specified path."""
         try:
-            total, used, free = shutil.disk_usage(path)
+            total, used, free = await asyncio.to_thread(shutil.disk_usage, path)
             return f"Disk Usage for {path}: {used // (2**30)}GB used / {free // (2**30)}GB free (Total: {total // (2**30)}GB)"
         except Exception as e:
             return f"Error checking disk space: {e}"
 
     @as_tool
-    def execute_shell(self, command: str, force: bool = False) -> str:
+    async def execute_shell(self, command: str, force: bool = False) -> str:
         """Executes a shell command and returns the output (STDOUT + STDERR).
         High-risk commands require 'force=True' as a HITL gate.
         """
         logging.warning(f"KernelAgent auditing shell command: {command}")
         
         # Security Audit (HITL Gate)
-        risk_level, warning = self.security_guard.audit_command(command)
+        risk_level, warning = await asyncio.to_thread(self.security_guard.audit_command, command)
         if risk_level == "HIGH" and not force:
             return (
                 f"BLOCKED: High-risk command detected.\n"
@@ -89,35 +93,32 @@ class KernelAgent(BaseAgent):
             )
 
         try:
-            # shell=True is intentional for KernelAgent as it provides direct OS shell access.
-            # Security at the agent level is managed via the security_guard HITL gate.
-            result = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=30) # nosec
-            output = f"STDOUT:\n{result.stdout}\n"
-            if result.stderr:
-                output += f"STDERR:\n{result.stderr}\n"
+            # Phase 287: Use asyncio for sub-processes
+            proc = await asyncio.create_subprocess_shell(
+                command,
+                stdout=asyncio.subprocess.PIPE,
+                stderr=asyncio.subprocess.PIPE
+            )
             
-            # Intelligence Harvesting (Phase 108)
-            if self.recorder:
-                self.recorder.record_lesson("kernel_shell_exec", {"command": command, "exit_code": result.returncode})
+            try:
+                stdout, stderr = await asyncio.wait_for(proc.communicate(), timeout=30)
+                output = f"STDOUT:\n{stdout.decode()}\n"
+                if stderr:
+                    output += f"STDERR:\n{stderr.decode()}\n"
                 
-            return output
-        except subprocess.TimeoutExpired:
-            if self.recorder:
-                self.recorder.record_lesson("kernel_shell_timeout", {"command": command})
-            return "Error: Command timed out after 30 seconds."
+                # Intelligence Harvesting (Phase 108)
+                if hasattr(self, 'recorder') and self.recorder:
+                    self.recorder.record_lesson("kernel_shell_exec", {"command": command, "exit_code": proc.returncode})
+                    
+                return output
+            except asyncio.TimeoutExpired:
+                proc.kill()
+                await proc.wait()
+                if hasattr(self, 'recorder') and self.recorder:
+                    self.recorder.record_lesson("kernel_shell_timeout", {"command": command})
+                return "Error: Command timed out after 30 seconds."
+                
         except Exception as e:
-            if self.recorder:
+            if hasattr(self, 'recorder') and self.recorder:
                 self.recorder.record_lesson("kernel_shell_error", {"command": command, "error": str(e)})
             return f"Error executing command: {e}"
-
-    @as_tool
-    def list_processes(self) -> str:
-        """Lists active processes (platform dependent)."""
-        if platform.system() == "Windows":
-            return self.execute_shell('tasklist /FI "STATUS eq running" /FO TABLE')
-        else:
-            return self.execute_shell("ps aux | head -n 20")
-
-    def improve_content(self, prompt: str) -> str:
-        """Overridden to handle system-level requests."""
-        return self.execute_shell(prompt)

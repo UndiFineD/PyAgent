@@ -36,7 +36,7 @@ class StrategicPlanningAgent(BaseAgent):
         self.roadmap = []
         self.status_reports = []
 
-    def set_long_term_goal(self, goal_description: str, target_date: str) -> Dict[str, Any]:
+    def set_long_term_goal(self, goal_description: str, target_date: str) -> dict[str, Any]:
         """Adds a long-term goal for the fleet to achieve."""
         goal = {
             "id": f"GOAL-{len(self.goals) + 1}",
@@ -61,7 +61,7 @@ class StrategicPlanningAgent(BaseAgent):
                 return True
         return False
 
-    def generate_roadmap(self) -> List[Dict[str, Any]]:
+    def generate_roadmap(self) -> list[dict[str, Any]]:
         """Generates a high-level roadmap based on active goals and their milestones."""
         self.roadmap = []
         for goal in self.goals:
@@ -72,7 +72,7 @@ class StrategicPlanningAgent(BaseAgent):
             })
         return self.roadmap
 
-    def _calculate_completion(self, goal: Dict[str, Any]) -> float:
+    def _calculate_completion(self, goal: dict[str, Any]) -> float:
         """Calculates completion percentage based on achieved milestones."""
         if not goal['milestones']:
             return 0.0
@@ -90,7 +90,7 @@ class StrategicPlanningAgent(BaseAgent):
                         return True
         return False
 
-    def get_strategic_summary(self) -> Dict[str, Any]:
+    def get_strategic_summary(self) -> dict[str, Any]:
         """Provides a summary of strategic alignment and progress."""
         return {
             "active_goals": len(self.goals),

@@ -41,7 +41,7 @@ class QuantumShardOrchestrator(BaseAgent):
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.shard_id = str(uuid.uuid4())[:8]
-        self.shared_state: Dict[str, Any] = {}
+        self.shared_state: dict[str, Any] = {}
         self.state_file = Path("data/memory/agent_store/quantum_state.json")
         self._system_prompt = (
             "You are the Quantum Shard Orchestrator. You ensure non-local state consistency. "
@@ -54,7 +54,7 @@ class QuantumShardOrchestrator(BaseAgent):
         try:
             current_field = {}
             if self.state_file.exists():
-                with open(self.state_file, "r") as f:
+                with open(self.state_file) as f:
                     current_field = json.load(f)
             
             current_field.update(self.shared_state)
@@ -77,7 +77,7 @@ class QuantumShardOrchestrator(BaseAgent):
         """Collapses the quantum state to measure the current value of a key."""
         if self.state_file.exists():
             try:
-                with open(self.state_file, "r") as f:
+                with open(self.state_file) as f:
                     data = json.load(f)
                     return data.get(key)
             except Exception:

@@ -49,18 +49,18 @@ class KnowledgeFusionAgent(BaseAgent):
             "episodes, and maintain a high-density collective knowledge graph."
         )
 
-    def _load_global_graph(self) -> Dict[str, Any]:
+    def _load_global_graph(self) -> dict[str, Any]:
         if self.global_graph_path.exists():
-            with open(self.global_graph_path, "r", encoding="utf-8") as f:
+            with open(self.global_graph_path, encoding="utf-8") as f:
                 return json.load(f)
         return {"nodes": [], "edges": []}
 
-    def _save_global_graph(self, graph: Dict[str, Any]) -> str:
+    def _save_global_graph(self, graph: dict[str, Any]) -> str:
         with open(self.global_graph_path, "w", encoding="utf-8") as f:
             json.dump(graph, f, indent=2)
 
     @as_tool
-    def fuse_memory_shards(self, shard_paths: List[str]) -> str:
+    def fuse_memory_shards(self, shard_paths: list[str]) -> str:
         """Aggregates multiple memory shards into the global knowledge graph.
         Args:
             shard_paths: List of file paths to agent-specific memory shards (JSON).
@@ -74,7 +74,7 @@ class KnowledgeFusionAgent(BaseAgent):
                 continue
             
             try:
-                with open(path, "r", encoding="utf-8") as f:
+                with open(path, encoding="utf-8") as f:
                     shard_data = json.load(f)
                 
                 # Simple fusion logic: Deduplicate by content/id

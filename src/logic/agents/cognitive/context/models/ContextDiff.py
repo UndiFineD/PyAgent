@@ -41,7 +41,7 @@ class ContextDiff:
     """
     version_from: str
     version_to: str
-    added_sections: List[str] = field(default_factory=lambda: [])
-    removed_sections: List[str] = field(default_factory=lambda: [])
-    modified_sections: List[str] = field(default_factory=lambda: [])
+    added_sections: list[str] = field(default_factory=lambda: [])
+    removed_sections: list[str] = field(default_factory=lambda: [])
+    modified_sections: list[str] = field(default_factory=lambda: [])
     change_summary: str = ""

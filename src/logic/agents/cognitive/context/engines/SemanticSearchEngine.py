@@ -44,12 +44,12 @@ class SemanticSearchEngine:
         >>> results=engine.search("function that handles authentication")
     """
 
-    def __init__(self, persist_directory: Optional[str] = None) -> None:
+    def __init__(self, persist_directory: str | None = None) -> None:
         """Initialize the semantic search engine."""
-        self.results: List[SemanticSearchResult] = []
+        self.results: list[SemanticSearchResult] = []
         self.algorithm: SearchAlgorithm = SearchAlgorithm.KEYWORD
         self.similarity_metric: str = "cosine"
-        self.documents: Dict[str, str] = {}
+        self.documents: dict[str, str] = {}
         self.persist_directory = persist_directory
         self._client = None
         self._collection = None
@@ -122,7 +122,7 @@ class SemanticSearchEngine:
     def search(
             self,
             query: str,
-            algorithm: Optional[SearchAlgorithm] = None) -> List[SemanticSearchResult]:
+            algorithm: SearchAlgorithm | None = None) -> list[SemanticSearchResult]:
         """Search for related code.
 
         Args:

@@ -220,8 +220,7 @@ class TestStatsAgent(unittest.TestCase):
         # Load StatsAgent from agent_stats.py
         AGENT_DIR = Path(__file__).parent.parent.parent.parent / 'src'
         if str(AGENT_DIR) not in sys.path:
-            sys.path.insert(0, str(AGENT_DIR))
-        
+
         from tests.utils.agent_test_utils import load_agent_module
         _stats_module = load_agent_module("stats/metrics_collector.py")
         self.StatsAgent = _stats_module.StatsAgent

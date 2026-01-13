@@ -41,7 +41,7 @@ class DocGenAgent(BaseAgent):
             return ""
 
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 tree = ast.parse(f.read())
             
             md_content = f"# Documentation for {os.path.basename(file_path)}\n\n"

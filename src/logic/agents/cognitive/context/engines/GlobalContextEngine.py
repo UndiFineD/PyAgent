@@ -51,7 +51,7 @@ class GlobalContextEngine:
         self.context_file = self.workspace_root / ".agent_global_context.json"
         self.shard_dir = self.workspace_root / ".agent_shards"
         self.core = GlobalContextCore()
-        self.memory: Dict[str, Any] = {
+        self.memory: dict[str, Any] = {
             "facts": {},
             "preferences": {},
             "constraints": [],
@@ -91,7 +91,7 @@ class GlobalContextEngine:
         
         self._loaded_shards.add(category)
 
-    def get(self, category: str, key: Optional[str] = None) -> Any:
+    def get(self, category: str, key: str | None = None) -> Any:
         """Retrieves data with lazy shard loading."""
         self._ensure_shard_loaded(category)
         data = self.memory.get(category)
@@ -182,7 +182,7 @@ class GlobalContextEngine:
             self.memory["constraints"].append(constraint)
             self.save()
 
-    def add_entity_info(self, entity_name: str, attributes: Dict[str, Any]) -> None:
+    def add_entity_info(self, entity_name: str, attributes: dict[str, Any]) -> None:
         """Tracks specific entities (files, classes, modules) and their metadata."""
         existing = self.memory["entities"].get(entity_name, {})
         self.memory["entities"][entity_name] = self.core.merge_entity_info(existing, attributes)
@@ -204,11 +204,11 @@ class GlobalContextEngine:
         """Returns a markdown summary of LTM for agent context."""
         return self.core.generate_markdown_summary(self.memory)
 
-    def consolidate_episodes(self, episodes: List[Dict[str, Any]]) -> None:
+    def consolidate_episodes(self, episodes: list[dict[str, Any]]) -> None:
         """Analyzes episodic memories to extract long-term insights."""
         # This would typically use an LLM to find patterns.
         # For now, we look for repeated failures or success patterns.
-        agent_stats: Dict[str, Dict[str, int]] = {}
+        agent_stats: dict[str, dict[str, int]] = {}
         for ep in episodes:
             agent = ep["agent"]
             if agent not in agent_stats:

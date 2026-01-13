@@ -44,14 +44,14 @@ class AgentPriorityQueue:
 
     def __init__(self) -> None:
         """Initialize priority queue."""
-        self._agents: Dict[str, Dict[str, Any]] = {}
+        self._agents: dict[str, dict[str, Any]] = {}
 
     def add_agent(
         self,
         name: str,
         priority: int = 5,
-        depends_on: Optional[List[str]] = None,
-        metadata: Optional[Dict[str, Any]] = None,
+        depends_on: list[str] | None = None,
+        metadata: dict[str, Any] | None = None,
     ) -> None:
         """Add agent to queue.
 
@@ -81,7 +81,7 @@ class AgentPriorityQueue:
             return True
         return False
 
-    def get_execution_order(self) -> List[str]:
+    def get_execution_order(self) -> list[str]:
         """Get agents in execution order.
 
         Returns:

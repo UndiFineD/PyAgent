@@ -3,7 +3,7 @@ from src.infrastructure.fleet.FleetManager import FleetManager
 
 class TestPhase52(unittest.TestCase):
     def setUp(self):
-        self.fleet = FleetManager("c:/DEV/PyAgent")
+        self.fleet = FleetManager(Path(__file__).resolve().parents[2])
 
     def test_neuro_optimization(self) -> None:
         print("\nTesting Phase 52: Evolutionary Neuro-Optimization...")

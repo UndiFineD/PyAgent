@@ -35,12 +35,12 @@ class PredictiveSchedulerAgent(BaseAgent):
     
     def __init__(self, path: str) -> None:
         super().__init__(path)
-        self.usage_history: List[Dict[str, Any]] = []
+        self.usage_history: list[dict[str, Any]] = []
         self.prediction_window = 10 # Number of steps to look ahead
-        self.weights: Dict[str, float] = {"avg": 0.5, "trend": 0.5} # Initial neural weights
+        self.weights: dict[str, float] = {"avg": 0.5, "trend": 0.5} # Initial neural weights
         self.learning_rate = 0.05
 
-    def ingest_metrics(self, metrics: List[Any], actual_outcome: Optional[float] = None) -> None:
+    def ingest_metrics(self, metrics: list[Any], actual_outcome: float | None = None) -> None:
         """
         Ingests recent agent metrics for analysis.
         Phase 130: Adjusts weights using simple backpropagation logic if actual outcome is provided.
@@ -69,7 +69,7 @@ class PredictiveSchedulerAgent(BaseAgent):
         if len(self.usage_history) > 1000:
             self.usage_history = self.usage_history[-1000:]
 
-    def forecast_usage(self) -> Dict[str, Any]:
+    def forecast_usage(self) -> dict[str, Any]:
         """
         Forecasts usage for the next cycle.
         Phase 130: Weighted combination of average and trend based on neural feedback.
@@ -93,7 +93,7 @@ class PredictiveSchedulerAgent(BaseAgent):
             "weights": self.weights
         }
 
-    def evaluate_scaling_needs(self, current_nodes: int) -> Dict[str, Any]:
+    def evaluate_scaling_needs(self, current_nodes: int) -> dict[str, Any]:
         """Recommends scaling actions based on predicted load."""
         forecast = self.forecast_usage()
         needed_nodes = current_nodes

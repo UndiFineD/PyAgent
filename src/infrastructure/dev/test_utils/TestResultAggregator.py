@@ -40,13 +40,13 @@ class TestResultAggregator:
 
     def __init__(self) -> None:
         """Initialize result aggregator."""
-        self._results: List[TestResult] = []
+        self._results: list[TestResult] = []
 
     def add_result(
         self,
-        result: Union[TestResult, str],
-        test_name: Optional[str] = None,
-        status: Optional[str] = None,
+        result: TestResult | str,
+        test_name: str | None = None,
+        status: str | None = None,
     ) -> None:
         """Add a test result.
 
@@ -68,11 +68,11 @@ class TestResultAggregator:
         else:
             raise TypeError("Invalid arguments to add_result")
 
-    def get_results(self) -> List[TestResult]:
+    def get_results(self) -> list[TestResult]:
         """Get all results."""
         return list(self._results)
 
-    def get_report(self) -> Dict[str, Any]:
+    def get_report(self) -> dict[str, Any]:
         """Get aggregated report.
 
         Returns:
@@ -96,7 +96,7 @@ class TestResultAggregator:
             "avg_duration_ms": sum(durations) / len(durations) if durations else 0,
         }
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """Compatibility alias used by some tests."""
         report = self.get_report()
         return {
@@ -107,9 +107,9 @@ class TestResultAggregator:
             "errors": report.get("errors", 0),
         }
 
-    def get_by_suite(self) -> Dict[str, Dict[str, int]]:
+    def get_by_suite(self) -> dict[str, dict[str, int]]:
         """Group results by suite prefix ("suite/test")."""
-        by_suite: Dict[str, Dict[str, int]] = {}
+        by_suite: dict[str, dict[str, int]] = {}
         for r in self._results:
             suite = "unknown"
             if "/" in r.test_name:
@@ -126,7 +126,7 @@ class TestResultAggregator:
                 by_suite[suite]["errors"] += 1
         return by_suite
 
-    def get_failures(self) -> List[TestResult]:
+    def get_failures(self) -> list[TestResult]:
         """Get failed tests."""
         return [r for r in self._results if r.status == TestStatus.FAILED]
 

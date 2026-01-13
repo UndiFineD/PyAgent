@@ -44,4 +44,4 @@ class FileLock:
     lock_type: LockType
     owner: str
     acquired_at: float
-    expires_at: Optional[float] = None
+    expires_at: float | None = None

@@ -35,9 +35,9 @@ class GPUScalingManager:
 
     def __init__(self, threshold_pct: float = 80.0) -> None:
         self.threshold = threshold_pct
-        self.gpu_state: Dict[str, float] = {"gpu_0": 0.0, "gpu_1": 0.0}
+        self.gpu_state: dict[str, float] = {"gpu_0": 0.0, "gpu_1": 0.0}
 
-    def monitor_memory_pressure(self) -> Dict[str, str]:
+    def monitor_memory_pressure(self) -> dict[str, str]:
         """Check current GPU memory and decide if scaling is needed."""
         # Simulated GPU pressure check
         actions = {}
@@ -54,7 +54,7 @@ class GPUScalingManager:
         
         return actions
 
-    def get_resource_summary(self) -> Dict[str, Any]:
+    def get_resource_summary(self) -> dict[str, Any]:
         """Returns the current state of GPU resources."""
         return {
             "gpus": self.gpu_state,

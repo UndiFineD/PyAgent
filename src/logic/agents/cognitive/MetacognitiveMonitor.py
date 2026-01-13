@@ -35,10 +35,10 @@ class MetacognitiveMonitor:
     """
 
     def __init__(self) -> None:
-        self.uncertainty_log: List[Dict[str, Any]] = []
+        self.uncertainty_log: list[dict[str, Any]] = []
         self.core = MetacognitiveCore()
         # Track weights for agents reporting to this monitor
-        self.agent_weights: Dict[str, float] = {}
+        self.agent_weights: dict[str, float] = {}
 
     def calibrate_agent(self, agent_name: str, reported_conf: float, actual_correct: bool):
         """Calibrates an agent's consensus weight based on performance."""
@@ -49,7 +49,7 @@ class MetacognitiveMonitor:
         if new_weight < current_weight:
             logging.info(f"Metacognitive: Penalized {agent_name} weight to {new_weight:.2f} due to overconfidence.")
 
-    def evaluate_reasoning(self, agent_name: str, task: str, reasoning_chain: str) -> Dict[str, Any]:
+    def evaluate_reasoning(self, agent_name: str, task: str, reasoning_chain: str) -> dict[str, Any]:
         """Analyzes a reasoning chain via core and handles alerts."""
         evaluation_base = self.core.calculate_confidence(reasoning_chain)
         
@@ -67,6 +67,6 @@ class MetacognitiveMonitor:
             
         return evaluation
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """Aggregates log via Core."""
         return self.core.aggregate_summary(self.uncertainty_log)

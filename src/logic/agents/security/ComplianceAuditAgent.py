@@ -45,7 +45,7 @@ class ComplianceAuditAgent(BaseAgent):
             ]
         }
 
-    def run_compliance_check(self, standard: str) -> Dict[str, Any]:
+    def run_compliance_check(self, standard: str) -> dict[str, Any]:
         """Runs a simulated compliance check for a specific standard."""
         print(f"Compliance: Auditing against {standard}...")
         
@@ -86,7 +86,7 @@ class ComplianceAuditAgent(BaseAgent):
             return False # Simulate a gap in GPDR
         return True
 
-    def get_compliance_inventory(self) -> Dict[str, List[str]]:
+    def get_compliance_inventory(self) -> dict[str, list[str]]:
         """Returns the list of supported standards and their associated checks."""
         return self.standards
 

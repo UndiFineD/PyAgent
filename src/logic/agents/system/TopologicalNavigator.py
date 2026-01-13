@@ -39,8 +39,8 @@ class TopologicalNavigator(BaseAgent):
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.graph: Dict[str, Set[str]] = {}
-        self.reverse_graph: Dict[str, Set[str]] = {}
+        self.graph: dict[str, set[str]] = {}
+        self.reverse_graph: dict[str, set[str]] = {}
         self.root_dir = Path(os.getcwd())
         self._system_prompt = (
             "You are the Topological Context Navigator. "
@@ -75,7 +75,7 @@ class TopologicalNavigator(BaseAgent):
     def _parse_file(self, file_path: Path) -> None:
         """Extracts imports and class/function definitions from a file."""
         try:
-            with open(file_path, "r", encoding="utf-8") as f:
+            with open(file_path, encoding="utf-8") as f:
                 tree = ast.parse(f.read())
 
             module_id = self._get_entity_id(file_path)
@@ -133,7 +133,7 @@ class TopologicalNavigator(BaseAgent):
             self.root_dir = original_root
 
     @as_tool
-    def find_impact_zone(self, entity_id: str, depth: int = 2) -> Dict[str, Any]:
+    def find_impact_zone(self, entity_id: str, depth: int = 2) -> dict[str, Any]:
         """Identifies which parts of the codebase depend on the given entity."""
         # Need reverse graph to find dependents
         if not self.reverse_graph:
@@ -170,7 +170,7 @@ class TopologicalNavigator(BaseAgent):
                 self.reverse_graph[dep].add(source)
 
     @as_tool
-    def get_topological_order(self) -> List[str]:
+    def get_topological_order(self) -> list[str]:
         """Returns nodes in topological order (safe initialization/build sequence)."""
         visited = set()
         stack = []

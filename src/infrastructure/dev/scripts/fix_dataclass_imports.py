@@ -33,7 +33,7 @@ def fix_dataclass_imports(root_dir: str) -> None:
             if file.endswith(".py"):
                 path = os.path.join(root, file)
                 # print(f"Checking {path}")
-                with open(path, "r", encoding="utf-8") as f:
+                with open(path, encoding="utf-8") as f:
                     content = f.read()
                 
                 if "@dataclass" in content and "from dataclasses import dataclass" not in content:

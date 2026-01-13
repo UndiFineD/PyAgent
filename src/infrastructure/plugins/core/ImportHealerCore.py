@@ -21,7 +21,7 @@ class ImportHealerCore:
         return "Suggested fix: Check sys.path or internal module naming."
 
     @staticmethod
-    def build_internal_import_map(directory: str) -> Dict[str, List[str]]:
+    def build_internal_import_map(directory: str) -> dict[str, list[str]]:
         """
         Scans directory for internal imports and builds a map.
         """
@@ -30,7 +30,7 @@ class ImportHealerCore:
             for file in files:
                 if file.endswith(".py") and not file.startswith("__"):
                     rel_path = os.path.relpath(os.path.join(root, file), directory)
-                    with open(os.path.join(root, file), "r", encoding="utf-8", errors="ignore") as f:
+                    with open(os.path.join(root, file), encoding="utf-8", errors="ignore") as f:
                         content = f.read()
                         # Find internal imports (src.xxx)
                         imports = re.findall(r"^from\s+(src\.[a-zA-Z0-9_\.]+)", content, re.MULTILINE)

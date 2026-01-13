@@ -36,7 +36,7 @@ Maintain a high-resolution stream of state changes, user interactions, and agent
     
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.buffer: List[Dict[str, Any]] = []
+        self.buffer: list[dict[str, Any]] = []
         self.max_buffer_size = 100
         self._system_prompt = (
             "You are the Attention Buffer Agent. "
@@ -66,7 +66,7 @@ Maintain a high-resolution stream of state changes, user interactions, and agent
         return f"Attention point registered. Buffer size: {len(self.buffer)}"
 
     @as_tool
-    def get_attention_summary(self) -> Dict[str, Any]:
+    def get_attention_summary(self) -> dict[str, Any]:
         """
         Returns the current state of the attention buffer, sorted by priority and recency.
         """

@@ -38,7 +38,7 @@ class SwarmTopologyReporter:
         self.nodes = []
         self.links = []
 
-    def record_node(self, node_id: str, group: str = "general", metadata: Dict[str, Any] = None) -> None:
+    def record_node(self, node_id: str, group: str = "general", metadata: dict[str, Any] = None) -> None:
         self.nodes.append({
             "id": node_id,
             "group": group,

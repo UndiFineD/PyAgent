@@ -43,7 +43,7 @@ class TenantManager:
         self.core = TenantCore()
         if not os.path.exists(self.tenants_dir):
             os.makedirs(self.tenants_dir)
-        self.active_tenants: Dict[str, str] = {}
+        self.active_tenants: dict[str, str] = {}
 
     def create_tenant(self, tenant_id: str) -> str:
         """Creates an isolated workspace for a new tenant."""

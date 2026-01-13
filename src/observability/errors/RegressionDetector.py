@@ -41,8 +41,8 @@ class RegressionDetector:
 
     def __init__(self) -> None:
         """Initialize the regression detector."""
-        self.fixed_errors: Dict[str, str] = {}  # signature -> fix_commit
-        self.regressions: List[RegressionInfo] = []
+        self.fixed_errors: dict[str, str] = {}  # signature -> fix_commit
+        self.regressions: list[RegressionInfo] = []
 
     def record_fix(self, error: ErrorEntry, commit_hash: str) -> None:
         """Record that an error was fixed.
@@ -56,7 +56,7 @@ class RegressionDetector:
 
     def check_regression(
         self, error: ErrorEntry, current_commit: str = ""
-    ) -> Optional[RegressionInfo]:
+    ) -> RegressionInfo | None:
         """Check if an error is a regression.
 
         Args:
@@ -87,7 +87,7 @@ class RegressionDetector:
         normalized = re.sub(r"\d+", "N", error.message)
         return f"{error.file_path}:{normalized}"
 
-    def get_regressions(self) -> List[RegressionInfo]:
+    def get_regressions(self) -> list[RegressionInfo]:
         """Get all detected regressions."""
         return self.regressions
 

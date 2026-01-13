@@ -47,4 +47,4 @@ class ImportedEntry:
     description: str
     author: str = ""
     created_at: str = ""
-    labels: List[str] = field(default_factory=lambda: [])
+    labels: list[str] = field(default_factory=lambda: [])

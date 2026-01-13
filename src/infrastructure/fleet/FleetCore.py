@@ -33,7 +33,7 @@ __version__ = VERSION
 class FleetCore:
     """Pure logic core for the FleetManager."""
 
-    def __init__(self, fleet: Optional[Any] = None, default_score_threshold: int = 10) -> None:
+    def __init__(self, fleet: Any | None = None, default_score_threshold: int = 10) -> None:
         # Handle cases where registry injects fleet instance as first arg
         if not isinstance(default_score_threshold, (int, float)) and isinstance(fleet, (int, float)):
             self.default_score_threshold = fleet
@@ -64,13 +64,13 @@ class FleetCore:
         
         return score
 
-    def score_tool_candidates(self, goal: str, tools_metadata: List[Dict[str, Any]], provided_kwargs: Dict[str, Any]) -> List[Tuple[float, str]]:
+    def score_tool_candidates(self, goal: str, tools_metadata: list[dict[str, Any]], provided_kwargs: dict[str, Any]) -> list[tuple[float, str]]:
         """
         Calculates match scores for tools based on a goal/capability.
         Returns a sorted list of (score, tool_name).
         """
-        g_low: str = goal.lower()
-        scored_candidates: List[Tuple[float, str]] = []
+        goal.lower()
+        scored_candidates: list[tuple[float, str]] = []
 
         for t in tools_metadata:
             name = t.get('name', '')
@@ -79,7 +79,7 @@ class FleetCore:
             # Use cached core logic for speed (Phase 107 optimization)
             score = self.cached_logic_match(goal, name, owner)
             
-            params: Dict[str, Any] = t.get('parameters', {})
+            params: dict[str, Any] = t.get('parameters', {})
 
             # Bonus for parameter intersection
             for param_name in provided_kwargs:

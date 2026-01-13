@@ -14,7 +14,8 @@
 
 from __future__ import annotations
 import re
-from typing import List, Pattern
+from typing import List
+from re import Pattern
 
 class LoggingCore:
     """
@@ -23,14 +24,14 @@ class LoggingCore:
     """
 
     # Static patterns for ultra-fast masking (used in shell)
-    DEFAULT_SENSITIVE_PATTERNS: List[str] = [
+    DEFAULT_SENSITIVE_PATTERNS: list[str] = [
         r"sk-[a-zA-Z0-9]{32,}",                # OpenAI
         r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*",     # JWT/Generic Bearer
         r"gh[ps]_[a-zA-Z0-9]{36}"               # GitHub
     ]
 
-    def __init__(self, custom_patterns: List[str] = None) -> None:
-        self.patterns: List[Pattern] = [
+    def __init__(self, custom_patterns: list[str] = None) -> None:
+        self.patterns: list[Pattern] = [
             re.compile(p) for p in (custom_patterns or self.DEFAULT_SENSITIVE_PATTERNS)
         ]
 
@@ -45,5 +46,5 @@ class LoggingCore:
     def format_rfc3339(timestamp_ms: int) -> str:
         """Logic for timestamp formatting (shell implementation)."""
         import datetime
-        dt = datetime.datetime.fromtimestamp(timestamp_ms / 1000.0, tz=datetime.timezone.utc)
+        dt = datetime.datetime.fromtimestamp(timestamp_ms / 1000.0, tz=datetime.UTC)
         return dt.isoformat(timespec='milliseconds').replace("+00:00", "Z")

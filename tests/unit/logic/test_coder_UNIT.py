@@ -32,7 +32,7 @@ except ImportError:
     
     class agent_sys_path:
         def __enter__(self) -> str: 
-            sys.path.insert(0, str(AGENT_DIR))
+
             return self
         def __exit__(self, *args) -> str: 
             sys.path.remove(str(AGENT_DIR))
@@ -504,7 +504,7 @@ class TestSecurityScanning:
             mod: sys.ModuleType = load_agent_module("coder/code_generator.py")
 
         code = '''
-API_KEY="sk_live_xxxxxxxxxxxx"
+API_KEY=os.environ.get("OPENAI_API_KEY", "dummy_key_for_testing")
 '''
         target: Path = tmp_path / "test.py"
         target.write_text(code)

@@ -11,8 +11,8 @@ class AuthManager:
     
     def __init__(self) -> None:
         self.core = AuthCore()
-        self.pending_challenges: Dict[str, str] = {} # agent_id -> challenge
-        self.sessions: Dict[str, float] = {} # agent_id -> expiry
+        self.pending_challenges: dict[str, str] = {} # agent_id -> challenge
+        self.sessions: dict[str, float] = {} # agent_id -> expiry
 
     def initiate_auth(self, agent_id: str) -> str:
         """Starts auth flow by issuing a challenge."""

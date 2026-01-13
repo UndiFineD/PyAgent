@@ -74,7 +74,7 @@ class ImprovementTemplate:
         self.default_priority = default_priority
         self.default_effort = default_effort
 
-    def instantiate(self, variables: Dict[str, str]) -> Dict[str, str]:
+    def instantiate(self, variables: dict[str, str]) -> dict[str, str]:
         """Instantiate the template with variables."""
         return {
             "title": self.title_pattern.format(**variables),

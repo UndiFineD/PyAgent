@@ -36,19 +36,19 @@ __version__ = VERSION
 app = FastAPI(title="PyAgent Unified API")
 
 # Global instances
-workspace_root = "c:/DEV/PyAgent"
+workspace_root = str(Path(__file__).resolve().parents[3]) + ""
 fleet = FleetManager(workspace_root)
 load_balancer = FleetLoadBalancer(fleet)
 
 class TaskRequest(BaseModel):
     agent_id: str
     task: str
-    context: Dict[str, Any] = {}
-    interface: Optional[str] = "Web" # Default to web if not specified
+    context: dict[str, Any] = {}
+    interface: str | None = "Web" # Default to web if not specified
 
 class TelemetryManger:
     def __init__(self) -> None:
-        self.active_connections: List[WebSocket] = []
+        self.active_connections: list[WebSocket] = []
 
     async def connect(self, websocket: WebSocket) -> None:
         await websocket.accept()
@@ -67,7 +67,7 @@ class TelemetryManger:
 telemetry = TelemetryManger()
 
 @app.get("/")
-async def root() -> Dict[str, Any]:
+async def root() -> dict[str, Any]:
     return {
         "status": "online", 
         "version": "2.0.0", 
@@ -76,7 +76,7 @@ async def root() -> Dict[str, Any]:
     }
 
 @app.get("/agents")
-async def list_agents() -> Dict[str, Any]:
+async def list_agents() -> dict[str, Any]:
     return {
         "agents": [
             {"id": k, "type": type(v).__name__} for k, v in fleet.agents.items()
@@ -84,7 +84,7 @@ async def list_agents() -> Dict[str, Any]:
     }
 
 @app.post("/task")
-async def dispatch_task(request: TaskRequest) -> Dict[str, Any]:
+async def dispatch_task(request: TaskRequest) -> dict[str, Any]:
     # Route through Load Balancer
     lb_result = load_balancer.balance_request(request.interface, request.task)
     if lb_result.get("status") == "REJECTED":
@@ -121,7 +121,7 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
     try:
         while True:
             # Keep connection alive
-            data = await websocket.receive_text()
+            await websocket.receive_text()
             # Echo or handle incoming messages
     except WebSocketDisconnect:
         telemetry.disconnect(websocket)

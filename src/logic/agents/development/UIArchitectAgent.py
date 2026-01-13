@@ -33,9 +33,9 @@ class UIArchitectAgent(BaseAgent):
     
     def __init__(self, path: str) -> None:
         super().__init__(path)
-        self.layouts: Dict[str, Any] = {}
+        self.layouts: dict[str, Any] = {}
 
-    def design_dashboard_layout(self, active_workflow: str, agent_list: List[str]) -> Dict[str, Any]:
+    def design_dashboard_layout(self, active_workflow: str, agent_list: list[str]) -> dict[str, Any]:
         """Creates a layout JSON based on active agents and workflow type."""
         layout = {
             "title": f"Live View: {active_workflow}",
@@ -73,7 +73,7 @@ class UIArchitectAgent(BaseAgent):
             
         return layout
 
-    def generate_ui_manifest(self, task_context: str) -> Dict[str, Any]:
+    def generate_ui_manifest(self, task_context: str) -> dict[str, Any]:
         """Determines which dynamic components should be rendered based on context strings."""
         manifest = {
             "requested_plugins": [],

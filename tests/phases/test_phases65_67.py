@@ -5,7 +5,7 @@ from src.infrastructure.fleet.FleetManager import FleetManager
 
 class TestPhases65_67(unittest.TestCase):
     def setUp(self):
-        self.workspace = "c:/DEV/PyAgent"
+        self.workspace = Path(__file__).resolve().parents[2]
         self.fleet = FleetManager(self.workspace)
 
     def test_semantic_search_mesh(self) -> None:

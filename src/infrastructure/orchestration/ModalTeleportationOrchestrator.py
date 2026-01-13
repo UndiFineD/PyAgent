@@ -46,12 +46,6 @@ class ModalTeleportationOrchestrator:
         # In a real system, this would use specialized agents (Linguistic, SQL, Android) to bridge the gap.
         # Example: GUI Actions -> Python Script
         
-        prompt = (
-            f"Source Modality: {source_modality}\n"
-            f"Target Modality: {target_modality}\n"
-            f"Source Data: {source_data}\n\n"
-            "Translate the source data into the target modality format while preserving all state and intent."
-        )
         
         # Use ReasoningAgent or LinguisticAgent to perform the translation
         try:

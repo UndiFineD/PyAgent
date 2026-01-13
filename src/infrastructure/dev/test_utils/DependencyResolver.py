@@ -31,9 +31,9 @@ class DependencyResolver:
 
     def __init__(self) -> None:
         """Initialize resolver."""
-        self.dependencies: Dict[str, List[str]] = {}
+        self.dependencies: dict[str, list[str]] = {}
 
-    def add_test(self, name: str, depends_on: List[str]) -> None:
+    def add_test(self, name: str, depends_on: list[str]) -> None:
         """Register a test and its dependencies (test compatibility API)."""
         self.dependencies[name] = list(depends_on)
 
@@ -43,11 +43,11 @@ class DependencyResolver:
             self.dependencies[test] = []
         self.dependencies[test].append(depends_on)
 
-    def resolve(self) -> List[str]:
+    def resolve(self) -> list[str]:
         """Resolve execution order or raise on circular dependencies."""
-        visiting: Set[str] = set()
-        visited: Set[str] = set()
-        order: List[str] = []
+        visiting: set[str] = set()
+        visited: set[str] = set()
+        order: list[str] = []
 
         def visit(node: str) -> None:
             if node in visited:
@@ -61,17 +61,17 @@ class DependencyResolver:
             visited.add(node)
             order.append(node)
 
-        nodes: Set[str] = set(self.dependencies.keys())
+        nodes: set[str] = set(self.dependencies.keys())
         for deps in self.dependencies.values():
             nodes.update(deps)
         for n in sorted(nodes):
             visit(n)
         return order
 
-    def resolve_order(self) -> List[str]:
+    def resolve_order(self) -> list[str]:
         """Resolve execution order (topological sort)."""
-        visited: Set[str] = set()
-        order: List[str] = []
+        visited: set[str] = set()
+        order: list[str] = []
 
         def visit(node: str) -> None:
             if node in visited:
@@ -87,8 +87,8 @@ class DependencyResolver:
 
     def detect_cycle(self) -> bool:
         """Detect circular dependencies."""
-        visited: Set[str] = set()
-        rec_stack: Set[str] = set()
+        visited: set[str] = set()
+        rec_stack: set[str] = set()
 
         def has_cycle(node: str) -> bool:
             visited.add(node)

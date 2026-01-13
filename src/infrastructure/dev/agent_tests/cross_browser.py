@@ -22,7 +22,8 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Any, Callable, Dict, List
+from typing import Any, Dict, List
+from collections.abc import Callable
 from src.infrastructure.dev.agent_tests.models import CrossBrowserConfig
 from src.infrastructure.dev.agent_tests.enums import BrowserType
 
@@ -46,10 +47,10 @@ class CrossBrowserRunner:
             config: The configuration to use.
         """
         self.config = config
-        self.results: Dict[BrowserType, List[Dict[str, Any]]] = {
+        self.results: dict[BrowserType, list[dict[str, Any]]] = {
             b: [] for b in config.browsers
         }
-        self._drivers: Dict[BrowserType, bool] = {}
+        self._drivers: dict[BrowserType, bool] = {}
 
     def setup_driver(self, browser: BrowserType) -> bool:
         """Setup browser driver.
@@ -76,7 +77,7 @@ class CrossBrowserRunner:
         self,
         test_name: str,
         test_code: Callable[[], bool]
-    ) -> Dict[BrowserType, Dict[str, Any]]:
+    ) -> dict[BrowserType, dict[str, Any]]:
         """Run a test across all browsers.
 
         Args:
@@ -86,7 +87,7 @@ class CrossBrowserRunner:
         Returns:
             Results for each browser.
         """
-        results: Dict[BrowserType, Dict[str, Any]] = {}
+        results: dict[BrowserType, dict[str, Any]] = {}
         for browser in self.config.browsers:
             self.setup_driver(browser)
             retries = 0
@@ -96,7 +97,7 @@ class CrossBrowserRunner:
                     passed = test_code()
                 except Exception:
                     retries += 1
-            result: Dict[str, Any] = {
+            result: dict[str, Any] = {
                 "test": test_name,
                 "passed": passed,
                 "retries": retries,
@@ -107,17 +108,17 @@ class CrossBrowserRunner:
             self.teardown_driver(browser)
         return results
 
-    def get_summary(self) -> Dict[str, Any]:
+    def get_summary(self) -> dict[str, Any]:
         """Get summary of all test runs.
 
         Returns:
             Summary statistics.
         """
-        summary: Dict[str, Any] = {"browsers": {}}
+        summary: dict[str, Any] = {"browsers": {}}
 
         for browser, results in self.results.items():
             passed = sum(1 for r in results if r.get("passed"))
-            browser_summary: Dict[str, int] = {
+            browser_summary: dict[str, int] = {
                 "total": len(results),
                 "passed": passed,
                 "failed": len(results) - passed

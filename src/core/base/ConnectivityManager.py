@@ -37,10 +37,10 @@ class ConnectivityManager:
 
     def __new__(cls, *args, **kwargs) -> ConnectivityManager:
         if cls._instance is None:
-            cls._instance = super(ConnectivityManager, cls).__new__(cls)
+            cls._instance = super().__new__(cls)
         return cls._instance
 
-    def __init__(self, workspace_root: Optional[str] = None) -> None:
+    def __init__(self, workspace_root: str | None = None) -> None:
         # Only init once if it's a singleton
         if hasattr(self, "_initialized") and self._initialized:
             return
@@ -48,15 +48,15 @@ class ConnectivityManager:
         self._conn_status_file = self.workspace_root / "data/logs" / "connectivity_status.json" if self.workspace_root else None
         self._ttl_success = 900  # 15 minutes for working endpoints
         self._ttl_failure = 120  # 2 minutes for failed endpoints (Phase 141 robustness)
-        self._cache: Dict[str, Any] = self._load_status()
-        self._preferred_cache: Dict[str, str] = self._cache.get("__preferred__", {})
+        self._cache: dict[str, Any] = self._load_status()
+        self._preferred_cache: dict[str, str] = self._cache.get("__preferred__", {})
         self._initialized = True
 
-    def _load_status(self) -> Dict[str, Any]:
+    def _load_status(self) -> dict[str, Any]:
         """Loads the connection status from disk."""
         if self._conn_status_file and self._conn_status_file.exists():
             try:
-                with open(self._conn_status_file, "r") as f:
+                with open(self._conn_status_file) as f:
                     return json.load(f)
             except Exception:
                 return {}
@@ -73,7 +73,7 @@ class ConnectivityManager:
             except Exception as e:
                 logging.error(f"ConnectivityManager: Failed to save status: {e}")
 
-    def get_preferred_endpoint(self, group: str) -> Optional[str]:
+    def get_preferred_endpoint(self, group: str) -> str | None:
         """Returns the last known working endpoint for a group if within TTL."""
         preferred = self._preferred_cache.get(group)
         if preferred and self.is_endpoint_available(preferred):
@@ -131,7 +131,7 @@ class ConnectivityManager:
         logging.debug(f"ConnectivityManager: Endpoint '{endpoint_id}' TPS tracked: {status['last_tps']} (avg: {status['avg_tps']})")
         self._save_status()
 
-    def get_tps_stats(self, endpoint_id: str) -> Dict[str, Any]:
+    def get_tps_stats(self, endpoint_id: str) -> dict[str, Any]:
         """Returns TPS statistics for an endpoint."""
         status = self._cache.get(endpoint_id, {})
         return {

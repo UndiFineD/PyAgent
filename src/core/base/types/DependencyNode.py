@@ -41,6 +41,6 @@ class DependencyNode:
     """
     name: str
     type: DependencyType
-    depends_on: List[str] = field(default_factory=lambda: [])
-    depended_by: List[str] = field(default_factory=lambda: [])
+    depends_on: list[str] = field(default_factory=lambda: [])
+    depended_by: list[str] = field(default_factory=lambda: [])
     file_path: str = ""

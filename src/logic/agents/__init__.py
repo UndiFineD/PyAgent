@@ -23,4 +23,5 @@ from __future__ import annotations
 from src.core.base.version import VERSION as VERSION
 from .swarm.OrchestratorAgent import OrchestratorAgent as Agent
 
+__all__ = ["Agent"]
 __version__ = VERSION

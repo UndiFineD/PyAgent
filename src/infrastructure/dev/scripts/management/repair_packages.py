@@ -35,11 +35,11 @@ def create_inits(root_dir: str) -> None:
 
 def fix_imports(file_path: str) -> bool:
     try:
-        with open(file_path, "r", encoding="utf-8") as f:
+        with open(file_path, encoding="utf-8") as f:
             content = f.read()
     except UnicodeDecodeError:
         try:
-            with open(file_path, "r", encoding="latin-1") as f:
+            with open(file_path, encoding="latin-1") as f:
                 content = f.read()
         except Exception:
             return False
@@ -88,7 +88,7 @@ def main() -> None:
     cb_path = src / "backend" / "CircuitBreaker.py"
     if cb_path.exists():
         print("Fixing src/backend/CircuitBreaker.py...")
-        with open(cb_path, "r", encoding="utf-8") as f:
+        with open(cb_path, encoding="utf-8") as f:
             lines = f.readlines()
         
         new_lines = []

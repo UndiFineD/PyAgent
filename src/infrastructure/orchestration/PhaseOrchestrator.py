@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 import logging
+import asyncio
 from typing import Dict, List, Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -24,7 +25,7 @@ class PhaseOrchestrator:
     
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
-        self.current_context: Dict[str, Any] = {}
+        self.current_context: dict[str, Any] = {}
 
     async def execute_task(self, task: str) -> str:
         """Runs the 7-phase cycle for a given task."""
@@ -74,7 +75,7 @@ class PhaseOrchestrator:
         """Define verification criteria."""
         return await self.fleet.call_by_capability("Security.improve_content", prompt=f"Define verification criteria for: {task}")
 
-    async def _phase_plan(self, task: str, thought: str) -> List[Dict[str, Any]]:
+    async def _phase_plan(self, task: str, thought: str) -> list[dict[str, Any]]:
         """Synthesize steps."""
         prompt = f"Plan a PyAgent workflow for: {task}\nThought: {thought}\nOutput ONLY a JSON list of steps."
         res = await self.fleet.call_by_capability("Security.improve_content", prompt=prompt)
@@ -91,10 +92,43 @@ class PhaseOrchestrator:
             logging.warning("Failed to parse JSON plan, using default reasoning step.")
             return [{"agent": "Reasoning", "action": "analyze_tot", "args": [task]}]
 
-    async def _phase_execute(self, plan: List[Dict[str, Any]]) -> str:
-        """Run the planned steps."""
+    async def _phase_execute(self, plan: list[dict[str, Any]]) -> str:
+        """Run the planned steps. (Phase 287: Optimized with asyncio.gather)"""
         if not plan:
             return "Error: No plan generated in Phase 3."
+
+        # Parallelization Logic: Group independent steps (shards)
+        independent_shards = []
+        sequential_steps = []
+        
+        for step in plan:
+            args = step.get("args", [])
+            is_dependent = any(isinstance(a, str) and a.startswith("$") for a in args)
+            
+            if is_dependent:
+                sequential_steps.append(step)
+            else:
+                independent_shards.append(step)
+
+        if independent_shards:
+            logging.info(f"PhaseOrchestrator: Executing {len(independent_shards)} independent shards in parallel.")
+            # Execute independent shards concurrently
+            shard_tasks = [
+                self.fleet.execute_workflow(f"Parallel Shard: {s.get('agent')}", [s])
+                for s in independent_shards
+            ]
+            shard_results = await asyncio.gather(*shard_tasks)
+            combined_results = "\n".join(shard_results)
+            
+            # If there are subsequent sequential steps, run them now
+            if sequential_steps:
+                logging.info(f"PhaseOrchestrator: Executing remaining {len(sequential_steps)} sequential steps.")
+                seq_results = await self.fleet.execute_workflow("Sequential Follow-up", sequential_steps)
+                return f"{combined_results}\n\n{seq_results}"
+            
+            return combined_results
+
+        # Fallback to standard sequential execution
         return await self.fleet.execute_workflow("7-Phase Execution", plan)
 
     async def _phase_verify(self, execution_result: str, criteria: str) -> str:

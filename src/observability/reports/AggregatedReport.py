@@ -39,7 +39,7 @@ class AggregatedReport:
         generated_at: Generation timestamp.
     """
 
-    sources: List[str] = field(default_factory=list)  # type: ignore[assignment]
-    combined_issues: List[CodeIssue] = field(default_factory=list)  # type: ignore[assignment]
-    summary: Dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]
+    sources: list[str] = field(default_factory=list)  # type: ignore[assignment]
+    combined_issues: list[CodeIssue] = field(default_factory=list)  # type: ignore[assignment]
+    summary: dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]
     generated_at: float = field(default_factory=time.time)  # type: ignore[assignment]

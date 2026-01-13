@@ -92,7 +92,7 @@ class DiffGenerator:
         )
 
     def format_diff(self, diff_result: DiffResult,
-                    output_format: Optional[DiffOutputFormat] = None) -> str:
+                    output_format: DiffOutputFormat | None = None) -> str:
         """Format a diff result for display.
 
         Args:

@@ -34,9 +34,9 @@ class FleetTelemetryVisualizer:
     
     def __init__(self, fleet) -> None:
         self.fleet = fleet
-        self.signal_events: List[Dict[str, Any]] = []
+        self.signal_events: list[dict[str, Any]] = []
 
-    def log_signal_flow(self, signal_name: str, sender: str, receivers: List[str]) -> str:
+    def log_signal_flow(self, signal_name: str, sender: str, receivers: list[str]) -> str:
         """Logs a signal flow event for visualization."""
         event = {
             "timestamp": time.time(),
@@ -68,7 +68,7 @@ class FleetTelemetryVisualizer:
             
         return mermaid
 
-    def identify_bottlenecks(self) -> List[str]:
+    def identify_bottlenecks(self) -> list[str]:
         """Identifies agents that are high-frequency senders or receivers."""
         traffic = {}
         for event in self.signal_events:
@@ -82,7 +82,7 @@ class FleetTelemetryVisualizer:
             return []
         return [k for k, v in traffic.items() if v / total >= 0.39]
 
-    def get_fleet_version_map(self) -> Dict[str, str]:
+    def get_fleet_version_map(self) -> dict[str, str]:
         """Phase 243: Returns a map of all registered agents and their current versions."""
         version_map = {}
         for name, agent in self.fleet.agents.items():

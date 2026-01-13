@@ -66,7 +66,7 @@ class IdentityAgent(BaseAgent):
         self.identity_registry[agent_name] = doc
         return did
 
-    def issue_verifiable_credential(self, issuer_name: str, subject_did: str, claim_type: str, claim_value: Any) -> Dict[str, Any]:
+    def issue_verifiable_credential(self, issuer_name: str, subject_did: str, claim_type: str, claim_value: Any) -> dict[str, Any]:
         """
         Issues a simulated VC for an agent.
         """
@@ -92,7 +92,7 @@ class IdentityAgent(BaseAgent):
         }
         return vc
 
-    def verify_credential(self, vc: Dict[str, Any]) -> Dict[str, Any]:
+    def verify_credential(self, vc: dict[str, Any]) -> dict[str, Any]:
         """
         Verifies the integrity of a credential.
         """

@@ -31,7 +31,7 @@ __version__ = VERSION
 src_path = r"c:\DEV\PyAgent\src"
 
 def sanitize_file(path: str) -> None:
-    with open(path, "r", encoding="utf-8", errors="ignore") as f:
+    with open(path, encoding="utf-8", errors="ignore") as f:
         lines = f.readlines()
     
     modified = False

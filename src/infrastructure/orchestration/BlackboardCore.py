@@ -29,10 +29,10 @@ class BlackboardCore:
     Handles data indexing and history tracking.
     """
     def __init__(self) -> None:
-        self.data: Dict[str, Any] = {}
-        self.history: List[Dict[str, Any]] = []
+        self.data: dict[str, Any] = {}
+        self.history: list[dict[str, Any]] = []
 
-    def process_post(self, key: str, value: Any, agent_name: str) -> Dict[str, Any]:
+    def process_post(self, key: str, value: Any, agent_name: str) -> dict[str, Any]:
         """Core logic for posting data."""
         self.data[key] = value
         entry = {"agent": agent_name, "key": key, "value": value}
@@ -42,5 +42,5 @@ class BlackboardCore:
     def get_value(self, key: str) -> Any:
         return self.data.get(key)
 
-    def get_all_keys(self) -> List[str]:
+    def get_all_keys(self) -> list[str]:
         return list(self.data.keys())

@@ -39,6 +39,6 @@ class ParameterizedTestCase:
     """
 
     name: str
-    params: Dict[str, Any]
+    params: dict[str, Any]
     expected: Any
-    tags: List[str] = field(default_factory=lambda: [])
+    tags: list[str] = field(default_factory=lambda: [])

@@ -53,17 +53,17 @@ class RequestRecorder:
             max_recordings: Maximum recordings to keep.
         """
         self.max_recordings = max_recordings
-        self._recordings: List[RecordedRequest] = []
+        self._recordings: list[RecordedRequest] = []
         self._lock = threading.Lock()
 
     def record(
         self,
         prompt: str,
         backend: str,
-        response: Optional[str] = None,
+        response: str | None = None,
         latency_ms: int = 0,
         success: bool = True,
-        metadata: Optional[Dict[str, Any]] = None,
+        metadata: dict[str, Any] | None = None,
     ) -> RecordedRequest:
         """Record a request.
 
@@ -99,9 +99,9 @@ class RequestRecorder:
 
     def get_recordings(
         self,
-        backend: Optional[str] = None,
+        backend: str | None = None,
         success_only: bool = False,
-    ) -> List[RecordedRequest]:
+    ) -> list[RecordedRequest]:
         """Get recorded requests.
 
         Args:
@@ -121,7 +121,7 @@ class RequestRecorder:
 
         return recordings
 
-    def replay(self, request_id: str) -> Optional[RecordedRequest]:
+    def replay(self, request_id: str) -> RecordedRequest | None:
         """Get recording by ID for replay.
 
         Args:
@@ -143,7 +143,7 @@ class RequestRecorder:
             str: JSON string of recordings.
         """
         with self._lock:
-            data: List[Dict[str, Any]] = [
+            data: list[dict[str, Any]] = [
                 {
                     "request_id": r.request_id,
                     "timestamp": r.timestamp,

@@ -23,7 +23,7 @@ class LocalizationCore:
             r"\bsanity check\b"          # Potentially ableist language
         ]
 
-    def detect_cultural_issues(self, text: str) -> List[Dict[str, Any]]:
+    def detect_cultural_issues(self, text: str) -> list[dict[str, Any]]:
         """
         Detects cultural red flags in agent communication.
         Returns a list of identified issues with suggestions.
@@ -40,7 +40,7 @@ class LocalizationCore:
                 })
         return issues
 
-    def get_supported_locales(self) -> List[str]:
+    def get_supported_locales(self) -> list[str]:
         """Returns the 12 major languages currently prioritized for translation."""
         return [
             "en", "zh", "es", "hi", "ar", 

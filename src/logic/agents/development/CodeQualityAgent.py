@@ -37,7 +37,7 @@ class CodeQualityAgent(BaseAgent):
         self.workspace_path = workspace_path
         self.quality_reports = []
 
-    def analyze_file_quality(self, file_path: str) -> Dict[str, Any]:
+    def analyze_file_quality(self, file_path: str) -> dict[str, Any]:
         """Analyzes code quality for a specific file based on its extension."""
         print(f"Code Quality: Analyzing {file_path}")
         
@@ -60,7 +60,7 @@ class CodeQualityAgent(BaseAgent):
         self.quality_reports.append(report)
         return report
 
-    def _check_python_quality(self, path: str) -> List[Dict[str, Any]]:
+    def _check_python_quality(self, path: str) -> list[dict[str, Any]]:
         """Run flake8 for Python quality analysis."""
         issues = []
         try:
@@ -86,13 +86,13 @@ class CodeQualityAgent(BaseAgent):
                         })
         except FileNotFoundError:
             # Fallback to internal checks if flake8 is missing
-            with open(path, 'r', encoding='utf-8') as f:
+            with open(path, encoding='utf-8') as f:
                 for i, line in enumerate(f, 1):
                     if len(line) > 120:
                         issues.append({"line": i, "type": "Style", "message": "Line too long (>120 chars)"})
         return issues
 
-    def _check_rust_quality(self, path: str) -> List[Dict[str, Any]]:
+    def _check_rust_quality(self, path: str) -> list[dict[str, Any]]:
         """Run cargo clippy for Rust quality analysis."""
         try:
             # Simulating cargo clippy call
@@ -101,7 +101,7 @@ class CodeQualityAgent(BaseAgent):
         except FileNotFoundError:
             return [{"type": "Info", "message": "Cargo not found, skipping clippy check."}]
 
-    def _check_js_quality(self, path: str) -> List[Dict[str, Any]]:
+    def _check_js_quality(self, path: str) -> list[dict[str, Any]]:
         """Run eslint for JavaScript/TypeScript quality analysis."""
         try:
             subprocess.run(["npx", "eslint", path, "--format", "json"], capture_output=True)

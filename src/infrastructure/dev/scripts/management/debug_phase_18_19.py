@@ -32,7 +32,7 @@ __version__ = VERSION
 def test_sql_and_adversarial() -> None:
     """Validate SQL query agent and adversarial security guard features."""
     logging.basicConfig(level=logging.INFO)
-    workspace = Path("c:/DEV/PyAgent")
+    workspace = Path(str(Path(__file__).resolve().parents[5]) + "")
     fleet = FleetManager(str(workspace))
     
     print("\n--- Phase 18: SQL Agent Validation ---")

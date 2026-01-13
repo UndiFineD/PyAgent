@@ -28,6 +28,7 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import re
 import logging
+from pathlib import Path
 from typing import Dict, List, Any, Optional, Tuple
 
 __version__ = VERSION
@@ -38,30 +39,30 @@ class KnowledgeCore:
     No I/O or database operations are allowed here to ensure Rust portability.
     """
     
-    def __init__(self, fleet: Optional[Any] = None) -> None:
+    def __init__(self, fleet: Any | None = None) -> None:
         self.fleet = fleet
 
-    def extract_symbols(self, content: str, pattern: str) -> List[str]:
+    def extract_symbols(self, content: str, pattern: str) -> list[str]:
         """Generic symbol extractor using optimized regex."""
         if not content:
             return []
         return re.findall(pattern, content)
 
-    def extract_python_symbols(self, content: str) -> List[str]:
+    def extract_python_symbols(self, content: str) -> list[str]:
         """Extracts class and function names from Python content."""
         return self.extract_symbols(content, r"(?:class|def)\s+([a-zA-Z_][a-zA-Z0-9_]*)")
 
-    def extract_markdown_backlinks(self, content: str) -> List[str]:
+    def extract_markdown_backlinks(self, content: str) -> list[str]:
         """Extracts [[WikiStyle]] backlinks from markdown content."""
         return self.extract_symbols(content, r"\[\[(.*?)\]\]")
 
-    def build_symbol_map(self, root: Path, patterns: Dict[str, str]) -> Dict[str, List[Dict[str, Any]]]:
+    def build_symbol_map(self, root: Path, patterns: dict[str, str]) -> dict[str, list[dict[str, Any]]]:
         """
         Builds a map of symbols and backlinks.
         Note: This currently violates the 'No I/O' rule due to the existing KnowledgeAgent caller.
         Will be moved to an 'I/O' layer in Phase 126.
         """
-        symbol_map: Dict[str, List[Dict[str, Any]]] = {}
+        symbol_map: dict[str, list[dict[str, Any]]] = {}
         
         for ext, pattern in patterns.items():
             for file_path in root.rglob(f"*{ext}"):
@@ -81,12 +82,12 @@ class KnowledgeCore:
                     
         return symbol_map
 
-    def process_file_content(self, rel_path: str, content: str, extension: str) -> List[Tuple[str, str, str, str]]:
+    def process_file_content(self, rel_path: str, content: str, extension: str) -> list[tuple[str, str, str, str]]:
         """
         Parses content and returns a list of (symbol, path, category, snippet) tuples.
         This is a pure function ready for Rust conversion.
         """
-        results: List[Tuple[str, str, str, str]] = []
+        results: list[tuple[str, str, str, str]] = []
         
         if extension == ".py":
             symbols = self.extract_python_symbols(content)
@@ -94,8 +95,8 @@ class KnowledgeCore:
                 results.append((s, rel_path, "python_symbol", content[:500]))
         elif extension == ".md":
             links = self.extract_markdown_backlinks(content)
-            for l in links:
-                results.append((f"link:{l}", rel_path, "markdown_link", content[:500]))
+            for link in links:
+                results.append((f"link:{link}", rel_path, "markdown_link", content[:500]))
         
         return results
 

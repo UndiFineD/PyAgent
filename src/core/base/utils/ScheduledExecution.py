@@ -45,5 +45,5 @@ class ScheduledExecution:
     cron: str  # Simplified: "hourly", "daily", "weekly", or HH:MM
     agent_config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
     enabled: bool = True
-    last_run: Optional[float] = None
-    next_run: Optional[float] = None
+    last_run: float | None = None
+    next_run: float | None = None

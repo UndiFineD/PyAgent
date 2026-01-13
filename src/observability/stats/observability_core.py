@@ -37,7 +37,7 @@ class Metric:
     metric_type: MetricType
     timestamp: str = ""
     namespace: str = "default"
-    tags: Dict[str, str] = field(default_factory=lambda: {})
+    tags: dict[str, str] = field(default_factory=lambda: {})
 
     # Compatibility: some tests treat history entries as (timestamp, value) tuples.
     def __iter__(self) -> Any:
@@ -70,9 +70,9 @@ class Alert:
 class Threshold:
     """Threshold configuration for alerting."""
     metric_name: str
-    min_value: Optional[float] = None
-    max_value: Optional[float] = None
-    severity: Optional[AlertSeverity] = None  # Will be set to MEDIUM (3) by default
+    min_value: float | None = None
+    max_value: float | None = None
+    severity: AlertSeverity | None = None  # Will be set to MEDIUM (3) by default
     message: str = ""
     operator: str = ""  # For backwards compatibility
     value: float = 0.0  # For backwards compatibility
@@ -87,7 +87,7 @@ class RetentionPolicy:
     name: str = ""  # Changed from metric_name to name for constructor
     retention_days: int = 0
     resolution: str = "1m"
-    metric_name: Optional[str] = None
+    metric_name: str | None = None
     namespace: str = ""
     max_age_days: int = 0
     max_points: int = 0
@@ -99,8 +99,8 @@ class MetricSnapshot:
     name: str
     id: str
     timestamp: str
-    metrics: Dict[str, float]
-    tags: Dict[str, str] = field(default_factory=lambda: {})
+    metrics: dict[str, float]
+    tags: dict[str, str] = field(default_factory=lambda: {})
 
 class AggregationType(Enum):
     """Types of metric aggregation for rollups."""
@@ -118,8 +118,8 @@ class MetricNamespace:
     """Namespace for organizing metrics."""
     name: str
     description: str = ""
-    parent: Optional[str] = None
-    tags: Dict[str, str] = field(default_factory=lambda: {})
+    parent: str | None = None
+    tags: dict[str, str] = field(default_factory=lambda: {})
     retention_days: int = 30
 
 @dataclass
@@ -146,7 +146,7 @@ class MetricSubscription:
     id: str
     metric_pattern: str  # glob pattern like "cpu.*"
     callback_url: str = ""
-    notify_on: List[str] = field(default_factory=lambda: ["threshold", "anomaly"])
+    notify_on: list[str] = field(default_factory=lambda: ["threshold", "anomaly"])
     min_interval_seconds: int = 60
 
 class ExportDestination(Enum):
@@ -165,7 +165,7 @@ class FederatedSource:
     auth_token: str = ""
     poll_interval_seconds: int = 300
     enabled: bool = True
-    metrics: Dict[str, float] = field(default_factory=dict)
+    metrics: dict[str, float] = field(default_factory=dict)
 
 class FederationMode(Enum):
     """Federation modes for multi-repo aggregation."""
@@ -177,7 +177,7 @@ class FederationMode(Enum):
 class RollupConfig:
     """Configuration for metric rollups."""
     name: str
-    source_metrics: List[str]
+    source_metrics: list[str]
     aggregation: AggregationType
     interval_minutes: int = 60
     keep_raw: bool = True
@@ -212,19 +212,19 @@ class AgentMetric:
     output_tokens: int = 0
     estimated_cost: float = 0.0
     model: str = "unknown"
-    metadata: Dict[str, Any] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
 
 class ObservabilityCore:
     """Pure logic for processing agent telemetry data."""
     
     def __init__(self) -> None:
-        self.metrics_history: List[AgentMetric] = []
+        self.metrics_history: list[AgentMetric] = []
 
     def process_metric(self, metric: AgentMetric) -> None:
         """Standardizes a metric entry."""
         self.metrics_history.append(metric)
 
-    def summarize_performance(self) -> Dict[str, Any]:
+    def summarize_performance(self) -> dict[str, Any]:
         """Calculates aggregate stats from history."""
         if not self.metrics_history:
             return {"count": 0, "avg_duration": 0, "total_cost": 0}
@@ -249,7 +249,7 @@ class ObservabilityCore:
             "agents": by_agent
         }
 
-    def filter_by_time(self, start_iso: str, end_iso: str) -> List[AgentMetric]:
+    def filter_by_time(self, start_iso: str, end_iso: str) -> list[AgentMetric]:
         """Filters metrics within a time range."""
         results = []
         for m in self.metrics_history:
@@ -257,16 +257,16 @@ class ObservabilityCore:
                 results.append(m)
         return results
 
-    def calculate_reliability_scores(self, agent_names: List[str]) -> List[float]:
+    def calculate_reliability_scores(self, agent_names: list[str]) -> list[float]:
         """
         Calculates normalized reliability scores (0.0 to 1.0) for a list of agents.
         Reliability = success_count / total_attempts.
         If no history, defaults to 0.5 (neutral).
         """
-        scores: List[float] = []
+        scores: list[float] = []
         
         # Aggregate history per agent
-        stats: Dict[str, Dict[str, int]] = {}
+        stats: dict[str, dict[str, int]] = {}
         for m in self.metrics_history:
             if m.agent_name not in stats:
                 stats[m.agent_name] = {"success": 0, "total": 0}
@@ -289,10 +289,10 @@ class StatsCore:
 
     @staticmethod
     def detect_anomaly(
-        history: List[Metric],
+        history: list[Metric],
         value: float,
         threshold_std: float = 2.0
-    ) -> Tuple[bool, float]:
+    ) -> tuple[bool, float]:
         """Detect if a value is anomalous using standard deviation."""
         if len(history) < 2:
             return False, 0.0
@@ -305,7 +305,7 @@ class StatsCore:
         return z_score > threshold_std, z_score
 
     @staticmethod
-    def forecast(history: List[Metric], periods: int = 5) -> List[float]:
+    def forecast(history: list[Metric], periods: int = 5) -> list[float]:
         """Simple linear forecasting for a metric."""
         if len(history) < 3:
             return []
@@ -322,7 +322,7 @@ class StatsCore:
         return [slope * (n + i) + intercept for i in range(periods)]
 
     @staticmethod
-    def compress_metrics(metrics: List[Metric]) -> bytes:
+    def compress_metrics(metrics: list[Metric]) -> bytes:
         """Compress metric history."""
         if not metrics:
             return b''
@@ -333,7 +333,7 @@ class StatsCore:
         return zlib.compress(data.encode("utf-8"))
 
     @staticmethod
-    def visualize_stats(stats: Dict[str, Any]) -> None:
+    def visualize_stats(stats: dict[str, Any]) -> None:
         """Generate CLI graphs for stats visualization."""
         if not has_matplotlib:
             logging.warning("matplotlib not available for visualization")
@@ -350,9 +350,9 @@ class StatsCore:
         plt.show()
 
     @staticmethod
-    def compare_snapshots(s1: MetricSnapshot, s2: MetricSnapshot) -> Dict[str, Dict[str, Union[float, int]]]:
+    def compare_snapshots(s1: MetricSnapshot, s2: MetricSnapshot) -> dict[str, dict[str, float | int]]:
         """Compare two snapshots."""
-        comparison: Dict[str, Dict[str, Union[float, int]]] = {}
+        comparison: dict[str, dict[str, float | int]] = {}
         all_keys = set(s1.metrics.keys()) | set(s2.metrics.keys())
         for key in all_keys:
             v1 = s1.metrics.get(key, 0.0)
@@ -367,8 +367,8 @@ class StatsCore:
 
     @staticmethod
     def apply_retention(
-        metrics_dict: Dict[str, List[Metric]], 
-        policies: Dict[str, RetentionPolicy]
+        metrics_dict: dict[str, list[Metric]], 
+        policies: dict[str, RetentionPolicy]
     ) -> int:
         """Apply retention policies to metrics."""
         removed = 0
@@ -394,8 +394,8 @@ class StatsNamespace:
     """Represents a namespace for metric isolation."""
     def __init__(self, name: str) -> None:
         self.name = name
-        self.metrics: Dict[str, List[Metric]] = {}
-        self.metric_values: Dict[str, float] = {}  # Direct metric values for set_metric/get_metric
+        self.metrics: dict[str, list[Metric]] = {}
+        self.metric_values: dict[str, float] = {}  # Direct metric values for set_metric/get_metric
 
     def add_metric(self, metric: Metric) -> None:
         """Add a metric to namespace."""
@@ -407,18 +407,18 @@ class StatsNamespace:
         """Set a metric value."""
         self.metric_values[name] = value
 
-    def get_metric(self, name: str) -> Optional[float]:
+    def get_metric(self, name: str) -> float | None:
         """Get a metric value."""
         return self.metric_values.get(name)
 
-    def get_metrics(self) -> Dict[str, List[Metric]]:
+    def get_metrics(self) -> dict[str, list[Metric]]:
         """Get all metrics in namespace."""
         return self.metrics
 
 class StatsNamespaceManager:
     """Manages multiple namespaces."""
     def __init__(self) -> None:
-        self.namespaces: Dict[str, StatsNamespace] = {}
+        self.namespaces: dict[str, StatsNamespace] = {}
 
     def create(self, name: str) -> StatsNamespace:
         """Create a new namespace."""
@@ -430,7 +430,7 @@ class StatsNamespaceManager:
         """Create a new namespace (backward compat)."""
         return self.create(name)
 
-    def get_namespace(self, name: str) -> Optional[StatsNamespace]:
+    def get_namespace(self, name: str) -> StatsNamespace | None:
         """Get a namespace."""
         return self.namespaces.get(name)
 
@@ -439,7 +439,7 @@ class StatsSnapshot:
     """A persisted snapshot for StatsSnapshotManager."""
 
     name: str
-    data: Dict[str, Any]
+    data: dict[str, Any]
     timestamp: str
 
 @dataclass
@@ -464,6 +464,6 @@ class ThresholdAlert:
 @dataclass
 class DerivedMetric:
     name: str
-    dependencies: List[str]
+    dependencies: list[str]
     formula: str
     description: str = ""

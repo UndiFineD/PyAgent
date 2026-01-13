@@ -34,10 +34,10 @@ class CodeGraphVisitor(ast.NodeVisitor):
     """AST visitor to extract imports, classes, and function calls."""
     def __init__(self, file_path: str) -> None:
         self.file_path = file_path
-        self.imports: Set[str] = set()
-        self.classes: List[str] = []
-        self.calls: Set[str] = set()
-        self.bases: Dict[str, List[str]] = {}
+        self.imports: set[str] = set()
+        self.classes: list[str] = []
+        self.calls: set[str] = set()
+        self.bases: dict[str, list[str]] = {}
 
     def visit_Import(self, node: ast.Import) -> None:
         for alias in node.names:
@@ -71,7 +71,7 @@ class GraphCore:
     """Pure logic for managing code relationship graphs."""
 
     @staticmethod
-    def parse_python_content(rel_path: str, content: str) -> Dict[str, Any]:
+    def parse_python_content(rel_path: str, content: str) -> dict[str, Any]:
         """Parses Python code and returns extracted symbols and relationships."""
         try:
             tree = ast.parse(content)
@@ -94,7 +94,7 @@ class GraphCore:
             }
 
     @staticmethod
-    def build_edges(analysis: Dict[str, Any]) -> List[Tuple[str, str, str]]:
+    def build_edges(analysis: dict[str, Any]) -> list[tuple[str, str, str]]:
         """
         Builds graph edges from analysis results.
         Returns list of (source, target, relationship_type).

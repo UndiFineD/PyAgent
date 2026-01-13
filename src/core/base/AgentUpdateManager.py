@@ -36,7 +36,7 @@ class AgentUpdateManager:
     Implements Version Gatekeeping to prevent unstable mutations.
     """
 
-    def __init__(self, repo_root: Path, models: Dict[str, Any], strategy: str, command_handler: Any, file_manager: Any, core: Any) -> None:
+    def __init__(self, repo_root: Path, models: dict[str, Any], strategy: str, command_handler: Any, file_manager: Any, core: Any) -> None:
         self.repo_root = repo_root
         self.models = models
         self.strategy = strategy
@@ -116,7 +116,7 @@ class AgentUpdateManager:
             
         return changes_made
 
-    def _get_pending_improvements(self, improvements_file: Path) -> List[str]:
+    def _get_pending_improvements(self, improvements_file: Path) -> list[str]:
         """Extract pending improvements using core logic."""
         if not improvements_file.exists():
             return []
@@ -128,7 +128,7 @@ class AgentUpdateManager:
             logging.warning(f"AgentUpdateManager: Failed to read improvements: {e}")
             return []
 
-    def _mark_improvements_fixed(self, improvements_file: Path, fixed_items: List[str]) -> None:
+    def _mark_improvements_fixed(self, improvements_file: Path, fixed_items: list[str]) -> None:
         """Mark items as fixed in the improvements file."""
         if not improvements_file.exists() or not fixed_items:
             return
@@ -139,7 +139,7 @@ class AgentUpdateManager:
         except Exception as e:
             logging.warning(f"AgentUpdateManager: Failed to update improvements file: {e}")
 
-    def _log_changes(self, changes_file: Path, fixed_items: List[str]) -> None:
+    def _log_changes(self, changes_file: Path, fixed_items: list[str]) -> None:
         """Log fixed improvements to the changes file."""
         if not changes_file.exists() or not fixed_items:
             return

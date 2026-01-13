@@ -24,7 +24,8 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from src.core.base.models import SpanContext, TelemetrySpan
 from contextlib import contextmanager
-from typing import List, Optional, Dict, Any, Iterator
+from typing import List, Optional, Dict, Any
+from collections.abc import Iterator
 import json
 import time
 import uuid
@@ -53,11 +54,11 @@ class TelemetryCollector:
             service_name: Service name for tracing.
         """
         self.service_name = service_name
-        self._spans: List[TelemetrySpan] = []
-        self._current_span: Optional[TelemetrySpan] = None
+        self._spans: list[TelemetrySpan] = []
+        self._current_span: TelemetrySpan | None = None
 
     @contextmanager
-    def span(self, name: str, attributes: Optional[Dict[str, Any]] = None) -> Iterator[SpanContext]:
+    def span(self, name: str, attributes: dict[str, Any] | None = None) -> Iterator[SpanContext]:
         """Create a telemetry span.
 
         Args:
@@ -92,7 +93,7 @@ class TelemetryCollector:
             self._spans.append(span)
             self._current_span = old_current
 
-    def get_spans(self) -> List[TelemetrySpan]:
+    def get_spans(self) -> list[TelemetrySpan]:
         """Get all collected spans."""
         return list(self._spans)
 

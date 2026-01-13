@@ -42,6 +42,6 @@ class ImprovementDiff:
     """
     improvement_id: str
     diff_type: ImprovementDiffType
-    source_version: Optional[Improvement] = None
-    target_version: Optional[Improvement] = None
+    source_version: Improvement | None = None
+    target_version: Improvement | None = None
     change_summary: str = ""

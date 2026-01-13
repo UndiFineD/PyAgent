@@ -40,9 +40,9 @@ class ByzantineConsensusAgent(BaseAgent):
         super().__init__(file_path)
         self.core = ByzantineCore()
         # Simulated historic reliability tracker
-        self.reliability_scores: Dict[str, float] = {}
+        self.reliability_scores: dict[str, float] = {}
 
-    def select_committee(self, task: str, available_agents: List[str]) -> List[str]:
+    def select_committee(self, task: str, available_agents: list[str]) -> list[str]:
         """Selects a subset of agents best suited for a task based on reliability."""
         # Ensure registry is populated
         for agent in available_agents:
@@ -52,14 +52,14 @@ class ByzantineConsensusAgent(BaseAgent):
         return self.core.select_committee(self.reliability_scores)
 
     @as_tool
-    def run_committee_vote(self, task: str, proposals: Dict[str, str], change_type: str = "default") -> Dict[str, Any]:
+    def run_committee_vote(self, task: str, proposals: dict[str, str], change_type: str = "default") -> dict[str, Any]:
         """Evaluates a set of proposals and determines the winner via AI-powered scoring."""
         logging.info(f"ByzantineConsensus: Evaluating {len(proposals)} proposals for task: {task[:30]}...")
         
-        quorum_req = self.core.get_required_quorum(change_type)
+        self.core.get_required_quorum(change_type)
         
         # 1. AI-Powered Scoring
-        scores: Dict[str, float] = {}
+        scores: dict[str, float] = {}
         for agent_name, content in proposals.items():
             evaluation_prompt = (
                 f"Identify the technical quality and correctness of the following proposal for the task: '{task}'\n\n"

@@ -49,7 +49,7 @@ class ProjectStatusPanel:
         """Polls the status file and updates the UI."""
         if self.status_file.exists():
             try:
-                with open(self.status_file, "r") as f:
+                with open(self.status_file) as f:
                     data = json.load(f)
                 
                 goal = data.get("active_project", "None") or "None"

@@ -22,7 +22,8 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Dict, List, Optional
+from collections.abc import Callable
 import logging
 import os
 import threading
@@ -46,9 +47,9 @@ class ConfigHotReloader:
 
     def __init__(self) -> None:
         """Initialize config hot reloader."""
-        self._config: Dict[str, Any] = {}
-        self._env_watches: Dict[str, str] = {}  # config_key -> env_var
-        self._callbacks: List[Callable[[str, Any], None]] = []
+        self._config: dict[str, Any] = {}
+        self._env_watches: dict[str, str] = {}  # config_key -> env_var
+        self._callbacks: list[Callable[[str, Any], None]] = []
         self._lock = threading.Lock()
         self._last_reload = time.time()
 
@@ -85,7 +86,7 @@ class ConfigHotReloader:
         with self._lock:
             return self._config.get(key, default)
 
-    def watch_env(self, env_var: str, config_key: Optional[str] = None) -> None:
+    def watch_env(self, env_var: str, config_key: str | None = None) -> None:
         """Watch environment variable for changes.
 
         Args:

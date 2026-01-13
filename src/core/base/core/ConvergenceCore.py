@@ -11,7 +11,7 @@ class ConvergenceCore:
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = workspace_root
 
-    def verify_fleet_health(self, agent_reports: Dict[str, bool]) -> Dict[str, Any]:
+    def verify_fleet_health(self, agent_reports: dict[str, bool]) -> dict[str, Any]:
         """
         Verifies if all agents are 'healthy'.
         """
@@ -27,7 +27,7 @@ class ConvergenceCore:
             "failed_agents": [name for name, status in agent_reports.items() if not status]
         }
 
-    def generate_strategic_summary(self, phase_history: List[Dict[str, Any]]) -> str:
+    def generate_strategic_summary(self, phase_history: list[dict[str, Any]]) -> str:
         """
         Generates a strategic summary of gains since Phase 140.
         """

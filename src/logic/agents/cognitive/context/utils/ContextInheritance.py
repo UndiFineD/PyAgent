@@ -42,9 +42,9 @@ class ContextInheritance:
 
     def __init__(self) -> None:
         """Initialize context inheritance manager."""
-        self.inheritance_map: Dict[str, InheritedContext] = {}
+        self.inheritance_map: dict[str, InheritedContext] = {}
         self.mode: InheritanceMode = InheritanceMode.MERGE
-        self.parent_path: Optional[str] = None
+        self.parent_path: str | None = None
 
     def set_mode(self, mode: InheritanceMode) -> None:
         """Set inheritance mode."""
@@ -58,7 +58,7 @@ class ContextInheritance:
         """Apply the currently configured inheritance mode."""
         return self.resolve_inheritance(parent_content, child_content, self.mode)
 
-    def get_hierarchy(self) -> List[str]:
+    def get_hierarchy(self) -> list[str]:
         """Get inheritance hierarchy."""
         return [self.parent_path] if self.parent_path else []
 

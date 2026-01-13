@@ -39,13 +39,13 @@ class ConsensusEngine:
     def __init__(self, fleet_manager) -> None:
         self.fleet = fleet_manager
         self.core = ConsensusCore()
-        self._votes: Dict[str, List[str]] = {}
+        self._votes: dict[str, list[str]] = {}
 
-    def request_consensus(self, task: str, agent_names: List[str]) -> str:
+    def request_consensus(self, task: str, agent_names: list[str]) -> str:
         """Asks multiple agents for solutions and picks the best one by voting."""
         logging.info(f"CONSENSUS: Requesting agreement on '{task}' from {agent_names}")
-        proposals: List[str] = []
-        valid_agents: List[str] = []
+        proposals: list[str] = []
+        valid_agents: list[str] = []
         
         for name in agent_names:
             # Check registry

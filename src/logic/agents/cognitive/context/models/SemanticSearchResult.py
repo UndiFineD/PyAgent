@@ -42,4 +42,4 @@ class SemanticSearchResult:
     content_snippet: str
     similarity_score: float
     context_type: str = ""
-    line_range: Tuple[int, int] = (0, 0)
+    line_range: tuple[int, int] = (0, 0)

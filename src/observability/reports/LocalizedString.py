@@ -37,5 +37,5 @@ class LocalizedString:
     """
 
     key: str
-    translations: Dict[str, str] = field(default_factory=dict)  # type: ignore[assignment]
+    translations: dict[str, str] = field(default_factory=dict)  # type: ignore[assignment]
     default: str = ""

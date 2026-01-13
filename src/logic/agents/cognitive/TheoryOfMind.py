@@ -34,10 +34,10 @@ class TheoryOfMind:
     """
 
     def __init__(self) -> None:
-        self.agent_profiles: Dict[str, Dict[str, Any]] = {}
+        self.agent_profiles: dict[str, dict[str, Any]] = {}
         self.core = TheoryOfMindCore()
 
-    def update_model(self, agent_name: str, observations: Dict[str, Any]) -> None:
+    def update_model(self, agent_name: str, observations: dict[str, Any]) -> None:
         """Updates the internal model via Core."""
         current_profile = self.agent_profiles.get(agent_name, {
             "knowledge_domains": [],
@@ -56,11 +56,11 @@ class TheoryOfMind:
             
         return self.core.estimate_knowledge_score(self.agent_profiles[agent_name], topic)
 
-    def suggest_collaborator(self, task: str) -> List[str]:
+    def suggest_collaborator(self, task: str) -> list[str]:
         """Suggests collaborators via Core."""
         return self.core.rank_collaborators(self.agent_profiles, task)
 
-    def get_mental_map(self) -> Dict[str, Any]:
+    def get_mental_map(self) -> dict[str, Any]:
         """Returns the collective mental map."""
         # The core already returns serializable lists
         return self.agent_profiles

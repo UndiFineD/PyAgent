@@ -40,14 +40,14 @@ class ValidationResult:
     """
     improvement_id: str
     is_valid: bool = True
-    issues: List[Tuple[ValidationSeverity, str]] = field(
+    issues: list[tuple[ValidationSeverity, str]] = field(
         default_factory=lambda: []
     )
-    test_results: Dict[str, bool] = field(
+    test_results: dict[str, bool] = field(
         default_factory=lambda: {}  # type: ignore[assignment]
     )
 
     @property
-    def errors(self) -> List[str]:
+    def errors(self) -> list[str]:
         """Compatibility accessor used by tests."""
         return [msg for sev, msg in self.issues if sev == ValidationSeverity.ERROR]

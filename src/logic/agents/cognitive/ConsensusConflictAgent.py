@@ -33,7 +33,7 @@ class ConsensusConflictAgent:
         self.workspace_path = workspace_path
         self.active_disputes = {} # dispute_id -> {options, votes, status}
 
-    def initiate_dispute(self, dispute_id: str, context: str, options: List[str]) -> Dict[str, Any]:
+    def initiate_dispute(self, dispute_id: str, context: str, options: list[str]) -> dict[str, Any]:
         """Starts a new consensus round for a disagreement."""
         self.active_disputes[dispute_id] = {
             "context": context,
@@ -44,7 +44,7 @@ class ConsensusConflictAgent:
         }
         return {"status": "dispute_initiated", "dispute_id": dispute_id}
 
-    def cast_vote(self, dispute_id: str, agent_id: str, option_index: int, reasoning: str) -> Dict[str, Any]:
+    def cast_vote(self, dispute_id: str, agent_id: str, option_index: int, reasoning: str) -> dict[str, Any]:
         """Allows an agent to vote on a specific option with reasoning."""
         if dispute_id not in self.active_disputes:
             return {"status": "error", "message": "Dispute not found"}
@@ -60,7 +60,7 @@ class ConsensusConflictAgent:
         }
         return {"status": "vote_cast", "dispute_id": dispute_id}
 
-    def resolve_dispute(self, dispute_id: str) -> Dict[str, Any]:
+    def resolve_dispute(self, dispute_id: str) -> dict[str, Any]:
         """Resolves a dispute based on the majority of votes."""
         if dispute_id not in self.active_disputes:
             return {"status": "error", "message": "Dispute not found"}
@@ -86,7 +86,7 @@ class ConsensusConflictAgent:
             "total_votes": len(dispute["votes"])
         }
 
-    def get_conflict_summary(self) -> Dict[str, Any]:
+    def get_conflict_summary(self) -> dict[str, Any]:
         """Returns statistics on handled conflicts."""
         return {
             "total_disputes": len(self.active_disputes),

@@ -9,7 +9,7 @@ from typing import List, Optional
 
 class AndroidCore:
     @staticmethod
-    def run_adb_command(command: List[str], serial: Optional[str] = None) -> str:
+    def run_adb_command(command: list[str], serial: str | None = None) -> str:
         """
         Runs an adb command and returns the output.
         """
@@ -27,7 +27,7 @@ class AndroidCore:
             return "Error: adb not found in PATH."
 
     @staticmethod
-    def list_devices() -> List[str]:
+    def list_devices() -> list[str]:
         """
         Returns a list of connected device serials.
         """
@@ -40,7 +40,7 @@ class AndroidCore:
         return devices
 
     @staticmethod
-    def take_screenshot(output_path: str, serial: Optional[str] = None) -> bool:
+    def take_screenshot(output_path: str, serial: str | None = None) -> bool:
         """
         Takes a screenshot of the device.
         """

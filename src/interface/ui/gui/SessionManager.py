@@ -53,14 +53,14 @@ class SessionManager:
                 messagebox.showerror("Save Error", f"Failed to save session: {e}")
         return False
 
-    def load_session(self) -> Optional[Any]:
+    def load_session(self) -> Any | None:
         """Loads session data from a JSON file."""
         filepath: str = filedialog.askopenfilename(filetypes=[("JSON", "*.json")])
         if not filepath:
             return None
             
         try:
-            with open(filepath, 'r', encoding='utf-8') as f:
+            with open(filepath, encoding='utf-8') as f:
                 data = json.load(f)
             return data
         except Exception as e:

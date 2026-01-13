@@ -38,7 +38,7 @@ for root, _, files in os.walk(src_path):
             files_processed += 1
             path = os.path.join(root, file)
             try:
-                with open(path, "r", encoding="utf-8", errors="ignore") as f:
+                with open(path, encoding="utf-8", errors="ignore") as f:
                     content = f.read()
                 
                 if "# Auto-removed unused" in content:

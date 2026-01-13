@@ -43,7 +43,7 @@ class ArchitectAgent(BaseAgent):
         )
 
     @as_tool
-    def suggest_architectural_pivot(self, performance_logs: str) -> Dict[str, Any]:
+    def suggest_architectural_pivot(self, performance_logs: str) -> dict[str, Any]:
         """
         Analyzes logs and suggests a structural change to the fleet or base agent.
         """

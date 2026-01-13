@@ -9,7 +9,6 @@ import logging
 from unittest.mock import MagicMock, patch
 
 # Add src to path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "src")))
 
 from src.infrastructure.orchestration.AutoDebuggerOrchestrator import AutoDebuggerOrchestrator
 from src.infrastructure.orchestration.SwarmPruningOrchestrator import SwarmPruningOrchestrator

@@ -36,15 +36,15 @@ class SelfHealingOrchestrator:
         self.fleet_manager: Any = fleet_manager
         # Shell-Core separation: The core handles pure logic and state registry
         self.core = SelfHealingCore(timeout_seconds=15.0, max_errors=3)
-        self.state_backups: Dict[str, Any] = {}    # agent_name -> state_snapshot
-        self.recovery_logs: List[Dict[str, Any]] = []
+        self.state_backups: dict[str, Any] = {}    # agent_name -> state_snapshot
+        self.recovery_logs: list[dict[str, Any]] = []
 
     @property
-    def health_registry(self) -> Dict[str, Any]:
+    def health_registry(self) -> dict[str, Any]:
         """Provides access to the core health registry for testing and monitoring."""
         return self.core.health_registry
 
-    def register_heartbeat(self, agent_name: str, state: Optional[Dict[str, Any]] = None, latency: float = 0.0, error: bool = False) -> None:
+    def register_heartbeat(self, agent_name: str, state: dict[str, Any] | None = None, latency: float = 0.0, error: bool = False) -> None:
         """Signals that an agent is alive and optionally backs up its state."""
         self.core.update_health(agent_name, latency=latency, error=error)
         if state:
@@ -103,7 +103,7 @@ class SelfHealingOrchestrator:
         self.attempt_recovery(agent_name)
         return f"Self-healing complete for {agent_name}."
 
-    def get_recovery_status(self) -> Dict[str, Any]:
+    def get_recovery_status(self) -> dict[str, Any]:
         """Returns statistics on health and recovery actions."""
         return {
             "monitored_agents": len(self.core.health_registry),

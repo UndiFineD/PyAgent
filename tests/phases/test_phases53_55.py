@@ -4,7 +4,7 @@ from src.infrastructure.fleet.FleetManager import FleetManager
 
 class TestPhases53_55(unittest.TestCase):
     def setUp(self):
-        self.workspace = "c:/DEV/PyAgent"
+        self.workspace = Path(__file__).resolve().parents[2]
         self.fleet = FleetManager(self.workspace)
 
     def test_resource_prediction(self) -> None:

@@ -68,7 +68,7 @@ class FleetLifecycleManager:
         self.fleet.signals.emit("CELL_APOPTOSIS", {"agent": agent_name}, sender="FleetManager")
         return f"Agent {agent_name} successfully removed from the fleet."
 
-    def register_agent(self, name: str, agent_class: Type[BaseAgent], file_path: Optional[str] = None) -> str:
+    def register_agent(self, name: str, agent_class: type[BaseAgent], file_path: str | None = None) -> str:
         """Adds an agent to the fleet."""
         path = file_path or str(self.fleet.workspace_root / f"agent_{name.lower()}.py")
         agent = agent_class(path)

@@ -28,7 +28,8 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import tkinter as tk
 from tkinter import ttk, messagebox, filedialog
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any, Dict, List, Optional
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -65,11 +66,11 @@ class DialogManager:
         ttk.Button(dialog, text="OK", command=on_ok).pack(side=tk.LEFT, padx=30, pady=10)
         ttk.Button(dialog, text="Cancel", command=dialog.destroy).pack(side=tk.RIGHT, padx=30, pady=10)
 
-    def browse_file(self, initial_dir: Optional[str] = None) -> str:
+    def browse_file(self, initial_dir: str | None = None) -> str:
         """Standard file browser dialog."""
         return filedialog.askopenfilename(initialdir=initial_dir)
 
-    def browse_directory(self, initial_dir: Optional[str] = None) -> str:
+    def browse_directory(self, initial_dir: str | None = None) -> str:
         """Standard directory browser dialog."""
         return filedialog.askdirectory(initialdir=initial_dir)
 
@@ -122,7 +123,7 @@ class DialogManager:
 
         ttk.Button(dialog, text="SAVE SETTINGS", style="Accent.TButton", command=on_save).pack(pady=10)
 
-    def show_bmad_wizard(self, setup_callback: Callable[[Dict[str, Any]], Any]) -> None:
+    def show_bmad_wizard(self, setup_callback: Callable[[dict[str, Any]], Any]) -> None:
         """Displays a wizard to initialize a project using BMAD tracks."""
         wizard = tk.Toplevel(self.root)
         wizard.title("BMAD Project Wizard")
@@ -170,7 +171,7 @@ class DialogManager:
 
         ttk.Button(wizard, text="FINISH & SETUP", style="Accent.TButton", command=on_finish).pack(pady=10)
 
-    def show_memory_dialog(self, agent_name: str, history: List[Dict[str, Any]], save_callback: Callable[[List[Dict[str, Any]]], Any]) -> None:
+    def show_memory_dialog(self, agent_name: str, history: list[dict[str, Any]], save_callback: Callable[[list[dict[str, Any]]], Any]) -> None:
         """Displays a dialog to manage agent memory (forget/retain)."""
         dialog = tk.Toplevel(self.root)
         dialog.title(f"Memory Management - {agent_name}")
@@ -197,14 +198,14 @@ class DialogManager:
         canvas.pack(side="left", fill="both", expand=True)
         scrollbar.pack(side="right", fill="y")
 
-        temp_history: List[Dict[str, Any]] = list(history)
+        temp_history: list[dict[str, Any]] = list(history)
 
         def forget_msg(idx: int) -> None:
             temp_history.pop(idx)
             redraw()
 
         def toggle_keep(idx: int) -> None:
-            msg: Dict[str, Any] = temp_history[idx]
+            msg: dict[str, Any] = temp_history[idx]
             if "metadata" not in msg:
                 msg["metadata"] = {}
             msg["metadata"]["keep"] = not msg["metadata"].get("keep", False)

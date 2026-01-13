@@ -47,8 +47,8 @@ class ABTester:
 
     def __init__(self) -> None:
         """Initialize A / B tester."""
-        self._tests: Dict[str, Dict[str, ABTestVariant]] = {}
-        self._assignments: Dict[str, Dict[str, str]] = {}  # test -> user -> variant
+        self._tests: dict[str, dict[str, ABTestVariant]] = {}
+        self._assignments: dict[str, dict[str, str]] = {}  # test -> user -> variant
         self._lock = threading.Lock()
 
     def create_test(
@@ -57,7 +57,7 @@ class ABTester:
         backend_a: str,
         backend_b: str,
         weight_a: float = 0.5,
-    ) -> Tuple[ABTestVariant, ABTestVariant]:
+    ) -> tuple[ABTestVariant, ABTestVariant]:
         """Create an A / B test.
 
         Args:
@@ -93,7 +93,7 @@ class ABTester:
         self,
         test_name: str,
         user_id: str,
-    ) -> Optional[ABTestVariant]:
+    ) -> ABTestVariant | None:
         """Assign user to a variant.
 
         Args:
@@ -155,7 +155,7 @@ class ABTester:
                         variant.metrics[metric] * (n - 1) + value
                     ) / n
 
-    def get_results(self, test_name: str) -> Optional[Dict[str, Any]]:
+    def get_results(self, test_name: str) -> dict[str, Any] | None:
         """Get test results.
 
         Args:
@@ -187,7 +187,7 @@ class ABTester:
         test_name: str,
         metric: str,
         higher_is_better: bool = True,
-    ) -> Optional[str]:
+    ) -> str | None:
         """Determine winning variant.
 
         Args:
@@ -203,8 +203,8 @@ class ABTester:
             if not test:
                 return None
 
-            best_name: Optional[str] = None
-            best_value: Optional[float] = None
+            best_name: str | None = None
+            best_value: float | None = None
 
             for name, variant in test.items():
                 value = variant.metrics.get(metric)

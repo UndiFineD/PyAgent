@@ -40,5 +40,5 @@ class ComplianceResult:
     """
     category: ComplianceCategory
     passed: bool
-    issues: List[str] = field(default_factory=lambda: [])
-    recommendations: List[str] = field(default_factory=lambda: [])
+    issues: list[str] = field(default_factory=lambda: [])
+    recommendations: list[str] = field(default_factory=lambda: [])

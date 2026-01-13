@@ -44,4 +44,4 @@ class MockResponse:
     response_type: MockResponseType = MockResponseType.SUCCESS
     latency_ms: int = 100
     tokens_used: int = 0
-    error_message: Optional[str] = None
+    error_message: str | None = None

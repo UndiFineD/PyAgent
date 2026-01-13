@@ -42,9 +42,9 @@ class SwarmPruningOrchestrator:
         else:
             self.pruning_engine = NeuralPruningEngine(fleet_manager)
             
-        self.pruned_history: List[List[str]] = []
+        self.pruned_history: list[list[str]] = []
 
-    def run_pruning_cycle(self, threshold: float = 0.25) -> Dict[str, Any]:
+    def run_pruning_cycle(self, threshold: float = 0.25) -> dict[str, Any]:
         """Runs a periodic pruning cycle and returns results.
         
         Args:
@@ -76,7 +76,7 @@ class SwarmPruningOrchestrator:
         """Proxy to record performance in the underlying engine."""
         self.pruning_engine.record_performance(node_id, success, float(tokens))
 
-    def get_audit_summary(self) -> Dict[str, Any]:
+    def get_audit_summary(self) -> dict[str, Any]:
         """Returns statistics on fleet pruning history."""
         return {
             "total_cycles": len(self.pruned_history),

@@ -39,5 +39,5 @@ class ConsistencyIssue:
     """
     issue_type: str
     description: str
-    occurrences: List[str]
+    occurrences: list[str]
     recommended_style: str

@@ -41,21 +41,21 @@ class CrossRepoAnalyzer:
 
     def __init__(self) -> None:
         """Initialize the cross-repo analyzer."""
-        self.repositories: Dict[str, CrossRepoContext] = {}
-        self.repos: Dict[str, Dict[str, str]] = {}  # Add repos attribute
+        self.repositories: dict[str, CrossRepoContext] = {}
+        self.repos: dict[str, dict[str, str]] = {}  # Add repos attribute
 
     def add_repo(self, name: str, url: str) -> None:
         """Add a repository."""
         self.repos[name] = {"name": name, "url": url}
 
-    def analyze(self, file_path: str) -> List[CrossRepoContext]:
+    def analyze(self, file_path: str) -> list[CrossRepoContext]:
         """Analyze a file path across configured repositories.
 
         Compatibility wrapper used by tests.
         """
         return self.find_related_contexts(file_path)
 
-    def find_common_patterns(self) -> List[str]:
+    def find_common_patterns(self) -> list[str]:
         """Find common patterns across repos."""
         return []
 
@@ -73,7 +73,7 @@ class CrossRepoAnalyzer:
         self.repositories[name] = context
         return context
 
-    def find_related_contexts(self, file_path: str) -> List[CrossRepoContext]:
+    def find_related_contexts(self, file_path: str) -> list[CrossRepoContext]:
         """Find related contexts across repositories.
 
         Args:
@@ -82,7 +82,7 @@ class CrossRepoAnalyzer:
         Returns:
             List of related cross - repo contexts.
         """
-        results: List[CrossRepoContext] = []
+        results: list[CrossRepoContext] = []
         for repo in self.repositories.values():
             # Simplified matching
             repo.similarity_score = 0.5

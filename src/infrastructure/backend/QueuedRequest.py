@@ -23,7 +23,8 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from dataclasses import dataclass
-from typing import Callable, Optional
+from typing import Optional
+from collections.abc import Callable
 
 __version__ = VERSION
 
@@ -43,9 +44,9 @@ class QueuedRequest:
     timestamp: float
     request_id: str
     prompt: str
-    callback: Optional[Callable[[str], None]] = None
+    callback: Callable[[str], None] | None = None
 
-    def __lt__(self, other: "QueuedRequest") -> bool:
+    def __lt__(self, other: QueuedRequest) -> bool:
         """Compare by priority (descending) then timestamp (ascending)."""
         if self.priority != other.priority:
             return self.priority > other.priority  # Higher priority first

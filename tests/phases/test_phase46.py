@@ -5,7 +5,7 @@ from src.infrastructure.fleet.FleetManager import FleetManager
 
 class TestPhase46(unittest.TestCase):
     def setUp(self):
-        self.workspace = os.path.abspath("c:/DEV/PyAgent")
+        self.workspace = os.path.abspath(Path(__file__).resolve().parents[2])
         self.fleet = FleetManager(self.workspace)
         # Setup shared state file location
         self.state_file = os.path.join(self.workspace, "data/memory/agent_store/quantum_state.json")

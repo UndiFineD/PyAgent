@@ -33,7 +33,7 @@ __version__ = VERSION
 def test_evolution_and_repair() -> None:
     """Validate self-generation and self-repair features."""
     logging.basicConfig(level=logging.INFO)
-    root = Path("c:/DEV/PyAgent")
+    root = Path(str(Path(__file__).resolve().parents[5]) + "")
     fleet = FleetManager(str(root))
     
     print("--- Phase 14: Agent Self-Generation ---")

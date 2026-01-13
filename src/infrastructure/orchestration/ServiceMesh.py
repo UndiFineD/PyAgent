@@ -32,13 +32,13 @@ class ServiceMesh:
     
     def __init__(self, fleet_manager) -> None:
         self.fleet = fleet_manager
-        self.known_nodes: Dict[str, List[str]] = {} # URL -> List of tool names
-        self.local_tools: List[str] = []
+        self.known_nodes: dict[str, list[str]] = {} # URL -> List of tool names
+        self.local_tools: list[str] = []
         
         # Subscribe to tool registration events
         self.fleet.signals.subscribe("TOOL_REGISTERED", self._on_tool_registered)
         
-    def _on_tool_registered(self, payload: Dict[str, Any]) -> None:
+    def _on_tool_registered(self, payload: dict[str, Any]) -> None:
         """Handler for local tool registration."""
         tool_name = payload.get("tool_name")
         if tool_name and tool_name not in self.local_tools:
@@ -74,7 +74,7 @@ class ServiceMesh:
         except Exception as e:
             logging.error(f"MESH: Failed to sync with {node_url}: {e}")
 
-    def get_mesh_status(self) -> Dict[str, Any]:
+    def get_mesh_status(self) -> dict[str, Any]:
         """Returns stats about the mesh."""
         return {
             "local_tools": len(self.local_tools),

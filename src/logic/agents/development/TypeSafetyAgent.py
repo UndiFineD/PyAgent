@@ -46,7 +46,7 @@ class TypeSafetyAgent(BaseAgent):
     def _get_default_content(self) -> str:
         return "# Type Safety Audit\n\n## Summary\nWaiting for analysis...\n"
 
-    def analyze_file(self, target_path: Path) -> List[Dict[str, Any]]:
+    def analyze_file(self, target_path: Path) -> list[dict[str, Any]]:
         """Analyzes a single Python file for type safety issues."""
         issues = []
         try:

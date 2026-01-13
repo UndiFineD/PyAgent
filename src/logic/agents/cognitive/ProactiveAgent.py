@@ -40,9 +40,9 @@ class ProactiveAgent(BaseAgent):
             "Your role is to monitor the environment and execute tasks based on triggers, "
             "schedules, or detected patterns. You don't just wait for prompts; you anticipate needs."
         )
-        self.scheduled_tasks: List[Dict[str, Any]] = []
+        self.scheduled_tasks: list[dict[str, Any]] = []
 
-    def observe_environment(self) -> Dict[str, Any]:
+    def observe_environment(self) -> dict[str, Any]:
         """
         Observes the local system environment for triggers.
         Hooked into ResourceMonitor (Phase 125).
@@ -66,7 +66,7 @@ class ProactiveAgent(BaseAgent):
         logging.info(f"ProactiveAgent: Scheduled task '{task}' with trigger '{cron_or_delay}'")
         return json.dumps(task_entry)
 
-    def scan_for_triggers(self, environment_state: Optional[Dict[str, Any]] = None) -> List[str]:
+    def scan_for_triggers(self, environment_state: dict[str, Any] | None = None) -> list[str]:
         """Checks if any environmental triggers should fire a proactive task."""
         state = environment_state or self.observe_environment()
         triggered_tasks = []
@@ -85,7 +85,7 @@ class ProactiveAgent(BaseAgent):
             
         return triggered_tasks
 
-    def get_habit_recommendation(self, user_history: List[str]) -> str:
+    def get_habit_recommendation(self, user_history: list[str]) -> str:
         """Uses LLM to detect user behavior patterns and recommend proactive habits."""
         if not user_history:
             return "Not enough data yet to establish habits."

@@ -31,14 +31,14 @@ class GlobalContextCore:
     No I/O or direct disk access.
     """
 
-    def partition_memory(self, memory: Dict[str, Any], max_entries_per_shard: int = 1000) -> Dict[str, Dict[str, Any]]:
+    def partition_memory(self, memory: dict[str, Any], max_entries_per_shard: int = 1000) -> dict[str, dict[str, Any]]:
         """
         Splits memory into shards if it exceeds thresholds.
         Implements stable sub-sharding for trillion-parameter scalability (Phase 104).
         Refined in Phase 119 for adaptive rebalancing.
         """
         import zlib
-        shards: Dict[str, Dict[str, Any]] = {"default": {}}
+        shards: dict[str, dict[str, Any]] = {"default": {}}
         for category, data in memory.items():
             if not isinstance(data, dict) or not data:
                 shards["default"][category] = data
@@ -62,7 +62,7 @@ class GlobalContextCore:
                 shards["default"][category] = data
         return shards
 
-    def detect_shard_bloat(self, shards: Dict[str, Dict[str, Any]], size_threshold_bytes: int = 5_000_000) -> List[str]:
+    def detect_shard_bloat(self, shards: dict[str, dict[str, Any]], size_threshold_bytes: int = 5_000_000) -> list[str]:
         """
         Identifies shards that are exceeding the recommended size for zero-latency retrieval.
         Phase 119: Adaptive Shard Rebalancing logic.
@@ -76,14 +76,14 @@ class GlobalContextCore:
                 bloated.append(name)
         return bloated
 
-    def prepare_fact(self, key: str, value: Any) -> Dict[str, Any]:
+    def prepare_fact(self, key: str, value: Any) -> dict[str, Any]:
         """Prepares a fact entry with timestamp."""
         return {
             "value": value,
             "updated_at": datetime.now().isoformat()
         }
 
-    def prepare_insight(self, insight: str, source_agent: str) -> Dict[str, Any]:
+    def prepare_insight(self, insight: str, source_agent: str) -> dict[str, Any]:
         """Prepares an insight entry."""
         return {
             "text": insight,
@@ -91,7 +91,7 @@ class GlobalContextCore:
             "timestamp": datetime.now().isoformat()
         }
 
-    def merge_entity_info(self, existing: Dict[str, Any], new_attributes: Dict[str, Any]) -> Dict[str, Any]:
+    def merge_entity_info(self, existing: dict[str, Any], new_attributes: dict[str, Any]) -> dict[str, Any]:
         """Merges new attributes into an entity record."""
         updated = existing.copy()
         updated.update(new_attributes)
@@ -128,11 +128,11 @@ class GlobalContextCore:
 
         return incoming
 
-    def prune_lessons(self, lessons: List[Dict[str, Any]], max_lessons: int = 20) -> List[Dict[str, Any]]:
+    def prune_lessons(self, lessons: list[dict[str, Any]], max_lessons: int = 20) -> list[dict[str, Any]]:
         """Prunes lessons to keep only the most recent."""
         return lessons[-max_lessons:]
 
-    def generate_markdown_summary(self, memory: Dict[str, Any]) -> str:
+    def generate_markdown_summary(self, memory: dict[str, Any]) -> str:
         """Logic for formatting the cognitive summary."""
         summary = ["# 🧠 Long-Term Memory Summary"]
         
@@ -153,7 +153,7 @@ class GlobalContextCore:
                 
         if memory.get("lessons_learned"):
             summary.append("\n## 🎓 Lessons Learned")
-            for l in memory["lessons_learned"][-3:]:
-                summary.append(f"- **Issue**: {l['failure']} | **Fix**: {l['correction']}")
+            for lesson in memory["lessons_learned"][-3:]:
+                summary.append(f"- **Issue**: {lesson['failure']} | **Fix**: {lesson['correction']}")
 
         return "\n".join(summary)

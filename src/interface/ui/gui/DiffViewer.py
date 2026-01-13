@@ -44,7 +44,7 @@ class DiffViewer:
             return
 
         try:
-            with open(original_path, 'r', encoding='utf-8') as f:
+            with open(original_path, encoding='utf-8') as f:
                 original_content = f.read()
         except Exception as e:
             messagebox.showerror("Error", f"Failed to read original file: {e}")

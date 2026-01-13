@@ -43,7 +43,7 @@ class RecordedInteraction:
 
     call_type: str
     call_name: str
-    args: Tuple[Any, ...] = ()
-    kwargs: Dict[str, Any] = field(default_factory=lambda: {})
+    args: tuple[Any, ...] = ()
+    kwargs: dict[str, Any] = field(default_factory=lambda: {})
     result: Any = None
     timestamp: float = field(default_factory=time.time)

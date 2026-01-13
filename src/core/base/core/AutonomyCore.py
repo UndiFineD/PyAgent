@@ -10,9 +10,9 @@ class AutonomyCore:
 
     def __init__(self, agent_id: str) -> None:
         self.agent_id = agent_id
-        self.performance_history: List[float] = []
+        self.performance_history: list[float] = []
 
-    def identify_blind_spots(self, success_rate: float, task_diversity: float) -> List[str]:
+    def identify_blind_spots(self, success_rate: float, task_diversity: float) -> list[str]:
         """
         Analyzes performance stats to find 'Blind Spots'.
         e.g., high success on coding, but low success on documentation.
@@ -36,7 +36,7 @@ class AutonomyCore:
         else:
             return 60 # 1 minute (high activity)
 
-    def generate_self_improvement_plan(self, blind_spots: List[str]) -> str:
+    def generate_self_improvement_plan(self, blind_spots: list[str]) -> str:
         """Constructs a directive for the agent to use in its next improvement cycle."""
         plan = f"AGENT SELF-MODEL UPDATE for {self.agent_id}:\n"
         if not blind_spots:

@@ -31,15 +31,15 @@ class PolicyEnforcementAgent:
     """
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.active_policies: Dict[str, Any] = {
+        self.active_policies: dict[str, Any] = {
             "no_external_data_leak": True,
             "max_token_spend_per_hour": 100000,
             "required_security_scan": True
         }
-        self.violation_log: List[Dict[str, Any]] = []
-        self.quarantine_list: Set[str] = set()
+        self.violation_log: list[dict[str, Any]] = []
+        self.quarantine_list: set[str] = set()
         
-    def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> Dict[str, Any]:
+    def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> dict[str, Any]:
         """
         Evaluates if an agent action complies with active policies.
         """
@@ -59,7 +59,7 @@ class PolicyEnforcementAgent:
             
         return {"status": "authorized"}
 
-    def quarantine_agent(self, agent_id: str, reason: str) -> Dict[str, Any]:
+    def quarantine_agent(self, agent_id: str, reason: str) -> dict[str, Any]:
         """
         Isolates an agent from the fleet.
         """

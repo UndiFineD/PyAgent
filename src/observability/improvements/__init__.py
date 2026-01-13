@@ -53,7 +53,7 @@ from .ImprovementScheduler import ImprovementScheduler as ImprovementScheduler
 from .ImprovementStatus import ImprovementStatus as ImprovementStatus
 from .ImprovementTemplate import ImprovementTemplate as ImprovementTemplate
 from .ImprovementValidator import ImprovementValidator as ImprovementValidator
-from .ImprovementsAgent import ImprovementsAgent, DEFAULT_TEMPLATES
+from .ImprovementsAgent import ImprovementsAgent as ImprovementsAgent, DEFAULT_TEMPLATES as DEFAULT_TEMPLATES
 from .MergeCandidate import MergeCandidate as MergeCandidate
 from .MergeDetector import MergeDetector as MergeDetector
 from .NotificationManager import NotificationManager as NotificationManager

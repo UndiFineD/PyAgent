@@ -26,7 +26,7 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 import requests
-from src.infrastructure.backend import *
+from src.infrastructure.backend.SubagentRunner import SubagentRunner
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[2]
@@ -62,7 +62,7 @@ def clear_response_cache() -> None:
     """Clear the response cache."""
     _runner.clear_response_cache()
 
-def get_metrics() -> Dict[str, Any]:
+def get_metrics() -> dict[str, Any]:
     """Get current metrics snapshot."""
     return _runner.get_metrics()
 
@@ -70,7 +70,7 @@ def reset_metrics() -> None:
     """Reset metrics."""
     _runner.reset_metrics()
 
-def validate_response_content(response: str, content_types: Optional[List[str]] = None) -> bool:
+def validate_response_content(response: str, content_types: list[str] | None = None) -> bool:
     """Validate AI response content."""
     return _runner.validate_response_content(response, content_types)
 
@@ -90,8 +90,8 @@ def llm_chat_via_github_models(
     prompt: str,
     model: str,
     system_prompt: str = "You are a helpful assistant.",
-    base_url: Optional[str] = None,
-    token: Optional[str] = None,
+    base_url: str | None = None,
+    token: str | None = None,
     timeout_s: int = 60,
     max_retries: int = 2,
     use_cache: bool = True,
@@ -114,11 +114,11 @@ def llm_chat_via_github_models(
         validate_content=validate_content,
     )
 
-def run_subagent(description: str, prompt: str, original_content: str = "") -> Optional[str]:
+def run_subagent(description: str, prompt: str, original_content: str = "") -> str | None:
     """Run a subagent."""
     return _runner.run_subagent(description, prompt, original_content)
 
-def get_backend_status() -> Dict[str, Any]:
+def get_backend_status() -> dict[str, Any]:
     """Return diagnostic snapshot."""
     return _runner.get_backend_status()
 

@@ -42,7 +42,7 @@ class NotificationManager:
 
     def __init__(self) -> None:
         """Initialize the notification manager."""
-        self.configs: List[NotificationConfig] = []
+        self.configs: list[NotificationConfig] = []
 
     def add_config(self, config: NotificationConfig) -> None:
         """Add a notification configuration.
@@ -67,7 +67,7 @@ class NotificationManager:
                 return True
         return False
 
-    def notify(self, error: ErrorEntry) -> List[str]:
+    def notify(self, error: ErrorEntry) -> list[str]:
         """Send notifications for an error.
 
         Args:
@@ -76,7 +76,7 @@ class NotificationManager:
         Returns:
             List of channels that were notified.
         """
-        notified: List[str] = []
+        notified: list[str] = []
         for config in self.configs:
             if not config.enabled:
                 continue
@@ -101,6 +101,6 @@ class NotificationManager:
         logging.info(f"Notification to {config.channel.value}: {message}")
         return True
 
-    def get_configs(self) -> List[NotificationConfig]:
+    def get_configs(self) -> list[NotificationConfig]:
         """Get all notification configurations."""
         return self.configs

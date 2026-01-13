@@ -44,7 +44,7 @@ class NASAgent(BaseAgent):
         )
 
     @as_tool
-    def search_optimal_architecture(self, task_requirement: str, latency_target_ms: int = 50) -> Dict[str, Any]:
+    def search_optimal_architecture(self, task_requirement: str, latency_target_ms: int = 50) -> dict[str, Any]:
         """
         Searches for the optimal neural architecture components for a given task.
         Returns a specification for a LoRA or small model adapter.

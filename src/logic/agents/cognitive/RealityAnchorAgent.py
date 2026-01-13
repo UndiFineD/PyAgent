@@ -44,7 +44,7 @@ class RealityAnchorAgent(BaseAgent):
         )
 
     @as_tool
-    def ground_against_docs(self, claim: str, doc_url: str) -> Dict[str, Any]:
+    def ground_against_docs(self, claim: str, doc_url: str) -> dict[str, Any]:
         """
         Cross-references a claim against official online documentation.
         Integrates with documentation fetching mechanisms.
@@ -65,7 +65,7 @@ class RealityAnchorAgent(BaseAgent):
             return {"grounded": False, "mismatch_detail": "Documentation source unreachable or unreadable."}
 
     @as_tool
-    def check_physics_constraints(self, action: str, environment_state: Dict[str, Any]) -> Dict[str, Any]:
+    def check_physics_constraints(self, action: str, environment_state: dict[str, Any]) -> dict[str, Any]:
         """
         Validates an action against physics-based constraints (Simulated).
         Args:
@@ -88,7 +88,7 @@ class RealityAnchorAgent(BaseAgent):
             return {"feasible": False, "reasoning": "Could not parse physics evaluation."}
 
     @as_tool
-    def verify_claim(self, claim: str, evidence_sources: List[str]) -> Dict[str, Any]:
+    def verify_claim(self, claim: str, evidence_sources: list[str]) -> dict[str, Any]:
         """
         Verifies a claim against a list of evidence sources (files, logs, etc.).
         Returns a verdict and supporting/contradicting evidence.
