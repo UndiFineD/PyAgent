@@ -1,0 +1,37 @@
+diff --git a/src/infrastructure/dev/scripts/management/debug_phase_15.py b/src/infrastructure/dev/scripts/management/debug_phase_15.py
+index cd86dc5..257f93c 100644
+--- a/src/infrastructure/dev/scripts/management/debug_phase_15.py
++++ b/src/infrastructure/dev/scripts/management/debug_phase_15.py
+@@ -29,13 +29,18 @@ from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ def test_ethics_and_safety() -> None:
+     """Validate ethics guardrails and kill switch features."""
+     logging.basicConfig(level=logging.INFO)
+     root = Path(str(Path(__file__).resolve().parents[5]) + "")
+     fleet = FleetManager(str(root))
+     fleet.register_agent("Knowledge", KnowledgeAgent)
+-    
++
+     print("--- Phase 15: Ethics Guardrail (Approved) ---")
+     workflow = [{"agent": "Knowledge", "action": "scan_workspace", "args": ["/"]}]
+     report = fleet.execute_workflow("Help me analyze the workspace", workflow)
+@@ -57,5 +62,10 @@ def test_ethics_and_safety() -> None:
+ 
+     print("\nEthics and Safety Governance validation COMPLETED.")
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+-    test_ethics_and_safety()
+\ No newline at end of file
++    test_ethics_and_safety()

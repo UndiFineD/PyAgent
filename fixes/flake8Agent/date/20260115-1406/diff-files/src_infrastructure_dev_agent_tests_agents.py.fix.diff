@@ -1,0 +1,52 @@
+diff --git a/src/infrastructure/dev/agent_tests/agents.py b/src/infrastructure/dev/agent_tests/agents.py
+index b0f966c..1098b0f 100644
+--- a/src/infrastructure/dev/agent_tests/agents.py
++++ b/src/infrastructure/dev/agent_tests/agents.py
+@@ -19,7 +19,7 @@ import json
+ import logging
+ from datetime import datetime
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional, Set
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.infrastructure.dev.agent_tests.enums import (
+     TestPriority,
+@@ -47,6 +47,16 @@ __version__ = VERSION
+ 
+ # from src.core.base.BaseAgent import BaseAgent, create_main_function
+ 
++
++
++
++
++
++
++
++
++
++
+ class TestsAgent(BaseAgent):
+     """Updates code file test suites using AI assistance.
+ 
+@@ -541,11 +551,21 @@ class TestsAgent(BaseAgent):
+ # create_main_function is not available in the current refactored structure
+ # def main() would need to be implemented separately if needed for CLI use
+ #main = create_main_function(
++
++
++
++
++
+ #    TestsAgent,
+ #    'Tests Agent: Updates code file test suites',
+ #    'Path to the tests file (e.g., test_file.py)'
+ #)
+ 
++
++
++
++
++
+ if __name__ == '__main__':
+     # CLI interface would be implemented here if needed
+     pass

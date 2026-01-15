@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/backend/BatchRequest.py b/src/infrastructure/backend/BatchRequest.py
+index dc40d50..511fa1f 100644
+--- a/src/infrastructure/backend/BatchRequest.py
++++ b/src/infrastructure/backend/BatchRequest.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ import time
+ import uuid
+ 

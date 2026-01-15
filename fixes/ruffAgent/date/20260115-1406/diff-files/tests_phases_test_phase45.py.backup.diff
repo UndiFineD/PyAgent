@@ -1,0 +1,63 @@
+diff --git a/tests/phases/test_phase45.py b/tests/phases/test_phase45.py
+index d61a9c6..a34c9e4 100644
+--- a/tests/phases/test_phase45.py
++++ b/tests/phases/test_phase45.py
+@@ -2,33 +2,52 @@ import unittest
+ import os
+ import shutil
+ import json
++import asyncio
++from unittest import IsolatedAsyncioTestCase
++from pathlib import Path
+ from src.infrastructure.fleet.FleetManager import FleetManager
+ 
+-class TestPhase45(unittest.TestCase):
++class TestPhase45(IsolatedAsyncioTestCase):
+     def setUp(self):
+         self.workspace = os.path.abspath(Path(__file__).resolve().parents[2])
+         self.fleet = FleetManager(self.workspace)
+         os.makedirs(os.path.join(self.workspace, "data/memory/agent_store/memory_shards"), exist_ok=True)
+ 
+-    def test_graph_relational(self) -> None:
++    async def test_graph_relational(self) -> None:
+         print("\nTesting Graph Relational Agent...")
+-        self.fleet.graph_relational.add_entity("ByzantineJudge", "SpecializedAgent", {"logic": "AI-Voting"})
+-        self.fleet.graph_relational.add_entity("FleetManager", "Coordinator")
++        # Add entities (assuming sync or async, handling both)
++        res = self.fleet.graph_relational.add_entity("ByzantineJudge", "SpecializedAgent", {"logic": "AI-Voting"})
++        if asyncio.iscoroutine(res): await res
++            
++        res = self.fleet.graph_relational.add_entity("FleetManager", "Coordinator")
++        if asyncio.iscoroutine(res): await res
++
+         res = self.fleet.graph_relational.add_relation("FleetManager", "manages", "ByzantineJudge")
++        if asyncio.iscoroutine(res):
++            res = await res
+         print(f"Result: {res}")
+         self.assertIn("established", res)
+         
+         rels = self.fleet.graph_relational.query_relationships("FleetManager")
++        if asyncio.iscoroutine(rels):
++            rels = await rels
++        
+         self.assertEqual(len(rels), 1)
+         self.assertEqual(rels[0]["target"], "ByzantineJudge")
+ 
+-    def test_memorag_sharding(self) -> None:
++    async def test_memorag_sharding(self) -> None:
+         print("\nTesting MemoRAG Sharding...")
+-        self.fleet.memorag.memorise_to_shard("Refactoring the consensus module", "cons_v2")
++        res = self.fleet.memorag.memorise_to_shard("Refactoring the consensus module", "cons_v2")
++        if asyncio.iscoroutine(res): await res
++            
+         shards = self.fleet.memorag.list_shards()
++        if asyncio.iscoroutine(shards):
++            shards = await shards
+         self.assertIn("cons_v2", shards)
+         
+         clues = self.fleet.memorag.recall_clues_from_shard("How was consensus updated?", "cons_v2")
++        if asyncio.iscoroutine(clues):
++            clues = await clues
+         print(f"Clues: {clues}")
+         self.assertTrue(any("cons_v2" in clue for clue in clues))
+ 

@@ -1,0 +1,20 @@
+diff --git a/src/logic/agents/cognitive/ExplainabilityAgent.py b/src/logic/agents/cognitive/ExplainabilityAgent.py
+index b044006..bd0e31c 100644
+--- a/src/logic/agents/cognitive/ExplainabilityAgent.py
++++ b/src/logic/agents/cognitive/ExplainabilityAgent.py
+@@ -21,7 +21,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import json
+ import os
+-from typing import Dict, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.logic.agents.cognitive.core.InterpretableCore import InterpretableCore
+ 
+@@ -115,4 +115,4 @@ class ExplainabilityAgent(BaseAgent):
+             "StrategicPlanner": "Aligning current tasks with long-term milestones ensures swarm convergence on core goals.",
+             "MultiCloudBridge": "State synchronization ensures high availability across provider-specific failure domains."
+         }
+-        return justifications.get(agent_name, f"Standard operational procedure for {agent_name} performing {action}.")
+\ No newline at end of file
++        return justifications.get(agent_name, f"Standard operational procedure for {agent_name} performing {action}.")

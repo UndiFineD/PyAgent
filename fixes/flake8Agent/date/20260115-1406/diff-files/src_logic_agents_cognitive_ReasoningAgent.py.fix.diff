@@ -1,0 +1,82 @@
+diff --git a/src/logic/agents/cognitive/ReasoningAgent.py b/src/logic/agents/cognitive/ReasoningAgent.py
+index 047c456..a7dd8a2 100644
+--- a/src/logic/agents/cognitive/ReasoningAgent.py
++++ b/src/logic/agents/cognitive/ReasoningAgent.py
+@@ -23,15 +23,25 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Dict, Any, Optional
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import create_main_function, as_tool
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class ReasoningAgent(BaseAgent):
+     """Analyzes complex problems and provides a logical blueprint before action."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self._system_prompt = (
+@@ -49,7 +59,7 @@ class ReasoningAgent(BaseAgent):
+     def analyze(self, problem: str, context: str | None = None) -> str:
+         """Performs a structured analysis of a technical problem."""
+         self._track_tokens(len(problem) // 4 + 100, 500)
+-        
++
+         analysis = [
+             f"## Reasoning Blueprint: {problem[:50]}...",
+             "",
+@@ -72,7 +82,7 @@ class ReasoningAgent(BaseAgent):
+             "---",
+             "*Reasoning complete. Ready for implementation.*"
+         ]
+-        
++
+         return "\n".join(analysis)
+ 
+     @as_tool
+@@ -97,7 +107,7 @@ class ReasoningAgent(BaseAgent):
+         # Simulation of Cross-Lingual consistency check (ArXiv 2601.02996)
+         is_consistent = True if language.lower() in ["english", "chinese", "spanish"] else False
+         confidence = 0.95 if is_consistent else 0.45
+-        
++
+         return {
+             "problem": problem,
+             "target_language": language,
+@@ -106,10 +116,20 @@ class ReasoningAgent(BaseAgent):
+             "recommendation": "English-centered reasoning is strong." if is_consistent else "Perform explicit COT in English before translating."
+         }
+ 
++
++
++
++
++
+     def improve_content(self, prompt: str) -> str:
+         """Perform a reasoning analysis."""
+         return self.analyze(prompt)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     main_func = create_main_function(ReasoningAgent, "Reasoning Agent", "Problem to analyze")
+-    main_func()
+\ No newline at end of file
++    main_func()

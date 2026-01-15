@@ -1,0 +1,29 @@
+diff --git a/src/observability/reports/ReportSearchEngine.py b/src/observability/reports/ReportSearchEngine.py
+index bc5166a..cefe21b 100644
+--- a/src/observability/reports/ReportSearchEngine.py
++++ b/src/observability/reports/ReportSearchEngine.py
+@@ -24,12 +24,16 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ReportSearchResult import ReportSearchResult
+ from .ReportType import ReportType
+-from typing import Dict, List, Tuple
+ import logging
+ import re
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ReportSearchEngine:
+     """Search engine for reports.
+     Enables full - text search across historical report data.
+@@ -105,4 +109,4 @@ class ReportSearchEngine:
+                 line_number=line_num,
+                 score=float(score)
+             ))
+-        return results
+\ No newline at end of file
++        return results

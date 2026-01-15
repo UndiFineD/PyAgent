@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/orchestration/MetaOrchestratorAgent.py b/src/infrastructure/orchestration/MetaOrchestratorAgent.py
+index 535e0e2..7fba9f4 100644
+--- a/src/infrastructure/orchestration/MetaOrchestratorAgent.py
++++ b/src/infrastructure/orchestration/MetaOrchestratorAgent.py
+@@ -15,7 +15,7 @@
+ from __future__ import annotations
+ import logging
+ import json
+-from typing import Dict, List, Any, TYPE_CHECKING
++from typing import Any, TYPE_CHECKING
+ from src.core.base.BaseAgent import BaseAgent
+ 
+ if TYPE_CHECKING:

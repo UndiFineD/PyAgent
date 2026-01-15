@@ -1,0 +1,29 @@
+diff --git a/src/infrastructure/dev/agent_tests/debugging.py b/src/infrastructure/dev/agent_tests/debugging.py
+index 06ecdcd..0df7ffa 100644
+--- a/src/infrastructure/dev/agent_tests/debugging.py
++++ b/src/infrastructure/dev/agent_tests/debugging.py
+@@ -25,7 +25,7 @@ from src.core.base.version import VERSION
+ import json
+ from dataclasses import dataclass, field
+ from datetime import datetime
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from .enums import ExecutionMode
+ from .models import ExecutionTrace
+ 
+@@ -204,6 +204,7 @@ class TestRecorder:
+ 
+     @dataclass
+     class Recording:
++        """A recording of test actions."""
+         test_name: str
+         actions: list[dict[str, Any]] = field(default_factory=_empty_action_list)
+ 
+@@ -233,6 +234,7 @@ class TestReplayer:
+ 
+     @dataclass
+     class ReplayResult:
++        """Result of a test replay."""
+         success: bool
+         errors: list[str] = field(default_factory=_empty_str_list)
+ 

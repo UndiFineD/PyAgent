@@ -1,0 +1,112 @@
+diff --git a/src/logic/agents/development/CodeQualityAgent.py b/src/logic/agents/development/CodeQualityAgent.py
+index 12e1f35..c2d3001 100644
+--- a/src/logic/agents/development/CodeQualityAgent.py
++++ b/src/logic/agents/development/CodeQualityAgent.py
+@@ -22,25 +22,36 @@ from src.core.base.version import VERSION
+ import os
+ import subprocess
+ import re
+-from typing import Dict, List, Any
++import json
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class CodeQualityAgent(BaseAgent):
+     """
+-    Automated Code Quality Guard: Performs linting, formatting checks, 
++    Automated Code Quality Guard: Performs linting, formatting checks,
+     and complexity analysis for Python, Rust, and JavaScript.
+     """
+     def __init__(self, workspace_path: str) -> None:
+         super().__init__(workspace_path)
+         self.workspace_path = workspace_path
+-        self.quality_reports = []
++        self.quality_reports: list[Any] = []
+ 
+     def analyze_file_quality(self, file_path: str) -> dict[str, Any]:
+         """Analyzes code quality for a specific file based on its extension."""
+         print(f"Code Quality: Analyzing {file_path}")
+-        
++
+         issues = []
+         if file_path.endswith('.py'):
+             issues = self._check_python_quality(file_path)
+@@ -68,13 +79,13 @@ class CodeQualityAgent(BaseAgent):
+                 ["flake8", "--format=json", path],
+                 capture_output=True, text=True, check=False
+             )
+-            
++
+             # Intelligence: Record shell interaction (Phase 108)
+             if hasattr(self, 'recorder') and self.recorder:
+                 self.recorder.record_interaction("Shell", "Flake8", f"Linting {path}", str(result.stdout)[:500])
+ 
+             if result.stdout:
+-                # Flake8 doesn't natively support JSON without plugins, 
++                # Flake8 doesn't natively support JSON without plugins,
+                 # but we'll simulate the parsing logic here for the 'Improvement' task
+                 for line in result.stdout.splitlines():
+                     match = re.match(r"(.*):(\d+):(\d+): (.*)", line)
+@@ -94,12 +105,38 @@ class CodeQualityAgent(BaseAgent):
+ 
+     def _check_rust_quality(self, path: str) -> list[dict[str, Any]]:
+         """Run cargo clippy for Rust quality analysis."""
++        issues = []
+         try:
+-            # Simulating cargo clippy call
+-            subprocess.run(["cargo", "clippy", "--fix", "--allow-dirty"], cwd=self.workspace_path, capture_output=True)
+-            return [] # In a real scenario, we'd parse the JSON output
+-        except FileNotFoundError:
+-            return [{"type": "Info", "message": "Cargo not found, skipping clippy check."}]
++            # Use message-format=json to get structured output
++            cwd = self.workspace_path
++
++            result = subprocess.run(
++                ["cargo", "clippy", "--message-format=json", "--quiet", "--allow-dirty", "--allow-staged"],
++                cwd=cwd,
++                capture_output=True,
++                text=True,
++                check=False
++            )
++
++            for line in result.stdout.splitlines():
++                try:
++                    data = json.loads(line)
++                    if data.get("reason") == "compiler-message":
++                        msg = data.get("message", {})
++                        if msg.get("level") in ["warning", "error"]:
++                            issues.append({
++                                "line": msg.get("spans", [{}])[0].get("line_start", 0),
++                                "column": msg.get("spans", [{}])[0].get("column_start", 0),
++                                "message": msg.get("message", "") + " (Clippy)",
++                                "type": "Suggestion"
++                            })
++                except json.JSONDecodeError:
++                    pass
++
++        except Exception:
++            pass
++
++        return issues
+ 
+     def _check_js_quality(self, path: str) -> list[dict[str, Any]]:
+         """Run eslint for JavaScript/TypeScript quality analysis."""
+@@ -113,4 +150,4 @@ class CodeQualityAgent(BaseAgent):
+         """Returns the average quality score across all analyzed files."""
+         if not self.quality_reports:
+             return 100.0
+-        return sum(r['score'] for r in self.quality_reports) / len(self.quality_reports)
+\ No newline at end of file
++        return sum(r['score'] for r in self.quality_reports) / len(self.quality_reports)

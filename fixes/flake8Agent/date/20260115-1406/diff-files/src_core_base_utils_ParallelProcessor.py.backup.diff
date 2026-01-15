@@ -1,0 +1,53 @@
+diff --git a/src/core/base/utils/ParallelProcessor.py b/src/core/base/utils/ParallelProcessor.py
+index 44c8f34..b8593b1 100644
+--- a/src/core/base/utils/ParallelProcessor.py
++++ b/src/core/base/utils/ParallelProcessor.py
+@@ -24,7 +24,7 @@ import asyncio
+ import logging
+ from concurrent.futures import ThreadPoolExecutor
+ from pathlib import Path
+-from typing import List, Any
++from typing import Any
+ from collections.abc import Callable
+ 
+ __version__ = VERSION
+@@ -35,14 +35,19 @@ try:
+ except ImportError:
+     HAS_TQDM = False
+ 
++
++
++
++
++
+ class ParallelProcessor:
+     """Handles concurrent and parallel execution of tasks across files."""
+ 
+     def __init__(self, max_workers: int = 4) -> None:
+         self.max_workers = max_workers
+ 
+-    def process_files_threaded(self, 
+-                               files: list[Path], 
++    def process_files_threaded(self,
++                               files: list[Path],
+                                worker_func: Callable[[Path], Any]) -> list[Any]:
+         """Process files using worker threads."""
+         results = []
+@@ -53,8 +58,8 @@ class ParallelProcessor:
+                 results = list(executor.map(worker_func, files))
+         return [r for r in results if r is not None]
+ 
+-    async def async_process_files(self, 
+-                                files: list[Path], 
++    async def async_process_files(self,
++                                files: list[Path],
+                                 worker_func: Callable[[Path], Any]) -> list[Any]:
+         """Process multiple files concurrently using async/await."""
+         modified_results: list[Any] = []
+@@ -73,4 +78,4 @@ class ParallelProcessor:
+             if tasks:
+                 await asyncio.gather(*tasks)
+ 
+-        return modified_results
+\ No newline at end of file
++        return modified_results

@@ -1,0 +1,29 @@
+diff --git a/temp/repair_autodoc.py b/temp/repair_autodoc.py
+index 5a0abe7..2594c7e 100644
+--- a/temp/repair_autodoc.py
++++ b/temp/repair_autodoc.py
+@@ -1,6 +1,5 @@
+ #!/usr/bin/env python3
+ import sys
+-import os
+ from pathlib import Path
+ 
+ # Add src to sys.path
+@@ -14,7 +13,7 @@ def run_repair():
+     agent_dir = Path("c:/DEV/PyAgent/src").resolve()
+     output_dir = Path("c:/DEV/PyAgent/docs/autodoc").resolve()
+     
+-    print(f"Starting autodoc repair...")
++    print("Starting autodoc repair...")
+     print(f"Source: {agent_dir}")
+     print(f"Output: {output_dir}")
+     
+@@ -24,7 +23,7 @@ def run_repair():
+     generator = ReportGenerator(agent_dir=agent_dir, output_dir=output_dir)
+     results = generator.process_all_files()
+     
+-    print(f"Autodoc repair completed.")
++    print("Autodoc repair completed.")
+     print(f"Files Processed: {results.get('count', 0)}")
+     print(f"Files Skipped: {results.get('skipped', 0)}")
+     print(f"Errors: {results.get('errors', 0)}")

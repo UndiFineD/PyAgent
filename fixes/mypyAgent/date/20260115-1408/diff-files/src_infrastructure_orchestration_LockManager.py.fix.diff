@@ -1,0 +1,20 @@
+diff --git a/src/infrastructure/orchestration/LockManager.py b/src/infrastructure/orchestration/LockManager.py
+index 75cdf80..596212c 100644
+--- a/src/infrastructure/orchestration/LockManager.py
++++ b/src/infrastructure/orchestration/LockManager.py
+@@ -18,7 +18,7 @@ import logging
+ import threading
+ import asyncio
+ from pathlib import Path
+-from typing import Dict, Optional, ContextManager, Any
++from typing import ContextManager
+ from contextlib import contextmanager, asynccontextmanager
+ 
+ try:
+@@ -140,4 +140,4 @@ class LockManager:
+             try:
+                 yield
+             finally:
+-                lock.release()
+\ No newline at end of file
++                lock.release()

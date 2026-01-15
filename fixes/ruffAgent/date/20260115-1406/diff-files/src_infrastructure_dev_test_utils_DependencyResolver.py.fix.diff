@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/dev/test_utils/DependencyResolver.py b/src/infrastructure/dev/test_utils/DependencyResolver.py
+index 9e1b7fc..97b5b14 100644
+--- a/src/infrastructure/dev/test_utils/DependencyResolver.py
++++ b/src/infrastructure/dev/test_utils/DependencyResolver.py
+@@ -22,7 +22,6 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, List, Set
+ 
+ __version__ = VERSION
+ 

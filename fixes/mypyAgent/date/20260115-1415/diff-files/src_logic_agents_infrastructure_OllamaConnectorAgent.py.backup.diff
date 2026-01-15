@@ -1,0 +1,11 @@
+diff --git a/src/logic/agents/infrastructure/OllamaConnectorAgent.py b/src/logic/agents/infrastructure/OllamaConnectorAgent.py
+index 7dfaa6f..93be0a3 100644
+--- a/src/logic/agents/infrastructure/OllamaConnectorAgent.py
++++ b/src/logic/agents/infrastructure/OllamaConnectorAgent.py
+@@ -86,4 +86,4 @@ class OllamaConnectorAgent(BaseAgent):
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(OllamaConnectorAgent)
+-    main()
+\ No newline at end of file
++    main()

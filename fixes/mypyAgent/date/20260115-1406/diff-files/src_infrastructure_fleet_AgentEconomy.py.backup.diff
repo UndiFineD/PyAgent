@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/fleet/AgentEconomy.py b/src/infrastructure/fleet/AgentEconomy.py
+index 04739c0..deb569e 100644
+--- a/src/infrastructure/fleet/AgentEconomy.py
++++ b/src/infrastructure/fleet/AgentEconomy.py
+@@ -28,7 +28,7 @@ import logging
+ import time
+ import hashlib
+ import json
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from src.infrastructure.fleet.core.EconomyCore import EconomyCore
+ 
+ class MarketPricingEngine:

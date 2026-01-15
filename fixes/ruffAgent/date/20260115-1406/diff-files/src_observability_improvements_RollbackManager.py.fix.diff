@@ -1,0 +1,13 @@
+diff --git a/src/observability/improvements/RollbackManager.py b/src/observability/improvements/RollbackManager.py
+index f4b5ea5..7b87501 100644
+--- a/src/observability/improvements/RollbackManager.py
++++ b/src/observability/improvements/RollbackManager.py
+@@ -23,7 +23,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .RollbackPoint import RollbackPoint
+-from typing import Any, Dict, List
++from typing import Any
+ 
+ __version__ = VERSION
+ 

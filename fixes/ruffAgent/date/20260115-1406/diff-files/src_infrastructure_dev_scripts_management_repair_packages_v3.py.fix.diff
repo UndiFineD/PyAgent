@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/dev/scripts/management/repair_packages_v3.py b/src/infrastructure/dev/scripts/management/repair_packages_v3.py
+index cd7c1b5..657d808 100644
+--- a/src/infrastructure/dev/scripts/management/repair_packages_v3.py
++++ b/src/infrastructure/dev/scripts/management/repair_packages_v3.py
+@@ -22,7 +22,6 @@ from src.core.base.version import VERSION
+ import os
+ import re
+ from pathlib import Path
+-from typing import Union
+ 
+ __version__ = VERSION
+ 

@@ -1,0 +1,180 @@
+diff --git a/src/observability/reports/ReportGenerator.py b/src/observability/reports/ReportGenerator.py
+index 7d372df..2fb6519 100644
+--- a/src/observability/reports/ReportGenerator.py
++++ b/src/observability/reports/ReportGenerator.py
+@@ -30,19 +30,30 @@ import re
+ import sys
+ import time
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional, Tuple, cast
++from typing import Any, cast
+ from collections.abc import Iterable
+ from .CompileResult import CompileResult
+ from .core.DeduplicationCore import DeduplicationCore
++from src.observability.StructuredLogger import StructuredLogger
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class ReportGenerator:
+     """Generates quality reports (description, errors, improvements) for agent files."""
+ 
+     def __init__(self, agent_dir: Path | str | None = None, output_dir: Path | str | None = None, recorder: Any = None) -> None:
+         """Initialize with directory containing agent scripts.
+-        
++
+         Args:
+             agent_dir: Directory containing agent scripts.
+             output_dir: Directory where reports should be written.
+@@ -60,6 +71,7 @@ class ReportGenerator:
+             self.output_dir = self.agent_dir
+ 
+         os.makedirs(self.output_dir, exist_ok=True)
++        self.logger = StructuredLogger(agent_id="ReportGenerator")
+ 
+     def _record(self, action: str, result: str) -> None:
+         """Record report generation activities."""
+@@ -85,7 +97,7 @@ class ReportGenerator:
+             except Exception as e:
+                 logging.error(f"Error processing {py_path.name}: {e}")
+                 errors_count += 1
+-        
++
+         logging.info(f"Processed {count} files, skipped {skipped} unchanged, {errors_count} errors.")
+         return {"count": count, "skipped": skipped, "errors": errors_count}
+ 
+@@ -95,12 +107,12 @@ class ReportGenerator:
+         # Deduplicate before export
+         unique_items = DeduplicationCore.deduplicate_items(items)
+         DeduplicationCore.export_to_jsonl(unique_items, str(output_path))
+-        print(f"[REPORT] Exported {len(unique_items)} deduplicated items to {output_path}")
++        self.logger.info("Exported deduplicated items", count=len(unique_items), path=str(output_path))
+ 
+     def generate_full_report(self) -> str:
+         """Generate a comprehensive project report including the dashboard grid."""
+         processed = self.process_all_files()
+-        
++
+         lines = [
+             "# 🚀 PyAgent Active Progress Dashboard",
+             f"*Last Updated: {time.strftime('%Y-%m-%d %H:%M:%S')}*",
+@@ -139,7 +151,7 @@ class ReportGenerator:
+         """Process a single file. Returns True if processed, False if skipped."""
+         source = self._read_text(py_path)
+         current_sha = self._sha256_text(source)[:16]
+-        
++
+         # Generate a flattened relative path as stem to avoid collisions (e.g., __init__.py)
+         rel_path = py_path.relative_to(self.agent_dir)
+         stem = "_".join(rel_path.with_suffix("").parts)
+@@ -201,7 +213,7 @@ class ReportGenerator:
+             "",
+             "## Behavior summary",
+         ]
+-        
++
+         behavior_bits: list[str] = []
+         if self._detect_cli_entry(source):
+             behavior_bits.append("Has a CLI entrypoint (`__main__`).")
+@@ -211,13 +223,13 @@ class ReportGenerator:
+             behavior_bits.append("Invokes external commands via `subprocess`.")
+         if "sys.path.insert" in source:
+             behavior_bits.append("Mutates `sys.path` to import sibling modules.")
+-        
++
+         if not behavior_bits:
+             behavior_bits.append("Pure module (no obvious CLI / side effects).")
+-        
++
+         for bit in behavior_bits:
+             lines.append(f"- {bit}")
+-            
++
+         lines.append("")
+         lines.append("## Key dependencies")
+         if imports:
+@@ -227,7 +239,7 @@ class ReportGenerator:
+             lines.append(f"- Top imports: {shown_imports}{suffix}")
+         else:
+             lines.append("- (none)")
+-            
++
+         lines.extend([
+             "",
+             "## Metadata",
+@@ -268,7 +280,7 @@ class ReportGenerator:
+             "",
+             "## Known issues / hazards",
+         ])
+-        
++
+         known: list[str] = []
+         if 'subprocess.run(["git"' in source or "subprocess.run(['git'" in source:
+             known.append("Runs `git` via `subprocess`; will fail if git is not installed or repo has no remote.")
+@@ -276,7 +288,7 @@ class ReportGenerator:
+             known.append("Runs GitHub CLI via `subprocess`; requires `gh` to be authenticated.")
+         if "copilot" in source and "subprocess.run" in source:
+             known.append("Invokes `copilot` CLI; will be a no-op / fallback if Copilot CLI is not installed.")
+-        
++
+         # Detected by AST
+         try:
+             for node in ast.walk(ast.parse(source)):
+@@ -292,7 +304,7 @@ class ReportGenerator:
+                 lines.append(f"- {item}")
+         else:
+             lines.append("- None detected by the lightweight scan")
+-            
++
+         lines.extend([
+             "",
+             "## Notes",
+@@ -306,7 +318,7 @@ class ReportGenerator:
+         _, classes = self._find_top_level_defs(tree)
+         suggestions: list[str] = []
+         suggestions.extend(self._find_issues(tree, source, py_path))
+-        
++
+         # Generic quality improvements
+         if not ast.get_docstring(cast(ast.Module, tree)):
+             suggestions.append("Add a concise module docstring describing purpose / usage.")
+@@ -314,7 +326,7 @@ class ReportGenerator:
+             suggestions.append("Consider documenting class construction / expected invariants.")
+         if "print(" in source and "logging" not in source:
+             suggestions.append("Consider using `logging` instead of `print` for controllable verbosity.")
+-        
++
+         suggestions = sorted(list(set(suggestions)))
+         lines = [
+             f"# Improvements: `{py_path.name}`",
+@@ -392,12 +404,12 @@ class ReportGenerator:
+             issues.append("Add robust subprocess error handling (`check=True`, timeouts, clearer stderr reporting).")
+         if self._detect_cli_entry(source) and self._detect_argparse(source):
+             issues.append("Add `--help` examples and validate CLI args (paths, required files).")
+-        
++
+         if self._is_pytest_test_file(py_path) and re.search(r"def\s+test_placeholder\s*\(", source):
+             issues.append("Replace placeholder tests with real assertions; target the most important behaviors first.")
+         if self._looks_like_pytest_import_problem(py_path):
+             issues.append("Rename the file to be pytest-importable (avoid '-' and extra '.'), then update references.")
+-        
++
+         return issues
+ 
+     def _detect_cli_entry(self, source: str) -> bool:
+@@ -448,4 +460,4 @@ class ReportGenerator:
+             # Show path relative to the workspace root if possible
+             return str(path.relative_to(self.agent_dir.parent if self.agent_dir.parent.parts else self.agent_dir))
+         except ValueError:
+-            return str(path)
+\ No newline at end of file
++            return str(path)

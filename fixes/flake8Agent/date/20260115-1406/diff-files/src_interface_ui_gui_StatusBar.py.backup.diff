@@ -1,0 +1,23 @@
+diff --git a/src/interface/ui/gui/StatusBar.py b/src/interface/ui/gui/StatusBar.py
+index 2b58cc2..c60f124 100644
+--- a/src/interface/ui/gui/StatusBar.py
++++ b/src/interface/ui/gui/StatusBar.py
+@@ -32,6 +32,11 @@ from tkinter import ttk
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class StatusBar:
+     """Handles status messages and UI feedback in the footer."""
+     def __init__(self, parent, status_var) -> None:
+@@ -40,4 +45,4 @@ class StatusBar:
+         self.label.pack(side=tk.BOTTOM, fill=tk.X)
+ 
+     def set_status(self, message) -> None:
+-        self.status_var.set(message)
+\ No newline at end of file
++        self.status_var.set(message)

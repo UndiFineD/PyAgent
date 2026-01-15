@@ -1,0 +1,28 @@
+diff --git a/src/observability/improvements/ImprovementArchive.py b/src/observability/improvements/ImprovementArchive.py
+index a52efbf..6ece739 100644
+--- a/src/observability/improvements/ImprovementArchive.py
++++ b/src/observability/improvements/ImprovementArchive.py
+@@ -26,10 +26,15 @@ from .ArchivedImprovement import ArchivedImprovement
+ from .Improvement import Improvement
+ from .ImprovementCategory import ImprovementCategory
+ from datetime import datetime
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ImprovementArchive:
+     """Archives old or completed improvements.
+ 
+@@ -118,4 +123,4 @@ class ImprovementArchive:
+         return {
+             "total_archived": len(self.archive),
+             "by_category": by_category
+-        }
+\ No newline at end of file
++        }

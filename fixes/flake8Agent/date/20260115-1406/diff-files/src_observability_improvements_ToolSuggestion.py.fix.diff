@@ -1,0 +1,28 @@
+diff --git a/src/observability/improvements/ToolSuggestion.py b/src/observability/improvements/ToolSuggestion.py
+index 9c4f556..6e28448 100644
+--- a/src/observability/improvements/ToolSuggestion.py
++++ b/src/observability/improvements/ToolSuggestion.py
+@@ -27,6 +27,16 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class ToolSuggestion:
+     """Suggestion from a code analysis tool.
+@@ -44,4 +54,4 @@ class ToolSuggestion:
+     file_path: str
+     line_number: int
+     message: str
+-    suggested_fix: str = ""
+\ No newline at end of file
++    suggested_fix: str = ""

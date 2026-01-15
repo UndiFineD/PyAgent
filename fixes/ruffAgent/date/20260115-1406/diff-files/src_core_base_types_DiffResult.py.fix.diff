@@ -1,0 +1,12 @@
+diff --git a/src/core/base/types/DiffResult.py b/src/core/base/types/DiffResult.py
+index cd3fa96..ac007fc 100644
+--- a/src/core/base/types/DiffResult.py
++++ b/src/core/base/types/DiffResult.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List, Tuple
+ 
+ __version__ = VERSION
+ 

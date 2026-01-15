@@ -1,0 +1,32 @@
+diff --git a/src/core/base/types/ChangelogEntry.py b/src/core/base/types/ChangelogEntry.py
+index 9950697..2515e0f 100644
+--- a/src/core/base/types/ChangelogEntry.py
++++ b/src/core/base/types/ChangelogEntry.py
+@@ -23,10 +23,19 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class ChangelogEntry:
+     """A single changelog entry."""
+@@ -38,4 +47,4 @@ class ChangelogEntry:
+     severity: str = "normal"  # low, normal, high, critical
+     tags: list[str] = field(default_factory=lambda: [])
+     linked_issues: list[str] = field(default_factory=lambda: [])
+-    linked_commits: list[str] = field(default_factory=lambda: [])
+\ No newline at end of file
++    linked_commits: list[str] = field(default_factory=lambda: [])

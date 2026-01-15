@@ -1,0 +1,28 @@
+diff --git a/src/observability/reports/AuditEntry.py b/src/observability/reports/AuditEntry.py
+index 898ca1a..4191408 100644
+--- a/src/observability/reports/AuditEntry.py
++++ b/src/observability/reports/AuditEntry.py
+@@ -24,10 +24,15 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .AuditAction import AuditAction
+ from dataclasses import dataclass, field
+-from typing import Any, Dict
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class AuditEntry:
+     """Audit log entry.
+@@ -45,4 +50,4 @@ class AuditEntry:
+     action: AuditAction
+     user_id: str
+     report_id: str
+-    details: dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]
+\ No newline at end of file
++    details: dict[str, Any] = field(default_factory=dict)  # type: ignore[assignment]

@@ -1,0 +1,47 @@
+diff --git a/src/logic/agents/intelligence/MemoRAGAgent.py b/src/logic/agents/intelligence/MemoRAGAgent.py
+index e5331de..e2064a7 100644
+--- a/src/logic/agents/intelligence/MemoRAGAgent.py
++++ b/src/logic/agents/intelligence/MemoRAGAgent.py
+@@ -27,15 +27,24 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ from pathlib import Path
+-from typing import List
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class MemoRAGAgent(BaseAgent):
+     """Memory-Augmented RAG agent for deep context discovery with sharding."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self.shard_dir = Path("data/memory/agent_store/memory_shards")
+@@ -61,7 +70,7 @@ class MemoRAGAgent(BaseAgent):
+         shard_file = self.shard_dir / f"{shard_name}.txt"
+         if not shard_file.exists():
+             return [f"Notice: Shard '{shard_name}' does not exist."]
+-        
++
+         # Simulated intelligent retrieval
+         return [
+             f"Clue for '{query}' in {shard_name}: Recent updates to core logic.",
+@@ -76,4 +85,4 @@ class MemoRAGAgent(BaseAgent):
+     def improve_content(self, prompt: str) -> str:
+         self.list_shards()
+         clues = self.recall_clues_from_shard(prompt, self.active_shard)
+-        return f"### MemoRAG Active Shard: {self.active_shard}\n" + "\n".join([f"- {c}" for c in clues])
+\ No newline at end of file
++        return f"### MemoRAG Active Shard: {self.active_shard}\n" + "\n".join([f"- {c}" for c in clues])

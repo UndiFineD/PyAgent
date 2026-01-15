@@ -1,0 +1,76 @@
+diff --git a/src/core/base/CircuitBreaker.py b/src/core/base/CircuitBreaker.py
+index 511e611..9387717 100644
+--- a/src/core/base/CircuitBreaker.py
++++ b/src/core/base/CircuitBreaker.py
+@@ -25,13 +25,18 @@ from src.core.base.version import VERSION
+ import logging
+ import time
+ import asyncio
+-from typing import Any, Optional, Dict
++from typing import Any
+ from collections.abc import Callable
+ from src.core.base.core.ResilienceCore import ResilienceCore
+ from src.observability.stats.exporters.OTelManager import OTelManager
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class CircuitBreaker:
+     """Circuit breaker pattern for failing backends with Jittered Backoff.
+ 
+@@ -96,7 +101,7 @@ class CircuitBreaker:
+     def _export_to_otel(self, old_state: str, new_state: str) -> None:
+         """Exports state transition to OTel and StructuredLogger (Phase 273)."""
+         logging.info(f"CircuitBreaker '{self.name}': Transition {old_state} -> {new_state}")
+-        
++
+         if self.otel_manager:
+             span_id = self.otel_manager.start_span(
+                 f"Resilience: {self.name} Transition",
+@@ -116,7 +121,7 @@ class CircuitBreaker:
+         """
+         if self.state != "OPEN":
+             return True
+-            
++
+         logging.debug(f"CircuitBreaker '{self.name}': Probing backend health...")
+         try:
+             # Perform the actual health check provided by the backend wrapper
+@@ -124,7 +129,7 @@ class CircuitBreaker:
+                 result = await health_check_func()
+             else:
+                 result = health_check_func()
+-            
++
+             if result:
+                 logging.info(f"CircuitBreaker '{self.name}': Probe SUCCEEDED. Transitioning to HALF_OPEN early.")
+                 old_state = self.state
+@@ -134,7 +139,7 @@ class CircuitBreaker:
+                 return True
+         except Exception as e:
+             logging.debug(f"CircuitBreaker '{self.name}': Probe failed: {e}")
+-            
++
+         return False
+ 
+     def call(self, func: Callable[..., Any], *args: Any, **kwargs: Any) -> Any:
+@@ -170,7 +175,7 @@ class CircuitBreaker:
+             self.last_failure_time,
+             self._get_thresholds()
+         )
+-        
++
+         if old_state != self.state:
+             logging.info(f"Circuit breaker '{self.name}' transitioned from {old_state} to {self.state}")
+             self._export_to_otel(old_state, self.state)
+@@ -190,4 +195,4 @@ class CircuitBreaker:
+ 
+         if old_state != self.state:
+             logging.error(f"Circuit breaker '{self.name}' transitioned from {old_state} to {self.state}")
+-            self._export_to_otel(old_state, self.state)
+\ No newline at end of file
++            self._export_to_otel(old_state, self.state)

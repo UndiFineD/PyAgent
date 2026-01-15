@@ -1,0 +1,21 @@
+diff --git a/src/infrastructure/dev/test_utils/TestRecorder.py b/src/infrastructure/dev/test_utils/TestRecorder.py
+index 0ac96ca..3f85ca3 100644
+--- a/src/infrastructure/dev/test_utils/TestRecorder.py
++++ b/src/infrastructure/dev/test_utils/TestRecorder.py
+@@ -32,7 +32,6 @@ import json
+ __version__ = VERSION
+ 
+ class TestRecorder:
+-    __test__ = False
+     """Records and replays test interactions.
+ 
+     Useful for recording external calls and replaying in tests.
+@@ -51,6 +50,8 @@ class TestRecorder:
+             result=api_call("data")  # Returns recorded result
+     """
+ 
++    __test__ = False
++
+     def __init__(self) -> None:
+         """Initialize recorder."""
+         self._recordings: list[RecordedInteraction] = []

@@ -1,0 +1,93 @@
+diff --git a/tests/integration/test_agent_logic_integration.py b/tests/integration/test_agent_logic_integration.py
+index 2bc5bed..d9f231c 100644
+--- a/tests/integration/test_agent_logic_integration.py
++++ b/tests/integration/test_agent_logic_integration.py
+@@ -2,23 +2,11 @@
+ """Test classes from test_agent.py - integration module."""
+ 
+ from __future__ import annotations
+-import unittest
+-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
+-from unittest.mock import MagicMock, Mock, patch, call, ANY
++from typing import List
+ import time
+-import json
+-from datetime import datetime
+-import pytest
+-import logging
+ from pathlib import Path
+ import sys
+-import os
+-import tempfile
+-import shutil
+-import subprocess
+-import threading
+-import asyncio
+-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
++from src.logic.agents.swarm.OrchestratorAgent import OrchestratorAgent
+ 
+ # Try to import test utilities
+ try:
+@@ -41,7 +29,7 @@ class TestPhase5Integration:
+ 
+     def test_circuit_breaker_with_agent_execution(self, tmp_path: Path, agent_module) -> None:
+         """Test circuit breaker integration with agent."""
+-        agent = agent_module.Agent(repo_root=str(tmp_path))
++        agent = OrchestratorAgent(repo_root=str(tmp_path))
+ 
+         cb = agent_module.CircuitBreaker("test_backend")
+ 
+@@ -55,7 +43,7 @@ class TestPhase5Integration:
+ 
+     def test_full_phase5_workflow(self, tmp_path: Path, agent_module) -> None:
+         """Test complete Phase 5 workflow."""
+-        agent = agent_module.Agent(repo_root=str(tmp_path), dry_run=False)
++        agent = OrchestratorAgent(repo_root=str(tmp_path), dry_run=False)
+ 
+         # Simulate execution metrics
+         agent.metrics = {
+@@ -95,7 +83,7 @@ class TestPhase6Integration:
+         (tmp_path / ".git").mkdir()
+ 
+         # Create agent with all Phase 6 features
+-        agent = agent_module.Agent(repo_root=str(tmp_path), dry_run=True)
++        agent = OrchestratorAgent(repo_root=str(tmp_path), dry_run=True)
+         agent.enable_rate_limiting()
+         agent.enable_file_locking()
+         agent.enable_diff_preview()
+@@ -124,7 +112,7 @@ class TestPhase6Integration:
+         config_path.write_text(config_content)
+         (tmp_path / ".git").mkdir()
+ 
+-        agent = agent_module.Agent.from_config_file(config_path)
++        agent = OrchestratorAgent.from_config_file(config_path)
+ 
+         # Rate limiting should be enabled from config
+         assert hasattr(agent, 'rate_limiter')
+@@ -133,13 +121,16 @@ class TestPhase6Integration:
+     def test_plugin_execution_with_rate_limiting(self, tmp_path: Path, agent_module) -> None:
+         """Test plugins execute with rate limiting."""
+         (tmp_path / ".git").mkdir()
+-        agent = agent_module.Agent(repo_root=str(tmp_path))
++        agent = OrchestratorAgent(repo_root=str(tmp_path))
+         agent.enable_rate_limiting()
+ 
+         # Create and register a mock plugin
+         class MockPlugin(agent_module.AgentPluginBase):
+             def run(self, file_path, context) -> bool:
+                 return True
++                
++            def shutdown(self) -> None:
++                pass
+ 
+         plugin = MockPlugin("test")
+         agent.register_plugin(plugin)
+@@ -156,7 +147,7 @@ class TestPhase6Integration:
+     def test_health_check_before_run(self, tmp_path: Path, agent_module) -> None:
+         """Test health check before agent run."""
+         (tmp_path / ".git").mkdir()
+-        agent = agent_module.Agent(repo_root=str(tmp_path))
++        agent = OrchestratorAgent(repo_root=str(tmp_path))
+ 
+         # Run health checks
+         results = agent.run_health_checks()

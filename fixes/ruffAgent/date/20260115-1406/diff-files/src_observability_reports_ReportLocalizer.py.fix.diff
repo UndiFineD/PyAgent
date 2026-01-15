@@ -1,0 +1,12 @@
+diff --git a/src/observability/reports/ReportLocalizer.py b/src/observability/reports/ReportLocalizer.py
+index 34597d5..6771998 100644
+--- a/src/observability/reports/ReportLocalizer.py
++++ b/src/observability/reports/ReportLocalizer.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .LocaleCode import LocaleCode
+ from .LocalizedString import LocalizedString
+-from typing import Dict, Optional
+ import logging
+ 
+ __version__ = VERSION

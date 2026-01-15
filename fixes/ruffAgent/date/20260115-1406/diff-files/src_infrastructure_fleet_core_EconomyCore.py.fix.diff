@@ -1,0 +1,16 @@
+diff --git a/src/infrastructure/fleet/core/EconomyCore.py b/src/infrastructure/fleet/core/EconomyCore.py
+index cbc97b7..bbbf736 100644
+--- a/src/infrastructure/fleet/core/EconomyCore.py
++++ b/src/infrastructure/fleet/core/EconomyCore.py
+@@ -4,9 +4,10 @@ Core logic for Swarm Economy (Phase 179).
+ Handles bidding and GPU priority allocation logic.
+ """
+ 
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ class EconomyCore:
++    """Handles economic logic for swarm resource bidding and priority."""
+     @staticmethod
+     def calculate_bid_priority(credits: float, importance: float, urgency: float) -> float:
+         """

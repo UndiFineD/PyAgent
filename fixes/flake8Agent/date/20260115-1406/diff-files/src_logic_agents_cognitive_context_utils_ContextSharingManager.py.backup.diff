@@ -1,0 +1,27 @@
+diff --git a/src/logic/agents/cognitive/context/utils/ContextSharingManager.py b/src/logic/agents/cognitive/context/utils/ContextSharingManager.py
+index cf3fb83..e8ce32f 100644
+--- a/src/logic/agents/cognitive/context/utils/ContextSharingManager.py
++++ b/src/logic/agents/cognitive/context/utils/ContextSharingManager.py
+@@ -25,10 +25,14 @@ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.SharedContext import SharedContext
+ from src.logic.agents.cognitive.context.models.SharingPermission import SharingPermission
+ from datetime import datetime
+-from typing import Dict, List, Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ContextSharingManager:
+     """Manages context sharing across team members.
+ 
+@@ -125,4 +129,4 @@ class ContextSharingManager:
+             List of usernames.
+         """
+         shared = self.shared_contexts.get(context_id)
+-        return shared.shared_with if shared else []
+\ No newline at end of file
++        return shared.shared_with if shared else []

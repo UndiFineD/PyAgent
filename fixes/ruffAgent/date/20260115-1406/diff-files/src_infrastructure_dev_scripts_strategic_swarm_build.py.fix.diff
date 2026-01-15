@@ -1,0 +1,135 @@
+diff --git a/src/infrastructure/dev/scripts/strategic_swarm_build.py b/src/infrastructure/dev/scripts/strategic_swarm_build.py
+index 3c8b9a7..7a443d0 100644
+--- a/src/infrastructure/dev/scripts/strategic_swarm_build.py
++++ b/src/infrastructure/dev/scripts/strategic_swarm_build.py
+@@ -37,16 +37,18 @@ sys.path.append(os.getcwd())
+ 
+ try:
+     from src.infrastructure.fleet.FleetManager import FleetManager
+-    from src.infrastructure.backend.LLMClient import LLMClient
+-    import requests
++from src.infrastructure.backend.LLMClient import LLMClient
++from src.observability.StructuredLogger import StructuredLogger
++import requests
+ except ImportError as e:
+     print(f"FAILED TO IMPORT: {e}")
+     sys.exit(1)
+ 
+ def main() -> None:
+     root = os.getcwd()
+-    print("=== STRATEGIC SWARM INITIALIZATION ===")
+-    print(f"Workspace Root: {root}")
++    logger = StructuredLogger(agent_id="SwarmBuilder")
++    logger.info("=== STRATEGIC SWARM INITIALIZATION ===")
++    logger.info(f"Workspace Root: {root}")
+     
+     fleet = FleetManager(root)
+     
+@@ -54,28 +56,28 @@ def main() -> None:
+     try:
+         # Based on OrchestratorRegistry discovery logic
+         intelligence = fleet.intelligence_orchestrator
+-        print("✅ Intelligence Orchestrator Resolved.")
++        logger.info("✅ Intelligence Orchestrator Resolved.")
+     except AttributeError:
+         # Try snake_case direct match
+         try:
+             intelligence = fleet.intelligence
+-            print("✅ 'intelligence' attribute found via FleetManager delegation.")
++            logger.info("✅ 'intelligence' attribute found via FleetManager delegation.")
+         except AttributeError:
+-             print("❌ Failed to resolve Intelligence Orchestrator. Check BootstrapConfigs.")
++             logger.error("❌ Failed to resolve Intelligence Orchestrator. Check BootstrapConfigs.")
+              return
+ 
+     # 2. Read the Strategic Prompt from note.txt
+     prompt_path = os.path.join(root, "docs/notes/note.txt")
+     if not os.path.exists(prompt_path):
+-        print(f"❌ Could not find {prompt_path}")
++        logger.error(f"❌ Could not find {prompt_path}")
+         return
+         
+     with open(prompt_path, encoding="utf-8") as f:
+         strategic_prompt = f.read()
+     
+-    print("\n--- INGESTING STRATEGIC PROMPT (note.txt) ---")
+-    print(f"Prompt length: {len(strategic_prompt)} bytes")
+-    print("Feeding prompt to Hive Mind insight pool...")
++    logger.info("\n--- INGESTING STRATEGIC PROMPT (note.txt) ---")
++    logger.info(f"Prompt length: {len(strategic_prompt)} bytes")
++    logger.info("Feeding prompt to Hive Mind insight pool...")
+     
+     # Contribute to Swarm Intelligence
+     intelligence.contribute_insight(
+@@ -83,10 +85,10 @@ def main() -> None:
+         insight=strategic_prompt,
+         confidence=1.0
+     )
+-    print("✅ Directive stored in context.")
++    logger.info("✅ Directive stored in context.")
+ 
+     # 3. Demonstrate External Learning
+-    print("\n--- EXTERNAL FEDERATED LEARNING ---")
++    logger.info("\n--- EXTERNAL FEDERATED LEARNING ---")
+     ai = LLMClient(requests, workspace_root=root)
+     
+     # We query the model specified by the user's intent (high-parameter workload)
+@@ -98,41 +100,41 @@ def main() -> None:
+     Focus on: 1. Data Sharding, 2. Dynamic Refactoring, 3. Security.
+     """
+     
+-    print("Consulting Gemini 3 Flash (GitHub Models) for architectural refinement...")
++    logger.info("Consulting Gemini 3 Flash (GitHub Models) for architectural refinement...")
+     try:
+         # Note: If GITHUB_TOKEN is not set, this will fail gracefully or use fallback
+         external_lesson = ai.llm_chat_via_github_models(learning_prompt, model="google/gemini-2.0-flash-exp")
+         if external_lesson:
+-            print("\n[External Insight Recieved]:")
+-            print(external_lesson[:300] + "...")
++            logger.info("\n[External Insight Received]:")
++            logger.info(external_lesson[:300] + "...")
+             intelligence.contribute_insight(
+                 agent_name="ExternalLLM_Gemini",
+                 insight=external_lesson,
+                 confidence=0.92
+             )
+-            print("✅ Insight integrated into Collective Intelligence.")
++            logger.info("✅ Insight integrated into Collective Intelligence.")
+         else:
+-            print("⚠️ External consultation returned no content. Continuing with local synthesis.")
++            logger.warning("⚠️ External consultation returned no content. Continuing with local synthesis.")
+     except Exception as e:
+-        print(f"⚠️ External consult skipped (likely missing API key): {e}")
++        logger.warning(f"⚠️ External consult skipped (likely missing API key): {e}")
+ 
+     # 4. Synthesize Intelligence
+-    print("\n--- COLLECTIVE INTELLIGENCE SYNTHESIS ---")
++    logger.info("\n--- COLLECTIVE INTELLIGENCE SYNTHESIS ---")
+     patterns = intelligence.synthesize_collective_intelligence()
+     if patterns:
+-        print(f"Identified {len(patterns)} actionable patterns for the fleet:")
++        logger.info(f"Identified {len(patterns)} actionable patterns for the fleet:")
+         for p in patterns:
+-            print(f"- {p}")
++            logger.info(f"- {p}")
+     else:
+-        print("Synthesis complete. Hive mind is currently processing data.")
++        logger.info("Synthesis complete. Hive mind is currently processing data.")
+ 
+     # 5. Readiness Confirmation
+-    print("\n--- READINESS STATUS ---")
+-    print("Ready to swarm build? YES.")
+-    print("Ready to implement changes from run_fleet_self_improvement.py? YES.")
+-    print("Architecture Tiers Validated? YES.")
+-    print("\n[Command to start autonomous build (Run 50 Cycles with strategic note)]:")
+-    print(str(Path(__file__).resolve().parents[4]) + "/.venv/Scripts/python.exe src/infrastructure/dev/scripts/run_fleet_self_improvement.py -c 50 -p docs\\notes\\note.txt")
++    logger.info("\n--- READINESS STATUS ---")
++    logger.info("Ready to swarm build? YES.")
++    logger.info("Ready to implement changes from run_fleet_self_improvement.py? YES.")
++    logger.info("Architecture Tiers Validated? YES.")
++    logger.info("\n[Command to start autonomous build (Run 50 Cycles with strategic note)]:")
++    logger.info(str(Path(__file__).resolve().parents[4]) + "/.venv/Scripts/python.exe src/infrastructure/dev/scripts/run_fleet_self_improvement.py -c 50 -p docs\\notes\\note.txt")
+ 
+ if __name__ == "__main__":
+     main()
+\ No newline at end of file

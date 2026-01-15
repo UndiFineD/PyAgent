@@ -1,0 +1,57 @@
+diff --git a/src/logic/agents/system/ConfigAgent.py b/src/logic/agents/system/ConfigAgent.py
+index 3c35629..e6063c3 100644
+--- a/src/logic/agents/system/ConfigAgent.py
++++ b/src/logic/agents/system/ConfigAgent.py
+@@ -31,9 +31,14 @@ from src.core.base.utilities import as_tool
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ConfigAgent(BaseAgent):
+     """Ensures the agent fleet has all necessary configurations and API keys."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self.workspace_root = self.file_path.parent.parent.parent
+@@ -49,13 +54,13 @@ class ConfigAgent(BaseAgent):
+         """Checks for required environment variables."""
+         required = ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "WORKSPACE_ROOT"]
+         missing = [key for key in required if key not in os.environ]
+-        
++
+         report = ["## ⚙️ Environment Validation\n"]
+         if not missing:
+             report.append("✅ All required environment variables are set.")
+         else:
+             report.append(f"❌ **Missing variables**: {', '.join(missing)}")
+-            
++
+         return "\n".join(report)
+ 
+     @as_tool
+@@ -64,11 +69,11 @@ class ConfigAgent(BaseAgent):
+         config_path = self.workspace_root / "config" / "models.yaml"
+         if not config_path.exists():
+             return "❌ `config/models.yaml` not found."
+-            
++
+         try:
+             with open(config_path) as f:
+                 data = yaml.safe_load(f)
+-            
++
+             # Simple structure check
+             if "models" in data and isinstance(data["models"], list):
+                 return f"✅ `models.yaml` is valid. Detected {len(data['models'])} models."
+@@ -78,4 +83,4 @@ class ConfigAgent(BaseAgent):
+             return f"❌ Error parsing `models.yaml`: {e}"
+ 
+     def improve_content(self, prompt: str) -> str:
+-        return self.validate_env()
+\ No newline at end of file
++        return self.validate_env()

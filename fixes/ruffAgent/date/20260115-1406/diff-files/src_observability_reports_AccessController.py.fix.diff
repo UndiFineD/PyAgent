@@ -1,0 +1,12 @@
+diff --git a/src/observability/reports/AccessController.py b/src/observability/reports/AccessController.py
+index 4b99bb7..0f957bf 100644
+--- a/src/observability/reports/AccessController.py
++++ b/src/observability/reports/AccessController.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .PermissionLevel import PermissionLevel
+ from .ReportPermission import ReportPermission
+-from typing import List
+ import logging
+ import re
+ import time

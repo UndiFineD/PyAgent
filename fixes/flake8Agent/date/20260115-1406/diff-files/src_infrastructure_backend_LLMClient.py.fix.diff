@@ -1,0 +1,113 @@
+diff --git a/src/infrastructure/backend/LLMClient.py b/src/infrastructure/backend/LLMClient.py
+index 85ff36f..8cdae82 100644
+--- a/src/infrastructure/backend/LLMClient.py
++++ b/src/infrastructure/backend/LLMClient.py
+@@ -26,7 +26,7 @@ import logging
+ import time
+ import os
+ from pathlib import Path
+-from typing import Any, Dict, Optional
++from typing import Any
+ from .LocalContextRecorder import LocalContextRecorder
+ from src.core.base.ConnectivityManager import ConnectivityManager
+ from src.infrastructure.backend.core.PoolingCore import PoolingCore
+@@ -36,6 +36,16 @@ from .llm_backends.VllmBackend import VllmBackend
+ from .llm_backends.VllmNativeBackend import VllmNativeBackend
+ from .llm_backends.CopilotCliBackend import CopilotCliBackend
+ 
++
++
++
++
++
++
++
++
++
++
+ class LLMClient:
+     """Handles direct HTTP calls to LLM providers.
+     Enhanced with PoolingCore for prompt compression and connection optimization.
+@@ -44,15 +54,15 @@ class LLMClient:
+     def __init__(self, requests_lib: Any, workspace_root: str | None = None) -> None:
+         self.requests = requests_lib
+         self.pooling_core = PoolingCore()
+-        
++
+         # Phase 108: Persistent Session for connection pooling
+         # If we're being passed a mock or patched requests, avoid Session for better test compatibility
+         self.session = requests_lib
+-        
++
+         # Only create a real session if it looks like the real requests module and hasn't been explicitly disabled
+         import requests as real_requests
+         is_real_requests = (requests_lib is real_requests)
+-        
++
+         if is_real_requests and hasattr(requests_lib, 'Session') and os.environ.get("DV_AGENT_USE_SESSION", "true").lower() == "true":
+             try:
+                 self.session = requests_lib.Session()
+@@ -60,12 +70,12 @@ class LLMClient:
+                 self.session.max_redirects = 5
+             except Exception:
+                 self.session = requests_lib
+-        
++
+         # Auto-init recorder if workspace provided, else None
+         self.workspace_root = workspace_root
+         self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
+         self.connectivity = ConnectivityManager(workspace_root)
+-        
++
+         # Phase 108: Result Caching (Speed optimization for repeated calls)
+         self._result_cache: dict[str, str] = {}
+         self._max_cache_size = 1000
+@@ -83,7 +93,7 @@ class LLMClient:
+         """Central entry point for chat completion. Compresses prompt before sending."""
+         # 1. Compress system prompt via Core
+         self.pooling_core.compress_prompt(system_prompt)
+-        
++
+         # 2. Logic to invoke backends (simplified for this edit)
+         # In actual code, this would delegate to backends[provider].chat(...)
+         return f"Simulated response for: {prompt[:20]}"
+@@ -207,7 +217,7 @@ class LLMClient:
+                 # If preferred failed, mark it unavailable and fallback to full list
+                 self.connectivity.update_status(preferred, False)
+ 
+-        # Robustness Patch (Phase 141): If all known endpoints are cached as offline, 
++        # Robustness Patch (Phase 141): If all known endpoints are cached as offline,
+         # force a retry across all of them ignoring the skipped cache.
+         force_retry = False
+         known_backends = ["vllm_native", "vllm", "ollama", "copilot_cli", "github_models"]
+@@ -236,7 +246,7 @@ class LLMClient:
+                 result = self.llm_chat_via_ollama(prompt, model=local_model, system_prompt=system_prompt)
+                 if result:
+                     used_provider, _used_model = "ollama", local_model
+-            
++
+             # 3. Try Copilot CLI if local servers failed
+             if not result and (force_retry or self.connectivity.is_endpoint_available("copilot_cli")):
+                 result = self.llm_chat_via_copilot_cli(prompt, system_prompt=system_prompt)
+@@ -259,9 +269,19 @@ class LLMClient:
+             self.connectivity.set_preferred_endpoint("llm_backends", used_provider)
+ 
+         # Phase 108: Store in result cache
++
++
++
++
++
+         if len(self._result_cache) < self._max_cache_size:
+             self._result_cache[cache_key] = result
+ 
+         return result
+ 
+-__version__ = VERSION
+\ No newline at end of file
++
++
++
++
++
++__version__ = VERSION

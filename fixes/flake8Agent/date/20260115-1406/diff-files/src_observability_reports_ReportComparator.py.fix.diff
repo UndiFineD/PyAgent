@@ -1,0 +1,36 @@
+diff --git a/src/observability/reports/ReportComparator.py b/src/observability/reports/ReportComparator.py
+index ee39260..3ee1f87 100644
+--- a/src/observability/reports/ReportComparator.py
++++ b/src/observability/reports/ReportComparator.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ReportComparison import ReportComparison
+ from pathlib import Path
+-from typing import List
+ 
+ __version__ = VERSION
+ 
+@@ -32,6 +31,16 @@ __version__ = VERSION
+ 
+ AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
+ 
++
++
++
++
++
++
++
++
++
++
+ class ReportComparator:
+     """Compares report versions to show differences.
+     Attributes:
+@@ -81,4 +90,4 @@ class ReportComparator:
+             line = line.strip()
+             if line.startswith('- '):
+                 items.append(line)
+-        return items
+\ No newline at end of file
++        return items

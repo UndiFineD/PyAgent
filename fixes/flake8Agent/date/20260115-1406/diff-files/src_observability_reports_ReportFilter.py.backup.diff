@@ -1,0 +1,27 @@
+diff --git a/src/observability/reports/ReportFilter.py b/src/observability/reports/ReportFilter.py
+index 9f7457e..326a05b 100644
+--- a/src/observability/reports/ReportFilter.py
++++ b/src/observability/reports/ReportFilter.py
+@@ -24,10 +24,14 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .CodeIssue import CodeIssue
+ from .FilterCriteria import FilterCriteria
+-from typing import List, Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ReportFilter:
+     """Filters reports based on criteria.
+     Attributes:
+@@ -66,4 +70,4 @@ class ReportFilter:
+             Filtered list of issues.
+         """
+ 
+-        return [i for i in issues if self.matches(i)]
+\ No newline at end of file
++        return [i for i in issues if self.matches(i)]

@@ -1,0 +1,28 @@
+diff --git a/src/infrastructure/dev/test_utils/Benchmarker.py b/src/infrastructure/dev/test_utils/Benchmarker.py
+index 84134cd..c7d0c68 100644
+--- a/src/infrastructure/dev/test_utils/Benchmarker.py
++++ b/src/infrastructure/dev/test_utils/Benchmarker.py
+@@ -23,11 +23,15 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .TestTimer import TestTimer
+-from typing import Dict, List
+ from collections.abc import Callable
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class Benchmarker:
+     """Runs benchmarks and collects statistics."""
+ 
+@@ -63,4 +67,4 @@ class Benchmarker:
+             "max_ms": max(self.timings) * 1000,
+             "average_ms": mean_seconds * 1000,
+             "iterations": iterations
+-        }
+\ No newline at end of file
++        }

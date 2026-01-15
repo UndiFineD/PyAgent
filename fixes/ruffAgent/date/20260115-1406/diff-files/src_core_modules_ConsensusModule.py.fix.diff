@@ -1,0 +1,13 @@
+diff --git a/src/core/modules/ConsensusModule.py b/src/core/modules/ConsensusModule.py
+index dfb706b..7f5d029 100644
+--- a/src/core/modules/ConsensusModule.py
++++ b/src/core/modules/ConsensusModule.py
+@@ -12,7 +12,7 @@
+ # limitations under the License.
+ 
+ from __future__ import annotations
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from src.core.base.modules import BaseModule
+ 
+ class ConsensusModule(BaseModule):

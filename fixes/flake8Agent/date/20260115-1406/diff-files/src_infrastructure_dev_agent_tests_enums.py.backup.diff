@@ -1,0 +1,92 @@
+diff --git a/src/infrastructure/dev/agent_tests/enums.py b/src/infrastructure/dev/agent_tests/enums.py
+index f8f285d..980472d 100644
+--- a/src/infrastructure/dev/agent_tests/enums.py
++++ b/src/infrastructure/dev/agent_tests/enums.py
+@@ -26,6 +26,11 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class TestPriority(Enum):
+     """Test priority levels."""
+     __test__ = False
+@@ -35,6 +40,11 @@ class TestPriority(Enum):
+     LOW = 2
+     SKIP = 1
+ 
++
++
++
++
++
+ class TestStatus(Enum):
+     """Test execution status."""
+     __test__ = False
+@@ -44,6 +54,11 @@ class TestStatus(Enum):
+     ERROR = "error"
+     FLAKY = "flaky"
+ 
++
++
++
++
++
+ class CoverageType(Enum):
+     """Types of coverage to track."""
+     LINE = "line"
+@@ -51,6 +66,11 @@ class CoverageType(Enum):
+     FUNCTION = "function"
+     CLASS = "class"
+ 
++
++
++
++
++
+ class BrowserType(Enum):
+     """Browser types for cross-browser testing."""
+     CHROME = "chrome"
+@@ -59,6 +79,11 @@ class BrowserType(Enum):
+     EDGE = "edge"
+     IE = "ie"
+ 
++
++
++
++
++
+ class TestSourceType(Enum):
+     """Types of test result sources for aggregation."""
+     __test__ = False
+@@ -68,6 +93,11 @@ class TestSourceType(Enum):
+     MOCHA = "mocha"
+     JUNIT = "junit"
+ 
++
++
++
++
++
+ class MutationOperator(Enum):
+     """Mutation operators for mutation testing."""
+     ARITHMETIC = "arithmetic"
+@@ -76,8 +106,13 @@ class MutationOperator(Enum):
+     ASSIGNMENT = "assignment"
+     RETURN_VALUE = "return_value"
+ 
++
++
++
++
++
+ class ExecutionMode(Enum):
+     """Test execution replay modes."""
+     STEP_BY_STEP = "step_by_step"
+     FULL_REPLAY = "full_replay"
+-    BREAKPOINT = "breakpoint"
+\ No newline at end of file
++    BREAKPOINT = "breakpoint"

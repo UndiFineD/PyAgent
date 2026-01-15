@@ -1,0 +1,49 @@
+diff --git a/src/logic/agents/intelligence/CsvAgent.py b/src/logic/agents/intelligence/CsvAgent.py
+index 1b977a8..ba4ae3c 100644
+--- a/src/logic/agents/intelligence/CsvAgent.py
++++ b/src/logic/agents/intelligence/CsvAgent.py
+@@ -27,9 +27,19 @@ from src.core.base.utilities import create_main_function
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class CsvAgent(BaseAgent):
+     """Agent for CSV data cleaning, analysis, and transformation."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self._system_prompt = (
+@@ -37,11 +47,21 @@ class CsvAgent(BaseAgent):
+             "Focus on tabular data integrity, cleaning, and transformation. "
+             "Identify missing values, deal with encoding issues, and suggest "
+             "optimal structures for data interoperability (e.g., preparing for SQL import)."
++
++
++
++
++
+         )
+ 
+     def _get_default_content(self) -> str:
+         return "header1,header2\nvalue1,value2\n"
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     main = create_main_function(CsvAgent, "CSV Agent", "Path to CSV file (.csv)")
+-    main()
+\ No newline at end of file
++    main()

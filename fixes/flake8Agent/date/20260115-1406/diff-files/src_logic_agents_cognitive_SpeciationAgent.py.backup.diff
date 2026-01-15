@@ -1,0 +1,131 @@
+diff --git a/src/logic/agents/cognitive/SpeciationAgent.py b/src/logic/agents/cognitive/SpeciationAgent.py
+index 7283e1e..d996c27 100644
+--- a/src/logic/agents/cognitive/SpeciationAgent.py
++++ b/src/logic/agents/cognitive/SpeciationAgent.py
+@@ -21,17 +21,22 @@
+ from __future__ import annotations
+ import logging
+ import os
+-from typing import Dict, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ from pathlib import Path
+ 
++
++
++
++
++
+ class SpeciationAgent(BaseAgent):
+     """
+     Agent responsible for 'speciation' - creating specialized derivatives of existing agents.
+     It analyzes task success and generates new agent classes with optimized system prompts.
+     """
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self._system_prompt = (
+@@ -47,7 +52,7 @@ class SpeciationAgent(BaseAgent):
+         e.g., 'CoderAgent' -> 'ReactSpecialistAgent'
+         """
+         logging.info(f"SpeciationAgent: Evolving specialization for {base_agent_name} in {niche_domain}")
+-        
++
+         new_agent_name = f"{niche_domain.replace(' ', '')}{base_agent_name}"
+         output_path = Path("src/logic/agents/specialized") / f"{new_agent_name}.py"
+         output_path.parent.mkdir(parents=True, exist_ok=True)
+@@ -60,16 +65,39 @@ class SpeciationAgent(BaseAgent):
+             "Use absolute imports: 'from src.core.base.BaseAgent import BaseAgent'.\n"
+             "Return ONLY the Python code."
+         )
+-        
++
+         specialized_code = self.think(prompt)
+-        
+-        # Save to file
+-        with open(output_path, 'w', encoding='utf-8') as f:
+-            f.write(specialized_code)
+-            
++
++        # Phase 21 Fix: Ensure we don't write the prompt itself to the file if think() just returns input
++        if not specialized_code or specialized_code.strip() == prompt.strip():
++            logging.warning("SpeciationAgent: LLM returned no distinct code or returned prompt. Using skeleton.")
++            specialized_code = f"""
++from src.core.base.BaseAgent import BaseAgent
++class {new_agent_name}(BaseAgent):
++    \"\"\"Specialized agent evolved by SpeciationAgent.\"\"\"
++    def __init__(self, workspace_path: str) -> None:
++        super().__init__(workspace_path)
++        self._system_prompt = \"Specialized logic for {niche_domain}\"
++"""
++
++        # Save to file atomically
++        temp_path = output_path.with_suffix(".tmp")
++        try:
++            with open(temp_path, 'w', encoding='utf-8') as f:
++                f.write(specialized_code)
++            temp_path.replace(output_path)
++        except Exception as e:
++            if temp_path.exists():
++                try:
++                    temp_path.unlink()
++                except Exception:
++                    pass
++            logging.error(f"SpeciationAgent: Failed to save agent code atomically: {e}")
++            raise
++
+         # Generate Unit Test for the new agent
+         self._generate_test_for_agent(new_agent_name, output_path)
+-            
++
+         return f"Successfully speciated {new_agent_name} at {output_path} with generated unit tests."
+ 
+     @as_tool
+@@ -81,10 +109,10 @@ class SpeciationAgent(BaseAgent):
+         # In a real scenario, we'd load both classes and compare _system_prompts.
+         # For simulation, we use a placeholder similarity check.
+         similarity = 0.85 if "Coder" in agent_a_name and "Coder" in agent_b_name else 0.3
+-        
++
+         stagnated = similarity > 0.8
+         recommendation = "Divergence required" if stagnated else "Healthy niche separation"
+-        
++
+         return {
+             "similarity": similarity,
+             "stagnated": stagnated,
+@@ -107,7 +135,7 @@ class SpeciationAgent(BaseAgent):
+         test_dir = Path("tests/specialists")
+         test_dir.mkdir(parents=True, exist_ok=True)
+         test_path = test_dir / f"test_{agent_name.lower()}_UNIT.py"
+-        
++
+         # Determine relative import path
+         rel_import = str(agent_path.with_suffix("")).replace(os.path.sep, ".").replace("/", ".")
+         if rel_import.startswith("src."):
+@@ -119,13 +147,14 @@ class SpeciationAgent(BaseAgent):
+ import unittest
+ import os
+ from {rel_import} import {agent_name}
++from src.core.base.version import VERSION
+ __version__ = VERSION
+ 
+ class Test{agent_name}(unittest.TestCase):
+-    def setUp(self):
++    def setUp(self) -> None:
+         self.agent = {agent_name}("dummy_path.py")
+ 
+-    def test_initialization(self):
++    def test_initialization(self) -> None:
+         self.assertIsNotNone(self.agent)
+         self.assertIn("{agent_name}", self.agent.__class__.__name__)
+ 
+@@ -134,4 +163,4 @@ if __name__ == "__main__":
+ """
+         with open(test_path, 'w', encoding='utf-8') as f:
+             f.write(test_code.strip())
+-        logging.info(f"SpeciationAgent: Generated unit test for {agent_name} at {test_path}")
+\ No newline at end of file
++        logging.info(f"SpeciationAgent: Generated unit test for {agent_name} at {test_path}")

@@ -1,0 +1,42 @@
+diff --git a/src/logic/agents/intelligence/FinancialAgent.py b/src/logic/agents/intelligence/FinancialAgent.py
+index 1399a48..6dbe895 100644
+--- a/src/logic/agents/intelligence/FinancialAgent.py
++++ b/src/logic/agents/intelligence/FinancialAgent.py
+@@ -22,16 +22,21 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import create_main_function, as_tool
+ import logging
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class FinancialAgent(BaseAgent):
+     """Agent for autonomous financial research and analysis (Dexter Pattern)."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self.research_plan: list[dict[str, Any]] = []
+@@ -71,6 +76,11 @@ class FinancialAgent(BaseAgent):
+     def _get_default_content(self) -> str:
+         return "# Financial Analysis Report\n\n## Overview\nPending autonomous research...\n"
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     main = create_main_function(FinancialAgent, "Financial Agent", "File containing financial data or topic")
+-    main()
+\ No newline at end of file
++    main()

@@ -1,0 +1,106 @@
+diff --git a/src/observability/reports/utils.py b/src/observability/reports/utils.py
+index b50e8c6..fe8790b 100644
+--- a/src/observability/reports/utils.py
++++ b/src/observability/reports/utils.py
+@@ -23,7 +23,6 @@ from src.core.base.version import VERSION
+ import ast
+ import re
+ from pathlib import Path
+-from typing import List, Optional
+ 
+ __version__ = VERSION
+ 
+@@ -32,14 +31,29 @@ __version__ = VERSION
+ AGENT_DIR = Path(__file__).resolve().parent.parent.parent
+ REPO_ROOT = AGENT_DIR.parent
+ 
++
++
++
++
++
+ def _read_text(path: Path) -> str:
+     """Read text file with UTF-8 and replacement errors."""
+     return path.read_text(encoding="utf-8", errors="replace")
+ 
++
++
++
++
++
+ def _is_pytest_test_file(path: Path) -> bool:
+     """Check if file is a pytest test file."""
+     return path.name.startswith("test_") and path.name.endswith(".py")
+ 
++
++
++
++
++
+ def _looks_like_pytest_import_problem(path: Path) -> str | None:
+     """Check if filename has characters that cause pytest import issues."""
+     name = path.name
+@@ -52,6 +66,11 @@ def _looks_like_pytest_import_problem(path: Path) -> str | None:
+         )
+     return None
+ 
++
++
++
++
++
+ def _find_imports(tree: ast.AST) -> list[str]:
+     """Find all top-level imports in an AST."""
+     imports: list[str] = []
+@@ -71,10 +90,20 @@ def _find_imports(tree: ast.AST) -> list[str]:
+             out.append(item)
+     return out
+ 
++
++
++
++
++
+ def _detect_argparse(source: str) -> bool:
+     """Check if source uses argparse."""
+     return "argparse" in source
+ 
++
++
++
++
++
+ def _placeholder_test_note(path: Path, source: str) -> str | None:
+     """Check if it's a placeholder test file."""
+     if not _is_pytest_test_file(path):
+@@ -83,6 +112,11 @@ def _placeholder_test_note(path: Path, source: str) -> str | None:
+         return "Test file only contains a placeholder test (no real assertions / coverage)."
+     return None
+ 
++
++
++
++
++
+ def _rel(path: Path) -> str:
+     """Get relative path string for display."""
+     try:
+@@ -90,6 +124,11 @@ def _rel(path: Path) -> str:
+     except ValueError:
+         return str(path).replace("\\", "/")
+ 
++
++
++
++
++
+ def _find_issues(tree: ast.AST, source: str) -> list[str]:
+     """Find potential issues via lightweight static analysis."""
+     issues: list[str] = []
+@@ -123,4 +162,4 @@ def _find_issues(tree: ast.AST, source: str) -> list[str]:
+     # 4. TODOs
+     if "TODO" in source or "FIXME" in source:
+         issues.append("Contains TODO or FIXME comments.")
+-    return issues
+\ No newline at end of file
++    return issues

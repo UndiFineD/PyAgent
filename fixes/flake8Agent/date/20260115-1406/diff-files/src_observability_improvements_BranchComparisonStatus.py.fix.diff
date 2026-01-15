@@ -1,0 +1,26 @@
+diff --git a/src/observability/improvements/BranchComparisonStatus.py b/src/observability/improvements/BranchComparisonStatus.py
+index eaa49a2..ffb87cc 100644
+--- a/src/observability/improvements/BranchComparisonStatus.py
++++ b/src/observability/improvements/BranchComparisonStatus.py
+@@ -26,9 +26,19 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class BranchComparisonStatus(Enum):
+     """Status of branch comparison."""
+     PENDING = "pending"
+     IN_PROGRESS = "in_progress"
+     COMPLETED = "completed"
+-    FAILED = "failed"
+\ No newline at end of file
++    FAILED = "failed"

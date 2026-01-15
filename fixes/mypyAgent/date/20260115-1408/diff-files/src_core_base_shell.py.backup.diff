@@ -1,0 +1,40 @@
+diff --git a/src/core/base/shell.py b/src/core/base/shell.py
+index e8d4c85..2ab4f12 100644
+--- a/src/core/base/shell.py
++++ b/src/core/base/shell.py
+@@ -28,7 +28,7 @@ import os
+ import subprocess
+ import logging
+ import asyncio
+-from typing import List, Any, Optional, Dict
++from typing import Any
+ 
+ __version__ = VERSION
+ 
+@@ -83,8 +83,8 @@ class ShellExecutor:
+                 creationflags=creationflags
+             )
+ 
+-            stdout_data = []
+-            stderr_data = []
++            stdout_data: list[Any] = []
++            stderr_data: list[Any] = []
+ 
+             async def stream_reader(pipe: asyncio.StreamReader, container: list[str], label: str) -> None:
+                 while True:
+@@ -105,7 +105,7 @@ class ShellExecutor:
+                     ),
+                     timeout=timeout
+                 )
+-            except asyncio.TimeoutExpired:
++            except asyncio.TimeoutExpired:  # type: ignore[attr-defined]
+                 process.kill()
+                 logging.error(f"Async shell command TIMEOUT after {timeout}s: {' '.join(cmd)}")
+                 raise
+@@ -177,4 +177,4 @@ class ShellExecutor:
+                 
+         if isinstance(last_error, subprocess.TimeoutExpired):
+              raise last_error
+-        return subprocess.CompletedProcess(" ".join(cmd), 1, stdout="", stderr=str(last_error))
+\ No newline at end of file
++        return subprocess.CompletedProcess(" ".join(cmd), 1, stdout="", stderr=str(last_error))

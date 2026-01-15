@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/development/ArchCore.py b/src/logic/agents/development/ArchCore.py
+index 9146762..467ce4e 100644
+--- a/src/logic/agents/development/ArchCore.py
++++ b/src/logic/agents/development/ArchCore.py
+@@ -26,7 +26,7 @@ No I/O or side effects.
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, List, Any, Tuple
++from typing import Any
+ 
+ __version__ = VERSION
+ 

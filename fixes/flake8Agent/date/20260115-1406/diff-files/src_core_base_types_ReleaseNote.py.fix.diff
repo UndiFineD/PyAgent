@@ -1,0 +1,32 @@
+diff --git a/src/core/base/types/ReleaseNote.py b/src/core/base/types/ReleaseNote.py
+index 19058f6..11be629 100644
+--- a/src/core/base/types/ReleaseNote.py
++++ b/src/core/base/types/ReleaseNote.py
+@@ -23,10 +23,19 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class ReleaseNote:
+     """Generated release notes.
+@@ -44,4 +53,4 @@ class ReleaseNote:
+     summary: str
+     highlights: list[str] = field(default_factory=lambda: [])
+     breaking_changes: list[str] = field(default_factory=lambda: [])
+-    full_changelog: str = ""
+\ No newline at end of file
++    full_changelog: str = ""

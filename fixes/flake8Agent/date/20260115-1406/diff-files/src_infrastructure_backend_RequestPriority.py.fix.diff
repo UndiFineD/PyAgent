@@ -1,0 +1,27 @@
+diff --git a/src/infrastructure/backend/RequestPriority.py b/src/infrastructure/backend/RequestPriority.py
+index 45f46bc..d772966 100644
+--- a/src/infrastructure/backend/RequestPriority.py
++++ b/src/infrastructure/backend/RequestPriority.py
+@@ -26,10 +26,20 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class RequestPriority(Enum):
+     """Priority levels for request queuing."""
+ 
+     LOW = 0
+     NORMAL = 1
+     HIGH = 2
+-    CRITICAL = 3
+\ No newline at end of file
++    CRITICAL = 3

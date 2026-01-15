@@ -1,0 +1,19 @@
+diff --git a/tests/community/test_resilience_community.py b/tests/community/test_resilience_community.py
+index 1f247be..9ba08aa 100644
+--- a/tests/community/test_resilience_community.py
++++ b/tests/community/test_resilience_community.py
+@@ -1,5 +1,4 @@
+ #!/usr/bin/env python3
+-import sys
+ import logging
+ from pathlib import Path
+ 
+@@ -8,7 +7,7 @@ from pathlib import Path
+ from src.infrastructure.fleet.AgentRegistry import AgentRegistry
+ 
+ def test_broken_community_plugin() -> None:
+-    print(f"--- Running Broken Plugin Resilience Test ---")
++    print("--- Running Broken Plugin Resilience Test ---")
+     workspace = Path('.').resolve()
+     agents = AgentRegistry.get_agent_map(workspace)
+     

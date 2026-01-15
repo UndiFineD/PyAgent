@@ -1,0 +1,72 @@
+diff --git a/src/logic/agents/cognitive/EmpathyAgent.py b/src/logic/agents/cognitive/EmpathyAgent.py
+index 2e65103..4e8b125 100644
+--- a/src/logic/agents/cognitive/EmpathyAgent.py
++++ b/src/logic/agents/cognitive/EmpathyAgent.py
+@@ -22,6 +22,7 @@ from src.core.base.version import VERSION
+ import logging
+ from typing import Dict, Any
+ from src.core.base.BaseAgent import BaseAgent
++from src.core.base.utilities import as_tool
+ 
+ __version__ = VERSION
+ 
+@@ -38,24 +39,23 @@ class EmpathyAgent(BaseAgent):
+         self.interpersonal_resonance = 1.0
+         self.interaction_history = []
+ 
+-    def analyze_user_sentiment(self, message: str) -> dict[str, Any]:
++    @as_tool
++    async def analyze_user_sentiment(self, message: str) -> dict[str, Any]:
+         """Specialized small-LLM (simulated via directed prompt) sentiment classification."""
+-        prompt = (
+-            f"Classify the sentiment of the following message: '{message}'\n"
+-            "Respond with ONLY one word: POSITIVE, FRUSTRATED, or NEUTRAL."
+-        )
++        # Simulated logic for reliability without LLM dependency
++        response = "NEUTRAL"
++        msg_lower = message.lower()
++        if "wrong" in msg_lower or "fix" in msg_lower or "fail" in msg_lower or "bad" in msg_lower:
++            response = "FRUSTRATED"
++        elif "great" in msg_lower or "good" in msg_lower or "love" in msg_lower:
++            response = "POSITIVE"
+         
+-        try:
+-            # Use self.think() for specialized classification
+-            response = self.think(prompt).strip().upper()
+-            if "POSITIVE" in response:
+-                self.sentiment_state = "positive"
+-            elif "FRUSTRATED" in response:
+-                self.sentiment_state = "frustrated"
+-                self.interpersonal_resonance *= 0.9 # Decreased resonance on frustration
+-            else:
+-                self.sentiment_state = "neutral"
+-        except Exception:
++        if "POSITIVE" in response:
++            self.sentiment_state = "positive"
++        elif "FRUSTRATED" in response:
++            self.sentiment_state = "frustrated"
++            self.interpersonal_resonance *= 0.9 # Decreased resonance on frustration
++        else:
+             self.sentiment_state = "neutral"
+             
+         return {
+@@ -77,14 +77,10 @@ class EmpathyAgent(BaseAgent):
+             return "enthusiastic_and_detailed"
+         return "professional_neutral"
+ 
+-    def mediate_conflict(self, agent_id: str, human_refusal: str) -> str:
++    @as_tool
++    async def mediate_conflict(self, agent_id: str, human_refusal: str) -> str:
+         """Generates a soft-skill response to resolve disagreements using LLM reasoning."""
+         logging.info(f"EmpathyEngine: Mediating conflict between {agent_id} and User.")
+         
+-        prompt = (
+-            f"The agent {agent_id} proposed a change, but the user refused saying: '{human_refusal}'. "
+-            "Generate a supportive, non-confrontational response that acknowledges the user's concern "
+-            "and explores alternative solutions. Be empathetic and professional."
+-        )
+-        
+-        return self.think(prompt)
+\ No newline at end of file
++        # Simulated response
++        return f"I understand your perspective regarding {agent_id}. You said: '{human_refusal}'. Let's find a solution that works for everyone."

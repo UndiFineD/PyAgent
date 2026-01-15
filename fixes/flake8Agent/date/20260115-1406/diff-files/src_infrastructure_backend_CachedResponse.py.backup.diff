@@ -1,0 +1,23 @@
+diff --git a/src/infrastructure/backend/CachedResponse.py b/src/infrastructure/backend/CachedResponse.py
+index 7e4682c..50681d9 100644
+--- a/src/infrastructure/backend/CachedResponse.py
++++ b/src/infrastructure/backend/CachedResponse.py
+@@ -26,6 +26,11 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class CachedResponse:
+     """A cached response with expiration."""
+@@ -33,4 +38,4 @@ class CachedResponse:
+     content: str
+     created_at: float
+     expires_at: float
+-    hit_count: int = 0
+\ No newline at end of file
++    hit_count: int = 0
