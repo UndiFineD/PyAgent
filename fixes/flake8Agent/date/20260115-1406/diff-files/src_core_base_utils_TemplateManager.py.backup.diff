@@ -1,0 +1,27 @@
+diff --git a/src/core/base/utils/TemplateManager.py b/src/core/base/utils/TemplateManager.py
+index 4dce112..624e3ce 100644
+--- a/src/core/base/utils/TemplateManager.py
++++ b/src/core/base/utils/TemplateManager.py
+@@ -23,10 +23,14 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.core.base.utils.AgentTemplate import AgentTemplate
+-from typing import List, Optional, Dict
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class TemplateManager:
+     """Manage agent templates for common use cases.
+ 
+@@ -92,4 +96,4 @@ class TemplateManager:
+ 
+     def list_templates(self) -> list[str]:
+         """List available template names."""
+-        return list(self._templates.keys())
+\ No newline at end of file
++        return list(self._templates.keys())

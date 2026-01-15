@@ -1,0 +1,11 @@
+diff --git a/src/core/knowledge/__init__.py b/src/core/knowledge/__init__.py
+index ba4249b..5ed6bde 100644
+--- a/src/core/knowledge/__init__.py
++++ b/src/core/knowledge/__init__.py
+@@ -36,4 +36,4 @@ __all__ = [
+     "VectorKnowledgeStore",
+     "GraphKnowledgeStore",
+     "BTreeKnowledgeStore",
+-]
+\ No newline at end of file
++]

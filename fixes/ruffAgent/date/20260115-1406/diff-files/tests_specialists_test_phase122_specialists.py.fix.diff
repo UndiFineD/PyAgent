@@ -1,0 +1,20 @@
+diff --git a/tests/specialists/test_phase122_specialists.py b/tests/specialists/test_phase122_specialists.py
+index 1b43787..88911e9 100644
+--- a/tests/specialists/test_phase122_specialists.py
++++ b/tests/specialists/test_phase122_specialists.py
+@@ -1,13 +1,13 @@
+ import sys
+ import os
+-import json
+ import unittest
+-from unittest.mock import MagicMock, patch
++from unittest.mock import patch
+ from pathlib import Path
+ 
+ # Add project root to sys.path
+ root = Path(__file__).resolve().parent.parent
+ if str(root) not in sys.path:
++    sys.path.append(str(root))
+ 
+ from src.infrastructure.fleet.SecretManager import SecretManager
+ from src.logic.agents.security.ImmuneSystemAgent import ImmuneSystemAgent

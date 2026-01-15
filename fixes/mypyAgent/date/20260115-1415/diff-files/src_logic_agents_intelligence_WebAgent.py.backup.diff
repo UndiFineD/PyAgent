@@ -1,0 +1,19 @@
+diff --git a/src/logic/agents/intelligence/WebAgent.py b/src/logic/agents/intelligence/WebAgent.py
+index 50bdde2..f570d19 100644
+--- a/src/logic/agents/intelligence/WebAgent.py
++++ b/src/logic/agents/intelligence/WebAgent.py
+@@ -26,7 +26,6 @@ import logging
+ import requests
+ import time
+ from pathlib import Path
+-from typing import List
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ from src.logic.agents.development.SecurityGuardAgent import SecurityGuardAgent
+@@ -124,4 +123,4 @@ class WebAgent(BaseAgent):
+             urls = re.findall(r'https?://[^\s<>"]+|www\.[^\s<>"]+', prompt)
+             if urls:
+                 return self.fetch_page_content(urls[0])
+-        return f"WebAgent processed: {prompt}"
+\ No newline at end of file
++        return f"WebAgent processed: {prompt}"

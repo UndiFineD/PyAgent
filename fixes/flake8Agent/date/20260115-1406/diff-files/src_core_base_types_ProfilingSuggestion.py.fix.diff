@@ -1,0 +1,28 @@
+diff --git a/src/core/base/types/ProfilingSuggestion.py b/src/core/base/types/ProfilingSuggestion.py
+index bfe4a64..1080f0c 100644
+--- a/src/core/base/types/ProfilingSuggestion.py
++++ b/src/core/base/types/ProfilingSuggestion.py
+@@ -27,6 +27,16 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class ProfilingSuggestion:
+     """A code profiling suggestion.
+@@ -42,4 +52,4 @@ class ProfilingSuggestion:
+     function_name: str
+     reason: str
+     estimated_impact: str
+-    profiling_approach: str
+\ No newline at end of file
++    profiling_approach: str

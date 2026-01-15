@@ -1,0 +1,53 @@
+diff --git a/src/infrastructure/orchestration/WeightOrchestrator.py b/src/infrastructure/orchestration/WeightOrchestrator.py
+index 210d362..254a7cc 100644
+--- a/src/infrastructure/orchestration/WeightOrchestrator.py
++++ b/src/infrastructure/orchestration/WeightOrchestrator.py
+@@ -28,12 +28,21 @@ from src.core.base.version import VERSION
+ import logging
+ import json
+ from pathlib import Path
+-from typing import Dict, Optional
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class WeightOrchestrator(BaseAgent):
+     """Orchestrates the distribution and activation of model weights across the fleet."""
+ 
+@@ -88,13 +97,23 @@ class WeightOrchestrator(BaseAgent):
+     @as_tool
+     def list_registrations(self) -> dict[str, str]:
+         """Returns all current agent-to-adapter mappings."""
++
++
++
++
++
+         return self.active_adapters
+ 
+     def improve_content(self, input_text: str) -> str:
+         return f"Current fleet weight distribution: {len(self.active_adapters)} active adapters."
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     # Internal test
+     orchestrator = WeightOrchestrator(".")
+     orchestrator.activate_adapter("LinguisticAgent", "poetry_v1")
+-    print(f"Active adapters: {orchestrator.list_registrations()}")
+\ No newline at end of file
++    print(f"Active adapters: {orchestrator.list_registrations()}")

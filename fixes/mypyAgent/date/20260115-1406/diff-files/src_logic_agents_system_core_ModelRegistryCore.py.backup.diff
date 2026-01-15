@@ -1,0 +1,24 @@
+diff --git a/src/logic/agents/system/core/ModelRegistryCore.py b/src/logic/agents/system/core/ModelRegistryCore.py
+index 27b635c..71eea42 100644
+--- a/src/logic/agents/system/core/ModelRegistryCore.py
++++ b/src/logic/agents/system/core/ModelRegistryCore.py
+@@ -1,6 +1,5 @@
+ 
+ from __future__ import annotations
+-from typing import Dict, List, Optional
+ from pathlib import Path
+ import logging
+ 
+@@ -53,6 +52,12 @@ class ModelRegistryCore:
+         """
+         Determines if fine-tuning is needed (e.g., last 5 scores below threshold).
+         """
++        try:
++            import rust_core
++            return rust_core.check_finetuning_trigger(quality_history, threshold, 5)
++        except (ImportError, AttributeError):
++            pass
++
+         if len(quality_history) < 5:
+             return False
+         

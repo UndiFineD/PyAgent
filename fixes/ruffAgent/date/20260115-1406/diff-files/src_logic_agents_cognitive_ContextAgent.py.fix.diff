@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/cognitive/ContextAgent.py b/src/logic/agents/cognitive/ContextAgent.py
+index af2944d..3e38b8c 100644
+--- a/src/logic/agents/cognitive/ContextAgent.py
++++ b/src/logic/agents/cognitive/ContextAgent.py
+@@ -33,7 +33,7 @@ from src.core.base.BaseAgent import BaseAgent
+ from src.logic.agents.cognitive.core.LocalRAGCore import LocalRAGCore, RAGShard
+ from datetime import datetime
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ import hashlib
+ import json
+ import logging

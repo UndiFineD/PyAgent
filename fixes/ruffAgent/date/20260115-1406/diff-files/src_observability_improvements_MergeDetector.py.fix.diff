@@ -1,0 +1,12 @@
+diff --git a/src/observability/improvements/MergeDetector.py b/src/observability/improvements/MergeDetector.py
+index 4226527..97aaf35 100644
+--- a/src/observability/improvements/MergeDetector.py
++++ b/src/observability/improvements/MergeDetector.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .Improvement import Improvement
+ from .MergeCandidate import MergeCandidate
+-from typing import List
+ 
+ __version__ = VERSION
+ 

@@ -1,0 +1,68 @@
+diff --git a/src/core/modules/ConsensusModule.py b/src/core/modules/ConsensusModule.py
+index dfb706b..8f352dd 100644
+--- a/src/core/modules/ConsensusModule.py
++++ b/src/core/modules/ConsensusModule.py
+@@ -12,9 +12,19 @@
+ # limitations under the License.
+ 
+ from __future__ import annotations
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from src.core.base.modules import BaseModule
+ 
++
++
++
++
++
++
++
++
++
++
+ class ConsensusModule(BaseModule):
+     """
+     Consolidated core module for consensus protocols.
+@@ -36,7 +46,7 @@ class ConsensusModule(BaseModule):
+ 
+         winner = self.calculate_winner(proposals, weights)
+         score = self.get_agreement_score(proposals, winner)
+-        
++
+         return {
+             "winner": winner,
+             "agreement_score": score,
+@@ -48,7 +58,7 @@ class ConsensusModule(BaseModule):
+         """Determines the winning proposal based on voting rules."""
+         if not proposals:
+             return ""
+-            
++
+         if weights and len(weights) != len(proposals):
+             weights = None
+ 
+@@ -56,13 +66,13 @@ class ConsensusModule(BaseModule):
+         for idx, p in enumerate(proposals):
+             weight = weights[idx] if weights else 1.0
+             counts[p] = counts.get(p, 0) + weight
+-            
++
+         winner = sorted(
+-            counts.keys(), 
+-            key=lambda x: (counts[x], len(x)), 
++            counts.keys(),
++            key=lambda x: (counts[x], len(x)),
+             reverse=True
+         )[0]
+-        
++
+         return winner
+ 
+     def get_agreement_score(self, proposals:
+@@ -75,4 +85,4 @@ class ConsensusModule(BaseModule):
+ 
+     def shutdown(self) -> bool:
+         """Cleanup consensus resources."""
+-        return super().shutdown()
+\ No newline at end of file
++        return super().shutdown()

@@ -1,0 +1,12 @@
+diff --git a/src/logic/agents/swarm/PatternOrchestrator.py b/src/logic/agents/swarm/PatternOrchestrator.py
+index 8fc270f..cce4600 100644
+--- a/src/logic/agents/swarm/PatternOrchestrator.py
++++ b/src/logic/agents/swarm/PatternOrchestrator.py
+@@ -26,7 +26,6 @@ Inspired by multi-agent-generator and LangGraph.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import List
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ from src.core.base.version import EVOLUTION_PHASE

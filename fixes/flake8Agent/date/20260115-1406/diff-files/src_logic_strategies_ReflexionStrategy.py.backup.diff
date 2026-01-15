@@ -1,0 +1,16 @@
+diff --git a/src/logic/strategies/ReflexionStrategy.py b/src/logic/strategies/ReflexionStrategy.py
+index 8634fee..649333c 100644
+--- a/src/logic/strategies/ReflexionStrategy.py
++++ b/src/logic/strategies/ReflexionStrategy.py
+@@ -14,6 +14,11 @@ if TYPE_CHECKING:
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ReflexionStrategy(AgentStrategy):
+     """Reflexion strategy: Draft -> Critique -> Revise."""
+ 

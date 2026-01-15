@@ -1,0 +1,20 @@
+diff --git a/src/logic/agents/cognitive/context/models/InheritanceMode.py b/src/logic/agents/cognitive/context/models/InheritanceMode.py
+index fa988ba..e9104f9 100644
+--- a/src/logic/agents/cognitive/context/models/InheritanceMode.py
++++ b/src/logic/agents/cognitive/context/models/InheritanceMode.py
+@@ -26,8 +26,13 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class InheritanceMode(Enum):
+     """Modes for context inheritance."""
+     OVERRIDE = "override"
+     MERGE = "merge"
+-    APPEND = "append"
+\ No newline at end of file
++    APPEND = "append"

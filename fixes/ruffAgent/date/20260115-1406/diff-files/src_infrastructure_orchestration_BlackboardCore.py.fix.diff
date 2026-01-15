@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/orchestration/BlackboardCore.py b/src/infrastructure/orchestration/BlackboardCore.py
+index ea1a27f..c7aa244 100644
+--- a/src/infrastructure/orchestration/BlackboardCore.py
++++ b/src/infrastructure/orchestration/BlackboardCore.py
+@@ -19,7 +19,7 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, Any, List
++from typing import Any
+ 
+ __version__ = VERSION
+ 

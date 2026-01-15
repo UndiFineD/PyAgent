@@ -1,0 +1,23 @@
+diff --git a/src/observability/errors/ErrorBudget.py b/src/observability/errors/ErrorBudget.py
+index 4994229..cbb7847 100644
+--- a/src/observability/errors/ErrorBudget.py
++++ b/src/observability/errors/ErrorBudget.py
+@@ -26,6 +26,11 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ErrorBudget:
+     """Error budget tracking for SLO management.
+@@ -41,4 +46,4 @@ class ErrorBudget:
+     total_budget: float
+     consumed: float = 0.0
+     period_start: str = ""
+-    period_end: str = ""
+\ No newline at end of file
++    period_end: str = ""

@@ -1,0 +1,14 @@
+diff --git a/tests/unit/test_utils/test_test_utils_INTEGRATION.py b/tests/unit/test_utils/test_test_utils_INTEGRATION.py
+index b57da95..00b4207 100644
+--- a/tests/unit/test_utils/test_test_utils_INTEGRATION.py
++++ b/tests/unit/test_utils/test_test_utils_INTEGRATION.py
+@@ -131,7 +131,8 @@ class TestIntegration(unittest.TestCase):
+             filename: str = f.name
+ 
+         try:
+-            with open(filename, 'r') as f: str = f.read()
++            with open(filename, 'r') as f:
++                content = f.read()
+ 
+             self.assertEqual(content, "test data")
+         finally:

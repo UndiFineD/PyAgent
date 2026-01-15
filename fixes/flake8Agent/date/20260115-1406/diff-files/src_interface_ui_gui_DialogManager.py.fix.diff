@@ -1,0 +1,128 @@
+diff --git a/src/interface/ui/gui/DialogManager.py b/src/interface/ui/gui/DialogManager.py
+index 9031550..cb230ff 100644
+--- a/src/interface/ui/gui/DialogManager.py
++++ b/src/interface/ui/gui/DialogManager.py
+@@ -28,11 +28,21 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import tkinter as tk
+ from tkinter import ttk, messagebox, filedialog
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from collections.abc import Callable
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class DialogManager:
+     """Handles modal dialogs and interactive prompts."""
+     def __init__(self, root: tk.Tk) -> None:
+@@ -94,7 +104,7 @@ class DialogManager:
+         ttk.Label(token_frame, text="GitHub Token File:").pack(side=tk.LEFT)
+         token_var = tk.StringVar(value=config_manager.get("github_token_file"))
+         ttk.Entry(token_frame, textvariable=token_var).pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
+-        
++
+         def browse_token() -> None:
+             f: str = filedialog.askopenfilename()
+             if f:
+@@ -132,26 +142,26 @@ class DialogManager:
+         wizard.grab_set()
+ 
+         ttk.Label(wizard, text="🚀 Initialize BMAD Methodology", font=("Segoe UI", 12, "bold")).pack(pady=10)
+-        
++
+         info_frame = ttk.Frame(wizard, padding=10)
+         info_frame.pack(fill=tk.BOTH, expand=True)
+-        
++
+         ttk.Label(info_frame, text="Select Track:", font=("Segoe UI", 10, "bold")).pack(anchor=tk.W)
+         track_var = tk.StringVar(value="BMad Method")
+         from .Constants import BMAD_TRACKS
+         track_cb = ttk.Combobox(info_frame, textvariable=track_var, values=list(BMAD_TRACKS.keys()), state="readonly")
+         track_cb.pack(fill=tk.X, pady=5)
+-        
++
+         desc_lbl = ttk.Label(info_frame, text=BMAD_TRACKS["BMad Method"]["desc"], wraplength=450)
+         desc_lbl.pack(fill=tk.X, pady=5)
+-        
++
+         def update_desc(event: Any) -> None:
+             desc_lbl.config(text=BMAD_TRACKS[track_var.get()]["desc"])
+         track_cb.bind("<<ComboboxSelected>>", update_desc)
+ 
+         options_frame: ttk.Labelframe = ttk.LabelFrame(info_frame, text="Inclusions")
+         options_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+-        
++
+         prd_var = tk.BooleanVar(value=True)
+         ttk.Checkbutton(options_frame, text="Create PRD template", variable=prd_var).pack(anchor=tk.W, padx=5)
+         spec_var = tk.BooleanVar(value=True)
+@@ -180,7 +190,7 @@ class DialogManager:
+         dialog.grab_set()
+ 
+         ttk.Label(dialog, text=f"🧠 Context Memory: {agent_name}", font=("Segoe UI", 12, "bold")).pack(pady=10)
+-        
++
+         container = ttk.Frame(dialog, padding=10)
+         container.pack(fill=tk.BOTH, expand=True)
+ 
+@@ -194,7 +204,7 @@ class DialogManager:
+         )
+         canvas.create_window((0, 0), window=scrollable_frame, anchor="nw", width=550)
+         canvas.configure(yscrollcommand=scrollbar.set)
+-        
++
+         canvas.pack(side="left", fill="both", expand=True)
+         scrollbar.pack(side="right", fill="y")
+ 
+@@ -214,22 +224,22 @@ class DialogManager:
+         def redraw() -> None:
+             for widget in scrollable_frame.winfo_children():
+                 widget.destroy()
+-            
++
+             for i, msg in enumerate(temp_history):
+                 role = msg["role"]
+                 f: ttk.Labelframe = ttk.LabelFrame(scrollable_frame, text=role.capitalize())
+                 f.pack(fill=tk.X, pady=5, padx=5)
+-                
++
+                 txt = tk.Text(f, height=3, font=("Consolas", 9), wrap=tk.WORD)
+                 txt.insert("1.0", msg["content"])
+                 txt.pack(fill=tk.X, padx=5, pady=2)
+-                
++
+                 btn_bar = ttk.Frame(f)
+                 btn_bar.pack(fill=tk.X)
+ 
+-                ttk.Button(btn_bar, text="Forget", width=10, 
++                ttk.Button(btn_bar, text="Forget", width=10,
+                            command=lambda idx=i: forget_msg(idx)).pack(side=tk.RIGHT, padx=5)
+-                
++
+                 is_kept = msg.get("metadata", {}).get("keep", False)
+                 keep_text: str = "Retained ✅" if is_kept else "Retain fact"
+                 ttk.Button(btn_bar, text=keep_text, width=12,
+@@ -239,10 +249,10 @@ class DialogManager:
+ 
+         footer = ttk.Frame(dialog, padding=10)
+         footer.pack(fill=tk.X)
+-        
++
+         def on_save() -> None:
+             save_callback(temp_history)
+             dialog.destroy()
+ 
+         ttk.Button(footer, text="SAVE & APPLY", style="Accent.TButton", command=on_save).pack(side=tk.RIGHT, padx=5)
+-        ttk.Button(footer, text="Cancel", command=dialog.destroy).pack(side=tk.RIGHT)
+\ No newline at end of file
++        ttk.Button(footer, text="Cancel", command=dialog.destroy).pack(side=tk.RIGHT)

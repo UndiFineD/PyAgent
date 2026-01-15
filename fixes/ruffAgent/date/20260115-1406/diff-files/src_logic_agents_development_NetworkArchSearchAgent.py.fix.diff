@@ -1,0 +1,20 @@
+diff --git a/src/logic/agents/development/NetworkArchSearchAgent.py b/src/logic/agents/development/NetworkArchSearchAgent.py
+index 48061b9..eb957e3 100644
+--- a/src/logic/agents/development/NetworkArchSearchAgent.py
++++ b/src/logic/agents/development/NetworkArchSearchAgent.py
+@@ -22,13 +22,13 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ import json
+-from typing import Dict, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+ __version__ = VERSION
+ 
+-class NASAgent(BaseAgent):
++class NetworkArchSearchAgent(BaseAgent):
+     """
+     Agent specializing in Neural Architecture Search (NAS).
+     Designs and suggests optimized model topologies (adapters) for specific swarm tasks.

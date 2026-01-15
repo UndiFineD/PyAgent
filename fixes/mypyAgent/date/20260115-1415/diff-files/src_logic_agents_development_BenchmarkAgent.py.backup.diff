@@ -1,0 +1,20 @@
+diff --git a/src/logic/agents/development/BenchmarkAgent.py b/src/logic/agents/development/BenchmarkAgent.py
+index dfc03d5..2518f65 100644
+--- a/src/logic/agents/development/BenchmarkAgent.py
++++ b/src/logic/agents/development/BenchmarkAgent.py
+@@ -26,7 +26,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import time
+ import logging
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ from src.logic.agents.development.core.BenchmarkCore import BenchmarkCore, BenchmarkResult
+@@ -158,4 +158,4 @@ class BenchmarkAgent(BaseAgent):
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(BenchmarkAgent, "Benchmark Agent", "Benchmark history path")
+-    main()
+\ No newline at end of file
++    main()

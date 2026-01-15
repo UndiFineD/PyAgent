@@ -1,0 +1,20 @@
+diff --git a/src/infrastructure/orchestration/FederatedKnowledgeOrchestrator.py b/src/infrastructure/orchestration/FederatedKnowledgeOrchestrator.py
+index aedbbbc..01ca9fd 100644
+--- a/src/infrastructure/orchestration/FederatedKnowledgeOrchestrator.py
++++ b/src/infrastructure/orchestration/FederatedKnowledgeOrchestrator.py
+@@ -26,7 +26,7 @@ Uses InterFleetBridgeOrchestrator to transmit knowledge without raw data leakage
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from src.infrastructure.orchestration.InterFleetBridgeOrchestrator import InterFleetBridgeOrchestrator
+ from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
+ 
+@@ -135,4 +135,4 @@ class FederatedKnowledgeOrchestrator:
+             "status": "success",
+             "fused_insights": count,
+             "peers_polled": len(peer_list)
+-        }
+\ No newline at end of file
++        }

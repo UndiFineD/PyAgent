@@ -1,0 +1,29 @@
+diff --git a/src/logic/agents/development/ToolSynthesisAgent.py b/src/logic/agents/development/ToolSynthesisAgent.py
+index 9c8e986..962a7bc 100644
+--- a/src/logic/agents/development/ToolSynthesisAgent.py
++++ b/src/logic/agents/development/ToolSynthesisAgent.py
+@@ -20,7 +20,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from pathlib import Path
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 
+@@ -33,7 +33,7 @@ class ToolSynthesisAgent:
+         self.workspace_path = Path(workspace_path)
+         self.tool_cache = self.workspace_path / "src/generated"
+         self.tool_cache.mkdir(parents=True, exist_ok=True)
+-        self.synthesis_history = []
++        self.synthesis_history: list[Any] = []
+ 
+     def synthesize_tool(self, task_pattern, requirements) -> dict[str, Any]:
+         """
+@@ -66,4 +66,4 @@ class ToolSynthesisAgent:
+             if tool["name"] == tool_name:
+                 tool["feedback"] = feedback
+                 return {"status": "feedback_logged", "tool": tool_name}
+-        return {"error": "Tool not found"}
+\ No newline at end of file
++        return {"error": "Tool not found"}

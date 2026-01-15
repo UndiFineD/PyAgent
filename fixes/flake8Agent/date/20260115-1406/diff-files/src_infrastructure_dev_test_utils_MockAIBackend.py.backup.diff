@@ -1,0 +1,31 @@
+diff --git a/src/infrastructure/dev/test_utils/MockAIBackend.py b/src/infrastructure/dev/test_utils/MockAIBackend.py
+index d0140ba..f4fb9f5 100644
+--- a/src/infrastructure/dev/test_utils/MockAIBackend.py
++++ b/src/infrastructure/dev/test_utils/MockAIBackend.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .MockResponse import MockResponse
+ from .MockResponseType import MockResponseType
+-from typing import Dict, List, Tuple, Optional
+ import logging
+ import re
+ import time
+@@ -35,6 +34,11 @@ from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+ # Infrastructure
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class MockAIBackend:
+     """Mock AI backend for testing.
+ 
+@@ -153,4 +157,4 @@ class MockAIBackend:
+     def clear(self) -> None:
+         """Clear all mock responses and history."""
+         self._responses.clear()
+-        self._call_history.clear()
+\ No newline at end of file
++        self._call_history.clear()

@@ -1,0 +1,19 @@
+diff --git a/src/observability/improvements/TransitionResult.py b/src/observability/improvements/TransitionResult.py
+index 9f6e3b6..721adc7 100644
+--- a/src/observability/improvements/TransitionResult.py
++++ b/src/observability/improvements/TransitionResult.py
+@@ -26,7 +26,12 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class TransitionResult:
+     success: bool
+-    message: str = ""
+\ No newline at end of file
++    message: str = ""

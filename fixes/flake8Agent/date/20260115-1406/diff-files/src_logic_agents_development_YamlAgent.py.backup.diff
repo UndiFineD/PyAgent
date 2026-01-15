@@ -1,0 +1,34 @@
+diff --git a/src/logic/agents/development/YamlAgent.py b/src/logic/agents/development/YamlAgent.py
+index d1cae70..128b4de 100644
+--- a/src/logic/agents/development/YamlAgent.py
++++ b/src/logic/agents/development/YamlAgent.py
+@@ -27,9 +27,14 @@ from src.core.base.utilities import create_main_function
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class YamlAgent(CoderAgent):
+     """Agent for YAML configuration improvement."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self._language = "yaml"
+@@ -43,6 +48,11 @@ class YamlAgent(CoderAgent):
+     def _get_default_content(self) -> str:
+         return "version: '1.0'\nservices:\n  app:\n    image: baseline\n"
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     main = create_main_function(YamlAgent, "YAML Agent", "Path to YAML file (.yaml, .yml)")
+-    main()
+\ No newline at end of file
++    main()

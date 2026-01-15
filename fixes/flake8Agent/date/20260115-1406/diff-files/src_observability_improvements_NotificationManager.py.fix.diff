@@ -1,0 +1,34 @@
+diff --git a/src/observability/improvements/NotificationManager.py b/src/observability/improvements/NotificationManager.py
+index 38151a9..cd8086d 100644
+--- a/src/observability/improvements/NotificationManager.py
++++ b/src/observability/improvements/NotificationManager.py
+@@ -22,11 +22,21 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Any, Dict, List
++from typing import Any
+ from collections.abc import Callable
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class NotificationManager:
+     """Notifies subscribers about improvement changes."""
+ 
+@@ -52,4 +62,4 @@ class NotificationManager:
+             "new_status": new_status,
+         }
+         for cb in list(self._callbacks):
+-            cb(payload)
+\ No newline at end of file
++            cb(payload)

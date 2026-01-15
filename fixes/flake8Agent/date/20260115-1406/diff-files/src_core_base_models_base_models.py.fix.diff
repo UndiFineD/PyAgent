@@ -1,0 +1,405 @@
+diff --git a/src/core/base/models/base_models.py b/src/core/base/models/base_models.py
+index 27b7d71..52702a9 100644
+--- a/src/core/base/models/base_models.py
++++ b/src/core/base/models/base_models.py
+@@ -15,80 +15,297 @@
+ """Base model classes and utility functions."""
+ 
+ from __future__ import annotations
+-import time
+ from dataclasses import dataclass, field
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from collections.abc import Callable
+-from datetime import datetime
+ from .enums import (
+-    AuthMethod, 
+-    SerializationFormat, 
+-    FilePriority, 
+-    DiffOutputFormat,
++    AuthMethod,
++    SerializationFormat,
++    FilePriority,
+     AgentEvent
+ )
+ 
+ # ========== Utility Functions ==========
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ def _empty_agent_event_handlers() -> dict[AgentEvent, list[Callable[..., None]]]:
++
++
++
++
++
+     return {}
+ 
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ def _empty_list_str() -> list[str]:
+     return []
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ 
+ def _empty_list_int() -> list[int]:
+     return []
+ 
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ def _empty_list_float() -> list[float]:
++
++
++
++
++
+     return []
+ 
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ def _empty_list_dict_str_any() -> list[dict[str, Any]]:
+     return []
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ 
+ def _empty_dict_str_float() -> dict[str, float]:
+     return {}
+ 
++
++
++
++
++
++
++
++
++
++
+ def _empty_dict_str_any() -> dict[str, Any]:
+     return {}
+ 
++
++
++
++
++
++
++
++
++
++
+ def _empty_dict_str_int() -> dict[str, int]:
+     return {}
+ 
++
++
++
++
++
+ def _empty_dict_str_str() -> dict[str, str]:
+     return {}
+ 
++
++
++
++
++
++
++
++
++
++
+ def _empty_dict_str_callable_any_any() -> dict[str, Callable[[Any], Any]]:
+     return {}
+ 
+-def _empty_dict_str_quality_criteria() -> dict[str, tuple[Callable[[str], float], float]]:  
++
++
++
++
++
++
++
++
++
++
++def _empty_dict_str_quality_criteria() -> dict[str, tuple[Callable[[str], float], float]]:
++
++
++
++
++
+     return {}
+ 
++
++
++
++
++
++
++
++
++
++
+ def _empty_dict_str_health_checks() -> dict[str, Callable[[], dict[str, Any]]]:
+     return {}
+ 
++
++
++
++
++
+ def _empty_dict_str_configprofile() -> dict[str, ConfigProfile]:
+     return {}
+ 
+-def _empty_routes_list() -> list[tuple[Callable[[Any], bool], Callable[[Any], Any]]]:       
++
++
++
++
++
++def _empty_routes_list() -> list[tuple[Callable[[Any], bool], Callable[[Any], Any]]]:
++
++
++
++
++
+     return []
+ 
++
++
++
++
++
+ def _empty_dict_str_filepriority() -> dict[str, FilePriority]:
+     return {}
+ 
++
++
++
++
++
++
++
++
++
++
+ def _empty_dict_str_modelconfig() -> dict[str, ModelConfig]:
+     return {}
+ 
+ # ========== Dataclasses ==========
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass(slots=True)
+ class CacheEntry:
+     """Cached response entry."""
+     key: str
+     response: str
+     timestamp: float
++
++
++
++
++
+     hit_count: int = 0
+     quality_score: float = 0.0
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class AuthConfig:
+     """Authentication configuration."""
+@@ -101,6 +318,11 @@ class AuthConfig:
+     oauth_client_secret: str = ""
+     custom_headers: dict[str, str] = field(default_factory=_empty_dict_str_str)
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class SerializationConfig:
+     """Configuration for custom serialization."""
+@@ -109,6 +331,11 @@ class SerializationConfig:
+     compression: bool = False
+     encryption: bool = False
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class FilePriorityConfig:
+     """Configuration for file priority."""
+@@ -116,6 +343,11 @@ class FilePriorityConfig:
+     extension_priorities: dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
+     default_priority: FilePriority = FilePriority.NORMAL
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class ExecutionCondition:
+     """A condition for agent execution."""
+@@ -123,6 +355,11 @@ class ExecutionCondition:
+     check: Callable[[Path, str], bool]
+     description: str = ""
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class ValidationRule:
+     """Consolidated validation rule for Phase 126."""
+@@ -140,6 +377,11 @@ class ValidationRule:
+         if not self.file_pattern and self.pattern:
+             self.file_pattern = self.pattern
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class ModelConfig:
+     """Model configuration."""
+@@ -149,6 +391,11 @@ class ModelConfig:
+     enable_thinking: bool = False
+     max_thinking_tokens: int = 2000
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class ConfigProfile:
+     """Configuration profile."""
+@@ -160,6 +407,11 @@ class ConfigProfile:
+         """Get setting value."""
+         return self.settings.get(key, default)
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class DiffResult:
+     """Result of a diff operation."""
+@@ -171,4 +423,9 @@ class DiffResult:
+     deletions: int = 0
+     changes: int = 0
+ 
++
++
++
++
++
+ EventHook = Callable[[dict[str, Any]], None]

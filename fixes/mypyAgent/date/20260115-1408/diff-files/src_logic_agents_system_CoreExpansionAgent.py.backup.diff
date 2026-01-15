@@ -1,0 +1,28 @@
+diff --git a/src/logic/agents/system/CoreExpansionAgent.py b/src/logic/agents/system/CoreExpansionAgent.py
+index 34826dd..94be23a 100644
+--- a/src/logic/agents/system/CoreExpansionAgent.py
++++ b/src/logic/agents/system/CoreExpansionAgent.py
+@@ -23,7 +23,6 @@ from src.core.base.version import VERSION
+ import logging
+ import subprocess
+ import sys
+-from typing import List
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+@@ -80,6 +79,10 @@ class CoreExpansionAgent(BaseAgent):
+         """
+         Lists currently installed packages in the environment.
+         """
+-        import pkg_resources
+-        installed_packages = [f"{d.project_name}=={d.version}" for d in pkg_resources.working_set]
+-        return installed_packages
+\ No newline at end of file
++        try:
++            from importlib.metadata import distributions
++            return [f"{d.metadata['Name']}=={d.version}" for d in distributions()]
++        except (ImportError, KeyError):
++            import pkg_resources
++            installed_packages = [f"{d.project_name}=={d.version}" for d in pkg_resources.working_set]
++            return installed_packages
+\ No newline at end of file

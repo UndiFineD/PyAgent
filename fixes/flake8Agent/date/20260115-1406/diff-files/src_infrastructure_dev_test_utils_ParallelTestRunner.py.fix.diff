@@ -1,0 +1,35 @@
+diff --git a/src/infrastructure/dev/test_utils/ParallelTestRunner.py b/src/infrastructure/dev/test_utils/ParallelTestRunner.py
+index 4d567e3..6198cc1 100644
+--- a/src/infrastructure/dev/test_utils/ParallelTestRunner.py
++++ b/src/infrastructure/dev/test_utils/ParallelTestRunner.py
+@@ -23,12 +23,22 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ParallelTestResult import ParallelTestResult
+-from typing import Any, Dict, List
++from typing import Any
+ from collections.abc import Callable
+ import time
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class ParallelTestRunner:
+     """Helper for parallel test execution.
+ 
+@@ -148,4 +158,4 @@ class ParallelTestRunner:
+             "passed": passed,
+             "failed": total - passed,
+             "total_duration_ms": sum(r.duration_ms for r in self._results),
+-        }
+\ No newline at end of file
++        }

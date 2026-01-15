@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/development/MigrationManager.py b/src/logic/agents/development/MigrationManager.py
+index 9c47561..fc51f33 100644
+--- a/src/logic/agents/development/MigrationManager.py
++++ b/src/logic/agents/development/MigrationManager.py
+@@ -24,7 +24,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.core.base.types.MigrationRule import MigrationRule
+ from src.core.base.types.MigrationStatus import MigrationStatus
+-from typing import Any, Dict, List, Tuple
++from typing import Any
+ import re
+ 
+ __version__ = VERSION

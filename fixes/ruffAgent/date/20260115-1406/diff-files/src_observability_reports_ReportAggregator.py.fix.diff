@@ -1,0 +1,12 @@
+diff --git a/src/observability/reports/ReportAggregator.py b/src/observability/reports/ReportAggregator.py
+index c7e49c5..8ccb862 100644
+--- a/src/observability/reports/ReportAggregator.py
++++ b/src/observability/reports/ReportAggregator.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .AggregatedReport import AggregatedReport
+ from .CodeIssue import CodeIssue
+-from typing import Dict, List
+ import logging
+ 
+ __version__ = VERSION

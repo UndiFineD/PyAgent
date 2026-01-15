@@ -1,0 +1,12 @@
+diff --git a/src/logic/agents/cognitive/context/utils/CodeGenerator.py b/src/logic/agents/cognitive/context/utils/CodeGenerator.py
+index 51f1815..7c1bbf7 100644
+--- a/src/logic/agents/cognitive/context/utils/CodeGenerator.py
++++ b/src/logic/agents/cognitive/context/utils/CodeGenerator.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.GeneratedCode import GeneratedCode
+-from typing import Dict, List, Optional
+ 
+ __version__ = VERSION
+ 

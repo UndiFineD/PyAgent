@@ -1,0 +1,28 @@
+diff --git a/src/observability/improvements/VotingSystem.py b/src/observability/improvements/VotingSystem.py
+index a5dfe95..b9cc627 100644
+--- a/src/observability/improvements/VotingSystem.py
++++ b/src/observability/improvements/VotingSystem.py
+@@ -22,10 +22,15 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class VotingSystem:
+     """Manages voting on improvements."""
+ 
+@@ -52,4 +57,4 @@ class VotingSystem:
+             list(improvement_ids),
+             key=lambda imp_id: self.get_vote_count(imp_id),
+             reverse=True,
+-        )
+\ No newline at end of file
++        )

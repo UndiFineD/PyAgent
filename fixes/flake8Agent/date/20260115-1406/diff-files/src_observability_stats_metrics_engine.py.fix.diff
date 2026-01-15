@@ -1,0 +1,1200 @@
+diff --git a/src/observability/stats/metrics_engine.py b/src/observability/stats/metrics_engine.py
+index 396a7d7..8533114 100644
+--- a/src/observability/stats/metrics_engine.py
++++ b/src/observability/stats/metrics_engine.py
+@@ -65,9 +65,19 @@ __version__ = VERSION
+ 
+ logger = logging.getLogger(__name__)
+ 
++
++
++
++
++
++
++
++
++
++
+ class ObservabilityEngine:
+     """Provides telemetry and performance tracking for the agent fleet."""
+-    
++
+     def __init__(self, workspace_root: str = None, fleet: Any = None) -> None:
+         if fleet and hasattr(fleet, "workspace_root"):
+             self.workspace_root = Path(fleet.workspace_root)
+@@ -75,7 +85,7 @@ class ObservabilityEngine:
+             self.workspace_root = Path(workspace_root)
+         else:
+             self.workspace_root = Path(".")
+-            
++
+         self.telemetry_file = self.workspace_root / ".agent_telemetry.json"
+         self.core = ObservabilityCore()
+         self.metrics: list[AgentMetric] = []
+@@ -90,7 +100,7 @@ class ObservabilityEngine:
+ 
+     def log_event(self, agent_id: str, event_type: str, data: Any, level: str = "INFO") -> None:
+         """Logs a system event in a structured format for ELK.
+-        
++
+         Args:
+             agent_id: The ID of the agent generating the event.
+             event_type: The category of event (e.g., 'task_complete', 'error').
+@@ -101,7 +111,7 @@ class ObservabilityEngine:
+         # Metrics are still recorded for everything.
+         important_types = ["agent_failure", "security_alert", "workflow_error", "system_crash"]
+         important_levels = ["ERROR", "WARNING", "CRITICAL"]
+-        
++
+         should_log = level in important_levels or event_type in important_types
+ 
+         if should_log:
+@@ -113,7 +123,7 @@ class ObservabilityEngine:
+                 "data": data
+             }
+             self.log_buffer.append(event)
+-            
++
+         # Always record metrics regardless of log storage
+         self.prometheus.record_metric("agent_events_total", 1.0, {"agent": agent_id, "type": event_type})
+         self.metrics_exporter.record_agent_call(agent_id, 0.0, True)
+@@ -123,7 +133,7 @@ class ObservabilityEngine:
+         count = len(self.log_buffer)
+         # In real scenario: push to Elasticsearch/Logstash
+         json.dumps(self.log_buffer)
+-        self.log_buffer = [] 
++        self.log_buffer = []
+         self.metrics_exporter.export_to_grafana()
+         return f"Exported {count} events to ELK/Logstash."
+ 
+@@ -149,24 +159,24 @@ class ObservabilityEngine:
+         span_id = self.otel.start_span(trace_id)
+         self._otel_spans[trace_id] = span_id
+ 
+-    def end_trace(self, trace_id: str, agent_name: str, operation: str, status: str = "success", 
++    def end_trace(self, trace_id: str, agent_name: str, operation: str, status: str = "success",
+                   input_tokens: int = 0, output_tokens: int = 0, model: str = "unknown",
+                   metadata: dict[str, Any] | None = None) -> None:
+         """End timing and record metric with cost estimation."""
+         if trace_id not in self._start_times:
+             logging.warning(f"No start trace found for {trace_id}")
+             return
+-            
++
+         duration = (time.time() - self._start_times.pop(trace_id)) * 1000
+-        
++
+         # End OTel span using the stored span_id
+         otel_span_id = self._otel_spans.pop(trace_id, None)
+         if otel_span_id:
+             self.otel.end_span(otel_span_id, status=status, attributes=metadata)
+-        
++
+         # Calculate cost
+         cost = self.cost_engine.calculate_cost(model, input_tokens, output_tokens)
+-        
++
+         metric = AgentMetric(
+             agent_name=agent_name,
+             operation=operation,
+@@ -179,14 +189,14 @@ class ObservabilityEngine:
+             model=model,
+             metadata=metadata or {}
+         )
+-        
++
+         self.core.process_metric(metric)
+         self.metrics.append(metric) # Redundant but kept for display
+-        
++
+         # External exporters
+         self.prometheus.record_metric("agent_duration_ms", duration, {"agent": agent_name, "op": operation})
+         self.metrics_exporter.record_agent_call(agent_name, duration, status == "success")
+-        
++
+         if len(self.metrics) > 1000:
+             self.save()
+             self.metrics = self.metrics[-500:] # Prune memory
+@@ -208,7 +218,7 @@ class ObservabilityEngine:
+         """Returns a summary of performance and cost metrics."""
+         if not self.metrics:
+             return {"status": "No data"}
+-            
++
+         summary = {
+             "total_calls": len(self.metrics),
+             "avg_latency_ms": round(sum(m.duration_ms for m in self.metrics) / len(self.metrics), 2),
+@@ -217,21 +227,21 @@ class ObservabilityEngine:
+             "total_cost_usd": round(sum(m.estimated_cost for m in self.metrics), 6),
+             "agents": {}
+         }
+-        
++
+         for m in self.metrics:
+             if m.agent_name not in summary["agents"]:
+                 summary["agents"][m.agent_name] = {"calls": 0, "latency": [], "cost": 0.0}
+             summary["agents"][m.agent_name]["calls"] += 1
+             summary["agents"][m.agent_name]["latency"].append(m.duration_ms)
+             summary["agents"][m.agent_name]["cost"] += m.estimated_cost
+-            
++
+         for agent in summary["agents"]:
+             lats = summary["agents"][agent]["latency"]
+             summary["agents"][agent]["avg_latency"] = round(sum(lats) / len(lats), 2)
+             summary["agents"][agent]["total_cost"] = round(summary["agents"][agent]["cost"], 6)
+             del summary["agents"][agent]["latency"]
+             del summary["agents"][agent]["cost"]
+-            
++
+         return summary
+ 
+     def save(self) -> None:
+@@ -247,11 +257,21 @@ class ObservabilityEngine:
+         if self.telemetry_file.exists():
+             try:
+                 data = json.loads(self.telemetry_file.read_text())
++
++
++
++
++
+                 self.metrics = [AgentMetric(**m) for m in data]
+             except Exception as e:
+                 logging.error(f"Failed to load telemetry: {e}")
+                 self.metrics = []
+ 
++
++
++
++
++
+ class DerivedMetricCalculator:
+     """Calculate derived metrics from dependencies using safe AST evaluation."""
+ 
+@@ -364,7 +384,7 @@ class DerivedMetricCalculator:
+             # Safe AST evaluation
+             tree = ast.parse(formula, mode='eval')
+             result = self._eval_node(tree.body)
+-            
++
+             self._cache[name] = result
+             return result
+         except Exception as e:
+@@ -380,6 +400,11 @@ class DerivedMetricCalculator:
+         Args:
+             metric_values: Current values of all metrics.
+ 
++
++
++
++
++
+         Returns:
+             Dictionary of all calculated derived metrics.
+         """
+@@ -390,6 +415,11 @@ class DerivedMetricCalculator:
+                 results[name] = value
+         return results
+ 
++
++
++
++
++
+ class CorrelationAnalyzer:
+     """Analyze correlations between metrics.
+ 
+@@ -483,6 +513,11 @@ class CorrelationAnalyzer:
+ 
+         Returns:
+             Matrix of correlations.
++
++
++
++
++
+         """
+         metrics = list(self._metric_history.keys())
+         matrix: dict[str, dict[str, float]] = {}
+@@ -498,9 +533,14 @@ class CorrelationAnalyzer:
+ 
+         return matrix
+ 
++
++
++
++
++
+ class FormulaEngine:
+     """Processes metric formulas and calculations using safe AST evaluation.
+-    
++
+     Acts as the I/O Shell for FormulaEngineCore.
+     """
+     def __init__(self) -> None:
+@@ -518,10 +558,15 @@ class FormulaEngine:
+     def calculate(self, formula_or_name: str, variables: dict[str, Any] | None = None) -> float:
+         """Calculate formula result via Core."""
+         variables = variables or {}
+-        
++
+         # If formula_or_name is in formulas dict, use stored formula
++
++
++
++
++
+         formula = self.formulas.get(formula_or_name, formula_or_name)
+-            
++
+         try:
+             return self.core.calculate_logic(formula, variables)
+         except Exception as e:
+@@ -532,7 +577,7 @@ class FormulaEngine:
+         """Validate formula syntax via Core."""
+         result = self.core.validate_logic(formula)
+         return FormulaValidation(
+-            is_valid=result["is_valid"], 
++            is_valid=result["is_valid"],
+             error=result["error"]
+         )
+ 
+@@ -540,6 +585,11 @@ class FormulaEngine:
+         """Validate formula syntax (backward compat)."""
+         return self.validate(formula).is_valid
+ 
++
++
++
++
++
+ class FormulaEngineCore:
+     """Pure logic core for formula calculations."""
+ 
+@@ -589,12 +639,22 @@ class FormulaEngineCore:
+             eval_formula = formula
+             for var_name, var_value in variables.items():
+                 eval_formula = eval_formula.replace(f"{{{var_name}}}", str(var_value))
+-            
++
++
++
++
++
++
+             # Use safe AST evaluation
+             tree = ast.parse(eval_formula, mode='eval')
+             return self._eval_node(tree.body)
+         except Exception:
+             # Core returns a default value, Shell handles logging
++
++
++
++
++
+             return 0.0
+ 
+     def validate_logic(self, formula: str) -> dict[str, Any]:
+@@ -607,22 +667,32 @@ class FormulaEngineCore:
+             vars_found: list[str] = re.findall(r'\{(\w+)\}', formula)
+             for var in vars_found:
+                 test_formula = test_formula.replace(f"{{{var}}}", "1")
+-            
++
+             # Final AST parse check
+             ast.parse(test_formula, mode='eval')
+             return {"is_valid": True, "error": None}
+         except Exception as e:
+             return {"is_valid": False, "error": str(e)}
+ 
++
++
++
++
++
+ @dataclass
+ class FormulaValidation:
+     """Result of formula validation."""
+     is_valid: bool = True
+     error: str = ""
+ 
++
++
++
++
++
+ class ResourceMonitor:
+     """Monitors local system load to inform agent execution strategies."""
+-    
++
+     def __init__(self, workspace_root: str) -> None:
+         self.workspace_root = Path(workspace_root)
+         self.stats_file = self.workspace_root / ".system_stats.json"
+@@ -637,21 +707,21 @@ class ResourceMonitor:
+             "status": "UNAVAILABLE",
+             "gpu": {"available": False, "type": "NONE"}
+         }
+-        
++
+         if not HAS_PSUTIL:
+             return stats
+-            
++
+         try:
+             stats["cpu_usage_pct"] = psutil.cpu_percent(interval=None)
+             mem = psutil.virtual_memory()
+             stats["memory_usage_pct"] = mem.percent
+-            
++
+             disk = psutil.disk_usage(str(self.workspace_root))
+             stats["disk_free_gb"] = round(disk.free / (1024**3), 2)
+-            
++
+             # GPU Detection (Hardware-Aware Orchestration - Phase 126)
+             stats["gpu"] = self._detect_gpu()
+-            
++
+             # Simple threshold logic
+             if stats["cpu_usage_pct"] > 90 or stats["memory_usage_pct"] > 90:
+                 stats["status"] = "CRITICAL"
+@@ -659,11 +729,11 @@ class ResourceMonitor:
+                 stats["status"] = "WARNING"
+             else:
+                 stats["status"] = "HEALTHY"
+-                
++
+         except Exception as e:
+             logging.error(f"Failed to gather resource stats: {e}")
+             stats["status"] = "ERROR"
+-            
++
+         return stats
+ 
+     def _detect_gpu(self) -> dict[str, Any]:
+@@ -672,7 +742,7 @@ class ResourceMonitor:
+         import shutil
+         if shutil.which("nvidia-smi"):
+             return {"available": True, "type": "NVIDIA"}
+-        
++
+         # Fallback to checking for torch/tensorflow availability if installed
+         try:
+             import torch
+@@ -680,11 +750,21 @@ class ResourceMonitor:
+                 return {"available": True, "type": "NVIDIA (Torch)"}
+         except ImportError:
+             pass
+-            
++
++
++
++
++
++
+         return {"available": False, "type": "NONE"}
+ 
+     def save_stats(self) -> str:
+         """Saves current stats to disk."""
++
++
++
++
++
+         stats = self.get_current_stats()
+         try:
+             self.stats_file.write_text(json.dumps(stats, indent=2))
+@@ -695,15 +775,15 @@ class ResourceMonitor:
+         """Determines the surcharge multiplier based on load."""
+         stats = self.get_current_stats()
+         multiplier = 1.0
+-        
++
+         if stats["status"] == "CRITICAL":
+             multiplier = 3.0
+         elif stats["status"] == "WARNING":
+             multiplier = 1.5
+-            
++
+         if stats.get("gpu", {}).get("available"):
+             multiplier += 1.0 # Additive premium for GPU availability
+-            
++
+         return multiplier
+ 
+     def get_execution_recommendation(self) -> str:
+@@ -715,11 +795,21 @@ class ResourceMonitor:
+             return "CAUTION: Elevated load. Run tasks sequentially rather than in parallel."
+         return "PROCEED: System resources are sufficient."
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     mon = ResourceMonitor(str(Path(__file__).resolve().parents[3]) + "")
+     print(json.dumps(mon.get_current_stats(), indent=2))
+     print(f"Recommendation: {mon.get_execution_recommendation()}")
+ 
++
++
++
++
++
+ class RetentionEnforcer:
+     """Enforces retention policies on metrics."""
+     def __init__(self) -> None:
+@@ -731,6 +821,11 @@ class RetentionEnforcer:
+         self.policies[metric_pattern] = policy
+ 
+     def add_policy(self, metric: str, max_age_days: int, max_points: int) -> None:
++
++
++
++
++
+         """Add a retention policy (backward compat)."""
+         policy = RetentionPolicy(name=metric, retention_days=max_age_days, max_points=max_points)
+         self.policies[metric] = policy
+@@ -756,6 +851,11 @@ class RetentionEnforcer:
+                     if policy.retention_days > 0:
+                         cutoff_time = now - (policy.retention_days * 86400)  # days to seconds
+                         self.data[metric] = [
++
++
++
++
++
+                             d for d in self.data[metric]
+                             if d["timestamp"] > cutoff_time
+                         ]
+@@ -776,18 +876,28 @@ class RetentionEnforcer:
+                 result[metric] = values
+         return result
+ 
++
++
++
++
++
+ class TokenCostEngine:
+     """
+     Calculates estimated costs for LLM tokens based on model variety.
+     Shell wrapper for TokenCostCore (pure logic).
+     """
+-    
++
+     def __init__(self) -> None:
+         self.core = TokenCostCore()  # Use imported pure logic core
+ 
++
++
++
++
++
+     def calculate_cost(self, model: str, input_tokens: int = 0, output_tokens: int = 0) -> float:
+         """Returns the estimated cost in USD for the given token counts.
+-        
++
+         Delegates to pure calculation core.
+         """
+         result = self.core.calculate_cost(input_tokens, output_tokens, model)
+@@ -801,6 +911,11 @@ class TokenCostEngine:
+ # TokenCostCore is now imported from MetricsCore module
+ # Removed duplicate definition to use the pure logic version
+ 
++
++
++
++
++
+ class ModelFallbackEngine:
+     """
+     Manages model redundancy and fallback strategies.
+@@ -828,13 +943,18 @@ class ModelFallbackEngine:
+         price_map = {}
+         if self.cost_engine:
+             price_map = self.cost_engine.MODEL_COSTS
+-            
++
+         ranked = self.core.rank_models_by_cost(models, price_map)
+         return ranked[0]
+ 
+ # ModelFallbackCore is now imported from MetricsCore module
+ # Removed duplicate definition to use the pure logic version
+ 
++
++
++
++
++
+ class StatsRollupCalculator:
+     """Calculates metric rollups using pure logic core."""
+     def __init__(self) -> None:
+@@ -842,6 +962,11 @@ class StatsRollupCalculator:
+         self._points: dict[str, list[tuple[float, float]]] = {}
+         self.core = StatsRollupCore()  # Use imported pure logic core
+ 
++
++
++
++
++
+     def add_point(self, metric: str, timestamp: float, value: float) -> None:
+         """Add a data point for rollup calculation."""
+         if metric not in self._points:
+@@ -902,6 +1027,11 @@ class StatsRollupCalculator:
+             return float(len(metrics))
+         return 0.0
+ 
++
++
++
++
++
+ class StatsRollup:
+     """Aggregate metrics into rollup views.
+ 
+@@ -969,6 +1099,11 @@ class StatsRollup:
+         self._raw_data[metric_name].append((ts, value))
+ 
+     def compute_rollup(self, name: str) -> list[dict[str, Any]]:
++
++
++
++
++
+         """Compute rollup for a configuration.
+ 
+         Args:
+@@ -1027,6 +1162,11 @@ class StatsRollup:
+ 
+         Args:
+             name: The rollup name.
++
++
++
++
++
+             limit: Maximum entries to return.
+ 
+         Returns:
+@@ -1034,6 +1174,11 @@ class StatsRollup:
+         """
+         return self.rollups.get(name, [])[-limit:]
+ 
++
++
++
++
++
+ class StatsChangeDetector:
+     """Detects changes in metric values."""
+     def __init__(self, threshold: float = 0.1, threshold_percent: float | None = None) -> None:
+@@ -1082,6 +1227,11 @@ class StatsChangeDetector:
+                     listener(change_info)
+                 except Exception:
+                     logging.debug("Change listener failed.")
++
++
++
++
++
+         return changed
+ 
+     def on_change(self, callback: Callable[[dict[str, Any]], None]) -> None:
+@@ -1092,6 +1242,11 @@ class StatsChangeDetector:
+         """Return recorded changes."""
+         return list(self._changes)
+ 
++
++
++
++
++
+ class StatsForecaster:
+     """Forecasts future metric values."""
+     def __init__(self, window_size: int = 10) -> None:
+@@ -1149,9 +1304,19 @@ class StatsForecaster:
+         return {
+             "predictions": preds,
+             "confidence_lower": lower,
++
++
++
++
++
+             "confidence_upper": upper,
+         }
+ 
++
++
++
++
++
+ class StatsQueryEngine:
+     """Queries metrics with time range and aggregation."""
+     def __init__(self) -> None:
+@@ -1224,6 +1389,11 @@ class StatsQueryEngine:
+             self.metrics[name] = []
+         self.metrics[name].append(metric)
+ 
++
++
++
++
++
+ class ABComparisonEngine:
+     """Compare stats between different code versions (A / B testing).
+ 
+@@ -1273,6 +1443,11 @@ class ABComparisonEngine:
+     ) -> bool:
+         """Add a metric measurement to a comparison.
+ 
++
++
++
++
++
+         Args:
+             comparison_id: The comparison ID.
+             version: Which version (a or b).
+@@ -1309,6 +1484,11 @@ class ABComparisonEngine:
+ 
+         Returns:
+             Comparison results.
++
++
++
++
++
+         """
+         comp = self.comparisons.get(comparison_id)
+         if not comp:
+@@ -1317,6 +1497,11 @@ class ABComparisonEngine:
+         val_a = comp.metrics_a.get(metric_name, 0)
+         val_b = comp.metrics_b.get(metric_name, 0)
+ 
++
++
++
++
++
+         if val_a == val_b:
+             winner = "tie"
+         elif higher_is_better:
+@@ -1324,6 +1509,11 @@ class ABComparisonEngine:
+         else:
+             winner = "a" if val_a < val_b else "b"
+ 
++
++
++
++
++
+         improvement = abs(val_b - val_a) / val_a * 100 if val_a != 0 else 0
+ 
+         return {
+@@ -1335,6 +1525,11 @@ class ABComparisonEngine:
+         }
+ 
+     def get_summary(self, comparison_id: str) -> dict[str, Any]:
++
++
++
++
++
+         """Get comparison summary.
+ 
+         Args:
+@@ -1357,6 +1552,11 @@ class ABComparisonEngine:
+             "metrics_b_count": len(comp.metrics_b)
+         }
+ 
++
++
++
++
++
+ class ABComparator:
+     """Compares A/B test metrics."""
+     def __init__(self) -> None:
+@@ -1394,6 +1594,11 @@ class ABComparator:
+         p_value = 0.01 if abs(effect) >= 1.0 else 0.5
+         return ABSignificanceResult(p_value=p_value, is_significant=p_value < alpha, effect_size=effect)
+ 
++
++
++
++
++
+ @dataclass
+ class ABComparisonResult:
+     """Result of comparing two metric groups."""
+@@ -1401,6 +1606,11 @@ class ABComparisonResult:
+     metrics_compared: int
+     differences: dict[str, float] = field(default_factory=lambda: {})
+ 
++
++
++
++
++
+ @dataclass
+ class ABSignificanceResult:
+     """Result of A/B statistical significance calculation."""
+@@ -1409,6 +1619,11 @@ class ABSignificanceResult:
+     is_significant: bool
+     effect_size: float = 0.0
+ 
++
++
++
++
++
+ @dataclass
+ class ABComparison:
+     """A / B comparison between code versions."""
+@@ -1420,6 +1635,16 @@ class ABComparison:
+     winner: str = ""
+     confidence: float = 0.0
+ 
++
++
++
++
++
++
++
++
++
++
+ class AnnotationManager:
+     """Manage metric annotations and comments.
+ 
+@@ -1457,6 +1682,11 @@ class AnnotationManager:
+             timestamp=datetime.now().isoformat(),
+             text=text,
+             author=author,
++
++
++
++
++
+             annotation_type=annotation_type
+         )
+ 
+@@ -1527,6 +1757,11 @@ class AnnotationManager:
+             "type": a.annotation_type
+         } for a in data], indent=2)
+ 
++
++
++
++
++
+ class StatsAnnotationManager:
+     """Manages annotations on metrics."""
+ 
+@@ -1567,10 +1802,20 @@ class StatsAnnotationManager:
+         """Get annotations for metric."""
+         return self.annotations.get(metric, [])
+ 
++
++
++
++
++
+ class SubscriptionManager:
+     """Manage metric subscriptions and change notifications.
+ 
+     Provides subscription management for receiving notifications
++
++
++
++
++
+     when metrics change or breach thresholds.
+ 
+     Attributes:
+@@ -1654,6 +1899,11 @@ class SubscriptionManager:
+ 
+         Args:
+             metric_name: The metric name.
++
++
++
++
++
+             event_type: Type of event (threshold, anomaly).
+             value: The metric value.
+ 
+@@ -1691,6 +1941,11 @@ class SubscriptionManager:
+             "notification_counts": dict(self._notification_count)
+         }
+ 
++
++
++
++
++
+ class StatsSubscriptionManager:
+     """Manages metric subscriptions."""
+     def __init__(self) -> None:
+@@ -1716,6 +1971,11 @@ class StatsSubscriptionManager:
+             return self._subscribe_delivery(subscriber_id, metric_pattern, delivery_method)
+ 
+         if len(args) == 2 and callable(args[1]):
++
++
++
++
++
+             metric, callback = args
+             metric = str(metric)
+             if metric not in self.subscribers:
+@@ -1774,11 +2034,21 @@ class StatsSubscriptionManager:
+                 except Exception:
+                     logging.debug(f"Delivery handler {sub.delivery_method} failed for {metric}")
+ 
++
++
++
++
++
+ class ThresholdAlertManager:
+     """Manages threshold-based alerting."""
+     def __init__(self) -> None:
+         self.alerts: list[ThresholdAlert] = []
+         # Each metric can have warning/critical thresholds and/or min/max thresholds.
++
++
++
++
++
+         self.thresholds: dict[str, dict[str, float | None]] = {}
+ 
+     def set_threshold(
+@@ -1787,6 +2057,11 @@ class ThresholdAlertManager:
+         min_val: float | None = None,
+         max_val: float | None = None,
+         warning: float | None = None,
++
++
++
++
++
+         critical: float | None = None,
+     ) -> None:
+         """Set thresholds for a metric.
+@@ -1817,6 +2092,11 @@ class ThresholdAlertManager:
+             alerts.append(
+                 ThresholdAlert(metric=metric, value=value, severity="critical", threshold=critical_threshold)
+             )
++
++
++
++
++
+         elif warning_threshold is not None and value >= warning_threshold:
+             alerts.append(
+                 ThresholdAlert(metric=metric, value=value, severity="warning", threshold=warning_threshold)
+@@ -1841,6 +2121,11 @@ class ThresholdAlertManager:
+         """Compatibility wrapper: return True if any alert triggered."""
+         return len(self.check(metric, value)) > 0
+ 
++
++
++
++
++
+ class StatsBackupManager:
+     """Manages backups of stats."""
+ 
+@@ -1881,6 +2166,11 @@ class StatsBackupManager:
+             return restored
+ 
+         path = self._backup_path(name)
++
++
++
++
++
+         if path is not None and path.exists():
+             try:
+                 payload = json.loads(path.read_text(encoding="utf-8"))
+@@ -1909,6 +2199,11 @@ class StatsBackupManager:
+                     names.add(candidate.stem)
+         return sorted(names)
+ 
++
++
++
++
++
+ @dataclass
+ class StatsBackup:
+     """A persisted backup entry for StatsBackupManager."""
+@@ -1917,7 +2212,17 @@ class StatsBackup:
+     path: Path
+     timestamp: str
+ 
++
++
++
++
++
+ class StatsCompressor:
++
++
++
++
++
+     """Compresses metric data."""
+     def compress(self, data: Any) -> bytes:
+         """Compress data.
+@@ -1947,11 +2252,21 @@ class StatsCompressor:
+         except Exception:
+             return payload
+ 
++
++
++
++
++
+ class StatsSnapshotManager:
+     """Manages snapshots of stats state.
+ 
+     Compatibility:
+     - Tests expect `__init__(snapshot_dir=...)`.
++
++
++
++
++
+     - `create_snapshot()` returns an object with `.name` and `.data`.
+     - When `snapshot_dir` is provided, snapshots are persisted to JSON files.
+     """
+@@ -2016,6 +2331,11 @@ class StatsSnapshotManager:
+                     names.add(candidate.stem)
+         return sorted(names)
+ 
++
++
++
++
++
+ class StatsAccessController:
+     """Controls access to stats."""
+     def __init__(self) -> None:
+@@ -2061,8 +2381,18 @@ class StatsAccessController:
+ 
+     def has_access(self, user: str, resource: str) -> bool:
+         """Check if user has access."""
++
++
++
++
++
+         return user in self.permissions and resource in self.permissions[user]
+ 
++
++
++
++
++
+ class StatsStreamManager:
+     """Manages real-time stats streaming."""
+     def __init__(self, config: StreamingConfig | None = None) -> None:
+@@ -2075,6 +2405,11 @@ class StatsStreamManager:
+         stream = StatsStream(name=name, buffer_size=buffer_size)
+         self.streams[name] = stream
+         self.subscribers[name] = []
++
++
++
++
++
+         return stream
+ 
+     def get_latest(self, name: str, count: int = 1) -> list[Any]:
+@@ -2085,6 +2420,11 @@ class StatsStreamManager:
+ 
+     def subscribe(self, stream_name: str, callback: Callable[[Any], None]) -> None:
+         """Subscribe to stream updates."""
++
++
++
++
++
+         if stream_name not in self.subscribers:
+             self.subscribers[stream_name] = []
+         self.subscribers[stream_name].append(callback)
+@@ -2102,6 +2442,11 @@ class StatsStreamManager:
+                 except Exception:
+                     logging.debug(f"Stream subscriber for {stream_name} failed.")
+ 
++
++
++
++
++
+ class StatsStreamer:
+     """Real-time stats streaming via WebSocket for live dashboards.
+ 
+@@ -2216,6 +2561,11 @@ class StatsStreamer:
+                 notified += 1
+         return notified
+ 
++
++
++
++
++
+ class StatsStream:
+     """Represents a real-time stats stream."""
+     def __init__(self, name: str, buffer_size: int = 1000) -> None:
+@@ -2235,6 +2585,11 @@ class StatsStream:
+         if len(self.buffer) > self.buffer_size:
+             self.buffer.pop(0)
+ 
++
++
++
++
++
+ class AggregationResult(dict[str, Any]):
+     """Compatibility class that behaves like both a dict and a float."""
+     def __eq__(self, other: Any) -> bool:
+@@ -2245,12 +2600,22 @@ class AggregationResult(dict[str, Any]):
+     def __float__(self) -> float:
+         return float(self.get("total", 0.0))
+ 
++
++
++
++
++
+ class StatsFederation:
+     """Aggregate stats from multiple repositories.
+ 
+     Provides federation capabilities to collect and aggregate
+     metrics from multiple source repositories.
+ 
++
++
++
++
++
+     Attributes:
+         sources: Federated data sources.
+         mode: Federation mode (pull, push, hybrid).
+@@ -2335,24 +2700,24 @@ class StatsFederation:
+                 headers = {}
+                 if source.auth_token:
+                     headers["Authorization"] = f"Bearer {source.auth_token}"
+-                
++
+                 # Use ConnectivityManager
+                 data = self.connectivity.get_json(endpoint, headers=headers)
+-                
++
+                 if isinstance(data, dict):
+                     # update metrics on source object
+                     for k, v in data.items():
+                         if isinstance(v, (int, float)):
+                              source.metrics[k] = float(v)
+-                    
++
+                     # Maintain compatibility with current aggregate() logic
+                     self.aggregated[name] = [float(v) for v in data.values() if isinstance(v, (int, float))]
+-                    
++
+                     self._last_sync[name] = datetime.now()
+                     return {k: float(v) for k, v in data.items() if isinstance(v, (int, float))}
+             except Exception as e:
+                 logging.error(f"StatsFederation: Sync failed for {name} ({endpoint}): {e}")
+-        
++
+         self._last_sync[name] = datetime.now()
+         return {}
+ 
+@@ -2374,6 +2739,11 @@ class StatsFederation:
+     ) -> AggregationResult:
+         """Aggregate a metric across all sources.
+ 
++
++
++
++
++
+         Args:
+             metric_name: The metric to aggregate.
+             aggregation: The aggregation type.
+@@ -2383,13 +2753,18 @@ class StatsFederation:
+         """
+         values: list[float] = list(self.aggregated.get(metric_name, []))
+         failed_sources = 0
+-        
++
++
++
++
++
++
+         # Collect values from all sources
+         for source_name, source in self.sources.items():
+             if not source.enabled:
+                 failed_sources += 1
+                 continue
+-                
++
+             # Check for the specific metric in the source's metrics dictionary
+             if metric_name in source.metrics:
+                 value = source.metrics[metric_name]
+@@ -2408,7 +2783,7 @@ class StatsFederation:
+                 total = max(values)
+             elif aggregation == AggregationType.COUNT:
+                 total = float(len(values))
+-        
++
+         return AggregationResult({
+             "total": total,
+             "failed_sources": failed_sources,
+@@ -2431,6 +2806,11 @@ class StatsFederation:
+             }
+         return status
+ 
++
++
++
++
++
+ class StatsAPIServer:
+     """Stats API endpoint for programmatic access.
+ 
+@@ -2554,6 +2934,11 @@ class StatsAPIServer:
+ 
+         return json.dumps(docs, indent=2)
+ 
++
++
++
++
++
+ @dataclass
+ class APIEndpoint:
+     """Stats API endpoint configuration."""
+@@ -2563,6 +2948,11 @@ class APIEndpoint:
+     rate_limit: int = 100  # requests per minute
+     cache_ttl: int = 60  # seconds
+ 
++
++
++
++
++
+ class MetricNamespaceManager:
+     """Manage metric namespaces for organizing large metric sets.
+ 

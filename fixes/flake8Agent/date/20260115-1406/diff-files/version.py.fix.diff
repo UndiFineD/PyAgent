@@ -1,0 +1,19 @@
+diff --git a/version.py b/version.py
+index 9a4f978..e1d6a6a 100644
+--- a/version.py
++++ b/version.py
+@@ -19,14 +19,3 @@ Unified Version Gatekeeper for PyAgent.
+ Redirects to the core versioning logic in src/core/base/version.py.
+ """
+ 
+-
+-
+-from src.core.base.version import (
+-    VERSION,
+-    SDK_VERSION,
+-    EVOLUTION_PHASE,
+-    STABILITY_SCORE,
+-    COMPATIBLE_CORE_VERSIONS,
+-    is_gate_open
+-)
+-

@@ -1,0 +1,38 @@
+diff --git a/src/core/modules/CodeQualityModule.py b/src/core/modules/CodeQualityModule.py
+index 2111905..081c40e 100644
+--- a/src/core/modules/CodeQualityModule.py
++++ b/src/core/modules/CodeQualityModule.py
+@@ -13,9 +13,14 @@
+ 
+ from __future__ import annotations
+ import re
+-from typing import Any, Dict, List
++from typing import Any
+ from src.core.base.modules import BaseModule
+ 
++
++
++
++
++
+ class CodeQualityModule(BaseModule):
+     """
+     Consolidated core module for code quality analysis.
+@@ -55,8 +60,8 @@ class CodeQualityModule(BaseModule):
+         for i, line in enumerate(lines, 1):
+             if len(line) > 120:
+                 issues.append({
+-                    "line": i, 
+-                    "type": "Style", 
++                    "line": i,
++                    "type": "Style",
+                     "message": "Line too long (>120 chars)"
+                 })
+         return issues
+@@ -85,4 +90,4 @@ class CodeQualityModule(BaseModule):
+ 
+     def shutdown(self) -> bool:
+         """Cleanup quality analyzer."""
+-        return super().shutdown()
+\ No newline at end of file
++        return super().shutdown()

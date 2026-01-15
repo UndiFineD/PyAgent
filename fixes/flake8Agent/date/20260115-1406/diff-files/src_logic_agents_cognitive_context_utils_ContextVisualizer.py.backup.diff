@@ -1,0 +1,29 @@
+diff --git a/src/logic/agents/cognitive/context/utils/ContextVisualizer.py b/src/logic/agents/cognitive/context/utils/ContextVisualizer.py
+index c859000..ab0d857 100644
+--- a/src/logic/agents/cognitive/context/utils/ContextVisualizer.py
++++ b/src/logic/agents/cognitive/context/utils/ContextVisualizer.py
+@@ -25,11 +25,16 @@ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.VisualizationData import VisualizationData
+ from src.logic.agents.cognitive.context.models.VisualizationType import VisualizationType
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional, Tuple
++from typing import Any
+ import json
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ContextVisualizer:
+     """Visualizes context relationships.
+ 
+@@ -118,4 +123,4 @@ class ContextVisualizer:
+             nodes=nodes,
+             edges=edges,
+             layout="tree"
+-        )
+\ No newline at end of file
++        )

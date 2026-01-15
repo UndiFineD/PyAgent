@@ -1,0 +1,38 @@
+diff --git a/src/infrastructure/fleet/AgentRegistryCore.py b/src/infrastructure/fleet/AgentRegistryCore.py
+index f05b8a6..cbe00e4 100644
+--- a/src/infrastructure/fleet/AgentRegistryCore.py
++++ b/src/infrastructure/fleet/AgentRegistryCore.py
+@@ -26,7 +26,7 @@ Pure logic component to be potentially rustified.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import os
+-from typing import Dict, List, Any, Optional, Tuple
++from typing import Any
+ from .VersionGate import VersionGate
+ 
+ __version__ = VERSION
+@@ -100,7 +100,7 @@ class AgentRegistryCore:
+         Uses DFS to find back-edges.
+         """
+         visited = set()
+-        path = []
++        path: list[Any] = []
+         cycles = []
+ 
+         def visit(node: str) -> None:
+@@ -128,7 +128,7 @@ class AgentRegistryCore:
+         s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
+         return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+ 
+-    def validate_agent_structure(self, agent_instance: Any, required_methods: list[str] = None) -> list[str]:
++    def validate_agent_structure(self, agent_instance: Any, required_methods: list[str] | None = None) -> list[str]:
+         """
+         Checks if an agent instance has the required methods.
+         Returns a list of missing methods.
+@@ -171,4 +171,4 @@ class AgentRegistryCore:
+                     if in_degree[v] == 0:
+                         queue.append(v)
+ 
+-        return load_order
+\ No newline at end of file
++        return load_order

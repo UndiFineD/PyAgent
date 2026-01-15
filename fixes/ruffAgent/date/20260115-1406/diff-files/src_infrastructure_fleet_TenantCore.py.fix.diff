@@ -1,0 +1,17 @@
+diff --git a/src/infrastructure/fleet/TenantCore.py b/src/infrastructure/fleet/TenantCore.py
+index 25ac330..d2d473f 100644
+--- a/src/infrastructure/fleet/TenantCore.py
++++ b/src/infrastructure/fleet/TenantCore.py
+@@ -26,11 +26,11 @@ Pure logic for path translation and security boundary enforcement.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import os
+-from typing import List
+ 
+ __version__ = VERSION
+ 
+ class TenantCore:
++    """Core logic for tenant isolation and path security."""
+     def __init__(self) -> None:
+         pass
+ 

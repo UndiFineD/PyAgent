@@ -1,0 +1,19 @@
+diff --git a/src/logic/agents/system/CloudProviderAgent.py b/src/logic/agents/system/CloudProviderAgent.py
+index 93e2990..ffa4e5a 100644
+--- a/src/logic/agents/system/CloudProviderAgent.py
++++ b/src/logic/agents/system/CloudProviderAgent.py
+@@ -19,7 +19,6 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict
+ from src.core.base.BaseAgent import BaseAgent
+ 
+ __version__ = VERSION
+@@ -73,4 +72,4 @@ resource "{provider}_instance" "pyagent_node" {{
+         """Selects the region with the lowest latency from a provided map."""
+         if not latency_data:
+             return "us-east-1" # Default
+-        return min(latency_data, key=latency_data.get)
+\ No newline at end of file
++        return min(latency_data, key=latency_data.get)

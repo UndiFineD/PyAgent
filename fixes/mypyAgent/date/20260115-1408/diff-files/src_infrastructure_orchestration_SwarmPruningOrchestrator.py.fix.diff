@@ -1,0 +1,28 @@
+diff --git a/src/infrastructure/orchestration/SwarmPruningOrchestrator.py b/src/infrastructure/orchestration/SwarmPruningOrchestrator.py
+index 78fb21a..28fb5f1 100644
+--- a/src/infrastructure/orchestration/SwarmPruningOrchestrator.py
++++ b/src/infrastructure/orchestration/SwarmPruningOrchestrator.py
+@@ -26,7 +26,7 @@ Implemented as part of Phase 40: Swarm-Wide Neural Pruning.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.NeuralPruningEngine import NeuralPruningEngine
+ 
+ __version__ = VERSION
+@@ -88,6 +88,7 @@ if __name__ == "__main__":
+     logging.basicConfig(level=logging.INFO)
+     # Mock fleet manager for demonstration
+     class MockFleet:
++        """Mock fleet manager for standalone testing."""
+         def __init__(self) -> None:
+             self.neural_pruning = NeuralPruningEngine(self)
+ 
+@@ -99,4 +100,4 @@ if __name__ == "__main__":
+     orchestrator.record_node_performance("AgentB", False, 1200)
+     orchestrator.record_node_performance("AgentC", True, 300)
+     
+-    print(orchestrator.run_pruning_cycle(threshold=1.0))
+\ No newline at end of file
++    print(orchestrator.run_pruning_cycle(threshold=1.0))

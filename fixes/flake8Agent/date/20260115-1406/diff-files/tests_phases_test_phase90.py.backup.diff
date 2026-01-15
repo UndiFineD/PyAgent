@@ -1,0 +1,32 @@
+diff --git a/tests/phases/test_phase90.py b/tests/phases/test_phase90.py
+index eaabf57..806eb2d 100644
+--- a/tests/phases/test_phase90.py
++++ b/tests/phases/test_phase90.py
+@@ -1,11 +1,15 @@
+ import unittest
+ import os
+-import sys
+ 
+ # Ensure the project root is in PYTHONPATH
+ 
+ from src.logic.agents.swarm.SwarmDeploymentAgent import SwarmDeploymentAgent
+ 
++
++
++
++
++
+ class TestSwarmDeployment(unittest.TestCase):
+     def setUp(self):
+         self.agent = SwarmDeploymentAgent(os.getcwd())
+@@ -22,5 +26,10 @@ class TestSwarmDeployment(unittest.TestCase):
+         inventory = self.agent.get_deployment_inventory()
+         self.assertEqual(inventory['total_nodes'], 3)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     unittest.main()

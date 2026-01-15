@@ -1,0 +1,32 @@
+diff --git a/tests/phases/test_phase84.py b/tests/phases/test_phase84.py
+index 6a8cab6..9f24fc8 100644
+--- a/tests/phases/test_phase84.py
++++ b/tests/phases/test_phase84.py
+@@ -1,11 +1,15 @@
+ import unittest
+ import os
+-import sys
+ 
+ # Ensure the project root is in PYTHONPATH
+ 
+ from src.logic.agents.security.SecurityAuditAgent import SecurityAuditAgent
+ 
++
++
++
++
++
+ class TestSecurityAudit(unittest.TestCase):
+     def setUp(self):
+         self.agent = SecurityAuditAgent(os.getcwd())
+@@ -29,5 +33,10 @@ class TestSecurityAudit(unittest.TestCase):
+         self.assertEqual(result['status'], "Complete")
+         self.assertTrue(result['findings_count'] > 0)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     unittest.main()

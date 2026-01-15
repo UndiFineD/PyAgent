@@ -1,0 +1,13 @@
+diff --git a/src/core/base/CircuitBreaker.py b/src/core/base/CircuitBreaker.py
+index 511e611..1110195 100644
+--- a/src/core/base/CircuitBreaker.py
++++ b/src/core/base/CircuitBreaker.py
+@@ -25,7 +25,7 @@ from src.core.base.version import VERSION
+ import logging
+ import time
+ import asyncio
+-from typing import Any, Optional, Dict
++from typing import Any
+ from collections.abc import Callable
+ from src.core.base.core.ResilienceCore import ResilienceCore
+ from src.observability.stats.exporters.OTelManager import OTelManager

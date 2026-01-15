@@ -1,0 +1,101 @@
+diff --git a/src/observability/stats/alerting.py b/src/observability/stats/alerting.py
+index 31b7d4a..99b3e01 100644
+--- a/src/observability/stats/alerting.py
++++ b/src/observability/stats/alerting.py
+@@ -5,19 +5,36 @@
+ from __future__ import annotations
+ import logging
+ from datetime import datetime
+-from typing import Any, Dict, List
+-from .metrics import Alert, AlertSeverity, RetentionPolicy, Threshold
++from typing import Any
++from .observability_core import Alert, AlertSeverity, RetentionPolicy, Threshold
+ 
+ logger = logging.getLogger(__name__)
+ 
++
++
++
++
++
++
++
++
++
++
+ class ThresholdAlertManager:
+     """Manages threshold checking and alert emission."""
+     def __init__(self) -> None:
+         self.thresholds: dict[str, list[Threshold]] = {}
+         self.alerts: list[Alert] = []
+ 
+-    def set_threshold(self, name:
+-        str, threshold: Threshold) -> None:
++    def set_threshold(self, name: str, threshold: Threshold | None = None, warning: float | None = None, critical: float | None = None) -> None:
++        if threshold is None:
++             if warning is not None:
++                # Warning threshold
++                self.set_threshold(name, Threshold(metric_name=name, max_value=warning, severity=AlertSeverity.MEDIUM))
++             if critical is not None:
++                # Critical threshold
++                self.set_threshold(name, Threshold(metric_name=name, max_value=critical, severity=AlertSeverity.CRITICAL))
++             return
+         if name not in self.thresholds:
+             self.thresholds[name] = []
+         self.thresholds[name].append(threshold)
+@@ -31,7 +48,7 @@ class ThresholdAlertManager:
+                 is_breach = True
+             if t.min_value is not None and value < t.min_value:
+                 is_breach = True
+-            
++
+             if is_breach:
+                 alert = Alert(
+                     id=f"{metric_name}_{datetime.now().timestamp()}",
+@@ -41,11 +58,21 @@ class ThresholdAlertManager:
+                     severity=t.severity or AlertSeverity.MEDIUM,
+                     message=t.message or f"Threshold breach for {metric_name}",
+                     timestamp=datetime.now().isoformat()
++
++
++
++
++
+                 )
+                 self.alerts.append(alert)
+                 triggered.append(alert)
+         return triggered
+ 
++
++
++
++
++
+ class RetentionEnforcer:
+     """Enforces retention policies on metrics."""
+     def __init__(self) -> None:
+@@ -56,11 +83,14 @@ class RetentionEnforcer:
+         str, policy: RetentionPolicy) -> None:
+         self.policies[pattern] = policy
+ 
+-    def add_data(self, name:
+-        str, ts: float, val: Any) -> None:
++    def add_data(self, name: str, ts: float | None = None, val: Any = None, timestamp: float | None = None, value: Any = None) -> None:
++        actual_ts = timestamp if timestamp is not None else ts
++        actual_val = value if value is not None else val
++        if actual_ts is None: actual_ts = datetime.now().timestamp()
++
+         if name not in self.data:
+             self.data[name] = []
+-        self.data[name].append({"timestamp": ts, "value": val})
++        self.data[name].append({"timestamp": actual_ts, "value": actual_val})
+ 
+     def enforce(self) -> int:
+         removed = 0
+@@ -73,4 +103,4 @@ class RetentionEnforcer:
+                     cutoff = now - (pol.retention_days * 86400)
+                     self.data[m] = [d for d in self.data[m] if d["timestamp"] > cutoff]
+                 removed += orig - len(self.data[m])
+-        return removed
+\ No newline at end of file
++        return removed

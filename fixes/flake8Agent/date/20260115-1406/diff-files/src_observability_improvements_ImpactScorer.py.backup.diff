@@ -1,0 +1,27 @@
+diff --git a/src/observability/improvements/ImpactScorer.py b/src/observability/improvements/ImpactScorer.py
+index 4b7c41c..facab39 100644
+--- a/src/observability/improvements/ImpactScorer.py
++++ b/src/observability/improvements/ImpactScorer.py
+@@ -23,10 +23,14 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .Improvement import Improvement
+-from typing import Dict
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ImpactScorer:
+     """Scores improvements based on weighted impact factors."""
+ 
+@@ -65,4 +69,4 @@ class ImpactScorer:
+             "reach": reach,
+             "urgency": urgency,
+         })
+-        return float(max(0.0, min(100.0, base)))
+\ No newline at end of file
++        return float(max(0.0, min(100.0, base)))

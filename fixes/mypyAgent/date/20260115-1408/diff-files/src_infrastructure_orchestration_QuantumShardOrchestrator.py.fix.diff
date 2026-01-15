@@ -1,0 +1,38 @@
+diff --git a/src/infrastructure/orchestration/QuantumShardOrchestrator.py b/src/infrastructure/orchestration/QuantumShardOrchestrator.py
+index 3847d71..88c268d 100644
+--- a/src/infrastructure/orchestration/QuantumShardOrchestrator.py
++++ b/src/infrastructure/orchestration/QuantumShardOrchestrator.py
+@@ -29,7 +29,7 @@ import logging
+ import json
+ import uuid
+ from pathlib import Path
+-from typing import Dict, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+@@ -61,7 +61,7 @@ class QuantumShardOrchestrator(BaseAgent):
+             
+             with open(self.state_file, "w") as f:
+                 json.dump(current_field, f, indent=4)
+-        except Exception as e:
++        except (IOError, json.JSONDecodeError) as e:
+             logging.error(f"QuantumShard: Sync failed: {e}")
+ 
+     @as_tool
+@@ -80,7 +80,7 @@ class QuantumShardOrchestrator(BaseAgent):
+                 with open(self.state_file) as f:
+                     data = json.load(f)
+                     return data.get(key)
+-            except Exception:
++            except (IOError, json.JSONDecodeError):
+                 logging.debug("Failed to read quantum state file.")
+         return self.shared_state.get(key)
+ 
+@@ -90,4 +90,4 @@ class QuantumShardOrchestrator(BaseAgent):
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(QuantumShardOrchestrator, "Quantum Shard Orchestrator", "Distributed state entanglement")
+-    main()
+\ No newline at end of file
++    main()

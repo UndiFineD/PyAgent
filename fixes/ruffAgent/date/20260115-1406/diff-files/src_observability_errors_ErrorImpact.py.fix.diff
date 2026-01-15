@@ -1,0 +1,12 @@
+diff --git a/src/observability/errors/ErrorImpact.py b/src/observability/errors/ErrorImpact.py
+index 2452b3d..ddce8d6 100644
+--- a/src/observability/errors/ErrorImpact.py
++++ b/src/observability/errors/ErrorImpact.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 

@@ -1,0 +1,22 @@
+diff --git a/src/infrastructure/orchestration/QuantumShardOrchestrator.py b/src/infrastructure/orchestration/QuantumShardOrchestrator.py
+index 3847d71..869d6cb 100644
+--- a/src/infrastructure/orchestration/QuantumShardOrchestrator.py
++++ b/src/infrastructure/orchestration/QuantumShardOrchestrator.py
+@@ -61,7 +61,7 @@ class QuantumShardOrchestrator(BaseAgent):
+             
+             with open(self.state_file, "w") as f:
+                 json.dump(current_field, f, indent=4)
+-        except Exception as e:
++        except (IOError, json.JSONDecodeError) as e:
+             logging.error(f"QuantumShard: Sync failed: {e}")
+ 
+     @as_tool
+@@ -80,7 +80,7 @@ class QuantumShardOrchestrator(BaseAgent):
+                 with open(self.state_file) as f:
+                     data = json.load(f)
+                     return data.get(key)
+-            except Exception:
++            except (IOError, json.JSONDecodeError):
+                 logging.debug("Failed to read quantum state file.")
+         return self.shared_state.get(key)
+ 

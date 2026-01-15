@@ -1,0 +1,12 @@
+diff --git a/src/core/base/types/ComplianceResult.py b/src/core/base/types/ComplianceResult.py
+index fb7ba6a..1b0d907 100644
+--- a/src/core/base/types/ComplianceResult.py
++++ b/src/core/base/types/ComplianceResult.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ComplianceCategory import ComplianceCategory
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 

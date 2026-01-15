@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/dev/test_utils/MockResponse.py b/src/infrastructure/dev/test_utils/MockResponse.py
+index 889ea68..37f5ac1 100644
+--- a/src/infrastructure/dev/test_utils/MockResponse.py
++++ b/src/infrastructure/dev/test_utils/MockResponse.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .MockResponseType import MockResponseType
+ from dataclasses import dataclass
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 

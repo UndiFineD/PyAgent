@@ -1,0 +1,12 @@
+diff --git a/src/observability/errors/ImpactAnalyzer.py b/src/observability/errors/ImpactAnalyzer.py
+index a6492a5..46d2b98 100644
+--- a/src/observability/errors/ImpactAnalyzer.py
++++ b/src/observability/errors/ImpactAnalyzer.py
+@@ -25,7 +25,6 @@ from src.core.base.version import VERSION
+ from .ErrorEntry import ErrorEntry
+ from .ErrorImpact import ErrorImpact
+ from .ErrorSeverity import ErrorSeverity
+-from typing import Dict, List, Set
+ 
+ __version__ = VERSION
+ 

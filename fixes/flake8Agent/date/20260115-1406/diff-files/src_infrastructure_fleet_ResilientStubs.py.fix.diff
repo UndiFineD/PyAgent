@@ -1,0 +1,65 @@
+diff --git a/src/infrastructure/fleet/ResilientStubs.py b/src/infrastructure/fleet/ResilientStubs.py
+index 49031ae..67950a7 100644
+--- a/src/infrastructure/fleet/ResilientStubs.py
++++ b/src/infrastructure/fleet/ResilientStubs.py
+@@ -27,11 +27,21 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ import importlib
+-from typing import Any, Dict, Optional
++from typing import Any
+ from collections.abc import Callable
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ def resilient_import(module_name: str, class_name: str | None = None) -> Any:
+     """
+     Decorator/Utility to import a module or class resiliently.
+@@ -41,11 +51,21 @@ def resilient_import(module_name: str, class_name: str | None = None) -> Any:
+         module = importlib.import_module(module_name)
+         if class_name:
+             return getattr(module, class_name)
++
++
++
++
++
+         return module
+     except (ImportError, SyntaxError) as e:
+         logging.warning(f"ResilientImport: Failed to load '{module_name}'. Returning stub. Error: {e}")
+         return ResilientStub(class_name or module_name, str(e))
+ 
++
++
++
++
++
+ class ResilientStub:
+     """A stub object that logs errors instead of crashing when called."""
+     def __init__(self, name: str, error: str) -> None:
+@@ -67,7 +87,7 @@ class ResilientStub:
+ 
+     def get_status(self) -> dict[str, Any]:
+         return {"status": "failed_to_load", "error": self._error, "name": self._name}
+-    
++
+     def execute_task(self, task: str) -> str:
+         return f"ERROR: Component '{self._name}' failed to load. {self._error}"
+ 
+@@ -75,4 +95,4 @@ class ResilientStub:
+         return f"ERROR: Component '{self._name}' failed to load. {self._error}"
+ 
+     def calculate_metrics(self, *args: Any, **kwargs: Any) -> dict[str, Any]:
+-        return {}
+\ No newline at end of file
++        return {}
