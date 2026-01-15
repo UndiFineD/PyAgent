@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\types\SecurityIssueType.py
+# hypothesis_version: 6.150.1
+
+['command_injection', 'hardcoded_secret', 'injection_attempt', 'insecure_random', 'other', 'path_traversal', 'sql_injection', 'xss']

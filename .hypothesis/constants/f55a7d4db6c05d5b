@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\observability\stats\TransparencyAgent.py
+# hypothesis_version: 6.150.1
+
+[100, 'STEP_STARTED', 'T', 'Transparency Agent', '__main__', 'data', 'sender', 'signal', 'timestamp', 'workflow_id']

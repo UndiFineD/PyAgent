@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\interface\ui\gui\ThemeManager.py
+# hypothesis_version: 6.150.1
+
+['#007acc', '#1e1e1e', '#2d2d2d', '#2e7d32', '#3d3d3d', '#3e3e42', '#4a4a4a', '#d04437', '#e1e1e1', '#f0f0f0', '#ffffff', 'Header.TFrame', 'TButton', 'TFrame', 'TLabel', 'TLabelframe', 'TLabelframe.Label', 'Treeview', 'bg', 'black', 'clam', 'default', 'white']

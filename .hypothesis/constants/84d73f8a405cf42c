@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\fleet\FleetInteractionRecorder.py
+# hypothesis_version: 6.150.1
+
+['FleetManager', 'args', 'duration', 'error_mitigation', 'error_type', 'execute', 'explainability', 'failed', 'failure_handler', 'fleet_internal', 'legacy', 'model', 'n/a', 'none', 'status', 'trace_id', 'unknown', 'workflow_id']

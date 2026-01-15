@@ -7,17 +7,32 @@ from typing import List, Dict, Any, Annotated
 from .utils import setup_fix_directory, run_command, GitManager, get_timestamp
 
 class SpecialistAgent:
-    def __init__(self, name: str, command: str):
+    def __init__(self, name: str, command: str, is_targeted: bool = False):
         self.name = name
         # Use full path to current python to ensure tools are found in the venv
-        self.command = command.replace("python", f'"{sys.executable}"')
+        self.base_command = command.replace("python", f'"{sys.executable}"')
+        self.is_targeted = is_targeted
         self.base_path = setup_fix_directory(name)
         self.log_file = self.base_path / "log" / f"{name}.log"
         self.issues_file = self.base_path / "log" / "issues.md"
 
     async def run_check(self) -> (int, str):
-        print(f"[{self.name}] Running check: {self.command}...")
-        code, stdout, stderr = await asyncio.to_thread(run_command, self.command)
+        command = self.base_command
+        
+        if self.is_targeted:
+            changed_files = GitManager.get_changed_files()
+            if changed_files:
+                # Append files to the command. Some tools might need a separator or prefix
+                # but for ruff, mypy, flake8, they just accept a list of files.
+                files_str = " ".join([f'"{f}"' for f in changed_files])
+                # Remove the trailing dot or space if it exists in base command
+                command = command.rstrip(" .") + " " + files_str
+                print(f"[{self.name}] Targeting {len(changed_files)} changed files.")
+            else:
+                print(f"[{self.name}] No changed files detected. Running full project scan...")
+
+        print(f"[{self.name}] Running: {command}...")
+        code, stdout, stderr = await asyncio.to_thread(run_command, command)
         output = stdout + stderr
         # Filter output to keep it manageable
         if len(output) > 50000:
@@ -134,15 +149,15 @@ class PytestAgent(SpecialistAgent):
 
 class MypyAgent(SpecialistAgent):
     def __init__(self):
-        super().__init__("mypyAgent", "python -m mypy .")
+        super().__init__("mypyAgent", "python -m mypy .", is_targeted=True)
 
 class RuffAgent(SpecialistAgent):
     def __init__(self):
-        super().__init__("ruffAgent", "python -m ruff check .")
+        super().__init__("ruffAgent", "python -m ruff check .", is_targeted=True)
 
 class Flake8Agent(SpecialistAgent):
     def __init__(self):
-        super().__init__("flake8Agent", "python -m flake8 .")
+        super().__init__("flake8Agent", "python -m flake8 .", is_targeted=True)
 
 class UnittestAgent(SpecialistAgent):
     def __init__(self):
@@ -166,7 +181,7 @@ class ReminderAgent(SpecialistAgent):
             "- [ ] **Log Cleanup**: The `fixes/` directory can grow large; periodically delete old run folders.",
             "",
             "## 💡 Suggested Improvements",
-            "- [ ] **Tool Specificity**: Update `RuffAgent` or `MypyAgent` to target specific directories for faster scans.",
+            "- [x] **Tool Specificity**: Updated `Ruff`, `Mypy`, and `Flake8` to only scan changed `.py` files.",
             "- [ ] **Rollback Strategy**: Implement `GitManager.hard_rollback()` call in `agents.py` if an AI-applied fix breaks the build.",
             "- [ ] **Pre-commit Hook**: Integrate the `orchestrator` as a heavy-duty pre-push check.",
             "",

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\system\KernelAgent.py
+# hypothesis_version: 6.150.1
+
+['.', '.audit', 'HIGH', 'command', 'cwd', 'env_vars', 'error', 'exit_code', 'kernel_shell_error', 'kernel_shell_exec', 'kernel_shell_timeout', 'machine', 'os', 'python_version', 'recorder', 'version']

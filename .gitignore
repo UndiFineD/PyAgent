@@ -56,3 +56,4 @@ chroma.sqlite3
 *.agent_knowledge_index.json
 *.db
 data/
+fixes/

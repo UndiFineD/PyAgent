@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\backend\LoadBalanceStrategy.py
+# hypothesis_version: 6.150.1
+
+['failover', 'least_connections', 'round_robin', 'weighted']

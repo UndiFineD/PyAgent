@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\backend\RequestCompressor.py
+# hypothesis_version: 6.150.1
+
+[b'\x00', b'\x01', 1000, 'bytes_saved', 'compressed_count', 'decompressed_count', 'utf-8']

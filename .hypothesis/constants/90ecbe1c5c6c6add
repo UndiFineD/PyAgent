@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\knowledge\knowledge_pruning_engine.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.0001, 0.5, 0.8, 2.0, 'btree', 'compressed', 'count', 'first_seen', 'graph', 'last_access', 'vector']

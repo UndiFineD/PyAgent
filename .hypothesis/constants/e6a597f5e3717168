@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\ConsensusConflictAgent.py
+# hypothesis_version: 6.150.1
+
+['Dispute not found', 'Invalid option index', 'No votes cast', 'choice', 'context', 'dispute_id', 'dispute_initiated', 'error', 'message', 'options', 'pending_disputes', 'reasoning', 'resolved', 'resolved_disputes', 'start_time', 'status', 'timestamp', 'total_disputes', 'total_votes', 'vote_cast', 'vote_counts', 'votes', 'voting', 'winner']
