@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\utils\ExecutionScheduler.py
+# hypothesis_version: 6.150.1
+
+[3600, 86400, 604800, ':', 'daily', 'hourly', 'weekly']

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\backend\ProviderType.py
+# hypothesis_version: 6.150.1
+
+['auto', 'codex', 'copilot', 'gh', 'github-models']

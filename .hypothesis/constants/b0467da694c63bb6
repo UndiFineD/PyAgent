@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\HierarchicalMemoryAgent.py
+# hypothesis_version: 6.150.1
+
+[0.5, 0.8, 0.9, 3600, '*.json', 'Archival', 'LongTerm', 'ShortTerm', 'Working', '__main__', 'archival', 'content', 'id', 'importance', 'long', 'mid', 'short', 'status', 'tags', 'timestamp', 'w']

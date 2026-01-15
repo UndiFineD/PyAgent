@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\backend\SubagentRunner.py
+# hypothesis_version: 6.150.1
+
+[0.03, 1000.0, '&&', '.agent_cache', '.git', ';', 'DV_AGENT_REPO_ROOT', 'Get-', 'Metrics reset', 'New-', 'Set-', 'cache_hits', 'disk_cache', 'docker ', 'errors', 'gh ', 'git ', 'gpt-4', 'kubectl ', 'node ', 'npm ', 'nt', 'pip ', 'powershell ', 'pwsh ', 'python ', 'requests', 'timeouts', 'total_latency_ms', 'where', 'which', '|']
