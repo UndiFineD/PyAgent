@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\interface\ui\gui\WorkflowManager.py
+# hypothesis_version: 6.150.1
+
+['1.0', 'Analysis', 'Analyst', 'Architect', 'BMad Master', 'Developer', 'Governance', 'Implementation', 'PM', 'Planning', 'Quality', 'Scrum Master', 'Security Auditor', 'Solutioning', 'Success', 'Test Architect', 'UX Designer', 'Validation', 'add_agent', 'phases', 'set_status']

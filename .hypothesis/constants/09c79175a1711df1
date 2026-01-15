@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\observability\stats\ReportingAgent.py
+# hypothesis_version: 6.150.1
+
+['\n```', '%H:%M:%S', 'Browser', 'Config', 'Consolidator', 'Dashboard Update', 'Evolution', 'Kernel', 'Knowledge', 'MCP', 'PR', 'Reporting', 'SpecAgent', 'Test', 'Transparency', 'Visualizer', '__main__', '```mermaid\n', 'action', 'agent', 'args', 'consolidate_all', 'duration', 'gantt', 'generate_audit_trail', 'generate_call_graph', 'get_graph_mermaid', 'get_system_info', 'src/core', 'timestamp', 'validate_env']

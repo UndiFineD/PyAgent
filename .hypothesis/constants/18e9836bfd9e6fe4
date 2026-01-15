@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\MemoryReplayAgent.py
+# hypothesis_version: 6.150.1
+
+[0.2, 0.3, 0.8, 1.0, 'confidence', 'consolidated', 'content', 'duration', 'end_ts', 'error', 'fix', 'id', 'insight', 'insights_count', 'latest_insights', 'memories_processed', 'original_id', 'pruned', 'start_ts', 'success']

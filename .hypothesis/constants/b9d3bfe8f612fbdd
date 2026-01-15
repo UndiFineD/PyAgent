@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\ModuleLoader.py
+# hypothesis_version: 6.150.1
+
+['.', '.py', 'Agent', 'coder', 'plugins', 'src/agents', 'src/logic/agents']

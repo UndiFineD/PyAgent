@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\LatentReasoningAgent.py
+# hypothesis_version: 6.150.1
+
+[0.65, 0.98, 100, 'Content to audit', 'None', 'Safe to proceed', '__main__', 'chinese', 'confidence', 'detected_bias', 'english', 'french', 'german', 'is_consistent', 'recommendation', 'spanish']

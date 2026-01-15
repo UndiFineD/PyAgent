@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\testing_utils.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.05, 1.0, 100, 200, 1000, 'Contract not found', 'No baseline found', 'average_duration_ms', 'browser', 'component_id', 'consumer', 'contract_id', 'declining', 'diff_percentage', 'duration', 'duration_ms', 'error', 'failed', 'improving', 'interactions', 'name', 'nodeid', 'outcome', 'pass_rate', 'pass_rate_trend', 'passed', 'path', 'provider', 'request', 'response', 'results', 'side', 'skipped', 'source', 'sources', 'stable', 'status', 'status_match', 'summary', 'synthetic_test', 'test', 'tests', 'threshold', 'total_duration_ms', 'total_failed', 'total_passed', 'total_skipped', 'total_tests', 'valid']

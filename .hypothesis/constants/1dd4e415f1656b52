@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\backend\TTLCache.py
+# hypothesis_version: 6.150.1
+
+[300.0, 1000, 'default_ttl_seconds', 'entries', 'max_entries', 'total_hits']

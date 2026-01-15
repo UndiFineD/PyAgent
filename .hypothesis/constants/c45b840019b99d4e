@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\managers\PromptManagers.py
+# hypothesis_version: 6.150.1
+
+[0.0, 1.0, 'active', 'content', 'inf', 'metrics', 'quality', 'selections', 'template_id', 'timestamp', 'total_selections', 'total_versions', 'variant', 'version_id', 'versions']
