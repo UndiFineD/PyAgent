@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\compliance\core\ComplianceCore.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.02, 0.1, 0.5, 1.0, 'Apache-2.0', 'BSD-3-Clause', 'CRITICAL', 'INFO', 'LICENSE', 'Licensing', 'MIT', 'PSF-2.0', 'Secret Leak', 'WARNING', 'aws_secret']

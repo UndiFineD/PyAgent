@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\interface\ui\gui\AppMenu.py
+# hypothesis_version: 6.150.1
+
+['Add Custom Agent...', 'Agents', 'BMAD', 'BMAD Wizard...', 'Exit', 'File', 'Load Session', 'Methodology Tracks', 'New Session', 'Save Session', 'Settings...', 'Toggle Theme', 'View', 'add_agent', 'add_custom', 'bmad_wizard', 'exit', 'load_session', 'new_session', 'save_session', 'set_track', 'show_settings', 'toggle_theme']

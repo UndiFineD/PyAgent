@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\dev\test_utils\ParallelTestRunner.py
+# hypothesis_version: 6.150.1
+
+[1000, 'failed', 'passed', 'total', 'total_duration_ms']

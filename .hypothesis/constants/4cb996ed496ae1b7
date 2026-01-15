@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\development\SecurityCore.py
+# hypothesis_version: 6.150.1
+
+['#!/bin/sh', 'CRITICAL', 'HIGH', 'Indirect Directive', 'Instruction Override', 'LOW', 'MEDIUM', 'Payload Loader', 'Social Engineering', 'Use of ev', '[[', '`.*`', 'al\\s*\\(', 'cat\\s+.*\\s*\\|\\s*grep', 'chmod\\s+777', 'critical', 'description', 'ev', 'high', 'medium', 'mv\\s+.*\\s+/dev/null', 'open\\s*\\([^)]*\\+', 'rm\\s+-rf\\s+/', 'rm\\s+-rf\\s+\\*', 'severity', 'timestamp', 'type', 'unset\\s+HISTFILE']

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\models\FileCategory.py
+# hypothesis_version: 6.150.1
+
+['build', 'code', 'configuration', 'data', 'documentation', 'other', 'test']

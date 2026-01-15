@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\swarm\OrchestratorDelegates.py
+# hypothesis_version: 6.150.1
+
+['core', 'file_manager', 'max_files', 'notifications', 'parallel_processor', 'process_file', 'update_manager']

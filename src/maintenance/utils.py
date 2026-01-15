@@ -45,6 +45,21 @@ class GitManager:
         return branch_name if code == 0 else None, current_branch
 
     @staticmethod
+    def get_changed_files():
+        """Returns a list of changed/added python files relative to main or uncommitted."""
+        # 1. Uncommitted changes
+        _, stdout, _ = run_command("git diff --name-only")
+        files = set(stdout.splitlines())
+        
+        # 2. Files changed in this branch relative to main
+        _, stdout_main, _ = run_command("git diff --name-only main")
+        files.update(stdout_main.splitlines())
+        
+        # 3. Filter for Python files only and ensure they exist
+        py_files = [f for f in files if f.endswith(".py") and os.path.exists(f)]
+        return py_files
+
+    @staticmethod
     def commit_changes(message):
         run_command("git add .")
         code, stdout, stderr = run_command(f'git commit -m "{message}"')
