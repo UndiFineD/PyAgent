@@ -1,0 +1,20 @@
+diff --git a/src/infrastructure/dev/test_utils/TestEnvironment.py b/src/infrastructure/dev/test_utils/TestEnvironment.py
+index 4a7ebf9..8563298 100644
+--- a/src/infrastructure/dev/test_utils/TestEnvironment.py
++++ b/src/infrastructure/dev/test_utils/TestEnvironment.py
+@@ -32,7 +32,6 @@ __version__ = VERSION
+ 
+ @dataclass
+ class TestEnvironment:
+-    __test__ = False
+     """Test environment configuration.
+ 
+     Attributes:
+@@ -42,6 +41,7 @@ class TestEnvironment:
+         isolation_level: File system isolation.
+         cleanup: Cleanup strategy.
+     """
++    __test__ = False
+ 
+     name: str
+     env_vars: dict[str, str] = field(default_factory=lambda: {})

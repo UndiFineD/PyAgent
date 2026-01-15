@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\polys\polyclasses.py
+# hypothesis_version: 6.150.1
+
+['%s(%s, %s)', '%s(%s, %s, %s)', '%s((%s, %s), %s)', '1.13', 'Inconsistent domain', '_cls', '_mod', '_rep', 'den', 'dmp-rep', 'dom', 'flint', 'fraction denominator', 'lev', 'lex', 'num', 'unreachable code', 'zero divisor']

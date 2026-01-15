@@ -21,7 +21,7 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 from datetime import datetime
 
 __version__ = VERSION
@@ -29,13 +29,16 @@ __version__ = VERSION
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
 
+
+
+
 class IntentCoherenceEngine:
     """
     Implements Swarm Consciousness (Phase 30).
     Maintains a unified 'Intent' layer that synchronizes all agent goals
     without necessitating explicit task decomposition.
     """
-    
+
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
         self.global_intent: str | None = None
@@ -49,7 +52,7 @@ class IntentCoherenceEngine:
         logging.info(f"IntentCoherenceEngine: Broadcasting global intent: {intent}")
         self.global_intent = intent
         self.intent_priority = priority
-        
+
         # Emit signal via the signal bus
         if hasattr(self.fleet, 'signals'):
             self.fleet.signals.emit("COHERENT_INTENT_ESTABLISHED", {
@@ -57,7 +60,7 @@ class IntentCoherenceEngine:
                 "priority": priority,
                 "timestamp": datetime.now().isoformat()
             }, sender="IntentCoherenceEngine")
-            
+
         return {
             "status": "synchronized",
             "global_intent": self.global_intent,
@@ -70,12 +73,12 @@ class IntentCoherenceEngine:
         """
         if not self.global_intent:
             return local_task
-            
+
         logging.info(f"IntentCoherenceEngine: Aligning {agent_name} with global intent.")
-        
-        # In a real implementation, we'd use an LLM or vector similarity to 
+
+        # In a real implementation, we'd use an LLM or vector similarity to
         # project the local task into the global intent space.
-        
+
         # For simulation, we'll just prepend the global context
         aligned_task = f"[Aligned with: {self.global_intent}] {local_task}"
         return aligned_task

@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/backend/RequestThrottler.py b/src/infrastructure/backend/RequestThrottler.py
+index d739645..122fa32 100644
+--- a/src/infrastructure/backend/RequestThrottler.py
++++ b/src/infrastructure/backend/RequestThrottler.py
+@@ -22,7 +22,7 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Any, Dict
++from typing import Any
+ import threading
+ import time
+ 

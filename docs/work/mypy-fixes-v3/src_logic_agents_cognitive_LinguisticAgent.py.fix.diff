@@ -1,0 +1,11 @@
+diff --git a/src/logic/agents/cognitive/LinguisticAgent.py b/src/logic/agents/cognitive/LinguisticAgent.py
+index 2736aa3..7264201 100644
+--- a/src/logic/agents/cognitive/LinguisticAgent.py
++++ b/src/logic/agents/cognitive/LinguisticAgent.py
+@@ -74,4 +74,4 @@ class LinguisticAgent(BaseAgent):
+ 
+     def improve_content(self, prompt: str) -> str:
+         """Entry point for verbalization."""
+-        return self.articulate_results(prompt, "How can I help you?")
+\ No newline at end of file
++        return self.articulate_results(prompt, "How can I help you?")

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\observability\stats\exporters\MetricsExporter.py
+# hypothesis_version: 6.150.1
+
+[1.0, 12.5, 256.0, 1500.0, 'CoderAgent', 'Export successful.', '__main__', 'agent', 'agent_calls_total', 'failure', 'fleet_cpu_percent', 'fleet_memory_mb', 'status', 'success']

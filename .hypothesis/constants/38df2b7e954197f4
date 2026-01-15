@@ -1,0 +1,4 @@
+# file: c:\DEV\PyAgent\src\infrastructure\backend\llm_backends\LLMBackend.py
+# hypothesis_version: 6.150.1
+
+[120, 'phase', 'system_prompt', 'timestamp_unix']

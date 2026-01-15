@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/orchestration/TenantIsolationOrchestrator.py b/src/infrastructure/orchestration/TenantIsolationOrchestrator.py
+index 1ebf487..6fecd4b 100644
+--- a/src/infrastructure/orchestration/TenantIsolationOrchestrator.py
++++ b/src/infrastructure/orchestration/TenantIsolationOrchestrator.py
+@@ -21,7 +21,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import os
+ import hashlib
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 

@@ -1,0 +1,20 @@
+diff --git a/src/interface/ui/gui/DialogManager.py b/src/interface/ui/gui/DialogManager.py
+index 9031550..ad85a6e 100644
+--- a/src/interface/ui/gui/DialogManager.py
++++ b/src/interface/ui/gui/DialogManager.py
+@@ -28,7 +28,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import tkinter as tk
+ from tkinter import ttk, messagebox, filedialog
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from collections.abc import Callable
+ 
+ __version__ = VERSION
+@@ -245,4 +245,4 @@ class DialogManager:
+             dialog.destroy()
+ 
+         ttk.Button(footer, text="SAVE & APPLY", style="Accent.TButton", command=on_save).pack(side=tk.RIGHT, padx=5)
+-        ttk.Button(footer, text="Cancel", command=dialog.destroy).pack(side=tk.RIGHT)
+\ No newline at end of file
++        ttk.Button(footer, text="Cancel", command=dialog.destroy).pack(side=tk.RIGHT)

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\huggingface_hub\_jobs_api.py
+# hypothesis_version: 6.150.1
+
+[3600, 'CANCELED', 'COMPLETED', 'DELETED', 'ERROR', 'RUNNING', 'arch', 'arguments', 'at', 'command', 'concurrency', 'createdAt', 'created_at', 'd', 'dockerImage', 'docker_image', 'endpoint', 'environment', 'flavor', 'h', 'hf.co/spaces/', 'id', 'jobSpec', 'job_spec', 'lastJob', 'last_job', 'm', 'message', 'name', 'nextJobRunAt', 'next_job_run_at', 'owner', 's', 'schedule', 'secrets', 'spaceId', 'space_id', 'stage', 'status', 'suspend', 'tags', 'timeout', 'timeoutSeconds', 'type']

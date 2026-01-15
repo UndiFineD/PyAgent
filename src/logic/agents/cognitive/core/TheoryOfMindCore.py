@@ -26,9 +26,12 @@ No I/O or side effects.
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, Any, List, Set, Tuple
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class TheoryOfMindCore:
     """Pure logic core for Theory of Mind modeling."""
@@ -40,7 +43,7 @@ class TheoryOfMindCore:
         domains: set[str] = set(profile.get("knowledge_domains", []))
         strengths: set[str] = set(profile.get("strengths", []))
         limitations: set[str] = set(profile.get("limitations", []))
-        
+
         if "domain" in observations:
             domains.add(observations["domain"])
         if "strength" in observations:
@@ -48,7 +51,7 @@ class TheoryOfMindCore:
         if "success" in observations:
             if not observations["success"]:
                 limitations.add(observations.get("task", "unknown"))
-                
+
         return {
             "knowledge_domains": list(domains),
             "strengths": list(strengths),
@@ -72,5 +75,5 @@ class TheoryOfMindCore:
         for agent, profile in profiles.items():
             score = TheoryOfMindCore.estimate_knowledge_score(profile, task)
             rankings.append((agent, score))
-            
+
         return [name for name, score in sorted(rankings, key=lambda x: x[1], reverse=True) if score > 0.5]

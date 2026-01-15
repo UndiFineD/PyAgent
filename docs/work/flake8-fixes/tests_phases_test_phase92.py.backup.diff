@@ -1,0 +1,47 @@
+diff --git a/tests/phases/test_phase92.py b/tests/phases/test_phase92.py
+index ef46d80..4d1cf10 100644
+--- a/tests/phases/test_phase92.py
++++ b/tests/phases/test_phase92.py
+@@ -1,12 +1,16 @@
+ import unittest
+ import time
+ import os
+-import sys
+ 
+ # Ensure the project root is in PYTHONPATH
+ 
+ from src.logic.agents.swarm.ResourceForecastingAgent import ResourceForecastingAgent
+ 
++
++
++
++
++
+ class TestResourceForecasting(unittest.TestCase):
+     def setUp(self):
+         self.agent = ResourceForecastingAgent(os.getcwd())
+@@ -16,7 +20,7 @@ class TestResourceForecasting(unittest.TestCase):
+         self.agent.log_usage_snapshot(10.0, 100.0, 50.0)
+         time.sleep(0.1)
+         self.agent.log_usage_snapshot(12.0, 105.0, 55.0)
+-        
++
+         forecast = self.agent.predict_future_needs(horizon_hours=1)
+         self.assertEqual(forecast['status'], "Success")
+         self.assertTrue(forecast['prediction']['compute'] > 12.0)
+@@ -27,9 +31,14 @@ class TestResourceForecasting(unittest.TestCase):
+         self.agent.log_usage_snapshot(80.0, 400.0, 200.0)
+         time.sleep(0.1)
+         self.agent.log_usage_snapshot(90.0, 450.0, 220.0)
+-        
++
+         rec = self.agent.get_scaling_recommendation()
+         self.assertIn("SCALE_UP", rec)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     unittest.main()

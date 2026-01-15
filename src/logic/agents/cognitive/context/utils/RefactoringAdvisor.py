@@ -23,10 +23,13 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.RefactoringSuggestion import RefactoringSuggestion
-from typing import Any, Dict, List
+from typing import Any
 import re
 
 __version__ = VERSION
+
+
+
 
 class RefactoringAdvisor:
     """Suggests refactoring based on context analysis.

@@ -23,12 +23,14 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .ValidationResult import ValidationResult
-from typing import List
 import hashlib
 import logging
 import re
 
 __version__ = VERSION
+
+
+
 
 class ReportValidator:
     """Validator for report data integrity.

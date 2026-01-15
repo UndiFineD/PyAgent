@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class DependencyType(Enum):
     """Types of code dependencies."""
     IMPORT = "import"

@@ -27,6 +27,9 @@ from dataclasses import dataclass
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class ToolSuggestion:
     """Suggestion from a code analysis tool.

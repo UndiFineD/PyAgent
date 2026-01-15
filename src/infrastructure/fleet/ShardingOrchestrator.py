@@ -28,12 +28,14 @@ import logging
 import json
 import numpy as np
 from pathlib import Path
-from typing import Dict, List
 from collections import Counter
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 
 __version__ = VERSION
+
+
+
 
 class ShardingOrchestrator:
     """Analyzes agent interactions and suggests/implements logical grouping.
@@ -46,9 +48,9 @@ class ShardingOrchestrator:
         self.interaction_log = workspace_root / "data/logs/interaction_matrix.json"
         self.shard_mapping_path = workspace_root / "config/shard_mapping.json"
         self._counts: Counter = Counter()
-        self._agent_vram: dict[str, float] = {} # agent -> VRAM usage in MB
+        self._agent_vram: dict[str, float] = {}  # agent -> VRAM usage in MB
         self._total_interactions = 0
-        self._current_mapping: dict[str, str] = {} # agent -> shard_id
+        self._current_mapping: dict[str, str] = {}  # agent -> shard_id
 
     def record_interaction(self, agent_a: str, agent_b: str, vram_a: float = 512.0, vram_b: float = 512.0) -> None:
         """Records a communication event and updates VRAM telemetry (Phase 234)."""
@@ -57,7 +59,7 @@ class ShardingOrchestrator:
         self._agent_vram[agent_a] = vram_a
         self._agent_vram[agent_b] = vram_b
         self._total_interactions += 1
-        
+
         if self._total_interactions >= self.threshold:
             self.rebalance_shards()
             self._total_interactions = 0
@@ -69,7 +71,7 @@ class ShardingOrchestrator:
             return
 
         logging.info(f"ShardingOrchestrator: MIGRATING '{agent_name}' from {old_shard} to {target_shard_id}")
-        # In a real system, this would involve updating the AgentRegistry 
+        # In a real system, this would involve updating the AgentRegistry
         # or notifying the FleetManager to update the agent's signal bus.
         self._current_mapping[agent_name] = target_shard_id
         self._sync_mapping_to_disk()
@@ -77,7 +79,7 @@ class ShardingOrchestrator:
     def rebalance_shards(self) -> None:
         """Clusters agents using DBSCAN based on interaction density and VRAM (Phase 234)."""
         logging.info("ShardingOrchestrator: Performing Robust DBSCAN Rebalancing...")
-        
+
         agents = sorted(list(self._agent_vram.keys()))
         if not agents:
             return
@@ -123,24 +125,47 @@ class ShardingOrchestrator:
         for agent, shard in self._current_mapping.items():
             if shard not in grouped:
                 grouped[shard] = []
+
+
+
+
+
+
+
+
+
+
             grouped[shard].append(agent)
         self._save_mapping(grouped)
 
     def _save_mapping(self, mapping: dict[str, list[str]]) -> None:
+
+
+
+
         self.shard_mapping_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.shard_mapping_path, "w") as f:
             json.dump(mapping, f, indent=4)
 
     def _save_mapping(self, mapping: dict[str, list[str]]) -> None:
+
+
         self.shard_mapping_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.shard_mapping_path, "w") as f:
             json.dump(mapping, f, indent=4)
 
     def load_mapping(self) -> dict[str, list[str]]:
+
+
+
         if self.shard_mapping_path.exists():
             with open(self.shard_mapping_path) as f:
                 return json.load(f)
         return {}
+
+
+
+
 
 if __name__ == "__main__":
     # Test stub

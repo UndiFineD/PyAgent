@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\fleet\AgentRegistry.py
+# hypothesis_version: 6.150.1
+
+['.py', '1.0.0', 'Agent', 'SDK_REQUIRED', '_', '__', '__min_sdk__', 'agent_manifest.json', 'fleet', 'manifest.json', 'mcp', 'plugins', 'register_tools', 'registry']

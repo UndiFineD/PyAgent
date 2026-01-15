@@ -28,13 +28,16 @@ from .Improvement import Improvement
 from .ImprovementDiff import ImprovementDiff
 from .ImprovementDiffType import ImprovementDiffType
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 import hashlib
 import logging
 import re
 import subprocess
 
 __version__ = VERSION
+
+
+
 
 class BranchComparer:
     """Comparer for improvements across git branches.

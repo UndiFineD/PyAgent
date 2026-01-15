@@ -25,16 +25,18 @@ from src.core.base.version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import create_main_function
 from src.logic.agents.development.SecurityCore import SecurityCore
-from typing import List, Tuple
 
 __version__ = VERSION
 
+
+
+
 class SecurityGuardAgent(BaseAgent):
     """Protects the workspace by validating diffs and commands."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.capabilities.extend(["security-audit", "secret-scanning", "vulnerability-detection"]) # Phase 241
+        self.capabilities.extend(["security-audit", "secret-scanning", "vulnerability-detection"])  # Phase 241
         self.security_core = SecurityCore(workspace_root=str(self.file_path.parent.parent.parent))
         self._system_prompt = (
             "You are the Security Guard Agent. "
@@ -66,32 +68,32 @@ class SecurityGuardAgent(BaseAgent):
     def generate_safety_report(self, task: str, code_changes: str, commands: list[str]) -> str:
         """Generates a comprehensive safety audit report."""
         vulnerabilities = self.security_core.scan_content(code_changes)
-        
+
         command_reports = []
         for cmd in commands:
             level, msg = self.security_core.audit_command(cmd)
             command_reports.append(f"- `{cmd}`: **{level}** - {msg}")
-            
+
         risk_level = self.security_core.get_risk_level(vulnerabilities)
         if any("HIGH" in r or "CRITICAL" in r for r in command_reports):
             risk_level = "HIGH"
-            
+
         report = [
             f"# Safety Audit Report for: {task}",
             f"**Overall Risk Level: {risk_level}**",
             "\n## Code Vulnerabilities",
         ]
-        
+
         if not vulnerabilities:
             report.append("- No high-risk patterns detected in code changes.")
         else:
             for v in vulnerabilities:
                 report.append(f"- [{v.severity.upper()}] Line {v.line_number}: {v.description}")
                 report.append(f"  * Fix: {v.fix_suggestion}")
-                
+
         report.append("\n## Command Audit")
         report.extend(command_reports if command_reports else ["- No commands provided for audit."])
-        
+
         return "\n".join(report)
 
     def detect_jailbreak(self, prompt: str) -> bool:
@@ -100,12 +102,12 @@ class SecurityGuardAgent(BaseAgent):
         jailbreak_markers = ["DAN", "Do Anything Now", "Stay in character", "You are now a", "bypass", "unfiltered"]
         if any(marker.lower() in prompt.lower() for marker in jailbreak_markers):
             return True
-            
+
         # Check for adversarial suffix patterns
         if len(prompt) > 50 and prompt.strip().endswith(("!!!", "???", "---")):
             # Common in pressure-based jailbreaks
-            pass 
-            
+            pass
+
         return False
 
     def improve_content(self, prompt: str) -> str:
@@ -114,27 +116,49 @@ class SecurityGuardAgent(BaseAgent):
         risk_level, command_warning = self.audit_command(prompt)
         injections = self.scan_for_injection(prompt)
         is_jailbreak = self.detect_jailbreak(prompt)
-        
+
         report = [
             "## Security Audit Report",
+
+
+
+
+
+
+
+
+
+
             f"**Target Analysis**: {prompt[:100]}...",
             f"**Overall Risk**: {'HIGH' if risk_level == 'HIGH' or injections or is_jailbreak else risk_level}",
             ""
         ]
-        
+
+
+
+
+
         if is_jailbreak:
             report.append("> [!DANGER] Jailbreak Attempt Detected")
-            
+
         if secretions := (secrets + injections):
+
+
+
             report.append("> [!CAUTION] Security Threats Detected")
             for s in secretions:
                 report.append(f"> - {s}")
             report.append("")
-            
+
+
         if risk_level != "LOW":
             report.append(f"> [!WARNING] Command Risk: {command_warning}")
-            
+
         return "\n".join(report)
+
+
+
+
 
 if __name__ == "__main__":
     main = create_main_function(SecurityGuardAgent, "SecurityGuard Agent", "Content or Command to audit")

@@ -26,12 +26,15 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
+
+
 class TemporalShardAgent(BaseAgent):
     """
     Agent responsible for temporal sharding of memory.
     Allows for 'flashbacks' and retrieval of context based on temporal relevance.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -47,7 +50,7 @@ class TemporalShardAgent(BaseAgent):
         Retrieves relevant context from a specific temporal shard.
         """
         logging.info(f"TemporalShardAgent: Retrieving context for {current_task} from {time_window}")
-        
+
         # Simulated retrieval
         return f"FLASHBACK [{time_window}]: Similar task performed. Key findings: used 'as_tool' decorator."
 

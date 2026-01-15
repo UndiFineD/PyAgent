@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\fleet\core\LoadBalancerCore.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.2, 0.4, 0.8, 1.0, 5000, 'CONSOLIDATE_SHARDS', 'SPAWN_NEW_INSTANCES', 'STABLE']

@@ -24,13 +24,16 @@ Enables real-time dashboards in Grafana and ELK stack.
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, Any, Optional
+from typing import Any
 
 __version__ = VERSION
 
+
+
+
 class PrometheusExporter:
     """Formats fleet telemetry into Prometheus-compatible metrics."""
-    
+
     def __init__(self) -> None:
         self.metrics_registry: dict[str, float] = {}
 
@@ -39,7 +42,7 @@ class PrometheusExporter:
         label_str = ""
         if labels:
             label_str = "{" + ",".join([f'{k}="{v}"' for k, v in labels.items()]) + "}"
-        
+
         metric_key = f"{name}{label_str}"
         self.metrics_registry[metric_key] = value
 
@@ -49,7 +52,7 @@ class PrometheusExporter:
         for key, value in self.metrics_registry.items():
             # Basic Prometheus format: metric_name{labels} value
             lines.append(f"pyagent_{key} {value}")
-        
+
         return "\n".join(lines)
 
     def get_grafana_info(self) -> dict[str, Any]:

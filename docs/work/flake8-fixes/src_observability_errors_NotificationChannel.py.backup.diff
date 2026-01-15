@@ -1,0 +1,22 @@
+diff --git a/src/observability/errors/NotificationChannel.py b/src/observability/errors/NotificationChannel.py
+index 210ba7d..9fa6905 100644
+--- a/src/observability/errors/NotificationChannel.py
++++ b/src/observability/errors/NotificationChannel.py
+@@ -26,10 +26,15 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class NotificationChannel(Enum):
+     """Notification channel types."""
+     SLACK = "slack"
+     TEAMS = "teams"
+     EMAIL = "email"
+     WEBHOOK = "webhook"
+-    DISCORD = "discord"
+\ No newline at end of file
++    DISCORD = "discord"

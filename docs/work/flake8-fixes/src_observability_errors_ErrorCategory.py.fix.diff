@@ -1,0 +1,28 @@
+diff --git a/src/observability/errors/ErrorCategory.py b/src/observability/errors/ErrorCategory.py
+index da7b766..efbff79 100644
+--- a/src/observability/errors/ErrorCategory.py
++++ b/src/observability/errors/ErrorCategory.py
+@@ -26,6 +26,16 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class ErrorCategory(Enum):
+     """Error categories."""
+     SYNTAX = "syntax"
+@@ -38,4 +48,4 @@ class ErrorCategory(Enum):
+     DEPRECATION = "deprecation"
+     VALUE = "value"
+     IMPORT = "import"
+-    OTHER = "other"
+\ No newline at end of file
++    OTHER = "other"

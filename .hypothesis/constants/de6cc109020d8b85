@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\security\ComplianceAuditAgent.py
+# hypothesis_version: 6.150.1
+
+[100, '=', 'Audit Trail Logging', 'ComplianceAudit', 'ComplianceAuditAgent', 'Compliant', 'Encryption at Rest', 'Error', 'FAIL', 'GDPR', 'Non-Compliant', 'PII Data Encryption', 'SOC2', 'StandardVerifier', 'check', 'failed_checks', 'message', 'recommendation', 'score', 'standard', 'status']

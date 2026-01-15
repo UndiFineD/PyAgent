@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\cluster\_affinity_propagation.py
+# hypothesis_version: 6.150.1
+
+[0.5, 1.0, 100, 200, 'Did not converge', 'S', 'affinity', 'array-like', 'boolean', 'cluster_centers_', 'convergence_iter', 'copy', 'csr', 'damping', 'euclidean', 'left', 'max_iter', 'neither', 'precomputed', 'preference', 'random_state', 'return_n_iter', 'verbose']

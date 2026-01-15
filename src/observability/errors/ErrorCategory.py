@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class ErrorCategory(Enum):
     """Error categories."""
     SYNTAX = "syntax"

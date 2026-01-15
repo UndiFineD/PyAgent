@@ -5,5 +5,20 @@ based on learned patterns of workload and system state.
 """
 
 from src.core.base.version import VERSION
+from src.core.base.BaseAgent import BaseAgent
+
+
+
+class RLPriorityAgent(BaseAgent):
+
+
+
+
+    """Reinforcement Learning based priority and resource allocation agent."""
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        self._system_prompt = "You are the RL Priority Agent."
+
+
 
 __version__ = VERSION

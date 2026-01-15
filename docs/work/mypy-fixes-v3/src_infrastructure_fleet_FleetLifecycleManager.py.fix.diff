@@ -1,0 +1,20 @@
+diff --git a/src/infrastructure/fleet/FleetLifecycleManager.py b/src/infrastructure/fleet/FleetLifecycleManager.py
+index 5f9a012..054e68f 100644
+--- a/src/infrastructure/fleet/FleetLifecycleManager.py
++++ b/src/infrastructure/fleet/FleetLifecycleManager.py
+@@ -22,7 +22,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ import time
+-from typing import Optional, Type, TYPE_CHECKING
++from typing import TYPE_CHECKING
+ from src.core.base.BaseAgent import BaseAgent
+ 
+ __version__ = VERSION
+@@ -86,4 +86,4 @@ class FleetLifecycleManager:
+ 
+         self.fleet.agents[name] = agent
+         logging.info(f"Registered agent: {name}")
+-        return f"Agent {name} registered."
+\ No newline at end of file
++        return f"Agent {name} registered."

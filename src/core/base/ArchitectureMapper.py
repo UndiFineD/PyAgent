@@ -2,7 +2,17 @@
 # Evolution Phase 236: Documentation Architecture - Mermaid C4 System Context Diagram
 
 import os
+import logging
 from pathlib import Path
+
+# Configure module-level logging
+logger = logging.getLogger(__name__)
+
+
+
+
+
+
 
 class ArchitectureMapper:
     """
@@ -53,9 +63,9 @@ class ArchitectureMapper:
 
     def run(self) -> None:
         """Generates and saves the markdown file."""
-        print("[*] Mapping PyAgent architecture...")
+        logger.info("Mapping PyAgent architecture...")
         diagram = self.generate_diagram()
-        
+
         md_content = f"""# Architecture: System Context
 
 This diagram provides a high-level overview of the PyAgent Fleet architecture, mapping the inter-dependencies between major system boundaries.
@@ -63,27 +73,56 @@ This diagram provides a high-level overview of the PyAgent Fleet architecture, m
 ## System Context Diagram
 
 ```mermaid
+
+
+
+
+
+
+
+
+
+
 {diagram}
 ```
+
+
+
+
+
 
 ## Boundaries
 
 | Boundary | Description | Key Modules |
 |----------|-------------|-------------|
+
 | **Core** | Fundamental logic, versioning, and workspace integrity. | `DependencyGraph`, `IncrementalProcessor`, `version.py` |
 | **Infrastructure** | Fleet orchestration, sharding, and external resource management. | `AsyncFleetManager`, `ShardingOrchestrator`, `SecretManager` |
 | **Logic** | The specialized agents performing the evolution tasks. | `CognitiveAgents`, `CoderAgent`, `SecurityAuditAgent` |
 | **Observability** | Telemetry, logging, and metrics aggregation. | `StructuredLogger`, `OTelManager`, `GPUMonitor` |
 
+
+
+
+
 ---
 *Generated automatically by `ArchitectureMapper.py` (Phase 236)*
 """
-        
+
         os.makedirs(self.output_path.parent, exist_ok=True)
+
+
+
+
         with open(self.output_path, "w", encoding="utf-8") as f:
             f.write(md_content)
-        
-        print(f"[+] Architecture map generated: {self.output_path}")
+
+        logger.info(f"Architecture map generated: {self.output_path}")
+
+
+
+
+
 
 if __name__ == "__main__":
     mapper = ArchitectureMapper(os.getcwd())

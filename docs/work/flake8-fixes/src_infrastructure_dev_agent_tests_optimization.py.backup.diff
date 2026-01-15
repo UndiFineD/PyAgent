@@ -1,0 +1,41 @@
+diff --git a/src/infrastructure/dev/agent_tests/optimization.py b/src/infrastructure/dev/agent_tests/optimization.py
+index 14ef0bd..f620cd9 100644
+--- a/src/infrastructure/dev/agent_tests/optimization.py
++++ b/src/infrastructure/dev/agent_tests/optimization.py
+@@ -22,11 +22,16 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import List, Set, Tuple, Dict, Any
++from typing import Any
+ from .models import TestCase
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class TestSuiteOptimizer:
+     """Optimize test suites by removing redundant tests."""
+     __test__ = False
+@@ -121,6 +126,11 @@ class TestSuiteOptimizer:
+ 
+         return kept
+ 
++
++
++
++
++
+ class CoverageGapAnalyzer:
+     """Analyzes coverage gaps."""
+ 
+@@ -172,4 +182,4 @@ class CoverageGapAnalyzer:
+ 
+     def find_uncovered(self) -> list[str]:
+         """Find uncovered items."""
+-        return []
+\ No newline at end of file
++        return []

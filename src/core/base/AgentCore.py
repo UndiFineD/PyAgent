@@ -34,22 +34,30 @@ import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 # Only internal imports allowed for Rust readiness
 __version__ = VERSION
 
+
+
 @dataclass
 class CodeQualityReport:
     """Report container for code quality analysis."""
+
+
+
+
     score: float
     violations: list[dict[str, Any]] = field(default_factory=list)
     metrics: dict[str, Any] = field(default_factory=dict)
     suggestions: list[str] = field(default_factory=list)
 
+
+
 class LogicCore:
     """Base class for performance-critical text processing logic."""
-    
+
     def process_text(self, text: str) -> str:
         """Normalize text: trim whitespace and remove empty lines."""
         if not text:
@@ -70,6 +78,88 @@ class LogicCore:
             "token_count": len(text) // 4
         }
 
+    def generate_cache_key(self, prompt: str, content: str, model: str = "") -> str:
+        """Generates a stable cache key."""
+        data = f"{prompt}:{content}:{model}"
+        return hashlib.sha256(data.encode()).hexdigest()
+
+    def calculate_diff(self, old_content: str, new_content: str, filename: str = "file") -> str:
+        """Generates a unified diff between two strings."""
+        if not old_content or not new_content:
+            return ""
+
+        diff = difflib.unified_diff(
+            old_content.splitlines(keepends=True),
+            new_content.splitlines(keepends=True),
+            fromfile=f"a/{filename}",
+            tofile=f"b/{filename}"
+        )
+        return "".join(diff)
+
+    def fix_markdown(self, content: str) -> str:
+        """Normalization logic for markdown text."""
+        if not content:
+            return ""
+        content = re.sub(r'^(#+.*)\n([^\n#])', r'\1\n\n\2', content, flags=re.MULTILINE)
+        return content
+
+    def validate_content_safety(self, content: str) -> bool:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        """High-performance safety check on content."""
+        return True
+
+
+
+    def score_response_quality(self, response: str) -> int:
+        """Score the quality of an AI response (1-5)."""
+        if not response or response.isspace():
+            return 1  # ResponseQuality.INVALID
+
+
+        score = 3
+        if len(response) > 500:
+            score += 1
+        if "```" in response:
+            score += 1
+        if "error" in response.lower() and len(response) < 100:
+            score -= 2
+
+        return max(1, min(5, score))
+
+    def build_prompt_with_history(self, prompt: str, history: list[dict[str, str]], max_history: int = 5) -> str:
+        """Logic for constructing a prompt string from history."""
+        context = ""
+        for msg in history[-max_history:]:
+            role = msg.get("role", "user")
+            content = msg.get("content", "")
+            context += f"\n{role.upper()}: {content}"
+
+        return f"{context}\n\nUSER: {prompt}"
+
+
+
+
+
+
 class BaseCore(LogicCore):
     """Pure logic core providing foundation for all agents."""
 
@@ -87,6 +177,16 @@ class BaseCore(LogicCore):
         curr = file_path.absolute()
         for _ in range(5):
             if (curr / ".git").exists() or (curr / "requirements.txt").exists() or (curr / "README.md").exists():
+
+
+
+
+
+
+
+
+
+
                 return str(curr)
             if curr.parent == curr:
                 break
@@ -95,6 +195,16 @@ class BaseCore(LogicCore):
         return str(file_path.parent.parent.parent)
 
     def is_path_ignored(self, path: Path, repo_root: Path, ignored_patterns: set[str]) -> bool:
+
+
+
+
+
+
+
+
+
+
         """Check if a path should be ignored based on patterns."""
         try:
             relative_path = str(path.relative_to(repo_root)).replace('\\', '/')
@@ -114,74 +224,37 @@ class BaseCore(LogicCore):
                 return True
         return False
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     def _is_default_ignored(self, relative_path: str) -> bool:
         """Internal helper for standard fleet ignore directories."""
         default_ignores = {
-            '.git', '__pycache__', 'node_modules', '.venv', 'venv', 
+            '.git', '__pycache__', 'node_modules', '.venv', 'venv',
             'env', '.agent_cache', '.agent_snapshots'
         }
         parts = relative_path.split('/')
         return any(part in default_ignores for part in parts)
-
-    def calculate_diff(self, old_content: str, new_content: str, filename: str = "file") -> str:
-        """Generates a unified diff between two strings."""
-        if not old_content or not new_content:
-            return ""
-
-        diff = difflib.unified_diff(
-            old_content.splitlines(keepends=True),
-            new_content.splitlines(keepends=True),
-            fromfile=f"a/{filename}",
-            tofile=f"b/{filename}"
-        )
-        return "".join(diff)
-
-    def fix_markdown(self, content: str) -> str:
-        """Normalization logic for markdown text."""
-        if not content:
-            return ""
-        content = re.sub(r'^(#+.*)\n([^\n#])', r'\1\n\n\2', content, flags=re.MULTILINE)       
-        return content
-
-    def validate_content_safety(self, content: str) -> bool:
-        """High-performance safety check on content."""
-        return True
-
-    def score_response_quality(self, response: str) -> int:
-        """Score the quality of an AI response (1-5)."""
-        if not response or response.isspace():
-            return 1 # ResponseQuality.INVALID
-
-        score = 3
-        if len(response) > 500:
-            score += 1
-        if "```" in response:
-            score += 1
-        if "error" in response.lower() and len(response) < 100:
-            score -= 2
-
-        return max(1, min(5, score))
-
-    def generate_cache_key(self, prompt: str, content: str, model: str = "") -> str:
-        """Generates a stable cache key."""
-        data = f"{prompt}:{content}:{model}"
-        return hashlib.sha256(data.encode()).hexdigest()
-
-    def build_prompt_with_history(self, prompt: str, history: list[dict[str, str]], max_history: int = 5) -> str:
-        """Logic for constructing a prompt string from history."""
-        context = ""
-        for msg in history[-max_history:]:
-            role = msg.get("role", "user")
-            content = msg.get("content", "")
-            context += f"\n{role.upper()}: {content}"
-
-        return f"{context}\n\nUSER: {prompt}"
 
     def estimate_tokens(self, text: str) -> int:
         """Heuristic-based token estimation."""
         if not text:
             return 0
         return len(text) // 4
+
+
+
+
 
     def truncate_for_context(self, text: str, max_tokens: int) -> str:
         """Truncate text to fit within token limit."""
@@ -196,6 +269,10 @@ class BaseCore(LogicCore):
             f for f in files
             if f.suffix in supported_extensions and not self.is_path_ignored(f, repo_root, ignored_patterns)
         ]
+
+
+
+
 
 class AgentCore(BaseCore):
     """Logic-only core for managing agent-specific data transformations."""

@@ -27,11 +27,14 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import re
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
+
+
+
 
 class ImmuneSystemAgent(BaseAgent):
     """Detects and mitigates security threats and prompt injections across the swarm."""
@@ -47,7 +50,7 @@ class ImmuneSystemAgent(BaseAgent):
             r"(?i)do anything now",
             r"(?i)you are now a...",
             r"(?i)<script>",
-            r"(?i)SELECT .* FROM .* WHERE", # Simple SQL injection
+            r"(?i)SELECT .* FROM .* WHERE",  # Simple SQL injection
             r"(?i)rm -rf /"
         ]
         self.quarantined_nodes: list[str] = []
@@ -67,7 +70,7 @@ class ImmuneSystemAgent(BaseAgent):
             issue_type: The nature of the failure (e.g., 'crash', 'logical_loop', 'unauthorized_access').
         """
         logging.info(f"ImmuneSystem: Self-healing protocol triggered for {node_id} (Issue: {issue_type})")
-        
+
         # simulated healing steps
         steps = [
             f"Step 1: Snapshot and isolate {node_id}",
@@ -75,7 +78,7 @@ class ImmuneSystemAgent(BaseAgent):
             "Step 3: Verification via RealityAnchorAgent",
             "Step 4: Gradually restore node connections"
         ]
-        
+
         return f"Self-healing complete for {node_id}. Integrity Level: 100%. \n" + "\n".join(steps)
 
     @as_tool
@@ -88,7 +91,7 @@ class ImmuneSystemAgent(BaseAgent):
         for pattern in self.injection_patterns:
             if re.search(pattern, input_text):
                 findings.append(f"Matched pattern: {pattern}")
-        
+
         status = "safe" if not findings else "dangerous"
         if status == "dangerous":
             logging.warning(f"ImmuneSystem: Detected potential injection: {findings}")
@@ -109,7 +112,7 @@ class ImmuneSystemAgent(BaseAgent):
         for log in agent_logs:
             agent_id = log.get("agent_id")
             activity = log.get("activity", "")
-            
+
             # Simple anomaly: repeating the same activity too many times
             if "retrying" in activity.lower() and activity.count("retrying") > 5:
                 anomalies.append(f"Agent {agent_id} is in a retry loop.")
@@ -136,23 +139,45 @@ class ImmuneSystemAgent(BaseAgent):
             sanitized = re.sub(pattern, "[CLEANSED]", sanitized)
         return sanitized
 
+
+
+
+
+
+
+
+
+
+
     def propose_autonomous_patch(self, vulnerability: str, insecure_code: str) -> str:
         """
         Proposes a patch for a detected vulnerability using AI reasoning.
+
+
+
         """
         prompt = (
             f"Vulnerability: {vulnerability}\n"
             f"Insecure Code:\n{insecure_code}\n\n"
             "Generate a secure patch to fix this vulnerability."
+
+
         )
         # Calls the inherited think() method (mocked in tests)
         patch = self.think(prompt)
-        
+
         return f"### Autonomous Security Patch Proposal\n\n{patch}"
+
+
+
 
     def improve_content(self, prompt: str) -> str:
         """General threat mitigation strategy."""
         return "The digital immune system is active. All node telemetry is within normal bounds."
+
+
+
+
 
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function

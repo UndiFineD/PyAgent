@@ -26,6 +26,9 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
+
+
 @as_tool
 def sample_automated_task() -> None:
     """Automated task from sample recording."""

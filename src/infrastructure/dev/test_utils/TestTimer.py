@@ -22,12 +22,15 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Optional
 import time
 
 __version__ = VERSION
 
+
+
+
 class TestTimer:
+    """Timer utility for tracking test execution duration."""
     __test__ = False
     """Timer for measuring test execution time."""
 

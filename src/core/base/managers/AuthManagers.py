@@ -22,10 +22,15 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 from dataclasses import dataclass, field
-from typing import Dict, Optional
 from src.core.base.models import AuthConfig, AuthMethod, _empty_dict_str_str
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class AuthenticationManager:
     """Manager for authentication methods."""
@@ -58,29 +63,59 @@ class AuthenticationManager:
             return self.token_cache[cache_key]
         token = self.config.token
         if not token:
-             logging.error(f"OAuth token missing for {cache_key}")
-             return ""
+            logging.error(f"OAuth token missing for {cache_key}")
+            return ""
+
+
+
+
+
+
+
+
+
+
         self.token_cache[cache_key] = token
         return token
+
+
 
     def refresh_token(self) -> None:
         self.token_cache.clear()
 
     def set_custom_header(self, key: str, value: str) -> None:
+
+
+
+
+
         self.config.custom_headers[key] = value
 
     def validate(self) -> bool:
         if self.config.method == AuthMethod.NONE:
             return True
+
+
+
+
+
         if self.config.method == AuthMethod.API_KEY:
             return bool(self.config.api_key)
         if self.config.method == AuthMethod.BEARER_TOKEN:
             return bool(self.config.token)
         if self.config.method == AuthMethod.BASIC_AUTH:
+
+
+
+
             return bool(self.config.username and self.config.password)
         if self.config.method == AuthMethod.OAUTH2:
             return bool(self.config.oauth_client_id and self.config.oauth_client_secret)
         return True
+
+
+
+
 
 @dataclass
 class AuthManager:

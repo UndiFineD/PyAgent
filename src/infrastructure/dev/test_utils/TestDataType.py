@@ -26,9 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class TestDataType(Enum):
-    __test__ = False
     """Types of test data."""
+    __test__ = False
 
     PYTHON_CODE = "python_code"
     MARKDOWN = "markdown"

@@ -1,0 +1,307 @@
+diff --git a/src/infrastructure/dev/scripts/run_fleet_self_improvement.py b/src/infrastructure/dev/scripts/run_fleet_self_improvement.py
+index 42bca06..1918584 100644
+--- a/src/infrastructure/dev/scripts/run_fleet_self_improvement.py
++++ b/src/infrastructure/dev/scripts/run_fleet_self_improvement.py
+@@ -40,8 +40,9 @@ import argparse
+ import subprocess
+ import re
+ from pathlib import Path
+-from typing import List, Dict, Any
++from typing import Any
+ from src.infrastructure.fleet.FleetManager import FleetManager
++from src.observability.StructuredLogger import StructuredLogger
+ 
+ # Phase 120: Load environment variables if available
+ try:
+@@ -52,11 +53,11 @@ except ImportError:
+ 
+ __version__ = VERSION
+ 
+-def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, context_path: str = None, current_cycle: int = 1, model_name: str = "gemini-3-flash") -> None:
++def run_cycle(fleet: FleetManager, root: str, logger: StructuredLogger, prompt_path: str | None = None, context_path: str | None = None, current_cycle: int = 1, model_name: str = "gemini-3-flash") -> None:
+     """Run a single improvement cycle."""
+     start_time = time.time()
+-    print(f"\n--- CYCLE {current_cycle} STARTING ---")
+-    print(f"Time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
++    logger.info(f"--- CYCLE {current_cycle} STARTING ---")
++    logger.info(f"Time: {time.strftime('%Y-%m-%d %H:%M:%S')}")
+ 
+     # 0. Load Strategic Directive / Directives
+     strategic_note = ""
+@@ -74,7 +75,7 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, context_p
+                 file_content = p_path.read_text(encoding="utf-8")
+                 strategic_note += "\n" + file_content
+             except Exception as e:
+-                print(f" - Failed to load {directive_file}: {e}")
++                logger.error(f" - Failed to load {directive_file}: {e}")
+     
+     # Parse merged directives
+     if strategic_note:
+@@ -95,14 +96,14 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, context_p
+                     target_dirs = [d.strip().strip('"').strip("'").strip() for d in inner if d.strip()]
+             else:
+                 target_dirs = [d.strip() for d in focus_val.split(",") if d.strip()]
+-            print(f" - Directive Focus: {target_dirs}")
++            logger.info(f" - Directive Focus: {target_dirs}")
+         
+         # Parse and execute @cmd: markers (Proactive Fixes)
+         import shlex
+         cmd_matches = re.findall(r"@cmd:\s*(.*)", strategic_note, re.IGNORECASE)
+         for cmd in cmd_matches:
+             clean_cmd = cmd.strip().strip('"').strip("'")
+-            print(f" - Executing Directive Command: {clean_cmd}")
++            logger.info(f" - Executing Directive Command: {clean_cmd}")
+             # Use shlex for safer execution (Phase 147 Security hardening)
+             # We avoid shell=True to prevent command injection warnings and risks
+             try:
+@@ -110,7 +111,7 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, context_p
+                 # shlex properly handles quoted arguments and prevents injection
+                 subprocess.run(shlex.split(clean_cmd), cwd=root, check=False)
+             except Exception as e:
+-                print(f"   - Command failed: {e}")
++                logger.error(f"   - Command failed: {e}")
+ 
+         # NOTE: Python code blocks in directives removed in Phase 2 (Security Hardening)
+         # exec() is a critical security vulnerability - arbitrary code execution risk
+@@ -127,10 +128,10 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, context_p
+     
+     stats = combined_stats
+     
+-    print("\nScan complete:")
+-    print(f" - Files Scanned: {stats['files_scanned']}")
+-    print(f" - Issues Found: {stats['issues_found']}")
+-    print(f" - Autonomous Fixes Applied: {stats['fixes_applied']}")
++    logger.info("Scan complete:")
++    logger.info(f" - Files Scanned: {stats['files_scanned']}")
++    logger.info(f" - Issues Found: {stats['issues_found']}")
++    logger.info(f" - Autonomous Fixes Applied: {stats['fixes_applied']}")
+     
+     # 2. Log what is 'broken' (issues not fixed)
+     broken_items = []
+@@ -140,7 +141,7 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, context_p
+             broken_items.append({"file": detail['file'], "remaining_issues": unfixed})
+     
+     if broken_items:
+-        print("\n--- Remaining Technical Debt / Issues ---")
++        logger.warning("--- Remaining Technical Debt / Issues ---")
+         for item in broken_items:
+             issues_to_print = item['remaining_issues']
+             # Filter matches for the orchestrator itself if they are false positives (Phase 149)
+@@ -148,30 +149,30 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, context_p
+                 issues_to_print = [issue for issue in item['remaining_issues'] if "subprocess.run" not in str(issue) and "time.sleep" not in str(issue)]
+             
+             if issues_to_print:
+-                print(f"File: {item['file']}")
++                logger.info(f"File: {item['file']}")
+                 for issue in issues_to_print:
+                     issue_type = issue.get('type') or issue.get('message', 'Unknown Issue')
+                     detail_text = issue.get('detail') or issue.get('message', '')
+-                    print(f"  - [ ] {issue_type}: {detail_text}")
++                    logger.info(f"  - [ ] {issue_type}: {detail_text}")
+     else:
+-        print("\nAll scanned issues have been autonomously addressed.")
++        logger.info("All scanned issues have been autonomously addressed.")
+ 
+     # 3. Documentation & Research Summary (Phase 112)
+-    print("\n[Research] Summarizing codebase intelligence...")
++    logger.info("[Research] Summarizing codebase intelligence...")
+     library_path = os.path.join(root, "data/memory/knowledge_exports", "research_library.json")
+     if os.path.exists(library_path):
+         with open(library_path) as f:
+             library = json.load(f)
+-        print(f" - Fleet Intelligence Library contains {len(library)} indexed agents.")
++        logger.info(f" - Fleet Intelligence Library contains {len(library)} indexed agents.")
+         
+         # Performance/Complexity check
+         high_comp = [e for e in library if e.get("taxonomy", {}).get("logic_complexity") == "High"]
+         if high_comp:
+-            print(f" - WARNING: {len(high_comp)} files identified with HIGH logic complexity.")
++            logger.warning(f" - WARNING: {len(high_comp)} files identified with HIGH logic complexity.")
+             for e in high_comp[:3]:
+-                print(f"    * {e['title']}")
++                logger.info(f"    * {e['title']}")
+ 
+-    print("\n[Documentation] Generating updated docs for improvements...")
++    logger.info("[Documentation] Generating updated docs for improvements...")
+     doc_res = fleet.doc_gen_agent.extract_docs(os.path.join(root, "src/infrastructure/fleet/FleetManager.py"))
+     doc_path = os.path.join(root, "docs/FLEET_AUTO_DOC.md")
+     # Using 'a' to preserve maintenance summary if it exists, or handling intelligently
+@@ -185,7 +186,7 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, context_p
+     with open(doc_path, "a", encoding="utf-8") as f:
+         f.write(maintenance_summary)
+         
+-    print(f" - Updated documentation logged to {doc_path}")
++    logger.info(f" - Updated documentation logged to {doc_path}")
+ 
+     # 4. Explainability Log
+     workflow_id = "self_improvement_01"
+@@ -194,7 +195,7 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, context_p
+         "Autonomous fleet optimization maintains system health and security parity.",
+         {"stats": stats}
+     )
+-    print("\nReasoning for this cycle logged to Explainability trace.")
++    logger.info("Reasoning for this cycle logged to Explainability trace.")
+ 
+     # 5. Smart AI Recording Verification (Phase 107)
+     print("\n[Intelligence] Verifying local interaction recording...")
+@@ -248,7 +249,7 @@ def run_cycle(fleet: FleetManager, root: str, prompt_path: str = None, context_p
+     duration = time.time() - start_time
+     print(f"\n=== CYCLE {current_cycle} COMPLETE (Time spent: {duration:.2f}s) ===")
+ 
+-def consult_external_models(fleet: FleetManager, broken_items: list[dict[str, Any]], prompt_path: str = None, model_name: str = "gemini-3-flash") -> list[dict[str, str]]:
++def consult_external_models(fleet: FleetManager, broken_items: list[dict[str, Any]], prompt_path: str | None = None, model_name: str = "gemini-3-flash") -> list[dict[str, str]]:
+     """
+     Queries external model backends (Ollama, Gemini, and Agentic Copilot) 
+     to extract lessons for the fleet.
+@@ -334,47 +335,56 @@ def consult_external_models(fleet: FleetManager, broken_items: list[dict[str, An
+             
+     return lessons
+ 
+-def _cycle_throttle(delay: int, root: str, target_dirs: list[str]) -> None:
++def _cycle_throttle(delay: int, root: str, target_dirs: list[str], use_watcher: bool = False) -> None:
+     """
+     Implement a controlled delay between improvement cycles.
+-    Uses 'watchfiles' for event-driven triggering if available (Phase 147).
++    Uses 'watchfiles' for event-driven triggering if available and requested (Phase 147).
+     """
+     import threading
+-    try:
+-        from watchfiles import watch
+-        print(f"\n[Watcher] Waiting for modifications in {target_dirs}...")
+-        
+-        # Build absolute paths for watching
+-        watch_paths = []
+-        for d in target_dirs:
+-            p = Path(d)
+-            if not p.is_absolute():
+-                p = Path(root) / d
+-            if p.exists():
+-                watch_paths.append(str(p))
+-        
+-        if not watch_paths:
+-            watch_paths = [root]
+-
+-        # watch() is a generator that yields changes. 
+-        # We'll wait for the first change.
+-        for changes in watch(*watch_paths):
+-            if changes:
+-                print(" - [Watcher] Change detected. Triggering next cycle.")
+-                return
+-
+-    except (ImportError, Exception) as e:
+-        # Fallback to simple wait if watchfiles is missing or fails
+-        if not isinstance(e, ImportError):
+-            logging.debug(f"Watcher failed: {e}")
+-        print(f" - [Throttle] Waiting {delay}s for next cycle...")
+-        # Use threading.Event to avoid synchronous wait performance warnings
+-        threading.Event().wait(timeout=float(delay))
++
++    if use_watcher:
++        try:
++            from watchfiles import watch
++            print(f"\n[Watcher] Waiting for modifications in {target_dirs}...")
++            
++            # Build absolute paths for watching
++            watch_paths = []
++            for d in target_dirs:
++                p = Path(d)
++                if not p.is_absolute():
++                    p = Path(root) / d
++                if p.exists():
++                    watch_paths.append(str(p))
++            
++            if not watch_paths:
++                watch_paths = [root]
++
++            # watch() is a generator that yields changes. 
++            # We'll wait for the first change.
++            for changes in watch(*watch_paths):
++                if changes:
++                    print(" - [Watcher] Change detected. Triggering next cycle.")
++                    return
++
++        except (ImportError, Exception) as e:
++            # Fallback to simple wait if watchfiles is missing or fails
++            if not isinstance(e, ImportError):
++                logging.debug(f"Watcher failed: {e}")
++            
++            if isinstance(e, ImportError):
++                print(" - [Watcher Fallback] 'watchfiles' package not found. Using time-based delay.")
++            else:
++                print(f" - [Watcher Fallback] Watcher error: {e}. Using time-based delay.")
++
++    print(f" - [Throttle] Waiting {delay}s for next cycle...")
++    # Use threading.Event to avoid synchronous wait performance warnings
++    threading.Event().wait(timeout=float(delay))
+ 
+ def main() -> None:
+     parser = argparse.ArgumentParser(description="PyAgent Fleet Self-Improvement Loop")
+     parser.add_argument("--cycles", "-c", type=int, default=1, help="Number of improvement cycles to run (default: 1). Use 0 or -1 for infinite/continuous.")
+-    parser.add_argument("--delay", "-d", type=int, default=6, help="Delay in seconds between cycles (default: 6)")
++    parser.add_argument("--delay", "-d", type=int, default=60, help="Delay in seconds between cycles (default: 60)")
++    parser.add_argument("--watch", "-w", action="store_true", help="Enable file watcher to trigger cycles on modification")
+     parser.add_argument("--prompt", "-p", type=str, help="Path to a strategic prompt/directive file (optional)")
+     parser.add_argument("--context", "-t", type=str, help="Path to a context file for additional directives (optional)")
+     parser.add_argument("--model", "-m", type=str, default="gemini-3-flash", help="Model to use for external consultation (default: gemini-3-flash)")
+@@ -384,12 +394,14 @@ def main() -> None:
+     root = os.getcwd()
+     fleet = FleetManager(root)
+     
+-    print("=== SWARM SELF-IMPROVEMENT CYCLE INITIATED ===")
+-    print(f"Scanning workspace: {root}")
++    logger = StructuredLogger(agent_id="SelfImprovementLoop")
++    
++    logger.info("=== SWARM SELF-IMPROVEMENT CYCLE INITIATED ===")
++    logger.info(f"Scanning workspace: {root}")
+ 
+     if args.dry_run:
+-        print("Dry-run mode: Initialization successful. Fleet is healthy.")
+-        print(f"SDK Version: {fleet.agents.core.sdk_version}")
++        logger.info("Dry-run mode: Initialization successful. Fleet is healthy.")
++        logger.info(f"SDK Version: {fleet.agents.core.sdk_version}")
+         sys.exit(0)
+ 
+     try:
+@@ -404,13 +416,15 @@ def main() -> None:
+         last_target_dirs = ["src"]
+ 
+         if num_cycles == 1:
+-            run_cycle(fleet, root, prompt_path=prompt_path, context_path=context_path, current_cycle=1, model_name=model_name)
++            run_cycle(fleet, root, logger, prompt_path=prompt_path, context_path=context_path, current_cycle=1, model_name=model_name)
+         else:
+             current_cycle = 0
+             if is_infinite:
+-                print(f"Running in CONTINUOUS mode with {args.delay}s delay/Watcher. Press Ctrl+C to stop.")
++                mode_info = "with Watcher" if args.watch else f"with {args.delay}s delay"
++                logger.info(f"Running in CONTINUOUS mode {mode_info}. Press Ctrl+C to stop.")
+             else:
+-                print(f"Running {num_cycles} cycles with {args.delay}s delay/Watcher. Press Ctrl+C to stop.")
++                mode_info = "with Watcher" if args.watch else f"with {args.delay}s delay"
++                logger.info(f"Running {num_cycles} cycles {mode_info}. Press Ctrl+C to stop.")
+                 
+             while True:
+                 current_cycle += 1
+@@ -437,17 +451,17 @@ def main() -> None:
+                         except Exception:
+                             pass
+ 
+-                run_cycle(fleet, root, prompt_path=prompt_path, context_path=context_path, current_cycle=current_cycle, model_name=model_name)
++                run_cycle(fleet, root, logger, prompt_path=prompt_path, context_path=context_path, current_cycle=current_cycle, model_name=model_name)
+                 
+                 if not is_infinite and current_cycle >= num_cycles:
+                     break
+                     
+-                print("\nWaiting before next cycle... (Press Ctrl+C to stop)")
+-                _cycle_throttle(args.delay, root, last_target_dirs)
++                logger.info("Waiting before next cycle... (Press Ctrl+C to stop)")
++                _cycle_throttle(args.delay, root, last_target_dirs, use_watcher=args.watch)
+                 
+     except KeyboardInterrupt:
+-        print("\n=== STOPPING SELF-IMPROVEMENT (User Interrupt) ===")
++        logger.info("=== STOPPING SELF-IMPROVEMENT (User Interrupt) ===")
+         sys.exit(0)
+ 
+ if __name__ == "__main__":
+-    main()
+\ No newline at end of file
++    main()

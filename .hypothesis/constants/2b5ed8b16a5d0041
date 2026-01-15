@@ -1,0 +1,4 @@
+# file: c:\DEV\PyAgent\src\logic\agents\development\AccessibilityAgent.py
+# hypothesis_version: 6.150.1
+
+[0.03928, 0.05, 0.055, 0.0722, 0.2126, 0.7152, 1.055, 2.4, 3.0, 4.5, 7.0, 12.92, 100.0, 100, 200, 255, '#', '.htm', '.html', '.js', '.jsx', '.py', '.ts', '.tsx', '1.1.1', '1.3.1', '1.4.3', '1.4.6', '2.1.1', '2.4.3', '2.4.6', '3.3.1', '3.3.2', '4.1.2', '<body', '<h([1-6])', '<input\\s+[^>]*?>', 'Button', 'Button\\s*\\([^)]*\\)', 'Canvas', 'Canvas\\s*\\([^)]*\\)', 'Contrast (Enhanced)', 'Contrast (Minimum)', 'Entry', 'Entry\\s*\\([^)]*\\)', 'Error Identification', 'Focus Order', 'Headings and Labels', 'Keyboard', 'Label', 'Label\\s*\\([^)]*\\)', 'Name, Role, Value', 'Non-text Content', 'alt=', 'aside', 'bind', 'content', 'document', 'footer', 'header', 'headings', 'help', 'html', 'javascript', 'main', 'nav', 'onKeyDown', 'onKeyPress', 'python', 'react', 'role=', 'tabindex', 'tooltip', 'type="hidden"', 'utf-8']

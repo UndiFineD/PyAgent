@@ -1,0 +1,20 @@
+diff --git a/src/core/base/utils/ParallelProcessor.py b/src/core/base/utils/ParallelProcessor.py
+index 44c8f34..6483f9f 100644
+--- a/src/core/base/utils/ParallelProcessor.py
++++ b/src/core/base/utils/ParallelProcessor.py
+@@ -24,7 +24,7 @@ import asyncio
+ import logging
+ from concurrent.futures import ThreadPoolExecutor
+ from pathlib import Path
+-from typing import List, Any
++from typing import Any
+ from collections.abc import Callable
+ 
+ __version__ = VERSION
+@@ -73,4 +73,4 @@ class ParallelProcessor:
+             if tasks:
+                 await asyncio.gather(*tasks)
+ 
+-        return modified_results
+\ No newline at end of file
++        return modified_results

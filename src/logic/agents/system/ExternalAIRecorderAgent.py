@@ -32,6 +32,9 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
+
+
 class ExternalAIRecorderAgent(BaseAgent):
     """Records interactions with external AI models to build a rich local knowledge repository."""
 
@@ -40,7 +43,7 @@ class ExternalAIRecorderAgent(BaseAgent):
         self.logs_dir = Path("data/logs/external_ai_learning")
         self.logs_dir.mkdir(parents=True, exist_ok=True)
         self.archive_path = self.logs_dir / "external_knowledge.jsonl"
-        
+
         self._system_prompt = (
             "You are the External AI Recorder Agent. "
             "Your role is to act as a memory bridge between external AI sessions and our local knowledge base. "
@@ -73,24 +76,48 @@ class ExternalAIRecorderAgent(BaseAgent):
             "source": external_ai_name,
             "prompt": prompt,
             "context": context,
+
+
+
+
+
+
+
+
+
+
             "response": response,
-            "hash": hash(prompt + response) # Simple identifier
+            "hash": hash(prompt + response)  # Simple identifier
         }
-        
+
+
+
+
         try:
             with open(self.archive_path, "a", encoding="utf-8") as f:
                 f.write(json.dumps(entry) + "\n")
             return f"Successfully recorded interaction from {external_ai_name}. Local knowledge enriched."
         except Exception as e:
+
+
             return f"Error recording interaction: {e}"
 
     @as_tool
     def synthesize_local_knowledge(self) -> str:
         """Analyzes recorded interactions to identify recurring patterns or high-value insights."""
+
+
+
+
+
         return "Local knowledge synthesis: Identification of 5 high-value patterns from external records completed."
 
     def improve_content(self, prompt: str) -> str:
         return "Local knowledge base is thriving with data from external AI sessions."
+
+
+
+
 
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function

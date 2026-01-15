@@ -1,0 +1,23 @@
+diff --git a/src/infrastructure/fleet/core/LoadBalancerCore.py b/src/infrastructure/fleet/core/LoadBalancerCore.py
+index 09d7bc5..e8c3f48 100644
+--- a/src/infrastructure/fleet/core/LoadBalancerCore.py
++++ b/src/infrastructure/fleet/core/LoadBalancerCore.py
+@@ -1,10 +1,10 @@
+ 
+ from __future__ import annotations
+-from typing import Dict
+ from dataclasses import dataclass
+ 
+ @dataclass(frozen=True)
+ class AgentMetrics:
++    """Metrics for agent load and performance tracking."""
+     token_pressure: float  # 0.0 to 1.0 (context used / context limit)
+     queue_depth: int
+     avg_latency_ms: float
+@@ -38,4 +38,4 @@ class LoadBalancerCore:
+             return "SPAWN_NEW_INSTANCES"
+         if fleet_pressure < 0.2:
+             return "CONSOLIDATE_SHARDS"
+-        return "STABLE"
+\ No newline at end of file
++        return "STABLE"

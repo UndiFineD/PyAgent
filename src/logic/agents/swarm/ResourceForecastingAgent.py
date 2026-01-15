@@ -20,20 +20,23 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import time
-from typing import Dict, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
+
+
+
 class ResourceForecastingAgent(BaseAgent):
     """
-    Resource Forecasting Agent: Predicts future compute, storage, and 
+    Resource Forecasting Agent: Predicts future compute, storage, and
     network requirements based on historical fleet activity trends.
     """
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
-        self.usage_history = [] # List of snapshots
+        self.usage_history: list[Any] = []  # List of snapshots
 
     def log_usage_snapshot(self, compute_units: float, storage_gb: float, network_mbps: float) -> str:
         """Logs a current snapshot of resource usage."""
@@ -55,7 +58,7 @@ class ResourceForecastingAgent(BaseAgent):
         first = self.usage_history[0]
         last = self.usage_history[-1]
         t_delta = last['timestamp'] - first['timestamp']
-        
+
         if t_delta == 0:
             return {"status": "Zero Time Delta", "prediction": None}
 
@@ -81,7 +84,7 @@ class ResourceForecastingAgent(BaseAgent):
         forecast = self.predict_future_needs()
         if forecast['status'] != "Success":
             return "Wait for more data."
-        
+
         pred = forecast['prediction']
         if pred['compute'] > 100 or pred['storage'] > 500:
             return "Recommend SCALE_UP: Resource exhaustion predicted."

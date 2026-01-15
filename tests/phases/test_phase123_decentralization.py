@@ -13,6 +13,9 @@ from src.logic.agents.system.IdentityAgent import IdentityAgent as AgentIdentity
 from src.infrastructure.orchestration.RLSelector import RLSelector
 from pathlib import Path
 
+
+
+
 class TestPhase123Decentralization(unittest.TestCase):
     def setUp(self):
         self.root = Path(__file__).resolve().parents[2]
@@ -20,7 +23,7 @@ class TestPhase123Decentralization(unittest.TestCase):
         if os.path.exists(self.test_dir):
             shutil.rmtree(self.test_dir)
         os.makedirs(self.test_dir)
-        
+
         self.fleet = FleetManager(self.root)
         # Register a few dummy agents for committee selection
         self.fleet.register_agent("Coder", ByzantineConsensusAgent, f"{self.root}/src/agents/ByzantineConsensusAgent.py")
@@ -37,14 +40,15 @@ class TestPhase123Decentralization(unittest.TestCase):
         available = ["Coder", "SpecialistA", "SpecialistB", "Research"]
         judge = ByzantineConsensusAgent(f"{self.root}/src/agents/ByzantineConsensusAgent.py")
         committee = judge.select_committee(task, available)
-        
+
         self.assertTrue(len(committee) > 0)
         self.assertTrue(all(a in available for a in committee))
 
     def test_messaging_polling_structure(self) -> None:
         # Test that MessagingAgent has poll_for_replies
+        import asyncio
         msg_agent = MessagingAgent(f"{self.root}/src/agents/MessagingAgent.py")
-        replies = msg_agent.poll_for_replies("slack")
+        replies = asyncio.run(msg_agent.poll_for_replies("slack"))
         self.assertIsInstance(replies, list)
 
     def test_bayesian_belief_update(self) -> None:
@@ -70,23 +74,25 @@ class TestPhase123Decentralization(unittest.TestCase):
         with open(log_file, "w") as f: f.write("#")
         agent = LoggingAgent(log_file)
         # Test configuration
-        res = agent.configure_aggregator(url="http://mock-aggregator:8080/log")
+        import asyncio
+        res = asyncio.run(agent.configure_aggregator(url="http://mock-aggregator:8080/log"))
         self.assertIn("Configured", res)
-        
+
         # Test broadcast
-        res = agent.broadcast_log(level="INFO", source="TestAgent", message="Hello World", metadata={"phase": 123})
+        res = asyncio.run(agent.broadcast_log(level="INFO", source="TestAgent", message="Hello World", metadata={"phase": 123}))
         self.assertIn("Log broadcasted", res)
-        
+
         # Test integration via BaseAgent
         self.fleet.register_agent("Logging", LoggingAgent, log_file)
         # Registry will create a new instance, ensure it's configured
         logging_agent = self.fleet.agents["Logging"]
-        logging_agent.configure_aggregator(url="http://mock-aggregator:8080/log")
-        
+        import asyncio
+        asyncio.run(logging_agent.configure_aggregator(url="http://mock-aggregator:8080/log"))
+
         test_agent = ByzantineConsensusAgent(os.path.join(self.test_dir, "test_agent.py"))
-        test_agent.fleet = self.fleet # Manual inject for test
+        test_agent.fleet = self.fleet  # Manual inject for test
         test_agent.log_distributed("WARNING", "Alert message")
-        
+
         logs = logging_agent.get_aggregated_logs()
         self.assertTrue(any(l["message"] == "Alert message" for l in logs))
 
@@ -94,33 +100,57 @@ class TestPhase123Decentralization(unittest.TestCase):
         id_file = os.path.join(self.test_dir, "identity_agent.py")
         with open(id_file, "w") as f: f.write("#")
         agent = AgentIdentityAgent(id_file)
-        
+
         # 1. Create DID for Alice
         alice_did = agent.create_agent_did("Alice")
         self.assertTrue(alice_did.startswith("did:pyagent:"))
-        
+
         # 2. Issue VC from Alice to Bob
         vc = agent.issue_verifiable_credential(
             issuer_name="Alice",
             subject_did="did:pyagent:fleet-01:bob-hash",
+
+
+
+
+
+
+
+
+
+
             claim_type="AccessBadge",
             claim_value="Level-5"
         )
-        
+
+
+
+
         self.assertIn("proof", vc)
         self.assertEqual(vc["proof"]["type"], "Ed25519Signature2020")
-        
+
         # 3. Verify VC
         verification = agent.verify_credential(vc)
+
+
         self.assertEqual(verification["status"], "verified")
         self.assertEqual(verification["issuer"], alice_did)
-        
+
         # 4. Tamper and Verify
         vc_copy = json.loads(json.dumps(vc))
-        vc_copy["credentialSubject"]["AccessBadge"] = "Level-99" # Tamper
+
+
+
+
+
+        vc_copy["credentialSubject"]["AccessBadge"] = "Level-99"  # Tamper
         tampered_verification = agent.verify_credential(vc_copy)
         # Signature should fail
         self.assertEqual(tampered_verification["status"], "error")
+
+
+
+
 
 if __name__ == "__main__":
     unittest.main()

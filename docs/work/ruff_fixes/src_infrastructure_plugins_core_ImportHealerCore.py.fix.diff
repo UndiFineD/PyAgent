@@ -1,0 +1,15 @@
+diff --git a/src/infrastructure/plugins/core/ImportHealerCore.py b/src/infrastructure/plugins/core/ImportHealerCore.py
+index bcdfa12..d250060 100644
+--- a/src/infrastructure/plugins/core/ImportHealerCore.py
++++ b/src/infrastructure/plugins/core/ImportHealerCore.py
+@@ -6,9 +6,9 @@ Suggests fixes for ModuleNotFound errors and builds import maps.
+ 
+ import re
+ import os
+-from typing import Dict, List
+ 
+ class ImportHealerCore:
++    """Core logic for diagnosing and fixing import errors."""
+     @staticmethod
+     def suggest_fix(error_message: str) -> str:
+         """

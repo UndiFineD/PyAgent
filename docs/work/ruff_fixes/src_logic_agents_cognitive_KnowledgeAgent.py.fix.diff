@@ -1,0 +1,86 @@
+diff --git a/src/logic/agents/cognitive/KnowledgeAgent.py b/src/logic/agents/cognitive/KnowledgeAgent.py
+index d3621f8..f01c684 100644
+--- a/src/logic/agents/cognitive/KnowledgeAgent.py
++++ b/src/logic/agents/cognitive/KnowledgeAgent.py
+@@ -33,7 +33,7 @@ import json
+ import re
+ from datetime import datetime
+ from pathlib import Path
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 
+@@ -96,9 +96,17 @@ class KnowledgeAgent(BaseAgent):
+             ".py": r"(?:class|def)\s+([a-zA-Z_][a-zA-Z0-9_]*)"
+         }
+         index = self.knowledge_core.build_symbol_map(root, patterns)
+-                
+-        with open(self.index_file, "w") as f:
+-            json.dump(index, f, indent=4)
++        
++        idx_path = Path(self.index_file)
++        temp_path = idx_path.with_suffix(".tmp")
++        try:
++            with open(temp_path, "w", encoding="utf-8") as f:
++                json.dump(index, f, indent=4)
++            temp_path.replace(idx_path)
++        except Exception:
++            if temp_path.exists(): temp_path.unlink()
++            raise
++            
+         logging.info(f"Knowledge index built at {self.index_file}")
+ 
+     def record_tier_memory(self, tier: str, content: str, metadata: dict[str, Any] | None = None) -> str:
+@@ -316,7 +324,17 @@ class KnowledgeAgent(BaseAgent):
+             
+         # Strip extension for note name
+         note_name = Path(file_name).stem
+-        return index.get(f"link:{note_name}", [])
++        entries = index.get(note_name, [])
++        
++        # Extract paths from the index entries (which are dicts)
++        paths = []
++        for entry in entries:
++            if isinstance(entry, dict) and "path" in entry:
++                paths.append(entry["path"])
++            elif isinstance(entry, str):
++                paths.append(entry)
++                
++        return paths
+ 
+     def auto_update_backlinks(self, directory: str | None = None) -> int:
+         """Updates all .md files in the directory with a Backlinks section."""
+@@ -366,14 +384,24 @@ class KnowledgeAgent(BaseAgent):
+         nodes = set()
+         edges = []
+         
+-        for key, paths in index.items():
+-            if key.startswith("link:"):
+-                target = key.replace("link:", "")
+-                nodes.add(target)
+-                for path in paths:
+-                    source = Path(path).stem
+-                    nodes.add(source)
+-                    edges.append(f"  {source} --> {target}")
++        for key, entries in index.items():
++            target = key
++            # Skip if key looks like an absolute path or non-symbol (heuristic)
++            if "/" in target or "\\" in target: 
++                continue
++
++            nodes.add(target)
++            
++            for entry in entries:
++                path_str = entry
++                if isinstance(entry, dict) and "path" in entry:
++                    path_str = entry["path"]
++                elif not isinstance(entry, str):
++                    continue
++
++                source = Path(path_str).stem
++                nodes.add(source)
++                edges.append(f"  {source} --> {target}")
+         
+         if not edges:
+             return "graph TD\n  Start[No Links Detected]"

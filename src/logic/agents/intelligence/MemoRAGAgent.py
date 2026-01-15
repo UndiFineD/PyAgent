@@ -27,15 +27,17 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 from pathlib import Path
-from typing import List
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
+
+
 class MemoRAGAgent(BaseAgent):
     """Memory-Augmented RAG agent for deep context discovery with sharding."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.shard_dir = Path("data/memory/agent_store/memory_shards")
@@ -61,7 +63,7 @@ class MemoRAGAgent(BaseAgent):
         shard_file = self.shard_dir / f"{shard_name}.txt"
         if not shard_file.exists():
             return [f"Notice: Shard '{shard_name}' does not exist."]
-        
+
         # Simulated intelligent retrieval
         return [
             f"Clue for '{query}' in {shard_name}: Recent updates to core logic.",

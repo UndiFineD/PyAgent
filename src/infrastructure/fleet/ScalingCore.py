@@ -26,9 +26,11 @@ Pure logic for computing moving averages, resource mapping, and anti-flapping sc
 from __future__ import annotations
 from src.core.base.version import VERSION
 import time
-from typing import Dict, List
 
 __version__ = VERSION
+
+
+
 
 class ScalingCore:
     """
@@ -48,7 +50,7 @@ class ScalingCore:
             self.load_metrics[key] = {}
         if metric_type not in self.load_metrics[key]:
             self.load_metrics[key][metric_type] = []
-            
+
         buffer = self.load_metrics[key][metric_type]
         buffer.append(value)
         if len(buffer) > self.window_size:
@@ -62,12 +64,12 @@ class ScalingCore:
         metrics = self.load_metrics.get(key, {})
         if not metrics:
             return 0.0
-            
+
         # Weights: Latency 60%, CPU 30%, MEM 10%
         latency_avg = self.get_avg(key, "latency")
         cpu_avg = self.get_avg(key, "cpu") or 0.0
         mem_avg = self.get_avg(key, "mem") or 0.0
-        
+
         load = (latency_avg * 0.6) + (cpu_avg * 0.3) + (mem_avg * 0.1)
         return load
 
@@ -77,18 +79,18 @@ class ScalingCore:
         Includes backoff to prevent flapping.
         """
         load = self.calculate_weighted_load(key)
-        
+
         # Check backoff
         last_event = self.last_scale_event.get(key, 0)
         current_time = time.time()
-        
+
         if (current_time - last_event) < self.backoff_seconds:
             return False
-            
+
         if load > self.scale_threshold:
             self.last_scale_event[key] = current_time
             return True
-            
+
         return False
 
     def get_avg(self, key: str, metric_type: str = "latency") -> float:

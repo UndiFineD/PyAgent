@@ -1,6 +1,9 @@
 import ast
 import os
 
+
+
+
 def fix_init_file(filepath):
     try:
         with open(filepath, 'r', encoding='utf-8') as f:
@@ -8,7 +11,7 @@ def fix_init_file(filepath):
     except Exception as e:
         print(f"Error reading {filepath}: {e}")
         return False
-    
+
     new_lines = []
     modified = False
     for line in lines:
@@ -20,33 +23,56 @@ def fix_init_file(filepath):
             if len(parts) == 2:
                 module_part = parts[0]
                 name = parts[1].strip()
-                if ' ' not in name and name.isidentifier(): # Single valid identifier
+                if ' ' not in name and name.isidentifier():  # Single valid identifier
                     indent = line[:line.find('from')]
                     # Preserve trailing comments if any
                     comment = ""
                     if '#' in name:
                         # This shouldn't happen with stripped and no space, but let's be safe
                         pass
-                    
+
                     # Ensure we don't double-alias if the name is already an alias in a complex line (though we checked ' as ')
+
+
+
+
+
+
+
+
+
+
                     new_line = f"{indent}{module_part} import {name} as {name}\n"
                     new_lines.append(new_line)
                     modified = True
                     continue
+
+
+
+
         new_lines.append(line)
-    
+
     if modified:
         content = "".join(new_lines)
         try:
+
+
             ast.parse(content)
             with open(filepath, 'w', encoding='utf-8') as f:
                 f.write(content)
             print(f"Fixed: {filepath}")
             return True
+
+
+
         except Exception as e:
             print(f"Failed validation for {filepath}: {e}")
             return False
     return False
+
+
+
+
 
 if __name__ == "__main__":
     count = 0

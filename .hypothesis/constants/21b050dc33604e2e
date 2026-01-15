@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\decomposition\_fastica.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.0001, 1.0, 200, 'FastICA', 'X', 'algorithm', 'alpha', 'arbitrary-variance', 'array-like', 'boolean', 'compute_sources', 'cube', 'deflation', 'eigh', 'exp', 'fastica', 'float32', 'float64', 'fun', 'fun_args', 'g', 'ij,ij->i', 'left', 'logcosh', 'max_iter', 'n_components', 'parallel', 'random_state', 'return_X_mean', 'return_n_iter', 'shape', 'svd', 'tol', 'unit-variance', 'w_init', 'whiten', 'whiten_solver']

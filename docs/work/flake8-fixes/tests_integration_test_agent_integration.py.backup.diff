@@ -1,0 +1,60 @@
+diff --git a/tests/integration/test_agent_integration.py b/tests/integration/test_agent_integration.py
+index 1216151..7d21b6f 100644
+--- a/tests/integration/test_agent_integration.py
++++ b/tests/integration/test_agent_integration.py
+@@ -1,12 +1,16 @@
+ import unittest
+-from unittest.mock import MagicMock, patch
+-import sys
++from unittest.mock import MagicMock
+ from pathlib import Path
+ 
+ # Add project root to path so we can import 'src'
+ 
+ from src.logic.agents import Agent
+ 
++
++
++
++
++
+ class TestAgentIntegration(unittest.TestCase):
+     def setUp(self) -> None:
+         self.agent: Agent = Agent(repo_root=".")
+@@ -16,13 +20,13 @@ class TestAgentIntegration(unittest.TestCase):
+     def test_strategy_flag_passed_to_subagent(self) -> None:
+         """Test that --strategy flag is passed to sub-agents."""
+         self.agent.strategy = "reflexion"
+-        
++
+         # Mock run_command to return success
+         self.agent.command_handler.run_command.return_value = MagicMock(returncode=0, stdout="Success")
+-        
++
+         # Call update_code which calls sub-agent
+         self.agent.update_code(Path("test_file.py"))
+-        
++
+         # Check calls
+         calls = self.agent.command_handler.run_command.call_args_list
+         found = False
+@@ -32,7 +36,7 @@ class TestAgentIntegration(unittest.TestCase):
+             if "--strategy" in args and "reflexion" in args:
+                 found = True
+                 break
+-        
++
+         self.assertTrue(found, "Sub-agent command should contain --strategy reflexion")
+ 
+     def test_async_flag_initialization(self) -> None:
+@@ -40,5 +44,10 @@ class TestAgentIntegration(unittest.TestCase):
+         agent: Agent = Agent(repo_root=".", enable_async=True)
+         self.assertTrue(agent.enable_async)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     unittest.main()

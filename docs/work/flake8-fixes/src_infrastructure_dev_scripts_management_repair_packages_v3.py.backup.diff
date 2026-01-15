@@ -1,0 +1,98 @@
+diff --git a/src/infrastructure/dev/scripts/management/repair_packages_v3.py b/src/infrastructure/dev/scripts/management/repair_packages_v3.py
+index cd7c1b5..c6c3179 100644
+--- a/src/infrastructure/dev/scripts/management/repair_packages_v3.py
++++ b/src/infrastructure/dev/scripts/management/repair_packages_v3.py
+@@ -22,10 +22,14 @@ from src.core.base.version import VERSION
+ import os
+ import re
+ from pathlib import Path
+-from typing import Union
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ def create_inits(root_dir: str | Path) -> None:
+     """Ensure all subdirectories contain a __init__.py file."""
+     for root, dirs, files in os.walk(root_dir):
+@@ -36,6 +40,11 @@ def create_inits(root_dir: str | Path) -> None:
+             with open(os.path.join(root, "__init__.py"), "w") as f:
+                 f.write('"""Package initialization."""\n')
+ 
++
++
++
++
++
+ def fix_content(file_path: str | Path) -> bool:
+     """Migrate legacy and test-specific imports to the src namespace in a file."""
+     try:
+@@ -49,13 +58,13 @@ def fix_content(file_path: str | Path) -> bool:
+             return False
+ 
+     original = content
+-    
++
+     # 1. Fix legacy classes imports
+     content = re.sub(r'from classes\.', 'from src.', content)
+     content = re.sub(r'import classes\.', 'import src.', content)
+     content = re.sub(r'from src\.classes\.', 'from src.', content)
+     content = re.sub(r'import src\.classes\.', 'import src.', content)
+-    
++
+     # 2. Fix root-level specific agent modules
+     root_modules = [
+         "agent_backend", "agent_changes", "agent_coder", "agent_context",
+@@ -80,13 +89,18 @@ def fix_content(file_path: str | Path) -> bool:
+         return True
+     return False
+ 
++
++
++
++
++
+ def main() -> None:
+     """Run the version 3 package and import repair suite."""
+     workspace = Path(".")
+     print("Step 1: Creating missing __init__.py files...")
+     create_inits(workspace / "src")
+     create_inits(workspace / "tests")
+-    
++
+     print("Step 2: Fixing imports in all files...")
+     count = 0
+     for p in workspace.rglob("*.py"):
+@@ -98,14 +112,14 @@ def main() -> None:
+ 
+     # Step 3: Specific fixes
+     print("Step 3: Applying specific class fixes...")
+-    
++
+     # backend/CircuitBreaker.py
+     cb_path = Path("src/backend/CircuitBreaker.py")
+     if cb_path.exists():
+         with open(cb_path, encoding="utf-8") as f:
+             c = f.read()
+         if "from src.agent.CircuitBreakerCore import CircuitBreakerCore" in c:
+-            c = c.replace("from src.agent.CircuitBreakerCore import CircuitBreakerCore", 
++            c = c.replace("from src.agent.CircuitBreakerCore import CircuitBreakerCore",
+                           "from src.core.base.CircuitBreaker import CircuitBreaker as CircuitBreakerImpl")
+             c = c.replace("self.core = CircuitBreakerCore()", "self.impl = CircuitBreakerImpl(name=name)")
+             with open(cb_path, "w", encoding="utf-8") as f:
+@@ -119,5 +133,10 @@ def main() -> None:
+         else:
+             agent_py.unlink()
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+-    main()
+\ No newline at end of file
++    main()

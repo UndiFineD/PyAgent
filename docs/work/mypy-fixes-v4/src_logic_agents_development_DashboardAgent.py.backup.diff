@@ -1,0 +1,19 @@
+diff --git a/src/logic/agents/development/DashboardAgent.py b/src/logic/agents/development/DashboardAgent.py
+index 8132d2d..e374461 100644
+--- a/src/logic/agents/development/DashboardAgent.py
++++ b/src/logic/agents/development/DashboardAgent.py
+@@ -24,7 +24,6 @@ Helps create Next.js or React interfaces for the fleet.
+ 
+ from __future__ import annotations
+ import logging
+-from typing import List
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+@@ -71,4 +70,4 @@ export default {name};
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(DashboardAgent, "Dashboard Agent", "Dashboard source path")
+-    main()
+\ No newline at end of file
++    main()

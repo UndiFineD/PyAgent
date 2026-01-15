@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class ValidationSeverity(Enum):
     """Severity of validation issues."""
     ERROR = "error"

@@ -1,0 +1,12 @@
+diff --git a/src/observability/errors/ErrorEntry.py b/src/observability/errors/ErrorEntry.py
+index 7553506..ca753dd 100644
+--- a/src/observability/errors/ErrorEntry.py
++++ b/src/observability/errors/ErrorEntry.py
+@@ -25,7 +25,6 @@ from src.core.base.version import VERSION
+ from .ErrorCategory import ErrorCategory
+ from .ErrorSeverity import ErrorSeverity
+ from dataclasses import dataclass, field
+-from typing import List
+ import hashlib
+ 
+ __version__ = VERSION

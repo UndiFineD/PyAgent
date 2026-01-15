@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class ErrorSeverity(Enum):
     """Error severity levels."""
     CRITICAL = 5

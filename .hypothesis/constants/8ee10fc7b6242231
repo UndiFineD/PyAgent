@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\backend\LocalContextRecorder.py
+# hypothesis_version: 6.150.1
+
+[256, '%Y%m', '.', '.jsonl', '.jsonl.gz', 'Harvested', 'Internal', 'System', 'a', 'ab', 'data/logs', 'external_ai_learning', 'meta', 'model', 'prompt', 'prompt_hash', 'provider', 'result', 'shards_lookup.index', 'tag', 'timestamp', 'user_context', 'utf-8', 'workspace_root']

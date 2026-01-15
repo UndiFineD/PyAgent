@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class InheritanceMode(Enum):
     """Modes for context inheritance."""
     OVERRIDE = "override"

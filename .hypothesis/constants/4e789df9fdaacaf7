@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\neighbors\_kde.py
+# hypothesis_version: 6.150.1
+
+[0.5, 1.0, 'C', 'algorithm', 'atol', 'auto', 'ball_tree', 'bandwidth', 'boolean', 'breadth_first', 'cosine', 'epanechnikov', 'euclidean', 'exponential', 'gaussian', 'kd_tree', 'kernel', 'leaf_size', 'left', 'linear', 'metric', 'metric_params', 'neither', 'rtol', 'scott', 'silverman', 'tophat']

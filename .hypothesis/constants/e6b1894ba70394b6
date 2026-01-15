@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\BaseAgent.py
+# hypothesis_version: 6.150.1
+
+[0.5, 100, 120, 500, '.markdown', '.md', '.plan.md', '/', ':', 'Logging', '\\', '_', '_strategy', '_webhooks', 'agent', 'agent_complete', 'auto', 'base', 'cognition', 'content', 'content_length', 'context_pool', 'data/agents', 'dry_run', 'event', 'exception', 'file', 'file_path', 'fleet', 'global_context', 'gpt-4o', 'max_time_per_session', 'models', 'prompt', 'quality', 'recorder', 'registry', 'repo_root', 'state_data', 'status', 'success', 'temp/dry_runs', 'thought', 'thought_stream', 'timestamp', 'token_usage', 'utf-8']

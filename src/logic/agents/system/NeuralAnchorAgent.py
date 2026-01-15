@@ -21,18 +21,21 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import re
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
+
+
+
 
 class NeuralAnchorAgent(BaseAgent):
     """
     Agent responsible for anchoring reasoning to verified external sources of truth.
     Validates agent statements against documentation, specifications, and issues.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.anchors: dict[str, Any] = {}
@@ -66,14 +69,14 @@ class NeuralAnchorAgent(BaseAgent):
                 # Simple keyword/regex check for validation in this stub
                 keywords = re.findall(r'\b\w+\b', claim.lower())
                 matches = [k for k in keywords if k in anchor["content"].lower()]
-                
+
                 score = len(matches) / len(keywords) if keywords else 0
                 results.append({
                     "source": src,
                     "overlap_score": score,
                     "confidence": "High" if score > 0.5 else "Low"
                 })
-        
+
         grounded = any(r["overlap_score"] > 0.1 for r in results)
         return {
             "claim": claim,

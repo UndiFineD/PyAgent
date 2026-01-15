@@ -22,18 +22,21 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import time
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
+
+
+
 
 class AttentionBufferAgent(BaseAgent):
     """
     Agent that maintains a shared attention buffer between humans and agents.
 Maintain a high-resolution stream of state changes, user interactions, and agent thoughts.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.buffer: list[dict[str, Any]] = []
@@ -57,11 +60,11 @@ Maintain a high-resolution stream of state changes, user interactions, and agent
             "priority": priority
         }
         self.buffer.append(point)
-        
+
         # Maintain size limit
         if len(self.buffer) > self.max_buffer_size:
             self.buffer.pop(0)
-            
+
         logging.info(f"Attention point added from {source}: {content[:50]}...")
         return f"Attention point registered. Buffer size: {len(self.buffer)}"
 

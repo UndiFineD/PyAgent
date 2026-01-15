@@ -26,6 +26,9 @@ from dataclasses import dataclass
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class MergeCandidate:
     """Candidate for merging with another improvement.

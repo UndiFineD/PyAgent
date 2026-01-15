@@ -1,0 +1,4 @@
+# file: c:\DEV\PyAgent\src\infrastructure\backend\LLMClient.py
+# hypothesis_version: 6.150.1
+
+[108, 1000, 'DV_AGENT_USE_SESSION', 'Session', 'copilot_cli', 'gh-extension', 'github_models', 'llm_backends', 'local', 'none', 'ollama', 'phase', 'system_prompt', 'timestamp_unix', 'tinyllama:latest', 'true', 'vllm', 'vllm-native', 'vllm_native']

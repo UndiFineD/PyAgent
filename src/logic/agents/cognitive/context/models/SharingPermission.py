@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class SharingPermission(Enum):
     """Permission levels for context sharing."""
     READ_ONLY = "read_only"

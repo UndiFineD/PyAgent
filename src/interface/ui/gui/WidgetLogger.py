@@ -32,6 +32,9 @@ import tkinter as tk
 
 __version__ = VERSION
 
+
+
+
 class WidgetLogger(logging.Handler):
     """Logging handler that redirects formatted log records to a Tkinter Text widget."""
     def __init__(self, widget, thread_id=None) -> None:
@@ -43,7 +46,7 @@ class WidgetLogger(logging.Handler):
         # Filter by thread if ID is provided
         if self.thread_id and record.thread != self.thread_id:
             return
-            
+
         msg: str = self.format(record)
         def append() -> None:
             try:

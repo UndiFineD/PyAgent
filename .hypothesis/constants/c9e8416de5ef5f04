@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\quantizers\quantizer_mxfp4.py
+# hypothesis_version: 6.150.1
+
+[2880, '.bias', '.weight', '3.4.0', '3.5.0', 'GptOssConfig', 'PreTrainedModel', '_blocks', '_scales', 'accelerate', 'base_model_ep_plan', 'base_model_tp_plan', 'blocks', 'casting_dtype', 'cpu', 'device_map', 'device_mesh', 'disk', 'down_proj', 'down_proj_bias', 'down_proj_blocks', 'down_proj_scales', 'empty_param', 'gate_up_proj', 'gate_up_proj_bias', 'gate_up_proj_blocks', 'gate_up_proj_scales', 'grouped_gemm', 'model', 'rank', 'scales', 'to_contiguous', 'torch.Tensor', 'torch.device', 'torch.dtype', 'use_kernels']

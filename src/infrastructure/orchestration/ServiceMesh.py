@@ -23,21 +23,24 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, List, Any
+from typing import Any
 
 __version__ = VERSION
 
+
+
+
 class ServiceMesh:
     """Manages cross-node tool discovery and capability synchronization."""
-    
+
     def __init__(self, fleet_manager) -> None:
         self.fleet = fleet_manager
-        self.known_nodes: dict[str, list[str]] = {} # URL -> List of tool names
+        self.known_nodes: dict[str, list[str]] = {}  # URL -> List of tool names
         self.local_tools: list[str] = []
-        
+
         # Subscribe to tool registration events
         self.fleet.signals.subscribe("TOOL_REGISTERED", self._on_tool_registered)
-        
+
     def _on_tool_registered(self, payload: dict[str, Any]) -> None:
         """Handler for local tool registration."""
         tool_name = payload.get("tool_name")
@@ -56,7 +59,7 @@ class ServiceMesh:
         """Fetches available tools from a remote node."""
         try:
             # Simulated call to remote node's discovery endpoint
-            remote_tools = ["remote_analyzer", "cloud_scaler", "global_context_shard"] 
+            remote_tools = ["remote_analyzer", "cloud_scaler", "global_context_shard"]
             self.known_nodes[node_url] = remote_tools
             for tool in remote_tools:
                 # Wrap lambda to give it a name and docstring for registry extraction
@@ -64,7 +67,7 @@ class ServiceMesh:
                     """Remote tool proxy."""
                     return f"Remote proxy call to {tool} at {node_url}"
                 remote_proxy.__name__ = f"{tool}_at_{node_url.replace(':', '_').replace('/', '_').replace('.', '_')}"
-                
+
                 self.fleet.registry.register_tool(
                     owner_name=f"RemoteNode:{node_url}",
                     func=remote_proxy,

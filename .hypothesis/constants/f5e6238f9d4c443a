@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\decomposition\_factor_analysis.py
+# hypothesis_version: 6.150.1
+
+[-0.5, 0.0, 1e-12, 1e-06, 0.01, 0.5, 1.0, 2.0, 100, 1000, 'array-like', 'boolean', 'copy', 'iterated_power', 'lapack', 'left', 'max_iter', 'n_components', 'noise_variance_init', 'quartimax', 'random_state', 'randomized', 'rotation', 'svd_method', 'tol', 'varimax']

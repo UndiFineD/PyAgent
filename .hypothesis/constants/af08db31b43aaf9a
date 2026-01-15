@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\types.py
+# hypothesis_version: 6.150.1
+
+['ADD', 'C', 'Collection', 'DELETE', 'FLOAT32', 'INT32', 'LiteralValue', 'LogicalOperator', 'METADATA', 'Metadata', 'No schema', 'OperatorExpression', 'PyVector', 'RECORD', 'T', 'UPDATE', 'UPSERT', 'Unspecified', 'UpdateMetadata', 'VECTOR', 'Vector', 'Where', 'WhereDocument', 'WhereOperator', 'configuration', 'configuration_json', 'database', 'dimension', 'id', 'log_position', 'metadata', 'name', 'schema', 'tenant', 'version']

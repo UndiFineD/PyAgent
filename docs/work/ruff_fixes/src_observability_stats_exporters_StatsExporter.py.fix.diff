@@ -1,0 +1,13 @@
+diff --git a/src/observability/stats/exporters/StatsExporter.py b/src/observability/stats/exporters/StatsExporter.py
+index b0c8ed3..abc4073 100644
+--- a/src/observability/stats/exporters/StatsExporter.py
++++ b/src/observability/stats/exporters/StatsExporter.py
+@@ -22,7 +22,7 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ import json
+ 
+ __version__ = VERSION

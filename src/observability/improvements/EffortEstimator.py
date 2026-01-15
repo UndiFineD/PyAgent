@@ -26,9 +26,12 @@ from .EffortEstimate import EffortEstimate
 from .EffortEstimateResult import EffortEstimateResult
 from .Improvement import Improvement
 from .ImprovementCategory import ImprovementCategory
-from typing import Any, Dict, List
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class EffortEstimator:
     """Estimates effort for improvements."""

@@ -1,0 +1,61 @@
+diff --git a/tests/performance/SwarmBenchmark.py b/tests/performance/SwarmBenchmark.py
+index c664d2d..41bff08 100644
+--- a/tests/performance/SwarmBenchmark.py
++++ b/tests/performance/SwarmBenchmark.py
+@@ -5,7 +5,17 @@ import json
+ import time
+ import logging
+ from pathlib import Path
+-from typing import Dict, List, Any, Optional
++from typing import Dict, List, Any
++
++
++
++
++
++
++
++
++
++
+ 
+ class SwarmBenchmark:
+     """Automated benchmark regression and tracking for the PyAgent Swarm."""
+@@ -32,7 +42,7 @@ class SwarmBenchmark:
+         # Keep only last 100 runs
+         if len(self.history) > 100:
+             self.history = self.history[-100:]
+-            
++
+         try:
+             self.history_file.write_text(json.dumps(self.history, indent=2))
+         except Exception as e:
+@@ -54,15 +64,25 @@ class SwarmBenchmark:
+ 
+         avg_ttft = sum(historical_ttfts) / len(historical_ttfts)
+         threshold = avg_ttft * 1.10 # 10% buffer
+-        
++
+         if current_ttft > threshold:
+-            logging.error(f"PERFORMANCE REGRESSION DETECTED!")
++            logging.error("PERFORMANCE REGRESSION DETECTED!")
+             logging.error(f"Current TTFT: {current_ttft:.4f}s | Avg TTFT: {avg_ttft:.4f}s | Threshold: {threshold:.4f}s")
++
++
++
++
++
+             return False
+-            
++
+         logging.info(f"Performance check passed: TTFT {current_ttft:.4f}s is within 10% of history ({avg_ttft:.4f}s)")
+         return True
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     # Example usage
+     benchmark = SwarmBenchmark()

@@ -1,0 +1,15 @@
+diff --git a/src/logic/agents/swarm/InterFleetIdentityAgent.py b/src/logic/agents/swarm/InterFleetIdentityAgent.py
+index efaf71a..b7d1612 100644
+--- a/src/logic/agents/swarm/InterFleetIdentityAgent.py
++++ b/src/logic/agents/swarm/InterFleetIdentityAgent.py
+@@ -40,6 +40,10 @@ class InterFleetIdentityAgent:
+         self.authorized_agents = {} # agent_id -> {fleet_id, permissions}
+         self.session_tokens = {} # token -> {agent_id, expiry}
+ 
++    def generate_fleet_handshake(self) -> dict[str, Any]:
++        """Generates a default secure handshake for fleet discovery."""
++        return self.secure_handshake(f"HANDSHAKE_{time.time()}", "default_secret")
++
+     def secure_handshake(self, payload: str, secret: str) -> dict[str, str]:
+         """Signs a handshake payload using IdentityCore."""
+         signature = self.core.sign_payload(payload, secret)

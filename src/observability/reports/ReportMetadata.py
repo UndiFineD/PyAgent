@@ -26,6 +26,9 @@ from dataclasses import dataclass
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class ReportMetadata:
     """Metadata for a generated report.

@@ -23,24 +23,27 @@ import zmq.asyncio
 import orjson
 import logging
 import asyncio
-from typing import Any, Dict, Optional, Callable
+from typing import Any, Callable
+
+
+
 
 class AgentCommunicationBus:
     """Zero-latency messaging bus for swarm orchestration."""
-    
+
     def __init__(self, pub_port: int = 5555, sub_port: int = 5556) -> None:
         self.context = zmq.asyncio.Context()
         self.pub_port = pub_port
         self.sub_port = sub_port
-        
+
         # PUB socket for broadcasting
         self.publisher = self.context.socket(zmq.PUB)
         self.publisher.bind(f"tcp://*:{self.pub_port}")
-        
+
         # SUB socket for receiving
         self.subscriber = self.context.socket(zmq.SUB)
         self.subscriber.connect(f"tcp://localhost:{self.pub_port}")
-        
+
         self.handlers: dict[str, list[Callable]] = {}
         self._running = False
 
@@ -64,43 +67,61 @@ class AgentCommunicationBus:
                 topic_bytes, payload_bytes = await self.subscriber.recv_multipart()
                 topic = topic_bytes.decode()
                 data = orjson.loads(payload_bytes)["data"]
-                
+
+
+
+
+
+
                 if topic in self.handlers:
                     for handler in self.handlers[topic]:
                         if asyncio.iscoroutinefunction(handler):
                             await handler(data)
+
+
+
+
                         else:
                             handler(data)
         except Exception as e:
             if self._running:
                 logging.error(f"AgentBus Error: {e}")
+
+
         finally:
             self.stop()
 
     def stop(self) -> None:
         """Stops the bus and cleans up sockets."""
+
+
+
         self._running = False
         self.publisher.close()
         self.subscriber.close()
         self.context.term()
 
+
+
+
+
 if __name__ == "__main__":
     # Example usage
     async def run_example() -> None:
         bus = AgentCommunicationBus()
-        
+
         def on_msg(data: dict[str, Any]) -> None:
             print(f"Received: {data}")
-            
+
         bus.subscribe("telemetry", on_msg)
-        
+
         # Start listener in background
         listener = asyncio.create_task(bus.start())
-        
+
         await asyncio.sleep(1)
         await bus.broadcast("telemetry", {"status": "alive", "agent": "test"})
         await asyncio.sleep(1)
-        
+
         bus.stop()
         await listener
 

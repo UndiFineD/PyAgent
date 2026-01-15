@@ -1,0 +1,96 @@
+diff --git a/src/infrastructure/dev/agent_tests/debugging.py b/src/infrastructure/dev/agent_tests/debugging.py
+index 06ecdcd..f4b1313 100644
+--- a/src/infrastructure/dev/agent_tests/debugging.py
++++ b/src/infrastructure/dev/agent_tests/debugging.py
+@@ -25,18 +25,33 @@ from src.core.base.version import VERSION
+ import json
+ from dataclasses import dataclass, field
+ from datetime import datetime
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from .enums import ExecutionMode
+ from .models import ExecutionTrace
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ def _empty_str_list() -> list[str]:
+     return []
+ 
++
++
++
++
++
+ def _empty_action_list() -> list[dict[str, Any]]:
+     return []
+ 
++
++
++
++
++
+ class ExecutionReplayer:
+     """Replay test execution for debugging."""
+ 
+@@ -127,6 +142,11 @@ class ExecutionReplayer:
+             "variables": trace.variables
+         }, indent=2)
+ 
++
++
++
++
++
+ class TestProfiler:
+     """Runtime profiling for tests."""
+     __test__ = False
+@@ -195,6 +215,11 @@ class TestProfiler:
+             )
+         return "\n".join(report)
+ 
++
++
++
++
++
+ class TestRecorder:
+     """Records test execution."""
+     __test__ = False
+@@ -204,6 +229,7 @@ class TestRecorder:
+ 
+     @dataclass
+     class Recording:
++        """A recording of test actions."""
+         test_name: str
+         actions: list[dict[str, Any]] = field(default_factory=_empty_action_list)
+ 
+@@ -228,11 +254,17 @@ class TestRecorder:
+             self.start_recording(test_name)
+         self.record_action("result", {"passed": bool(result)})
+ 
++
++
++
++
++
+ class TestReplayer:
+     """Replays recorded tests."""
+ 
+     @dataclass
+     class ReplayResult:
++        """Result of a test replay."""
+         success: bool
+         errors: list[str] = field(default_factory=_empty_str_list)
+ 
+@@ -241,4 +273,4 @@ class TestReplayer:
+         actions = getattr(recording, "actions", None)
+         if actions is None:
+             return TestReplayer.ReplayResult(success=False, errors=["missing_actions"])
+-        return TestReplayer.ReplayResult(success=True)
+\ No newline at end of file
++        return TestReplayer.ReplayResult(success=True)

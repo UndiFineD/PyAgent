@@ -26,17 +26,20 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Any, Dict, List, Optional
+from typing import Any
 from .AgentColumn import AgentColumn
 
 __version__ = VERSION
+
+
+
 
 class AgentManager:
     """Manages the lifecycle and state of agent columns."""
     def __init__(self, main_app, columns_container) -> None:
         self.main_app: Any = main_app
         self.container: Any = columns_container
-        self.agent_columns = []
+        self.agent_columns: list[Any] = []
 
     def add_agent(self, name, preset_data=None) -> AgentColumn:
         """Creates and adds a new agent column."""
@@ -54,10 +57,10 @@ class AgentManager:
         }
         col = AgentColumn(self.container, name, callbacks)
         self.agent_columns.append(col)
-        
+
         if preset_data:
             col.set_data(preset_data)
-            
+
         self.main_app.status_var.set(f"Added {name} agent.")
         return col
 

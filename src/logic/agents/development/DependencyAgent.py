@@ -25,9 +25,11 @@ from src.core.base.version import VERSION
 from src.core.base.types.DependencyNode import DependencyNode
 from src.core.base.types.DependencyType import DependencyType
 from src.logic.agents.development.DependencyCore import DependencyCore
-from typing import Dict, List
 
 __version__ = VERSION
+
+
+
 
 class DependencyAgent:
     """Analyzes code dependencies.

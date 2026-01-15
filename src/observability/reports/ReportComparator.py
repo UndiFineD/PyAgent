@@ -24,13 +24,15 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .ReportComparison import ReportComparison
 from pathlib import Path
-from typing import List
 
 __version__ = VERSION
 
 # Define AGENT_DIR for default parameter
 
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
+
+
+
 
 class ReportComparator:
     """Compares report versions to show differences.

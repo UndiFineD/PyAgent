@@ -1,0 +1,47 @@
+diff --git a/temp/verify_imports.py b/temp/verify_imports.py
+index 6aed389..7bd28e3 100644
+--- a/temp/verify_imports.py
++++ b/temp/verify_imports.py
+@@ -1,19 +1,27 @@
+ #!/usr/bin/env python3
+-import os
+ import ast
+-import sys
+ from pathlib import Path
+ 
++
++
++
++
++
+ def get_py_files(directory):
+     return list(Path(directory).rglob("*.py"))
+ 
++
++
++
++
++
+ def check_file_imports(file_path):
+     with open(file_path, "r", encoding="utf-8") as f:
+         try:
+             tree = ast.parse(f.read())
+         except Exception as e:
+             return [f"PARSE ERROR: {e}"]
+-            
++
+     errors = []
+     for node in ast.walk(tree):
+         if isinstance(node, ast.Import):
+@@ -25,6 +33,11 @@ def check_file_imports(file_path):
+                 pass
+     return errors
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     src_dir = "c:/DEV/PyAgent/src"
+     files = get_py_files(src_dir)

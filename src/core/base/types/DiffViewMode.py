@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class DiffViewMode(Enum):
     """Modes for changelog diff visualization."""
     UNIFIED = "unified"

@@ -27,6 +27,9 @@ from dataclasses import dataclass
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class ReportSearchResult:
     """Result from report search.

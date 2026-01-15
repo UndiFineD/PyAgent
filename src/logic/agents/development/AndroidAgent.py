@@ -23,7 +23,7 @@ from src.core.base.version import VERSION
 import logging
 import time
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
@@ -31,12 +31,15 @@ from src.logic.agents.development.core.AndroidCore import AndroidCore
 
 __version__ = VERSION
 
+
+
+
 class AndroidAgent(BaseAgent):
     """
     Automates Android devices using the 'Action-State' pattern (Accessibility Tree).
     95% cheaper and 5x faster than vision-based mobile automation.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.core = AndroidCore()
@@ -46,7 +49,7 @@ class AndroidAgent(BaseAgent):
             "to find structured UI elements (buttons, text, coordinates). "
             "Focus on efficiency and low latency. Use ADB for actions."
         )
-        
+
         # Phase 108: Intelligence Harvesting
         work_root = getattr(self, "_workspace_root", None)
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
@@ -78,7 +81,7 @@ class AndroidAgent(BaseAgent):
     def execute_mobile_action(self, action_type: str, params: dict[str, Any]) -> str:
         """Executes a mobile action (tap, type, swipe, home) using ADB."""
         logging.info(f"Executing mobile action: {action_type} with {params}")
-        
+
         # Mapping actions to ADB commands
         if action_type == "tap":
             x, y = params.get("coords", [0, 0])
@@ -87,11 +90,11 @@ class AndroidAgent(BaseAgent):
             text = params.get("text", "")
             cmd = f"adb shell input text '{text}'"
         elif action_type == "key":
-            key_code = params.get("code", 3) # Default 3 (HOME)
+            key_code = params.get("code", 3)  # Default 3 (HOME)
             cmd = f"adb shell input keyevent {key_code}"
         else:
             return f"Action {action_type} not supported."
-            
+
         result = f"SUCCESS: Executed '{cmd}' on device."
         self._record(action_type, f"Params: {params} | Cmd: {cmd}")
         return result
@@ -103,16 +106,16 @@ class AndroidAgent(BaseAgent):
         self._record("workflow_start", f"Goal: {goal}")
         # Phase 1: Perception
         state = self.dump_accessibility_tree()
-        
+
         # Phase 2: Reasoning (Simulated)
         # Find 'WhatsApp' button in the elements
         target = next((e for e in state["elements"] if e["text"] == "WhatsApp"), None)
-        
+
         if target:
             # Phase 3: Action
-            coords = target["bounds"][:2] # [x, y]
+            coords = target["bounds"][:2]  # [x, y]
             return self.execute_mobile_action("tap", {"coords": coords})
-        
+
         err = "ERROR: Could not find target element to complete goal."
         self._record("workflow_error", err)
         return err

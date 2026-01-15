@@ -25,10 +25,16 @@ Generates OpenAPI/Swagger specs and handles external tool integration.
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, Any
+from typing import Any
 from .APICore import APICore
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class PublicAPIEngine:
     """
@@ -45,18 +51,18 @@ class PublicAPIEngine:
         # Standardize tool data for core
         raw_tools = []
         if hasattr(self.fleet, 'registry'):
-             # This depends on how tools are stored, assuming a list of objects with .name
-             tools = self.fleet.registry.list_tools()
-             for t in tools:
-                 raw_tools.append({"name": t.name, "parameters": getattr(t, 'parameters', None)})
-        
+            # This depends on how tools are stored, assuming a list of objects with .name
+            tools = self.fleet.registry.list_tools()
+            for t in tools:
+                raw_tools.append({"name": t.name, "parameters": getattr(t, 'parameters', None)})
+
         return self.core.build_openapi_json(raw_tools)
 
     def register_external_tool(self, tool_spec: dict[str, Any]) -> str:
         """Registers a tool from an external OpenAPI definition."""
         if not self.core.validate_tool_contract(tool_spec):
-             return "Error: Invalid tool specification."
-             
+            return "Error: Invalid tool specification."
+
         name = tool_spec.get("name")
         logging.info(f"API-ENGINE: Importing external tool '{name}'")
         return f"Successfully registered external tool '{name}' into fleet registry."

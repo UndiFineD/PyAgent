@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_higher_order_ops\while_loop.py
+# hypothesis_version: 6.150.1
+
+['additional_inputs', 'body_fn', 'body_output', 'call_function', 'carried_inputs', 'carries', 'cond_fn', 'constant', 'eager', 'example_value', 'fw_body_fn', 'fw_cond_fn', 'fw_outputs', 'mode', 'placeholder', 'val', 'while_loop']

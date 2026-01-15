@@ -24,10 +24,15 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from src.core.base.models import DiffOutputFormat, DiffResult
 from pathlib import Path
-from typing import Optional
 import difflib
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class DiffGenerator:
     """Generates diffs to preview changes before applying them.
@@ -131,10 +136,11 @@ class DiffGenerator:
         """
         for line in diff_result.diff_lines:
             if line.startswith('+') and not line.startswith('+++'):
-                print(f"\033[92m{line}\033[0m", end='')  # Green
+                sys.stdout.write(f"\033[92m{line}\033[0m")  # Green
             elif line.startswith('-') and not line.startswith('---'):
-                print(f"\033[91m{line}\033[0m", end='')  # Red
+                sys.stdout.write(f"\033[91m{line}\033[0m")  # Red
             elif line.startswith('@@'):
-                print(f"\033[96m{line}\033[0m", end='')  # Cyan
+                sys.stdout.write(f"\033[96m{line}\033[0m")  # Cyan
             else:
-                print(line, end='')
+                sys.stdout.write(line)
+        sys.stdout.flush()

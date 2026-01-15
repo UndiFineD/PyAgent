@@ -1,0 +1,27 @@
+diff --git a/src/core/base/utils/FileLock.py b/src/core/base/utils/FileLock.py
+index 16cad4a..a12d899 100644
+--- a/src/core/base/utils/FileLock.py
++++ b/src/core/base/utils/FileLock.py
+@@ -25,10 +25,14 @@ from src.core.base.version import VERSION
+ from src.core.base.models import LockType
+ from dataclasses import dataclass
+ from pathlib import Path
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class FileLock:
+     """File lock information.
+@@ -44,4 +48,4 @@ class FileLock:
+     lock_type: LockType
+     owner: str
+     acquired_at: float
+-    expires_at: float | None = None
+\ No newline at end of file
++    expires_at: float | None = None

@@ -18,9 +18,15 @@ Interfaces with rust_core via PyO3 or CFFI.
 
 from __future__ import annotations
 
+
+
+
+
+
+
 class NeuralPruningEngine:
     """Core engine for pruning neural connections in the swarm."""
-    
+
     def calculate_synaptic_weight_python(self, inputs: list[float], weights: list[float]) -> float:
         """Native Python implementation of weight calculation."""
         return sum(i * w for i, w in zip(inputs, weights))
@@ -31,9 +37,7 @@ class NeuralPruningEngine:
         Falls back to Python if Rust module is not compiled.
         """
         try:
-            # TODO: Import rust_core after compilation
-            # from rust_core import calculate_synaptic_weight as rust_calc
-            # return rust_calc(inputs, weights)
-            return self.calculate_synaptic_weight_python(inputs, weights)
-        except ImportError:
+            import rust_core as rc
+            return rc.calculate_synaptic_weight(inputs, weights)  # type: ignore[attr-defined]
+        except (ImportError, AttributeError):
             return self.calculate_synaptic_weight_python(inputs, weights)

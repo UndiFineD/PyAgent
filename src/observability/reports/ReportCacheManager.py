@@ -23,7 +23,7 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any
 import json
 import logging
 import time
@@ -33,6 +33,9 @@ __version__ = VERSION
 # Define AGENT_DIR for default parameter
 
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
+
+
+
 
 class ReportCacheManager:
     """Manages report caching with invalidation strategies.

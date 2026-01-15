@@ -1,0 +1,10 @@
+diff --git a/tests/specialists/test_specialists.py b/tests/specialists/test_specialists.py
+index f38f334..7465fa5 100644
+--- a/tests/specialists/test_specialists.py
++++ b/tests/specialists/test_specialists.py
+@@ -1,5 +1,4 @@
+ import sys
+-import os
+ from pathlib import Path
+ 
+ # Add src to path

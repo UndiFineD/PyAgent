@@ -24,12 +24,14 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .PermissionLevel import PermissionLevel
 from .ReportPermission import ReportPermission
-from typing import List
 import logging
 import re
 import time
 
 __version__ = VERSION
+
+
+
 
 class AccessController:
     """Controller for report access permissions.

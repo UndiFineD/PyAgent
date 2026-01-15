@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\strategies\__init__.py
+# hypothesis_version: 6.150.1
+
+['branch', 'canon', 'chain', 'condition', 'debug', 'distribute', 'do_one', 'exhaust', 'flatten', 'glom', 'minimize', 'new', 'null_safe', 'rebuild', 'rl', 'rm_id', 'sort', 'traverse', 'tryit', 'typed', 'unpack']

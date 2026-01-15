@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_dynamo\variables\distributed.py
+# hypothesis_version: 6.150.1
+
+['NON_GROUP_MEMBER', 'VariableTracker', 'WORLD', '__getattr__', '__init__', '__new__', '__setattr__', '_get_backend_name', 'call_function', 'call_method', 'device_type', 'dim', 'example_value', 'get_coordinate', 'get_group', 'get_local_rank', 'get_rank', 'group_name', 'is_partial', 'is_replicate', 'is_shard', 'mod', 'ndim', 'rank', 'setup_input_hook', 'setup_output_hook', 'size']

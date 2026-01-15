@@ -27,6 +27,12 @@ from dataclasses import dataclass
 
 __version__ = VERSION
 
+
+
+
+
+
+
 @dataclass
 class RefactoringPattern:
     """A code refactoring pattern."""

@@ -1,0 +1,11 @@
+diff --git a/src/observability/improvements/refinement_engine.py b/src/observability/improvements/refinement_engine.py
+index 6fd344d..11a7cb9 100644
+--- a/src/observability/improvements/refinement_engine.py
++++ b/src/observability/improvements/refinement_engine.py
+@@ -46,4 +46,4 @@ main = create_main_function(
+ )
+ 
+ if __name__ == '__main__':
+-    main()
+\ No newline at end of file
++    main()

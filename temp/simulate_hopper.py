@@ -9,25 +9,50 @@ Source: https://www.nvidia.com/en-us/data-center/h100/ (NVIDIA H100 Whitepaper)
 import numpy as np
 import time
 
+
+
+
 class HopperOptimizer:
+
+
+
+
+
+
+
+
+
+
     """Simulates H100 Hopper core optimizations for large model inference."""
-    
+
     def simulate_fp8_speedup(self, matrix_size: int = 4096):
         """Quantitatively simulates FP8 vs FP16 throughput on Hopper architecture."""
+
+
+
         print(f"Matrix Size: {matrix_size}x{matrix_size}")
-        
+
         # FP16 (Classic)
         start = time.perf_counter()
         _ = np.random.randn(matrix_size, matrix_size).astype(np.float32) @ np.random.randn(matrix_size, matrix_size).astype(np.float32)
-        fp16_est = (time.perf_counter() - start) * 0.5 # Simulated H100 peak scaling
-        
+
+
+        fp16_est = (time.perf_counter() - start) * 0.5  # Simulated H100 peak scaling
+
         # FP8 (Transformer Engine Scaling)
         # H100 delivers 3x speedup for FP8 training and even more for inference vs A100 FP16
         fp8_est = fp16_est / 3.0
-        
+
+
+
+
         print(f"  FP16 Estimated Latency (H100): {fp16_est:.4f}s")
         print(f"  FP8 Estimated Latency (H100):  {fp8_est:.4f}s")
-        print(f"  Speedup: 3.0x (NVIDIA Transformer Engine Metric)")
+        print("  Speedup: 3.0x (NVIDIA Transformer Engine Metric)")
+
+
+
+
 
 if __name__ == "__main__":
     opt = HopperOptimizer()

@@ -23,7 +23,7 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 import json
 import logging
 import threading
@@ -31,6 +31,12 @@ import time
 import uuid
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class ConnectionPool:
     """
@@ -46,10 +52,10 @@ class ConnectionPool:
         self._pools: dict[str, list[Any]] = {}
         self._in_use: dict[str, int] = {}
         self._lock = threading.Lock()
-        
+
         # Phase 108: Status Caching (15 minute TTL)
         self.status_cache: dict[str, dict[str, Any]] = {}
-        self.cache_ttl = 900 # 15 minutes
+        self.cache_ttl = 900  # 15 minutes
         self.cache_file = Path(cache_file) if cache_file else None
         self._load_status_cache()
 
@@ -76,7 +82,7 @@ class ConnectionPool:
                 elapsed = time.time() - status.get("timestamp", 0)
                 if elapsed < self.cache_ttl:
                     return status.get("working", False)
-        return True # Default to True if no cache or expired
+        return True  # Default to True if no cache or expired
 
     def set_backend_status(self, backend: str, working: bool) -> None:
         """Updates the working status of a backend."""

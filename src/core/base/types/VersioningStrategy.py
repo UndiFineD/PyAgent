@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class VersioningStrategy(Enum):
     """Supported versioning strategies."""
     SEMVER = "semver"  # Semantic Versioning (MAJOR.MINOR.PATCH)

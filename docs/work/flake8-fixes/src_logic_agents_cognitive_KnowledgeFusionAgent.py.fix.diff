@@ -1,0 +1,107 @@
+diff --git a/src/logic/agents/cognitive/KnowledgeFusionAgent.py b/src/logic/agents/cognitive/KnowledgeFusionAgent.py
+index d12087b..eb632f2 100644
+--- a/src/logic/agents/cognitive/KnowledgeFusionAgent.py
++++ b/src/logic/agents/cognitive/KnowledgeFusionAgent.py
+@@ -27,12 +27,22 @@ from src.core.base.version import VERSION
+ import logging
+ import json
+ from pathlib import Path
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class KnowledgeFusionAgent(BaseAgent):
+     """Fuses distributed memory shards and resolves conflicts in the collective knowledge base."""
+ 
+@@ -41,7 +51,7 @@ class KnowledgeFusionAgent(BaseAgent):
+         self.fusion_dir = Path("data/logs/knowledge_fusion")
+         self.fusion_dir.mkdir(parents=True, exist_ok=True)
+         self.global_graph_path = self.fusion_dir / "global_knowledge_graph.json"
+-        
++
+         self._system_prompt = (
+             "You are the Knowledge Fusion Agent. "
+             "Your role is to aggregate experiences and insights from all swarm members. "
+@@ -55,9 +65,21 @@ class KnowledgeFusionAgent(BaseAgent):
+                 return json.load(f)
+         return {"nodes": [], "edges": []}
+ 
+-    def _save_global_graph(self, graph: dict[str, Any]) -> str:
+-        with open(self.global_graph_path, "w", encoding="utf-8") as f:
+-            json.dump(graph, f, indent=2)
++    def _save_global_graph(self, graph: dict[str, Any]) -> None:
++        """Saves graph atomically using temp file."""
++        temp_path = self.global_graph_path.with_suffix(".tmp")
++        try:
++            with open(temp_path, "w", encoding="utf-8") as f:
++                json.dump(graph, f, indent=2)
++            temp_path.replace(self.global_graph_path)
++        except Exception as e:
++            if temp_path.exists():
++                try:
++                    temp_path.unlink()
++                except Exception:
++                    pass
++            logging.error(f"KnowledgeFusion: Atomic save failed: {e}")
++            raise
+ 
+     @as_tool
+     def fuse_memory_shards(self, shard_paths: list[str]) -> str:
+@@ -67,16 +89,16 @@ class KnowledgeFusionAgent(BaseAgent):
+         """
+         graph = self._load_global_graph()
+         added_nodes = 0
+-        
++
+         for path_str in shard_paths:
+             path = Path(path_str)
+             if not path.exists():
+                 continue
+-            
++
+             try:
+                 with open(path, encoding="utf-8") as f:
+                     shard_data = json.load(f)
+-                
++
+                 # Simple fusion logic: Deduplicate by content/id
+                 # In a real scenario, this would involve semantic embedding comparison
+                 items = shard_data if isinstance(shard_data, list) else shard_data.get("nodes", [])
+@@ -95,12 +117,22 @@ class KnowledgeFusionAgent(BaseAgent):
+     def resolve_conflicts(self, keyword: str) -> str:
+         """Scans the global graph for contradictory information regarding a specific topic."""
+         # Mock logic for conflict resolution
++
++
++
++
++
+         return f"Conflict resolution for '{keyword}': No critical contradictions found. Knowledge remains stable."
+ 
+     def improve_content(self, prompt: str) -> str:
+         return "Global knowledge fusion is optimized. Swarm shards are synchronized."
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(KnowledgeFusionAgent, "Knowledge Fusion Agent", "Collective intelligence consolidator")
+-    main()
+\ No newline at end of file
++    main()

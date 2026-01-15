@@ -27,9 +27,12 @@ No I/O or side effects.
 from __future__ import annotations
 from src.core.base.version import VERSION
 import time
-from typing import List, Dict, Any
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class MemoryConsolidatorCore:
     """Pure logic core for memory consolidation."""
@@ -49,21 +52,21 @@ class MemoryConsolidatorCore:
         """Groups interactions and generates summary strings (insights)."""
         if not buffer:
             return []
-            
+
         summary: dict[str, list[str]] = {}
         for entry in buffer:
             agent = entry.get("agent", "Unknown")
             if agent not in summary:
                 summary[agent] = []
             summary[agent].append(entry.get("task", "Unknown Task"))
-            
+
         consolidated: list[str] = []
         for agent, tasks in summary.items():
             # In a real scenario, this might involve LLM calls (via the Shell)
             # but the logic of collation is here.
             insight = f"{agent} completed {len(tasks)} tasks. Key focus: {tasks[-1]}."
             consolidated.append(insight)
-            
+
         return consolidated
 
     @staticmethod

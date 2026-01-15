@@ -1,0 +1,28 @@
+diff --git a/src/observability/errors/RegressionDetector.py b/src/observability/errors/RegressionDetector.py
+index dfa454d..5f2f5d7 100644
+--- a/src/observability/errors/RegressionDetector.py
++++ b/src/observability/errors/RegressionDetector.py
+@@ -24,11 +24,15 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ErrorEntry import ErrorEntry
+ from .RegressionInfo import RegressionInfo
+-from typing import Dict, List, Optional
+ import re
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class RegressionDetector:
+     """Detects error regressions.
+ 
+@@ -95,4 +99,4 @@ class RegressionDetector:
+         """Calculate the regression rate."""
+         if not self.fixed_errors:
+             return 0.0
+-        return len(self.regressions) / len(self.fixed_errors) * 100
+\ No newline at end of file
++        return len(self.regressions) / len(self.fixed_errors) * 100

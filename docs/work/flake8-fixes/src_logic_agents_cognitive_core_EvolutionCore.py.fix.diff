@@ -1,0 +1,44 @@
+diff --git a/src/logic/agents/cognitive/core/EvolutionCore.py b/src/logic/agents/cognitive/core/EvolutionCore.py
+index fda0049..da0a38e 100644
+--- a/src/logic/agents/cognitive/core/EvolutionCore.py
++++ b/src/logic/agents/cognitive/core/EvolutionCore.py
+@@ -7,7 +7,18 @@ Handles prompt crossover and lineage persistence.
+ import hashlib
+ import random
+ 
++
++
++
++
++
++
++
++
++
++
+ class EvolutionCore:
++    """Core logic for evolutionary algorithms in prompt engineering."""
+     @staticmethod
+     def prompt_crossover(prompt1: str, prompt2: str) -> str:
+         """
+@@ -15,11 +26,11 @@ class EvolutionCore:
+         """
+         lines1 = prompt1.splitlines()
+         lines2 = prompt2.splitlines()
+-        
++
+         # Take halves or interweave
+         mid1 = len(lines1) // 2
+         mid2 = len(lines2) // 2
+-        
++
+         child_lines = lines1[:mid1] + lines2[mid2:]
+         return "\n".join(child_lines)
+ 
+@@ -38,4 +49,4 @@ class EvolutionCore:
+         modifiers = ["be more precise", "explain reasoning", "be concise", "check for security"]
+         if random.random() < mutation_rate:
+             return prompt + f"\n[Mutation: {random.choice(modifiers)}]"
+-        return prompt
+\ No newline at end of file
++        return prompt

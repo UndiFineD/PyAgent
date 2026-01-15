@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\functions\elementary\exponential.py
+# hypothesis_version: 6.150.1
+
+['basic', 'complex', 'deep', 'exp', 'factor', 'force', 'inverse', 'k', 'l', 'log', 'measure', 'mul', 'multinomial', 'power_base', 'power_exp', 't', 'w']

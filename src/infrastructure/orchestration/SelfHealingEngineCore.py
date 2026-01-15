@@ -19,20 +19,23 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, List, Any
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class SelfHealingEngineCore:
     """
     Pure logic for self-healing analysis.
     Decides what kind of fix is needed based on the traceback.
     """
-    
+
     def analyze_failure(self, agent_name: str, tool_name: str, error_msg: str, tb: str) -> dict[str, Any]:
         """Analyzes a failure and suggests a strategy."""
         strategy = "manual_review"
-        
+
         if "SyntaxError" in tb:
             strategy = "fix_syntax"
         elif "ImportError" in tb:
@@ -41,7 +44,7 @@ class SelfHealingEngineCore:
             strategy = "check_config"
         elif "AttributeError" in tb:
             strategy = "verify_api_compatibility"
-            
+
         return {
             "agent": agent_name,
             "tool": tool_name,

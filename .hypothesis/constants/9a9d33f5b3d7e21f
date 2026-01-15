@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\manifold\_mds.py
+# hypothesis_version: 6.150.1
+
+[0.0, 1e-06, 1e-05, 1.0, 300, '__array__', 'array-like', 'auto', 'boolean', 'classical_mds', 'clip', 'deprecated', 'dissimilarities', 'dissimilarity', 'eps', 'euclidean', 'init', 'left', 'max_iter', 'metric', 'metric_mds', 'metric_params', 'n_components', 'n_init', 'n_jobs', 'normalized_stress', 'precomputed', 'random', 'random_state', 'return_n_iter', 'verbose', 'warn']

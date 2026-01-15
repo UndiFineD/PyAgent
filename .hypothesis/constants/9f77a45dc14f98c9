@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\google\protobuf\text_format.py
+# hypothesis_version: 6.150.1
+
+[b'\n', ' [', ' {\n', ' { ', '"', '"\n', '" ', '%s\n', '%s ', '%s[%s]%s ', "'", "': ", '(-?)0(\\d+)$', '(\\s*#.*$)', '(\\s|(#.*$))+', ',', ', ', '-', '-?0[0-9]+', '-?inf(?:inity)?f?$', '-inf', '.', '/', '0', '0o', '1', ':', ': ', ': "', ':{0}', ';', '<', '>', 'Expected "%s".', 'Expected comment.', 'Expected identifier.', 'False', 'Merge', 'MessageToBytes', 'MessageToString', 'Parse', 'PrintField', 'PrintFieldValue', 'PrintMessage', 'True', '[', '[^\\d\\W]\\w*', '\\s+', '\\w+', ']', 'as_utf8', 'ascii', 'f', 'fF', 'false', 'google.protobuf.Any', 'inf', 'nan', 'nanf?$', 't', 'true', 'utf-8', 'value', '{', '{0} : {1}', '{1:{0}}', '|', '}', '}\n', '} ']

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\system\CloudProviderAgent.py
+# hypothesis_version: 6.150.1
+
+['aws', 'azure', 'cloud_iac_generation', 'gcp', 'nodes', 'provider', 'us-east-1']

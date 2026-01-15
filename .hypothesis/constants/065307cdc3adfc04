@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\generation\continuous_batching\continuous_api.py
+# hypothesis_version: 6.150.1
+
+[0.1, 5.0, 'Manager not started.', 'No more free blocks', '_tp_size', 'attention_mask', 'cache', 'config', 'cu_seq_lens_k', 'cu_seq_lens_q', 'device', 'do_sample', 'dtype', 'eager_paged', 'flash_attention_2', 'full_attention', 'generation_loop', 'graph', 'graph_replay', 'input_ids', 'layer_types', 'log_prob_generation', 'logit_processing', 'logits_indices', 'max_seqlen_k', 'max_seqlen_q', 'model_forward', 'paged_attention', 'position_ids', 'profile', 'read_index', 'request', 'sampling', 'scheduler', 'sdpa_paged', 'size', 'sliding_attention', 'sliding_window', 'state', 'use_cache', 'use_cuda_graph', 'write_index']

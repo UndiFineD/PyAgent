@@ -1,0 +1,12 @@
+diff --git a/src/core/base/managers/ResourceQuotaManager.py b/src/core/base/managers/ResourceQuotaManager.py
+index ed29015..09708d5 100644
+--- a/src/core/base/managers/ResourceQuotaManager.py
++++ b/src/core/base/managers/ResourceQuotaManager.py
+@@ -1,6 +1,6 @@
+ 
+ import time
+-from typing import Dict, Any, Optional
++from typing import Any
+ from dataclasses import dataclass, field
+ 
+ @dataclass

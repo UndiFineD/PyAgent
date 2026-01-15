@@ -1,0 +1,11 @@
+diff --git a/src/logic/agents/development/PowershellAgent.py b/src/logic/agents/development/PowershellAgent.py
+index d111eae..80af7a7 100644
+--- a/src/logic/agents/development/PowershellAgent.py
++++ b/src/logic/agents/development/PowershellAgent.py
+@@ -44,4 +44,4 @@ class PowershellAgent(CoderAgent):
+ 
+ if __name__ == "__main__":
+     main = create_main_function(PowershellAgent, "PowerShell Agent", "Path to .ps1 file")
+-    main()
+\ No newline at end of file
++    main()

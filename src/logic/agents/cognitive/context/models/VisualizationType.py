@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class VisualizationType(Enum):
     """Types of context visualization."""
     DEPENDENCY_GRAPH = "dependency_graph"

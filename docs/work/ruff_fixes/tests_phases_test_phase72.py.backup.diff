@@ -1,0 +1,21 @@
+diff --git a/tests/phases/test_phase72.py b/tests/phases/test_phase72.py
+index 182bc4a..162410f 100644
+--- a/tests/phases/test_phase72.py
++++ b/tests/phases/test_phase72.py
+@@ -1,6 +1,7 @@
+ import unittest
+ import os
+ import time
++from pathlib import Path
+ from src.infrastructure.fleet.FleetManager import FleetManager
+ 
+ class TestPhase72(unittest.TestCase):
+@@ -12,7 +13,7 @@ class TestPhase72(unittest.TestCase):
+         print("\nTesting Phase 72: Agentic Self-Evolution & Core Hardening...")
+         
+         # Test file
+-        test_file = "src/agents/core/CoreEvolutionGuard.py"
++        test_file = "src/logic/agents/system/CoreEvolutionGuard.py"
+         
+         # Take snapshot
+         res = self.fleet.evolution_guard.snapshot_core_logic([test_file])

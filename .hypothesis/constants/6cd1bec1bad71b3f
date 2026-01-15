@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\core\relational.py
+# hypothesis_version: 6.150.1
+
+['!=', '1.13', '<', '<=', '<>', '==', '>', '>=', 'Eq', 'Equality', 'Ge', 'GreaterThan', 'Gt', 'Le', 'LessThan', 'Lt', 'Ne', 'Rel', 'Relational', 'StrictGreaterThan', 'StrictLessThan', 'Unequality', '_eval_Eq', 'eq', 'eq-rewrite-Add', 'evaluate', 'ge', 'gt', 'imag', 'le', 'lt', 'measure', 'ne', 'ratio', 'real']

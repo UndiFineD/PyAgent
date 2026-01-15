@@ -1,0 +1,20 @@
+diff --git a/src/logic/tools/mcp_server.py b/src/logic/tools/mcp_server.py
+index 75a4d49..f188f43 100644
+--- a/src/logic/tools/mcp_server.py
++++ b/src/logic/tools/mcp_server.py
+@@ -51,7 +51,7 @@ def confirm_proceed(confirmation: str) -> str:
+     return spec_agent.confirm_proceed(confirmation)
+ 
+ @mcp.tool()
+-def create_task(title: str, parent_id: str = None) -> str:
++def create_task(title: str, parent_id: str | None = None) -> str:
+     """Creates a new task in the Beads graph."""
+     return memory_agent.create_task(title, parent_id)
+ 
+@@ -62,4 +62,4 @@ def store_memory(category: str, name: str, data: str) -> str:
+ 
+ if __name__ == "__main__":
+     import uvicorn
+-    uvicorn.run(app, host="0.0.0.0", port=8000)
+\ No newline at end of file
++    uvicorn.run(app, host="0.0.0.0", port=8000)

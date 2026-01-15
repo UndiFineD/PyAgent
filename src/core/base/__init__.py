@@ -26,5 +26,7 @@ from src.core.base.version import VERSION as VERSION
 from .BaseAgent import BaseAgent as BaseAgent
 from .models import AgentConfig as AgentConfig, AgentState as AgentState, ResponseQuality as ResponseQuality, PromptTemplate as PromptTemplate
 from .interfaces import AgentInterface as AgentInterface, OrchestratorInterface as OrchestratorInterface
+from .AgentPluginBase import AgentPluginBase
+from .models.enums import HealthStatus
 
 __version__ = VERSION

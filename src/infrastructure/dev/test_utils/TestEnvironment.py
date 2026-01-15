@@ -26,13 +26,14 @@ from .CleanupStrategy import CleanupStrategy
 from .IsolationLevel import IsolationLevel
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Dict, Optional
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class TestEnvironment:
-    __test__ = False
     """Test environment configuration.
 
     Attributes:
@@ -42,6 +43,7 @@ class TestEnvironment:
         isolation_level: File system isolation.
         cleanup: Cleanup strategy.
     """
+    __test__ = False
 
     name: str
     env_vars: dict[str, str] = field(default_factory=lambda: {})

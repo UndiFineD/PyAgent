@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\simplify\epathtools.py
+# hypothesis_version: 6.150.1
+
+['%s(%r)', '*', '/', ':', '?', '[', ']', '_', '__iter__', '_epath', '_path', 'empty EPath', 'empty element', 'empty selector', 'non-root EPath', '|']

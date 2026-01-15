@@ -23,19 +23,22 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 import json
 
 __version__ = VERSION
 
+
+
+
 class TestDataGenerator:
-    __test__ = False
     """Generates realistic test data for agent testing.
 
     Example:
         gen=TestDataGenerator()
         code=gen.generate_python_code(with_errors=False)
     """
+    __test__ = False
 
     def __init__(self, seed: int | None = None) -> None:
         """Initialize data generator.

@@ -25,9 +25,11 @@ from src.core.base.version import VERSION
 from .ErrorEntry import ErrorEntry
 from .ErrorImpact import ErrorImpact
 from .ErrorSeverity import ErrorSeverity
-from typing import Dict, List, Set
 
 __version__ = VERSION
+
+
+
 
 class ImpactAnalyzer:
     """Analyzes the impact of errors on the codebase.

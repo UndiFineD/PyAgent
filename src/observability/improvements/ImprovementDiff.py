@@ -25,9 +25,11 @@ from src.core.base.version import VERSION
 from .Improvement import Improvement
 from .ImprovementDiffType import ImprovementDiffType
 from dataclasses import dataclass
-from typing import Optional
 
 __version__ = VERSION
+
+
+
 
 @dataclass
 class ImprovementDiff:

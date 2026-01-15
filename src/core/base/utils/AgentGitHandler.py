@@ -23,13 +23,19 @@ from src.core.base.version import VERSION
 import subprocess
 import logging
 from pathlib import Path
-from typing import List, Optional, Any, Dict
+from typing import Any
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class AgentGitHandler:
     """Handles git operations for the Agent."""
-    
+
     def __init__(self, repo_root: Path, no_git: bool = False, recorder: Any = None) -> None:
         self.repo_root: Path = repo_root
         self.no_git: bool = no_git

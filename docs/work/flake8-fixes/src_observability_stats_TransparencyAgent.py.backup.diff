@@ -1,0 +1,67 @@
+diff --git a/src/observability/stats/TransparencyAgent.py b/src/observability/stats/TransparencyAgent.py
+index 39d41c8..8fdd7e0 100644
+--- a/src/observability/stats/TransparencyAgent.py
++++ b/src/observability/stats/TransparencyAgent.py
+@@ -22,16 +22,20 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Optional
+ from src.core.base.BaseAgent import BaseAgent
+ from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+ from src.core.base.utilities import create_main_function, as_tool
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class TransparencyAgent(BaseAgent):
+     """Provides a detailed audit trail of agent thoughts, signals, and dependencies."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self.signals = SignalRegistry()
+@@ -46,7 +50,7 @@ class TransparencyAgent(BaseAgent):
+     def generate_audit_trail(self, workflow_id: str | None = None) -> str:
+         """Generates a detailed markdown report of recent agent interactions."""
+         history = self.signals.get_history(limit=100)
+-        
++
+         if workflow_id:
+             # Filter by workflow_id if it's in the data
+             history = [e for e in history if e.get("data", {}).get("workflow_id") == workflow_id or workflow_id in str(e)]
+@@ -54,14 +58,14 @@ class TransparencyAgent(BaseAgent):
+         report = ["# fleet Transparency Audit Trail"]
+         if workflow_id:
+             report.append(f"## Focus: Workflow {workflow_id}")
+-            
++
+         report.append("\n### 📡 Signal Event Log")
+         for event in history:
+             ts = event["timestamp"].split('T')[1][:8]
+             sender = event["sender"]
+             signal = event["signal"]
+             report.append(f"- **[{ts}]** `{sender}` emitted `{signal}`")
+-            
++
+         report.append("\n### 🧠 Reasoning Correlation")
+         # In a real scenario, we'd fetch the reasoning blueprint from the WorkflowState or a log
+         # For now, we point to the most recent 'STEP_STARTED' events
+@@ -76,6 +80,11 @@ class TransparencyAgent(BaseAgent):
+         """Trigger an audit report."""
+         return self.generate_audit_trail()
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     main = create_main_function(TransparencyAgent, "Transparency Agent", "Workflow ID (optional)")
+-    main()
+\ No newline at end of file
++    main()

@@ -1,0 +1,17 @@
+diff --git a/src/observability/reports/FeedGenerator.py b/src/observability/reports/FeedGenerator.py
+index f8739c1..c0bb5f5 100644
+--- a/src/observability/reports/FeedGenerator.py
++++ b/src/observability/reports/FeedGenerator.py
+@@ -22,9 +22,9 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from .ChangelogEntry import ChangelogEntry
+-from .FeedFormat import FeedFormat
+-from typing import Dict, List, Any
++from src.core.base.types import ChangelogEntry
++from src.core.base.types import FeedFormat
++from typing import Any
+ import json
+ 
+ __version__ = VERSION

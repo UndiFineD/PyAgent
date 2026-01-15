@@ -26,7 +26,7 @@ import logging
 import importlib.util
 import sys
 from pathlib import Path
-from typing import Set, Optional, Any, cast
+from typing import Any, cast
 from collections.abc import Callable
 
 __version__ = VERSION
@@ -34,6 +34,12 @@ __version__ = VERSION
 # Global cache for .codeignore patterns to avoid re-parsing
 _CODEIGNORE_CACHE: dict[str, set[str]] = {}
 _CODEIGNORE_CACHE_TIME: dict[str, float] = {}
+
+
+
+
+
+
 
 def load_codeignore(root: Path) -> set[str]:
     """Load and parse ignore patterns from .codeignore file.
@@ -80,47 +86,102 @@ def load_codeignore(root: Path) -> set[str]:
 
     if codeignore_path.exists():
         try:
+
+
+
+
+
+
+
+
+
+
             logging.debug(f"Loading .codeignore patterns from {codeignore_path}")
             content = codeignore_path.read_text(encoding='utf-8')
             patterns = {
+
+
+
                 line.strip() for line in content.split('\n')
                 if line.strip() and not line.strip().startswith('#')
             }
             logging.info(f"Loaded {len(patterns)} ignore patterns from .codeignore")
 
             # Cache the patterns
+
+
+
+
+
+
+
+
+
+
             _CODEIGNORE_CACHE[cache_key] = patterns
             try:
                 _CODEIGNORE_CACHE_TIME[cache_key] = codeignore_path.stat().st_mtime
+
             except OSError:
+
+
+
+
+
+
+
+
+
+
                 pass
 
             return patterns
         except Exception as e:
+
+
+
+
             logging.warning(f"Could not read .codeignore file: {e}")
     else:
         logging.debug(f"No .codeignore file found at {codeignore_path}")
     return set()
 
+
+
+
+
 def setup_logging(verbosity: str | None = None) -> None:
     """Configure logging based on verbosity level.
-    
+
+
+
+
+
+
     Defaults to WARNING to capture only errors and failures as requested.
     """
     levels = {
         'quiet': logging.ERROR,
+
+
+
         'minimal': logging.WARNING,
         'normal': logging.INFO,
         'elaborate': logging.DEBUG,
         '0': logging.ERROR,
+
+
         '1': logging.WARNING,
         '2': logging.INFO,
         '3': logging.DEBUG,
     }
-    
+
     # Determine level from environment or argument
+
+
+
     level = levels.get(str(verbosity).lower(), logging.WARNING) if verbosity else logging.WARNING
-    
+
     logging.basicConfig(
         level=level,
         format='%(asctime)s - %(levelname)s - %(message)s',
@@ -129,12 +190,18 @@ def setup_logging(verbosity: str | None = None) -> None:
     if level <= logging.DEBUG:
         logging.debug(f"Logging configured at level: {logging.getLevelName(level)}")
 
+
+
+
+
+
 def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Path | None:
     """Worker function for multiprocessing file processing.
 
     This function must be at module level to be pickleable for multiprocessing.
     """
     try:
+
         logging.debug(f"[worker] Processing {file_path.name}")
         agent_instance.process_file(file_path)
         logging.info(f"[worker] Completed {file_path.name}")
@@ -143,6 +210,10 @@ def _multiprocessing_worker(agent_instance: Any, file_path: Path) -> Path | None
         logging.error(f"[worker] Failed: {e}")
         return None
 
+
+
+
+
 def _load_fix_markdown_content() -> Callable[[str], str]:
     """Load the markdown fixer module dynamically."""
     # Calculate path from this file's location: src/classes/agent/utils.py
@@ -150,7 +221,12 @@ def _load_fix_markdown_content() -> Callable[[str], str]:
     this_file = Path(__file__)
     fix_dir = this_file.parent.parent.parent.parent / 'fix'
     target_file = fix_dir / "fix_markdown_lint.py"
-    
+
+
+
+
+
+
     if not target_file.exists():
         logging.debug(f"Markdown fixer not found at {target_file}. Using fallback.")
         def _fallback(text: str) -> str:
@@ -169,5 +245,10 @@ def _load_fix_markdown_content() -> Callable[[str], str]:
         return text
 
     return _fallback
+
+
+
+
+
 
 fix_markdown_content: Callable[[str], str] = _load_fix_markdown_content()

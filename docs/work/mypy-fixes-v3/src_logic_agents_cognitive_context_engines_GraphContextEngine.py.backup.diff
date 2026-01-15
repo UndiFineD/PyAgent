@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/cognitive/context/engines/GraphContextEngine.py b/src/logic/agents/cognitive/context/engines/GraphContextEngine.py
+index 71be765..56cfab7 100644
+--- a/src/logic/agents/cognitive/context/engines/GraphContextEngine.py
++++ b/src/logic/agents/cognitive/context/engines/GraphContextEngine.py
+@@ -25,7 +25,7 @@ from src.core.base.version import VERSION
+ import json
+ import logging
+ from pathlib import Path
+-from typing import Dict, Set, Any, Optional
++from typing import Any
+ from src.logic.agents.cognitive.context.engines.GraphCore import GraphCore
+ 
+ __version__ = VERSION

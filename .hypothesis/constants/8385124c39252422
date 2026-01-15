@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\metrics\_plot\regression.py
+# hypothesis_version: 6.150.1
+
+[0.7, 0.8, 1000, '--', 'Actual values', 'Predicted values', 'actual_vs_predicted', 'alpha', 'black', 'color', 'datalim', 'equal', 'linestyle', 'tab:blue']

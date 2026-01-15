@@ -27,9 +27,11 @@ from typing import Any
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class TestAssertion:
-    __test__ = False
     """Custom assertion for agent testing.
 
     Attributes:
@@ -39,6 +41,7 @@ class TestAssertion:
         passed: Whether assertion passed.
         message: Assertion message.
     """
+    __test__ = False
 
     name: str
     expected: Any

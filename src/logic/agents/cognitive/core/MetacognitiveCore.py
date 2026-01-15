@@ -26,9 +26,12 @@ No I/O or side effects.
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, Any, List
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class MetacognitiveCore:
     """Pure logic core for metacognitive evaluation and intention prediction."""
@@ -39,9 +42,9 @@ class MetacognitiveCore:
         If an agent is 'overconfident' (high conf, wrong result), penalize heavily.
         """
         if not actual_correct and reported_conf > 0.8:
-            return max(0.1, current_weight * 0.8) # Overconfidence penalty
+            return max(0.1, current_weight * 0.8)  # Overconfidence penalty
         elif actual_correct and reported_conf < 0.4:
-            return min(2.0, current_weight * 1.05) # Underconfidence reward
+            return min(2.0, current_weight * 1.05)  # Underconfidence reward
         return current_weight
 
     def predict_next_intent(self, history: list[dict[str, Any]]) -> str:
@@ -70,10 +73,10 @@ class MetacognitiveCore:
         """Analyzes a reasoning chain for hedge words and length patterns."""
         hedge_words = ["maybe", "perhaps", "i think", "not sure", "unclear", "likely"]
         count = sum(1 for word in hedge_words if word in reasoning_chain.lower())
-        
+
         uncertainty_score = min(1.0, count / 5.0)
         confidence = 1.0 - uncertainty_score
-        
+
         return {
             "confidence": confidence,
             "uncertainty_score": uncertainty_score,
@@ -86,7 +89,7 @@ class MetacognitiveCore:
         """Calculates average confidence and totals."""
         if not uncertainty_log:
             return {"avg_confidence": 1.0, "total_evaluations": 0}
-            
+
         avg = sum(e.get("confidence", 0.0) for e in uncertainty_log) / len(uncertainty_log)
         return {
             "avg_confidence": round(avg, 2),

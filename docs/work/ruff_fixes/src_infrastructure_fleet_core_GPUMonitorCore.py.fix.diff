@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/fleet/core/GPUMonitorCore.py b/src/infrastructure/fleet/core/GPUMonitorCore.py
+index f9f3395..8ebc7a5 100644
+--- a/src/infrastructure/fleet/core/GPUMonitorCore.py
++++ b/src/infrastructure/fleet/core/GPUMonitorCore.py
+@@ -14,7 +14,6 @@
+ 
+ from __future__ import annotations
+ from dataclasses import dataclass
+-from typing import List, Optional
+ 
+ @dataclass(frozen=True)
+ class GPUMetrics:

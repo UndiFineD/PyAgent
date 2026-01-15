@@ -25,13 +25,16 @@ Agents 'bid' for tasks based on their specialized capabilities and RL scores.
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, List, Any
+from typing import Any
 
 __version__ = VERSION
 
+
+
+
 class CollaborationMarketplace:
     """Facilitates task auctioning and collaboration between agents."""
-    
+
     def __init__(self, fleet_manager) -> None:
         self.fleet = fleet_manager
         self.transactions: list[dict[str, Any]] = []
@@ -40,12 +43,12 @@ class CollaborationMarketplace:
         """Broadcasts a task to the fleet and collects bids."""
         logging.info(f"MARKETPLACE: Auctioning task '{task}' requiring {required_capability}")
         bids = []
-        
+
         for name, agent in self.fleet.agents.items():
             # In a real system, we'd ask the agent if they can handle it.
             # Here we check RL weight or class type.
             weight = self.fleet.rl_selector.tool_stats.get(f"{name}.improve_content", {}).get("weight", 0.5)
-            
+
             # Simulated bid criteria
             if required_capability.lower() in agent.__class__.__name__.lower():
                 bid = {
@@ -54,7 +57,7 @@ class CollaborationMarketplace:
                     "cost_estimate": 0.05  # Mock cost
                 }
                 bids.append(bid)
-        
+
         # Sort by confidence
         bids.sort(key=lambda x: x["confidence"], reverse=True)
         return bids

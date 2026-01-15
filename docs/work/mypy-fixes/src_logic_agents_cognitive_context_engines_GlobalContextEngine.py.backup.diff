@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/cognitive/context/engines/GlobalContextEngine.py b/src/logic/agents/cognitive/context/engines/GlobalContextEngine.py
+index cb13fd3..179e6af 100644
+--- a/src/logic/agents/cognitive/context/engines/GlobalContextEngine.py
++++ b/src/logic/agents/cognitive/context/engines/GlobalContextEngine.py
+@@ -28,7 +28,7 @@ from src.core.base.version import VERSION
+ import json
+ import logging
+ from pathlib import Path
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from datetime import datetime
+ from src.logic.agents.cognitive.context.engines.GlobalContextCore import GlobalContextCore
+ 

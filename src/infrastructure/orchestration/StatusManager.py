@@ -22,13 +22,16 @@ from src.core.base.version import VERSION
 import json
 from pathlib import Path
 from datetime import datetime
-from typing import Dict, Any
+from typing import Any
 
 __version__ = VERSION
 
+
+
+
 class StatusManager:
     """Manages project execution status for the DirectorAgent and GUI."""
-    
+
     def __init__(self) -> None:
         self.status_file = Path("src/infrastructure/orchestration/status.json")
         self.clear_status()

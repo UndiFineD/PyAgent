@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_dynamo\__init__.py
+# hypothesis_version: 6.150.1
+
+['OptimizedModule', 'allow_in_graph', 'aten::manual_seed', 'config', 'disable', 'disallow_in_graph', 'dont_skip_tracing', 'error_on_graph_break', 'explain', 'export', 'forbid_in_graph', 'graph_break', 'is_compiling', 'list_backends', 'lookup_backend', 'mark_dynamic', 'mark_static', 'mark_static_address', 'maybe_mark_dynamic', 'nonstrict_trace', 'optimize', 'optimize_assert', 'patch_dynamo_config', 'register_backend', 'replay', 'reset', 'run', 'set_stance', 'skip_frame', 'substitute_in_graph', 'torch._dynamo.reset']

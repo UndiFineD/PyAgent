@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\cluster\_hdbscan\hdbscan.py
+# hypothesis_version: 6.150.1
+
+[0.0, 1.0, 'C', 'algo', 'algorithm', 'allow_single_cluster', 'alpha', 'auto', 'ball_tree', 'boolean', 'both', 'brute', 'centroid', 'cluster_size', 'copy', 'csr', 'distance', 'eom', 'euclidean', 'infinite', 'kd_tree', 'label', 'leaf', 'leaf_size', 'left', 'left_node', 'lil', 'max_cluster_size', 'max_distance', 'medoid', 'metric', 'metric_params', 'min_cluster_size', 'min_samples', 'missing', 'n_jobs', 'neither', 'precomputed', 'prob', 'right_node', 'store_centers', 'warn']

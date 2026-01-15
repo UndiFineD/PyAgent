@@ -1,0 +1,32 @@
+diff --git a/src/observability/reports/ReportCacheManager.py b/src/observability/reports/ReportCacheManager.py
+index 937cb8b..2f37e5c 100644
+--- a/src/observability/reports/ReportCacheManager.py
++++ b/src/observability/reports/ReportCacheManager.py
+@@ -23,7 +23,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from pathlib import Path
+-from typing import Any, Dict, Optional
++from typing import Any
+ import json
+ import logging
+ import time
+@@ -34,6 +34,11 @@ __version__ = VERSION
+ 
+ AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
+ 
++
++
++
++
++
+ class ReportCacheManager:
+     """Manages report caching with invalidation strategies.
+     Attributes:
+@@ -127,4 +132,4 @@ class ReportCacheManager:
+             self.invalidate_by_path(file_path)
+         else:
+             self._cache.clear()
+-            self._save_cache()
+\ No newline at end of file
++            self._save_cache()

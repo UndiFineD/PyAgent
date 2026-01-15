@@ -53,10 +53,19 @@ AGENT_DIR = _loader.agent_dir
 # Re-expose methods as expected by legacy tests
 load_module_from_path = _loader.load_module_from_path
 
+
+
+
+
+
+
 @contextmanager
 def agent_dir_on_path() -> Iterator[None]:
     with _loader.agent_dir_on_path():
         yield
+
+
+
 
 @contextmanager
 def agent_sys_path() -> Iterator[None]:
@@ -64,6 +73,9 @@ def agent_sys_path() -> Iterator[None]:
         yield
 
 # Aliases for legacy compatibility
+
+
+
 MockBackend = MockAIBackend
 FileSystemIsolation = FileSystemIsolator
 SnapshotTester = SnapshotManager

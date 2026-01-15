@@ -35,6 +35,6 @@ if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
 if __name__ == '__main__':
-    # OrchestratorAgent does not have a main function. 
+    # OrchestratorAgent does not have a main function.
     # This file is deprecated.
     pass

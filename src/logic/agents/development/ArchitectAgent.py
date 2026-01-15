@@ -21,18 +21,21 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
+
+
+
 
 class ArchitectAgent(BaseAgent):
     """
     Agent responsible for autonomous core structural evolution (Swarm Singularity v1).
     Analyzes performance telemetry and refactors core components to improve architecture.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -48,13 +51,13 @@ class ArchitectAgent(BaseAgent):
         Analyzes logs and suggests a structural change to the fleet or base agent.
         """
         logging.info("ArchitectAgent: Analyzing logs for architectural pivot.")
-        
+
         prompt = (
             f"Performance Logs: {performance_logs}\n"
             "Based on these logs, suggest one structural improvement to the PyAgent core. "
             "Format your response as a JSON object with 'component', 'proposed_change', and 'impact_est'."
         )
-        
+
         response = self.think(prompt)
         try:
             import json

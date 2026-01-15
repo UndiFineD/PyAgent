@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\zeroconf\const.py
+# hypothesis_version: 6.150.1
+
+[120, 125, 200, 225, 254, 255, 256, 500, 512, 999, 1000, 1024, 1125, 1460, 4500, 5353, 8966, 10000, 32767, 32768, '._tcp.local.', '._udp.local.', '.local.', '224.0.0.251', '[A-Za-z]', '[\\x00-\\x1f\\x7f]', '^[A-Za-z0-9\\-\\_]+$', '^[A-Za-z0-9\\-]+$', 'a', 'any', 'ch', 'cname', 'cs', 'ff02::fb', 'hinfo', 'hs', 'in', 'mb', 'md', 'mf', 'mg', 'minfo', 'mr', 'mx', 'none', 'ns', 'nsec', 'null', 'ptr', 'quada', 'soa', 'srv', 'txt', 'wks']

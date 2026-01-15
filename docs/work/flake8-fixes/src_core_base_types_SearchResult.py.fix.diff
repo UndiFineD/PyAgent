@@ -1,0 +1,28 @@
+diff --git a/src/core/base/types/SearchResult.py b/src/core/base/types/SearchResult.py
+index e9d8611..f4a8869 100644
+--- a/src/core/base/types/SearchResult.py
++++ b/src/core/base/types/SearchResult.py
+@@ -26,6 +26,16 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class SearchResult:
+     """Result from changelog search.
+@@ -39,4 +49,4 @@ class SearchResult:
+     version: str
+     line_number: int
+     context: str
+-    match_score: float = 1.0
+\ No newline at end of file
++    match_score: float = 1.0

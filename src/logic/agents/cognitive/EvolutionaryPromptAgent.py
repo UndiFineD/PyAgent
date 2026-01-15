@@ -15,7 +15,7 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import random
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 from src.logic.agents.cognitive.core.EvolutionCore import EvolutionCore
@@ -28,12 +28,15 @@ __version__ = VERSION
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
 
+
+
+
 class EvolutionaryPromptAgent(BaseAgent):
     """
     Agent that implements genetic algorithms to 'breed' and evolve system prompts.
     It tracks fitness scores based on task performance and performs crossover/mutation.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.population: list[dict[str, Any]] = []
@@ -85,16 +88,16 @@ class EvolutionaryPromptAgent(BaseAgent):
         # 1. Selection
         self.population.sort(key=lambda x: x.get("fitness", 0), reverse=True)
         winners = self.population[:self.population_size // 2]
-        
+
         new_population = []
         for i in range(self.population_size):
             parent1 = random.choice(winners)
             parent2 = random.choice(winners)
-            
+
             # Crossover & Mutation using Core
             child_prompt = self.core.prompt_crossover(parent1["prompt"], parent2["prompt"])
             child_prompt = self.core.mutate_prompt(child_prompt)
-            
+
             # Lineage Tracking
             sha = self.core.calculate_prompt_sha(child_prompt)
             new_population.append({
@@ -104,10 +107,10 @@ class EvolutionaryPromptAgent(BaseAgent):
                 "fitness": 0.0,
                 "generation": self.generation + 1
             })
-            
+
         self.population = new_population
         self.generation += 1
-        
+
         return {
             "generation": self.generation,
             "best_fitness_last_gen": winners[0]["fitness"],

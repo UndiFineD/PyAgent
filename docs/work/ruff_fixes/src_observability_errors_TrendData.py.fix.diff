@@ -1,0 +1,12 @@
+diff --git a/src/observability/errors/TrendData.py b/src/observability/errors/TrendData.py
+index 4447aab..b0960c5 100644
+--- a/src/observability/errors/TrendData.py
++++ b/src/observability/errors/TrendData.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .TrendDirection import TrendDirection
+ from dataclasses import dataclass, field
+-from typing import List, Optional
+ 
+ __version__ = VERSION
+ 

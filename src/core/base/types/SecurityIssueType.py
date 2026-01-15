@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class SecurityIssueType(Enum):
     """Types of security vulnerabilities."""
     SQL_INJECTION = "sql_injection"

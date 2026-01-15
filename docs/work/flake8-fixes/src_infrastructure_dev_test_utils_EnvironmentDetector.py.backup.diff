@@ -1,0 +1,28 @@
+diff --git a/src/infrastructure/dev/test_utils/EnvironmentDetector.py b/src/infrastructure/dev/test_utils/EnvironmentDetector.py
+index 252e547..d30160e 100644
+--- a/src/infrastructure/dev/test_utils/EnvironmentDetector.py
++++ b/src/infrastructure/dev/test_utils/EnvironmentDetector.py
+@@ -22,10 +22,15 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Any, Dict
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class EnvironmentDetector:
+     """Detects and reports test environment information."""
+ 
+@@ -51,4 +56,4 @@ class EnvironmentDetector:
+             'os': os_name,
+             'python_version': platform.python_version(),
+             'platform': system
+-        }
+\ No newline at end of file
++        }

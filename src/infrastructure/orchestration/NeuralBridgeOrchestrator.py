@@ -22,24 +22,27 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import uuid
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 
 __version__ = VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
 
+
+
+
 class NeuralBridgeOrchestrator:
     """
     Implements Neural Bridge Swarming (Phase 31).
     Facilitates real-time cross-platform state sharing via a shared 'Neural Bridge'.
     """
-    
+
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
         self.bridge_id = str(uuid.uuid4())
         self.connected_nodes: list[str] = ["localhost"]
-        self.shared_consciousness: dict[str, Any] = {} # Key-value store for global state
+        self.shared_consciousness: dict[str, Any] = {}  # Key-value store for global state
 
     def establish_bridge(self, remote_node_url: str) -> bool:
         """
@@ -48,7 +51,7 @@ class NeuralBridgeOrchestrator:
         logging.info(f"NeuralBridgeOrchestrator: Establishing bridge to {remote_node_url}")
         if remote_node_url not in self.connected_nodes:
             self.connected_nodes.append(remote_node_url)
-            
+
             if hasattr(self.fleet, 'signals'):
                 self.fleet.signals.emit("BRIDGE_NODE_CONNECTED", {
                     "node": remote_node_url,
@@ -63,7 +66,7 @@ class NeuralBridgeOrchestrator:
         """
         logging.info(f"NeuralBridgeOrchestrator: Syncing state key '{key}' across {len(self.connected_nodes)} nodes")
         self.shared_consciousness[key] = value
-        
+
         # In a real distributed system, this would be a broadcast to all remote nodes.
         # Here we use the LatentBus if available to transmit compressed state.
         if hasattr(self.fleet, 'latent_bus'):

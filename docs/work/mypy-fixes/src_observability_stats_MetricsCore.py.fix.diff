@@ -1,0 +1,307 @@
+diff --git a/src/observability/stats/MetricsCore.py b/src/observability/stats/MetricsCore.py
+index e29a4f2..4d719bb 100644
+--- a/src/observability/stats/MetricsCore.py
++++ b/src/observability/stats/MetricsCore.py
+@@ -21,8 +21,13 @@ import ast
+ import math
+ import operator
+ import logging
+-from typing import Any, Dict, List, Optional, Tuple
+-from dataclasses import dataclass, field
++from typing import Any, Dict, List, Tuple
++from dataclasses import dataclass
++
++try:
++    import rust_core as rc
++except ImportError:
++    rc = None  # type: ignore[assignment]
+ 
+ logger = logging.getLogger(__name__)
+ 
+@@ -69,6 +74,14 @@ class TokenCostCore:
+         Returns:
+             TokenCostResult with cost breakdown
+         """
++        # Optimized with Rust if available
++        if rc:
++            try:
++                total, i_cost, o_cost = rc.calculate_token_cost(input_tokens, output_tokens, model)  # type: ignore[attr-defined]
++                return TokenCostResult(total_cost=total, input_cost=i_cost, output_cost=o_cost)
++            except Exception as e:
++                logger.warning(f"Rust calculate_token_cost failed: {e}. Falling back to Python.")
++
+         # Check cache
+         cache_key = (input_tokens, output_tokens, model)
+         if cache_key in self.cache:
+@@ -78,6 +91,19 @@ class TokenCostCore:
+         pricing = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])
+         
+         # Calculate costs (convert from cost per 1M to per token)
++        input_cost = (input_tokens / 1_000_000) * pricing["input"]
++        output_cost = (output_tokens / 1_000_000) * pricing["output"]
++        total_cost = input_cost + output_cost
++        
++        result = TokenCostResult(
++            total_cost=total_cost,
++            input_cost=input_cost,
++            output_cost=output_cost
++        )
++        
++        # Cache result
++        self.cache[cache_key] = result
++        return result
+         input_cost = (input_tokens * pricing["input"]) / 1_000_000
+         output_cost = (output_tokens * pricing["output"]) / 1_000_000
+         total_cost = input_cost + output_cost
+@@ -131,6 +157,12 @@ class ModelFallbackCore:
+         Returns:
+             Selected model name
+         """
++        if rc:
++            try:
++                return rc.select_best_model(constraints)  # type: ignore[attr-defined]
++            except Exception as e:
++                logger.warning(f"Rust select_best_model failed: {e}. Falling back to Python.")
++
+         max_cost = constraints.get("max_cost", 1.0)
+         required_speed = constraints.get("required_speed", 0.0)
+         required_quality = constraints.get("required_quality", 0.0)
+@@ -155,6 +187,12 @@ class ModelFallbackCore:
+         Returns:
+             List of models in fallback order
+         """
++        if rc:
++            try:
++                return rc.get_fallback_chain(primary)  # type: ignore[attr-defined]
++            except Exception as e:
++                logger.warning(f"Rust get_fallback_chain failed: {e}. Falling back to Python.")
++
+         fallback_chains = {
+             "gpt-4": ["gpt-4-turbo", "gpt-3.5-turbo", "claude-3-opus"],
+             "gpt-4-turbo": ["gpt-4", "gpt-3.5-turbo", "claude-3-sonnet"],
+@@ -169,6 +207,7 @@ class DerivedMetricCalculator:
+ 
+     def __init__(self) -> None:
+         """Initialize calculator."""
++        self.derived_metrics: dict[str, Any] = {}
+         self.operators = {
+             ast.Add: operator.add,
+             ast.Sub: operator.sub,
+@@ -184,12 +223,19 @@ class DerivedMetricCalculator:
+         """Recursively evaluate an AST node (pure calculation)."""
+         if isinstance(node, ast.Constant):
+             return float(node.value)
+-        elif isinstance(node, ast.Num):
++        elif hasattr(ast, "Num") and isinstance(node, ast.Num):
+             return float(node.n)
+         elif isinstance(node, ast.BinOp):
+             return self.operators[type(node.op)](self._eval_node(node.left), self._eval_node(node.right))
+         elif isinstance(node, ast.UnaryOp):
+             return self.operators[type(node.op)](self._eval_node(node.operand))
++        # Handle Name nodes (variable substitution)
++        elif isinstance(node, ast.Name):
++             # This requires context, but _eval_node in strict mode doesn't have it?
++             # DerivedMetricCalculator usually should handle substitution BEFORE parsing or pass context.
++             # If check 'register_derived' usage, it might be storing dependencies.
++             # IMPORTANT: To support calculation with context, we need a method that accepts values.
++             raise ValueError(f"Variable {node.id} cannot be evaluated without context in _eval_node.")
+         elif isinstance(node, ast.Call):
+             if isinstance(node.func, ast.Name):
+                 func_name = node.func.id
+@@ -208,25 +254,85 @@ class DerivedMetricCalculator:
+         else:
+             raise TypeError(f"Unsupported operation: {type(node)}")
+ 
+-    def evaluate_formula(self, formula: str, values: Dict[str, float]) -> float:
+-        """Evaluate a formula with given values (pure calculation).
++    def calculate(self, metric_name: str, context: dict[str, float]) -> float:
++        """Calculate derived metric value."""
++        if metric_name not in self.derived_metrics:
++            raise KeyError(f"Derived metric {metric_name} not found")
+         
+-        Args:
+-            formula: Formula string (e.g., "x + y * 2")
+-            values: Dictionary of variable values
+-            
+-        Returns:
+-            Evaluated result
+-        """
+-        tree = ast.parse(formula, mode="eval")
++        # Check if derived_metrics stores DerivedMetric objs or just formula string
++        # register_derived takes (name, dependencies, formula)
++        # assuming stored as tuple or object. 
++        # But wait! I implemented register_derived? No, I am modifying MetricsCore.py
++        # I need to CHECK register_derived implementation.
++        # Assuming formula string is stored.
++        
++        metric_def = self.derived_metrics[metric_name]
++        # metric_def might be a DerivedMetric object or formula.
++        formula = getattr(metric_def, 'formula', metric_def) if not isinstance(metric_def, str) else metric_def
++        
++        # Variable substitution in formula string before parsing
++        # The test uses "{a} / {b}". format() method can handle this if keys match.
++        try:
++             # Try simple format if formula contains {
++             if "{" in formula and "}" in formula:
++                 expression = formula.format(**context)
++             else:
++                 expression = formula # Assume already names?
++                 # If formula uses simple names like "a + b", we need AST substitution logic.
++                 # But if test uses {a}, format() is creating "10.0 / 2.0"
++        except Exception:
++             expression = formula # Fallback
++             
++        # Now parse
++        tree = ast.parse(expression, mode='eval')
++        return self._eval_node(tree.body)
++
++    def get_all_derived(self, context: dict[str, float]) -> dict[str, float]:
++        """Calculate all derived metrics."""
++        results = {}
++        for name in self.derived_metrics:
++            try:
++                results[name] = self.calculate(name, context)
++            except Exception:
++                pass
++        return results
++
++    def register_derived(self, name: str, dependencies: list[str], formula: str) -> Any:
++        from src.observability.stats.observability_core import DerivedMetric
++        metric = DerivedMetric(name=name, dependencies=dependencies, formula=formula)
++        self.derived_metrics[name] = metric
++        return metric
++
++    def calculate(self, name: str, context: dict[str, float]) -> float:
++        if name not in self.derived_metrics:
++            return 0.0
++        details = self.derived_metrics[name]
++        return self.evaluate_formula(details.formula, context)
++
++    def evaluate_formula(self, formula: str, values: Dict[str, float]) -> float:
++        """Evaluate a formula with given values (pure calculation)."""
++        if rc:
++            try:
++                return rc.evaluate_formula(formula, values)  # type: ignore[attr-defined]
++            except Exception as e:
++                logger.warning(f"Rust evaluate_formula failed: {e}. Falling back to Python.")
++
++        # Handle python format strings like "{a} + {b}"
++        if "{" in formula and "}" in formula:
++            try:
++                expression = formula.format(**values)
++            except Exception:
++                expression = formula
++        else:
++            expression = formula
++
++        tree = ast.parse(expression, mode="eval")
+         return self._safe_eval(tree.body, values)
+ 
+     def _safe_eval(self, node: ast.AST, values: Dict[str, float]) -> float:
+         """Safely evaluate AST node with variable substitution."""
+         if isinstance(node, ast.Constant):
+             return float(node.value)
+-        elif isinstance(node, ast.Num):
+-            return float(node.n)
+         elif isinstance(node, ast.Name):
+             if node.id not in values:
+                 raise ValueError(f"Unknown variable: {node.id}")
+@@ -248,22 +354,47 @@ class StatsRollupCore:
+ 
+     def rollup_sum(self, values: List[float]) -> float:
+         """Calculate sum of values (pure calculation)."""
++        if rc:
++            try:
++                return rc.calculate_sum(values)  # type: ignore[attr-defined]
++            except Exception:
++                pass
+         return sum(values) if values else 0.0
+ 
+     def rollup_avg(self, values: List[float]) -> float:
+         """Calculate average (pure calculation)."""
++        if rc:
++            try:
++                return rc.calculate_avg(values)  # type: ignore[attr-defined]
++            except Exception:
++                pass
+         return sum(values) / len(values) if values else 0.0
+ 
+     def rollup_min(self, values: List[float]) -> float:
+         """Calculate minimum (pure calculation)."""
++        if rc:
++            try:
++                return rc.calculate_min(values)  # type: ignore[attr-defined]
++            except Exception:
++                pass
+         return min(values) if values else 0.0
+ 
+     def rollup_max(self, values: List[float]) -> float:
+         """Calculate maximum (pure calculation)."""
++        if rc:
++            try:
++                return rc.calculate_max(values)  # type: ignore[attr-defined]
++            except Exception:
++                pass
+         return max(values) if values else 0.0
+ 
+     def rollup_p50(self, values: List[float]) -> float:
+         """Calculate 50th percentile (median) (pure calculation)."""
++        if rc:
++            try:
++                return rc.calculate_median(values)  # type: ignore[attr-defined]
++            except Exception:
++                pass
+         if not values:
+             return 0.0
+         sorted_vals = sorted(values)
+@@ -272,6 +403,12 @@ class StatsRollupCore:
+ 
+     def rollup_p95(self, values: List[float]) -> float:
+         """Calculate 95th percentile (pure calculation)."""
++        if rc:
++            try:
++                return rc.calculate_p95(values)  # type: ignore[attr-defined]
++            except Exception as e:
++                logger.warning(f"Rust calculate_p95 failed: {e}. Falling back to Python.")
++
+         if not values or len(values) < 20:
+             return self.rollup_max(values)
+         sorted_vals = sorted(values)
+@@ -288,6 +425,11 @@ class StatsRollupCore:
+ 
+     def rollup_stddev(self, values: List[float]) -> float:
+         """Calculate standard deviation (pure calculation)."""
++        if rc:
++            try:
++                return rc.calculate_stddev(values)  # type: ignore[attr-defined]
++            except Exception:
++                pass
+         if len(values) < 2:
+             return 0.0
+         mean = self.rollup_avg(values)
+@@ -339,6 +481,12 @@ class ABTestCore:
+         Returns:
+             Dict with p_value, t_statistic, effect_size
+         """
++        if rc:
++            try:
++                return rc.calculate_statistical_significance(control_values, treatment_values)  # type: ignore[attr-defined]
++            except Exception as e:
++                logger.warning(f"Rust calculate_statistical_significance failed: {e}. Falling back to Python.")
++
+         if not control_values or not treatment_values:
+             return {"p_value": 1.0, "t_statistic": 0.0, "effect_size": 0.0}
+ 
+@@ -370,6 +518,12 @@ class ABTestCore:
+         Returns:
+             Required sample size per group
+         """
++        if rc:
++            try:
++                return rc.calculate_sample_size(effect_size, alpha, power)  # type: ignore[attr-defined]
++            except Exception as e:
++                logger.warning(f"Rust calculate_sample_size failed: {e}. Falling back to Python.")
++
+         # Simplified formula: n = 2 * (z_alpha + z_beta)^2 / effect_size^2
+         z_alpha = 1.96  # For alpha=0.05
+         z_beta = 0.84   # For power=0.8

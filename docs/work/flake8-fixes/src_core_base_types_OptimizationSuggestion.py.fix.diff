@@ -1,0 +1,28 @@
+diff --git a/src/core/base/types/OptimizationSuggestion.py b/src/core/base/types/OptimizationSuggestion.py
+index 7ed0673..f7e3d52 100644
+--- a/src/core/base/types/OptimizationSuggestion.py
++++ b/src/core/base/types/OptimizationSuggestion.py
+@@ -27,6 +27,16 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class OptimizationSuggestion:
+     """A suggestion for code optimization.
+@@ -44,4 +54,4 @@ class OptimizationSuggestion:
+     impact: str
+     code_location: str
+     before_snippet: str = ""
+-    after_snippet: str = ""
+\ No newline at end of file
++    after_snippet: str = ""

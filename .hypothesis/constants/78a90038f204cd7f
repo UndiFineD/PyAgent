@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\orchestration\SignalBusOrchestrator.py
+# hypothesis_version: 6.150.1
+
+[1.0, 'System', 'payload', 'sender', 'type']

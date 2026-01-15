@@ -34,7 +34,7 @@ from .PluginManager import PluginManager as PluginManager, PluginMetadata as Plu
 from .SystemManagers import (
     FilePriorityManager as FilePriorityManager,
     ResponseCache as ResponseCache,
-    StatePersistence as StatePersistence, 
+    StatePersistence as StatePersistence,
     EventManager as EventManager,
     HealthChecker as HealthChecker,
     ProfileManager as ProfileManager

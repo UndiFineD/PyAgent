@@ -29,12 +29,15 @@ from src.core.base.version import VERSION
 import logging
 import json
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore
 
 __version__ = VERSION
+
+
+
 
 class FeatureStoreAgent(BaseAgent):
     """Manages the lifecycle of high-utility context features for the fleet.
@@ -66,13 +69,13 @@ class FeatureStoreAgent(BaseAgent):
             v = self.get_feature(name)
             if v:
                 vectors.append(v)
-        
+
         return self.core.merge_feature_vectors(vectors)
 
     @as_tool
     def register_feature(self, feature_name: str, value: Any, metadata: dict[str, Any] | None = None) -> str:
         """Registers a new feature in the store.
-        
+
         Args:
             feature_name: Unique identifier for the feature (e.g., 'python_error_patterns').
             value: The data or logic representing the feature.
@@ -90,10 +93,23 @@ class FeatureStoreAgent(BaseAgent):
     def get_feature(self, feature_name: str) -> Any | None:
         """Retrieves a feature from the store."""
         path = self.feature_dir / f"{feature_name}.json"
+
+
+
+
+
+
+
+
+
+
         if not path.exists():
             return None
         try:
             with open(path, encoding="utf-8") as f:
+
+
+
                 data = json.load(f)
                 return data.get("value")
         except Exception as e:
@@ -105,9 +121,14 @@ class FeatureStoreAgent(BaseAgent):
         """Lists all available features in the store."""
         return [f.stem for f in self.feature_dir.glob("*.json")]
 
+
     def improve_content(self, input_text: str) -> str:
         """Advisory on feature engineering for agents."""
         return "I am serving current agentic features. Recommend a feature for extraction?"
+
+
+
+
 
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function

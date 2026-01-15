@@ -1,0 +1,28 @@
+diff --git a/src/logic/agents/cognitive/context/utils/MergeConflictResolver.py b/src/logic/agents/cognitive/context/utils/MergeConflictResolver.py
+index c87d608..041744f 100644
+--- a/src/logic/agents/cognitive/context/utils/MergeConflictResolver.py
++++ b/src/logic/agents/cognitive/context/utils/MergeConflictResolver.py
+@@ -24,11 +24,15 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.utils.ConflictResolution import ConflictResolution
+ from src.logic.agents.cognitive.context.models.MergeConflict import MergeConflict
+-from typing import List, Optional
+ import re
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class MergeConflictResolver:
+     """Resolves merge conflicts in context files.
+ 
+@@ -106,4 +110,4 @@ class MergeConflictResolver:
+         strategy: ConflictResolution | None = None,
+     ) -> str:
+         """Resolve all conflicts and join results."""
+-        return "\n".join(self.resolve(c, strategy=strategy) for c in conflicts)
+\ No newline at end of file
++        return "\n".join(self.resolve(c, strategy=strategy) for c in conflicts)

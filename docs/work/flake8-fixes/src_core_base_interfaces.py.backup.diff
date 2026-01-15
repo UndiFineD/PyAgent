@@ -1,0 +1,121 @@
+diff --git a/src/core/base/interfaces.py b/src/core/base/interfaces.py
+index d993c00..1341aa5 100644
+--- a/src/core/base/interfaces.py
++++ b/src/core/base/interfaces.py
+@@ -20,15 +20,20 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Protocol, runtime_checkable, Dict, Any, List, Optional
++from typing import Protocol, runtime_checkable, Any
+ from pathlib import Path
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @runtime_checkable
+ class AgentInterface(Protocol):
+     """
+-    Core interface for all AI-powered agents. 
++    Core interface for all AI-powered agents.
+     Defining this as a Protocol facilitates future Rust implementation (PyO3).
+     """
+     file_path: Path
+@@ -37,39 +42,89 @@ class AgentInterface(Protocol):
+ 
+     def read_previous_content(self) -> str:
+         raise NotImplementedError()
++
++
++
++
++
+     def improve_content(self, prompt: str) -> str:
+         raise NotImplementedError()
++
++
++
++
++
+     def update_file(self) -> bool:
+         raise NotImplementedError()
++
++
++
++
++
+     def get_diff(self) -> str:
+         raise NotImplementedError()
+-    
++
+     # Advanced features that might be offloaded to Rust later
+     def calculate_metrics(self, content: str | None = None) -> Any:
+         raise NotImplementedError()
++
++
++
++
++
+     def scan_for_secrets(self, content: str) -> list[str]:
+         raise NotImplementedError()
+ 
++
++
++
++
++
+ @runtime_checkable
+ class OrchestratorInterface(Protocol):
+     """Interface for fleet orchestrators."""
+     def execute_task(self, task: str) -> str:
+         raise NotImplementedError()
++
++
++
++
++
+     def get_status(self) -> dict[str, Any]:
+         raise NotImplementedError()
+ 
++
++
++
++
++
+ @runtime_checkable
+ class CoreInterface(Protocol):
+     """Pure logic interface. High-performance, no-IO, candidate for Rust parity."""
+     def process_data(self, data: Any) -> Any:
+         raise NotImplementedError()
++
++
++
++
++
+     def validate(self, content: str) -> bool:
+         raise NotImplementedError()
++
++
++
++
++
+     def get_metadata(self) -> dict[str, Any]:
+         raise NotImplementedError()
+ 
++
++
++
++
++
+ @runtime_checkable
+ class ContextRecorderInterface(Protocol):
+     """Interface for cognitive recording and context harvesting."""
+-    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] = None) -> None:
+-        raise NotImplementedError()
+\ No newline at end of file
++    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] | None = None) -> None:
++        raise NotImplementedError()

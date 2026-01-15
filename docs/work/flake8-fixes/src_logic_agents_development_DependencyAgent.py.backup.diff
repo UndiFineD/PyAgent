@@ -1,0 +1,27 @@
+diff --git a/src/logic/agents/development/DependencyAgent.py b/src/logic/agents/development/DependencyAgent.py
+index afc0808..3b0fc38 100644
+--- a/src/logic/agents/development/DependencyAgent.py
++++ b/src/logic/agents/development/DependencyAgent.py
+@@ -25,10 +25,14 @@ from src.core.base.version import VERSION
+ from src.core.base.types.DependencyNode import DependencyNode
+ from src.core.base.types.DependencyType import DependencyType
+ from src.logic.agents.development.DependencyCore import DependencyCore
+-from typing import Dict, List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class DependencyAgent:
+     """Analyzes code dependencies.
+ 
+@@ -65,4 +69,4 @@ class DependencyAgent:
+                 base_module = name.split('.')[0]
+                 if base_module not in stdlib_modules:
+                     external.append(name)
+-        return external
+\ No newline at end of file
++        return external

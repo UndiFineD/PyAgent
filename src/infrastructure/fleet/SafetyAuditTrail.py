@@ -21,6 +21,7 @@
 """Persistent audit log for safety violations and adversarial attempts."""
 
 from __future__ import annotations
+from typing import Any
 from src.core.base.version import VERSION
 import json
 import logging
@@ -29,12 +30,15 @@ from datetime import datetime
 
 __version__ = VERSION
 
+
+
+
 class SafetyAuditTrail:
     """Logs security violations for later forensic analysis and training."""
-    
+
     def __init__(self, log_path: str) -> None:
         self.log_path = Path(log_path)
-        self.violations = []
+        self.violations: list[Any] = []
         self._load_log()
 
     def _load_log(self) -> str:

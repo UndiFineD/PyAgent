@@ -1,0 +1,17 @@
+diff --git a/src/core/base/IncrementalProcessor.py b/src/core/base/IncrementalProcessor.py
+index a929a57..0827cf5 100644
+--- a/src/core/base/IncrementalProcessor.py
++++ b/src/core/base/IncrementalProcessor.py
+@@ -24,11 +24,9 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.core.base.models import IncrementalState
+ from pathlib import Path
+-from typing import List, Any
++from typing import Any
+ import logging
+-import os
+ import time
+-import mmap
+ import blake3
+ import orjson
+ import cbor2

@@ -1,0 +1,11 @@
+diff --git a/src/infrastructure/plugins/mock_plugin/MockAgent.py b/src/infrastructure/plugins/mock_plugin/MockAgent.py
+index 010e0a7..df32bd5 100644
+--- a/src/infrastructure/plugins/mock_plugin/MockAgent.py
++++ b/src/infrastructure/plugins/mock_plugin/MockAgent.py
+@@ -51,4 +51,4 @@ class MockAgent(BaseAgent):
+         return f"MockAgent processed your task: {processed}"
+ 
+     def get_status(self) -> dict:
+-        return self.core.get_metadata()
+\ No newline at end of file
++        return self.core.get_metadata()

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\distro\__init__.py
+# hypothesis_version: 6.150.1
+
+['LinuxDistribution', 'NORMALIZED_DISTRO_ID', 'NORMALIZED_LSB_ID', 'NORMALIZED_OS_ID', 'build_number', 'codename', 'distro_release_attr', 'distro_release_info', 'id', 'info', 'like', 'linux_distribution', 'lsb_release_attr', 'lsb_release_info', 'major_version', 'minor_version', 'name', 'os_release_attr', 'os_release_info', 'uname_attr', 'uname_info', 'version', 'version_parts']

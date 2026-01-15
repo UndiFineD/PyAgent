@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\autograd\functional.py
+# hypothesis_version: 6.150.1
+
+['back', 'back_trick', 'double', 'double_back', 'double_back_trick', 'forward-mode', 'grad_inputs', 'hessian', 'hvp', 'inputs', 'jacobian', 'jvp', 'outputs', 'reverse-mode', 'v', 'vhp', 'vjp']

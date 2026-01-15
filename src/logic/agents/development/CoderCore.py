@@ -32,7 +32,7 @@ from src.core.base.types.QualityScore import QualityScore
 from src.core.base.types.StyleRule import StyleRule
 from src.core.base.types.StyleRuleSeverity import StyleRuleSeverity
 from src.core.base.AgentCore import LogicCore
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 import ast
 import hashlib
 import logging
@@ -42,7 +42,6 @@ import re
 import shutil
 import subprocess
 import tempfile
-from pathlib import Path
 
 __version__ = VERSION
 
@@ -110,29 +109,26 @@ CODE_SMELL_PATTERNS: dict[str, dict[str, Any]] = {
     },
 }
 
+
+
+
 class CoderCore(LogicCore):
     """Core logic for CoderAgent, target for Rust conversion."""
-    
+
     def __init__(self, language: CodeLanguage, workspace_root: str | None = None) -> None:
         self.language = language
         self.workspace_root = workspace_root
         try:
-            from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
-            root = Path(workspace_root) if workspace_root else Path.cwd()
-            self.recorder = LocalContextRecorder(workspace_root=root)
-        except ImportError:
-            self.recorder = None
-
-    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] = None) -> None:
-        """Record an interaction for intelligence harvesting (Phase 108)."""
-        if self.recorder:
-            self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
+            import rust_core
+            self._rust_core = rust_core.CoderCore(str(language))  # type: ignore[attr-defined]
+        except (ImportError, AttributeError):
+            self._rust_core = None
 
     def calculate_metrics(self, content: str) -> CodeMetrics:
         """Analyze code structure and compute metrics."""
         lines = content.split('\n')
         metrics = CodeMetrics()
-        
+
         # Basic line counts
         for line in lines:
             stripped = line.strip()
@@ -150,7 +146,7 @@ class CoderCore(LogicCore):
                 metrics = self._analyze_python_ast(tree, metrics)
             except SyntaxError:
                 pass
-        
+
         # General Maintainability Index
         if metrics.lines_of_code > 0:
             halstead_volume = metrics.lines_of_code * math.log2(
@@ -158,9 +154,9 @@ class CoderCore(LogicCore):
             cc = max(1, metrics.cyclomatic_complexity)
             loc = metrics.lines_of_code
             cm = metrics.lines_of_comments
-            metrics.maintainability_index = max(0, min(100, 
+            metrics.maintainability_index = max(0, min(100,
                 171 - 5.2 * math.log(halstead_volume + 1) - 0.23 * cc - 16.2 * math.log(loc + 1) + 50 * math.sin(math.sqrt(2.4 * (cm / (loc + cm + 1))))))
-                
+
         return metrics
 
     def _analyze_python_ast(self, tree: ast.AST, metrics: CodeMetrics) -> CodeMetrics:
@@ -183,15 +179,41 @@ class CoderCore(LogicCore):
                 metrics.class_count += 1
             elif isinstance(node, (ast.Import, ast.ImportFrom)):
                 metrics.import_count += 1
-        
+
         if function_lengths:
             metrics.average_function_length = sum(function_lengths) / len(function_lengths)
             metrics.max_function_length = max(function_lengths)
-            
+
         return metrics
 
     def check_style(self, content: str, rules: list[StyleRule]) -> list[dict[str, Any]]:
         """Run regex-based style checks."""
+        # Rust optimization
+        if self._rust_core:
+            patterns = []
+            for rule in rules:
+                if rule.enabled and (not rule.language or rule.language == self.language):
+                    patterns.append((rule.name, rule.pattern))
+
+            try:
+                rust_violations = self._rust_core.check_style(content, patterns)
+                violations = []
+                # Map Rust tuple back to dict: (name, line, content)
+                rule_map = {r.name: r for r in rules}
+                for (name, line, match_content) in rust_violations:
+                    rule = rule_map.get(name)
+                    if rule:
+                        violations.append({
+                            "rule": rule.name,
+                            "message": rule.message,
+                            "severity": rule.severity.value if hasattr(rule.severity, 'value') else str(rule.severity),
+                            "line": line,
+                            "content": match_content
+                        })
+                return violations
+            except Exception as e:
+                logging.warning(f"Rust optimization failed for check_style: {e}")
+
         violations: list[dict[str, Any]] = []
         lines = content.split('\n')
         for rule in rules:
@@ -199,7 +221,7 @@ class CoderCore(LogicCore):
                 continue
             if rule.language and rule.language != self.language:
                 continue
-            
+
             if '\n' in rule.pattern or rule.pattern.startswith('^'):
                 for match in re.finditer(rule.pattern, content, re.MULTILINE):
                     line_no = content.count('\n', 0, match.start()) + 1
@@ -231,19 +253,19 @@ class CoderCore(LogicCore):
                 continue
             if rule.language and rule.language != self.language:
                 continue
-            
+
             new_content = rule.auto_fix(fixed_content)
             if new_content != fixed_content:
                 fix_count += 1
                 fixed_content = new_content
-        
+
         # Standard cleanup
         lines = fixed_content.split('\n')
         cleaned = [line.rstrip() for line in lines]
         if cleaned != lines:
             fix_count += 1
             fixed_content = '\n'.join(cleaned)
-            
+
         return fixed_content, fix_count
 
     def detect_code_smells(self, content: str) -> list[CodeSmell]:
@@ -251,12 +273,12 @@ class CoderCore(LogicCore):
         smells: list[CodeSmell] = []
         if self.language != CodeLanguage.PYTHON:
             return smells
-            
+
         try:
             tree = ast.parse(content)
         except SyntaxError:
             return smells
-            
+
         lines = content.split('\n')
         for node in ast.walk(tree):
             # Long method detection
@@ -273,7 +295,7 @@ class CoderCore(LogicCore):
                             suggestion=f"Consider breaking down '{node.name}' into smaller functions",
                             category="complexity"
                         ))
-                
+
                 # Too many parameters
                 param_count = len(node.args.args)
                 threshold = CODE_SMELL_PATTERNS["too_many_parameters"]["threshold"]
@@ -315,7 +337,7 @@ class CoderCore(LogicCore):
                     suggestion="Consider early returns or extracting nested logic",
                     category="complexity"
                 ))
-        
+
         return smells
 
     def find_duplicate_code(self, content: str, min_lines: int = 4) -> list[dict[str, Any]]:
@@ -323,18 +345,18 @@ class CoderCore(LogicCore):
         lines = content.split('\n')
         duplicates: list[dict[str, Any]] = []
         hashes: dict[str, list[int]] = {}
-        
+
         for i in range(len(lines) - min_lines + 1):
             block = '\n'.join(lines[i:i + min_lines])
             normalized = re.sub(r'\s+', ' ', block.strip())
             if len(normalized) < 20:
                 continue
-            
+
             block_hash = hashlib.md5(normalized.encode()).hexdigest()
             if block_hash not in hashes:
                 hashes[block_hash] = []
             hashes[block_hash].append(i + 1)
-            
+
         for block_hash, line_numbers in hashes.items():
             if len(line_numbers) > 1:
                 duplicates.append({
@@ -349,25 +371,25 @@ class CoderCore(LogicCore):
         """Aggregate all analysis into a single QualityScore."""
         score = QualityScore()
         score.maintainability = min(100, metrics.maintainability_index)
-        
+
         # Readability score
         readability_deductions = len(violations) * 5
         score.readability = max(0, 100 - readability_deductions)
-        
+
         # Complexity score
         if metrics.function_count > 0:
             avg_cc = metrics.cyclomatic_complexity / metrics.function_count
             score.complexity = max(0, 100 - (avg_cc - 1) * 10)
         else:
             score.complexity = 100
-            
+
         # Documentation score
         if metrics.lines_of_code > 0:
             comment_ratio = metrics.lines_of_comments / metrics.lines_of_code
             score.documentation = min(100, comment_ratio * 200)
-            
+
         score.test_coverage = coverage
-        
+
         # Overall score (weighted average)
         score.overall_score = (
             score.maintainability * 0.25 +
@@ -376,13 +398,13 @@ class CoderCore(LogicCore):
             score.documentation * 0.15 +
             score.test_coverage * 0.10
         )
-        
+
         # Add primary issues
         for violation in violations[:5]:
             score.issues.append(f"Style: {violation['message']} (line {violation['line']})")
         for smell in smells[:5]:
             score.issues.append(f"Smell: {smell.description}")
-            
+
         return score
 
     def suggest_refactorings(self, content: str) -> list[dict[str, str]]:
@@ -433,7 +455,7 @@ class CoderCore(LogicCore):
             tree = ast.parse(content)
         except SyntaxError:
             return "# Documentation\n\nUnable to parse file for documentation."
-            
+
         docs: list[str] = ["# API Documentation\n"]
         # Get module docstring
         module_doc = ast.get_docstring(tree)
@@ -498,9 +520,9 @@ class CoderCore(LogicCore):
                 text=True,
                 check=False
             )
-            
-            # Intelligence: Record shell-based code validation (Phase 108)
-            self.record_interaction("Shell", "Flake8", f"Validating code in {tmp_path}", str(result.stdout)[:500])
+
+            # Removed self.record_interaction call.
+            # Core classes should not have side effects.
 
             return result.returncode == 0
         except Exception as e:

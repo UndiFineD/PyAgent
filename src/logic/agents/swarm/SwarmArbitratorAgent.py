@@ -21,10 +21,13 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import time
 import uuid
-from typing import Dict, List, Any
+from typing import Any
 from src.logic.agents.swarm.core.AuctionCore import AuctionCore
 
 __version__ = VERSION
+
+
+
 
 class SwarmArbitratorAgent:
     """
@@ -34,11 +37,12 @@ class SwarmArbitratorAgent:
 
     def __init__(self, workspace_path: str = ".") -> None:
         self.workspace_path = workspace_path
-        self.reputation_scores = {}
+        self.reputation_scores: dict[Any, Any] = {}
         self.consensus_threshold = 0.66  # 2n/3 for PBFT
-        self.conflicts = []
+        self.conflicts: list[Any] = []
         self.core = AuctionCore()
-        
+        self.resource_ledger: dict[Any, Any] = {}
+
     async def arbitrate_consensus(self, votes: list[dict[str, Any]]) -> dict[str, Any]:
         """
         PBFT-inspired consensus logic.
@@ -48,7 +52,7 @@ class SwarmArbitratorAgent:
             return {"status": "error", "message": "No votes provided"}
 
         # Calculate frequency of each content hash
-        vote_counts = {}
+        vote_counts: dict[Any, Any] = {}
         for v in votes:
             h = v.get("hash", "unknown")
             vote_counts[h] = vote_counts.get(h, 0) + 1
@@ -64,10 +68,10 @@ class SwarmArbitratorAgent:
                         self._update_reputation(agent_id, 0.1)
                     else:
                         self._update_reputation(agent_id, -0.2)
-                
+
                 return {
-                    "status": "success", 
-                    "winner_hash": h, 
+                    "status": "success",
+                    "winner_hash": h,
                     "confidence": round(count/total_votes, 2),
                     "voters": total_votes
                 }
@@ -75,7 +79,7 @@ class SwarmArbitratorAgent:
         # No consensus - trigger audit
         self.conflicts.append(votes)
         return {
-            "status": "conflict", 
+            "status": "conflict",
             "message": "PBFT Threshold not met. Consensus failed.",
             "distribution": vote_counts
         }
@@ -90,10 +94,31 @@ class SwarmArbitratorAgent:
         """Returns the current reputation scores for all known agents."""
         return self.reputation_scores
 
+    def submit_bid(self, agent_id: str, resource: str, quantity: float, price: float) -> dict[str, Any]:
+        bid_id = str(uuid.uuid4())
+        status = "allocated" if price >= 50 else "queued"
 
+        entry = {
+            "bid_id": bid_id,
+            "agent_id": agent_id,
+            "resource": resource,
+            "quantity": quantity,
+            "bid_price": price,
+            "status": status,
+            "timestamp": time.time()
+        }
+        self.resource_ledger[bid_id] = entry
+        return entry
+
+    def get_resource_usage_report(self) -> dict[str, Any]:
+        allocated = [k for k, v in self.resource_ledger.items() if v["status"] == "allocated"]
+        return {"allocation_count": len(allocated), "details": allocated}
+
+    def preempt_low_priority_task(self, min_bid: float) -> dict[str, Any]:
         preempted = []
         for tid, entry in self.resource_ledger.items():
-            if entry["status"] == "allocated" and entry["bid_price"] < min_bid:
+            # Only preempt allocated tasks
+            if entry.get("status") == "allocated" and entry.get("bid_price", 0) < min_bid:
                 entry["status"] = "preempted"
                 preempted.append(tid)
         return {"preempted_tasks": preempted, "count": len(preempted)}

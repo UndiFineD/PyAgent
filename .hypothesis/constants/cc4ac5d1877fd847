@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\data\processors\glue.py
+# hypothesis_version: 6.150.1
+
+['*** Example ***', '0', '1', 'classification', 'cola', 'contradiction', 'dev', 'dev.tsv', 'dev_matched', 'dev_matched.tsv', 'dev_mismatched', 'dev_mismatched.tsv', 'entailment', 'function', 'hypothesis', 'idx', 'label', 'max_length', 'mnli', 'mnli-mm', 'mrpc', 'neutral', 'not_entailment', 'premise', 'processor', 'qnli', 'qqp', 'question', 'question1', 'question2', 'regression', 'rte', 'sentence', 'sentence1', 'sentence2', 'sst-2', 'sts-b', 'test', 'test.tsv', 'test_matched', 'test_matched.tsv', 'test_mismatched', 'test_mismatched.tsv', 'tf.data.Dataset', 'train', 'train.tsv', 'utf-8', 'wnli']

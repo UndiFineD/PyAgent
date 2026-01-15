@@ -3,22 +3,12 @@
 
 from __future__ import annotations
 import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
+from typing import Any, Dict
 import time
 import json
 from datetime import datetime
-import pytest
-import logging
 from pathlib import Path
 import sys
-import os
-import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
@@ -26,15 +16,23 @@ try:
 except ImportError:
     # Fallback
     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
+
     class agent_sys_path:
-        def __enter__(self) -> bool: 
+        def __enter__(self) -> bool:
 
             return self
-        def __exit__(self, *args) -> bool: 
+
+
+
+
+
+
+
+        def __exit__(self, *args) -> bool:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestAuditLogger:
     """Tests for AuditLogger class."""
@@ -45,7 +43,7 @@ class TestAuditLogger:
         logger = AuditLogger()
         assert logger.log_file is None
 
-    def test_log_request(self, agent_backend_module: any, tmp_path) -> None:
+    def test_log_request(self, agent_backend_module: Any, tmp_path) -> None:
         """Test logging a request."""
         AuditLogger = agent_backend_module.AuditLogger
 
@@ -64,7 +62,7 @@ class TestAuditLogger:
         content = log_file.read_text()
         assert "github-models" in content
 
-    def test_get_recent_entries(self, agent_backend_module: any, tmp_path) -> None:
+    def test_get_recent_entries(self, agent_backend_module: Any, tmp_path) -> None:
         """Test getting recent entries."""
         AuditLogger = agent_backend_module.AuditLogger
 
@@ -81,7 +79,6 @@ class TestAuditLogger:
 # =============================================================================
 # Phase 6: Integration Tests
 # =============================================================================
-
 
 
 class TestRequestSigner:
@@ -137,7 +134,6 @@ class TestRequestSigner:
 # =============================================================================
 
 
-
 class TestRequestDeduplicator:
     """Tests for RequestDeduplicator class."""
 
@@ -184,7 +180,6 @@ class TestRequestDeduplicator:
 # =============================================================================
 
 
-
 class TestVersionNegotiator:
     """Tests for VersionNegotiator class."""
 
@@ -206,7 +201,7 @@ class TestVersionNegotiator:
             capabilities=["streaming", "batching"],
         )
 
-        assert version.backend == "api"
+        assert version.component == "api"
         assert version.version == "2.0"
         assert "streaming" in version.capabilities
 
@@ -234,7 +229,6 @@ class TestVersionNegotiator:
 # =============================================================================
 # Session 9: Capability Discovery Tests
 # =============================================================================
-
 
 
 class TestCapabilityDiscovery:
@@ -289,7 +283,6 @@ class TestCapabilityDiscovery:
 # =============================================================================
 
 
-
 class TestRequestRecorder:
     """Tests for RequestRecorder class."""
 
@@ -332,7 +325,6 @@ class TestRequestRecorder:
     def test_export_recordings(self, agent_backend_module: Any) -> None:
         """Test exporting recordings as JSON."""
         RequestRecorder = agent_backend_module.RequestRecorder
-        import json
 
         recorder = RequestRecorder()
         recorder.record("prompt", "backend", "response")
@@ -345,7 +337,6 @@ class TestRequestRecorder:
 # =============================================================================
 # Session 9: Config Hot-Reloading Tests
 # =============================================================================
-
 
 
 class TestConfigHotReloader:
@@ -384,7 +375,6 @@ class TestConfigHotReloader:
 # =============================================================================
 # Session 9: Request Compression Tests
 # =============================================================================
-
 
 
 class TestRequestCompressor:
@@ -436,7 +426,6 @@ class TestRequestCompressor:
 # =============================================================================
 
 
-
 class TestSystemAnalytics:
     """Tests for SystemAnalytics class."""
 
@@ -481,7 +470,6 @@ class TestSystemAnalytics:
 # =============================================================================
 
 
-
 class TestConnectionPool:
     """Tests for ConnectionPool class."""
 
@@ -517,7 +505,6 @@ class TestConnectionPool:
 # =============================================================================
 # Session 9: Request Throttling Tests
 # =============================================================================
-
 
 
 class TestRequestThrottler:
@@ -557,7 +544,6 @@ class TestRequestThrottler:
 # =============================================================================
 # Session 9: TTL Cache Tests
 # =============================================================================
-
 
 
 class TestTTLCache:
@@ -603,7 +589,6 @@ class TestTTLCache:
 # =============================================================================
 # Session 9: A / B Testing Tests
 # =============================================================================
-
 
 
 class TestABTester:
@@ -875,7 +860,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
         """Test tracking costs for custom endpoints."""
         class CostTracker:
             def __init__(self) -> None:
-                self.endpoint_costs = {}
+                self.endpoint_costs: dict[Any, Any] = {}
 
             def record_request(
                     self,
@@ -926,5 +911,3 @@ class TestCustomModelEndpoints(unittest.TestCase):
         result: bool = health_check.check_health()
         self.assertTrue(result)
         self.assertIsNotNone(health_check.last_check)
-
-

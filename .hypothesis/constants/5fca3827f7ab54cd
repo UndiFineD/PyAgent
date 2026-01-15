@@ -1,0 +1,4 @@
+# file: c:\DEV\PyAgent\src\infrastructure\backend\llm_backends\CopilotCliBackend.py
+# hypothesis_version: 6.150.1
+
+[800, '-t', '...', 'copilot', 'copilot_cli', 'gh', 'gh-extension', 'shell', 'suggest', 'timeout_s', 'utf-8']

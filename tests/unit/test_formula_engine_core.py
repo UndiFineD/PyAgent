@@ -1,6 +1,5 @@
 import math
 
-import pytest
 from hypothesis import given, strategies as st
 
 from src.observability.stats.metrics_engine import FormulaEngineCore

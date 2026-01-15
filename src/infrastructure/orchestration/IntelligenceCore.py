@@ -25,21 +25,38 @@ Handles weight calculation, insight distillation, and pattern matching.
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import List, Dict, Any, Optional
+import logging
+from typing import Any
 from dataclasses import dataclass, field
 from datetime import datetime
 
+try:
+    import rust_core as rc
+except (ImportError, AttributeError):
+    rc = None  # type: ignore[assignment]
+
+logger = logging.getLogger(__name__)
+
 __version__ = VERSION
 
+
+
+
 @dataclass
+
+
 class SwarmInsight:
+    """Data class representing a derived insight from the swarm."""
     agent: str
     insight: str
     confidence: float
+
+
     timestamp: float = field(default_factory=lambda: datetime.now().timestamp())
-    
+
     def format_for_pool(self) -> str:
         return f"- {self.agent} ({self.confidence:.2f}): {self.insight}"
+
 
 class IntelligenceCore:
     """Logic-only core for swarm intelligence synthesis."""
@@ -49,11 +66,16 @@ class IntelligenceCore:
 
     def filter_relevant_insights(self, pool: list[dict[str, Any]], limit: int = 20) -> list[SwarmInsight]:
         """Filters and converts raw insight dictionaries into SwarmInsight objects."""
+        if rc:
+            try:
+                # Optimized sort and truncate in Rust
+                pool = rc.filter_relevant_insights(pool, limit)  # type: ignore[attr-defined]
+            except Exception as e:
+                logger.warning(f"Rust filter_relevant_insights failed: {e}")
+
         insights = []
-        # Sort by confidence and recency
-        sorted_pool = sorted(pool, key=lambda x: (x.get('confidence', 0), x.get('timestamp', 0)), reverse=True)
-        
-        for item in sorted_pool[:limit]:
+        # Fallback/Process results
+        for item in pool[:limit]:
             insights.append(SwarmInsight(
                 agent=item.get('agent', 'Unknown'),
                 insight=item.get('insight', ''),
@@ -67,7 +89,7 @@ class IntelligenceCore:
         lines = [i.format_for_pool() for i in insights]
         for lesson in sql_lessons:
             lines.append(f"- RELATIONAL_LESSON: {lesson.get('sample_lesson')} (Category: {lesson.get('category')})")
-            
+
         pool_text = "\n".join(lines)
         return f"Analyze these swarm insights and relational lessons. Synthesize the top 3 high-level patterns or warnings:\n{pool_text}"
 
@@ -75,14 +97,14 @@ class IntelligenceCore:
         """Filters raw AI output to ensure patterns are technically relevant."""
         valid_patterns = []
         keywords = ["error", "failure", "bottleneck", "missing", "security", "leak", "logic", "refactor", "quantum"]
-        
+
         for p in raw_patterns:
             p_clean = p.strip()
             if not p_clean:
                 continue
-            
+
             # Heuristic: must contain a technical keyword or be long enough
             if any(k in p_clean.lower() for k in keywords) or len(p_clean) > 40:
                 valid_patterns.append(p_clean)
-                
+
         return valid_patterns

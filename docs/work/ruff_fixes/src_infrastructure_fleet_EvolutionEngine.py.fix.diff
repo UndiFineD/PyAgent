@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/fleet/EvolutionEngine.py b/src/infrastructure/fleet/EvolutionEngine.py
+index ebb9c9d..11bb14f 100644
+--- a/src/infrastructure/fleet/EvolutionEngine.py
++++ b/src/infrastructure/fleet/EvolutionEngine.py
+@@ -26,7 +26,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ from pathlib import Path
+-from typing import Dict, Any
++from typing import Any
+ from .EvolutionCore import EvolutionCore
+ 
+ __version__ = VERSION

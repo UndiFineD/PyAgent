@@ -31,9 +31,12 @@ from src.core.base.utilities import as_tool, create_main_function
 # Lazy loaded: pandas moved to localized usage
 __version__ = VERSION
 
+
+
+
 class DataAgent(BaseAgent):
     """Advanced agent for database interaction and data processing."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.conn = None
@@ -59,7 +62,7 @@ class DataAgent(BaseAgent):
         import pandas as pd
         if not self.conn:
             return "Error: No database connection. Call 'connect' first."
-        
+
         try:
             # Check if it's a SELECT query
             if sql.strip().upper().startswith("SELECT"):
@@ -80,12 +83,12 @@ class DataAgent(BaseAgent):
         """Retrieves the schema of the currently connected database."""
         if not self.conn:
             return "Error: No database connection."
-        
+
         try:
             cursor = self.conn.cursor()
             cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
             tables = cursor.fetchall()
-            
+
             schema_info = []
             for table in tables:
                 table_name = table[0]
@@ -93,28 +96,50 @@ class DataAgent(BaseAgent):
                 columns = cursor.fetchall()
                 cols_str = ", ".join([f"{c[1]} ({c[2]})" for c in columns])
                 schema_info.append(f"Table: {table_name} | Columns: {cols_str}")
-            
+
             return "\n".join(schema_info) if schema_info else "Database holds no tables."
         except Exception as e:
             return f"Error retrieving schema: {e}"
 
+
+
+
+
+
+
+
+
+
+
     @as_tool
     def query_to_csv(self, sql: str, output_path: str) -> str:
         """Executes a query and saves the result to a CSV file."""
+
+
+
         import pandas as pd
         if not self.conn:
             return "Error: No database connection."
-        
+
         try:
+
+
             df = pd.read_sql_query(sql, self.conn)
             df.to_csv(output_path, index=False)
             return f"Query results saved to {output_path}"
         except Exception as e:
             return f"Error saving to CSV: {e}"
 
+
+
+
     def improve_content(self, prompt: str) -> str:
         """Analyzes a data-related prompt and executes the appropriate tool."""
         return f"DataAgent processing: {prompt}\n(Use specific tools for execution)"
+
+
+
+
 
 if __name__ == "__main__":
     main = create_main_function(DataAgent, "Data Agent", "Path to data log")

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\cluster\_bicluster.py
+# hypothesis_version: 6.150.1
+
+[1e-05, 1.0, 1000, 'SpectralBiclustering', 'SpectralCoclustering', 'arpack', 'bistochastic', 'boolean', 'csr', 'init', 'k-means++', 'left', 'log', 'method', 'mini_batch', 'n_best', 'n_clusters', 'n_column_clusters', 'n_components', 'n_init', 'n_oversamples', 'n_row_clusters', 'n_svd_vecs', 'random', 'random_state', 'randomized', 'scale', 'svd_method']

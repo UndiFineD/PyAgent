@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\joblib\externals\loky\backend\context.py
+# hypothesis_version: 6.150.1
+
+[100000, '#', ',', 'LOKY_MAX_CPU_COUNT', 'Node,NumberOfCores', 'cat /proc/cpuinfo', 'core id', 'cpu_affinity', 'darwin', 'fork', 'forkserver', 'linux', 'loky', 'loky_init_main', 'lscpu --parse=core', 'max', 'not found', 'sched_getaffinity', 'spawn', 'win32']

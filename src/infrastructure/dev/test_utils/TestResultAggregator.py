@@ -24,12 +24,14 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .TestResult import TestResult
 from .TestStatus import TestStatus
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 __version__ = VERSION
 
+
+
+
 class TestResultAggregator:
-    __test__ = False
     """Aggregates test results for reporting.
 
     Example:
@@ -37,6 +39,8 @@ class TestResultAggregator:
         agg.add_result(TestResult(name="test1", status=TestStatus.PASSED))
         report=agg.get_report()
     """
+
+    __test__ = False
 
     def __init__(self) -> None:
         """Initialize result aggregator."""

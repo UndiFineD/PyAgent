@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class GroupingStrategy(Enum):
     """Strategies for entry grouping."""
     BY_DATE = "by_date"

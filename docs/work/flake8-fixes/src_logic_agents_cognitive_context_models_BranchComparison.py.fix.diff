@@ -1,0 +1,36 @@
+diff --git a/src/logic/agents/cognitive/context/models/BranchComparison.py b/src/logic/agents/cognitive/context/models/BranchComparison.py
+index d04d605..b91e151 100644
+--- a/src/logic/agents/cognitive/context/models/BranchComparison.py
++++ b/src/logic/agents/cognitive/context/models/BranchComparison.py
+@@ -22,13 +22,23 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import List, TYPE_CHECKING
++from typing import TYPE_CHECKING
+ from dataclasses import dataclass, field
+ 
+ if TYPE_CHECKING:
+     pass
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class BranchComparison:
+     """Comparison of context across branches.
+@@ -44,4 +54,4 @@ class BranchComparison:
+     branch_b: str
+     files_only_in_a: list[str] = field(default_factory=lambda: [])
+     files_only_in_b: list[str] = field(default_factory=lambda: [])
+-    modified_files: list[str] = field(default_factory=lambda: [])
+\ No newline at end of file
++    modified_files: list[str] = field(default_factory=lambda: [])

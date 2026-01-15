@@ -21,21 +21,24 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import time
 import logging
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
+
+
 class CooperativeCommunicationAgent(BaseAgent):
     """
-    Cooperative Communication Agent: Manages high-speed signal synchronization 
+    Cooperative Communication Agent: Manages high-speed signal synchronization
     between sibling agent nodes in the fleet.
     Uses LLM thinking to optimize communication protocols.
     """
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.active_channels: dict[str, Any] = {} # node_id -> channel_metadata
+        self.active_channels: dict[str, Any] = {}  # node_id -> channel_metadata
         self._system_prompt = (
             "You are the Cooperative Communication Agent. "
             "Your role is to optimize peer-to-peer data transfers "
@@ -82,7 +85,7 @@ class CooperativeCommunicationAgent(BaseAgent):
         import hashlib
         state_str = str(fleet_state)
         state_hash = hashlib.sha256(state_str.encode()).hexdigest()
-        
+
         return {
             "synchronized": True,
             "state_hash": state_hash,

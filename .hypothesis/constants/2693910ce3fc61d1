@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\huggingface_hub\utils\_http.py
+# hypothesis_version: 6.150.1
+
+[400, 401, 403, 416, 500, 502, 503, 504, 1000, '\n\nBad request:', ' ... [truncated]', ',', '-H', '-X', '-d', '/', '<TOKEN>', '<file-like object>', 'Content-Type', 'EntryNotFound', 'GatedRepo', 'Range', 'RepoNotFound', 'RevisionNotFound', 'X-Amzn-Trace-Id', 'X-Error-Code', 'X-Error-Message', 'authorization', 'curl', 'data', 'error', 'errors', 'html', 'http://', 'https://', 'ignore', 'message', 'read', 'utf-8', 'x-request-id', '{0}: {1}']

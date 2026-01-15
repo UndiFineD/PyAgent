@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\data\data_collator.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.1, 0.15, 0.5, 0.8, 1.0, -100, 512, '##', 'MainProcess', '[CLS]', '[SEP]', 'attention_mask', 'chinese_ref', 'cu_seq_lens_k', 'cu_seq_lens_q', 'decoder_input_ids', 'deprecation_warnings', 'detach', 'input_ids', 'label', 'label_ids', 'labels', 'max_length_k', 'max_length_q', 'np', 'numpy', 'offset_mapping', 'perm_mask', 'position_ids', 'pt', 'right', 'sentence_order_label', 'seq_idx', 'special_tokens_mask', 'target_mapping', 'tf', 'token_type_ids']

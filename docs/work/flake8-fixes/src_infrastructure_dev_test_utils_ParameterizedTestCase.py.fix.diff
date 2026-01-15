@@ -1,0 +1,33 @@
+diff --git a/src/infrastructure/dev/test_utils/ParameterizedTestCase.py b/src/infrastructure/dev/test_utils/ParameterizedTestCase.py
+index 7e1d81a..9cf8925 100644
+--- a/src/infrastructure/dev/test_utils/ParameterizedTestCase.py
++++ b/src/infrastructure/dev/test_utils/ParameterizedTestCase.py
+@@ -23,10 +23,20 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import Any, Dict, List
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class ParameterizedTestCase:
+     """A parameterized test case.
+@@ -41,4 +51,4 @@ class ParameterizedTestCase:
+     name: str
+     params: dict[str, Any]
+     expected: Any
+-    tags: list[str] = field(default_factory=lambda: [])
+\ No newline at end of file
++    tags: list[str] = field(default_factory=lambda: [])

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\orchestration\ResourcePredictorOrchestrator.py
+# hypothesis_version: 6.150.1
+
+[0.2, 0.4, 0.6, 0.7, 100, 512, 2048, 2500, 'HIGH', 'NORMAL', 'allocation', 'complexity_forecast', 'cpu_util_target', 'forecasted_tokens', 'priority', 'reason', 'recommended_nodes', 'task', 'trigger_scaling', 'vram_mb']

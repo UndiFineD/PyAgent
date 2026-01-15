@@ -32,9 +32,12 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
+
+
 class VoiceInteractionAgent(BaseAgent):
     """Voice interface for the swarm, supporting STT and TTS."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -49,9 +52,9 @@ class VoiceInteractionAgent(BaseAgent):
         logging.info(f"VoiceAgent: Synthesizing speech with profile {voice_profile}...")
         audio_dir = Path("data/audio")
         audio_dir.mkdir(parents=True, exist_ok=True)
-        
+
         target_path = audio_dir / f"speech_{abs(hash(text))}.mp3"
-        
+
         try:
             from gtts import gTTS
             tts = gTTS(text=text, lang='en')
@@ -65,7 +68,7 @@ class VoiceInteractionAgent(BaseAgent):
     def transcribe_audio(self, audio_path: str) -> str:
         """Transcribes audio file to text using speech recognition."""
         logging.info(f"VoiceAgent: Transcribing {audio_path}...")
-        
+
         try:
             import speech_recognition as sr
             r = sr.Recognizer()

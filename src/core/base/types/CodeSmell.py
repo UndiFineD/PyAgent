@@ -26,6 +26,12 @@ from dataclasses import dataclass
 
 __version__ = VERSION
 
+
+
+
+
+
+
 @dataclass
 class CodeSmell:
     """A detected code smell."""

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\KnowledgeAgent.py
+# hypothesis_version: 6.150.1
+
+[1000, '\n... (truncated)', '\n> ```\n', '## Backlinks', '*', '*.md', '*.py', ', ', '.', '.git', '.md', '.py', '.tmp', '.txt', '/', 'Knowledge Agent', '\\', '\\[\\[(.*?)\\]\\]', '__main__', '__pycache__', 'content', 'context_summary', 'core', 'depended_on_by', 'depends_on', 'documents', 'episodic', 'file_path', 'graph TD\n', 'knowledge', 'metadata', 'metadatas', 'mirix_tiers', 'path', 'procedural', 'query', 'related_nodes', 'resource', 'score', 'semantic', 'semantic_matches', 'success', 'symbol', 'tier', 'timestamp', 'unknown', 'utf-8', 'venv', 'w', 'workspace_docs', 'workspace_root', '✅', '❌']

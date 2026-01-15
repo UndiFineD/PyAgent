@@ -3,22 +3,9 @@
 
 from __future__ import annotations
 import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
-import time
-import json
-from datetime import datetime
-import pytest
-import logging
+from unittest.mock import patch
 from pathlib import Path
 import sys
-import os
-import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
@@ -26,15 +13,23 @@ try:
 except ImportError:
     # Fallback
     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
+
     class agent_sys_path:
-        def __enter__(self) -> Self: 
+        def __enter__(self) -> Self:
 
             return self
-        def __exit__(self, *args) -> None: 
+
+
+
+
+
+
+
+        def __exit__(self, *args) -> None:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestFlake8Integration(unittest.TestCase):
     """Tests for flake8 linting integration."""
@@ -68,7 +63,6 @@ class TestFlake8Integration(unittest.TestCase):
         assert "whitespace" in output.lower()
 
 
-
 class TestSecurityScanningIntegration(unittest.TestCase):
     """Tests for security scanning integration."""
 
@@ -98,7 +92,6 @@ class TestSecurityScanningIntegration(unittest.TestCase):
         """Test bandit on secure code."""
         mock_run.return_value.returncode = 0
         assert mock_run.return_value.returncode == 0
-
 
 
 class TestIntegration(unittest.TestCase):
@@ -134,5 +127,3 @@ class TestIntegration(unittest.TestCase):
         assert "greet" in modified
         assert '"""' not in original  # No docstring in original
         assert '"""' in modified  # Has docstring in modified
-
-

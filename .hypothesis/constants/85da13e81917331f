@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\joblib\compressor.py
+# hypothesis_version: 6.150.1
+
+[b'\x04"M\x18', b'\x1f\x8b', b'BZ', b'ZF', b']\x00', b'x', b'\xfd7zXZ', 8192, ' {}', '.', '.bz2', '.gz', '.lz4', '.lzma', '.xz', '.z', '0.19', 'FORMAT_ALONE', 'FORMAT_XZ', 'Invalid mode: %r', 'name', 'rb', 'read', 'seek', 'tell', 'v', 'wb', 'write']

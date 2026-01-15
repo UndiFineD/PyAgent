@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\backends\mps\__init__.py
+# hypothesis_version: 6.150.1
+
+['IMPL', 'MPS', 'aten', 'get_core_count', 'get_name', 'is_available', 'is_built', 'is_macos13_or_newer', 'is_macos_or_newer', 'native_group_norm']

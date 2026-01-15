@@ -26,22 +26,43 @@ import re
 
 __version__ = VERSION
 
+
+
+
+
+
+
 def fix_imports(content: str) -> str:
     """Correct legacy module imports to use the src prefix."""
+
+
+
+
+
     modules = [
-        'agent_backend', 'agent_changes', 'agent_coder', 'agent_context', 
-        'agent_errors', 'agent_improvements', 'agent_knowledge', 'agent_search', 
+        'agent_backend', 'agent_changes', 'agent_coder', 'agent_context',
+        'agent_errors', 'agent_improvements', 'agent_knowledge', 'agent_search',
         'agent_stats', 'agent_strategies', 'agent_tests', 'agent_test_utils'
     ]
-    
+
+
+
     for mod in modules:
         # Match from agent_X and import agent_X
         # Using \b to ensure we match the full module name
         content = re.sub(rf'^\s*from ({mod})(\b\s+import|\b\s+)', r'from src.\1\2', content, flags=re.MULTILINE)
+
+
+
+
         content = re.sub(rf'^\s*import ({mod})(\b\s*$)', r'from src import \1', content, flags=re.MULTILINE)
 
     content = content.replace('from classes.', 'from src.')
     return content
+
+
+
+
 
 print("Starting fix script...")
 updated_count = 0
@@ -54,7 +75,7 @@ for root_dir in ['src', 'tests']:
     for root, dirs, files in os.walk(root_dir):
         if '__pycache__' in root or '.git' in root:
             continue
-        
+
         init_file = os.path.join(root, '__init__.py')
         if not os.path.exists(init_file):
             with open(init_file, 'w', encoding='utf-8') as f:
@@ -67,9 +88,9 @@ for root_dir in ['src', 'tests']:
                 try:
                     with open(path, encoding='utf-8') as f:
                         content = f.read()
-                    
+
                     new_content = fix_imports(content)
-                    
+
                     if new_content != content:
                         with open(path, 'w', encoding='utf-8') as f:
                             f.write(new_content)

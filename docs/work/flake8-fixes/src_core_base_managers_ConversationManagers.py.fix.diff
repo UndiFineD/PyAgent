@@ -1,0 +1,26 @@
+diff --git a/src/core/base/managers/ConversationManagers.py b/src/core/base/managers/ConversationManagers.py
+index dd3c3f9..3b8c884 100644
+--- a/src/core/base/managers/ConversationManagers.py
++++ b/src/core/base/managers/ConversationManagers.py
+@@ -20,11 +20,20 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import List
+ from src.core.base.models import MessageRole, ConversationMessage
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class ConversationHistory:
+     """Manages a conversation history with message storage and retrieval."""
+ 

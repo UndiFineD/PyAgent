@@ -15,9 +15,12 @@ from __future__ import annotations
 import os
 import re
 import asyncio
-from typing import List, Dict, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+
+
+
 
 class LegalAuditAgent(BaseAgent):
     """
@@ -49,16 +52,16 @@ class LegalAuditAgent(BaseAgent):
             for root, _, files in os.walk(target_dir):
                 if "node_modules" in root or ".git" in root or "__pycache__" in root:
                     continue
-                    
+
                 for file in files:
                     if not file.endswith((".py", ".js", ".ts", ".go", ".rs")):
                         continue
-                        
+
                     path = os.path.join(root, file)
                     try:
                         with open(path, encoding="utf-8") as f:
-                            content = f.read(1000) # Check first 1KB for header
-                            
+                            content = f.read(1000)  # Check first 1KB for header
+
                         if any(lic in content for lic in self.allowed_licenses):
                             results["compliant"].append(path)
                         else:
@@ -79,7 +82,7 @@ class LegalAuditAgent(BaseAgent):
         """Provides improvements for files missing license headers."""
         target = context.get("target_dir", ".")
         audit = await self.run_audit(target)
-        
+
         improvements = []
         for issue in audit["non_compliant"]:
             improvements.append({

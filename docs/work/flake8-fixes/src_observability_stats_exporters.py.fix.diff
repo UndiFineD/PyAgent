@@ -1,0 +1,167 @@
+diff --git a/src/observability/stats/exporters.py b/src/observability/stats/exporters.py
+index 163fb81..a7e6b52 100644
+--- a/src/observability/stats/exporters.py
++++ b/src/observability/stats/exporters.py
+@@ -8,12 +8,22 @@ import logging
+ import time
+ import uuid
+ from dataclasses import dataclass, field
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from .analysis import TracingCore
+ from .metrics import ExportDestination, Metric
+ 
+ logger = logging.getLogger(__name__)
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class Span:
+     """A tracing span for OTel."""
+@@ -21,16 +31,31 @@ class Span:
+     trace_id: str
+     span_id: str
+     parent_id: str | None = None
++
++
++
++
++
+     start_time: float = field(default_factory=time.time)
+     end_time: float | None = None
+     attributes: dict[str, Any] = field(default_factory=dict)
+     status: str = "unset"
+ 
++
++
++
++
++
+ class PrometheusExporter:
+     """Formats fleet telemetry into Prometheus-compatible metrics."""
+     def __init__(self) -> None:
+         self.metrics_registry: dict[str, float] = {}
+ 
++
++
++
++
++
+     def record_metric(self, name:
+         str, value: float, labels: dict[str, str] | None = None) -> None:
+         label_str = ""
+@@ -41,6 +66,11 @@ class PrometheusExporter:
+     def generate_scrape_response(self) -> str:
+         return "\n".join([f"pyagent_{k} {v}" for k, v in self.metrics_registry.items()])
+ 
++
++
++
++
++
+ class OTelManager:
+     """Manages OTel-compatible spans and traces."""
+     def __init__(self) -> None:
+@@ -61,11 +91,16 @@ class OTelManager:
+         span = self.active_spans.pop(span_id, None)
+         if not span:
+             return
++
++
++
++
++
+         span.end_time = time.time()
+         span.status = status
+         if attributes:
+             span.attributes.update(attributes)
+-        
++
+         total_latency = span.end_time - span.start_time
+         breakdown = self.core.calculate_latency_breakdown(total_latency, network_latency_sec)
+         span.attributes.update(breakdown)
+@@ -76,6 +111,11 @@ class OTelManager:
+         self.completed_spans = []
+         return batch
+ 
++
++
++
++
++
+ class CloudExporter:
+     """Export stats to cloud monitoring services."""
+     def __init__(self, destination:
+@@ -85,6 +125,11 @@ class CloudExporter:
+         self.endpoint = endpoint or self._get_default_endpoint()
+         self.export_queue: list[Metric] = []
+ 
++
++
++
++
++
+     def _get_default_endpoint(self) -> str:
+         defaults = {
+             ExportDestination.DATADOG: "https://api.datadoghq.com/v1/series",
+@@ -98,12 +143,27 @@ class CloudExporter:
+         self.export_queue.append(metric)
+ 
+     def export(self) -> int:
++
++
++
++
++
+         if not self.export_queue:
+             return 0
+         count = len(self.export_queue)
+         self.export_queue.clear()
+         return count
+ 
++
++
++
++
++
++
++
++
++
++
+ class MetricsExporter:
+     """Consolidates fleet telemetry for external monitoring."""
+     def __init__(self) -> None:
+@@ -118,12 +178,22 @@ class MetricsExporter:
+     def get_prometheus_payload(self) -> str:
+         return self.prometheus.generate_scrape_response()
+ 
++
++
++
++
++
+ class StatsExporter:
+     """Exports stats in various formats."""
+     def __init__(self, format:
+         str = "json") -> None:
+         self.format = format
++
++
++
++
++
+     def export(self, metrics:
+         dict[str, Any], format: str | None = None) -> str:
+         f = format or self.format
+-        return json.dumps(metrics) if f == "json" else ""
+\ No newline at end of file
++        return json.dumps(metrics) if f == "json" else ""

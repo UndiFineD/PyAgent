@@ -22,11 +22,16 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, Optional
 import hashlib
 import os
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class RequestSigner:
     """Signs and verifies requests for integrity and authenticity.

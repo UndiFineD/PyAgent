@@ -28,17 +28,19 @@ from src.infrastructure.orchestration.StatusManager import StatusManager
 import logging
 import json
 from pathlib import Path
-from typing import List
 
 __version__ = VERSION
 
+
+
+
 class DirectorAgent(BaseAgent):
     """Orchestrator agent that decomposes complex tasks and delegates to specialists."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.status = StatusManager()
-        
+
         # Subscribe to signals to adjust coordination
         if self.registry:
             self.registry.subscribe("agent_fail", self._handle_agent_failure)
@@ -89,9 +91,9 @@ class DirectorAgent(BaseAgent):
         """Decomposes a goal and executes delegations."""
         available = self._get_available_agents()
         logging.info(f"Director planning for: {high_level_goal}. Available specialists: {available}")
-        
+
         self.status.start_project(high_level_goal, 0)
-        
+
         # Step 1: Ask the LLM to generate a JSON plan
         planning_prompt = (
             f"Given the project goal: '{high_level_goal}'\n"
@@ -99,9 +101,9 @@ class DirectorAgent(BaseAgent):
             "Analyze the workspace and generate a step-by-step execution plan. "
             "Output your plan as a JSON list of objects, each with 'agent', 'file', and 'prompt' keys."
         )
-        
+
         raw_plan = super().improve_content(planning_prompt)
-        
+
         try:
             # Try to extract JSON from the LLM response
             import re
@@ -110,10 +112,10 @@ class DirectorAgent(BaseAgent):
                 error_msg = f"Plan generation failed. LLM did not provide a valid JSON list. Response: {raw_plan[:200]}"
                 self.status.finish_project(success=False)
                 return error_msg
-            
+
             plan = json.loads(json_match.group(0))
             results = []
-            
+
             # Record all steps first
             for step in plan:
                 self.status.add_step(step.get("agent"), step.get("file"), step.get("prompt"))
@@ -122,19 +124,32 @@ class DirectorAgent(BaseAgent):
                 agent_type = step.get("agent")
                 target_file = step.get("file")
                 sub_prompt = step.get("prompt")
-                
+
                 self.status.update_step_status(i, "Running")
                 logging.info(f"Step {i+1}: Delegating {agent_type} -> {target_file}")
-                
+
                 try:
                     res = self.delegate_to(agent_type, sub_prompt, target_file)
+
+
+
+
+
+
+
+
+
+
                     results.append(f"### Step {i+1}: {agent_type} on {target_file}\n{res}\n")
                     self.status.update_step_status(i, "Completed", res[:100] + "...")
                 except Exception as step_error:
                     logging.error(f"Step {i+1} failed: {step_error}")
+
+
+
                     results.append(f"### Step {i+1}: {agent_type} FAILED\n{str(step_error)}\n")
                     self.status.update_step_status(i, "Failed", str(step_error))
-            
+
             self.status.finish_project(success=True)
             return "# Plan Execution Results\n\n" + "\n".join(results)
 
@@ -143,9 +158,14 @@ class DirectorAgent(BaseAgent):
             self.status.finish_project(success=False)
             return f"Error executing plan: {str(e)}\n\nOriginal Plan Output:\n{raw_plan}"
 
+
     def improve_content(self, prompt: str) -> str:
         """Override improve_content to perform the orchestration."""
         return self.execute_project_plan(prompt)
+
+
+
+
 
 if __name__ == "__main__":
     main = create_main_function(DirectorAgent, "Director Agent", "Goal/Project to orchestrate")

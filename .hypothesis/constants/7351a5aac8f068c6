@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\data\processors\squad.py
+# hypothesis_version: 6.150.1
+
+[0.01, 8239, 1000000000, 'BartTokenizer', 'BartTokenizerFast', 'LongformerTokenizer', 'RobertaTokenizer', 'RobertaTokenizerFast', 'Tokenizer', 'answer_start', 'answers', 'attention_mask', 'bart', 'camembert', 'cls_index', 'context', 'data', 'dev', 'dev-v1.1.json', 'dev-v2.0.json', 'end_positions', 'feature_index', 'id', 'input_ids', 'is_impossible', 'left', 'length', 'max_length', 'mpnet', 'overflowing_tokens', 'p_mask', 'paragraph_len', 'paragraphs', 'pt', 'qas', 'qas_id', 'question', 'r', 'right', 'roberta', 'start', 'start_positions', 'text', 'tf', 'title', 'token_is_max_context', 'token_to_orig_map', 'token_type_ids', 'tokens', 'train', 'train-v1.1.json', 'train-v2.0.json', 'utf-8', 'validation']

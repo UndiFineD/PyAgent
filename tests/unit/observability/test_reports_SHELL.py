@@ -2,17 +2,10 @@
 """Shell test classes for observability reports - Managers and IO logic."""
 
 from __future__ import annotations
-import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
+from typing import Any, List, Dict
 import time
 import json
-from datetime import datetime
-import pytest
-import logging
 from pathlib import Path
-import sys
-import os
 
 # Import test utilities
 try:
@@ -21,6 +14,9 @@ except ImportError:
     AGENT_DIR = Path(__file__).parent.parent.parent.parent / 'src'
 
 # Import from src if needed
+
+
+
 
 class TestReportCacheManager:
     """Tests for ReportCacheManager class."""
@@ -1083,7 +1079,6 @@ class TestReportPermissionManagement:
         """Test permissions with expiration."""
         ReportPermission = report_module.ReportPermission
         PermissionLevel = report_module.PermissionLevel
-        import time
 
         # Create permission that expires in the past
         expired_perm = ReportPermission(
@@ -1131,7 +1126,7 @@ class TestReportExporting:
         json_file = tmp_path / "report.json"
         with open(json_file, 'w') as f:
             json.dump(data, f)
-        
+
         with open(json_file, 'r') as f:
             restored = json.load(f)
         assert restored["title"] == "Report"

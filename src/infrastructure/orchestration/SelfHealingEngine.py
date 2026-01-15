@@ -26,18 +26,21 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import traceback
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from .SelfHealingEngineCore import SelfHealingEngineCore
 
 __version__ = VERSION
+
+
+
 
 class SelfHealingEngine:
     """
     Monitors tool execution and attempts automatic fixes for crashes.
     Shell for SelfHealingEngineCore.
     """
-    
+
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = workspace_root
         self.failure_history: list[dict[str, Any]] = []
@@ -48,11 +51,11 @@ class SelfHealingEngine:
         tb = traceback.format_exc()
         agent_name = agent.__class__.__name__
         logging.error(f"SELF-HEAL: Failure in {agent_name}.{tool_name}: {error}\n{tb}")
-        
+
         analysis = self.core.analyze_failure(agent_name, tool_name, str(error), tb)
         analysis["context"] = context
         self.failure_history.append(analysis)
-        
+
         # Fixed logic: communicate strategy
         return f"Self-Healing initiated: Strategy '{analysis['strategy']}' assigned to {tool_name}."
 

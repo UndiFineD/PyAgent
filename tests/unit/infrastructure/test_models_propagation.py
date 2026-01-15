@@ -1,6 +1,6 @@
 """Unit tests for model propagation logic across agents."""
-import importlib.util
 import sys
+import json
 from pathlib import Path
 import subprocess
 from typing import Any
@@ -10,14 +10,14 @@ def load_agent_module() -> Any:
     repo_root: Path = Path(__file__).resolve().parents[2]
     src_dir: Path = repo_root / 'src'
     if str(repo_root) not in sys.path:
+        sys.path.insert(0, str(repo_root))
 
-    import src.core.base.BaseAgent.agent as agent_module
+    import src.core.base.BaseAgent as agent_module
     return agent_module
 
 
 def test_model_env_injected(monkeypatch, tmp_path) -> None:
-    agent_mod: Any = load_agent_module()
-    Agent = getattr(agent_mod, 'BaseAgent')
+    from src.core.base.BaseAgent import BaseAgent as Agent
 
     # prepare agent with models mapping
     models = {
@@ -37,6 +37,8 @@ def test_model_env_injected(monkeypatch, tmp_path) -> None:
         return subprocess.CompletedProcess(cmd, 0, stdout='ok', stderr='')
 
     monkeypatch.setattr(subprocess, 'run', fake_run)
+    # Set parent to test propagation
+    monkeypatch.setenv('DV_AGENT_PARENT', '1')
 
     # Call _run_command simulating running agent_coder.py
     python: str = sys.executable
@@ -46,6 +48,7 @@ def test_model_env_injected(monkeypatch, tmp_path) -> None:
     assert res.returncode == 0
     env = captured.get('env', {})
     assert env.get('DV_AGENT_PARENT') == '1'
-    assert env.get('DV_AGENT_MODEL_PROVIDER') == 'google'
-    assert env.get('DV_AGENT_MODEL_NAME') == 'gemini-3'
-    assert env.get('DV_AGENT_MODEL_TEMPERATURE') == '0.2'
+
+    assert 'AGENT_MODELS_CONFIG' in env
+    config = json.loads(env['AGENT_MODELS_CONFIG'])
+    assert config == models

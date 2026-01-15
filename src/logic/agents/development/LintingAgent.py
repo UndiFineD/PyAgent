@@ -28,9 +28,12 @@ from src.core.base.utilities import create_main_function
 
 __version__ = VERSION
 
+
+
+
 class LintingAgent(BaseAgent):
     """Ensures code adheres to quality standards by running linters."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -72,24 +75,57 @@ class LintingAgent(BaseAgent):
             )
             if "Success: no issues found" in result.stdout:
                 return "✅ No type issues found by mypy."
+
+
+
+
+
+
+
+
+
+
             return f"### Mypy Issues\n```plaintext\n{result.stdout}\n```"
         except FileNotFoundError:
             return "❌ mypy not installed in the current environment."
         except Exception as e:
+
+
+
+
+
+
+
+
+
             return f"❌ Error running mypy: {e}"
 
     def improve_content(self, prompt: str) -> str:
         """Perform a quality audit on a file or directory."""
         # prompt is expected to be a path
+
+
+
+
+
+
+
+
+
         path = prompt if prompt else "."
         flake8_res = self.run_flake8(path)
         mypy_res = self.run_mypy(path)
-        
+
         return (
+
             f"## Quality Audit for: {path}\n\n"
             f"{flake8_res}\n\n"
             f"{mypy_res}"
         )
+
+
+
+
 
 if __name__ == "__main__":
     main = create_main_function(LintingAgent, "Linting Agent", "Path to audit")

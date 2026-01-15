@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class ImprovementCategory(Enum):
     """Categories for improvements."""
     PERFORMANCE = "performance"
