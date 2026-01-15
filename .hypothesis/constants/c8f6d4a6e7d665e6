@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\ao\nn\intrinsic\quantized\modules\conv_relu.py
+# hypothesis_version: 6.150.1
+
+['ConvReLU1d', 'ConvReLU2d', 'ConvReLU3d', 'QuantizedConvReLU1d', 'QuantizedConvReLU2d', 'QuantizedConvReLU3d', 'reflect', 'zeros']

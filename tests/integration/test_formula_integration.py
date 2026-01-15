@@ -4,7 +4,6 @@ This tests Python implementation end-to-end.
 Rust integration tests will be added once Rust crate builds.
 """
 
-import pytest
 from src.observability.stats.metrics_engine import FormulaEngineCore
 
 
@@ -42,12 +41,12 @@ class TestFormulaEngineIntegration:
         """Test validation followed by calculation."""
         core = FormulaEngineCore()
         formula = "{base} * (1 + {rate})"
-        
+
         # Validate first
         validation_result = core.validate_logic(formula)
         assert validation_result["is_valid"]
         assert validation_result["error"] is None
-        
+
         # Then calculate
         variables = {"base": 100.0, "rate": 0.05}
         result = core.calculate_logic(formula, variables)
@@ -75,14 +74,14 @@ class TestFormulaEngineIntegration:
     def test_validation_accepts_valid_formulas(self) -> None:
         """Test that validation accepts well-formed formulas."""
         core = FormulaEngineCore()
-        
+
         valid_formulas = [
             "{x} + {y}",
             "{x} * {y} - {z}",
             "({x} + {y})",
             "{x} ** 2",
         ]
-        
+
         for formula in valid_formulas:
             validation = core.validate_logic(formula)
             # Note: validate_logic may not catch all syntax errors at parse time
@@ -93,7 +92,7 @@ class TestFormulaEngineIntegration:
         """Test formula evaluation with various edge case values."""
         core = FormulaEngineCore()
         formula = "{x} * {y}"
-        
+
         # Test with small positive values
         variables = {"x": 0.001, "y": 0.002}
         result = core.calculate_logic(formula, variables)

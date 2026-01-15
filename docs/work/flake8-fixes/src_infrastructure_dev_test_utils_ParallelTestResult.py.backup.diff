@@ -1,0 +1,27 @@
+diff --git a/src/infrastructure/dev/test_utils/ParallelTestResult.py b/src/infrastructure/dev/test_utils/ParallelTestResult.py
+index ce5fca9..5af9f8f 100644
+--- a/src/infrastructure/dev/test_utils/ParallelTestResult.py
++++ b/src/infrastructure/dev/test_utils/ParallelTestResult.py
+@@ -23,10 +23,14 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ParallelTestResult:
+     """Result from parallel test execution.
+@@ -43,4 +47,4 @@ class ParallelTestResult:
+     passed: bool
+     duration_ms: float
+     error: str | None = None
+-    worker_id: int = 0
+\ No newline at end of file
++    worker_id: int = 0

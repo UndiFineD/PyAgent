@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\dev\test_utils\BaselineManager.py
+# hypothesis_version: 6.150.1
+
+[0.1, 'baseline', 'baseline_version', 'changed', 'created_at', 'current', 'diffs', 'error', 'inf', 'name', 'new', 'no baseline', 'passed', 'pct_change', 'status', 'values', 'version', 'w']

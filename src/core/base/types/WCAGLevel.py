@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class WCAGLevel(Enum):
     """WCAG conformance levels."""
     A = "A"       # Minimum level

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\packaging\_tokenizer.py
+# hypothesis_version: 6.150.1
+
+['$', ',', ';', 'AT', 'BOOLOP', 'COMMA', 'END', 'IDENTIFIER', 'IN', 'LEFT_BRACKET', 'LEFT_PARENTHESIS', 'NOT', 'OP', 'QUOTED_STRING', 'RIGHT_BRACKET', 'RIGHT_PARENTHESIS', 'SEMICOLON', 'SPECIFIER', 'URL', 'VARIABLE', 'VERSION_PREFIX_TRAIL', 'WS', '[ \\t]+', '[^ \\t]+', '\\(', '\\)', '\\.\\*', '\\@', '\\[', '\\]', '\\b(or|and)\\b', '\\bin\\b', '\\bnot\\b', '^', '~']

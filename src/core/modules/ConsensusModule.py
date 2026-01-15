@@ -12,8 +12,14 @@
 # limitations under the License.
 
 from __future__ import annotations
-from typing import Any, Dict, List, Optional
+from typing import Any
 from src.core.base.modules import BaseModule
+
+
+
+
+
+
 
 class ConsensusModule(BaseModule):
     """
@@ -36,11 +42,11 @@ class ConsensusModule(BaseModule):
 
         winner = self.calculate_winner(proposals, weights)
         score = self.get_agreement_score(proposals, winner)
-        
+
         return {
             "winner": winner,
             "agreement_score": score,
-            "quorum_reached": score >= 0.667 # BFT 2/3 requirement
+            "quorum_reached": score >= 0.667  # BFT 2/3 requirement
         }
 
     def calculate_winner(self, proposals:
@@ -48,7 +54,7 @@ class ConsensusModule(BaseModule):
         """Determines the winning proposal based on voting rules."""
         if not proposals:
             return ""
-            
+
         if weights and len(weights) != len(proposals):
             weights = None
 
@@ -56,13 +62,13 @@ class ConsensusModule(BaseModule):
         for idx, p in enumerate(proposals):
             weight = weights[idx] if weights else 1.0
             counts[p] = counts.get(p, 0) + weight
-            
+
         winner = sorted(
-            counts.keys(), 
-            key=lambda x: (counts[x], len(x)), 
+            counts.keys(),
+            key=lambda x: (counts[x], len(x)),
             reverse=True
         )[0]
-        
+
         return winner
 
     def get_agreement_score(self, proposals:

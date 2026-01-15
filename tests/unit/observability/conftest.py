@@ -1,13 +1,11 @@
 """Pytest fixtures for test_agent_stats tests."""
 
 import pytest
-import sys
 from pathlib import Path
 from typing import Any
 
 # Add src to path
 
-from tests.utils.agent_test_utils import agent_dir_on_path, load_agent_module
 
 
 @pytest.fixture

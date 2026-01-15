@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class PermissionLevel(Enum):
     """Permission levels for report access."""
 

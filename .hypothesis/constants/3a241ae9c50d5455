@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\linear_model\_omp.py
+# hypothesis_version: 6.150.1
+
+[0.1, 1.0, 100, 'F', 'Gram', 'X', 'Xy', 'array-like', 'auto', 'boolean', 'copy', 'copy_Gram', 'copy_X', 'copy_Xy', 'cv', 'cv_object', 'fit', 'fit_intercept', 'left', 'max_iter', 'n_jobs', 'n_nonzero_coefs', 'neither', 'norms_squared', 'nrm2', 'potrs', 'precompute', 'return_n_iter', 'return_path', 'split', 'swap', 'tol', 'verbose', 'y']

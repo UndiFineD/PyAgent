@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\quantizers\quantizer_finegrained_fp8.py
+# hypothesis_version: 6.150.1
+
+['.', '.bias', '.weight', '.weight_scale_inv', 'PreTrainedModel', 'Qwen3', 'accelerate', 'bias', 'cpu', 'device_map', 'disk', 'from_flax', 'from_tf', 'gather', 'layers.*.mlp', 'layers.*.self_attn', 'local_colwise', 'local_rowwise', 'torch.Tensor', 'torch.device', 'torch.dtype', 'weight', 'weight_scale_inv']

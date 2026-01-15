@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/system/MessagingAgent.py b/src/logic/agents/system/MessagingAgent.py
+index ad8830e..6b6a322 100644
+--- a/src/logic/agents/system/MessagingAgent.py
++++ b/src/logic/agents/system/MessagingAgent.py
+@@ -52,7 +52,7 @@ class MessagingAgent(BaseAgent):
+         if hasattr(self, "fleet") and self.fleet:
+             privacy_guard = self.fleet.agents.get("PrivacyGuard")
+             if privacy_guard and hasattr(privacy_guard, "verify_message_safety"):
+-                check_result = await privacy_guard.verify_message_safety(message)
++                check_result = privacy_guard.verify_message_safety(message)
+                 if not check_result.get("safe", True):
+                     return f"SAFETY ERROR: Message blocked. Reason: {check_result.get('reason')}"
+ 

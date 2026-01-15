@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/development/DependencyGraphAgent.py b/src/logic/agents/development/DependencyGraphAgent.py
+index 2d9fa3e..9fa66a2 100644
+--- a/src/logic/agents/development/DependencyGraphAgent.py
++++ b/src/logic/agents/development/DependencyGraphAgent.py
+@@ -22,7 +22,7 @@ from src.core.base.version import VERSION
+ import os
+ import ast
+ from pathlib import Path
+-from typing import Dict, List, Set, Any, Union
++from typing import Any
+ 
+ __version__ = VERSION
+ 

@@ -1,0 +1,11 @@
+diff --git a/src/infrastructure/backend/llm_backends/GitHubModelsBackend.py b/src/infrastructure/backend/llm_backends/GitHubModelsBackend.py
+index ada2b9e..5975b51 100644
+--- a/src/infrastructure/backend/llm_backends/GitHubModelsBackend.py
++++ b/src/infrastructure/backend/llm_backends/GitHubModelsBackend.py
+@@ -157,4 +157,4 @@ class GitHubModelsBackend(LLMBackend):
+                     logging.debug(f"GitHub Models call failed after {max_retries} retries: {e}")
+                     self._update_status("github_models", False)
+                     self._record("github_models", model, prompt, f"ERROR: {str(e)}", system_prompt=system_prompt)
+-        return ""
+\ No newline at end of file
++        return ""

@@ -26,27 +26,54 @@ from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 SCRIPTS_DIR = Path(__file__).parent
 MGMT_DIR = SCRIPTS_DIR / "management"
 
+
+
+
+
+
+
 def run_script(script_path: Path, args: list[str] | None = None, recorder: ContextRecorderInterface | None = None) -> None:
     """Executes an internal management script and records the invocation."""
     if not script_path.exists():
+
+
+
         print(f"Error: Script {script_path} not found.")
         return
-    
+
     cmd = [sys.executable, str(script_path)] + (args or [])
+
     print(f"Executing: {' '.join(cmd)}")
 
     if recorder:
         recorder.record_interaction(
             provider="fleet",
+
+
+
+
+
+
+
+
+
+
+
+
             model="harness",
             prompt=" ".join(cmd),
             result="launched",
             meta={"script": str(script_path), "args": args or []}
         )
+
     try:
+
+
+
         subprocess.run(cmd, check=True)
     except subprocess.CalledProcessError as e:
         print(f"Error executing script: {e}")
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="PyAgent Fleet Harness")
@@ -54,11 +81,16 @@ def main() -> None:
 
     # Heal
     subparsers.add_parser("heal", help="Run autonomous fleet healing")
-    
+
+
     # Restore
     subparsers.add_parser("restore", help="Restore fleet state")
-    
+
     # Improve
+
+
+
+
     improve_parser = subparsers.add_parser("improve", help="Run self-improvement cycle")
     improve_parser.add_argument("-c", "--cycles", type=int, default=1)
     improve_parser.add_argument("-p", "--prompt", type=str, default="docs/notes/prompt.txt")
@@ -69,6 +101,11 @@ def main() -> None:
     if args.command == "heal":
         run_script(SCRIPTS_DIR / "run_autonomous_fleet_healing.py", unknown, recorder)
     elif args.command == "restore":
+
+
+
+
+
         run_script(SCRIPTS_DIR / "fleet_restoration.py", unknown, recorder)
     elif args.command == "improve":
         run_script(
@@ -78,6 +115,11 @@ def main() -> None:
         )
     else:
         parser.print_help()
+
+
+
+
+
 
 if __name__ == "__main__":
     main()

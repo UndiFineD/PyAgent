@@ -22,13 +22,17 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Any, Dict, List, Tuple
+from typing import Any
 
 __version__ = VERSION
 
+
+
+
 class TestOutputFormatter:
-    __test__ = False
     """Formats test output and results for display."""
+
+    __test__ = False
 
     def __init__(self) -> None:
         """Initialize formatter."""

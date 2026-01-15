@@ -22,12 +22,15 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import List, TYPE_CHECKING
+from typing import TYPE_CHECKING
 from dataclasses import dataclass, field
 
 if TYPE_CHECKING:
     pass
 __version__ = VERSION
+
+
+
 
 @dataclass
 class BranchComparison:

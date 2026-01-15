@@ -28,11 +28,13 @@ from src.core.base.version import VERSION
 import logging
 import json
 from pathlib import Path
-from typing import Dict, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
+
+
+
 
 class WeightOrchestrator(BaseAgent):
     """Orchestrates the distribution and activation of model weights across the fleet."""
@@ -41,7 +43,7 @@ class WeightOrchestrator(BaseAgent):
         super().__init__(file_path)
         self.workspace_root = Path(file_path).parent
         self.weights_registry_path = self.workspace_root / "data/memory/agent_store/weights_registry.json"
-        self.active_adapters: dict[str, str] = {} # agent_name -> adapter_name
+        self.active_adapters: dict[str, str] = {}  # agent_name -> adapter_name
         self._load_registry()
         self._system_prompt = "You are the Weight Orchestrator. You manage model adapters and neural weights across the fleet."
 
@@ -74,24 +76,47 @@ class WeightOrchestrator(BaseAgent):
     @as_tool
     def get_active_adapter(self, agent_name: str) -> str | None:
         """Returns the currently active adapter for an agent."""
+
+
+
+
+
+
+
+
+
+
         return self.active_adapters.get(agent_name)
 
     @as_tool
     def deactivate_adapter(self, agent_name: str) -> bool:
+
+
+
+
         """Removes the active adapter from an agent."""
         if agent_name in self.active_adapters:
             del self.active_adapters[agent_name]
             self._save_registry()
             return True
+
+
         return False
 
     @as_tool
     def list_registrations(self) -> dict[str, str]:
         """Returns all current agent-to-adapter mappings."""
+
+
+
         return self.active_adapters
 
     def improve_content(self, input_text: str) -> str:
         return f"Current fleet weight distribution: {len(self.active_adapters)} active adapters."
+
+
+
+
 
 if __name__ == "__main__":
     # Internal test

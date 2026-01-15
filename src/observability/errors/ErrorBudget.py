@@ -26,6 +26,9 @@ from dataclasses import dataclass
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class ErrorBudget:
     """Error budget tracking for SLO management.

@@ -1,0 +1,32 @@
+diff --git a/src/infrastructure/orchestration/StatusManager.py b/src/infrastructure/orchestration/StatusManager.py
+index 81375a5..06a28da 100644
+--- a/src/infrastructure/orchestration/StatusManager.py
++++ b/src/infrastructure/orchestration/StatusManager.py
+@@ -22,13 +22,18 @@ from src.core.base.version import VERSION
+ import json
+ from pathlib import Path
+ from datetime import datetime
+-from typing import Dict, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class StatusManager:
+     """Manages project execution status for the DirectorAgent and GUI."""
+-    
++
+     def __init__(self) -> None:
+         self.status_file = Path("src/infrastructure/orchestration/status.json")
+         self.clear_status()
+@@ -94,4 +99,4 @@ class StatusManager:
+     def _write(self, data: dict[str, Any]) -> None:
+         self.status_file.parent.mkdir(parents=True, exist_ok=True)
+         with open(self.status_file, "w") as f:
+-            json.dump(data, f, indent=4)
+\ No newline at end of file
++            json.dump(data, f, indent=4)

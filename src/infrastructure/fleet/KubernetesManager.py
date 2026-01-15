@@ -26,13 +26,15 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import json
-from typing import List
 
 __version__ = VERSION
 
+
+
+
 class KubernetesManager:
     """Orchestrates agent execution within a K8s cluster."""
-    
+
     def __init__(self, namespace: str = "pyagent-fleet") -> None:
         self.namespace = namespace
         self.active_deployments: list[str] = []
@@ -40,7 +42,7 @@ class KubernetesManager:
     def deploy_agent_pod(self, agent_name: str, image: str = "pyagent-worker:latest") -> str:
         """Generates a K8s Pod/Deployment manifest for a specialized agent."""
         logging.info(f"K8S: Deploying {agent_name} to namespace {self.namespace}")
-        
+
         manifest = {
             "apiVersion": "v1",
             "kind": "Pod",
@@ -58,13 +60,26 @@ class KubernetesManager:
                         {"name": "FLEET_STATE_URL", "value": "http://fleet-manager:8080"}
                     ],
                     "resources": {
+
+
+
+
+
+
+
+
+
+
                         "limits": {"cpu": "500m", "data/memory": "1Gi"},
                         "requests": {"cpu": "200m", "data/memory": "512Mi"}
                     }
                 }]
+
+
+
             }
         }
-        
+
         self.active_deployments.append(f"agent-{agent_name.lower()}")
         return json.dumps(manifest, indent=2)
 
@@ -73,9 +88,14 @@ class KubernetesManager:
         logging.info(f"K8S: Scaling {deployment_name} to {replicas} replicas.")
         return f"SCALE_SUCCESS: {deployment_name} now at {replicas}."
 
+
     def get_cluster_status(self) -> str:
         """Returns a summary of K8s orchestration."""
         return f"Kubernetes Manager: Managing {len(self.active_deployments)} pods in '{self.namespace}'."
+
+
+
+
 
 if __name__ == "__main__":
     mgr = KubernetesManager()

@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/dev/test_utils/CleanupManager.py b/src/infrastructure/dev/test_utils/CleanupManager.py
+index 0ab8306..dc7237e 100644
+--- a/src/infrastructure/dev/test_utils/CleanupManager.py
++++ b/src/infrastructure/dev/test_utils/CleanupManager.py
+@@ -22,7 +22,6 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import List
+ from collections.abc import Callable
+ import logging
+ 

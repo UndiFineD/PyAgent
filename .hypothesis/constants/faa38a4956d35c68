@@ -1,0 +1,4 @@
+# file: c:\DEV\PyAgent\src\core\base\types\LocalizationLanguage.py
+# hypothesis_version: 6.150.1
+
+['de', 'en', 'es', 'fr', 'ja', 'pt', 'zh']

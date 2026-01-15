@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\engines\MemoryCore.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.2, 0.3, 0.5, 1.0, 'agent', 'metadata', 'outcome', 'success', 'task', 'timestamp', 'utility_score']

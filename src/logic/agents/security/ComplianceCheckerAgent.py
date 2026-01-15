@@ -22,12 +22,14 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from .ChangelogEntry import ChangelogEntry
-from .ComplianceCategory import ComplianceCategory
-from .ComplianceResult import ComplianceResult
-from typing import List
+from src.core.base.types import ChangelogEntry
+from src.core.base.types import ComplianceCategory
+from src.core.base.types import ComplianceResult
 
 __version__ = VERSION
+
+
+
 
 class ComplianceChecker:
     """Checks changelog compliance with various requirements.

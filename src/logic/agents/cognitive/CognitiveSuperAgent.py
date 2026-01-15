@@ -24,9 +24,12 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
+
+
 class CognitiveSuperAgent(BaseAgent):
     """
-    Cognitive Super-Agent: A fused agent combining Reasoning and Reflection 
+    Cognitive Super-Agent: A fused agent combining Reasoning and Reflection
     capabilities for high-performance cognitive workflows.
     """
     def __init__(self, workspace_path: str) -> None:

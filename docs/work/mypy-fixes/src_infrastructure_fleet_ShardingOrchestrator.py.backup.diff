@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/fleet/ShardingOrchestrator.py b/src/infrastructure/fleet/ShardingOrchestrator.py
+index fe0ad29..585aa37 100644
+--- a/src/infrastructure/fleet/ShardingOrchestrator.py
++++ b/src/infrastructure/fleet/ShardingOrchestrator.py
+@@ -28,7 +28,6 @@ import logging
+ import json
+ import numpy as np
+ from pathlib import Path
+-from typing import Dict, List
+ from collections import Counter
+ from sklearn.cluster import DBSCAN
+ from sklearn.preprocessing import StandardScaler

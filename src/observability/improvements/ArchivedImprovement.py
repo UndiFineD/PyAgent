@@ -27,6 +27,9 @@ from dataclasses import dataclass
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class ArchivedImprovement:
     """An archived improvement.

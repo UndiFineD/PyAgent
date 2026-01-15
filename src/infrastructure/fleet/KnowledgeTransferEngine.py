@@ -27,10 +27,13 @@ from src.core.base.version import VERSION
 import json
 import logging
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
 from .KnowledgeTransferCore import KnowledgeTransferCore
 
 __version__ = VERSION
+
+
+
 
 class KnowledgeTransferEngine:
     """
@@ -47,10 +50,10 @@ class KnowledgeTransferEngine:
     def export_knowledge(self, fleet_id: str, knowledge_data: dict[str, Any]) -> str:
         """Exports a fleet's knowledge (lessons, entities) to a shareable file."""
         export_file = self.export_path / f"knowledge_{fleet_id}.json"
-        
+
         with open(export_file, "w") as f:
             json.dump(knowledge_data, f, indent=2)
-            
+
         logging.info(f"KnowledgeTransfer: Exported knowledge for {fleet_id} to {export_file}")
         return str(export_file)
 
@@ -59,10 +62,10 @@ class KnowledgeTransferEngine:
         source_path = Path(source_file)
         if not source_path.exists():
             raise FileNotFoundError(f"Knowledge file not found: {source_file}")
-            
+
         with open(source_path) as f:
             data = json.load(f)
-            
+
         logging.info(f"KnowledgeTransfer: Imported knowledge from {source_file}")
         return data
 

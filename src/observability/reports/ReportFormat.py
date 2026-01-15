@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class ReportFormat(Enum):
     """Output format for reports."""
 

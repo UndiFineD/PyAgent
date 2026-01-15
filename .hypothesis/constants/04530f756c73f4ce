@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\opentelemetry\sdk\metrics\_internal\aggregation.py
+# hypothesis_version: 6.150.1
+
+[0.0, 5.0, 10.0, 25.0, 50.0, 75.0, 100.0, 250.0, 500.0, 750.0, 1000.0, 2500.0, 5000.0, 7500.0, 10000.0, 160, 16384, '_DataPointVarT']

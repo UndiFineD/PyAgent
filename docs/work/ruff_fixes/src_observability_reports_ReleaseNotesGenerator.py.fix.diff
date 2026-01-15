@@ -1,0 +1,12 @@
+diff --git a/src/observability/reports/ReleaseNotesGenerator.py b/src/observability/reports/ReleaseNotesGenerator.py
+index 0c4a3f6..fe7b9c9 100644
+--- a/src/observability/reports/ReleaseNotesGenerator.py
++++ b/src/observability/reports/ReleaseNotesGenerator.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ChangelogEntry import ChangelogEntry
+ from .ReleaseNote import ReleaseNote
+-from typing import Optional, Dict, List
+ 
+ __version__ = VERSION
+ 

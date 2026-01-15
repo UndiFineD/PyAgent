@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\backend\SqlMetadataHandler.py
+# hypothesis_version: 6.150.1
+
+[1024, '.', '.jsonl.gz', 'ANALYZE', 'General', 'REINDEX', 'VACUUM', '_', 'agent', 'generic', 'id', 'meta', 'recorder', 'rt', 'status', 'success', 'tags', 'timestamp', 'type', 'unknown', 'utf-8']

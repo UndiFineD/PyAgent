@@ -1,0 +1,11 @@
+diff --git a/src/infrastructure/plugins/__init__.py b/src/infrastructure/plugins/__init__.py
+index f9e9ce1..486e2c0 100644
+--- a/src/infrastructure/plugins/__init__.py
++++ b/src/infrastructure/plugins/__init__.py
+@@ -27,4 +27,4 @@ Plugin namespace for external fleet extensions.
+ This package contains agents and orchestrators that can be dynamically loaded.
+ """
+ 
+-# PyAgent Plugins Namespace
+\ No newline at end of file
++# PyAgent Plugins Namespace

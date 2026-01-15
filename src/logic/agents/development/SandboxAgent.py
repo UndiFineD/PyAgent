@@ -30,9 +30,12 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
+
+
 class SandboxAgent(BaseAgent):
     """Executes untrusted code in a controlled environment."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -48,31 +51,44 @@ class SandboxAgent(BaseAgent):
         In production, this would use a Docker container or gVisor.
         """
         logging.info("Executing code in sandbox...")
-        
+
         # Phase 108: Record sandboxed execution intent
         self._record(f"Sandbox run: {code[:100]}", "Simulated Success", provider="Sandbox", model="Docker-Mock")
-        
+
         # Simulated execution
         return "Execution Output: Success\n(Simulated Output)"
+
+
+
+
+
 
     @as_tool
     def dry_run_prediction(self, code: str) -> str:
         """Simulates the outcome of code execution without actually running it."""
         logging.info("Performing dry-run prediction...")
+
+
+
         # Mental model logic: Analyze imports and side effects
         if "os.remove" in code or "shutil.rmtree" in code:
             return "Prediction: DANGER. Code attempts to delete files."
         return "Prediction: SAFE. Code appears to be computational."
         logging.info("SandboxAgent: Running sandboxed Python...")
-        
+
         # simulated sandbox execution
         # process = subprocess.Popen(["docker", "run", "--rm", "python:3.10-slim", "python", "-c", code], ...)
-        
+
         return f"### Sandboxed Execution Results\n\n- Environment: Docker (python:3.10-slim)\n- Code Length: {len(code)} characters\n- Output: Hello from the sandbox!\n- Status: Success"
+
 
     def improve_content(self, prompt: str) -> str:
         """Sandboxing helper."""
         return "I am ready to execute code. Use 'run_python_sandboxed' to begin."
+
+
+
+
 
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function

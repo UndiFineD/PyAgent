@@ -20,9 +20,12 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import time
-from typing import Dict, List, Any, Set
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class PolicyEnforcementAgent:
     """
@@ -38,17 +41,17 @@ class PolicyEnforcementAgent:
         }
         self.violation_log: list[dict[str, Any]] = []
         self.quarantine_list: set[str] = set()
-        
+
     def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> dict[str, Any]:
         """
         Evaluates if an agent action complies with active policies.
         """
         violations = []
-        
+
         if action_type == "external_push" and self.active_policies["no_external_data_leak"]:
             if "credentials" in str(metadata).lower():
                 violations.append("DATA_LEAK_PREVENTION")
-                
+
         if len(violations) > 0:
             self.violation_log.append({
                 "agent_id": agent_id,
@@ -56,7 +59,7 @@ class PolicyEnforcementAgent:
                 "timestamp": time.time()
             })
             return {"status": "violation", "details": violations}
-            
+
         return {"status": "authorized"}
 
     def quarantine_agent(self, agent_id: str, reason: str) -> dict[str, Any]:

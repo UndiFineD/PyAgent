@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\distributed\fsdp\_fully_shard\_fsdp_collectives.py
+# hypothesis_version: 6.150.1
+
+['CPU', 'CUDA', 'FRAGMENT', 'HPU', 'MTIA', 'Meta', 'PrivateUse1', 'XPU', 'all_gather_copy_in', 'chunk_cat', 'cpu', 'fsdp', 'fsdp_pre_all_gather', 'mtia']

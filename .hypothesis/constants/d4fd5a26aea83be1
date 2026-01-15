@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\quantizers\quantizer_bnb_8bit.py
+# hypothesis_version: 6.150.1
+
+[0.9, '0.37.0', '0.37.2', '0.43.1', 'PreTrainedModel', 'SCB', '_is_hf_initialized', 'accelerate', 'bias', 'bitsandbytes', 'cpu', 'device_map', 'disk', 'from_flax', 'from_tf', 'torch.Tensor', 'torch.device', 'torch.dtype', 'weight_format']

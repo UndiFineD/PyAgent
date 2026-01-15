@@ -2,17 +2,8 @@
 """Core test classes for observability reports - Enums and Dataclasses."""
 
 from __future__ import annotations
-import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
-import time
-import json
-from datetime import datetime
-import pytest
-import logging
+from typing import Any, List
 from pathlib import Path
-import sys
-import os
 
 # Import test utilities
 try:
@@ -21,6 +12,9 @@ except ImportError:
     AGENT_DIR = Path(__file__).parent.parent.parent.parent / 'src'
 
 # Import from src if needed
+
+
+
 
 class TestReportTypeEnum:
     """Tests for ReportType enum."""
@@ -41,7 +35,6 @@ class TestReportTypeEnum:
         assert "ERRORS" in members
         assert "IMPROVEMENTS" in members
         assert "SUMMARY" in members
-
 
 
 class TestReportFormatEnum:
@@ -157,8 +150,6 @@ class TestReportMetadataDataclass:
         assert metadata.content_hash == "abc123"
         assert metadata.version == "1.0.0"
 
-
-
 class TestReportTemplateDataclass:
     """Tests for ReportTemplate dataclass."""
 
@@ -236,7 +227,6 @@ class TestFilterCriteriaDataclass:
         assert criteria.date_to is None
         assert criteria.file_patterns is None
 
-
 class TestSubscriptionFrequencyEnum:
     """Tests for SubscriptionFrequency enum."""
 
@@ -252,8 +242,6 @@ class TestSubscriptionFrequencyEnum:
         """Test all members exist."""
         SubscriptionFrequency = report_module.SubscriptionFrequency
         assert len(list(SubscriptionFrequency)) == 4
-
-
 
 class TestPermissionLevelEnum:
     """Tests for PermissionLevel enum."""
@@ -271,8 +259,6 @@ class TestPermissionLevelEnum:
         assert PermissionLevel.READ.value < PermissionLevel.WRITE.value
         assert PermissionLevel.WRITE.value < PermissionLevel.ADMIN.value
 
-
-
 class TestExportFormatEnum:
     """Tests for ExportFormat enum."""
 
@@ -288,8 +274,6 @@ class TestExportFormatEnum:
         """Test all members exist."""
         ExportFormat = report_module.ExportFormat
         assert len(list(ExportFormat)) == 4
-
-
 
 class TestLocaleCodeEnum:
     """Tests for LocaleCode enum."""
@@ -359,8 +343,6 @@ class TestReportSubscriptionDataclass:
         assert sub.frequency == SubscriptionFrequency.WEEKLY
         assert ReportType.ERRORS in sub.report_types
         assert sub.enabled is False
-
-
 
 class TestArchivedReportDataclass:
     """Tests for ArchivedReport dataclass."""
@@ -477,7 +459,6 @@ class TestAuditEntryDataclass:
         )
         assert entry.action == AuditAction.READ
         assert entry.details["ip"] == "127.0.0.1"
-
 
 
 class TestLocalizedStringDataclass:

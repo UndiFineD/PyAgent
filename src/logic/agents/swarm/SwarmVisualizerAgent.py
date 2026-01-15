@@ -20,9 +20,12 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import time
-from typing import Dict, Any
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class SwarmVisualizerAgent:
     """
@@ -31,8 +34,8 @@ class SwarmVisualizerAgent:
     """
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.interaction_log = [] # List of (from_agent, to_agent, message_type, timestamp)
-        self.agent_positions = {} # agent_id -> (x, y)
+        self.interaction_log: list[Any] = []  # List of (from_agent, to_agent, message_type, timestamp)
+        self.agent_positions: dict[Any, Any] = {}  # agent_id -> (x, y)
 
     def log_interaction(self, from_agent: str, to_agent: str, message_type: str) -> None:
         """Logs an interaction between two agents."""
@@ -50,7 +53,7 @@ class SwarmVisualizerAgent:
         """Generates a graph-based representation of the swarm topology."""
         nodes = set()
         edges = []
-        
+
         for interaction in self.interaction_log:
             nodes.add(interaction["from"])
             nodes.add(interaction["to"])
@@ -59,7 +62,7 @@ class SwarmVisualizerAgent:
                 "target": interaction["to"],
                 "type": interaction["type"]
             })
-            
+
         return {
             "nodes": list(nodes),
             "edges": edges,

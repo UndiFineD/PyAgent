@@ -23,7 +23,7 @@ from src.core.base.version import VERSION
 import logging
 import time
 from pathlib import Path
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 from collections.abc import Callable
 from src.core.base.models import FilePriority, BatchResult
 
@@ -33,6 +33,12 @@ if TYPE_CHECKING:
     from ..agent import BaseAgent
     from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
+
+
+
+
+
+
 class BatchRequest:
     """Request in a batch processing queue."""
 
@@ -41,27 +47,54 @@ class BatchRequest:
         file_path: Path | None = None,
         prompt: str | None = None,
         priority: FilePriority = FilePriority.NORMAL,
+
+
+
+
+
+
+
+
+
+
         callback: Callable[[str], None] | None = None,
         max_size: int | None = None
     ) -> None:
+
+
+
         self.file_path = file_path
         self.prompt = prompt or ""
         self.priority = priority
         self.callback = callback
+
+
+
+
+
         self.max_size = max_size
         self.items: list[Any] = []
 
     def add(self, item: Any) -> None:
         if self.max_size is not None and len(self.items) >= self.max_size:
+
             return
         self.items.append(item)
 
     @property
     def size(self) -> int:
+
+
+
+
         return len(self.items)
 
     def execute(self, processor: Callable[[list[Any]], list[Any]]) -> list[Any]:
         return processor(self.items)
+
+
+
+
 
 class RequestBatcher:
     """Batch processor for multiple file requests."""
@@ -93,10 +126,10 @@ class RequestBatcher:
         sorted_requests = self._sort_by_priority()
         batch = sorted_requests[:self.batch_size]
         results: list[BatchResult] = []
-        
+
         if self.recorder:
             self.recorder.record_lesson("batch_processing_start", {"batch_size": len(batch)})
-            
+
         for request in batch:
             start_time = time.time()
             try:

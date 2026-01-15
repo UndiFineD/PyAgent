@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\polys\domains\groundtypes.py
+# hypothesis_version: 6.150.1
+
+['GMPYInteger', 'GMPYRational', 'PythonComplex', 'PythonInteger', 'PythonRational', 'PythonReal', 'SymPyInteger', 'SymPyRational', 'SymPyReal', 'factorial', 'flint', 'gmpy', 'gmpy_denom', 'gmpy_gcd', 'gmpy_gcdex', 'gmpy_lcm', 'gmpy_numer', 'gmpy_qdiv', 'is_square', 'python_gcd', 'python_gcdex', 'python_lcm', 'sqrt', 'sqrtrem']

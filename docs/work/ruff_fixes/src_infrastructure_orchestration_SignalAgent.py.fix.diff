@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/orchestration/SignalAgent.py b/src/infrastructure/orchestration/SignalAgent.py
+index cf011c6..9d83854 100644
+--- a/src/infrastructure/orchestration/SignalAgent.py
++++ b/src/infrastructure/orchestration/SignalAgent.py
+@@ -26,7 +26,7 @@ from src.core.base.BaseAgent import BaseAgent
+ from .SignalRegistry import SignalRegistry
+ import logging
+ import json
+-from typing import Dict, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 

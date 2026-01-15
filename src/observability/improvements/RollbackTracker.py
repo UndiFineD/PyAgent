@@ -25,10 +25,12 @@ from src.core.base.version import VERSION
 from .Improvement import Improvement
 from .RollbackRecord import RollbackRecord
 from datetime import datetime
-from typing import Dict, List, Optional
 import json
 
 __version__ = VERSION
+
+
+
 
 class RollbackTracker:
     """Tracks improvement rollbacks.

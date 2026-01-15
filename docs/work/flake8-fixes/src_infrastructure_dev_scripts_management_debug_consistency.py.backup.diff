@@ -1,0 +1,29 @@
+diff --git a/src/infrastructure/dev/scripts/management/debug_consistency.py b/src/infrastructure/dev/scripts/management/debug_consistency.py
+index b35cf41..4cb09c6 100644
+--- a/src/infrastructure/dev/scripts/management/debug_consistency.py
++++ b/src/infrastructure/dev/scripts/management/debug_consistency.py
+@@ -28,6 +28,11 @@ import os
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ def main() -> None:
+     root = "src"
+     findings = []
+@@ -46,5 +51,10 @@ def main() -> None:
+ 
+     print("\n".join(findings))
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+-    main()
+\ No newline at end of file
++    main()

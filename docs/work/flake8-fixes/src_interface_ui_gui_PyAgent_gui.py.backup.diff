@@ -1,0 +1,27 @@
+diff --git a/src/interface/ui/gui/PyAgent_gui.py b/src/interface/ui/gui/PyAgent_gui.py
+index 862ee63..7446e4b 100644
+--- a/src/interface/ui/gui/PyAgent_gui.py
++++ b/src/interface/ui/gui/PyAgent_gui.py
+@@ -37,10 +37,20 @@ if str(project_root) not in sys.path:
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ def main() -> None:
+     root = tk.Tk()
+     PyAgentGUI(root)
+     root.mainloop()
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+-    main()
+\ No newline at end of file
++    main()

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\backend\SubagentStatus.py
+# hypothesis_version: 6.150.1
+
+[12000, '12000', 'Backend diagnostics:', 'DV_AGENT_BACKEND', 'DV_AGENT_MODEL', 'DV_GITHUB_TOKEN_FILE', 'GITHUB_MODELS_MODEL', 'GITHUB_TOKEN', 'TERM_PROGRAM', 'auto', 'base_url_set', 'codex', 'commands', 'configured', 'copilot', 'gh', 'github_models', 'max_context_chars', 'model_set', 'no', 'nt', 'repo_root', 'requests_installed', 'selected_backend', 'token_set', 'vscode', 'warnings', 'yes']

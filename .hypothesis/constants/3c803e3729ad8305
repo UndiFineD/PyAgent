@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\orchestration\SpeciationOrchestrator.py
+# hypothesis_version: 6.150.1
+
+['Cluster_Healer', 'Deployed', 'K8s_Optimizer', 'SRE_Sentinel', 'SpeciationAgent', 'agents', 'breed_name', 'domain', 'status']

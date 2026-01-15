@@ -22,19 +22,22 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import uuid
-from typing import Dict, Any, Optional
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class InterFleetBridgeOrchestrator:
     """
     Phase 35: Swarm-to-Swarm Telepathy.
     Direct state-synchronized communication between different PyAgent instances.
     """
-    
+
     def __init__(self, fleet) -> None:
         self.fleet = fleet
-        self.connected_fleets: dict[str, str] = {} # fleet_id -> endpoint
+        self.connected_fleets: dict[str, str] = {}  # fleet_id -> endpoint
         self.shared_state_cache: dict[str, Any] = {}
         self.fleet_id = str(uuid.uuid4())[:8]
 
@@ -57,7 +60,7 @@ class InterFleetBridgeOrchestrator:
         """Callback for receiving state updates from a peer."""
         logging.info(f"InterFleetBridge: Received telepathic sync from {peer_id}: {list(state_diff.keys())}")
         self.shared_state_cache.update(state_diff)
-        
+
     def query_global_intelligence(self, query: str) -> Any | None:
         """Queries the collective knowledge of all bridged fleets."""
         logging.info(f"InterFleetBridge: Querying global intelligence for: {query}")

@@ -25,12 +25,18 @@ import logging
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class TestGeneratedAgent(BaseAgent):
     """
     Generated Agent: TestGenerated
     Capabilities: Perform complex math and string analysis
     """
-    
+
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self.name = "TestGenerated"

@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class AnalysisToolType(Enum):
     """Types of code analysis tools."""
     LINTER = "linter"

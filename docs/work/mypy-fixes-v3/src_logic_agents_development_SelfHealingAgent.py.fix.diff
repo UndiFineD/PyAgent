@@ -1,0 +1,24 @@
+diff --git a/src/logic/agents/development/SelfHealingAgent.py b/src/logic/agents/development/SelfHealingAgent.py
+index a2295ac..5aa9c62 100644
+--- a/src/logic/agents/development/SelfHealingAgent.py
++++ b/src/logic/agents/development/SelfHealingAgent.py
+@@ -22,10 +22,10 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import create_main_function, as_tool
+-from src.observability.stats.ObservabilityEngine import ObservabilityEngine
++from src.observability.stats.metrics_engine import ObservabilityEngine
+ 
+ __version__ = VERSION
+ 
+@@ -93,4 +93,4 @@ class SelfHealingAgent(BaseAgent):
+ 
+ if __name__ == "__main__":
+     main = create_main_function(SelfHealingAgent, "SelfHealing Agent", "Task")
+-    main()
+\ No newline at end of file
++    main()

@@ -21,20 +21,23 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import os
 import hashlib
-from typing import Dict, List, Any
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class TenantIsolationOrchestrator:
     """
     Phase 51: Managed isolation for multi-tenant fleets.
     Ensures compute resources, memory shards, and context windows are strictly segregated.
     """
-    
+
     def __init__(self, tenant_manager: Any) -> None:
         self.tenant_manager = tenant_manager
         self.resource_limits: dict[str, dict[str, float]] = {}
-        self.context_vaults: dict[str, bytes] = {} # Simulated encrypted vaults
+        self.context_vaults: dict[str, bytes] = {}  # Simulated encrypted vaults
 
     def set_resource_limits(self, tenant_id: str, max_tokens: int, max_nodes: int) -> str:
         """Sets compute quotas for a specific tenant."""
@@ -49,7 +52,7 @@ class TenantIsolationOrchestrator:
         # In a real system, we'd use libsodium or similar
         nonce = os.urandom(16).hex()
         vault_id = hashlib.sha256(f"{tenant_id}:{nonce}".encode()).hexdigest()
-        self.context_vaults[vault_id] = data.encode() # Mock storage
+        self.context_vaults[vault_id] = data.encode()  # Mock storage
         return vault_id
 
     def fuse_knowledge_zk(self, vault_ids: list[str]) -> str:
@@ -63,7 +66,7 @@ class TenantIsolationOrchestrator:
             if vid in self.context_vaults:
                 # In ZK, we would extract features without decrypting
                 insights.append(f"Insight from {vid[:8]}")
-        
+
         return " | ".join(insights)
 
     def validate_access(self, tenant_id: str, resource_id: str) -> bool:

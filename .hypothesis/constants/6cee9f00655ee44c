@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\integrations\deepspeed.py
+# hypothesis_version: 6.150.1
+
+[0.9, '.', '_metadata', 'accelerate', 'adafactor', 'adam_epsilon', 'amp', 'amp.enabled', 'amp.opt_level', 'apex', 'auto', 'autotp_size', 'bf16.enabled', 'bf16|bf16_full_eval', 'checkpoint', 'config', 'deepspeed', 'fp16.enabled', 'fp16_opt_level', 'gradient_clipping', 'hidden_size', 'hidden_sizes', 'learning_rate', 'lr_scheduler', 'max_grad_norm', 'optimizer', 'optimizer.params.eps', 'optimizer.params.lr', 'scheduler', 'tensor_parallel', 'text_config', 'train_batch_size', 'warmup_steps', 'weight_decay']

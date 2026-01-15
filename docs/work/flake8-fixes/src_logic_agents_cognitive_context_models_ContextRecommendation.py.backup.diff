@@ -1,0 +1,27 @@
+diff --git a/src/logic/agents/cognitive/context/models/ContextRecommendation.py b/src/logic/agents/cognitive/context/models/ContextRecommendation.py
+index fb1b282..11ccbf8 100644
+--- a/src/logic/agents/cognitive/context/models/ContextRecommendation.py
++++ b/src/logic/agents/cognitive/context/models/ContextRecommendation.py
+@@ -23,10 +23,14 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ContextRecommendation:
+     """Recommendation for context improvement.
+@@ -40,4 +44,4 @@ class ContextRecommendation:
+     source_file: str
+     suggested_sections: list[str] = field(default_factory=lambda: [])
+     reason: str = ""
+-    confidence: float = 0.0
+\ No newline at end of file
++    confidence: float = 0.0

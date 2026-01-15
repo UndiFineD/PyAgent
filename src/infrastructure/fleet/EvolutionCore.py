@@ -24,7 +24,9 @@ Contains pure logic for template generation and hyperparameter optimization.
 """
 
 from __future__ import annotations
-from typing import Dict
+
+
+
 
 class EvolutionCore:
     """
@@ -49,7 +51,7 @@ class {name}Agent(BaseAgent):
     Generated Agent: {name}
     Capabilities: {capabilities}
     """
-    
+
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self.name = "{name}"
@@ -67,7 +69,7 @@ class {name}Agent(BaseAgent):
         refined_params: dict[str, dict[str, float]] = {}
         for agent_id, metrics in fleet_stats.items():
             success_rate = metrics.get("success_rate", 1.0)
-            
+
             # Genetic mutation logic:
             # If success is low, reduce randomness (temperature).
             # If success is high, increase randomness for exploration.
@@ -75,8 +77,8 @@ class {name}Agent(BaseAgent):
                 mutation = -0.1
             else:
                 mutation = 0.05
-                
+
             new_temp = max(0.1, min(1.0, self.default_temp + mutation))
             refined_params[agent_id] = {"temperature": new_temp}
-            
+
         return refined_params

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\loss\loss_grounding_dino.py
+# hypothesis_version: 6.150.1
+
+[1e-08, 0.25, 2.0, '_enc', 'auxiliary_outputs', 'boxes', 'cardinality', 'class_labels', 'label_maps', 'labels', 'logits', 'loss_bbox', 'loss_ce', 'loss_giou', 'none', 'pred_boxes', 'text_mask']

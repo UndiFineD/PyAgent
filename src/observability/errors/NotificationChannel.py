@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class NotificationChannel(Enum):
     """Notification channel types."""
     SLACK = "slack"

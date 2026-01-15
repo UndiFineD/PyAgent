@@ -1,0 +1,32 @@
+diff --git a/src/logic/agents/cognitive/context/models/ContextDiff.py b/src/logic/agents/cognitive/context/models/ContextDiff.py
+index 3723248..f903040 100644
+--- a/src/logic/agents/cognitive/context/models/ContextDiff.py
++++ b/src/logic/agents/cognitive/context/models/ContextDiff.py
+@@ -23,10 +23,19 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class ContextDiff:
+     """Diff between context versions.
+@@ -44,4 +53,4 @@ class ContextDiff:
+     added_sections: list[str] = field(default_factory=lambda: [])
+     removed_sections: list[str] = field(default_factory=lambda: [])
+     modified_sections: list[str] = field(default_factory=lambda: [])
+-    change_summary: str = ""
+\ No newline at end of file
++    change_summary: str = ""

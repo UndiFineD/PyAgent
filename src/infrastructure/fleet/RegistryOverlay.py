@@ -22,24 +22,27 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import json
 import logging
-from typing import Dict, Any, Tuple, Optional
+from typing import Any
 from pathlib import Path
 
 __version__ = VERSION
+
+
+
 
 class RegistryOverlay:
     """
     RegistryOverlay handles dynamic overrides for bootstrap configurations.
     It allows the fleet to update its core agent map without modifying source code.
     """
-    
+
     def __init__(self, overlay_path: Path | None = None) -> None:
         if overlay_path is None:
             # Default to agent_store/registry_overlay.json
             self.overlay_path = Path("data/memory/agent_store/registry_overlay.json")
         else:
             self.overlay_path = overlay_path
-            
+
         self.overrides: dict[str, Any] = {}
         self._load_overlay()
 
@@ -47,7 +50,7 @@ class RegistryOverlay:
         """Loads overrides from the JSON file."""
         if not self.overlay_path.exists():
             return
-            
+
         try:
             with open(self.overlay_path, encoding="utf-8") as f:
                 data = json.load(f)
@@ -69,7 +72,7 @@ class RegistryOverlay:
     def save_override(self, agent_id: str, module_path: str, class_name: str, params: Any = None) -> None:
         """Saves a new override to the overlay file."""
         self.overrides[agent_id] = [module_path, class_name, params]
-        
+
         self.overlay_path.parent.mkdir(parents=True, exist_ok=True)
         try:
             with open(self.overlay_path, "w", encoding="utf-8") as f:

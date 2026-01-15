@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class ImprovementStatus(Enum):
     """Status of an improvement."""
     PROPOSED = "proposed"

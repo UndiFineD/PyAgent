@@ -22,12 +22,15 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from .ChangelogEntry import ChangelogEntry
-from .FeedFormat import FeedFormat
-from typing import Dict, List, Any
+from src.core.base.types import ChangelogEntry
+from src.core.base.types import FeedFormat
+from typing import Any
 import json
 
 __version__ = VERSION
+
+
+
 
 class FeedGenerator:
     """Generates RSS / Atom feeds from changelog.

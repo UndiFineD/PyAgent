@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_library\fake_class_registry.py
+# hypothesis_version: 6.150.1
+
+['.', '__get_state__', '__obj_flatten__', '__obj_unflatten__', '__set_state__', 'fake', 'real', 'tracing_mode']

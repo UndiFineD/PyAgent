@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\quantizers\auto.py
+# hypothesis_version: 6.150.1
+
+['_4bit', '_8bit', 'aqlm', 'auto-round', 'awq', 'bitnet', 'bitsandbytes_4bit', 'bitsandbytes_8bit', 'compressed-tensors', 'dequantize', 'eetq', 'fbgemm_fp8', 'fp8', 'fp_quant', 'gptq', 'higgs', 'hqq', 'load_in_4bit', 'load_in_8bit', 'mxfp4', 'quant', 'quant_method', 'quantization_config', 'quanto', 'quark', 'spqr', 'torchao', 'value', 'vptq']

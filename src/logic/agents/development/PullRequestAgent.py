@@ -34,9 +34,12 @@ from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
 __version__ = VERSION
 
-class PRAgent(BaseAgent):
+
+
+
+class PullRequestAgent(BaseAgent):
     """Analyzes differences in the codebase and generates summaries or review comments."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -45,7 +48,7 @@ class PRAgent(BaseAgent):
             "Identify impacted modules, potential breaking changes, and suggest improvements. "
             "Output clear Markdown reports for code reviews."
         )
-        
+
         # Phase 108: Intelligence Harvesting
         work_root = getattr(self, "_workspace_root", None)
         self.recorder = LocalContextRecorder(Path(work_root)) if work_root else None
@@ -65,18 +68,18 @@ class PRAgent(BaseAgent):
         try:
             # Get the diff
             summary = subprocess.check_output(["git", "diff", branch, "--stat"], text=True, encoding="utf-8")
-            
+
             # Get actual file changes for content analysis (limited)
             files = subprocess.check_output(["git", "diff", branch, "--name-only"], text=True, encoding="utf-8").splitlines()
-            
+
             report = ["## 📝 PR Change Summary", f"Comparing current state against `{branch}`\n"]
             report.append(f"```text\n{summary}\n```")
-            
+
             if files:
                 report.append("\n### Impacted Files")
-                for f in files[:10]: # Limit to top 10
+                for f in files[:10]:  # Limit to top 10
                     report.append(f"- `{f}`")
-            
+
             res = "\n".join(report)
             self._record("diff_summary", {"branch": branch}, res)
             return res
@@ -159,7 +162,7 @@ class PRAgent(BaseAgent):
             staged_diff = subprocess.check_output(["git", "diff", "--cached"], text=True)
             if not staged_diff:
                 return "No staged changes to review."
-            
+
             # Simulated review logic
             findings = [
                 "### 🛡️ PyAgent Self-Review Findings",

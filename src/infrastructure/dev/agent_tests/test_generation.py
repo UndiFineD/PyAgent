@@ -23,11 +23,17 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import ast
-from typing import Any, List, Tuple
+from typing import Any
 from collections.abc import Callable
 from .models import GeneratedTest
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class TestGenerator:
     """Generate tests from specifications."""
@@ -126,7 +132,7 @@ class TestGenerator:
     ) -> GeneratedTest:
         """SCA Pattern: Generate tests specifically designed to break the implementation."""
         test_name = f"test_{function_name}_red_team"
-        
+
         # Phase 125: Enhanced Red-Team Adversarial Generation
         # (Inspired by Digital Red Queen - Adversarial Program Evolution)
         code = (
@@ -143,27 +149,51 @@ class TestGenerator:
             f'    """SCA Red-Team: Targeting edge cases for {function_name}"""\n'
             f"    # This test verifies that the implementation handles extreme inputs gracefully\n"
             f"    try:\n"
+
+
+
+
+
+
+
+
+
+
             f"        result = {function_name}(adversarial_input)\n"
             f"        # If it returns, we check it doesn't crash internally or leak memory\n"
             f"        assert True\n"
+
+
+
             f"    except (ValueError, TypeError, KeyError):\n"
             f"        # Expected graceful failures are acceptable\n"
             f"        pytest.skip('Accepted domain error')\n"
             f"    except Exception as e:\n"
+
             f"        # Unhandled exceptions are red-team victories\n"
             f"        pytest.fail(f'Red-Team Win: Unhandled {{type(e).__name__}}: {{e}}')\n"
         )
-        
+
         generated = GeneratedTest(
+
+
             name=test_name,
             specification=f"Red-Team adversarial tests for {function_name}",
             generated_code=code,
             confidence=0.9
         )
+
+
+
+
         self.generated.append(generated)
         return generated
         validated = [g for g in self.generated if g.validated]
         return "\n\n".join(g.generated_code for g in validated)
+
+
+
+
 
 class TestCaseMinimizer:
     """Minimize test cases for debugging."""
@@ -175,6 +205,16 @@ class TestCaseMinimizer:
 
     def minimize_string(
         self,
+
+
+
+
+
+
+
+
+
+
         input_str: str,
         test_fn: Callable[[str], bool]
     ) -> str:
@@ -183,6 +223,8 @@ class TestCaseMinimizer:
         while len(current) > 1:
             mid = len(current) // 2
             left = current[:mid]
+
+
             right = current[mid:]
             if test_fn(left):
                 current = left
@@ -190,11 +232,14 @@ class TestCaseMinimizer:
                 current = right
             else:
                 break
-        
+
         reduction = 1 - len(current) / len(input_str) if input_str else 0
         self.history.append({
             "original": input_str,
             "minimized": current,
+
+
+
             "reduction": reduction
         })
         return current
@@ -209,11 +254,14 @@ class TestCaseMinimizer:
         i = 0
         while i < len(current):
             candidate = current[:i] + current[i + 1:]
+
+
+
             if test_fn(candidate):
                 current = candidate
             else:
                 i += 1
-        
+
         self.history.append({
             "original_length": len(input_list),
             "minimized_length": len(current)
@@ -224,15 +272,23 @@ class TestCaseMinimizer:
         """Get minimization statistics."""
         if not self.history:
             return {"total": 0}
-        
+
+
+
+
+
         reductions = [h.get("reduction", 0) for h in self.history if "reduction" in h]
         avg_reduction = sum(reductions) / len(reductions) if reductions else 0
-        
+
         return {
             "total_minimizations": len(self.history),
             "average_reduction": avg_reduction,
             "total": len(self.history)
         }
+
+
+
+
 
 class TestDocGenerator:
     """Generates documentation from tests."""

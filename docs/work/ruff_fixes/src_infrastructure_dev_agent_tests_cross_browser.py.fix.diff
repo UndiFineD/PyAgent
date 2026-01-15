@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/dev/agent_tests/cross_browser.py b/src/infrastructure/dev/agent_tests/cross_browser.py
+index a568072..a5c2e6c 100644
+--- a/src/infrastructure/dev/agent_tests/cross_browser.py
++++ b/src/infrastructure/dev/agent_tests/cross_browser.py
+@@ -22,7 +22,7 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Any, Dict, List
++from typing import Any
+ from collections.abc import Callable
+ from src.infrastructure.dev.agent_tests.models import CrossBrowserConfig
+ from src.infrastructure.dev.agent_tests.enums import BrowserType

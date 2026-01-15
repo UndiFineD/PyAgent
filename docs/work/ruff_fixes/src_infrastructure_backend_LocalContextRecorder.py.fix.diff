@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/backend/LocalContextRecorder.py b/src/infrastructure/backend/LocalContextRecorder.py
+index de5458c..8794b32 100644
+--- a/src/infrastructure/backend/LocalContextRecorder.py
++++ b/src/infrastructure/backend/LocalContextRecorder.py
+@@ -23,7 +23,7 @@ import json
+ import logging
+ from datetime import datetime
+ from pathlib import Path
+-from typing import Dict, Any
++from typing import Any
+ from src.core.base.interfaces import ContextRecorderInterface
+ 
+ __version__ = VERSION

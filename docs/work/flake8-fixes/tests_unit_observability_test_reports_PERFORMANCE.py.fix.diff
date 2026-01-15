@@ -1,0 +1,75 @@
+diff --git a/tests/unit/observability/test_reports_PERFORMANCE.py b/tests/unit/observability/test_reports_PERFORMANCE.py
+index 731e791..b7122a7 100644
+--- a/tests/unit/observability/test_reports_PERFORMANCE.py
++++ b/tests/unit/observability/test_reports_PERFORMANCE.py
+@@ -3,22 +3,9 @@
+ 
+ from __future__ import annotations
+ import unittest
+-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
+-from unittest.mock import MagicMock, Mock, patch, call, ANY
+-import time
+-import json
+-from datetime import datetime
+-import pytest
+-import logging
++from typing import Dict
+ from pathlib import Path
+ import sys
+-import os
+-import tempfile
+-import shutil
+-import subprocess
+-import threading
+-import asyncio
+-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+ 
+ # Try to import test utilities
+ try:
+@@ -26,16 +13,36 @@ try:
+ except ImportError:
+     # Fallback
+     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+-    
++
+     class agent_sys_path:
+-        def __enter__(self) -> Self: 
++        def __enter__(self) -> Self:
+ 
+             return self
+-        def __exit__(self, *args) -> None: 
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++        def __exit__(self, *args) -> None:
+             sys.path.remove(str(AGENT_DIR))
+ 
+ # Import from src if needed
+ 
++
++
++
++
++
+ class TestPerformanceMetrics(unittest.TestCase):
+     """Test performance metrics collection and reporting."""
+ 
+@@ -72,6 +79,3 @@ class TestPerformanceMetrics(unittest.TestCase):
+         improvement_pct = (improvement / performance[0]['execution_time']) * 100
+ 
+         self.assertGreater(improvement_pct, 0)
+-
+-
+-

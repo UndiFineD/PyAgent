@@ -25,9 +25,11 @@ from src.core.base.version import VERSION
 from .IssueCategory import IssueCategory
 from .SeverityLevel import SeverityLevel
 from dataclasses import dataclass
-from typing import Optional
 
 __version__ = VERSION
+
+
+
 
 @dataclass
 class CodeIssue:

@@ -23,10 +23,13 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 import json
 
 __version__ = VERSION
+
+
+
 
 @dataclass
 class SnapshotComparisonResult:

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\optim\rmsprop.py
+# hypothesis_version: 6.150.1
+
+[0.0, 1e-08, 0.01, 0.99, 1.0, 'RMSprop', 'alpha', 'capturable', 'centered', 'cpu', 'differentiable', 'eps', 'foreach', 'grad_avg', 'lr', 'maximize', 'momentum', 'momentum_buffer', 'params', 'rmsprop', 'square_avg', 'step', 'weight_decay']

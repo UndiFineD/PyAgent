@@ -26,7 +26,6 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import sys
 from pathlib import Path
-from typing import Dict, List, Optional
 from collections.abc import Callable, Awaitable
 
 # Ensure project root and src are in path for modular imports
@@ -41,7 +40,7 @@ __version__ = VERSION
 
 # Type alias for functional compatibility
 BackendFunction = Callable[
-    [str, 
-     str | None, 
-     list[dict[str, str]] | None], 
+    [str,
+     str | None,
+     list[dict[str, str]] | None],
     Awaitable[str]]

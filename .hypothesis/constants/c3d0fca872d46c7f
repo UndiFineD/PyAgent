@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\interface\ui\gui\BmadManager.py
+# hypothesis_version: 6.150.1
+
+['--exclude-standard', '-m', '-o', '.git', '.js', '.md', '.py', '.ts', '.venv', '1.0', '<<ComboboxSelected>>', 'Accent.TButton', 'All', 'Apply Agents:', 'BMAD', 'BMad Method', 'Confirm Workflow', 'Current Phase:', 'Developer', 'GUI', 'Git Changes', 'Git Error', 'Implementation', 'Large Deployment', 'Methodology Track:', 'None', 'Project', 'Segoe UI', 'Selected', 'Target Scope:', 'Warning', 'Workflow-Init', '__pycache__', 'add_agent', 'bold', 'desc', 'get_project_root', 'get_selected_path', 'get_workflow_manager', 'git', 'gray', 'ls-files', 'node_modules', 'phases', 'project', 'readonly', 'selected', '⚡ Workflow-Init', '🚀 DEPLOY BULK AGENTS']

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\decomposition\_pca.py
+# hypothesis_version: 6.150.1
+
+[-0.5, 0.0, 1e-15, 0.5, 0.8, 1.0, 2.0, 500, 1000, 'LU', 'QR', '_fit_svd_solver', 'arpack', 'auto', 'boolean', 'copy', 'covariance_eigh', 'csc', 'csr', 'float32', 'float64', 'full', 'iterated_power', 'left', 'mle', 'n_components', 'n_oversamples', 'neither', 'none', 'random_state', 'randomized', 'right', 'svd_solver', 'tol', 'whiten']

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\models\SharingPermission.py
+# hypothesis_version: 6.150.1
+
+['admin', 'read_only', 'read_write']

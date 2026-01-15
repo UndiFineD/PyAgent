@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\observability\stats\metrics_engine.py
+# hypothesis_version: 6.150.1
+
+[0.0, 1.0, -500, 1000, '.', 'CRITICAL', 'ERROR', 'INFO', 'No data', 'WARNING', 'agent', 'agent_duration_ms', 'agent_events_total', 'agent_failure', 'agent_id', 'avg_latency_ms', 'data', 'duration', 'event_type', 'level', 'op', 'security_alert', 'status', 'success', 'system', 'timestamp', 'total_calls', 'total_cost_usd', 'type', 'unknown', 'workflow', 'workflow_trace', 'workspace_root']

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_functorch\_aot_autograd\schemas.py
+# hypothesis_version: 6.150.1
+
+['FQN', 'FakifiedFlatArgs', 'GraphInputName', 'GraphOutputName', 'OutputCode', 'OutputType', 'SubclassTracingInfo', 'TOutputCode', 'alias_of_input', 'custom_function_view', 'is_input', 'maybe_subclass_meta', 'non_alias', 'plain_tensor_args', 'unsafe_view_alias']

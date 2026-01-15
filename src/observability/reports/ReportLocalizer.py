@@ -24,10 +24,12 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .LocaleCode import LocaleCode
 from .LocalizedString import LocalizedString
-from typing import Dict, Optional
 import logging
 
 __version__ = VERSION
+
+
+
 
 class ReportLocalizer:
     """Localizer for report internationalization.

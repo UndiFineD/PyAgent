@@ -1,0 +1,16 @@
+diff --git a/src/observability/reports/DiffVisualizer.py b/src/observability/reports/DiffVisualizer.py
+index b536a7e..f6db3e1 100644
+--- a/src/observability/reports/DiffVisualizer.py
++++ b/src/observability/reports/DiffVisualizer.py
+@@ -22,9 +22,8 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from .DiffResult import DiffResult
+-from .DiffViewMode import DiffViewMode
+-from typing import List
++from src.core.base.types import DiffResult
++from src.core.base.types import DiffViewMode
+ 
+ __version__ = VERSION
+ 

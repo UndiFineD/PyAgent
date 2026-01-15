@@ -24,9 +24,11 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .TrendDirection import TrendDirection
 from dataclasses import dataclass, field
-from typing import List, Optional
 
 __version__ = VERSION
+
+
+
 
 @dataclass
 class TrendData:

@@ -1,0 +1,55 @@
+diff --git a/src/logic/agents/specialized/PrivacyGuardAgent.py b/src/logic/agents/specialized/PrivacyGuardAgent.py
+index 31d12d6..2d7a21a 100644
+--- a/src/logic/agents/specialized/PrivacyGuardAgent.py
++++ b/src/logic/agents/specialized/PrivacyGuardAgent.py
+@@ -5,10 +5,20 @@ from __future__ import annotations
+ import os
+ import re
+ import asyncio
+-from typing import List, Dict, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
++
++
++
++
++
++
++
++
++
++
+ class PrivacyGuardAgent(BaseAgent):
+     """
+     Phase 286: Privacy Guard Agent.
+@@ -37,7 +47,7 @@ class PrivacyGuardAgent(BaseAgent):
+                     try:
+                         with open(path, encoding="utf-8") as f:
+                             lines = f.readlines()
+-                        
++
+                         for i, line in enumerate(lines):
+                             for name, pattern in self.secret_patterns.items():
+                                 if pattern.search(line):
+@@ -47,16 +57,16 @@ class PrivacyGuardAgent(BaseAgent):
+                                         "type": name,
+                                         "snippet": line.strip()[:50] + "..."
+                                     })
+-                    except Exception:
++                    except (OSError, UnicodeDecodeError):
+                         continue
+             return leaks
+-            
++
+         return await asyncio.to_thread(run_scan)
+ 
+     async def get_improvement_items(self, context: dict[str, Any]) -> list[dict[str, Any]]:
+         target = context.get("target_dir", ".")
+         leaks = await self.scan_secrets(target)
+-        
++
+         improvements = []
+         for leak in leaks:
+             improvements.append({

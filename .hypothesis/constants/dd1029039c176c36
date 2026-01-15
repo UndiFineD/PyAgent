@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\library.py
+# hypothesis_version: 6.150.1
+
+['(', '.', '/', '::', 'AutocastCPU', 'AutocastCUDA', 'Autograd', 'CONSERVATIVE', 'DEF', 'FRAGMENT', 'FROM_SCHEMA', 'FuncTorchBatched', 'IMPL', 'Library', 'Meta', 'Unsupported kind: ', '\\(.*\\) -> .*', '_', '_P', '_T', 'cpu', 'cuda', 'custom_op', 'default', 'define', 'fallthrough_kernel', 'get_ctx', 'get_kernel', 'impl', 'impl_abstract', 'infer_schema', 'prim', 'register_autocast', 'register_fake', 'register_vmap', 'test_faketensor', 'test_schema', 'torchvision.', 'triton_op', 'wrap_triton']

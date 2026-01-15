@@ -1,0 +1,27 @@
+diff --git a/src/infrastructure/backend/ABTestVariant.py b/src/infrastructure/backend/ABTestVariant.py
+index 41ffc38..b6d5535 100644
+--- a/src/infrastructure/backend/ABTestVariant.py
++++ b/src/infrastructure/backend/ABTestVariant.py
+@@ -23,10 +23,14 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import Dict
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ABTestVariant:
+     """A variant in an A / B test."""
+@@ -35,4 +39,4 @@ class ABTestVariant:
+     backend: str
+     weight: float = 0.5
+     metrics: dict[str, float] = field(default_factory=lambda: {})
+-    sample_count: int = 0
+\ No newline at end of file
++    sample_count: int = 0

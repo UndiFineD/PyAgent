@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class AccessibilityIssueType(Enum):
     """Types of accessibility issues in UI code."""
     MISSING_ALT_TEXT = "missing_alt_text"

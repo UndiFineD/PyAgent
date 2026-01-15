@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\utils\_response.py
+# hypothesis_version: 6.150.1
+
+['auto', 'binary', 'decision_function', 'multiclass', 'multilabel-indicator', 'predict', 'predict_log_proba', 'predict_proba']

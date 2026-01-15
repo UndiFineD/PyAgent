@@ -1,0 +1,27 @@
+diff --git a/tests/unit/test_utils/test_test_utils_LEGACY.py b/tests/unit/test_utils/test_test_utils_LEGACY.py
+index 574dadf..2f661b7 100644
+--- a/tests/unit/test_utils/test_test_utils_LEGACY.py
++++ b/tests/unit/test_utils/test_test_utils_LEGACY.py
+@@ -1,12 +1,19 @@
+-import pytest
+-from pathlib import Path
+-from typing import Any, List, Dict, Optional
+ import sys
+ try:
+     from tests.utils.agent_test_utils import *
+ except ImportError:
+     pass
+ 
++
++
++
++
++
++
++
++
++
++
+ def test_agent_dir_on_path_modifies_sys_path() -> None:
+     """Test that agent_dir_on_path adds AGENT_DIR to sys.path."""
+     original_path = list(sys.path)

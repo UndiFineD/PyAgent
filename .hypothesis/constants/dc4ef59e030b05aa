@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\GracefulShutdown.py
+# hypothesis_version: 6.150.1
+
+['.agent_shutdown.json', 'SIGTERM', 'completed_files', 'current_file', 'pending_files', 'shutdown_requested', 'start_time']

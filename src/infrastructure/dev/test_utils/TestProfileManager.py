@@ -23,14 +23,16 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .TestProfile import TestProfile
-from typing import Any, Dict, Optional
+from typing import Any
 import logging
 import os
 
 __version__ = VERSION
 
+
+
+
 class TestProfileManager:
-    __test__ = False
     """Manages test configuration profiles.
 
     Allows switching between test configurations easily.
@@ -43,6 +45,8 @@ class TestProfileManager:
         manager.activate("ci")
         timeout=manager.get_setting("timeout")  # 60
     """
+
+    __test__ = False
 
     def __init__(self) -> None:
         """Initialize profile manager."""

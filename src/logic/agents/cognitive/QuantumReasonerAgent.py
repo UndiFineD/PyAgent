@@ -22,19 +22,22 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import json
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
+
+
 class QuantumReasonerAgent(BaseAgent):
     """
     Agent that uses 'Quantum-Inspired Reasoning' to handle ambiguity.
-    It explores multiple 'superposition' states (plans) in parallel and 
+    It explores multiple 'superposition' states (plans) in parallel and
     collapses them into a single coherent execution path.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -49,7 +52,7 @@ class QuantumReasonerAgent(BaseAgent):
         Generates multiple reasoning branches for a task and selects the best one.
         """
         logging.info(f"QuantumReasoner: Exploring {branch_count} parallel states for task: {task}")
-        
+
         # 1. Enter Superposition (Generate branches with divergent personas)
         personas = ["Conservative/Strict", "Creative/Divergent", "Empirical/Evidence-Based"]
         branches = []
@@ -59,21 +62,21 @@ class QuantumReasonerAgent(BaseAgent):
                 "id": i,
                 "persona": personas[i],
                 "content": branch_content,
-                "amplitude": 0.5 # Initial neutral amplitude
+                "amplitude": 0.5  # Initial neutral amplitude
             })
-            
+
         # 2. Interference Pattern (Cross-evaluation)
         # Each branch reviews the others for logical consistency
         for i, branch in enumerate(branches):
             others = [b["content"] for j, b in enumerate(branches) if i != j]
             interference_score = self._calculate_interference(branch["content"], others)
             branch["amplitude"] = interference_score
-            
+
         # 3. Wave Function Collapse (Pick highest amplitude)
         collapsed_state = max(branches, key=lambda x: x["amplitude"])
-        
+
         logging.info(f"QuantumReasoner: Wave function collapsed to branch {collapsed_state['id']} ({collapsed_state['persona']})")
-        
+
         return {
             "task": task,
             "collapsed_decision": collapsed_state["content"],
@@ -99,7 +102,7 @@ class QuantumReasonerAgent(BaseAgent):
             score_str = self.think(prompt)
             return float(score_str)
         except Exception:
-            return 0.5 # Default probability on failure
+            return 0.5  # Default probability on failure
 
     @as_tool
     def collapse_quantum_states(self, branches: list[dict[str, Any]]) -> str:

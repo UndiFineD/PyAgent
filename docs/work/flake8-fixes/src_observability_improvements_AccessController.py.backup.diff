@@ -1,0 +1,27 @@
+diff --git a/src/observability/improvements/AccessController.py b/src/observability/improvements/AccessController.py
+index fc4e3be..e9613d8 100644
+--- a/src/observability/improvements/AccessController.py
++++ b/src/observability/improvements/AccessController.py
+@@ -22,10 +22,14 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class AccessController:
+     """Tracks per-improvement permissions and roles."""
+ 
+@@ -50,4 +54,4 @@ class AccessController:
+         role = self._assigned_roles.get(improvement_id, {}).get(user)
+         if role and role in self._roles:
+             return level in self._roles[role]
+-        return False
+\ No newline at end of file
++        return False

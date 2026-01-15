@@ -1,0 +1,66 @@
+diff --git a/src/infrastructure/backend/SubagentStatus.py b/src/infrastructure/backend/SubagentStatus.py
+index 3930a6e..64c3702 100644
+--- a/src/infrastructure/backend/SubagentStatus.py
++++ b/src/infrastructure/backend/SubagentStatus.py
+@@ -24,16 +24,26 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import os
+ from pathlib import Path
+-from typing import Any, Dict, TYPE_CHECKING
++from typing import Any, TYPE_CHECKING
+ 
+ __version__ = VERSION
+ 
+ if TYPE_CHECKING:
+     from .SubagentRunner import SubagentRunner
+ 
++
++
++
++
++
++
++
++
++
++
+ class SubagentStatus:
+     """Delegated status/diagnostic manager for SubagentRunner."""
+-    
++
+     def __init__(self, runner: SubagentRunner) -> None:
+         self.runner = runner
+ 
+@@ -47,7 +57,7 @@ class SubagentStatus:
+             max_context_chars = 12_000
+         models_base_url = (os.environ.get("GITHUB_MODELS_BASE_URL") or "").strip()
+         models_model = (os.environ.get("DV_AGENT_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "").strip()
+-        
++
+         token_set = bool(os.environ.get("GITHUB_TOKEN"))
+         if not token_set:
+             token_file = os.environ.get("DV_GITHUB_TOKEN_FILE", r"C:\DEV\github-gat.txt")
+@@ -84,7 +94,7 @@ class SubagentStatus:
+         cmd = status["commands"]
+         models = status["github_models"]
+         def yn(v: bool) -> str: return "yes" if v else "no"
+-        
++
+         lines = [
+             "Backend diagnostics:",
+             f"- selected: {status['selected_backend']}",
+@@ -99,10 +109,10 @@ class SubagentStatus:
+             f"  - model set: {yn(bool(models.get('model_set')))}",
+             f"  - token set: {yn(bool(models.get('token_set')))}",
+         ]
+-        
++
+         if status.get("warnings"):
+             lines.append("- POTENTIAL CONFLICTS:")
+             for w in status["warnings"]:
+                 lines.append(f"  ! {w}")
+-                
+-        return "\n".join(lines)
+\ No newline at end of file
++
++        return "\n".join(lines)

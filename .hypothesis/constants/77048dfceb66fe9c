@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\ao\nn\quantizable\modules\rnn.py
+# hypothesis_version: 6.150.1
+
+[0.0, 1.0, 'LSTM', 'LSTMCell', 'QuantizableLSTM', 'QuantizableLSTMCell', 'batch_first', 'bias', 'bidirectional', 'cell', 'device', 'dtype', 'forget', 'hidden_size', 'input', 'input_size', 'layer_bw', 'output', 'qconfig', 'split_gates']

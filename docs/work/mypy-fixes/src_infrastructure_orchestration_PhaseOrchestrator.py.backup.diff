@@ -1,0 +1,69 @@
+diff --git a/src/infrastructure/orchestration/PhaseOrchestrator.py b/src/infrastructure/orchestration/PhaseOrchestrator.py
+index c0e359d..b448e69 100644
+--- a/src/infrastructure/orchestration/PhaseOrchestrator.py
++++ b/src/infrastructure/orchestration/PhaseOrchestrator.py
+@@ -13,13 +13,16 @@
+ # limitations under the License.
+ 
+ from __future__ import annotations
+-import logging
+ import asyncio
+-from typing import Dict, List, Any, TYPE_CHECKING
++import json
++from src.observability.StructuredLogger import StructuredLogger
++from typing import Any, TYPE_CHECKING
+ 
+ if TYPE_CHECKING:
+     from ..fleet.FleetManager import FleetManager
+ 
++logger = StructuredLogger(__name__)
++
+ class PhaseOrchestrator:
+     """High-reliability task orchestrator using a 7-phase scientific method loop."""
+     
+@@ -29,7 +32,7 @@ class PhaseOrchestrator:
+ 
+     async def execute_task(self, task: str) -> str:
+         """Runs the 7-phase cycle for a given task."""
+-        logging.info(f"PhaseOrchestrator: Starting 7-phase cycle for task: {task}")
++        logger.info(f"PhaseOrchestrator: Starting 7-phase cycle for task: {task}")
+         
+         report = [f"# Phase Execution Report: {task}\n"]
+         
+@@ -80,7 +83,6 @@ class PhaseOrchestrator:
+         prompt = f"Plan a PyAgent workflow for: {task}\nThought: {thought}\nOutput ONLY a JSON list of steps."
+         res = await self.fleet.call_by_capability("Security.improve_content", prompt=prompt)
+         # Parse JSON from result
+-        import json
+         try:
+             # Simple extractor for markdown
+             if "```json" in res:
+@@ -88,8 +90,8 @@ class PhaseOrchestrator:
+             elif "```" in res:
+                 res = res.split("```")[-1].split("```")[0].strip()
+             return json.loads(res)
+-        except Exception:
+-            logging.warning("Failed to parse JSON plan, using default reasoning step.")
++        except json.JSONDecodeError:
++            logger.warning("Failed to parse JSON plan, using default reasoning step.")
+             return [{"agent": "Reasoning", "action": "analyze_tot", "args": [task]}]
+ 
+     async def _phase_execute(self, plan: list[dict[str, Any]]) -> str:
+@@ -111,7 +113,7 @@ class PhaseOrchestrator:
+                 independent_shards.append(step)
+ 
+         if independent_shards:
+-            logging.info(f"PhaseOrchestrator: Executing {len(independent_shards)} independent shards in parallel.")
++            logger.info(f"PhaseOrchestrator: Executing {len(independent_shards)} independent shards in parallel.")
+             # Execute independent shards concurrently
+             shard_tasks = [
+                 self.fleet.execute_workflow(f"Parallel Shard: {s.get('agent')}", [s])
+@@ -122,7 +124,7 @@ class PhaseOrchestrator:
+             
+             # If there are subsequent sequential steps, run them now
+             if sequential_steps:
+-                logging.info(f"PhaseOrchestrator: Executing remaining {len(sequential_steps)} sequential steps.")
++                logger.info(f"PhaseOrchestrator: Executing remaining {len(sequential_steps)} sequential steps.")
+                 seq_results = await self.fleet.execute_workflow("Sequential Follow-up", sequential_steps)
+                 return f"{combined_results}\n\n{seq_results}"
+             

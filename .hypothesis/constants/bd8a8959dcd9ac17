@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_library\fake_profile.py
+# hypothesis_version: 6.150.1
+
+['.', 'FRAGMENT', 'TensorMetadata', 'args_profile', 'device', 'dtype', 'layout', 'operators', 'out_profile', 'rank', 'torch_version', 'utf-8', 'w']

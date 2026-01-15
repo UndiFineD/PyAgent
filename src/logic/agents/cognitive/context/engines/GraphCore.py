@@ -26,9 +26,12 @@ Pure logic for AST-based code relationship analysis and graph management.
 from __future__ import annotations
 from src.core.base.version import VERSION
 import ast
-from typing import Dict, List, Set, Any, Tuple
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class CodeGraphVisitor(ast.NodeVisitor):
     """AST visitor to extract imports, classes, and function calls."""
@@ -49,23 +52,46 @@ class CodeGraphVisitor(ast.NodeVisitor):
             self.imports.add(node.module)
         self.generic_visit(node)
 
+
+
+
+
+
+
+
+
+
+
     def visit_ClassDef(self, node: ast.ClassDef) -> None:
         self.classes.append(node.name)
         bases = []
+
+
+
+
         for base in node.bases:
             if isinstance(base, ast.Name):
                 bases.append(base.id)
             elif isinstance(base, ast.Attribute):
                 bases.append(base.attr)
+
+
         self.bases[node.name] = bases
         self.generic_visit(node)
 
     def visit_Call(self, node: ast.Call) -> None:
         if isinstance(node.func, ast.Name):
+
+
+
             self.calls.add(node.func.id)
         elif isinstance(node.func, ast.Attribute):
             self.calls.add(node.func.attr)
         self.generic_visit(node)
+
+
+
+
 
 class GraphCore:
     """Pure logic for managing code relationship graphs."""
@@ -73,6 +99,33 @@ class GraphCore:
     @staticmethod
     def parse_python_content(rel_path: str, content: str) -> dict[str, Any]:
         """Parses Python code and returns extracted symbols and relationships."""
+        try:
+            import rust_core
+            # Rust returns {imports: [], classes: [(name, bases)], calls: []}
+            data = rust_core.extract_graph_entities_regex(content)  # type: ignore[attr-defined]
+
+            # Map Rust output to expected format
+            inherits = {}
+            classes_list = []
+            for name, bases_str in data.get("classes", []):
+                classes_list.append(name)
+                # Parse bases string simply by split ','
+                if bases_str:
+                    bases = [b.strip() for b in bases_str.split(',') if b.strip()]
+                    inherits[name] = bases
+                else:
+                    inherits[name] = []
+
+            return {
+                "rel_path": rel_path,
+                "imports": data.get("imports", []),
+                "classes": classes_list,
+                "inherits": inherits,
+                "calls": data.get("calls", [])
+            }
+        except (ImportError, AttributeError):
+            pass
+
         try:
             tree = ast.parse(content)
             visitor = CodeGraphVisitor(rel_path)
@@ -101,14 +154,14 @@ class GraphCore:
         """
         edges = []
         rel_path = analysis["rel_path"]
-        
+
         # File level dependencies
         for imp in analysis["imports"]:
             edges.append((rel_path, imp, "imports"))
-            
+
         # Class level edges
         for cls, bases in analysis["inherits"].items():
             for base in bases:
                 edges.append((f"{rel_path}::{cls}", base, "inherits"))
-                
+
         return edges

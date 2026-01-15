@@ -29,9 +29,11 @@ import time
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class TestSnapshot:
-    __test__ = False
     """Snapshot for snapshot testing.
 
     Attributes:
@@ -47,6 +49,7 @@ class TestSnapshot:
     content_hash: str = ""
     created_at: float = field(default_factory=time.time)
     updated_at: float = field(default_factory=time.time)
+    __test__ = False
 
     def __post_init__(self) -> None:
         """Compute content hash if not provided."""

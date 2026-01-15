@@ -25,15 +25,18 @@ Provides tools for remote system administration and automated environment scalin
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
+
+
 class InfrastructureManagerAgent(BaseAgent):
     """Manages remote infrastructure including Proxmox virtualization and HomeAssistant IoT."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -55,7 +58,7 @@ class InfrastructureManagerAgent(BaseAgent):
         # Simulation of Proxmox API call
         # url = f"https://{host}:8006/api2/json/nodes"
         # headers = {"Authorization": f"PVEAPIToken={token_id}={secret}"}
-        
+
         return (
             f"### Proxmox Inventory for {host}\n"
             "- VM 101: `Ubuntu-Server` (Status: Running, CPU: 2.1%)\n"
@@ -76,24 +79,58 @@ class InfrastructureManagerAgent(BaseAgent):
         # Simulation of HA REST API call
         # url = f"{api_url}/api/services/{entity_id.split('.')[0]}/{action}"
         # headers = {"Authorization": f"Bearer {token}"}
-        
+
+
+
+
+
+
+
+
+
+
+
         return f"Successfully executed `{action}` for `{entity_id}` on HomeAssistant at {api_url}."
 
     @as_tool
+
+
+
+
+
+
+
+
+
+
     def get_system_metrics(self, server_ip: str) -> dict[str, Any]:
         """Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP."""
         logging.info(f"INFRA: Fetching metrics for {server_ip}")
         # Mock metrics
         return {
+
+
+
+
+
+
+
+
+
             "server": server_ip,
             "cpu_usage": "15%",
             "ram_free": "8.2GB",
             "disk_status": "Healthy",
             "uptime": "14 days, 3 hours"
+
         }
 
     def improve_content(self, prompt: str) -> str:
         return "Infrastructure Manager ready. Provide Proxmox or HomeAssistant credentials to begin orchestration."
+
+
+
+
 
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function

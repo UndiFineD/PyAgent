@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\series\sequences.py
+# hypothesis_version: 6.150.1
+
+['(%s).gen', '(%s).interval', '(%s).length', '(%s).start', '(%s).stop', '__add__', '__mul__', '__sub__', 'c_{}', 'evaluate', 'k']

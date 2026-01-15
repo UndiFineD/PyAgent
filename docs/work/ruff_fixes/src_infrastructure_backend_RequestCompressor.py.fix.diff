@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/backend/RequestCompressor.py b/src/infrastructure/backend/RequestCompressor.py
+index 055eb05..42999a9 100644
+--- a/src/infrastructure/backend/RequestCompressor.py
++++ b/src/infrastructure/backend/RequestCompressor.py
+@@ -22,7 +22,6 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict
+ 
+ __version__ = VERSION
+ 

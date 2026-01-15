@@ -23,10 +23,12 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.ContextRecommendation import ContextRecommendation
-from typing import Dict, List, Optional, Tuple
 import re
 
 __version__ = VERSION
+
+
+
 
 class ContextRecommender:
     """Recommends context improvements based on similar files.

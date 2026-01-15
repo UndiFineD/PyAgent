@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\utils\embedding_functions\openai_embedding_function.py
+# hypothesis_version: 6.150.1
+
+['OPENAI_API_KEY', 'api_base', 'api_key', 'api_key_env_var', 'api_type', 'api_version', 'azure', 'base_url', 'cosine', 'default_headers', 'deployment_id', 'dimensions', 'input', 'ip', 'l2', 'model', 'model_name', 'openai', 'organization', 'organization_id', 'text-embedding-3']

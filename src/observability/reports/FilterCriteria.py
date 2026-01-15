@@ -26,9 +26,11 @@ from .IssueCategory import IssueCategory
 from .SeverityLevel import SeverityLevel
 from dataclasses import dataclass
 from datetime import datetime
-from typing import List, Optional
 
 __version__ = VERSION
+
+
+
 
 @dataclass
 class FilterCriteria:

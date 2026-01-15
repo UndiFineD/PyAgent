@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\posthog\__init__.py
+# hypothesis_version: 6.150.1
+
+['alias', 'capture', 'capture_exception', 'feature_enabled', 'flush', 'get_all_flags', 'get_feature_flag', 'group_identify', 'identify', 'join', 'load_feature_flags', 'page', 'screen', 'set', 'set_once']

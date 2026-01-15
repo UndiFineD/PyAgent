@@ -22,10 +22,15 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from .LinkedReference import LinkedReference
-from typing import Dict, List
+from src.core.base.types import LinkedReference
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class ReferenceLinkManager:
     """Manages links to commits and issues in changelog entries.

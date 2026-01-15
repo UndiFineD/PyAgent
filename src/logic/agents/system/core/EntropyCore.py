@@ -7,7 +7,11 @@ Calculates structural complexity metrics.
 import os
 import ast
 
+
+
+
 class EntropyCore:
+    """Core logic for calculating code complexity and entropy."""
     @staticmethod
     def calculate_cyclomatic_complexity(code: str) -> int:
         """
@@ -15,10 +19,16 @@ class EntropyCore:
         CC = E - N + 2P (approximate using decision points)
         """
         try:
+            import rust_core
+            return rust_core.calculate_cyclomatic_complexity(code)  # type: ignore[attr-defined]
+        except (ImportError, AttributeError):
+            pass
+
+        try:
             tree = ast.parse(code)
         except SyntaxError:
             return 0
-            
+
         complexity = 1
         for node in ast.walk(tree):
             if isinstance(node, (ast.If, ast.While, ast.For, ast.And, ast.Or, ast.ExceptHandler)):
@@ -32,10 +42,10 @@ class EntropyCore:
         """
         if not os.path.exists(file_path):
             return {}
-            
+
         with open(file_path, encoding="utf-8", errors="ignore") as f:
             content = f.read()
-            
+
         return {
             "size_bytes": len(content),
             "lines": len(content.splitlines()),
@@ -54,10 +64,10 @@ class EntropyCore:
                     metrics = EntropyCore.get_file_metrics(os.path.join(root, file))
                     if metrics:
                         all_metrics.append(metrics)
-                        
+
         if not all_metrics:
             return {}
-            
+
         count = len(all_metrics)
         return {
             "avg_size": sum(m['size_bytes'] for m in all_metrics) / count,

@@ -14,44 +14,47 @@
 
 from __future__ import annotations
 import logging
-from typing import Any, Dict, List, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 from .ToolRegistry import ToolRegistry
 
 if TYPE_CHECKING:
     from ..fleet.FleetManager import FleetManager
+
+
+
 
 class McpToolRegistry(ToolRegistry):
     """Registry specialized for Model Context Protocol (MCP) tools."""
 
     def __init__(self, fleet: FleetManager) -> None:
         super().__init__(fleet)
-        self.server_proxies = {}
+        self.server_proxies: dict[Any, Any] = {}
 
     def register_mcp_server(self, server_name: str, tools: list[dict[str, Any]], call_handler) -> None:
         """Dynamically registers tools from an MCP server."""
         logging.info(f"McpToolRegistry: Registering tools for server: {server_name}")
-        
+
         for tool_def in tools:
             tool_name = tool_def.get("name")
             description = tool_def.get("description", "")
-            
+
             # Create a proxy function that calls the handler
             def mcp_proxy_func(**kwargs: Any) -> Any:
                 return call_handler(tool_name, **kwargs)
-            
+
             mcp_proxy_func.__name__ = tool_name
             mcp_proxy_func.__doc__ = description
-            
+
             self.register_tool(
                 owner_name=f"mcp.{server_name}",
                 func=mcp_proxy_func,
                 category="mcp",
-                priority=10 # Higher priority for external tools
+                priority=10  # Higher priority for external tools
             )
 
     async def call_mcp_tool(self, tool_name: str, **kwargs) -> Any:
         """Call a tool and specifically handle MCP result formatting."""
         result = await self.call_tool(tool_name, **kwargs)
         if isinstance(result, dict) and "result" in result:
-             return result["result"]
+            return result["result"]
         return result

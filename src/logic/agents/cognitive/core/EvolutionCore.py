@@ -7,7 +7,11 @@ Handles prompt crossover and lineage persistence.
 import hashlib
 import random
 
+
+
+
 class EvolutionCore:
+    """Core logic for evolutionary algorithms in prompt engineering."""
     @staticmethod
     def prompt_crossover(prompt1: str, prompt2: str) -> str:
         """
@@ -15,11 +19,11 @@ class EvolutionCore:
         """
         lines1 = prompt1.splitlines()
         lines2 = prompt2.splitlines()
-        
+
         # Take halves or interweave
         mid1 = len(lines1) // 2
         mid2 = len(lines2) // 2
-        
+
         child_lines = lines1[:mid1] + lines2[mid2:]
         return "\n".join(child_lines)
 

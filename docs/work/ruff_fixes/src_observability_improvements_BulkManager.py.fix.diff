@@ -1,0 +1,12 @@
+diff --git a/src/observability/improvements/BulkManager.py b/src/observability/improvements/BulkManager.py
+index 96b5660..0671306 100644
+--- a/src/observability/improvements/BulkManager.py
++++ b/src/observability/improvements/BulkManager.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .BulkOperationResult import BulkOperationResult
+-from typing import List
+ 
+ __version__ = VERSION
+ 

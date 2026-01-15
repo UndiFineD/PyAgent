@@ -1,0 +1,29 @@
+diff --git a/src/infrastructure/orchestration/IntelligenceOrchestrator.py b/src/infrastructure/orchestration/IntelligenceOrchestrator.py
+index 0a3b145..453ab94 100644
+--- a/src/infrastructure/orchestration/IntelligenceOrchestrator.py
++++ b/src/infrastructure/orchestration/IntelligenceOrchestrator.py
+@@ -21,7 +21,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import time
+ import logging
+-from typing import Dict, List, Any
++from typing import Any
+ from .IntelligenceCore import IntelligenceCore
+ 
+ __version__ = VERSION
+@@ -111,7 +111,7 @@ class IntelligenceOrchestrator:
+         Extracts specific, actionable coding tasks from the synthesized intelligence.
+         Designed for the SelfImprovementOrchestrator to ingest (Phase 108).
+         """
+-        tasks = []
++        tasks: list[Any] = []
+         for pattern in self.patterns:
+             # Look for keywords that suggest code changes
+             if any(k in pattern.lower() for k in ["error", "failure", "bottleneck", "reinitialize", "missing"]):
+@@ -125,4 +125,4 @@ class IntelligenceOrchestrator:
+                         "origin_pattern": pattern,
+                         "severity": "High" if "error" in pattern.lower() else "Medium"
+                     })
+-        return tasks
+\ No newline at end of file
++        return tasks

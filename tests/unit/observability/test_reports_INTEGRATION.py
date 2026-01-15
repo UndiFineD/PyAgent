@@ -3,22 +3,13 @@
 
 from __future__ import annotations
 import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
-import time
+from typing import Any, List, Dict, Set
 import json
 from datetime import datetime
-import pytest
-import logging
 from pathlib import Path
 import sys
 import os
 import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
@@ -26,15 +17,23 @@ try:
 except ImportError:
     # Fallback
     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
+
     class agent_sys_path:
-        def __enter__(self) -> Self: 
+        def __enter__(self) -> Self:
 
             return self
-        def __exit__(self, *args) -> None: 
+
+
+
+
+
+
+
+        def __exit__(self, *args) -> None:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestPhase6Integration:
     """Integration tests for Phase 6 features."""
@@ -203,7 +202,6 @@ class TestSession8Integration:
 # =============================================================================
 
 
-
 class TestReportIntegration(unittest.TestCase):
     """Integration tests for report generation."""
 
@@ -261,7 +259,6 @@ class TestReportIntegration(unittest.TestCase):
         assert len(reports) == 5
         assert reports[0]["id"] == 0
         assert reports[4]["data"]["count"] == 40
-
 
 
 class TestGitIntegration(unittest.TestCase):
@@ -322,7 +319,6 @@ class TestGitIntegration(unittest.TestCase):
         self.assertEqual(len(blame_data['lines']), 2)
 
 
-
 class TestTestCoverageIntegration(unittest.TestCase):
     """Test coverage integration in reports."""
 
@@ -358,6 +354,3 @@ class TestTestCoverageIntegration(unittest.TestCase):
         }
 
         self.assertGreater(gap_analysis['uncovered_branches'], gap_analysis['uncovered_functions'])
-
-
-

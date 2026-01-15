@@ -1,0 +1,33 @@
+diff --git a/src/observability/improvements/ImprovementDashboard.py b/src/observability/improvements/ImprovementDashboard.py
+index 1e33816..32f8818 100644
+--- a/src/observability/improvements/ImprovementDashboard.py
++++ b/src/observability/improvements/ImprovementDashboard.py
+@@ -23,11 +23,20 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .Improvement import Improvement
+-from typing import List
+ from collections.abc import Callable
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class ImprovementDashboard:
+     """Renders a lightweight dashboard and emits update callbacks."""
+ 
+@@ -47,4 +56,4 @@ class ImprovementDashboard:
+         lines = ["# Improvements Dashboard"]
+         for imp in improvements:
+             lines.append(f"- {imp.title}")
+-        return "\n".join(lines)
+\ No newline at end of file
++        return "\n".join(lines)

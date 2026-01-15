@@ -1,0 +1,29 @@
+diff --git a/src/infrastructure/orchestration/TaskDecomposer.py b/src/infrastructure/orchestration/TaskDecomposer.py
+index 8e6697f..1e51a3c 100644
+--- a/src/infrastructure/orchestration/TaskDecomposer.py
++++ b/src/infrastructure/orchestration/TaskDecomposer.py
+@@ -25,11 +25,16 @@ Breaks complex user requests into granular sub-tasks for the agent fleet.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import List, Dict, Any
++from typing import Any
+ from .TaskDecomposerCore import TaskDecomposerCore
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class TaskDecomposer:
+     """
+     Analyzes high-level requests and generates a multi-step plan.
+@@ -48,4 +53,4 @@ class TaskDecomposer:
+         return steps
+ 
+     def get_plan_summary(self, steps: list[dict[str, Any]]) -> str:
+-        return self.core.summarize_plan(steps)
+\ No newline at end of file
++        return self.core.summarize_plan(steps)

@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/dev/test_utils/ParameterizedTestCase.py b/src/infrastructure/dev/test_utils/ParameterizedTestCase.py
+index 7e1d81a..be65210 100644
+--- a/src/infrastructure/dev/test_utils/ParameterizedTestCase.py
++++ b/src/infrastructure/dev/test_utils/ParameterizedTestCase.py
+@@ -23,7 +23,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import Any, Dict, List
++from typing import Any
+ 
+ __version__ = VERSION
+ 

@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class ComplianceCategory(Enum):
     """Categories for compliance checking."""
     SECURITY = "security"

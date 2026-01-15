@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\ifaddr\_shared.py
+# hypothesis_version: 6.150.1
+
+['BSD', 'Darwin', 'IP', 'sa_data', 'sa_familiy', 'sa_len', 'sin6_addr', 'sin6_familiy', 'sin6_flowinfo', 'sin6_port', 'sin6_scope_id', 'sin_addr', 'sin_familiy', 'sin_port', 'sin_zero']

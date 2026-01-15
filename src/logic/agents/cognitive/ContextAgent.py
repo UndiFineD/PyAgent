@@ -33,7 +33,7 @@ from src.core.base.BaseAgent import BaseAgent
 from src.logic.agents.cognitive.core.LocalRAGCore import LocalRAGCore, RAGShard
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 import hashlib
 import json
 import logging
@@ -179,6 +179,9 @@ DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
     ),
 ]
 
+
+
+
 class ContextAgent(BaseAgent):
     """Updates code file context descriptions using AI assistance."""
 
@@ -186,7 +189,7 @@ class ContextAgent(BaseAgent):
         super().__init__(file_path)
         self.rag_core = LocalRAGCore()
         self.rag_shards: list[RAGShard] = []
-        
+
         # Configuration
         self.config = {
             "extensions": [
@@ -195,7 +198,7 @@ class ContextAgent(BaseAgent):
                 '.md', '.rst', '.txt'
             ]
         }
-        
+
         self._validate_file_extension()
         self.source_path = self._derive_source_path()
 
@@ -220,7 +223,7 @@ class ContextAgent(BaseAgent):
     def _validate_file_extension(self) -> None:
         """Validate that the file has the correct extension."""
         if not self.file_path.name.endswith('.description.md'):
-             logging.warning(f"File {self.file_path.name} does not end with .description.md. " 
+            logging.warning(f"File {self.file_path.name} does not end with .description.md. "
                              "Context operations may be limited.")
 
     def _derive_source_path(self) -> Path | None:

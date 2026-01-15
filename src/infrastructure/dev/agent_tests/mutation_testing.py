@@ -23,11 +23,16 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import hashlib
-from typing import List, Dict
 from .enums import MutationOperator
 from .models import Mutation
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class MutationTester:
     """Test mutation analysis."""
@@ -91,26 +96,59 @@ class MutationTester:
         killed = sum(1 for m in self.mutations if m.killed)
         return (killed / len(self.mutations)) * 100
 
+
+
+
+
+
+
+
+
+
+
     def get_surviving_mutations(self) -> list[Mutation]:
         """Get mutations that survived (not killed)."""
+
+
+
+
+
+
+
+
         return [m for m in self.mutations if not m.killed]
 
     def generate_report(self) -> str:
         """Generate mutation testing report."""
+
         report = ["# Mutation Testing Report\n"]
         report.append(f"Total mutations: {len(self.mutations)}")
         report.append(f"Mutation score: {self.get_mutation_score():.1f}%\n")
 
         surviving = self.get_surviving_mutations()
+
+
+
+
+
         if surviving:
             report.append("## Surviving Mutations\n")
             for mut in surviving[:10]:
                 report.append(
                     f"- Line {mut.line_number}: {mut.operator.value} "
+
+
+
+
+
                     f"(`{mut.original_code.strip()}` -> `{mut.mutated_code.strip()}`)"
                 )
 
         return "\n".join(report)
+
+
+
+
 
 class MutationRunner:
     """Run mutation testing analysis."""

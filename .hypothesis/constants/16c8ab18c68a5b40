@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\ao\nn\quantized\modules\conv.py
+# hypothesis_version: 6.150.1
+
+[1.0, ' but got:', ' nnq.', ', bias=False', ', groups={groups}', ', padding={padding}', 'Conv1d', 'Conv2d', 'Conv3d', 'ConvTranspose1d', 'ConvTranspose2d', 'ConvTranspose3d', 'QuantizedConv1d', 'QuantizedConv2d', 'QuantizedConv3d', 'bias', 'circular', 'device', 'dtype', 'qconfig', 'reflect', 'replicate', 'scale', 'weight', 'weight_fake_quant', 'zero_point', 'zeros']

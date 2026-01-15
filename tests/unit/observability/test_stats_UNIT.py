@@ -2,12 +2,16 @@
 """Test classes for stats formatting and aggregation - UNIT module."""
 
 from __future__ import annotations
+from typing import Any
 import unittest
-from typing import Any, List, Dict
+from typing import List, Dict
 import json
 from datetime import datetime
 from pathlib import Path
 import tempfile
+
+
+
 
 class TestTrendAnalysis(unittest.TestCase):
     """Tests for trend analysis and delta calculation."""
@@ -114,7 +118,7 @@ class TestAggregation(unittest.TestCase):
             {"file": "b.py", "lines": 200, "functions": 20},
         ]
 
-        aggregated = {}
+        aggregated: dict[Any, Any] = {}
         for stat in stats:
             if stat["file"] not in aggregated:
                 aggregated[stat["file"]] = []
@@ -773,6 +777,3 @@ class TestReportingWithInsights(unittest.TestCase):
 
         sorted_improvements = sorted(improvements, key=lambda x: x["priority"], reverse=True)
         assert sorted_improvements[0]["item"] == "Add tests"
-
-
-

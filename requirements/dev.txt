@@ -23,3 +23,4 @@ hypothesis==6.115.0
 setuptools==80.9.0
 # supervisor==4.3.0
 # win32_setctime==1.2.0
+pytest-asyncio

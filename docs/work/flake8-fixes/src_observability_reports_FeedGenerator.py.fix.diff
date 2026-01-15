@@ -1,0 +1,38 @@
+diff --git a/src/observability/reports/FeedGenerator.py b/src/observability/reports/FeedGenerator.py
+index f8739c1..aa0fd5e 100644
+--- a/src/observability/reports/FeedGenerator.py
++++ b/src/observability/reports/FeedGenerator.py
+@@ -22,13 +22,23 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from .ChangelogEntry import ChangelogEntry
+-from .FeedFormat import FeedFormat
+-from typing import Dict, List, Any
++from src.core.base.types import ChangelogEntry
++from src.core.base.types import FeedFormat
++from typing import Any
+ import json
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class FeedGenerator:
+     """Generates RSS / Atom feeds from changelog.
+ 
+@@ -112,4 +122,4 @@ class FeedGenerator:
+             "title": f"{project_name} Changelog",
+             "items": items
+         }
+-        return json.dumps(feed, indent=2)
+\ No newline at end of file
++        return json.dumps(feed, indent=2)

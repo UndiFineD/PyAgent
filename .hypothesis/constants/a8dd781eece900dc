@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\covariance\_robust_covariance.py
+# hypothesis_version: 6.150.1
+
+[1e-08, 0.025, 0.5, 300, 500, 1500, 'MinCovDet', 'fast_mcd', 'random_state', 'right', 'support_fraction']

@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/api/core/GatewayCore.py b/src/infrastructure/api/core/GatewayCore.py
+index a1c8296..434b6cf 100644
+--- a/src/infrastructure/api/core/GatewayCore.py
++++ b/src/infrastructure/api/core/GatewayCore.py
+@@ -1,6 +1,6 @@
+ 
+ from __future__ import annotations
+-from typing import Dict, Any, Optional
++from typing import Any
+ 
+ class GatewayCore:
+     """

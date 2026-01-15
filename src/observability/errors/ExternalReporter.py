@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class ExternalReporter(Enum):
     """External error reporting systems."""
     SENTRY = "sentry"

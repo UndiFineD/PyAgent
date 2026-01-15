@@ -24,10 +24,12 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .AggregatedReport import AggregatedReport
 from .CodeIssue import CodeIssue
-from typing import Dict, List
 import logging
 
 __version__ = VERSION
+
+
+
 
 class ReportAggregator:
     """Aggregator for combining reports from multiple sources.

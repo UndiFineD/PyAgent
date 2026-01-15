@@ -1,0 +1,35 @@
+diff --git a/tests/integration/test_webhooks_integration.py b/tests/integration/test_webhooks_integration.py
+index 0342ba9..b245640 100644
+--- a/tests/integration/test_webhooks_integration.py
++++ b/tests/integration/test_webhooks_integration.py
+@@ -1,21 +1,26 @@
+ """Integration tests for agent webhooks."""
+-import importlib.util
+ import sys
+ from pathlib import Path
+-from typing import Any
++from typing import Any, Dict
++from unittest.mock import MagicMock
+ 
+ 
+ def load_agent_module() -> Any:
+     repo_root = Path(__file__).resolve().parents[2]
+     if str(repo_root) not in sys.path:
++        sys.path.append(str(repo_root))
+ 
+-    import src.core.base.BaseAgent.agent as agent_module
++    import src.core.base.BaseAgent as agent_module
+     return agent_module
+ 
+ 
+ def test_webhooks_sent_on_run(monkeypatch, tmp_path) -> None:
+     agent_mod = load_agent_module()
+-    Agent = getattr(agent_mod, 'BaseAgent')
++    try:
++        Agent = agent_mod.BaseAgent
++    except AttributeError:
++        # If agent_mod is already the class or other issue, try direct import
++        from src.core.base.BaseAgent import BaseAgent as Agent
+ 
+     # Create a minimal repo root
+     (tmp_path / 'README.md').write_text('# repo')

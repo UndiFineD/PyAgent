@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\filelock\_api.py
+# hypothesis_version: 6.150.1
+
+[0.05, 420, 'AcquireReturnProxy', 'BaseFileLock', 'blocking', 'filelock', 'is_singleton', 'lock_file', 'mode', 'thread_local', 'timeout']

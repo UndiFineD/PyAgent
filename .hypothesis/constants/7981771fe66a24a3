@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\quantizers\quantizer_quanto.py
+# hypothesis_version: 6.150.1
+
+[0.9, '.bias', '.weight', '0.27.0', 'PreTrainedModel', 'accelerate', 'cpu', 'float8', 'int2', 'int4', 'int8', 'quanto', 'torch.Tensor', 'torch.device', 'torch.dtype', 'weight']

@@ -19,10 +19,13 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, List, Any
+from typing import Any
 from datetime import datetime
 
 __version__ = VERSION
+
+
+
 
 class GlobalContextCore:
     """
@@ -49,7 +52,7 @@ class GlobalContextCore:
                 # Logic for Sub-sharding (Stable Hash-based)
                 # Phase 119: Adaptive rebalancing - we adjust shard count based on density
                 num_sub_shards = 2**((count // max_entries_per_shard).bit_length())
-                
+
                 for key, val in data.items():
                     # Adler-32 is fast and sufficient for non-cryptographic sharding
                     hash_input = f"{category}:{key}"
@@ -135,12 +138,12 @@ class GlobalContextCore:
     def generate_markdown_summary(self, memory: dict[str, Any]) -> str:
         """Logic for formatting the cognitive summary."""
         summary = ["# 🧠 Long-Term Memory Summary"]
-        
+
         if memory.get("facts"):
             summary.append("\n## 📋 Project Facts")
             for k, v in memory["facts"].items():
                 summary.append(f"- **{k}**: {v['value']}")
-        
+
         if memory.get("constraints"):
             summary.append("\n## ⚠️ Constraints")
             for c in memory["constraints"]:
@@ -148,9 +151,9 @@ class GlobalContextCore:
 
         if memory.get("insights"):
             summary.append("\n## 💡 Key Insights")
-            for i in memory["insights"][-5:]: # Show last 5
+            for i in memory["insights"][-5:]:  # Show last 5
                 summary.append(f"- {i['text']} (via {i['source']})")
-                
+
         if memory.get("lessons_learned"):
             summary.append("\n## 🎓 Lessons Learned")
             for lesson in memory["lessons_learned"][-3:]:

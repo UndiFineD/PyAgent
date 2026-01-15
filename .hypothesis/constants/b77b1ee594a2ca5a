@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\preprocessing\_discretization.py
+# hypothesis_version: 6.150.1
+
+[1e-08, 0.5, 100, 200000, ', ', '_encoder', 'array-like', 'closest_observation', 'dtype', 'encode', 'hazen', 'inverted_cdf', 'kmeans', 'left', 'linear', 'median_unbiased', 'method', 'n_bins', 'n_features_in_', 'normal_unbiased', 'numeric', 'onehot', 'onehot-dense', 'ordinal', 'quantile', 'quantile_method', 'random_state', 'right', 'strategy', 'subsample', 'uniform', 'warn', 'weibull']

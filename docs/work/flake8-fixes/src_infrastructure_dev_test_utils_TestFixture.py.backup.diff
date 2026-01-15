@@ -1,0 +1,38 @@
+diff --git a/src/infrastructure/dev/test_utils/TestFixture.py b/src/infrastructure/dev/test_utils/TestFixture.py
+index 54510fd..9ab0458 100644
+--- a/src/infrastructure/dev/test_utils/TestFixture.py
++++ b/src/infrastructure/dev/test_utils/TestFixture.py
+@@ -23,14 +23,18 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass
+-from typing import Any, Optional
++from typing import Any
+ from collections.abc import Callable
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class TestFixture:
+-    __test__ = False
+     """A test fixture with setup and teardown.
+ 
+     Attributes:
+@@ -40,9 +44,10 @@ class TestFixture:
+         scope: Fixture scope (function, class, module, session).
+         data: Fixture data.
+     """
++    __test__ = False
+ 
+     name: str
+     setup_fn: Callable[[], Any] | None = None
+     teardown_fn: Callable[[Any], None] | None = None
+     scope: str = "function"
+-    data: Any = None
+\ No newline at end of file
++    data: Any = None

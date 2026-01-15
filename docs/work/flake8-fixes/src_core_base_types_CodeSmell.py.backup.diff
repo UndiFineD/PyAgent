@@ -1,0 +1,23 @@
+diff --git a/src/core/base/types/CodeSmell.py b/src/core/base/types/CodeSmell.py
+index eb4a55f..f796028 100644
+--- a/src/core/base/types/CodeSmell.py
++++ b/src/core/base/types/CodeSmell.py
+@@ -26,6 +26,11 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class CodeSmell:
+     """A detected code smell."""
+@@ -34,4 +39,4 @@ class CodeSmell:
+     severity: str
+     line_number: int
+     suggestion: str
+-    category: str = "general"
+\ No newline at end of file
++    category: str = "general"

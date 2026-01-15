@@ -21,11 +21,14 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import re
 import logging
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.logic.agents.intelligence.core.LocalizationCore import LocalizationCore
 
 __version__ = VERSION
+
+
+
 
 class LocalizationAgent(BaseAgent):
     """
@@ -54,8 +57,8 @@ class LocalizationAgent(BaseAgent):
         Translates a single agent comment using the core's formatting.
         """
         if target_lang not in self.supported_locales:
-             logging.warning(f"Target language {target_lang} not in core supported list.")
-             
+            logging.warning(f"Target language {target_lang} not in core supported list.")
+
         request = self.core.format_translation_request(text, target_lang)
         # In a real scenario, this would call self.improve_content or an API
         return self.solve_translation_task(request)
@@ -80,7 +83,7 @@ class LocalizationAgent(BaseAgent):
         """Generates a JSON translation dictionary for a specific locale."""
         if locale not in self.supported_locales:
             logging.warning(f"Locale {locale} not officially supported.")
-        
+
         translation_map = {s: f"TRANSLATED_{locale}_{s}" for s in strings}
         return translation_map
 

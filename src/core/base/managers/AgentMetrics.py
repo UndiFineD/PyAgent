@@ -21,11 +21,17 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from dataclasses import dataclass, field
-from typing import Dict, Any, List, Optional
+from typing import Any
 import time
 import logging
 
 __version__ = VERSION
+
+
+
+
+
+
 
 @dataclass
 class AgentMetrics:
@@ -87,11 +93,11 @@ Agents applied:
             'agents_applied': self.agents_applied
         }
 
-    def benchmark_execution(self, files: list[Any], total_time_provided: float = None) -> dict[str, Any]:
+    def benchmark_execution(self, files: list[Any], total_time_provided: float | None = None) -> dict[str, Any]:
         """Benchmark execution time per file and per agent."""
         if not self.end_time:
             self.finalize()
-        
+
         total_time = total_time_provided if total_time_provided is not None else (self.end_time - self.start_time)
         files_count = len(files)
         avg_per_file = total_time / max(files_count, 1)

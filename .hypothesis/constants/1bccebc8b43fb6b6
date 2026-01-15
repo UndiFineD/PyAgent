@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\google\protobuf\descriptor.py
+# hypothesis_version: 6.150.1
+
+[100, 19000, 19999, '.', '.proto', '/', 'EDITION_PROTO2', 'EDITION_PROTO3', 'EDITION_UNKNOWN', 'EnumOptions', 'EnumValueOptions', 'FieldOptions', 'FileOptions', 'MessageOptions', 'MethodOptions', 'OneofOptions', 'ServiceOptions', '_', 'ascii', 'features', 'label property', 'options', 'packed', 'proto3', 'python', 'type_name']

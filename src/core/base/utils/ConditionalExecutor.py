@@ -22,12 +22,18 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from .ExecutionCondition import ExecutionCondition
+from src.core.base.models.base_models import ExecutionCondition
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
 from collections.abc import Callable
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class ConditionalExecutor:
     """Execute agents based on file content conditions.

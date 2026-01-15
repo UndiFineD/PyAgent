@@ -26,9 +26,14 @@ from src.core.base.types.AccessibilityIssueType import AccessibilityIssueType
 from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity
 from src.core.base.types.WCAGLevel import WCAGLevel
 from dataclasses import dataclass
-from typing import Optional
 
 __version__ = VERSION
+
+
+
+
+
+
 
 @dataclass
 class AccessibilityIssue:

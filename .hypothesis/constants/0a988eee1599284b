@@ -1,0 +1,4 @@
+# file: c:\DEV\PyAgent\src\core\base\utils\TemplateManager.py
+# hypothesis_version: 6.150.1
+
+['*.md', '*.py', 'Quick fixes only', 'coder', 'documentation', 'errors', 'markdown_docs', 'max_files', 'python_full', 'quick_fix', 'tests']

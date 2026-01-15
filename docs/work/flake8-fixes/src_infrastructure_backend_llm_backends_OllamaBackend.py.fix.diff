@@ -1,0 +1,40 @@
+diff --git a/src/infrastructure/backend/llm_backends/OllamaBackend.py b/src/infrastructure/backend/llm_backends/OllamaBackend.py
+index ffd7a8b..fdb916b 100644
+--- a/src/infrastructure/backend/llm_backends/OllamaBackend.py
++++ b/src/infrastructure/backend/llm_backends/OllamaBackend.py
+@@ -25,6 +25,16 @@ from .LLMBackend import LLMBackend
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class OllamaBackend(LLMBackend):
+     """Ollama LLM Backend."""
+ 
+@@ -42,9 +52,9 @@ class OllamaBackend(LLMBackend):
+             "prompt": prompt,
+             "stream": False
+         }
+-        
++
+         timeout_s = kwargs.get("timeout_s", 120)
+-        
++
+         try:
+             response = self.session.post(url, json=payload, timeout=timeout_s)
+             response.raise_for_status()
+@@ -57,4 +67,4 @@ class OllamaBackend(LLMBackend):
+             logging.debug(f"Ollama call failed: {e}")
+             self._update_status("ollama", False)
+             self._record("ollama", model, prompt, f"ERROR: {str(e)}", system_prompt=system_prompt)
+-            return ""
+\ No newline at end of file
++            return ""

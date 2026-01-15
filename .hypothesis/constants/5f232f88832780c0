@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\backend\llm_backends\GitHubModelsBackend.py
+# hypothesis_version: 6.150.1
+
+[401, '/', '/v1/chat/completions', 'Authorization', 'Content-Type', 'DV_GITHUB_TOKEN_FILE', 'Describe this image.', 'GITHUB_TOKEN', '\\[IMAGE_DATA:(.*?)\\]', 'application/json', 'auth', 'base_url', 'choices', 'content', 'gh', 'github-token.txt', 'github_models', 'image_url', 'max_retries', 'message', 'messages', 'model', 'role', 'stream', 'system', 'text', 'timeout_s', 'token', 'type', 'url', 'user', 'utf-8']

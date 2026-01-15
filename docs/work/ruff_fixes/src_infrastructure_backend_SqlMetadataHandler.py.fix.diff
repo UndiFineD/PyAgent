@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/backend/SqlMetadataHandler.py b/src/infrastructure/backend/SqlMetadataHandler.py
+index d7a4f70..c1c71d3 100644
+--- a/src/infrastructure/backend/SqlMetadataHandler.py
++++ b/src/infrastructure/backend/SqlMetadataHandler.py
+@@ -26,7 +26,7 @@ import os
+ import gzip
+ import logging
+ import time
+-from typing import List, Dict, Any, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 

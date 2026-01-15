@@ -1,0 +1,89 @@
+diff --git a/src/logic/agents/swarm/InterFleetIdentityAgent.py b/src/logic/agents/swarm/InterFleetIdentityAgent.py
+index efaf71a..6609bfd 100644
+--- a/src/logic/agents/swarm/InterFleetIdentityAgent.py
++++ b/src/logic/agents/swarm/InterFleetIdentityAgent.py
+@@ -22,11 +22,21 @@ from src.core.base.version import VERSION
+ import time
+ import hashlib
+ import uuid
+-from typing import Dict, Any, List
++from typing import Any
+ from src.core.base.core.IdentityCore import IdentityCore
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class InterFleetIdentityAgent:
+     """
+     Manages federated identities for agents across multiple fleets.
+@@ -36,9 +46,13 @@ class InterFleetIdentityAgent:
+         self.workspace_path = workspace_path
+         self.core = IdentityCore()
+         self.fleet_id = str(uuid.uuid4())
+-        self.known_fleets = {} # fleet_id -> {pub_key, metadata}
+-        self.authorized_agents = {} # agent_id -> {fleet_id, permissions}
+-        self.session_tokens = {} # token -> {agent_id, expiry}
++        self.known_fleets: dict[Any, Any] = {} # fleet_id -> {pub_key, metadata}
++        self.authorized_agents: dict[Any, Any] = {} # agent_id -> {fleet_id, permissions}
++        self.session_tokens: dict[Any, Any] = {} # token -> {agent_id, expiry}
++
++    def generate_fleet_handshake(self) -> dict[str, Any]:
++        """Generates a default secure handshake for fleet discovery."""
++        return self.secure_handshake(f"HANDSHAKE_{time.time()}", "default_secret")
+ 
+     def secure_handshake(self, payload: str, secret: str) -> dict[str, str]:
+         """Signs a handshake payload using IdentityCore."""
+@@ -58,32 +72,32 @@ class InterFleetIdentityAgent:
+         """Authorizes an agent from a remote fleet with specific permissions."""
+         if remote_fleet_id not in self.known_fleets:
+             return {"status": "error", "message": "Unknown fleet ID"}
+-        
++
+         self.authorized_agents[agent_id] = {
+             "fleet_id": remote_fleet_id,
+             "permissions": permissions,
+             "authorized_at": time.time()
+         }
+-        
++
+         # Generate a simulated session token
+         token = hashlib.sha256(f"{agent_id}-{time.time()}".encode()).hexdigest()
+         self.session_tokens[token] = {
+             "agent_id": agent_id,
+             "expiry": time.time() + 3600
+         }
+-        
++
+         return {"status": "authorized", "session_token": token}
+ 
+     def verify_token(self, token: str) -> bool:
+         """Verifies if a session token is valid and not expired."""
+         if token not in self.session_tokens:
+             return False
+-            
++
+         session = self.session_tokens[token]
+         if time.time() > session["expiry"]:
+             del self.session_tokens[token]
+             return False
+-            
++
+         return True
+ 
+     def get_identity_report(self) -> dict[str, Any]:
+@@ -93,4 +107,4 @@ class InterFleetIdentityAgent:
+             "remote_fleets_count": len(self.known_fleets),
+             "authorized_agents_count": len(self.authorized_agents),
+             "active_sessions_count": len(self.session_tokens)
+-        }
+\ No newline at end of file
++        }

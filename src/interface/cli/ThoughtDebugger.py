@@ -5,33 +5,35 @@
 from __future__ import annotations
 import sys
 import time
-import json
 import logging
-from typing import Dict, Any, Optional
+from typing import Any
 from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
 from src.core.base.version import VERSION
+
+
+
 
 class ThoughtDebugger:
     """
     Interactive CLI tool for real-time inspection of agent reasoning (thoughts).
     Subscribes to the 'thought_stream' signal and provides formatting and control.
     """
-    
+
     def __init__(self, interactive: bool = True) -> None:
         self.signals = SignalRegistry()
         self.interactive = interactive
         self.thought_count = 0
         self.active = False
-        
+
     def start(self) -> None:
         """Starts the debugger session. Use in a threaded or async context for non-blocking."""
         print(f"--- PyAgent Thought Debugger v{VERSION} ---")
         print(f"Mode: {'Interactive' if self.interactive else 'Passive Monitor'}")
         print("Waiting for thoughts from the swarm... (Ctrl+C to exit)\n")
-        
+
         self.signals.subscribe("thought_stream", self._handle_thought)
         self.active = True
-        
+
         try:
             # If we're the main entry point, block here using event-driven approach
             if __name__ == "__main__":
@@ -58,13 +60,27 @@ class ThoughtDebugger:
 
         print(f"\r[{timestamp}] [{agent}] THOUGHT #{self.thought_count}:")
         print(f"  > {thought}")
-        
+
         if self.interactive:
             # Note: This will block the thread emitting the signal!
+
+
+
+
+
+
+
+
+
+
             # In a live fleet, this acts as a 'breakpoint'.
             choice = input("\n[DEBUG] (ENTER=Continue, q=Quit, m=Menu): ").lower().strip()
             if choice == 'q':
                 self.stop()
+
+
+
+
                 sys.exit(0)
             elif choice == 'm':
                 self._show_menu(data)
@@ -75,15 +91,20 @@ class ThoughtDebugger:
         """Displays extended thought metadata and controls."""
         print("\n--- Thought Metadata ---")
         for k, v in data.items():
+
             if k != "thought":
                 print(f"  {k}: {v}")
         print("------------------------")
         input("Press ENTER to return to thought stream...")
 
+
+
+
+
 if __name__ == "__main__":
     # Configure logging to not interfere too much with stdout
     logging.basicConfig(level=logging.WARNING)
-    
+
     # If run directly, start the passive monitor or interactive REPL
     interactive_mode = "--passive" not in sys.argv
     debugger = ThoughtDebugger(interactive=interactive_mode)

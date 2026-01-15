@@ -1,0 +1,12 @@
+diff --git a/src/logic/agents/system/CompressionAgent.py b/src/logic/agents/system/CompressionAgent.py
+index 89e8b3c..89fc369 100644
+--- a/src/logic/agents/system/CompressionAgent.py
++++ b/src/logic/agents/system/CompressionAgent.py
+@@ -26,7 +26,6 @@ and minimizing token usage for long-running sub-swarm dialogues.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Dict, List
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 

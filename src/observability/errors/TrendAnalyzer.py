@@ -25,9 +25,11 @@ from src.core.base.version import VERSION
 from .TrendData import TrendData
 from .TrendDirection import TrendDirection
 from datetime import datetime
-from typing import Dict, List
 
 __version__ = VERSION
+
+
+
 
 class TrendAnalyzer:
     """Analyzes error trends over time.

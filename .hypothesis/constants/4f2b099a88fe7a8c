@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\cuda\jiterator.py
+# hypothesis_version: 6.150.1
+
+['(?P<return_type>\\w+)', '\\s*', '\\s+', 'function_body', 'function_name', 'function_params', 'return_type', 'template', 'template_params']

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\security\ImmuneSystemAgent.py
+# hypothesis_version: 6.150.1
+
+['(?i)<script>', '(?i)dan mode', '(?i)do anything now', '(?i)jailbreak', '(?i)rm -rf /', '(?i)system prompt', '(?i)you are now a...', '; ', 'Anomalies detected: ', 'Immune System Agent', 'ImmuneSystem', 'InjectionScanner', '[CLEANSED]', '__main__', 'activity', 'agent_id', 'dangerous', 'findings', 'high', 'low', 'retrying', 'safe', 'status', 'threat_level']

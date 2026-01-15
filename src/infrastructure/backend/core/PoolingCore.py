@@ -1,7 +1,12 @@
 
 from __future__ import annotations
-from typing import Dict, List
 import re
+
+
+
+
+
+
 
 class PoolingCore:
     """
@@ -16,7 +21,7 @@ class PoolingCore:
             (r"\bi would like you to\b", ""),
             (r"\bthank you\b", ""),
             (r"\bhelpful assistant\b", "assistant"),
-            (r"\s+", " ") # Collapse whitespace
+            (r"\s+", " ")  # Collapse whitespace
         ]
 
     def compress_prompt(self, text: str) -> str:
@@ -35,7 +40,7 @@ class PoolingCore:
         """
         if not endpoint_stats:
             return preferred_host
-            
+
         return min(endpoint_stats, key=endpoint_stats.get)
 
     def should_reuse_session(self, host: str, active_sessions: list[str]) -> bool:

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\scipy\sparse\_compressed.py
+# hypothesis_version: 6.150.1
+
+[0.001, 'CF', '_eldiv_', '_elmul_', '_ge_', '_gt_', '_has_sorted_indices', '_le_', '_lt_', '_matvec', '_matvecs', '_minus_', '_ne_', '_plus_', 'axis out of bounds', 'blocksize', 'cannot be broadcast', 'cf', 'clip', 'csc', 'csr', 'i', 'indices must be >= 0', 'mergesort']

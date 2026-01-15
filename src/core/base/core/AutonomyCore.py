@@ -2,6 +2,12 @@
 from __future__ import annotations
 from typing import List
 
+
+
+
+
+
+
 class AutonomyCore:
     """
     AutonomyCore implements 'Self-Model' logic and the Background Evolution Daemon.
@@ -19,9 +25,9 @@ class AutonomyCore:
         """
         blind_spots = []
         if success_rate < 0.7:
-             blind_spots.append("GENERAL_REASONING_RELIABILITY")
+            blind_spots.append("GENERAL_REASONING_RELIABILITY")
         if task_diversity < 0.3:
-             blind_spots.append("DOMAIN_SPECIFIC_RIGIDITY")
+            blind_spots.append("DOMAIN_SPECIFIC_RIGIDITY")
         return blind_spots
 
     def calculate_daemon_sleep_interval(self, optimization_score: float) -> int:
@@ -30,17 +36,17 @@ class AutonomyCore:
         If score is 1.0 (100% optimized), sleep longer (e.g., 3600s).
         """
         if optimization_score >= 1.0:
-            return 3600 # 1 hour
+            return 3600  # 1 hour
         elif optimization_score > 0.8:
-            return 600 # 10 minutes
+            return 600  # 10 minutes
         else:
-            return 60 # 1 minute (high activity)
+            return 60  # 1 minute (high activity)
 
     def generate_self_improvement_plan(self, blind_spots: list[str]) -> str:
         """Constructs a directive for the agent to use in its next improvement cycle."""
         plan = f"AGENT SELF-MODEL UPDATE for {self.agent_id}:\n"
         if not blind_spots:
             return f"{plan}Status: Optimal. No immediate changes required."
-        
+
         plan += "Action: Expand training data for identified blind spots: " + ", ".join(blind_spots)
         return plan

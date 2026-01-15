@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\quantizers\quantizer_fbgemm_fp8.py
+# hypothesis_version: 6.150.1
+
+['.bias', '.weight', '0.32.2', 'Llama4', 'PreTrainedModel', 'accelerate', 'bias', 'cpu', 'device_map', 'disk', 'down_proj', 'down_proj_scale', 'fbgemm-gpu', 'gate_up_proj', 'gate_up_proj_scale', 'gather', 'layers.*.self_attn', 'local', 'local_colwise', 'local_packed_rowwise', 'local_rowwise', 'norm.weight', 'sequence_parallel', 'torch.Tensor', 'torch.device', 'torch.dtype', 'weight', 'weight_scale']

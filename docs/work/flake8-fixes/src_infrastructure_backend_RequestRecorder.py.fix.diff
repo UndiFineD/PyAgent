@@ -1,0 +1,37 @@
+diff --git a/src/infrastructure/backend/RequestRecorder.py b/src/infrastructure/backend/RequestRecorder.py
+index e745529..6cca677 100644
+--- a/src/infrastructure/backend/RequestRecorder.py
++++ b/src/infrastructure/backend/RequestRecorder.py
+@@ -23,7 +23,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .RecordedRequest import RecordedRequest
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ import json
+ import threading
+ import time
+@@ -31,6 +31,16 @@ import uuid
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class RequestRecorder:
+     """Records and replays requests for debugging and testing.
+ 
+@@ -167,4 +177,4 @@ class RequestRecorder:
+         with self._lock:
+             count = len(self._recordings)
+             self._recordings.clear()
+-        return count
+\ No newline at end of file
++        return count

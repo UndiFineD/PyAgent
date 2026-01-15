@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\opentelemetry\sdk\metrics\_internal\export\__init__.py
+# hypothesis_version: 6.150.1
+
+[1000.0, 10000, 30000, 60000, 'register_at_fork']

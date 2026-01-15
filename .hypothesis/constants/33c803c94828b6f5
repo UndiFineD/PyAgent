@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\jinja2\defaults.py
+# hypothesis_version: 6.150.1
+
+['#}', '%}', 'compiler.ascii_str', 'cycler', 'dict', 'ext.i18n.trimmed', 'joiner', 'json.dumps_function', 'json.dumps_kwargs', 'lipsum', 'namespace', 'noopener', 'range', 'sort_keys', 'truncate.leeway', 'urlize.extra_schemes', 'urlize.rel', 'urlize.target', '{#', '{%', '{{', '}}']

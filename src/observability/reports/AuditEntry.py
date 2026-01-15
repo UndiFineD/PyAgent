@@ -24,9 +24,12 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .AuditAction import AuditAction
 from dataclasses import dataclass, field
-from typing import Any, Dict
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 @dataclass
 class AuditEntry:

@@ -24,9 +24,14 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .LocalizationLanguage import LocalizationLanguage
 from dataclasses import dataclass, field
-from typing import Dict
 
 __version__ = VERSION
+
+
+
+
+
+
 
 @dataclass
 class LocalizedEntry:

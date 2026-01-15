@@ -1,0 +1,11 @@
+diff --git a/src/infrastructure/dev/scripts/management/repair_packages.py b/src/infrastructure/dev/scripts/management/repair_packages.py
+index 8ea845e..de905fb 100644
+--- a/src/infrastructure/dev/scripts/management/repair_packages.py
++++ b/src/infrastructure/dev/scripts/management/repair_packages.py
+@@ -124,4 +124,4 @@ def main() -> None:
+             agent_py.rename(src / "agent_deprecated.py")
+ 
+ if __name__ == "__main__":
+-    main()
+\ No newline at end of file
++    main()

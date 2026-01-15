@@ -10,79 +10,176 @@ import zlib
 from enum import Enum
 from datetime import datetime, timedelta
 from dataclasses import dataclass, field
-from typing import Dict, List, Any, Optional, Tuple, Union
+from typing import Any
 
 try:
     import matplotlib.pyplot as plt
     has_matplotlib = True
 except ImportError:
-    plt = None
+    plt = None  # type: ignore[assignment]
     has_matplotlib = False
 from src.core.base.version import VERSION
 
 __version__ = VERSION
 
+
 class MetricType(Enum):
     """Types of metrics."""
+
+
+
+
     COUNTER = "counter"
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
+
     SUMMARY = "summary"
 
 @dataclass
+
+
 class Metric:
     """A single metric."""
     name: str
+
+
+
+
+
+
+
+
+
+
     value: float
     metric_type: MetricType
+
+
+
+
     timestamp: str = ""
     namespace: str = "default"
+
+
     tags: dict[str, str] = field(default_factory=lambda: {})
 
     # Compatibility: some tests treat history entries as (timestamp, value) tuples.
     def __iter__(self) -> Any:
+
+
         yield self.timestamp
         yield self.value
 
+
+
+
+
+
+
+
+
+
+
+
+
+
     def __getitem__(self, index: int) -> Any:
+
+
+
+
+
         return (self.timestamp, self.value)[index]
 
 class AlertSeverity(Enum):
+
+
+
     """Alert severity levels."""
     CRITICAL = 5
+
+
     HIGH = 4
+
+
     MEDIUM = 3
+
+
     LOW = 2
+
     INFO = 1
+
+
+
 
 @dataclass
 class Alert:
+
     """An alert triggered by a threshold breach."""
+
     id: str
     metric_name: str
     current_value: float
+
+
+
+
     threshold_value: float
     severity: AlertSeverity
+
     message: str
     timestamp: str
 
 @dataclass
+
 class Threshold:
+
+
+
+
+
     """Threshold configuration for alerting."""
+
+
+
+
     metric_name: str
     min_value: float | None = None
+
     max_value: float | None = None
+
+
+
+
     severity: AlertSeverity | None = None  # Will be set to MEDIUM (3) by default
     message: str = ""
+
+
+
+
+
+
+
+
+
+
     operator: str = ""  # For backwards compatibility
     value: float = 0.0  # For backwards compatibility
+
+
+
 
     def __post_init__(self) -> None:
         if self.severity is None:
             self.severity = AlertSeverity.MEDIUM
 
+
+
+
+
 @dataclass
 class RetentionPolicy:
+
     """Policy for data retention."""
     name: str = ""  # Changed from metric_name to name for constructor
     retention_days: int = 0
@@ -90,17 +187,40 @@ class RetentionPolicy:
     metric_name: str | None = None
     namespace: str = ""
     max_age_days: int = 0
+
+
+
+
+
+
+
+
     max_points: int = 0
     compression_after_days: int = 7
+
+
+
+
+
+
+
+
 
 @dataclass
 class MetricSnapshot:
     """A snapshot of metrics at a point in time."""
+
+
     name: str
     id: str
     timestamp: str
     metrics: dict[str, float]
     tags: dict[str, str] = field(default_factory=lambda: {})
+
+
+
+
+
 
 class AggregationType(Enum):
     """Types of metric aggregation for rollups."""
@@ -109,9 +229,20 @@ class AggregationType(Enum):
     MIN = "minimum"
     MAX = "maximum"
     COUNT = "count"
+
+
+
     P50 = "percentile_50"
     P95 = "percentile_95"
     P99 = "percentile_99"
+
+
+
+
+
+
+
+
 
 @dataclass
 class MetricNamespace:
@@ -122,7 +253,28 @@ class MetricNamespace:
     tags: dict[str, str] = field(default_factory=lambda: {})
     retention_days: int = 30
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @dataclass
+
+
+
+
 class MetricAnnotation:
     """Annotation or comment on a metric."""
     metric_name: str
@@ -131,6 +283,7 @@ class MetricAnnotation:
     author: str = ""
     annotation_type: str = "info"  # info, warning, milestone
 
+
 @dataclass
 class MetricCorrelation:
     """Correlation between two metrics."""
@@ -138,13 +291,28 @@ class MetricCorrelation:
     metric_b: str
     correlation_coefficient: float
     sample_size: int
+
     significance: float = 0.0
+
+
+
+
 
 @dataclass
 class MetricSubscription:
     """Subscription for metric change notifications."""
     id: str
     metric_pattern: str  # glob pattern like "cpu.*"
+
+
+
+
+
+
+
+
+
+
     callback_url: str = ""
     notify_on: list[str] = field(default_factory=lambda: ["threshold", "anomaly"])
     min_interval_seconds: int = 60
@@ -157,21 +325,33 @@ class ExportDestination(Enum):
     CLOUDWATCH = "cloudwatch"
     STACKDRIVER = "stackdriver"
 
+
+
+
+
 @dataclass
 class FederatedSource:
     """A source repository for stats federation."""
     repo_url: str
     api_endpoint: str
     auth_token: str = ""
+
+
     poll_interval_seconds: int = 300
     enabled: bool = True
     metrics: dict[str, float] = field(default_factory=dict)
 
+
 class FederationMode(Enum):
     """Federation modes for multi-repo aggregation."""
     PULL = "pull"
+
+
     PUSH = "push"
     HYBRID = "hybrid"
+
+
+
 
 @dataclass
 class RollupConfig:
@@ -182,9 +362,21 @@ class RollupConfig:
     interval_minutes: int = 60
     keep_raw: bool = True
 
+
+
 @dataclass
 class StreamingConfig:
     """Configuration for real-time stats streaming."""
+
+
+
+
+
+
+
+
+
+
     protocol: StreamingProtocol
     endpoint: str
     port: int = 8080
@@ -193,15 +385,40 @@ class StreamingConfig:
     reconnect_attempts: int = 3
     buffer_size: int = 1000
 
+
+
+
+
 class StreamingProtocol(Enum):
+
     """Protocols for real-time stats streaming."""
+
+
+
     WEBSOCKET = "websocket"
     SSE = "server_sent_events"
+
+
+
+
+
+
+
+
     GRPC = "grpc"
     MQTT = "mqtt"
 
+
+
+
+
 @dataclass
 class AgentMetric:
+
+
+
+
+
     agent_name: str
     operation: str
     duration_ms: float
@@ -211,12 +428,25 @@ class AgentMetric:
     input_tokens: int = 0
     output_tokens: int = 0
     estimated_cost: float = 0.0
+
+
+
+
+
+
+
+
     model: str = "unknown"
     metadata: dict[str, Any] = field(default_factory=dict)
 
+
+
+
+
+
 class ObservabilityCore:
     """Pure logic for processing agent telemetry data."""
-    
+
     def __init__(self) -> None:
         self.metrics_history: list[AgentMetric] = []
 
@@ -228,25 +458,32 @@ class ObservabilityCore:
         """Calculates aggregate stats from history."""
         if not self.metrics_history:
             return {"count": 0, "avg_duration": 0, "total_cost": 0}
-            
+
         total_duration = sum(m.duration_ms for m in self.metrics_history)
         total_cost = sum(m.estimated_cost for m in self.metrics_history)
         count = len(self.metrics_history)
-        
+
         # Breakdown by agent
         by_agent = {}
         for m in self.metrics_history:
             if m.agent_name not in by_agent:
+
+
+
+
                 by_agent[m.agent_name] = {"count": 0, "total_cost": 0, "avg_duration": 0}
             stats = by_agent[m.agent_name]
             stats["count"] += 1
             stats["total_cost"] += m.estimated_cost
-            
+
         return {
             "total_count": count,
             "avg_duration_ms": total_duration / count,
             "total_cost_usd": round(total_cost, 6),
             "agents": by_agent
+
+
+
         }
 
     def filter_by_time(self, start_iso: str, end_iso: str) -> list[AgentMetric]:
@@ -257,6 +494,11 @@ class ObservabilityCore:
                 results.append(m)
         return results
 
+
+
+
+
+
     def calculate_reliability_scores(self, agent_names: list[str]) -> list[float]:
         """
         Calculates normalized reliability scores (0.0 to 1.0) for a list of agents.
@@ -264,7 +506,7 @@ class ObservabilityCore:
         If no history, defaults to 0.5 (neutral).
         """
         scores: list[float] = []
-        
+
         # Aggregate history per agent
         stats: dict[str, dict[str, int]] = {}
         for m in self.metrics_history:
@@ -273,7 +515,7 @@ class ObservabilityCore:
             stats[m.agent_name]["total"] += 1
             if m.status == "success":
                 stats[m.agent_name]["success"] += 1
-                
+
         for name in agent_names:
             if name in stats and stats[name]["total"] > 0:
                 score = stats[name]["success"] / stats[name]["total"]
@@ -281,10 +523,16 @@ class ObservabilityCore:
             else:
                 # Neutral default for new/unknown agents
                 scores.append(0.5)
-                
+
         return scores
 
+
+
+
+
 class StatsCore:
+
+
     """Core logic for statistics processing, separated from the Agent shell."""
 
     @staticmethod
@@ -296,7 +544,7 @@ class StatsCore:
         """Detect if a value is anomalous using standard deviation."""
         if len(history) < 2:
             return False, 0.0
-            
+
         values = [m.value for m in history]
         mean = sum(values) / len(values)
         variance = sum((x - mean) ** 2 for x in values) / len(values)
@@ -310,6 +558,11 @@ class StatsCore:
         if len(history) < 3:
             return []
         values = [m.value for m in history]
+
+
+
+
+
         n = len(values)
         x_mean = (n - 1) / 2
         y_mean = sum(values) / n
@@ -329,6 +582,11 @@ class StatsCore:
         data = json.dumps([
             {"value": m.value, "timestamp": m.timestamp, "tags": m.tags}
             for m in metrics
+
+
+
+
+
         ])
         return zlib.compress(data.encode("utf-8"))
 
@@ -337,6 +595,10 @@ class StatsCore:
         """Generate CLI graphs for stats visualization."""
         if not has_matplotlib:
             logging.warning("matplotlib not available for visualization")
+
+
+
+
             return
         labels = list(stats.keys())
         values = list(stats.values())
@@ -347,6 +609,7 @@ class StatsCore:
         plt.title('Stats Visualization')
         plt.xticks(rotation=45, ha='right')
         plt.tight_layout()
+
         plt.show()
 
     @staticmethod
@@ -356,6 +619,11 @@ class StatsCore:
         all_keys = set(s1.metrics.keys()) | set(s2.metrics.keys())
         for key in all_keys:
             v1 = s1.metrics.get(key, 0.0)
+
+
+
+
+
             v2 = s2.metrics.get(key, 0.0)
             comparison[key] = {
                 "snapshot1": v1,
@@ -367,7 +635,7 @@ class StatsCore:
 
     @staticmethod
     def apply_retention(
-        metrics_dict: dict[str, list[Metric]], 
+        metrics_dict: dict[str, list[Metric]],
         policies: dict[str, RetentionPolicy]
     ) -> int:
         """Apply retention policies to metrics."""
@@ -378,17 +646,22 @@ class StatsCore:
             policy = policies.get(key) or policies.get(namespace)
             if not policy:
                 continue
-            
+
             if policy.max_age_days > 0:
                 cutoff = now - timedelta(days=policy.max_age_days)
                 orig = len(metrics)
                 metrics_dict[key] = [m for m in metrics if datetime.fromisoformat(m.timestamp) > cutoff]
                 removed += orig - len(metrics_dict[key])
-                
+
             if policy.max_points > 0 and len(metrics_dict[key]) > policy.max_points:
                 removed += len(metrics_dict[key]) - policy.max_points
                 metrics_dict[key] = metrics_dict[key][-policy.max_points:]
         return removed
+
+
+
+
+
 
 class StatsNamespace:
     """Represents a namespace for metric isolation."""
@@ -415,6 +688,11 @@ class StatsNamespace:
         """Get all metrics in namespace."""
         return self.metrics
 
+
+
+
+
+
 class StatsNamespaceManager:
     """Manages multiple namespaces."""
     def __init__(self) -> None:
@@ -434,6 +712,11 @@ class StatsNamespaceManager:
         """Get a namespace."""
         return self.namespaces.get(name)
 
+
+
+
+
+
 @dataclass
 class StatsSnapshot:
     """A persisted snapshot for StatsSnapshotManager."""
@@ -441,6 +724,11 @@ class StatsSnapshot:
     name: str
     data: dict[str, Any]
     timestamp: str
+
+
+
+
+
 
 @dataclass
 class StatsSubscription:
@@ -452,6 +740,11 @@ class StatsSubscription:
     delivery_method: str
     created_at: str
 
+
+
+
+
+
 @dataclass
 class ThresholdAlert:
     """A single threshold alert emitted by ThresholdAlertManager."""
@@ -460,6 +753,11 @@ class ThresholdAlert:
     value: float
     severity: str
     threshold: float
+
+
+
+
+
 
 @dataclass
 class DerivedMetric:

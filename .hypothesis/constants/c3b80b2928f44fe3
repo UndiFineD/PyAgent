@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\neighbors\_nearest_centroid.py
+# hypothesis_version: 6.150.1
+
+[1.0, 2.0, 'allow-nan', 'array-like', 'centroids_', 'csc', 'csr', 'empirical', 'euclidean', 'manhattan', 'metric', 'nan_euclidean', 'neither', 'priors', 'shrink_threshold', 'uniform']

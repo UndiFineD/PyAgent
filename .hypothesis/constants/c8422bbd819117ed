@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\backend\RequestThrottler.py
+# hypothesis_version: 6.150.1
+
+[0.1, 1.0, 10.0, 'available_tokens', 'max_tokens', 'requests_per_second']

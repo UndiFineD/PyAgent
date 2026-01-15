@@ -1,0 +1,12 @@
+diff --git a/src/observability/reports/ReportValidator.py b/src/observability/reports/ReportValidator.py
+index 83fb28c..2a3499b 100644
+--- a/src/observability/reports/ReportValidator.py
++++ b/src/observability/reports/ReportValidator.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ValidationResult import ValidationResult
+-from typing import List
+ import hashlib
+ import logging
+ import re

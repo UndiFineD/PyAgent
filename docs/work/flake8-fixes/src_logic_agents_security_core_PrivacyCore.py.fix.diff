@@ -1,0 +1,70 @@
+diff --git a/src/logic/agents/security/core/PrivacyCore.py b/src/logic/agents/security/core/PrivacyCore.py
+index 7db2c0b..e190a53 100644
+--- a/src/logic/agents/security/core/PrivacyCore.py
++++ b/src/logic/agents/security/core/PrivacyCore.py
+@@ -5,13 +5,28 @@ Handles PII detection and redaction using regex.
+ """
+ 
+ import re
+-from typing import Dict
++
++try:
++    import rust_core as rc
++except ImportError:
++    rc = None  # type: ignore[assignment]
++
++
++
++
++
++
++
++
++
++
+ 
+ class PrivacyCore:
++    """Core logic for PII detection and content redaction."""
+     # Patterns for sensitive data
+     PATTERNS = {
+         "email": r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+',
+-        "api_key": r'(?:key|token|auth|secret|password)["\']?\s*[:=]\s*["\']?([a-zA-Z0-9_\-\.\~]{16,})["\']?',
++        "api_key": r'(?:api_key|secret_key|secret|token)\s*[:=]\s*["\']?([a-zA-Z0-9_\-\.\~]{16,})["\']?',
+         "ipv4": r'\b(?:\d{1,3}\.){3}\d{1,3}\b',
+         "credit_card": r'\b(?:\d[ -]*?){13,16}\b'
+     }
+@@ -21,6 +36,12 @@ class PrivacyCore:
+         """
+         Scans text for PII and replaces it with [REDACTED].
+         """
++        if rc:
++            try:
++                return rc.redact_pii(text)  # type: ignore[attr-defined]
++            except Exception:
++                pass
++
+         redacted = text
+         for label, pattern in cls.PATTERNS.items():
+             if label == "api_key":
+@@ -31,10 +52,11 @@ class PrivacyCore:
+                     val = match.group(1)
+                     start = match.start(1) + offset
+                     end = match.end(1) + offset
+-                    redacted = redacted[:start] + "[REDACTED_API_KEY]" + redacted[end:]
+-                    offset += len("[REDACTED_API_KEY]") - len(val)
++                    redacted = redacted[:start] + "[REDACTED]" + redacted[end:]
++                    offset += len("[REDACTED]") - len(val)
+             else:
+-                redacted = re.sub(pattern, f"[REDACTED_{label.upper()}]", redacted)
++                label_fmt = "IP" if label == "ipv4" else label.upper()
++                redacted = re.sub(pattern, f"[{label_fmt}_REDACTED]", redacted)
+         return redacted
+ 
+     @classmethod
+@@ -48,4 +70,4 @@ class PrivacyCore:
+             return [cls.scan_log_entry(i) for i in entry]
+         elif isinstance(entry, str):
+             return cls.redact_text(entry)
+-        return entry
+\ No newline at end of file
++        return entry

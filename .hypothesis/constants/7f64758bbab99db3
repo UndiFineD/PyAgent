@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\huggingface_hub\repocard_data.py
+# hypothesis_version: 6.150.1
+
+['EvalResult', 'args', 'config', 'dataset', 'eval_results', 'metric_value', 'metrics', 'model-index', 'model_name', 'name', 'results', 'revision', 'source', 'split', 'task', 'train-eval-index', 'train_eval_index', 'type', 'url', 'value', 'verified', 'verifyToken', 'verify_token']

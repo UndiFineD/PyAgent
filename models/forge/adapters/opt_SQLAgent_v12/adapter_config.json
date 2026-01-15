@@ -1,1 +1,1 @@
-{"base_model": "unsloth/llama-3-8b-bnb-4bit", "peft_type": "LORA", "job_id": "job_opt_SQLAgent_v12_1768067088"}
+{"base_model": "unsloth/llama-3-8b-bnb-4bit", "peft_type": "LORA", "job_id": "job_opt_SQLAgent_v12_1768474453"}

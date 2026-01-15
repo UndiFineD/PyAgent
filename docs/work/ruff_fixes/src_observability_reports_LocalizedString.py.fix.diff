@@ -1,0 +1,12 @@
+diff --git a/src/observability/reports/LocalizedString.py b/src/observability/reports/LocalizedString.py
+index 99e7672..b6f55e0 100644
+--- a/src/observability/reports/LocalizedString.py
++++ b/src/observability/reports/LocalizedString.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import Dict
+ 
+ __version__ = VERSION
+ 

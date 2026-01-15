@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\onnx\_constants.py
+# hypothesis_version: 6.150.1
+
+[-9223372036854775808, -2147483648, -32768, -128, 127, 255, 32767, 2147483647, 9223372036854775807, '__MODEL_PROTO']

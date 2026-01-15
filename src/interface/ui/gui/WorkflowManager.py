@@ -31,25 +31,28 @@ from tkinter import messagebox
 
 __version__ = VERSION
 
+
+
+
 class WorkflowManager:
     """Manages the lifecycle of a complex development workflow."""
     def __init__(self, callbacks) -> None:
         self.callbacks: Any = callbacks
         self.current_step_index = 0
         self.workflow_active = False
-        
+
     def start_workflow(self, track_name, targets) -> None:
         """Starts a predefined workflow based on the track."""
         from .Constants import BMAD_TRACKS
         track = BMAD_TRACKS.get(track_name)
         if not track:
             return
-            
+
         self.phases = track["phases"]
         self.targets = targets
         self.current_step_index = 0
         self.workflow_active = True
-        
+
         self.execute_current_phase()
 
     def execute_current_phase(self) -> None:
@@ -57,13 +60,13 @@ class WorkflowManager:
         if self.current_step_index >= len(self.phases):
             self.finish_workflow()
             return
-            
+
         phase = self.phases[self.current_step_index]
         self.callbacks["set_status"](f"Workflow: {phase} Phase starting...")
-        
+
         # Decide which agents to deploy based on phase
         agents: list[str] = self.get_agents_for_phase(phase)
-        
+
         for target in self.targets:
             for agent in agents:
                 col = self.callbacks["add_agent"](agent)

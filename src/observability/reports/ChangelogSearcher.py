@@ -22,11 +22,13 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from .SearchResult import SearchResult
-from typing import List
+from src.core.base.types import SearchResult
 import re
 
 __version__ = VERSION
+
+
+
 
 class ChangelogSearcher:
     """Searches changelog content across project history.

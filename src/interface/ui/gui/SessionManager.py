@@ -27,10 +27,13 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import json
-from typing import Any, Optional
+from typing import Any
 from tkinter import filedialog, messagebox
 
 __version__ = VERSION
+
+
+
 
 class SessionManager:
     """Handles saving and loading of the GUI state."""
@@ -41,7 +44,7 @@ class SessionManager:
         """Saves session data to a JSON file."""
         filepath: str = filedialog.asksaveasfilename(
             initialfile=self.default_filename,
-            defaultextension=".json", 
+            defaultextension=".json",
             filetypes=[("JSON", "*.json")]
         )
         if filepath:
@@ -58,7 +61,7 @@ class SessionManager:
         filepath: str = filedialog.askopenfilename(filetypes=[("JSON", "*.json")])
         if not filepath:
             return None
-            
+
         try:
             with open(filepath, encoding='utf-8') as f:
                 data = json.load(f)

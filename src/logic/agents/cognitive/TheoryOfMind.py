@@ -22,14 +22,17 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, Any, List
-from src.logic.cognitive.TheoryOfMindCore import TheoryOfMindCore
+from typing import Any
+from src.logic.agents.cognitive.TheoryOfMindCore import TheoryOfMindCore
 
 __version__ = VERSION
 
+
+
+
 class TheoryOfMind:
     """Models the mental states and knowledge domains of other agents.
-    
+
     Acts as the I/O Shell for TheoryOfMindCore.
     """
 
@@ -45,7 +48,7 @@ class TheoryOfMind:
             "limitations": [],
             "last_active": 0.0
         })
-        
+
         updated = self.core.update_profile_logic(current_profile, observations)
         self.agent_profiles[agent_name] = updated
 
@@ -53,7 +56,7 @@ class TheoryOfMind:
         """Estimates knowledge probability via Core."""
         if agent_name not in self.agent_profiles:
             return 0.5
-            
+
         return self.core.estimate_knowledge_score(self.agent_profiles[agent_name], topic)
 
     def suggest_collaborator(self, task: str) -> list[str]:

@@ -28,9 +28,12 @@ CommunityCore: Logic-only module for demonstration.
 This part can be easily converted to a Rust library in the future.
 """
 
+
+
+
 class CommunityCore:
     """Pure logic for a custom community plugin."""
-    
+
     def process_data(self, input_text: str) -> str:
         """A simple transformation: Mock logic."""
         if not input_text:

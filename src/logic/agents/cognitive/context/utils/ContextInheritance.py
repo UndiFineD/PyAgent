@@ -24,10 +24,12 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.InheritanceMode import InheritanceMode
 from src.logic.agents.cognitive.context.models.InheritedContext import InheritedContext
-from typing import Dict, List, Optional
 import re
 
 __version__ = VERSION
+
+
+
 
 class ContextInheritance:
     """Manages context inheritance from parent files.

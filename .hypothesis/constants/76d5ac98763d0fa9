@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\intelligence\ExcelAgent.py
+# hypothesis_version: 6.150.1
+
+['.xlsx', 'Sheet1', '__main__', '_charts', '_tables', 'book_name', 'charts', 'dimensions', 'error', 'extract', 'max_col', 'max_row', 'merged_cells', 'note', 'sample.xlsx', 'shapes', 'sheets', 'standard', 'table_candidates']

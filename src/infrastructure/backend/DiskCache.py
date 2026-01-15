@@ -26,9 +26,14 @@ import json
 import logging
 import time
 from pathlib import Path
-from typing import Optional
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class DiskCache:
     """A simple disk-based cache for persistent storage of AI responses."""
@@ -88,7 +93,7 @@ class DiskCache:
 
         try:
             data = json.loads(file_path.read_text(encoding="utf-8"))
-            
+
             # Check TTL
             if self.ttl_seconds is not None:
                 timestamp = data.get("timestamp", 0)
@@ -99,7 +104,7 @@ class DiskCache:
                     except Exception:
                         logging.debug(f"Failed to unlink expired cache file {file_path}")
                     return None
-            
+
             return data.get("value")
         except Exception as e:
             logging.warning(f"Failed to read cache file {file_path}: {e}")

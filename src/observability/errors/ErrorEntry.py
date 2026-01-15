@@ -25,10 +25,12 @@ from src.core.base.version import VERSION
 from .ErrorCategory import ErrorCategory
 from .ErrorSeverity import ErrorSeverity
 from dataclasses import dataclass, field
-from typing import List
 import hashlib
 
 __version__ = VERSION
+
+
+
 
 @dataclass
 class ErrorEntry:

@@ -1,0 +1,22 @@
+diff --git a/src/infrastructure/dev/test_utils/CleanupStrategy.py b/src/infrastructure/dev/test_utils/CleanupStrategy.py
+index ab05048..e26bda0 100644
+--- a/src/infrastructure/dev/test_utils/CleanupStrategy.py
++++ b/src/infrastructure/dev/test_utils/CleanupStrategy.py
+@@ -26,10 +26,15 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class CleanupStrategy(Enum):
+     """Cleanup strategies for test resources."""
+ 
+     IMMEDIATE = "immediate"
+     DEFERRED = "deferred"
+     ON_SUCCESS = "on_success"
+-    NEVER = "never"
+\ No newline at end of file
++    NEVER = "never"

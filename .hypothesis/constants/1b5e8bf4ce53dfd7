@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\discriminant_analysis.py
+# hypothesis_version: 6.150.1
+
+[-0.5, 0.0, 1e-05, 0.0001, 1.0, 'array-like', 'auto', 'boolean', 'both', 'covariance_', 'covariance_estimator', 'eigen', 'empirical', 'fit', 'left', 'lsqr', 'n_components', 'priors', 'reg_param', 'shrinkage', 'solver', 'store_covariance', 'svd', 'tol']

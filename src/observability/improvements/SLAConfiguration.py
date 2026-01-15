@@ -24,9 +24,11 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .SLALevel import SLALevel
 from dataclasses import dataclass, field
-from typing import List
 
 __version__ = VERSION
+
+
+
 
 @dataclass
 class SLAConfiguration:

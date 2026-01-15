@@ -20,9 +20,12 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import time
-from typing import Dict, List, Any
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class ProcessSynthesizerAgent:
     """
@@ -56,7 +59,7 @@ class ProcessSynthesizerAgent:
         """
         if workflow_id not in self.active_workflows:
             return {"error": "Workflow not found"}
-        
+
         # Simulate optimization
         self.active_workflows[workflow_id]["steps"][step_index]["optimized"] = True
         return {"workflow_id": workflow_id, "step": step_index, "status": "optimized"}
@@ -71,7 +74,7 @@ class ProcessSynthesizerAgent:
         merged = "Combined Intelligence Output:\n"
         for i, output in enumerate(agent_outputs):
             merged += f"[{i+1}] {output}\n"
-        
+
         return {
             "synthesized_response": merged,
             "merger_protocol": "Fusion-v2",

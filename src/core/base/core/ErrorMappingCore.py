@@ -15,6 +15,12 @@
 from __future__ import annotations
 from typing import Dict
 
+
+
+
+
+
+
 class ErrorMappingCore:
     """
     Pure logic for mapping system exceptions to standardized PA-xxxx error codes.

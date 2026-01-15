@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\decomposition\_truncated_svd.py
+# hypothesis_version: 6.150.1
+
+[0.0, 'LU', 'OR', 'TruncatedSVD', 'algorithm', 'arpack', 'auto', 'csc', 'csr', 'float32', 'float64', 'left', 'n_components', 'n_iter', 'n_oversamples', 'none', 'random_state', 'randomized', 'tol']

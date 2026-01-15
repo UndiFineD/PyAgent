@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\enums.py
+# hypothesis_version: 6.150.1
+
+['arithmetic', 'assignment', 'branch', 'breakpoint', 'chrome', 'class', 'edge', 'error', 'failed', 'firefox', 'flaky', 'full_replay', 'function', 'ie', 'jest', 'junit', 'line', 'logical', 'mocha', 'passed', 'pytest', 'relational', 'return_value', 'safari', 'skipped', 'step_by_step', 'unittest']

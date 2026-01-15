@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class MigrationStatus(Enum):
     """Status of a code migration operation."""
     PENDING = "pending"

@@ -1,0 +1,19 @@
+diff --git a/src/logic/agents/system/SelfArchivingAgent.py b/src/logic/agents/system/SelfArchivingAgent.py
+index d9a3d4f..4a14f4b 100644
+--- a/src/logic/agents/system/SelfArchivingAgent.py
++++ b/src/logic/agents/system/SelfArchivingAgent.py
+@@ -22,7 +22,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ import os
+-from typing import List
+ from datetime import datetime
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+@@ -75,4 +74,4 @@ class SelfArchivingAgent(BaseAgent):
+         return report
+ 
+     def improve_content(self, prompt: str) -> str:
+-        return self.archive_targets(self.identify_archivable_targets())
+\ No newline at end of file
++        return self.archive_targets(self.identify_archivable_targets())

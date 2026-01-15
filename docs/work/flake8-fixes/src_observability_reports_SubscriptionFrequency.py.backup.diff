@@ -1,0 +1,22 @@
+diff --git a/src/observability/reports/SubscriptionFrequency.py b/src/observability/reports/SubscriptionFrequency.py
+index 5e676c0..7e357e3 100644
+--- a/src/observability/reports/SubscriptionFrequency.py
++++ b/src/observability/reports/SubscriptionFrequency.py
+@@ -26,10 +26,15 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class SubscriptionFrequency(Enum):
+     """Frequency for report subscriptions."""
+ 
+     IMMEDIATE = "immediate"
+     HOURLY = "hourly"
+     DAILY = "daily"
+-    WEEKLY = "weekly"
+\ No newline at end of file
++    WEEKLY = "weekly"

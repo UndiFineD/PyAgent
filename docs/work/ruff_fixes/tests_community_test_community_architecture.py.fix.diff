@@ -1,0 +1,33 @@
+diff --git a/tests/community/test_community_architecture.py b/tests/community/test_community_architecture.py
+index 86245cf..8a9d0ca 100644
+--- a/tests/community/test_community_architecture.py
++++ b/tests/community/test_community_architecture.py
+@@ -1,13 +1,10 @@
+ #!/usr/bin/env python3
+-import sys
+-import os
+ import logging
+ from pathlib import Path
+ 
+ # Add project root to sys.path
+ 
+ from src.infrastructure.fleet.AgentRegistry import AgentRegistry
+-from src.infrastructure.orchestration.SelfHealingOrchestrator import SelfHealingOrchestrator
+ from src.core.base.version import SDK_VERSION
+ 
+ def test_community_loading_workflow() -> None:
+@@ -17,12 +14,12 @@ def test_community_loading_workflow() -> None:
+     # 1. Test Registry Gatekeeping
+     agents = AgentRegistry.get_agent_map(workspace)
+     
+-    print(f"Checking FutureAgent (v3.0)...")
++    print("Checking FutureAgent (v3.0)...")
+     is_in_manifest = "FutureAgent" in agents._manifest_configs
+     print(f"FutureAgent in manifest? {is_in_manifest} (Expect: False)")
+ 
+     # 2. Test Self-Healing reload
+-    print(f"\n--- Testing Self-Healing Reload ---")
++    print("\n--- Testing Self-Healing Reload ---")
+     # Simulate a failed agent
+     agents.registry_configs["HealTest"] = ("non.existent.module", "HealTestAgent", None)
+     

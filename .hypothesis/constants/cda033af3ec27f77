@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\models\ExportFormat.py
+# hypothesis_version: 6.150.1
+
+['docx', 'html', 'markdown', 'pdf', 'rst']

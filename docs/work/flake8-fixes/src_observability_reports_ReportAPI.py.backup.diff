@@ -1,0 +1,31 @@
+diff --git a/src/observability/reports/ReportAPI.py b/src/observability/reports/ReportAPI.py
+index d529d63..3cbd5db 100644
+--- a/src/observability/reports/ReportAPI.py
++++ b/src/observability/reports/ReportAPI.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ReportType import ReportType
+ from pathlib import Path
+-from typing import List, Optional
+ import logging
+ 
+ __version__ = VERSION
+@@ -33,6 +32,11 @@ __version__ = VERSION
+ 
+ AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
+ 
++
++
++
++
++
+ class ReportAPI:
+     """API for programmatic report access.
+     Provides a RESTful - style interface for report operations.
+@@ -106,4 +110,4 @@ class ReportAPI:
+             path.write_text(content, encoding="utf-8")
+             return True
+         except Exception:
+-            return False
+\ No newline at end of file
++            return False

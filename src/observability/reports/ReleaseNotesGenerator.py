@@ -22,11 +22,13 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from .ChangelogEntry import ChangelogEntry
-from .ReleaseNote import ReleaseNote
-from typing import Optional, Dict, List
+from src.core.base.types import ChangelogEntry
+from src.core.base.types import ReleaseNote
 
 __version__ = VERSION
+
+
+
 
 class ReleaseNotesGenerator:
     """Generates release notes from changelog entries.

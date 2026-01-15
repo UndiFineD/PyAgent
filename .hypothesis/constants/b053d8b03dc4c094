@@ -1,0 +1,4 @@
+# file: c:\DEV\PyAgent\src\core\base\types\GroupingStrategy.py
+# hypothesis_version: 6.150.1
+
+['by_author', 'by_category', 'by_date', 'by_version']

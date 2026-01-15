@@ -44,10 +44,13 @@ from .DialogManager import DialogManager
 from .WorkflowManager import WorkflowManager
 from .ConfigurationManager import ConfigurationManager
 from .ProjectStatusPanel import ProjectStatusPanel
-from typing import Any, Dict, Self
+from typing import Any, Self
 from collections.abc import Callable
 
 __version__ = VERSION
+
+
+
 
 class PyAgentGUI:
     """The main application window and controller."""
@@ -55,11 +58,11 @@ class PyAgentGUI:
         self.root: tk.Tk = root
         self.root.title("PyAgent Control Center - BMAD Enabled")
         self.root.geometry("1400x900")
-        
+
         # UI State (Init before managers)
         self.project_root_var = tk.StringVar(value=os.getcwd())
         self.status_var = tk.StringVar(value="Ready")
-        
+
         # Managers
         self.config_manager = ConfigurationManager()
         self.dialogs = DialogManager(self.root)
@@ -67,7 +70,7 @@ class PyAgentGUI:
             "set_status": self.status_var.set,
             "add_agent": lambda name: self.agent_manager.add_column(name)
         })
-        
+
         # Backend components
         self.session_manager = SessionManager("gui_session.json")
         self.theme_manager: ThemeManager[tk.Tk] = ThemeManager(self.root)
@@ -76,9 +79,9 @@ class PyAgentGUI:
             "set_status": self.status_var.set,
             "get_global_context": lambda: self.global_context.get("1.0", tk.END).strip()
         })
-        
+
         self.setup_ui()
-        
+
         # Agent Manager (requires container from setup_ui)
         self.agent_manager: AgentManager[Self, ttk.Frame] = AgentManager(self, self.columns_container)
         self.agent_columns = self.agent_manager.agent_columns
@@ -123,7 +126,7 @@ class PyAgentGUI:
 
         # Projects Tree
         self.explorer: ProjectExplorer[ttk.Frame, tk.StringVar, Callable[..., None]] = ProjectExplorer(
-            side_panel, 
+            side_panel,
             self.project_root_var,
             on_double_click_callback=self.on_file_double_click
         )
@@ -173,7 +176,7 @@ class PyAgentGUI:
         column = self.agent_manager.get_agent_by_name(agent_name)
         if column:
             history = self.agent_runner.get_history(column)
-            
+
             def save_memory(new_history) -> None:
                 self.agent_runner.set_history(column, new_history)
                 self.status_var.set(f"Memory updated for {agent_name}.")
@@ -194,7 +197,7 @@ class PyAgentGUI:
     def apply_bmad_setup(self, config: dict[str, Any]) -> None:
         self.bmad.track_var.set(config["track"])
         self.status_var.set(f"BMAD: Applied {config['track']} setup.")
-        
+
         # Mock file creation for wizard
         root: str = self.project_root_var.get()
         if config["prd"]:
@@ -238,24 +241,47 @@ class PyAgentGUI:
             "agents": self.agent_manager.save_state(),
             "global_context": self.global_context.get("1.0", tk.END)
         }
+
+
+
+
+
+
+
+
+
+
         if self.session_manager.save_session(state):
             self.status_var.set("Session saved.")
 
     def load_session(self) -> None:
+
+
+
+
         state = self.session_manager.load_session()
         if state:
             self.project_root_var.set(state.get("root", os.getcwd()))
             self.agent_manager.load_state(state.get("agents", []))
             self.global_context.delete("1.0", tk.END)
+
+
             self.global_context.insert("1.0", state.get("global_context", ""))
             self.explorer.refresh_tree()
             self.status_var.set("Session loaded.")
 
     def new_session(self) -> None:
+
+
+
         if self.dialogs.confirm_action("Confirm", "Discard current session?"):
             self.agent_manager.clear_all()
             self.global_context.delete("1.0", tk.END)
             self.status_var.set("New session started.")
+
+
+
+
 
 if __name__ == "__main__":
     root = tk.Tk()

@@ -1,0 +1,20 @@
+diff --git a/src/observability/stats/exporters/OTelManager.py b/src/observability/stats/exporters/OTelManager.py
+index d61833e..c0c59fd 100644
+--- a/src/observability/stats/exporters/OTelManager.py
++++ b/src/observability/stats/exporters/OTelManager.py
+@@ -27,7 +27,7 @@ from src.core.base.version import VERSION
+ import logging
+ import time
+ import uuid
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from dataclasses import dataclass, field
+ from src.observability.stats.core.TracingCore import TracingCore
+ 
+@@ -151,4 +151,4 @@ if __name__ == "__main__":
+     threading.Event().wait(timeout=0.1)
+     otel.end_span(child, status="ok")
+     otel.end_span(root, status="ok")
+-    print(f"Exported {len(otel.export_spans())} spans.")
+\ No newline at end of file
++    print(f"Exported {len(otel.export_spans())} spans.")

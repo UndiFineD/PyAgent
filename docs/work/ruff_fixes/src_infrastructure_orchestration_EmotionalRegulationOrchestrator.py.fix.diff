@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/orchestration/EmotionalRegulationOrchestrator.py b/src/infrastructure/orchestration/EmotionalRegulationOrchestrator.py
+index 2ed6565..5d083b8 100644
+--- a/src/infrastructure/orchestration/EmotionalRegulationOrchestrator.py
++++ b/src/infrastructure/orchestration/EmotionalRegulationOrchestrator.py
+@@ -22,7 +22,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ import time
+-from typing import Dict, List, Optional
+ 
+ __version__ = VERSION
+ 

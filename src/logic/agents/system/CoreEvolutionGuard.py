@@ -22,9 +22,12 @@ from src.core.base.version import VERSION
 import os
 import hashlib
 import time
-from typing import Dict, List, Any, Optional
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class CoreEvolutionGuard:
     """
@@ -33,9 +36,9 @@ class CoreEvolutionGuard:
     """
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.code_fingerprints: dict[str, str] = {} # path -> hash
+        self.code_fingerprints: dict[str, str] = {}  # path -> hash
         self.security_threshold = 0.8
-        
+
     def hash_file(self, file_path: str) -> str | None:
         """Calculates SHA256 hash of a file."""
         hasher = hashlib.sha256()
@@ -76,18 +79,18 @@ class CoreEvolutionGuard:
 
         if rel_path not in self.code_fingerprints:
             return {"status": "untracked", "risk": "medium", "file": rel_path}
-            
+
         full_path = os.path.join(self.workspace_path, rel_path) if not os.path.isabs(rel_path) else rel_path
         new_hash = self.hash_file(full_path)
         old_hash = self.code_fingerprints[rel_path]
-        
+
         if new_hash == old_hash:
             return {"status": "unchanged", "risk": "none", "file": rel_path}
-            
+
         # Simulated heuristic check
         # In a real scenario, this would analyze AST changes or use LLM classification
         risk = "high" if "src/classes" in rel_path or "agent" in rel_path.lower() else "low"
-        
+
         return {
             "status": "modified",
             "risk": risk,

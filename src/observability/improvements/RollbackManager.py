@@ -23,9 +23,12 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .RollbackPoint import RollbackPoint
-from typing import Any, Dict, List
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class RollbackManager:
     """Stores rollback points and can restore the latest state."""

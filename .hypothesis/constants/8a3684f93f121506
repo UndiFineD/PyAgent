@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\knowledge_main.py
+# hypothesis_version: 6.150.1
+
+['--build-index', '--dir', '--graph', '--update-backlinks', '--verbose', '-v', '.', 'Increase verbosity', '__main__', 'count', 'src', 'store_true']

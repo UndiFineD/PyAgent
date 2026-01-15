@@ -23,81 +23,159 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Tuple
+from typing import Any
 from .enums import TestPriority, TestStatus, CoverageType, BrowserType, TestSourceType, MutationOperator
 
 __version__ = VERSION
 
+
+
+
+
 def _empty_str_list() -> list[str]:
+
+
+
+
     return []
 
+
 def _empty_dict_any() -> dict[str, Any]:
+
+
+
     return {}
+
+
 
 def _empty_dict_str_status() -> dict[str, TestStatus]:
     return {}
 
+
+
+
 def _empty_action_list() -> list[dict[str, Any]]:
+
+
     return []
 
 @dataclass
 class TestCase:
     """Represents a single test case."""
     __test__ = False
+
+
+
     id: str
     name: str
     file_path: str
+
+
+
     line_number: int
     priority: TestPriority = TestPriority.MEDIUM
+
     status: TestStatus = TestStatus.PASSED
+
+
     duration_ms: float = 0.0
+
     flakiness_score: float = 0.0
     last_run: str = ""
     run_count: int = 0
     failure_count: int = 0
     tags: list[str] = field(default_factory=lambda: [])
+
+
+
+
     dependencies: list[str] = field(default_factory=lambda: [])
 
+
+
 @dataclass
+
+
+
+
 class TestRun:
+
+
     """A test execution run."""
     __test__ = False
+
+
+
+
+
     id: str
     timestamp: str
+
+
+
+
     total_tests: int = 0
     passed: int = 0
     failed: int = 0
+
     skipped: int = 0
     errors: int = 0
+
+
+
+
+
     duration_ms: float = 0.0
+
     test_results: dict[str, TestStatus] = field(default_factory=lambda: {})
 
 @dataclass
+
+
+
+
+
 class CoverageGap:
+
     """Represents a gap in test coverage."""
     file_path: str
     line_start: int
     line_end: int
     coverage_type: CoverageType
+
     suggestion: str = ""
 
+
 @dataclass
+
 class TestFactory:
     """A test data factory for generating test data."""
     __test__ = False
     name: str
     return_type: str
     parameters: dict[str, str] = field(default_factory=lambda: {})
+
+
+
     generator: str = ""  # Code snippet or function name
+
+
 
 @dataclass
 class VisualRegressionConfig:
     """Configuration for visual regression testing."""
     baseline_dir: str
+
+
+
     diff_threshold: float = 0.01
     browsers: list[BrowserType] = field(default_factory=lambda: [BrowserType.CHROME])
     viewport_sizes: list[tuple[int, int]] = field(default_factory=lambda: [(1920, 1080)])
+
+
     ignore_regions: list[tuple[int, int, int, int]] = field(default_factory=lambda: [])
+
+
 
 @dataclass
 class ContractTest:
@@ -109,16 +187,25 @@ class ContractTest:
     response_schema: dict[str, Any] = field(default_factory=lambda: {})
     status_code: int = 200
 
+
+
+
+
 @dataclass
 class TestEnvironment:
     """Test environment configuration."""
     __test__ = False
     name: str
+
+
     base_url: str = ""
     variables: dict[str, str] = field(default_factory=lambda: {})
     fixtures: list[str] = field(default_factory=lambda: [])
     setup_commands: list[str] = field(default_factory=lambda: [])
     teardown_commands: list[str] = field(default_factory=lambda: [])
+
+
+
 
 @dataclass
 class ExecutionTrace:
@@ -130,9 +217,15 @@ class ExecutionTrace:
     stdout: str = ""
     stderr: str = ""
 
+
+
 @dataclass
 class TestDependency:
     """A dependency for test injection."""
+
+
+
+
     __test__ = False
     name: str
     dependency_type: str
@@ -142,11 +235,18 @@ class TestDependency:
 @dataclass
 class CrossBrowserConfig:
     """Cross-browser testing configuration."""
+
+
+
+
     browsers: list[BrowserType]
     parallel: bool = True
     headless: bool = True
     timeout_seconds: int = 30
     retries: int = 1
+
+
+
 
 @dataclass
 class AggregatedResult:
@@ -157,6 +257,9 @@ class AggregatedResult:
     duration_ms: float
     timestamp: str
     metadata: dict[str, Any] = field(default_factory=lambda: {})
+
+
+
 
 @dataclass
 class Mutation:
@@ -178,6 +281,9 @@ class GeneratedTest:
     confidence: float = 0.0
     validated: bool = False
 
+
+
+
 @dataclass
 class TestProfile:
     """Runtime profiling data for a test."""
@@ -189,6 +295,9 @@ class TestProfile:
     function_calls: int
     timestamp: str = ""
 
+
+
+
 @dataclass
 class ScheduleSlot:
     """A scheduled time slot for test execution."""
@@ -198,6 +307,9 @@ class ScheduleSlot:
     workers: int = 1
     priority: TestPriority = TestPriority.MEDIUM
 
+
+
+
 @dataclass
 class ProvisionedEnvironment:
     """A provisioned test environment."""
@@ -206,17 +318,26 @@ class ProvisionedEnvironment:
     dependencies: list[str] = field(default_factory=lambda: [])
     config: dict[str, Any] = field(default_factory=lambda: {})
 
+
+
+
 @dataclass
 class ValidationResult:
     """Result of a validation operation."""
     valid: bool
     errors: list[str] = field(default_factory=lambda: [])
 
+
+
+
 @dataclass
 class Recording:
     """A recording of test execution."""
     test_name: str
     actions: list[dict[str, Any]] = field(default_factory=lambda: [])
+
+
+
 
 @dataclass
 class ReplayResult:

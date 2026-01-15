@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class ImprovementDiffType(Enum):
     """Types of improvement differences between branches."""
     ADDED = "added"      # Improvement exists only in target branch

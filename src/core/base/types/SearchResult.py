@@ -26,6 +26,12 @@ from dataclasses import dataclass
 
 __version__ = VERSION
 
+
+
+
+
+
+
 @dataclass
 class SearchResult:
     """Result from changelog search.

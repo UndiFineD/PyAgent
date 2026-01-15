@@ -1,0 +1,31 @@
+diff --git a/src/observability/reports/ReleaseNotesGenerator.py b/src/observability/reports/ReleaseNotesGenerator.py
+index 0c4a3f6..0389a6b 100644
+--- a/src/observability/reports/ReleaseNotesGenerator.py
++++ b/src/observability/reports/ReleaseNotesGenerator.py
+@@ -22,12 +22,16 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from .ChangelogEntry import ChangelogEntry
+-from .ReleaseNote import ReleaseNote
+-from typing import Optional, Dict, List
++from src.core.base.types import ChangelogEntry
++from src.core.base.types import ReleaseNote
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ReleaseNotesGenerator:
+     """Generates release notes from changelog entries.
+ 
+@@ -92,4 +96,4 @@ class ReleaseNotesGenerator:
+             highlights=highlights[:5],  # Top 5 highlights
+             breaking_changes=breaking,
+             full_changelog='\n'.join(changelog_lines)
+-        )
+\ No newline at end of file
++        )

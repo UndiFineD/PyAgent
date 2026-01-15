@@ -24,9 +24,11 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .Improvement import Improvement
 from .TransitionResult import TransitionResult
-from typing import Dict, List
 
 __version__ = VERSION
+
+
+
 
 class WorkflowEngine:
     """Manages improvement workflow transitions."""

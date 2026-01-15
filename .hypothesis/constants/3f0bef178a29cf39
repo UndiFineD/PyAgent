@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\cbor2\_encoder.py
+# hypothesis_version: 6.150.1
+
+[b'\xf4', b'\xf5', b'\xf6', b'\xf7', b'\xf9|\x00', b'\xf9~\x00', b'\xf9\xfc\x00', -18446744073709551616, 100, 224, 248, 249, 250, 251, 256, 258, 260, 261, 1004, 43000, 65536, 719163, 1000000, 4294967296, 18446744073709551616, '+00:00', '>B', '>BB', '>BH', '>BL', '>BQ', '>Bd', '>Be', '>Bf', 'Decimal', 'Fraction', 'IPv4Address', 'IPv4Network', 'IPv6Address', 'IPv6Network', 'Message', 'UUID', 'Z', '_canonical', '_default', '_encode_depth', '_encoders', '_fp', '_fp_write', '_shared_containers', '_string_references', '_timezone', 'big', 'date_as_datetime', 'decimal', 'email.message', 'fractions', 'ipaddress', 'string_namespacing', 'string_referencing', 'utf-8', 'uuid', 'value_sharing']

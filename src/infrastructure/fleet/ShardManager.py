@@ -21,22 +21,24 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, List, Optional, Set
 from pathlib import Path
 
 __version__ = VERSION
+
+
+
 
 class ShardManager:
     """
     Manages partitioning of large fleets into semi-autonomous clusters (shards).
     This reduces broadcast noise and improves scalability for trillion-parameter systems.
     """
-    
+
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
-        self.shards: dict[str, set[str]] = {} # Shard name to agent names
+        self.shards: dict[str, set[str]] = {}  # Shard name to agent names
         self.agent_to_shard: dict[str, str] = {}
-        self.communication_log: dict[frozenset[str], int] = {} # Pairs of agents to frequency
+        self.communication_log: dict[frozenset[str], int] = {}  # Pairs of agents to frequency
 
     def log_communication(self, agent_a: str, agent_b: str) -> None:
         """Records a communication event between two agents."""
@@ -53,12 +55,12 @@ class ShardManager:
         """Assigns an agent to a specific shard."""
         if shard_name not in self.shards:
             self.create_shard(shard_name)
-        
+
         # Remove from old shard if exists
         if agent_name in self.agent_to_shard:
             old_shard = self.agent_to_shard[agent_name]
             self.shards[old_shard].discard(agent_name)
-            
+
         self.shards[shard_name].add(agent_name)
         self.agent_to_shard[agent_name] = shard_name
         logging.info(f"ShardManager: Assigned agent {agent_name} to shard {shard_name}")
@@ -78,7 +80,7 @@ class ShardManager:
         Nodes that talk to each other frequently (>= threshold) are clustered together.
         """
         logging.info("ShardManager: Running dynamic sharding optimization (Phase 128)...")
-        
+
         # Identify high-frequency pairings
         clusters: list[set[str]] = []
         for pair, count in self.communication_log.items():
@@ -98,5 +100,5 @@ class ShardManager:
             shard_name = f"swarm_shard_{i}"
             for agent in cluster:
                 self.assign_agent(agent, shard_name)
-        
+
         logging.info(f"ShardManager: Optimization complete. Created {len(clusters)} tactical shards.")

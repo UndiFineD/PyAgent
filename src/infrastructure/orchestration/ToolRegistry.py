@@ -15,16 +15,19 @@
 from __future__ import annotations
 import logging
 import asyncio
-from typing import Dict, List, Any, Optional, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 from collections.abc import Callable
 from .ToolCore import ToolCore
 
 if TYPE_CHECKING:
     from ..fleet.FleetManager import FleetManager
 
+
+
+
 class ToolRegistry:
     """Central registry for managing and invoking PyAgent tools across all specialists."""
-    
+
     def __init__(self, fleet: FleetManager | None = None) -> None:
         self.fleet = fleet
         self.tools: dict[str, list[dict[str, Any]]] = {}
@@ -35,7 +38,7 @@ class ToolRegistry:
         name = func.__name__
         if name not in self.tools:
             self.tools[name] = []
-        
+
         # Check for duplicates
         if any(t["owner"] == owner_name for t in self.tools[name]):
             logging.debug(f"Tool {name} already registered for {owner_name}. Skipping.")
@@ -56,7 +59,7 @@ class ToolRegistry:
         """Returns metadata for all registered tools."""
         from collections import namedtuple
         ToolMeta = namedtuple("ToolMeta", ["name", "owner", "category", "priority", "sync"])
-        
+
         meta = []
         for name, variations in self.tools.items():
             for v in variations:
@@ -74,10 +77,10 @@ class ToolRegistry:
         tool = self.get_tool(name)
         if not tool:
             raise ValueError(f"Tool '{name}' not found in registry.")
-        
+
         filtered_kwargs = self.core.filter_arguments(tool, kwargs)
         logging.info(f"Invoking tool: {name} with filtered {filtered_kwargs}")
-        
+
         if asyncio.iscoroutinefunction(tool):
             return await tool(**filtered_kwargs)
         else:

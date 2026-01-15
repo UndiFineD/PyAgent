@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class ReportType(Enum):
     """Type of report to generate."""
 

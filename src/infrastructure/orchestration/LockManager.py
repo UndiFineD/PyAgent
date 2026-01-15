@@ -18,7 +18,7 @@ import logging
 import threading
 import asyncio
 from pathlib import Path
-from typing import Dict, Optional, ContextManager, Any
+from typing import ContextManager
 from contextlib import contextmanager, asynccontextmanager
 
 try:
@@ -26,6 +26,9 @@ try:
     HAS_PORTALOCKER = True
 except ImportError:
     HAS_PORTALOCKER = False
+
+
+
 
 class LockManager:
     """Phase 242/152: Distributed & Async-Ready Lock Manager.
@@ -83,7 +86,7 @@ class LockManager:
         if HAS_PORTALOCKER:
             lock_obj = portalocker.Lock(str(lock_file), timeout=timeout)
             lock_obj.acquire()
-            # Store lock object for release - this is simplistic, 
+            # Store lock object for release - this is simplistic,
             # in a real system we'd need a better way to track these per-task
             if not hasattr(self, '_active_file_locks'):
                 self._active_file_locks = {}
@@ -104,7 +107,7 @@ class LockManager:
     def file_lock(self, resource_path: str, timeout: float = 10.0) -> ContextManager[None]:
         """A cross-process file lock using portalocker."""
         lock_file = self.lock_dir / f"{os.path.basename(resource_path)}.lock"
-        
+
         if not HAS_PORTALOCKER:
             logging.warning("portalocker not installed. Falling back to memory-only lock for file.")
             with self.get_memory_lock(resource_path):

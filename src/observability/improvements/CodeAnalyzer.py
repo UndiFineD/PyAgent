@@ -23,9 +23,11 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .Improvement import Improvement
-from typing import List
 
 __version__ = VERSION
+
+
+
 
 class CodeAnalyzer:
     """Suggests analysis tools based on improvement content."""

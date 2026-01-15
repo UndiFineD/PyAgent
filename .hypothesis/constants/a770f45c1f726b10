@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\fleet\EvolutionCore.py
+# hypothesis_version: 6.150.1
+
+[-0.1, 0.05, 0.1, 0.7, 0.8, 1.0, 'BaseAgent', 'success_rate', 'temperature']

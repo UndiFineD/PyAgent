@@ -26,17 +26,20 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import json
 import logging
-from typing import Dict, List, Any
+from typing import Any
 from pathlib import Path
 
 __version__ = VERSION
+
+
+
 
 class FleetWebUI:
     """Provides backend support for the Fleet visualization dashboard."""
 
     def __init__(self, fleet_manager: Any) -> None:
         self.fleet = fleet_manager
-        self.generative_registry: dict[str, dict[str, Any]] = {} # Tambo Pattern
+        self.generative_registry: dict[str, dict[str, Any]] = {}  # Tambo Pattern
 
     def register_generative_component(self, name: str, description: str, props_schema: dict[str, Any]) -> str:
         """Registers a UI component that the AI can choose to render dynamically (Tambo Pattern)."""
@@ -52,34 +55,34 @@ class FleetWebUI:
         suggestions = []
         for name, metadata in self.generative_registry.items():
             if metadata["description"].lower() in task_result.lower():
-                suggestions.append({"component": name, "props": {}}) # Simplified
+                suggestions.append({"component": name, "props": {}})  # Simplified
         return suggestions
 
     def get_fleet_topology(self) -> str:
         """Returns a graph representation of the fleet for Mermaid/D3 visualization."""
         nodes = []
-        links = []
-        
+        links: list[Any] = []
+
         for name, agent in self.fleet.agents.items():
             nodes.append({"id": name, "type": "agent", "model": getattr(agent, "model", "unknown")})
-            
+
         return json.dumps({"nodes": nodes, "links": links}, indent=2)
 
     def generate_workflow_graph(self, workflow_state: Any) -> str:
         """Generates a Mermaid graph for a specific workflow's progress."""
         if not workflow_state:
             return "graph TD\n  Empty[No Active Workflow]"
-            
+
         mermaid_lines = ["graph LR"]
         history = workflow_state.history
-        
+
         last_node = "START"
         for i, entry in enumerate(history):
             node_id = f"step_{i}_{entry['agent']}"
             mermaid_lines.append(f"  {last_node} --> {node_id}")
             mermaid_lines.append(f"  {node_id}[{entry['agent']}: {entry['action']}]")
             last_node = node_id
-            
+
         return "\n".join(mermaid_lines)
 
     def get_metrics_snapshot(self) -> dict[str, Any]:
@@ -94,7 +97,7 @@ class FleetWebUI:
         base = Path(self.fleet.workspace_root) / sub_path
         if not base.exists():
             return {"error": f"Path {sub_path} not found"}
-            
+
         items = []
         for item in base.iterdir():
             items.append({
@@ -126,7 +129,7 @@ class FleetWebUI:
                 "actions": methods,
                 "capabilities": getattr(agent, "capabilities", [])
             })
-            
+
         return {
             "agents": available_agents,
             "triggers": ["HTTP_REQUEST", "SCHEDULE", "SIGNAL_EMITTED"],

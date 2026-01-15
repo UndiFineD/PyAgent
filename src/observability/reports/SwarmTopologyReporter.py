@@ -23,22 +23,25 @@ from src.core.base.version import VERSION
 import json
 import logging
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class SwarmTopologyReporter:
     """
     Generates D3.js compatible topology data for 3D Swarm Viewer.
     Captures node relationships, trust scores, and communication latency.
     """
-    
+
     def __init__(self, output_path: str = "data/logs/topology.json") -> None:
         self.output_path = Path(output_path)
-        self.nodes = []
-        self.links = []
+        self.nodes: list[Any] = []
+        self.links: list[Any] = []
 
-    def record_node(self, node_id: str, group: str = "general", metadata: dict[str, Any] = None) -> None:
+    def record_node(self, node_id: str, group: str = "general", metadata: dict[str, Any] | None = None) -> None:
         self.nodes.append({
             "id": node_id,
             "group": group,

@@ -24,15 +24,17 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import sqlite3
 import logging
-from typing import List, Optional
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
+
+
 class SQLQueryAgent(BaseAgent):
     """Enables the fleet to interact with relational databases and unified data sources (MindsDB style)."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.connection: sqlite3.Connection | None = None
@@ -69,7 +71,7 @@ class SQLQueryAgent(BaseAgent):
         """Executes a Read-Only SQL query and returns the results."""
         if not self.connection:
             return "Error: No database connection active."
-        
+
         # Security check: Block destructive commands in execute_query (read-only by intent)
         destructive = ["drop", "delete", "truncate", "alter", "update", "insert"]
         if any(cmd in query.lower() for cmd in destructive):
@@ -82,24 +84,46 @@ class SQLQueryAgent(BaseAgent):
             if not rows:
                 return "Query executed successfully. 0 rows returned."
             return str(rows)
+
+
+
+
+
+
+
+
+
+
         except Exception as e:
             return f"SQL Error: {e}"
 
     @as_tool
+
+
+
     def get_table_schema(self, table_name: str) -> str:
         """Returns the schema for a specific table."""
         if not self.connection:
             return "Error: No database connection."
         try:
+
+
             cursor = self.connection.cursor()
             cursor.execute(f"PRAGMA table_info({table_name})")
             return str(cursor.fetchall())
         except Exception as e:
             return f"Schema Error: {e}"
 
+
+
+
     def improve_content(self, prompt: str) -> str:
         """SQL generation helper."""
         return f"SQLAgent: Ready to query database. Connection active: {self.connection is not None}."
+
+
+
+
 
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function

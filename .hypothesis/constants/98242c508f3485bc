@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\system\MCPAgent.py
+# hypothesis_version: 6.150.1
+
+['arguments', 'error', 'failed', 'list', 'mcp.json', 'mcp_server_init', 'mcp_tool_call', 'mcp_tool_error', 'mjs_servers', 'name', 'recorder', 'result', 'server', 'status', 'success', 'tool', 'tools/call']

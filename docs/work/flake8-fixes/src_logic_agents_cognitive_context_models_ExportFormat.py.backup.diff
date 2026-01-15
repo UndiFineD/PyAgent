@@ -1,0 +1,22 @@
+diff --git a/src/logic/agents/cognitive/context/models/ExportFormat.py b/src/logic/agents/cognitive/context/models/ExportFormat.py
+index 5c1a2ff..4611e31 100644
+--- a/src/logic/agents/cognitive/context/models/ExportFormat.py
++++ b/src/logic/agents/cognitive/context/models/ExportFormat.py
+@@ -26,10 +26,15 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ExportFormat(Enum):
+     """Formats for context export."""
+     MARKDOWN = "markdown"
+     HTML = "html"
+     PDF = "pdf"
+     DOCX = "docx"
+-    RST = "rst"
+\ No newline at end of file
++    RST = "rst"

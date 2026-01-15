@@ -32,6 +32,9 @@ from .Constants import BMAD_AGENTS
 
 __version__ = VERSION
 
+
+
+
 class AppMenu:
     """Handles the creation and command routing for the application menu bar."""
     def __init__(self, master, callbacks) -> None:
@@ -51,16 +54,16 @@ class AppMenu:
         file_menu.add_separator()
         file_menu.add_command(label="Exit", command=self.callbacks.get("exit"))
         self.menubar.add_cascade(label="File", menu=file_menu)
-        
+
         # View Menu
         view_menu = tk.Menu(self.menubar, tearoff=0)
         view_menu.add_command(label="Toggle Theme", command=self.callbacks.get("toggle_theme"))
         self.menubar.add_cascade(label="View", menu=view_menu)
-        
+
         # Agents Menu
         agents_menu = tk.Menu(self.menubar, tearoff=0)
         for atype in BMAD_AGENTS:
-            agents_menu.add_command(label=f"Add {atype} Agent", 
+            agents_menu.add_command(label=f"Add {atype} Agent",
                                    command=lambda t=atype: self.callbacks.get("add_agent")(t))
         agents_menu.add_separator()
         agents_menu.add_command(label="Add Custom Agent...", command=self.callbacks.get("add_custom"))

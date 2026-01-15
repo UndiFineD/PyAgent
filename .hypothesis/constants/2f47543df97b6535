@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_dynamo\bytecode_analysis.py
+# hypothesis_version: 6.150.1
+
+[100, '-inf', 'DELETE', 'Instruction', 'JUMP_ABSOLUTE', 'JUMP_BACKWARD', 'JUMP_FORWARD', 'LOAD', 'MAKE_CELL', 'RAISE_VARARGS', 'RERAISE', 'RETURN_CONST', 'RETURN_VALUE', 'STORE', 'StackSize', 'inf']

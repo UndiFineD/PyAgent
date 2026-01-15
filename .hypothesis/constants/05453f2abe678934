@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\system\MultiModalContextAgent.py
+# hypothesis_version: 6.150.1
+
+[0.1, 0.25, 0.5, 100, 'Already recording.', 'Describe this UI', 'Image analysis tool', 'Key.', 'Not recording.', '__main__', 'amount', 'button', 'click', 'current_state', 'drag', 'en', 'key', 'keypress', 'move', 'rb', 'scroll', 'text', 'time', 'type', 'utf-8', 'w', 'x', 'y']

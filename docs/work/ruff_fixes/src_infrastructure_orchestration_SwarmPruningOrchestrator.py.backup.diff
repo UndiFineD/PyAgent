@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/orchestration/SwarmPruningOrchestrator.py b/src/infrastructure/orchestration/SwarmPruningOrchestrator.py
+index 78fb21a..003d27c 100644
+--- a/src/infrastructure/orchestration/SwarmPruningOrchestrator.py
++++ b/src/infrastructure/orchestration/SwarmPruningOrchestrator.py
+@@ -88,6 +88,7 @@ if __name__ == "__main__":
+     logging.basicConfig(level=logging.INFO)
+     # Mock fleet manager for demonstration
+     class MockFleet:
++        """Mock fleet manager for standalone testing."""
+         def __init__(self) -> None:
+             self.neural_pruning = NeuralPruningEngine(self)
+ 

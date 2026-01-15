@@ -21,11 +21,13 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from typing import Any
 import logging
-from src.core.base.ConnectivityManager import ConnectivityManager
 import requests
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
+
+
+
 
 class Weather_APITool:
     """Auto-generated tool class"""

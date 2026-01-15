@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\observability\reports\ReportCacheManager.py
+# hypothesis_version: 6.150.1
+
+[3600, '.report_cache.json', 'cache', 'content', 'expires_at']
