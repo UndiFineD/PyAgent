@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\security\ComplianceCheckerAgent.py
+# hypothesis_version: 6.150.1
+
+['Security', 'copyright', 'cve', 'exploit', 'license', 'patch', 'patent', 'security', 'trademark', 'vulnerability']

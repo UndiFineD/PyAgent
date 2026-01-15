@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\development\ConsistencyAgent.py
+# hypothesis_version: 6.150.1
+
+['^from\\s+[a-zA-Z]', '^from\\s+\\.', '_', 'def\\s+([a-zA-Z_]\\w*)', 'import_style', 'naming_convention']

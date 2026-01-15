@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\CircuitBreaker.py
+# hypothesis_version: 6.150.1
+
+[0.0, 1.5, 120, 'CLOSED', 'HALF_OPEN', 'OPEN', 'backoff_multiplier', 'failure_threshold', 'max_recovery_timeout', 'recovery_timeout']

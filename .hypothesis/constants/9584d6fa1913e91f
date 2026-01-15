@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\interface\ui\gui\DiffViewer.py
+# hypothesis_version: 6.150.1
+
+['+', '+++', '-', '---', '900x600', '@@', 'Changes Preview', 'Error', 'No Changes', 'Original', 'Proposed', 'Segoe UI', 'Warning', 'add', 'blue', 'bold', 'green', 'header', 'red', 'remove', 'utf-8']

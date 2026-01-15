@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\IntentionPredictionAgent.py
+# hypothesis_version: 6.150.1
+
+[0.1, 0.3, 0.4, 0.65, 0.75, 0.8, 0.9, 'CONTINUATION', 'NeuroLink-v3', 'action', 'confidence', 'create_file', 'edit_file', 'idle', 'latency_ms', 'meta', 'origin', 'payload_size', 'predicted_intent', 'prediction', 'prewarm_targets', 'protocol', 'read_file', 'run_tests', 'targets', 'ts', 'wait_for_instruction']

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\knowledge\btree_store.py
+# hypothesis_version: 6.150.1
+
+[1000, 'BTreeStore', 'INFO', 'email', 'ip_address', 'password', 'shard.db', 'token', 'user_id']

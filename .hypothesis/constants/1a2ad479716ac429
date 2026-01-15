@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\engines\KnowledgeCore.py
+# hypothesis_version: 6.150.1
+
+[0.0, 200, 500, '.md', '.py', '\\[\\[(.*?)\\]\\]', '\\w+', 'ignore', 'markdown_link', 'path', 'python_symbol', 'snippet', 'utf-8']

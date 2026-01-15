@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\engines\SemanticSearchEngine.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.5, 1.0, 200, 'all-MiniLM-L6-v2', 'cosine', 'distances', 'documents', 'hnsw:space', 'ids', 'path', 'pyagent_code']

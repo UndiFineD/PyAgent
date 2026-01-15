@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\system\NeuralAnchorAgent.py
+# hypothesis_version: 6.150.1
+
+[0.1, 0.5, 'High', 'Low', '\\b\\w+\\b', 'claim', 'confidence', 'content', 'doc', 'is_grounded', 'overlap_score', 'source', 'type', 'validations', 'verified']

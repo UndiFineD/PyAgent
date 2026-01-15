@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\fleet\OrchestratorRegistry.py
+# hypothesis_version: 6.150.1
+
+['1.0.0', 'Orchestrator', 'SDK_REQUIRED', '_', '__min_sdk__', 'fleet', 'manifest.json', 'plugins']

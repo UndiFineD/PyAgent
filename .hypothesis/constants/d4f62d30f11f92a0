@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\observability\reports\report_generator.py
+# hypothesis_version: 6.150.1
+
+['--dir', '--output', '.', 'Directory to scan', 'Output directory', '__main__', 'report.html', 'reports', 'src', 'utf-8']

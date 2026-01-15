@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\StrategicPlanningAgent.py
+# hypothesis_version: 6.150.1
+
+[0.0, 100, 'At Risk', 'In Progress', 'On Track', 'achieved', 'active_goals', 'completion', 'description', 'goal', 'id', 'milestones', 'milestones_count', 'overall_health', 'roadmap_items', 'status', 'target_date']

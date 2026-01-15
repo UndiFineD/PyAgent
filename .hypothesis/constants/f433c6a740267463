@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\development\core\BashCore.py
+# hypothesis_version: 6.150.1
+
+[2000, '#!', '-f', 'File not found', 'bash', 'error', 'file-not-found', 'issues', 'json', 'set -euo pipefail', 'shellcheck', 'valid']
