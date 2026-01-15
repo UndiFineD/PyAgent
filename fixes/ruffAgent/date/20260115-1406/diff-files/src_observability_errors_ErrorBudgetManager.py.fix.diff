@@ -1,0 +1,12 @@
+diff --git a/src/observability/errors/ErrorBudgetManager.py b/src/observability/errors/ErrorBudgetManager.py
+index ea30aa1..4ba7d08 100644
+--- a/src/observability/errors/ErrorBudgetManager.py
++++ b/src/observability/errors/ErrorBudgetManager.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ErrorBudget import ErrorBudget
+ from datetime import datetime, timedelta
+-from typing import Dict
+ 
+ __version__ = VERSION
+ 

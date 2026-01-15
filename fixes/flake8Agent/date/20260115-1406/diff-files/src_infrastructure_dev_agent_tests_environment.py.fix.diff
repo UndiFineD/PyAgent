@@ -1,0 +1,97 @@
+diff --git a/src/infrastructure/dev/agent_tests/environment.py b/src/infrastructure/dev/agent_tests/environment.py
+index 09e70d5..3562cff 100644
+--- a/src/infrastructure/dev/agent_tests/environment.py
++++ b/src/infrastructure/dev/agent_tests/environment.py
+@@ -24,22 +24,53 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import random
+ from dataclasses import dataclass, field
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from .models import TestEnvironment
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
+ def _empty_str_list() -> list[str]:
++
++
++
++
++
+     return []
+ 
++
++
++
++
++
+ def _empty_dict_any() -> dict[str, Any]:
+     return {}
+ 
++
++
++
++
++
+ class EnvironmentProvisioner:
+     """Provision test environments."""
+ 
+     @dataclass
+     class ProvisionedEnvironment:
++        """Represents a provisioned development or testing environment."""
+         status: str
+         python_version: str = ""
+         dependencies: list[str] = field(default_factory=_empty_str_list)
+@@ -107,12 +138,17 @@ class EnvironmentProvisioner:
+         if hasattr(env, "status"):
+             try:
+                 env.status = "cleaned"
+-            except Exception:
++            except (AttributeError, ValueError):
+                 pass
+ 
+     def teardown(self, name: str) -> dict[str, Any]:
+         """Teardown an environment."""
+         env = self.environments.get(name)
++
++
++
++
++
+         if not env:
+             return {"error": "Environment not found", "success": False}
+         for cmd in env.teardown_commands:
+@@ -128,6 +164,11 @@ class EnvironmentProvisioner:
+         """Get setup / teardown logs for an environment."""
+         return self._setup_logs.get(name, [])
+ 
++
++
++
++
++
+ class DataFactory:
+     """Factory for creating test data."""
+ 
+@@ -179,4 +220,4 @@ class DataFactory:
+ 
+     def create_batch(self, kind: str, count: int, overrides: dict[str, Any] | None = None) -> list[dict[str, Any]]:
+         """Create a batch of objects for a kind."""
+-        return [self.create(kind, overrides=overrides or {}) for _ in range(count)]
+\ No newline at end of file
++        return [self.create(kind, overrides=overrides or {}) for _ in range(count)]

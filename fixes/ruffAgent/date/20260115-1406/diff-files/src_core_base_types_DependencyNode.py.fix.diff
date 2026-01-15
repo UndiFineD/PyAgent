@@ -1,0 +1,12 @@
+diff --git a/src/core/base/types/DependencyNode.py b/src/core/base/types/DependencyNode.py
+index ffa6299..7f448bd 100644
+--- a/src/core/base/types/DependencyNode.py
++++ b/src/core/base/types/DependencyNode.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.core.base.types.DependencyType import DependencyType
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 

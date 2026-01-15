@@ -1,0 +1,47 @@
+diff --git a/tests/phases/test_phase85.py b/tests/phases/test_phase85.py
+index afa2fe9..0a00c87 100644
+--- a/tests/phases/test_phase85.py
++++ b/tests/phases/test_phase85.py
+@@ -1,11 +1,20 @@
+ import unittest
+ import os
+-import sys
+ 
+ # Ensure the project root is in PYTHONPATH
+ 
+ from src.logic.agents.development.TechDebtAgent import TechDebtAgent
+ 
++
++
++
++
++
++
++
++
++
++
+ class TestTechDebt(unittest.TestCase):
+     def setUp(self):
+         self.agent = TechDebtAgent(os.getcwd())
+@@ -22,10 +31,20 @@ class TestTechDebt(unittest.TestCase):
+         self.assertEqual(report['file'], self.test_file)
+         self.assertTrue(any(i['type'] == 'Missing Docstring' for i in report['issues']))
+ 
++
++
++
++
++
+     def test_analyze_workspace(self) -> None:
+         result = self.agent.analyze_workspace()
+         self.assertTrue(result['total_issues'] > 0)
+         self.assertTrue(len(result['hotspots']) > 0)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     unittest.main()

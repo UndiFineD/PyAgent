@@ -1,0 +1,78 @@
+diff --git a/src/infrastructure/dev/scripts/management/debug_final_scan.py b/src/infrastructure/dev/scripts/management/debug_final_scan.py
+index bf3b612..022b649 100644
+--- a/src/infrastructure/dev/scripts/management/debug_final_scan.py
++++ b/src/infrastructure/dev/scripts/management/debug_final_scan.py
+@@ -30,6 +30,16 @@ from pathlib import Path
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ def strict_scan() -> None:
+     src_dir = Path("src")
+     patterns = [
+@@ -38,24 +48,24 @@ def strict_scan() -> None:
+         (r"placeholder(?!\.)(?!\s*[:=]\s*(?:'|\")\{)", "Suspected technical debt placeholder found"),
+         (r"\[Vision Model Placeholder\]", "Unresolved Vision Placeholder")
+     ]
+-    
++
+     ignore_files = [
+-        "utils.py", 
+-        "ByzantineConsensusAgent.py", 
++        "utils.py",
++        "ByzantineConsensusAgent.py",
+         "RewardModelAgent.py",
+         "LLMClient.py", # I added the regex here
+         "MultiModalContextAgent.py" # I added logic here
+     ]
+-    
++
+     issues = []
+-    
++
+     for root, _, files in os.walk(src_dir):
+         for file in files:
+             if not file.endswith(".py"):
+                 continue
+             if file in ignore_files:
+                 continue
+-                
++
+             path = Path(root) / file
+             try:
+                 content = path.read_text(encoding="utf-8")
+@@ -68,12 +78,22 @@ def strict_scan() -> None:
+                             issues.append(f"{path}:{i+1} - {msg}: {line.strip()}")
+             except Exception as e:
+                 print(f"Error reading {path}: {e}")
+-                
++
+     if not issues:
++
++
++
++
++
+         print("ALL CLEAR")
+     else:
+         for issue in issues:
+             print(issue)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+-    strict_scan()
+\ No newline at end of file
++    strict_scan()

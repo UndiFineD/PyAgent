@@ -1,0 +1,12 @@
+diff --git a/src/logic/agents/development/DocumentationIndexerAgent.py b/src/logic/agents/development/DocumentationIndexerAgent.py
+index 20db4bf..8c62a01 100644
+--- a/src/logic/agents/development/DocumentationIndexerAgent.py
++++ b/src/logic/agents/development/DocumentationIndexerAgent.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.core.base.BaseAgent import BaseAgent
+ from pathlib import Path
+-from typing import Dict, List
+ 
+ __version__ = VERSION
+ 

@@ -1,0 +1,42 @@
+diff --git a/src/infrastructure/dev/test_utils/TestBaseline.py b/src/infrastructure/dev/test_utils/TestBaseline.py
+index 0326535..1477add 100644
+--- a/src/infrastructure/dev/test_utils/TestBaseline.py
++++ b/src/infrastructure/dev/test_utils/TestBaseline.py
+@@ -23,14 +23,23 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import Any, Dict
++from typing import Any
+ import time
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class TestBaseline:
+-    __test__ = False
+     """A test baseline for comparison.
+ 
+     Attributes:
+@@ -39,8 +48,9 @@ class TestBaseline:
+         created_at: Creation timestamp.
+         version: Baseline version.
+     """
++    __test__ = False
+ 
+     name: str
+     values: dict[str, Any]
+     created_at: float = field(default_factory=time.time)
+-    version: int = 1
+\ No newline at end of file
++    version: int = 1

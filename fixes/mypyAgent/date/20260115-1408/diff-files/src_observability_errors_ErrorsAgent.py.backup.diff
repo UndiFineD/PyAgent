@@ -1,0 +1,13 @@
+diff --git a/src/observability/errors/ErrorsAgent.py b/src/observability/errors/ErrorsAgent.py
+index 443380e..a0ea499 100644
+--- a/src/observability/errors/ErrorsAgent.py
++++ b/src/observability/errors/ErrorsAgent.py
+@@ -30,7 +30,7 @@ from .ErrorSeverity import ErrorSeverity
+ from .SuppressionRule import SuppressionRule
+ from src.core.base.BaseAgent import BaseAgent
+ from datetime import datetime
+-from typing import Any, Dict, List, Optional, Set
++from typing import Any
+ import hashlib
+ import json
+ import logging

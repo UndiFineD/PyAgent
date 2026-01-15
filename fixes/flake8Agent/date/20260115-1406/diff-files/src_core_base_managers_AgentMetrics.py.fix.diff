@@ -1,0 +1,49 @@
+diff --git a/src/core/base/managers/AgentMetrics.py b/src/core/base/managers/AgentMetrics.py
+index 99e13be..14cad8b 100644
+--- a/src/core/base/managers/AgentMetrics.py
++++ b/src/core/base/managers/AgentMetrics.py
+@@ -21,12 +21,22 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import Dict, Any, List, Optional
++from typing import Any
+ import time
+ import logging
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class AgentMetrics:
+     """Manages execution metrics and statistics for an agent."""
+@@ -87,11 +97,11 @@ Agents applied:
+             'agents_applied': self.agents_applied
+         }
+ 
+-    def benchmark_execution(self, files: list[Any], total_time_provided: float = None) -> dict[str, Any]:
++    def benchmark_execution(self, files: list[Any], total_time_provided: float | None = None) -> dict[str, Any]:
+         """Benchmark execution time per file and per agent."""
+         if not self.end_time:
+             self.finalize()
+-        
++
+         total_time = total_time_provided if total_time_provided is not None else (self.end_time - self.start_time)
+         files_count = len(files)
+         avg_per_file = total_time / max(files_count, 1)
+@@ -132,4 +142,4 @@ Agents applied:
+ 
+         logging.info(f"Cost analysis: {estimated_requests} requests, "
+                      f"${estimated_cost:.4f} estimated")
+-        return analysis
+\ No newline at end of file
++        return analysis

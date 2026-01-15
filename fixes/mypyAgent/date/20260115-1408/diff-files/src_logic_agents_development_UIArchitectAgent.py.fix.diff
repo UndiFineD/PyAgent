@@ -1,0 +1,20 @@
+diff --git a/src/logic/agents/development/UIArchitectAgent.py b/src/logic/agents/development/UIArchitectAgent.py
+index f05b813..72305fc 100644
+--- a/src/logic/agents/development/UIArchitectAgent.py
++++ b/src/logic/agents/development/UIArchitectAgent.py
+@@ -19,7 +19,7 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ 
+ __version__ = VERSION
+@@ -85,4 +85,4 @@ class UIArchitectAgent(BaseAgent):
+         if "chart" in task_context.lower() or "plot" in task_context.lower():
+             manifest["requested_plugins"].append("Data_Visualizer")
+             
+-        return manifest
+\ No newline at end of file
++        return manifest

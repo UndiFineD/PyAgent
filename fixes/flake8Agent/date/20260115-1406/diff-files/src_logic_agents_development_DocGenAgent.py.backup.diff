@@ -1,0 +1,65 @@
+diff --git a/src/logic/agents/development/DocGenAgent.py b/src/logic/agents/development/DocGenAgent.py
+index a1d4903..6d01ea4 100644
+--- a/src/logic/agents/development/DocGenAgent.py
++++ b/src/logic/agents/development/DocGenAgent.py
+@@ -18,6 +18,7 @@
+ # limitations under the License.
+ 
+ from __future__ import annotations
++from typing import Any
+ from src.core.base.version import VERSION
+ import os
+ import ast
+@@ -25,15 +26,20 @@ from src.core.base.BaseAgent import BaseAgent
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class DocGenAgent(BaseAgent):
+     """
+-    Autonomous Documentation Generator: Extracts docstrings from Python modules 
++    Autonomous Documentation Generator: Extracts docstrings from Python modules
+     and generates Markdown files compatible with Sphinx/Jekyll.
+     """
+     def __init__(self, workspace_path: str) -> None:
+         super().__init__(workspace_path)
+         self.workspace_path = workspace_path
+-        self.doc_registry = {} # module_path -> extracted_docs
++        self.doc_registry: dict[Any, Any] = {} # module_path -> extracted_docs
+ 
+     def extract_docs(self, file_path: str) -> str:
+         """Extracts docstrings from a Python file and returns Markdown content."""
+@@ -43,9 +49,9 @@ class DocGenAgent(BaseAgent):
+         try:
+             with open(file_path, encoding="utf-8") as f:
+                 tree = ast.parse(f.read())
+-            
++
+             md_content = f"# Documentation for {os.path.basename(file_path)}\n\n"
+-            
++
+             # Module docstring
+             module_doc = ast.get_docstring(tree)
+             if module_doc:
+@@ -57,7 +63,7 @@ class DocGenAgent(BaseAgent):
+                     class_doc = ast.get_docstring(node)
+                     if class_doc:
+                         md_content += f"{class_doc}\n\n"
+-                    
++
+                     for item in node.body:
+                         if isinstance(item, ast.FunctionDef):
+                             md_content += f"### Method: `{item.name}`\n"
+@@ -87,5 +93,5 @@ class DocGenAgent(BaseAgent):
+             doc_filename = rel_path.replace(os.sep, '_').replace('.py', '.md')
+             with open(os.path.join(output_dir, doc_filename), "w", encoding="utf-8") as f:
+                 f.write(content)
+-        
+-        return len(self.doc_registry)
+\ No newline at end of file
++
++        return len(self.doc_registry)

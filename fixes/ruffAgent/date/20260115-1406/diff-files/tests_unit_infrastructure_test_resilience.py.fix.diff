@@ -1,0 +1,11 @@
+diff --git a/tests/unit/infrastructure/test_resilience.py b/tests/unit/infrastructure/test_resilience.py
+index b1eca69..271f36a 100644
+--- a/tests/unit/infrastructure/test_resilience.py
++++ b/tests/unit/infrastructure/test_resilience.py
+@@ -1,6 +1,5 @@
+ """Unit tests for AgentRegistry resilience and lazy mapping."""
+ import os
+-import sys
+ import logging
+ from pathlib import Path
+ 

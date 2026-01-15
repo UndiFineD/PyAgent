@@ -1,0 +1,28 @@
+diff --git a/src/logic/agents/cognitive/context/utils/ContextDiffer.py b/src/logic/agents/cognitive/context/utils/ContextDiffer.py
+index da7a76f..e210ecf 100644
+--- a/src/logic/agents/cognitive/context/utils/ContextDiffer.py
++++ b/src/logic/agents/cognitive/context/utils/ContextDiffer.py
+@@ -23,11 +23,15 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.ContextDiff import ContextDiff
+-from typing import Dict, List
+ import re
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ContextDiffer:
+     """Shows changes in context between versions.
+ 
+@@ -100,4 +104,4 @@ class ContextDiffer:
+             change_summary=(
+                 f"Added {len(added)}, removed {len(removed)}, "
+                 f"modified {len(modified)} sections"
+-            ))
+\ No newline at end of file
++            ))

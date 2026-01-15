@@ -1,0 +1,29 @@
+diff --git a/src/infrastructure/dev/test_utils/AgentAssertions.py b/src/infrastructure/dev/test_utils/AgentAssertions.py
+index a36db34..711b901 100644
+--- a/src/infrastructure/dev/test_utils/AgentAssertions.py
++++ b/src/infrastructure/dev/test_utils/AgentAssertions.py
+@@ -23,12 +23,16 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .TestAssertion import TestAssertion
+-from typing import List
+ import json
+ import re
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class AgentAssertions:
+     """Custom assertion helpers for agent testing.
+ 
+@@ -160,4 +164,4 @@ class AgentAssertions:
+ 
+     def get_assertions(self) -> list[TestAssertion]:
+         """Get all recorded assertions."""
+-        return list(self._assertions)
+\ No newline at end of file
++        return list(self._assertions)

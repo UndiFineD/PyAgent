@@ -1,0 +1,13 @@
+diff --git a/src/observability/reports/SubscriptionManager.py b/src/observability/reports/SubscriptionManager.py
+index 541edbe..cee8940 100644
+--- a/src/observability/reports/SubscriptionManager.py
++++ b/src/observability/reports/SubscriptionManager.py
+@@ -24,7 +24,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ReportSubscription import ReportSubscription
+ from .ReportType import ReportType
+-from typing import Any, Dict, List
++from typing import Any
+ import logging
+ import time
+ 

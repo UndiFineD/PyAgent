@@ -1,0 +1,393 @@
+diff --git a/src/infrastructure/orchestration/SelfImprovementOrchestrator.py b/src/infrastructure/orchestration/SelfImprovementOrchestrator.py
+index c790612..7383581 100644
+--- a/src/infrastructure/orchestration/SelfImprovementOrchestrator.py
++++ b/src/infrastructure/orchestration/SelfImprovementOrchestrator.py
+@@ -25,8 +25,9 @@ import logging
+ import time
+ import re
+ from pathlib import Path
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
++from src.infrastructure.orchestration.core.SelfImprovementCore import SelfImprovementCore
+ from src.infrastructure.backend.LLMClient import LLMClient
+ from src.core.base.version import is_gate_open
+ 
+@@ -59,6 +60,7 @@ class SelfImprovementOrchestrator(BaseAgent):
+         # Phase 107: AI-assisted refactoring
+         import requests
+         self.ai = LLMClient(requests, workspace_root=self.workspace_root)
++        self.core = SelfImprovementCore(workspace_root=self.workspace_root)
+ 
+     def run_improvement_cycle(self, target_dir: str = "src") -> dict[str, Any]:
+         """Runs a full scan and fix cycle across the specified directory."""
+@@ -90,7 +92,7 @@ class SelfImprovementOrchestrator(BaseAgent):
+         # Find all python files (Phase 135: Supported file targets)
+         src_path = os.path.join(self.workspace_root, target_dir)
+         
+-        target_files = []
++        target_files: list[Any] = []
+         if os.path.isfile(src_path) and src_path.endswith(".py"):
+             target_files = [(os.path.dirname(src_path), [], [os.path.basename(src_path)])]
+         elif os.path.isdir(src_path):
+@@ -152,7 +154,7 @@ class SelfImprovementOrchestrator(BaseAgent):
+         
+         return results
+ 
+-    def update_research_report(self, results: dict[str, Any], lessons: list[str] = None) -> str:
++    def update_research_report(self, results: dict[str, Any], lessons: list[str] | None = None) -> str:
+         """Updates the IMPROVEMENT_RESEARCH.md and FLEET_AUTO_DOC.md based on latest scan findings."""
+         if not os.path.exists(self.research_doc):
+             return
+@@ -203,204 +205,71 @@ class SelfImprovementOrchestrator(BaseAgent):
+ 
+     def _analyze_and_fix(self, file_path: str) -> list[dict[str, Any]]:
+         """Uses specialized agents to analyze and potentially fix a file."""
+-        findings = []
+-        
+         # 0. Versioning Gatekeeping (Phase 106)
+         version_file = os.path.join(self.workspace_root, "version.py")
+         if not os.path.exists(version_file):
+-            findings.append({
++            return [{
+                 "type": "Versioning Issue",
+                 "message": "Missing version.py gatekeeper. Project standardization required.",
+                 "file": file_path
+-            })
++            }]
+ 
+-        # 1. Tech Debt (Phase 85)
+-        # Check for large files (Complexity Gate)
++        with open(file_path, encoding="utf-8", errors="ignore") as f:
++            content = f.read()
++        
++        rel_path = os.path.relpath(file_path, self.workspace_root)
++        findings = self.core.analyze_content(content, rel_path)
++        
++        # Add shell-specific findings (Large file)
+         size_kb = os.path.getsize(file_path) / 1024
+         if size_kb > 50:
+             findings.append({
+                 "type": "Refactoring Target",
+                 "message": f"File is large ({size_kb:.1f} KB). Consider decomposing into Core/Shell classes.",
+-                "file": file_path
++                "file": rel_path
+             })
+ 
+-        # 2. Security (Phase 84 / 104)
+-        with open(file_path, encoding="utf-8", errors="ignore") as f:
+-            content = f.read()
+-            lines = content.split('\n')
+-            # Expanded security patterns
+-            dangerous_patterns = [
+-                (r"\beval\s*\(", "Use of eval() is highly insecure."), # nosec
+-                (r"subprocess\.run\(.*shell=True", "shell=True in subprocess can lead to command injection."), # nosec
+-                (r"os\.system\(", "os.system() is deprecated and insecure."), # nosec
+-                (r"yaml\.load\(", "Unsafe YAML loading detected. Use yaml.safe_load()."), # nosec
+-                (r"pickle\.load\(", "Pickle can execute arbitrary code. Use JSON if possible."), # nosec
+-                (r"requests\.get\(.*verify=False", "SSL verification is disabled.") # nosec
+-            ]
+-            for pattern, msg in dangerous_patterns:
+-                # Find the line number for the pattern
+-                for i, line in enumerate(lines, 1):
+-                    if re.search(pattern, line):
+-                        # Support # nosec to suppress security warning (Phase 105)
+-                        if "# nosec" in line:
+-                            continue
+-
+-                        # Simple heuristic: Avoid flagging the scanner file if it matches its own definition strings
+-                        if "SelfImprovementOrchestrator" in content and pattern in str(dangerous_patterns):
+-                            continue
+-                        
+-                        findings.append({
+-                            "type": "Security Risk",
+-                            "message": f"{msg} (Pattern: {pattern})",
+-                            "file": file_path,
+-                            "line": i
+-                        })
+-
+-        # 3. Quality (Phase 87)
+-        if '"""' not in content[:2000] and "'''" not in content[:2000]:
+-            findings.append({
+-                "type": "Missing Docstring",
+-                "message": "Top-level module docstring is missing.",
+-                "file": file_path
+-            })
+-
+-        # 4. Rust-Readiness: Type Hinting (Phase 105/108)
+-        if file_path.endswith(".py"):
+-            try:
+-                import ast
+-                tree = ast.parse(content)
+-                untyped_nodes = [n for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)) and n.returns is None]
+-                if untyped_nodes:
+-                    findings.append({
+-                        "type": "Rust Readiness Task",
+-                        "message": f"Found {len(untyped_nodes)} functions without return type hints. Strong typing required for Rust port.",
+-                        "file": file_path,
+-                        "details": [n.name for n in untyped_nodes]
+-                    })
+-            except Exception:
+-                # Fallback to simple line check if AST fails
+-                untyped_defs = [line for line in lines if line.strip().startswith("def ") and "->" not in line and not line.strip().startswith("#")]
+-                if untyped_defs:
+-                    findings.append({
+-                        "type": "Rust Readiness Task",
+-                        "message": f"Found {len(untyped_defs)} functions without return type hints. Strong typing required for Rust port.",
+-                        "file": file_path
+-                    })
+-
+-        # 5. Robustness: Exception Handling
+-        if re.search(r"^\s*except:\s*(#.*)?$", content, re.MULTILINE):
+-            findings.append({
+-                "type": "Robustness Issue",
+-                "message": "Bare 'except:' caught. Use 'except Exception:' or specific errors.",
+-                "file": file_path
+-            })
+-
+-        # 6. Speed & Efficiency: Performance Bottlenecks
+-        if re.search(r"^[^\#]*time\.sleep\(", content, re.MULTILINE) and "test" not in file_path.lower() and "SelfImprovementOrchestrator.py" not in file_path:
+-            findings.append({
+-                "type": "Performance Warning",
+-                "message": "Found active time.sleep() in non-test code. Possible blocking bottleneck.",
+-                "file": file_path
+-            })
+-        
+-        # 7. Speed: Missing Cache usage for expensive patterns
+-        expensive_patterns = [r"os\.walk\(", r"pathlib\.Path\.glob\(", r"requests\.get\(", r"requests\.post\("]
+-        for pattern in expensive_patterns:
+-            if len(re.findall(pattern, content)) > 2:
+-                findings.append({
+-                    "type": "Performance Target",
+-                    "message": f"Repeated expensive call '{pattern}' detected. Implement caching (lru_cache) or persistent storage.",
+-                    "file": file_path
+-                })
+-        
+-        # 8. Intelligence Feedback: Missing shard recording (Phase 108)
+-        # We look for actual calls, avoiding matching type hints like subprocess.CompletedProcess
+-        io_pattern = r"(requests\.(get|post|put|delete|patch|head)\(|self\.ai|subprocess\.(run|call|Popen|check_call|check_output)\(|adb shell)"
+-        if (re.search(io_pattern, content)) and not any(x in content for x in ["_record", "record_lesson", "record_interaction"]):
+-            findings.append({
+-                "type": "Intelligence Gap",
+-                "message": "Component performs AI/IO or Shell operations without recording context to shards. Future self-improvement requires logic harvesting.",
+-                "file": file_path
+-            })
+-        
+-        # 9. Robustness: HTTP Connection Pooling (Phase 108)
+-        # Smarter check: look for actual usage of requests module, not just the word in docstrings
++        # Add intelligence-specific findings (Connectivity/Hivemind)
++        # Robustness: HTTP Connection Pooling (Phase 108)
+         if (re.search(r"requests\.(get|post|put|delete|patch|request)\(", content) or "http.client" in content):
+-            # Check for caching indicators (Phase 108: TTL, ConnectivityManager, status_cache)
+             if "TTL" not in content and "status_cache" not in content.lower() and "ConnectivityManager" not in content:
+                  findings.append({
+                     "type": "Resilience Issue",
+                     "message": "Direct HTTP calls detected without connection status caching. Use 15-minute TTL status checks or ConnectivityManager.",
+-                    "file": file_path
++                    "file": rel_path
+                 })
+ 
+-        # 10. Robustness: Syntax Check (Phase 108)
+-        import py_compile
+-        try:
+-            py_compile.compile(file_path, doraise=True)
+-        except py_compile.PyCompileError as e:
+-            findings.append({
+-                "type": "Logic Error",
+-                "message": f"Syntax Error detected: {str(e)}",
+-                "file": file_path,
+-                "line": 1
+-            })
+-
+-        # 11. Intelligence: Hivemind Tasks (Phase 108)
+         if hasattr(self, 'active_tasks') and self.active_tasks:
+             for task in self.active_tasks:
+-                # If the task description mentions this file specifically
+                 if os.path.basename(file_path).lower() in task['description'].lower():
+                     findings.append({
+                         "type": "Swarm Intelligence Fix",
+                         "message": f"Collective intelligence requires: {task['description']}",
+-                        "file": file_path,
++                        "file": rel_path,
+                         "task_payload": task
+                     })
+ 
+-        # 8. Speed: Slow Imports (Phase 107)
+-        if "import pandas" in content or "import torch" in content or "import tensorflow" in content:
+-            # Check if it's top-level or inside a function
+-            for i, line in enumerate(lines, 1):
+-                if re.match(r"^import (pandas|torch|tensorflow)", line):
+-                    findings.append({
+-                        "type": "Speed Issue",
+-                        "message": f"Heavy module '{line.split()[1]}' imported at top-level. Consider lazy loading.",
+-                        "file": file_path,
+-                        "line": i
+-                    })
+-
+         # Autonomous Fixes (Self-Healing)
+         fixed_count = 0
+         new_content = content
+-        
+-        unsafe_yaml_pattern = "yaml." + "load("  # avoid embedding unsafe call literal
++        lines = content.split('\n')
+ 
+         for issue in findings:
+             issue["fixed"] = False
+             
+-            # Simple fix for bare excepts
+-            if issue["type"] == "Robustness Issue":
+-                new_content = re.sub(r"^(\s*)except:(\s*)(#.*)?$", r"\1except Exception:\2\3", new_content, flags=re.MULTILINE)
++            # Simple Core Fixes
++            simple_fix = self.core.generate_simple_fix(issue["type"], new_content)
++            if simple_fix:
++                new_content = simple_fix
+                 issue["fixed"] = True
+                 fixed_count += 1
++                continue
+             
+-            # Simple fix for unsafe YAML
+-            if unsafe_yaml_pattern in content and "yaml.safe_load(" not in content:
+-                # nosec
+-                if "import yaml" in content:
+-                    new_content = new_content.replace(unsafe_yaml_pattern, "yaml.safe_load(") # nosec
+-                    issue["fixed"] = True
+-                    fixed_count += 1
+-            
+-            # Fixed: Common Robustness and Speed issues (Phase 108)
++            # Shell-side fixes (Resilience injection)
+             if issue["type"] == "Resilience Issue":
+                 if "import requests" in new_content and "ConnectivityManager" not in new_content:
+-                    # Inject ConnectivityManager if missing
+                     if "class " in new_content:
+-                        # Find first __init__ and inject there, or top of class
+                         new_content = new_content.replace("import logging", "import logging\nfrom src.core.base.ConnectivityManager import ConnectivityManager")
+-                        # (Simplified injection for brevity in this simulation)
+                         logging.info(f"Self-Healing: Injected ConnectivityManager into {file_path}")
+                         issue["fixed"] = True
+                         fixed_count += 1
+@@ -408,16 +277,14 @@ class SelfImprovementOrchestrator(BaseAgent):
+             if issue["type"] == "Performance Target" and "lru_cache" not in new_content:
+                 if "import " in new_content and "functools" not in new_content:
+                     new_content = new_content.replace("import ", "from functools import lru_cache\nimport ", 1)
+-                    # Find expensive looking function and tag it
+                     if "def " in new_content:
+                          new_content = re.sub(r"def (\w+)\(([^)]*)\):", r"@lru_cache(maxsize=128)\ndef \1(\2):", new_content, count=1)
+                          issue["fixed"] = True
+                          fixed_count += 1
+                          logging.info(f"Self-Healing: Added @lru_cache to {file_path}")
+ 
+-            # Phase 107: AI-Assisted Fixes for Complex Issues (Security & Speed)
++            # AI-Assisted Fixes (Shell only)
+             if not issue["fixed"] and issue["type"] in ["Security Risk", "Speed Issue"]:
+-                # Use smart_chat to suggest a fix
+                 prompt = f"Fix the following {issue['type']} in this Python code:\nIssue: {issue['message']}\nCode Snippet around line {issue.get('line', 'unknown')}:\n"
+                 context_start = max(0, issue.get('line', 0) - 5)
+                 context_end = min(len(lines), issue.get('line', 0) + 5)
+@@ -426,39 +293,24 @@ class SelfImprovementOrchestrator(BaseAgent):
+                 
+                 fix_suggestion = self.ai.smart_chat(prompt, system_prompt="You are a senior Python security and performance engineer. Provide concise code fixes.")
+                 if fix_suggestion and "```" not in fix_suggestion and len(fix_suggestion) < 200:
+-                    # Apply if it's a simple line replacement
+                     old_line = lines[issue.get('line', 1)-1]
+                     if old_line.strip() in fix_suggestion or fix_suggestion.strip() in old_line:
+-                         # We'll be cautious here, but for simple things like verify=False -> verify=True
+                          new_content = new_content.replace(old_line, fix_suggestion)
+                          issue["fixed"] = True
+                          fixed_count += 1
+                          logging.info(f"Self-Healing: AI fixed {issue['type']} in {file_path}")
+ 
+-            # Phase 107: Speed Issue - Auto Lazy Loading
+-            if issue["type"] == "Speed Issue" and not issue["fixed"]:
+-                module_name = re.search(r"import (\w+)", lines[issue['line']-1]).group(1)
+-                fixed_line = f"# Lazy loaded: {module_name} moved to localized usage"
+-                new_content = new_content.replace(lines[issue['line']-1], fixed_line)
+-                issue["fixed"] = True
+-                fixed_count += 1
+-                logging.info(f"Self-Healing: Masked heavy top-level import of {module_name} in {file_path}")
+-
+-            # Rust Readiness: Auto-inject -> None for __init__
++            # Rust Readiness: AI Type Inference
+             if issue["type"] == "Rust Readiness Task":
+-                # 1. AI-Driven Massive Type Inference (Phase 108)
+                 if not issue["fixed"] and "Found" in issue["message"]:
+-                     # Use the whole file context if it's missing lots of types
+                      prompt = f"Add comprehensive Python type hints (return types and arguments) to ALL untyped functions in the following code for Rust FFI stability. Return ONLY the modified code:\n\n{new_content[:8000]}"
+                      try:
+                          ai_typed_code = self.ai.smart_chat(prompt, system_prompt="You are a senior Rust/Python integration expert. Your task is to add perfect type hints to make Python code ready for binding with Rust.")
+                          if ai_typed_code and "def " in ai_typed_code and "->" in ai_typed_code:
+-                              # Extract code from Markdown if AI wraps it
+                               if "```python" in ai_typed_code:
+                                    ai_typed_code = ai_typed_code.split("```python")[1].split("```")[0].strip()
+                               elif "```" in ai_typed_code:
+                                    ai_typed_code = ai_typed_code.split("```")[1].split("```")[0].strip()
+-                              
+                               new_content = ai_typed_code
+                               issue["fixed"] = True
+                               fixed_count += 1
+@@ -466,34 +318,12 @@ class SelfImprovementOrchestrator(BaseAgent):
+                      except Exception as e:
+                          logging.error(f"AI Typing failed for {file_path}: {e}")
+ 
+-                # 2. Simple Constructor typing (fallback)
+                 if not issue["fixed"] and "def __init__" in new_content and "def __init__(self" in new_content and "-> None" not in new_content:
+                     new_content = re.sub(r"def __init__\((self[^)]*)\):", r"def __init__(\1) -> None:", new_content)
+                     issue["fixed"] = True
+                     fixed_count += 1
+-                
+-                # ... (rest of simple inference kept for robustness)
+-                if not issue["fixed"] and ("return True" in new_content or "return False" in new_content):
+-                    # Match untyped functions that return bool literals
+-                    match_bool = re.search(r"def (\w+)\(([^)]*)\):\s+(?:(?:.|\n)*?)return (?:True|False)", new_content)
+-                    if match_bool:
+-                        func_name = match_bool.group(1)
+-                        if "->" not in new_content.split(f"def {func_name}")[1].split(":")[0]:
+-                            new_content = new_content.replace(f"def {func_name}({match_bool.group(2)}):", f"def {func_name}({match_bool.group(2)}) -> bool:")
+-                            issue["fixed"] = True
+-                            fixed_count += 1
+-
+-                # 3. Simple String inference
+-                if 'return "' in new_content or "return '" in new_content:
+-                    match_str = re.search(r"def (\w+)\(([^)]*)\):\s+(?:(?:.|\n)*?)return ['\"]", new_content)
+-                    if match_str:
+-                        func_name = match_str.group(1)
+-                        if "->" not in new_content.split(f"def {func_name}")[1].split(":")[0]:
+-                            new_content = new_content.replace(f"def {func_name}({match_str.group(2)}):", f"def {func_name}({match_str.group(2)}) -> str:")
+-                            issue["fixed"] = True
+-                            fixed_count += 1
+-
+-            # Phase 108: AI-Driven Hivemind Logic Fix
++
++            # Hivemind Logic Fix
+             if issue["type"] == "Swarm Intelligence Fix" and not issue["fixed"]:
+                 task_payload = issue.get("task_payload", {})
+                 prompt = f"Collective Intelligence identified an issue: '{task_payload.get('description')}' based on pattern '{task_payload.get('origin_pattern')}'.\nApply the requested fix to the following code and return ONLY the full updated code:\n\n{new_content[:8000]}"
+@@ -504,7 +334,6 @@ class SelfImprovementOrchestrator(BaseAgent):
+                               hive_fixed_code = hive_fixed_code.split("```python")[1].split("```")[0].strip()
+                          elif "```" in hive_fixed_code:
+                               hive_fixed_code = hive_fixed_code.split("```")[1].split("```")[0].strip()
+-                         
+                          new_content = hive_fixed_code
+                          issue["fixed"] = True
+                          fixed_count += 1
+@@ -517,14 +346,6 @@ class SelfImprovementOrchestrator(BaseAgent):
+                 f.write(new_content)
+             logging.info(f"Self-Healing: Applied {fixed_count} fixes to {file_path}")
+ 
+-        # Post-scan heuristic fixes (Phase 104)
+-        for issue in findings:
+-            if issue.get("type") == "Missing Docstring" and not issue.get("fixed"):
+-                # In a real run, we'd use CoderAgent. Here we'll let it be reported as debt.
+-                # issue["fixed"] = True
+-                # logging.info(f"Self-Improvement: Auto-fixed missing docstring in {os.path.basename(file_path)}")
+-                pass
+-
+         return findings
+ 
+     def _log_results(self, results: dict[str, Any]) -> None:
+@@ -600,4 +421,4 @@ class SelfImprovementOrchestrator(BaseAgent):
+         except Exception as e:
+             logging.debug(f"Intelligence lesson recovery failed: {e}")
+         
+-        return lessons
+\ No newline at end of file
++        return lessons

@@ -1,0 +1,23 @@
+diff --git a/src/core/base/types/MigrationRule.py b/src/core/base/types/MigrationRule.py
+index 8954aec..4403517 100644
+--- a/src/core/base/types/MigrationRule.py
++++ b/src/core/base/types/MigrationRule.py
+@@ -27,6 +27,11 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class MigrationRule:
+     """A rule for code migration from old to new API.
+@@ -44,4 +49,4 @@ class MigrationRule:
+     new_pattern: str
+     description: str
+     status: MigrationStatus = MigrationStatus.PENDING
+-    breaking_change: bool = False
+\ No newline at end of file
++    breaking_change: bool = False

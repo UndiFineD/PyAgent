@@ -1,0 +1,55 @@
+diff --git a/src/core/base/core/AutonomyCore.py b/src/core/base/core/AutonomyCore.py
+index 40b542d..1d25355 100644
+--- a/src/core/base/core/AutonomyCore.py
++++ b/src/core/base/core/AutonomyCore.py
+@@ -2,6 +2,11 @@
+ from __future__ import annotations
+ from typing import List
+ 
++try:
++    import rust_core as rc
++except ImportError:
++    rc = None
++
+ class AutonomyCore:
+     """
+     AutonomyCore implements 'Self-Model' logic and the Background Evolution Daemon.
+@@ -17,6 +22,12 @@ class AutonomyCore:
+         Analyzes performance stats to find 'Blind Spots'.
+         e.g., high success on coding, but low success on documentation.
+         """
++        if rc:
++            try:
++                return rc.identify_blind_spots(success_rate, task_diversity)
++            except Exception:
++                pass
++
+         blind_spots = []
+         if success_rate < 0.7:
+              blind_spots.append("GENERAL_REASONING_RELIABILITY")
+@@ -29,6 +40,12 @@ class AutonomyCore:
+         Returns sleep seconds for the Background Evolution Daemon.
+         If score is 1.0 (100% optimized), sleep longer (e.g., 3600s).
+         """
++        if rc:
++            try:
++                return rc.calculate_daemon_sleep_interval(optimization_score)
++            except Exception:
++                pass
++
+         if optimization_score >= 1.0:
+             return 3600 # 1 hour
+         elif optimization_score > 0.8:
+@@ -38,6 +55,12 @@ class AutonomyCore:
+ 
+     def generate_self_improvement_plan(self, blind_spots: list[str]) -> str:
+         """Constructs a directive for the agent to use in its next improvement cycle."""
++        if rc:
++            try:
++                return rc.generate_self_improvement_plan(self.agent_id, blind_spots)
++            except Exception:
++                pass
++
+         plan = f"AGENT SELF-MODEL UPDATE for {self.agent_id}:\n"
+         if not blind_spots:
+             return f"{plan}Status: Optimal. No immediate changes required."

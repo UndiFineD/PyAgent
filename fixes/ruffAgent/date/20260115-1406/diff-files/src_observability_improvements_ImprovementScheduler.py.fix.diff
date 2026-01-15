@@ -1,0 +1,13 @@
+diff --git a/src/observability/improvements/ImprovementScheduler.py b/src/observability/improvements/ImprovementScheduler.py
+index 28cc34f..6b062b6 100644
+--- a/src/observability/improvements/ImprovementScheduler.py
++++ b/src/observability/improvements/ImprovementScheduler.py
+@@ -29,7 +29,7 @@ from .ScheduledEntry import ScheduledEntry
+ from .ScheduledImprovement import ScheduledImprovement
+ from ._ScheduleStore import _ScheduleStore
+ from datetime import datetime, timedelta
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 

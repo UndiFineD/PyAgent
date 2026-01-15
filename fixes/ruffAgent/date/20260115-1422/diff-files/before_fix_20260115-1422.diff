@@ -1,0 +1,83 @@
+diff --git a/.gitignore b/.gitignore
+index a6edb627..f1783e07 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -56,3 +56,4 @@ chroma.sqlite3
+ *.agent_knowledge_index.json
+ *.db
+ data/
++fixes/
+diff --git a/deploy/Dockerfile.SQLAgent b/deploy/Dockerfile.SQLAgent
+index d0eb0fef..1b11d477 100644
+--- a/deploy/Dockerfile.SQLAgent
++++ b/deploy/Dockerfile.SQLAgent
+@@ -2,9 +2,18 @@ FROM python:3.10-slim
+ 
+ WORKDIR /app
+ COPY requirements.txt .
++
++
++
++
+ RUN pip install --no-cache-dir -r requirements.txt
+ 
+ COPY . .
+ 
+ ENV AGENT_TYPE=SQLAgent
++
++
++
++
++
+ CMD ["python", "src/logic/agents/specialized/SQLAgent.py"]
+diff --git a/deploy/provisioning_logs.jsonl b/deploy/provisioning_logs.jsonl
+index 638ae1a4..410300d4 100644
+--- a/deploy/provisioning_logs.jsonl
++++ b/deploy/provisioning_logs.jsonl
+@@ -36,3 +36,7 @@
+ {"node_id": "SQL_Node_01", "type": "SQLAgent", "status": "provisioning", "timestamp": 0}
+ {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 0}
+ {"node_id": "SQL_Node_01", "type": "SQLAgent", "status": "provisioning", "timestamp": 0}
++{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 0}
++{"node_id": "SQL_Node_01", "type": "SQLAgent", "status": "provisioning", "timestamp": 0}
++{"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 0}
++{"node_id": "SQL_Node_01", "type": "SQLAgent", "status": "provisioning", "timestamp": 0}
+diff --git a/models/forge/adapters/opt_SQLAgent_v12/adapter_config.json b/models/forge/adapters/opt_SQLAgent_v12/adapter_config.json
+index cc73502f..ec930835 100644
+--- a/models/forge/adapters/opt_SQLAgent_v12/adapter_config.json
++++ b/models/forge/adapters/opt_SQLAgent_v12/adapter_config.json
+@@ -1 +1 @@
+-{"base_model": "unsloth/llama-3-8b-bnb-4bit", "peft_type": "LORA", "job_id": "job_opt_SQLAgent_v12_1768474453"}
+\ No newline at end of file
++{"base_model": "unsloth/llama-3-8b-bnb-4bit", "peft_type": "LORA", "job_id": "job_opt_SQLAgent_v12_1768483029"}
+\ No newline at end of file
+diff --git a/src/generated/tool_1.py b/src/generated/tool_1.py
+index 0cec6523..52357019 100644
+--- a/src/generated/tool_1.py
++++ b/src/generated/tool_1.py
+@@ -2,12 +2,6 @@
+ Generated tool for CSV Parsing
+ """
+ 
+-
+-
+-
+-
+-
+-
+ def run(data):
+     # Requirements: Read CSV and sum column A
+-    return f"Processed {data} using tool_1.py"
++    return f"Processed {data} using tool_1.py"
+\ No newline at end of file
+diff --git a/src/infrastructure/orchestration/status.json b/src/infrastructure/orchestration/status.json
+index fbe4cc8b..9cc89b54 100644
+--- a/src/infrastructure/orchestration/status.json
++++ b/src/infrastructure/orchestration/status.json
+@@ -1,5 +1,5 @@
+ {
+-    "last_updated": "2026-01-15T11:56:54.231792",
++    "last_updated": "2026-01-15T14:19:46.230664",
+     "active_project": null,
+     "steps": [],
+     "current_step_index": -1,

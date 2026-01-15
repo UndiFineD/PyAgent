@@ -1,0 +1,28 @@
+diff --git a/src/observability/errors/FixSuggestion.py b/src/observability/errors/FixSuggestion.py
+index d3333b7..23f673b 100644
+--- a/src/observability/errors/FixSuggestion.py
++++ b/src/observability/errors/FixSuggestion.py
+@@ -26,6 +26,16 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class FixSuggestion:
+     """Automated fix suggestion for an error.
+@@ -41,4 +51,4 @@ class FixSuggestion:
+     suggestion: str
+     confidence: float = 0.0
+     code_snippet: str = ""
+-    source: str = "pattern_match"
+\ No newline at end of file
++    source: str = "pattern_match"

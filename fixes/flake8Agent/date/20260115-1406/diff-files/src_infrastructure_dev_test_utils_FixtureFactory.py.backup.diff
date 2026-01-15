@@ -1,0 +1,44 @@
+diff --git a/src/infrastructure/dev/test_utils/FixtureFactory.py b/src/infrastructure/dev/test_utils/FixtureFactory.py
+index 03c2ac4..bc1bb9f 100644
+--- a/src/infrastructure/dev/test_utils/FixtureFactory.py
++++ b/src/infrastructure/dev/test_utils/FixtureFactory.py
+@@ -23,10 +23,15 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class FixtureFactory:
+     """Factory for creating test fixtures.
+ 
+@@ -59,6 +64,7 @@ class FixtureFactory:
+             Agent fixture object with name, config and dependencies attributes.
+         """
+         class AgentFixture:
++            """Fixture representing a pre-configured agent for testing."""
+             def __init__(self, name: str, config: dict[str, Any] | None, dependencies: list[Any] | None) -> None:
+                 self.name = name
+                 self.config = config or {}
+@@ -77,6 +83,7 @@ class FixtureFactory:
+             File fixture object with setup_fn method.
+         """
+         class FileFixture:
++            """Fixture representing a file to be created during test setup."""
+             def __init__(self, base_dir: Path, name: str, content: str) -> None:
+                 self.base_dir = base_dir
+                 self.name = name
+@@ -89,4 +96,4 @@ class FixtureFactory:
+                 path.write_text(self.content)
+                 return path
+ 
+-        return FileFixture(self.base_dir, name, content)
+\ No newline at end of file
++        return FileFixture(self.base_dir, name, content)

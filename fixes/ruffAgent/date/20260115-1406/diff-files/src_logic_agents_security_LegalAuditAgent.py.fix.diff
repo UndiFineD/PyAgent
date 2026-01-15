@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/security/LegalAuditAgent.py b/src/logic/agents/security/LegalAuditAgent.py
+index 3053e98..d1be7b2 100644
+--- a/src/logic/agents/security/LegalAuditAgent.py
++++ b/src/logic/agents/security/LegalAuditAgent.py
+@@ -20,7 +20,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import re
+-from typing import Dict, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ 
+ __version__ = VERSION

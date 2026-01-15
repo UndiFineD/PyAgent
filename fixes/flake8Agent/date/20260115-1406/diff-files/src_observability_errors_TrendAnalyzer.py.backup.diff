@@ -1,0 +1,27 @@
+diff --git a/src/observability/errors/TrendAnalyzer.py b/src/observability/errors/TrendAnalyzer.py
+index ca53f7d..15ad507 100644
+--- a/src/observability/errors/TrendAnalyzer.py
++++ b/src/observability/errors/TrendAnalyzer.py
+@@ -25,10 +25,14 @@ from src.core.base.version import VERSION
+ from .TrendData import TrendData
+ from .TrendDirection import TrendDirection
+ from datetime import datetime
+-from typing import Dict, List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class TrendAnalyzer:
+     """Analyzes error trends over time.
+ 
+@@ -111,4 +115,4 @@ class TrendAnalyzer:
+             avg_change = sum(changes) / len(changes)
+         for i in range(periods):
+             predictions.append(last_value + avg_change * (i + 1))
+-        return predictions
+\ No newline at end of file
++        return predictions

@@ -1,0 +1,33 @@
+diff --git a/src/infrastructure/backend/CapabilityDiscovery.py b/src/infrastructure/backend/CapabilityDiscovery.py
+index 0a96980..aa29077 100644
+--- a/src/infrastructure/backend/CapabilityDiscovery.py
++++ b/src/infrastructure/backend/CapabilityDiscovery.py
+@@ -23,10 +23,20 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .SystemCapability import SystemCapability
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class CapabilityDiscovery:
+     """Discovers and tracks backend capabilities.
+ 
+@@ -109,4 +119,4 @@ class CapabilityDiscovery:
+         return {
+             backend: [c.name for c in caps.values() if c.enabled]
+             for backend, caps in self._capabilities.items()
+-        }
+\ No newline at end of file
++        }

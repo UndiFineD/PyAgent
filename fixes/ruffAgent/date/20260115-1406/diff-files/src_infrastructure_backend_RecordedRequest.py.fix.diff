@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/backend/RecordedRequest.py b/src/infrastructure/backend/RecordedRequest.py
+index e349d7d..e355c08 100644
+--- a/src/infrastructure/backend/RecordedRequest.py
++++ b/src/infrastructure/backend/RecordedRequest.py
+@@ -23,7 +23,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import Any, Dict, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 

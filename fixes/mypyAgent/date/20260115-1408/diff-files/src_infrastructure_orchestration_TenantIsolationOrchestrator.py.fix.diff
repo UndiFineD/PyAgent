@@ -1,0 +1,20 @@
+diff --git a/src/infrastructure/orchestration/TenantIsolationOrchestrator.py b/src/infrastructure/orchestration/TenantIsolationOrchestrator.py
+index 1ebf487..a7d2e6c 100644
+--- a/src/infrastructure/orchestration/TenantIsolationOrchestrator.py
++++ b/src/infrastructure/orchestration/TenantIsolationOrchestrator.py
+@@ -21,7 +21,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import os
+ import hashlib
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 
+@@ -69,4 +69,4 @@ class TenantIsolationOrchestrator:
+     def validate_access(self, tenant_id: str, resource_id: str) -> bool:
+         """Checks if a tenant has authorization for a specific resource."""
+         # Simple domain-based validation
+-        return resource_id.startswith(tenant_id)
+\ No newline at end of file
++        return resource_id.startswith(tenant_id)

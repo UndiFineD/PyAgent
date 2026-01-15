@@ -1,0 +1,34 @@
+diff --git a/src/infrastructure/dev/scripts/management/debug_intelligence_gaps.py b/src/infrastructure/dev/scripts/management/debug_intelligence_gaps.py
+index 0b55b6d..f81ed72 100644
+--- a/src/infrastructure/dev/scripts/management/debug_intelligence_gaps.py
++++ b/src/infrastructure/dev/scripts/management/debug_intelligence_gaps.py
+@@ -29,6 +29,11 @@ import re
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ def main() -> None:
+     root = "src"
+     io_pattern = r"(requests\.(get|post|put|delete|patch|head)\(|self\.ai|subprocess\.(run|call|Popen|check_call|check_output)\(|adb shell|sqlite3\.(connect|execute|read_sql)|pd\.read_sql)"
+@@ -47,9 +52,14 @@ def main() -> None:
+                                  findings.append(path)
+                 except Exception:
+                     pass
+-    
++
+     for f in findings:
+         print(f)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+-    main()
+\ No newline at end of file
++    main()

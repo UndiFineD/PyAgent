@@ -1,0 +1,14 @@
+diff --git a/src/infrastructure/dev/test_utils/TestConfigLoader.py b/src/infrastructure/dev/test_utils/TestConfigLoader.py
+index ac72da1..4a23e3f 100644
+--- a/src/infrastructure/dev/test_utils/TestConfigLoader.py
++++ b/src/infrastructure/dev/test_utils/TestConfigLoader.py
+@@ -29,8 +29,8 @@ import json
+ __version__ = VERSION
+ 
+ class TestConfigLoader:
+-    __test__ = False
+     """Loads test configuration from files."""
++    __test__ = False
+ 
+     def __init__(self, config_path: Path | None = None) -> None:
+         """Initialize config loader."""

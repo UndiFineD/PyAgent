@@ -1,0 +1,12 @@
+diff --git a/src/logic/agents/cognitive/context/models/SharedContext.py b/src/logic/agents/cognitive/context/models/SharedContext.py
+index 3f7c83d..d31c42a 100644
+--- a/src/logic/agents/cognitive/context/models/SharedContext.py
++++ b/src/logic/agents/cognitive/context/models/SharedContext.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.SharingPermission import SharingPermission
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 

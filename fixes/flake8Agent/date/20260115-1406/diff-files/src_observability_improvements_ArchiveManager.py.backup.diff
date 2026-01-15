@@ -1,0 +1,27 @@
+diff --git a/src/observability/improvements/ArchiveManager.py b/src/observability/improvements/ArchiveManager.py
+index 3a418a8..2c0125d 100644
+--- a/src/observability/improvements/ArchiveManager.py
++++ b/src/observability/improvements/ArchiveManager.py
+@@ -23,10 +23,14 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .Improvement import Improvement
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ArchiveManager:
+     """Archives completed improvements."""
+ 
+@@ -41,4 +45,4 @@ class ArchiveManager:
+             if imp.id == improvement_id:
+                 self.archived.pop(i)
+                 return imp
+-        raise KeyError(improvement_id)
+\ No newline at end of file
++        raise KeyError(improvement_id)

@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/intelligence/ExcelAgent.py b/src/logic/agents/intelligence/ExcelAgent.py
+index 5ef99d3..a84277c 100644
+--- a/src/logic/agents/intelligence/ExcelAgent.py
++++ b/src/logic/agents/intelligence/ExcelAgent.py
+@@ -25,7 +25,7 @@ from src.core.base.version import VERSION
+ from src.core.base.BaseAgent import BaseAgent
+ import logging
+ from pathlib import Path
+-from typing import Dict, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 

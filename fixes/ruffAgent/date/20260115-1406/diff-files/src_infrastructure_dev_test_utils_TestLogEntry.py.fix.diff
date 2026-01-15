@@ -1,0 +1,28 @@
+diff --git a/src/infrastructure/dev/test_utils/TestLogEntry.py b/src/infrastructure/dev/test_utils/TestLogEntry.py
+index e840bba..b433667 100644
+--- a/src/infrastructure/dev/test_utils/TestLogEntry.py
++++ b/src/infrastructure/dev/test_utils/TestLogEntry.py
+@@ -23,14 +23,13 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import Any, Dict, Optional
++from typing import Any
+ import time
+ 
+ __version__ = VERSION
+ 
+ @dataclass
+ class TestLogEntry:
+-    __test__ = False
+     """A test log entry.
+ 
+     Attributes:
+@@ -40,6 +39,7 @@ class TestLogEntry:
+         test_name: Associated test.
+         extra: Extra data.
+     """
++    __test__ = False
+ 
+     level: str
+     message: str

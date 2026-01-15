@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/backend/SystemHealthMonitor.py b/src/infrastructure/backend/SystemHealthMonitor.py
+index 561ae01..35e1ab4 100644
+--- a/src/infrastructure/backend/SystemHealthMonitor.py
++++ b/src/infrastructure/backend/SystemHealthMonitor.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .SystemHealthStatus import SystemHealthStatus
+ from .SystemState import SystemState
+-from typing import Dict, List, Optional, Tuple
+ import logging
+ import threading
+ from src.observability.stats.analysis import FleetMetrics

@@ -1,0 +1,32 @@
+diff --git a/src/core/base/types/DiffResult.py b/src/core/base/types/DiffResult.py
+index cd3fa96..e8ed0f4 100644
+--- a/src/core/base/types/DiffResult.py
++++ b/src/core/base/types/DiffResult.py
+@@ -23,10 +23,19 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List, Tuple
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class DiffResult:
+     """Result of a changelog diff comparison.
+@@ -42,4 +51,4 @@ class DiffResult:
+     deletions: list[str] = field(default_factory=lambda: [])
+     modifications: list[tuple[str, str]] = field(default_factory=lambda: [])
+     unchanged: int = 0
+-    similarity_score: float = 0.0
+\ No newline at end of file
++    similarity_score: float = 0.0

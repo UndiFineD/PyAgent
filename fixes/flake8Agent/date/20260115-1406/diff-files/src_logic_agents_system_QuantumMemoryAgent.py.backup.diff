@@ -1,0 +1,95 @@
+diff --git a/src/logic/agents/system/QuantumMemoryAgent.py b/src/logic/agents/system/QuantumMemoryAgent.py
+index a813a37..5e6d0a4 100644
+--- a/src/logic/agents/system/QuantumMemoryAgent.py
++++ b/src/logic/agents/system/QuantumMemoryAgent.py
+@@ -23,6 +23,7 @@ Uses hierarchical summarization and selective hydration to handle massive local
+ """
+ 
+ from __future__ import annotations
++from typing import Any
+ from src.core.base.version import VERSION
+ import logging
+ import json
+@@ -32,15 +33,20 @@ from src.core.base.utilities import as_tool
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class QuantumMemoryAgent(BaseAgent):
+     """Manages massive context windows through compression and quantization."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self.context_cache_dir = Path("data/logs/quantum_context")
+         self.context_cache_dir.mkdir(parents=True, exist_ok=True)
+-        self.active_context_blocks = []
+-        
++        self.active_context_blocks: list[Any] = []
++
+         self._system_prompt = (
+             "You are the Quantum Memory Agent. "
+             "Your role is to manage information overflow. "
+@@ -57,18 +63,18 @@ class QuantumMemoryAgent(BaseAgent):
+             target_ratio: The desired compression ratio (default 10%).
+         """
+         logging.info(f"QuantumMemory: Compressing {len(context_text)} chars...")
+-        
++
+         # Simplified logic: In a real scenario, this would use a small model (like 4-bit quantized)
+         # to generate a dense representation. For now, we simulate extraction.
+         summary = f"[Compressed Context]: Dense summary of {len(context_text)} characters. Main themes preserved."
+-        
++
+         block_id = f"block_{len(self.active_context_blocks)}"
+         self.active_context_blocks.append({
+             "id": block_id,
+             "original_len": len(context_text),
+             "summary": summary
+         })
+-        
++
+         return f"SUCCESS: Compressed block {block_id}. Current context pool: {len(self.active_context_blocks)} blocks."
+ 
+     @as_tool
+@@ -79,11 +85,11 @@ class QuantumMemoryAgent(BaseAgent):
+         """
+         # Logic: Scan all summaries and 're-hydrate' only the most relevant blocks.
+         relevant_blocks = [b["id"] for b in self.active_context_blocks if any(word in b["summary"].lower() for word in query.lower().split())]
+-        
++
+         if not relevant_blocks:
+             # Fallback to general search across the last 3 blocks
+             relevant_blocks = [b["id"] for b in self.active_context_blocks[-3:]]
+-            
++
+         return f"### Results for '{query}'\n\nFound relevant data in blocks: {', '.join(relevant_blocks)}. \n[Hydrated Context]: Re-assembling memory nodes for reasoning..."
+ 
+     @as_tool
+@@ -92,14 +98,19 @@ class QuantumMemoryAgent(BaseAgent):
+         filepath = self.context_cache_dir / "knowledge_graph.json"
+         with open(filepath, "w") as f:
+             json.dump(self.active_context_blocks, f, indent=2)
+-            
++
+         return f"Knowledge Graph exported to {filepath}"
+ 
+     def improve_content(self, prompt: str) -> str:
+         """General memory optimization logic."""
+         return "I am optimizing the local memory pool. Memory fragments are being quantized for retrieval efficiency."
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(QuantumMemoryAgent, "Quantum Memory Agent", "Context compression tool")
+-    main()
+\ No newline at end of file
++    main()

@@ -1,0 +1,12 @@
+diff --git a/src/observability/errors/RegressionDetector.py b/src/observability/errors/RegressionDetector.py
+index dfa454d..b2e2fa6 100644
+--- a/src/observability/errors/RegressionDetector.py
++++ b/src/observability/errors/RegressionDetector.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ErrorEntry import ErrorEntry
+ from .RegressionInfo import RegressionInfo
+-from typing import Dict, List, Optional
+ import re
+ 
+ __version__ = VERSION

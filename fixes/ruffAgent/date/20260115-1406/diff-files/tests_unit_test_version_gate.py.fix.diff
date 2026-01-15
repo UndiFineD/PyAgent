@@ -1,0 +1,12 @@
+diff --git a/tests/unit/test_version_gate.py b/tests/unit/test_version_gate.py
+index c7d1063..0f07d3f 100644
+--- a/tests/unit/test_version_gate.py
++++ b/tests/unit/test_version_gate.py
+@@ -3,7 +3,6 @@
+ 
+ import logging
+ from pathlib import Path
+-from src.infrastructure.fleet.FleetManager import FleetManager
+ from src.infrastructure.fleet.AgentRegistry import AgentRegistry, LazyAgentMap
+ from src.infrastructure.fleet.ResilientStubs import ResilientStub
+ 

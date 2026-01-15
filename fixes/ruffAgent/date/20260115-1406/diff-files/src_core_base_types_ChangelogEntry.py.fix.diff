@@ -1,0 +1,12 @@
+diff --git a/src/core/base/types/ChangelogEntry.py b/src/core/base/types/ChangelogEntry.py
+index 9950697..ee2d10e 100644
+--- a/src/core/base/types/ChangelogEntry.py
++++ b/src/core/base/types/ChangelogEntry.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 

@@ -1,0 +1,11 @@
+diff --git a/src/infrastructure/dev/scripts/count_code.py b/src/infrastructure/dev/scripts/count_code.py
+index 6f64207..85975df 100644
+--- a/src/infrastructure/dev/scripts/count_code.py
++++ b/src/infrastructure/dev/scripts/count_code.py
+@@ -66,4 +66,4 @@ for root, dirs, files in os.walk(src_path):
+                 stubs.append((path, count))
+ 
+ for path, count in sorted(stubs, key=lambda x: x[1]):
+-    print(f"{count}: {path}")
+\ No newline at end of file
++    print(f"{count}: {path}")

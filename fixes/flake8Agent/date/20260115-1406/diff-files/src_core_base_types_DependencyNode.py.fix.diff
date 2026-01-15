@@ -1,0 +1,32 @@
+diff --git a/src/core/base/types/DependencyNode.py b/src/core/base/types/DependencyNode.py
+index ffa6299..bc3ed65 100644
+--- a/src/core/base/types/DependencyNode.py
++++ b/src/core/base/types/DependencyNode.py
+@@ -24,10 +24,19 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.core.base.types.DependencyType import DependencyType
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class DependencyNode:
+     """A node in the dependency graph.
+@@ -43,4 +52,4 @@ class DependencyNode:
+     type: DependencyType
+     depends_on: list[str] = field(default_factory=lambda: [])
+     depended_by: list[str] = field(default_factory=lambda: [])
+-    file_path: str = ""
+\ No newline at end of file
++    file_path: str = ""

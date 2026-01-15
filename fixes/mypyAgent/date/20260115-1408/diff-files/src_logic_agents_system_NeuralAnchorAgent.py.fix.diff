@@ -1,0 +1,20 @@
+diff --git a/src/logic/agents/system/NeuralAnchorAgent.py b/src/logic/agents/system/NeuralAnchorAgent.py
+index bef4fae..c11ac2b 100644
+--- a/src/logic/agents/system/NeuralAnchorAgent.py
++++ b/src/logic/agents/system/NeuralAnchorAgent.py
+@@ -21,7 +21,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import re
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+@@ -86,4 +86,4 @@ class NeuralAnchorAgent(BaseAgent):
+         """
+         Iteratively validates a chain of reasoning steps.
+         """
+-        return [self.validate_claim(step, sources) for step in reasoning_chain]
+\ No newline at end of file
++        return [self.validate_claim(step, sources) for step in reasoning_chain]

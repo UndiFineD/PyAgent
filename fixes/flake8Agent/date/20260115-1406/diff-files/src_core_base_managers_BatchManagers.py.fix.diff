@@ -1,0 +1,65 @@
+diff --git a/src/core/base/managers/BatchManagers.py b/src/core/base/managers/BatchManagers.py
+index 6bcb4b8..f4fa8d1 100644
+--- a/src/core/base/managers/BatchManagers.py
++++ b/src/core/base/managers/BatchManagers.py
+@@ -23,7 +23,7 @@ from src.core.base.version import VERSION
+ import logging
+ import time
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional, TYPE_CHECKING
++from typing import Any, TYPE_CHECKING
+ from collections.abc import Callable
+ from src.core.base.models import FilePriority, BatchResult
+ 
+@@ -33,6 +33,16 @@ if TYPE_CHECKING:
+     from ..agent import BaseAgent
+     from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+ 
++
++
++
++
++
++
++
++
++
++
+ class BatchRequest:
+     """Request in a batch processing queue."""
+ 
+@@ -58,11 +68,21 @@ class BatchRequest:
+ 
+     @property
+     def size(self) -> int:
++
++
++
++
++
+         return len(self.items)
+ 
+     def execute(self, processor: Callable[[list[Any]], list[Any]]) -> list[Any]:
+         return processor(self.items)
+ 
++
++
++
++
++
+ class RequestBatcher:
+     """Batch processor for multiple file requests."""
+ 
+@@ -93,10 +113,10 @@ class RequestBatcher:
+         sorted_requests = self._sort_by_priority()
+         batch = sorted_requests[:self.batch_size]
+         results: list[BatchResult] = []
+-        
++
+         if self.recorder:
+             self.recorder.record_lesson("batch_processing_start", {"batch_size": len(batch)})
+-            
++
+         for request in batch:
+             start_time = time.time()
+             try:

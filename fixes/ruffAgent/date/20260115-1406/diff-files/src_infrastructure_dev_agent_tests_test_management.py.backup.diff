@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/dev/agent_tests/test_management.py b/src/infrastructure/dev/agent_tests/test_management.py
+index e26e496..6e337ed 100644
+--- a/src/infrastructure/dev/agent_tests/test_management.py
++++ b/src/infrastructure/dev/agent_tests/test_management.py
+@@ -289,6 +289,7 @@ class ContractValidator:
+ 
+     @dataclass
+     class ValidationResult:
++        """Result of a contract validation."""
+         valid: bool
+         errors: list[str] = field(default_factory=list)
+ 

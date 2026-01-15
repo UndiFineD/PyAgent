@@ -1,0 +1,32 @@
+diff --git a/src/logic/agents/cognitive/context/models/MergeConflict.py b/src/logic/agents/cognitive/context/models/MergeConflict.py
+index 87670b6..aec3c22 100644
+--- a/src/logic/agents/cognitive/context/models/MergeConflict.py
++++ b/src/logic/agents/cognitive/context/models/MergeConflict.py
+@@ -24,10 +24,19 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.utils.ConflictResolution import ConflictResolution
+ from dataclasses import dataclass
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class MergeConflict:
+     """Merge conflict information.
+@@ -41,4 +50,4 @@ class MergeConflict:
+     section: str
+     ours: str
+     theirs: str
+-    resolution: ConflictResolution | None = None
+\ No newline at end of file
++    resolution: ConflictResolution | None = None

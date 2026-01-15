@@ -1,0 +1,29 @@
+diff --git a/src/interface/ui/web/PyAgent_web.py b/src/interface/ui/web/PyAgent_web.py
+index 664c63a..3914350 100644
+--- a/src/interface/ui/web/PyAgent_web.py
++++ b/src/interface/ui/web/PyAgent_web.py
+@@ -26,7 +26,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import json
+ import logging
+-from typing import Dict, List, Any
++from typing import Any
+ from pathlib import Path
+ 
+ __version__ = VERSION
+@@ -58,7 +58,7 @@ class FleetWebUI:
+     def get_fleet_topology(self) -> str:
+         """Returns a graph representation of the fleet for Mermaid/D3 visualization."""
+         nodes = []
+-        links = []
++        links: list[Any] = []
+         
+         for name, agent in self.fleet.agents.items():
+             nodes.append({"id": name, "type": "agent", "model": getattr(agent, "model", "unknown")})
+@@ -142,4 +142,4 @@ class FleetWebUI:
+             },
+             "remote_nodes": self.fleet.remote_nodes,
+             "mesh_status": self.fleet.mesh.get_mesh_status() if hasattr(self.fleet, "mesh") else "Unknown"
+-        }
+\ No newline at end of file
++        }

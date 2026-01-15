@@ -1,0 +1,21 @@
+diff --git a/src/core/base/types/AccessibilitySeverity.py b/src/core/base/types/AccessibilitySeverity.py
+index c33baa0..f60f83e 100644
+--- a/src/core/base/types/AccessibilitySeverity.py
++++ b/src/core/base/types/AccessibilitySeverity.py
+@@ -26,9 +26,14 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class AccessibilitySeverity(Enum):
+     """Severity levels for accessibility issues."""
+     CRITICAL = 4  # Blocks access for users with disabilities
+     SERIOUS = 3   # Significant barrier to access
+     MODERATE = 2  # Some difficulty for users
+-    MINOR = 1     # Cosmetic or minor inconvenience
+\ No newline at end of file
++    MINOR = 1     # Cosmetic or minor inconvenience

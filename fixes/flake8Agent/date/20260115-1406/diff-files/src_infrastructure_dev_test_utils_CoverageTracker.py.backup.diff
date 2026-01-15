@@ -1,0 +1,27 @@
+diff --git a/src/infrastructure/dev/test_utils/CoverageTracker.py b/src/infrastructure/dev/test_utils/CoverageTracker.py
+index 429d38c..0c513a0 100644
+--- a/src/infrastructure/dev/test_utils/CoverageTracker.py
++++ b/src/infrastructure/dev/test_utils/CoverageTracker.py
+@@ -22,10 +22,14 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, Set
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class CoverageTracker:
+     """Lightweight coverage hit tracker used by tests."""
+ 
+@@ -46,4 +50,4 @@ class CoverageTracker:
+         if not self._targets:
+             return 0.0
+         covered = sum(1 for t in self._targets if self._hits.get(t, 0) > 0)
+-        return (covered / len(self._targets)) * 100.0
+\ No newline at end of file
++        return (covered / len(self._targets)) * 100.0

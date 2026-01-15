@@ -1,0 +1,69 @@
+diff --git a/src/logic/agents/intelligence/FeatureStoreAgent.py b/src/logic/agents/intelligence/FeatureStoreAgent.py
+index 3c2e174..df0608b 100644
+--- a/src/logic/agents/intelligence/FeatureStoreAgent.py
++++ b/src/logic/agents/intelligence/FeatureStoreAgent.py
+@@ -29,13 +29,23 @@ from src.core.base.version import VERSION
+ import logging
+ import json
+ from pathlib import Path
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class FeatureStoreAgent(BaseAgent):
+     """Manages the lifecycle of high-utility context features for the fleet.
+     Integrated with SynthesisCore for feature vectorization and insight merging.
+@@ -66,13 +76,13 @@ class FeatureStoreAgent(BaseAgent):
+             v = self.get_feature(name)
+             if v:
+                 vectors.append(v)
+-        
++
+         return self.core.merge_feature_vectors(vectors)
+ 
+     @as_tool
+     def register_feature(self, feature_name: str, value: Any, metadata: dict[str, Any] | None = None) -> str:
+         """Registers a new feature in the store.
+-        
++
+         Args:
+             feature_name: Unique identifier for the feature (e.g., 'python_error_patterns').
+             value: The data or logic representing the feature.
+@@ -105,11 +115,21 @@ class FeatureStoreAgent(BaseAgent):
+         """Lists all available features in the store."""
+         return [f.stem for f in self.feature_dir.glob("*.json")]
+ 
++
++
++
++
++
+     def improve_content(self, input_text: str) -> str:
+         """Advisory on feature engineering for agents."""
+         return "I am serving current agentic features. Recommend a feature for extraction?"
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(FeatureStoreAgent, "Feature Store Agent", "Feature life-cycle management")
+-    main()
+\ No newline at end of file
++    main()

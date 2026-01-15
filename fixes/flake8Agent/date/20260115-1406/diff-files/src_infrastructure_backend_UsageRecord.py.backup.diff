@@ -1,0 +1,23 @@
+diff --git a/src/infrastructure/backend/UsageRecord.py b/src/infrastructure/backend/UsageRecord.py
+index fc46223..75ab879 100644
+--- a/src/infrastructure/backend/UsageRecord.py
++++ b/src/infrastructure/backend/UsageRecord.py
+@@ -26,6 +26,11 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class UsageRecord:
+     """A usage record for analytics."""
+@@ -35,4 +40,4 @@ class UsageRecord:
+     tokens_used: int
+     latency_ms: int
+     success: bool
+-    cost_estimate: float = 0.0
+\ No newline at end of file
++    cost_estimate: float = 0.0

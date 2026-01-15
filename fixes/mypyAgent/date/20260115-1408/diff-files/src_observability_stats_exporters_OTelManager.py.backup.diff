@@ -1,0 +1,13 @@
+diff --git a/src/observability/stats/exporters/OTelManager.py b/src/observability/stats/exporters/OTelManager.py
+index d61833e..b61edec 100644
+--- a/src/observability/stats/exporters/OTelManager.py
++++ b/src/observability/stats/exporters/OTelManager.py
+@@ -27,7 +27,7 @@ from src.core.base.version import VERSION
+ import logging
+ import time
+ import uuid
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from dataclasses import dataclass, field
+ from src.observability.stats.core.TracingCore import TracingCore
+ 
