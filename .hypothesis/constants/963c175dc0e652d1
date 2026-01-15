@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\verification.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.1, 0.3, 0.5, 1.0, 1.5, 127, 'Empty result', 'Verified', 'agents', 'all-MiniLM-L6-v2', 'hallucinations', 'src/logic/agents', 'utf-8', 'valid']

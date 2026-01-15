@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\utils\NotificationManager.py
+# hypothesis_version: 6.150.1
+
+['__name__', 'data_keys', 'error', 'event', 'event_notify', 'url', 'webhook_failure']

@@ -1,9 +1,0 @@
-diff --git a/tests/phases/test_phase24.py b/tests/phases/test_phase24.py
-index 4f039b6..a3e1636 100644
---- a/tests/phases/test_phase24.py
-+++ b/tests/phases/test_phase24.py
-@@ -1,4 +1,3 @@
--import sys
- from pathlib import Path
- 
- from src.infrastructure.fleet.FleetManager import FleetManager

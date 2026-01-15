@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\backend\DiskCache.py
+# hypothesis_version: 6.150.1
+
+['*.json', 'key', 'timestamp', 'utf-8', 'value']

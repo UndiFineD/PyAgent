@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\ConfigLoader.py
+# hypothesis_version: 6.150.1
+
+[1.0, 10.0, '.', '.agent.json', '.agent.toml', '.agent.yaml', '.agent.yml', '.ini', '.json', '.toml', '.yaml', '.yml', 'agent.json', 'agent.toml', 'agent.yaml', 'agent.yml', 'agent_config.json', 'agent_config.yaml', 'agents_only', 'burst_size', 'config', 'cooldown_seconds', 'diff_preview', 'direct', 'dry_run', 'enable_async', 'enable_file_locking', 'enabled', 'entry_point', 'graceful_shutdown', 'health_check', 'incremental', 'loop', 'max_files', 'max_workers', 'models', 'module_path', 'name', 'no_git', 'normal', 'plugins', 'rate_limit', 'repo_root', 'requests_per_minute', 'requests_per_second', 'resume', 'run', 'selective_agents', 'strategy', 'timeout_per_agent', 'unknown', 'verbosity', 'webhook', 'workers']
