@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\observability\reports\ReportAPI.py
+# hypothesis_version: 6.150.1
+
+['*.md', '.description.md', '.errors.md', '.improvements.md', '.md', 'utf-8']

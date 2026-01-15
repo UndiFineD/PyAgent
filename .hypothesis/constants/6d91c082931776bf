@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\swarm\OrchestratorAgent.py
+# hypothesis_version: 6.150.1
+
+[0.0001, 120, '.', '.go', '.js', '.py', '.rb', '.sh', '.ts', 'agents', 'agents_applied', 'async_enabled', 'command_handler', 'consensus.log', 'data', 'direct', 'dry_run', 'end_time', 'files_modified', 'files_processed', 'github-models', 'logs', 'mode', 'modification_rate', 'start_time', 'summary', 'update_manager']
