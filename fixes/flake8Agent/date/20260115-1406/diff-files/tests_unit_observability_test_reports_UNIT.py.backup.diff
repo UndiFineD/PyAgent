@@ -1,0 +1,35 @@
+diff --git a/tests/unit/observability/test_reports_UNIT.py b/tests/unit/observability/test_reports_UNIT.py
+index 72eb0e9..852418f 100644
+--- a/tests/unit/observability/test_reports_UNIT.py
++++ b/tests/unit/observability/test_reports_UNIT.py
+@@ -3,17 +3,10 @@
+ 
+ from __future__ import annotations
+ import unittest
+-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
+-from unittest.mock import MagicMock, Mock, patch, call, ANY
+-import time
++from typing import List, Dict
+ import json
+ from datetime import datetime
+-import pytest
+-import logging
+ from pathlib import Path
+-import sys
+-import os
+-import tempfile
+ 
+ # Import test utilities
+ try:
+@@ -23,6 +16,11 @@ except ImportError:
+ 
+ # Import from src if needed
+ 
++
++
++
++
++
+ class TestReportGeneration(unittest.TestCase):
+     """Tests for basic report generation."""
+ 

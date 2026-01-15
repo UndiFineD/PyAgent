@@ -1,0 +1,29 @@
+diff --git a/src/infrastructure/dev/agent_tests/dependency_injection.py b/src/infrastructure/dev/agent_tests/dependency_injection.py
+index a88595a..99ac010 100644
+--- a/src/infrastructure/dev/agent_tests/dependency_injection.py
++++ b/src/infrastructure/dev/agent_tests/dependency_injection.py
+@@ -22,11 +22,16 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Any, Dict, Optional
++from typing import Any
+ from .models import TestDependency
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class DependencyInjector:
+     """Test dependency injection framework."""
+ 
+@@ -93,4 +98,4 @@ class DependencyInjector:
+         fixtures: list[str] = []
+         for name in self.dependencies:
+             fixtures.append(self.get_fixture_code(name))
+-        return "\n".join(fixtures)
+\ No newline at end of file
++        return "\n".join(fixtures)

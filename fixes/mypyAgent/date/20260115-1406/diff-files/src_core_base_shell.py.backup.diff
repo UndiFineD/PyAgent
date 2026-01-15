@@ -1,0 +1,13 @@
+diff --git a/src/core/base/shell.py b/src/core/base/shell.py
+index e8d4c85..fc3f4c6 100644
+--- a/src/core/base/shell.py
++++ b/src/core/base/shell.py
+@@ -28,7 +28,7 @@ import os
+ import subprocess
+ import logging
+ import asyncio
+-from typing import List, Any, Optional, Dict
++from typing import Any
+ 
+ __version__ = VERSION
+ 

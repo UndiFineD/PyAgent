@@ -1,0 +1,22 @@
+diff --git a/src/infrastructure/backend/LoadBalanceStrategy.py b/src/infrastructure/backend/LoadBalanceStrategy.py
+index a317f3f..b801d8d 100644
+--- a/src/infrastructure/backend/LoadBalanceStrategy.py
++++ b/src/infrastructure/backend/LoadBalanceStrategy.py
+@@ -26,10 +26,15 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class LoadBalanceStrategy(Enum):
+     """Load balancing strategies for multiple backends."""
+ 
+     ROUND_ROBIN = "round_robin"
+     LEAST_CONNECTIONS = "least_connections"
+     WEIGHTED = "weighted"
+-    FAILOVER = "failover"
+\ No newline at end of file
++    FAILOVER = "failover"

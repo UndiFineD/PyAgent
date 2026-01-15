@@ -1,0 +1,32 @@
+diff --git a/src/observability/errors/BranchComparer.py b/src/observability/errors/BranchComparer.py
+index a2731c3..5658386 100644
+--- a/src/observability/errors/BranchComparer.py
++++ b/src/observability/errors/BranchComparer.py
+@@ -23,10 +23,19 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .BranchComparison import BranchComparison
+-from typing import Dict, List, Set
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class BranchComparer:
+     """Compares errors across git branches.
+ 
+@@ -101,4 +110,4 @@ class BranchComparer:
+             List of error IDs fixed in feature branch.
+         """
+         comparison = self.compare(base_branch, feature_branch)
+-        return comparison.errors_only_in_a
+\ No newline at end of file
++        return comparison.errors_only_in_a

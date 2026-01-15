@@ -1,0 +1,21 @@
+diff --git a/src/infrastructure/dev/test_utils/TestResultAggregator.py b/src/infrastructure/dev/test_utils/TestResultAggregator.py
+index 29df1c7..6acac0b 100644
+--- a/src/infrastructure/dev/test_utils/TestResultAggregator.py
++++ b/src/infrastructure/dev/test_utils/TestResultAggregator.py
+@@ -29,7 +29,6 @@ from typing import Any, Dict, List, Optional, Union
+ __version__ = VERSION
+ 
+ class TestResultAggregator:
+-    __test__ = False
+     """Aggregates test results for reporting.
+ 
+     Example:
+@@ -38,6 +37,8 @@ class TestResultAggregator:
+         report=agg.get_report()
+     """
+ 
++    __test__ = False
++
+     def __init__(self) -> None:
+         """Initialize result aggregator."""
+         self._results: list[TestResult] = []

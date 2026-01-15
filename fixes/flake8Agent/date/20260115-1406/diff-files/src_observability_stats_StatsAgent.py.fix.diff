@@ -1,0 +1,100 @@
+diff --git a/src/observability/stats/StatsAgent.py b/src/observability/stats/StatsAgent.py
+index 7481d41..392f227 100644
+--- a/src/observability/stats/StatsAgent.py
++++ b/src/observability/stats/StatsAgent.py
+@@ -22,27 +22,39 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from .observability_core import Alert
+-from .observability_core import AlertSeverity
+-from .observability_core import Metric
+-from .observability_core import MetricSnapshot
+-from .observability_core import MetricType
+-from .observability_core import RetentionPolicy
+-from .observability_core import Threshold
+-from .observability_core import StatsCore
++from src.observability.stats.observability_core import Alert
++from src.observability.stats.observability_core import AlertSeverity
++from src.observability.stats.observability_core import Metric
++from src.observability.stats.observability_core import MetricSnapshot
++from src.observability.stats.observability_core import MetricType
++from src.observability.stats.observability_core import RetentionPolicy
++from src.observability.stats.observability_core import Threshold
++from src.observability.stats.observability_core import StatsCore
+ from datetime import datetime
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional, Tuple, Union
++from typing import Any
+ from collections.abc import Callable
+ import csv
+ import hashlib
+ import json
+ import logging
+-import sys
++from src.observability.StructuredLogger import StructuredLogger
+ import zlib
+ 
+ __version__ = VERSION
+ 
++logger = StructuredLogger(__name__)
++
++
++
++
++
++
++
++
++
++
++
+ class StatsAgent:
+     """Reports statistics on file update progress."""
+ 
+@@ -505,6 +517,7 @@ class StatsAgent:
+                 'baseline': baseline_value,
+                 'difference': current_value - baseline_value
+             }
++        logger.info(json.dumps(comparison, indent=2))
+         print(json.dumps(comparison, indent=2))
+ 
+     def report_stats(self, output_format: str = 'text') -> None:
+@@ -513,11 +526,14 @@ class StatsAgent:
+         total = stats['total_files']
+ 
+         if output_format == 'json':
+-            print(json.dumps(stats, indent=2))
++            logger.info(json.dumps(stats, indent=2))
+         elif output_format == 'csv':
+-            writer = csv.writer(sys.stdout)
++            import io
++            output = io.StringIO()
++            writer = csv.writer(output)
+             writer.writerow(stats.keys())
+             writer.writerow(stats.values())
++            logger.info(output.getvalue())
+         else:
+             def fmt(count: int) -> str:
+                 if total > 0:
+@@ -525,11 +541,11 @@ class StatsAgent:
+                 else:
+                     return "0 / 0 (0.0%)"
+ 
+-            print("=== Stats Report ===")
+-            print(f"Total files: {total}")
+-            print(f"Files with descriptions: {fmt(stats['files_with_context'])}")
+-            print(f"Files with changelogs: {fmt(stats['files_with_changes'])}")
+-            print(f"Files with error reports: {fmt(stats['files_with_errors'])}")
+-            print(f"Files with improvements: {fmt(stats['files_with_improvements'])}")
+-            print(f"Files with tests: {fmt(stats['files_with_tests'])}")
+-            print("====================")
+\ No newline at end of file
++            logger.info("=== Stats Report ===")
++            logger.info(f"Total files: {total}")
++            logger.info(f"Files with descriptions: {fmt(stats['files_with_context'])}")
++            logger.info(f"Files with changelogs: {fmt(stats['files_with_changes'])}")
++            logger.info(f"Files with error reports: {fmt(stats['files_with_errors'])}")
++            logger.info(f"Files with improvements: {fmt(stats['files_with_improvements'])}")
++            logger.info(f"Files with tests: {fmt(stats['files_with_tests'])}")
++            logger.info("====================")

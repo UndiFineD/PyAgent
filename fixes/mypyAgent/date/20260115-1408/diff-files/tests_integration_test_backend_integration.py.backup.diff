@@ -1,0 +1,45 @@
+diff --git a/tests/integration/test_backend_integration.py b/tests/integration/test_backend_integration.py
+index e5e7408..c502260 100644
+--- a/tests/integration/test_backend_integration.py
++++ b/tests/integration/test_backend_integration.py
+@@ -3,22 +3,11 @@
+ 
+ from __future__ import annotations
+ import unittest
+-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
+-from unittest.mock import MagicMock, Mock, patch, call, ANY
+-import time
++from typing import Any, List, Dict
+ import json
+-from datetime import datetime
+-import pytest
+-import logging
+ from pathlib import Path
+ import sys
+ import os
+-import tempfile
+-import shutil
+-import subprocess
+-import threading
+-import asyncio
+-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+ 
+ # Try to import test utilities
+ try:
+@@ -81,7 +70,7 @@ class TestPhase6Integration:
+         is_healthy = monitor.is_healthy(backend.name)
+         assert is_healthy is not None  # Either True or False
+ 
+-    def test_tracer_with_audit_logger(self, agent_backend_module: any, tmp_path) -> None:
++    def test_tracer_with_audit_logger(self, agent_backend_module: Any, tmp_path) -> None:
+         """Test tracer with audit logger."""
+         RequestTracer = agent_backend_module.RequestTracer
+         AuditLogger = agent_backend_module.AuditLogger
+@@ -130,7 +119,6 @@ class TestGitHubModelsIntegration(unittest.TestCase):
+ 
+     def test_github_models_authentication_token(self) -> None:
+         """Test authentication with GitHub Models."""
+-        import os
+         auth_token = os.environ.get("GITHUB_TOKEN", "ghp_DUMMY_TOKEN_FOR_TESTS")
+         headers: Dict[str, str] = {
+             "Authorization": f"Bearer {auth_token}",

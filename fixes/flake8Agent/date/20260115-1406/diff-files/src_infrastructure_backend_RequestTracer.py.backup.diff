@@ -1,0 +1,31 @@
+diff --git a/src/infrastructure/backend/RequestTracer.py b/src/infrastructure/backend/RequestTracer.py
+index 9b10360..b094cdb 100644
+--- a/src/infrastructure/backend/RequestTracer.py
++++ b/src/infrastructure/backend/RequestTracer.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .RequestContext import RequestContext
+ from .RequestPriority import RequestPriority
+-from typing import Dict, List, Optional
+ import logging
+ import threading
+ import time
+@@ -32,6 +31,11 @@ import uuid
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class RequestTracer:
+     """Traces requests with correlation IDs.
+ 
+@@ -109,4 +113,4 @@ class RequestTracer:
+     def get_active_traces(self) -> list[RequestContext]:
+         """Get all active traces."""
+         with self._lock:
+-            return list(self._traces.values())
+\ No newline at end of file
++            return list(self._traces.values())

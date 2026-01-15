@@ -1,0 +1,39 @@
+diff --git a/src/logic/agents/development/DashboardAgent.py b/src/logic/agents/development/DashboardAgent.py
+index 8132d2d..f4190f5 100644
+--- a/src/logic/agents/development/DashboardAgent.py
++++ b/src/logic/agents/development/DashboardAgent.py
+@@ -24,13 +24,17 @@ Helps create Next.js or React interfaces for the fleet.
+ 
+ from __future__ import annotations
+ import logging
+-from typing import List
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
++
++
++
++
++
+ class DashboardAgent(BaseAgent):
+     """Generates and maintains the Fleet Dashboard UI."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self._system_prompt = (
+@@ -68,7 +72,12 @@ export default {name};
+         # In a real scenario, this might write to a JSON config for a Next.js frontend
+         return f"Dashboard layout updated for {len(active_agents)} agents."
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(DashboardAgent, "Dashboard Agent", "Dashboard source path")
+-    main()
+\ No newline at end of file
++    main()

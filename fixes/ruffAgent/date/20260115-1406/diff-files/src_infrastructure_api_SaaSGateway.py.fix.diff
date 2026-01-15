@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/api/SaaSGateway.py b/src/infrastructure/api/SaaSGateway.py
+index 81becd2..71ff2b8 100644
+--- a/src/infrastructure/api/SaaSGateway.py
++++ b/src/infrastructure/api/SaaSGateway.py
+@@ -25,7 +25,7 @@ from src.core.base.version import VERSION
+ import logging
+ import time
+ import uuid
+-from typing import Dict, List, Any
++from typing import Any
+ from src.infrastructure.api.core.GatewayCore import GatewayCore
+ 
+ __version__ = VERSION

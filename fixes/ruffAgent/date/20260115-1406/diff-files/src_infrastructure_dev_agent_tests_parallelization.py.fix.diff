@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/dev/agent_tests/parallelization.py b/src/infrastructure/dev/agent_tests/parallelization.py
+index da63d6c..6cae481 100644
+--- a/src/infrastructure/dev/agent_tests/parallelization.py
++++ b/src/infrastructure/dev/agent_tests/parallelization.py
+@@ -22,7 +22,6 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, List, Optional
+ 
+ __version__ = VERSION
+ 

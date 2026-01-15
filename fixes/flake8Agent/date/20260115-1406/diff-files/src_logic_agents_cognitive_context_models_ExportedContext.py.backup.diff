@@ -1,0 +1,28 @@
+diff --git a/src/logic/agents/cognitive/context/models/ExportedContext.py b/src/logic/agents/cognitive/context/models/ExportedContext.py
+index a4ddc46..19fd8d4 100644
+--- a/src/logic/agents/cognitive/context/models/ExportedContext.py
++++ b/src/logic/agents/cognitive/context/models/ExportedContext.py
+@@ -24,10 +24,15 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.ExportFormat import ExportFormat
+ from dataclasses import dataclass, field
+-from typing import Any, Dict
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ExportedContext:
+     """Exported context document.
+@@ -41,4 +46,4 @@ class ExportedContext:
+     format: ExportFormat
+     content: str
+     metadata: dict[str, Any] = field(default_factory=lambda: {})
+-    created_at: str = ""
+\ No newline at end of file
++    created_at: str = ""

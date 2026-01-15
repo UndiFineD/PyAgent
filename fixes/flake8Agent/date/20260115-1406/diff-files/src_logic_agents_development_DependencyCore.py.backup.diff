@@ -1,0 +1,47 @@
+diff --git a/src/logic/agents/development/DependencyCore.py b/src/logic/agents/development/DependencyCore.py
+index f953993..d5ef3a0 100644
+--- a/src/logic/agents/development/DependencyCore.py
++++ b/src/logic/agents/development/DependencyCore.py
+@@ -27,12 +27,16 @@ No I/O or side effects.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import ast
+-from typing import Dict, List, Set
+ from src.core.base.types.DependencyType import DependencyType
+ from src.core.base.types.DependencyNode import DependencyNode
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class DependencyCore:
+     """Pure logic core for dependency analysis."""
+ 
+@@ -40,7 +44,7 @@ class DependencyCore:
+     def parse_dependencies(content: str, file_path: str = "") -> dict[str, DependencyNode]:
+         """Parses imports and class inheritance from code content."""
+         nodes: dict[str, DependencyNode] = {}
+-        
++
+         try:
+             tree = ast.parse(content)
+         except SyntaxError:
+@@ -58,7 +62,7 @@ class DependencyCore:
+                 for base in node.bases:
+                     if isinstance(base, ast.Name):
+                         DependencyCore._add_to_nodes(nodes, base.id, DependencyType.CLASS_INHERITANCE, file_path)
+-        
++
+         return nodes
+ 
+     @staticmethod
+@@ -72,4 +76,4 @@ class DependencyCore:
+     @staticmethod
+     def filter_external_deps(nodes: dict[str, DependencyNode], stdlib_list: set[str]) -> list[str]:
+         """Filters nodes to return only non-standard library dependencies."""
+-        return [name for name in nodes if name not in stdlib_list]
+\ No newline at end of file
++        return [name for name in nodes if name not in stdlib_list]

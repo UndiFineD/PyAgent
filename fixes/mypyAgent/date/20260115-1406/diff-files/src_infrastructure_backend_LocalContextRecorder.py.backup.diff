@@ -1,0 +1,38 @@
+diff --git a/src/infrastructure/backend/LocalContextRecorder.py b/src/infrastructure/backend/LocalContextRecorder.py
+index de5458c..6d7b1b3 100644
+--- a/src/infrastructure/backend/LocalContextRecorder.py
++++ b/src/infrastructure/backend/LocalContextRecorder.py
+@@ -23,7 +23,7 @@ import json
+ import logging
+ from datetime import datetime
+ from pathlib import Path
+-from typing import Dict, Any
++from typing import Any
+ from src.core.base.interfaces import ContextRecorderInterface
+ 
+ __version__ = VERSION
+@@ -35,7 +35,7 @@ class LocalContextRecorder(ContextRecorderInterface):
+     Optimized for trillion-parameter data harvesting (Phase 105).
+     """
+ 
+-    def __init__(self, workspace_root: Path = None, user_context: str = "System", fleet: Any = None) -> None:
++    def __init__(self, workspace_root: Path | None = None, user_context: str = "System", fleet: Any = None) -> None:
+         if fleet and hasattr(fleet, "workspace_root"):
+             self.workspace_root = Path(fleet.workspace_root)
+         elif workspace_root:
+@@ -51,7 +51,7 @@ class LocalContextRecorder(ContextRecorderInterface):
+         self.current_month = datetime.now().strftime('%Y%m')
+         self.use_compression = True # Save 70-80% space for massive datasets
+ 
+-    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] = None) -> None:
++    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] | None = None) -> None:
+         """
+         Appends a new interaction record.
+         Includes unique context hashing for future deduplication and sharded storage.
+@@ -116,4 +116,4 @@ class LocalContextRecorder(ContextRecorderInterface):
+             with open(index_file, "a", encoding="utf-8") as f:
+                 f.write(f"{prompt_hash}:{filename}\n")
+         except Exception as e:
+-            logging.error(f"Failed to update shard index: {e}")
+\ No newline at end of file
++            logging.error(f"Failed to update shard index: {e}")

@@ -1,0 +1,10 @@
+diff --git a/tests/community/test_community_orchestrator.py b/tests/community/test_community_orchestrator.py
+index bdd5cd1..eeee052 100644
+--- a/tests/community/test_community_orchestrator.py
++++ b/tests/community/test_community_orchestrator.py
+@@ -1,5 +1,4 @@
+ #!/usr/bin/env python3
+-import sys
+ import logging
+ from pathlib import Path
+ 

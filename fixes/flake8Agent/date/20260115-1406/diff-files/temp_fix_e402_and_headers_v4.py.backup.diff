@@ -1,0 +1,90 @@
+diff --git a/temp/fix_e402_and_headers_v4.py b/temp/fix_e402_and_headers_v4.py
+index 03e68c5..be2a657 100644
+--- a/temp/fix_e402_and_headers_v4.py
++++ b/temp/fix_e402_and_headers_v4.py
+@@ -1,6 +1,10 @@
+ import ast
+ import os
+-import sys
++
++
++
++
++
+ 
+ def fix_imports_and_headers(path):
+     try:
+@@ -12,12 +16,12 @@ def fix_imports_and_headers(path):
+ 
+     try:
+         tree = ast.parse(content)
+-    except Exception as e:
++    except Exception:
+         # Skip files with syntax errors
+         return
+ 
+     lines = content.splitlines()
+-    
++
+     # 1. Identify all top-level import nodes
+     import_nodes = [n for n in tree.body if isinstance(n, (ast.Import, ast.ImportFrom))]
+     if not import_nodes:
+@@ -46,7 +50,7 @@ def fix_imports_and_headers(path):
+ 
+     # 5. Reconstruct file
+     final_output = []
+-    
++
+     # a. Shebang
+     if other_lines and other_lines[0].startswith('#!'):
+         final_output.append(other_lines.pop(0))
+@@ -59,7 +63,7 @@ def fix_imports_and_headers(path):
+         line = other_lines.pop(0)
+         if line.strip() == "": continue # Skip empty lines in header for now
+         first_block_comments.append(line)
+-    
++
+     # Deduplicate lines in first_block_comments? Maybe later.
+     final_output.extend(first_block_comments)
+     final_output.append("") # One newline after license
+@@ -88,7 +92,7 @@ def fix_imports_and_headers(path):
+     # d. Future imports
+     future_imports = [i for i in extracted_imports if '__future__' in i]
+     other_imports = [i for i in extracted_imports if '__future__' not in i]
+-    
++
+     final_output.extend(future_imports)
+     final_output.extend(other_imports)
+     final_output.append("")
+@@ -100,7 +104,7 @@ def fix_imports_and_headers(path):
+         "you may not use this file except in compliance",
+         "http://www.apache.org/licenses/LICENSE-2.0"
+     ]
+-    
++
+     for line in other_lines:
+         # Crude deduplication: if it's a comment and contains a license marker, skip it
+         # UNLESS we are in the first 50 lines (but we already popped the first block)
+@@ -126,6 +130,11 @@ def fix_imports_and_headers(path):
+         f.write(new_content)
+     print(f"Fixed {path}")
+ 
++
++
++
++
++
+ def main():
+     target_dir = 'src'
+     for root, dirs, files in os.walk(target_dir):
+@@ -134,5 +143,10 @@ def main():
+                 path = os.path.join(root, file)
+                 fix_imports_and_headers(path)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     main()

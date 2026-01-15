@@ -1,0 +1,21 @@
+diff --git a/src/logic/agents/cognitive/VisualizerAgent.py b/src/logic/agents/cognitive/VisualizerAgent.py
+index df4eb92..94efe2d 100644
+--- a/src/logic/agents/cognitive/VisualizerAgent.py
++++ b/src/logic/agents/cognitive/VisualizerAgent.py
+@@ -123,8 +123,14 @@ class VisualizerAgent(BaseAgent):
+         }
+         
+         output_path = Path(str(self.workspace_root)) / "config" / f"{workflow_name}_visual.json"
+-        with open(output_path, 'w') as f:
+-            json.dump(workflow_data, f, indent=2)
++        temp_path = output_path.with_suffix(".tmp")
++        try:
++            with open(temp_path, "w", encoding="utf-8") as f:
++                json.dump(workflow_data, f, indent=2)
++            temp_path.replace(output_path)
++        except Exception:
++            if temp_path.exists(): temp_path.unlink()
++            raise
+             
+         return f"Successfully exported visual workflow to {output_path}"
+ 

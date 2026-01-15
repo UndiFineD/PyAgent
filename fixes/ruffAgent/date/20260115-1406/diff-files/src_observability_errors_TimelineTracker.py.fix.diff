@@ -1,0 +1,13 @@
+diff --git a/src/observability/errors/TimelineTracker.py b/src/observability/errors/TimelineTracker.py
+index 30252e8..5293558 100644
+--- a/src/observability/errors/TimelineTracker.py
++++ b/src/observability/errors/TimelineTracker.py
+@@ -24,7 +24,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .TimelineEvent import TimelineEvent
+ from datetime import datetime
+-from typing import Any, Dict, List
++from typing import Any
+ 
+ __version__ = VERSION
+ 

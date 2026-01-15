@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/fleet/TenantManager.py b/src/infrastructure/fleet/TenantManager.py
+index 44febef..ad40e65 100644
+--- a/src/infrastructure/fleet/TenantManager.py
++++ b/src/infrastructure/fleet/TenantManager.py
+@@ -26,7 +26,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import os
+ import logging
+-from typing import Dict
+ from .TenantCore import TenantCore
+ 
+ __version__ = VERSION

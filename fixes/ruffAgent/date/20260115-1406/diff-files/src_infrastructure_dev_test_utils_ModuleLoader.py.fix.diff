@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/dev/test_utils/ModuleLoader.py b/src/infrastructure/dev/test_utils/ModuleLoader.py
+index b6c155c..a13ade9 100644
+--- a/src/infrastructure/dev/test_utils/ModuleLoader.py
++++ b/src/infrastructure/dev/test_utils/ModuleLoader.py
+@@ -29,7 +29,6 @@ import sys
+ from contextlib import contextmanager
+ from pathlib import Path
+ from types import ModuleType
+-from typing import Optional
+ from collections.abc import Iterator
+ 
+ __version__ = VERSION

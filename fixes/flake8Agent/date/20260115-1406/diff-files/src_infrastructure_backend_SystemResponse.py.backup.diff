@@ -1,0 +1,27 @@
+diff --git a/src/infrastructure/backend/SystemResponse.py b/src/infrastructure/backend/SystemResponse.py
+index 5853d8b..f0003c7 100644
+--- a/src/infrastructure/backend/SystemResponse.py
++++ b/src/infrastructure/backend/SystemResponse.py
+@@ -23,10 +23,14 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class SystemResponse:
+     """Response from a backend request.
+@@ -45,4 +49,4 @@ class SystemResponse:
+     latency_ms: int = 0
+     cached: bool = False
+     request_id: str | None = None
+-    tokens_used: int = 0
+\ No newline at end of file
++    tokens_used: int = 0

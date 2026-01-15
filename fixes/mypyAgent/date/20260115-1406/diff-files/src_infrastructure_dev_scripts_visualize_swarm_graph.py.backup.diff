@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/dev/scripts/visualize_swarm_graph.py b/src/infrastructure/dev/scripts/visualize_swarm_graph.py
+index e06f4bc..2b877cc 100644
+--- a/src/infrastructure/dev/scripts/visualize_swarm_graph.py
++++ b/src/infrastructure/dev/scripts/visualize_swarm_graph.py
+@@ -3,7 +3,6 @@
+ import json
+ import sys
+ from pathlib import Path
+-from typing import List, Set
+ from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+ 
+ sys.path.append(str(Path(__file__).parent.parent.parent.parent))

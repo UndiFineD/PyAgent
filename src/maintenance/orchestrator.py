@@ -1,7 +1,7 @@
 import asyncio
 import sys
 from pathlib import Path
-from .utils import GitManager, get_timestamp
+from .utils import GitManager, get_timestamp, run_command
 from .agents import PytestAgent, MypyAgent, RuffAgent, Flake8Agent, UnittestAgent, ReminderAgent
 
 class MaintenanceOrchestrator:
@@ -46,7 +46,7 @@ class MaintenanceOrchestrator:
 
         # Always return to original branch to avoid "hanging branches"
         print(f"Returning to {original_branch}...")
-        GitManager.run_git(["checkout", original_branch])
+        run_command(f"git checkout {original_branch}")
 
         # Summary of all proposals for learning
         self.generate_global_summary(results)

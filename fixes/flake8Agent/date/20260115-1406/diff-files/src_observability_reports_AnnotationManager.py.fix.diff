@@ -1,0 +1,33 @@
+diff --git a/src/observability/reports/AnnotationManager.py b/src/observability/reports/AnnotationManager.py
+index 05a445e..9269a49 100644
+--- a/src/observability/reports/AnnotationManager.py
++++ b/src/observability/reports/AnnotationManager.py
+@@ -23,11 +23,20 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ReportAnnotation import ReportAnnotation
+-from typing import Dict, List, Optional
+ import logging
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class AnnotationManager:
+     """Manager for report annotations and comments.
+     Handles adding, retrieving, and managing annotations on reports.
+@@ -100,4 +109,4 @@ class AnnotationManager:
+                 if ann.annotation_id == annotation_id:
+                     self.annotations[report_id].pop(i)
+                     return True
+-        return False
+\ No newline at end of file
++        return False

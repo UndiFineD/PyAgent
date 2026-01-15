@@ -1,0 +1,13 @@
+diff --git a/src/observability/reports/MetricsCollector.py b/src/observability/reports/MetricsCollector.py
+index 6d3197a..3903ced 100644
+--- a/src/observability/reports/MetricsCollector.py
++++ b/src/observability/reports/MetricsCollector.py
+@@ -23,7 +23,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ReportMetric import ReportMetric
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ import logging
+ 
+ __version__ = VERSION

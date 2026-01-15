@@ -1,0 +1,11 @@
+diff --git a/src/core/base/utils/_helpers.py b/src/core/base/utils/_helpers.py
+index bf02e73..021cf2f 100644
+--- a/src/core/base/utils/_helpers.py
++++ b/src/core/base/utils/_helpers.py
+@@ -85,4 +85,4 @@ def _empty_list_dict_str_any() -> list[dict[str, Any]]:
+ def _empty_plugin_config_list() -> list[AgentPluginConfig]:
+     """Helper function for default factory in dataclass fields."""
+     # Import here to avoid circular dependency
+-    return []
+\ No newline at end of file
++    return []

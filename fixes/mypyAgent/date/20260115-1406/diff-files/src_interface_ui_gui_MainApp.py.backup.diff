@@ -1,0 +1,13 @@
+diff --git a/src/interface/ui/gui/MainApp.py b/src/interface/ui/gui/MainApp.py
+index 830930c..72e909d 100644
+--- a/src/interface/ui/gui/MainApp.py
++++ b/src/interface/ui/gui/MainApp.py
+@@ -44,7 +44,7 @@ from .DialogManager import DialogManager
+ from .WorkflowManager import WorkflowManager
+ from .ConfigurationManager import ConfigurationManager
+ from .ProjectStatusPanel import ProjectStatusPanel
+-from typing import Any, Dict, Self
++from typing import Any, Self
+ from collections.abc import Callable
+ 
+ __version__ = VERSION

@@ -1,0 +1,29 @@
+diff --git a/tests/performance/test_base_agent_PERFORMANCE.py b/tests/performance/test_base_agent_PERFORMANCE.py
+index a0b03cd..c0e1a5a 100644
+--- a/tests/performance/test_base_agent_PERFORMANCE.py
++++ b/tests/performance/test_base_agent_PERFORMANCE.py
+@@ -2,23 +2,9 @@
+ """Test classes from test_base_agent.py - performance module."""
+ 
+ from __future__ import annotations
+-import unittest
+-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
+-from unittest.mock import MagicMock, Mock, patch, call, ANY
+-import time
+-import json
+-from datetime import datetime
+-import pytest
+-import logging
++from typing import Any
+ from pathlib import Path
+ import sys
+-import os
+-import tempfile
+-import shutil
+-import subprocess
+-import threading
+-import asyncio
+-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+ 
+ # Try to import test utilities
+ try:

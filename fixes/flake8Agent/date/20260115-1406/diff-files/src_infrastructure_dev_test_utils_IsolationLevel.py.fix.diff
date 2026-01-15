@@ -1,0 +1,27 @@
+diff --git a/src/infrastructure/dev/test_utils/IsolationLevel.py b/src/infrastructure/dev/test_utils/IsolationLevel.py
+index 6c84fe4..b5cb2aa 100644
+--- a/src/infrastructure/dev/test_utils/IsolationLevel.py
++++ b/src/infrastructure/dev/test_utils/IsolationLevel.py
+@@ -26,10 +26,20 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class IsolationLevel(Enum):
+     """File system isolation levels."""
+ 
+     NONE = "none"
+     TEMP_DIR = "temp_dir"
+     COPY_ON_WRITE = "copy_on_write"
+-    SANDBOX = "sandbox"
+\ No newline at end of file
++    SANDBOX = "sandbox"

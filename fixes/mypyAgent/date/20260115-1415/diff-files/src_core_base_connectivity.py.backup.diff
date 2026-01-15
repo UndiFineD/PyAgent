@@ -1,0 +1,13 @@
+diff --git a/src/core/base/connectivity.py b/src/core/base/connectivity.py
+index a18683d..68f5ad0 100644
+--- a/src/core/base/connectivity.py
++++ b/src/core/base/connectivity.py
+@@ -21,7 +21,7 @@ from __future__ import annotations
+ import msgpack
+ import zstd
+ import logging
+-from typing import Any, Optional, Union
++from typing import Any
+ from src.core.base.version import VERSION
+ 
+ __version__ = VERSION

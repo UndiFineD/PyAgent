@@ -1,0 +1,19 @@
+diff --git a/src/logic/agents/development/SpecToolAgent.py b/src/logic/agents/development/SpecToolAgent.py
+index 0265f92..536a6e8 100644
+--- a/src/logic/agents/development/SpecToolAgent.py
++++ b/src/logic/agents/development/SpecToolAgent.py
+@@ -25,7 +25,6 @@ from src.core.base.version import VERSION
+ import json
+ import logging
+ from pathlib import Path
+-from typing import Optional
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import create_main_function, as_tool
+ 
+@@ -170,4 +169,4 @@ class SpecToolAgent(BaseAgent):
+ 
+ if __name__ == "__main__":
+     main = create_main_function(SpecToolAgent, "SpecTool Agent", "Path to spec file")
+-    main()
+\ No newline at end of file
++    main()

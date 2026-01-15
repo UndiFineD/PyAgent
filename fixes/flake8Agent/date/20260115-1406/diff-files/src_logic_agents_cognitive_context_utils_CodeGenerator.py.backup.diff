@@ -1,0 +1,27 @@
+diff --git a/src/logic/agents/cognitive/context/utils/CodeGenerator.py b/src/logic/agents/cognitive/context/utils/CodeGenerator.py
+index 51f1815..0ff2709 100644
+--- a/src/logic/agents/cognitive/context/utils/CodeGenerator.py
++++ b/src/logic/agents/cognitive/context/utils/CodeGenerator.py
+@@ -23,10 +23,14 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.GeneratedCode import GeneratedCode
+-from typing import Dict, List, Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class CodeGenerator:
+     """Generates code based on context.
+ 
+@@ -107,4 +111,4 @@ class CodeGenerator:
+             code=code,
+             context_used=used_contexts,
+             description=prompt,
+-        )
+\ No newline at end of file
++        )

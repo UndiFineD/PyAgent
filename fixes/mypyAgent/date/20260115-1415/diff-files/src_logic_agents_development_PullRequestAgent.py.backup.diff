@@ -1,0 +1,20 @@
+diff --git a/src/logic/agents/development/PullRequestAgent.py b/src/logic/agents/development/PullRequestAgent.py
+index 7608321..7ee8273 100644
+--- a/src/logic/agents/development/PullRequestAgent.py
++++ b/src/logic/agents/development/PullRequestAgent.py
+@@ -34,7 +34,7 @@ from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+ 
+ __version__ = VERSION
+ 
+-class PRAgent(BaseAgent):
++class PullRequestAgent(BaseAgent):
+     """Analyzes differences in the codebase and generates summaries or review comments."""
+     
+     def __init__(self, file_path: str) -> None:
+@@ -174,4 +174,4 @@ class PRAgent(BaseAgent):
+ 
+     def improve_content(self, prompt: str) -> str:
+         """Analyzes specific changes if provided in the prompt."""
+-        return self.get_diff_summary()
+\ No newline at end of file
++        return self.get_diff_summary()

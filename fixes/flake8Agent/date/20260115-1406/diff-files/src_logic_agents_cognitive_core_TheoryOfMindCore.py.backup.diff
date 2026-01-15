@@ -1,0 +1,48 @@
+diff --git a/src/logic/agents/cognitive/core/TheoryOfMindCore.py b/src/logic/agents/cognitive/core/TheoryOfMindCore.py
+index 2e7b5c6..86f939e 100644
+--- a/src/logic/agents/cognitive/core/TheoryOfMindCore.py
++++ b/src/logic/agents/cognitive/core/TheoryOfMindCore.py
+@@ -26,10 +26,15 @@ No I/O or side effects.
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, Any, List, Set, Tuple
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class TheoryOfMindCore:
+     """Pure logic core for Theory of Mind modeling."""
+ 
+@@ -40,7 +45,7 @@ class TheoryOfMindCore:
+         domains: set[str] = set(profile.get("knowledge_domains", []))
+         strengths: set[str] = set(profile.get("strengths", []))
+         limitations: set[str] = set(profile.get("limitations", []))
+-        
++
+         if "domain" in observations:
+             domains.add(observations["domain"])
+         if "strength" in observations:
+@@ -48,7 +53,7 @@ class TheoryOfMindCore:
+         if "success" in observations:
+             if not observations["success"]:
+                 limitations.add(observations.get("task", "unknown"))
+-                
++
+         return {
+             "knowledge_domains": list(domains),
+             "strengths": list(strengths),
+@@ -72,5 +77,5 @@ class TheoryOfMindCore:
+         for agent, profile in profiles.items():
+             score = TheoryOfMindCore.estimate_knowledge_score(profile, task)
+             rankings.append((agent, score))
+-            
+-        return [name for name, score in sorted(rankings, key=lambda x: x[1], reverse=True) if score > 0.5]
+\ No newline at end of file
++
++        return [name for name, score in sorted(rankings, key=lambda x: x[1], reverse=True) if score > 0.5]

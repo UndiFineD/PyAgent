@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/dev/test_utils/FileSystemIsolator.py b/src/infrastructure/dev/test_utils/FileSystemIsolator.py
+index b92cb81..5fd064b 100644
+--- a/src/infrastructure/dev/test_utils/FileSystemIsolator.py
++++ b/src/infrastructure/dev/test_utils/FileSystemIsolator.py
+@@ -24,7 +24,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .IsolationLevel import IsolationLevel
+ from pathlib import Path
+-from typing import Any, List, Optional
++from typing import Any
+ import os
+ import shutil
+ import tempfile

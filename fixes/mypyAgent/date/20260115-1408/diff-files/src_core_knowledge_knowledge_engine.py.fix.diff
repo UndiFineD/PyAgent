@@ -1,0 +1,20 @@
+diff --git a/src/core/knowledge/knowledge_engine.py b/src/core/knowledge/knowledge_engine.py
+index fee4741..4be64bd 100644
+--- a/src/core/knowledge/knowledge_engine.py
++++ b/src/core/knowledge/knowledge_engine.py
+@@ -19,7 +19,7 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Any, List
++from typing import Any
+ from pathlib import Path
+ from .btree_store import BTreeKnowledgeStore
+ from .vector_store import VectorKnowledgeStore
+@@ -105,4 +105,4 @@ class KnowledgeEngine:
+             return self.btree.retrieve(query, limit)
+         elif mode == "graph":
+             return self.graph.retrieve(query, limit)
+-        return []
+\ No newline at end of file
++        return []

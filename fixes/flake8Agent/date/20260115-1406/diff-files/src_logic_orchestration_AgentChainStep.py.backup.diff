@@ -1,0 +1,29 @@
+diff --git a/src/logic/orchestration/AgentChainStep.py b/src/logic/orchestration/AgentChainStep.py
+index 2bfa7cd..bb159ba 100644
+--- a/src/logic/orchestration/AgentChainStep.py
++++ b/src/logic/orchestration/AgentChainStep.py
+@@ -23,11 +23,16 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass
+-from typing import Optional, Any
++from typing import Any
+ from collections.abc import Callable
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class AgentChainStep:
+     """A step in an agent chain.
+@@ -44,4 +49,4 @@ class AgentChainStep:
+     input_transform: Callable[[Any], Any] | None = None
+     output_transform: Callable[[Any], Any] | None = None
+     enabled: bool = True
+-    condition: Callable[[Any], bool] | None = None
+\ No newline at end of file
++    condition: Callable[[Any], bool] | None = None

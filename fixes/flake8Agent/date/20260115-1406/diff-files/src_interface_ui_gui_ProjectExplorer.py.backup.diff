@@ -1,0 +1,108 @@
+diff --git a/src/interface/ui/gui/ProjectExplorer.py b/src/interface/ui/gui/ProjectExplorer.py
+index 25210fc..35dee2e 100644
+--- a/src/interface/ui/gui/ProjectExplorer.py
++++ b/src/interface/ui/gui/ProjectExplorer.py
+@@ -30,25 +30,29 @@ import os
+ import tkinter as tk
+ from tkinter import ttk
+ import logging
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ProjectExplorer:
+     """A tree-view based file explorer for the PyAgent workspace."""
+     def __init__(self, parent, project_root_var, on_double_click_callback) -> None:
+         self.parent = parent
+         self.project_root_var = project_root_var
+         self.on_double_click_callback = on_double_click_callback
+-        
++
+         self.frame = ttk.Frame(parent)
+         self.setup_ui()
+-        
++
+     def setup_ui(self) -> None:
+         header_frame = ttk.Frame(self.frame)
+         header_frame.pack(fill=tk.X, padx=5, pady=2)
+         ttk.Label(header_frame, text="Project Explorer").pack(side=tk.LEFT)
+-        
++
+         # Search Bar
+         search_frame = ttk.Frame(self.frame)
+         search_frame.pack(fill=tk.X, padx=5, pady=2)
+@@ -57,22 +61,22 @@ class ProjectExplorer:
+         search_entry = ttk.Entry(search_frame, textvariable=self.search_var)
+         search_entry.pack(fill=tk.X, side=tk.LEFT, expand=True)
+         ttk.Label(search_frame, text="🔍").pack(side=tk.RIGHT)
+-        
++
+         self.tree = ttk.Treeview(self.frame, selectmode="browse")
+         self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+-        
++
+         tree_scroll = ttk.Scrollbar(self.frame, orient=tk.VERTICAL, command=self.tree.yview)
+         tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+         self.tree.configure(yscrollcommand=tree_scroll.set)
+-        
++
+         self.tree.bind("<Double-1>", self.on_double_click)
+         self.tree.bind("<<TreeviewOpen>>", self.on_tree_open)
+         self.tree.bind("<Button-3>", self.show_context_menu)
+-        
++
+         btn_frame = ttk.Frame(self.frame)
+         btn_frame.pack(fill=tk.X)
+         ttk.Button(btn_frame, text="Refresh", command=self.refresh_tree).pack(fill=tk.X)
+-        
++
+         self.refresh_tree()
+ 
+     def show_context_menu(self, event: tk.Event) -> None:
+@@ -111,10 +115,10 @@ class ProjectExplorer:
+             for item in items:
+                 abspath = os.path.join(path, item)
+                 is_dir = os.path.isdir(abspath)
+-                
++
+                 if item in {'__pycache__', 'node_modules', '.git', '.venv', '.pytest_cache', '.agent_cache'}:
+                     continue
+-                    
++
+                 node = self.tree.insert(parent, "end", text=item, values=[abspath], open=False)
+                 if is_dir:
+                     self.tree.insert(node, "end")
+@@ -149,17 +153,17 @@ class ProjectExplorer:
+         if not query:
+             self.refresh_tree()
+             return
+-            
++
+         if len(query) < 3:
+             return
+-            
++
+         root_path = self.project_root_var.get()
+         if not os.path.exists(root_path):
+             return
+-            
++
+         for i in self.tree.get_children():
+             self.tree.delete(i)
+-            
++
+         count = 0
+         for root, dirs, files in os.walk(root_path):
+             dirs[:] = [d for d in dirs if d not in {'__pycache__', 'node_modules', '.git', '.venv', '.pytest_cache', '.agent_cache'}]
+@@ -172,4 +176,4 @@ class ProjectExplorer:
+                 if count > 100:
+                     break
+             if count > 100:
+-                break
+\ No newline at end of file
++                break

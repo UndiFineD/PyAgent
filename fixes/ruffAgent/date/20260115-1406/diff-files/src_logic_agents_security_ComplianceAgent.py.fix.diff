@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/security/ComplianceAgent.py b/src/logic/agents/security/ComplianceAgent.py
+index c7f9868..19ec0db 100644
+--- a/src/logic/agents/security/ComplianceAgent.py
++++ b/src/logic/agents/security/ComplianceAgent.py
+@@ -23,7 +23,7 @@ import re
+ import logging
+ import time
+ from pathlib import Path
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+ 

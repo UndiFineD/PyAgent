@@ -1,0 +1,92 @@
+diff --git a/src/logic/agents/development/SecurityCore.py b/src/logic/agents/development/SecurityCore.py
+index 366101a..717c143 100644
+--- a/src/logic/agents/development/SecurityCore.py
++++ b/src/logic/agents/development/SecurityCore.py
+@@ -30,16 +30,20 @@ import re
+ import logging
+ import time
+ from pathlib import Path
+-from typing import List, Optional, Tuple
+ from src.core.base.types.SecurityIssueType import SecurityIssueType
+ from src.core.base.types.SecurityVulnerability import SecurityVulnerability
+ from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class SecurityCore:
+     """Pure logic core for security and safety validation."""
+-    
++
+     SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [
+         (r'(?i)(password|secret|key|token|auth|pwd)\s*[:=]\s*[\'"][^\'"]{8,}[\'"]',
+          SecurityIssueType.HARDCODED_SECRET, "high",
+@@ -101,7 +105,7 @@ class SecurityCore:
+                     )
+                     vulnerabilities.append(vuln)
+                     self._record_finding(issue_type.value, severity, desc)
+-        
++
+         # Add injection scanning
+         injection_findings = self.scan_for_injection(content)
+         for inf in injection_findings:
+@@ -113,7 +117,7 @@ class SecurityCore:
+                 fix_suggestion="Sanitize all inputs and wrap specialized instructions in strict boundaries."
+             ))
+              self._record_finding(SecurityIssueType.INJECTION_ATTEMPT.value, "high", inf)
+-            
++
+         return vulnerabilities
+ 
+     def audit_command(self, command: str) -> tuple[str, str]:
+@@ -126,25 +130,25 @@ class SecurityCore:
+             (r"unset\s+HISTFILE", "MEDIUM: Attempt to disable shell history (anti-forensics)"),
+             (r"mv\s+.*\s+/dev/null", "MEDIUM: Deletion by moving to null device"),
+         ]
+-        
++
+         for pattern, warning in risky_patterns:
+             if re.search(pattern, command):
+                 return "HIGH", warning
+-        
++
+         return "LOW", "No obvious security risks detected in command."
+ 
+     def validate_shell_script(self, script_content: str) -> list[str]:
+         """Analyzes shell scripts for common pitfalls and security bugs."""
+         findings = []
+-        
++
+         # Unquoted variable expansion
+         if re.search(r"\$[a-zA-Z_][a-zA-Z0-9_]*[^\"']", script_content):
+             findings.append("SC2086: Unquoted variable expansion. Prone to word splitting and globbing.")
+-            
++
+         # Backticks vs $(...)
+         if re.search(r"`.*`", script_content):
+             findings.append("SC2006: Use of legacy backticks for command substitution. Use $(...) instead.")
+-            
++
+         # Useless cat
+         if re.search(r"cat\s+.*\s*\|\s*grep", script_content):
+             findings.append("SC2002: Useless use of cat. Grep can read files directly.")
+@@ -152,7 +156,7 @@ class SecurityCore:
+         # POSIX compatibility
+         if "#!/bin/sh" in script_content and "[[" in script_content:
+             findings.append("SC2039: [[ .. ]] is a bash/zsh extension. Use [ .. ] for standard POSIX sh.")
+-            
++
+         return findings
+ 
+     def scan_for_injection(self, content: str) -> list[str]:
+@@ -178,4 +182,4 @@ class SecurityCore:
+             return "HIGH"
+         if "medium" in severities or "MEDIUM" in [s.upper() for s in severities]:
+             return "MEDIUM"
+-        return "LOW"
+\ No newline at end of file
++        return "LOW"

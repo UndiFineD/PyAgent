@@ -1,0 +1,49 @@
+diff --git a/src/logic/agents/security/ImmuneResponseOrchestrator.py b/src/logic/agents/security/ImmuneResponseOrchestrator.py
+index 8b703f6..de4da75 100644
+--- a/src/logic/agents/security/ImmuneResponseOrchestrator.py
++++ b/src/logic/agents/security/ImmuneResponseOrchestrator.py
+@@ -20,10 +20,15 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import time
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ImmuneResponseOrchestrator:
+     """
+     Coordinates rapid patching and vulnerability shielding across the fleet.
+@@ -31,7 +36,7 @@ class ImmuneResponseOrchestrator:
+     def __init__(self, workspace_path: str) -> None:
+         self.workspace_path = workspace_path
+         self.active_shields: list[str] = []
+-        self.vulnerability_db: dict[str, Any] = {} 
++        self.vulnerability_db: dict[str, Any] = {}
+ 
+     def deploy_rapid_patch(self, vulnerability_id: str, patch_code: str) -> dict[str, Any]:
+         """
+@@ -63,6 +68,11 @@ class ImmuneResponseOrchestrator:
+             "last_scan": time.time()
+         }
+ 
++
++
++
++
++
+ class HoneypotAgent:
+     """
+     Detects and neutralizes prompt injection and adversarial attacks
+@@ -91,4 +101,4 @@ class HoneypotAgent:
+         return {
+             "attempts_neutralized": len(self.trapped_attempts),
+             "attacker_profiles_identified": 0
+-        }
+\ No newline at end of file
++        }

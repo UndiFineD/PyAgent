@@ -1,0 +1,22 @@
+diff --git a/src/logic/agents/cognitive/context/models/ContextPriority.py b/src/logic/agents/cognitive/context/models/ContextPriority.py
+index 71cc0c9..36b42a4 100644
+--- a/src/logic/agents/cognitive/context/models/ContextPriority.py
++++ b/src/logic/agents/cognitive/context/models/ContextPriority.py
+@@ -26,10 +26,15 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ContextPriority(Enum):
+     """Priority levels for context relevance."""
+     CRITICAL = 5
+     HIGH = 4
+     MEDIUM = 3
+     LOW = 2
+-    MINIMAL = 1
+\ No newline at end of file
++    MINIMAL = 1

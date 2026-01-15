@@ -1,0 +1,13 @@
+diff --git a/src/observability/errors/BlameTracker.py b/src/observability/errors/BlameTracker.py
+index 7da60f5..45849d6 100644
+--- a/src/observability/errors/BlameTracker.py
++++ b/src/observability/errors/BlameTracker.py
+@@ -25,7 +25,7 @@ from src.core.base.version import VERSION
+ from .BlameInfo import BlameInfo
+ from .ErrorEntry import ErrorEntry
+ from datetime import datetime
+-from typing import Any, Dict, List, Tuple
++from typing import Any
+ import subprocess
+ 
+ __version__ = VERSION

@@ -1,0 +1,12 @@
+diff --git a/src/observability/reports/ReportArchiver.py b/src/observability/reports/ReportArchiver.py
+index be406cd..5ce5718 100644
+--- a/src/observability/reports/ReportArchiver.py
++++ b/src/observability/reports/ReportArchiver.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ArchivedReport import ArchivedReport
+ from pathlib import Path
+-from typing import Dict, List, Optional
+ import logging
+ import time
+ 

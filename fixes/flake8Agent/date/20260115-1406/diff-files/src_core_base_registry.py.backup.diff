@@ -1,0 +1,31 @@
+diff --git a/src/core/base/registry.py b/src/core/base/registry.py
+index 4999f8b..e2a446f 100644
+--- a/src/core/base/registry.py
++++ b/src/core/base/registry.py
+@@ -25,13 +25,18 @@ Provides discovery and cross-agent communication.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import TYPE_CHECKING, Optional
++from typing import TYPE_CHECKING
+ 
+ __version__ = VERSION
+ 
+ if TYPE_CHECKING:
+     from src.core.base.BaseAgent import BaseAgent
+ 
++
++
++
++
++
+ class AgentRegistry:
+     """Singleton registry to track all active agents."""
+     _instance: AgentRegistry | None = None
+@@ -64,4 +69,4 @@ class AgentRegistry:
+ 
+     @property
+     def active_count(self) -> int:
+-        return len(self._agents)
+\ No newline at end of file
++        return len(self._agents)

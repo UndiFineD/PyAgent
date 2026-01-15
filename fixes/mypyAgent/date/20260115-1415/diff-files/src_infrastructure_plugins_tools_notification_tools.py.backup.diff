@@ -1,0 +1,11 @@
+diff --git a/src/infrastructure/plugins/tools/notification_tools.py b/src/infrastructure/plugins/tools/notification_tools.py
+index eec57e4..30a190e 100644
+--- a/src/infrastructure/plugins/tools/notification_tools.py
++++ b/src/infrastructure/plugins/tools/notification_tools.py
+@@ -80,4 +80,4 @@ def send_discord_notification(webhook_url: str, message: str) -> bool:
+     except Exception as e:
+         logging.error(f"Failed to send Discord notification: {e}")
+         cm.update_status("discord_webhook", False)
+-        return False
+\ No newline at end of file
++        return False

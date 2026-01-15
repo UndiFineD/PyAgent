@@ -1,0 +1,27 @@
+diff --git a/src/observability/reports/ReportPermission.py b/src/observability/reports/ReportPermission.py
+index c4a4cd5..c8bf674 100644
+--- a/src/observability/reports/ReportPermission.py
++++ b/src/observability/reports/ReportPermission.py
+@@ -24,10 +24,14 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .PermissionLevel import PermissionLevel
+ from dataclasses import dataclass
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ReportPermission:
+     """Permission for report access.
+@@ -43,4 +47,4 @@ class ReportPermission:
+     report_pattern: str
+     level: PermissionLevel = PermissionLevel.READ
+     granted_by: str = ""
+-    expires_at: float | None = None
+\ No newline at end of file
++    expires_at: float | None = None
