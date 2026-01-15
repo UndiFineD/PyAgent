@@ -1,0 +1,34 @@
+diff --git a/src/observability/stats/utils.py b/src/observability/stats/utils.py
+index d5ecd1e..282c885 100644
+--- a/src/observability/stats/utils.py
++++ b/src/observability/stats/utils.py
+@@ -37,11 +37,21 @@ try:
+     import matplotlib.pyplot as plt
+     has_matplotlib = True
+ except (ImportError, RuntimeError, Exception):
+-    plt = None
++    plt = None  # type: ignore[assignment]
+     has_matplotlib = False
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ def main() -> None:
+     """CLI entry point for the Stats Agent."""
+     parser = argparse.ArgumentParser(
+@@ -92,4 +102,4 @@ def main() -> None:
+         sys.exit(1)
+     except Exception as e:
+         logging.error(f"Unexpected error: {str(e)}")
+-        sys.exit(1)
+\ No newline at end of file
++        sys.exit(1)

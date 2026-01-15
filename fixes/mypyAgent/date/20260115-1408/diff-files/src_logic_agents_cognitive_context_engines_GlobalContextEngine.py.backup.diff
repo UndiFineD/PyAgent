@@ -1,0 +1,38 @@
+diff --git a/src/logic/agents/cognitive/context/engines/GlobalContextEngine.py b/src/logic/agents/cognitive/context/engines/GlobalContextEngine.py
+index cb13fd3..9913bb2 100644
+--- a/src/logic/agents/cognitive/context/engines/GlobalContextEngine.py
++++ b/src/logic/agents/cognitive/context/engines/GlobalContextEngine.py
+@@ -28,7 +28,7 @@ from src.core.base.version import VERSION
+ import json
+ import logging
+ from pathlib import Path
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from datetime import datetime
+ from src.logic.agents.cognitive.context.engines.GlobalContextCore import GlobalContextCore
+ 
+@@ -40,7 +40,7 @@ class GlobalContextEngine:
+     Shell for GlobalContextCore.
+     """
+     
+-    def __init__(self, workspace_root: str = None, fleet: Any = None) -> None:
++    def __init__(self, workspace_root: str | None = None, fleet: Any = None) -> None:
+         if fleet and hasattr(fleet, "workspace_root"):
+             self.workspace_root = Path(fleet.workspace_root)
+         elif workspace_root:
+@@ -59,7 +59,7 @@ class GlobalContextEngine:
+             "entities": {},
+             "lessons_learned": []
+         }
+-        self._loaded_shards = set()
++        self._loaded_shards: set[Any] = set()
+         self.load()
+ 
+     def _ensure_shard_loaded(self, category: str) -> None:
+@@ -222,4 +222,4 @@ class GlobalContextEngine:
+             if stats["fail"] > 3:
+                 self.add_insight(f"{agent} is struggling with current tasks. Context injection might be insufficient.", "LTM_System")
+             elif stats["success"] > 10:
+-                self.add_insight(f"{agent} is highly reliable for current task types.", "LTM_System")
+\ No newline at end of file
++                self.add_insight(f"{agent} is highly reliable for current task types.", "LTM_System")

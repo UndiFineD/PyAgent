@@ -1,0 +1,26 @@
+diff --git a/src/core/base/types/GroupingStrategy.py b/src/core/base/types/GroupingStrategy.py
+index da95629..ec788bb 100644
+--- a/src/core/base/types/GroupingStrategy.py
++++ b/src/core/base/types/GroupingStrategy.py
+@@ -26,9 +26,19 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class GroupingStrategy(Enum):
+     """Strategies for entry grouping."""
+     BY_DATE = "by_date"
+     BY_VERSION = "by_version"
+     BY_CATEGORY = "by_category"
+-    BY_AUTHOR = "by_author"
+\ No newline at end of file
++    BY_AUTHOR = "by_author"

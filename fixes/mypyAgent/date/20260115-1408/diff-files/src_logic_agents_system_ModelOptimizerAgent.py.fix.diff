@@ -1,0 +1,20 @@
+diff --git a/src/logic/agents/system/ModelOptimizerAgent.py b/src/logic/agents/system/ModelOptimizerAgent.py
+index 286961a..1d3e9bb 100644
+--- a/src/logic/agents/system/ModelOptimizerAgent.py
++++ b/src/logic/agents/system/ModelOptimizerAgent.py
+@@ -24,7 +24,7 @@ from __future__ import annotations
+ from src.core.base.BaseAgent import BaseAgent
+ import logging
+ import json
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ class ModelOptimizerAgent(BaseAgent):
+     """Optimizes LLM deployment and inference using patterns like AirLLM."""
+@@ -154,4 +154,4 @@ print(model.tokenizer.decode(output.sequences[0]))
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(ModelOptimizerAgent)
+-    main()
+\ No newline at end of file
++    main()

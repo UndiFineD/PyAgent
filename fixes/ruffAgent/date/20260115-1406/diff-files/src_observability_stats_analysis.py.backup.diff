@@ -1,0 +1,45 @@
+diff --git a/src/observability/stats/analysis.py b/src/observability/stats/analysis.py
+index b722027..ebb0681 100644
+--- a/src/observability/stats/analysis.py
++++ b/src/observability/stats/analysis.py
+@@ -226,6 +226,11 @@ class CorrelationAnalyzer:
+         self.correlations.append(res)
+         return res
+ 
++try:
++    import rust_core as rc
++except ImportError:
++    rc = None
++
+ class FormulaEngineCore:
+     """Pure logic core for formula calculations."""
+     def __init__(self) -> None:
+@@ -249,6 +254,14 @@ class FormulaEngineCore:
+ 
+     def calculate_logic(self, formula:
+         str, variables: dict[str, Any]) -> float:
++        if rc and "AVG(" not in formula:
++            try:
++                # Convert variables to dict[str, float] for Rust (excludes list/complex types)
++                float_vars = {k: float(v) for k, v in variables.items() if isinstance(v, (int, float))}
++                return rc.evaluate_formula(formula, float_vars)
++            except Exception:
++                pass
++        
+         if "AVG(" in formula:
+             match = re.search(r'AVG\(\{(\w+)\}\)', formula)
+             if match and match.group(1) in variables:
+@@ -345,6 +358,13 @@ class StatsRollupCalculator:
+         amt = int(interval[:-1]) if interval[:-1].isdigit() else 1
+         mult = {"m": 60, "h": 3600, "d": 86400}.get(unit, 3600)
+         bucket = mult * amt
++
++        if rc:
++            try:
++                return rc.calculate_stats_rollup(pts, bucket)
++            except Exception:
++                pass
++
+         bkts: dict[int, list[float]] = {}
+         for t, v in pts:
+             bkts.setdefault(int(t)//int(bucket), []).append(float(v))

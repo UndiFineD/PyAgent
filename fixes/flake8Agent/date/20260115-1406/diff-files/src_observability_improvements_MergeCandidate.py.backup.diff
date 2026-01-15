@@ -1,0 +1,23 @@
+diff --git a/src/observability/improvements/MergeCandidate.py b/src/observability/improvements/MergeCandidate.py
+index 1541014..ea87c09 100644
+--- a/src/observability/improvements/MergeCandidate.py
++++ b/src/observability/improvements/MergeCandidate.py
+@@ -26,6 +26,11 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class MergeCandidate:
+     """Candidate for merging with another improvement.
+@@ -39,4 +44,4 @@ class MergeCandidate:
+     source_id: str
+     target_id: str
+     similarity_score: float = 0.0
+-    merge_reason: str = ""
+\ No newline at end of file
++    merge_reason: str = ""

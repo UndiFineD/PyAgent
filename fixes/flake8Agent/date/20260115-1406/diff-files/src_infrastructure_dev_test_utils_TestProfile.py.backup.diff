@@ -1,0 +1,32 @@
+diff --git a/src/infrastructure/dev/test_utils/TestProfile.py b/src/infrastructure/dev/test_utils/TestProfile.py
+index 42f044f..d8ec5fc 100644
+--- a/src/infrastructure/dev/test_utils/TestProfile.py
++++ b/src/infrastructure/dev/test_utils/TestProfile.py
+@@ -23,13 +23,17 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import Any, Dict
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class TestProfile:
+-    __test__ = False
+     """A test configuration profile.
+ 
+     Attributes:
+@@ -42,4 +46,5 @@ class TestProfile:
+     name: str
+     settings: dict[str, Any] = field(default_factory=lambda: {})
+     env_vars: dict[str, str] = field(default_factory=lambda: {})
+-    enabled: bool = True
+\ No newline at end of file
++    enabled: bool = True
++    __test__ = False

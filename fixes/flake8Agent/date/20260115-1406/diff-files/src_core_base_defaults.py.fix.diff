@@ -1,0 +1,19 @@
+diff --git a/src/core/base/defaults.py b/src/core/base/defaults.py
+index be78b60..ea53c6d 100644
+--- a/src/core/base/defaults.py
++++ b/src/core/base/defaults.py
+@@ -22,7 +22,6 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import List
+ from .models import PromptTemplate
+ 
+ __version__ = VERSION
+@@ -56,4 +55,4 @@ DEFAULT_PROMPT_TEMPLATES: list[PromptTemplate] = [
+         description="Template for test generation",
+         tags=["tests", "coverage"]
+     ),
+-]
+\ No newline at end of file
++]

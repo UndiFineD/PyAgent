@@ -1,0 +1,76 @@
+diff --git a/src/infrastructure/api/SaaSGateway.py b/src/infrastructure/api/SaaSGateway.py
+index 81becd2..010df85 100644
+--- a/src/infrastructure/api/SaaSGateway.py
++++ b/src/infrastructure/api/SaaSGateway.py
+@@ -25,16 +25,26 @@ from src.core.base.version import VERSION
+ import logging
+ import time
+ import uuid
+-from typing import Dict, List, Any
++from typing import Any
+ from src.infrastructure.api.core.GatewayCore import GatewayCore
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class SaaSGateway:
+     """Provides usage control and authentication for the fleet as a service.
+     Integrated with GatewayCore for external SaaS orchestration.
+     """
+-    
++
+     def __init__(self) -> None:
+         self.api_keys: dict[str, dict[str, Any]] = {} # key -> {tenant, quota}
+         self.usage_logs: list[dict[str, Any]] = []
+@@ -47,14 +57,14 @@ class SaaSGateway:
+         """
+         if not self.validate_request(api_key):
+              return {"error": "unauthorized"}
+-             
++
+         endpoint = self.core.get_service_endpoint(service)
+         if not endpoint:
+             return {"error": f"Service {service} not registered"}
+-            
++
+         self.core.format_saas_request(service, action, params)
+         logging.info(f"SaaSGateway: Forwarding to {endpoint}{action}...")
+-        
++
+         # Simulated response
+         return {
+             "status": "success",
+@@ -79,7 +89,7 @@ class SaaSGateway:
+         if api_key not in self.api_keys:
+             logging.warning(f"SAAS: Unauthorized access attempt with key {api_key}")
+             return False
+-            
++
+         # Rate Limiting (Simple Token Bucket: max 5 requests per second)
+         now = time.time()
+         self.rate_limits[api_key] = [t for t in self.rate_limits[api_key] if now - t < 1.0]
+@@ -91,7 +101,7 @@ class SaaSGateway:
+         if tenant_info["used_today"] + cost > tenant_info["daily_quota"]:
+             logging.warning(f"SAAS: Quota exceeded for tenant {tenant_info['tenant_id']}")
+             return False
+-            
++
+         # Record successful request
+         self.rate_limits[api_key].append(now)
+         tenant_info["used_today"] += cost
+@@ -104,4 +114,4 @@ class SaaSGateway:
+ 
+     def get_quota_status(self, api_key: str) -> dict[str, Any]:
+         """Returns the current quota status for a key."""
+-        return self.api_keys.get(api_key, {"error": "Invalid API Key"})
+\ No newline at end of file
++        return self.api_keys.get(api_key, {"error": "Invalid API Key"})

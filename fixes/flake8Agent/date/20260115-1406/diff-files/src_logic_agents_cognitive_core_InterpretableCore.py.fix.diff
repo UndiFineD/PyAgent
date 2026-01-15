@@ -1,0 +1,47 @@
+diff --git a/src/logic/agents/cognitive/core/InterpretableCore.py b/src/logic/agents/cognitive/core/InterpretableCore.py
+index 6ef69eb..1683ce2 100644
+--- a/src/logic/agents/cognitive/core/InterpretableCore.py
++++ b/src/logic/agents/cognitive/core/InterpretableCore.py
+@@ -1,6 +1,16 @@
+ 
+ from __future__ import annotations
+-from typing import Dict, List, Any
++from typing import Any
++
++
++
++
++
++
++
++
++
++
+ 
+ class InterpretableCore:
+     """
+@@ -20,7 +30,7 @@ class InterpretableCore:
+         k = 10
+         sorted_indices = sorted(range(len(mock_activations)), key=lambda i: mock_activations[i], reverse=True)
+         top_k = sorted_indices[:k]
+-        
++
+         active_features = []
+         for idx in top_k:
+             active_features.append({
+@@ -28,7 +38,7 @@ class InterpretableCore:
+                 "activation": mock_activations[idx],
+                 "semantic_label": self._get_label_for_index(idx)
+             })
+-            
++
+         return {
+             "reconstruction_error": 0.005,
+             "sparsity_ratio": k / self.feature_count,
+@@ -53,4 +63,4 @@ class InterpretableCore:
+             "Logic_Flow", "Synax_Error_Detector", "Circular_Dependency",
+             "Resource_Limit", "Security_Honeypot", "Byzantine_Suspect"
+         ]
+-        return labels[index % len(labels)]
+\ No newline at end of file
++        return labels[index % len(labels)]

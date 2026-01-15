@@ -1,0 +1,18 @@
+diff --git a/src/observability/improvements/BulkOperationResult.py b/src/observability/improvements/BulkOperationResult.py
+index b96cae6..60a3ea2 100644
+--- a/src/observability/improvements/BulkOperationResult.py
++++ b/src/observability/improvements/BulkOperationResult.py
+@@ -26,6 +26,11 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class BulkOperationResult:
+-    success_count: int
+\ No newline at end of file
++    success_count: int

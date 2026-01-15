@@ -1,0 +1,28 @@
+diff --git a/src/observability/improvements/ImprovementScheduler.py b/src/observability/improvements/ImprovementScheduler.py
+index 28cc34f..de748d7 100644
+--- a/src/observability/improvements/ImprovementScheduler.py
++++ b/src/observability/improvements/ImprovementScheduler.py
+@@ -29,10 +29,15 @@ from .ScheduledEntry import ScheduledEntry
+ from .ScheduledImprovement import ScheduledImprovement
+ from ._ScheduleStore import _ScheduleStore
+ from datetime import datetime, timedelta
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ImprovementScheduler:
+     """Manages improvement scheduling with resource allocation.
+ 
+@@ -117,4 +122,4 @@ class ImprovementScheduler:
+         return self._allocations.get(
+             improvement_id,
+             ResourceAllocation(improvement_id=improvement_id, resources=[]),
+-        )
+\ No newline at end of file
++        )

@@ -1,0 +1,28 @@
+diff --git a/src/observability/improvements/ImprovementTemplate.py b/src/observability/improvements/ImprovementTemplate.py
+index 615b567..c80c56d 100644
+--- a/src/observability/improvements/ImprovementTemplate.py
++++ b/src/observability/improvements/ImprovementTemplate.py
+@@ -26,10 +26,15 @@ from .EffortEstimate import EffortEstimate
+ from .ImprovementCategory import ImprovementCategory
+ from .ImprovementPriority import ImprovementPriority
+ from dataclasses import dataclass
+-from typing import Any, Dict
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass(init=False)
+ class ImprovementTemplate:
+     """Template for creating improvements.
+@@ -79,4 +84,4 @@ class ImprovementTemplate:
+         return {
+             "title": self.title_pattern.format(**variables),
+             "description": self.description_template.format(**variables),
+-        }
+\ No newline at end of file
++        }

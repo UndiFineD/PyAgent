@@ -1,0 +1,28 @@
+diff --git a/src/core/base/types/StyleRule.py b/src/core/base/types/StyleRule.py
+index a095e5f..5ed0b1c 100644
+--- a/src/core/base/types/StyleRule.py
++++ b/src/core/base/types/StyleRule.py
+@@ -25,11 +25,15 @@ from src.core.base.version import VERSION
+ from src.core.base.types.CodeLanguage import CodeLanguage
+ from src.core.base.types.StyleRuleSeverity import StyleRuleSeverity
+ from dataclasses import dataclass
+-from typing import Optional
+ from collections.abc import Callable
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class StyleRule:
+     """A configurable code style rule."""
+@@ -39,4 +43,4 @@ class StyleRule:
+     severity: StyleRuleSeverity = StyleRuleSeverity.WARNING
+     enabled: bool = True
+     language: CodeLanguage | None = None
+-    auto_fix: Callable[[str], str] | None = None
+\ No newline at end of file
++    auto_fix: Callable[[str], str] | None = None

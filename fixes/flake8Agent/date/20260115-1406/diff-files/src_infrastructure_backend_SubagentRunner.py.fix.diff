@@ -1,0 +1,77 @@
+diff --git a/src/infrastructure/backend/SubagentRunner.py b/src/infrastructure/backend/SubagentRunner.py
+index 6c12c54..187edfd 100644
+--- a/src/infrastructure/backend/SubagentRunner.py
++++ b/src/infrastructure/backend/SubagentRunner.py
+@@ -27,7 +27,7 @@ import logging
+ import os
+ import subprocess
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from .DiskCache import DiskCache
+ from .LLMClient import LLMClient
+ from .LocalContextRecorder import LocalContextRecorder
+@@ -41,9 +41,19 @@ try:
+ except ImportError:
+     requests = None  # type: ignore[assignment]
+ 
++
++
++
++
++
++
++
++
++
++
+ class SubagentRunner:
+     """Handles running subagents with multiple backend support and fallback logic."""
+-    
++
+     _command_cache: dict[str, bool] = {}
+ 
+     @staticmethod
+@@ -63,7 +73,7 @@ class SubagentRunner:
+         """Check if a command is available in PATH with result caching (Phase 108)."""
+         if command in SubagentRunner._command_cache:
+             return SubagentRunner._command_cache[command]
+-            
++
+         try:
+             logging.debug(f"Checking if command is available: {command}")
+             # Use 'which' on Linux/Mac or 'where' on Windows for faster checks
+@@ -85,14 +95,14 @@ class SubagentRunner:
+     def __init__(self) -> None:
+         """Initialize the subagent runner with empty cache and metrics."""
+         self._response_cache: dict[str, str] = {}
+-        
++
+         # Disk cache initialization
+         repo_root = self._resolve_repo_root()
+         self.disk_cache = DiskCache(repo_root / ".agent_cache", ttl_seconds=60*60*24*7) # 7 days default
+-        
++
+         # Phase 108: Recording Intelligence
+         self.recorder = LocalContextRecorder(workspace_root=repo_root)
+-        
++
+         self._metrics: dict[str, Any] = {
+             "requests": 0,
+             "errors": 0,
+@@ -123,7 +133,7 @@ class SubagentRunner:
+     def llm_client(self, value: LLMClient) -> None:
+         self._llm_client = value
+ 
+-    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] = None) -> None:
++    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] | None = None) -> None:
+         """Record an interaction for intelligence harvesting (Phase 108)."""
+         if self.recorder:
+             self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
+@@ -225,4 +235,4 @@ class SubagentRunner:
+ 
+     def describe_backends(self) -> str:
+         """Return human-readable backend diagnostics."""
+-        return self._status_manager.describe_backends()
+\ No newline at end of file
++        return self._status_manager.describe_backends()

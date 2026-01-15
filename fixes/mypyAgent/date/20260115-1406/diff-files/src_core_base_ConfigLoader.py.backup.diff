@@ -1,0 +1,13 @@
+diff --git a/src/core/base/ConfigLoader.py b/src/core/base/ConfigLoader.py
+index 0c166dd..2af9d4f 100644
+--- a/src/core/base/ConfigLoader.py
++++ b/src/core/base/ConfigLoader.py
+@@ -25,7 +25,7 @@ from src.core.base.version import VERSION
+ from src.core.base.AgentConfig import AgentConfig
+ from src.core.base.models import AgentPluginConfig, ConfigFormat, RateLimitConfig
+ from pathlib import Path
+-from typing import Optional, Any, cast
++from typing import Any, cast
+ import json
+ import logging
+ 

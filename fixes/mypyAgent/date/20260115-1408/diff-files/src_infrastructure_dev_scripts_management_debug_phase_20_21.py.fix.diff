@@ -1,0 +1,11 @@
+diff --git a/src/infrastructure/dev/scripts/management/debug_phase_20_21.py b/src/infrastructure/dev/scripts/management/debug_phase_20_21.py
+index d0c571f..e7a6b77 100644
+--- a/src/infrastructure/dev/scripts/management/debug_phase_20_21.py
++++ b/src/infrastructure/dev/scripts/management/debug_phase_20_21.py
+@@ -106,4 +106,4 @@ if __name__ == "__main__":
+     except Exception as e:
+         print(f"❌ TEST FAILED: {e}")
+         import traceback
+-        traceback.print_exc()
+\ No newline at end of file
++        traceback.print_exc()

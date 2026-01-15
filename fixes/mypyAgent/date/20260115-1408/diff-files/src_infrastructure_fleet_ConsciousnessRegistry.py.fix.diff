@@ -1,0 +1,20 @@
+diff --git a/src/infrastructure/fleet/ConsciousnessRegistry.py b/src/infrastructure/fleet/ConsciousnessRegistry.py
+index 124c98f..b77eef2 100644
+--- a/src/infrastructure/fleet/ConsciousnessRegistry.py
++++ b/src/infrastructure/fleet/ConsciousnessRegistry.py
+@@ -14,7 +14,7 @@
+ 
+ from __future__ import annotations
+ import logging
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from datetime import datetime
+ from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+ 
+@@ -87,4 +87,4 @@ class ConsciousnessRegistry:
+         summary = "COLLECTIVE FLEET STATE:\n"
+         for agent, thought in awareness.items():
+             summary += f"- {agent}: {thought}\n"
+-        return summary
+\ No newline at end of file
++        return summary

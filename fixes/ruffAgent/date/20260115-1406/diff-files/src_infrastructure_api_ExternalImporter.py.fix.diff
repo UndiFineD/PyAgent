@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/api/ExternalImporter.py b/src/infrastructure/api/ExternalImporter.py
+index e201353..6a485c5 100644
+--- a/src/infrastructure/api/ExternalImporter.py
++++ b/src/infrastructure/api/ExternalImporter.py
+@@ -25,7 +25,7 @@ from src.core.base.version import VERSION
+ from .ChangelogEntry import ChangelogEntry
+ from .ImportSource import ImportSource
+ from .ImportedEntry import ImportedEntry
+-from typing import Optional, Dict, List, Any
++from typing import Any
+ import logging
+ from pathlib import Path
+ from src.core.base.ConnectivityManager import ConnectivityManager

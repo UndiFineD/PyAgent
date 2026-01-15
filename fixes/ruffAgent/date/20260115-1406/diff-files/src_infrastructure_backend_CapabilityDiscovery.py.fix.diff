@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/backend/CapabilityDiscovery.py b/src/infrastructure/backend/CapabilityDiscovery.py
+index 0a96980..b9b1dd9 100644
+--- a/src/infrastructure/backend/CapabilityDiscovery.py
++++ b/src/infrastructure/backend/CapabilityDiscovery.py
+@@ -23,7 +23,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .SystemCapability import SystemCapability
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 

@@ -1,0 +1,12 @@
+diff --git a/src/observability/errors/BranchComparison.py b/src/observability/errors/BranchComparison.py
+index 75cb7ad..2a8b698 100644
+--- a/src/observability/errors/BranchComparison.py
++++ b/src/observability/errors/BranchComparison.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 

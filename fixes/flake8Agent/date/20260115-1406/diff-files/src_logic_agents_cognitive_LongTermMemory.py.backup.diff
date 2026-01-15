@@ -1,0 +1,139 @@
+diff --git a/src/logic/agents/cognitive/LongTermMemory.py b/src/logic/agents/cognitive/LongTermMemory.py
+index d3fedd3..79451e2 100644
+--- a/src/logic/agents/cognitive/LongTermMemory.py
++++ b/src/logic/agents/cognitive/LongTermMemory.py
+@@ -21,7 +21,7 @@ import logging
+ import time
+ from datetime import datetime
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 
+@@ -33,9 +33,14 @@ try:
+ except ImportError:
+     HAS_RAG_DEPS = False
+ 
++
++
++
++
++
+ class LongTermMemory:
+     """Manages persistent conversational and factual memory using DiskCache shards."""
+-    
++
+     _model = None  # Singleton model for embeddings
+ 
+     def __init__(self, agent_name: str = "default_agent", base_dir: str = "data/memory/shards") -> None:
+@@ -44,10 +49,10 @@ class LongTermMemory:
+         # Sharding: hash the agent name to pick a subdirectory
+         self.shard_id = hashlib.md5(agent_name.encode()).hexdigest()[:8]
+         self.persist_directory = self.base_dir / self.shard_id
+-        
++
+         self._enabled = HAS_RAG_DEPS
+         self._cache = None
+-        
++
+         if not self._enabled:
+             logging.warning("DiskCache or RAG dependencies missing. Long-term memory logic will be limited.")
+         else:
+@@ -69,23 +74,23 @@ class LongTermMemory:
+         """Store a thought or interaction in the local DiskCache shard."""
+         if not self._enabled or not self._cache:
+             return ""
+-            
++
+         mem_id = f"mem_{int(time.time() * 1000)}"
+         model = self._get_embedding_model()
+         embedding = model.encode(content) if model else None
+-        
++
+         meta = metadata or {}
+         meta["timestamp"] = datetime.now().isoformat()
+         meta["agent"] = self.agent_name
+         if tags:
+             meta["tags"] = tags
+-            
++
+         entry = {
+             "content": content,
+             "metadata": meta,
+             "embedding": embedding.tolist() if embedding is not None else None
+         }
+-        
++
+         self._cache.set(mem_id, entry)
+         return mem_id
+ 
+@@ -97,31 +102,31 @@ class LongTermMemory:
+         """Internal helper to search a specific diskcache instance."""
+         if not HAS_RAG_DEPS or not cache:
+             return []
+-            
++
+         model = self._get_embedding_model()
+         if not model:
+             return []
+-            
++
+         query_emb = model.encode(query_text)
+         results = []
+-        
++
+         # We iterate over the cache keys for RAG (sharding keeps this small)
+         for key in cache:
+             entry = cache.get(key)
+             if not entry or "embedding" not in entry or entry["embedding"] is None:
+                 continue
+-                
++
+             doc_emb = np.array(entry["embedding"])
+             # Cosine similarity
+             similarity = np.dot(query_emb, doc_emb) / (np.linalg.norm(query_emb) * np.linalg.norm(doc_emb))
+-            
++
+             results.append({
+                 "id": key,
+                 "content": entry["content"],
+                 "metadata": entry["metadata"],
+                 "score": float(similarity)
+             })
+-            
++
+         results.sort(key=lambda x: x["score"], reverse=True)
+         return results[:n_results]
+ 
+@@ -129,12 +134,12 @@ class LongTermMemory:
+         """Search across ALL available memory shards (federation)."""
+         if not HAS_RAG_DEPS:
+             return []
+-            
++
+         all_results = []
+         # Find all shard directories
+         if not self.base_dir.exists():
+             return self.query(query_text, n_results)
+-            
++
+         for shard_path in self.base_dir.iterdir():
+             if shard_path.is_dir():
+                 try:
+@@ -144,7 +149,7 @@ class LongTermMemory:
+                     shard_cache.close()
+                 except Exception as e:
+                     logging.error(f"Failed to query shard {shard_path}: {e}")
+-                    
++
+         all_results.sort(key=lambda x: x["score"], reverse=True)
+         return all_results[:n_results]
+ 
+@@ -159,4 +164,4 @@ class LongTermMemory:
+             try:
+                 self._cache.close()
+             except Exception:
+-                pass
+\ No newline at end of file
++                pass

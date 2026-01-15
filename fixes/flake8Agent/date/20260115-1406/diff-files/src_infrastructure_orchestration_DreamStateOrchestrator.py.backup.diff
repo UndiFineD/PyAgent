@@ -1,0 +1,51 @@
+diff --git a/src/infrastructure/orchestration/DreamStateOrchestrator.py b/src/infrastructure/orchestration/DreamStateOrchestrator.py
+index b7cf204..c001cad 100644
+--- a/src/infrastructure/orchestration/DreamStateOrchestrator.py
++++ b/src/infrastructure/orchestration/DreamStateOrchestrator.py
+@@ -17,7 +17,7 @@ import asyncio
+ import logging
+ import json
+ import os
+-from typing import Dict, Any, TYPE_CHECKING
++from typing import Any, TYPE_CHECKING
+ from src.core.base.version import VERSION
+ 
+ if TYPE_CHECKING:
+@@ -25,6 +25,11 @@ if TYPE_CHECKING:
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class DreamStateOrchestrator:
+     """
+     Implements Recursive Skill Synthesis (Phase 237).
+@@ -48,15 +53,15 @@ class DreamStateOrchestrator:
+ 
+         # 2. Simulate outcomes across variations
+         tasks = [
+-            self.fleet.call_by_capability("predict_action_outcome", 
+-                                        action=f"Optimize {focus_area}", 
++            self.fleet.call_by_capability("predict_action_outcome",
++                                        action=f"Optimize {focus_area}",
+                                         environment=scenarios)
+             for i in range(2)
+         ]
+         simulation_results = await asyncio.gather(*tasks)
+ 
+         # 3. Analyze patterns and synthesize a new 'skill' spec
+-        dream_synthesis = await self.fleet.call_by_capability("analyze", 
++        dream_synthesis = await self.fleet.call_by_capability("analyze",
+             input_text=f"Simulation results for {focus_area}: {simulation_results}")
+ 
+         dream_id = f"dream_{int(asyncio.get_event_loop().time())}"
+@@ -72,4 +77,4 @@ class DreamStateOrchestrator:
+             json.dump(result, f, indent=4)
+ 
+         logging.info("Dream cycle complete. New skill pattern synthesized.")
+-        return result
+\ No newline at end of file
++        return result

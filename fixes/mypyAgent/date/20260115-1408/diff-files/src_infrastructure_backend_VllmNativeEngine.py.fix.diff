@@ -1,0 +1,20 @@
+diff --git a/src/infrastructure/backend/VllmNativeEngine.py b/src/infrastructure/backend/VllmNativeEngine.py
+index 119a429..fadd808 100644
+--- a/src/infrastructure/backend/VllmNativeEngine.py
++++ b/src/infrastructure/backend/VllmNativeEngine.py
+@@ -26,7 +26,7 @@ Optimized for local inference and future trillion-parameter context handling.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Optional, Any
++from typing import Any
+ import os
+ 
+ __version__ = VERSION
+@@ -142,4 +142,4 @@ class VllmNativeEngine:
+             gc.collect()
+             if torch.cuda.is_available():
+                 torch.cuda.empty_cache()
+-            logging.info("Native vLLM Engine shut down and VRAM cleared.")
+\ No newline at end of file
++            logging.info("Native vLLM Engine shut down and VRAM cleared.")

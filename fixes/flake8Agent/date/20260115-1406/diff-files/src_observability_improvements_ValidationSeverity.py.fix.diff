@@ -1,0 +1,25 @@
+diff --git a/src/observability/improvements/ValidationSeverity.py b/src/observability/improvements/ValidationSeverity.py
+index 2345a13..b411826 100644
+--- a/src/observability/improvements/ValidationSeverity.py
++++ b/src/observability/improvements/ValidationSeverity.py
+@@ -26,8 +26,18 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class ValidationSeverity(Enum):
+     """Severity of validation issues."""
+     ERROR = "error"
+     WARNING = "warning"
+-    INFO = "info"
+\ No newline at end of file
++    INFO = "info"

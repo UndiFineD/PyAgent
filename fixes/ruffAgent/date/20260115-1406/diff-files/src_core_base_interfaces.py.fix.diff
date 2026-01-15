@@ -1,0 +1,13 @@
+diff --git a/src/core/base/interfaces.py b/src/core/base/interfaces.py
+index d993c00..2e1363c 100644
+--- a/src/core/base/interfaces.py
++++ b/src/core/base/interfaces.py
+@@ -20,7 +20,7 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Protocol, runtime_checkable, Dict, Any, List, Optional
++from typing import Protocol, runtime_checkable, Any
+ from pathlib import Path
+ 
+ __version__ = VERSION

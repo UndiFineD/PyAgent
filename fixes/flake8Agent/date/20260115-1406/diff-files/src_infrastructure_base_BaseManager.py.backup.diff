@@ -1,0 +1,27 @@
+diff --git a/src/infrastructure/base/BaseManager.py b/src/infrastructure/base/BaseManager.py
+index 835d396..ea279d0 100644
+--- a/src/infrastructure/base/BaseManager.py
++++ b/src/infrastructure/base/BaseManager.py
+@@ -19,9 +19,14 @@ from src.core.base.version import VERSION
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class BaseManager(ABC):
+     """Base class for all infrastructure manager services."""
+-    
++
+     def __init__(self, workspace_root:
+         str = None) -> None:
+         self.workspace_root = workspace_root
+@@ -29,4 +34,4 @@ class BaseManager(ABC):
+ 
+     def shutdown(self) -> None:
+         """Gracefully shutdown the manager."""
+-        logging.debug(f"{self.__class__.__name__} shutting down.")
+\ No newline at end of file
++        logging.debug(f"{self.__class__.__name__} shutting down.")

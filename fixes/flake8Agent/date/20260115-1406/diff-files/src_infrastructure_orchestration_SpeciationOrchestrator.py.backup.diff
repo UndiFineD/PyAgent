@@ -1,0 +1,52 @@
+diff --git a/src/infrastructure/orchestration/SpeciationOrchestrator.py b/src/infrastructure/orchestration/SpeciationOrchestrator.py
+index 878bf9b..4c3b53f 100644
+--- a/src/infrastructure/orchestration/SpeciationOrchestrator.py
++++ b/src/infrastructure/orchestration/SpeciationOrchestrator.py
+@@ -21,16 +21,21 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class SpeciationOrchestrator:
+     """
+     Phase 39: Autonomous Sub-Fleet Speciation.
+     Uses the SpeciationAgent to spawn specialized 'breeds' of the fleet for specific domains.
+     """
+-    
++
+     def __init__(self, fleet) -> None:
+         self.fleet = fleet
+         self.sub_fleets: dict[str, list[str]] = {} # domain -> list of agent_names
+@@ -40,13 +45,13 @@ class SpeciationOrchestrator:
+         Creates a specialized sub-fleet for a given domain (e.g., 'Kubernetes-SRE').
+         """
+         logging.info(f"SpeciationOrchestrator: Initiating speciation for domain: {domain}")
+-        
++
+         # Consult the SpeciationAgent (Mock call)
+         # In a real system: self.fleet.speciation.determine_traits(domain)
+         specialized_agents = ["SRE_Sentinel", "K8s_Optimizer", "Cluster_Healer"]
+-        
++
+         self.sub_fleets[domain] = specialized_agents
+-        
++
+         return {
+             "domain": domain,
+             "breed_name": f"{domain}_Elite_SubFleet",
+@@ -61,4 +66,4 @@ class SpeciationOrchestrator:
+         return speciator.evolve_specialized_agent(base_agent, niche)
+ 
+     def get_sub_fleet(self, domain: str) -> list[str] | None:
+-        return self.sub_fleets.get(domain)
+\ No newline at end of file
++        return self.sub_fleets.get(domain)

@@ -1,0 +1,33 @@
+diff --git a/src/core/base/types/TemplateManager.py b/src/core/base/types/TemplateManager.py
+index fb7c4c2..877d6bf 100644
+--- a/src/core/base/types/TemplateManager.py
++++ b/src/core/base/types/TemplateManager.py
+@@ -23,11 +23,20 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .EntryTemplate import EntryTemplate
+-from typing import Dict, List
+ import re
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class TemplateManager:
+     """Manages entry templates with placeholders.
+ 
+@@ -103,4 +112,4 @@ class TemplateManager:
+             List of placeholder names.
+         """
+         template = self.templates.get(name)
+-        return template.placeholders if template else []
+\ No newline at end of file
++        return template.placeholders if template else []

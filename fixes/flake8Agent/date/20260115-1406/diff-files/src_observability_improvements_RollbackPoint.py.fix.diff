@@ -1,0 +1,30 @@
+diff --git a/src/observability/improvements/RollbackPoint.py b/src/observability/improvements/RollbackPoint.py
+index bcab90b..6d6f937 100644
+--- a/src/observability/improvements/RollbackPoint.py
++++ b/src/observability/improvements/RollbackPoint.py
+@@ -24,12 +24,22 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+ from datetime import datetime
+-from typing import Any, Dict
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class RollbackPoint:
+     improvement_id: str
+     state: dict[str, Any]
+-    created_at: datetime = field(default_factory=datetime.now)
+\ No newline at end of file
++    created_at: datetime = field(default_factory=datetime.now)

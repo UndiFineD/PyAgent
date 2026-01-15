@@ -1,0 +1,11 @@
+diff --git a/src/interface/ui/cli/pyagent_cli.py b/src/interface/ui/cli/pyagent_cli.py
+index 8e8d036..c935de3 100644
+--- a/src/interface/ui/cli/pyagent_cli.py
++++ b/src/interface/ui/cli/pyagent_cli.py
+@@ -216,4 +216,4 @@ def main() -> None:
+         parser.print_help()
+ 
+ if __name__ == "__main__":
+-    main()
+\ No newline at end of file
++    main()

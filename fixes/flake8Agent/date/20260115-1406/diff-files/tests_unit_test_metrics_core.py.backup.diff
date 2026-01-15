@@ -1,0 +1,124 @@
+diff --git a/tests/unit/test_metrics_core.py b/tests/unit/test_metrics_core.py
+index b312563..f377fe4 100644
+--- a/tests/unit/test_metrics_core.py
++++ b/tests/unit/test_metrics_core.py
+@@ -1,7 +1,5 @@
+ 
+-import pytest
+ from hypothesis import given, strategies as st
+-from hypothesis import settings, HealthCheck
+ import math
+ from src.observability.stats.MetricsCore import (
+     TokenCostCore,
+@@ -15,8 +13,13 @@ from src.observability.stats.MetricsCore import (
+ 
+ # === TokenCostCore Tests ===
+ 
++
++
++
++
++
+ class TestTokenCostCore:
+-    @given(st.integers(min_value=0, max_value=1_000_000), 
++    @given(st.integers(min_value=0, max_value=1_000_000),
+            st.integers(min_value=0, max_value=1_000_000),
+            st.sampled_from(["gpt-4", "gpt-3.5-turbo", "claude-3-opus"]))
+     def test_calculate_cost_properties(self, input_tokens, output_tokens, model):
+@@ -27,7 +30,7 @@ class TestTokenCostCore:
+         assert result.input_cost >= 0
+         assert result.output_cost >= 0
+         assert math.isclose(result.total_cost, result.input_cost + result.output_cost)
+-        
++
+     def test_cost_calculation_accuracy(self):
+         core = TokenCostCore()
+         # GPT-4: Input 0.03/1M, Output 0.06/1M
+@@ -38,6 +41,11 @@ class TestTokenCostCore:
+ 
+ # === ModelFallbackCore Tests ===
+ 
++
++
++
++
++
+ class TestModelFallbackCore:
+     @given(st.floats(min_value=0.1, max_value=1.0),
+            st.floats(min_value=0.0, max_value=1.0),
+@@ -61,6 +69,11 @@ class TestModelFallbackCore:
+ 
+ # === StatsRollupCore Tests ===
+ 
++
++
++
++
++
+ class TestStatsRollupCore:
+     @given(st.lists(st.floats(allow_nan=False, allow_infinity=False, min_value=-1e6, max_value=1e6), min_size=1))
+     def test_rollup_properties(self, values):
+@@ -69,7 +82,7 @@ class TestStatsRollupCore:
+         assert math.isclose(core.rollup_avg(values), sum(values)/len(values), rel_tol=1e-9)
+         assert core.rollup_min(values) == min(values)
+         assert core.rollup_max(values) == max(values)
+-        
++
+     def test_empty_lists(self):
+         core = StatsRollupCore()
+         assert core.rollup_sum([]) == 0.0
+@@ -81,7 +94,7 @@ class TestStatsRollupCore:
+         p50 = core.rollup_p50(values)
+         p95 = core.rollup_p95(values)
+         p99 = core.rollup_p99(values)
+-        
++
+         assert core.rollup_min(values) <= p50 <= core.rollup_max(values)
+         if len(values) >= 20:
+              # p95 should generally be higher than p50 for typical distributions, but not strictly guaranteed for all random sets
+@@ -89,21 +102,31 @@ class TestStatsRollupCore:
+ 
+ # === DerivedMetricCalculator Tests ===
+ 
++
++
++
++
++
+ class TestDerivedMetricCalculator:
+     def test_basic_math(self):
+         core = DerivedMetricCalculator()
+         assert core.evaluate_formula("1 + 1", {}) == 2.0
+         assert core.evaluate_formula("x * 2", {"x": 5}) == 10.0
+-        
++
+ # === CorrelationCore Tests ===
+ 
++
++
++
++
++
+ class TestCorrelationCore:
+     def test_perfect_correlation(self):
+         core = CorrelationCore()
+         s1 = [1.0, 2.0, 3.0]
+         s2 = [2.0, 4.0, 6.0]
+         assert math.isclose(core.calculate_correlation(s1, s2), 1.0)
+-        
++
+     def test_perfect_negative_correlation(self):
+         core = CorrelationCore()
+         s1 = [1.0, 2.0, 3.0]
+@@ -112,6 +135,11 @@ class TestCorrelationCore:
+ 
+ # === ABTestCore Tests ===
+ 
++
++
++
++
++
+ class TestABTestCore:
+     def test_significance(self):
+         core = ABTestCore()

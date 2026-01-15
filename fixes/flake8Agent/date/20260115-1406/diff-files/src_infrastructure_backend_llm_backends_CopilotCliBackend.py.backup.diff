@@ -1,0 +1,41 @@
+diff --git a/src/infrastructure/backend/llm_backends/CopilotCliBackend.py b/src/infrastructure/backend/llm_backends/CopilotCliBackend.py
+index 42a0981..60b0c7b 100644
+--- a/src/infrastructure/backend/llm_backends/CopilotCliBackend.py
++++ b/src/infrastructure/backend/llm_backends/CopilotCliBackend.py
+@@ -26,6 +26,11 @@ from .LLMBackend import LLMBackend
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class CopilotCliBackend(LLMBackend):
+     """GitHub Copilot CLI LLM Backend."""
+ 
+@@ -40,7 +45,7 @@ class CopilotCliBackend(LLMBackend):
+             # gh copilot suggest doesn't need the full strategic roadmap, just a task summary.
+             max_char = 800
+             safe_prompt = prompt[:max_char] + "..." if len(prompt) > max_char else prompt
+-            
++
+             cmd = ["gh", "copilot", "suggest", "-t", "shell", safe_prompt]
+             process = subprocess.run(
+                 cmd,
+@@ -49,7 +54,7 @@ class CopilotCliBackend(LLMBackend):
+                 timeout=timeout_s,
+                 encoding="utf-8"
+             )
+-            
++
+             if process.returncode == 0:
+                 content = process.stdout.strip()
+                 self._record("copilot_cli", model, safe_prompt, content, system_prompt=system_prompt)
+@@ -62,4 +67,4 @@ class CopilotCliBackend(LLMBackend):
+         except Exception as e:
+             logging.error(f"Failed to call Copilot CLI: {e}")
+             self._update_status("copilot_cli", False)
+-            return ""
+\ No newline at end of file
++            return ""

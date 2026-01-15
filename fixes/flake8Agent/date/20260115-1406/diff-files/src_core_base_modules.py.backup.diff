@@ -1,0 +1,25 @@
+diff --git a/src/core/base/modules.py b/src/core/base/modules.py
+index 7b403f4..6bbbb5b 100644
+--- a/src/core/base/modules.py
++++ b/src/core/base/modules.py
+@@ -13,7 +13,12 @@
+ 
+ from __future__ import annotations
+ from abc import ABC, abstractmethod
+-from typing import Any, Dict, Optional
++from typing import Any
++
++
++
++
++
+ 
+ class BaseModule(ABC):
+     """
+@@ -38,4 +43,4 @@ class BaseModule(ABC):
+     def shutdown(self) -> bool:
+         """Cleans up the module resources."""
+         self.initialized = False
+-        return True
+\ No newline at end of file
++        return True

@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/fleet/GPUScalingManager.py b/src/infrastructure/fleet/GPUScalingManager.py
+index 1b73d91..676fc92 100644
+--- a/src/infrastructure/fleet/GPUScalingManager.py
++++ b/src/infrastructure/fleet/GPUScalingManager.py
+@@ -26,7 +26,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ import random
+-from typing import Dict, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 

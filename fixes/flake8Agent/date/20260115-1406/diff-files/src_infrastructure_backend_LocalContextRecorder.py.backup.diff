@@ -1,0 +1,102 @@
+diff --git a/src/infrastructure/backend/LocalContextRecorder.py b/src/infrastructure/backend/LocalContextRecorder.py
+index de5458c..b3502db 100644
+--- a/src/infrastructure/backend/LocalContextRecorder.py
++++ b/src/infrastructure/backend/LocalContextRecorder.py
+@@ -23,11 +23,16 @@ import json
+ import logging
+ from datetime import datetime
+ from pathlib import Path
+-from typing import Dict, Any
++from typing import Any
+ from src.core.base.interfaces import ContextRecorderInterface
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class LocalContextRecorder(ContextRecorderInterface):
+     """
+     Records LLM prompts and results for future training/fine-tuning.
+@@ -35,14 +40,14 @@ class LocalContextRecorder(ContextRecorderInterface):
+     Optimized for trillion-parameter data harvesting (Phase 105).
+     """
+ 
+-    def __init__(self, workspace_root: Path = None, user_context: str = "System", fleet: Any = None) -> None:
++    def __init__(self, workspace_root: Path | None = None, user_context: str = "System", fleet: Any = None) -> None:
+         if fleet and hasattr(fleet, "workspace_root"):
+             self.workspace_root = Path(fleet.workspace_root)
+         elif workspace_root:
+             self.workspace_root = Path(workspace_root)
+         else:
+             self.workspace_root = Path(".")
+-            
++
+         self.user_context = user_context
+         self.log_dir = self.workspace_root / "data/logs" / "external_ai_learning"
+         self.log_dir.mkdir(parents=True, exist_ok=True)
+@@ -51,7 +56,7 @@ class LocalContextRecorder(ContextRecorderInterface):
+         self.current_month = datetime.now().strftime('%Y%m')
+         self.use_compression = True # Save 70-80% space for massive datasets
+ 
+-    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] = None) -> None:
++    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] | None = None) -> None:
+         """
+         Appends a new interaction record.
+         Includes unique context hashing for future deduplication and sharded storage.
+@@ -60,17 +65,17 @@ class LocalContextRecorder(ContextRecorderInterface):
+         import hashlib
+         import zlib
+         import gzip
+-        
++
+         # Stability: generate a stable hash for the prompt to allow O(1) deduplication
+         prompt_hash = hashlib.sha256(prompt.encode('utf-8')).hexdigest()
+-        
++
+         # Determine sub-shard for massively parallel access (256 virtual buckets)
+         shard_id = zlib.adler32(prompt_hash.encode()) % self.shard_count
+-        
++
+         # Use .jsonl.gz if compression is enabled
+         ext = ".jsonl.gz" if self.use_compression else ".jsonl"
+         log_file = self.log_dir / f"shard_{self.current_month}_{shard_id:03d}{ext}"
+-        
++
+         record = {
+             "timestamp": datetime.now().isoformat(),
+             "user_context": self.user_context,
+@@ -81,9 +86,9 @@ class LocalContextRecorder(ContextRecorderInterface):
+             "result": result,
+             "meta": meta or {}
+         }
+-        
++
+         line = (json.dumps(record) + "\n").encode('utf-8')
+-        
++
+         try:
+             if self.use_compression:
+                 with gzip.open(log_file, "ab") as f:
+@@ -91,10 +96,10 @@ class LocalContextRecorder(ContextRecorderInterface):
+             else:
+                 with open(log_file, "a", encoding="utf-8") as f:
+                     f.write(json.dumps(record) + "\n")
+-                    
++
+             # Update a centralized index for fast semantic lookup in the future (Phase 106)
+             self._update_index(prompt_hash, str(log_file.name))
+-            
++
+         except Exception as e:
+             logging.error(f"Failed to record interaction to shard {shard_id}: {e}")
+ 
+@@ -116,4 +121,4 @@ class LocalContextRecorder(ContextRecorderInterface):
+             with open(index_file, "a", encoding="utf-8") as f:
+                 f.write(f"{prompt_hash}:{filename}\n")
+         except Exception as e:
+-            logging.error(f"Failed to update shard index: {e}")
+\ No newline at end of file
++            logging.error(f"Failed to update shard index: {e}")

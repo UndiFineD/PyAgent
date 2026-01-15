@@ -1,0 +1,25 @@
+diff --git a/src/infrastructure/fleet/AttributionEngine.py b/src/infrastructure/fleet/AttributionEngine.py
+index 79cb394..62c989c 100644
+--- a/src/infrastructure/fleet/AttributionEngine.py
++++ b/src/infrastructure/fleet/AttributionEngine.py
+@@ -30,7 +30,7 @@ import json
+ import os
+ import logging
+ from pathlib import Path
+-from typing import Dict, List, Any
++from typing import Any
+ from src.infrastructure.fleet.core.AttributionCore import AttributionCore
+ 
+ __version__ = VERSION
+@@ -93,8 +93,8 @@ class AttributionEngine:
+ 
+     def get_summary(self) -> dict[str, Any]:
+         """Provides a summary of total attributions."""
+-        summary = {}
++        summary: dict[Any, Any] = {}
+         for r in self.records:
+             agent = r["agent"]
+             summary[agent] = summary.get(agent, 0) + 1
+-        return summary
+\ No newline at end of file
++        return summary

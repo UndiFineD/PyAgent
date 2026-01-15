@@ -1,0 +1,96 @@
+diff --git a/src/infrastructure/fleet/OrchestratorRegistryCore.py b/src/infrastructure/fleet/OrchestratorRegistryCore.py
+index 37b18ea..c2f3197 100644
+--- a/src/infrastructure/fleet/OrchestratorRegistryCore.py
++++ b/src/infrastructure/fleet/OrchestratorRegistryCore.py
+@@ -20,16 +20,21 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import os
+-from typing import Dict, List, Any, Tuple, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class OrchestratorRegistryCore:
+     """
+     Pure logic core for Orchestrator Registry.
+     Handles dynamic discovery of orchestrator classes.
+     """
+-    
++
+     def __init__(self, current_sdk_version: str) -> None:
+         self.sdk_version: str = current_sdk_version
+ 
+@@ -39,16 +44,16 @@ class OrchestratorRegistryCore:
+         Expects relative paths from workspace root.
+         """
+         discovered: dict[str, tuple[str, str, bool, str | None]] = {}
+-        
++
+         for rel_path in file_paths:
+             file = os.path.basename(rel_path)
+             if file.endswith(".py") and not file.startswith("__"):
+                 class_name: str = file[:-3]
+-                
++
+                 if any(x in class_name for x in ["Orchestrator", "Manager", "Selector", "Engine", "Spawner", "Bridge"]):
+                      # Calculate module path
+                     module_path: str = rel_path.replace(os.sep, ".").replace(".py", "")
+-                    
++
+                     # Convert ClassName -> snake_case key
+                     # "SelfHealingOrchestrator" -> "self_healing"
+                     short_key: str = self._to_snake_case(class_name.replace("Orchestrator", ""))
+@@ -56,10 +61,10 @@ class OrchestratorRegistryCore:
+ 
+                     # Default heuristic for 'needs_fleet'
+                     needs_fleet: bool = any(x in class_name for x in ["Orchestrator", "Spawner", "Bridge", "Selector", "Engine"])
+-                    
++
+                     # (module, class, needs_fleet, arg_path)
+                     cfg = (module_path, class_name, needs_fleet, None)
+-                    
++
+                     if short_key:
+                         discovered[short_key] = cfg
+                     discovered[full_key] = cfg
+@@ -83,12 +88,12 @@ class OrchestratorRegistryCore:
+             if isinstance(cfg, list) and len(cfg) >= 2:
+                 # Version gate
+                 min_sdk: str = cfg[4] if len(cfg) > 4 else "1.0.0"
+-                
++
+                 if self.is_compatible(min_sdk):
+                     needs_fleet: bool = cfg[2] if len(cfg) > 2 else False
+                     arg_path: str | None = cfg[3] if len(cfg) > 3 else None
+                     valid_configs[key] = (cfg[0], cfg[1], needs_fleet, arg_path)
+-                
++
+         return valid_configs
+ 
+     def is_compatible(self, required_version: str) -> bool:
+@@ -98,15 +103,15 @@ class OrchestratorRegistryCore:
+         try:
+             p_parts = [int(x) for x in self.sdk_version.split('.')]
+             r_parts = [int(x) for x in required_version.split('.')]
+-            
++
+             # Pad to length 3
+             p_parts += [0] * (3 - len(p_parts))
+             r_parts += [0] * (3 - len(r_parts))
+-            
++
+             if p_parts[0] > r_parts[0]:
+                 return True
+             if p_parts[0] < r_parts[0]:
+                 return False
+             return p_parts[1] >= r_parts[1]
+         except Exception:
+-            return True
+\ No newline at end of file
++            return True

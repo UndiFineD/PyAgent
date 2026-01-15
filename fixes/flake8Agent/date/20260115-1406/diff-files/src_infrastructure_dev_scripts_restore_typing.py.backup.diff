@@ -1,0 +1,55 @@
+diff --git a/src/infrastructure/dev/scripts/restore_typing.py b/src/infrastructure/dev/scripts/restore_typing.py
+index d6dba25..b57597b 100644
+--- a/src/infrastructure/dev/scripts/restore_typing.py
++++ b/src/infrastructure/dev/scripts/restore_typing.py
+@@ -26,11 +26,16 @@ import re
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ def fix_file(file_path: str) -> None:
+     """Uncomment standard library imports in a specific file."""
+     with open(file_path, encoding='utf-8') as f:
+         lines = f.readlines()
+-    
++
+     changed = False
+     new_lines = []
+     for line in lines:
+@@ -48,12 +53,17 @@ def fix_file(file_path: str) -> None:
+                 new_lines.append(line)
+         else:
+             new_lines.append(line)
+-            
++
+     if changed:
+         with open(file_path, 'w', encoding='utf-8') as f:
+             f.writelines(new_lines)
+         print(f"Fixed {file_path}")
+ 
++
++
++
++
++
+ def walk_dir(path: str) -> None:
+     """Walk directory to apply typing restoration to all python files."""
+     for root, dirs, files in os.walk(path):
+@@ -61,6 +71,11 @@ def walk_dir(path: str) -> None:
+             if file.endswith('.py'):
+                 fix_file(os.path.join(root, file))
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     walk_dir('src')
+-    walk_dir('tests')
+\ No newline at end of file
++    walk_dir('tests')

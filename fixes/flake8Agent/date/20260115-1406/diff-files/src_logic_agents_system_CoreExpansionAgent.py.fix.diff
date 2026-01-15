@@ -1,0 +1,81 @@
+diff --git a/src/logic/agents/system/CoreExpansionAgent.py b/src/logic/agents/system/CoreExpansionAgent.py
+index 34826dd..19334c1 100644
+--- a/src/logic/agents/system/CoreExpansionAgent.py
++++ b/src/logic/agents/system/CoreExpansionAgent.py
+@@ -23,18 +23,27 @@ from src.core.base.version import VERSION
+ import logging
+ import subprocess
+ import sys
+-from typing import List
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class CoreExpansionAgent(BaseAgent):
+     """
+     Agent responsible for autonomous environment expansion.
+     Detects missing libraries and installs them into the active Python environment.
+     """
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self._system_prompt = (
+@@ -50,7 +59,7 @@ class CoreExpansionAgent(BaseAgent):
+         Attempts to install a missing Python package using pip.
+         """
+         logging.info(f"CoreExpansionAgent: Attempting to install package: {package_name}")
+-        
++
+         try:
+             # Use subprocess to run pip
+             cmd_str = f"{sys.executable} -m pip install {package_name}"
+@@ -61,18 +70,18 @@ class CoreExpansionAgent(BaseAgent):
+                 check=True
+             )
+             logging.info(f"CoreExpansionAgent: Successfully installed {package_name}")
+-            
++
+             # Phase 108: Record intelligence for future dependency graph learning
+             self._record(cmd_str, f"Success\n{result.stdout}", provider="Shell", model="pip")
+-            
++
+             return f"Success: {package_name} installed.\nStdout: {result.stdout}"
+         except subprocess.CalledProcessError as e:
+             err_msg = e.stderr or str(e)
+             logging.error(f"CoreExpansionAgent: Failed to install {package_name}. Error: {err_msg}")
+-            
++
+             # Phase 108: Record failure as a lesson
+             self._record(f"pip install {package_name}", f"Failed: {err_msg}", provider="Shell", model="pip")
+-            
++
+             return f"Error: Failed to install {package_name}. Details: {err_msg}"
+ 
+     @as_tool
+@@ -80,6 +89,10 @@ class CoreExpansionAgent(BaseAgent):
+         """
+         Lists currently installed packages in the environment.
+         """
+-        import pkg_resources
+-        installed_packages = [f"{d.project_name}=={d.version}" for d in pkg_resources.working_set]
+-        return installed_packages
+\ No newline at end of file
++        try:
++            from importlib.metadata import distributions
++            return [f"{d.metadata['Name']}=={d.version}" for d in distributions()]
++        except (ImportError, KeyError):
++            import pkg_resources
++            installed_packages = [f"{d.project_name}=={d.version}" for d in pkg_resources.working_set]
++            return installed_packages

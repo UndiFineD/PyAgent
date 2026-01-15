@@ -1,0 +1,22 @@
+diff --git a/src/observability/improvements/ScheduleStatus.py b/src/observability/improvements/ScheduleStatus.py
+index 64d19ff..276cf09 100644
+--- a/src/observability/improvements/ScheduleStatus.py
++++ b/src/observability/improvements/ScheduleStatus.py
+@@ -26,10 +26,15 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ScheduleStatus(Enum):
+     """Status of scheduled improvements."""
+     UNSCHEDULED = "unscheduled"
+     SCHEDULED = "scheduled"
+     IN_SPRINT = "in_sprint"
+     BLOCKED = "blocked"
+-    OVERDUE = "overdue"
+\ No newline at end of file
++    OVERDUE = "overdue"
