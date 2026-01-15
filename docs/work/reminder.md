@@ -1,4 +1,4 @@
-# Repository Maintenance Reminders (20260115-1635)
+# Repository Maintenance Reminders (20260115-1443)
 
 ## 🛠️ Pending Manual Actions
 - [ ] **Review Merge**: Examine the current restore branch and merge into `main` if satisfied.
@@ -6,7 +6,7 @@
 - [ ] **Log Cleanup**: The `fixes/` directory can grow large; periodically delete old run folders.
 
 ## 💡 Suggested Improvements
-- [x] **Tool Specificity**: Updated `Ruff`, `Mypy`, and `Flake8` to only scan changed `.py` files.
+- [ ] **Tool Specificity**: Update `RuffAgent` or `MypyAgent` to target specific directories for faster scans.
 - [ ] **Rollback Strategy**: Implement `GitManager.hard_rollback()` call in `agents.py` if an AI-applied fix breaks the build.
 - [ ] **Pre-commit Hook**: Integrate the `orchestrator` as a heavy-duty pre-push check.
 

@@ -1,51 +1,68 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Recovered and standardized for Phase 317
-
-"""
-Maintenance Orchestrator for the PyAgent Fleet.
-
-This module coordinates system-wide maintenance cycles, including dependency
-audits, configuration hygiene checks, and environment stabilization.
-"""
-
-from __future__ import annotations
-
-import logging
-from typing import Any
+import asyncio
+import sys
 from pathlib import Path
-
-from src.core.base.lifecycle.version import VERSION
-from src.maintenance.workspace_maintenance import WorkspaceMaintenance
-
-__version__ = VERSION
-
+from .utils import GitManager, get_timestamp
+from .agents import PytestAgent, MypyAgent, RuffAgent, Flake8Agent, UnittestAgent, ReminderAgent
 
 class MaintenanceOrchestrator:
-    """
-    Central coordinator for system-wide maintenance cycles in the PyAgent fleet.
+    def __init__(self):
+        self.agents = [
+            PytestAgent(),
+            MypyAgent(),
+            RuffAgent(),
+            Flake8Agent(),
+            UnittestAgent(),
+            ReminderAgent()
+        ]
 
-    Acts as the primary lifecycle manager for Tier 5 (Maintenance) operations.
-    It triggers dependency audits, workspace cleanup (TTL-based), and
-    configuration synchronization across all architectural tiers.
-    """
+    async def run_maintenance(self):
+        print(f"--- Starting Maintenance Workflow {get_timestamp()} ---")
+        
+        restore_branch, original_branch = GitManager.create_restore_point()
+        if not restore_branch:
+            print("Failed to create restore branch. Aborting.")
+            return
 
-    def __init__(self, fleet_manager: Any = None, workspace_root: str = ".") -> None:
-        self.version = VERSION
-        self.fleet_manager = fleet_manager
-        self.maintenance = WorkspaceMaintenance(workspace_root)
-        logging.info(f"MaintenanceOrchestrator initialized (v{VERSION}).")
+        print(f"Created restore branch: {restore_branch}")
+        print(f"Launching {len(self.agents)} agents concurrently...")
 
-    def run_standard_cycle(self) -> dict[str, Any]:
-        """Runs a full maintenance cycle."""
-        pylint_results = self.maintenance.fix_pylint_violations()
-        results = {
-            "whitespace_fixed": len(self.maintenance.fix_whitespace()),
-            "headers_applied": len(self.maintenance.apply_header_compliance()),
-            "long_lines": len(self.maintenance.find_long_lines()),
-            "naming_violations": len(self.maintenance.audit_naming_conventions()),
-            "pylint_fixes": {k: len(v) for k, v in pylint_results.items()},
-            "imports_cleaned": len(self.maintenance.run_import_cleanup()),
-        }
-        logging.info(f"Maintenance cycle completed: {results}")
-        return results
+        tasks = [agent.perform_maintenance_cycle() for agent in self.agents]
+        results = await asyncio.gather(*tasks)
+
+        # Final Evaluation
+        success_count = sum(1 for r in results if r)
+        total_count = len(self.agents)
+        
+        print(f"\n--- Maintenance Cycle Complete ---")
+        print(f"Successes: {success_count}/{total_count}")
+        
+        if success_count == total_count:
+            print("All agents reported success. Preparing for merge...")
+            # GitManager.merge_to_main(restore_branch)
+            print(f"To finish, run: git checkout main; git merge {restore_branch}")
+        else:
+            print(f"Some maintenance tasks failed. Inspect logs in 'fixes/' directory.")
+            print(f"Current branch is {restore_branch}. Roll back if needed.")
+
+        # Summary of all proposals for learning
+        self.generate_global_summary(results)
+
+    def generate_global_summary(self, results):
+        summary_path = Path("fixes/global_summary.md")
+        summary_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        with open(summary_path, "w", encoding="utf-8") as f:
+            f.write("# Global Maintenance Report\n\n")
+            f.write(f"Run Date: {get_timestamp()}\n")
+            f.write(f"System State: {'HEALTHY' if all(results) else 'ISSUES REMAIN'}\n\n")
+            
+            for i, agent in enumerate(self.agents):
+                status = "✅ Success" if results[i] else "❌ Failed"
+                f.write(f"## {agent.name}: {status}\n")
+                f.write(f"Path: {agent.base_path}\n\n")
+        
+        print(f"Global summary written to {summary_path}")
+
+if __name__ == "__main__":
+    orchestrator = MaintenanceOrchestrator()
+    asyncio.run(orchestrator.run_maintenance())
