@@ -1,0 +1,22 @@
+diff --git a/src/infrastructure/fleet/BootstrapConfigs.py b/src/infrastructure/fleet/BootstrapConfigs.py
+index 69abfce..a2d56dd 100644
+--- a/src/infrastructure/fleet/BootstrapConfigs.py
++++ b/src/infrastructure/fleet/BootstrapConfigs.py
+@@ -97,7 +97,7 @@ BOOTSTRAP_ORCHESTRATORS = {
+         "SelfHealingOrchestrator"
+     ),
+     "telemetry": (
+-        "src.observability.stats.ObservabilityEngine",
++        "src.observability.stats.metrics_engine",
+         "ObservabilityEngine"
+     ),
+     "self_improvement": (
+@@ -129,7 +129,7 @@ BOOTSTRAP_ORCHESTRATORS = {
+         "AgentEconomy"
+     ),
+     "resources": (
+-        "src.observability.stats.ResourceMonitor",
++        "src.observability.stats.monitoring",
+         "ResourceMonitor"
+     ),
+     "gossip": (

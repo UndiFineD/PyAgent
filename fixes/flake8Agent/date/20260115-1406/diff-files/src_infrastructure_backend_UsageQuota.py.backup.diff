@@ -1,0 +1,23 @@
+diff --git a/src/infrastructure/backend/UsageQuota.py b/src/infrastructure/backend/UsageQuota.py
+index ff60a12..cbff07e 100644
+--- a/src/infrastructure/backend/UsageQuota.py
++++ b/src/infrastructure/backend/UsageQuota.py
+@@ -27,6 +27,11 @@ import time
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class UsageQuota:
+     """Usage quota configuration.
+@@ -45,4 +50,4 @@ class UsageQuota:
+     current_daily: int = 0
+     current_hourly: int = 0
+     reset_daily_at: float = field(default_factory=time.time)
+-    reset_hourly_at: float = field(default_factory=time.time)
+\ No newline at end of file
++    reset_hourly_at: float = field(default_factory=time.time)

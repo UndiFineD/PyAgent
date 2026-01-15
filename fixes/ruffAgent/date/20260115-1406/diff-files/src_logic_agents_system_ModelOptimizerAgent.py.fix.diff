@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/system/ModelOptimizerAgent.py b/src/logic/agents/system/ModelOptimizerAgent.py
+index 286961a..1d276b9 100644
+--- a/src/logic/agents/system/ModelOptimizerAgent.py
++++ b/src/logic/agents/system/ModelOptimizerAgent.py
+@@ -24,7 +24,7 @@ from __future__ import annotations
+ from src.core.base.BaseAgent import BaseAgent
+ import logging
+ import json
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ class ModelOptimizerAgent(BaseAgent):
+     """Optimizes LLM deployment and inference using patterns like AirLLM."""

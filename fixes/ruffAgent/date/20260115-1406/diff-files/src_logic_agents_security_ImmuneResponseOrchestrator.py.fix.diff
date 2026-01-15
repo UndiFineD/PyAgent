@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/security/ImmuneResponseOrchestrator.py b/src/logic/agents/security/ImmuneResponseOrchestrator.py
+index 8b703f6..a0d11cf 100644
+--- a/src/logic/agents/security/ImmuneResponseOrchestrator.py
++++ b/src/logic/agents/security/ImmuneResponseOrchestrator.py
+@@ -20,7 +20,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import time
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 

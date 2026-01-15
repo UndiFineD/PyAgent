@@ -1,0 +1,29 @@
+diff --git a/src/infrastructure/orchestration/FleetTelemetryVisualizer.py b/src/infrastructure/orchestration/FleetTelemetryVisualizer.py
+index d4a88b6..f4527df 100644
+--- a/src/infrastructure/orchestration/FleetTelemetryVisualizer.py
++++ b/src/infrastructure/orchestration/FleetTelemetryVisualizer.py
+@@ -22,7 +22,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ import time
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 
+@@ -70,7 +70,7 @@ class FleetTelemetryVisualizer:
+ 
+     def identify_bottlenecks(self) -> list[str]:
+         """Identifies agents that are high-frequency senders or receivers."""
+-        traffic = {}
++        traffic: dict[Any, Any] = {}
+         for event in self.signal_events:
+             traffic[event["sender"]] = traffic.get(event["sender"], 0) + 1
+             for r in event["receivers"]:
+@@ -102,4 +102,4 @@ class FleetTelemetryVisualizer:
+         
+         if not drift:
+             return "All agents are synchronized with core version."
+-        return "VERSION DRIFT DETECTED:\n" + "\n".join(drift)
+\ No newline at end of file
++        return "VERSION DRIFT DETECTED:\n" + "\n".join(drift)

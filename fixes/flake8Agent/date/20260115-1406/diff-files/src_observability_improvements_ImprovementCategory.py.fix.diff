@@ -1,0 +1,28 @@
+diff --git a/src/observability/improvements/ImprovementCategory.py b/src/observability/improvements/ImprovementCategory.py
+index 44ac564..4073bd7 100644
+--- a/src/observability/improvements/ImprovementCategory.py
++++ b/src/observability/improvements/ImprovementCategory.py
+@@ -26,6 +26,16 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class ImprovementCategory(Enum):
+     """Categories for improvements."""
+     PERFORMANCE = "performance"
+@@ -35,4 +45,4 @@ class ImprovementCategory(Enum):
+     TESTING = "testing"
+     DOCUMENTATION = "documentation"
+     REFACTORING = "refactoring"
+-    OTHER = "other"
+\ No newline at end of file
++    OTHER = "other"

@@ -1,7 +1,7 @@
 import asyncio
 import sys
 from pathlib import Path
-from .utils import GitManager, get_timestamp
+from .utils import GitManager, get_timestamp, run_command
 from .agents import PytestAgent, MypyAgent, RuffAgent, Flake8Agent, UnittestAgent, ReminderAgent
 
 class MaintenanceOrchestrator:
@@ -42,7 +42,11 @@ class MaintenanceOrchestrator:
             print(f"To finish, run: git checkout main; git merge {restore_branch}")
         else:
             print(f"Some maintenance tasks failed. Inspect logs in 'fixes/' directory.")
-            print(f"Current branch is {restore_branch}. Roll back if needed.")
+            print(f"Changes were staged in {restore_branch}.")
+
+        # Always return to original branch to avoid "hanging branches"
+        print(f"Returning to {original_branch}...")
+        run_command(f"git checkout {original_branch}")
 
         # Summary of all proposals for learning
         self.generate_global_summary(results)

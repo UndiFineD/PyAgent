@@ -1,0 +1,30 @@
+diff --git a/src/infrastructure/orchestration/ConsensusCore.py b/src/infrastructure/orchestration/ConsensusCore.py
+index 64d9740..3f6c9c8 100644
+--- a/src/infrastructure/orchestration/ConsensusCore.py
++++ b/src/infrastructure/orchestration/ConsensusCore.py
+@@ -25,7 +25,11 @@ Contains pure logic for tallying votes, handling ties, and selecting winners.
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import List, Dict, Optional
++
++try:
++    import rust_core as rc
++except (ImportError, AttributeError):
++    rc = None
+ 
+ __version__ = VERSION
+ 
+@@ -40,6 +44,12 @@ class ConsensusCore:
+         Determines the winning proposal based on voting rules.
+         Phase 119: Supports weighted voting based on agent reliability.
+         """
++        if rc:
++            try:
++                return rc.calculate_consensus_winner(proposals, weights)
++            except (ImportError, AttributeError):
++                pass
++                
+         if not proposals:
+             return ""
+             

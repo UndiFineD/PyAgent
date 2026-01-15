@@ -1,0 +1,19 @@
+diff --git a/temp/debug_fix.py b/temp/debug_fix.py
+index 0e7e007..3e6a05e 100644
+--- a/temp/debug_fix.py
++++ b/temp/debug_fix.py
+@@ -1,6 +1,4 @@
+ import ast
+-import os
+-import re
+ 
+ def debug_fix(path):
+     with open(path, 'r', encoding='utf-8') as f:
+@@ -72,7 +70,6 @@ def debug_fix(path):
+     except Exception as e:
+         print(f"FAILED: {e}")
+         # Find the line with the error
+-        import traceback
+         lines_res = res.splitlines()
+         if hasattr(e, 'lineno'):
+              print(f"Error at line {e.lineno}: {lines_res[e.lineno-1]}")

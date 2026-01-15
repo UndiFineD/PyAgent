@@ -1,0 +1,14 @@
+diff --git a/tests/unit/test_benchmark_core.py b/tests/unit/test_benchmark_core.py
+index feba559..2325957 100644
+--- a/tests/unit/test_benchmark_core.py
++++ b/tests/unit/test_benchmark_core.py
+@@ -89,7 +89,8 @@ class TestBenchmarkCorePropertyBased:
+             for i, lat in enumerate(latencies)
+         ]
+         baseline = core.calculate_baseline(results)
+-        assert min(latencies) <= baseline <= max(latencies)
++        # Use epsilon for floating point comparison
++        assert min(latencies) - 1e-9 <= baseline <= max(latencies) + 1e-9
+ 
+     @given(
+         baseline=st.floats(min_value=1.0, max_value=100.0),

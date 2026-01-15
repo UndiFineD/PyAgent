@@ -1,0 +1,59 @@
+diff --git a/tests/unit/core/test_AgentCommandHandler_UNIT.py b/tests/unit/core/test_AgentCommandHandler_UNIT.py
+index 05ace65..70d2635 100644
+--- a/tests/unit/core/test_AgentCommandHandler_UNIT.py
++++ b/tests/unit/core/test_AgentCommandHandler_UNIT.py
+@@ -9,9 +9,14 @@ import os
+ import sys
+ import subprocess
+ from pathlib import Path
+-from unittest.mock import MagicMock, patch
++from unittest.mock import patch
+ from src.core.base.AgentCommandHandler import AgentCommandHandler
+ 
++
++
++
++
++
+ class TestAgentCommandHandler(unittest.TestCase):
+     def setUp(self):
+         self.repo_root = Path(os.getcwd())
+@@ -41,7 +46,7 @@ class TestAgentCommandHandler(unittest.TestCase):
+             subprocess.CompletedProcess(args=["fail"], returncode=1, stdout="", stderr="error"),
+             subprocess.CompletedProcess(args=["fail"], returncode=0, stdout="success", stderr="")
+         ]
+-        
++
+         # We use a small timeout for wait in the handler if we wanted to speed this up,
+         # but here we just mock the run calls.
+         result = self.handler.run_command(["fail"], max_retries=2)
+@@ -51,11 +56,11 @@ class TestAgentCommandHandler(unittest.TestCase):
+ 
+     def test_prepare_command_environment_agent(self):
+         # Simulate an agent script being called
+-        agent_script = str(self.repo_root / "agent_tester.py")
++        agent_script = str(self.repo_root / "agent_test_agent.py")
+         cmd = [sys.executable, agent_script, "--arg1"]
+-        
++
+         local_cmd, env = self.handler._prepare_command_environment(cmd)
+-        
++
+         self.assertIn("--no-cascade", local_cmd)
+         self.assertEqual(env.get("DV_AGENT_PARENT"), "1")
+         self.assertEqual(env.get("DV_AGENT_MODEL_PROVIDER"), "test_provider")
+@@ -65,8 +70,13 @@ class TestAgentCommandHandler(unittest.TestCase):
+         with self.handler.with_agent_env("test_agent"):
+             self.assertEqual(os.environ.get("DV_AGENT_MODEL_PROVIDER"), "test_provider")
+             self.assertEqual(os.environ.get("DV_AGENT_MODEL_NAME"), "test_model")
+-        
++
+         self.assertNotIn("DV_AGENT_MODEL_PROVIDER", os.environ)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     unittest.main()

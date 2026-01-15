@@ -1,0 +1,18 @@
+diff --git a/src/logic/agents/security/ComplianceCheckerAgent.py b/src/logic/agents/security/ComplianceCheckerAgent.py
+index 6d78595..f8f6224 100644
+--- a/src/logic/agents/security/ComplianceCheckerAgent.py
++++ b/src/logic/agents/security/ComplianceCheckerAgent.py
+@@ -22,10 +22,9 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from .ChangelogEntry import ChangelogEntry
+-from .ComplianceCategory import ComplianceCategory
+-from .ComplianceResult import ComplianceResult
+-from typing import List
++from src.core.base.types import ChangelogEntry
++from src.core.base.types import ComplianceCategory
++from src.core.base.types import ComplianceResult
+ 
+ __version__ = VERSION
+ 

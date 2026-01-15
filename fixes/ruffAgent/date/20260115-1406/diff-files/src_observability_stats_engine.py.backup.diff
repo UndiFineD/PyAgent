@@ -1,0 +1,14 @@
+diff --git a/src/observability/stats/engine.py b/src/observability/stats/engine.py
+index 6fe3b39..292684d 100644
+--- a/src/observability/stats/engine.py
++++ b/src/observability/stats/engine.py
+@@ -8,7 +8,8 @@ import time
+ from pathlib import Path
+ from typing import Any, Dict, List, Optional
+ from .alerting import ThresholdAlertManager
+-from .analysis import StatsQueryEngine, StatsRollupCalculator, TokenCostEngine
++from .analysis import TokenCostEngine
++from .rollup_engine import StatsQueryEngine, StatsRollupCalculator
+ from .exporters import MetricsExporter, OTelManager, PrometheusExporter
+ from .metrics import AgentMetric, Metric
+ 

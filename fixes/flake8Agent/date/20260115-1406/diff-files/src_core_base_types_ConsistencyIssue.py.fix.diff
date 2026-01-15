@@ -1,0 +1,32 @@
+diff --git a/src/core/base/types/ConsistencyIssue.py b/src/core/base/types/ConsistencyIssue.py
+index 08890c7..15f4937 100644
+--- a/src/core/base/types/ConsistencyIssue.py
++++ b/src/core/base/types/ConsistencyIssue.py
+@@ -23,10 +23,19 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class ConsistencyIssue:
+     """A code consistency issue across the codebase.
+@@ -40,4 +49,4 @@ class ConsistencyIssue:
+     issue_type: str
+     description: str
+     occurrences: list[str]
+-    recommended_style: str
+\ No newline at end of file
++    recommended_style: str

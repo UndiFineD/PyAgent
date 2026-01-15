@@ -1,0 +1,12 @@
+diff --git a/tests/phases/test_phase86.py b/tests/phases/test_phase86.py
+index 2325fa0..ab2b078 100644
+--- a/tests/phases/test_phase86.py
++++ b/tests/phases/test_phase86.py
+@@ -1,7 +1,5 @@
+ import unittest
+ import time
+-import os
+-import sys
+ 
+ # Ensure the project root is in PYTHONPATH
+ 

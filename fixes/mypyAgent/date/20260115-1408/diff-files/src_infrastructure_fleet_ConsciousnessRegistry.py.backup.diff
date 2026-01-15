@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/fleet/ConsciousnessRegistry.py b/src/infrastructure/fleet/ConsciousnessRegistry.py
+index 124c98f..659ef07 100644
+--- a/src/infrastructure/fleet/ConsciousnessRegistry.py
++++ b/src/infrastructure/fleet/ConsciousnessRegistry.py
+@@ -14,7 +14,7 @@
+ 
+ from __future__ import annotations
+ import logging
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from datetime import datetime
+ from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+ 

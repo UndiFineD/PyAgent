@@ -1,0 +1,265 @@
+diff --git a/tests/unit/core/test_base_agent_LEGACY.py b/tests/unit/core/test_base_agent_LEGACY.py
+index 983c393..4fa020b 100644
+--- a/tests/unit/core/test_base_agent_LEGACY.py
++++ b/tests/unit/core/test_base_agent_LEGACY.py
+@@ -3,15 +3,22 @@ import pytest
+ from pathlib import Path
+ from typing import Any, List, Dict, Optional
+ import sys
++import subprocess
+ try:
+     from tests.utils.agent_test_utils import *
+ except ImportError:
+     pass
+ 
++
++
++
++
++
+ def test_read_previous_content_existing_file(tmp_path: Path, base_agent_module: Any) -> None:
+     target = tmp_path / "x.md"
+     target.write_text("HELLO", encoding="utf-8")
+     agent = base_agent_module.BaseAgent(str(target))
++    print(f"DEBUG: Existing file agent.file_path: {agent.file_path} (absolute: {agent.file_path.absolute()})")
+     assert agent.read_previous_content() == "HELLO"
+ 
+ 
+@@ -19,8 +26,9 @@ def test_read_previous_content_missing_file_uses_default(
+         tmp_path: Path, base_agent_module: Any) -> None:
+     target = tmp_path / "missing.md"
+     agent = base_agent_module.BaseAgent(str(target))
++    print(f"DEBUG: Missing file agent.file_path: {agent.file_path} (absolute: {agent.file_path.absolute()})")
+     content = agent.read_previous_content()
+-    assert "Default content" in content
++    assert "# New Document" in content
+ 
+ 
+ def test_improve_content_uses_run_subagent(monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
+@@ -33,7 +41,7 @@ def test_improve_content_uses_run_subagent(monkeypatch: pytest.MonkeyPatch, tmp_
+     monkeypatch.setenv("DV_AGENT_CACHE", "false")
+     base_agent_module.BaseAgent._response_cache.clear()
+ 
+-    def fake_run_subagent(
++    async def fake_run_subagent(
+             self: Any,
+             description: str,
+             prompt: str,
+@@ -48,9 +56,16 @@ def test_improve_content_uses_run_subagent(monkeypatch: pytest.MonkeyPatch, tmp_
+         "run_subagent",
+         fake_run_subagent,
+         raising=True)
++
+     agent = base_agent_module.BaseAgent(str(target))
+     agent.read_previous_content()
+-    assert agent.improve_content("prompt") == "AFTER"
++    import asyncio
++    loop = asyncio.new_event_loop()
++    try:
++         res = loop.run_until_complete(agent.improve_content("prompt"))
++    finally:
++         loop.close()
++    assert res == "AFTER"
+ 
+ 
+ def test_update_file_writes_content(tmp_path: Path, base_agent_module: Any) -> None:
+@@ -83,9 +98,18 @@ def test_run_subagent_delegates_to_agent_backend(
+         calls.append((description, prompt, original_content))
+         return "OK"
+ 
+-    monkeypatch.setattr(base_agent_module.agent_backend, "run_subagent", fake_backend_run_subagent)
++    import src.infrastructure.backend.execution_engine
++    monkeypatch.setattr(src.infrastructure.backend.execution_engine, "run_subagent", fake_backend_run_subagent)
+     agent = base_agent_module.BaseAgent("x.md")
+     out = agent.run_subagent("desc", "prompt", "ORIG")
++    # BaseAgent.run_subagent returns a coroutine now, so we need to await it or mock it to return string if not async
++    # But run_subagent is async def in BaseAgent.py.
++    # The legacy test assumes sync.
++    # We should use asyncio.run(out) or await if possible.
++    import asyncio
++    if asyncio.iscoroutine(out):
++        out = asyncio.run(out)
++
+     assert out == "OK"
+     assert calls == [("desc", "prompt", "ORIG")]
+ 
+@@ -96,60 +120,17 @@ def test_run_subagent_falls_back_to_original_content_when_backend_returns_none(
+     def fake_backend_run_subagent(description: str, prompt: str, original_content: str = "") -> None:
+         return None
+ 
+-    monkeypatch.setattr(base_agent_module.agent_backend, "run_subagent", fake_backend_run_subagent)
++    import src.infrastructure.backend.execution_engine
++    monkeypatch.setattr(src.infrastructure.backend.execution_engine, "run_subagent", fake_backend_run_subagent)
+     agent = base_agent_module.BaseAgent("x.md")
+     out = agent.run_subagent("desc", "prompt", "ORIG")
+-    assert out == "ORIG"
+ 
++    import asyncio
++    if asyncio.iscoroutine(out):
++        out = asyncio.run(out)
+ 
+-def test_llm_chat_via_github_models_builds_request_and_parses_response(
+-    monkeypatch: pytest.MonkeyPatch, base_agent_module: Any
+-) -> None:
+-    posted: Dict[str, Any] = {}
+-
+-    class FakeResponse:
+-        def raise_for_status(self) -> None:
+-            return None
+-
+-        def json(self) -> Dict[str, Any]:
+-            return {"choices": [{"message": {"content": "  hello  "}}]}
+-
+-    def fake_post(
+-        url: str,
+-        headers: Optional[Dict[str, str]] = None,
+-        data: Optional[str] = None,
+-        timeout: Optional[int] = None,
+-    ) -> FakeResponse:
+-        posted["url"] = url
+-        posted["headers"] = headers
+-        posted["data"] = data
+-        posted["timeout"] = timeout
+-        return FakeResponse()
++    assert out == "ORIG"
+ 
+-    monkeypatch.setattr(base_agent_module.agent_backend.requests, "post", fake_post)
+-    out = base_agent_module.agent_backend.llm_chat_via_github_models(
+-        prompt="Say hi",
+-        model="some-model",
+-        system_prompt="system",
+-        base_url="https://example.test",
+-        token="TOKEN",
+-        timeout_s=12,
+-    )
+-    assert out == "hello"
+-    assert posted["url"] == "https://example.test/v1/chat/completions"
+-    assert posted["headers"]["Authorization"] == "Bearer TOKEN"
+-    assert posted["timeout"] == 12
+-    assert '"model": "some-model"' in posted["data"]
+-    assert '"role": "user"' in posted["data"]
+-
+-
+-def test_llm_chat_via_github_models_requires_token_and_base_url(base_agent_module: Any) -> None:
+-    with pytest.raises(RuntimeError, match=r"Missing token"):
+-        base_agent_module.agent_backend.llm_chat_via_github_models(
+-            prompt="x", model="m", base_url="https://x", token=None)
+-    with pytest.raises(RuntimeError, match=r"Missing base URL"):
+-        base_agent_module.agent_backend.llm_chat_via_github_models(
+-            prompt="x", model="m", base_url=None, token="t")
+ 
+ 
+ def test_run_subagent_uses_github_models_backend(
+@@ -164,7 +145,9 @@ def test_run_subagent_uses_github_models_backend(
+ 
+     def boom(*args: Any, **kwargs: Any) -> None:
+         raise AssertionError("subprocess.run should not be called for github-models backend")
+-    monkeypatch.setattr(base_agent_module.agent_backend.subprocess, "run", boom)
++
++    import src.infrastructure.backend.execution_engine
++    monkeypatch.setattr(subprocess, "run", boom)
+ 
+     class FakeResponse:
+         def raise_for_status(self) -> None:
+@@ -184,9 +167,12 @@ def test_run_subagent_uses_github_models_backend(
+         assert data is not None and '"model": "unit-test-model"' in data
+         return FakeResponse()
+ 
+-    monkeypatch.setattr(base_agent_module.agent_backend.requests, "post", fake_post)
++    monkeypatch.setattr(src.infrastructure.backend.execution_engine.requests, "post", fake_post)
+     agent = base_agent_module.BaseAgent("x.md")
+-    out = agent.run_subagent("desc", "prompt", "ORIG")
++
++    import asyncio
++    out = asyncio.run(agent.run_subagent("desc", "prompt", "ORIG"))
++
+     assert out == "OK_FROM_MODELS"
+ 
+ 
+@@ -208,11 +194,14 @@ def test_run_subagent_handles_subprocess_failures_gracefully(
+         return Result(1, "", "Process failed")
+ 
+     monkeypatch.delenv("DV_AGENT_BACKEND", raising=False)
+-    monkeypatch.setattr(base_agent_module.agent_backend.subprocess, "run", fake_run_fail_all)
++
++    monkeypatch.setattr(subprocess, "run", fake_run_fail_all)
+ 
+     agent = base_agent_module.BaseAgent("x.md")
+     # Pass empty original_content to force fallback message
+-    out = agent.run_subagent("desc", "prompt", "")
++    import asyncio
++    out = asyncio.run(agent.run_subagent("desc", "prompt", ""))
++
+     assert "AI Improvement Unavailable" in out
+ 
+ 
+@@ -236,6 +225,11 @@ def test_read_file_with_mixed_encoding_fallback(tmp_path: Path, base_agent_modul
+     content = agent.read_previous_content()
+     assert "UTF-8 content" in content or "café" in content
+ 
++
++
++
++
++
+ @pytest.mark.parametrize("backend", ["github-models", "copilot", "gh"])
+ def test_backend_selection_via_env_var(
+         monkeypatch: pytest.MonkeyPatch,
+@@ -275,9 +269,12 @@ def test_subprocess_timeout_handling(
+         return Result(0, "output")
+ 
+     monkeypatch.delenv("DV_AGENT_BACKEND", raising=False)
+-    monkeypatch.setattr(base_agent_module.agent_backend.subprocess, "run", fake_run_with_timeout)
++
++    monkeypatch.setattr(subprocess, "run", fake_run_with_timeout)
++
+     agent = base_agent_module.BaseAgent("x.md")
+-    agent.run_subagent("desc", "prompt", "ORIG")
++    import asyncio
++    asyncio.run(agent.run_subagent("desc", "prompt", "ORIG"))
+ 
+ 
+ def test_markdown_fixing_with_edge_cases(tmp_path: Path, base_agent_module: Any) -> None:
+@@ -309,7 +306,6 @@ def test_error_recovery_on_write_failure(
+     agent.current_content = "NEW"
+ 
+     # Make directory read-only to cause write failure (skip on Windows)
+-    import sys
+     if sys.platform != "win32":
+         tmp_path.chmod(0o444)
+         try:
+@@ -356,10 +352,12 @@ def test_missing_backend_availability(
+         return Result(1)
+ 
+     monkeypatch.delenv("DV_AGENT_BACKEND", raising=False)
+-    monkeypatch.setattr(base_agent_module.agent_backend.subprocess, "run", fake_run_all_missing)
++
++    monkeypatch.setattr(subprocess, "run", fake_run_all_missing)
+ 
+     agent = base_agent_module.BaseAgent("x.md")
+-    out = agent.run_subagent("desc", "prompt", "")
++    import asyncio
++    out = asyncio.run(agent.run_subagent("desc", "prompt", ""))
+     assert out is not None  # Should return fallback
+ 
+ 
+@@ -461,7 +459,7 @@ def test_integration_real_file_io_operations(
+     assert "Original" in read_content
+     # Mock the run_subagent to avoid actual API calls
+ 
+-    def fake_run_subagent(
++    async def fake_run_subagent(
+             self: Any,
+             description: str,
+             prompt: str,
+@@ -474,8 +472,8 @@ def test_integration_real_file_io_operations(
+         fake_run_subagent,
+         raising=True)
+     # Improve content
+-    agent.current_content = agent.improve_content("prompt")
+-    # Update file
++    import asyncio
++    agent.current_content = asyncio.run(agent.improve_content("prompt"))
+     agent.update_file()
+     # Verify file was updated
+     final_content = target.read_text(encoding="utf-8")

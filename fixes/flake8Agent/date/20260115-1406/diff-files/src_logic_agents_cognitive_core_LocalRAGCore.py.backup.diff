@@ -1,0 +1,52 @@
+diff --git a/src/logic/agents/cognitive/core/LocalRAGCore.py b/src/logic/agents/cognitive/core/LocalRAGCore.py
+index 5ff9366..25b2777 100644
+--- a/src/logic/agents/cognitive/core/LocalRAGCore.py
++++ b/src/logic/agents/cognitive/core/LocalRAGCore.py
+@@ -1,8 +1,12 @@
+ 
+ from __future__ import annotations
+-from typing import List
+ from dataclasses import dataclass
+ 
++
++
++
++
++
+ @dataclass(frozen=True)
+ class RAGShard:
+     """Metadata for a localized vector shard."""
+@@ -11,11 +15,16 @@ class RAGShard:
+     document_count: int
+     last_updated: float
+ 
++
++
++
++
++
+ class LocalRAGCore:
+     """Pure logic for hyper-localized RAG and vector sharding.
+     Handles shard selection, path-based routing, and context relevance.
+     """
+-    
++
+     def route_query_to_shards(self, query: str, query_path: str, available_shards: list[RAGShard]) -> list[str]:
+         """Routes a query to the most relevant localized shards based on file path."""
+         # Preference: direct path match > parent path match > tag match
+@@ -25,7 +34,7 @@ class LocalRAGCore:
+                 selected.append(shard.path)
+             elif any(tag in query.lower() for tag in shard.tags):
+                 selected.append(shard.path)
+-        
++
+         return selected
+ 
+     def calculate_rerank_score(self, original_score: float, path_proximity: int) -> float:
+@@ -42,4 +51,4 @@ class LocalRAGCore:
+             for line in content.splitlines()[:10]:
+                 if "import" in line:
+                     markers.append(line.split()[-1])
+-        return list(set(markers))
+\ No newline at end of file
++        return list(set(markers))

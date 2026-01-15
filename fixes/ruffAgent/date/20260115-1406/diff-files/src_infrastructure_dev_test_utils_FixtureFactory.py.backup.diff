@@ -1,0 +1,20 @@
+diff --git a/src/infrastructure/dev/test_utils/FixtureFactory.py b/src/infrastructure/dev/test_utils/FixtureFactory.py
+index 03c2ac4..4f9ce9e 100644
+--- a/src/infrastructure/dev/test_utils/FixtureFactory.py
++++ b/src/infrastructure/dev/test_utils/FixtureFactory.py
+@@ -59,6 +59,7 @@ class FixtureFactory:
+             Agent fixture object with name, config and dependencies attributes.
+         """
+         class AgentFixture:
++            """Fixture representing a pre-configured agent for testing."""
+             def __init__(self, name: str, config: dict[str, Any] | None, dependencies: list[Any] | None) -> None:
+                 self.name = name
+                 self.config = config or {}
+@@ -77,6 +78,7 @@ class FixtureFactory:
+             File fixture object with setup_fn method.
+         """
+         class FileFixture:
++            """Fixture representing a file to be created during test setup."""
+             def __init__(self, base_dir: Path, name: str, content: str) -> None:
+                 self.base_dir = base_dir
+                 self.name = name

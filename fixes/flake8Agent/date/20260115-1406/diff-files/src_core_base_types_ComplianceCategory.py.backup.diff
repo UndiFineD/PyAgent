@@ -1,0 +1,21 @@
+diff --git a/src/core/base/types/ComplianceCategory.py b/src/core/base/types/ComplianceCategory.py
+index e2be7d7..fadf032 100644
+--- a/src/core/base/types/ComplianceCategory.py
++++ b/src/core/base/types/ComplianceCategory.py
+@@ -26,9 +26,14 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ComplianceCategory(Enum):
+     """Categories for compliance checking."""
+     SECURITY = "security"
+     LEGAL = "legal"
+     PRIVACY = "privacy"
+-    ACCESSIBILITY = "accessibility"
+\ No newline at end of file
++    ACCESSIBILITY = "accessibility"

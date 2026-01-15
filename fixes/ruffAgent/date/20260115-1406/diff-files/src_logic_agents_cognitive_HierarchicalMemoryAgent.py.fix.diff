@@ -1,0 +1,12 @@
+diff --git a/src/logic/agents/cognitive/HierarchicalMemoryAgent.py b/src/logic/agents/cognitive/HierarchicalMemoryAgent.py
+index 388e4be..0e3885f 100644
+--- a/src/logic/agents/cognitive/HierarchicalMemoryAgent.py
++++ b/src/logic/agents/cognitive/HierarchicalMemoryAgent.py
+@@ -27,7 +27,6 @@ from src.core.base.version import VERSION
+ import json
+ import time
+ from pathlib import Path
+-from typing import List
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 

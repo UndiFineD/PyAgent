@@ -1,0 +1,13 @@
+diff --git a/src/observability/improvements/ToolIntegration.py b/src/observability/improvements/ToolIntegration.py
+index e0d625a..d0fa988 100644
+--- a/src/observability/improvements/ToolIntegration.py
++++ b/src/observability/improvements/ToolIntegration.py
+@@ -25,7 +25,7 @@ from src.core.base.version import VERSION
+ from .AnalysisToolType import AnalysisToolType
+ from .ImprovementCategory import ImprovementCategory
+ from .ToolSuggestion import ToolSuggestion
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ import re
+ 
+ __version__ = VERSION

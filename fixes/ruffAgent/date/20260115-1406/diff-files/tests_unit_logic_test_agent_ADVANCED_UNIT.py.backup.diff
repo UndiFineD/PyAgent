@@ -1,0 +1,15 @@
+diff --git a/tests/unit/logic/test_agent_ADVANCED_UNIT.py b/tests/unit/logic/test_agent_ADVANCED_UNIT.py
+index 340173d..5090331 100644
+--- a/tests/unit/logic/test_agent_ADVANCED_UNIT.py
++++ b/tests/unit/logic/test_agent_ADVANCED_UNIT.py
+@@ -281,7 +281,9 @@ class TestDependencyGraph:
+         graph.add_dependency("tests", "coder")
+         graph.add_dependency("docs", "tests")
+ 
+-        order = graph.resolve()
++        batches = graph.resolve()
++        # Flatten batches to verify order
++        order = [item for batch in batches for item in batch]
+ 
+         assert order.index("coder") < order.index("tests")
+         assert order.index("tests") < order.index("docs")

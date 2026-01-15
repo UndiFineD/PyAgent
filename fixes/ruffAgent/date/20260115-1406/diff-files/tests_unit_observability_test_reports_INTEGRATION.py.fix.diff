@@ -1,0 +1,28 @@
+diff --git a/tests/unit/observability/test_reports_INTEGRATION.py b/tests/unit/observability/test_reports_INTEGRATION.py
+index 39008dc..dc69721 100644
+--- a/tests/unit/observability/test_reports_INTEGRATION.py
++++ b/tests/unit/observability/test_reports_INTEGRATION.py
+@@ -3,22 +3,13 @@
+ 
+ from __future__ import annotations
+ import unittest
+-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
+-from unittest.mock import MagicMock, Mock, patch, call, ANY
+-import time
++from typing import Any, List, Dict, Set
+ import json
+ from datetime import datetime
+-import pytest
+-import logging
+ from pathlib import Path
+ import sys
+ import os
+ import tempfile
+-import shutil
+-import subprocess
+-import threading
+-import asyncio
+-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+ 
+ # Try to import test utilities
+ try:

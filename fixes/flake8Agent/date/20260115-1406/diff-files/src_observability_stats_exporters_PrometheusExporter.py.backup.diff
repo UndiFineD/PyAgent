@@ -1,0 +1,50 @@
+diff --git a/src/observability/stats/exporters/PrometheusExporter.py b/src/observability/stats/exporters/PrometheusExporter.py
+index 86ccfcf..76528b7 100644
+--- a/src/observability/stats/exporters/PrometheusExporter.py
++++ b/src/observability/stats/exporters/PrometheusExporter.py
+@@ -24,13 +24,18 @@ Enables real-time dashboards in Grafana and ELK stack.
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, Any, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class PrometheusExporter:
+     """Formats fleet telemetry into Prometheus-compatible metrics."""
+-    
++
+     def __init__(self) -> None:
+         self.metrics_registry: dict[str, float] = {}
+ 
+@@ -39,7 +44,7 @@ class PrometheusExporter:
+         label_str = ""
+         if labels:
+             label_str = "{" + ",".join([f'{k}="{v}"' for k, v in labels.items()]) + "}"
+-        
++
+         metric_key = f"{name}{label_str}"
+         self.metrics_registry[metric_key] = value
+ 
+@@ -49,7 +54,7 @@ class PrometheusExporter:
+         for key, value in self.metrics_registry.items():
+             # Basic Prometheus format: metric_name{labels} value
+             lines.append(f"pyagent_{key} {value}")
+-        
++
+         return "\n".join(lines)
+ 
+     def get_grafana_info(self) -> dict[str, Any]:
+@@ -61,4 +66,4 @@ class PrometheusExporter:
+             "suggested_dashboard_uid": "pyagent-swarm-health-main",
+             "provisioning_status": "Ready",
+             "metric_prefix": "pyagent_"
+-        }
+\ No newline at end of file
++        }

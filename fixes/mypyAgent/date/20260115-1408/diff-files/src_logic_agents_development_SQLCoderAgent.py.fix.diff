@@ -1,0 +1,11 @@
+diff --git a/src/logic/agents/development/SQLCoderAgent.py b/src/logic/agents/development/SQLCoderAgent.py
+index 26cabdc..6cacdde 100644
+--- a/src/logic/agents/development/SQLCoderAgent.py
++++ b/src/logic/agents/development/SQLCoderAgent.py
+@@ -45,4 +45,4 @@ class SQLCoderAgent(CoderAgent):
+ 
+ if __name__ == "__main__":
+     main = create_main_function(SQLCoderAgent, "SQL Agent", "Path to SQL file")
+-    main()
+\ No newline at end of file
++    main()

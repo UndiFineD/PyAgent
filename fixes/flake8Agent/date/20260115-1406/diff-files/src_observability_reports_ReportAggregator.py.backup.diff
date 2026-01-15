@@ -1,0 +1,28 @@
+diff --git a/src/observability/reports/ReportAggregator.py b/src/observability/reports/ReportAggregator.py
+index c7e49c5..8327701 100644
+--- a/src/observability/reports/ReportAggregator.py
++++ b/src/observability/reports/ReportAggregator.py
+@@ -24,11 +24,15 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .AggregatedReport import AggregatedReport
+ from .CodeIssue import CodeIssue
+-from typing import Dict, List
+ import logging
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ReportAggregator:
+     """Aggregator for combining reports from multiple sources.
+     Combines and summarizes reports across files.
+@@ -85,4 +89,4 @@ class ReportAggregator:
+     def clear(self) -> None:
+         """Clear all sources."""
+ 
+-        self.sources.clear()
+\ No newline at end of file
++        self.sources.clear()

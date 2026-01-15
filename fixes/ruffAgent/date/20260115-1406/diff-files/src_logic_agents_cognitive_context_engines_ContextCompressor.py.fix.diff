@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/cognitive/context/engines/ContextCompressor.py b/src/logic/agents/cognitive/context/engines/ContextCompressor.py
+index f19fd03..839f98e 100644
+--- a/src/logic/agents/cognitive/context/engines/ContextCompressor.py
++++ b/src/logic/agents/cognitive/context/engines/ContextCompressor.py
+@@ -24,7 +24,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ from pathlib import Path
+-from typing import Any, Optional
++from typing import Any
+ from src.logic.agents.cognitive.context.engines.ContextCompressorCore import ContextCompressorCore
+ 
+ __version__ = VERSION

@@ -1,0 +1,20 @@
+diff --git a/tests/phases/test_phase73.py b/tests/phases/test_phase73.py
+index 702bb9e..0aa8863 100644
+--- a/tests/phases/test_phase73.py
++++ b/tests/phases/test_phase73.py
+@@ -1,5 +1,6 @@
+ import unittest
+ import os
++from pathlib import Path
+ from src.infrastructure.fleet.FleetManager import FleetManager
+ 
+ class TestPhase73(unittest.TestCase):
+@@ -11,7 +12,7 @@ class TestPhase73(unittest.TestCase):
+         print("\nTesting Phase 73: Semantic Versioning & Dependency Graphing...")
+         
+         # Scan a small subset for speed in test
+-        res = self.fleet.dependency_graph.scan_dependencies(start_dir="src/agents")
++        res = self.fleet.dependency_graph.scan_dependencies(start_dir="src/logic/agents")
+         print(f"Scan Result: {res}")
+         self.assertGreater(res["modules_scanned"], 0)
+         

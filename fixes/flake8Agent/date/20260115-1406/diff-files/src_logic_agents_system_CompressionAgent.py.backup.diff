@@ -1,0 +1,66 @@
+diff --git a/src/logic/agents/system/CompressionAgent.py b/src/logic/agents/system/CompressionAgent.py
+index 89e8b3c..90c4e0e 100644
+--- a/src/logic/agents/system/CompressionAgent.py
++++ b/src/logic/agents/system/CompressionAgent.py
+@@ -19,19 +19,23 @@
+ # limitations under the License.
+ 
+ """CompressionAgent for PyAgent.
+-Specializes in context window optimization, recursive summarization, 
++Specializes in context window optimization, recursive summarization,
+ and minimizing token usage for long-running sub-swarm dialogues.
+ """
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Dict, List
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class CompressionAgent(BaseAgent):
+     """Agent that compresses multi-turn histories into essential state representations."""
+ 
+@@ -47,17 +51,17 @@ class CompressionAgent(BaseAgent):
+     def compress_history(self, history: list[dict[str, str]], target_tokens: int = 500) -> str:
+         """Compresses a conversation history into a dense summary block."""
+         logging.info(f"CompressionAgent: Summarizing {len(history)} messages into ~{target_tokens} tokens.")
+-        
++
+         # Serialize history for prompting
+         history_text = "\n".join([f"{m.get('role', 'user')}: {m.get('content', '')}" for m in history])
+-        
++
+         prompt = (
+             f"Please compress the following conversation history into a dense summary. "
+             f"Focus on key decisions, tool outputs, and unresolved state. "
+             f"Target length: {target_tokens} vocabulary-rich tokens.\n\n"
+             f"HISTORY:\n{history_text}"
+         )
+-        
++
+         compressed_summary = self.think(prompt)
+         return compressed_summary
+ 
+@@ -71,7 +75,12 @@ class CompressionAgent(BaseAgent):
+     def improve_content(self, prompt: str) -> str:
+         return "Context compression logic is active. Information density is optimal."
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(CompressionAgent, "Compression Agent", "Token efficiency and summarization optimizer")
+-    main()
+\ No newline at end of file
++    main()

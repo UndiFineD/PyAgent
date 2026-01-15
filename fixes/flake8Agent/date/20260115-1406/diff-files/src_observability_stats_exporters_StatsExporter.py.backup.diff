@@ -1,0 +1,29 @@
+diff --git a/src/observability/stats/exporters/StatsExporter.py b/src/observability/stats/exporters/StatsExporter.py
+index b0c8ed3..106905f 100644
+--- a/src/observability/stats/exporters/StatsExporter.py
++++ b/src/observability/stats/exporters/StatsExporter.py
+@@ -22,11 +22,16 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ import json
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class StatsExporter:
+     """Exports stats in various formats."""
+     def __init__(self, format: str = "json") -> None:
+@@ -42,4 +47,4 @@ class StatsExporter:
+             for name, value in metrics.items():
+                 lines.append(f"{name} {value}")
+             return "\n".join(lines)
+-        return ""
+\ No newline at end of file
++        return ""

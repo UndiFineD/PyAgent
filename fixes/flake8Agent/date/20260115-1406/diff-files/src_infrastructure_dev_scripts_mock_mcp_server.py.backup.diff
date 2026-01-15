@@ -1,0 +1,36 @@
+diff --git a/src/infrastructure/dev/scripts/mock_mcp_server.py b/src/infrastructure/dev/scripts/mock_mcp_server.py
+index 9698e24..763c080 100644
+--- a/src/infrastructure/dev/scripts/mock_mcp_server.py
++++ b/src/infrastructure/dev/scripts/mock_mcp_server.py
+@@ -27,6 +27,11 @@ import sys
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ def main() -> None:
+     """Run a basic JSON-RPC server loop for MCP tool mocking."""
+     while True:
+@@ -49,11 +54,16 @@ def main() -> None:
+                 }
+             else:
+                 response = {"jsonrpc": "2.0", "id": request.get("id"), "error": "Unknown method"}
+-            
++
+             sys.stdout.write(json.dumps(response) + "\n")
+             sys.stdout.flush()
+         except Exception:
+             break
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+-    main()
+\ No newline at end of file
++    main()

@@ -1,0 +1,40 @@
+diff --git a/src/logic/agents/system/core/ConfigHygieneCore.py b/src/logic/agents/system/core/ConfigHygieneCore.py
+index 20d1c2b..7dbc8d5 100644
+--- a/src/logic/agents/system/core/ConfigHygieneCore.py
++++ b/src/logic/agents/system/core/ConfigHygieneCore.py
+@@ -6,9 +6,10 @@ Handles JSON Schema validation for configuration files.
+ 
+ import json
+ import os
+-from typing import Dict, Any
++from typing import Any
+ 
+ class ConfigHygieneCore:
++    """Core logic for validating configuration schemas and hygiene."""
+     @staticmethod
+     def validate_json_with_schema(data_path: str, schema_path: str) -> tuple[bool, str]:
+         """
+@@ -41,11 +42,21 @@ class ConfigHygieneCore:
+         """
+         Helper to flatten nested config into env-style key-value pairs.
+         """
++        try:
++            import rust_core
++            return rust_core.flatten_env_vars(config_data, prefix)
++        except (ImportError, AttributeError):
++            pass
++
++        return ConfigHygieneCore._extract_env_vars_python(config_data, prefix)
++
++    @staticmethod
++    def _extract_env_vars_python(config_data: dict[str, Any], prefix: str) -> dict[str, str]:
+         env_vars = {}
+         for k, v in config_data.items():
+             if isinstance(v, (str, int, float, bool)):
+                 env_vars[f"{prefix}{k.upper()}"] = str(v)
+             elif isinstance(v, dict):
+-                sub = ConfigHygieneCore.extract_env_vars(v, f"{prefix}{k.upper()}_")
++                sub = ConfigHygieneCore._extract_env_vars_python(v, f"{prefix}{k.upper()}_")
+                 env_vars.update(sub)
+         return env_vars
+\ No newline at end of file

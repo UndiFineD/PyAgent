@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/fleet/RegistryOverlay.py b/src/infrastructure/fleet/RegistryOverlay.py
+index 25b5d16..df468ee 100644
+--- a/src/infrastructure/fleet/RegistryOverlay.py
++++ b/src/infrastructure/fleet/RegistryOverlay.py
+@@ -22,7 +22,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import json
+ import logging
+-from typing import Dict, Any, Tuple, Optional
++from typing import Any
+ from pathlib import Path
+ 
+ __version__ = VERSION

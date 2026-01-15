@@ -1,0 +1,12 @@
+diff --git a/src/logic/agents/cognitive/context/models/MergeConflict.py b/src/logic/agents/cognitive/context/models/MergeConflict.py
+index 87670b6..63db77c 100644
+--- a/src/logic/agents/cognitive/context/models/MergeConflict.py
++++ b/src/logic/agents/cognitive/context/models/MergeConflict.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.utils.ConflictResolution import ConflictResolution
+ from dataclasses import dataclass
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 

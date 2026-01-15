@@ -1,0 +1,27 @@
+diff --git a/src/infrastructure/dev/test_utils/MockResponse.py b/src/infrastructure/dev/test_utils/MockResponse.py
+index 889ea68..deb4781 100644
+--- a/src/infrastructure/dev/test_utils/MockResponse.py
++++ b/src/infrastructure/dev/test_utils/MockResponse.py
+@@ -24,10 +24,14 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .MockResponseType import MockResponseType
+ from dataclasses import dataclass
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class MockResponse:
+     """Mock AI backend response.
+@@ -44,4 +48,4 @@ class MockResponse:
+     response_type: MockResponseType = MockResponseType.SUCCESS
+     latency_ms: int = 100
+     tokens_used: int = 0
+-    error_message: str | None = None
+\ No newline at end of file
++    error_message: str | None = None

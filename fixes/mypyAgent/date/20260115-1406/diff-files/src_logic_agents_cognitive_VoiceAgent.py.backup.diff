@@ -1,0 +1,12 @@
+diff --git a/src/logic/agents/cognitive/VoiceAgent.py b/src/logic/agents/cognitive/VoiceAgent.py
+index 5984216..d24e8b9 100644
+--- a/src/logic/agents/cognitive/VoiceAgent.py
++++ b/src/logic/agents/cognitive/VoiceAgent.py
+@@ -25,7 +25,6 @@ Integrates with fleet for voice-driven commands.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Optional
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 

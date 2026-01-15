@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/development/UIArchitectAgent.py b/src/logic/agents/development/UIArchitectAgent.py
+index f05b813..0b7ca0c 100644
+--- a/src/logic/agents/development/UIArchitectAgent.py
++++ b/src/logic/agents/development/UIArchitectAgent.py
+@@ -19,7 +19,7 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ 
+ __version__ = VERSION

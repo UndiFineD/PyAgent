@@ -1,0 +1,76 @@
+diff --git a/tests/phases/test_phase46.py b/tests/phases/test_phase46.py
+index 5863caa..85e15a1 100644
+--- a/tests/phases/test_phase46.py
++++ b/tests/phases/test_phase46.py
+@@ -1,9 +1,21 @@
+ import unittest
+ import os
+-import json
++import asyncio
++from unittest import IsolatedAsyncioTestCase
++from pathlib import Path
+ from src.infrastructure.fleet.FleetManager import FleetManager
+ 
+-class TestPhase46(unittest.TestCase):
++
++
++
++
++
++
++
++
++
++
++class TestPhase46(IsolatedAsyncioTestCase):
+     def setUp(self):
+         self.workspace = os.path.abspath(Path(__file__).resolve().parents[2])
+         self.fleet = FleetManager(self.workspace)
+@@ -12,24 +24,42 @@ class TestPhase46(unittest.TestCase):
+         if os.path.exists(self.state_file):
+             os.remove(self.state_file)
+ 
+-    def test_quantum_entanglement(self) -> None:
++    async def test_quantum_entanglement(self) -> None:
+         print("\nTesting Quantum Shard Entanglement...")
+         # Shard A updates state
+         resA = self.fleet.quantum_shard.update_entangled_state("consensus_protocol", "BFT-2.1")
++        if asyncio.iscoroutine(resA):
++            resA = await resA
+         print(f"Shard A update: {resA}")
+-        
++
+         # Shard B measures state (instantly synchronized via the 'field')
+         valB = self.fleet.quantum_shard.measure_state("consensus_protocol")
++        if asyncio.iscoroutine(valB):
++            valB = await valB
+         print(f"Shard B measurement: {valB}")
+         self.assertEqual(valB, "BFT-2.1")
+ 
+-    def test_binary_bridge_transmission(self) -> None:
++    async def test_binary_bridge_transmission(self) -> None:
+         print("\nTesting High-Throughput Bridge...")
+         dummy_packet = b"\x00\xFF\xAA\x55" * 1024 # 4KB bin packet
+         success = self.fleet.inter_fleet_bridge.transmit_binary_packet(dummy_packet)
++        if asyncio.iscoroutine(success):
++            success = await success
+         self.assertTrue(success)
+-        
+-        self.fleet.inter_fleet_bridge.toggle_quantum_sync(True)
++
++
++
++
++
++
++        res = self.fleet.inter_fleet_bridge.toggle_quantum_sync(True)
++        if asyncio.iscoroutine(res):
++            await res
++
++
++
++
++
+ 
+ if __name__ == "__main__":
+     unittest.main()

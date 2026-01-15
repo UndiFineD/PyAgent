@@ -1,0 +1,12 @@
+diff --git a/src/logic/agents/cognitive/context/engines/NLQueryEngine.py b/src/logic/agents/cognitive/context/engines/NLQueryEngine.py
+index ba224ad..0b9c2d3 100644
+--- a/src/logic/agents/cognitive/context/engines/NLQueryEngine.py
++++ b/src/logic/agents/cognitive/context/engines/NLQueryEngine.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.NLQueryResult import NLQueryResult
+-from typing import Dict, List, Optional
+ 
+ __version__ = VERSION
+ 

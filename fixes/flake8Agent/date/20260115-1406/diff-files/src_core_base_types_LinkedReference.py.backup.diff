@@ -1,0 +1,23 @@
+diff --git a/src/core/base/types/LinkedReference.py b/src/core/base/types/LinkedReference.py
+index d5ebe83..dbd6cbf 100644
+--- a/src/core/base/types/LinkedReference.py
++++ b/src/core/base/types/LinkedReference.py
+@@ -26,6 +26,11 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class LinkedReference:
+     """A linked reference to commit or issue.
+@@ -39,4 +44,4 @@ class LinkedReference:
+     ref_type: str
+     ref_id: str
+     url: str = ""
+-    title: str = ""
+\ No newline at end of file
++    title: str = ""

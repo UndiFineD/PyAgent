@@ -1,0 +1,29 @@
+diff --git a/src/logic/agents/swarm/ResourceCurationAgent.py b/src/logic/agents/swarm/ResourceCurationAgent.py
+index 06535c7..b6f912f 100644
+--- a/src/logic/agents/swarm/ResourceCurationAgent.py
++++ b/src/logic/agents/swarm/ResourceCurationAgent.py
+@@ -26,7 +26,7 @@ blog posts, and technical papers into the agent's knowledge base.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import json
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+@@ -45,7 +45,7 @@ class ResourceCurationAgent(BaseAgent):
+         )
+ 
+     @as_tool
+-    def add_resource(self, url: str, title: str, summary: str | None = None, tags: list[str] = None) -> str:
++    def add_resource(self, url: str, title: str, summary: str | None = None, tags: list[str] | None = None) -> str:
+         """Adds a new research resource to the library."""
+         resource = {
+             "url": url,
+@@ -86,4 +86,4 @@ class ResourceCurationAgent(BaseAgent):
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(ResourceCurationAgent, "Resource Curation Agent", "Curating research and documentation")
+-    main()
+\ No newline at end of file
++    main()

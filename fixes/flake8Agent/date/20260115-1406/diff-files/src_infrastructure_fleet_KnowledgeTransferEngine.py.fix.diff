@@ -1,0 +1,58 @@
+diff --git a/src/infrastructure/fleet/KnowledgeTransferEngine.py b/src/infrastructure/fleet/KnowledgeTransferEngine.py
+index a2b0684..b61f90b 100644
+--- a/src/infrastructure/fleet/KnowledgeTransferEngine.py
++++ b/src/infrastructure/fleet/KnowledgeTransferEngine.py
+@@ -27,11 +27,21 @@ from src.core.base.version import VERSION
+ import json
+ import logging
+ from pathlib import Path
+-from typing import List, Dict, Any
++from typing import Any
+ from .KnowledgeTransferCore import KnowledgeTransferCore
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class KnowledgeTransferEngine:
+     """
+     Manages export and import of knowledge/lessons between fleets.
+@@ -47,10 +57,10 @@ class KnowledgeTransferEngine:
+     def export_knowledge(self, fleet_id: str, knowledge_data: dict[str, Any]) -> str:
+         """Exports a fleet's knowledge (lessons, entities) to a shareable file."""
+         export_file = self.export_path / f"knowledge_{fleet_id}.json"
+-        
++
+         with open(export_file, "w") as f:
+             json.dump(knowledge_data, f, indent=2)
+-            
++
+         logging.info(f"KnowledgeTransfer: Exported knowledge for {fleet_id} to {export_file}")
+         return str(export_file)
+ 
+@@ -59,13 +69,13 @@ class KnowledgeTransferEngine:
+         source_path = Path(source_file)
+         if not source_path.exists():
+             raise FileNotFoundError(f"Knowledge file not found: {source_file}")
+-            
++
+         with open(source_path) as f:
+             data = json.load(f)
+-            
++
+         logging.info(f"KnowledgeTransfer: Imported knowledge from {source_file}")
+         return data
+ 
+     def merge_lessons(self, current_lessons: list[Any], imported_lessons: list[Any]) -> list[Any]:
+         """Merges imported lessons into the current set, avoiding duplicates."""
+-        return self.core.merge_lessons(current_lessons, imported_lessons)
+\ No newline at end of file
++        return self.core.merge_lessons(current_lessons, imported_lessons)

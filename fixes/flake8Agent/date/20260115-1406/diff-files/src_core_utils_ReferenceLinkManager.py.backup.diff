@@ -1,0 +1,29 @@
+diff --git a/src/core/utils/ReferenceLinkManager.py b/src/core/utils/ReferenceLinkManager.py
+index 9f57e1a..36fbcba 100644
+--- a/src/core/utils/ReferenceLinkManager.py
++++ b/src/core/utils/ReferenceLinkManager.py
+@@ -22,11 +22,15 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from .LinkedReference import LinkedReference
+-from typing import Dict, List
++from src.core.base.types import LinkedReference
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ReferenceLinkManager:
+     """Manages links to commits and issues in changelog entries.
+ 
+@@ -115,4 +119,4 @@ class ReferenceLinkManager:
+         refs = self.references.get(entry_id, [])
+         if not refs:
+             return ""
+-        return " (" + ", ".join(f"[{r.ref_id}]({r.url})" if r.url else r.ref_id for r in refs) + ")"
+\ No newline at end of file
++        return " (" + ", ".join(f"[{r.ref_id}]({r.url})" if r.url else r.ref_id for r in refs) + ")"

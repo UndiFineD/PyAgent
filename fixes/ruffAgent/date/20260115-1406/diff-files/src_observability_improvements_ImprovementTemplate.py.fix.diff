@@ -1,0 +1,13 @@
+diff --git a/src/observability/improvements/ImprovementTemplate.py b/src/observability/improvements/ImprovementTemplate.py
+index 615b567..4193217 100644
+--- a/src/observability/improvements/ImprovementTemplate.py
++++ b/src/observability/improvements/ImprovementTemplate.py
+@@ -26,7 +26,7 @@ from .EffortEstimate import EffortEstimate
+ from .ImprovementCategory import ImprovementCategory
+ from .ImprovementPriority import ImprovementPriority
+ from dataclasses import dataclass
+-from typing import Any, Dict
++from typing import Any
+ 
+ __version__ = VERSION
+ 

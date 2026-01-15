@@ -1,0 +1,42 @@
+diff --git a/tests/phases/test_phase89.py b/tests/phases/test_phase89.py
+index 8b88200..6d663de 100644
+--- a/tests/phases/test_phase89.py
++++ b/tests/phases/test_phase89.py
+@@ -1,11 +1,14 @@
+ import unittest
+-import os
+-import sys
+ 
+ # Ensure the project root is in PYTHONPATH
+ 
+ from src.infrastructure.orchestration.IntelligenceOrchestrator import IntelligenceOrchestrator
+ 
++
++
++
++
++
+ class TestIntelligence(unittest.TestCase):
+     def setUp(self):
+         self.orchestrator = IntelligenceOrchestrator(None)
+@@ -13,13 +16,18 @@ class TestIntelligence(unittest.TestCase):
+     def test_synthesis(self) -> None:
+         self.orchestrator.contribute_insight("AgentA", "Detected quantum fluctuation in memory", 0.9)
+         self.orchestrator.contribute_insight("AgentB", "Quantum patterns appearing in the shard", 0.8)
+-        
++
+         patterns = self.orchestrator.synthesize_collective_intelligence()
+         self.assertTrue(any("quantum" in p.lower() for p in patterns))
+-        
++
+         report = self.orchestrator.get_intelligence_report()
+         self.assertEqual(report['insights_collected'], 2)
+         self.assertEqual(report['patterns_identified'], 1)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     unittest.main()

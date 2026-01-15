@@ -1,0 +1,66 @@
+diff --git a/src/logic/agents/intelligence/SemanticSearchMeshAgent.py b/src/logic/agents/intelligence/SemanticSearchMeshAgent.py
+index 7b062c9..d150155 100644
+--- a/src/logic/agents/intelligence/SemanticSearchMeshAgent.py
++++ b/src/logic/agents/intelligence/SemanticSearchMeshAgent.py
+@@ -20,12 +20,17 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import asyncio
+-from typing import Dict, List, Any
++from typing import Any
+ from src.logic.agents.intelligence.core.SearchMeshCore import SearchMeshCore
+ from src.logic.agents.intelligence.MemoRAGAgent import MemoRAGAgent
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class SemanticSearchMeshAgent:
+     """
+     Coordinates federated semantic search across multiple providers and fleet shards.
+@@ -47,21 +52,21 @@ class SemanticSearchMeshAgent:
+         tasks = []
+         for p in providers:
+             tasks.append(self._mock_provider_call(p, query))
+-        
++
+         raw_results_list = await asyncio.gather(*tasks)
+         raw_results = {providers[i]: raw_results_list[i] for i in range(len(providers))}
+-        
++
+         # Aggregate using Core logic
+         aggregated = self.core.aggregate_results(raw_results)
+-        
++
+         # Filter redundant results using MemoRAG knowledge (simulated set check)
+         filtered = self.core.filter_redundant(aggregated, self.remembered_urls)
+-        
++
+         # Update memory
+         for item in filtered[:3]: # Remember top 3 for this session
+             self.remembered_urls.add(item["url"])
+             self.memo_rag.memorise_to_shard(f"Visited: {item['url']} for query: {query}", "search_history")
+-            
++
+         return filtered
+ 
+     async def _mock_provider_call(self, provider: str, query: str) -> list[dict[str, Any]]:
+@@ -71,7 +76,7 @@ class SemanticSearchMeshAgent:
+             {"title": f"Result from {provider} for {query}", "url": f"https://{provider}.com/res1", "snippet": "...", "score": 0.9},
+             {"title": f"Second result from {provider}", "url": f"https://{provider}.com/res2", "snippet": "...", "score": 0.7}
+         ]
+-        
++
+     def register_shard(self, shard_id: str, metadata: dict[str, Any]) -> dict[str, Any]:
+         """
+         Registers a new vector shard in the mesh.
+@@ -102,4 +107,4 @@ class SemanticSearchMeshAgent:
+             "target": target_node,
+             "status": "synchronized",
+             "bytes_transferred": 1024 * 512
+-        }
+\ No newline at end of file
++        }

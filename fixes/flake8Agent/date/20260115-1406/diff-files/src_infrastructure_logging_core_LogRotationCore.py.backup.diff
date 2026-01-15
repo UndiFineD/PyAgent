@@ -1,0 +1,41 @@
+diff --git a/src/infrastructure/logging/core/LogRotationCore.py b/src/infrastructure/logging/core/LogRotationCore.py
+index 18a82a7..c4d534f 100644
+--- a/src/infrastructure/logging/core/LogRotationCore.py
++++ b/src/infrastructure/logging/core/LogRotationCore.py
+@@ -3,9 +3,13 @@ from __future__ import annotations
+ import os
+ import gzip
+ import shutil
+-from typing import Optional
+ from datetime import datetime
+ 
++
++
++
++
++
+ class LogRotationCore:
+     """
+     LogRotationCore handles rolling log file strategies with compression.
+@@ -37,12 +41,12 @@ class LogRotationCore:
+         try:
+             # Rename for rotation
+             shutil.move(file_path, rotated_path)
+-            
++
+             # Compress
+             with open(rotated_path, 'rb') as f_in:
+                 with gzip.open(compressed_path, 'wb') as f_out:
+                     shutil.copyfileobj(f_in, f_out)
+-            
++
+             # Remove uncompressed rotated file
+             os.remove(rotated_path)
+             return compressed_path
+@@ -62,4 +66,4 @@ class LogRotationCore:
+         elif fleet_health_score < 0.8:
+             return "WARNING"
+         else:
+-            return "ERROR"
+\ No newline at end of file
++            return "ERROR"

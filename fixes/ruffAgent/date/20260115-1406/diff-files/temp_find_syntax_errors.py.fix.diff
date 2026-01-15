@@ -1,0 +1,13 @@
+diff --git a/temp/find_syntax_errors.py b/temp/find_syntax_errors.py
+index 4b57e0b..48eccbe 100644
+--- a/temp/find_syntax_errors.py
++++ b/temp/find_syntax_errors.py
+@@ -11,7 +11,7 @@ def find_syntax_errors(root_dir):
+                         ast.parse(f.read())
+                 except SyntaxError as e:
+                     print(f"Syntax Error in {path}: {e}")
+-                except Exception as e:
++                except Exception:
+                     # Some files might have encoding issues
+                     pass
+ 

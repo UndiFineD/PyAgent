@@ -1,0 +1,123 @@
+diff --git a/src/core/modules/TaskDecomposerModule.py b/src/core/modules/TaskDecomposerModule.py
+index 9b6fbc0..2204f58 100644
+--- a/src/core/modules/TaskDecomposerModule.py
++++ b/src/core/modules/TaskDecomposerModule.py
+@@ -13,16 +13,37 @@
+ 
+ from __future__ import annotations
+ from dataclasses import dataclass, field
+-from typing import Any, Dict, List
++from typing import Any
+ from src.core.base.modules import BaseModule
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class PlanStep:
++    """Represents a single step in a decomposed task plan."""
++
++
++
++
++
+     agent: str
+     action: str
+     args: list[Any] = field(default_factory=list)
+     metadata: dict[str, Any] = field(default_factory=dict)
+ 
++
++
++
++
++
+ class TaskDecomposerModule(BaseModule):
+     """
+     Consolidated core module for task decomposition.
+@@ -41,55 +62,55 @@ class TaskDecomposerModule(BaseModule):
+         """
+         if not self.initialized:
+             self.initialize()
+-            
++
+         request_lower = request.lower()
+         steps: list[PlanStep] = []
+-        
++
+         # 1. Research & Analysis Phase
+         if any(w in request_lower for w in ["research", "search", "analyze", "find"]):
+             steps.append(PlanStep(
+-                agent="ResearchAgent", 
+-                action="search_and_summarize", 
++                agent="ResearchAgent",
++                action="search_and_summarize",
+                 args=[request],
+                 metadata={"priority": 1}
+             ))
+-            
++
+         # 2. Implementation Phase
+         if any(w in request_lower for w in ["code", "refactor", "fix", "implement"]):
+             steps.append(PlanStep(
+-                agent="CoderAgent", 
+-                action="improve_content", 
++                agent="CoderAgent",
++                action="improve_content",
+                 args=["# Implement request: " + request],
+                 metadata={"priority": 2, "depends_on": "ResearchAgent"}
+             ))
+-            
++
+         # 3. Data/SQL Phase
+         if any(w in request_lower for w in ["data", "sql", "db", "database"]):
+             steps.append(PlanStep(
+-                agent="SQLAgent", 
+-                action="query_database", 
++                agent="SQLAgent",
++                action="query_database",
+                 args=["SELECT * FROM relevant_tables WHERE context LIKE '%" + request[:20] + "%'"],
+                 metadata={"priority": 2}
+             ))
+-            
++
+         # 4. Final Review
+         if steps:
+             steps.append(PlanStep(
+-                agent="LinguisticAgent", 
+-                action="articulate", 
++                agent="LinguisticAgent",
++                action="articulate",
+                 args=["Summarize the results of the task: " + request],
+                 metadata={"priority": 10, "is_final": True}
+             ))
+-            
++
+         # Default fallback
+         if not steps:
+             steps.append(PlanStep(
+-                agent="KnowledgeAgent", 
+-                action="scan_workspace", 
++                agent="KnowledgeAgent",
++                action="scan_workspace",
+                 args=["/"],
+                 metadata={"reason": "unrecognized request structure"}
+             ))
+-            
++
+         return [self._to_dict(s) for s in steps]
+ 
+     def _to_dict(self, step:
+@@ -113,4 +134,4 @@ class TaskDecomposerModule(BaseModule):
+ 
+     def shutdown(self) -> bool:
+         """Cleanup decomposition resources."""
+-        return super().shutdown()
+\ No newline at end of file
++        return super().shutdown()

@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/orchestration/SignalBusOrchestrator.py b/src/infrastructure/orchestration/SignalBusOrchestrator.py
+index 1fcf490..992da74 100644
+--- a/src/infrastructure/orchestration/SignalBusOrchestrator.py
++++ b/src/infrastructure/orchestration/SignalBusOrchestrator.py
+@@ -23,7 +23,7 @@ from src.core.base.version import VERSION
+ import logging
+ import queue
+ import threading
+-from typing import Dict, List, Any
++from typing import Any
+ from collections.abc import Callable
+ 
+ __version__ = VERSION

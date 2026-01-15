@@ -1,0 +1,11 @@
+diff --git a/src/interface/ui/gui/Constants.py b/src/interface/ui/gui/Constants.py
+index a37d7de..53759b0 100644
+--- a/src/interface/ui/gui/Constants.py
++++ b/src/interface/ui/gui/Constants.py
+@@ -105,4 +105,4 @@ DEFAULT_EXTENSIONS = [".py", ".js", ".ts", ".html", ".css", ".md", ".json", ".ya
+ # GUI Layout Constants
+ DEFAULT_WINDOW_SIZE = "1400x900"
+ AGENT_COLUMN_WIDTH = 320
+-LEFT_PANEL_WIDTH = 400
+\ No newline at end of file
++LEFT_PANEL_WIDTH = 400

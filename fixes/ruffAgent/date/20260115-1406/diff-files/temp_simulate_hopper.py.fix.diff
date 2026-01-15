@@ -1,0 +1,13 @@
+diff --git a/temp/simulate_hopper.py b/temp/simulate_hopper.py
+index 5474681..2b574a7 100644
+--- a/temp/simulate_hopper.py
++++ b/temp/simulate_hopper.py
+@@ -27,7 +27,7 @@ class HopperOptimizer:
+         
+         print(f"  FP16 Estimated Latency (H100): {fp16_est:.4f}s")
+         print(f"  FP8 Estimated Latency (H100):  {fp8_est:.4f}s")
+-        print(f"  Speedup: 3.0x (NVIDIA Transformer Engine Metric)")
++        print("  Speedup: 3.0x (NVIDIA Transformer Engine Metric)")
+ 
+ if __name__ == "__main__":
+     opt = HopperOptimizer()

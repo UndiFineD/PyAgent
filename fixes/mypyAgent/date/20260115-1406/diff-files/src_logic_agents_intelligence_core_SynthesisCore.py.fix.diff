@@ -1,0 +1,70 @@
+diff --git a/src/logic/agents/intelligence/core/SynthesisCore.py b/src/logic/agents/intelligence/core/SynthesisCore.py
+index f9f6c4d..ee6ded8 100644
+--- a/src/logic/agents/intelligence/core/SynthesisCore.py
++++ b/src/logic/agents/intelligence/core/SynthesisCore.py
+@@ -1,8 +1,18 @@
+ 
++"""
++SynthesisCore handles synthetic data generation for fine-tuning.
++It also implements the Feature Store logic for vectorized insights.
++"""
++
+ from __future__ import annotations
+-from typing import List
+ import random
+ 
++try:
++    import rust_core
++    HAS_RUST = True
++except ImportError:
++    HAS_RUST = False
++
+ class SynthesisCore:
+     """
+     SynthesisCore handles synthetic data generation for fine-tuning.
+@@ -20,6 +30,12 @@ class SynthesisCore:
+ 
+     def generate_python_edge_cases(self, count: int) -> list[str]:
+         """Generates synthetic Python snippets based on templates."""
++        if HAS_RUST:
++            try:
++                return rust_core.generate_synthetic_snippets(count)  # type: ignore[attr-defined]
++            except Exception:
++                pass
++
+         results = []
+         for i in range(count):
+             tpl = random.choice(self.edge_case_templates)
+@@ -31,6 +47,12 @@ class SynthesisCore:
+         Simulated vectorization of a text insight.
+         Returns a mock embedding vector.
+         """
++        if HAS_RUST:
++            try:
++                return rust_core.vectorize_text_insight(insight)  # type: ignore[attr-defined]
++            except Exception:
++                pass
++
+         # In a real scenario, this would call a local embedding model
+         # Use a deterministic mock based on text length and first char
+         seed = len(insight) + (ord(insight[0]) if insight else 0)
+@@ -39,6 +61,12 @@ class SynthesisCore:
+ 
+     def merge_feature_vectors(self, vectors: list[list[float]]) -> list[float]:
+         """Averages multiple feature vectors into a single swarm insight."""
++        if HAS_RUST:
++            try:
++                return rust_core.average_feature_vectors(vectors)  # type: ignore[attr-defined]
++            except Exception:
++                pass
++
+         if not vectors:
+             return [0.0] * 128
+         
+@@ -48,4 +76,4 @@ class SynthesisCore:
+             for i in range(dim):
+                 total[i] += v[i]
+                 
+-        return [x / len(vectors) for x in total]
+\ No newline at end of file
++        return [x / len(vectors) for x in total]

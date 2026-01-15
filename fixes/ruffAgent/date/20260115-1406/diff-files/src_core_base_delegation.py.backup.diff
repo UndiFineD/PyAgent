@@ -1,0 +1,31 @@
+diff --git a/src/core/base/delegation.py b/src/core/base/delegation.py
+index a356195..94b5e60 100644
+--- a/src/core/base/delegation.py
++++ b/src/core/base/delegation.py
+@@ -29,6 +29,7 @@ import logging
+ from pathlib import Path
+ from typing import Optional, Any
+ from src.core.base.registry import AgentRegistry
++from src.core.base.ModuleLoader import ModuleLoader
+ from src.core.base.models import CascadeContext, AgentPriority
+ 
+ __version__ = VERSION
+@@ -67,16 +68,8 @@ class AgentDelegator:
+         target_path: Path = Path(target_file) if target_file else current_file_path
+         
+         try:
+-            # Simple heuristic for discovery
+-            # TODO: Move to centralized ModuleLoader
+-            if type_clean == "coder" or os.path.exists(os.path.join("src", "coder", "agents", f"{agent_type}.py")):
+-                module_name = f"src.logic.agents.development.{agent_type}"
+-            else:
+-                module_name = f"src.{type_clean}.{agent_type}"
+-            
+-            import importlib
+-            module = importlib.import_module(module_name)
+-            agent_class = getattr(module, agent_type)
++            # Discovery delegated to centralized ModuleLoader
++            agent_class = ModuleLoader.load_agent_class(agent_type)
+             
+             try:
+                 with agent_class(str(target_path)) as sub_agent:

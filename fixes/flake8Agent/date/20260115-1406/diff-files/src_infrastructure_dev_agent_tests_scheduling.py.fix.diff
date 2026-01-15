@@ -1,0 +1,58 @@
+diff --git a/src/infrastructure/dev/agent_tests/scheduling.py b/src/infrastructure/dev/agent_tests/scheduling.py
+index 6981a29..9450261 100644
+--- a/src/infrastructure/dev/agent_tests/scheduling.py
++++ b/src/infrastructure/dev/agent_tests/scheduling.py
+@@ -22,13 +22,23 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Any, Dict, List
++from typing import Any
+ from collections.abc import Callable
+ from .enums import BrowserType
+ from .models import CrossBrowserConfig, ScheduleSlot
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class CrossBrowserRunner:
+     """Cross-browser testing configuration and execution."""
+ 
+@@ -86,11 +96,21 @@ class CrossBrowserRunner:
+                 "total": len(results),
+                 "passed": passed,
+                 "failed": len(results) - passed
++
++
++
++
++
+             }
+             summary["browsers"][browser.value] = browser_summary
+ 
+         return summary
+ 
++
++
++
++
++
+ class TestScheduler:
+     """Test scheduling and load balancing."""
+     __test__ = False
+@@ -180,4 +200,4 @@ class TestScheduler:
+         assignments: dict[int, list[str]] = {}
+         for i, slot in enumerate(self.schedule):
+             assignments[i] = slot.tests
+-        return assignments
+\ No newline at end of file
++        return assignments
