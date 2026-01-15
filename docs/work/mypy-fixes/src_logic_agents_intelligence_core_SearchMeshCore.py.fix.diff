@@ -1,0 +1,38 @@
+diff --git a/src/logic/agents/intelligence/core/SearchMeshCore.py b/src/logic/agents/intelligence/core/SearchMeshCore.py
+index b90aeb1..c9128da 100644
+--- a/src/logic/agents/intelligence/core/SearchMeshCore.py
++++ b/src/logic/agents/intelligence/core/SearchMeshCore.py
+@@ -1,6 +1,12 @@
+ 
+ from __future__ import annotations
+-from typing import Dict, List, Any, Optional
++from typing import Any
++
++try:
++    import rust_core
++    HAS_RUST = True
++except ImportError:
++    HAS_RUST = False
+ 
+ class SearchMeshCore:
+     """
+@@ -23,6 +29,12 @@ class SearchMeshCore:
+         Takes raw results from multiple providers and merges them into a ranked list.
+         Each result should have: 'title', 'url', 'snippet', 'score' (optional).
+         """
++        if HAS_RUST:
++            try:
++                return rust_core.aggregate_search_results(raw_results, self.weights)  # type: ignore[attr-defined]
++            except Exception:
++                pass
++
+         master_list: list[dict[str, Any]] = []
+         seen_urls: set[str] = set()
+ 
+@@ -72,4 +84,4 @@ class SearchMeshCore:
+         (The Shell agent will provide the actual API implementation callbacks).
+         """
+         # This logic stays in the shell, but the core defines the expected structure.
+-        return {}
+\ No newline at end of file
++        return {}

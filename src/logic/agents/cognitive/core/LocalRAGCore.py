@@ -1,21 +1,26 @@
 
 from __future__ import annotations
-from typing import List
 from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class RAGShard:
     """Metadata for a localized vector shard."""
+
+
+
+
     path: str
     tags: list[str]
     document_count: int
     last_updated: float
 
+
+
 class LocalRAGCore:
     """Pure logic for hyper-localized RAG and vector sharding.
     Handles shard selection, path-based routing, and context relevance.
     """
-    
+
     def route_query_to_shards(self, query: str, query_path: str, available_shards: list[RAGShard]) -> list[str]:
         """Routes a query to the most relevant localized shards based on file path."""
         # Preference: direct path match > parent path match > tag match
@@ -25,7 +30,7 @@ class LocalRAGCore:
                 selected.append(shard.path)
             elif any(tag in query.lower() for tag in shard.tags):
                 selected.append(shard.path)
-        
+
         return selected
 
     def calculate_rerank_score(self, original_score: float, path_proximity: int) -> float:

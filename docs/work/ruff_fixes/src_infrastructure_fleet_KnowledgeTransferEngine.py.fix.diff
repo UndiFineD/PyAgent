@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/fleet/KnowledgeTransferEngine.py b/src/infrastructure/fleet/KnowledgeTransferEngine.py
+index a2b0684..e0c94ef 100644
+--- a/src/infrastructure/fleet/KnowledgeTransferEngine.py
++++ b/src/infrastructure/fleet/KnowledgeTransferEngine.py
+@@ -27,7 +27,7 @@ from src.core.base.version import VERSION
+ import json
+ import logging
+ from pathlib import Path
+-from typing import List, Dict, Any
++from typing import Any
+ from .KnowledgeTransferCore import KnowledgeTransferCore
+ 
+ __version__ = VERSION

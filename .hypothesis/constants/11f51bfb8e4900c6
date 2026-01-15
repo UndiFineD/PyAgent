@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\utils\embedding_functions\schemas\__init__.py
+# hypothesis_version: 6.150.1
+
+['get_schema_info', 'get_schema_version', 'load_schema']

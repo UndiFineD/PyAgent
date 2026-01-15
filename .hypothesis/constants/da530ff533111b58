@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\linear_model\_logistic.py
+# hypothesis_version: 6.150.1
+
+[-1.0, 0.0, 0.0001, 1.0, 1e+30, 100, 101, 'C', 'Cs', 'F', 'L-BFGS-B', 'accuracy', 'array-like', 'balanced', 'boolean', 'both', 'class_weight', 'coef', 'coef_', 'csr', 'cv', 'cv_object', 'deprecated', 'dual', 'elasticnet', 'fit', 'fit_intercept', 'ftol', 'gtol', 'intercept_scaling', 'iprint', 'l1', 'l1_ratio', 'l1_ratios', 'l2', 'lbfgs', 'left', 'liblinear', 'log', 'max_iter', 'maxiter', 'maxls', 'multinomial', 'n_jobs', 'neither', 'newton-cg', 'newton-cholesky', 'penalty', 'processes', 'random_state', 'refit', 'right', 'sag', 'saga', 'sample_weight', 'score', 'scoring', 'solver', 'split', 'threads', 'tol', 'verbose', 'warm_start', 'warn']

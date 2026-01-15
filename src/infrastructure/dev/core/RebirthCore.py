@@ -7,9 +7,16 @@ Handles mass directory scaffolding and cleanup.
 import os
 import shutil
 import yaml
-from typing import Dict, Any
+from typing import Any
+
+
+
+
+
+
 
 class RebirthCore:
+    """Pure logic core for swarm rebirth processes, handling project scaffolding."""
     @staticmethod
     def scaffold_structure(root_dir: str, structure: dict[str, Any]) -> int:
         """

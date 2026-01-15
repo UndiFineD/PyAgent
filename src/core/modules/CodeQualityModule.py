@@ -13,8 +13,14 @@
 
 from __future__ import annotations
 import re
-from typing import Any, Dict, List
+from typing import Any
 from src.core.base.modules import BaseModule
+
+
+
+
+
+
 
 class CodeQualityModule(BaseModule):
     """
@@ -55,8 +61,8 @@ class CodeQualityModule(BaseModule):
         for i, line in enumerate(lines, 1):
             if len(line) > 120:
                 issues.append({
-                    "line": i, 
-                    "type": "Style", 
+                    "line": i,
+                    "type": "Style",
                     "message": "Line too long (>120 chars)"
                 })
         return issues

@@ -27,9 +27,15 @@ import os
 import subprocess
 import json
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class BackendHandlers:
     """Namespace for backend execution logic."""
@@ -38,7 +44,7 @@ class BackendHandlers:
     def _parse_content(text: str) -> Any:
         if "[IMAGE_DATA:" not in text:
             return text
-            
+
         parts = []
         import re
         # Find [IMAGE_DATA:base64]
@@ -48,21 +54,21 @@ class BackendHandlers:
             pre_text = text[last_idx:match.start()].strip()
             if pre_text:
                 parts.append({"type": "text", "text": pre_text})
-            
+
             image_data = match.group(1)
             if not image_data.startswith("data:image"):
                 image_data = f"data:image/png;base64,{image_data}"
-                
+
             parts.append({
                 "type": "image_url",
                 "image_url": {"url": image_data}
             })
             last_idx = match.end()
-            
+
         remaining = text[last_idx:].strip()
         if remaining:
             parts.append({"type": "text", "text": remaining})
-            
+
         return parts if parts else text
 
     @staticmethod
@@ -90,7 +96,7 @@ class BackendHandlers:
                 capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=180, cwd=str(repo_root), check=False
             )
             stdout = (result.stdout or "").strip()
-            
+
             # Phase 108: Recording
             if recorder:
                 recorder.record_interaction("codex", "cli", full_prompt[:200], stdout[:1000] if result.returncode == 0 else "FAILED")
@@ -128,7 +134,7 @@ class BackendHandlers:
         if not allow_non_command:
              # Basic heuristic: if it doesn't look like a command, skip gh copilot explain
              # (This logic was partially in SubagentRunner, but we can pass a flag)
-             pass
+            pass
 
         try:
             logging.debug("Attempting to use gh copilot alias backend")
@@ -148,10 +154,10 @@ class BackendHandlers:
     def try_github_models(full_prompt: str, requests_lib: Any) -> str | None:
         if not requests_lib:
             return None
-        
+
         base_url = (os.environ.get("GITHUB_MODELS_BASE_URL") or "https://models.inference.ai.azure.com").strip().rstrip("/")
         model = (os.environ.get("DV_AGENT_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "gpt-4o-mini").strip()
-        
+
         token = os.environ.get("GITHUB_TOKEN")
         if not token:
             search_paths = [
@@ -170,7 +176,7 @@ class BackendHandlers:
                             break
                     except Exception:
                         continue
-        
+
         if not token:
             logging.debug("GitHub Models skipped: No token found")
             return None
@@ -205,11 +211,11 @@ class BackendHandlers:
     def try_openai_api(full_prompt: str, requests_lib: Any) -> str | None:
         if not requests_lib:
             return None
-            
+
         api_key = os.environ.get("OPENAI_API_KEY")
         base_url = os.environ.get("OPENAI_BASE_URL") or "https://api.openai.com/v1"
         model = os.environ.get("OPENAI_MODEL") or "gpt-4o-mini"
-        
+
         if not api_key:
             logging.debug("OpenAI API skipped: No API key")
             return None

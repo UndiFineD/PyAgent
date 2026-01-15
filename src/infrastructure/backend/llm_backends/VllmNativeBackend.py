@@ -25,6 +25,12 @@ from .LLMBackend import LLMBackend
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class VllmNativeBackend(LLMBackend):
     """vLLM Native Engine LLM Backend."""
 
@@ -34,7 +40,7 @@ class VllmNativeBackend(LLMBackend):
             engine = VllmNativeEngine.get_instance(model_name=model or "meta-llama/Llama-3-8B-Instruct")
             if not engine.enabled:
                 return ""
-            
+
             result = engine.generate(prompt, system_prompt=system_prompt)
             if result:
                 self._record("vllm_native", model or engine.model_name, prompt, result, system_prompt=system_prompt)

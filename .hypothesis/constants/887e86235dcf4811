@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\orchestration\SubSwarmSpawner.py
+# hypothesis_version: 6.150.1
+
+['SUB_SWARM_SPAWNED', 'agents', 'signals', 'swarm_id']

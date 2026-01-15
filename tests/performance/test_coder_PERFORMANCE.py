@@ -2,23 +2,8 @@
 """Test classes from test_agent_coder.py - performance module."""
 
 from __future__ import annotations
-import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
-import time
-import json
-from datetime import datetime
-import pytest
-import logging
 from pathlib import Path
 import sys
-import os
-import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
@@ -26,15 +11,23 @@ try:
 except ImportError:
     # Fallback
     AGENT_DIR = Path(__file__).parent.parent.parent.parent / 'src'
-    
+
     class agent_sys_path:
-        def __enter__(self): 
+        def __enter__(self):
 
             return self
-        def __exit__(self, *args): 
+
+
+
+
+
+
+
+        def __exit__(self, *args):
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestPerformanceProfiling:
     """Tests for code performance profiling."""
@@ -42,7 +35,8 @@ class TestPerformanceProfiling:
     def test_detect_performance_issue(self, tmp_path: Path) -> None:
         """Test detecting potential performance issues."""
         with agent_dir_on_path():
-            mod = load_agent_module("coder/code_generator.py")
+            # Fix: Use correct path to CoderAgent
+            mod = load_agent_module("src/logic/agents/development/CoderAgent.py")
 
         code = """
 def slow_function(n):
@@ -63,6 +57,3 @@ def slow_function(n):
 # =============================================================================
 # Session 9: Migration Automation Tests
 # =============================================================================
-
-
-

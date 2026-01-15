@@ -1,0 +1,32 @@
+diff --git a/src/logic/agents/cognitive/context/engines/NLQueryEngine.py b/src/logic/agents/cognitive/context/engines/NLQueryEngine.py
+index ba224ad..5bfb3f2 100644
+--- a/src/logic/agents/cognitive/context/engines/NLQueryEngine.py
++++ b/src/logic/agents/cognitive/context/engines/NLQueryEngine.py
+@@ -23,10 +23,19 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.NLQueryResult import NLQueryResult
+-from typing import Dict, List, Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class NLQueryEngine:
+     """Searches context with natural language queries.
+ 
+@@ -73,4 +82,4 @@ class NLQueryEngine:
+             answer=f"Found {len(relevant)} relevant context files",
+             relevant_contexts=relevant,
+             confidence=0.7 if relevant else 0.2
+-        )
+\ No newline at end of file
++        )

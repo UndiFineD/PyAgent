@@ -1,0 +1,28 @@
+diff --git a/src/core/base/utils/ScheduledExecution.py b/src/core/base/utils/ScheduledExecution.py
+index 63ad5b6..3c92d3c 100644
+--- a/src/core/base/utils/ScheduledExecution.py
++++ b/src/core/base/utils/ScheduledExecution.py
+@@ -24,10 +24,15 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.core.base.utils._helpers import _empty_dict_str_any
+ from dataclasses import dataclass, field
+-from typing import Optional, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ScheduledExecution:
+     """A scheduled agent execution.
+@@ -46,4 +51,4 @@ class ScheduledExecution:
+     agent_config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+     enabled: bool = True
+     last_run: float | None = None
+-    next_run: float | None = None
+\ No newline at end of file
++    next_run: float | None = None

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\neighbors\_classification.py
+# hypothesis_version: 6.150.1
+
+[0.0, 1.0, 'C', '_fit_method', 'array-like', 'auto', 'brute', 'csr', 'distance', 'euclidean', 'minkowski', 'most_frequent', 'n_neighbors', 'outlier_label', 'p', 'parallel_on_X', 'precomputed', 'radius', 'uniform', 'weights']

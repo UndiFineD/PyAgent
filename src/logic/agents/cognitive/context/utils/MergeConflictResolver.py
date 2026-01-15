@@ -24,10 +24,12 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.utils.ConflictResolution import ConflictResolution
 from src.logic.agents.cognitive.context.models.MergeConflict import MergeConflict
-from typing import List, Optional
 import re
 
 __version__ = VERSION
+
+
+
 
 class MergeConflictResolver:
     """Resolves merge conflicts in context files.

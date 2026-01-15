@@ -24,9 +24,12 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.ExportFormat import ExportFormat
 from dataclasses import dataclass, field
-from typing import Any, Dict
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 @dataclass
 class ExportedContext:

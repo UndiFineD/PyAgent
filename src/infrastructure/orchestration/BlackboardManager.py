@@ -23,17 +23,20 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Any, List
+from typing import Any
 from .BlackboardCore import BlackboardCore
 
 __version__ = VERSION
+
+
+
 
 class BlackboardManager:
     """
     Central repository for agents to post findings and look for data.
     Shell for BlackboardCore.
     """
-    
+
     def __init__(self) -> None:
         self.core = BlackboardCore()
 

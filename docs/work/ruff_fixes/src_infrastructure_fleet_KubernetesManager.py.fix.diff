@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/fleet/KubernetesManager.py b/src/infrastructure/fleet/KubernetesManager.py
+index 484cd4d..7d09864 100644
+--- a/src/infrastructure/fleet/KubernetesManager.py
++++ b/src/infrastructure/fleet/KubernetesManager.py
+@@ -26,7 +26,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ import json
+-from typing import List
+ 
+ __version__ = VERSION
+ 

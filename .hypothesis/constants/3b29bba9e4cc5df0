@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\agents.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.1, 1.0, 100, 20000, '\n# ... (truncated)', '## Summary\n', ', ', '.py', '/', '_', '__main__', 'agent', 'average_duration_ms', 'by_priority', 'by_status', 'coverage_gaps', 'factories', 'file', 'flakiness', 'flaky_tests', 'id', 'json', 'line', 'name', 'priority', 'quarantined', 'raises', 'scripts', 'status', 'tags', 'test', 'test_', 'test_runs', 'tests', 'total_tests', 'utf-8', '✓', '✗']

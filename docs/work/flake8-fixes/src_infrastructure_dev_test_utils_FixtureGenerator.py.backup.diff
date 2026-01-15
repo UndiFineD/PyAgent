@@ -1,0 +1,30 @@
+diff --git a/src/infrastructure/dev/test_utils/FixtureGenerator.py b/src/infrastructure/dev/test_utils/FixtureGenerator.py
+index 16236d1..06326ff 100644
+--- a/src/infrastructure/dev/test_utils/FixtureGenerator.py
++++ b/src/infrastructure/dev/test_utils/FixtureGenerator.py
+@@ -24,13 +24,17 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .TestFixture import TestFixture
+ from pathlib import Path
+-from typing import Dict, Optional
+ import logging
+ import shutil
+ import tempfile
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class FixtureGenerator:
+     """Generates test fixtures for common agent scenarios.
+ 
+@@ -123,4 +127,4 @@ class FixtureGenerator:
+                     fixture.teardown_fn(fixture.data)
+                 except Exception as e:
+                     logging.warning(f"Failed to cleanup fixture {fixture.name}: {e}")
+-        self._fixtures.clear()
+\ No newline at end of file
++        self._fixtures.clear()

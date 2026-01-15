@@ -21,31 +21,34 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class ResourcePredictorOrchestrator:
     """
     Phase 38: Predictive Resource Pre-allocation.
     Forecasts task complexity and pre-allocates resources.
     """
-    
+
     def __init__(self, fleet) -> None:
         self.fleet = fleet
-        self.resource_map: dict[str, dict[str, float]] = {} # task_type -> resource_profile
+        self.resource_map: dict[str, dict[str, float]] = {}  # task_type -> resource_profile
 
     def forecast_usage(self, task: str | None = None) -> dict[str, Any]:
         """
         Phase 53: Forecasts resource requirements and token usage.
         """
         logging.info(f"ResourcePredictor: Forecasting requirements for task: {task[:50] if task else 'General'}...")
-        
+
         # 1. Prediction (Using TemporalPredictor logic via fleet)
         # Mocking the predictor response
         predicted_complexity = 0.7 if (task and len(task) > 100) else 0.4
-        forecasted_tokens = 2500 # Phase 53 expectation
-        
+        forecasted_tokens = 2500  # Phase 53 expectation
+
         # 2. Resource Mapping
         base_cpu = 0.2 + (predicted_complexity * 0.6)
         allocation = {
@@ -53,10 +56,10 @@ class ResourcePredictorOrchestrator:
             "cpu_util_target": base_cpu,
             "priority": "HIGH" if predicted_complexity > 0.6 else "NORMAL"
         }
-        
+
         # 3. Allocation (Simulated)
         logging.info(f"ResourcePredictor: Pre-allocated {allocation['vram_mb']:.0f}MB VRAM and {allocation['cpu_util_target']:.2%} CPU.")
-        
+
         return {
             "task": task,
             "complexity_forecast": predicted_complexity,

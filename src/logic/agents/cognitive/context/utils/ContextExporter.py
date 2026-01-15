@@ -25,10 +25,12 @@ from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.ExportFormat import ExportFormat
 from src.logic.agents.cognitive.context.models.ExportedContext import ExportedContext
 from datetime import datetime
-from typing import List, Optional
 import re
 
 __version__ = VERSION
+
+
+
 
 class ContextExporter:
     """Exports context to documentation systems.

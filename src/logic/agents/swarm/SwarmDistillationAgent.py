@@ -20,20 +20,23 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
 from src.logic.agents.swarm.core.LessonCore import LessonCore, Lesson
 
 __version__ = VERSION
 
+
+
+
 class SwarmDistillationAgent:
     """
-    Compresses and distills knowledge from multiple specialized agents 
+    Compresses and distills knowledge from multiple specialized agents
     into a unified "Master" context for more efficient retrieval.
     Integrated with LessonCore for failure mode propagation.
     """
     def __init__(self, workspace_path) -> None:
         self.workspace_path = Path(workspace_path)
-        self.master_context = {}
+        self.master_context: dict[Any, Any] = {}
         self.lesson_core = LessonCore()
         self.lessons: list[Lesson] = []
 
@@ -48,7 +51,7 @@ class SwarmDistillationAgent:
             "key_patterns": list(knowledge_data.get("patterns", {}).keys())[:10],
             "metrics": knowledge_data.get("metrics", {})
         }
-        
+
         self.master_context[agent_id] = distilled
         return distilled
 

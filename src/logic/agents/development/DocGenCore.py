@@ -24,6 +24,9 @@ import os
 
 __version__ = VERSION
 
+
+
+
 class DocGenCore:
     """
     Pure logic for extracting documentation from Python source code.
@@ -34,19 +37,19 @@ class DocGenCore:
     def extract_markdown_from_source(source_code: str, file_name: str) -> str:
         """
         Parses source code using AST and generates Markdown documentation.
-        
+
         Args:
             source_code: The raw Python source code as a string.
             file_name: The name of the file for labeling in the Markdown.
-            
+
         Returns:
             A string containing the formatted Markdown documentation.
         """
         try:
             tree = ast.parse(source_code)
-            
+
             md_content = f"# Documentation for {file_name}\n\n"
-            
+
             # Module docstring
             module_doc = ast.get_docstring(tree)
             if module_doc:
@@ -58,7 +61,7 @@ class DocGenCore:
                     class_doc = ast.get_docstring(node)
                     if class_doc:
                         md_content += f"{class_doc}\n\n"
-                    
+
                     for item in node.body:
                         if isinstance(item, ast.FunctionDef):
                             md_content += f"### Method: `{item.name}`\n"

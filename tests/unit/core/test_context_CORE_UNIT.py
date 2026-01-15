@@ -3,23 +3,12 @@
 
 from __future__ import annotations
 import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
-import time
+from typing import Any, List, Dict, Optional, Set
 import json
 from datetime import datetime
-import pytest
-import logging
 from pathlib import Path
 import sys
-import os
-import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
 import ast
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Import test utilities
 from tests.utils.agent_test_utils import *
@@ -30,13 +19,16 @@ from tests.utils.agent_test_utils import *
 # Session 9: Context Notification Tests
 # =============================================================================
 
+
+
+
 class TestContextNotification:
     """Tests for context notification triggers."""
 
     def test_alert_marker_detection(self, tmp_path: Path) -> None:
         """Test alert marker detection."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("agent_context.py")
+            mod: sys.ModuleType = load_agent_module("logic/agents/cognitive/ContextAgent.py")
 
         content = "> ⚠️ WARNING: This module is deprecated."
         target: Path = tmp_path / "test.description.md"
@@ -50,7 +42,7 @@ class TestContextNotification:
     def test_breaking_change_detection(self, tmp_path: Path) -> None:
         """Test breaking change detection."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("agent_context.py")
+            mod: sys.ModuleType = load_agent_module("logic/agents/cognitive/ContextAgent.py")
 
         content = "BREAKING CHANGE: API signature changed in v2.0"
         target: Path = tmp_path / "test.description.md"
@@ -61,10 +53,7 @@ class TestContextNotification:
 
         assert "BREAKING CHANGE" in previous
 
-
 # ========== Comprehensive Context Tests (from test_agent_context_comprehensive.py) ==========
-
-
 
 class TestContextCreation(unittest.TestCase):
     """Tests for context creation and initialization."""
@@ -125,8 +114,6 @@ class TestContextCreation(unittest.TestCase):
 
         assert context["metadata"]["source"] == "api"
 
-
-
 class TestContextStateTracking(unittest.TestCase):
     """Tests for context state tracking."""
 
@@ -171,8 +158,6 @@ class TestContextStateTracking(unittest.TestCase):
             violations.append("id")
 
         assert "id" in violations
-
-
 
 class TestContextLifecycle(unittest.TestCase):
     """Tests for context lifecycle management."""
@@ -238,8 +223,6 @@ class TestContextLifecycle(unittest.TestCase):
         assert cleanup_called
         assert context["active"] is False
 
-
-
 class TestContextStorage(unittest.TestCase):
     """Tests for context storage and retrieval."""
 
@@ -277,8 +260,6 @@ class TestContextStorage(unittest.TestCase):
         assert context["user"]["name"] == "Alice"
         assert "admin" in context["user"]["roles"]
 
-
-
 class TestContextVariables(unittest.TestCase):
     """Tests for context-local variables."""
 
@@ -308,8 +289,6 @@ class TestContextVariables(unittest.TestCase):
         ctx2_vars: Dict[str, str] = {"var": "ctx2_value"}
 
         assert ctx1_vars["var"] != ctx2_vars["var"]
-
-
 
 class TestContextPropagation(unittest.TestCase):
     """Tests for context propagation through call chains."""
@@ -358,8 +337,6 @@ class TestContextPropagation(unittest.TestCase):
 
         assert context_stack[-1]["level"] == 2
 
-
-
 class TestContextMerging(unittest.TestCase):
     """Tests for context merging."""
 
@@ -396,12 +373,10 @@ class TestContextMerging(unittest.TestCase):
     def test_merge_empty_context(self) -> None:
         """Test merging empty context."""
         ctx: Dict[str, str] = {"key": "value"}
-        empty = {}
+        empty: dict[Any, Any] = {}
 
         merged = {**ctx, **empty}
         assert merged["key"] == "value"
-
-
 
 class TestContextSerialization(unittest.TestCase):
     """Tests for context serialization."""
@@ -420,7 +395,6 @@ class TestContextSerialization(unittest.TestCase):
 
     def test_serialize_context_to_json(self) -> None:
         """Test serializing context to JSON."""
-        import json
         context: Dict[str, str] = {"id": "ctx1", "name": "test"}
 
         json_str: str = json.dumps(context)
@@ -428,7 +402,6 @@ class TestContextSerialization(unittest.TestCase):
 
     def test_deserialize_context(self) -> None:
         """Test deserializing context."""
-        import json
         json_str = '{"id": "ctx1", "name": "test"}'
 
         context = json.loads(json_str)
@@ -436,7 +409,6 @@ class TestContextSerialization(unittest.TestCase):
 
     def test_serialize_with_nested_structures(self) -> None:
         """Test serializing with nested structures."""
-        import json
         context = {
             "user": {"id": 1, "name": "Alice"},
             "tags": ["tag1", "tag2"],
@@ -445,8 +417,6 @@ class TestContextSerialization(unittest.TestCase):
         json_str: str = json.dumps(context)
         restored = json.loads(json_str)
         assert restored["user"]["name"] == "Alice"
-
-
 
 class TestASTSignatureExtraction(unittest.TestCase):
     """Test extracting class and function signatures using AST."""
@@ -498,8 +468,6 @@ class Calculator:
 
         self.assertEqual(len(methods), 2)
         self.assertEqual(methods[0].name, 'add')
-
-
 
 class TestDependencyGraphAnalysis(unittest.TestCase):
     """Test dependency graph analysis and visualization."""
@@ -572,8 +540,6 @@ import numpy as np
         cycle_exists: bool = has_cycle('module_a', dependencies)
         self.assertTrue(cycle_exists)
 
-
-
 class TestContextSummarization(unittest.TestCase):
     """Test context summarization for large files."""
 
@@ -618,8 +584,6 @@ This module provides functionality for:
 
         self.assertIn('Summary', module_docstring)
 
-
-
 class TestRelatedFilesDetection(unittest.TestCase):
     """Test finding files that import or use this module."""
 
@@ -650,8 +614,6 @@ class TestRelatedFilesDetection(unittest.TestCase):
 
         top_related = sorted(related_files, key=lambda x: x['relevance'], reverse=True)
         self.assertEqual(top_related[0]['file'], 'test_module.py')
-
-
 
 class TestAPIDocumentationExtraction(unittest.TestCase):
     """Test extracting public API documentation from docstrings."""
@@ -706,8 +668,6 @@ class PublicClass:
         self.assertIn('Args:', docstring)
         self.assertIn('Returns:', docstring)
 
-
-
 class TestCoverageMetrics(unittest.TestCase):
     """Test including test coverage metrics from test files."""
 
@@ -732,8 +692,6 @@ class TestCoverageMetrics(unittest.TestCase):
 
         uncovered = [f for f in function_coverage if f['coverage'] < 100]
         self.assertEqual(len(uncovered), 3)
-
-
 
 class TestCodeMetrics(unittest.TestCase):
     """Test code metrics: cyclomatic complexity, LOC, maintainability index."""
@@ -790,8 +748,6 @@ else:
         self.assertIn('loc', metrics)
         self.assertIn('cyclomatic_complexity', metrics)
 
-
-
 class TestCodeSmellDetection(unittest.TestCase):
     """Test detecting code smells and anti-patterns."""
 
@@ -840,8 +796,6 @@ if a:
 
         self.assertEqual(nesting_levels, 4)
 
-
-
 class TestArchitectureDecisions(unittest.TestCase):
     """Test including architecture decisions and design patterns."""
 
@@ -867,8 +821,6 @@ class TestArchitectureDecisions(unittest.TestCase):
         }
 
         self.assertEqual(adr['status'], 'accepted')
-
-
 
 class TestChangeStatistics(unittest.TestCase):
     """Test recent change statistics."""
@@ -902,8 +854,6 @@ class TestChangeStatistics(unittest.TestCase):
         total_commits: int = sum(c['commits'] for c in contributors.values())
         self.assertEqual(total_commits, 45)
 
-
-
 class TestPluginSystem(unittest.TestCase):
     """Test custom context providers via plugin system."""
 
@@ -911,7 +861,7 @@ class TestPluginSystem(unittest.TestCase):
         """Test registering custom context providers."""
         class PluginRegistry:
             def __init__(self) -> None:
-                self.providers = {}
+                self.providers: dict[Any, Any] = {}
 
             def register(self, name, provider) -> None:
                 self.providers[name] = provider
@@ -934,14 +884,12 @@ class TestPluginSystem(unittest.TestCase):
         provider = CustomProvider()
         self.assertEqual(provider.name(), 'custom_context')
 
-
-
 class TestContextCachingImprovements(unittest.TestCase):
     """Test context caching for improved performance."""
 
     def test_cache_storage(self) -> None:
         """Test caching extracted context."""
-        cache = {}
+        cache: dict[Any, Any] = {}
 
         def get_context(file_path) -> Any:
             if file_path in cache:
@@ -965,8 +913,6 @@ class TestContextCachingImprovements(unittest.TestCase):
         cache.pop('file.py', None)
 
         self.assertNotIn('file.py', cache)
-
-
 
 class TestContextPrioritization(unittest.TestCase):
     """Test context prioritization for relevance."""
@@ -995,8 +941,6 @@ class TestContextPrioritization(unittest.TestCase):
 
         truncated: List[Dict[str, str]] = [c for c in context if c['priority'] != 'low']
         self.assertEqual(len(truncated), 3)
-
-
 
 class TestContextVisualization(unittest.TestCase):
     """Test context visualization (dependency graphs, diagrams)."""
@@ -1029,8 +973,6 @@ class TestContextVisualization(unittest.TestCase):
         }
 
         self.assertEqual(len(layers), 4)
-
-
 
 class TestContextFiltering(unittest.TestCase):
     """Test context filtering for sensitive data."""
@@ -1066,8 +1008,6 @@ class TestContextFiltering(unittest.TestCase):
 
         self.assertEqual(filtered_code, '[REDACTED]')
 
-
-
 class TestCrossModuleContext(unittest.TestCase):
     """Test cross-module context relationships."""
 
@@ -1093,5 +1033,3 @@ class TestCrossModuleContext(unittest.TestCase):
         }
 
         self.assertEqual(len(interfaces['Processor']['modules']), 3)
-
-

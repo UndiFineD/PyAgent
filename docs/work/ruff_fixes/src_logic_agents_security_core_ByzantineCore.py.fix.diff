@@ -1,0 +1,53 @@
+diff --git a/src/logic/agents/security/core/ByzantineCore.py b/src/logic/agents/security/core/ByzantineCore.py
+index bf99837..f5a65f6 100644
+--- a/src/logic/agents/security/core/ByzantineCore.py
++++ b/src/logic/agents/security/core/ByzantineCore.py
+@@ -12,7 +12,11 @@
+ # limitations under the License.
+ 
+ from __future__ import annotations
+-from typing import Dict, List
++
++try:
++    import rust_core as rc
++except ImportError:
++    rc = None
+ 
+ class ByzantineCore:
+     """
+@@ -25,6 +29,11 @@ class ByzantineCore:
+         Calculates the consensus score.
+         votes: list of {'weight': float, 'hash': str}
+         """
++        if rc:
++            try:
++                return rc.calculate_agreement_score(votes)
++            except Exception:
++                pass
+         if not votes:
+             return 0.0
+             
+@@ -46,6 +55,11 @@ class ByzantineCore:
+         Scales the committee based on historic reliability scores.
+         Only recruits agents with reliability > 0.7.
+         """
++        if rc:
++            try:
++                return rc.select_committee(agents_reliability, min_size)
++            except Exception:
++                pass
+         eligible = [(name, score) for name, score in agents_reliability.items() if score > 0.7]
+         # Sort by reliability descending
+         eligible.sort(key=lambda x: x[1], reverse=True)
+@@ -64,6 +78,11 @@ class ByzantineCore:
+         Documentation/Scripts: 0.5 (1/2)
+         Default: 0.67 (2/3)
+         """
++        if rc:
++            try:
++                return rc.get_required_quorum(change_type)
++            except Exception:
++                pass
+         if change_type in ["infrastructure", "security", "core"]:
+             return 0.8
+         elif change_type in ["documentation", "examples", "comments"]:

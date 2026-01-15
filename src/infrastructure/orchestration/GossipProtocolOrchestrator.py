@@ -17,13 +17,16 @@ import asyncio
 import logging
 import random
 import time
-from typing import Dict, Any, Optional, Set, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 from src.core.base.version import VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.fleet.AsyncFleetManager import AsyncFleetManager
 
 __version__ = VERSION
+
+
+
 
 class GossipProtocolOrchestrator:
     """
@@ -82,7 +85,7 @@ class GossipProtocolOrchestrator:
 
                 async with self._lock:
                     peers_list = list(self.peers)
-                
+
                 target_peer = random.choice(peers_list)
                 await self._synchronize_with_peer(target_peer)
             except asyncio.CancelledError:
@@ -96,7 +99,7 @@ class GossipProtocolOrchestrator:
         Exchanges digests (versions) and requests missing data.
         """
         logging.debug(f"Gossip: Syncing with {peer_name}...")
-        
+
         async with self._lock:
             # Randomly 'learn' something from the virtual peer to simulate convergence
             if random.random() > 0.7:

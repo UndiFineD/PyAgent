@@ -1,0 +1,61 @@
+diff --git a/tests/phases/test_phase43.py b/tests/phases/test_phase43.py
+index 94fc79f..0163a76 100644
+--- a/tests/phases/test_phase43.py
++++ b/tests/phases/test_phase43.py
+@@ -1,8 +1,18 @@
+ import unittest
+ import os
+-import shutil
++from pathlib import Path
+ from src.infrastructure.fleet.FleetManager import FleetManager
+ 
++
++
++
++
++
++
++
++
++
++
+ class TestPhase43(unittest.TestCase):
+     def setUp(self):
+         self.workspace = os.path.abspath(Path(__file__).resolve().parents[2])
+@@ -14,13 +24,13 @@ class TestPhase43(unittest.TestCase):
+     def test_feature_store(self) -> None:
+         print("\nTesting Feature Store...")
+         res = self.fleet.feature_store.register_feature(
+-            "dist_training_config", 
++            "dist_training_config",
+             {"nodes": 8, "gpu": "H100", "strategy": "FSDP"},
+             {"version": "1.0", "author": "damien-mlops"}
+         )
+         print(f"Result: {res}")
+         self.assertIn("successfully registered", res)
+-        
++
+         val = self.fleet.feature_store.get_feature("dist_training_config")
+         self.assertEqual(val["strategy"], "FSDP")
+ 
+@@ -39,10 +49,20 @@ class TestPhase43(unittest.TestCase):
+             "https://example.com/fsdp-paper",
+             "FSDP: Distributed Training at Scale",
+             "Paper on Fully Sharded Data Parallelism implementation",
++
++
++
++
++
+             ["MLOps", "Distributed", "Infrastructure"]
+         )
+         print(f"Result: {res}")
+         self.assertIn("added to the Research Library", res)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     unittest.main()

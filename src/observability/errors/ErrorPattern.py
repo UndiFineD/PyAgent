@@ -28,6 +28,9 @@ from dataclasses import dataclass
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class ErrorPattern:
     """A recognized error pattern."""

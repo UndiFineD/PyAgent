@@ -1,0 +1,12 @@
+diff --git a/src/logic/agents/cognitive/context/utils/CrossRepoAnalyzer.py b/src/logic/agents/cognitive/context/utils/CrossRepoAnalyzer.py
+index 82b114a..f93936b 100644
+--- a/src/logic/agents/cognitive/context/utils/CrossRepoAnalyzer.py
++++ b/src/logic/agents/cognitive/context/utils/CrossRepoAnalyzer.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.utils.CrossRepoContext import CrossRepoContext
+-from typing import Dict, List
+ 
+ __version__ = VERSION
+ 

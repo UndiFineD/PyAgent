@@ -22,21 +22,23 @@ from src.core.base.version import VERSION
 import hashlib
 import os
 import logging
-from typing import Dict
 from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
+
+
+
 
 class EntropyGuardAgent(BaseAgent):
     """
     Phase 60: Quantum-Resistant Cryptographic Layer.
     Manages simulated post-quantum cryptographic (PQC) keys and entropy pools.
     """
-    
+
     def __init__(self, path: str) -> None:
         super().__init__(path)
         self.entropy_pool = os.urandom(64)
-        self.pqc_keys: dict[str, str] = {} # Simulated Kyber/Dilithium keys
+        self.pqc_keys: dict[str, str] = {}  # Simulated Kyber/Dilithium keys
 
     def generate_pqc_keypair(self, fleet_id: str) -> str:
         """Simulates the generation of a Kyber-1024 public key."""
@@ -51,11 +53,11 @@ class EntropyGuardAgent(BaseAgent):
         """Simulates encryption using a post-quantum algorithm."""
         if target_fleet_id not in self.pqc_keys:
             raise ValueError("Target fleet PQC key not found.")
-            
+
         # Mocking encryption: XORing with a hash derived from the PQC key
         key = self.pqc_keys[target_fleet_id]
         mask = hashlib.sha3_256(key.encode()).digest()
-        
+
         data_bytes = data.encode()
         encrypted = bytes([b ^ mask[i % len(mask)] for i, b in enumerate(data_bytes)])
         return encrypted

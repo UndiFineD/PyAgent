@@ -1,0 +1,13 @@
+diff --git a/src/core/base/ConnectivityManager.py b/src/core/base/ConnectivityManager.py
+index 22895bf..2cb9d47 100644
+--- a/src/core/base/ConnectivityManager.py
++++ b/src/core/base/ConnectivityManager.py
+@@ -27,7 +27,7 @@ import logging
+ import time
+ import os
+ from pathlib import Path
+-from typing import Dict, Any, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 

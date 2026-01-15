@@ -1,0 +1,10 @@
+diff --git a/temp/fix_e402_versions_v3.py b/temp/fix_e402_versions_v3.py
+index 8b8802f..552c4b5 100644
+--- a/temp/fix_e402_versions_v3.py
++++ b/temp/fix_e402_versions_v3.py
+@@ -1,5 +1,4 @@
+ import os
+-import re
+ import ast
+ 
+ def is_syntax_valid(content):

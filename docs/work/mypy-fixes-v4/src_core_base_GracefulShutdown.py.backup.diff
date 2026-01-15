@@ -1,0 +1,20 @@
+diff --git a/src/core/base/GracefulShutdown.py b/src/core/base/GracefulShutdown.py
+index baa65cc..045ad17 100644
+--- a/src/core/base/GracefulShutdown.py
++++ b/src/core/base/GracefulShutdown.py
+@@ -24,7 +24,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.core.base.models import ShutdownState
+ from pathlib import Path
+-from typing import List, Optional, Any, cast
++from typing import Any, cast
+ import json
+ import logging
+ import signal
+@@ -156,4 +156,4 @@ class GracefulShutdown:
+         """Clean up state file after successful completion."""
+         if self.state_file.exists():
+             self.state_file.unlink()
+-        self.restore_handlers()
+\ No newline at end of file
++        self.restore_handlers()

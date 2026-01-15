@@ -1,0 +1,29 @@
+diff --git a/tests/unit/infrastructure/test_backend_UNIT.py b/tests/unit/infrastructure/test_backend_UNIT.py
+index 1794998..b0fd5d0 100644
+--- a/tests/unit/infrastructure/test_backend_UNIT.py
++++ b/tests/unit/infrastructure/test_backend_UNIT.py
+@@ -2,23 +2,9 @@
+ """Test classes from test_agent_backend.py - core module."""
+ 
+ from __future__ import annotations
+-import unittest
+-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
+-from unittest.mock import MagicMock, Mock, patch, call, ANY
+-import time
+-import json
+-from datetime import datetime
+-import pytest
+-import logging
++from typing import Any, List
+ from pathlib import Path
+ import sys
+-import os
+-import tempfile
+-import shutil
+-import subprocess
+-import threading
+-import asyncio
+-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+ 
+ # Try to import test utilities
+ try:

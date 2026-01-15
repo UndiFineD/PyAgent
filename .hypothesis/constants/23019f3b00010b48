@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\observability\stats\core\TracingCore.py
+# hypothesis_version: 6.150.1
+
+[1000, 'INTERNAL', 'OTel-1.1', 'agent_thinking_ms', 'attributes', 'kind', 'name', 'network_latency_ms', 'span_id', 'think_ratio', 'timestamp', 'total_latency_ms', 'trace_id', 'version']

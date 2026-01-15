@@ -1,0 +1,20 @@
+diff --git a/src/logic/agents/cognitive/DynamicDecomposerAgent.py b/src/logic/agents/cognitive/DynamicDecomposerAgent.py
+index 9d848a2..fcf241c 100644
+--- a/src/logic/agents/cognitive/DynamicDecomposerAgent.py
++++ b/src/logic/agents/cognitive/DynamicDecomposerAgent.py
+@@ -26,7 +26,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ import json
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+@@ -79,4 +79,4 @@ class DynamicDecomposerAgent(BaseAgent):
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(DynamicDecomposerAgent, "Dynamic Decomposer Agent", "Task splitting and routing optimizer")
+-    main()
+\ No newline at end of file
++    main()

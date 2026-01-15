@@ -1,0 +1,44 @@
+diff --git a/src/infrastructure/backend/RequestQueue.py b/src/infrastructure/backend/RequestQueue.py
+index 31b0b62..8831044 100644
+--- a/src/infrastructure/backend/RequestQueue.py
++++ b/src/infrastructure/backend/RequestQueue.py
+@@ -25,7 +25,6 @@ from src.core.base.version import VERSION
+ from .QueuedRequest import QueuedRequest
+ from .RequestPriority import RequestPriority
+ from queue import PriorityQueue
+-from typing import Dict, Optional
+ from collections.abc import Callable
+ import logging
+ import threading
+@@ -36,6 +35,11 @@ from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+ # Infrastructure
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class RequestQueue:
+     """Priority queue for backend requests.
+ 
+@@ -88,10 +92,10 @@ class RequestQueue:
+         with self._lock:
+             self._queue.put(request)
+             self._pending[request_id] = request
+-            
++
+         if self.recorder:
+             self.recorder.record_lesson("request_queued", {"id": request_id, "priority": priority.name})
+-            
++
+         logging.debug(f"Queued request {request_id} with priority {priority.name}")
+         return request_id
+ 
+@@ -123,4 +127,4 @@ class RequestQueue:
+     def get_pending(self, request_id: str) -> QueuedRequest | None:
+         """Get pending request by ID."""
+         with self._lock:
+-            return self._pending.get(request_id)
+\ No newline at end of file
++            return self._pending.get(request_id)

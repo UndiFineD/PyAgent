@@ -1,10 +1,15 @@
 #!/usr/bin/env python3
-import os
 import ast
-import sys
 from pathlib import Path
 
 def get_py_files(directory):
+
+
+
+
+
+
+
     return list(Path(directory).rglob("*.py"))
 
 def check_file_imports(file_path):
@@ -13,17 +18,24 @@ def check_file_imports(file_path):
             tree = ast.parse(f.read())
         except Exception as e:
             return [f"PARSE ERROR: {e}"]
-            
+
     errors = []
+
+
+
     for node in ast.walk(tree):
         if isinstance(node, ast.Import):
             for n in node.names:
-                pass # Check if module starts with src
+                pass  # Check if module starts with src
         elif isinstance(node, ast.ImportFrom):
             if node.level == 0 and node.module:
                 # Absolute import
                 pass
     return errors
+
+
+
+
 
 if __name__ == "__main__":
     src_dir = "c:/DEV/PyAgent/src"

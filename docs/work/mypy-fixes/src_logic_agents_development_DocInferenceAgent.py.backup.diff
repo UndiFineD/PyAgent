@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/development/DocInferenceAgent.py b/src/logic/agents/development/DocInferenceAgent.py
+index 0bd5206..13208d0 100644
+--- a/src/logic/agents/development/DocInferenceAgent.py
++++ b/src/logic/agents/development/DocInferenceAgent.py
+@@ -27,7 +27,7 @@ from src.core.base.version import VERSION
+ import logging
+ import json
+ from pathlib import Path
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool, create_main_function
+ 

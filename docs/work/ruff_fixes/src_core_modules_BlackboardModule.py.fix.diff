@@ -1,0 +1,13 @@
+diff --git a/src/core/modules/BlackboardModule.py b/src/core/modules/BlackboardModule.py
+index 07f8ee9..0b72252 100644
+--- a/src/core/modules/BlackboardModule.py
++++ b/src/core/modules/BlackboardModule.py
+@@ -12,7 +12,7 @@
+ # limitations under the License.
+ 
+ from __future__ import annotations
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from src.core.base.modules import BaseModule
+ 
+ class BlackboardModule(BaseModule):

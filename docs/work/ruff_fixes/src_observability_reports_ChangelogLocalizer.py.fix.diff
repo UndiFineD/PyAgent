@@ -1,0 +1,12 @@
+diff --git a/src/observability/reports/ChangelogLocalizer.py b/src/observability/reports/ChangelogLocalizer.py
+index 0a18a14..c55d645 100644
+--- a/src/observability/reports/ChangelogLocalizer.py
++++ b/src/observability/reports/ChangelogLocalizer.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .LocalizationLanguage import LocalizationLanguage
+ from .LocalizedEntry import LocalizedEntry
+-from typing import List
+ 
+ __version__ = VERSION
+ 

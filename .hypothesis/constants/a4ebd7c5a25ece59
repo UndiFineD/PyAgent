@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\AttentionBufferAgent.py
+# hypothesis_version: 6.150.1
+
+[100, 3600, 'content', 'current_focus', 'priority', 'recent_context', 'source', 'timestamp', 'total_points']

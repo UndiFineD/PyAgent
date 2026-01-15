@@ -1,29 +1,47 @@
 
 from __future__ import annotations
 import hashlib
-from typing import List, Set
 from dataclasses import dataclass
+
+try:
+    import rust_core as rc
+    HAS_RUST = True
+except ImportError:
+    HAS_RUST = False
 
 @dataclass
 class Lesson:
+    """Captures a learned pattern or error correction for shared memory."""
+
+
+
+
     error_pattern: str
     cause: str
     solution: str
     impact_score: float = 0.5
 
+
+
 class LessonCore:
+    """Core logic for managing shared learnings across the fleet."""
     """Pure logic for cross-fleet lesson aggregation.
     Uses bloom-filter-like hashing to track known failure modes.
     """
-    
+
     def __init__(self) -> None:
         self.known_failures: set[str] = set()
 
     def generate_failure_hash(self, error_msg: str) -> str:
         """Generates a stable hash for an error message (ignoring line numbers/paths)."""
+        if HAS_RUST:
+            try:
+                return rc.generate_failure_hash(error_msg)  # type: ignore[attr-defined]
+            except Exception:
+                pass
         # Simple normalization: lower case and strip numbers
         normalized = "".join([c for c in error_msg.lower() if not c.isdigit()])
-        return hashlib.md5(normalized.encode()).hexdigest()
+        return hashlib.sha256(normalized.encode()).hexdigest()
 
     def is_known_failure(self, error_msg: str) -> bool:
         """Checks if the failure mode has been encountered before."""

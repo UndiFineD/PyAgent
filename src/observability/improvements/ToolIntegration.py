@@ -25,10 +25,13 @@ from src.core.base.version import VERSION
 from .AnalysisToolType import AnalysisToolType
 from .ImprovementCategory import ImprovementCategory
 from .ToolSuggestion import ToolSuggestion
-from typing import Any, Dict, List, Optional
+from typing import Any
 import re
 
 __version__ = VERSION
+
+
+
 
 class ToolIntegration:
     """Integrates with code analysis tools for suggestions.

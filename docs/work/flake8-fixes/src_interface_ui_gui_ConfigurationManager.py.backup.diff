@@ -1,0 +1,23 @@
+diff --git a/src/interface/ui/gui/ConfigurationManager.py b/src/interface/ui/gui/ConfigurationManager.py
+index 9293186..7c156dd 100644
+--- a/src/interface/ui/gui/ConfigurationManager.py
++++ b/src/interface/ui/gui/ConfigurationManager.py
+@@ -32,6 +32,11 @@ import os
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ConfigurationManager:
+     """Handles loading and saving global configuration settings."""
+     def __init__(self, config_file="config/gui_settings.json") -> None:
+@@ -66,4 +71,4 @@ class ConfigurationManager:
+         self.save()
+         # Also update environment variable for backend compatibility
+         if key == "github_token_file":
+-            os.environ["DV_GITHUB_TOKEN_FILE"] = value
+\ No newline at end of file
++            os.environ["DV_GITHUB_TOKEN_FILE"] = value

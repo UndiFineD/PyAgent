@@ -1,0 +1,38 @@
+diff --git a/src/infrastructure/api/core/GatewayCore.py b/src/infrastructure/api/core/GatewayCore.py
+index a1c8296..d6c2004 100644
+--- a/src/infrastructure/api/core/GatewayCore.py
++++ b/src/infrastructure/api/core/GatewayCore.py
+@@ -1,6 +1,16 @@
+ 
+ from __future__ import annotations
+-from typing import Dict, Any, Optional
++from typing import Any
++
++
++
++
++
++
++
++
++
++
+ 
+ class GatewayCore:
+     """
+@@ -15,7 +25,7 @@ class GatewayCore:
+             "slack": "https://slack.com/api/",
+             "trello": "https://api.trello.com/1/"
+         }
+-        
++
+         # Interface affinity rules: interface -> model_preference
+         self.interface_affinity: dict[str, str] = {
+             "web_ui": "glm-4-flash",
+@@ -42,4 +52,4 @@ class GatewayCore:
+             "action": action,
+             "params": params,
+             "method": "POST" if action in ["create", "update"] else "GET"
+-        }
+\ No newline at end of file
++        }

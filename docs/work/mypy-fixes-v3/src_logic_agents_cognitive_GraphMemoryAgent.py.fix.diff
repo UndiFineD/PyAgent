@@ -1,0 +1,20 @@
+diff --git a/src/logic/agents/cognitive/GraphMemoryAgent.py b/src/logic/agents/cognitive/GraphMemoryAgent.py
+index 806e37c..b1243ed 100644
+--- a/src/logic/agents/cognitive/GraphMemoryAgent.py
++++ b/src/logic/agents/cognitive/GraphMemoryAgent.py
+@@ -28,7 +28,7 @@ import logging
+ import json
+ import time
+ from pathlib import Path
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+@@ -280,4 +280,4 @@ class GraphMemoryAgent(BaseAgent):
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(GraphMemoryAgent, "Graph Memory Agent", "Memory storage path")
+-    main()
+\ No newline at end of file
++    main()

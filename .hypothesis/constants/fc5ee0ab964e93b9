@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\profiler\_memory_profiler.py
+# hypothesis_version: 6.150.1
+
+[0.7, 1000.0, 1000, 1024, '.png', '::', 'DataFlowGraph', 'Key', 'Memory (GB)', 'TensorKey', 'Time (ms)', 'Unknown', 'aten::add_', 'aten::detach', 'black', 'darkgreen', 'goldenrod', 'grey', 'is_write', 'matplotlib', 'mediumblue', 'mediumpurple', 'png', 'rb', 'red', 'royalblue', 'utf-8', 'w', 'wb']

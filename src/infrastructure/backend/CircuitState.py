@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class CircuitState(Enum):
     """Circuit breaker states."""
 

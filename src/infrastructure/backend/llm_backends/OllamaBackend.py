@@ -25,6 +25,12 @@ from .LLMBackend import LLMBackend
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class OllamaBackend(LLMBackend):
     """Ollama LLM Backend."""
 
@@ -42,9 +48,9 @@ class OllamaBackend(LLMBackend):
             "prompt": prompt,
             "stream": False
         }
-        
+
         timeout_s = kwargs.get("timeout_s", 120)
-        
+
         try:
             response = self.session.post(url, json=payload, timeout=timeout_s)
             response.raise_for_status()

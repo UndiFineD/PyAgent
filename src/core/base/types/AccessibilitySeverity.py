@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class AccessibilitySeverity(Enum):
     """Severity levels for accessibility issues."""
     CRITICAL = 4  # Blocks access for users with disabilities

@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class ImprovementPriority(Enum):
     """Priority levels for improvements."""
     CRITICAL = 5

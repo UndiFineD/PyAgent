@@ -23,15 +23,18 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, List, Any
+from typing import Any
 
 __version__ = VERSION
 
+
+
+
 class SchemaManager:
     """Discovers and caches database schemas across the fleet."""
-    
+
     def __init__(self) -> None:
-        self.schemas: dict[str, dict[str, Any]] = {} # db_path -> schema_map
+        self.schemas: dict[str, dict[str, Any]] = {}  # db_path -> schema_map
 
     def register_schema(self, db_id: str, tables: dict[str, list[str]]) -> str:
         """Registers a database schema (tables and columns)."""
@@ -42,7 +45,7 @@ class SchemaManager:
         """Generates a schema summary for an agent's system prompt."""
         if db_id not in self.schemas:
             return "No schema information available."
-        
+
         summary = [f"Database: {db_id}"]
         for table, cols in self.schemas[db_id].items():
             summary.append(f"- Table: {table} (Columns: {', '.join(cols)})")

@@ -1,0 +1,35 @@
+diff --git a/src/logic/agents/intelligence/SelfSearchAgent.py b/src/logic/agents/intelligence/SelfSearchAgent.py
+index 0d9a9d0..76b5f5f 100644
+--- a/src/logic/agents/intelligence/SelfSearchAgent.py
++++ b/src/logic/agents/intelligence/SelfSearchAgent.py
+@@ -27,9 +27,14 @@ import logging
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class SelfSearchAgent(BaseAgent):
+     """Provides internal knowledge retrieval using structural prompting (SSRL pattern)."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self._system_prompt = (
+@@ -70,7 +75,12 @@ Query: {query}
+         """Returns the self-search results for a given query."""
+         return self.perform_internal_search(query)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(SelfSearchAgent)
+-    main()
+\ No newline at end of file
++    main()

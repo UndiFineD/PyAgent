@@ -4,9 +4,13 @@ Core logic for Swarm Economy (Phase 179).
 Handles bidding and GPU priority allocation logic.
 """
 
-from typing import Dict, List, Any
+from typing import Any
+
+
+
 
 class EconomyCore:
+    """Handles economic logic for swarm resource bidding and priority."""
     @staticmethod
     def calculate_bid_priority(credits: float, importance: float, urgency: float) -> float:
         """

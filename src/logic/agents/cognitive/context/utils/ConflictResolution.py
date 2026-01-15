@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class ConflictResolution(Enum):
     """Strategies for merge conflict resolution."""
     OURS = "ours"

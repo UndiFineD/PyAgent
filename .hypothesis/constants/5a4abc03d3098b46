@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\image_transforms.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.5, 255, 256, 'PIL.Image.Image', 'PILImageResampling', 'RGB', 'constant', 'cpu', 'edge', 'jnp.ndarray', 'reflect', 'replicate', 'symmetric', 'tf.Tensor', 'torch.Tensor', 'vision']

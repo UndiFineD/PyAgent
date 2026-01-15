@@ -1,0 +1,56 @@
+diff --git a/src/infrastructure/fleet/ScalingManager.py b/src/infrastructure/fleet/ScalingManager.py
+index eb930ab..e6532c7 100644
+--- a/src/infrastructure/fleet/ScalingManager.py
++++ b/src/infrastructure/fleet/ScalingManager.py
+@@ -30,20 +30,30 @@ from .ScalingCore import ScalingCore
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class ScalingManager:
+     """
+     Shell for ScalingManager.
+     Handles fleet orchestration while delegating logic to ScalingCore.
+     """
+-    
++
+     def __init__(self, fleet_manager) -> None:
+         self.fleet = fleet_manager
+         self.core = ScalingCore(scale_threshold=5.0, window_size=10, backoff_seconds=60)
+-        
++
+     def record_metric(self, agent_name: str, value: float, metric_type: str = "latency") -> None:
+         """Records a metric and checks if scaling is required."""
+         self.core.add_metric(agent_name, value, metric_type=metric_type)
+-        
++
+         if self.core.should_scale(agent_name):
+             self._execute_scale_out(agent_name)
+ 
+@@ -51,13 +61,13 @@ class ScalingManager:
+         """Spawns a new instance of an agent if load is too high."""
+         load_score = self.core.calculate_weighted_load(agent_name)
+         logging.warning(f"SCALING: High load score ({load_score:.2f}) detected for {agent_name}. Spawning replica.")
+-        
++
+         # Replica naming logic
+         replica_name = f"{agent_name}_replica_{int(time.time())}"
+         # Implementation depends on FleetManager dynamic registration
+         if hasattr(self.fleet, 'register_agent_runtime'):
+             self.fleet.register_agent_runtime(replica_name, agent_name)
+-            
++
+     def get_scaling_status(self) -> str:
+         """Returns the current scaling status."""
+-        return f"Scaling Manager: Monitoring {len(self.core.load_metrics)} active agent archetypes."
+\ No newline at end of file
++        return f"Scaling Manager: Monitoring {len(self.core.load_metrics)} active agent archetypes."

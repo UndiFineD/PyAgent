@@ -23,13 +23,15 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from dataclasses import dataclass, field
-from typing import Any, Dict
+from typing import Any
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class TestProfile:
-    __test__ = False
     """A test configuration profile.
 
     Attributes:
@@ -43,3 +45,4 @@ class TestProfile:
     settings: dict[str, Any] = field(default_factory=lambda: {})
     env_vars: dict[str, str] = field(default_factory=lambda: {})
     enabled: bool = True
+    __test__ = False

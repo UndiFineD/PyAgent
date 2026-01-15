@@ -15,41 +15,88 @@
 """Base model classes and utility functions."""
 
 from __future__ import annotations
-import time
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any
 from collections.abc import Callable
-from datetime import datetime
 from .enums import (
-    AuthMethod, 
-    SerializationFormat, 
-    FilePriority, 
-    DiffOutputFormat,
+    AuthMethod,
+    SerializationFormat,
+    FilePriority,
     AgentEvent
 )
 
 # ========== Utility Functions ==========
+
+
+
+
+
+
+
+
+
+
+
+
 def _empty_agent_event_handlers() -> dict[AgentEvent, list[Callable[..., None]]]:
+
+
+
+
+
+
+
+
+
     return {}
 
 def _empty_list_str() -> list[str]:
+
+
+
     return []
+
+
+
 
 def _empty_list_int() -> list[int]:
     return []
 
+
+
+
 def _empty_list_float() -> list[float]:
+
+
+
+
+
+
+
     return []
 
 def _empty_list_dict_str_any() -> list[dict[str, Any]]:
     return []
 
+
+
+
+
+
+
 def _empty_dict_str_float() -> dict[str, float]:
+
+
     return {}
+
+
+
 
 def _empty_dict_str_any() -> dict[str, Any]:
     return {}
+
+
 
 def _empty_dict_str_int() -> dict[str, int]:
     return {}
@@ -57,28 +104,47 @@ def _empty_dict_str_int() -> dict[str, int]:
 def _empty_dict_str_str() -> dict[str, str]:
     return {}
 
+
+
+
 def _empty_dict_str_callable_any_any() -> dict[str, Callable[[Any], Any]]:
     return {}
 
-def _empty_dict_str_quality_criteria() -> dict[str, tuple[Callable[[str], float], float]]:  
+
+def _empty_dict_str_quality_criteria() -> dict[str, tuple[Callable[[str], float], float]]:
+
+
     return {}
+
 
 def _empty_dict_str_health_checks() -> dict[str, Callable[[], dict[str, Any]]]:
     return {}
 
+
 def _empty_dict_str_configprofile() -> dict[str, ConfigProfile]:
     return {}
 
-def _empty_routes_list() -> list[tuple[Callable[[Any], bool], Callable[[Any], Any]]]:       
+
+def _empty_routes_list() -> list[tuple[Callable[[Any], bool], Callable[[Any], Any]]]:
+
+
+
     return []
 
 def _empty_dict_str_filepriority() -> dict[str, FilePriority]:
     return {}
 
+
+
+
+
+
 def _empty_dict_str_modelconfig() -> dict[str, ModelConfig]:
     return {}
 
 # ========== Dataclasses ==========
+
+
 
 @dataclass(slots=True)
 class CacheEntry:
@@ -86,6 +152,8 @@ class CacheEntry:
     key: str
     response: str
     timestamp: float
+
+
     hit_count: int = 0
     quality_score: float = 0.0
 
@@ -109,12 +177,19 @@ class SerializationConfig:
     compression: bool = False
     encryption: bool = False
 
+
+
+
 @dataclass(slots=True)
 class FilePriorityConfig:
     """Configuration for file priority."""
     path_patterns: dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
     extension_priorities: dict[str, FilePriority] = field(default_factory=_empty_dict_str_filepriority)
     default_priority: FilePriority = FilePriority.NORMAL
+
+
+
+
 
 @dataclass(slots=True)
 class ExecutionCondition:
@@ -123,22 +198,29 @@ class ExecutionCondition:
     check: Callable[[Path, str], bool]
     description: str = ""
 
+
+
+
 @dataclass(slots=True)
 class ValidationRule:
     """Consolidated validation rule for Phase 126."""
     name: str
     pattern: str = ""
     message: str = "Validation failed"
-    severity: str = "error" # error, warning, info
+    severity: str = "error"  # error, warning, info
     validator: Callable[[str, Path], bool] | None = None
     required: bool = False
-    file_pattern: str = "" # Alias for backward compatibility
+    file_pattern: str = ""  # Alias for backward compatibility
 
     def __post_init__(self) -> None:
         if not self.pattern and self.file_pattern:
             self.pattern = self.file_pattern
         if not self.file_pattern and self.pattern:
             self.file_pattern = self.pattern
+
+
+
+
 
 @dataclass(slots=True)
 class ModelConfig:
@@ -148,6 +230,10 @@ class ModelConfig:
     max_tokens: int = 2000
     enable_thinking: bool = False
     max_thinking_tokens: int = 2000
+
+
+
+
 
 @dataclass(slots=True)
 class ConfigProfile:
@@ -160,6 +246,7 @@ class ConfigProfile:
         """Get setting value."""
         return self.settings.get(key, default)
 
+
 @dataclass(slots=True)
 class DiffResult:
     """Result of a diff operation."""
@@ -170,5 +257,9 @@ class DiffResult:
     additions: int = 0
     deletions: int = 0
     changes: int = 0
+
+
+
+
 
 EventHook = Callable[[dict[str, Any]], None]

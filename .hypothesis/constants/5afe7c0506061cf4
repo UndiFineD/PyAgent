@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\models\InheritanceMode.py
+# hypothesis_version: 6.150.1
+
+['append', 'merge', 'override']

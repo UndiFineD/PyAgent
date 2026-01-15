@@ -1,0 +1,12 @@
+diff --git a/src/logic/strategies/plan_executor.py b/src/logic/strategies/plan_executor.py
+index f965f96..158b89c 100644
+--- a/src/logic/strategies/plan_executor.py
++++ b/src/logic/strategies/plan_executor.py
+@@ -26,7 +26,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import sys
+ from pathlib import Path
+-from typing import Dict, List, Optional
+ from collections.abc import Callable, Awaitable
+ 
+ # Ensure project root and src are in path for modular imports

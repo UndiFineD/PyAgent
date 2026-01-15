@@ -24,14 +24,22 @@ Contains pure logic for tallying votes, handling ties, and selecting winners.
 """
 
 from __future__ import annotations
+from typing import Any
 from src.core.base.version import VERSION
-from typing import List, Dict, Optional
+
+try:
+    import rust_core as rc
+except (ImportError, AttributeError):
+    rc: Any = None  # type: ignore[no-redef]
 
 __version__ = VERSION
 
+
+
+
 class ConsensusCore:
     """Pure logic core for consensus protocols."""
-    
+
     def __init__(self, mode: str = "plurality") -> None:
         self.mode = mode
 
@@ -40,25 +48,31 @@ class ConsensusCore:
         Determines the winning proposal based on voting rules.
         Phase 119: Supports weighted voting based on agent reliability.
         """
+        if rc:
+            try:
+                return rc.calculate_consensus_winner(proposals, weights)  # type: ignore[attr-defined]
+            except (ImportError, AttributeError):
+                pass
+
         if not proposals:
             return ""
-            
+
         if weights and len(weights) != len(proposals):
-            weights = None # Fallback to unweighted if mismatch
+            weights = None  # Fallback to unweighted if mismatch
 
         # Count identical proposals with weights
         counts: dict[str, float] = {}
         for idx, p in enumerate(proposals):
             weight = weights[idx] if weights else 1.0
             counts[p] = counts.get(p, 0) + weight
-            
+
         # Strategy: Most weighted, then longest as tie-breaker
         winner = sorted(
-            counts.keys(), 
-            key=lambda x: (counts[x], len(x)), 
+            counts.keys(),
+            key=lambda x: (counts[x], len(x)),
             reverse=True
         )[0]
-        
+
         return winner
 
     def get_agreement_score(self, proposals: list[str], winner: str) -> float:

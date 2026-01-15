@@ -23,9 +23,11 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .BulkOperationResult import BulkOperationResult
-from typing import List
 
 __version__ = VERSION
+
+
+
 
 class BulkManager:
     """Applies bulk operations to improvement IDs."""

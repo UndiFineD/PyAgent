@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\utils\_sympy\functions.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.5, 'Atom', 'BitwiseAnd', 'BitwiseFn_', 'BitwiseOr', 'CeilDiv', 'CeilToInt', 'CleanDiv', 'FloatPow', 'FloatTrueDiv', 'FloorDiv', 'FloorToInt', 'Identity', 'IntTrueDiv', 'LShift', 'Mod', 'ModularIndexing', 'Modulo by zero', 'OpaqueUnaryFn_', 'PowByNatural', 'PythonMod', 'RShift', 'RoundDecimal', 'RoundToInt', 'ToFloat', 'TruncToFloat', 'TruncToInt', 'Where', '_T', '_Ts', 'acos', 'and_', 'asin', 'asinh', 'atan', 'bitwise_and', 'bitwise_or', 'cos', 'cosh', 'division by zero', 'evaluate', 'exp', 'log', 'log2', 'negative shift count', 'or_', 'sin', 'sinh', 'sqrt', 'tan', 'tanh']

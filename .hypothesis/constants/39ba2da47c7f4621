@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\ao\nn\quantized\reference\__init__.py
+# hypothesis_version: 6.150.1
+
+['Conv1d', 'Conv2d', 'Conv3d', 'ConvTranspose1d', 'ConvTranspose2d', 'ConvTranspose3d', 'Embedding', 'EmbeddingBag', 'GRU', 'GRUCell', 'LSTM', 'LSTMCell', 'Linear', 'RNNCell']

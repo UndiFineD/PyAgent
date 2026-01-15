@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\__init__.py
+# hypothesis_version: 6.150.1
+
+[443, 8000, '-m', './chroma', '1.4.0', 'CHROMA_API_KEY', 'CHROMA_DATABASE', 'CHROMA_TENANT', 'Cmek', 'Collection', 'CollectionMetadata', 'Documents', 'EmbeddingFunction', 'Embeddings', 'FtsIndexConfig', 'GetResult', 'HnswIndexConfig', 'IDs', 'Include', 'K', 'Key', 'Knn', 'Metadata', 'Metadatas', 'QueryResult', 'Rrf', 'Schema', 'Search', 'SpannIndexConfig', 'SparseVector', 'SparseVectors', 'TokenTransportHeader', 'URI', 'URIs', 'UpdateMetadata', 'VectorIndexConfig', 'Where', 'WhereDocument', 'api.trychroma.com', 'api_key', 'install', 'localhost', 'pip', 'pysqlite3', 'pysqlite3-binary', 'sqlite3']

@@ -1,0 +1,122 @@
+diff --git a/src/core/base/models/agent_models.py b/src/core/base/models/agent_models.py
+index 6537da7..42ca1ba 100644
+--- a/src/core/base/models/agent_models.py
++++ b/src/core/base/models/agent_models.py
+@@ -17,10 +17,10 @@
+ from __future__ import annotations
+ import time
+ from dataclasses import dataclass, field
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from collections.abc import Callable
+ from .enums import (
+-    HealthStatus, 
++    HealthStatus,
+     AgentPriority
+ )
+ from .base_models import (
+@@ -29,6 +29,11 @@ from .base_models import (
+     _empty_dict_str_callable_any_any
+ )
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class AgentConfig:
+     """Agent configuration from environment or file."""
+@@ -42,6 +47,11 @@ class AgentConfig:
+     token_budget: int = 100000
+     dry_run: bool = False
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class ComposedAgent:
+     """Configuration for agent composition."""
+@@ -50,6 +60,11 @@ class ComposedAgent:
+     order: int = 0
+     depends_on: list[str] = field(default_factory=_empty_list_str)
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class AgentHealthCheck:
+     """Health check result for an agent."""
+@@ -60,6 +75,11 @@ class AgentHealthCheck:
+     error_message: str | None = None
+     details: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class AgentPluginConfig:
+     """Configuration for an agent plugin."""
+@@ -70,6 +90,11 @@ class AgentPluginConfig:
+     enabled: bool = True
+     config: dict[str, Any] = field(default_factory=_empty_dict_str_any)
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class ExecutionProfile:
+     """A profile for agent execution settings."""
+@@ -80,6 +105,11 @@ class ExecutionProfile:
+     workers: int = 4
+     dry_run: bool = False
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class AgentPipeline:
+     """Chains agent steps sequentially."""
+@@ -96,16 +126,31 @@ class AgentPipeline:
+             result = self.steps[step_name](result)
+         return result
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class AgentParallel:
+     """Executes agent branches in parallel conceptually."""
+-    branches: dict[str, Callable[[Any], Any]] = field(default_factory=_empty_dict_str_callable_any_any)                                                                                 
++    branches: dict[str, Callable[[Any], Any]] = field(default_factory=_empty_dict_str_callable_any_any)
++
++
++
++
++
+     def add_branch(self, name: str, func: Callable[[Any], Any]) -> None:
+         self.branches[name] = func
+ 
+     def execute(self, data: Any) -> dict[str, Any]:
+         return {name: func(data) for name, func in self.branches.items()}
+ 
++
++
++
++
++
+ @dataclass(slots=True)
+ class AgentRouter:
+     """Routes input based on conditions."""

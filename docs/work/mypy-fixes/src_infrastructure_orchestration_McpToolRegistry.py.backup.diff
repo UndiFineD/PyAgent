@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/orchestration/McpToolRegistry.py b/src/infrastructure/orchestration/McpToolRegistry.py
+index 43e5f75..c06b99b 100644
+--- a/src/infrastructure/orchestration/McpToolRegistry.py
++++ b/src/infrastructure/orchestration/McpToolRegistry.py
+@@ -14,7 +14,7 @@
+ 
+ from __future__ import annotations
+ import logging
+-from typing import Any, Dict, List, TYPE_CHECKING
++from typing import Any, TYPE_CHECKING
+ from .ToolRegistry import ToolRegistry
+ 
+ if TYPE_CHECKING:

@@ -1,0 +1,12 @@
+diff --git a/src/core/base/utils/FileLock.py b/src/core/base/utils/FileLock.py
+index 16cad4a..2bf56c2 100644
+--- a/src/core/base/utils/FileLock.py
++++ b/src/core/base/utils/FileLock.py
+@@ -25,7 +25,6 @@ from src.core.base.version import VERSION
+ from src.core.base.models import LockType
+ from dataclasses import dataclass
+ from pathlib import Path
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 

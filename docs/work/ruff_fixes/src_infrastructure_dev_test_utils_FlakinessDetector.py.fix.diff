@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/dev/test_utils/FlakinessDetector.py b/src/infrastructure/dev/test_utils/FlakinessDetector.py
+index bbbcf82..087104d 100644
+--- a/src/infrastructure/dev/test_utils/FlakinessDetector.py
++++ b/src/infrastructure/dev/test_utils/FlakinessDetector.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .FlakinessReport import FlakinessReport
+-from typing import Dict, List, Optional
+ from collections.abc import Callable
+ 
+ __version__ = VERSION

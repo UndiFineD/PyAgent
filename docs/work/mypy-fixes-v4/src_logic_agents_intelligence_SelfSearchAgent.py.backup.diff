@@ -1,0 +1,11 @@
+diff --git a/src/logic/agents/intelligence/SelfSearchAgent.py b/src/logic/agents/intelligence/SelfSearchAgent.py
+index 0d9a9d0..1b9c623 100644
+--- a/src/logic/agents/intelligence/SelfSearchAgent.py
++++ b/src/logic/agents/intelligence/SelfSearchAgent.py
+@@ -73,4 +73,4 @@ Query: {query}
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(SelfSearchAgent)
+-    main()
+\ No newline at end of file
++    main()

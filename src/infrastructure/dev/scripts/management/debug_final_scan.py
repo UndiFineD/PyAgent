@@ -30,6 +30,12 @@ from pathlib import Path
 
 __version__ = VERSION
 
+
+
+
+
+
+
 def strict_scan() -> None:
     src_dir = Path("src")
     patterns = [
@@ -38,42 +44,72 @@ def strict_scan() -> None:
         (r"placeholder(?!\.)(?!\s*[:=]\s*(?:'|\")\{)", "Suspected technical debt placeholder found"),
         (r"\[Vision Model Placeholder\]", "Unresolved Vision Placeholder")
     ]
-    
+
     ignore_files = [
-        "utils.py", 
-        "ByzantineConsensusAgent.py", 
+        "utils.py",
+        "ByzantineConsensusAgent.py",
         "RewardModelAgent.py",
-        "LLMClient.py", # I added the regex here
-        "MultiModalContextAgent.py" # I added logic here
+        "LLMClient.py",  # I added the regex here
+        "MultiModalContextAgent.py"  # I added logic here
     ]
-    
+
     issues = []
-    
+
     for root, _, files in os.walk(src_dir):
         for file in files:
             if not file.endswith(".py"):
                 continue
+
+
+
+
+
+
+
+
+
+
             if file in ignore_files:
                 continue
-                
+
+
+
             path = Path(root) / file
             try:
                 content = path.read_text(encoding="utf-8")
                 lines = content.splitlines()
+
+
+
+
+
                 for i, line in enumerate(lines):
                     for pattern, msg in patterns:
                         if re.search(pattern, line, re.IGNORECASE):
                             # Check if it's a real issue or just a variable name that's allowed
                             # (e.g. template_placeholders is okay, but "placeholder" in a string is not)
+
+
+
+
+
                             issues.append(f"{path}:{i+1} - {msg}: {line.strip()}")
             except Exception as e:
                 print(f"Error reading {path}: {e}")
-                
+
     if not issues:
+
+
+
+
         print("ALL CLEAR")
     else:
         for issue in issues:
             print(issue)
+
+
+
+
 
 if __name__ == "__main__":
     strict_scan()

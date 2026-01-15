@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\quantizers\quantizer_hqq.py
+# hypothesis_version: 6.150.1
+
+['.', '.bias', '.weight', 'PreTrainedModel', 'bias', 'cpu', 'device_map', 'disk', 'dtype', 'from_flax', 'from_tf', 'hqq', 'hqq_params', 'meta', 'quant_config', 'skip_modules', 'torch.Tensor', 'torch.device', 'weight', 'weight_quant_params']

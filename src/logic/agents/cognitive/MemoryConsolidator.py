@@ -25,48 +25,58 @@ from src.core.base.version import VERSION
 import json
 import logging
 from pathlib import Path
-from typing import List, Dict, Any
-from src.logic.cognitive.MemoryConsolidatorCore import MemoryConsolidatorCore
+from typing import Any
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
+# Fixed import path assuming Core is in the same directory
+from src.logic.agents.cognitive.MemoryConsolidatorCore import MemoryConsolidatorCore
 
 __version__ = VERSION
 
-class MemoryConsolidator:
+
+
+
+class MemoryConsolidator(BaseAgent):
     """Manages the 'Sleep & Consolidate' phase for agents.
-    
+
     Acts as the I/O Shell for MemoryConsolidatorCore.
     """
 
-    def __init__(self, storage_path: str) -> None:
-        self.storage_path = Path(storage_path)
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+        # Use workspace root from BaseAgent if available, or derive from file_path
+        self.storage_path = Path("data/memory")  # Default path
         self.storage_path.mkdir(parents=True, exist_ok=True)
         self.long_term_memory_file = self.storage_path / "long_term_memory.json"
         self.daily_buffer: list[dict[str, Any]] = []
         self.core = MemoryConsolidatorCore()
 
+    @as_tool
     def record_interaction(self, agent: str, task: str, outcome: str) -> None:
         """Adds an interaction to the temporary daily buffer via Core."""
         entry = self.core.create_interaction_entry(agent, task, outcome)
         self.daily_buffer.append(entry)
 
+    @as_tool
     def sleep_and_consolidate(self) -> str:
         """Processes daily buffer into distilled long-term insights."""
         if not self.daily_buffer:
             return "No interactions to consolidate."
-            
+
         logging.info("Entering sleep phase: Consolidating memories...")
-        
+
         # Pure logic distillation
         consolidated_insights = self.core.distill_buffer(self.daily_buffer)
-            
+
         # I/O: Append to long-term storage
         memory = self._load_memory()
         daily_record = self.core.format_daily_memory(consolidated_insights)
         memory.append(daily_record)
-        
+
         self._save_memory(memory)
-        
+
         total_interactions = len(self.daily_buffer)
-        self.daily_buffer = [] # Clear buffer
+        self.daily_buffer = []  # Clear buffer
         return f"Consolidated {total_interactions} interactions into {len(consolidated_insights)} insights."
 
     def _load_memory(self) -> list[dict[str, Any]]:
@@ -80,13 +90,22 @@ class MemoryConsolidator:
         return []
 
     def _save_memory(self, memory: list[dict[str, Any]]) -> None:
-        """I/O: Save memory to disk."""
+        """I/O: Save memory to disk atomically."""
+        temp_path = self.long_term_memory_file.with_suffix(".tmp")
         try:
-            with open(self.long_term_memory_file, 'w', encoding='utf-8') as f:
+            with open(temp_path, 'w', encoding='utf-8') as f:
                 json.dump(memory, f, indent=2)
+            temp_path.replace(self.long_term_memory_file)
         except Exception as e:
-            logging.error(f"Failed to save memory: {e}")
-            
+            if temp_path.exists():
+                try:
+                    temp_path.unlink()
+                except Exception:
+                    pass
+            logging.error(f"Failed to save memory atomically: {e}")
+            raise
+
+    @as_tool
     def query_long_term_memory(self, query: str) -> list[str]:
         """I/O and Core combined search."""
         memory = self._load_memory()

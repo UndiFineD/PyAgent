@@ -1,0 +1,11 @@
+diff --git a/src/logic/agents/development/MarkdownAgent.py b/src/logic/agents/development/MarkdownAgent.py
+index ec84725..ebbb36e 100644
+--- a/src/logic/agents/development/MarkdownAgent.py
++++ b/src/logic/agents/development/MarkdownAgent.py
+@@ -148,4 +148,4 @@ class MarkdownAgent(CoderAgent):
+ 
+ if __name__ == "__main__":
+     main = create_main_function(MarkdownAgent, "Markdown Agent", "Path to Markdown file (.md)")
+-    main()
+\ No newline at end of file
++    main()

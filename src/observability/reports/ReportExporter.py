@@ -25,12 +25,14 @@ from src.core.base.version import VERSION
 from .CodeIssue import CodeIssue
 from .ExportFormat import ExportFormat
 from pathlib import Path
-from typing import List, Optional
 import json
 import logging
 import re
 
 __version__ = VERSION
+
+
+
 
 class ReportExporter:
     """Exporter for various report formats.

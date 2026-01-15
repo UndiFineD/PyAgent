@@ -22,9 +22,12 @@ from src.core.base.version import VERSION
 import time
 import random
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class MemoryReplayAgent:
     """
@@ -52,7 +55,7 @@ class MemoryReplayAgent:
         for memory in episodic_memories:
             # Simulate "dreaming" - re-evaluating memory importance
             utility_score = self._evaluate_utility(memory)
-            
+
             if utility_score > 0.8:
                 self.consolidated_insights.append({
                     "insight": f"Pattern found in {memory.get('action', 'task')}",
@@ -62,7 +65,7 @@ class MemoryReplayAgent:
                 results["consolidated"] += 1
             elif utility_score < 0.2:
                 results["pruned"] += 1
-                
+
         self.is_sleeping = False
         results["end_ts"] = time.time()
         results["duration"] = results["end_ts"] - results["start_ts"]
@@ -75,11 +78,11 @@ class MemoryReplayAgent:
         # In real life, this might involve an LLM summarizing or looking for repetition
         score = random.uniform(0, 1)
         content = str(memory.get("content", "")).lower()
-        
+
         # High value on errors and fixes
         if "error" in content or "fix" in content or "success" in content:
             score = min(1.0, score + 0.3)
-            
+
         return score
 
     def get_dream_log(self) -> dict[str, Any]:

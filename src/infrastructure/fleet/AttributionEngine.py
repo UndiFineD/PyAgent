@@ -30,10 +30,13 @@ import json
 import os
 import logging
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
 from src.infrastructure.fleet.core.AttributionCore import AttributionCore
 
 __version__ = VERSION
+
+
+
 
 class AttributionEngine:
     """Records the 'who, when, and how' for all system outputs (Phase 185)."""
@@ -56,12 +59,12 @@ class AttributionEngine:
         path = Path(file_path)
         if not path.exists():
             return
-            
+
         with open(path, encoding="utf-8") as f:
             content = f.read()
-            
+
         new_content = self.core.ensure_license_header(content)
-        
+
         if new_content != content:
             with open(path, "w", encoding="utf-8") as f:
                 f.write(new_content)
@@ -93,7 +96,7 @@ class AttributionEngine:
 
     def get_summary(self) -> dict[str, Any]:
         """Provides a summary of total attributions."""
-        summary = {}
+        summary: dict[Any, Any] = {}
         for r in self.records:
             agent = r["agent"]
             summary[agent] = summary.get(agent, 0) + 1

@@ -1,0 +1,63 @@
+diff --git a/src/logic/agents/development/TechDebtCore.py b/src/logic/agents/development/TechDebtCore.py
+index d322675..f52578a 100644
+--- a/src/logic/agents/development/TechDebtCore.py
++++ b/src/logic/agents/development/TechDebtCore.py
+@@ -20,10 +20,15 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import ast
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class TechDebtCore:
+     """
+     Pure logic for analyzing technical debt from AST.
+@@ -34,15 +39,15 @@ class TechDebtCore:
+     def analyze_ast_debt(tree: ast.AST) -> list[dict[str, Any]]:
+         """
+         Analyzes an AST tree for technical debt markers.
+-        
++
+         Args:
+             tree: The pre-parsed AST tree.
+-            
++
+         Returns:
+             A list of identified issues.
+         """
+         issues = []
+-        
++
+         # Check for missing docstrings
+         for node in ast.walk(tree):
+             if isinstance(node, (ast.FunctionDef, ast.ClassDef, ast.Module)):
+@@ -52,7 +57,7 @@ class TechDebtCore:
+                         "name": getattr(node, 'name', 'Module'),
+                         "severity": "Low"
+                     })
+-        
++
+         # Check for high node density (complexity proxy)
+         node_count = sum(1 for _ in ast.walk(tree))
+         if node_count > 1000:
+@@ -61,10 +66,10 @@ class TechDebtCore:
+                 "detail": f"Structure contains {node_count} AST nodes.",
+                 "severity": "Medium"
+             })
+-            
++
+         return issues
+ 
+     @staticmethod
+     def identify_hotspots(reports: list[dict[str, Any]], limit: int = 5) -> list[dict[str, Any]]:
+         """Sorts and returns major technical debt hotspots."""
+-        return sorted(reports, key=lambda x: x.get('issue_count', 0), reverse=True)[:limit]
+\ No newline at end of file
++        return sorted(reports, key=lambda x: x.get('issue_count', 0), reverse=True)[:limit]

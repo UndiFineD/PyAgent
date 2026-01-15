@@ -1,0 +1,12 @@
+diff --git a/src/core/base/managers/AuthManager.py b/src/core/base/managers/AuthManager.py
+index 7a06435..739d71b 100644
+--- a/src/core/base/managers/AuthManager.py
++++ b/src/core/base/managers/AuthManager.py
+@@ -1,7 +1,6 @@
+ 
+ import logging
+ import time
+-from typing import Dict
+ from src.core.base.core.AuthCore import AuthCore
+ 
+ class AuthManager:

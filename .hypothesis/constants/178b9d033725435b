@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\logic\__init__.py
+# hypothesis_version: 6.150.1
+
+['And', 'Equivalent', 'ITE', 'Implies', 'Nand', 'Nor', 'Not', 'Or', 'POSform', 'SOPform', 'Xor', 'bool_map', 'false', 'gateinputcount', 'satisfiable', 'simplify_logic', 'to_cnf', 'to_dnf', 'to_nnf', 'true']

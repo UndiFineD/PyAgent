@@ -27,6 +27,12 @@ from dataclasses import dataclass
 
 __version__ = VERSION
 
+
+
+
+
+
+
 @dataclass
 class ReviewFinding:
     """A finding from automated code review.

@@ -16,12 +16,15 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import uuid
-from typing import Dict, List, Any, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 
 __version__ = VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
+
+
+
 
 class FederatedOrchestrator:
     """
@@ -29,18 +32,18 @@ class FederatedOrchestrator:
     Manages coordination and consensus across distributed PyAgent swarms.
     Ensures local sovereignty remains intact while achieving global alignment.
     """
-    
+
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
-        self.peers: dict[str, str] = {} # swarm_id -> endpoint
+        self.peers: dict[str, str] = {}  # swarm_id -> endpoint
         self.negotiation_history: list[dict[str, Any]] = []
-        self.trust_scores: dict[str, float] = {} # swarm_id -> score (Phase 300)
+        self.trust_scores: dict[str, float] = {}  # swarm_id -> score (Phase 300)
 
     def register_peer_swarm(self, swarm_id: str, endpoint: str) -> bool:
         """Registers an external swarm as a negotiation peer."""
         logging.info(f"FederatedOrchestrator: Registering peer swarm {swarm_id} at {endpoint}")
         self.peers[swarm_id] = endpoint
-        self.trust_scores[swarm_id] = 1.0 # Initial trust score
+        self.trust_scores[swarm_id] = 1.0  # Initial trust score
         return True
 
     def propose_federated_task(self, task_description: str, target_swarm_ids: list[str]) -> str:
@@ -49,7 +52,7 @@ class FederatedOrchestrator:
         """
         proposal_id = str(uuid.uuid4())
         logging.info(f"FederatedOrchestrator: Proposing task {proposal_id} to {target_swarm_ids}")
-        
+
         proposal = {
             "proposal_id": proposal_id,
             "task": task_description,

@@ -26,6 +26,12 @@ from .LLMBackend import LLMBackend
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class CopilotCliBackend(LLMBackend):
     """GitHub Copilot CLI LLM Backend."""
 
@@ -40,7 +46,7 @@ class CopilotCliBackend(LLMBackend):
             # gh copilot suggest doesn't need the full strategic roadmap, just a task summary.
             max_char = 800
             safe_prompt = prompt[:max_char] + "..." if len(prompt) > max_char else prompt
-            
+
             cmd = ["gh", "copilot", "suggest", "-t", "shell", safe_prompt]
             process = subprocess.run(
                 cmd,
@@ -49,7 +55,7 @@ class CopilotCliBackend(LLMBackend):
                 timeout=timeout_s,
                 encoding="utf-8"
             )
-            
+
             if process.returncode == 0:
                 content = process.stdout.strip()
                 self._record("copilot_cli", model, safe_prompt, content, system_prompt=system_prompt)

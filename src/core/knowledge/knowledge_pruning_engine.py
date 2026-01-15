@@ -22,11 +22,17 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import time
-from typing import List, Dict, Any, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 
 __version__ = VERSION
 if TYPE_CHECKING:
     from .knowledge_engine import KnowledgeEngine
+
+
+
+
+
+
 
 class KnowledgePruningEngine:
     """
@@ -36,14 +42,14 @@ class KnowledgePruningEngine:
     """
     def __init__(self, engine: KnowledgeEngine) -> None:
         self.engine = engine
-        self.access_logs: dict[str, dict[str, Any]] = {} # id -> {"count": int, "last_access": float}
+        self.access_logs: dict[str, dict[str, Any]] = {}  # id -> {"count": int, "last_access": float}
 
     def log_access(self, element_id: str) -> None:
         """Records an access event to an element and updates timestamps."""
         import time
         if element_id not in self.access_logs:
             self.access_logs[element_id] = {"count": 0, "first_seen": time.time()}
-        
+
         self.access_logs[element_id]["count"] += 1
         self.access_logs[element_id]["last_access"] = time.time()
 
@@ -54,14 +60,14 @@ class KnowledgePruningEngine:
         """
         import time
         import math
-        
+
         log = self.access_logs.get(element_id)
         if not log:
             return 0.0
-            
-        decay_constant = 0.0001 # Adjustable parameter
+
+        decay_constant = 0.0001  # Adjustable parameter
         age = time.time() - log["last_access"]
-        
+
         strength = log["count"] * math.exp(-decay_constant * age)
         return strength
 
@@ -71,7 +77,7 @@ class KnowledgePruningEngine:
         Items with strength < strength_threshold are considered candidates for eviction.
         """
         logging.info(f"KnowledgePruningEngine: Initiating neural pruning for agent {self.engine.agent_id}")
-        
+
         pruned_report = {
             "btree": [],
             "graph": [],
@@ -83,7 +89,7 @@ class KnowledgePruningEngine:
         for element_id in list(self.access_logs.keys()):
             # Use anchoring strength instead of raw counts
             strength = self.get_anchoring_strength(element_id)
-            
+
             # Deletion path
             if strength <= strength_threshold:
                 if self.engine.btree.delete(element_id):
@@ -91,7 +97,7 @@ class KnowledgePruningEngine:
                 if self.engine.graph.delete(element_id):
                     pruned_report["graph"].append(element_id)
                 del self.access_logs[element_id]
-                
+
             # Compression path (Phase 128)
             elif strength <= compression_threshold:
                 if self.engine.compress_memory(element_id):

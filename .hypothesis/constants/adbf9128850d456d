@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\distributed\c10d_logger.py
+# hypothesis_version: 6.150.1
+
+['.', '_P', '_T', 'backend', 'default', 'error', 'func_name', 'global_rank', 'group', 'group_size', 'local_rank', 'nccl', 'nccl_version', 'pg_name', 'process_group', 'world_size']

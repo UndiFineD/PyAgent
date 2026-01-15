@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\sandbox.py
+# hypothesis_version: 6.150.1
+
+[16384, 134217728, '1', 'AGENT_IDENTITY', 'PATH', 'PYTHONPATH', 'SWARM_CORE_KEY', 'TEMP', '[REDACTED]', 'data', 'plugins', 'scratch', 'temp', 'win32']

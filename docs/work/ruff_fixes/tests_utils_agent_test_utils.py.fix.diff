@@ -1,0 +1,16 @@
+diff --git a/tests/utils/agent_test_utils.py b/tests/utils/agent_test_utils.py
+index 68b3b0b..e03447d 100644
+--- a/tests/utils/agent_test_utils.py
++++ b/tests/utils/agent_test_utils.py
+@@ -1,11 +1,9 @@
+ """Import test utilities from src."""
+ from __future__ import annotations
+-import sys
+ from pathlib import Path
+ from typing import Union
+ from src.infrastructure.dev.test_utils import (
+     FileSystemIsolator,
+-    LogCapturer,
+     MockAIBackend,
+     ModuleLoader,
+     SnapshotManager,

@@ -1,0 +1,105 @@
+diff --git a/src/observability/stats/exporters.py b/src/observability/stats/exporters.py
+index 163fb81..8d61f8f 100644
+--- a/src/observability/stats/exporters.py
++++ b/src/observability/stats/exporters.py
+@@ -8,12 +8,17 @@ import logging
+ import time
+ import uuid
+ from dataclasses import dataclass, field
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from .analysis import TracingCore
+ from .metrics import ExportDestination, Metric
+ 
+ logger = logging.getLogger(__name__)
+ 
++
++
++
++
++
+ @dataclass
+ class Span:
+     """A tracing span for OTel."""
+@@ -26,6 +31,11 @@ class Span:
+     attributes: dict[str, Any] = field(default_factory=dict)
+     status: str = "unset"
+ 
++
++
++
++
++
+ class PrometheusExporter:
+     """Formats fleet telemetry into Prometheus-compatible metrics."""
+     def __init__(self) -> None:
+@@ -41,6 +51,11 @@ class PrometheusExporter:
+     def generate_scrape_response(self) -> str:
+         return "\n".join([f"pyagent_{k} {v}" for k, v in self.metrics_registry.items()])
+ 
++
++
++
++
++
+ class OTelManager:
+     """Manages OTel-compatible spans and traces."""
+     def __init__(self) -> None:
+@@ -65,7 +80,7 @@ class OTelManager:
+         span.status = status
+         if attributes:
+             span.attributes.update(attributes)
+-        
++
+         total_latency = span.end_time - span.start_time
+         breakdown = self.core.calculate_latency_breakdown(total_latency, network_latency_sec)
+         span.attributes.update(breakdown)
+@@ -76,6 +91,11 @@ class OTelManager:
+         self.completed_spans = []
+         return batch
+ 
++
++
++
++
++
+ class CloudExporter:
+     """Export stats to cloud monitoring services."""
+     def __init__(self, destination:
+@@ -104,6 +124,11 @@ class CloudExporter:
+         self.export_queue.clear()
+         return count
+ 
++
++
++
++
++
+ class MetricsExporter:
+     """Consolidates fleet telemetry for external monitoring."""
+     def __init__(self) -> None:
+@@ -118,12 +143,22 @@ class MetricsExporter:
+     def get_prometheus_payload(self) -> str:
+         return self.prometheus.generate_scrape_response()
+ 
++
++
++
++
++
+ class StatsExporter:
+     """Exports stats in various formats."""
+     def __init__(self, format:
+         str = "json") -> None:
+         self.format = format
++
++
++
++
++
+     def export(self, metrics:
+         dict[str, Any], format: str | None = None) -> str:
+         f = format or self.format
+-        return json.dumps(metrics) if f == "json" else ""
+\ No newline at end of file
++        return json.dumps(metrics) if f == "json" else ""

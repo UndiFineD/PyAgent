@@ -28,6 +28,9 @@ from dataclasses import dataclass
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class NotificationConfig:
     """Configuration for error notifications.

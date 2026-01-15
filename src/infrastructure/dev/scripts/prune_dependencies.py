@@ -18,7 +18,6 @@ Uses curate_dependencies logic to comment out unused requirements.
 """
 
 from __future__ import annotations
-import os
 from pathlib import Path
 
 # Unused dependencies extracted from curate_dependencies.py output
@@ -58,36 +57,69 @@ UNUSED = {
     "win32_setctime", "yarl", "zipp"
 }
 
+
+
+
+
+
+
 def prune_requirements() -> None:
     req_path = Path("requirements")
     if not req_path.exists():
-        req_path = Path(".") # Fallback to root
-        
+        req_path = Path(".")  # Fallback to root
+
     for req_file in req_path.glob("*.txt"):
         print(f"Processing {req_file}...")
         lines = []
         changed = False
+
+
+
+
+
+
+
+
+
+
         with open(req_file, 'r') as f:
             for line in f:
                 content = line.strip()
+
+
+
                 if not content or content.startswith("#"):
                     lines.append(line)
                     continue
-                
+
                 # Check if this package is in UNUSED
                 # Matches name==version or name>=version
                 parts = content.split("==")[0].split(">=")[0].split("<=")[0].strip()
                 if parts in UNUSED:
                     print(f"  - Pruning {parts}")
-                    lines.append(f"# {line}") # Comment out
+
+
+
+
+
+
+
+                    lines.append(f"# {line}")  # Comment out
                     changed = True
                 else:
                     lines.append(line)
-        
+
+
+
+
         if changed:
             with open(req_file, 'w') as f:
                 f.writelines(lines)
             print(f"  - Saved changes to {req_file}")
+
+
+
+
 
 if __name__ == "__main__":
     prune_requirements()

@@ -19,11 +19,14 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, Any
+from typing import Any
 import logging
 from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
+
+
+
 
 class CodeTranslationAgent(BaseAgent):
     """
@@ -33,23 +36,23 @@ class CodeTranslationAgent(BaseAgent):
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
-        self.translation_history = []
+        self.translation_history: list[Any] = []
 
     def translate_file(self, source_code: str, from_lang: str, to_lang: str) -> str:
         """
         Translates source code from one language to another using LLM reasoning.
         """
         logging.info(f"CodeTranslationAgent: Translating code from {from_lang} to {to_lang}.")
-        
+
         prompt = (
             f"Translate the following {from_lang} code into {to_lang}.\n"
             "Ensure idiomatic conversion, preserving comments and structure.\n"
             "Respond ONLY with the translated code, no explanations.\n\n"
             f"### {from_lang} Source:\n{source_code}"
         )
-        
+
         translated_code = self.think(prompt)
-        
+
         # Strip markdown code blocks if present
         if translated_code.startswith("```"):
             lines = translated_code.split("\n")
@@ -64,7 +67,7 @@ class CodeTranslationAgent(BaseAgent):
             "to_lang": to_lang,
             "timestamp": "2026-01-10"
         })
-        
+
         return translated_code
 
     def _mock_python_to_rust(self, code: str) -> str:

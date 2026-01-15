@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\observability\stats\rollup_engine.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.95, 0.99, 100, 3600, 86400, '-inf', '1h', 'aggregation', 'avg', 'd', 'h', 'inf', 'm', 'max', 'mean', 'metric', 'metric_a', 'metric_b', 'min', 'sample_count', 'sample_size', 'sum', 'timestamp', 'value']

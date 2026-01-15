@@ -23,14 +23,18 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 import json
 
 __version__ = VERSION
 
+
+
+
 class TestReportGenerator:
-    __test__ = False
     """Generates test reports in various formats."""
+
+    __test__ = False
 
     def __init__(self, output_dir: str | Path | None = None) -> None:
         """Initialize report generator."""

@@ -23,10 +23,15 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .EntryTemplate import EntryTemplate
-from typing import Dict, List
 import re
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class TemplateManager:
     """Manages entry templates with placeholders.

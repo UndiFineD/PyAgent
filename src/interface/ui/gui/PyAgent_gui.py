@@ -37,10 +37,15 @@ if str(project_root) not in sys.path:
 
 __version__ = VERSION
 
+
+
+
 def main() -> None:
     root = tk.Tk()
     PyAgentGUI(root)
     root.mainloop()
+
+
 
 if __name__ == "__main__":
     main()

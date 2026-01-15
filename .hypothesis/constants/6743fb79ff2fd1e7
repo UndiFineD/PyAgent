@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\api\configuration.py
+# hypothesis_version: 6.150.1
+
+[1.2, 100, 1000, 'M', 'T', '_type', 'automatically_purge', 'batch_size', 'cosine', 'ef_construction', 'ef_search', 'hnsw:M', 'hnsw:batch_size', 'hnsw:construction_ef', 'hnsw:num_threads', 'hnsw:resize_factor', 'hnsw:search_ef', 'hnsw:space', 'hnsw:sync_threshold', 'hnsw_configuration', 'ip', 'l2', 'num_threads', 'resize_factor', 'space', 'sync_threshold']

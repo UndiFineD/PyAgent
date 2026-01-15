@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\observability\reports\ReportGenerator.py
+# hypothesis_version: 6.150.1
+
+[' ...', '## Behavior summary', '## Key dependencies', '## Location', '## Metadata', '## Module purpose', '## Notes', '## Public surface', '## Scan scope', '## Syntax / compile', '## 📂 Module Reports', '*.py', ', ', '-', '- (none)', '---', '-m', '.', '.py', 'FIXME', 'ReportGenerator', 'Reporting', 'TODO', '_', '__init__', '```', 'audit_log.jsonl', 'copilot', 'count', 'errors', 'except Exception:', 'except:', 'from argparse import', 'import argparse', 'logging', 'print(', 'py_compile', 'replace', 'self', 'skipped', 'subprocess', 'subprocess.run', 'subprocess.run(["gh"', "subprocess.run(['gh'", 'sys.path.insert', 'test_', 'utf-8']

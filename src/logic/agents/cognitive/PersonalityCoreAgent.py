@@ -21,18 +21,21 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
+
+
+
 
 class PersonalityCoreAgent(BaseAgent):
     """
     Manages the 'emotional intelligence' and 'vibes' of the fleet.
     Adjusts communication style and task priorities based on user context.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -48,23 +51,23 @@ class PersonalityCoreAgent(BaseAgent):
         Analyzes user input and sets the fleet-wide emotional/operational vibe.
         """
         logging.info(f"PersonalityCoreAgent: Analyzing vibe for: {user_input[:50]}...")
-        
+
         # In a real implementation, we'd use LLM to classify sentiment/urgency
         # prompt = f"Analyze setiment/urgency of: {user_input}"
         # analysis = self.think(prompt)
-        
+
         # Simulated analysis logic
         vibe = "professional"
         urgency = "low"
-        
+
         if any(word in user_input.lower() for word in ["urgent", "asap", "emergency", "broken"]):
             urgency = "high"
             vibe = "rapid_response"
         elif any(word in user_input.lower() for word in ["thanks", "great", "awesome", "fun"]):
             vibe = "friendly"
-        
+
         self.current_vibe = vibe
-        
+
         # Emit signal to the fleet
         if hasattr(self, 'registry') and self.registry:
             self.registry.emit("FLEET_VIBE_CHANGED", {
@@ -72,7 +75,7 @@ class PersonalityCoreAgent(BaseAgent):
                 "urgency": urgency,
                 "context": user_input[:100]
             })
-            
+
         return {
             "status": "success",
             "detected_vibe": vibe,

@@ -22,11 +22,16 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from .ChangelogEntry import ChangelogEntry
+from src.core.base.types import ChangelogEntry
 from .GroupingStrategy import GroupingStrategy
-from typing import Dict, List
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class EntryReorderer:
     """Reorders and groups changelog entries.

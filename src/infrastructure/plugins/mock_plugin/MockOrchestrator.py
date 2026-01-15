@@ -27,6 +27,9 @@ from typing import Any
 
 __version__ = VERSION
 
+
+
+
 class MockOrchestrator:
     """
     A mock orchestrator demonstrating how community members can add
@@ -39,10 +42,10 @@ class MockOrchestrator:
     def coordinate_mock_ritual(self, data: str) -> str:
         """Example coordination method."""
         logging.info("MockOrchestrator performing ritual...")
-        
+
         # In a real orchestrator, you'd call multiple agents:
         # self.fleet.agents["Mock"].run("Ritual Step 1")
-        
+
         return f"MockOrchestrator ritual successfully coordinated: {data}"
 
     def get_status(self) -> dict[str, str]:

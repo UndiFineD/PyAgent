@@ -24,26 +24,43 @@ import logging
 import random
 import time
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 from src.core.base.models import PromptTemplate
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class PromptTemplateManager:
+
+
+
+
+
     """Manages a collection of prompt templates."""
 
     def __init__(self) -> None:
         """Initialize the template manager."""
         self.templates: dict[str, PromptTemplate] = {}
 
+
+
     def register(self, template: PromptTemplate) -> None:
         """Register a prompt template."""
         self.templates[template.name] = template
+
+
+
 
     def render(self, template_name: str, **kwargs: Any) -> str:
         """Render a template by name."""
         template = self.templates[template_name]
         return template.render(**kwargs)
+
 
 class PromptVersion:
     """Versioned prompt for A/B testing."""
@@ -52,6 +69,7 @@ class PromptVersion:
         self,
         version: str | None = None,
         content: str | None = None,
+
         description: str = "",
         active: bool = True,
         version_id: str | None = None,
@@ -62,6 +80,7 @@ class PromptVersion:
     ) -> None:
         self.version = version or version_id or ""
         self.content = content or prompt_text or ""
+
         self.description = description
         self.active = active
         self.created_at = datetime.now()

@@ -7,12 +7,15 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from .engine import StatsCore
-from .metrics import Alert, Metric, MetricSnapshot, MetricType, Threshold
+from .observability_core import Alert, Metric, MetricSnapshot, MetricType, Threshold
 
 logger = logging.getLogger(__name__)
+
+
+
 
 class StatsAgent:
     """Agent that calculates statistics for fleet progress and file maintenance."""
@@ -36,10 +39,72 @@ class StatsAgent:
 
     def calculate_stats(self) -> dict[str, int]:
         total = len(self.files)
-        with_tests = sum(1 for f in self.files if (f.parent / f"test_{f.stem}.py").exists())
-        return {"total_files": total, "files_with_tests": with_tests}
+        with_tests = 0
+        with_context = 0
+        with_changes = 0
+        with_errors = 0
+        with_improvements = 0
+
+        for f in self.files:
+            # Check for test file
+            if (f.parent / f"test_{f.stem}.py").exists() or (f.parent / f"test_{f.name}").exists():
+                with_tests += 1
+
+            # Check for context files (assumed collocated for this agent version)
+            # In broader system these might be in docs/autodoc, but for local stats agent we check colloquial locations
+            has_desc = (f.parent / f"{f.stem}.description.md").exists()
+            if has_desc:
+                with_context += 1
+
+
+
+
+
+
+
+
+
+
+
+            if (f.parent / f"{f.stem}.changes.md").exists():
+                with_changes += 1
+
+
+
+            if (f.parent / f"{f.stem}.errors.md").exists():
+                with_errors += 1
+
+
+
+
+
+
+
+
+
+
+
+            if (f.parent / f"{f.stem}.improvements.md").exists():
+                with_improvements += 1
+
+
+        return {
+            "total_files": total,
+            "files_with_tests": with_tests,
+            "files_with_context": with_context,
+
+
+
+
+            "files_with_changes": with_changes,
+
+            "files_with_errors": with_errors,
+            "files_with_improvements": with_improvements
+        }
+
 
 class ReportingAgent(BaseAgent):
+
     """Observer agent that generates executive dashboards and reports."""
     def __init__(self, fleet:
         Any) -> None:
@@ -49,6 +114,9 @@ class ReportingAgent(BaseAgent):
     async def generate_dashboard(self) -> str:
         summary = self.fleet.telemetry.summarize_performance()
         return f"# 🚀 PyAgent Active Progress Dashboard\n\n## 🛡️ Executive Summary\n{json.dumps(summary, indent=2)}"
+
+
+
 
 class TransparencyAgent(BaseAgent):
     """Provides a detailed audit trail of agent thoughts, signals, and dependencies."""

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\zeroconf\__init__.py
+# hypothesis_version: 6.150.1
+
+['0.148.0', 'DNSQuestionType', 'Error', 'EventLoopBlocked', 'IPVersion', 'IncomingDecodeError', 'InterfaceChoice', 'LGPL', 'NotRunningException', 'RecordUpdate', 'RecordUpdateListener', 'ServiceBrowser', 'ServiceInfo', 'ServiceListener', 'ServiceStateChange', 'Zeroconf', 'ZeroconfServiceTypes', '__version__', 'current_time_millis']

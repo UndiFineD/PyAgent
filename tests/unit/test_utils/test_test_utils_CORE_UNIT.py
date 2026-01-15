@@ -2,24 +2,13 @@
 """Test classes from test_agent_test_utils.py - core module."""
 
 from __future__ import annotations
-import unittest
-from typing import Any, List, Dict, Never, Optional, Callable, Tuple, Set, Union
-from unittest.case import _AssertRaisesContext
-from unittest.mock import AsyncMock, MagicMock, Mock, patch, call, ANY
-import time
+from typing import Any, List, Dict
 import json
-from datetime import datetime
 import pytest
 import logging
 from pathlib import Path
 import sys
 import os
-import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
@@ -27,15 +16,23 @@ try:
 except ImportError:
     # Fallback
     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
+
     class agent_sys_path:
-        def __enter__(self) -> str: 
+        def __enter__(self) -> str:
 
             return self
-        def __exit__(self, *args) -> str: 
+
+
+
+
+
+
+
+        def __exit__(self, *args) -> str:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestFixtureFactoryPatterns:
     """Tests for fixture factory patterns."""
@@ -80,7 +77,6 @@ class TestFixtureFactoryPatterns:
         assert len(child.dependencies) == 1
 
 
-
 class TestTestDataSeedingUtilities:
     """Tests for test data seeding utilities."""
 
@@ -117,7 +113,6 @@ class TestTestDataSeedingUtilities:
         data = seeder.generate_bulk_data(count=10, data_type="python_code")
 
         assert len(data) == 10
-
 
 
 class TestParallelTestExecutionHelpers:
@@ -158,7 +153,6 @@ class TestParallelTestExecutionHelpers:
 
         assert runner.failure_count == 1
         assert runner.success_count == 1
-
 
 
 class TestTestOutputFormattingUtilities:
@@ -208,7 +202,6 @@ class TestTestOutputFormattingUtilities:
         assert summary["failed"] == 1
 
 
-
 class TestAssertionHelperFunctions:
     """Tests for assertion helper functions."""
 
@@ -251,7 +244,6 @@ class TestAssertionHelperFunctions:
         assert result is True
 
 
-
 class TestTestResultAggregationHelpers:
     """Tests for test result aggregation helpers."""
 
@@ -281,7 +273,6 @@ class TestTestResultAggregationHelpers:
         by_suite = aggregator.get_by_suite()
         assert by_suite["suite1"]["total"] == 2
         assert by_suite["suite2"]["total"] == 1
-
 
 
 class TestTestEnvironmentDetection:
@@ -316,7 +307,6 @@ class TestTestEnvironmentDetection:
 
         assert "python_version" in env
         assert env["python_version"].startswith("3.")
-
 
 
 class TestSnapshotComparisonUtilities:
@@ -359,7 +349,6 @@ class TestSnapshotComparisonUtilities:
         assert result.diff is not None
 
 
-
 class TestTestCoverageMeasurementHelpers:
     """Tests for test coverage measurement helpers."""
 
@@ -389,14 +378,12 @@ class TestTestCoverageMeasurementHelpers:
         assert percentage == 50.0
 
 
-
 class TestTestLogCaptureUtilities:
     """Tests for test log capture utilities."""
 
     def test_log_capturer_captures_logs(self, utils_module: Any) -> None:
         """Test log capturer captures log messages."""
         LogCapturer = utils_module.LogCapturer
-        import logging
 
         with LogCapturer() as capturer:
             logger = logging.getLogger("test_logger")
@@ -408,7 +395,6 @@ class TestTestLogCaptureUtilities:
     def test_log_capturer_filters_by_level(self, utils_module: Any) -> None:
         """Test log capturer filters by level."""
         LogCapturer = utils_module.LogCapturer
-        import logging
 
         with LogCapturer(level=logging.ERROR) as capturer:
             logger = logging.getLogger("test_filter")
@@ -419,14 +405,12 @@ class TestTestLogCaptureUtilities:
         assert any("Error" in log for log in logs)
 
 
-
 class TestTestConfigurationLoadingUtilities:
     """Tests for test configuration loading utilities."""
 
     def test_config_loader_loads_json(self, utils_module: Any, tmp_path: Path) -> None:
         """Test config loader loads JSON files."""
         TestConfigLoader = utils_module.TestConfigLoader
-        import json
 
         config_file: Path = tmp_path / "test_config.json"
         config_file.write_text(json.dumps({"timeout": 30, "retries": 3}))
@@ -439,7 +423,6 @@ class TestTestConfigurationLoadingUtilities:
     def test_config_loader_with_defaults(self, utils_module: Any, tmp_path: Path) -> None:
         """Test config loader applies defaults."""
         TestConfigLoader = utils_module.TestConfigLoader
-        import json
 
         config_file: Path = tmp_path / "partial_config.json"
         config_file.write_text(json.dumps({"timeout": 60}))
@@ -449,7 +432,6 @@ class TestTestConfigurationLoadingUtilities:
 
         assert config["timeout"] == 60  # Overridden
         assert config["retries"] == 5  # Default
-
 
 
 class TestTestReportGenerationHelpers:
@@ -473,7 +455,6 @@ class TestTestReportGenerationHelpers:
     def test_report_generator_creates_json(self, utils_module: Any, tmp_path: Path) -> None:
         """Test report generator creates JSON report."""
         TestReportGenerator = utils_module.TestReportGenerator
-        import json
 
         generator = TestReportGenerator(output_dir=tmp_path)
         generator.add_test_result("test1", "passed", 100)
@@ -483,7 +464,6 @@ class TestTestReportGenerationHelpers:
         assert report_path.exists()
         data = json.loads(report_path.read_text())
         assert "results" in data
-
 
 
 class TestTestIsolationMechanisms:
@@ -508,7 +488,6 @@ class TestTestIsolationMechanisms:
     def test_isolator_preserves_environment(self, utils_module: Any) -> None:
         """Test isolator preserves environment."""
         EnvironmentIsolator = utils_module.EnvironmentIsolator
-        import os
 
         original: str = os.environ.get("TEST_VAR", "")
 
@@ -518,7 +497,6 @@ class TestTestIsolationMechanisms:
 
         # Should be restored
         assert os.environ.get("TEST_VAR", "") == original
-
 
 
 class TestTestRetryUtilities:
@@ -553,7 +531,6 @@ class TestTestRetryUtilities:
 
         with pytest.raises(ValueError):
             helper.retry(always_fails)
-
 
 
 class TestTestCleanupHooks:
@@ -591,7 +568,6 @@ class TestTestCleanupHooks:
         assert order == [3, 2, 1]
 
 
-
 class TestTestDependencyManagement:
     """Tests for test dependency management."""
 
@@ -619,7 +595,6 @@ class TestTestDependencyManagement:
 
         with pytest.raises(ValueError, match="[Cc]ircular"):
             resolver.resolve()
-
 
 
 class TestTestResourceAllocation:
@@ -666,7 +641,6 @@ class TestTestResourceAllocation:
 # =============================================================================
 # Session 9: Parameterized Test Generator Tests
 # =============================================================================
-
 
 
 class TestParameterizedTestGenerator:
@@ -718,7 +692,6 @@ class TestParameterizedTestGenerator:
 # =============================================================================
 # Session 9: Dependency Container Tests
 # =============================================================================
-
 
 
 class TestDependencyContainer:
@@ -775,7 +748,6 @@ class TestDependencyContainer:
 # =============================================================================
 # Session 9: Flakiness Detector Tests
 # =============================================================================
-
 
 
 class TestFlakinessDetector:
@@ -836,7 +808,6 @@ class TestFlakinessDetector:
 # =============================================================================
 
 
-
 class TestTestDataCleaner:
     """Tests for TestDataCleaner class."""
 
@@ -893,7 +864,6 @@ class TestTestDataCleaner:
 # =============================================================================
 
 
-
 class TestCrossPlatformHelper:
     """Tests for CrossPlatformHelper class."""
 
@@ -938,7 +908,6 @@ class TestCrossPlatformHelper:
 # =============================================================================
 # Session 9: Test Logger Tests
 # =============================================================================
-
 
 
 class TestTestLogger:
@@ -1004,7 +973,6 @@ class TestTestLogger:
 # =============================================================================
 
 
-
 class TestParallelTestRunner:
     """Tests for ParallelTestRunner class."""
 
@@ -1062,7 +1030,6 @@ class TestParallelTestRunner:
 # =============================================================================
 # Session 9: Test Recorder Tests
 # =============================================================================
-
 
 
 class TestTestRecorder:
@@ -1126,7 +1093,6 @@ class TestTestRecorder:
 # =============================================================================
 
 
-
 class TestBaselineManager:
     """Tests for BaselineManager class."""
 
@@ -1178,7 +1144,6 @@ class TestBaselineManager:
 # =============================================================================
 # Session 9: Test Profile Manager Tests
 # =============================================================================
-
 
 
 class TestTestProfileManager:

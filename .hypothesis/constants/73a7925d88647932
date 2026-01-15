@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\decomposition\_kernel_pca.py
+# hypothesis_version: 6.150.1
+
+[1.0, 200, 'LA', 'alpha', 'arpack', 'auto', 'boolean', 'coef0', 'copy_X', 'cosine', 'csr', 'default', 'degree', 'dense', 'eigen_solver', 'float32', 'float64', 'gamma', 'iterated_power', 'kernel', 'kernel_params', 'left', 'linear', 'max_iter', 'module', 'n_components', 'n_jobs', 'neither', 'poly', 'pos', 'precomputed', 'random_state', 'randomized', 'rbf', 'remove_zero_eig', 'sigmoid', 'tocsr', 'tol']

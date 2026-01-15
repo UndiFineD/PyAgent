@@ -25,11 +25,14 @@ Specializes in data cleaning, exploratory data analysis (EDA), statistical model
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import create_main_function, as_tool
 
 __version__ = VERSION
+
+
+
 
 class DataScienceAgent(BaseAgent):
     """Agent designed for data-driven insights and statistical analysis."""
@@ -46,7 +49,7 @@ class DataScienceAgent(BaseAgent):
     @as_tool
     def analyze_dataset(self, data_path: str) -> dict[str, Any]:
         """Performs a comprehensive Exploratory Data Analysis (EDA) on a dataset.
-        
+
         Args:
             data_path: Path to the CSV or JSON dataset.
         """
@@ -69,7 +72,7 @@ class DataScienceAgent(BaseAgent):
     @as_tool
     def run_statistical_test(self, group_a: list[float], group_b: list[float], test_type: str = "t-test") -> dict[str, Any]:
         """Runs a statistical test between two groups of data.
-        
+
         Args:
             group_a: First set of numeric values.
             group_b: Second set of numeric values.
@@ -83,24 +86,44 @@ class DataScienceAgent(BaseAgent):
             "confidence_interval": [0.01, 0.08]
         }
 
+
+
+
+
+
     @as_tool
     def build_forecast_model(self, time_series_data: dict[str, float]) -> dict[str, Any]:
         """Builds a simple predictive forecast based on historical data.
-        
+
+
+
+
+
+
         Args:
             time_series_data: Mapping of timestamps to values.
         """
         logging.info("DataScience: Building time-series forecast model.")
         return {
+
+
             "model_type": "Prophet/ARIMA (Simulated)",
             "horizon": "30 days",
             "forecasted_trend": "Increasing",
             "accuracy_metric": {"MAE": 12.5, "R2": 0.89}
         }
 
+
+
+
+
     def improve_content(self, prompt: str) -> str:
         """Generic processing helper for data science tasks."""
         return f"DataScience insights for: {prompt}. Data pipeline optimized."
+
+
+
+
 
 if __name__ == "__main__":
     main = create_main_function(DataScienceAgent, "Data Science Agent", "Path to data or research question")

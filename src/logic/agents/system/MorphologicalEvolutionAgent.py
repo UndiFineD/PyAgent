@@ -21,12 +21,15 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 from src.logic.agents.system.core.MorphologyCore import MorphologyCore
 
 __version__ = VERSION
+
+
+
 
 class MorphologicalEvolutionAgent(BaseAgent):
     """
@@ -34,7 +37,7 @@ class MorphologicalEvolutionAgent(BaseAgent):
     Analyzes API usage patterns and evolves the fleet's class structures.
     Integrated with MorphologyCore for Agent DNA and Splitting/Merging logic.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.core = MorphologyCore()
@@ -47,7 +50,7 @@ class MorphologicalEvolutionAgent(BaseAgent):
             name=agent_instance.__class__.__name__,
             tools=[t["name"] for t in (getattr(agent_instance, "tools", []) or [])],
             prompt=getattr(agent_instance, "_system_prompt", ""),
-            model="gpt-4o" # Default
+            model="gpt-4o"  # Default
         )
 
     def check_for_merge_opportunity(self, agent_a_paths: list[str], agent_b_paths: list[str]) -> bool:
@@ -66,13 +69,13 @@ class MorphologicalEvolutionAgent(BaseAgent):
         Analyzes how an agent is being used and proposes a morphological evolution.
         """
         logging.info(f"MorphologicalEvolution: Analyzing usage patterns for {agent_name}")
-        
+
         # Determine if the agent is 'overloaded' or has 'redundant' parameters
-        param_usage = {}
+        param_usage: dict[Any, Any] = {}
         for log in call_logs:
             for p in log.get("params", []):
                 param_usage[p] = param_usage.get(p, 0) + 1
-                
+
         # Propose a flattened or optimized interface
         proposals = []
         if len(call_logs) > 10:
@@ -81,7 +84,7 @@ class MorphologicalEvolutionAgent(BaseAgent):
                 "description": f"Convert high-frequency calls in {agent_name} to specialized micro-tools.",
                 "target_file": f"src/logic/agents/specialized/{agent_name}.py"
             })
-            
+
         return {
             "agent": agent_name,
             "usage_summary": param_usage,

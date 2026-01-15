@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\solvers\simplex.py
+# hypothesis_version: 6.150.1
+
+['expecting min or max', 'max', 'min', 'must give A and B', 'shape', 'unexpected bounds %s', 'x', 'x1:%s', 'y', 'z']

@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/fleet/KnowledgeTransferCore.py b/src/infrastructure/fleet/KnowledgeTransferCore.py
+index 7f2b34c..34e40b5 100644
+--- a/src/infrastructure/fleet/KnowledgeTransferCore.py
++++ b/src/infrastructure/fleet/KnowledgeTransferCore.py
+@@ -19,7 +19,7 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import List, Any, Set
++from typing import Any
+ 
+ __version__ = VERSION
+ 

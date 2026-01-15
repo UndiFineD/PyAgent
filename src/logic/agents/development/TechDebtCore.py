@@ -20,9 +20,12 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import ast
-from typing import Dict, List, Any
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class TechDebtCore:
     """
@@ -34,15 +37,15 @@ class TechDebtCore:
     def analyze_ast_debt(tree: ast.AST) -> list[dict[str, Any]]:
         """
         Analyzes an AST tree for technical debt markers.
-        
+
         Args:
             tree: The pre-parsed AST tree.
-            
+
         Returns:
             A list of identified issues.
         """
         issues = []
-        
+
         # Check for missing docstrings
         for node in ast.walk(tree):
             if isinstance(node, (ast.FunctionDef, ast.ClassDef, ast.Module)):
@@ -52,7 +55,7 @@ class TechDebtCore:
                         "name": getattr(node, 'name', 'Module'),
                         "severity": "Low"
                     })
-        
+
         # Check for high node density (complexity proxy)
         node_count = sum(1 for _ in ast.walk(tree))
         if node_count > 1000:
@@ -61,7 +64,7 @@ class TechDebtCore:
                 "detail": f"Structure contains {node_count} AST nodes.",
                 "severity": "Medium"
             })
-            
+
         return issues
 
     @staticmethod

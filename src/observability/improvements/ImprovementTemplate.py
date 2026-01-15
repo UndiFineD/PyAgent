@@ -26,9 +26,12 @@ from .EffortEstimate import EffortEstimate
 from .ImprovementCategory import ImprovementCategory
 from .ImprovementPriority import ImprovementPriority
 from dataclasses import dataclass
-from typing import Any, Dict
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 @dataclass(init=False)
 class ImprovementTemplate:

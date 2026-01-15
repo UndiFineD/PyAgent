@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\engines\GraphContextEngine.py
+# hypothesis_version: 6.150.1
+
+['*.py', '.agent_graph.json', '.git', '.venv', '__pycache__', 'calls', 'classes', 'graph', 'imports', 'inherits', 'metadata', 'symbols', 'type', 'utf-8', 'w']

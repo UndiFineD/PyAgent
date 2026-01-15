@@ -25,7 +25,7 @@ from src.core.base.version import VERSION
 import sys
 from pathlib import Path
 from src.logic.agents.development.CoderAgent import CoderAgent
-from src.core.base.entrypoint import create_main_function
+from src.core.base.utilities import create_main_function
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[2]
@@ -36,9 +36,33 @@ if str(root / "src") not in sys.path:
 
 __version__ = VERSION
 
+
+class CodeGeneratorAgent(CoderAgent):
+    """Agent specializing in code generation."""
+    def __init__(self, file_path: str) -> None:
+        super().__init__(file_path)
+
 # Create main function using the helper
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 main = create_main_function(
-    CoderAgent,
+    CodeGeneratorAgent,
     'Coder Agent: Updates code files',
     'Path to the code file'
 )

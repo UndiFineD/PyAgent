@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/swarm/ResourceCurationAgent.py b/src/logic/agents/swarm/ResourceCurationAgent.py
+index 06535c7..3aed4aa 100644
+--- a/src/logic/agents/swarm/ResourceCurationAgent.py
++++ b/src/logic/agents/swarm/ResourceCurationAgent.py
+@@ -26,7 +26,7 @@ blog posts, and technical papers into the agent's knowledge base.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import json
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 

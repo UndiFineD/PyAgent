@@ -1,0 +1,28 @@
+diff --git a/src/infrastructure/backend/ResponseTransformerBase.py b/src/infrastructure/backend/ResponseTransformerBase.py
+index 2c38b2c..7c7358d 100644
+--- a/src/infrastructure/backend/ResponseTransformerBase.py
++++ b/src/infrastructure/backend/ResponseTransformerBase.py
+@@ -26,6 +26,16 @@ from abc import ABC, abstractmethod
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class ResponseTransformerBase(ABC):
+     """Abstract base class for response transformers.
+ 
+@@ -45,4 +55,4 @@ class ResponseTransformerBase(ABC):
+ 
+     @abstractmethod
+     def get_name(self) -> str:
+-        """Get transformer name."""
+\ No newline at end of file
++        """Get transformer name."""

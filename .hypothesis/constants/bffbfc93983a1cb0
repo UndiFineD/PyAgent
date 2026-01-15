@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\utils\embedding_functions\together_ai_embedding_function.py
+# hypothesis_version: 6.150.1
+
+['Authorization', 'Content-Type', 'Input is required', 'Input must be a list', 'TOGETHER_API_KEY', 'accept', 'api_key_env_var', 'application/json', 'cosine', 'data', 'embedding', 'input', 'ip', 'l2', 'model', 'model_name', 'together_ai']

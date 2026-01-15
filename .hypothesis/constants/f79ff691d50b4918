@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\printing\python.py
+# hypothesis_version: 6.150.1
+
+[" = Function('", " = Symbol('", "')\n", 'Add', 'Infinity', 'Integer', 'Mul', 'NegativeInfinity', 'Pow', '_', '_print_%s', 'e = ', '{', '}']

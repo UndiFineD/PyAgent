@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\utils\chat_template_utils.py
+# hypothesis_version: 6.150.1
+
+['3.1.0', 'UnionType', '\\s*\\n+\\s*', '_generation_support', 'additionalProperties', 'anyOf', 'array', 'audio', 'boolean', 'content', 'description', 'enum', 'function', 'generation', 'image', 'integer', 'items', 'messages', 'name', 'name:endgeneration', 'null', 'nullable', 'number', 'object', 'parameters', 'prefixItems', 'properties', 'raise_exception', 'required', 'return', 'strftime_now', 'string', 'text', 'tojson', 'type']

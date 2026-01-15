@@ -19,26 +19,31 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
+from src.observability.StructuredLogger import StructuredLogger
 
 __version__ = VERSION
 
+
+
+
 class ResearchSynthesisAgent(BaseAgent):
     """
-    Autonomously conducts research on technical topics by querying 
+    Autonomously conducts research on technical topics by querying
     external/internal sources and synthesizing complex findings.
     """
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
-        self.research_library = {} # topic -> research_summary
+        self.logger = StructuredLogger(agent_id="ResearchSynthesisAgent")
+        self.research_library: dict[Any, Any] = {}  # topic -> research_summary
 
     def conduct_research(self, topic: str, focus_areas: list[str]) -> dict[str, Any]:
         """Conducts a simulated research session on a given topic."""
-        print(f"Conducting research on: {topic}")
+        self.logger.info(f"Conducting research on: {topic}", topic=topic, areas=focus_areas)
         research_id = f"R-{hash(topic) % 1000}"
-        
+
         # Simulate research gathering
         findings = []
         for area in focus_areas:
@@ -47,10 +52,10 @@ class ResearchSynthesisAgent(BaseAgent):
                 "data": f"Simulated data for {area} regarding {topic}",
                 "confidence": 0.85
             })
-            
+
         summary = self._synthesize_findings(topic, findings)
         self.research_library[topic] = summary
-        
+
         return {
             "research_id": research_id,
             "topic": topic,

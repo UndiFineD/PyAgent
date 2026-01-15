@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\_loss\link.py
+# hypothesis_version: 6.150.1
+
+[-10000000000.0, 0.5, 10000000000.0, 'half_logit', 'identity', 'log', 'logit', 'multinomial_logit']

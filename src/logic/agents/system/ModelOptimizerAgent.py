@@ -24,11 +24,14 @@ from __future__ import annotations
 from src.core.base.BaseAgent import BaseAgent
 import logging
 import json
-from typing import Dict, List, Any
+from typing import Any
+
+
+
 
 class ModelOptimizerAgent(BaseAgent):
     """Optimizes LLM deployment and inference using patterns like AirLLM."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -41,7 +44,7 @@ class ModelOptimizerAgent(BaseAgent):
         """Calculates the best optimization strategy based on hardware constraints."""
         if self.recorder:
             self.recorder.record_lesson("model_optimization_request", {"size": model_size_gb, "vram": available_vram_gb, "hw": hardware_features})
-            
+
         strategy = {
             "method": "Standard",
             "quantization": None,
@@ -60,26 +63,26 @@ class ModelOptimizerAgent(BaseAgent):
             strategy["quantization"] = "FP8"
             strategy["estimated_speed"] = "Ultra-Fast (Hardware Aggregated)"
             return strategy
-        
+
         # Check for NPU (FastFlowLM / Ryzen AI Pattern)
         if "npu_dna2" in hardware_features:
             strategy["acceleration"] = "FastFlowLM (NPU Optimized)"
             strategy["estimated_speed"] = "Fast (PPA Efficient)"
             return strategy
-            
+
         if model_size_gb > available_vram_gb:
             strategy["layered_inference"] = True
             strategy["method"] = "Layer-by-Layer (AirLLM Pattern)"
-            
+
             if model_size_gb > available_vram_gb * 2:
                 strategy["quantization"] = "4-bit"
                 strategy["estimated_speed"] = "Slow (Disk IO Bound)"
             else:
                 strategy["quantization"] = "8-bit"
                 strategy["estimated_speed"] = "Moderate"
-                
+
             strategy["offload_to_cpu"] = True
-            
+
         return strategy
 
     def run_tinyml_benchmark(self, model_id: str, hardware_target: str) -> dict[str, Any]:
@@ -89,7 +92,7 @@ class ModelOptimizerAgent(BaseAgent):
         """
         if self.recorder:
             self.recorder.record_lesson("tinyml_benchmark", {"model": model_id, "target": hardware_target})
-            
+
         logging.info(f"Running TinyML benchmark for {model_id} on {hardware_target}...")
         return {
             "latency_ms": 12.5,
@@ -108,9 +111,9 @@ class ModelOptimizerAgent(BaseAgent):
         Simulates H100 (Hopper) performance using HopperSim logic (Phase 130).
         Calculates compute utilization and bandwidth requirements for FP8 kernels.
         """
-        utilization = 0.85 # H100 Transformer Engine target
-        memory_bandwidth_gb_s = 3350 # H100 SXM5
-        
+        utilization = 0.85  # H100 Transformer Engine target
+        memory_bandwidth_gb_s = 3350  # H100 SXM5
+
         return {
             "hardware": "NVIDIA H100 (Hopper)",
             "peak_tflops_fp8": 3958,
@@ -132,24 +135,45 @@ model = AutoModel.from_pretrained("{model_id}", compression='{compression}')
 input_text = ["Explain the architecture of a transformer."]
 input_tokens = model.tokenizer(input_text, return_tensors="pt")
 
+
+
+
+
+
 output = model.generate(
     input_tokens['input_ids'].cuda(),
     max_new_tokens=50,
     use_cache=True
+
+
+
+
 )
 
 print(model.tokenizer.decode(output.sequences[0]))
 """
+
+
+
 
     def improve_content(self, task_description: str) -> str:
         """Suggests an optimization plan for a specific model deployment task."""
         # Simple parser for "model size" and "vram" in text if provided
         # For now, return a generic recommendation
         return json.dumps({
+
+
+
+
             "recommendation": "Use 4-bit quantization and Layered Inference for models > 30B parameters on consumer hardware.",
             "pattern": "AirLLM (Layered Loading)",
             "benefits": ["Run 70B on 4GB VRAM", "Avoid OOM errors", "Simplified deployment"]
         }, indent=2)
+
+
+
+
+
 
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function

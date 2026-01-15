@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/backend/ConfigHotReloader.py b/src/infrastructure/backend/ConfigHotReloader.py
+index 70ff584..bb9c698 100644
+--- a/src/infrastructure/backend/ConfigHotReloader.py
++++ b/src/infrastructure/backend/ConfigHotReloader.py
+@@ -22,7 +22,7 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from collections.abc import Callable
+ import logging
+ import os

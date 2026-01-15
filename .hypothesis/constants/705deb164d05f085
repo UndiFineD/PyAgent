@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\tokenization_utils.py
+# hypothesis_version: 6.150.1
+
+[123, 126, '(', '(.+?)', ')|', 'C', 'P', 'Zs', 'added_tokens.json', 'added_tokens_decoder', 'do_lower_case', 'normalized', 'special', 'split_special_tokens', 'use_source_tokenizer', '|']

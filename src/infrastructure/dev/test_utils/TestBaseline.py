@@ -23,14 +23,16 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from dataclasses import dataclass, field
-from typing import Any, Dict
+from typing import Any
 import time
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class TestBaseline:
-    __test__ = False
     """A test baseline for comparison.
 
     Attributes:
@@ -39,6 +41,7 @@ class TestBaseline:
         created_at: Creation timestamp.
         version: Baseline version.
     """
+    __test__ = False
 
     name: str
     values: dict[str, Any]

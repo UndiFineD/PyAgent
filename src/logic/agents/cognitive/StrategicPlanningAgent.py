@@ -19,22 +19,25 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
+
+
+
 class StrategicPlanningAgent(BaseAgent):
     """
-    Strategic Planning Agent: Handles long-term goal setting, roadmap 
+    Strategic Planning Agent: Handles long-term goal setting, roadmap
     prioritization, and autonomous project management for the fleet.
     """
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
-        self.goals = []
-        self.roadmap = []
-        self.status_reports = []
+        self.goals: list[Any] = []
+        self.roadmap: list[Any] = []
+        self.status_reports: list[Any] = []
 
     def set_long_term_goal(self, goal_description: str, target_date: str) -> dict[str, Any]:
         """Adds a long-term goal for the fleet to achieve."""

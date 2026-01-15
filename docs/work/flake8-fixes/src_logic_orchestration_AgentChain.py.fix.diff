@@ -1,0 +1,34 @@
+diff --git a/src/logic/orchestration/AgentChain.py b/src/logic/orchestration/AgentChain.py
+index de6d55d..6d4d466 100644
+--- a/src/logic/orchestration/AgentChain.py
++++ b/src/logic/orchestration/AgentChain.py
+@@ -23,11 +23,21 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.orchestration.AgentChainStep import AgentChainStep
+-from typing import List, Optional, Dict, Any
++from typing import Any
+ from collections.abc import Callable
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class AgentChain:
+     """Chain multiple agents for sequential execution.
+ 
+@@ -136,4 +146,4 @@ class AgentChain:
+ 
+     def get_results(self) -> list[dict[str, Any]]:
+         """Get results from last execution."""
+-        return self._results
+\ No newline at end of file
++        return self._results

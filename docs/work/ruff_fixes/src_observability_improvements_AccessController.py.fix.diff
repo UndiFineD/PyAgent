@@ -1,0 +1,12 @@
+diff --git a/src/observability/improvements/AccessController.py b/src/observability/improvements/AccessController.py
+index fc4e3be..b4e87e4 100644
+--- a/src/observability/improvements/AccessController.py
++++ b/src/observability/improvements/AccessController.py
+@@ -22,7 +22,6 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, List
+ 
+ __version__ = VERSION
+ 

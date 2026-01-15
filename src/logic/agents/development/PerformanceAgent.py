@@ -24,10 +24,12 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from src.core.base.types.OptimizationSuggestion import OptimizationSuggestion
 from src.core.base.types.OptimizationType import OptimizationType
-from typing import List, Tuple
 import re
 
 __version__ = VERSION
+
+
+
 
 class PerformanceAgent:
     """Identifies and suggests code optimizations.

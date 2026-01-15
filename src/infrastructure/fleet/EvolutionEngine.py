@@ -26,10 +26,13 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 from pathlib import Path
-from typing import Dict, Any
+from typing import Any
 from .EvolutionCore import EvolutionCore
 
 __version__ = VERSION
+
+
+
 
 class EvolutionEngine:
     """
@@ -49,10 +52,10 @@ class EvolutionEngine:
         target_path = self.output_dir / agent_filename
 
         template = self.core.generate_agent_template(name, capabilities, base_type)
-        
+
         with open(target_path, "w") as f:
             f.write(template)
-            
+
         logging.info(f"Evolution: Generated new agent {name} at {target_path}")
         return str(target_path)
 

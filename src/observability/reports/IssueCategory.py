@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class IssueCategory(Enum):
     """Category of code issue."""
 

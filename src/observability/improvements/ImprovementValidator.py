@@ -25,10 +25,13 @@ from src.core.base.version import VERSION
 from .Improvement import Improvement
 from .ValidationResult import ValidationResult
 from .ValidationSeverity import ValidationSeverity
-from typing import Any, List, Tuple
+from typing import Any
 from collections.abc import Callable
 
 __version__ = VERSION
+
+
+
 
 class ImprovementValidator:
     """Validates improvements with automated testing.

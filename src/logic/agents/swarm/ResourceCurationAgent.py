@@ -19,18 +19,21 @@
 # limitations under the License.
 
 """ResourceCurationAgent for PyAgent.
-Specializes in parsing, summarizing, and indexing external research links, 
+Specializes in parsing, summarizing, and indexing external research links,
 blog posts, and technical papers into the agent's knowledge base.
 """
 
 from __future__ import annotations
 from src.core.base.version import VERSION
 import json
-from typing import Dict, List, Any, Optional
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
+
+
+
 
 class ResourceCurationAgent(BaseAgent):
     """Manages the 'Good Read Unit' and research link lifecycle."""
@@ -45,7 +48,7 @@ class ResourceCurationAgent(BaseAgent):
         )
 
     @as_tool
-    def add_resource(self, url: str, title: str, summary: str | None = None, tags: list[str] = None) -> str:
+    def add_resource(self, url: str, title: str, summary: str | None = None, tags: list[str] | None = None) -> str:
         """Adds a new research resource to the library."""
         resource = {
             "url": url,
@@ -54,7 +57,7 @@ class ResourceCurationAgent(BaseAgent):
             "tags": tags or [],
             "status": "Archived"
         }
-        
+
         try:
             library = self._load_library()
             library.append(resource)
@@ -64,24 +67,47 @@ class ResourceCurationAgent(BaseAgent):
             return f"Failed to add resource: {e}"
 
     @as_tool
+
+
+
+
+
+
+
+
+
+
     def process_research_queue(self, urls: list[str]) -> str:
         """Bulk processes a list of discovery URLs."""
         # Simulated extraction logic
         return f"Processed {len(urls)} research items. Recommendations sent to KnowledgeAgent."
 
+
+
+
+
     def _load_library(self) -> list[dict[str, Any]]:
         import os
         if not os.path.exists(self.library_path):
             return []
+
+
         with open(self.library_path, encoding="utf-8") as f:
             return json.load(f)
 
     def _save_library(self, data: list[dict[str, Any]]) -> None:
         with open(self.library_path, "w", encoding="utf-8") as f:
+
+
+
             json.dump(data, f, indent=4)
 
     def improve_content(self, input_text: str) -> str:
         return f"Library currently contains {len(self._load_library())} curated research units."
+
+
+
+
 
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function

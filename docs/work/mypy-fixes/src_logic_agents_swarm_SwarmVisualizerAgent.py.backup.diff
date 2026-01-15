@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/swarm/SwarmVisualizerAgent.py b/src/logic/agents/swarm/SwarmVisualizerAgent.py
+index 7ea285a..fa4f2c2 100644
+--- a/src/logic/agents/swarm/SwarmVisualizerAgent.py
++++ b/src/logic/agents/swarm/SwarmVisualizerAgent.py
+@@ -20,7 +20,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import time
+-from typing import Dict, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 

@@ -22,37 +22,60 @@ Provides functions to count lines of code, measure file sizes, and generate
 code statistics across the project.
 """
 from __future__ import annotations
+from pathlib import Path
 from src.core.base.version import VERSION
 import os
 import ast
 
 __version__ = VERSION
 
+
+
+
+
+
+
 def count_real_code(file_path: str) -> int:
     if os.path.basename(file_path) == "__init__.py":
-        return 1000 # Ignore in this filter
-    
+        return 1000  # Ignore in this filter
+
+
+
+
+
+
     try:
         with open(file_path, encoding='utf-8') as f:
             content = f.read()
+
+
             if not content.strip():
                 return 0
-            
+
             tree = ast.parse(content)
-            
+
             real_stmts = 0
             for node in tree.body:
                 # Only top level
                 if isinstance(node, (ast.Import, ast.ImportFrom)):
+
+
                     continue
                 if isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
-                    continue # Docstrings
-                
+                    continue  # Docstrings
+
                 real_stmts += 1
-            
+
+
+
+
             return real_stmts
     except Exception:
         return 1000
+
+
+
+
 
 src_path = str(Path(__file__).resolve().parents[4]) + "/src"
 stubs = []

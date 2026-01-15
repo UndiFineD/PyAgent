@@ -38,6 +38,12 @@ import time
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class ShardedKnowledgeCore:
     """Logic for sharding and asynchronously retrieving knowledge at scale."""
 
@@ -153,17 +159,17 @@ class ShardedKnowledgeCore:
 
     async def right_to_be_forgotten(self, entity_name: str) -> bool:
         """
-        Removes an entity from the knowledge store across all shards 
+        Removes an entity from the knowledge store across all shards
         to comply with privacy regulations (GDPR/CCPA).
         """
         shard_id = self.get_shard_id(entity_name)
         logging.info(f"Compliance: Executing 'Right to be Forgotten' for entity '{entity_name}' in shard {shard_id}")
-        
+
         shard_data = await self.load_shard(shard_id)
         if entity_name in shard_data:
             del shard_data[entity_name]
             return await self.save_shard(shard_id, shard_data)
-        
+
         logging.warning(f"Compliance: Entity '{entity_name}' not found in knowledge store.")
         return False
 
@@ -173,18 +179,18 @@ class ShardedKnowledgeCore:
             import pandas as pd
             import pyarrow as pa
             import pyarrow.parquet as pq
-            
+
             # Load the shard (blocking load for this utility move)
             source_path = self.get_shard_path(shard_id)
             if not source_path.exists():
                 return False
-                
+
             with open(source_path, "rb") as f:
                 data = orjson.loads(f.read())
-            
+
             if not data:
                 return False
-            
+
             # Convert dict to flat list of records if possible
             records = []
             for key, val in data.items():
@@ -194,10 +200,10 @@ class ShardedKnowledgeCore:
                     records.append(rec)
                 else:
                     records.append({"entity": key, "value": val})
-            
+
             df = pd.DataFrame(records)
             table = pa.Table.from_pandas(df)
-            
+
             output_path.parent.mkdir(parents=True, exist_ok=True)
             pq.write_table(table, str(output_path), compression='zstd')
             return True

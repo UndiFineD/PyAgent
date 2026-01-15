@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\development\LintingAgent.py
+# hypothesis_version: 6.150.1
+
+['--ignore=E203,W503', '.', 'Linting Agent', 'Path to audit', 'Shell', '__main__', 'flake8', 'mypy']

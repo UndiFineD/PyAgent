@@ -9,7 +9,11 @@ import os
 
 from src.core.base.interfaces import ContextRecorderInterface
 
+
+
+
 class DependencyCore:
+    """Core logic for dependency auditing and version management."""
     @staticmethod
     def run_pip_audit(recorder: ContextRecorderInterface | None = None) -> str:
         """
@@ -46,10 +50,10 @@ class DependencyCore:
                     result="file-not-found"
                 )
             return 0
-            
+
         with open(file_path) as f:
             lines = f.readlines()
-            
+
         new_lines = []
         modified = 0
         for line in lines:
@@ -57,7 +61,7 @@ class DependencyCore:
             # If line is a package and not pinned
             if stripped and not stripped.startswith("#") and not stripped.startswith("-r"):
                 if "==" not in stripped and ">=" not in stripped:
-                    # In a real scenario, we'd fetch current version. 
+                    # In a real scenario, we'd fetch current version.
                     # For this phase, we'll mark it for review if not pinned.
                     new_lines.append(line.replace(stripped, stripped + "==LATEST-CHECK-REQUIRED"))
                     modified += 1
@@ -65,7 +69,7 @@ class DependencyCore:
                     new_lines.append(line)
             else:
                 new_lines.append(line)
-                
+
         with open(file_path, "w") as f:
             f.writelines(new_lines)
 
@@ -77,5 +81,5 @@ class DependencyCore:
                 result=f"modified={modified}",
                 meta={"changes": modified}
             )
-        
+
         return modified

@@ -18,15 +18,20 @@ Scans the workspace for imports and cross-references with requirements.txt.
 """
 
 from __future__ import annotations
-import os
 import re
 from pathlib import Path
+
+
+
+
+
+
 
 def curate_dependencies() -> None:
     workspace_root = Path(".")
     src_dir = workspace_root / "src"
     requirements_file = workspace_root / "requirements.txt"
-    
+
     if not src_dir.exists() or not requirements_file.exists():
         print("Error: src/ or requirements.txt not found.")
         return
@@ -47,7 +52,7 @@ def curate_dependencies() -> None:
     # 1. extract all unique imports from src/
     imported_modules = set()
     import_regex = re.compile(r"^(?:from|import)\s+([a-zA-Z0-9_]+)")
-    
+
     for py_file in src_dir.rglob("*.py"):
         try:
             with open(py_file, 'r', encoding='utf-8') as f:
@@ -81,11 +86,23 @@ def curate_dependencies() -> None:
 
     # 3. Intersection and delta
     unused_normalized = req_modules - imported_modules
-    
+
     # Map back to raw for report
+
+
+
+
+
+
+
+
+
+
     unused_raw = []
     for rm in req_modules_raw:
         normalized = rm.replace("-", "_")
+
+
         mapped = PACKAGE_TO_IMPORT_MAP.get(rm, PACKAGE_TO_IMPORT_MAP.get(normalized, normalized)).lower()
         if mapped in unused_normalized:
             unused_raw.append(rm)
@@ -95,15 +112,29 @@ def curate_dependencies() -> None:
     print("--- Dependency Curation Report (Phase 312) ---")
     print(f"Total Unique External Modules Imported: {len(imported_modules)}")
     print(f"Total Modules in requirements/*.txt: {len(req_modules_raw)}")
+
+
+
+
+
+
     print("\n[UNUSED] (In requirements but not imported in src/):")
     for m in sorted(unused_raw):
         # Filter out common false positives
         if m.lower() not in ['pytest', 'ruff', 'mypy', 'pytest-cov', 'black', 'flake8', 'isort', 'pip-tools', 'tox', 'build', 'setuptools', 'wheel', 'twine']:
             print(f"  - {m}")
 
+
+
+
+
     print("\n[MISSING?] (Imported in src/ but not listed in requirements/*.txt):")
     for m in sorted(missing):
         print(f"  - {m}")
+
+
+
+
 
 if __name__ == "__main__":
     curate_dependencies()

@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/dev/test_utils/BaselineManager.py b/src/infrastructure/dev/test_utils/BaselineManager.py
+index 340af9b..92965a5 100644
+--- a/src/infrastructure/dev/test_utils/BaselineManager.py
++++ b/src/infrastructure/dev/test_utils/BaselineManager.py
+@@ -24,7 +24,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .TestBaseline import TestBaseline
+ from pathlib import Path
+-from typing import Any, Dict, Optional
++from typing import Any
+ import json
+ 
+ __version__ = VERSION

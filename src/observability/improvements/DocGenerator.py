@@ -23,9 +23,12 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .Improvement import Improvement
-from typing import Any, Dict, cast
+from typing import Any, cast
 
 __version__ = VERSION
+
+
+
 
 class DocGenerator:
     """Generates simple documentation text for improvements."""

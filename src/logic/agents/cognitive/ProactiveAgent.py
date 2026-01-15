@@ -26,13 +26,16 @@ from src.core.base.BaseAgent import BaseAgent
 import logging
 import json
 import time
-from typing import Dict, List, Any, Optional
+from typing import Any
 
 __version__ = VERSION
 
+
+
+
 class ProactiveAgent(BaseAgent):
     """Manages recurring, triggered, and scheduled tasks proactively."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -70,39 +73,56 @@ class ProactiveAgent(BaseAgent):
         """Checks if any environmental triggers should fire a proactive task."""
         state = environment_state or self.observe_environment()
         triggered_tasks = []
-        
+
         # CPU/Memory Triggers
         if state.get("status") == "CRITICAL":
             triggered_tasks.append(f"Resource Alert: System status is {state['status']}. Optimizing processes.")
-            
+
         # Disk Triggers
         if state.get("disk_free_gb", 100) < 5:
             triggered_tasks.append("Cleanup workspace: Disk space is critically low (less than 5GB free)")
-            
+
         # Original placeholders
         if state.get("error_count", 0) > 5:
             triggered_tasks.append("Diagnostic: High error rate detected")
-            
+
         return triggered_tasks
+
+
+
+
+
 
     def get_habit_recommendation(self, user_history: list[str]) -> str:
         """Uses LLM to detect user behavior patterns and recommend proactive habits."""
         if not user_history:
             return "Not enough data yet to establish habits."
-            
+
+
+
+
         logging.info(f"ProactiveAgent: Analyzing history of {len(user_history)} interactions.")
         prompt = (
             f"Analyze the following user interaction history: {json.dumps(user_history)}\n"
             "Identify recurring patterns (e.g., 'always runs tests after editing models') "
+
+
             "and suggest one proactive automation or habit that would save time. "
             "Be concise and helpful."
         )
-        
+
         return self.think(prompt)
+
+
+
 
     def improve_content(self, input_text: str) -> str:
         """Returns proactive suggestions based on current context."""
         return self.get_habit_recommendation([input_text])
+
+
+
+
 
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function

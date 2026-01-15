@@ -22,10 +22,16 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import List, Set, Tuple, Dict, Any
+from typing import Any
 from .models import TestCase
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class TestSuiteOptimizer:
     """Optimize test suites by removing redundant tests."""
@@ -100,26 +106,57 @@ class TestSuiteOptimizer:
         """Get the coverage set for a given test."""
         return set(self.coverage_map.get(test_id, set()))
 
+
+
+
+
+
+
+
+
+
+
     def optimize(self) -> list[str]:
         """Return a minimized set of tests while preserving overall coverage."""
+
+
+
         if not self.coverage_map:
             return []
 
         all_coverage: set[str] = set()
+
+
+
+
         for cov in self.coverage_map.values():
             all_coverage |= set(cov)
 
         redundant = set(self.find_redundant_tests())
         kept = [test_id for test_id in self.coverage_map.keys() if test_id not in redundant]
 
+
+
+
+
+
+
+
         kept_coverage: set[str] = set()
         for test_id in kept:
             kept_coverage |= self.get_coverage(test_id)
+
+
+
 
         if kept_coverage != all_coverage:
             return list(self.coverage_map.keys())
 
         return kept
+
+
+
+
 
 class CoverageGapAnalyzer:
     """Analyzes coverage gaps."""

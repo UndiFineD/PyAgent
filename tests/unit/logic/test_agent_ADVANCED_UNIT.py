@@ -2,23 +2,13 @@
 """Test classes from test_agent.py - core module."""
 
 from __future__ import annotations
-import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
+from typing import List
 import time
 import json
-from datetime import datetime
 import pytest
-import logging
 from pathlib import Path
 import sys
-import os
-import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+from concurrent.futures import ThreadPoolExecutor
 
 # Try to import test utilities
 try:
@@ -26,17 +16,25 @@ try:
 except ImportError:
     # Fallback
     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
+
     class agent_sys_path:
-        def __enter__(self) -> bool: 
+        def __enter__(self) -> bool:
 
             return self
-        def __exit__(self, *args) -> str: 
+
+
+
+
+
+
+
+        def __exit__(self, *args) -> str:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
 
 # Core Logic and Utility Tests
+
 
 class TestGitBranchProcessor:
     """Tests for GitBranchProcessor class."""
@@ -64,8 +62,6 @@ class TestGitBranchProcessor:
 # ============================================================================
 # SESSION 9: VALIDATION RULE MANAGER TESTS
 # ============================================================================
-
-
 
 class TestValidationRuleManager:
     """Tests for ValidationRuleManager class."""
@@ -101,7 +97,6 @@ class TestValidationRuleManager:
 # ============================================================================
 
 
-
 class TestAgentPriorityQueue:
     """Tests for AgentPriorityQueue class."""
 
@@ -131,7 +126,6 @@ class TestAgentPriorityQueue:
 # ============================================================================
 
 
-
 class TestTelemetryCollector:
     """Tests for TelemetryCollector class."""
 
@@ -158,7 +152,6 @@ class TestTelemetryCollector:
     def test_export_json(self, agent_module) -> None:
         """Test exporting spans as JSON."""
         TelemetryCollector = agent_module.TelemetryCollector
-        import json
 
         collector = TelemetryCollector()
 
@@ -173,7 +166,6 @@ class TestTelemetryCollector:
 # ============================================================================
 # SESSION 9: CONDITIONAL EXECUTOR TESTS
 # ============================================================================
-
 
 
 class TestConditionalExecutor:
@@ -215,8 +207,6 @@ class TestConditionalExecutor:
 # SESSION 9: TEMPLATE MANAGER TESTS
 # ============================================================================
 
-
-
 class TestTemplateManager:
     """Tests for TemplateManager class."""
 
@@ -251,8 +241,6 @@ class TestTemplateManager:
 # SESSION 9: DEPENDENCY GRAPH TESTS
 # ============================================================================
 
-
-
 class TestDependencyGraph:
     """Tests for DependencyGraph class."""
 
@@ -281,7 +269,9 @@ class TestDependencyGraph:
         graph.add_dependency("tests", "coder")
         graph.add_dependency("docs", "tests")
 
-        order = graph.resolve()
+        batches = graph.resolve()
+        # Flatten batches to verify order
+        order = [item for batch in batches for item in batch]
 
         assert order.index("coder") < order.index("tests")
         assert order.index("tests") < order.index("docs")
@@ -289,7 +279,6 @@ class TestDependencyGraph:
 # ============================================================================
 # SESSION 9: PROFILE MANAGER TESTS
 # ============================================================================
-
 
 
 class TestProfileManager:
@@ -316,7 +305,6 @@ class TestProfileManager:
 # ============================================================================
 # SESSION 9: RESULT CACHE TESTS
 # ============================================================================
-
 
 
 class TestResultCache:
@@ -353,7 +341,6 @@ class TestResultCache:
 # ============================================================================
 
 
-
 class TestExecutionScheduler:
     """Tests for ExecutionScheduler class."""
 
@@ -388,7 +375,6 @@ class TestExecutionScheduler:
 # =============================================================================
 
 
-
 @pytest.mark.skip(reason="AgentPluginSystem not implemented in agent module")
 class TestPluginBasedAgentLoading:
     """Tests for plugin-based agent loading and discovery."""
@@ -415,7 +401,6 @@ class TestPluginBasedAgentLoading:
 # =============================================================================
 
 
-
 class TestAgentCommunication:
     """Tests for agent communication and message passing."""
 
@@ -433,7 +418,6 @@ class TestAgentCommunication:
 # =============================================================================
 # Session 9: Agent State Serialization Tests
 # =============================================================================
-
 
 
 class TestAgentStateSerialization:
@@ -456,7 +440,6 @@ class TestAgentStateSerialization:
 # =============================================================================
 
 
-
 class TestDistributedAgentExecution:
     """Tests for distributed agent execution across multiple processes."""
 
@@ -476,7 +459,6 @@ class TestDistributedAgentExecution:
 # =============================================================================
 
 
-
 @pytest.mark.skip(reason="Dependency resolution not implemented")
 class TestAgentDependencyResolution:
     """Tests for agent dependency resolution."""
@@ -494,7 +476,6 @@ class TestAgentDependencyResolution:
 # =============================================================================
 # Session 9: Agent Lifecycle Hooks Tests
 # =============================================================================
-
 
 
 class TestAgentLifecycleHooks:
@@ -525,7 +506,6 @@ class TestAgentLifecycleHooks:
 # =============================================================================
 
 
-
 @pytest.mark.skip(reason="Resource quotas not implemented")
 class TestAgentResourceQuotas:
     """Tests for agent resource quotas and limits."""
@@ -544,8 +524,6 @@ class TestAgentResourceQuotas:
 # =============================================================================
 # Session 9: Agent Retry Policies Tests
 # =============================================================================
-
-
 
 @pytest.mark.skip(reason="Some retry policies not fully implemented")
 class TestAgentRetryPolicies:
@@ -572,7 +550,6 @@ class TestAgentRetryPolicies:
 # =============================================================================
 
 
-
 @pytest.mark.skip(reason="Telemetry not implemented")
 class TestAgentMetricsTelemetry:
     """Tests for agent metrics and telemetry collection."""
@@ -589,8 +566,6 @@ class TestAgentMetricsTelemetry:
 # =============================================================================
 # Session 9: Agent Configuration Inheritance Tests
 # =============================================================================
-
-
 
 @pytest.mark.skip(reason="Config inheritance patterns need more work")
 class TestAgentConfigInheritance:
@@ -614,7 +589,6 @@ class TestAgentConfigInheritance:
 # =============================================================================
 
 
-
 class TestAgentSandboxIsolation:
     """Tests for agent sandbox isolation."""
 
@@ -633,8 +607,6 @@ class TestAgentSandboxIsolation:
 # =============================================================================
 # Session 9: Agent Output Validation Tests
 # =============================================================================
-
-
 
 @pytest.mark.skip(reason="Output validation not implemented")
 class TestAgentOutputValidation:
@@ -657,7 +629,6 @@ class TestAgentOutputValidation:
 # =============================================================================
 
 
-
 class TestAgentCompatibility:
     """Tests for agent compatibility across Python versions."""
 
@@ -670,7 +641,6 @@ class TestAgentCompatibility:
 # =============================================================================
 # Session 9: Agent Profiling Tests
 # =============================================================================
-
 
 
 class TestAgentProfiling:
@@ -691,7 +661,6 @@ class TestAgentProfiling:
 # =============================================================================
 
 
-
 class TestAgentExecutionTimeouts:
     """Tests for agent execution timeouts."""
 
@@ -705,8 +674,6 @@ class TestAgentExecutionTimeouts:
 # =============================================================================
 # Session 9: Agent Memory Management Tests
 # =============================================================================
-
-
 
 class TestAgentMemoryManagement:
     """Tests for agent memory management."""
@@ -724,8 +691,6 @@ class TestAgentMemoryManagement:
 # =============================================================================
 # Session 9: Agent Graceful Shutdown Tests
 # =============================================================================
-
-
 
 @pytest.mark.skip(reason="Some shutdown features need more work")
 class TestAgentGracefulShutdownBehavior:
@@ -748,14 +713,11 @@ class TestAgentGracefulShutdownBehavior:
 # Session 9: Agent Concurrent Execution Tests
 # =============================================================================
 
-
-
 class TestAgentConcurrentExecution:
     """Tests for agent concurrent execution."""
 
     def test_concurrent_task_concept(self, agent_module, tmp_path) -> None:
         """Test concurrent task concept."""
-        from concurrent.futures import ThreadPoolExecutor
 
         def task(x: int) -> int:
             return x * 2
@@ -768,7 +730,6 @@ class TestAgentConcurrentExecution:
 # =============================================================================
 # Session 9: Agent Result Caching Tests
 # =============================================================================
-
 
 
 class TestAgentResultCachingBehavior:
@@ -795,8 +756,6 @@ class TestAgentResultCachingBehavior:
         result = cache.get("file.py", "coder", "new_hash")
         assert result is None
 
-
 # =============================================================================
 # ADVANCED TESTS: Large Repository Performance, Git Operations, Logging
 # =============================================================================
-

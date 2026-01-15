@@ -20,9 +20,12 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import time
-from typing import Dict, List, Any
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class ConsensusConflictAgent:
     """
@@ -31,14 +34,14 @@ class ConsensusConflictAgent:
     """
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.active_disputes = {} # dispute_id -> {options, votes, status}
+        self.active_disputes: dict[Any, Any] = {}  # dispute_id -> {options, votes, status}
 
     def initiate_dispute(self, dispute_id: str, context: str, options: list[str]) -> dict[str, Any]:
         """Starts a new consensus round for a disagreement."""
         self.active_disputes[dispute_id] = {
             "context": context,
             "options": options,
-            "votes": {}, # agent_id -> option_index
+            "votes": {},  # agent_id -> option_index
             "status": "voting",
             "start_time": time.time()
         }
@@ -48,11 +51,11 @@ class ConsensusConflictAgent:
         """Allows an agent to vote on a specific option with reasoning."""
         if dispute_id not in self.active_disputes:
             return {"status": "error", "message": "Dispute not found"}
-        
+
         dispute = self.active_disputes[dispute_id]
         if option_index >= len(dispute["options"]):
             return {"status": "error", "message": "Invalid option index"}
-            
+
         dispute["votes"][agent_id] = {
             "choice": option_index,
             "reasoning": reasoning,
@@ -64,21 +67,21 @@ class ConsensusConflictAgent:
         """Resolves a dispute based on the majority of votes."""
         if dispute_id not in self.active_disputes:
             return {"status": "error", "message": "Dispute not found"}
-            
+
         dispute = self.active_disputes[dispute_id]
         if not dispute["votes"]:
             return {"status": "error", "message": "No votes cast"}
-            
-        vote_counts = {}
+
+        vote_counts: dict[Any, Any] = {}
         for vote in dispute["votes"].values():
             choice = vote["choice"]
             vote_counts[choice] = vote_counts.get(choice, 0) + 1
-            
+
         # Find option with most votes
         winner_index = max(vote_counts, key=vote_counts.get)
         dispute["status"] = "resolved"
         dispute["winner"] = dispute["options"][winner_index]
-        
+
         return {
             "status": "resolved",
             "winner": dispute["winner"],

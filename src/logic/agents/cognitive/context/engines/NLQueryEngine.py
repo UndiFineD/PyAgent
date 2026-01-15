@@ -23,9 +23,11 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.NLQueryResult import NLQueryResult
-from typing import Dict, List, Optional
 
 __version__ = VERSION
+
+
+
 
 class NLQueryEngine:
     """Searches context with natural language queries.

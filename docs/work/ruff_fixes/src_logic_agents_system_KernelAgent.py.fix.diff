@@ -1,0 +1,12 @@
+diff --git a/src/logic/agents/system/KernelAgent.py b/src/logic/agents/system/KernelAgent.py
+index 9fc84bd..ee214c4 100644
+--- a/src/logic/agents/system/KernelAgent.py
++++ b/src/logic/agents/system/KernelAgent.py
+@@ -30,7 +30,6 @@ import json
+ import shutil
+ import platform
+ import logging
+-import subprocess
+ import asyncio
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool

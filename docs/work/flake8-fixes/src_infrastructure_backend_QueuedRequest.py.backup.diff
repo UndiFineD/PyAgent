@@ -1,0 +1,28 @@
+diff --git a/src/infrastructure/backend/QueuedRequest.py b/src/infrastructure/backend/QueuedRequest.py
+index 166e868..e1b109b 100644
+--- a/src/infrastructure/backend/QueuedRequest.py
++++ b/src/infrastructure/backend/QueuedRequest.py
+@@ -23,11 +23,15 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass
+-from typing import Optional
+ from collections.abc import Callable
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class QueuedRequest:
+     """A request waiting in the queue.
+@@ -50,4 +54,4 @@ class QueuedRequest:
+         """Compare by priority (descending) then timestamp (ascending)."""
+         if self.priority != other.priority:
+             return self.priority > other.priority  # Higher priority first
+-        return self.timestamp < other.timestamp  # Earlier first
+\ No newline at end of file
++        return self.timestamp < other.timestamp  # Earlier first

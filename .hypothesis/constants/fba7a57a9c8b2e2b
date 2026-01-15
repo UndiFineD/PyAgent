@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\decomposition\_incremental_pca.py
+# hypothesis_version: 6.150.1
+
+[0.0, 'batch_size', 'boolean', 'check_input', 'components_', 'copy', 'csc', 'csr', 'left', 'lil', 'n_components', 'n_samples_seen_', 'whiten']

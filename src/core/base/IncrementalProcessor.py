@@ -24,16 +24,20 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from src.core.base.models import IncrementalState
 from pathlib import Path
-from typing import List, Any
+from typing import Any
 import logging
-import os
 import time
-import mmap
 import blake3
 import orjson
 import cbor2
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class IncrementalProcessor:
     """Processes only files changed since last run.
@@ -139,18 +143,18 @@ class IncrementalProcessor:
         batches: list[list[Path]] = []
         current_batch: list[Path] = []
         current_tokens = 0
-        
+
         # Tight Pack algorithm (80% target)
         target_limit = int(token_limit * 0.8)
-        
+
         for file in files:
             if not file.exists():
                 continue
-            
+
             # Simple approximation: 4 characters per token
             file_size = file.stat().st_size
             file_tokens = int(file_size / 4)
-            
+
             if file_tokens > target_limit:
                 # File too large for batching, give it its own "batch"
                 if current_batch:
@@ -159,7 +163,7 @@ class IncrementalProcessor:
                 batches.append([file])
                 current_tokens = 0
                 continue
-                
+
             if current_tokens + file_tokens > target_limit:
                 # Close current batch and start new one
                 batches.append(current_batch)
@@ -168,10 +172,10 @@ class IncrementalProcessor:
             else:
                 current_batch.append(file)
                 current_tokens += file_tokens
-                
+
         if current_batch:
             batches.append(current_batch)
-            
+
         logging.info(f"Batched {len(files)} files into {len(batches)} efficient processing units.")
         return batches
 

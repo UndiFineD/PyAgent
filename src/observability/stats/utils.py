@@ -37,10 +37,13 @@ try:
     import matplotlib.pyplot as plt
     has_matplotlib = True
 except (ImportError, RuntimeError, Exception):
-    plt = None
+    plt = None  # type: ignore[assignment]
     has_matplotlib = False
 
 __version__ = VERSION
+
+
+
 
 def main() -> None:
     """CLI entry point for the Stats Agent."""

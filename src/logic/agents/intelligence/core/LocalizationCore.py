@@ -1,7 +1,16 @@
 
 from __future__ import annotations
-from typing import Dict, List, Any
+from typing import Any
 import re
+
+try:
+    import rust_core
+    HAS_RUST = True
+except ImportError:
+    HAS_RUST = False
+
+
+
 
 class LocalizationCore:
     """
@@ -28,6 +37,13 @@ class LocalizationCore:
         Detects cultural red flags in agent communication.
         Returns a list of identified issues with suggestions.
         """
+        if HAS_RUST:
+            try:
+                # Rust implementation expects regex patterns
+                return rust_core.detect_cultural_issues(text, self.cultural_red_flags)  # type: ignore[attr-defined]
+            except Exception:
+                pass
+
         issues = []
         for pattern in self.cultural_red_flags:
             matches = re.finditer(pattern, text, re.IGNORECASE)
@@ -43,8 +59,8 @@ class LocalizationCore:
     def get_supported_locales(self) -> list[str]:
         """Returns the 12 major languages currently prioritized for translation."""
         return [
-            "en", "zh", "es", "hi", "ar", 
-            "bn", "pt", "ru", "ja", "de", 
+            "en", "zh", "es", "hi", "ar",
+            "bn", "pt", "ru", "ja", "de",
             "fr", "ko"
         ]
 

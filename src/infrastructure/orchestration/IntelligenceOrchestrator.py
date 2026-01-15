@@ -21,14 +21,17 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import time
 import logging
-from typing import Dict, List, Any
+from typing import Any
 from .IntelligenceCore import IntelligenceCore
 
 __version__ = VERSION
 
+
+
+
 class IntelligenceOrchestrator:
     """
-    Swarm Collective Intelligence: Analyzes actions and insights from 
+    Swarm Collective Intelligence: Analyzes actions and insights from
     multiple agents to find emerging patterns and synthesize "meta-knowledge".
     Optimized for Phase 108 with high-performance local AI (vLLM) integration.
     """
@@ -38,7 +41,7 @@ class IntelligenceOrchestrator:
         self.insight_pool: list[dict[str, Any]] = []
         self.patterns: list[str] = []
         self.core = IntelligenceCore(workspace_root=self.workspace_root)
-        
+
         # Phase 108: Native AI for collective synthesis
         import requests
         from src.infrastructure.backend.LLMClient import LLMClient
@@ -77,14 +80,14 @@ class IntelligenceOrchestrator:
 
         # Construct prompt via Core
         prompt = self.core.generate_synthesis_prompt(insights, sql_lessons)
-        
+
         try:
             summary = self.ai.smart_chat(prompt, system_prompt="You are a Swarm Intelligence Synthesizer. Be concise and technical.")
             if summary:
                 raw_patterns = [s.strip() for s in summary.split("\n") if s.strip() and len(s) > 10]
                 # Validate patterns via Core
                 self.patterns = self.core.extract_actionable_patterns(raw_patterns)
-                
+
                 # Record the synthesis to SQL Metadata (Phase 108)
                 if hasattr(self.fleet_manager, 'sql_metadata'):
                     self.fleet_manager.sql_metadata.record_lesson(
@@ -111,7 +114,7 @@ class IntelligenceOrchestrator:
         Extracts specific, actionable coding tasks from the synthesized intelligence.
         Designed for the SelfImprovementOrchestrator to ingest (Phase 108).
         """
-        tasks = []
+        tasks: list[Any] = []
         for pattern in self.patterns:
             # Look for keywords that suggest code changes
             if any(k in pattern.lower() for k in ["error", "failure", "bottleneck", "reinitialize", "missing"]):

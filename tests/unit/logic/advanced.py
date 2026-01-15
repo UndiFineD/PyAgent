@@ -3,22 +3,9 @@
 
 from __future__ import annotations
 import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
-import time
-import json
-from datetime import datetime
-import pytest
-import logging
+from typing import List, Dict
 from pathlib import Path
 import sys
-import os
-import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
@@ -26,15 +13,23 @@ try:
 except ImportError:
     # Fallback
     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
+
     class agent_sys_path:
-        def __enter__(self) -> Self: 
+        def __enter__(self) -> Self:
 
             return self
-        def __exit__(self, *args) -> None: 
+
+
+
+
+
+
+
+        def __exit__(self, *args) -> None:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestAdvancedCodeFormatting(unittest.TestCase):
     """Test advanced code formatting improvements."""
@@ -89,7 +84,6 @@ import requests
         if original == formatted:
             result: str = original
         self.assertEqual(original, result)
-
 
 
 class TestAdvancedSecurityValidation(unittest.TestCase):
@@ -149,6 +143,3 @@ class TestAdvancedSecurityValidation(unittest.TestCase):
             'mysql://user:password@host'
         ]
         self.assertEqual(len(credentials_patterns), 3)
-
-
-

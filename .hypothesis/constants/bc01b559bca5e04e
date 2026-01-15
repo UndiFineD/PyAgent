@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_utils.py
+# hypothesis_version: 6.150.1
+
+['.', '.LongTensor', '.sparse', 'Exception', 'IterableUserDict', 'P', 'Queue', 'StandardError', 'StringIO', 'UserDict', 'UserList', 'UserString', '__builtin__', '__getstate__', '__init__', '__new__', '_abcoll', 'async', 'basestring', 'builtins', 'cStringIO', 'chr', 'collections', 'collections.abc', 'copy_reg', 'copyreg', 'cpu', 'cuda', 'dbm', 'exceptions', 'filter', 'filterfalse', 'functools', 'ifilter', 'ifilterfalse', 'imap', 'in background', 'int', 'intern', 'io', 'itertools', 'izip', 'izip_longest', 'long', 'map', 'message', 'meta', 'mps', 'mtia', 'queue', 'range', 'reduce', 'repr', 'reprlib', 'return', 'sparse', 'str', 'sys', 'torch.Tensor', 'type', 'unichr', 'unicode', 'whichdb', 'xpu', 'xrange', 'zip', 'zip_longest']

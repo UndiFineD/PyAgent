@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\posthog\types.py
+# hypothesis_version: 6.150.1
+
+['FeatureFlag', 'FeatureFlagResult', 'FlagMetadata', 'FlagReason', 'code', 'condition_index', 'description', 'enabled', 'featureFlagPayloads', 'featureFlags', 'flags', 'id', 'key', 'metadata', 'payload', 'reason', 'requestId', 'variant', 'version']

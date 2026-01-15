@@ -27,9 +27,12 @@ import logging
 
 __version__ = VERSION
 
+
+
+
 class SelfSearchAgent(BaseAgent):
     """Provides internal knowledge retrieval using structural prompting (SSRL pattern)."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -51,24 +54,46 @@ Query: {query}
 2. Recall relevant entities, facts, and relationships related to the query.
 3. STRUCTURE your output as follows:
    - KEY_ENTITIES: [List significant entities]
+
+
+
+
+
+
+
+
+
+
    - RELATIONAL_MAP: [Map how they connect]
    - PRIMARY_FACTS: [Specific verified facts from training data]
    - UNCERTAINTY_FRONTIER: [Areas where internal knowledge might be outdated or sparse]
 4. DO NOT make up URLs.
+
+
+
 5. If internal search fails, explicitly state: INTERNAL_SEARCH_EMPTY.
 </SelfSearchTask>
 """
 
     def perform_internal_search(self, query: str) -> str:
+
+
         """Executes the self-search cycle."""
         # In a real implementation, this would call the LLM with the generated structure
         structure = self.generate_search_structure(query)
         logging.info(f"SelfSearchAgent: Executing internal search for '{query}'")
         return f"Executing structured self-search for: {query}\nStructure:\n{structure}"
 
+
+
+
     def improve_content(self, query: str) -> str:
         """Returns the self-search results for a given query."""
         return self.perform_internal_search(query)
+
+
+
+
 
 if __name__ == "__main__":
     from src.core.base.utilities import create_main_function

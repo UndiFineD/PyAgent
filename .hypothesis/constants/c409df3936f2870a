@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\ao\quantization\quantize.py
+# hypothesis_version: 6.150.1
+
+['.', '_IS_REFERENCE', 'add_quant_dequant', 'convert', 'meta', 'prepare', 'prepare_qat', 'propagate_qconfig_', 'qconfig', 'quantize', 'quantize_dynamic', 'quantize_qat', 'swap_module', 'weight_fake_quant']

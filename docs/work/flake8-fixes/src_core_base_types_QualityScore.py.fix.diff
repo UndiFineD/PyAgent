@@ -1,0 +1,32 @@
+diff --git a/src/core/base/types/QualityScore.py b/src/core/base/types/QualityScore.py
+index 48cfc33..ad9ebbf 100644
+--- a/src/core/base/types/QualityScore.py
++++ b/src/core/base/types/QualityScore.py
+@@ -23,10 +23,19 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class QualityScore:
+     """Code quality score with breakdown."""
+@@ -45,4 +54,4 @@ class QualityScore:
+ 
+     @score.setter
+     def score(self, value: float) -> None:
+-        self.overall_score = value
+\ No newline at end of file
++        self.overall_score = value

@@ -1,0 +1,22 @@
+diff --git a/src/observability/improvements/AnalysisToolType.py b/src/observability/improvements/AnalysisToolType.py
+index d972549..c053fa0 100644
+--- a/src/observability/improvements/AnalysisToolType.py
++++ b/src/observability/improvements/AnalysisToolType.py
+@@ -26,10 +26,15 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class AnalysisToolType(Enum):
+     """Types of code analysis tools."""
+     LINTER = "linter"
+     TYPE_CHECKER = "type_checker"
+     SECURITY_SCANNER = "security_scanner"
+     COVERAGE = "coverage"
+-    COMPLEXITY = "complexity"
+\ No newline at end of file
++    COMPLEXITY = "complexity"

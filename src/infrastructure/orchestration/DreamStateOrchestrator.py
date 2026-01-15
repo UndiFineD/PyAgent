@@ -17,13 +17,16 @@ import asyncio
 import logging
 import json
 import os
-from typing import Dict, Any, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 from src.core.base.version import VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.fleet.AsyncFleetManager import AsyncFleetManager
 
 __version__ = VERSION
+
+
+
 
 class DreamStateOrchestrator:
     """
@@ -48,15 +51,15 @@ class DreamStateOrchestrator:
 
         # 2. Simulate outcomes across variations
         tasks = [
-            self.fleet.call_by_capability("predict_action_outcome", 
-                                        action=f"Optimize {focus_area}", 
+            self.fleet.call_by_capability("predict_action_outcome",
+                                        action=f"Optimize {focus_area}",
                                         environment=scenarios)
             for i in range(2)
         ]
         simulation_results = await asyncio.gather(*tasks)
 
         # 3. Analyze patterns and synthesize a new 'skill' spec
-        dream_synthesis = await self.fleet.call_by_capability("analyze", 
+        dream_synthesis = await self.fleet.call_by_capability("analyze",
             input_text=f"Simulation results for {focus_area}: {simulation_results}")
 
         dream_id = f"dream_{int(asyncio.get_event_loop().time())}"

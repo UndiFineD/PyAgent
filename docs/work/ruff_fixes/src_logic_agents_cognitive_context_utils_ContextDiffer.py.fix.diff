@@ -1,0 +1,12 @@
+diff --git a/src/logic/agents/cognitive/context/utils/ContextDiffer.py b/src/logic/agents/cognitive/context/utils/ContextDiffer.py
+index da7a76f..85e8e69 100644
+--- a/src/logic/agents/cognitive/context/utils/ContextDiffer.py
++++ b/src/logic/agents/cognitive/context/utils/ContextDiffer.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.ContextDiff import ContextDiff
+-from typing import Dict, List
+ import re
+ 
+ __version__ = VERSION

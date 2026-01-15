@@ -1,6 +1,8 @@
 import ast
 import os
-import sys
+
+
+
 
 def fix_imports_and_headers(path):
     try:
@@ -12,12 +14,12 @@ def fix_imports_and_headers(path):
 
     try:
         tree = ast.parse(content)
-    except Exception as e:
+    except Exception:
         # Skip files with syntax errors
         return
 
     lines = content.splitlines()
-    
+
     # 1. Identify all top-level import nodes
     import_nodes = [n for n in tree.body if isinstance(n, (ast.Import, ast.ImportFrom))]
     if not import_nodes:
@@ -42,11 +44,11 @@ def fix_imports_and_headers(path):
     # Check if first node is a docstring Expr
     if tree.body and isinstance(tree.body[0], ast.Expr) and isinstance(tree.body[0].value, (ast.Constant, ast.Str)):
         # It's a docstring
-        docstring_end_idx = tree.body[0].end_lineno - 1 # 0-indexed index in original lines
+        docstring_end_idx = tree.body[0].end_lineno - 1  # 0-indexed index in original lines
 
     # 5. Reconstruct file
     final_output = []
-    
+
     # a. Shebang
     if other_lines and other_lines[0].startswith('#!'):
         final_output.append(other_lines.pop(0))
@@ -57,12 +59,12 @@ def fix_imports_and_headers(path):
     first_block_comments = []
     while other_lines and (other_lines[0].strip().startswith('#') or not other_lines[0].strip()):
         line = other_lines.pop(0)
-        if line.strip() == "": continue # Skip empty lines in header for now
+        if line.strip() == "": continue  # Skip empty lines in header for now
         first_block_comments.append(line)
-    
+
     # Deduplicate lines in first_block_comments? Maybe later.
     final_output.extend(first_block_comments)
-    final_output.append("") # One newline after license
+    final_output.append("")  # One newline after license
 
     # c. Docstring
     # If there was a docstring, we need to extract it from 'other_lines'
@@ -88,7 +90,7 @@ def fix_imports_and_headers(path):
     # d. Future imports
     future_imports = [i for i in extracted_imports if '__future__' in i]
     other_imports = [i for i in extracted_imports if '__future__' not in i]
-    
+
     final_output.extend(future_imports)
     final_output.extend(other_imports)
     final_output.append("")
@@ -100,31 +102,60 @@ def fix_imports_and_headers(path):
         "you may not use this file except in compliance",
         "http://www.apache.org/licenses/LICENSE-2.0"
     ]
-    
+
     for line in other_lines:
         # Crude deduplication: if it's a comment and contains a license marker, skip it
         # UNLESS we are in the first 50 lines (but we already popped the first block)
         is_license = any(marker in line for marker in license_markers)
         if is_license:
             continue
+
+
+
+
+
+
+
+
+
+
         final_output.append(line)
 
     # Final cleanup: ensure no massive empty blocks
     new_content = "\n".join(final_output)
+
+
+
     # Replace 3+ newlines with 2
     import re
     new_content = re.sub(r'\n{3,}', '\n\n', new_content)
 
     # Validation
+
+
     try:
         ast.parse(new_content)
     except Exception as e:
+
+
+
         print(f"Skipping {path} - resulting code is invalid: {e}")
         return
+
+
+
 
     with open(path, 'w', encoding='utf-8') as f:
         f.write(new_content)
     print(f"Fixed {path}")
+
+
+
+
+
+
+
+
 
 def main():
     target_dir = 'src'
@@ -133,6 +164,10 @@ def main():
             if file.endswith('.py'):
                 path = os.path.join(root, file)
                 fix_imports_and_headers(path)
+
+
+
+
 
 if __name__ == "__main__":
     main()

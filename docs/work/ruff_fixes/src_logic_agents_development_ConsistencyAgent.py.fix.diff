@@ -1,0 +1,12 @@
+diff --git a/src/logic/agents/development/ConsistencyAgent.py b/src/logic/agents/development/ConsistencyAgent.py
+index 43ac565..8a6974b 100644
+--- a/src/logic/agents/development/ConsistencyAgent.py
++++ b/src/logic/agents/development/ConsistencyAgent.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.core.base.types.ConsistencyIssue import ConsistencyIssue
+-from typing import Dict, List
+ import re
+ 
+ __version__ = VERSION

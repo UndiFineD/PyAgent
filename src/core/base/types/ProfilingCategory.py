@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class ProfilingCategory(Enum):
     """Categories for code profiling suggestions."""
     CPU_BOUND = "cpu_bound"

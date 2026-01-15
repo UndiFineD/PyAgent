@@ -20,16 +20,23 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .storage_base import KnowledgeStore
-from typing import Any, Dict, List, Optional
+from typing import Any
+import logging
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class VectorKnowledgeStore(KnowledgeStore):
     """
     Handles vector-based knowledge storage using ChromaDB.
     Isolated per agent.
     """
-    
+
     def __init__(self, agent_id: str, storage_path: Any) -> None:
         super().__init__(agent_id, storage_path)
         try:
@@ -38,7 +45,7 @@ class VectorKnowledgeStore(KnowledgeStore):
             self.collection = self.client.get_or_create_collection(name=f"{agent_id}_knowledge")
         except ImportError:
             self.client = None
-            print("ChromaDB not installed, VectorKnowledgeStore will be disabled.")
+            logging.warning("ChromaDB not installed, VectorKnowledgeStore will be disabled.")
 
     def store(self, key: str, value: str, metadata: dict[str, Any] | None = None) -> bool:
         if not self.client:

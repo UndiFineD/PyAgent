@@ -1,0 +1,23 @@
+diff --git a/src/infrastructure/dev/test_utils/CrossPlatformHelper.py b/src/infrastructure/dev/test_utils/CrossPlatformHelper.py
+index a68c570..2152a9e 100644
+--- a/src/infrastructure/dev/test_utils/CrossPlatformHelper.py
++++ b/src/infrastructure/dev/test_utils/CrossPlatformHelper.py
+@@ -28,6 +28,11 @@ import tempfile
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class CrossPlatformHelper:
+     """Helpers for cross-platform testing.
+ 
+@@ -100,4 +105,4 @@ class CrossPlatformHelper:
+             "linux": self.is_linux(),
+             "macos": self.is_macos(),
+         }
+-        return any(platform_map.get(p, False) for p in platforms)
+\ No newline at end of file
++        return any(platform_map.get(p, False) for p in platforms)

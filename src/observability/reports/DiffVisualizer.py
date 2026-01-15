@@ -22,11 +22,13 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from .DiffResult import DiffResult
-from .DiffViewMode import DiffViewMode
-from typing import List
+from src.core.base.types import DiffResult
+from src.core.base.types import DiffViewMode
 
 __version__ = VERSION
+
+
+
 
 class DiffVisualizer:
     """Visualizes changelog differences with multiple view modes.

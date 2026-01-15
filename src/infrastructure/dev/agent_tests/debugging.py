@@ -25,17 +25,27 @@ from src.core.base.version import VERSION
 import json
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 from .enums import ExecutionMode
 from .models import ExecutionTrace
 
 __version__ = VERSION
 
+
+
+
+
 def _empty_str_list() -> list[str]:
+
+
     return []
+
 
 def _empty_action_list() -> list[dict[str, Any]]:
     return []
+
+
+
 
 class ExecutionReplayer:
     """Replay test execution for debugging."""
@@ -90,13 +100,37 @@ class ExecutionReplayer:
         mode: ExecutionMode = ExecutionMode.FULL_REPLAY,
         breakpoint_step: int = -1
     ) -> list[dict[str, Any]]:
+
+
+
         """Replay a recorded execution."""
         trace = self.traces.get(test_id)
+
+
+
+
+
+
+
+
+
         if not trace:
             return []
         replayed: list[dict[str, Any]] = []
         for i, step in enumerate(trace.steps):
             if mode == ExecutionMode.BREAKPOINT and i == breakpoint_step:
+
+
+
+
+
+
+
+
+
+
+
+
                 break
             replayed.append({
                 "step": i,
@@ -112,6 +146,11 @@ class ExecutionReplayer:
         trace = self.traces.get(test_id)
         if trace and 0 <= step_index < len(trace.steps):
             return trace.steps[step_index]
+
+
+
+
+
         return None
 
     def export_trace(self, test_id: str) -> str:
@@ -123,9 +162,23 @@ class ExecutionReplayer:
         return json.dumps({
             "test_id": trace.test_id,
             "timestamp": trace.timestamp,
+
+
+
+
+
+
+
+
+
+
             "steps": trace.steps,
             "variables": trace.variables
         }, indent=2)
+
+
+
+
 
 class TestProfiler:
     """Runtime profiling for tests."""
@@ -137,24 +190,53 @@ class TestProfiler:
         self.profiles: dict[str, TestProfile] = {}
         self._start_times: dict[str, float] = {}
 
+
+
     def start_profiling(self, test_id: str) -> None:
         """Start profiling a test."""
         import time
         self._start_times[test_id] = time.time()
 
     def stop_profiling(
+
+
+
+
+
+
+
+
+
+
         self,
         test_id: str,
         memory_peak_mb: float = 0.0,
         io_operations: int = 0,
         function_calls: int = 0
+
+
+
+
+
+
+
+
+
+
     ) -> Any:
         """Stop profiling and record results."""
+
+
         import time
         from .models import TestProfile
         start = self._start_times.pop(test_id, time.time())
         cpu_time = (time.time() - start) * 1000
         profile = TestProfile(
+
+
+
+
+
             test_id=test_id,
             cpu_time_ms=cpu_time,
             memory_peak_mb=memory_peak_mb,
@@ -175,6 +257,7 @@ class TestProfiler:
         return sorted_profiles[:limit]
 
     def get_memory_heavy_tests(self, limit: int = 10) -> list[Any]:
+
         """Get tests with highest memory usage."""
         sorted_profiles = sorted(
             self.profiles.values(),
@@ -184,6 +267,10 @@ class TestProfiler:
         return sorted_profiles[:limit]
 
     def generate_report(self) -> str:
+
+
+
+
         """Generate profiling report."""
         report = ["# Test Profiling Report\n"]
         report.append(f"Total profiled: {len(self.profiles)}\n")
@@ -195,6 +282,9 @@ class TestProfiler:
             )
         return "\n".join(report)
 
+
+
+
 class TestRecorder:
     """Records test execution."""
     __test__ = False
@@ -204,6 +294,11 @@ class TestRecorder:
 
     @dataclass
     class Recording:
+
+
+
+
+        """A recording of test actions."""
         test_name: str
         actions: list[dict[str, Any]] = field(default_factory=_empty_action_list)
 
@@ -228,11 +323,17 @@ class TestRecorder:
             self.start_recording(test_name)
         self.record_action("result", {"passed": bool(result)})
 
+
+
+
+
+
 class TestReplayer:
     """Replays recorded tests."""
 
     @dataclass
     class ReplayResult:
+        """Result of a test replay."""
         success: bool
         errors: list[str] = field(default_factory=_empty_str_list)
 

@@ -19,19 +19,24 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
+from src.observability.StructuredLogger import StructuredLogger
 
 __version__ = VERSION
 
+
+
+
 class ComplianceAuditAgent(BaseAgent):
     """
-    Compliance Audit Agent: Verifies fleet operations against simulated 
+    Compliance Audit Agent: Verifies fleet operations against simulated
     industry standards (e.g., SOC2, GDPR, HIPAA patterns).
     """
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
+        self.logger = StructuredLogger(agent_id="ComplianceAuditAgent")
         self.standards = {
             "GDPR": [
                 "PII Data Encryption",
@@ -47,15 +52,15 @@ class ComplianceAuditAgent(BaseAgent):
 
     def run_compliance_check(self, standard: str) -> dict[str, Any]:
         """Runs a simulated compliance check for a specific standard."""
-        print(f"Compliance: Auditing against {standard}...")
-        
+        self.logger.info(f"Compliance: Auditing against {standard}...")
+
         if standard not in self.standards:
             return {"status": "Error", "message": f"Standard {standard} not supported."}
-        
+
         findings = []
         passed_checks = 0
         total_checks = len(self.standards[standard])
-        
+
         for check in self.standards[standard]:
             # Simulate check logic
             passed = self._simulate_check(check)
@@ -67,7 +72,7 @@ class ComplianceAuditAgent(BaseAgent):
                     "status": "FAIL",
                     "recommendation": f"Implement {check} immediately to meet {standard} requirements."
                 })
-        
+
         score = (passed_checks / total_checks) * 100
         res = {
             "standard": standard,
@@ -83,7 +88,7 @@ class ComplianceAuditAgent(BaseAgent):
         """Simulates the result of a specific compliance check."""
         # For simplicity, we pass most checks but fail a few to demonstrate logic
         if "Right to be Forgotten" in check_name:
-            return False # Simulate a gap in GPDR
+            return False  # Simulate a gap in GPDR
         return True
 
     def get_compliance_inventory(self) -> dict[str, list[str]]:

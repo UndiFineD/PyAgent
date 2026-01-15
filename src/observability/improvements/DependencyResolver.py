@@ -22,9 +22,11 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, List
 
 __version__ = VERSION
+
+
+
 
 class DependencyResolver:
     """Resolves improvement dependencies."""

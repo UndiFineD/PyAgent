@@ -1,0 +1,23 @@
+diff --git a/src/infrastructure/backend/ExtractJsonTransformer.py b/src/infrastructure/backend/ExtractJsonTransformer.py
+index 51fa015..de06fb6 100644
+--- a/src/infrastructure/backend/ExtractJsonTransformer.py
++++ b/src/infrastructure/backend/ExtractJsonTransformer.py
+@@ -28,6 +28,11 @@ import re
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ExtractJsonTransformer(ResponseTransformerBase):
+     """Transformer that extracts JSON from response."""
+ 
+@@ -53,4 +58,4 @@ class ExtractJsonTransformer(ResponseTransformerBase):
+ 
+     def get_name(self) -> str:
+         """Get transformer name."""
+-        return "extract_json"
+\ No newline at end of file
++        return "extract_json"

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\opentelemetry\proto\trace\v1\trace_pb2.py
+# hypothesis_version: 6.150.1
+
+[166, 247, 250, 417, 420, 571, 574, 1131, 1271, 1274, 1446, 1449, 1602, 1605, 1695, 1773, 1779, 1782, 1938, 'DESCRIPTOR', '_RESOURCESPANS', '_SCOPESPANS', '_SPAN', '_SPANFLAGS', '_SPAN_EVENT', '_SPAN_LINK', '_SPAN_SPANKIND', '_STATUS', '_STATUS_STATUSCODE', '_TRACESDATA']

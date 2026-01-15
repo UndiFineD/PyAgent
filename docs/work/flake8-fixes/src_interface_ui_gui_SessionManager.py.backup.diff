@@ -1,0 +1,46 @@
+diff --git a/src/interface/ui/gui/SessionManager.py b/src/interface/ui/gui/SessionManager.py
+index a64ad82..d23c828 100644
+--- a/src/interface/ui/gui/SessionManager.py
++++ b/src/interface/ui/gui/SessionManager.py
+@@ -27,11 +27,16 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import json
+-from typing import Any, Optional
++from typing import Any
+ from tkinter import filedialog, messagebox
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class SessionManager:
+     """Handles saving and loading of the GUI state."""
+     def __init__(self, default_filename="gui_session.json") -> None:
+@@ -41,7 +46,7 @@ class SessionManager:
+         """Saves session data to a JSON file."""
+         filepath: str = filedialog.asksaveasfilename(
+             initialfile=self.default_filename,
+-            defaultextension=".json", 
++            defaultextension=".json",
+             filetypes=[("JSON", "*.json")]
+         )
+         if filepath:
+@@ -58,11 +63,11 @@ class SessionManager:
+         filepath: str = filedialog.askopenfilename(filetypes=[("JSON", "*.json")])
+         if not filepath:
+             return None
+-            
++
+         try:
+             with open(filepath, encoding='utf-8') as f:
+                 data = json.load(f)
+             return data
+         except Exception as e:
+             messagebox.showerror("Load Error", f"Failed to load session: {e}")
+-            return None
+\ No newline at end of file
++            return None

@@ -2,23 +2,10 @@
 """Test classes from test_agent.py - core module."""
 
 from __future__ import annotations
-import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
+from typing import List
 import time
-import json
-from datetime import datetime
-import pytest
-import logging
 from pathlib import Path
 import sys
-import os
-import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
@@ -26,12 +13,19 @@ try:
 except ImportError:
     # Fallback
     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
+
     class agent_sys_path:
-        def __enter__(self) -> bool: 
+        def __enter__(self) -> bool:
 
             return self
-        def __exit__(self, *args) -> str: 
+
+
+
+
+
+
+
+        def __exit__(self, *args) -> str:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
@@ -58,7 +52,6 @@ class TestAgentExecutionStateEnum:
         assert len(values) == len(set(values))
 
 
-
 class TestRateLimitStrategyEnum:
     """Test RateLimitStrategy enum."""
 
@@ -69,7 +62,6 @@ class TestRateLimitStrategyEnum:
         assert strategies.SLIDING_WINDOW is not None
         assert strategies.TOKEN_BUCKET is not None
         assert strategies.LEAKY_BUCKET is not None
-
 
 
 class TestConfigFormatEnum:
@@ -84,7 +76,6 @@ class TestConfigFormatEnum:
         assert formats.INI is not None
 
 
-
 class TestLockTypeEnum:
     """Test LockType enum."""
 
@@ -94,8 +85,6 @@ class TestLockTypeEnum:
         assert locks.SHARED is not None
         assert locks.EXCLUSIVE is not None
         assert locks.ADVISORY is not None
-
-
 
 class TestDiffOutputFormatEnum:
     """Test DiffOutputFormat enum."""
@@ -107,8 +96,6 @@ class TestDiffOutputFormatEnum:
         assert formats.CONTEXT is not None
         assert formats.SIDE_BY_SIDE is not None
         assert formats.HTML is not None
-
-
 
 class TestAgentPriorityEnum:
     """Test AgentPriority enum."""
@@ -131,7 +118,6 @@ class TestAgentPriorityEnum:
         assert priorities.LOW.value < priorities.BACKGROUND.value
 
 
-
 class TestHealthStatusEnum:
     """Test HealthStatus enum."""
 
@@ -142,7 +128,6 @@ class TestHealthStatusEnum:
         assert statuses.DEGRADED is not None
         assert statuses.UNHEALTHY is not None
         assert statuses.UNKNOWN is not None
-
 
 
 class TestRateLimitConfigDataclass:
@@ -170,7 +155,6 @@ class TestRateLimitConfigDataclass:
         assert config.cooldown_seconds == 0.5
 
 
-
 class TestAgentPluginConfigDataclass:
     """Test AgentPluginConfig dataclass."""
 
@@ -195,7 +179,6 @@ class TestAgentPluginConfigDataclass:
         assert config.priority == agent_module.AgentPriority.CRITICAL
 
 
-
 class TestFileLockDataclass:
     """Test FileLock dataclass."""
 
@@ -211,7 +194,6 @@ class TestFileLockDataclass:
         assert lock.lock_type == agent_module.LockType.EXCLUSIVE
         assert lock.owner == "test_owner"
         assert lock.expires_at is None
-
 
 
 class TestDiffResultDataclass:
@@ -230,8 +212,6 @@ class TestDiffResultDataclass:
         assert result.additions == 0
         assert result.deletions == 0
 
-
-
 class TestIncrementalStateDataclass:
     """Test IncrementalState dataclass."""
 
@@ -242,7 +222,6 @@ class TestIncrementalStateDataclass:
         assert state.processed_files == {}
         assert state.file_hashes == {}
         assert state.pending_files == []
-
 
 
 class TestAgentHealthCheckDataclass:
@@ -261,7 +240,6 @@ class TestAgentHealthCheckDataclass:
         assert check.error_message is None
 
 
-
 class TestShutdownStateDataclass:
     """Test ShutdownState dataclass."""
 
@@ -272,8 +250,6 @@ class TestShutdownStateDataclass:
         assert state.current_file is None
         assert state.completed_files == []
         assert state.pending_files == []
-
-
 
 class TestRateLimiter:
     """Test RateLimiter class."""
@@ -310,7 +286,6 @@ class TestRateLimiter:
         assert limiter.config.burst_size == 2
 
 
-
 class TestFileLockManager:
     """Test FileLockManager class."""
 
@@ -344,7 +319,6 @@ class TestFileLockManager:
 
         lock2 = manager.acquire_lock(test_file, lock_type=agent_module.LockType.SHARED)
         assert lock2 is not None
-
 
 
 class TestDiffGenerator:
@@ -403,7 +377,6 @@ class TestDiffGenerator:
         assert '<html>' in formatted.lower() or '<table' in formatted.lower()
 
 
-
 class TestIncrementalProcessor:
     """Test IncrementalProcessor class."""
 
@@ -449,7 +422,6 @@ class TestIncrementalProcessor:
         assert processor.state.file_hashes == {}
 
 
-
 class TestGracefulShutdown:
     """Test GracefulShutdown class."""
 
@@ -490,7 +462,6 @@ class TestGracefulShutdown:
 
         handler.set_pending_files(files)
         assert len(handler.state.pending_files) == 2
-
 
 
 class TestConfigLoader:
@@ -538,7 +509,6 @@ class TestConfigLoader:
         assert found is None
 
 
-
 class TestHealthChecker:
     """Test HealthChecker class."""
 
@@ -578,7 +548,6 @@ class TestHealthChecker:
         assert 'git' in results
         # Agent scripts will be unhealthy in test environment
         assert 'coder' in results
-
 
 
 class TestAgentPluginSystem:
@@ -631,7 +600,6 @@ class TestAgentPluginSystem:
         assert retrieved is plugin
 
 
-
 class TestAgentRateLimiting:
     """Test Agent rate limiting methods."""
 
@@ -666,7 +634,6 @@ class TestAgentRateLimiting:
         assert 'tokens_available' in stats
 
 
-
 class TestAgentFileLocking:
     """Test Agent file locking methods."""
 
@@ -688,8 +655,6 @@ class TestAgentFileLocking:
         agent.enable_file_locking(lock_timeout=600.0)
 
         assert agent.lock_manager.lock_timeout == 600.0
-
-
 
 class TestAgentDiffPreview:
     """Test Agent diff preview methods."""
@@ -716,8 +681,6 @@ class TestAgentDiffPreview:
 
         assert diff.original_content == "old content"
         assert diff.modified_content == "new content"
-
-
 
 class TestAgentIncrementalProcessing:
     """Test Agent incremental processing methods."""
@@ -761,7 +724,6 @@ class TestAgentIncrementalProcessing:
         assert agent.incremental_processor.state.processed_files == {}
 
 
-
 class TestAgentGracefulShutdown:
     """Test Agent graceful shutdown methods."""
 
@@ -782,8 +744,6 @@ class TestAgentGracefulShutdown:
 
         result = agent.resume_from_shutdown()
         assert result is None
-
-
 
 class TestAgentHealthChecks:
     """Test Agent health check methods."""
@@ -806,8 +766,6 @@ class TestAgentHealthChecks:
         result = agent.is_healthy()
 
         assert isinstance(result, bool)
-
-
 
 class TestAgentConfigFile:
     """Test Agent configuration file methods."""
@@ -851,7 +809,6 @@ class TestAgentConfigFile:
 # ============================================================================
 
 
-
 class TestAgentChain:
     """Tests for AgentChain class."""
 
@@ -892,6 +849,3 @@ class TestAgentChain:
 # ============================================================================
 # SESSION 9: GIT BRANCH PROCESSOR TESTS
 # ============================================================================
-
-
-

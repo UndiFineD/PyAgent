@@ -1,0 +1,27 @@
+diff --git a/src/infrastructure/dev/test_utils/DependencyResolver.py b/src/infrastructure/dev/test_utils/DependencyResolver.py
+index 9e1b7fc..0755482 100644
+--- a/src/infrastructure/dev/test_utils/DependencyResolver.py
++++ b/src/infrastructure/dev/test_utils/DependencyResolver.py
+@@ -22,10 +22,14 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, List, Set
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class DependencyResolver:
+     """Resolves dependencies between tests."""
+ 
+@@ -106,4 +110,4 @@ class DependencyResolver:
+             if test not in visited:
+                 if has_cycle(test):
+                     return True
+-        return False
+\ No newline at end of file
++        return False

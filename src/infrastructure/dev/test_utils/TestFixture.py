@@ -23,14 +23,16 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from dataclasses import dataclass
-from typing import Any, Optional
+from typing import Any
 from collections.abc import Callable
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class TestFixture:
-    __test__ = False
     """A test fixture with setup and teardown.
 
     Attributes:
@@ -40,6 +42,7 @@ class TestFixture:
         scope: Fixture scope (function, class, module, session).
         data: Fixture data.
     """
+    __test__ = False
 
     name: str
     setup_fn: Callable[[], Any] | None = None

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\utilities\misc.py
+# hypothesis_version: 6.150.1
+
+[100, '  %s\n', '"', '"""', '%s\n%s', '%s\nr%s', '%s is not an integer', '%s%s = %s\n', "'", "'''", '(\n    %s\n)', '(\n%s%%s%s\n)', '(\nr%s%%s%s\n)', '+-%s\n', '-bit', '.', '.exe', '1.7', "<class '", "<type '", 'Eq', 'Equality', 'Ge', 'GreaterThan', 'Gt', 'Le', 'LessThan', 'Lt', 'Ne', 'P', 'PATH', 'PATHEXT', 'StrictGreaterThan', 'StrictLessThan', 'Unequality', '\\', '__name__', 'func', 'hash_randomization', 'nd', 'os2', 'rd', 'st', 'th', 'win32', '|', '| %s\n']

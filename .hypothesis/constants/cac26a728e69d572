@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\utils\ContextRecommender.py
+# hypothesis_version: 6.150.1
+
+[0.8, '##\\s+(\\w+)']

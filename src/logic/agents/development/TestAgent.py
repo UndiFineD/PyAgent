@@ -31,9 +31,12 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
+
+
 class TestAgent(BaseAgent):
     """Executes unit and integration tests and analyzes failures."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
@@ -53,21 +56,21 @@ class TestAgent(BaseAgent):
             # Converted to list-based execution to prevent shell injection
             cmd = [sys.executable, "-m", "pytest", path, "--tb=short", "--maxfail=5"]
             result = subprocess.run(cmd, shell=False, capture_output=True, text=True)
-            
+
             # Phase 108: Record test execution patterns
-            self._record(f"pytest {path}", 
+            self._record(f"pytest {path}",
                          f"RC={result.returncode}\n{result.stdout[-1000:]}",
                          provider="Shell", model="pytest")
-            
+
             report = ["## 🧪 Test Execution Report\n"]
             if result.returncode == 0:
                 report.append("✅ **Status**: All tests passed.")
-                report.append(f"```text\n{result.stdout.splitlines()[-1]}\n```") # Last line summary
+                report.append(f"```text\n{result.stdout.splitlines()[-1]}\n```")  # Last line summary
             else:
                 report.append(f"❌ **Status**: {result.returncode} tests FAILED.\n")
                 report.append("### Failure Details")
                 report.append(f"```text\n{result.stdout}\n```")
-            
+
             return "\n".join(report)
         except Exception as e:
             return f"Error running tests: {e}"

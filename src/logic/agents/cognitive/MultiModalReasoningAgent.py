@@ -18,16 +18,15 @@ from .core.VisionCore import VisionCore
 
 __version__ = VERSION
 
+
+
+
 class MultiModalReasoningAgent(BaseAgent):
     """
     Agent capable of analyzing visual inputs (screenshots, diagrams)
     to complement textual code analysis.
     """
-    
-    def __init__(self, **kwargs) -> None:
-        super().__init__(**kwargs)
-        self.vision_core = VisionCore()
 
-    async def execute(self, task: str) -> str:
-        # Phase 167 implementation
-        return "Visual analysis complete. No glitches detected."
+    def __init__(self, file_path: str, **kwargs) -> None:
+        super().__init__(file_path=file_path, **kwargs)
+        self.vision_core = VisionCore()

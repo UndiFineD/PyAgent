@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\autograd\function.py
+# hypothesis_version: 6.150.1
+
+['. Accepted types: ', 'Backward', 'BackwardCFunction', 'Function', 'FunctionCtx', 'FunctionMeta', 'InplaceFunction', 'NestedIOFunction', 'Tensors', 'Tensors (permissive)', 'Tensors or None', '_P', '_R', '_T', '_fields', '_forward_cls', '_jit_unwrap', '_jit_wrap', "jit's Values or None", 'once_differentiable']

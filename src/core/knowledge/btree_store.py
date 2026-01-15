@@ -15,13 +15,19 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from src.observability.StructuredLogger import StructuredLogger
 from .storage_base import KnowledgeStore
-from typing import Any, Dict, List, Optional
+from typing import Any
 import json
 import hashlib
 import logging
 import time
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class BTreeKnowledgeStore(KnowledgeStore):
     """
@@ -30,18 +36,18 @@ class BTreeKnowledgeStore(KnowledgeStore):
     Phase 141: Hierarchical Persistence via SQLite per-bucket aggregation.
     Phase 144: Telemetry-Ready Access Patterns.
     """
-    
+
     def __init__(self, *args, **kwargs) -> bool:
         super().__init__(*args, **kwargs)
         self.logger = StructuredLogger(agent_id="BTreeStore")
-    
+
     def _hash_key(self, key: str) -> str:
         """
-        Fast hashing for shard lookup. 
+        Fast hashing for shard lookup.
         PHASE 131: Uses PyO3 Rust extension for sub-millisecond page access.
         """
         try:
-            from rust_core import fast_hash
+            from rust_core import fast_hash  # type: ignore[attr-defined]
             return fast_hash(key)
         except (ImportError, ModuleNotFoundError):
             return hashlib.md5(key.encode()).hexdigest()
@@ -51,11 +57,11 @@ class BTreeKnowledgeStore(KnowledgeStore):
         hash_val = self._hash_key(key)
         tier1 = hash_val[:2]
         tier2 = hash_val[2:4]
-        
+
         shard_dir = self.storage_path / tier1 / tier2
         shard_dir.mkdir(exist_ok=True, parents=True)
         db_path = shard_dir / "shard.db"
-        
+
         conn = sqlite3.connect(db_path)
         conn.execute("CREATE TABLE IF NOT EXISTS data (key TEXT PRIMARY KEY, value TEXT, metadata TEXT)")
         conn.commit()
@@ -65,18 +71,18 @@ class BTreeKnowledgeStore(KnowledgeStore):
         start_time = time.time()
         conn = self._get_shard_connection(key)
         clean_metadata = self._apply_privacy_filter(metadata or {})
-        
+
         val_str = json.dumps(value)
         meta_str = json.dumps(clean_metadata)
-        
-        conn.execute("INSERT OR REPLACE INTO data (key, value, metadata) VALUES (?, ?, ?)", 
+
+        conn.execute("INSERT OR REPLACE INTO data (key, value, metadata) VALUES (?, ?, ?)",
                      (key, val_str, meta_str))
         conn.commit()
         conn.close()
-        
+
         latency = (time.time() - start_time) * 1000
         self.logger.log("INFO", f"Stored key {key}", latency_ms=latency, shard_bucket=key[:4])
-        
+
         self._sync_multimodal(key, value, clean_metadata)
         return True
 
@@ -93,10 +99,10 @@ class BTreeKnowledgeStore(KnowledgeStore):
         cursor = conn.execute("SELECT value FROM data WHERE key = ?", (query,))
         row = cursor.fetchone()
         conn.close()
-        
+
         latency = (time.time() - start_time) * 1000
         self.logger.log("INFO", f"Retrieved key {query}", latency_ms=latency, found=bool(row))
-        
+
         if row:
             return [json.loads(row[0])]
         return []
@@ -107,4 +113,3 @@ class BTreeKnowledgeStore(KnowledgeStore):
         conn.commit()
         conn.close()
         return True
-

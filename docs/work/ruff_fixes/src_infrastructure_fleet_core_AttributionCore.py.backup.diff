@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/fleet/core/AttributionCore.py b/src/infrastructure/fleet/core/AttributionCore.py
+index 6dd3777..503d00e 100644
+--- a/src/infrastructure/fleet/core/AttributionCore.py
++++ b/src/infrastructure/fleet/core/AttributionCore.py
+@@ -7,6 +7,7 @@ from typing import Dict, Any
+ import time
+ 
+ class AttributionCore:
++    """Handles logic for code attribution and SPDX licensing."""
+     SPDX_TEMPLATE = """# Copyright 2026 PyAgent Authors
+ # Licensed under the Apache License, Version 2.0 (the "License");
+ # you may not use this file except in compliance with the License.

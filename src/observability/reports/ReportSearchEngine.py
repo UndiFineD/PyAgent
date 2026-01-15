@@ -24,11 +24,13 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .ReportSearchResult import ReportSearchResult
 from .ReportType import ReportType
-from typing import Dict, List, Tuple
 import logging
 import re
 
 __version__ = VERSION
+
+
+
 
 class ReportSearchEngine:
     """Search engine for reports.

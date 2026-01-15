@@ -1,0 +1,27 @@
+diff --git a/src/infrastructure/orchestration/SelfHealingCore.py b/src/infrastructure/orchestration/SelfHealingCore.py
+index 2ca30ab..725a727 100644
+--- a/src/infrastructure/orchestration/SelfHealingCore.py
++++ b/src/infrastructure/orchestration/SelfHealingCore.py
+@@ -27,13 +27,13 @@ and recovery strategy selection.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import time
+-from typing import Dict, List
+ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
+ @dataclass
+ class HealthStatus:
++    """Status tracking for individual agents in the self-healing system."""
+     agent_name: str
+     is_alive: bool
+     last_seen: float
+@@ -116,5 +116,5 @@ class SelfHealingCore:
+             if p_parts[1] < r_parts[1]:
+                 return False
+             return True
+-        except Exception:
++        except (ValueError, AttributeError):
+             return False
+\ No newline at end of file

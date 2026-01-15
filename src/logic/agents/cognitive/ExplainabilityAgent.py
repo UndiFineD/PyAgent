@@ -21,15 +21,18 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import json
 import os
-from typing import Dict, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.logic.agents.cognitive.core.InterpretableCore import InterpretableCore
 
 __version__ = VERSION
 
+
+
+
 class ExplainabilityAgent(BaseAgent):
     """
-    Explainability Agent: Provides autonomous tracing and justification of multi-agent 
+    Explainability Agent: Provides autonomous tracing and justification of multi-agent
     reasoning chains. Enhanced with SAE (Sparse Autoencoder) neural interpretability.
     """
     def __init__(self, workspace_path: str, errors_only: bool = False) -> None:
@@ -51,34 +54,34 @@ class ExplainabilityAgent(BaseAgent):
         import random
         for i in range(10):
             mock_activations[random.randint(0, 4095)] = 0.9
-            
+
         sae_details = self.interpret_core.decompose_activations(mock_activations)
-        
+
         return {
             "trace": trace,
             "sae_analysis": sae_details
         }
 
-    def log_reasoning_step(self, workflow_id: str, agent_name: str, action: str, 
+    def log_reasoning_step(self, workflow_id: str, agent_name: str, action: str,
                            justification: str, context: dict[str, Any]) -> str:
         """Logs a single reasoning step in the chain."""
-        
+
         # Pruning logic: Only record if verbose is ON or if it's a failure/error
-        is_failure = any(word in (justification + action).lower() 
+        is_failure = any(word in (justification + action).lower()
                          for word in ["error", "fail", "mistake", "exception", "retry", "violation"])
-        
+
         if self.errors_only and not is_failure:
             return  # Skip routine success logs
 
         entry = {
-            "timestamp": "2026-01-08", # Simulated
+            "timestamp": "2026-01-08",  # Simulated
             "workflow_id": workflow_id,
             "agent": agent_name,
             "action": action,
             "justification": justification,
             "context_summary": {k: str(v)[:100] for k, v in context.items()}
         }
-        
+
         with open(self.log_path, "a", encoding="utf-8") as f:
             f.write(json.dumps(entry) + "\n")
 
@@ -102,7 +105,7 @@ class ExplainabilityAgent(BaseAgent):
             explanation += f"## Step {i}: {step['agent']}.{step['action']}\n"
             explanation += f"**Justification**: {step['justification']}\n"
             explanation += "**Context**: " + json.dumps(step['context_summary'], indent=2) + "\n\n"
-        
+
         return explanation
 
     def justify_action(self, agent_name: str, action: str, result: Any) -> str:

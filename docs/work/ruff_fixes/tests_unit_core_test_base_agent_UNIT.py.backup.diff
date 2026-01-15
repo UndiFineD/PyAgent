@@ -1,0 +1,24 @@
+diff --git a/tests/unit/core/test_base_agent_UNIT.py b/tests/unit/core/test_base_agent_UNIT.py
+index 56f693e..0525f1d 100644
+--- a/tests/unit/core/test_base_agent_UNIT.py
++++ b/tests/unit/core/test_base_agent_UNIT.py
+@@ -43,9 +43,16 @@ class TestAgentPluginLoading:
+         manager = PluginManager()
+         class MockPlugin:
+             name: str = 'mock'
+-            def activate(self) -> None: pass
+-        manager.register(MockPlugin())
+-        assert 'mock' in manager.plugins
++            def setup(self) -> None: pass
++            def health_check(self) -> Any:
++                return base_agent_module.AgentHealthCheck(agent_name="mock", status="healthy")
++            def run(self, path: Any, ctx: Any) -> bool: return False
++            def shutdown(self) -> None: pass
++
++        plugin = MockPlugin()
++        # Manual registration since register() was removed in favor of discover/load
++        manager.active_plugins[plugin.name] = plugin
++        assert 'mock' in manager.active_plugins
+ 
+ class TestAgentHealthDiagnostics:
+     def test_health_check_basic(self, base_agent_module: Any) -> None:

@@ -1,6 +1,15 @@
 
 from __future__ import annotations
-from typing import Dict, List, Any, Optional
+from typing import Any
+
+try:
+    import rust_core
+    HAS_RUST = True
+except ImportError:
+    HAS_RUST = False
+
+
+
 
 class SearchMeshCore:
     """
@@ -23,6 +32,12 @@ class SearchMeshCore:
         Takes raw results from multiple providers and merges them into a ranked list.
         Each result should have: 'title', 'url', 'snippet', 'score' (optional).
         """
+        if HAS_RUST:
+            try:
+                return rust_core.aggregate_search_results(raw_results, self.weights)  # type: ignore[attr-defined]
+            except Exception:
+                pass
+
         master_list: list[dict[str, Any]] = []
         seen_urls: set[str] = set()
 
@@ -33,11 +48,11 @@ class SearchMeshCore:
                 url = res.get("url", "")
                 if not url:
                     continue
-                
+
                 # Basic score calculation
                 base_score = res.get("score", 0.5)
                 weighted_score = base_score * weight
-                
+
                 if url in seen_urls:
                     # If duplicate, boost the existing entry
                     for item in master_list:
@@ -46,7 +61,7 @@ class SearchMeshCore:
                             item["providers"].append(provider)
                             break
                     continue
-                
+
                 seen_urls.add(url)
                 master_list.append({
                     "title": res.get("title", "No Title"),

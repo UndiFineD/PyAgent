@@ -24,9 +24,11 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .ScheduleStatus import ScheduleStatus
 from dataclasses import dataclass, field
-from typing import List
 
 __version__ = VERSION
+
+
+
 
 @dataclass
 class ScheduledImprovement:

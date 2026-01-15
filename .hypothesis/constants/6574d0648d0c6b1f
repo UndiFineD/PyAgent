@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\image_utils.py
+# hypothesis_version: 6.150.1
+
+[255.0, 255, ',', ', ', 'InterpolationMode', 'PIL.Image.Image', 'PILImageResampling', 'RGB', 'annotations', 'channels_first', 'channels_last', 'coco_detection', 'coco_panoptic', 'data:image/', 'file_name', 'http://', 'https://', 'image_id', 'jax', 'numpy', 'pillow', 'segments_info', 'tensorflow', 'torch', 'torch.Tensor', 'vision']

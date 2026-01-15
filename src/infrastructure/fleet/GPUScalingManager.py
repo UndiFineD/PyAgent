@@ -26,9 +26,12 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import random
-from typing import Dict, Any
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class GPUScalingManager:
     """Monitors GPU resources and triggers scaling events."""
@@ -45,13 +48,13 @@ class GPUScalingManager:
             # Simulate random load
             usage = random.uniform(50.0, 95.0)
             self.gpu_state[gpu_id] = usage
-            
+
             if usage > self.threshold:
                 actions[gpu_id] = "SCALE_UP_POD"
                 logging.warning(f"GPU high pressure detected: {gpu_id} at {usage}%. Action: {actions[gpu_id]}")
             else:
                 actions[gpu_id] = "STABLE"
-        
+
         return actions
 
     def get_resource_summary(self) -> dict[str, Any]:

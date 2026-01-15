@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class OptimizationType(Enum):
     """Types of code optimization."""
     ALGORITHMIC = "algorithmic"

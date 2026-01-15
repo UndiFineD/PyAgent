@@ -25,9 +25,14 @@ from src.core.base.version import VERSION
 from src.core.base.types.AccessibilityIssue import AccessibilityIssue
 from src.core.base.types.WCAGLevel import WCAGLevel
 from dataclasses import dataclass, field
-from typing import List
 
 __version__ = VERSION
+
+
+
+
+
+
 
 @dataclass
 class AccessibilityReport:

@@ -5,9 +5,12 @@ from __future__ import annotations
 import os
 import re
 import asyncio
-from typing import List, Dict, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
+
+
+
 
 class PrivacyGuardAgent(BaseAgent):
     """
@@ -37,7 +40,7 @@ class PrivacyGuardAgent(BaseAgent):
                     try:
                         with open(path, encoding="utf-8") as f:
                             lines = f.readlines()
-                        
+
                         for i, line in enumerate(lines):
                             for name, pattern in self.secret_patterns.items():
                                 if pattern.search(line):
@@ -47,21 +50,21 @@ class PrivacyGuardAgent(BaseAgent):
                                         "type": name,
                                         "snippet": line.strip()[:50] + "..."
                                     })
-                    except Exception:
+                    except (OSError, UnicodeDecodeError):
                         continue
             return leaks
-            
+
         return await asyncio.to_thread(run_scan)
 
     async def get_improvement_items(self, context: dict[str, Any]) -> list[dict[str, Any]]:
         target = context.get("target_dir", ".")
         leaks = await self.scan_secrets(target)
-        
+
         improvements = []
         for leak in leaks:
             improvements.append({
                 "path": leak["file"],
                 "improvement": f"REMOVE EXPOSED SECRET ({leak['type']}) at line {leak['line']}",
-                "priority": 1.0 # Highest priority
+                "priority": 1.0  # Highest priority
             })
         return improvements

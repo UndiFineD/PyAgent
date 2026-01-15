@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\google\protobuf\internal\type_checkers.py
+# hypothesis_version: 6.150.1
+
+[0.0, 3.4028235677973366e+38, -2147483648, 100, 2147483647, '-inf', '0x1.fffffep+127', '<f', '__float__', '__index__', 'bool', 'inf', 'ndarray', 'numpy', 'utf-8', 'utf8', '{0:.{1}g}']

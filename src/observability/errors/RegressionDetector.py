@@ -24,10 +24,12 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .ErrorEntry import ErrorEntry
 from .RegressionInfo import RegressionInfo
-from typing import Dict, List, Optional
 import re
 
 __version__ = VERSION
+
+
+
 
 class RegressionDetector:
     """Detects error regressions.

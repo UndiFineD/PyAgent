@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/cognitive/LongTermMemory.py b/src/logic/agents/cognitive/LongTermMemory.py
+index d3fedd3..dc67fd3 100644
+--- a/src/logic/agents/cognitive/LongTermMemory.py
++++ b/src/logic/agents/cognitive/LongTermMemory.py
+@@ -21,7 +21,7 @@ import logging
+ import time
+ from datetime import datetime
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 

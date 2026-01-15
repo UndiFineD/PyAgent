@@ -2,23 +2,10 @@
 """Test classes from test_agent_test_utils.py - performance module."""
 
 from __future__ import annotations
-import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
+from typing import Any, Dict
 import time
-import json
-from datetime import datetime
-import pytest
-import logging
 from pathlib import Path
 import sys
-import os
-import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
@@ -26,15 +13,23 @@ try:
 except ImportError:
     # Fallback
     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
+
     class agent_sys_path:
-        def __enter__(self) -> Self: 
+        def __enter__(self) -> Self:
 
             return self
-        def __exit__(self, *args) -> None: 
+
+
+
+
+
+
+
+        def __exit__(self, *args) -> None:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestPerformanceMetricDataclass:
     """Tests for PerformanceMetric dataclass."""
@@ -54,7 +49,6 @@ class TestPerformanceMetricDataclass:
         assert metric.unit == "ms"
 
 
-
 class TestPerformanceTracker:
     """Tests for PerformanceTracker class."""
 
@@ -66,7 +60,6 @@ class TestPerformanceTracker:
 
     def test_track_execution(self, utils_module: Any) -> None:
         """Test tracking execution time."""
-        import time
         PerformanceTracker = utils_module.PerformanceTracker
         tracker = PerformanceTracker()
 
@@ -91,12 +84,9 @@ class TestPerformanceTracker:
         summary = tracker.get_summary()
         assert summary["total_metrics"] == 2
 
-
 # =============================================================================
 # Phase 6: SnapshotManager Tests
 # =============================================================================
-
-
 
 class TestTestTimingAndBenchmarkingUtilities:
     """Tests for test timing and benchmarking utilities."""
@@ -104,7 +94,6 @@ class TestTestTimingAndBenchmarkingUtilities:
     def test_timer_measures_duration(self, utils_module: Any) -> None:
         """Test timer measures execution duration."""
         TestTimer = utils_module.TestTimer
-        import time
 
         timer = TestTimer()
         timer.start()
@@ -142,6 +131,3 @@ class TestTestTimingAndBenchmarkingUtilities:
 
         assert results["iterations"] == 10
         assert results["average_ms"] >= 0
-
-
-

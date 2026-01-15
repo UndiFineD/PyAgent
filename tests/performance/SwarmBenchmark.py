@@ -5,7 +5,10 @@ import json
 import time
 import logging
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any
+
+
+
 
 class SwarmBenchmark:
     """Automated benchmark regression and tracking for the PyAgent Swarm."""
@@ -32,7 +35,7 @@ class SwarmBenchmark:
         # Keep only last 100 runs
         if len(self.history) > 100:
             self.history = self.history[-100:]
-            
+
         try:
             self.history_file.write_text(json.dumps(self.history, indent=2))
         except Exception as e:
@@ -44,29 +47,52 @@ class SwarmBenchmark:
         Fails if it increased by more than 10% compared to average.
         """
         if not self.history:
+
+
+
+
+
+
+
+
+
+
             logging.info("No benchmark history found. Skipping regression check.")
             return True
 
         # Calculate average TTFT from history
+
+
+
+
         historical_ttfts = [run['metrics'].get('ttft', 0) for run in self.history if 'ttft' in run['metrics']]
         if not historical_ttfts:
             return True
 
         avg_ttft = sum(historical_ttfts) / len(historical_ttfts)
-        threshold = avg_ttft * 1.10 # 10% buffer
-        
+
+
+        threshold = avg_ttft * 1.10  # 10% buffer
+
         if current_ttft > threshold:
-            logging.error(f"PERFORMANCE REGRESSION DETECTED!")
+            logging.error("PERFORMANCE REGRESSION DETECTED!")
             logging.error(f"Current TTFT: {current_ttft:.4f}s | Avg TTFT: {avg_ttft:.4f}s | Threshold: {threshold:.4f}s")
+
+
+
             return False
-            
+
         logging.info(f"Performance check passed: TTFT {current_ttft:.4f}s is within 10% of history ({avg_ttft:.4f}s)")
         return True
+
+
+
+
 
 if __name__ == "__main__":
     # Example usage
     benchmark = SwarmBenchmark()
-    current_val = 0.55 # Simulated current TTFT
+    current_val = 0.55  # Simulated current TTFT
     if benchmark.check_regression(current_val):
         benchmark.save_metrics({"ttft": current_val, "files_processed": 10})
     else:

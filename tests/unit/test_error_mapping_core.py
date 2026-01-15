@@ -3,7 +3,6 @@
 Tests the error code mapping system before Rust conversion.
 """
 
-import pytest
 from hypothesis import given, strategies as st
 from src.core.base.core.ErrorMappingCore import ErrorMappingCore
 
@@ -50,7 +49,7 @@ class TestErrorMappingCoreCategories:
             ("DiskFull", "PA-1003"),
             ("PermissionsDenied", "PA-1004"),
         ]
-        
+
         for exception_name, expected_code in infra_codes:
             code = ErrorMappingCore.get_code(exception_name)
             assert code == expected_code
@@ -63,7 +62,7 @@ class TestErrorMappingCoreCategories:
             ("ContextWindowExceeded", "PA-2003"),
             ("RateLimitExceeded", "PA-2004"),
         ]
-        
+
         for exception_name, expected_code in model_codes:
             code = ErrorMappingCore.get_code(exception_name)
             assert code == expected_code
@@ -75,7 +74,7 @@ class TestErrorMappingCoreCategories:
             ("CircularDependency", "PA-3002"),
             ("InfiniteLoopDetected", "PA-3003"),
         ]
-        
+
         for exception_name, expected_code in logic_codes:
             code = ErrorMappingCore.get_code(exception_name)
             assert code == expected_code
@@ -87,7 +86,7 @@ class TestErrorMappingCoreCategories:
             ("SafetyFilterTriggered", "PA-4002"),
             ("SensitiveDataExposure", "PA-4003"),
         ]
-        
+
         for exception_name, expected_code in security_codes:
             code = ErrorMappingCore.get_code(exception_name)
             assert code == expected_code
@@ -98,7 +97,7 @@ class TestErrorMappingCoreCategories:
             ("ManifestMismatch", "PA-5001"),
             ("EnvVarMissing", "PA-5002"),
         ]
-        
+
         for exception_name, expected_code in config_codes:
             code = ErrorMappingCore.get_code(exception_name)
             assert code == expected_code

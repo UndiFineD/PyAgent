@@ -1,7 +1,15 @@
 
 from __future__ import annotations
-from typing import Dict, Any
+from typing import Any
 import time
+
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None  # type: ignore[assignment]
+
+
+
 
 class TracingCore:
     """
@@ -11,6 +19,11 @@ class TracingCore:
 
     def create_span_context(self, trace_id: str, span_id: str) -> dict[str, str]:
         """Creates a standardized context for distributed tracing."""
+        if rc:
+            try:
+                return rc.create_span_context(trace_id, span_id)  # type: ignore[attr-defined]
+            except Exception:
+                pass
         return {
             "trace_id": trace_id,
             "span_id": span_id,
@@ -21,6 +34,11 @@ class TracingCore:
         """
         Calculates agent thinking time vs network latency.
         """
+        if rc:
+            try:
+                return rc.calculate_latency_breakdown(total_time, network_time)  # type: ignore[attr-defined]
+            except Exception:
+                pass
         thinking_time = total_time - network_time
         return {
             "total_latency_ms": total_time * 1000,

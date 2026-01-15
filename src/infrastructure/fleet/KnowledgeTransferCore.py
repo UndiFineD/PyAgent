@@ -19,9 +19,12 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import List, Any, Set
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class KnowledgeTransferCore:
     """
@@ -34,21 +37,21 @@ class KnowledgeTransferCore:
         # Normalize to dicts only
         valid_current = [lesson for lesson in current_lessons if isinstance(lesson, dict)]
         valid_imported = [lesson for lesson in imported_lessons if isinstance(lesson, dict)]
-        
+
         # Create a signature set for existing lessons
         # Signature = (failure_context, correction) usually unique enough
         seen_signatures: set[str] = set()
-        
+
         for lesson in valid_current:
             sig = f"{lesson.get('failure_context')}|{lesson.get('correction')}"
             seen_signatures.add(sig)
-            
-        merged = list(valid_current) # Start with current
-        
+
+        merged = list(valid_current)  # Start with current
+
         for lesson in valid_imported:
             sig = f"{lesson.get('failure_context')}|{lesson.get('correction')}"
             if sig not in seen_signatures:
                 merged.append(lesson)
                 seen_signatures.add(sig)
-                
+
         return merged

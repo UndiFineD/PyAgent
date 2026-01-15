@@ -25,13 +25,16 @@ Demonstrates the 'Core/Shell' pattern for cross-language compatibility.
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, Any
+from typing import Any
 
 __version__ = VERSION
 
+
+
+
 class MockCore:
     """Pure logic for the MockPlugin."""
-    
+
     def __init__(self, multiplier: float = 1.0) -> None:
         self.multiplier: float = multiplier
         self.processed_count: int = 0

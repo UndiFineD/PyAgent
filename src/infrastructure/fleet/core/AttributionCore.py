@@ -3,10 +3,14 @@ Core logic for Code Attribution and Licensing (Phase 185).
 Handles SPDX header generation and contribution tagging.
 """
 
-from typing import Dict, Any
+from typing import Any
 import time
 
+
+
+
 class AttributionCore:
+    """Handles logic for code attribution and SPDX licensing."""
     SPDX_TEMPLATE = """# Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.

@@ -21,10 +21,13 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import time
 import logging
-from typing import Dict, List, Any, Optional
+from typing import Any
 from .SelfHealingCore import SelfHealingCore
 
 __version__ = VERSION
+
+
+
 
 class SelfHealingOrchestrator:
     """
@@ -53,7 +56,7 @@ class SelfHealingOrchestrator:
     def check_fleet_health(self) -> None:
         """Scans the fleet for agents that have stopped responding."""
         failed_agents = self.core.detect_failures()
-        
+
         for agent_name in failed_agents:
             self.attempt_recovery(agent_name)
 
@@ -61,9 +64,9 @@ class SelfHealingOrchestrator:
         """Attempts to restart a failed agent and restore its last known state."""
         action = self.core.get_recovery_action(agent_name)
         logging.info(f"Self-Healing: Recovery action '{action}' triggered for {agent_name}")
-        
+
         success = False
-        
+
         # Action implementation using FleetManager/Registry
         if action == "reinitialize" or action == "restart_process":
             # Attempt to reload through the registry
@@ -72,15 +75,15 @@ class SelfHealingOrchestrator:
             else:
                 logging.warning(f"Self-Healing: FleetManager registry unavailable for {agent_name} recovery.")
                 success = False
-        
+
         if success:
             # Clear error count on success
             self.core.health_registry[agent_name].error_count = 0
             self.core.health_registry[agent_name].is_alive = True
-            
+
             # Update core that it's fixed
             self.core.update_health(agent_name, error=False)
-            
+
             restored_state = self.state_backups.get(agent_name, "N/A")
             self.recovery_logs.append({
                 "agent": agent_name,
@@ -94,10 +97,10 @@ class SelfHealingOrchestrator:
             logging.error(f"Self-Healing: Agent {agent_name} is unrecoverable. Initiating apoptosis.")
             # Logic to remove from registry or kill process here
             return False
-            
+
         return False
 
-    def attempt_repair(self, agent_name: str, error: Exception = None, **kwargs) -> Any:
+    def attempt_repair(self, agent_name: str, error: Exception | None = None, **kwargs) -> Any:
         """Alias for attempt_recovery (Legacy Phase 35 compatibility)."""
         logging.info(f"Self-Healing: Attempting repair for {agent_name}...")
         self.attempt_recovery(agent_name)
@@ -118,7 +121,7 @@ class SelfHealingOrchestrator:
         """
         if not self.recovery_logs:
             return
-            
+
         logging.info("Self-Healing: Reviewing recovery logs for new intelligence lessons...")
         for log in self.recovery_logs[-10:]:
             if log.get("action") == "apoptosis":

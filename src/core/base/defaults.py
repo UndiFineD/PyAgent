@@ -22,7 +22,6 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import List
 from .models import PromptTemplate
 
 __version__ = VERSION

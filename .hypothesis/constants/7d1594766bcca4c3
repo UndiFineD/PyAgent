@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\development\CoderAgent.py
+# hypothesis_version: 6.150.1
+
+[0.0, 1.0, '--cov=', '-m', '.cc', '.cpp', '.cxx', '.go', '.java', '.js', '.py', '.rb', '.rs', '.ts', 'No match', 'Shell', 'TOTAL.*?\\s+(\\d+)%', 'code-refactor', 'javascript', 'occurrences', 'pytest', 'python', 'tests']

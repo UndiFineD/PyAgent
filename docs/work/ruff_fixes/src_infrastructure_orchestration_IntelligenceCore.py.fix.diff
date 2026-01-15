@@ -1,0 +1,50 @@
+diff --git a/src/infrastructure/orchestration/IntelligenceCore.py b/src/infrastructure/orchestration/IntelligenceCore.py
+index 7f58ce4..550c8d9 100644
+--- a/src/infrastructure/orchestration/IntelligenceCore.py
++++ b/src/infrastructure/orchestration/IntelligenceCore.py
+@@ -25,14 +25,23 @@ Handles weight calculation, insight distillation, and pattern matching.
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import List, Dict, Any, Optional
++import logging
++from typing import Any
+ from dataclasses import dataclass, field
+ from datetime import datetime
+ 
++try:
++    import rust_core as rc
++except (ImportError, AttributeError):
++    rc = None
++
++logger = logging.getLogger(__name__)
++
+ __version__ = VERSION
+ 
+ @dataclass
+ class SwarmInsight:
++    """Data class representing a derived insight from the swarm."""
+     agent: str
+     insight: str
+     confidence: float
+@@ -49,11 +58,16 @@ class IntelligenceCore:
+ 
+     def filter_relevant_insights(self, pool: list[dict[str, Any]], limit: int = 20) -> list[SwarmInsight]:
+         """Filters and converts raw insight dictionaries into SwarmInsight objects."""
++        if rc:
++            try:
++                # Optimized sort and truncate in Rust
++                pool = rc.filter_relevant_insights(pool, limit)
++            except Exception as e:
++                logger.warning(f"Rust filter_relevant_insights failed: {e}")
++
+         insights = []
+-        # Sort by confidence and recency
+-        sorted_pool = sorted(pool, key=lambda x: (x.get('confidence', 0), x.get('timestamp', 0)), reverse=True)
+-        
+-        for item in sorted_pool[:limit]:
++        # Fallback/Process results
++        for item in pool[:limit]:
+             insights.append(SwarmInsight(
+                 agent=item.get('agent', 'Unknown'),
+                 insight=item.get('insight', ''),

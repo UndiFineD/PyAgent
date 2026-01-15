@@ -21,9 +21,11 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, Optional
 
 __version__ = VERSION
+
+
+
 
 class CognitiveBorrowingOrchestrator:
     """
@@ -31,10 +33,10 @@ class CognitiveBorrowingOrchestrator:
     When an agent encounters a task outside its direct specialization, it can request
     a 'Cognitive Bridge' to a more specialized peer.
     """
-    
+
     def __init__(self, fleet) -> None:
         self.fleet = fleet
-        self.active_bridges: dict[str, str] = {} # target -> source
+        self.active_bridges: dict[str, str] = {}  # target -> source
 
     def establish_bridge(self, target_agent: str, source_agent: str) -> bool:
         """Establishes a cognitive bridge between two agents."""
@@ -46,10 +48,10 @@ class CognitiveBorrowingOrchestrator:
         """Retrieves a prompt or pattern snippet for a specific skill from a peer."""
         if agent_name not in self.active_bridges:
             return None
-            
+
         source = self.active_bridges[agent_name]
         logging.info(f"CognitiveBorrowing: {agent_name} is borrowing '{skill_description}' from {source}")
-        
+
         # In a real system, this would query the source agent's cognitive profile
         return f"PATTERN: {skill_description.upper()} execution logic from {source}."
 

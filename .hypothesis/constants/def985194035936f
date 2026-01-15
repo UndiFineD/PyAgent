@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\opentelemetry\proto\metrics\v1\metrics_pb2.py
+# hypothesis_version: 6.150.1
+
+[172, 260, 263, 438, 441, 600, 603, 1064, 1066, 1143, 1146, 1332, 1335, 1508, 1511, 1706, 1708, 1788, 1791, 2053, 2056, 2414, 2417, 2947, 2995, 3019, 3022, 3291, 3341, 3347, 3350, 3543, 3546, 3686, 3688, 3782, 'DESCRIPTOR', '_DATAPOINTFLAGS', '_EXEMPLAR', '_GAUGE', '_HISTOGRAM', '_HISTOGRAMDATAPOINT', '_METRIC', '_METRICSDATA', '_NUMBERDATAPOINT', '_RESOURCEMETRICS', '_SCOPEMETRICS', '_SUM', '_SUMMARY', '_SUMMARYDATAPOINT']

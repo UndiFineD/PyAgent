@@ -22,10 +22,13 @@ from src.core.base.version import VERSION
 import time
 import random
 import logging
-from typing import Dict, List, Any
+from typing import Any
 from src.logic.agents.cognitive.core.MetacognitiveCore import MetacognitiveCore
 
 __version__ = VERSION
+
+
+
 
 class IntentionPredictionAgent:
     """
@@ -34,9 +37,9 @@ class IntentionPredictionAgent:
     """
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.agent_histories: dict[str, list[dict[str, Any]]] = {} # agent_id -> [action_logs]
+        self.agent_histories: dict[str, list[dict[str, Any]]] = {}  # agent_id -> [action_logs]
         self.core = MetacognitiveCore()
-        
+
     def predict_and_prewarm(self, agent_id: str) -> dict[str, Any]:
         """
         Predicts next intent and identifies agents to pre-warm.
@@ -44,10 +47,10 @@ class IntentionPredictionAgent:
         history = self.agent_histories.get(agent_id, [])
         intent = self.core.predict_next_intent(history)
         prewarm_targets = self.core.get_prewarm_targets(intent)
-        
+
         if prewarm_targets:
             logging.info(f"IntentionPrediction: Pre-warming {prewarm_targets} for predicted intent: {intent}")
-            
+
         return {
             "predicted_intent": intent,
             "prewarm_targets": prewarm_targets,
@@ -76,9 +79,9 @@ class IntentionPredictionAgent:
         history = self.agent_histories.get(agent_id, [])
         if not history:
             return {"prediction": "idle", "confidence": 0.1}
-            
+
         last_action = history[-1]["action"]
-        
+
         # Simple Markov-like simulation
         if last_action == "read_file":
             return {"prediction": "edit_file", "confidence": 0.65}

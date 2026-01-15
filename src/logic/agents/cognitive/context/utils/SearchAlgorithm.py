@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class SearchAlgorithm(Enum):
     """Algorithms for semantic search."""
     KEYWORD = "keyword"

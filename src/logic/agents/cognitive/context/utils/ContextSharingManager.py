@@ -25,9 +25,11 @@ from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.SharedContext import SharedContext
 from src.logic.agents.cognitive.context.models.SharingPermission import SharingPermission
 from datetime import datetime
-from typing import Dict, List, Optional
 
 __version__ = VERSION
+
+
+
 
 class ContextSharingManager:
     """Manages context sharing across team members.

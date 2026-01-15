@@ -22,21 +22,31 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import os
 import sys
+import logging
 from src.infrastructure.fleet.FleetManager import FleetManager
+
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '.')))
 
 __version__ = VERSION
 
+
+
+
+
+
+
 def main() -> None:
     """Perform a comprehensive safety and compliance audit."""
     root = os.getcwd()
     fleet = FleetManager(root)
-    
-    print("--- Starting Safety and Compliance Audit ---")
-    
+
+    logging.info("--- Starting Safety and Compliance Audit ---")
+
     # 1. Privacy Check (Latest Phase 95)
-    print("\n[Step 1] Privacy Check (PII Detection)")
+    logging.info("[Step 1] Privacy Check (PII Detection)")
     # Scan a few key files for PII
     privacy_files = ["src/infrastructure/fleet/FleetManager.py", "requirements.txt"]
     for pf in privacy_files:
@@ -46,39 +56,67 @@ def main() -> None:
                 content = f.read()
             res = fleet.privacy_guard.scan_and_redact(content)
             if res['pii_detected']:
-                print(f"  - WARNING: PII found in {pf}")
+                logging.info(f"  - WARNING: PII found in {pf}")
                 for find in res['findings']:
-                    print(f"    - Found {find['type']}")
+                    logging.info(f"    - Found {find['type']}")
             else:
-                print(f"  - Clean: {pf}")
+                logging.info(f"  - Clean: {pf}")
 
     # 2. Security Audit (Phase 84)
-    print("\n[Step 2] Security Audit (Secret Scanning)")
+    logging.info("[Step 2] Security Audit (Secret Scanning)")
     security_findings = fleet.security_audit_agent.scan_file(os.path.join(root, "src/infrastructure/fleet/FleetManager.py"))
     if security_findings:
-        print(f"  - Found {len(security_findings)} potential security issues.")
+        logging.info(f"  - Found {len(security_findings)} potential security issues.")
         for f in security_findings:
-            print(f"    - {f['type']}: {f['detail']} ({f['severity']})")
+
+
+
+
+
+
+
+
+
+
+            logging.info(f"    - {f['type']}: {f['detail']} ({f['severity']})")
     else:
-        print("  - No critical security issues found in FleetManager.")
+        logging.info("  - No critical security issues found in FleetManager.")
+
+
+
 
     # 3. Compliance Audit (Phase 93)
-    print("\n[Step 3] Compliance Check (SOC2/GDPR)")
+    logging.info("[Step 3] Compliance Check (SOC2/GDPR)")
     soc2_res = fleet.compliance_audit.run_compliance_check("SOC2")
-    print(f"  - SOC2 Compliance Score: {soc2_res['score']}%")
+
+
+
+
+
+
+    logging.info(f"  - SOC2 Compliance Score: {soc2_res['score']}%")
     if soc2_res['failed_checks']:
         for find in soc2_res['failed_checks']:
-            print(f"    - FAIL: {find['check']}")
+            logging.info(f"    - FAIL: {find['check']}")
 
     # 4. Code Quality (Phase 87)
-    print("\n[Step 4] Code Quality (Style/Complexity)")
+    logging.info("[Step 4] Code Quality (Style/Complexity)")
     quality_res = fleet.code_quality_agent.analyze_file_quality(os.path.join(root, "src/infrastructure/fleet/FleetManager.py"))
-    print(f"  - FleetManager Quality Score: {quality_res['score']}/100")
+    logging.info(f"  - FleetManager Quality Score: {quality_res['score']}/100")
     if quality_res['issues']:
-        print(f"    - Issues: {len(quality_res['issues'])}")
 
-    print("\n--- Summary ---")
-    print("Safety Audit Complete. The codebase has multiple active monitoring agents in place.")
+
+
+
+        logging.info(f"    - Issues: {len(quality_res['issues'])}")
+
+    logging.info("--- Summary ---")
+    logging.info("Safety Audit Complete. The codebase has multiple active monitoring agents in place.")
+
+
+
+
+
 
 if __name__ == "__main__":
     main()

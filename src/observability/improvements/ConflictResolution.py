@@ -27,6 +27,9 @@ from dataclasses import dataclass
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class ConflictResolution:
     """Resolution for a conflicting improvement.

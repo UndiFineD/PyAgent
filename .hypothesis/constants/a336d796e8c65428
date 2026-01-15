@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\posthog\feature_flags.py
+# hypothesis_version: 6.150.1
+
+[100, 10000, 1152921504606846975, 'AND', 'cohort', 'd', 'exact', 'filters', 'groups', 'gt', 'gte', 'h', 'icontains', 'interval', 'is_date_after', 'is_date_before', 'is_not', 'is_not_set', 'is_set', 'key', 'lt', 'lte', 'm', 'multivariate', 'negation', 'not_icontains', 'not_regex', 'number', 'operator', 'posthog', 'properties', 'regex', 'rollout_percentage', 'type', 'utf-8', 'value', 'value_max', 'value_min', 'values', 'variant', 'variants', 'w', 'y']

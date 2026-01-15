@@ -25,14 +25,16 @@ from src.core.base.version import VERSION
 from .RecordedInteraction import RecordedInteraction
 from contextlib import contextmanager
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 from collections.abc import Iterator
 import json
 
 __version__ = VERSION
 
+
+
+
 class TestRecorder:
-    __test__ = False
     """Records and replays test interactions.
 
     Useful for recording external calls and replaying in tests.
@@ -50,6 +52,8 @@ class TestRecorder:
         with recorder.replay():
             result=api_call("data")  # Returns recorded result
     """
+
+    __test__ = False
 
     def __init__(self) -> None:
         """Initialize recorder."""

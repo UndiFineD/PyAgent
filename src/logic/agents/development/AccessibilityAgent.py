@@ -28,14 +28,18 @@ from src.core.base.types.AccessibilityReport import AccessibilityReport
 from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity
 from src.core.base.types.ColorContrastResult import ColorContrastResult
 from src.core.base.types.WCAGLevel import WCAGLevel
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.utilities import as_tool
 from pathlib import Path
-from typing import Dict, List, Tuple
 import logging
 import re
 
 __version__ = VERSION
 
-class AccessibilityAgent:
+
+
+
+class AccessibilityAgent(BaseAgent):
     """Analyzer for accessibility issues in UI code.
 
     Detects accessibility problems and suggests improvements
@@ -47,7 +51,7 @@ class AccessibilityAgent:
         rules: Enabled accessibility rules.
 
     Example:
-        analyzer=AccessibilityAgent(WCAGLevel.AA)
+        analyzer=AccessibilityAgent(file_path="...", target_level=WCAGLevel.AA)
         report=analyzer.analyze_file("component.py")
         for issue in report.issues:
             print(f"{issue.severity.name}: {issue.description}")
@@ -67,17 +71,31 @@ class AccessibilityAgent:
         "4.1.2": (AccessibilityIssueType.ARIA_MISSING, "Name, Role, Value"),
     }
 
-    def __init__(self, target_level: WCAGLevel = WCAGLevel.AA) -> None:
+    def __init__(self, target_level: WCAGLevel | str = WCAGLevel.AA, file_path: str | None = None) -> None:
         """Initialize accessibility analyzer.
 
         Args:
             target_level: Target WCAG conformance level.
+            file_path: Path to the agent file.
         """
-        self.target_level: WCAGLevel = target_level
+        super().__init__(file_path if file_path else "virtual_accessibility_agent")
+
+        # Robust handling of target_level
+        if isinstance(target_level, str):
+            try:
+                # remove 'WCAGLevel.' prefix if present
+                clean_level = target_level.split('.')[-1]
+                self.target_level = WCAGLevel[clean_level]
+            except KeyError:
+                self.target_level = WCAGLevel.AA
+        else:
+            self.target_level = target_level
+
         self.issues: list[AccessibilityIssue] = []
         self.rules: dict[str, bool] = {rule: True for rule in self.WCAG_CRITERIA}
-        logging.debug(f"AccessibilityAgent initialized with level {target_level.value}")
+        logging.debug(f"AccessibilityAgent initialized with level {self.target_level.value}")
 
+    @as_tool
     def analyze_file(self, file_path: str) -> AccessibilityReport:
         """Analyze a file for accessibility issues.
 

@@ -26,9 +26,13 @@ __version__ = VERSION
 
 SDK_REQUIRED = "10.0.0"
 
+
+
+
 class FutureAgent:
+    """Test agent for verifying forward compatibility with future SDK versions."""
     def __init__(self, *args) -> None:
         pass
-    
+
     def execute(self, task) -> str:
         return "I am from the future!"

@@ -28,39 +28,68 @@ from src.infrastructure.fleet.FleetManager import FleetManager
 
 __version__ = VERSION
 
+
+
+
+
+
+
 def test_swarm_features() -> None:
     """Validate distributed swarm consensus and optimization features."""
     logging.basicConfig(level=logging.INFO)
     root = Path(str(Path(__file__).resolve().parents[5]) + "")
     fleet = FleetManager(str(root))
-    
+
     print("--- Phase 13: Swarm Consensus ---")
     # Register agents that have 'improve_content'
     from src.logic.agents.development.SecurityGuardAgent import SecurityGuardAgent
     fleet.register_agent("Voter1", SecurityGuardAgent)
-    
+
     res = fleet.consensus.request_consensus("Fix this: pass = '123'", ["Voter1"])
+
+
+
+
+
+
+
+
+
+
     print(f"Consensus Result: {res}")
 
     print("\n--- Phase 13: Task Decomposition ---")
+
+
+
     plan = fleet.decomposer.decompose("I want to research agents and then write some code to analyze data.")
     print(f"Generated Plan: {fleet.decomposer.get_plan_summary(plan)}")
 
     print("\n--- Phase 13: Self-Referential Optimization ---")
+
     # Clear metrics to ensure threshold is hit
     fleet.telemetry.metrics = []
-    from src.observability.stats.ObservabilityEngine import AgentMetric
+    from src.observability.stats.metrics_engine import AgentMetric
     fleet.telemetry.metrics.append(AgentMetric(
         agent_name="Bot", operation="Compute", duration_ms=6000, status="success"
+
+
+
     ))
-    
+
     suggestions = fleet.optimizer.monitor_efficiency()
     print(f"Swarm Suggestions: {suggestions}")
-    
+
+
+
     opt_msg = fleet.optimizer.apply_optimizations(suggestions)
     print(f"Optimization Outcome: {opt_msg}")
 
     print("\nSwarm intelligence validation COMPLETED.")
+
+
+
+
 
 if __name__ == "__main__":
     test_swarm_features()

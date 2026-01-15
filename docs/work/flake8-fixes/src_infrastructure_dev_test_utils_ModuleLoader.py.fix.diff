@@ -1,0 +1,42 @@
+diff --git a/src/infrastructure/dev/test_utils/ModuleLoader.py b/src/infrastructure/dev/test_utils/ModuleLoader.py
+index b6c155c..b5ed337 100644
+--- a/src/infrastructure/dev/test_utils/ModuleLoader.py
++++ b/src/infrastructure/dev/test_utils/ModuleLoader.py
+@@ -29,11 +29,20 @@ import sys
+ from contextlib import contextmanager
+ from pathlib import Path
+ from types import ModuleType
+-from typing import Optional
+ from collections.abc import Iterator
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class ModuleLoader:
+     """Handles dynamic loading of agent modules and sys.path management."""
+ 
+@@ -95,7 +104,7 @@ class ModuleLoader:
+             if not safe or safe[0].isdigit():
+                 safe = f"m_{safe}"
+             module_name = f"_dv_legacy_{safe}"
+-        
++
+         try:
+             return self.load_module_from_path(module_name, path)
+         except Exception:
+@@ -105,4 +114,4 @@ class ModuleLoader:
+ 
+     def get_base_agent_module(self) -> ModuleType:
+         """Load base_agent module without modifying sys.path."""
+-        return self.load_agent_module("base_agent.py", "base_agent")
+\ No newline at end of file
++        return self.load_agent_module("base_agent.py", "base_agent")

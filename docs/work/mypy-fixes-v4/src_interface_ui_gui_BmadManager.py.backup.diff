@@ -1,0 +1,11 @@
+diff --git a/src/interface/ui/gui/BmadManager.py b/src/interface/ui/gui/BmadManager.py
+index a7b8479..777dc88 100644
+--- a/src/interface/ui/gui/BmadManager.py
++++ b/src/interface/ui/gui/BmadManager.py
+@@ -213,4 +213,4 @@ class BmadManager:
+                 col.local_context.insert("1.0", f"--- BMAD {phase} PHASE ---\n{instr}")
+ 
+         # Final status update via callback if available
+-        # self.callbacks["set_status"](f"Deployed {total_instances} agents for {mode} targeting.")
+\ No newline at end of file
++        # self.callbacks["set_status"](f"Deployed {total_instances} agents for {mode} targeting.")
