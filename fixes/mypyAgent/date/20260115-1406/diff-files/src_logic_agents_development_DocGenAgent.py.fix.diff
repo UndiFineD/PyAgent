@@ -1,0 +1,28 @@
+diff --git a/src/logic/agents/development/DocGenAgent.py b/src/logic/agents/development/DocGenAgent.py
+index a1d4903..189c001 100644
+--- a/src/logic/agents/development/DocGenAgent.py
++++ b/src/logic/agents/development/DocGenAgent.py
+@@ -18,6 +18,7 @@
+ # limitations under the License.
+ 
+ from __future__ import annotations
++from typing import Any
+ from src.core.base.version import VERSION
+ import os
+ import ast
+@@ -33,7 +34,7 @@ class DocGenAgent(BaseAgent):
+     def __init__(self, workspace_path: str) -> None:
+         super().__init__(workspace_path)
+         self.workspace_path = workspace_path
+-        self.doc_registry = {} # module_path -> extracted_docs
++        self.doc_registry: dict[Any, Any] = {} # module_path -> extracted_docs
+ 
+     def extract_docs(self, file_path: str) -> str:
+         """Extracts docstrings from a Python file and returns Markdown content."""
+@@ -88,4 +89,4 @@ class DocGenAgent(BaseAgent):
+             with open(os.path.join(output_dir, doc_filename), "w", encoding="utf-8") as f:
+                 f.write(content)
+         
+-        return len(self.doc_registry)
+\ No newline at end of file
++        return len(self.doc_registry)

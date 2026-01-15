@@ -1,0 +1,27 @@
+diff --git a/src/core/base/types/ComplianceResult.py b/src/core/base/types/ComplianceResult.py
+index fb7ba6a..d7d1b23 100644
+--- a/src/core/base/types/ComplianceResult.py
++++ b/src/core/base/types/ComplianceResult.py
+@@ -24,10 +24,14 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ComplianceCategory import ComplianceCategory
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ComplianceResult:
+     """Result of compliance checking.
+@@ -41,4 +45,4 @@ class ComplianceResult:
+     category: ComplianceCategory
+     passed: bool
+     issues: list[str] = field(default_factory=lambda: [])
+-    recommendations: list[str] = field(default_factory=lambda: [])
+\ No newline at end of file
++    recommendations: list[str] = field(default_factory=lambda: [])

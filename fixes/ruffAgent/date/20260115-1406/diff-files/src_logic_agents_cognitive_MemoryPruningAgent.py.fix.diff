@@ -1,0 +1,13 @@
+diff --git a/src/logic/agents/cognitive/MemoryPruningAgent.py b/src/logic/agents/cognitive/MemoryPruningAgent.py
+index a65144b..767c99a 100644
+--- a/src/logic/agents/cognitive/MemoryPruningAgent.py
++++ b/src/logic/agents/cognitive/MemoryPruningAgent.py
+@@ -20,7 +20,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import time
+-from typing import Dict, List, Any
++from typing import Any
+ 
+ __version__ = VERSION
+ 

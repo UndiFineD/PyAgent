@@ -1,0 +1,130 @@
+diff --git a/tests/conftest.py b/tests/conftest.py
+index d2341d7..d0166b2 100644
+--- a/tests/conftest.py
++++ b/tests/conftest.py
+@@ -1,8 +1,105 @@
+ """Pytest configuration for PyAgent tests."""
+ import pytest
+ import tempfile
++import types
+ from pathlib import Path
+ from src.infrastructure.fleet.AgentRegistry import AgentRegistry
++from src.core.base.BaseAgent import BaseAgent
++from src.core.base.CircuitBreaker import CircuitBreaker
++from src.core.base.AgentPluginBase import AgentPluginBase
++from src.core.base.models.enums import HealthStatus
++
++
++
++
++
++
++
++
++
++
++
++@pytest.fixture
++def agent_module():
++    """Provides a mock module with Agent and CircuitBreaker classes."""
++    mod = types.SimpleNamespace()
++    mod.Agent = BaseAgent
++
++
++
++
++
++    mod.CircuitBreaker = CircuitBreaker
++    mod.AgentPluginBase = AgentPluginBase
++    mod.HealthStatus = HealthStatus
++    return mod
++
++
++
++
++
++
++@pytest.fixture
++def agent_backend_module():
++    """Provides backend infrastructure classes."""
++    mod = types.SimpleNamespace()
++    # Lazy imports to avoid circular dependencies or import errors if modules are broken
++    try:
++        from src.infrastructure.backend.RequestQueue import RequestQueue
++        from src.infrastructure.backend.RequestBatcher import RequestBatcher
++        from src.infrastructure.backend.RequestPriority import RequestPriority
++        from src.infrastructure.backend.SystemHealthMonitor import SystemHealthMonitor
++        from src.infrastructure.backend.LoadBalancer import LoadBalancer
++        from src.infrastructure.backend.RequestTracer import RequestTracer
++        from src.infrastructure.backend.AuditLogger import AuditLogger
++
++        mod.RequestQueue = RequestQueue
++
++
++
++
++
++        mod.RequestBatcher = RequestBatcher
++        mod.RequestPriority = RequestPriority
++        mod.SystemHealthMonitor = SystemHealthMonitor
++        mod.LoadBalancer = LoadBalancer
++        mod.RequestTracer = RequestTracer
++        mod.AuditLogger = AuditLogger
++    except ImportError:
++        pass
++    return mod
++
++
++
++
++
++
++
++
++
++
++
++@pytest.fixture
++def base_agent_module():
++    """Provides core base agent classes including BatchManagers."""
++    mod = types.SimpleNamespace()
++    try:
++        from src.core.base.managers.BatchManagers import BatchRequest, RequestBatcher
++        mod.BatchRequest = BatchRequest
++        mod.RequestBatcher = RequestBatcher
++    except ImportError:
++        pass
++    return mod
++
++
++
++
++
++
++
++
++
++
+ 
+ @pytest.fixture
+ def agent_sandbox():
+@@ -13,12 +110,17 @@ def agent_sandbox():
+         data_dir = temp_path / "data"
+         src_dir.mkdir()
+         data_dir.mkdir()
+-        
++
+         # Initialize basic structure
+         (src_dir / "__init__.py").touch()
+-        
++
+         yield temp_path
+ 
++
++
++
++
++
+ @pytest.fixture
+ def agent_registry():
+     """Provides a central AgentRegistry for test use."""

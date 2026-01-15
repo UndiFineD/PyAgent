@@ -1,0 +1,47 @@
+diff --git a/tests/unit/test_utils/test_test_utils_INTEGRATION.py b/tests/unit/test_utils/test_test_utils_INTEGRATION.py
+index b57da95..28d53c3 100644
+--- a/tests/unit/test_utils/test_test_utils_INTEGRATION.py
++++ b/tests/unit/test_utils/test_test_utils_INTEGRATION.py
+@@ -3,22 +3,12 @@
+ 
+ from __future__ import annotations
+ import unittest
+-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
+-from unittest.mock import MagicMock, Mock, patch, call, ANY
+-import time
+-import json
+-from datetime import datetime
+-import pytest
+-import logging
++from typing import Any, List
++from unittest.mock import MagicMock
+ from pathlib import Path
+ import sys
+ import os
+ import tempfile
+-import shutil
+-import subprocess
+-import threading
+-import asyncio
+-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+ 
+ # Try to import test utilities
+ try:
+@@ -112,7 +102,6 @@ class TestIntegration(unittest.TestCase):
+ 
+     def test_complex_mock_scenario(self) -> None:
+         """Test complex mock scenario."""
+-        from unittest.mock import MagicMock
+         mock_service = MagicMock()
+         mock_service.fetch_data.return_value = {"status": "ok"}
+         mock_service.process_data.return_value = True
+@@ -131,7 +120,8 @@ class TestIntegration(unittest.TestCase):
+             filename: str = f.name
+ 
+         try:
+-            with open(filename, 'r') as f: str = f.read()
++            with open(filename, 'r') as f:
++                content = f.read()
+ 
+             self.assertEqual(content, "test data")
+         finally:

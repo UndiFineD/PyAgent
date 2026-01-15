@@ -1,0 +1,26 @@
+diff --git a/src/logic/agents/cognitive/context/models/ContextTag.py b/src/logic/agents/cognitive/context/models/ContextTag.py
+index 6a0063d..3800800 100644
+--- a/src/logic/agents/cognitive/context/models/ContextTag.py
++++ b/src/logic/agents/cognitive/context/models/ContextTag.py
+@@ -23,14 +23,18 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ContextTag:
+     """A tag for categorizing context."""
+     name: str
+     description: str = ""
+     color: str = "#666666"
+-    parent: str | None = None
+\ No newline at end of file
++    parent: str | None = None

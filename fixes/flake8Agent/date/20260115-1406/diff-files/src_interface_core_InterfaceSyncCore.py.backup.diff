@@ -1,0 +1,24 @@
+diff --git a/src/interface/core/InterfaceSyncCore.py b/src/interface/core/InterfaceSyncCore.py
+index 33ccdaf..ec0b554 100644
+--- a/src/interface/core/InterfaceSyncCore.py
++++ b/src/interface/core/InterfaceSyncCore.py
+@@ -1,6 +1,11 @@
+ 
+ from __future__ import annotations
+-from typing import Dict, List, Any, Optional
++from typing import Any
++
++
++
++
++
+ 
+ class InterfaceSyncCore:
+     """
+@@ -47,4 +52,4 @@ class InterfaceSyncCore:
+             "nodes": agents,
+             "edges": [{"from": c[0], "to": c[1]} for c in connections],
+             "sync_version": "v2.0"
+-        }
+\ No newline at end of file
++        }

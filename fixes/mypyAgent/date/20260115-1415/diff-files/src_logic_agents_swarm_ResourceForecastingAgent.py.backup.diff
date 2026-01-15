@@ -1,0 +1,29 @@
+diff --git a/src/logic/agents/swarm/ResourceForecastingAgent.py b/src/logic/agents/swarm/ResourceForecastingAgent.py
+index 7a85134..7576fb8 100644
+--- a/src/logic/agents/swarm/ResourceForecastingAgent.py
++++ b/src/logic/agents/swarm/ResourceForecastingAgent.py
+@@ -20,7 +20,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import time
+-from typing import Dict, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ 
+ __version__ = VERSION
+@@ -33,7 +33,7 @@ class ResourceForecastingAgent(BaseAgent):
+     def __init__(self, workspace_path: str) -> None:
+         super().__init__(workspace_path)
+         self.workspace_path = workspace_path
+-        self.usage_history = [] # List of snapshots
++        self.usage_history: list[Any] = [] # List of snapshots
+ 
+     def log_usage_snapshot(self, compute_units: float, storage_gb: float, network_mbps: float) -> str:
+         """Logs a current snapshot of resource usage."""
+@@ -87,4 +87,4 @@ class ResourceForecastingAgent(BaseAgent):
+             return "Recommend SCALE_UP: Resource exhaustion predicted."
+         elif pred['compute'] < 10 and len(self.usage_history) > 5:
+             return "Recommend SCALE_DOWN: Resource underutilization predicted."
+-        return "Maintain current scale."
+\ No newline at end of file
++        return "Maintain current scale."

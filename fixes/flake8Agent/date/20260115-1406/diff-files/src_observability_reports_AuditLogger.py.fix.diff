@@ -1,0 +1,35 @@
+diff --git a/src/observability/reports/AuditLogger.py b/src/observability/reports/AuditLogger.py
+index 717cdab..15eabc4 100644
+--- a/src/observability/reports/AuditLogger.py
++++ b/src/observability/reports/AuditLogger.py
+@@ -24,12 +24,22 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .AuditAction import AuditAction
+ from .AuditEntry import AuditEntry
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ import logging
+ import time
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class AuditLogger:
+     """Logger for report audit trail.
+     Records all actions performed on reports for compliance.
+@@ -93,4 +103,4 @@ class AuditLogger:
+             List of entries.
+         """
+ 
+-        return [e for e in self.entries if e.user_id == user_id]
+\ No newline at end of file
++        return [e for e in self.entries if e.user_id == user_id]

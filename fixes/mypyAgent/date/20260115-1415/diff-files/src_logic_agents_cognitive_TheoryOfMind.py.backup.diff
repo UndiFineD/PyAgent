@@ -1,0 +1,22 @@
+diff --git a/src/logic/agents/cognitive/TheoryOfMind.py b/src/logic/agents/cognitive/TheoryOfMind.py
+index 7eaf818..c3c43ae 100644
+--- a/src/logic/agents/cognitive/TheoryOfMind.py
++++ b/src/logic/agents/cognitive/TheoryOfMind.py
+@@ -22,8 +22,8 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, Any, List
+-from src.logic.cognitive.TheoryOfMindCore import TheoryOfMindCore
++from typing import Any
++from src.logic.agents.cognitive.TheoryOfMindCore import TheoryOfMindCore
+ 
+ __version__ = VERSION
+ 
+@@ -63,4 +63,4 @@ class TheoryOfMind:
+     def get_mental_map(self) -> dict[str, Any]:
+         """Returns the collective mental map."""
+         # The core already returns serializable lists
+-        return self.agent_profiles
+\ No newline at end of file
++        return self.agent_profiles

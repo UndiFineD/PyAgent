@@ -1,0 +1,23 @@
+diff --git a/src/observability/reports/ReportSearchResult.py b/src/observability/reports/ReportSearchResult.py
+index 7174a77..e014c78 100644
+--- a/src/observability/reports/ReportSearchResult.py
++++ b/src/observability/reports/ReportSearchResult.py
+@@ -27,6 +27,11 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ReportSearchResult:
+     """Result from report search.
+@@ -42,4 +47,4 @@ class ReportSearchResult:
+     report_type: ReportType
+     match_text: str
+     line_number: int
+-    score: float = 1.0
+\ No newline at end of file
++    score: float = 1.0

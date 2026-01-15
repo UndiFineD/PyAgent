@@ -1,0 +1,31 @@
+diff --git a/src/observability/reports/ChangelogLocalizer.py b/src/observability/reports/ChangelogLocalizer.py
+index 0a18a14..70a1379 100644
+--- a/src/observability/reports/ChangelogLocalizer.py
++++ b/src/observability/reports/ChangelogLocalizer.py
+@@ -22,12 +22,16 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from .LocalizationLanguage import LocalizationLanguage
+-from .LocalizedEntry import LocalizedEntry
+-from typing import List
++from src.core.base.types import LocalizationLanguage
++from src.core.base.types import LocalizedEntry
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ChangelogLocalizer:
+     """Handles changelog localization to multiple languages.
+ 
+@@ -101,4 +105,4 @@ class ChangelogLocalizer:
+                 result.append(entry.translations[language.value])
+             else:
+                 result.append(entry.original_text)
+-        return '\n'.join(result)
+\ No newline at end of file
++        return '\n'.join(result)

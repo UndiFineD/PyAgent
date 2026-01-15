@@ -1,0 +1,51 @@
+diff --git a/src/logic/agents/intelligence/LocalizationAgent.py b/src/logic/agents/intelligence/LocalizationAgent.py
+index e41d7b3..9a03cdf 100644
+--- a/src/logic/agents/intelligence/LocalizationAgent.py
++++ b/src/logic/agents/intelligence/LocalizationAgent.py
+@@ -21,12 +21,22 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import re
+ import logging
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.logic.agents.intelligence.core.LocalizationCore import LocalizationCore
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class LocalizationAgent(BaseAgent):
+     """
+     Handles localization and internationalization (i18n) tasks.
+@@ -55,7 +65,7 @@ class LocalizationAgent(BaseAgent):
+         """
+         if target_lang not in self.supported_locales:
+              logging.warning(f"Target language {target_lang} not in core supported list.")
+-             
++
+         request = self.core.format_translation_request(text, target_lang)
+         # In a real scenario, this would call self.improve_content or an API
+         return self.solve_translation_task(request)
+@@ -80,10 +90,10 @@ class LocalizationAgent(BaseAgent):
+         """Generates a JSON translation dictionary for a specific locale."""
+         if locale not in self.supported_locales:
+             logging.warning(f"Locale {locale} not officially supported.")
+-        
++
+         translation_map = {s: f"TRANSLATED_{locale}_{s}" for s in strings}
+         return translation_map
+ 
+     def solve_translation_task(self, prompt: str) -> str:
+         """Uses LLM to help with complex translation tasks."""
+-        return self.improve_content(f"Translate the following content preserving formatting: {prompt}")
+\ No newline at end of file
++        return self.improve_content(f"Translate the following content preserving formatting: {prompt}")

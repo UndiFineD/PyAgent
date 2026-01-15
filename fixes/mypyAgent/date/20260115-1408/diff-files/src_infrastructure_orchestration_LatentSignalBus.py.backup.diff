@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/orchestration/LatentSignalBus.py b/src/infrastructure/orchestration/LatentSignalBus.py
+index ea84469..4acf6f5 100644
+--- a/src/infrastructure/orchestration/LatentSignalBus.py
++++ b/src/infrastructure/orchestration/LatentSignalBus.py
+@@ -23,7 +23,7 @@ from src.core.base.version import VERSION
+ import logging
+ import json
+ import base64
+-from typing import Dict, List, Any, Optional, TYPE_CHECKING
++from typing import Any, TYPE_CHECKING
+ from datetime import datetime
+ 
+ __version__ = VERSION

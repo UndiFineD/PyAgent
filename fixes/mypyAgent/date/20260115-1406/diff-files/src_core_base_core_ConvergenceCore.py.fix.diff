@@ -1,0 +1,38 @@
+diff --git a/src/core/base/core/ConvergenceCore.py b/src/core/base/core/ConvergenceCore.py
+index 884e7b7..df18f0a 100644
+--- a/src/core/base/core/ConvergenceCore.py
++++ b/src/core/base/core/ConvergenceCore.py
+@@ -1,6 +1,11 @@
+ 
+ from __future__ import annotations
+-from typing import Dict, List, Any
++from typing import Any
++
++try:
++    import rust_core as rc
++except ImportError:
++    rc: Any = None
+ 
+ class ConvergenceCore:
+     """
+@@ -15,6 +20,13 @@ class ConvergenceCore:
+         """
+         Verifies if all agents are 'healthy'.
+         """
++        if rc:
++            try:
++                # The Rust version returns HashMap<String, PyObject>
++                return rc.verify_fleet_health(agent_reports)  # type: ignore[attr-defined]
++            except Exception:
++                pass
++
+         healthy_count = sum(1 for status in agent_reports.values() if status)
+         total_count = len(agent_reports)
+         
+@@ -49,4 +61,4 @@ class ConvergenceCore:
+         summary += "- Search relevance increased via Multi-Provider weighting.\n"
+         summary += "- System resiliency improved with BrokenImportAgent."
+         
+-        return summary
+\ No newline at end of file
++        return summary

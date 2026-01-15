@@ -1,0 +1,80 @@
+diff --git a/src/logic/agents/cognitive/context/engines/ContextCompressor.py b/src/logic/agents/cognitive/context/engines/ContextCompressor.py
+index f19fd03..95a03b3 100644
+--- a/src/logic/agents/cognitive/context/engines/ContextCompressor.py
++++ b/src/logic/agents/cognitive/context/engines/ContextCompressor.py
+@@ -24,17 +24,27 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ from pathlib import Path
+-from typing import Any, Optional
++from typing import Any
+ from src.logic.agents.cognitive.context.engines.ContextCompressorCore import ContextCompressorCore
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class ContextCompressor:
+     """Reduces the size of source files while preserving structural context.
+-    
++
+     Acts as the I/O Shell for ContextCompressorCore.
+     """
+-    
++
+     def __init__(self, workspace_root: str | None = None) -> None:
+         self.workspace_root: Path | None = Path(workspace_root) if workspace_root else None
+         self.core = ContextCompressorCore()
+@@ -42,15 +52,15 @@ class ContextCompressor:
+     def compress_file(self, file_path_raw: Any) -> str:
+         """Determines compression strategy based on file extension and handles I/O."""
+         file_path = Path(file_path_raw)
+-        
++
+         if not file_path.exists():
+             return f"Error: File {file_path} not found."
+-            
++
+         try:
+             content = file_path.read_text(encoding="utf-8", errors="replace")
+             mode = self.core.decide_compression_mode(file_path.name)
+             header = self.core.get_summary_header(file_path.name, mode.capitalize())
+-            
++
+             if mode == "python":
+                 return header + self.core.compress_python(content)
+             elif mode == "markdown":
+@@ -58,13 +68,23 @@ class ContextCompressor:
+             else:
+                 # For other files, just return the first 20 lines
+                 lines = content.splitlines()[:20]
++
++
++
++
++
+                 return header + "\n".join(lines)
+         except Exception as e:
+             logging.error(f"Failed to compress {file_path}: {e}")
+             return f"Error compressing {file_path.name}: {str(e)}"
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     # Test
+     compressor = ContextCompressor()
+     # Simple self-test
+-    print(compressor.compress_file(__file__))
+\ No newline at end of file
++    print(compressor.compress_file(__file__))

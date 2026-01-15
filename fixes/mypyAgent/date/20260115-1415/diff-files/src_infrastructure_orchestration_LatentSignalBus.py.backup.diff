@@ -1,0 +1,20 @@
+diff --git a/src/infrastructure/orchestration/LatentSignalBus.py b/src/infrastructure/orchestration/LatentSignalBus.py
+index ea84469..112fd76 100644
+--- a/src/infrastructure/orchestration/LatentSignalBus.py
++++ b/src/infrastructure/orchestration/LatentSignalBus.py
+@@ -23,7 +23,7 @@ from src.core.base.version import VERSION
+ import logging
+ import json
+ import base64
+-from typing import Dict, List, Any, Optional, TYPE_CHECKING
++from typing import Any, TYPE_CHECKING
+ from datetime import datetime
+ 
+ __version__ = VERSION
+@@ -88,4 +88,4 @@ class LatentSignalBus:
+             return None
+ 
+     def list_active_channels(self) -> list[str]:
+-        return list(self.latent_space.keys())
+\ No newline at end of file
++        return list(self.latent_space.keys())

@@ -1,0 +1,11 @@
+diff --git a/src/infrastructure/dev/scripts/apply_basic_types.py b/src/infrastructure/dev/scripts/apply_basic_types.py
+index 484d99a..6a62b75 100644
+--- a/src/infrastructure/dev/scripts/apply_basic_types.py
++++ b/src/infrastructure/dev/scripts/apply_basic_types.py
+@@ -72,4 +72,4 @@ def apply_basic_types(target_dir="src") -> bool:
+     print(f"Applied {total_fixes} basic type hints across {fixed_files} files.")
+ 
+ if __name__ == "__main__":
+-    apply_basic_types()
+\ No newline at end of file
++    apply_basic_types()

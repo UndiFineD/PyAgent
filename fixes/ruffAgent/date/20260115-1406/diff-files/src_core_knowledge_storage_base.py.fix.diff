@@ -1,0 +1,13 @@
+diff --git a/src/core/knowledge/storage_base.py b/src/core/knowledge/storage_base.py
+index ef84db5..95117f6 100644
+--- a/src/core/knowledge/storage_base.py
++++ b/src/core/knowledge/storage_base.py
+@@ -20,7 +20,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from abc import ABC, abstractmethod
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ from pathlib import Path
+ 
+ __version__ = VERSION

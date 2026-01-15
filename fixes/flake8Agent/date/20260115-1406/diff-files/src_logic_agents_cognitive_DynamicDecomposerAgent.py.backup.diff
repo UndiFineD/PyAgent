@@ -1,0 +1,60 @@
+diff --git a/src/logic/agents/cognitive/DynamicDecomposerAgent.py b/src/logic/agents/cognitive/DynamicDecomposerAgent.py
+index 9d848a2..222395e 100644
+--- a/src/logic/agents/cognitive/DynamicDecomposerAgent.py
++++ b/src/logic/agents/cognitive/DynamicDecomposerAgent.py
+@@ -26,12 +26,17 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ import json
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class DynamicDecomposerAgent(BaseAgent):
+     """Orchestrates complex task splitting and routes sub-tasks to specialized agents based on load."""
+ 
+@@ -52,10 +57,10 @@ class DynamicDecomposerAgent(BaseAgent):
+             available_agents: List of agent names currently active.
+         """
+         logging.info(f"DynamicDecomposer: Decomposing task: {complex_task[:50]}...")
+-        
++
+         # In a real implementation, this would involve LLM reasoning to split the task
+         # and assign them to the best suited agents.
+-        
++
+         decomposition = {
+             "root_task": complex_task,
+             "sub_tasks": [
+@@ -65,7 +70,7 @@ class DynamicDecomposerAgent(BaseAgent):
+                 {"id": 4, "task": "Final validation and reporting", "assigned_to": "LinguisticAgent"}
+             ]
+         }
+-        
++
+         return f"### Optimized Task Decomposition\n\n```json\n{json.dumps(decomposition, indent=2)}\n```"
+ 
+     @as_tool
+@@ -76,7 +81,12 @@ class DynamicDecomposerAgent(BaseAgent):
+     def improve_content(self, prompt: str) -> str:
+         return "Task decomposition workflows are optimized for maximum parallelization."
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     from src.core.base.utilities import create_main_function
+     main = create_main_function(DynamicDecomposerAgent, "Dynamic Decomposer Agent", "Task splitting and routing optimizer")
+-    main()
+\ No newline at end of file
++    main()

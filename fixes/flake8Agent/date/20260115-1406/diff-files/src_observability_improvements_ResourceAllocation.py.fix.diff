@@ -1,0 +1,30 @@
+diff --git a/src/observability/improvements/ResourceAllocation.py b/src/observability/improvements/ResourceAllocation.py
+index fb1e2fb..cf1e0fd 100644
+--- a/src/observability/improvements/ResourceAllocation.py
++++ b/src/observability/improvements/ResourceAllocation.py
+@@ -23,13 +23,22 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class ResourceAllocation:
+     """Compatibility allocation record used by tests."""
+ 
+     improvement_id: str
+-    resources: list[str] = field(default_factory=list)  # type: ignore[assignment]
+\ No newline at end of file
++    resources: list[str] = field(default_factory=list)  # type: ignore[assignment]

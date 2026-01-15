@@ -1,0 +1,21 @@
+diff --git a/src/infrastructure/api/ImportSource.py b/src/infrastructure/api/ImportSource.py
+index b7340c3..ae9c836 100644
+--- a/src/infrastructure/api/ImportSource.py
++++ b/src/infrastructure/api/ImportSource.py
+@@ -26,9 +26,14 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ImportSource(Enum):
+     """External sources for changelog import."""
+     GITHUB_RELEASES = "github_releases"
+     JIRA = "jira"
+     GITLAB = "gitlab"
+-    MANUAL = "manual"
+\ No newline at end of file
++    MANUAL = "manual"

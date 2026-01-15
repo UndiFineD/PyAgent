@@ -1,0 +1,33 @@
+diff --git a/src/infrastructure/backend/RecordedRequest.py b/src/infrastructure/backend/RecordedRequest.py
+index e349d7d..ef370d0 100644
+--- a/src/infrastructure/backend/RecordedRequest.py
++++ b/src/infrastructure/backend/RecordedRequest.py
+@@ -23,10 +23,20 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import Any, Dict, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class RecordedRequest:
+     """A recorded request for replay."""
+@@ -38,4 +48,4 @@ class RecordedRequest:
+     response: str | None = None
+     latency_ms: int = 0
+     success: bool = True
+-    metadata: dict[str, Any] = field(default_factory=lambda: {})
+\ No newline at end of file
++    metadata: dict[str, Any] = field(default_factory=lambda: {})

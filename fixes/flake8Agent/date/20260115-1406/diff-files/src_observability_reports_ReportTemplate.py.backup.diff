@@ -1,0 +1,27 @@
+diff --git a/src/observability/reports/ReportTemplate.py b/src/observability/reports/ReportTemplate.py
+index 0cf4e99..8ca7911 100644
+--- a/src/observability/reports/ReportTemplate.py
++++ b/src/observability/reports/ReportTemplate.py
+@@ -23,10 +23,14 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ReportTemplate:
+     """Template for report generation.
+@@ -42,4 +46,4 @@ class ReportTemplate:
+         default_factory=lambda: ["purpose", "location", "surface"]
+     )  # type: ignore[assignment]
+     include_metadata: bool = True
+-    include_summary: bool = True
+\ No newline at end of file
++    include_summary: bool = True

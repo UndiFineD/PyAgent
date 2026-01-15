@@ -1,0 +1,13 @@
+diff --git a/src/observability/stats/exporters/PrometheusExporter.py b/src/observability/stats/exporters/PrometheusExporter.py
+index 86ccfcf..767f0f5 100644
+--- a/src/observability/stats/exporters/PrometheusExporter.py
++++ b/src/observability/stats/exporters/PrometheusExporter.py
+@@ -24,7 +24,7 @@ Enables real-time dashboards in Grafana and ELK stack.
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, Any, Optional
++from typing import Any
+ 
+ __version__ = VERSION
+ 

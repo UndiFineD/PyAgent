@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/backend/RequestDeduplicator.py b/src/infrastructure/backend/RequestDeduplicator.py
+index 739de28..54f3b1a 100644
+--- a/src/infrastructure/backend/RequestDeduplicator.py
++++ b/src/infrastructure/backend/RequestDeduplicator.py
+@@ -22,7 +22,6 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, Optional
+ import hashlib
+ import threading
+ import time

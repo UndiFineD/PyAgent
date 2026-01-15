@@ -1,0 +1,24 @@
+diff --git a/tests/unit/observability/test_stats_UNIT.py b/tests/unit/observability/test_stats_UNIT.py
+index 9ad4963..5215535 100644
+--- a/tests/unit/observability/test_stats_UNIT.py
++++ b/tests/unit/observability/test_stats_UNIT.py
+@@ -2,8 +2,9 @@
+ """Test classes for stats formatting and aggregation - UNIT module."""
+ 
+ from __future__ import annotations
++from typing import Any
+ import unittest
+-from typing import Any, List, Dict
++from typing import List, Dict
+ import json
+ from datetime import datetime
+ from pathlib import Path
+@@ -114,7 +115,7 @@ class TestAggregation(unittest.TestCase):
+             {"file": "b.py", "lines": 200, "functions": 20},
+         ]
+ 
+-        aggregated = {}
++        aggregated: dict[Any, Any] = {}
+         for stat in stats:
+             if stat["file"] not in aggregated:
+                 aggregated[stat["file"]] = []

@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/backend/SubagentStatus.py b/src/infrastructure/backend/SubagentStatus.py
+index 3930a6e..38e9f0d 100644
+--- a/src/infrastructure/backend/SubagentStatus.py
++++ b/src/infrastructure/backend/SubagentStatus.py
+@@ -24,7 +24,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import os
+ from pathlib import Path
+-from typing import Any, Dict, TYPE_CHECKING
++from typing import Any, TYPE_CHECKING
+ 
+ __version__ = VERSION
+ 

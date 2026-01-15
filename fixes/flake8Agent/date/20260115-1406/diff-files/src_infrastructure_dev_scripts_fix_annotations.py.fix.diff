@@ -1,0 +1,18 @@
+diff --git a/src/infrastructure/dev/scripts/fix_annotations.py b/src/infrastructure/dev/scripts/fix_annotations.py
+index 1aa3854..cc165fe 100644
+--- a/src/infrastructure/dev/scripts/fix_annotations.py
++++ b/src/infrastructure/dev/scripts/fix_annotations.py
+@@ -33,10 +33,10 @@ for root, _, files in os.walk(src_path):
+             path = os.path.join(root, file)
+             with open(path, encoding="utf-8", errors="ignore") as f:
+                 content = f.read()
+-            
++
+             if "import annotations" in content and "from __future__ import annotations" not in content:
+                 new_content = re.sub(r"^import annotations$", r"from __future__ import annotations", content, flags=re.MULTILINE)
+                 if new_content != content:
+                     with open(path, "w", encoding="utf-8") as f:
+                         f.write(new_content)
+-                    print(f"Fixed: {path}")
+\ No newline at end of file
++                    print(f"Fixed: {path}")

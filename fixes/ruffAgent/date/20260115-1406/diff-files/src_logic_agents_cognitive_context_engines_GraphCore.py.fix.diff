@@ -1,0 +1,47 @@
+diff --git a/src/logic/agents/cognitive/context/engines/GraphCore.py b/src/logic/agents/cognitive/context/engines/GraphCore.py
+index 89e1995..6ddfe72 100644
+--- a/src/logic/agents/cognitive/context/engines/GraphCore.py
++++ b/src/logic/agents/cognitive/context/engines/GraphCore.py
+@@ -26,7 +26,7 @@ Pure logic for AST-based code relationship analysis and graph management.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import ast
+-from typing import Dict, List, Set, Any, Tuple
++from typing import Any
+ 
+ __version__ = VERSION
+ 
+@@ -73,6 +73,33 @@ class GraphCore:
+     @staticmethod
+     def parse_python_content(rel_path: str, content: str) -> dict[str, Any]:
+         """Parses Python code and returns extracted symbols and relationships."""
++        try:
++            import rust_core
++            # Rust returns {imports: [], classes: [(name, bases)], calls: []}
++            data = rust_core.extract_graph_entities_regex(content)
++            
++            # Map Rust output to expected format
++            inherits = {}
++            classes_list = []
++            for name, bases_str in data.get("classes", []):
++                classes_list.append(name)
++                # Parse bases string simply by split ','
++                if bases_str:
++                     bases = [b.strip() for b in bases_str.split(',') if b.strip()]
++                     inherits[name] = bases
++                else:
++                     inherits[name] = []
++            
++            return {
++                "rel_path": rel_path,
++                "imports": data.get("imports", []),
++                "classes": classes_list,
++                "inherits": inherits,
++                "calls": data.get("calls", [])
++            }
++        except (ImportError, AttributeError):
++            pass
++
+         try:
+             tree = ast.parse(content)
+             visitor = CodeGraphVisitor(rel_path)

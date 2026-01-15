@@ -1,0 +1,20 @@
+diff --git a/src/logic/agents/security/EternalAuditAgent.py b/src/logic/agents/security/EternalAuditAgent.py
+index e3be4ab..7a0dbf1 100644
+--- a/src/logic/agents/security/EternalAuditAgent.py
++++ b/src/logic/agents/security/EternalAuditAgent.py
+@@ -25,7 +25,7 @@ import json
+ import time
+ import hashlib
+ import os
+-from typing import Dict, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+@@ -136,4 +136,4 @@ class EternalAuditAgent(BaseAgent):
+             "status": "success" if not errors else "tampered",
+             "entries_processed": count,
+             "errors": errors
+-        }
+\ No newline at end of file
++        }

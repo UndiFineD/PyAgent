@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/orchestration/HeartbeatOrchestrator.py b/src/infrastructure/orchestration/HeartbeatOrchestrator.py
+index ef85d29..f52bd10 100644
+--- a/src/infrastructure/orchestration/HeartbeatOrchestrator.py
++++ b/src/infrastructure/orchestration/HeartbeatOrchestrator.py
+@@ -23,7 +23,6 @@ from src.core.base.version import VERSION
+ import logging
+ import time
+ import threading
+-from typing import Dict
+ 
+ __version__ = VERSION
+ 

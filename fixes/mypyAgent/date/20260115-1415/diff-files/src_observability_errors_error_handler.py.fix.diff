@@ -1,0 +1,11 @@
+diff --git a/src/observability/errors/error_handler.py b/src/observability/errors/error_handler.py
+index 907dafb..cdb885f 100644
+--- a/src/observability/errors/error_handler.py
++++ b/src/observability/errors/error_handler.py
+@@ -44,4 +44,4 @@ main = create_main_function(
+ )
+ 
+ if __name__ == '__main__':
+-    main()
+\ No newline at end of file
++    main()

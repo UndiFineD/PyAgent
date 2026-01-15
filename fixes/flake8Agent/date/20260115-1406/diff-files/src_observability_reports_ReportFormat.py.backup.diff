@@ -1,0 +1,21 @@
+diff --git a/src/observability/reports/ReportFormat.py b/src/observability/reports/ReportFormat.py
+index 3bc327f..cff1cc7 100644
+--- a/src/observability/reports/ReportFormat.py
++++ b/src/observability/reports/ReportFormat.py
+@@ -26,9 +26,14 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ReportFormat(Enum):
+     """Output format for reports."""
+ 
+     MARKDOWN = "markdown"
+     JSON = "json"
+-    HTML = "html"
+\ No newline at end of file
++    HTML = "html"

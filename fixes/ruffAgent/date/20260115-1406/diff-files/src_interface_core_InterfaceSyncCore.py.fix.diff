@@ -1,0 +1,12 @@
+diff --git a/src/interface/core/InterfaceSyncCore.py b/src/interface/core/InterfaceSyncCore.py
+index 33ccdaf..5f01d2f 100644
+--- a/src/interface/core/InterfaceSyncCore.py
++++ b/src/interface/core/InterfaceSyncCore.py
+@@ -1,6 +1,6 @@
+ 
+ from __future__ import annotations
+-from typing import Dict, List, Any, Optional
++from typing import Any
+ 
+ class InterfaceSyncCore:
+     """

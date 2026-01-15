@@ -1,0 +1,28 @@
+diff --git a/src/logic/agents/cognitive/context/utils/ContextInheritance.py b/src/logic/agents/cognitive/context/utils/ContextInheritance.py
+index fc5c7f8..6728ce8 100644
+--- a/src/logic/agents/cognitive/context/utils/ContextInheritance.py
++++ b/src/logic/agents/cognitive/context/utils/ContextInheritance.py
+@@ -24,11 +24,15 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.InheritanceMode import InheritanceMode
+ from src.logic.agents.cognitive.context.models.InheritedContext import InheritedContext
+-from typing import Dict, List, Optional
+ import re
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ContextInheritance:
+     """Manages context inheritance from parent files.
+ 
+@@ -115,4 +119,4 @@ class ContextInheritance:
+                 section_name = re.search(r"##\s+(\w+)", section)
+                 if section_name and section_name.group(1) not in child_sections:
+                     result += "\n" + section.strip()
+-            return result
+\ No newline at end of file
++            return result

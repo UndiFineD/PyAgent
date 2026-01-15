@@ -1,0 +1,33 @@
+diff --git a/src/logic/agents/cognitive/context/utils/ContextExporter.py b/src/logic/agents/cognitive/context/utils/ContextExporter.py
+index 40a8bf7..b6c5f34 100644
+--- a/src/logic/agents/cognitive/context/utils/ContextExporter.py
++++ b/src/logic/agents/cognitive/context/utils/ContextExporter.py
+@@ -25,11 +25,20 @@ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.ExportFormat import ExportFormat
+ from src.logic.agents.cognitive.context.models.ExportedContext import ExportedContext
+ from datetime import datetime
+-from typing import List, Optional
+ import re
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class ContextExporter:
+     """Exports context to documentation systems.
+ 
+@@ -91,4 +100,4 @@ class ContextExporter:
+                      "=" * len(m.group(1)), rst, flags=re.M)
+         rst = re.sub(r"^## (.+)$", lambda m: m.group(1) + "\n" +
+                      "-" * len(m.group(1)), rst, flags=re.M)
+-        return rst
+\ No newline at end of file
++        return rst

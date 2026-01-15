@@ -1,0 +1,27 @@
+diff --git a/src/core/base/types/ModernizationSuggestion.py b/src/core/base/types/ModernizationSuggestion.py
+index bf3d9b4..3ecf48e 100644
+--- a/src/core/base/types/ModernizationSuggestion.py
++++ b/src/core/base/types/ModernizationSuggestion.py
+@@ -23,10 +23,14 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ModernizationSuggestion:
+     """Suggestion to modernize deprecated API usage.
+@@ -42,4 +46,4 @@ class ModernizationSuggestion:
+     new_api: str
+     deprecation_version: str
+     removal_version: str | None = None
+-    migration_guide: str = ""
+\ No newline at end of file
++    migration_guide: str = ""

@@ -1,0 +1,16 @@
+diff --git a/src/infrastructure/backend/AuditLogger.py b/src/infrastructure/backend/AuditLogger.py
+index 9a3f47d..57c8d07 100644
+--- a/src/infrastructure/backend/AuditLogger.py
++++ b/src/infrastructure/backend/AuditLogger.py
+@@ -22,9 +22,9 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from datetime import datetime, timezone, UTC
++from datetime import datetime, UTC
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ import json
+ import logging
+ import threading

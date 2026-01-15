@@ -1,0 +1,25 @@
+diff --git a/src/core/base/types/StyleRuleSeverity.py b/src/core/base/types/StyleRuleSeverity.py
+index 3ceca28..7af6a7b 100644
+--- a/src/core/base/types/StyleRuleSeverity.py
++++ b/src/core/base/types/StyleRuleSeverity.py
+@@ -26,8 +26,18 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class StyleRuleSeverity(Enum):
+     """Severity levels for style rules."""
+     ERROR = "error"
+     WARNING = "warning"
+-    INFO = "info"
+\ No newline at end of file
++    INFO = "info"

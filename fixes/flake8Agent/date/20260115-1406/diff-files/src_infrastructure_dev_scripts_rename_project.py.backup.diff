@@ -1,0 +1,50 @@
+diff --git a/src/infrastructure/dev/scripts/rename_project.py b/src/infrastructure/dev/scripts/rename_project.py
+index dbf861b..28cccd3 100644
+--- a/src/infrastructure/dev/scripts/rename_project.py
++++ b/src/infrastructure/dev/scripts/rename_project.py
+@@ -28,13 +28,18 @@ import os
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ def replace_in_file(filepath: str) -> None:
+     try:
+         with open(filepath, encoding='utf-8') as f:
+             content = f.read()
+-        
++
+         new_content = content.replace("DebVisor", "PyAgent").replace("debvisor", "pyagent")
+-        
++
+         if content != new_content:
+             print(f"Updating {filepath}")
+             with open(filepath, 'w', encoding='utf-8') as f:
+@@ -42,6 +47,11 @@ def replace_in_file(filepath: str) -> None:
+     except Exception as e:
+         print(f"Skipping {filepath}: {e}")
+ 
++
++
++
++
++
+ def main() -> None:
+     start_dirs = ["src", "tests", "docs"]
+     for d in start_dirs:
+@@ -51,5 +61,10 @@ def main() -> None:
+                     if file.endswith((".py", ".md", ".txt", ".json")):
+                         replace_in_file(os.path.join(root, file))
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+-    main()
+\ No newline at end of file
++    main()

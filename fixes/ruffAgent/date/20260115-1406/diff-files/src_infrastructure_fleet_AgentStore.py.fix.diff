@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/fleet/AgentStore.py b/src/infrastructure/fleet/AgentStore.py
+index d29b69e..51c873a 100644
+--- a/src/infrastructure/fleet/AgentStore.py
++++ b/src/infrastructure/fleet/AgentStore.py
+@@ -26,7 +26,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ from pathlib import Path
+-from typing import Dict, Any, Optional
++from typing import Any
+ 
+ class AgentStore:
+     """Marketplace for agent templates and specialized configurations."""

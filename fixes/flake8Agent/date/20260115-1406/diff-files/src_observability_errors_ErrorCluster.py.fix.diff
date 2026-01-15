@@ -1,0 +1,32 @@
+diff --git a/src/observability/errors/ErrorCluster.py b/src/observability/errors/ErrorCluster.py
+index dd48f0f..a33ffec 100644
+--- a/src/observability/errors/ErrorCluster.py
++++ b/src/observability/errors/ErrorCluster.py
+@@ -23,10 +23,19 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class ErrorCluster:
+     """A cluster of similar errors."""
+@@ -34,4 +43,4 @@ class ErrorCluster:
+     name: str
+     pattern: str
+     error_ids: list[str] = field(default_factory=lambda: [])
+-    description: str = ""
+\ No newline at end of file
++    description: str = ""

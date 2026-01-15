@@ -1,0 +1,59 @@
+diff --git a/src/logic/agents/cognitive/SpeciationAgent.py b/src/logic/agents/cognitive/SpeciationAgent.py
+index 7283e1e..aa101a5 100644
+--- a/src/logic/agents/cognitive/SpeciationAgent.py
++++ b/src/logic/agents/cognitive/SpeciationAgent.py
+@@ -63,10 +63,33 @@ class SpeciationAgent(BaseAgent):
+         
+         specialized_code = self.think(prompt)
+         
+-        # Save to file
+-        with open(output_path, 'w', encoding='utf-8') as f:
+-            f.write(specialized_code)
+-            
++        # Phase 21 Fix: Ensure we don't write the prompt itself to the file if think() just returns input
++        if not specialized_code or specialized_code.strip() == prompt.strip():
++            logging.warning("SpeciationAgent: LLM returned no distinct code or returned prompt. Using skeleton.")
++            specialized_code = f"""
++from src.core.base.BaseAgent import BaseAgent
++class {new_agent_name}(BaseAgent):
++    \"\"\"Specialized agent evolved by SpeciationAgent.\"\"\"
++    def __init__(self, workspace_path: str) -> None:
++        super().__init__(workspace_path)
++        self._system_prompt = \"Specialized logic for {niche_domain}\"
++"""
++
++        # Save to file atomically
++        temp_path = output_path.with_suffix(".tmp")
++        try:
++            with open(temp_path, 'w', encoding='utf-8') as f:
++                f.write(specialized_code)
++            temp_path.replace(output_path)
++        except Exception as e:
++            if temp_path.exists():
++                try:
++                    temp_path.unlink()
++                except Exception:
++                    pass
++            logging.error(f"SpeciationAgent: Failed to save agent code atomically: {e}")
++            raise
++
+         # Generate Unit Test for the new agent
+         self._generate_test_for_agent(new_agent_name, output_path)
+             
+@@ -119,13 +142,14 @@ class SpeciationAgent(BaseAgent):
+ import unittest
+ import os
+ from {rel_import} import {agent_name}
++from src.core.base.version import VERSION
+ __version__ = VERSION
+ 
+ class Test{agent_name}(unittest.TestCase):
+-    def setUp(self):
++    def setUp(self) -> None:
+         self.agent = {agent_name}("dummy_path.py")
+ 
+-    def test_initialization(self):
++    def test_initialization(self) -> None:
+         self.assertIsNotNone(self.agent)
+         self.assertIn("{agent_name}", self.agent.__class__.__name__)
+ 

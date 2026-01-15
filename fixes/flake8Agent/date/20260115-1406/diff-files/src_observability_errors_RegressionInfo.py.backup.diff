@@ -1,0 +1,23 @@
+diff --git a/src/observability/errors/RegressionInfo.py b/src/observability/errors/RegressionInfo.py
+index 0a26868..ad5859f 100644
+--- a/src/observability/errors/RegressionInfo.py
++++ b/src/observability/errors/RegressionInfo.py
+@@ -26,6 +26,11 @@ from dataclasses import dataclass
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class RegressionInfo:
+     """Information about error regression.
+@@ -39,4 +44,4 @@ class RegressionInfo:
+     error_id: str
+     original_fix_commit: str = ""
+     regression_commit: str = ""
+-    occurrences: int = 1
+\ No newline at end of file
++    occurrences: int = 1

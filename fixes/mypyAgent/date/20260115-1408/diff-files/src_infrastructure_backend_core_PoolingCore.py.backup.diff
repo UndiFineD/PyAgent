@@ -1,0 +1,11 @@
+diff --git a/src/infrastructure/backend/core/PoolingCore.py b/src/infrastructure/backend/core/PoolingCore.py
+index e46aa5c..d3540b1 100644
+--- a/src/infrastructure/backend/core/PoolingCore.py
++++ b/src/infrastructure/backend/core/PoolingCore.py
+@@ -1,6 +1,5 @@
+ 
+ from __future__ import annotations
+-from typing import Dict, List
+ import re
+ 
+ class PoolingCore:

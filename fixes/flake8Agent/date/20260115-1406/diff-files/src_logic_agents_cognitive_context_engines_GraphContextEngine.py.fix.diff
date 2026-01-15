@@ -1,0 +1,97 @@
+diff --git a/src/logic/agents/cognitive/context/engines/GraphContextEngine.py b/src/logic/agents/cognitive/context/engines/GraphContextEngine.py
+index 71be765..b0980b7 100644
+--- a/src/logic/agents/cognitive/context/engines/GraphContextEngine.py
++++ b/src/logic/agents/cognitive/context/engines/GraphContextEngine.py
+@@ -25,14 +25,24 @@ from src.core.base.version import VERSION
+ import json
+ import logging
+ from pathlib import Path
+-from typing import Dict, Set, Any, Optional
++from typing import Any
+ from src.logic.agents.cognitive.context.engines.GraphCore import GraphCore
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class GraphContextEngine:
+     """Manages an adjacency list of file and class dependencies."""
+-    
++
+     def __init__(self, workspace_root: str) -> None:
+         self.workspace_root = Path(workspace_root)
+         self.graph: dict[str, set[str]] = {}
+@@ -55,16 +65,16 @@ class GraphContextEngine:
+         """Scans files using AST to build a detailed relationship graph."""
+         target = start_path or self.workspace_root
+         logging.info(f"Scanning project graph from {target}")
+-        
++
+         for py_file in target.rglob("*.py"):
+             if any(p in str(py_file) for p in [".venv", "__pycache__", ".git"]):
+                 continue
+-            
++
+             rel_path = str(py_file.relative_to(self.workspace_root))
+             try:
+                 content = py_file.read_text(encoding="utf-8")
+                 analysis = self.core.parse_python_content(rel_path, content)
+-                
++
+                 # Store symbol info
+                 self.symbols[rel_path] = {
+                     "classes": analysis["classes"],
+@@ -79,7 +89,7 @@ class GraphContextEngine:
+ 
+             except Exception as e:
+                 logging.error(f"GraphContextEngine: Failed to scan {rel_path}: {e}")
+-        
++
+         self.save()
+ 
+     def get_impact_radius(self, node: str, max_depth: int = 3) -> set[str]:
+@@ -87,25 +97,25 @@ class GraphContextEngine:
+         affected = set()
+         to_visit = [(node, 0)]
+         visited = {node}
+-        
++
+         inverse_graph: dict[str, set[str]] = {}
+         for src, targets in self.graph.items():
+             for t in targets:
+                 if t not in inverse_graph:
+                     inverse_graph[t] = set()
+                 inverse_graph[t].add(src)
+-        
++
+         while to_visit:
+             curr, depth = to_visit.pop(0)
+             if depth >= max_depth:
+                 continue
+-                
++
+             for depender in inverse_graph.get(curr, set()):
+                 if depender not in visited:
+                     visited.add(depender)
+                     affected.add(depender)
+                     to_visit.append((depender, depth + 1))
+-                    
++
+         return affected
+ 
+     def save(self) -> None:
+@@ -128,4 +138,4 @@ class GraphContextEngine:
+                 self.metadata = data.get("metadata", {})
+                 self.symbols = data.get("symbols", {})
+             except Exception as e:
+-                logging.error(f"Error loading graph: {e}")
+\ No newline at end of file
++                logging.error(f"Error loading graph: {e}")

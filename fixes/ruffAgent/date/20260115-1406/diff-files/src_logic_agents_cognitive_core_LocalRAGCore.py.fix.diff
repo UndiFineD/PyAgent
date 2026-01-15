@@ -1,0 +1,11 @@
+diff --git a/src/logic/agents/cognitive/core/LocalRAGCore.py b/src/logic/agents/cognitive/core/LocalRAGCore.py
+index 5ff9366..3a8aed9 100644
+--- a/src/logic/agents/cognitive/core/LocalRAGCore.py
++++ b/src/logic/agents/cognitive/core/LocalRAGCore.py
+@@ -1,6 +1,5 @@
+ 
+ from __future__ import annotations
+-from typing import List
+ from dataclasses import dataclass
+ 
+ @dataclass(frozen=True)

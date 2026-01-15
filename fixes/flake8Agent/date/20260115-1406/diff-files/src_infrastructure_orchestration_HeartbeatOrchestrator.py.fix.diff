@@ -1,0 +1,39 @@
+diff --git a/src/infrastructure/orchestration/HeartbeatOrchestrator.py b/src/infrastructure/orchestration/HeartbeatOrchestrator.py
+index ef85d29..72b55c2 100644
+--- a/src/infrastructure/orchestration/HeartbeatOrchestrator.py
++++ b/src/infrastructure/orchestration/HeartbeatOrchestrator.py
+@@ -23,16 +23,25 @@ from src.core.base.version import VERSION
+ import logging
+ import time
+ import threading
+-from typing import Dict
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class HeartbeatOrchestrator:
+     """
+     Ensures the swarm processes remain alive via a distributed watchdog system.
+     Monitors agent health and attempts to respawn or alert on failure.
+     """
+-    
++
+     def __init__(self, fleet) -> None:
+         self.fleet = fleet
+         self.last_seen: dict[str, float] = {}
+@@ -58,4 +67,4 @@ class HeartbeatOrchestrator:
+             self._stop_event.wait(timeout=60)
+ 
+     def shutdown(self) -> None:
+-        self._stop_event.set()
+\ No newline at end of file
++        self._stop_event.set()

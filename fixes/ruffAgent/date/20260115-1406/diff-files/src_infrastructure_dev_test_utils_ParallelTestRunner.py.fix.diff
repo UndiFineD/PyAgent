@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/dev/test_utils/ParallelTestRunner.py b/src/infrastructure/dev/test_utils/ParallelTestRunner.py
+index 4d567e3..17851ac 100644
+--- a/src/infrastructure/dev/test_utils/ParallelTestRunner.py
++++ b/src/infrastructure/dev/test_utils/ParallelTestRunner.py
+@@ -23,7 +23,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ParallelTestResult import ParallelTestResult
+-from typing import Any, Dict, List
++from typing import Any
+ from collections.abc import Callable
+ import time
+ 

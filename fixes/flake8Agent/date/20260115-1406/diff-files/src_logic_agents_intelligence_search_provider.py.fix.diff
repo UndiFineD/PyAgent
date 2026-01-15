@@ -1,0 +1,11 @@
+diff --git a/src/logic/agents/intelligence/search_provider.py b/src/logic/agents/intelligence/search_provider.py
+index df8513a..b7a6dab 100644
+--- a/src/logic/agents/intelligence/search_provider.py
++++ b/src/logic/agents/intelligence/search_provider.py
+@@ -41,4 +41,4 @@ if str(root / "src") not in sys.path:
+ 
+ if __name__ == "__main__":
+     main = create_main_function(SearchAgent, "Research Agent", "Topic/File to research")
+-    main()
+\ No newline at end of file
++    main()

@@ -1,0 +1,91 @@
+diff --git a/src/infrastructure/fleet/BootstrapConfigs.py b/src/infrastructure/fleet/BootstrapConfigs.py
+index 69abfce..74d4b14 100644
+--- a/src/infrastructure/fleet/BootstrapConfigs.py
++++ b/src/infrastructure/fleet/BootstrapConfigs.py
+@@ -25,24 +25,33 @@ These must remain static to ensure the system can boot up before dynamic discove
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Dict, Tuple, Optional
+ from src.infrastructure.fleet.RegistryOverlay import RegistryOverlay
+ 
+ __version__ = VERSION
+ 
+ _overlay = RegistryOverlay()
+ 
++
++
++
++
++
++
++
++
++
++
+ def get_bootstrap_agents() -> dict[str, tuple[str, str, str | None]]:
+     """Returns the bootstrap agents with dynamic overrides applied."""
+     defaults = {
+         "Orchestrator": (
+-            "src.logic.agents.swarm.PatternOrchestrator", 
+-            "PatternOrchestrator", 
++            "src.logic.agents.swarm.PatternOrchestrator",
++            "PatternOrchestrator",
+             None
+         ),
+         "Sandbox": (
+-            "src.logic.agents.development.SandboxAgent", 
+-            "SandboxAgent", 
++            "src.logic.agents.development.SandboxAgent",
++            "SandboxAgent",
+             None
+         ),
+         "Linguist": (
+@@ -84,11 +93,21 @@ def get_bootstrap_agents() -> dict[str, tuple[str, str, str | None]]:
+             "src.infrastructure.orchestration.QuantumShardOrchestrator",
+             "QuantumShardOrchestrator",
+             None
++
++
++
++
++
+         )
+     }
+-    
++
+     return {k: _overlay.get_agent_config(k, v) for k, v in defaults.items()}
+ 
++
++
++
++
++
+ BOOTSTRAP_AGENTS = get_bootstrap_agents()
+ 
+ BOOTSTRAP_ORCHESTRATORS = {
+@@ -97,7 +116,7 @@ BOOTSTRAP_ORCHESTRATORS = {
+         "SelfHealingOrchestrator"
+     ),
+     "telemetry": (
+-        "src.observability.stats.ObservabilityEngine",
++        "src.observability.stats.metrics_engine",
+         "ObservabilityEngine"
+     ),
+     "self_improvement": (
+@@ -129,7 +148,7 @@ BOOTSTRAP_ORCHESTRATORS = {
+         "AgentEconomy"
+     ),
+     "resources": (
+-        "src.observability.stats.ResourceMonitor",
++        "src.observability.stats.monitoring",
+         "ResourceMonitor"
+     ),
+     "gossip": (
+@@ -196,4 +215,4 @@ BOOTSTRAP_ORCHESTRATORS = {
+         "src.infrastructure.fleet.ConsciousnessRegistry",
+         "ConsciousnessRegistry"
+     )
+-}
+\ No newline at end of file
++}

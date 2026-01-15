@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/dev/test_utils/SnapshotManager.py b/src/infrastructure/dev/test_utils/SnapshotManager.py
+index f6fef15..ba23fcb 100644
+--- a/src/infrastructure/dev/test_utils/SnapshotManager.py
++++ b/src/infrastructure/dev/test_utils/SnapshotManager.py
+@@ -25,7 +25,7 @@ from src.core.base.version import VERSION
+ from .SnapshotComparisonResult import SnapshotComparisonResult
+ from .TestSnapshot import TestSnapshot
+ from pathlib import Path
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ import json
+ 
+ __version__ = VERSION

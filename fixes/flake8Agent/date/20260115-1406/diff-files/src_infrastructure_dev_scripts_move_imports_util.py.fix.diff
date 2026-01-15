@@ -1,0 +1,120 @@
+diff --git a/src/infrastructure/dev/scripts/move_imports_util.py b/src/infrastructure/dev/scripts/move_imports_util.py
+index 0a8b222..1b30106 100644
+--- a/src/infrastructure/dev/scripts/move_imports_util.py
++++ b/src/infrastructure/dev/scripts/move_imports_util.py
+@@ -26,41 +26,51 @@ import re
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ def fix_file(file_path: str) -> None:
+     """Move standard library imports from TYPE_CHECKING to top-level."""
+     with open(file_path, encoding='utf-8') as f:
+         content = f.read()
+-    
++
+     # regex to find if TYPE_CHECKING: block
+     pattern = re.compile(r'if TYPE_CHECKING:\s+(?:\s*(?:pass|from|import).*)+', re.MULTILINE)
+-    
++
+     match = pattern.search(content)
+     if not match:
+         return
+ 
+     block = match.group(0)
+     lines = block.split('\n')
+-    
++
+     new_block_lines = []
+     extracted_lines = []
+-    
++
+     runtime_modules = ['dataclasses', 'enum', 'pathlib', 'json', 'logging', 'os', 'sys', 'time', 'datetime', 're', 'argparse', 'typing', 'abc', 'functools', 'collections', 'itertools', 'threading', 'inspect']
+-    
++
+     started = False
+     for line in lines:
+         if 'if TYPE_CHECKING:' in line:
+             new_block_lines.append(line)
+             started = True
+             continue
+-        
++
+         if not started:
+             continue
+-            
++
+         stripped = line.strip()
+         if not stripped or stripped == 'pass':
+             new_block_lines.append(line)
+             continue
+-            
++
+         # Check if it's an import we want to move out
+         is_runtime = False
+         # Only move out if it's a standard library import
+@@ -72,22 +82,37 @@ def fix_file(file_path: str) -> None:
+             mod_part = stripped.split(' ')[1]
+             if mod_part in runtime_modules:
+                 is_runtime = True
+-        
++
+         if is_runtime:
+             extracted_lines.append(stripped)
+         else:
+             new_block_lines.append(line)
+-            
++
+     if not extracted_lines:
+         return
+-        
++
+     # Reconstruct
+     new_content = content.replace(block, '\n'.join(extracted_lines) + '\n' + '\n'.join(new_block_lines))
+-    
++
++
++
++
++
++
+     with open(file_path, 'w', encoding='utf-8') as f:
+         f.write(new_content)
+     print(f"Moved imports in {file_path}")
+ 
++
++
++
++
++
++
++
++
++
++
+ def walk_dir(path: str) -> None:
+     """Walk directory to apply import movement fix to all python files."""
+     for root, dirs, files in os.walk(path):
+@@ -95,6 +120,11 @@ def walk_dir(path: str) -> None:
+             if file.endswith('.py'):
+                 fix_file(os.path.join(root, file))
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     walk_dir('src')
+-    walk_dir('tests')
+\ No newline at end of file
++    walk_dir('tests')

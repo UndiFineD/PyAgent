@@ -1,0 +1,22 @@
+diff --git a/src/infrastructure/dev/test_utils/PerformanceMetricType.py b/src/infrastructure/dev/test_utils/PerformanceMetricType.py
+index ff5207e..75cd8d7 100644
+--- a/src/infrastructure/dev/test_utils/PerformanceMetricType.py
++++ b/src/infrastructure/dev/test_utils/PerformanceMetricType.py
+@@ -26,10 +26,15 @@ from enum import Enum
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class PerformanceMetricType(Enum):
+     """Types of performance metrics."""
+ 
+     EXECUTION_TIME = "execution_time"
+     MEMORY_USAGE = "memory_usage"
+     FILE_IO = "file_io"
+-    CPU_TIME = "cpu_time"
+\ No newline at end of file
++    CPU_TIME = "cpu_time"

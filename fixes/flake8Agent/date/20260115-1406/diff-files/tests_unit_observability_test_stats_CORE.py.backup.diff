@@ -1,0 +1,18 @@
+diff --git a/tests/unit/observability/test_stats_CORE.py b/tests/unit/observability/test_stats_CORE.py
+index 22c34fa..a84daec 100644
+--- a/tests/unit/observability/test_stats_CORE.py
++++ b/tests/unit/observability/test_stats_CORE.py
+@@ -3,8 +3,11 @@
+ 
+ from __future__ import annotations
+ from typing import Any, List
+-import pytest
+-from datetime import datetime
++
++
++
++
++
+ 
+ class TestMetricType:
+     """Tests for MetricType enum."""

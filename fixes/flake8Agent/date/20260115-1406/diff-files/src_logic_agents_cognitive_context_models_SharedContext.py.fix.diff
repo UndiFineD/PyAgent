@@ -1,0 +1,32 @@
+diff --git a/src/logic/agents/cognitive/context/models/SharedContext.py b/src/logic/agents/cognitive/context/models/SharedContext.py
+index 3f7c83d..b2d656d 100644
+--- a/src/logic/agents/cognitive/context/models/SharedContext.py
++++ b/src/logic/agents/cognitive/context/models/SharedContext.py
+@@ -24,10 +24,19 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.logic.agents.cognitive.context.models.SharingPermission import SharingPermission
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class SharedContext:
+     """Context shared with team members.
+@@ -43,4 +52,4 @@ class SharedContext:
+     owner: str
+     shared_with: list[str] = field(default_factory=lambda: [])
+     permission: SharingPermission = SharingPermission.READ_ONLY
+-    last_sync: str = ""
+\ No newline at end of file
++    last_sync: str = ""
