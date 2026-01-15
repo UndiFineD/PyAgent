@@ -1,0 +1,71 @@
+diff --git a/src/logic/agents/swarm/core/AuctionCore.py b/src/logic/agents/swarm/core/AuctionCore.py
+index a54c836..02625d0 100644
+--- a/src/logic/agents/swarm/core/AuctionCore.py
++++ b/src/logic/agents/swarm/core/AuctionCore.py
+@@ -4,31 +4,47 @@ Core logic for Swarm Resource Auctioning (Phase 184).
+ Implements the VCG auction model for truthful bidding.
+ """
+ 
+-from typing import List, Dict, Any
++from typing import Any
++
++try:
++    import rust_core as rc
++except ImportError:
++    rc = None  # type: ignore[assignment]
++
++
++
++
++
+ 
+ class AuctionCore:
++    """Core logic for VCG-based resource auctions in the swarm economy."""
+     @staticmethod
+     def calculate_vcg_auction(bids: list[dict[str, Any]], slots: int) -> list[dict[str, Any]]:
+         """
+-        Simple VCG-inspired auction. 
++        Simple VCG-inspired auction.
+         Winners are the top 'slots' bidders.
+         Price paid by winner i = The negative externality they impose on others.
+         (Simplified: Winner i pays the bid of the first loser).
+         """
++        if rc:
++            try:
++                return rc.calculate_vcg_auction(bids, slots)  # type: ignore[attr-defined]
++            except Exception:
++                pass
+         if not bids:
+             return []
+-            
++
+         sorted_bids = sorted(bids, key=lambda x: x['amount'], reverse=True)
+         winners = sorted_bids[:slots]
+-        
++
+         if len(sorted_bids) > slots:
+             clearing_price = sorted_bids[slots]['amount']
+         else:
+             clearing_price = 0.0
+-            
++
+         for w in winners:
+             w['price_paid'] = clearing_price
+-            
++
+         return winners
+ 
+     @staticmethod
+@@ -36,5 +52,10 @@ class AuctionCore:
+         """
+         Checks if a request exceeds the per-agent quota (default 20%).
+         """
++        if rc:
++            try:
++                return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent)  # type: ignore[attr-defined]
++            except Exception:
++                pass
+         quota = total_available * quota_percent
+-        return agent_vram_request <= quota
+\ No newline at end of file
++        return agent_vram_request <= quota

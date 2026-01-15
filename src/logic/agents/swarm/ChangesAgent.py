@@ -28,12 +28,15 @@ from .ValidationRule import ValidationRule
 from .VersioningStrategy import VersioningStrategy
 from src.core.base.BaseAgent import BaseAgent
 from datetime import datetime
-from typing import Optional, Dict, List, Any
+from typing import Any
 import hashlib
 import logging
 import re
 
 __version__ = VERSION
+
+
+
 
 class ChangesAgent(BaseAgent):
     """Updates code file changelogs using AI assistance.

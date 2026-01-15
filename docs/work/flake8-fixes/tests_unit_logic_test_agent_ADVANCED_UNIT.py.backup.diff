@@ -1,0 +1,94 @@
+diff --git a/tests/unit/logic/test_agent_ADVANCED_UNIT.py b/tests/unit/logic/test_agent_ADVANCED_UNIT.py
+index 340173d..23a288d 100644
+--- a/tests/unit/logic/test_agent_ADVANCED_UNIT.py
++++ b/tests/unit/logic/test_agent_ADVANCED_UNIT.py
+@@ -2,23 +2,13 @@
+ """Test classes from test_agent.py - core module."""
+ 
+ from __future__ import annotations
+-import unittest
+-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
+-from unittest.mock import MagicMock, Mock, patch, call, ANY
++from typing import List
+ import time
+ import json
+-from datetime import datetime
+ import pytest
+-import logging
+ from pathlib import Path
+ import sys
+-import os
+-import tempfile
+-import shutil
+-import subprocess
+-import threading
+-import asyncio
+-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
++from concurrent.futures import ThreadPoolExecutor
+ 
+ # Try to import test utilities
+ try:
+@@ -26,18 +16,28 @@ try:
+ except ImportError:
+     # Fallback
+     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+-    
++
+     class agent_sys_path:
+-        def __enter__(self) -> bool: 
++        def __enter__(self) -> bool:
+ 
+             return self
+-        def __exit__(self, *args) -> str: 
++
++
++
++
++
++        def __exit__(self, *args) -> str:
+             sys.path.remove(str(AGENT_DIR))
+ 
+ # Import from src if needed
+ 
+ # Core Logic and Utility Tests
+ 
++
++
++
++
++
+ class TestGitBranchProcessor:
+     """Tests for GitBranchProcessor class."""
+ 
+@@ -158,7 +158,6 @@ class TestTelemetryCollector:
+     def test_export_json(self, agent_module) -> None:
+         """Test exporting spans as JSON."""
+         TelemetryCollector = agent_module.TelemetryCollector
+-        import json
+ 
+         collector = TelemetryCollector()
+ 
+@@ -281,7 +280,9 @@ class TestDependencyGraph:
+         graph.add_dependency("tests", "coder")
+         graph.add_dependency("docs", "tests")
+ 
+-        order = graph.resolve()
++        batches = graph.resolve()
++        # Flatten batches to verify order
++        order = [item for batch in batches for item in batch]
+ 
+         assert order.index("coder") < order.index("tests")
+         assert order.index("tests") < order.index("docs")
+@@ -755,7 +756,6 @@ class TestAgentConcurrentExecution:
+ 
+     def test_concurrent_task_concept(self, agent_module, tmp_path) -> None:
+         """Test concurrent task concept."""
+-        from concurrent.futures import ThreadPoolExecutor
+ 
+         def task(x: int) -> int:
+             return x * 2
+@@ -799,4 +799,3 @@ class TestAgentResultCachingBehavior:
+ # =============================================================================
+ # ADVANCED TESTS: Large Repository Performance, Git Operations, Logging
+ # =============================================================================
+-

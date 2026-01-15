@@ -22,18 +22,21 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
 import re
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
+
+
+
 
 class NeuroSymbolicAgent(BaseAgent):
     """
     Phase 36: Neuro-Symbolic Reasoning.
     Verifies probabilistic neural output against strict symbolic rules.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.symbolic_rules: list[dict[str, Any]] = [
@@ -48,13 +51,13 @@ class NeuroSymbolicAgent(BaseAgent):
         )
 
     @as_tool
-    def verify_and_correct(self, content: str) -> dict[str, Any]:
+    def perform_neurosymbolic_verification(self, content: str) -> dict[str, Any]:
         """
         Validates content against symbolic rules and attempts to flag violations.
         """
         logging.info("NeuroSymbolic: Validating content against symbolic rules.")
         violations = []
-        
+
         for rule in self.symbolic_rules:
             if re.search(rule["regex"], content, re.IGNORECASE):
                 violations.append({
@@ -62,9 +65,9 @@ class NeuroSymbolicAgent(BaseAgent):
                     "impact": rule["impact"],
                     "action": "CORRECTION_REQUIRED" if rule["impact"] == "BLOCK" else "ADVISORY"
                 })
-        
+
         passed = all(v["impact"] != "BLOCK" for v in violations)
-        
+
         return {
             "content_verified": passed,
             "violations": violations,
@@ -72,5 +75,5 @@ class NeuroSymbolicAgent(BaseAgent):
         }
 
     def improve_content(self, prompt: str) -> str:
-        res = self.verify_and_correct(prompt)
+        res = self.perform_neurosymbolic_verification(prompt)
         return res["corrected_content"]

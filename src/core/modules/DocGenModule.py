@@ -16,6 +16,12 @@ import ast
 import os
 from src.core.base.modules import BaseModule
 
+
+
+
+
+
+
 class DocGenModule(BaseModule):
     """
     Consolidated core module for generating documentation.
@@ -33,12 +39,12 @@ class DocGenModule(BaseModule):
         """
         if not self.initialized:
             self.initialize()
-            
+
         try:
             tree = ast.parse(source_code)
-            
+
             md_content = f"# Documentation for {file_name}\n\n"
-            
+
             # Module docstring
             module_doc = ast.get_docstring(tree)
             if module_doc:
@@ -50,7 +56,7 @@ class DocGenModule(BaseModule):
                     class_doc = ast.get_docstring(node)
                     if class_doc:
                         md_content += f"{class_doc}\n\n"
-                    
+
                     for item in node.body:
                         if isinstance(item, ast.FunctionDef):
                             md_content += f"### Method: `{item.name}`\n"

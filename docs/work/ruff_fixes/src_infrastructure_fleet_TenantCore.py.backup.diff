@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/fleet/TenantCore.py b/src/infrastructure/fleet/TenantCore.py
+index 25ac330..61f5adf 100644
+--- a/src/infrastructure/fleet/TenantCore.py
++++ b/src/infrastructure/fleet/TenantCore.py
+@@ -31,6 +31,7 @@ from typing import List
+ __version__ = VERSION
+ 
+ class TenantCore:
++    """Core logic for tenant isolation and path security."""
+     def __init__(self) -> None:
+         pass
+ 

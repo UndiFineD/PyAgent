@@ -24,6 +24,7 @@ Ensures machine-readable logs with mandatory AgentID and TraceID fields.
 """
 
 from __future__ import annotations
+from typing import Any
 from src.core.base.version import VERSION
 import json
 import logging
@@ -31,22 +32,24 @@ import re
 import time
 import gzip
 import shutil
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
-from typing import Optional
 
 __version__ = VERSION
+
+
+
 
 class StructuredLogger:
     """JSON logger for PyAgent swarm observability.
     Phase 277: Added log hygiene with automated GZIP compression.
     """
-    
+
     # regex for sensitive data masking (Phase 227)
     SENSITIVE_PATTERNS = [
         re.compile(r"sk-[a-zA-Z0-9]{32,}"),  # OpenAI Keys
-        re.compile(r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*"), # Bearer Tokens
-        re.compile(r"gh[ps]_[a-zA-Z0-9]{36}") # GitHub Tokens
+        re.compile(r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*"),  # Bearer Tokens
+        re.compile(r"gh[ps]_[a-zA-Z0-9]{36}")  # GitHub Tokens
     ]
 
     def __init__(self, agent_id: str, trace_id: str | None = None, log_file: str = "data/logs/structured.json") -> None:
@@ -66,12 +69,12 @@ class StructuredLogger:
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
         compressed_file = self.log_file.with_name(f"{self.log_file.stem}_{timestamp}.json.gz")
         logging.info(f"StructuredLogger: Compressing log file ({self.log_file.name}) to {compressed_file.name}")
-        
+
         try:
             with open(self.log_file, 'rb') as f_in:
                 with gzip.open(compressed_file, 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
-            self.log_file.unlink() # Delete original
+            self.log_file.unlink()  # Delete original
         except Exception as e:
             logging.error(f"StructuredLogger compression failed: {e}")
 
@@ -89,14 +92,14 @@ class StructuredLogger:
         clean_kwargs = {k: (self._mask_sensitive(str(v)) if isinstance(v, str) else v) for k, v in kwargs.items()}
 
         entry = {
-            "timestamp": datetime.utcnow().isoformat() + "Z",
+            "timestamp": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
             "agent_id": self.agent_id,
             "trace_id": self.trace_id,
             "level": level.upper(),
             "message": clean_message,
             **clean_kwargs
         }
-        
+
         # Also log to standard logging for console visibility
         std_logger = logging.getLogger(f"PyAgent.{self.agent_id}")
         log_func = getattr(std_logger, level.lower(), std_logger.info)

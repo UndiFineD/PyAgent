@@ -1,0 +1,89 @@
+diff --git a/tests/phases/test_phase51.py b/tests/phases/test_phase51.py
+index e0504ae..fefdb7f 100644
+--- a/tests/phases/test_phase51.py
++++ b/tests/phases/test_phase51.py
+@@ -1,33 +1,71 @@
+ import unittest
++import asyncio
++from unittest import IsolatedAsyncioTestCase
++from pathlib import Path
+ from src.infrastructure.fleet.FleetManager import FleetManager
+ 
+-class TestPhase51(unittest.TestCase):
++
++
++
++
++
++class TestPhase51(IsolatedAsyncioTestCase):
+     def setUp(self):
+-        self.fleet = FleetManager(Path(__file__).resolve().parents[2])
++        self.fleet = FleetManager(str(Path(__file__).resolve().parents[2]))
+ 
+-    def test_tenant_isolation(self) -> None:
++    async def test_tenant_isolation(self) -> None:
+         print("\nTesting Phase 51: Multi-Tenant Fleet Isolation & Privacy...")
+         tenant_a = "Client_A"
+         tenant_b = "Client_B"
+-        
++
+         # Resource limits
+-        self.fleet.tenant_isolation.set_resource_limits(tenant_a, 10000, 5)
++        res = self.fleet.tenant_isolation.set_resource_limits(tenant_a, 10000, 5)
++        if asyncio.iscoroutine(res): await res
+         self.assertIn(tenant_a, self.fleet.tenant_isolation.resource_limits)
+-        
++
+         # ZK-Knowledge Sharding
+-        shard_id = self.fleet.tenant_isolation.encrypt_knowledge_shard(tenant_a, "Top secret project alpha")
++        res = self.fleet.tenant_isolation.encrypt_knowledge_shard(tenant_a, "Top secret project alpha")
++        if asyncio.iscoroutine(res):
++            shard_id = await res
++        else:
++            shard_id = res
+         print(f"Encrypted Shard ID: {shard_id}")
+         self.assertIsNotNone(shard_id)
+-        
++
+         # Access validation
+-        self.assertTrue(self.fleet.tenant_isolation.validate_access(tenant_a, "Client_A_Resource_01"))
+-        self.assertFalse(self.fleet.tenant_isolation.validate_access(tenant_a, "Client_B_Resource_01"))
+-        
++        res = self.fleet.tenant_isolation.validate_access(tenant_a, "Client_A_Resource_01")
++        if asyncio.iscoroutine(res):
++            is_valid = await res
++        else:
++            is_valid = res
++        self.assertTrue(is_valid)
++
++        res = self.fleet.tenant_isolation.validate_access(tenant_a, "Client_B_Resource_01")
++        if asyncio.iscoroutine(res):
++            is_valid = await res
++        else:
++            is_valid = res
++        self.assertFalse(is_valid)
++
+         # ZK-Fusion
+-        shard_id_2 = self.fleet.tenant_isolation.encrypt_knowledge_shard(tenant_b, "Project beta highlights")
+-        fusion_res = self.fleet.tenant_isolation.fuse_knowledge_zk([shard_id, shard_id_2])
++        res = self.fleet.tenant_isolation.encrypt_knowledge_shard(tenant_b, "Project beta highlights")
++        if asyncio.iscoroutine(res):
++            shard_id_2 = await res
++        else:
++            shard_id_2 = res
++
++        res = self.fleet.tenant_isolation.fuse_knowledge_zk([shard_id, shard_id_2])
++        if asyncio.iscoroutine(res):
++            fusion_res = await res
++        else:
++            fusion_res = res
+         print(f"Fused Insights: {fusion_res}")
+         self.assertIn("Insight from", fusion_res)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     unittest.main()

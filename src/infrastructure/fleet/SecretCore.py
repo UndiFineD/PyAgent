@@ -28,7 +28,11 @@ from src.core.base.version import VERSION
 
 __version__ = VERSION
 
+
+
+
 class SecretCore:
+    """Core logic for secret management, masking, and validation."""
     def __init__(self) -> None:
         pass
 

@@ -1,0 +1,13 @@
+diff --git a/src/observability/reports/ReportScheduler.py b/src/observability/reports/ReportScheduler.py
+index 40b3a25..854924b 100644
+--- a/src/observability/reports/ReportScheduler.py
++++ b/src/observability/reports/ReportScheduler.py
+@@ -22,7 +22,7 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Any, Dict, List
++from typing import Any
+ import logging
+ import time
+ 

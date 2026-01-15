@@ -19,7 +19,7 @@ import json
 import logging
 from datetime import datetime
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.infrastructure.dev.agent_tests.enums import (
     TestPriority,
@@ -46,6 +46,12 @@ __version__ = VERSION
 """Main TestsAgent class for test suite improvement."""
 
 # from src.core.base.BaseAgent import BaseAgent, create_main_function
+
+
+
+
+
+
 
 class TestsAgent(BaseAgent):
     """Updates code file test suites using AI assistance.
@@ -524,27 +530,54 @@ class TestsAgent(BaseAgent):
                 logging.warning(f"Failed to read source file context: {e}")
         new_content = super().improve_content(enhanced_prompt)
         # Validate syntax
+
+
+
+
+
+
+
+
+
+
         if not self._validate_syntax(new_content):
             logging.error("Generated tests failed syntax validation. Reverting.")
             self.current_content = self.previous_content
+
+
+
             return self.previous_content
         logging.debug("Syntax validation passed")
         # Validate structure
         self._validate_test_structure(new_content)
+
+
+
+
+
         return new_content
 
     def update_file(self) -> bool:
         """Write the improved content back to the file (no markdown fixing for test files)."""
         self.file_path.write_text(self.current_content, encoding='utf-8')
+
         return True
 
 # create_main_function is not available in the current refactored structure
 # def main() would need to be implemented separately if needed for CLI use
 #main = create_main_function(
+
+
+
+
 #    TestsAgent,
 #    'Tests Agent: Updates code file test suites',
 #    'Path to the tests file (e.g., test_file.py)'
 #)
+
+
+
+
 
 if __name__ == '__main__':
     # CLI interface would be implemented here if needed

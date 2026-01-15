@@ -1,0 +1,29 @@
+diff --git a/src/infrastructure/plugins/community_demo/CommunityAgent.py b/src/infrastructure/plugins/community_demo/CommunityAgent.py
+index cf93e5d..7f27fd3 100644
+--- a/src/infrastructure/plugins/community_demo/CommunityAgent.py
++++ b/src/infrastructure/plugins/community_demo/CommunityAgent.py
+@@ -31,10 +31,15 @@ import logging
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class CommunityAgent(BaseAgent):
+     """A flexible agent shell that uses CommunityCore for logic."""
+-    
+-    def __init__(self, path: str = None) -> None:
++
++    def __init__(self, path: str | None = None) -> None:
+         super().__init__(path)
+         self.name = "CommunityAgent"
+         self.core = CommunityCore()
+@@ -47,4 +52,4 @@ class CommunityAgent(BaseAgent):
+ 
+     def run(self, task: str) -> str:
+         """Main execution loop for the agent."""
+-        return self.improve_content(task)
+\ No newline at end of file
++        return self.improve_content(task)

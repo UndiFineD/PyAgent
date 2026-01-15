@@ -27,11 +27,13 @@ No I/O or side effects.
 from __future__ import annotations
 from src.core.base.version import VERSION
 import ast
-from typing import Dict, List, Set
 from src.core.base.types.DependencyType import DependencyType
 from src.core.base.types.DependencyNode import DependencyNode
 
 __version__ = VERSION
+
+
+
 
 class DependencyCore:
     """Pure logic core for dependency analysis."""
@@ -40,7 +42,7 @@ class DependencyCore:
     def parse_dependencies(content: str, file_path: str = "") -> dict[str, DependencyNode]:
         """Parses imports and class inheritance from code content."""
         nodes: dict[str, DependencyNode] = {}
-        
+
         try:
             tree = ast.parse(content)
         except SyntaxError:
@@ -58,7 +60,7 @@ class DependencyCore:
                 for base in node.bases:
                     if isinstance(base, ast.Name):
                         DependencyCore._add_to_nodes(nodes, base.id, DependencyType.CLASS_INHERITANCE, file_path)
-        
+
         return nodes
 
     @staticmethod

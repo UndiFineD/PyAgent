@@ -25,10 +25,15 @@ from src.core.base.version import VERSION
 from src.core.base.types.CodeLanguage import CodeLanguage
 from src.core.base.types.StyleRuleSeverity import StyleRuleSeverity
 from dataclasses import dataclass
-from typing import Optional
 from collections.abc import Callable
 
 __version__ = VERSION
+
+
+
+
+
+
 
 @dataclass
 class StyleRule:

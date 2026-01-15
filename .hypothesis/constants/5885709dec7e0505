@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\integrations\peft.py
+# hypothesis_version: 6.150.1
+
+['0.13.0', '0.18.0', '0.5.0', 'aria', 'auto', 'ayavision', 'balanced_low_0', 'base_model.model.', 'cpu', 'default', 'delete_adapter', 'device', 'disk', 'emu3', 'enable_adapters', 'fuyu', 'gemma3', 'gotocr2', 'hf_device_map', 'internvl', 'key_mapping', 'llava', 'lora_', 'low_cpu_mem_usage', 'missing_keys', 'mistral3', 'mllama', 'name_or_path', 'offload_index', 'paligemma', 'peft', 'peft_config', 'qwen2_5_vl', 'qwen2vl', 'revision', 'sequential', 'set_adapter', 'state_dict', 'token', 'torch.Tensor', 'unexpected_keys', 'videollava', 'vipllava']

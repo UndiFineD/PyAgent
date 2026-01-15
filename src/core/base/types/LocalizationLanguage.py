@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class LocalizationLanguage(Enum):
     """Supported languages for changelog localization."""
     ENGLISH = "en"

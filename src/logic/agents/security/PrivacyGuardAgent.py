@@ -20,14 +20,17 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import re
-from typing import Dict, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
+
+
+
 class PrivacyGuardAgent(BaseAgent):
     """
-    Privacy Guard Agent: Monitors fleet communications for PII (Personally 
+    Privacy Guard Agent: Monitors fleet communications for PII (Personally
     Identifiable Information), performs redaction, and tracks compliance.
     """
     def __init__(self, workspace_path: str) -> None:
@@ -39,7 +42,7 @@ class PrivacyGuardAgent(BaseAgent):
             "SSN": r"\b\d{3}-\d{2}-\d{4}\b",
             "CreditCard": r"\b(?:\d[ -]*?){13,16}\b"
         }
-        self.redaction_logs = []
+        self.redaction_logs: list[Any] = []
 
     def scan_and_redact(self, text: str) -> dict[str, Any]:
         """Scans text for PII patterns and returns redacted version."""
@@ -56,7 +59,7 @@ class PrivacyGuardAgent(BaseAgent):
 
         if findings:
             self.redaction_logs.append({
-                "timestamp": "2026-01-08", # Simulated
+                "timestamp": "2026-01-08",  # Simulated
                 "findings_count": len(findings),
                 "pii_types": list(set(f['type'] for f in findings))
             })

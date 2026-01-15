@@ -1,0 +1,12 @@
+diff --git a/src/infrastructure/dev/test_utils/ResourcePool.py b/src/infrastructure/dev/test_utils/ResourcePool.py
+index 7018bdb..30cab5d 100644
+--- a/src/infrastructure/dev/test_utils/ResourcePool.py
++++ b/src/infrastructure/dev/test_utils/ResourcePool.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ResourceHandle import ResourceHandle
+-from typing import Dict, Optional, Union
+ import threading
+ import time
+ 

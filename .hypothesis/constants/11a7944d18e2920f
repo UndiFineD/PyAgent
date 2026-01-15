@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\development\SpecToolAgent.py
+# hypothesis_version: 6.150.1
+
+['    @as_tool', "'", "', 'method': '", '**APPROVED**', '-', '.json', 'COMMAND: PROCEED', 'GeneratedTool', 'No summary', 'Path to spec file', 'SPECIFICATION.md', 'SpecTool Agent', '_', '__main__', 'archive', 'changes', 'delta.md', 'import logging', 'info', 'openspec', 'openspec/archive', 'openspec/changes', 'operationId', 'paths', 'project.md', 'proposal.md', 'specs', 'src/plugins/tools', 'summary', 'tasks.md', 'title', 'utf-8']

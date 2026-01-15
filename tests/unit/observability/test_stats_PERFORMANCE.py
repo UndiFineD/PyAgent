@@ -3,22 +3,10 @@
 
 from __future__ import annotations
 import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
+from typing import Any
 import time
-import json
-from datetime import datetime
-import pytest
-import logging
 from pathlib import Path
 import sys
-import os
-import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
@@ -26,15 +14,23 @@ try:
 except ImportError:
     # Fallback
     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
+
     class agent_sys_path:
-        def __enter__(self) -> Self: 
+        def __enter__(self) -> Self:
 
             return self
-        def __exit__(self, *args) -> None: 
+
+
+
+
+
+
+
+        def __exit__(self, *args) -> None:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestStatsQueryPerformance:
     """Tests for stats query performance."""
@@ -66,14 +62,11 @@ class TestStatsQueryPerformance:
         result = engine.query("metric1", aggregation="avg")
         assert result["value"] == 20.0
 
-
-
 class TestPerformanceMetrics(unittest.TestCase):
     """Tests for performance metrics tracking."""
 
     def test_track_execution_time(self) -> None:
         """Test tracking execution time."""
-        import time
         start: float = time.time()
         # Simulate work
         time.sleep(0.01)
@@ -95,7 +88,6 @@ class TestPerformanceMetrics(unittest.TestCase):
         }
         assert metrics["cpu_percent"] > 0
         assert metrics["threads"] > 0
-
 
 
 class TestBenchmarking(unittest.TestCase):
@@ -123,6 +115,3 @@ class TestBenchmarking(unittest.TestCase):
         regression_percent = ((current["time_ms"] - baseline["time_ms"])
                               / baseline["time_ms"]) * 100
         assert regression_percent > 0  # Performance regressed
-
-
-

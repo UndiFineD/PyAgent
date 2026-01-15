@@ -1,0 +1,27 @@
+diff --git a/src/observability/reports/ReportMetric.py b/src/observability/reports/ReportMetric.py
+index 0a22931..4f0ead1 100644
+--- a/src/observability/reports/ReportMetric.py
++++ b/src/observability/reports/ReportMetric.py
+@@ -23,10 +23,14 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass
+-from typing import Optional
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ReportMetric:
+     """Custom metric for reports.
+@@ -42,4 +46,4 @@ class ReportMetric:
+     value: float
+     unit: str = ""
+     threshold: float | None = None
+-    trend: str = "="
+\ No newline at end of file
++    trend: str = "="

@@ -26,6 +26,12 @@ from dataclasses import dataclass
 
 __version__ = VERSION
 
+
+
+
+
+
+
 @dataclass
 class LinkedReference:
     """A linked reference to commit or issue.

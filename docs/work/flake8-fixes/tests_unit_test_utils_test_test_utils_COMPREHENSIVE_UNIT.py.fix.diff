@@ -1,0 +1,149 @@
+diff --git a/tests/unit/test_utils/test_test_utils_COMPREHENSIVE_UNIT.py b/tests/unit/test_utils/test_test_utils_COMPREHENSIVE_UNIT.py
+index 5cfedcc..d86515b 100644
+--- a/tests/unit/test_utils/test_test_utils_COMPREHENSIVE_UNIT.py
++++ b/tests/unit/test_utils/test_test_utils_COMPREHENSIVE_UNIT.py
+@@ -3,23 +3,14 @@
+ 
+ from __future__ import annotations
+ import unittest
+-from typing import Any, List, Dict, Never, Optional, Callable, Tuple, Set, Union
+-from unittest.case import _AssertRaisesContext
+-from unittest.mock import AsyncMock, MagicMock, Mock, patch, call, ANY
++from typing import Any, List, Dict, Optional, Tuple, Set
++from unittest.mock import MagicMock, patch
+ import time
+-import json
+-from datetime import datetime
+-import pytest
+-import logging
+ from pathlib import Path
+ import sys
+ import os
+ import tempfile
+ import shutil
+-import subprocess
+-import threading
+-import asyncio
+-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+ 
+ # Try to import test utilities
+ try:
+@@ -27,16 +18,36 @@ try:
+ except ImportError:
+     # Fallback
+     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+-    
++
+     class agent_sys_path:
+-        def __enter__(self) -> str: 
++        def __enter__(self) -> str:
+ 
+             return self
+-        def __exit__(self, *args) -> str: 
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++
++        def __exit__(self, *args) -> str:
+             sys.path.remove(str(AGENT_DIR))
+ 
+ # Import from src if needed
+ 
++
++
++
++
++
+ class TestTestStatusEnum:
+     """Tests for TestStatus enum."""
+ 
+@@ -101,7 +112,6 @@ class TestFixtureHelpers(unittest.TestCase):
+ 
+     def tearDown(self) -> None:
+         """Clean up test fixtures."""
+-        import shutil
+         if os.path.exists(self.temp_dir):
+             shutil.rmtree(self.temp_dir)
+ 
+@@ -146,7 +156,6 @@ class TestMockingUtilities(unittest.TestCase):
+ 
+     def test_create_simple_mock(self) -> None:
+         """Test creating simple mock."""
+-        from unittest.mock import MagicMock
+         mock_obj = MagicMock()
+         mock_obj.method.return_value = "result"
+ 
+@@ -154,7 +163,6 @@ class TestMockingUtilities(unittest.TestCase):
+ 
+     def test_mock_with_side_effect(self) -> None:
+         """Test mock with side effect."""
+-        from unittest.mock import MagicMock
+         mock_obj = MagicMock()
+         mock_obj.method.side_effect = [1, 2, 3]
+ 
+@@ -164,7 +172,6 @@ class TestMockingUtilities(unittest.TestCase):
+ 
+     def test_mock_attribute_access(self) -> None:
+         """Test mocking attribute access."""
+-        from unittest.mock import MagicMock
+         mock_obj = MagicMock()
+         mock_obj.attribute = "value"
+ 
+@@ -172,7 +179,6 @@ class TestMockingUtilities(unittest.TestCase):
+ 
+     def test_verify_mock_calls(self) -> None:
+         """Test verifying mock calls."""
+-        from unittest.mock import MagicMock
+         mock_obj = MagicMock()
+ 
+         mock_obj.method(1)
+@@ -183,7 +189,6 @@ class TestMockingUtilities(unittest.TestCase):
+ 
+     def test_mock_chain_calls(self) -> None:
+         """Test mocking chained calls."""
+-        from unittest.mock import MagicMock
+         mock_obj = MagicMock()
+         mock_obj.chain.method.return_value = "chained"
+ 
+@@ -213,7 +218,6 @@ class TestContextManagers(unittest.TestCase):
+ 
+     def test_context_manager_exception_handling(self) -> None:
+         """Test context manager exception handling."""
+-        from unittest.mock import patch
+         cleanup_called = False
+ 
+         try:
+@@ -235,7 +239,6 @@ class TestContextManagers(unittest.TestCase):
+ 
+     def test_context_manager_with_patch(self) -> None:
+         """Test context manager with patch."""
+-        from unittest.mock import patch
+         with patch('os.path.exists') as mock_exists:
+             mock_exists.return_value = True
+             result: bool = os.path.exists('/fake/path')
+@@ -436,7 +439,6 @@ class TestReporting(unittest.TestCase):
+ 
+     def test_test_timing(self) -> None:
+         """Test measuring test timing."""
+-        import time
+ 
+         start: float = time.time()
+         time.sleep(0.01)
+@@ -466,6 +468,3 @@ class TestReporting(unittest.TestCase):
+             self.skipTest("Test skipped")
+ 
+         self.assertTrue(True)
+-
+-
+-

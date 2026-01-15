@@ -24,9 +24,11 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .CompletionTrend import CompletionTrend
 from .Improvement import Improvement
-from typing import List
 
 __version__ = VERSION
+
+
+
 
 class AnalyticsEngine:
     """Very small analytics engine used by tests."""

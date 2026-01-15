@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\scipy\stats\_resampling.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.01, 0.95, 1.0, 100, 9999, 10000, 'BCa', 'axis', 'basic', 'bca', 'bootstrap', 'data', 'greater', 'independent', 'less', 'monte_carlo_test', 'pairings', 'percentile', 'permutation_test', 'permuted', 'pvalue', 'random_state', 'real floating', 'rng', 'sample', 'samples', 'size', 'two-sided']

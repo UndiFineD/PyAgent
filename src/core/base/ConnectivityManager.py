@@ -27,9 +27,15 @@ import logging
 import time
 import os
 from pathlib import Path
-from typing import Dict, Any, Optional
+from typing import Any
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class ConnectivityManager:
     """Manages connection status for external APIs with persistent 15-minute TTL caching."""
@@ -92,9 +98,9 @@ class ConnectivityManager:
         if status:
             elapsed = time.time() - status.get("timestamp", 0)
             is_working = status.get("working", False)
-            
+
             target_ttl = self._ttl_success if is_working else self._ttl_failure
-            
+
             if elapsed < target_ttl:
                 if not is_working:
                     logging.debug(f"ConnectivityManager: Skipping '{endpoint_id}' (cached offline, retrying in {int(target_ttl - elapsed)}s)")
@@ -115,18 +121,18 @@ class ConnectivityManager:
         """Tracks tokens per second for an endpoint (Phase 144)."""
         if duration <= 0:
             return
-        
+
         tps = token_count / duration
         status = self._cache.get(endpoint_id, {})
-        
+
         # Simple moving average (alpha 0.3)
         old_tps = status.get("avg_tps", tps)
         new_tps = (0.7 * old_tps) + (0.3 * tps)
-        
+
         status["avg_tps"] = round(new_tps, 2)
         status["last_tps"] = round(tps, 2)
         status["total_tokens"] = status.get("total_tokens", 0) + token_count
-        
+
         self._cache[endpoint_id] = status
         logging.debug(f"ConnectivityManager: Endpoint '{endpoint_id}' TPS tracked: {status['last_tps']} (avg: {status['avg_tps']})")
         self._save_status()
@@ -152,7 +158,7 @@ class ConnectivityManager:
         """Executes a function only if endpoint is available, updating status on failure."""
         if not self.is_endpoint_available(endpoint_id):
             return None
-            
+
         try:
             result = func(*args, **kwargs)
             self.update_status(endpoint_id, True)

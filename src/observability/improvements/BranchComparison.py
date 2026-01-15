@@ -25,10 +25,12 @@ from src.core.base.version import VERSION
 from .BranchComparisonStatus import BranchComparisonStatus
 from .ImprovementDiff import ImprovementDiff
 from dataclasses import dataclass, field
-from typing import List
 import time
 
 __version__ = VERSION
+
+
+
 
 @dataclass
 class BranchComparison:

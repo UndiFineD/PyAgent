@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\backend\AuditLogger.py
+# hypothesis_version: 6.150.1
+
+[100, '...', 'a', 'backend', 'latency_ms', 'metadata', 'prompt_length', 'prompt_preview', 'request_id', 'response_length', 'success', 'timestamp', 'utf-8']

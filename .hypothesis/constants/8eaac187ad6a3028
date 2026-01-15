@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_dynamo\source.py
+# hypothesis_version: 6.150.1
+
+['.', '<unknown source>', 'BINARY_SUBSCR', 'BUILD_TUPLE', 'PyCodegen', '__closure__', '__code__', '__defaults__', '__dict__', "__import__('torch')", '__kwdefaults__', '__mro__', '_fields', '_name', 'as_tensor', 'base', 'builtins', 'dataclass_fields', 'dict_getitem', 'dict_keys_getitem', 'field', 'grad', 'index', 'index_is_slice', 'list_getitem', 'member', 'set_getitem', 'size', 'storage_offset', 'stride', 'torch', 'type']

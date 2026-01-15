@@ -19,17 +19,29 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import List, Dict, Any
+from typing import Any
 from dataclasses import dataclass, field
+
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None  # type: ignore[assignment]
 
 __version__ = VERSION
 
 @dataclass
 class PlanStep:
+    """Represents a single step in a decomposed task plan."""
+
+
+
+
     agent: str
     action: str
     args: list[Any] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
+
+
 
 class TaskDecomposerCore:
     """
@@ -42,54 +54,61 @@ class TaskDecomposerCore:
         Core planning logic.
         Uses expanded heuristics and dependency analysis (Phase 119).
         """
+        if rc:
+            try:
+                # Use Rust implementation for high-speed heuristic planning
+                return rc.generate_heuristic_plan(request)  # type: ignore[attr-defined]
+            except Exception:
+                pass
+
         request_lower = request.lower()
         steps: list[PlanStep] = []
-        
+
         # 1. Research & Analysis Phase
         if any(w in request_lower for w in ["research", "search", "analyze", "find"]):
             steps.append(PlanStep(
-                agent="ResearchAgent", 
-                action="search_and_summarize", 
+                agent="ResearchAgent",
+                action="search_and_summarize",
                 args=[request],
                 metadata={"priority": 1}
             ))
-            
+
         # 2. Implementation Phase
         if any(w in request_lower for w in ["code", "refactor", "fix", "implement"]):
             steps.append(PlanStep(
-                agent="CoderAgent", 
-                action="improve_content", 
+                agent="CoderAgent",
+                action="improve_content",
                 args=["# Implement request: " + request],
                 metadata={"priority": 2, "depends_on": "ResearchAgent"}
             ))
-            
+
         # 3. Data/SQL Phase
         if any(w in request_lower for w in ["data", "sql", "db", "database"]):
             steps.append(PlanStep(
-                agent="SQLAgent", 
-                action="query_database", 
+                agent="SQLAgent",
+                action="query_database",
                 args=["SELECT * FROM relevant_tables WHERE context LIKE '%" + request[:20] + "%'"],
                 metadata={"priority": 2}
             ))
-            
+
         # 4. Final Review
         if steps:
             steps.append(PlanStep(
-                agent="LinguisticAgent", 
-                action="articulate", 
+                agent="LinguisticAgent",
+                action="articulate",
                 args=["Summarize the results of the task: " + request],
                 metadata={"priority": 10, "is_final": True}
             ))
-            
+
         # Default fallback
         if not steps:
             steps.append(PlanStep(
-                agent="KnowledgeAgent", 
-                action="scan_workspace", 
+                agent="KnowledgeAgent",
+                action="scan_workspace",
                 args=["/"],
                 metadata={"reason": "unrecognized request structure"}
             ))
-            
+
         # Convert dataclasses to dicts for shell compatibility
         return [self._to_dict(s) for s in steps]
 

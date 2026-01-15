@@ -25,10 +25,16 @@ from src.core.base.version import VERSION
 import logging
 import sys
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import Any
 from src.core.base.version import is_gate_open, EVOLUTION_PHASE
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class AgentUpdateManager:
     """
@@ -43,7 +49,7 @@ class AgentUpdateManager:
         self.command_handler = command_handler
         self.file_manager = file_manager
         self.core = core
-        self.min_gate_phase = 105 # Minimum phase required for autonomous updates
+        self.min_gate_phase = 105  # Minimum phase required for autonomous updates
 
     def _check_gate(self) -> bool:
         """Internal version gate check."""
@@ -65,7 +71,7 @@ class AgentUpdateManager:
         errors_file = dir_path / f"{base}.errors.md"
         improvements_file = dir_path / f"{base}.improvements.md"
         changes_made = False
-        
+
         # Create errors file if it doesn't exist
         if not errors_file.exists():
             from src.core.base.utils.core_utils import fix_markdown_content
@@ -73,7 +79,7 @@ class AgentUpdateManager:
             errors_file.write_text(fix_markdown_content(content), encoding='utf-8')
             logging.info(f"Created {errors_file.relative_to(self.repo_root)}")
             changes_made = True
-            
+
         # Update errors
         prompt = f"Analyze and improve the error report for {code_file.name}"
         script_path = str(Path(__file__).parent.parent.parent / 'errors' / 'main.py')
@@ -89,7 +95,7 @@ class AgentUpdateManager:
 
         if result.stdout and "No changes made" not in result.stdout:
             changes_made = True
-            
+
         # Create improvements file if it doesn't exist
         if not improvements_file.exists():
             from src.core.base.utils.core_utils import fix_markdown_content
@@ -97,7 +103,7 @@ class AgentUpdateManager:
             improvements_file.write_text(fix_markdown_content(content), encoding='utf-8')
             logging.info(f"Created {improvements_file.relative_to(self.repo_root)}")
             changes_made = True
-            
+
         # Update improvements
         prompt = f"Suggest and improve improvements for {code_file.name}"
         script_path = str(Path(__file__).parent.parent.parent / 'improvements' / 'main.py')
@@ -113,7 +119,7 @@ class AgentUpdateManager:
 
         if result.stdout and "No changes made" not in result.stdout:
             changes_made = True
-            
+
         return changes_made
 
     def _get_pending_improvements(self, improvements_file: Path) -> list[str]:

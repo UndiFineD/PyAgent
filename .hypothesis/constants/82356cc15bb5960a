@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\AgentCommandHandler.py
+# hypothesis_version: 6.150.1
+
+[120, '--no-cascade', '.py', '1', 'DV_AGENT_MODEL_NAME', 'DV_AGENT_PARENT', 'Shell', 'Timeout expired', 'agent_', 'default', 'max_tokens', 'model', 'provider', 'replace', 'subprocess', 'temperature', 'utf-8']

@@ -1,0 +1,45 @@
+diff --git a/src/infrastructure/fleet/TenantCore.py b/src/infrastructure/fleet/TenantCore.py
+index 25ac330..7a2b7da 100644
+--- a/src/infrastructure/fleet/TenantCore.py
++++ b/src/infrastructure/fleet/TenantCore.py
+@@ -26,11 +26,21 @@ Pure logic for path translation and security boundary enforcement.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import os
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class TenantCore:
++    """Core logic for tenant isolation and path security."""
+     def __init__(self) -> None:
+         pass
+ 
+@@ -41,13 +51,13 @@ class TenantCore:
+         """
+         tenant_root_abs = os.path.abspath(tenant_root)
+         target_path_abs = os.path.abspath(os.path.join(tenant_root_abs, relative_path))
+-        
++
+         # Security Boundary Check: Must start with tenant root
+         if not target_path_abs.startswith(tenant_root_abs):
+             raise PermissionError(f"Security Breach: Path {relative_path} escaped isolation boundary.")
+-            
++
+         return target_path_abs
+ 
+     def get_required_dirs(self) -> list[str]:
+         """Standardised tenant folder structure."""
+-        return ["src", "data", "data/logs", "config"]
+\ No newline at end of file
++        return ["src", "data", "data/logs", "config"]

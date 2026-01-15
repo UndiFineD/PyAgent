@@ -1,0 +1,27 @@
+diff --git a/src/observability/errors/BranchComparison.py b/src/observability/errors/BranchComparison.py
+index 75cb7ad..c97cb23 100644
+--- a/src/observability/errors/BranchComparison.py
++++ b/src/observability/errors/BranchComparison.py
+@@ -23,10 +23,14 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class BranchComparison:
+     """Comparison of errors across branches.
+@@ -42,4 +46,4 @@ class BranchComparison:
+     branch_b: str
+     errors_only_in_a: list[str] = field(default_factory=lambda: [])
+     errors_only_in_b: list[str] = field(default_factory=lambda: [])
+-    common_errors: list[str] = field(default_factory=lambda: [])
+\ No newline at end of file
++    common_errors: list[str] = field(default_factory=lambda: [])

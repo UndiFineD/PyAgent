@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class ImportSource(Enum):
     """External sources for changelog import."""
     GITHUB_RELEASES = "github_releases"

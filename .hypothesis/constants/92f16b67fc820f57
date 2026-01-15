@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\decomposition\_dict_learning.py
+# hypothesis_version: 6.150.1
+
+[1e-08, 1e-06, 0.001, 0.01, 0.5, 1.0, 100, 256, 1000, '.', 'C', 'F', 'W', 'WRITEABLE', 'X', '[dict_learning]', 'algorithm', 'alpha', 'array-like', 'batch_size', 'boolean', 'callback', 'cd', 'check_input', 'code_init', 'components_', 'copy_cov', 'cov', 'default', 'dict_init', 'dictionary', 'fit_algorithm', 'float32', 'float64', 'gram', 'ignore', 'init', 'lars', 'lasso_', 'lasso_cd', 'lasso_lars', 'left', 'max_iter', 'max_no_improvement', 'method', 'method_max_iter', 'n_components', 'n_jobs', 'n_nonzero_coefs', 'omp', 'positive', 'positive_code', 'positive_dict', 'random_state', 'return_code', 'return_n_iter', 'shuffle', 'split_sign', 'threshold', 'tol', 'transform_algorithm', 'transform_alpha', 'transform_max_iter', 'verbose']

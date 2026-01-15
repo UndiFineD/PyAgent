@@ -1,19 +1,22 @@
 import os
 import ast
 
+
+
+
 def is_stub(file_path):
     if os.path.basename(file_path) == "__init__.py":
         return False
-    
+
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             content = f.read().strip()
             if not content:
                 # Completely empty file
                 return True
-            
+
             tree = ast.parse(content)
-            
+
             has_real_logic = False
             is_abc = False
 
@@ -25,7 +28,7 @@ def is_stub(file_path):
                             is_abc = True
                         elif isinstance(base, ast.Attribute) and base.attr in ('ABC', 'Protocol'):
                             is_abc = True
-                
+
                 # Check for @abstractmethod in any function
                 if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
                     target_nodes = node.body if isinstance(node, ast.ClassDef) else [node]
@@ -36,7 +39,7 @@ def is_stub(file_path):
                                     is_abc = True
                                 elif isinstance(deco, ast.Attribute) and deco.attr == "abstractmethod":
                                     is_abc = True
-            
+
             if is_abc:
                 return False
 
@@ -44,8 +47,8 @@ def is_stub(file_path):
                 if isinstance(node, (ast.Import, ast.ImportFrom)):
                     continue
                 if isinstance(node, ast.Expr) and isinstance(node.value, ast.Constant) and isinstance(node.value.value, str):
-                    continue # Docstrings
-                
+                    continue  # Docstrings
+
                 if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
                     # Check if body is just pass or raise NotImplementedError
                     if len(node.body) > 1:
@@ -63,11 +66,11 @@ def is_stub(file_path):
                                     exc_name = stmt.exc.func.id
                             elif isinstance(stmt.exc, ast.Name):
                                 exc_name = stmt.exc.id
-                            
+
                             if exc_name == "NotImplementedError":
                                 continue
                         has_real_logic = True
-                
+
                 elif isinstance(node, ast.ClassDef):
                     # Check all members
                     for item in node.body:
@@ -87,7 +90,7 @@ def is_stub(file_path):
                                         exc_name = stmt.exc.func.id
                                 elif isinstance(stmt.exc, ast.Name):
                                     exc_name = stmt.exc.id
-                                
+
                                 if exc_name == "NotImplementedError":
                                     continue
                             has_real_logic = True
@@ -99,24 +102,47 @@ def is_stub(file_path):
                         elif isinstance(item, (ast.Assign, ast.AnnAssign)):
                             # Variable assignments in class might be okay if they are just types/defaults,
                             # but usually stubs don't have many. Let's count them as logic for now unless we find many.
+
+
+
+
+
+
+
+
+
+
                             has_real_logic = True
                             break
                         else:
                             has_real_logic = True
+
+
+
+
                             break
                 elif isinstance(node, (ast.Assign, ast.AnnAssign)):
                     # Top level assignments
-                    continue # Allow constants at top level for now?
+                    continue  # Allow constants at top level for now?
                 else:
+
+
                     has_real_logic = True
 
             return not has_real_logic
 
     except Exception:
+
+
+
         return False
 
     except Exception:
         return False
+
+
+
+
 
 stubs = []
 src_path = "c:/DEV/PyAgent/src"

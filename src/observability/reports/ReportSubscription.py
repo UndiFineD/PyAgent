@@ -25,9 +25,11 @@ from src.core.base.version import VERSION
 from .ReportType import ReportType
 from .SubscriptionFrequency import SubscriptionFrequency
 from dataclasses import dataclass, field
-from typing import List
 
 __version__ = VERSION
+
+
+
 
 @dataclass
 class ReportSubscription:

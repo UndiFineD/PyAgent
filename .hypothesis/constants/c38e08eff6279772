@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\system\TelemetryAgent.py
+# hypothesis_version: 6.150.1
+
+[100, 108, 'TelemetryAgent', 'broadcast', 'data', 'phase', 'source', 'telemetry', 'telemetry_server', 'timestamp', 'type']

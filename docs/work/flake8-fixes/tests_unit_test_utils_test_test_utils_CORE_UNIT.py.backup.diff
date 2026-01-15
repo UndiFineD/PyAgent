@@ -1,0 +1,108 @@
+diff --git a/tests/unit/test_utils/test_test_utils_CORE_UNIT.py b/tests/unit/test_utils/test_test_utils_CORE_UNIT.py
+index 254f420..f74e021 100644
+--- a/tests/unit/test_utils/test_test_utils_CORE_UNIT.py
++++ b/tests/unit/test_utils/test_test_utils_CORE_UNIT.py
+@@ -2,24 +2,13 @@
+ """Test classes from test_agent_test_utils.py - core module."""
+ 
+ from __future__ import annotations
+-import unittest
+-from typing import Any, List, Dict, Never, Optional, Callable, Tuple, Set, Union
+-from unittest.case import _AssertRaisesContext
+-from unittest.mock import AsyncMock, MagicMock, Mock, patch, call, ANY
+-import time
++from typing import Any, List, Dict
+ import json
+-from datetime import datetime
+ import pytest
+ import logging
+ from pathlib import Path
+ import sys
+ import os
+-import tempfile
+-import shutil
+-import subprocess
+-import threading
+-import asyncio
+-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+ 
+ # Try to import test utilities
+ try:
+@@ -27,16 +16,26 @@ try:
+ except ImportError:
+     # Fallback
+     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+-    
++
+     class agent_sys_path:
+-        def __enter__(self) -> str: 
++        def __enter__(self) -> str:
+ 
+             return self
+-        def __exit__(self, *args) -> str: 
++
++
++
++
++
++        def __exit__(self, *args) -> str:
+             sys.path.remove(str(AGENT_DIR))
+ 
+ # Import from src if needed
+ 
++
++
++
++
++
+ class TestFixtureFactoryPatterns:
+     """Tests for fixture factory patterns."""
+ 
+@@ -396,7 +395,6 @@ class TestTestLogCaptureUtilities:
+     def test_log_capturer_captures_logs(self, utils_module: Any) -> None:
+         """Test log capturer captures log messages."""
+         LogCapturer = utils_module.LogCapturer
+-        import logging
+ 
+         with LogCapturer() as capturer:
+             logger = logging.getLogger("test_logger")
+@@ -408,7 +406,6 @@ class TestTestLogCaptureUtilities:
+     def test_log_capturer_filters_by_level(self, utils_module: Any) -> None:
+         """Test log capturer filters by level."""
+         LogCapturer = utils_module.LogCapturer
+-        import logging
+ 
+         with LogCapturer(level=logging.ERROR) as capturer:
+             logger = logging.getLogger("test_filter")
+@@ -426,7 +423,6 @@ class TestTestConfigurationLoadingUtilities:
+     def test_config_loader_loads_json(self, utils_module: Any, tmp_path: Path) -> None:
+         """Test config loader loads JSON files."""
+         TestConfigLoader = utils_module.TestConfigLoader
+-        import json
+ 
+         config_file: Path = tmp_path / "test_config.json"
+         config_file.write_text(json.dumps({"timeout": 30, "retries": 3}))
+@@ -439,7 +435,6 @@ class TestTestConfigurationLoadingUtilities:
+     def test_config_loader_with_defaults(self, utils_module: Any, tmp_path: Path) -> None:
+         """Test config loader applies defaults."""
+         TestConfigLoader = utils_module.TestConfigLoader
+-        import json
+ 
+         config_file: Path = tmp_path / "partial_config.json"
+         config_file.write_text(json.dumps({"timeout": 60}))
+@@ -473,7 +468,6 @@ class TestTestReportGenerationHelpers:
+     def test_report_generator_creates_json(self, utils_module: Any, tmp_path: Path) -> None:
+         """Test report generator creates JSON report."""
+         TestReportGenerator = utils_module.TestReportGenerator
+-        import json
+ 
+         generator = TestReportGenerator(output_dir=tmp_path)
+         generator.add_test_result("test1", "passed", 100)
+@@ -508,7 +502,6 @@ class TestTestIsolationMechanisms:
+     def test_isolator_preserves_environment(self, utils_module: Any) -> None:
+         """Test isolator preserves environment."""
+         EnvironmentIsolator = utils_module.EnvironmentIsolator
+-        import os
+ 
+         original: str = os.environ.get("TEST_VAR", "")
+ 

@@ -1,0 +1,11 @@
+diff --git a/src/observability/stats/exporters/MetricsExporter.py b/src/observability/stats/exporters/MetricsExporter.py
+index b449e68..747c9ba 100644
+--- a/src/observability/stats/exporters/MetricsExporter.py
++++ b/src/observability/stats/exporters/MetricsExporter.py
+@@ -63,4 +63,4 @@ if __name__ == "__main__":
+     exporter = MetricsExporter()
+     exporter.record_agent_call("CoderAgent", 1500.0, True)
+     exporter.record_resource_usage(12.5, 256.0)
+-    print(exporter.get_prometheus_payload())
+\ No newline at end of file
++    print(exporter.get_prometheus_payload())

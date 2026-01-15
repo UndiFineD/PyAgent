@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\utils\embedding_functions\cloudflare_workers_ai_embedding_function.py
+# hypothesis_version: 6.150.1
+
+['Accept-Encoding', 'Authorization', 'CLOUDFLARE_API_KEY', 'Unknown error', 'account_id', 'api_key_env_var', 'cosine', 'data', 'detail', 'gateway_id', 'identity', 'ip', 'l2', 'model_name', 'result', 'text']

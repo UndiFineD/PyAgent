@@ -25,12 +25,18 @@ Provides discovery and cross-agent communication.
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import TYPE_CHECKING, Optional
+from typing import TYPE_CHECKING
 
 __version__ = VERSION
 
 if TYPE_CHECKING:
     from src.core.base.BaseAgent import BaseAgent
+
+
+
+
+
+
 
 class AgentRegistry:
     """Singleton registry to track all active agents."""

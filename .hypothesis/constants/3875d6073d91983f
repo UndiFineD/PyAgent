@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\PIL\ImageGrab.py
+# hypothesis_version: 6.150.1
+
+[b' not available', b'No selection', b'No suitable type of content copied', b'Nothing is copied', b'cannot convert ', b'xclip: Error: There is no owner for the ', 100, '\x00', '-R', '-b', '-e', '-f', '-l', '-n', '-o', '-selection', '-t', '-x', '.png', 'BGR', 'BGRX', 'DIB', 'DISPLAY', 'I', 'RGB', 'WAYLAND_DISPLAY', 'clipboard', 'darwin', 'file', 'gnome-screenshot', 'grim', 'image', 'image/png', 'mbcs', 'osascript', 'png', 'raw', 'screencapture', 'spectacle', 'utf-16le', 'wayland', 'win32', 'wl-paste', 'x11', 'xclip']

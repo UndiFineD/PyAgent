@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_dynamo\polyfills\pytree.py
+# hypothesis_version: 6.150.1
+
+['*', 'is_namedtuple', 'is_namedtuple_class', 'is_structseq', 'is_structseq_class', 'namedtuple_fields', 'namespace', 'none_is_leaf', 'num_children', 'num_leaves', 'num_nodes', 'structseq_fields', 'torch', 'tree_flatten', 'tree_iter', 'tree_leaves', 'tree_map', 'tree_map_', 'tree_structure', 'tree_unflatten']

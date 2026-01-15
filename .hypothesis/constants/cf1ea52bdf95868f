@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\system\core\MultiModalCore.py
+# hypothesis_version: 6.150.1
+
+[0.5, 0.85, 500, 'bug', 'confidence', 'content', 'description', 'error', 'image_url', 'max_tokens', 'messages', 'model', 'potential_bug', 'rb', 'role', 'text', 'type', 'url', 'user', 'utf-8']

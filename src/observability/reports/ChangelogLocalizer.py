@@ -22,11 +22,13 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from .LocalizationLanguage import LocalizationLanguage
-from .LocalizedEntry import LocalizedEntry
-from typing import List
+from src.core.base.types import LocalizationLanguage
+from src.core.base.types import LocalizedEntry
 
 __version__ = VERSION
+
+
+
 
 class ChangelogLocalizer:
     """Handles changelog localization to multiple languages.

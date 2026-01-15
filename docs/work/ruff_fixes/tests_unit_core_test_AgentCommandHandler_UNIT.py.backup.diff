@@ -1,0 +1,13 @@
+diff --git a/tests/unit/core/test_AgentCommandHandler_UNIT.py b/tests/unit/core/test_AgentCommandHandler_UNIT.py
+index 05ace65..770293b 100644
+--- a/tests/unit/core/test_AgentCommandHandler_UNIT.py
++++ b/tests/unit/core/test_AgentCommandHandler_UNIT.py
+@@ -51,7 +51,7 @@ class TestAgentCommandHandler(unittest.TestCase):
+ 
+     def test_prepare_command_environment_agent(self):
+         # Simulate an agent script being called
+-        agent_script = str(self.repo_root / "agent_tester.py")
++        agent_script = str(self.repo_root / "agent_test_agent.py")
+         cmd = [sys.executable, agent_script, "--arg1"]
+         
+         local_cmd, env = self.handler._prepare_command_environment(cmd)

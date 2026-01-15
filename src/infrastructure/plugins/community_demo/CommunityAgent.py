@@ -31,10 +31,13 @@ import logging
 
 __version__ = VERSION
 
+
+
+
 class CommunityAgent(BaseAgent):
     """A flexible agent shell that uses CommunityCore for logic."""
-    
-    def __init__(self, path: str = None) -> None:
+
+    def __init__(self, path: str | None = None) -> None:
         super().__init__(path)
         self.name = "CommunityAgent"
         self.core = CommunityCore()

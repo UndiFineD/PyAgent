@@ -1,0 +1,50 @@
+diff --git a/src/observability/stats/core/TracingCore.py b/src/observability/stats/core/TracingCore.py
+index 46abef8..4d0e20c 100644
+--- a/src/observability/stats/core/TracingCore.py
++++ b/src/observability/stats/core/TracingCore.py
+@@ -1,8 +1,13 @@
+ 
+ from __future__ import annotations
+-from typing import Dict, Any
++from typing import Any
+ import time
+ 
++try:
++    import rust_core as rc
++except ImportError:
++    rc = None  # type: ignore[assignment]
++
+ class TracingCore:
+     """
+     TracingCore handles the logic for distributed tracing and latency breakdown.
+@@ -11,6 +16,11 @@ class TracingCore:
+ 
+     def create_span_context(self, trace_id: str, span_id: str) -> dict[str, str]:
+         """Creates a standardized context for distributed tracing."""
++        if rc:
++            try:
++                return rc.create_span_context(trace_id, span_id)  # type: ignore[attr-defined]
++            except Exception:
++                pass
+         return {
+             "trace_id": trace_id,
+             "span_id": span_id,
+@@ -21,6 +31,11 @@ class TracingCore:
+         """
+         Calculates agent thinking time vs network latency.
+         """
++        if rc:
++            try:
++                return rc.calculate_latency_breakdown(total_time, network_time)  # type: ignore[attr-defined]
++            except Exception:
++                pass
+         thinking_time = total_time - network_time
+         return {
+             "total_latency_ms": total_time * 1000,
+@@ -36,4 +51,4 @@ class TracingCore:
+             "name": name,
+             "attributes": attributes,
+             "kind": "INTERNAL"
+-        }
+\ No newline at end of file
++        }

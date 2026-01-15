@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class ScheduleStatus(Enum):
     """Status of scheduled improvements."""
     UNSCHEDULED = "unscheduled"

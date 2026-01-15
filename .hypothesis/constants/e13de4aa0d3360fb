@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\cluster\_dbscan.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.5, 'X', 'algorithm', 'array-like', 'auto', 'ball_tree', 'brute', 'csr', 'eps', 'euclidean', 'ignore', 'kd_tree', 'leaf_size', 'left', 'metric', 'metric_params', 'min_samples', 'minkowski', 'n_jobs', 'neither', 'p', 'precomputed', 'sample_weight', 'sparse matrix']

@@ -27,9 +27,12 @@ from .SLAConfiguration import SLAConfiguration
 from .SLALevel import SLALevel
 from .SLAPolicy import SLAPolicy
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class SLAManager:
     """Manages SLAs for improvements.
@@ -77,7 +80,7 @@ class SLAManager:
             else:
                 try:
                     created_dt = datetime.fromisoformat(str(created))
-                except Exception:
+                except (ValueError, TypeError):
                     created_dt = None
 
             if not created_dt:

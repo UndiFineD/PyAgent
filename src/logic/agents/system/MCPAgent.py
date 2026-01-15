@@ -28,16 +28,19 @@ from src.core.base.version import VERSION
 import json
 import asyncio
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 from src.infrastructure.fleet.MCPConnector import MCPConnector
 
 __version__ = VERSION
 
+
+
+
 class MCPAgent(BaseAgent):
     """Enables the fleet to discover and utilize external tools via the MCP protocol."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = Path(self.file_path).parent.parent.parent
@@ -56,7 +59,7 @@ class MCPAgent(BaseAgent):
             mcp_configs = list(self.workspace_root.rglob("mcp.json"))
             if not mcp_configs:
                 return "No local `mcp.json` configs found. Check common locations."
-            
+
             report = ["## 🔌 Discovered MCP Servers"]
             for cfg in mcp_configs:
                 try:
@@ -67,7 +70,7 @@ class MCPAgent(BaseAgent):
                 except Exception as e:
                     report.append(f"- Error reading `{cfg}`: {e}")
             return "\n".join(report)
-            
+
         return await asyncio.to_thread(discover)
 
     @as_tool
@@ -75,20 +78,20 @@ class MCPAgent(BaseAgent):
         """Calls an MCP tool via the live connector."""
         if server_name not in self.connectors:
             return f"Error: MCP Server '{server_name}' not initialized. Call 'initialize_mcp_server' first."
-        
+
         # Intelligence Harvesting (Phase 108)
         if hasattr(self, 'recorder') and self.recorder:
             self.recorder.record_lesson("mcp_tool_call", {"server": server_name, "tool": tool_name})
-            
+
         connector = self.connectors[server_name]
         # MCPConnector might be sync, so wrap in thread
         response = await asyncio.to_thread(connector.call, "tools/call", {"name": tool_name, "arguments": arguments})
-        
+
         if "error" in response:
             if hasattr(self, 'recorder') and self.recorder:
                 self.recorder.record_lesson("mcp_tool_error", {"server": server_name, "tool": tool_name, "error": response["error"]})
             return f"MCP Error: {response['error']}"
-        
+
         return json.dumps(response.get("result", {}), indent=2)
 
     @as_tool

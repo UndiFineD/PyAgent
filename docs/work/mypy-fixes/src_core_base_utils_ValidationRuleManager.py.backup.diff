@@ -1,0 +1,13 @@
+diff --git a/src/core/base/utils/ValidationRuleManager.py b/src/core/base/utils/ValidationRuleManager.py
+index f8e0f0c..2d9c7d7 100644
+--- a/src/core/base/utils/ValidationRuleManager.py
++++ b/src/core/base/utils/ValidationRuleManager.py
+@@ -24,7 +24,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from src.core.base.models import ValidationRule
+ from pathlib import Path
+-from typing import List, Dict, Any
++from typing import Any
+ import fnmatch
+ 
+ __version__ = VERSION

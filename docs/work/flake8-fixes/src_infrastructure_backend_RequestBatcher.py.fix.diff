@@ -1,0 +1,49 @@
+diff --git a/src/infrastructure/backend/RequestBatcher.py b/src/infrastructure/backend/RequestBatcher.py
+index d38e948..516f842 100644
+--- a/src/infrastructure/backend/RequestBatcher.py
++++ b/src/infrastructure/backend/RequestBatcher.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .BatchRequest import BatchRequest
+-from typing import List, Optional
+ import threading
+ import time
+ from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+@@ -31,6 +30,16 @@ from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+ # Infrastructure
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class RequestBatcher:
+     """Batches multiple requests for efficient processing.
+ 
+@@ -97,10 +106,10 @@ class RequestBatcher:
+         with self._lock:
+             if not self._buffer:
+                 return None
+-            
++
+             if self.recorder:
+                 self.recorder.record_lesson("batch_created", {"size": len(self._buffer)})
+-                
++
+             batch = BatchRequest(requests=self._buffer.copy())
+             self._buffer.clear()
+             self._batch_start = None
+@@ -109,4 +118,4 @@ class RequestBatcher:
+     def pending_count(self) -> int:
+         """Get number of pending requests."""
+         with self._lock:
+-            return len(self._buffer)
+\ No newline at end of file
++            return len(self._buffer)

@@ -1,0 +1,11 @@
+diff --git a/src/core/base/managers.py b/src/core/base/managers.py
+index 6740b41..7347b8d 100644
+--- a/src/core/base/managers.py
++++ b/src/core/base/managers.py
+@@ -27,4 +27,4 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ 
+-__version__ = VERSION
+\ No newline at end of file
++__version__ = VERSION

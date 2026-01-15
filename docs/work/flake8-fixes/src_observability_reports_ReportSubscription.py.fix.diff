@@ -1,0 +1,32 @@
+diff --git a/src/observability/reports/ReportSubscription.py b/src/observability/reports/ReportSubscription.py
+index fd15147..3046aff 100644
+--- a/src/observability/reports/ReportSubscription.py
++++ b/src/observability/reports/ReportSubscription.py
+@@ -25,10 +25,19 @@ from src.core.base.version import VERSION
+ from .ReportType import ReportType
+ from .SubscriptionFrequency import SubscriptionFrequency
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ @dataclass
+ class ReportSubscription:
+     """Subscription for report delivery.
+@@ -46,4 +55,4 @@ class ReportSubscription:
+     frequency: SubscriptionFrequency = SubscriptionFrequency.DAILY
+     report_types: list[ReportType] = field(default_factory=list)  # type: ignore[assignment]
+     file_patterns: list[str] = field(default_factory=list)  # type: ignore[assignment]
+-    enabled: bool = True
+\ No newline at end of file
++    enabled: bool = True

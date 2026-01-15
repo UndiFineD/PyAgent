@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\masking_utils.py
+# hypothesis_version: 6.150.1
+
+[0.0, '\x1b[0m', '\x1b[92m', '\x1b[93m', '...', '2.5', '2.6', 'AttentionMask', 'allow_is_causal_skip', 'and_mask_function', 'attention_chunk_size', 'attention_mask', 'cache_position', 'chunked_attention', 'config', 'eager', 'flash_attention_2', 'flash_attention_3', 'flex_attention', 'full_attention', 'input_embeds', 'is_compileable', 'is_sliding', 'layer_types', 'majong', 'or_mask_function', 'past_key_values', 'position_ids', 'sdpa', 'sliding_attention', 'sliding_window', '∙', '█', '░', '▙', '▜', '■', '⬔', '⬕', '⬚', '🀆', '🀙', '🀛', '🀞']

@@ -1,0 +1,29 @@
+diff --git a/src/observability/improvements/ImprovementValidator.py b/src/observability/improvements/ImprovementValidator.py
+index 9d35dfb..e0bc474 100644
+--- a/src/observability/improvements/ImprovementValidator.py
++++ b/src/observability/improvements/ImprovementValidator.py
+@@ -25,11 +25,16 @@ from src.core.base.version import VERSION
+ from .Improvement import Improvement
+ from .ValidationResult import ValidationResult
+ from .ValidationSeverity import ValidationSeverity
+-from typing import Any, List, Tuple
++from typing import Any
+ from collections.abc import Callable
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class ImprovementValidator:
+     """Validates improvements with automated testing.
+ 
+@@ -108,4 +113,4 @@ class ImprovementValidator:
+ 
+     def validate_all(self, improvements: list[Improvement]) -> list[ValidationResult]:
+         """Validate multiple improvements."""
+-        return [self.validate(imp) for imp in improvements]
+\ No newline at end of file
++        return [self.validate(imp) for imp in improvements]

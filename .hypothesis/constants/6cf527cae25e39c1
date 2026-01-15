@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\fx\interpreter.py
+# hypothesis_version: 6.150.1
+
+['*', '.', 'Interpreter', 'Target', 'Transformer', 'artifact', 'call_function', 'encoding', 'fx_interpreter_error', 'get_attr', 'name', 'output', 'placeholder', 'string']

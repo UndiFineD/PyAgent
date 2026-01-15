@@ -26,17 +26,19 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import os
 import logging
-from typing import Dict
 from .TenantCore import TenantCore
 
 __version__ = VERSION
+
+
+
 
 class TenantManager:
     """
     Manages isolated environments for different users or projects.
     Shell for TenantCore.
     """
-    
+
     def __init__(self, base_root: str) -> None:
         self.base_root = base_root
         self.tenants_dir = os.path.join(base_root, "data/db/tenants")
@@ -54,7 +56,7 @@ class TenantManager:
             for sub_dir in self.core.get_required_dirs():
                 os.makedirs(os.path.join(tenant_path, sub_dir), exist_ok=True)
             logging.info(f"TENANT-MGR: Created isolated workspace for {tenant_id}")
-        
+
         self.active_tenants[tenant_id] = tenant_path
         return tenant_path
 
@@ -63,7 +65,7 @@ class TenantManager:
         tenant_root = self.active_tenants.get(tenant_id)
         if not tenant_root:
             raise ValueError(f"Tenant {tenant_id} not active.")
-        
+
         return self.core.validate_and_translate_path(tenant_root, relative_path)
 
     def get_tenancy_report(self) -> str:

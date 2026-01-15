@@ -23,10 +23,16 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 from src.infrastructure.plugins.core.ImportHealerCore import ImportHealerCore
+from src.observability.StructuredLogger import StructuredLogger
 import json
 import os
 
 __version__ = VERSION
+
+logger = StructuredLogger(__name__)
+
+
+
 
 class BrokenImportAgent(BaseAgent):
     """
@@ -40,12 +46,12 @@ class BrokenImportAgent(BaseAgent):
 
     def heal_import_error(self, error_msg: str) -> str:
         fix = self.core.suggest_fix(error_msg)
-        print(f"[HEALER] Detected broken import. {fix}")
+        logger.info(f"[HEALER] Detected broken import. {fix}")
         return fix
 
     def update_global_import_map(self) -> None:
-        print("[HEALER] Updating global import map...")
+        logger.info("[HEALER] Updating global import map...")
         imap = self.core.build_internal_import_map(os.path.join(self._workspace_root, "src"))
         with open(self.import_map_file, "w") as f:
             json.dump(imap, f, indent=2)
-        print(f"[HEALER] Map saved to {self.import_map_file}")
+        logger.info(f"[HEALER] Map saved to {self.import_map_file}")

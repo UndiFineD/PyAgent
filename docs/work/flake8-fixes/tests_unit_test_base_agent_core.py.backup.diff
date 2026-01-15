@@ -1,0 +1,69 @@
+diff --git a/tests/unit/test_base_agent_core.py b/tests/unit/test_base_agent_core.py
+index 5f95c50..6ddaf0d 100644
+--- a/tests/unit/test_base_agent_core.py
++++ b/tests/unit/test_base_agent_core.py
+@@ -3,7 +3,6 @@
+ Tests pure logic methods before Rust conversion.
+ """
+ 
+-import pytest
+ from hypothesis import given, strategies as st
+ from src.core.base.BaseAgentCore import BaseAgentCore
+ from src.core.base.models import AgentConfig, AgentPriority
+@@ -207,17 +206,17 @@ class TestBaseAgentCorePropertyBased:
+         """Property: Deduplication preserves first occurrence order."""
+         core = BaseAgentCore()
+         deduped = core.deduplicate_entries(entries)
+-        
++
+         # All unique
+         assert len(deduped) == len(set(deduped))
+-        
++
+         # Order preserved
+         if entries:
+             first_occurrence = {}
+             for i, entry in enumerate(entries):
+                 if entry not in first_occurrence:
+                     first_occurrence[entry] = i
+-            
++
+             for i in range(len(deduped) - 1):
+                 assert first_occurrence[deduped[i]] < first_occurrence[deduped[i + 1]]
+ 
+@@ -299,10 +298,10 @@ class TestBaseAgentCoreStrategyValidation:
+     def test_set_strategy_missing_execute(self) -> None:
+         """Test strategy validation with missing execute method."""
+         core = BaseAgentCore()
+-        
++
+         class InvalidStrategy:
+             pass
+-        
++
+         result = core.set_strategy(InvalidStrategy())
+         assert "ERROR" in result
+         assert "execute" in result
+@@ -310,11 +309,11 @@ class TestBaseAgentCoreStrategyValidation:
+     def test_set_strategy_valid(self) -> None:
+         """Test strategy validation with valid strategy."""
+         core = BaseAgentCore()
+-        
++
+         class ValidStrategy:
+             def execute(self):
+                 pass
+-        
++
+         result = core.set_strategy(ValidStrategy())
+         assert "ERROR" not in result
+         assert "ValidStrategy" in result
+@@ -353,7 +352,7 @@ class TestBaseAgentCoreEdgeCases:
+         # Just under limit
+         is_valid, _ = core.is_response_valid("x" * 999999)
+         assert is_valid
+-        
++
+         # Over limit
+         is_valid, reason = core.is_response_valid("x" * 1000001)
+         assert not is_valid

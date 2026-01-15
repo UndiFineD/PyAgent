@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\utils\embedding_functions\__init__.py
+# hypothesis_version: 6.150.1
+
+['EmbeddingFunction', 'JinaQueryConfig', 'NomicQueryConfig', 'ONNXMiniLM_L6_V2', 'amazon_bedrock', 'baseten', 'bm25', 'chroma-cloud-qwen', 'chroma-cloud-splade', 'chroma_bm25', 'chroma_langchain', 'cohere', 'config', 'default', 'fastembed_sparse', 'google_genai', 'google_generative_ai', 'google_palm', 'google_vertex', 'huggingface', 'huggingface_server', 'huggingface_sparse', 'instructor', 'jina', 'mistral', 'morph', 'name', 'nomic', 'ollama', 'onnx_mini_lm_l6_v2', 'open_clip', 'openai', 'roboflow', 'sentence_transformer', 'text2vec', 'together_ai', 'voyageai']

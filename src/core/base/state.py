@@ -30,50 +30,102 @@ import shutil
 import time
 import collections
 from pathlib import Path
-from typing import Dict, Any, Optional, List
+from typing import Any
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class EmergencyEventLog:
     """Phase 278: Ring buffer recording the last 10 filesystem actions for recovery."""
-    
+
     def __init__(self, log_path: Path = Path("data/logs/emergency_recovery.log")) -> None:
+
+
+
+
+
+
+
+
+
+
         self.log_path = log_path
         self.buffer = collections.deque(maxlen=10)
+
+
+
+
+
+
+
+
+
+
         self._load_buffer()
 
+
+
+
     def _load_buffer(self) -> None:
+
+
+
         if self.log_path.exists():
             try:
+
+
+
                 content = self.log_path.read_text(encoding="utf-8")
                 self.buffer.extend(content.splitlines())
+
+
             except Exception:
                 pass
 
+
+
     def record_action(self, action: str, details: str) -> None:
         event = f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] {action}: {details}"
+
+
+
+
         self.buffer.append(event)
         try:
             self.log_path.parent.mkdir(parents=True, exist_ok=True)
+
+
+
             self.log_path.write_text("\n".join(self.buffer), encoding="utf-8")
         except Exception as e:
+
             logging.error(f"StructuredLogger: Failed to write emergency log: {e}")
 
 # Global instance for easy access (Phase 278)
+
+
+
+
 EMERGENCY_LOG = EmergencyEventLog()
+
 
 class StateTransaction:
     """Phase 267: Transactional context manager for agent file operations."""
-    
+
     def __init__(self, target_files: list[Path]) -> None:
         self.target_files = target_files
+
         self.backups: dict[Path, Path] = {}
         self.temp_dir = Path("temp/transactions")
         self.temp_dir.mkdir(parents=True, exist_ok=True)
         self.id = f"tx_{int(time.time()*1000)}"
 
     def __enter__(self) -> StateTransaction:
-        import time
         for file in self.target_files:
             if file.exists():
                 backup_path = self.temp_dir / f"{file.name}_{self.id}.bak"
@@ -84,9 +136,13 @@ class StateTransaction:
 
     def __exit__(self, exc_type, exc_val, exc_tb) -> None:
         if exc_type is not None:
-             self.rollback()
+            self.rollback()
         else:
-             self.commit()
+            self.commit()
+
+
+
+
 
     def commit(self) -> None:
         """Discard backups after successful transaction."""
@@ -103,9 +159,13 @@ class StateTransaction:
                 backup.unlink()
         logging.warning(f"Transaction {self.id} ROLLED BACK. Files restored.")
 
+
+
+
+
 class AgentStateManager:
     """Manages saving and loading agent state to/from disk."""
-    
+
     @staticmethod
     def save_state(file_path: Path, current_state: str, token_usage: int, state_data: dict[str, Any], history_len: int, path: Path | None = None) -> None:
         """Save agent state to disk."""

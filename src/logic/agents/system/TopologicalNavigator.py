@@ -27,12 +27,15 @@ from src.core.base.version import VERSION
 import os
 import ast
 import logging
-from typing import Dict, List, Set, Any
+from typing import Any
 from pathlib import Path
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
+
+
+
 
 class TopologicalNavigator(BaseAgent):
     """Parses source code to build a dependency graph of classes and functions."""
@@ -98,7 +101,7 @@ class TopologicalNavigator(BaseAgent):
                         self.graph[class_id] = set()
                     # Add class as dependee of module
                     self.graph[module_id].add(class_id)
-                    
+
                     # Track base classes
                     for base in node.bases:
                         if isinstance(base, ast.Name):
@@ -121,11 +124,11 @@ class TopologicalNavigator(BaseAgent):
         ext_path = Path(external_root)
         if not ext_path.exists():
             return f"Error: External path {external_root} not found."
-            
+
         # Store previous root to restore later if needed
         original_root = self.root_dir
         self.root_dir = ext_path.absolute()
-        
+
         try:
             report = self.build_dependency_map(".")
             return f"Federation Success: {report} (External Root: {external_root})"
@@ -147,7 +150,7 @@ class TopologicalNavigator(BaseAgent):
             current, current_depth = to_visit.pop(0)
             if current in visited or current_depth >= depth:
                 continue
-            
+
             visited.add(current)
             dependents = self.reverse_graph.get(current, set())
             for dep in dependents:
@@ -186,5 +189,5 @@ class TopologicalNavigator(BaseAgent):
 
         for node in self.graph:
             visit(node)
-        
+
         return stack[::-1]

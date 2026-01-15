@@ -1,0 +1,20 @@
+diff --git a/src/logic/agents/cognitive/PersonalityCoreAgent.py b/src/logic/agents/cognitive/PersonalityCoreAgent.py
+index f9c1a4f..d79c314 100644
+--- a/src/logic/agents/cognitive/PersonalityCoreAgent.py
++++ b/src/logic/agents/cognitive/PersonalityCoreAgent.py
+@@ -21,7 +21,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Dict, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import as_tool
+ 
+@@ -89,4 +89,4 @@ class PersonalityCoreAgent(BaseAgent):
+             "friendly": "Encouraging, helpful, and personable.",
+             "rapid_response": "Extremely concise, focusing on immediate fixes and safety."
+         }
+-        return guidance.get(self.current_vibe, "Maintain standard operational parameters.")
+\ No newline at end of file
++        return guidance.get(self.current_vibe, "Maintain standard operational parameters.")

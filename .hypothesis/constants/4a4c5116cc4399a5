@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\ao\nn\quantized\modules\activation.py
+# hypothesis_version: 6.150.1
+
+[0.01, 1.0, 'ELU', 'Hardswish', 'LeakyReLU', 'MultiheadAttention', 'PReLU', 'QuantizedELU', 'QuantizedHardswish', 'QuantizedLeakyReLU', 'QuantizedPReLU', 'QuantizedReLU6', 'QuantizedSoftmax', 'ReLU6', 'Sigmoid', 'Softmax', 'bias_k', 'bias_v', 'device', 'dtype', 'scale', 'softmax', 'zero_point']

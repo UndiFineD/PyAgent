@@ -22,9 +22,12 @@ from src.core.base.version import VERSION
 import os
 import ast
 from pathlib import Path
-from typing import Dict, List, Set, Any, Union
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class DependencyGraphAgent:
     """
@@ -33,7 +36,7 @@ class DependencyGraphAgent:
     """
     def __init__(self, workspace_path: str | Path) -> None:
         self.workspace_path = Path(workspace_path)
-        self.dependency_map: dict[str, list[str]] = {} # module -> list of imports
+        self.dependency_map: dict[str, list[str]] = {}  # module -> list of imports
 
     def scan_dependencies(self, start_dir: str = "src") -> dict[str, Any]:
         """
@@ -52,7 +55,7 @@ class DependencyGraphAgent:
                         self.dependency_map[str(rel_path)] = self._extract_imports(full_path)
                     except ValueError:
                         continue
-        
+
         return {"modules_scanned": len(self.dependency_map)}
 
     def _extract_imports(self, file_path: Path) -> list[str]:
@@ -60,7 +63,7 @@ class DependencyGraphAgent:
         try:
             with open(file_path, encoding="utf-8") as f:
                 tree = ast.parse(f.read())
-            
+
             for node in ast.walk(tree):
                 if isinstance(node, ast.Import):
                     for alias in node.names:

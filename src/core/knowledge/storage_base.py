@@ -20,14 +20,20 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from abc import ABC, abstractmethod
-from typing import Any, Dict, List, Optional
+from typing import Any
 from pathlib import Path
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class KnowledgeStore(ABC):
     """Base interface for all knowledge storage types."""
-    
+
     def __init__(self, agent_id: str, storage_path: Path) -> None:
         self.agent_id = agent_id
         self.storage_path = storage_path

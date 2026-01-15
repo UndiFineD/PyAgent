@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\fx\passes\param_fetch.py
+# hypothesis_version: 6.150.1
+
+['bias', 'call_module', 'ceil_mode', 'default_matching', 'dilation', 'eps', 'groups', 'inplace', 'kernel_size', 'name', 'padding', 'padding_mode', 'return_indices', 'running_mean', 'running_var', 'stride', 'weight']

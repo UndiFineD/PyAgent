@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\ao\nn\quantized\modules\normalization.py
+# hypothesis_version: 6.150.1
+
+[1e-05, 0.1, 'GroupNorm', 'InstanceNorm1d', 'InstanceNorm2d', 'InstanceNorm3d', 'LayerNorm', 'QuantizedGroupNorm', 'QuantizedLayerNorm', 'affine', 'device', 'dtype', 'eps', 'num_channels', 'num_groups', 'scale', 'zero_point']

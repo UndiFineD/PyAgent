@@ -1,0 +1,31 @@
+diff --git a/src/core/utils/MonorepoAggregator.py b/src/core/utils/MonorepoAggregator.py
+index 4b8e8a0..204654f 100644
+--- a/src/core/utils/MonorepoAggregator.py
++++ b/src/core/utils/MonorepoAggregator.py
+@@ -22,12 +22,16 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from .ChangelogEntry import ChangelogEntry
+-from .MonorepoEntry import MonorepoEntry
+-from typing import Dict, List
++from src.core.base.types import ChangelogEntry
++from src.core.base.types import MonorepoEntry
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class MonorepoAggregator:
+     """Aggregates changelogs for monorepo setups.
+ 
+@@ -88,4 +92,4 @@ class MonorepoAggregator:
+                 result.append(f"- [{entry.category}] {entry.description}")
+             result.append("")
+ 
+-        return '\n'.join(result)
+\ No newline at end of file
++        return '\n'.join(result)

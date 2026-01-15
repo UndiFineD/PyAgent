@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/backend/SystemAnalytics.py b/src/infrastructure/backend/SystemAnalytics.py
+index c73cd52..b86e05c 100644
+--- a/src/infrastructure/backend/SystemAnalytics.py
++++ b/src/infrastructure/backend/SystemAnalytics.py
+@@ -23,7 +23,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .UsageRecord import UsageRecord
+-from typing import Any, Dict, List, Optional
++from typing import Any
+ import threading
+ import time
+ 

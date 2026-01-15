@@ -33,6 +33,9 @@ from typing import Any
 
 __version__ = VERSION
 
+
+
+
 class DiffViewer:
     """A window for viewing differences between original and changed files."""
     def __init__(self, parent: Any) -> None:
@@ -57,7 +60,7 @@ class DiffViewer:
             tofile="Proposed",
             lineterm=""
         )
-        
+
         diff_text = "\n".join(list(diff))
         if not diff_text:
             messagebox.showinfo("No Changes", "The proposed content is identical to the original.")
@@ -90,6 +93,6 @@ class DiffViewer:
         h_scroll = ttk.Scrollbar(win, orient=tk.HORIZONTAL, command=text.xview)
         v_scroll = ttk.Scrollbar(win, orient=tk.VERTICAL, command=text.yview)
         text.configure(xscrollcommand=h_scroll.set, yscrollcommand=v_scroll.set)
-        
+
         h_scroll.pack(side=tk.BOTTOM, fill=tk.X)
         v_scroll.pack(side=tk.RIGHT, fill=tk.Y)

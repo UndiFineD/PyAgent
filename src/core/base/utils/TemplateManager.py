@@ -23,9 +23,14 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from src.core.base.utils.AgentTemplate import AgentTemplate
-from typing import List, Optional, Dict
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class TemplateManager:
     """Manage agent templates for common use cases.

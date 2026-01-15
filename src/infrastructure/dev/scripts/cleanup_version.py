@@ -23,7 +23,7 @@ from __future__ import annotations
 import os
 import re
 
-root_dirs = ['src', '.', 'gui', 'tests'] # Scan these top-level dirs
+root_dirs = ['src', '.', 'gui', 'tests']  # Scan these top-level dirs
 skip_files = ['version.py', 'cleanup_version.py']
 version_pattern = re.compile(r'VERSION\s*=\s*[\"\']2\.1\.2-stable[\"\']')
 
@@ -33,14 +33,14 @@ for r_dir in root_dirs:
         # Skip some common hidden/vendor dirs
         if any(x in root for x in ['.git', '__pycache__', '.venv', 'node_modules']):
             continue
-            
+
         for file in files:
             if file.endswith('.py') and file not in skip_files:
                 file_path = os.path.join(root, file)
                 try:
                     with open(file_path, encoding='utf-8') as f:
                         lines = f.readlines()
-                    
+
                     new_lines = []
                     changed = False
                     for line in lines:
@@ -50,7 +50,7 @@ for r_dir in root_dirs:
                                 changed = True
                                 continue
                         new_lines.append(line)
-                    
+
                     if changed:
                         with open(file_path, 'w', encoding='utf-8') as f:
                             f.writelines(new_lines)

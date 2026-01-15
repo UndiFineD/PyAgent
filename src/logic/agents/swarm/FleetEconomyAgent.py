@@ -22,10 +22,12 @@ from src.core.base.version import VERSION
 from pathlib import Path
 import sqlite3
 import logging
-import numpy as np
-from typing import Dict, Any, Union, List
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class FleetEconomyAgent:
     """
@@ -68,16 +70,16 @@ class FleetEconomyAgent:
             cursor = conn.execute("SELECT balance FROM wallets WHERE agent_id = ?", (agent_id,))
             row = cursor.fetchone()
             balance = row[0] if row else 0.0
-            
+
             if balance < bid_amount:
                 return {"status": "failed", "reason": "Insufficient credits"}
-            
+
             conn.execute("INSERT INTO bids (task_id, agent_id, bid, priority, status) VALUES (?, ?, ?, ?, 'active')",
                          (task_id, agent_id, bid_amount, priority))
             # Lock funds
             conn.execute("UPDATE wallets SET balance = balance - ? WHERE agent_id = ?", (bid_amount, agent_id))
             conn.commit()
-            
+
         return {"status": "bid_placed", "task_id": task_id, "remaining_balance": balance - bid_amount}
 
     def resolve_auction(self, task_id: str) -> dict[str, Any]:
@@ -85,28 +87,42 @@ class FleetEconomyAgent:
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.execute("SELECT agent_id, bid FROM bids WHERE task_id = ? ORDER BY bid DESC", (task_id,))
             bids = cursor.fetchall()
-            
+
             if not bids:
                 return {"status": "failed", "reason": "No bids for task"}
-            
+
             winner_id, highest_bid = bids[0]
             # Second bid or half of highest if only one bidder
             second_bid = bids[1][1] if len(bids) > 1 else (highest_bid * 0.5)
-            
+
             # Refund the difference (Winner pays second price)
             refund = highest_bid - second_bid
             conn.execute("UPDATE wallets SET balance = balance + ? WHERE agent_id = ?", (refund, winner_id))
-            
+
             # Close all bids for this task
             conn.execute("UPDATE bids SET status = 'closed' WHERE task_id = ?", (task_id,))
             conn.commit()
-            
+
         return {
             "winner": winner_id,
             "paid": second_bid,
             "savings": refund,
             "task": task_id
         }
+
+    def resolve_bids(self) -> dict[str, Any]:
+        """Resolves all pending auctions (Phase 77)."""
+        allocated = []
+        with sqlite3.connect(self.db_path) as conn:
+            cursor = conn.execute("SELECT DISTINCT task_id FROM bids WHERE status = 'active'")
+            tasks = [row[0] for row in cursor.fetchall()]
+
+        for task_id in tasks:
+            res = self.resolve_auction(task_id)
+            if "winner" in res:
+                allocated.append(res["task"])
+
+        return {"allocated_tasks": allocated}
 
     def get_wallet_summary(self) -> dict[str, float]:
         return self.wallets

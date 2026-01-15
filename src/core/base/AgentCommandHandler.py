@@ -26,14 +26,20 @@ import logging
 import subprocess
 import contextlib
 from pathlib import Path
-from typing import List, Dict, Any, Optional, Tuple
+from typing import Any
 from collections.abc import Iterator
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class AgentCommandHandler:
     """Handles command execution for the Agent, including sub-agent orchestration."""
-    
+
     def __init__(self, repo_root: Path, models_config: dict[str, Any] | None = None, recorder: Any = None) -> None:
         self.repo_root: Path = repo_root
         self.models: dict[str, Any] = models_config or {}
@@ -87,13 +93,13 @@ class AgentCommandHandler:
             res = attempt_command()
             if res.returncode == 0 or i == max_retries - 1:
                 return res
-            
+
             wait_time = float(2 ** i)
             logging.warning(f"Command failed (rc={res.returncode}). Retrying in {wait_time}s... (Attempt {i+1}/{max_retries})")
             # Use threading.Event().wait for better interruptibility than block-waits
             import threading
             threading.Event().wait(timeout=wait_time)
-            
+
         return res
 
     def _prepare_command_environment(self, cmd: list[str]) -> tuple[list[str], dict[str, str]]:
@@ -116,7 +122,7 @@ class AgentCommandHandler:
             env['DV_AGENT_PARENT'] = '1'
             if '--no-cascade' not in local_cmd:
                 local_cmd = local_cmd[:2] + ['--no-cascade'] + local_cmd[2:]
-            
+
             try:
                 script_name = Path(local_cmd[1]).name
                 agent_name = script_name[len('agent_'):-3] if script_name.endswith('.py') else None
@@ -142,7 +148,7 @@ class AgentCommandHandler:
             for spec_key, env_key in mapping.items():
                 if spec_key in spec:
                     vars_to_set[env_key] = str(spec.get(spec_key, ''))
-        
+
         return vars_to_set
 
     @contextlib.contextmanager

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\aiofiles\tempfile\temptypes.py
+# hypothesis_version: 6.150.1
+
+['cleanup', 'close', 'closed', 'encoding', 'fileno', 'flush', 'isatty', 'mode', 'name', 'newlines', 'read', 'readline', 'readlines', 'rollover', 'seek', 'tell', 'truncate']

@@ -1,7 +1,9 @@
 import unittest
-import os
-import time
+from pathlib import Path
 from src.infrastructure.fleet.FleetManager import FleetManager
+
+
+
 
 class TestPhase72(unittest.TestCase):
     def setUp(self):
@@ -10,29 +12,59 @@ class TestPhase72(unittest.TestCase):
 
     def test_core_evolution_guard(self) -> None:
         print("\nTesting Phase 72: Agentic Self-Evolution & Core Hardening...")
-        
+
         # Test file
-        test_file = "src/agents/core/CoreEvolutionGuard.py"
-        
+        test_file = "src/logic/agents/system/CoreEvolutionGuard.py"
+
         # Take snapshot
+
+
+
+
+
+
+
+
+
+
         res = self.fleet.evolution_guard.snapshot_core_logic([test_file])
         print(f"Snapshot Result: {res}")
         self.assertEqual(res["monitored_files"], 1)
-        
+
+
+
+
+
+
         # Validate (no change)
         val_res = self.fleet.evolution_guard.validate_code_integrity(test_file)
         print(f"Validation Result (No Change): {val_res}")
         self.assertEqual(val_res["status"], "unchanged")
-        
+
+
+
+
+
+
         # Validate (untracked)
         untracked_res = self.fleet.evolution_guard.validate_code_integrity("nonexistent.py")
         print(f"Validation Result (Untracked): {untracked_res}")
         self.assertEqual(untracked_res["status"], "untracked")
 
+
+
+
+
+
         # Report
         report = self.fleet.evolution_guard.generate_hardening_report()
         print(f"Hardening Report: {report}")
         self.assertEqual(report["monitored_files_count"], 1)
+
+
+
+
+
 
 if __name__ == "__main__":
     unittest.main()

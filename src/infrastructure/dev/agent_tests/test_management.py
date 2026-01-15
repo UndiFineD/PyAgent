@@ -25,14 +25,23 @@ from src.core.base.version import VERSION
 from dataclasses import dataclass, field
 from pathlib import Path
 import json
-from typing import Any, Dict, List, Optional, Set, cast
+from typing import Any, cast
 from collections.abc import Callable
 from .models import TestCase
 
 __version__ = VERSION
 
+
+
+
+
+
+
 def _empty_str_list() -> list[str]:
     return []
+
+
+
 
 class BaselineComparisonResult:
     """Result of a baseline comparison."""
@@ -40,19 +49,44 @@ class BaselineComparisonResult:
         self.matches = matches
         self.differences = differences or []
 
+
 class BaselineManager:
     """Manage test baselines."""
 
     def __init__(self, baseline_dir: Path | None = None) -> None:
         """Initialize baseline manager."""
         self.baseline_dir = Path(baseline_dir) if baseline_dir else Path("./baselines")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         self.baseline_dir.mkdir(parents=True, exist_ok=True)
+
+
+
+
 
     def save_baseline(self, name: str, data: dict[str, Any]) -> None:
         """Save a baseline."""
         baseline_path = self.baseline_dir / f"{name}.json"
         with open(baseline_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
+
+
+
+
+
+
 
     def load_baseline(self, name: str) -> dict[str, Any]:
         """Load a baseline."""
@@ -66,27 +100,46 @@ class BaselineManager:
         """Compare current data to baseline."""
         baseline = self.load_baseline(name)
         if baseline == current:
+
+
+
+
+
+
+
+
+
+
             return BaselineComparisonResult(matches=True, differences=[])
-        
+
         differences = []
         for key in set(baseline.keys()) | set(current.keys()):
             if key not in baseline:
                 differences.append(f"Key '{key}' added")
             elif key not in current:
+
+
+
+
                 differences.append(f"Key '{key}' removed")
             elif baseline[key] != current[key]:
                 differences.append(f"Value mismatch for key '{key}': {baseline[key]} != {current[key]}")
-        
+
         return BaselineComparisonResult(matches=False, differences=differences)
 
     def update_baseline(self, name: str, data: dict[str, Any]) -> None:
         """Update a baseline."""
         self.save_baseline(name, data)
 
+
+
 class DIContainer:
     """Dependency injection container."""
 
     def __init__(self) -> None:
+
+
+
         """Initialize DI container."""
         self._dependencies: dict[str, Any] = {}
         self._overrides: dict[str, Any] = {}
@@ -107,7 +160,18 @@ class DIContainer:
         if name not in self._dependencies:
             raise ValueError(f"Dependency not registered: {name}")
 
+
         return self._dependencies[name]()
+
+
+
+
+
+
+
+
+
+
 
     def override(self, name: str, factory: Callable[[], Any]) -> Any:
         """Context manager for dependency override."""
@@ -123,13 +187,34 @@ class DIContainer:
                 if old_override:
                     self._overrides[name] = old_override
                 else:
+
+
+
+
+
+
+
+
+
                     self._overrides.pop(name, None)
 
+
+
+
+
         return override_context()
+
+
+
+
 
 class TestPrioritizer:
     """Prioritizes tests based on various factors."""
     __test__ = False
+
+
+
+
 
     def __init__(self) -> None:
         """Initialize test prioritizer."""
@@ -138,9 +223,17 @@ class TestPrioritizer:
     def add_test(
         self,
         name: str,
+
+
         recent_changes: int = 0,
+
+
+
+
+
         failure_rate: float = 0.0,
         changed_recently: bool | None = None,
+
     ) -> None:
         """Add a test for prioritization.
 
@@ -151,7 +244,24 @@ class TestPrioritizer:
             recent_changes = 1 if changed_recently else 0
         self.tests[name] = {
             "recent_changes": int(recent_changes),
+
+
+
+
+
+
+
+
+
+
             "failure_rate": float(failure_rate),
+
+
+
+
+
+
+
         }
 
     def prioritize_by_changes(self) -> list[str]:
@@ -159,12 +269,14 @@ class TestPrioritizer:
         return self.prioritize_by_recent_changes()
 
     def prioritize_by_recent_changes(self) -> list[str]:
+
         """Prioritize by recent changes."""
         return sorted(
             self.tests.keys(),
             key=lambda t: self.tests[t]["recent_changes"],
             reverse=True,
         )
+
 
     def prioritize_by_failure_history(self) -> list[str]:
         """Prioritize by failure history."""
@@ -181,10 +293,14 @@ class TestPrioritizer:
     ) -> list[str]:
         """Prioritize with combined strategy."""
         scores: dict[str, float] = {}
+
         for test, data in self.tests.items():
             scores[test] = (data["recent_changes"] * float(change_weight)) + (
                 data["failure_rate"] * float(failure_weight)
             )
+
+
+
         return sorted(scores.keys(), key=lambda t: scores[t], reverse=True)
 
     def prioritize(self, tests: list[TestCase]) -> list[TestCase]:
@@ -199,6 +315,9 @@ class FlakinessDetector:
         self.test_runs: dict[str, list[bool]] = {}
 
     def add_run(self, test_name: str, passed: bool) -> None:
+
+
+
         """Add a test run result."""
         if test_name not in self.test_runs:
             self.test_runs[test_name] = []
@@ -210,12 +329,22 @@ class FlakinessDetector:
 
     def is_flaky(self, test_name: str) -> bool:
         """Detect if test is flaky."""
+
+
+
+
         if test_name not in self.test_runs or len(self.test_runs[test_name]) < 2:
             return False
         results = self.test_runs[test_name]
         passes = sum(results)
+
+
         fails = len(results) - passes
         return passes > 0 and fails > 0
+
+
+
+
 
 class QuarantineManager:
     """Manages quarantined flaky tests."""
@@ -223,6 +352,10 @@ class QuarantineManager:
     def __init__(self) -> None:
         """Initialize quarantine manager."""
         self.quarantined: set[str] = set()
+
+
+
+
         self.reasons: dict[str, str] = {}
 
     def quarantine(self, test_name: str, reason: str = "") -> None:
@@ -244,6 +377,7 @@ class ImpactAnalyzer:
     """Analyzes impact of code changes on tests."""
 
     def __init__(self) -> None:
+
         """Initialize impact analyzer."""
         self._test_to_files: dict[str, set[str]] = {}
         self._file_dependencies: dict[str, set[str]] = {}
@@ -284,11 +418,17 @@ class ImpactAnalyzer:
         """Get impacted tests (compat alias)."""
         return self.get_affected_tests(changed_files=changed_files, include_dependencies=False)
 
+
+
+
+
+
 class ContractValidator:
     """Validates API contracts."""
 
     @dataclass
     class ValidationResult:
+        """Result of a contract validation."""
         valid: bool
         errors: list[str] = field(default_factory=list)
 
@@ -321,6 +461,11 @@ class ContractValidator:
                 errors.append("body_type_mismatch")
 
         return ContractValidator.ValidationResult(valid=(len(errors) == 0), errors=errors)
+
+
+
+
+
 
 class TestDocGenerator:
     """Generates documentation from tests."""

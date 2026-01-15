@@ -1,0 +1,32 @@
+diff --git a/src/logic/agents/intelligence/BrowsingAgent.py b/src/logic/agents/intelligence/BrowsingAgent.py
+index bce32ee..ba73c90 100644
+--- a/src/logic/agents/intelligence/BrowsingAgent.py
++++ b/src/logic/agents/intelligence/BrowsingAgent.py
+@@ -30,9 +30,19 @@ from src.core.base.utilities import as_tool
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class BrowsingAgent(BaseAgent):
+     """Interacts with the web to retrieve documentation, search for solutions, and extract data."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self._system_prompt = (
+@@ -64,4 +74,4 @@ class BrowsingAgent(BaseAgent):
+         """Browse the web based on a prompt."""
+         if "http" in prompt:
+             return self.extract_api_spec(prompt)
+-        return self.search_and_summarize(prompt)
+\ No newline at end of file
++        return self.search_and_summarize(prompt)

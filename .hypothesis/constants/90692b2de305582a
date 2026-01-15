@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\model_selection\_search.py
+# hypothesis_version: 6.150.1
+
+['2*n_jobs', 'GridSearchCV', 'ParameterGrid', 'ParameterSampler', 'RandomizedSearchCV', 'U', 'best_estimator_', 'boolean', 'classes_', 'cv', 'cv_object', 'decision_function', 'error_score', 'estimator', 'feature_names_in_', 'fit', 'fit_time', 'groups', 'inverse_transform', 'left', 'mean_%s', 'min', 'n_iter', 'n_jobs', 'parallel', 'param_%s', 'param_distributions', 'param_grid', 'params', 'pre_dispatch', 'predict', 'predict_log_proba', 'predict_proba', 'raise', 'random_state', 'rank_%s', 'refit', 'return_train_score', 'rvs', 'sample_weight', 'score', 'score_samples', 'score_time', 'scoring', 'split', 'split%d_%s', 'std_%s', 'test_', 'test_%s', 'test_scores', 'train_', 'train_%s', 'train_scores', 'transform', 'verbose']

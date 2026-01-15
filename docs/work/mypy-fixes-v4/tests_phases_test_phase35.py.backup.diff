@@ -1,0 +1,32 @@
+diff --git a/tests/phases/test_phase35.py b/tests/phases/test_phase35.py
+index 0b5d7f8..7f59326 100644
+--- a/tests/phases/test_phase35.py
++++ b/tests/phases/test_phase35.py
+@@ -1,15 +1,15 @@
+ #!/usr/bin/env python3
+ 
+ import os
+-import sys
+ import logging
+-from pathlib import Path
+ 
+ # Add the workspace root to sys.path
+ 
++import pytest
+ from src.infrastructure.fleet.FleetManager import FleetManager
+ 
+-def test_phase35() -> None:
++@pytest.mark.asyncio
++async def test_phase35() -> None:
+     logging.basicConfig(level=logging.INFO)
+     print("🚀 Starting Phase 35 Verification...")
+     
+@@ -35,7 +35,7 @@ def test_phase35() -> None:
+     # 2. Test Recursive Self-Archiving
+     print("\n--- Testing Recursive Self-Archiving ---")
+     # Identify targets
+-    targets = fleet.call_by_capability("SelfArchiving", threshold_days=30)
++    targets = await fleet.call_by_capability("SelfArchiving", threshold_days=30)
+     print(f"✅ Archiving Targets: {targets}")
+     
+     if "session_old_001.log" in str(targets):

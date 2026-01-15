@@ -29,9 +29,12 @@ from .ScheduledEntry import ScheduledEntry
 from .ScheduledImprovement import ScheduledImprovement
 from ._ScheduleStore import _ScheduleStore
 from datetime import datetime, timedelta
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class ImprovementScheduler:
     """Manages improvement scheduling with resource allocation.

@@ -1,0 +1,42 @@
+diff --git a/tests/phases/test_phase34.py b/tests/phases/test_phase34.py
+index a5166e7..44bb5ca 100644
+--- a/tests/phases/test_phase34.py
++++ b/tests/phases/test_phase34.py
+@@ -4,13 +4,14 @@ import os
+ import sys
+ import time
+ import logging
++import asyncio
+ from pathlib import Path
+ 
+ # Add the workspace root to sys.path
+ 
+ from src.infrastructure.fleet.FleetManager import FleetManager
+ 
+-def test_phase34() -> None:
++async def run_phase34():
+     logging.basicConfig(level=logging.INFO)
+     print("🚀 Starting Phase 34 Verification...")
+     
+@@ -43,7 +44,11 @@ def test_phase34() -> None:
+     # Simulate a dream result
+     dream_intelligence = "Synthesized logic for high-performance multi-vector indexing discovered during simulation."
+     # Use call_by_capability to test the whole path
+-    graft_result = fleet.call_by_capability("RealityGrafting", focus_area="Search Logic", dream_output=dream_intelligence)
++    res = fleet.call_by_capability("RealityGrafting", focus_area="Search Logic", dream_output=dream_intelligence)
++    if asyncio.iscoroutine(res):
++        graft_result = await res
++    else:
++        graft_result = res
+     print(f"✅ Graft Result: {graft_result}")
+     
+     if "Reality Grafting Report" in graft_result:
+@@ -53,5 +58,8 @@ def test_phase34() -> None:
+ 
+     print("\n🏁 Phase 34 Verification Complete.")
+ 
++def test_phase34() -> None:
++    asyncio.run(run_phase34())
++
+ if __name__ == "__main__":
+     test_phase34()

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_prims\rng_prims.py
+# hypothesis_version: 6.150.1
+
+[256, 'call_function', 'cpu', 'cuda', 'device', 'hpu', 'philox_rand', 'rng_state', 'rngprims::', 'run_with_rng_state', 'xpu']

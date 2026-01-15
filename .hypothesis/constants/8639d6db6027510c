@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\security\ComplianceAgent.py
+# hypothesis_version: 6.150.1
+
+[100, 108, 365, 'High', 'High-risk PII', 'Low', 'Medium', '_workspace_root', 'collection_purpose', 'compliance', 'compliant', 'count', 'credit_card', 'email', 'encrypted_at_rest', 'encryption', 'findings', 'health_record', 'phase', 'phone', 'pia_score', 'pii_detected', 'pii_scan', 'pii_types', 'recommendations', 'retention', 'risk_assessment', 'ssn', 'timestamp', 'type']

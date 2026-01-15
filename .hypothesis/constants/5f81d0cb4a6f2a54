@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\cluster\_agglomerative.py
+# hypothesis_version: 6.150.1
+
+[0.02, 2.0, 100, 'C', 'W', 'X', 'affinity', 'array-like', 'auto', 'average', 'boolean', 'cache', 'cityblock', 'complete', 'compute_distances', 'compute_full_tree', 'connectivity', 'coo', 'cosine', 'csr', 'distance_threshold', 'euclidean', 'l1', 'l2', 'left', 'lil', 'linkage', 'manhattan', 'memory', 'mergesort', 'metric', 'n_clusters', 'pooling_func', 'precomputed', 'return_distance', 'single', 'sparse matrix', 'ward']

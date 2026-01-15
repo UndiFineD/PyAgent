@@ -5,7 +5,7 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from .AgentStrategy import AgentStrategy
-from typing import Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING
 import logging
 
 if TYPE_CHECKING:
@@ -13,6 +13,9 @@ if TYPE_CHECKING:
     BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
 __version__ = VERSION
+
+
+
 
 class ChainOfThoughtStrategy(AgentStrategy):
     """Chain-of-Thought strategy: Prompt -> Reasoning -> Response."""
@@ -40,9 +43,9 @@ class ChainOfThoughtStrategy(AgentStrategy):
             f"Based on the following reasoning:\n{reasoning}\n\n"
             "Please implement the changes. Output ONLY the final code/content."
         )
-        
+
         # We append the reasoning to the history for the second call if history exists
         new_history = list(history) if history else []
         new_history.append({"role": "assistant", "content": reasoning})
-        
+
         return await backend_call(execution_prompt, system_prompt, new_history)

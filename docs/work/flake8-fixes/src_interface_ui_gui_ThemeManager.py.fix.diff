@@ -1,0 +1,46 @@
+diff --git a/src/interface/ui/gui/ThemeManager.py b/src/interface/ui/gui/ThemeManager.py
+index efe75e3..869e20d 100644
+--- a/src/interface/ui/gui/ThemeManager.py
++++ b/src/interface/ui/gui/ThemeManager.py
+@@ -32,6 +32,16 @@ from tkinter import ttk
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class ThemeManager:
+     """Handles switching between light and dark themes for the GUI."""
+     def __init__(self, root) -> None:
+@@ -55,7 +65,7 @@ class ThemeManager:
+             style.theme_use('default')
+             style.configure("Header.TFrame", background="#e1e1e1")
+             self.root.configure(bg="#f0f0f0")
+-        
++
+         self.refresh_widgets(self.root)
+ 
+     def toggle_theme(self) -> None:
+@@ -66,7 +76,7 @@ class ThemeManager:
+         bg: str = "#2d2d2d" if self.is_dark_mode else "#f0f0f0"
+         fg: str = "white" if self.is_dark_mode else "black"
+         text_bg: str = "#1e1e1e" if self.is_dark_mode else "white"
+-        
++
+         for child in parent.winfo_children():
+             if isinstance(child, tk.Text):
+                 child.configure(bg=text_bg, fg=fg, insertbackground=fg)
+@@ -79,4 +89,4 @@ class ThemeManager:
+                 # Don't change background of phase labels with colors
+                 if child.cget("bg") not in ["#007acc", "#d04437", "#2e7d32"]:
+                     child.configure(bg=bg, fg=fg)
+-            self.refresh_widgets(child)
+\ No newline at end of file
++            self.refresh_widgets(child)

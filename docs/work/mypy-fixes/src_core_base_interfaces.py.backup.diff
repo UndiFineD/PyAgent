@@ -1,0 +1,22 @@
+diff --git a/src/core/base/interfaces.py b/src/core/base/interfaces.py
+index d993c00..f9ab4eb 100644
+--- a/src/core/base/interfaces.py
++++ b/src/core/base/interfaces.py
+@@ -20,7 +20,7 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Protocol, runtime_checkable, Dict, Any, List, Optional
++from typing import Protocol, runtime_checkable, Any
+ from pathlib import Path
+ 
+ __version__ = VERSION
+@@ -71,5 +71,5 @@ class CoreInterface(Protocol):
+ @runtime_checkable
+ class ContextRecorderInterface(Protocol):
+     """Interface for cognitive recording and context harvesting."""
+-    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] = None) -> None:
+-        raise NotImplementedError()
+\ No newline at end of file
++    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] | None = None) -> None:
++        raise NotImplementedError()

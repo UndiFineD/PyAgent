@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\ifaddr\_win32.py
+# hypothesis_version: 6.150.1
+
+[111, 128, 256, 1024, 'AdapterName', 'Address', 'DadState', 'Description', 'DnsSuffix', 'FirstAnycastAddress', 'FirstUnicastAddress', 'Flags', 'FriendlyName', 'IfIndex', 'Iphlpapi', 'LeaseLifetime', 'Length', 'Next', 'OnLinkPrefixLength', 'PreferredLifetime', 'PrefixOrigin', 'SuffixOrigin', 'ValidLifetime', 'iSockaddrLength', 'lpSockaddr']

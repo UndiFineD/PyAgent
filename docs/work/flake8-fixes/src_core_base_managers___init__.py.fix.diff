@@ -1,0 +1,13 @@
+diff --git a/src/core/base/managers/__init__.py b/src/core/base/managers/__init__.py
+index 0842490..40d2b7e 100644
+--- a/src/core/base/managers/__init__.py
++++ b/src/core/base/managers/__init__.py
+@@ -34,7 +34,7 @@ from .PluginManager import PluginManager as PluginManager, PluginMetadata as Plu
+ from .SystemManagers import (
+     FilePriorityManager as FilePriorityManager,
+     ResponseCache as ResponseCache,
+-    StatePersistence as StatePersistence, 
++    StatePersistence as StatePersistence,
+     EventManager as EventManager,
+     HealthChecker as HealthChecker,
+     ProfileManager as ProfileManager

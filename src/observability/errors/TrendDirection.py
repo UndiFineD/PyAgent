@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class TrendDirection(Enum):
     """Trend direction indicators."""
     INCREASING = "increasing"

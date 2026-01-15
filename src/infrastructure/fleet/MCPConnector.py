@@ -26,13 +26,16 @@ import json
 import logging
 import subprocess
 import threading
-from typing import Dict, List, Any, Optional
+from typing import Any
 
 __version__ = VERSION
 
+
+
+
 class MCPConnector:
     """Manages the lifecycle and JSON-RPC communication with an MCP server."""
-    
+
     def __init__(self, name: str, command: list[str], env: dict[str, str] | None = None, recorder: Any = None) -> None:
         self.name = name
         self.command = command
@@ -95,16 +98,16 @@ class MCPConnector:
         try:
             self.process.stdin.write(json.dumps(request) + "\n")
             self.process.stdin.flush()
-            
+
             # Read response
             # Note: This is an extremely simplified synchronous read from a shared stdout.
             # In a real system, we'd have a permanent reader thread and a way to match IDs.
             # For this Phase, we'll implement a basic matching reader.
-            
+
             line = self.process.stdout.readline()
             if not line:
                 return {"error": "No response from MCP server"}
-            
+
             response = json.loads(line)
             if response.get("id") == id:
                 return response

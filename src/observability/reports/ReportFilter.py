@@ -24,9 +24,11 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .CodeIssue import CodeIssue
 from .FilterCriteria import FilterCriteria
-from typing import List, Optional
 
 __version__ = VERSION
+
+
+
 
 class ReportFilter:
     """Filters reports based on criteria.

@@ -1,0 +1,29 @@
+diff --git a/src/infrastructure/api/ExternalImporter.py b/src/infrastructure/api/ExternalImporter.py
+index e201353..f1ad7e5 100644
+--- a/src/infrastructure/api/ExternalImporter.py
++++ b/src/infrastructure/api/ExternalImporter.py
+@@ -25,7 +25,7 @@ from src.core.base.version import VERSION
+ from .ChangelogEntry import ChangelogEntry
+ from .ImportSource import ImportSource
+ from .ImportedEntry import ImportedEntry
+-from typing import Optional, Dict, List, Any
++from typing import Any
+ import logging
+ from pathlib import Path
+ from src.core.base.ConnectivityManager import ConnectivityManager
+@@ -56,7 +56,7 @@ class ExternalImporter:
+         except ImportError:
+             self.recorder = None
+ 
+-    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] = None) -> None:
++    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] | None = None) -> None:
+         """Record an interaction for intelligence harvesting (Phase 108)."""
+         if self.recorder:
+             self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
+@@ -191,4 +191,4 @@ class ExternalImporter:
+                 description=imported.description,
+                 tags=imported.labels
+             ))
+-        return result
+\ No newline at end of file
++        return result

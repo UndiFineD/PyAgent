@@ -22,11 +22,16 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from .ChangelogEntry import ChangelogEntry
-from .MonorepoEntry import MonorepoEntry
-from typing import Dict, List
+from src.core.base.types import ChangelogEntry
+from src.core.base.types import MonorepoEntry
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class MonorepoAggregator:
     """Aggregates changelogs for monorepo setups.

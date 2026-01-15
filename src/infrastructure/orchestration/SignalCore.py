@@ -19,12 +19,20 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, List, Any
+from typing import Any
 from datetime import datetime
 
 __version__ = VERSION
 
+
+
+
 class SignalCore:
+
+
+
+
+
     """
     Pure logic for the Signal Registry.
     Handles event structure and history windowing.
@@ -32,12 +40,22 @@ class SignalCore:
 
     def create_event(self, signal_name: str, data: Any, sender: str) -> dict[str, Any]:
         """Creates a standardized signal event object."""
+        import time
         return {
             "signal": signal_name,
+
+
+
+
             "data": data,
             "sender": sender,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": time.time(),
+            "timestamp_iso": datetime.now().isoformat()
         }
+
+
+
+
 
     def prune_history(self, history: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
         """Returns the last N events from the signal history."""

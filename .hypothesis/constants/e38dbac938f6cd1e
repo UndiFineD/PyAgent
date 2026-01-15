@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\aiofiles\threadpool\__init__.py
+# hypothesis_version: 6.150.1
+
+['open', 'r', 'stderr', 'stderr_bytes', 'stdin', 'stdin_bytes', 'stdout', 'stdout_bytes', 'sys.stderr', 'sys.stderr.buffer', 'sys.stdin', 'sys.stdin.buffer', 'sys.stdout', 'sys.stdout.buffer']

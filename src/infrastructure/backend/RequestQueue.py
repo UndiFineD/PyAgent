@@ -25,7 +25,6 @@ from src.core.base.version import VERSION
 from .QueuedRequest import QueuedRequest
 from .RequestPriority import RequestPriority
 from queue import PriorityQueue
-from typing import Dict, Optional
 from collections.abc import Callable
 import logging
 import threading
@@ -35,6 +34,12 @@ from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
 # Infrastructure
 __version__ = VERSION
+
+
+
+
+
+
 
 class RequestQueue:
     """Priority queue for backend requests.
@@ -88,10 +93,10 @@ class RequestQueue:
         with self._lock:
             self._queue.put(request)
             self._pending[request_id] = request
-            
+
         if self.recorder:
             self.recorder.record_lesson("request_queued", {"id": request_id, "priority": priority.name})
-            
+
         logging.debug(f"Queued request {request_id} with priority {priority.name}")
         return request_id
 

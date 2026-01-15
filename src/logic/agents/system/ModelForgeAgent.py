@@ -25,17 +25,19 @@ Specializes in local fine-tuning and model optimization (LoRA/QLoRA).
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-import os
 import json
 import asyncio
 import time
 from pathlib import Path
-from typing import Dict, Any, List, Optional
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 from src.logic.agents.system.core.ModelRegistryCore import ModelRegistryCore
 
 __version__ = VERSION
+
+
+
 
 class ModelForgeAgent(BaseAgent):
     """Orchestrates local model fine-tuning and adapter management."""
@@ -49,7 +51,7 @@ class ModelForgeAgent(BaseAgent):
         self.adapters_dir.mkdir(parents=True, exist_ok=True)
         self.datasets_dir = self.forge_dir / "datasets"
         self.datasets_dir.mkdir(parents=True, exist_ok=True)
-        
+
         self.registry = ModelRegistryCore()
         # Simulated quality history for agents
         self.agent_quality_history: dict[str, list[float]] = {}
@@ -58,9 +60,9 @@ class ModelForgeAgent(BaseAgent):
         """Monitors agent response quality and triggers fine-tuning if needed."""
         if agent_name not in self.agent_quality_history:
             self.agent_quality_history[agent_name] = []
-        
+
         self.agent_quality_history[agent_name].append(last_score)
-        
+
         if self.registry.should_trigger_finetuning(self.agent_quality_history[agent_name]):
             logging.warning(f"ModelForge: Triggering autonomous fine-tuning for {agent_name} due to low quality scores.")
             return await self.start_finetuning(f"fix_{agent_name.lower()}")
@@ -74,17 +76,40 @@ class ModelForgeAgent(BaseAgent):
             examples: List of dictionaries with 'instruction' and 'output'.
         """
         output_path = self.datasets_dir / f"{task_name}.jsonl"
-        
+
         def write_dataset() -> None:
             with open(output_path, "w", encoding="utf-8") as f:
                 for ex in examples:
                     f.write(json.dumps(ex) + "\n")
-                    
+
         try:
             await asyncio.to_thread(write_dataset)
             return f"Dataset prepared at {output_path} with {len(examples)} examples."
         except Exception as e:
             return f"Failed to prepare dataset: {e}"
+
+    @as_tool
+    async def trigger_autonomous_tuning(self, module_name: str, evolution_data: dict[str, Any]) -> str:
+        """
+        Triggers an autonomous fine-tuning loop for a specific agent/module.
+        Args:
+            module_name: The target agent or module (e.g., 'SQLAgent').
+            evolution_data: Dictionary containing 'version' and 'synthetic_examples'.
+        """
+        version = evolution_data.get("version", "v1")
+        examples = evolution_data.get("synthetic_examples", [])
+
+        task_name = f"opt_{module_name}_{version}"
+
+        # 1. Prepare Dataset
+        await self.prepare_dataset(task_name, examples)
+
+        # 2. Start Fine-tuning (Mock)
+        job_id = await self.start_finetuning(task_name)
+
+        if job_id:
+            return f"SUCCESS: Fine-tuning job {job_id} started for {task_name}. Autonomous Tuning Initialized."
+        return "FAILED: Could not start fine-tuning job."
 
     @as_tool
     async def start_finetuning(self, task_name: str, base_model: str = "unsloth/llama-3-8b-bnb-4bit") -> str:
@@ -94,7 +119,7 @@ class ModelForgeAgent(BaseAgent):
             base_model: The base model to fine-tune.
         """
         dataset_path = self.datasets_dir / f"{task_name}.jsonl"
-        
+
         def setup_job() -> str | None:
             if not dataset_path.exists():
                 return None
@@ -108,7 +133,7 @@ class ModelForgeAgent(BaseAgent):
 
         job_id = await asyncio.to_thread(setup_job)
         if job_id is None:
-             return f"Error: Dataset {dataset_path} not found."
+            return f"Error: Dataset {dataset_path} not found."
 
         if hasattr(self, 'recorder') and self.recorder:
             self.recorder.record_lesson("model_forge_finetune", {"task": task_name, "base": base_model})
@@ -122,9 +147,9 @@ class ModelForgeAgent(BaseAgent):
         adapter_path = self.adapters_dir / task_name / "adapter_config.json"
         if not adapter_path.exists():
             return f"Error: Adapter '{task_name}' not found."
-            
+
         def read_config() -> str:
             with open(adapter_path) as f:
                 return f.read()
-        
+
         return await asyncio.to_thread(read_config)

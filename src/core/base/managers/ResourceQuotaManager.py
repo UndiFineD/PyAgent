@@ -1,11 +1,33 @@
 
 import time
-from typing import Dict, Any, Optional
+from typing import Any
 from dataclasses import dataclass, field
+
+
+
 
 @dataclass
 class QuotaConfig:
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     """Configuration for agent resource quotas."""
+
+
+
+
+
     max_tokens: int | None = None
     max_time_seconds: int | None = None
     max_cycles: int | None = None
@@ -16,6 +38,7 @@ class ResourceUsage:
     tokens_input: int = 0
     tokens_output: int = 0
     start_time: float = field(default_factory=time.time)
+
     cycles: int = 0
 
     @property
@@ -26,12 +49,16 @@ class ResourceUsage:
     def elapsed_time(self) -> float:
         return time.time() - self.start_time
 
+
+
+
+
 class ResourceQuotaManager:
     """Manages resource quotas and budget enforcement for agent sessions.
-    
+
     Phase 245: RESOURCE QUOTAS & BUDGETS
     """
-    
+
     def __init__(self, config: QuotaConfig | None = None) -> None:
         self.config = config or QuotaConfig()
         self.usage = ResourceUsage()
@@ -46,7 +73,7 @@ class ResourceQuotaManager:
 
     def check_quotas(self) -> tuple[bool, str | None]:
         """Check if any quotas have been exceeded.
-        
+
         Returns:
             (is_exceeded, reason)
         """

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\infrastructure\NetworkContextAgent.py
+# hypothesis_version: 6.150.1
+
+['*.py', ',', '.', '.agent_cache', '.git', '.py', '/', '\\', '__pycache__', 'class', 'contains', 'file', 'imports', 'inherits', 'type', 'unknown', 'utf-8', 'venv']

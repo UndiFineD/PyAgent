@@ -1,0 +1,12 @@
+diff --git a/src/core/base/types/StyleRule.py b/src/core/base/types/StyleRule.py
+index a095e5f..dca3c69 100644
+--- a/src/core/base/types/StyleRule.py
++++ b/src/core/base/types/StyleRule.py
+@@ -25,7 +25,6 @@ from src.core.base.version import VERSION
+ from src.core.base.types.CodeLanguage import CodeLanguage
+ from src.core.base.types.StyleRuleSeverity import StyleRuleSeverity
+ from dataclasses import dataclass
+-from typing import Optional
+ from collections.abc import Callable
+ 
+ __version__ = VERSION

@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class MockResponseType(Enum):
     """Types of mock AI backend responses."""
 

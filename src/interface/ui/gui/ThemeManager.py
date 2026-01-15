@@ -32,6 +32,9 @@ from tkinter import ttk
 
 __version__ = VERSION
 
+
+
+
 class ThemeManager:
     """Handles switching between light and dark themes for the GUI."""
     def __init__(self, root) -> None:
@@ -55,7 +58,7 @@ class ThemeManager:
             style.theme_use('default')
             style.configure("Header.TFrame", background="#e1e1e1")
             self.root.configure(bg="#f0f0f0")
-        
+
         self.refresh_widgets(self.root)
 
     def toggle_theme(self) -> None:
@@ -66,7 +69,7 @@ class ThemeManager:
         bg: str = "#2d2d2d" if self.is_dark_mode else "#f0f0f0"
         fg: str = "white" if self.is_dark_mode else "black"
         text_bg: str = "#1e1e1e" if self.is_dark_mode else "white"
-        
+
         for child in parent.winfo_children():
             if isinstance(child, tk.Text):
                 child.configure(bg=text_bg, fg=fg, insertbackground=fg)

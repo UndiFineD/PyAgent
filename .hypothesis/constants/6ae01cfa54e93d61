@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\observability\stats\subs_engine.py
+# hypothesis_version: 6.150.1
+
+['annotation_type', 'anomaly', 'author', 'delivery_method', 'info', 'metric_pattern', 'subscriber_id', 'text', 'threshold', 'timestamp', 'type']

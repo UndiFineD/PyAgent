@@ -6,9 +6,12 @@ Suggests fixes for ModuleNotFound errors and builds import maps.
 
 import re
 import os
-from typing import Dict, List
+
+
+
 
 class ImportHealerCore:
+    """Core logic for diagnosing and fixing import errors."""
     @staticmethod
     def suggest_fix(error_message: str) -> str:
         """

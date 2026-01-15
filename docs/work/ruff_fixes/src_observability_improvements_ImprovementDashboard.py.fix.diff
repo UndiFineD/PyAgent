@@ -1,0 +1,12 @@
+diff --git a/src/observability/improvements/ImprovementDashboard.py b/src/observability/improvements/ImprovementDashboard.py
+index 1e33816..c26e785 100644
+--- a/src/observability/improvements/ImprovementDashboard.py
++++ b/src/observability/improvements/ImprovementDashboard.py
+@@ -23,7 +23,6 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .Improvement import Improvement
+-from typing import List
+ from collections.abc import Callable
+ 
+ __version__ = VERSION

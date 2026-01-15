@@ -1,0 +1,39 @@
+diff --git a/src/infrastructure/dev/test_utils/TestDataSeeder.py b/src/infrastructure/dev/test_utils/TestDataSeeder.py
+index df62a63..f511aa4 100644
+--- a/src/infrastructure/dev/test_utils/TestDataSeeder.py
++++ b/src/infrastructure/dev/test_utils/TestDataSeeder.py
+@@ -22,7 +22,7 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from typing import Any, Dict, List, Optional, Union
++from typing import Any
+ import random
+ import time
+ 
+@@ -31,11 +31,16 @@ __version__ = VERSION
+ try:
+     import numpy as np
+ except ImportError:
+-    np = None
++    np: Any = None
++
++
++
++
++
+ 
+ class TestDataSeeder:
+-    __test__ = False
+     """Generates reproducible test data with optional seeding."""
++    __test__ = False
+ 
+     def __init__(self, seed: int | None = None) -> None:
+         """Initialize test data seeder.
+@@ -128,4 +133,4 @@ class TestDataSeeder:
+         elif data_type == "ids":
+             return [self.generate_unique_id() for _ in range(count)]
+         else:
+-            return [f"item_{i}_{self.generate_unique_id()}" for i in range(count)]
+\ No newline at end of file
++            return [f"item_{i}_{self.generate_unique_id()}" for i in range(count)]

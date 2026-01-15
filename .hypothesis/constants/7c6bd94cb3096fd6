@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\posthog\request.py
+# hypothesis_version: 6.150.1
+
+[200, '/batch/', '/decide/?v=4', '/flags/?v=2', 'Authorization', 'Bearer %s', 'Content-Encoding', 'Content-Type', 'User-Agent', '[PostHog] {0} ({1})', 'api_key', 'application/json', 'detail', 'feature_flags', 'gzip', 'https://', 'posthog', 'posthog-python/', 'quotaLimited', 'sentAt', 'utf-8', 'w']

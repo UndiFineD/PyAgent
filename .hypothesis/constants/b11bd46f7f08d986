@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\AgentCore.py
+# hypothesis_version: 6.150.1
+
+[100, 500, ' [Fixed]', '- [ ]', '- [x]', '--context', '--prompt', '--strategy', '... [Truncated]', '.agent_cache', '.agent_snapshots', '.git', '.venv', '/', 'README.md', '[Fixed]', '[x]', '\\', '\\1\\n\\n\\2', '^(#+.*)\\n([^\\n#])', '__pycache__', '```', 'content', 'crash', 'critical', 'current strengths', 'env', 'error', 'file', 'line_count', 'node_modules', 'requirements.txt', 'role', 'security', 'token_count', 'user', 'venv', 'vulnerability', 'word_count']

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\development\TechDebtCore.py
+# hypothesis_version: 6.150.1
+
+[1000, 'High Complexity', 'Low', 'Medium', 'Missing Docstring', 'Module', 'detail', 'issue_count', 'name', 'severity', 'type']

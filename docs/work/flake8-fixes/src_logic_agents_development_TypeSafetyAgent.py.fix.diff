@@ -1,0 +1,121 @@
+diff --git a/src/logic/agents/development/TypeSafetyAgent.py b/src/logic/agents/development/TypeSafetyAgent.py
+index d3600a6..98721b9 100644
+--- a/src/logic/agents/development/TypeSafetyAgent.py
++++ b/src/logic/agents/development/TypeSafetyAgent.py
+@@ -25,15 +25,25 @@ from src.core.base.version import VERSION
+ import ast
+ import logging
+ from pathlib import Path
+-from typing import Dict, List, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ from src.core.base.utilities import create_main_function
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class TypeSafetyAgent(BaseAgent):
+     """Identifies missing type annotations and 'Any' usage to improve codebase robustness."""
+-    
++
+     def __init__(self, file_path: str) -> None:
+         super().__init__(file_path)
+         self._system_prompt = (
+@@ -52,7 +62,7 @@ class TypeSafetyAgent(BaseAgent):
+         try:
+             content = target_path.read_text(encoding="utf-8")
+             tree = ast.parse(content)
+-            
++
+             for node in ast.walk(tree):
+                 if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                     # Check arguments
+@@ -64,7 +74,7 @@ class TypeSafetyAgent(BaseAgent):
+                                 "item": f"Parameter '{arg.arg}' in '{node.name}'",
+                                 "severity": "MEDIUM"
+                             })
+-                    
++
+                     # Check return type
+                     if node.returns is None:
+                         issues.append({
+@@ -73,7 +83,7 @@ class TypeSafetyAgent(BaseAgent):
+                             "item": f"Function '{node.name}'",
+                             "severity": "LOW"
+                         })
+-                
++
+                 # Check for 'Any'
+                 elif isinstance(node, ast.Name) and node.id == "Any":
+                     issues.append({
+@@ -82,42 +92,52 @@ class TypeSafetyAgent(BaseAgent):
+                         "item": "Variable or annotation using 'Any'",
+                         "severity": "HIGH"
+                     })
+-                    
++
+         except Exception as e:
+             logging.error(f"Failed to analyze {target_path}: {e}")
+-            
++
+         return issues
+ 
+     def run_audit(self, directory: str = "src") -> str:
+         """Runs a full type safety audit on the directory."""
+         root = Path(directory)
+         all_issues = []
+-        
++
+         for py_file in root.rglob("*.py"):
+             if any(p in str(py_file) for p in ["__pycache__", "venv", ".git"]):
+                 continue
+-            
++
+             file_issues = self.analyze_file(py_file)
+             if file_issues:
+                 all_issues.append((py_file.name, file_issues))
+-                
++
+         if not all_issues:
+             return "✅ No type safety issues detected in the analyzed scope."
+-            
++
+         report = ["## Type Safety Analysis Report\n"]
+         for filename, issues in all_issues:
+             report.append(f"### {filename}")
+             for issue in issues:
+                 icon = "🚨" if issue["severity"] == "HIGH" else "⚠️"
+                 report.append(f"- {icon} **{issue['type']}**: {issue['item']} (Line {issue['line']})")
+-        
++
+         return "\n".join(report)
+ 
++
++
++
++
++
+     def improve_content(self, prompt: str) -> str:
+         """Perform a type safety audit."""
+         path = prompt if prompt else "src/classes"
+         return self.run_audit(path)
+ 
++
++
++
++
++
+ if __name__ == "__main__":
+     main = create_main_function(TypeSafetyAgent, "TypeSafety Agent", "Path to audit (e.g. 'src/classes')")
+-    main()
+\ No newline at end of file
++    main()

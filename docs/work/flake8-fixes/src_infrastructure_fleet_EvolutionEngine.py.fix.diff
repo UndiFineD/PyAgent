@@ -1,0 +1,47 @@
+diff --git a/src/infrastructure/fleet/EvolutionEngine.py b/src/infrastructure/fleet/EvolutionEngine.py
+index ebb9c9d..fc8c47a 100644
+--- a/src/infrastructure/fleet/EvolutionEngine.py
++++ b/src/infrastructure/fleet/EvolutionEngine.py
+@@ -26,11 +26,21 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ from pathlib import Path
+-from typing import Dict, Any
++from typing import Any
+ from .EvolutionCore import EvolutionCore
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
++
++
++
++
++
+ class EvolutionEngine:
+     """
+     Manages the autonomous generation of new agent types.
+@@ -49,10 +59,10 @@ class EvolutionEngine:
+         target_path = self.output_dir / agent_filename
+ 
+         template = self.core.generate_agent_template(name, capabilities, base_type)
+-        
++
+         with open(target_path, "w") as f:
+             f.write(template)
+-            
++
+         logging.info(f"Evolution: Generated new agent {name} at {target_path}")
+         return str(target_path)
+ 
+@@ -69,4 +79,4 @@ class EvolutionEngine:
+         # In a real system, we'd use importlib.util.spec_from_file_location
+         logging.info(f"Evolution: Registering generated agent {name} from {path}")
+         # Note: FleetManager already has a register_agent method
+-        return f"Agent {name} registered."
+\ No newline at end of file
++        return f"Agent {name} registered."

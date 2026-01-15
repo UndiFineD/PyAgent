@@ -26,9 +26,12 @@ from .ArchivedImprovement import ArchivedImprovement
 from .Improvement import Improvement
 from .ImprovementCategory import ImprovementCategory
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 class ImprovementArchive:
     """Archives old or completed improvements.

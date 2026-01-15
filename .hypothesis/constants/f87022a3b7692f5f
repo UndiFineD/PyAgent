@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\security\ByzantineConsensusAgent.py
+# hypothesis_version: 6.150.1
+
+[0.2, 0.4, 0.5, 0.7, 0.9, 200, '(\\d+\\.\\d+)', 'ACCEPTED', 'ByzantineConsensus', 'Evaluator', 'FIXME', 'REJECTED', 'TODO', '__main__', 'agent', 'avg_integrity', 'confidence', 'consensus_stats', 'content', 'decision', 'default', 'reason', 'scores', 'voters', 'winner']

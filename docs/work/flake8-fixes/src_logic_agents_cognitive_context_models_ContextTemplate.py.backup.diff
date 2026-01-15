@@ -1,0 +1,27 @@
+diff --git a/src/logic/agents/cognitive/context/models/ContextTemplate.py b/src/logic/agents/cognitive/context/models/ContextTemplate.py
+index e99b8cc..78e8898 100644
+--- a/src/logic/agents/cognitive/context/models/ContextTemplate.py
++++ b/src/logic/agents/cognitive/context/models/ContextTemplate.py
+@@ -23,10 +23,14 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from dataclasses import dataclass, field
+-from typing import List
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ContextTemplate:
+     """Template for context documentation."""
+@@ -34,4 +38,4 @@ class ContextTemplate:
+     file_type: str
+     sections: list[str]
+     template_content: str
+-    required_fields: list[str] = field(default_factory=lambda: [])
+\ No newline at end of file
++    required_fields: list[str] = field(default_factory=lambda: [])

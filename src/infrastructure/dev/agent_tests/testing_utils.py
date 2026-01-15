@@ -16,7 +16,7 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 import hashlib
 import json
-from typing import Any, Dict, List, Optional
+from typing import Any
 from .enums import TestSourceType
 from .models import (
     AggregatedResult, ContractTest, TestStatus, VisualRegressionConfig
@@ -31,6 +31,12 @@ __version__ = VERSION
 # limitations under the License.
 
 """Testing utilities for visual regression, contract testing, and results aggregation."""
+
+
+
+
+
+
 
 class VisualRegressionTester:
     """Visual regression testing for UI components."""
@@ -74,27 +80,60 @@ class VisualRegressionTester:
         report = ["# Visual Regression Report\n"]
         report.append(f"Threshold: {self.config.diff_threshold * 100}%\n")
         passed = [r for r in self.results if r.get("passed")]
+
+
+
+
+
+
+
+
+
+
         failed = [r for r in self.results if not r.get("passed")]
         report.append(f"## Summary: {len(passed)} passed, {len(failed)} failed\n")
         if failed:
+
+
+
+
+
+
+
+
             report.append("## Failed Components\n")
             for r in failed:
                 report.append(
                     f"- **{r['component_id']}**: {r['diff_percentage'] * 100:.2f}% diff"
+
                 )
         return "\n".join(report)
 
     def run_for_browsers(self, component_id: str) -> list[dict[str, Any]]:
         """Run visual test across all configured browsers."""
+
+
+
+
+
         results: list[dict[str, Any]] = []
         for browser in self.config.browsers:
             result: dict[str, Any] = {
                 "browser": browser.value,
                 "component_id": component_id,
+
+
+
+
+
                 "passed": True
             }
             results.append(result)
         return results
+
+
+
+
 
 class ContractTestRunner:
     """Contract testing for API boundaries."""
@@ -126,6 +165,11 @@ class ContractTestRunner:
         self.contracts[contract_id] = contract
         return contract
 
+
+
+
+
+
     def verify_consumer(
         self,
         contract_id: str,
@@ -135,6 +179,10 @@ class ContractTestRunner:
         contract = self.contracts.get(contract_id)
         if not contract:
             return {"error": "Contract not found", "valid": False}
+
+
+
+
 
         valid = all(
             k in actual_request
@@ -150,6 +198,10 @@ class ContractTestRunner:
 
     def verify_provider(
         self,
+
+
+
+
         contract_id: str,
         actual_response: dict[str, Any],
         actual_status: int
@@ -164,11 +216,23 @@ class ContractTestRunner:
             for k in contract.response_schema.keys()
         )
         result: dict[str, Any] = {
+
+
+
+
+
+
+
+
             "contract_id": contract_id,
             "side": "provider",
             "valid": status_match and schema_valid,
             "status_match": status_match
         }
+
+
+
+
         self.results.append(result)
         return result
 
@@ -179,6 +243,11 @@ class ContractTestRunner:
     def export_pact(self, consumer: str) -> str:
         """Export contracts in Pact format."""
         contracts = self.get_contracts_for_consumer(consumer)
+
+
+
+
+
         pact: dict[str, Any] = {
             "consumer": {"name": consumer},
             "provider": {"name": contracts[0].provider if contracts else ""},
@@ -188,6 +257,11 @@ class ContractTestRunner:
             } for c in contracts]
         }
         return json.dumps(pact, indent=2)
+
+
+
+
+
 
 class ResultAggregator:
     """Aggregate test results from multiple sources."""
@@ -238,6 +312,16 @@ class ResultAggregator:
                 test_name="synthetic_test",
                 status=TestStatus.FAILED,
                 duration_ms=1.0
+
+
+
+
+
+
+
+
+
+
             )
         for _ in range(run_data.get("skipped", 0)):
             self.add_result(
@@ -251,6 +335,16 @@ class ResultAggregator:
         """Import results from pytest JSON report."""
         try:
             data = json.loads(json_report)
+
+
+
+
+
+
+
+
+
+
             count = 0
             for test in data.get("tests", []):
                 status_map = {
@@ -273,6 +367,15 @@ class ResultAggregator:
         """Get aggregated summary."""
         total = len(self.results)
         passed = sum(1 for r in self.results if r.status == TestStatus.PASSED)
+
+
+
+
+
+
+
+
+
         failed = sum(1 for r in self.results if r.status == TestStatus.FAILED)
         total_duration = sum(r.duration_ms for r in self.results)
 
@@ -297,6 +400,11 @@ class ResultAggregator:
             } for r in self.results]
         }, indent=2)
 
+
+
+
+
+
     def merge(self) -> dict[str, Any]:
         """Merge all results into a single summary."""
         summary = self.get_summary()
@@ -307,6 +415,10 @@ class ResultAggregator:
             "total_passed": passed,
             "total_failed": failed,
             "total_skipped": sum(1 for r in self.results if r.status == TestStatus.SKIPPED),
+
+
+
+
             "total_duration_ms": summary.get("total_duration_ms", 0)
         }
 
@@ -322,6 +434,11 @@ class ResultAggregator:
         earlier_rate = (
             sum(1 for r in earlier_results if r.status == TestStatus.PASSED) /
             len(earlier_results) if len(earlier_results) > 0 else 0
+
+
+
+
+
         )
         later_rate = (
             sum(1 for r in later_results if r.status == TestStatus.PASSED) /
@@ -336,6 +453,11 @@ class ResultAggregator:
             trend = "stable"
 
         return {"pass_rate_trend": trend}
+
+
+
+
+
 
 class TestMetricsCollector:
     """Collect test execution metrics."""

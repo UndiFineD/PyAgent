@@ -24,7 +24,6 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .ReportType import ReportType
 from pathlib import Path
-from typing import List, Optional
 import logging
 
 __version__ = VERSION
@@ -32,6 +31,9 @@ __version__ = VERSION
 # Define AGENT_DIR for default parameter
 
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
+
+
+
 
 class ReportAPI:
     """API for programmatic report access.

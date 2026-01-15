@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\execution\expression\__init__.py
+# hypothesis_version: 6.150.1
+
+['Abs', 'Aggregate', 'And', 'Contains', 'Div', 'Eq', 'Exp', 'GroupBy', 'Gt', 'Gte', 'In', 'K', 'Key', 'Knn', 'Limit', 'Log', 'Lt', 'Lte', 'Max', 'MaxK', 'Min', 'MinK', 'Mul', 'Ne', 'Nin', 'NotContains', 'NotRegex', 'Or', 'Rank', 'Regex', 'Rrf', 'Search', 'SearchWhere', 'Select', 'Sub', 'Sum', 'Val', 'Where']

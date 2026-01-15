@@ -5,9 +5,13 @@ Handles interactions with vision models for bug analysis.
 """
 
 import base64
-from typing import Dict, Any
+from typing import Any
+
+
+
 
 class MultiModalCore:
+    """Core logic for multi-modal interactions (Vision/Image)."""
     @staticmethod
     def encode_image(image_path: str) -> str:
         """

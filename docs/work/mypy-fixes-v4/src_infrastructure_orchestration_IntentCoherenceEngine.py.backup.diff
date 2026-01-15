@@ -1,0 +1,20 @@
+diff --git a/src/infrastructure/orchestration/IntentCoherenceEngine.py b/src/infrastructure/orchestration/IntentCoherenceEngine.py
+index 52c66f5..dd4b17f 100644
+--- a/src/infrastructure/orchestration/IntentCoherenceEngine.py
++++ b/src/infrastructure/orchestration/IntentCoherenceEngine.py
+@@ -21,7 +21,7 @@
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Dict, List, Any, Optional, TYPE_CHECKING
++from typing import Any, TYPE_CHECKING
+ from datetime import datetime
+ 
+ __version__ = VERSION
+@@ -81,4 +81,4 @@ class IntentCoherenceEngine:
+         return aligned_task
+ 
+     def get_current_intent(self) -> str | None:
+-        return self.global_intent
+\ No newline at end of file
++        return self.global_intent

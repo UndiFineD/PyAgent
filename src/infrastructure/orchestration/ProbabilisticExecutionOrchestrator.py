@@ -21,19 +21,22 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, List, Any, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 
 __version__ = VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
 
+
+
+
 class ProbabilisticExecutionOrchestrator:
     """
     Implements 'Wave-function collapse' execution for Phase 28.
     Runs multiple parallel task variations and selects the most stable/optimal outcome.
     """
-    
+
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
@@ -42,14 +45,28 @@ class ProbabilisticExecutionOrchestrator:
         Executes a task multiple times and collapses the results into a single high-confidence output.
         """
         logging.info(f"ProbabilisticExecutionOrchestrator: Executing task '{task}' with {variations} variations.")
-        
+
         results = []
+        import asyncio
+        loop = None
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+
         for i in range(variations):
             try:
                 # In a real scenario, we might pass different 'seed' or 'temperature' signals
                 # For this implementation, we rely on the variability of the reasoning agent.
                 # Use ReasoningAgent to process the task
-                res = self.fleet.call_by_capability("analyze", input_text=task)
+                coro = self.fleet.call_by_capability("analyze", input_text=task)
+                if loop.is_running():
+                    # We can't block.
+                    coro.close()
+                    res = f"Variation {i} deferred (async loop running)"
+                else:
+                    res = loop.run_until_complete(coro)
                 results.append(res)
                 logging.info(f"Variation {i+1} completed.")
             except Exception as e:
@@ -60,11 +77,11 @@ class ProbabilisticExecutionOrchestrator:
 
         # Wave-function collapse: Select the best result
         collapsed_result = self._collapse(task, results)
-        
+
         confidence = self._calculate_confidence(results, collapsed_result)
-        
+
         logging.info(f"Probabilistic execution complete. Confidence: {confidence:.2f}")
-        
+
         return {
             "status": "success",
             "final_result": collapsed_result,
@@ -81,7 +98,7 @@ class ProbabilisticExecutionOrchestrator:
         if hasattr(self.fleet, 'reality_anchor') and self.fleet.reality_anchor:
             best_result = None
             highest_score = -1.0
-            
+
             for res in results:
                 try:
                     verification = self.fleet.reality_anchor.verify_claim(str(res))
@@ -91,7 +108,7 @@ class ProbabilisticExecutionOrchestrator:
                         best_result = res
                 except Exception:
                     continue
-            
+
             if best_result is not None:
                 return best_result
 
@@ -100,7 +117,7 @@ class ProbabilisticExecutionOrchestrator:
         from collections import Counter
         str_results = [str(r) for r in results]
         most_common_str = Counter(str_results).most_common(1)[0][0]
-        
+
         # Find the original object corresponding to the most common string
         for r in results:
             if str(r) == most_common_str:

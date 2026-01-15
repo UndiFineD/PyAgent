@@ -27,7 +27,7 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from typing import List, Dict, Any
+from typing import Any
 import json
 import logging
 from pathlib import Path
@@ -63,39 +63,96 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
+
+
 class ConnectionManager:
     """Manages active WebSocket connections for real-time telemetry."""
     def __init__(self) -> None:
         self.active_connections: list[WebSocket] = []
 
+
+
+
+
+
+
+
+
+
+
     async def connect(self, websocket: WebSocket) -> None:
+
+
+
+
+
+
+
+
+
+
         await websocket.accept()
         self.active_connections.append(websocket)
 
+
+
+
+
     def disconnect(self, websocket: WebSocket) -> None:
+
+
+
+
         if websocket in self.active_connections:
             self.active_connections.remove(websocket)
 
+
+
     async def broadcast(self, message: dict[str, Any]) -> None:
         """Send a JSON broadcast to all connected clients."""
-        payload = message # message is already a dict, send_json will handle it
+
+
+
+
+
+        payload = message  # message is already a dict, send_json will handle it
         for connection in self.active_connections:
             try:
+
                 await connection.send_json(payload)
             except Exception:
+
                 # Connection might be dead
                 pass
 
+
+
 manager = ConnectionManager()
+
 
 @app.get("/api/version")
 async def get_version() -> dict[str, str]:
+
+
+
+
+
+
+
+
+
+
     """Returns the current PyAgent version."""
     return {"version": VERSION}
+
+
 
 @app.get("/api/health")
 async def get_health() -> dict[str, Any]:
     """Returns the system health status from the HealthChecker manager."""
+
+
     try:
         return health_checker.check()
     except Exception as e:
@@ -103,6 +160,8 @@ async def get_health() -> dict[str, Any]:
 
 @app.get("/api/status")
 async def get_status() -> dict[str, Any]:
+
+
     """Returns the current system status and metadata."""
     return {
         "status": "online",
@@ -110,17 +169,28 @@ async def get_status() -> dict[str, Any]:
         "version": VERSION,
         "timestamp": datetime.now().isoformat(),
         "workspace": str(WORKSPACE_ROOT)
+
+
+
+
+
     }
+
+
 
 @app.get("/api/logs")
 async def get_logs(limit: int = 100) -> list[str]:
     """Retrieve the last N lines of the agent log file if it exists."""
     if not AGENT_LOG_FILE.exists():
+
+
+
+
         # Fallback to check episodic memory if agent.log is missing
         if not EPISODIC_LOG_FILE.exists():
             return ["No log files found."]
         return [f"Log file not found at {AGENT_LOG_FILE}."]
-    
+
     try:
         with open(AGENT_LOG_FILE, encoding="utf-8") as f:
             lines = f.readlines()
@@ -128,13 +198,20 @@ async def get_logs(limit: int = 100) -> list[str]:
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error reading logs: {str(e)}")
 
+
+
 @app.get("/api/thoughts")
 async def get_thoughts(limit: int = 50) -> list[dict[str, Any]]:
     """Retrieve the latest episodic memories (agent thoughts/actions)."""
     if not EPISODIC_LOG_FILE.exists():
         return []
-    
+
     thoughts = []
+
+
+
+
+
     try:
         with open(EPISODIC_LOG_FILE, encoding="utf-8") as f:
             lines = f.readlines()
@@ -143,8 +220,12 @@ async def get_thoughts(limit: int = 50) -> list[dict[str, Any]]:
                     thoughts.append(json.loads(line))
     except (json.JSONDecodeError, Exception) as e:
         raise HTTPException(status_code=500, detail=f"Error parsing thoughts: {str(e)}")
-    
-    return thoughts[::-1] # Newest first
+
+    return thoughts[::-1]  # Newest first
+
+
+
+
 
 @app.get("/api/artifacts")
 async def list_artifacts() -> list[dict[str, Any]]:
@@ -154,7 +235,7 @@ async def list_artifacts() -> list[dict[str, Any]]:
         {"type": "generated", "path": GENERATED_DIR},
         {"type": "screenshot", "path": SCREENSHOTS_DIR}
     ]
-    
+
     for item in monitored_paths:
         p = item["path"]
         if p.exists() and p.is_dir():
@@ -169,6 +250,11 @@ async def list_artifacts() -> list[dict[str, Any]]:
                         "modified": stat.st_mtime
                     })
     return artifacts
+
+
+
+
+
 
 @app.websocket("/ws/telemetry")
 async def websocket_telemetry(websocket: WebSocket) -> None:

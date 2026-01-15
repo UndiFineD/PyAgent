@@ -58,17 +58,31 @@ else:
         """Fallback if tqdm not available."""
         return iterable
 
+
+
+
+
 def _empty_dict_str_any() -> dict[str, Any]:
+
+
+
     """Helper function for default factory in dataclass fields."""
     return {}
+
 
 def _empty_dict_str_float() -> dict[str, float]:
     """Helper function for default factory in dataclass fields."""
+
+
     return {}
 
 def _empty_dict_str_int() -> dict[str, int]:
+
+
+
     """Helper function for default factory in dataclass fields."""
     return {}
+
 
 def _empty_dict_str_str() -> dict[str, str]:
     """Helper function for default factory in dataclass fields."""

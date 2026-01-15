@@ -26,6 +26,9 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class LocaleCode(Enum):
     """Supported locales for reports."""
 

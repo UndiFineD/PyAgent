@@ -2,23 +2,9 @@
 """Test classes from test_agent_backend.py - core module."""
 
 from __future__ import annotations
-import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
-import time
-import json
-from datetime import datetime
-import pytest
-import logging
+from typing import Any, List
 from pathlib import Path
 import sys
-import os
-import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
@@ -26,15 +12,23 @@ try:
 except ImportError:
     # Fallback
     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
+
     class agent_sys_path:
-        def __enter__(self) -> bool: 
+        def __enter__(self) -> bool:
 
             return self
-        def __exit__(self, *args) -> bool: 
+
+
+
+
+
+
+
+        def __exit__(self, *args) -> bool:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestBackendTypeEnum:
     """Tests for BackendType enum."""
@@ -53,8 +47,6 @@ class TestBackendTypeEnum:
         BackendType = agent_backend_module.BackendType
         assert len(list(BackendType)) == 5
 
-
-
 class TestBackendStateEnum:
     """Tests for BackendState enum."""
 
@@ -66,8 +58,6 @@ class TestBackendStateEnum:
         assert BackendState.UNHEALTHY.value == "unhealthy"
         assert BackendState.UNKNOWN.value == "unknown"
 
-
-
 class TestCircuitStateEnum:
     """Tests for CircuitState enum."""
 
@@ -78,8 +68,6 @@ class TestCircuitStateEnum:
         assert CircuitState.OPEN.value == "open"
         assert CircuitState.HALF_OPEN.value == "half_open"
 
-
-
 class TestRequestPriorityEnum:
     """Tests for RequestPriority enum."""
 
@@ -89,8 +77,6 @@ class TestRequestPriorityEnum:
         assert RequestPriority.LOW.value < RequestPriority.NORMAL.value
         assert RequestPriority.NORMAL.value < RequestPriority.HIGH.value
         assert RequestPriority.HIGH.value < RequestPriority.CRITICAL.value
-
-
 
 class TestResponseTransformEnum:
     """Tests for ResponseTransform enum."""
@@ -103,7 +89,6 @@ class TestResponseTransformEnum:
         assert "STRIP_WHITESPACE" in members
         assert "EXTRACT_CODE" in members
         assert "EXTRACT_JSON" in members
-
 
 
 class TestLoadBalanceStrategyEnum:
@@ -122,8 +107,6 @@ class TestLoadBalanceStrategyEnum:
 # =============================================================================
 # Phase 6: Dataclass Tests
 # =============================================================================
-
-
 
 class TestSystemConfigDataclass:
     """Tests for SystemConfig dataclass."""
@@ -146,8 +129,6 @@ class TestSystemConfigDataclass:
         assert config.weight == 2
         assert config.timeout_s == 120
 
-
-
 class TestRequestContextDataclass:
     """Tests for RequestContext dataclass."""
 
@@ -160,8 +141,6 @@ class TestRequestContextDataclass:
         assert context.request_id is not None
         assert context.priority == RequestPriority.NORMAL
         assert context.created_at > 0
-
-
 
 class TestSystemResponseDataclass:
     """Tests for SystemResponse dataclass."""
@@ -182,7 +161,6 @@ class TestSystemResponseDataclass:
         assert response.cached is False
 
 
-
 class TestSystemHealthStatusDataclass:
     """Tests for SystemHealthStatus dataclass."""
 
@@ -199,8 +177,6 @@ class TestSystemHealthStatusDataclass:
         assert status.backend == "test"
         assert status.state == BackendState.HEALTHY
         assert status.success_rate == 0.95
-
-
 
 class TestQueuedRequestDataclass:
     """Tests for QueuedRequest dataclass."""
@@ -220,8 +196,6 @@ class TestQueuedRequestDataclass:
 # Phase 6: Response Transformer Tests
 # =============================================================================
 
-
-
 class TestStripWhitespaceTransformer:
     """Tests for StripWhitespaceTransformer."""
 
@@ -230,8 +204,6 @@ class TestStripWhitespaceTransformer:
         transformer = agent_backend_module.StripWhitespaceTransformer()
         assert transformer.transform("  hello  ") == "hello"
         assert transformer.get_name() == "strip_whitespace"
-
-
 
 class TestExtractCodeTransformer:
     """Tests for ExtractCodeTransformer."""
@@ -250,8 +222,6 @@ class TestExtractCodeTransformer:
         """Test transformer name."""
         transformer = agent_backend_module.ExtractCodeTransformer()
         assert transformer.get_name() == "extract_code"
-
-
 
 class TestExtractJsonTransformer:
     """Tests for ExtractJsonTransformer."""
@@ -274,7 +244,6 @@ class TestExtractJsonTransformer:
 # =============================================================================
 # Phase 6: RequestQueue Tests
 # =============================================================================
-
 
 
 class TestRequestQueue:
@@ -322,7 +291,6 @@ class TestRequestQueue:
 # =============================================================================
 
 
-
 class TestRequestBatcher:
     """Tests for RequestBatcher class."""
 
@@ -362,7 +330,6 @@ class TestRequestBatcher:
 # =============================================================================
 # Phase 6: SystemHealthMonitor Tests
 # =============================================================================
-
 
 
 class TestSystemHealthMonitor:
@@ -414,7 +381,6 @@ class TestSystemHealthMonitor:
 # =============================================================================
 # Phase 6: LoadBalancer Tests
 # =============================================================================
-
 
 
 class TestLoadBalancer:
@@ -473,7 +439,6 @@ class TestLoadBalancer:
 # =============================================================================
 
 
-
 class TestUsageQuotaManager:
     """Tests for UsageQuotaManager class."""
 
@@ -519,4 +484,3 @@ class TestUsageQuotaManager:
 # =============================================================================
 # Phase 6: RequestTracer Tests
 # =============================================================================
-

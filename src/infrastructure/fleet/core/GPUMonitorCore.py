@@ -14,25 +14,39 @@
 
 from __future__ import annotations
 from dataclasses import dataclass
-from typing import List, Optional
+
+
+
 
 @dataclass(frozen=True)
 class GPUMetrics:
     """Pure data class for GPU telemetry."""
+
+
+
     index: int
     name: str
     vram_total: int
     vram_used: int
     vram_free: int
+
+
     utilization_gpu: int
     utilization_mem: int
     temperature: int
     power_usage: int
     power_limit: int
 
+
+
+
     @property
     def vram_percent(self) -> float:
         return (self.vram_used / self.vram_total) * 100 if self.vram_total > 0 else 0.0
+
+
+
+
 
 class GPUMonitorCore:
     """
@@ -57,10 +71,10 @@ class GPUMonitorCore:
         """
         if not metrics:
             return None
-        
+
         # Sort by utilization first, then by free VRAM (descending)
         sorted_gpus = sorted(
-            metrics, 
+            metrics,
             key=lambda m: (m.utilization_gpu, -m.vram_free)
         )
         return sorted_gpus[0].index

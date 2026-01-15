@@ -1,0 +1,16 @@
+diff --git a/src/core/utils/MonorepoAggregator.py b/src/core/utils/MonorepoAggregator.py
+index 4b8e8a0..140038a 100644
+--- a/src/core/utils/MonorepoAggregator.py
++++ b/src/core/utils/MonorepoAggregator.py
+@@ -22,9 +22,8 @@
+ 
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+-from .ChangelogEntry import ChangelogEntry
+-from .MonorepoEntry import MonorepoEntry
+-from typing import Dict, List
++from src.core.base.types import ChangelogEntry
++from src.core.base.types import MonorepoEntry
+ 
+ __version__ = VERSION
+ 

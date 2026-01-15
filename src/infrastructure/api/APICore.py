@@ -26,17 +26,35 @@ Pure logic for OpenAPI spec generation and tool contract validation.
 from __future__ import annotations
 from src.core.base.version import VERSION
 import json
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.version import SDK_VERSION
 
 __version__ = VERSION
 
+try:
+    import rust_core as rc
+except ImportError:
+    rc: Any = None  # type: ignore[no-redef]
+
+
+
+
+
+
+
 class APICore:
+    """Logic for API-related operations, including OpenAPI schema generation."""
     def __init__(self, version: str = SDK_VERSION) -> None:
         self.version = version
 
     def build_openapi_json(self, tool_definitions: list[dict[str, Any]]) -> str:
         """Constructs an OpenAPI 3.0 string from tool metadata."""
+        if rc:
+            try:
+                return rc.generate_openapi_spec(tool_definitions, self.version)  # type: ignore[attr-defined]
+            except Exception:
+                pass
+
         paths = {}
         for tool in tool_definitions:
             tool_name = tool.get('name', 'unknown')
@@ -59,7 +77,7 @@ class APICore:
                     }
                 }
             }
-            
+
         spec = {
             "openapi": "3.0.0",
             "info": {

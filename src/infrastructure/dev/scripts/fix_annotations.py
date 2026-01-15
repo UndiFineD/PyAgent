@@ -33,7 +33,7 @@ for root, _, files in os.walk(src_path):
             path = os.path.join(root, file)
             with open(path, encoding="utf-8", errors="ignore") as f:
                 content = f.read()
-            
+
             if "import annotations" in content and "from __future__ import annotations" not in content:
                 new_content = re.sub(r"^import annotations$", r"from __future__ import annotations", content, flags=re.MULTILINE)
                 if new_content != content:

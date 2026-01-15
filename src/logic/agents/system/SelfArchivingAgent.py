@@ -19,22 +19,25 @@
 # limitations under the License.
 
 from __future__ import annotations
+from pathlib import Path
 from src.core.base.version import VERSION
 import logging
 import os
-from typing import List
 from datetime import datetime
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
+
+
 class SelfArchivingAgent(BaseAgent):
     """
     Phase 35: Recursive Self-Archiving.
     Identifies abandoned code paths or low-utility memories and compresses them into archives.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -63,15 +66,15 @@ class SelfArchivingAgent(BaseAgent):
         """
         if not targets:
             return "No targets provided for archiving."
-            
+
         logging.info(f"SelfArchiving: Archiving {len(targets)} targets.")
         # Simplified simulation: just pretend we archived them
         os.path.join(os.path.dirname(self.file_path), "archives")
-        
+
         report = f"### Archiving Report\n- **Timestamp**: {datetime.now().isoformat()}\n"
         for t in targets:
             report += f"- [ARCHIVED] {t}\n"
-            
+
         return report
 
     def improve_content(self, prompt: str) -> str:

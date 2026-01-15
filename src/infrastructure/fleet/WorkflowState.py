@@ -23,9 +23,12 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from dataclasses import dataclass, field
-from typing import Dict, List, Any
+from typing import Any
 
 __version__ = VERSION
+
+
+
 
 @dataclass
 class WorkflowState:
@@ -36,13 +39,13 @@ class WorkflowState:
     history: list[dict[str, Any]] = field(default_factory=list)
     context_snippets: list[str] = field(default_factory=list)
     errors: list[str] = field(default_factory=list)
-    
+
     def set(self, key: str, value: Any) -> None:
         self.variables[key] = value
-        
+
     def get(self, key: str, default: Any = None) -> Any:
         return self.variables.get(key, default)
-    
+
     def add_history(self, agent: str, action: str, result: str) -> None:
         self.history.append({
             "agent": agent,

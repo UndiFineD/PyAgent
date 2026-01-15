@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\distributed\tensor\_ops\utils.py
+# hypothesis_version: 6.150.1
+
+['List[Tensor]', 'Tensor', '_P', '_T', 'memory_format', 'output spec is None']

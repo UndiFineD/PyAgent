@@ -1,0 +1,12 @@
+diff --git a/src/observability/improvements/ValidationResult.py b/src/observability/improvements/ValidationResult.py
+index d9a8a5f..e044117 100644
+--- a/src/observability/improvements/ValidationResult.py
++++ b/src/observability/improvements/ValidationResult.py
+@@ -24,7 +24,6 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ValidationSeverity import ValidationSeverity
+ from dataclasses import dataclass, field
+-from typing import Dict, List, Tuple
+ 
+ __version__ = VERSION
+ 

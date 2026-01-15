@@ -27,9 +27,11 @@ from .ImprovementCategory import ImprovementCategory
 from .ImprovementPriority import ImprovementPriority
 from .ImprovementStatus import ImprovementStatus
 from dataclasses import dataclass, field
-from typing import List, Optional
 
 __version__ = VERSION
+
+
+
 
 @dataclass
 class Improvement:

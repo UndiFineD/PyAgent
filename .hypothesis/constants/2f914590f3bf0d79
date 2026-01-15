@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\security\GeneticHardeningAgent.py
+# hypothesis_version: 6.150.1
+
+['->', '-> None', 'EvolutionaryRefactor', 'GeneticHardening', 'fix', 'high', 'impact', 'medium', 'missing_type_hints', 'try:', 'type']

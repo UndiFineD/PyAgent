@@ -23,14 +23,17 @@ Mocks integration with Azure Key Vault or HashiCorp Vault.
 """
 
 from __future__ import annotations
+from typing import Any
 from src.core.base.version import VERSION
 import os
 import json
 import logging
-from typing import Optional
 from .SecretCore import SecretCore
 
 __version__ = VERSION
+
+
+
 
 class SecretManager:
     """
@@ -42,7 +45,7 @@ class SecretManager:
         self.provider = provider
         self.vault_path = vault_path
         self.core = SecretCore()
-        self._cache = {}
+        self._cache: dict[Any, Any] = {}
         self.providers = {
             "local": self._fetch_local,
             "azure": self._fetch_azure,
@@ -89,15 +92,15 @@ class SecretManager:
         """Retrieves a secret from the configured provider."""
         if key in self._cache:
             return self._cache[key]
-            
+
         fetch_func = self.providers.get(self.provider, self._fetch_local)
         value = fetch_func(key)
-        
+
         if value:
             masked = self.core.mask_secret(value)
             logging.info(f"Retrieved secret {key} -> {masked}")
             return value
-            
+
         return default
 
     def set_secret(self, key: str, value: str, persist: bool = False) -> None:

@@ -25,6 +25,12 @@ from .LLMBackend import LLMBackend
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class VllmBackend(LLMBackend):
     """vLLM (OpenAI-compatible) LLM Backend."""
 
@@ -43,9 +49,9 @@ class VllmBackend(LLMBackend):
                 {"role": "user", "content": prompt}
             ]
         }
-        
+
         timeout_s = kwargs.get("timeout_s", 60)
-        
+
         try:
             response = self.session.post(url, headers={"Content-Type": "application/json"}, json=payload, timeout=timeout_s)
             response.raise_for_status()

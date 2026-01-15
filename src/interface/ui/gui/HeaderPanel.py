@@ -33,6 +33,9 @@ from .TemplateManager import TemplateManager
 
 __version__ = VERSION
 
+
+
+
 class HeaderPanel:
     """Handles project root selection and global context input."""
     def __init__(self, parent, project_root_var, callbacks) -> None:
@@ -44,7 +47,7 @@ class HeaderPanel:
     def setup_ui(self) -> None:
         root_frame = ttk.Frame(self.frame)
         root_frame.pack(fill=tk.X)
-        
+
         ttk.Label(root_frame, text="Project Root:").pack(side=tk.LEFT)
         ttk.Entry(root_frame, textvariable=self.project_root_var, width=60).pack(side=tk.LEFT, padx=5)
         ttk.Button(root_frame, text="Browse", command=self.callbacks.get("browse_root")).pack(side=tk.LEFT)
@@ -53,13 +56,13 @@ class HeaderPanel:
         # Global Prompt Frame
         prompt_frame: ttk.Labelframe = ttk.LabelFrame(self.frame, text="Global Context / Task Description", padding=5)
         prompt_frame.pack(fill=tk.X, pady=5)
-        
+
         template_frame = ttk.Frame(prompt_frame)
         template_frame.pack(fill=tk.X)
         ttk.Label(template_frame, text="Templates:").pack(side=tk.LEFT)
-        
+
         self.template_var = tk.StringVar(value="Select Template...")
-        template_cb = ttk.Combobox(template_frame, textvariable=self.template_var, 
+        template_cb = ttk.Combobox(template_frame, textvariable=self.template_var,
                                   values=TemplateManager.get_template_names(), state="readonly")
         template_cb.pack(side=tk.LEFT, padx=5)
         template_cb.bind("<<ComboboxSelected>>", self.on_template_selected)

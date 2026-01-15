@@ -29,7 +29,7 @@ import argparse
 import os
 import sys
 from pathlib import Path
-from typing import Any, Optional, Type, TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
 from collections.abc import Callable
 
 if TYPE_CHECKING:
@@ -42,19 +42,30 @@ except ImportError:
     from src.logic.strategies import plan_executor as agent_strategies
 __version__ = VERSION
 
+
+
 def setup_logging(verbosity_arg: int = 0) -> None:
     """Configure logging based on verbosity level."""
     level = logging.INFO
     if verbosity_arg >= 2:
+
         level = logging.DEBUG
     elif verbosity_arg == 1:
         level = logging.INFO
 
     logging.basicConfig(
+
+
+
+
+
         level=level,
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
         force=True
     )
+
+
+
 
 def as_tool(priority: int = 0, category: str | None = None) -> Callable:
     """Decorator to mark a method as a tool for the ToolRegistry.
@@ -65,42 +76,109 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
     import time
 
     def decorator(func: Callable) -> Callable:
-        @wraps(func)
-        def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
-            # Phase 108: Enhanced Traceability
-            logging.debug(f"Executing tool {func.__name__} on {self.__class__.__name__}")
-            
-            result = func(self, *args, **kwargs)
-            
-            # Autonomous Logic Harvesting:
-            if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
-                try:
-                    shard_result = str(result)
-                    if len(shard_result) > 2000:
-                        shard_result = shard_result[:2000] + "... [TRUNCATED]"
-                    
-                    prompt_trace = f"TOOL_EXECUTION: {func.__name__}\nArgs: {args}\nKwargs: {kwargs}"
-                    
-                    self.fleet.recorder.record_interaction(
-                        provider="agent_tool",
-                        model=self.__class__.__name__,
-                        prompt=prompt_trace,
-                        result=shard_result,
-                        meta={
-                            "tool": func.__name__,
-                            "agent": self.__class__.__name__,
-                            "timestamp_ms": int(time.time() * 1000)
-                        }
-                    )
-                except Exception as e:
-                    logging.debug(f"Failed to record tool interaction: {e}")
-                    
-            return result
+        import asyncio
+        if asyncio.iscoroutinefunction(func):
+            @wraps(func)
+            async def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
+                # Phase 108: Enhanced Traceability
+                logging.debug(f"Executing async tool {func.__name__} on {self.__class__.__name__}")
+
+                result = await func(self, *args, **kwargs)
+
+                # Autonomous Logic Harvesting:
+                if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
+                    try:
+                        shard_result = str(result)
+                        if len(shard_result) > 2000:
+                            shard_result = shard_result[:2000] + "... [TRUNCATED]"
+
+                        prompt_trace = f"TOOL_EXECUTION: {func.__name__}\nArgs: {args}\nKwargs: {kwargs}"
+
+                        self.fleet.recorder.record_interaction(
+                            provider="agent_tool",
+                            model=self.__class__.__name__,
+                            prompt=prompt_trace,
+                            result=shard_result,
+                            meta={
+                                "tool": func.__name__,
+                                "agent": self.__class__.__name__,
+                                "timestamp_ms": int(time.time() * 1000)
+                            }
+                        )
+                    except Exception as e:
+                        logging.debug(f"Failed to record tool interaction: {e}")
+
+                return result
+        else:
+            @wraps(func)
+            def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:
+
+
+
+
+
+
+
+
+
+
+                # Phase 108: Enhanced Traceability
+
+
+
+
+
+
+
+
+
+
+                logging.debug(f"Executing tool {func.__name__} on {self.__class__.__name__}")
+
+                result = func(self, *args, **kwargs)
+
+
+
+
+
+                # Autonomous Logic Harvesting:
+                if hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "recorder"):
+                    try:
+                        shard_result = str(result)
+                        if len(shard_result) > 2000:
+                            shard_result = shard_result[:2000] + "... [TRUNCATED]"
+
+                        prompt_trace = f"TOOL_EXECUTION: {func.__name__}\nArgs: {args}\nKwargs: {kwargs}"
+
+                        self.fleet.recorder.record_interaction(
+                            provider="agent_tool",
+                            model=self.__class__.__name__,
+                            prompt=prompt_trace,
+                            result=shard_result,
+
+                            meta={
+                                "tool": func.__name__,
+                                "agent": self.__class__.__name__,
+                                "timestamp_ms": int(time.time() * 1000)
+                            }
+
+
+
+                        )
+                    except Exception as e:
+                        logging.debug(f"Failed to record tool interaction: {e}")
+
+                return result
 
         wrapper._is_tool = True
         wrapper._tool_priority = priority
         if category:
             wrapper._tool_category = category
+
+
+
+
+
         return wrapper
 
     # Support @as_tool without parentheses
@@ -108,8 +186,13 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
         f = priority
         priority = 0
         return decorator(f)
-        
+
     return decorator
+
+
+
+
+
 
 def create_main_function(
     agent_class: type[BaseAgent],
@@ -158,20 +241,20 @@ def create_main_function(
         parser.add_argument('--delegate', help='Agent type to delegate a sub-task to (e.g., SearchAgent)')
         args = parser.parse_args()
         setup_logging(args.verbose)
-        
+
         if args.backend:
             os.environ['DV_AGENT_BACKEND'] = args.backend
-            
+
         agent = agent_class(args.context)
-        
+
         # If delegation is requested via CLI
         if args.delegate:
             logging.info(f"CLI Delegation: {agent_class.__name__} -> {args.delegate}")
             result = agent.delegate_to(args.delegate, args.prompt)
             if args.json:
-                print(json.dumps({"delegation_result": result}))
+                sys.stdout.write(json.dumps({"delegation_result": result}) + "\n")
             else:
-                print(f"Delegation Result:\n{result}")
+                sys.stdout.write(f"Delegation Result:\n{result}\n")
             return
 
         # Normal execution
@@ -182,17 +265,17 @@ def create_main_function(
 
         # Set strategy based on argument
         if args.strategy == 'cot':
-            agent.set_strategy(agent_strategies.ChainOfThoughtStrategy())
+            agent.set_strategy(agent_strategies.ChainOfThoughtStrategy())  # type: ignore[attr-defined]
         elif args.strategy == 'reflexion':
-            agent.set_strategy(agent_strategies.ReflexionStrategy())
+            agent.set_strategy(agent_strategies.ReflexionStrategy())  # type: ignore[attr-defined]
         else:
-            agent.set_strategy(agent_strategies.DirectStrategy())
+            agent.set_strategy(agent_strategies.DirectStrategy())  # type: ignore[attr-defined]
 
         agent.read_previous_content()
         agent.improve_content(args.prompt)
         agent.update_file()
         diff = agent.get_diff()
-        
+
         if args.json:
             result = {
                 "agent": agent_class.__name__,
@@ -201,7 +284,7 @@ def create_main_function(
                 "diff": diff,
                 "content_length": len(agent.current_content)
             }
-            print(json.dumps(result, indent=2))
+            sys.stdout.write(json.dumps(result, indent=2) + "\n")
         else:
             if diff:
                 logging.info(f"{agent_class.__name__.replace('Agent', '').lower()} updated:")

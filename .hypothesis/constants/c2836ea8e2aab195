@@ -1,0 +1,4 @@
+# file: c:\DEV\PyAgent\src\core\base\state.py
+# hypothesis_version: 6.150.1
+
+['.state.json', 'file_path', 'history_length', 'state', 'state_data', 'temp/transactions', 'token_usage', 'utf-8']

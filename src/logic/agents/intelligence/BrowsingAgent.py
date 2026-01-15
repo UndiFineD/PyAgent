@@ -30,9 +30,12 @@ from src.core.base.utilities import as_tool
 
 __version__ = VERSION
 
+
+
+
 class BrowsingAgent(BaseAgent):
     """Interacts with the web to retrieve documentation, search for solutions, and extract data."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (

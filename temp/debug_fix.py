@@ -1,15 +1,16 @@
 import ast
-import os
-import re
+
+
+
 
 def debug_fix(path):
     with open(path, 'r', encoding='utf-8') as f:
         content = f.read()
-    
+
     tree = ast.parse(content)
     lines = content.splitlines()
     import_nodes = [n for n in tree.body if isinstance(n, (ast.Import, ast.ImportFrom))]
-    
+
     import_line_indices = set()
     for node in import_nodes:
         for i in range(node.lineno - 1, node.end_lineno):
@@ -34,7 +35,7 @@ def debug_fix(path):
         line = other_lines.pop(0)
         if line.strip() == "": continue
         first_block_comments.append(line)
-    
+
     final_output.extend(first_block_comments)
     final_output.append("")
 
@@ -55,26 +56,44 @@ def debug_fix(path):
 
     future_imports = [i for i in extracted_imports if '__future__' in i]
     other_imports = [i for i in extracted_imports if '__future__' not in i]
-    
+
     final_output.extend(future_imports)
+
+
+
+
+
+
+
+
+
+
     final_output.extend(other_imports)
     final_output.append("")
 
     for line in other_lines:
+
+
+
+
         final_output.append(line)
 
     res = "\n".join(final_output)
     print("--- FIRST 100 LINES OF RESULT ---")
     print("\n".join(res.splitlines()[:100]))
-    
+
     try:
         ast.parse(res)
     except Exception as e:
         print(f"FAILED: {e}")
+
         # Find the line with the error
-        import traceback
         lines_res = res.splitlines()
         if hasattr(e, 'lineno'):
-             print(f"Error at line {e.lineno}: {lines_res[e.lineno-1]}")
+            print(f"Error at line {e.lineno}: {lines_res[e.lineno-1]}")
+
+
+
+
 
 debug_fix('src/core/base/BaseAgent.py')

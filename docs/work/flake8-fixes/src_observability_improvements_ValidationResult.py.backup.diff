@@ -1,0 +1,27 @@
+diff --git a/src/observability/improvements/ValidationResult.py b/src/observability/improvements/ValidationResult.py
+index d9a8a5f..fcd526c 100644
+--- a/src/observability/improvements/ValidationResult.py
++++ b/src/observability/improvements/ValidationResult.py
+@@ -24,10 +24,14 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ from .ValidationSeverity import ValidationSeverity
+ from dataclasses import dataclass, field
+-from typing import Dict, List, Tuple
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ @dataclass
+ class ValidationResult:
+     """Result from improvement validation.
+@@ -50,4 +54,4 @@ class ValidationResult:
+     @property
+     def errors(self) -> list[str]:
+         """Compatibility accessor used by tests."""
+-        return [msg for sev, msg in self.issues if sev == ValidationSeverity.ERROR]
+\ No newline at end of file
++        return [msg for sev, msg in self.issues if sev == ValidationSeverity.ERROR]

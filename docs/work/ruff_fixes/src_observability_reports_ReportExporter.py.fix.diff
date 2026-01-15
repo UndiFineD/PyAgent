@@ -1,0 +1,12 @@
+diff --git a/src/observability/reports/ReportExporter.py b/src/observability/reports/ReportExporter.py
+index c2e1b28..0c7704f 100644
+--- a/src/observability/reports/ReportExporter.py
++++ b/src/observability/reports/ReportExporter.py
+@@ -25,7 +25,6 @@ from src.core.base.version import VERSION
+ from .CodeIssue import CodeIssue
+ from .ExportFormat import ExportFormat
+ from pathlib import Path
+-from typing import List, Optional
+ import json
+ import logging
+ import re

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\optimization.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.7, 0.8, 0.9, 100, 2147483647, '__legacy__', '__legacy_total__', 'confidence', 'fully_redundant', 'reason', 'test_id']

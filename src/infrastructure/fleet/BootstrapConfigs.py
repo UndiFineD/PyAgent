@@ -25,24 +25,26 @@ These must remain static to ensure the system can boot up before dynamic discove
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, Tuple, Optional
 from src.infrastructure.fleet.RegistryOverlay import RegistryOverlay
 
 __version__ = VERSION
 
 _overlay = RegistryOverlay()
 
+
+
+
 def get_bootstrap_agents() -> dict[str, tuple[str, str, str | None]]:
     """Returns the bootstrap agents with dynamic overrides applied."""
     defaults = {
         "Orchestrator": (
-            "src.logic.agents.swarm.PatternOrchestrator", 
-            "PatternOrchestrator", 
+            "src.logic.agents.swarm.PatternOrchestrator",
+            "PatternOrchestrator",
             None
         ),
         "Sandbox": (
-            "src.logic.agents.development.SandboxAgent", 
-            "SandboxAgent", 
+            "src.logic.agents.development.SandboxAgent",
+            "SandboxAgent",
             None
         ),
         "Linguist": (
@@ -70,24 +72,58 @@ def get_bootstrap_agents() -> dict[str, tuple[str, str, str | None]]:
             "AgentDAO",
             None
         ),
+
+
+
+
+
+
+
+
+
+
         "weight_orchestrator": (
             "src.infrastructure.orchestration.WeightOrchestrator",
             "WeightOrchestrator",
             None
+
+
+
+
+
+
+
+
+
+
         ),
         "immune_orchestrator": (
             "src.logic.agents.security.ImmuneResponseOrchestrator",
             "ImmuneResponseOrchestrator",
             None
+
+
+
+
+
+
+
+
+
         ),
         "quantum_shard": (
             "src.infrastructure.orchestration.QuantumShardOrchestrator",
             "QuantumShardOrchestrator",
             None
+
         )
     }
-    
+
     return {k: _overlay.get_agent_config(k, v) for k, v in defaults.items()}
+
+
+
+
 
 BOOTSTRAP_AGENTS = get_bootstrap_agents()
 
@@ -97,7 +133,7 @@ BOOTSTRAP_ORCHESTRATORS = {
         "SelfHealingOrchestrator"
     ),
     "telemetry": (
-        "src.observability.stats.ObservabilityEngine",
+        "src.observability.stats.metrics_engine",
         "ObservabilityEngine"
     ),
     "self_improvement": (
@@ -129,7 +165,7 @@ BOOTSTRAP_ORCHESTRATORS = {
         "AgentEconomy"
     ),
     "resources": (
-        "src.observability.stats.ResourceMonitor",
+        "src.observability.stats.monitoring",
         "ResourceMonitor"
     ),
     "gossip": (

@@ -1,0 +1,4 @@
+# file: c:\DEV\PyAgent\src\core\base\shell.py
+# hypothesis_version: 6.150.1
+
+[120, 'AGENT_MODELS_CONFIG', 'DV_AGENT_PARENT', 'HOME', 'HTTPS_PROXY', 'HTTP_PROXY', 'LANG', 'LC_ALL', 'LC_CTYPE', 'NO_PROXY', 'PATH', 'PYTHONPATH', 'STDERR', 'STDOUT', 'SYSTEMROOT', 'Shell', 'ShellAsync', 'TEMP', 'TMP', 'USERPROFILE', 'WINDIR', 'async_subprocess', 'attempt', 'exit_code', 'nt', 'plugins', 'replace', 'subprocess', 'utf-8']

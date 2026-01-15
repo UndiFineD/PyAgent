@@ -1,0 +1,76 @@
+diff --git a/src/logic/agents/development/EthicsGuardrailAgent.py b/src/logic/agents/development/EthicsGuardrailAgent.py
+index 05fefe8..5cf7285 100644
+--- a/src/logic/agents/development/EthicsGuardrailAgent.py
++++ b/src/logic/agents/development/EthicsGuardrailAgent.py
+@@ -25,13 +25,18 @@ Reviews task requests and agent actions against constitutional AI principles.
+ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+-from typing import Dict, Any
++from typing import Any
+ from src.core.base.BaseAgent import BaseAgent
+ 
+ __version__ = VERSION
+ 
++
++
++
++
++
+ class EthicsGuardrailAgent(BaseAgent):
+-    """Reviews requests for ethical compliance and safety. 
++    """Reviews requests for ethical compliance and safety.
+     Version 2: Real-time swarm monitoring and safety protocol enforcement.
+     """
+ 
+@@ -49,22 +54,22 @@ class EthicsGuardrailAgent(BaseAgent):
+             "Honesty: Do not generate deceptive or falsely representative information.",
+             "Privacy: Respect user data privacy and do not attempt to exfiltrate secrets."
+         ]
+-        self.violation_log = []
++        self.violation_log: list[Any] = []
+ 
+     def monitor_swarm_decision(self, decision: dict[str, Any]) -> str:
+         """Analyzes a swarm consensus decision for alignment risks."""
+         logging.info("Ethics: Monitoring swarm decision...")
+-        
++
+         # Risk scoring
+         risk_score = 0
+         if "critical" in str(decision).lower():
+             risk_score += 5
+         if "delete" in str(decision).lower():
+             risk_score += 3
+-        
++
+         if risk_score > 7:
+             return "ALARM: Swarm decision exceeds safe autonomous threshold. Human-In-The-Loop (HITL) required."
+-        
++
+         return f"ALIGNED: Swarm decision reviewed (Risk Score: {risk_score}/10)."
+ 
+     def enforce_protocol(self, action_context: str) -> bool:
+@@ -78,14 +83,14 @@ class EthicsGuardrailAgent(BaseAgent):
+     def review_task(self, task: str) -> dict[str, Any]:
+         """Reviews a task description against ethical principles."""
+         logging.info(f"Ethics: Reviewing task: {task[:50]}...")
+-        
++
+         violations = []
+         # Simulation: Keyword-based violation detection
+         dangerous_keywords = ["harm", "attack", "exploit", "exfiltrate", "deceive"]
+         for word in dangerous_keywords:
+             if word in task.lower():
+                 violations.append(f"Potential violation of '{word}' policy.")
+-        
++
+         status = "approved" if not violations else "rejected"
+         return {
+             "status": status,
+@@ -99,4 +104,4 @@ class EthicsGuardrailAgent(BaseAgent):
+         if "sensitive_data" in result.lower():
+             logging.warning(f"Ethics Alert: {agent_name} output contains potentially sensitive data.")
+             return False
+-        return True
+\ No newline at end of file
++        return True

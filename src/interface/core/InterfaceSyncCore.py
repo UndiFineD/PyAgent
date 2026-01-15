@@ -1,6 +1,9 @@
 
 from __future__ import annotations
-from typing import Dict, List, Any, Optional
+from typing import Any
+
+
+
 
 class InterfaceSyncCore:
     """
@@ -36,7 +39,7 @@ class InterfaceSyncCore:
             "event": "INTERFACE_SYNC",
             "type": action_type,
             "payload": payload,
-            "timestamp": "2026-01-08" # Simulated
+            "timestamp": "2026-01-08"  # Simulated
         }
 
     def resolve_topology_state(self, agents: list[dict[str, Any]], connections: list[tuple]) -> dict[str, Any]:

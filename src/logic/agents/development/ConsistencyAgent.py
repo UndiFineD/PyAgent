@@ -23,10 +23,12 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 from src.core.base.types.ConsistencyIssue import ConsistencyIssue
-from typing import Dict, List
 import re
 
 __version__ = VERSION
+
+
+
 
 class ConsistencyAgent:
     """Checks code consistency across the codebase.

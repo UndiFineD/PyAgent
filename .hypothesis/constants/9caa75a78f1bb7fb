@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\utils\embedding_functions\fastembed_sparse_embedding_function.py
+# hypothesis_version: 6.150.1
+
+['cache_dir', 'cuda', 'device_ids', 'document', 'fastembed_sparse', 'kwargs', 'lazy_load', 'model_name', 'query', 'query_config', 'task', 'threads']

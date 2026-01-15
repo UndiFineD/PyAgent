@@ -1,0 +1,26 @@
+diff --git a/src/core/base/core/AutonomyCore.py b/src/core/base/core/AutonomyCore.py
+index 40b542d..1cf5ee0 100644
+--- a/src/core/base/core/AutonomyCore.py
++++ b/src/core/base/core/AutonomyCore.py
+@@ -2,6 +2,11 @@
+ from __future__ import annotations
+ from typing import List
+ 
++
++
++
++
++
+ class AutonomyCore:
+     """
+     AutonomyCore implements 'Self-Model' logic and the Background Evolution Daemon.
+@@ -41,6 +46,6 @@ class AutonomyCore:
+         plan = f"AGENT SELF-MODEL UPDATE for {self.agent_id}:\n"
+         if not blind_spots:
+             return f"{plan}Status: Optimal. No immediate changes required."
+-        
++
+         plan += "Action: Expand training data for identified blind spots: " + ", ".join(blind_spots)
+-        return plan
+\ No newline at end of file
++        return plan

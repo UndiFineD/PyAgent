@@ -1,6 +1,12 @@
 
 from __future__ import annotations
-from typing import Dict, Any, Optional
+from typing import Any
+
+
+
+
+
+
 
 class GatewayCore:
     """
@@ -15,7 +21,7 @@ class GatewayCore:
             "slack": "https://slack.com/api/",
             "trello": "https://api.trello.com/1/"
         }
-        
+
         # Interface affinity rules: interface -> model_preference
         self.interface_affinity: dict[str, str] = {
             "web_ui": "glm-4-flash",

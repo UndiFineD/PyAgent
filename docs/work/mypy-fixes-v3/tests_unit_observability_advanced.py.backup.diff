@@ -1,0 +1,49 @@
+diff --git a/tests/unit/observability/advanced.py b/tests/unit/observability/advanced.py
+index 572c490..f575868 100644
+--- a/tests/unit/observability/advanced.py
++++ b/tests/unit/observability/advanced.py
+@@ -2,25 +2,15 @@
+ """Test classes from test_agent_stats.py - advanced module."""
+ 
+ from __future__ import annotations
++from typing import Any
+ from sqlite3 import Connection
+ from sqlite3 import Cursor
+ import unittest
+-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
+-from unittest.mock import MagicMock, Mock, patch, call, ANY
++from typing import List, Dict
+ import time
+ import json
+-from datetime import datetime
+-import pytest
+-import logging
+ from pathlib import Path
+ import sys
+-import os
+-import tempfile
+-import shutil
+-import subprocess
+-import threading
+-import asyncio
+-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+ 
+ # Try to import test utilities
+ try:
+@@ -371,7 +361,7 @@ class TestCachingAdvanced(unittest.TestCase):
+ 
+     def test_cache_computed_stats(self) -> None:
+         """Test caching computed statistics."""
+-        cache = {}
++        cache: dict[Any, Any] = {}
+ 
+         def get_stats(file_id: str) -> Dict[str, int]:
+             if file_id in cache:
+@@ -399,7 +389,6 @@ class TestCachingAdvanced(unittest.TestCase):
+ 
+     def test_cache_expiration(self) -> None:
+         """Test cache expiration."""
+-        import time
+ 
+         cache_items = {
+             "file1": {"data": "stats", "timestamp": time.time()},

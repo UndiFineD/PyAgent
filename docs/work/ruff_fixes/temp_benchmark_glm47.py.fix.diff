@@ -1,0 +1,22 @@
+diff --git a/temp/benchmark_glm47.py b/temp/benchmark_glm47.py
+index 045ba46..f4be9f4 100644
+--- a/temp/benchmark_glm47.py
++++ b/temp/benchmark_glm47.py
+@@ -6,8 +6,6 @@ Date: 2025-01-11
+ Source: https://z.ai (Z AI Official Benchmarks)
+ """
+ 
+-import time
+-import json
+ from typing import Dict, Any
+ 
+ class GLM47Benchmark:
+@@ -41,7 +39,7 @@ if __name__ == "__main__":
+         ("Knowledge Graph Synthesis (1M triples)", 500_000, 200_000)
+     ]
+     
+-    print(f"--- GLM-4.7 Strategic Benchmark Results ---")
++    print("--- GLM-4.7 Strategic Benchmark Results ---")
+     for t_name, t_in, t_out in tasks:
+         res = bench.simulate_task(t_name, t_in, t_out)
+         print(f"Task: {res['task']}")

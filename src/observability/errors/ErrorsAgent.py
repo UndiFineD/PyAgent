@@ -30,7 +30,7 @@ from .ErrorSeverity import ErrorSeverity
 from .SuppressionRule import SuppressionRule
 from src.core.base.BaseAgent import BaseAgent
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 import hashlib
 import json
 import logging
@@ -77,6 +77,9 @@ DEFAULT_ERROR_PATTERNS: list[ErrorPattern] = [
 ]
 
 __version__ = VERSION
+
+
+
 
 class ErrorsAgent(BaseAgent):
     """Updates code file error reports using AI assistance."""

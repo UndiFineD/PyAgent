@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\metrics\_plot\roc_curve.py
+# hypothesis_version: 6.150.1
+
+[-0.01, 0.5, 1.01, '--', '1.7', 'AUC', 'False Positive Rate', 'RocCurveDisplay', 'True Positive Rate', 'alpha', 'auto', 'blue', 'color', 'deprecated', 'equal', 'estimator', 'indices', 'k', 'label', 'linestyle', 'lower right', 'mean', 'metric', 'self.fpr', 'self.roc_auc', 'self.tpr', 'std', 'test']

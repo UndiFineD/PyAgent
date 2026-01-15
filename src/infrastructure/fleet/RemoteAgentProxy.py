@@ -27,26 +27,29 @@ from src.core.base.version import VERSION
 import requests
 import logging
 import os
-from typing import Dict, Any, Optional
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.ConnectivityManager import ConnectivityManager
 from src.core.base.connectivity import BinaryTransport
 
 __version__ = VERSION
 
+
+
+
 class RemoteAgentProxy(BaseAgent):
     """Encapsulates a remote agent accessible via HTTP/JSON-RPC.
-    
+
     Resilience (Phase 108): Implements a 15-minute TTL status cache for remote nodes.
     Intelligence (Phase 108): Records remote interactions to local shards.
     """
-    
+
     def __init__(self, file_path: str, node_url: str, agent_name: str) -> None:
         super().__init__(file_path)
         self.node_url = node_url.rstrip("/")
         self.agent_name = agent_name
         self._system_prompt = f"Proxy for remote agent '{agent_name}' at {node_url}"
-        
+
         # Phase 108: Centralized Resilience management
         work_root = getattr(self, "_workspace_root", os.getcwd())
         self.connectivity = ConnectivityManager(work_root)
@@ -70,7 +73,7 @@ class RemoteAgentProxy(BaseAgent):
             "tool": tool_name,
             "args": kwargs
         }
-        
+
         try:
             logging.info(f"Calling remote tool {tool_name} on {self.node_url}")
             # Security Patch 115.1: Limit redirects for remote proxy calls
@@ -78,7 +81,7 @@ class RemoteAgentProxy(BaseAgent):
                 session.max_redirects = 3
                 response = session.post(endpoint, json=payload, timeout=60)
                 response.raise_for_status()
-            
+
             result = response.json().get("result", "No result returned.")
             self._update_node_status(True)
             self._record_interaction(tool_name, payload, result)
@@ -101,18 +104,18 @@ class RemoteAgentProxy(BaseAgent):
             "tool": tool_name,
             "args": kwargs
         }
-        
+
         try:
             packed_payload = BinaryTransport.pack(payload_data, compress=compress)
             logging.info(f"Calling remote binary tool {tool_name} on {self.node_url} (Compressed: {compress})")
-            
+
             headers = {"Content-Type": "application/octet-stream"}
             if compress:
                 headers["Content-Encoding"] = "zstd"
 
             response = requests.post(endpoint, data=packed_payload, headers=headers, timeout=60)
             response.raise_for_status()
-            
+
             result = BinaryTransport.unpack(response.content, compressed=compress)
             self._update_node_status(True)
             return result.get("result")

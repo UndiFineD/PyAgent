@@ -1,0 +1,13 @@
+diff --git a/src/infrastructure/orchestration/ImmunizationOrchestrator.py b/src/infrastructure/orchestration/ImmunizationOrchestrator.py
+index ba70cf8..e49773a 100644
+--- a/src/infrastructure/orchestration/ImmunizationOrchestrator.py
++++ b/src/infrastructure/orchestration/ImmunizationOrchestrator.py
+@@ -22,7 +22,7 @@ from __future__ import annotations
+ from src.core.base.version import VERSION
+ import logging
+ import re
+-from typing import Dict, List, Any, TYPE_CHECKING
++from typing import Any, TYPE_CHECKING
+ 
+ __version__ = VERSION
+ 

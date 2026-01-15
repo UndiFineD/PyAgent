@@ -26,7 +26,11 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
 class TestStatus(Enum):
+    """Enumeration for test execution status."""
     __test__ = False
     """Status of a test execution."""
 

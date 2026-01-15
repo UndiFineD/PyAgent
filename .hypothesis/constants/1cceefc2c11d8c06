@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\mutation_testing.py
+# hypothesis_version: 6.150.1
+
+[0.0, 100, ' and ', ' or ', '!=', '+', '-', '==', 'test.py']

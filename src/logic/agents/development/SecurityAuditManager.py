@@ -27,13 +27,16 @@ from src.core.base.version import VERSION
 import logging
 import time
 import uuid
-from typing import Dict, List, Any
+from typing import Any
 
 __version__ = VERSION
 
+
+
+
 class SecurityAuditManager:
     """Manages fleet security including certificates and access control."""
-    
+
     def __init__(self) -> None:
         self.certificates: dict[str, dict[str, Any]] = {}
 
@@ -43,7 +46,7 @@ class SecurityAuditManager:
         self.certificates[fleet_id] = {
             "cert_id": new_cert_id,
             "issued_at": time.time(),
-            "expires_at": time.time() + (3600 * 24 * 90), # 90 days
+            "expires_at": time.time() + (3600 * 24 * 90),  # 90 days
             "status": "valid"
         }
         return f"Rotated certificates for fleet {fleet_id}. New Cert ID: {new_cert_id}"
@@ -51,7 +54,7 @@ class SecurityAuditManager:
     def audit_agent_permissions(self, agent_id: str) -> list[str]:
         """Audits an agent's permissions against the security policy."""
         # Simulated audit
-        violations = []
+        violations: list[Any] = []
         logging.info(f"Auditing agent {agent_id}...")
         return violations
 

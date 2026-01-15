@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\dev\test_utils\TestOutputFormatter.py
+# hypothesis_version: 6.150.1
+
+['fail', 'failed', 'pass', 'passed', 'total', 'value']

@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_dynamo\external_utils.py
+# hypothesis_version: 6.150.1
+
+['_P', '_R', 'hook_type', 'post_acc_grad_hook', 'saved_variables']

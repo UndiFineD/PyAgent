@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\neighbors\_nca.py
+# hypothesis_version: 6.150.1
+
+[-1.0, 1e-05, 1.0, '-', 'Iteration', 'L-BFGS-B', 'Objective Value', 'Time(s)', '[{}]', '[{}] {}\n[{}] {}', 'args', 'auto', 'boolean', 'callback', 'components_', 'disp', 'done in {:5.2f}s', 'fun', 'identity', 'init', 'jac', 'lda', 'left', 'max_iter', 'method', 'n_components', 'options', 'pca', 'random', 'random_state', 'tol', 'verbose', 'warm_start', 'x0', '{:>10} {:>20} {:>10}']

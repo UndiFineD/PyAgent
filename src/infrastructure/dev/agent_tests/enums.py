@@ -26,23 +26,63 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
 class TestPriority(Enum):
     """Test priority levels."""
     __test__ = False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     CRITICAL = 5
+
+
+
+
     HIGH = 4
+
     MEDIUM = 3
+
+
+
+
+
+
+
     LOW = 2
     SKIP = 1
 
 class TestStatus(Enum):
     """Test execution status."""
     __test__ = False
+
     PASSED = "passed"
     FAILED = "failed"
     SKIPPED = "skipped"
+
+
+
     ERROR = "error"
     FLAKY = "flaky"
+
+
+
 
 class CoverageType(Enum):
     """Types of coverage to track."""
@@ -56,8 +96,15 @@ class BrowserType(Enum):
     CHROME = "chrome"
     FIREFOX = "firefox"
     SAFARI = "safari"
+
+
+
+
     EDGE = "edge"
     IE = "ie"
+
+
+
 
 class TestSourceType(Enum):
     """Types of test result sources for aggregation."""
@@ -68,6 +115,10 @@ class TestSourceType(Enum):
     MOCHA = "mocha"
     JUNIT = "junit"
 
+
+
+
+
 class MutationOperator(Enum):
     """Mutation operators for mutation testing."""
     ARITHMETIC = "arithmetic"
@@ -75,6 +126,10 @@ class MutationOperator(Enum):
     LOGICAL = "logical"
     ASSIGNMENT = "assignment"
     RETURN_VALUE = "return_value"
+
+
+
+
 
 class ExecutionMode(Enum):
     """Test execution replay modes."""

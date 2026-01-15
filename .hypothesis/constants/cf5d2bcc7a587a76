@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\orchestration\AutoDebuggerOrchestrator.py
+# hypothesis_version: 6.150.1
+
+['-m', '.py', 'IndentationError', 'SyntaxError', '__main__', 'blocked', 'dangerous', 'error', 'error_details', 'file', 'findings', 'message', 'now', 'py_compile', 'repaired', 'src', 'status', 'success', 'timestamp', 'utf-8']

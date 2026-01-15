@@ -1,0 +1,12 @@
+diff --git a/src/logic/agents/system/core/MultiModalCore.py b/src/logic/agents/system/core/MultiModalCore.py
+index 1b5889c..874d21a 100644
+--- a/src/logic/agents/system/core/MultiModalCore.py
++++ b/src/logic/agents/system/core/MultiModalCore.py
+@@ -8,6 +8,7 @@ import base64
+ from typing import Dict, Any
+ 
+ class MultiModalCore:
++    """Core logic for multi-modal interactions (Vision/Image)."""
+     @staticmethod
+     def encode_image(image_path: str) -> str:
+         """

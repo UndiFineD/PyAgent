@@ -22,12 +22,18 @@
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Any, Dict, List
+from typing import Any
 from collections.abc import Callable
 from .enums import BrowserType
 from .models import CrossBrowserConfig, ScheduleSlot
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class CrossBrowserRunner:
     """Cross-browser testing configuration and execution."""
@@ -69,9 +75,27 @@ class CrossBrowserRunner:
                 "test": test_name,
                 "passed": passed,
                 "retries": retries,
+
+
+
+
+
+
+
+
+
+
                 "headless": self.config.headless
             }
             results[browser] = result
+
+
+
+
+
+
+
+
             self.results[browser].append(result)
             self.teardown_driver(browser)
         return results
@@ -81,15 +105,37 @@ class CrossBrowserRunner:
         summary: dict[str, Any] = {"browsers": {}}
 
         for browser, results in self.results.items():
+
+
+
+
+
+
+
+
+
+
+
+
+
             passed = sum(1 for r in results if r.get("passed"))
             browser_summary: dict[str, int] = {
                 "total": len(results),
                 "passed": passed,
                 "failed": len(results) - passed
+
+
+
+
+
             }
             summary["browsers"][browser.value] = browser_summary
 
         return summary
+
+
+
+
 
 class TestScheduler:
     """Test scheduling and load balancing."""

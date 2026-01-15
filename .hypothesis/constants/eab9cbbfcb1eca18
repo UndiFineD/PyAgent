@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\observability\StructuredLogger.py
+# hypothesis_version: 6.150.1
+
+[100, 1024, '%Y%m%d_%H%M%S', 'Z', '[REDACTED]', 'a', 'agent_id', 'debug', 'error', 'info', 'level', 'message', 'rb', 'sk-[a-zA-Z0-9]{32,}', 'success', 'timestamp', 'trace_id', 'utf-8', 'warning', 'wb']

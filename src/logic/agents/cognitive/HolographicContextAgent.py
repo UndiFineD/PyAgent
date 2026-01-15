@@ -23,11 +23,14 @@ from src.core.base.version import VERSION
 import logging
 import time
 import random
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.utilities import as_tool
 
 __version__ = VERSION
+
+
+
 
 class HolographicContextAgent(BaseAgent):
     """
@@ -35,7 +38,7 @@ class HolographicContextAgent(BaseAgent):
     Allows agents to view the same project state from different architectural angles
     (e.g., Security, Performance, Maintainability, UX).
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.holograms: dict[str, dict[str, Any]] = {}
@@ -55,7 +58,7 @@ class HolographicContextAgent(BaseAgent):
             "source_data": state_data,
             "perspectives": {}
         }
-        
+
         for angle in angles:
             # In a real system, this would call specialized agents or use specific prompts to 're-view' the data
             hologram["perspectives"][angle] = {
@@ -63,7 +66,7 @@ class HolographicContextAgent(BaseAgent):
                 "metrics": {angle: random.uniform(0.1, 1.0) if 'random' in globals() else 0.5},
                 "recommendations": [f"Improve {angle} by doing X."]
             }
-            
+
         self.holograms[name] = hologram
         logging.info(f"Hologram created: {name} with {len(angles)} perspectives.")
         return f"Successfully created hologram '{name}'."

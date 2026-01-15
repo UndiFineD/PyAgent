@@ -1,0 +1,16 @@
+diff --git a/src/infrastructure/dev/test_utils/TestReportGenerator.py b/src/infrastructure/dev/test_utils/TestReportGenerator.py
+index 70ea5ec..eec676b 100644
+--- a/src/infrastructure/dev/test_utils/TestReportGenerator.py
++++ b/src/infrastructure/dev/test_utils/TestReportGenerator.py
+@@ -29,9 +29,10 @@ import json
+ __version__ = VERSION
+ 
+ class TestReportGenerator:
+-    __test__ = False
+     """Generates test reports in various formats."""
+ 
++    __test__ = False
++
+     def __init__(self, output_dir: str | Path | None = None) -> None:
+         """Initialize report generator."""
+         self.output_dir = Path(output_dir) if output_dir is not None else None

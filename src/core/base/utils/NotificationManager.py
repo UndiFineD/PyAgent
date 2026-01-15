@@ -22,7 +22,7 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import List, Dict, Any, Optional
+from typing import Any
 from collections.abc import Callable
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 from src.core.base.ConnectivityManager import ConnectivityManager
@@ -37,6 +37,12 @@ try:
 except ImportError:
     HAS_REQUESTS = False
     requests = None
+
+
+
+
+
+
 
 class NotificationManager:
     """Manages event notifications via webhooks and internal callbacks."""

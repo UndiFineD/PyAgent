@@ -1,0 +1,4 @@
+# file: c:\DEV\PyAgent\src\core\base\types\ReviewCategory.py
+# hypothesis_version: 6.150.1
+
+['correctness', 'documentation', 'maintainability', 'performance', 'security', 'style']

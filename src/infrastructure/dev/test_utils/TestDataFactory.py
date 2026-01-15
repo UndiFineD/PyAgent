@@ -24,13 +24,14 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .TestDataType import TestDataType
 from dataclasses import dataclass
-from typing import Optional
 
 __version__ = VERSION
 
+
+
+
 @dataclass
 class TestDataFactory:
-    __test__ = False
     """Factory for generating test data.
 
     Attributes:
@@ -39,6 +40,7 @@ class TestDataFactory:
         variations: Number of variations to create.
         seed: Random seed for reproducibility.
     """
+    __test__ = False
 
     data_type: TestDataType
     template: str = ""

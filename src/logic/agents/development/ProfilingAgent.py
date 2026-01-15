@@ -24,13 +24,16 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from src.core.base.types.ProfilingCategory import ProfilingCategory
 from src.core.base.types.ProfilingSuggestion import ProfilingSuggestion
-from typing import Any, List
+from typing import Any
 import ast
 import logging
 import pstats
 from src.observability.stats.core.ProfilingCore import ProfilingCore, ProfileStats
 
 __version__ = VERSION
+
+
+
 
 class ProfilingAgent:
     """Provides code profiling suggestions.
@@ -46,11 +49,11 @@ class ProfilingAgent:
         """Analyzes a binary pstats file and returns optimization priorities."""
         stats = pstats.Stats(pstats_filepath)
         results = self.core.analyze_stats(stats)
-        
+
         bottlenecks = self.core.identify_bottlenecks(results)
         if bottlenecks:
             logging.warning(f"ProfilingAgent: Detected {len(bottlenecks)} bottlenecks.")
-            
+
         return results
 
     def _analyze_function(

@@ -25,10 +25,12 @@ from src.core.base.version import VERSION
 from .ErrorEntry import ErrorEntry
 from .NotificationChannel import NotificationChannel
 from .NotificationConfig import NotificationConfig
-from typing import List
 import logging
 
 __version__ = VERSION
+
+
+
 
 class NotificationManager:
     """Manages error notifications to various channels.

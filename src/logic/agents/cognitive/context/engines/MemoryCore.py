@@ -25,25 +25,41 @@ Handles episode structuring, utility scoring, and rank-based filtering.
 
 from __future__ import annotations
 from src.core.base.version import VERSION
-from typing import Dict, List, Any, Optional
+from typing import Any
 from datetime import datetime
+
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None  # type: ignore[assignment]
 
 __version__ = VERSION
 
+
+
+
 class MemoryCore:
+    """Logic for episodic memory construction and utility estimation."""
     def __init__(self, baseline_utility: float = 0.5) -> None:
         self.baseline_utility = baseline_utility
 
     def create_episode(self, agent_name: str, task: str, outcome: str, success: bool, metadata: dict[str, Any] | None = None) -> dict[str, Any]:
         """Pure logic to construct an episode and calculate utility."""
+        if rc:
+            try:
+                meta = metadata or {}
+                return rc.create_episode_struct(agent_name, task, outcome, success, meta, self.baseline_utility)  # type: ignore[attr-defined]
+            except Exception:
+                pass
+
         timestamp = datetime.now().isoformat()
         utility_score = self.baseline_utility
-        
+
         if success:
             utility_score += 0.2
         else:
             utility_score -= 0.3
-            
+
         return {
             "timestamp": timestamp,
             "agent": agent_name,

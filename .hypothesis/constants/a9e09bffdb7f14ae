@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\utils\RefactoringAdvisor.py
+# hypothesis_version: 6.150.1
+
+[100, 'description', 'estimated_impact', 'extract_common', 'high', 'inline', 'low', 'medium', 'pattern']

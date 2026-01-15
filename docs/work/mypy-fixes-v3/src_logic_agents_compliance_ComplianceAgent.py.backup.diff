@@ -1,0 +1,56 @@
+diff --git a/src/logic/agents/compliance/ComplianceAgent.py b/src/logic/agents/compliance/ComplianceAgent.py
+index 2ae1c32..1913f74 100644
+--- a/src/logic/agents/compliance/ComplianceAgent.py
++++ b/src/logic/agents/compliance/ComplianceAgent.py
+@@ -1,23 +1,37 @@
+ 
+ from src.core.base.version import VERSION
++from src.core.base.BaseAgent import BaseAgent
++from src.core.base.utilities import as_tool
+ import logging
+-from typing import List, Dict, Any
+-from src.logic.agents.compliance.core.ComplianceCore import ComplianceCore, ComplianceIssue
++from typing import Any
++# Ensure relative or absolute import matches structure
++try:
++    from src.logic.agents.compliance.core.ComplianceCore import ComplianceCore, ComplianceIssue
++except ImportError:
++    # If core doesn't exist yet, we might need to mock or it is in a different place
++    pass
+ 
+ __version__ = VERSION
+ 
+-class ComplianceAgent:
++class ComplianceAgent(BaseAgent):
+     """Shell agent for continuous compliance and regulatory auditing.
+     Coordinates fleet-wide scans and reports violations to the security layer.
+     """
+-    
+-    def __init__(self) -> None:
+-        self.core = ComplianceCore()
++
++    def __init__(self, file_path: str | None = None) -> None:
++        super().__init__(file_path if file_path else "virtual_compliance_agent")
++        try:
++             self.core = ComplianceCore()
++        except NameError:
++             self.core = None # Handle missing core gracefully
+         self.history: list[dict[str, Any]] = []
+ 
++    @as_tool
+     def perform_audit(self, file_map: dict[str, str]) -> dict[str, Any]:
+         """Audits a map of file_paths to content."""
+-        all_issues: list[ComplianceIssue] = []
++        if not self.core:
++             return {"status": "ERROR", "message": "ComplianceCore missing"}
++             
+         
+         for path, content in file_map.items():
+             issues = self.core.audit_content(content, path)
+@@ -35,4 +49,4 @@ class ComplianceAgent:
+         self.history.append(report)
+         logging.info(f"Compliance Report: Score {score:.2f} ({report['status']})")
+         
+-        return report
+\ No newline at end of file
++        return report

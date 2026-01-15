@@ -1,0 +1,40 @@
+diff --git a/src/observability/core/LoggingCore.py b/src/observability/core/LoggingCore.py
+index 7df37f8..75d523d 100644
+--- a/src/observability/core/LoggingCore.py
++++ b/src/observability/core/LoggingCore.py
+@@ -14,9 +14,14 @@
+ 
+ from __future__ import annotations
+ import re
+-from typing import List
+ from re import Pattern
+ 
++try:
++    import rust_core
++    HAS_RUST = True
++except ImportError:
++    HAS_RUST = False
++
+ class LoggingCore:
+     """
+     Pure logic for log formatting and sensitive data masking.
+@@ -31,12 +36,19 @@ class LoggingCore:
+     ]
+ 
+     def __init__(self, custom_patterns: list[str] = None) -> None:
++        self._has_custom_patterns = custom_patterns is not None
+         self.patterns: list[Pattern] = [
+             re.compile(p) for p in (custom_patterns or self.DEFAULT_SENSITIVE_PATTERNS)
+         ]
+ 
+     def mask_text(self, text: str) -> str:
+         """Apply all masking patterns to the input string."""
++        if HAS_RUST and not self._has_custom_patterns:
++            try:
++                return rust_core.mask_sensitive_logs(text)
++            except Exception:
++                pass
++        
+         result = text
+         for pattern in self.patterns:
+             result = pattern.sub("[REDACTED]", result)

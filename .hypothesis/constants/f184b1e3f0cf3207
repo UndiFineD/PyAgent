@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\distributed\fsdp\_fully_shard\_fsdp_param_group.py
+# hypothesis_version: 6.150.1
+
+['%s', 'FSDP::all_gather', 'FSDP::post_backward', 'FSDP::post_forward', 'FSDP::pre_backward', 'FSDP::pre_forward', 'FSDPParamGroup', '_unsharded_param', 'all_gather_stream', 'backward', 'cpu', 'device_handle', 'forward', 'meta']

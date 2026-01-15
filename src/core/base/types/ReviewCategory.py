@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class ReviewCategory(Enum):
     """Categories for code review feedback."""
     STYLE = "style"

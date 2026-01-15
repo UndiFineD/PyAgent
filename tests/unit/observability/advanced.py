@@ -2,25 +2,15 @@
 """Test classes from test_agent_stats.py - advanced module."""
 
 from __future__ import annotations
+from typing import Any
 from sqlite3 import Connection
 from sqlite3 import Cursor
 import unittest
-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
-from unittest.mock import MagicMock, Mock, patch, call, ANY
+from typing import List, Dict
 import time
 import json
-from datetime import datetime
-import pytest
-import logging
 from pathlib import Path
 import sys
-import os
-import tempfile
-import shutil
-import subprocess
-import threading
-import asyncio
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 # Try to import test utilities
 try:
@@ -28,15 +18,23 @@ try:
 except ImportError:
     # Fallback
     AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
-    
+
     class agent_sys_path:
-        def __enter__(self) -> Self: 
+        def __enter__(self) -> Self:
 
             return self
-        def __exit__(self, *args) -> None: 
+
+
+
+
+
+
+
+        def __exit__(self, *args) -> None:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestTrendAnalysisAdvanced(unittest.TestCase):
     """Tests for trend analysis and change tracking."""
@@ -96,7 +94,6 @@ class TestTrendAnalysisAdvanced(unittest.TestCase):
         assert report["change"]["files"] == 25
 
 
-
 class TestVisualizationAdvanced(unittest.TestCase):
     """Tests for CLI graph and visualization features."""
 
@@ -152,7 +149,6 @@ class TestVisualizationAdvanced(unittest.TestCase):
 
         assert "+" in comparison["metric_a"]
         assert "-" in comparison["metric_b"]
-
 
 
 class TestExportFormatsAdvanced(unittest.TestCase):
@@ -235,7 +231,6 @@ class TestExportFormatsAdvanced(unittest.TestCase):
         conn.close()
 
 
-
 class TestAggregationAdvanced(unittest.TestCase):
     """Tests for stat aggregation by different dimensions."""
 
@@ -264,7 +259,7 @@ class TestAggregationAdvanced(unittest.TestCase):
             {"agent": "tester", "improvements": 8},
         ]
 
-        by_agent = {}
+        by_agent: dict[Any, Any] = {}
         for entry in entries:
             by_agent[entry["agent"]] = by_agent.get(entry["agent"], 0) + entry["improvements"]
 
@@ -278,12 +273,11 @@ class TestAggregationAdvanced(unittest.TestCase):
             {"date": "2025-12-15", "issues": 2},
         ]
 
-        by_date = {}
+        by_date: dict[Any, Any] = {}
         for entry in entries:
             by_date[entry["date"]] = by_date.get(entry["date"], 0) + entry["issues"]
 
         assert by_date["2025-12-16"] == 8
-
 
 
 class TestStatisticalSummariesAdvanced(unittest.TestCase):
@@ -321,7 +315,6 @@ class TestStatisticalSummariesAdvanced(unittest.TestCase):
 
         assert p50 == 50
         assert p95 > 90  # Allow for rounding differences
-
 
 
 class TestBenchmarkingAdvanced(unittest.TestCase):
@@ -365,13 +358,12 @@ class TestBenchmarkingAdvanced(unittest.TestCase):
         assert stats["coder"]["avg"] > stats["tester"]["avg"]
 
 
-
 class TestCachingAdvanced(unittest.TestCase):
     """Tests for caching performance optimizations."""
 
     def test_cache_computed_stats(self) -> None:
         """Test caching computed statistics."""
-        cache = {}
+        cache: dict[Any, Any] = {}
 
         def get_stats(file_id: str) -> Dict[str, int]:
             if file_id in cache:
@@ -399,7 +391,6 @@ class TestCachingAdvanced(unittest.TestCase):
 
     def test_cache_expiration(self) -> None:
         """Test cache expiration."""
-        import time
 
         cache_items = {
             "file1": {"data": "stats", "timestamp": time.time()},
@@ -415,6 +406,3 @@ class TestCachingAdvanced(unittest.TestCase):
         }
 
         assert len(expired) == 0
-
-
-

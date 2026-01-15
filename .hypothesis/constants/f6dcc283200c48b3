@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\distributed\fsdp\_runtime_utils.py
+# hypothesis_version: 6.150.1
+
+['_saved_grad_shard', '_use_orig_params', 'cpu', 'limit_all_gathers']

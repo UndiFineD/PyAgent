@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\core\symbol.py
+# hypothesis_version: 6.150.1
+
+['%s', '%s ', '%s_%i', '(', ')', ',', ':', 'Dummy_', '\\ ', '\\,', '\\:', '_', '_assumptions0', '_assumptions_orig', 'a', 'commutative', 'dummy_index', 'exclude', 'ignore', 'missing end range', 'missing symbol', 'name', 'no symbols given', 'properties', 'seq']

@@ -1,0 +1,38 @@
+diff --git a/tests/performance/test_coder_PERFORMANCE.py b/tests/performance/test_coder_PERFORMANCE.py
+index d31ab8c..0616967 100644
+--- a/tests/performance/test_coder_PERFORMANCE.py
++++ b/tests/performance/test_coder_PERFORMANCE.py
+@@ -2,23 +2,8 @@
+ """Test classes from test_agent_coder.py - performance module."""
+ 
+ from __future__ import annotations
+-import unittest
+-from typing import Any, List, Dict, Optional, Callable, Tuple, Set, Union
+-from unittest.mock import MagicMock, Mock, patch, call, ANY
+-import time
+-import json
+-from datetime import datetime
+-import pytest
+-import logging
+ from pathlib import Path
+ import sys
+-import os
+-import tempfile
+-import shutil
+-import subprocess
+-import threading
+-import asyncio
+-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+ 
+ # Try to import test utilities
+ try:
+@@ -42,7 +27,8 @@ class TestPerformanceProfiling:
+     def test_detect_performance_issue(self, tmp_path: Path) -> None:
+         """Test detecting potential performance issues."""
+         with agent_dir_on_path():
+-            mod = load_agent_module("coder/code_generator.py")
++            # Fix: Use correct path to CoderAgent
++            mod = load_agent_module("src/logic/agents/development/CoderAgent.py")
+ 
+         code = """
+ def slow_function(n):

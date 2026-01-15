@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\optim\sgd.py
+# hypothesis_version: 6.150.1
+
+[0.0, 0.001, 'SGD', 'dampening', 'differentiable', 'foreach', 'found_inf', 'fused', 'grad_scale', 'lr', 'maximize', 'momentum', 'momentum_buffer', 'nesterov', 'params', 'sgd', 'weight_decay']

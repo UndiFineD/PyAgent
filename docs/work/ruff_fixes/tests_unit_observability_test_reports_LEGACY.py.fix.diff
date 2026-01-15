@@ -1,0 +1,23 @@
+diff --git a/tests/unit/observability/test_reports_LEGACY.py b/tests/unit/observability/test_reports_LEGACY.py
+index dc5cd35..ea20121 100644
+--- a/tests/unit/observability/test_reports_LEGACY.py
++++ b/tests/unit/observability/test_reports_LEGACY.py
+@@ -1,7 +1,4 @@
+-import pytest
+-from pathlib import Path
+-from typing import Any, List, Dict, Optional
+-import sys
++from typing import Any
+ try:
+     from tests.utils.agent_test_utils import *
+ except ImportError:
+@@ -9,7 +6,8 @@ except ImportError:
+ 
+ def test_sha256_text(report_module: Any) -> None:
+     """Test SHA256 calculation."""
++    from src.observability.reports.report_generator import _sha256_text
+     text = "hello world"
+     # echo -n "hello world" | sha256sum
+     expected = "b94d27b9934d3e08a52e52d7da7dabfac484efe37a5380ee9088f7ace2efcde9"
+-    assert report_module._sha256_text(text) == expected
++    assert _sha256_text(text) == expected

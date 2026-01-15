@@ -21,18 +21,24 @@
 from __future__ import annotations
 from src.core.base.version import VERSION
 import logging
-from typing import Dict, List, Any
+from typing import Any
 from src.infrastructure.api.core.GatewayCore import GatewayCore
 from src.infrastructure.fleet.core.LoadBalancerCore import LoadBalancerCore, AgentMetrics
 
 __version__ = VERSION
+
+
+
+
+
+
 
 class FleetLoadBalancer:
     """
     GUI Improvements: Load Balancer for multi-interface traffic.
     Integrated with LoadBalancerCore for cognitive pressure distribution.
     """
-    
+
     def __init__(self, fleet) -> None:
         self.fleet = fleet
         self.gateway_core = GatewayCore()
@@ -46,19 +52,19 @@ class FleetLoadBalancer:
         Assigns model based on Interface Affinity.
         """
         logging.info(f"LoadBalancer: Incoming request from {interface}: {command[:30]}...")
-        
-        assigned_model = self.core.resolve_model_by_affinity(interface)
-        
+
+        assigned_model = self.gateway_core.resolve_model_by_affinity(interface)
+
         # Simple simulation: If queue is large, increase latency or reject
         if len(self.request_queue) > 100:
             return {"status": "REJECTED", "reason": "High Traffic Load"}
-            
+
         self.request_queue.append({
             "interface": interface,
             "command": command,
             "model": assigned_model
         })
-        
+
         return {
             "status": "ACCEPTED",
             "interface": interface,

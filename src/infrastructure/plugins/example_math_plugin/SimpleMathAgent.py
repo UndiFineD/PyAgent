@@ -24,12 +24,15 @@ from src.infrastructure.orchestration.ToolRegistry import as_tool
 
 __version__ = VERSION
 
+
+
+
 class SimpleMathAgent(BaseAgent):
     """
     An example community plugin for simple math operations.
     Demonstrates dynamic discovery and tool registration.
     """
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._language = "python"
@@ -38,7 +41,7 @@ class SimpleMathAgent(BaseAgent):
     def quick_add(self, a: float, b: float) -> float:
         """Adds two numbers instantly."""
         return a + b
-    
+
     @as_tool
     def quick_mult(self, a: float, b: float) -> float:
         """Multiplies two numbers instantly."""

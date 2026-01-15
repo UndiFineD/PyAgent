@@ -24,13 +24,15 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 from pathlib import Path
-from typing import Dict, List
 
 __version__ = VERSION
 
+
+
+
 class DocumentationIndexerAgent(BaseAgent):
     """Indexes workspace documentation and provides structured navigation/search."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -43,17 +45,29 @@ class DocumentationIndexerAgent(BaseAgent):
         """Crawls the workspace for markdown and text documentation."""
         index = {"docs": [], "source_comments": [], "readmes": []}
         root = Path(root_path)
-        
+
         for p in root.rglob("*.md"):
             if "README" in p.name:
+
+
+
+
+
+
+
+
+
+
                 index["readmes"].append(str(p.relative_to(root)))
             else:
                 index["docs"].append(str(p.relative_to(root)))
-                
+
+
+
         for p in root.rglob("*.py"):
             # Potential for extracting docstrings
             pass
-            
+
         return index
 
     def get_semantic_pointers(self, query: str) -> str:

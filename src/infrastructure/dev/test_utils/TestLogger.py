@@ -24,13 +24,15 @@ from __future__ import annotations
 from src.core.base.version import VERSION
 from .TestLogEntry import TestLogEntry
 from contextlib import contextmanager
-from typing import Any, Dict, List, Optional
+from typing import Any
 from collections.abc import Iterator
 
 __version__ = VERSION
 
+
+
+
 class TestLogger:
-    __test__ = False
     """Logger for test debugging.
 
     Captures logs during test execution for debugging.
@@ -42,6 +44,7 @@ class TestLogger:
             # ... test code ...
         logs=logger.get_logs("test_name")
     """
+    __test__ = False
 
     def __init__(self) -> None:
         """Initialize logger."""

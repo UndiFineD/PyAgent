@@ -25,10 +25,13 @@ from src.core.base.version import VERSION
 from src.logic.agents.cognitive.context.models.VisualizationData import VisualizationData
 from src.logic.agents.cognitive.context.models.VisualizationType import VisualizationType
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 import json
 
 __version__ = VERSION
+
+
+
 
 class ContextVisualizer:
     """Visualizes context relationships.

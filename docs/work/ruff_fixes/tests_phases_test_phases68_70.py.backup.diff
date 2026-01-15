@@ -1,0 +1,12 @@
+diff --git a/tests/phases/test_phases68_70.py b/tests/phases/test_phases68_70.py
+index 51cd9a8..7e6d138 100644
+--- a/tests/phases/test_phases68_70.py
++++ b/tests/phases/test_phases68_70.py
+@@ -1,6 +1,7 @@
+ import unittest
+ import os
+ import json
++from pathlib import Path
+ from src.infrastructure.fleet.FleetManager import FleetManager
+ 
+ class TestPhases68_70(unittest.TestCase):

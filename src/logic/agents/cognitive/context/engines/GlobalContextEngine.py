@@ -28,26 +28,29 @@ from src.core.base.version import VERSION
 import json
 import logging
 from pathlib import Path
-from typing import Dict, List, Any, Optional
+from typing import Any
 from datetime import datetime
 from src.logic.agents.cognitive.context.engines.GlobalContextCore import GlobalContextCore
 
 __version__ = VERSION
+
+
+
 
 class GlobalContextEngine:
     """
     Manages persistent project-wide knowledge and agent preferences.
     Shell for GlobalContextCore.
     """
-    
-    def __init__(self, workspace_root: str = None, fleet: Any = None) -> None:
+
+    def __init__(self, workspace_root: str | None = None, fleet: Any = None) -> None:
         if fleet and hasattr(fleet, "workspace_root"):
             self.workspace_root = Path(fleet.workspace_root)
         elif workspace_root:
             self.workspace_root = Path(workspace_root)
         else:
             self.workspace_root = Path(".")
-            
+
         self.context_file = self.workspace_root / ".agent_global_context.json"
         self.shard_dir = self.workspace_root / ".agent_shards"
         self.core = GlobalContextCore()
@@ -59,14 +62,14 @@ class GlobalContextEngine:
             "entities": {},
             "lessons_learned": []
         }
-        self._loaded_shards = set()
+        self._loaded_shards: set[Any] = set()
         self.load()
 
     def _ensure_shard_loaded(self, category: str) -> None:
         """Lazy load a specific shard or sub-shards if they exist."""
         if category in self._loaded_shards:
             return None
-            
+
         # Check for sub-shards (Phase 104)
         shard_files = list(self.shard_dir.glob(f"{category}_*.json"))
         if shard_files:
@@ -88,7 +91,7 @@ class GlobalContextEngine:
                     logging.info(f"Context: Lazy-loaded shard '{category}' from disk.")
                 except Exception as e:
                     logging.warning(f"Failed to load shard {category}: {e}")
-        
+
         self._loaded_shards.add(category)
 
     def get(self, category: str, key: str | None = None) -> Any:
@@ -104,7 +107,7 @@ class GlobalContextEngine:
         self._ensure_shard_loaded(category)
         if category not in self.memory:
             self.memory[category] = {}
-        
+
         if not isinstance(self.memory[category], dict):
             # If it's not a dict, we can't key it, so we just overwrite it if possible or skip
             self.memory[category] = {key: value}
@@ -115,7 +118,7 @@ class GlobalContextEngine:
                 self.memory[category][key] = resolved
             else:
                 self.memory[category][key] = value
-        
+
         self.save()
 
     def load(self) -> None:
@@ -135,7 +138,7 @@ class GlobalContextEngine:
             # Logic for sharding large datasets (Phase 101)
             # Phase 119: Adaptive rebalancing automatically scales shard count
             shards = self.core.partition_memory(self.memory, max_entries_per_shard=2000)
-            
+
             # Phase 119: Check for shard bloat to notify system for potential migration
             bloated = self.core.detect_shard_bloat(shards)
             if bloated:
@@ -143,7 +146,7 @@ class GlobalContextEngine:
 
             # Save default state
             self.context_file.write_text(json.dumps(shards["default"], indent=2), encoding="utf-8")
-            
+
             # Save extra shards
             if len(shards) > 1:
                 self.shard_dir.mkdir(exist_ok=True)
@@ -152,7 +155,7 @@ class GlobalContextEngine:
                         continue
                     shard_file = self.shard_dir / f"{shard_name}.json"
                     shard_file.write_text(json.dumps(shard_data, indent=2), encoding="utf-8")
-                    
+
         except Exception as e:
             logging.error(f"Failed to save GlobalContext: {e}")
 
@@ -217,7 +220,7 @@ class GlobalContextEngine:
                 agent_stats[agent]["success"] += 1
             else:
                 agent_stats[agent]["fail"] += 1
-                
+
         for agent, stats in agent_stats.items():
             if stats["fail"] > 3:
                 self.add_insight(f"{agent} is struggling with current tasks. Context injection might be insufficient.", "LTM_System")

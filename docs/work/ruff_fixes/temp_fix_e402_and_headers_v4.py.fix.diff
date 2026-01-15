@@ -1,0 +1,20 @@
+diff --git a/temp/fix_e402_and_headers_v4.py b/temp/fix_e402_and_headers_v4.py
+index 03e68c5..0be7c88 100644
+--- a/temp/fix_e402_and_headers_v4.py
++++ b/temp/fix_e402_and_headers_v4.py
+@@ -1,6 +1,5 @@
+ import ast
+ import os
+-import sys
+ 
+ def fix_imports_and_headers(path):
+     try:
+@@ -12,7 +11,7 @@ def fix_imports_and_headers(path):
+ 
+     try:
+         tree = ast.parse(content)
+-    except Exception as e:
++    except Exception:
+         # Skip files with syntax errors
+         return
+ 

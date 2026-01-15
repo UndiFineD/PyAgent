@@ -1,0 +1,20 @@
+diff --git a/src/core/base/sandbox.py b/src/core/base/sandbox.py
+index 21eba80..72c340d 100644
+--- a/src/core/base/sandbox.py
++++ b/src/core/base/sandbox.py
+@@ -18,7 +18,6 @@ Enforces process-level lockdowns for potentially unsafe plugin code.
+ """
+ 
+ from __future__ import annotations
+-import os
+ import sys
+ from pathlib import Path
+ 
+@@ -60,7 +59,6 @@ class SandboxManager:
+     def apply_process_limits(creationflags: int = 0) -> int:
+         """Returns flags to lower process priority / restrict UI (Windows specific)."""
+         if sys.platform == "win32":
+-            import subprocess
+             # CREATE_NO_WINDOW and BELOW_NORMAL_PRIORITY_CLASS
+             return creationflags | 0x08000000 | 0x00004000
+         return creationflags

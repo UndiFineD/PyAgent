@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\quantizers\quantizer_torchao.py
+# hypothesis_version: 6.150.1
+
+[0.9, '(\\d)weight', '.', '.safetensors', '0.12.0', '0.14.0', '0.19.0', '0.25.0', '0.9.0', '2.5.0', '4', ':', 'PreTrainedModel', '_data', '_default', 'accelerate', 'ao_params', 'autoquant', 'bias', 'cpu', 'device_map', 'disk', 'huggingface_hub', 'int4', 'int4_weight_only', 'int8_weight_only', 'max-autotune', 'pt', 'qdata', 'scale', 'tie_word_embeddings', 'torch', 'torch.Tensor', 'torch.device', 'torch.dtype', 'torchao', 'weight', 'weights_only', 'zero_point']

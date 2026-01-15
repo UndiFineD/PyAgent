@@ -1,5 +1,4 @@
 import sys
-import os
 from pathlib import Path
 
 # Add src to path
@@ -9,12 +8,26 @@ from src.logic.agents.development.RustAgent import RustAgent
 from src.logic.agents.development.GoAgent import GoAgent
 from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
 
+
+
 def test_specialists_exist() -> None:
+
+
+
+
     print("Checking specialist availability...")
     agents = [
         DirectorAgent("test_plan.md"),
+
+
+
+
+
         RustAgent("test.rs"),
         GoAgent("test.go"),
+
+
+
         KnowledgeAgent(".")
     ]
     for agent in agents:

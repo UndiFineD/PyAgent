@@ -26,6 +26,12 @@ from enum import Enum
 
 __version__ = VERSION
 
+
+
+
+
+
+
 class StyleRuleSeverity(Enum):
     """Severity levels for style rules."""
     ERROR = "error"

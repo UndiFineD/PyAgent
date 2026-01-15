@@ -1,0 +1,4 @@
+# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sentence_transformers\models\WordWeights.py
+# hypothesis_version: 6.150.1
+
+['attention_mask', 'input_ids', 'token_embeddings', 'token_weights_sum', 'unknown_word_weight', 'vocab', 'weight', 'word_weights']
