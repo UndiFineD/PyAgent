@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\dev\test_utils\PerformanceMetricType.py
+# hypothesis_version: 6.150.1
+
+['cpu_time', 'execution_time', 'file_io', 'memory_usage']

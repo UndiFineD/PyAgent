@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\utils\AgentGitHandler.py
+# hypothesis_version: 6.150.1
+
+['--porcelain', '-b', '-m', '.', 'Git', 'add', 'checkout', 'cli', 'commit', 'files', 'git', 'status', 'success']

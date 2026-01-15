@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\dev\test_utils\TestRecorder.py
+# hypothesis_version: 6.150.1
+
+['args', 'call_name', 'call_type', 'kwargs', 'normal', 'record', 'replay', 'result', 'timestamp', 'w']

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\dev\test_utils\MockResponseType.py
+# hypothesis_version: 6.150.1
+
+['empty', 'error', 'rate_limited', 'success', 'timeout']

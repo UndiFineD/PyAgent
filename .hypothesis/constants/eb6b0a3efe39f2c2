@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\fleet\FleetCore.py
+# hypothesis_version: 6.150.1
+
+[0.0, 10.0, 20.0, 50.0, 100.0, 128, 'ERROR', 'EXECUTING', 'IDLE', 'PLANNING', 'REVIEWING', 'TERMINATED', 'name', 'owner', 'parameters']
