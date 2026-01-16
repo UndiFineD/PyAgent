@@ -18,12 +18,10 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class LogicProverAgent:
@@ -31,10 +29,13 @@ class LogicProverAgent:
     Formally verifies agent reasoning chains and solves complex
     spatial/temporal constraints.
     """
+
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
 
-    def verify_reasoning_step(self, hypothesis: str, evidence: list[str], conclusion: str) -> dict[str, Any]:
+    def verify_reasoning_step(
+        self, hypothesis: str, evidence: list[str], conclusion: str
+    ) -> dict[str, Any]:
         """
         Simulates formal logic verification (TPTP-like).
         """
@@ -49,7 +50,9 @@ class LogicProverAgent:
 
         return {"status": "verified", "proof_confidence": 0.5}
 
-    def solve_scheduling_constraints(self, tasks: list[str], deadlines: dict[str, float]) -> dict[str, Any]:
+    def solve_scheduling_constraints(
+        self, tasks: list[str], deadlines: dict[str, float]
+    ) -> dict[str, Any]:
         """
         Solves for an optimal schedule using simulated constraint satisfaction (CSP).
         """
@@ -58,25 +61,29 @@ class LogicProverAgent:
         sorted_tasks = sorted(tasks, key=lambda x: deadlines.get(x, 9999999999))
 
         for i, task in enumerate(sorted_tasks):
-            schedule.append({
-                "task": task,
-                "start_time": i * 1.0,
-                "end_time": (i + 1) * 1.0,
-                "status": "feasible"
-            })
+            schedule.append(
+                {
+                    "task": task,
+                    "start_time": i * 1.0,
+                    "end_time": (i + 1) * 1.0,
+                    "status": "feasible",
+                }
+            )
 
         return {
             "is_satisfiable": True,
             "optimal_schedule": schedule,
-            "total_latency": len(tasks) * 1.0
+            "total_latency": len(tasks) * 1.0,
         }
 
-    def generate_formal_proof_log(self, reasoning_chain: list[dict[str, Any]]) -> dict[str, Any]:
+    def generate_formal_proof_log(
+        self, reasoning_chain: list[dict[str, Any]]
+    ) -> dict[str, Any]:
         """
         Exports a log of verified steps for auditing.
         """
         return {
             "chain_id": "logic_v1_001",
             "steps_verified": len(reasoning_chain),
-            "timestamp": "2026-01-08T12:00:00Z"
+            "timestamp": "2026-01-08T12:00:00Z",
         }

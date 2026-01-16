@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\stats\monitoring.py
-# hypothesis_version: 6.150.1
-
-[1.0, 1.5, 3.0, 1024, '.system_stats.json', 'CRITICAL', 'ERROR', 'HEALTHY', 'NONE', 'UNAVAILABLE', 'WARNING', 'available', 'cpu_usage_pct', 'disk_free_gb', 'gpu', 'memory_usage_pct', 'platform', 'status', 'type']

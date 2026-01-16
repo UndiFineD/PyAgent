@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\stats\alerting.py
-# hypothesis_version: 6.150.1
-
-[86400, '*', 'timestamp', 'value']

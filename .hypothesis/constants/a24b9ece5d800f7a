@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\core\base\BaseAgentCore.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.1, 0.2, 0.3, 0.5, 0.7, 0.8, 0.9, 1.0, 2.0, 4.0, 100, 1000000, 'Response is empty', 'base', 'calculation', 'error', 'execute', 'fail', 'has_references', 'is_complete', 'timeout must be > 0', 'type', 'verification']

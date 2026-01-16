@@ -21,16 +21,21 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types.ReviewCategory import ReviewCategory
 from src.core.base.types.ReviewFinding import ReviewFinding
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 import re
 
+# Rust acceleration imports
+try:
+    from rust_core import scan_lines_multi_pattern_rust
+    _RUST_AVAILABLE = True
+except ImportError:
+    _RUST_AVAILABLE = False
+
 __version__ = VERSION
-
-
 
 
 class CodeReviewerAgent(BaseAgent):
@@ -46,6 +51,14 @@ class CodeReviewerAgent(BaseAgent):
         >>> reviewer=CodeReviewerAgent("path/to/agent.py")
         >>> findings=reviewer.review_code("def foo():\\n    pass")
     """
+
+    # Pattern definitions for Rust acceleration
+    REVIEW_PATTERNS = [
+        (r'password\s*=\s*[\'"][^\'"]+[\'"]', ReviewCategory.SECURITY, 5,
+         "Potential hardcoded password", "Use environment variables or secure vault", False),
+        (r"for\s+\w+\s+in\s+range\(len\(", ReviewCategory.PERFORMANCE, 2,
+         "Inefficient iteration pattern", "Use 'enumerate()' instead of 'range(len())'", True),
+    ]
 
     def __init__(self, file_path: str | None = None) -> None:
         """Initialize the code reviewer."""
@@ -63,56 +76,89 @@ class CodeReviewerAgent(BaseAgent):
             List of review findings.
         """
         self.findings = []
-        lines = content.split('\n')
+        lines = content.split("\n")
 
+        # Line length checks (simple, no regex needed)
         for i, line in enumerate(lines, 1):
-            # Style checks
             if len(line) > 120:
-                self.findings.append(ReviewFinding(
-                    category=ReviewCategory.STYLE,
-                    message=f"Line exceeds 120 characters ({len(line)})",
-                    line_number=i,
-                    severity=2,
-                    suggestion="Break line into multiple lines",
-                    auto_fixable=False
-                ))
+                self.findings.append(
+                    ReviewFinding(
+                        category=ReviewCategory.STYLE,
+                        message=f"Line exceeds 120 characters ({len(line)})",
+                        line_number=i,
+                        severity=2,
+                        suggestion="Break line into multiple lines",
+                        auto_fixable=False,
+                    )
+                )
 
+        # Rust-accelerated pattern scanning
+        if _RUST_AVAILABLE:
+            try:
+                patterns = [p[0] for p in self.REVIEW_PATTERNS]
+                matches = scan_lines_multi_pattern_rust(content, patterns)
+                for line_num, pat_idx, _ in matches:
+                    _, category, severity, message, suggestion, auto_fix = self.REVIEW_PATTERNS[pat_idx]
+                    self.findings.append(
+                        ReviewFinding(
+                            category=category,
+                            message=message,
+                            line_number=line_num,
+                            severity=severity,
+                            suggestion=suggestion,
+                            auto_fixable=auto_fix,
+                        )
+                    )
+            except Exception:
+                self._python_pattern_scan(lines)
+        else:
+            self._python_pattern_scan(lines)
+
+        # Documentation checks (require context awareness)
+        for i, line in enumerate(lines, 1):
+            if re.match(r"^\s*def\s+[a-z_]\w*\s*\(", line):
+                if i < len(lines) and '"""' not in lines[i]:
+                    self.findings.append(
+                        ReviewFinding(
+                            category=ReviewCategory.DOCUMENTATION,
+                            message="Function missing docstring",
+                            line_number=i,
+                            severity=3,
+                            suggestion="Add docstring describing function purpose",
+                            auto_fixable=False,
+                        )
+                    )
+
+        return self.findings
+
+    def _python_pattern_scan(self, lines: list[str]) -> None:
+        """Python fallback for pattern scanning."""
+        for i, line in enumerate(lines, 1):
             # Security checks
             if re.search(r'password\s*=\s*[\'"][^\'"]+[\'"]', line, re.I):
-                self.findings.append(ReviewFinding(
-                    category=ReviewCategory.SECURITY,
-                    message="Potential hardcoded password",
-                    line_number=i,
-                    severity=5,
-                    suggestion="Use environment variables or secure vault",
-                    auto_fixable=False
-                ))
+                self.findings.append(
+                    ReviewFinding(
+                        category=ReviewCategory.SECURITY,
+                        message="Potential hardcoded password",
+                        line_number=i,
+                        severity=5,
+                        suggestion="Use environment variables or secure vault",
+                        auto_fixable=False,
+                    )
+                )
 
             # Performance checks
             if re.search(r"for\s+\w+\s+in\s+range\(len\(", line):
-                self.findings.append(ReviewFinding(
-                    category=ReviewCategory.PERFORMANCE,
-                    message="Inefficient iteration pattern",
-                    line_number=i,
-                    severity=2,
-                    suggestion="Use 'enumerate()' instead of 'range(len())'",
-                    auto_fixable=True
-                ))
-
-            # Documentation checks
-            if re.match(r"^\s*def\s+[a-z_]\w*\s*\(", line):
-                # Check for docstring on next line
-                if i < len(lines) and '"""' not in lines[i]:
-                    self.findings.append(ReviewFinding(
-                        category=ReviewCategory.DOCUMENTATION,
-                        message="Function missing docstring",
+                self.findings.append(
+                    ReviewFinding(
+                        category=ReviewCategory.PERFORMANCE,
+                        message="Inefficient iteration pattern",
                         line_number=i,
-                        severity=3,
-                        suggestion="Add docstring describing function purpose",
-                        auto_fixable=False
-                    ))
-
-        return self.findings
+                        severity=2,
+                        suggestion="Use 'enumerate()' instead of 'range(len())'",
+                        auto_fixable=True,
+                    )
+                )
 
     def get_summary(self) -> dict[str, int]:
         """Get summary of findings by category.

@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\linear_model\_least_angle.py
-# hypothesis_version: 6.150.1
-
-[0.0, 1e-07, 1.0, 500, 1000, '%s\t\t%s\t\t%s\t\t%s\t\t%s', '.', 'F', 'Gram', 'X', 'Xy', '__array__', 'aic', 'alpha', 'alpha_min', 'auto', 'bic', 'boolean', 'check_finite', 'copy_Gram', 'copy_X', 'criterion', 'cv', 'cv_object', 'eps', 'fit', 'fit_intercept', 'fit_path', 'jitter', 'lar', 'lasso', 'left', 'max_iter', 'max_n_alphas', 'method', 'n_jobs', 'n_nonzero_coefs', 'n_samples', 'neither', 'noise_variance', 'nrm2', 'positive', 'potrs', 'precompute', 'random_state', 'return_n_iter', 'return_path', 'split', 'swap', 'verbose', 'y']

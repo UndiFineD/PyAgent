@@ -20,8 +20,6 @@ import json
 from src.interface.ui.gui.MainApp import PyAgentGUI
 
 
-
-
 class TestGUIIntegration(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -59,7 +57,9 @@ class TestGUIIntegration(unittest.TestCase):
         initial_count: int = len(self.app.agent_manager.agent_columns)
         self.app.add_agent_column("TestAgent")
         self.assertEqual(len(self.app.agent_manager.agent_columns), initial_count + 1)
-        self.assertEqual(self.app.agent_manager.agent_columns[-1].agent_name, "TestAgent")
+        self.assertEqual(
+            self.app.agent_manager.agent_columns[-1].agent_name, "TestAgent"
+        )
 
     def test_session_manager_save_load(self) -> None:
         # Mock file dialogs
@@ -72,14 +72,19 @@ class TestGUIIntegration(unittest.TestCase):
                     "name": "Coder",
                     "file": "test.py",
                     "backend": "copilot",
-                    "model": "gpt-4o"
+                    "model": "gpt-4o",
                 }
-            ]
+            ],
         }
 
         # Test loading logic in MainApp which uses SessionManager
-        with patch('tkinter.filedialog.askopenfilename', return_value=test_session_file):
-            with patch('builtins.open', unittest.mock.mock_open(read_data=json.dumps(session_data))):
+        with patch(
+            "tkinter.filedialog.askopenfilename", return_value=test_session_file
+        ):
+            with patch(
+                "builtins.open",
+                unittest.mock.mock_open(read_data=json.dumps(session_data)),
+            ):
                 self.app.load_session()
 
         self.assertEqual(self.app.project_root_var.get(), "/mock/path")

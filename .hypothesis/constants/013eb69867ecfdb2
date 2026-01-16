@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\feature_extraction_utils.py
-# hypothesis_version: 6.150.1
-
-['AutoFeatureExtractor', 'BatchFeature', '_from_auto', '_from_pipeline', '_processor_class', 'cache_dir', 'commit_message', 'data', 'device', 'feature extractor', 'feature_extractor', 'file_type', 'force_download', 'from_auto_class', 'local_files_only', 'main', 'mel_filters', 'non_blocking', 'overflowing_values', 'processor_class', 'proxies', 'repo_id', 'resume_download', 'return_unused_kwargs', 'revision', 'subfolder', 'token', 'torch', 'use_auth_token', 'using_pipeline', 'utf-8', 'w', 'window']

@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\linear_model\_ransac.py
-# hypothesis_version: 6.150.1
-
-[0.99, 100, 'absolute_error', 'both', 'csr', 'estimator', 'fit', 'inf', 'is_data_valid', 'is_model_valid', 'left', 'loss', 'max_skips', 'max_trials', 'min_samples', 'predict', 'random_state', 'residual_threshold', 'sample_weight', 'score', 'squared_error', 'stop_n_inliers', 'stop_probability', 'stop_score']

@@ -6,8 +6,6 @@ import os
 from src.logic.agents.security.PrivacyGuardAgent import PrivacyGuardAgent
 
 
-
-
 class TestDataPrivacyGuard(unittest.TestCase):
     def setUp(self):
         self.agent = PrivacyGuardAgent(os.getcwd())
@@ -16,24 +14,11 @@ class TestDataPrivacyGuard(unittest.TestCase):
         text = "Hello, my email is john@example.com and phone is 555-0199."
         result = self.agent.scan_and_redact(text)
 
+        self.assertTrue(result["pii_detected"])
+        self.assertIn("[REDACTED_EMAIL]", result["redacted"])
+        self.assertIn("[REDACTED_PHONE]", result["redacted"])
 
-
-
-
-
-
-
-
-
-
-        self.assertTrue(result['pii_detected'])
-        self.assertIn("[REDACTED_EMAIL]", result['redacted'])
-        self.assertIn("[REDACTED_PHONE]", result['redacted'])
-
-
-
-
-        self.assertNotIn("john@example.com", result['redacted'])
+        self.assertNotIn("john@example.com", result["redacted"])
 
     def test_safety_check(self) -> None:
         safe_msg = "The weather is lovely today."
@@ -43,14 +28,10 @@ class TestDataPrivacyGuard(unittest.TestCase):
         self.assertFalse(self.agent.verify_message_safety(unsafe_msg)["safe"])
 
     def test_metrics(self) -> None:
-
         self.agent.scan_and_redact("contact me at boss@company.org")
         metrics = self.agent.get_privacy_metrics()
-        self.assertEqual(metrics['total_redactions'], 1)
-        self.assertIn("Email", metrics['pii_types_captured'])
-
-
-
+        self.assertEqual(metrics["total_redactions"], 1)
+        self.assertIn("Email", metrics["pii_types_captured"])
 
 
 if __name__ == "__main__":

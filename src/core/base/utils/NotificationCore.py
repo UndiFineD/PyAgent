@@ -25,7 +25,7 @@ No I/O or side effects.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import time
 import urllib.parse
 from typing import Any
@@ -33,22 +33,19 @@ from typing import Any
 __version__ = VERSION
 
 
-
-
-
-
-
 class NotificationCore:
     """Pure logic core for notification management."""
 
     @staticmethod
-    def construct_payload(event_name: str, event_data: dict[str, Any]) -> dict[str, Any]:
+    def construct_payload(
+        event_name: str, event_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """Formats the JSON payload for webhook delivery."""
         return {
-            'event': event_name,
-            'timestamp': time.time(),
-            'data': event_data,
-            'version': '1.1.0'
+            "event": event_name,
+            "timestamp": time.time(),
+            "data": event_data,
+            "version": "1.1.0",
         }
 
     @staticmethod

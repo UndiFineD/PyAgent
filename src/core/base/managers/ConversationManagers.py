@@ -19,15 +19,10 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.models import MessageRole, ConversationMessage
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class ConversationHistory:
@@ -41,7 +36,7 @@ class ConversationHistory:
         msg = ConversationMessage(role=role, content=content)
         self.messages.append(msg)
         if len(self.messages) > self.max_messages:
-            self.messages = self.messages[-self.max_messages:]
+            self.messages = self.messages[-self.max_messages :]
 
     def get_context(self) -> list[ConversationMessage]:
         return self.messages.copy()

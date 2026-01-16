@@ -19,7 +19,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import time
 from typing import TYPE_CHECKING
@@ -29,8 +29,6 @@ __version__ = VERSION
 
 if TYPE_CHECKING:
     from .FleetManager import FleetManager
-
-
 
 
 class FleetLifecycleManager:
@@ -49,7 +47,11 @@ class FleetLifecycleManager:
         self.fleet.agents[clone_name] = base_agent
 
         logging.info(f"Mitosis: {agent_name} divided into {clone_name}")
-        self.fleet.signals.emit("CELL_DIVIDED", {"parent": agent_name, "child": clone_name}, sender="FleetManager")
+        self.fleet.signals.emit(
+            "CELL_DIVIDED",
+            {"parent": agent_name, "child": clone_name},
+            sender="FleetManager",
+        )
         return f"Agent {agent_name} successfully divided into {clone_name}."
 
     def cell_differentiate(self, agent_name: str, specialization: str) -> str:
@@ -58,7 +60,11 @@ class FleetLifecycleManager:
             return f"Error: Agent {agent_name} not found for differentiation."
 
         logging.info(f"Differentiation: {agent_name} specialized into {specialization}")
-        self.fleet.signals.emit("CELL_DIFFERENTIATED", {"agent": agent_name, "specialization": specialization}, sender="FleetManager")
+        self.fleet.signals.emit(
+            "CELL_DIFFERENTIATED",
+            {"agent": agent_name, "specialization": specialization},
+            sender="FleetManager",
+        )
         return f"Agent {agent_name} successfully differentiated into {specialization}."
 
     def cell_apoptosis(self, agent_name: str) -> str:
@@ -68,10 +74,14 @@ class FleetLifecycleManager:
 
         del self.fleet.agents[agent_name]
         logging.info(f"Apoptosis: {agent_name} has been recycled.")
-        self.fleet.signals.emit("CELL_APOPTOSIS", {"agent": agent_name}, sender="FleetManager")
+        self.fleet.signals.emit(
+            "CELL_APOPTOSIS", {"agent": agent_name}, sender="FleetManager"
+        )
         return f"Agent {agent_name} successfully removed from the fleet."
 
-    def register_agent(self, name: str, agent_class: type[BaseAgent], file_path: str | None = None) -> str:
+    def register_agent(
+        self, name: str, agent_class: type[BaseAgent], file_path: str | None = None
+    ) -> str:
         """Adds an agent to the fleet."""
         path = file_path or str(self.fleet.workspace_root / f"agent_{name.lower()}.py")
         agent = agent_class(path)
@@ -80,12 +90,18 @@ class FleetLifecycleManager:
             agent.fleet = self.fleet
 
         # Register tools with the fleet registry (Phase 123 Integration)
-        if hasattr(agent, "register_tools") and hasattr(self.fleet, "registry") and self.fleet.registry:
+        if (
+            hasattr(agent, "register_tools")
+            and hasattr(self.fleet, "registry")
+            and self.fleet.registry
+        ):
             try:
                 agent.register_tools(self.fleet.registry)
                 logging.debug(f"Fleet: Registered tools for agent '{name}'")
             except Exception as e:
-                logging.error(f"Fleet: Failed to register tools for agent '{name}': {e}")
+                logging.error(
+                    f"Fleet: Failed to register tools for agent '{name}': {e}"
+                )
 
         self.fleet.agents[name] = agent
         logging.info(f"Registered agent: {name}")

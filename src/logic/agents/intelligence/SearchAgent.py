@@ -21,9 +21,9 @@
 """Agent for performing web searches and deep research."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function
+from src.core.base.BaseUtilities import create_main_function
 import logging
 import os
 import requests
@@ -36,22 +36,26 @@ from .SearchCore import SearchCore
 __version__ = VERSION
 
 
-
-
 class SearchAgent(BaseAgent):
     """Agent that specializes in researching topics via web search."""
 
     def __init__(self, context: str) -> None:
         super().__init__(context)
-        self.bing_api_key: str | None = os.environ.get("BING_SEARCH_V7_SUBSCRIPTION_KEY")
-        self.bing_endpoint: str = os.environ.get("BING_SEARCH_V7_ENDPOINT", "https://api.bing.microsoft.com/v7.0/search")
+        self.bing_api_key: str | None = os.environ.get(
+            "BING_SEARCH_V7_SUBSCRIPTION_KEY"
+        )
+        self.bing_endpoint: str = os.environ.get(
+            "BING_SEARCH_V7_ENDPOINT", "https://api.bing.microsoft.com/v7.0/search"
+        )
         self.google_api_key: str | None = os.environ.get("GOOGLE_SEARCH_API_KEY")
         self.google_cse_id: str | None = os.environ.get("GOOGLE_SEARCH_CSE_ID")
 
         # Phase 108: Robustness and Intelligence Harvesting
         work_root = getattr(self, "_workspace_root", None)
         self.connectivity: ConnectivityManager = ConnectivityManager(work_root)
-        self.recorder: LocalContextRecorder | None = LocalContextRecorder(Path(work_root)) if work_root else None
+        self.recorder: LocalContextRecorder | None = (
+            LocalContextRecorder(Path(work_root)) if work_root else None
+        )
         self.core: SearchCore = SearchCore()
 
         logging.info(f"SearchAgent initialized for topic: {context}")
@@ -64,7 +68,9 @@ class SearchAgent(BaseAgent):
         if self.recorder:
             try:
                 meta = {"phase": 116, "type": "search", "timestamp": time.time()}
-                self.recorder.record_interaction(provider, "search-v2", query, result, meta=meta)
+                self.recorder.record_interaction(
+                    provider, "search-v2", query, result, meta=meta
+                )
             except Exception as e:
                 logging.error(f"SearchAgent: Transcription error: {e}")
 
@@ -75,6 +81,7 @@ class SearchAgent(BaseAgent):
 
         try:
             from duckduckgo_search import DDGS
+
             logging.info(f"Performing DuckDuckGo search for: {query}")
 
             with DDGS() as ddgs:
@@ -103,8 +110,15 @@ class SearchAgent(BaseAgent):
             with requests.Session() as session:
                 session.max_redirects = 5
                 headers = {"Ocp-Apim-Subscription-Key": self.bing_api_key or ""}
-                params = {"q": query, "textDecorations": True, "textFormat": "HTML", "count": max_results}
-                response = session.get(self.bing_endpoint, headers=headers, params=params, timeout=10)
+                params = {
+                    "q": query,
+                    "textDecorations": True,
+                    "textFormat": "HTML",
+                    "count": max_results,
+                }
+                response = session.get(
+                    self.bing_endpoint, headers=headers, params=params, timeout=10
+                )
                 response.raise_for_status()
                 search_results = response.json()
 
@@ -129,7 +143,12 @@ class SearchAgent(BaseAgent):
 
         try:
             url = "https://www.googleapis.com/customsearch/v1"
-            params = {"key": self.google_api_key, "cx": self.google_cse_id, "q": query, "num": max_results}
+            params = {
+                "key": self.google_api_key,
+                "cx": self.google_cse_id,
+                "q": query,
+                "num": max_results,
+            }
             with requests.Session() as session:
                 session.max_redirects = 5
                 response = session.get(url, params=params, timeout=10)
@@ -164,55 +183,24 @@ class SearchAgent(BaseAgent):
         if self.bing_api_key:
             res = self._search_bing(query)
             if "failed" not in res.lower() and "not configured" not in res.lower():
-
-
-
-
-
-
-
-
-
-
                 return res
 
         # Fallback to DDG
         return self._search_duckduckgo(query)
-
-
-
-
-
-
-
-
 
     def improve_content(self, prompt: str) -> str:
         """Perform research based on the topic and prompt."""
         # Step 1: Perform real search
         search_results = self.perform_search(prompt)
 
-
-
-
-
-
-
-
         # Step 2: Use AI to synthesize the results
         research_prompt = (
             f"You are a Research Agent. Your task is to perform deep research on the following topic: {self.file_path}\n"
             f"Specific focus: {prompt}\n\n"
-
-
-
             f"Here are REAL search results retrieved for your query:\n\n{search_results}\n\n"
             "Based on these results and your internal knowledge, provide a comprehensive report."
         )
         return super().improve_content(research_prompt)
-
-
-
 
 
 if __name__ == "__main__":

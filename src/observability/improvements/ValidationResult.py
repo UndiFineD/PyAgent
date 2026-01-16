@@ -21,13 +21,11 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ValidationSeverity import ValidationSeverity
 from dataclasses import dataclass, field
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -40,11 +38,10 @@ class ValidationResult:
         issues: List of validation issues.
         test_results: Results from automated tests.
     """
+
     improvement_id: str
     is_valid: bool = True
-    issues: list[tuple[ValidationSeverity, str]] = field(
-        default_factory=lambda: []
-    )
+    issues: list[tuple[ValidationSeverity, str]] = field(default_factory=lambda: [])
     test_results: dict[str, bool] = field(
         default_factory=lambda: {}  # type: ignore[assignment]
     )

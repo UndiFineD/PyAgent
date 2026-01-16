@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\starlette\middleware\base.py
-# hypothesis_version: 6.150.1
-
-[200, 'T', '_body', 'body', 'headers', 'http', 'http.disconnect', 'http.request', 'http.response.body', 'http.response.debug', 'http.response.start', 'info', 'more_body', 'status', 'type']

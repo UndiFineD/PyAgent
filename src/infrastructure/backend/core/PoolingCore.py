@@ -1,11 +1,5 @@
-
 from __future__ import annotations
 import re
-
-
-
-
-
 
 
 class PoolingCore:
@@ -21,7 +15,7 @@ class PoolingCore:
             (r"\bi would like you to\b", ""),
             (r"\bthank you\b", ""),
             (r"\bhelpful assistant\b", "assistant"),
-            (r"\s+", " ")  # Collapse whitespace
+            (r"\s+", " "),  # Collapse whitespace
         ]
 
     def compress_prompt(self, text: str) -> str:
@@ -34,7 +28,9 @@ class PoolingCore:
             compressed = re.sub(pattern, replacement, compressed, flags=re.IGNORECASE)
         return compressed.strip()
 
-    def select_best_endpoint(self, preferred_host: str, endpoint_stats: dict[str, float]) -> str:
+    def select_best_endpoint(
+        self, preferred_host: str, endpoint_stats: dict[str, float]
+    ) -> str:
         """
         Selects the lowest-latency endpoint from a pool based on recent stats.
         """

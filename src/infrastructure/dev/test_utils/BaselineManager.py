@@ -21,18 +21,13 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .TestBaseline import TestBaseline
 from pathlib import Path
 from typing import Any
 import json
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class BaselineManager:
@@ -78,12 +73,16 @@ class BaselineManager:
         baseline = TestBaseline(name=name, values=values, version=version)
 
         with open(self._get_path(name), "w") as f:
-            json.dump({
-                "name": baseline.name,
-                "values": baseline.values,
-                "created_at": baseline.created_at,
-                "version": baseline.version,
-            }, f, indent=2)
+            json.dump(
+                {
+                    "name": baseline.name,
+                    "values": baseline.values,
+                    "created_at": baseline.created_at,
+                    "version": baseline.version,
+                },
+                f,
+                indent=2,
+            )
 
         return baseline
 
@@ -138,7 +137,9 @@ class BaselineManager:
 
             baseline_val = baseline.values[key]
 
-            if isinstance(current_val, (int, float)) and isinstance(baseline_val, (int, float)):
+            if isinstance(current_val, (int, float)) and isinstance(
+                baseline_val, (int, float)
+            ):
                 if baseline_val == 0:
                     pct_change = float("inf") if current_val != 0 else 0
                 else:

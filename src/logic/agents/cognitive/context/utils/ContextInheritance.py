@@ -21,14 +21,12 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.models.InheritanceMode import InheritanceMode
 from src.logic.agents.cognitive.context.models.InheritedContext import InheritedContext
 import re
 
 __version__ = VERSION
-
-
 
 
 class ContextInheritance:
@@ -68,7 +66,7 @@ class ContextInheritance:
         self,
         parent_path: str,
         child_path: str,
-        mode: InheritanceMode = InheritanceMode.MERGE
+        mode: InheritanceMode = InheritanceMode.MERGE,
     ) -> InheritedContext:
         """Set up inheritance relationship.
 
@@ -80,18 +78,13 @@ class ContextInheritance:
         Returns:
             InheritedContext configuration.
         """
-        inherited = InheritedContext(
-            parent_path=parent_path,
-            mode=mode
-        )
+        inherited = InheritedContext(parent_path=parent_path, mode=mode)
         self.inheritance_map[child_path] = inherited
         return inherited
 
     def resolve_inheritance(
-            self,
-            parent_content: str,
-            child_content: str,
-            mode: InheritanceMode) -> str:
+        self, parent_content: str, child_content: str, mode: InheritanceMode
+    ) -> str:
         """Resolve inheritance to produce final content.
 
         Args:
@@ -110,7 +103,9 @@ class ContextInheritance:
             # MERGE
             # Simple merge: keep child sections, add missing from parent
             child_sections = set(re.findall(r"##\s+(\w+)", child_content))
-            parent_sections = re.findall(r"(##\s+\w+.*?)(?=##|\Z)", parent_content, re.DOTALL)
+            parent_sections = re.findall(
+                r"(##\s+\w+.*?)(?=##|\Z)", parent_content, re.DOTALL
+            )
 
             result = child_content
             for section in parent_sections:

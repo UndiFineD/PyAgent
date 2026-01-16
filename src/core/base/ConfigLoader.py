@@ -21,7 +21,7 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.AgentConfig import AgentConfig
 from src.core.base.models import AgentPluginConfig, ConfigFormat, RateLimitConfig
 from pathlib import Path
@@ -30,11 +30,6 @@ import json
 import logging
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class ConfigLoader:
@@ -49,11 +44,11 @@ class ConfigLoader:
     """
 
     SUPPORTED_EXTENSIONS = {
-        '.yaml': ConfigFormat.YAML,
-        '.yml': ConfigFormat.YAML,
-        '.toml': ConfigFormat.TOML,
-        '.json': ConfigFormat.JSON,
-        '.ini': ConfigFormat.INI,
+        ".yaml": ConfigFormat.YAML,
+        ".yml": ConfigFormat.YAML,
+        ".toml": ConfigFormat.TOML,
+        ".json": ConfigFormat.JSON,
+        ".ini": ConfigFormat.INI,
     }
 
     def __init__(self, config_path: Path | None = None) -> None:
@@ -94,6 +89,7 @@ class ConfigLoader:
         elif self.format == ConfigFormat.YAML:
             try:
                 import yaml
+
                 raw: Any = yaml.safe_load(content)
                 return cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
             except ImportError:
@@ -102,11 +98,13 @@ class ConfigLoader:
         elif self.format == ConfigFormat.TOML:
             try:
                 import tomllib
+
                 raw: Any = tomllib.loads(content)
                 return cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
             except ImportError:
                 try:
                     import toml
+
                     raw: Any = toml.loads(content)
                     return cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
                 except ImportError:
@@ -118,50 +116,52 @@ class ConfigLoader:
         """Build AgentConfig from parsed data."""
         # Build rate limit config
         rate_limit = None
-        if 'rate_limit' in data:
-            rl_data = data['rate_limit']
+        if "rate_limit" in data:
+            rl_data = data["rate_limit"]
             rate_limit = RateLimitConfig(
-                requests_per_second=rl_data.get('requests_per_second', 10.0),
-                requests_per_minute=rl_data.get('requests_per_minute', 60),
-                burst_size=rl_data.get('burst_size', 10),
-                cooldown_seconds=rl_data.get('cooldown_seconds', 1.0)
+                requests_per_second=rl_data.get("requests_per_second", 10.0),
+                requests_per_minute=rl_data.get("requests_per_minute", 60),
+                burst_size=rl_data.get("burst_size", 10),
+                cooldown_seconds=rl_data.get("cooldown_seconds", 1.0),
             )
 
         # Build plugin configs
         plugins: list[AgentPluginConfig] = []
-        for plugin_data in cast(list[dict[str, Any]], data.get('plugins', [])):
-            plugins.append(AgentPluginConfig(
-                name=plugin_data.get('name', 'unknown'),
-                module_path=plugin_data.get('module_path', ''),
-                entry_point=plugin_data.get('entry_point', 'run'),
-                enabled=plugin_data.get('enabled', True),
-                config=plugin_data.get('config', {})
-            ))
+        for plugin_data in cast(list[dict[str, Any]], data.get("plugins", [])):
+            plugins.append(
+                AgentPluginConfig(
+                    name=plugin_data.get("name", "unknown"),
+                    module_path=plugin_data.get("module_path", ""),
+                    entry_point=plugin_data.get("entry_point", "run"),
+                    enabled=plugin_data.get("enabled", True),
+                    config=plugin_data.get("config", {}),
+                )
+            )
 
         return AgentConfig(
-            repo_root=data.get('repo_root', '.'),
-            agents_only=data.get('agents_only', False),
-            max_files=data.get('max_files'),
-            loop=data.get('loop', 1),
-            dry_run=data.get('dry_run', False),
-            no_git=data.get('no_git', False),
-            verbosity=data.get('verbosity', 'normal'),
+            repo_root=data.get("repo_root", "."),
+            agents_only=data.get("agents_only", False),
+            max_files=data.get("max_files"),
+            loop=data.get("loop", 1),
+            dry_run=data.get("dry_run", False),
+            no_git=data.get("no_git", False),
+            verbosity=data.get("verbosity", "normal"),
             rate_limit=rate_limit,
             plugins=plugins,
-            selective_agents=data.get('selective_agents', []),
-            timeout_per_agent=data.get('timeout_per_agent', {}),
-            enable_async=data.get('enable_async', False),
-            enable_multiprocessing=data.get('enable_multiprocessing', False),
-            max_workers=data.get('workers', data.get('max_workers', 4)),
-            strategy=data.get('strategy', 'direct'),
-            enable_file_locking=data.get('enable_file_locking', False),
-            incremental=data.get('incremental', False),
-            graceful_shutdown=data.get('graceful_shutdown', False),
-            health_check=data.get('health_check', False),
-            resume=data.get('resume', False),
-            diff_preview=data.get('diff_preview', False),
-            webhook=data.get('webhook', []),
-            models=data.get('models', {})
+            selective_agents=data.get("selective_agents", []),
+            timeout_per_agent=data.get("timeout_per_agent", {}),
+            enable_async=data.get("enable_async", False),
+            enable_multiprocessing=data.get("enable_multiprocessing", False),
+            max_workers=data.get("workers", data.get("max_workers", 4)),
+            strategy=data.get("strategy", "direct"),
+            enable_file_locking=data.get("enable_file_locking", False),
+            incremental=data.get("incremental", False),
+            graceful_shutdown=data.get("graceful_shutdown", False),
+            health_check=data.get("health_check", False),
+            resume=data.get("resume", False),
+            diff_preview=data.get("diff_preview", False),
+            webhook=data.get("webhook", []),
+            models=data.get("models", {}),
         )
 
     @staticmethod
@@ -175,9 +175,16 @@ class ConfigLoader:
             Path to config file if found, None otherwise.
         """
         config_names = [
-            'agent.yaml', 'agent.yml', 'agent.toml', 'agent.json',
-            '.agent.yaml', '.agent.yml', '.agent.toml', '.agent.json',
-            'agent_config.yaml', 'agent_config.json'
+            "agent.yaml",
+            "agent.yml",
+            "agent.toml",
+            "agent.json",
+            ".agent.yaml",
+            ".agent.yml",
+            ".agent.toml",
+            ".agent.json",
+            "agent_config.yaml",
+            "agent_config.json",
         ]
 
         for name in config_names:

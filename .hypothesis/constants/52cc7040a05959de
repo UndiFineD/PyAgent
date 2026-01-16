@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\debugging.py
-# hypothesis_version: 6.150.1
-
-[0.0, 1000, '## Slowest Tests\n', 'action', 'actions', 'data', 'index', 'missing_actions', 'passed', 'replayed', 'result', 'step', 'steps', 'test_id', 'timestamp', 'type', 'variables', '{}']

@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\amp\autocast_mode.py
-# hypothesis_version: 6.150.1
-
-[' currently.', ', ', 'autocast', 'autocast_decorator', 'cpu', 'cuda', 'custom_bwd', 'custom_fwd', 'hpu', 'ipu', 'maia', 'mps', 'mtia', 'xla', 'xpu']

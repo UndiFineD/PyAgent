@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\PullRequestAgent.py
-# hypothesis_version: 6.150.1
-
-[108, '\n### Impacted Files', '## ✅ Checklists', '## 📝 Overview', '## 🔍 Changes Impact', '--cached', '--name-only', '--stat', '-b', '-m', '-n', '.', '_workspace_root', '```', '```diff', 'add', 'branch', 'checkout', 'commit', 'diff', 'diff_error', 'diff_summary', 'git', 'git_pr', 'log', 'main', 'phase', 'pr_desc_error', 'pr_description', 'pra', 'timestamp', 'type', 'utf-8']

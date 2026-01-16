@@ -23,16 +23,14 @@ Handles dynamic task splitting, load balancing, and capability-based routing.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class DynamicDecomposerAgent(BaseAgent):
@@ -60,31 +58,30 @@ class DynamicDecomposerAgent(BaseAgent):
         # and assign them to the best suited agents.
 
         decomposition = {
-
-
-
-
-
-
-
-
-
-
             "root_task": complex_task,
             "sub_tasks": [
-                {"id": 1, "task": "Initial research and context collection", "assigned_to": "ResearchAgent"},
-                {"id": 2, "task": "Data analysis and synthesis", "assigned_to": "ReasoningAgent"},
-
-
-
-
-                {"id": 3, "task": "Execution and implementation", "assigned_to": "CoderAgent"},
-                {"id": 4, "task": "Final validation and reporting", "assigned_to": "LinguisticAgent"}
-            ]
+                {
+                    "id": 1,
+                    "task": "Initial research and context collection",
+                    "assigned_to": "ResearchAgent",
+                },
+                {
+                    "id": 2,
+                    "task": "Data analysis and synthesis",
+                    "assigned_to": "ReasoningAgent",
+                },
+                {
+                    "id": 3,
+                    "task": "Execution and implementation",
+                    "assigned_to": "CoderAgent",
+                },
+                {
+                    "id": 4,
+                    "task": "Final validation and reporting",
+                    "assigned_to": "LinguisticAgent",
+                },
+            ],
         }
-
-
-
 
         return f"### Optimized Task Decomposition\n\n```json\n{json.dumps(decomposition, indent=2)}\n```"
 
@@ -92,20 +89,18 @@ class DynamicDecomposerAgent(BaseAgent):
     def balance_swarm_load(self, pending_tasks: list[dict[str, Any]]) -> str:
         """Re-routes tasks among agents to prevent bottlenecks."""
 
-
-
-
         return "Swarm load balancing: Workload evenly distributed. No re-routing necessary."
 
     def improve_content(self, prompt: str) -> str:
         return "Task decomposition workflows are optimized for maximum parallelization."
 
 
-
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(DynamicDecomposerAgent, "Dynamic Decomposer Agent", "Task splitting and routing optimizer")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        DynamicDecomposerAgent,
+        "Dynamic Decomposer Agent",
+        "Task splitting and routing optimizer",
+    )
     main()

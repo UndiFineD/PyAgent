@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\reports\ReportAggregator.py
-# hypothesis_version: 6.150.1
-
-['by_category', 'by_severity', 'total_files', 'total_issues']

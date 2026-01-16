@@ -25,7 +25,7 @@
 """Project Explorer component for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import os
 import tkinter as tk
 from tkinter import ttk
@@ -34,10 +34,9 @@ import logging
 __version__ = VERSION
 
 
-
-
 class ProjectExplorer:
     """A tree-view based file explorer for the PyAgent workspace."""
+
     def __init__(self, parent, project_root_var, on_double_click_callback) -> None:
         self.parent = parent
         self.project_root_var = project_root_var
@@ -63,7 +62,9 @@ class ProjectExplorer:
         self.tree = ttk.Treeview(self.frame, selectmode="browse")
         self.tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        tree_scroll = ttk.Scrollbar(self.frame, orient=tk.VERTICAL, command=self.tree.yview)
+        tree_scroll = ttk.Scrollbar(
+            self.frame, orient=tk.VERTICAL, command=self.tree.yview
+        )
         tree_scroll.pack(side=tk.RIGHT, fill=tk.Y)
         self.tree.configure(yscrollcommand=tree_scroll.set)
 
@@ -109,15 +110,27 @@ class ProjectExplorer:
 
     def populate_tree(self, parent: str, path: str) -> None:
         try:
-            items = sorted(os.listdir(path), key=lambda x: (not os.path.isdir(os.path.join(path, x)), x.lower()))
+            items = sorted(
+                os.listdir(path),
+                key=lambda x: (not os.path.isdir(os.path.join(path, x)), x.lower()),
+            )
             for item in items:
                 abspath = os.path.join(path, item)
                 is_dir = os.path.isdir(abspath)
 
-                if item in {'__pycache__', 'node_modules', '.git', '.venv', '.pytest_cache', '.agent_cache'}:
+                if item in {
+                    "__pycache__",
+                    "node_modules",
+                    ".git",
+                    ".venv",
+                    ".pytest_cache",
+                    ".agent_cache",
+                }:
                     continue
 
-                node = self.tree.insert(parent, "end", text=item, values=[abspath], open=False)
+                node = self.tree.insert(
+                    parent, "end", text=item, values=[abspath], open=False
+                )
                 if is_dir:
                     self.tree.insert(node, "end")
         except Exception as e:
@@ -164,7 +177,19 @@ class ProjectExplorer:
 
         count = 0
         for root, dirs, files in os.walk(root_path):
-            dirs[:] = [d for d in dirs if d not in {'__pycache__', 'node_modules', '.git', '.venv', '.pytest_cache', '.agent_cache'}]
+            dirs[:] = [
+                d
+                for d in dirs
+                if d
+                not in {
+                    "__pycache__",
+                    "node_modules",
+                    ".git",
+                    ".venv",
+                    ".pytest_cache",
+                    ".agent_cache",
+                }
+            ]
             for f in files:
                 if query in f.lower():
                     abspath = os.path.join(root, f)

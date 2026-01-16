@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\stats\federation.py
-# hypothesis_version: 6.150.1
-
-[0.0, 'healthy', 'http', 'https', 'last_sync', 'sources', 'unhealthy']

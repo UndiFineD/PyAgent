@@ -21,13 +21,11 @@
 """Agent specializing in Self-Search Reinforcement Learning (SSRL) patterns."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 import logging
 
 __version__ = VERSION
-
-
 
 
 class SelfSearchAgent(BaseAgent):
@@ -76,26 +74,19 @@ Query: {query}
 """
 
     def perform_internal_search(self, query: str) -> str:
-
-
         """Executes the self-search cycle."""
         # In a real implementation, this would call the LLM with the generated structure
         structure = self.generate_search_structure(query)
         logging.info(f"SelfSearchAgent: Executing internal search for '{query}'")
         return f"Executing structured self-search for: {query}\nStructure:\n{structure}"
 
-
-
-
     def improve_content(self, query: str) -> str:
         """Returns the self-search results for a given query."""
         return self.perform_internal_search(query)
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
+    from src.core.base.BaseUtilities import create_main_function
+
     main = create_main_function(SelfSearchAgent)
     main()

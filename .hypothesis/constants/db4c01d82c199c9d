@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_inductor\analysis\device_info.py
-# hypothesis_version: 6.150.1
-
-[15.1, 19.5, 30.3, 45.3, 64.0, 67.0, 67.5, 80.0, 120.0, 122.6, 128.0, 156.0, 163.4, 181.0, 192.0, 242.0, 312.5, 485.0, 490.3, 624.0, 653.7, 980.6, 1307.4, 1600.0, 1961.2, 1979.0, 2039.0, 2614.9, 3958.0, 5300.0, 3350, 'AMD INSTINCT MI210X', 'AMD INSTINCT MI300X', 'AMD MI210X', 'AMD MI300A', 'AMD MI300X', 'NVIDIA A100', 'NVIDIA H100', 'NVIDIA L4', 'torch.tf32']

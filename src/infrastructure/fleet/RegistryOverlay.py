@@ -19,15 +19,13 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import logging
 from typing import Any
 from pathlib import Path
 
 __version__ = VERSION
-
-
 
 
 class RegistryOverlay:
@@ -55,21 +53,31 @@ class RegistryOverlay:
             with open(self.overlay_path, encoding="utf-8") as f:
                 data = json.load(f)
                 self.overrides = data.get("agents", {})
-                logging.info(f"RegistryOverlay: Loaded {len(self.overrides)} overrides from {self.overlay_path}")
+                logging.info(
+                    f"RegistryOverlay: Loaded {len(self.overrides)} overrides from {self.overlay_path}"
+                )
         except Exception as e:
             logging.error(f"RegistryOverlay: Failed to load overlay: {e}")
 
-    def get_agent_config(self, agent_id: str, default: tuple[str, str, Any]) -> tuple[str, str, Any]:
+    def get_agent_config(
+        self, agent_id: str, default: tuple[str, str, Any]
+    ) -> tuple[str, str, Any]:
         """Returns the overridden config or the default."""
         if agent_id in self.overrides:
             override = self.overrides[agent_id]
             # Expected format in JSON: [module, class, params]
             if isinstance(override, list) and len(override) >= 2:
                 logging.info(f"RegistryOverlay: Applying override for '{agent_id}'")
-                return (override[0], override[1], override[2] if len(override) > 2 else None)
+                return (
+                    override[0],
+                    override[1],
+                    override[2] if len(override) > 2 else None,
+                )
         return default
 
-    def save_override(self, agent_id: str, module_path: str, class_name: str, params: Any = None) -> None:
+    def save_override(
+        self, agent_id: str, module_path: str, class_name: str, params: Any = None
+    ) -> None:
         """Saves a new override to the overlay file."""
         self.overrides[agent_id] = [module_path, class_name, params]
 

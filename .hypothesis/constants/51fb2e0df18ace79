@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\nn\utils\__init__.py
-# hypothesis_version: 6.150.1
-
-['clip_grad_norm', 'clip_grad_norm_', 'clip_grad_value_', 'fuse_conv_bn_eval', 'fuse_conv_bn_weights', 'fuse_linear_bn_eval', 'get_total_norm', 'parameters_to_vector', 'parametrizations', 'remove_spectral_norm', 'remove_weight_norm', 'rnn', 'skip_init', 'spectral_norm', 'stateless', 'vector_to_parameters', 'weight_norm']

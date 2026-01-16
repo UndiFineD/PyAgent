@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\pyperclip\__init__.py
-# hypothesis_version: 6.150.1
-
-[b'STATIC', 0.01, 0.5, ' (%s)', ', ', '--clear', '-b', '-command', '-i', '-n', '-noprofile', '-o', '-p', '-selection', '-t', '/dev/clipboard', '/klipper', '/proc/version', '1.11.0', 'DISPLAY', 'Darwin', 'Error calling ', 'Linux', 'WAYLAND_DISPLAY', 'Windows', 'c', 'clip.exe', 'copy', 'cygwin', 'determine_clipboard', 'f', 'getClipboardContents', 'klipper', 'linux', 'mac', 'microsoft', 'msvcrt', 'no', 'nt', 'org.kde.klipper', 'p', 'paste', 'pbcopy', 'pbpaste', 'powershell.exe', 'pyobjc', 'qdbus', 'qt', 'r', 'rt', 'setClipboardContents', 'set_clipboard', 'text', 'utf-16le', 'utf-8', 'w', 'which', 'windows', 'wl-clipboard', 'wl-copy', 'wl-paste', 'wt', 'xclip', 'xsel']

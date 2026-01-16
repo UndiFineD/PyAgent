@@ -18,13 +18,11 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import time
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class ConsensusConflictAgent:
@@ -32,22 +30,29 @@ class ConsensusConflictAgent:
     Arbitrates disagreements and resolves conflicts between agents in the swarm.
     Uses voting systems and consensus mechanisms to reach a final decision.
     """
+
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.active_disputes: dict[Any, Any] = {}  # dispute_id -> {options, votes, status}
+        self.active_disputes: dict[
+            Any, Any
+        ] = {}  # dispute_id -> {options, votes, status}
 
-    def initiate_dispute(self, dispute_id: str, context: str, options: list[str]) -> dict[str, Any]:
+    def initiate_dispute(
+        self, dispute_id: str, context: str, options: list[str]
+    ) -> dict[str, Any]:
         """Starts a new consensus round for a disagreement."""
         self.active_disputes[dispute_id] = {
             "context": context,
             "options": options,
             "votes": {},  # agent_id -> option_index
             "status": "voting",
-            "start_time": time.time()
+            "start_time": time.time(),
         }
         return {"status": "dispute_initiated", "dispute_id": dispute_id}
 
-    def cast_vote(self, dispute_id: str, agent_id: str, option_index: int, reasoning: str) -> dict[str, Any]:
+    def cast_vote(
+        self, dispute_id: str, agent_id: str, option_index: int, reasoning: str
+    ) -> dict[str, Any]:
         """Allows an agent to vote on a specific option with reasoning."""
         if dispute_id not in self.active_disputes:
             return {"status": "error", "message": "Dispute not found"}
@@ -59,7 +64,7 @@ class ConsensusConflictAgent:
         dispute["votes"][agent_id] = {
             "choice": option_index,
             "reasoning": reasoning,
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
         return {"status": "vote_cast", "dispute_id": dispute_id}
 
@@ -86,13 +91,17 @@ class ConsensusConflictAgent:
             "status": "resolved",
             "winner": dispute["winner"],
             "vote_counts": vote_counts,
-            "total_votes": len(dispute["votes"])
+            "total_votes": len(dispute["votes"]),
         }
 
     def get_conflict_summary(self) -> dict[str, Any]:
         """Returns statistics on handled conflicts."""
         return {
             "total_disputes": len(self.active_disputes),
-            "resolved_disputes": len([d for d in self.active_disputes.values() if d["status"] == "resolved"]),
-            "pending_disputes": len([d for d in self.active_disputes.values() if d["status"] == "voting"])
+            "resolved_disputes": len(
+                [d for d in self.active_disputes.values() if d["status"] == "resolved"]
+            ),
+            "pending_disputes": len(
+                [d for d in self.active_disputes.values() if d["status"] == "voting"]
+            ),
         }

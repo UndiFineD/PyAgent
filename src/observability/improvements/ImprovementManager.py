@@ -37,7 +37,7 @@ DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
             "Add unit tests to cover {function_name} including "
             "edge cases and error handling."
         ),
-        default_effort=EffortEstimate.SMALL
+        default_effort=EffortEstimate.SMALL,
     ),
     ImprovementTemplate(
         id="add_type_hints",
@@ -48,7 +48,7 @@ DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
             "Add proper type annotations to {function_name} for "
             "better IDE support and documentation."
         ),
-        default_effort=EffortEstimate.TRIVIAL
+        default_effort=EffortEstimate.TRIVIAL,
     ),
     ImprovementTemplate(
         id="performance_optimization",
@@ -57,7 +57,7 @@ DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
         title_pattern="Optimize {component}",
         description_template="Improve performance of {component} in {file}.",
         default_priority=ImprovementPriority.HIGH,
-        default_effort=EffortEstimate.MEDIUM
+        default_effort=EffortEstimate.MEDIUM,
     ),
     ImprovementTemplate(
         id="security_fix",
@@ -66,17 +66,19 @@ DEFAULT_TEMPLATES: list[ImprovementTemplate] = [
         title_pattern="Fix security issue in {component}",
         description_template="Address security vulnerability: {vulnerability_description}",
         default_priority=ImprovementPriority.CRITICAL,
-        default_effort=EffortEstimate.MEDIUM
+        default_effort=EffortEstimate.MEDIUM,
     ),
 ]
-
-
 
 
 class ImprovementManager:
     """Manages improvement lifecycle, templates, and impact scoring."""
 
-    def __init__(self, templates: list[ImprovementTemplate] | None = None, base_file_path: str = "") -> None:
+    def __init__(
+        self,
+        templates: list[ImprovementTemplate] | None = None,
+        base_file_path: str = "",
+    ) -> None:
         self._improvements: list[Improvement] = []
         self._templates: dict[str, ImprovementTemplate] = {}
         self.base_file_path = base_file_path
@@ -95,7 +97,7 @@ class ImprovementManager:
         category: ImprovementCategory = ImprovementCategory.OTHER,
         effort: EffortEstimate = EffortEstimate.MEDIUM,
         tags: list[str] | None = None,
-        dependencies: list[str] | None = None
+        dependencies: list[str] | None = None,
     ) -> Improvement:
         """Add a new improvement."""
         final_path = file_path if file_path is not None else self.base_file_path
@@ -114,7 +116,7 @@ class ImprovementManager:
             created_at=datetime.now().isoformat(),
             updated_at=datetime.now().isoformat(),
             tags=tags or [],
-            dependencies=dependencies or []
+            dependencies=dependencies or [],
         )
 
         self._improvements.append(improvement)
@@ -125,11 +127,13 @@ class ImprovementManager:
         self._improvements = []
         current_priority = ImprovementPriority.MEDIUM
 
-        item_re = re.compile(r"^\s*-\s*\[([\sxX✓○\-/])] \*\*(.*?)\*\* \((.*?)\)(?:\s*<!--\s*id:\s*(\w+)\s*-->)?")
+        item_re = re.compile(
+            r"^\s*-\s*\[([\sxX✓○\-/])] \*\*(.*?)\*\* \((.*?)\)(?:\s*<!--\s*id:\s*(\w+)\s*-->)?"
+        )
         desc_re = re.compile(r"^\s+-\s*(.*)")
         section_re = re.compile(r"^##\s+(.*)")
 
-        lines = content.split('\n')
+        lines = content.split("\n")
         current_improvement = None
 
         for line in lines:
@@ -151,17 +155,20 @@ class ImprovementManager:
                 imp_id = item_match.group(4)
 
                 status = ImprovementStatus.PROPOSED
-                if status_char in ('x', 'X', '✓'):
+                if status_char in ("x", "X", "✓"):
                     status = ImprovementStatus.COMPLETED
-                elif status_char == '/':
+                elif status_char == "/":
                     status = ImprovementStatus.IN_PROGRESS
-                elif status_char == '-':
+                elif status_char == "-":
                     status = ImprovementStatus.DEFERRED
 
                 category = ImprovementCategory.OTHER
-                cat_part = category_val.split(',')[0].strip()
+                cat_part = category_val.split(",")[0].strip()
                 for cat in ImprovementCategory:
-                    if cat.value.lower() == cat_part.lower() or cat.name.lower() == cat_part.lower():
+                    if (
+                        cat.value.lower() == cat_part.lower()
+                        or cat.name.lower() == cat_part.lower()
+                    ):
                         category = cat
                         break
 
@@ -170,7 +177,7 @@ class ImprovementManager:
                     description="",
                     file_path=self.base_file_path,
                     priority=current_priority,
-                    category=category
+                    category=category,
                 )
                 if imp_id:
                     current_improvement.id = imp_id
@@ -203,7 +210,11 @@ class ImprovementManager:
         """Return improvements sorted by impact score."""
         for imp in self._improvements:
             imp.impact_score = self.calculate_impact_score(imp)
-        return sorted(self._improvements, key=lambda i: (i.impact_score, i.priority.value), reverse=True)
+        return sorted(
+            self._improvements,
+            key=lambda i: (i.impact_score, i.priority.value),
+            reverse=True,
+        )
 
     def estimate_total_effort(self) -> int:
         """Return total effort score for non-completed improvements."""
@@ -225,10 +236,7 @@ class ImprovementManager:
         self._templates[template.name] = template
 
     def create_from_template(
-        self,
-        template_name: str,
-        variables: dict[str, str],
-        file_path: str = ""
+        self, template_name: str, variables: dict[str, str], file_path: str = ""
     ) -> Improvement | None:
         """Create an improvement from a template."""
         template = self._templates.get(template_name)
@@ -250,7 +258,7 @@ class ImprovementManager:
             category=template.category,
             effort=template.default_effort,
             status=ImprovementStatus.PENDING,
-            created_at=datetime.now().isoformat()
+            created_at=datetime.now().isoformat(),
         )
         return total
 

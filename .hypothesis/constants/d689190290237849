@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\sets\__init__.py
-# hypothesis_version: 6.150.1
-
-['Complement', 'ComplexRegion', 'ConditionSet', 'Contains', 'DisjointUnion', 'EmptySet', 'FiniteSet', 'ImageSet', 'Integers', 'Intersection', 'Interval', 'Naturals', 'Naturals0', 'OmegaPower', 'Ordinal', 'PowerSet', 'ProductSet', 'Range', 'Rationals', 'Reals', 'Set', 'SymmetricDifference', 'Union', 'UniversalSet', 'imageset', 'ord0']

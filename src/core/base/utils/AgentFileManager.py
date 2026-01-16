@@ -19,29 +19,29 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import os
 import logging
 import time
 import hashlib
 from pathlib import Path
-from src.core.base.utils.core_utils import load_codeignore
+from src.core.base.utils.CoreUtils import load_codeignore
 from src.core.base.AgentCore import BaseCore
 
 __version__ = VERSION
 
 
-
-
-
-
-
 class AgentFileManager:
     """Manages file discovery, filtering, and snapshots for the Agent."""
 
-    SUPPORTED_EXTENSIONS = {'.py', '.sh', '.js', '.ts', '.go', '.rb'}
+    SUPPORTED_EXTENSIONS = {".py", ".sh", ".js", ".ts", ".go", ".rb"}
 
-    def __init__(self, repo_root: Path, agents_only: bool = False, ignored_patterns: set[str] | None = None) -> None:
+    def __init__(
+        self,
+        repo_root: Path,
+        agents_only: bool = False,
+        ignored_patterns: set[str] | None = None,
+    ) -> None:
         self.repo_root = repo_root
         self.agents_only = agents_only
         self.ignored_patterns = ignored_patterns or load_codeignore(repo_root)
@@ -58,7 +58,7 @@ class AgentFileManager:
         search_root = self.repo_root
         if self.agents_only:
             # Look for agent-specific directories
-            for sub in ['scripts/agent', 'src/agent', 'src/agents']:
+            for sub in ["scripts/agent", "src/agent", "src/agents"]:
                 potential = self.repo_root / sub
                 if potential.exists():
                     search_root = potential
@@ -75,15 +75,16 @@ class AgentFileManager:
             all_potential_files,
             self.repo_root,
             self.ignored_patterns,
-            self.SUPPORTED_EXTENSIONS
+            self.SUPPORTED_EXTENSIONS,
         )
 
         # If agents_only is True and we're searching from the root,
         # further filter to only include files that appear to be part of the agent system
         if self.agents_only and search_root == self.repo_root:
             code_files = [
-                f for f in code_files
-                if f.parent != self.repo_root or 'agent' in f.name.lower()
+                f
+                for f in code_files
+                if f.parent != self.repo_root or "agent" in f.name.lower()
             ]
 
         if max_files:
@@ -101,12 +102,14 @@ class AgentFileManager:
 
         # Walk up to repo root, loading .codeignore files
         while current_dir >= self.repo_root:
-            codeignore_file = current_dir / '.codeignore'
+            codeignore_file = current_dir / ".codeignore"
             if codeignore_file.exists():
                 try:
                     patterns = load_codeignore(current_dir)
                     all_patterns.update(patterns)
-                    logging.debug(f"Loaded {len(patterns)} patterns from {codeignore_file}")
+                    logging.debug(
+                        f"Loaded {len(patterns)} patterns from {codeignore_file}"
+                    )
                 except Exception as e:
                     logging.warning(f"Failed to load {codeignore_file}: {e}")
 
@@ -127,18 +130,18 @@ class AgentFileManager:
                 return None
 
             # Create snapshots directory if needed
-            snapshot_dir = self.repo_root / '.agent_snapshots'
+            snapshot_dir = self.repo_root / ".agent_snapshots"
             snapshot_dir.mkdir(exist_ok=True)
 
             # Generate snapshot ID based on timestamp
-            content = file_path.read_text(encoding='utf-8', errors='replace')
+            content = file_path.read_text(encoding="utf-8", errors="replace")
             content_hash = hashlib.md5(content.encode()).hexdigest()[:8]
             snapshot_id = f"{time.time():.0f}_{content_hash}"
 
             # Save relative path and content
             rel_path = file_path.relative_to(self.repo_root)
             snapshot_file = snapshot_dir / f"{snapshot_id}_{rel_path.name}"
-            snapshot_file.write_text(content, encoding='utf-8')
+            snapshot_file.write_text(content, encoding="utf-8")
 
             logging.debug(f"Created snapshot {snapshot_id} for {rel_path}")
             return snapshot_id
@@ -150,7 +153,7 @@ class AgentFileManager:
     def restore_from_snapshot(self, file_path: Path, snapshot_id: str) -> bool:
         """Restore a file from a previously created snapshot."""
         try:
-            snapshot_dir = self.repo_root / '.agent_snapshots'
+            snapshot_dir = self.repo_root / ".agent_snapshots"
             if not snapshot_dir.exists():
                 logging.warning(f"Snapshot directory not found: {snapshot_dir}")
                 return False
@@ -165,8 +168,8 @@ class AgentFileManager:
                 return False
 
             # Restore content
-            content = snapshot_file.read_text(encoding='utf-8')
-            file_path.write_text(content, encoding='utf-8')
+            content = snapshot_file.read_text(encoding="utf-8")
+            file_path.write_text(content, encoding="utf-8")
 
             logging.info(f"Restored {rel_path} from snapshot {snapshot_id}")
             return True
@@ -175,10 +178,11 @@ class AgentFileManager:
             logging.error(f"Failed to restore snapshot for {file_path}: {e}")
             return False
 
-    def cleanup_old_snapshots(self, max_age_days: int = 7,
-                              max_snapshots_per_file: int = 10) -> int:
+    def cleanup_old_snapshots(
+        self, max_age_days: int = 7, max_snapshots_per_file: int = 10
+    ) -> int:
         """Clean up old file snapshots according to retention policy."""
-        snapshot_dir = self.repo_root / '.agent_snapshots'
+        snapshot_dir = self.repo_root / ".agent_snapshots"
         if not snapshot_dir.exists():
             logging.debug("No snapshot directory found, nothing to clean")
             return 0
@@ -189,10 +193,7 @@ class AgentFileManager:
 
             snapshots_by_file = self._group_snapshots_by_filename(snapshot_dir)
             deleted_count = self._prune_snapshot_groups(
-                snapshots_by_file,
-                current_time,
-                max_age_seconds,
-                max_snapshots_per_file
+                snapshots_by_file, current_time, max_age_seconds, max_snapshots_per_file
             )
 
             logging.info(f"Cleaned up {deleted_count} old snapshots")
@@ -205,9 +206,9 @@ class AgentFileManager:
     def _group_snapshots_by_filename(self, snapshot_dir: Path) -> dict[str, list[Path]]:
         """Helper to group snapshot files by their original filename."""
         groups: dict[str, list[Path]] = {}
-        for snapshot_file in snapshot_dir.glob('*'):
+        for snapshot_file in snapshot_dir.glob("*"):
             if snapshot_file.is_file():
-                parts = snapshot_file.name.split('_', 2)
+                parts = snapshot_file.name.split("_", 2)
                 if len(parts) >= 3:
                     filename = parts[2]
                     if filename not in groups:
@@ -215,10 +216,13 @@ class AgentFileManager:
                     groups[filename].append(snapshot_file)
         return groups
 
-    def _prune_snapshot_groups(self, groups: dict[str, list[Path]],
-                               current_time: float,
-                               max_age_seconds: int,
-                               max_count: int) -> int:
+    def _prune_snapshot_groups(
+        self,
+        groups: dict[str, list[Path]],
+        current_time: float,
+        max_age_seconds: int,
+        max_count: int,
+    ) -> int:
         """Helper to prune snapshot files based on age and count limits."""
         deleted = 0
         for filename, snapshots in groups.items():

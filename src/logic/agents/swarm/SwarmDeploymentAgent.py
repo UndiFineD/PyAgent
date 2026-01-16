@@ -18,7 +18,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import os
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
@@ -27,13 +27,12 @@ from src.observability.StructuredLogger import StructuredLogger
 __version__ = VERSION
 
 
-
-
 class SwarmDeploymentAgent(BaseAgent):
     """
     Autonomous Fleet Expansion: Provisions and initializes new agent nodes
     on simulated cloud infrastructure.
     """
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -42,7 +41,11 @@ class SwarmDeploymentAgent(BaseAgent):
 
     def provision_node(self, node_type: str, region: str) -> dict[str, Any]:
         """Simulates provisioning of a new agent node."""
-        self.logger.info(f"Deployment: Provisioning {node_type} node in {region}...", node_type=node_type, region=region)
+        self.logger.info(
+            f"Deployment: Provisioning {node_type} node in {region}...",
+            node_type=node_type,
+            region=region,
+        )
 
         deployment_id = f"DEP-{os.urandom(4).hex()}"
         node_details = {
@@ -50,15 +53,19 @@ class SwarmDeploymentAgent(BaseAgent):
             "node_type": node_type,
             "region": region,
             "ip_address": f"10.0.{len(self.active_deployments) % 255}.{len(self.active_deployments) + 1}",
-            "status": "Healthy"
+            "status": "Healthy",
         }
 
         self.active_deployments.append(node_details)
         return node_details
 
-    def scale_swarm(self, target_node_count: int, node_type: str) -> list[dict[str, Any]]:
+    def scale_swarm(
+        self, target_node_count: int, node_type: str
+    ) -> list[dict[str, Any]]:
         """Scales the swarm up to the target count of nodes."""
-        current_count = sum(1 for d in self.active_deployments if d['node_type'] == node_type)
+        current_count = sum(
+            1 for d in self.active_deployments if d["node_type"] == node_type
+        )
         new_nodes = []
 
         if target_node_count > current_count:
@@ -71,6 +78,6 @@ class SwarmDeploymentAgent(BaseAgent):
         """Returns the inventory of all provisioned nodes."""
         return {
             "total_nodes": len(self.active_deployments),
-            "regions": list(set(d['region'] for d in self.active_deployments)),
-            "nodes": self.active_deployments
+            "regions": list(set(d["region"] for d in self.active_deployments)),
+            "nodes": self.active_deployments,
         }

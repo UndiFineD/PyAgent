@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\fastapi\utils.py
-# hypothesis_version: 6.150.1
-
-[200, 204, 205, 304, '1', '1XX', '2XX', '3XX', '4XX', '5XX', 'APIRoute', '\\W', '_', 'auto', 'default', 'field_info', 'mode', 'name', 'serialization', 'validation', '{(.*?)}']

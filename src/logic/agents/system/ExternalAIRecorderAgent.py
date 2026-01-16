@@ -23,16 +23,14 @@ Captures prompts, contexts, and responses provided to/from external systems like
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import time
 from pathlib import Path
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class ExternalAIRecorderAgent(BaseAgent):
@@ -53,7 +51,9 @@ class ExternalAIRecorderAgent(BaseAgent):
         )
 
     @as_tool
-    def record_external_interaction(self, external_ai_name: str, prompt: str, context: str, response: str) -> str:
+    def record_external_interaction(
+        self, external_ai_name: str, prompt: str, context: str, response: str
+    ) -> str:
         """Saves a session with an external AI to the local learning archive.
         Args:
             external_ai_name: Name of the external system (e.g., 'Claude-3.5', 'GPT-4o').
@@ -68,7 +68,7 @@ class ExternalAIRecorderAgent(BaseAgent):
                 model="External",
                 prompt=prompt,
                 result=response,
-                meta={"context": context, "session_hash": hash(prompt + response)}
+                meta={"context": context, "session_hash": hash(prompt + response)},
             )
 
         entry = {
@@ -76,39 +76,20 @@ class ExternalAIRecorderAgent(BaseAgent):
             "source": external_ai_name,
             "prompt": prompt,
             "context": context,
-
-
-
-
-
-
-
-
-
-
             "response": response,
-            "hash": hash(prompt + response)  # Simple identifier
+            "hash": hash(prompt + response),  # Simple identifier
         }
-
-
-
 
         try:
             with open(self.archive_path, "a", encoding="utf-8") as f:
                 f.write(json.dumps(entry) + "\n")
             return f"Successfully recorded interaction from {external_ai_name}. Local knowledge enriched."
         except Exception as e:
-
-
             return f"Error recording interaction: {e}"
 
     @as_tool
     def synthesize_local_knowledge(self) -> str:
         """Analyzes recorded interactions to identify recurring patterns or high-value insights."""
-
-
-
-
 
         return "Local knowledge synthesis: Identification of 5 high-value patterns from external records completed."
 
@@ -116,10 +97,12 @@ class ExternalAIRecorderAgent(BaseAgent):
         return "Local knowledge base is thriving with data from external AI sessions."
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(ExternalAIRecorderAgent, "External AI Recorder Agent", "Cross-model knowledge harvester")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        ExternalAIRecorderAgent,
+        "External AI Recorder Agent",
+        "Cross-model knowledge harvester",
+    )
     main()

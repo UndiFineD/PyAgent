@@ -21,13 +21,11 @@
 """Shell for TheoryOfMind, managing agent profiles and state."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from src.logic.agents.cognitive.TheoryOfMindCore import TheoryOfMindCore
 
 __version__ = VERSION
-
-
 
 
 class TheoryOfMind:
@@ -42,12 +40,15 @@ class TheoryOfMind:
 
     def update_model(self, agent_name: str, observations: dict[str, Any]) -> None:
         """Updates the internal model via Core."""
-        current_profile = self.agent_profiles.get(agent_name, {
-            "knowledge_domains": [],
-            "strengths": [],
-            "limitations": [],
-            "last_active": 0.0
-        })
+        current_profile = self.agent_profiles.get(
+            agent_name,
+            {
+                "knowledge_domains": [],
+                "strengths": [],
+                "limitations": [],
+                "last_active": 0.0,
+            },
+        )
 
         updated = self.core.update_profile_logic(current_profile, observations)
         self.agent_profiles[agent_name] = updated
@@ -57,7 +58,9 @@ class TheoryOfMind:
         if agent_name not in self.agent_profiles:
             return 0.5
 
-        return self.core.estimate_knowledge_score(self.agent_profiles[agent_name], topic)
+        return self.core.estimate_knowledge_score(
+            self.agent_profiles[agent_name], topic
+        )
 
     def suggest_collaborator(self, task: str) -> list[str]:
         """Suggests collaborators via Core."""

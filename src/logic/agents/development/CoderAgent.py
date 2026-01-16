@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types.CodeLanguage import CodeLanguage
 from src.core.base.types.CodeMetrics import CodeMetrics
 from src.core.base.types.CodeSmell import CodeSmell
@@ -39,8 +39,6 @@ import subprocess
 import sys
 
 __version__ = VERSION
-
-
 
 
 class CoderAgent(BaseAgent):
@@ -85,8 +83,9 @@ class CoderAgent(BaseAgent):
                 severity=r.severity,
                 enabled=r.enabled,
                 language=r.language,
-                auto_fix=r.auto_fix
-            ) for r in DEFAULT_PYTHON_STYLE_RULES
+                auto_fix=r.auto_fix,
+            )
+            for r in DEFAULT_PYTHON_STYLE_RULES
         ]
         self._metrics: CodeMetrics | None = None
         self._quality_score: QualityScore | None = None
@@ -173,30 +172,42 @@ class CoderAgent(BaseAgent):
         test_file = self.file_path.parent / f"test_{self.file_path.name}"
         if not test_file.exists():
             # Try tests/test_filename.py
-            test_file = self.file_path.parent.parent / "tests" / f"test_{self.file_path.name}"
+            test_file = (
+                self.file_path.parent.parent / "tests" / f"test_{self.file_path.name}"
+            )
 
         if not test_file.exists():
             return 0.0
 
         # If pytest is available, try to run it with coverage
-        if shutil.which('pytest'):
+        if shutil.which("pytest"):
             try:
                 # Run coverage for just this file
                 # Use --cov-fail-under=0 to avoid exit code 1 if coverage is low
                 result = subprocess.run(
-                    [sys.executable, '-m', 'pytest', '--cov=' + str(self.file_path), '--cov-report=term-missing', str(test_file)],
+                    [
+                        sys.executable,
+                        "-m",
+                        "pytest",
+                        "--cov=" + str(self.file_path),
+                        "--cov-report=term-missing",
+                        str(test_file),
+                    ],
                     capture_output=True,
                     text=True,
                     timeout=30,
-                    check=False
+                    check=False,
                 )
                 # Parse output for percentage (e.g., TOTAL 10 2 80%)
-                match = re.search(r'TOTAL.*?\s+(\d+)%', result.stdout)
+                match = re.search(r"TOTAL.*?\s+(\d+)%", result.stdout)
 
                 # Phase 108: Record coverage intelligence
-                self._record(f"pytest --cov on {self.file_path.name}",
-                             f"Coverage: {match.group(1)}%" if match else "No match",
-                             provider="Shell", model="pytest")
+                self._record(
+                    f"pytest --cov on {self.file_path.name}",
+                    f"Coverage: {match.group(1)}%" if match else "No match",
+                    provider="Shell",
+                    model="pytest",
+                )
 
                 if match:
                     return float(match.group(1))
@@ -215,7 +226,9 @@ class CoderAgent(BaseAgent):
         code_smells = self.detect_code_smells(content)
         coverage = self._get_test_coverage()
 
-        self._quality_score = self.core.calculate_quality_score(metrics, style_violations, code_smells, coverage)
+        self._quality_score = self.core.calculate_quality_score(
+            metrics, style_violations, code_smells, coverage
+        )
         return self._quality_score
 
     # ========== Code Smell Detection ==========
@@ -228,9 +241,7 @@ class CoderAgent(BaseAgent):
 
     # ========== Code Deduplication ==========
     def find_duplicate_code(
-        self,
-        content: str | None = None,
-        min_lines: int = 4
+        self, content: str | None = None, min_lines: int = 4
     ) -> list[dict[str, Any]]:
         """Find duplicate code blocks."""
         if content is None:
@@ -242,7 +253,7 @@ class CoderAgent(BaseAgent):
         if content is None:
             content = self.current_content or self.previous_content or ""
         duplicates = self.find_duplicate_code(content)
-        total_lines = len(content.split('\n'))
+        total_lines = len(content.split("\n"))
         if total_lines == 0:
             return 0.0
         duplicate_lines = sum(
@@ -289,9 +300,11 @@ class CoderAgent(BaseAgent):
 
     def _get_fallback_response(self) -> str:
         """Return fallback response when Copilot is unavailable."""
-        return ("# AI Improvement Unavailable\n"
-                "# GitHub CLI not found. Install from https://cli.github.com/\n\n"
-                "# Original code preserved below:\n\n")
+        return (
+            "# AI Improvement Unavailable\n"
+            "# GitHub CLI not found. Install from https://cli.github.com/\n\n"
+            "# Original code preserved below:\n\n"
+        )
 
     def _validate_syntax(self, content: str) -> bool:
         """Validate Python syntax using ast."""
@@ -314,7 +327,9 @@ class CoderAgent(BaseAgent):
         logging.debug("Syntax validation passed")
         # Validate style (flake8)
         if not self._validate_flake8(new_content):
-            logging.warning("Generated code failed style validation (flake8). Proceeding anyway.")
+            logging.warning(
+                "Generated code failed style validation (flake8). Proceeding anyway."
+            )
         else:
             logging.debug("Style validation passed")
         return new_content

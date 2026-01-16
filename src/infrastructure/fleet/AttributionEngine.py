@@ -23,7 +23,7 @@ Tracks the lineage and provenance of every generated piece of content or code.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import hashlib
 import time
 import json
@@ -34,8 +34,6 @@ from typing import Any
 from src.infrastructure.fleet.core.AttributionCore import AttributionCore
 
 __version__ = VERSION
-
-
 
 
 class AttributionEngine:
@@ -70,7 +68,9 @@ class AttributionEngine:
                 f.write(new_content)
             logging.info(f"AttributionEngine: Applied license header to {file_path}")
 
-    def record_attribution(self, agent_id: str, content: str, task_context: str) -> None:
+    def record_attribution(
+        self, agent_id: str, content: str, task_context: str
+    ) -> None:
         """Creates a record of content generation."""
         content_hash = hashlib.sha256(content.encode()).hexdigest()
         record = {
@@ -78,10 +78,7 @@ class AttributionEngine:
             "agent": agent_id,
             "hash": content_hash,
             "task": task_context,
-            "metadata": {
-                "chars": len(content),
-                "words": len(content.split())
-            }
+            "metadata": {"chars": len(content), "words": len(content.split())},
         }
         self.records.append(record)
         self._save()

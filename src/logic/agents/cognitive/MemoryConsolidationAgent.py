@@ -15,16 +15,16 @@
 """Agent specializing in consolidating episodic memories into global project context."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from src.core.base.BaseAgent import BaseAgent
 from src.logic.agents.cognitive.LongTermMemory import LongTermMemory
-from src.logic.agents.cognitive.context.engines.GlobalContextEngine import GlobalContextEngine
-from src.core.base.utilities import create_main_function, as_tool
+from src.logic.agents.cognitive.context.engines.GlobalContextEngine import (
+    GlobalContextEngine,
+)
+from src.core.base.BaseUtilities import create_main_function, as_tool
 
 __version__ = VERSION
-
-
 
 
 class MemoryConsolidationAgent(BaseAgent):
@@ -51,7 +51,9 @@ class MemoryConsolidationAgent(BaseAgent):
     def consolidate_all(self) -> str:
         """Performs a full review of all federated memory shards."""
         # Querying for common themes across federation
-        recent_memories = self.ltm.federated_query("", n_results=100)  # Empty query to get general recent ones
+        recent_memories = self.ltm.federated_query(
+            "", n_results=100
+        )  # Empty query to get general recent ones
         if not recent_memories:
             return "No memories found in federated shards to consolidate."
 
@@ -79,26 +81,19 @@ class MemoryConsolidationAgent(BaseAgent):
                 version_val = content.split()[-1]
                 self.context_engine.add_fact("project_version_recorded", version_val)
 
-
-
-
-
-
-
-
-
-
                 new_facts += 1
 
             if "error" in task or "failed" in task:
                 if "import" in task:
-
-
-
-                    self.context_engine.add_constraint("Verify __init__.py exports for all RAG shards.")
+                    self.context_engine.add_constraint(
+                        "Verify __init__.py exports for all RAG shards."
+                    )
                     new_insights += 1
                 elif "diskcache" in task:
-                    self.context_engine.add_insight("DiskCache performance hinges on shard size. Keep shards < 1GB.", "Consolidator")
+                    self.context_engine.add_insight(
+                        "DiskCache performance hinges on shard size. Keep shards < 1GB.",
+                        "Consolidator",
+                    )
                     new_insights += 1
 
         self.context_engine.save()
@@ -106,15 +101,13 @@ class MemoryConsolidationAgent(BaseAgent):
         logging.info(report)
         return report
 
-
     def improve_content(self, prompt: str) -> str:
         """Trigger consolidation cycle."""
         return self.consolidate_all()
 
 
-
-
-
 if __name__ == "__main__":
-    main = create_main_function(MemoryConsolidationAgent, "MemoryConsolidation Agent", "Consolidation Task")
+    main = create_main_function(
+        MemoryConsolidationAgent, "MemoryConsolidation Agent", "Consolidation Task"
+    )
     main()

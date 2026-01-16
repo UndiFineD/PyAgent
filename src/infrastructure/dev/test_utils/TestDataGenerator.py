@@ -21,14 +21,12 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from datetime import datetime
 from typing import Any
 import json
 
 __version__ = VERSION
-
-
 
 
 class TestDataGenerator:
@@ -38,6 +36,7 @@ class TestDataGenerator:
         gen=TestDataGenerator()
         code=gen.generate_python_code(with_errors=False)
     """
+
     __test__ = False
 
     def __init__(self, seed: int | None = None) -> None:
@@ -49,6 +48,7 @@ class TestDataGenerator:
         self.seed = seed
         if seed:
             import random
+
             random.seed(seed)
 
     def generate_python_code(

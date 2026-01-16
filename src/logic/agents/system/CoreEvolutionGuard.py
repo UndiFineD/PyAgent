@@ -18,7 +18,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import os
 import hashlib
 import time
@@ -27,13 +27,12 @@ from typing import Any
 __version__ = VERSION
 
 
-
-
 class CoreEvolutionGuard:
     """
     Monitors and validates changes to the agent's core source code.
     Prevents unintended mutations or malicious injections into the agent logic.
     """
+
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
         self.code_fingerprints: dict[str, str] = {}  # path -> hash
@@ -43,7 +42,7 @@ class CoreEvolutionGuard:
         """Calculates SHA256 hash of a file."""
         hasher = hashlib.sha256()
         try:
-            with open(file_path, 'rb') as f:
+            with open(file_path, "rb") as f:
                 buf = f.read()
                 hasher.update(buf)
             return hasher.hexdigest()
@@ -80,7 +79,11 @@ class CoreEvolutionGuard:
         if rel_path not in self.code_fingerprints:
             return {"status": "untracked", "risk": "medium", "file": rel_path}
 
-        full_path = os.path.join(self.workspace_path, rel_path) if not os.path.isabs(rel_path) else rel_path
+        full_path = (
+            os.path.join(self.workspace_path, rel_path)
+            if not os.path.isabs(rel_path)
+            else rel_path
+        )
         new_hash = self.hash_file(full_path)
         old_hash = self.code_fingerprints[rel_path]
 
@@ -89,13 +92,17 @@ class CoreEvolutionGuard:
 
         # Simulated heuristic check
         # In a real scenario, this would analyze AST changes or use LLM classification
-        risk = "high" if "src/classes" in rel_path or "agent" in rel_path.lower() else "low"
+        risk = (
+            "high"
+            if "src/classes" in rel_path or "agent" in rel_path.lower()
+            else "low"
+        )
 
         return {
             "status": "modified",
             "risk": risk,
             "requires_review": True,
-            "file": rel_path
+            "file": rel_path,
         }
 
     def generate_hardening_report(self) -> dict[str, Any]:
@@ -104,5 +111,5 @@ class CoreEvolutionGuard:
             "uptime_integrity": 1.0,
             "failed_validations": 0,
             "last_scan": time.time(),
-            "monitored_files_count": len(self.code_fingerprints)
+            "monitored_files_count": len(self.code_fingerprints),
         }

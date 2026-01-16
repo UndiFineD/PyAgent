@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\TestAgent.py
-# hypothesis_version: 6.150.1
-
-['### Failure Details', '--maxfail=5', '--tb=short', '-m', 'Shell', 'pytest', 'tests']

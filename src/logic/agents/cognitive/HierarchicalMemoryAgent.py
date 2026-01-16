@@ -23,16 +23,14 @@ Manages Short-term (Episodic), Mid-term (Working), Long-term (Semantic), and Arc
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import time
 from pathlib import Path
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class HierarchicalMemoryAgent(BaseAgent):
@@ -58,7 +56,9 @@ class HierarchicalMemoryAgent(BaseAgent):
         )
 
     @as_tool
-    def store_memory(self, content: str, importance: float = 0.5, tags: list[str] | None = None) -> str:
+    def store_memory(
+        self, content: str, importance: float = 0.5, tags: list[str] | None = None
+    ) -> str:
         """Stores a new memory fragment into the ShortTerm tier.
         Args:
             content: The actual memory text.
@@ -73,7 +73,7 @@ class HierarchicalMemoryAgent(BaseAgent):
             "content": content,
             "importance": importance,
             "tags": tags or [],
-            "status": "ShortTerm"
+            "status": "ShortTerm",
         }
 
         target_path = self.memory_root / "ShortTerm" / f"{memory_id}.json"
@@ -116,39 +116,53 @@ class HierarchicalMemoryAgent(BaseAgent):
             query: The search term or semantic query.
             deep_search: If True, searches long-term and archival tiers.
         """
-        results = []
         search_tiers = ["short", "mid"]
-
-
-
-
-
-
-
-
-
-
         if deep_search:
             search_tiers += ["long", "archival"]
 
+        # Collect all memory files
+        all_data = []  # (tier, content, tags)
         for tier in search_tiers:
-
-
-
-
             tier_dir = self.memory_root / tier
             for mem_file in tier_dir.glob("*.json"):
-                with open(mem_file) as f:
-                    data = json.load(f)
-                if query.lower() in data["content"].lower() or any(query.lower() in t.lower() for t in data["tags"]):
-
-
-
-                    results.append(f"[{tier.upper()}] {data['content'][:100]}...")
+                try:
+                    with open(mem_file) as f:
+                        data = json.load(f)
+                    all_data.append((tier, data.get("content", ""), data.get("tags", [])))
+                except Exception:
+                    continue
+        
+        if not all_data:
+            return "No matching memories found."
+        
+        # Rust-accelerated search
+        try:
+            from rust_core import search_with_tags_rust
+            contents = [d[1] for d in all_data]
+            tags_list = [d[2] for d in all_data]
+            matches = search_with_tags_rust(query, contents, tags_list)
+            
+            results = []
+            for idx, score in matches:
+                tier, content, _ = all_data[idx]
+                results.append(f"[{tier.upper()}] {content[:100]}...")
+            
+            if not results:
+                return "No matching memories found."
+            return "### Memory Search Results\n\n" + "\n".join(results)
+        except (ImportError, Exception):
+            pass  # Fall back to Python
+        
+        # Python fallback
+        results = []
+        for tier, content, tags in all_data:
+            if query.lower() in content.lower() or any(
+                query.lower() in t.lower() for t in tags
+            ):
+                results.append(f"[{tier.upper()}] {content[:100]}...")
 
         if not results:
             return "No matching memories found."
-
 
         return "### Memory Search Results\n\n" + "\n".join(results)
 
@@ -156,10 +170,12 @@ class HierarchicalMemoryAgent(BaseAgent):
         return "Hierarchical memory is synchronized and optimized."
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(HierarchicalMemoryAgent, "Hierarchical Memory Agent", "Multi-resolution memory management")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        HierarchicalMemoryAgent,
+        "Hierarchical Memory Agent",
+        "Multi-resolution memory management",
+    )
     main()

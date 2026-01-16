@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\utils\ContextDiffer.py
-# hypothesis_version: 6.150.1
-
-['##\\s+(\\w+)', 'added', 'modified', 'removed', 'v1', 'v2']

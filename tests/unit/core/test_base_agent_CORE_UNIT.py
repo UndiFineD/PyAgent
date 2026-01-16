@@ -9,8 +9,6 @@ from pathlib import Path
 # Import from src
 
 
-
-
 class TestAgentEnums:
     """Tests for agent enums."""
 
@@ -52,9 +50,7 @@ class TestCoreDataclasses:
     def test_create_template(self, base_agent_module: Any) -> None:
         """Test creating a prompt template."""
         template = base_agent_module.PromptTemplate(
-            id="test1",
-            name="Test Template",
-            template="Improve {content} with {focus}"
+            id="test1", name="Test Template", template="Improve {content} with {focus}"
         )
         assert template.id == "test1"
         assert template.version == "1.0"
@@ -68,8 +64,7 @@ class TestCoreDataclasses:
     def test_health_check_result(self, base_agent_module: Any) -> None:
         """Test creating health check result."""
         result = base_agent_module.HealthCheckResult(
-            healthy=True,
-            backend_available=True
+            healthy=True, backend_available=True
         )
         assert result.healthy is True
 
@@ -248,14 +243,18 @@ class TestPromptVersioningAndABTesting:
     def test_prompt_version_creation(self, base_agent_module: Any) -> None:
         """Test creating prompt versions."""
         PromptVersion = base_agent_module.PromptVersion
-        v1 = PromptVersion(version="1.0.0", content="Analyze this code", description="Original prompt")
+        v1 = PromptVersion(
+            version="1.0.0", content="Analyze this code", description="Original prompt"
+        )
         assert v1.version == "1.0.0"
         assert v1.active
 
     def test_ab_test_variant_selection(self, base_agent_module: Any) -> None:
         """Test A/B test variant selection."""
         ABTest = base_agent_module.ABTest
-        test = ABTest(name="prompt_test", variants=["control", "treatment"], weights=[0.5, 0.5])
+        test = ABTest(
+            name="prompt_test", variants=["control", "treatment"], weights=[0.5, 0.5]
+        )
         variant = test.select_variant()
         assert variant in ["control", "treatment"]
 
@@ -329,7 +328,7 @@ class TestAgentConfigurationProfiles:
 
         metrics = checker.get_metrics()
         assert metrics["total_requests"] == 6
-        assert metrics["error_rate"] == pytest.approx(1/6)
+        assert metrics["error_rate"] == pytest.approx(1 / 6)
 
     def test_config_profile_inheritance(self, base_agent_module: Any) -> None:
         """Test profile inheritance logic."""

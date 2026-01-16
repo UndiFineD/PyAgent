@@ -79,16 +79,41 @@ pub fn deduplicate_entries(entries: Vec<String>) -> PyResult<Vec<String>> {
 #[pyfunction]
 pub fn normalize_response(response: &str) -> PyResult<String> {
     // Strip whitespace
-    let mut normalized = response.trim().to_string();
+    let normalized = response.trim();
     
     // Normalize line endings
-    normalized = normalized.replace("\r\n", "\n");
+    let normalized = normalized.replace("\r\n", "\n");
     
     // Collapse multiple spaces
     let words: Vec<&str> = normalized.split_whitespace().collect();
-    normalized = words.join(" ");
+    Ok(words.join(" "))
+}
+
+/// Assess response quality (Logic only).
+/// Returns a score from 0.0 to 1.0.
+#[pyfunction]
+pub fn assess_response_quality(response: &str, metadata: Option<HashMap<String, bool>>) -> PyResult<f64> {
+    let mut score: f64 = 0.5;
     
-    Ok(normalized)
+    if response.len() > 100 {
+        score += 0.1;
+    }
+    
+    let lower = response.to_lowercase();
+    if !lower.contains("error") && !lower.contains("fail") {
+        score += 0.1;
+    }
+    
+    if let Some(m) = metadata {
+        if *m.get("has_references").unwrap_or(&false) {
+            score += 0.1;
+        }
+        if *m.get("is_complete").unwrap_or(&false) {
+            score += 0.1;
+        }
+    }
+    
+    Ok(score.min(1.0))
 }
 
 // === MetricsCore Implementations ===
@@ -560,4 +585,85 @@ pub fn check_finetuning_trigger(quality_history: Vec<f64>, threshold: f64, n_las
     }
     
     Ok(true)
+}
+
+/// Calculate Pearson correlation coefficient (CorrelationAnalyzer).
+#[pyfunction]
+pub fn calculate_pearson_correlation(values_a: Vec<f64>, values_b: Vec<f64>) -> PyResult<f64> {
+    let n = values_a.len().min(values_b.len());
+    if n < 3 {
+        return Ok(0.0);
+    }
+    
+    let mean_a: f64 = values_a.iter().take(n).sum::<f64>() / n as f64;
+    let mean_b: f64 = values_b.iter().take(n).sum::<f64>() / n as f64;
+    
+    let mut numerator = 0.0;
+    let mut denom_a = 0.0;
+    let mut denom_b = 0.0;
+    
+    for i in 0..n {
+        let diff_a = values_a[i] - mean_a;
+        let diff_b = values_b[i] - mean_b;
+        numerator += diff_a * diff_b;
+        denom_a += diff_a * diff_a;
+        denom_b += diff_b * diff_b;
+    }
+    
+    let denom = (denom_a.sqrt()) * (denom_b.sqrt());
+    if denom == 0.0 {
+        return Ok(0.0);
+    }
+    
+    Ok(numerator / denom)
+}
+
+/// Predict future values using linear extrapolation (PredictionEngine).
+#[pyfunction]
+pub fn predict_linear(historical: Vec<f64>, periods: i32) -> PyResult<Vec<f64>> {
+    if periods <= 0 || historical.is_empty() {
+        return Ok(vec![]);
+    }
+    if historical.len() == 1 {
+        return Ok(vec![historical[0]; periods as usize]);
+    }
+    
+    let last = *historical.last().unwrap();
+    let prev = historical[historical.len() - 2];
+    let mut delta = last - prev;
+    
+    if delta == 0.0 && historical.len() > 2 {
+        let window_size = historical.len().min(5);
+        let window: Vec<f64> = historical.iter().rev().take(window_size).copied().collect();
+        delta = (window[0] - window[window_size - 1]) / (window_size - 1) as f64;
+    }
+    
+    let mut predictions = Vec::with_capacity(periods as usize);
+    for i in 1..=periods {
+        predictions.push(last + delta * i as f64);
+    }
+    
+    Ok(predictions)
+}
+
+/// Calculate prediction with confidence intervals (PredictionEngine).
+#[pyfunction]
+pub fn predict_with_confidence_rust(historical: Vec<f64>, periods: i32) -> PyResult<(Vec<f64>, Vec<f64>, Vec<f64>)> {
+    let predictions = predict_linear(historical.clone(), periods)?;
+    
+    if historical.is_empty() {
+        let empty: Vec<f64> = vec![];
+        return Ok((predictions.clone(), empty.clone(), empty));
+    }
+    
+    let n = historical.len() as f64;
+    let mean: f64 = historical.iter().sum::<f64>() / n;
+    let var: f64 = historical.iter().map(|v| (v - mean).powi(2)).sum::<f64>() / n;
+    let std = var.sqrt();
+    let margin = std.max(mean.abs() * 0.05);
+    
+    let lower: Vec<f64> = predictions.iter().map(|p| p - margin).collect();
+    let upper: Vec<f64> = predictions.iter().map(|p| p + margin).collect();
+    
+    Ok((predictions, lower, upper))
 }

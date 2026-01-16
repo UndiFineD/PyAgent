@@ -18,7 +18,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.observability.StructuredLogger import StructuredLogger
@@ -26,13 +26,12 @@ from src.observability.StructuredLogger import StructuredLogger
 __version__ = VERSION
 
 
-
-
 class ComplianceAuditAgent(BaseAgent):
     """
     Compliance Audit Agent: Verifies fleet operations against simulated
     industry standards (e.g., SOC2, GDPR, HIPAA patterns).
     """
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -41,13 +40,13 @@ class ComplianceAuditAgent(BaseAgent):
             "GDPR": [
                 "PII Data Encryption",
                 "Right to be Forgotten API",
-                "Data Portability Export"
+                "Data Portability Export",
             ],
             "SOC2": [
                 "Audit Trail Logging",
                 "Access Control Verification",
-                "Encryption at Rest"
-            ]
+                "Encryption at Rest",
+            ],
         }
 
     def run_compliance_check(self, standard: str) -> dict[str, Any]:
@@ -67,21 +66,28 @@ class ComplianceAuditAgent(BaseAgent):
             if passed:
                 passed_checks += 1
             else:
-                findings.append({
-                    "check": check,
-                    "status": "FAIL",
-                    "recommendation": f"Implement {check} immediately to meet {standard} requirements."
-                })
+                findings.append(
+                    {
+                        "check": check,
+                        "status": "FAIL",
+                        "recommendation": f"Implement {check} immediately to meet {standard} requirements.",
+                    }
+                )
 
         score = (passed_checks / total_checks) * 100
         res = {
             "standard": standard,
             "score": score,
             "status": "Compliant" if score == 100 else "Non-Compliant",
-            "failed_checks": findings
+            "failed_checks": findings,
         }
         # Phase 108: Intelligence Recording
-        self._record(f"Compliance check: {standard}", str(res), provider="ComplianceAudit", model="StandardVerifier")
+        self._record(
+            f"Compliance check: {standard}",
+            str(res),
+            provider="ComplianceAudit",
+            model="StandardVerifier",
+        )
         return res
 
     def _simulate_check(self, check_name: str) -> bool:
@@ -102,6 +108,6 @@ class ComplianceAuditAgent(BaseAgent):
         for standard in self.standards:
             res = self.run_compliance_check(standard)
             report += f"{standard}: {res['status']} (Score: {res['score']}%)\n"
-            for fail in res['failed_checks']:
+            for fail in res["failed_checks"]:
                 report += f"  - [FAIL] {fail['check']}: {fail['recommendation']}\n"
         return report

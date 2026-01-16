@@ -7,10 +7,9 @@ from typing import Any
 import time
 
 
-
-
 class AttributionCore:
     """Handles logic for code attribution and SPDX licensing."""
+
     SPDX_TEMPLATE = """# Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,7 +33,7 @@ class AttributionCore:
             "agent_id": agent_id,
             "model_id": model_id,
             "timestamp": time.time(),
-            "license": "Apache-2.0"
+            "license": "Apache-2.0",
         }
 
     @staticmethod
@@ -42,6 +41,9 @@ class AttributionCore:
         """
         Appends the SPDX header if not already present.
         """
-        if "SPDX-License-Identifier" in content or "Copyright 2026 PyAgent Authors" in content:
+        if (
+            "SPDX-License-Identifier" in content
+            or "Copyright 2026 PyAgent Authors" in content
+        ):
             return content
         return AttributionCore.SPDX_TEMPLATE + "\n" + content

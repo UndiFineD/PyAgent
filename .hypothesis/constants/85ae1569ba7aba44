@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\nn\attention\flex_attention.py
-# hypothesis_version: 6.150.1
-
-[1.0, 2.0, 100, 128, '\n)', ', ', '-inf', '...', 'AuxOutput', 'AuxRequest', 'BlockMask', 'FlexKernelOptions', 'OUTPUT_LOGSUMEXP', 'OUTPUT_MAX', 'PRESCALE_QK', 'ROWS_GUARANTEED_SAFE', 'WRITE_DQ', 'and_masks', 'cpu', 'create_block_mask', 'create_mask', 'cuda', 'eager', 'flex_attention', 'hpu', 'noop_mask', 'or_masks', 'xpu', '█', '░']

@@ -23,22 +23,35 @@ if TYPE_CHECKING:
     from .FleetManager import FleetManager
 
 
-
-
 class FleetConsensusManager:
     """Manages multi-agent consensus workflows."""
 
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
-    def execute_with_consensus(self, task: str, primary_agent: str | None = None, secondary_agents: list[str] | None = None) -> dict[str, Any]:
+    def execute_with_consensus(
+        self,
+        task: str,
+        primary_agent: str | None = None,
+        secondary_agents: list[str] | None = None,
+    ) -> dict[str, Any]:
         """Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner."""
         logging.info(f"Fleet: Running consensus vote for task: {task[:50]}")
 
         # Dynamic Committee Formation
         if not primary_agent or not secondary_agents:
-            available = list(set(list(self.fleet.agents.registry_configs.keys()) + list(self.fleet.agents.keys())))
-            available = [a for a in available if a not in ["ByzantineConsensus", "ByzantineConsensusAgent", "FleetManager"]]
+            available = list(
+                set(
+                    list(self.fleet.agents.registry_configs.keys())
+                    + list(self.fleet.agents.keys())
+                )
+            )
+            available = [
+                a
+                for a in available
+                if a
+                not in ["ByzantineConsensus", "ByzantineConsensusAgent", "FleetManager"]
+            ]
 
             judge = getattr(self.fleet, "ByzantineConsensus", None)
             if not judge:
@@ -48,14 +61,22 @@ class FleetConsensusManager:
                         break
 
             if not judge:
-                return {"decision": "REJECTED", "reason": "ByzantineConsensus agent not available."}
+                return {
+                    "decision": "REJECTED",
+                    "reason": "ByzantineConsensus agent not available.",
+                }
 
             committee = judge.select_committee(task, available)
             if not committee:
-                return {"decision": "REJECTED", "reason": "No committee could be formed."}
+                return {
+                    "decision": "REJECTED",
+                    "reason": "No committee could be formed.",
+                }
             primary_agent = committee[0]
             secondary_agents = committee[1:]
-            logging.info(f"Fleet: Formed dynamic committee: {primary_agent}, {secondary_agents}")
+            logging.info(
+                f"Fleet: Formed dynamic committee: {primary_agent}, {secondary_agents}"
+            )
 
         proposals: dict[str, str] = {}
         all_agents = [primary_agent] + secondary_agents
@@ -66,22 +87,32 @@ class FleetConsensusManager:
                     res = self.fleet.agents[agent_name].improve_content(task)
                     proposals[agent_name] = res
                 except Exception as e:
-                    logging.error(f"Fleet: Agent {agent_name} failed to provide consensus proposal: {e}")
+                    logging.error(
+                        f"Fleet: Agent {agent_name} failed to provide consensus proposal: {e}"
+                    )
 
         if not proposals:
-            return {"decision": "REJECTED", "reason": "No agents could provide proposals."}
+            return {
+                "decision": "REJECTED",
+                "reason": "No agents could provide proposals.",
+            }
 
         # Run the committee vote
-        if 'judge' not in locals():
+        if "judge" not in locals():
             judge = getattr(self.fleet, "ByzantineConsensus", None)
 
         if not judge:
-            return {"decision": "REJECTED", "reason": "ByzantineConsensus not found for voting."}
+            return {
+                "decision": "REJECTED",
+                "reason": "ByzantineConsensus not found for voting.",
+            }
 
         result = judge.run_committee_vote(task, proposals)
 
         # Broadcast lesson via Federated Knowledge
-        if result["decision"] == "ACCEPTED" and getattr(self.fleet, "federated_knowledge", None):
+        if result["decision"] == "ACCEPTED" and getattr(
+            self.fleet, "federated_knowledge", None
+        ):
             try:
                 self.fleet.federated_knowledge.broadcast_lesson(
                     lesson_id=f"consensus_{int(time.time())}",
@@ -89,8 +120,8 @@ class FleetConsensusManager:
                         "agent": result.get("winner"),
                         "task_type": "high_integrity_code",
                         "success": True,
-                        "fix": f"Consensus reached by {result.get('winner')} for {task[:30]}"
-                    }
+                        "fix": f"Consensus reached by {result.get('winner')} for {task[:30]}",
+                    },
                 )
             except Exception:
                 pass

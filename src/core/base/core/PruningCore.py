@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 from typing import Any
 import math
@@ -11,10 +10,10 @@ except ImportError:
     rc: Any = None  # type: ignore[no-redef]
 
 
-
 @dataclass
 class SynapticWeight:
     """State tracking for neural synaptic weights during swarm pruning."""
+
     agent_id: str
 
     weight: float  # 0.0 to 1.0
@@ -22,12 +21,15 @@ class SynapticWeight:
     last_fired_cycle: int = 0
     refractory_until: float = 0.0
 
+
 class PruningCore:
     """Pure logic for neural pruning and synaptic decay within the agent swarm.
     Handles weight calculations, refractory periods, and pruning decisions.
     """
 
-    def calculate_decay(self, current_weight: float, idle_time_sec: float, half_life_sec: float = 3600) -> float:
+    def calculate_decay(
+        self, current_weight: float, idle_time_sec: float, half_life_sec: float = 3600
+    ) -> float:
         """Calculates logarithmic/exponential decay for a synaptic weight."""
         if rc:
             try:
@@ -43,7 +45,9 @@ class PruningCore:
         """Checks if an agent is in a synaptic refractory period (preventing rigid over-use)."""
         if rc:
             try:
-                return rc.is_in_refractory({"refractory_until": weight.refractory_until})  # type: ignore[attr-defined]
+                return rc.is_in_refractory(
+                    {"refractory_until": weight.refractory_until}
+                )  # type: ignore[attr-defined]
             except Exception:
                 pass
         return time.time() < weight.refractory_until

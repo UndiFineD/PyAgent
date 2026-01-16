@@ -301,7 +301,7 @@ pub fn ensure_safety_flags_rust(content: &str) -> PyResult<String> {
         return Ok(content.to_string());
     }
 
-    let mut lines: Vec<&str> = content.lines().collect();
+    let lines: Vec<&str> = content.lines().collect();
     // Check if empty
     if lines.is_empty() {
         return Ok(format!("#!/bin/bash\n{}\n\n", header));

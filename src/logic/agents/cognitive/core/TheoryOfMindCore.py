@@ -25,19 +25,19 @@ No I/O or side effects.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class TheoryOfMindCore:
     """Pure logic core for Theory of Mind modeling."""
 
     @staticmethod
-    def update_profile_logic(profile: dict[str, Any], observations: dict[str, Any]) -> dict[str, Any]:
+    def update_profile_logic(
+        profile: dict[str, Any], observations: dict[str, Any]
+    ) -> dict[str, Any]:
         """Core logic to update an agent profile based on observations."""
         # Ensure sets exist
         domains: set[str] = set(profile.get("knowledge_domains", []))
@@ -56,7 +56,9 @@ class TheoryOfMindCore:
             "knowledge_domains": list(domains),
             "strengths": list(strengths),
             "limitations": list(limitations),
-            "last_active": observations.get("timestamp", profile.get("last_active", 0.0))
+            "last_active": observations.get(
+                "timestamp", profile.get("last_active", 0.0)
+            ),
         }
 
     @staticmethod
@@ -76,4 +78,8 @@ class TheoryOfMindCore:
             score = TheoryOfMindCore.estimate_knowledge_score(profile, task)
             rankings.append((agent, score))
 
-        return [name for name, score in sorted(rankings, key=lambda x: x[1], reverse=True) if score > 0.5]
+        return [
+            name
+            for name, score in sorted(rankings, key=lambda x: x[1], reverse=True)
+            if score > 0.5
+        ]

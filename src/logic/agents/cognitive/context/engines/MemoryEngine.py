@@ -21,7 +21,7 @@
 """Engine for persistent episodic memory of agent actions and outcomes."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import logging
 from datetime import datetime
@@ -33,11 +33,10 @@ __version__ = VERSION
 
 try:
     import chromadb
+
     HAS_CHROMA = True
 except ImportError:
     HAS_CHROMA = False
-
-
 
 
 class MemoryEngine:
@@ -65,7 +64,14 @@ class MemoryEngine:
             logging.error(f"Memory DB init error: {e}")
             return None
 
-    def record_episode(self, agent_name: str, task: str, outcome: str, success: bool, metadata: dict[str, Any] | None = None) -> None:
+    def record_episode(
+        self,
+        agent_name: str,
+        task: str,
+        outcome: str,
+        success: bool,
+        metadata: dict[str, Any] | None = None,
+    ) -> None:
         """Records an agent's experience with semantic indexing and utility scoring."""
         episode = self.core.create_episode(agent_name, task, outcome, success, metadata)
         self.episodes.append(episode)
@@ -77,13 +83,15 @@ class MemoryEngine:
                 doc = self.core.format_for_indexing(episode)
                 collection.add(
                     documents=[doc],
-                    metadatas=[{
-                        "agent": episode['agent'],
-                        "success": str(episode['success']),
-                        "timestamp": episode['timestamp'],
-                        "utility_score": float(episode['utility_score'])
-                    }],
-                    ids=[f"mem_{len(self.episodes)}_{int(datetime.now().timestamp())}"]
+                    metadatas=[
+                        {
+                            "agent": episode["agent"],
+                            "success": str(episode["success"]),
+                            "timestamp": episode["timestamp"],
+                            "utility_score": float(episode["utility_score"]),
+                        }
+                    ],
+                    ids=[f"mem_{len(self.episodes)}_{int(datetime.now().timestamp())}"],
                 )
             except Exception as e:
                 logging.error(f"Failed to index memory: {e}")
@@ -99,16 +107,13 @@ class MemoryEngine:
         try:
             # Fetch existing metadata
             result = collection.get(ids=[memory_id])
-            if result and result['metadatas']:
-                meta = result['metadatas'][0]
-                old_score = float(meta.get('utility_score', 0.5))
+            if result and result["metadatas"]:
+                meta = result["metadatas"][0]
+                old_score = float(meta.get("utility_score", 0.5))
                 new_score = self.core.calculate_new_utility(old_score, increment)
-                meta['utility_score'] = new_score
+                meta["utility_score"] = new_score
 
-                collection.update(
-                    ids=[memory_id],
-                    metadatas=[meta]
-                )
+                collection.update(ids=[memory_id], metadatas=[meta])
 
                 # Update local list too
                 for ep in self.episodes:
@@ -117,34 +122,44 @@ class MemoryEngine:
         except Exception as e:
             logging.error(f"Failed to update utility for {memory_id}: {e}")
 
-    def get_lessons_learned(self, query: str = "", limit: int = 5, min_utility: float = 0.0) -> list[dict[str, Any]]:
+    def get_lessons_learned(
+        self, query: str = "", limit: int = 5, min_utility: float = 0.0
+    ) -> list[dict[str, Any]]:
         """Retrieves past episodes relevant to the query, filtered by high utility."""
         if not query:
             # Return recent high utility episodes
-            candidates = [ep for ep in self.episodes if ep.get("utility_score", 0.5) >= min_utility]
+            candidates = [
+                ep
+                for ep in self.episodes
+                if ep.get("utility_score", 0.5) >= min_utility
+            ]
             return candidates[-limit:]
 
         collection = self._init_db()
         if collection:
             try:
                 # Build specific filter for utility if Chroma version supports it
-                where_clause = {"utility_score": {"$gte": min_utility}} if min_utility > 0 else None
+                where_clause = (
+                    {"utility_score": {"$gte": min_utility}}
+                    if min_utility > 0
+                    else None
+                )
                 results = collection.query(
-                    query_texts=[query],
-                    n_results=limit,
-                    where=where_clause
+                    query_texts=[query], n_results=limit, where=where_clause
                 )
 
                 semantic_results = []
                 for i, doc in enumerate(results.get("documents", [[]])[0]):
-                    meta = results['metadatas'][0][i]
-                    semantic_results.append({
-                        "task": "Semantic Memory",
-                        "outcome": doc,
-                        "success": meta.get("success") == "True",
-                        "agent": meta.get("agent", "Self"),
-                        "utility_score": meta.get("utility_score", 0.5)
-                    })
+                    meta = results["metadatas"][0][i]
+                    semantic_results.append(
+                        {
+                            "task": "Semantic Memory",
+                            "outcome": doc,
+                            "success": meta.get("success") == "True",
+                            "agent": meta.get("agent", "Self"),
+                            "utility_score": meta.get("utility_score", 0.5),
+                        }
+                    )
                 return semantic_results
             except Exception as e:
                 logging.error(f"Memory search error: {e}")
@@ -153,7 +168,11 @@ class MemoryEngine:
         relevant = []
         q = query.lower()
         for ep in reversed(self.episodes):
-            if q in ep["task"].lower() or q in ep["outcome"].lower() or q in ep["agent"].lower():
+            if (
+                q in ep["task"].lower()
+                or q in ep["outcome"].lower()
+                or q in ep["agent"].lower()
+            ):
                 relevant.append(ep)
             if len(relevant) >= limit:
                 break
@@ -164,18 +183,31 @@ class MemoryEngine:
         collection = self._init_db()
         if not collection:
             # Fallback to simple matching if Chroma is not available
-            return [{"content": ep["outcome"], "metadata": {"file_path": ep.get("metadata", {}).get("file_path", "unknown"), "agent": ep["agent"]}, "score": 0.5}
-                    for ep in self.get_lessons_learned(query, limit)]
+            return [
+                {
+                    "content": ep["outcome"],
+                    "metadata": {
+                        "file_path": ep.get("metadata", {}).get("file_path", "unknown"),
+                        "agent": ep["agent"],
+                    },
+                    "score": 0.5,
+                }
+                for ep in self.get_lessons_learned(query, limit)
+            ]
 
         try:
             results = collection.query(query_texts=[query], n_results=limit)
             matches = []
             for i in range(len(results.get("documents", [[]])[0])):
-                matches.append({
-                    "content": results['documents'][0][i],
-                    "metadata": results['metadatas'][0][i],
-                    "score": results['distances'][0][i] if 'distances' in results else 0
-                })
+                matches.append(
+                    {
+                        "content": results["documents"][0][i],
+                        "metadata": results["metadatas"][0][i],
+                        "score": results["distances"][0][i]
+                        if "distances" in results
+                        else 0,
+                    }
+                )
             return matches
         except Exception as e:
             logging.error(f"search_memories error: {e}")

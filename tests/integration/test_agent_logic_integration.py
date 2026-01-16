@@ -10,21 +10,19 @@ from src.logic.agents.swarm.OrchestratorAgent import OrchestratorAgent
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
     class agent_sys_path:
         def __enter__(self) -> bool:
-
             return self
-
-
-
-
-
-
 
         def __exit__(self, *args) -> bool:
             sys.path.remove(str(AGENT_DIR))
@@ -35,7 +33,9 @@ except ImportError:
 class TestPhase5Integration:
     """Integration tests for Phase 5 features."""
 
-    def test_circuit_breaker_with_agent_execution(self, tmp_path: Path, agent_module) -> None:
+    def test_circuit_breaker_with_agent_execution(
+        self, tmp_path: Path, agent_module
+    ) -> None:
         """Test circuit breaker integration with agent."""
         agent = OrchestratorAgent(repo_root=str(tmp_path))
 
@@ -46,7 +46,7 @@ class TestPhase5Integration:
 
         report = cb.call(run_agent)
 
-        assert 'summary' in report
+        assert "summary" in report
         assert cb.state == "CLOSED"
 
     def test_full_phase5_workflow(self, tmp_path: Path, agent_module) -> None:
@@ -55,27 +55,28 @@ class TestPhase5Integration:
 
         # Simulate execution metrics
         agent.metrics = {
-            'files_processed': 10,
-            'files_modified': 7,
-            'agents_applied': {'coder': 8, 'tests': 6},
-            'start_time': time.time() - 15,
-            'end_time': time.time(),
+            "files_processed": 10,
+            "files_modified": 7,
+            "agents_applied": {"coder": 8, "tests": 6},
+            "start_time": time.time() - 15,
+            "end_time": time.time(),
         }
 
         # Generate report
         report = agent.generate_improvement_report()
-        assert 'summary' in report
+        assert "summary" in report
 
         # Benchmark
-        files: List[Path] = [tmp_path / f'test{i}.py' for i in range(10)]
+        files: List[Path] = [tmp_path / f"test{i}.py" for i in range(10)]
         for f in files:
-            f.write_text('# test')
+            f.write_text("# test")
         benchmark = agent.benchmark_execution(files)
-        assert 'average_per_file' in benchmark
+        assert "average_per_file" in benchmark
 
         # Cost analysis
         cost = agent.cost_analysis(cost_per_request=0.0001)
-        assert 'total_estimated_cost' in cost
+        assert "total_estimated_cost" in cost
+
 
 # ============================================================================
 # EDGE CASES & ERROR HANDLING
@@ -98,16 +99,16 @@ class TestPhase6Integration:
         agent.enable_graceful_shutdown()
 
         # Verify all features are enabled
-        assert hasattr(agent, 'rate_limiter')
-        assert hasattr(agent, 'lock_manager')
-        assert hasattr(agent, 'diff_generator')
-        assert hasattr(agent, 'incremental_processor')
-        assert hasattr(agent, 'shutdown_handler')
+        assert hasattr(agent, "rate_limiter")
+        assert hasattr(agent, "lock_manager")
+        assert hasattr(agent, "diff_generator")
+        assert hasattr(agent, "incremental_processor")
+        assert hasattr(agent, "shutdown_handler")
 
     def test_config_with_rate_limiting(self, tmp_path: Path, agent_module) -> None:
         """Test config file with rate limiting."""
         config_path: Path = tmp_path / "agent.json"
-        config_content = '''
+        config_content = """
         {
             "repo_root": ".",
             "rate_limit": {
@@ -115,17 +116,19 @@ class TestPhase6Integration:
                 "burst_size": 5
             }
         }
-        '''
+        """
         config_path.write_text(config_content)
         (tmp_path / ".git").mkdir()
 
         agent = OrchestratorAgent.from_config_file(config_path)
 
         # Rate limiting should be enabled from config
-        assert hasattr(agent, 'rate_limiter')
+        assert hasattr(agent, "rate_limiter")
         assert agent.rate_limiter.config.requests_per_second == 2.0
 
-    def test_plugin_execution_with_rate_limiting(self, tmp_path: Path, agent_module) -> None:
+    def test_plugin_execution_with_rate_limiting(
+        self, tmp_path: Path, agent_module
+    ) -> None:
         """Test plugins execute with rate limiting."""
         (tmp_path / ".git").mkdir()
         agent = OrchestratorAgent(repo_root=str(tmp_path))
@@ -148,8 +151,8 @@ class TestPhase6Integration:
 
         results = agent.run_plugins(test_file)
 
-        assert 'test' in results
-        assert results['test'] is True
+        assert "test" in results
+        assert results["test"] is True
 
     def test_health_check_before_run(self, tmp_path: Path, agent_module) -> None:
         """Test health check before agent run."""
@@ -160,7 +163,8 @@ class TestPhase6Integration:
         results = agent.run_health_checks()
 
         # Check Python is healthy
-        assert results['python'].status == agent_module.HealthStatus.HEALTHY
+        assert results["python"].status == agent_module.HealthStatus.HEALTHY
+
 
 # ============================================================================
 # SESSION 9: AGENT CHAINING TESTS

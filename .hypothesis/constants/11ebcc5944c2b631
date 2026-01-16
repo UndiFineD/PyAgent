@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\swarm\ResourceForecastingAgent.py
-# hypothesis_version: 6.150.1
-
-[0.4, 0.7, 100, 500, 3600, 'Incomplete Data', 'Success', 'Wait for more data.', 'Zero Time Delta', 'compute', 'confidence', 'horizon_hours', 'network', 'prediction', 'status', 'storage', 'timestamp']

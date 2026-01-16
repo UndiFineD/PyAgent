@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\intelligence\SemanticSearchMeshAgent.py
-# hypothesis_version: 6.150.1
-
-[0.1, 0.7, 0.85, 0.9, 512, 1024, '...', 'bytes_transferred', 'content', 'id', 'meta', 'registered', 'score', 'search_history', 'shard', 'shard_count', 'snippet', 'source', 'status', 'synchronized', 'target', 'title', 'url']

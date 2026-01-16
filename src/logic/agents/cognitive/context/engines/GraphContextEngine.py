@@ -21,7 +21,7 @@
 """Core engine for managing code relationships as a graph."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import logging
 from pathlib import Path
@@ -29,8 +29,6 @@ from typing import Any
 from src.logic.agents.cognitive.context.engines.GraphCore import GraphCore
 
 __version__ = VERSION
-
-
 
 
 class GraphContextEngine:
@@ -72,7 +70,7 @@ class GraphContextEngine:
                 self.symbols[rel_path] = {
                     "classes": analysis["classes"],
                     "inherits": analysis["inherits"],
-                    "calls": analysis["calls"]
+                    "calls": analysis["calls"],
                 }
 
                 # Build and add edges
@@ -116,7 +114,7 @@ class GraphContextEngine:
         data = {
             "graph": {k: list(v) for k, v in self.graph.items()},
             "metadata": self.metadata,
-            "symbols": self.symbols
+            "symbols": self.symbols,
         }
         with open(self.persist_file, "w") as f:
             json.dump(data, f, indent=2)

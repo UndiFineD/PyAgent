@@ -21,13 +21,11 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.models.InheritanceMode import InheritanceMode
 from dataclasses import dataclass, field
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -40,6 +38,7 @@ class InheritedContext:
         mode: Inheritance mode used.
         overrides: Sections that override parent.
     """
+
     parent_path: str
     inherited_sections: list[str] = field(default_factory=lambda: [])
     mode: InheritanceMode = InheritanceMode.MERGE

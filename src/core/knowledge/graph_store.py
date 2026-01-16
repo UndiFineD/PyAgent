@@ -18,7 +18,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import hashlib
 from .storage_base import KnowledgeStore
 from typing import Any
@@ -26,11 +26,6 @@ import json
 from pathlib import Path
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class GraphKnowledgeStore(KnowledgeStore):

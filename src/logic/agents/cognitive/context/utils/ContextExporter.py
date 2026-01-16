@@ -21,15 +21,13 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.models.ExportFormat import ExportFormat
 from src.logic.agents.cognitive.context.models.ExportedContext import ExportedContext
 from datetime import datetime
 import re
 
 __version__ = VERSION
-
-
 
 
 class ContextExporter:
@@ -53,7 +51,9 @@ class ContextExporter:
         """Return all supported export formats."""
         return list(ExportFormat)
 
-    def export(self, content: str, format: ExportFormat | None = None) -> ExportedContext:
+    def export(
+        self, content: str, format: ExportFormat | None = None
+    ) -> ExportedContext:
         """Export context to specified format.
 
         Args:
@@ -71,9 +71,7 @@ class ContextExporter:
         elif fmt == ExportFormat.RST:
             exported_content = self._to_rst(content)
         return ExportedContext(
-            format=fmt,
-            content=exported_content,
-            created_at=datetime.now().isoformat()
+            format=fmt, content=exported_content, created_at=datetime.now().isoformat()
         )
 
     def _to_html(self, content: str) -> str:
@@ -89,8 +87,16 @@ class ContextExporter:
         """Convert markdown to RST."""
         rst = content
         # Convert headers
-        rst = re.sub(r"^# (.+)$", lambda m: m.group(1) + "\n" +
-                     "=" * len(m.group(1)), rst, flags=re.M)
-        rst = re.sub(r"^## (.+)$", lambda m: m.group(1) + "\n" +
-                     "-" * len(m.group(1)), rst, flags=re.M)
+        rst = re.sub(
+            r"^# (.+)$",
+            lambda m: m.group(1) + "\n" + "=" * len(m.group(1)),
+            rst,
+            flags=re.M,
+        )
+        rst = re.sub(
+            r"^## (.+)$",
+            lambda m: m.group(1) + "\n" + "-" * len(m.group(1)),
+            rst,
+            flags=re.M,
+        )
         return rst

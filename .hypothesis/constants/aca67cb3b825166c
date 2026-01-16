@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\cognitive\GraphMemoryAgent.py
-# hypothesis_version: 6.150.1
-
-[-0.3, 0.0, 0.2, 0.3, 0.5, 0.7, 1.0, 1.5, 2.0, 86400, '.beads', 'Graph Memory Agent', 'Memory storage path', '__main__', 'a', 'access_count', 'blocked', 'blocked_by', 'caution', 'completed', 'core', 'data', 'entities', 'episodic', 'graph_context', 'id', 'knowledge', 'name', 'object', 'predicate', 'priority', 'procedural', 'promoted', 'query', 'ready', 'relations', 'relationships', 'resource', 'semantic', 'source', 'stable', 'status', 'subject', 'subtasks', 'target', 'tasks.jsonl', 'timestamp', 'title', 'type', 'utf-8', 'vector_results', 'w']

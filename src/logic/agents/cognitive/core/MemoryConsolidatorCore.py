@@ -25,13 +25,17 @@ No I/O or side effects.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import time
 from typing import Any
 
+try:
+    from rust_core import filter_memory_by_query_rust
+    _RUST_ACCEL = True
+except ImportError:
+    _RUST_ACCEL = False
+
 __version__ = VERSION
-
-
 
 
 class MemoryConsolidatorCore:
@@ -44,7 +48,7 @@ class MemoryConsolidatorCore:
             "timestamp": time.time(),
             "agent": agent,
             "task": task,
-            "outcome": outcome
+            "outcome": outcome,
         }
 
     @staticmethod
@@ -72,6 +76,14 @@ class MemoryConsolidatorCore:
     @staticmethod
     def filter_memory_by_query(memory: list[dict[str, Any]], query: str) -> list[str]:
         """Logic for keyword search across consolidated insights."""
+        if _RUST_ACCEL:
+            # Convert to Rust-compatible format: Vec<(date, Vec<insight>)>
+            rust_memory = [
+                (day.get("date", "Unknown Date"), day.get("insights", []))
+                for day in memory
+            ]
+            return filter_memory_by_query_rust(rust_memory, query)
+        # Python fallback
         matches: list[str] = []
         query_lower = query.lower()
         for day in memory:
@@ -84,7 +96,4 @@ class MemoryConsolidatorCore:
     @staticmethod
     def format_daily_memory(insights: list[str]) -> dict[str, Any]:
         """Prepares the daily record object."""
-        return {
-            "date": time.strftime("%Y-%m-%d"),
-            "insights": insights
-        }
+        return {"date": time.strftime("%Y-%m-%d"), "insights": insights}

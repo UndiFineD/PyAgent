@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\models\mt5\configuration_mt5.py
-# hypothesis_version: 6.150.1
-
-[0.0, 1e-06, 0.0005, 0.1, 1.0, 128, 512, 1024, 250112, '-', 'MT5Config', 'MT5OnnxConfig', 'T5Tokenizer', 'attention_mask', 'batch', 'd_kv', 'd_model', 'decoder_input_ids', 'decoder_sequence', 'encoder_sequence', 'gated', 'gated-gelu', 'gelu_new', 'head_dim', 'hidden_size', 'input_ids', 'inputs', 'mt5', 'num_attention_heads', 'num_heads', 'num_hidden_layers', 'num_layers', 'past_key_values']

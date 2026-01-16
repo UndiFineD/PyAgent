@@ -18,15 +18,13 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import hashlib
 import os
 import logging
 from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
-
-
 
 
 class EntropyGuardAgent(BaseAgent):

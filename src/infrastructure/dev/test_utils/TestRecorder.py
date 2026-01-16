@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .RecordedInteraction import RecordedInteraction
 from contextlib import contextmanager
 from pathlib import Path
@@ -30,8 +30,6 @@ from collections.abc import Iterator
 import json
 
 __version__ = VERSION
-
-
 
 
 class TestRecorder:
@@ -137,14 +135,16 @@ class TestRecorder:
         """Save recordings to file."""
         data: list[dict[str, Any]] = []
         for r in self._recordings:
-            data.append({
-                "call_type": r.call_type,
-                "call_name": r.call_name,
-                "args": list(r.args),
-                "kwargs": r.kwargs,
-                "result": r.result,
-                "timestamp": r.timestamp,
-            })
+            data.append(
+                {
+                    "call_type": r.call_type,
+                    "call_name": r.call_name,
+                    "args": list(r.args),
+                    "kwargs": r.kwargs,
+                    "result": r.result,
+                    "timestamp": r.timestamp,
+                }
+            )
         with open(path, "w") as f:
             json.dump(data, f, indent=2, default=str)
 

@@ -9,22 +9,20 @@ from tests.utils.agent_test_utils import *  # Added for modular test support
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path, load_agent_module
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+        load_agent_module,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
     class agent_sys_path:
         def __enter__(self) -> str:
-
             return self
-
-
-
-
-
-
-
 
         def __exit__(self, *args) -> str:
             sys.path.remove(str(AGENT_DIR))
@@ -37,7 +35,9 @@ except ImportError:
     def test_generate_javascript_code(self, tmp_path: Path) -> None:
         """Test generating JavaScript code."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         target: Path = tmp_path / "test.js"
         target.write_text("// JavaScript code")
@@ -51,13 +51,16 @@ except ImportError:
 # Session 9: Code Documentation Generation Tests
 # =============================================================================
 
+
 class TestCodeDocumentationGeneration:
     """Tests for code comment and documentation generation."""
 
     def test_detect_missing_docstring(self, tmp_path: Path) -> None:
         """Test detecting missing docstrings."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 def my_function(x, y) -> str:
@@ -74,7 +77,9 @@ def my_function(x, y) -> str:
     def test_detect_existing_docstring(self, tmp_path: Path) -> None:
         """Test detecting existing docstrings."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = '''
 def documented_function(x, y) -> str:
@@ -89,9 +94,11 @@ def documented_function(x, y) -> str:
 
         assert '"""Add two numbers."""' in content
 
+
 # =============================================================================
 # Session 9: Code Optimization Pattern Tests
 # =============================================================================
+
 
 class TestCodeOptimizationPatterns:
     """Tests for code optimization pattern application."""
@@ -99,7 +106,9 @@ class TestCodeOptimizationPatterns:
     def test_detect_inefficient_loop(self, tmp_path: Path) -> None:
         """Test detecting inefficient loop patterns."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 result=[]
@@ -117,7 +126,9 @@ for i in range(len(items)):
     def test_detect_list_comprehension_opportunity(self, tmp_path: Path) -> None:
         """Test detecting list comprehension opportunities."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 result=[]
@@ -132,9 +143,11 @@ for x in data:
 
         assert "append" in content
 
+
 # =============================================================================
 # Session 9: Dead Code Detection Tests
 # =============================================================================
+
 
 class TestDeadCodeDetection:
     """Tests for dead code detection and removal."""
@@ -142,7 +155,9 @@ class TestDeadCodeDetection:
     def test_detect_unused_import(self, tmp_path: Path) -> None:
         """Test detecting unused imports."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
         import os
@@ -161,7 +176,9 @@ print("hello")
     def test_detect_unused_variable(self, tmp_path: Path) -> None:
         """Test detecting unused variables."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 def func() -> str:
@@ -176,9 +193,11 @@ def func() -> str:
 
         assert "unused=42" in content
 
+
 # =============================================================================
 # Session 9: Dependency Injection Pattern Tests
 # =============================================================================
+
 
 class TestDependencyInjectionPatterns:
     """Tests for code dependency injection patterns."""
@@ -186,7 +205,9 @@ class TestDependencyInjectionPatterns:
     def test_detect_hardcoded_dependency(self, tmp_path: Path) -> None:
         """Test detecting hardcoded dependencies."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 class Service:
@@ -201,9 +222,11 @@ class Service:
 
         assert "Database()" in content
 
+
 # =============================================================================
 # Session 9: Code Splitting Tests
 # =============================================================================
+
 
 class TestCodeSplitting:
     """Tests for code splitting and module extraction."""
@@ -211,7 +234,9 @@ class TestCodeSplitting:
     def test_detect_large_function(self, tmp_path: Path) -> None:
         """Test detecting functions that should be split."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code: str = "\n".join([f"    line{i} = {i}" for i in range(50)])
         code: str = f"def large_function():\n{code}\n    return None"
@@ -223,9 +248,11 @@ class TestCodeSplitting:
 
         assert metrics is not None
 
+
 # =============================================================================
 # Session 9: Code Consistency Tests
 # =============================================================================
+
 
 class TestCodeConsistency:
     """Tests for code consistency enforcement across files."""
@@ -233,7 +260,9 @@ class TestCodeConsistency:
     def test_detect_naming_inconsistency(self, tmp_path: Path) -> None:
         """Test detecting naming inconsistencies."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 def camelCase() -> str:
@@ -251,9 +280,11 @@ def snake_case() -> str:
         assert "camelCase" in content
         assert "snake_case" in content
 
+
 # =============================================================================
 # Session 9: Code Template Tests
 # =============================================================================
+
 
 class TestCodeTemplates:
     """Tests for code template instantiation."""
@@ -261,7 +292,9 @@ class TestCodeTemplates:
     def test_read_template_file(self, tmp_path: Path) -> None:
         """Test reading template-like code."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 # Template: {name}
@@ -277,9 +310,11 @@ class {ClassName}:
 
         assert "{name}" in content
 
+
 # =============================================================================
 # Session 9: Type Annotation Tests
 # =============================================================================
+
 
 class TestTypeAnnotationInference:
     """Tests for code type annotation inference."""
@@ -287,7 +322,9 @@ class TestTypeAnnotationInference:
     def test_detect_missing_type_hints(self, tmp_path: Path) -> None:
         """Test detecting missing type hints."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 def add(x, y) -> str:
@@ -304,7 +341,9 @@ def add(x, y) -> str:
     def test_detect_existing_type_hints(self, tmp_path: Path) -> None:
         """Test detecting existing type hints."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 def add(x: int, y: int) -> int:
@@ -318,9 +357,11 @@ def add(x: int, y: int) -> int:
 
         assert "-> int" in content
 
+
 # =============================================================================
 # Session 9: Style Unification Tests
 # =============================================================================
+
 
 class TestStyleUnification:
     """Tests for code style unification."""
@@ -328,12 +369,14 @@ class TestStyleUnification:
     def test_detect_mixed_quotes(self, tmp_path: Path) -> None:
         """Test detecting mixed quote styles."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
-        code = '''
+        code = """
 x="double"
 y='single'
-'''
+"""
         target: Path = tmp_path / "test.py"
         target.write_text(code)
 
@@ -343,9 +386,11 @@ y='single'
         assert '"double"' in content
         assert "'single'" in content
 
+
 # =============================================================================
 # Session 9: Merge Conflict Resolution Tests
 # =============================================================================
+
 
 class TestMergeConflictResolution:
     """Tests for code merge conflict resolution."""
@@ -353,7 +398,9 @@ class TestMergeConflictResolution:
     def test_detect_merge_markers(self, tmp_path: Path) -> None:
         """Test detecting merge conflict markers."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 <<<<<<< HEAD
@@ -370,9 +417,11 @@ x=2
 
         assert "<<<<<<< HEAD" in content
 
+
 # =============================================================================
 # Session 9: API Compatibility Tests
 # =============================================================================
+
 
 class TestAPICompatibility:
     """Tests for code API compatibility checking."""
@@ -380,7 +429,9 @@ class TestAPICompatibility:
     def test_detect_api_signature(self, tmp_path: Path) -> None:
         """Test detecting API signatures."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 def public_api(arg1, arg2, *, keyword=None) -> str:
@@ -394,9 +445,11 @@ def public_api(arg1, arg2, *, keyword=None) -> str:
 
         assert "keyword=None" in content
 
+
 # =============================================================================
 # Session 9: Incremental Improvement Tests
 # =============================================================================
+
 
 class TestIncrementalImprovement:
     """Tests for incremental code improvement strategies."""
@@ -404,7 +457,9 @@ class TestIncrementalImprovement:
     def test_small_improvement_applied(self, tmp_path: Path) -> None:
         """Test small improvements are detected."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = "x=1\ny=2"  # Missing spaces
         target: Path = tmp_path / "test.py"
@@ -415,9 +470,11 @@ class TestIncrementalImprovement:
 
         assert content is not None
 
+
 # =============================================================================
 # Session 9: Quality Gates Tests
 # =============================================================================
+
 
 class TestQualityGates:
     """Tests for code quality gates and thresholds."""
@@ -425,7 +482,9 @@ class TestQualityGates:
     def test_quality_score_calculation(self, tmp_path: Path) -> None:
         """Test quality score is calculated."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = '''
 def good_function(x: int) -> int:
@@ -441,9 +500,11 @@ def good_function(x: int) -> int:
         assert score is not None
         assert score.score >= 0
 
+
 # =============================================================================
 # Session 9: Security Scanning Tests
 # =============================================================================
+
 
 class TestSecurityScanning:
     """Tests for code security scanning integration."""
@@ -451,11 +512,13 @@ class TestSecurityScanning:
     def test_detect_hardcoded_secret(self, tmp_path: Path) -> None:
         """Test detecting hardcoded secrets."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
-        code = '''
+        code = """
 API_KEY=os.environ.get("OPENAI_API_KEY", "dummy_key_for_testing")
-'''
+"""
         target: Path = tmp_path / "test.py"
         target.write_text(code)
 
@@ -464,9 +527,11 @@ API_KEY=os.environ.get("OPENAI_API_KEY", "dummy_key_for_testing")
 
         assert "API_KEY" in content
 
+
 # =============================================================================
 # Session 9: Complexity Analysis Tests
 # =============================================================================
+
 
 class TestComplexityAnalysis:
     """Tests for code complexity analysis."""
@@ -474,7 +539,9 @@ class TestComplexityAnalysis:
     def test_calculate_cyclomatic_complexity(self, tmp_path: Path) -> None:
         """Test calculating cyclomatic complexity."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 def complex_function(x) -> str:
@@ -492,9 +559,11 @@ def complex_function(x) -> str:
 
         assert metrics is not None
 
+
 # =============================================================================
 # Session 9: Coverage Gap Tests
 # =============================================================================
+
 
 class TestCoverageGapDetection:
     """Tests for code coverage gap detection."""
@@ -502,7 +571,9 @@ class TestCoverageGapDetection:
     def test_detect_untested_function(self, tmp_path: Path) -> None:
         """Test detecting untested functions."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 def untested_function() -> str:
@@ -516,9 +587,11 @@ def untested_function() -> str:
 
         assert "untested_function" in content
 
+
 # =============================================================================
 # Session 9: Performance Profiling Tests
 # =============================================================================
+
 
 class TestMigrationAutomation:
     """Tests for code migration automation."""
@@ -526,7 +599,9 @@ class TestMigrationAutomation:
     def test_detect_deprecated_syntax(self, tmp_path: Path) -> None:
         """Test detecting deprecated syntax."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 # Old-style string formatting
@@ -543,7 +618,9 @@ message="Hello %s" % name
     def test_detect_python2_syntax(self, tmp_path: Path) -> None:
         """Test detecting Python 2 style syntax."""
         with agent_dir_on_path():
-            mod: sys.ModuleType = load_agent_module("src/logic/agents/development/CoderAgent.py")
+            mod: sys.ModuleType = load_agent_module(
+                "src/logic/agents/development/CoderAgent.py"
+            )
 
         code = """
 class OldStyle:

@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\core\base\core\ErrorMappingCore.py
-# hypothesis_version: 6.150.1
-
-['CircularDependency', 'DecompositionFailure', 'DiskFull', 'EnvVarMissing', 'FileSystemError', 'InfiniteLoopDetected', 'InvalidResponse', 'ManifestMismatch', 'ModelTimeout', 'NetworkTimeout', 'PA-0000', 'PA-1001', 'PA-1002', 'PA-1003', 'PA-1004', 'PA-2001', 'PA-2002', 'PA-2003', 'PA-2004', 'PA-3001', 'PA-3002', 'PA-3003', 'PA-4001', 'PA-4002', 'PA-4003', 'PA-5001', 'PA-5002', 'PermissionsDenied', 'RateLimitExceeded', 'UnauthorizedAccess', 'Unknown System Error']

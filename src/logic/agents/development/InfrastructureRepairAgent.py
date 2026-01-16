@@ -23,15 +23,13 @@ Detects and fixes environment issues like missing dependencies or broken paths.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import subprocess
 import logging
 import sys
 from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
-
-
 
 
 class InfrastructureRepairAgent(BaseAgent):
@@ -44,6 +42,7 @@ class InfrastructureRepairAgent(BaseAgent):
     def audit_environment(self) -> dict:
         """Checks for common environment issues."""
         import importlib.util
+
         issues = []
 
         # Check for common packages
@@ -66,7 +65,9 @@ class InfrastructureRepairAgent(BaseAgent):
                 self._record(cmd_str, "Success", provider="Shell", model="pip")
                 return f"Successfully installed {package}."
             except Exception as e:
-                self._record(cmd_str, f"Failed: {str(e)}", provider="Shell", model="pip")
+                self._record(
+                    cmd_str, f"Failed: {str(e)}", provider="Shell", model="pip"
+                )
                 return f"Failed to install {package}: {e}"
 
         return "Unknown issue type."

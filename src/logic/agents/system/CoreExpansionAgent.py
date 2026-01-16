@@ -19,16 +19,14 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import subprocess
 import sys
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class CoreExpansionAgent(BaseAgent):
@@ -51,7 +49,9 @@ class CoreExpansionAgent(BaseAgent):
         """
         Attempts to install a missing Python package using pip.
         """
-        logging.info(f"CoreExpansionAgent: Attempting to install package: {package_name}")
+        logging.info(
+            f"CoreExpansionAgent: Attempting to install package: {package_name}"
+        )
 
         try:
             # Use subprocess to run pip
@@ -60,20 +60,29 @@ class CoreExpansionAgent(BaseAgent):
                 [sys.executable, "-m", "pip", "install", package_name],
                 capture_output=True,
                 text=True,
-                check=True
+                check=True,
             )
             logging.info(f"CoreExpansionAgent: Successfully installed {package_name}")
 
             # Phase 108: Record intelligence for future dependency graph learning
-            self._record(cmd_str, f"Success\n{result.stdout}", provider="Shell", model="pip")
+            self._record(
+                cmd_str, f"Success\n{result.stdout}", provider="Shell", model="pip"
+            )
 
             return f"Success: {package_name} installed.\nStdout: {result.stdout}"
         except subprocess.CalledProcessError as e:
             err_msg = e.stderr or str(e)
-            logging.error(f"CoreExpansionAgent: Failed to install {package_name}. Error: {err_msg}")
+            logging.error(
+                f"CoreExpansionAgent: Failed to install {package_name}. Error: {err_msg}"
+            )
 
             # Phase 108: Record failure as a lesson
-            self._record(f"pip install {package_name}", f"Failed: {err_msg}", provider="Shell", model="pip")
+            self._record(
+                f"pip install {package_name}",
+                f"Failed: {err_msg}",
+                provider="Shell",
+                model="pip",
+            )
 
             return f"Error: Failed to install {package_name}. Details: {err_msg}"
 
@@ -84,8 +93,12 @@ class CoreExpansionAgent(BaseAgent):
         """
         try:
             from importlib.metadata import distributions
+
             return [f"{d.metadata['Name']}=={d.version}" for d in distributions()]
         except (ImportError, KeyError):
             import pkg_resources
-            installed_packages = [f"{d.project_name}=={d.version}" for d in pkg_resources.working_set]
+
+            installed_packages = [
+                f"{d.project_name}=={d.version}" for d in pkg_resources.working_set
+            ]
             return installed_packages

@@ -41,6 +41,16 @@ wheels/
 Thumbs.db
 .flake8
 
+# Testing and Coverage
+.hypothesis/
+.coverage
+htmlcov/
+.nox/
+.tox/
+
+# Rust
+rust_core/target/
+
 #__pycache__
 __pycache__
 fix\__pycache__

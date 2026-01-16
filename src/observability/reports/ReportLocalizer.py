@@ -21,14 +21,12 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .LocaleCode import LocaleCode
 from .LocalizedString import LocalizedString
 import logging
 
 __version__ = VERSION
-
-
 
 
 class ReportLocalizer:
@@ -75,8 +73,12 @@ class ReportLocalizer:
             translations: Locale to text mapping.
         """
 
-        default = translations.get("en-US", list(translations.values())[0] if translations else "")
-        self.strings[key] = LocalizedString(key=key, translations=translations, default=default)
+        default = translations.get(
+            "en-US", list(translations.values())[0] if translations else ""
+        )
+        self.strings[key] = LocalizedString(
+            key=key, translations=translations, default=default
+        )
 
     def get(self, key: str, locale: LocaleCode | None = None) -> str:
         """Get localized string.

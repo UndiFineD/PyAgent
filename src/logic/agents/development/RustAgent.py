@@ -21,52 +21,29 @@
 """Agent specializing in Rust programming."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.logic.agents.development.CoderAgent import CoderAgent
-from src.core.base.utilities import create_main_function
+from src.core.base.BaseUtilities import create_main_function
 
 __version__ = VERSION
 
 
-
-
 class RustAgent(CoderAgent):
-
-
-
-
-
-
-
-
-
     """Agent for Rust code improvement and auditing."""
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._language = "rust"
 
-
-
-
-
-
-
-
-
         self._system_prompt = (
             "You are a Rust Expert. "
             "Focus on memory safety, ownership patterns, idiomatic usage of Result/Option, "
             "zero-cost abstractions, and effective use of the borrow checker. "
             "Suggest crates from crates.io where appropriate for common tasks."
-
         )
 
     def _get_default_content(self) -> str:
         return 'fn main() {\n    println!("Hello, Rust!");\n}\n'
-
-
-
 
 
 if __name__ == "__main__":

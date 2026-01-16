@@ -7,7 +7,7 @@ from dataclasses import dataclass, field
 from datetime import datetime
 from enum import Enum
 from typing import Any
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -15,84 +15,39 @@ __version__ = VERSION
 class MetricType(Enum):
     """Types of metrics."""
 
-
-
-
     COUNTER = "counter"
     GAUGE = "gauge"
     HISTOGRAM = "histogram"
     SUMMARY = "summary"
 
 
-
 @dataclass
 class Metric:
     """A single metric."""
+
     name: str
     value: float
-
-
-
-
-
-
-
-
-
 
     metric_type: MetricType
     timestamp: str = ""
     namespace: str = "default"
     tags: dict[str, str] = field(default_factory=dict)
 
-
-
-
-
-
-
     # Compatibility: some tests treat history entries as (timestamp, value) tuples.
-
-
-
 
     def __iter__(self) -> Any:
         yield self.timestamp
         yield self.value
 
-    def __getitem__(self, index:
-
-
-
-        int) -> Any:
+    def __getitem__(self, index: int) -> Any:
         return (self.timestamp, self.value)[index]
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 @dataclass
 class AgentMetric:
     """Telemetry data for a single agent operation."""
 
-
-
-
     agent_name: str
-
-
-
-
 
     operation: str
     duration_ms: float
@@ -100,10 +55,6 @@ class AgentMetric:
 
     status: str = "success"
     token_count: int = 0
-
-
-
-
 
     input_tokens: int = 0
     output_tokens: int = 0
@@ -115,9 +66,8 @@ class AgentMetric:
 @dataclass
 class MetricSnapshot:
     """A snapshot of metrics at a point in time."""
+
     name: str
-
-
 
     id: str
     timestamp: str
@@ -126,17 +76,13 @@ class MetricSnapshot:
 
     tags: dict[str, str] = field(default_factory=dict)
 
+
 class AggregationType(Enum):
-
-
-
     """Types of metric aggregation for rollups."""
+
     SUM = "sum"
     AVG = "average"
     MIN = "minimum"
-
-
-
 
     MAX = "maximum"
     COUNT = "count"
@@ -144,42 +90,34 @@ class AggregationType(Enum):
     P95 = "percentile_95"
     P99 = "percentile_99"
 
+
 class AggregationResult(dict[str, Any]):
     """Compatibility class that behaves like both a dict and a float."""
-    def __init__(self, value:
-        float = 0.0, **kwargs: Any) -> None:
+
+    def __init__(self, value: float = 0.0, **kwargs: Any) -> None:
         super().__init__(**kwargs)
         self.value = value
-
-
 
     def __float__(self) -> float:
         return float(self.value)
 
+
 @dataclass
-
-
-
-
 class MetricNamespace:
-
     """Namespace for organizing metrics."""
+
     name: str
     description: str = ""
     parent: str | None = None
     tags: dict[str, str] = field(default_factory=dict)
 
-
-
     retention_days: int = 30
-
-
-
 
 
 @dataclass
 class MetricAnnotation:
     """Annotation or comment on a metric."""
+
     metric_name: str
     timestamp: str
     text: str
@@ -187,17 +125,10 @@ class MetricAnnotation:
     annotation_type: str = "info"  # info, warning, milestone
 
 
-
-
-
-
-
-
 @dataclass
-
-
 class MetricCorrelation:
     """Correlation between two metrics."""
+
     metric_a: str
     metric_b: str
     correlation_coefficient: float
@@ -205,14 +136,11 @@ class MetricCorrelation:
     significance: float = 0.0
 
 
-
-
-
 @dataclass
 class MetricSubscription:
     """Subscription for metric change notifications."""
-    id: str
 
+    id: str
 
     metric_pattern: str  # glob pattern like "cpu.*"
     callback_url: str = ""
@@ -220,53 +148,39 @@ class MetricSubscription:
     min_interval_seconds: int = 60
 
 
-
-
-
-
 @dataclass
-
-
 class StatsNamespace:
     """Represents a namespace for metric isolation."""
+
     name: str
     metrics: dict[str, list[Metric]] = field(default_factory=dict)
     metric_values: dict[str, float] = field(default_factory=dict)
 
-
-
-
-
-
-    def add_metric(self, metric:
-        Metric) -> None:
+    def add_metric(self, metric: Metric) -> None:
         if metric.name not in self.metrics:
             self.metrics[metric.name] = []
         self.metrics[metric.name].append(metric)
 
-    def set_metric(self, name:
-        str, value: float) -> None:
+    def set_metric(self, name: str, value: float) -> None:
         self.metric_values[name] = value
 
-    def get_metric(self, name:
-        str) -> float | None:
+    def get_metric(self, name: str) -> float | None:
         return self.metric_values.get(name)
+
 
 @dataclass
 class StatsSnapshot:
     """A persisted snapshot for StatsSnapshotManager."""
+
     name: str
     data: dict[str, Any]
     timestamp: str
 
 
-
-
-
-
 @dataclass
 class StatsSubscription:
     """A subscription entry for StatsSubscriptionManager."""
+
     id: str
     subscriber_id: str
     metric_pattern: str
@@ -274,24 +188,20 @@ class StatsSubscription:
     created_at: str
 
 
-
-
-
 @dataclass
 class DerivedMetric:
     """Definition for a metric calculated from other metrics."""
+
     name: str
     dependencies: list[str]
     formula: str
     description: str = ""
 
 
-
-
-
 @dataclass
 class RetentionPolicy:
     """Policy for data retention."""
+
     name: str = ""
     retention_days: int = 0
     resolution: str = "1m"
@@ -302,17 +212,10 @@ class RetentionPolicy:
     compression_after_days: int = 7
 
 
-
-
-
 @dataclass
 class ABComparisonResult:
     metrics_compared: int
     differences: dict[str, float] = field(default_factory=dict)
-
-
-
-
 
 
 @dataclass

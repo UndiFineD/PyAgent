@@ -23,7 +23,7 @@ Designed to handle high-volume parameters with efficient access patterns.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
+from src.core.base.Version import VERSION as VERSION
 from .storage_base import KnowledgeStore as KnowledgeStore
 from .vector_store import VectorKnowledgeStore as VectorKnowledgeStore
 from .graph_store import GraphKnowledgeStore as GraphKnowledgeStore

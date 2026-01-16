@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .SnapshotComparisonResult import SnapshotComparisonResult
 from .TestSnapshot import TestSnapshot
 from pathlib import Path
@@ -29,8 +29,6 @@ from typing import Any
 import json
 
 __version__ = VERSION
-
-
 
 
 class SnapshotManager:
@@ -118,10 +116,7 @@ class SnapshotManager:
 
         if expected_snapshot is None:
             return SnapshotComparisonResult(
-                matches=False,
-                expected=None,
-                actual=actual,
-                snapshot_name=name
+                matches=False, expected=None, actual=actual, snapshot_name=name
             )
 
         # Compare the content
@@ -130,7 +125,7 @@ class SnapshotManager:
             matches=matches,
             expected=expected_snapshot.content,
             actual=actual,
-            snapshot_name=name
+            snapshot_name=name,
         )
 
     def assert_match(
@@ -176,13 +171,16 @@ class SnapshotManager:
             List[str]: Diff lines.
         """
         import difflib
+
         expected = self.load_snapshot(name)
         if expected is None:
             return ["No snapshot exists"]
-        return list(difflib.unified_diff(
-            expected.content.splitlines(),
-            actual.splitlines(),
-            fromfile=f"snapshot/{name}",
-            tofile="actual",
-            lineterm="",
-        ))
+        return list(
+            difflib.unified_diff(
+                expected.content.splitlines(),
+                actual.splitlines(),
+                fromfile=f"snapshot/{name}",
+                tofile="actual",
+                lineterm="",
+            )
+        )

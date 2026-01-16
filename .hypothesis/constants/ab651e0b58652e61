@@ -1,4 +1,0 @@
-# file: c:\DEV\PyAgent\src\infrastructure\backend\RunnerBackends.py
-# hypothesis_version: 6.150.1
-
-[0.1, 120, 180, 200, 1000, 4096, 12000, '--add-dir', '--allow-all-tools', '--deny-tool', '--log-level', '--no-color', '--prompt', '--silent', '--stream', '/', '12000', 'Authorization', 'Codex CLI timed out', 'Content-Type', 'DV_AGENT_MODEL', 'DV_GITHUB_TOKEN_FILE', 'FAILED', 'GITHUB_MODELS_MODEL', 'GITHUB_TOKEN', 'OPENAI_API_KEY', 'OPENAI_BASE_URL', 'OPENAI_MODEL', '[IMAGE_DATA:', 'application/json', 'choices', 'cli', 'codex', 'content', 'copilot', 'data:image', 'error', 'explain', 'gh', 'github-token.txt', 'gpt-4o-mini', 'image_url', 'max_tokens', 'message', 'messages', 'model', 'off', 'replace', 'role', 'shell', 'system', 'temperature', 'text', 'type', 'url', 'user', 'utf-8', 'write']

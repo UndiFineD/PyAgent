@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\models\bert\modeling_bert.py
-# hypothesis_version: 6.150.1
-
-[0.0, 1.0, '/', '4.58', 'BertEmbeddings', 'BertForMaskedLM', 'BertForPreTraining', 'BertLMHeadModel', 'BertLayer', 'BertModel', 'BertPreTrainedModel', '[A-Za-z]+_\\d+', '_(\\d+)', '_embeddings', 'absolute', 'adam_m', 'adam_v', 'attention_mask', 'bert', 'beta', 'bhld,lrd->bhlr', 'bhrd,lrd->bhlr', 'bias', 'cache_position', 'classifier', 'crossattention', 'eager', 'embedding_size', 'gamma', 'global_step', 'input_ids', 'kernel', 'next_sentence_label', 'output_bias', 'output_weights', 'past_key_value', 'past_key_values', 'position_ids', 'regression', 'relative_key', 'relative_key_query', 'sdpa', 'squad', 'token_type_ids', 'weight']

@@ -18,7 +18,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import tkinter as tk
 from tkinter import ttk
 import json
@@ -27,20 +27,24 @@ from pathlib import Path
 __version__ = VERSION
 
 
-
-
 class ProjectStatusPanel:
     """A panel that displays the current orchestration status from status.json."""
 
     def __init__(self, parent) -> None:
-        self.frame: ttk.Labelframe = ttk.LabelFrame(parent, text="Orchestration Status", padding=10)
+        self.frame: ttk.Labelframe = ttk.LabelFrame(
+            parent, text="Orchestration Status", padding=10
+        )
         self.status_file = Path("src/infrastructure/orchestration/status.json")
 
-        self.goal_label = ttk.Label(self.frame, text="Active Project: None", font=("Segoe UI", 10, "bold"))
+        self.goal_label = ttk.Label(
+            self.frame, text="Active Project: None", font=("Segoe UI", 10, "bold")
+        )
         self.goal_label.pack(anchor="w")
 
         self.progress_var = tk.DoubleVar(value=0)
-        self.progress_bar = ttk.Progressbar(self.frame, variable=self.progress_var, maximum=100)
+        self.progress_bar = ttk.Progressbar(
+            self.frame, variable=self.progress_var, maximum=100
+        )
         self.progress_bar.pack(fill=tk.X, pady=5)
 
         self.steps_text = tk.Text(self.frame, height=8, width=50, font=("Consolas", 9))
@@ -72,7 +76,9 @@ class ProjectStatusPanel:
                     status = step.get("status", "Pending")
                     agent = step.get("agent", "Unknown")
                     file = step.get("file", "unknown")
-                    self.steps_text.insert(tk.END, f"[{i+1}/{total}] {status:10} | {agent} -> {file}\n")
+                    self.steps_text.insert(
+                        tk.END, f"[{i + 1}/{total}] {status:10} | {agent} -> {file}\n"
+                    )
 
             except Exception as e:
                 self.steps_text.delete("1.0", tk.END)

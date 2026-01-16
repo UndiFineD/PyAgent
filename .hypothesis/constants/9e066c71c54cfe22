@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\fx\passes\utils\common.py
-# hypothesis_version: 6.150.1
-
-['.', 'GraphModule', 'HolderModule', 'call_module', 'compare_graphs', 'get_attr']

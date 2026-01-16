@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\distributed\tensor\_ops\_math_ops.py
-# hypothesis_version: 6.150.1
-
-[0.0, 1.0, '-inf', 'avg', 'descending', 'dim', 'inf', 'keepdim', 'max', 'min', 'product', 'reduce_op', 'stable', 'sum']

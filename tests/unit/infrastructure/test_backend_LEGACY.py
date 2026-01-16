@@ -1,18 +1,19 @@
 import time
 from unittest.mock import patch, MagicMock
 from typing import Any
+
 try:
     from tests.utils.agent_test_utils import *
 except ImportError:
     pass
 
 
-
-
 def test_response_caching_enabled(agent_backend_module: Any) -> None:
     """Test that responses are cached when use_cache=True."""
     agent_backend_module.clear_response_cache()
-    agent_backend_module._runner.llm_client.connectivity.update_status("github_models", True)
+    agent_backend_module._runner.llm_client.connectivity.update_status(
+        "github_models", True
+    )
 
     with patch("requests.Session.post") as mock_post:
         mock_response = MagicMock()
@@ -24,16 +25,22 @@ def test_response_caching_enabled(agent_backend_module: Any) -> None:
 
         # First call - should hit API
         result1 = agent_backend_module.llm_chat_via_github_models(
-            prompt="test", model="gpt-4", base_url="https://api.test",
-            token="token", use_cache=True
+            prompt="test",
+            model="gpt-4",
+            base_url="https://api.test",
+            token="token",
+            use_cache=True,
         )
         assert result1 == "cached response"
         assert mock_post.call_count == 1
 
         # Second call - should use cache
         result2 = agent_backend_module.llm_chat_via_github_models(
-            prompt="test", model="gpt-4", base_url="https://api.test",
-            token="token", use_cache=True
+            prompt="test",
+            model="gpt-4",
+            base_url="https://api.test",
+            token="token",
+            use_cache=True,
         )
         assert result2 == "cached response"
         assert mock_post.call_count == 1  # Still 1, cache was used
@@ -42,7 +49,9 @@ def test_response_caching_enabled(agent_backend_module: Any) -> None:
 def test_response_cache_disabled(agent_backend_module: Any) -> None:
     """Test that caching can be disabled with use_cache=False."""
     agent_backend_module.clear_response_cache()
-    agent_backend_module._runner.llm_client.connectivity.update_status("github_models", True)
+    agent_backend_module._runner.llm_client.connectivity.update_status(
+        "github_models", True
+    )
 
     with patch("requests.Session.post") as mock_post:
         mock_response = MagicMock()
@@ -54,15 +63,21 @@ def test_response_cache_disabled(agent_backend_module: Any) -> None:
 
         # First call with cache disabled
         agent_backend_module.llm_chat_via_github_models(
-            prompt="test", model="gpt-4", base_url="https://api.test",
-            token="token", use_cache=False
+            prompt="test",
+            model="gpt-4",
+            base_url="https://api.test",
+            token="token",
+            use_cache=False,
         )
         assert mock_post.call_count == 1
 
         # Second call - should call API again (no caching)
         agent_backend_module.llm_chat_via_github_models(
-            prompt="test", model="gpt-4", base_url="https://api.test",
-            token="token", use_cache=False
+            prompt="test",
+            model="gpt-4",
+            base_url="https://api.test",
+            token="token",
+            use_cache=False,
         )
         assert mock_post.call_count == 2
 
@@ -91,19 +106,24 @@ def test_validate_response_content_basic(agent_backend_module: Any) -> None:
 def test_validate_response_content_with_types(agent_backend_module: Any) -> None:
     """Test response validation with expected content types."""
     # Should pass if content contains expected type
-    assert agent_backend_module.validate_response_content(
-        "Here is the code:", ["code"]
-    ) is True
+    assert (
+        agent_backend_module.validate_response_content("Here is the code:", ["code"])
+        is True
+    )
 
     # Should pass if contains any expected type
-    assert agent_backend_module.validate_response_content(
-        "Explanation: The code works by...", ["code", "explanation"]
-    ) is True
+    assert (
+        agent_backend_module.validate_response_content(
+            "Explanation: The code works by...", ["code", "explanation"]
+        )
+        is True
+    )
 
     # Case insensitive
-    assert agent_backend_module.validate_response_content(
-        "CODE: print('hello')", ["code"]
-    ) is True
+    assert (
+        agent_backend_module.validate_response_content("CODE: print('hello')", ["code"])
+        is True
+    )
 
 
 def test_estimate_tokens(agent_backend_module: Any) -> None:
@@ -120,7 +140,9 @@ def test_estimate_tokens(agent_backend_module: Any) -> None:
 def test_estimate_cost(agent_backend_module: Any) -> None:
     """Test cost estimation."""
     # 1000 tokens at $0.03 per 1k=$0.03
-    cost = agent_backend_module.estimate_cost(1000, model="gpt-4", rate_per_1k_input=0.03)
+    cost = agent_backend_module.estimate_cost(
+        1000, model="gpt-4", rate_per_1k_input=0.03
+    )
     assert abs(cost - 0.03) < 0.001
 
     # 500 tokens at default rate
@@ -155,7 +177,9 @@ def test_circuit_breaker_opens_on_threshold(agent_backend_module: Any) -> None:
 
 def test_circuit_breaker_recovery(agent_backend_module: Any) -> None:
     """Test circuit breaker recovery after timeout."""
-    breaker = agent_backend_module.CircuitBreaker("test", failure_threshold=2, recovery_timeout=1)
+    breaker = agent_backend_module.CircuitBreaker(
+        "test", failure_threshold=2, recovery_timeout=1
+    )
 
     # Open the circuit
     breaker.on_failure()
@@ -167,14 +191,16 @@ def test_circuit_breaker_recovery(agent_backend_module: Any) -> None:
 
     # Should be half-open now
     assert breaker.is_open() is False
-        # assert breaker.state == "HALF_OPEN"
+    # assert breaker.state == "HALF_OPEN"
     breaker.on_success()
     assert breaker.state == "CLOSED"
 
 
 def test_circuit_breaker_half_open_to_open(agent_backend_module: Any) -> None:
     """Test that failure in HALF_OPEN state reopens circuit."""
-    breaker = agent_backend_module.CircuitBreaker("test", failure_threshold=2, recovery_timeout=1)
+    breaker = agent_backend_module.CircuitBreaker(
+        "test", failure_threshold=2, recovery_timeout=1
+    )
 
     # Open and wait for recovery
     breaker.on_failure()
@@ -218,7 +244,9 @@ def test_metrics_tracking_in_llm_chat(agent_backend_module: Any) -> None:
     """Test that metrics are tracked during API calls."""
     agent_backend_module.reset_metrics()
     agent_backend_module.clear_response_cache()
-    agent_backend_module._runner.llm_client.connectivity.update_status("github_models", True)
+    agent_backend_module._runner.llm_client.connectivity.update_status(
+        "github_models", True
+    )
 
     with patch("requests.Session.post") as mock_post:
         mock_response = MagicMock()
@@ -229,8 +257,11 @@ def test_metrics_tracking_in_llm_chat(agent_backend_module: Any) -> None:
         mock_post.return_value = mock_response
 
         agent_backend_module.llm_chat_via_github_models(
-            prompt="test", model="gpt-4", base_url="https://api.test",
-            token="token", use_cache=False
+            prompt="test",
+            model="gpt-4",
+            base_url="https://api.test",
+            token="token",
+            use_cache=False,
         )
 
         metrics = agent_backend_module.get_metrics()
@@ -242,12 +273,15 @@ def test_configure_timeout_per_backend(agent_backend_module: Any) -> None:
     agent_backend_module.configure_timeout_per_backend("github-models", 120)
 
     import os
+
     assert os.environ.get("DV_AGENT_TIMEOUT_GITHUB-MODELS") == "120"
 
 
 def test_streaming_payload_flag(agent_backend_module: Any) -> None:
     """Test that streaming flag is included in payload when requested."""
-    agent_backend_module._runner.llm_client.connectivity.update_status("github_models", True)
+    agent_backend_module._runner.llm_client.connectivity.update_status(
+        "github_models", True
+    )
     with patch("requests.Session.post") as mock_post:
         mock_response = MagicMock()
         mock_response.status_code = 200
@@ -258,8 +292,12 @@ def test_streaming_payload_flag(agent_backend_module: Any) -> None:
 
         # Call with stream=True
         agent_backend_module.llm_chat_via_github_models(
-            prompt="test", model="gpt-4", base_url="https://api.test",
-            token="token", stream=True, use_cache=False
+            prompt="test",
+            model="gpt-4",
+            base_url="https://api.test",
+            token="token",
+            stream=True,
+            use_cache=False,
         )
 
         # Check that payload was sent
@@ -327,7 +365,9 @@ def test_cache_different_prompts_separately(agent_backend_module: Any) -> None:
 
 def test_validation_with_streaming_disabled(agent_backend_module: Any) -> None:
     """Test response validation with streaming disabled (default)."""
-    agent_backend_module._runner.llm_client.connectivity.update_status("github_models", True)
+    agent_backend_module._runner.llm_client.connectivity.update_status(
+        "github_models", True
+    )
     with patch("requests.Session.post") as mock_post:
         mock_response = MagicMock()
         mock_response.status_code = 200
@@ -337,9 +377,12 @@ def test_validation_with_streaming_disabled(agent_backend_module: Any) -> None:
         mock_post.return_value = mock_response
 
         result = agent_backend_module.llm_chat_via_github_models(
-            prompt="generate code", model="gpt-4",
-            base_url="https://api.test", token="token",
-            validate_content=True, use_cache=False
+            prompt="generate code",
+            model="gpt-4",
+            base_url="https://api.test",
+            token="token",
+            validate_content=True,
+            use_cache=False,
         )
 
         assert result == "valid code response"
@@ -347,7 +390,9 @@ def test_validation_with_streaming_disabled(agent_backend_module: Any) -> None:
 
 def test_response_content_stripped(agent_backend_module: Any) -> None:
     """Test that responses are trimmed of whitespace."""
-    agent_backend_module._runner.llm_client.connectivity.update_status("github_models", True)
+    agent_backend_module._runner.llm_client.connectivity.update_status(
+        "github_models", True
+    )
     with patch("requests.Session.post") as mock_post:
         mock_response = MagicMock()
         mock_response.status_code = 200
@@ -357,8 +402,11 @@ def test_response_content_stripped(agent_backend_module: Any) -> None:
         mock_post.return_value = mock_response
 
         result = agent_backend_module.llm_chat_via_github_models(
-            prompt="test", model="gpt-4",
-            base_url="https://api.test", token="token", use_cache=False
+            prompt="test",
+            model="gpt-4",
+            base_url="https://api.test",
+            token="token",
+            use_cache=False,
         )
 
         assert result == "response with whitespace"

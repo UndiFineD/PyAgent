@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\interface\ui\gui\AgentColumn.py
-# hypothesis_version: 6.150.1
-
-['\n[Memory Reset]\n', '#007acc', '#1e1e1e', '#d4d4d4', '#f9f9f9', '...', '1.0', 'Agent.TLabelframe', 'ClrLog', 'Consolas', 'Delegate', 'Diff', 'Log & Memory:', 'Memory', 'None', 'Reset Memory', 'Segoe UI', 'Target File:', 'Toggle Local Context', 'Warning', 'auto', 'backend', 'bold', 'browse_file', 'claude-3-5-sonnet', 'copilot', 'default', 'delegate_callback', 'diff', 'duplicate', 'execute', 'file', 'gh', 'github-models', 'gpt-3.5-turbo', 'gpt-4o', 'indeterminate', 'local_context', 'model', 'name', 'prompt', 'remove', 'show_memory', 'show_settings', 'stop', 'type', 'voice', 'white', '⏹️', '▶', '▶️', '▼', '⚙️', '✕', '🎤', '📑']

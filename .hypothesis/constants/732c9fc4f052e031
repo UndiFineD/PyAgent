@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\security\SecurityScannerAgent.py
-# hypothesis_version: 6.150.1
-
-['Avoid ev', 'Internal', 'SecurityScanner', 'Source Scan', 'Use of ev', 'al() is dangerous', 'al\\s*\\(', 'critical', 'ev', 'high', 'medium', 'open\\s*\\([^)]*\\+']

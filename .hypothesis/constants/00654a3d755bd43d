@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\swarm\FleetEconomyAgent.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.5, '.', 'Insufficient credits', 'No bids for task', 'agent', 'allocated_tasks', 'balance', 'bid_placed', 'failed', 'paid', 'reason', 'remaining_balance', 'savings', 'status', 'task', 'task_id', 'winner']

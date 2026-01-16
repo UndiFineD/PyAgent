@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\swarm\InterFleetIdentityAgent.py
-# hypothesis_version: 6.150.1
-
-[3600, 'Unknown fleet ID', 'agent_id', 'authorized', 'authorized_at', 'default_secret', 'error', 'expiry', 'fleet_id', 'local_fleet_id', 'message', 'payload', 'permissions', 'registered', 'remote_fleets_count', 'session_token', 'signature', 'status']

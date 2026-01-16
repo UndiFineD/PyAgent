@@ -21,17 +21,12 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ABTestVariant import ABTestVariant
 from typing import Any
 import threading
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class ABTester:
@@ -121,6 +116,7 @@ class ABTester:
 
             # Assign based on weights
             import random
+
             variant_a = test["A"]
             if random.random() < variant_a.weight:
                 variant_name = "A"

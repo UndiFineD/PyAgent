@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_export\wrappers.py
-# hypothesis_version: 6.150.1
-
-['.', '0', '_', '__init__', '_export_tracepoint', 'apply', 'call_function', 'get_attr', 'in_spec', 'module_call_inputs', 'module_call_outputs', 'out_spec']

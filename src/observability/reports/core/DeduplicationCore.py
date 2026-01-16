@@ -1,4 +1,3 @@
-
 """
 Core logic for Report Deduplication (Phase 183).
 Handles similarity calculations and JSONL export.
@@ -11,8 +10,6 @@ try:
     import rust_core as rc
 except ImportError:
     rc = None  # type: ignore[assignment]
-
-
 
 
 class DeduplicationCore:
@@ -36,7 +33,9 @@ class DeduplicationCore:
         return len(intersection) / len(union)
 
     @staticmethod
-    def deduplicate_items(items: list[dict[str, Any]], key: str = "message", threshold: float = 0.8) -> list[dict[str, Any]]:
+    def deduplicate_items(
+        items: list[dict[str, Any]], key: str = "message", threshold: float = 0.8
+    ) -> list[dict[str, Any]]:
         """
         Removes items that are too similar to already seen items.
         """

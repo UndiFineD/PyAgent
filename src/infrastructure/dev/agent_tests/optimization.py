@@ -21,20 +21,16 @@
 """Test optimization and coverage analysis."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from .models import TestCase
 
 __version__ = VERSION
 
 
-
-
-
-
-
 class TestSuiteOptimizer:
     """Optimize test suites by removing redundant tests."""
+
     __test__ = False
 
     def __init__(self) -> None:
@@ -71,7 +67,7 @@ class TestSuiteOptimizer:
         overlaps: list[tuple[str, str, float]] = []
         test_ids = list(self.coverage_map.keys())
         for i, id_a in enumerate(test_ids):
-            for id_b in test_ids[i + 1:]:
+            for id_b in test_ids[i + 1 :]:
                 cov_a = self.coverage_map[id_a]
                 cov_b = self.coverage_map[id_b]
                 if not cov_a or not cov_b:
@@ -86,76 +82,50 @@ class TestSuiteOptimizer:
         """Suggest tests that could be removed."""
         suggestions: list[dict[str, Any]] = []
         for test_id in self.find_redundant_tests():
-            suggestions.append({
-                "test_id": test_id,
-                "reason": "fully_redundant",
-                "confidence": 0.9
-            })
+            suggestions.append(
+                {"test_id": test_id, "reason": "fully_redundant", "confidence": 0.9}
+            )
         for id_a, id_b, overlap in self.find_overlapping_tests():
             cov_a = len(self.coverage_map.get(id_a, set()))
             cov_b = len(self.coverage_map.get(id_b, set()))
             remove = id_a if cov_a < cov_b else id_b
-            suggestions.append({
-                "test_id": remove,
-                "reason": f"overlaps {overlap * 100:.0f}% with {id_a if remove == id_b else id_b}",
-                "confidence": 0.7
-            })
+            suggestions.append(
+                {
+                    "test_id": remove,
+                    "reason": f"overlaps {overlap * 100:.0f}% with {id_a if remove == id_b else id_b}",
+                    "confidence": 0.7,
+                }
+            )
         return suggestions
 
     def get_coverage(self, test_id: str) -> set[str]:
         """Get the coverage set for a given test."""
         return set(self.coverage_map.get(test_id, set()))
 
-
-
-
-
-
-
-
-
-
-
     def optimize(self) -> list[str]:
         """Return a minimized set of tests while preserving overall coverage."""
-
-
 
         if not self.coverage_map:
             return []
 
         all_coverage: set[str] = set()
 
-
-
-
         for cov in self.coverage_map.values():
             all_coverage |= set(cov)
 
         redundant = set(self.find_redundant_tests())
-        kept = [test_id for test_id in self.coverage_map.keys() if test_id not in redundant]
-
-
-
-
-
-
-
+        kept = [
+            test_id for test_id in self.coverage_map.keys() if test_id not in redundant
+        ]
 
         kept_coverage: set[str] = set()
         for test_id in kept:
             kept_coverage |= self.get_coverage(test_id)
 
-
-
-
         if kept_coverage != all_coverage:
             return list(self.coverage_map.keys())
 
         return kept
-
-
-
 
 
 class CoverageGapAnalyzer:
@@ -197,7 +167,9 @@ class CoverageGapAnalyzer:
 
     def add_uncovered(self, item: str) -> None:
         """Mark item as uncovered."""
-        self._covered_lines.setdefault("__legacy_total__", set()).add(hash(item) & 0x7FFFFFFF)
+        self._covered_lines.setdefault("__legacy_total__", set()).add(
+            hash(item) & 0x7FFFFFFF
+        )
 
     def get_coverage_percentage_legacy(self) -> float:
         """Get coverage percentage (legacy aggregate)."""

@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\dev\test_utils\IsolationLevel.py
-# hypothesis_version: 6.150.1
-
-['copy_on_write', 'none', 'sandbox', 'temp_dir']

@@ -24,14 +24,12 @@ These must remain static to ensure the system can boot up before dynamic discove
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.infrastructure.fleet.RegistryOverlay import RegistryOverlay
 
 __version__ = VERSION
 
 _overlay = RegistryOverlay()
-
-
 
 
 def get_bootstrap_agents() -> dict[str, tuple[str, str, str | None]]:
@@ -40,196 +38,121 @@ def get_bootstrap_agents() -> dict[str, tuple[str, str, str | None]]:
         "Orchestrator": (
             "src.logic.agents.swarm.PatternOrchestrator",
             "PatternOrchestrator",
-            None
+            None,
         ),
-        "Sandbox": (
-            "src.logic.agents.development.SandboxAgent",
-            "SandboxAgent",
-            None
-        ),
+        "Sandbox": ("src.logic.agents.development.SandboxAgent", "SandboxAgent", None),
         "Linguist": (
             "src.logic.agents.cognitive.LinguisticAgent",
             "LinguisticAgent",
-            None
+            None,
         ),
         "Audit": (
             "src.logic.agents.security.EternalAuditAgent",
             "EternalAuditAgent",
-            None
+            None,
         ),
         "LegalAudit": (
             "src.logic.agents.security.LegalAuditAgent",
             "LegalAuditAgent",
-            None
+            None,
         ),
-        "Logging": (
-            "src.logic.agents.system.LoggingAgent",
-            "LoggingAgent",
-            None
-        ),
-        "agent_dao": (
-            "src.infrastructure.orchestration.AgentDAO",
-            "AgentDAO",
-            None
-        ),
-
-
-
-
-
-
-
-
-
-
+        "Logging": ("src.logic.agents.system.LoggingAgent", "LoggingAgent", None),
+        "agent_dao": ("src.infrastructure.orchestration.system.AgentDAO", "AgentDAO", None),
         "weight_orchestrator": (
-            "src.infrastructure.orchestration.WeightOrchestrator",
+            "src.infrastructure.orchestration.system.WeightOrchestrator",
             "WeightOrchestrator",
-            None
-
-
-
-
-
-
-
-
-
-
+            None,
         ),
         "immune_orchestrator": (
             "src.logic.agents.security.ImmuneResponseOrchestrator",
             "ImmuneResponseOrchestrator",
-            None
-
-
-
-
-
-
-
-
-
+            None,
         ),
         "quantum_shard": (
-            "src.infrastructure.orchestration.QuantumShardOrchestrator",
+            "src.infrastructure.orchestration.system.QuantumShardOrchestrator",
             "QuantumShardOrchestrator",
-            None
-
-        )
+            None,
+        ),
     }
 
     return {k: _overlay.get_agent_config(k, v) for k, v in defaults.items()}
-
-
-
 
 
 BOOTSTRAP_AGENTS = get_bootstrap_agents()
 
 BOOTSTRAP_ORCHESTRATORS = {
     "self_healing": (
-        "src.infrastructure.orchestration.SelfHealingOrchestrator",
-        "SelfHealingOrchestrator"
+        "src.infrastructure.orchestration.healing.SelfHealingOrchestrator",
+        "SelfHealingOrchestrator",
     ),
-    "telemetry": (
-        "src.observability.stats.metrics_engine",
-        "ObservabilityEngine"
-    ),
+    "telemetry": ("src.observability.stats.Metrics_engine", "ObservabilityEngine"),
     "self_improvement": (
-        "src.infrastructure.orchestration.SelfImprovementOrchestrator",
-        "SelfImprovementOrchestrator"
+        "src.infrastructure.orchestration.intel.SelfImprovementOrchestrator",
+        "SelfImprovementOrchestrator",
     ),
-    "registry": (
-        "src.infrastructure.orchestration.ToolRegistry",
-        "ToolRegistry"
-    ),
-    "signals": (
-        "src.infrastructure.orchestration.SignalRegistry",
-        "SignalRegistry"
-    ),
+    "registry": ("src.infrastructure.orchestration.system.ToolRegistry", "ToolRegistry"),
+    "signals": ("src.infrastructure.orchestration.signals.SignalRegistry", "SignalRegistry"),
     "recorder": (
         "src.infrastructure.backend.LocalContextRecorder",
-        "LocalContextRecorder"
+        "LocalContextRecorder",
     ),
     "sql_metadata": (
         "src.infrastructure.backend.SqlMetadataHandler",
-        "SqlMetadataHandler"
+        "SqlMetadataHandler",
     ),
     "global_context": (
         "src.logic.agents.cognitive.context.engines.GlobalContextEngine",
-        "GlobalContextEngine"
+        "GlobalContextEngine",
     ),
-    "market": (
-        "src.infrastructure.fleet.AgentEconomy",
-        "AgentEconomy"
-    ),
-    "resources": (
-        "src.observability.stats.monitoring",
-        "ResourceMonitor"
-    ),
+    "market": ("src.infrastructure.fleet.AgentEconomy", "AgentEconomy"),
+    "resources": ("src.observability.stats.Monitoring", "ResourceMonitor"),
     "gossip": (
-        "src.infrastructure.orchestration.GossipProtocolOrchestrator",
-        "GossipProtocolOrchestrator"
+        "src.infrastructure.orchestration.consensus.GossipProtocolOrchestrator",
+        "GossipProtocolOrchestrator",
     ),
-    "sharding": (
-        "src.infrastructure.fleet.ShardManager",
-        "ShardManager"
-    ),
-    "load_balancer": (
-        "src.infrastructure.api.FleetLoadBalancer",
-        "FleetLoadBalancer"
-    ),
+    "sharding": ("src.infrastructure.fleet.ShardManager", "ShardManager"),
+    "load_balancer": ("src.infrastructure.api.FleetLoadBalancer", "FleetLoadBalancer"),
     "fallback_engine": (
         "src.observability.stats.ModelFallbackEngine",
-        "ModelFallbackEngine"
+        "ModelFallbackEngine",
     ),
-    "core": (
-        "src.infrastructure.fleet.FleetCore",
-        "FleetCore"
-    ),
+    "core": ("src.infrastructure.fleet.FleetCore", "FleetCore"),
     "speciation": (
-        "src.infrastructure.orchestration.SpeciationOrchestrator",
-        "SpeciationOrchestrator"
+        "src.infrastructure.orchestration.swarm.SpeciationOrchestrator",
+        "SpeciationOrchestrator",
     ),
     "sovereignty_orchestrator": (
-        "src.infrastructure.orchestration.SovereigntyOrchestrator",
-        "SovereigntyOrchestrator"
+        "src.infrastructure.orchestration.swarm.SovereigntyOrchestrator",
+        "SovereigntyOrchestrator",
     ),
     "fractal_orchestrator": (
-        "src.infrastructure.orchestration.FractalOrchestrator",
-        "FractalOrchestrator"
+        "src.infrastructure.orchestration.swarm.FractalOrchestrator",
+        "FractalOrchestrator",
     ),
     "sub_swarm_spawner": (
-        "src.infrastructure.orchestration.SubSwarmSpawner",
-        "SubSwarmSpawner"
+        "src.infrastructure.orchestration.swarm.SubSwarmSpawner",
+        "SubSwarmSpawner",
     ),
     "discovery": (
-        "src.infrastructure.orchestration.DiscoveryOrchestrator",
-        "DiscoveryOrchestrator"
+        "src.infrastructure.orchestration.swarm.DiscoveryOrchestrator",
+        "DiscoveryOrchestrator",
     ),
-    "scaling": (
-        "src.infrastructure.fleet.ScalingManager",
-        "ScalingManager"
-    ),
+    "scaling": ("src.infrastructure.fleet.ScalingManager", "ScalingManager"),
     "blackboard": (
-        "src.infrastructure.orchestration.BlackboardManager",
-        "BlackboardManager"
+        "src.infrastructure.orchestration.state.BlackboardManager",
+        "BlackboardManager",
     ),
     "experiment_orchestrator": (
-        "src.infrastructure.orchestration.ExperimentOrchestrator",
-        "ExperimentOrchestrator"
+        "src.infrastructure.orchestration.system.ExperimentOrchestrator",
+        "ExperimentOrchestrator",
     ),
-    "evolution": (
-        "src.infrastructure.fleet.EvolutionEngine",
-        "EvolutionEngine"
-    ),
+    "evolution": ("src.infrastructure.fleet.EvolutionEngine", "EvolutionEngine"),
     "fleet_telemetry": (
-        "src.infrastructure.orchestration.FleetTelemetryVisualizer",
-        "FleetTelemetryVisualizer"
+        "src.infrastructure.orchestration.swarm.FleetTelemetryVisualizer",
+        "FleetTelemetryVisualizer",
     ),
     "consciousness": (
         "src.infrastructure.fleet.ConsciousnessRegistry",
-        "ConsciousnessRegistry"
-    )
+        "ConsciousnessRegistry",
+    ),
 }

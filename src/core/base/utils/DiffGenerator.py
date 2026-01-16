@@ -21,17 +21,18 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.models import DiffOutputFormat, DiffResult
 from pathlib import Path
 import difflib
 
+try:
+    import rust_core as rc
+    HAS_RUST = True
+except ImportError:
+    HAS_RUST = False
+
 __version__ = VERSION
-
-
-
-
-
 
 
 class DiffGenerator:
@@ -45,8 +46,11 @@ class DiffGenerator:
         context_lines: Number of context lines in diff.
     """
 
-    def __init__(self, output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED,
-                 context_lines: int = 3) -> str:
+    def __init__(
+        self,
+        output_format: DiffOutputFormat = DiffOutputFormat.UNIFIED,
+        context_lines: int = 3,
+    ) -> str:
         """Initialize the diff generator.
 
         Args:
@@ -56,8 +60,9 @@ class DiffGenerator:
         self.output_format = output_format
         self.context_lines = context_lines
 
-    def generate_diff(self, file_path: Path, original: str,
-                      modified: str) -> DiffResult:
+    def generate_diff(
+        self, file_path: Path, original: str, modified: str
+    ) -> DiffResult:
         """Generate a diff between original and modified content.
 
         Args:
@@ -68,23 +73,50 @@ class DiffGenerator:
         Returns:
             DiffResult with diff information.
         """
+        # Rust-accelerated diff generation
+        if HAS_RUST:
+            try:
+                diff_text, additions, deletions = rc.generate_unified_diff_rust(
+                    original, modified, file_path.name, self.context_lines
+                )  # type: ignore[attr-defined]
+                diff_lines = diff_text.splitlines(keepends=True)
+                return DiffResult(
+                    file_path=file_path,
+                    original_content=original,
+                    modified_content=modified,
+                    diff_lines=diff_lines,
+                    additions=additions,
+                    deletions=deletions,
+                    changes=additions + deletions,
+                )
+            except Exception:
+                pass
+
         original_lines = original.splitlines(keepends=True)
         modified_lines = modified.splitlines(keepends=True)
 
         # Generate unified diff
-        diff_lines = list(difflib.unified_diff(
-            original_lines,
-            modified_lines,
-            fromfile=f"a/{file_path.name}",
-            tofile=f"b/{file_path.name}",
-            n=self.context_lines
-        ))
+        diff_lines = list(
+            difflib.unified_diff(
+                original_lines,
+                modified_lines,
+                fromfile=f"a/{file_path.name}",
+                tofile=f"b/{file_path.name}",
+                n=self.context_lines,
+            )
+        )
 
         # Count additions and deletions
-        additions = sum(1 for line in diff_lines if line.startswith('+')
-                        and not line.startswith('+++'))
-        deletions = sum(1 for line in diff_lines if line.startswith('-')
-                        and not line.startswith('---'))
+        additions = sum(
+            1
+            for line in diff_lines
+            if line.startswith("+") and not line.startswith("+++")
+        )
+        deletions = sum(
+            1
+            for line in diff_lines
+            if line.startswith("-") and not line.startswith("---")
+        )
 
         return DiffResult(
             file_path=file_path,
@@ -93,11 +125,12 @@ class DiffGenerator:
             diff_lines=diff_lines,
             additions=additions,
             deletions=deletions,
-            changes=additions + deletions
+            changes=additions + deletions,
         )
 
-    def format_diff(self, diff_result: DiffResult,
-                    output_format: DiffOutputFormat | None = None) -> str:
+    def format_diff(
+        self, diff_result: DiffResult, output_format: DiffOutputFormat | None = None
+    ) -> str:
         """Format a diff result for display.
 
         Args:
@@ -110,23 +143,26 @@ class DiffGenerator:
         fmt = output_format or self.output_format
 
         if fmt == DiffOutputFormat.UNIFIED:
-            return ''.join(diff_result.diff_lines)
+            return "".join(diff_result.diff_lines)
         elif fmt == DiffOutputFormat.CONTEXT:
             original = diff_result.original_content.splitlines(keepends=True)
             modified = diff_result.modified_content.splitlines(keepends=True)
-            return ''.join(difflib.context_diff(
-                original, modified,
-                fromfile=f"a/{diff_result.file_path.name}",
-                tofile=f"b/{diff_result.file_path.name}",
-                n=self.context_lines
-            ))
+            return "".join(
+                difflib.context_diff(
+                    original,
+                    modified,
+                    fromfile=f"a/{diff_result.file_path.name}",
+                    tofile=f"b/{diff_result.file_path.name}",
+                    n=self.context_lines,
+                )
+            )
         elif fmt == DiffOutputFormat.HTML:
             differ = difflib.HtmlDiff()
             original = diff_result.original_content.splitlines()
             modified = diff_result.modified_content.splitlines()
             return differ.make_file(original, modified)
         else:
-            return ''.join(diff_result.diff_lines)
+            return "".join(diff_result.diff_lines)
 
     def print_diff(self, diff_result: DiffResult) -> None:
         """Print a colorized diff to console.
@@ -135,11 +171,11 @@ class DiffGenerator:
             diff_result: DiffResult to print.
         """
         for line in diff_result.diff_lines:
-            if line.startswith('+') and not line.startswith('+++'):
+            if line.startswith("+") and not line.startswith("+++"):
                 sys.stdout.write(f"\033[92m{line}\033[0m")  # Green
-            elif line.startswith('-') and not line.startswith('---'):
+            elif line.startswith("-") and not line.startswith("---"):
                 sys.stdout.write(f"\033[91m{line}\033[0m")  # Red
-            elif line.startswith('@@'):
+            elif line.startswith("@@"):
                 sys.stdout.write(f"\033[96m{line}\033[0m")  # Cyan
             else:
                 sys.stdout.write(line)

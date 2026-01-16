@@ -23,14 +23,12 @@ Prevents side effects on the host system by using containerized or WASM environm
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class SandboxAgent(BaseAgent):
@@ -53,22 +51,20 @@ class SandboxAgent(BaseAgent):
         logging.info("Executing code in sandbox...")
 
         # Phase 108: Record sandboxed execution intent
-        self._record(f"Sandbox run: {code[:100]}", "Simulated Success", provider="Sandbox", model="Docker-Mock")
+        self._record(
+            f"Sandbox run: {code[:100]}",
+            "Simulated Success",
+            provider="Sandbox",
+            model="Docker-Mock",
+        )
 
         # Simulated execution
         return "Execution Output: Success\n(Simulated Output)"
-
-
-
-
-
 
     @as_tool
     def dry_run_prediction(self, code: str) -> str:
         """Simulates the outcome of code execution without actually running it."""
         logging.info("Performing dry-run prediction...")
-
-
 
         # Mental model logic: Analyze imports and side effects
         if "os.remove" in code or "shutil.rmtree" in code:
@@ -81,16 +77,15 @@ class SandboxAgent(BaseAgent):
 
         return f"### Sandboxed Execution Results\n\n- Environment: Docker (python:3.10-slim)\n- Code Length: {len(code)} characters\n- Output: Hello from the sandbox!\n- Status: Success"
 
-
     def improve_content(self, prompt: str) -> str:
         """Sandboxing helper."""
         return "I am ready to execute code. Use 'run_python_sandboxed' to begin."
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(SandboxAgent, "Sandbox Agent", "Sandboxed execution tool")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        SandboxAgent, "Sandbox Agent", "Sandboxed execution tool"
+    )
     main()

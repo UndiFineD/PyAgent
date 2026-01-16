@@ -21,13 +21,11 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .MockResponseType import MockResponseType
 from dataclasses import dataclass
 
 __version__ = VERSION
-
-
 
 
 @dataclass

@@ -20,7 +20,7 @@ import logging
 from dataclasses import dataclass
 from pathlib import Path
 from typing import TYPE_CHECKING
-from src.core.base.version import SDK_VERSION
+from src.core.base.Version import SDK_VERSION
 
 if TYPE_CHECKING:
     from src.core.base.AgentPluginBase import AgentPluginBase
@@ -30,7 +30,6 @@ try:
     from src.infrastructure.fleet.VersionGate import VersionGate
 except ImportError:
     VersionGate = None
-
 
 
 @dataclass
@@ -43,15 +42,10 @@ class PluginMetadata:
     min_sdk_version: str = "1.0.0"
     version: str = "0.1.0"
 
-
-
-
     author: str = "Unknown"
     description: str = ""
     permissions: list[str] = None
     restricted_mode: bool = False
-
-
 
 
 class PluginManager:
@@ -91,8 +85,12 @@ class PluginManager:
                                 meta = PluginMetadata(
                                     module_path=raw_meta[0],
                                     class_name=raw_meta[1],
-                                    needs_fleet=raw_meta[2] if len(raw_meta) > 2 else True,
-                                    min_sdk_version=raw_meta[3] if len(raw_meta) > 3 else "1.0.0"
+                                    needs_fleet=raw_meta[2]
+                                    if len(raw_meta) > 2
+                                    else True,
+                                    min_sdk_version=raw_meta[3]
+                                    if len(raw_meta) > 3
+                                    else "1.0.0",
                                 )
                             else:
                                 meta = PluginMetadata(**raw_meta)
@@ -101,7 +99,9 @@ class PluginManager:
                                 self.loaded_meta[key] = meta
                                 discovered.append(key)
                             else:
-                                self.logger.warning(f"Ignoring '{key}': Incompatible SDK requirement {meta.min_sdk_version}")
+                                self.logger.warning(
+                                    f"Ignoring '{key}': Incompatible SDK requirement {meta.min_sdk_version}"
+                                )
                         except (TypeError, KeyError) as e:
                             self.logger.error(f"Malformed metadata for '{key}': {e}")
             except Exception as e:
@@ -109,7 +109,11 @@ class PluginManager:
 
         # 2. Dynamic Directory Scan (Flexible Fallback)
         for item in self.plugins_dir.iterdir():
-            if item.name == "manifest.json" or item.stem in discovered or item.name.startswith("__"):
+            if (
+                item.name == "manifest.json"
+                or item.stem in discovered
+                or item.name.startswith("__")
+            ):
                 continue
 
             permissions = None
@@ -123,20 +127,30 @@ class PluginManager:
                         with open(perm_file) as pf:
                             permissions = json.load(pf)
                             restricted = True  # Any explicit permission file triggers restricted mode
-                            self.logger.info(f"Plugin '{item.name}' requested permissions: {permissions}")
+                            self.logger.info(
+                                f"Plugin '{item.name}' requested permissions: {permissions}"
+                            )
                     except Exception as pe:
-                        self.logger.error(f"Failed to read permissions for '{item.name}': {pe}")
+                        self.logger.error(
+                            f"Failed to read permissions for '{item.name}': {pe}"
+                        )
 
-            if (item.is_file() and item.suffix == ".py") or (item.is_dir() and (item / "__init__.py").exists()):
+            if (item.is_file() and item.suffix == ".py") or (
+                item.is_dir() and (item / "__init__.py").exists()
+            ):
                 plugin_name = item.stem if item.is_file() else item.name
                 discovered.append(plugin_name)
                 self.loaded_meta[plugin_name] = PluginMetadata(
                     module_path=f"plugins.{plugin_name}",
-                    class_name=plugin_name if "_" not in plugin_name else plugin_name.replace("_", ""),
+                    class_name=plugin_name
+                    if "_" not in plugin_name
+                    else plugin_name.replace("_", ""),
                     permissions=permissions,
-                    restricted_mode=restricted
+                    restricted_mode=restricted,
                 )
-                self.logger.debug(f"Dynamically discovered '{plugin_name}' (Restricted: {restricted})")
+                self.logger.debug(
+                    f"Dynamically discovered '{plugin_name}' (Restricted: {restricted})"
+                )
 
         return discovered
 
@@ -155,7 +169,9 @@ class PluginManager:
         try:
             # Phase 288: Handle Restricted Mode
             if meta.restricted_mode:
-                self.logger.info(f"Loading '{plugin_name}' in Restricted Mode (Sandbox)")
+                self.logger.info(
+                    f"Loading '{plugin_name}' in Restricted Mode (Sandbox)"
+                )
                 return self._load_sandboxed_plugin(plugin_name, meta)
 
             module = importlib.import_module(meta.module_path)
@@ -167,7 +183,9 @@ class PluginManager:
             # Health check immediately after setup
             health = instance.health_check()
             if health.status != "healthy":
-                self.logger.error(f"Plugin '{plugin_name}' failed health check: {health.message}")
+                self.logger.error(
+                    f"Plugin '{plugin_name}' failed health check: {health.message}"
+                )
                 return None
 
             self.active_plugins[plugin_name] = instance
@@ -176,10 +194,13 @@ class PluginManager:
             self.logger.error(f"Failed to load plugin '{plugin_name}': {e}")
             return None
 
-    def _load_sandboxed_plugin(self, name: str, meta: PluginMetadata) -> AgentPluginBase | None:
+    def _load_sandboxed_plugin(
+        self, name: str, meta: PluginMetadata
+    ) -> AgentPluginBase | None:
         """Phase 288: Implement Docker-based or native sandboxing for untrusted plugins."""
         try:
             import docker
+
             client = docker.from_env()
             # Verify daemon is running
             client.ping()
@@ -188,10 +209,14 @@ class PluginManager:
             # For this implementation, we will use a 'PermissiveProxy' that checks permissions.
             return self._setup_permission_proxy(name, meta)
         except Exception as e:
-            self.logger.warning(f"Plugin '{name}': Docker sandbox unavailable ({e}). Falling back to Native Permission Enforcement.")
+            self.logger.warning(
+                f"Plugin '{name}': Docker sandbox unavailable ({e}). Falling back to Native Permission Enforcement."
+            )
             return self._setup_permission_proxy(name, meta)
 
-    def _setup_permission_proxy(self, name: str, meta: PluginMetadata) -> AgentPluginBase | None:
+    def _setup_permission_proxy(
+        self, name: str, meta: PluginMetadata
+    ) -> AgentPluginBase | None:
         """Enforces permissions via a runtime wrapper."""
         module = importlib.import_module(meta.module_path)
         plugin_class = getattr(module, meta.class_name)
@@ -204,7 +229,9 @@ class PluginManager:
         def restricted_run(file_path: Path, context: dict[str, Any]) -> bool:
             # Enforce "read:src"
             if "read:src" not in allowed_permissions and "src" in str(file_path):
-                self.logger.error(f"Permission Denied: Plugin '{name}' attempted to read 'src' path without 'read:src' permission.")
+                self.logger.error(
+                    f"Permission Denied: Plugin '{name}' attempted to read 'src' path without 'read:src' permission."
+                )
                 return False
 
             # Enforce "write:temp" (Mock check)

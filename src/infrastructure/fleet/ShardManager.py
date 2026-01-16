@@ -19,13 +19,11 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from pathlib import Path
 
 __version__ = VERSION
-
-
 
 
 class ShardManager:
@@ -38,7 +36,9 @@ class ShardManager:
         self.workspace_root = Path(workspace_root)
         self.shards: dict[str, set[str]] = {}  # Shard name to agent names
         self.agent_to_shard: dict[str, str] = {}
-        self.communication_log: dict[frozenset[str], int] = {}  # Pairs of agents to frequency
+        self.communication_log: dict[
+            frozenset[str], int
+        ] = {}  # Pairs of agents to frequency
 
     def log_communication(self, agent_a: str, agent_b: str) -> None:
         """Records a communication event between two agents."""
@@ -49,7 +49,9 @@ class ShardManager:
         """Initializes a new shard."""
         if shard_name not in self.shards:
             self.shards[shard_name] = set()
-            logging.info(f"ShardManager: Created shard '{shard_name}' with capacity {capacity}")
+            logging.info(
+                f"ShardManager: Created shard '{shard_name}' with capacity {capacity}"
+            )
 
     def assign_agent(self, agent_name: str, shard_name: str) -> bool:
         """Assigns an agent to a specific shard."""
@@ -79,7 +81,9 @@ class ShardManager:
         Dynamic sharding logic based on communication frequency.
         Nodes that talk to each other frequently (>= threshold) are clustered together.
         """
-        logging.info("ShardManager: Running dynamic sharding optimization (Phase 128)...")
+        logging.info(
+            "ShardManager: Running dynamic sharding optimization (Phase 128)..."
+        )
 
         # Identify high-frequency pairings
         clusters: list[set[str]] = []
@@ -101,4 +105,6 @@ class ShardManager:
             for agent in cluster:
                 self.assign_agent(agent, shard_name)
 
-        logging.info(f"ShardManager: Optimization complete. Created {len(clusters)} tactical shards.")
+        logging.info(
+            f"ShardManager: Optimization complete. Created {len(clusters)} tactical shards."
+        )

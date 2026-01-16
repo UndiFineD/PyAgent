@@ -21,16 +21,14 @@
 """Agent specializing in breaking down complex tasks into executable workflows."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import logging
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function, as_tool
+from src.core.base.BaseUtilities import create_main_function, as_tool
 
 __version__ = VERSION
-
-
 
 
 class TaskPlannerAgent(BaseAgent):
@@ -71,63 +69,54 @@ class TaskPlannerAgent(BaseAgent):
         req = user_request.lower()
 
         # 0. Generate Contract (Shared Dependencies) - Pattern from smol-ai
-        plan.append({
-            "agent": "TaskPlanner",
-            "action": "generate_shared_dependencies",
-            "args": [user_request]
-        })
+        plan.append(
+            {
+                "agent": "TaskPlanner",
+                "action": "generate_shared_dependencies",
+                "args": [user_request],
+            }
+        )
 
         # 1. Verification of state (OBSERVE)
-        plan.append({
-            "agent": "Knowledge",
-            "action": "query_knowledge",
-            "args": [user_request]
-        })
+        plan.append(
+            {"agent": "Knowledge", "action": "query_knowledge", "args": [user_request]}
+        )
 
         # 2. Logic Step (THINK)
         # 3. Work Step (EXECUTE)
         if any(w in req for w in ["fix", "bug", "error", "refactor"]):
-            plan.append({
-                "agent": "Coder",
-                "action": "improve_content",
-                "args": [f"Follow scientific iteration to fix: {user_request}"]
-            })
+            plan.append(
+                {
+                    "agent": "Coder",
+                    "action": "improve_content",
+                    "args": [f"Follow scientific iteration to fix: {user_request}"],
+                }
+            )
 
         # 4. Critical Gate (VERIFY)
-        plan.append({
-            "agent": "Security",
-            "action": "improve_content",
-            "args": ["Verify the code changes for hallucinations or injections."]
-        })
+        plan.append(
+            {
+                "agent": "Security",
+                "action": "improve_content",
+                "args": ["Verify the code changes for hallucinations or injections."],
+            }
+        )
 
         return plan
-
-
-
-
-
 
     def improve_content(self, prompt: str) -> str:
         """Analyze a request and output the planning report."""
         plan = self.create_plan(prompt)
         report = [
-
-
-
-
             f"# Execution Plan for: {prompt}",
             "",
             "## Assigned Agents and Actions",
             "| Step | Agent | Action |",
-            "| :--- | :--- | :--- |"
-
-
-
+            "| :--- | :--- | :--- |",
         ]
 
         for i, step in enumerate(plan, 1):
             report.append(f"| {i} | {step['agent']} | {step['action']} |")
-
 
         report.append("\n## JSON Payload (for FleetManager)")
         report.append(f"```json\n{json.dumps(plan, indent=2)}\n```")
@@ -135,9 +124,8 @@ class TaskPlannerAgent(BaseAgent):
         return "\n".join(report)
 
 
-
-
-
 if __name__ == "__main__":
-    main = create_main_function(TaskPlannerAgent, "TaskPlanner Agent", "User request to plan for")
+    main = create_main_function(
+        TaskPlannerAgent, "TaskPlanner Agent", "User request to plan for"
+    )
     main()

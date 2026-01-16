@@ -24,10 +24,10 @@ Pure logic for OpenAPI spec generation and tool contract validation.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 from typing import Any
-from src.core.base.version import SDK_VERSION
+from src.core.base.Version import SDK_VERSION
 
 __version__ = VERSION
 
@@ -37,13 +37,9 @@ except ImportError:
     rc: Any = None  # type: ignore[no-redef]
 
 
-
-
-
-
-
 class APICore:
     """Logic for API-related operations, including OpenAPI schema generation."""
+
     def __init__(self, version: str = SDK_VERSION) -> None:
         self.version = version
 
@@ -57,7 +53,7 @@ class APICore:
 
         paths = {}
         for tool in tool_definitions:
-            tool_name = tool.get('name', 'unknown')
+            tool_name = tool.get("name", "unknown")
             paths[f"/tools/{tool_name}"] = {
                 "post": {
                     "summary": f"Execute {tool_name}",
@@ -67,24 +63,21 @@ class APICore:
                             "application/json": {
                                 "schema": {
                                     "type": "object",
-                                    "properties": tool.get('parameters', {"input": {"type": "string"}})
+                                    "properties": tool.get(
+                                        "parameters", {"input": {"type": "string"}}
+                                    ),
                                 }
                             }
                         }
                     },
-                    "responses": {
-                        "200": {"description": "OK"}
-                    }
+                    "responses": {"200": {"description": "OK"}},
                 }
             }
 
         spec = {
             "openapi": "3.0.0",
-            "info": {
-                "title": "PyAgent Fleet API",
-                "version": self.version
-            },
-            "paths": paths
+            "info": {"title": "PyAgent Fleet API", "version": self.version},
+            "paths": paths,
         }
         return json.dumps(spec, indent=2)
 

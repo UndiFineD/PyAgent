@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\swarm\OrchestratorAgent.py
-# hypothesis_version: 6.150.1
-
-[0.0001, 5.0, 30.0, 300.0, 100, 120, '--files', '-A', '-m', '-v', '.', '.go', '.js', '.py', '.rb', '.sh', '.ts', 'Entering agent.run()', 'Final stats:', 'No pending changes.', 'Runtime Error', 'add', 'agent', 'agent_complete', 'agent_stats.py', 'agents', 'agents_applied', 'async_enabled', 'command_handler', 'commit', 'consensus.log', 'data', 'diff_generator', 'direct', 'dry_run', 'enabled', 'end_time', 'files_modified', 'files_processed', 'git', 'github-models', 'lock_manager', 'logs', 'metrics', 'mode', 'modification_rate', 'pending_diffs', 'plugins', 'push', 'pytest', 'rate_limiter', 'repo_root', 'shutdown_handler', 'sql_metadata', 'start_time', 'summary', 'update_manager', 'utf-8']

@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\optimization.py
-# hypothesis_version: 6.150.1
-
-[-0.8, 0.0, 1e-30, 1e-07, 1e-06, 0.001, 0.01, 0.5, 1.0, 2.0, 10000, '1-sqrt', 'RMS', 'beta1', 'clip_threshold', 'cosine', 'decay_rate', 'eps', 'exp_avg', 'exp_avg_sq', 'exp_avg_sq_col', 'exp_avg_sq_row', 'initial_lr', 'linear', 'lr', 'params', 'relative_step', 'scale_parameter', 'step', 'warmup_init', 'weight_decay']

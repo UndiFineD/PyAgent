@@ -9,10 +9,8 @@ import asyncio
 from src.infrastructure.fleet.FleetManager import FleetManager
 
 
-
-
 async def run_phase39():
-    logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
     workspace_root = os.getcwd()
     fleet = FleetManager(workspace_root)
 
@@ -35,65 +33,33 @@ async def run_phase39():
     if asyncio.iscoroutine(res):
         spec_fleet = await res
 
-
-
-
-
-
-
-
-
-
     else:
         spec_fleet = res
-    print(f"SpeciationOrchestrator: Created '{spec_fleet['breed_name']}' with agents: {spec_fleet['agents']}")
-
-
-
-
-
-
-
-
-
-
-
-
-
+    print(
+        f"SpeciationOrchestrator: Created '{spec_fleet['breed_name']}' with agents: {spec_fleet['agents']}"
+    )
 
     # 3. Test Load Balancer
     res = fleet.load_balancer.balance_request("Mobile", "Fetch Fleet Status")
     if asyncio.iscoroutine(res):
-
-
         lb_resp = await res
     else:
-
-
-
         lb_resp = res
-    print(f"LoadBalancer: Request Accepted: {lb_resp['status']}, Worker: {lb_resp['assigned_model']}")
+    print(
+        f"LoadBalancer: Request Accepted: {lb_resp['status']}, Worker: {lb_resp['assigned_model']}"
+    )
 
     # Assertions
-    assert synthesis['topic'] == topic, "Fractal synthesis failed!"
+    assert synthesis["topic"] == topic, "Fractal synthesis failed!"
 
-
-
-    assert len(spec_fleet['agents']) > 0, "Speciation failed!"
-    assert lb_resp['status'] == "ACCEPTED", "Load balancing failed!"
-
+    assert len(spec_fleet["agents"]) > 0, "Speciation failed!"
+    assert lb_resp["status"] == "ACCEPTED", "Load balancing failed!"
 
     print("\n[SUCCESS] Phase 39 verification complete.")
 
 
-
-
-
 def test_phase39() -> None:
     asyncio.run(run_phase39())
-
-
-
 
 
 if __name__ == "__main__":

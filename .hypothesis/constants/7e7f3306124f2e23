@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\dev\test_utils\AgentAssertions.py
-# hypothesis_version: 6.150.1
-
-['"""', "'''", ', ', '<string>', '^#+\\s', '```', 'contains_docstring', 'exec', 'json_valid', 'markdown_structure', 'missing code blocks', 'missing headers', 'valid', 'valid structure', 'valid_python']

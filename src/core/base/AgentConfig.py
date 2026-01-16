@@ -18,20 +18,15 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 from src.core.base.models import AgentPluginConfig, RateLimitConfig
-from src.core.base.utils._helpers import (
+from src.core.base.utils.Helpers import (
     _empty_dict_str_any,
     _empty_plugin_config_list,
     _empty_list_str,
     _empty_dict_str_int,
 )
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
-
-
-
-
-
 
 
 @dataclass
@@ -51,6 +46,7 @@ class AgentConfig:
         selective_agents: Agents to execute.
         timeout_per_agent: Timeout settings per agent.
     """
+
     repo_root: str = "."
     agents_only: bool = False
     max_files: int | None = None
@@ -66,7 +62,7 @@ class AgentConfig:
     enable_async: bool = False
     enable_multiprocessing: bool = False
     max_workers: int = 4
-    strategy: str = 'direct'
+    strategy: str = "direct"
     enable_file_locking: bool = False
     incremental: bool = False
     graceful_shutdown: bool = False

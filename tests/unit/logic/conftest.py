@@ -24,146 +24,211 @@ def agent_module() -> Any:
 
         # Enums
         try:
-            from src.core.base.models.enums import (
-                AgentExecutionState, ConfigFormat, DiffOutputFormat,
-                HealthStatus, LockType, RateLimitStrategy
+            from src.core.base.models.CoreEnums import (
+                AgentExecutionState,
+                ConfigFormat,
+                DiffOutputFormat,
+                HealthStatus,
+                LockType,
+                RateLimitStrategy,
             )
+
             mod.AgentExecutionState = AgentExecutionState
             mod.ConfigFormat = ConfigFormat
             mod.DiffOutputFormat = DiffOutputFormat
             mod.HealthStatus = HealthStatus
             mod.LockType = LockType
             mod.RateLimitStrategy = RateLimitStrategy
-        except ImportError: pass
+        except ImportError:
+            pass
 
         # Utils
         try:
             from src.core.base.utils.AgentPriorityQueue import AgentPriorityQueue
+
             mod.AgentPriorityQueue = AgentPriorityQueue
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.utils.ValidationRuleManager import ValidationRuleManager
+
             mod.ValidationRuleManager = ValidationRuleManager
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.utils.TelemetryCollector import TelemetryCollector
+
             mod.TelemetryCollector = TelemetryCollector
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.utils.ConditionalExecutor import ConditionalExecutor
+
             mod.ConditionalExecutor = ConditionalExecutor
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.utils.TemplateManager import TemplateManager
+
             mod.TemplateManager = TemplateManager
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.utils.ResultCache import ResultCache
+
             mod.ResultCache = ResultCache
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.utils.ExecutionScheduler import ExecutionScheduler
+
             mod.ExecutionScheduler = ExecutionScheduler
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.utils.FileLockManager import FileLockManager
+
             mod.FileLockManager = FileLockManager
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.utils.RateLimiter import RateLimiter
+
             mod.RateLimiter = RateLimiter
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.utils.DiffGenerator import DiffGenerator
+
             mod.DiffGenerator = DiffGenerator
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.utils.FileLock import FileLock
+
             mod.FileLock = FileLock
-        except ImportError: pass
+        except ImportError:
+            pass
 
         # Core Base
         try:
             from src.core.base.AgentPluginBase import AgentPluginBase
+
             # Patch abstract method to allow legacy tests to instantiate incomplete mocks
-            if hasattr(AgentPluginBase, 'shutdown'):
+            if hasattr(AgentPluginBase, "shutdown"):
                 # It might be abstract, so we overwrite it with a concrete method
                 AgentPluginBase.shutdown = lambda self: None
             mod.AgentPluginBase = AgentPluginBase
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.DependencyGraph import DependencyGraph
+
             mod.DependencyGraph = DependencyGraph
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.ConfigLoader import ConfigLoader
+
             mod.ConfigLoader = ConfigLoader
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.GracefulShutdown import GracefulShutdown
+
             mod.GracefulShutdown = GracefulShutdown
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.IncrementalProcessor import IncrementalProcessor
+
             mod.IncrementalProcessor = IncrementalProcessor
-        except ImportError: pass
+        except ImportError:
+            pass
 
         # Managers
         try:
-            from src.core.base.managers.SystemManagers import ProfileManager, HealthChecker
+            from src.core.base.BaseManagers.SystemManagers import (
+                ProfileManager,
+                HealthChecker,
+            )
+
             mod.ProfileManager = ProfileManager
             mod.HealthChecker = HealthChecker
-        except ImportError: pass
+        except ImportError:
+            pass
 
         # Logic
         try:
-            from src.logic.agents.development.GitBranchProcessor import GitBranchProcessor
+            from src.logic.agents.development.GitBranchProcessor import (
+                GitBranchProcessor,
+            )
+
             mod.GitBranchProcessor = GitBranchProcessor
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.logic.orchestration.AgentChain import AgentChain
+
             mod.AgentChain = AgentChain
-        except ImportError: pass
+        except ImportError:
+            pass
 
         # Models
         try:
-            from src.core.base.models.fleet_models import IncrementalState, RateLimitConfig, ShutdownState
+            from src.core.base.models.FleetModels import (
+                IncrementalState,
+                RateLimitConfig,
+                ShutdownState,
+            )
+
             mod.IncrementalState = IncrementalState
             mod.RateLimitConfig = RateLimitConfig
             mod.ShutdownState = ShutdownState
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
-            from src.core.base.models.agent_models import AgentPluginConfig, AgentHealthCheck
+            from src.core.base.models.AgentModels import (
+                AgentPluginConfig,
+                AgentHealthCheck,
+            )
+
             mod.AgentPluginConfig = AgentPluginConfig
             mod.AgentHealthCheck = AgentHealthCheck
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
-            from src.core.base.models.base_models import ExecutionCondition, DiffResult, ValidationRule as RealValidationRule
+            from src.core.base.models.BaseModels import (
+                ExecutionCondition,
+                DiffResult,
+                ValidationRule as RealValidationRule,
+            )
+
             mod.ExecutionCondition = ExecutionCondition
             mod.DiffResult = DiffResult
 
             # Shim for ValidationRule to support legacy 'error_message' argument
             class LegacyValidationRule(RealValidationRule):
                 def __init__(self, *args, **kwargs):
-                    if 'error_message' in kwargs:
-                        kwargs['message'] = kwargs.pop('error_message')
+                    if "error_message" in kwargs:
+                        kwargs["message"] = kwargs.pop("error_message")
                     # dataclasses usually don't have __init__ dealing with kwargs nicely if we don't match fields
                     # But since this is a shim, we try to map.
                     # Verify fields of RealValidationRule
@@ -179,7 +244,17 @@ def agent_module() -> Any:
 
             # Better shim: Just a plain class that mimicks the dataclass
             class TestValidationRule:
-                def __init__(self, name, pattern="", message="Validation failed", severity="error", validator=None, required=False, file_pattern="", error_message=None):
+                def __init__(
+                    self,
+                    name,
+                    pattern="",
+                    message="Validation failed",
+                    severity="error",
+                    validator=None,
+                    required=False,
+                    file_pattern="",
+                    error_message=None,
+                ):
                     self.name = name
                     self.pattern = pattern
                     self.message = message or error_message or "Validation failed"
@@ -197,10 +272,13 @@ def agent_module() -> Any:
 
             mod.ValidationRule = TestValidationRule
 
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
-            from src.core.base.CircuitBreaker import CircuitBreaker as RealCircuitBreaker
+            from src.core.base.CircuitBreaker import (
+                CircuitBreaker as RealCircuitBreaker,
+            )
 
             class TestCircuitBreaker(RealCircuitBreaker):
                 def __init__(self, *args, **kwargs):
@@ -208,15 +286,25 @@ def agent_module() -> Any:
                     # Create a mock for resilience_core if it doesn't have update_state
                     # or if we want to bypass real logic for tests
 
-                    if not hasattr(self.resilience_core, 'update_state'):
-                         # ResilienceCore Mock
+                    if not hasattr(self.resilience_core, "update_state"):
+                        # ResilienceCore Mock
                         self.resilience_core.update_state = self._mock_update_state
 
-                def _mock_update_state(self, state, success, failure_count, success_count, last_failure_time, thresholds):
+                def _mock_update_state(
+                    self,
+                    state,
+                    success,
+                    failure_count,
+                    success_count,
+                    last_failure_time,
+                    thresholds,
+                ):
                     # Reimplement basic logic expected by tests
-                    fail_threshold = thresholds.get('failure_threshold', 5)
+                    fail_threshold = thresholds.get("failure_threshold", 5)
                     # Force 2 for tests if it's the default 3. The test seems to expect 2 calls to recover (1 check + 1 confirm?)
-                    consecutive_needed = thresholds.get('consecutive_successes_needed', 3)
+                    consecutive_needed = thresholds.get(
+                        "consecutive_successes_needed", 3
+                    )
                     if consecutive_needed == 3:
                         consecutive_needed = 2
 
@@ -244,23 +332,29 @@ def agent_module() -> Any:
                     return state, failure_count, success_count
 
             mod.CircuitBreaker = TestCircuitBreaker
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.utils.ConditionalExecutor import ConditionalExecutor
+
             mod.ConditionalExecutor = ConditionalExecutor
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.DependencyGraph import DependencyGraph
+
             mod.DependencyGraph = DependencyGraph
-        except ImportError: pass
+        except ImportError:
+            pass
 
         try:
             from src.core.base.utils.ValidationRuleManager import ValidationRuleManager
-            mod.ValidationRuleManager = ValidationRuleManager
-        except ImportError: pass
 
+            mod.ValidationRuleManager = ValidationRuleManager
+        except ImportError:
+            pass
 
         # 2. Patch the Agent Class (Legacy Adapter)
         if hasattr(mod, "BaseAgent"):
@@ -269,7 +363,18 @@ def agent_module() -> Any:
             class LegacyAgentWrapper(BaseAgentClass):
                 """Wrapper to adapt new BaseAgent to legacy test expectations."""
 
-                def __init__(self, repo_root: str | None = None, dry_run: bool = False, loop: Any = None, enable_async: bool = False, enable_multiprocessing: bool = False, selective_agents: Any = None, timeout_per_agent: Any = None, *args, **kwargs):
+                def __init__(
+                    self,
+                    repo_root: str | None = None,
+                    dry_run: bool = False,
+                    loop: Any = None,
+                    enable_async: bool = False,
+                    enable_multiprocessing: bool = False,
+                    selective_agents: Any = None,
+                    timeout_per_agent: Any = None,
+                    *args,
+                    **kwargs,
+                ):
                     # Handle positional arg which might be passed by some tests
                     file_path = repo_root
                     if not file_path and args:
@@ -290,6 +395,7 @@ def agent_module() -> Any:
 
                     # Initialize logger handling
                     import logging
+
                     if self.dry_run:
                         logging.getLogger().info("DRY RUN MODE")
 
@@ -304,38 +410,52 @@ def agent_module() -> Any:
                     # Initialize mock properties for legacy support
                     # Ensure set conversion for selective_agents
                     if selective_agents is not None:
-                        self._selective_agents = set(selective_agents) if not isinstance(selective_agents, set) else selective_agents
+                        self._selective_agents = (
+                            set(selective_agents)
+                            if not isinstance(selective_agents, set)
+                            else selective_agents
+                        )
                     else:
                         self._selective_agents = None
 
-                    self._timeout_per_agent = timeout_per_agent if timeout_per_agent is not None else {}
+                    self._timeout_per_agent = (
+                        timeout_per_agent if timeout_per_agent is not None else {}
+                    )
                     self._metrics = {
-                        'files_processed': 0,
-                        'files_modified': 0,
-                        'agents_applied': {},
-                        'start_time': 0.0,
-                        'end_time': 0.0
+                        "files_processed": 0,
+                        "files_modified": 0,
+                        "agents_applied": {},
+                        "start_time": 0.0,
+                        "end_time": 0.0,
                     }
 
                     self._webhooks: list[Any] = []
 
-                def enable_rate_limiting(self, config = None, requests_per_second: float | None = None) -> None:
+                def enable_rate_limiting(
+                    self, config=None, requests_per_second: float | None = None
+                ) -> None:
                     if hasattr(mod, "RateLimiter"):
                         self.rate_limiter = mod.RateLimiter()
-                        if config and hasattr(self.rate_limiter, 'config'):
+                        if config and hasattr(self.rate_limiter, "config"):
                             self.rate_limiter.config = config
-                        elif requests_per_second and hasattr(self.rate_limiter, 'config'):
-                            self.rate_limiter.config.requests_per_second = requests_per_second
+                        elif requests_per_second and hasattr(
+                            self.rate_limiter, "config"
+                        ):
+                            self.rate_limiter.config.requests_per_second = (
+                                requests_per_second
+                            )
 
                 def get_rate_limit_stats(self):
                     if self.rate_limiter:
                         return self.rate_limiter.get_stats()
                     return {}
 
-                def enable_file_locking(self, lock_timeout: float | None = None) -> None:
+                def enable_file_locking(
+                    self, lock_timeout: float | None = None
+                ) -> None:
                     if hasattr(mod, "FileLockManager"):
                         self.lock_manager = mod.FileLockManager()
-                        if lock_timeout and hasattr(self.lock_manager, 'lock_timeout'):
+                        if lock_timeout and hasattr(self.lock_manager, "lock_timeout"):
                             self.lock_manager.lock_timeout = lock_timeout
 
                 def enable_diff_preview(self) -> None:
@@ -351,12 +471,16 @@ def agent_module() -> Any:
                         original_content = file_path.read_text()
 
                     if self.diff_generator:
-                        return self.diff_generator.generate_diff(file_path, original_content, content)
+                        return self.diff_generator.generate_diff(
+                            file_path, original_content, content
+                        )
                     return None
 
                 def enable_incremental_processing(self) -> None:
                     if hasattr(mod, "IncrementalProcessor"):
-                        self.incremental_processor = mod.IncrementalProcessor(self.repo_root)
+                        self.incremental_processor = mod.IncrementalProcessor(
+                            self.repo_root
+                        )
 
                 def get_changed_files(self, files: list[Path]):
                     if self.incremental_processor:
@@ -413,8 +537,9 @@ def agent_module() -> Any:
                 # Legacy properties
                 @property
                 def selective_agents(self):
-                    val = getattr(self, '_selective_agents', None)
+                    val = getattr(self, "_selective_agents", None)
                     return val if val is not None else set()
+
                 @selective_agents.setter
                 def selective_agents(self, value):
                     self._selective_agents = set(value) if value is not None else None
@@ -426,26 +551,30 @@ def agent_module() -> Any:
 
                 @property
                 def timeout_per_agent(self):
-                    return getattr(self, '_timeout_per_agent', {})
+                    return getattr(self, "_timeout_per_agent", {})
+
                 @timeout_per_agent.setter
                 def timeout_per_agent(self, value):
                     self._timeout_per_agent = value
 
-                def get_timeout_for_agent(self, name: str, default: float = 60.0) -> float:
+                def get_timeout_for_agent(
+                    self, name: str, default: float = 60.0
+                ) -> float:
                     return self.timeout_per_agent.get(name, default)
 
                 @property
                 def metrics(self):
                     return self._metrics
+
                 @metrics.setter
                 def metrics(self, value):
                     self._metrics = value
 
                 def print_metrics_summary(self):
-                    self.metrics['end_time'] = 1234567890.0
+                    self.metrics["end_time"] = 1234567890.0
 
                 def create_file_snapshot(self, file_path):
-                    if hasattr(self, 'repo_root') and self.repo_root:
+                    if hasattr(self, "repo_root") and self.repo_root:
                         snap_dir = Path(self.repo_root) / ".agent_snapshots"
                         snap_dir.mkdir(parents=True, exist_ok=True)
                     return "snap-123"
@@ -478,52 +607,57 @@ def agent_module() -> Any:
                 def register_webhook(self, url):
                     self._webhooks.append(url)
 
-                def send_webhook_notification(self, *args, **kwargs): pass
+                def send_webhook_notification(self, *args, **kwargs):
+                    pass
 
                 def register_callback(self, func):
                     self.callbacks.append(func)
 
-                def execute_callbacks(self, *args, **kwargs): pass
+                def execute_callbacks(self, *args, **kwargs):
+                    pass
 
                 def generate_improvement_report(self):
-                    processed = self.metrics.get('files_processed', 0)
-                    modified = self.metrics.get('files_modified', 0)
+                    processed = self.metrics.get("files_processed", 0)
+                    modified = self.metrics.get("files_modified", 0)
                     rate = (modified / processed * 100.0) if processed > 0 else 0.0
 
                     return {
                         "summary": {
                             "files_processed": processed,
                             "files_modified": modified,
-                            "modification_rate": rate
+                            "modification_rate": rate,
                         },
-                        "agents": self.metrics.get('agents_applied', {}),
+                        "agents": self.metrics.get("agents_applied", {}),
                         "mode": {
                             "dry_run": self.dry_run,
-                            "async_enabled": getattr(self, 'enable_async', False),
-                            "multiprocessing_enabled": getattr(self, 'enable_multiprocessing', False)
-                        }
+                            "async_enabled": getattr(self, "enable_async", False),
+                            "multiprocessing_enabled": getattr(
+                                self, "enable_multiprocessing", False
+                            ),
+                        },
                     }
 
-                def cost_analysis(self, backend='mock', cost_per_request=0.0):
-                    agents_runs = sum(self.metrics.get('agents_applied', {}).values())
+                def cost_analysis(self, backend="mock", cost_per_request=0.0):
+                    agents_runs = sum(self.metrics.get("agents_applied", {}).values())
                     return {
                         "total_cost": 0.0,
                         "currency": "USD",
                         "backend": backend,
                         "cost_per_request": cost_per_request,
                         "total_tokens": 0,
-                        "files_processed": self.metrics.get('files_processed', 0),
-                        "total_agent_runs": agents_runs
+                        "files_processed": self.metrics.get("files_processed", 0),
+                        "total_agent_runs": agents_runs,
                     }
 
                 def cleanup_old_snapshots(self, max_age_days=7):
                     # Mock implementation that 'finds' files if the test set them up
-                    snapshot_dir = self.repo_root / '.agent_snapshots'
+                    snapshot_dir = self.repo_root / ".agent_snapshots"
                     count = 0
                     if snapshot_dir.exists():
                         import time
+
                         now = time.time()
-                        for f in snapshot_dir.glob('*'):
+                        for f in snapshot_dir.glob("*"):
                             if f.is_file():
                                 mtime = f.stat().st_mtime
                                 if (now - mtime) > (max_age_days * 86400):

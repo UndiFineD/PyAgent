@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\quantizers\quantizer_bnb_4bit.py
-# hypothesis_version: 6.150.1
-
-[0.9, '.', '0.19.0', '0.41.3', '0.43.1', '0.43.3', 'PreTrainedModel', '_is_hf_initialized', 'absmax', 'accelerate', 'bias', 'bitsandbytes', 'cpu', 'device_map', 'disk', 'from_flax', 'from_tf', 'module', 'nested_absmax', 'nested_quant_map', 'param_quant_stats', 'quant_map', 'quant_state.', 'torch.Tensor', 'torch.device', 'torch.dtype']

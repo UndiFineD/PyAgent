@@ -23,20 +23,20 @@ Inspired by system-design-visualizer and FalkorDB.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import time
 from pathlib import Path
 from typing import Any
 import json
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
-from src.logic.agents.cognitive.context.engines.GraphContextEngine import GraphContextEngine
+from src.core.base.BaseUtilities import as_tool
+from src.logic.agents.cognitive.context.engines.GraphContextEngine import (
+    GraphContextEngine,
+)
 from src.logic.agents.cognitive.GraphMemoryAgent import GraphMemoryAgent
 
 __version__ = VERSION
-
-
 
 
 class VisualizerAgent(BaseAgent):
@@ -75,7 +75,9 @@ class VisualizerAgent(BaseAgent):
         return self.think(prompt)
 
     @as_tool
-    def video_grounding(self, frames: list[dict[str, Any]], event_query: str) -> dict[str, Any]:
+    def video_grounding(
+        self, frames: list[dict[str, Any]], event_query: str
+    ) -> dict[str, Any]:
         """
         Phase 58: Video Grounding.
         Analyzes a sequence of video frames to identify events or temporal relationships.
@@ -92,11 +94,13 @@ class VisualizerAgent(BaseAgent):
             "event_start": frames[0]["timestamp"] if frames else 0,
             "confidence": 0.85,
             "detected_sequence": [f["detected_objects"] for f in frames],
-            "conclusion": f"Analysis of {len(frames)} frames confirms intent for: {event_query}"
+            "conclusion": f"Analysis of {len(frames)} frames confirms intent for: {event_query}",
         }
 
     @as_tool
-    def export_visual_workflow(self, workflow_name: str, tasks: list[dict[str, Any]]) -> str:
+    def export_visual_workflow(
+        self, workflow_name: str, tasks: list[dict[str, Any]]
+    ) -> str:
         """Exports a task sequence as a JSON visual workflow (cc-wf-studio format)."""
         logging.info(f"VISUALIZER: Exporting visual workflow '{workflow_name}'")
 
@@ -105,34 +109,44 @@ class VisualizerAgent(BaseAgent):
 
         for i, task in enumerate(tasks):
             node_id = f"node_{i}"
-            nodes.append({
-                "id": node_id,
-                "type": "agent_action",
-                "data": {"label": task.get("title", f"Task {i}"), "agent": task.get("agent", "Generic")},
-                "position": {"x": 100 * i, "y": 100 * i}
-            })
+            nodes.append(
+                {
+                    "id": node_id,
+                    "type": "agent_action",
+                    "data": {
+                        "label": task.get("title", f"Task {i}"),
+                        "agent": task.get("agent", "Generic"),
+                    },
+                    "position": {"x": 100 * i, "y": 100 * i},
+                }
+            )
             if i > 0:
-                edges.append({
-                    "id": f"edge_{i-1}_{i}",
-                    "source": f"node_{i-1}",
-                    "target": node_id,
-                    "label": "sequence"
-                })
+                edges.append(
+                    {
+                        "id": f"edge_{i - 1}_{i}",
+                        "source": f"node_{i - 1}",
+                        "target": node_id,
+                        "label": "sequence",
+                    }
+                )
 
         workflow_data = {
             "name": workflow_name,
             "version": "1.0.0",
-            "canvas": {"nodes": nodes, "edges": edges}
+            "canvas": {"nodes": nodes, "edges": edges},
         }
 
-        output_path = Path(str(self.workspace_root)) / "config" / f"{workflow_name}_visual.json"
+        output_path = (
+            Path(str(self.workspace_root)) / "config" / f"{workflow_name}_visual.json"
+        )
         temp_path = output_path.with_suffix(".tmp")
         try:
             with open(temp_path, "w", encoding="utf-8") as f:
                 json.dump(workflow_data, f, indent=2)
             temp_path.replace(output_path)
         except Exception:
-            if temp_path.exists(): temp_path.unlink()
+            if temp_path.exists():
+                temp_path.unlink()
             raise
 
         return f"Successfully exported visual workflow to {output_path}"
@@ -152,11 +166,13 @@ class VisualizerAgent(BaseAgent):
         # Convert canvas nodes to fleet tasks
         tasks = []
         for node in data.get("canvas", {}).get("nodes", []):
-            tasks.append({
-                "title": node["data"]["label"],
-                "agent": node["data"]["agent"],
-                "status": "pending"
-            })
+            tasks.append(
+                {
+                    "title": node["data"]["label"],
+                    "agent": node["data"]["agent"],
+                    "status": "pending",
+                }
+            )
 
         return {"workflow_name": data.get("name"), "tasks": tasks}
 
@@ -176,9 +192,9 @@ class VisualizerAgent(BaseAgent):
 
         lines = ["graph LR"]
         for rel in relationships:
-            s = rel['subject'].replace(" ", "_")
-            p = rel['predicate'].replace(" ", "_")
-            o = rel['object'].replace(" ", "_")
+            s = rel["subject"].replace(" ", "_")
+            p = rel["predicate"].replace(" ", "_")
+            o = rel["object"].replace(" ", "_")
             lines.append(f"    {s} -- {p} --> {o}")
 
         return "## 🧠 Knowledge Graph\n\n```mermaid\n" + "\n".join(lines) + "\n```"
@@ -201,10 +217,12 @@ class VisualizerAgent(BaseAgent):
             "    TaskPlannerAgent --|> BaseAgent : inherits",
             "    KnowledgeAgent --|> BaseAgent : inherits",
             "    SecurityGuardAgent --|> BaseAgent : inherits",
-            "    MetaOrchestratorAgent --> FleetManager : uses"
+            "    MetaOrchestratorAgent --> FleetManager : uses",
         ]
 
-        return "## 🗺️ Fleet Architecture Map\n\n```mermaid\n" + "\n".join(diagram) + "\n```"
+        return (
+            "## 🗺️ Fleet Architecture Map\n\n```mermaid\n" + "\n".join(diagram) + "\n```"
+        )
 
     @as_tool
     def generate_call_graph(self, filter_term: str = "") -> str:
@@ -237,23 +255,20 @@ class VisualizerAgent(BaseAgent):
             {"id": "SecurityAudit", "group": 2, "size": 5},
             {"id": "PrivacyGuard", "group": 2, "size": 5},
             {"id": "CoderAgent", "group": 3, "size": 7},
-            {"id": "ByzantineConsensus", "group": 4, "size": 6}
+            {"id": "ByzantineConsensus", "group": 4, "size": 6},
         ]
         links = [
             {"source": "FleetManager", "target": "SecurityAudit", "value": 1},
             {"source": "FleetManager", "target": "CoderAgent", "value": 1},
             {"source": "SecurityAudit", "target": "PrivacyGuard", "value": 0.5},
-            {"source": "CoderAgent", "target": "ByzantineConsensus", "value": 0.8}
+            {"source": "CoderAgent", "target": "ByzantineConsensus", "value": 0.8},
         ]
 
         return {
             "format": "v1-3d-swarm",
             "nodes": nodes,
             "links": links,
-            "metadata": {
-                "generated_at": time.time(),
-                "node_count": len(nodes)
-            }
+            "metadata": {"generated_at": time.time(), "node_count": len(nodes)},
         }
 
     def improve_content(self, prompt: str) -> str:

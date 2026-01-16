@@ -17,7 +17,7 @@ Enables 'core' logic to find agent implementations without hardcoded paths.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import importlib
 import logging
 import os
@@ -27,18 +27,15 @@ from typing import Any, Type
 __version__ = VERSION
 
 
-
-
-
-
-
 class ModuleLoader:
     """Handles dynamic discovery and loading of agent classes."""
 
     _module_cache: dict[str, str] = {}  # agent_type -> module_path
 
     @classmethod
-    def find_agent_module_path(cls, agent_type: str, start_dirs: list[str] | None = None) -> str | None:
+    def find_agent_module_path(
+        cls, agent_type: str, start_dirs: list[str] | None = None
+    ) -> str | None:
         """
         Recursively searches for a python file matching the agent type.
         Returns the dotted module path (e.g. 'src.logic.agents.development.CoderAgent').
@@ -68,7 +65,9 @@ class ModuleLoader:
                         # Convert file path to module path
                         # e.g. src/logic/agents/development/CoderAgent.py -> src.logic.agents.development.CoderAgent
                         relative = rel_path.relative_to(workspace_root)
-                        module_path = str(relative).replace(os.sep, ".").replace(".py", "")
+                        module_path = (
+                            str(relative).replace(os.sep, ".").replace(".py", "")
+                        )
 
                         cls._module_cache[agent_type] = module_path
                         return module_path
@@ -89,12 +88,14 @@ class ModuleLoader:
                 module_path = f"src.logic.agents.development.{agent_type}"
             # Add other known mappings here if needed
             else:
-                 # Last resort attempt based on old structure
+                # Last resort attempt based on old structure
                 module_path = f"src.{type_clean}.{agent_type}"
 
         try:
             module = importlib.import_module(module_path)
             return getattr(module, agent_type)
         except (ImportError, AttributeError, ModuleNotFoundError) as e:
-            logging.error(f"ModuleLoader: Failed to load class {agent_type} from {module_path}. Error: {e}")
+            logging.error(
+                f"ModuleLoader: Failed to load class {agent_type} from {module_path}. Error: {e}"
+            )
             raise ImportError(f"Could not load agent class {agent_type}") from e

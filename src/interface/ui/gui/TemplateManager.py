@@ -25,7 +25,7 @@
 """BMAD Template Manager for providing structured document templates."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import tkinter as tk
 
 __version__ = VERSION
@@ -83,14 +83,13 @@ BMAD_TEMPLATES: dict[str, str] = {
 2. [Edge Case]
    - Input: ...
    - Expected: ...
-"""
+""",
 }
-
-
 
 
 class TemplateManager:
     """Manages insertion of BMAD-standard templates into text widgets."""
+
     @staticmethod
     def get_template_names() -> list[str]:
         return list(BMAD_TEMPLATES.keys())

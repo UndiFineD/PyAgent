@@ -25,7 +25,7 @@
 """Configuration management for PyAgent GUI settings."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 import json
 import os
@@ -33,17 +33,16 @@ import os
 __version__ = VERSION
 
 
-
-
 class ConfigurationManager:
     """Handles loading and saving global configuration settings."""
+
     def __init__(self, config_file="config/gui_settings.json") -> None:
         self.config_file: str = config_file
         self.settings = {
             "github_token_file": r"C:\DEV\github-gat.txt",
             "default_model": "gpt-4o",
             "cache_enabled": True,
-            "monitor_scaling": 1.0
+            "monitor_scaling": 1.0,
         }
         self.load()
 
@@ -58,7 +57,7 @@ class ConfigurationManager:
 
     def save(self) -> None:
         os.makedirs(os.path.dirname(self.config_file), exist_ok=True)
-        with open(self.config_file, 'w') as f:
+        with open(self.config_file, "w") as f:
             json.dump(self.settings, f, indent=4)
 
     def get(self, key: str, default: Any = None) -> Any:

@@ -23,15 +23,13 @@ Generates data structures for internal/external dashboard consumers.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import logging
 from typing import Any
 from pathlib import Path
 
 __version__ = VERSION
-
-
 
 
 class FleetWebUI:
@@ -41,12 +39,14 @@ class FleetWebUI:
         self.fleet = fleet_manager
         self.generative_registry: dict[str, dict[str, Any]] = {}  # Tambo Pattern
 
-    def register_generative_component(self, name: str, description: str, props_schema: dict[str, Any]) -> str:
+    def register_generative_component(
+        self, name: str, description: str, props_schema: dict[str, Any]
+    ) -> str:
         """Registers a UI component that the AI can choose to render dynamically (Tambo Pattern)."""
         self.generative_registry[name] = {
             "description": description,
             "props_schema": props_schema,
-            "type": "generative"
+            "type": "generative",
         }
         logging.info(f"Registered generative UI component: {name}")
 
@@ -64,7 +64,13 @@ class FleetWebUI:
         links: list[Any] = []
 
         for name, agent in self.fleet.agents.items():
-            nodes.append({"id": name, "type": "agent", "model": getattr(agent, "model", "unknown")})
+            nodes.append(
+                {
+                    "id": name,
+                    "type": "agent",
+                    "model": getattr(agent, "model", "unknown"),
+                }
+            )
 
         return json.dumps({"nodes": nodes, "links": links}, indent=2)
 
@@ -94,19 +100,22 @@ class FleetWebUI:
         Returns directory structure and file metadata.
         """
         from pathlib import Path
+
         base = Path(self.fleet.workspace_root) / sub_path
         if not base.exists():
             return {"error": f"Path {sub_path} not found"}
 
         items = []
         for item in base.iterdir():
-            items.append({
-                "name": item.name,
-                "is_dir": item.is_dir(),
-                "size": item.stat().st_size if item.is_file() else 0,
-                "extension": item.suffix if item.is_file() else "",
-                "preview": self._get_preview(item) if item.is_file() else None
-            })
+            items.append(
+                {
+                    "name": item.name,
+                    "is_dir": item.is_dir(),
+                    "size": item.stat().st_size if item.is_file() else 0,
+                    "extension": item.suffix if item.is_file() else "",
+                    "preview": self._get_preview(item) if item.is_file() else None,
+                }
+            )
         return {"path": str(sub_path), "items": items}
 
     def _get_preview(self, file_path: Path) -> str:
@@ -123,26 +132,31 @@ class FleetWebUI:
         """Returns the available nodes and signals for the Graphical Workflow Designer."""
         available_agents = []
         for name, agent in self.fleet.agents.items():
-            methods = [m for m in dir(agent) if not m.startswith("_") and callable(getattr(agent, m))]
-            available_agents.append({
-                "name": name,
-                "actions": methods,
-                "capabilities": getattr(agent, "capabilities", [])
-            })
+            methods = [
+                m
+                for m in dir(agent)
+                if not m.startswith("_") and callable(getattr(agent, m))
+            ]
+            available_agents.append(
+                {
+                    "name": name,
+                    "actions": methods,
+                    "capabilities": getattr(agent, "capabilities", []),
+                }
+            )
 
         return {
             "agents": available_agents,
             "triggers": ["HTTP_REQUEST", "SCHEDULE", "SIGNAL_EMITTED"],
-            "v_connectors": ["sequential", "parallel", "conditional"]
+            "v_connectors": ["sequential", "parallel", "conditional"],
         }
 
     def get_multi_fleet_manager(self) -> dict[str, Any]:
         """Returns status of multiple fleets (local and remote)."""
         return {
-            "local_fleet": {
-                "agents": len(self.fleet.agents),
-                "status": "active"
-            },
+            "local_fleet": {"agents": len(self.fleet.agents), "status": "active"},
             "remote_nodes": self.fleet.remote_nodes,
-            "mesh_status": self.fleet.mesh.get_mesh_status() if hasattr(self.fleet, "mesh") else "Unknown"
+            "mesh_status": self.fleet.mesh.get_mesh_status()
+            if hasattr(self.fleet, "mesh")
+            else "Unknown",
         }

@@ -19,7 +19,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import sqlite3
 import json
 import os
@@ -31,16 +31,20 @@ from typing import Any
 __version__ = VERSION
 
 
-
-
-
-
-
 class SqlMetadataHandler:
     """Relational metadata overlay for compressed interaction shards."""
 
-    def __init__(self, db_path: str = "data/memory/agent_store/metadata.db", shards_dir: str = "data/memory/agent_store/memory_shards", fleet: Any | None = None) -> None:
-        if fleet and hasattr(fleet, "recorder") and shards_dir == "data/memory/agent_store/memory_shards":
+    def __init__(
+        self,
+        db_path: str = "data/memory/agent_store/metadata.db",
+        shards_dir: str = "data/memory/agent_store/memory_shards",
+        fleet: Any | None = None,
+    ) -> None:
+        if (
+            fleet
+            and hasattr(fleet, "recorder")
+            and shards_dir == "data/memory/agent_store/memory_shards"
+        ):
             self.shards_dir = str(fleet.recorder.log_dir)
         else:
             self.shards_dir = shards_dir
@@ -118,14 +122,24 @@ class SqlMetadataHandler:
                     END
                 """)
             except sqlite3.OperationalError:
-                logging.warning("FTS5 not supported in this SQLite build. Logic falling back to standard LIKE.")
+                logging.warning(
+                    "FTS5 not supported in this SQLite build. Logic falling back to standard LIKE."
+                )
 
             # Phase 107/108 Optimized Indexes for Meta-Scale Data
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_agent_name ON interactions (agent_name)")
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_task_type ON interactions (task_type)")
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_timestamp ON interactions (timestamp)")
+            cursor.execute(
+                "CREATE INDEX IF NOT EXISTS idx_agent_name ON interactions (agent_name)"
+            )
+            cursor.execute(
+                "CREATE INDEX IF NOT EXISTS idx_task_type ON interactions (task_type)"
+            )
+            cursor.execute(
+                "CREATE INDEX IF NOT EXISTS idx_timestamp ON interactions (timestamp)"
+            )
             cursor.execute("CREATE INDEX IF NOT EXISTS idx_tags ON metadata_tags (tag)")
-            cursor.execute("CREATE INDEX IF NOT EXISTS idx_lessons_cat ON intelligence_lessons (category)")
+            cursor.execute(
+                "CREATE INDEX IF NOT EXISTS idx_lessons_cat ON intelligence_lessons (category)"
+            )
 
             conn.commit()
 
@@ -138,24 +152,33 @@ class SqlMetadataHandler:
             conn.execute("ANALYZE")
             # Phase 108: Reindex for massive FTS5 performance
             conn.execute("REINDEX")
-            logging.info(f"SQL Metadata DB optimized (Size: {db_size_mb:.1f}MB, WAL/VACUUM/ANALYZE/REINDEX).")
+            logging.info(
+                f"SQL Metadata DB optimized (Size: {db_size_mb:.1f}MB, WAL/VACUUM/ANALYZE/REINDEX)."
+            )
 
         # Phase 108: Scalability Gatekeeping (Prep for trillion-parameter community data)
         if db_size_mb > 1024:
             # 1GB threshold for relational sharding
-            logging.warning("SQL Metadata DB exceeds scale thresholds. Partitioning registry recommended.")
+            logging.warning(
+                "SQL Metadata DB exceeds scale thresholds. Partitioning registry recommended."
+            )
 
     def _rotate_metadata_shard(self) -> None:
         """Logic for metadata sharding/rotation."""
         pass
 
-    def record_lesson(self, interaction_id: str, text: str, category: str = "General") -> None:
+    def record_lesson(
+        self, interaction_id: str, text: str, category: str = "General"
+    ) -> None:
         """Persists an extracted AI lesson to the intelligence table."""
         with sqlite3.connect(self.db_path) as conn:
-            conn.execute("""
+            conn.execute(
+                """
                 INSERT INTO intelligence_lessons (source_interaction_id, lesson_text, category, timestamp)
                 VALUES (?, ?, ?, ?)
-            """, (interaction_id, text, category, time.time()))
+            """,
+                (interaction_id, text, category, time.time()),
+            )
             conn.commit()
 
     def get_intelligence_summary(self) -> list[dict[str, Any]]:
@@ -182,7 +205,9 @@ class SqlMetadataHandler:
     def index_shards(self) -> int:
         """Scans shards and populates the metadata DB."""
         indexed_count = 0
-        shard_files = [f for f in os.listdir(self.shards_dir) if f.endswith(".jsonl.gz")]
+        shard_files = [
+            f for f in os.listdir(self.shards_dir) if f.endswith(".jsonl.gz")
+        ]
 
         with sqlite3.connect(self.db_path) as conn:
             cursor = conn.cursor()
@@ -202,22 +227,28 @@ class SqlMetadataHandler:
                             i_id = meta.get("id", f"{shard_num}_{indexed_count}")
 
                             # Insert interaction metadata
-                            cursor.execute("""
+                            cursor.execute(
+                                """
                                 INSERT OR REPLACE INTO interactions (id, shard_id, timestamp, agent_name, task_type, success)
                                 VALUES (?, ?, ?, ?, ?, ?)
-                            """, (
-                                i_id,
-                                shard_num,
-                                data.get("timestamp", 0),
-                                meta.get("agent", "unknown"),
-                                meta.get("type", "generic"),
-                                1 if meta.get("status") == "success" else 0
-                            ))
+                            """,
+                                (
+                                    i_id,
+                                    shard_num,
+                                    data.get("timestamp", 0),
+                                    meta.get("agent", "unknown"),
+                                    meta.get("type", "generic"),
+                                    1 if meta.get("status") == "success" else 0,
+                                ),
+                            )
 
                             # Insert tags if present
                             if "tags" in meta:
                                 for tag in meta["tags"]:
-                                    cursor.execute("INSERT OR IGNORE INTO metadata_tags VALUES (?, ?)", (i_id, tag))
+                                    cursor.execute(
+                                        "INSERT OR IGNORE INTO metadata_tags VALUES (?, ?)",
+                                        (i_id, tag),
+                                    )
 
                             indexed_count += 1
                 except Exception as e:
@@ -237,14 +268,77 @@ class SqlMetadataHandler:
                 results.append(dict(row))
         return results
 
-    def record_debt(self, file_path: str, issue_type: str, message: str, fixed: bool) -> None:
+    def record_debt(
+        self, file_path: str, issue_type: str, message: str, fixed: bool
+    ) -> None:
         """Persists identified technical debt to the relational DB."""
+        # Use batch buffer if available (Phase 14: Reduce connection overhead)
+        if hasattr(self, "_debt_buffer"):
+            self._debt_buffer.append((file_path, issue_type, message, 1 if fixed else 0, time.time()))
+            if len(self._debt_buffer) >= 100:
+                self._flush_debt_buffer()
+            return
+        
         with sqlite3.connect(self.db_path) as conn:
-            conn.execute("""
+            conn.execute(
+                """
                 INSERT INTO technical_debt (file_path, issue_type, message, fixed, timestamp)
                 VALUES (?, ?, ?, ?, ?)
-            """, (file_path, issue_type, message, 1 if fixed else 0, time.time()))
+            """,
+                (file_path, issue_type, message, 1 if fixed else 0, time.time()),
+            )
             conn.commit()
+
+    def start_debt_batch(self) -> None:
+        """Start batching debt records for bulk insert."""
+        self._debt_buffer: list[tuple] = []
+
+    def flush_debt_batch(self) -> int:
+        """Flush all batched debt records to database."""
+        if not hasattr(self, "_debt_buffer") or not self._debt_buffer:
+            return 0
+        count = self._flush_debt_buffer()
+        del self._debt_buffer
+        return count
+
+    def _flush_debt_buffer(self) -> int:
+        """Internal: Flush debt buffer to database."""
+        if not self._debt_buffer:
+            return 0
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute("PRAGMA journal_mode = WAL")
+            cursor = conn.cursor()
+            cursor.executemany(
+                """
+                INSERT INTO technical_debt (file_path, issue_type, message, fixed, timestamp)
+                VALUES (?, ?, ?, ?, ?)
+            """,
+                self._debt_buffer,
+            )
+            conn.commit()
+            count = len(self._debt_buffer)
+            self._debt_buffer.clear()
+            return count
+
+    def bulk_record_debt(self, debt_records: list[tuple]) -> int:
+        """
+        Efficiently inserts multiple debt records in a single transaction.
+        Format: [(file_path, issue_type, message, fixed, timestamp), ...]
+        """
+        if not debt_records:
+            return 0
+        with sqlite3.connect(self.db_path) as conn:
+            conn.execute("PRAGMA journal_mode = WAL")
+            cursor = conn.cursor()
+            cursor.executemany(
+                """
+                INSERT INTO technical_debt (file_path, issue_type, message, fixed, timestamp)
+                VALUES (?, ?, ?, ?, ?)
+            """,
+                debt_records,
+            )
+            conn.commit()
+            return cursor.rowcount
 
     def bulk_record_interactions(self, interaction_data: list[tuple]) -> int:
         """
@@ -254,9 +348,12 @@ class SqlMetadataHandler:
         with sqlite3.connect(self.db_path) as conn:
             conn.execute("PRAGMA journal_mode = WAL")
             cursor = conn.cursor()
-            cursor.executemany("""
+            cursor.executemany(
+                """
                 INSERT OR REPLACE INTO interactions (id, shard_id, timestamp, agent_name, task_type, success)
                 VALUES (?, ?, ?, ?, ?, ?)
-            """, interaction_data)
+            """,
+                interaction_data,
+            )
             conn.commit()
             return cursor.rowcount

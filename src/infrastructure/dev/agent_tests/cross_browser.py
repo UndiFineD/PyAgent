@@ -21,18 +21,13 @@
 """Cross-browser testing classes."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from collections.abc import Callable
 from src.infrastructure.dev.agent_tests.models import CrossBrowserConfig
 from src.infrastructure.dev.agent_tests.enums import BrowserType
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class CrossBrowserRunner:
@@ -80,9 +75,7 @@ class CrossBrowserRunner:
         self._drivers[browser] = False
 
     def run_test(
-        self,
-        test_name: str,
-        test_code: Callable[[], bool]
+        self, test_name: str, test_code: Callable[[], bool]
     ) -> dict[BrowserType, dict[str, Any]]:
         """Run a test across all browsers.
 
@@ -107,7 +100,7 @@ class CrossBrowserRunner:
                 "test": test_name,
                 "passed": passed,
                 "retries": retries,
-                "headless": self.config.headless
+                "headless": self.config.headless,
             }
             results[browser] = result
             self.results[browser].append(result)
@@ -127,7 +120,7 @@ class CrossBrowserRunner:
             browser_summary: dict[str, int] = {
                 "total": len(results),
                 "passed": passed,
-                "failed": len(results) - passed
+                "failed": len(results) - passed,
             }
             summary["browsers"][browser.value] = browser_summary
 

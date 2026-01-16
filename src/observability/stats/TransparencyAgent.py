@@ -21,14 +21,12 @@
 """Agent specializing in interpretability and deep tracing of agent reasoning steps."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.BaseAgent import BaseAgent
-from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
-from src.core.base.utilities import create_main_function, as_tool
+from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
+from src.core.base.BaseUtilities import create_main_function, as_tool
 
 __version__ = VERSION
-
-
 
 
 class TransparencyAgent(BaseAgent):
@@ -51,7 +49,12 @@ class TransparencyAgent(BaseAgent):
 
         if workflow_id:
             # Filter by workflow_id if it's in the data
-            history = [e for e in history if e.get("data", {}).get("workflow_id") == workflow_id or workflow_id in str(e)]
+            history = [
+                e
+                for e in history
+                if e.get("data", {}).get("workflow_id") == workflow_id
+                or workflow_id in str(e)
+            ]
 
         report = ["# fleet Transparency Audit Trail"]
         if workflow_id:
@@ -59,47 +62,31 @@ class TransparencyAgent(BaseAgent):
 
         report.append("\n### 📡 Signal Event Log")
         for event in history:
-
-
-
-
-
-
-
-
-
-
-            ts = event["timestamp"].split('T')[1][:8]
+            ts = event["timestamp"].split("T")[1][:8]
             sender = event["sender"]
             signal = event["signal"]
             report.append(f"- **[{ts}]** `{sender}` emitted `{signal}`")
-
-
-
 
         report.append("\n### 🧠 Reasoning Correlation")
         # In a real scenario, we'd fetch the reasoning blueprint from the WorkflowState or a log
         # For now, we point to the most recent 'STEP_STARTED' events
         steps = [h for h in history if h["signal"] == "STEP_STARTED"]
 
-
         for step in steps:
             data = step["data"]
-            report.append(f"- Agent `{data['agent']}` executed `{data['action']}` triggered by the previous objective.")
+            report.append(
+                f"- Agent `{data['agent']}` executed `{data['action']}` triggered by the previous objective."
+            )
 
         return "\n".join(report)
-
-
-
 
     def improve_content(self, prompt: str) -> str:
         """Trigger an audit report."""
         return self.generate_audit_trail()
 
 
-
-
-
 if __name__ == "__main__":
-    main = create_main_function(TransparencyAgent, "Transparency Agent", "Workflow ID (optional)")
+    main = create_main_function(
+        TransparencyAgent, "Transparency Agent", "Workflow ID (optional)"
+    )
     main()

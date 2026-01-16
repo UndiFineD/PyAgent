@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\interface\ui\gui\AgentRunner.py
-# hypothesis_version: 6.150.1
-
-[1.0, '1.0', 'Analyst', 'Architect', 'BMad Master', 'Coder', 'Developer', 'PM', 'Reviewer', 'Scrum Master', 'Security Auditor', 'Stopping agent...', 'Test Architect', 'UX Designer', 'assistant', 'backend', 'content', 'default', 'get_global_context', 'keep', 'metadata', 'model', 'role', 'set_status', 'src.agent_architect', 'src.agent_coder', 'src.agent_master', 'src.agent_pm', 'src.agent_reviewer', 'src.agent_security', 'src.agent_tester', 'src.agent_ux', 'stop_event', 'type', 'user']

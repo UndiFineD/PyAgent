@@ -23,10 +23,8 @@ import logging
 import os
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 from pathlib import Path
-
-
 
 
 class SpeciationAgent(BaseAgent):
@@ -49,7 +47,9 @@ class SpeciationAgent(BaseAgent):
         Creates a new agent class file that specializes in a specific niche.
         e.g., 'CoderAgent' -> 'ReactSpecialistAgent'
         """
-        logging.info(f"SpeciationAgent: Evolving specialization for {base_agent_name} in {niche_domain}")
+        logging.info(
+            f"SpeciationAgent: Evolving specialization for {base_agent_name} in {niche_domain}"
+        )
 
         new_agent_name = f"{niche_domain.replace(' ', '')}{base_agent_name}"
         output_path = Path("src/logic/agents/specialized") / f"{new_agent_name}.py"
@@ -68,7 +68,9 @@ class SpeciationAgent(BaseAgent):
 
         # Phase 21 Fix: Ensure we don't write the prompt itself to the file if think() just returns input
         if not specialized_code or specialized_code.strip() == prompt.strip():
-            logging.warning("SpeciationAgent: LLM returned no distinct code or returned prompt. Using skeleton.")
+            logging.warning(
+                "SpeciationAgent: LLM returned no distinct code or returned prompt. Using skeleton."
+            )
             specialized_code = f"""
 from src.core.base.BaseAgent import BaseAgent
 class {new_agent_name}(BaseAgent):
@@ -81,7 +83,7 @@ class {new_agent_name}(BaseAgent):
         # Save to file atomically
         temp_path = output_path.with_suffix(".tmp")
         try:
-            with open(temp_path, 'w', encoding='utf-8') as f:
+            with open(temp_path, "w", encoding="utf-8") as f:
                 f.write(specialized_code)
             temp_path.replace(output_path)
         except Exception as e:
@@ -99,23 +101,29 @@ class {new_agent_name}(BaseAgent):
         return f"Successfully speciated {new_agent_name} at {output_path} with generated unit tests."
 
     @as_tool
-    def detect_red_queen_stagnation(self, agent_a_name: str, agent_b_name: str) -> dict[str, Any]:
+    def detect_red_queen_stagnation(
+        self, agent_a_name: str, agent_b_name: str
+    ) -> dict[str, Any]:
         """
         Detects if two agents are converging in their specialized roles (Red Queen stagnation).
         If similarity is > 80%, it recommends a divergence event.
         """
         # In a real scenario, we'd load both classes and compare _system_prompts.
         # For simulation, we use a placeholder similarity check.
-        similarity = 0.85 if "Coder" in agent_a_name and "Coder" in agent_b_name else 0.3
+        similarity = (
+            0.85 if "Coder" in agent_a_name and "Coder" in agent_b_name else 0.3
+        )
 
         stagnated = similarity > 0.8
-        recommendation = "Divergence required" if stagnated else "Healthy niche separation"
+        recommendation = (
+            "Divergence required" if stagnated else "Healthy niche separation"
+        )
 
         return {
             "similarity": similarity,
             "stagnated": stagnated,
             "recommendation": recommendation,
-            "action": "trigger_divergence" if stagnated else "none"
+            "action": "trigger_divergence" if stagnated else "none",
         }
 
     @as_tool
@@ -135,7 +143,9 @@ class {new_agent_name}(BaseAgent):
         test_path = test_dir / f"test_{agent_name.lower()}_UNIT.py"
 
         # Determine relative import path
-        rel_import = str(agent_path.with_suffix("")).replace(os.path.sep, ".").replace("/", ".")
+        rel_import = (
+            str(agent_path.with_suffix("")).replace(os.path.sep, ".").replace("/", ".")
+        )
         if rel_import.startswith("src."):
             rel_import = rel_import  # Already correct
         else:
@@ -145,7 +155,7 @@ class {new_agent_name}(BaseAgent):
 import unittest
 import os
 from {rel_import} import {agent_name}
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 __version__ = VERSION
 
 class Test{agent_name}(unittest.TestCase):
@@ -159,6 +169,8 @@ class Test{agent_name}(unittest.TestCase):
 if __name__ == "__main__":
     unittest.main()
 """
-        with open(test_path, 'w', encoding='utf-8') as f:
+        with open(test_path, "w", encoding="utf-8") as f:
             f.write(test_code.strip())
-        logging.info(f"SpeciationAgent: Generated unit test for {agent_name} at {test_path}")
+        logging.info(
+            f"SpeciationAgent: Generated unit test for {agent_name} at {test_path}"
+        )

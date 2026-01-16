@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\swarm\SwarmDeploymentAgent.py
-# hypothesis_version: 6.150.1
-
-['Healthy', 'SwarmDeploymentAgent', 'deployment_id', 'ip_address', 'node_type', 'nodes', 'region', 'regions', 'status', 'total_nodes', 'us-east-1']

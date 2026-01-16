@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types.AccessibilityIssue import AccessibilityIssue
 from src.core.base.types.AccessibilityIssueType import AccessibilityIssueType
 from src.core.base.types.AccessibilityReport import AccessibilityReport
@@ -29,14 +29,12 @@ from src.core.base.types.AccessibilitySeverity import AccessibilitySeverity
 from src.core.base.types.ColorContrastResult import ColorContrastResult
 from src.core.base.types.WCAGLevel import WCAGLevel
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 from pathlib import Path
 import logging
 import re
 
 __version__ = VERSION
-
-
 
 
 class AccessibilityAgent(BaseAgent):
@@ -71,7 +69,9 @@ class AccessibilityAgent(BaseAgent):
         "4.1.2": (AccessibilityIssueType.ARIA_MISSING, "Name, Role, Value"),
     }
 
-    def __init__(self, target_level: WCAGLevel | str = WCAGLevel.AA, file_path: str | None = None) -> None:
+    def __init__(
+        self, target_level: WCAGLevel | str = WCAGLevel.AA, file_path: str | None = None
+    ) -> None:
         """Initialize accessibility analyzer.
 
         Args:
@@ -84,7 +84,7 @@ class AccessibilityAgent(BaseAgent):
         if isinstance(target_level, str):
             try:
                 # remove 'WCAGLevel.' prefix if present
-                clean_level = target_level.split('.')[-1]
+                clean_level = target_level.split(".")[-1]
                 self.target_level = WCAGLevel[clean_level]
             except KeyError:
                 self.target_level = WCAGLevel.AA
@@ -93,7 +93,9 @@ class AccessibilityAgent(BaseAgent):
 
         self.issues: list[AccessibilityIssue] = []
         self.rules: dict[str, bool] = {rule: True for rule in self.WCAG_CRITERIA}
-        logging.debug(f"AccessibilityAgent initialized with level {self.target_level.value}")
+        logging.debug(
+            f"AccessibilityAgent initialized with level {self.target_level.value}"
+        )
 
     @as_tool
     def analyze_file(self, file_path: str) -> AccessibilityReport:
@@ -119,7 +121,9 @@ class AccessibilityAgent(BaseAgent):
             self._analyze_javascript_ui(content)
         return self._generate_report(file_path)
 
-    def analyze_content(self, content: str, file_type: str = "html") -> AccessibilityReport:
+    def analyze_content(
+        self, content: str, file_type: str = "html"
+    ) -> AccessibilityReport:
         """Analyze content string for accessibility issues.
 
         Args:
@@ -145,10 +149,10 @@ class AccessibilityAgent(BaseAgent):
             content: HTML content string.
         """
         # Check for images without alt text
-        img_pattern = r'<img\s+[^>]*?(?<!alt=)[^>]*?>'
+        img_pattern = r"<img\s+[^>]*?(?<!alt=)[^>]*?>"
         for match in re.finditer(img_pattern, content, re.IGNORECASE):
-            if 'alt=' not in match.group().lower():
-                line_num = content[:match.start()].count('\n') + 1
+            if "alt=" not in match.group().lower():
+                line_num = content[: match.start()].count("\n") + 1
                 issue: AccessibilityIssue = AccessibilityIssue(
                     issue_type=AccessibilityIssueType.MISSING_ALT_TEXT,
                     severity=AccessibilitySeverity.CRITICAL,
@@ -159,12 +163,13 @@ class AccessibilityAgent(BaseAgent):
                     line_number=line_num,
                     suggested_fix=(
                         'Add alt="" for decorative or alt="description" '
-                        'for meaningful images'
+                        "for meaningful images"
                     ),
-                    auto_fixable=False)
+                    auto_fixable=False,
+                )
                 self.issues.append(issue)
         # Check for form inputs without labels
-        input_pattern = r'<input\s+[^>]*?>'
+        input_pattern = r"<input\s+[^>]*?>"
         for match in re.finditer(input_pattern, content, re.IGNORECASE):
             input_tag = match.group()
             if 'type="hidden"' not in input_tag.lower():
@@ -172,26 +177,31 @@ class AccessibilityAgent(BaseAgent):
                 input_id_match = re.search(r'id=["\']([^"\']+)["\']', input_tag)
                 if input_id_match:
                     input_id = input_id_match.group(1)
-                    if f'for="{input_id}"' not in content and f"for='{input_id}'" not in content:
-                        line_num = content[:match.start()].count('\n') + 1
-                        self.issues.append(AccessibilityIssue(
-                            issue_type=AccessibilityIssueType.MISSING_LABEL,
-                            severity=AccessibilitySeverity.SERIOUS,
-                            wcag_level=WCAGLevel.A,
-                            wcag_criterion="3.3.2",
-                            description="Form input missing associated label",
-                            element=input_tag[:50],
-                            line_number=line_num,
-                            suggested_fix=f'Add <label for="{input_id}">Label text</label>',
-                            auto_fixable=False
-                        ))
+                    if (
+                        f'for="{input_id}"' not in content
+                        and f"for='{input_id}'" not in content
+                    ):
+                        line_num = content[: match.start()].count("\n") + 1
+                        self.issues.append(
+                            AccessibilityIssue(
+                                issue_type=AccessibilityIssueType.MISSING_LABEL,
+                                severity=AccessibilitySeverity.SERIOUS,
+                                wcag_level=WCAGLevel.A,
+                                wcag_criterion="3.3.2",
+                                description="Form input missing associated label",
+                                element=input_tag[:50],
+                                line_number=line_num,
+                                suggested_fix=f'Add <label for="{input_id}">Label text</label>',
+                                auto_fixable=False,
+                            )
+                        )
         # Check for missing ARIA landmarks
-        landmarks = ['main', 'nav', 'header', 'footer', 'aside']
+        landmarks = ["main", "nav", "header", "footer", "aside"]
         has_landmark = any(
-            f'<{tag}' in content.lower() or f'role="{tag}"' in content.lower()
+            f"<{tag}" in content.lower() or f'role="{tag}"' in content.lower()
             for tag in landmarks
         )
-        if not has_landmark and '<body' in content.lower():
+        if not has_landmark and "<body" in content.lower():
             self.issues.append(
                 AccessibilityIssue(
                     issue_type=AccessibilityIssueType.ARIA_MISSING,
@@ -204,41 +214,45 @@ class AccessibilityAgent(BaseAgent):
                         "Add semantic HTML5 elements (main, nav, header, "
                         "footer) or ARIA landmarks"
                     ),
-                    auto_fixable=False
+                    auto_fixable=False,
                 )
             )
         # Check heading hierarchy
         heading_levels: list[int] = []
-        for match in re.finditer(r'<h([1-6])', content, re.IGNORECASE):
+        for match in re.finditer(r"<h([1-6])", content, re.IGNORECASE):
             heading_levels.append(int(match.group(1)))
         if heading_levels:
             if heading_levels[0] != 1:
-                self.issues.append(AccessibilityIssue(
-                    issue_type=AccessibilityIssueType.HEADING_HIERARCHY,
-                    severity=AccessibilitySeverity.MODERATE,
-                    wcag_level=WCAGLevel.AA,
-                    wcag_criterion="2.4.6",
-                    description="Page should start with an h1 heading",
-                    element="headings",
-                    suggested_fix="Start page with <h1> element",
-                    auto_fixable=False
-                ))
-            # Check for skipped levels
-            for i in range(1, len(heading_levels)):
-                if heading_levels[i] > heading_levels[i - 1] + 1:
-                    self.issues.append(AccessibilityIssue(
+                self.issues.append(
+                    AccessibilityIssue(
                         issue_type=AccessibilityIssueType.HEADING_HIERARCHY,
                         severity=AccessibilitySeverity.MODERATE,
                         wcag_level=WCAGLevel.AA,
                         wcag_criterion="2.4.6",
-                        description=(
-                            f"Heading level skipped: "
-                            f"h{heading_levels[i - 1]} to h{heading_levels[i]}"
-                        ),
-                        element=f"h{heading_levels[i]}",
-                        suggested_fix="Use sequential heading levels without skipping",
-                        auto_fixable=False
-                    ))
+                        description="Page should start with an h1 heading",
+                        element="headings",
+                        suggested_fix="Start page with <h1> element",
+                        auto_fixable=False,
+                    )
+                )
+            # Check for skipped levels
+            for i in range(1, len(heading_levels)):
+                if heading_levels[i] > heading_levels[i - 1] + 1:
+                    self.issues.append(
+                        AccessibilityIssue(
+                            issue_type=AccessibilityIssueType.HEADING_HIERARCHY,
+                            severity=AccessibilitySeverity.MODERATE,
+                            wcag_level=WCAGLevel.AA,
+                            wcag_criterion="2.4.6",
+                            description=(
+                                f"Heading level skipped: "
+                                f"h{heading_levels[i - 1]} to h{heading_levels[i]}"
+                            ),
+                            element=f"h{heading_levels[i]}",
+                            suggested_fix="Use sequential heading levels without skipping",
+                            auto_fixable=False,
+                        )
+                    )
 
     def _analyze_python_ui(self, content: str) -> None:
         """Analyze Python UI code (tkinter, PyQt, etc.) for accessibility issues.
@@ -248,32 +262,37 @@ class AccessibilityAgent(BaseAgent):
         """
         # Check for tkinter widgets without accessibility properties
         widget_patterns = [
-            (r'Button\s*\([^)]*\)', "Button"),
-            (r'Label\s*\([^)]*\)', "Label"),
-            (r'Entry\s*\([^)]*\)', "Entry"),
-            (r'Canvas\s*\([^)]*\)', "Canvas"),
+            (r"Button\s*\([^)]*\)", "Button"),
+            (r"Label\s*\([^)]*\)", "Label"),
+            (r"Entry\s*\([^)]*\)", "Entry"),
+            (r"Canvas\s*\([^)]*\)", "Canvas"),
         ]
         for pattern, widget_name in widget_patterns:
             for match in re.finditer(pattern, content):
                 widget_call = match.group()
-                line_num = content[:match.start()].count('\n') + 1
+                line_num = content[: match.start()].count("\n") + 1
                 # Check for keyboard bindings
-                if 'bind' not in content[match.end():match.end() + 200]:
+                if "bind" not in content[match.end() : match.end() + 200]:
                     # Check if there's a bind call near this widget
                     pass  # More complex analysis would be needed
                 # Check for tooltips / accessibility text
-                if 'tooltip' not in widget_call.lower() and 'help' not in widget_call.lower():
-                    self.issues.append(AccessibilityIssue(
-                        issue_type=AccessibilityIssueType.ARIA_MISSING,
-                        severity=AccessibilitySeverity.MINOR,
-                        wcag_level=WCAGLevel.AA,
-                        wcag_criterion="4.1.2",
-                        description=f"{widget_name} widget may benefit from tooltip or help text",
-                        element=widget_call[:50],
-                        line_number=line_num,
-                        suggested_fix="Consider adding tooltip or accessibility description",
-                        auto_fixable=False
-                    ))
+                if (
+                    "tooltip" not in widget_call.lower()
+                    and "help" not in widget_call.lower()
+                ):
+                    self.issues.append(
+                        AccessibilityIssue(
+                            issue_type=AccessibilityIssueType.ARIA_MISSING,
+                            severity=AccessibilitySeverity.MINOR,
+                            wcag_level=WCAGLevel.AA,
+                            wcag_criterion="4.1.2",
+                            description=f"{widget_name} widget may benefit from tooltip or help text",
+                            element=widget_call[:50],
+                            line_number=line_num,
+                            suggested_fix="Consider adding tooltip or accessibility description",
+                            auto_fixable=False,
+                        )
+                    )
 
     def _analyze_javascript_ui(self, content: str) -> None:
         """Analyze JavaScript / React UI code for accessibility issues.
@@ -282,48 +301,49 @@ class AccessibilityAgent(BaseAgent):
             content: JavaScript / React source code.
         """
         # Check for click handlers without keyboard support
-        click_pattern = r'onClick\s*=\s*\{[^}]+\}'
+        click_pattern = r"onClick\s*=\s*\{[^}]+\}"
         for match in re.finditer(click_pattern, content):
-            line_num = content[:match.start()].count('\n') + 1
+            line_num = content[: match.start()].count("\n") + 1
             # Check if there's also onKeyPress / onKeyDown nearby
-            context = content[max(0, match.start() - 100):match.end() + 100]
-            if 'onKeyPress' not in context and 'onKeyDown' not in context:
-                self.issues.append(AccessibilityIssue(
-                    issue_type=AccessibilityIssueType.KEYBOARD_NAVIGATION,
-                    severity=AccessibilitySeverity.SERIOUS,
-                    wcag_level=WCAGLevel.A,
-                    wcag_criterion="2.1.1",
-                    description="Click handler without keyboard equivalent",
-                    element=match.group()[:50],
-                    line_number=line_num,
-                    suggested_fix="Add onKeyPress or onKeyDown handler for keyboard users",
-                    auto_fixable=False
-                ))
+            context = content[max(0, match.start() - 100) : match.end() + 100]
+            if "onKeyPress" not in context and "onKeyDown" not in context:
+                self.issues.append(
+                    AccessibilityIssue(
+                        issue_type=AccessibilityIssueType.KEYBOARD_NAVIGATION,
+                        severity=AccessibilitySeverity.SERIOUS,
+                        wcag_level=WCAGLevel.A,
+                        wcag_criterion="2.1.1",
+                        description="Click handler without keyboard equivalent",
+                        element=match.group()[:50],
+                        line_number=line_num,
+                        suggested_fix="Add onKeyPress or onKeyDown handler for keyboard users",
+                        auto_fixable=False,
+                    )
+                )
 
         # Check for div / span used as interactive elements
-        interactive_div = r'<div\b[^>]*\bonClick\s*=\s*\{[^}]+\}[^>]*>'
+        interactive_div = r"<div\b[^>]*\bonClick\s*=\s*\{[^}]+\}[^>]*>"
         for match in re.finditer(interactive_div, content, re.IGNORECASE):
-            line_num = content[:match.start()].count('\n') + 1
+            line_num = content[: match.start()].count("\n") + 1
             context = match.group()
             context_lower = context.lower()
-            if 'role=' not in context_lower and 'tabindex' not in context_lower:
-                self.issues.append(AccessibilityIssue(
-                    issue_type=AccessibilityIssueType.SEMANTIC_HTML,
-                    severity=AccessibilitySeverity.SERIOUS,
-                    wcag_level=WCAGLevel.A,
-                    wcag_criterion="1.3.1",
-                    description="Interactive div should be a button or have role / tabIndex",
-                    element=context[:50],
-                    line_number=line_num,
-                    suggested_fix='Use <button> or add role="button" tabIndex="0"',
-                    auto_fixable=False
-                ))
+            if "role=" not in context_lower and "tabindex" not in context_lower:
+                self.issues.append(
+                    AccessibilityIssue(
+                        issue_type=AccessibilityIssueType.SEMANTIC_HTML,
+                        severity=AccessibilitySeverity.SERIOUS,
+                        wcag_level=WCAGLevel.A,
+                        wcag_criterion="1.3.1",
+                        description="Interactive div should be a button or have role / tabIndex",
+                        element=context[:50],
+                        line_number=line_num,
+                        suggested_fix='Use <button> or add role="button" tabIndex="0"',
+                        auto_fixable=False,
+                    )
+                )
 
     def check_color_contrast(
-        self,
-        foreground: str,
-        background: str,
-        is_large_text: bool = False
+        self, foreground: str, background: str, is_large_text: bool = False
     ) -> ColorContrastResult:
         """Check color contrast ratio.
 
@@ -354,7 +374,7 @@ class AccessibilityAgent(BaseAgent):
             passes_aa=contrast_ratio >= min_aa,
             passes_aaa=contrast_ratio >= min_aaa,
             min_ratio_aa=min_aa,
-            min_ratio_aaa=min_aaa
+            min_ratio_aaa=min_aaa,
         )
 
     def _relative_luminance(self, hex_color: str) -> float:
@@ -366,9 +386,9 @@ class AccessibilityAgent(BaseAgent):
         Returns:
             Relative luminance value.
         """
-        hex_color = hex_color.lstrip('#')
+        hex_color = hex_color.lstrip("#")
         if len(hex_color) == 3:
-            hex_color = ''.join([c * 2 for c in hex_color])
+            hex_color = "".join([c * 2 for c in hex_color])
 
         r = int(hex_color[0:2], 16) / 255
         g = int(hex_color[2:4], 16) / 255
@@ -388,8 +408,12 @@ class AccessibilityAgent(BaseAgent):
         Returns:
             Comprehensive accessibility report.
         """
-        critical_count = sum(1 for i in self.issues if i.severity == AccessibilitySeverity.CRITICAL)
-        serious_count = sum(1 for i in self.issues if i.severity == AccessibilitySeverity.SERIOUS)
+        critical_count = sum(
+            1 for i in self.issues if i.severity == AccessibilitySeverity.CRITICAL
+        )
+        serious_count = sum(
+            1 for i in self.issues if i.severity == AccessibilitySeverity.SERIOUS
+        )
         # Calculate compliance score (100 - weighted issues)
         score = 100.0
         for issue in self.issues:
@@ -409,7 +433,9 @@ class AccessibilityAgent(BaseAgent):
         if serious_count > 0:
             recommendations.append("Fix serious issues to improve basic accessibility")
         if not self.issues:
-            recommendations.append("Continue to test with screen readers and keyboard navigation")
+            recommendations.append(
+                "Continue to test with screen readers and keyboard navigation"
+            )
         return AccessibilityReport(
             file_path=file_path,
             issues=list(self.issues),
@@ -418,12 +444,11 @@ class AccessibilityAgent(BaseAgent):
             compliance_score=round(score, 1),
             critical_count=critical_count,
             serious_count=serious_count,
-            recommendations=recommendations
+            recommendations=recommendations,
         )
 
     def get_issues_by_severity(
-        self,
-        severity: AccessibilitySeverity
+        self, severity: AccessibilitySeverity
     ) -> list[AccessibilityIssue]:
         """Get issues filtered by severity.
 
@@ -435,10 +460,7 @@ class AccessibilityAgent(BaseAgent):
         """
         return [i for i in self.issues if i.severity == severity]
 
-    def get_issues_by_wcag_level(
-        self,
-        level: WCAGLevel
-    ) -> list[AccessibilityIssue]:
+    def get_issues_by_wcag_level(self, level: WCAGLevel) -> list[AccessibilityIssue]:
         """Get issues filtered by WCAG level.
 
         Args:

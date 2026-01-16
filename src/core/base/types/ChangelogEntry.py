@@ -21,20 +21,16 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass, field
 
 __version__ = VERSION
 
 
-
-
-
-
-
 @dataclass
 class ChangelogEntry:
     """A single changelog entry."""
+
     category: str
     description: str
     version: str = ""

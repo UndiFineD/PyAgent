@@ -21,15 +21,13 @@
 """Agent specializing in automated documentation generation and maintenance."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function
+from src.core.base.BaseUtilities import create_main_function
 from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
 
 __version__ = VERSION
-
-
 
 
 class DocumentationAgent(BaseAgent):
@@ -38,7 +36,9 @@ class DocumentationAgent(BaseAgent):
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
-        self.knowledge = KnowledgeAgent(str(self.workspace_root / "src/logic/agents/cognitive/KnowledgeAgent.py"))
+        self.knowledge = KnowledgeAgent(
+            str(self.workspace_root / "src/logic/agents/cognitive/KnowledgeAgent.py")
+        )
         self._system_prompt = (
             "You are the Documentation Agent. "
             "Your role is to maintain clear, accurate technical documentation. "
@@ -54,8 +54,14 @@ class DocumentationAgent(BaseAgent):
         classes_dir = self.workspace_root / "src/classes"
 
         # Get structural briefs
-        py_files = [str(p.relative_to(self.workspace_root)) for p in classes_dir.rglob("*.py") if "__init__" not in p.name]
-        briefing = self.knowledge.get_compressed_briefing(py_files[:10])  # Top 10 for summary
+        py_files = [
+            str(p.relative_to(self.workspace_root))
+            for p in classes_dir.rglob("*.py")
+            if "__init__" not in p.name
+        ]
+        briefing = self.knowledge.get_compressed_briefing(
+            py_files[:10]
+        )  # Top 10 for summary
 
         doc = [
             "# Technical Reference Guide",
@@ -65,29 +71,14 @@ class DocumentationAgent(BaseAgent):
             "",
             briefing,
             "",
-
-
-
-
-
-
-
-
-
-
             "## 🔗 Dependency Map",
             "```mermaid",
             self.knowledge.get_graph_mermaid(),
             "```",
-
-
-
             "",
             "---",
-            f"*Generated autonomously on {logging.time.strftime('%Y-%m-%d')}*"  # type: ignore[attr-defined]
+            f"*Generated autonomously on {logging.time.strftime('%Y-%m-%d')}*",  # type: ignore[attr-defined]
         ]
-
-
 
         ref_path = self.workspace_root / "docs/TECHNICAL_REFERENCE.md"
         ref_path.parent.mkdir(parents=True, exist_ok=True)
@@ -95,18 +86,13 @@ class DocumentationAgent(BaseAgent):
 
         return f"Reference documentation updated at: {ref_path}"
 
-
-
-
     def improve_content(self, prompt: str) -> str:
         """Perform documentation maintenance."""
         return self.generate_reference()
 
 
-
-
-
-
 if __name__ == "__main__":
-    main = create_main_function(DocumentationAgent, "Documentation Agent", "Task (e.g. 'generate')")
+    main = create_main_function(
+        DocumentationAgent, "Documentation Agent", "Task (e.g. 'generate')"
+    )
     main()

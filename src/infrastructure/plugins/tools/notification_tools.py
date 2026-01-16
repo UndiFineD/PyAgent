@@ -21,14 +21,12 @@
 """Notification tools for Slack and Discord webhooks."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import requests
 import logging
 from src.core.base.ConnectivityManager import ConnectivityManager
 
 __version__ = VERSION
-
-
 
 
 def send_slack_notification(webhook_url: str, message: str) -> bool:
@@ -39,46 +37,31 @@ def send_slack_notification(webhook_url: str, message: str) -> bool:
         return False
 
     try:
-
-
-
-
-
-
-
-
-
-
         payload = {"text": message}
         response = requests.post(webhook_url, json=payload, timeout=30)
         response.raise_for_status()
         cm.update_status("slack_webhook", True)
 
-
-
-
-
         # Intelligence: Record outgoing notification (Phase 108)
         try:
-            from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+            from src.infrastructure.backend.LocalContextRecorder import (
+                LocalContextRecorder,
+            )
+
             recorder = LocalContextRecorder()
 
-
-            recorder.record_interaction("Slack", "Webhook", f"Notification to {webhook_url}", message)
+            recorder.record_interaction(
+                "Slack", "Webhook", f"Notification to {webhook_url}", message
+            )
         except Exception:
             pass
 
         return True
 
-
-
     except Exception as e:
         logging.error(f"Failed to send Slack notification: {e}")
         cm.update_status("slack_webhook", False)
         return False
-
-
-
 
 
 def send_discord_notification(webhook_url: str, message: str) -> bool:
@@ -96,9 +79,14 @@ def send_discord_notification(webhook_url: str, message: str) -> bool:
 
         # Intelligence: Record outgoing notification (Phase 108)
         try:
-            from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+            from src.infrastructure.backend.LocalContextRecorder import (
+                LocalContextRecorder,
+            )
+
             recorder = LocalContextRecorder()
-            recorder.record_interaction("Discord", "Webhook", f"Notification to {webhook_url}", message)
+            recorder.record_interaction(
+                "Discord", "Webhook", f"Notification to {webhook_url}", message
+            )
         except Exception:
             pass
 

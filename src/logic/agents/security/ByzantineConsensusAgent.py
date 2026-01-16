@@ -24,16 +24,14 @@ Used for critical infrastructure or security logic changes.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 from src.logic.agents.security.core.ByzantineCore import ByzantineCore
 
 __version__ = VERSION
-
-
 
 
 class ByzantineConsensusAgent(BaseAgent):
@@ -55,9 +53,13 @@ class ByzantineConsensusAgent(BaseAgent):
         return self.core.select_committee(self.reliability_scores)
 
     @as_tool
-    def run_committee_vote(self, task: str, proposals: dict[str, str], change_type: str = "default") -> dict[str, Any]:
+    def run_committee_vote(
+        self, task: str, proposals: dict[str, str], change_type: str = "default"
+    ) -> dict[str, Any]:
         """Evaluates a set of proposals and determines the winner via AI-powered scoring."""
-        logging.info(f"ByzantineConsensus: Evaluating {len(proposals)} proposals for task: {task[:30]}...")
+        logging.info(
+            f"ByzantineConsensus: Evaluating {len(proposals)} proposals for task: {task[:30]}..."
+        )
 
         self.core.get_required_quorum(change_type)
 
@@ -76,10 +78,19 @@ class ByzantineConsensusAgent(BaseAgent):
                 # Fix: Use self.think() instead of self.run_subagent() to handle sync/async bridging
                 score_response = self.think(evaluation_prompt).strip()
                 # Phase 108: Record the evaluation context
-                self._record(evaluation_prompt, score_response, provider="ByzantineConsensus", model="Evaluator", meta={"agent": agent_name})
+                self._record(
+                    evaluation_prompt,
+                    score_response,
+                    provider="ByzantineConsensus",
+                    model="Evaluator",
+                    meta={"agent": agent_name},
+                )
                 import re
+
                 match = re.search(r"(\d+\.\d+)", score_response)
-                score = float(match.group(1)) if match else 0.7  # Fallback to reasonable default
+                score = (
+                    float(match.group(1)) if match else 0.7
+                )  # Fallback to reasonable default
             except Exception as e:
                 logging.error(f"ByzantineConsensus: Error scoring {agent_name}: {e}")
                 score = 0.5
@@ -111,48 +122,33 @@ class ByzantineConsensusAgent(BaseAgent):
             return {
                 "decision": "REJECTED",
                 "reason": "No proposals met the minimum integrity threshold.",
-
-
-
-
-
-
-
-
-
-
-                "scores": scores
+                "scores": scores,
             }
 
-        logging.warning(f"ByzantineConsensus: Decision reached. Primary output selected from '{best_agent}' (Score: {confidence:.2f}).")
-
-
+        logging.warning(
+            f"ByzantineConsensus: Decision reached. Primary output selected from '{best_agent}' (Score: {confidence:.2f})."
+        )
 
         return {
             "decision": "ACCEPTED",
             "winner": best_agent,
             "confidence": confidence,
             "content": proposals[best_agent],
-
-
             "consensus_stats": {
                 "voters": list(proposals.keys()),
-                "avg_integrity": sum(scores.values()) / len(scores)
-            }
+                "avg_integrity": sum(scores.values()) / len(scores),
+            },
         }
-
-
-
 
     def improve_content(self, input_text: str) -> str:
         """Acts as a high-level evaluator for a single piece of content."""
         return "Byzantine Evaluation: Content integrity verified at 94% confidence level. Ready for deployment."
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(ByzantineConsensusAgent, "Byzantine Consensus Agent", "Path to evaluator log")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        ByzantineConsensusAgent, "Byzantine Consensus Agent", "Path to evaluator log"
+    )
     main()

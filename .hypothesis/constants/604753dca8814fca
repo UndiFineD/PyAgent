@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\linear_model\_coordinate_descent.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.0001, 0.001, 0.5, 1.0, 100, 1000, '.', 'C', 'ElasticNet', 'F', 'Lasso', 'WRITEABLE', 'X', 'X_offset', 'X_scale', 'Xy', 'alpha', 'alphas', 'array-like', 'auto', 'boolean', 'both', 'check_input', 'coef_', 'coef_init', 'copy_X', 'csc', 'csr', 'cv', 'cv_object', 'cyclic', 'data', 'deprecated', 'do_screening', 'eps', 'fit', 'fit_intercept', 'l1_ratio', 'left', 'max_iter', 'n_alphas', 'n_jobs', 'neither', 'positive', 'precompute', 'random', 'random_state', 'return_n_iter', 'sample_weight', 'selection', 'sparse matrix', 'split', 'threads', 'tol', 'verbose', 'warm_start', 'warn', 'y']

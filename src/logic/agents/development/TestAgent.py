@@ -23,15 +23,13 @@ Inspired by SGI-Bench and py.test.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import subprocess
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class TestAgent(BaseAgent):
@@ -53,19 +51,25 @@ class TestAgent(BaseAgent):
         logging.info(f"TestAgent running tests in: {path}")
         try:
             import sys
+
             # Converted to list-based execution to prevent shell injection
             cmd = [sys.executable, "-m", "pytest", path, "--tb=short", "--maxfail=5"]
             result = subprocess.run(cmd, shell=False, capture_output=True, text=True)
 
             # Phase 108: Record test execution patterns
-            self._record(f"pytest {path}",
-                         f"RC={result.returncode}\n{result.stdout[-1000:]}",
-                         provider="Shell", model="pytest")
+            self._record(
+                f"pytest {path}",
+                f"RC={result.returncode}\n{result.stdout[-1000:]}",
+                provider="Shell",
+                model="pytest",
+            )
 
             report = ["## 🧪 Test Execution Report\n"]
             if result.returncode == 0:
                 report.append("✅ **Status**: All tests passed.")
-                report.append(f"```text\n{result.stdout.splitlines()[-1]}\n```")  # Last line summary
+                report.append(
+                    f"```text\n{result.stdout.splitlines()[-1]}\n```"
+                )  # Last line summary
             else:
                 report.append(f"❌ **Status**: {result.returncode} tests FAILED.\n")
                 report.append("### Failure Details")

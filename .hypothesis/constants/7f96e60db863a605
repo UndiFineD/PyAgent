@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\backend\ABTester.py
-# hypothesis_version: 6.150.1
-
-[0.5, 1.0, 'A', 'B', 'backend', 'metrics', 'sample_count', 'test_name', 'variants', 'weight']

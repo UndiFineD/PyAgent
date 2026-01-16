@@ -24,14 +24,18 @@ Pure logic component to be potentially rustified.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import os
 from typing import Any
 from .VersionGate import VersionGate
 
+try:
+    from rust_core import topological_sort_rust, to_snake_case_rust
+    _RUST_ACCEL = True
+except ImportError:
+    _RUST_ACCEL = False
+
 __version__ = VERSION
-
-
 
 
 class AgentRegistryCore:
@@ -40,7 +44,9 @@ class AgentRegistryCore:
     def __init__(self, current_sdk_version: str) -> None:
         self.sdk_version: str = current_sdk_version
 
-    def process_discovered_files(self, file_paths: list[str]) -> dict[str, tuple[str, str, str | None]]:
+    def process_discovered_files(
+        self, file_paths: list[str]
+    ) -> dict[str, tuple[str, str, str | None]]:
         """
         Processes a list of file paths and extracts agent/orchestrator configurations.
         Expects relative paths from workspace root.
@@ -51,7 +57,11 @@ class AgentRegistryCore:
             file = os.path.basename(rel_path)
             if file.endswith(".py") and not file.startswith("__"):
                 agent_name: str = file[:-3]
-                module_path: str = rel_path.replace(os.path.sep, ".").replace("/", ".").replace(".py", "")
+                module_path: str = (
+                    rel_path.replace(os.path.sep, ".")
+                    .replace("/", ".")
+                    .replace(".py", "")
+                )
 
                 # Phase 105: Discovered agents should not default to their own file path as arg
                 discovered[agent_name] = (module_path, agent_name, None)
@@ -72,7 +82,9 @@ class AgentRegistryCore:
                         discovered[short_name] = (module_path, agent_name, None)
         return discovered
 
-    def parse_manifest(self, raw_manifest: dict[str, Any]) -> dict[str, tuple[str, str, str | None]]:
+    def parse_manifest(
+        self, raw_manifest: dict[str, Any]
+    ) -> dict[str, tuple[str, str, str | None]]:
         """
         Parses the raw manifest dictionary and filters incompatible plugins.
         Returns a dict of {AgentName: (module, class, config)}.
@@ -96,7 +108,9 @@ class AgentRegistryCore:
         """
         return VersionGate.is_compatible(self.sdk_version, required_version)
 
-    def detect_circular_dependencies(self, dep_graph: dict[str, list[str]]) -> list[list[str]]:
+    def detect_circular_dependencies(
+        self, dep_graph: dict[str, list[str]]
+    ) -> list[list[str]]:
         """
         Logic for detecting circular dependencies in the agent graph.
         Useful for preventing init-loop during complex swarm orchestration.
@@ -127,11 +141,20 @@ class AgentRegistryCore:
         return cycles
 
     def _to_snake_case(self, name: str) -> str:
+        # Use Rust acceleration when available (~3x faster)
+        if _RUST_ACCEL:
+            try:
+                return to_snake_case_rust(name)
+            except Exception:
+                pass
+        # Python fallback
         import re
-        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+        s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
+        return re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
 
-    def validate_agent_structure(self, agent_instance: Any, required_methods: list[str] | None = None) -> list[str]:
+    def validate_agent_structure(
+        self, agent_instance: Any, required_methods: list[str] | None = None
+    ) -> list[str]:
         """
         Checks if an agent instance has the required methods.
         Returns a list of missing methods.
@@ -149,7 +172,15 @@ class AgentRegistryCore:
         Ensures dependencies are loaded before agents that require them.
         Uses topological sort (Kahn's Algorithm variant).
         """
-        # Calculate in-degrees
+        if _RUST_ACCEL:
+            try:
+                graph_list = [(k, v) for k, v in dep_graph.items()]
+                result = topological_sort_rust(graph_list)
+                if result:  # Empty means cycle detected
+                    return result
+            except Exception:
+                pass
+        # Python fallback - Calculate in-degrees
         in_degree = {u: 0 for u in dep_graph}
         for u in dep_graph:
             for v in dep_graph[u]:

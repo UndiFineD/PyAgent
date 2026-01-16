@@ -11,8 +11,6 @@ import json
 from pathlib import Path
 
 
-
-
 class TestCustomMetrics:
     """Tests for custom metrics functionality."""
 
@@ -21,7 +19,7 @@ class TestCustomMetrics:
         metric = agent.register_custom_metric(
             name="request_count",
             metric_type=stats_module.MetricType.COUNTER,
-            description="Number of requests"
+            description="Number of requests",
         )
         assert metric.name == "request_count"
         assert metric.metric_type == stats_module.MetricType.COUNTER
@@ -90,7 +88,7 @@ class TestThresholdsAndAlerting:
             metric_name="cpu",
             min_value=0,
             max_value=90,
-            severity=stats_module.AlertSeverity.HIGH
+            severity=stats_module.AlertSeverity.HIGH,
         )
         assert threshold.metric_name == "cpu"
         assert threshold.max_value == 90
@@ -101,7 +99,7 @@ class TestThresholdsAndAlerting:
         agent.add_threshold(
             metric_name="data/memory",
             max_value=80,
-            severity=stats_module.AlertSeverity.CRITICAL
+            severity=stats_module.AlertSeverity.CRITICAL,
         )
         agent.add_metric("data/memory", 95)  # Exceeds threshold
         alerts = agent.get_alerts()
@@ -111,7 +109,9 @@ class TestThresholdsAndAlerting:
     def test_clear_alerts(self, agent: Any, stats_module: Any) -> None:
         """Test clearing alerts."""
         agent.register_custom_metric("disk", stats_module.MetricType.GAUGE)
-        agent.add_threshold("disk", max_value=50, severity=stats_module.AlertSeverity.HIGH)
+        agent.add_threshold(
+            "disk", max_value=50, severity=stats_module.AlertSeverity.HIGH
+        )
         agent.add_metric("disk", 100)
         agent.clear_alerts()
         assert len(agent.get_alerts()) == 0
@@ -153,9 +153,7 @@ class TestRetentionPolicies:
         """Test adding a retention policy."""
         agent.register_custom_metric("retention_test", stats_module.MetricType.GAUGE)
         policy = agent.add_retention_policy(
-            metric_name="retention_test",
-            max_age_days=7,
-            max_points=1000
+            metric_name="retention_test", max_age_days=7, max_points=1000
         )
         assert policy.metric_name == "retention_test"
         assert policy.max_age_days == 7
@@ -206,7 +204,9 @@ class TestCompression:
     def test_decompress_metrics(self, agent: Any, stats_module: Any) -> None:
         """Test decompressing metric data."""
         agent.register_custom_metric("decompress_test", stats_module.MetricType.GAUGE)
-        original: List[Tuple[str | int]] = [(datetime.now().isoformat(), i) for i in range(10)]
+        original: List[Tuple[str | int]] = [
+            (datetime.now().isoformat(), i) for i in range(10)
+        ]
         agent._metric_history["decompress_test"] = original
         compressed = agent.compress_metrics("decompress_test")
         decompressed = agent.decompress_metrics(compressed)
@@ -214,7 +214,6 @@ class TestCompression:
 
 
 class TestStatsAgent(unittest.TestCase):
-
     def setUp(self) -> None:
         import tempfile
         import os
@@ -222,18 +221,19 @@ class TestStatsAgent(unittest.TestCase):
         import sys
 
         # Load StatsAgent from agent_stats.py
-        AGENT_DIR = Path(__file__).parent.parent.parent.parent / 'src'
+        AGENT_DIR = Path(__file__).parent.parent.parent.parent / "src"
         if str(AGENT_DIR) not in sys.path:
             sys.path.insert(0, str(AGENT_DIR))
 
         from tests.utils.agent_test_utils import load_agent_module
+
         _stats_module = load_agent_module("observability/stats/StatsAgent.py")
         self.StatsAgent = _stats_module.StatsAgent
 
         self.temp_dir: str = tempfile.mkdtemp()
         self.files: List[str] = [
-            os.path.join(self.temp_dir, 'file1.py'),
-            os.path.join(self.temp_dir, 'file2.py')
+            os.path.join(self.temp_dir, "file1.py"),
+            os.path.join(self.temp_dir, "file2.py"),
         ]
         for f in self.files:
             Path(f).write_text("# test file\n", encoding="utf-8")
@@ -241,6 +241,7 @@ class TestStatsAgent(unittest.TestCase):
 
     def tearDown(self) -> None:
         import shutil
+
         shutil.rmtree(self.temp_dir, ignore_errors=True)
 
     def test_validate_files(self) -> None:
@@ -249,41 +250,38 @@ class TestStatsAgent(unittest.TestCase):
 
     def test_calculate_stats(self) -> None:
         self.agent.stats = {
-            'total_files': 2,
-            'files_with_context': 1,
-            'files_with_changes': 1,
-            'files_with_errors': 0,
-            'files_with_improvements': 2,
-            'files_with_tests': 1
+            "total_files": 2,
+            "files_with_context": 1,
+            "files_with_changes": 1,
+            "files_with_errors": 0,
+            "files_with_improvements": 2,
+            "files_with_tests": 1,
         }
         stats = self.agent.calculate_stats()
-        self.assertEqual(stats['total_files'], 2)
+        self.assertEqual(stats["total_files"], 2)
 
-    @patch('builtins.open', new_callable=mock_open, read_data='{"total_coverage": 85}')
+    @patch("builtins.open", new_callable=mock_open, read_data='{"total_coverage": 85}')
     def test_track_code_coverage(self, mock_file) -> None:
-        self.agent.track_code_coverage('coverage.json')
-        self.assertEqual(self.agent.stats['code_coverage'], 85)
+        self.agent.track_code_coverage("coverage.json")
+        self.assertEqual(self.agent.stats["code_coverage"], 85)
 
     @pytest.mark.skip(reason="matplotlib not available")
     def test_visualize_stats(self) -> None:
         self.agent.stats = {
-            'total_files': 2,
-            'files_with_context': 1,
-            'files_with_changes': 1,
-            'files_with_errors': 0,
-            'files_with_improvements': 2,
-            'files_with_tests': 1
+            "total_files": 2,
+            "files_with_context": 1,
+            "files_with_changes": 1,
+            "files_with_errors": 0,
+            "files_with_improvements": 2,
+            "files_with_tests": 1,
         }
         self.agent.visualize_stats()
         # mock_show.assert_called_once()
 
-    @patch('builtins.open', new_callable=mock_open, read_data='{"total_files": 2}')
+    @patch("builtins.open", new_callable=mock_open, read_data='{"total_files": 2}')
     def test_generate_comparison_report(self, mock_file) -> None:
-        baseline_stats: Dict[str, int] = {
-            'total_files': 1,
-            'files_with_context': 0
-        }
-        with patch('builtins.print') as mock_print:
+        baseline_stats: Dict[str, int] = {"total_files": 1, "files_with_context": 0}
+        with patch("builtins.print") as mock_print:
             self.agent.generate_comparison_report(baseline_stats)
             mock_print.assert_called()
 
@@ -294,8 +292,7 @@ class TestStatsStreamer:
     def test_init(self, stats_module: Any) -> None:
         """Test StatsStreamer initialization."""
         config = stats_module.StreamingConfig(
-            protocol=stats_module.StreamingProtocol.WEBSOCKET,
-            endpoint="ws://localhost"
+            protocol=stats_module.StreamingProtocol.WEBSOCKET, endpoint="ws://localhost"
         )
         streamer = stats_module.StatsStreamer(config)
         assert streamer.subscribers == []
@@ -304,8 +301,7 @@ class TestStatsStreamer:
     def test_connect(self, stats_module: Any) -> None:
         """Test connecting to stream."""
         config = stats_module.StreamingConfig(
-            protocol=stats_module.StreamingProtocol.WEBSOCKET,
-            endpoint="ws://localhost"
+            protocol=stats_module.StreamingProtocol.WEBSOCKET, endpoint="ws://localhost"
         )
         streamer = stats_module.StatsStreamer(config)
         result = streamer.connect()
@@ -314,8 +310,7 @@ class TestStatsStreamer:
     def test_disconnect(self, stats_module: Any) -> None:
         """Test disconnecting from stream."""
         config = stats_module.StreamingConfig(
-            protocol=stats_module.StreamingProtocol.WEBSOCKET,
-            endpoint="ws://localhost"
+            protocol=stats_module.StreamingProtocol.WEBSOCKET, endpoint="ws://localhost"
         )
         streamer = stats_module.StatsStreamer(config)
         streamer.connect()
@@ -325,8 +320,7 @@ class TestStatsStreamer:
     def test_add_subscriber(self, stats_module: Any) -> None:
         """Test adding a subscriber."""
         config = stats_module.StreamingConfig(
-            protocol=stats_module.StreamingProtocol.WEBSOCKET,
-            endpoint="ws://localhost"
+            protocol=stats_module.StreamingProtocol.WEBSOCKET, endpoint="ws://localhost"
         )
         streamer = stats_module.StatsStreamer(config)
         streamer.add_subscriber("sub1")
@@ -335,15 +329,12 @@ class TestStatsStreamer:
     def test_stream_metric(self, stats_module: Any) -> None:
         """Test streaming a metric."""
         config = stats_module.StreamingConfig(
-            protocol=stats_module.StreamingProtocol.WEBSOCKET,
-            endpoint="ws://localhost"
+            protocol=stats_module.StreamingProtocol.WEBSOCKET, endpoint="ws://localhost"
         )
         streamer = stats_module.StatsStreamer(config)
         streamer.connect()
         metric = stats_module.Metric(
-            name="test",
-            value=42.0,
-            metric_type=stats_module.MetricType.GAUGE
+            name="test", value=42.0, metric_type=stats_module.MetricType.GAUGE
         )
         result = streamer.stream_metric(metric)
         assert result is True
@@ -362,8 +353,7 @@ class TestStatsFederation:
         """Test adding a federated source."""
         federation = stats_module.StatsFederation()
         source = stats_module.FederatedSource(
-            repo_url="https://github.com/test/repo",
-            api_endpoint="https://api.test.com"
+            repo_url="https://github.com/test/repo", api_endpoint="https://api.test.com"
         )
         federation.add_source("repo1", source)
         assert "repo1" in federation.sources
@@ -372,8 +362,7 @@ class TestStatsFederation:
         """Test removing a source."""
         federation = stats_module.StatsFederation()
         source = stats_module.FederatedSource(
-            repo_url="https://github.com/test/repo",
-            api_endpoint="https://api.test.com"
+            repo_url="https://github.com/test/repo", api_endpoint="https://api.test.com"
         )
         federation.add_source("repo1", source)
         result = federation.remove_source("repo1")
@@ -394,8 +383,7 @@ class TestStatsFederation:
         """Test getting federation status."""
         federation = stats_module.StatsFederation()
         source = stats_module.FederatedSource(
-            repo_url="https://github.com/test/repo",
-            api_endpoint="https://api.test.com"
+            repo_url="https://github.com/test/repo", api_endpoint="https://api.test.com"
         )
         federation.add_source("repo1", source)
         status = federation.get_federation_status()
@@ -531,8 +519,7 @@ class TestCloudExporter:
     def test_init(self, stats_module: Any) -> None:
         """Test CloudExporter initialization."""
         exporter = stats_module.CloudExporter(
-            stats_module.ExportDestination.DATADOG,
-            api_key="test_key"
+            stats_module.ExportDestination.DATADOG, api_key="test_key"
         )
         assert exporter.destination == stats_module.ExportDestination.DATADOG
 
@@ -540,9 +527,7 @@ class TestCloudExporter:
         """Test queueing a metric."""
         exporter = stats_module.CloudExporter(stats_module.ExportDestination.PROMETHEUS)
         metric = stats_module.Metric(
-            name="test",
-            value=42.0,
-            metric_type=stats_module.MetricType.GAUGE
+            name="test", value=42.0, metric_type=stats_module.MetricType.GAUGE
         )
         exporter.queue_metric(metric)
         assert len(exporter.export_queue) == 1
@@ -551,9 +536,7 @@ class TestCloudExporter:
         """Test exporting metrics."""
         exporter = stats_module.CloudExporter(stats_module.ExportDestination.DATADOG)
         metric = stats_module.Metric(
-            name="test",
-            value=42.0,
-            metric_type=stats_module.MetricType.GAUGE
+            name="test", value=42.0, metric_type=stats_module.MetricType.GAUGE
         )
         exporter.queue_metric(metric)
         count = exporter.export()
@@ -655,9 +638,7 @@ class TestDerivedMetricCalculator:
         """Test registering a derived metric."""
         calc = stats_module.DerivedMetricCalculator()
         derived = calc.register_derived(
-            "cpu_pct",
-            ["cpu_used", "cpu_total"],
-            "{cpu_used} / {cpu_total} * 100"
+            "cpu_pct", ["cpu_used", "cpu_total"], "{cpu_used} / {cpu_total} * 100"
         )
         assert derived.name == "cpu_pct"
         assert "cpu_pct" in calc.derived_metrics
@@ -665,11 +646,7 @@ class TestDerivedMetricCalculator:
     def test_calculate(self, stats_module: Any) -> None:
         """Test calculating a derived metric."""
         calc = stats_module.DerivedMetricCalculator()
-        calc.register_derived(
-            "ratio",
-            ["a", "b"],
-            "{a} / {b}"
-        )
+        calc.register_derived("ratio", ["a", "b"], "{a} / {b}")
         result = calc.calculate("ratio", {"a": 10.0, "b": 2.0})
         assert result == 5.0
 
@@ -693,9 +670,7 @@ class TestStatsRollup:
         """Test configuring a rollup."""
         rollup = stats_module.StatsRollup()
         config = rollup.configure_rollup(
-            "hourly_avg",
-            ["cpu.usage"],
-            stats_module.AggregationType.AVG
+            "hourly_avg", ["cpu.usage"], stats_module.AggregationType.AVG
         )
         assert config.name == "hourly_avg"
         assert "hourly_avg" in rollup.configs
@@ -711,9 +686,7 @@ class TestStatsRollup:
         """Test computing a rollup."""
         rollup = stats_module.StatsRollup()
         rollup.configure_rollup(
-            "test_rollup",
-            ["cpu.usage"],
-            stats_module.AggregationType.AVG
+            "test_rollup", ["cpu.usage"], stats_module.AggregationType.AVG
         )
         rollup.add_value("cpu.usage", 50.0)
         rollup.add_value("cpu.usage", 70.0)
@@ -959,7 +932,7 @@ class TestStatsABComparison:
         # Large sample with clear difference
         result = comparator.calculate_significance(
             control_values=[10, 11, 12, 9, 10] * 100,
-            treatment_values=[15, 16, 14, 15, 16] * 100
+            treatment_values=[15, 16, 14, 15, 16] * 100,
         )
 
         assert result.is_significant
@@ -1070,9 +1043,7 @@ class TestStatsSubscriptionAndNotification:
 
         manager = StatsSubscriptionManager()
         sub = manager.subscribe(
-            subscriber_id="user1",
-            metric_pattern="cpu.*",
-            delivery_method="email"
+            subscriber_id="user1", metric_pattern="cpu.*", delivery_method="email"
         )
 
         assert sub.subscriber_id == "user1"
@@ -1131,7 +1102,7 @@ class TestStatsAnnotationPersistence:
             metric="cpu_usage",
             timestamp=datetime.now().timestamp(),
             text="Deployment started",
-            author="admin"
+            author="admin",
         )
 
         assert annotation.text == "Deployment started"
@@ -1190,6 +1161,7 @@ class TestStatsCompressionAlgorithms:
         # Repetitive data compresses well
         data: List[float] = [100.0] * 1000
         import json
+
         compressed = compressor.compress(data)
 
         assert len(compressed) < len(json.dumps(data))
@@ -1266,7 +1238,9 @@ class TestStatsAccessControl:
         controller.grant("admin", "metrics.*", level="write")
 
         assert controller.can_access("admin", "metrics.cpu", "write")
-        assert controller.can_access("admin", "metrics.cpu", "read")  # Write implies read
+        assert controller.can_access(
+            "admin", "metrics.cpu", "read"
+        )  # Write implies read
 
 
 class TestStatsBackupAndRestore:

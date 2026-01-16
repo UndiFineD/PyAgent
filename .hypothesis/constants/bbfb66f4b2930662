@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\backend\VllmNativeEngine.py
-# hypothesis_version: 6.150.1
-
-[0.7, 0.8, 0.95, 1024, 'VLLM_TARGET_DEVICE', 'cpu', 'cuda', 'device', 'model', 'tensor_parallel_size', 'trust_remote_code']

@@ -21,16 +21,11 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types.ReviewCategory import ReviewCategory
 from dataclasses import dataclass
 
 __version__ = VERSION
-
-
-
-
-
 
 
 @dataclass
@@ -45,6 +40,7 @@ class ReviewFinding:
         suggestion: Suggested fix.
         auto_fixable: Whether this can be auto - fixed.
     """
+
     category: ReviewCategory
     message: str
     line_number: int

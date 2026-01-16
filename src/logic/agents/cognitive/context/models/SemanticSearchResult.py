@@ -21,12 +21,10 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -40,6 +38,7 @@ class SemanticSearchResult:
         context_type: Type of context matched.
         line_range: Tuple of start and end line numbers.
     """
+
     file_path: str
     content_snippet: str
     similarity_score: float

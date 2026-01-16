@@ -24,15 +24,13 @@ Part of Phase 127 Swarm UX.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from pathlib import Path
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class VoiceInteractionAgent(BaseAgent):
@@ -57,7 +55,8 @@ class VoiceInteractionAgent(BaseAgent):
 
         try:
             from gtts import gTTS
-            tts = gTTS(text=text, lang='en')
+
+            tts = gTTS(text=text, lang="en")
             tts.save(str(target_path))
             return str(target_path)
         except ImportError:
@@ -71,6 +70,7 @@ class VoiceInteractionAgent(BaseAgent):
 
         try:
             import speech_recognition as sr
+
             r = sr.Recognizer()
             with sr.AudioFile(audio_path) as source:
                 audio = r.record(source)
@@ -83,5 +83,7 @@ class VoiceInteractionAgent(BaseAgent):
     def think_aloud(self, thought: str) -> str:
         """Standard Swarm UX: Agents can broadcast their 'internal' monologue via voice."""
         audio_file = self.synthesize_speech(thought)
-        logging.info(f"Agent {self.id} Thinking Aloud: '{thought}' (Audio: {audio_file})")
+        logging.info(
+            f"Agent {self.id} Thinking Aloud: '{thought}' (Audio: {audio_file})"
+        )
         return audio_file

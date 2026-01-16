@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\printing\precedence.py
-# hypothesis_version: 6.150.1
-
-[0.5, 100, 1000, 'Add', 'Adjoint', 'And', 'Atom', 'BitwiseAnd', 'BitwiseOr', 'BitwiseXor', 'Complement', 'Cross', 'Curl', 'Derivative', 'Divergence', 'Dot', 'DotProduct', 'Equality', 'Equivalent', 'Float', 'FracElement', 'Func', 'Function', 'Gradient', 'HadamardPower', 'HadamardProduct', 'Implies', 'Integer', 'Integral', 'Intersection', 'KroneckerProduct', 'Lambda', 'Laplacian', 'Limit', 'MatAdd', 'MatPow', 'MatrixSolve', 'Mod', 'Mul', 'NegativeInfinity', 'Not', 'Or', 'PolyElement', 'Pow', 'Product', 'ProductSet', 'Rational', 'Relational', 'Sub', 'Sum', 'SymmetricDifference', 'TensAdd', 'TensMul', 'TensorProduct', 'Transpose', 'Unequality', 'UnevaluatedExpr', 'Union', 'Xor', 'precedence']

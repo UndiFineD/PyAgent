@@ -23,7 +23,7 @@ Context Agent: Maintains and improves context/description files.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import sys
 from pathlib import Path
 
@@ -42,9 +42,9 @@ if str(root / "src") not in sys.path:
 # Create main function using the helper
 main = create_main_function(
     ContextAgent,
-    'Context Agent: Maintains and improves context/description files',
-    'Path to the context file (e.g., file.description.md)'
+    "Context Agent: Maintains and improves context/description files",
+    "Path to the context file (e.g., file.description.md)",
 )
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

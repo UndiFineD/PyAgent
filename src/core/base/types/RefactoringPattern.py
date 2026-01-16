@@ -21,21 +21,17 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types.CodeLanguage import CodeLanguage
 from dataclasses import dataclass
 
 __version__ = VERSION
 
 
-
-
-
-
-
 @dataclass
 class RefactoringPattern:
     """A code refactoring pattern."""
+
     name: str
     description: str
     pattern: str

@@ -23,15 +23,13 @@ Provides a unified interface for external communications.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class MessagingAgent(BaseAgent):
@@ -46,7 +44,9 @@ class MessagingAgent(BaseAgent):
         )
 
     @as_tool
-    async def send_notification(self, platform: str, recipient: str, message: str) -> str:
+    async def send_notification(
+        self, platform: str, recipient: str, message: str
+    ) -> str:
         """Sends a message to a specific platform/recipient. (SKELETON)"""
         logging.info(f"Sending {platform} message to {recipient}: {message}")
 
@@ -54,36 +54,19 @@ class MessagingAgent(BaseAgent):
         if hasattr(self, "fleet") and self.fleet:
             privacy_guard = self.fleet.agents.get("PrivacyGuard")
 
-
-
-
-
-
-
-
-
-
             if privacy_guard and hasattr(privacy_guard, "verify_message_safety"):
                 check_result = privacy_guard.verify_message_safety(message)
                 if not check_result.get("safe", True):
                     return f"SAFETY ERROR: Message blocked. Reason: {check_result.get('reason')}"
 
-
-
-
-
         # In a real implementation, use Twilio API, Slack Webhooks, or Discord bots
         return f"Message sent to {recipient} via {platform} (Simulated)"
 
     @as_tool
-
-
-
     async def poll_for_replies(self, platform: str) -> list[dict[str, Any]]:
         """Polls for new messages on a specific platform."""
         logging.info(f"Polling {platform} for new messages...")
         return []  # Return empty list for now
-
 
     @as_tool
     async def format_for_mobile(self, report: str) -> str:
@@ -91,10 +74,10 @@ class MessagingAgent(BaseAgent):
         return report[:500] + "..." if len(report) > 500 else report
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(MessagingAgent, "Messaging Agent", "Messaging history path")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        MessagingAgent, "Messaging Agent", "Messaging history path"
+    )
     main()

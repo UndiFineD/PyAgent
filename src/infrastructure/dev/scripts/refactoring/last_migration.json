@@ -1,0 +1,92 @@
+{
+  "absolute": {
+    "src.core.base.version": "src.core.base.Version",
+    "src.core.base.utils.core_utils": "src.core.base.utils.CoreUtils",
+    "src.core.base.utils._helpers": "src.core.base.utils.Helpers",
+    "src.core.base.models.enums": "src.core.base.models.CoreEnums",
+    "src.core.base.models.base_models": "src.core.base.models.BaseModels",
+    "src.core.base.models.agent_models": "src.core.base.models.AgentModels",
+    "src.core.base.models.communication_models": "src.core.base.models.CommunicationModels",
+    "src.core.base.models.fleet_models": "src.core.base.models.FleetModels",
+    "src.observability.stats.ab_engine": "src.observability.stats.ABEngine",
+    "src.observability.stats.access": "src.observability.stats.Access",
+    "src.observability.stats.agents": "src.observability.stats.Agents",
+    "src.observability.stats.alerting": "src.observability.stats.Alerting",
+    "src.observability.stats.analysis": "src.observability.stats.Analysis",
+    "src.observability.stats.api": "src.observability.stats.API",
+    "src.observability.stats.engine": "src.observability.stats.Engine",
+    "src.observability.stats.exporters": "src.observability.stats.Exporters",
+    "src.observability.stats.federation": "src.observability.stats.Federation",
+    "src.observability.stats.formula_engine": "src.observability.stats.FormulaEngine",
+    "src.observability.stats.metrics": "src.observability.stats.Metrics",
+    "src.observability.stats.metrics_engine": "src.observability.stats.MetricsEngine",
+    "src.observability.stats.monitoring": "src.observability.stats.Monitoring",
+    "src.observability.stats.namespaces": "src.observability.stats.Namespaces",
+    "src.observability.stats.observability_core": "src.observability.stats.ObservabilityCore",
+    "src.observability.stats.prediction_engine": "src.observability.stats.PredictionEngine",
+    "src.observability.stats.rollup_engine": "src.observability.stats.RollupEngine",
+    "src.observability.stats.storage_engine": "src.observability.stats.StorageEngine",
+    "src.observability.stats.streaming": "src.observability.stats.Streaming",
+    "src.observability.stats.subs_engine": "src.observability.stats.SubsEngine",
+    "src.observability.stats.utils": "src.observability.stats.Utils",
+    "src.logic.agents.intelligence.search_provider": "src.logic.agents.intelligence.SearchProvider",
+    "src.observability.errors.error_handler": "src.observability.errors.ErrorHandler",
+    "src.observability.improvements.refinement_engine": "src.observability.improvements.RefinementEngine",
+    "src.observability.reports.report_generator": "src.observability.reports.ReportGeneratorCLI",
+    "src.observability.reports.utils": "src.observability.reports.ReportUtils",
+    "src.logic.strategies.plan_executor": "src.logic.strategies.PlanExecutor",
+    "src.logic.tools.mcp_server": "src.logic.tools.MCPServer",
+    "src.logic.tools.evolved.sampletask": "src.logic.tools.evolved.SampleTask",
+    "tests.utils.agent_test_utils": "tests.utils.AgentTestUtils",
+    "tests.utils.legacy_support": "tests.utils.LegacySupport",
+    "tests.utils.verify_async": "tests.utils.VerifyAsync"
+  },
+  "relative": {
+    "C:\\DEV\\PyAgent\\src\\core\\base\\models": {
+      ".enums": ".CoreEnums",
+      ".base_models": ".BaseModels",
+      ".agent_models": ".AgentModels",
+      ".communication_models": ".CommunicationModels",
+      ".fleet_models": ".FleetModels"
+    },
+    "C:\\DEV\\PyAgent\\src\\observability\\stats": {
+      ".ab_engine": ".ABEngine",
+      ".access": ".Access",
+      ".agents": ".Agents",
+      ".alerting": ".Alerting",
+      ".analysis": ".Analysis",
+      ".api": ".API",
+      ".engine": ".Engine",
+      ".exporters": ".Exporters",
+      ".federation": ".Federation",
+      ".formula_engine": ".FormulaEngine",
+      ".metrics": ".Metrics",
+      ".metrics_engine": ".MetricsEngine",
+      ".monitoring": ".Monitoring",
+      ".namespaces": ".Namespaces",
+      ".observability_core": ".ObservabilityCore",
+      ".prediction_engine": ".PredictionEngine",
+      ".rollup_engine": ".RollupEngine",
+      ".storage_engine": ".StorageEngine",
+      ".streaming": ".Streaming",
+      ".subs_engine": ".SubsEngine",
+      ".utils": ".Utils"
+    },
+    "C:\\DEV\\PyAgent\\src\\observability\\reports": {
+      ".utils": ".ReportUtils",
+      ".report_generator": ".ReportGeneratorCLI"
+    },
+    "C:\\DEV\\PyAgent\\src\\logic\\agents\\intelligence": {
+      ".search_provider": ".SearchProvider"
+    },
+    "C:\\DEV\\PyAgent\\src\\observability\\errors": {
+      ".error_handler": ".ErrorHandler"
+    },
+    "C:\\DEV\\PyAgent\\src\\logic\\strategies": {
+      ".plan_executor": ".PlanExecutor"
+    },
+    "C:\\DEV\\PyAgent\\src\\logic\\tools": {
+      ".mcp_server": ".MCPServer"
+    }
+  }
+}

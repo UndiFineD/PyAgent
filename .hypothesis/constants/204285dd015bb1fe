@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\reports\ReportLocalizer.py
-# hypothesis_version: 6.150.1
-
-['Beschreibung', 'Description', 'Error', 'Errors', 'Fehler', 'Improvements', 'Info', 'Verbesserungen', 'Warning', 'Warnung', 'de-DE', 'en-US', 'report.description', 'report.errors', 'report.improvements', 'severity.error', 'severity.info', 'severity.warning']

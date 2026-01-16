@@ -18,13 +18,11 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 import re
 
 __version__ = VERSION
-
-
 
 
 class CodeQualityCore:
@@ -37,6 +35,7 @@ class CodeQualityCore:
     def __init__(self) -> None:
         try:
             import rust_core
+
             self._rust_core = rust_core.CodeQualityCore()  # type: ignore[attr-defined]
         except (ImportError, AttributeError):
             self._rust_core = None
@@ -63,11 +62,13 @@ class CodeQualityCore:
         lines = source.splitlines()
         for i, line in enumerate(lines, 1):
             if len(line) > 120:
-                issues.append({
-                    "line": i,
-                    "type": "Style",
-                    "message": "Line too long (>120 chars)"
-                })
+                issues.append(
+                    {
+                        "line": i,
+                        "type": "Style",
+                        "message": "Line too long (>120 chars)",
+                    }
+                )
         return issues
 
     def analyze_rust_source(self, source: str) -> list[dict[str, Any]]:
@@ -80,13 +81,28 @@ class CodeQualityCore:
 
         issues: list[dict[str, Any]] = []
         if not source or len(source.strip()) < 5:
-            issues.append({"type": "Suggestion", "message": "clippy: source too sparse for deep analysis."})
+            issues.append(
+                {
+                    "type": "Suggestion",
+                    "message": "clippy: source too sparse for deep analysis.",
+                }
+            )
             return issues
 
         if "unwrap()" in source:
-            issues.append({"type": "Safety", "message": "Avoid '.unwrap()', use proper error handling or '.expect()'."})
+            issues.append(
+                {
+                    "type": "Safety",
+                    "message": "Avoid '.unwrap()', use proper error handling or '.expect()'.",
+                }
+            )
         if "match" in source and source.count("=>") == 1:
-            issues.append({"type": "Suggestion", "message": "Consider using 'if let' instead of 'match' for single pattern."})
+            issues.append(
+                {
+                    "type": "Suggestion",
+                    "message": "Consider using 'if let' instead of 'match' for single pattern.",
+                }
+            )
         return issues
 
     def analyze_js_source(self, source: str) -> list[dict[str, Any]]:
@@ -102,7 +118,17 @@ class CodeQualityCore:
             return issues
 
         if re.search(r"\bvar\s+", source):
-            issues.append({"type": "Insecure", "message": "Avoid using 'var', use 'let' or 'const' instead."})  # Phase 135: Security
+            issues.append(
+                {
+                    "type": "Insecure",
+                    "message": "Avoid using 'var', use 'let' or 'const' instead.",
+                }
+            )  # Phase 135: Security
         if "==" in source and "===" not in source:
-            issues.append({"type": "Style", "message": "Use '===' instead of '==' for strict equality check."})
+            issues.append(
+                {
+                    "type": "Style",
+                    "message": "Use '===' instead of '==' for strict equality check.",
+                }
+            )
         return issues

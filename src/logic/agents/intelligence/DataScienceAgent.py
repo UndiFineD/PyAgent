@@ -23,15 +23,13 @@ Specializes in data cleaning, exploratory data analysis (EDA), statistical model
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function, as_tool
+from src.core.base.BaseUtilities import create_main_function, as_tool
 
 __version__ = VERSION
-
-
 
 
 class DataScienceAgent(BaseAgent):
@@ -61,16 +59,18 @@ class DataScienceAgent(BaseAgent):
                 "rows": 1250,
                 "columns": ["id", "timestamp", "value", "category"],
                 "missing_values": {"value": 5, "category": 0},
-                "correlations": {"value_vs_timestamp": 0.82}
+                "correlations": {"value_vs_timestamp": 0.82},
             },
             "insights": [
                 "Strong positive correlation between value and time.",
-                "Detected 0.4% missing markers in 'value' column."
-            ]
+                "Detected 0.4% missing markers in 'value' column.",
+            ],
         }
 
     @as_tool
-    def run_statistical_test(self, group_a: list[float], group_b: list[float], test_type: str = "t-test") -> dict[str, Any]:
+    def run_statistical_test(
+        self, group_a: list[float], group_b: list[float], test_type: str = "t-test"
+    ) -> dict[str, Any]:
         """Runs a statistical test between two groups of data.
 
         Args:
@@ -83,16 +83,13 @@ class DataScienceAgent(BaseAgent):
             "test": test_type,
             "p_value": 0.042,
             "significant": True,
-            "confidence_interval": [0.01, 0.08]
+            "confidence_interval": [0.01, 0.08],
         }
 
-
-
-
-
-
     @as_tool
-    def build_forecast_model(self, time_series_data: dict[str, float]) -> dict[str, Any]:
+    def build_forecast_model(
+        self, time_series_data: dict[str, float]
+    ) -> dict[str, Any]:
         """Builds a simple predictive forecast based on historical data.
 
 
@@ -105,26 +102,19 @@ class DataScienceAgent(BaseAgent):
         """
         logging.info("DataScience: Building time-series forecast model.")
         return {
-
-
             "model_type": "Prophet/ARIMA (Simulated)",
             "horizon": "30 days",
             "forecasted_trend": "Increasing",
-            "accuracy_metric": {"MAE": 12.5, "R2": 0.89}
+            "accuracy_metric": {"MAE": 12.5, "R2": 0.89},
         }
-
-
-
-
 
     def improve_content(self, prompt: str) -> str:
         """Generic processing helper for data science tasks."""
         return f"DataScience insights for: {prompt}. Data pipeline optimized."
 
 
-
-
-
 if __name__ == "__main__":
-    main = create_main_function(DataScienceAgent, "Data Science Agent", "Path to data or research question")
+    main = create_main_function(
+        DataScienceAgent, "Data Science Agent", "Path to data or research question"
+    )
     main()

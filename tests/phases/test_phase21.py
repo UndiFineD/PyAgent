@@ -3,8 +3,6 @@ from pathlib import Path
 from src.infrastructure.fleet.FleetManager import FleetManager
 
 
-
-
 def test_phase21() -> None:
     print("--- Phase 21 Verification: World Model & Speciation ---")
     workspace_root = Path(__file__).resolve().parents[2]
@@ -17,32 +15,23 @@ def test_phase21() -> None:
     prediction = fleet.world_model.predict_action_outcome(action, context)
 
     if "success_probability" in prediction:
-        print(f"✅ Prediction received. Risk level: {prediction.get('risks', ['unknown'])[0]}")
+        print(
+            f"✅ Prediction received. Risk level: {prediction.get('risks', ['unknown'])[0]}"
+        )
     else:
         print("❌ World Model prediction failed.")
-
-
-
-
-
-
-
-
-
-
 
     # 2. Test Speciation
     print("\n[2/2] Testing Agent Speciation (Specialization)...")
     base_agent = "CoderAgent"
 
-
-
-
     niche = "quantum scaling"
     result = fleet.speciation.evolve_specialized_agent(base_agent, niche)
 
     expected_file = Path("src/logic/agents/specialized/quantumscalingCoderAgent.py")
-    generated_test = Path("tests/specialists") / f"test_{expected_file.stem.lower()}_UNIT.py"
+    generated_test = (
+        Path("tests/specialists") / f"test_{expected_file.stem.lower()}_UNIT.py"
+    )
 
     if expected_file.exists():
         print(f"✅ Speciation confirmed: {result}")
@@ -53,9 +42,6 @@ def test_phase21() -> None:
             generated_test.unlink()
     else:
         print(f"❌ Speciation failed. Expected {expected_file}")
-
-
-
 
 
 if __name__ == "__main__":

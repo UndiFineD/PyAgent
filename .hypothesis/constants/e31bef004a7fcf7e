@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\security\PrivacyGuardAgent.py
-# hypothesis_version: 6.150.1
-
-[100, 500, '2026-01-08', 'CreditCard', 'Email', 'High', 'PIIScanner', 'Phone', 'PrivacyGuard', 'SSN', 'findings', 'findings_count', 'original', 'pii_detected', 'pii_types', 'pii_types_captured', 'reason', 'redacted', 'safe', 'safety_rating', 'timestamp', 'total_redactions', 'type', 'value']

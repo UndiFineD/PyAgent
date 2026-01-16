@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\nn\utils\rnn.py
-# hypothesis_version: 6.150.1
-
-[0.0, 'PackedSequence', '_R', '_T', 'cpu', 'cuda', 'device', 'dtype', 'invert_permutation', 'pack_padded_sequence', 'pack_sequence', 'pad_packed_sequence', 'pad_sequence', 'right', 'unpack_sequence', 'unpad_sequence']

@@ -1,10 +1,9 @@
 import sys
+
 try:
     from tests.utils.agent_test_utils import *
 except ImportError:
     pass
-
-
 
 
 def test_agent_dir_on_path_modifies_sys_path() -> None:

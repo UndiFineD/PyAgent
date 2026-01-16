@@ -15,8 +15,6 @@ from src.logic.agents.cognitive.VisualizerAgent import VisualizerAgent
 from src.logic.agents.system.IdentityAgent import IdentityAgent as AgentIdentityAgent
 
 
-
-
 class TestPhase122Specialists(unittest.TestCase):
     def setUp(self):
         self.vault_file = "data/memory/agent_store/test_vault.json"
@@ -50,44 +48,29 @@ class TestPhase122Specialists(unittest.TestCase):
         mock_think.return_value = "FIXED_CODE_HERE"
         isa = ImmuneSystemAgent("dummy.py")
 
-
-
-
-
-
-
-
-
-
-        patch_code = isa.propose_autonomous_patch("Injection vulnerability", "def insecure(): pass")
+        patch_code = isa.propose_autonomous_patch(
+            "Injection vulnerability", "def insecure(): pass"
+        )
         self.assertIn("FIXED_CODE_HERE", patch_code)
         self.assertIn("### Autonomous Security Patch Proposal", patch_code)
         mock_think.assert_called_once()
-
-
-
-
 
     def test_agent_identity_with_secrets(self) -> None:
         """Test that AgentIdentityAgent uses SecretManager for VCs."""
         aia = AgentIdentityAgent("dummy.py")
         # Set a custom secret in the manager AIA uses
 
-
-
-        aia.secret_manager.set_secret("AGENT_IDENTITY_SECRET", "test-secret", persist=True)
+        aia.secret_manager.set_secret(
+            "AGENT_IDENTITY_SECRET", "test-secret", persist=True
+        )
 
         did = aia.create_agent_did("TestAgent")
         vc = aia.issue_verifiable_credential(did, did, "TestType", "TestValue")
-
 
         self.assertIn("proof", vc)
         # Verification should pass
         verification = aia.verify_credential(vc)
         self.assertEqual(verification["status"], "verified")
-
-
-
 
 
 if __name__ == "__main__":

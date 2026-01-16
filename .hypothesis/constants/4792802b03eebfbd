@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\model_selection\__init__.py
-# hypothesis_version: 6.150.1
-
-['BaseCrossValidator', 'BaseShuffleSplit', 'GridSearchCV', 'GroupKFold', 'GroupShuffleSplit', 'HalvingGridSearchCV', 'KFold', 'LearningCurveDisplay', 'LeaveOneGroupOut', 'LeaveOneOut', 'LeavePGroupsOut', 'LeavePOut', 'ParameterGrid', 'ParameterSampler', 'PredefinedSplit', 'RandomizedSearchCV', 'RepeatedKFold', 'ShuffleSplit', 'StratifiedGroupKFold', 'StratifiedKFold', 'TimeSeriesSplit', 'check_cv', 'cross_val_predict', 'cross_val_score', 'cross_validate', 'learning_curve', 'train_test_split', 'validation_curve']

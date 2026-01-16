@@ -24,7 +24,7 @@ Follows Decentralized Autonomous Organization (DAO) principles for agent swarms.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 import uuid
@@ -32,11 +32,9 @@ import time
 from pathlib import Path
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class GovernanceAgent(BaseAgent):
@@ -54,7 +52,13 @@ class GovernanceAgent(BaseAgent):
         )
 
     @as_tool
-    def submit_proposal(self, title: str, description: str, creator: str, options: list[str] | None = None) -> str:
+    def submit_proposal(
+        self,
+        title: str,
+        description: str,
+        creator: str,
+        options: list[str] | None = None,
+    ) -> str:
         """Submits a new governance proposal for the fleet.
 
         Args:
@@ -72,7 +76,7 @@ class GovernanceAgent(BaseAgent):
             "options": options or ["Approve", "Reject"],
             "status": "active",
             "votes": {opt: [] for opt in (options or ["Approve", "Reject"])},
-            "created_at": time.time()
+            "created_at": time.time(),
         }
 
         path = self.proposals_dir / f"{proposal_id}.json"
@@ -80,13 +84,21 @@ class GovernanceAgent(BaseAgent):
             json.dump(proposal, f, indent=4)
 
         # Phase 108: Intelligence Recording
-        self._record(description, proposal_id, provider="Governance", model="ProposalSubmission", meta={"title": title, "creator": creator})
+        self._record(
+            description,
+            proposal_id,
+            provider="Governance",
+            model="ProposalSubmission",
+            meta={"title": title, "creator": creator},
+        )
 
         logging.info(f"Governance: New proposal submitted: {title} ({proposal_id})")
         return proposal_id
 
     @as_tool
-    def cast_vote(self, proposal_id: str, voter: str, choice: str, rationale: str = "") -> str:
+    def cast_vote(
+        self, proposal_id: str, voter: str, choice: str, rationale: str = ""
+    ) -> str:
         """Casts a vote on an active proposal.
 
         Args:
@@ -114,17 +126,21 @@ class GovernanceAgent(BaseAgent):
                 if v["agent"] == voter:
                     return f"Error: Agent {voter} has already voted on this proposal."
 
-        proposal["votes"][choice].append({
-            "agent": voter,
-            "rationale": rationale,
-            "timestamp": time.time()
-        })
+        proposal["votes"][choice].append(
+            {"agent": voter, "rationale": rationale, "timestamp": time.time()}
+        )
 
         with open(path, "w", encoding="utf-8") as f:
             json.dump(proposal, f, indent=4)
 
         # Phase 108: Intelligence Recording
-        self._record(f"{voter} voted {choice} on {proposal_id}", rationale, provider="Governance", model="Vote", meta={"proposal_id": proposal_id})
+        self._record(
+            f"{voter} voted {choice} on {proposal_id}",
+            rationale,
+            provider="Governance",
+            model="Vote",
+            meta={"proposal_id": proposal_id},
+        )
 
         return f"Vote cast by {voter} on proposal {proposal_id}."
 
@@ -138,36 +154,16 @@ class GovernanceAgent(BaseAgent):
         with open(path, encoding="utf-8") as f:
             proposal = json.load(f)
 
-
-
-
-
-
-
-
-
-
-
         proposal["status"] = "closed"
 
         # Calculate winner
 
-
-
-
         tallies = {opt: len(proposal["votes"][opt]) for opt in proposal["votes"]}
         winner = max(tallies, key=tallies.get)
-        proposal["result"] = {
-            "winner": winner,
-            "tallies": tallies
-
-
-
-        }
+        proposal["result"] = {"winner": winner, "tallies": tallies}
 
         with open(path, "w", encoding="utf-8") as f:
             json.dump(proposal, f, indent=4)
-
 
         return proposal
 
@@ -175,10 +171,10 @@ class GovernanceAgent(BaseAgent):
         return "Decentralized governance ensures fleet resilience and alignment."
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(GovernanceAgent, "Governance Agent", "Swarm DAO Management")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        GovernanceAgent, "Governance Agent", "Swarm DAO Management"
+    )
     main()

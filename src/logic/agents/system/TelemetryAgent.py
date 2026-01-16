@@ -18,7 +18,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import time
 from typing import Any
@@ -30,18 +30,20 @@ from src.observability.StructuredLogger import StructuredLogger
 __version__ = VERSION
 
 
-
-
 class TelemetryAgent:
     """Agent responsible for broadcasting fleet telemetry to the API server."""
 
-    def __init__(self, api_url: str = "http://localhost:8000", workspace_root: str | None = None) -> None:
+    def __init__(
+        self, api_url: str = "http://localhost:8000", workspace_root: str | None = None
+    ) -> None:
         self.api_url = api_url
         self.log_buffer: list[Any] = []
 
         # Phase 108: Robustness and Intelligence Harvesting
         self.connectivity = ConnectivityManager(workspace_root)
-        self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
+        self.recorder = (
+            LocalContextRecorder(Path(workspace_root)) if workspace_root else None
+        )
         self.logger = StructuredLogger(agent_id="TelemetryAgent")
 
     def _record(self, event_type: str, data: dict[str, Any]) -> None:
@@ -49,7 +51,9 @@ class TelemetryAgent:
         if self.recorder:
             try:
                 meta = {"phase": 108, "type": "telemetry", "timestamp": time.time()}
-                self.recorder.record_interaction("telemetry", "broadcast", event_type, json.dumps(data), meta=meta)
+                self.recorder.record_interaction(
+                    "telemetry", "broadcast", event_type, json.dumps(data), meta=meta
+                )
             except Exception:
                 pass
 
@@ -58,9 +62,11 @@ class TelemetryAgent:
             "type": event_type,
             "source": source,
             "data": data,
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
-        self.logger.info(f"Telemetry event: {event_type}", source=source, type=event_type)
+        self.logger.info(
+            f"Telemetry event: {event_type}", source=source, type=event_type
+        )
 
         # Phase 108: TTL-based connectivity check
         if self.connectivity.is_endpoint_available("telemetry_server"):

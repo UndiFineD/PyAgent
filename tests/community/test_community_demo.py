@@ -5,30 +5,14 @@ from pathlib import Path
 # Add project root to sys.path
 
 from src.infrastructure.fleet.AgentRegistry import AgentRegistry
-from src.core.base.version import SDK_VERSION
-
-
+from src.core.base.Version import SDK_VERSION
 
 
 def test_community_demo() -> None:
-
-
-
-
-
-
-
-
-
-
     print(f"--- Running Community Demo Test (SDK {SDK_VERSION}) ---")
-    workspace = Path('.').resolve()
+    workspace = Path(".").resolve()
 
     agents = AgentRegistry.get_agent_map(workspace)
-
-
-
-
 
     print("Loading CommunityDemo Agent...")
     try:
@@ -44,9 +28,6 @@ def test_community_demo() -> None:
         print(f"CommunityDemo agent not found in registry: {e}")
     except Exception as e:
         print(f"Error loading agent: {e}")
-
-
-
 
 
 if __name__ == "__main__":

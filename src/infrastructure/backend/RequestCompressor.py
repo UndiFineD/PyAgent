@@ -21,14 +21,9 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class RequestCompressor:
@@ -49,6 +44,7 @@ class RequestCompressor:
             compression_level: Compression level (1 - 9, default 6).
         """
         import zlib
+
         self._zlib = zlib
         self.compression_level = compression_level
         self._stats = {

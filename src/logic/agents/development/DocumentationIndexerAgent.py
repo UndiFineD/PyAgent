@@ -21,13 +21,11 @@
 """Agent specializing in workspace-wide documentation indexing and retrieval (Tabby pattern)."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 from pathlib import Path
 
 __version__ = VERSION
-
-
 
 
 class DocumentationIndexerAgent(BaseAgent):
@@ -48,21 +46,9 @@ class DocumentationIndexerAgent(BaseAgent):
 
         for p in root.rglob("*.md"):
             if "README" in p.name:
-
-
-
-
-
-
-
-
-
-
                 index["readmes"].append(str(p.relative_to(root)))
             else:
                 index["docs"].append(str(p.relative_to(root)))
-
-
 
         for p in root.rglob("*.py"):
             # Potential for extracting docstrings
@@ -73,13 +59,19 @@ class DocumentationIndexerAgent(BaseAgent):
     def get_semantic_pointers(self, query: str) -> str:
         """Returns pointers to documentation relevant to the query."""
         # This would use semantic search in a real implementation
-        return f"Searching index for: {query}... (Pointers to be generated via embeddings)"
+        return (
+            f"Searching index for: {query}... (Pointers to be generated via embeddings)"
+        )
 
     def improve_content(self, input_text: str) -> str:
         """Returns documentation snippets or paths."""
         return self.get_semantic_pointers(input_text)
 
+
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(DocumentationIndexerAgent, "Documentation Indexer Agent", "Path to index")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        DocumentationIndexerAgent, "Documentation Indexer Agent", "Path to index"
+    )
     main()

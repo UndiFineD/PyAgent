@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\core\base\utilities.py
-# hypothesis_version: 6.150.1
-
-[1000, 2000, '--backend', '--context', '--delegate', '--describe-backends', '--json', '--no-cascade', '--prompt', '--strategy', '--verbose', '-v', '... [TRUNCATED]', 'DV_AGENT_BACKEND', 'DV_AGENT_PARENT', 'agent', 'agent_tool', 'auto', 'content_length', 'copilot', 'cot', 'count', 'delegation_result', 'diff', 'direct', 'file_path', 'fleet', 'gh', 'github-models', 'no_cascade', 'recorder', 'reflexion', 'store_true', 'timestamp_ms', 'tool', 'updated']

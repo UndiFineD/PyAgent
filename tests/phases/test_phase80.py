@@ -10,8 +10,6 @@ if str(root) not in sys.path:
 from src.infrastructure.fleet.FleetManager import FleetManager
 
 
-
-
 class TestPhase80(unittest.TestCase):
     def setUp(self):
         self.workspace = Path(__file__).resolve().parents[2]
@@ -25,32 +23,24 @@ class TestPhase80(unittest.TestCase):
         self.fleet.consensus_conflict.initiate_dispute(
             dispute_id,
             "Should we refactor the core backend?",
-            ["Yes", "No", "Partially"]
+            ["Yes", "No", "Partially"],
         )
 
-
-
-
-
-
-
-
-
-
-
         # 2. Cast votes
-        self.fleet.consensus_conflict.cast_vote(dispute_id, "AgentA", 0, "Current code is messy")
-        self.fleet.consensus_conflict.cast_vote(dispute_id, "AgentB", 0, "Better for long term maintainability")
+        self.fleet.consensus_conflict.cast_vote(
+            dispute_id, "AgentA", 0, "Current code is messy"
+        )
+        self.fleet.consensus_conflict.cast_vote(
+            dispute_id, "AgentB", 0, "Better for long term maintainability"
+        )
 
-
-
-
-        self.fleet.consensus_conflict.cast_vote(dispute_id, "AgentC", 2, "Risky to do all at once")
+        self.fleet.consensus_conflict.cast_vote(
+            dispute_id, "AgentC", 2, "Risky to do all at once"
+        )
 
         # 3. Resolve dispute
         res = self.fleet.consensus_conflict.resolve_dispute(dispute_id)
         print(f"Resolution: {res}")
-
 
         self.assertEqual(res["winner"], "Yes")
         self.assertEqual(res["total_votes"], 3)
@@ -58,15 +48,10 @@ class TestPhase80(unittest.TestCase):
 
         # 4. Conflict summary
 
-
-
         summary = self.fleet.consensus_conflict.get_conflict_summary()
         print(f"Summary: {summary}")
         self.assertEqual(summary["total_disputes"], 1)
         self.assertEqual(summary["resolved_disputes"], 1)
-
-
-
 
 
 if __name__ == "__main__":

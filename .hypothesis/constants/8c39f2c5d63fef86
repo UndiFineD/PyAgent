@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\security\SecurityAuditAgent.py
-# hypothesis_version: 6.150.1
-
-['# nosec', '(?', '(?i)api[-_]?key', '(?i)auth[-_]?key', '(?i)password', '(?i)secret', '(?i)token', ')', '.', '.*\\b', '.*shell\\s*=\\s*True.*', '.js', '.json', '.py', '.txt', '.venv', '.yaml', '.yml', 'Complete', 'Error', 'FileScanner', 'Hardcoded Secret', 'High', 'Insecure Pattern', 'Low', 'Medium', 'SecurityAudit', 'SecurityAuditAgent', 'SecurityScanner', 'Usage of ev', '\\b', '__pycache__', 'al() detected', 'al\\s*\\(', 'al\\s*\\(.*', 'detail', 'ev', 'file', 'findings', 'findings_count', 'ignore', 'node_modules', 'severity', 'shell\\s*=\\s*True', 'status', 'type', 'utf-8', 'venv']

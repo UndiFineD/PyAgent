@@ -23,14 +23,12 @@ Simulates Docker-based environment isolation by managing restricted root paths.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import os
 import logging
 from .TenantCore import TenantCore
 
 __version__ = VERSION
-
-
 
 
 class TenantManager:

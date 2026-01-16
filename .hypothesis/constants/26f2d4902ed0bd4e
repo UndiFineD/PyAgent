@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\api\rust.py
-# hypothesis_version: 6.150.1
-
-['/chroma.sqlite3', 'AttachedFunction', 'Windows', 'allow_reset', 'apply', 'distances', 'documents', 'id', 'is_persistent', 'md5', 'metadatas', 'migrations', 'name', 'persist_directory', 'tenant', 'uris']

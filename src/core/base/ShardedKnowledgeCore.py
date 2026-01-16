@@ -26,7 +26,7 @@ Requires orjson and aiofiles for high-speed non-blocking I/O.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import zlib
 import logging
 from pathlib import Path
@@ -36,12 +36,13 @@ import aiofiles
 import msgpack
 import time
 
+try:
+    import rust_core as rc
+    HAS_RUST = True
+except ImportError:
+    HAS_RUST = False
+
 __version__ = VERSION
-
-
-
-
-
 
 
 class ShardedKnowledgeCore:
@@ -55,7 +56,12 @@ class ShardedKnowledgeCore:
 
     def get_shard_id(self, entity_name: str) -> int:
         """Determines the shard ID for a given entity using stable hashing (Adler-32)."""
-        return zlib.adler32(entity_name.encode('utf-8')) % self.shard_count
+        if HAS_RUST:
+            try:
+                return rc.calculate_shard_id_rust(entity_name, self.shard_count)
+            except Exception:
+                pass
+        return zlib.adler32(entity_name.encode("utf-8")) % self.shard_count
 
     def get_shard_path(self, shard_id: int) -> Path:
         """Calculates the file path for a specific shard."""
@@ -68,7 +74,7 @@ class ShardedKnowledgeCore:
             return {}
 
         try:
-            async with aiofiles.open(path, mode='rb') as f:
+            async with aiofiles.open(path, mode="rb") as f:
                 content = await f.read()
                 return orjson.loads(content) if content else {}
         except Exception as e:
@@ -81,15 +87,26 @@ class ShardedKnowledgeCore:
         path.parent.mkdir(parents=True, exist_ok=True)
 
         try:
-            async with aiofiles.open(path, mode='wb') as f:
+            async with aiofiles.open(path, mode="wb") as f:
                 await f.write(orjson.dumps(data, option=orjson.OPT_INDENT_2))
             return True
         except Exception as e:
             logging.error(f"Failed to save shard {shard_id}: {e}")
             return False
 
-    def merge_knowledge(self, base: dict[str, Any], delta: dict[str, Any]) -> dict[str, Any]:
+    def merge_knowledge(
+        self, base: dict[str, Any], delta: dict[str, Any]
+    ) -> dict[str, Any]:
         """Merges new knowledge into existing structure with conflict resolution."""
+        if HAS_RUST:
+            try:
+                import json
+                base_json = json.dumps(base)
+                delta_json = json.dumps(delta)
+                merged_json = rc.merge_knowledge_rust(base_json, delta_json)
+                return json.loads(merged_json)
+            except Exception:
+                pass
         for key, value in delta.items():
             if key in base and isinstance(base[key], dict) and isinstance(value, dict):
                 self.merge_knowledge(base[key], value)
@@ -97,35 +114,36 @@ class ShardedKnowledgeCore:
                 base[key] = value
         return base
 
-    def filter_stable_knowledge(self, data: dict[str, Any], threshold_confidence: float = 0.8) -> dict[str, Any]:
+    def filter_stable_knowledge(
+        self, data: dict[str, Any], threshold_confidence: float = 0.8
+    ) -> dict[str, Any]:
         """Filters knowledge that is considered stable enough."""
+        if HAS_RUST:
+            try:
+                import json
+                data_json = json.dumps(data)
+                filtered_json = rc.filter_stable_knowledge_rust(data_json, threshold_confidence)
+                return json.loads(filtered_json)
+            except Exception:
+                pass
         stable = {}
         for k, v in data.items():
             if isinstance(v, dict) and v.get("confidence", 0) >= threshold_confidence:
                 stable[k] = v
         return stable
 
-    async def right_to_be_forgotten(self, entity_name: str) -> bool:
-        """
-        Phase 238: Prunes all knowledge associated with a specific entity (user/project)
-        """
-        shard_id = self.get_shard_id(entity_name)
-        data = await self.load_shard(shard_id)
-        if entity_name in data:
-            del data[entity_name]
-            return await self.save_shard(shard_id, data)
-        return False
-
     # PHASE 261: KNOWLEDGE INDEX SNAPSHOTTING
     async def create_index_snapshot(self) -> bool:
         """Serializes the current index mapping to a binary snapshot."""
         try:
-            async with aiofiles.open(self.index_path, mode='wb') as f:
-                packed = msgpack.packb({
-                    "version": __version__,
-                    "timestamp": time.time(),
-                    "index": self._index_cache
-                })
+            async with aiofiles.open(self.index_path, mode="wb") as f:
+                packed = msgpack.packb(
+                    {
+                        "version": __version__,
+                        "timestamp": time.time(),
+                        "index": self._index_cache,
+                    }
+                )
                 await f.write(packed)
             logging.info(f"Knowledge index snapshot created at {self.index_path}")
             return True
@@ -138,7 +156,7 @@ class ShardedKnowledgeCore:
         if not self.index_path.exists():
             return False
         try:
-            async with aiofiles.open(self.index_path, mode='rb') as f:
+            async with aiofiles.open(self.index_path, mode="rb") as f:
                 content = await f.read()
                 data = msgpack.unpackb(content)
                 self._index_cache = data.get("index", {})
@@ -163,14 +181,18 @@ class ShardedKnowledgeCore:
         to comply with privacy regulations (GDPR/CCPA).
         """
         shard_id = self.get_shard_id(entity_name)
-        logging.info(f"Compliance: Executing 'Right to be Forgotten' for entity '{entity_name}' in shard {shard_id}")
+        logging.info(
+            f"Compliance: Executing 'Right to be Forgotten' for entity '{entity_name}' in shard {shard_id}"
+        )
 
         shard_data = await self.load_shard(shard_id)
         if entity_name in shard_data:
             del shard_data[entity_name]
             return await self.save_shard(shard_id, shard_data)
 
-        logging.warning(f"Compliance: Entity '{entity_name}' not found in knowledge store.")
+        logging.warning(
+            f"Compliance: Entity '{entity_name}' not found in knowledge store."
+        )
         return False
 
     def export_to_parquet(self, shard_id: int, output_path: Path) -> bool:
@@ -205,7 +227,7 @@ class ShardedKnowledgeCore:
             table = pa.Table.from_pandas(df)
 
             output_path.parent.mkdir(parents=True, exist_ok=True)
-            pq.write_table(table, str(output_path), compression='zstd')
+            pq.write_table(table, str(output_path), compression="zstd")
             return True
         except ImportError:
             logging.error("Parquet export failed: pandas/pyarrow not installed.")

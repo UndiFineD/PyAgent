@@ -21,12 +21,10 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass, field
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -39,6 +37,7 @@ class GeneratedCode:
         context_used: Context files used for generation.
         description: Description of what the code does.
     """
+
     language: str
     code: str
     context_used: list[str] = field(default_factory=lambda: [])

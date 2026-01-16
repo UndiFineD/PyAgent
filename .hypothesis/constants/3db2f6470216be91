@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\cluster\_kmeans.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.0001, 0.01, 0.5, 2.0, 100, 300, 1024, 'C', 'X', '_random_state', 'algorithm', 'array-like', 'auto', 'batch_size', 'blas', 'boolean', 'cluster_centers_', 'compute_labels', 'copy_x', 'csr', 'elkan', 'init', 'init_size', 'intel', 'internal_api', 'k-means++', 'left', 'lloyd', 'max_iter', 'max_no_improvement', 'mkl', 'n_clusters', 'n_init', 'n_local_trials', 'n_steps_', 'prefix', 'random', 'random_state', 'reassignment_ratio', 'return_n_iter', 'sample_weight', 'sparse matrix', 'threading_layer', 'tol', 'vcomp', 'verbose', 'x_squared_norms']

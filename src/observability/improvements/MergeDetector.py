@@ -21,13 +21,18 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .Improvement import Improvement
 from .MergeCandidate import MergeCandidate
 
+# Rust acceleration imports
+try:
+    from rust_core import find_similar_pairs_rust
+    _RUST_AVAILABLE = True
+except ImportError:
+    _RUST_AVAILABLE = False
+
 __version__ = VERSION
-
-
 
 
 class MergeDetector:
@@ -43,9 +48,7 @@ class MergeDetector:
         """Initialize merge detector."""
         self.similarity_threshold = similarity_threshold
 
-    def find_similar(
-        self, improvements: list[Improvement]
-    ) -> list[MergeCandidate]:
+    def find_similar(self, improvements: list[Improvement]) -> list[MergeCandidate]:
         """Find similar improvements that could be merged.
 
         Args:
@@ -54,22 +57,51 @@ class MergeDetector:
         Returns:
             List of merge candidates.
         """
+        # Rust-accelerated O(N²) similarity detection
+        if _RUST_AVAILABLE and len(improvements) > 2:
+            try:
+                # Pack improvements for Rust: (id, title, category, file_path)
+                items = [
+                    (
+                        imp.id,
+                        imp.title,
+                        imp.category.value if hasattr(imp.category, 'value') else str(imp.category),
+                        imp.file_path,
+                    )
+                    for imp in improvements
+                ]
+                
+                rust_results = find_similar_pairs_rust(items, self.similarity_threshold)
+                
+                return [
+                    MergeCandidate(
+                        source_id=src_id,
+                        target_id=tgt_id,
+                        similarity_score=score,
+                        merge_reason=reason,
+                    )
+                    for src_id, tgt_id, score, reason in rust_results
+                ]
+            except Exception:
+                pass  # Fall back to Python
+        
+        # Python fallback
         candidates: list[MergeCandidate] = []
         for i, imp1 in enumerate(improvements):
-            for imp2 in improvements[i + 1:]:
+            for imp2 in improvements[i + 1 :]:
                 similarity = self._calculate_similarity(imp1, imp2)
                 if similarity >= self.similarity_threshold:
-                    candidates.append(MergeCandidate(
-                        source_id=imp1.id,
-                        target_id=imp2.id,
-                        similarity_score=similarity,
-                        merge_reason=self._get_merge_reason(imp1, imp2)
-                    ))
+                    candidates.append(
+                        MergeCandidate(
+                            source_id=imp1.id,
+                            target_id=imp2.id,
+                            similarity_score=similarity,
+                            merge_reason=self._get_merge_reason(imp1, imp2),
+                        )
+                    )
         return candidates
 
-    def _calculate_similarity(
-        self, imp1: Improvement, imp2: Improvement
-    ) -> float:
+    def _calculate_similarity(self, imp1: Improvement, imp2: Improvement) -> float:
         """Calculate similarity between two improvements."""
         score = 0.0
 
@@ -91,9 +123,7 @@ class MergeDetector:
 
         return score
 
-    def _get_merge_reason(
-        self, imp1: Improvement, imp2: Improvement
-    ) -> str:
+    def _get_merge_reason(self, imp1: Improvement, imp2: Improvement) -> str:
         """Generate merge reason."""
         reasons: list[str] = []
         if imp1.category == imp2.category:
@@ -102,9 +132,7 @@ class MergeDetector:
             reasons.append("same file")
         return ", ".join(reasons) or "similar content"
 
-    def merge(
-        self, source: Improvement, target: Improvement
-    ) -> Improvement:
+    def merge(self, source: Improvement, target: Improvement) -> Improvement:
         """Merge two improvements into one.
 
         Args:

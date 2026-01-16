@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\profiler\_utils.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.6, 1000, 'Optimizable events:\n', 'Unknown Event Type', '\\.py\\(.*\\)', '__cudaLaunchKernel', 'alloc', 'cpy', 'cudaLaunchKernel', 'cudaLaunchKernelExC', 'free', 'mem', 'name', 'start_ns', 'start_time_ns', 'start_us']

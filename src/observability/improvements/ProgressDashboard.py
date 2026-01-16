@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .Improvement import Improvement
 from .ImprovementStatus import ImprovementStatus
 from .ProgressReport import ProgressReport
@@ -29,8 +29,6 @@ from datetime import datetime
 from pathlib import Path
 
 __version__ = VERSION
-
-
 
 
 class ProgressDashboard:
@@ -47,9 +45,7 @@ class ProgressDashboard:
         self.reports: list[ProgressReport] = []
         self.velocity_history: list[float] = []
 
-    def generate_report(
-        self, improvements: list[Improvement]
-    ) -> ProgressReport:
+    def generate_report(self, improvements: list[Improvement]) -> ProgressReport:
         """Generate a progress report.
 
         Args:
@@ -58,12 +54,15 @@ class ProgressDashboard:
         Returns:
             ProgressReport with current metrics.
         """
-        completed = len([i for i in improvements
-                        if i.status == ImprovementStatus.COMPLETED])
-        in_progress = len([i for i in improvements
-                           if i.status == ImprovementStatus.IN_PROGRESS])
-        blocked = len([i for i in improvements
-                      if i.status == ImprovementStatus.DEFERRED])
+        completed = len(
+            [i for i in improvements if i.status == ImprovementStatus.COMPLETED]
+        )
+        in_progress = len(
+            [i for i in improvements if i.status == ImprovementStatus.IN_PROGRESS]
+        )
+        blocked = len(
+            [i for i in improvements if i.status == ImprovementStatus.DEFERRED]
+        )
 
         # Calculate velocity (avg completions per week)
         velocity = self._calculate_velocity()
@@ -73,7 +72,7 @@ class ProgressDashboard:
             completed_count=completed,
             in_progress_count=in_progress,
             blocked_count=blocked,
-            velocity=velocity
+            velocity=velocity,
         )
 
         self.reports.append(report)
@@ -96,20 +95,24 @@ class ProgressDashboard:
         self, improvements: list[Improvement]
     ) -> list[tuple[str, int]]:
         """Generate burndown chart data."""
-        remaining = len([i for i in improvements
-                        if i.status not in [ImprovementStatus.COMPLETED,
-                                            ImprovementStatus.REJECTED]])
+        remaining = len(
+            [
+                i
+                for i in improvements
+                if i.status
+                not in [ImprovementStatus.COMPLETED, ImprovementStatus.REJECTED]
+            ]
+        )
         return [(datetime.now().isoformat()[:10], remaining)]
 
-    def get_completion_rate(
-        self, improvements: list[Improvement]
-    ) -> float:
+    def get_completion_rate(self, improvements: list[Improvement]) -> float:
         """Calculate completion rate."""
         total = len(improvements)
         if total == 0:
             return 0.0
-        completed = len([i for i in improvements
-                        if i.status == ImprovementStatus.COMPLETED])
+        completed = len(
+            [i for i in improvements if i.status == ImprovementStatus.COMPLETED]
+        )
         return (completed / total) * 100
 
     def generate_bmad_strategic_grid(self, root_path: Path) -> str:
@@ -118,8 +121,17 @@ class ProgressDashboard:
         Checks for project artifacts and quality indicators.
         """
         # Planning Indicators
-        has_prd = any((root_path / p).exists() for p in ["docs/PRD.md", "prd.md", "docs/stories"])
-        has_arch = any((root_path / p).exists() for p in ["docs/architecture.md", "architecture.md", "docs/CODE_OF_CONDUCT.md"])
+        has_prd = any(
+            (root_path / p).exists() for p in ["docs/PRD.md", "prd.md", "docs/stories"]
+        )
+        has_arch = any(
+            (root_path / p).exists()
+            for p in [
+                "docs/architecture.md",
+                "architecture.md",
+                "docs/CODE_OF_CONDUCT.md",
+            ]
+        )
         has_backlog = (root_path / "improvements.txt").exists()
 
         # Development Indicators
@@ -129,7 +141,9 @@ class ProgressDashboard:
         # Quality Indicators
         has_tests = (root_path / "tests").exists()
         has_results = (root_path / "test_results.txt").exists()
-        has_errors = (root_path / "errors.txt").exists() and (root_path / "errors.txt").stat().st_size > 0
+        has_errors = (root_path / "errors.txt").exists() and (
+            root_path / "errors.txt"
+        ).stat().st_size > 0
 
         # Mapping to Grid
         p_prd = "✅" if has_prd else "❌"
@@ -151,7 +165,7 @@ class ProgressDashboard:
             f"| **Strategy** | {p_backlog} Backlog | {d_git} Repo | {q_health} Health |",
             f"| **Definition** | {p_prd} PRD/Stories | {d_code} Codebase | {q_results} Results |",
             f"| **Structure** | {p_arch} Architecture | {d_stories} Flows | {q_tests} Tests |",
-            "\n"
+            "\n",
         ]
         return "\n".join(grid)
 
@@ -166,6 +180,6 @@ class ProgressDashboard:
             f"- In Progress: {report.in_progress_count}",
             f"- Blocked: {report.blocked_count}",
             f"- Velocity: {report.velocity:.1f} per week",
-            f"- Completion Rate: {self.get_completion_rate(improvements):.1f}%"
+            f"- Completion Rate: {self.get_completion_rate(improvements):.1f}%",
         ]
-        return '\n'.join(lines)
+        return "\n".join(lines)

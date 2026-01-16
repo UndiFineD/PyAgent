@@ -1,11 +1,4 @@
-
 from __future__ import annotations
-from typing import List
-
-
-
-
-
 
 
 class AutonomyCore:
@@ -18,7 +11,9 @@ class AutonomyCore:
         self.agent_id = agent_id
         self.performance_history: list[float] = []
 
-    def identify_blind_spots(self, success_rate: float, task_diversity: float) -> list[str]:
+    def identify_blind_spots(
+        self, success_rate: float, task_diversity: float
+    ) -> list[str]:
         """
         Analyzes performance stats to find 'Blind Spots'.
         e.g., high success on coding, but low success on documentation.
@@ -48,5 +43,7 @@ class AutonomyCore:
         if not blind_spots:
             return f"{plan}Status: Optimal. No immediate changes required."
 
-        plan += "Action: Expand training data for identified blind spots: " + ", ".join(blind_spots)
+        plan += "Action: Expand training data for identified blind spots: " + ", ".join(
+            blind_spots
+        )
         return plan

@@ -18,12 +18,10 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class KnowledgeTransferCore:
@@ -32,11 +30,17 @@ class KnowledgeTransferCore:
     Handles merging of lesson datasets.
     """
 
-    def merge_lessons(self, current_lessons: list[Any], imported_lessons: list[Any]) -> list[Any]:
+    def merge_lessons(
+        self, current_lessons: list[Any], imported_lessons: list[Any]
+    ) -> list[Any]:
         """Merges imported lessons into the current set, avoiding duplicates."""
         # Normalize to dicts only
-        valid_current = [lesson for lesson in current_lessons if isinstance(lesson, dict)]
-        valid_imported = [lesson for lesson in imported_lessons if isinstance(lesson, dict)]
+        valid_current = [
+            lesson for lesson in current_lessons if isinstance(lesson, dict)
+        ]
+        valid_imported = [
+            lesson for lesson in imported_lessons if isinstance(lesson, dict)
+        ]
 
         # Create a signature set for existing lessons
         # Signature = (failure_context, correction) usually unique enough

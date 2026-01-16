@@ -1,32 +1,27 @@
-
 from typing import List
 
-from src.logic.agents.cognitive.context.models.SemanticSearchResult import SemanticSearchResult
-
+from src.logic.agents.cognitive.context.models.SemanticSearchResult import (
+    SemanticSearchResult,
+)
 
 
 # Add src to path
 
-from src.logic.agents.cognitive.context.engines.SemanticSearchEngine import SemanticSearchEngine
+from src.logic.agents.cognitive.context.engines.SemanticSearchEngine import (
+    SemanticSearchEngine,
+)
 from src.logic.agents.cognitive.context.utils.SearchAlgorithm import SearchAlgorithm
-
-
 
 
 def test_semantic_search_engine_integration() -> None:
     """Test that SemanticSearchEngine uses ChromaDB for semantic search."""
     engine = SemanticSearchEngine()  # Memory-based by default
 
-
-
-
-
-
     # 1. Add documents
     engine.add_document("file1.py", "def calculate_risk(data): return data * 0.5")
-    engine.add_document("file2.py", "def save_user_profile(user): pass # write to database")
-
-
+    engine.add_document(
+        "file2.py", "def save_user_profile(user): pass # write to database"
+    )
 
     # 2. Test Keyword search
     engine.set_algorithm(SearchAlgorithm.KEYWORD)
@@ -44,6 +39,7 @@ def test_semantic_search_engine_integration() -> None:
     assert results[0].file_path == "file2.py"
     assert results[0].similarity_score > 0
 
+
 def test_semantic_search_clear() -> None:
     """Test that clearing the engine works."""
     engine = SemanticSearchEngine()
@@ -52,5 +48,7 @@ def test_semantic_search_clear() -> None:
 
     engine.clear()
     assert len(engine.documents) == 0
-    results: List[SemanticSearchResult] = engine.search("content", algorithm=SearchAlgorithm.SEMANTIC)
+    results: List[SemanticSearchResult] = engine.search(
+        "content", algorithm=SearchAlgorithm.SEMANTIC
+    )
     assert len(results) == 0

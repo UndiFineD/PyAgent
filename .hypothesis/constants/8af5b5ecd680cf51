@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\fleet\FleetExecutionCore.py
-# hypothesis_version: 6.150.1
-
-[1.0, '$', 'AGENT_NOT_FOUND', 'FleetManager', 'LOOP_DETECTED', 'STEP_STARTED', 'WORKFLOW_REJECTED', 'WORKFLOW_STARTED', '_check_preemption', '_last_token_usage', 'action', 'agent', 'agents', 'args', 'default', 'error', 'get_model', 'input', 'internal_ai', 'model', 'output', 'priority', 'rejected', 'router_model', 'status', 'step', 'success', 'task', 'unknown', 'violations', 'workflow_id']

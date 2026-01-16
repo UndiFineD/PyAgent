@@ -21,13 +21,11 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ReportAnnotation import ReportAnnotation
 import logging
 
 __version__ = VERSION
-
-
 
 
 class AnnotationManager:
@@ -49,11 +47,7 @@ class AnnotationManager:
         logging.debug("AnnotationManager initialized")
 
     def add_annotation(
-        self,
-        report_id: str,
-        author: str,
-        content: str,
-        line_number: int | None = None
+        self, report_id: str, author: str, content: str, line_number: int | None = None
     ) -> ReportAnnotation:
         """Add an annotation.
         Args:
@@ -72,7 +66,7 @@ class AnnotationManager:
             report_id=report_id,
             author=author,
             content=content,
-            line_number=line_number
+            line_number=line_number,
         )
         if report_id not in self.annotations:
             self.annotations[report_id] = []
