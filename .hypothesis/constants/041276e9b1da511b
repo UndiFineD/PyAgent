@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\LinguisticAgent.py
+# hypothesis_version: 6.150.1
+
+['How can I help you?', 'message', 'slack', 'telegram', 'whatsapp', '{message}']

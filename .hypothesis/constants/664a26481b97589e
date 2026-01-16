@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\managers\AuthManagers.py
+# hypothesis_version: 6.150.1
+
+['Authorization', 'X-API-Key', 'api_key', 'bearer_token', 'token']

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\system\ConfigAgent.py
+# hypothesis_version: 6.150.1
+
+['ANTHROPIC_API_KEY', 'OPENAI_API_KEY', 'WORKSPACE_ROOT', 'config', 'models', 'models.yaml']

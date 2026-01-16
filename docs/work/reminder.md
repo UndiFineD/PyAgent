@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # Repository Maintenance Reminders (20260115-1635)
+=======
+# Repository Maintenance Reminders (20260115-1505)
+>>>>>>> origin/restore-point-20260115-1505
 
 ## 🛠️ Pending Manual Actions
 - [ ] **Review Merge**: Examine the current restore branch and merge into `main` if satisfied.

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\utils\AgentFileManager.py
+# hypothesis_version: 6.150.1
+
+['*', '.agent_snapshots', '.codeignore', '.go', '.js', '.py', '.rb', '.sh', '.ts', '_', 'agent', 'replace', 'scripts/agent', 'src/agent', 'src/agents', 'utf-8']
