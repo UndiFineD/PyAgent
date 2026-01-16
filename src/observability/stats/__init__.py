@@ -9,6 +9,8 @@ for monitoring PyAgent system performance and health.
 
 from __future__ import annotations
 from src.core.base.Version import VERSION as VERSION
+
+# Phase 317: Structured imports to restore package parity after Synaptic Modularization
 from .ObservabilityCore import (
     Metric as Metric,
     MetricType as MetricType,
@@ -31,30 +33,57 @@ from .ObservabilityCore import (
     DerivedMetric as DerivedMetric,
     StatsNamespace as StatsNamespace,
 )
+
 from .MetricsEngine import (
     ObservabilityEngine as ObservabilityEngine,
+    TokenCostEngine as TokenCostEngine,
+    ModelFallbackEngine as ModelFallbackEngine,
+)
+
+from .MetricsCore import (
     DerivedMetricCalculator as DerivedMetricCalculator,
+    TokenCostCore as TokenCostCore,
+    ModelFallbackCore as ModelFallbackCore,
+)
+
+from .Analysis import (
     CorrelationAnalyzer as CorrelationAnalyzer,
+)
+
+from .FormulaEngine import (
     FormulaEngine as FormulaEngine,
     FormulaEngineCore as FormulaEngineCore,
     FormulaValidation as FormulaValidation,
+)
+
+from .Monitoring import (
     ResourceMonitor as ResourceMonitor,
+)
+
+from .Alerting import (
+    ThresholdAlertManager as ThresholdAlertManager,
     RetentionEnforcer as RetentionEnforcer,
-    TokenCostEngine as TokenCostEngine,
-    TokenCostCore as TokenCostCore,
-    ModelFallbackEngine as ModelFallbackEngine,
-    ModelFallbackCore as ModelFallbackCore,
+)
+
+from .RollupEngine import (
     StatsRollupCalculator as StatsRollupCalculator,
     StatsRollup as StatsRollup,
+    StatsQueryEngine as StatsQueryEngine,
+)
+
+from .PredictionEngine import (
     StatsChangeDetector as StatsChangeDetector,
     StatsForecaster as StatsForecaster,
-    StatsQueryEngine as StatsQueryEngine,
+)
+
+from .ABEngine import (
     ABComparisonEngine as ABComparisonEngine,
     ABComparator as ABComparator,
     ABComparisonResult as ABComparisonResult,
     ABSignificanceResult as ABSignificanceResult,
     ABComparison as ABComparison,
 )
+
 from .Exporters import (
     MetricsExporter as MetricsExporter,
     StatsExporter as StatsExporter,
@@ -75,7 +104,6 @@ from .Streaming import (
 from .Engine import StatsNamespaceManager as StatsNamespaceManager
 from .Namespaces import MetricNamespaceManager as MetricNamespaceManager
 from .Federation import StatsFederation as StatsFederation
-from .Alerting import ThresholdAlertManager as ThresholdAlertManager
 from .Access import StatsAccessController as StatsAccessController
 from .StorageEngine import (
     StatsBackupManager as StatsBackupManager,
