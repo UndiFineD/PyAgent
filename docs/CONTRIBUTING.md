@@ -80,6 +80,14 @@ We follow PEP 8 with the following specifics:
 - **Type Safety**: Mandatory type hints for all public functions in `src/infrastructure` and `src/logic`.
 - **Formatter**: Black with line length 120.
 - **Docstrings**: Google-style docstrings for all public APIs. Every module must start with a docstring.
+
+### Agent Development (Mixin Architecture)
+When creating new agents or extending `BaseAgent`, adhere to the **Synaptic Modularization** pattern:
+- **Do not** add logic directly to `BaseAgent.py`.
+- **Use Mixins**: If you are adding a new core capability (e.g., a new memory type or governance rule), create a new Mixin in `src/core/base/mixins/`.
+- **Composition over Inheritance**: Prefer specialized sub-agents for complex business logic rather than deep inheritance trees.
+- **Complexity threshold**: Any method exceeding complexity 15 should be broken into private helper methods.
+
 Testing Requirements
 Test Structure
 Tests are currently co-located in the src directory or in a dedicated tests folder depending on the module.
