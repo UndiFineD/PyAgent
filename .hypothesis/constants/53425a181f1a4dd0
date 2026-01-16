@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\orchestration\ConsensusOrchestrator.py
+# hypothesis_version: 6.150.1
+
+[0.3, 0.5, 0.7, 'agent', 'content', 'hash', 'inter_fleet_bridge', 'task', 'weight']

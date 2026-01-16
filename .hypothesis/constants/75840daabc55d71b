@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\observability\stats\metrics.py
+# hypothesis_version: 6.150.1
+
+[0.0, '1m', 'anomaly', 'average', 'count', 'counter', 'default', 'gauge', 'histogram', 'info', 'maximum', 'minimum', 'percentile_50', 'percentile_95', 'percentile_99', 'success', 'sum', 'summary', 'threshold', 'unknown']

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\DynamicDecomposerAgent.py
+# hypothesis_version: 6.150.1
+
+['CoderAgent', 'LinguisticAgent', 'ReasoningAgent', 'ResearchAgent', '__main__', 'assigned_to', 'id', 'root_task', 'sub_tasks', 'task']

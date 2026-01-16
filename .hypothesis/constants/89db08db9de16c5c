@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\orchestration\RLSelector.py
+# hypothesis_version: 6.150.1
+
+[-1.0, 1.0, 'No policy data yet.', '__main__', 'alpha', 'beta', 'tool_a', 'tool_b', 'total_calls']
