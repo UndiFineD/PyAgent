@@ -66,5 +66,13 @@ from .UsageQuotaManager import UsageQuotaManager as UsageQuotaManager
 from .UsageRecord import UsageRecord as UsageRecord
 from .VersionNegotiator import VersionNegotiator as VersionNegotiator
 from .DiskCache import DiskCache as DiskCache
+from .ExecutionEngine import (
+    llm_chat_via_github_models,
+    llm_chat_via_ollama,
+    llm_chat_via_copilot_cli,
+    run_subagent,
+    get_backend_status,
+    describe_backends,
+)
 
 __version__ = VERSION
