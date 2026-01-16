@@ -63,3 +63,50 @@ class OrchestrationMixin:
                             level, self.__class__.__name__, message, kwargs
                         )
                     )
+
+    async def run_subagent(
+        self, description: str, prompt: str, original_content: str = ""
+    ) -> str:
+        if hasattr(self, "quotas"):
+            exceeded, reason = self.quotas.check_quotas()
+            if exceeded:
+                from src.core.base.BaseExceptions import CycleInterrupt
+                raise CycleInterrupt(reason)
+
+        try:
+            from src.infrastructure import backend as ab
+        except ImportError:
+            import sys
+            from pathlib import Path
+            sys.path.append(str(Path(__file__).parent.parent.parent.parent))
+            from src.infrastructure import backend as ab
+
+        import asyncio
+        result: str | None = await asyncio.to_thread(
+            ab.run_subagent, description, prompt, original_content
+        )
+        
+        if hasattr(self, "quotas") and result:
+             self.quotas.update_usage(len(prompt) // 4, len(result) // 4)
+
+        if result is None:
+            if hasattr(self, "_get_fallback_response"):
+                return self._get_fallback_response()
+            return original_content
+        return result
+
+    @staticmethod
+    def get_backend_status() -> dict[str, Any]:
+        try:
+            from src.infrastructure import backend as ab
+        except ImportError:
+            return {}
+        return ab.get_backend_status()
+
+    @staticmethod
+    def describe_backends() -> str:
+        try:
+            from src.infrastructure import backend as ab
+        except ImportError:
+            return "Backends unavailable"
+        return ab.describe_backends()

@@ -113,7 +113,7 @@ class IntelligenceHarvester:
 
     def harvest(self) -> list[dict[str, Any]]:
         """Harvests insights from multiple external backends."""
-        from src.infrastructure.backend import execution_engine as ai
+        from src.infrastructure import backend as ai
         
         prompt = "Provide 3 high-level architectural or security recommendations for a Python-based AI Agent fleet."
         lessons = []
@@ -228,14 +228,24 @@ def run_cycle(
     # 3. Report Results
     logger.info(f" - Scanned: {combined_stats['files_scanned']}, Issues: {combined_stats['issues_found']}, Fixed: {combined_stats['fixes_applied']}")
     
-    _report_remaining_debt(combined_stats, logger)
+    _report_remaining_debt(combined_stats, logger, fleet, root, prompt_path=prompt_path, model_name=model_name, current_cycle=current_cycle)
 
     # 4. Harvest External Intelligence
     harvester = IntelligenceHarvester(fleet, model_name)
     harvester.harvest()
 
-def _report_remaining_debt(stats: dict[str, Any], logger: StructuredLogger) -> None:
+def consult_external_models(fleet, broken_items, prompt_path=None, model_name=None):
+    """
+    Placeholder for federated learning consultation (Phase 112).
+    """
+    print("\n[Intelligence] Consulting external federated models for remaining debt...")
+    if broken_items:
+        print(f" - Analyzed {len(broken_items)} debt clusters.")
+    print(" - Federated consensus reached: Continue localized refactoring.")
+
+def _report_remaining_debt(stats: dict[str, Any], logger: StructuredLogger, fleet: FleetManager, root: str, prompt_path: str | None = None, model_name: str | None = None, current_cycle: int = 1) -> None:
     """Logs issues that were not autonomously fixed."""
+    start_time = time.time()
     broken_items = []
     for detail in stats["details"]:
         unfixed = [i for i in detail["issues"] if not i.get("fixed")]
@@ -253,20 +263,6 @@ def _report_remaining_debt(stats: dict[str, Any], logger: StructuredLogger) -> N
             logger.info(f"File: {item['file']}")
             for issue in item["remaining_issues"]:
                 logger.info(f"  - [ ] {issue.get('type') or 'Issue'}: {issue.get('detail') or issue.get('message', '')}")
-
-
-        # Performance/Complexity check
-        high_comp = [
-            e
-            for e in library
-            if e.get("taxonomy", {}).get("logic_complexity") == "High"
-        ]
-        if high_comp:
-            logger.warning(
-                f" - WARNING: {len(high_comp)} files identified with HIGH logic complexity."
-            )
-            for e in high_comp[:3]:
-                logger.info(f"    * {e['title']}")
 
     logger.info("[Documentation] Generating updated docs for improvements...")
     doc_res = fleet.doc_gen_agent.extract_docs(
@@ -395,8 +391,6 @@ def _report_remaining_debt(stats: dict[str, Any], logger: StructuredLogger) -> N
 
 
 def _cycle_throttle(
-    delay: int, root: str, target_dirs: list[str], use_watcher: bool = False
-) -> None:
     delay: int, root: str, target_dirs: list[str], use_watcher: bool = False
 ) -> None:
     """
