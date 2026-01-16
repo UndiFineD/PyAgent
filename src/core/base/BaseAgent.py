@@ -50,6 +50,13 @@ from src.core.base.ShellExecutor import ShellExecutor
 from src.core.base.AgentScratchpad import AgentScratchpad
 from src.core.base.AgentHistory import AgentConversationHistory
 
+# Import Mixins for Synaptic Modularization (Phase 317)
+from src.core.base.mixins.IdentityMixin import IdentityMixin
+from src.core.base.mixins.PersistenceMixin import PersistenceMixin
+from src.core.base.mixins.KnowledgeMixin import KnowledgeMixin
+from src.core.base.mixins.OrchestrationMixin import OrchestrationMixin
+from src.core.base.mixins.GovernanceMixin import GovernanceMixin
+
 # from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder # Moved to __init__
 from src.core.base.managers.ResourceQuotaManager import (
     ResourceQuotaManager,
@@ -79,7 +86,13 @@ __version__ = VERSION
 # Advanced components (Lazy loaded or optional)
 
 
-class BaseAgent:
+class BaseAgent(
+    IdentityMixin,
+    PersistenceMixin,
+    KnowledgeMixin,
+    OrchestrationMixin,
+    GovernanceMixin,
+):
     """Shell class for AI-powered agents. Logic delegated to BaseAgentCore."""
 
     # Class-level attributes for shared state
@@ -113,35 +126,25 @@ class BaseAgent:
 
         self.previous_content: str = ""
         self.current_content: str = ""
-        self.fleet: Any = None  # FleetManager reference
-        self.capabilities: list[str] = ["base"]  # Phase 241: Default capabilities
 
-        # Phase 260: Priority and Preemption
-        self.priority: AgentPriority = AgentPriority.NORMAL
-        self._suspended: bool = False
+        # Initialize Mixins
+        IdentityMixin.__init__(self, **kwargs)
+        PersistenceMixin.__init__(self, **kwargs)
+        KnowledgeMixin.__init__(
+            self,
+            agent_name=self.agent_name,
+            workspace_root=Path(self._workspace_root),
+            **kwargs,
+        )
+        OrchestrationMixin.__init__(self, **kwargs)
 
-        # Knowledge Trinity initialization (Phase 126)
-        try:
-            from src.core.knowledge.knowledge_engine import KnowledgeEngine
-
-            agent_name = self.__class__.__name__.lower().replace("agent", "") or "base"
-            self.knowledge = KnowledgeEngine(
-                agent_id=agent_name, base_path=Path("data/agents")
-            )
-        except (ImportError, ModuleNotFoundError):
-            self.knowledge = None
+        self._config: AgentConfig = self._load_config()
+        GovernanceMixin.__init__(self, config=self._config, **kwargs)
 
         # Phase 241: Auto-register capabilities if SignalRegistry is available
         self._register_capabilities()
 
-        # Strategy for agent execution (Phase 130: Lazy-loaded to avoid core-on-logic dependency)
-        self._strategy: Any | None = None
-
-        # New attributes for enhanced functionality
-        self._state: AgentState = AgentState.INITIALIZED
-        self._history_manager = AgentConversationHistory()
-        self._scratchpad_manager = AgentScratchpad()
-        self._config: AgentConfig = self._load_config()
+        # Late configuration
         self._token_usage = 0
         self._state_data: dict[str, Any] = {}
         self._post_processors: list[Callable[[str], str]] = []
@@ -149,183 +152,18 @@ class BaseAgent:
         self._is_stop_requested = False
         self._system_prompt: str = "You are a helpful AI assistant."
 
-        # Phase 245: RESOURCE QUOTAS & BUDGETS
-        self.quotas = ResourceQuotaManager(
-            config=QuotaConfig(
-                max_tokens=getattr(self._config, "max_tokens_per_session", None),
-                max_time_seconds=getattr(self._config, "max_time_per_session", None),
-            )
-        )
-
-        self._local_global_context = None
-
-        # Advanced features
-        # Derive agent name for data isolation (e.g., CoderAgent -> "coder")
-        self.agent_name = self.__class__.__name__.lower().replace("agent", "") or "base"
-        self.memory: LongTermMemory | None = (
-            LongTermMemory(agent_name=self.agent_name) if LongTermMemory else None
-        )
-
-        # Phase 143: Sharded Knowledge initialization
-        self.sharded_knowledge = ShardedKnowledgeCore(base_path=Path("data/agents"))
-
-        self.registry: SignalRegistry | None = (
-            SignalRegistry() if SignalRegistry else None
-        )
-        self.tool_registry: ToolRegistry | None = (
-            ToolRegistry() if ToolRegistry else None
-        )
-
-        # Intelligence Harvesting (Phase 108)
-        from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
-
-        self.recorder = LocalContextRecorder(
-            Path(self._workspace_root), f"{self.__class__.__name__}_Agent"
-        )
-
-    def _register_capabilities(self) -> None:
-        """Emits a signal with agent capabilities for discovery."""
+        self.recorder = None
         try:
-            import asyncio
-            from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
-
-            signals = SignalRegistry()
-
-            payload = self.agent_logic_core.prepare_capability_payload(
-                self.__class__.__name__, self.get_capabilities()
+            # Intelligence Harvesting (Phase 108)
+            from src.infrastructure.backend.LocalContextRecorder import (
+                LocalContextRecorder,
             )
 
-            # Schedule the async emit to run in the background
-            try:
-                try:
-                    loop = asyncio.get_running_loop()
-                except RuntimeError:
-                    loop = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop)
-
-                if loop.is_running():
-                    asyncio.create_task(
-                        signals.emit("agent_capability_registration", payload)
-                    )
-                else:
-                    loop.run_until_complete(
-                        signals.emit("agent_capability_registration", payload)
-                    )
-            except Exception:
-                pass
-        except Exception:
+            self.recorder = LocalContextRecorder(
+                Path(self._workspace_root), f"{self.__class__.__name__}_Agent"
+            )
+        except (ImportError, Exception):
             pass
-
-    def suspend(self) -> None:
-        self._suspended = True
-
-    def resume(self) -> None:
-        self._suspended = False
-
-    def log_distributed(self, level: str, message: str, **kwargs) -> None:
-        """Publishes a log to the distributed logging system."""
-        if hasattr(self, "fleet") and self.fleet:
-            logging_agent = self.fleet.agents.get("Logging")
-            if logging_agent:
-                import asyncio
-
-                try:
-                    loop = asyncio.get_running_loop()
-                    loop.create_task(
-                        logging_agent.broadcast_log(
-                            level, self.__class__.__name__, message, kwargs
-                        )
-                    )
-                except RuntimeError:
-                    asyncio.run(
-                        logging_agent.broadcast_log(
-                            level, self.__class__.__name__, message, kwargs
-                        )
-                    )
-
-    async def _check_preemption(self) -> None:
-        while self._suspended:
-            await asyncio.sleep(0.5)
-
-    async def _request_firewall_clearance(self, thought: str) -> bool:
-        """Phase 281: Inform fleet of thought and wait for FirewallAgent clearance."""
-        # 1. Inform the fleet
-        registry = None
-        if hasattr(self, "registry") and self.registry:
-            registry = self.registry
-        elif hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "signals"):
-            registry = self.fleet.signals
-
-        if registry:
-            try:
-                await registry.emit(
-                    "thought_stream",
-                    {"agent": self.__class__.__name__, "thought": thought},
-                )
-            except Exception as e:
-                logging.debug(f"Thought emission failed: {e}")
-
-        # 2. Check for clearance (avoid recursion for FirewallAgent)
-        if self.__class__.__name__ == "FirewallAgent":
-            return True
-
-        try:
-            from src.logic.agents.security.FirewallAgent import FirewallAgent
-
-            firewall = None
-            if hasattr(self, "fleet") and self.fleet:
-                firewall = self.fleet.agents.get("FirewallAgent")
-
-            if not firewall:
-                firewall = FirewallAgent()
-
-            return await firewall.request_clearance_blocking(
-                self.__class__.__name__, thought
-            )
-        except Exception as e:
-            logging.debug(f"Firewall clearance defaulted to True (Error: {e})")
-            return True
-
-    def get_capabilities(self) -> list[str]:
-        return self.capabilities
-
-    @property
-    def strategy(self) -> Any:
-        if not hasattr(self, "_strategy") or self._strategy is None:
-            try:
-                from src.logic.strategies.DirectStrategy import DirectStrategy
-
-                self._strategy = DirectStrategy()
-            except (ImportError, ModuleNotFoundError):
-                self._strategy = None
-        return self._strategy
-
-    @classmethod
-    def from_config_file(cls, config_path: Path) -> BaseAgent:
-        """Create an agent instance from a configuration file.
-
-        Args:
-            config_path: Path to the JSON configuration file.
-
-        Returns:
-            Initialized Agent.
-        """
-        import json
-
-        try:
-            config = json.loads(Path(config_path).read_text())
-            repo_root = config.get("repo_root", None)
-            # file_path is mandatory, assuming the config file itself acts as the 'file' or config specifies it
-            # Attempt to derive file_path from config, or use config_path as dummy
-            file_path = config.get("file_path", str(config_path))
-            return cls(file_path, repo_root=repo_root)
-        except Exception as e:
-            logging.error(f"Failed to load agent from config {config_path}: {e}")
-            raise
-
-    @strategy.setter
-    def strategy(self, value: Any) -> None:
-        self._strategy = value
 
     def _run_command(
         self, cmd: list[str], timeout: int = 120
@@ -338,36 +176,6 @@ class BaseAgent:
             models_config=models_config,
             timeout=timeout,
         )
-
-    @property
-    def global_context(self) -> Any:
-        if (
-            hasattr(self, "fleet")
-            and self.fleet
-            and hasattr(self.fleet, "global_context")
-        ):
-            return self.fleet.global_context
-        if self._local_global_context is None:
-            try:
-                from src.logic.agents.cognitive.context.engines.GlobalContextEngine import (
-                    GlobalContextEngine,
-                )
-
-                self._local_global_context = GlobalContextEngine(self._workspace_root)
-            except (ImportError, ValueError):
-                pass
-        return self._local_global_context
-
-    @global_context.setter
-    def global_context(self, value: Any) -> None:
-        self._local_global_context = value
-
-    def register_tools(self, registry: ToolRegistry) -> None:
-        if not registry:
-            return
-        for method, cat, prio in self.agent_logic_core.collect_tools(self):
-            # Fix: Correct order is (owner_name, func, category, priority)
-            registry.register_tool(self.__class__.__name__, method, cat, prio)
 
     def calculate_anchoring_strength(self, result: str) -> float:
         return self.agent_logic_core.calculate_anchoring_strength(
@@ -383,10 +191,6 @@ class BaseAgent:
     def set_strategy(self, strategy: Any) -> None:
         self.strategy = strategy
         logging.info(self.agent_logic_core.set_strategy(strategy))
-
-    @property
-    def state(self) -> AgentState:
-        return self._state
 
     def set_model(self, model: str) -> None:
         self._model = model
@@ -422,13 +226,6 @@ class BaseAgent:
         """Request the agent to stop its current operation."""
         logging.info(f"Stop requested for {self.__class__.__name__}")
         self._is_stop_requested = True
-
-    def register_webhook(self, url: str) -> None:
-        """Registers a webhook URL for notifications."""
-        if not hasattr(self, "_webhooks"):
-            self._webhooks: list[Any] = []
-        if url not in self._webhooks:
-            self._webhooks.append(url)
 
     def run(self, prompt: str = "") -> None:
         """Synchronous entry point for agent execution."""
