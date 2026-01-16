@@ -73,13 +73,13 @@ Functions	lowercase_underscore	calculate_priority_score()
 Constants	UPPERCASE	DEFAULT_TEMPLATES
 Private	Leading underscore	_validate_file_extension()
 Code Style Guidelines
-Python Code Style
+### Python Code Style
 We follow PEP 8 with the following specifics:
 
-Formatter: Black with line length 120 (or project default).
-Import sorting: isort.
-Type hints: Required for all public functions and class methods.
-Docstrings: Google-style docstrings for all public APIs.
+- **Complexity (Phase 317)**: High priority on keeping **Cyclomatic Complexity < 25**.
+- **Type Safety**: Mandatory type hints for all public functions in `src/infrastructure` and `src/logic`.
+- **Formatter**: Black with line length 120.
+- **Docstrings**: Google-style docstrings for all public APIs. Every module must start with a docstring.
 Testing Requirements
 Test Structure
 Tests are currently co-located in the src directory or in a dedicated tests folder depending on the module.

@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .PerformanceMetric import PerformanceMetric
 from .PerformanceMetricType import PerformanceMetricType
 from contextlib import contextmanager
@@ -30,8 +30,6 @@ from collections.abc import Iterator
 import time
 
 __version__ = VERSION
-
-
 
 
 class PerformanceTracker:
@@ -104,15 +102,15 @@ class PerformanceTracker:
             return {}
 
         execution_times = [
-            m.value for m in self._metrics
+            m.value
+            for m in self._metrics
             if m.metric_type == PerformanceMetricType.EXECUTION_TIME
         ]
 
         return {
             "total_metrics": len(self._metrics),
             "avg_execution_time_ms": (
-                sum(execution_times) / len(execution_times)
-                if execution_times else 0
+                sum(execution_times) / len(execution_times) if execution_times else 0
             ),
             "max_execution_time_ms": max(execution_times) if execution_times else 0,
             "min_execution_time_ms": min(execution_times) if execution_times else 0,

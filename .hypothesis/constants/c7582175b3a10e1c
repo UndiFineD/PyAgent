@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\pydantic\type_adapter.py
-# hypothesis_version: 6.150.1
-
-['$defs', 'P', 'R', 'T', 'TypeAdapter', 'TypeAdapterT', '__dict__', '__name__', '__pydantic_config__', '__slots__', 'any_of', 'defer_build', 'description', 'error', 'json', 'none', 'off', 'on', 'primitive_type_array', 'python', 'title', 'trailing-strings', 'typing', 'validation', 'warn']

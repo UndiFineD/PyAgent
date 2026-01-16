@@ -21,15 +21,13 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import TYPE_CHECKING
 from dataclasses import dataclass, field
 
 if TYPE_CHECKING:
     pass
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -43,6 +41,7 @@ class BranchComparison:
         files_only_in_b: Files only in branch B.
         modified_files: Files modified between branches.
     """
+
     branch_a: str
     branch_b: str
     files_only_in_a: list[str] = field(default_factory=lambda: [])

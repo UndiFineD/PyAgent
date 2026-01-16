@@ -25,19 +25,18 @@ No I/O or side effects.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import re
 import ast
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
 __version__ = VERSION
-
-
 
 
 class ContextCompressorCore:
@@ -59,7 +58,9 @@ class ContextCompressorCore:
                     bases_str = ""
                     if node.bases:
                         try:
-                            bases_str = f"({', '.join([ast.unparse(b) for b in node.bases])})"
+                            bases_str = (
+                                f"({', '.join([ast.unparse(b) for b in node.bases])})"
+                            )
                         except Exception:
                             bases_str = "(...)"
                     compressed_lines.append(f"class {node.name}{bases_str}:")
@@ -91,7 +92,11 @@ class ContextCompressorCore:
                 return rust_core.regex_compress_python(content)  # type: ignore[attr-defined]
             except Exception:
                 pass
-        signatures = re.findall(r"^\s*(?:async\s+)?(?:def|class)\s+[a-zA-Z_][a-zA-Z0-9_]*.*?:", content, re.MULTILINE)
+        signatures = re.findall(
+            r"^\s*(?:async\s+)?(?:def|class)\s+[a-zA-Z_][a-zA-Z0-9_]*.*?:",
+            content,
+            re.MULTILINE,
+        )
         return "\n".join([s.strip() for s in signatures])
 
     @staticmethod

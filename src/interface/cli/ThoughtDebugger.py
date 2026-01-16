@@ -7,10 +7,8 @@ import sys
 import time
 import logging
 from typing import Any
-from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
-from src.core.base.version import VERSION
-
-
+from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
+from src.core.base.Version import VERSION
 
 
 class ThoughtDebugger:
@@ -38,6 +36,7 @@ class ThoughtDebugger:
             # If we're the main entry point, block here using event-driven approach
             if __name__ == "__main__":
                 import asyncio
+
                 loop = asyncio.new_event_loop()
                 loop.run_forever()
         except KeyboardInterrupt:
@@ -64,25 +63,15 @@ class ThoughtDebugger:
         if self.interactive:
             # Note: This will block the thread emitting the signal!
 
-
-
-
-
-
-
-
-
-
             # In a live fleet, this acts as a 'breakpoint'.
-            choice = input("\n[DEBUG] (ENTER=Continue, q=Quit, m=Menu): ").lower().strip()
-            if choice == 'q':
+            choice = (
+                input("\n[DEBUG] (ENTER=Continue, q=Quit, m=Menu): ").lower().strip()
+            )
+            if choice == "q":
                 self.stop()
 
-
-
-
                 sys.exit(0)
-            elif choice == 'm':
+            elif choice == "m":
                 self._show_menu(data)
             else:
                 print("Continuing...\n")
@@ -91,14 +80,10 @@ class ThoughtDebugger:
         """Displays extended thought metadata and controls."""
         print("\n--- Thought Metadata ---")
         for k, v in data.items():
-
             if k != "thought":
                 print(f"  {k}: {v}")
         print("------------------------")
         input("Press ENTER to return to thought stream...")
-
-
-
 
 
 if __name__ == "__main__":

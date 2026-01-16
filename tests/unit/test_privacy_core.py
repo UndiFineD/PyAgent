@@ -1,8 +1,5 @@
-
 from hypothesis import given, strategies as st
 from src.logic.agents.security.core.PrivacyCore import PrivacyCore
-
-
 
 
 class TestPrivacyCore:
@@ -26,12 +23,14 @@ class TestPrivacyCore:
         assert "[REDACTED]" in redacted
         assert "abcde" not in redacted
 
-    @given(st.recursive(
-        st.text(),
-        lambda children: st.lists(children) | st.dictionaries(st.text(), children),
-        max_leaves=10
-    ))
+    @given(
+        st.recursive(
+            st.text(),
+            lambda children: st.lists(children) | st.dictionaries(st.text(), children),
+            max_leaves=10,
+        )
+    )
     def test_scan_log_entry(self, data):
         # Just ensure it doesn't crash and returns same structure type
         result = PrivacyCore.scan_log_entry(data)
-        assert type(result) == type(data)
+        assert isinstance(result, type(data))

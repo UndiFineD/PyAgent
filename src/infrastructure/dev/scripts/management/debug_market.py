@@ -21,17 +21,12 @@
 """Validation script for Phase 11: Market & Economy."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from pathlib import Path
 from src.infrastructure.fleet.FleetManager import FleetManager
 
 __version__ = VERSION
-
-
-
-
-
 
 
 def test_market_features() -> None:
@@ -44,25 +39,16 @@ def test_market_features() -> None:
     alice_bal = fleet.economy.get_balance("AliceAgent")
     print(f"Alice Starting Balance: {alice_bal}")
 
-
-
-
-
-
-    success = fleet.economy.transfer_credits("AliceAgent", "BobAgent", 50.0, "Subcontracting research")
+    success = fleet.economy.transfer_credits(
+        "AliceAgent", "BobAgent", 50.0, "Subcontracting research"
+    )
     print(f"Transfer Alice -> Bob (50.0): {'Success' if success else 'Failed'}")
     print(f"Alice New Balance: {fleet.economy.get_balance('AliceAgent')}")
-
-
 
     print(f"Bob New Balance: {fleet.economy.get_balance('BobAgent')}")
 
     print("\n--- Phase 11: Blockchain Audit ---")
     print(f"Blockchain height: {len(fleet.economy.blockchain)}")
-
-
-
-
 
     last_block = fleet.economy.blockchain[-1]
     print(f"Last Block Hash: {last_block['hash']}")
@@ -75,17 +61,10 @@ def test_market_features() -> None:
 
     purchased = fleet.store.purchase_template("BobAgent", "SqlExpert", fleet.economy)
     if purchased:
-
-
-
-
         print("Bob successfully purchased SqlExpert template.")
         print(f"Bob Balance after purchase: {fleet.economy.get_balance('BobAgent')}")
 
     print("\nMarket features validation COMPLETED.")
-
-
-
 
 
 if __name__ == "__main__":

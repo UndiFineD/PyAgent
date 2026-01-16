@@ -21,20 +21,16 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
-
-
-
 class AccessibilitySeverity(Enum):
     """Severity levels for accessibility issues."""
+
     CRITICAL = 4  # Blocks access for users with disabilities
-    SERIOUS = 3   # Significant barrier to access
+    SERIOUS = 3  # Significant barrier to access
     MODERATE = 2  # Some difficulty for users
-    MINOR = 1     # Cosmetic or minor inconvenience
+    MINOR = 1  # Cosmetic or minor inconvenience

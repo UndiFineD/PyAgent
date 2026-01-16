@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\backend\SystemAnalytics.py
-# hypothesis_version: 6.150.1
-
-[0.0, 3600, 'avg_latency_ms', 'by_backend', 'requests', 'success_rate', 'tokens', 'total_cost', 'total_requests', 'total_tokens']

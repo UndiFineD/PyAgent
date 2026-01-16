@@ -25,7 +25,7 @@ This file is optimized for Rust migration (Phase 114).
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import re
 import logging
 from pathlib import Path
@@ -33,13 +33,12 @@ from typing import Any
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
 __version__ = VERSION
-
-
 
 
 class KnowledgeCore:
@@ -64,7 +63,9 @@ class KnowledgeCore:
                 return rust_core.extract_python_symbols(content)  # type: ignore[attr-defined]
             except Exception:
                 pass
-        return self.extract_symbols(content, r"(?:class|def)\s+([a-zA-Z_][a-zA-Z0-9_]*)")
+        return self.extract_symbols(
+            content, r"(?:class|def)\s+([a-zA-Z_][a-zA-Z0-9_]*)"
+        )
 
     def extract_markdown_backlinks(self, content: str) -> list[str]:
         """Extracts [[WikiStyle]] backlinks from markdown content."""
@@ -75,33 +76,60 @@ class KnowledgeCore:
                 pass
         return self.extract_symbols(content, r"\[\[(.*?)\]\]")
 
-    def build_symbol_map(self, root: Path, patterns: dict[str, str]) -> dict[str, list[dict[str, Any]]]:
-        """
-        Builds a map of symbols and backlinks.
-        Note: This currently violates the 'No I/O' rule due to the existing KnowledgeAgent caller.
-        Will be moved to an 'I/O' layer in Phase 126.
-        """
-        symbol_map: dict[str, list[dict[str, Any]]] = {}
+    def search_index(self, query: str, index: dict, root: Path) -> list[str]:
+        """Extracts code snippets based on index hits."""
+        snippets = []
+        hits = index.get(query, [])
+        for hit in hits:
+            rel_path = hit["path"] if isinstance(hit, dict) else hit
+            p = root / rel_path
+            try:
+                content = p.read_text(encoding="utf-8")
+                lines = content.splitlines()
+                for i, line in enumerate(lines):
+                    if f"def {query}" in line or f"class {query}" in line or query in line:
+                        start, end = max(0, i - 5), min(len(lines), i + 15)
+                        snippet = "\n".join(lines[start:end])
+                        snippets.append(
+                            f"> [!CODE] File: {rel_path} (from index)\n> ```python\n"
+                            + "\n".join([f"> {sl}" for sl in snippet.splitlines()])
+                            + "\n> ```\n"
+                        )
+                        break
+            except Exception:
+                pass
+            if len(snippets) > 5: break
+        return snippets
 
-        for ext, pattern in patterns.items():
-            for file_path in root.rglob(f"*{ext}"):
-                try:
-                    rel_path = str(file_path.relative_to(root))
-                    content = file_path.read_text(encoding='utf-8', errors='ignore')
-                    symbols = re.findall(pattern, content)
-                    for sym in symbols:
-                        if sym not in symbol_map:
-                            symbol_map[sym] = []
-                        symbol_map[sym].append({
-                            "path": rel_path,
-                            "snippet": content[:200].replace("\n", " ").strip()
-                        })
-                except Exception as e:
-                    logging.warning(f"KnowledgeCore: Error indexing {file_path}: {e}")
+    def perform_fallback_scan(self, query: str, root: Path, indexed_paths: list) -> list[str]:
+        """Performs a deep grep fallback search across the workspace."""
+        snippets = []
+        for p in root.rglob("*.py"):
+            rel_path = str(p.relative_to(root))
+            if any(part in rel_path for part in ["__pycache__", "venv", ".git"]) or rel_path in indexed_paths:
+                continue
+            try:
+                content = p.read_text(encoding="utf-8")
+                if query.lower() in content.lower():
+                    lines = content.splitlines()
+                    for i, line in enumerate(lines):
+                        if query.lower() in line.lower():
+                            start, end = max(0, i - 5), min(len(lines), i + 10)
+                            snippet = "\n".join(lines[start:end])
+                            snippets.append(
+                                f"> [!CODE] File: {rel_path}\n> ```python\n"
+                                + "\n".join([f"> {sl}" for sl in snippet.splitlines()])
+                                + "\n> ```\n"
+                            )
+                            break
+            except Exception:
+                pass
+            if len(snippets) > 5: break
+        return snippets
 
-        return symbol_map
-
-    def process_file_content(self, rel_path: str, content: str, extension: str) -> list[tuple[str, str, str, str]]:
+    def process_file_content(
+        self, rel_path: str, content: str, extension: str
+    ) -> list[tuple[str, str, str, str]]:
         """
         Parses content and returns a list of (symbol, path, category, snippet) tuples.
         This is a pure function ready for Rust conversion.
@@ -115,7 +143,9 @@ class KnowledgeCore:
         elif extension == ".md":
             links = self.extract_markdown_backlinks(content)
             for link in links:
-                results.append((f"link:{link}", rel_path, "markdown_link", content[:500]))
+                results.append(
+                    (f"link:{link}", rel_path, "markdown_link", content[:500])
+                )
 
         return results
 

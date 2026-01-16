@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ChangelogEntry import ChangelogEntry
 from .ChangelogTemplate import ChangelogTemplate
 from .ValidationRule import ValidationRule
@@ -34,8 +34,6 @@ import logging
 import re
 
 __version__ = VERSION
-
-
 
 
 class ChangesAgent(BaseAgent):
@@ -56,7 +54,7 @@ class ChangesAgent(BaseAgent):
             name="Python",
             project_type="python",
             sections=["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"],
-            include_contributors=True
+            include_contributors=True,
         ),
         "javascript": ChangelogTemplate(
             name="JavaScript",
@@ -76,19 +74,19 @@ class ChangesAgent(BaseAgent):
             name="version_format",
             pattern=r"^\d+\.\d+\.\d+$",
             message="Version should follow semantic versioning (X.Y.Z)",
-            severity="warning"
+            severity="warning",
         ),
         ValidationRule(
             name="date_format",
             pattern=r"^\d{4}-\d{2}-\d{2}$",
             message="Date should be in ISO format (YYYY-MM-DD)",
-            severity="warning"
+            severity="warning",
         ),
         ValidationRule(
             name="entry_not_empty",
             pattern=r".{3,}",
             message="Entry description should not be empty or too short",
-            severity="error"
+            severity="error",
         ),
     ]
 
@@ -98,7 +96,9 @@ class ChangesAgent(BaseAgent):
         self._check_associated_file()
         self._template: ChangelogTemplate | None = None
         self._versioning_strategy: VersioningStrategy = VersioningStrategy.SEMVER
-        self._validation_rules: list[ValidationRule] = self.DEFAULT_VALIDATION_RULES.copy()
+        self._validation_rules: list[ValidationRule] = (
+            self.DEFAULT_VALIDATION_RULES.copy()
+        )
         self._preview_mode: bool = False
         self._preview_content: str = ""
         self._entries: list[ChangelogEntry] = []
@@ -106,24 +106,26 @@ class ChangesAgent(BaseAgent):
 
     def _validate_file_extension(self) -> None:
         """Validate that the file has the correct extension."""
-        if not self.file_path.name.endswith('.changes.md'):
+        if not self.file_path.name.endswith(".changes.md"):
             logging.warning(f"File {self.file_path.name} does not end with .changes.md")
 
     def _check_associated_file(self) -> None:
         """Check if the associated code file exists."""
         name = self.file_path.name
-        if name.endswith('.changes.md'):
+        if name.endswith(".changes.md"):
             base_name = name[:-11]  # len('.changes.md')
             # Try to find the file with common extensions or exact match
             candidate = self.file_path.parent / base_name
             if candidate.exists():
                 return
             # Try adding extensions
-            for ext in ['.py', '.sh', '.js', '.ts', '.md']:
+            for ext in [".py", ".sh", ".js", ".ts", ".md"]:
                 candidate = self.file_path.parent / (base_name + ext)
                 if candidate.exists() and candidate != self.file_path:
                     return
-            logging.warning(f"Could not find associated code file for {self.file_path.name}")
+            logging.warning(
+                f"Could not find associated code file for {self.file_path.name}"
+            )
 
     # ========== Template Management ==========
 
@@ -143,7 +145,7 @@ class ChangesAgent(BaseAgent):
         sections: list[str],
         header_format: str = "## [{version}] - {date}",
         include_links: bool = True,
-        include_contributors: bool = False
+        include_contributors: bool = False,
     ) -> ChangelogTemplate:
         """Create a custom changelog template."""
         template = ChangelogTemplate(
@@ -152,7 +154,7 @@ class ChangesAgent(BaseAgent):
             sections=sections,
             header_format=header_format,
             include_links=include_links,
-            include_contributors=include_contributors
+            include_contributors=include_contributors,
         )
         self._template = template
         return template
@@ -223,18 +225,20 @@ class ChangesAgent(BaseAgent):
         self._preview_content = content
 
         # Calculate diff statistics
-        original_lines = self.previous_content.split('\n')
-        new_lines = content.split('\n')
+        original_lines = self.previous_content.split("\n")
+        new_lines = content.split("\n")
 
         added = len([line for line in new_lines if line and line not in original_lines])
-        removed = len([line for line in original_lines if line and line not in new_lines])
+        removed = len(
+            [line for line in original_lines if line and line not in new_lines]
+        )
 
         return {
             "original_lines": len(original_lines),
             "new_lines": len(new_lines),
             "lines_added": added,
             "lines_removed": removed,
-            "preview": content[:500] + "..." if len(content) > 500 else content
+            "preview": content[:500] + "..." if len(content) > 500 else content,
         }
 
     def update_file(self) -> bool:
@@ -249,40 +253,41 @@ class ChangesAgent(BaseAgent):
     def detect_merge_conflicts(self, content: str) -> list[dict[str, Any]]:
         """Detect merge conflict markers in the content."""
         conflicts: list[dict[str, Any]] = []
-        lines = content.split('\n')
+        lines = content.split("\n")
         in_conflict = False
         conflict_start = 0
         ours: list[str] = []
         theirs: list[str] = []
         for i, line in enumerate(lines):
-            if line.startswith('<<<<<<<'):
+            if line.startswith("<<<<<<<"):
                 in_conflict = True
                 conflict_start = i
                 ours = []
-            elif line.startswith('=======') and in_conflict:
+            elif line.startswith("=======") and in_conflict:
                 pass  # Separator
-            elif line.startswith('>>>>>>>') and in_conflict:
-                conflicts.append({
-                    "start_line": conflict_start,
-                    "end_line": i,
-                    "ours": '\n'.join(ours),
-                    "theirs": '\n'.join(theirs)
-                })
+            elif line.startswith(">>>>>>>") and in_conflict:
+                conflicts.append(
+                    {
+                        "start_line": conflict_start,
+                        "end_line": i,
+                        "ours": "\n".join(ours),
+                        "theirs": "\n".join(theirs),
+                    }
+                )
                 in_conflict = False
                 ours = []
                 theirs = []
             elif in_conflict:
-                if '=======' not in content[content.find('<<<<<<<'):content.find(line)]:
+                if (
+                    "======="
+                    not in content[content.find("<<<<<<<") : content.find(line)]
+                ):
                     ours.append(line)
                 else:
                     theirs.append(line)
         return conflicts
 
-    def resolve_merge_conflict(
-        self,
-        content: str,
-        resolution: str = "ours"
-    ) -> str:
+    def resolve_merge_conflict(self, content: str, resolution: str = "ours") -> str:
         """Resolve merge conflicts in the content.
 
         Args:
@@ -290,21 +295,21 @@ class ChangesAgent(BaseAgent):
             resolution: 'ours', 'theirs', or 'both'
         """
         result: list[str] = []
-        lines = content.split('\n')
+        lines = content.split("\n")
         in_conflict = False
         ours_section = True
         ours: list[str] = []
         theirs: list[str] = []
 
         for line in lines:
-            if line.startswith('<<<<<<<'):
+            if line.startswith("<<<<<<<"):
                 in_conflict = True
                 ours_section = True
                 ours = []
                 theirs = []
-            elif line.startswith('=======') and in_conflict:
+            elif line.startswith("=======") and in_conflict:
                 ours_section = False
-            elif line.startswith('>>>>>>>') and in_conflict:
+            elif line.startswith(">>>>>>>") and in_conflict:
                 # Apply resolution
                 if resolution == "ours":
                     result.extend(ours)
@@ -322,7 +327,7 @@ class ChangesAgent(BaseAgent):
                     theirs.append(line)
             else:
                 result.append(line)
-        return '\n'.join(result)
+        return "\n".join(result)
 
     # ========== Entry Validation ==========
     def add_validation_rule(self, rule: ValidationRule) -> None:
@@ -335,38 +340,41 @@ class ChangesAgent(BaseAgent):
         # Validate version format
         if entry.version:
             version_rule = next(
-                (r for r in self._validation_rules if r.name == "version_format"),
-                None
+                (r for r in self._validation_rules if r.name == "version_format"), None
             )
             if version_rule and not re.match(version_rule.pattern, entry.version):
-                issues.append({
-                    "rule": version_rule.name,
-                    "message": version_rule.message,
-                    "severity": version_rule.severity
-                })
+                issues.append(
+                    {
+                        "rule": version_rule.name,
+                        "message": version_rule.message,
+                        "severity": version_rule.severity,
+                    }
+                )
         # Validate date format
         if entry.date:
             date_rule = next(
-                (r for r in self._validation_rules if r.name == "date_format"),
-                None
+                (r for r in self._validation_rules if r.name == "date_format"), None
             )
             if date_rule and not re.match(date_rule.pattern, entry.date):
-                issues.append({
-                    "rule": date_rule.name,
-                    "message": date_rule.message,
-                    "severity": date_rule.severity
-                })
+                issues.append(
+                    {
+                        "rule": date_rule.name,
+                        "message": date_rule.message,
+                        "severity": date_rule.severity,
+                    }
+                )
         # Validate entry description
         entry_rule = next(
-            (r for r in self._validation_rules if r.name == "entry_not_empty"),
-            None
+            (r for r in self._validation_rules if r.name == "entry_not_empty"), None
         )
         if entry_rule and not re.match(entry_rule.pattern, entry.description):
-            issues.append({
-                "rule": entry_rule.name,
-                "message": entry_rule.message,
-                "severity": entry_rule.severity
-            })
+            issues.append(
+                {
+                    "rule": entry_rule.name,
+                    "message": entry_rule.message,
+                    "severity": entry_rule.severity,
+                }
+            )
         return issues
 
     def validate_changelog(self, content: str) -> list[dict[str, Any]]:
@@ -375,22 +383,26 @@ class ChangesAgent(BaseAgent):
         # Check for merge conflicts
         conflicts = self.detect_merge_conflicts(content)
         if conflicts:
-            all_issues.append({
-                "type": "merge_conflict",
-                "count": len(conflicts),
-                "severity": "error",
-                "message": f"Found {len(conflicts)} unresolved merge conflict(s)"
-            })
+            all_issues.append(
+                {
+                    "type": "merge_conflict",
+                    "count": len(conflicts),
+                    "severity": "error",
+                    "message": f"Found {len(conflicts)} unresolved merge conflict(s)",
+                }
+            )
         # Check for required sections
         if self._template:
             for section in self._template.sections:
                 if f"### {section}" not in content and f"## {section}" not in content:
-                    all_issues.append({
-                        "type": "missing_section",
-                        "section": section,
-                        "severity": "warning",
-                        "message": f"Missing recommended section: {section}"
-                    })
+                    all_issues.append(
+                        {
+                            "type": "missing_section",
+                            "section": section,
+                            "severity": "warning",
+                            "message": f"Missing recommended section: {section}",
+                        }
+                    )
         return all_issues
 
     # ========== Statistics ==========
@@ -402,11 +414,22 @@ class ChangesAgent(BaseAgent):
         versions = re.findall(version_pattern, content)
         # Count entries per category
         categories: dict[str, int] = {}
-        for section in ["Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"]:
+        for section in [
+            "Added",
+            "Changed",
+            "Deprecated",
+            "Removed",
+            "Fixed",
+            "Security",
+        ]:
             pattern = rf"###\s*{section}\s*\n(.*?)(?=###|\Z)"
             matches = re.findall(pattern, content, re.DOTALL)
             if matches:
-                entries = [line for line in matches[0].split('\n') if line.strip().startswith('-')]
+                entries = [
+                    line
+                    for line in matches[0].split("\n")
+                    if line.strip().startswith("-")
+                ]
                 categories[section] = len(entries)
         # Count contributors (if mentioned)
         contributor_pattern = r"@(\w+)"
@@ -418,8 +441,8 @@ class ChangesAgent(BaseAgent):
             "total_entries": sum(categories.values()) if categories else 0,
             "contributor_count": len(contributors),
             "contributors": list(contributors),
-            "line_count": len(content.split('\n')),
-            "character_count": len(content)
+            "line_count": len(content.split("\n")),
+            "character_count": len(content),
         }
         return self._statistics
 
@@ -431,7 +454,7 @@ class ChangesAgent(BaseAgent):
         priority: int = 0,
         severity: str = "normal",
         tags: list[str] | None = None,
-        linked_issues: list[str] | None = None
+        linked_issues: list[str] | None = None,
     ) -> ChangelogEntry:
         """Add a new changelog entry."""
         entry = ChangelogEntry(
@@ -442,7 +465,7 @@ class ChangesAgent(BaseAgent):
             priority=priority,
             severity=severity,
             tags=tags or [],
-            linked_issues=linked_issues or []
+            linked_issues=linked_issues or [],
         )
         # Validate before adding
         issues = self.validate_entry(entry)
@@ -511,7 +534,7 @@ class ChangesAgent(BaseAgent):
                             line += f" ({', '.join(entry.linked_issues)})"
                         result.append(line)
                     result.append("")
-        return '\n'.join(result)
+        return "\n".join(result)
 
     def _get_default_content(self) -> str:
         """Return default content for new changelog files."""
@@ -519,9 +542,11 @@ class ChangesAgent(BaseAgent):
 
     def _get_fallback_response(self) -> str:
         """Return fallback response when Copilot is unavailable."""
-        return ("# AI Improvement Unavailable\n"
-                "# GitHub CLI not found. Install from https://cli.github.com/\n\n"
-                "# Original changelog preserved below:\n\n")
+        return (
+            "# AI Improvement Unavailable\n"
+            "# GitHub CLI not found. Install from https://cli.github.com/\n\n"
+            "# Original changelog preserved below:\n\n"
+        )
 
     def improve_content(self, prompt: str) -> str:
         """Use AI to improve the changelogs with specific change tracking suggestions."""
@@ -538,7 +563,9 @@ class ChangesAgent(BaseAgent):
             "### Fixed\n"
             "### Security\n"
         )
-        description = f"Improve the changelog for {self.file_path.stem.replace('.changes', '')}"
+        description = (
+            f"Improve the changelog for {self.file_path.stem.replace('.changes', '')}"
+        )
         # For changelog improvement, provide specific change tracking suggestions
         if any(keyword in prompt.lower() for keyword in ["improve", "change", "log"]):
             fallback_suggestions = f"""# AI Changelog Improvement Suggestions
@@ -567,7 +594,9 @@ class ChangesAgent(BaseAgent):
         except Exception:
             full_prompt = enhanced_prompt
 
-        improvement = _base_agent.BaseAgent.run_subagent(self, description, full_prompt, self.previous_content)
+        improvement = _base_agent.BaseAgent.run_subagent(
+            self, description, full_prompt, self.previous_content
+        )
 
         for processor in self._post_processors:
             improvement = processor(improvement)

@@ -24,15 +24,13 @@ Ref: https://github.com/qhjqhj00/MemoRAG
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from pathlib import Path
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class MemoRAGAgent(BaseAgent):
@@ -58,7 +56,9 @@ class MemoRAGAgent(BaseAgent):
         logging.info(f"MemoRAG: Shard '{shard_name}' updated.")
 
     @as_tool
-    def recall_clues_from_shard(self, query: str, shard_name: str = "global") -> list[str]:
+    def recall_clues_from_shard(
+        self, query: str, shard_name: str = "global"
+    ) -> list[str]:
         """Generates clues by scanning a specific memory shard."""
         shard_file = self.shard_dir / f"{shard_name}.txt"
         if not shard_file.exists():
@@ -67,7 +67,7 @@ class MemoRAGAgent(BaseAgent):
         # Simulated intelligent retrieval
         return [
             f"Clue for '{query}' in {shard_name}: Recent updates to core logic.",
-            "Historical context suggests a dependency on previous Phase 40 logic."
+            "Historical context suggests a dependency on previous Phase 40 logic.",
         ]
 
     @as_tool
@@ -78,4 +78,6 @@ class MemoRAGAgent(BaseAgent):
     def improve_content(self, prompt: str) -> str:
         self.list_shards()
         clues = self.recall_clues_from_shard(prompt, self.active_shard)
-        return f"### MemoRAG Active Shard: {self.active_shard}\n" + "\n".join([f"- {c}" for c in clues])
+        return f"### MemoRAG Active Shard: {self.active_shard}\n" + "\n".join(
+            [f"- {c}" for c in clues]
+        )

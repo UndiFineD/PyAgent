@@ -21,17 +21,16 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
 class ImprovementDiffType(Enum):
     """Types of improvement differences between branches."""
-    ADDED = "added"      # Improvement exists only in target branch
+
+    ADDED = "added"  # Improvement exists only in target branch
     REMOVED = "removed"  # Improvement exists only in source branch
     MODIFIED = "modified"  # Improvement exists in both but changed
     UNCHANGED = "unchanged"  # Improvement is identical in both

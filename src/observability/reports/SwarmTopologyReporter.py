@@ -19,15 +19,13 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import logging
 from pathlib import Path
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class SwarmTopologyReporter:
@@ -41,30 +39,31 @@ class SwarmTopologyReporter:
         self.nodes: list[Any] = []
         self.links: list[Any] = []
 
-    def record_node(self, node_id: str, group: str = "general", metadata: dict[str, Any] | None = None) -> None:
-        self.nodes.append({
-            "id": node_id,
-            "group": group,
-            "meta": metadata or {}
-        })
+    def record_node(
+        self,
+        node_id: str,
+        group: str = "general",
+        metadata: dict[str, Any] | None = None,
+    ) -> None:
+        self.nodes.append({"id": node_id, "group": group, "meta": metadata or {}})
 
-    def record_link(self, source: str, target: str, strength: float = 1.0, type: str = "coord") -> None:
-        self.links.append({
-            "source": source,
-            "target": target,
-            "value": strength,
-            "type": type
-        })
+    def record_link(
+        self, source: str, target: str, strength: float = 1.0, type: str = "coord"
+    ) -> None:
+        self.links.append(
+            {"source": source, "target": target, "value": strength, "type": type}
+        )
 
     def export(self) -> None:
         data = {
             "nodes": self.nodes,
             "links": self.links,
-            "timestamp": "2026-01-11T18:00:00"
+            "timestamp": "2026-01-11T18:00:00",
         }
         self.output_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.output_path, "w") as f:
             json.dump(data, f, indent=2)
         logging.info(f"Topology exported to {self.output_path}")
+
 
 # Integration hook in FleetManager would call this.

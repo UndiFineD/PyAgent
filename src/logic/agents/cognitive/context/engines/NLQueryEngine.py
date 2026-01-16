@@ -21,12 +21,10 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.models.NLQueryResult import NLQueryResult
 
 __version__ = VERSION
-
-
 
 
 class NLQueryEngine:
@@ -51,7 +49,9 @@ class NLQueryEngine:
         """Extract keywords from query."""
         return query.lower().split()
 
-    def query(self, question: str, contexts: dict[str, str] | None = None) -> NLQueryResult:
+    def query(
+        self, question: str, contexts: dict[str, str] | None = None
+    ) -> NLQueryResult:
         """Query contexts with natural language.
 
         Args:
@@ -74,5 +74,5 @@ class NLQueryEngine:
             query=question,
             answer=f"Found {len(relevant)} relevant context files",
             relevant_contexts=relevant,
-            confidence=0.7 if relevant else 0.2
+            confidence=0.7 if relevant else 0.2,
         )

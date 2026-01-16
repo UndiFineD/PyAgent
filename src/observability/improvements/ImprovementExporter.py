@@ -21,14 +21,12 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .Improvement import Improvement
 from typing import Any
 import json
 
 __version__ = VERSION
-
-
 
 
 class ImprovementExporter:
@@ -42,11 +40,13 @@ class ImprovementExporter:
         if fmt == "json":
             rows: list[dict[str, Any]] = []
             for imp in improvements:
-                rows.append({
-                    "id": imp.id,
-                    "title": imp.title,
-                    "description": imp.description,
-                })
+                rows.append(
+                    {
+                        "id": imp.id,
+                        "title": imp.title,
+                        "description": imp.description,
+                    }
+                )
             return json.dumps(rows)
         if fmt == "csv":
             lines = ["id,title,description"]

@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\scipy\sparse\_sputils.py
-# hypothesis_version: 6.150.1
-
-[', ', 'C', 'SparseArray', 'broadcast_shapes', 'bsr', 'coo', 'copy', 'csc', 'csr', 'dia', 'get_sum_dtype', 'getdata', 'getdtype', 'isdense', 'isintlike', 'ismatrix', 'isscalarlike', 'issequence', 'isshape', 'native', 'newshape', 'order', 'sp.spmatrix', 'sparse', 'u', 'upcast']

@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\huggingface_hub\serialization\_torch.py
-# hypothesis_version: 6.150.1
-
-['(-\\d{5}-of-\\d{5})?', '(\\.index\\.json)?', '*.bin', '*.safetensors', ',', '.index.json', '.safetensors', '1.13.0', '2.1.0', 'IncompatibleKeys', 'cpu', 'float8_e4m3fn', 'float8_e5m2', 'format', 'meta', 'metadata', 'missing_keys', 'mlx', 'mmap', 'pt', 'r', 'torch.Tensor', 'torch.device', 'torch.dtype', 'torch.nn.Module', 'torch_xla', 'type', 'unexpected_keys', 'utf-8', 'w', 'weight_map', 'weights_only', 'xla']

@@ -21,12 +21,10 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -40,6 +38,7 @@ class ErrorBudget:
         period_start: Start of the budget period.
         period_end: End of the budget period.
     """
+
     budget_name: str
     total_budget: float
     consumed: float = 0.0

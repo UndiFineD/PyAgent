@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\svm\_bounds.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.5, 1.0, 2.0, 'X', 'array-like', 'boolean', 'csc', 'fit_intercept', 'intercept_scaling', 'log', 'loss', 'neither', 'sparse matrix', 'squared_hinge', 'y']

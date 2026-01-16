@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\decomposition\_lda.py
-# hypothesis_version: 6.150.1
-
-[-1.0, 0.001, 0.01, 0.1, 0.7, 1.0, 10.0, 100.0, 1000000.0, 100, 128, 'batch', 'batch_size', 'both', 'components_', 'csr', 'doc_topic_prior', 'double', 'evaluate_every', 'float', 'float32', 'float64', 'learning_decay', 'learning_method', 'learning_offset', 'left', 'max_doc_update_iter', 'max_iter', 'mean_change_tol', 'n_components', 'n_jobs', 'neither', 'online', 'perp_tol', 'random_state', 'topic_word_prior', 'total_samples', 'verbose']

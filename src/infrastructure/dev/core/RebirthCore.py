@@ -1,4 +1,3 @@
-
 """
 Core logic for Swarm Rebirth (Phase 180).
 Handles mass directory scaffolding and cleanup.
@@ -10,13 +9,9 @@ import yaml
 from typing import Any
 
 
-
-
-
-
-
 class RebirthCore:
     """Pure logic core for swarm rebirth processes, handling project scaffolding."""
+
     @staticmethod
     def scaffold_structure(root_dir: str, structure: dict[str, Any]) -> int:
         """
@@ -35,7 +30,7 @@ class RebirthCore:
                 count += 1
                 for item in sub:
                     # Create empty files for list items
-                    open(os.path.join(path, item), 'a').close()
+                    open(os.path.join(path, item), "a").close()
         return count
 
     @staticmethod

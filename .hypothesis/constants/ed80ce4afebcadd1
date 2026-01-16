@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\core\AndroidCore.py
-# hypothesis_version: 6.150.1
-
-['-p', '-s', 'List of devices', 'Unknown ADB error', 'adb', 'android', 'command', 'device', 'devices', 'error', 'output', 'pull', 'rm', 'screencap', 'serial', 'shell', 'success']

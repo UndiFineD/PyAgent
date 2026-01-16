@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\core\base\ShardedKnowledgeCore.py
-# hypothesis_version: 6.150.1
-
-[0.8, 1024, 'confidence', 'entity', 'index', 'knowledge.json', 'rb', 'shard_index.msgpack', 'timestamp', 'utf-8', 'value', 'version', 'wb', 'zstd']

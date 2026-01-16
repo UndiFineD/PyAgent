@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\stats\exporters\CloudExporter.py
-# hypothesis_version: 6.150.1
-
-[',', 'a', 'data/metrics', 'destination', 'last_export', 'metric', 'name', 'points', 'queue_size', 'series', 'tags', 'timestamp', 'total_exported', 'type', 'value']

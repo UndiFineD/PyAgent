@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\huggingface_hub\_space_api.py
-# hypothesis_version: 6.150.1
-
-['BUILDING', 'BUILD_ERROR', 'CONFIG_ERROR', 'DELETING', 'NO_APP_FILE', 'PAUSED', 'RUNNING', 'RUNNING_BUILDING', 'RUNTIME_ERROR', 'STOPPED', 'a100-large', 'a10g-large', 'a10g-largex2', 'a10g-largex4', 'a10g-small', 'cpu-basic', 'cpu-upgrade', 'cpu-xl', 'current', 'description', 'gcTimeout', 'h100', 'h100x8', 'hardware', 'l40sx1', 'l40sx4', 'l40sx8', 'l4x1', 'l4x4', 'large', 'medium', 'requested', 'small', 'stage', 'storage', 't4-medium', 't4-small', 'updatedAt', 'value', 'zero-a10g']

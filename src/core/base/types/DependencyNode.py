@@ -21,16 +21,11 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types.DependencyType import DependencyType
 from dataclasses import dataclass, field
 
 __version__ = VERSION
-
-
-
-
-
 
 
 @dataclass
@@ -44,6 +39,7 @@ class DependencyNode:
         depended_by: List of dependents.
         file_path: Path to the file.
     """
+
     name: str
     type: DependencyType
     depends_on: list[str] = field(default_factory=lambda: [])

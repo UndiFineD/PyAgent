@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\backend\RequestRecorder.py
-# hypothesis_version: 6.150.1
-
-[1000, 'backend', 'latency_ms', 'metadata', 'prompt', 'request_id', 'response', 'success', 'timestamp']

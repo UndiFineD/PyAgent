@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ErrorCategory import ErrorCategory
 from .ErrorSeverity import ErrorSeverity
 from dataclasses import dataclass
@@ -29,11 +29,10 @@ from dataclasses import dataclass
 __version__ = VERSION
 
 
-
-
 @dataclass
 class ErrorPattern:
     """A recognized error pattern."""
+
     name: str
     regex: str
     severity: ErrorSeverity

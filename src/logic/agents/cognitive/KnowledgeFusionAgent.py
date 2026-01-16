@@ -23,17 +23,15 @@ Consolidates individual agent memory shards into a unified global knowledge grap
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 from pathlib import Path
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class KnowledgeFusionAgent(BaseAgent):
@@ -94,25 +92,16 @@ class KnowledgeFusionAgent(BaseAgent):
 
                 # Simple fusion logic: Deduplicate by content/id
                 # In a real scenario, this would involve semantic embedding comparison
-                items = shard_data if isinstance(shard_data, list) else shard_data.get("nodes", [])
+                items = (
+                    shard_data
+                    if isinstance(shard_data, list)
+                    else shard_data.get("nodes", [])
+                )
                 for item in items:
-
-
-
-
-
-
-
-
-
-
                     content = item.get("content") or item.get("text") or str(item)
                     if not any(n.get("content") == content for n in graph["nodes"]):
                         graph["nodes"].append(item)
                         added_nodes += 1
-
-
-
 
             except Exception as e:
                 logging.error(f"KnowledgeFusion: Error processing shard {path}: {e}")
@@ -131,10 +120,12 @@ class KnowledgeFusionAgent(BaseAgent):
         return "Global knowledge fusion is optimized. Swarm shards are synchronized."
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(KnowledgeFusionAgent, "Knowledge Fusion Agent", "Collective intelligence consolidator")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        KnowledgeFusionAgent,
+        "Knowledge Fusion Agent",
+        "Collective intelligence consolidator",
+    )
     main()

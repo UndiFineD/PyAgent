@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\jit\__init__.py
-# hypothesis_version: 6.150.1
-
-['Attribute', 'CompilationUnit', 'Error', 'Future', 'ScriptFunction', 'ScriptModule', 'annotate', 'enable_onednn_fusion', 'export', 'export_opnames', 'fork', 'freeze', 'ignore', 'interface', 'isinstance', 'load', 'save', 'script', 'script_if_tracing', 'set_fusion_strategy', 'strict_fusion', 'torch.jit', 'trace', 'trace_module', 'unused', 'wait']

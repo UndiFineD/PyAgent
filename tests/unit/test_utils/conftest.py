@@ -13,4 +13,5 @@ def utils_module() -> Any:
     """Load and return the agent_test_utils module."""
     with agent_dir_on_path():
         import src.infrastructure.dev.test_utils as test_utils
+
         return test_utils

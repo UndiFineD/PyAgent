@@ -23,7 +23,7 @@ Debug script for testing Phases 20 (Visual/Multimodal) and 21 (Distributed Obser
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from pathlib import Path
 from src.infrastructure.fleet.FleetManager import FleetManager
@@ -34,30 +34,14 @@ from src.core.base.MultiModalContextAgent import MultiModalContextAgent
 __version__ = VERSION
 
 
-
-
-
-
-
 def test_visualization_and_memory() -> None:
     print("\n--- Testing Phase 20: Visual & Multimodal ---")
     root = Path(str(Path(__file__).resolve().parents[5]) + "")
     viz = VisualizerAgent(str(root / "src/logic/agents/cognitive/VisualizerAgent.py"))
 
-
-
-
-
-
-
-
-
-
     mem = GraphMemoryAgent(str(root / "src/logic/agents/cognitive/GraphMemoryAgent.py"))
 
     # 1. Test Integration
-
-
 
     viz.set_memory_agent(mem)
     mem.add_relationship("User", "request", "CodeFix")
@@ -69,18 +53,9 @@ def test_visualization_and_memory() -> None:
 
     # 2. Test MultiModal (Simulated)
 
-
-
-    mm = MultiModalContextAgent(str(root / "src/logic/agents/system/MultiModalContextAgent.py"))
-
-
-
-
-
-
-
-
-
+    mm = MultiModalContextAgent(
+        str(root / "src/logic/agents/system/MultiModalContextAgent.py")
+    )
 
     # Create a dummy file for testing
     dummy_img = root / "dummy_ui.png"
@@ -89,19 +64,9 @@ def test_visualization_and_memory() -> None:
     analysis = mm.analyze_screenshot(str(dummy_img))
     print(analysis)
 
-
-
-
-
-
-
     assert "Visual Analysis" in analysis
 
-
-
     dummy_img.unlink()
-
-
 
 
 def test_observability() -> None:
@@ -117,8 +82,6 @@ def test_observability() -> None:
     print(f"Metrics (Promptheus format):\n{metrics[:200]}...")
     assert "pyagent_agent_call_duration_ms" in metrics
 
-
-
     # Check OTel
     spans = fleet.telemetry.otel.export_spans()
     print(f"Exported {len(spans)} OTel spans.")
@@ -130,26 +93,19 @@ def test_gui_backend() -> None:
     fleet = FleetManager(str(Path(__file__).resolve().parents[5]) + "")
     ui = fleet.web_ui
 
-
-
-
     # File Explorer
     files = ui.list_workspace_files(".")
     print(f"File count: {len(files['items'])}")
-    assert len(files['items']) > 0
+    assert len(files["items"]) > 0
 
     # Workflow Designer
     designer = ui.get_workflow_designer_state()
     print(f"Available Agents: {len(designer['agents'])}")
-    assert len(designer['agents']) >= 0
+    assert len(designer["agents"]) >= 0
 
     # Multi-Fleet
     fleet_mgmt = ui.get_multi_fleet_manager()
     print(f"Local Fleet Status: {fleet_mgmt['local_fleet']['status']}")
-
-
-
-
 
 
 if __name__ == "__main__":
@@ -162,4 +118,5 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"❌ TEST FAILED: {e}")
         import traceback
+
         traceback.print_exc()

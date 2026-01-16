@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\system\ModelForgeAgent.py
-# hypothesis_version: 6.150.1
-
-['LORA', 'ModelForge', 'adapter_config.json', 'adapters', 'base', 'base_model', 'datasets', 'job_id', 'model_forge_finetune', 'models/forge', 'peft_type', 'recorder', 'synthetic_examples', 'task', 'utf-8', 'v1', 'version', 'w']

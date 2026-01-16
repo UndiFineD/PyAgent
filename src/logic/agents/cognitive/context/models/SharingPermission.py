@@ -21,16 +21,15 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
 class SharingPermission(Enum):
     """Permission levels for context sharing."""
+
     READ_ONLY = "read_only"
     READ_WRITE = "read_write"
     ADMIN = "admin"

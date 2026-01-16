@@ -15,21 +15,15 @@
 from __future__ import annotations
 import logging
 from abc import ABC
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class BaseManager(ABC):
     """Base class for all infrastructure manager services."""
 
-    def __init__(self, workspace_root:
-        str = None) -> None:
+    def __init__(self, workspace_root: str = None) -> None:
         self.workspace_root = workspace_root
         logging.debug(f"{self.__class__.__name__} initialized.")
 

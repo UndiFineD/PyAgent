@@ -25,9 +25,7 @@ Helps create Next.js or React interfaces for the fleet.
 from __future__ import annotations
 import logging
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
-
-
+from src.core.base.BaseUtilities import as_tool
 
 
 class DashboardAgent(BaseAgent):
@@ -81,19 +79,16 @@ export default {name};
 
     @as_tool
     def update_dashboard_layout(self, active_agents: list[str]) -> str:
-
-
-
         """Updates the dashboard layout with the current fleet status."""
         logging.info("Updating Dashboard Layout...")
         # In a real scenario, this might write to a JSON config for a Next.js frontend
         return f"Dashboard layout updated for {len(active_agents)} agents."
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(DashboardAgent, "Dashboard Agent", "Dashboard source path")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        DashboardAgent, "Dashboard Agent", "Dashboard source path"
+    )
     main()

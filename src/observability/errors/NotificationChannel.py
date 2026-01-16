@@ -21,16 +21,15 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
 class NotificationChannel(Enum):
     """Notification channel types."""
+
     SLACK = "slack"
     TEAMS = "teams"
     EMAIL = "email"

@@ -24,7 +24,7 @@ Provides REST API and WebSocket interfaces for real-time telemetry and managemen
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from fastapi import FastAPI, HTTPException, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Any
@@ -32,7 +32,7 @@ import json
 import logging
 from pathlib import Path
 from datetime import datetime
-from src.core.base.managers import HealthChecker
+from src.core.base.BaseManagers import HealthChecker
 
 # Internal Imports
 __version__ = VERSION
@@ -48,7 +48,7 @@ GENERATED_DIR = WORKSPACE_ROOT / "src" / "generated"
 app = FastAPI(
     title="PyAgent Unified Desktop API",
     description="Bridge for PyAgent React/Web frontend",
-    version=VERSION
+    version=VERSION,
 )
 
 # Global Manager Instances
@@ -64,68 +64,30 @@ app.add_middleware(
 )
 
 
-
-
 class ConnectionManager:
     """Manages active WebSocket connections for real-time telemetry."""
+
     def __init__(self) -> None:
         self.active_connections: list[WebSocket] = []
 
-
-
-
-
-
-
-
-
-
-
     async def connect(self, websocket: WebSocket) -> None:
-
-
-
-
-
-
-
-
-
-
         await websocket.accept()
         self.active_connections.append(websocket)
 
-
-
-
-
     def disconnect(self, websocket: WebSocket) -> None:
-
-
-
-
         if websocket in self.active_connections:
             self.active_connections.remove(websocket)
-
-
 
     async def broadcast(self, message: dict[str, Any]) -> None:
         """Send a JSON broadcast to all connected clients."""
 
-
-
-
-
         payload = message  # message is already a dict, send_json will handle it
         for connection in self.active_connections:
             try:
-
                 await connection.send_json(payload)
             except Exception:
-
                 # Connection might be dead
                 pass
-
 
 
 manager = ConnectionManager()
@@ -133,59 +95,36 @@ manager = ConnectionManager()
 
 @app.get("/api/version")
 async def get_version() -> dict[str, str]:
-
-
-
-
-
-
-
-
-
-
     """Returns the current PyAgent version."""
     return {"version": VERSION}
-
 
 
 @app.get("/api/health")
 async def get_health() -> dict[str, Any]:
     """Returns the system health status from the HealthChecker manager."""
 
-
     try:
         return health_checker.check()
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Health check failed: {str(e)}")
 
+
 @app.get("/api/status")
 async def get_status() -> dict[str, Any]:
-
-
     """Returns the current system status and metadata."""
     return {
         "status": "online",
         "agent": "PyAgent",
         "version": VERSION,
         "timestamp": datetime.now().isoformat(),
-        "workspace": str(WORKSPACE_ROOT)
-
-
-
-
-
+        "workspace": str(WORKSPACE_ROOT),
     }
-
 
 
 @app.get("/api/logs")
 async def get_logs(limit: int = 100) -> list[str]:
     """Retrieve the last N lines of the agent log file if it exists."""
     if not AGENT_LOG_FILE.exists():
-
-
-
-
         # Fallback to check episodic memory if agent.log is missing
         if not EPISODIC_LOG_FILE.exists():
             return ["No log files found."]
@@ -199,7 +138,6 @@ async def get_logs(limit: int = 100) -> list[str]:
         raise HTTPException(status_code=500, detail=f"Error reading logs: {str(e)}")
 
 
-
 @app.get("/api/thoughts")
 async def get_thoughts(limit: int = 50) -> list[dict[str, Any]]:
     """Retrieve the latest episodic memories (agent thoughts/actions)."""
@@ -207,10 +145,6 @@ async def get_thoughts(limit: int = 50) -> list[dict[str, Any]]:
         return []
 
     thoughts = []
-
-
-
-
 
     try:
         with open(EPISODIC_LOG_FILE, encoding="utf-8") as f:
@@ -224,16 +158,13 @@ async def get_thoughts(limit: int = 50) -> list[dict[str, Any]]:
     return thoughts[::-1]  # Newest first
 
 
-
-
-
 @app.get("/api/artifacts")
 async def list_artifacts() -> list[dict[str, Any]]:
     """List files in the generated and screenshots directories."""
     artifacts = []
     monitored_paths = [
         {"type": "generated", "path": GENERATED_DIR},
-        {"type": "screenshot", "path": SCREENSHOTS_DIR}
+        {"type": "screenshot", "path": SCREENSHOTS_DIR},
     ]
 
     for item in monitored_paths:
@@ -242,18 +173,16 @@ async def list_artifacts() -> list[dict[str, Any]]:
             for entry in p.iterdir():
                 if entry.is_file():
                     stat = entry.stat()
-                    artifacts.append({
-                        "name": entry.name,
-                        "type": item["type"],
-                        "path": str(entry),
-                        "size": stat.st_size,
-                        "modified": stat.st_mtime
-                    })
+                    artifacts.append(
+                        {
+                            "name": entry.name,
+                            "type": item["type"],
+                            "path": str(entry),
+                            "size": stat.st_size,
+                            "modified": stat.st_mtime,
+                        }
+                    )
     return artifacts
-
-
-
-
 
 
 @app.websocket("/ws/telemetry")
@@ -262,7 +191,9 @@ async def websocket_telemetry(websocket: WebSocket) -> None:
     await manager.connect(websocket)
     try:
         # Send initial connection success message
-        await websocket.send_json({"event": "connected", "msg": "PyAgent Telemetry Bridge Active"})
+        await websocket.send_json(
+            {"event": "connected", "msg": "PyAgent Telemetry Bridge Active"}
+        )
         while True:
             # Wait for any messages from client (keeping connection open)
             data = await websocket.receive_text()
@@ -274,7 +205,9 @@ async def websocket_telemetry(websocket: WebSocket) -> None:
         manager.disconnect(websocket)
         logging.error(f"WebSocket error: {e}")
 
+
 if __name__ == "__main__":
     import uvicorn
+
     # Start the server on port 8000
     uvicorn.run(app, host="0.0.0.0", port=8000)

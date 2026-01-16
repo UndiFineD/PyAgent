@@ -21,17 +21,16 @@
 """Auto-extracted class from agent_stats.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 import json
 
 __version__ = VERSION
 
 
-
-
 class StatsExporter:
     """Exports stats in various formats."""
+
     def __init__(self, format: str = "json") -> None:
         self.format = format
 

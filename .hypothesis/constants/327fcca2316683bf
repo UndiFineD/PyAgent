@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\execution\expression\operator.py
-# hypothesis_version: 6.150.1
-
-[0.0, 1.0, '#document', '#embedding', '#id', '#metadata', '#score', '$abs', '$and', '$contains', '$div', '$eq', '$exp', '$gt', '$gte', '$in', '$knn', '$log', '$lt', '$lte', '$max', '$max_k', '$min', '$min_k', '$mul', '$ne', '$nin', '$not_contains', '$not_regex', '$or', '$regex', '$sub', '$sum', '$val', 'Abs', 'Aggregate', 'And', 'Div', 'Exp', 'GroupBy', 'Key', 'Limit', 'Log', 'Max', 'Min', 'Mul', 'NDArray[np.float32]', 'NDArray[np.float64]', 'NDArray[np.int32]', 'Or', 'Rank', 'Select', 'Sub', 'Sum', 'Where', 'aggregate', 'default', 'distances', 'documents', 'embeddings', 'k', 'key', 'keys', 'left', 'limit', 'metadatas', 'offset', 'query', 'return_rank', 'right', 'uris']

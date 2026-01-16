@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\core\add.py
-# hypothesis_version: 6.150.1
-
-['add', 'basic', 'deep', 'factor', 'force', 'kind', 'log', 'logx', 'mul', 'multinomial', 'oo', 'power_base', 'power_exp']

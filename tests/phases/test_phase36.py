@@ -9,8 +9,6 @@ from src.infrastructure.fleet.FleetManager import FleetManager
 import asyncio
 
 
-
-
 async def run_phase36():
     logging.basicConfig(level=logging.INFO)
     print("🚀 Starting Phase 36 Verification...")
@@ -31,7 +29,9 @@ async def run_phase36():
     print(f"✅ Urgency 0.9 Path: {path_fast}")
 
     fleet.emotional_regulation.set_vibe(urgency=0.1, patience=0.9)
-    res = fleet.emotional_regulation.determine_execution_path("Research the implications of quantum tunneling in synapses.")
+    res = fleet.emotional_regulation.determine_execution_path(
+        "Research the implications of quantum tunneling in synapses."
+    )
     if asyncio.iscoroutine(res):
         path_deep = await res
     else:
@@ -49,65 +49,46 @@ async def run_phase36():
     valid_code = "def add(a: int, b: int) -> int: return a + b"
     res_valid = await fleet.call_by_capability("NeuroSymbolic", content=valid_code)
 
-
-
-
-
-
-
-
-
-
-    print(f"✅ Valid Content Result (Passed={res_valid.get('content_verified')}): {res_valid.get('violations')}")
+    print(
+        f"✅ Valid Content Result (Passed={res_valid.get('content_verified')}): {res_valid.get('violations')}"
+    )
 
     # Test violation (No plain passwords)
 
-
-
-
-
-
-
-
-
-
     invalid_password = "password = 'secret123'"
 
-
-
-
-    res_invalid_pwd = await fleet.call_by_capability("NeuroSymbolic", content=invalid_password)
-    print(f"✅ Invalid Password Result (Passed={res_invalid_pwd.get('content_verified')}): {res_invalid_pwd.get('violations')}")
-
+    res_invalid_pwd = await fleet.call_by_capability(
+        "NeuroSymbolic", content=invalid_password
+    )
+    print(
+        f"✅ Invalid Password Result (Passed={res_invalid_pwd.get('content_verified')}): {res_invalid_pwd.get('violations')}"
+    )
 
     # Test violation (Deletions)
     invalid_del = "rm -rf /"
 
+    res_invalid_del = await fleet.call_by_capability(
+        "NeuroSymbolic", content=invalid_del
+    )
+    print(
+        f"✅ Invalid Deletion Result (Passed={res_invalid_del.get('content_verified')}): {res_invalid_del.get('violations')}"
+    )
 
-
-    res_invalid_del = await fleet.call_by_capability("NeuroSymbolic", content=invalid_del)
-    print(f"✅ Invalid Deletion Result (Passed={res_invalid_del.get('content_verified')}): {res_invalid_del.get('violations')}")
-
-    if res_valid.get('content_verified') and not res_invalid_pwd.get('content_verified') and not res_invalid_del.get('content_verified'):
+    if (
+        res_valid.get("content_verified")
+        and not res_invalid_pwd.get("content_verified")
+        and not res_invalid_del.get("content_verified")
+    ):
         print("✅ Neuro-Symbolic Reasoning flow verified.")
-
-
 
     else:
         print("❌ Neuro-Symbolic Reasoning flow failed.")
 
-
     print("\n🏁 Phase 36 Verification Complete.")
-
-
-
 
 
 def test_phase36() -> None:
     asyncio.run(run_phase36())
-
-
-
 
 
 if __name__ == "__main__":

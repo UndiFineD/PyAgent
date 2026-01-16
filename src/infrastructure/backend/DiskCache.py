@@ -21,18 +21,13 @@
 """Disk-based cache for persistent storage."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import logging
 import time
 from pathlib import Path
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class DiskCache:
@@ -68,11 +63,7 @@ class DiskCache:
             value: Value to cache.
         """
         file_path = self._get_file_path(key)
-        data = {
-            "key": key,
-            "value": value,
-            "timestamp": time.time()
-        }
+        data = {"key": key, "value": value, "timestamp": time.time()}
         try:
             file_path.write_text(json.dumps(data), encoding="utf-8")
         except Exception as e:
@@ -102,7 +93,9 @@ class DiskCache:
                     try:
                         file_path.unlink()
                     except Exception:
-                        logging.debug(f"Failed to unlink expired cache file {file_path}")
+                        logging.debug(
+                            f"Failed to unlink expired cache file {file_path}"
+                        )
                     return None
 
             return data.get("value")

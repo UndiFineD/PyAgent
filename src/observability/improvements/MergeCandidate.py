@@ -21,12 +21,10 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -39,6 +37,7 @@ class MergeCandidate:
         similarity_score: How similar the improvements are.
         merge_reason: Why these should be merged.
     """
+
     source_id: str
     target_id: str
     similarity_score: float = 0.0

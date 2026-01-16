@@ -21,12 +21,10 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -39,6 +37,7 @@ class TimelineEvent:
         error_id: Associated error ID.
         details: Additional event details.
     """
+
     timestamp: str
     event_type: str
     error_id: str

@@ -7,13 +7,16 @@ from pathlib import Path
 
 # Import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
-    AGENT_DIR = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR = Path(__file__).parent.parent.parent.parent / "src"
 
 # Import from src if needed
-
-
 
 
 class TestReportTypeEnum:
@@ -53,7 +56,6 @@ class TestReportFormatEnum:
         assert len(list(ReportFormat)) == 3
 
 
-
 class TestSeverityLevelEnum:
     """Tests for SeverityLevel enum."""
 
@@ -72,7 +74,6 @@ class TestSeverityLevelEnum:
         assert "WARNING" in members
         assert "ERROR" in members
         assert "CRITICAL" in members
-
 
 
 class TestIssueCategoryEnum:
@@ -106,7 +107,7 @@ class TestCodeIssueDataclass:
         issue = CodeIssue(
             message="Test error",
             category=IssueCategory.SYNTAX,
-            severity=SeverityLevel.ERROR
+            severity=SeverityLevel.ERROR,
         )
         assert issue.message == "Test error"
         assert issue.category == IssueCategory.SYNTAX
@@ -125,11 +126,10 @@ class TestCodeIssueDataclass:
             category=IssueCategory.TYPE_ANNOTATION,
             severity=SeverityLevel.WARNING,
             line_number=42,
-            file_path="test.py"
+            file_path="test.py",
         )
         assert issue.line_number == 42
         assert issue.file_path == "test.py"
-
 
 
 class TestReportMetadataDataclass:
@@ -143,12 +143,13 @@ class TestReportMetadataDataclass:
             path="test.py",
             generated_at="2025-01-13",
             content_hash="abc123",
-            version="1.0.0"
+            version="1.0.0",
         )
         assert metadata.path == "test.py"
         assert metadata.generated_at == "2025-01-13"
         assert metadata.content_hash == "abc123"
         assert metadata.version == "1.0.0"
+
 
 class TestReportTemplateDataclass:
     """Tests for ReportTemplate dataclass."""
@@ -157,15 +158,11 @@ class TestReportTemplateDataclass:
         """Test creating ReportTemplate with defaults."""
         ReportTemplate = report_module.ReportTemplate
 
-        template = ReportTemplate(
-            name="default",
-            sections=["description", "errors"]
-        )
+        template = ReportTemplate(name="default", sections=["description", "errors"])
         assert template.name == "default"
         assert "description" in template.sections
         assert template.include_metadata is True
         assert template.include_summary is True
-
 
 
 class TestReportCacheDataclass:
@@ -180,13 +177,12 @@ class TestReportCacheDataclass:
             content_hash="abc123",
             content="Report content",
             created_at=1000.0,
-            ttl_seconds=3600
+            ttl_seconds=3600,
         )
         assert cache.path == "test.py"
         assert cache.content_hash == "abc123"
         assert cache.content == "Report content"
         assert cache.ttl_seconds == 3600
-
 
 
 class TestReportComparisonDataclass:
@@ -202,7 +198,7 @@ class TestReportComparisonDataclass:
             added=["- New item"],
             removed=["- Old item"],
             changed=[("- Changed from", "- Changed to")],
-            unchanged_count=5
+            unchanged_count=5,
         )
         assert comparison.old_path == "old.md"
         assert comparison.new_path == "new.md"
@@ -210,7 +206,6 @@ class TestReportComparisonDataclass:
         assert len(comparison.removed) == 1
         assert len(comparison.changed) == 1
         assert comparison.unchanged_count == 5
-
 
 
 class TestFilterCriteriaDataclass:
@@ -226,6 +221,7 @@ class TestFilterCriteriaDataclass:
         assert criteria.date_from is None
         assert criteria.date_to is None
         assert criteria.file_patterns is None
+
 
 class TestSubscriptionFrequencyEnum:
     """Tests for SubscriptionFrequency enum."""
@@ -243,6 +239,7 @@ class TestSubscriptionFrequencyEnum:
         SubscriptionFrequency = report_module.SubscriptionFrequency
         assert len(list(SubscriptionFrequency)) == 4
 
+
 class TestPermissionLevelEnum:
     """Tests for PermissionLevel enum."""
 
@@ -258,6 +255,7 @@ class TestPermissionLevelEnum:
         PermissionLevel = report_module.PermissionLevel
         assert PermissionLevel.READ.value < PermissionLevel.WRITE.value
         assert PermissionLevel.WRITE.value < PermissionLevel.ADMIN.value
+
 
 class TestExportFormatEnum:
     """Tests for ExportFormat enum."""
@@ -275,6 +273,7 @@ class TestExportFormatEnum:
         ExportFormat = report_module.ExportFormat
         assert len(list(ExportFormat)) == 4
 
+
 class TestLocaleCodeEnum:
     """Tests for LocaleCode enum."""
 
@@ -290,7 +289,6 @@ class TestLocaleCodeEnum:
         """Test all members exist."""
         LocaleCode = report_module.LocaleCode
         assert len(list(LocaleCode)) == 4
-
 
 
 class TestAuditActionEnum:
@@ -318,10 +316,7 @@ class TestReportSubscriptionDataclass:
         """Test creating with minimal fields."""
         ReportSubscription = report_module.ReportSubscription
 
-        sub = ReportSubscription(
-            subscriber_id="user1",
-            email="user@example.com"
-        )
+        sub = ReportSubscription(subscriber_id="user1", email="user@example.com")
         assert sub.subscriber_id == "user1"
         assert sub.email == "user@example.com"
         assert sub.enabled is True
@@ -338,11 +333,12 @@ class TestReportSubscriptionDataclass:
             frequency=SubscriptionFrequency.WEEKLY,
             report_types=[ReportType.ERRORS],
             file_patterns=["*.py"],
-            enabled=False
+            enabled=False,
         )
         assert sub.frequency == SubscriptionFrequency.WEEKLY
         assert ReportType.ERRORS in sub.report_types
         assert sub.enabled is False
+
 
 class TestArchivedReportDataclass:
     """Tests for ArchivedReport dataclass."""
@@ -352,14 +348,11 @@ class TestArchivedReportDataclass:
         ArchivedReport = report_module.ArchivedReport
 
         archive = ArchivedReport(
-            report_id="report_123",
-            file_path="test.py",
-            content="Report content"
+            report_id="report_123", file_path="test.py", content="Report content"
         )
         assert archive.report_id == "report_123"
         assert archive.file_path == "test.py"
         assert archive.retention_days == 90
-
 
 
 class TestReportAnnotationDataclass:
@@ -374,12 +367,11 @@ class TestReportAnnotationDataclass:
             report_id="report_1",
             author="user1",
             content="Important note",
-            line_number=42
+            line_number=42,
         )
         assert annotation.annotation_id == "ann_1"
         assert annotation.author == "user1"
         assert annotation.line_number == 42
-
 
 
 class TestReportSearchResultDataclass:
@@ -395,11 +387,10 @@ class TestReportSearchResultDataclass:
             report_type=ReportType.ERRORS,
             match_text="Syntax error",
             line_number=10,
-            score=2.5
+            score=2.5,
         )
         assert result.file_path == "test.py"
         assert result.score == 2.5
-
 
 
 class TestReportMetricDataclass:
@@ -410,16 +401,11 @@ class TestReportMetricDataclass:
         ReportMetric = report_module.ReportMetric
 
         metric = ReportMetric(
-            name="issues_count",
-            value=42.0,
-            unit="count",
-            threshold=100.0,
-            trend="+"
+            name="issues_count", value=42.0, unit="count", threshold=100.0, trend="+"
         )
         assert metric.name == "issues_count"
         assert metric.value == 42.0
         assert metric.trend == "+"
-
 
 
 class TestReportPermissionDataclass:
@@ -434,11 +420,10 @@ class TestReportPermissionDataclass:
             user_id="user1",
             report_pattern="*.md",
             level=PermissionLevel.WRITE,
-            granted_by="admin"
+            granted_by="admin",
         )
         assert perm.user_id == "user1"
         assert perm.level == PermissionLevel.WRITE
-
 
 
 class TestAuditEntryDataclass:
@@ -455,7 +440,7 @@ class TestAuditEntryDataclass:
             action=AuditAction.READ,
             user_id="user1",
             report_id="report1",
-            details={"ip": "127.0.0.1"}
+            details={"ip": "127.0.0.1"},
         )
         assert entry.action == AuditAction.READ
         assert entry.details["ip"] == "127.0.0.1"
@@ -471,11 +456,10 @@ class TestLocalizedStringDataclass:
         localized = LocalizedString(
             key="error.syntax",
             translations={"en-US": "Syntax Error", "de-DE": "Syntaxfehler"},
-            default="Syntax Error"
+            default="Syntax Error",
         )
         assert localized.key == "error.syntax"
         assert localized.translations["de-DE"] == "Syntaxfehler"
-
 
 
 class TestValidationResultDataclass:
@@ -486,10 +470,7 @@ class TestValidationResultDataclass:
         ValidationResult = report_module.ValidationResult
 
         result = ValidationResult(
-            valid=True,
-            errors=[],
-            warnings=["Minor issue"],
-            checksum="abc123"
+            valid=True, errors=[], warnings=["Minor issue"], checksum="abc123"
         )
         assert result.valid is True
         assert len(result.errors) == 0
@@ -500,13 +481,10 @@ class TestValidationResultDataclass:
         ValidationResult = report_module.ValidationResult
 
         result = ValidationResult(
-            valid=False,
-            errors=["Missing heading"],
-            checksum="def456"
+            valid=False, errors=["Missing heading"], checksum="def456"
         )
         assert result.valid is False
         assert "Missing heading" in result.errors
-
 
 
 class TestAggregatedReportDataclass:
@@ -522,12 +500,12 @@ class TestAggregatedReportDataclass:
         issue = CodeIssue(
             message="Test error",
             category=IssueCategory.SYNTAX,
-            severity=SeverityLevel.ERROR
+            severity=SeverityLevel.ERROR,
         )
         report = AggregatedReport(
             sources=["file1.py", "file2.py"],
             combined_issues=[issue],
-            summary={"total": 1}
+            summary={"total": 1},
         )
         assert len(report.sources) == 2
         assert len(report.combined_issues) == 1

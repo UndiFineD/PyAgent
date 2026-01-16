@@ -12,11 +12,9 @@ from pathlib import Path
 try:
     from tests.utils.agent_test_utils import AGENT_DIR, load_module_from_path
 except ImportError:
-    AGENT_DIR = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR = Path(__file__).parent.parent.parent.parent / "src"
 
 # Import from src if needed
-
-
 
 
 class TestReportGeneration(unittest.TestCase):
@@ -134,10 +132,10 @@ class TestIncrementalGeneration(unittest.TestCase):
 
     def test_track_changed_files(self) -> None:
         """Test tracking which files have changed."""
-        baseline = {'a.py': 'h1'}
-        current = {'a.py': 'h2'}
+        baseline = {"a.py": "h1"}
+        current = {"a.py": "h2"}
         changed = [f for f in current if current[f] != baseline.get(f)]
-        assert 'a.py' in changed
+        assert "a.py" in changed
 
 
 class TestReportCustomization(unittest.TestCase):
@@ -145,10 +143,10 @@ class TestReportCustomization(unittest.TestCase):
 
     def test_user_selectable_sections(self) -> None:
         """Test user-customizable report sections."""
-        available: Dict[str, bool] = {'summary': True, 'trends': False}
+        available: Dict[str, bool] = {"summary": True, "trends": False}
         selected = [s for s, inc in available.items() if inc]
-        assert 'summary' in selected
-        assert 'trends' not in selected
+        assert "summary" in selected
+        assert "trends" not in selected
 
 
 class TestVisualReportGeneration(unittest.TestCase):
@@ -156,8 +154,8 @@ class TestVisualReportGeneration(unittest.TestCase):
 
     def test_chart_config(self) -> None:
         """Test chart configuration object."""
-        config = {'type': 'line', 'title': 'Trend'}
-        assert config['type'] == 'line'
+        config = {"type": "line", "title": "Trend"}
+        assert config["type"] == "line"
 
 
 class TestExecutiveSummary(unittest.TestCase):
@@ -165,7 +163,7 @@ class TestExecutiveSummary(unittest.TestCase):
 
     def test_generate_summary(self) -> None:
         """Test generating summary text."""
-        metrics = {'files': 150, 'coverage': 85.5}
+        metrics = {"files": 150, "coverage": 85.5}
         summary = f"Files: {metrics['files']}, Coverage: {metrics['coverage']}%"
         assert "150" in summary
         assert "85.5" in summary
@@ -176,7 +174,7 @@ class TestTechnicalDebt(unittest.TestCase):
 
     def test_debt_scoring(self) -> None:
         """Test calculating debt score."""
-        factors = {'complexity': 0.3, 'duplication': 0.2}
+        factors = {"complexity": 0.3, "duplication": 0.2}
         score = sum(factors.values())
         assert score > 0
 
@@ -186,6 +184,6 @@ class TestRecommendationGeneration(unittest.TestCase):
 
     def test_coverage_recommendations(self) -> None:
         """Test generating recommendations."""
-        uncovered = ['agent.py']
+        uncovered = ["agent.py"]
         recs = [f"Fix {f}" for f in uncovered]
         assert len(recs) == 1

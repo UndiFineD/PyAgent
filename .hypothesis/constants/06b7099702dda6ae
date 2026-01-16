@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\model_debugging_utils.py
-# hypothesis_version: 6.150.1
-
-[120, '(.*)\\.(\\d+)$', '.', '.safetensors', 'DTensor(non-rank0)', '_FULL_TENSORS.json', '_SUMMARY.json', '_debug_tree', '_local_tensor', 'args', 'children', 'data', 'dtype', 'inputs', 'kwargs', 'max', 'mean', 'min', 'module_path', 'object at 0xXXXXXXXX', 'outputs', 'shape', 'std', 'torch', 'value', 'w']

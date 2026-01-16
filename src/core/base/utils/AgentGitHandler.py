@@ -19,7 +19,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import subprocess
 import logging
 from pathlib import Path
@@ -28,28 +28,23 @@ from typing import Any
 __version__ = VERSION
 
 
-
-
-
-
-
 class AgentGitHandler:
     """Handles git operations for the Agent."""
 
-    def __init__(self, repo_root: Path, no_git: bool = False, recorder: Any = None) -> None:
+    def __init__(
+        self, repo_root: Path, no_git: bool = False, recorder: Any = None
+    ) -> None:
         self.repo_root: Path = repo_root
         self.no_git: bool = no_git
         self.recorder: Any = recorder
 
-    def _record(self, action: str, result: str, meta: dict[str, Any] | None = None) -> None:
+    def _record(
+        self, action: str, result: str, meta: dict[str, Any] | None = None
+    ) -> None:
         """Internal helper to record git operations if recorder is available."""
         if self.recorder:
             self.recorder.record_interaction(
-                provider="Git",
-                model="cli",
-                prompt=action,
-                result=result,
-                meta=meta
+                provider="Git", model="cli", prompt=action, result=result, meta=meta
             )
 
     def commit_changes(self, message: str, files: list[str] | None = None) -> None:
@@ -61,17 +56,37 @@ class AgentGitHandler:
         try:
             if files:
                 for file in files:
-                    subprocess.run(["git", "add", file], cwd=self.repo_root, check=True, capture_output=True)
+                    subprocess.run(
+                        ["git", "add", file],
+                        cwd=self.repo_root,
+                        check=True,
+                        capture_output=True,
+                    )
             else:
-                subprocess.run(["git", "add", "."], cwd=self.repo_root, check=True, capture_output=True)
+                subprocess.run(
+                    ["git", "add", "."],
+                    cwd=self.repo_root,
+                    check=True,
+                    capture_output=True,
+                )
 
             # Check if there are changes to commit
-            status: str = subprocess.run(["git", "status", "--porcelain"], cwd=self.repo_root, capture_output=True, text=True).stdout.strip()
+            status: str = subprocess.run(
+                ["git", "status", "--porcelain"],
+                cwd=self.repo_root,
+                capture_output=True,
+                text=True,
+            ).stdout.strip()
             if not status:
                 logging.info("No changes to commit.")
                 return
 
-            subprocess.run(["git", "commit", "-m", message], cwd=self.repo_root, check=True, capture_output=True)
+            subprocess.run(
+                ["git", "commit", "-m", message],
+                cwd=self.repo_root,
+                check=True,
+                capture_output=True,
+            )
             logging.info(f"Successfully committed changes: {message}")
             self._record(f"commit: {message}", "success", {"files": files})
         except subprocess.CalledProcessError as e:
@@ -87,7 +102,12 @@ class AgentGitHandler:
         if self.no_git:
             return False
         try:
-            subprocess.run(["git", "checkout", "-b", branch_name], cwd=self.repo_root, check=True, capture_output=True)
+            subprocess.run(
+                ["git", "checkout", "-b", branch_name],
+                cwd=self.repo_root,
+                check=True,
+                capture_output=True,
+            )
             logging.info(f"Created branch: {branch_name}")
             return True
         except Exception as e:

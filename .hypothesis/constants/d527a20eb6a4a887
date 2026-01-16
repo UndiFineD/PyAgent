@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\optim\swa_utils.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.999, 1.0, 'AveragedModel', 'SWALR', 'cos', 'get_ema_avg_fn', 'get_ema_multi_avg_fn', 'get_swa_avg_fn', 'get_swa_multi_avg_fn', 'linear', 'lr', 'n_averaged', 'swa_lr', 'update_bn']

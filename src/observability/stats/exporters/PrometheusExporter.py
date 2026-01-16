@@ -23,12 +23,10 @@ Enables real-time dashboards in Grafana and ELK stack.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class PrometheusExporter:
@@ -37,7 +35,9 @@ class PrometheusExporter:
     def __init__(self) -> None:
         self.metrics_registry: dict[str, float] = {}
 
-    def record_metric(self, name: str, value: float, labels: dict[str, str] | None = None) -> str:
+    def record_metric(
+        self, name: str, value: float, labels: dict[str, str] | None = None
+    ) -> str:
         """Records a metric with optional labels."""
         label_str = ""
         if labels:
@@ -45,6 +45,7 @@ class PrometheusExporter:
 
         metric_key = f"{name}{label_str}"
         self.metrics_registry[metric_key] = value
+        return metric_key
 
     def generate_scrape_response(self) -> str:
         """Generates the text response for a Prometheus scrape endpoint."""
@@ -63,5 +64,5 @@ class PrometheusExporter:
             "endpoint": "/metrics",
             "suggested_dashboard_uid": "pyagent-swarm-health-main",
             "provisioning_status": "Ready",
-            "metric_prefix": "pyagent_"
+            "metric_prefix": "pyagent_",
         }

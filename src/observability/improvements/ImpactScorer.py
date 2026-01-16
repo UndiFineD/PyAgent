@@ -21,12 +21,10 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .Improvement import Improvement
 
 __version__ = VERSION
-
-
 
 
 class ImpactScorer:
@@ -62,9 +60,11 @@ class ImpactScorer:
         except Exception:
             pass
 
-        base = self.calculate_weighted_score({
-            "complexity": complexity,
-            "reach": reach,
-            "urgency": urgency,
-        })
+        base = self.calculate_weighted_score(
+            {
+                "complexity": complexity,
+                "reach": reach,
+                "urgency": urgency,
+            }
+        )
         return float(max(0.0, min(100.0, base)))

@@ -21,14 +21,12 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .Improvement import Improvement
 from .ImprovementDiffType import ImprovementDiffType
 from dataclasses import dataclass
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -42,6 +40,7 @@ class ImprovementDiff:
         target_version: Improvement in target branch (if exists).
         change_summary: Summary of changes.
     """
+
     improvement_id: str
     diff_type: ImprovementDiffType
     source_version: Improvement | None = None

@@ -22,20 +22,28 @@ if TYPE_CHECKING:
     from .FleetManager import FleetManager
 
 
-
-
 class FleetInteractionRecorder:
     """Handles recording of agent successes and explainability traces."""
 
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
-    async def record_success(self, res_or_prompt: Any, *args: Any, **kwargs: Any) -> None:
+    async def record_success(
+        self, res_or_prompt: Any, *args: Any, **kwargs: Any
+    ) -> None:
         """Records the success of a workflow step including Explainability and Telemetry."""
         # Detect calling convention (New: 8 parameters total, Legacy: 3)
         if len(args) == 7:
             res = res_or_prompt
-            workflow_id, agent_name, action_name, p_args, token_info, trace_id, start_time = args
+            (
+                workflow_id,
+                agent_name,
+                action_name,
+                p_args,
+                token_info,
+                trace_id,
+                start_time,
+            ) = args
             duration = time.time() - start_time
             prompt = f"{agent_name}.{action_name}({p_args})"
             model = token_info.get("model", "unknown")
@@ -57,7 +65,11 @@ class FleetInteractionRecorder:
                 model=model,
                 prompt=prompt,
                 result=str(res),
-                meta={"workflow_id": workflow_id, "duration": duration, "trace_id": trace_id}
+                meta={
+                    "workflow_id": workflow_id,
+                    "duration": duration,
+                    "trace_id": trace_id,
+                },
             )
         except (AttributeError, ValueError, TypeError):
             pass
@@ -66,13 +78,15 @@ class FleetInteractionRecorder:
         try:
             explainability = getattr(self.fleet, "explainability", None)
             if explainability:
-                justification = explainability.justify_action(agent_name, action_name, res)
+                justification = explainability.justify_action(
+                    agent_name, action_name, res
+                )
                 explainability.log_reasoning_step(
                     workflow_id=workflow_id,
                     agent_name=agent_name,
                     action=action_name,
                     justification=justification,
-                    context={"args": p_args}
+                    context={"args": p_args},
                 )
         except Exception:
             pass
@@ -85,7 +99,7 @@ class FleetInteractionRecorder:
                 model=model,
                 prompt=prompt,
                 result=f"ERROR: {error}",
-                meta={"status": "failed", "error_type": type(error).__name__}
+                meta={"status": "failed", "error_type": type(error).__name__},
             )
         except (AttributeError, ValueError, TypeError):
             pass
@@ -95,10 +109,10 @@ class FleetInteractionRecorder:
             explainability = getattr(self.fleet, "explainability", None)
             if explainability:
                 explainability.log_reasoning_step(
-                     workflow_id="error_mitigation",
-                     agent_name="FleetManager",
-                     action="failure_handler",
-                     justification=f"Operation failed with: {error}. Recording for swarm learning."
+                    workflow_id="error_mitigation",
+                    agent_name="FleetManager",
+                    action="failure_handler",
+                    justification=f"Operation failed with: {error}. Recording for swarm learning.",
                 )
         except Exception:
             pass

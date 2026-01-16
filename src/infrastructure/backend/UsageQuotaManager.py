@@ -21,18 +21,13 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .UsageQuota import UsageQuota
 from typing import Any
 import threading
 import time
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class UsageQuotaManager:
@@ -81,8 +76,8 @@ class UsageQuotaManager:
         with self._lock:
             self._check_reset()
             return (
-                self._quota.current_daily < self._quota.daily_limit and
-                self._quota.current_hourly < self._quota.hourly_limit
+                self._quota.current_daily < self._quota.daily_limit
+                and self._quota.current_hourly < self._quota.hourly_limit
             )
 
     def record_request(self) -> None:
@@ -96,8 +91,12 @@ class UsageQuotaManager:
         """Get remaining quota (daily, hourly)."""
         with self._lock:
             self._check_reset()
-            daily_remaining = max(0, self._quota.daily_limit - self._quota.current_daily)
-            hourly_remaining = max(0, self._quota.hourly_limit - self._quota.current_hourly)
+            daily_remaining = max(
+                0, self._quota.daily_limit - self._quota.current_daily
+            )
+            hourly_remaining = max(
+                0, self._quota.hourly_limit - self._quota.current_hourly
+            )
             return daily_remaining, hourly_remaining
 
     def get_usage_report(self) -> dict[str, Any]:
@@ -107,8 +106,12 @@ class UsageQuotaManager:
             return {
                 "daily_used": self._quota.current_daily,
                 "daily_limit": self._quota.daily_limit,
-                "daily_remaining": max(0, self._quota.daily_limit - self._quota.current_daily),
+                "daily_remaining": max(
+                    0, self._quota.daily_limit - self._quota.current_daily
+                ),
                 "hourly_used": self._quota.current_hourly,
                 "hourly_limit": self._quota.hourly_limit,
-                "hourly_remaining": max(0, self._quota.hourly_limit - self._quota.current_hourly),
+                "hourly_remaining": max(
+                    0, self._quota.hourly_limit - self._quota.current_hourly
+                ),
             }

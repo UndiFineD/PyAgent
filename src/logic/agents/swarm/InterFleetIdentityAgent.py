@@ -18,7 +18,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import time
 import hashlib
 import uuid
@@ -28,19 +28,20 @@ from src.core.base.core.IdentityCore import IdentityCore
 __version__ = VERSION
 
 
-
-
 class InterFleetIdentityAgent:
     """
     Manages federated identities for agents across multiple fleets.
     Integrated with IdentityCore for cryptographic payload signing and DID.
     """
+
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
         self.core = IdentityCore()
         self.fleet_id = str(uuid.uuid4())
         self.known_fleets: dict[Any, Any] = {}  # fleet_id -> {pub_key, metadata}
-        self.authorized_agents: dict[Any, Any] = {}  # agent_id -> {fleet_id, permissions}
+        self.authorized_agents: dict[
+            Any, Any
+        ] = {}  # agent_id -> {fleet_id, permissions}
         self.session_tokens: dict[Any, Any] = {}  # token -> {agent_id, expiry}
 
     def generate_fleet_handshake(self) -> dict[str, Any]:
@@ -50,18 +51,16 @@ class InterFleetIdentityAgent:
     def secure_handshake(self, payload: str, secret: str) -> dict[str, str]:
         """Signs a handshake payload using IdentityCore."""
         signature = self.core.sign_payload(payload, secret)
-        return {
-            "fleet_id": self.fleet_id,
-            "payload": payload,
-            "signature": signature
-        }
+        return {"fleet_id": self.fleet_id, "payload": payload, "signature": signature}
 
     def register_remote_fleet(self, fleet_id: str, metadata: dict[str, Any]) -> bool:
         """Registers a remote fleet to enable inter-fleet communication."""
         self.known_fleets[fleet_id] = metadata
         return {"status": "registered", "fleet_id": fleet_id}
 
-    def authorize_remote_agent(self, agent_id: str, remote_fleet_id: str, permissions: list[str]) -> bool:
+    def authorize_remote_agent(
+        self, agent_id: str, remote_fleet_id: str, permissions: list[str]
+    ) -> bool:
         """Authorizes an agent from a remote fleet with specific permissions."""
         if remote_fleet_id not in self.known_fleets:
             return {"status": "error", "message": "Unknown fleet ID"}
@@ -69,14 +68,14 @@ class InterFleetIdentityAgent:
         self.authorized_agents[agent_id] = {
             "fleet_id": remote_fleet_id,
             "permissions": permissions,
-            "authorized_at": time.time()
+            "authorized_at": time.time(),
         }
 
         # Generate a simulated session token
         token = hashlib.sha256(f"{agent_id}-{time.time()}".encode()).hexdigest()
         self.session_tokens[token] = {
             "agent_id": agent_id,
-            "expiry": time.time() + 3600
+            "expiry": time.time() + 3600,
         }
 
         return {"status": "authorized", "session_token": token}
@@ -99,5 +98,5 @@ class InterFleetIdentityAgent:
             "local_fleet_id": self.fleet_id,
             "remote_fleets_count": len(self.known_fleets),
             "authorized_agents_count": len(self.authorized_agents),
-            "active_sessions_count": len(self.session_tokens)
+            "active_sessions_count": len(self.session_tokens),
         }

@@ -19,7 +19,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import random
 import time
@@ -30,31 +30,16 @@ from src.core.base.models import PromptTemplate
 __version__ = VERSION
 
 
-
-
-
-
-
 class PromptTemplateManager:
-
-
-
-
-
     """Manages a collection of prompt templates."""
 
     def __init__(self) -> None:
         """Initialize the template manager."""
         self.templates: dict[str, PromptTemplate] = {}
 
-
-
     def register(self, template: PromptTemplate) -> None:
         """Register a prompt template."""
         self.templates[template.name] = template
-
-
-
 
     def render(self, template_name: str, **kwargs: Any) -> str:
         """Render a template by name."""
@@ -69,14 +54,13 @@ class PromptVersion:
         self,
         version: str | None = None,
         content: str | None = None,
-
         description: str = "",
         active: bool = True,
         version_id: str | None = None,
         template_id: str | None = None,
         variant: str | None = None,
         prompt_text: str | None = None,
-        weight: float = 1.0
+        weight: float = 1.0,
     ) -> None:
         self.version = version or version_id or ""
         self.content = content or prompt_text or ""
@@ -90,6 +74,7 @@ class PromptVersion:
         self.variant = variant or ""
         self.prompt_text = self.content
         self.weight = weight
+
 
 class PromptVersionManager:
     """Manager for prompt versioning and A/B testing."""
@@ -143,12 +128,14 @@ class PromptVersionManager:
         for version in versions:
             cumulative += version.weight
             if r <= cumulative:
-                self.selection_history.append({
-                    "template_id": template_id,
-                    "version_id": version.version_id,
-                    "variant": version.variant,
-                    "timestamp": time.time()
-                })
+                self.selection_history.append(
+                    {
+                        "template_id": template_id,
+                        "version_id": version.version_id,
+                        "variant": version.variant,
+                        "timestamp": time.time(),
+                    }
+                )
                 return version
         return versions[-1]
 
@@ -163,12 +150,18 @@ class PromptVersionManager:
         if version_id in self.versions:
             self.versions[version_id].metrics[metric_name] = value
 
-    def get_best_version(self, template_id: str = "", metric: str = "quality") -> PromptVersion | None:
-        versions = self.get_versions(template_id) if template_id else list(self.versions.values())
+    def get_best_version(
+        self, template_id: str = "", metric: str = "quality"
+    ) -> PromptVersion | None:
+        versions = (
+            self.get_versions(template_id)
+            if template_id
+            else list(self.versions.values())
+        )
         if not versions:
             return None
         best: PromptVersion | None = None
-        best_score = -float('inf')
+        best_score = -float("inf")
         for version in versions:
             score = version.metrics.get(metric, 0)
             if score > best_score:
@@ -182,19 +175,27 @@ class PromptVersionManager:
             report["versions"][version_id] = {
                 "content": version.content,
                 "active": version.active,
-                "metrics": version.metrics
+                "metrics": version.metrics,
             }
         return report
 
     def get_ab_report(self, template_id: str) -> dict[str, Any]:
         versions = self.get_versions(template_id)
-        selections = [s for s in self.selection_history if s["template_id"] == template_id]
-        report: dict[str, Any] = {"template_id": template_id, "total_selections": len(selections), "versions": {}}
+        selections = [
+            s for s in self.selection_history if s["template_id"] == template_id
+        ]
+        report: dict[str, Any] = {
+            "template_id": template_id,
+            "total_selections": len(selections),
+            "versions": {},
+        }
         for version in versions:
-            version_selections = [s for s in selections if s["version_id"] == version.version_id]
+            version_selections = [
+                s for s in selections if s["version_id"] == version.version_id
+            ]
             report["versions"][version.version_id] = {
                 "variant": version.variant,
                 "selections": len(version_selections),
-                "metrics": self.metrics.get(version.version_id, {})
+                "metrics": self.metrics.get(version.version_id, {}),
             }
         return report

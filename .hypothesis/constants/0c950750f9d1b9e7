@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\errors.py
-# hypothesis_version: 6.150.1
-
-[400, 401, 403, 404, 409, 413, 429, 500, ', ', 'AuthError', 'AuthorizationError', 'ChromaError', 'DuplicateID', 'Forbidden', 'IDAlreadyExists', 'InternalError', 'InvalidArgument', 'InvalidArgumentError', 'InvalidDimension', 'InvalidHTTPVersion', 'InvalidUUID', 'NotFoundError', 'QuotaError', 'RateLimitError', 'VersionMismatchError']

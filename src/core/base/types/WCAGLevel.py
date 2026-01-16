@@ -21,19 +21,15 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
-
-
-
 class WCAGLevel(Enum):
     """WCAG conformance levels."""
-    A = "A"       # Minimum level
-    AA = "AA"     # Mid - range level (legal requirement in many jurisdictions)
-    AAA = "AAA"   # Highest level
+
+    A = "A"  # Minimum level
+    AA = "AA"  # Mid - range level (legal requirement in many jurisdictions)
+    AAA = "AAA"  # Highest level

@@ -4,7 +4,10 @@ Tests performance calculation logic before Rust conversion.
 """
 
 from hypothesis import given, strategies as st
-from src.logic.agents.development.core.BenchmarkCore import BenchmarkCore, BenchmarkResult
+from src.logic.agents.development.core.BenchmarkCore import (
+    BenchmarkCore,
+    BenchmarkResult,
+)
 
 
 class TestBenchmarkCoreBasics:
@@ -78,7 +81,9 @@ class TestBenchmarkCorePropertyBased:
     """Property-based tests using Hypothesis."""
 
     @given(
-        latencies=st.lists(st.floats(min_value=0.1, max_value=1000.0), min_size=1, max_size=100)
+        latencies=st.lists(
+            st.floats(min_value=0.1, max_value=1000.0), min_size=1, max_size=100
+        )
     )
     def test_baseline_mean_is_within_range(self, latencies: list[float]) -> None:
         """Property: Baseline is within min and max latencies."""
@@ -93,9 +98,11 @@ class TestBenchmarkCorePropertyBased:
 
     @given(
         baseline=st.floats(min_value=1.0, max_value=100.0),
-        delta_pct=st.floats(min_value=-50.0, max_value=50.0)
+        delta_pct=st.floats(min_value=-50.0, max_value=50.0),
     )
-    def test_regression_threshold_logic(self, baseline: float, delta_pct: float) -> None:
+    def test_regression_threshold_logic(
+        self, baseline: float, delta_pct: float
+    ) -> None:
         """Property: Regression flag matches threshold logic."""
         core = BenchmarkCore()
         threshold = 0.20
@@ -109,7 +116,7 @@ class TestBenchmarkCorePropertyBased:
 
     @given(
         latency=st.floats(min_value=0.1, max_value=1000.0),
-        tokens=st.integers(min_value=1, max_value=10000)
+        tokens=st.integers(min_value=1, max_value=10000),
     )
     def test_efficiency_score_positive(self, latency: float, tokens: int) -> None:
         """Property: Efficiency score is latency/tokens."""
@@ -183,8 +190,7 @@ class TestBenchmarkCoreConsistency:
         """Test that baseline calculation is deterministic."""
         core = BenchmarkCore()
         results = [
-            BenchmarkResult(f"agent{i}", float(i) * 10, i * 5, True)
-            for i in range(10)
+            BenchmarkResult(f"agent{i}", float(i) * 10, i * 5, True) for i in range(10)
         ]
 
         baseline1 = core.calculate_baseline(results)

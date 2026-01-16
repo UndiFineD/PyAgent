@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\core\base\BaseAgentCore.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.1, 0.2, 0.3, 0.5, 0.7, 0.8, 0.9, 1.0, 2.0, 4.0, 100, 1000000, '#', '# ', '# New Document\n', '(', '.markdown', '.md', '.py', '0.7', '100000', '3', '4096', '60', '<script', 'Agent', 'DV_AGENT_BACKEND', 'DV_AGENT_CACHE', 'DV_AGENT_MAX_TOKENS', 'DV_AGENT_MODEL', 'DV_AGENT_RETRY_COUNT', 'DV_AGENT_TEMPERATURE', 'DV_AGENT_TIMEOUT', 'Response is empty', '\\1 ', '^(#+)', '_is_tool', '_tool_category', '_tool_priority', 'agent', 'auto', 'available', 'avg_quality', 'backends', 'base', 'cache_entries', 'calculation', 'capabilities', 'content', 'entries', 'error', 'eval', 'execute', 'fail', 'has_references', 'hit_count', 'input', 'is_complete', 'model', 'os.', 'output', 'plugins', 'quality_score', 'role', 'system(', 'timeout must be > 0', 'total_hits', 'true', 'type', 'verification']

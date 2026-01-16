@@ -1,4 +1,3 @@
-
 """
 Core logic for Config Hygiene (Phase 174).
 Handles JSON Schema validation for configuration files.
@@ -9,10 +8,9 @@ import os
 from typing import Any
 
 
-
-
 class ConfigHygieneCore:
     """Core logic for validating configuration schemas and hygiene."""
+
     @staticmethod
     def validate_json_with_schema(data_path: str, schema_path: str) -> tuple[bool, str]:
         """
@@ -41,12 +39,15 @@ class ConfigHygieneCore:
             return False, str(e)
 
     @staticmethod
-    def extract_env_vars(config_data: dict[str, Any], prefix: str = "PYAGENT_") -> dict[str, str]:
+    def extract_env_vars(
+        config_data: dict[str, Any], prefix: str = "PYAGENT_"
+    ) -> dict[str, str]:
         """
         Helper to flatten nested config into env-style key-value pairs.
         """
         try:
             import rust_core
+
             return rust_core.flatten_env_vars(config_data, prefix)  # type: ignore[attr-defined]
         except (ImportError, AttributeError):
             pass
@@ -54,12 +55,16 @@ class ConfigHygieneCore:
         return ConfigHygieneCore._extract_env_vars_python(config_data, prefix)
 
     @staticmethod
-    def _extract_env_vars_python(config_data: dict[str, Any], prefix: str) -> dict[str, str]:
+    def _extract_env_vars_python(
+        config_data: dict[str, Any], prefix: str
+    ) -> dict[str, str]:
         env_vars = {}
         for k, v in config_data.items():
             if isinstance(v, (str, int, float, bool)):
                 env_vars[f"{prefix}{k.upper()}"] = str(v)
             elif isinstance(v, dict):
-                sub = ConfigHygieneCore._extract_env_vars_python(v, f"{prefix}{k.upper()}_")
+                sub = ConfigHygieneCore._extract_env_vars_python(
+                    v, f"{prefix}{k.upper()}_"
+                )
                 env_vars.update(sub)
         return env_vars

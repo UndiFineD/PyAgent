@@ -21,14 +21,12 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.models.ExportFormat import ExportFormat
 from dataclasses import dataclass, field
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -41,6 +39,7 @@ class ExportedContext:
         metadata: Export metadata.
         created_at: Creation timestamp.
     """
+
     format: ExportFormat
     content: str
     metadata: dict[str, Any] = field(default_factory=lambda: {})

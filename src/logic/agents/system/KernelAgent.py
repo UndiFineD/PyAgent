@@ -23,7 +23,7 @@ Inspired by Open Interpreter and Openator.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import os
 import sys
 import json
@@ -32,12 +32,10 @@ import platform
 import logging
 import asyncio
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 from src.logic.agents.development.SecurityGuardAgent import SecurityGuardAgent
 
 __version__ = VERSION
-
-
 
 
 class KernelAgent(BaseAgent):
@@ -56,6 +54,7 @@ class KernelAgent(BaseAgent):
     @as_tool
     async def get_system_info(self) -> str:
         """Returns details about the current operating system and environment."""
+
         def get_info() -> str:
             info = {
                 "os": platform.system(),
@@ -63,7 +62,7 @@ class KernelAgent(BaseAgent):
                 "machine": platform.machine(),
                 "python_version": sys.version,
                 "cwd": os.getcwd(),
-                "env_vars": list(os.environ.keys())[:10]  # First 10 for brevity
+                "env_vars": list(os.environ.keys())[:10],  # First 10 for brevity
             }
             return json.dumps(info, indent=2)
 
@@ -86,7 +85,9 @@ class KernelAgent(BaseAgent):
         logging.warning(f"KernelAgent auditing shell command: {command}")
 
         # Security Audit (HITL Gate)
-        risk_level, warning = await asyncio.to_thread(self.security_guard.audit_command, command)
+        risk_level, warning = await asyncio.to_thread(
+            self.security_guard.audit_command, command
+        )
         if risk_level == "HIGH" and not force:
             return (
                 f"BLOCKED: High-risk command detected.\n"
@@ -97,9 +98,7 @@ class KernelAgent(BaseAgent):
         try:
             # Phase 287: Use asyncio for sub-processes
             proc = await asyncio.create_subprocess_shell(
-                command,
-                stdout=asyncio.subprocess.PIPE,
-                stderr=asyncio.subprocess.PIPE
+                command, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE
             )
 
             try:
@@ -109,18 +108,25 @@ class KernelAgent(BaseAgent):
                     output += f"STDERR:\n{stderr.decode()}\n"
 
                 # Intelligence Harvesting (Phase 108)
-                if hasattr(self, 'recorder') and self.recorder:
-                    self.recorder.record_lesson("kernel_shell_exec", {"command": command, "exit_code": proc.returncode})
+                if hasattr(self, "recorder") and self.recorder:
+                    self.recorder.record_lesson(
+                        "kernel_shell_exec",
+                        {"command": command, "exit_code": proc.returncode},
+                    )
 
                 return output
             except asyncio.TimeoutExpired:  # type: ignore[attr-defined]
                 proc.kill()
                 await proc.wait()
-                if hasattr(self, 'recorder') and self.recorder:
-                    self.recorder.record_lesson("kernel_shell_timeout", {"command": command})
+                if hasattr(self, "recorder") and self.recorder:
+                    self.recorder.record_lesson(
+                        "kernel_shell_timeout", {"command": command}
+                    )
                 return "Error: Command timed out after 30 seconds."
 
         except Exception as e:
-            if hasattr(self, 'recorder') and self.recorder:
-                self.recorder.record_lesson("kernel_shell_error", {"command": command, "error": str(e)})
+            if hasattr(self, "recorder") and self.recorder:
+                self.recorder.record_lesson(
+                    "kernel_shell_error", {"command": command, "error": str(e)}
+                )
             return f"Error executing command: {e}"

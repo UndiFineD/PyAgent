@@ -21,13 +21,11 @@
 """Agent specializing in CSV and tabular data processing."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function
+from src.core.base.BaseUtilities import create_main_function
 
 __version__ = VERSION
-
-
 
 
 class CsvAgent(BaseAgent):
@@ -36,25 +34,15 @@ class CsvAgent(BaseAgent):
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
 
-
-
-
         self._system_prompt = (
             "You are a Data Analyst and CSV Expert. "
             "Focus on tabular data integrity, cleaning, and transformation. "
             "Identify missing values, deal with encoding issues, and suggest "
             "optimal structures for data interoperability (e.g., preparing for SQL import)."
-
-
-
-
-
         )
 
     def _get_default_content(self) -> str:
         return "header1,header2\nvalue1,value2\n"
-
-
 
 
 if __name__ == "__main__":

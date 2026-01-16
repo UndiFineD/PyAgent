@@ -1,4 +1,3 @@
-
 """
 Core logic for Swarm Convergence (Phase 170).
 Handles file system cleanup and version management.
@@ -9,10 +8,9 @@ import shutil
 import re
 
 
-
-
 class ConvergenceCore:
     """Core logic for workspace cleanup and state convergence."""
+
     @staticmethod
     def clean_sweep(root_dir: str) -> dict:
         """
@@ -47,7 +45,9 @@ class ConvergenceCore:
             content = f.read()
 
         # Regex to find VERSION = "..."
-        new_content = re.sub(r'VERSION\s*=\s*["\'].*?["\']', f'VERSION = "{new_version}"', content)
+        new_content = re.sub(
+            r'VERSION\s*=\s*["\'].*?["\']', f'VERSION = "{new_version}"', content
+        )
 
         with open(file_path, "w", encoding="utf-8") as f:
             f.write(new_content)

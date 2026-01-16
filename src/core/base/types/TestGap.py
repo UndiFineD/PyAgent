@@ -21,15 +21,10 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass, field
 
 __version__ = VERSION
-
-
-
-
-
 
 
 @dataclass
@@ -43,6 +38,7 @@ class TestGap:
         complexity: Cyclomatic complexity of the function.
         suggested_tests: List of suggested test cases.
     """
+
     function_name: str
     file_path: str
     line_number: int

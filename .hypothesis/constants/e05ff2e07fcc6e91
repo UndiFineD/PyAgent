@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\quantizers\quantizer_compressed_tensors.py
-# hypothesis_version: 6.150.1
-
-['compressed_tensors', 'local_colwise', 'local_rowwise', 'torch.dtype']

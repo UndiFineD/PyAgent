@@ -21,15 +21,15 @@
 """Shell for ContextCompressorCore, handling File I/O and orchestration."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from pathlib import Path
 from typing import Any
-from src.logic.agents.cognitive.context.engines.ContextCompressorCore import ContextCompressorCore
+from src.logic.agents.cognitive.context.engines.ContextCompressorCore import (
+    ContextCompressorCore,
+)
 
 __version__ = VERSION
-
-
 
 
 class ContextCompressor:
@@ -39,7 +39,9 @@ class ContextCompressor:
     """
 
     def __init__(self, workspace_root: str | None = None) -> None:
-        self.workspace_root: Path | None = Path(workspace_root) if workspace_root else None
+        self.workspace_root: Path | None = (
+            Path(workspace_root) if workspace_root else None
+        )
         self.core = ContextCompressorCore()
 
     def compress_file(self, file_path_raw: Any) -> str:
@@ -47,23 +49,10 @@ class ContextCompressor:
         file_path = Path(file_path_raw)
 
         if not file_path.exists():
-
-
-
-
-
-
-
-
-
-
             return f"Error: File {file_path} not found."
 
         try:
             content = file_path.read_text(encoding="utf-8", errors="replace")
-
-
-
 
             mode = self.core.decide_compression_mode(file_path.name)
             header = self.core.get_summary_header(file_path.name, mode.capitalize())
@@ -71,22 +60,16 @@ class ContextCompressor:
             if mode == "python":
                 return header + self.core.compress_python(content)
 
-
             elif mode == "markdown":
                 return header + self.core.summarize_markdown(content)
             else:
                 # For other files, just return the first 20 lines
                 lines = content.splitlines()[:20]
 
-
-
                 return header + "\n".join(lines)
         except Exception as e:
             logging.error(f"Failed to compress {file_path}: {e}")
             return f"Error compressing {file_path.name}: {str(e)}"
-
-
-
 
 
 if __name__ == "__main__":

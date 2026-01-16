@@ -21,16 +21,11 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types import ChangelogEntry
 from src.core.base.types import MonorepoEntry
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class MonorepoAggregator:
@@ -57,7 +52,7 @@ class MonorepoAggregator:
         package_name: str,
         version: str,
         entries: list[ChangelogEntry],
-        path: str = ""
+        path: str = "",
     ) -> MonorepoEntry:
         """Add a package to the aggregator.
 
@@ -71,10 +66,7 @@ class MonorepoAggregator:
             The created MonorepoEntry.
         """
         entry = MonorepoEntry(
-            package_name=package_name,
-            version=version,
-            entries=entries,
-            path=path
+            package_name=package_name, version=version, entries=entries, path=path
         )
         self.packages[package_name] = entry
         return entry
@@ -93,4 +85,4 @@ class MonorepoAggregator:
                 result.append(f"- [{entry.category}] {entry.description}")
             result.append("")
 
-        return '\n'.join(result)
+        return "\n".join(result)

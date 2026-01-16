@@ -11,8 +11,6 @@ from pathlib import Path
 import tempfile
 
 
-
-
 class TestTrendAnalysis(unittest.TestCase):
     """Tests for trend analysis and delta calculation."""
 
@@ -41,7 +39,6 @@ class TestTrendAnalysis(unittest.TestCase):
         values: List[int] = [5, 4, 3, 2, 1]
         is_decreasing: bool = values[0] > values[-1]
         assert is_decreasing
-
 
 
 class TestCSVExport(unittest.TestCase):
@@ -74,7 +71,6 @@ class TestCSVExport(unittest.TestCase):
         assert "test,with,commas" in csv_line
 
 
-
 class TestExportFormats(unittest.TestCase):
     """Tests for different export formats."""
 
@@ -97,14 +93,9 @@ class TestExportFormats(unittest.TestCase):
 
     def test_export_excel_metadata(self) -> None:
         """Test Excel export with metadata."""
-        excel_data = {
-            "sheet": "Statistics",
-            "rows": 100,
-            "columns": 5
-        }
+        excel_data = {"sheet": "Statistics", "rows": 100, "columns": 5}
         assert excel_data["rows"] == 100
         assert excel_data["sheet"] == "Statistics"
-
 
 
 class TestAggregation(unittest.TestCase):
@@ -164,7 +155,6 @@ class TestAggregation(unittest.TestCase):
         assert daily_totals["2024-12-17"] == 20
 
 
-
 class TestStatisticalSummaries(unittest.TestCase):
     """Tests for statistical summaries."""
 
@@ -186,7 +176,7 @@ class TestStatisticalSummaries(unittest.TestCase):
         values: List[int] = [1, 2, 3, 4, 5]
         mean: float = sum(values) / len(values)
         variance: float = sum((x - mean) ** 2 for x in values) / len(values)
-        stddev = variance ** 0.5
+        stddev = variance**0.5
         assert stddev > 0
 
     def test_calculate_min_max(self) -> None:
@@ -194,7 +184,6 @@ class TestStatisticalSummaries(unittest.TestCase):
         values: List[int] = [10, 20, 30, 40, 50]
         assert min(values) == 10
         assert max(values) == 50
-
 
 
 class TestComparison(unittest.TestCase):
@@ -223,7 +212,6 @@ class TestComparison(unittest.TestCase):
         assert is_below_threshold
 
 
-
 class TestVisualization(unittest.TestCase):
     """Tests for visualization generation."""
 
@@ -237,7 +225,7 @@ class TestVisualization(unittest.TestCase):
 
         chart_data = {
             "labels": [s["date"] for s in stats],
-            "values": [s["value"] for s in stats]
+            "values": [s["value"] for s in stats],
         }
 
         assert len(chart_data["labels"]) == 3
@@ -248,7 +236,6 @@ class TestVisualization(unittest.TestCase):
         value = 0.856432
         formatted: str = f"{value:.2%}"
         assert "85.64%" in formatted
-
 
 
 class TestMetricFiltering(unittest.TestCase):
@@ -277,7 +264,9 @@ class TestMetricFiltering(unittest.TestCase):
 
         start = datetime(2024, 12, 15)
         end = datetime(2024, 12, 17)
-        filtered: List[Dict[str, datetime]] = [s for s in stats if start <= s["date"] <= end]
+        filtered: List[Dict[str, datetime]] = [
+            s for s in stats if start <= s["date"] <= end
+        ]
         assert len(filtered) == 1
 
     def test_select_top_metrics(self) -> None:
@@ -292,7 +281,6 @@ class TestMetricFiltering(unittest.TestCase):
         assert top_3[0]["value"] == 50
 
 
-
 class TestTimeSeries(unittest.TestCase):
     """Tests for time-series data persistence."""
 
@@ -303,7 +291,7 @@ class TestTimeSeries(unittest.TestCase):
             {"timestamp": "2024-12-16T11:00:00", "value": 105},
         ]
 
-        with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f:
+        with tempfile.NamedTemporaryFile(mode="w", delete=False, suffix=".json") as f:
             json.dump(data, f)
             f.flush()
             fname: str = f.name
@@ -326,7 +314,6 @@ class TestTimeSeries(unittest.TestCase):
         assert data[0]["value"] == 100
 
 
-
 class TestValidation(unittest.TestCase):
     """Tests for stat validation and anomaly detection."""
 
@@ -342,7 +329,7 @@ class TestValidation(unittest.TestCase):
         values: List[int] = [100, 105, 103, 102, 200]  # Last value is anomaly
         mean: float = sum(values) / len(values)
         variance: float = sum((x - mean) ** 2 for x in values) / len(values)
-        variance ** 0.5
+        variance**0.5
 
         # The last value (200) is significantly higher than mean
         assert values[-1] > mean * 1.5  # Obvious anomaly
@@ -356,7 +343,6 @@ class TestValidation(unittest.TestCase):
         }
         # Verify: passed + failed=total
         assert stats["passed"] + stats["failed"] == stats["total"]
-
 
 
 class TestCaching(unittest.TestCase):
@@ -385,7 +371,6 @@ class TestCaching(unittest.TestCase):
         # Invalidate
         del cache["key"]
         assert "key" not in cache
-
 
 
 class TestReporting(unittest.TestCase):
@@ -420,7 +405,6 @@ Pass Rate: 95.0%
         assert "Excellent" in insight
 
 
-
 class TestCoverageMetrics(unittest.TestCase):
     """Tests for code coverage metric tracking."""
 
@@ -435,8 +419,10 @@ class TestCoverageMetrics(unittest.TestCase):
             }
         }
 
-        line_coverage: float = (coverage_data["totals"]["lines_covered"] /
-                         coverage_data["totals"]["lines_valid"]) * 100
+        line_coverage: float = (
+            coverage_data["totals"]["lines_covered"]
+            / coverage_data["totals"]["lines_valid"]
+        ) * 100
 
         assert line_coverage == 85.0
 
@@ -461,7 +447,6 @@ class TestCoverageMetrics(unittest.TestCase):
 
         gaps: Dict[str, float] = {k: v for k, v in coverage_by_file.items() if v < 80}
         assert len(gaps) == 2
-
 
 
 class TestDocstrings(unittest.TestCase):
@@ -499,7 +484,6 @@ class TestDocstrings(unittest.TestCase):
         assert "analyze" in missing
 
 
-
 class TestPathLibUsage(unittest.TestCase):
     """Tests for pathlib migration."""
 
@@ -524,11 +508,14 @@ class TestPathLibUsage(unittest.TestCase):
         from pathlib import Path
 
         # Simulated file system
-        files: List[Path] = [Path("src / main.py"), Path("src / utils.py"), Path("tests / test.py")]
+        files: List[Path] = [
+            Path("src / main.py"),
+            Path("src / utils.py"),
+            Path("tests / test.py"),
+        ]
         py_files: List[Path] = [f for f in files if f.suffix == ".py"]
 
         assert len(py_files) == 3
-
 
 
 class TestTimeSeriesStorage(unittest.TestCase):
@@ -542,11 +529,13 @@ class TestTimeSeriesStorage(unittest.TestCase):
 
         for i in range(5):
             timestamp: datetime = datetime.now() - timedelta(days=5 - i)
-            history.append({
-                "timestamp": timestamp.isoformat(),
-                "files": 50 + (i * 10),
-                "errors": 10 - i,
-            })
+            history.append(
+                {
+                    "timestamp": timestamp.isoformat(),
+                    "files": 50 + (i * 10),
+                    "errors": 10 - i,
+                }
+            )
 
         assert len(history) == 5
         assert history[0]["files"] < history[-1]["files"]
@@ -572,7 +561,6 @@ class TestTimeSeriesStorage(unittest.TestCase):
 
         filtered = [s for s in all_stats if "2025-12-15" <= s["date"] <= "2025-12-16"]
         assert len(filtered) == 2
-
 
 
 class TestFiltering(unittest.TestCase):
@@ -612,7 +600,6 @@ class TestFiltering(unittest.TestCase):
         assert len(recent) == 2
 
 
-
 class TestComparisonReports(unittest.TestCase):
     """Tests for generating comparison reports."""
 
@@ -649,9 +636,10 @@ class TestComparisonReports(unittest.TestCase):
             {"timestamp": "2025-12-16", "score": 82},
         ]
 
-        trend: str = "improving" if runs[-1]["score"] > runs[0]["score"] else "declining"
+        trend: str = (
+            "improving" if runs[-1]["score"] > runs[0]["score"] else "declining"
+        )
         assert trend == "improving"
-
 
 
 class TestVisualizationGeneration(unittest.TestCase):
@@ -695,7 +683,6 @@ class TestVisualizationGeneration(unittest.TestCase):
         assert summary["total_metrics"] == 4
 
 
-
 class TestAlerting(unittest.TestCase):
     """Tests for alerting on metric thresholds."""
 
@@ -728,7 +715,6 @@ class TestAlerting(unittest.TestCase):
         assert len(error_alerts) == 2
 
 
-
 class TestReportingWithInsights(unittest.TestCase):
     """Tests for generating actionable recommendations."""
 
@@ -741,7 +727,8 @@ class TestReportingWithInsights(unittest.TestCase):
         }
 
         problem_areas: Dict[str, Dict[str, int]] = {
-            f: s for f, s in file_stats.items()
+            f: s
+            for f, s in file_stats.items()
             if s["errors"] > 10 or s["coverage"] < 75
         }
 
@@ -775,5 +762,7 @@ class TestReportingWithInsights(unittest.TestCase):
         for imp in improvements:
             imp["priority"] = imp["impact"] / imp["effort"]
 
-        sorted_improvements = sorted(improvements, key=lambda x: x["priority"], reverse=True)
+        sorted_improvements = sorted(
+            improvements, key=lambda x: x["priority"], reverse=True
+        )
         assert sorted_improvements[0]["item"] == "Add tests"

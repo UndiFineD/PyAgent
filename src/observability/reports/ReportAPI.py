@@ -21,7 +21,7 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ReportType import ReportType
 from pathlib import Path
 import logging
@@ -31,8 +31,6 @@ __version__ = VERSION
 # Define AGENT_DIR for default parameter
 
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
-
-
 
 
 class ReportAPI:
@@ -83,10 +81,7 @@ class ReportAPI:
         return None
 
     def create_report(
-        self,
-        file_stem: str,
-        report_type: ReportType,
-        content: str
+        self, file_stem: str, report_type: ReportType, content: str
     ) -> bool:
         """Create or update a report.
         Args:

@@ -17,9 +17,7 @@ import re
 import asyncio
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
-
-
+from src.core.base.BaseUtilities import as_tool
 
 
 class LegalAuditAgent(BaseAgent):
@@ -35,19 +33,18 @@ class LegalAuditAgent(BaseAgent):
             "Apache License, Version 2.0",
             "MIT License",
             "Apache-2.0",
-            "MIT"
+            "MIT",
         ]
-        self.header_pattern = re.compile(r"Licensed under the Apache License, Version 2.0")
+        self.header_pattern = re.compile(
+            r"Licensed under the Apache License, Version 2.0"
+        )
 
     @as_tool
     async def run_audit(self, target_dir: str) -> dict[str, Any]:
         """Scans a directory for license compliance issues."""
+
         def walk_and_check() -> dict[str, Any]:
-            results = {
-                "compliant": [],
-                "non_compliant": [],
-                "missing_hashes": []
-            }
+            results = {"compliant": [], "non_compliant": [], "missing_hashes": []}
 
             for root, _, files in os.walk(target_dir):
                 if "node_modules" in root or ".git" in root or "__pycache__" in root:
@@ -65,29 +62,34 @@ class LegalAuditAgent(BaseAgent):
                         if any(lic in content for lic in self.allowed_licenses):
                             results["compliant"].append(path)
                         else:
-                            results["non_compliant"].append({
-                                "file": path,
-                                "issue": "Missing or unsupported license header"
-                            })
+                            results["non_compliant"].append(
+                                {
+                                    "file": path,
+                                    "issue": "Missing or unsupported license header",
+                                }
+                            )
                     except Exception as e:
-                        results["non_compliant"].append({
-                            "file": path,
-                            "issue": f"Error reading file: {str(e)}"
-                        })
+                        results["non_compliant"].append(
+                            {"file": path, "issue": f"Error reading file: {str(e)}"}
+                        )
             return results
 
         return await asyncio.to_thread(walk_and_check)
 
-    async def get_improvement_items(self, context: dict[str, Any]) -> list[dict[str, Any]]:
+    async def get_improvement_items(
+        self, context: dict[str, Any]
+    ) -> list[dict[str, Any]]:
         """Provides improvements for files missing license headers."""
         target = context.get("target_dir", ".")
         audit = await self.run_audit(target)
 
         improvements = []
         for issue in audit["non_compliant"]:
-            improvements.append({
-                "path": issue["file"],
-                "improvement": f"Add Apache 2.0 license header to {issue['file']}",
-                "priority": 0.8
-            })
+            improvements.append(
+                {
+                    "path": issue["file"],
+                    "improvement": f"Add Apache 2.0 license header to {issue['file']}",
+                    "priority": 0.8,
+                }
+            )
         return improvements

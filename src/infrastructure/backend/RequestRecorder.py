@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .RecordedRequest import RecordedRequest
 from typing import Any
 import json
@@ -30,11 +30,6 @@ import time
 import uuid
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class RequestRecorder:
@@ -99,7 +94,7 @@ class RequestRecorder:
             self._recordings.append(recording)
             # Trim to max size
             if len(self._recordings) > self.max_recordings:
-                self._recordings = self._recordings[-self.max_recordings:]
+                self._recordings = self._recordings[-self.max_recordings :]
 
         return recording
 

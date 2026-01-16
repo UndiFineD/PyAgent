@@ -1,0 +1,36 @@
+# Strategic Improvement Directives (Phase 317)
+# Priority: HIGH | Focus: Logic Complexity & Type Safety
+@focus: ["src/maintenance", "src/logic", "src/infrastructure/orchestration"]
+
+## Primary Objectives
+
+### 1. Complexity Reduction (CRITICAL)
+- Target the 32 files identified with **Cyclomatic Complexity > 25**.
+- Break down monolithic functions into smaller, deterministic helper methods.
+- Prioritize `src/logic/agents` and `src/infrastructure/orchestration`.
+
+### 2. Type Safety & Rust Portability
+- Inject explicit type hints into all `src/infrastructure` orchestrators.
+- Focus on method arguments and return values.
+- Ensure `self` is not typed, but all other complex objects (Fleet, Agents) are.
+
+### 3. Documentation Injection (Maintenance Phase)
+- Ensure every file in `src/maintenance` has a module-level docstring starting with triple quotes.
+- Verify that every public class has a high-quality docstring explaining its role in the 5-tier architecture.
+
+### 4. Swarm Intelligence Verification
+- Use `SelfImprovementOrchestrator` to apply "Swarm Intelligence Fixes" based on the latest interaction shards.
+- Validate that lessons from Shard 220 (Copilot CLI deprecation patterns) are being processed.
+
+### 5. FFI Stability Check
+- Ensure Python type hints align with the expected signatures in `rust_core.pyd`.
+- Identify functions in `src/core` that are candidates for the next wave of Rust oxidation (Phase 318).
+
+## Quality Gates
+- All autonomous fixes must maintain system stability (Stability Gate 1.0).
+- No regression in interaction recording performance.
+- Validated masking of all sensitive tokens in logs.
+
+## Exclusions
+- Do not modify files in `temp/` or `data/`.
+- Skip documentation injection for `__init__.py` files unless they contain significant logic.

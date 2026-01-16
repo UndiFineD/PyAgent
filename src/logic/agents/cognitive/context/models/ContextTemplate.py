@@ -21,17 +21,16 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass, field
 
 __version__ = VERSION
 
 
-
-
 @dataclass
 class ContextTemplate:
     """Template for context documentation."""
+
     name: str
     file_type: str
     sections: list[str]

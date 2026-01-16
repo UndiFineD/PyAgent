@@ -21,13 +21,11 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types import ChangelogEntry
 from src.core.base.types import ReleaseNote
 
 __version__ = VERSION
-
-
 
 
 class ReleaseNotesGenerator:
@@ -41,10 +39,7 @@ class ReleaseNotesGenerator:
     """
 
     def generate(
-        self,
-        version: str,
-        entries: list[ChangelogEntry],
-        title: str | None = None
+        self, version: str, entries: list[ChangelogEntry], title: str | None = None
     ) -> ReleaseNote:
         """Generate release notes from entries.
 
@@ -58,13 +53,15 @@ class ReleaseNotesGenerator:
         """
         # Extract highlights (high priority or high severity)
         highlights = [
-            e.description for e in entries
+            e.description
+            for e in entries
             if e.priority >= 2 or e.severity in ("high", "critical")
         ]
 
         # Extract breaking changes
         breaking = [
-            e.description for e in entries
+            e.description
+            for e in entries
             if "breaking" in e.description.lower() or "breaking" in e.tags
         ]
 
@@ -93,5 +90,5 @@ class ReleaseNotesGenerator:
             summary=summary,
             highlights=highlights[:5],  # Top 5 highlights
             breaking_changes=breaking,
-            full_changelog='\n'.join(changelog_lines)
+            full_changelog="\n".join(changelog_lines),
         )

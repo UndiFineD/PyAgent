@@ -19,19 +19,17 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import time
 from pathlib import Path
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 from src.logic.agents.development.core.AndroidCore import AndroidCore
 
 __version__ = VERSION
-
-
 
 
 class AndroidAgent(BaseAgent):
@@ -58,8 +56,14 @@ class AndroidAgent(BaseAgent):
         """Record mobile automation logic for the collective intelligence pool."""
         if self.recorder:
             try:
-                meta = {"phase": 108, "type": "mobile_automation", "timestamp": time.time()}
-                self.recorder.record_interaction("android", "local_device", action, details, meta=meta)
+                meta = {
+                    "phase": 108,
+                    "type": "mobile_automation",
+                    "timestamp": time.time(),
+                }
+                self.recorder.record_interaction(
+                    "android", "local_device", action, details, meta=meta
+                )
             except Exception as e:
                 logging.error(f"AndroidAgent: Recording error: {e}")
 
@@ -72,9 +76,14 @@ class AndroidAgent(BaseAgent):
         return {
             "screen": "Home",
             "elements": [
-                {"type": "Button", "text": "WhatsApp", "bounds": [100, 200, 300, 400], "id": "com.whatsapp:id/launcher"},
-                {"type": "TextView", "text": "Messages", "bounds": [50, 50, 200, 100]}
-            ]
+                {
+                    "type": "Button",
+                    "text": "WhatsApp",
+                    "bounds": [100, 200, 300, 400],
+                    "id": "com.whatsapp:id/launcher",
+                },
+                {"type": "TextView", "text": "Messages", "bounds": [50, 50, 200, 100]},
+            ],
         }
 
     @as_tool

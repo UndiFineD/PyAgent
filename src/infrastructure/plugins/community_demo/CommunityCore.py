@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -27,8 +27,6 @@ __version__ = VERSION
 CommunityCore: Logic-only module for demonstration.
 This part can be easily converted to a Rust library in the future.
 """
-
-
 
 
 class CommunityCore:

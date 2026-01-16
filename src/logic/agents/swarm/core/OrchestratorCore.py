@@ -27,8 +27,6 @@ except ImportError:
     rc = None  # type: ignore[assignment]
 
 
-
-
 class OrchestratorCore(AgentCore):
     """
     Pure logic core for the OrchestratorAgent.
@@ -45,7 +43,9 @@ class OrchestratorCore(AgentCore):
             return True
         return agent_name.lower() in [s.lower() for s in selective_agents]
 
-    def get_timeout_for_agent(self, agent_name: str, timeout_map: Dict[str, int], default: int = 120) -> int:
+    def get_timeout_for_agent(
+        self, agent_name: str, timeout_map: Dict[str, int], default: int = 120
+    ) -> int:
         """Calculates timeout for a specific agent."""
         return timeout_map.get(agent_name.lower(), default)
 
@@ -57,19 +57,21 @@ class OrchestratorCore(AgentCore):
             dir_path / f"{base}.description.md",
             dir_path / f"{base}.changes.md",
             dir_path / f"{base}.errors.md",
-            dir_path / f"{base}.improvements.md"
+            dir_path / f"{base}.improvements.md",
         ]
 
         for req in required:
             if not req.exists():
                 return False
             # Optimization: Rust could eventually handle high-speed content validation
-            content = req.read_text(encoding='utf-8').strip()
+            content = req.read_text(encoding="utf-8").strip()
             if len(content) < 100:
                 return False
         return True
 
-    def calculate_improvement_score(self, files_processed: int, files_modified: int) -> float:
+    def calculate_improvement_score(
+        self, files_processed: int, files_modified: int
+    ) -> float:
         """
         Calculates a global improvement score.
         Rust hook candidate for phase 132.
@@ -85,10 +87,15 @@ class OrchestratorCore(AgentCore):
             return 0.0
         return (files_modified / files_processed) * 100.0
 
-    def validate_with_consensus(self, task: str, proposals: Dict[str, str], log_path: Path) -> Dict[str, Any]:
+    def validate_with_consensus(
+        self, task: str, proposals: Dict[str, str], log_path: Path
+    ) -> Dict[str, Any]:
         """
         Validates proposals using the ByzantineConsensusAgent via logical delegation.
         """
-        from src.logic.agents.security.ByzantineConsensusAgent import ByzantineConsensusAgent
+        from src.logic.agents.security.ByzantineConsensusAgent import (
+            ByzantineConsensusAgent,
+        )
+
         consensus_agent = ByzantineConsensusAgent(str(log_path))
         return consensus_agent.run_committee_vote(task, proposals)

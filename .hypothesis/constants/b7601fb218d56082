@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\ModernizationAgent.py
-# hypothesis_version: 6.150.1
-
-['2.7', '3.0', '3.10', '3.3', 'binascii.hexlify()', 'import\\s+urllib2', 'urllib.request']

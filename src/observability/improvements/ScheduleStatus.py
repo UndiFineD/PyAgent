@@ -21,16 +21,15 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
 class ScheduleStatus(Enum):
     """Status of scheduled improvements."""
+
     UNSCHEDULED = "unscheduled"
     SCHEDULED = "scheduled"
     IN_SPRINT = "in_sprint"

@@ -24,14 +24,12 @@ Demonstrates how to wrap a Core and interact with the Fleet.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from src.core.base.BaseAgent import BaseAgent
 from .MockCore import MockCore
 
 __version__ = VERSION
-
-
 
 
 class MockAgent(BaseAgent):

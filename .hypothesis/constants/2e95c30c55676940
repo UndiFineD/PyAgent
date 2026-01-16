@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_library\infer_schema.py
-# hypothesis_version: 6.150.1
-
-['(', '()', ')', '*', ', ', 'Device', 'Scalar', 'ScalarType', 'SymInt', 'Tensor', 'Tensor[]', '__args__', 'bool', 'float', 'str', 'torch.', 'torch.library', 'unknown']

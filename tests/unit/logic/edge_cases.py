@@ -9,21 +9,19 @@ import sys
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
     class agent_sys_path:
         def __enter__(self) -> str:
-
             return self
-
-
-
-
-
-
 
         def __exit__(self, *args) -> str:
             sys.path.remove(str(AGENT_DIR))
@@ -61,7 +59,7 @@ class TestErrorRecovery(unittest.TestCase):
 
         delays = []
         for attempt in range(3):
-            delay = min(2 ** attempt, 60)  # Exponential with cap
+            delay = min(2**attempt, 60)  # Exponential with cap
             delays.append(delay)
 
         assert delays == [1, 2, 4]
@@ -72,6 +70,7 @@ class TestAIRetryAndErrorRecovery(unittest.TestCase):
 
     def test_multi_attempt_retry_on_validation_failure(self) -> None:
         """Test multi-attempt retry when syntax validation fails."""
+
         class RetryMechanism:
             def __init__(self, max_retries=3) -> None:
                 self.max_retries: int = max_retries
@@ -96,48 +95,40 @@ class TestAIRetryAndErrorRecovery(unittest.TestCase):
     def test_ai_powered_syntax_error_autofix(self) -> None:
         """Test AI-powered syntax error auto-fix."""
         syntax_errors: List[Dict[str, str]] = [
-            {'error': 'missing colon', 'fix': 'add colon to if statement'},
-            {'error': 'unmatched parenthesis', 'fix': 'add closing parenthesis'},
-            {'error': 'invalid indentation', 'fix': 'fix indentation'}
+            {"error": "missing colon", "fix": "add colon to if statement"},
+            {"error": "unmatched parenthesis", "fix": "add closing parenthesis"},
+            {"error": "invalid indentation", "fix": "fix indentation"},
         ]
         self.assertEqual(len(syntax_errors), 3)
 
     def test_fallback_chain(self) -> None:
         """Test fallback chain: syntax fix -> style fix -> revert."""
-        fallback_chain: List[str] = [
-            'syntax_fix',
-            'style_fix',
-            'revert_to_original'
-        ]
-        self.assertEqual(fallback_chain[0], 'syntax_fix')
-        self.assertEqual(fallback_chain[-1], 'revert_to_original')
+        fallback_chain: List[str] = ["syntax_fix", "style_fix", "revert_to_original"]
+        self.assertEqual(fallback_chain[0], "syntax_fix")
+        self.assertEqual(fallback_chain[-1], "revert_to_original")
 
     def test_retry_attempt_logging(self) -> None:
         """Test logging of all retry attempts with error context."""
         retry_log = [
             {
-                'attempt': 1,
-                'error': 'SyntaxError: invalid syntax',
-                'timestamp': '2025-12-16T10:00:00'
+                "attempt": 1,
+                "error": "SyntaxError: invalid syntax",
+                "timestamp": "2025-12-16T10:00:00",
             },
             {
-                'attempt': 2,
-                'error': 'SyntaxError: missing colon',
-                'timestamp': '2025-12-16T10:00:01'
+                "attempt": 2,
+                "error": "SyntaxError: missing colon",
+                "timestamp": "2025-12-16T10:00:01",
             },
-            {
-                'attempt': 3,
-                'error': 'Success',
-                'timestamp': '2025-12-16T10:00:02'
-            }
+            {"attempt": 3, "error": "Success", "timestamp": "2025-12-16T10:00:02"},
         ]
         self.assertEqual(len(retry_log), 3)
 
     def test_configurable_retry_timeout(self) -> None:
         """Test configurable timeout for AI retry operations."""
         retry_config = {
-            'max_retries': 3,
-            'timeout_seconds': 30,
-            'backoff_multiplier': 2.0
+            "max_retries": 3,
+            "timeout_seconds": 30,
+            "backoff_multiplier": 2.0,
         }
-        self.assertEqual(retry_config['timeout_seconds'], 30)
+        self.assertEqual(retry_config["timeout_seconds"], 30)

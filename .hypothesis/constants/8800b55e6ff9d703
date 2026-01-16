@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_custom_op\impl.py
-# hypothesis_version: 6.150.1
-
-['.', '::', 'Autograd', 'AutogradCPU', 'AutogradCUDA', 'BackendSelect', 'CPU', 'CUDA', 'CustomOp', 'FRAGMENT', 'List[Tensor]', 'Meta', 'SymInt', 'Tensor', 'Undefined', 'abstract', 'at', 'aten', 'autograd', 'backward', 'bool', 'cpu', 'cuda', 'custom_op', 'default', 'factory', 'float', 'get_ctx', 'int', 'prim', 'prims', 'pytorch', 'save_for_backward', 'torch']

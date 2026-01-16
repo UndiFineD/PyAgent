@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\cache_utils.py
-# hypothesis_version: 6.150.1
-
-[128, '0.2.5', '2.7', 'DynamicCache', 'EncoderDecoderCache', 'attention_chunk_size', 'cache_position', 'chunked_attention', 'compute_dtype', 'cpu', 'cumulative_length', 'full_attention', 'hqq', 'is_sliding', 'layer_types', 'num_kv_shared_layers', 'quanto', 'scale', 'sliding_attention', 'sliding_window', 'zero']

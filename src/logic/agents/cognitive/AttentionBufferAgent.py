@@ -19,22 +19,20 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import time
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
 
 
-
-
 class AttentionBufferAgent(BaseAgent):
     """
-    Agent that maintains a shared attention buffer between humans and agents.
-Maintain a high-resolution stream of state changes, user interactions, and agent thoughts.
+        Agent that maintains a shared attention buffer between humans and agents.
+    Maintain a high-resolution stream of state changes, user interactions, and agent thoughts.
     """
 
     def __init__(self, file_path: str) -> None:
@@ -57,7 +55,7 @@ Maintain a high-resolution stream of state changes, user interactions, and agent
             "timestamp": time.time(),
             "source": source,
             "content": content,
-            "priority": priority
+            "priority": priority,
         }
         self.buffer.append(point)
 
@@ -73,11 +71,13 @@ Maintain a high-resolution stream of state changes, user interactions, and agent
         """
         Returns the current state of the attention buffer, sorted by priority and recency.
         """
-        sorted_buffer = sorted(self.buffer, key=lambda x: (x['priority'], x['timestamp']), reverse=True)
+        sorted_buffer = sorted(
+            self.buffer, key=lambda x: (x["priority"], x["timestamp"]), reverse=True
+        )
         return {
             "current_focus": sorted_buffer[0] if sorted_buffer else None,
             "recent_context": sorted_buffer[:10],
-            "total_points": len(self.buffer)
+            "total_points": len(self.buffer),
         }
 
     @as_tool
@@ -87,6 +87,6 @@ Maintain a high-resolution stream of state changes, user interactions, and agent
         """
         now = time.time()
         initial_count = len(self.buffer)
-        self.buffer = [p for p in self.buffer if now - p['timestamp'] < age_seconds]
+        self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]
         removed = initial_count - len(self.buffer)
         return f"Cleared {removed} stale attention points."

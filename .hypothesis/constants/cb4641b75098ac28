@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\polys\monomials.py
-# hypothesis_version: 6.150.1
-
-['%s + %s', '%s + %s*k', '%s - %s', '%s%s', '%s(%s)', '%s**%s', '%s*k', '*', ', ', 'A', 'AB', 'ABk', 'Ak', 'B', 'R', 'RAB', 'a', 'b', 'exponents', 'gens', 'i', 'monomial_div', 'monomial_gcd', 'monomial_lcm', 'monomial_ldiv', 'monomial_mul', 'monomial_mulpow', 'monomial_pow', 'name', 'r']

@@ -21,14 +21,14 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.models.SharedContext import SharedContext
-from src.logic.agents.cognitive.context.models.SharingPermission import SharingPermission
+from src.logic.agents.cognitive.context.models.SharingPermission import (
+    SharingPermission,
+)
 from datetime import datetime
 
 __version__ = VERSION
-
-
 
 
 class ContextSharingManager:
@@ -97,7 +97,7 @@ class ContextSharingManager:
         context_id: str,
         users: list[str],
         owner: str = "current_user",
-        permission: SharingPermission = SharingPermission.READ_ONLY
+        permission: SharingPermission = SharingPermission.READ_ONLY,
     ) -> SharedContext:
         """Share context with users.
 

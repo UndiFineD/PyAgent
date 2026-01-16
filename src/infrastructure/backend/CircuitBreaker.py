@@ -21,17 +21,12 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from collections.abc import Callable
 from src.core.base.CircuitBreaker import CircuitBreaker as CircuitBreakerImpl
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class CircuitBreaker:
@@ -61,13 +56,18 @@ class CircuitBreaker:
         self.success_count = 0
         self.last_failure_time: float | None = None
         self.state = "CLOSED"  # CLOSED, OPEN, or HALF_OPEN
-        self.impl = CircuitBreakerImpl(name=name, failure_threshold=failure_threshold, recovery_timeout=recovery_timeout)
+        self.impl = CircuitBreakerImpl(
+            name=name,
+            failure_threshold=failure_threshold,
+            recovery_timeout=recovery_timeout,
+        )
 
     def is_open(self) -> bool:
         if self.impl.state == "OPEN":
             # Check if recovery timeout has passed (Lazy evaluation)
             if self.impl.last_failure_time:
                 import time
+
                 current_timeout = self.impl._get_current_timeout()
                 if time.time() - self.impl.last_failure_time > current_timeout:
                     return False

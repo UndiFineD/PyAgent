@@ -1,8 +1,11 @@
-
 from __future__ import annotations
 import json
 
-
+try:
+    import rust_core as rc
+    HAS_RUST = True
+except ImportError:
+    HAS_RUST = False
 
 
 class MorphologyCore:
@@ -16,6 +19,12 @@ class MorphologyCore:
         Calculates Jaccard similarity between two agent logic paths.
         Overlap > 0.8 triggers a 'MERGE' proposal.
         """
+        # Rust-accelerated Jaccard similarity
+        if HAS_RUST:
+            try:
+                return rc.calculate_jaccard_set_rust(path_a, path_b)  # type: ignore[attr-defined]
+            except Exception:
+                pass
         set_a, set_b = set(path_a), set(path_b)
         if not set_a or not set_b:
             return 0.0
@@ -23,7 +32,9 @@ class MorphologyCore:
         union = len(set_a.union(set_b))
         return intersection / union
 
-    def encode_agent_dna(self, name: str, tools: list[str], prompt: str, model: str) -> str:
+    def encode_agent_dna(
+        self, name: str, tools: list[str], prompt: str, model: str
+    ) -> str:
         """
         Encodes the agent's DNA into a JSON string.
         """
@@ -32,9 +43,9 @@ class MorphologyCore:
             "genome": {
                 "tools": sorted(tools),
                 "system_prompt_hash": hash(prompt),
-                "preferred_model": model
+                "preferred_model": model,
             },
-            "version": "1.0.DNA"
+            "version": "1.0.DNA",
         }
         return json.dumps(dna)
 

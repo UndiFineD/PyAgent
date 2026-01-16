@@ -19,15 +19,13 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class PersonalityCoreAgent(BaseAgent):
@@ -60,27 +58,27 @@ class PersonalityCoreAgent(BaseAgent):
         vibe = "professional"
         urgency = "low"
 
-        if any(word in user_input.lower() for word in ["urgent", "asap", "emergency", "broken"]):
+        if any(
+            word in user_input.lower()
+            for word in ["urgent", "asap", "emergency", "broken"]
+        ):
             urgency = "high"
             vibe = "rapid_response"
-        elif any(word in user_input.lower() for word in ["thanks", "great", "awesome", "fun"]):
+        elif any(
+            word in user_input.lower() for word in ["thanks", "great", "awesome", "fun"]
+        ):
             vibe = "friendly"
 
         self.current_vibe = vibe
 
         # Emit signal to the fleet
-        if hasattr(self, 'registry') and self.registry:
-            self.registry.emit("FLEET_VIBE_CHANGED", {
-                "vibe": vibe,
-                "urgency": urgency,
-                "context": user_input[:100]
-            })
+        if hasattr(self, "registry") and self.registry:
+            self.registry.emit(
+                "FLEET_VIBE_CHANGED",
+                {"vibe": vibe, "urgency": urgency, "context": user_input[:100]},
+            )
 
-        return {
-            "status": "success",
-            "detected_vibe": vibe,
-            "urgency": urgency
-        }
+        return {"status": "success", "detected_vibe": vibe, "urgency": urgency}
 
     @as_tool
     def get_track_guidance(self) -> str:
@@ -90,6 +88,8 @@ class PersonalityCoreAgent(BaseAgent):
         guidance = {
             "professional": "Direct, technical, and concise.",
             "friendly": "Encouraging, helpful, and personable.",
-            "rapid_response": "Extremely concise, focusing on immediate fixes and safety."
+            "rapid_response": "Extremely concise, focusing on immediate fixes and safety.",
         }
-        return guidance.get(self.current_vibe, "Maintain standard operational parameters.")
+        return guidance.get(
+            self.current_vibe, "Maintain standard operational parameters."
+        )

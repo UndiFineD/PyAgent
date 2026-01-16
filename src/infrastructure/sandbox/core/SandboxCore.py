@@ -1,18 +1,13 @@
-
 from __future__ import annotations
 import typing
 from dataclasses import dataclass, field
 
 
-
-
 @dataclass(frozen=True)
 class SandboxConfig:
     """Immutable configuration for agent sandboxing."""
+
     cpu_limit: float = 0.5
-
-
-
 
     memory_mb: int = 512
     network_enabled: bool = False
@@ -20,13 +15,14 @@ class SandboxConfig:
     timeout_sec: int = 30
 
 
-
 class SandboxCore:
     """Pure logic for containerized agent runtimes and resource isolation.
     Handles enforcement logic, quota calculations, and security constraints.
     """
 
-    def validate_code_execution(self, code: str, config: SandboxConfig) -> dict[str, typing.Any]:
+    def validate_code_execution(
+        self, code: str, config: SandboxConfig
+    ) -> dict[str, typing.Any]:
         """Validates if code execution fits within sandbox constraints."""
         issues = []
         if "os.system" in code or "subprocess" in code:
@@ -40,11 +36,13 @@ class SandboxCore:
             "issues": issues,
             "quota": {
                 "cpu": f"{config.cpu_limit} cores",
-                "mem": f"{config.memory_mb}MB"
-            }
+                "mem": f"{config.memory_mb}MB",
+            },
         }
 
-    def calculate_resource_usage(self, start_cpu: float, end_cpu: float, duration: float) -> float:
+    def calculate_resource_usage(
+        self, start_cpu: float, end_cpu: float, duration: float
+    ) -> float:
         """Calculates normalized resource usage score."""
         if duration <= 0:
             return 0.0

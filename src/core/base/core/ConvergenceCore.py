@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 from typing import Any
 
@@ -6,11 +5,6 @@ try:
     import rust_core as rc
 except ImportError:
     rc: Any = None  # type: ignore[no-redef]
-
-
-
-
-
 
 
 class ConvergenceCore:
@@ -42,7 +36,9 @@ class ConvergenceCore:
             "all_passed": all_passed,
             "healthy_count": healthy_count,
             "total_count": total_count,
-            "failed_agents": [name for name, status in agent_reports.items() if not status]
+            "failed_agents": [
+                name for name, status in agent_reports.items() if not status
+            ],
         }
 
     def generate_strategic_summary(self, phase_history: list[dict[str, Any]]) -> str:
@@ -58,7 +54,7 @@ class ConvergenceCore:
             "- Established Byzantine Consensus with weighted committee selection.",
             "- Developed self-healing import logic and PII redaction.",
             "- Scaffolding for Rust migration completed for 30+ core modules.",
-            "- Federated search mesh with MemoRAG integration active."
+            "- Federated search mesh with MemoRAG integration active.",
         ]
         summary += "\n".join(achievements)
 

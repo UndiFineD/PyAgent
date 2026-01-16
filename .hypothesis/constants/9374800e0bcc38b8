@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\cognitive\ProactiveAgent.py
-# hypothesis_version: 6.150.1
-
-[100, 'CRITICAL', 'UNAVAILABLE', '__main__', 'cpu_usage_pct', 'disk_free_gb', 'error_count', 'id', 'scheduled', 'status', 'task', 'trigger']

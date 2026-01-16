@@ -21,13 +21,11 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.models.ContextDiff import ContextDiff
 import re
 
 __version__ = VERSION
-
-
 
 
 class ContextDiffer:
@@ -48,7 +46,9 @@ class ContextDiffer:
         """Compute a structured diff between two context contents."""
         return self.diff_versions(content_from, content_to)
 
-    def get_section_changes(self, content_from: str, content_to: str) -> dict[str, list[str]]:
+    def get_section_changes(
+        self, content_from: str, content_to: str
+    ) -> dict[str, list[str]]:
         """Return section-level changes between two contents."""
         diff = self.diff_versions(content_from, content_to)
         return {
@@ -69,7 +69,7 @@ class ContextDiffer:
         content_from: str,
         content_to: str,
         version_from: str = "v1",
-        version_to: str = "v2"
+        version_to: str = "v2",
     ) -> ContextDiff:
         """Create diff between two content versions.
 
@@ -102,4 +102,5 @@ class ContextDiffer:
             change_summary=(
                 f"Added {len(added)}, removed {len(removed)}, "
                 f"modified {len(modified)} sections"
-            ))
+            ),
+        )

@@ -14,21 +14,19 @@ import sys
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
     class agent_sys_path:
         def __enter__(self) -> Self:
-
             return self
-
-
-
-
-
-
 
         def __exit__(self, *args) -> None:
             sys.path.remove(str(AGENT_DIR))
@@ -68,7 +66,11 @@ class TestTrendAnalysisAdvanced(unittest.TestCase):
             {"date": "2025-12-16", "errors": 5},
         ]
 
-        trend: str = "decreasing" if history[-1]["errors"] < history[0]["errors"] else "increasing"
+        trend: str = (
+            "decreasing"
+            if history[-1]["errors"] < history[0]["errors"]
+            else "increasing"
+        )
         assert trend == "decreasing"
 
     def test_generate_trend_report(self) -> None:
@@ -85,10 +87,10 @@ class TestTrendAnalysisAdvanced(unittest.TestCase):
             "change": {
                 "files": stats_history[-1]["files"] - stats_history[-2]["files"],
                 "improvements": (
-                    stats_history[-1]["improvements"] -
-                    stats_history[-2]["improvements"]
+                    stats_history[-1]["improvements"]
+                    - stats_history[-2]["improvements"]
                 ),
-            }
+            },
         }
 
         assert report["change"]["files"] == 25
@@ -102,10 +104,7 @@ class TestVisualizationAdvanced(unittest.TestCase):
         data: Dict[str, int] = {"python": 50, "javascript": 30, "bash": 20}
         max_val: int = max(data.values())
 
-        bars: Dict[str, str] = {
-            k: "█" * (v * 20 // max_val)
-            for k, v in data.items()
-        }
+        bars: Dict[str, str] = {k: "█" * (v * 20 // max_val) for k, v in data.items()}
 
         assert len(bars["python"]) > len(bars["javascript"])
 
@@ -144,7 +143,9 @@ class TestVisualizationAdvanced(unittest.TestCase):
         for key in current:
             current_val: int = current[key]
             prev_val: int = previous[key]
-            percent: float | int = ((current_val - prev_val) / prev_val) * 100 if prev_val else 0
+            percent: float | int = (
+                ((current_val - prev_val) / prev_val) * 100 if prev_val else 0
+            )
             comparison[key] = f"{percent:+.1f}%"
 
         assert "+" in comparison["metric_a"]
@@ -222,7 +223,9 @@ class TestExportFormatsAdvanced(unittest.TestCase):
         cursor.execute("CREATE TABLE stats (file TEXT, errors INTEGER)")
 
         for stat in stats:
-            cursor.execute("INSERT INTO stats VALUES (?, ?)", (stat["file"], stat["errors"]))
+            cursor.execute(
+                "INSERT INTO stats VALUES (?, ?)", (stat["file"], stat["errors"])
+            )
 
         cursor.execute("SELECT COUNT(*) FROM stats")
         count = cursor.fetchone()[0]
@@ -261,7 +264,9 @@ class TestAggregationAdvanced(unittest.TestCase):
 
         by_agent: dict[Any, Any] = {}
         for entry in entries:
-            by_agent[entry["agent"]] = by_agent.get(entry["agent"], 0) + entry["improvements"]
+            by_agent[entry["agent"]] = (
+                by_agent.get(entry["agent"], 0) + entry["improvements"]
+            )
 
         assert by_agent["coder"] == 15
 
@@ -401,7 +406,8 @@ class TestCachingAdvanced(unittest.TestCase):
         current_time: float = time.time()
 
         expired = {
-            k: v for k, v in cache_items.items()
+            k: v
+            for k, v in cache_items.items()
             if current_time - v["timestamp"] > max_age
         }
 

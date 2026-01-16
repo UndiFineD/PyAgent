@@ -21,7 +21,7 @@
 """Implementation of subagent running logic."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import hashlib
 import logging
 import os
@@ -40,11 +40,6 @@ try:
     import requests
 except ImportError:
     requests = None  # type: ignore[assignment]
-
-
-
-
-
 
 
 class SubagentRunner:
@@ -74,7 +69,7 @@ class SubagentRunner:
             logging.debug(f"Checking if command is available: {command}")
             # Use 'which' on Linux/Mac or 'where' on Windows for faster checks
             subprocess.run(
-                ['where' if os.name == 'nt' else 'which', command],
+                ["where" if os.name == "nt" else "which", command],
                 capture_output=True,
                 text=True,
                 timeout=2,
@@ -83,7 +78,11 @@ class SubagentRunner:
             logging.debug(f"Command available: {command}")
             SubagentRunner._command_cache[command] = True
             return True
-        except (subprocess.CalledProcessError, FileNotFoundError, subprocess.TimeoutExpired):
+        except (
+            subprocess.CalledProcessError,
+            FileNotFoundError,
+            subprocess.TimeoutExpired,
+        ):
             logging.debug(f"Command not available: {command}")
             SubagentRunner._command_cache[command] = False
             return False
@@ -94,7 +93,9 @@ class SubagentRunner:
 
         # Disk cache initialization
         repo_root = self._resolve_repo_root()
-        self.disk_cache = DiskCache(repo_root / ".agent_cache", ttl_seconds=60*60*24*7)  # 7 days default
+        self.disk_cache = DiskCache(
+            repo_root / ".agent_cache", ttl_seconds=60 * 60 * 24 * 7
+        )  # 7 days default
 
         # Phase 108: Recording Intelligence
         self.recorder = LocalContextRecorder(workspace_root=repo_root)
@@ -129,7 +130,14 @@ class SubagentRunner:
     def llm_client(self, value: LLMClient) -> None:
         self._llm_client = value
 
-    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] | None = None) -> None:
+    def record_interaction(
+        self,
+        provider: str,
+        model: str,
+        prompt: str,
+        result: str,
+        meta: dict[str, Any] | None = None,
+    ) -> None:
         """Record an interaction for intelligence harvesting (Phase 108)."""
         if self.recorder:
             self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
@@ -137,7 +145,7 @@ class SubagentRunner:
     def clear_response_cache(self) -> None:
         """Clear the response cache."""
         self._response_cache.clear()
-        if hasattr(self, 'disk_cache'):
+        if hasattr(self, "disk_cache"):
             self.disk_cache.clear()
         logging.debug("Response cache cleared")
 
@@ -147,13 +155,15 @@ class SubagentRunner:
 
     def reset_metrics(self) -> None:
         """Reset metrics to zero."""
-        self._metrics.update({
-            "requests": 0,
-            "errors": 0,
-            "timeouts": 0,
-            "cache_hits": 0,
-            "total_latency_ms": 0,
-        })
+        self._metrics.update(
+            {
+                "requests": 0,
+                "errors": 0,
+                "timeouts": 0,
+                "cache_hits": 0,
+                "total_latency_ms": 0,
+            }
+        )
         logging.debug("Metrics reset")
 
     def _get_cache_key(self, prompt: str, model: str) -> str:
@@ -161,7 +171,9 @@ class SubagentRunner:
         content = f"{prompt}:{model}".encode()
         return hashlib.sha256(content).hexdigest()
 
-    def validate_response_content(self, response: str, content_types: list[str] | None = None) -> bool:
+    def validate_response_content(
+        self, response: str, content_types: list[str] | None = None
+    ) -> bool:
         """Validate that AI response contains expected content types."""
         if not response:
             return False
@@ -171,7 +183,9 @@ class SubagentRunner:
         for content_type in content_types:
             if content_type.lower() in response_lower:
                 return True
-        logging.warning(f"Response validation failed: expected {content_types}, got partial match")
+        logging.warning(
+            f"Response validation failed: expected {content_types}, got partial match"
+        )
         return True
 
     def estimate_tokens(self, text: str) -> int:
@@ -180,7 +194,9 @@ class SubagentRunner:
             return 0
         return max(1, len(text) // 4)
 
-    def estimate_cost(self, tokens: int, model: str = "gpt-4", rate_per_1k_input: float = 0.03) -> float:
+    def estimate_cost(
+        self, tokens: int, model: str = "gpt-4", rate_per_1k_input: float = 0.03
+    ) -> float:
         """Estimate cost for API-based backends."""
         cost = (tokens / 1000.0) * rate_per_1k_input
         logging.debug(f"Estimated cost for {tokens} tokens: ${cost:.6f}")
@@ -192,12 +208,7 @@ class SubagentRunner:
         os.environ[env_key] = str(timeout_s)
         logging.debug(f"Configured {backend} timeout to {timeout_s}s")
 
-    def llm_chat_via_github_models(
-        self,
-        prompt: str,
-        model: str,
-        **kwargs: Any
-    ) -> str:
+    def llm_chat_via_github_models(self, prompt: str, model: str, **kwargs: Any) -> str:
         """Call a GitHub Models OpenAI-compatible chat endpoint with caching."""
         return self._core.llm_chat_via_github_models(prompt, model, **kwargs)
 
@@ -210,10 +221,26 @@ class SubagentRunner:
             return False
         if any(op in t for op in ("|", "&&", ";")):
             return True
-        starters = ("git ", "gh ", "docker ", "kubectl ", "pip ", "python ", "npm ", "node ", "pwsh ", "powershell ", "Get-", "Set-", "New-")
+        starters = (
+            "git ",
+            "gh ",
+            "docker ",
+            "kubectl ",
+            "pip ",
+            "python ",
+            "npm ",
+            "node ",
+            "pwsh ",
+            "powershell ",
+            "Get-",
+            "Set-",
+            "New-",
+        )
         return t.startswith(starters)
 
-    def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str | None:
+    def run_subagent(
+        self, description: str, prompt: str, original_content: str = ""
+    ) -> str | None:
         """Run a subagent using available backends."""
         return self._core.run_subagent(description, prompt, original_content)
 

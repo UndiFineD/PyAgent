@@ -875,6 +875,7 @@ pub fn aggregate_search_results(
 
 #[pyclass]
 pub struct CoderCore {
+    #[allow(dead_code)]
     language: String,
 }
 

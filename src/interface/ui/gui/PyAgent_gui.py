@@ -23,7 +23,7 @@ GUI Agent: Provides a graphical user interface for PyAgent.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import sys
 import tkinter as tk
 from pathlib import Path
@@ -38,13 +38,10 @@ if str(project_root) not in sys.path:
 __version__ = VERSION
 
 
-
-
 def main() -> None:
     root = tk.Tk()
     PyAgentGUI(root)
     root.mainloop()
-
 
 
 if __name__ == "__main__":

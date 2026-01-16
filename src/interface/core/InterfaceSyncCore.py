@@ -1,8 +1,5 @@
-
 from __future__ import annotations
 from typing import Any
-
-
 
 
 class InterfaceSyncCore:
@@ -16,13 +13,13 @@ class InterfaceSyncCore:
             "dark": {
                 "background": "#1e1e1e",
                 "foreground": "#d4d4d4",
-                "accent": "#007acc"
+                "accent": "#007acc",
             },
             "light": {
                 "background": "#ffffff",
                 "foreground": "#000000",
-                "accent": "#005fb8"
-            }
+                "accent": "#005fb8",
+            },
         }
         self.current_theme = "dark"
 
@@ -39,15 +36,17 @@ class InterfaceSyncCore:
             "event": "INTERFACE_SYNC",
             "type": action_type,
             "payload": payload,
-            "timestamp": "2026-01-08"  # Simulated
+            "timestamp": "2026-01-08",  # Simulated
         }
 
-    def resolve_topology_state(self, agents: list[dict[str, Any]], connections: list[tuple]) -> dict[str, Any]:
+    def resolve_topology_state(
+        self, agents: list[dict[str, Any]], connections: list[tuple]
+    ) -> dict[str, Any]:
         """
         Prepares a unified topology state for the Web viewer and GUI.
         """
         return {
             "nodes": agents,
             "edges": [{"from": c[0], "to": c[1]} for c in connections],
-            "sync_version": "v2.0"
+            "sync_version": "v2.0",
         }

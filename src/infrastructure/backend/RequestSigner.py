@@ -21,16 +21,11 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import hashlib
 import os
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class RequestSigner:
@@ -52,8 +47,11 @@ class RequestSigner:
             secret_key: Secret key for signing. If None, uses environment variable.
         """
         import hmac
+
         self._hmac = hmac
-        self.secret_key = (secret_key or os.environ.get("DV_AGENT_SIGNING_KEY", "")).encode()
+        self.secret_key = (
+            secret_key or os.environ.get("DV_AGENT_SIGNING_KEY", "")
+        ).encode()
         self._signatures: dict[str, str] = {}
 
     def sign(self, data: str, request_id: str | None = None) -> str:
@@ -67,9 +65,7 @@ class RequestSigner:
             str: Hex - encoded signature.
         """
         signature = self._hmac.new(
-            self.secret_key,
-            data.encode(),
-            hashlib.sha256
+            self.secret_key, data.encode(), hashlib.sha256
         ).hexdigest()
 
         if request_id:
@@ -88,9 +84,7 @@ class RequestSigner:
             bool: True if signature is valid.
         """
         expected = self._hmac.new(
-            self.secret_key,
-            data.encode(),
-            hashlib.sha256
+            self.secret_key, data.encode(), hashlib.sha256
         ).hexdigest()
 
         return self._hmac.compare_digest(expected, signature)

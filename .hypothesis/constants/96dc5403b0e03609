@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\interface\ui\gui\MainApp.py
-# hypothesis_version: 6.150.1
-
-['1.0', '1400x900', 'Confirm', 'New session started.', 'Ready', 'Session loaded.', 'Session saved.', '__main__', 'add_agent', 'add_custom', 'agents', 'bmad_wizard', 'browse_root', 'collapse_all', 'exit', 'expand_all', 'get_global_context', 'get_project_root', 'get_selected_path', 'get_workflow_manager', 'global_context', 'gui_session.json', 'load_session', 'new_session', 'prd', 'refresh_explorer', 'root', 'save_session', 'set_status', 'set_track', 'show_settings', 'tests', 'toggle_theme', 'track']

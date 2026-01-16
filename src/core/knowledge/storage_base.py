@@ -18,17 +18,12 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from abc import ABC, abstractmethod
 from typing import Any
 from pathlib import Path
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class KnowledgeStore(ABC):
@@ -40,7 +35,9 @@ class KnowledgeStore(ABC):
         self.storage_path.mkdir(parents=True, exist_ok=True)
 
     @abstractmethod
-    def store(self, key: str, value: Any, metadata: dict[str, Any] | None = None) -> bool:
+    def store(
+        self, key: str, value: Any, metadata: dict[str, Any] | None = None
+    ) -> bool:
         raise NotImplementedError()
 
     @abstractmethod

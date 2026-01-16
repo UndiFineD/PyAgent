@@ -21,16 +21,15 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
 class EffortEstimate(Enum):
     """Effort estimation levels."""
+
     TRIVIAL = 1
     SMALL = 3
     MEDIUM = 5

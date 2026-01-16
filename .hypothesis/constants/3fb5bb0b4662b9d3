@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\generation\continuous_batching\cache.py
-# hypothesis_version: 6.150.1
-
-[0.01, 0.9, 1.0, 256, 4096, 'attn_implementation', 'block_size', 'full_attention', 'head_dim', 'layer_types', 'max_batch_tokens', 'max_memory', 'num_blocks', 'num_key_value_heads', 'paged_attention', 'sliding_attention', 'sliding_window']

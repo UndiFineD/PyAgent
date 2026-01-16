@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\decomposition\_sparse_pca.py
-# hypothesis_version: 6.150.1
-
-[0.0, 1e-08, 0.001, 0.01, 1000, 'U_init', 'V_init', 'alpha', 'batch_size', 'boolean', 'callback', 'cd', 'cholesky', 'default', 'float32', 'float64', 'lars', 'lasso_', 'left', 'max_iter', 'max_no_improvement', 'method', 'n_components', 'n_jobs', 'random_state', 'ridge_alpha', 'shuffle', 'tol', 'verbose']

@@ -21,35 +21,63 @@
 """Test agent functionality - extracted classes."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
+from src.core.base.Version import VERSION as VERSION
 from .enums import (
-    TestPriority, TestStatus, CoverageType, BrowserType, TestSourceType,
-    MutationOperator, ExecutionMode
+    TestPriority,
+    TestStatus,
+    CoverageType,
+    BrowserType,
+    TestSourceType,
+    MutationOperator,
+    ExecutionMode,
 )
 from .models import (
-    TestCase as TestCase, TestRun as TestRun, CoverageGap as CoverageGap, TestFactory as TestFactory, VisualRegressionConfig as VisualRegressionConfig,
-    ContractTest as ContractTest, TestEnvironment as TestEnvironment, ExecutionTrace as ExecutionTrace, TestDependency as TestDependency,
-    CrossBrowserConfig as CrossBrowserConfig, AggregatedResult as AggregatedResult, Mutation as Mutation, GeneratedTest as GeneratedTest,
-    TestProfile as TestProfile, ScheduleSlot as ScheduleSlot, Recording as Recording, ReplayResult as ReplayResult, ProvisionedEnvironment as ProvisionedEnvironment,
-    ValidationResult as ValidationResult, _empty_str_list as _empty_str_list, _empty_dict_any as _empty_dict_any, _empty_action_list as _empty_action_list
+    TestCase as TestCase,
+    TestRun as TestRun,
+    CoverageGap as CoverageGap,
+    TestFactory as TestFactory,
+    VisualRegressionConfig as VisualRegressionConfig,
+    ContractTest as ContractTest,
+    TestEnvironment as TestEnvironment,
+    ExecutionTrace as ExecutionTrace,
+    TestDependency as TestDependency,
+    CrossBrowserConfig as CrossBrowserConfig,
+    AggregatedResult as AggregatedResult,
+    Mutation as Mutation,
+    GeneratedTest as GeneratedTest,
+    TestProfile as TestProfile,
+    ScheduleSlot as ScheduleSlot,
+    Recording as Recording,
+    ReplayResult as ReplayResult,
+    ProvisionedEnvironment as ProvisionedEnvironment,
+    ValidationResult as ValidationResult,
+    _empty_str_list as _empty_str_list,
+    _empty_dict_any as _empty_dict_any,
+    _empty_action_list as _empty_action_list,
 )
 from .testing_utils import (
-    VisualRegressionTester, ContractTestRunner, ResultAggregator,
-    TestMetricsCollector
+    VisualRegressionTester,
+    ContractTestRunner,
+    ResultAggregator,
+    TestMetricsCollector,
 )
 from .optimization import TestSuiteOptimizer, CoverageGapAnalyzer
 from .mutation_testing import MutationTester, MutationRunner
 from .test_generation import TestGenerator, TestCaseMinimizer, TestDocGenerator
-from .debugging import (
-    ExecutionReplayer, TestProfiler, TestRecorder, TestReplayer
-)
+from .debugging import ExecutionReplayer, TestProfiler, TestRecorder, TestReplayer
 from .environment import EnvironmentProvisioner, DataFactory
 from .dependency_injection import DependencyInjector as DependencyInjector
 from .scheduling import CrossBrowserRunner, TestScheduler
 from .parallelization import ParallelizationStrategy as ParallelizationStrategy
 from .test_management import (
-    BaselineComparisonResult, BaselineManager, DIContainer, TestPrioritizer,
-    FlakinessDetector, QuarantineManager, ImpactAnalyzer, ContractValidator
+    BaselineComparisonResult,
+    BaselineManager,
+    DIContainer,
+    TestPrioritizer,
+    FlakinessDetector,
+    QuarantineManager,
+    ImpactAnalyzer,
+    ContractValidator,
 )
 from .agents import TestsAgent as TestsAgent
 
@@ -82,36 +110,72 @@ __version__ = VERSION
 
 __all__ = [
     # Enums
-    "TestPriority", "TestStatus", "CoverageType", "BrowserType", "TestSourceType",
-    "MutationOperator", "ExecutionMode",
+    "TestPriority",
+    "TestStatus",
+    "CoverageType",
+    "BrowserType",
+    "TestSourceType",
+    "MutationOperator",
+    "ExecutionMode",
     # Models
-    "TestCase", "TestRun", "CoverageGap", "TestFactory", "VisualRegressionConfig",
-    "ContractTest", "TestEnvironment", "ExecutionTrace", "TestDependency",
-    "CrossBrowserConfig", "AggregatedResult", "Mutation", "GeneratedTest",
-    "TestProfile", "ScheduleSlot", "Recording", "ReplayResult", "ProvisionedEnvironment",
+    "TestCase",
+    "TestRun",
+    "CoverageGap",
+    "TestFactory",
+    "VisualRegressionConfig",
+    "ContractTest",
+    "TestEnvironment",
+    "ExecutionTrace",
+    "TestDependency",
+    "CrossBrowserConfig",
+    "AggregatedResult",
+    "Mutation",
+    "GeneratedTest",
+    "TestProfile",
+    "ScheduleSlot",
+    "Recording",
+    "ReplayResult",
+    "ProvisionedEnvironment",
     "ValidationResult",
     # Testing utilities
-    "VisualRegressionTester", "ContractTestRunner", "ResultAggregator",
+    "VisualRegressionTester",
+    "ContractTestRunner",
+    "ResultAggregator",
     "TestMetricsCollector",
     # Optimization
-    "TestSuiteOptimizer", "CoverageGapAnalyzer",
+    "TestSuiteOptimizer",
+    "CoverageGapAnalyzer",
     # Mutation testing
-    "MutationTester", "MutationRunner",
+    "MutationTester",
+    "MutationRunner",
     # Test generation
-    "TestGenerator", "TestCaseMinimizer", "TestDocGenerator",
+    "TestGenerator",
+    "TestCaseMinimizer",
+    "TestDocGenerator",
     # Debugging
-    "ExecutionReplayer", "TestProfiler", "TestRecorder", "TestReplayer",
+    "ExecutionReplayer",
+    "TestProfiler",
+    "TestRecorder",
+    "TestReplayer",
     # Environment and data
-    "EnvironmentProvisioner", "DataFactory",
+    "EnvironmentProvisioner",
+    "DataFactory",
     # Dependency injection
     "DependencyInjector",
     # Scheduling
-    "CrossBrowserRunner", "TestScheduler",
+    "CrossBrowserRunner",
+    "TestScheduler",
     # Parallelization
     "ParallelizationStrategy",
     # Test management
-    "BaselineComparisonResult", "BaselineManager", "DIContainer", "TestPrioritizer",
-    "FlakinessDetector", "QuarantineManager", "ImpactAnalyzer", "ContractValidator",
+    "BaselineComparisonResult",
+    "BaselineManager",
+    "DIContainer",
+    "TestPrioritizer",
+    "FlakinessDetector",
+    "QuarantineManager",
+    "ImpactAnalyzer",
+    "ContractValidator",
     # Agents
     "TestsAgent",
 ]

@@ -5,14 +5,12 @@ from pathlib import Path
 # Add project root to sys.path
 
 from src.infrastructure.fleet.AgentRegistry import AgentRegistry
-from src.core.base.version import SDK_VERSION
-
-
+from src.core.base.Version import SDK_VERSION
 
 
 def test_community_loading_workflow() -> None:
     print(f"--- Testing Community Plugin Workflow (SDK {SDK_VERSION}) ---")
-    workspace = Path('.').resolve()
+    workspace = Path(".").resolve()
 
     # 1. Test Registry Gatekeeping
     agents = AgentRegistry.get_agent_map(workspace)
@@ -23,21 +21,9 @@ def test_community_loading_workflow() -> None:
 
     # 2. Test Self-Healing reload
 
-
-
-
-
-
-
-
-
-
     print("\n--- Testing Self-Healing Reload ---")
     # Simulate a failed agent
     agents.registry_configs["HealTest"] = ("non.existent.module", "HealTestAgent", None)
-
-
-
 
     # Try to load it - should return a ResilientStub
     stub = agents["HealTest"]
@@ -45,23 +31,19 @@ def test_community_loading_workflow() -> None:
 
     # Simulate 'fixing' it
 
-
-    agents.registry_configs["HealTest"] = ("src.logic.agents.development.CoderAgent", "CoderAgent", "src/coder/agents/CoderAgent.py")
+    agents.registry_configs["HealTest"] = (
+        "src.logic.agents.development.CoderAgent",
+        "CoderAgent",
+        "src/coder/agents/CoderAgent.py",
+    )
 
     # Trigger self-healing try_reload
     success = agents.try_reload("HealTest")
     print(f"Reload successful? {success}")
 
-
-
-
-
     if success:
         new_instance = agents["HealTest"]
         print(f"New instance type: {type(new_instance).__name__}")
-
-
-
 
 
 if __name__ == "__main__":

@@ -20,7 +20,7 @@
 """Plugin demonstrating handling of broken imports during agent initialization."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 from src.infrastructure.plugins.core.ImportHealerCore import ImportHealerCore
 from src.observability.StructuredLogger import StructuredLogger
@@ -32,12 +32,11 @@ __version__ = VERSION
 logger = StructuredLogger(__name__)
 
 
-
-
 class BrokenImportAgent(BaseAgent):
     """
     Agent designed to catch and heal broken imports in the fleet (Phase 186).
     """
+
     def __init__(self, file_path) -> None:
         super().__init__(file_path)
         self.core = ImportHealerCore()
@@ -51,7 +50,9 @@ class BrokenImportAgent(BaseAgent):
 
     def update_global_import_map(self) -> None:
         logger.info("[HEALER] Updating global import map...")
-        imap = self.core.build_internal_import_map(os.path.join(self._workspace_root, "src"))
+        imap = self.core.build_internal_import_map(
+            os.path.join(self._workspace_root, "src")
+        )
         with open(self.import_map_file, "w") as f:
             json.dump(imap, f, indent=2)
         logger.info(f"[HEALER] Map saved to {self.import_map_file}")

@@ -21,15 +21,13 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ParallelTestResult import ParallelTestResult
 from typing import Any
 from collections.abc import Callable
 import time
 
 __version__ = VERSION
-
-
 
 
 class ParallelTestRunner:
@@ -65,7 +63,9 @@ class ParallelTestRunner:
         """
         self._tests[name] = test_fn
 
-    def run(self, test_functions: list[Callable[[], Any]], fail_fast: bool = True) -> list[Any]:
+    def run(
+        self, test_functions: list[Callable[[], Any]], fail_fast: bool = True
+    ) -> list[Any]:
         """Run tests in parallel.
 
         Args:
@@ -76,11 +76,14 @@ class ParallelTestRunner:
             List of results from test functions.
         """
         from concurrent.futures import ThreadPoolExecutor, as_completed
+
         self.success_count = 0
         self.failure_count = 0
         results: list[Any] = []
         with ThreadPoolExecutor(max_workers=self.workers) as executor:
-            futures = {executor.submit(test_fn): i for i, test_fn in enumerate(test_functions)}
+            futures = {
+                executor.submit(test_fn): i for i, test_fn in enumerate(test_functions)
+            }
             for future in as_completed(futures):
                 try:
                     result = future.result()

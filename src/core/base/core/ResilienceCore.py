@@ -22,11 +22,6 @@ except ImportError:
     rc = None  # type: ignore[assignment]
 
 
-
-
-
-
-
 class ResilienceCore:
     """
     Pure logic for Circuit Breaker and Retry mechanisms.
@@ -40,7 +35,7 @@ class ResilienceCore:
         base_timeout: float,
         multiplier: float,
         max_timeout: float,
-        jitter_mode: str = "full"
+        jitter_mode: str = "full",
     ) -> float:
         """
         Phase 145: Enhanced backoff with Full Jitter.
@@ -50,7 +45,9 @@ class ResilienceCore:
             try:
                 # rc.calculate_backoff(failure_count, threshold, base_timeout, multiplier, max_timeout)
                 # Rust version assumes jitter_mode is full for simplicity if not provided.
-                return rc.calculate_backoff(failure_count, threshold, base_timeout, multiplier, max_timeout)  # type: ignore[attr-defined]
+                return rc.calculate_backoff(
+                    failure_count, threshold, base_timeout, multiplier, max_timeout
+                )  # type: ignore[attr-defined]
             except Exception:
                 pass
 
@@ -58,7 +55,7 @@ class ResilienceCore:
             return 0.0
 
         exponent = max(0, failure_count - threshold)
-        backoff = min(max_timeout, base_timeout * (multiplier ** exponent))
+        backoff = min(max_timeout, base_timeout * (multiplier**exponent))
 
         if jitter_mode == "full":
             # AWS style Full Jitter: random between 0 and exponential backoff
@@ -73,14 +70,14 @@ class ResilienceCore:
 
     @staticmethod
     def should_attempt_recovery(
-        last_failure_time: float,
-        current_time: float,
-        timeout: float
+        last_failure_time: float, current_time: float, timeout: float
     ) -> bool:
         """Determines if the cooldown period has passed."""
         if rc:
             try:
-                return rc.should_attempt_recovery(last_failure_time, current_time, timeout)  # type: ignore[attr-defined]
+                return rc.should_attempt_recovery(
+                    last_failure_time, current_time, timeout
+                )  # type: ignore[attr-defined]
             except Exception:
                 pass
         return (current_time - last_failure_time) > timeout
@@ -91,7 +88,7 @@ class ResilienceCore:
         success_count: int,
         consecutive_successes_needed: int,
         failure_count: int,
-        failure_threshold: int
+        failure_threshold: int,
     ) -> str:
         """
         Pure state machine logic for transition.
@@ -108,7 +105,7 @@ class ResilienceCore:
                     success_count,
                     consecutive_successes_needed,
                     failure_count,
-                    failure_threshold
+                    failure_threshold,
                 )
             except Exception:
                 pass
@@ -129,7 +126,7 @@ class ResilienceCore:
         failure_count: int,
         success_count: int,
         last_failure_time: float,
-        thresholds: dict[str, Any]
+        thresholds: dict[str, Any],
     ) -> tuple[str, int, int]:
         """
         Updates state based on outcome.
@@ -142,7 +139,11 @@ class ResilienceCore:
             new_success_count = success_count + 1
             if current_state == "HALF_OPEN":
                 new_state = ResilienceCore.evaluate_state_transition(
-                    current_state, new_success_count, consecutive_successes_needed, failure_count, failure_threshold
+                    current_state,
+                    new_success_count,
+                    consecutive_successes_needed,
+                    failure_count,
+                    failure_threshold,
                 )
                 if new_state == "CLOSED":
                     return "CLOSED", 0, 0
@@ -150,7 +151,7 @@ class ResilienceCore:
             elif current_state == "CLOSED":
                 return "CLOSED", 0, 0
             elif current_state == "OPEN":
-                 # Success in OPEN state implies recovery (e.g. via probe or forced call)
+                # Success in OPEN state implies recovery (e.g. via probe or forced call)
                 return "CLOSED", 0, 0
 
             return current_state, failure_count, new_success_count
@@ -162,6 +163,10 @@ class ResilienceCore:
                 return "OPEN", new_failure_count, 0
 
             new_state = ResilienceCore.evaluate_state_transition(
-                current_state, success_count, consecutive_successes_needed, new_failure_count, failure_threshold
+                current_state,
+                success_count,
+                consecutive_successes_needed,
+                new_failure_count,
+                failure_threshold,
             )
             return new_state, new_failure_count, 0

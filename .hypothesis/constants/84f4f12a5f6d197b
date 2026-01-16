@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\fleet\ScalingCore.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.1, 0.3, 0.6, 5.0, 'cpu', 'latency', 'mem']

@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\distributed\_shard\sharding_spec\chunk_sharding_spec_ops\embedding.py
-# hypothesis_version: 6.150.1
-
-[0.0, 'max_norm', 'norm_type', 'padding_idx', 'scale_grad_by_freq', 'sparse']

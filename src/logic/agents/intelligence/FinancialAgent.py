@@ -21,15 +21,13 @@
 """Agent specializing in financial analysis and advice."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function, as_tool
+from src.core.base.BaseUtilities import create_main_function, as_tool
 import logging
 
 __version__ = VERSION
-
-
 
 
 class FinancialAgent(BaseAgent):
@@ -53,26 +51,15 @@ class FinancialAgent(BaseAgent):
         self.research_plan = [
             {"task": "Fetch income statement", "status": "pending"},
             {"task": "Calculate operating margin", "status": "pending"},
-            {"task": "Compare with sector average", "status": "pending"}
+            {"task": "Compare with sector average", "status": "pending"},
         ]
 
-
-
-
-
-
-
-
-
-
-        return f"Research plan created with {len(self.research_plan)} tasks for: {query}"
+        return (
+            f"Research plan created with {len(self.research_plan)} tasks for: {query}"
+        )
 
     @as_tool
     def validate_sufficiency(self, data: dict[str, Any]) -> str:
-
-
-
-
         """Self-reflects on whether gathered data is enough to answer the query."""
         missing = [k for k, v in data.items() if v is None]
         if missing:
@@ -90,9 +77,8 @@ class FinancialAgent(BaseAgent):
         return "# Financial Analysis Report\n\n## Overview\nPending autonomous research...\n"
 
 
-
-
-
 if __name__ == "__main__":
-    main = create_main_function(FinancialAgent, "Financial Agent", "File containing financial data or topic")
+    main = create_main_function(
+        FinancialAgent, "Financial Agent", "File containing financial data or topic"
+    )
     main()

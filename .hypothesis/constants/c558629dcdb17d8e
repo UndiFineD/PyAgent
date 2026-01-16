@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\swarm\SwarmArbitratorAgent.py
-# hypothesis_version: 6.150.1
-
-[-0.2, 0.0, 0.1, 0.66, 1.0, 2.0, '.', 'No votes provided', 'agent_id', 'allocated', 'bid_price', 'confidence', 'conflict', 'count', 'distribution', 'error', 'hash', 'message', 'preempted', 'preempted_tasks', 'status', 'success', 'unknown', 'voters', 'winner_hash']

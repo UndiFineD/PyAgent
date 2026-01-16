@@ -21,19 +21,19 @@
 """Agent for connecting to local Ollama instances on edge nodes (Phase 125)."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 import requests
 
 __version__ = VERSION
 
 
-
-
 class OllamaConnectorAgent(BaseAgent):
     """Handles local inference requests via the Ollama API."""
 
-    def __init__(self, file_path: str, endpoint: str = "http://localhost:11434") -> None:
+    def __init__(
+        self, file_path: str, endpoint: str = "http://localhost:11434"
+    ) -> None:
         super().__init__(file_path)
         self.endpoint = endpoint
         self._system_prompt = "You are an Edge Intelligence Connector for Ollama."
@@ -51,11 +51,7 @@ class OllamaConnectorAgent(BaseAgent):
         if not self.check_availability():
             return "Error: Ollama service not reachable at " + self.endpoint
 
-        payload = {
-            "model": model,
-            "prompt": prompt,
-            "stream": False
-        }
+        payload = {"model": model, "prompt": prompt, "stream": False}
 
         try:
             response = requests.post(f"{self.endpoint}/api/generate", json=payload)
@@ -67,59 +63,26 @@ class OllamaConnectorAgent(BaseAgent):
 
             # Phase 120: Harvest intelligence/interaction to shards
             if hasattr(self, "recorder") and self.recorder:
-
-
-
-
-
-
-
-
-
-
                 self.recorder.record_interaction(
-                    provider="Ollama",
-                    model=model,
-                    prompt=prompt,
-
-
-
-
-
-
-
-
-
-                    result=response_text
+                    provider="Ollama", model=model, prompt=prompt, result=response_text
                 )
             return response_text
         except Exception as e:
             error_msg = f"Exception during local inference: {e}"
-
-
-
-
-
-
-
-
 
             if hasattr(self, "recorder") and self.recorder:
                 self.recorder.record_interaction(
                     provider="Ollama",
                     model=model,
                     prompt=prompt,
-
                     result=error_msg,
-                    meta={"status": "exception"}
+                    meta={"status": "exception"},
                 )
             return error_msg
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
+    from src.core.base.BaseUtilities import create_main_function
+
     main = create_main_function(OllamaConnectorAgent)
     main()

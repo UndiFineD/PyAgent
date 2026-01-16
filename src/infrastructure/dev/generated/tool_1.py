@@ -12,7 +12,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -25,11 +25,6 @@ __version__ = VERSION
 """
 Generated tool for CSV Parsing
 """
-
-
-
-
-
 
 
 def run(data: str) -> str:

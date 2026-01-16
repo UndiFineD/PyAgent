@@ -21,13 +21,11 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -41,6 +39,7 @@ class TestAssertion:
         passed: Whether assertion passed.
         message: Assertion message.
     """
+
     __test__ = False
 
     name: str

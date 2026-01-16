@@ -47,6 +47,15 @@ pub fn generate_self_improvement_plan(agent_id: &str, blind_spots: Vec<String>) 
 
 // === AuthCore Implementations ===
 
+/// Generate cache key (SHA256 hash).
+#[pyfunction]
+pub fn generate_cache_key(prompt: &str, context: &str) -> PyResult<String> {
+    let combined = format!("{}:{}", prompt, context);
+    let mut hasher = Sha256::new();
+    hasher.update(combined.as_bytes());
+    Ok(hex::encode(hasher.finalize()))
+}
+
 /// Generate authentication challenge (AuthCore).
 #[pyfunction]
 pub fn generate_challenge(agent_id: &str, timestamp: f64) -> PyResult<String> {
@@ -235,6 +244,72 @@ pub fn should_prune(weight: f64, threshold: f64) -> PyResult<bool> {
     Ok(weight < threshold)
 }
 
+/// Calculate anchoring strength fallback (AgentVerifier).
+/// Uses word overlap / intersection as a baseline heuristic.
+#[pyfunction]
+pub fn calculate_anchoring_fallback(result: &str, context_text: &str) -> PyResult<f64> {
+    if result.is_empty() || context_text.is_empty() {
+        return Ok(0.5);
+    }
+
+    let result_lower = result.to_lowercase();
+    let context_lower = context_text.to_lowercase();
+    
+    let context_words: std::collections::HashSet<&str> = context_lower.split_whitespace().collect();
+    let result_words: Vec<&str> = result_lower.split_whitespace().collect();
+    
+    if result_words.is_empty() {
+        return Ok(0.0);
+    }
+    
+    let mut overlap_count = 0;
+    for word in &result_words {
+        if context_words.contains(word) {
+            overlap_count += 1;
+        }
+    }
+    
+    let mut score = overlap_count as f64 / result_words.len() as f64;
+    
+    if result_words.len() < 5 {
+        score *= 0.5;
+    }
+    
+    Ok(f64::min(1.0, score * 1.5))
+}
+
+/// Check for latent reasoning (AgentVerifier).
+/// Detects excessive non-ASCII characters.
+#[pyfunction]
+pub fn check_latent_reasoning(content: &str, threshold: f64) -> PyResult<bool> {
+    if content.is_empty() {
+        return Ok(true);
+    }
+    
+    let non_ascii_count = content.chars().filter(|c| !c.is_ascii()).count();
+    let ratio = non_ascii_count as f64 / content.len() as f64;
+    
+    Ok(ratio <= threshold)
+}
+
+/// Validate response (BaseAgentCore).
+#[pyfunction]
+pub fn is_response_valid_rust(response: &str, min_length: usize) -> PyResult<(bool, String)> {
+    if response.is_empty() {
+        return Ok((false, "Response is empty".to_string()));
+    }
+    
+    if response.len() < min_length {
+        return Ok((false, format!("Response too short (< {} chars)", min_length)));
+    }
+    
+    if response.len() > 1_000_000 {
+        return Ok((false, "Response too long (> 1M chars)".to_string()));
+    }
+    
+    Ok((true, "".to_string()))
+}
+
 // === ConvergenceCore Implementations ===
 
 /// Verify fleet health.
@@ -329,7 +404,7 @@ pub fn redact_pii(text: &str) -> PyResult<String> {
     });
     
     let key_re = KEY_RE.get_or_init(|| {
-        regex::Regex::new(r"(?P<key>api_key|secret_key|secret|token)\s*[:=]\s*['""]?(?P<val>[a-zA-Z0-9_\-\.\~]{16,})['""]?").unwrap()
+        regex::Regex::new(r"(?P<key>api_key|secret_key|secret|token)\s*[:=]\s*[']?(?P<val>[a-zA-Z0-9_.~-]{16,})[']?").unwrap()
     });
 
     let text_no_email = email_re.replace_all(text, "[EMAIL_REDACTED]");
@@ -365,4 +440,102 @@ pub fn mask_sensitive_logs(text: &str) -> PyResult<String> {
     let t3 = github_re.replace_all(&t2, "[REDACTED]");
 
     Ok(t3.to_string())
+}
+/// Convert CamelCase to snake_case (AgentRegistryCore, OrchestratorRegistryCore).
+/// High-frequency function (~300 calls) during registry scanning.
+#[pyfunction]
+pub fn to_snake_case_rust(name: &str) -> PyResult<String> {
+    static RE1: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+    static RE2: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+
+    let re1 = RE1.get_or_init(|| {
+        regex::Regex::new(r"(.)([A-Z][a-z]+)").unwrap()
+    });
+
+    let re2 = RE2.get_or_init(|| {
+        regex::Regex::new(r"([a-z0-9])([A-Z])").unwrap()
+    });
+
+    let s1 = re1.replace_all(name, "${1}_${2}");
+    let s2 = re2.replace_all(&s1, "${1}_${2}");
+
+    Ok(s2.to_lowercase())
+}
+
+/// Build a structured log entry (StructuredLogger.log).
+/// Returns JSON string ready for file write.
+/// This moves JSON serialization to Rust for the hot path.
+#[pyfunction]
+pub fn build_log_entry_rust(
+    timestamp: &str,
+    agent_id: &str,
+    trace_id: &str,
+    level: &str,
+    message: &str,
+    extra_json: Option<&str>,
+) -> PyResult<String> {
+    // First mask the message
+    static OPENAI_RE: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+    static BEARER_RE: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+    static GITHUB_RE: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+
+    let openai_re = OPENAI_RE.get_or_init(|| {
+        regex::Regex::new(r"sk-[a-zA-Z0-9]{32,}").unwrap()
+    });
+
+    let bearer_re = BEARER_RE.get_or_init(|| {
+         regex::Regex::new(r"Bearer\s+[a-zA-Z0-9\-\._~+/]+=*").unwrap()
+    });
+
+    let github_re = GITHUB_RE.get_or_init(|| {
+        regex::Regex::new(r"gh[ps]_[a-zA-Z0-9]{36}").unwrap()
+    });
+
+    let t1 = openai_re.replace_all(message, "[REDACTED]");
+    let t2 = bearer_re.replace_all(&t1, "Bearer [REDACTED]");
+    let clean_message = github_re.replace_all(&t2, "[REDACTED]");
+
+    // Build JSON manually for speed (avoid serde dependency overhead)
+    let mut json = String::with_capacity(512);
+    json.push_str("{\"timestamp\":\"");
+    json.push_str(timestamp);
+    json.push_str("\",\"agent_id\":\"");
+    json_escape_into(&mut json, agent_id);
+    json.push_str("\",\"trace_id\":\"");
+    json_escape_into(&mut json, trace_id);
+    json.push_str("\",\"level\":\"");
+    json.push_str(&level.to_uppercase());
+    json.push_str("\",\"message\":\"");
+    json_escape_into(&mut json, &clean_message);
+    json.push('"');
+
+    // Append extra fields if present
+    if let Some(extra) = extra_json {
+        let trimmed = extra.trim();
+        if trimmed.starts_with('{') && trimmed.ends_with('}') && trimmed.len() > 2 {
+            // Strip outer braces and append contents
+            json.push(',');
+            json.push_str(&trimmed[1..trimmed.len() - 1]);
+        }
+    }
+    json.push('}');
+
+    Ok(json)
+}
+
+/// Helper for JSON string escaping
+fn json_escape_into(output: &mut String, s: &str) {
+    for c in s.chars() {
+        match c {
+            '"' => output.push_str("\\\""),
+            '\\' => output.push_str("\\\\"),
+            '\n' => output.push_str("\\n"),
+            '\r' => output.push_str("\\r"),
+            '\t' => output.push_str("\\t"),
+            c if c.is_control() => {
+                output.push_str(&format!("\\u{:04x}", c as u32));
+            }
+            c => output.push(c),
+        }
+    }
 }

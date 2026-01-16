@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\decomposition\_nmf.py
-# hypothesis_version: 6.150.1
-
-[0.0, 1e-06, 0.0001, 0.7, 1.0, 2.0, 100, 200, 1024, 'C', 'H', 'NMF (input H)', 'NMF (input W)', 'NMF initialization', 'W', 'X', 'alpha_H', 'alpha_W', 'array-like', 'auto', 'batch_size', 'beta_loss', 'boolean', 'both', 'cd', 'components_', 'csc', 'csr', 'custom', 'float32', 'float64', 'forget_factor', 'fresh_restarts', 'frobenius', 'init', 'itakura-saito', 'kullback-leibler', 'l1_ratio', 'left', 'max_iter', 'max_no_improvement', 'mu', 'n_components', 'nndsvd', 'nndsvda', 'nndsvdar', 'random', 'random_state', 'same', 'shuffle', 'solver', 'sparse matrix', 'tol', 'transform_max_iter', 'update_H', 'verbose', 'violation:']

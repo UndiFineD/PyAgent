@@ -21,14 +21,12 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types import ChangelogEntry
 from src.core.base.types import ComplianceCategory
 from src.core.base.types import ComplianceResult
 
 __version__ = VERSION
-
-
 
 
 class ComplianceChecker:
@@ -45,7 +43,9 @@ class ComplianceChecker:
     SECURITY_KEYWORDS = ["vulnerability", "cve", "security", "patch", "exploit"]
     LEGAL_KEYWORDS = ["license", "copyright", "trademark", "patent"]
 
-    def check_security_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
+    def check_security_compliance(
+        self, entries: list[ChangelogEntry]
+    ) -> ComplianceResult:
         """Check security compliance.
 
         Args:
@@ -64,12 +64,14 @@ class ComplianceChecker:
                         f"Security-related entry not in Security category: "
                         f"{entry.description[:50]}"
                     )
-                    recommendations.append("Move security-related entries to the Security section")
+                    recommendations.append(
+                        "Move security-related entries to the Security section"
+                    )
         return ComplianceResult(
             category=ComplianceCategory.SECURITY,
             passed=len(issues) == 0,
             issues=issues,
-            recommendations=recommendations
+            recommendations=recommendations,
         )
 
     def check_legal_compliance(self, entries: list[ChangelogEntry]) -> ComplianceResult:
@@ -87,12 +89,14 @@ class ComplianceChecker:
         for entry in entries:
             if any(kw in entry.description.lower() for kw in self.LEGAL_KEYWORDS):
                 issues.append(f"Entry may need legal review: {entry.description[:50]}")
-                recommendations.append("Have legal team review license / copyright changes")
+                recommendations.append(
+                    "Have legal team review license / copyright changes"
+                )
         return ComplianceResult(
             category=ComplianceCategory.LEGAL,
             passed=len(issues) == 0,
             issues=issues,
-            recommendations=recommendations
+            recommendations=recommendations,
         )
 
     def check_all(self, entries: list[ChangelogEntry]) -> list[ComplianceResult]:
@@ -106,5 +110,5 @@ class ComplianceChecker:
         """
         return [
             self.check_security_compliance(entries),
-            self.check_legal_compliance(entries)
+            self.check_legal_compliance(entries),
         ]

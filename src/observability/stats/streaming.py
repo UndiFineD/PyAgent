@@ -5,42 +5,34 @@
 from __future__ import annotations
 import logging
 from typing import Any, Callable
-from .metrics import Metric
-from .observability_core import StreamingConfig
+from .Metrics import Metric
+from .ObservabilityCore import StreamingConfig
 
 logger = logging.getLogger(__name__)
 
 
-
-
 class StatsStream:
     """Represents a real-time stats stream."""
+
     def __init__(self, name: str, buffer_size: int = 1000) -> None:
         self.name = name
 
-
         self.buffer_size = buffer_size
-
 
         self.buffer: list[Any] = []
 
     def get_latest(self, count: int = 1) -> list[Any]:
         return self.buffer[-count:]
 
-
-
-
     def add_data(self, data: Any) -> None:
         self.buffer.append(data)
-        if len(self.buffer) > self.buffer_size: self.buffer.pop(0)
+        if len(self.buffer) > self.buffer_size:
+            self.buffer.pop(0)
 
 
 class StatsStreamManager:
-
-
-
-
     """Manages real-time stats streaming."""
+
     def __init__(self, config: StreamingConfig | None = None) -> None:
         self.config = config
         self.streams: dict[str, StatsStream] = {}
@@ -51,27 +43,22 @@ class StatsStreamManager:
         self.streams[name] = s
         return s
 
-
-
-
-
-
     def publish(self, name: str, data: Any) -> None:
-        if name in self.streams: self.streams[name].add_data(data)
+        if name in self.streams:
+            self.streams[name].add_data(data)
         for cb in self.subscribers.get(name, []):
-            try: cb(data)
-            except Exception: pass
+            try:
+                cb(data)
+            except Exception:
+                pass
 
     def subscribe(self, name: str, callback: Callable[[Any], None]) -> None:
         self.subscribers.setdefault(name, []).append(callback)
 
 
-
-
-
-
 class StatsStreamer:
     """Real-time stats streaming via WebSocket (simulated)."""
+
     def __init__(self, config: StreamingConfig) -> None:
         self.config = config
         self.subscribers: list[str] = []
@@ -88,7 +75,8 @@ class StatsStreamer:
     def stream_metric(self, metric: Metric) -> bool:
         if not self._connected:
             self.buffer.append(metric)
-            if len(self.buffer) > self.config.buffer_size: self.buffer.pop(0)
+            if len(self.buffer) > self.config.buffer_size:
+                self.buffer.pop(0)
             return False
         return True
 

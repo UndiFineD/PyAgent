@@ -23,14 +23,12 @@ Integrates with fleet for voice-driven commands.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class VoiceAgent(BaseAgent):
@@ -46,16 +44,25 @@ class VoiceAgent(BaseAgent):
         )
 
     @as_tool
-    def synthesize_advanced_speech(self, text: str, reference_voice_path: str | None = None, language_code: str = "en") -> str:
+    def synthesize_advanced_speech(
+        self,
+        text: str,
+        reference_voice_path: str | None = None,
+        language_code: str = "en",
+    ) -> str:
         """
         Synthesizes speech with paralinguistic tags and multilingual support (Toucan Pattern).
         Supports expressive markers: [laugh], [chuckle], [sigh], [breath].
         """
-        logging.info(f"VoiceAgent: Synthesizing speech in {language_code} with tags. Text: {text}")
+        logging.info(
+            f"VoiceAgent: Synthesizing speech in {language_code} with tags. Text: {text}"
+        )
 
         # Toucan/Chatterbox Turbo pattern: 350M params, zero-shot cloning
         if any(tag in text for tag in ["[laugh]", "[chuckle]", "[sigh]"]):
-            logging.info("Detected paralinguistic emotion markers. Applying expressive prosody.")
+            logging.info(
+                "Detected paralinguistic emotion markers. Applying expressive prosody."
+            )
 
         return f"Advanced Multilingual Audio Stream generated (Lang: {language_code}, Quality: 44.1kHz)"
 
@@ -66,7 +73,9 @@ class VoiceAgent(BaseAgent):
         return "Zero-shot speaker profile injected successfully."
 
     @as_tool
-    def transcribe_audio(self, audio_file_path: str, strategy: str = "whisper-gpu") -> str:
+    def transcribe_audio(
+        self, audio_file_path: str, strategy: str = "whisper-gpu"
+    ) -> str:
         """
         Transcribes an audio file into text.
         Supports multiple strategies (Handy/Whisper patterns):
@@ -75,20 +84,11 @@ class VoiceAgent(BaseAgent):
         - silero-vad: Voice Activity Detection preprocessing
         """
 
-
-
-
-
-
-
-
-
-
-        logging.info(f"VoiceAgent: Transcribing {audio_file_path} using strategy: {strategy}")
+        logging.info(
+            f"VoiceAgent: Transcribing {audio_file_path} using strategy: {strategy}"
+        )
         # Implementation would use local models as per Handy.computer patterns
         return f"Simulated transcription using {strategy}: 'Hello fleet, please check the system status.'"
-
-
 
     @as_tool
     def apply_voice_activity_detection(self, audio_file_path: str) -> str:
@@ -106,7 +106,9 @@ class VoiceAgent(BaseAgent):
     def improve_content(self, prompt: str) -> str:
         return "VoiceAgent active and ready for multimedia tasks."
 
+
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
+    from src.core.base.BaseUtilities import create_main_function
+
     main = create_main_function(VoiceAgent, "Voice Agent", "Voice logs path")
     main()

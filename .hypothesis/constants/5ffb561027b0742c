@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\stats\api.py
-# hypothesis_version: 6.150.1
-
-[100, 200, 404, '/api / alerts', '/api / metrics', '/api / snapshots', '/api / stats', '1.0.0', '200', '3.0.0', 'GET', 'Not Found', 'Stats API', 'Success', 'data', 'description', 'error', 'info', 'openapi', 'paths', 'responses', 'status', 'summary', 'title', 'version']

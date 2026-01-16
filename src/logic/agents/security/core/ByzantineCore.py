@@ -20,8 +20,6 @@ except ImportError:  # type: ignore[assignment]
     rc = None  # type: ignore[assignment]
 
 
-
-
 class ByzantineCore:
     """
     Pure logic for Byzantine Fault Tolerance (BFT) consensus.
@@ -41,12 +39,12 @@ class ByzantineCore:
         if not votes:
             return 0.0
 
-        total_weight = sum(v['weight'] for v in votes)
+        total_weight = sum(v["weight"] for v in votes)
         hash_weights: dict[Any, Any] = {}
 
         for v in votes:
-            h = v['hash']
-            hash_weights[h] = hash_weights.get(h, 0.0) + v['weight']
+            h = v["hash"]
+            hash_weights[h] = hash_weights.get(h, 0.0) + v["weight"]
 
         if not total_weight:
             return 0.0
@@ -54,7 +52,9 @@ class ByzantineCore:
         max_agreement = max(hash_weights.values())
         return max_agreement / total_weight
 
-    def select_committee(self, agents_reliability: dict[str, float], min_size: int = 3) -> list[str]:
+    def select_committee(
+        self, agents_reliability: dict[str, float], min_size: int = 3
+    ) -> list[str]:
         """
         Scales the committee based on historic reliability scores.
         Only recruits agents with reliability > 0.7.
@@ -64,14 +64,20 @@ class ByzantineCore:
                 return rc.select_committee(agents_reliability, min_size)  # type: ignore[attr-defined]
             except Exception:
                 pass
-        eligible = [(name, score) for name, score in agents_reliability.items() if score > 0.7]
+        eligible = [
+            (name, score) for name, score in agents_reliability.items() if score > 0.7
+        ]
         # Sort by reliability descending
         eligible.sort(key=lambda x: x[1], reverse=True)
 
         committee = [name for name, _ in eligible]
         if len(committee) < min_size:
             # Fallback to top N if not enough high-reliability agents
-            return sorted(agents_reliability.keys(), key=lambda x: agents_reliability[x], reverse=True)[:min_size]
+            return sorted(
+                agents_reliability.keys(),
+                key=lambda x: agents_reliability[x],
+                reverse=True,
+            )[:min_size]
 
         return committee
 
@@ -93,6 +99,8 @@ class ByzantineCore:
             return 0.5
         return 0.67
 
-    def detect_deviating_hashes(self, votes: list[dict[str, Any]], consensus_hash: str) -> list[str]:
+    def detect_deviating_hashes(
+        self, votes: list[dict[str, Any]], consensus_hash: str
+    ) -> list[str]:
         """Returns IDs of agents whose votes deviated from consensus."""
-        return [v['id'] for v in votes if v['hash'] != consensus_hash]
+        return [v["id"] for v in votes if v["hash"] != consensus_hash]

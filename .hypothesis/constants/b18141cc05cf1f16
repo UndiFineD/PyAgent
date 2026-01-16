@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_functorch\config.py
-# hypothesis_version: 6.150.1
-
-[1.0, 1000, '0', '1', 'FAKE_ALLOW_META', 'donated', 'dp', 'flexible_layout', 'flops', 'needs_exact_strides', 'same_as_forward', 'svg']

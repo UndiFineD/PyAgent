@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\models\VisualizationType.py
-# hypothesis_version: 6.150.1
-
-['call_hierarchy', 'dependency_graph', 'file_tree', 'mind_map']

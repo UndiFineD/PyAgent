@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\profiler\__init__.py
-# hypothesis_version: 6.150.1
-
-['DeviceType', 'KINETO_USE_DAEMON', 'Optimizer', 'ProfilerAction', 'ProfilerActivity', '_Ts', 'kineto_available', 'profile', 'record_function', 'schedule', 'supported_activities']

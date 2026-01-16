@@ -21,14 +21,12 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass, field
 from typing import Any
 import time
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -42,6 +40,7 @@ class TestLogEntry:
         test_name: Associated test.
         extra: Extra data.
     """
+
     __test__ = False
 
     level: str

@@ -21,12 +21,10 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.models.BranchComparison import BranchComparison
 
 __version__ = VERSION
-
-
 
 
 class BranchComparer:
@@ -95,7 +93,7 @@ class BranchComparer:
             branch_b=resolved_b,
             files_only_in_a=list(files_a - files_b),
             files_only_in_b=list(files_b - files_a),
-            modified_files=modified
+            modified_files=modified,
         )
         self._last_comparison = comparison
         return comparison

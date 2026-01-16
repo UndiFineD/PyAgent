@@ -21,14 +21,12 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .TestResult import TestResult
 from .TestStatus import TestStatus
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class TestResultAggregator:
@@ -65,8 +63,10 @@ class TestResultAggregator:
             # Support add_result(suite, test_name, status) style
             test_result = TestResult(
                 test_name=f"{result}/{test_name}",
-                status=TestStatus[status.upper()] if hasattr(TestStatus, status.upper()) else TestStatus.PASSED,
-                duration_ms=0.0
+                status=TestStatus[status.upper()]
+                if hasattr(TestStatus, status.upper())
+                else TestStatus.PASSED,
+                duration_ms=0.0,
             )
             self._results.append(test_result)
         else:
@@ -118,7 +118,9 @@ class TestResultAggregator:
             suite = "unknown"
             if "/" in r.test_name:
                 suite = r.test_name.split("/", 1)[0]
-            by_suite.setdefault(suite, {"total": 0, "passed": 0, "failed": 0, "skipped": 0, "errors": 0})
+            by_suite.setdefault(
+                suite, {"total": 0, "passed": 0, "failed": 0, "skipped": 0, "errors": 0}
+            )
             by_suite[suite]["total"] += 1
             if r.status == TestStatus.PASSED:
                 by_suite[suite]["passed"] += 1

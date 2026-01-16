@@ -24,16 +24,15 @@ Pure logic for path translation and security boundary enforcement.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import os
 
 __version__ = VERSION
 
 
-
-
 class TenantCore:
     """Core logic for tenant isolation and path security."""
+
     def __init__(self) -> None:
         pass
 
@@ -47,7 +46,9 @@ class TenantCore:
 
         # Security Boundary Check: Must start with tenant root
         if not target_path_abs.startswith(tenant_root_abs):
-            raise PermissionError(f"Security Breach: Path {relative_path} escaped isolation boundary.")
+            raise PermissionError(
+                f"Security Breach: Path {relative_path} escaped isolation boundary."
+            )
 
         return target_path_abs
 

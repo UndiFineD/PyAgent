@@ -20,7 +20,7 @@
 """Debug script for inspecting the agent registry."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.infrastructure.fleet.FleetManager import FleetManager
 import os
 

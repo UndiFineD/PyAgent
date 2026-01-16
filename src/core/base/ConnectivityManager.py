@@ -21,7 +21,7 @@
 """Centralized connectivity management with TTL-based status caching."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import logging
 import time
@@ -32,13 +32,9 @@ from typing import Any
 __version__ = VERSION
 
 
-
-
-
-
-
 class ConnectivityManager:
     """Manages connection status for external APIs with persistent 15-minute TTL caching."""
+
     _instance = None
 
     def __new__(cls, *args, **kwargs) -> ConnectivityManager:
@@ -51,7 +47,11 @@ class ConnectivityManager:
         if hasattr(self, "_initialized") and self._initialized:
             return
         self.workspace_root = Path(workspace_root) if workspace_root else None
-        self._conn_status_file = self.workspace_root / "data/logs" / "connectivity_status.json" if self.workspace_root else None
+        self._conn_status_file = (
+            self.workspace_root / "data/logs" / "connectivity_status.json"
+            if self.workspace_root
+            else None
+        )
         self._ttl_success = 900  # 15 minutes for working endpoints
         self._ttl_failure = 120  # 2 minutes for failed endpoints (Phase 141 robustness)
         self._cache: dict[str, Any] = self._load_status()
@@ -103,17 +103,16 @@ class ConnectivityManager:
 
             if elapsed < target_ttl:
                 if not is_working:
-                    logging.debug(f"ConnectivityManager: Skipping '{endpoint_id}' (cached offline, retrying in {int(target_ttl - elapsed)}s)")
+                    logging.debug(
+                        f"ConnectivityManager: Skipping '{endpoint_id}' (cached offline, retrying in {int(target_ttl - elapsed)}s)"
+                    )
                 return is_working
         return True  # Default to True or if TTL expired
 
     def update_status(self, endpoint_id: str, working: bool) -> None:
         """Updates and persists the status for an endpoint."""
         status = self._cache.get(endpoint_id, {})
-        status.update({
-            "working": working,
-            "timestamp": time.time()
-        })
+        status.update({"working": working, "timestamp": time.time()})
         self._cache[endpoint_id] = status
         self._save_status()
 
@@ -134,7 +133,9 @@ class ConnectivityManager:
         status["total_tokens"] = status.get("total_tokens", 0) + token_count
 
         self._cache[endpoint_id] = status
-        logging.debug(f"ConnectivityManager: Endpoint '{endpoint_id}' TPS tracked: {status['last_tps']} (avg: {status['avg_tps']})")
+        logging.debug(
+            f"ConnectivityManager: Endpoint '{endpoint_id}' TPS tracked: {status['last_tps']} (avg: {status['avg_tps']})"
+        )
         self._save_status()
 
     def get_tps_stats(self, endpoint_id: str) -> dict[str, Any]:
@@ -143,7 +144,7 @@ class ConnectivityManager:
         return {
             "avg_tps": status.get("avg_tps", 0),
             "last_tps": status.get("last_tps", 0),
-            "total_tokens": status.get("total_tokens", 0)
+            "total_tokens": status.get("total_tokens", 0),
         }
 
     def is_online(self, endpoint: str) -> bool:
@@ -154,7 +155,9 @@ class ConnectivityManager:
         """Compatibility alias for update_status."""
         self.update_status(endpoint, online)
 
-    def check_and_execute(self, endpoint_id: str, func: callable, *args, **kwargs) -> Any:
+    def check_and_execute(
+        self, endpoint_id: str, func: callable, *args, **kwargs
+    ) -> Any:
         """Executes a function only if endpoint is available, updating status on failure."""
         if not self.is_endpoint_available(endpoint_id):
             return None
@@ -164,6 +167,8 @@ class ConnectivityManager:
             self.update_status(endpoint_id, True)
             return result
         except Exception as e:
-            logging.warning(f"ConnectivityManager: Endpoint '{endpoint_id}' failed: {e}")
+            logging.warning(
+                f"ConnectivityManager: Endpoint '{endpoint_id}' failed: {e}"
+            )
             self.update_status(endpoint_id, False)
             raise e

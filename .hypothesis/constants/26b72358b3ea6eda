@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sentence_transformers\sparse_encoder\models\SparseAutoEncoder.py
-# hypothesis_version: 6.150.1
-
-[1e-05, 512, 'auxiliary_embedding', 'cache_folder', 'dead_threshold', 'decoded_embedding_4k', 'decoded_embedding_k', 'hidden_dim', 'input_dim', 'k', 'k_aux', 'local_files_only', 'max_active_dims', 'mu', 'normalize', 'revision', 'sentence_embedding', 'stats_last_nonzero', 'std', 'subfolder', 'token']

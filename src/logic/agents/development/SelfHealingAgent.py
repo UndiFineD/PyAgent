@@ -21,15 +21,13 @@
 """Agent specializing in self-healing through telemetry analysis and error correction."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function, as_tool
-from src.observability.stats.metrics_engine import ObservabilityEngine
+from src.core.base.BaseUtilities import create_main_function, as_tool
+from src.observability.stats.Metrics_engine import ObservabilityEngine
 
 __version__ = VERSION
-
-
 
 
 class SelfHealingAgent(BaseAgent):
@@ -74,47 +72,35 @@ class SelfHealingAgent(BaseAgent):
         for agent, agent_errors in by_agent.items():
             report.append(f"### Agent: {agent}")
             for err in agent_errors[:3]:  # Show last 3
-                ts = err.timestamp.split('T')[1].split('.')[0]
-
-
-
-
-
-
-
-
-
+                ts = err.timestamp.split("T")[1].split(".")[0]
 
                 op = err.operation
-                msg = err.metadata.get('error', 'Unknown error')
+                msg = err.metadata.get("error", "Unknown error")
                 report.append(f"- **[{ts}] {op}**: `{msg}`")
 
-
-
-
             report.append(f"\n> [!TIP] Suggested Fix for {agent}")
-            if "missing 1 required positional argument" in str(agent_errors[0].metadata):
-                report.append("> - Check `improve_content` signature in the source file.")
+            if "missing 1 required positional argument" in str(
+                agent_errors[0].metadata
+            ):
+                report.append(
+                    "> - Check `improve_content` signature in the source file."
+                )
             elif "ImportError" in str(agent_errors[0].metadata):
-                report.append("> - Verify `__init__.py` exports or virtual environment packages.")
-
+                report.append(
+                    "> - Verify `__init__.py` exports or virtual environment packages."
+                )
 
             else:
-                report.append("> - Increase timeout or check for circular dependencies.")
+                report.append(
+                    "> - Increase timeout or check for circular dependencies."
+                )
             report.append("")
 
         return "\n".join(report)
 
-
-
-
-
     def improve_content(self, prompt: str) -> str:
         """Trigger a self-healing scan."""
         return self.scan_for_failures()
-
-
-
 
 
 if __name__ == "__main__":

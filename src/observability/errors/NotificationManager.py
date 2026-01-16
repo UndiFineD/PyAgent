@@ -21,15 +21,13 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ErrorEntry import ErrorEntry
 from .NotificationChannel import NotificationChannel
 from .NotificationConfig import NotificationConfig
 import logging
 
 __version__ = VERSION
-
-
 
 
 class NotificationManager:
@@ -95,7 +93,7 @@ class NotificationManager:
             file=error.file_path,
             line=error.line_number,
             severity=error.severity.name,
-            category=error.category.value
+            category=error.category.value,
         )
 
     def _send(self, config: NotificationConfig, message: str) -> bool:

@@ -23,15 +23,13 @@ Provides execution capabilities and schema discovery.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import sqlite3
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool, create_main_function
+from src.core.base.BaseUtilities import as_tool, create_main_function
 
 # Lazy loaded: pandas moved to localized usage
 __version__ = VERSION
-
-
 
 
 class DataAgent(BaseAgent):
@@ -60,6 +58,7 @@ class DataAgent(BaseAgent):
     def execute_sql(self, sql: str) -> str:
         """Executes a SQL query and returns the result as a formatted string."""
         import pandas as pd
+
         if not self.conn:
             return "Error: No database connection. Call 'connect' first."
 
@@ -97,48 +96,31 @@ class DataAgent(BaseAgent):
                 cols_str = ", ".join([f"{c[1]} ({c[2]})" for c in columns])
                 schema_info.append(f"Table: {table_name} | Columns: {cols_str}")
 
-            return "\n".join(schema_info) if schema_info else "Database holds no tables."
+            return (
+                "\n".join(schema_info) if schema_info else "Database holds no tables."
+            )
         except Exception as e:
             return f"Error retrieving schema: {e}"
-
-
-
-
-
-
-
-
-
-
 
     @as_tool
     def query_to_csv(self, sql: str, output_path: str) -> str:
         """Executes a query and saves the result to a CSV file."""
 
-
-
         import pandas as pd
+
         if not self.conn:
             return "Error: No database connection."
 
         try:
-
-
             df = pd.read_sql_query(sql, self.conn)
             df.to_csv(output_path, index=False)
             return f"Query results saved to {output_path}"
         except Exception as e:
             return f"Error saving to CSV: {e}"
 
-
-
-
     def improve_content(self, prompt: str) -> str:
         """Analyzes a data-related prompt and executes the appropriate tool."""
         return f"DataAgent processing: {prompt}\n(Use specific tools for execution)"
-
-
-
 
 
 if __name__ == "__main__":

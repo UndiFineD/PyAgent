@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\modeling_flash_attention_utils.py
-# hypothesis_version: 6.150.1
-
-[0.0, '0', '1', 'causal', 'deterministic', 'device', 'dropout', 'dropout_p', 'dtype', 'flash_attention_2', 'flash_attention_3', 'flash_attn_func', 'mps', 's_aux', 'sliding_window', 'softcap', 'softmax_scale', 'window_size']

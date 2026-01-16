@@ -12,7 +12,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.observability.StructuredLogger import StructuredLogger
 from .storage_base import KnowledgeStore
 from typing import Any
@@ -22,11 +22,6 @@ import logging
 import time
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class BTreeKnowledgeStore(KnowledgeStore):
@@ -48,12 +43,14 @@ class BTreeKnowledgeStore(KnowledgeStore):
         """
         try:
             from rust_core import fast_hash  # type: ignore[attr-defined]
+
             return fast_hash(key)
         except (ImportError, ModuleNotFoundError):
             return hashlib.md5(key.encode()).hexdigest()
 
     def _get_shard_connection(self, key: str) -> Any:
         import sqlite3
+
         hash_val = self._hash_key(key)
         tier1 = hash_val[:2]
         tier2 = hash_val[2:4]
@@ -63,11 +60,15 @@ class BTreeKnowledgeStore(KnowledgeStore):
         db_path = shard_dir / "shard.db"
 
         conn = sqlite3.connect(db_path)
-        conn.execute("CREATE TABLE IF NOT EXISTS data (key TEXT PRIMARY KEY, value TEXT, metadata TEXT)")
+        conn.execute(
+            "CREATE TABLE IF NOT EXISTS data (key TEXT PRIMARY KEY, value TEXT, metadata TEXT)"
+        )
         conn.commit()
         return conn
 
-    def store(self, key: str, value: Any, metadata: dict[str, Any] | None = None) -> bool:
+    def store(
+        self, key: str, value: Any, metadata: dict[str, Any] | None = None
+    ) -> bool:
         start_time = time.time()
         conn = self._get_shard_connection(key)
         clean_metadata = self._apply_privacy_filter(metadata or {})
@@ -75,13 +76,17 @@ class BTreeKnowledgeStore(KnowledgeStore):
         val_str = json.dumps(value)
         meta_str = json.dumps(clean_metadata)
 
-        conn.execute("INSERT OR REPLACE INTO data (key, value, metadata) VALUES (?, ?, ?)",
-                     (key, val_str, meta_str))
+        conn.execute(
+            "INSERT OR REPLACE INTO data (key, value, metadata) VALUES (?, ?, ?)",
+            (key, val_str, meta_str),
+        )
         conn.commit()
         conn.close()
 
         latency = (time.time() - start_time) * 1000
-        self.logger.log("INFO", f"Stored key {key}", latency_ms=latency, shard_bucket=key[:4])
+        self.logger.log(
+            "INFO", f"Stored key {key}", latency_ms=latency, shard_bucket=key[:4]
+        )
 
         self._sync_multimodal(key, value, clean_metadata)
         return True
@@ -101,7 +106,9 @@ class BTreeKnowledgeStore(KnowledgeStore):
         conn.close()
 
         latency = (time.time() - start_time) * 1000
-        self.logger.log("INFO", f"Retrieved key {query}", latency_ms=latency, found=bool(row))
+        self.logger.log(
+            "INFO", f"Retrieved key {query}", latency_ms=latency, found=bool(row)
+        )
 
         if row:
             return [json.loads(row[0])]

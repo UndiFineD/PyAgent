@@ -21,13 +21,11 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from collections.abc import Callable
 
 __version__ = VERSION
-
-
 
 
 class NotificationManager:
@@ -48,7 +46,9 @@ class NotificationManager:
     def on_notification(self, callback: Callable[[dict[str, Any]], None]) -> None:
         self._callbacks.append(callback)
 
-    def notify_status_change(self, improvement_id: str, old_status: str, new_status: str) -> None:
+    def notify_status_change(
+        self, improvement_id: str, old_status: str, new_status: str
+    ) -> None:
         payload = {
             "improvement_id": improvement_id,
             "old_status": old_status,

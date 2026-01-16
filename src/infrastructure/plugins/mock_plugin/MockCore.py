@@ -24,12 +24,10 @@ Demonstrates the 'Core/Shell' pattern for cross-language compatibility.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class MockCore:
@@ -52,5 +50,5 @@ class MockCore:
         return {
             "version": "1.0.0",
             "author": "CommunityMember",
-            "calls_made": self.processed_count
+            "calls_made": self.processed_count,
         }

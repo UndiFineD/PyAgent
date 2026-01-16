@@ -21,22 +21,28 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass, field
 
 __version__ = VERSION
 
 
-
-
 @dataclass
 class ChangelogTemplate:
     """Template for changelog entries."""
+
     name: str
     project_type: str
-    sections: list[str] = field(default_factory=lambda: [
-        "Added", "Changed", "Deprecated", "Removed", "Fixed", "Security"
-    ])
+    sections: list[str] = field(
+        default_factory=lambda: [
+            "Added",
+            "Changed",
+            "Deprecated",
+            "Removed",
+            "Fixed",
+            "Security",
+        ]
+    )
     header_format: str = "## [{version}] - {date}"
     include_links: bool = True
     include_contributors: bool = False

@@ -20,16 +20,11 @@
 """Comprehensive script for repairing improperly indented imports and VERSION placement."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import os
 import re
 
 __version__ = VERSION
-
-
-
-
-
 
 
 def fix_all() -> None:
@@ -65,7 +60,19 @@ def fix_all() -> None:
 
                     # 2. Track block state
                     ls = line.lstrip()
-                    if ls.startswith(("def ", "class ", "try:", "except", "finally:", "if ", "for ", "while ", "with ")):
+                    if ls.startswith(
+                        (
+                            "def ",
+                            "class ",
+                            "try:",
+                            "except",
+                            "finally:",
+                            "if ",
+                            "for ",
+                            "while ",
+                            "with ",
+                        )
+                    ):
                         is_inside_block = True
 
                     # Keep track of indentation for non-empty lines
@@ -78,59 +85,59 @@ def fix_all() -> None:
                         # Guess indent
                         indent = ""
                         # Look back for indent
-                        for j in range(i-1, -1, -1):
-                            if lines[j].strip() and (lines[j].startswith(" ") or lines[j].startswith("\t")):
+                        for j in range(i - 1, -1, -1):
+                            if lines[j].strip() and (
+                                lines[j].startswith(" ") or lines[j].startswith("\t")
+                            ):
                                 m = re.match(r"^(\s+)", lines[j])
                                 if m:
                                     indent = m.group(1)
                                     break
                         if not indent:
                             # Look forward
-                            for j in range(i+1, min(i+10, len(lines))):
-                                if lines[j].strip() and (lines[j].startswith(" ") or lines[j].startswith("\t")):
+                            for j in range(i + 1, min(i + 10, len(lines))):
+                                if lines[j].strip() and (
+                                    lines[j].startswith(" ")
+                                    or lines[j].startswith("\t")
+                                ):
                                     m = re.match(r"^(\s+)", lines[j])
                                     if m:
-
-
-
-
-
-
-
-
-
-
                                         indent = m.group(1)
                                         break
                         if not indent:
-
-
-
                             indent = last_non_empty_indent or "    "
 
                         line = indent + line
                         changed = True
 
                     # Reset block state if we see a code line at col 0 that isn't a block keyword or comment
-                    if line.strip() and not (line.startswith(" ") or line.startswith("\t")):
+                    if line.strip() and not (
+                        line.startswith(" ") or line.startswith("\t")
+                    ):
                         if not line.startswith(("#", "import", "from")):
                             # Check if it starts a new block
 
-
-                            if not line.startswith(("def ", "class ", "try:", "except", "finally:", "if ", "for ", "while ", "with ")):
+                            if not line.startswith(
+                                (
+                                    "def ",
+                                    "class ",
+                                    "try:",
+                                    "except",
+                                    "finally:",
+                                    "if ",
+                                    "for ",
+                                    "while ",
+                                    "with ",
+                                )
+                            ):
                                 is_inside_block = False
 
                     new_lines.append(line)
-
-
 
                 if changed:
                     with open(path, "w", encoding="utf-8") as f:
                         f.writelines(new_lines)
                     print(f"Fixed {path}")
-
-
-
 
 
 if __name__ == "__main__":

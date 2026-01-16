@@ -21,7 +21,7 @@
 """Agent specializing in tracking, summarizing, and documenting code changes."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import sys
 from pathlib import Path
 
@@ -34,15 +34,15 @@ if str(root) not in sys.path:
 if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
-from src.core.base.utilities import create_main_function  # noqa: E402
+from src.core.base.BaseUtilities import create_main_function  # noqa: E402
 from src.logic.agents.swarm.ChangesAgent import ChangesAgent  # noqa: E402
 
 # Create main function using the helper
 main = create_main_function(
     ChangesAgent,
-    'Changes Agent: Updates code file changelogs',
-    'Path to the changes file (e.g., file.changes.md)'
+    "Changes Agent: Updates code file changelogs",
+    "Path to the changes file (e.g., file.changes.md)",
 )
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

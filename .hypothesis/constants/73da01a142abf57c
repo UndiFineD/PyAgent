@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\specialized\FinancialAgent.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.1, 0.15, 0.2, 1.0, 3.0, 15.0, 1000000, 'Claude-3.5-Sonnet', 'DeepSeek-V3', 'GLM-4', 'GPT-4o', 'GPT-4o-mini', 'Ollama', 'breakdown', 'budget.audit', 'cost_usd', 'model', 'tokens', 'total_usd']

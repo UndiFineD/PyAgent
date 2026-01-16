@@ -21,14 +21,12 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from pathlib import Path
 from typing import Any
 import json
 
 __version__ = VERSION
-
-
 
 
 class TestReportGenerator:
@@ -45,20 +43,26 @@ class TestReportGenerator:
 
     def add_result(self, test_name: str, passed: bool, duration_ms: float) -> None:
         """Add test result (legacy API)."""
-        self.results.append({
-            "test_name": test_name,
-            "status": "passed" if passed else "failed",
-            "duration_ms": float(duration_ms),
-        })
+        self.results.append(
+            {
+                "test_name": test_name,
+                "status": "passed" if passed else "failed",
+                "duration_ms": float(duration_ms),
+            }
+        )
 
-    def add_test_result(self, test_name: str, status: str, duration_ms: float, error: str = "") -> None:
+    def add_test_result(
+        self, test_name: str, status: str, duration_ms: float, error: str = ""
+    ) -> None:
         """Add test result (test compatibility API)."""
-        self.results.append({
-            "test_name": test_name,
-            "status": status,
-            "duration_ms": float(duration_ms),
-            "error": error,
-        })
+        self.results.append(
+            {
+                "test_name": test_name,
+                "status": status,
+                "duration_ms": float(duration_ms),
+                "error": error,
+            }
+        )
 
     def _render_html(self) -> str:
         rows = ""
@@ -71,11 +75,11 @@ class TestReportGenerator:
                 f"<td>{error}</td></tr>"
             )
         return (
-            '<html><head><title>Test Report</title></head><body>'
-            '<h1>Test Results</h1>'
+            "<html><head><title>Test Report</title></head><body>"
+            "<h1>Test Results</h1>"
             '<table border="1">'
-            '<tr><th>Test</th><th>Status</th><th>Duration</th><th>Error</th></tr>'
-            f'{rows}</table></body></html>'
+            "<tr><th>Test</th><th>Status</th><th>Duration</th><th>Error</th></tr>"
+            f"{rows}</table></body></html>"
         )
 
     def generate_html(self) -> Path:

@@ -21,16 +21,15 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
 class ExternalReporter(Enum):
     """External error reporting systems."""
+
     SENTRY = "sentry"
     ROLLBAR = "rollbar"
     BUGSNAG = "bugsnag"

@@ -25,18 +25,18 @@ No I/O or side effects.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 
 __version__ = VERSION
 
 
-
-
 class MetacognitiveCore:
     """Pure logic core for metacognitive evaluation and intention prediction."""
 
-    def calibrate_confidence_weight(self, reported_conf: float, actual_correct: bool, current_weight: float) -> float:
+    def calibrate_confidence_weight(
+        self, reported_conf: float, actual_correct: bool, current_weight: float
+    ) -> float:
         """
         Adjusts the consensus weight of an agent.
         If an agent is 'overconfident' (high conf, wrong result), penalize heavily.
@@ -64,7 +64,7 @@ class MetacognitiveCore:
         """Returns agent types that should be pre-warmed."""
         mapping = {
             "CODE_VALIDATION": ["LintingAgent", "UnitTestingAgent"],
-            "REPORT_GENERATION": ["DocGenAgent", "SummarizationAgent"]
+            "REPORT_GENERATION": ["DocGenAgent", "SummarizationAgent"],
         }
         return mapping.get(predicted_intent, [])
 
@@ -81,7 +81,7 @@ class MetacognitiveCore:
             "confidence": confidence,
             "uncertainty_score": uncertainty_score,
             "hedges_detected": count,
-            "status": "high_confidence" if confidence > 0.7 else "uncertain"
+            "status": "high_confidence" if confidence > 0.7 else "uncertain",
         }
 
     @staticmethod
@@ -90,8 +90,10 @@ class MetacognitiveCore:
         if not uncertainty_log:
             return {"avg_confidence": 1.0, "total_evaluations": 0}
 
-        avg = sum(e.get("confidence", 0.0) for e in uncertainty_log) / len(uncertainty_log)
+        avg = sum(e.get("confidence", 0.0) for e in uncertainty_log) / len(
+            uncertainty_log
+        )
         return {
             "avg_confidence": round(avg, 2),
-            "total_evaluations": len(uncertainty_log)
+            "total_evaluations": len(uncertainty_log),
         }

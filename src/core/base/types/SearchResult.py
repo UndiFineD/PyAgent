@@ -21,15 +21,10 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass
 
 __version__ = VERSION
-
-
-
-
-
 
 
 @dataclass
@@ -42,6 +37,7 @@ class SearchResult:
         context: Surrounding text context.
         match_score: Relevance score (0 - 1).
     """
+
     version: str
     line_number: int
     context: str

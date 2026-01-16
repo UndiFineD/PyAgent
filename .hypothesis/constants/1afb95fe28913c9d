@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\specialized\LegalAuditAgent.py
-# hypothesis_version: 6.150.1
-
-[0.8, 1000, '.', '.git', '.go', '.js', '.py', '.rs', '.ts', 'Apache-2.0', 'MIT', 'MIT License', '__pycache__', 'compliant', 'file', 'improvement', 'issue', 'missing_hashes', 'node_modules', 'non_compliant', 'path', 'priority', 'target_dir', 'utf-8']

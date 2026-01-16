@@ -2,8 +2,6 @@ import pytest
 from tests.utils.agent_test_utils import agent_dir_on_path
 
 
-
-
 @pytest.fixture(name="agent_backend_module")
 def agent_backend_module():
     """Load the agent backend module with all subcomponents aggregated."""
@@ -11,7 +9,9 @@ def agent_backend_module():
         import importlib
 
         # Load main execution engine
-        main_mod = importlib.import_module("src.infrastructure.backend.execution_engine")
+        main_mod = importlib.import_module(
+            "src.infrastructure.backend.ExecutionEngine"
+        )
 
         # Aggregate classes from other backend modules
         class_map = {

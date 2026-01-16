@@ -23,18 +23,16 @@ Inspired by PR-Agent and GitHub CLI.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import subprocess
 import time
 from pathlib import Path
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
 __version__ = VERSION
-
-
 
 
 class PullRequestAgent(BaseAgent):
@@ -58,7 +56,9 @@ class PullRequestAgent(BaseAgent):
         if self.recorder:
             try:
                 meta = {"phase": 108, "type": "git_pr", "timestamp": time.time()}
-                self.recorder.record_interaction("pra", "git", action, result, meta=meta)
+                self.recorder.record_interaction(
+                    "pra", "git", action, result, meta=meta
+                )
             except Exception:
                 pass
 
@@ -67,12 +67,19 @@ class PullRequestAgent(BaseAgent):
         """Generates a summary of changes between the current state and a branch."""
         try:
             # Get the diff
-            summary = subprocess.check_output(["git", "diff", branch, "--stat"], text=True, encoding="utf-8")
+            summary = subprocess.check_output(
+                ["git", "diff", branch, "--stat"], text=True, encoding="utf-8"
+            )
 
             # Get actual file changes for content analysis (limited)
-            files = subprocess.check_output(["git", "diff", branch, "--name-only"], text=True, encoding="utf-8").splitlines()
+            files = subprocess.check_output(
+                ["git", "diff", branch, "--name-only"], text=True, encoding="utf-8"
+            ).splitlines()
 
-            report = ["## 📝 PR Change Summary", f"Comparing current state against `{branch}`\n"]
+            report = [
+                "## 📝 PR Change Summary",
+                f"Comparing current state against `{branch}`\n",
+            ]
             report.append(f"```text\n{summary}\n```")
 
             if files:
@@ -93,7 +100,7 @@ class PullRequestAgent(BaseAgent):
         """Summarizes recent activity in the repository."""
         try:
             # Use argument list for git log to avoid shell injection
-            cmd = ["git", "log", "-n", str(limit), '--pretty=format:%h - %an: %s (%cr)']
+            cmd = ["git", "log", "-n", str(limit), "--pretty=format:%h - %an: %s (%cr)"]
             result = subprocess.run(cmd, capture_output=True, text=True)
             if result.returncode != 0:
                 return f"Git history unavailable: {result.stderr}"
@@ -124,7 +131,9 @@ class PullRequestAgent(BaseAgent):
     def generate_pr_description(self, branch: str = "main") -> str:
         """PR-Agent Pattern: Generates a full Markdown description for a Pull Request."""
         try:
-            diff = subprocess.check_output(["git", "diff", branch], text=True, encoding="utf-8")
+            diff = subprocess.check_output(
+                ["git", "diff", branch], text=True, encoding="utf-8"
+            )
             # In a real scenario, we'd pass this diff to an LLM.
             # Here we structure the template.
             description = [
@@ -145,7 +154,7 @@ class PullRequestAgent(BaseAgent):
                 "### Detailed Diff Analysis (Preview)",
                 "```diff",
                 f"{diff[:1000]}...",
-                "```"
+                "```",
             ]
             res = "\n".join(description)
             self._record("pr_description", {"branch": branch}, res)
@@ -159,7 +168,9 @@ class PullRequestAgent(BaseAgent):
     def review_changes(self) -> str:
         """Self-Review: Analyzes staged changes for security, style, and logic issues."""
         try:
-            staged_diff = subprocess.check_output(["git", "diff", "--cached"], text=True)
+            staged_diff = subprocess.check_output(
+                ["git", "diff", "--cached"], text=True
+            )
             if not staged_diff:
                 return "No staged changes to review."
 
@@ -169,7 +180,7 @@ class PullRequestAgent(BaseAgent):
                 "1. **Security**: No secrets or hardcoded keys detected in diff.",
                 "2. **Style**: Docstrings present for all new methods.",
                 "3. **Optimization**: Import order looks consistent.",
-                "\n**Verdict**: Ready for commit."
+                "\n**Verdict**: Ready for commit.",
             ]
             return "\n".join(findings)
         except Exception as e:

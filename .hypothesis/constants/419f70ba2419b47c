@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_dynamo\variables\optimizer.py
-# hypothesis_version: 6.150.1
-
-['VariableTracker', '_init_group', 'capturable', 'grad', 'grad_to_source', 'param_groups', 'params', 'perf_hints', 'state', 'static_tensor_names', 'step', 'tensor_to_source']

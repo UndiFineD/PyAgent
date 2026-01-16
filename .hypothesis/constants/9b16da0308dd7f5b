@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\api\FleetLoadBalancer.py
-# hypothesis_version: 6.150.1
-
-[100, 'ACCEPTED', 'High Traffic Load', 'REJECTED', 'assigned_model', 'command', 'estimated_wait_ms', 'interface', 'interface_diversity', 'model', 'queue_depth', 'reason', 'status']

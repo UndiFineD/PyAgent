@@ -17,12 +17,16 @@ mod agents;
 mod base;
 mod stats;
 mod utils;
+mod security;
+mod neural;
+mod text;
 
 // Imports for wrapping
 use agents::*;
 use base::*;
 use stats::*;
 use utils::*;
+use neural::*;
 
 /// A Python module implemented in Rust.
 #[pymodule]
@@ -70,6 +74,7 @@ fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(parse_adb_devices_rust, m)?)?;
 
     // Base
+    m.add_function(wrap_pyfunction!(generate_cache_key, m)?)?;
     m.add_function(wrap_pyfunction!(get_error_code, m)?)?;
     m.add_function(wrap_pyfunction!(get_error_documentation_link, m)?)?;
     m.add_function(wrap_pyfunction!(redact_pii, m)?)?;
@@ -92,12 +97,16 @@ fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(update_weight_on_fire, m)?)?;
     m.add_function(wrap_pyfunction!(should_prune, m)?)?;
     m.add_function(wrap_pyfunction!(verify_fleet_health, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_anchoring_fallback, m)?)?;
+    m.add_function(wrap_pyfunction!(check_latent_reasoning, m)?)?;
+    m.add_function(wrap_pyfunction!(is_response_valid_rust, m)?)?;
 
     // Stats
     m.add_function(wrap_pyfunction!(calculate_baseline, m)?)?;
     m.add_function(wrap_pyfunction!(check_regression, m)?)?;
     m.add_function(wrap_pyfunction!(score_efficiency, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_priority_score, m)?)?;
+    m.add_function(wrap_pyfunction!(assess_response_quality, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_token_estimate, m)?)?;
     m.add_function(wrap_pyfunction!(deduplicate_entries, m)?)?;
     m.add_function(wrap_pyfunction!(normalize_response, m)?)?;
@@ -105,6 +114,9 @@ fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(select_best_model, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_cyclomatic_complexity, m)?)?;
     m.add_function(wrap_pyfunction!(check_finetuning_trigger, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_pearson_correlation, m)?)?;
+    m.add_function(wrap_pyfunction!(predict_linear, m)?)?;
+    m.add_function(wrap_pyfunction!(predict_with_confidence_rust, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_p95, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_avg, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_sum, m)?)?;
@@ -143,6 +155,87 @@ fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(agents::extract_graph_entities_regex, m)?)?;
     m.add_function(wrap_pyfunction!(agents::extract_markdown_backlinks, m)?)?;
     m.add_function(wrap_pyfunction!(mask_sensitive_logs, m)?)?;
+    m.add_function(wrap_pyfunction!(to_snake_case_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(build_log_entry_rust, m)?)?;
+
+    // Security
+    m.add_function(wrap_pyfunction!(security::analyze_thought_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(security::scan_secrets_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(security::scan_pii_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(security::scan_code_vulnerabilities_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(security::scan_injections_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(security::scan_optimization_patterns_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(security::scan_hardcoded_secrets_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(security::scan_insecure_patterns_rust, m)?)?;
+
+    // Neural
+    m.add_function(wrap_pyfunction!(cluster_interactions_rust, m)?)?;
+
+    // Text processing (ReportSearchEngine, MergeDetector)
+    m.add_function(wrap_pyfunction!(text::tokenize_and_index_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::tokenize_query_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::calculate_text_similarity_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::find_similar_pairs_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::bulk_tokenize_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::word_frequencies_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::deduplicate_strings_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::match_patterns_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::bulk_match_patterns_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::check_suppression_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::scan_lines_multi_pattern_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::search_content_scored_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::extract_versions_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::batch_scan_files_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::cosine_similarity_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::batch_cosine_similarity_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::find_strong_correlations_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::search_with_tags_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::filter_memory_by_query_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::find_dependents_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::match_policies_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::search_blocks_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::apply_patterns_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::analyze_security_patterns_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::calculate_coupling_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::topological_sort_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::partition_to_shards_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::count_untyped_functions_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::build_graph_edges_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::find_duplicate_code_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::linear_forecast_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::check_style_patterns_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::scan_compliance_patterns_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::normalize_and_hash_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::generate_unified_diff_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::calculate_jaccard_set_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::fast_cache_key_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::fast_prefix_key_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::select_best_agent_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::aggregate_file_metrics_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::calculate_weighted_load_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::detect_failed_agents_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::calculate_variance_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::validate_semver_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::analyze_failure_strategy_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::analyze_tech_debt_rust, m)?)?;
+    // Phase 13: Stats & Knowledge Core
+    m.add_function(wrap_pyfunction!(text::calculate_sum_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::calculate_avg_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::calculate_min_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::calculate_max_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::calculate_median_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::calculate_p95_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::calculate_p99_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::calculate_stddev_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::calculate_pearson_correlation_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::calculate_shard_id_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::merge_knowledge_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::filter_stable_knowledge_rust, m)?)?;
+    // Phase 14: SelfImprovementCore Acceleration
+    m.add_function(wrap_pyfunction!(text::analyze_code_quality_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::prepare_debt_records_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(text::apply_simple_fixes_rust, m)?)?;
+
     m.add_class::<CoderCore>()?;
     m.add_class::<ToolDraftingCore>()?;
     m.add_class::<WebCore>()?;

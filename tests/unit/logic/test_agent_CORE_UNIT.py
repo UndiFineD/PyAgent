@@ -9,21 +9,19 @@ import sys
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
     class agent_sys_path:
         def __enter__(self) -> bool:
-
             return self
-
-
-
-
-
-
 
         def __exit__(self, *args) -> str:
             sys.path.remove(str(AGENT_DIR))
@@ -31,6 +29,7 @@ except ImportError:
 # Import from src if needed
 
 # Core Logic and Utility Tests
+
 
 class TestAgentExecutionStateEnum:
     """Test AgentExecutionState enum."""
@@ -86,6 +85,7 @@ class TestLockTypeEnum:
         assert locks.EXCLUSIVE is not None
         assert locks.ADVISORY is not None
 
+
 class TestDiffOutputFormatEnum:
     """Test DiffOutputFormat enum."""
 
@@ -96,6 +96,7 @@ class TestDiffOutputFormatEnum:
         assert formats.CONTEXT is not None
         assert formats.SIDE_BY_SIDE is not None
         assert formats.HTML is not None
+
 
 class TestAgentPriorityEnum:
     """Test AgentPriority enum."""
@@ -147,7 +148,7 @@ class TestRateLimitConfigDataclass:
             requests_per_second=5.0,
             requests_per_minute=30,
             burst_size=5,
-            cooldown_seconds=0.5
+            cooldown_seconds=0.5,
         )
         assert config.requests_per_second == 5.0
         assert config.requests_per_minute == 30
@@ -161,8 +162,7 @@ class TestAgentPluginConfigDataclass:
     def test_required_fields(self, agent_module) -> None:
         """Verify required fields are enforced."""
         config = agent_module.AgentPluginConfig(
-            name="test_plugin",
-            module_path="/path / to / plugin.py"
+            name="test_plugin", module_path="/path / to / plugin.py"
         )
         assert config.name == "test_plugin"
         assert config.module_path == "/path / to / plugin.py"
@@ -174,7 +174,7 @@ class TestAgentPluginConfigDataclass:
         config = agent_module.AgentPluginConfig(
             name="critical_plugin",
             module_path="/path / to / plugin.py",
-            priority=agent_module.AgentPriority.CRITICAL
+            priority=agent_module.AgentPriority.CRITICAL,
         )
         assert config.priority == agent_module.AgentPriority.CRITICAL
 
@@ -188,7 +188,7 @@ class TestFileLockDataclass:
             file_path=tmp_path / "test.py",
             lock_type=agent_module.LockType.EXCLUSIVE,
             owner="test_owner",
-            acquired_at=time.time()
+            acquired_at=time.time(),
         )
         assert lock.file_path == tmp_path / "test.py"
         assert lock.lock_type == agent_module.LockType.EXCLUSIVE
@@ -204,13 +204,14 @@ class TestDiffResultDataclass:
         result = agent_module.DiffResult(
             file_path=tmp_path / "test.py",
             original_content="old content",
-            modified_content="new content"
+            modified_content="new content",
         )
         assert result.file_path == tmp_path / "test.py"
         assert result.original_content == "old content"
         assert result.modified_content == "new content"
         assert result.additions == 0
         assert result.deletions == 0
+
 
 class TestIncrementalStateDataclass:
     """Test IncrementalState dataclass."""
@@ -232,7 +233,7 @@ class TestAgentHealthCheckDataclass:
         check = agent_module.AgentHealthCheck(
             agent_name="coder",
             status=agent_module.HealthStatus.HEALTHY,
-            response_time_ms=50.0
+            response_time_ms=50.0,
         )
         assert check.agent_name == "coder"
         assert check.status == agent_module.HealthStatus.HEALTHY
@@ -250,6 +251,7 @@ class TestShutdownStateDataclass:
         assert state.current_file is None
         assert state.completed_files == []
         assert state.pending_files == []
+
 
 class TestRateLimiter:
     """Test RateLimiter class."""
@@ -270,17 +272,14 @@ class TestRateLimiter:
         """Verify stats can be retrieved."""
         limiter = agent_module.RateLimiter()
         stats = limiter.get_stats()
-        assert 'tokens_available' in stats
-        assert 'requests_last_minute' in stats
-        assert 'requests_per_second' in stats
-        assert 'burst_size' in stats
+        assert "tokens_available" in stats
+        assert "requests_last_minute" in stats
+        assert "requests_per_second" in stats
+        assert "burst_size" in stats
 
     def test_custom_config(self, agent_module) -> None:
         """Verify custom config is applied."""
-        config = agent_module.RateLimitConfig(
-            requests_per_second=1.0,
-            burst_size=2
-        )
+        config = agent_module.RateLimitConfig(requests_per_second=1.0, burst_size=2)
         limiter = agent_module.RateLimiter(config)
         assert limiter.config.requests_per_second == 1.0
         assert limiter.config.burst_size == 2
@@ -336,9 +335,7 @@ class TestDiffGenerator:
         test_file: Path = tmp_path / "test.py"
 
         result = generator.generate_diff(
-            test_file,
-            "line1\nline2\nline3",
-            "line1\nmodified\nline3"
+            test_file, "line1\nline2\nline3", "line1\nmodified\nline3"
         )
 
         assert result.file_path == test_file
@@ -350,11 +347,7 @@ class TestDiffGenerator:
         generator = agent_module.DiffGenerator()
         test_file: Path = tmp_path / "test.py"
 
-        diff_result = generator.generate_diff(
-            test_file,
-            "old",
-            "new"
-        )
+        diff_result = generator.generate_diff(test_file, "old", "new")
 
         formatted = generator.format_diff(diff_result)
         assert isinstance(formatted, str)
@@ -364,17 +357,12 @@ class TestDiffGenerator:
         generator = agent_module.DiffGenerator()
         test_file: Path = tmp_path / "test.py"
 
-        diff_result = generator.generate_diff(
-            test_file,
-            "old",
-            "new"
-        )
+        diff_result = generator.generate_diff(test_file, "old", "new")
 
         formatted = generator.format_diff(
-            diff_result,
-            agent_module.DiffOutputFormat.HTML
+            diff_result, agent_module.DiffOutputFormat.HTML
         )
-        assert '<html>' in formatted.lower() or '<table' in formatted.lower()
+        assert "<html>" in formatted.lower() or "<table" in formatted.lower()
 
 
 class TestIncrementalProcessor:
@@ -498,7 +486,7 @@ class TestConfigLoader:
     def test_find_config_file(self, tmp_path: Path, agent_module) -> None:
         """Verify config file can be found."""
         config_path: Path = tmp_path / "agent.json"
-        config_path.write_text('{}')
+        config_path.write_text("{}")
 
         found = agent_module.ConfigLoader.find_config_file(tmp_path)
         assert found == config_path
@@ -523,20 +511,20 @@ class TestHealthChecker:
         checker = agent_module.HealthChecker(tmp_path)
         result = checker.check_python()
 
-        assert result.agent_name == 'python'
+        assert result.agent_name == "python"
         assert result.status == agent_module.HealthStatus.HEALTHY
-        assert 'version' in result.details
+        assert "version" in result.details
 
     def test_check_git(self, tmp_path: Path, agent_module) -> None:
         """Verify git check runs."""
         checker = agent_module.HealthChecker(tmp_path)
         result = checker.check_git()
 
-        assert result.agent_name == 'git'
+        assert result.agent_name == "git"
         # May be healthy or unhealthy depending on git availability
         assert result.status in [
             agent_module.HealthStatus.HEALTHY,
-            agent_module.HealthStatus.UNHEALTHY
+            agent_module.HealthStatus.UNHEALTHY,
         ]
 
     def test_run_all_checks(self, tmp_path: Path, agent_module) -> None:
@@ -544,10 +532,10 @@ class TestHealthChecker:
         checker = agent_module.HealthChecker(tmp_path)
         results = checker.run_all_checks()
 
-        assert 'python' in results
-        assert 'git' in results
+        assert "python" in results
+        assert "git" in results
         # Agent scripts will be unhealthy in test environment
-        assert 'coder' in results
+        assert "coder" in results
 
 
 class TestAgentPluginSystem:
@@ -610,10 +598,12 @@ class TestAgentRateLimiting:
 
         agent.enable_rate_limiting()
 
-        assert hasattr(agent, 'rate_limiter')
+        assert hasattr(agent, "rate_limiter")
         assert agent.rate_limiter is not None
 
-    def test_enable_rate_limiting_with_config(self, tmp_path: Path, agent_module) -> None:
+    def test_enable_rate_limiting_with_config(
+        self, tmp_path: Path, agent_module
+    ) -> None:
         """Verify rate limiting can be enabled with custom config."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
@@ -631,7 +621,7 @@ class TestAgentRateLimiting:
         agent.enable_rate_limiting()
         stats = agent.get_rate_limit_stats()
 
-        assert 'tokens_available' in stats
+        assert "tokens_available" in stats
 
 
 class TestAgentFileLocking:
@@ -644,10 +634,12 @@ class TestAgentFileLocking:
 
         agent.enable_file_locking()
 
-        assert hasattr(agent, 'lock_manager')
+        assert hasattr(agent, "lock_manager")
         assert agent.lock_manager is not None
 
-    def test_enable_file_locking_with_timeout(self, tmp_path: Path, agent_module) -> None:
+    def test_enable_file_locking_with_timeout(
+        self, tmp_path: Path, agent_module
+    ) -> None:
         """Verify file locking can be enabled with custom timeout."""
         (tmp_path / ".git").mkdir()
         agent = agent_module.Agent(repo_root=str(tmp_path))
@@ -655,6 +647,7 @@ class TestAgentFileLocking:
         agent.enable_file_locking(lock_timeout=600.0)
 
         assert agent.lock_manager.lock_timeout == 600.0
+
 
 class TestAgentDiffPreview:
     """Test Agent diff preview methods."""
@@ -666,7 +659,7 @@ class TestAgentDiffPreview:
 
         agent.enable_diff_preview()
 
-        assert hasattr(agent, 'diff_generator')
+        assert hasattr(agent, "diff_generator")
         assert agent.diff_generator is not None
 
     def test_preview_changes(self, tmp_path: Path, agent_module) -> None:
@@ -682,6 +675,7 @@ class TestAgentDiffPreview:
         assert diff.original_content == "old content"
         assert diff.modified_content == "new content"
 
+
 class TestAgentIncrementalProcessing:
     """Test Agent incremental processing methods."""
 
@@ -692,7 +686,7 @@ class TestAgentIncrementalProcessing:
 
         agent.enable_incremental_processing()
 
-        assert hasattr(agent, 'incremental_processor')
+        assert hasattr(agent, "incremental_processor")
         assert agent.incremental_processor is not None
 
     def test_get_changed_files(self, tmp_path: Path, agent_module) -> None:
@@ -734,7 +728,7 @@ class TestAgentGracefulShutdown:
 
         agent.enable_graceful_shutdown()
 
-        assert hasattr(agent, 'shutdown_handler')
+        assert hasattr(agent, "shutdown_handler")
         assert agent.shutdown_handler is not None
 
     def test_resume_from_shutdown_no_state(self, tmp_path: Path, agent_module) -> None:
@@ -744,6 +738,7 @@ class TestAgentGracefulShutdown:
 
         result = agent.resume_from_shutdown()
         assert result is None
+
 
 class TestAgentHealthChecks:
     """Test Agent health check methods."""
@@ -755,8 +750,8 @@ class TestAgentHealthChecks:
 
         results = agent.run_health_checks()
 
-        assert 'python' in results
-        assert 'git' in results
+        assert "python" in results
+        assert "git" in results
 
     def test_is_healthy(self, tmp_path: Path, agent_module) -> None:
         """Verify is_healthy returns boolean."""
@@ -767,6 +762,7 @@ class TestAgentHealthChecks:
 
         assert isinstance(result, bool)
 
+
 class TestAgentConfigFile:
     """Test Agent configuration file methods."""
 
@@ -774,11 +770,10 @@ class TestAgentConfigFile:
         """Verify Agent can be created from config file."""
         config_path: Path = tmp_path / "agent.json"
         config_path.write_text(
-            '{"repo_root": "' +
-            str(tmp_path).replace(
-                '\\',
-                '\\\\') +
-            '", "dry_run": true}')
+            '{"repo_root": "'
+            + str(tmp_path).replace("\\", "\\\\")
+            + '", "dry_run": true}'
+        )
         (tmp_path / ".git").mkdir()
 
         agent = agent_module.Agent.from_config_file(config_path)
@@ -803,6 +798,7 @@ class TestAgentConfigFile:
         agent = agent_module.Agent.auto_configure(str(tmp_path))
 
         assert agent.loop == 5
+
 
 # ============================================================================
 # PHASE 6 INTEGRATION TESTS
@@ -845,6 +841,7 @@ class TestAgentChain:
         assert len(results) == 2
         assert results[0]["success"]
         assert results[1]["output"] == "start->step1->step2"
+
 
 # ============================================================================
 # SESSION 9: GIT BRANCH PROCESSOR TESTS

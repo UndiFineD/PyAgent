@@ -18,15 +18,13 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class EmpathyAgent(BaseAgent):
@@ -48,7 +46,12 @@ class EmpathyAgent(BaseAgent):
         # Simulated logic for reliability without LLM dependency
         response = "NEUTRAL"
         msg_lower = message.lower()
-        if "wrong" in msg_lower or "fix" in msg_lower or "fail" in msg_lower or "bad" in msg_lower:
+        if (
+            "wrong" in msg_lower
+            or "fix" in msg_lower
+            or "fail" in msg_lower
+            or "bad" in msg_lower
+        ):
             response = "FRUSTRATED"
         elif "great" in msg_lower or "good" in msg_lower or "love" in msg_lower:
             response = "POSITIVE"
@@ -64,7 +67,7 @@ class EmpathyAgent(BaseAgent):
         return {
             "sentiment": self.sentiment_state,
             "resonance": self.interpersonal_resonance,
-            "linguistic_adjustment": self.get_tone_recommendation()
+            "linguistic_adjustment": self.get_tone_recommendation(),
         }
 
     def calibrate_empathy(self, user_feedback_score: float) -> float:

@@ -1,16 +1,15 @@
 import unittest
-from src.logic.agents.specialized.asynciothreadingCoderAgent import asynciothreadingCoderAgent
-from src.core.base.version import VERSION
+from src.logic.agents.specialized.asynciothreadingCoderAgent import (
+    asynciothreadingCoderAgent,
+)
+from src.core.base.Version import VERSION
+
 __version__ = VERSION
-
-
 
 
 class TestasynciothreadingCoderAgent(unittest.TestCase):
     def setUp(self) -> None:
         self.agent = asynciothreadingCoderAgent("dummy_path.py")
-
-
 
     def test_initialization(self) -> None:
         self.assertIsNotNone(self.agent)

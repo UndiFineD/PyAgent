@@ -3,8 +3,6 @@ from pathlib import Path
 from src.infrastructure.fleet.FleetManager import FleetManager
 
 
-
-
 def test_phase23() -> None:
     print("--- Phase 23 Verification: NAS & Core Expansion ---")
     workspace_root = Path(__file__).resolve().parents[2]
@@ -15,23 +13,11 @@ def test_phase23() -> None:
     task = "High-speed tensor processing for financial sentiment"
     arch = fleet.nas.search_optimal_architecture(task)
 
-
-
-
-
-
-
-
-
-
-
     if "architecture_type" in arch:
-        print(f"✅ NAS suggested: {arch['architecture_type']} with rank {arch.get('rank')}")
+        print(
+            f"✅ NAS suggested: {arch['architecture_type']} with rank {arch.get('rank')}"
+        )
     else:
-
-
-
-
         print("❌ NAS search failed.")
 
     # 2. Test Core Expansion Agent
@@ -47,9 +33,6 @@ def test_phase23() -> None:
             print("   (Confirmed presence of 'requests')")
     else:
         print("❌ Environment audit returned no packages.")
-
-
-
 
 
 if __name__ == "__main__":

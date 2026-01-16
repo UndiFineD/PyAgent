@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\huggingface_hub\_inference_endpoints.py
-# hypothesis_version: 6.150.1
-
-[200, 'AsyncInferenceClient', 'HfApi', 'InferenceClient', 'InferenceEndpoint', 'createdAt', 'failed', 'framework', 'healthRoute', 'initializing', 'model', 'name', 'paused', 'pending', 'private', 'protected', 'public', 'repository', 'revision', 'running', 'scaledToZero', 'state', 'status', 'task', 'type', 'updateFailed', 'updatedAt', 'updating', 'url']

@@ -13,8 +13,6 @@ from unittest.mock import patch
 from src.core.base.AgentCommandHandler import AgentCommandHandler
 
 
-
-
 class TestAgentCommandHandler(unittest.TestCase):
     def setUp(self):
         self.repo_root = Path(os.getcwd())
@@ -22,10 +20,12 @@ class TestAgentCommandHandler(unittest.TestCase):
             "test_agent": {
                 "provider": "test_provider",
                 "model": "test_model",
-                "temperature": 0.7
+                "temperature": 0.7,
             }
         }
-        self.handler = AgentCommandHandler(self.repo_root, models_config=self.models_config)
+        self.handler = AgentCommandHandler(
+            self.repo_root, models_config=self.models_config
+        )
 
     @patch("subprocess.run")
     def test_run_command_basic(self, mock_run):
@@ -41,8 +41,12 @@ class TestAgentCommandHandler(unittest.TestCase):
     def test_run_command_retry_logic(self, mock_run):
         # Fail first, succeed second
         mock_run.side_effect = [
-            subprocess.CompletedProcess(args=["fail"], returncode=1, stdout="", stderr="error"),
-            subprocess.CompletedProcess(args=["fail"], returncode=0, stdout="success", stderr="")
+            subprocess.CompletedProcess(
+                args=["fail"], returncode=1, stdout="", stderr="error"
+            ),
+            subprocess.CompletedProcess(
+                args=["fail"], returncode=0, stdout="success", stderr=""
+            ),
         ]
 
         # We use a small timeout for wait in the handler if we wanted to speed this up,
@@ -52,41 +56,25 @@ class TestAgentCommandHandler(unittest.TestCase):
         self.assertEqual(result.stdout, "success")
         self.assertEqual(mock_run.call_count, 2)
 
-
-
-
-
-
     def test_prepare_command_environment_agent(self):
         # Simulate an agent script being called
         agent_script = str(self.repo_root / "agent_test_agent.py")
         cmd = [sys.executable, agent_script, "--arg1"]
-
-
-
-
 
         local_cmd, env = self.handler._prepare_command_environment(cmd)
 
         self.assertIn("--no-cascade", local_cmd)
         self.assertEqual(env.get("DV_AGENT_PARENT"), "1")
 
-
         self.assertEqual(env.get("DV_AGENT_MODEL_PROVIDER"), "test_provider")
         self.assertEqual(env.get("DV_AGENT_MODEL_NAME"), "test_model")
 
     def test_with_agent_env_context_manager(self):
         with self.handler.with_agent_env("test_agent"):
-
-
-
             self.assertEqual(os.environ.get("DV_AGENT_MODEL_PROVIDER"), "test_provider")
             self.assertEqual(os.environ.get("DV_AGENT_MODEL_NAME"), "test_model")
 
         self.assertNotIn("DV_AGENT_MODEL_PROVIDER", os.environ)
-
-
-
 
 
 if __name__ == "__main__":

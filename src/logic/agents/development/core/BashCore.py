@@ -1,4 +1,3 @@
-
 """
 Core logic for Bash script analysis (Phase 175).
 Integrates shellcheck for linting generated scripts.
@@ -12,25 +11,18 @@ import os
 import subprocess
 from typing import TypedDict, Optional, Any
 
-from src.core.base.interfaces import ContextRecorderInterface
+from src.core.base.BaseInterfaces import ContextRecorderInterface
 
 
 class ShellCheckIssue(TypedDict):
     """Represents a single issue found by shellcheck."""
 
-
     file: str
-
-
-
-
 
     line: int
     endLine: int
     column: int
     endColumn: int
-
-
 
     level: str
     code: int
@@ -38,28 +30,34 @@ class ShellCheckIssue(TypedDict):
     fix: Any
 
 
-
-
 class BashLintResult(TypedDict):
     """Result of a bash script linting session."""
+
     valid: bool
     issues: list[ShellCheckIssue]
     error: Optional[str]
 
 
-
-
 class BashCore:
     """Core logic for Bash script analysis and linting."""
+
     @staticmethod
-    def lint_script(script_path: str, recorder: ContextRecorderInterface | None = None) -> BashLintResult:
+    def lint_script(
+        script_path: str, recorder: ContextRecorderInterface | None = None
+    ) -> BashLintResult:
         """
         Runs shellcheck on a bash script.
         """
         if not os.path.exists(script_path):
-            result: BashLintResult = {"valid": False, "issues": [], "error": "File not found"}
+            result: BashLintResult = {
+                "valid": False,
+                "issues": [],
+                "error": "File not found",
+            }
             if recorder:
-                recorder.record_interaction("bash", "shellcheck", script_path, "file-not-found")
+                recorder.record_interaction(
+                    "bash", "shellcheck", script_path, "file-not-found"
+                )
             return result
 
         try:
@@ -68,7 +66,7 @@ class BashCore:
                 ["shellcheck", "-f", "json", script_path],
                 capture_output=True,
                 text=True,
-                check=False
+                check=False,
             )
 
             issues: list[ShellCheckIssue] = []
@@ -76,7 +74,11 @@ class BashCore:
                 try:
                     issues = json.loads(process.stdout)
                 except json.JSONDecodeError:
-                    return {"valid": False, "issues": [], "error": "Failed to parse shellcheck output"}
+                    return {
+                        "valid": False,
+                        "issues": [],
+                        "error": "Failed to parse shellcheck output",
+                    }
 
             valid = len(issues) == 0
             findings: BashLintResult = {"issues": issues, "valid": valid, "error": None}
@@ -86,13 +88,17 @@ class BashCore:
                     provider="bash",
                     model="shellcheck",
                     prompt=script_path,
-                    result=str(findings)[:2000]
+                    result=str(findings)[:2000],
                 )
 
             return findings
 
         except FileNotFoundError:
-            return {"valid": False, "issues": [], "error": "shellcheck not found. Please install it."}
+            return {
+                "valid": False,
+                "issues": [],
+                "error": "shellcheck not found. Please install it.",
+            }
         except Exception as e:
             error_msg = str(e)
             if recorder:
@@ -100,7 +106,7 @@ class BashCore:
                     provider="bash",
                     model="shellcheck",
                     prompt=script_path,
-                    result=f"Error: {error_msg}"
+                    result=f"Error: {error_msg}",
                 )
             return {"valid": False, "issues": [], "error": error_msg}
 
@@ -111,6 +117,7 @@ class BashCore:
         """
         try:
             import rust_core
+
             return rust_core.ensure_safety_flags_rust(content)  # type: ignore[attr-defined]
         except (ImportError, AttributeError):
             pass

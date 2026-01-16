@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\InfrastructureRepairAgent.py
-# hypothesis_version: 6.150.1
-
-['-m', 'InfrastructureRepair', 'Shell', 'Success', 'Unknown issue type.', 'clean', 'degraded', 'install', 'issues', 'missing_package', 'package', 'pandas', 'pip', 'pyyaml', 'status', 'type', 'yaml']
