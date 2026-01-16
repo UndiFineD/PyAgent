@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\orchestration\TemporalSyncOrchestrator.py
-# hypothesis_version: 6.150.1
-
-[1e-06, 0.01, 0.1, 0.5, 1.0, 2.0, 5.0, 300, 1800]

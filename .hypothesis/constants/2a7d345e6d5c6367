@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_functorch\deprecated.py
-# hypothesis_version: 6.150.1
-
-['\n.. warning::\n\n', 'error', 'functionalize', 'grad', 'grad_and_value', 'hessian', 'jacfwd', 'jacrev', 'jvp', 'make_functional', 'mutations', 'torch.vmap', 'vjp', 'vmap']

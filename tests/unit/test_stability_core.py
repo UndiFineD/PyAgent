@@ -3,8 +3,6 @@ from hypothesis import given, strategies as st
 from src.observability.stats.core.StabilityCore import StabilityCore, FleetMetrics
 
 
-
-
 class TestStabilityCore(unittest.TestCase):
     def setUp(self):
         self.core = StabilityCore()
@@ -14,20 +12,27 @@ class TestStabilityCore(unittest.TestCase):
         total_token_out=st.integers(min_value=0),
         active_agent_count=st.integers(min_value=0),
         latency_p95=st.floats(min_value=0.0, max_value=10000.0),
-        sae_anomalies=st.integers(min_value=0, max_value=100)
+        sae_anomalies=st.integers(min_value=0, max_value=100),
     )
-    def test_calculate_stability_score_bounds(self, avg_error_rate, total_token_out, active_agent_count, latency_p95, sae_anomalies):
+    def test_calculate_stability_score_bounds(
+        self,
+        avg_error_rate,
+        total_token_out,
+        active_agent_count,
+        latency_p95,
+        sae_anomalies,
+    ):
         # Constraints on average error rate for sensible testing
         if avg_error_rate > 1.0:
-             # Though the strategy caps at 1.0, float precision might jitter.
-             # logic handles floats generally, but error rate implies 0-1.
+            # Though the strategy caps at 1.0, float precision might jitter.
+            # logic handles floats generally, but error rate implies 0-1.
             pass
 
         metrics = FleetMetrics(
             avg_error_rate=avg_error_rate,
             total_token_out=total_token_out,
             active_agent_count=active_agent_count,
-            latency_p95=latency_p95
+            latency_p95=latency_p95,
         )
 
         score = self.core.calculate_stability_score(metrics, sae_anomalies)
@@ -63,22 +68,9 @@ class TestStabilityCore(unittest.TestCase):
         if len(history) < 10:
             self.assertFalse(self.core.is_in_stasis(history))
 
-
-
-
-
-
-
-
-
-
-
     def test_is_in_stasis_true(self):
         # 10 items, identical -> variance 0 < 0.0001
         history = [0.5] * 10
-
-
-
 
         self.assertTrue(self.core.is_in_stasis(history))
 
@@ -86,14 +78,11 @@ class TestStabilityCore(unittest.TestCase):
         # Alternating 0.0 and 1.0 -> High variance
         history = [0.0, 1.0] * 5
 
-
         self.assertFalse(self.core.is_in_stasis(history))
 
     @given(st.floats(min_value=0.0, max_value=1.0))
     def test_get_healing_threshold(self, score):
         threshold = self.core.get_healing_threshold(score)
-
-
 
         if score < 0.3:
             self.assertEqual(threshold, 0.9)
@@ -101,8 +90,5 @@ class TestStabilityCore(unittest.TestCase):
             self.assertEqual(threshold, 0.5)
 
 
-
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

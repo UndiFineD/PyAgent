@@ -22,15 +22,13 @@
 
 from __future__ import annotations
 from typing import Any
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import logging
 from pathlib import Path
 from datetime import datetime
 
 __version__ = VERSION
-
-
 
 
 class SafetyAuditTrail:
@@ -49,14 +47,16 @@ class SafetyAuditTrail:
             except Exception as e:
                 logging.error(f"SafetyAuditTrail: Error loading log: {e}")
 
-    def log_violation(self, agent_name: str, task: str, violations: list, level: str = "HIGH") -> str:
+    def log_violation(
+        self, agent_name: str, task: str, violations: list, level: str = "HIGH"
+    ) -> str:
         """Records a new safety violation."""
         entry = {
             "timestamp": datetime.now().isoformat(),
             "agent": agent_name,
             "level": level,
             "violations": violations,
-            "context": task[:500]
+            "context": task[:500],
         }
         self.violations.append(entry)
         self._save_log()
@@ -64,7 +64,7 @@ class SafetyAuditTrail:
 
     def _save_log(self) -> str:
         try:
-            with open(self.log_path, 'w') as f:
+            with open(self.log_path, "w") as f:
                 json.dump(self.violations, f, indent=2)
         except Exception as e:
             logging.error(f"SafetyAuditTrail: Error saving log: {e}")

@@ -21,7 +21,7 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .PermissionLevel import PermissionLevel
 from .ReportPermission import ReportPermission
 import logging
@@ -29,8 +29,6 @@ import re
 import time
 
 __version__ = VERSION
-
-
 
 
 class AccessController:
@@ -55,7 +53,7 @@ class AccessController:
         user_id: str,
         report_pattern: str,
         level: PermissionLevel,
-        granted_by: str = "system"
+        granted_by: str = "system",
     ) -> ReportPermission:
         """Grant permission to a user.
         Args:
@@ -71,7 +69,7 @@ class AccessController:
             user_id=user_id,
             report_pattern=report_pattern,
             level=level,
-            granted_by=granted_by
+            granted_by=granted_by,
         )
         self.permissions.append(permission)
         return permission
@@ -92,10 +90,7 @@ class AccessController:
         return False
 
     def check(
-        self,
-        user_id: str,
-        report_path: str,
-        required_level: PermissionLevel
+        self, user_id: str, report_path: str, required_level: PermissionLevel
     ) -> bool:
         """Check if user has permission.
         Args:
@@ -114,7 +109,7 @@ class AccessController:
             if perm.expires_at and time.time() > perm.expires_at:
                 continue
             # Normalize paths for comparison (remove extra spaces)
-            normalized_path = re.sub(r'\s+', '/', report_path)
+            normalized_path = re.sub(r"\s+", "/", report_path)
             if fnmatch.fnmatch(normalized_path, perm.report_pattern):
                 if perm.level.value >= required_level.value:
                     return True

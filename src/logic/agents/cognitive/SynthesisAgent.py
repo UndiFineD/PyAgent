@@ -19,16 +19,14 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import os
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class SynthesisAgent(BaseAgent):
@@ -39,7 +37,9 @@ class SynthesisAgent(BaseAgent):
 
     def __init__(self, workspace_root: str) -> None:
         # Initialize with a dummy path as base_agent needs a file path
-        dummy_path = os.path.join(workspace_root, "src/logic/agents/cognitive/SynthesisAgent.py")
+        dummy_path = os.path.join(
+            workspace_root, "src/logic/agents/cognitive/SynthesisAgent.py"
+        )
         super().__init__(dummy_path)
         self.workspace_root = workspace_root
         self._system_prompt = (
@@ -50,7 +50,9 @@ class SynthesisAgent(BaseAgent):
         )
 
     @as_tool
-    def fuse_agents(self, agent_names: list[str], new_agent_name: str) -> dict[str, Any]:
+    def fuse_agents(
+        self, agent_names: list[str], new_agent_name: str
+    ) -> dict[str, Any]:
         """
         Creates a new agent that combines functionalities of multiple source agents.
 
@@ -99,7 +101,7 @@ class SynthesisAgent(BaseAgent):
                 "status": "success",
                 "new_agent": new_agent_name,
                 "file_path": file_path,
-                "components_fused": agent_names
+                "components_fused": agent_names,
             }
         except Exception as e:
             if os.path.exists(temp_path):
@@ -108,13 +110,12 @@ class SynthesisAgent(BaseAgent):
                 except Exception:
                     pass
             logging.error(f"SynthesisAgent: Failed to save fused agent atomically: {e}")
-            return {
-                "status": "error",
-                "message": str(e)
-            }
+            return {"status": "error", "message": str(e)}
 
     @as_tool
-    def analyze_fusion_candidates(self, fleet_agents: list[str]) -> list[dict[str, Any]]:
+    def analyze_fusion_candidates(
+        self, fleet_agents: list[str]
+    ) -> list[dict[str, Any]]:
         """
         Analyzes the fleet to suggest which agents should be fused based on usage patterns.
         """
@@ -125,6 +126,6 @@ class SynthesisAgent(BaseAgent):
             {
                 "agents": ["ReasoningAgent", "ReflectionAgent"],
                 "target": "CognitiveSuperAgent",
-                "reason": "High frequency of sequential calling in reasoning loops"
+                "reason": "High frequency of sequential calling in reasoning loops",
             }
         ]

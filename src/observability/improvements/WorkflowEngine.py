@@ -21,13 +21,11 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .Improvement import Improvement
 from .TransitionResult import TransitionResult
 
 __version__ = VERSION
-
-
 
 
 class WorkflowEngine:
@@ -47,7 +45,9 @@ class WorkflowEngine:
             "completed": [],
         }
 
-    def transition(self, improvement: Improvement, from_status: str, to_status: str) -> TransitionResult:
+    def transition(
+        self, improvement: Improvement, from_status: str, to_status: str
+    ) -> TransitionResult:
         allowed = self._transitions.get(from_status, [])
         if to_status not in allowed:
             return TransitionResult(success=False, message="Invalid transition")

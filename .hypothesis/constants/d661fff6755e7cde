@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\security\LegalAuditAgent.py
-# hypothesis_version: 6.150.1
-
-[2.5, 1000, '.call{value:', '100% safe', 'AGPL', 'Apache', 'Apache License 2\\.0', 'Block / Rewrite', 'GPL', 'LegalAudit', 'LicenseScanner', 'MIT', 'MIT License', 'None', 'action_required', 'detected_licenses', 'fail', 'guarantee', 'high', 'is_compliant', 'low', 'no risk', 'pass', 'perfect', 'reentrancy', 'risk_level', 'selfdestruct', 'status', 'summary', 'threat_score', 'tx.origin', 'violations', 'vulnerabilities']

@@ -23,15 +23,13 @@ Ingests SOTA research (simulated) and generates new agentic tools.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 from .ResearchCore import ResearchCore
 
 __version__ = VERSION
-
-
 
 
 class ResearchAgent(BaseAgent):
@@ -57,7 +55,7 @@ class ResearchAgent(BaseAgent):
 
         result = self.core.execute_dcap_cycle(topic, content)
 
-        if self.memory and hasattr(self.memory, 'add_entity'):
+        if self.memory and hasattr(self.memory, "add_entity"):
             self.memory.add_entity(topic, {"type": "dcap_research", "data": result})
 
         return result
@@ -66,37 +64,22 @@ class ResearchAgent(BaseAgent):
     def ingest_paper(self, title: str, summary: str) -> str:
         """Analyzes a research paper summary and identifies new capabilities."""
 
-
-
-
-
-
-
-
-
-
         logging.info(f"RESEARCH: Ingesting paper '{title}'")
         analysis = self.core.analyze_paper(title, summary)
 
-        if self.memory and hasattr(self.memory, 'add_entity'):
-
-
-
-
-            self.memory.add_entity(title, {"type": "paper", "summary": summary, "analysis": analysis})
+        if self.memory and hasattr(self.memory, "add_entity"):
+            self.memory.add_entity(
+                title, {"type": "paper", "summary": summary, "analysis": analysis}
+            )
 
         return f"Successfully ingested paper '{title}'. Capabilities identified for tool generation."
 
     @as_tool
-
-
     def generate_tool_from_research(self, title: str) -> str:
         """Drafts a Python tool implementation based on an ingested paper."""
         logging.info(f"RESEARCH: Generating tool based on {title}")
         tool_code = self.core.draft_tool_code(title)
         return tool_code
-
-
 
         return f"Tool draft generated for '{title}':\n{tool_code}"
 
@@ -104,10 +87,10 @@ class ResearchAgent(BaseAgent):
         return f"ResearchAgent scanning for SOTA updates: {prompt}"
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(ResearchAgent, "Research Agent", "Research database path")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        ResearchAgent, "Research Agent", "Research database path"
+    )
     main()

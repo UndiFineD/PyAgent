@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\stats\core\ProfilingCore.py
-# hypothesis_version: 6.150.1
-
-[100.0, 1000.0, 'call_count', 'cumulative', 'function_name', 'per_call', 'total_time']

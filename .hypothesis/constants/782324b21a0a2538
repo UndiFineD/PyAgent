@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\utils\embedding_functions\open_clip_embedding_function.py
-# hypothesis_version: 6.150.1
-
-['PIL.Image', 'ViT-B-32', 'checkpoint', 'cosine', 'cpu', 'device', 'ip', 'l2', 'laion2b_s34b_b79k', 'model_name', 'open_clip', 'torch']

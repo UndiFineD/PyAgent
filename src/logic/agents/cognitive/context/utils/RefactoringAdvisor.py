@@ -21,14 +21,20 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.logic.agents.cognitive.context.models.RefactoringSuggestion import RefactoringSuggestion
+from src.core.base.Version import VERSION
+from src.logic.agents.cognitive.context.models.RefactoringSuggestion import (
+    RefactoringSuggestion,
+)
 from typing import Any
 import re
 
+try:
+    from rust_core import apply_patterns_rust
+    _RUST_ACCEL = True
+except ImportError:
+    _RUST_ACCEL = False
+
 __version__ = VERSION
-
-
 
 
 class RefactoringAdvisor:
@@ -75,19 +81,37 @@ class RefactoringAdvisor:
         suggestions: list[RefactoringSuggestion] = []
 
         # Apply custom patterns first.
-        for path, content in context_map.items():
-            for name, spec in self.patterns.items():
-                try:
-                    if re.search(spec["pattern"], content):
-                        suggestions.append(RefactoringSuggestion(
-                            suggestion_type=name,
-                            description=spec.get("description", ""),
-                            affected_files=[path],
-                            estimated_impact="low",
-                        ))
-                except re.error:
-                    # Invalid user-provided regex; ignore for robustness.
-                    continue
+        if _RUST_ACCEL and self.patterns:
+            # Use Rust for pattern matching: Vec<(path, content)>, Vec<(name, pattern)>
+            content_list = list(context_map.items())
+            pattern_list = [(name, spec["pattern"]) for name, spec in self.patterns.items()]
+            matches = apply_patterns_rust(content_list, pattern_list)
+            for path, name in matches:
+                spec = self.patterns[name]
+                suggestions.append(
+                    RefactoringSuggestion(
+                        suggestion_type=name,
+                        description=spec.get("description", ""),
+                        affected_files=[path],
+                        estimated_impact="low",
+                    )
+                )
+        else:
+            for path, content in context_map.items():
+                for name, spec in self.patterns.items():
+                    try:
+                        if re.search(spec["pattern"], content):
+                            suggestions.append(
+                                RefactoringSuggestion(
+                                    suggestion_type=name,
+                                    description=spec.get("description", ""),
+                                    affected_files=[path],
+                                    estimated_impact="low",
+                                )
+                            )
+                    except re.error:
+                        # Invalid user-provided regex; ignore for robustness.
+                        continue
 
         # Look for duplicate descriptions (indicating code duplication)
         descriptions: dict[str, list[str]] = {}
@@ -100,15 +124,19 @@ class RefactoringAdvisor:
                 descriptions[desc].append(path)
         for desc, files in descriptions.items():
             if len(files) > 1:
-                suggestions.append(RefactoringSuggestion(
-                    suggestion_type="extract_common",
-                    description=f"Similar purpose found in {len(files)} files",
-                    affected_files=files,
-                    estimated_impact="medium"
-                ))
+                suggestions.append(
+                    RefactoringSuggestion(
+                        suggestion_type="extract_common",
+                        description=f"Similar purpose found in {len(files)} files",
+                        affected_files=files,
+                        estimated_impact="medium",
+                    )
+                )
         return suggestions
 
-    def prioritize(self, suggestions: list[RefactoringSuggestion]) -> list[RefactoringSuggestion]:
+    def prioritize(
+        self, suggestions: list[RefactoringSuggestion]
+    ) -> list[RefactoringSuggestion]:
         """Prioritize refactoring suggestions.
 
         Args:

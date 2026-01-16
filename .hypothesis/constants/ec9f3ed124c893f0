@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\quantization\__init__.py
-# hypothesis_version: 6.150.1
-
-['DeQuantStub', 'HistogramObserver', 'ObserverBase', 'QConfig', 'QuantStub', 'QuantType', 'QuantWrapper', 'WeightObserver', 'add_quant_dequant', 'convert', 'default_eval_fn', 'default_fake_quant', 'default_observer', 'default_qat_qconfig', 'default_qconfig', 'fuse_modules', 'get_fuser_method', 'observer', 'prepare', 'prepare_qat', 'propagate_qconfig_', 'quantize', 'quantize_dynamic', 'quantize_dynamic_jit', 'quantize_jit', 'quantize_qat', 'swap_module']

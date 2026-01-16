@@ -19,15 +19,13 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class ArchitectAgent(BaseAgent):
@@ -61,10 +59,11 @@ class ArchitectAgent(BaseAgent):
         response = self.think(prompt)
         try:
             import json
+
             return json.loads(response)
         except Exception:
             return {
                 "component": "FleetManager",
                 "proposed_change": "Move to an asynchronous event loop for all agent calls.",
-                "impact_est": "30% reduction in idle latency"
+                "impact_est": "30% reduction in idle latency",
             }

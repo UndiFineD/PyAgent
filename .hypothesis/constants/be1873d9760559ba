@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_functorch\_aot_autograd\graph_capture_wrappers.py
-# hypothesis_version: 6.150.1
-
-['T', '_orig_mod', 'backward', 'cuda', 'forward', 'ignore', 'is_backward', 'must_be_in_backward', 'must_be_in_forward', 'off', 'partitioner_tag', 'same_as_forward']

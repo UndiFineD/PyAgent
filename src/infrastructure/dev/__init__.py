@@ -12,7 +12,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
+from src.core.base.Version import VERSION as VERSION
 
 __version__ = VERSION
 

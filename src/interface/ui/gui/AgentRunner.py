@@ -25,7 +25,7 @@
 """Background Agent Execution Manager for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 import threading
 import logging
@@ -35,10 +35,9 @@ from src.interface.ui.gui.WidgetLogger import WidgetLogger
 __version__ = VERSION
 
 
-
-
 class AgentRunner:
     """Manages background threads and execution lifecycle for agents."""
+
     def __init__(self, callbacks) -> None:
         self.callbacks: Any = callbacks
         self.history: dict[Any, Any] = {}  # Store history per agent instance
@@ -77,6 +76,7 @@ class AgentRunner:
 
                 # Truncate memory based on model limits
                 from .Constants import MODEL_TOKENS
+
                 limit: int = MODEL_TOKENS.get(cfg["model"], MODEL_TOKENS["default"])
                 self.optimize_memory(agent_id, limit)
 
@@ -92,7 +92,7 @@ class AgentRunner:
                     "UX Designer": "src.agent_ux",
                     "BMad Master": "src.agent_master",
                     "Scrum Master": "src.agent_pm",
-                    "Security Auditor": "src.agent_security"
+                    "Security Auditor": "src.agent_security",
                 }
                 module_map.get(agent_type, "src.agent_coder")
 
@@ -108,12 +108,14 @@ class AgentRunner:
                     if column.stop_event.is_set():
                         logger.warning("Execution aborted by user.")
                         return
-                    logger.info(f"Processing chunk {i+1}/5...")
+                    logger.info(f"Processing chunk {i + 1}/5...")
                     column.stop_event.wait(timeout=1.0)
 
                 # Update history with a mock response
                 mock_response: str = f"Simulated response from {agent_type}."
-                self.history[agent_id].append({"role": "assistant", "content": mock_response})
+                self.history[agent_id].append(
+                    {"role": "assistant", "content": mock_response}
+                )
 
                 logger.info("Agent execution completed successfully.")
                 if "set_status" in self.callbacks:
@@ -128,7 +130,7 @@ class AgentRunner:
         thread.start()
 
     def stop_agent(self, column, reset_history=False) -> None:
-        if hasattr(column, 'stop_event') and column.stop_event:
+        if hasattr(column, "stop_event") and column.stop_event:
             column.stop_event.set()
             if "set_status" in self.callbacks:
                 self.callbacks["set_status"]("Stopping agent...")
@@ -159,15 +161,19 @@ class AgentRunner:
         while total_chars > char_limit and i < len(current_history) - 2:
             # Check if this exchange should be kept
             msg_user = current_history[i]
-            msg_assist = current_history[i+1]
+            msg_assist = current_history[i + 1]
 
-            if msg_user.get("metadata", {}).get("keep") or msg_assist.get("metadata", {}).get("keep"):
+            if msg_user.get("metadata", {}).get("keep") or msg_assist.get(
+                "metadata", {}
+            ).get("keep"):
                 i += 2
                 continue
 
             # Drop earliest exchange
             removed_user = current_history.pop(i)
             removed_assist = current_history.pop(i)
-            total_chars -= (len(removed_user["content"]) + len(removed_assist["content"]))
-            logging.info(f"Optimized memory for agent {agent_id}: dropped exchange at index {i}.")
+            total_chars -= len(removed_user["content"]) + len(removed_assist["content"])
+            logging.info(
+                f"Optimized memory for agent {agent_id}: dropped exchange at index {i}."
+            )
             # i stays same as we popped

@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types.ProfilingCategory import ProfilingCategory
 from src.core.base.types.ProfilingSuggestion import ProfilingSuggestion
 from typing import Any
@@ -31,8 +31,6 @@ import pstats
 from src.observability.stats.core.ProfilingCore import ProfilingCore, ProfileStats
 
 __version__ = VERSION
-
-
 
 
 class ProfilingAgent:
@@ -56,10 +54,7 @@ class ProfilingAgent:
 
         return results
 
-    def _analyze_function(
-        self,
-        node: Any
-    ) -> None:
+    def _analyze_function(self, node: Any) -> None:
         """Analyze a function for profiling needs.
 
         Args:
@@ -74,31 +69,37 @@ class ProfilingAgent:
             if isinstance(child, ast.Call):
                 if isinstance(child.func, ast.Attribute):
                     name = child.func.attr
-                    if name in ('read', 'write', 'open', 'close'):
+                    if name in ("read", "write", "open", "close"):
                         has_io = True
-                    if name in ('get', 'post', 'request', 'connect'):
+                    if name in ("get", "post", "request", "connect"):
                         has_network = True
         if has_loop:
-            self.suggestions.append(ProfilingSuggestion(
-                category=ProfilingCategory.CPU_BOUND,
-                function_name=node.name,
-                reason="Contains loops that may be CPU-intensive",
-                estimated_impact="medium",
-                profiling_approach="Use cProfile or line_profiler"
-            ))
+            self.suggestions.append(
+                ProfilingSuggestion(
+                    category=ProfilingCategory.CPU_BOUND,
+                    function_name=node.name,
+                    reason="Contains loops that may be CPU-intensive",
+                    estimated_impact="medium",
+                    profiling_approach="Use cProfile or line_profiler",
+                )
+            )
         if has_io:
-            self.suggestions.append(ProfilingSuggestion(
-                category=ProfilingCategory.IO_BOUND,
-                function_name=node.name,
-                reason="Contains I / O operations that may block",
-                estimated_impact="high",
-                profiling_approach="Use async profiling or io tracing"
-            ))
+            self.suggestions.append(
+                ProfilingSuggestion(
+                    category=ProfilingCategory.IO_BOUND,
+                    function_name=node.name,
+                    reason="Contains I / O operations that may block",
+                    estimated_impact="high",
+                    profiling_approach="Use async profiling or io tracing",
+                )
+            )
         if has_network:
-            self.suggestions.append(ProfilingSuggestion(
-                category=ProfilingCategory.NETWORK_BOUND,
-                function_name=node.name,
-                reason="Contains network operations",
-                estimated_impact="high",
-                profiling_approach="Monitor network latency and throughput"
-            ))
+            self.suggestions.append(
+                ProfilingSuggestion(
+                    category=ProfilingCategory.NETWORK_BOUND,
+                    function_name=node.name,
+                    reason="Contains network operations",
+                    estimated_impact="high",
+                    profiling_approach="Monitor network latency and throughput",
+                )
+            )

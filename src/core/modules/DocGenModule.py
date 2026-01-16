@@ -14,12 +14,7 @@
 from __future__ import annotations
 import ast
 import os
-from src.core.base.modules import BaseModule
-
-
-
-
-
+from src.core.base.BaseModules import BaseModule
 
 
 class DocGenModule(BaseModule):
@@ -32,8 +27,7 @@ class DocGenModule(BaseModule):
         """Initialize documentation templates."""
         return super().initialize()
 
-    def execute(self, source_code:
-        str, file_name: str) -> str:
+    def execute(self, source_code: str, file_name: str) -> str:
         """
         Extracts markdown documentation from Python source code.
         """
@@ -75,10 +69,9 @@ class DocGenModule(BaseModule):
         except Exception as e:
             return f"Error extracting docs: {str(e)}"
 
-    def get_doc_filename(self, rel_path:
-        str) -> str:
+    def get_doc_filename(self, rel_path: str) -> str:
         """Generates a standardized documentation filename."""
-        return rel_path.replace(os.sep, '_').replace('.py', '.md')
+        return rel_path.replace(os.sep, "_").replace(".py", ".md")
 
     def shutdown(self) -> bool:
         """Cleanup documentation generator."""

@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\system\PerformanceProfilingAgent.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.05, 5.0, 10.0, 85.0, 100.0, 500.0, 2048.0, 300, 'Action Required', 'CPU Saturation', 'Healthy', 'High Latency', 'agent', 'agents', 'cpu_usage', 'error_rate', 'issue', 'latency_ms', 'memory_mb', 'recommendation', 'snapshots_captured', 'status', 'timestamp', 'value']

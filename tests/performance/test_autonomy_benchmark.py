@@ -1,9 +1,6 @@
-
 import timeit
 import statistics
 from src.core.base.core.AutonomyCore import AutonomyCore
-
-
 
 
 def benchmark_autonomy():
@@ -16,22 +13,10 @@ def benchmark_autonomy():
     times_spots = timeit.repeat(run_blind_spots, repeat=5, number=100000)
     avg_spots = statistics.mean(times_spots) / 100000 * 1e6
 
-
-
-
-
-
-
-
-
-
     print(f"identify_blind_spots: {avg_spots:.4f} μs per call")
 
     # 2. Benchmark sleep interval
     def run_sleep():
-
-
-
         core.calculate_daemon_sleep_interval(0.85)
 
     times_sleep = timeit.repeat(run_sleep, repeat=5, number=100000)
@@ -40,16 +25,13 @@ def benchmark_autonomy():
 
     # 3. Benchmark plan generation
     spots = ["General_Error", "Rigidity"]
+
     def run_plan():
         core.generate_self_improvement_plan(spots)
-
 
     times_plan = timeit.repeat(run_plan, repeat=5, number=100000)
     avg_plan = statistics.mean(times_plan) / 100000 * 1e6
     print(f"generate_self_improvement_plan: {avg_plan:.4f} μs per call")
-
-
-
 
 
 if __name__ == "__main__":

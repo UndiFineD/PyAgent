@@ -21,16 +21,11 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ImportSource import ImportSource
 from dataclasses import dataclass, field
 
 __version__ = VERSION
-
-
-
-
-
 
 
 @dataclass
@@ -46,6 +41,7 @@ class ImportedEntry:
         created_at: When the entry was created.
         labels: Labels / tags from the source.
     """
+
     source: ImportSource
     external_id: str
     title: str

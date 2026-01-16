@@ -21,7 +21,7 @@
 """Coordinator for deploying and aggregating results from multiple agents."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from pathlib import Path
 from typing import Any, TYPE_CHECKING
@@ -41,12 +41,21 @@ from src.infrastructure.fleet.FleetConsensusManager import FleetConsensusManager
 if TYPE_CHECKING:
     from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
     from src.infrastructure.backend.SqlMetadataHandler import SqlMetadataHandler
-    from src.observability.stats.metrics_engine import ObservabilityEngine, ModelFallbackEngine
-    from src.infrastructure.orchestration.ToolRegistry import ToolRegistry
-    from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
-    from src.infrastructure.orchestration.SelfHealingOrchestrator import SelfHealingOrchestrator
-    from src.infrastructure.orchestration.SelfImprovementOrchestrator import SelfImprovementOrchestrator
-    from src.logic.agents.cognitive.context.engines.GlobalContextEngine import GlobalContextEngine
+    from src.observability.stats.Metrics_engine import (
+        ObservabilityEngine,
+        ModelFallbackEngine,
+    )
+    from src.infrastructure.orchestration.system.ToolRegistry import ToolRegistry
+    from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
+    from src.infrastructure.orchestration.healing.SelfHealingOrchestrator import (
+        SelfHealingOrchestrator,
+    )
+    from src.infrastructure.orchestration.intel.SelfImprovementOrchestrator import (
+        SelfImprovementOrchestrator,
+    )
+    from src.logic.agents.cognitive.context.engines.GlobalContextEngine import (
+        GlobalContextEngine,
+    )
 
 # Core Components
 
@@ -54,8 +63,6 @@ if TYPE_CHECKING:
 __version__ = VERSION
 
 logger = StructuredLogger(__name__)
-
-
 
 
 class FleetManager:
@@ -94,8 +101,8 @@ class FleetManager:
                 pass
 
         # 2. Try Orchestrators
-        if 'orchestrators' in current_dict:
-            orchestrators = current_dict['orchestrators']
+        if "orchestrators" in current_dict:
+            orchestrators = current_dict["orchestrators"]
             try:
                 # LazyOrchestratorMap implements __getattr__
                 return getattr(orchestrators, effective_name)
@@ -109,8 +116,8 @@ class FleetManager:
                 logging.debug(f"Fleet: Lazy-load error for orchestrator '{name}': {e}")
 
         # 3. Try Agents
-        if 'agents' in current_dict:
-            agents = current_dict['agents']
+        if "agents" in current_dict:
+            agents = current_dict["agents"]
             try:
                 # LazyAgentMap implements __getitem__ with fallback logic
                 return agents[effective_name]
@@ -131,7 +138,9 @@ class FleetManager:
 
         # Load agents from registry (also lazy)
         # Pass self so agents can register utils/tools upon lazy instantiation
-        self.agents = AgentRegistry.get_agent_map(self.workspace_root, fleet_instance=self)
+        self.agents = AgentRegistry.get_agent_map(
+            self.workspace_root, fleet_instance=self
+        )
 
         # Capability Hints for Lazy Loading (Core Agents)
         self._capability_hints = {
@@ -175,7 +184,7 @@ class FleetManager:
             "empathy_engine": "EmpathyAgent",
             "neurosymbolic": "NeuroSymbolicAgent",
             "neuro_symbolic": "NeuroSymbolicAgent",
-            "agent_identity": "IdentityAgent"
+            "agent_identity": "IdentityAgent",
         }
 
         self.remote_nodes: list[str] = []
@@ -241,29 +250,38 @@ class FleetManager:
 
     @property
     def rl_selector(self) -> Any:
-        return getattr(self.orchestrators, "r_l_selector", None) or getattr(self.orchestrators, "rl_selector", None)
+        return getattr(self.orchestrators, "r_l_selector", None) or getattr(
+            self.orchestrators, "rl_selector", None
+        )
 
     # PHASE 260: Preemption Logic
     def preempt_lower_priority_tasks(self, new_priority: AgentPriority) -> None:
         """Suspends all tasks with lower priority than the new high-priority task."""
         for tid, data in self.active_tasks.items():
-            if data['priority'].value > new_priority.value:
-                logging.info(f"Preempting lower-priority task {tid} ({data['priority'].name})")
-                for agent in data.get('agents', []):
-                    if hasattr(agent, 'suspend'):
+            if data["priority"].value > new_priority.value:
+                logging.info(
+                    f"Preempting lower-priority task {tid} ({data['priority'].name})"
+                )
+                for agent in data.get("agents", []):
+                    if hasattr(agent, "suspend"):
                         agent.suspend()
 
     def resume_tasks(self) -> None:
         """Resumes all suspended tasks if no critical tasks are running."""
         # Check if any Critical/High tasks are still active
-        critical_active = any(d['priority'].value < AgentPriority.NORMAL.value for d in self.active_tasks.values())
+        critical_active = any(
+            d["priority"].value < AgentPriority.NORMAL.value
+            for d in self.active_tasks.values()
+        )
         if not critical_active:
             for tid, data in self.active_tasks.items():
-                for agent in data.get('agents', []):
-                    if hasattr(agent, 'resume'):
+                for agent in data.get("agents", []):
+                    if hasattr(agent, "resume"):
                         agent.resume()
 
-    async def execute_reliable_task(self, task: str, priority: AgentPriority = AgentPriority.NORMAL) -> str:
+    async def execute_reliable_task(
+        self, task: str, priority: AgentPriority = AgentPriority.NORMAL
+    ) -> str:
         """Executes a task using the 7-phase inner loop and linguistic articulation."""
         return await self.execution_core.execute_reliable_task(task, priority=priority)
 
@@ -275,17 +293,21 @@ class FleetManager:
         """Records errors, failures, and mistakes (Delegated)."""
         await self.interaction_recorder.record_failure(prompt, error, model)
 
-    def register_remote_node(self, node_url: str, agent_names: list[str], remote_version: str = "1.0.0") -> str:
+    def register_remote_node(
+        self, node_url: str, agent_names: list[str], remote_version: str = "1.0.0"
+    ) -> str:
         """
         Registers a remote node and its available agents.
         Uses VersionGate to ensure compatibility (Phase 104).
         """
-        from src.core.base.version import SDK_VERSION
+        from src.core.base.Version import SDK_VERSION
         from src.infrastructure.fleet.VersionGate import VersionGate
         from src.infrastructure.fleet.RemoteAgentProxy import RemoteAgentProxy
 
         if not VersionGate.is_compatible(SDK_VERSION, remote_version):
-            logging.warning(f"Fleet: Rejecting remote node {node_url} (Incompatible version {remote_version})")
+            logging.warning(
+                f"Fleet: Rejecting remote node {node_url} (Incompatible version {remote_version})"
+            )
             return
 
         self.remote_nodes.append(node_url)
@@ -293,7 +315,7 @@ class FleetManager:
             proxy = RemoteAgentProxy(
                 str(self.workspace_root / f"remote_{name.lower()}.proxy"),
                 node_url,
-                name
+                name,
             )
             self.agents[f"remote_{name}"] = proxy
             logging.info(f"Registered remote agent proxy: remote_{name} at {node_url}")
@@ -302,7 +324,9 @@ class FleetManager:
         """Finds an agent with the required capability and executes it with RL optimization."""
         return await self.routing_core.call_by_capability(goal, **kwargs)
 
-    def register_agent(self, name: str, agent_class: type[BaseAgent], file_path: str | None = None) -> str:
+    def register_agent(
+        self, name: str, agent_class: type[BaseAgent], file_path: str | None = None
+    ) -> str:
         """Adds an agent to the fleet."""
         return self.lifecycle_manager.register_agent(name, agent_class, file_path)
 
@@ -317,46 +341,40 @@ class FleetManager:
         return self.lifecycle_manager.cell_differentiate(agent_name, specialization)
 
     def cell_apoptosis(self, agent_name: str) -> str:
-
-
-
-
-
-
-
-
-
-
         """Cleanly shuts down and removes an agent."""
         return self.lifecycle_manager.cell_apoptosis(agent_name)
 
-    async def execute_workflow(self, task: str, workflow_steps: list[dict[str, Any]], priority: AgentPriority = AgentPriority.NORMAL) -> str:
-
-
-
-
+    async def execute_workflow(
+        self,
+        task: str,
+        workflow_steps: list[dict[str, Any]],
+        priority: AgentPriority = AgentPriority.NORMAL,
+    ) -> str:
         """Runs a sequence of agent actions with shared state and signals."""
-        return await self.execution_core.execute_workflow(task, workflow_steps, priority=priority)
+        return await self.execution_core.execute_workflow(
+            task, workflow_steps, priority=priority
+        )
 
-    def execute_with_consensus(self, task: str, primary_agent: str | None = None, secondary_agents: list[str] | None = None) -> dict[str, Any]:
+    def execute_with_consensus(
+        self,
+        task: str,
+        primary_agent: str | None = None,
+        secondary_agents: list[str] | None = None,
+    ) -> dict[str, Any]:
         """
 
 
         Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner.
         """
-        return self.consensus_manager.execute_with_consensus(task, primary_agent, secondary_agents)
+        return self.consensus_manager.execute_with_consensus(
+            task, primary_agent, secondary_agents
+        )
 
     def route_task(self, task_type: str, task_data: Any) -> str:
-
-
-
         """
         Routes tasks based on system load and hardware availability (Phase 126).
         """
         return self.routing_core.route_task(task_type, task_data)
-
-
-
 
 
 if __name__ == "__main__":
@@ -369,12 +387,24 @@ if __name__ == "__main__":
     from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
     from src.logic.agents.development.SecurityGuardAgent import SecurityGuardAgent
 
-    fleet.register_agent("Knowledge", KnowledgeAgent, str(root / "src/logic/agents/cognitive/KnowledgeAgent.py"))
-    fleet.register_agent("Security", SecurityGuardAgent, str(root / "src/logic/agents/development/SecurityGuardAgent.py"))
+    fleet.register_agent(
+        "Knowledge",
+        KnowledgeAgent,
+        str(root / "src/logic/agents/cognitive/KnowledgeAgent.py"),
+    )
+    fleet.register_agent(
+        "Security",
+        SecurityGuardAgent,
+        str(root / "src/logic/agents/development/SecurityGuardAgent.py"),
+    )
 
     workflow = [
         {"agent": "Knowledge", "action": "scan_workspace", "args": ["KnowledgeAgent"]},
-        {"agent": "Security", "action": "improve_content", "args": ["password = os.environ.get('DB_PASSWORD')"]}
+        {
+            "agent": "Security",
+            "action": "improve_content",
+            "args": ["password = os.environ.get('DB_PASSWORD')"],
+        },
     ]
 
     # report = fleet.execute_workflow("Initial Audit", workflow) # Async call, requires await or asyncio.run
@@ -383,5 +413,5 @@ if __name__ == "__main__":
     # print(report)
     # print("\nTelemetry Summary:")
     # print(json.dumps(fleet.telemetry.get_summary(), indent=2))
-    if hasattr(fleet, 'telemetry'):
+    if hasattr(fleet, "telemetry"):
         logger.info("Telemetry Summary", summary=fleet.telemetry.get_summary())

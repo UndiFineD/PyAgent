@@ -19,7 +19,7 @@
 
 from __future__ import annotations
 from typing import Any
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import os
 import ast
 from src.core.base.BaseAgent import BaseAgent
@@ -27,13 +27,12 @@ from src.core.base.BaseAgent import BaseAgent
 __version__ = VERSION
 
 
-
-
 class DocGenAgent(BaseAgent):
     """
     Autonomous Documentation Generator: Extracts docstrings from Python modules
     and generates Markdown files compatible with Sphinx/Jekyll.
     """
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -41,7 +40,7 @@ class DocGenAgent(BaseAgent):
 
     def extract_docs(self, file_path: str) -> str:
         """Extracts docstrings from a Python file and returns Markdown content."""
-        if not file_path.endswith('.py'):
+        if not file_path.endswith(".py"):
             return ""
 
         try:
@@ -88,8 +87,10 @@ class DocGenAgent(BaseAgent):
 
         for file_path, content in self.doc_registry.items():
             rel_path = os.path.relpath(file_path, self.workspace_path)
-            doc_filename = rel_path.replace(os.sep, '_').replace('.py', '.md')
-            with open(os.path.join(output_dir, doc_filename), "w", encoding="utf-8") as f:
+            doc_filename = rel_path.replace(os.sep, "_").replace(".py", ".md")
+            with open(
+                os.path.join(output_dir, doc_filename), "w", encoding="utf-8"
+            ) as f:
                 f.write(content)
 
         return len(self.doc_registry)

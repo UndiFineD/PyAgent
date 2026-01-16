@@ -1,36 +1,44 @@
 """Legacy unit tests for BaseAgent logic."""
+
 import pytest
 from pathlib import Path
 from typing import Any, List, Dict, Optional
 import sys
 import subprocess
+
 try:
     from tests.utils.agent_test_utils import *
 except ImportError:
     pass
 
 
-
-
-def test_read_previous_content_existing_file(tmp_path: Path, base_agent_module: Any) -> None:
+def test_read_previous_content_existing_file(
+    tmp_path: Path, base_agent_module: Any
+) -> None:
     target = tmp_path / "x.md"
     target.write_text("HELLO", encoding="utf-8")
     agent = base_agent_module.BaseAgent(str(target))
-    print(f"DEBUG: Existing file agent.file_path: {agent.file_path} (absolute: {agent.file_path.absolute()})")
+    print(
+        f"DEBUG: Existing file agent.file_path: {agent.file_path} (absolute: {agent.file_path.absolute()})"
+    )
     assert agent.read_previous_content() == "HELLO"
 
 
 def test_read_previous_content_missing_file_uses_default(
-        tmp_path: Path, base_agent_module: Any) -> None:
+    tmp_path: Path, base_agent_module: Any
+) -> None:
     target = tmp_path / "missing.md"
     agent = base_agent_module.BaseAgent(str(target))
-    print(f"DEBUG: Missing file agent.file_path: {agent.file_path} (absolute: {agent.file_path.absolute()})")
+    print(
+        f"DEBUG: Missing file agent.file_path: {agent.file_path} (absolute: {agent.file_path.absolute()})"
+    )
     content = agent.read_previous_content()
     assert "# New Document" in content
 
 
-def test_improve_content_uses_run_subagent(monkeypatch: pytest.MonkeyPatch, tmp_path: Path,
-                                           base_agent_module: Any) -> str:
+def test_improve_content_uses_run_subagent(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, base_agent_module: Any
+) -> str:
     target = tmp_path / "x.md"
     target.write_text("BEFORE", encoding="utf-8")
 
@@ -40,24 +48,21 @@ def test_improve_content_uses_run_subagent(monkeypatch: pytest.MonkeyPatch, tmp_
     base_agent_module.BaseAgent._response_cache.clear()
 
     async def fake_run_subagent(
-            self: Any,
-            description: str,
-            prompt: str,
-            original_content: str = "") -> str:
+        self: Any, description: str, prompt: str, original_content: str = ""
+    ) -> str:
         assert "Improve" in description
         assert "prompt" in prompt
         assert original_content == "BEFORE"
         return "AFTER"
 
     monkeypatch.setattr(
-        base_agent_module.BaseAgent,
-        "run_subagent",
-        fake_run_subagent,
-        raising=True)
+        base_agent_module.BaseAgent, "run_subagent", fake_run_subagent, raising=True
+    )
 
     agent = base_agent_module.BaseAgent(str(target))
     agent.read_previous_content()
     import asyncio
+
     loop = asyncio.new_event_loop()
     try:
         res = loop.run_until_complete(agent.improve_content("prompt"))
@@ -75,7 +80,9 @@ def test_update_file_writes_content(tmp_path: Path, base_agent_module: Any) -> N
     assert target.read_text(encoding="utf-8") == "CONTENT"
 
 
-def test_get_diff_contains_unified_markers(tmp_path: Path, base_agent_module: Any) -> None:
+def test_get_diff_contains_unified_markers(
+    tmp_path: Path, base_agent_module: Any
+) -> None:
     target = tmp_path / "x.txt"
     agent = base_agent_module.BaseAgent(str(target))
     agent.previous_content = "A\n"
@@ -86,18 +93,25 @@ def test_get_diff_contains_unified_markers(tmp_path: Path, base_agent_module: An
 
 
 def test_run_subagent_delegates_to_agent_backend(
-        monkeypatch: pytest.MonkeyPatch,
-        base_agent_module: Any) -> None:
+    monkeypatch: pytest.MonkeyPatch, base_agent_module: Any
+) -> None:
     """BaseAgent.run_subagent delegates backend selection to agent_backend."""
 
     calls: list[tuple[str, str, str]] = []
 
-    def fake_backend_run_subagent(description: str, prompt: str, original_content: str = "") -> str:
+    def fake_backend_run_subagent(
+        description: str, prompt: str, original_content: str = ""
+    ) -> str:
         calls.append((description, prompt, original_content))
         return "OK"
 
-    import src.infrastructure.backend.execution_engine
-    monkeypatch.setattr(src.infrastructure.backend.execution_engine, "run_subagent", fake_backend_run_subagent)
+    import src.infrastructure.backend.ExecutionEngine
+
+    monkeypatch.setattr(
+        src.infrastructure.backend.ExecutionEngine,
+        "run_subagent",
+        fake_backend_run_subagent,
+    )
     agent = base_agent_module.BaseAgent("x.md")
     out = agent.run_subagent("desc", "prompt", "ORIG")
     # BaseAgent.run_subagent returns a coroutine now, so we need to await it or mock it to return string if not async
@@ -105,6 +119,7 @@ def test_run_subagent_delegates_to_agent_backend(
     # The legacy test assumes sync.
     # We should use asyncio.run(out) or await if possible.
     import asyncio
+
     if asyncio.iscoroutine(out):
         out = asyncio.run(out)
 
@@ -113,27 +128,34 @@ def test_run_subagent_delegates_to_agent_backend(
 
 
 def test_run_subagent_falls_back_to_original_content_when_backend_returns_none(
-        monkeypatch: pytest.MonkeyPatch,
-        base_agent_module: Any) -> None:
-    def fake_backend_run_subagent(description: str, prompt: str, original_content: str = "") -> None:
+    monkeypatch: pytest.MonkeyPatch, base_agent_module: Any
+) -> None:
+    def fake_backend_run_subagent(
+        description: str, prompt: str, original_content: str = ""
+    ) -> None:
         return None
 
-    import src.infrastructure.backend.execution_engine
-    monkeypatch.setattr(src.infrastructure.backend.execution_engine, "run_subagent", fake_backend_run_subagent)
+    import src.infrastructure.backend.ExecutionEngine
+
+    monkeypatch.setattr(
+        src.infrastructure.backend.ExecutionEngine,
+        "run_subagent",
+        fake_backend_run_subagent,
+    )
     agent = base_agent_module.BaseAgent("x.md")
     out = agent.run_subagent("desc", "prompt", "ORIG")
 
     import asyncio
+
     if asyncio.iscoroutine(out):
         out = asyncio.run(out)
 
     assert out == "ORIG"
 
 
-
 def test_run_subagent_uses_github_models_backend(
-        monkeypatch: pytest.MonkeyPatch,
-        base_agent_module: Any) -> None:
+    monkeypatch: pytest.MonkeyPatch, base_agent_module: Any
+) -> None:
     # Force backend selection.
     monkeypatch.setenv("DV_AGENT_BACKEND", "github-models")
     monkeypatch.setenv("GITHUB_MODELS_BASE_URL", "https://example.test")
@@ -142,9 +164,12 @@ def test_run_subagent_uses_github_models_backend(
     # If subprocess is used, fail.
 
     def boom(*args: Any, **kwargs: Any) -> None:
-        raise AssertionError("subprocess.run should not be called for github-models backend")
+        raise AssertionError(
+            "subprocess.run should not be called for github-models backend"
+        )
 
-    import src.infrastructure.backend.execution_engine
+    import src.infrastructure.backend.ExecutionEngine
+
     monkeypatch.setattr(subprocess, "run", boom)
 
     class FakeResponse:
@@ -165,18 +190,23 @@ def test_run_subagent_uses_github_models_backend(
         assert data is not None and '"model": "unit-test-model"' in data
         return FakeResponse()
 
-    monkeypatch.setattr(src.infrastructure.backend.execution_engine.requests, "post", fake_post)
+    monkeypatch.setattr(
+        src.infrastructure.backend.ExecutionEngine.requests, "post", fake_post
+    )
     agent = base_agent_module.BaseAgent("x.md")
 
     import asyncio
+
     out = asyncio.run(agent.run_subagent("desc", "prompt", "ORIG"))
 
     assert out == "OK_FROM_MODELS"
 
 
 def test_run_subagent_handles_subprocess_failures_gracefully(
-        monkeypatch: pytest.MonkeyPatch, base_agent_module: Any) -> None:
+    monkeypatch: pytest.MonkeyPatch, base_agent_module: Any
+) -> None:
     """Verify that subprocess failures (non-zero exit code) result in fallback response."""
+
     class Result:
         def __init__(self, returncode: int, stdout: str = "", stderr: str = "") -> None:
             self.returncode = returncode
@@ -198,28 +228,19 @@ def test_run_subagent_handles_subprocess_failures_gracefully(
     agent = base_agent_module.BaseAgent("x.md")
     # Pass empty original_content to force fallback message
     import asyncio
+
     out = asyncio.run(agent.run_subagent("desc", "prompt", ""))
 
     assert "AI Improvement Unavailable" in out
 
 
-def test_read_file_with_utf8_bom_encoding(tmp_path: Path, base_agent_module: Any) -> None:
-
-
-
-
-
-
-
-
-
-
+def test_read_file_with_utf8_bom_encoding(
+    tmp_path: Path, base_agent_module: Any
+) -> None:
     """Test file reading with UTF-8 BOM encoding."""
     target = tmp_path / "bom.md"
     # Write file with UTF-8 BOM
-    target.write_bytes(b'\xef\xbb\xbfHELLO WITH BOM')
-
-
+    target.write_bytes(b"\xef\xbb\xbfHELLO WITH BOM")
 
     agent = base_agent_module.BaseAgent(str(target))
     content = agent.read_previous_content()
@@ -227,14 +248,12 @@ def test_read_file_with_utf8_bom_encoding(tmp_path: Path, base_agent_module: Any
     assert "HELLO" in content or content.startswith("HELLO")
 
 
-
-
-def test_read_file_with_mixed_encoding_fallback(tmp_path: Path, base_agent_module: Any) -> None:
+def test_read_file_with_mixed_encoding_fallback(
+    tmp_path: Path, base_agent_module: Any
+) -> None:
     """Test file reading with fallback for mixed / unusual encodings."""
     target = tmp_path / "mixed.md"
     # Write UTF-8 content
-
-
 
     target.write_text("UTF-8 content: café", encoding="utf-8")
     agent = base_agent_module.BaseAgent(str(target))
@@ -242,15 +261,10 @@ def test_read_file_with_mixed_encoding_fallback(tmp_path: Path, base_agent_modul
     assert "UTF-8 content" in content or "café" in content
 
 
-
-
-
-
 @pytest.mark.parametrize("backend", ["github-models", "copilot", "gh"])
 def test_backend_selection_via_env_var(
-        monkeypatch: pytest.MonkeyPatch,
-        base_agent_module: Any,
-        backend: str) -> None:
+    monkeypatch: pytest.MonkeyPatch, base_agent_module: Any, backend: str
+) -> None:
     """Test backend selection through DV_AGENT_BACKEND environment variable."""
     if backend == "github-models":
         monkeypatch.setenv("DV_AGENT_BACKEND", "github-models")
@@ -264,9 +278,10 @@ def test_backend_selection_via_env_var(
 
 
 def test_subprocess_timeout_handling(
-        monkeypatch: pytest.MonkeyPatch,
-        base_agent_module: Any) -> None:
+    monkeypatch: pytest.MonkeyPatch, base_agent_module: Any
+) -> None:
     """Test timeout handling in subprocess calls."""
+
     class Result:
         def __init__(self, returncode: int, stdout: str = "") -> None:
             self.returncode = returncode
@@ -290,10 +305,13 @@ def test_subprocess_timeout_handling(
 
     agent = base_agent_module.BaseAgent("x.md")
     import asyncio
+
     asyncio.run(agent.run_subagent("desc", "prompt", "ORIG"))
 
 
-def test_markdown_fixing_with_edge_cases(tmp_path: Path, base_agent_module: Any) -> None:
+def test_markdown_fixing_with_edge_cases(
+    tmp_path: Path, base_agent_module: Any
+) -> None:
     """Test markdown content fixing with various edge cases."""
     # Test with markdown file containing edge cases
     target = tmp_path / "edge_cases.md"
@@ -303,7 +321,9 @@ def test_markdown_fixing_with_edge_cases(tmp_path: Path, base_agent_module: Any)
 
 
 @pytest.mark.parametrize("extension", [".md", ".txt", ".py", ".js", ""])
-def test_file_extensions_handling(tmp_path: Path, base_agent_module: Any, extension: str) -> None:
+def test_file_extensions_handling(
+    tmp_path: Path, base_agent_module: Any, extension: str
+) -> None:
     """Test agent with various file extensions."""
     target = tmp_path / f"file{extension}"
     target.write_text("CONTENT", encoding="utf-8")
@@ -312,9 +332,8 @@ def test_file_extensions_handling(tmp_path: Path, base_agent_module: Any, extens
 
 
 def test_error_recovery_on_write_failure(
-        tmp_path: Path,
-        monkeypatch: pytest.MonkeyPatch,
-        base_agent_module: Any) -> None:
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, base_agent_module: Any
+) -> None:
     """Test error recovery when file write fails."""
     target = tmp_path / "readonly.md"
     target.write_text("INITIAL", encoding="utf-8")
@@ -342,7 +361,9 @@ def test_diff_generation_no_changes(tmp_path: Path, base_agent_module: Any) -> N
     assert diff is not None
 
 
-def test_diff_generation_multiple_changes(tmp_path: Path, base_agent_module: Any) -> None:
+def test_diff_generation_multiple_changes(
+    tmp_path: Path, base_agent_module: Any
+) -> None:
     """Test diff generation with multiple content changes."""
     target = tmp_path / "x.txt"
     agent = base_agent_module.BaseAgent(str(target))
@@ -354,9 +375,10 @@ def test_diff_generation_multiple_changes(tmp_path: Path, base_agent_module: Any
 
 
 def test_missing_backend_availability(
-        monkeypatch: pytest.MonkeyPatch,
-        base_agent_module: Any) -> None:
+    monkeypatch: pytest.MonkeyPatch, base_agent_module: Any
+) -> None:
     """Test interaction with missing or unavailable backends."""
+
     class Result:
         def __init__(self, returncode: int = 1) -> None:
             self.returncode = returncode
@@ -373,6 +395,7 @@ def test_missing_backend_availability(
 
     agent = base_agent_module.BaseAgent("x.md")
     import asyncio
+
     out = asyncio.run(agent.run_subagent("desc", "prompt", ""))
     assert out is not None  # Should return fallback
 
@@ -380,6 +403,7 @@ def test_missing_backend_availability(
 def test_concurrent_agent_operations(tmp_path: Path, base_agent_module: Any) -> None:
     """Test concurrent operations with multiple agent instances."""
     import threading
+
     results = []
 
     def create_agent(suffix: int) -> None:
@@ -400,7 +424,9 @@ def test_concurrent_agent_operations(tmp_path: Path, base_agent_module: Any) -> 
         assert f"CONTENT {suffix}" in content
 
 
-def test_markdown_preservation_non_markdown_files(tmp_path: Path, base_agent_module: Any) -> None:
+def test_markdown_preservation_non_markdown_files(
+    tmp_path: Path, base_agent_module: Any
+) -> None:
     """Test that non-markdown files are not modified by markdown fixing."""
     target = tmp_path / "script.py"
     original = "def hello():\n    return 'world'\n"
@@ -424,24 +450,25 @@ def test_large_file_handling(tmp_path: Path, base_agent_module: Any) -> None:
     assert len(content) > 0
 
 
-def test_import_fallback_chain_for_agent_backend(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_import_fallback_chain_for_agent_backend(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     """Test import fallback chains for agent_backend module."""
     # Verify that the agent_backend can be imported from scripts / agent
     with agent_dir_on_path():
         try:
             from src.infrastructure.backend import execution_engine as agent_backend
-            assert hasattr(
-                agent_backend,
-                'BaseAgent') or hasattr(
-                agent_backend,
-                'llm_chat_via_github_models')
+
+            assert hasattr(agent_backend, "BaseAgent") or hasattr(
+                agent_backend, "llm_chat_via_github_models"
+            )
         except ImportError:
             pytest.skip("agent_backend module structure differs from expected")
 
 
 def test_setup_logging_verbosity_levels(base_agent_module: Any) -> None:
     """Test setup_logging with different verbosity levels."""
-    if hasattr(base_agent_module, 'setup_logging'):
+    if hasattr(base_agent_module, "setup_logging"):
         # Test if setup_logging exists and can handle different verbosity
         try:
             base_agent_module.setup_logging(verbose=True)
@@ -452,7 +479,7 @@ def test_setup_logging_verbosity_levels(base_agent_module: Any) -> None:
 
 def test_create_main_function_various_agent_types(base_agent_module: Any) -> None:
     """Test create_main_function with various agent types."""
-    if hasattr(base_agent_module, 'create_main_function'):
+    if hasattr(base_agent_module, "create_main_function"):
         try:
             # Verify function exists and is callable
             assert callable(base_agent_module.create_main_function)
@@ -461,9 +488,8 @@ def test_create_main_function_various_agent_types(base_agent_module: Any) -> Non
 
 
 def test_integration_real_file_io_operations(
-        tmp_path: Path,
-        monkeypatch: pytest.MonkeyPatch,
-        base_agent_module: Any) -> None:
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, base_agent_module: Any
+) -> None:
     """Integration test with real file I / O operations."""
     # Create initial file
     target = tmp_path / "integration_test.md"
@@ -476,19 +502,16 @@ def test_integration_real_file_io_operations(
     # Mock the run_subagent to avoid actual API calls
 
     async def fake_run_subagent(
-            self: Any,
-            description: str,
-            prompt: str,
-            original_content: str = "") -> str:
+        self: Any, description: str, prompt: str, original_content: str = ""
+    ) -> str:
         return "# Updated\n\nThis is updated content."
 
     monkeypatch.setattr(
-        base_agent_module.BaseAgent,
-        "run_subagent",
-        fake_run_subagent,
-        raising=True)
+        base_agent_module.BaseAgent, "run_subagent", fake_run_subagent, raising=True
+    )
     # Improve content
     import asyncio
+
     agent.current_content = asyncio.run(agent.improve_content("prompt"))
     agent.update_file()
     # Verify file was updated

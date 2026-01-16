@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\DependencyAgent.py
-# hypothesis_version: 6.150.1
-
-['.', 'ast', 'collections', 'dataclasses', 'enum', 'functools', 'hashlib', 'json', 'logging', 'math', 'os', 'pathlib', 're', 'shutil', 'subprocess', 'sys', 'tempfile', 'typing']

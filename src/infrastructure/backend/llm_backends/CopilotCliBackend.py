@@ -19,7 +19,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import subprocess
 from .LLMBackend import LLMBackend
@@ -27,15 +27,16 @@ from .LLMBackend import LLMBackend
 __version__ = VERSION
 
 
-
-
-
-
-
 class CopilotCliBackend(LLMBackend):
     """GitHub Copilot CLI LLM Backend."""
 
-    def chat(self, prompt: str, model: str = "gh-extension", system_prompt: str = "You are a helpful assistant.", **kwargs) -> str:
+    def chat(
+        self,
+        prompt: str,
+        model: str = "gh-extension",
+        system_prompt: str = "You are a helpful assistant.",
+        **kwargs,
+    ) -> str:
         if not self._is_working("copilot_cli"):
             logging.debug("Copilot CLI skipped due to connection cache.")
             return ""
@@ -44,21 +45,35 @@ class CopilotCliBackend(LLMBackend):
         try:
             # Phase 141 Fix: Windows command line length limit (WinError 206)
             # gh copilot suggest doesn't need the full strategic roadmap, just a task summary.
-            max_char = 800
-            safe_prompt = prompt[:max_char] + "..." if len(prompt) > max_char else prompt
+            # Phase 317 expansion: Increasing to 4000 to allow more context for code fixes.
+            max_char = 4000
+            safe_prompt = (
+                prompt[:max_char] + "..." if len(prompt) > max_char else prompt
+            )
 
+            # We use 'shell' type because suggest works best with it, 
+            # though it's still far from a full LLM.
             cmd = ["gh", "copilot", "suggest", "-t", "shell", safe_prompt]
             process = subprocess.run(
-                cmd,
-                capture_output=True,
-                text=True,
-                timeout=timeout_s,
-                encoding="utf-8"
+                cmd, capture_output=True, text=True, timeout=timeout_s, encoding="utf-8"
             )
 
             if process.returncode == 0:
                 content = process.stdout.strip()
-                self._record("copilot_cli", model, safe_prompt, content, system_prompt=system_prompt)
+                
+                # Phase 317 Protection: Detecting gh-copilot deprecation message
+                if "gh-copilot extension has been deprecated" in content:
+                    logging.warning("Copilot CLI detected deprecation message. Skipping backend.")
+                    self._update_status("copilot_cli", False)
+                    return ""
+                
+                self._record(
+                    "copilot_cli",
+                    model,
+                    safe_prompt,
+                    content,
+                    system_prompt=system_prompt,
+                )
                 self._update_status("copilot_cli", True)
                 return content
             else:

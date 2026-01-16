@@ -21,14 +21,12 @@
 """Agent specializing in code quality, linting, and style enforcement."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import subprocess
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function
+from src.core.base.BaseUtilities import create_main_function
 
 __version__ = VERSION
-
-
 
 
 class LintingAgent(BaseAgent):
@@ -52,10 +50,15 @@ class LintingAgent(BaseAgent):
             result = subprocess.run(
                 ["flake8", "--max-line-length=120", "--ignore=E203,W503", target_path],
                 capture_output=True,
-                text=True
+                text=True,
             )
             # Phase 108: Record linting result
-            self._record(f"flake8 {target_path}", f"RC={result.returncode}\n{result.stdout[:500]}", provider="Shell", model="flake8")
+            self._record(
+                f"flake8 {target_path}",
+                f"RC={result.returncode}\n{result.stdout[:500]}",
+                provider="Shell",
+                model="flake8",
+            )
 
             if not result.stdout:
                 return "✅ No linting issues found by flake8."
@@ -71,60 +74,26 @@ class LintingAgent(BaseAgent):
             result = subprocess.run(
                 ["mypy", "--ignore-missing-imports", target_path],
                 capture_output=True,
-                text=True
+                text=True,
             )
             if "Success: no issues found" in result.stdout:
                 return "✅ No type issues found by mypy."
-
-
-
-
-
-
-
-
-
 
             return f"### Mypy Issues\n```plaintext\n{result.stdout}\n```"
         except FileNotFoundError:
             return "❌ mypy not installed in the current environment."
         except Exception as e:
-
-
-
-
-
-
-
-
-
             return f"❌ Error running mypy: {e}"
 
     def improve_content(self, prompt: str) -> str:
         """Perform a quality audit on a file or directory."""
         # prompt is expected to be a path
 
-
-
-
-
-
-
-
-
         path = prompt if prompt else "."
         flake8_res = self.run_flake8(path)
         mypy_res = self.run_mypy(path)
 
-        return (
-
-            f"## Quality Audit for: {path}\n\n"
-            f"{flake8_res}\n\n"
-            f"{mypy_res}"
-        )
-
-
-
+        return f"## Quality Audit for: {path}\n\n{flake8_res}\n\n{mypy_res}"
 
 
 if __name__ == "__main__":

@@ -19,16 +19,14 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class NetworkArchSearchAgent(BaseAgent):
@@ -47,12 +45,16 @@ class NetworkArchSearchAgent(BaseAgent):
         )
 
     @as_tool
-    def search_optimal_architecture(self, task_requirement: str, latency_target_ms: int = 50) -> dict[str, Any]:
+    def search_optimal_architecture(
+        self, task_requirement: str, latency_target_ms: int = 50
+    ) -> dict[str, Any]:
         """
         Searches for the optimal neural architecture components for a given task.
         Returns a specification for a LoRA or small model adapter.
         """
-        logging.info(f"NASAgent: Searching for architecture optimized for: {task_requirement}")
+        logging.info(
+            f"NASAgent: Searching for architecture optimized for: {task_requirement}"
+        )
 
         prompt = (
             f"Task Requirement: {task_requirement}\n"
@@ -71,5 +73,5 @@ class NetworkArchSearchAgent(BaseAgent):
                 "alpha": 16,
                 "target_modules": ["q_proj", "v_proj"],
                 "estimated_improvement": "15% accuracy boost",
-                "estimated_latency_penalty": "2ms"
+                "estimated_latency_penalty": "2ms",
             }

@@ -21,12 +21,10 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.utils.CrossRepoContext import CrossRepoContext
 
 __version__ = VERSION
-
-
 
 
 class CrossRepoAnalyzer:

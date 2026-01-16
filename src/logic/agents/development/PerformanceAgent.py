@@ -21,14 +21,12 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types.OptimizationSuggestion import OptimizationSuggestion
 from src.core.base.types.OptimizationType import OptimizationType
 import re
 
 __version__ = VERSION
-
-
 
 
 class PerformanceAgent:
@@ -46,15 +44,24 @@ class PerformanceAgent:
     """
 
     OPTIMIZATION_PATTERNS: list[tuple[str, OptimizationType, str, str]] = [
-        (r"for\s+\w+\s+in\s+range\(len\((\w+)\)\)", OptimizationType.ALGORITHMIC,
-         "Use enumerate() instead of range(len())",
-         "for idx, item in enumerate({0}):"),
-        (r"\+=\s*.*?for\s+", OptimizationType.MEMORY,
-         "String concatenation in loop is inefficient",
-         "Use ''.join() or list comprehension"),
-        (r"time\.sleep\(\d+\)", OptimizationType.CONCURRENCY,
-         "Blocking sleep may hurt performance",
-         "Consider asyncio.sleep() for async code"),
+        (
+            r"for\s+\w+\s+in\s+range\(len\((\w+)\)\)",
+            OptimizationType.ALGORITHMIC,
+            "Use enumerate() instead of range(len())",
+            "for idx, item in enumerate({0}):",
+        ),
+        (
+            r"\+=\s*.*?for\s+",
+            OptimizationType.MEMORY,
+            "String concatenation in loop is inefficient",
+            "Use ''.join() or list comprehension",
+        ),
+        (
+            r"time\.sleep\(\d+\)",
+            OptimizationType.CONCURRENCY,
+            "Blocking sleep may hurt performance",
+            "Consider asyncio.sleep() for async code",
+        ),
     ]
 
     def __init__(self) -> None:
@@ -71,19 +78,42 @@ class PerformanceAgent:
             List of optimization suggestions.
         """
         self.suggestions = []
-        lines = content.split('\n')
 
-        for i, line in enumerate(lines, 1):
-            for pattern, opt_type, desc, fix in self.OPTIMIZATION_PATTERNS:
-                match = re.search(pattern, line)
-                if match:
-                    self.suggestions.append(OptimizationSuggestion(
-                        type=opt_type,
-                        description=desc,
-                        impact="medium",
-                        code_location=f"line {i}",
-                        before_snippet=line.strip(),
-                        after_snippet=fix.format(*match.groups()) if match.groups() else fix
-                    ))
+        try:
+            from rust_core import scan_optimization_patterns_rust  # type: ignore[attr-defined]
+
+            rust_results = scan_optimization_patterns_rust(content)
+            for line_num, pattern_idx, groups in rust_results:
+                if pattern_idx < len(self.OPTIMIZATION_PATTERNS):
+                    pattern, opt_type, desc, fix = self.OPTIMIZATION_PATTERNS[pattern_idx]
+                    self.suggestions.append(
+                        OptimizationSuggestion(
+                            type=opt_type,
+                            description=desc,
+                            impact="medium",
+                            code_location=f"line {line_num}",
+                            before_snippet="",
+                            after_snippet=fix.format(*groups) if groups else fix,
+                        )
+                    )
+        except (ImportError, AttributeError):
+            # Fallback to Python implementation
+            lines = content.split("\n")
+            for i, line in enumerate(lines, 1):
+                for pattern, opt_type, desc, fix in self.OPTIMIZATION_PATTERNS:
+                    match = re.search(pattern, line)
+                    if match:
+                        self.suggestions.append(
+                            OptimizationSuggestion(
+                                type=opt_type,
+                                description=desc,
+                                impact="medium",
+                                code_location=f"line {i}",
+                                before_snippet=line.strip(),
+                                after_snippet=fix.format(*match.groups())
+                                if match.groups()
+                                else fix,
+                            )
+                        )
 
         return self.suggestions

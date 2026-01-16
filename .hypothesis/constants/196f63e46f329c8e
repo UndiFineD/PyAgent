@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\core\BenchmarkCore.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.1, 100, 'agent_id', 'delta', 'delta_percentage', 'latency_ms', 'limit', 'regression', 'success', 'token_count']

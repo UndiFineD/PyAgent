@@ -13,14 +13,12 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import hashlib
 import json
 from typing import Any
 from .enums import TestSourceType
-from .models import (
-    AggregatedResult, ContractTest, TestStatus, VisualRegressionConfig
-)
+from .models import AggregatedResult, ContractTest, TestStatus, VisualRegressionConfig
 
 __version__ = VERSION
 
@@ -31,11 +29,6 @@ __version__ = VERSION
 # limitations under the License.
 
 """Testing utilities for visual regression, contract testing, and results aggregation."""
-
-
-
-
-
 
 
 class VisualRegressionTester:
@@ -70,7 +63,7 @@ class VisualRegressionTester:
             "component_id": component_id,
             "diff_percentage": diff,
             "threshold": self.config.diff_threshold,
-            "passed": passed
+            "passed": passed,
         }
         self.results.append(result)
         return result
@@ -81,58 +74,28 @@ class VisualRegressionTester:
         report.append(f"Threshold: {self.config.diff_threshold * 100}%\n")
         passed = [r for r in self.results if r.get("passed")]
 
-
-
-
-
-
-
-
-
-
         failed = [r for r in self.results if not r.get("passed")]
         report.append(f"## Summary: {len(passed)} passed, {len(failed)} failed\n")
         if failed:
-
-
-
-
-
-
-
-
             report.append("## Failed Components\n")
             for r in failed:
                 report.append(
                     f"- **{r['component_id']}**: {r['diff_percentage'] * 100:.2f}% diff"
-
                 )
         return "\n".join(report)
 
     def run_for_browsers(self, component_id: str) -> list[dict[str, Any]]:
         """Run visual test across all configured browsers."""
 
-
-
-
-
         results: list[dict[str, Any]] = []
         for browser in self.config.browsers:
             result: dict[str, Any] = {
                 "browser": browser.value,
                 "component_id": component_id,
-
-
-
-
-
-                "passed": True
+                "passed": True,
             }
             results.append(result)
         return results
-
-
-
 
 
 class ContractTestRunner:
@@ -150,7 +113,7 @@ class ContractTestRunner:
         endpoint: str,
         request_schema: dict[str, Any] | None = None,
         response_schema: dict[str, Any] | None = None,
-        status_code: int = 200
+        status_code: int = 200,
     ) -> ContractTest:
         """Add a contract definition."""
         contract_id = f"{consumer}:{provider}:{endpoint}"
@@ -160,51 +123,30 @@ class ContractTestRunner:
             endpoint=endpoint,
             request_schema=request_schema or {},
             response_schema=response_schema or {},
-            status_code=status_code
+            status_code=status_code,
         )
         self.contracts[contract_id] = contract
         return contract
 
-
-
-
-
-
     def verify_consumer(
-        self,
-        contract_id: str,
-        actual_request: dict[str, Any]
+        self, contract_id: str, actual_request: dict[str, Any]
     ) -> dict[str, Any]:
         """Verify consumer sends correct request."""
         contract = self.contracts.get(contract_id)
         if not contract:
             return {"error": "Contract not found", "valid": False}
 
-
-
-
-
-        valid = all(
-            k in actual_request
-            for k in contract.request_schema.keys()
-        )
+        valid = all(k in actual_request for k in contract.request_schema.keys())
         result: dict[str, Any] = {
             "contract_id": contract_id,
             "side": "consumer",
-            "valid": valid
+            "valid": valid,
         }
         self.results.append(result)
         return result
 
     def verify_provider(
-        self,
-
-
-
-
-        contract_id: str,
-        actual_response: dict[str, Any],
-        actual_status: int
+        self, contract_id: str, actual_response: dict[str, Any], actual_status: int
     ) -> dict[str, Any]:
         """Verify provider sends correct response."""
         contract = self.contracts.get(contract_id)
@@ -212,26 +154,14 @@ class ContractTestRunner:
             return {"error": "Contract not found", "valid": False}
         status_match = actual_status == contract.status_code
         schema_valid = all(
-            k in actual_response
-            for k in contract.response_schema.keys()
+            k in actual_response for k in contract.response_schema.keys()
         )
         result: dict[str, Any] = {
-
-
-
-
-
-
-
-
             "contract_id": contract_id,
             "side": "provider",
             "valid": status_match and schema_valid,
-            "status_match": status_match
+            "status_match": status_match,
         }
-
-
-
 
         self.results.append(result)
         return result
@@ -244,23 +174,15 @@ class ContractTestRunner:
         """Export contracts in Pact format."""
         contracts = self.get_contracts_for_consumer(consumer)
 
-
-
-
-
         pact: dict[str, Any] = {
             "consumer": {"name": consumer},
             "provider": {"name": contracts[0].provider if contracts else ""},
-            "interactions": [{
-                "request": {"path": c.endpoint},
-                "response": {"status": c.status_code}
-            } for c in contracts]
+            "interactions": [
+                {"request": {"path": c.endpoint}, "response": {"status": c.status_code}}
+                for c in contracts
+            ],
         }
         return json.dumps(pact, indent=2)
-
-
-
-
 
 
 class ResultAggregator:
@@ -277,17 +199,18 @@ class ResultAggregator:
         test_name: str,
         status: TestStatus,
         duration_ms: float,
-        metadata: dict[str, Any] | None = None
+        metadata: dict[str, Any] | None = None,
     ) -> AggregatedResult:
         """Add a test result."""
         from datetime import datetime
+
         result = AggregatedResult(
             source=source,
             test_name=test_name,
             status=status,
             duration_ms=duration_ms,
             timestamp=datetime.now().isoformat(),
-            metadata=metadata or {}
+            metadata=metadata or {},
         )
         self.results.append(result)
 
@@ -304,31 +227,21 @@ class ResultAggregator:
                 source=TestSourceType.PYTEST,
                 test_name="synthetic_test",
                 status=TestStatus.PASSED,
-                duration_ms=1.0
+                duration_ms=1.0,
             )
         for _ in range(run_data.get("failed", 0)):
             self.add_result(
                 source=TestSourceType.PYTEST,
                 test_name="synthetic_test",
                 status=TestStatus.FAILED,
-                duration_ms=1.0
-
-
-
-
-
-
-
-
-
-
+                duration_ms=1.0,
             )
         for _ in range(run_data.get("skipped", 0)):
             self.add_result(
                 source=TestSourceType.PYTEST,
                 test_name="synthetic_test",
                 status=TestStatus.SKIPPED,
-                duration_ms=0.0
+                duration_ms=0.0,
             )
 
     def import_pytest_results(self, json_report: str) -> int:
@@ -336,27 +249,18 @@ class ResultAggregator:
         try:
             data = json.loads(json_report)
 
-
-
-
-
-
-
-
-
-
             count = 0
             for test in data.get("tests", []):
                 status_map = {
                     "passed": TestStatus.PASSED,
                     "failed": TestStatus.FAILED,
-                    "skipped": TestStatus.SKIPPED
+                    "skipped": TestStatus.SKIPPED,
                 }
                 self.add_result(
                     source=TestSourceType.PYTEST,
                     test_name=test.get("nodeid", ""),
                     status=status_map.get(test.get("outcome", ""), TestStatus.ERROR),
-                    duration_ms=test.get("duration", 0) * 1000
+                    duration_ms=test.get("duration", 0) * 1000,
                 )
                 count += 1
             return count
@@ -368,14 +272,6 @@ class ResultAggregator:
         total = len(self.results)
         passed = sum(1 for r in self.results if r.status == TestStatus.PASSED)
 
-
-
-
-
-
-
-
-
         failed = sum(1 for r in self.results if r.status == TestStatus.FAILED)
         total_duration = sum(r.duration_ms for r in self.results)
 
@@ -385,25 +281,26 @@ class ResultAggregator:
             "failed": failed,
             "pass_rate": (passed / total * 100) if total > 0 else 0,
             "total_duration_ms": total_duration,
-            "sources": [s.value for s in self._by_source.keys()]
+            "sources": [s.value for s in self._by_source.keys()],
         }
 
     def export_unified_report(self) -> str:
         """Export unified report across all sources."""
-        return json.dumps({
-            "summary": self.get_summary(),
-            "results": [{
-                "source": r.source.value,
-                "test": r.test_name,
-                "status": r.status.value,
-                "duration_ms": r.duration_ms
-            } for r in self.results]
-        }, indent=2)
-
-
-
-
-
+        return json.dumps(
+            {
+                "summary": self.get_summary(),
+                "results": [
+                    {
+                        "source": r.source.value,
+                        "test": r.test_name,
+                        "status": r.status.value,
+                        "duration_ms": r.duration_ms,
+                    }
+                    for r in self.results
+                ],
+            },
+            indent=2,
+        )
 
     def merge(self) -> dict[str, Any]:
         """Merge all results into a single summary."""
@@ -414,12 +311,10 @@ class ResultAggregator:
         return {
             "total_passed": passed,
             "total_failed": failed,
-            "total_skipped": sum(1 for r in self.results if r.status == TestStatus.SKIPPED),
-
-
-
-
-            "total_duration_ms": summary.get("total_duration_ms", 0)
+            "total_skipped": sum(
+                1 for r in self.results if r.status == TestStatus.SKIPPED
+            ),
+            "total_duration_ms": summary.get("total_duration_ms", 0),
         }
 
     def get_trend(self) -> dict[str, Any]:
@@ -432,17 +327,16 @@ class ResultAggregator:
         later_results = self.results[mid_point:]
 
         earlier_rate = (
-            sum(1 for r in earlier_results if r.status == TestStatus.PASSED) /
-            len(earlier_results) if len(earlier_results) > 0 else 0
-
-
-
-
-
+            sum(1 for r in earlier_results if r.status == TestStatus.PASSED)
+            / len(earlier_results)
+            if len(earlier_results) > 0
+            else 0
         )
         later_rate = (
-            sum(1 for r in later_results if r.status == TestStatus.PASSED) /
-            len(later_results) if len(later_results) > 0 else 0
+            sum(1 for r in later_results if r.status == TestStatus.PASSED)
+            / len(later_results)
+            if len(later_results) > 0
+            else 0
         )
 
         if later_rate > earlier_rate:
@@ -455,12 +349,9 @@ class ResultAggregator:
         return {"pass_rate_trend": trend}
 
 
-
-
-
-
 class TestMetricsCollector:
     """Collect test execution metrics."""
+
     __test__ = False
 
     def __init__(self) -> None:
@@ -485,7 +376,7 @@ class TestMetricsCollector:
         avg_duration = total_duration / total_tests if total_tests > 0 else 0
         return {
             "total_duration_ms": total_duration,
-            "average_duration_ms": avg_duration
+            "average_duration_ms": avg_duration,
         }
 
     def get_flaky_tests(self) -> dict[str, int]:

@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -26,22 +26,6 @@ __version__ = VERSION
 """Plugin containing intentional syntax errors for resilience testing."""
 
 # DANGER: Intentional syntax error to test resilience
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 class BrokenAgent:

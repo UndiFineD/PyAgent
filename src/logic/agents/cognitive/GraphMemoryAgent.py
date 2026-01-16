@@ -23,18 +23,16 @@ Supports FalkorDB-style triple storage (Subject-Predicate-Object).
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 import time
 from pathlib import Path
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class GraphMemoryAgent(BaseAgent):
@@ -47,12 +45,12 @@ class GraphMemoryAgent(BaseAgent):
         self.graph_store_path = Path("data/memory/agent_store/knowledge_graph.json")
         # MIRIX 6-component memory categories
         self.memory_store = {
-            "core": {},       # Human/Persona identities
-            "episodic": [],   # Action logs/events
-            "semantic": {},   # Facts and concepts
+            "core": {},  # Human/Persona identities
+            "episodic": [],  # Action logs/events
+            "semantic": {},  # Facts and concepts
             "procedural": {},  # Skill instructions/algorithms
-            "resource": {},   # Links/Paths/Tools
-            "knowledge": {}   # Synthesis/Insights
+            "resource": {},  # Links/Paths/Tools
+            "knowledge": {},  # Synthesis/Insights
         }
         self.entities: dict[str, dict[str, Any]] = {}
         self.relationships: list[dict[str, str]] = []
@@ -78,11 +76,13 @@ class GraphMemoryAgent(BaseAgent):
                     # Convert 'relations' from GraphRelational format to 'relationships' if needed
                     rels = data.get("relations", [])
                     for r in rels:
-                        self.relationships.append({
-                            "subject": r.get("source", r.get("subject")),
-                            "predicate": r.get("type", r.get("predicate")),
-                            "object": r.get("target", r.get("object"))
-                        })
+                        self.relationships.append(
+                            {
+                                "subject": r.get("source", r.get("subject")),
+                                "predicate": r.get("type", r.get("predicate")),
+                                "object": r.get("target", r.get("object")),
+                            }
+                        )
                     # Also handle if it was already in GraphMemory format
                     m_rels = data.get("relationships", [])
                     for r in m_rels:
@@ -96,10 +96,11 @@ class GraphMemoryAgent(BaseAgent):
         try:
             self.graph_store_path.parent.mkdir(parents=True, exist_ok=True)
             with open(self.graph_store_path, "w", encoding="utf-8") as f:
-                json.dump({
-                    "entities": self.entities,
-                    "relationships": self.relationships
-                }, f, indent=4)
+                json.dump(
+                    {"entities": self.entities, "relationships": self.relationships},
+                    f,
+                    indent=4,
+                )
         except Exception as e:
             logging.error(f"GraphMemoryAgent: Failed to save graph: {e}")
 
@@ -133,7 +134,7 @@ class GraphMemoryAgent(BaseAgent):
             "name": name,
             "data": data,
             "timestamp": time.time(),
-            "access_count": 0
+            "access_count": 0,
         }
 
         if isinstance(self.memory_store[category], list):
@@ -154,14 +155,18 @@ class GraphMemoryAgent(BaseAgent):
             if isinstance(store, list):
                 original_len = len(store)
                 self.memory_store[category] = [
-                    m for m in store
-                    if (now - m['timestamp']) < (86400 * 30) or m.get('access_count', 0) > 5
+                    m
+                    for m in store
+                    if (now - m["timestamp"]) < (86400 * 30)
+                    or m.get("access_count", 0) > 5
                 ]
                 count += original_len - len(self.memory_store[category])
             elif isinstance(store, dict):
                 to_delete = []
                 for name, m in store.items():
-                    if (now - m['timestamp']) > (86400 * 30) and m.get('access_count', 0) < 3:
+                    if (now - m["timestamp"]) > (86400 * 30) and m.get(
+                        "access_count", 0
+                    ) < 3:
                         to_delete.append(name)
                 for name in to_delete:
                     del store[name]
@@ -176,8 +181,16 @@ class GraphMemoryAgent(BaseAgent):
         delta = 0.2 if success else -0.3
         self.outcomes[entity_id] = round(max(0.0, min(2.0, current + delta)), 2)
 
-        status = "promoted" if self.outcomes[entity_id] > 1.5 else "caution" if self.outcomes[entity_id] < 0.7 else "stable"
-        logging.info(f"GraphMemory: Outcome for {entity_id} is {success}. New score: {self.outcomes[entity_id]}")
+        status = (
+            "promoted"
+            if self.outcomes[entity_id] > 1.5
+            else "caution"
+            if self.outcomes[entity_id] < 0.7
+            else "stable"
+        )
+        logging.info(
+            f"GraphMemory: Outcome for {entity_id} is {success}. New score: {self.outcomes[entity_id]}"
+        )
 
         # Auto-prune bad advice
         if self.outcomes[entity_id] < 0.3:
@@ -189,17 +202,25 @@ class GraphMemoryAgent(BaseAgent):
         return f"Memory {entity_id} score updated to {self.outcomes[entity_id]} ({status})."
 
     @as_tool
-    def create_task(self, title: str, parent_id: str | None = None, priority: int = 2) -> str:
+    def create_task(
+        self, title: str, parent_id: str | None = None, priority: int = 2
+    ) -> str:
         """Creates a new task with optional parent for hierarchy (Beads pattern)."""
-        task_count = len([t for t in self.tasks if not parent_id or t.startswith(f"{parent_id}.")])
-        task_id = f"{parent_id}.{task_count + 1}" if parent_id else f"epic-{len(self.tasks) + 1}"
+        task_count = len(
+            [t for t in self.tasks if not parent_id or t.startswith(f"{parent_id}.")]
+        )
+        task_id = (
+            f"{parent_id}.{task_count + 1}"
+            if parent_id
+            else f"epic-{len(self.tasks) + 1}"
+        )
 
         task_data = {
             "title": title,
             "status": "ready",
             "priority": priority,
             "blocked_by": [],
-            "subtasks": []
+            "subtasks": [],
         }
         self.tasks[task_id] = task_data
 
@@ -224,7 +245,9 @@ class GraphMemoryAgent(BaseAgent):
     @as_tool
     def compact_memory(self, threshold_days: int = 30) -> str:
         """Summarizes and prunes old closed tasks to save context (Memory Decay)."""
-        closed_tasks = [tid for tid, t in self.tasks.items() if t["status"] == "completed"]
+        closed_tasks = [
+            tid for tid, t in self.tasks.items() if t["status"] == "completed"
+        ]
         if not closed_tasks:
             return "No completed tasks to compact."
 
@@ -236,7 +259,9 @@ class GraphMemoryAgent(BaseAgent):
         return summary
 
     @as_tool
-    def add_entity(self, name: str, properties: dict[str, Any], entity_type: str | None = None) -> str:
+    def add_entity(
+        self, name: str, properties: dict[str, Any], entity_type: str | None = None
+    ) -> str:
         """Adds or updates an entity in the graph."""
         if entity_type:
             properties["type"] = entity_type
@@ -260,49 +285,34 @@ class GraphMemoryAgent(BaseAgent):
         matches = [
             f"{r['subject']} {r['predicate']} {r['object']}"
             for r in self.relationships
-            if r['subject'] == entity_name or r['object'] == entity_name
-
-
-
-
-
-
-
-
-
-
+            if r["subject"] == entity_name or r["object"] == entity_name
         ]
         if not matches:
             return f"No relationships found for '{entity_name}'."
         return "\n".join(matches)
-
-
-
 
     @as_tool
     def hybrid_search(self, query: str) -> dict[str, Any]:
         """Performs a combined vector-graph search (Simulated)."""
         # In a real system, this would call ChromaDB for vectors and then cross-reference with self.entities
 
-
         return {
             "query": query,
             "vector_results": ["Related code snippet from repository"],
-            "graph_context": self.query_relationships(query) if query in self.entities else "No direct graph matches."
+            "graph_context": self.query_relationships(query)
+            if query in self.entities
+            else "No direct graph matches.",
         }
-
-
-
 
     def improve_content(self, prompt: str) -> str:
         """Graph-based reasoning helper."""
         return f"GraphMemory state: {len(self.entities)} entities, {len(self.relationships)} relationships."
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(GraphMemoryAgent, "Graph Memory Agent", "Memory storage path")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        GraphMemoryAgent, "Graph Memory Agent", "Memory storage path"
+    )
     main()

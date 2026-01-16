@@ -19,28 +19,31 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from abc import ABC, abstractmethod
 from typing import Any
 
 __version__ = VERSION
 
 
-
-
-
-
-
 class LLMBackend(ABC):
     """Base class for LLM backends."""
 
-    def __init__(self, session: Any, connectivity_manager: Any, recorder: Any = None) -> None:
+    def __init__(
+        self, session: Any, connectivity_manager: Any, recorder: Any = None
+    ) -> None:
         self.session = session
         self.connectivity = connectivity_manager
         self.recorder = recorder
 
     @abstractmethod
-    def chat(self, prompt: str, model: str, system_prompt: str = "You are a helpful assistant.", **kwargs) -> str:
+    def chat(
+        self,
+        prompt: str,
+        model: str,
+        system_prompt: str = "You are a helpful assistant.",
+        **kwargs,
+    ) -> str:
         """Excecute a chat completion."""
         raise NotImplementedError()
 
@@ -50,15 +53,25 @@ class LLMBackend(ABC):
     def _update_status(self, provider_id: str, working: bool) -> None:
         self.connectivity.update_status(provider_id, working)
 
-    def _record(self, provider: str, model: str, prompt: str, result: str, system_prompt: str = "") -> None:
+    def _record(
+        self,
+        provider: str,
+        model: str,
+        prompt: str,
+        result: str,
+        system_prompt: str = "",
+    ) -> None:
         if self.recorder:
             try:
                 import time
+
                 meta = {
                     "system_prompt": system_prompt,
                     "phase": 120,
-                    "timestamp_unix": time.time()
+                    "timestamp_unix": time.time(),
                 }
-                self.recorder.record_interaction(provider, model, prompt, result, meta=meta)
+                self.recorder.record_interaction(
+                    provider, model, prompt, result, meta=meta
+                )
             except Exception:
                 pass

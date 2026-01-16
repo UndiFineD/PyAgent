@@ -9,10 +9,8 @@ from src.infrastructure.fleet.FleetManager import FleetManager
 import asyncio
 
 
-
-
 async def run_phase38():
-    logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
+    logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
     workspace_root = os.getcwd()
     fleet = FleetManager(workspace_root)
 
@@ -22,12 +20,14 @@ async def run_phase38():
     test_state = {
         "goal": "Rebuild the universe",
         "progress": 0.42,
-        "active_nodes": ["NodeA", "NodeB", "NodeC"]
+        "active_nodes": ["NodeA", "NodeB", "NodeC"],
     }
 
     # Shard into 3 parts
     # Assuming shard_state might be async or sync, check first (safety pattern)
-    res = fleet.holographic_state.shard_state("rebuild_universe_plan", test_state, redundant_factor=3)
+    res = fleet.holographic_state.shard_state(
+        "rebuild_universe_plan", test_state, redundant_factor=3
+    )
     if asyncio.iscoroutine(res):
         await res
     print("HolographicState: Generated shards for 'rebuild_universe_plan'.")
@@ -40,40 +40,27 @@ async def run_phase38():
         reconstructed_str = res
     print(f"HolographicState: Reconstruction result: {reconstructed_str[:50]}...")
 
-
-
-
-
-
     # Note: HolographicState currently returns a string (serialized dict)
     assert reconstructed_str is not None, "Holographic state reconstruction failed!"
 
     # 2. Test Resource Prediction
-
-
 
     task = "Complex neural refactoring of the memory bus with high entropy data."
     res = fleet.resource_predictor.forecast_and_allocate(task)
     if asyncio.iscoroutine(res):
         prediction = await res
     else:
-
-
         prediction = res
 
     print(f"ResourcePredictor: Task: '{task[:40]}...'")
-    print(f"ResourcePredictor: Complexity Forecast: {prediction['complexity_forecast']}")
+    print(
+        f"ResourcePredictor: Complexity Forecast: {prediction['complexity_forecast']}"
+    )
     print(f"ResourcePredictor: Allocation: {prediction['allocation']}")
 
-
-
-
-    assert prediction['allocation']['vram_mb'] > 512, "Resource allocation failed!"
+    assert prediction["allocation"]["vram_mb"] > 512, "Resource allocation failed!"
 
     print("\n[SUCCESS] Phase 38 verification complete.")
-
-
-
 
 
 def test_phase38() -> None:

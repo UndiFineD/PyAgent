@@ -21,7 +21,7 @@
 """Diagnostic and status logic for SubagentRunner."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import os
 from pathlib import Path
 from typing import Any, TYPE_CHECKING
@@ -30,11 +30,6 @@ __version__ = VERSION
 
 if TYPE_CHECKING:
     from .SubagentRunner import SubagentRunner
-
-
-
-
-
 
 
 class SubagentStatus:
@@ -48,22 +43,34 @@ class SubagentStatus:
         backend = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()
         repo_root = str(self.runner._resolve_repo_root())
         try:
-            max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))
+            max_context_chars = int(
+                os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000")
+            )
         except ValueError:
             max_context_chars = 12_000
         models_base_url = (os.environ.get("GITHUB_MODELS_BASE_URL") or "").strip()
-        models_model = (os.environ.get("DV_AGENT_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "").strip()
+        models_model = (
+            os.environ.get("DV_AGENT_MODEL")
+            or os.environ.get("GITHUB_MODELS_MODEL")
+            or ""
+        ).strip()
 
         token_set = bool(os.environ.get("GITHUB_TOKEN"))
         if not token_set:
-            token_file = os.environ.get("DV_GITHUB_TOKEN_FILE", r"C:\DEV\github-gat.txt")
+            token_file = os.environ.get(
+                "DV_GITHUB_TOKEN_FILE", r"C:\DEV\github-gat.txt"
+            )
             token_set = Path(token_file).exists()
 
         warnings = []
         if os.environ.get("TERM_PROGRAM") == "vscode":
-            warnings.append("VS Code Environment: Pylance or Git extensions may lock files or cause rewrite conflicts.")
-        if os.name == 'nt':
-            warnings.append("Windows Platform: Sensitive to file locks. Consider closing open editors for target files.")
+            warnings.append(
+                "VS Code Environment: Pylance or Git extensions may lock files or cause rewrite conflicts."
+            )
+        if os.name == "nt":
+            warnings.append(
+                "Windows Platform: Sensitive to file locks. Consider closing open editors for target files."
+            )
 
         return {
             "selected_backend": backend,
@@ -80,7 +87,12 @@ class SubagentStatus:
                 "base_url_set": bool(models_base_url),
                 "model_set": bool(models_model),
                 "token_set": token_set,
-                "configured": bool(models_base_url and models_model and token_set and self.runner.requests is not None),
+                "configured": bool(
+                    models_base_url
+                    and models_model
+                    and token_set
+                    and self.runner.requests is not None
+                ),
             },
         }
 
@@ -89,7 +101,9 @@ class SubagentStatus:
         status = self.get_backend_status()
         cmd = status["commands"]
         models = status["github_models"]
-        def yn(v: bool) -> str: return "yes" if v else "no"
+
+        def yn(v: bool) -> str:
+            return "yes" if v else "no"
 
         lines = [
             "Backend diagnostics:",

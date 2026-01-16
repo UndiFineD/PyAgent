@@ -21,19 +21,15 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
-
-
-
 class DiffViewMode(Enum):
     """Modes for changelog diff visualization."""
+
     UNIFIED = "unified"
     SIDE_BY_SIDE = "side_by_side"
     INLINE = "inline"

@@ -24,16 +24,20 @@ Uses hierarchical summarization and selective hydration to handle massive local 
 
 from __future__ import annotations
 from typing import Any
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 from pathlib import Path
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
+
+try:
+    from rust_core import search_blocks_rust
+    _RUST_ACCEL = True
+except ImportError:
+    _RUST_ACCEL = False
 
 __version__ = VERSION
-
-
 
 
 class QuantumMemoryAgent(BaseAgent):
@@ -67,11 +71,9 @@ class QuantumMemoryAgent(BaseAgent):
         summary = f"[Compressed Context]: Dense summary of {len(context_text)} characters. Main themes preserved."
 
         block_id = f"block_{len(self.active_context_blocks)}"
-        self.active_context_blocks.append({
-            "id": block_id,
-            "original_len": len(context_text),
-            "summary": summary
-        })
+        self.active_context_blocks.append(
+            {"id": block_id, "original_len": len(context_text), "summary": summary}
+        )
 
         return f"SUCCESS: Compressed block {block_id}. Current context pool: {len(self.active_context_blocks)} blocks."
 
@@ -82,19 +84,20 @@ class QuantumMemoryAgent(BaseAgent):
             query: The question or reference to search for.
         """
         # Logic: Scan all summaries and 're-hydrate' only the most relevant blocks.
-        relevant_blocks = [b["id"] for b in self.active_context_blocks if any(word in b["summary"].lower() for word in query.lower().split())]
-
-
-
-
-
+        if _RUST_ACCEL and self.active_context_blocks:
+            # Use Rust for block search: Vec<(block_id, summary)>
+            blocks = [(b["id"], b.get("summary", "")) for b in self.active_context_blocks]
+            relevant_blocks = search_blocks_rust(blocks, query)
+        else:
+            relevant_blocks = [
+                b["id"]
+                for b in self.active_context_blocks
+                if any(word in b["summary"].lower() for word in query.lower().split())
+            ]
 
         if not relevant_blocks:
             # Fallback to general search across the last 3 blocks
             relevant_blocks = [b["id"] for b in self.active_context_blocks[-3:]]
-
-
-
 
         return f"### Results for '{query}'\n\nFound relevant data in blocks: {', '.join(relevant_blocks)}. \n[Hydrated Context]: Re-assembling memory nodes for reasoning..."
 
@@ -102,26 +105,21 @@ class QuantumMemoryAgent(BaseAgent):
     def export_context_knowledge_graph(self) -> str:
         """Exports the current compressed context as a JSON Knowledge Graph."""
 
-
         filepath = self.context_cache_dir / "knowledge_graph.json"
         with open(filepath, "w") as f:
             json.dump(self.active_context_blocks, f, indent=2)
 
         return f"Knowledge Graph exported to {filepath}"
 
-
-
-
-
     def improve_content(self, prompt: str) -> str:
         """General memory optimization logic."""
         return "I am optimizing the local memory pool. Memory fragments are being quantized for retrieval efficiency."
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(QuantumMemoryAgent, "Quantum Memory Agent", "Context compression tool")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        QuantumMemoryAgent, "Quantum Memory Agent", "Context compression tool"
+    )
     main()

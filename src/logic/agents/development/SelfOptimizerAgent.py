@@ -21,15 +21,13 @@
 """Agent specializing in self-optimization and roadmap refinement."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function
-from src.observability.stats.monitoring import ResourceMonitor
-from src.observability.stats.metrics_engine import ObservabilityEngine
+from src.core.base.BaseUtilities import create_main_function
+from src.observability.stats.Monitoring import ResourceMonitor
+from src.observability.stats.Metrics_engine import ObservabilityEngine
 
 __version__ = VERSION
-
-
 
 
 class SelfOptimizerAgent(BaseAgent):
@@ -68,7 +66,7 @@ class SelfOptimizerAgent(BaseAgent):
             categories = {
                 "High Priority (Stability)": [],
                 "Medium Priority (Features)": [],
-                "Low Priority (Maintenance)": []
+                "Low Priority (Maintenance)": [],
             }
 
             for line in lines:
@@ -76,9 +74,14 @@ class SelfOptimizerAgent(BaseAgent):
                     continue
 
                 low_line = line.lower()
-                if any(k in low_line for k in ["fix", "bug", "error", "crash", "stable"]):
+                if any(
+                    k in low_line for k in ["fix", "bug", "error", "crash", "stable"]
+                ):
                     categories["High Priority (Stability)"].append(line)
-                elif any(k in low_line for k in ["add", "new", "feature", "capability", "expand"]):
+                elif any(
+                    k in low_line
+                    for k in ["add", "new", "feature", "capability", "expand"]
+                ):
                     categories["Medium Priority (Features)"].append(line)
                 else:
                     categories["Low Priority (Maintenance)"].append(line)
@@ -95,58 +98,30 @@ class SelfOptimizerAgent(BaseAgent):
         except Exception as e:
             return f"Error analyzing roadmap: {e}"
 
-
-
-
-
-
-
-
-
-
-
     def improve_content(self, prompt: str) -> str:
         """Analyze and optimize."""
         roadmap = self.analyze_roadmap()
-
-
-
-
-
-
-
-
-
 
         stats = self.resource_monitor.get_current_stats()
         telemetry = self.telemetry.get_summary()
 
         system_report = [
             "\n## System Health",
-
-
-
-
-
-
-
-
-
             f"- **Status**: {stats.get('status', 'Unknown')}",
             f"- **CPU Usage**: {stats.get('cpu_usage_pct')}%",
             f"- **Memory Usage**: {stats.get('memory_usage_pct')}%",
             f"- **Free Disk**: {stats.get('disk_free_gb')} GB",
             f"- **Avg Latency**: {telemetry.get('avg_latency_ms', 'N/A')} ms",
-
-            f"- **Success Rate**: {telemetry.get('success_rate', 'N/A')}%"
+            f"- **Success Rate**: {telemetry.get('success_rate', 'N/A')}%",
         ]
 
-        return f"Self-Optimization Analysis for: {prompt}\n\n{roadmap}\n" + "\n".join(system_report)
-
-
-
+        return f"Self-Optimization Analysis for: {prompt}\n\n{roadmap}\n" + "\n".join(
+            system_report
+        )
 
 
 if __name__ == "__main__":
-    main = create_main_function(SelfOptimizerAgent, "SelfOptimizer Agent", "Query/Topic to optimize")
+    main = create_main_function(
+        SelfOptimizerAgent, "SelfOptimizer Agent", "Query/Topic to optimize"
+    )
     main()

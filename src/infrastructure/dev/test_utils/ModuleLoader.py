@@ -21,7 +21,7 @@
 """Module loading utilities for test environment."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import importlib.util
 import logging
 import re
@@ -32,8 +32,6 @@ from types import ModuleType
 from collections.abc import Iterator
 
 __version__ = VERSION
-
-
 
 
 class ModuleLoader:
@@ -87,7 +85,9 @@ class ModuleLoader:
         spec.loader.exec_module(mod)
         return mod
 
-    def load_agent_module(self, filename: str, module_name: str | None = None) -> ModuleType:
+    def load_agent_module(
+        self, filename: str, module_name: str | None = None
+    ) -> ModuleType:
         """Load an agent module from scripts/agent by filename."""
         path = self.agent_dir / filename
         if not path.exists():

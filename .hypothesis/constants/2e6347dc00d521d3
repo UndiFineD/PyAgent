@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\linear_model\_stochastic_gradient.py
-# hypothesis_version: 6.150.1
-
-[-1.0, 0.0, 0.0001, 0.001, 0.01, 0.1, 0.15, 0.25, 0.5, 1.0, 2.0, 1000, 'C', '_average_coef', 'adaptive', 'alpha', 'average', 'balanced', 'boolean', 'both', 'class_weight', 'classes_', 'coef_', 'constant', 'csr', 'early_stopping', 'elasticnet', 'epsilon', 'epsilon_insensitive', 'eta0', 'fit_intercept', 'hinge', 'huber', 'invscaling', 'l1', 'l1_ratio', 'l2', 'learning_rate', 'left', 'log_loss', 'loss', 'max_iter', 'modified_huber', 'n_iter_no_change', 'n_jobs', 'neither', 'none', 'nu', 'optimal', 'pa1', 'pa2', 'penalty', 'perceptron', 'power_t', 'random_state', 'right', 'sharedmem', 'shuffle', 'squared_error', 'squared_hinge', 't_', 'tol', 'validation_fraction', 'verbose', 'warm_start']

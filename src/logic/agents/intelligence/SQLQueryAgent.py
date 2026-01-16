@@ -21,15 +21,13 @@
 """Agent specializing in SQL database interaction and query optimization."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import sqlite3
 import logging
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class SQLQueryAgent(BaseAgent):
@@ -85,47 +83,28 @@ class SQLQueryAgent(BaseAgent):
                 return "Query executed successfully. 0 rows returned."
             return str(rows)
 
-
-
-
-
-
-
-
-
-
         except Exception as e:
             return f"SQL Error: {e}"
 
     @as_tool
-
-
-
     def get_table_schema(self, table_name: str) -> str:
         """Returns the schema for a specific table."""
         if not self.connection:
             return "Error: No database connection."
         try:
-
-
             cursor = self.connection.cursor()
             cursor.execute(f"PRAGMA table_info({table_name})")
             return str(cursor.fetchall())
         except Exception as e:
             return f"Schema Error: {e}"
 
-
-
-
     def improve_content(self, prompt: str) -> str:
         """SQL generation helper."""
         return f"SQLAgent: Ready to query database. Connection active: {self.connection is not None}."
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
+    from src.core.base.BaseUtilities import create_main_function
+
     main = create_main_function(SQLQueryAgent, "SQL Agent", "Database path")
     main()

@@ -1,4 +1,5 @@
 """Unit tests for agent execution strategies (Direct, CoT, Reflexion)."""
+
 import unittest
 from unittest.mock import MagicMock, AsyncMock
 import os
@@ -9,8 +10,6 @@ from src.core.base.BaseAgent import BaseAgent
 from src.logic.strategies.DirectStrategy import DirectStrategy
 from src.logic.strategies.ChainOfThoughtStrategy import ChainOfThoughtStrategy
 from src.logic.strategies.ReflexionStrategy import ReflexionStrategy
-
-
 
 
 class TestStrategies(unittest.IsolatedAsyncioTestCase):
@@ -28,7 +27,9 @@ class TestStrategies(unittest.IsolatedAsyncioTestCase):
         self.agent._config.retry_count = 0
 
         # Mock quality check to always pass
-        self.agent._score_response_quality = MagicMock(return_value=MagicMock(value=100))  # High value
+        self.agent._score_response_quality = MagicMock(
+            return_value=MagicMock(value=100)
+        )  # High value
 
     def tearDown(self) -> None:
         if os.path.exists("test_file.txt"):
@@ -59,36 +60,20 @@ class TestStrategies(unittest.IsolatedAsyncioTestCase):
         # Check second call (Implementation)
         args2 = self.agent.run_subagent.call_args_list[1]
 
-
-
-
-
-
-
-
-
-
         self.assertIn("Based on the following reasoning", args2[0][1])
 
     async def test_reflexion_strategy(self) -> None:
         self.agent.set_strategy(ReflexionStrategy())
-
-
-
 
         # Mock run_subagent to return different values based on prompt
         async def side_effect(desc, prompt, content) -> str:
             if "Critique" in prompt:
                 return "Critique: Good but needs X"
             if "Revise" in prompt:
-
-
-
                 return "Revised Content"
             return "Draft Content"
 
         self.agent.run_subagent = AsyncMock(side_effect=side_effect)
-
 
         await self.agent.improve_content("Fix bugs")
 
@@ -96,8 +81,5 @@ class TestStrategies(unittest.IsolatedAsyncioTestCase):
         self.assertEqual(self.agent.run_subagent.call_count, 3)
 
 
-
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

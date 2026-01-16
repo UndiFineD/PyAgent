@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_dynamo\decorators.py
-# hypothesis_version: 6.150.1
-
-['F', '_P', '_R', '__', '_specialize_on', '_specialized_on', 'default', 'dont_skip_tracing', 'einops', 'einsum', 'guarded', 'nonexistent config', 'not implemented yet', 'pack', 'repeat', 'set_stance', 'skip_torchrec', 'unguarded', 'unpack', 'verbose', 'verify_correctness']

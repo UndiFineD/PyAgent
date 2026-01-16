@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -47,37 +47,45 @@ BMAD_AGENTS = [
     "Web Searcher",
     "Moderator",
     "Financial Advisor",
-    "Image Generator (2D/3D)"
+    "Image Generator (2D/3D)",
 ]
 
 # BMAD Methodology Tracks
 BMAD_TRACKS = {
     "Quick Flow": {
         "desc": "Bug fixes, small features (< 5 mins)",
-        "phases": ["Analysis", "Implementation", "Validation"]
+        "phases": ["Analysis", "Implementation", "Validation"],
     },
     "BMad Method": {
         "desc": "Products, platforms (PRD + Arch + UX, < 15 mins)",
-        "phases": ["Analysis", "Planning", "Solutioning", "Implementation", "Validation"]
+        "phases": [
+            "Analysis",
+            "Planning",
+            "Solutioning",
+            "Implementation",
+            "Validation",
+        ],
     },
     "Enterprise": {
         "desc": "Compliance, scale (Full governance suite, < 30 mins)",
-        "phases": ["Governance", "Analysis", "Planning", "Solutioning", "Implementation", "Quality", "Compliance"]
+        "phases": [
+            "Governance",
+            "Analysis",
+            "Planning",
+            "Solutioning",
+            "Implementation",
+            "Quality",
+            "Compliance",
+        ],
     },
     "Vibe Coding (2025)": {
         "desc": "Research-driven AI workflow (Research/Define/Design/Prep/Build)",
-        "phases": ["Research", "Define", "Design", "Agent Prep", "Build", "Validation"]
-    }
+        "phases": ["Research", "Define", "Design", "Agent Prep", "Build", "Validation"],
+    },
 }
 
 # BMAD Methodology Phases
-BMAD_PHASES = [
-    "Analysis",
-    "Planning",
-    "Solutioning",
-    "Implementation",
-    "Validation"
-]
+BMAD_PHASES = ["Analysis", "Planning", "Solutioning", "Implementation", "Validation"]
 
 # Agent Specific Instructions (Placeholders for BMAD instructions)
 DEFAULT_INSTRUCTIONS = {
@@ -88,7 +96,7 @@ DEFAULT_INSTRUCTIONS = {
     "Test Architect": "Act as a Quality Lead. Design comprehensive test suites including unit, integration, and end-to-end tests. Focus on boundary cases, regression reliability, and RAG evaluation metrics.",
     "Security Auditor": "Act as a Security Expert. Identify potential vulnerabilities, perform dependency scans, and ensure data privacy compliance. Follow OWASP Best Practices and LLM-ops security standards.",
     "Tech Writer": "Act as a Lead Technical Writer. Produce clear, concise documentation for APIs, users, and internal developers. Use structured formats like Markdown and ensure knowledge graph consistency.",
-    "Researcher": "Act as a Market/Tech Researcher. Scan for current trends, competitive analysis, and emerging technologies using available search tools. Synthesize findings into actionable technical reports for 2025."
+    "Researcher": "Act as a Market/Tech Researcher. Scan for current trends, competitive analysis, and emerging technologies using available search tools. Synthesize findings into actionable technical reports for 2025.",
 }
 
 # Model Token Limits (Context Window Management)
@@ -96,7 +104,7 @@ MODEL_TOKENS = {
     "gpt-4o": 128000,
     "gpt-3.5-turbo": 16385,
     "claude-3-5-sonnet": 200000,
-    "default": 16385
+    "default": 16385,
 }
 
 # Default Target File Extensions

@@ -25,7 +25,7 @@ No I/O or side effects.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import ast
 from src.core.base.types.DependencyType import DependencyType
 from src.core.base.types.DependencyNode import DependencyNode
@@ -33,13 +33,13 @@ from src.core.base.types.DependencyNode import DependencyNode
 __version__ = VERSION
 
 
-
-
 class DependencyCore:
     """Pure logic core for dependency analysis."""
 
     @staticmethod
-    def parse_dependencies(content: str, file_path: str = "") -> dict[str, DependencyNode]:
+    def parse_dependencies(
+        content: str, file_path: str = ""
+    ) -> dict[str, DependencyNode]:
         """Parses imports and class inheritance from code content."""
         nodes: dict[str, DependencyNode] = {}
 
@@ -52,19 +52,30 @@ class DependencyCore:
         for node in ast.walk(tree):
             if isinstance(node, ast.Import):
                 for alias in node.names:
-                    DependencyCore._add_to_nodes(nodes, alias.name, DependencyType.IMPORT, file_path)
+                    DependencyCore._add_to_nodes(
+                        nodes, alias.name, DependencyType.IMPORT, file_path
+                    )
             elif isinstance(node, ast.ImportFrom):
                 module = node.module or ""
-                DependencyCore._add_to_nodes(nodes, module, DependencyType.IMPORT, file_path)
+                DependencyCore._add_to_nodes(
+                    nodes, module, DependencyType.IMPORT, file_path
+                )
             elif isinstance(node, ast.ClassDef):
                 for base in node.bases:
                     if isinstance(base, ast.Name):
-                        DependencyCore._add_to_nodes(nodes, base.id, DependencyType.CLASS_INHERITANCE, file_path)
+                        DependencyCore._add_to_nodes(
+                            nodes, base.id, DependencyType.CLASS_INHERITANCE, file_path
+                        )
 
         return nodes
 
     @staticmethod
-    def _add_to_nodes(nodes: dict[str, DependencyNode], name: str, dep_type: DependencyType, file_path: str) -> None:
+    def _add_to_nodes(
+        nodes: dict[str, DependencyNode],
+        name: str,
+        dep_type: DependencyType,
+        file_path: str,
+    ) -> None:
         if name not in nodes:
             nodes[name] = DependencyNode(name=name, type=dep_type, file_path=file_path)
         else:
@@ -72,6 +83,8 @@ class DependencyCore:
                 nodes[name].depended_by.append(file_path)
 
     @staticmethod
-    def filter_external_deps(nodes: dict[str, DependencyNode], stdlib_list: set[str]) -> list[str]:
+    def filter_external_deps(
+        nodes: dict[str, DependencyNode], stdlib_list: set[str]
+    ) -> list[str]:
         """Filters nodes to return only non-standard library dependencies."""
         return [name for name in nodes if name not in stdlib_list]

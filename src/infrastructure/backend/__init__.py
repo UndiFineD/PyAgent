@@ -20,7 +20,7 @@
 """Auto-generated module exports."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
+from src.core.base.Version import VERSION as VERSION
 from .ABTestVariant import ABTestVariant as ABTestVariant
 from .ABTester import ABTester as ABTester
 from .AuditLogger import AuditLogger as AuditLogger
@@ -58,7 +58,9 @@ from .RequestThrottler import RequestThrottler as RequestThrottler
 from .RequestTracer import RequestTracer as RequestTracer
 from .ResponseTransform import ResponseTransform as ResponseTransform
 from .ResponseTransformerBase import ResponseTransformerBase as ResponseTransformerBase
-from .StripWhitespaceTransformer import StripWhitespaceTransformer as StripWhitespaceTransformer
+from .StripWhitespaceTransformer import (
+    StripWhitespaceTransformer as StripWhitespaceTransformer,
+)
 from .SubagentRunner import SubagentRunner as SubagentRunner
 from .TTLCache import TTLCache as TTLCache
 from .UsageQuota import UsageQuota as UsageQuota

@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\dev\test_utils\MockAIBackend.py
-# hypothesis_version: 6.150.1
-
-[1000, 'Mock error', 'Mock response', 'Mock timeout', 'Rate limited', 'mock', 'mock-model']

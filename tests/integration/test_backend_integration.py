@@ -11,21 +11,19 @@ import os
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
     class agent_sys_path:
         def __enter__(self) -> Self:
-
             return self
-
-
-
-
-
-
 
         def __exit__(self, *args) -> None:
             sys.path.remove(str(AGENT_DIR))
@@ -78,7 +76,9 @@ class TestPhase6Integration:
         is_healthy = monitor.is_healthy(backend.name)
         assert is_healthy is not None  # Either True or False
 
-    def test_tracer_with_audit_logger(self, agent_backend_module: Any, tmp_path) -> None:
+    def test_tracer_with_audit_logger(
+        self, agent_backend_module: Any, tmp_path
+    ) -> None:
         """Test tracer with audit logger."""
         RequestTracer = agent_backend_module.RequestTracer
         AuditLogger = agent_backend_module.AuditLogger
@@ -129,7 +129,7 @@ class TestGitHubModelsIntegration(unittest.TestCase):
         auth_token = os.environ.get("GITHUB_TOKEN", "ghp_DUMMY_TOKEN_FOR_TESTS")
         headers: Dict[str, str] = {
             "Authorization": f"Bearer {auth_token}",
-            "Content-Type": "application / json"
+            "Content-Type": "application / json",
         }
 
         self.assertIn("Authorization", headers)
@@ -138,13 +138,11 @@ class TestGitHubModelsIntegration(unittest.TestCase):
     def test_github_models_request_payload_format(self) -> None:
         """Test request payload format for GitHub Models."""
         payload = {
-            "messages": [
-                {"role": "user", "content": "Hello, how are you?"}
-            ],
+            "messages": [{"role": "user", "content": "Hello, how are you?"}],
             "temperature": 0.7,
             "top_p": 1.0,
             "max_tokens": 2048,
-            "stream": False
+            "stream": False,
         }
 
         self.assertIn("messages", payload)
@@ -163,16 +161,12 @@ class TestGitHubModelsIntegration(unittest.TestCase):
                     "index": 0,
                     "message": {
                         "role": "assistant",
-                        "content": "I'm doing well, thank you for asking!"
+                        "content": "I'm doing well, thank you for asking!",
                     },
-                    "finish_reason": "stop"
+                    "finish_reason": "stop",
                 }
             ],
-            "usage": {
-                "prompt_tokens": 10,
-                "completion_tokens": 15,
-                "total_tokens": 25
-            }
+            "usage": {"prompt_tokens": 10, "completion_tokens": 15, "total_tokens": 25},
         }
 
         # Extract response content
@@ -186,7 +180,7 @@ class TestGitHubModelsIntegration(unittest.TestCase):
             '{"choices":[{"delta":{"content":"Hello"}}]}\n',
             '{"choices":[{"delta":{"content":" "}}]}\n',
             '{"choices":[{"delta":{"content":"world"}}]}\n',
-            '{"choices":[{"delta":{"content":"!"}}]}\n'
+            '{"choices":[{"delta":{"content":"!"}}]}\n',
         ]
 
         # Aggregate stream chunks
@@ -204,7 +198,7 @@ class TestGitHubModelsIntegration(unittest.TestCase):
             "error": {
                 "code": "401",
                 "message": "Unauthorized",
-                "details": "Invalid authentication token"
+                "details": "Invalid authentication token",
             }
         }
 
@@ -215,7 +209,7 @@ class TestGitHubModelsIntegration(unittest.TestCase):
         rate_limit_headers: Dict[str, str] = {
             "x-ratelimit-limit": "100",
             "x-ratelimit-remaining": "0",
-            "x-ratelimit-reset": "1234567890"
+            "x-ratelimit-reset": "1234567890",
         }
 
         remaining = int(rate_limit_headers["x-ratelimit-remaining"])
@@ -226,7 +220,7 @@ class TestGitHubModelsIntegration(unittest.TestCase):
         usage_info: Dict[str, int] = {
             "prompt_tokens": 42,
             "completion_tokens": 135,
-            "total_tokens": 177
+            "total_tokens": 177,
         }
 
         total: int = usage_info["total_tokens"]
@@ -244,7 +238,7 @@ class TestGitHubModelsIntegration(unittest.TestCase):
             return {
                 "request_id": request_id,
                 "status": "success",
-                "response": f"Response to request {request_id}"
+                "response": f"Response to request {request_id}",
             }
 
         with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:

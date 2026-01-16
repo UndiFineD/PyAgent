@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\PerformanceAgent.py
-# hypothesis_version: 6.150.1
-
-['\\+=\\s*.*?for\\s+', 'medium', 'time\\.sleep\\(\\d+\\)']

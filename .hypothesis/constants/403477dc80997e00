@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\fx\experimental\recording.py
-# hypothesis_version: 6.150.1
-
-['%s-> %s', '%scall %s(*%r, **%r)', ', ', 'FakeTensorMeta', 'NotEqualError', 'ShapeEnvEvent', 'args', 'evaluate_expr', 'field set mismatch:', 'found unique fields:', 'fx_node', 'name_to_node', 'self', 'trace_shape_events', '{', '}']

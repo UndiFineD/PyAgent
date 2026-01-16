@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\orchestration\SwarmPruningOrchestrator.py
-# hypothesis_version: 6.150.1
-
-[0.25, 0.99, 1.0, 300, 500, 1200, '30%', 'AgentA', 'AgentB', 'AgentC', '__main__', 'active_synapses', 'neural_pruning', 'pruned_count', 'pruned_nodes', 'status', 'success', 'target_success_rate', 'total_cycles', 'total_pruned_nodes']

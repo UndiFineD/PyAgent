@@ -21,18 +21,13 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.models import ValidationRule
 from pathlib import Path
 from typing import Any
 import fnmatch
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class ValidationRuleManager:
@@ -91,19 +86,23 @@ class ValidationRuleManager:
             if fnmatch.fnmatch(file_path.name, rule.file_pattern):
                 try:
                     passed = rule.validator(content, file_path)
-                    results.append({
-                        "rule": rule.name,
-                        "passed": passed,
-                        "severity": rule.severity,
-                        "message": None if passed else rule.error_message,
-                    })
+                    results.append(
+                        {
+                            "rule": rule.name,
+                            "passed": passed,
+                            "severity": rule.severity,
+                            "message": None if passed else rule.error_message,
+                        }
+                    )
                 except Exception as e:
-                    results.append({
-                        "rule": rule.name,
-                        "passed": False,
-                        "severity": "error",
-                        "message": f"Validation error: {e}",
-                    })
+                    results.append(
+                        {
+                            "rule": rule.name,
+                            "passed": False,
+                            "severity": "error",
+                            "message": f"Validation error: {e}",
+                        }
+                    )
 
         return results
 
@@ -117,6 +116,7 @@ class ValidationRuleManager:
             List of applicable rules.
         """
         return [
-            rule for rule in self._rules.values()
+            rule
+            for rule in self._rules.values()
             if fnmatch.fnmatch(file_path.name, rule.file_pattern)
         ]

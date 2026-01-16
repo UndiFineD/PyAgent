@@ -21,7 +21,7 @@
 """Test generation and case minimization."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import ast
 from typing import Any
 from collections.abc import Callable
@@ -30,13 +30,9 @@ from .models import GeneratedTest
 __version__ = VERSION
 
 
-
-
-
-
-
 class TestGenerator:
     """Generate tests from specifications."""
+
     __test__ = False
 
     def __init__(self) -> None:
@@ -53,7 +49,7 @@ class TestGenerator:
         specification: str,
         function_name: str,
         input_type: str = "Any",
-        output_type: str = "Any"
+        output_type: str = "Any",
     ) -> GeneratedTest:
         """Generate test from specification."""
         test_name = f"test_{function_name}_{len(self.generated)}"
@@ -80,15 +76,13 @@ class TestGenerator:
             name=test_name,
             specification=specification,
             generated_code=code,
-            confidence=0.7
+            confidence=0.7,
         )
         self.generated.append(generated)
         return generated
 
     def generate_parametrized(
-        self,
-        function_name: str,
-        test_cases: list[tuple[Any, Any]]
+        self, function_name: str, test_cases: list[tuple[Any, Any]]
     ) -> GeneratedTest:
         """Generate parametrized test."""
         test_name = f"test_{function_name}_parametrized"
@@ -105,7 +99,7 @@ class TestGenerator:
             name=test_name,
             specification=f"Parametrized test for {function_name}",
             generated_code=code,
-            confidence=0.8
+            confidence=0.8,
         )
         self.generated.append(generated)
         return generated
@@ -126,9 +120,7 @@ class TestGenerator:
         return "\n\n".join(t.generated_code for t in self.generated)
 
     def generate_red_team_tests(
-        self,
-        function_name: str,
-        implementation_code: str
+        self, function_name: str, implementation_code: str
     ) -> GeneratedTest:
         """SCA Pattern: Generate tests specifically designed to break the implementation."""
         test_name = f"test_{function_name}_red_team"
@@ -149,42 +141,23 @@ class TestGenerator:
             f'    """SCA Red-Team: Targeting edge cases for {function_name}"""\n'
             f"    # This test verifies that the implementation handles extreme inputs gracefully\n"
             f"    try:\n"
-
-
-
-
-
-
-
-
-
-
             f"        result = {function_name}(adversarial_input)\n"
             f"        # If it returns, we check it doesn't crash internally or leak memory\n"
             f"        assert True\n"
-
-
-
             f"    except (ValueError, TypeError, KeyError):\n"
             f"        # Expected graceful failures are acceptable\n"
             f"        pytest.skip('Accepted domain error')\n"
             f"    except Exception as e:\n"
-
             f"        # Unhandled exceptions are red-team victories\n"
             f"        pytest.fail(f'Red-Team Win: Unhandled {{type(e).__name__}}: {{e}}')\n"
         )
 
         generated = GeneratedTest(
-
-
             name=test_name,
             specification=f"Red-Team adversarial tests for {function_name}",
             generated_code=code,
-            confidence=0.9
+            confidence=0.9,
         )
-
-
-
 
         self.generated.append(generated)
         return generated
@@ -192,38 +165,21 @@ class TestGenerator:
         return "\n\n".join(g.generated_code for g in validated)
 
 
-
-
-
 class TestCaseMinimizer:
     """Minimize test cases for debugging."""
+
     __test__ = False
 
     def __init__(self) -> None:
         """Initialize test case minimizer."""
         self.history: list[dict[str, Any]] = []
 
-    def minimize_string(
-        self,
-
-
-
-
-
-
-
-
-
-
-        input_str: str,
-        test_fn: Callable[[str], bool]
-    ) -> str:
+    def minimize_string(self, input_str: str, test_fn: Callable[[str], bool]) -> str:
         """Minimize a string input using delta debugging."""
         current = input_str
         while len(current) > 1:
             mid = len(current) // 2
             left = current[:mid]
-
 
             right = current[mid:]
             if test_fn(left):
@@ -234,38 +190,28 @@ class TestCaseMinimizer:
                 break
 
         reduction = 1 - len(current) / len(input_str) if input_str else 0
-        self.history.append({
-            "original": input_str,
-            "minimized": current,
-
-
-
-            "reduction": reduction
-        })
+        self.history.append(
+            {"original": input_str, "minimized": current, "reduction": reduction}
+        )
         return current
 
     def minimize_list(
-        self,
-        input_list: list[Any],
-        test_fn: Callable[[list[Any]], bool]
+        self, input_list: list[Any], test_fn: Callable[[list[Any]], bool]
     ) -> list[Any]:
         """Minimize a list input by removing elements."""
         current = input_list.copy()
         i = 0
         while i < len(current):
-            candidate = current[:i] + current[i + 1:]
-
-
+            candidate = current[:i] + current[i + 1 :]
 
             if test_fn(candidate):
                 current = candidate
             else:
                 i += 1
 
-        self.history.append({
-            "original_length": len(input_list),
-            "minimized_length": len(current)
-        })
+        self.history.append(
+            {"original_length": len(input_list), "minimized_length": len(current)}
+        )
         return current
 
     def get_minimization_stats(self) -> dict[str, Any]:
@@ -273,34 +219,32 @@ class TestCaseMinimizer:
         if not self.history:
             return {"total": 0}
 
-
-
-
-
         reductions = [h.get("reduction", 0) for h in self.history if "reduction" in h]
         avg_reduction = sum(reductions) / len(reductions) if reductions else 0
 
         return {
             "total_minimizations": len(self.history),
             "average_reduction": avg_reduction,
-            "total": len(self.history)
+            "total": len(self.history),
         }
-
-
-
 
 
 class TestDocGenerator:
     """Generates documentation from tests."""
+
     __test__ = False
 
     def __init__(self) -> None:
         """Initialize doc generator."""
         self.tests: list[dict[str, Any]] = []
 
-    def add_test(self, name: str, module: str = "unknown", docstring: str = "", code: str = "") -> None:
+    def add_test(
+        self, name: str, module: str = "unknown", docstring: str = "", code: str = ""
+    ) -> None:
         """Add test for documentation."""
-        self.tests.append({"name": name, "module": module, "docstring": docstring, "code": code})
+        self.tests.append(
+            {"name": name, "module": module, "docstring": docstring, "code": code}
+        )
 
     def generate(self) -> str:
         """Generate a human-readable documentation summary."""
@@ -320,7 +264,9 @@ class TestDocGenerator:
         """Extract examples from test code."""
         return [{"example": test_code}] if test_code else []
 
-    def group_by_module(self, tests: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    def group_by_module(
+        self, tests: list[dict[str, Any]]
+    ) -> dict[str, list[dict[str, Any]]]:
         """Group tests by module."""
         result: dict[str, list[dict[str, Any]]] = {}
         for test in tests:

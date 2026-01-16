@@ -1,12 +1,6 @@
-
 import logging
 import time
 from src.core.base.core.AuthCore import AuthCore
-
-
-
-
-
 
 
 class AuthManager:

@@ -19,7 +19,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 import time
@@ -27,11 +27,9 @@ import hashlib
 import os
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class EternalAuditAgent(BaseAgent):
@@ -42,9 +40,16 @@ class EternalAuditAgent(BaseAgent):
 
     # User requirement: Only record errors, failure, mistakes in general logs
     CRITICAL_ACTIONS = [
-        "error", "failure", "mistake", "security_violation",
-        "vulnerability_found", "exception", "unauthorized_access",
-        "quota_exceeded", "blocklist_hit", "safety_violation"
+        "error",
+        "failure",
+        "mistake",
+        "security_violation",
+        "vulnerability_found",
+        "exception",
+        "unauthorized_access",
+        "quota_exceeded",
+        "blocklist_hit",
+        "safety_violation",
     ]
 
     def __init__(self, file_path: str, selective_logging: bool = True) -> None:
@@ -60,9 +65,11 @@ class EternalAuditAgent(BaseAgent):
         """Finds the last hash in the audit trail to maintain the chain."""
         if os.path.exists(self.current_shard):
             try:
-                with open(self.current_shard, 'rb') as f:
-                    f.seek(-min(1024, os.path.getsize(self.current_shard)), 2)  # Go to end
-                    last_line = f.readlines()[-1].decode('utf-8')
+                with open(self.current_shard, "rb") as f:
+                    f.seek(
+                        -min(1024, os.path.getsize(self.current_shard)), 2
+                    )  # Go to end
+                    last_line = f.readlines()[-1].decode("utf-8")
                     last_entry = json.loads(last_line)
                     self.last_hash = last_entry.get("hash", self.last_hash)
             except Exception:
@@ -74,8 +81,9 @@ class EternalAuditAgent(BaseAgent):
         Records an event in the verifiable audit trail.
         """
         # Selective pruning: check if action or details contain critical keywords
-        is_critical = any(kw in action.lower() for kw in self.CRITICAL_ACTIONS) or \
-                      details.get("severity") in ["HIGH", "CRITICAL"]
+        is_critical = any(
+            kw in action.lower() for kw in self.CRITICAL_ACTIONS
+        ) or details.get("severity") in ["HIGH", "CRITICAL"]
 
         if self.selective_logging and not is_critical:
             return "Event skipped (routine/success)."
@@ -86,21 +94,27 @@ class EternalAuditAgent(BaseAgent):
             "agent": agent_name,
             "action": action,
             "details": details,
-            "previous_hash": self.last_hash
+            "previous_hash": self.last_hash,
         }
 
         # Generate hash for current entry
         payload_str = json.dumps(payload, sort_keys=True)
-        current_hash = hashlib.sha256(payload_str.encode('utf-8')).hexdigest()
+        current_hash = hashlib.sha256(payload_str.encode("utf-8")).hexdigest()
         payload["hash"] = current_hash
         self.last_hash = current_hash
 
         # Write to append-only log
-        with open(self.current_shard, 'a', encoding='utf-8') as f:
+        with open(self.current_shard, "a", encoding="utf-8") as f:
             f.write(json.dumps(payload) + "\n")
 
         # Phase 108: Intelligence Recording
-        self._record(action, json.dumps(details), provider="EternalAudit", model="AuditTrail", meta={"agent": agent_name})
+        self._record(
+            action,
+            json.dumps(details),
+            provider="EternalAudit",
+            model="AuditTrail",
+            meta={"agent": agent_name},
+        )
 
         logging.info(f"AUDIT LOG: {agent_name} -> {action} [{current_hash[:8]}]")
         return f"Event logged and verified. Hash: {current_hash[:16]}"
@@ -117,7 +131,7 @@ class EternalAuditAgent(BaseAgent):
         expected_prev_hash = "0" * 64
         count = 0
 
-        with open(self.current_shard, encoding='utf-8') as f:
+        with open(self.current_shard, encoding="utf-8") as f:
             for line in f:
                 count += 1
                 entry = json.loads(line)
@@ -125,11 +139,15 @@ class EternalAuditAgent(BaseAgent):
 
                 # Check previous hash chain
                 if entry.get("previous_hash") != expected_prev_hash:
-                    errors.append(f"Line {count}: Chain broken. Expected {expected_prev_hash}, found {entry.get('previous_hash')}")
+                    errors.append(
+                        f"Line {count}: Chain broken. Expected {expected_prev_hash}, found {entry.get('previous_hash')}"
+                    )
 
                 # Verify content hash
                 entry_str = json.dumps(entry, sort_keys=True)
-                recalculated_hash = hashlib.sha256(entry_str.encode('utf-8')).hexdigest()
+                recalculated_hash = hashlib.sha256(
+                    entry_str.encode("utf-8")
+                ).hexdigest()
                 if recalculated_hash != actual_hash:
                     errors.append(f"Line {count}: Hash mismatch.")
 
@@ -138,5 +156,5 @@ class EternalAuditAgent(BaseAgent):
         return {
             "status": "success" if not errors else "tampered",
             "entries_processed": count,
-            "errors": errors
+            "errors": errors,
         }

@@ -21,20 +21,15 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .SystemHealthStatus import SystemHealthStatus
 from .SystemState import SystemState
 import logging
 import threading
-from src.observability.stats.analysis import FleetMetrics
+from src.observability.stats.Analysis import FleetMetrics
 
 __version__ = VERSION
 # from src.observability.stats.core.StabilityCore import StabilityCore, FleetMetrics
-
-
-
-
-
 
 
 class SystemHealthMonitor:
@@ -48,6 +43,7 @@ class SystemHealthMonitor:
         window_size: int = 100,
     ) -> None:
         from src.observability.stats.core.StabilityCore import StabilityCore
+
         self.health_threshold = health_threshold
         self.window_size = window_size
         self.core = StabilityCore()
@@ -67,7 +63,7 @@ class SystemHealthMonitor:
             if backend not in self._history:
                 self._history[backend] = []
             self._history[backend].append((True, latency_ms))
-            self._history[backend] = self._history[backend][-self.window_size:]
+            self._history[backend] = self._history[backend][-self.window_size :]
             self._update_status(backend)
 
     def record_failure(self, backend: str, latency_ms: int = 0) -> None:
@@ -81,7 +77,7 @@ class SystemHealthMonitor:
             if backend not in self._history:
                 self._history[backend] = []
             self._history[backend].append((False, latency_ms))
-            self._history[backend] = self._history[backend][-self.window_size:]
+            self._history[backend] = self._history[backend][-self.window_size :]
             self._update_status(backend)
 
     def _update_status(self, backend: str) -> None:
@@ -176,20 +172,24 @@ class SystemHealthMonitor:
                 total_requests += len(hist)
                 latencies.extend([lat for _, lat in hist])
 
-            error_rate = 1.0 - (total_success / total_requests if total_requests > 0 else 0)
+            error_rate = 1.0 - (
+                total_success / total_requests if total_requests > 0 else 0
+            )
             avg_latency = sum(latencies) / len(latencies) if latencies else 0
 
             metrics = FleetMetrics(
-                avg_error_rate = error_rate,
-                total_token_out = 0,  # simulated for now
-                active_agent_count = len(self._history),
-                latency_p95 = avg_latency  # rough estimate
+                avg_error_rate=error_rate,
+                total_token_out=0,  # simulated for now
+                active_agent_count=len(self._history),
+                latency_p95=avg_latency,  # rough estimate
             )
 
             score = self.core.calculate_stability_score(metrics, anomalies)
             self.stability_history.append(score)
 
             if self.core.is_in_stasis(self.stability_history):
-                logging.warning("SystemHealth: Stable Stasis detected (Minimal change).")
+                logging.warning(
+                    "SystemHealth: Stable Stasis detected (Minimal change)."
+                )
 
             return score

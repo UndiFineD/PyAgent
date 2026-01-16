@@ -21,19 +21,15 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
-
-
-
 class GroupingStrategy(Enum):
     """Strategies for entry grouping."""
+
     BY_DATE = "by_date"
     BY_VERSION = "by_version"
     BY_CATEGORY = "by_category"

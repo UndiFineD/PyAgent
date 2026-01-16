@@ -21,14 +21,12 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ParameterizedTestCase import ParameterizedTestCase
 from typing import Any
 from collections.abc import Callable
 
 __version__ = VERSION
-
-
 
 
 class ParameterizedTestGenerator:
@@ -87,6 +85,7 @@ class ParameterizedTestGenerator:
         if not self._parameters:
             return []
         import itertools
+
         keys = list(self._parameters.keys())
         values = [self._parameters[k] for k in keys]
         cases: list[ParameterizedTestCase] = []

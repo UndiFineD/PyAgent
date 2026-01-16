@@ -19,63 +19,41 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import logging
 from pathlib import Path
 from typing import Any
 from collections.abc import Callable
-from src.core.base.models import InputType, MultimodalInput, SerializationConfig, SerializationFormat
+from src.core.base.models import (
+    InputType,
+    MultimodalInput,
+    SerializationConfig,
+    SerializationFormat,
+)
 
 __version__ = VERSION
 
 
-
-
-
 class ResponsePostProcessor:
-
     """Manages post-processing hooks for agent responses."""
 
     def __init__(self) -> None:
         self.hooks: list[tuple[Callable[[str], str], int]] = []
 
-
-
-
-
-
-
-
-
-
     def register(self, hook: Callable[[str], str], priority: int = 0) -> None:
-
-
-
-
-
-
-
-
-
         self.hooks.append((hook, priority))
 
-
     def process(self, text: str) -> str:
-
         sorted_hooks = sorted(self.hooks, key=lambda x: x[1], reverse=True)
         for hook, _ in sorted_hooks:
-
-
-
-
             text = hook(text)
         return text
 
 
 class MultimodalProcessor:
     """Processor for multimodal inputs."""
+
     def __init__(self) -> None:
         self.inputs: list[MultimodalInput] = []
         self.processed: str = ""
@@ -84,21 +62,16 @@ class MultimodalProcessor:
     def add_input(self, input_data: MultimodalInput) -> None:
         self.inputs.append(input_data)
 
-
-
-
-
     def add_text(self, text: str) -> None:
         self.add_input(MultimodalInput(InputType.TEXT, text))
-
-
 
     def add_image(self, data: str, mime_type: str = "image/png") -> None:
         self.add_input(MultimodalInput(InputType.IMAGE, data, mime_type))
 
-
     def add_code(self, code: str, language: str = "python") -> None:
-        self.add_input(MultimodalInput(InputType.CODE, code, metadata={"language": language}))
+        self.add_input(
+            MultimodalInput(InputType.CODE, code, metadata={"language": language})
+        )
 
     def build_prompt(self) -> str:
         parts: list[str] = []
@@ -115,27 +88,37 @@ class MultimodalProcessor:
         self.processed = "\\n\\n".join(parts)
         return self.processed
 
-
     def get_api_messages(self) -> list[dict[str, Any]]:
         messages: list[dict[str, Any]] = []
         for inp in self.inputs:
             if inp.input_type == InputType.TEXT:
                 messages.append({"type": "text", "text": inp.content})
             elif inp.input_type == InputType.IMAGE:
-                messages.append({"type": "image_url", "image_url": {"url": f"data:{inp.mime_type};base64,{inp.content}"}})
+                messages.append(
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": f"data:{inp.mime_type};base64,{inp.content}"
+                        },
+                    }
+                )
             elif inp.input_type == InputType.CODE:
-                messages.append({"type": "text", "text": f"```{inp.metadata.get('language', '')}\\n{inp.content}\\n```"})
+                messages.append(
+                    {
+                        "type": "text",
+                        "text": f"```{inp.metadata.get('language', '')}\\n{inp.content}\\n```",
+                    }
+                )
         return messages
-
 
     def clear(self) -> None:
         self.inputs.clear()
         self.processed = ""
 
 
-
 class SerializationManager:
     """Manager for custom serialization formats (Binary/JSON)."""
+
     def __init__(self, config: SerializationConfig | None = None) -> None:
         self.config = config or SerializationConfig()
 
@@ -145,10 +128,12 @@ class SerializationManager:
             result = json.dumps(data, indent=2).encode("utf-8")
         elif self.config.format == SerializationFormat.PICKLE:
             import pickle
+
             result = pickle.dumps(data)
         elif self.config.format == SerializationFormat.CBOR:
             try:
                 import cbor2
+
                 result = cbor2.dumps(data)
             except ImportError:
                 logging.warning("cbor2 not installed. Falling back to JSON.")
@@ -158,6 +143,7 @@ class SerializationManager:
 
         if self.config.compression:
             import zlib
+
             result = zlib.compress(result)
         return result
 
@@ -165,23 +151,28 @@ class SerializationManager:
         """Deserializes data using the configured format."""
         if self.config.compression:
             import zlib
+
             data = zlib.decompress(data)
 
         if self.config.format == SerializationFormat.JSON:
             return json.loads(data.decode("utf-8"))
         elif self.config.format == SerializationFormat.PICKLE:
             import pickle
+
             return pickle.loads(data)
         elif self.config.format == SerializationFormat.CBOR:
             try:
                 import cbor2
+
                 return cbor2.loads(data)
             except (ImportError, ValueError):
                 # Fallback to JSON if CBOR fails or is missing
                 try:
                     return json.loads(data.decode("utf-8"))
                 except Exception:
-                    raise ValueError("Deserialization failed for CBOR and JSON fallback.")
+                    raise ValueError(
+                        "Deserialization failed for CBOR and JSON fallback."
+                    )
         return json.loads(data.decode("utf-8"))
 
     def save_to_file(self, data: Any, path: Path) -> None:

@@ -21,16 +21,11 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ResponseTransformerBase import ResponseTransformerBase
 import re
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class ExtractCodeTransformer(ResponseTransformerBase):

@@ -18,13 +18,11 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import time
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class ProcessSynthesizerAgent:
@@ -32,6 +30,7 @@ class ProcessSynthesizerAgent:
     Dynamically assembles and optimizes complex multi-step reasoning workflows
     based on real-time task constraints and agent availability.
     """
+
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
         self.active_workflows: dict[str, Any] = {}
@@ -44,12 +43,12 @@ class ProcessSynthesizerAgent:
         steps = [
             {"step": 1, "agent": "ReasoningAgent", "action": "analyze_requirements"},
             {"step": 2, "agent": "CoderAgent", "action": "implement_base"},
-            {"step": 3, "agent": "ReviewAgent", "action": "validate_logic"}
+            {"step": 3, "agent": "ReviewAgent", "action": "validate_logic"},
         ]
         self.active_workflows[workflow_id] = {
             "goal": goal,
             "steps": steps,
-            "status": "active"
+            "status": "active",
         }
         return {"workflow_id": workflow_id, "estimated_steps": len(steps)}
 
@@ -73,10 +72,10 @@ class ProcessSynthesizerAgent:
         """
         merged = "Combined Intelligence Output:\n"
         for i, output in enumerate(agent_outputs):
-            merged += f"[{i+1}] {output}\n"
+            merged += f"[{i + 1}] {output}\n"
 
         return {
             "synthesized_response": merged,
             "merger_protocol": "Fusion-v2",
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }

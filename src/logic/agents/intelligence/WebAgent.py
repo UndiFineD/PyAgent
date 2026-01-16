@@ -21,21 +21,19 @@
 """Agent specializing in autonomous web navigation and information extraction."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import requests
 import time
 from pathlib import Path
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 from src.logic.agents.development.SecurityGuardAgent import SecurityGuardAgent
 from src.core.base.ConnectivityManager import ConnectivityManager
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 from src.logic.agents.intelligence.WebCore import WebCore
 
 __version__ = VERSION
-
-
 
 
 class WebAgent(BaseAgent):
@@ -61,7 +59,9 @@ class WebAgent(BaseAgent):
         if self.recorder:
             try:
                 meta = {"phase": 116, "type": "web_fetch", "timestamp": time.time()}
-                self.recorder.record_interaction("web", url, "fetch_page_content", content[:1000], meta=meta)
+                self.recorder.record_interaction(
+                    "web", url, "fetch_page_content", content[:1000], meta=meta
+                )
             except Exception as e:
                 logging.error(f"WebAgent: Transcription error: {e}")
 
@@ -69,6 +69,7 @@ class WebAgent(BaseAgent):
     def fetch_page_content(self, url: str) -> str:
         """Fetches and simplifies content from a URL with safety scanning."""
         import urllib.parse
+
         domain = urllib.parse.urlparse(url).netloc
 
         if not self.connectivity.is_endpoint_available(domain):
@@ -82,7 +83,7 @@ class WebAgent(BaseAgent):
                 response = session.get(url, timeout=15, stream=True)
 
                 # Decompression bomb safeguard: check content length if available
-                content_length = response.headers.get('Content-Length')
+                content_length = response.headers.get("Content-Length")
                 if content_length and int(content_length) > 10 * 1024 * 1024:
                     # 10MB limit
                     return f"ERROR: Page content too large ({content_length} bytes). Aborting for safety."
@@ -98,7 +99,9 @@ class WebAgent(BaseAgent):
                 # Safety Scan
                 injections = self.security_guard.scan_for_injection(text)
                 if injections:
-                    logging.warning(f"WebAgent blocked content from {url} due to safety risks: {injections}")
+                    logging.warning(
+                        f"WebAgent blocked content from {url} due to safety risks: {injections}"
+                    )
                     return f"ERROR: Content from {url} was blocked for safety reasons: {', '.join(injections)}"
 
                 extracted = text[:5000]
@@ -115,7 +118,7 @@ class WebAgent(BaseAgent):
         # In a real implementation, this would call Google/DuckDuckGo/Serper
         return [
             f"https://github.com/search?q={query}",
-            f"https://en.wikipedia.org/wiki/{query.replace(' ', '_')}"
+            f"https://en.wikipedia.org/wiki/{query.replace(' ', '_')}",
         ]
 
     def improve_content(self, prompt: str) -> str:
@@ -123,6 +126,7 @@ class WebAgent(BaseAgent):
         if "fetch" in prompt.lower() or "read" in prompt.lower():
             # Basic parsing of URL from prompt
             import re
+
             urls = re.findall(r'https?://[^\s<>"]+|www\.[^\s<>"]+', prompt)
             if urls:
                 return self.fetch_page_content(urls[0])

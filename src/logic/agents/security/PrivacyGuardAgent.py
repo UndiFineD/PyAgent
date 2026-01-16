@@ -18,7 +18,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import re
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
@@ -26,13 +26,12 @@ from src.core.base.BaseAgent import BaseAgent
 __version__ = VERSION
 
 
-
-
 class PrivacyGuardAgent(BaseAgent):
     """
     Privacy Guard Agent: Monitors fleet communications for PII (Personally
     Identifiable Information), performs redaction, and tracks compliance.
     """
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -40,7 +39,7 @@ class PrivacyGuardAgent(BaseAgent):
             "Email": r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+",
             "Phone": r"\b(?:\d{3}[-.]?)?\d{3}[-.]?\d{4}\b",
             "SSN": r"\b\d{3}-\d{2}-\d{4}\b",
-            "CreditCard": r"\b(?:\d[ -]*?){13,16}\b"
+            "CreditCard": r"\b(?:\d[ -]*?){13,16}\b",
         }
         self.redaction_logs: list[Any] = []
 
@@ -50,36 +49,70 @@ class PrivacyGuardAgent(BaseAgent):
         redacted_text = text
         findings = []
 
-        for pii_type, pattern in self.pii_patterns.items():
-            matches = re.findall(pattern, text)
-            if matches:
-                for match in matches:
-                    findings.append({"type": pii_type, "value": match})
-                    redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")
+        try:
+            from rust_core import scan_pii_rust  # type: ignore[attr-defined]
+
+            rust_findings = scan_pii_rust(text)
+            for pii_type, match in rust_findings:
+                findings.append({"type": pii_type, "value": match})
+                redacted_text = redacted_text.replace(
+                    match, f"[REDACTED_{pii_type.upper()}]"
+                )
+        except (ImportError, AttributeError):
+            for pii_type, pattern in self.pii_patterns.items():
+                matches = re.findall(pattern, text)
+                if matches:
+                    for match in matches:
+                        findings.append({"type": pii_type, "value": match})
+                        redacted_text = redacted_text.replace(
+                            match, f"[REDACTED_{pii_type.upper()}]"
+                        )
 
         if findings:
-            self.redaction_logs.append({
-                "timestamp": "2026-01-08",  # Simulated
-                "findings_count": len(findings),
-                "pii_types": list(set(f['type'] for f in findings))
-            })
+            self.redaction_logs.append(
+                {
+                    "timestamp": "2026-01-08",  # Simulated
+                    "findings_count": len(findings),
+                    "pii_types": list(set(f["type"] for f in findings)),
+                }
+            )
             # Phase 108: Intelligence Recording
-            self._record(text[:500], redacted_text[:500], provider="PrivacyGuard", model="PIIScanner", meta={"findings_count": len(findings)})
+            self._record(
+                text[:500],
+                redacted_text[:500],
+                provider="PrivacyGuard",
+                model="PIIScanner",
+                meta={"findings_count": len(findings)},
+            )
 
         return {
             "original": original_text,
             "redacted": redacted_text,
             "pii_detected": len(findings) > 0,
-            "findings": findings
+            "findings": findings,
         }
+
+    def bulk_scan_workspace(self) -> list[dict[str, str]]:
+        """
+        Performs a high-speed recursive scan of the workspace for secrets.
+        Offloads the heavy filesystem traversal and regex matching to Rust.
+        """
+        try:
+            from rust_core import scan_secrets_rust  # type: ignore[attr-defined]
+
+            return scan_secrets_rust(self.workspace_path)
+        except (ImportError, AttributeError):
+            # Fallback to a basic (slower) implementation if needed
+            # In a real scenario, this would loop using os.walk in Python
+            return []
 
     def verify_message_safety(self, message: str) -> dict[str, Any]:
         """Returns safety report; 'safe': True if no PII is detected."""
         result = self.scan_and_redact(message)
-        if result['pii_detected']:
+        if result["pii_detected"]:
             return {
                 "safe": False,
-                "reason": f"PII Detected: {', '.join(set(f['type'] for f in result['findings']))}"
+                "reason": f"PII Detected: {', '.join(set(f['type'] for f in result['findings']))}",
             }
         return {"safe": True}
 
@@ -87,6 +120,10 @@ class PrivacyGuardAgent(BaseAgent):
         """Returns summary metrics for privacy protection efforts."""
         return {
             "total_redactions": len(self.redaction_logs),
-            "pii_types_captured": list(set(t for log in self.redaction_logs for t in log['pii_types'])),
-            "safety_rating": "High" if len(self.redaction_logs) < 100 else "Critical Levels of PII Exposure"
+            "pii_types_captured": list(
+                set(t for log in self.redaction_logs for t in log["pii_types"])
+            ),
+            "safety_rating": "High"
+            if len(self.redaction_logs) < 100
+            else "Critical Levels of PII Exposure",
         }

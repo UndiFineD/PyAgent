@@ -21,16 +21,11 @@
 """Dependency injection for tests."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from .models import TestDependency
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class DependencyInjector:
@@ -48,14 +43,14 @@ class DependencyInjector:
         dependency_type: str,
         implementation: str = "",
         mock_behavior: str = "",
-        scope: str = "function"
+        scope: str = "function",
     ) -> TestDependency:
         """Register a dependency."""
         dep = TestDependency(
             name=name,
             dependency_type=dependency_type,
             implementation=implementation,
-            mock_behavior=mock_behavior
+            mock_behavior=mock_behavior,
         )
         self.dependencies[name] = dep
         self._scopes[name] = scope

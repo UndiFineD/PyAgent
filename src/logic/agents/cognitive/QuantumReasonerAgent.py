@@ -19,16 +19,14 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class QuantumReasonerAgent(BaseAgent):
@@ -47,23 +45,33 @@ class QuantumReasonerAgent(BaseAgent):
         )
 
     @as_tool
-    def reason_with_superposition(self, task: str, branch_count: int = 3) -> dict[str, Any]:
+    def reason_with_superposition(
+        self, task: str, branch_count: int = 3
+    ) -> dict[str, Any]:
         """
         Generates multiple reasoning branches for a task and selects the best one.
         """
-        logging.info(f"QuantumReasoner: Exploring {branch_count} parallel states for task: {task}")
+        logging.info(
+            f"QuantumReasoner: Exploring {branch_count} parallel states for task: {task}"
+        )
 
         # 1. Enter Superposition (Generate branches with divergent personas)
-        personas = ["Conservative/Strict", "Creative/Divergent", "Empirical/Evidence-Based"]
+        personas = [
+            "Conservative/Strict",
+            "Creative/Divergent",
+            "Empirical/Evidence-Based",
+        ]
         branches = []
         for i in range(min(branch_count, len(personas))):
             branch_content = self._generate_reasoning_branch(task, personas[i])
-            branches.append({
-                "id": i,
-                "persona": personas[i],
-                "content": branch_content,
-                "amplitude": 0.5  # Initial neutral amplitude
-            })
+            branches.append(
+                {
+                    "id": i,
+                    "persona": personas[i],
+                    "content": branch_content,
+                    "amplitude": 0.5,  # Initial neutral amplitude
+                }
+            )
 
         # 2. Interference Pattern (Cross-evaluation)
         # Each branch reviews the others for logical consistency
@@ -75,14 +83,16 @@ class QuantumReasonerAgent(BaseAgent):
         # 3. Wave Function Collapse (Pick highest amplitude)
         collapsed_state = max(branches, key=lambda x: x["amplitude"])
 
-        logging.info(f"QuantumReasoner: Wave function collapsed to branch {collapsed_state['id']} ({collapsed_state['persona']})")
+        logging.info(
+            f"QuantumReasoner: Wave function collapsed to branch {collapsed_state['id']} ({collapsed_state['persona']})"
+        )
 
         return {
             "task": task,
             "collapsed_decision": collapsed_state["content"],
             "selected_persona": collapsed_state["persona"],
             "confidence": collapsed_state["amplitude"],
-            "all_branches": branches
+            "all_branches": branches,
         }
 
     def _generate_reasoning_branch(self, task: str, persona: str) -> str:
@@ -90,7 +100,9 @@ class QuantumReasonerAgent(BaseAgent):
         prompt = f"Persona: {persona}\nTask: {task}\nProvide your reasoning path for this task."
         return self.think(prompt)
 
-    def _calculate_interference(self, hypothesis: str, counter_arguments: list[str]) -> float:
+    def _calculate_interference(
+        self, hypothesis: str, counter_arguments: list[str]
+    ) -> float:
         """Calculates 'interference' (logical consistency score) between reasoning paths."""
         prompt = (
             f"Hypothesis: {hypothesis}\n"

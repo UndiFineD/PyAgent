@@ -21,15 +21,15 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.utils.SearchAlgorithm import SearchAlgorithm
-from src.logic.agents.cognitive.context.models.SemanticSearchResult import SemanticSearchResult
+from src.logic.agents.cognitive.context.models.SemanticSearchResult import (
+    SemanticSearchResult,
+)
 from typing import Any
 import logging
 
 __version__ = VERSION
-
-
 
 
 class SemanticSearchEngine:
@@ -65,7 +65,9 @@ class SemanticSearchEngine:
                 from chromadb.utils import embedding_functions
 
                 if self.persist_directory:
-                    self._client = chromadb.PersistentClient(path=self.persist_directory)
+                    self._client = chromadb.PersistentClient(
+                        path=self.persist_directory
+                    )
                 else:
                     self._client = chromadb.EphemeralClient()
 
@@ -76,10 +78,12 @@ class SemanticSearchEngine:
                 self._collection = self._client.get_or_create_collection(
                     name="pyagent_code",
                     embedding_function=emb_fn,
-                    metadata={"hnsw:space": self.similarity_metric}
+                    metadata={"hnsw:space": self.similarity_metric},
                 )
             except Exception as e:
-                logging.warning(f"Failed to initialize ChromaDB: {e}. Falling back to keyword search.")
+                logging.warning(
+                    f"Failed to initialize ChromaDB: {e}. Falling back to keyword search."
+                )
                 return None
         return self._collection
 
@@ -99,7 +103,7 @@ class SemanticSearchEngine:
         collection = self._get_collection()
         if collection:
             # Delete all items in collection by fetching all IDs
-            existing_ids = collection.get().get('ids', [])
+            existing_ids = collection.get().get("ids", [])
             if existing_ids:
                 collection.delete(ids=existing_ids)
 
@@ -117,15 +121,12 @@ class SemanticSearchEngine:
         if collection:
             # Upsert into Chroma
             collection.upsert(
-                documents=[content],
-                ids=[file_path],
-                metadatas=[{"path": file_path}]
+                documents=[content], ids=[file_path], metadatas=[{"path": file_path}]
             )
 
     def search(
-            self,
-            query: str,
-            algorithm: SearchAlgorithm | None = None) -> list[SemanticSearchResult]:
+        self, query: str, algorithm: SearchAlgorithm | None = None
+    ) -> list[SemanticSearchResult]:
         """Search for related code.
 
         Args:
@@ -141,27 +142,34 @@ class SemanticSearchEngine:
         if search_algo == SearchAlgorithm.SEMANTIC:
             collection = self._get_collection()
             if collection:
-                results = collection.query(
-                    query_texts=[query],
-                    n_results=10
-                )
+                results = collection.query(query_texts=[query], n_results=10)
 
-                if results and 'documents' in results and results['documents']:
-                    for i in range(len(results['ids'][0])):
-                        file_path = results['ids'][0][i]
-                        content = results['documents'][0][i]
+                if results and "documents" in results and results["documents"]:
+                    for i in range(len(results["ids"][0])):
+                        file_path = results["ids"][0][i]
+                        content = results["documents"][0][i]
                         # Chroma distances: smaller is better for cosine if it's 1-cosine
                         # But Chroma cosine space is usually 1 - cosine similarity
                         # Score: 1.0 - distance
-                        distance = results['distances'][0][i] if 'distances' in results else 0.5
+                        distance = (
+                            results["distances"][0][i]
+                            if "distances" in results
+                            else 0.5
+                        )
                         score = max(0.0, min(1.0, 1.0 - distance))
 
-                        self.results.append(SemanticSearchResult(
-                            file_path=file_path,
-                            content_snippet=content[:200],  # Longer snippet for semantic
-                            similarity_score=score
-                        ))
-                return sorted(self.results, key=lambda r: r.similarity_score, reverse=True)
+                        self.results.append(
+                            SemanticSearchResult(
+                                file_path=file_path,
+                                content_snippet=content[
+                                    :200
+                                ],  # Longer snippet for semantic
+                                similarity_score=score,
+                            )
+                        )
+                return sorted(
+                    self.results, key=lambda r: r.similarity_score, reverse=True
+                )
 
         # Fallback to keyword search (original logic)
         query_words = set(query.lower().split())
@@ -174,10 +182,12 @@ class SemanticSearchEngine:
                 continue
 
             score = len(matches) / max(1, len(query_words))
-            self.results.append(SemanticSearchResult(
-                file_path=file_path,
-                content_snippet=content[:80],
-                similarity_score=min(score, 1.0)
-            ))
+            self.results.append(
+                SemanticSearchResult(
+                    file_path=file_path,
+                    content_snippet=content[:80],
+                    similarity_score=min(score, 1.0),
+                )
+            )
 
         return sorted(self.results, key=lambda r: r.similarity_score, reverse=True)

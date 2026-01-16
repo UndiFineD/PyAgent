@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\overrides\overrides.py
-# hypothesis_version: 6.150.1
-
-['7.7.0', 'LOAD_ATTR', 'LOAD_GLOBAL', 'LOAD_NAME', '_WrappedMethod', '__', '__builtins__', '__final__', '__globals__', '__override__']

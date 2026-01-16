@@ -10,15 +10,16 @@ from unittest import IsolatedAsyncioTestCase
 
 # Add src to path
 
-from src.infrastructure.orchestration.AutoDebuggerOrchestrator import AutoDebuggerOrchestrator
-from src.infrastructure.orchestration.SwarmPruningOrchestrator import SwarmPruningOrchestrator
+from src.infrastructure.orchestration.AutoDebuggerOrchestrator import (
+    AutoDebuggerOrchestrator,
+)
+from src.infrastructure.orchestration.SwarmPruningOrchestrator import (
+    SwarmPruningOrchestrator,
+)
 from src.core.base.NeuralPruningEngine import NeuralPruningEngine
 
 
-
-
 class TestPhase40(IsolatedAsyncioTestCase):
-
     def setUp(self):
         self.workspace_root = os.getcwd()
         logging.basicConfig(level=logging.DEBUG)
@@ -60,53 +61,35 @@ class TestPhase40(IsolatedAsyncioTestCase):
         self.assertIn("WastefulAgent", result["pruned_nodes"])
         self.assertNotIn("EfficientAgent", result["pruned_nodes"])
 
-    @patch('subprocess.run')
+    @patch("subprocess.run")
     async def test_auto_debugger_repair_trigger(self, mock_run) -> None:
         """Tests that repair is triggered on syntax error."""
         from subprocess import CalledProcessError
 
         # Simulate a syntax error
-        mock_run.side_effect = CalledProcessError(1, "python -m py_compile", stderr="SyntaxError: invalid syntax")
-
-
-
-
-
-
-
-
-
-
+        mock_run.side_effect = CalledProcessError(
+            1, "python -m py_compile", stderr="SyntaxError: invalid syntax"
+        )
 
         orchestrator = AutoDebuggerOrchestrator(self.workspace_root)
 
         # Mock CoderAgent.improve_content
-
-
-
 
         orchestrator.coder.improve_content = AsyncMock(return_value="fixed code")
 
         # Create a dummy broken file
         dummy_file = "dummy_broken.py"
         with open(dummy_file, "w") as f:
-
-
             f.write("invalid python code")
 
         try:
             result = await orchestrator.validate_and_repair(dummy_file)
             self.assertEqual(result["status"], "repaired")
 
-
-
             orchestrator.coder.improve_content.assert_called()
         finally:
             if os.path.exists(dummy_file):
                 os.remove(dummy_file)
-
-
-
 
 
 if __name__ == "__main__":

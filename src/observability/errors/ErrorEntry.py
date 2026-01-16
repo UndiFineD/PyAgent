@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ErrorCategory import ErrorCategory
 from .ErrorSeverity import ErrorSeverity
 from dataclasses import dataclass, field
@@ -30,11 +30,10 @@ import hashlib
 __version__ = VERSION
 
 
-
-
 @dataclass
 class ErrorEntry:
     """A single error entry."""
+
     id: str = ""
     message: str = ""
     file_path: str = ""

@@ -21,15 +21,13 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .CleanupStrategy import CleanupStrategy
 from .IsolationLevel import IsolationLevel
 from dataclasses import dataclass, field
 from pathlib import Path
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -43,6 +41,7 @@ class TestEnvironment:
         isolation_level: File system isolation.
         cleanup: Cleanup strategy.
     """
+
     __test__ = False
 
     name: str

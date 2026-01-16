@@ -1,4 +1,0 @@
-# file: c:\DEV\PyAgent\src\core\base\utils\TelemetryCollector.py
-# hypothesis_version: 6.150.1
-
-[1000, 'agent', 'attributes', 'duration_ms', 'end_time', 'events', 'exception', 'message', 'name', 'parent_id', 'span_id', 'start_time', 'trace_id']

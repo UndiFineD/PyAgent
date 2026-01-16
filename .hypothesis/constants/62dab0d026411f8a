@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\tokenizers\implementations\byte_level_bpe.py
-# hypothesis_version: 6.150.1
-
-[30000, 'ByteLevelBPE', 'add_prefix_space', 'dropout', 'end_of_word_suffix', 'lowercase', 'model', 'trim_offsets', 'unicode_normalizer']

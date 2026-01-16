@@ -25,12 +25,10 @@ No I/O or side effects.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from bs4 import BeautifulSoup
 
 __version__ = VERSION
-
-
 
 
 class WebCore:
@@ -39,6 +37,7 @@ class WebCore:
     def __init__(self) -> None:
         try:
             import rust_core
+
             self._rust_core = rust_core.WebCore()  # type: ignore[attr-defined]
         except (ImportError, Exception):
             self._rust_core = None
@@ -48,7 +47,7 @@ class WebCore:
         # Rust optimization (non-static wrapper needed if using instance method)
         # Since original method was static, we need to handle instance access carefully
         # or change design. Here we check if self is an instance or class.
-        if hasattr(self, '_rust_core') and self._rust_core:
+        if hasattr(self, "_rust_core") and self._rust_core:
             try:
                 return self._rust_core.clean_html(html_content)
             except Exception:
@@ -58,7 +57,7 @@ class WebCore:
         if not html_content:
             return ""
 
-        soup = BeautifulSoup(html_content, 'html.parser')
+        soup = BeautifulSoup(html_content, "html.parser")
 
         # Remove navigation, scripts, and styles
         for element in soup(["script", "style", "nav", "footer", "header"]):
@@ -69,7 +68,7 @@ class WebCore:
         # Clean up whitespace
         lines = (line.strip() for line in text.splitlines())
         chunks = (phrase.strip() for line in lines for phrase in line.split("  "))
-        return '\n'.join(chunk for chunk in chunks if chunk)
+        return "\n".join(chunk for chunk in chunks if chunk)
 
     # Static method wrapper to maintain API compatibility while allowing instance creation
     @staticmethod
@@ -81,13 +80,14 @@ class WebCore:
     def extract_links(html_content: str, base_url: str | None = None) -> list[str]:
         """Extracts all absolute links from HTML content."""
         import urllib.parse
+
         if not html_content:
             return []
 
-        soup = BeautifulSoup(html_content, 'html.parser')
+        soup = BeautifulSoup(html_content, "html.parser")
         links = []
-        for a in soup.find_all('a', href=True):
-            href = a['href']
+        for a in soup.find_all("a", href=True):
+            href = a["href"]
             if base_url:
                 href = urllib.parse.urljoin(base_url, href)
             links.append(href)

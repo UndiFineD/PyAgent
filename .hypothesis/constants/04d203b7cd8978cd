@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\opentelemetry\sdk\_logs\_internal\__init__.py
-# hypothesis_version: 6.150.1
-
-[1000.0, 1000000000.0, 128, 30000, 1000000, 'WARN', 'WARNING', 'args', 'asctime', 'attributes', 'body', 'created', 'dropped_attributes', 'event_name', 'exc_info', 'exc_text', 'filename', 'force_flush', 'funcName', 'getMessage', 'levelname', 'levelno', 'lineno', 'message', 'module', 'msecs', 'msg', 'name', 'observed_timestamp', 'once', 'pathname', 'process', 'processName', 'relativeCreated', 'resource', 'severity_number', 'severity_text', 'span_id', 'stack_info', 'taskName', 'thread', 'threadName', 'timestamp', 'trace_flags', 'trace_id', 'true']

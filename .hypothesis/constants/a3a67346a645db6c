@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\export\dynamic_shapes.py
-# hypothesis_version: 6.150.1
-
-[' = ', 'AdditionalInputs', 'Constraint', 'Dim', 'ShapeEnv', 'Source', 'Suggested fixes:', 'Symbol', '_DimHint', 'dim', 'dims', 'inputs', 'max', 'min', 'min must be <= max', 'mismatch', 't_id']

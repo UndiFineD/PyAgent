@@ -5,9 +5,7 @@ from pathlib import Path
 # Add project root to sys.path
 
 from src.infrastructure.fleet.OrchestratorRegistry import OrchestratorRegistry
-from src.core.base.version import SDK_VERSION
-
-
+from src.core.base.Version import SDK_VERSION
 
 
 class MockFleet:
@@ -15,20 +13,15 @@ class MockFleet:
         self.workspace_root = root
 
 
-
-
 def test_community_orchestrator() -> None:
     print(f"--- Running Community Orchestrator Test (SDK {SDK_VERSION}) ---")
-    workspace = Path('.').resolve()
+    workspace = Path(".").resolve()
     fleet = MockFleet(workspace)
 
     orc_map = OrchestratorRegistry.get_orchestrator_map(fleet)
 
     print("Loading CommunityDemoOrc...")
     try:
-
-
-
         # Using getattr since it's a LazyOrchestratorMap
         orc = getattr(orc_map, "CommunityDemoOrc")
         print(f"Orchestrator Type: {type(orc).__name__}")
@@ -38,9 +31,6 @@ def test_community_orchestrator() -> None:
 
     except Exception as e:
         print(f"Error loading orchestrator: {e}")
-
-
-
 
 
 if __name__ == "__main__":

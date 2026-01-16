@@ -21,62 +21,51 @@
 """Data models for test agent functionality."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass, field
 from typing import Any
-from .enums import TestPriority, TestStatus, CoverageType, BrowserType, TestSourceType, MutationOperator
+from .enums import (
+    TestPriority,
+    TestStatus,
+    CoverageType,
+    BrowserType,
+    TestSourceType,
+    MutationOperator,
+)
 
 __version__ = VERSION
 
 
-
-
-
 def _empty_str_list() -> list[str]:
-
-
-
-
     return []
 
 
 def _empty_dict_any() -> dict[str, Any]:
-
-
-
     return {}
-
 
 
 def _empty_dict_str_status() -> dict[str, TestStatus]:
     return {}
 
 
-
-
 def _empty_action_list() -> list[dict[str, Any]]:
-
-
     return []
+
 
 @dataclass
 class TestCase:
     """Represents a single test case."""
+
     __test__ = False
-
-
 
     id: str
     name: str
     file_path: str
 
-
-
     line_number: int
     priority: TestPriority = TestPriority.MEDIUM
 
     status: TestStatus = TestStatus.PASSED
-
 
     duration_ms: float = 0.0
 
@@ -86,33 +75,17 @@ class TestCase:
     failure_count: int = 0
     tags: list[str] = field(default_factory=lambda: [])
 
-
-
-
     dependencies: list[str] = field(default_factory=lambda: [])
 
 
-
 @dataclass
-
-
-
-
 class TestRun:
-
-
     """A test execution run."""
+
     __test__ = False
-
-
-
-
 
     id: str
     timestamp: str
-
-
-
 
     total_tests: int = 0
     passed: int = 0
@@ -121,23 +94,15 @@ class TestRun:
     skipped: int = 0
     errors: int = 0
 
-
-
-
-
     duration_ms: float = 0.0
 
     test_results: dict[str, TestStatus] = field(default_factory=lambda: {})
 
+
 @dataclass
-
-
-
-
-
 class CoverageGap:
-
     """Represents a gap in test coverage."""
+
     file_path: str
     line_start: int
     line_end: int
@@ -147,39 +112,36 @@ class CoverageGap:
 
 
 @dataclass
-
 class TestFactory:
     """A test data factory for generating test data."""
+
     __test__ = False
     name: str
     return_type: str
     parameters: dict[str, str] = field(default_factory=lambda: {})
 
-
-
     generator: str = ""  # Code snippet or function name
-
 
 
 @dataclass
 class VisualRegressionConfig:
     """Configuration for visual regression testing."""
+
     baseline_dir: str
-
-
 
     diff_threshold: float = 0.01
     browsers: list[BrowserType] = field(default_factory=lambda: [BrowserType.CHROME])
-    viewport_sizes: list[tuple[int, int]] = field(default_factory=lambda: [(1920, 1080)])
-
+    viewport_sizes: list[tuple[int, int]] = field(
+        default_factory=lambda: [(1920, 1080)]
+    )
 
     ignore_regions: list[tuple[int, int, int, int]] = field(default_factory=lambda: [])
-
 
 
 @dataclass
 class ContractTest:
     """A contract test for API boundaries."""
+
     consumer: str
     provider: str
     endpoint: str
@@ -188,15 +150,12 @@ class ContractTest:
     status_code: int = 200
 
 
-
-
-
 @dataclass
 class TestEnvironment:
     """Test environment configuration."""
+
     __test__ = False
     name: str
-
 
     base_url: str = ""
     variables: dict[str, str] = field(default_factory=lambda: {})
@@ -205,11 +164,10 @@ class TestEnvironment:
     teardown_commands: list[str] = field(default_factory=lambda: [])
 
 
-
-
 @dataclass
 class ExecutionTrace:
     """Test execution trace for replay."""
+
     test_id: str
     timestamp: str
     steps: list[dict[str, Any]] = field(default_factory=lambda: [])
@@ -218,13 +176,9 @@ class ExecutionTrace:
     stderr: str = ""
 
 
-
 @dataclass
 class TestDependency:
     """A dependency for test injection."""
-
-
-
 
     __test__ = False
     name: str
@@ -232,12 +186,10 @@ class TestDependency:
     implementation: str = ""
     mock_behavior: str = ""
 
+
 @dataclass
 class CrossBrowserConfig:
     """Cross-browser testing configuration."""
-
-
-
 
     browsers: list[BrowserType]
     parallel: bool = True
@@ -246,11 +198,10 @@ class CrossBrowserConfig:
     retries: int = 1
 
 
-
-
 @dataclass
 class AggregatedResult:
     """Aggregated test result from multiple sources."""
+
     source: TestSourceType
     test_name: str
     status: TestStatus
@@ -259,11 +210,10 @@ class AggregatedResult:
     metadata: dict[str, Any] = field(default_factory=lambda: {})
 
 
-
-
 @dataclass
 class Mutation:
     """A code mutation for mutation testing."""
+
     id: str
     file_path: str
     line_number: int
@@ -272,9 +222,11 @@ class Mutation:
     mutated_code: str
     killed: bool = False
 
+
 @dataclass
 class GeneratedTest:
     """A test generated from specification."""
+
     name: str
     specification: str
     generated_code: str
@@ -282,11 +234,10 @@ class GeneratedTest:
     validated: bool = False
 
 
-
-
 @dataclass
 class TestProfile:
     """Runtime profiling data for a test."""
+
     __test__ = False
     test_id: str
     cpu_time_ms: float
@@ -296,11 +247,10 @@ class TestProfile:
     timestamp: str = ""
 
 
-
-
 @dataclass
 class ScheduleSlot:
     """A scheduled time slot for test execution."""
+
     start_time: str
     end_time: str
     tests: list[str] = field(default_factory=lambda: [])
@@ -308,39 +258,35 @@ class ScheduleSlot:
     priority: TestPriority = TestPriority.MEDIUM
 
 
-
-
 @dataclass
 class ProvisionedEnvironment:
     """A provisioned test environment."""
+
     status: str
     python_version: str = ""
     dependencies: list[str] = field(default_factory=lambda: [])
     config: dict[str, Any] = field(default_factory=lambda: {})
 
 
-
-
 @dataclass
 class ValidationResult:
     """Result of a validation operation."""
+
     valid: bool
     errors: list[str] = field(default_factory=lambda: [])
-
-
 
 
 @dataclass
 class Recording:
     """A recording of test execution."""
+
     test_name: str
     actions: list[dict[str, Any]] = field(default_factory=lambda: [])
-
-
 
 
 @dataclass
 class ReplayResult:
     """Result of replaying a recorded test."""
+
     success: bool
     errors: list[str] = field(default_factory=lambda: [])

@@ -18,7 +18,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.observability.StructuredLogger import StructuredLogger
@@ -26,13 +26,12 @@ from src.observability.StructuredLogger import StructuredLogger
 __version__ = VERSION
 
 
-
-
 class ResearchSynthesisAgent(BaseAgent):
     """
     Autonomously conducts research on technical topics by querying
     external/internal sources and synthesizing complex findings.
     """
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -41,17 +40,21 @@ class ResearchSynthesisAgent(BaseAgent):
 
     def conduct_research(self, topic: str, focus_areas: list[str]) -> dict[str, Any]:
         """Conducts a simulated research session on a given topic."""
-        self.logger.info(f"Conducting research on: {topic}", topic=topic, areas=focus_areas)
+        self.logger.info(
+            f"Conducting research on: {topic}", topic=topic, areas=focus_areas
+        )
         research_id = f"R-{hash(topic) % 1000}"
 
         # Simulate research gathering
         findings = []
         for area in focus_areas:
-            findings.append({
-                "area": area,
-                "data": f"Simulated data for {area} regarding {topic}",
-                "confidence": 0.85
-            })
+            findings.append(
+                {
+                    "area": area,
+                    "data": f"Simulated data for {area} regarding {topic}",
+                    "confidence": 0.85,
+                }
+            )
 
         summary = self._synthesize_findings(topic, findings)
         self.research_library[topic] = summary
@@ -60,7 +63,7 @@ class ResearchSynthesisAgent(BaseAgent):
             "research_id": research_id,
             "topic": topic,
             "findings_count": len(findings),
-            "summary": summary
+            "summary": summary,
         }
 
     def _synthesize_findings(self, topic: str, findings: list[dict[str, Any]]) -> str:
@@ -82,5 +85,7 @@ class ResearchSynthesisAgent(BaseAgent):
         """Returns metrics on research productivity."""
         return {
             "topics_researched": len(self.research_library),
-            "total_insights_generated": sum(len(s.split("\n")) for s in self.research_library.values())
+            "total_insights_generated": sum(
+                len(s.split("\n")) for s in self.research_library.values()
+            ),
         }

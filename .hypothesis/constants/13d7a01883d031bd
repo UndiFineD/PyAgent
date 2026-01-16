@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\nn\modules\normalization.py
-# hypothesis_version: 6.150.1
-
-[1e-05, 0.0001, 0.75, 1.0, 'CrossMapLRN2d', 'GroupNorm', 'LayerNorm', 'LocalResponseNorm', 'RMSNorm', 'affine', 'alpha', 'beta', 'bias', 'device', 'dtype', 'elementwise_affine', 'eps', 'k', 'normalized_shape', 'num_channels', 'num_groups', 'size', 'weight']

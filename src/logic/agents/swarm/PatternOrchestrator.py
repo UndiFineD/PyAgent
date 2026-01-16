@@ -25,16 +25,14 @@ Inspired by multi-agent-generator and LangGraph.
 
 from __future__ import annotations
 from pathlib import Path
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
-from src.core.base.version import EVOLUTION_PHASE
+from src.core.base.BaseUtilities import as_tool
+from src.core.base.Version import EVOLUTION_PHASE
 from src.logic.cognitive.prompt_templates import VIBE_CODING_2025_TRACKS
 
 __version__ = VERSION
-
-
 
 
 class PatternOrchestrator(BaseAgent):
@@ -84,7 +82,9 @@ class PatternOrchestrator(BaseAgent):
         """Sets the active Vibe-Coding 2025 track (Overrides phase-based defaults)."""
         if track_name.upper() in VIBE_CODING_2025_TRACKS:
             self.active_track = track_name.upper()
-            self._state_data["active_track"] = self.active_track  # Phase 283 Persistence
+            self._state_data["active_track"] = (
+                self.active_track
+            )  # Phase 283 Persistence
             self._apply_vibe_persona()
             return f"Vibe-Coding track set to {self.active_track}. Persona: {VIBE_CODING_2025_TRACKS[self.active_track]['persona'][:100]}..."
         return f"Error: Track '{track_name}' not found. Available: {list(VIBE_CODING_2025_TRACKS.keys())}"
@@ -104,7 +104,8 @@ class PatternOrchestrator(BaseAgent):
         """Runs the Supervisor pattern (Phase 283): delegates sub-goals to specialist agents."""
         logging.info(f"ORCHESTRATOR: Supervisor mode for goal: {goal}")
 
-        from src.core.base.delegation import AgentDelegator
+        from src.core.base.AgentDelegator import AgentDelegator
+
         delegator = AgentDelegator(self)
         results = []
 
@@ -112,7 +113,10 @@ class PatternOrchestrator(BaseAgent):
             logging.info(f"Supervisor: Delegating to {agent_type}")
             try:
                 # Recursive call (Phase 283)
-                result = delegator.delegate(agent_type=agent_type, task=f"As Supervisor, I need you to address: {goal}")
+                result = delegator.delegate(
+                    agent_type=agent_type,
+                    task=f"As Supervisor, I need you to address: {goal}",
+                )
                 results.append(f"[{agent_type}]: {result[:150]}...")
             except Exception as e:
                 results.append(f"[{agent_type}]: FAILED - {e}")
@@ -124,18 +128,25 @@ class PatternOrchestrator(BaseAgent):
         """Runs the Debate pattern (Phase 283): agents argue iterations to reach consensus."""
         logging.info(f"ORCHESTRATOR: Debate mode for topic: {topic}")
 
-        from src.core.base.delegation import AgentDelegator
+        from src.core.base.AgentDelegator import AgentDelegator
+
         delegator = AgentDelegator(self)
 
         # Iterative debate (Phase 283)
         logging.info(f"Debate: {pro_agent} vs {con_agent} on '{topic}'")
-        pro_arg = delegator.delegate(agent_type=pro_agent, task=f"Provide a strong technical argument FOR: {topic}")
-        con_arg = delegator.delegate(agent_type=con_agent, task=f"Provide a strong technical argument AGAINST: {topic}. Respond to: {pro_arg[:200]}")
+        pro_arg = delegator.delegate(
+            agent_type=pro_agent,
+            task=f"Provide a strong technical argument FOR: {topic}",
+        )
+        con_arg = delegator.delegate(
+            agent_type=con_agent,
+            task=f"Provide a strong technical argument AGAINST: {topic}. Respond to: {pro_arg[:200]}",
+        )
 
         # Consensus
         consensus = delegator.delegate(
             agent_type="ArchitectAgent",
-            task=f"Synthesize a final consensus for topic '{topic}' based on PRO ({pro_agent}): {pro_arg[:300]} and CON ({con_agent}): {con_arg[:300]}"
+            task=f"Synthesize a final consensus for topic '{topic}' based on PRO ({pro_agent}): {pro_arg[:300]} and CON ({con_agent}): {con_arg[:300]}",
         )
 
         return (
@@ -173,7 +184,7 @@ class PatternOrchestrator(BaseAgent):
     @as_tool
     def orchestrate_mapreduce(self, file_path: str, chunk_size: int = 1000) -> str:
         """Runs MapReduce (Phase 283): splits file, processes in parallel, merges results."""
-        from src.core.base.delegation import AgentDelegator
+        from src.core.base.AgentDelegator import AgentDelegator
         import math
 
         path = Path(file_path)
@@ -187,27 +198,23 @@ class PatternOrchestrator(BaseAgent):
         delegator = AgentDelegator(self)
         shards = []
         for i in range(num_chunks):
-            chunk = content[i*chunk_size : (i+1)*chunk_size]
+            chunk = content[i * chunk_size : (i + 1) * chunk_size]
             # Map phase
 
-
-
-
-
-
-
-
-
-
-            logging.info(f"MapReduce: Processing chunk {i+1}/{num_chunks}")
-            shard_res = delegator.delegate(agent_type="CoderAgent", task=f"Analyze this code shard for bugs: {chunk}")
+            logging.info(f"MapReduce: Processing chunk {i + 1}/{num_chunks}")
+            shard_res = delegator.delegate(
+                agent_type="CoderAgent",
+                task=f"Analyze this code shard for bugs: {chunk}",
+            )
             shards.append(shard_res)
-
-
 
         # Reduce phase
         logging.info("MapReduce: Reducing results.")
-        summary = delegator.delegate(agent_type="ArchitectAgent", task=f"Merge these {len(shards)} analysis shards into a final report: " + "\n---\n".join(shards)[:2000])
+        summary = delegator.delegate(
+            agent_type="ArchitectAgent",
+            task=f"Merge these {len(shards)} analysis shards into a final report: "
+            + "\n---\n".join(shards)[:2000],
+        )
 
         return f"MapReduce Complete for {file_path}:\n\n{summary}"
 
@@ -221,7 +228,11 @@ class PatternOrchestrator(BaseAgent):
     def improve_content(self, prompt: str) -> str:
         return f"PatternOrchestrator ready to route: {prompt}"
 
+
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(PatternOrchestrator, "Pattern Orchestrator", "Orchestration logs")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        PatternOrchestrator, "Pattern Orchestrator", "Orchestration logs"
+    )
     main()

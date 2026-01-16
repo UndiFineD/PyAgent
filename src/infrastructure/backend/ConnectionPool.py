@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from pathlib import Path
 from typing import Any
 import json
@@ -33,11 +33,6 @@ import uuid
 __version__ = VERSION
 
 
-
-
-
-
-
 class ConnectionPool:
     """
     Manages a pool of reusable connections with Phase 108 status caching.
@@ -45,7 +40,12 @@ class ConnectionPool:
     caching 'working' status for 15 minutes.
     """
 
-    def __init__(self, max_connections: int = 10, timeout_s: float = 30.0, cache_file: str | None = None) -> None:
+    def __init__(
+        self,
+        max_connections: int = 10,
+        timeout_s: float = 30.0,
+        cache_file: str | None = None,
+    ) -> None:
         """Initialize connection pool."""
         self.max_connections = max_connections
         self.timeout_s = timeout_s
@@ -87,16 +87,15 @@ class ConnectionPool:
     def set_backend_status(self, backend: str, working: bool) -> None:
         """Updates the working status of a backend."""
         with self._lock:
-            self.status_cache[backend] = {
-                "working": working,
-                "timestamp": time.time()
-            }
+            self.status_cache[backend] = {"working": working, "timestamp": time.time()}
             self._save_status_cache()
 
     def acquire(self, backend: str) -> Any:
         """Acquire a connection, respecting the status cache (Phase 108)."""
         if not self.is_backend_working(backend):
-            logging.debug(f"ConnectionPool: Skipping '{backend}' (cached as non-working)")
+            logging.debug(
+                f"ConnectionPool: Skipping '{backend}' (cached as non-working)"
+            )
             return None
 
         with self._lock:

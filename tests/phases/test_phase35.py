@@ -9,8 +9,6 @@ import pytest
 from src.infrastructure.fleet.FleetManager import FleetManager
 
 
-
-
 @pytest.mark.asyncio
 async def test_phase35() -> None:
     logging.basicConfig(level=logging.INFO)
@@ -25,7 +23,9 @@ async def test_phase35() -> None:
     fleet.inter_fleet_bridge.broadcast_state("swarm_objective", "Scale neural bridge")
 
     # Simulate receiving state from peer
-    fleet.inter_fleet_bridge.sync_external_state("fleet_beta", {"peer_capability": "extreme_compression"})
+    fleet.inter_fleet_bridge.sync_external_state(
+        "fleet_beta", {"peer_capability": "extreme_compression"}
+    )
 
     discovery = fleet.inter_fleet_bridge.query_global_intelligence("peer_capability")
     print(f"✅ Discovered Intelligence: {discovery}")
@@ -47,6 +47,7 @@ async def test_phase35() -> None:
         print("❌ Self-Archiving identification failed.")
 
     print("\n🏁 Phase 35 Verification Complete.")
+
 
 if __name__ == "__main__":
     test_phase35()

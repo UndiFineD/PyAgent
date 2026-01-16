@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\system\IdentityAgent.py
-# hypothesis_version: 6.150.1
-
-['Ed25519Signature2020', 'VerifiableCredential', 'authentication', 'context', 'created', 'credentialSubject', 'error', 'fleet-01', 'id', 'issuanceDate', 'issuer', 'jws', 'name', 'proof', 'pyagent-signature-v1', 'reason', 'service', 'serviceEndpoint', 'status', 'type', 'verified']

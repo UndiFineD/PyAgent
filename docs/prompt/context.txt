@@ -1,0 +1,37 @@
+# PyAgent Workspace Context
+# Generated: January 16, 2026
+# Version: 3.6.0 (Evolution Phase 317 - SYNAPTIC ACCELERATION)
+
+## Project Overview
+PyAgent is an AI-powered multi-agent orchestration system for autonomous code improvement.
+The fleet coordinates 50+ specialized agents across 5 architectural tiers to analyze,
+improve, and maintain Python codebases with high autonomy.
+
+## Architecture (5-Tiered)
+- src/core/          → Primitives, Knowledge Trinity (B-Tree, Vector, Graph)
+- src/logic/         → Swarm Intelligence, Specialized Agents, Reasoning Strategies  
+- src/infrastructure/→ Fleet Management, Economy, API Wrappers, Orchestration
+- src/interface/     → Multi-UI layer (CLI, GUI, Web, Mobile)
+- src/observability/ → Telemetry, Stats, Reporting, Audit Trails
+
+## Rust Acceleration (rust_core/)
+- 200+ PyO3 functions for CPU-bound operations
+- Integration: `rust_core.pyd` binary active in workspace root.
+- Recent fixes: JSON log builder bug resolved, compiler warnings cleared.
+- Performance: 37% end-to-end acceleration; optimized complexity analysis (Rust-native).
+
+## Current State (Phase 317)
+- Test baseline: 1,300+ tests with 100% collection health.
+- Self-Healing: Enabled for complexity reduction (>25), docstring injection, and type inference.
+- Model backend: Ollama/tinyllama:latest (Local High-Speed) -> Copilot CLI (Fallback).
+- Stability Gate: 1.0 (Green).
+
+## Data & Observability
+- 1,024 virtual shards for interaction history (MD5-indexed).
+- Centralized ConnectivityManager with 15-minute persistent TTL status cache.
+- Structured Logger yielding valid, masked JSON logs via Rust core.
+
+## known Issues to Address (Self-Improvement Focus)
+- 32 files with high logic complexity.
+- Typing gaps in src/infrastructure for Rust FFI stability.
+- Missing docstrings in Logic and Maintenance layers.

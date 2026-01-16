@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\utilities\__init__.py
-# hypothesis_version: 6.150.1
-
-['capture', 'cartes', 'dict_merge', 'filldedent', 'flatten', 'group', 'has_dups', 'has_variety', 'lambdify', 'memoize_property', 'numbered_symbols', 'postfixes', 'prefixes', 'public', 'reshape', 'rotations', 'sift', 'subsets', 'take', 'threaded', 'timed', 'topological_sort', 'unflatten', 'variations', 'xthreaded']

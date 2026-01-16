@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\quantizers\quantizer_bitnet.py
-# hypothesis_version: 6.150.1
-
-[0.9, 'PreTrainedModel', 'accelerate', 'autobitlinear', 'cpu', 'device_map', 'disk', 'from_flax', 'from_tf', 'online', 'torch.dtype']

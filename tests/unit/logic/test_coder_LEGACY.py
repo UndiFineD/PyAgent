@@ -8,48 +8,33 @@ from contextlib import contextmanager
 
 
 @contextmanager
-
-
-
-
-
-
-
-
-
-
 def agent_dir_on_path():
-
-
     base_path = Path(__file__).resolve().parent.parent.parent.parent / "src"
     parent_path = base_path.parent
     if str(parent_path) not in sys.path:
-
-
-
         sys.path.insert(0, str(parent_path))
     try:
-
         yield
     finally:
         if str(parent_path) in sys.path:
             sys.path.remove(str(parent_path))
 
+
 def load_agent_module(relative_path: str):
     import importlib.util
-    file_path = Path(__file__).resolve().parent.parent.parent.parent / "src" / relative_path
+
+    file_path = (
+        Path(__file__).resolve().parent.parent.parent.parent / "src" / relative_path
+    )
     spec = importlib.util.spec_from_file_location("dynamic_agent", file_path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
     return mod
 
 
-
-
-
 def test_coder_agent_keyword_prompt_generates_suggestions(
-        tmp_path: Path, monkeypatch: pytest.MonkeyPatch, agent_module: Any) -> None:
-
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, agent_module: Any
+) -> None:
     # Always mock rust_core for this test
     mock_rust = MagicMock()
     mock_rust.CoderCore = MagicMock(return_value=MagicMock())
@@ -60,12 +45,17 @@ def test_coder_agent_keyword_prompt_generates_suggestions(
         return "x=1 # AI GENERATED CONTENT"
 
     import src.core.base.BaseAgent
+
     print(f"DEBUG: src.core.base.BaseAgent type: {type(src.core.base.BaseAgent)}")
     if isinstance(src.core.base.BaseAgent, type):
         # If it is the class itself (weird import issue)
-        monkeypatch.setattr(src.core.base.BaseAgent, "improve_content", fake_improve_content)
+        monkeypatch.setattr(
+            src.core.base.BaseAgent, "improve_content", fake_improve_content
+        )
     else:
-        monkeypatch.setattr(src.core.base.BaseAgent.BaseAgent, "improve_content", fake_improve_content)
+        monkeypatch.setattr(
+            src.core.base.BaseAgent.BaseAgent, "improve_content", fake_improve_content
+        )
 
     with agent_dir_on_path():
         mod = load_agent_module("logic/agents/development/CodeGeneratorAgent.py")

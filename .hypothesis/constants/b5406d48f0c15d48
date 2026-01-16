@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_dynamo\variables\torch.py
-# hypothesis_version: 6.150.1
-
-['.', 'Parameter', 'PyCodegen', 'VariableTracker', '[^a-zA-Z0-9_]+', '_', '__', '__module__', '__objclass__', '__torch_function__', '_input_spec', 'add', 'backends', 'batch_size', 'branch not supported', 'call_function', 'data', 'detach', 'device', 'div', 'dtype', 'example_value', 'get_attr', 'has', 'key', 'level', 'lower', 'math', 'mul', 'numel', 'out', 'overloads', 'placeholder', 'prim ', 'process', 'randomness', 'requires_grad', 'set_priority', 'shape', 'size', 'sqrt', 'stride', 'sub', 'torch', 'torch.nn', 'value']

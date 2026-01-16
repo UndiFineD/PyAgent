@@ -14,8 +14,6 @@ from src.infrastructure.orchestration.RLSelector import RLSelector
 from pathlib import Path
 
 
-
-
 class TestPhase123Decentralization(unittest.TestCase):
     def setUp(self):
         self.root = Path(__file__).resolve().parents[2]
@@ -26,9 +24,21 @@ class TestPhase123Decentralization(unittest.TestCase):
 
         self.fleet = FleetManager(self.root)
         # Register a few dummy agents for committee selection
-        self.fleet.register_agent("Coder", ByzantineConsensusAgent, f"{self.root}/src/agents/ByzantineConsensusAgent.py")
-        self.fleet.register_agent("SpecialistA", ByzantineConsensusAgent, f"{self.root}/src/agents/ByzantineConsensusAgent.py")
-        self.fleet.register_agent("SpecialistB", ByzantineConsensusAgent, f"{self.root}/src/agents/ByzantineConsensusAgent.py")
+        self.fleet.register_agent(
+            "Coder",
+            ByzantineConsensusAgent,
+            f"{self.root}/src/agents/ByzantineConsensusAgent.py",
+        )
+        self.fleet.register_agent(
+            "SpecialistA",
+            ByzantineConsensusAgent,
+            f"{self.root}/src/agents/ByzantineConsensusAgent.py",
+        )
+        self.fleet.register_agent(
+            "SpecialistB",
+            ByzantineConsensusAgent,
+            f"{self.root}/src/agents/ByzantineConsensusAgent.py",
+        )
 
     def tearDown(self):
         if os.path.exists(self.test_dir):
@@ -38,7 +48,9 @@ class TestPhase123Decentralization(unittest.TestCase):
         # Test that FleetManager can form a committee if none provided
         task = "Fix a bug in the quantum logic"
         available = ["Coder", "SpecialistA", "SpecialistB", "Research"]
-        judge = ByzantineConsensusAgent(f"{self.root}/src/agents/ByzantineConsensusAgent.py")
+        judge = ByzantineConsensusAgent(
+            f"{self.root}/src/agents/ByzantineConsensusAgent.py"
+        )
         committee = judge.select_committee(task, available)
 
         self.assertTrue(len(committee) > 0)
@@ -47,13 +59,16 @@ class TestPhase123Decentralization(unittest.TestCase):
     def test_messaging_polling_structure(self) -> None:
         # Test that MessagingAgent has poll_for_replies
         import asyncio
+
         msg_agent = MessagingAgent(f"{self.root}/src/agents/MessagingAgent.py")
         replies = asyncio.run(msg_agent.poll_for_replies("slack"))
         self.assertIsInstance(replies, list)
 
     def test_bayesian_belief_update(self) -> None:
         # Test that BayesianReasoningAgent updates beliefs correctly
-        bayesian = BayesianReasoningAgent(f"{self.root}/src/agents/BayesianReasoningAgent.py")
+        bayesian = BayesianReasoningAgent(
+            f"{self.root}/src/agents/BayesianReasoningAgent.py"
+        )
         # Scenario: 50% chance of server up. Evidence: Ping successful (Likelihood 0.9)
         res = bayesian.update_belief("server_up", "ping_success", 0.9)
         self.assertGreater(res["posterior"], 0.5)
@@ -71,15 +86,26 @@ class TestPhase123Decentralization(unittest.TestCase):
 
     def test_distributed_logging(self) -> None:
         log_file = os.path.join(self.test_dir, "logging_agent.py")
-        with open(log_file, "w") as f: f.write("#")
+        with open(log_file, "w") as f:
+            f.write("#")
         agent = LoggingAgent(log_file)
         # Test configuration
         import asyncio
-        res = asyncio.run(agent.configure_aggregator(url="http://mock-aggregator:8080/log"))
+
+        res = asyncio.run(
+            agent.configure_aggregator(url="http://mock-aggregator:8080/log")
+        )
         self.assertIn("Configured", res)
 
         # Test broadcast
-        res = asyncio.run(agent.broadcast_log(level="INFO", source="TestAgent", message="Hello World", metadata={"phase": 123}))
+        res = asyncio.run(
+            agent.broadcast_log(
+                level="INFO",
+                source="TestAgent",
+                message="Hello World",
+                metadata={"phase": 123},
+            )
+        )
         self.assertIn("Log broadcasted", res)
 
         # Test integration via BaseAgent
@@ -87,9 +113,14 @@ class TestPhase123Decentralization(unittest.TestCase):
         # Registry will create a new instance, ensure it's configured
         logging_agent = self.fleet.agents["Logging"]
         import asyncio
-        asyncio.run(logging_agent.configure_aggregator(url="http://mock-aggregator:8080/log"))
 
-        test_agent = ByzantineConsensusAgent(os.path.join(self.test_dir, "test_agent.py"))
+        asyncio.run(
+            logging_agent.configure_aggregator(url="http://mock-aggregator:8080/log")
+        )
+
+        test_agent = ByzantineConsensusAgent(
+            os.path.join(self.test_dir, "test_agent.py")
+        )
         test_agent.fleet = self.fleet  # Manual inject for test
         test_agent.log_distributed("WARNING", "Alert message")
 
@@ -98,7 +129,8 @@ class TestPhase123Decentralization(unittest.TestCase):
 
     def test_did_sovereign_identity(self) -> None:
         id_file = os.path.join(self.test_dir, "identity_agent.py")
-        with open(id_file, "w") as f: f.write("#")
+        with open(id_file, "w") as f:
+            f.write("#")
         agent = AgentIdentityAgent(id_file)
 
         # 1. Create DID for Alice
@@ -109,22 +141,9 @@ class TestPhase123Decentralization(unittest.TestCase):
         vc = agent.issue_verifiable_credential(
             issuer_name="Alice",
             subject_did="did:pyagent:fleet-01:bob-hash",
-
-
-
-
-
-
-
-
-
-
             claim_type="AccessBadge",
-            claim_value="Level-5"
+            claim_value="Level-5",
         )
-
-
-
 
         self.assertIn("proof", vc)
         self.assertEqual(vc["proof"]["type"], "Ed25519Signature2020")
@@ -132,24 +151,16 @@ class TestPhase123Decentralization(unittest.TestCase):
         # 3. Verify VC
         verification = agent.verify_credential(vc)
 
-
         self.assertEqual(verification["status"], "verified")
         self.assertEqual(verification["issuer"], alice_did)
 
         # 4. Tamper and Verify
         vc_copy = json.loads(json.dumps(vc))
 
-
-
-
-
         vc_copy["credentialSubject"]["AccessBadge"] = "Level-99"  # Tamper
         tampered_verification = agent.verify_credential(vc_copy)
         # Signature should fail
         self.assertEqual(tampered_verification["status"], "error")
-
-
-
 
 
 if __name__ == "__main__":

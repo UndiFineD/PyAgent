@@ -1,12 +1,9 @@
-
 """Unit test for verifying version gatekeeping in agent loading."""
 
 import logging
 from pathlib import Path
 from src.infrastructure.fleet.AgentRegistry import AgentRegistry, LazyAgentMap
 from src.infrastructure.fleet.ResilientStubs import ResilientStub
-
-
 
 
 def test_version_gate() -> None:
@@ -21,22 +18,9 @@ def test_version_gate() -> None:
     # Let's instantiate the Registry directly to test logic
     registry: LazyAgentMap = AgentRegistry.get_agent_map(workspace_root)
 
-
-
-
-
-
-
-
-
-
-
     # FutureAgent should be discovered
     if "FutureAgent" in registry:
         print("✅ FutureAgent discovered in registry keys.")
-
-
-
 
     else:
         print("❌ FutureAgent NOT found in registry keys.")
@@ -44,22 +28,16 @@ def test_version_gate() -> None:
     # Attempt to load it
     agent = registry.get("FutureAgent")
 
-
     print(f"Loaded object type: {type(agent)}")
 
     if isinstance(agent, ResilientStub):
         print("✅ SUCCESS: FutureAgent loaded as ResilientStub.")
         print(f"Stub Reason: {agent._error}")
 
-
-
         if "requires SDK 10.0.0" in agent._error:
             print("✅ Error message confirms version mismatch.")
     else:
         print("❌ FAILURE: FutureAgent loaded as normal agent (Version check failed).")
-
-
-
 
 
 if __name__ == "__main__":

@@ -23,7 +23,7 @@ Optimizes swarm latency by clustering frequently interacting agents.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 import numpy as np
@@ -35,8 +35,6 @@ from sklearn.preprocessing import StandardScaler
 __version__ = VERSION
 
 
-
-
 class ShardingOrchestrator:
     """Analyzes agent interactions and suggests/implements logical grouping.
     Phase 234: Implements Dynamic Shard Rebalancing via DBSCAN and Live Migration.
@@ -46,13 +44,15 @@ class ShardingOrchestrator:
         self.workspace_root = workspace_root
         self.threshold = interaction_threshold
         self.interaction_log = workspace_root / "data/logs/interaction_matrix.json"
-        self.shard_mapping_path = workspace_root / "config/shard_mapping.json"
+        self.shard_mapping_path = workspace_root / "data/config/shard_mapping.json"
         self._counts: Counter = Counter()
         self._agent_vram: dict[str, float] = {}  # agent -> VRAM usage in MB
         self._total_interactions = 0
         self._current_mapping: dict[str, str] = {}  # agent -> shard_id
 
-    def record_interaction(self, agent_a: str, agent_b: str, vram_a: float = 512.0, vram_b: float = 512.0) -> None:
+    def record_interaction(
+        self, agent_a: str, agent_b: str, vram_a: float = 512.0, vram_b: float = 512.0
+    ) -> None:
         """Records a communication event and updates VRAM telemetry (Phase 234)."""
         pair = tuple(sorted([agent_a, agent_b]))
         self._counts[pair] += 1
@@ -70,7 +70,9 @@ class ShardingOrchestrator:
         if old_shard == target_shard_id:
             return
 
-        logging.info(f"ShardingOrchestrator: MIGRATING '{agent_name}' from {old_shard} to {target_shard_id}")
+        logging.info(
+            f"ShardingOrchestrator: MIGRATING '{agent_name}' from {old_shard} to {target_shard_id}"
+        )
         # In a real system, this would involve updating the AgentRegistry
         # or notifying the FleetManager to update the agent's signal bus.
         self._current_mapping[agent_name] = target_shard_id
@@ -116,7 +118,9 @@ class ShardingOrchestrator:
             for agent in agent_list:
                 self.migrate_agent(agent, shard_id)
 
-        logging.info(f"ShardingOrchestrator: Rebalancing complete. {len(new_mapping)} shards active.")
+        logging.info(
+            f"ShardingOrchestrator: Rebalancing complete. {len(new_mapping)} shards active."
+        )
 
     def _sync_mapping_to_disk(self) -> None:
         """Internal helper to persist current mapping."""
@@ -126,45 +130,24 @@ class ShardingOrchestrator:
             if shard not in grouped:
                 grouped[shard] = []
 
-
-
-
-
-
-
-
-
-
             grouped[shard].append(agent)
         self._save_mapping(grouped)
 
     def _save_mapping(self, mapping: dict[str, list[str]]) -> None:
-
-
-
-
         self.shard_mapping_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.shard_mapping_path, "w") as f:
             json.dump(mapping, f, indent=4)
 
     def _save_mapping(self, mapping: dict[str, list[str]]) -> None:
-
-
         self.shard_mapping_path.parent.mkdir(parents=True, exist_ok=True)
         with open(self.shard_mapping_path, "w") as f:
             json.dump(mapping, f, indent=4)
 
     def load_mapping(self) -> dict[str, list[str]]:
-
-
-
         if self.shard_mapping_path.exists():
             with open(self.shard_mapping_path) as f:
                 return json.load(f)
         return {}
-
-
-
 
 
 if __name__ == "__main__":

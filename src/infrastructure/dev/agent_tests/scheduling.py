@@ -21,18 +21,13 @@
 """Cross-browser and scheduling functionality."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from collections.abc import Callable
 from .enums import BrowserType
 from .models import CrossBrowserConfig, ScheduleSlot
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class CrossBrowserRunner:
@@ -56,9 +51,7 @@ class CrossBrowserRunner:
         self._drivers[browser] = False
 
     def run_test(
-        self,
-        test_name: str,
-        test_code: Callable[[], bool]
+        self, test_name: str, test_code: Callable[[], bool]
     ) -> dict[BrowserType, dict[str, Any]]:
         """Run a test across all browsers."""
         results: dict[BrowserType, dict[str, Any]] = {}
@@ -75,26 +68,9 @@ class CrossBrowserRunner:
                 "test": test_name,
                 "passed": passed,
                 "retries": retries,
-
-
-
-
-
-
-
-
-
-
-                "headless": self.config.headless
+                "headless": self.config.headless,
             }
             results[browser] = result
-
-
-
-
-
-
-
 
             self.results[browser].append(result)
             self.teardown_driver(browser)
@@ -105,40 +81,20 @@ class CrossBrowserRunner:
         summary: dict[str, Any] = {"browsers": {}}
 
         for browser, results in self.results.items():
-
-
-
-
-
-
-
-
-
-
-
-
-
             passed = sum(1 for r in results if r.get("passed"))
             browser_summary: dict[str, int] = {
                 "total": len(results),
                 "passed": passed,
-                "failed": len(results) - passed
-
-
-
-
-
+                "failed": len(results) - passed,
             }
             summary["browsers"][browser.value] = browser_summary
 
         return summary
 
 
-
-
-
 class TestScheduler:
     """Test scheduling and load balancing."""
+
     __test__ = False
 
     def __init__(self, num_workers: int = 4) -> None:
@@ -152,10 +108,7 @@ class TestScheduler:
         self._test_durations[test_id] = duration_ms
 
     def create_schedule(
-        self,
-        tests: list[str],
-        start_time: str,
-        strategy: str = "load_balanced"
+        self, tests: list[str], start_time: str, strategy: str = "load_balanced"
     ) -> list[ScheduleSlot]:
         """Create a test execution schedule."""
         if strategy == "load_balanced":
@@ -166,15 +119,11 @@ class TestScheduler:
             return self._schedule_load_balanced(tests, start_time)
 
     def _schedule_load_balanced(
-        self,
-        tests: list[str],
-        start_time: str
+        self, tests: list[str], start_time: str
     ) -> list[ScheduleSlot]:
         """Create load-balanced schedule."""
         sorted_tests = sorted(
-            tests,
-            key=lambda t: self._test_durations.get(t, 1000),
-            reverse=True
+            tests, key=lambda t: self._test_durations.get(t, 1000), reverse=True
         )
         worker_loads: list[list[str]] = [[] for _ in range(self.num_workers)]
         worker_times = [0.0] * self.num_workers
@@ -189,23 +138,16 @@ class TestScheduler:
                     start_time=start_time,
                     end_time="",
                     tests=tests_for_worker,
-                    workers=1
+                    workers=1,
                 )
                 self.schedule.append(slot)
         return self.schedule
 
     def _schedule_sequential(
-        self,
-        tests: list[str],
-        start_time: str
+        self, tests: list[str], start_time: str
     ) -> list[ScheduleSlot]:
         """Create sequential schedule."""
-        slot = ScheduleSlot(
-            start_time=start_time,
-            end_time="",
-            tests=tests,
-            workers=1
-        )
+        slot = ScheduleSlot(start_time=start_time, end_time="", tests=tests, workers=1)
         self.schedule = [slot]
         return self.schedule
 
@@ -215,9 +157,7 @@ class TestScheduler:
             return 0.0
         max_duration = 0.0
         for slot in self.schedule:
-            slot_duration = sum(
-                self._test_durations.get(t, 1000) for t in slot.tests
-            )
+            slot_duration = sum(self._test_durations.get(t, 1000) for t in slot.tests)
             max_duration = max(max_duration, slot_duration)
         return max_duration
 

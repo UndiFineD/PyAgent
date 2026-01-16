@@ -23,18 +23,19 @@ Monitors task patterns and generates new executable tools to automate repetitive
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 import time
 from pathlib import Path
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
-from src.logic.agents.development.core.ToolDraftingCore import ToolDraftingCore, ToolDefinition
+from src.core.base.BaseUtilities import as_tool
+from src.logic.agents.development.core.ToolDraftingCore import (
+    ToolDraftingCore,
+    ToolDefinition,
+)
 
 __version__ = VERSION
-
-
 
 
 class ToolEvolutionAgent(BaseAgent):
@@ -79,11 +80,11 @@ class ToolEvolutionAgent(BaseAgent):
 
         code_lines = [
             "import pyautogui",
-            "from src.core.base.utilities import as_tool",
+            "from src.core.base.BaseUtilities import as_tool",
             "",
             "@as_tool",
             f"def {tool_name}():",
-            f'    """Automated GUI task generated from {path.name}"""'
+            f'    """Automated GUI task generated from {path.name}"""',
         ]
 
         for event in events:
@@ -98,7 +99,9 @@ class ToolEvolutionAgent(BaseAgent):
         return f"### Automation Analysis Complete\n\n{explanation}\n\nGenerated Implementation:\n\n```python\n{implementation}\n```\n\nRun `implement_and_save_tool` with this code to activate it."
 
     @as_tool
-    def implement_and_save_tool(self, tool_name: str, code_content: str, description: str) -> str:
+    def implement_and_save_tool(
+        self, tool_name: str, code_content: str, description: str
+    ) -> str:
         """Writes a new Python tool to the evolved tool directory.
         Args:
             tool_name: CamelCase name for the tool file (e.g. MyNewTool).
@@ -126,36 +129,19 @@ class ToolEvolutionAgent(BaseAgent):
             endpoint: The API path where this tool is exposed.
         """
 
-
-
-
-
-
-
-
-
-
         if not self.core.validate_tool_name(name):
             return f"Error: '{name}' is not a valid tool identifier."
 
         tool_def = ToolDefinition(
-
-
-
-
             name=name,
             description=description,
             parameters={"type": "object", "properties": {"input": {"type": "string"}}},
-            endpoint=endpoint
+            endpoint=endpoint,
         )
-
 
         spec = self.core.generate_openapi_spec([tool_def])
         logging.info(f"ToolEvolution: Generated contract for {name}")
         return f"### OpenAPI Contract for '{name}'\n\n```json\n{spec}\n```"
-
-
-
 
     @as_tool
     def improve_content(self, prompt: str) -> str:
@@ -163,10 +149,10 @@ class ToolEvolutionAgent(BaseAgent):
         return "I am scanning for ways to improve my own capabilities."
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(ToolEvolutionAgent, "Tool Evolution Agent", "Self-evolving tool creator")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        ToolEvolutionAgent, "Tool Evolution Agent", "Self-evolving tool creator"
+    )
     main()

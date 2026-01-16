@@ -21,16 +21,18 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.logic.agents.cognitive.context.models.VisualizationData import VisualizationData
-from src.logic.agents.cognitive.context.models.VisualizationType import VisualizationType
+from src.core.base.Version import VERSION
+from src.logic.agents.cognitive.context.models.VisualizationData import (
+    VisualizationData,
+)
+from src.logic.agents.cognitive.context.models.VisualizationType import (
+    VisualizationType,
+)
 from pathlib import Path
 from typing import Any
 import json
 
 __version__ = VERSION
-
-
 
 
 class ContextVisualizer:
@@ -43,7 +45,9 @@ class ContextVisualizer:
         >>> data=visualizer.create_dependency_graph(contexts)
     """
 
-    def __init__(self, viz_type: VisualizationType = VisualizationType.DEPENDENCY_GRAPH) -> None:
+    def __init__(
+        self, viz_type: VisualizationType = VisualizationType.DEPENDENCY_GRAPH
+    ) -> None:
         self.viz_type: VisualizationType = viz_type
         self.nodes: list[dict[str, Any]] = []
         self.edges: list[tuple[str, str]] = []
@@ -98,9 +102,7 @@ class ContextVisualizer:
                     if other_name in content:
                         edges.append((path, other_path))
         return VisualizationData(
-            viz_type=VisualizationType.DEPENDENCY_GRAPH,
-            nodes=nodes,
-            edges=edges
+            viz_type=VisualizationType.DEPENDENCY_GRAPH, nodes=nodes, edges=edges
         )
 
     def create_call_hierarchy(self, contexts: dict[str, str]) -> VisualizationData:
@@ -120,5 +122,5 @@ class ContextVisualizer:
             viz_type=VisualizationType.CALL_HIERARCHY,
             nodes=nodes,
             edges=edges,
-            layout="tree"
+            layout="tree",
         )

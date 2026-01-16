@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_inductor\__init__.py
-# hypothesis_version: 6.150.1
-
-['.cpp', '.pt2', '.so', '_guards_fn', 'accuracy', 'aot_inductor.package', 'call_module', 'compile', 'default', 'from_example_inputs', 'from_graph', 'from_tracing_context', 'list_mode_options', 'list_options', 'max-autotune', 'max_autotune', 'reduce-overhead', 'standalone_compile', 'triton.cudagraphs']

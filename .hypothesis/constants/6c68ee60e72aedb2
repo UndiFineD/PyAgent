@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_numpy\_dtypes_impl.py
-# hypothesis_version: 6.150.1
-
-['DefaultDTypes', 'arctan2', 'complex_dtype', 'copysign', 'float_dtype', 'fmax', 'fmin', 'fmod', 'gcd', 'heaviside', 'hypot', 'int_dtype', 'lcm', 'logaddexp', 'logaddexp2', 'maximum', 'minimum']

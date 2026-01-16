@@ -21,14 +21,9 @@
 """ParallelizationStrategy for test distribution."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class ParallelizationStrategy:
@@ -39,7 +34,9 @@ class ParallelizationStrategy:
         self.strategy_type = strategy_type
         self.workers = int(workers)
 
-    def distribute(self, tests: list[str], workers: int | None = None) -> dict[int, list[str]]:
+    def distribute(
+        self, tests: list[str], workers: int | None = None
+    ) -> dict[int, list[str]]:
         """Distribute tests across workers."""
         worker_count = int(workers) if workers is not None else self.workers
         worker_count = max(worker_count, 1)
@@ -59,7 +56,9 @@ class ParallelizationStrategy:
         worker_count = max(self.workers, 1)
         assignments: dict[int, list[str]] = {i: [] for i in range(worker_count)}
         loads: dict[int, float] = {i: 0.0 for i in range(worker_count)}
-        for test_name, duration in sorted(tests.items(), key=lambda kv: kv[1], reverse=True):
+        for test_name, duration in sorted(
+            tests.items(), key=lambda kv: kv[1], reverse=True
+        ):
             target = min(loads.keys(), key=lambda idx: loads[idx])
             assignments[target].append(test_name)
             loads[target] += float(duration)

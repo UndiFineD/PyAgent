@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\matrices\expressions\matexpr.py
-# hypothesis_version: 6.150.1
-
-[11.0, 'Add', 'Invalid index %s', 'Mul', '__add__', '__mul__', '__pow__', '__radd__', '__rmul__', '__rpow__', '__rsub__', '__rtruediv__', '__sub__', '__truediv__', 'deep', 'incompatible shapes', 'indices out of range', 'other', 'valid_index', 'z1, z2']

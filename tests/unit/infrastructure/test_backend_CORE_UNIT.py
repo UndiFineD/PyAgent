@@ -12,21 +12,19 @@ import sys
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
     class agent_sys_path:
         def __enter__(self) -> bool:
-
             return self
-
-
-
-
-
-
 
         def __exit__(self, *args) -> bool:
             sys.path.remove(str(AGENT_DIR))
@@ -674,7 +672,8 @@ class TestCustomModelEndpoints(unittest.TestCase):
                 "https://company.openai.azure.com / openai / deployments / "
                 "model-name / chat / completions"
             ),
-            "ollama": "http://localhost:11434 / api"}
+            "ollama": "http://localhost:11434 / api",
+        }
 
         self.assertIn("local_llm", custom_endpoints)
         self.assertEqual(custom_endpoints["ollama"], "http://localhost:11434 / api")
@@ -685,24 +684,20 @@ class TestCustomModelEndpoints(unittest.TestCase):
             "api_key": {
                 "type": "api_key",
                 "header": "X-API-Key",
-                "value": "secret-key-123"
+                "value": "secret-key-123",
             },
             "bearer_token": {
                 "type": "bearer",
                 "header": "Authorization",
-                "format": "Bearer {token}"
+                "format": "Bearer {token}",
             },
             "oauth2": {
                 "type": "oauth2",
                 "client_id": "client-123",
                 "client_secret": "secret-123",
-                "token_endpoint": "https://auth.example.com / oauth / token"
+                "token_endpoint": "https://auth.example.com / oauth / token",
             },
-            "basic_auth": {
-                "type": "basic",
-                "username": "user",
-                "password": "pass"
-            }
+            "basic_auth": {"type": "basic", "username": "user", "password": "pass"},
         }
 
         self.assertEqual(auth_methods["api_key"]["type"], "api_key")
@@ -710,6 +705,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
 
     def test_build_custom_endpoint_request(self) -> None:
         """Test building requests to custom endpoints."""
+
         class CustomEndpointClient:
             def __init__(self, endpoint_url, auth_config) -> bool:
                 self.endpoint_url: Any = endpoint_url
@@ -729,11 +725,17 @@ class TestCustomModelEndpoints(unittest.TestCase):
                 return {
                     "url": self.endpoint_url,
                     "headers": self.build_headers(),
-                    "json": {"messages": messages}
+                    "json": {"messages": messages},
                 }
 
-        auth: Dict[str, str] = {"type": "api_key", "header": "X-API-Key", "value": "key123"}
-        client: TestCustomModelEndpoints.CustomEndpointClient = CustomEndpointClient("http://localhost:8000 / v1 / chat", auth)
+        auth: Dict[str, str] = {
+            "type": "api_key",
+            "header": "X-API-Key",
+            "value": "key123",
+        }
+        client: TestCustomModelEndpoints.CustomEndpointClient = CustomEndpointClient(
+            "http://localhost:8000 / v1 / chat", auth
+        )
 
         request: bool = client.build_request([{"role": "user", "content": "Hi"}])
         self.assertEqual(request["headers"]["X-API-Key"], "key123")
@@ -744,21 +746,18 @@ class TestCustomModelEndpoints(unittest.TestCase):
         response_formats = {
             "openai_compatible": {
                 "choices": [{"message": {"content": "response"}}],
-                "usage": {"total_tokens": 100}
+                "usage": {"total_tokens": 100},
             },
             "anthropic": {
                 "content": [{"text": "response"}],
-                "usage": {"input_tokens": 50, "output_tokens": 50}
+                "usage": {"input_tokens": 50, "output_tokens": 50},
             },
-            "huggingface": {
-                "generated_text": "response",
-                "details": {"tokens": 100}
-            },
+            "huggingface": {"generated_text": "response", "details": {"tokens": 100}},
             "ollama": {
                 "response": "response",
                 "prompt_eval_count": 50,
-                "eval_count": 50
-            }
+                "eval_count": 50,
+            },
         }
 
         # Generic parser that handles multiple formats
@@ -773,17 +772,28 @@ class TestCustomModelEndpoints(unittest.TestCase):
                 return response["response"]
 
         openai_response: bool = extract_response_content(
-            response_formats["openai_compatible"],
-            "openai_compatible"
+            response_formats["openai_compatible"], "openai_compatible"
         )
         self.assertEqual(openai_response, "response")
 
     def test_custom_endpoint_fallback_chain(self) -> None:
         """Test fallback chain when multiple custom endpoints available."""
         endpoints = [
-            {"name": "primary", "url": "https://primary.example.com", "available": False},
-            {"name": "secondary", "url": "https://secondary.example.com", "available": True},
-            {"name": "tertiary", "url": "https://tertiary.example.com", "available": True}
+            {
+                "name": "primary",
+                "url": "https://primary.example.com",
+                "available": False,
+            },
+            {
+                "name": "secondary",
+                "url": "https://secondary.example.com",
+                "available": True,
+            },
+            {
+                "name": "tertiary",
+                "url": "https://tertiary.example.com",
+                "available": True,
+            },
         ]
 
         def select_available_endpoint(endpoints) -> bool:
@@ -800,7 +810,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
         endpoint_config = {
             "url": "https://secure.example.com",
             "verify_ssl": True,
-            "ca_bundle_path": "/etc / ssl / certs / ca-bundle.crt"
+            "ca_bundle_path": "/etc / ssl / certs / ca-bundle.crt",
         }
 
         self.assertTrue(endpoint_config["verify_ssl"])
@@ -811,7 +821,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
         endpoint_timeouts: Dict[str, int] = {
             "local_llm": 5,
             "cloud_api": 30,
-            "slow_inference": 120
+            "slow_inference": 120,
         }
 
         self.assertEqual(endpoint_timeouts["local_llm"], 5)
@@ -819,6 +829,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
 
     def test_custom_endpoint_parameter_mapping(self) -> None:
         """Test mapping parameters between different endpoint formats."""
+
         class ParameterMapper:
             """Maps request parameters to different endpoint formats."""
 
@@ -827,7 +838,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
                     "model": request.get("model"),
                     "messages": request.get("messages"),
                     "temperature": request.get("temperature", 0.7),
-                    "max_tokens": request.get("max_tokens", 2048)
+                    "max_tokens": request.get("max_tokens", 2048),
                 }
 
             def map_to_anthropic_format(self, request) -> bool:
@@ -835,7 +846,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
                     "model": request.get("model"),
                     "messages": request.get("messages"),
                     "temperature": request.get("temperature", 0.7),
-                    "max_tokens": request.get("max_tokens", 2048)
+                    "max_tokens": request.get("max_tokens", 2048),
                 }
 
             def map_to_ollama_format(self, request) -> bool:
@@ -843,33 +854,36 @@ class TestCustomModelEndpoints(unittest.TestCase):
                     "model": request.get("model"),
                     "messages": request.get("messages"),
                     "temperature": request.get("temperature", 0.7),
-                    "stream": request.get("stream", False)
+                    "stream": request.get("stream", False),
                 }
 
         mapper = ParameterMapper()
-        openai_params: bool = mapper.map_to_openai_format({
-            "model": "gpt-4",
-            "messages": [{"role": "user", "content": "hi"}],
-            "temperature": 0.5
-        })
+        openai_params: bool = mapper.map_to_openai_format(
+            {
+                "model": "gpt-4",
+                "messages": [{"role": "user", "content": "hi"}],
+                "temperature": 0.5,
+            }
+        )
 
         self.assertEqual(openai_params["model"], "gpt-4")
         self.assertEqual(openai_params["temperature"], 0.5)
 
     def test_custom_endpoint_cost_tracking(self) -> None:
         """Test tracking costs for custom endpoints."""
+
         class CostTracker:
             def __init__(self) -> None:
                 self.endpoint_costs: dict[Any, Any] = {}
 
             def record_request(
-                    self,
-                    endpoint_name,
-                    input_tokens,
-                    output_tokens,
-                    cost_per_1k_tokens) -> None:
+                self, endpoint_name, input_tokens, output_tokens, cost_per_1k_tokens
+            ) -> None:
                 if endpoint_name not in self.endpoint_costs:
-                    self.endpoint_costs[endpoint_name] = {"total_cost": 0, "requests": 0}
+                    self.endpoint_costs[endpoint_name] = {
+                        "total_cost": 0,
+                        "requests": 0,
+                    }
 
                 total_tokens = input_tokens + output_tokens
                 cost = (total_tokens / 1000) * cost_per_1k_tokens
@@ -889,6 +903,7 @@ class TestCustomModelEndpoints(unittest.TestCase):
 
     def test_custom_endpoint_health_check(self) -> None:
         """Test health checking for custom endpoints."""
+
         class EndpointHealthCheck:
             def __init__(self, endpoint_url) -> None:
                 self.endpoint_url: Any = endpoint_url
@@ -907,7 +922,9 @@ class TestCustomModelEndpoints(unittest.TestCase):
                     self.last_check: datetime = datetime.now()
                     return False
 
-        health_check: TestCustomModelEndpoints.EndpointHealthCheck = EndpointHealthCheck("http://localhost:8000")
+        health_check: TestCustomModelEndpoints.EndpointHealthCheck = (
+            EndpointHealthCheck("http://localhost:8000")
+        )
         result: bool = health_check.check_health()
         self.assertTrue(result)
         self.assertIsNotNone(health_check.last_check)

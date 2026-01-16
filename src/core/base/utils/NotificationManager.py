@@ -20,7 +20,7 @@
 # Infrastructure
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 from collections.abc import Callable
@@ -33,21 +33,21 @@ __version__ = VERSION
 # Optional dependency
 try:
     import requests
+
     HAS_REQUESTS = True
 except ImportError:
     HAS_REQUESTS = False
     requests = None
 
 
-
-
-
-
-
 class NotificationManager:
     """Manages event notifications via webhooks and internal callbacks."""
 
-    def __init__(self, workspace_root: str | None = None, recorder: LocalContextRecorder | None = None) -> None:
+    def __init__(
+        self,
+        workspace_root: str | None = None,
+        recorder: LocalContextRecorder | None = None,
+    ) -> None:
         self.webhooks: list[str] = []
         self.callbacks: list[Callable[[str, dict[str, Any]], None]] = []
         # Phase 108: Resilience management
@@ -68,9 +68,11 @@ class NotificationManager:
         self.webhooks.append(url)
         logging.info(f"Registered webhook: {url}")
 
-    def register_callback(self, callback: Callable[[str, dict[str, Any]], None]) -> None:
+    def register_callback(
+        self, callback: Callable[[str, dict[str, Any]], None]
+    ) -> None:
         self.callbacks.append(callback)
-        name = getattr(callback, '__name__', repr(callback))
+        name = getattr(callback, "__name__", repr(callback))
         logging.info(f"Registered callback: {name}")
 
     def notify(self, event_name: str, event_data: dict[str, Any]) -> None:
@@ -80,7 +82,10 @@ class NotificationManager:
             return
 
         if self.recorder:
-            self.recorder.record_lesson("event_notify", {"event": event_name, "data_keys": list(event_data.keys())})
+            self.recorder.record_lesson(
+                "event_notify",
+                {"event": event_name, "data_keys": list(event_data.keys())},
+            )
         self._execute_callbacks(event_name, event_data)
         self._send_webhooks(event_name, event_data)
 
@@ -113,4 +118,6 @@ class NotificationManager:
                 logging.warning(f"Webhook failed for {url}: {e}")
                 self._update_status(url, False)
                 if self.recorder:
-                    self.recorder.record_lesson("webhook_failure", {"url": url, "error": str(e)})
+                    self.recorder.record_lesson(
+                        "webhook_failure", {"url": url, "error": str(e)}
+                    )

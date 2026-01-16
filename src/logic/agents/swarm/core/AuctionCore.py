@@ -1,4 +1,3 @@
-
 """
 Core logic for Swarm Resource Auctioning (Phase 184).
 Implements the VCG auction model for truthful bidding.
@@ -12,12 +11,13 @@ except ImportError:
     rc = None  # type: ignore[assignment]
 
 
-
-
 class AuctionCore:
     """Core logic for VCG-based resource auctions in the swarm economy."""
+
     @staticmethod
-    def calculate_vcg_auction(bids: list[dict[str, Any]], slots: int) -> list[dict[str, Any]]:
+    def calculate_vcg_auction(
+        bids: list[dict[str, Any]], slots: int
+    ) -> list[dict[str, Any]]:
         """
         Simple VCG-inspired auction.
         Winners are the top 'slots' bidders.
@@ -32,27 +32,31 @@ class AuctionCore:
         if not bids:
             return []
 
-        sorted_bids = sorted(bids, key=lambda x: x['amount'], reverse=True)
+        sorted_bids = sorted(bids, key=lambda x: x["amount"], reverse=True)
         winners = sorted_bids[:slots]
 
         if len(sorted_bids) > slots:
-            clearing_price = sorted_bids[slots]['amount']
+            clearing_price = sorted_bids[slots]["amount"]
         else:
             clearing_price = 0.0
 
         for w in winners:
-            w['price_paid'] = clearing_price
+            w["price_paid"] = clearing_price
 
         return winners
 
     @staticmethod
-    def enforce_vram_quota(agent_vram_request: float, total_available: float, quota_percent: float = 0.2) -> bool:
+    def enforce_vram_quota(
+        agent_vram_request: float, total_available: float, quota_percent: float = 0.2
+    ) -> bool:
         """
         Checks if a request exceeds the per-agent quota (default 20%).
         """
         if rc:
             try:
-                return rc.enforce_vram_quota(agent_vram_request, total_available, quota_percent)  # type: ignore[attr-defined]
+                return rc.enforce_vram_quota(
+                    agent_vram_request, total_available, quota_percent
+                )  # type: ignore[attr-defined]
             except Exception:
                 pass
         quota = total_available * quota_percent

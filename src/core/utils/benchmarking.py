@@ -23,7 +23,7 @@ Test Utils: Common utilities for agent and backend unit tests.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import sys
 from pathlib import Path
 from contextlib import contextmanager
@@ -54,17 +54,10 @@ AGENT_DIR = _loader.agent_dir
 load_module_from_path = _loader.load_module_from_path
 
 
-
-
-
-
-
 @contextmanager
 def agent_dir_on_path() -> Iterator[None]:
     with _loader.agent_dir_on_path():
         yield
-
-
 
 
 @contextmanager
@@ -72,8 +65,8 @@ def agent_sys_path() -> Iterator[None]:
     with _loader.agent_sys_path():
         yield
 
-# Aliases for legacy compatibility
 
+# Aliases for legacy compatibility
 
 
 MockBackend = MockAIBackend

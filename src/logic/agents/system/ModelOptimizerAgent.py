@@ -22,11 +22,10 @@
 
 from __future__ import annotations
 from src.core.base.BaseAgent import BaseAgent
+from src.infrastructure.simulation.HopperSim import HopperSim, Precision
 import logging
 import json
 from typing import Any
-
-
 
 
 class ModelOptimizerAgent(BaseAgent):
@@ -40,10 +39,22 @@ class ModelOptimizerAgent(BaseAgent):
             "Suggest the best 'Virtualization' strategy for large models (e.g., layered loading, 4-bit quantization)."
         )
 
-    def select_optimization_strategy(self, model_size_gb: float, available_vram_gb: float, hardware_features: list[str] = []) -> dict[str, Any]:
+    def select_optimization_strategy(
+        self,
+        model_size_gb: float,
+        available_vram_gb: float,
+        hardware_features: list[str] = [],
+    ) -> dict[str, Any]:
         """Calculates the best optimization strategy based on hardware constraints."""
         if self.recorder:
-            self.recorder.record_lesson("model_optimization_request", {"size": model_size_gb, "vram": available_vram_gb, "hw": hardware_features})
+            self.recorder.record_lesson(
+                "model_optimization_request",
+                {
+                    "size": model_size_gb,
+                    "vram": available_vram_gb,
+                    "hw": hardware_features,
+                },
+            )
 
         strategy = {
             "method": "Standard",
@@ -52,7 +63,7 @@ class ModelOptimizerAgent(BaseAgent):
             "offload_to_cpu": False,
             "acceleration": "None",
             "estimated_speed": "Normal",
-            "hopper_optimized": False
+            "hopper_optimized": False,
         }
 
         # Phase 130: Hopper Optimization (H100)
@@ -85,13 +96,17 @@ class ModelOptimizerAgent(BaseAgent):
 
         return strategy
 
-    def run_tinyml_benchmark(self, model_id: str, hardware_target: str) -> dict[str, Any]:
+    def run_tinyml_benchmark(
+        self, model_id: str, hardware_target: str
+    ) -> dict[str, Any]:
         """
         Runs an energy and latency benchmark for a specific model on target hardware (MLSysBook Pattern).
         Analyzes batch size, precision (INT8/FP16), and memory constraints.
         """
         if self.recorder:
-            self.recorder.record_lesson("tinyml_benchmark", {"model": model_id, "target": hardware_target})
+            self.recorder.record_lesson(
+                "tinyml_benchmark", {"model": model_id, "target": hardware_target}
+            )
 
         logging.info(f"Running TinyML benchmark for {model_id} on {hardware_target}...")
         return {
@@ -99,7 +114,7 @@ class ModelOptimizerAgent(BaseAgent):
             "energy_uj": 450,
             "memory_kb": 256,
             "suitability_score": 0.92,
-            "bottlenecks": ["Bus contention during INT8 quantization"]
+            "bottlenecks": ["Bus contention during INT8 quantization"],
         }
 
     def get_fastflow_command(self, model_tag: str) -> str:
@@ -111,15 +126,22 @@ class ModelOptimizerAgent(BaseAgent):
         Simulates H100 (Hopper) performance using HopperSim logic (Phase 130).
         Calculates compute utilization and bandwidth requirements for FP8 kernels.
         """
+        sim = HopperSim()
         utilization = 0.85  # H100 Transformer Engine target
-        memory_bandwidth_gb_s = 3350  # H100 SXM5
+        
+        # Estimate latency for a standard 4096 context block (simulated)
+        latency = sim.estimate_matmul_latency(4096, 4096, 4096, precision=Precision.FP8)
 
         return {
             "hardware": "NVIDIA H100 (Hopper)",
             "peak_tflops_fp8": 3958,
-            "simulated_throughput_tokens_s": (memory_bandwidth_gb_s / (model_params_billions * 2)) * utilization,
+            "simulated_block_latency_ms": round(latency, 2),
+            "simulated_throughput_tokens_s": (
+                3350 / (model_params_billions * 2)
+            )
+            * utilization,
             "energy_efficiency_score": 0.95,
-            "recommendation": "Use FP8 mixed-precision via Transformer Engine."
+            "recommendation": "Use FP8 mixed-precision via Transformer Engine for compute efficiency.",
         }
 
     def get_airllm_setup_code(self, model_id: str, compression: str = "4bit") -> str:
@@ -153,29 +175,26 @@ output = model.generate(
 print(model.tokenizer.decode(output.sequences[0]))
 """
 
-
-
-
     def improve_content(self, task_description: str) -> str:
         """Suggests an optimization plan for a specific model deployment task."""
         # Simple parser for "model size" and "vram" in text if provided
         # For now, return a generic recommendation
-        return json.dumps({
-
-
-
-
-            "recommendation": "Use 4-bit quantization and Layered Inference for models > 30B parameters on consumer hardware.",
-            "pattern": "AirLLM (Layered Loading)",
-            "benefits": ["Run 70B on 4GB VRAM", "Avoid OOM errors", "Simplified deployment"]
-        }, indent=2)
-
-
-
-
+        return json.dumps(
+            {
+                "recommendation": "Use 4-bit quantization and Layered Inference for models > 30B parameters on consumer hardware.",
+                "pattern": "AirLLM (Layered Loading)",
+                "benefits": [
+                    "Run 70B on 4GB VRAM",
+                    "Avoid OOM errors",
+                    "Simplified deployment",
+                ],
+            },
+            indent=2,
+        )
 
 
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
+    from src.core.base.BaseUtilities import create_main_function
+
     main = create_main_function(ModelOptimizerAgent)
     main()

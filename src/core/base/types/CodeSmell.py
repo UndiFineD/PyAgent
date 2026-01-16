@@ -21,20 +21,16 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass
 
 __version__ = VERSION
 
 
-
-
-
-
-
 @dataclass
 class CodeSmell:
     """A detected code smell."""
+
     name: str
     description: str
     severity: str

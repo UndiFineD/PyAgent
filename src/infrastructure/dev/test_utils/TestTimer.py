@@ -21,16 +21,15 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import time
 
 __version__ = VERSION
 
 
-
-
 class TestTimer:
     """Timer utility for tracking test execution duration."""
+
     __test__ = False
     """Timer for measuring test execution time."""
 

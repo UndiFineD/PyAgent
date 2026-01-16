@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\system\LoggingAgent.py
-# hypothesis_version: 6.150.1
-
-[500, 514, 'args', 'kwargs', 'level', 'levelno', 'message', 'metadata', 'msg', 'name', 'resLevelName', 'source', 'timestamp']

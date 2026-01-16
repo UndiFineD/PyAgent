@@ -138,9 +138,11 @@ class TestErrorMappingCorePropertyBased:
         assert link.startswith("https://docs.pyagent.ai/errors/")
         assert code in link
 
-    @given(st.sampled_from([
-        "PA-1001", "PA-2001", "PA-3001", "PA-4001", "PA-5001", "PA-9999"
-    ]))
+    @given(
+        st.sampled_from(
+            ["PA-1001", "PA-2001", "PA-3001", "PA-4001", "PA-5001", "PA-9999"]
+        )
+    )
     def test_describe_error_always_returns_string(self, code: str) -> None:
         """Property: describe_error always returns a non-empty string."""
         desc = ErrorMappingCore.describe_error(code)

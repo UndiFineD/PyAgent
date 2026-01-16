@@ -21,14 +21,12 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ErrorEntry import ErrorEntry
 from .RegressionInfo import RegressionInfo
 import re
 
 __version__ = VERSION
-
-
 
 
 class RegressionDetector:
@@ -73,7 +71,7 @@ class RegressionDetector:
             regression = RegressionInfo(
                 error_id=error.id,
                 original_fix_commit=self.fixed_errors[signature],
-                regression_commit=current_commit
+                regression_commit=current_commit,
             )
             # Check if already tracked
             for r in self.regressions:

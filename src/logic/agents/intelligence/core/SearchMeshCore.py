@@ -1,14 +1,12 @@
-
 from __future__ import annotations
 from typing import Any
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
-
-
 
 
 class SearchMeshCore:
@@ -24,10 +22,12 @@ class SearchMeshCore:
             "bing": 0.8,
             "perplexity": 1.5,
             "tavily": 1.3,
-            "generic": 1.0
+            "generic": 1.0,
         }
 
-    def aggregate_results(self, raw_results: dict[str, list[dict[str, Any]]]) -> list[dict[str, Any]]:
+    def aggregate_results(
+        self, raw_results: dict[str, list[dict[str, Any]]]
+    ) -> list[dict[str, Any]]:
         """
         Takes raw results from multiple providers and merges them into a ranked list.
         Each result should have: 'title', 'url', 'snippet', 'score' (optional).
@@ -63,25 +63,31 @@ class SearchMeshCore:
                     continue
 
                 seen_urls.add(url)
-                master_list.append({
-                    "title": res.get("title", "No Title"),
-                    "url": url,
-                    "snippet": res.get("snippet", ""),
-                    "providers": [provider],
-                    "total_score": weighted_score
-                })
+                master_list.append(
+                    {
+                        "title": res.get("title", "No Title"),
+                        "url": url,
+                        "snippet": res.get("snippet", ""),
+                        "providers": [provider],
+                        "total_score": weighted_score,
+                    }
+                )
 
         # Step 2: Sort by total score
         master_list.sort(key=lambda x: x["total_score"], reverse=True)
         return master_list
 
-    def filter_redundant(self, results: list[dict[str, Any]], remembered_urls: set[str]) -> list[dict[str, Any]]:
+    def filter_redundant(
+        self, results: list[dict[str, Any]], remembered_urls: set[str]
+    ) -> list[dict[str, Any]]:
         """
         Filters out results that have already been seen in previous search research sessions (MemoRAG integration).
         """
         return [res for res in results if res["url"] not in remembered_urls]
 
-    async def parallel_search_placeholder(self, providers: list[str], query: str) -> dict[str, list[dict[str, Any]]]:
+    async def parallel_search_placeholder(
+        self, providers: list[str], query: str
+    ) -> dict[str, list[dict[str, Any]]]:
         """
         Generic structure for the Mesh agent to invoke search providers in parallel.
         (The Shell agent will provide the actual API implementation callbacks).

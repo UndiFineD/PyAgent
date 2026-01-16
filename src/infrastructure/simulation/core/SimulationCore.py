@@ -1,4 +1,3 @@
-
 """
 Core logic for Swarm Simulation and Stress-Testing (Phase 181).
 Handles stochastic failure modeling and visualization progress hooks.
@@ -15,12 +14,13 @@ except (ImportError, AttributeError):
 logger = logging.getLogger(__name__)
 
 
-
-
 class SimulationCore:
     """Core logic for stochastic simulation and stress testing."""
+
     @staticmethod
-    def calculate_stochastic_failures(agent_count: int, failure_rate: float = 0.1) -> list[int]:
+    def calculate_stochastic_failures(
+        agent_count: int, failure_rate: float = 0.1
+    ) -> list[int]:
         """
         Returns a list of agent indices that are designated to 'fail'.
         """
@@ -34,7 +34,9 @@ class SimulationCore:
         return random.sample(range(agent_count), num_failures)
 
     @staticmethod
-    def apply_latency_spike(base_latency: float, spike_probability: float = 0.05) -> float:
+    def apply_latency_spike(
+        base_latency: float, spike_probability: float = 0.05
+    ) -> float:
         """
         Simulates network/hardware jitter by adding a random spike.
         """
@@ -62,4 +64,4 @@ class SimulationCore:
         percent = current / total
         filled = int(width * percent)
         bar = "=" * filled + "-" * (width - filled)
-        return f"[{bar}] {percent*100:3.0f}% ({current}/{total})"
+        return f"[{bar}] {percent * 100:3.0f}% ({current}/{total})"

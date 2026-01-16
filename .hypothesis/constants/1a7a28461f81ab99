@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\svm\_classes.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.0001, 0.001, 0.1, 0.5, 1.0, 200, 1000, 'C', 'auto', 'balanced', 'boolean', 'c_svc', 'class_weight', 'crammer_singer', 'csr', 'dual', 'epsilon', 'epsilon_insensitive', 'epsilon_svr', 'fit_intercept', 'hinge', 'intercept_scaling', 'l1', 'l2', 'left', 'loss', 'max_iter', 'multi_class', 'neither', 'nu', 'nu_svc', 'nu_svr', 'one_class', 'ovr', 'penalty', 'probability', 'random_state', 'rbf', 'right', 'scale', 'squared_hinge', 'tol', 'verbose']

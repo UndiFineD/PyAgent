@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\cognitive\core\MetacognitiveCore.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.1, 0.4, 0.7, 0.8, 1.0, 1.05, 2.0, 5.0, 'CODE_VALIDATION', 'CONTINUATION', 'DocGenAgent', 'GENERAL_INQUIRY', 'LintingAgent', 'REPORT_GENERATION', 'SummarizationAgent', 'UnitTestingAgent', 'action', 'avg_confidence', 'confidence', 'create', 'edit', 'hedges_detected', 'high_confidence', 'i think', 'likely', 'maybe', 'not sure', 'perhaps', 'research', 'search', 'status', 'total_evaluations', 'uncertain', 'uncertainty_score', 'unclear']

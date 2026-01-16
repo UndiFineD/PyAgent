@@ -1,4 +1,3 @@
-
 """
 SynthesisCore handles synthetic data generation for fine-tuning.
 It also implements the Feature Store logic for vectorized insights.
@@ -9,11 +8,10 @@ import random
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
-
-
 
 
 class SynthesisCore:
@@ -28,7 +26,7 @@ class SynthesisCore:
             "def {name}(*args, **kwargs): return args[0] if args else kwargs.get('default')",
             "async with {context} as c: yield await c.exec(f'{{a}} + {{b}}')",
             "lambda x: [i for i in x if i is not None and not isinstance(i, (int, float))]",
-            "class {name}(metaclass=Singleton): pass"
+            "class {name}(metaclass=Singleton): pass",
         ]
 
     def generate_python_edge_cases(self, count: int) -> list[str]:

@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\distributed\device_mesh.py
-# hypothesis_version: 6.150.1
-
-['ArrayLike', 'DETAIL', 'DeviceMesh', 'LOCAL_RANK', '_', '_dim_group_names', '_hash', 'bound_device_id', 'cpu', 'cpu:gloo,cuda:nccl', 'cuda', 'gloo', 'init_device_mesh', 'mesh_default', 'threaded', 'xla']

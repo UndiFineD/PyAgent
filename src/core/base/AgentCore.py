@@ -26,7 +26,7 @@ Zero external dependencies besides standard library and local models.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import difflib
 import fnmatch
 import hashlib
@@ -40,19 +40,14 @@ from typing import Any
 __version__ = VERSION
 
 
-
 @dataclass
 class CodeQualityReport:
     """Report container for code quality analysis."""
-
-
-
 
     score: float
     violations: list[dict[str, Any]] = field(default_factory=list)
     metrics: dict[str, Any] = field(default_factory=dict)
     suggestions: list[str] = field(default_factory=list)
-
 
 
 class LogicCore:
@@ -75,7 +70,7 @@ class LogicCore:
         return {
             "line_count": len(lines),
             "word_count": len(words),
-            "token_count": len(text) // 4
+            "token_count": len(text) // 4,
         }
 
     def generate_cache_key(self, prompt: str, content: str, model: str = "") -> str:
@@ -83,7 +78,9 @@ class LogicCore:
         data = f"{prompt}:{content}:{model}"
         return hashlib.sha256(data.encode()).hexdigest()
 
-    def calculate_diff(self, old_content: str, new_content: str, filename: str = "file") -> str:
+    def calculate_diff(
+        self, old_content: str, new_content: str, filename: str = "file"
+    ) -> str:
         """Generates a unified diff between two strings."""
         if not old_content or not new_content:
             return ""
@@ -92,7 +89,7 @@ class LogicCore:
             old_content.splitlines(keepends=True),
             new_content.splitlines(keepends=True),
             fromfile=f"a/{filename}",
-            tofile=f"b/{filename}"
+            tofile=f"b/{filename}",
         )
         return "".join(diff)
 
@@ -100,40 +97,17 @@ class LogicCore:
         """Normalization logic for markdown text."""
         if not content:
             return ""
-        content = re.sub(r'^(#+.*)\n([^\n#])', r'\1\n\n\2', content, flags=re.MULTILINE)
+        content = re.sub(r"^(#+.*)\n([^\n#])", r"\1\n\n\2", content, flags=re.MULTILINE)
         return content
 
     def validate_content_safety(self, content: str) -> bool:
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         """High-performance safety check on content."""
         return True
-
-
 
     def score_response_quality(self, response: str) -> int:
         """Score the quality of an AI response (1-5)."""
         if not response or response.isspace():
             return 1  # ResponseQuality.INVALID
-
 
         score = 3
         if len(response) > 500:
@@ -145,7 +119,9 @@ class LogicCore:
 
         return max(1, min(5, score))
 
-    def build_prompt_with_history(self, prompt: str, history: list[dict[str, str]], max_history: int = 5) -> str:
+    def build_prompt_with_history(
+        self, prompt: str, history: list[dict[str, str]], max_history: int = 5
+    ) -> str:
         """Logic for constructing a prompt string from history."""
         context = ""
         for msg in history[-max_history:]:
@@ -154,10 +130,6 @@ class LogicCore:
             context += f"\n{role.upper()}: {content}"
 
         return f"{context}\n\nUSER: {prompt}"
-
-
-
-
 
 
 class BaseCore(LogicCore):
@@ -176,17 +148,11 @@ class BaseCore(LogicCore):
         # Fallback heuristic: search upwards for .git or requirements.txt
         curr = file_path.absolute()
         for _ in range(5):
-            if (curr / ".git").exists() or (curr / "requirements.txt").exists() or (curr / "README.md").exists():
-
-
-
-
-
-
-
-
-
-
+            if (
+                (curr / ".git").exists()
+                or (curr / "requirements.txt").exists()
+                or (curr / "README.md").exists()
+            ):
                 return str(curr)
             if curr.parent == curr:
                 break
@@ -194,20 +160,12 @@ class BaseCore(LogicCore):
 
         return str(file_path.parent.parent.parent)
 
-    def is_path_ignored(self, path: Path, repo_root: Path, ignored_patterns: set[str]) -> bool:
-
-
-
-
-
-
-
-
-
-
+    def is_path_ignored(
+        self, path: Path, repo_root: Path, ignored_patterns: set[str]
+    ) -> bool:
         """Check if a path should be ignored based on patterns."""
         try:
-            relative_path = str(path.relative_to(repo_root)).replace('\\', '/')
+            relative_path = str(path.relative_to(repo_root)).replace("\\", "/")
         except ValueError:
             return True
 
@@ -216,34 +174,30 @@ class BaseCore(LogicCore):
 
         return self._is_default_ignored(relative_path)
 
-    def _matches_ignored_patterns(self, relative_path: str, ignored_patterns: set[str]) -> bool:
+    def _matches_ignored_patterns(
+        self, relative_path: str, ignored_patterns: set[str]
+    ) -> bool:
         """Internal helper to check against custom ignore patterns."""
         for pattern in ignored_patterns:
-            if fnmatch.fnmatch(relative_path, pattern) or \
-               fnmatch.fnmatch(relative_path.split('/')[0], pattern):
+            if fnmatch.fnmatch(relative_path, pattern) or fnmatch.fnmatch(
+                relative_path.split("/")[0], pattern
+            ):
                 return True
         return False
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def _is_default_ignored(self, relative_path: str) -> bool:
         """Internal helper for standard fleet ignore directories."""
         default_ignores = {
-            '.git', '__pycache__', 'node_modules', '.venv', 'venv',
-            'env', '.agent_cache', '.agent_snapshots'
+            ".git",
+            "__pycache__",
+            "node_modules",
+            ".venv",
+            "venv",
+            "env",
+            ".agent_cache",
+            ".agent_snapshots",
         }
-        parts = relative_path.split('/')
+        parts = relative_path.split("/")
         return any(part in default_ignores for part in parts)
 
     def estimate_tokens(self, text: str) -> int:
@@ -252,10 +206,6 @@ class BaseCore(LogicCore):
             return 0
         return len(text) // 4
 
-
-
-
-
     def truncate_for_context(self, text: str, max_tokens: int) -> str:
         """Truncate text to fit within token limit."""
         chars = max_tokens * 4
@@ -263,21 +213,28 @@ class BaseCore(LogicCore):
             return text
         return text[:chars] + "... [Truncated]"
 
-    def filter_code_files(self, files: list[Path], repo_root: Path, ignored_patterns: set[str], supported_extensions: set[str]) -> list[Path]:
+    def filter_code_files(
+        self,
+        files: list[Path],
+        repo_root: Path,
+        ignored_patterns: set[str],
+        supported_extensions: set[str],
+    ) -> list[Path]:
         """Pure logic for filtering code files."""
         return [
-            f for f in files
-            if f.suffix in supported_extensions and not self.is_path_ignored(f, repo_root, ignored_patterns)
+            f
+            for f in files
+            if f.suffix in supported_extensions
+            and not self.is_path_ignored(f, repo_root, ignored_patterns)
         ]
-
-
-
 
 
 class AgentCore(BaseCore):
     """Logic-only core for managing agent-specific data transformations."""
 
-    def __init__(self, workspace_root: str | None = None, settings: dict[str, Any] | None = None) -> None:
+    def __init__(
+        self, workspace_root: str | None = None, settings: dict[str, Any] | None = None
+    ) -> None:
         super().__init__(workspace_root=workspace_root)
         self.settings = settings or {}
 
@@ -288,17 +245,17 @@ class AgentCore(BaseCore):
 
         lines = content.splitlines()
         pending: list[str] = []
-        list_pattern = re.compile(r'^(\d+[\.\)]|\*|\-)\s+(\[ \]\s+)?(.*)')
+        list_pattern = re.compile(r"^(\d+[\.\)]|\*|\-)\s+(\[ \]\s+)?(.*)")
 
         for line in lines:
             stripped = line.strip()
-            if not stripped or '[x]' in stripped or '[Fixed]' in stripped:
+            if not stripped or "[x]" in stripped or "[Fixed]" in stripped:
                 continue
 
             match = list_pattern.match(stripped)
             if match:
                 item_text = match.group(3).strip()
-                if item_text.lower().startswith('current strengths'):
+                if item_text.lower().startswith("current strengths"):
                     continue
                 if len(item_text) > 5:
                     pending.append(item_text)
@@ -317,18 +274,18 @@ class AgentCore(BaseCore):
             updated = False
             for item in fixed_items:
                 if item in line:
-                    if '- [ ]' in line:
-                        new_lines.append(line.replace('- [ ]', '- [x]'))
+                    if "- [ ]" in line:
+                        new_lines.append(line.replace("- [ ]", "- [x]"))
                         updated = True
                         break
-                    elif '[x]' not in line and '[Fixed]' not in line:
+                    elif "[x]" not in line and "[Fixed]" not in line:
                         new_lines.append(line + " [Fixed]")
                         updated = True
                         break
             if not updated:
                 new_lines.append(line)
 
-        return '\n'.join(new_lines) + '\n'
+        return "\n".join(new_lines) + "\n"
 
     def generate_changelog_entries(self, fixed_items: list[str]) -> str:
         """Generates changelog snippet for fixed items."""
@@ -343,19 +300,32 @@ class AgentCore(BaseCore):
 
         for item in items:
             it_low = item.lower()
-            if any(word in it_low for word in ['security', 'vulnerability', 'crash', 'critical']):
+            if any(
+                word in it_low
+                for word in ["security", "vulnerability", "crash", "critical"]
+            ):
                 prioritized.append(item)
             else:
                 remaining.append(item)
 
         return prioritized + remaining
 
-    def get_agent_command(self, python_exe: str, script_name: str, context_file: str, prompt: str, strategy: str) -> list[str]:
+    def get_agent_command(
+        self,
+        python_exe: str,
+        script_name: str,
+        context_file: str,
+        prompt: str,
+        strategy: str,
+    ) -> list[str]:
         """Pure logic for generating agent execution commands."""
         return [
             python_exe,
             script_name,
-            '--context', context_file,
-            '--prompt', prompt,
-            '--strategy', strategy
+            "--context",
+            context_file,
+            "--prompt",
+            prompt,
+            "--strategy",
+            strategy,
         ]

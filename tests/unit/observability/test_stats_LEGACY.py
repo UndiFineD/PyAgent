@@ -1,16 +1,16 @@
 """Legacy unit tests for observability statistics."""
+
 from pathlib import Path
+
 try:
     from tests.utils.agent_test_utils import *
 except ImportError:
     pass
 
 
-
-
 def test_stats_agent_counts_files(tmp_path: Path) -> None:
     with agent_dir_on_path():
-        from src.observability.stats.agents import StatsAgent
+        from src.observability.stats.Agents import StatsAgent
 
     a = tmp_path / "a.py"
     b = tmp_path / "b.py"
@@ -21,7 +21,9 @@ def test_stats_agent_counts_files(tmp_path: Path) -> None:
     (tmp_path / "a.changes.md").write_text("chg", encoding="utf-8")
     (tmp_path / "a.errors.md").write_text("err", encoding="utf-8")
     (tmp_path / "a.improvements.md").write_text("imp", encoding="utf-8")
-    (tmp_path / "test_a.py").write_text("def test_a() -> None:\n    assert True\n", encoding="utf-8")
+    (tmp_path / "test_a.py").write_text(
+        "def test_a() -> None:\n    assert True\n", encoding="utf-8"
+    )
     agent = StatsAgent([str(a), str(b)])
     stats = agent.calculate_stats()
     assert stats["total_files"] == 2

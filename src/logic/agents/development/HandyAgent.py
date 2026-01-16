@@ -23,19 +23,17 @@ Inspired by the Handy pattern (Rust terminal agent) and GitHub Copilot CLI.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import subprocess
 import shutil
 import time
 from pathlib import Path
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
 __version__ = VERSION
-
-
 
 
 class HandyAgent(BaseAgent):
@@ -58,7 +56,9 @@ class HandyAgent(BaseAgent):
         if self.recorder:
             try:
                 meta = {"phase": 108, "type": "shell", "timestamp": time.time()}
-                self.recorder.record_interaction("handy", "bash", str(input), output, meta=meta)
+                self.recorder.record_interaction(
+                    "handy", "bash", str(input), output, meta=meta
+                )
             except Exception:
                 pass
 
@@ -73,12 +73,18 @@ class HandyAgent(BaseAgent):
                 # git ls-files | grep required shell or manual piping
                 # Added # nosec to suppress security warning for git/grep chain as it is manually piped
                 p1 = subprocess.Popen(["git", "ls-files"], stdout=subprocess.PIPE)  # nosec
-                result = subprocess.check_output(["grep", query], stdin=p1.stdout, text=True)  # nosec
+                result = subprocess.check_output(
+                    ["grep", query], stdin=p1.stdout, text=True
+                )  # nosec
                 p1.stdout.close()
             else:
-                result = subprocess.check_output(["find", path, "-name", f"*{query}*"], text=True)
+                result = subprocess.check_output(
+                    ["find", path, "-name", f"*{query}*"], text=True
+                )
 
-            return f"### 🔍 Search Results for '{query}':\n```text\n{result[:1000]}\n```"
+            return (
+                f"### 🔍 Search Results for '{query}':\n```text\n{result[:1000]}\n```"
+            )
         except Exception as e:
             return f"Search failed: {e}"
 
@@ -93,7 +99,9 @@ class HandyAgent(BaseAgent):
         elif command == "/summarize":
             res = f"### 📝 Triggered /summarize for {args}\nGenerating high-level architectural overview..."
         else:
-            res = f"Unknown slash command: {command}. Available: /fix, /test, /summarize"
+            res = (
+                f"Unknown slash command: {command}. Available: /fix, /test, /summarize"
+            )
 
         self._record("slash_command", {"cmd": command, "args": args}, res)
         return res
@@ -107,8 +115,14 @@ class HandyAgent(BaseAgent):
         """
         # Improved Security Blocklist (Phase 104)
         blocklist = [
-            "rm -rf /", "mkfs", "dd if=", "> /dev/sda",
-            "chmod -R 777 /", ":(){ :|:& };:", "del /s /q c:\\", "format c:"
+            "rm -rf /",
+            "mkfs",
+            "dd if=",
+            "> /dev/sda",
+            "chmod -R 777 /",
+            ":(){ :|:& };:",
+            "del /s /q c:\\",
+            "format c:",
         ]
         if any(b in command.lower() for b in blocklist):
             msg = "### ⚠️ Security Block: Potentially catastrophic command detected."
@@ -119,8 +133,11 @@ class HandyAgent(BaseAgent):
             # Use shlex to safely split commands without shell=True
             # This prevents command injection while supporting most use cases
             import shlex
+
             cmd_args = shlex.split(command)
-            result = subprocess.run(cmd_args, capture_output=True, text=True, timeout=60)
+            result = subprocess.run(
+                cmd_args, capture_output=True, text=True, timeout=60
+            )
             if result.returncode == 0:
                 stdout = result.stdout[:1000]
                 self._record("execute_success", command, stdout)
@@ -132,7 +149,7 @@ class HandyAgent(BaseAgent):
                     f"**Stderr**: `{stderr}`",
                     "\n**Handy Diagnosis**:",
                     "- Suggested Fix: Check if dependencies are installed or if paths are correct.",
-                    "- Context: This error often occurs when the environment is misconfigured."
+                    "- Context: This error often occurs when the environment is misconfigured.",
                 ]
                 res = "\n".join(analysis)
                 self._record("execute_fail", command, res)

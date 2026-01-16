@@ -3,17 +3,16 @@
 # Apache 2.0 License
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .AgentStrategy import AgentStrategy
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+
     BackendFunction = Callable[[str, str | None, list[dict[str, str]] | None], str]
 
 __version__ = VERSION
-
-
 
 
 class DirectStrategy(AgentStrategy):
@@ -25,7 +24,7 @@ class DirectStrategy(AgentStrategy):
         context: str,
         backend_call: BackendFunction,
         system_prompt: str | None = None,
-        history: list[dict[str, str]] | None = None
+        history: list[dict[str, str]] | None = None,
     ) -> str:
         full_prompt = f"{prompt}\n\nContext:\n{context}"
         return await backend_call(full_prompt, system_prompt, history)

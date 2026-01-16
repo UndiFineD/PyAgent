@@ -24,12 +24,16 @@ Pure logic for computing moving averages, resource mapping, and anti-flapping sc
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import time
 
+try:
+    import rust_core as rc
+    HAS_RUST = True
+except ImportError:
+    HAS_RUST = False
+
 __version__ = VERSION
-
-
 
 
 class ScalingCore:
@@ -37,7 +41,13 @@ class ScalingCore:
     Pure logic for handling scaling decisions.
     Supports multi-resource metrics (latency, cpu, mem) and anti-flapping.
     """
-    def __init__(self, scale_threshold: float = 5.0, window_size: int = 10, backoff_seconds: int = 30) -> None:
+
+    def __init__(
+        self,
+        scale_threshold: float = 5.0,
+        window_size: int = 10,
+        backoff_seconds: int = 30,
+    ) -> None:
         self.scale_threshold = scale_threshold
         self.window_size = window_size
         self.backoff_seconds = backoff_seconds
@@ -64,6 +74,16 @@ class ScalingCore:
         metrics = self.load_metrics.get(key, {})
         if not metrics:
             return 0.0
+
+        # Rust-accelerated weighted load calculation
+        if HAS_RUST:
+            try:
+                latency = metrics.get("latency", [])
+                cpu = metrics.get("cpu", [])
+                mem = metrics.get("mem", [])
+                return rc.calculate_weighted_load_rust(latency, cpu, mem)  # type: ignore[attr-defined]
+            except Exception:
+                pass
 
         # Weights: Latency 60%, CPU 30%, MEM 10%
         latency_avg = self.get_avg(key, "latency")

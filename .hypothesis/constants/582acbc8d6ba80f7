@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\utils\_metadata_requests.py
-# hypothesis_version: 6.150.1
-
-['$UNCHANGED$', '$UNUSED$', '$WARN$', '$self_request', 'MethodPair', 'RouterMappingPair', 'X', 'Xt', 'Y', '_metadata_request', '_type', 'callee', 'caller', 'decision_function', 'fit', 'fit_predict', 'fit_transform', 'get_metadata_routing', 'inverse_transform', 'mapping', 'metadata_request', 'metadata_router', 'partial_fit', 'predict', 'predict_log_proba', 'predict_proba', 'router', 'score', 'self', 'split', 'transform', 'y', 'yt']

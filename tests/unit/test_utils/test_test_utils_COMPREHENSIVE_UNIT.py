@@ -14,21 +14,19 @@ import shutil
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
     class agent_sys_path:
         def __enter__(self) -> str:
-
             return self
-
-
-
-
-
-
 
         def __exit__(self, *args) -> str:
             sys.path.remove(str(AGENT_DIR))
@@ -47,6 +45,8 @@ class TestTestStatusEnum:
         assert TestStatus.SKIPPED.value == "skipped"
         assert TestStatus.ERROR.value == "error"
         assert TestStatus.PENDING.value == "pending"
+
+
 # =============================================================================
 
 
@@ -111,12 +111,7 @@ class TestFixtureHelpers(unittest.TestCase):
 
     def test_create_temp_directory_structure(self) -> None:
         """Test creating temporary directory structure."""
-        _ = {
-            "subdir1": {},
-            "subdir2": {
-                "nested": {}
-            }
-        }
+        _ = {"subdir1": {}, "subdir2": {"nested": {}}}
 
         for dirname in ["subdir1", "subdir2"]:
             os.makedirs(os.path.join(self.temp_dir, dirname), exist_ok=True)
@@ -126,7 +121,7 @@ class TestFixtureHelpers(unittest.TestCase):
 
     def test_fixture_with_context_manager(self) -> None:
         """Test fixture with context manager."""
-        with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
             f.write("content")
             temp_name: str = f.name
 
@@ -205,7 +200,7 @@ class TestContextManagers(unittest.TestCase):
         cleanup_called = False
 
         try:
-            with patch.object(object, '__init__', side_effect=Exception("Error")):
+            with patch.object(object, "__init__", side_effect=Exception("Error")):
                 pass
         except Exception:
             pass
@@ -223,9 +218,9 @@ class TestContextManagers(unittest.TestCase):
 
     def test_context_manager_with_patch(self) -> None:
         """Test context manager with patch."""
-        with patch('os.path.exists') as mock_exists:
+        with patch("os.path.exists") as mock_exists:
             mock_exists.return_value = True
-            result: bool = os.path.exists('/fake/path')
+            result: bool = os.path.exists("/fake/path")
             self.assertTrue(result)
 
 
@@ -315,7 +310,7 @@ class TestDataGenerators(unittest.TestCase):
 
     def test_generate_boundary_values(self) -> None:
         """Test generating boundary values."""
-        boundaries = [0, 1, -1, 999999, -999999, float('inf'), float('-inf')]
+        boundaries = [0, 1, -1, 999999, -999999, float("inf"), float("-inf")]
 
         self.assertEqual(len(boundaries), 7)
         self.assertTrue(all(isinstance(b, (int, float)) for b in boundaries))
@@ -326,6 +321,7 @@ class TestExceptionHandling(unittest.TestCase):
 
     def test_assert_raises(self) -> None:
         """Test assert_raises."""
+
         def raise_error() -> sys.NoReturn:
             raise ValueError("Error message")
 
@@ -334,6 +330,7 @@ class TestExceptionHandling(unittest.TestCase):
 
     def test_assert_raises_with_message(self) -> None:
         """Test assert_raises with message check."""
+
         def raise_error() -> sys.NoReturn:
             raise ValueError("Specific error")
 
@@ -344,6 +341,7 @@ class TestExceptionHandling(unittest.TestCase):
 
     def test_assert_does_not_raise(self) -> None:
         """Test assert_does_not_raise."""
+
         def safe_operation() -> int:
             return 42
 
@@ -355,6 +353,7 @@ class TestExceptionHandling(unittest.TestCase):
 
     def test_multiple_exception_types(self) -> None:
         """Test handling multiple exception types."""
+
         def process(value: Optional[int]) -> int:
             if value is None:
                 raise TypeError("None not allowed")

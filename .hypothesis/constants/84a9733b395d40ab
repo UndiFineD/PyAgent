@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\utils\embedding_functions\chroma_cloud_qwen_embedding_function.py
-# hypothesis_version: 6.150.1
-
-['CHROMA_API_KEY', 'Unknown error', 'api_key_env_var', 'chroma-cloud-qwen', 'cosine', 'documents', 'embeddings', 'error', 'instructions', 'ip', 'l2', 'model', 'nl_to_code', 'query', 'task', 'texts', 'x-chroma-token']

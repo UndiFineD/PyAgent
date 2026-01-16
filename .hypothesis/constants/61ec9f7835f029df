@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\model_selection\_classification_threshold.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.5, 1.0, 100, 'array-like', 'auto', 'balanced_accuracy', 'binary', 'boolean', 'classes_', 'cv', 'cv_object', 'decision_function', 'estimator', 'estimator_', 'feature_names_in_', 'fit', 'left', 'n_features_in_', 'n_jobs', 'neither', 'pos_label', 'predict_log_proba', 'predict_proba', 'prefit', 'random_state', 'refit', 'response_method', 'score', 'scores', 'scoring', 'split', 'store_cv_results', 'threshold', 'thresholds', 'y']

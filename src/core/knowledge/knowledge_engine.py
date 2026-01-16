@@ -18,7 +18,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from pathlib import Path
 from .btree_store import BTreeKnowledgeStore
@@ -27,11 +27,6 @@ from .graph_store import GraphKnowledgeStore
 from .knowledge_pruning_engine import KnowledgePruningEngine
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class KnowledgeEngine:
@@ -56,9 +51,13 @@ class KnowledgeEngine:
         if self._compressor is None:
             try:
                 from src.logic.agents.system.CompressionAgent import CompressionAgent
-                self._compressor = CompressionAgent(str(self.base_path / "compression_config.json"))
+
+                self._compressor = CompressionAgent(
+                    str(self.base_path / "compression_config.json")
+                )
             except ImportError as e:
                 import logging
+
                 logging.error(f"KnowledgeEngine: Failed to load CompressionAgent: {e}")
         return self._compressor
 
@@ -100,7 +99,9 @@ class KnowledgeEngine:
         elif mode == "btree":
             return self.btree.store(key, content, kwargs.get("metadata"))
         elif mode == "graph":
-            return self.graph.store(content, kwargs.get("target"), kwargs.get("relationship", "related_to"))
+            return self.graph.store(
+                content, kwargs.get("target"), kwargs.get("relationship", "related_to")
+            )
         return False
 
     def query(self, query: Any, mode: str = "vector", limit: int = 5) -> list[Any]:

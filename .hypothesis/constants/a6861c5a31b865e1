@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\nn\modules\linear.py
-# hypothesis_version: 6.150.1
-
-['Bilinear', 'Identity', 'LazyLinear', 'Linear', 'bias', 'device', 'dtype', 'in1_features', 'in2_features', 'in_features', 'out_features']

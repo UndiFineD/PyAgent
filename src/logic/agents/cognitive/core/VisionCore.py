@@ -15,8 +15,6 @@ from __future__ import annotations
 import hashlib
 
 
-
-
 class VisionCore:
     """
     Pure logic for visual processing, signature extraction,
@@ -50,7 +48,7 @@ class VisionCore:
                 matches += 1
 
         if matches == limit:
-             # High probability of solid color screen
+            # High probability of solid color screen
             return True
 
         # 2. Low Entropy / Binary Artifact Check

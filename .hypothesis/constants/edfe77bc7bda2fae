@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\solvers\ode\__init__.py
-# hypothesis_version: 6.150.1
-
-['allhints', 'canonical_odes', 'checkinfsol', 'checkodesol', 'classify_ode', 'constantsimp', 'dsolve', 'homogeneous_order', 'infinitesimals', 'linear_ode_to_matrix', 'linodesolve']

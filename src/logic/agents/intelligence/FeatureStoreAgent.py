@@ -25,18 +25,16 @@ Inspired by MLOps best practices.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 from pathlib import Path
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore
 
 __version__ = VERSION
-
-
 
 
 class FeatureStoreAgent(BaseAgent):
@@ -57,7 +55,9 @@ class FeatureStoreAgent(BaseAgent):
         """
         vector = self.core.vectorize_insight(insight_text)
         feature_name = f"insight_{hash(insight_text)}"
-        return self.register_feature(feature_name, vector, {"original_text": insight_text, "tags": tags})
+        return self.register_feature(
+            feature_name, vector, {"original_text": insight_text, "tags": tags}
+        )
 
     @as_tool
     def merge_swarm_insights(self, feature_names: list[str]) -> list[float]:
@@ -73,7 +73,9 @@ class FeatureStoreAgent(BaseAgent):
         return self.core.merge_feature_vectors(vectors)
 
     @as_tool
-    def register_feature(self, feature_name: str, value: Any, metadata: dict[str, Any] | None = None) -> str:
+    def register_feature(
+        self, feature_name: str, value: Any, metadata: dict[str, Any] | None = None
+    ) -> str:
         """Registers a new feature in the store.
 
         Args:
@@ -94,22 +96,10 @@ class FeatureStoreAgent(BaseAgent):
         """Retrieves a feature from the store."""
         path = self.feature_dir / f"{feature_name}.json"
 
-
-
-
-
-
-
-
-
-
         if not path.exists():
             return None
         try:
             with open(path, encoding="utf-8") as f:
-
-
-
                 data = json.load(f)
                 return data.get("value")
         except Exception as e:
@@ -121,16 +111,17 @@ class FeatureStoreAgent(BaseAgent):
         """Lists all available features in the store."""
         return [f.stem for f in self.feature_dir.glob("*.json")]
 
-
     def improve_content(self, input_text: str) -> str:
         """Advisory on feature engineering for agents."""
-        return "I am serving current agentic features. Recommend a feature for extraction?"
-
-
-
+        return (
+            "I am serving current agentic features. Recommend a feature for extraction?"
+        )
 
 
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(FeatureStoreAgent, "Feature Store Agent", "Feature life-cycle management")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        FeatureStoreAgent, "Feature Store Agent", "Feature life-cycle management"
+    )
     main()

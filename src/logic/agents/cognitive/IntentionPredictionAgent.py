@@ -18,7 +18,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import time
 import random
 import logging
@@ -28,16 +28,17 @@ from src.logic.agents.cognitive.core.MetacognitiveCore import MetacognitiveCore
 __version__ = VERSION
 
 
-
-
 class IntentionPredictionAgent:
     """
     Predicts the future actions and goals of peer agents in the fleet.
     Integrated with MetacognitiveCore for intent prediction and pre-warming.
     """
+
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.agent_histories: dict[str, list[dict[str, Any]]] = {}  # agent_id -> [action_logs]
+        self.agent_histories: dict[
+            str, list[dict[str, Any]]
+        ] = {}  # agent_id -> [action_logs]
         self.core = MetacognitiveCore()
 
     def predict_and_prewarm(self, agent_id: str) -> dict[str, Any]:
@@ -49,25 +50,27 @@ class IntentionPredictionAgent:
         prewarm_targets = self.core.get_prewarm_targets(intent)
 
         if prewarm_targets:
-            logging.info(f"IntentionPrediction: Pre-warming {prewarm_targets} for predicted intent: {intent}")
+            logging.info(
+                f"IntentionPrediction: Pre-warming {prewarm_targets} for predicted intent: {intent}"
+            )
 
         return {
             "predicted_intent": intent,
             "prewarm_targets": prewarm_targets,
-            "confidence": 0.75 if intent != "CONTINUATION" else 0.3
+            "confidence": 0.75 if intent != "CONTINUATION" else 0.3,
         }
 
-    def log_agent_action(self, agent_id: str, action_type: str, metadata: dict[str, Any]) -> None:
+    def log_agent_action(
+        self, agent_id: str, action_type: str, metadata: dict[str, Any]
+    ) -> None:
         """
         Record an action for better future prediction.
         """
         if agent_id not in self.agent_histories:
             self.agent_histories[agent_id] = []
-        self.agent_histories[agent_id].append({
-            "action": action_type,
-            "meta": metadata,
-            "ts": time.time()
-        })
+        self.agent_histories[agent_id].append(
+            {"action": action_type, "meta": metadata, "ts": time.time()}
+        )
         # Keep window small for simulation
         if len(self.agent_histories[agent_id]) > 10:
             self.agent_histories[agent_id].pop(0)
@@ -90,7 +93,9 @@ class IntentionPredictionAgent:
         else:
             return {"prediction": "wait_for_instruction", "confidence": 0.4}
 
-    def share_thought_signal(self, sender_id: str, receivers: list[str], thought_payload: Any) -> dict[str, Any]:
+    def share_thought_signal(
+        self, sender_id: str, receivers: list[str], thought_payload: Any
+    ) -> dict[str, Any]:
         """
         Simulates sub-millisecond thought sharing protocols.
         """
@@ -99,5 +104,5 @@ class IntentionPredictionAgent:
             "targets": receivers,
             "payload_size": len(str(thought_payload)),
             "protocol": "NeuroLink-v3",
-            "latency_ms": random.uniform(0.1, 0.9)
+            "latency_ms": random.uniform(0.1, 0.9),
         }

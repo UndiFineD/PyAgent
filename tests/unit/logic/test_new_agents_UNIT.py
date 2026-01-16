@@ -1,4 +1,5 @@
 """Unit tests for the new agent infrastructure."""
+
 from typing import Any, Dict
 from src.logic.agents.system.ModelOptimizerAgent import ModelOptimizerAgent
 from src.logic.agents.cognitive.LatentReasoningAgent import LatentReasoningAgent
@@ -7,9 +8,10 @@ from src.logic.agents.cognitive.LatentReasoningAgent import LatentReasoningAgent
 def test_hopper_optimization() -> None:
     agent = ModelOptimizerAgent("dummy_path")
 
-
     # Test strategy selection for H100
-    strategy: Dict[str, Any] = agent.select_optimization_strategy(70, 80, hardware_features=["h100"])
+    strategy: Dict[str, Any] = agent.select_optimization_strategy(
+        70, 80, hardware_features=["h100"]
+    )
     assert strategy["hopper_optimized"] is True
     assert strategy["quantization"] == "FP8"
 
@@ -18,10 +20,13 @@ def test_hopper_optimization() -> None:
     assert sim["hardware"] == "NVIDIA H100 (Hopper)"
     assert sim["simulated_throughput_tokens_s"] > 0
 
+
 def test_latent_reasoning_guardrails() -> None:
     agent = LatentReasoningAgent("dummy_path")
     # Test high-resource language
-    audit_eng = agent.audit_multilingual_output("Sort this list", "[1, 2, 3]", "English")
+    audit_eng = agent.audit_multilingual_output(
+        "Sort this list", "[1, 2, 3]", "English"
+    )
     assert audit_eng["is_consistent"] is True
 
     # Test low-resource language with complex task

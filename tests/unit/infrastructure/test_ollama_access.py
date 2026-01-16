@@ -1,5 +1,5 @@
-
 """Unit tests for local Ollama API connectivity."""
+
 import logging
 from pathlib import Path
 from requests import Response
@@ -8,8 +8,6 @@ from requests import Response
 from src.infrastructure.backend.LLMClient import LLMClient
 from src.core.base.ConnectivityManager import ConnectivityManager
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
-
-
 
 
 def test_ollama() -> None:
@@ -38,23 +36,10 @@ def test_ollama() -> None:
         if res:
             print(f"Ollama Success! Response: {res}")
 
-
-
-
-
-
-
-
-
-
             # Intelligence Gap: Record the interaction
             recorder.record_interaction("ollama", model, prompt, res)
             conn_manager.update_status(endpoint, True)
         else:
-
-
-
-
             print("Ollama failed to respond (maybe model not downloaded?).")
             conn_manager.update_status(endpoint, False)
     except Exception as e:
@@ -70,9 +55,6 @@ def test_ollama() -> None:
         except Exception as e2:
             print(f"Could not reach Ollama server: {e2}")
             conn_manager.update_status(endpoint, False)
-
-
-
 
 
 if __name__ == "__main__":

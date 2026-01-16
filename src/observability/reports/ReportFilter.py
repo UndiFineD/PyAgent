@@ -21,13 +21,11 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .CodeIssue import CodeIssue
 from .FilterCriteria import FilterCriteria
 
 __version__ = VERSION
-
-
 
 
 class ReportFilter:
@@ -53,7 +51,10 @@ class ReportFilter:
         """
 
         # Check severity
-        if self.criteria.min_severity and issue.severity.value < self.criteria.min_severity.value:
+        if (
+            self.criteria.min_severity
+            and issue.severity.value < self.criteria.min_severity.value
+        ):
             return False
         # Check category
         if self.criteria.categories and issue.category not in self.criteria.categories:

@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\tokenizers\implementations\sentencepiece_bpe.py
-# hypothesis_version: 6.150.1
-
-[1000, 30000, '<unk>', 'SentencePieceBPE', 'add_prefix_space', 'always', 'dropout', 'model', 'never', 'replacement', 'unk_token', '▁']

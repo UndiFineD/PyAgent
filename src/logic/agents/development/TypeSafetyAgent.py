@@ -21,17 +21,15 @@
 """Agent specializing in Python type hint enforcement and 'Any' type elimination."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import ast
 import logging
 from pathlib import Path
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function
+from src.core.base.BaseUtilities import create_main_function
 
 __version__ = VERSION
-
-
 
 
 class TypeSafetyAgent(BaseAgent):
@@ -61,30 +59,36 @@ class TypeSafetyAgent(BaseAgent):
                     # Check arguments
                     for arg in node.args.args:
                         if arg.annotation is None and arg.arg != "self":
-                            issues.append({
-                                "line": node.lineno,
-                                "type": "Missing Param Type",
-                                "item": f"Parameter '{arg.arg}' in '{node.name}'",
-                                "severity": "MEDIUM"
-                            })
+                            issues.append(
+                                {
+                                    "line": node.lineno,
+                                    "type": "Missing Param Type",
+                                    "item": f"Parameter '{arg.arg}' in '{node.name}'",
+                                    "severity": "MEDIUM",
+                                }
+                            )
 
                     # Check return type
                     if node.returns is None:
-                        issues.append({
-                            "line": node.lineno,
-                            "type": "Missing Return Type",
-                            "item": f"Function '{node.name}'",
-                            "severity": "LOW"
-                        })
+                        issues.append(
+                            {
+                                "line": node.lineno,
+                                "type": "Missing Return Type",
+                                "item": f"Function '{node.name}'",
+                                "severity": "LOW",
+                            }
+                        )
 
                 # Check for 'Any'
                 elif isinstance(node, ast.Name) and node.id == "Any":
-                    issues.append({
-                        "line": node.lineno,
-                        "type": "Usage of 'Any'",
-                        "item": "Variable or annotation using 'Any'",
-                        "severity": "HIGH"
-                    })
+                    issues.append(
+                        {
+                            "line": node.lineno,
+                            "type": "Usage of 'Any'",
+                            "item": "Variable or annotation using 'Any'",
+                            "severity": "HIGH",
+                        }
+                    )
 
         except Exception as e:
             logging.error(f"Failed to analyze {target_path}: {e}")
@@ -102,37 +106,21 @@ class TypeSafetyAgent(BaseAgent):
 
             file_issues = self.analyze_file(py_file)
             if file_issues:
-
-
-
-
-
-
-
-
-
-
                 all_issues.append((py_file.name, file_issues))
 
         if not all_issues:
             return "✅ No type safety issues detected in the analyzed scope."
 
-
-
-
-
         report = ["## Type Safety Analysis Report\n"]
         for filename, issues in all_issues:
             report.append(f"### {filename}")
             for issue in issues:
-
-
-
                 icon = "🚨" if issue["severity"] == "HIGH" else "⚠️"
-                report.append(f"- {icon} **{issue['type']}**: {issue['item']} (Line {issue['line']})")
+                report.append(
+                    f"- {icon} **{issue['type']}**: {issue['item']} (Line {issue['line']})"
+                )
 
         return "\n".join(report)
-
 
     def improve_content(self, prompt: str) -> str:
         """Perform a type safety audit."""
@@ -140,9 +128,8 @@ class TypeSafetyAgent(BaseAgent):
         return self.run_audit(path)
 
 
-
-
-
 if __name__ == "__main__":
-    main = create_main_function(TypeSafetyAgent, "TypeSafety Agent", "Path to audit (e.g. 'src/classes')")
+    main = create_main_function(
+        TypeSafetyAgent, "TypeSafety Agent", "Path to audit (e.g. 'src/classes')"
+    )
     main()

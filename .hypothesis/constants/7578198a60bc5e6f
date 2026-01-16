@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\cognitive\prompt_templates.py
-# hypothesis_version: 6.150.1
-
-[100, 150, 200, 250, 999, 'BUILD', 'DEFINE', 'DESIGN', 'RESEARCH', 'VALIDATE', 'persona', 'phase_range', 'workflow']

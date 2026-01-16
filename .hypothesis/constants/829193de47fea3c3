@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_dynamo\variables\iter.py
-# hypothesis_version: 6.150.1
-
-[100, 1024, 'BUILD_MAP', 'BUILD_TUPLE', 'CALL_FUNCTION_EX', 'PyCodegen', 'VariableTracker', '__add__', 'builtins', 'count', 'filter', 'index', 'key', 'map', 'repeat', 'strict', 'zip']

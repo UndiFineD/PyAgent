@@ -21,14 +21,12 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .AggregatedReport import AggregatedReport
 from .CodeIssue import CodeIssue
 import logging
 
 __version__ = VERSION
-
-
 
 
 class ReportAggregator:
@@ -80,8 +78,8 @@ class ReportAggregator:
                 "total_issues": len(all_issues),
                 "total_files": len(self.sources),
                 "by_severity": by_severity,
-                "by_category": by_category
-            }
+                "by_category": by_category,
+            },
         )
 
     def clear(self) -> None:

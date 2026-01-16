@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .MockResponse import MockResponse
 from .MockResponseType import MockResponseType
 import logging
@@ -33,8 +33,6 @@ from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
 # Infrastructure
 __version__ = VERSION
-
-
 
 
 class MockAIBackend:
@@ -56,7 +54,9 @@ class MockAIBackend:
         self._call_history: list[tuple[str, float]] = []
         self._response_sequence: list[MockResponse] = []
         self._sequence_index: int = 0
-        self.recorder = LocalContextRecorder(Path(workspace_root)) if workspace_root else None
+        self.recorder = (
+            LocalContextRecorder(Path(workspace_root)) if workspace_root else None
+        )
 
     def add_response(
         self,
@@ -96,7 +96,9 @@ class MockAIBackend:
         self._call_history.append((prompt, time.time()))
 
         # Use response sequence if available
-        if self._response_sequence and self._sequence_index < len(self._response_sequence):
+        if self._response_sequence and self._sequence_index < len(
+            self._response_sequence
+        ):
             response = self._response_sequence[self._sequence_index]
             self._sequence_index += 1
         else:
@@ -123,7 +125,9 @@ class MockAIBackend:
 
         # Intelligence Harvesting
         if self.recorder:
-            self.recorder.record_interaction("mock", "mock-model", prompt, response.content)
+            self.recorder.record_interaction(
+                "mock", "mock-model", prompt, response.content
+            )
 
         return response.content
 
@@ -144,8 +148,7 @@ class MockAIBackend:
             message: Error message.
         """
         self._default_response = MockResponse(
-            response_type=response_type,
-            error_message=message
+            response_type=response_type, error_message=message
         )
 
     def get_call_history(self) -> list[tuple[str, float]]:

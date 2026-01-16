@@ -21,7 +21,7 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ArchivedReport import ArchivedReport
 from pathlib import Path
 import logging
@@ -32,8 +32,6 @@ __version__ = VERSION
 # Define AGENT_DIR for default parameter
 
 AGENT_DIR = Path(__file__).resolve().parent.parent.parent  # src/
-
-
 
 
 class ReportArchiver:
@@ -59,10 +57,7 @@ class ReportArchiver:
         logging.debug(f"ReportArchiver initialized at {self.archive_dir}")
 
     def archive(
-        self,
-        file_path: str,
-        content: str,
-        retention_days: int = 90
+        self, file_path: str, content: str, retention_days: int = 90
     ) -> ArchivedReport:
         """Archive a report.
         Args:
@@ -78,7 +73,7 @@ class ReportArchiver:
             report_id=report_id,
             file_path=file_path,
             content=content,
-            retention_days=retention_days
+            retention_days=retention_days,
         )
         if file_path not in self.archives:
             self.archives[file_path] = []

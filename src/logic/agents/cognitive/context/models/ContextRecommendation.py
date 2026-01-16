@@ -21,12 +21,10 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass, field
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -39,6 +37,7 @@ class ContextRecommendation:
         reason: Why this recommendation was made.
         confidence: Recommendation confidence.
     """
+
     source_file: str
     suggested_sections: list[str] = field(default_factory=lambda: [])
     reason: str = ""

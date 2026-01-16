@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\huggingface_hub\_upload_large_folder.py
-# hypothesis_version: 6.150.1
-
-[100, 125, 150, 200, 250, 256, 400, 512, 600, 1000, 10000, 100000, 1000000000, '\n  - ', '\r\x1b[K', '\x1b[F', '%Y-%m-%d %H:%M:%S', '**/*', '-', '.', '/', 'Files:   ', 'HfApi', 'Job: commit', 'Job: get upload mode', 'Job: preupload LFS', 'Job: sha256', 'Starting upload...', 'Upload is complete!', 'Workers: ', 'api', 'files', 'lfs', 'rb', 'regular', 'repo_id', 'repo_type', 'revision', 'root', 'status', 'subdirs', 'xetEnabled']

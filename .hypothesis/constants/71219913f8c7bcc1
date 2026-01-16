@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\scipy\_lib\array_api_extra\_lib\_utils\_compat.py
-# hypothesis_version: 6.150.1
-
-['array_namespace', 'device', 'is_array_api_obj', 'is_cupy_array', 'is_cupy_namespace', 'is_dask_array', 'is_dask_namespace', 'is_jax_array', 'is_jax_namespace', 'is_lazy_array', 'is_numpy_array', 'is_numpy_namespace', 'is_torch_array', 'is_torch_namespace', 'is_writeable_array', 'size', 'to_device']

@@ -8,8 +8,6 @@ from pathlib import Path
 from typing import Dict, List, Any
 
 
-
-
 class SwarmBenchmark:
     """Automated benchmark regression and tracking for the PyAgent Swarm."""
 
@@ -28,10 +26,7 @@ class SwarmBenchmark:
 
     def save_metrics(self, current_metrics: Dict[str, Any]) -> None:
         """Saves current benchmark metrics to history."""
-        self.history.append({
-            "timestamp": time.time(),
-            "metrics": current_metrics
-        })
+        self.history.append({"timestamp": time.time(), "metrics": current_metrics})
         # Keep only last 100 runs
         if len(self.history) > 100:
             self.history = self.history[-100:]
@@ -47,46 +42,35 @@ class SwarmBenchmark:
         Fails if it increased by more than 10% compared to average.
         """
         if not self.history:
-
-
-
-
-
-
-
-
-
-
             logging.info("No benchmark history found. Skipping regression check.")
             return True
 
         # Calculate average TTFT from history
 
-
-
-
-        historical_ttfts = [run['metrics'].get('ttft', 0) for run in self.history if 'ttft' in run['metrics']]
+        historical_ttfts = [
+            run["metrics"].get("ttft", 0)
+            for run in self.history
+            if "ttft" in run["metrics"]
+        ]
         if not historical_ttfts:
             return True
 
         avg_ttft = sum(historical_ttfts) / len(historical_ttfts)
 
-
         threshold = avg_ttft * 1.10  # 10% buffer
 
         if current_ttft > threshold:
             logging.error("PERFORMANCE REGRESSION DETECTED!")
-            logging.error(f"Current TTFT: {current_ttft:.4f}s | Avg TTFT: {avg_ttft:.4f}s | Threshold: {threshold:.4f}s")
-
-
+            logging.error(
+                f"Current TTFT: {current_ttft:.4f}s | Avg TTFT: {avg_ttft:.4f}s | Threshold: {threshold:.4f}s"
+            )
 
             return False
 
-        logging.info(f"Performance check passed: TTFT {current_ttft:.4f}s is within 10% of history ({avg_ttft:.4f}s)")
+        logging.info(
+            f"Performance check passed: TTFT {current_ttft:.4f}s is within 10% of history ({avg_ttft:.4f}s)"
+        )
         return True
-
-
-
 
 
 if __name__ == "__main__":

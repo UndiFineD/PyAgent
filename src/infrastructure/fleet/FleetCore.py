@@ -24,21 +24,23 @@ Contains pure logic for tool scoring, capability mapping, and state transition v
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from functools import lru_cache
 
 __version__ = VERSION
 
 
-
-
 class FleetCore:
     """Pure logic core for the FleetManager."""
 
-    def __init__(self, fleet: Any | None = None, default_score_threshold: int = 10) -> None:
+    def __init__(
+        self, fleet: Any | None = None, default_score_threshold: int = 10
+    ) -> None:
         # Handle cases where registry injects fleet instance as first arg
-        if not isinstance(default_score_threshold, (int, float)) and isinstance(fleet, (int, float)):
+        if not isinstance(default_score_threshold, (int, float)) and isinstance(
+            fleet, (int, float)
+        ):
             self.default_score_threshold = fleet
         elif isinstance(fleet, (int, float)):
             self.default_score_threshold = float(fleet)
@@ -67,7 +69,12 @@ class FleetCore:
 
         return score
 
-    def score_tool_candidates(self, goal: str, tools_metadata: list[dict[str, Any]], provided_kwargs: dict[str, Any]) -> list[tuple[float, str]]:
+    def score_tool_candidates(
+        self,
+        goal: str,
+        tools_metadata: list[dict[str, Any]],
+        provided_kwargs: dict[str, Any],
+    ) -> list[tuple[float, str]]:
         """
         Calculates match scores for tools based on a goal/capability.
         Returns a sorted list of (score, tool_name).
@@ -76,13 +83,13 @@ class FleetCore:
         scored_candidates: list[tuple[float, str]] = []
 
         for t in tools_metadata:
-            name = t.get('name', '')
-            owner = t.get('owner', '')
+            name = t.get("name", "")
+            owner = t.get("owner", "")
 
             # Use cached core logic for speed (Phase 107 optimization)
             score = self.cached_logic_match(goal, name, owner)
 
-            params: dict[str, Any] = t.get('parameters', {})
+            params: dict[str, Any] = t.get("parameters", {})
 
             # Bonus for parameter intersection
             for param_name in provided_kwargs:
@@ -106,6 +113,6 @@ class FleetCore:
             "PLANNING": ["EXECUTING", "ERROR"],
             "EXECUTING": ["REVIEWING", "ERROR"],
             "REVIEWING": ["IDLE", "PLANNING", "ERROR"],
-            "ERROR": ["PLANNING", "IDLE"]
+            "ERROR": ["PLANNING", "IDLE"],
         }
         return next_state in allowed.get(current_state, [])

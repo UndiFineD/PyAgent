@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\integrations\tensor_parallel.py
-# hypothesis_version: 6.150.1
-
-['*', '.', '0', '2.5', '2.8', 'BF16', 'BOOL', 'CCL_WORKER_COUNT', 'F16', 'F32', 'F64', 'F8_E4M3', 'F8_E5M2', 'I16', 'I32', 'I64', 'I8', 'LOCAL_RANK', 'RANK', 'U8', 'WORLD_SIZE', '\\d+', '_bias', '_is_hooked', 'bias', 'ccl', 'colwise', 'colwise_rep', 'cpu', 'cuda', 'ep_router', 'gather', 'gloo', 'grouped_gemm', 'hccl', 'hpu', 'local', 'local_colwise', 'local_packed_rowwise', 'local_rowwise', 'nccl', 'replicate', 'rowwise', 'rowwise_rep', 'sequence_parallel', 'w', 'xccl', 'xpu']

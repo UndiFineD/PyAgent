@@ -20,7 +20,7 @@
 """Auto-generated module exports."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
+from src.core.base.Version import VERSION as VERSION
 from .AccessController import AccessController as AccessController
 from .AnalysisToolType import AnalysisToolType as AnalysisToolType
 from .AnalyticsEngine import AnalyticsEngine as AnalyticsEngine
@@ -53,7 +53,10 @@ from .ImprovementScheduler import ImprovementScheduler as ImprovementScheduler
 from .ImprovementStatus import ImprovementStatus as ImprovementStatus
 from .ImprovementTemplate import ImprovementTemplate as ImprovementTemplate
 from .ImprovementValidator import ImprovementValidator as ImprovementValidator
-from .ImprovementsAgent import ImprovementsAgent as ImprovementsAgent, DEFAULT_TEMPLATES as DEFAULT_TEMPLATES
+from .ImprovementsAgent import (
+    ImprovementsAgent as ImprovementsAgent,
+    DEFAULT_TEMPLATES as DEFAULT_TEMPLATES,
+)
 from .MergeCandidate import MergeCandidate as MergeCandidate
 from .MergeDetector import MergeDetector as MergeDetector
 from .NotificationManager import NotificationManager as NotificationManager

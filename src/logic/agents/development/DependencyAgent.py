@@ -21,14 +21,12 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types.DependencyNode import DependencyNode
 from src.core.base.types.DependencyType import DependencyType
 from src.logic.agents.development.DependencyCore import DependencyCore
 
 __version__ = VERSION
-
-
 
 
 class DependencyAgent:
@@ -57,14 +55,28 @@ class DependencyAgent:
             List of external dependency names.
         """
         stdlib_modules = {
-            'os', 'sys', 're', 'json', 'ast', 'hashlib', 'logging',
-            'pathlib', 'typing', 'dataclasses', 'enum', 'subprocess',
-            'tempfile', 'shutil', 'math', 'collections', 'functools'
+            "os",
+            "sys",
+            "re",
+            "json",
+            "ast",
+            "hashlib",
+            "logging",
+            "pathlib",
+            "typing",
+            "dataclasses",
+            "enum",
+            "subprocess",
+            "tempfile",
+            "shutil",
+            "math",
+            "collections",
+            "functools",
         }
         external: list[str] = []
         for name, node in self.nodes.items():
             if node.type == DependencyType.IMPORT:
-                base_module = name.split('.')[0]
+                base_module = name.split(".")[0]
                 if base_module not in stdlib_modules:
                     external.append(name)
         return external

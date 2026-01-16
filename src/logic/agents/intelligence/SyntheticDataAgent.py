@@ -19,17 +19,15 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 import os
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore
 
 __version__ = VERSION
-
-
 
 
 class SyntheticDataAgent(BaseAgent):
@@ -54,9 +52,14 @@ class SyntheticDataAgent(BaseAgent):
         snippets = self.core.generate_python_edge_cases(count)
 
         filepath = os.path.join(self.output_dir, "python_edge_cases.jsonl")
-        with open(filepath, 'w', encoding='utf-8') as f:
+        with open(filepath, "w", encoding="utf-8") as f:
             for s in snippets:
-                f.write(json.dumps({"instruction": "Complete or explain this code", "output": s}) + "\n")
+                f.write(
+                    json.dumps(
+                        {"instruction": "Complete or explain this code", "output": s}
+                    )
+                    + "\n"
+                )
 
         return f"Generated {count} edge cases in {filepath}"
 
@@ -66,22 +69,26 @@ class SyntheticDataAgent(BaseAgent):
         Generates synthetic training pairs (instruction, input, output) for a given topic.
         Saves them to a .jsonl file in the logs directory.
         """
-        logging.info(f"SyntheticDataAgent: Generating {count} training pairs for topic: {topic}")
+        logging.info(
+            f"SyntheticDataAgent: Generating {count} training pairs for topic: {topic}"
+        )
 
         dataset = []
         for i in range(count):
             # In a real implementation, this would call the LLM to generate variations
             # Here we simulate the structure
-            dataset.append({
-                "instruction": f"Explain the concept of {topic} in the context of agentic swarms.",
-                "input": "",
-                "output": f"Synthetic response for {topic} variation {i}. Detailed explanation of {topic}..."
-            })
+            dataset.append(
+                {
+                    "instruction": f"Explain the concept of {topic} in the context of agentic swarms.",
+                    "input": "",
+                    "output": f"Synthetic response for {topic} variation {i}. Detailed explanation of {topic}...",
+                }
+            )
 
         filename = f"synthetic_{topic.replace(' ', '_').lower()}.jsonl"
         filepath = os.path.join(self.output_dir, filename)
 
-        with open(filepath, 'a', encoding='utf-8') as f:
+        with open(filepath, "a", encoding="utf-8") as f:
             for entry in dataset:
                 f.write(json.dumps(entry) + "\n")
 

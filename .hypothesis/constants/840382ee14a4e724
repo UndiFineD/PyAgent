@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\scipy\stats\_quantile.py
-# hypothesis_version: 6.150.1
-
-[-0.5, 0.0, 0.5, 'closest_observation', 'harrell-davis', 'hazen', 'integral', 'inverted_cdf', 'linear', 'median_unbiased', 'normal_unbiased', 'propagate', 'real floating', 'weibull']

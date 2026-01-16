@@ -21,16 +21,11 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ComplianceCategory import ComplianceCategory
 from dataclasses import dataclass, field
 
 __version__ = VERSION
-
-
-
-
-
 
 
 @dataclass
@@ -43,6 +38,7 @@ class ComplianceResult:
         issues: List of compliance issues found.
         recommendations: Recommendations for fixing issues.
     """
+
     category: ComplianceCategory
     passed: bool
     issues: list[str] = field(default_factory=lambda: [])

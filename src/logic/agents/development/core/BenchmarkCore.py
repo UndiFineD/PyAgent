@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 from typing import Any
 from dataclasses import dataclass
@@ -8,18 +7,15 @@ try:
 except ImportError:
     rc = None  # type: ignore[assignment]
 
+
 @dataclass(frozen=True)
 class BenchmarkResult:
     """Performance metrics from a benchmark execution."""
-
-
-
 
     agent_id: str
     latency_ms: float
     token_count: int
     success: bool
-
 
 
 class BenchmarkCore:
@@ -37,8 +33,9 @@ class BenchmarkCore:
                         "agent_id": r.agent_id,
                         "latency_ms": r.latency_ms,
                         "token_count": r.token_count,
-                        "success": r.success
-                    } for r in results
+                        "success": r.success,
+                    }
+                    for r in results
                 ]
                 return rc.calculate_baseline(results_list)  # type: ignore[attr-defined]
             except Exception:
@@ -47,7 +44,9 @@ class BenchmarkCore:
             return 0.0
         return sum(r.latency_ms for r in results) / len(results)
 
-    def check_regression(self, current_latency: float, baseline: float, threshold: float = 0.1) -> dict[str, Any]:
+    def check_regression(
+        self, current_latency: float, baseline: float, threshold: float = 0.1
+    ) -> dict[str, Any]:
         """Checks if current latency exceeds the baseline by the given threshold."""
         if rc:
             try:
@@ -61,7 +60,7 @@ class BenchmarkCore:
         return {
             "regression": delta > threshold,
             "delta_percentage": delta * 100,
-            "limit": threshold * 100
+            "limit": threshold * 100,
         }
 
     def score_efficiency(self, result: BenchmarkResult) -> float:
@@ -72,7 +71,7 @@ class BenchmarkCore:
                     "agent_id": result.agent_id,
                     "latency_ms": result.latency_ms,
                     "token_count": result.token_count,
-                    "success": result.success
+                    "success": result.success,
                 }
                 return rc.score_efficiency(r_dict)  # type: ignore[attr-defined]
             except Exception:

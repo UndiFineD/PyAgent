@@ -1,4 +1,0 @@
-# file: c:\DEV\PyAgent\src\core\base\managers\ResourceQuotaManager.py
-# hypothesis_version: 6.150.1
-
-['cycles', 'elapsed_time', 'interrupted', 'reason', 'tokens_input', 'tokens_output', 'total_tokens']

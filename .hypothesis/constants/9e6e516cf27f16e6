@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\pyscreeze\__init__.py
-# hypothesis_version: 6.150.1
-
-[0.95, 0.999, 10000, '%Y-%m%d_%H-%M-%S-%f', '-f', '-x', '-z', '.', '.screenshot%s.png', '1.0.1', '3', 'Box', 'Point', 'RGB', 'RGBA', 'WAYLAND_DISPLAY', 'XDG_SESSION_TYPE', 'convert', 'darwin', 'gnome-screenshot', 'limit', 'linux', 'rb', 'red', 'red green blue', 'screencapture', 'screenshot%s.png', 'scrot', 'wayland', 'which', 'win32', 'x y', 'x11', '{:0>6x}']

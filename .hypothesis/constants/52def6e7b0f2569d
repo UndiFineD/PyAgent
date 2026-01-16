@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\cognitive\LogicProverAgent.py
-# hypothesis_version: 6.150.1
-
-[0.5, 0.98, 1.0, 9999999999, '2026-01-08T12:00:00Z', 'chain_id', 'end_time', 'error', 'feasible', 'fix', 'is_satisfiable', 'logic_v1_001', 'optimal_schedule', 'proof_confidence', 'start_time', 'status', 'steps_verified', 'task', 'timestamp', 'total_latency', 'unproven', 'verified']

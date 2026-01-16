@@ -18,7 +18,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import time
 import random
 from pathlib import Path
@@ -27,20 +27,21 @@ from typing import Any
 __version__ = VERSION
 
 
-
-
 class MemoryReplayAgent:
     """
     Simulates "sleep cycles" for agents where they replay episodic memories
     to consolidate knowledge, identify patterns, and prune low-utility data.
     """
+
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = Path(workspace_path)
         self.is_sleeping: bool = False
         self.replay_buffer: list[Any] = []
         self.consolidated_insights: list[dict[str, Any]] = []
 
-    def start_sleep_cycle(self, episodic_memories: list[dict[str, Any]]) -> dict[str, Any]:
+    def start_sleep_cycle(
+        self, episodic_memories: list[dict[str, Any]]
+    ) -> dict[str, Any]:
         """
         Begins a period of autonomous memory replay and consolidation.
         """
@@ -49,7 +50,7 @@ class MemoryReplayAgent:
             "start_ts": time.time(),
             "memories_processed": len(episodic_memories),
             "consolidated": 0,
-            "pruned": 0
+            "pruned": 0,
         }
 
         for memory in episodic_memories:
@@ -57,11 +58,13 @@ class MemoryReplayAgent:
             utility_score = self._evaluate_utility(memory)
 
             if utility_score > 0.8:
-                self.consolidated_insights.append({
-                    "insight": f"Pattern found in {memory.get('action', 'task')}",
-                    "confidence": utility_score,
-                    "original_id": memory.get('id')
-                })
+                self.consolidated_insights.append(
+                    {
+                        "insight": f"Pattern found in {memory.get('action', 'task')}",
+                        "confidence": utility_score,
+                        "original_id": memory.get("id"),
+                    }
+                )
                 results["consolidated"] += 1
             elif utility_score < 0.2:
                 results["pruned"] += 1
@@ -91,5 +94,5 @@ class MemoryReplayAgent:
         """
         return {
             "insights_count": len(self.consolidated_insights),
-            "latest_insights": self.consolidated_insights[-5:]
+            "latest_insights": self.consolidated_insights[-5:],
         }

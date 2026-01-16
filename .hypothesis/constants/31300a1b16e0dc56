@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\reports\IssueCategory.py
-# hypothesis_version: 6.150.1
-
-['documentation', 'performance', 'security', 'style', 'syntax', 'type_annotation']

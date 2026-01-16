@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\image_processing_base.py
-# hypothesis_version: 6.150.1
-
-['AutoImageProcessor', 'ImageProcessingMixin', 'ImageProcessorType', '_from_auto', '_from_pipeline', '_processor_class', 'cache_dir', 'commit_message', 'crop_size', 'file_type', 'force_download', 'from_auto_class', 'image processor', 'image processor file', 'image_processor', 'image_processor_type', 'local_files_only', 'main', 'processor_class', 'proxies', 'repo_id', 'resume_download', 'return_unused_kwargs', 'revision', 'size', 'subfolder', 'token', 'use_auth_token', 'using_pipeline', 'utf-8', 'w']

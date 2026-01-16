@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\externals\array_api_compat\numpy\_aliases.py
-# hypothesis_version: 6.150.1
-
-['Any', 'acos', 'acosh', 'asarray', 'asin', 'asinh', 'astype', 'atan', 'atan2', 'atanh', 'bitwise_invert', 'bitwise_left_shift', 'bitwise_right_shift', 'bool', 'concat', 'count_nonzero', 'get_xp', 'isdtype', 'np', 'pow', 'take_along_axis', 'unstack', 'vecdot']

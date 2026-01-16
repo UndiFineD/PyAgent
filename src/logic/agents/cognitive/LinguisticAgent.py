@@ -23,14 +23,12 @@ Ensures that the LLM only verbalizes grounded results and never hallucinates new
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class LinguisticAgent(BaseAgent):
@@ -48,7 +46,7 @@ class LinguisticAgent(BaseAgent):
         self.notification_templates = {
             "whatsapp": "🔔 *Update*: {message}\n\n_Status_: {status}",
             "telegram": "🚀 <b>System Notification</b>\n\n{message}\n\n<code>Target: {target}</code>",
-            "slack": ":robot_face: *PyAgent Notification*\n> {message}"
+            "slack": ":robot_face: *PyAgent Notification*\n> {message}",
         }
 
     def format_notification(self, platform: str, message: str, **kwargs) -> str:

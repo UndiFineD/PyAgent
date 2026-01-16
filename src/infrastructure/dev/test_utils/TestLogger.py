@@ -21,15 +21,13 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .TestLogEntry import TestLogEntry
 from contextlib import contextmanager
 from typing import Any
 from collections.abc import Iterator
 
 __version__ = VERSION
-
-
 
 
 class TestLogger:
@@ -44,6 +42,7 @@ class TestLogger:
             # ... test code ...
         logs=logger.get_logs("test_name")
     """
+
     __test__ = False
 
     def __init__(self) -> None:

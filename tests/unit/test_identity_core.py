@@ -5,15 +5,12 @@ import hmac
 from src.core.base.core.IdentityCore import IdentityCore, AgentIdentity
 
 
-
-
 class TestIdentityCore(unittest.TestCase):
     def setUp(self):
         self.core = IdentityCore()
 
     @given(
-        public_key=st.text(min_size=1),
-        metadata=st.dictionaries(st.text(), st.text())
+        public_key=st.text(min_size=1), metadata=st.dictionaries(st.text(), st.text())
     )
     def test_generate_agent_id(self, public_key, metadata):
         agent_id = self.core.generate_agent_id(public_key, metadata)
@@ -32,21 +29,17 @@ class TestIdentityCore(unittest.TestCase):
         expected = hashlib.sha256(seed.encode()).hexdigest()[:16]
         self.assertEqual(agent_id, expected)
 
-    @given(
-        payload=st.text(),
-        secret_key=st.text(min_size=1)
-    )
+    @given(payload=st.text(), secret_key=st.text(min_size=1))
     def test_sign_payload(self, payload, secret_key):
         signature = self.core.sign_payload(payload, secret_key)
 
-        expected = hmac.new(secret_key.encode(), payload.encode(), hashlib.sha256).hexdigest()
+        expected = hmac.new(
+            secret_key.encode(), payload.encode(), hashlib.sha256
+        ).hexdigest()
         self.assertEqual(signature, expected)
         self.assertEqual(len(signature), 64)  # sha256 hex digest length
 
-    @given(
-        payload=st.text(),
-        public_key=st.text(min_size=1)
-    )
+    @given(payload=st.text(), public_key=st.text(min_size=1))
     def test_verify_signature_valid(self, payload, public_key):
         # Python impl uses public_key as secret for simulation
         signature = self.core.sign_payload(payload, public_key)
@@ -56,7 +49,7 @@ class TestIdentityCore(unittest.TestCase):
     @given(
         payload=st.text(),
         public_key=st.text(min_size=1),
-        wrong_sig=st.text(alphabet="0123456789abcdef", min_size=64, max_size=64)
+        wrong_sig=st.text(alphabet="0123456789abcdef", min_size=64, max_size=64),
     )
     def test_verify_signature_invalid(self, payload, public_key, wrong_sig):
         # Create a signature that is definitely different?
@@ -68,36 +61,20 @@ class TestIdentityCore(unittest.TestCase):
 
         is_valid = self.core.verify_signature(payload, wrong_sig, public_key)
 
-
-
-
-
-
-
-
-
-
         self.assertFalse(is_valid)
 
     @given(
         agent_id=st.text(),
-
-
-
-
         public_key=st.text(),
-        claims=st.dictionaries(st.text(), st.text())
+        claims=st.dictionaries(st.text(), st.text()),
     )
     def test_validate_identity(self, agent_id, public_key, claims):
         identity = AgentIdentity(agent_id, public_key, claims)
-
-
 
         is_valid = self.core.validate_identity(identity)
 
         has_at = "@" in agent_id
         is_len_16 = len(agent_id) == 16
-
 
         if is_len_16 and not has_at:
             self.assertTrue(is_valid)
@@ -105,8 +82,5 @@ class TestIdentityCore(unittest.TestCase):
             self.assertFalse(is_valid)
 
 
-
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
