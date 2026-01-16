@@ -132,6 +132,16 @@ def llm_chat_via_github_models(
     )
 
 
+def llm_chat_via_ollama(prompt: str) -> str | None:
+    """Call local Ollama endpoint (Phase 112 placeholder)."""
+    return None
+
+
+def llm_chat_via_copilot_cli(prompt: str) -> str | None:
+    """Call Copilot CLI endpoint (Phase 112 placeholder)."""
+    return None
+
+
 def run_subagent(
     description: str, prompt: str, original_content: str = ""
 ) -> str | None:
