@@ -21,15 +21,13 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .BranchComparisonStatus import BranchComparisonStatus
 from .ImprovementDiff import ImprovementDiff
 from dataclasses import dataclass, field
 import time
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -47,6 +45,7 @@ class BranchComparison:
         modified_count: Number of improvements modified.
         compared_at: Comparison timestamp.
     """
+
     source_branch: str
     target_branch: str
     file_path: str

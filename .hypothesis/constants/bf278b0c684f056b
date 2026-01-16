@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\fleet\AgentRegistryCore.py
-# hypothesis_version: 6.150.1
-
-['(.)([A-Z][a-z]+)', '([a-z0-9])([A-Z])', '.', '.py', '/', '1.0.0', 'Agent', 'Orchestrator', '\\1_\\2', '__', 'describe', 'execute']

@@ -1,21 +1,17 @@
-
 from __future__ import annotations
 import json
 from typing import Any
 from dataclasses import dataclass
 
+
 @dataclass(frozen=True)
 class ToolDefinition:
     """Schema definition for an automated tool."""
-
-
-
 
     name: str
     description: str
     parameters: dict[str, Any]
     endpoint: str
-
 
 
 class ToolDraftingCore:
@@ -26,6 +22,7 @@ class ToolDraftingCore:
     def __init__(self) -> None:
         try:
             import rust_core
+
             self._rust_core = rust_core.ToolDraftingCore()  # type: ignore[attr-defined]
         except (ImportError, AttributeError):
             self._rust_core = None
@@ -39,22 +36,16 @@ class ToolDraftingCore:
                     "summary": tool.description,
                     "operationId": tool.name,
                     "requestBody": {
-                        "content": {
-                            "application/json": {
-                                "schema": tool.parameters
-                            }
-                        }
+                        "content": {"application/json": {"schema": tool.parameters}}
                     },
-                    "responses": {
-                        "200": {"description": "Successful execution"}
-                    }
+                    "responses": {"200": {"description": "Successful execution"}},
                 }
             }
 
         spec = {
             "openapi": "3.0.0",
             "info": {"title": "Dynamic Agent Tools", "version": "1.0.0"},
-            "paths": paths
+            "paths": paths,
         }
         return json.dumps(spec, indent=2)
 

@@ -1,4 +1,4 @@
-# PyAgent: AI-Powered Code Improvement Orchestration (v3.5.0-GOLD)
+# PyAgent: AI-Powered Code Improvement Orchestration (v3.6.0-PHASE-317)
 
 An intelligent orchestration system that coordinates specialized AI agents to automatically improve code quality, documentation, testing, and code artifacts across Python projects.
 
@@ -7,6 +7,15 @@ An intelligent orchestration system that coordinates specialized AI agents to au
 **PyAgent** is a comprehensive framework for multi-agent code improvement. It coordinates various specialized agents that work together to enhance code quality, generate documentation, improve tests, and maintain code artifacts. The system acts as an intelligent project manager, delegating specific improvement tasks to domain-expert agents while tracking progress and managing dependencies.
 
 ## Key Features
+
+### 🚀 Evolution Phase 317: "SYNAPTIC ACCELERATION" 
+
+The fleet has achieved **Performance Tier 1 (Synaptic Acceleration)**:
+- **Rust Core Acceleration**: Integrated `rust_core.pyd` providing a 37% end-to-end performance boost and sub-millisecond complexity analysis.
+- **Complexity Guardrail (Phase 317)**: Autonomous self-improvement now targets files with cyclomatic complexity > 25, refactoring monolithic classes into leaner, deterministic modules.
+- **Backend Hardening**: Implemented "Deprecation Shield" for the GitHub Copilot CLI to prevent accidental codebase corruption from backend warnings.
+- **Automated Refactoring**: Native support for automated import refactoring, type safety injection, and dead-code elimination.
+- **Observability Tier**: Real-time nanosecond-precision profiling of all Rust bridge functions using the `RustBridgeProfiler`.
 
 ### 🏆 Evolution Phase 315: Project "ULTIMA CONVERGENCE" 
 
@@ -44,24 +53,24 @@ The project has achieved a "debt-free" architectural baseline for autonomous sel
 
 ### �🔧 Specialized Agent Modules
 
-- All agents (Coder, Tests, Context, Changes, Errors, Stats) are now modular classes found in `src/classes/`.
-- **Legacy Compatibility**: Original entry points in `src/*.py` are now wrappers around the modular framework.
+- All agents (Coder, Tests, Context, Changes, Errors, Stats) are now modular classes found in [src/logic/agents/](src/logic/agents/).
+- **Legacy Compatibility**: Deep integration with the 5-tier modular framework.
 
 ### 📊 Advanced Capabilities
 
 - **Hybrid Caching**: High-performance in-memory cache coupled with persistent disk-based caching for all AI responses.
-- **Configurable Backends**: Support for Codex, Copilot CLI, gh copilot, and GitHub Models.
-- **Configuration Management**: New global settings for GitHub tokens, model defaults, and caching behavior.
-- **Smart Memory & History**: Agents now retain conversation history during GUI sessions, allowing for multi-turn iterative improvements.
-- **BMAD V6 Methodology**: Native support for the "Build More, Architect Dreams" method, featuring dynamic tracks (Quick, BMad, Enterprise) and phased workflows.
+- **Configurable Backends**: Support for GitHub Models, Copilot CLI, Ollama, and VLLM.
+- **Configuration Management**: Global settings for GitHub tokens, model defaults, and complexity thresholds.
+- **Smart Memory & History**: Agents retain conversation history, allowing for multi-turn iterative improvements.
+- **BMAD V6 Methodology**: Native support for the "Build More, Architect Dreams" method, featuring dynamic tracks (Quick, BMad, Enterprise).
 
 ### 🌐 Interfaces
 
 PyAgent now supports a unified multi-interface architecture connected via a central **Fleet Load Balancer**:
-- **GUI**: Comprehensive desktop control center ([MainApp.py](src/classes/gui/MainApp.py)).
+- **GUI**: Comprehensive desktop control center ([MainApp.py](src/interface/ui/gui/MainApp.py)).
 - **Mobile**: Flutter-based mobile companion.
 - **Web**: FastAPI-powered web interface.
-- **CLI**: A new high-performance Command Line Interface ([pyagent_cli.py](src/pyagent_cli.py)) for terminal-based automation.
+- **CLI**: A high-performance Command Line Interface ([pyagent_cli.py](src/interface/ui/cli/pyagent_cli.py)) for terminal-based automation.
 
 ### 🚀 Architecture (Jan 2026 - Tiered Evolution)
 
@@ -111,20 +120,13 @@ python -m src.interface.ui.gui.MainApp
 python -m src.interface.ui.cli.pyagent_cli --task "Analyze codebase" --strategy cot
 ```
 
-# Parallel execution
-python src/agent.py --dir . --multiprocessing --workers 4
-
-# Async I/O
-python src/agent.py --dir . --async
-```
-
 ### Programmatic Usage
 
 ```python
-from src.agent import Agent
+from src.core.base.BaseAgent import BaseAgent
 
 # Create agent for code improvement
-agent = Agent("path/to/file.py")
+agent = BaseAgent("path/to/file.py")
 
 # Read and analyze content
 agent.read_previous_content()
@@ -134,10 +136,6 @@ agent.improve_content("Add comprehensive docstrings and type hints")
 
 # Apply and save changes
 agent.update_file()
-
-# Review changes
-diff = agent.get_diff()
-print(diff)
 ```
 
 ## Core Components

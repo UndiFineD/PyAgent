@@ -21,14 +21,14 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.logic.agents.cognitive.context.utils.ConflictResolution import ConflictResolution
+from src.core.base.Version import VERSION
+from src.logic.agents.cognitive.context.utils.ConflictResolution import (
+    ConflictResolution,
+)
 from src.logic.agents.cognitive.context.models.MergeConflict import MergeConflict
 import re
 
 __version__ = VERSION
-
-
 
 
 class MergeConflictResolver:
@@ -47,7 +47,9 @@ class MergeConflictResolver:
     def set_strategy(self, strategy: ConflictResolution) -> None:
         self.strategy = strategy
 
-    def detect_conflicts(self, ours: str, theirs: str | None = None) -> list[MergeConflict]:
+    def detect_conflicts(
+        self, ours: str, theirs: str | None = None
+    ) -> list[MergeConflict]:
         """Detect merge conflicts.
 
         Supports two modes:
@@ -59,11 +61,11 @@ class MergeConflictResolver:
             conflicts: list[MergeConflict] = []
             pattern = r"<<<<<<<[^\n]*\n(.*?)\n=======\n(.*?)\n>>>>>>>"
             for match in re.finditer(pattern, content, re.DOTALL):
-                conflicts.append(MergeConflict(
-                    section="conflict",
-                    ours=match.group(1),
-                    theirs=match.group(2)
-                ))
+                conflicts.append(
+                    MergeConflict(
+                        section="conflict", ours=match.group(1), theirs=match.group(2)
+                    )
+                )
             return conflicts
 
         if ours == theirs:
@@ -77,7 +79,9 @@ class MergeConflictResolver:
 
         return [MergeConflict(section=_section_name(ours), ours=ours, theirs=theirs)]
 
-    def resolve(self, conflict: MergeConflict, strategy: ConflictResolution | None = None) -> str:
+    def resolve(
+        self, conflict: MergeConflict, strategy: ConflictResolution | None = None
+    ) -> str:
         """Resolve a merge conflict.
 
         Args:
@@ -97,7 +101,11 @@ class MergeConflictResolver:
         if effective == ConflictResolution.AUTO:
             # Auto: prefer longer content
             conflict.resolution = effective
-            return conflict.ours if len(conflict.ours) >= len(conflict.theirs) else conflict.theirs
+            return (
+                conflict.ours
+                if len(conflict.ours) >= len(conflict.theirs)
+                else conflict.theirs
+            )
 
         conflict.resolution = ConflictResolution.MANUAL
         return f"MANUAL RESOLUTION NEEDED:\n{conflict.ours}\n---\n{conflict.theirs}"

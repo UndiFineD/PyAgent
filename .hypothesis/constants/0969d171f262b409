@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\scipy\linalg\decomp_svd.py
-# hypothesis_version: 6.150.1
-
-['LinAlgError', '_decomp_svd', 'decomp_svd', 'diagsvd', 'get_lapack_funcs', 'linalg', 'null_space', 'orth', 'subspace_angles', 'svd', 'svdvals']

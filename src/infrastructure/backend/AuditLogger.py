@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from datetime import datetime, UTC
 from pathlib import Path
 from typing import Any
@@ -31,11 +31,6 @@ import threading
 import uuid
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class AuditLogger:

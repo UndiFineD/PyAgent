@@ -1,11 +1,5 @@
-
 from __future__ import annotations
 from typing import Any
-
-
-
-
-
 
 
 class GatewayCore:
@@ -19,7 +13,7 @@ class GatewayCore:
         self.saas_registry: dict[str, str] = {
             "jira": "https://api.atlassian.com/ex/jira/",
             "slack": "https://slack.com/api/",
-            "trello": "https://api.trello.com/1/"
+            "trello": "https://api.trello.com/1/",
         }
 
         # Interface affinity rules: interface -> model_preference
@@ -27,7 +21,7 @@ class GatewayCore:
             "web_ui": "glm-4-flash",
             "cli": "gpt-4o",
             "gui": "claude-3-haiku",
-            "background": "llama-3-70b"
+            "background": "llama-3-70b",
         }
 
     def get_service_endpoint(self, service_name: str) -> str | None:
@@ -41,11 +35,13 @@ class GatewayCore:
         """
         return self.interface_affinity.get(interface_type.lower(), "gpt-4o")
 
-    def format_saas_request(self, service: str, action: str, params: dict[str, Any]) -> dict[str, Any]:
+    def format_saas_request(
+        self, service: str, action: str, params: dict[str, Any]
+    ) -> dict[str, Any]:
         """Constructs a standardized internal request for external SaaS consumption."""
         return {
             "service": service,
             "action": action,
             "params": params,
-            "method": "POST" if action in ["create", "update"] else "GET"
+            "method": "POST" if action in ["create", "update"] else "GET",
         }

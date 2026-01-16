@@ -24,15 +24,13 @@ Provides stub objects when plugins fail to load due to missing dependencies.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import importlib
 from typing import Any
 from collections.abc import Callable
 
 __version__ = VERSION
-
-
 
 
 def resilient_import(module_name: str, class_name: str | None = None) -> Any:
@@ -47,25 +45,30 @@ def resilient_import(module_name: str, class_name: str | None = None) -> Any:
         if class_name:
             return getattr(module, class_name)
 
-
         return module
     except (ImportError, SyntaxError) as e:
-        logging.warning(f"ResilientImport: Failed to load '{module_name}'. Returning stub. Error: {e}")
+        logging.warning(
+            f"ResilientImport: Failed to load '{module_name}'. Returning stub. Error: {e}"
+        )
         return ResilientStub(class_name or module_name, str(e))
 
 
 class ResilientStub:
     """A stub object that logs errors instead of crashing when called."""
+
     def __init__(self, name: str, error: str) -> None:
         self._name = name
         self._error = error
-        logging.error(f"STUB ACTIVE: Component '{name}' failed to load. Reason: {error}")
+        logging.error(
+            f"STUB ACTIVE: Component '{name}' failed to load. Reason: {error}"
+        )
 
     def __getattr__(self, name: str) -> Callable:
         def _stub_method(*args: Any, **kwargs: Any) -> str:
             msg = f"Cannot call '{name}' on component '{self._name}': it failed to load. Error: {self._error}"
             logging.error(msg)
             return f"ERROR: {msg}"
+
         return _stub_method
 
     def __call__(self, *args: Any, **kwargs: Any) -> str:

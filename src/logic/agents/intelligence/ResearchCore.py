@@ -18,17 +18,16 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 
 try:
     import rust_core as rc
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
 __version__ = VERSION
-
-
 
 
 class ResearchCore:
@@ -57,24 +56,30 @@ class ResearchCore:
                 pass
 
         # Phase 1: Deliberation
-        deliberation = f"Deliberating on '{topic}': Assessing implications of {content[:50]}..."
+        deliberation = (
+            f"Deliberating on '{topic}': Assessing implications of {content[:50]}..."
+        )
 
         # Phase 2: Conception
-        conception = f"Conceiving tool structure for '{topic}' based on extracted patterns."
+        conception = (
+            f"Conceiving tool structure for '{topic}' based on extracted patterns."
+        )
 
         # Phase 3: Action
         # Standardize topic for function name
-        sanitized_topic = topic.lower().replace(' ', '_').replace('-', '_')
+        sanitized_topic = topic.lower().replace(" ", "_").replace("-", "_")
         tool_code = f"def {sanitized_topic}_tool():\n    return 'Logic from {topic}'"
 
         # Phase 4: Perception
-        perception = "Validated tools against DCAP benchmarks (Self-Consistency, Logical Flow)."
+        perception = (
+            "Validated tools against DCAP benchmarks (Self-Consistency, Logical Flow)."
+        )
 
         return {
             "deliberation": deliberation,
             "conception": conception,
             "action": tool_code,
-            "perception": perception
+            "perception": perception,
         }
 
     @staticmethod

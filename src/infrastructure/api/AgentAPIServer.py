@@ -22,7 +22,7 @@ FastAPI-based API gateway for the PyAgent fleet.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from pydantic import BaseModel
 from typing import Any
@@ -42,46 +42,20 @@ fleet = FleetManager(workspace_root)
 load_balancer = FleetLoadBalancer(fleet)
 
 
-
-
 class TaskRequest(BaseModel):
     """Schema for incoming task requests via the REST API."""
 
-
-
-
     agent_id: str
 
-
-
-
-
-
-
-
-
-
     task: str
-
-
-
-
-
 
     context: dict[str, Any] = {}
     interface: str | None = "Web"  # Default to web if not specified
 
 
-
-
 class TelemetryManager:
-
-
-
-
-
-
     """Manages WebSocket connections for real-time fleet telemetry."""
+
     def __init__(self) -> None:
         self.active_connections: list[WebSocket] = []
 
@@ -92,29 +66,16 @@ class TelemetryManager:
     def disconnect(self, websocket: WebSocket) -> None:
         self.active_connections.remove(websocket)
 
-
-
-
-
-
-
-
-
-
-
-
     async def broadcast(self, message: str) -> None:
         for connection in self.active_connections:
             try:
                 await connection.send_text(message)
             except Exception:
-
-
-
-
                 pass
 
+
 telemetry = TelemetryManager()
+
 
 @app.get("/")
 async def root() -> dict[str, Any]:
@@ -122,39 +83,36 @@ async def root() -> dict[str, Any]:
         "status": "online",
         "version": "2.0.0",
         "fleet_size": len(fleet.agents),
-        "lb_stats": load_balancer.get_stats()
+        "lb_stats": load_balancer.get_stats(),
     }
-
 
 
 @app.get("/agents")
 async def list_agents() -> dict[str, Any]:
     return {
-        "agents": [
-            {"id": k, "type": type(v).__name__} for k, v in fleet.agents.items()
-        ]
+        "agents": [{"id": k, "type": type(v).__name__} for k, v in fleet.agents.items()]
     }
-
-
-
 
 
 @app.post("/task")
 async def dispatch_task(request: TaskRequest) -> dict[str, Any]:
-
     # Route through Load Balancer
     lb_result = load_balancer.balance_request(request.interface, request.task)
     if lb_result.get("status") == "REJECTED":
         return {"status": "error", "message": lb_result.get("reason"), "code": 429}
 
     # Log task start to telemetry
-    await telemetry.broadcast(json.dumps({
-        "type": "task_started",
-        "agent": request.agent_id,
-        "interface": request.interface,
-        "timestamp": time.time(),
-        "lb_metadata": lb_result
-    }))
+    await telemetry.broadcast(
+        json.dumps(
+            {
+                "type": "task_started",
+                "agent": request.agent_id,
+                "interface": request.interface,
+                "timestamp": time.time(),
+                "lb_metadata": lb_result,
+            }
+        )
+    )
 
     # Simulate routing to agent
     # In a real scenario, we'd use fleet.get_agent(request.agent_id).run(...)
@@ -162,18 +120,19 @@ async def dispatch_task(request: TaskRequest) -> dict[str, Any]:
         # Mock result for now
         result = f"Task '{request.task}' received by {request.agent_id}"
 
-        await telemetry.broadcast(json.dumps({
-            "type": "task_completed",
-            "agent": request.agent_id,
-            "status": "success",
-            "timestamp": time.time()
-        }))
+        await telemetry.broadcast(
+            json.dumps(
+                {
+                    "type": "task_completed",
+                    "agent": request.agent_id,
+                    "status": "success",
+                    "timestamp": time.time(),
+                }
+            )
+        )
         return {"status": "success", "result": result}
     except Exception as e:
         return {"status": "error", "message": str(e)}
-
-
-
 
 
 @app.websocket("/ws/telemetry")
@@ -187,6 +146,8 @@ async def websocket_endpoint(websocket: WebSocket) -> None:
     except WebSocketDisconnect:
         telemetry.disconnect(websocket)
 
+
 if __name__ == "__main__":
     import uvicorn
+
     uvicorn.run(app, host="0.0.0.0", port=8000)

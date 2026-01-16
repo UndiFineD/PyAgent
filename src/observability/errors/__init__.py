@@ -20,7 +20,7 @@
 """Auto-generated module exports."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
+from src.core.base.Version import VERSION as VERSION
 from .AutoFixSuggester import AutoFixSuggester as AutoFixSuggester
 from .BlameInfo import BlameInfo as BlameInfo
 from .BlameTracker import BlameTracker as BlameTracker
@@ -34,7 +34,10 @@ from .ErrorEntry import ErrorEntry as ErrorEntry
 from .ErrorImpact import ErrorImpact as ErrorImpact
 from .ErrorPattern import ErrorPattern as ErrorPattern
 from .ErrorSeverity import ErrorSeverity as ErrorSeverity
-from .ErrorsAgent import ErrorsAgent as ErrorsAgent, DEFAULT_ERROR_PATTERNS as DEFAULT_ERROR_PATTERNS
+from .ErrorsAgent import (
+    ErrorsAgent as ErrorsAgent,
+    DEFAULT_ERROR_PATTERNS as DEFAULT_ERROR_PATTERNS,
+)
 from .ExternalReporter import ExternalReporter as ExternalReporter
 from .ExternalReportingClient import ExternalReportingClient as ExternalReportingClient
 from .FixSuggestion import FixSuggestion as FixSuggestion

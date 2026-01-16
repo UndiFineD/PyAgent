@@ -18,7 +18,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import re
 import logging
 import time
@@ -28,8 +28,6 @@ from src.core.base.BaseAgent import BaseAgent
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
 __version__ = VERSION
-
-
 
 
 class ComplianceAgent(BaseAgent):
@@ -44,7 +42,7 @@ class ComplianceAgent(BaseAgent):
             "email": r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}",
             "ssn": r"\b\d{3}-\d{2}-\d{4}\b",
             "credit_card": r"\b\d{4}-\d{4}-\d{4}-\d{4}\b",
-            "phone": r"\b\d{3}-\d{3}-\d{4}\b"
+            "phone": r"\b\d{3}-\d{3}-\d{4}\b",
         }
 
         # Phase 108: Intelligence Recording
@@ -56,7 +54,9 @@ class ComplianceAgent(BaseAgent):
         if self.recorder:
             try:
                 meta = {"phase": 108, "type": "compliance", "timestamp": time.time()}
-                self.recorder.record_interaction("compliance", "pii_scan", action, str(findings), meta=meta)
+                self.recorder.record_interaction(
+                    "compliance", "pii_scan", action, str(findings), meta=meta
+                )
             except Exception as e:
                 logging.debug(f"ComplianceAgent: Recording failed: {e}")
 
@@ -71,7 +71,7 @@ class ComplianceAgent(BaseAgent):
         res = {
             "pii_detected": len(findings) > 0,
             "findings": findings,
-            "compliant": len(findings) == 0
+            "compliant": len(findings) == 0,
         }
 
         if res["pii_detected"]:
@@ -93,7 +93,9 @@ class ComplianceAgent(BaseAgent):
                 return False
         return True
 
-    def generate_privacy_impact_assessment(self, project_data: dict[str, Any]) -> dict[str, Any]:
+    def generate_privacy_impact_assessment(
+        self, project_data: dict[str, Any]
+    ) -> dict[str, Any]:
         """Phase 240: Conducts a Privacy Impact Assessment (PIA).
         Analyzes data types, retention, and collection purposes.
         """
@@ -116,7 +118,9 @@ class ComplianceAgent(BaseAgent):
             risks.append("No clear data retention policy defined")
         elif retention > 365:
             score -= 10
-            risks.append(f"Long retention period ({retention} days) increases exposure risk")
+            risks.append(
+                f"Long retention period ({retention} days) increases exposure risk"
+            )
 
         # Check for encryption status
         if not project_data.get("encrypted_at_rest", False):
@@ -130,19 +134,29 @@ class ComplianceAgent(BaseAgent):
 
         return {
             "pia_score": max(0, score),
-            "risk_assessment": "High" if score < 50 else "Medium" if score < 80 else "Low",
+            "risk_assessment": "High"
+            if score < 50
+            else "Medium"
+            if score < 80
+            else "Low",
             "findings": risks,
             "recommendations": self._get_pia_recommendations(risks),
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
 
     def _get_pia_recommendations(self, risks: list[str]) -> list[str]:
         recommendations = []
         for risk in risks:
             if "encryption" in risk.lower():
-                recommendations.append("Implement AES-256 encryption at rest for all database shards.")
+                recommendations.append(
+                    "Implement AES-256 encryption at rest for all database shards."
+                )
             if "retention" in risk.lower():
-                recommendations.append("Implement automated data pruning for records older than 90 days.")
+                recommendations.append(
+                    "Implement automated data pruning for records older than 90 days."
+                )
             if "High-risk PII" in risk:
-                recommendations.append("Consider data tokenization or removal of SSN/Financial data if not strictly necessary.")
+                recommendations.append(
+                    "Consider data tokenization or removal of SSN/Financial data if not strictly necessary."
+                )
         return recommendations

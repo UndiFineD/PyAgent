@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\orchestration\DiscoveryOrchestrator.py
-# hypothesis_version: 6.150.1
-
-[b'1.0.0', b'agents', b'version', 0.5, 8000, ',', '1.0.0', '127.0.0.1', '8.8.8.8', '_pyagent._tcp.local.', 'agents', 'hostname', 'registry_configs', 'utf-8', 'version', 'zeroconf']

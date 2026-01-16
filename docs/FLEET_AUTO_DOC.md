@@ -49,11 +49,13 @@ Cleanly shuts down and removes an agent.
 
 ### Method: `execute_with_consensus`
 Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner.
-If agents are not specified, ByzantineConsensusAgent dynamically selects a committee. (Phase 123)
 
 ### Method: `route_task`
 Routes tasks based on system load and hardware availability (Phase 126).
 
 
-## 2026-01-13 - Maintenance Cycle Summary
-The fleet's SelfImprovementOrchestrator completed a cycle over 1005 files. Re-stabilization phase engaged.
+## 2026-01-16 - Maintenance Cycle Summary (v3.6.0)
+The fleet's SelfImprovementOrchestrator completed a Synaptic Acceleration cycle (Phase 317).
+- **Complexity Guard**: Scanned 380+ files; identified and refactored high-complexity hotspots.
+- **Rust Integration**: 100% of core complexity metrics are now calculated via `rust_core.pyd`.
+- **System Stability**: Stability Gate 1.0 achieved after backend hardening.

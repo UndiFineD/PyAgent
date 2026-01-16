@@ -15,9 +15,9 @@
 """BaseAgent main class and core agent logic."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.utilities import as_tool
-from src.core.base.exceptions import CycleInterrupt
+from src.core.base.Version import VERSION
+from src.core.base.BaseUtilities import as_tool
+from src.core.base.BaseExceptions import CycleInterrupt
 import logging
 import asyncio
 import subprocess
@@ -42,18 +42,23 @@ from src.core.base.models import (
 )
 from src.core.base.AgentCore import BaseCore
 from src.core.base.BaseAgentCore import BaseAgentCore
-from src.core.base.registry import AgentRegistry
+from src.core.base.AgentRegistry import AgentRegistry
 from src.core.base.ShardedKnowledgeCore import ShardedKnowledgeCore
-from src.core.base.state import AgentStateManager
-from src.core.base.delegation import AgentDelegator
-from src.core.base.shell import ShellExecutor
-from src.core.base.scratchpad import AgentScratchpad
-from src.core.base.history import AgentConversationHistory
+from src.core.base.AgentStateManager import AgentStateManager
+from src.core.base.AgentDelegator import AgentDelegator
+from src.core.base.ShellExecutor import ShellExecutor
+from src.core.base.AgentScratchpad import AgentScratchpad
+from src.core.base.AgentHistory import AgentConversationHistory
+
 # from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder # Moved to __init__
-from src.core.base.managers.ResourceQuotaManager import ResourceQuotaManager, QuotaConfig
+from src.core.base.managers.ResourceQuotaManager import (
+    ResourceQuotaManager,
+    QuotaConfig,
+)
 
 try:
     import requests
+
     HAS_REQUESTS = True
 except ImportError:
     requests = None
@@ -62,8 +67,8 @@ except ImportError:
 # Advanced components (Lazy loaded or optional)
 try:
     from src.logic.agents.cognitive.LongTermMemory import LongTermMemory
-    from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
-    from src.infrastructure.orchestration.ToolRegistry import ToolRegistry
+    from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
+    from src.infrastructure.orchestration.system.ToolRegistry import ToolRegistry
 except (ImportError, ValueError):
     LongTermMemory = None
     SignalRegistry = None
@@ -72,11 +77,6 @@ except (ImportError, ValueError):
 __version__ = VERSION
 
 # Advanced components (Lazy loaded or optional)
-
-
-
-
-
 
 
 class BaseAgent:
@@ -123,8 +123,11 @@ class BaseAgent:
         # Knowledge Trinity initialization (Phase 126)
         try:
             from src.core.knowledge.knowledge_engine import KnowledgeEngine
+
             agent_name = self.__class__.__name__.lower().replace("agent", "") or "base"
-            self.knowledge = KnowledgeEngine(agent_id=agent_name, base_path=Path("data/agents"))
+            self.knowledge = KnowledgeEngine(
+                agent_id=agent_name, base_path=Path("data/agents")
+            )
         except (ImportError, ModuleNotFoundError):
             self.knowledge = None
 
@@ -149,8 +152,8 @@ class BaseAgent:
         # Phase 245: RESOURCE QUOTAS & BUDGETS
         self.quotas = ResourceQuotaManager(
             config=QuotaConfig(
-                max_tokens=getattr(self._config, 'max_tokens_per_session', None),
-                max_time_seconds=getattr(self._config, 'max_time_per_session', None)
+                max_tokens=getattr(self._config, "max_tokens_per_session", None),
+                max_time_seconds=getattr(self._config, "max_time_per_session", None),
             )
         )
 
@@ -159,28 +162,37 @@ class BaseAgent:
         # Advanced features
         # Derive agent name for data isolation (e.g., CoderAgent -> "coder")
         self.agent_name = self.__class__.__name__.lower().replace("agent", "") or "base"
-        self.memory: LongTermMemory | None = LongTermMemory(agent_name=self.agent_name) if LongTermMemory else None
+        self.memory: LongTermMemory | None = (
+            LongTermMemory(agent_name=self.agent_name) if LongTermMemory else None
+        )
 
         # Phase 143: Sharded Knowledge initialization
         self.sharded_knowledge = ShardedKnowledgeCore(base_path=Path("data/agents"))
 
-        self.registry: SignalRegistry | None = SignalRegistry() if SignalRegistry else None
-        self.tool_registry: ToolRegistry | None = ToolRegistry() if ToolRegistry else None
+        self.registry: SignalRegistry | None = (
+            SignalRegistry() if SignalRegistry else None
+        )
+        self.tool_registry: ToolRegistry | None = (
+            ToolRegistry() if ToolRegistry else None
+        )
 
         # Intelligence Harvesting (Phase 108)
         from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
-        self.recorder = LocalContextRecorder(Path(self._workspace_root), f"{self.__class__.__name__}_Agent")
+
+        self.recorder = LocalContextRecorder(
+            Path(self._workspace_root), f"{self.__class__.__name__}_Agent"
+        )
 
     def _register_capabilities(self) -> None:
         """Emits a signal with agent capabilities for discovery."""
         try:
             import asyncio
-            from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
+            from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
+
             signals = SignalRegistry()
 
             payload = self.agent_logic_core.prepare_capability_payload(
-                self.__class__.__name__,
-                self.get_capabilities()
+                self.__class__.__name__, self.get_capabilities()
             )
 
             # Schedule the async emit to run in the background
@@ -192,9 +204,13 @@ class BaseAgent:
                     asyncio.set_event_loop(loop)
 
                 if loop.is_running():
-                    asyncio.create_task(signals.emit("agent_capability_registration", payload))
+                    asyncio.create_task(
+                        signals.emit("agent_capability_registration", payload)
+                    )
                 else:
-                    loop.run_until_complete(signals.emit("agent_capability_registration", payload))
+                    loop.run_until_complete(
+                        signals.emit("agent_capability_registration", payload)
+                    )
             except Exception:
                 pass
         except Exception:
@@ -212,15 +228,63 @@ class BaseAgent:
             logging_agent = self.fleet.agents.get("Logging")
             if logging_agent:
                 import asyncio
+
                 try:
                     loop = asyncio.get_running_loop()
-                    loop.create_task(logging_agent.broadcast_log(level, self.__class__.__name__, message, kwargs))
+                    loop.create_task(
+                        logging_agent.broadcast_log(
+                            level, self.__class__.__name__, message, kwargs
+                        )
+                    )
                 except RuntimeError:
-                    asyncio.run(logging_agent.broadcast_log(level, self.__class__.__name__, message, kwargs))
+                    asyncio.run(
+                        logging_agent.broadcast_log(
+                            level, self.__class__.__name__, message, kwargs
+                        )
+                    )
 
     async def _check_preemption(self) -> None:
         while self._suspended:
             await asyncio.sleep(0.5)
+
+    async def _request_firewall_clearance(self, thought: str) -> bool:
+        """Phase 281: Inform fleet of thought and wait for FirewallAgent clearance."""
+        # 1. Inform the fleet
+        registry = None
+        if hasattr(self, "registry") and self.registry:
+            registry = self.registry
+        elif hasattr(self, "fleet") and self.fleet and hasattr(self.fleet, "signals"):
+            registry = self.fleet.signals
+
+        if registry:
+            try:
+                await registry.emit(
+                    "thought_stream",
+                    {"agent": self.__class__.__name__, "thought": thought},
+                )
+            except Exception as e:
+                logging.debug(f"Thought emission failed: {e}")
+
+        # 2. Check for clearance (avoid recursion for FirewallAgent)
+        if self.__class__.__name__ == "FirewallAgent":
+            return True
+
+        try:
+            from src.logic.agents.security.FirewallAgent import FirewallAgent
+
+            firewall = None
+            if hasattr(self, "fleet") and self.fleet:
+                firewall = self.fleet.agents.get("FirewallAgent")
+
+            if not firewall:
+                firewall = FirewallAgent()
+
+            return await firewall.request_clearance_blocking(
+                self.__class__.__name__, thought
+            )
+        except Exception as e:
+            logging.debug(f"Firewall clearance defaulted to True (Error: {e})")
+            return True
 
     def get_capabilities(self) -> list[str]:
         return self.capabilities
@@ -230,6 +294,7 @@ class BaseAgent:
         if not hasattr(self, "_strategy") or self._strategy is None:
             try:
                 from src.logic.strategies.DirectStrategy import DirectStrategy
+
                 self._strategy = DirectStrategy()
             except (ImportError, ModuleNotFoundError):
                 self._strategy = None
@@ -246,6 +311,7 @@ class BaseAgent:
             Initialized Agent.
         """
         import json
+
         try:
             config = json.loads(Path(config_path).read_text())
             repo_root = config.get("repo_root", None)
@@ -261,19 +327,35 @@ class BaseAgent:
     def strategy(self, value: Any) -> None:
         self._strategy = value
 
-    def _run_command(self, cmd: list[str], timeout: int = 120) -> subprocess.CompletedProcess[str]:
-        models_config = getattr(self, 'models', None)
-        return ShellExecutor.run_command(cmd, self._workspace_root, self.agent_name, models_config=models_config, timeout=timeout)
+    def _run_command(
+        self, cmd: list[str], timeout: int = 120
+    ) -> subprocess.CompletedProcess[str]:
+        models_config = getattr(self, "models", None)
+        return ShellExecutor.run_command(
+            cmd,
+            self._workspace_root,
+            self.agent_name,
+            models_config=models_config,
+            timeout=timeout,
+        )
 
     @property
     def global_context(self) -> Any:
-        if hasattr(self, 'fleet') and self.fleet and hasattr(self.fleet, 'global_context'):
+        if (
+            hasattr(self, "fleet")
+            and self.fleet
+            and hasattr(self.fleet, "global_context")
+        ):
             return self.fleet.global_context
         if self._local_global_context is None:
             try:
-                from src.logic.agents.cognitive.context.engines.GlobalContextEngine import GlobalContextEngine
+                from src.logic.agents.cognitive.context.engines.GlobalContextEngine import (
+                    GlobalContextEngine,
+                )
+
                 self._local_global_context = GlobalContextEngine(self._workspace_root)
-            except (ImportError, ValueError): pass
+            except (ImportError, ValueError):
+                pass
         return self._local_global_context
 
     @global_context.setter
@@ -281,13 +363,16 @@ class BaseAgent:
         self._local_global_context = value
 
     def register_tools(self, registry: ToolRegistry) -> None:
-        if not registry: return
+        if not registry:
+            return
         for method, cat, prio in self.agent_logic_core.collect_tools(self):
             # Fix: Correct order is (owner_name, func, category, priority)
             registry.register_tool(self.__class__.__name__, method, cat, prio)
 
     def calculate_anchoring_strength(self, result: str) -> float:
-        return self.agent_logic_core.calculate_anchoring_strength(result, getattr(self, 'context_pool', {}))
+        return self.agent_logic_core.calculate_anchoring_strength(
+            result, getattr(self, "context_pool", {})
+        )
 
     def verify_self(self, result: str) -> tuple[bool, str]:
         return self.agent_logic_core.verify_self(result)
@@ -319,7 +404,12 @@ class BaseAgent:
         AgentRegistry().register(self)
         return self
 
-    def __exit__(self, exc_type: type[BaseException] | None, exc_val: BaseException | None, exc_tb: TracebackType | None) -> bool:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> bool:
         AgentRegistry().unregister(self.agent_name)
         if exc_type is not None:
             self._state = AgentState.ERROR
@@ -335,39 +425,48 @@ class BaseAgent:
 
     def register_webhook(self, url: str) -> None:
         """Registers a webhook URL for notifications."""
-        if not hasattr(self, '_webhooks'):
+        if not hasattr(self, "_webhooks"):
             self._webhooks: list[Any] = []
         if url not in self._webhooks:
             self._webhooks.append(url)
 
     def run(self, prompt: str = "") -> None:
+        """Synchronous entry point for agent execution."""
         self._is_stop_requested = False
+        import asyncio
+        
         try:
-            import asyncio
-            coro = self.improve_content(prompt)
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
 
-            try:
-                loop = asyncio.get_event_loop()
-            except RuntimeError:
-                loop = asyncio.new_event_loop()
-                asyncio.set_event_loop(loop)
+        if loop.is_running():
+            asyncio.create_task(self._run_async(prompt))
+        else:
+            loop.run_until_complete(self._run_async(prompt))
 
-            if loop.is_running():
-                # If loop is already running, we can't block.
-                # Use a task but we won't wait for it here, which is better than just a warning
-                # but still not ideal for a sync 'run' method.
-                asyncio.create_task(coro)
-            else:
-                loop.run_until_complete(coro)
+    async def _run_async(self, prompt: str) -> None:
+        """Internal async runner."""
+        await self.improve_content(prompt)
+        if not self._is_stop_requested:
+            self.update_file()
+        self._notify_webhooks()
 
-            if not self._is_stop_requested: self.update_file()
-            webhooks = getattr(self, '_webhooks', [])
-            for url in webhooks:
-                if HAS_REQUESTS and requests:
-                    requests.post(url, json={"event": "agent_complete", "status": "success", "file": str(self.file_path), "timestamp": time.time()}, timeout=5)
-        except Exception as e:
-            logging.error(f"Error running {self.__class__.__name__}: {e}")
-            raise
+    def _notify_webhooks(self) -> None:
+        """Sends completion notifications to registered webhooks."""
+        webhooks = getattr(self, "_webhooks", [])
+        for url in webhooks:
+            if HAS_REQUESTS and requests:
+                try:
+                    requests.post(url, json={
+                        "event": "agent_complete",
+                        "status": "success",
+                        "file": str(self.file_path),
+                        "timestamp": time.time(),
+                    }, timeout=5)
+                except Exception:
+                    pass
 
     def read_previous_content(self) -> str:
         """Read existing file content."""
@@ -376,17 +475,22 @@ class BaseAgent:
 
         try:
             if self.file_path.is_file():
-                self.previous_content = self.file_path.read_text(encoding='utf-8')
+                self.previous_content = self.file_path.read_text(encoding="utf-8")
             else:
-                logging.warning(f"File not found: {self.file_path}. Using default content.")
+                logging.warning(
+                    f"File not found: {self.file_path}. Using default content."
+                )
                 self.previous_content = self._get_default_content()
         except Exception as e:
             logging.error(f"Failed to read file {self.file_path}: {e}")
             import traceback
+
             traceback.print_exc()
             self.previous_content = ""
 
-        self._trigger_event(EventType.POST_READ, {"content_length": len(self.previous_content)})
+        self._trigger_event(
+            EventType.POST_READ, {"content_length": len(self.previous_content)}
+        )
         return self.previous_content
 
     def _get_default_content(self) -> str:
@@ -396,13 +500,8 @@ class BaseAgent:
     def think(self, prompt: str, system_prompt: str | None = None) -> str:
         """Generic reasoning method that doesn't involve file updates."""
         self._state: AgentState = AgentState.THINKING
-        if hasattr(self, 'registry') and self.registry:
-            self.registry.emit("thought_stream", {"agent": self.__class__.__name__, "thought": prompt[:100]})
-
         import asyncio
-        coro = self.run_subagent(f"Reasoning: {self.__class__.__name__}", prompt, system_prompt or self._system_prompt)
 
-        # Handle async execution from sync context
         try:
             loop = asyncio.get_event_loop()
         except RuntimeError:
@@ -410,27 +509,37 @@ class BaseAgent:
             asyncio.set_event_loop(loop)
 
         if loop.is_running():
-            # If loop is already running, we can't block.
-            # Phase 21: Create a task to avoid "never awaited" warning
-            asyncio.create_task(coro)
-            import logging
-            logging.warning("BaseAgent.think() called from running loop. Returning empty string.")
+            asyncio.create_task(self._think_process(prompt, system_prompt))
             return ""
 
         try:
-            result = loop.run_until_complete(coro)
+            result = loop.run_until_complete(self._think_process(prompt, system_prompt))
             self._state: AgentState = AgentState.IDLE
             return result
-        except RuntimeError as e:
-            # Fallback if we really can't await
-            import logging
-            logging.error(f"BaseAgent.think() failed to await async result: {e}")
+        except Exception as e:
+            logging.error(f"BaseAgent.think() failed: {e}")
             return ""
+
+    async def _think_process(self, prompt: str, system_prompt: str | None) -> str:
+        """Async core for thinking."""
+        if not await self._request_firewall_clearance(prompt):
+            return "SECURITY_BLOCK: Clearance Denied."
+        
+        return await self.run_subagent(
+            f"Reasoning: {self.__class__.__name__}",
+            prompt,
+            system_prompt or self._system_prompt,
+        )
 
     async def improve_content(self, prompt: str) -> str:
         """Use AI to improve the content."""
         self._state: AgentState = AgentState.PROCESSING
         self._trigger_event(EventType.PRE_IMPROVE, {"prompt": prompt})
+
+        # Phase 281: Security Gatekeeping (Firewall)
+        if not await self._request_firewall_clearance(prompt):
+            logging.warning(f"Action blocked by FirewallAgent: {prompt[:50]}")
+            return self.previous_content
 
         # Pre-processing: Preemption and Quotas
         await self._check_preemption()
@@ -450,26 +559,49 @@ class BaseAgent:
                 memory_docs = [m.get("content", "") for m in memories]
 
             full_prompt = self.agent_logic_core.prepare_improvement_prompt(
-                prompt, memory_docs, self._history_manager.get_messages(), self._system_prompt
+                prompt,
+                memory_docs,
+                self._history_manager.get_messages(),
+                self._system_prompt,
             )
 
-            async def backend_callable(p: str, sp: str | None = None, h: list[dict[str, str]] | None = None) -> str:
-                return await self.run_subagent(f"Improve {self.file_path.stem}", p, self.previous_content)
+            async def backend_callable(
+                p: str, sp: str | None = None, h: list[dict[str, str]] | None = None
+            ) -> str:
+                return await self.run_subagent(
+                    f"Improve {self.file_path.stem}", p, self.previous_content
+                )
 
-            improvement = await self.strategy.execute(full_prompt, self.previous_content, backend_callable)
-            improvement = self.agent_logic_core.finalize_improvement(improvement, self._post_processors)
+            improvement = await self.strategy.execute(
+                full_prompt, self.previous_content, backend_callable
+            )
+            improvement = self.agent_logic_core.finalize_improvement(
+                improvement, self._post_processors
+            )
 
             # Quality Check and Retry
             quality = self._score_response_quality(improvement)
-            if quality.value <= ResponseQuality.POOR.value and self._config.retry_count > 0:
+            if (
+                quality.value <= ResponseQuality.POOR.value
+                and self._config.retry_count > 0
+            ):
                 for _ in range(self._config.retry_count):
-                    improvement = await self.run_subagent(f"Retry {self.file_path.stem}", full_prompt, self.previous_content)
-                    if self._score_response_quality(improvement).value >= ResponseQuality.ACCEPTABLE.value:
+                    improvement = await self.run_subagent(
+                        f"Retry {self.file_path.stem}",
+                        full_prompt,
+                        self.previous_content,
+                    )
+                    if (
+                        self._score_response_quality(improvement).value
+                        >= ResponseQuality.ACCEPTABLE.value
+                    ):
                         break
 
             self.current_content = improvement
             if self._config.cache_enabled:
-                BaseAgent._response_cache[cache_key] = CacheEntry(cache_key, improvement, time.time(), quality.value)
+                BaseAgent._response_cache[cache_key] = CacheEntry(
+                    cache_key, improvement, time.time(), quality.value
+                )
 
             self.add_to_history(MessageRole.USER.value, prompt)
             self.add_to_history(MessageRole.ASSISTANT.value, improvement[:500])
@@ -481,9 +613,12 @@ class BaseAgent:
             self.current_content = self.previous_content
             return self.current_content
 
-    async def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str:
+    async def run_subagent(
+        self, description: str, prompt: str, original_content: str = ""
+    ) -> str:
         exceeded, reason = self.quotas.check_quotas()
-        if exceeded: raise CycleInterrupt(reason)
+        if exceeded:
+            raise CycleInterrupt(reason)
 
         try:
             from src.infrastructure.backend import execution_engine as ab
@@ -491,10 +626,15 @@ class BaseAgent:
             sys.path.append(str(Path(__file__).parent.parent.parent))
             from src.infrastructure.backend import execution_engine as ab
 
-        result: str | None = await asyncio.to_thread(ab.run_subagent, description, prompt, original_content)
-        self.quotas.update_usage(len(prompt)//4, len(result or "")//4 if result else 0)
+        result: str | None = await asyncio.to_thread(
+            ab.run_subagent, description, prompt, original_content
+        )
+        self.quotas.update_usage(
+            len(prompt) // 4, len(result or "") // 4 if result else 0
+        )
 
-        if result is None: return original_content or self._get_fallback_response()
+        if result is None:
+            return original_content or self._get_fallback_response()
         return result
 
     @staticmethod
@@ -525,28 +665,28 @@ class BaseAgent:
             str: Unified diff string.
         """
         return self.core.calculate_diff(
-            self.previous_content,
-            self.current_content,
-            filename=str(self.file_path)
+            self.previous_content, self.current_content, filename=str(self.file_path)
         )
 
     def update_file(self) -> bool:
         """Write content back to disk."""
         content_to_write = self.current_content
         suffix = self.file_path.suffix.lower()
-        if suffix in {'.md', '.markdown'} or self.file_path.name.lower().endswith('.plan.md'):
+        if suffix in {".md", ".markdown"} or self.file_path.name.lower().endswith(
+            ".plan.md"
+        ):
             content_to_write = self.core.fix_markdown(content_to_write)
 
         if not self.core.validate_content_safety(content_to_write):
             logging.error(f"Security violation detected in {self.file_path.name}")
             return False
 
-        if getattr(self._config, 'dry_run', False):
+        if getattr(self._config, "dry_run", False):
             return self._write_dry_run_diff()
 
         try:
             self.file_path.parent.mkdir(parents=True, exist_ok=True)
-            self.file_path.write_text(content_to_write, encoding='utf-8')
+            self.file_path.write_text(content_to_write, encoding="utf-8")
             return True
         except Exception as e:
             logging.error(f"File write failed: {e}")
@@ -555,15 +695,18 @@ class BaseAgent:
     def _write_dry_run_diff(self) -> bool:
         """Saves a diff for verification without modifying the file."""
         diff = self.get_diff()
-        if not diff: return True
+        if not diff:
+            return True
 
         dry_run_dir = Path("temp/dry_runs")
         dry_run_dir.mkdir(parents=True, exist_ok=True)
-        safe_name = str(self.file_path).replace("\\", "_").replace("/", "_").replace(":", "_")
+        safe_name = (
+            str(self.file_path).replace("\\", "_").replace("/", "_").replace(":", "_")
+        )
         diff_path = dry_run_dir / f"{safe_name}_{int(time.time())}.diff"
 
         try:
-            diff_path.write_text(diff, encoding='utf-8')
+            diff_path.write_text(diff, encoding="utf-8")
             logging.info(f"Dry-run diff saved to {diff_path}")
             return True
         except Exception:
@@ -613,7 +756,9 @@ class BaseAgent:
         if not template:
             raise ValueError(f"Template not found: {template_id}")
 
-        prompt: str = template.template.format(**variables, content=self.previous_content)
+        prompt: str = template.template.format(
+            **variables, content=self.previous_content
+        )
         return self.improve_content(prompt)
 
     # ========== Conversation History ==========
@@ -637,7 +782,9 @@ class BaseAgent:
 
     def _build_prompt_with_history(self, prompt: str) -> str:
         """Build prompt with conversation history context. (Delegated to Core)."""
-        return self._history_manager.build_prompt(prompt, self.agent_logic_core, self.core)
+        return self._history_manager.build_prompt(
+            prompt, self.agent_logic_core, self.core
+        )
 
     # ========== Response Post-Processing ==========
 
@@ -696,7 +843,8 @@ class BaseAgent:
 
     @classmethod
     def register_hook(cls, event: EventType, callback: EventHook) -> None:
-        if event not in cls._event_hooks: cls._event_hooks[event] = []
+        if event not in cls._event_hooks:
+            cls._event_hooks[event] = []
         cls._event_hooks[event].append(callback)
 
     @classmethod
@@ -704,15 +852,25 @@ class BaseAgent:
         if event in cls._event_hooks and callback in cls._event_hooks[event]:
             cls._event_hooks[event].remove(callback)
 
-    def _record(self, prompt: str, result: str, provider: str = "auto", model: str = "auto", meta: dict[str, Any] | None = None) -> None:
+    def _record(
+        self,
+        prompt: str,
+        result: str,
+        provider: str = "auto",
+        model: str = "auto",
+        meta: dict[str, Any] | None = None,
+    ) -> None:
         try:
             if hasattr(self, "recorder") and self.recorder:
                 self.recorder.record_interaction(provider, model, prompt, result, meta)
-        except Exception: pass
+        except Exception:
+            pass
 
     def _trigger_event(self, event: EventType, data: dict[str, Any]) -> None:
         data["agent"], data["file_path"] = self.__class__.__name__, str(self.file_path)
-        self.agent_logic_core.trigger_event(event, data, self._event_hooks.get(event, []))
+        self.agent_logic_core.trigger_event(
+            event, data, self._event_hooks.get(event, [])
+        )
 
     @classmethod
     def register_plugin(cls, name: str, plugin: Any) -> None:
@@ -725,17 +883,31 @@ class BaseAgent:
     @classmethod
     def health_check(cls) -> HealthCheckResult:
         healthy, details = BaseAgentCore().perform_health_check(
-            cls.get_backend_status(), len(cls._response_cache), list(cls._plugins.keys())
+            cls.get_backend_status(),
+            len(cls._response_cache),
+            list(cls._plugins.keys()),
         )
-        return HealthCheckResult(healthy=healthy, backend_available=healthy, details=details)
+        return HealthCheckResult(
+            healthy=healthy, backend_available=healthy, details=details
+        )
 
     def save_state(self, path: Path | None = None) -> None:
-        AgentStateManager.save_state(self.file_path, self._state.value, self._token_usage, self._state_data, len(self._history_manager.get_messages()), path)
+        AgentStateManager.save_state(
+            self.file_path,
+            self._state.value,
+            self._token_usage,
+            self._state_data,
+            len(self._history_manager.get_messages()),
+            path,
+        )
 
     def load_state(self, path: Path | None = None) -> bool:
         state = AgentStateManager.load_state(self.file_path, path)
         if state:
-            self._token_usage, self._state_data = state.get("token_usage", 0), state.get("state_data", {})
+            self._token_usage, self._state_data = (
+                state.get("token_usage", 0),
+                state.get("state_data", {}),
+            )
             return True
         return False
 
@@ -751,7 +923,9 @@ class BaseAgent:
 
     # ========== Agent Delegation ==========
 
-    def delegate_to(self, agent_type: str, prompt: str, target_file: str | None = None) -> str:
+    def delegate_to(
+        self, agent_type: str, prompt: str, target_file: str | None = None
+    ) -> str:
         """Launches another agent to perform a sub-task."""
         return AgentDelegator.delegate(
             agent_type=agent_type,
@@ -759,5 +933,5 @@ class BaseAgent:
             current_agent_name=self.__class__.__name__,
             current_file_path=self.file_path,
             current_model=self.get_model(),
-            target_file=target_file
+            target_file=target_file,
         )

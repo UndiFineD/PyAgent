@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\pybase64\__init__.py
-# hypothesis_version: 6.150.1
-
-[b'-_', 'b64decode', 'b64encode', 'b64encode_as_string', 'encodebytes', 'fallback', 'standard_b64decode', 'standard_b64encode', 'urlsafe_b64decode', 'urlsafe_b64encode']

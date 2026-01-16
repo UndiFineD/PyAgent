@@ -18,13 +18,11 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import ast
 import os
 
 __version__ = VERSION
-
-
 
 
 class DocGenCore:
@@ -86,4 +84,4 @@ class DocGenCore:
         Generates a standardized documentation filename from a relative path.
         Example: src/utils/helper.py -> src_utils_helper.md
         """
-        return rel_path.replace(os.sep, '_').replace('.py', '.md')
+        return rel_path.replace(os.sep, "_").replace(".py", ".md")

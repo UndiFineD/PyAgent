@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\intelligence\SQLQueryAgent.py
-# hypothesis_version: 6.150.1
-
-['Database path', 'SQL Agent', '__main__', 'alter', 'delete', 'drop', 'insert', 'truncate', 'update']

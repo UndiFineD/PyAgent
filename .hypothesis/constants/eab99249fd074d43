@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\manifold\_t_sne.py
-# hypothesis_version: 6.150.1
-
-[-2.0, 0.0, 1e-07, 0.0001, 0.01, 0.2, 0.5, 0.8, 1.0, 2.0, 3.0, 12.0, 30.0, 200.0, 250, 300, 1000, 'K', 'X', 'X_embedded', 'angle', 'args', 'array-like', 'auto', 'barnes_hut', 'both', 'compute_error', 'coo', 'csc', 'csr', 'default', 'distance', 'early_exaggeration', 'euclidean', 'exact', 'init', 'it', 'kwargs', 'learning_rate', 'left', 'max_iter', 'method', 'metric', 'metric_params', 'min_grad_norm', 'momentum', 'n_components', 'n_iter_check', 'n_jobs', 'n_neighbors', 'neither', 'num_threads', 'pca', 'perplexity', 'precomputed', 'random', 'random_state', 'sparse matrix', 'sqeuclidean', 'verbose']

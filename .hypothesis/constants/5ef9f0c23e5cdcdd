@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\cluster\_optics.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.05, 'X', 'algorithm', 'auto', 'ball_tree', 'boolean', 'both', 'brute', 'cache', 'cluster_method', 'core_distances', 'csr', 'dbscan', 'end', 'eps', 'ignore', 'kd_tree', 'leaf_size', 'left', 'max_eps', 'memory', 'metric', 'metric_params', 'mib', 'min_cluster_size', 'min_samples', 'minkowski', 'n_jobs', 'ordering', 'p', 'precomputed', 'predecessor', 'reachability', 'right', 'sparse matrix', 'start', 'xi']

@@ -1,4 +1,3 @@
-
 """
 Core logic for Resource Curation (Phase 173).
 Handles pruning of temporary directories and old files.
@@ -9,10 +8,9 @@ import shutil
 import time
 
 
-
-
 class CurationCore:
     """Core logic for pruning and managing filesystem resources."""
+
     @staticmethod
     def prune_directory(directory: str, max_age_days: int = 7) -> int:
         """
@@ -24,6 +22,7 @@ class CurationCore:
 
         try:
             import rust_core
+
             return rust_core.prune_directory_rust(directory, max_age_days)  # type: ignore[attr-defined]
         except (ImportError, AttributeError):
             pass
@@ -54,6 +53,7 @@ class CurationCore:
 
         try:
             import rust_core
+
             return rust_core.deep_clean_pycache_rust(root_dir)  # type: ignore[attr-defined]
         except (ImportError, AttributeError):
             pass

@@ -23,15 +23,13 @@ Handles certificate rotation and security policy enforcement.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import time
 import uuid
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class SecurityAuditManager:
@@ -47,7 +45,7 @@ class SecurityAuditManager:
             "cert_id": new_cert_id,
             "issued_at": time.time(),
             "expires_at": time.time() + (3600 * 24 * 90),  # 90 days
-            "status": "valid"
+            "status": "valid",
         }
         return f"Rotated certificates for fleet {fleet_id}. New Cert ID: {new_cert_id}"
 

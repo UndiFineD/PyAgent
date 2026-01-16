@@ -4,8 +4,6 @@ from src.infrastructure.fleet.FleetManager import FleetManager
 import time
 
 
-
-
 def test_phase19() -> None:
     print("--- Phase 19 Verification: Synthetic Data & Signal Bus ---")
     workspace_root = Path(__file__).resolve().parents[2]
@@ -26,49 +24,29 @@ def test_phase19() -> None:
     if results:
         print("✅ Signal Bus confirmed.")
     else:
-
-
-
-
-
-
-
-
-
-
         print("❌ Signal Bus failed.")
 
     # 2. Test Synthetic Data Agent
     print("\n[2/2] Testing Synthetic Data Forge...")
-
-
-
 
     topic = "Python Refactoring"
 
     # generate_training_data(self, topic: str, count: int = 5)
     training_data = fleet.synthetic_data.generate_training_data(topic, count=3)
 
-
-
-
     # The agent saves to logs/synthetic_data by default
-    expected_path = Path("data/logs/synthetic_data") / f"synthetic_{topic.replace(' ', '_').lower()}.jsonl"
+    expected_path = (
+        Path("data/logs/synthetic_data")
+        / f"synthetic_{topic.replace(' ', '_').lower()}.jsonl"
+    )
 
     if expected_path.exists():
         print(f"✅ Synthetic data generated at {expected_path}")
-
-
-
 
         # Cleanup
         # expected_path.unlink()
     else:
         print(f"❌ Synthetic data generation failed. Expected {expected_path}")
-
-
-
-
 
 
 if __name__ == "__main__":

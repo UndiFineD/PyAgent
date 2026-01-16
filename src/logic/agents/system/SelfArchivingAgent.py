@@ -20,16 +20,14 @@
 
 from __future__ import annotations
 from pathlib import Path
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import os
 from datetime import datetime
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class SelfArchivingAgent(BaseAgent):
@@ -51,11 +49,13 @@ class SelfArchivingAgent(BaseAgent):
         """
         Scans for files or memory entries that haven't been accessed in the given threshold.
         """
-        logging.info(f"SelfArchiving: Scanning for targets older than {threshold_days} days.")
+        logging.info(
+            f"SelfArchiving: Scanning for targets older than {threshold_days} days."
+        )
         # Mock logic to 'find' some obsolete paths
         targets = [
             str(Path(__file__).resolve().parents[4]) + "/logs/session_old_001.log",
-            str(Path(__file__).resolve().parents[4]) + "/memory/abandoned_plan_v1.json"
+            str(Path(__file__).resolve().parents[4]) + "/memory/abandoned_plan_v1.json",
         ]
         return targets
 
@@ -71,7 +71,9 @@ class SelfArchivingAgent(BaseAgent):
         # Simplified simulation: just pretend we archived them
         os.path.join(os.path.dirname(self.file_path), "archives")
 
-        report = f"### Archiving Report\n- **Timestamp**: {datetime.now().isoformat()}\n"
+        report = (
+            f"### Archiving Report\n- **Timestamp**: {datetime.now().isoformat()}\n"
+        )
         for t in targets:
             report += f"- [ARCHIVED] {t}\n"
 

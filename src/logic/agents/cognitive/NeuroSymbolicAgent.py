@@ -19,16 +19,14 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import re
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class NeuroSymbolicAgent(BaseAgent):
@@ -41,8 +39,16 @@ class NeuroSymbolicAgent(BaseAgent):
         super().__init__(file_path)
         self.symbolic_rules: list[dict[str, Any]] = [
             {"name": "No deletions", "regex": r"delete|rm -rf", "impact": "BLOCK"},
-            {"name": "Type Safety", "regex": r":\s*(int|str|List|Dict|Any)", "impact": "PREFER"},
-            {"name": "No plain passwords", "regex": r'password\s*=\s*[\'"][^\'"]+[\'"]', "impact": "BLOCK"}
+            {
+                "name": "Type Safety",
+                "regex": r":\s*(int|str|List|Dict|Any)",
+                "impact": "PREFER",
+            },
+            {
+                "name": "No plain passwords",
+                "regex": r'password\s*=\s*[\'"][^\'"]+[\'"]',
+                "impact": "BLOCK",
+            },
         ]
         self._system_prompt = (
             "You are the Neuro-Symbolic Agent. "
@@ -60,18 +66,24 @@ class NeuroSymbolicAgent(BaseAgent):
 
         for rule in self.symbolic_rules:
             if re.search(rule["regex"], content, re.IGNORECASE):
-                violations.append({
-                    "rule": rule["name"],
-                    "impact": rule["impact"],
-                    "action": "CORRECTION_REQUIRED" if rule["impact"] == "BLOCK" else "ADVISORY"
-                })
+                violations.append(
+                    {
+                        "rule": rule["name"],
+                        "impact": rule["impact"],
+                        "action": "CORRECTION_REQUIRED"
+                        if rule["impact"] == "BLOCK"
+                        else "ADVISORY",
+                    }
+                )
 
         passed = all(v["impact"] != "BLOCK" for v in violations)
 
         return {
             "content_verified": passed,
             "violations": violations,
-            "corrected_content": content if passed else "# BLOCK: Symbolic Rule Violation Detected"
+            "corrected_content": content
+            if passed
+            else "# BLOCK: Symbolic Rule Violation Detected",
         }
 
     def improve_content(self, prompt: str) -> str:

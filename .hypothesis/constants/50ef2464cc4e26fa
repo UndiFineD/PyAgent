@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\QualityGateAgent.py
-# hypothesis_version: 6.150.1
-
-['--version', '-m', 'FAILED', 'Gatekeeper', 'Initiated', 'Internal', 'Primary Objective', 'QualityGate Agent', "Task (e.g. 'check')", '__main__', 'check_gates', 'error', 'pytest', 'status', 'test_results.txt']

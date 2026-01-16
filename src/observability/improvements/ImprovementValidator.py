@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .Improvement import Improvement
 from .ValidationResult import ValidationResult
 from .ValidationSeverity import ValidationSeverity
@@ -29,8 +29,6 @@ from typing import Any
 from collections.abc import Callable
 
 __version__ = VERSION
-
-
 
 
 class ImprovementValidator:
@@ -52,17 +50,13 @@ class ImprovementValidator:
         self.rules.append(self._rule_has_description)
         self.rules.append(self._rule_valid_effort)
 
-    def _rule_has_description(
-        self, imp: Improvement
-    ) -> tuple[bool, str]:
+    def _rule_has_description(self, imp: Improvement) -> tuple[bool, str]:
         """Check that improvement has a description."""
         if not imp.description or len(imp.description) < 10:
             return False, "Description too short or missing"
         return True, ""
 
-    def _rule_valid_effort(
-        self, imp: Improvement
-    ) -> tuple[bool, str]:
+    def _rule_valid_effort(self, imp: Improvement) -> tuple[bool, str]:
         """Check that effort estimate is reasonable."""
         return True, ""
 
@@ -82,7 +76,10 @@ class ImprovementValidator:
 
             def _min_desc(imp: Improvement) -> tuple[bool, str]:
                 if len(imp.description or "") < min_length:
-                    return False, f"Description must be at least {min_length} characters"
+                    return (
+                        False,
+                        f"Description must be at least {min_length} characters",
+                    )
                 return True, ""
 
             self.rules.append(_min_desc)

@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\api\models\CollectionCommon.py
-# hypothesis_version: 6.150.1
-
-['AsyncServerAPI', 'ClientT', 'ServerAPI', 'T', 'add', 'data', 'delete', 'distances', 'documents', 'embed_query', 'embedding_function', 'embeddings', 'get', 'hnsw:space', 'ids', 'images', 'metadata', 'metadatas', 'name', 'query', 'serialized_schema', 'update', 'upsert', 'uris', 'where', 'where_document']

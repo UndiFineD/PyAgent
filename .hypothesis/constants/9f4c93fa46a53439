@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\starlette\routing.py
-# hypothesis_version: 6.150.1
-
-[404, 405, '$', ', ', '/', '/{path:path}', ':', 'Allow', 'GET', 'HEAD', 'Method Not Allowed', 'Not Found', '^', '_T', '__name__', 'app', 'app_root_path', 'endpoint', 'host', 'http', 'lifespan', 'message', 'method', 'path', 'path_params', 'root_path', 'router', 'routes', 's', 'shutdown', 'startup', 'state', 'str', 'type', 'websocket', '{', '{%s}', '}']

@@ -10,8 +10,6 @@ import asyncio
 from src.infrastructure.fleet.FleetManager import FleetManager
 
 
-
-
 async def run_phase34():
     logging.basicConfig(level=logging.INFO)
     print("🚀 Starting Phase 34 Verification...")
@@ -38,41 +36,21 @@ async def run_phase34():
     start = time.time()
     fleet.temporal_sync.sync_wait(0.01)
     end = time.time()
-    print(f"✅ Sync Wait actual: {end-start:.4f}s")
-
-
-
-
-
+    print(f"✅ Sync Wait actual: {end - start:.4f}s")
 
     # 2. Test Reality Grafting
     print("\n--- Testing Reality Grafting ---")
     # Simulate a dream result
 
-
-
-
-
-
-
-
-
-
     dream_intelligence = "Synthesized logic for high-performance multi-vector indexing discovered during simulation."
 
-
-
-
     # Use call_by_capability to test the whole path
-    res = fleet.call_by_capability("RealityGrafting", focus_area="Search Logic", dream_output=dream_intelligence)
+    res = fleet.call_by_capability(
+        "RealityGrafting", focus_area="Search Logic", dream_output=dream_intelligence
+    )
     if asyncio.iscoroutine(res):
-
-
         graft_result = await res
     else:
-
-
-
         graft_result = res
     print(f"✅ Graft Result: {graft_result}")
 
@@ -82,20 +60,11 @@ async def run_phase34():
     else:
         print("❌ Reality Grafting flow failed.")
 
-
-
-
     print("\n🏁 Phase 34 Verification Complete.")
-
-
-
 
 
 def test_phase34() -> None:
     asyncio.run(run_phase34())
-
-
-
 
 
 if __name__ == "__main__":

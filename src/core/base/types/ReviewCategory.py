@@ -21,19 +21,15 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
-
-
-
 class ReviewCategory(Enum):
     """Categories for code review feedback."""
+
     STYLE = "style"
     PERFORMANCE = "performance"
     SECURITY = "security"

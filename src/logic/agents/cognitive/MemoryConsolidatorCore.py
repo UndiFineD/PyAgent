@@ -19,18 +19,18 @@ import time
 from typing import Any
 
 
-
-
 class MemoryConsolidatorCore:
     """Pure logic core for memory consolidation."""
 
-    def create_interaction_entry(self, agent: str, task: str, outcome: str) -> dict[str, Any]:
+    def create_interaction_entry(
+        self, agent: str, task: str, outcome: str
+    ) -> dict[str, Any]:
         """Creates a standardized interaction entry."""
         return {
             "timestamp": time.time(),
             "agent": agent,
             "task": task,
-            "outcome": outcome
+            "outcome": outcome,
         }
 
     def distill_buffer(self, buffer: list[dict[str, Any]]) -> list[str]:
@@ -39,7 +39,9 @@ class MemoryConsolidatorCore:
         for entry in buffer:
             # Simple heuristic: if outcome is long/complex, keep it
             if len(entry.get("outcome", "")) > 10:
-                insights.append(f"{entry['agent']} on task '{entry['task']}': {entry['outcome']}")
+                insights.append(
+                    f"{entry['agent']} on task '{entry['task']}': {entry['outcome']}"
+                )
         return insights[:50]  # Limit to top 50 insights per day
 
     def format_daily_memory(self, insights: list[str]) -> dict[str, Any]:
@@ -47,10 +49,12 @@ class MemoryConsolidatorCore:
         return {
             "date": time.strftime("%Y-%m-%d"),
             "insights": insights,
-            "count": len(insights)
+            "count": len(insights),
         }
 
-    def filter_memory_by_query(self, memory: list[dict[str, Any]], query: str) -> list[str]:
+    def filter_memory_by_query(
+        self, memory: list[dict[str, Any]], query: str
+    ) -> list[str]:
         """Filters memory records by query string."""
         results = []
         query_lower = query.lower()

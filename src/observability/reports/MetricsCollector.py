@@ -21,14 +21,12 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ReportMetric import ReportMetric
 from typing import Any
 import logging
 
 __version__ = VERSION
-
-
 
 
 class MetricsCollector:
@@ -54,7 +52,7 @@ class MetricsCollector:
         name: str,
         value: float,
         unit: str = "",
-        threshold: float | None = None
+        threshold: float | None = None,
     ) -> ReportMetric:
         """Record a metric.
         Args:
@@ -67,12 +65,7 @@ class MetricsCollector:
             Created metric.
         """
 
-        metric = ReportMetric(
-            name=name,
-            value=value,
-            unit=unit,
-            threshold=threshold
-        )
+        metric = ReportMetric(name=name, value=value, unit=unit, threshold=threshold)
         if file_path not in self.metrics:
             self.metrics[file_path] = []
         self.metrics[file_path].append(metric)
@@ -110,5 +103,5 @@ class MetricsCollector:
         return {
             "total_files": total_files,
             "total_metrics": total_metrics,
-            "averages": avg_summary
+            "averages": avg_summary,
         }

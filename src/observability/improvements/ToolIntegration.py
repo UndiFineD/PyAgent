@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .AnalysisToolType import AnalysisToolType
 from .ImprovementCategory import ImprovementCategory
 from .ToolSuggestion import ToolSuggestion
@@ -29,8 +29,6 @@ from typing import Any
 import re
 
 __version__ = VERSION
-
-
 
 
 class ToolIntegration:
@@ -49,10 +47,7 @@ class ToolIntegration:
         self.suggestions: list[ToolSuggestion] = []
 
     def configure_tool(
-        self,
-        tool_name: str,
-        tool_type: AnalysisToolType,
-        command: str = ""
+        self, tool_name: str, tool_type: AnalysisToolType, command: str = ""
     ) -> None:
         """Configure a tool.
 
@@ -61,43 +56,41 @@ class ToolIntegration:
             tool_type: Type of the tool.
             command: Command to run the tool.
         """
-        self.tool_configs[tool_name] = {
-            "type": tool_type,
-            "command": command
-        }
+        self.tool_configs[tool_name] = {"type": tool_type, "command": command}
 
     def parse_pylint_output(self, output: str) -> list[ToolSuggestion]:
         """Parse pylint output into suggestions."""
         suggestions: list[ToolSuggestion] = []
-        for line in output.split('\n'):
-            match = re.match(
-                r'(.+):(\d+):\d+: (\w+): (.+)',
-                line
-            )
+        for line in output.split("\n"):
+            match = re.match(r"(.+):(\d+):\d+: (\w+): (.+)", line)
             if match:
-                suggestions.append(ToolSuggestion(
-                    tool_type=AnalysisToolType.LINTER,
-                    tool_name="pylint",
-                    file_path=match.group(1),
-                    line_number=int(match.group(2)),
-                    message=match.group(4)
-                ))
+                suggestions.append(
+                    ToolSuggestion(
+                        tool_type=AnalysisToolType.LINTER,
+                        tool_name="pylint",
+                        file_path=match.group(1),
+                        line_number=int(match.group(2)),
+                        message=match.group(4),
+                    )
+                )
         self.suggestions.extend(suggestions)
         return suggestions
 
     def parse_mypy_output(self, output: str) -> list[ToolSuggestion]:
         """Parse mypy output into suggestions."""
         suggestions: list[ToolSuggestion] = []
-        for line in output.split('\n'):
-            match = re.match(r'(.+):(\d+): error: (.+)', line)
+        for line in output.split("\n"):
+            match = re.match(r"(.+):(\d+): error: (.+)", line)
             if match:
-                suggestions.append(ToolSuggestion(
-                    tool_type=AnalysisToolType.TYPE_CHECKER,
-                    tool_name="mypy",
-                    file_path=match.group(1),
-                    line_number=int(match.group(2)),
-                    message=match.group(3)
-                ))
+                suggestions.append(
+                    ToolSuggestion(
+                        tool_type=AnalysisToolType.TYPE_CHECKER,
+                        tool_name="mypy",
+                        file_path=match.group(1),
+                        line_number=int(match.group(2)),
+                        message=match.group(3),
+                    )
+                )
         self.suggestions.extend(suggestions)
         return suggestions
 
@@ -106,18 +99,20 @@ class ToolIntegration:
     ) -> list[ToolSuggestion]:
         """Get all tool suggestions."""
         if tool_type:
-            return [s for s in self.suggestions
-                    if s.tool_type == tool_type]
+            return [s for s in self.suggestions if s.tool_type == tool_type]
         return self.suggestions
 
     def convert_to_improvements(
         self, suggestions: list[ToolSuggestion]
     ) -> list[dict[str, Any]]:
         """Convert tool suggestions to improvement data."""
-        return [{
-            "title": f"Fix {s.tool_name} issue in {s.file_path}",
-            "description": s.message,
-            "file_path": s.file_path,
-            "line_number": s.line_number,
-            "category": ImprovementCategory.MAINTAINABILITY.value
-        } for s in suggestions]
+        return [
+            {
+                "title": f"Fix {s.tool_name} issue in {s.file_path}",
+                "description": s.message,
+                "file_path": s.file_path,
+                "line_number": s.line_number,
+                "category": ImprovementCategory.MAINTAINABILITY.value,
+            }
+            for s in suggestions
+        ]

@@ -16,9 +16,7 @@ from __future__ import annotations
 import logging
 from typing import Any
 from datetime import datetime
-from src.infrastructure.orchestration.SignalRegistry import SignalRegistry
-
-
+from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
 
 
 class ConsciousnessRegistry:
@@ -26,13 +24,18 @@ class ConsciousnessRegistry:
     Indexes and summarizes the 'Thought Streams' of all agents for global awareness.
     Allows any agent to 'know' what the rest of the fleet is doing.
     """
+
     _instance = None
 
     def __new__(cls, *args, **kwargs) -> ConsciousnessRegistry:
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            cls._instance.thought_index: dict[str, list[dict[str, Any]]] = {}  # Agent -> Thoughts
-            cls._instance.global_summary: str = "Fleet consciousness active. No thoughts yet."
+            cls._instance.thought_index: dict[
+                str, list[dict[str, Any]]
+            ] = {}  # Agent -> Thoughts
+            cls._instance.global_summary: str = (
+                "Fleet consciousness active. No thoughts yet."
+            )
 
             # Subscribe to signals
             try:
@@ -40,7 +43,9 @@ class ConsciousnessRegistry:
                 registry.subscribe("thought_stream", cls._instance._on_thought)
                 logging.debug("ConsciousnessRegistry: Subscribed to thought_stream.")
             except Exception as e:
-                logging.debug(f"ConsciousnessRegistry: Failed to subscribe to signals: {e}")
+                logging.debug(
+                    f"ConsciousnessRegistry: Failed to subscribe to signals: {e}"
+                )
         return cls._instance
 
     def __init__(self, fleet: Any | None = None) -> None:
@@ -59,7 +64,7 @@ class ConsciousnessRegistry:
         entry = {
             "thought": thought,
             "timestamp": event.get("timestamp", str(datetime.now())),
-            "id": event.get("id", "evt_unknown")
+            "id": event.get("id", "evt_unknown"),
         }
 
         self.thought_index[agent].append(entry)

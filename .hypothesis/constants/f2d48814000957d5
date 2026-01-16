@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\distributed\_composable\checkpoint_activation.py
-# hypothesis_version: 6.150.1
-
-[',', 'context_fn', 'debug', 'determinism_check', 'early_stop', 'preserve_rng_state', 'use_reentrant']

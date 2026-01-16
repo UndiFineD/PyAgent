@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\dev\test_utils\TestResultAggregator.py
-# hypothesis_version: 6.150.1
-
-[0.0, '/', 'avg_duration_ms', 'errors', 'failed', 'pass_rate', 'passed', 'skipped', 'total', 'total_duration_ms', 'unknown']

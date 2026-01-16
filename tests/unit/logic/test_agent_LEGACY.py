@@ -1,4 +1,5 @@
 """Legacy unit tests for agent logic."""
+
 import pytest
 import subprocess
 from pathlib import Path
@@ -11,12 +12,11 @@ except ImportError:
     pass
 
 
-
-
-def test_agent_with_large_repository_performance(tmp_path: Path, agent_module: Any) -> None:
+def test_agent_with_large_repository_performance(
+    tmp_path: Path, agent_module: Any
+) -> None:
     """Test agent behavior with large repository - performance benchmarks."""
     # ... (skipping context for now)
-
 
 
 def test_git_operations_commit(tmp_path: Path, agent_module: Any) -> None:
@@ -27,28 +27,46 @@ def test_git_operations_commit(tmp_path: Path, agent_module: Any) -> None:
     subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True)
     recorder.record_interaction("shell", "git", "git init", "Initialized git repo")
 
-    subprocess.run(["git", "config", "user.email", "test@test.com"],
-                   cwd=tmp_path, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.name", "Test User"],
-                   cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "config", "user.email", "test@test.com"],
+        cwd=tmp_path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "Test User"],
+        cwd=tmp_path,
+        check=True,
+        capture_output=True,
+    )
 
     # Create a file
     test_file = tmp_path / "test.txt"
     test_file.write_text("initial content")
 
     # Commit
-    subprocess.run(["git", "add", "test.txt"], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "add", "test.txt"], cwd=tmp_path, check=True, capture_output=True
+    )
     result = subprocess.run(
         ["git", "commit", "-m", "Initial commit"],
-        cwd=tmp_path, capture_output=True, text=True
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
     )
-    recorder.record_interaction("shell", "git", "git commit -m 'Initial commit'", result.stdout)
+    recorder.record_interaction(
+        "shell", "git", "git commit -m 'Initial commit'", result.stdout
+    )
 
     assert result.returncode == 0
-    assert "Initial commit" in result.stdout or "initial content" in test_file.read_text()
+    assert (
+        "Initial commit" in result.stdout or "initial content" in test_file.read_text()
+    )
 
 
-def test_concurrent_file_processing_scenarios(tmp_path: Path, agent_module: Any) -> None:
+def test_concurrent_file_processing_scenarios(
+    tmp_path: Path, agent_module: Any
+) -> None:
     """Test concurrent file processing scenarios."""
     # Create multiple files for concurrent processing
     files = []
@@ -66,11 +84,11 @@ def test_concurrent_file_processing_scenarios(tmp_path: Path, agent_module: Any)
 def test_all_cli_argument_combinations(agent_module: Any) -> None:
     """Test all command-line argument combinations."""
     # Mock parser
-    if hasattr(agent_module, 'create_parser'):
+    if hasattr(agent_module, "create_parser"):
         parser = agent_module.create_parser()
 
         # Test individual arguments
-        args = parser.parse_args(['--help'] if '--help' in ['-h', '--help'] else [])
+        args = parser.parse_args(["--help"] if "--help" in ["-h", "--help"] else [])
         assert args is not None
 
 
@@ -78,10 +96,10 @@ def test_agent_with_large_file_set(tmp_path: Path, agent_module: Any) -> None:
     """Test agent with large file sets."""
     # Create 50 diverse files
     file_types = {
-        '.py': 'def test(): pass',
-        '.md': '# Test\nContent',
-        '.txt': 'Plain text',
-        '.json': '{"key": "value"}',
+        ".py": "def test(): pass",
+        ".md": "# Test\nContent",
+        ".txt": "Plain text",
+        ".json": '{"key": "value"}',
     }
 
     for ext, content in file_types.items():
@@ -114,6 +132,7 @@ def test_logging_output_verbosity(tmp_path: Path, agent_module: Any) -> None:
 def test_verbosity_level_debug(agent_module: Any, caplog: Any) -> None:
     """Test debug verbosity level produces detailed output."""
     import logging
+
     with caplog.at_level(logging.DEBUG):
         logger = logging.getLogger("agent_test")
         logger.debug("Detailed debug info")
@@ -125,26 +144,47 @@ def test_git_operations_branch_switching(tmp_path: Path) -> None:
     """Test git operations: branch switching."""
     # Initialize repo
     subprocess.run(["git", "init"], cwd=tmp_path, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.email", "test@test.com"],
-                   cwd=tmp_path, check=True, capture_output=True)
-    subprocess.run(["git", "config", "user.name", "Test"],
-                   cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "config", "user.email", "test@test.com"],
+        cwd=tmp_path,
+        check=True,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "Test"],
+        cwd=tmp_path,
+        check=True,
+        capture_output=True,
+    )
 
     # Create initial commit
     (tmp_path / "test.txt").write_text("test")
     subprocess.run(["git", "add", "."], cwd=tmp_path, check=True, capture_output=True)
-    subprocess.run(["git", "commit", "-m", "init"], cwd=tmp_path, check=True, capture_output=True)
+    subprocess.run(
+        ["git", "commit", "-m", "init"], cwd=tmp_path, check=True, capture_output=True
+    )
 
     # Create and switch branch
-    subprocess.run(["git", "checkout", "-b", "feature"],
-                   cwd=tmp_path, check=True, capture_output=True)
-    result = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"],
-                            cwd=tmp_path, capture_output=True, text=True)
+    subprocess.run(
+        ["git", "checkout", "-b", "feature"],
+        cwd=tmp_path,
+        check=True,
+        capture_output=True,
+    )
+    result = subprocess.run(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        cwd=tmp_path,
+        capture_output=True,
+        text=True,
+    )
     assert "feature" in result.stdout
 
 
-def test_git_unavailable_graceful_degradation(agent_module: Any, monkeypatch: Any) -> None:
+def test_git_unavailable_graceful_degradation(
+    agent_module: Any, monkeypatch: Any
+) -> None:
     """Test graceful degradation when git is unavailable."""
+
     # Mock git command to fail
     def mock_run(*args: Any, **kwargs: Any) -> Any:
         raise FileNotFoundError("git not found")
@@ -191,13 +231,17 @@ def test_stats_reporting_accuracy(agent_module: Any, tmp_path: Path) -> None:
     assert file_count == 5
 
 
-@pytest.mark.parametrize("file_type, content", [
-    (".py", "print('hello')"),
-    (".md", "# Hello"),
-    (".txt", "hello"),
-])
+@pytest.mark.parametrize(
+    "file_type, content",
+    [
+        (".py", "print('hello')"),
+        (".md", "# Hello"),
+        (".txt", "hello"),
+    ],
+)
 def test_agent_with_parametrized_file_types(
-        tmp_path: Path, file_type: str, content: str) -> None:
+    tmp_path: Path, file_type: str, content: str
+) -> None:
     """Test agent with parametrized different file types."""
     test_file = tmp_path / f"test{file_type}"
     test_file.write_text(content)
@@ -312,8 +356,8 @@ def test_agent_with_complex_repo_fixture(complex_repo_structure: Path) -> None:
 
 
 def test_multiple_fixture_repo_structures(
-        simple_repo_structure: Path,
-        complex_repo_structure: Path) -> None:
+    simple_repo_structure: Path, complex_repo_structure: Path
+) -> None:
     """Test with multiple fixture-based repo structures."""
     assert simple_repo_structure.exists()
     assert complex_repo_structure.exists()

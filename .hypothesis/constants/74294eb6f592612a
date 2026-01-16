@@ -1,4 +1,0 @@
-# file: c:\DEV\PyAgent\src\core\base\types\AccessibilityIssueType.py
-# hypothesis_version: 6.150.1
-
-['aria_invalid', 'aria_missing', 'focus_management', 'form_validation', 'heading_hierarchy', 'keyboard_navigation', 'low_color_contrast', 'missing_alt_text', 'missing_label', 'semantic_html']

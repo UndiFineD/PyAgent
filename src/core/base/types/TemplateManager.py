@@ -21,16 +21,11 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .EntryTemplate import EntryTemplate
 import re
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class TemplateManager:
@@ -52,10 +47,7 @@ class TemplateManager:
         self.templates: dict[str, EntryTemplate] = {}
 
     def add_template(
-        self,
-        name: str,
-        template_text: str,
-        description: str = ""
+        self, name: str, template_text: str, description: str = ""
     ) -> EntryTemplate:
         """Add a new template.
 
@@ -68,13 +60,13 @@ class TemplateManager:
             The created EntryTemplate.
         """
         # Extract placeholders
-        placeholders = re.findall(r'\{(\w+)\}', template_text)
+        placeholders = re.findall(r"\{(\w+)\}", template_text)
 
         template = EntryTemplate(
             name=name,
             template_text=template_text,
             placeholders=placeholders,
-            description=description
+            description=description,
         )
         self.templates[name] = template
         return template

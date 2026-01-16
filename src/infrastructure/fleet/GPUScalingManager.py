@@ -23,14 +23,12 @@ Scales agent pools based on GPU memory pressure and latency.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import random
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class GPUScalingManager:
@@ -51,7 +49,9 @@ class GPUScalingManager:
 
             if usage > self.threshold:
                 actions[gpu_id] = "SCALE_UP_POD"
-                logging.warning(f"GPU high pressure detected: {gpu_id} at {usage}%. Action: {actions[gpu_id]}")
+                logging.warning(
+                    f"GPU high pressure detected: {gpu_id} at {usage}%. Action: {actions[gpu_id]}"
+                )
             else:
                 actions[gpu_id] = "STABLE"
 
@@ -62,5 +62,5 @@ class GPUScalingManager:
         return {
             "gpus": self.gpu_state,
             "threshold": self.threshold,
-            "can_accept_load": all(u < self.threshold for u in self.gpu_state.values())
+            "can_accept_load": all(u < self.threshold for u in self.gpu_state.values()),
         }

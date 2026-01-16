@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\EthicsGuardrailAgent.py
-# hypothesis_version: 6.150.1
-
-['EthicsGuardrail', 'approved', 'attack', 'critical', 'critical_infra', 'data_privacy', 'deceive', 'delete', 'exfiltrate', 'exploit', 'harm', 'principles_reviewed', 'recursive_autonomy', 'rejected', 'sensitive_data', 'status', 'violations']

@@ -18,20 +18,15 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-from src.core.base.interfaces import ContextRecorderInterface
+from src.core.base.BaseInterfaces import ContextRecorderInterface
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class LocalContextRecorder(ContextRecorderInterface):
@@ -41,7 +36,12 @@ class LocalContextRecorder(ContextRecorderInterface):
     Optimized for trillion-parameter data harvesting (Phase 105).
     """
 
-    def __init__(self, workspace_root: Path | None = None, user_context: str = "System", fleet: Any = None) -> None:
+    def __init__(
+        self,
+        workspace_root: Path | None = None,
+        user_context: str = "System",
+        fleet: Any = None,
+    ) -> None:
         if fleet and hasattr(fleet, "workspace_root"):
             self.workspace_root = Path(fleet.workspace_root)
         elif workspace_root:
@@ -54,10 +54,17 @@ class LocalContextRecorder(ContextRecorderInterface):
         self.log_dir.mkdir(parents=True, exist_ok=True)
         # Phase 105: Monthly + Hash-based Sharding (Deeper distribution for trillion-param scale)
         self.shard_count = 256
-        self.current_month = datetime.now().strftime('%Y%m')
+        self.current_month = datetime.now().strftime("%Y%m")
         self.use_compression = True  # Save 70-80% space for massive datasets
 
-    def record_interaction(self, provider: str, model: str, prompt: str, result: str, meta: dict[str, Any] | None = None) -> None:
+    def record_interaction(
+        self,
+        provider: str,
+        model: str,
+        prompt: str,
+        result: str,
+        meta: dict[str, Any] | None = None,
+    ) -> None:
         """
         Appends a new interaction record.
         Includes unique context hashing for future deduplication and sharded storage.
@@ -68,7 +75,7 @@ class LocalContextRecorder(ContextRecorderInterface):
         import gzip
 
         # Stability: generate a stable hash for the prompt to allow O(1) deduplication
-        prompt_hash = hashlib.sha256(prompt.encode('utf-8')).hexdigest()
+        prompt_hash = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
 
         # Determine sub-shard for massively parallel access (256 virtual buckets)
         shard_id = zlib.adler32(prompt_hash.encode()) % self.shard_count
@@ -85,10 +92,10 @@ class LocalContextRecorder(ContextRecorderInterface):
             "prompt_hash": prompt_hash,
             "prompt": prompt,
             "result": result,
-            "meta": meta or {}
+            "meta": meta or {},
         }
 
-        line = (json.dumps(record) + "\n").encode('utf-8')
+        line = (json.dumps(record) + "\n").encode("utf-8")
 
         try:
             if self.use_compression:
@@ -111,7 +118,7 @@ class LocalContextRecorder(ContextRecorderInterface):
             model=tag,
             prompt=json.dumps(data),
             result="Harvested",
-            meta={"tag": tag}
+            meta={"tag": tag},
         )
 
     def _update_index(self, prompt_hash: str, filename: str) -> None:

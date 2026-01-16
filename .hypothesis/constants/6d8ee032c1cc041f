@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\neighbors\_graph.py
-# hypothesis_version: 6.150.1
-
-[1.0, 'X', 'array-like', 'auto', 'boolean', 'both', 'connectivity', 'distance', 'include_self', 'left', 'metric', 'metric_params', 'minkowski', 'mode', 'n_jobs', 'n_neighbors', 'p', 'radius', 'right', 'sparse matrix']

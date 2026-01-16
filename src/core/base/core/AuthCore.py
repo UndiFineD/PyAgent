@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 from typing import Any
 import hashlib
@@ -11,19 +10,13 @@ except ImportError:
     rc: Any = None  # type: ignore[no-redef]
 
 
-
-
 @dataclass(frozen=True)
 class AuthProof:
-
-
-
-
     """Authentication proof container for agent validation."""
+
     timestamp: float
     challenge: str
     proof: str
-
 
 
 class AuthCore:
@@ -50,7 +43,9 @@ class AuthCore:
                 pass
         return hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()
 
-    def verify_proof(self, challenge: str, proof: str, expected_secret_hash: str) -> bool:
+    def verify_proof(
+        self, challenge: str, proof: str, expected_secret_hash: str
+    ) -> bool:
         """Verifies proof against the expected secret hash without knowing the secret."""
         if rc:
             try:
@@ -59,7 +54,12 @@ class AuthCore:
                 pass
         # Simulated ZK verify: In a real ZK, we wouldn't even need the secret hash here.
         # But for this logic-isolation stage, we use hashed comparison.
-        return proof == hashlib.sha512(f"{challenge}:{expected_secret_hash}".encode()).hexdigest()
+        return (
+            proof
+            == hashlib.sha512(
+                f"{challenge}:{expected_secret_hash}".encode()
+            ).hexdigest()
+        )
 
     def is_proof_expired(self, proof_time: float, ttl: int = 60) -> bool:
         """Standard TTL check for authentication proofs."""

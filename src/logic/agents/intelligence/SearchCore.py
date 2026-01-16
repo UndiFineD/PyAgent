@@ -25,18 +25,17 @@ No I/O or side effects.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 
 try:
     import rust_core as rc
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
 __version__ = VERSION
-
-
 
 
 class SearchCore:

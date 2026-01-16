@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\isotonic.py
-# hypothesis_version: 6.150.1
-
-[-1.0, 0.5, 1.0, 1.96, '1.12.0', 'IsotonicRegression', 'T', 'X', 'X_thresholds_', 'array-like', 'auto', 'boolean', 'both', 'check_increasing', 'clip', 'f_', 'increasing', 'isotonic_regression', 'linear', 'nan', 'out_of_bounds', 'raise', 'sample_weight', 'x', 'y', 'y_max', 'y_min', 'y_thresholds_']

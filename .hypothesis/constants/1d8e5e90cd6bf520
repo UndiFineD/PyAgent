@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\core\base\managers\AgentMetrics.py
-# hypothesis_version: 6.150.1
-
-[0.0001, 'agents_applied', 'average_per_file', 'backend', 'cost_per_file', 'cost_per_request', 'end_time', 'estimated_requests', 'file_count', 'files_modified', 'files_processed', 'github-models', 'name', 'per_agent', 'per_file', 'start_time', 'summary', 'timestamp', 'total_agent_runs', 'total_estimated_cost', 'total_time', 'total_time_seconds']

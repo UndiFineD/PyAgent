@@ -23,7 +23,7 @@ Allows visualization of agent chains and request propagation across nodes.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import time
 import uuid
@@ -52,17 +52,12 @@ except ImportError:
 __version__ = VERSION
 
 
-
-
 @dataclass
-
-
 class Span:
     name: str
     trace_id: str
     span_id: str
     parent_id: str | None = None
-
 
     start_time: float = field(default_factory=time.time)
     end_time: float | None = None
@@ -76,7 +71,9 @@ class OTelManager:
     """
 
     def __init__(self) -> None:
-        self.active_spans: dict[str, Any] = {}  # Now stores real OTel spans if available
+        self.active_spans: dict[
+            str, Any
+        ] = {}  # Now stores real OTel spans if available
         self.completed_spans: list[Span] = []
         self.core = TracingCore()
         if HAS_OTEL:
@@ -84,7 +81,12 @@ class OTelManager:
         else:
             self.tracer = None
 
-    def start_span(self, name: str, parent_id: str | None = None, attributes: dict[str, Any] | None = None) -> str:
+    def start_span(
+        self,
+        name: str,
+        parent_id: str | None = None,
+        attributes: dict[str, Any] | None = None,
+    ) -> str:
         """Starts a new tracing span and returns its ID."""
         span_id = str(uuid.uuid4())
 
@@ -101,28 +103,24 @@ class OTelManager:
                 trace_id=trace_id,
                 span_id=span_id,
                 parent_id=parent_id,
-                attributes=attributes or {}
+                attributes=attributes or {},
             )
             self.active_spans[span_id] = span
 
         logging.info(f"OTel: Started span {name} ({span_id})")
         return span_id
 
-    def end_span(self, span_id: str, status: str = "ok", network_latency_sec: float = 0.0, attributes: dict[str, Any] | None = None) -> None:
+    def end_span(
+        self,
+        span_id: str,
+        status: str = "ok",
+        network_latency_sec: float = 0.0,
+        attributes: dict[str, Any] | None = None,
+    ) -> None:
         """Ends a span and calculates latency breakdown via Core."""
-
-
-
-
-
-
-
-
-
 
         raw_span = self.active_spans.pop(span_id, None)
         if not raw_span:
-
             logging.warning(f"OTel: Attempted to end non-existent span {span_id}")
             return
 
@@ -137,11 +135,6 @@ class OTelManager:
             raw_span.status = status
 
             if attributes:
-
-
-
-
-
                 raw_span.attributes.update(attributes)
 
             total_latency = raw_span.end_time - raw_span.start_time
@@ -158,23 +151,12 @@ class OTelManager:
         self.completed_spans = []
         return batch
 
-
-
-
-
-
     def get_trace_context(self, span_id: str) -> dict[str, str]:
         """Generates headers for propagation across HTTP/RPC calls."""
         if span_id in self.active_spans:
             span = self.active_spans[span_id]
-            return {
-                "traceparent": f"00-{span.trace_id}-{span.span_id}-01"
-            }
+            return {"traceparent": f"00-{span.trace_id}-{span.span_id}-01"}
         return {}
-
-
-
-
 
 
 if __name__ == "__main__":
@@ -182,6 +164,7 @@ if __name__ == "__main__":
     root = otel.start_span("Workflow: Fix Code")
     child = otel.start_span("Agent: SecurityGuard", parent_id=root)
     import threading
+
     threading.Event().wait(timeout=0.1)
     otel.end_span(child, status="ok")
     otel.end_span(root, status="ok")

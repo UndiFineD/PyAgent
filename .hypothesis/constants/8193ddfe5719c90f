@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\CoderCore.py
-# hypothesis_version: 6.150.1
-
-[0.1, 0.15, 0.23, 0.25, 2.4, 5.2, 16.2, 100, 171, 200, '#', '# API Documentation\n', '.py', '//', '[ \\t]+$', '\\n{4,}', '\\s+', '^', '^.{89,}$', 'category', 'complexity', 'content', 'deep_nesting', 'description', 'design', 'duplicate_code', 'duplication', 'end_lineno', 'extract_class', 'extract_method', 'flake8', 'god_class', 'hash', 'info', 'line', 'line_length', 'lines', 'long_method', 'message', 'missing_docstring', 'multiple_blank_lines', 'occurrences', 'preview', 'reason', 'rule', 'self', 'severity', 'threshold', 'too_many_parameters', 'trailing_whitespace', 'type', 'value', 'w', 'warning']

@@ -12,21 +12,19 @@ import os
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
     class agent_sys_path:
         def __enter__(self) -> str:
-
             return self
-
-
-
-
-
-
 
         def __exit__(self, *args) -> str:
             sys.path.remove(str(AGENT_DIR))
@@ -43,22 +41,20 @@ class TestFixtureFactoryPatterns:
 
         factory = FixtureFactory()
         fixture = factory.create_agent_fixture(
-            name="test_agent",
-            config={"timeout": 30}
+            name="test_agent", config={"timeout": 30}
         )
 
         assert fixture.name == "test_agent"
         assert fixture.config["timeout"] == 30
 
-    def test_fixture_factory_creates_file_fixtures(self, utils_module: Any, tmp_path: Path) -> None:
+    def test_fixture_factory_creates_file_fixtures(
+        self, utils_module: Any, tmp_path: Path
+    ) -> None:
         """Test fixture factory creates file fixtures."""
         FixtureFactory = utils_module.FixtureFactory
 
         factory = FixtureFactory(base_dir=tmp_path)
-        fixture = factory.create_file_fixture(
-            name="test.py",
-            content="# Test file"
-        )
+        fixture = factory.create_file_fixture(name="test.py", content="# Test file")
 
         path = fixture.setup_fn()
         assert path.exists()
@@ -69,10 +65,7 @@ class TestFixtureFactoryPatterns:
 
         factory = FixtureFactory()
         parent = factory.create_agent_fixture(name="parent")
-        child = factory.create_agent_fixture(
-            name="child",
-            dependencies=[parent]
-        )
+        child = factory.create_agent_fixture(name="child", dependencies=[parent])
 
         assert len(child.dependencies) == 1
 
@@ -130,10 +123,7 @@ class TestParallelTestExecutionHelpers:
             results.append(name)
             return f"done_{name}"
 
-        outputs = runner.run([
-            lambda: test_fn("test1"),
-            lambda: test_fn("test2")
-        ])
+        outputs = runner.run([lambda: test_fn("test1"), lambda: test_fn("test2")])
 
         assert len(outputs) == 2
 
@@ -165,9 +155,7 @@ class TestTestOutputFormattingUtilities:
 
         formatter = TestOutputFormatter()
         output = formatter.format_result(
-            test_name="test_example",
-            status=TestStatus.PASSED,
-            duration_ms=150
+            test_name="test_example", status=TestStatus.PASSED, duration_ms=150
         )
 
         assert "test_example" in output
@@ -183,7 +171,7 @@ class TestTestOutputFormattingUtilities:
             test_name="test_failing",
             status=TestStatus.FAILED,
             duration_ms=50,
-            error_message="Assertion failed"
+            error_message="Assertion failed",
         )
 
         assert "Assertion failed" in output
@@ -222,8 +210,7 @@ class TestAssertionHelperFunctions:
 
         helpers = AssertionHelpers()
         result = helpers.assert_output_matches_pattern(
-            output="Error on line 42: syntax error",
-            pattern=r"Error on line \d+:"
+            output="Error on line 42: syntax error", pattern=r"Error on line \d+:"
         )
         assert result is True
 
@@ -237,9 +224,7 @@ class TestAssertionHelperFunctions:
             raise ValueError("Expected error message")
 
         result = helpers.assert_raises_with_message(
-            raising_fn,
-            ValueError,
-            "Expected error"
+            raising_fn, ValueError, "Expected error"
         )
         assert result is True
 
@@ -324,7 +309,9 @@ class TestSnapshotComparisonUtilities:
         loaded = manager.load_snapshot("test_snapshot")
         assert loaded == data
 
-    def test_snapshot_comparison_matches(self, utils_module: Any, tmp_path: Path) -> None:
+    def test_snapshot_comparison_matches(
+        self, utils_module: Any, tmp_path: Path
+    ) -> None:
         """Test snapshot comparison when matching."""
         SnapshotManager = utils_module.SnapshotManager
 
@@ -336,7 +323,9 @@ class TestSnapshotComparisonUtilities:
         result = manager.compare_snapshot("test", data)
         assert result.matches is True
 
-    def test_snapshot_comparison_differs(self, utils_module: Any, tmp_path: Path) -> None:
+    def test_snapshot_comparison_differs(
+        self, utils_module: Any, tmp_path: Path
+    ) -> None:
         """Test snapshot comparison when different."""
         SnapshotManager = utils_module.SnapshotManager
 
@@ -420,7 +409,9 @@ class TestTestConfigurationLoadingUtilities:
 
         assert config["timeout"] == 30
 
-    def test_config_loader_with_defaults(self, utils_module: Any, tmp_path: Path) -> None:
+    def test_config_loader_with_defaults(
+        self, utils_module: Any, tmp_path: Path
+    ) -> None:
         """Test config loader applies defaults."""
         TestConfigLoader = utils_module.TestConfigLoader
 
@@ -437,7 +428,9 @@ class TestTestConfigurationLoadingUtilities:
 class TestTestReportGenerationHelpers:
     """Tests for test report generation helpers."""
 
-    def test_report_generator_creates_html(self, utils_module: Any, tmp_path: Path) -> None:
+    def test_report_generator_creates_html(
+        self, utils_module: Any, tmp_path: Path
+    ) -> None:
         """Test report generator creates HTML report."""
         TestReportGenerator = utils_module.TestReportGenerator
 
@@ -452,7 +445,9 @@ class TestTestReportGenerationHelpers:
         assert "test1" in content
         assert "test2" in content
 
-    def test_report_generator_creates_json(self, utils_module: Any, tmp_path: Path) -> None:
+    def test_report_generator_creates_json(
+        self, utils_module: Any, tmp_path: Path
+    ) -> None:
         """Test report generator creates JSON report."""
         TestReportGenerator = utils_module.TestReportGenerator
 

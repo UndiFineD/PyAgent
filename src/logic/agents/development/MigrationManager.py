@@ -21,15 +21,13 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types.MigrationRule import MigrationRule
 from src.core.base.types.MigrationStatus import MigrationStatus
 from typing import Any
 import re
 
 __version__ = VERSION
-
-
 
 
 class MigrationManager:
@@ -82,11 +80,13 @@ class MigrationManager:
             rule.status = MigrationStatus.IN_PROGRESS
             new_result = re.sub(rule.old_pattern, rule.new_pattern, result)
             if new_result != result:
-                applied.append({
-                    "rule": rule.name,
-                    "description": rule.description,
-                    "breaking_change": rule.breaking_change
-                })
+                applied.append(
+                    {
+                        "rule": rule.name,
+                        "description": rule.description,
+                        "breaking_change": rule.breaking_change,
+                    }
+                )
                 rule.status = MigrationStatus.COMPLETED
                 result = new_result
             else:

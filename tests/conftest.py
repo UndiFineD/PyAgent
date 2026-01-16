@@ -1,4 +1,5 @@
 """Pytest configuration for PyAgent tests."""
+
 import pytest
 import tempfile
 import types
@@ -7,9 +8,7 @@ from src.infrastructure.fleet.AgentRegistry import AgentRegistry
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.CircuitBreaker import CircuitBreaker
 from src.core.base.AgentPluginBase import AgentPluginBase
-from src.core.base.models.enums import HealthStatus
-
-
+from src.core.base.models.CoreEnums import HealthStatus
 
 
 @pytest.fixture
@@ -18,14 +17,10 @@ def agent_module():
     mod = types.SimpleNamespace()
     mod.Agent = BaseAgent
 
-
-
-
     mod.CircuitBreaker = CircuitBreaker
     mod.AgentPluginBase = AgentPluginBase
     mod.HealthStatus = HealthStatus
     return mod
-
 
 
 @pytest.fixture
@@ -34,34 +29,18 @@ def agent_backend_module():
     mod = types.SimpleNamespace()
     # Lazy imports to avoid circular dependencies or import errors if modules are broken
 
-
     try:
         from src.infrastructure.backend.RequestQueue import RequestQueue
         from src.infrastructure.backend.RequestBatcher import RequestBatcher
         from src.infrastructure.backend.RequestPriority import RequestPriority
         from src.infrastructure.backend.SystemHealthMonitor import SystemHealthMonitor
 
-
-
-
-
-
-
-
-
-
         from src.infrastructure.backend.LoadBalancer import LoadBalancer
         from src.infrastructure.backend.RequestTracer import RequestTracer
-
-
 
         from src.infrastructure.backend.AuditLogger import AuditLogger
 
         mod.RequestQueue = RequestQueue
-
-
-
-
 
         mod.RequestBatcher = RequestBatcher
         mod.RequestPriority = RequestPriority
@@ -70,15 +49,6 @@ def agent_backend_module():
         mod.RequestTracer = RequestTracer
         mod.AuditLogger = AuditLogger
     except ImportError:
-
-
-
-
-
-
-
-
-
         pass
     return mod
 
@@ -88,12 +58,14 @@ def base_agent_module():
     """Provides core base agent classes including BatchManagers."""
     mod = types.SimpleNamespace()
     try:
-        from src.core.base.managers.BatchManagers import BatchRequest, RequestBatcher
+        from src.core.base.BaseManagers.BatchManagers import BatchRequest, RequestBatcher
+
         mod.BatchRequest = BatchRequest
         mod.RequestBatcher = RequestBatcher
     except ImportError:
         pass
     return mod
+
 
 @pytest.fixture
 def agent_sandbox():
@@ -109,9 +81,6 @@ def agent_sandbox():
         (src_dir / "__init__.py").touch()
 
         yield temp_path
-
-
-
 
 
 @pytest.fixture

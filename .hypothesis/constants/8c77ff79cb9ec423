@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\CodeQualityAgent.py
-# hypothesis_version: 6.150.1
-
-[100.0, 100, 120, 500, '--allow-dirty', '--fix', '--format', '--format=json', '.js', '.py', '.rs', '.ts', 'Flake8', 'Info', 'Shell', 'Style', 'Warning', 'cargo', 'clippy', 'column', 'eslint', 'file', 'flake8', 'issues', 'json', 'line', 'message', 'npx', 'recorder', 'score', 'timestamp', 'type', 'utf-8']

@@ -1,4 +1,5 @@
 """Unit tests for fleet initialization and lazy orchestrator access."""
+
 import logging
 import sys
 from pathlib import Path
@@ -26,5 +27,6 @@ try:
 except Exception as e:
     print(f"FAILED: {e}")
     import traceback
+
     traceback.print_exc()
     sys.exit(1)

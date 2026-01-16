@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\google\protobuf\text_encoding.py
-# hypothesis_version: 6.150.1
-
-[127, 128, 256, '"', "'", '\\', '\\"', '\\%03o', "\\'", '\\\\', '\\n', '\\r', '\\t', 'latin-1', 'raw_unicode_escape', 'unicode_escape', 'utf-8', 'x0']

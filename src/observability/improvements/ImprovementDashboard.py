@@ -21,13 +21,11 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .Improvement import Improvement
 from collections.abc import Callable
 
 __version__ = VERSION
-
-
 
 
 class ImprovementDashboard:

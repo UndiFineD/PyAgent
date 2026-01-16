@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\dev\test_utils\Benchmarker.py
-# hypothesis_version: 6.150.1
-
-[1000, 'average_ms', 'iterations', 'max', 'max_ms', 'mean', 'median', 'min', 'min_ms']

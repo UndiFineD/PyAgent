@@ -21,15 +21,13 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types.SecurityIssueType import SecurityIssueType
 from src.core.base.types.SecurityVulnerability import SecurityVulnerability
 from src.core.base.BaseAgent import BaseAgent
 import re
 
 __version__ = VERSION
-
-
 
 
 class SecurityScannerAgent(BaseAgent):
@@ -39,30 +37,48 @@ class SecurityScannerAgent(BaseAgent):
     """
 
     SECURITY_PATTERNS: list[tuple[str, SecurityIssueType, str, str, str]] = [
-        (r'password\s*=\s*[\'"][^\'"]+[\'"]',
-         SecurityIssueType.HARDCODED_SECRET, "high",
-         "Hardcoded password detected",
-         "Use environment variables or secure vault"),
-        (r'api_key\s*=\s*[\'"][^\'"]+[\'"]',
-         SecurityIssueType.HARDCODED_SECRET, "high",
-         "Hardcoded API key detected",
-         "Use environment variables or secure vault"),
-        (r"os\.system\s*\([^)]*\+",
-         SecurityIssueType.COMMAND_INJECTION, "critical",
-         "Potential command injection vulnerability",
-         "Use subprocess with shell=False and proper escaping"),
-        (r"ev" + r"al\s*\(",
-         SecurityIssueType.INSECURE_DESERIALIZATION, "critical",
-         "Use of ev" + "al() is dangerous",
-         "Avoid ev" + "al() or use ast.literal_eval() for safe parsing"),
-        (r"random\.(random|randint|choice)\s*\(",
-         SecurityIssueType.INSECURE_RANDOM, "medium",
-         "Insecure random number generation for security context",
-         "Use secrets module for cryptographic randomness"),
-        (r"open\s*\([^)]*\+",
-         SecurityIssueType.PATH_TRAVERSAL, "high",
-         "Potential path traversal vulnerability",
-         "Validate and sanitize file paths"),
+        (
+            r'password\s*=\s*[\'"][^\'"]+[\'"]',
+            SecurityIssueType.HARDCODED_SECRET,
+            "high",
+            "Hardcoded password detected",
+            "Use environment variables or secure vault",
+        ),
+        (
+            r'api_key\s*=\s*[\'"][^\'"]+[\'"]',
+            SecurityIssueType.HARDCODED_SECRET,
+            "high",
+            "Hardcoded API key detected",
+            "Use environment variables or secure vault",
+        ),
+        (
+            r"os\.system\s*\([^)]*\+",
+            SecurityIssueType.COMMAND_INJECTION,
+            "critical",
+            "Potential command injection vulnerability",
+            "Use subprocess with shell=False and proper escaping",
+        ),
+        (
+            r"ev" + r"al\s*\(",
+            SecurityIssueType.INSECURE_DESERIALIZATION,
+            "critical",
+            "Use of ev" + "al() is dangerous",
+            "Avoid ev" + "al() or use ast.literal_eval() for safe parsing",
+        ),
+        (
+            r"random\.(random|randint|choice)\s*\(",
+            SecurityIssueType.INSECURE_RANDOM,
+            "medium",
+            "Insecure random number generation for security context",
+            "Use secrets module for cryptographic randomness",
+        ),
+        (
+            r"open\s*\([^)]*\+",
+            SecurityIssueType.PATH_TRAVERSAL,
+            "high",
+            "Potential path traversal vulnerability",
+            "Validate and sanitize file paths",
+        ),
     ]
 
     def __init__(self, file_path: str) -> None:
@@ -81,24 +97,53 @@ class SecurityScannerAgent(BaseAgent):
             List of detected vulnerabilities.
         """
         self.vulnerabilities = []
-        lines = content.split('\n')
 
-        for i, line in enumerate(lines, 1):
-            for pattern, issue_type, severity, desc, fix in self.SECURITY_PATTERNS:
-                if re.search(pattern, line, re.I):
-                    self.vulnerabilities.append(SecurityVulnerability(
-                        type=issue_type,
-                        severity=severity,
-                        description=desc,
-                        line_number=i,
-                        fix_suggestion=fix
-                    ))
+        try:
+            from rust_core import scan_code_vulnerabilities_rust  # type: ignore[attr-defined]
+
+            # Rust returns (line_number, pattern_index, matched_text)
+            rust_results = scan_code_vulnerabilities_rust(content)
+            for line_num, pattern_idx, _ in rust_results:
+                if pattern_idx < len(self.SECURITY_PATTERNS):
+                    _, issue_type, severity, desc, fix = self.SECURITY_PATTERNS[pattern_idx]
+                    self.vulnerabilities.append(
+                        SecurityVulnerability(
+                            type=issue_type,
+                            severity=severity,
+                            description=desc,
+                            line_number=line_num,
+                            fix_suggestion=fix,
+                        )
+                    )
+        except (ImportError, AttributeError):
+            # Fallback to Python implementation
+            lines = content.split("\n")
+            for i, line in enumerate(lines, 1):
+                for pattern, issue_type, severity, desc, fix in self.SECURITY_PATTERNS:
+                    if re.search(pattern, line, re.I):
+                        self.vulnerabilities.append(
+                            SecurityVulnerability(
+                                type=issue_type,
+                                severity=severity,
+                                description=desc,
+                                line_number=i,
+                                fix_suggestion=fix,
+                            )
+                        )
 
         # Phase 108: Intelligence Recording
         try:
-            from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+            from src.infrastructure.backend.LocalContextRecorder import (
+                LocalContextRecorder,
+            )
+
             recorder = LocalContextRecorder(user_context="SecurityScanner")
-            recorder.record_interaction("Internal", "SecurityScanner", "Source Scan", f"Detected {len(self.vulnerabilities)} vulnerabilities.")
+            recorder.record_interaction(
+                "Internal",
+                "SecurityScanner",
+                "Source Scan",
+                f"Detected {len(self.vulnerabilities)} vulnerabilities.",
+            )
         except Exception:
             pass
 

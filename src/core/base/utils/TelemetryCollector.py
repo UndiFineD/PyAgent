@@ -21,7 +21,7 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.models import SpanContext, TelemetrySpan
 from contextlib import contextmanager
 from typing import Any
@@ -31,11 +31,6 @@ import time
 import uuid
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class TelemetryCollector:
@@ -64,7 +59,9 @@ class TelemetryCollector:
         self._current_span: TelemetrySpan | None = None
 
     @contextmanager
-    def span(self, name: str, attributes: dict[str, Any] | None = None) -> Iterator[SpanContext]:
+    def span(
+        self, name: str, attributes: dict[str, Any] | None = None
+    ) -> Iterator[SpanContext]:
         """Create a telemetry span.
 
         Args:
@@ -75,7 +72,9 @@ class TelemetryCollector:
             SpanContext for adding attributes and events.
         """
         parent_id = self._current_span.span_id if self._current_span else None
-        trace_id = self._current_span.trace_id if self._current_span else str(uuid.uuid4())
+        trace_id = (
+            self._current_span.trace_id if self._current_span else str(uuid.uuid4())
+        )
 
         span = TelemetrySpan(
             name=name,
@@ -111,17 +110,21 @@ class TelemetryCollector:
         """
         spans_data: list[dict[str, Any]] = []
         for span in self._spans:
-            spans_data.append({
-                "name": span.name,
-                "trace_id": span.trace_id,
-                "span_id": span.span_id,
-                "parent_id": span.parent_id,
-                "start_time": span.start_time,
-                "end_time": span.end_time,
-                "duration_ms": (span.end_time - span.start_time) * 1000 if span.end_time else None,
-                "attributes": span.attributes,
-                "events": span.events,
-            })
+            spans_data.append(
+                {
+                    "name": span.name,
+                    "trace_id": span.trace_id,
+                    "span_id": span.span_id,
+                    "parent_id": span.parent_id,
+                    "start_time": span.start_time,
+                    "end_time": span.end_time,
+                    "duration_ms": (span.end_time - span.start_time) * 1000
+                    if span.end_time
+                    else None,
+                    "attributes": span.attributes,
+                    "events": span.events,
+                }
+            )
         return json.dumps(spans_data, indent=2)
 
     def clear(self) -> None:

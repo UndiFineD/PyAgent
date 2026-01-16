@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\models\auto\auto_factory.py
-# hypothesis_version: 6.150.1
-
-['-', '--', '/', 'BaseAutoModelClass', 'Flax', 'GenerationMixin', 'TF', '_T', '__name__', '_adapter_model_path', '_commit_hash', '_from_auto', 'adapter_kwargs', 'architectures', 'auto', 'auto_map', 'cache_dir', 'code_revision', 'config', 'config_class', 'dtype', 'features_only', 'force_download', 'generate', 'get_values', 'local_files_only', 'num_channels', 'out_features', 'out_indices', 'output_loading_info', 'proxies', 'quantization_config', 'r', 'resume_download', 'revision', 'shortcut_placeholder', 'subfolder', 'text_config', 'timm', 'token', 'torch_dtype', 'transformers', 'transformers.models', 'trust_remote_code', 'use_auth_token', 'use_timm_backbone', 'utf-8', 'vision']

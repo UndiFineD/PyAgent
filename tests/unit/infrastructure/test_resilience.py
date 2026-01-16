@@ -1,4 +1,5 @@
 """Unit tests for AgentRegistry resilience and lazy mapping."""
+
 import os
 import logging
 from pathlib import Path
@@ -8,31 +9,16 @@ from pathlib import Path
 from src.infrastructure.fleet.AgentRegistry import AgentRegistry, LazyAgentMap
 
 
-
-
 def test_resilience() -> None:
     logging.basicConfig(level=logging.INFO)
     print("🧪 Testing Resilience of AgentRegistry...")
 
     workspace_root = Path(os.getcwd())
 
-
-
-
-
-
-
-
-
-
     agents: LazyAgentMap = AgentRegistry.get_agent_map(workspace_root)
 
     print("\n--- Attempting to load BrokenImportAgent ---")
     broken_agent = agents.get("BrokenImport")
-
-
-
-
 
     if broken_agent:
         print(f"✅ Found agent: {type(broken_agent).__name__}")
@@ -48,9 +34,6 @@ def test_resilience() -> None:
         print("❌ Agent not found even with stub.")
 
     print("\n🏁 Resilience Verification Complete.")
-
-
-
 
 
 if __name__ == "__main__":

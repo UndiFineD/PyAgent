@@ -19,15 +19,13 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class GeneticHardeningAgent(BaseAgent):
@@ -56,17 +54,21 @@ class GeneticHardeningAgent(BaseAgent):
         # simulated analysis
         vulnerabilities = []
         if "try:" not in code_snippet:
-            vulnerabilities.append({
-                "type": "missing_error_handling",
-                "impact": "high",
-                "fix": "Wrap core logic in try-except blocks."
-            })
+            vulnerabilities.append(
+                {
+                    "type": "missing_error_handling",
+                    "impact": "high",
+                    "fix": "Wrap core logic in try-except blocks.",
+                }
+            )
         if "-> None" not in code_snippet and "->" not in code_snippet:
-            vulnerabilities.append({
-                "type": "missing_type_hints",
-                "impact": "medium",
-                "fix": "Add explicit return type annotations."
-            })
+            vulnerabilities.append(
+                {
+                    "type": "missing_type_hints",
+                    "impact": "medium",
+                    "fix": "Add explicit return type annotations.",
+                }
+            )
 
         return vulnerabilities
 
@@ -75,7 +77,9 @@ class GeneticHardeningAgent(BaseAgent):
         """
         Applies hardening rules to the code to 'evolve' it into a more resilient version.
         """
-        logging.info(f"GeneticHardeningAgent: Applying {len(hardening_rules)} hardening rules.")
+        logging.info(
+            f"GeneticHardeningAgent: Applying {len(hardening_rules)} hardening rules."
+        )
 
         prompt = (
             f"Code:\n{code}\n\n"
@@ -86,5 +90,10 @@ class GeneticHardeningAgent(BaseAgent):
 
         evolved_code = self.think(prompt)
         # Phase 108: Intelligence Recording
-        self._record(prompt, evolved_code, provider="GeneticHardening", model="EvolutionaryRefactor")
+        self._record(
+            prompt,
+            evolved_code,
+            provider="GeneticHardening",
+            model="EvolutionaryRefactor",
+        )
         return evolved_code

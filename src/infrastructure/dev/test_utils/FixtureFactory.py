@@ -21,13 +21,11 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from pathlib import Path
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class FixtureFactory:
@@ -61,9 +59,16 @@ class FixtureFactory:
         Returns:
             Agent fixture object with name, config and dependencies attributes.
         """
+
         class AgentFixture:
             """Fixture representing a pre-configured agent for testing."""
-            def __init__(self, name: str, config: dict[str, Any] | None, dependencies: list[Any] | None) -> None:
+
+            def __init__(
+                self,
+                name: str,
+                config: dict[str, Any] | None,
+                dependencies: list[Any] | None,
+            ) -> None:
                 self.name = name
                 self.config = config or {}
                 self.dependencies = dependencies or []
@@ -80,8 +85,10 @@ class FixtureFactory:
         Returns:
             File fixture object with setup_fn method.
         """
+
         class FileFixture:
             """Fixture representing a file to be created during test setup."""
+
             def __init__(self, base_dir: Path, name: str, content: str) -> None:
                 self.base_dir = base_dir
                 self.name = name

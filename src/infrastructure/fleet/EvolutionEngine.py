@@ -23,15 +23,13 @@ Allows agents to generate new, specialized agent files to expand fleet capabilit
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from pathlib import Path
 from typing import Any
 from .EvolutionCore import EvolutionCore
 
 __version__ = VERSION
-
-
 
 
 class EvolutionEngine:
@@ -46,7 +44,9 @@ class EvolutionEngine:
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.core = EvolutionCore()
 
-    def generate_agent(self, name: str, capabilities: str, base_type: str = "BaseAgent") -> str:
+    def generate_agent(
+        self, name: str, capabilities: str, base_type: str = "BaseAgent"
+    ) -> str:
         """Generates a new agent class file based on a name and capabilities description."""
         agent_filename = f"{name.lower()}_agent.py"
         target_path = self.output_dir / agent_filename

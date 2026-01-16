@@ -10,26 +10,25 @@ import sys
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
     class agent_sys_path:
         def __enter__(self) -> str:
-
             return self
-
-
-
-
-
-
 
         def __exit__(self, *args) -> str:
             sys.path.remove(str(AGENT_DIR))
 
 # Import from src if needed
+
 
 class TestTestStatusEnum:
     """Tests for TestStatus enum."""
@@ -42,6 +41,7 @@ class TestTestStatusEnum:
         assert TestStatus.SKIPPED.value == "skipped"
         assert TestStatus.ERROR.value == "error"
         assert TestStatus.PENDING.value == "pending"
+
 
 class TestMockResponseTypeEnum:
     """Tests for MockResponseType enum."""
@@ -76,9 +76,11 @@ class TestTestDataTypeEnum:
         assert TestDataType.MARKDOWN.value == "markdown"
         assert TestDataType.JSON.value == "json"
 
+
 # =============================================================================
 # Phase 6: Dataclass Tests
 # =============================================================================
+
 
 class TestTestFixtureDataclass:
     """Tests for TestFixture dataclass."""
@@ -90,6 +92,7 @@ class TestTestFixtureDataclass:
         assert fixture.name == "test"
         assert fixture.scope == "function"
         assert fixture.setup_fn is None
+
 
 class TestMockResponseDataclass:
     """Tests for MockResponse dataclass."""
@@ -103,6 +106,7 @@ class TestMockResponseDataclass:
         assert response.content == ""
         assert response.response_type == MockResponseType.SUCCESS
         assert response.latency_ms == 100
+
 
 class TestTestResultDataclass:
     """Tests for TestResult dataclass."""
@@ -121,6 +125,7 @@ class TestTestResultDataclass:
         assert result.status == TestStatus.PASSED
         assert result.duration_ms == 150.5
 
+
 class TestTestSnapshotDataclass:
     """Tests for TestSnapshot dataclass."""
 
@@ -136,6 +141,7 @@ class TestTestSnapshotDataclass:
 # =============================================================================
 # Phase 6: MockAIBackend Tests
 # =============================================================================
+
 
 class TestMockAIBackend:
     """Tests for MockAIBackend class."""
@@ -214,7 +220,9 @@ class TestFixtureGenerator:
         gen = FixtureGenerator(base_dir=tmp_path)
         assert gen.base_dir == tmp_path
 
-    def test_create_python_file_fixture(self, utils_module: Any, tmp_path: Path) -> None:
+    def test_create_python_file_fixture(
+        self, utils_module: Any, tmp_path: Path
+    ) -> None:
         """Test creating Python file fixture."""
         FixtureGenerator = utils_module.FixtureGenerator
         gen = FixtureGenerator(base_dir=tmp_path)
@@ -236,10 +244,13 @@ class TestFixtureGenerator:
         FixtureGenerator = utils_module.FixtureGenerator
         gen = FixtureGenerator(base_dir=tmp_path)
 
-        fixture = gen.create_directory_fixture("test_dir", {
-            "file1.py": "content1",
-            "file2.py": "content2",
-        })
+        fixture = gen.create_directory_fixture(
+            "test_dir",
+            {
+                "file1.py": "content1",
+                "file2.py": "content2",
+            },
+        )
 
         path = fixture.setup_fn()
         assert path.exists()
@@ -249,6 +260,7 @@ class TestFixtureGenerator:
 # =============================================================================
 # Phase 6: TestDataGenerator Tests
 # =============================================================================
+
 
 class TestTestDataGenerator:
     """Tests for TestDataGenerator class."""
@@ -344,7 +356,9 @@ class TestSnapshotManager:
         assert loaded is not None
         assert loaded.content == "content"
 
-    def test_assert_match_creates_snapshot(self, utils_module: Any, tmp_path: Path) -> None:
+    def test_assert_match_creates_snapshot(
+        self, utils_module: Any, tmp_path: Path
+    ) -> None:
         """Test assert_match creates snapshot if missing."""
         SnapshotManager = utils_module.SnapshotManager
         mgr = SnapshotManager(tmp_path)
@@ -355,7 +369,9 @@ class TestSnapshotManager:
         loaded = mgr.load_snapshot("new_snapshot")
         assert loaded.content == "content"
 
-    def test_assert_match_detects_mismatch(self, utils_module: Any, tmp_path: Path) -> None:
+    def test_assert_match_detects_mismatch(
+        self, utils_module: Any, tmp_path: Path
+    ) -> None:
         """Test assert_match detects mismatch."""
         SnapshotManager = utils_module.SnapshotManager
         mgr = SnapshotManager(tmp_path)

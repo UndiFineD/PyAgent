@@ -21,15 +21,13 @@
 """Agent specializing in logical reasoning, chain-of-thought analysis, and problem decomposition."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function, as_tool
+from src.core.base.BaseUtilities import create_main_function, as_tool
 
 __version__ = VERSION
-
-
 
 
 class ReasoningAgent(BaseAgent):
@@ -73,7 +71,7 @@ class ReasoningAgent(BaseAgent):
             "- **Performance**: Negligible impact on latency.",
             "",
             "---",
-            "*Reasoning complete. Ready for implementation.*"
+            "*Reasoning complete. Ready for implementation.*",
         ]
 
         return "\n".join(analysis)
@@ -86,12 +84,14 @@ class ReasoningAgent(BaseAgent):
             "Exploring multiple reasoning paths...",
             "- Path 1: Decomposition and sequential solving.",
             "- Path 2: Holistic pattern matching.",
-            "Consensus: Path 1 provides higher reliability."
+            "Consensus: Path 1 provides higher reliability.",
         ]
         return "\n".join(analysis)
 
     @as_tool
-    def check_latent_consistency(self, problem: str, language: str = "english") -> dict[str, Any]:
+    def check_latent_consistency(
+        self, problem: str, language: str = "english"
+    ) -> dict[str, Any]:
         """
         Validates reasoning across language boundaries (Latent Reasoning Guardrail).
 
@@ -109,32 +109,28 @@ class ReasoningAgent(BaseAgent):
         logging.info(f"ReasoningAgent: Checking latent consistency for {language}")
         # Simulation of Cross-Lingual consistency check (ArXiv 2601.02996)
 
-
-
-        is_consistent = True if language.lower() in ["english", "chinese", "spanish"] else False
+        is_consistent = (
+            True if language.lower() in ["english", "chinese", "spanish"] else False
+        )
         confidence = 0.95 if is_consistent else 0.45
 
         return {
             "problem": problem,
-
-
             "target_language": language,
             "is_consistent": is_consistent,
             "confidence_score": confidence,
-            "recommendation": "English-centered reasoning is strong." if is_consistent else "Perform explicit COT in English before translating."
+            "recommendation": "English-centered reasoning is strong."
+            if is_consistent
+            else "Perform explicit COT in English before translating.",
         }
-
-
-
 
     def improve_content(self, prompt: str) -> str:
         """Perform a reasoning analysis."""
         return self.analyze(prompt)
 
 
-
-
-
 if __name__ == "__main__":
-    main_func = create_main_function(ReasoningAgent, "Reasoning Agent", "Problem to analyze")
+    main_func = create_main_function(
+        ReasoningAgent, "Reasoning Agent", "Problem to analyze"
+    )
     main_func()

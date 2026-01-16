@@ -21,16 +21,15 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
 class VisualizationType(Enum):
     """Types of context visualization."""
+
     DEPENDENCY_GRAPH = "dependency_graph"
     CALL_HIERARCHY = "call_hierarchy"
     FILE_TREE = "file_tree"

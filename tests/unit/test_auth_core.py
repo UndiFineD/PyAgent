@@ -5,8 +5,6 @@ import time
 from src.core.base.core.AuthCore import AuthCore
 
 
-
-
 class TestAuthCore(unittest.TestCase):
     def setUp(self):
         self.core = AuthCore()
@@ -26,10 +24,7 @@ class TestAuthCore(unittest.TestCase):
         except ValueError:
             self.fail("Challenge is not valid hex")
 
-    @given(
-        challenge=st.text(min_size=1),
-        secret_key=st.text(min_size=1)
-    )
+    @given(challenge=st.text(min_size=1), secret_key=st.text(min_size=1))
     def test_generate_proof(self, challenge, secret_key):
         proof = self.core.generate_proof(challenge, secret_key)
 
@@ -37,10 +32,7 @@ class TestAuthCore(unittest.TestCase):
         self.assertEqual(proof, expected)
         self.assertEqual(len(proof), 128)  # sha512 is 128 chars hex
 
-    @given(
-        challenge=st.text(min_size=1),
-        secret=st.text(min_size=1)
-    )
+    @given(challenge=st.text(min_size=1), secret=st.text(min_size=1))
     def test_verify_proof_valid(self, challenge, secret):
         proof = self.core.generate_proof(challenge, secret)
         # In current impl, verified against the secret itself
@@ -50,7 +42,7 @@ class TestAuthCore(unittest.TestCase):
     @given(
         challenge=st.text(min_size=1),
         secret=st.text(min_size=1, max_size=10),
-        wrong_secret=st.text(min_size=11, max_size=20)
+        wrong_secret=st.text(min_size=11, max_size=20),
     )
     def test_verify_proof_invalid(self, challenge, secret, wrong_secret):
         proof = self.core.generate_proof(challenge, secret)
@@ -59,24 +51,11 @@ class TestAuthCore(unittest.TestCase):
 
     @given(
         proof_time=st.floats(min_value=0, max_value=2000000000),
-        ttl=st.integers(min_value=1, max_value=3600)
-
-
-
-
-
-
-
-
-
-
+        ttl=st.integers(min_value=1, max_value=3600),
     )
     def test_is_proof_expired_logic(self, proof_time, ttl):
         # We need to control current time to test this purely.
         # But the method calls time.time().
-
-
-
 
         # Ideally we refactor the python code to accept current_time too.
         # Since I can't easily mock time.time() inside hypothesis without side effects...
@@ -84,13 +63,9 @@ class TestAuthCore(unittest.TestCase):
 
         now = time.time()
 
-
         # expired case
         old_time = now - (ttl + 10)
         self.assertTrue(self.core.is_proof_expired(old_time, ttl))
-
-
-
 
         # valid case
         fresh_time = now - (ttl - 10)
@@ -98,8 +73,5 @@ class TestAuthCore(unittest.TestCase):
             self.assertFalse(self.core.is_proof_expired(fresh_time, ttl))
 
 
-
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -24,17 +24,17 @@ Inspired by mem0 and BabyAGI patterns.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import logging
 from pathlib import Path
 from typing import Any
 from datetime import datetime
-from src.logic.agents.cognitive.context.engines.GlobalContextCore import GlobalContextCore
+from src.logic.agents.cognitive.context.engines.GlobalContextCore import (
+    GlobalContextCore,
+)
 
 __version__ = VERSION
-
-
 
 
 class GlobalContextEngine:
@@ -60,7 +60,7 @@ class GlobalContextEngine:
             "constraints": [],
             "insights": [],
             "entities": {},
-            "lessons_learned": []
+            "lessons_learned": [],
         }
         self._loaded_shards: set[Any] = set()
         self.load()
@@ -81,7 +81,9 @@ class GlobalContextEngine:
                     self.memory[category].update(shard_data)
                 except Exception as e:
                     logging.warning(f"Failed to load sub-shard {s_file.name}: {e}")
-            logging.info(f"Context: Loaded {len(shard_files)} sub-shards for '{category}'.")
+            logging.info(
+                f"Context: Loaded {len(shard_files)} sub-shards for '{category}'."
+            )
         else:
             shard_file = self.shard_dir / f"{category}.json"
             if shard_file.exists():
@@ -102,7 +104,9 @@ class GlobalContextEngine:
             return data.get(key)
         return data
 
-    def set_with_conflict_resolution(self, category: str, key: str, value: Any, strategy: str = "latest") -> None:
+    def set_with_conflict_resolution(
+        self, category: str, key: str, value: Any, strategy: str = "latest"
+    ) -> None:
         """Sets a value in memory, resolving conflicts if the key already exists."""
         self._ensure_shard_loaded(category)
         if category not in self.memory:
@@ -142,10 +146,14 @@ class GlobalContextEngine:
             # Phase 119: Check for shard bloat to notify system for potential migration
             bloated = self.core.detect_shard_bloat(shards)
             if bloated:
-                logging.warning(f"CONTEXT: Detected bloat in shards {bloated}. Adaptive rebalancing triggered.")
+                logging.warning(
+                    f"CONTEXT: Detected bloat in shards {bloated}. Adaptive rebalancing triggered."
+                )
 
             # Save default state
-            self.context_file.write_text(json.dumps(shards["default"], indent=2), encoding="utf-8")
+            self.context_file.write_text(
+                json.dumps(shards["default"], indent=2), encoding="utf-8"
+            )
 
             # Save extra shards
             if len(shards) > 1:
@@ -154,7 +162,9 @@ class GlobalContextEngine:
                     if shard_name == "default":
                         continue
                     shard_file = self.shard_dir / f"{shard_name}.json"
-                    shard_file.write_text(json.dumps(shard_data, indent=2), encoding="utf-8")
+                    shard_file.write_text(
+                        json.dumps(shard_data, indent=2), encoding="utf-8"
+                    )
 
         except Exception as e:
             logging.error(f"Failed to save GlobalContext: {e}")
@@ -175,7 +185,7 @@ class GlobalContextEngine:
         self._ensure_shard_loaded("insights")
         entry = self.core.prepare_insight(insight, source_agent)
         # Avoid duplicates in insights
-        if not any(i['text'] == insight for i in self.memory["insights"]):
+        if not any(i["text"] == insight for i in self.memory["insights"]):
             self.memory["insights"].append(entry)
             self.save()
 
@@ -188,7 +198,9 @@ class GlobalContextEngine:
     def add_entity_info(self, entity_name: str, attributes: dict[str, Any]) -> None:
         """Tracks specific entities (files, classes, modules) and their metadata."""
         existing = self.memory["entities"].get(entity_name, {})
-        self.memory["entities"][entity_name] = self.core.merge_entity_info(existing, attributes)
+        self.memory["entities"][entity_name] = self.core.merge_entity_info(
+            existing, attributes
+        )
         self.save()
 
     def record_lesson(self, failure_context: str, correction: str, agent: str) -> None:
@@ -197,10 +209,12 @@ class GlobalContextEngine:
             "failure": failure_context,
             "correction": correction,
             "agent": agent,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
         self.memory["lessons_learned"].append(lesson)
-        self.memory["lessons_learned"] = self.core.prune_lessons(self.memory["lessons_learned"])
+        self.memory["lessons_learned"] = self.core.prune_lessons(
+            self.memory["lessons_learned"]
+        )
         self.save()
 
     def get_summary(self) -> str:
@@ -223,6 +237,11 @@ class GlobalContextEngine:
 
         for agent, stats in agent_stats.items():
             if stats["fail"] > 3:
-                self.add_insight(f"{agent} is struggling with current tasks. Context injection might be insufficient.", "LTM_System")
+                self.add_insight(
+                    f"{agent} is struggling with current tasks. Context injection might be insufficient.",
+                    "LTM_System",
+                )
             elif stats["success"] > 10:
-                self.add_insight(f"{agent} is highly reliable for current task types.", "LTM_System")
+                self.add_insight(
+                    f"{agent} is highly reliable for current task types.", "LTM_System"
+                )

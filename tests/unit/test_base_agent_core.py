@@ -199,9 +199,7 @@ class TestBaseAgentCorePropertyBased:
         tokens = core.calculate_token_estimate(text)
         assert tokens >= 1
 
-    @given(
-        entries=st.lists(st.text(min_size=1, max_size=20), min_size=0, max_size=100)
-    )
+    @given(entries=st.lists(st.text(min_size=1, max_size=20), min_size=0, max_size=100))
     def test_deduplicate_preserves_order(self, entries: list[str]) -> None:
         """Property: Deduplication preserves first occurrence order."""
         core = BaseAgentCore()

@@ -23,16 +23,14 @@ Optimizes system prompts, tool descriptions, and agent logic based on performanc
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import os
 from pathlib import Path
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class RefinementAgent(BaseAgent):
@@ -64,7 +62,9 @@ class RefinementAgent(BaseAgent):
         return analysis
 
     @as_tool
-    def propose_prompt_update(self, agent_class_name: str, performance_feedback: str) -> str:
+    def propose_prompt_update(
+        self, agent_class_name: str, performance_feedback: str
+    ) -> str:
         """Generates a new optimized system prompt for an agent.
         Args:
             agent_class_name: The name of the agent class to refine.
@@ -80,16 +80,6 @@ class RefinementAgent(BaseAgent):
 
         return f"### Proposed System Prompt for {agent_class_name}\n\n```\n{new_prompt}\n```"
 
-
-
-
-
-
-
-
-
-
-
     @as_tool
     def update_agent_source(self, file_path: str, new_logic_snippet: str) -> str:
         """Safely applies a refinement to an agent's source code.
@@ -103,13 +93,10 @@ class RefinementAgent(BaseAgent):
         """
         # In a real scenario, this would use the edit tools or AST manipulation.
 
-
-
         # This implementation logs the proposal for human-governed or orchestrated application.
         ref_file = self.refinement_logs / f"refine_{os.path.basename(file_path)}.txt"
         with open(ref_file, "w") as f:
             f.write(new_logic_snippet)
-
 
         return f"Refinement logic written to {ref_file}. Verification required before merge."
 
@@ -117,10 +104,10 @@ class RefinementAgent(BaseAgent):
         return "Fleet self-refinement loops are active and monitoring for optimization opportunities."
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(RefinementAgent, "Refinement Agent", "Autonomous logic optimizer")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        RefinementAgent, "Refinement Agent", "Autonomous logic optimizer"
+    )
     main()

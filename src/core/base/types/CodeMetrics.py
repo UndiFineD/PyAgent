@@ -21,20 +21,16 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass
 
 __version__ = VERSION
 
 
-
-
-
-
-
 @dataclass
 class CodeMetrics:
     """Code quality metrics."""
+
     lines_of_code: int = 0
     lines_of_comments: int = 0
     blank_lines: int = 0

@@ -14,12 +14,7 @@
 from __future__ import annotations
 from datetime import datetime
 from typing import Any
-from src.core.base.modules import BaseModule
-
-
-
-
-
+from src.core.base.BaseModules import BaseModule
 
 
 class SignalModule(BaseModule):
@@ -32,8 +27,7 @@ class SignalModule(BaseModule):
         """Initialize signal handlers."""
         return super().initialize()
 
-    def execute(self, action:
-        str, **kwargs) -> Any:
+    def execute(self, action: str, **kwargs) -> Any:
         """
         Executes signal-related logic.
         Supported actions: create_event, prune_history
@@ -45,27 +39,26 @@ class SignalModule(BaseModule):
             return self.create_event(
                 kwargs.get("signal_name", "generic"),
                 kwargs.get("data"),
-                kwargs.get("sender", "unknown")
+                kwargs.get("sender", "unknown"),
             )
         elif action == "prune_history":
             return self.prune_history(
-                kwargs.get("history", []),
-                kwargs.get("limit", 100)
+                kwargs.get("history", []), kwargs.get("limit", 100)
             )
         return None
 
-    def create_event(self, signal_name:
-        str, data: Any, sender: str) -> dict[str, Any]:
+    def create_event(self, signal_name: str, data: Any, sender: str) -> dict[str, Any]:
         """Creates a standardized signal event object."""
         return {
             "signal": signal_name,
             "data": data,
             "sender": sender,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
 
-    def prune_history(self, history:
-        list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+    def prune_history(
+        self, history: list[dict[str, Any]], limit: int
+    ) -> list[dict[str, Any]]:
         """Returns the last N events from the signal history."""
         return history[-limit:]
 

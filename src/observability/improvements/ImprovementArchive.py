@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ArchivedImprovement import ArchivedImprovement
 from .Improvement import Improvement
 from .ImprovementCategory import ImprovementCategory
@@ -29,8 +29,6 @@ from datetime import datetime
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class ImprovementArchive:
@@ -47,10 +45,7 @@ class ImprovementArchive:
         self.archive: list[ArchivedImprovement] = []
 
     def archive_improvement(
-        self,
-        improvement: Improvement,
-        reason: str,
-        archived_by: str = ""
+        self, improvement: Improvement, reason: str, archived_by: str = ""
     ) -> ArchivedImprovement:
         """Archive an improvement.
 
@@ -66,7 +61,7 @@ class ImprovementArchive:
             improvement=improvement,
             archived_date=datetime.now().isoformat(),
             archived_by=archived_by,
-            archive_reason=reason
+            archive_reason=reason,
         )
         self.archive.append(archived)
         return archived
@@ -88,9 +83,7 @@ class ImprovementArchive:
         return None
 
     def search_archive(
-        self,
-        query: str = "",
-        category: ImprovementCategory | None = None
+        self, query: str = "", category: ImprovementCategory | None = None
     ) -> list[ArchivedImprovement]:
         """Search the archive.
 
@@ -118,7 +111,4 @@ class ImprovementArchive:
             cat = archived.improvement.category.value
             by_category[cat] = by_category.get(cat, 0) + 1
 
-        return {
-            "total_archived": len(self.archive),
-            "by_category": by_category
-        }
+        return {"total_archived": len(self.archive), "by_category": by_category}

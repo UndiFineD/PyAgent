@@ -19,13 +19,11 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 from pathlib import Path
 
 __version__ = VERSION
-
-
 
 
 class GrafanaDashboardGenerator:
@@ -46,16 +44,18 @@ class GrafanaDashboardGenerator:
                 {
                     "title": "Agent Count",
                     "type": "stat",
-                    "targets": [{"expr": "count(agent_up)"}]
+                    "targets": [{"expr": "count(agent_up)"}],
                 },
                 {
                     "title": "Fleet Latency",
                     "type": "timeseries",
-                    "targets": [{"expr": "rate(fleet_request_duration_seconds_sum[5m])"}]
-                }
+                    "targets": [
+                        {"expr": "rate(fleet_request_duration_seconds_sum[5m])"}
+                    ],
+                },
             ],
             "schemaVersion": 36,
-            "uid": "pyagent-fleet-summary"
+            "uid": "pyagent-fleet-summary",
         }
 
         output_path = self.output_dir / "fleet_summary.json"
@@ -70,11 +70,11 @@ class GrafanaDashboardGenerator:
                 {
                     "title": "Shard Load",
                     "type": "gauge",
-                    "targets": [{"expr": f"shard_load{{shard='{shard_name}'}} "}]
+                    "targets": [{"expr": f"shard_load{{shard='{shard_name}'}} "}],
                 }
             ],
             "schemaVersion": 36,
-            "uid": f"shard-{shard_name}"
+            "uid": f"shard-{shard_name}",
         }
 
         output_path = self.output_dir / f"shard_{shard_name}.json"

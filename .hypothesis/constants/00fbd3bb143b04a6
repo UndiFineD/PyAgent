@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\dev\test_utils\TestDataGenerator.py
-# hypothesis_version: 6.150.1
-
-['    return arg1 +', '# Test Document', '```', '```python', 'count', 'generated', 'id', 'import os', 'items', 'metadata', 'name', 'value']

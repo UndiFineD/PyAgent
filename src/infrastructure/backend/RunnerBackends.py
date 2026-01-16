@@ -21,7 +21,7 @@
 """Backend implementation handlers for SubagentRunner."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import os
 import subprocess
@@ -30,11 +30,6 @@ from pathlib import Path
 from typing import Any
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class BackendHandlers:
@@ -47,11 +42,12 @@ class BackendHandlers:
 
         parts = []
         import re
+
         # Find [IMAGE_DATA:base64]
         pattern = r"\[IMAGE_DATA:([^\]\s]+)\]"
         last_idx = 0
         for match in re.finditer(pattern, text):
-            pre_text = text[last_idx:match.start()].strip()
+            pre_text = text[last_idx : match.start()].strip()
             if pre_text:
                 parts.append({"type": "text", "text": pre_text})
 
@@ -59,10 +55,7 @@ class BackendHandlers:
             if not image_data.startswith("data:image"):
                 image_data = f"data:image/png;base64,{image_data}"
 
-            parts.append({
-                "type": "image_url",
-                "image_url": {"url": image_data}
-            })
+            parts.append({"type": "image_url", "image_url": {"url": image_data}})
             last_idx = match.end()
 
         remaining = text[last_idx:].strip()
@@ -74,7 +67,9 @@ class BackendHandlers:
     @staticmethod
     def build_full_prompt(description: str, prompt: str, original_content: str) -> str:
         try:
-            max_context_chars = int(os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000"))
+            max_context_chars = int(
+                os.environ.get("DV_AGENT_MAX_CONTEXT_CHARS", "12000")
+            )
         except ValueError:
             max_context_chars = 12_000
         trimmed_original = (original_content or "")[:max_context_chars]
@@ -90,22 +85,51 @@ class BackendHandlers:
         try:
             logging.debug("Attempting to use Codex CLI backend")
             result = subprocess.run(
-                ['codex', '--prompt', full_prompt, '--no-color', '--log-level', 'error', '--add-dir', str(repo_root),
-                 '--allow-all-tools', '--disable-parallel-tools-execution', '--deny-tool', 'write', '--deny-tool', 'shell',
-                 '--silent', '--stream', 'off'],
-                capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=180, cwd=str(repo_root), check=False
+                [
+                    "codex",
+                    "--prompt",
+                    full_prompt,
+                    "--no-color",
+                    "--log-level",
+                    "error",
+                    "--add-dir",
+                    str(repo_root),
+                    "--allow-all-tools",
+                    "--disable-parallel-tools-execution",
+                    "--deny-tool",
+                    "write",
+                    "--deny-tool",
+                    "shell",
+                    "--silent",
+                    "--stream",
+                    "off",
+                ],
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=180,
+                cwd=str(repo_root),
+                check=False,
             )
             stdout = (result.stdout or "").strip()
 
             # Phase 108: Recording
             if recorder:
-                recorder.record_interaction("codex", "cli", full_prompt[:200], stdout[:1000] if result.returncode == 0 else "FAILED")
+                recorder.record_interaction(
+                    "codex",
+                    "cli",
+                    full_prompt[:200],
+                    stdout[:1000] if result.returncode == 0 else "FAILED",
+                )
 
             if result.returncode == 0 and stdout:
                 logging.info("Codex CLI backend succeeded")
                 return stdout
             if result.returncode != 0:
-                logging.debug(f"Codex CLI failed (code {result.returncode}): {result.stderr}")
+                logging.debug(
+                    f"Codex CLI failed (code {result.returncode}): {result.stderr}"
+                )
         except subprocess.TimeoutExpired:
             logging.warning("Codex CLI timed out")
         except Exception as e:
@@ -117,8 +141,14 @@ class BackendHandlers:
         try:
             logging.debug("Attempting to use local Copilot CLI backend")
             result = subprocess.run(
-                ['copilot', 'explain', full_prompt],
-                capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=60, cwd=str(repo_root), check=False
+                ["copilot", "explain", full_prompt],
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=60,
+                cwd=str(repo_root),
+                check=False,
             )
             stdout = (result.stdout or "").strip()
             if result.returncode == 0 and stdout:
@@ -129,11 +159,13 @@ class BackendHandlers:
         return None
 
     @staticmethod
-    def try_gh_copilot(full_prompt: str, repo_root: Path, allow_non_command: bool = False) -> str | None:
+    def try_gh_copilot(
+        full_prompt: str, repo_root: Path, allow_non_command: bool = False
+    ) -> str | None:
         # Optimization: if not a command and not allowed, skip
         if not allow_non_command:
-             # Basic heuristic: if it doesn't look like a command, skip gh copilot explain
-             # (This logic was partially in SubagentRunner, but we can pass a flag)
+            # Basic heuristic: if it doesn't look like a command, skip gh copilot explain
+            # (This logic was partially in SubagentRunner, but we can pass a flag)
             pass
 
         try:
@@ -141,8 +173,14 @@ class BackendHandlers:
             # Note: gh copilot requires interactive session or specific config for shell completion
             # We attempt it as a subprocess call
             result = subprocess.run(
-                ['gh', 'copilot', 'explain', full_prompt],
-                capture_output=True, text=True, encoding='utf-8', errors='replace', timeout=60, cwd=str(repo_root), check=False
+                ["gh", "copilot", "explain", full_prompt],
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=60,
+                cwd=str(repo_root),
+                check=False,
             )
             if result.returncode == 0 and result.stdout:
                 return result.stdout.strip()
@@ -155,15 +193,26 @@ class BackendHandlers:
         if not requests_lib:
             return None
 
-        base_url = (os.environ.get("GITHUB_MODELS_BASE_URL") or "https://models.inference.ai.azure.com").strip().rstrip("/")
-        model = (os.environ.get("DV_AGENT_MODEL") or os.environ.get("GITHUB_MODELS_MODEL") or "gpt-4o-mini").strip()
+        base_url = (
+            (
+                os.environ.get("GITHUB_MODELS_BASE_URL")
+                or "https://models.inference.ai.azure.com"
+            )
+            .strip()
+            .rstrip("/")
+        )
+        model = (
+            os.environ.get("DV_AGENT_MODEL")
+            or os.environ.get("GITHUB_MODELS_MODEL")
+            or "gpt-4o-mini"
+        ).strip()
 
         token = os.environ.get("GITHUB_TOKEN")
         if not token:
             search_paths = [
                 os.environ.get("DV_GITHUB_TOKEN_FILE"),
                 r"C:\DEV\github-gat.txt",
-                "github-token.txt"
+                "github-token.txt",
             ]
             for path_str in search_paths:
                 if not path_str:
@@ -171,7 +220,7 @@ class BackendHandlers:
                 path = Path(path_str)
                 if path.exists():
                     try:
-                        token = path.read_text(encoding='utf-8').strip()
+                        token = path.read_text(encoding="utf-8").strip()
                         if token:
                             break
                     except Exception:
@@ -186,19 +235,24 @@ class BackendHandlers:
             content = BackendHandlers._parse_content(full_prompt)
             headers = {
                 "Authorization": f"Bearer {token}",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             }
             payload = {
                 "messages": [
-                    {"role": "system", "content": "You are a helpful coding assistant."},
-                    {"role": "user", "content": content}
+                    {
+                        "role": "system",
+                        "content": "You are a helpful coding assistant.",
+                    },
+                    {"role": "user", "content": content},
                 ],
                 "model": model,
                 "temperature": 0.1,
-                "max_tokens": 4096
+                "max_tokens": 4096,
             }
             url = f"{base_url}/v1/chat/completions"
-            response = requests_lib.post(url, headers=headers, data=json.dumps(payload), timeout=120)
+            response = requests_lib.post(
+                url, headers=headers, data=json.dumps(payload), timeout=120
+            )
             response.raise_for_status()
             data = response.json()
             return data["choices"][0]["message"]["content"].strip()
@@ -224,17 +278,22 @@ class BackendHandlers:
             content = BackendHandlers._parse_content(full_prompt)
             headers = {
                 "Authorization": f"Bearer {api_key}",
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
             }
             payload = {
                 "model": model,
                 "messages": [
                     {"role": "system", "content": "You are a helpful assistant."},
-                    {"role": "user", "content": content}
+                    {"role": "user", "content": content},
                 ],
-                "temperature": 0
+                "temperature": 0,
             }
-            response = requests_lib.post(f"{base_url}/chat/completions", headers=headers, json=payload, timeout=60)
+            response = requests_lib.post(
+                f"{base_url}/chat/completions",
+                headers=headers,
+                json=payload,
+                timeout=60,
+            )
             response.raise_for_status()
             data = response.json()
             return data["choices"][0]["message"]["content"].strip()

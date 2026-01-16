@@ -4,7 +4,7 @@ This tests Python implementation end-to-end.
 Rust integration tests will be added once Rust crate builds.
 """
 
-from src.observability.stats.metrics_engine import FormulaEngineCore
+from src.observability.stats.Metrics_engine import FormulaEngineCore
 
 
 class TestFormulaEngineIntegration:

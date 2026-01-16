@@ -18,13 +18,11 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
-
-
 
 
 class AudioReasoningAgent(BaseAgent):
@@ -46,11 +44,16 @@ class AudioReasoningAgent(BaseAgent):
         return {
             "intent": "diagnostic_report",
             "entities": ["engine", "clicking_sound", "belt"],
-            "urgency": "medium"
+            "urgency": "medium",
         }
 
-    def correlate_with_telemetry(self, audio_analysis: dict[str, Any], sensor_data: dict[str, Any]) -> str:
+    def correlate_with_telemetry(
+        self, audio_analysis: dict[str, Any], sensor_data: dict[str, Any]
+    ) -> str:
         """Correlates audio findings with numerical sensor data."""
-        if "engine" in audio_analysis["entities"] and sensor_data.get("vibration_level", 0) > 0.8:
+        if (
+            "engine" in audio_analysis["entities"]
+            and sensor_data.get("vibration_level", 0) > 0.8
+        ):
             return "Audio finding confirmed by high vibration sensors."
         return "Audio finding remains unconfirmed by numerical telemetry."

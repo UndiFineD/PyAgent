@@ -21,18 +21,13 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.models import CachedResult
 from pathlib import Path
 from typing import Any
 import time
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class ResultCache:

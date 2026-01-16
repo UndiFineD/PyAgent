@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 from dataclasses import dataclass
 
@@ -10,15 +9,10 @@ except ImportError:
 
 @dataclass(frozen=True)
 class FleetMetrics:
-
-
-
-
     avg_error_rate: float
     total_token_out: int
     active_agent_count: int
     latency_p95: float
-
 
 
 class StabilityCore:
@@ -26,7 +20,9 @@ class StabilityCore:
     Integrates SAE activation metrics and error trends into a unified score.
     """
 
-    def calculate_stability_score(self, metrics: FleetMetrics, sae_anomalies: int) -> float:
+    def calculate_stability_score(
+        self, metrics: FleetMetrics, sae_anomalies: int
+    ) -> float:
         """Calculates a stability score from 0.0 to 1.0."""
         if rc:
             try:
@@ -35,7 +31,7 @@ class StabilityCore:
                     "avg_error_rate": metrics.avg_error_rate,
                     "total_token_out": metrics.total_token_out,
                     "active_agent_count": metrics.active_agent_count,
-                    "latency_p95": metrics.latency_p95
+                    "latency_p95": metrics.latency_p95,
                 }
                 return rc.calculate_stability_score(m_dict, sae_anomalies)  # type: ignore[attr-defined]
             except Exception:
@@ -45,8 +41,8 @@ class StabilityCore:
         # Deductions: error_rate * 5.0, sae_anomalies * 0.05, latency_p95 overhead
 
         score = 1.0
-        score -= (metrics.avg_error_rate * 5.0)
-        score -= (sae_anomalies * 0.05)
+        score -= metrics.avg_error_rate * 5.0
+        score -= sae_anomalies * 0.05
 
         latency_penalty = max(0.0, (metrics.latency_p95 - 2000) / 10000)
         score -= latency_penalty
@@ -57,12 +53,15 @@ class StabilityCore:
         """Determines if the swarm is in 'Digital Stasis' (too rigid)."""
         if rc:
             try:
-                return rc.is_in_stasis(score_history)  # type: ignore[attr-defined]
+                variance = rc.calculate_variance_rust(score_history)  # type: ignore[attr-defined]
+                return len(score_history) >= 10 and variance < 0.0001
             except Exception:
                 pass
         if len(score_history) < 10:
             return False
-        variance = sum((x - sum(score_history)/len(score_history))**2 for x in score_history) / len(score_history)
+        variance = sum(
+            (x - sum(score_history) / len(score_history)) ** 2 for x in score_history
+        ) / len(score_history)
         return variance < 0.0001  # Minimal change indicates stasis
 
     def get_healing_threshold(self, stability_score: float) -> float:

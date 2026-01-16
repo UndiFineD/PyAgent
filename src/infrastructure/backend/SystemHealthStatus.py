@@ -21,17 +21,12 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .SystemState import SystemState
 from dataclasses import dataclass, field
 import time
 
 __version__ = VERSION
-
-
-
-
-
 
 
 @dataclass

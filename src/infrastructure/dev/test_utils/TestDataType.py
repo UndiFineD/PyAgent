@@ -21,16 +21,15 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
 class TestDataType(Enum):
     """Types of test data."""
+
     __test__ = False
 
     PYTHON_CODE = "python_code"

@@ -3,8 +3,6 @@ from pathlib import Path
 from src.infrastructure.fleet.FleetManager import FleetManager
 
 
-
-
 class TestPhases68_70(unittest.TestCase):
     def setUp(self):
         self.workspace = Path(__file__).resolve().parents[2]
@@ -14,7 +12,9 @@ class TestPhases68_70(unittest.TestCase):
         print("\nTesting Phase 68: Multi-Agent Theory of Mind (ToM) v3...")
         agent_id = "CoderAgent"
         # Log some actions
-        self.fleet.intention_predictor.log_agent_action(agent_id, "read_file", {"path": "main.py"})
+        self.fleet.intention_predictor.log_agent_action(
+            agent_id, "read_file", {"path": "main.py"}
+        )
 
         # Predict
         pred = self.fleet.intention_predictor.predict_next_action(agent_id)
@@ -22,14 +22,18 @@ class TestPhases68_70(unittest.TestCase):
         self.assertEqual(pred["prediction"], "edit_file")
 
         # Thought sharing
-        signal = self.fleet.intention_predictor.share_thought_signal("AgentA", ["AgentB"], {"goal": "refactor"})
+        signal = self.fleet.intention_predictor.share_thought_signal(
+            "AgentA", ["AgentB"], {"goal": "refactor"}
+        )
         print(f"Thought Signal: {signal}")
         self.assertTrue(signal["latency_ms"] < 1.0)
 
     def test_immune_response_and_honeypot(self) -> None:
         print("\nTesting Phase 69: Fleet-Wide Immune Response & Honeypot...")
         # Rapid patch
-        patch_res = self.fleet.immune_orchestrator.deploy_rapid_patch("CVE-2026-001", "import os; ...")
+        patch_res = self.fleet.immune_orchestrator.deploy_rapid_patch(
+            "CVE-2026-001", "import os; ..."
+        )
         print(f"Patch Result: {patch_res}")
         self.assertEqual(patch_res["status"], "remediated")
 
@@ -46,22 +50,9 @@ class TestPhases68_70(unittest.TestCase):
         self.assertTrue(check_safe["safe"])
         self.assertFalse(check_unsafe["safe"])
 
-
-
-
-
-
-
-
-
-
-
     def test_logic_prover(self) -> None:
         print("\nTesting Phase 70: Neuro-Symbolic Logic Prover...")
         # Verification
-
-
-
 
         hyp = "Found a bug"
         ev = ["Line 10 returns None instead of List"]
@@ -69,22 +60,18 @@ class TestPhases68_70(unittest.TestCase):
 
         proof = self.fleet.logic_prover.verify_reasoning_step(hyp, ev, conc)
 
-
         print(f"Logic Proof: {proof}")
         self.assertEqual(proof["status"], "verified")
 
         # Scheduling
         tasks = ["task1", "task2", "task3"]
 
-
-
         deadlines = {"task1": 10, "task2": 5, "task3": 15}
-        schedule = self.fleet.logic_prover.solve_scheduling_constraints(tasks, deadlines)
+        schedule = self.fleet.logic_prover.solve_scheduling_constraints(
+            tasks, deadlines
+        )
         print(f"Optimal Schedule: {schedule}")
         self.assertEqual(schedule["optimal_schedule"][0]["task"], "task2")
-
-
-
 
 
 if __name__ == "__main__":

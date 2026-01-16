@@ -20,7 +20,7 @@
 """Domain types for the PyAgent core architecture."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
+from src.core.base.Version import VERSION as VERSION
 from .AccessibilityIssue import AccessibilityIssue as AccessibilityIssue
 from .AccessibilityIssueType import AccessibilityIssueType as AccessibilityIssueType
 from .AccessibilityReport import AccessibilityReport as AccessibilityReport

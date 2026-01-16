@@ -18,13 +18,18 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import os
 from typing import Any
 
+# Rust acceleration
+try:
+    from rust_core import to_snake_case_rust
+    _RUST_ACCEL = True
+except ImportError:
+    _RUST_ACCEL = False
+
 __version__ = VERSION
-
-
 
 
 class OrchestratorRegistryCore:
@@ -36,7 +41,9 @@ class OrchestratorRegistryCore:
     def __init__(self, current_sdk_version: str) -> None:
         self.sdk_version: str = current_sdk_version
 
-    def process_discovered_files(self, file_paths: list[str]) -> dict[str, tuple[str, str, bool, str | None]]:
+    def process_discovered_files(
+        self, file_paths: list[str]
+    ) -> dict[str, tuple[str, str, bool, str | None]]:
         """
         Processes a list of file paths and extracts orchestrator configurations.
         Expects relative paths from workspace root.
@@ -48,17 +55,38 @@ class OrchestratorRegistryCore:
             if file.endswith(".py") and not file.startswith("__"):
                 class_name: str = file[:-3]
 
-                if any(x in class_name for x in ["Orchestrator", "Manager", "Selector", "Engine", "Spawner", "Bridge"]):
-                     # Calculate module path
+                if any(
+                    x in class_name
+                    for x in [
+                        "Orchestrator",
+                        "Manager",
+                        "Selector",
+                        "Engine",
+                        "Spawner",
+                        "Bridge",
+                    ]
+                ):
+                    # Calculate module path
                     module_path: str = rel_path.replace(os.sep, ".").replace(".py", "")
 
                     # Convert ClassName -> snake_case key
                     # "SelfHealingOrchestrator" -> "self_healing"
-                    short_key: str = self._to_snake_case(class_name.replace("Orchestrator", ""))
+                    short_key: str = self._to_snake_case(
+                        class_name.replace("Orchestrator", "")
+                    )
                     full_key: str = self._to_snake_case(class_name)
 
                     # Default heuristic for 'needs_fleet'
-                    needs_fleet: bool = any(x in class_name for x in ["Orchestrator", "Spawner", "Bridge", "Selector", "Engine"])
+                    needs_fleet: bool = any(
+                        x in class_name
+                        for x in [
+                            "Orchestrator",
+                            "Spawner",
+                            "Bridge",
+                            "Selector",
+                            "Engine",
+                        ]
+                    )
 
                     # (module, class, needs_fleet, arg_path)
                     cfg = (module_path, class_name, needs_fleet, None)
@@ -66,16 +94,27 @@ class OrchestratorRegistryCore:
                     if short_key:
                         discovered[short_key] = cfg
                     discovered[full_key] = cfg
-                    discovered[class_name] = cfg  # Also keep original class name for direct access
+                    discovered[class_name] = (
+                        cfg  # Also keep original class name for direct access
+                    )
 
         return discovered
 
     def _to_snake_case(self, name: str) -> str:
+        # Use Rust acceleration when available (~3x faster)
+        if _RUST_ACCEL:
+            try:
+                return to_snake_case_rust(name)
+            except Exception:
+                pass
+        # Python fallback
         import re
-        s1 = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)
-        return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s1).lower()
+        s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
+        return re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
 
-    def parse_manifest(self, raw_manifest: dict[str, Any]) -> dict[str, tuple[str, str, bool, str | None]]:
+    def parse_manifest(
+        self, raw_manifest: dict[str, Any]
+    ) -> dict[str, tuple[str, str, bool, str | None]]:
         """
         Parses the raw manifest dictionary and filters incompatible plugins.
         Returns a dict of {Name: (module, class, needs_fleet, arg_path)}.
@@ -99,8 +138,8 @@ class OrchestratorRegistryCore:
         Checks if the current SDK version meets the required version.
         """
         try:
-            p_parts = [int(x) for x in self.sdk_version.split('.')]
-            r_parts = [int(x) for x in required_version.split('.')]
+            p_parts = [int(x) for x in self.sdk_version.split(".")]
+            r_parts = [int(x) for x in required_version.split(".")]
 
             # Pad to length 3
             p_parts += [0] * (3 - len(p_parts))

@@ -21,17 +21,12 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 import threading
 import time
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class RequestThrottler:
@@ -85,7 +80,7 @@ class RequestThrottler:
             elapsed = now - self._last_update[backend]
             self._buckets[backend] = min(
                 self.burst_size,
-                self._buckets[backend] + elapsed * self.requests_per_second
+                self._buckets[backend] + elapsed * self.requests_per_second,
             )
             self._last_update[backend] = now
 
@@ -112,6 +107,7 @@ class RequestThrottler:
             if self.allow_request(backend):
                 return True
             import threading
+
             threading.Event().wait(timeout=0.1)
 
         return False

@@ -24,8 +24,6 @@ if TYPE_CHECKING:
     from .FleetManager import FleetManager
 
 
-
-
 class FleetRoutingCore:
     """Handles task routing and capability-based agent selection."""
 
@@ -35,7 +33,7 @@ class FleetRoutingCore:
     async def call_by_capability(self, goal: str, **kwargs) -> str:
         """Finds an agent with the required capability and executes it with RL optimization."""
         # Report activity to TemporalSync
-        if hasattr(self.fleet, 'temporal_sync'):
+        if hasattr(self.fleet, "temporal_sync"):
             self.fleet.temporal_sync.report_activity()
 
         g_low = goal.lower()
@@ -44,11 +42,15 @@ class FleetRoutingCore:
         for hint_key, agent_name in self.fleet._capability_hints.items():
             if hint_key in g_low and agent_name in self.fleet.agents:
                 _ = self.fleet.agents[agent_name]  # Force load
-                logging.info(f"Fleet: Lazy-loaded '{agent_name}' for capability '{hint_key}'")
+                logging.info(
+                    f"Fleet: Lazy-loaded '{agent_name}' for capability '{hint_key}'"
+                )
 
         # New: Auto-instantiate agent if goal matches agent name
         if goal in self.fleet.agents:
-            _ = self.fleet.agents[goal]  # Access triggers instantiation and tool registration
+            _ = self.fleet.agents[
+                goal
+            ]  # Access triggers instantiation and tool registration
         else:
             # Check if any agent name contains the goal
             for agent_name in self.fleet.agents:
@@ -60,13 +62,13 @@ class FleetRoutingCore:
         tools = self.fleet.registry.list_tools()
         tools_metadata = []
         for t in tools:
-            tools_metadata.append({
-                "name": t.name,
-                "owner": t.owner,
-                "sync": getattr(t, 'sync', True)
-            })
+            tools_metadata.append(
+                {"name": t.name, "owner": t.owner, "sync": getattr(t, "sync", True)}
+            )
 
-        scored_candidates = self.fleet.core.score_tool_candidates(goal, tools_metadata, kwargs)
+        scored_candidates = self.fleet.core.score_tool_candidates(
+            goal, tools_metadata, kwargs
+        )
 
         if not scored_candidates:
             return f"No tool found for goal: {goal}"
@@ -76,22 +78,29 @@ class FleetRoutingCore:
         selector = self.fleet.rl_selector
         if selector and hasattr(selector, "select_best_tool"):
             best_tool = selector.select_best_tool(candidates)
-            logging.info(f"Fleet selected optimized tool '{best_tool}' using RL for goal '{goal}'")
+            logging.info(
+                f"Fleet selected optimized tool '{best_tool}' using RL for goal '{goal}'"
+            )
         else:
             best_tool = candidates[0]
-            logging.info(f"Fleet: RLSelector missing or incompatible. Defaulting to first candidate '{best_tool}' for goal '{goal}'")
+            logging.info(
+                f"Fleet: RLSelector missing or incompatible. Defaulting to first candidate '{best_tool}' for goal '{goal}'"
+            )
 
         owner = next((t.owner for t in tools if t.name == best_tool), None)
         is_essential = owner in self.fleet.agents.registry_configs if owner else False
 
         start_time = time.time()
         try:
+
             async def run_tool() -> str:
                 if asyncio.iscoroutinefunction(self.fleet.registry.call_tool):
                     return await self.fleet.registry.call_tool(best_tool, **kwargs)
                 else:
                     loop = asyncio.get_running_loop()
-                    return await loop.run_in_executor(None, self.fleet.registry.call_tool, best_tool, **kwargs)
+                    return await loop.run_in_executor(
+                        None, self.fleet.registry.call_tool, best_tool, **kwargs
+                    )
 
             if is_essential:
                 res = await run_tool()
@@ -109,21 +118,29 @@ class FleetRoutingCore:
                 try:
                     immune = self.fleet.agents["ImmuneSystem"]
                     if asyncio.iscoroutinefunction(immune.perform_security_audit):
-                        audit_passed = await immune.perform_security_audit(best_tool, str(res))
+                        audit_passed = await immune.perform_security_audit(
+                            best_tool, str(res)
+                        )
                     else:
-                        audit_passed = immune.perform_security_audit(best_tool, str(res))
+                        audit_passed = immune.perform_security_audit(
+                            best_tool, str(res)
+                        )
                 except (AttributeError, ValueError, TypeError):
                     pass
 
             if not audit_passed:
-                logging.warning(f"Fleet: Security audit FAILED for tool '{best_tool}'. Penalizing RLSelector.")
+                logging.warning(
+                    f"Fleet: Security audit FAILED for tool '{best_tool}'. Penalizing RLSelector."
+                )
                 if self.fleet.rl_selector:
                     self.fleet.rl_selector.update_stats(best_tool, success=False)
                 return f"ERROR: Security audit failed for tool '{best_tool}'. Output blocked."
 
             if self.fleet.rl_selector:
                 self.fleet.rl_selector.update_stats(best_tool, success=True)
-            await self.fleet._record_success(f"Capability call: {goal} with {kwargs}", str(res), "internal_ai")
+            await self.fleet._record_success(
+                f"Capability call: {goal} with {kwargs}", str(res), "internal_ai"
+            )
             return res
         except Exception as e:
             if self.fleet.rl_selector:
@@ -133,13 +150,19 @@ class FleetRoutingCore:
                 target_agent = owner if owner else best_tool
                 clean_kwargs = {k: v for k, v in kwargs.items() if k != "agent_name"}
                 if asyncio.iscoroutinefunction(self.fleet.self_healing.attempt_repair):
-                    return await self.fleet.self_healing.attempt_repair(target_agent, e, **clean_kwargs)
+                    return await self.fleet.self_healing.attempt_repair(
+                        target_agent, e, **clean_kwargs
+                    )
                 else:
-                    return self.fleet.self_healing.attempt_repair(target_agent, e, **clean_kwargs)
+                    return self.fleet.self_healing.attempt_repair(
+                        target_agent, e, **clean_kwargs
+                    )
             return f"Error executing tool {best_tool}: {e}"
         finally:
-            if hasattr(self.fleet, 'telemetry'):
-                self.fleet.telemetry.trace_workflow(f"tool_{best_tool}", time.time() - start_time)
+            if hasattr(self.fleet, "telemetry"):
+                self.fleet.telemetry.trace_workflow(
+                    f"tool_{best_tool}", time.time() - start_time
+                )
 
     def route_task(self, task_type: str, task_data: Any) -> str:
         """Routes tasks based on system load and hardware availability."""
@@ -147,7 +170,9 @@ class FleetRoutingCore:
         is_compute_heavy = task_type in ["training", "indexing", "llm_finetune"]
 
         if is_compute_heavy and stats["gpu"]["available"]:
-            logging.info(f"Fleet: Routing {task_type} to GPU node ({stats['gpu']['type']})")
+            logging.info(
+                f"Fleet: Routing {task_type} to GPU node ({stats['gpu']['type']})"
+            )
             return f"ROUTED:GPU:{stats['gpu']['type']}"
         elif is_compute_heavy and stats["status"] == "CRITICAL":
             logging.warning("Fleet: System critical, deferring compute-heavy task.")

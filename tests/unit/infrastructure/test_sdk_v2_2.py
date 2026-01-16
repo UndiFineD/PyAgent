@@ -8,8 +8,6 @@ from src.infrastructure.fleet.FleetManager import FleetManager
 logging.basicConfig(level=logging.INFO)
 
 
-
-
 def test_v2_2_plugin_loading() -> None:
     print("--- Running SDK v2.2.0 Verification ---")
     workspace = Path(Path(__file__).resolve().parents[3])
@@ -38,26 +36,14 @@ def test_v2_2_plugin_loading() -> None:
     except Exception as e:
         print(f"FAILED to load Mock Orchestrator: {e}")
 
-
-
-
-
-
     # 3. Test Version Gatekeeping (FutureAgent should fail if we didn't bump enough, but it requires 3.0.0)
     print("\n[3] Testing SDK Version Gatekeeping...")
     # FutureAgent is in manifest as 3.0.0
     try:
-
-
-
-
         fleet.agents["FutureAgent"]
         print("ERROR: FutureAgent should have been skipped!")
     except KeyError:
         print("Success: FutureAgent correctly skipped (requires 3.0.0).")
-
-
-
 
     # 4. Test Core Extraction Verification (Blackboard)
     print("\n[4] Testing Core/Shell Extraction (Blackboard)...")
@@ -65,17 +51,10 @@ def test_v2_2_plugin_loading() -> None:
     val = fleet.blackboard.get("test_key")
     print(f"Blackboard retrieval: {val}")
 
-
-
-
-    assert hasattr(fleet.blackboard, 'core')
+    assert hasattr(fleet.blackboard, "core")
     print("Success: Blackboard is using Core delegation.")
 
     print("\n--- SDK v2.2.0 Verification Complete ---")
-
-
-
-
 
 
 if __name__ == "__main__":

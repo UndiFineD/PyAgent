@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\orchestration\ToolRegistry.py
-# hypothesis_version: 6.150.1
-
-['ToolMeta', 'category', 'function', 'general', 'name', 'owner', 'priority', 'sync']

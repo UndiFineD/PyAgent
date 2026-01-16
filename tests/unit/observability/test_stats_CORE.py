@@ -5,8 +5,6 @@ from __future__ import annotations
 from typing import Any, List
 
 
-
-
 class TestMetricType:
     """Tests for MetricType enum."""
 
@@ -71,8 +69,7 @@ class TestSession7Dataclasses:
     def test_streaming_config_dataclass(self, stats_module: Any) -> None:
         """Test StreamingConfig dataclass."""
         config = stats_module.StreamingConfig(
-            protocol=stats_module.StreamingProtocol.WEBSOCKET,
-            endpoint="ws://localhost"
+            protocol=stats_module.StreamingProtocol.WEBSOCKET, endpoint="ws://localhost"
         )
         assert config.port == 8080
         assert config.buffer_size == 1000
@@ -88,26 +85,19 @@ class TestSession7Dataclasses:
         ann = stats_module.MetricAnnotation(
             metric_name="cpu.usage",
             timestamp="2025-01-01T00:00:00",
-            text="High usage noted"
+            text="High usage noted",
         )
         assert ann.annotation_type == "info"
 
     def test_metric_subscription_dataclass(self, stats_module: Any) -> None:
         """Test MetricSubscription dataclass."""
-        sub = stats_module.MetricSubscription(
-            id="sub1",
-            metric_pattern="cpu.*"
-        )
+        sub = stats_module.MetricSubscription(id="sub1", metric_pattern="cpu.*")
         assert "threshold" in sub.notify_on
         assert sub.min_interval_seconds == 60
 
     def test_ab_comparison_dataclass(self, stats_module: Any) -> None:
         """Test ABComparison dataclass."""
-        comp = stats_module.ABComparison(
-            id="ab1",
-            version_a="v1.0",
-            version_b="v2.0"
-        )
+        comp = stats_module.ABComparison(id="ab1", version_a="v1.0", version_b="v2.0")
         assert comp.winner == ""
         assert comp.confidence == 0.0
 
@@ -117,7 +107,7 @@ class TestSession7Dataclasses:
             metric_a="cpu",
             metric_b="data/memory",
             correlation_coefficient=0.85,
-            sample_size=100
+            sample_size=100,
         )
         assert corr.significance == 0.0
 
@@ -126,7 +116,7 @@ class TestSession7Dataclasses:
         derived = stats_module.DerivedMetric(
             name="cpu_ratio",
             dependencies=["cpu_used", "cpu_total"],
-            formula="{cpu_used} / {cpu_total} * 100"
+            formula="{cpu_used} / {cpu_total} * 100",
         )
         assert derived.description == ""
 
@@ -135,7 +125,7 @@ class TestSession7Dataclasses:
         config = stats_module.RollupConfig(
             name="hourly_cpu",
             source_metrics=["cpu.usage"],
-            aggregation=stats_module.AggregationType.AVG
+            aggregation=stats_module.AggregationType.AVG,
         )
         assert config.interval_minutes == 60
         assert config.keep_raw is True
@@ -143,8 +133,7 @@ class TestSession7Dataclasses:
     def test_federated_source_dataclass(self, stats_module: Any) -> None:
         """Test FederatedSource dataclass."""
         source = stats_module.FederatedSource(
-            repo_url="https://github.com/test/repo",
-            api_endpoint="https://api.test.com"
+            repo_url="https://github.com/test/repo", api_endpoint="https://api.test.com"
         )
         assert source.enabled is True
         assert source.poll_interval_seconds == 300
@@ -163,11 +152,7 @@ class TestRetentionPolicyCreation:
         """Test retention policy creation."""
         RetentionPolicy = stats_module.RetentionPolicy
 
-        policy = RetentionPolicy(
-            name="short_term",
-            retention_days=7,
-            resolution="1m"
-        )
+        policy = RetentionPolicy(name="short_term", retention_days=7, resolution="1m")
 
         assert policy.retention_days == 7
 

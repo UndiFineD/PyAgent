@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\integrations\hub_kernels.py
-# hypothesis_version: 6.150.1
-
-[':', '>=0.0.4,<0.1.0', '>=0.1.0', '@', 'FastGELU', 'GeLU', 'Gelu', 'GeluTanh', 'LayerRepository', 'LigerRMSNorm', 'Llama4TextMoe', 'MLP', 'MegaBlocksMoeMLP', 'NewGELU', 'QuickGELU', 'RMSNorm', 'SiLU', 'Silu', 'TritonLlamaMLP', 'ahadnagy/megablocks', 'cuda', 'flash_attention_2', 'rocm', '|']

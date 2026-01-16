@@ -12,7 +12,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
 
@@ -27,10 +27,9 @@ __version__ = VERSION
 SDK_REQUIRED = "10.0.0"
 
 
-
-
 class FutureAgent:
     """Test agent for verifying forward compatibility with future SDK versions."""
+
     def __init__(self, *args) -> None:
         pass
 

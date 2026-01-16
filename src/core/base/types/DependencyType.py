@@ -21,19 +21,15 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
-
-
-
 class DependencyType(Enum):
     """Types of code dependencies."""
+
     IMPORT = "import"
     FUNCTION_CALL = "function_call"
     CLASS_INHERITANCE = "class_inheritance"

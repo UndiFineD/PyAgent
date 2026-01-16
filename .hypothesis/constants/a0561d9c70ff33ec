@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\config.py
-# hypothesis_version: 6.150.1
-
-[40.0, 50052, '.', './chroma', '.env', '/api/v1', '/api/v2', 'C', 'Component', 'GET', 'LRU', 'System', 'T', 'Windows', 'apply', 'chroma_api_impl', 'chroma_consumer_impl', 'chroma_db_impl', 'chroma_executor_impl', 'chroma_producer_impl', 'chroma_server_nofile', 'chroma_sysdb_impl', 'chromadb', 'chromadb.api.API', 'clickhouse', 'default', 'default_database', 'default_tenant', 'duckdb', 'duckdb+parquet', 'id', 'local', 'localhost', 'md5', 'node', 'none', 'rest', 'sha256', 'utf-8', 'validate']

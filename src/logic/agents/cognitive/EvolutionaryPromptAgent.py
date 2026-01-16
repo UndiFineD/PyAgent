@@ -13,11 +13,11 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import random
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 from src.logic.agents.cognitive.core.EvolutionCore import EvolutionCore
 
 __version__ = VERSION
@@ -27,8 +27,6 @@ __version__ = VERSION
 #
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # limitations under the License.
-
-
 
 
 class EvolutionaryPromptAgent(BaseAgent):
@@ -57,14 +55,15 @@ class EvolutionaryPromptAgent(BaseAgent):
         self.population = []
         for i in range(self.population_size):
             # Create a variation (mocked with simple string additions for initialization)
-            variation = seed_prompt + f"\n[Variation {i}: Focus on specific detail {random.randint(1,100)}]"
-            self.population.append({
-                "prompt": variation,
-                "fitness": 0.0,
-                "history": []
-            })
+            variation = (
+                seed_prompt
+                + f"\n[Variation {i}: Focus on specific detail {random.randint(1, 100)}]"
+            )
+            self.population.append({"prompt": variation, "fitness": 0.0, "history": []})
         self.generation = 1
-        return f"Initialized population of {self.population_size} prompts for evolution."
+        return (
+            f"Initialized population of {self.population_size} prompts for evolution."
+        )
 
     @as_tool
     def record_fitness(self, prompt_index: int, score: float) -> str:
@@ -87,7 +86,7 @@ class EvolutionaryPromptAgent(BaseAgent):
 
         # 1. Selection
         self.population.sort(key=lambda x: x.get("fitness", 0), reverse=True)
-        winners = self.population[:self.population_size // 2]
+        winners = self.population[: self.population_size // 2]
 
         new_population = []
         for i in range(self.population_size):
@@ -95,18 +94,22 @@ class EvolutionaryPromptAgent(BaseAgent):
             parent2 = random.choice(winners)
 
             # Crossover & Mutation using Core
-            child_prompt = self.core.prompt_crossover(parent1["prompt"], parent2["prompt"])
+            child_prompt = self.core.prompt_crossover(
+                parent1["prompt"], parent2["prompt"]
+            )
             child_prompt = self.core.mutate_prompt(child_prompt)
 
             # Lineage Tracking
             sha = self.core.calculate_prompt_sha(child_prompt)
-            new_population.append({
-                "prompt": child_prompt,
-                "sha": sha,
-                "parents": [parent1.get("sha"), parent2.get("sha")],
-                "fitness": 0.0,
-                "generation": self.generation + 1
-            })
+            new_population.append(
+                {
+                    "prompt": child_prompt,
+                    "sha": sha,
+                    "parents": [parent1.get("sha"), parent2.get("sha")],
+                    "fitness": 0.0,
+                    "generation": self.generation + 1,
+                }
+            )
 
         self.population = new_population
         self.generation += 1
@@ -114,7 +117,7 @@ class EvolutionaryPromptAgent(BaseAgent):
         return {
             "generation": self.generation,
             "best_fitness_last_gen": winners[0]["fitness"],
-            "new_population_size": len(self.population)
+            "new_population_size": len(self.population),
         }
 
     @as_tool

@@ -23,18 +23,16 @@ Supports forwarding logs to central aggregators via syslog or HTTP.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import logging.handlers
 import time
 import asyncio
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class LoggingAgent(BaseAgent):
@@ -52,7 +50,12 @@ class LoggingAgent(BaseAgent):
         self._internal_buffer: list[dict[str, Any]] = []
 
     @as_tool
-    async def configure_aggregator(self, url: str | None = None, syslog_host: str | None = None, syslog_port: int = 514) -> str:
+    async def configure_aggregator(
+        self,
+        url: str | None = None,
+        syslog_host: str | None = None,
+        syslog_port: int = 514,
+    ) -> str:
         """
         Configures the destination for distributed logs.
 
@@ -63,17 +66,27 @@ class LoggingAgent(BaseAgent):
         """
         self.log_aggregator_url = url
         if syslog_host:
+
             def init_syslog() -> str:
                 try:
-                    self.syslog_handler = logging.handlers.SysLogHandler(address=(syslog_host, syslog_port))
+                    self.syslog_handler = logging.handlers.SysLogHandler(
+                        address=(syslog_host, syslog_port)
+                    )
                     return f"LoggingAgent: Configured SysLog to {syslog_host}:{syslog_port} and Aggregator URL to {url}."
                 except Exception as e:
                     return f"LoggingAgent: Failed to configure SysLog: {e}"
+
             return await asyncio.to_thread(init_syslog)
         return f"LoggingAgent: Configured Aggregator URL to {url}."
 
     @as_tool
-    async def broadcast_log(self, level: str, source: str, message: str, metadata: dict[str, Any] | None = None) -> str:
+    async def broadcast_log(
+        self,
+        level: str,
+        source: str,
+        message: str,
+        metadata: dict[str, Any] | None = None,
+    ) -> str:
         """
         Broadcasts a log entry to configured aggregators.
 
@@ -88,7 +101,7 @@ class LoggingAgent(BaseAgent):
             "level": level.upper(),
             "source": source,
             "message": message,
-            "metadata": metadata or {}
+            "metadata": metadata or {},
         }
 
         # Local buffering
@@ -100,19 +113,23 @@ class LoggingAgent(BaseAgent):
             # 1. Forward to SysLog
             if self.syslog_handler:
                 lvl_const = getattr(logging, level.upper(), logging.INFO)
-                record = logging.makeLogRecord({
-                    "name": source,
-                    "levelno": lvl_const,
-                    "resLevelName": level.upper(),
-                    "msg": message,
-                    "args": (),
-                    "kwargs": {}
-                })
+                record = logging.makeLogRecord(
+                    {
+                        "name": source,
+                        "levelno": lvl_const,
+                        "resLevelName": level.upper(),
+                        "msg": message,
+                        "args": (),
+                        "kwargs": {},
+                    }
+                )
                 self.syslog_handler.emit(record)
 
             # 2. Forward to HTTP Aggregator (Mocked/Future-proofed)
             if self.log_aggregator_url:
-                logging.debug(f"LoggingAgent: Forwarding to {self.log_aggregator_url} -> {message}")
+                logging.debug(
+                    f"LoggingAgent: Forwarding to {self.log_aggregator_url} -> {message}"
+                )
 
         await asyncio.to_thread(forward)
         return "Log broadcasted successfully."

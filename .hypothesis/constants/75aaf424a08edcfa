@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\backend\llm_backends\OllamaBackend.py
-# hypothesis_version: 6.150.1
-
-[120, '/', '/api/generate', 'DV_OLLAMA_BASE_URL', 'base_url', 'model', 'ollama', 'prompt', 'response', 'stream', 'system', 'timeout_s']

@@ -18,7 +18,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import re
 import logging
 from typing import Any
@@ -28,13 +28,12 @@ from src.logic.agents.intelligence.core.LocalizationCore import LocalizationCore
 __version__ = VERSION
 
 
-
-
 class LocalizationAgent(BaseAgent):
     """
     Handles localization and internationalization (i18n) tasks.
     Integrated with LocalizationCore for cultural guardrails and multi-lang support.
     """
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.workspace_path = workspace_path
@@ -46,18 +45,16 @@ class LocalizationAgent(BaseAgent):
         Runs cultural guardrails on agent communication.
         """
         issues = self.core.detect_cultural_issues(text)
-        return {
-            "compliant": len(issues) == 0,
-            "issues": issues,
-            "count": len(issues)
-        }
+        return {"compliant": len(issues) == 0, "issues": issues, "count": len(issues)}
 
     def translate_comment(self, text: str, target_lang: str) -> str:
         """
         Translates a single agent comment using the core's formatting.
         """
         if target_lang not in self.supported_locales:
-            logging.warning(f"Target language {target_lang} not in core supported list.")
+            logging.warning(
+                f"Target language {target_lang} not in core supported list."
+            )
 
         request = self.core.format_translation_request(text, target_lang)
         # In a real scenario, this would call self.improve_content or an API
@@ -79,7 +76,9 @@ class LocalizationAgent(BaseAgent):
             logging.error(f"LocalizationAgent: Error reading {file_path}: {e}")
         return found_strings
 
-    def generate_translation_file(self, locale: str, strings: list[str]) -> dict[str, str]:
+    def generate_translation_file(
+        self, locale: str, strings: list[str]
+    ) -> dict[str, str]:
         """Generates a JSON translation dictionary for a specific locale."""
         if locale not in self.supported_locales:
             logging.warning(f"Locale {locale} not officially supported.")
@@ -89,4 +88,6 @@ class LocalizationAgent(BaseAgent):
 
     def solve_translation_task(self, prompt: str) -> str:
         """Uses LLM to help with complex translation tasks."""
-        return self.improve_content(f"Translate the following content preserving formatting: {prompt}")
+        return self.improve_content(
+            f"Translate the following content preserving formatting: {prompt}"
+        )

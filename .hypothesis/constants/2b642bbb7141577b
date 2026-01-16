@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\scipy\sparse\linalg\_interface.py
-# hypothesis_version: 6.150.1
-
-[1.0, 'LinearOperator', '_rmatmat', 'aslinearoperator', 'dimension mismatch', 'dtype', 'dtype=', 'matvec', 'rmatmat', 'rmatvec', 'shape', 'type not understood', 'unspecified dtype']

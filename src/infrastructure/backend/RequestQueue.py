@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_backend.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .QueuedRequest import QueuedRequest
 from .RequestPriority import RequestPriority
 from queue import PriorityQueue
@@ -36,11 +36,6 @@ from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 __version__ = VERSION
 
 
-
-
-
-
-
 class RequestQueue:
     """Priority queue for backend requests.
 
@@ -53,7 +48,9 @@ class RequestQueue:
         request=queue.dequeue()
     """
 
-    def __init__(self, max_size: int = 1000, recorder: LocalContextRecorder | None = None) -> None:
+    def __init__(
+        self, max_size: int = 1000, recorder: LocalContextRecorder | None = None
+    ) -> None:
         """Initialize request queue.
 
         Args:
@@ -95,7 +92,9 @@ class RequestQueue:
             self._pending[request_id] = request
 
         if self.recorder:
-            self.recorder.record_lesson("request_queued", {"id": request_id, "priority": priority.name})
+            self.recorder.record_lesson(
+                "request_queued", {"id": request_id, "priority": priority.name}
+            )
 
         logging.debug(f"Queued request {request_id} with priority {priority.name}")
         return request_id

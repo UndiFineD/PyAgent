@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\fastapi\params.py
-# hypothesis_version: 6.150.1
-
-['alias_priority', 'annotation', 'application/json', 'cookie', 'deprecated', 'examples', 'function', 'header', 'json_schema_extra', 'multipart/form-data', 'path', 'pattern', 'query', 'request', 'serialization_alias', 'strict', 'validation_alias']

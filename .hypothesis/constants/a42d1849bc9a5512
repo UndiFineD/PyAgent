@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\transformers\pytorch_utils.py
-# hypothesis_version: 6.150.1
-
-[0.02, '1.12', '1.13', '2.0', '2.1', '2.2', '2.3', '2.4', '2.5', '2.6', '2.8', 'cpu', 'cuda', 'mps', 'xla', 'xpu']

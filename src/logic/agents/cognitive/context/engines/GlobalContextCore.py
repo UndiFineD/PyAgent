@@ -18,13 +18,18 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from datetime import datetime
+import json
+
+try:
+    from rust_core import partition_to_shards_rust
+    _RUST_ACCEL = True
+except ImportError:
+    _RUST_ACCEL = False
 
 __version__ = VERSION
-
-
 
 
 class GlobalContextCore:
@@ -34,13 +39,16 @@ class GlobalContextCore:
     No I/O or direct disk access.
     """
 
-    def partition_memory(self, memory: dict[str, Any], max_entries_per_shard: int = 1000) -> dict[str, dict[str, Any]]:
+    def partition_memory(
+        self, memory: dict[str, Any], max_entries_per_shard: int = 1000
+    ) -> dict[str, dict[str, Any]]:
         """
         Splits memory into shards if it exceeds thresholds.
         Implements stable sub-sharding for trillion-parameter scalability (Phase 104).
         Refined in Phase 119 for adaptive rebalancing.
         """
         import zlib
+
         shards: dict[str, dict[str, Any]] = {"default": {}}
         for category, data in memory.items():
             if not isinstance(data, dict) or not data:
@@ -49,9 +57,22 @@ class GlobalContextCore:
 
             count = len(data)
             if count > max_entries_per_shard:
-                # Logic for Sub-sharding (Stable Hash-based)
-                # Phase 119: Adaptive rebalancing - we adjust shard count based on density
-                num_sub_shards = 2**((count // max_entries_per_shard).bit_length())
+                # Use Rust for sharding if available
+                if _RUST_ACCEL:
+                    try:
+                        items = [(k, json.dumps(v)) for k, v in data.items()]
+                        rust_shards = partition_to_shards_rust(category, items, max_entries_per_shard)
+                        for shard_name, shard_items in rust_shards:
+                            if shard_name not in shards:
+                                shards[shard_name] = {}
+                            for key, val_json in shard_items:
+                                shards[shard_name][key] = json.loads(val_json)
+                        continue
+                    except Exception:
+                        pass  # Fall through to Python
+                
+                # Python fallback: Sub-sharding (Stable Hash-based)
+                num_sub_shards = 2 ** ((count // max_entries_per_shard).bit_length())
 
                 for key, val in data.items():
                     # Adler-32 is fast and sufficient for non-cryptographic sharding
@@ -65,12 +86,15 @@ class GlobalContextCore:
                 shards["default"][category] = data
         return shards
 
-    def detect_shard_bloat(self, shards: dict[str, dict[str, Any]], size_threshold_bytes: int = 5_000_000) -> list[str]:
+    def detect_shard_bloat(
+        self, shards: dict[str, dict[str, Any]], size_threshold_bytes: int = 5_000_000
+    ) -> list[str]:
         """
         Identifies shards that are exceeding the recommended size for zero-latency retrieval.
         Phase 119: Adaptive Shard Rebalancing logic.
         """
         import json
+
         bloated = []
         for name, data in shards.items():
             # Estimate size via JSON serialization
@@ -81,27 +105,28 @@ class GlobalContextCore:
 
     def prepare_fact(self, key: str, value: Any) -> dict[str, Any]:
         """Prepares a fact entry with timestamp."""
-        return {
-            "value": value,
-            "updated_at": datetime.now().isoformat()
-        }
+        return {"value": value, "updated_at": datetime.now().isoformat()}
 
     def prepare_insight(self, insight: str, source_agent: str) -> dict[str, Any]:
         """Prepares an insight entry."""
         return {
             "text": insight,
             "source": source_agent,
-            "timestamp": datetime.now().isoformat()
+            "timestamp": datetime.now().isoformat(),
         }
 
-    def merge_entity_info(self, existing: dict[str, Any], new_attributes: dict[str, Any]) -> dict[str, Any]:
+    def merge_entity_info(
+        self, existing: dict[str, Any], new_attributes: dict[str, Any]
+    ) -> dict[str, Any]:
         """Merges new attributes into an entity record."""
         updated = existing.copy()
         updated.update(new_attributes)
         updated["last_modified"] = datetime.now().isoformat()
         return updated
 
-    def resolve_conflict(self, existing: Any, incoming: Any, strategy: str = "latest") -> Any:
+    def resolve_conflict(
+        self, existing: Any, incoming: Any, strategy: str = "latest"
+    ) -> Any:
         """
         Logic to resolve conflicts when multiple agents update the same key.
         - 'latest': Uses timestamp if available, else incoming.
@@ -125,13 +150,17 @@ class GlobalContextCore:
             return incoming
 
         if strategy == "accumulate":
-            if isinstance(existing, (int, float)) and isinstance(incoming, (int, float)):
+            if isinstance(existing, (int, float)) and isinstance(
+                incoming, (int, float)
+            ):
                 return existing + incoming
             return incoming
 
         return incoming
 
-    def prune_lessons(self, lessons: list[dict[str, Any]], max_lessons: int = 20) -> list[dict[str, Any]]:
+    def prune_lessons(
+        self, lessons: list[dict[str, Any]], max_lessons: int = 20
+    ) -> list[dict[str, Any]]:
         """Prunes lessons to keep only the most recent."""
         return lessons[-max_lessons:]
 
@@ -157,6 +186,8 @@ class GlobalContextCore:
         if memory.get("lessons_learned"):
             summary.append("\n## 🎓 Lessons Learned")
             for lesson in memory["lessons_learned"][-3:]:
-                summary.append(f"- **Issue**: {lesson['failure']} | **Fix**: {lesson['correction']}")
+                summary.append(
+                    f"- **Issue**: {lesson['failure']} | **Fix**: {lesson['correction']}"
+                )
 
         return "\n".join(summary)

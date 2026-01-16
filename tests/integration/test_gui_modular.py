@@ -23,8 +23,6 @@ from src.interface.ui.gui.ProjectExplorer import ProjectExplorer
 from src.interface.ui.gui.AgentColumn import AgentColumn
 
 
-
-
 class TestGUIModular(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -48,7 +46,9 @@ class TestGUIModular(unittest.TestCase):
     def test_widget_logger(self) -> None:
         text = tk.Text(self.root)
         logger = WidgetLogger(text)
-        record = logging.LogRecord("test", logging.INFO, "test.py", 10, "Test Log message", (), None)
+        record = logging.LogRecord(
+            "test", logging.INFO, "test.py", 10, "Test Log message", (), None
+        )
         logger.emit(record)
         self.root.update()
         content = text.get("1.0", tk.END).strip()
@@ -57,7 +57,10 @@ class TestGUIModular(unittest.TestCase):
     def test_project_explorer_init(self) -> None:
         frame = ttk.Frame(self.root)
         root_var = tk.StringVar(value=os.getcwd())
-        def dummy_cb(*args: Any) -> None: pass
+
+        def dummy_cb(*args: Any) -> None:
+            pass
+
         explorer = ProjectExplorer(frame, root_var, on_double_click_callback=dummy_cb)
         self.assertIsNotNone(explorer.tree)
 
@@ -67,12 +70,16 @@ class TestGUIModular(unittest.TestCase):
         logger = WidgetLogger(text, thread_id=123)
 
         # Record from same thread
-        record1 = logging.LogRecord("test", logging.INFO, "test.py", 10, "Thread 123 message", (), None)
+        record1 = logging.LogRecord(
+            "test", logging.INFO, "test.py", 10, "Thread 123 message", (), None
+        )
         record1.thread = 123
         logger.emit(record1)
 
         # Record from different thread
-        record2 = logging.LogRecord("test", logging.INFO, "test.py", 10, "Thread 456 message", (), None)
+        record2 = logging.LogRecord(
+            "test", logging.INFO, "test.py", 10, "Thread 456 message", (), None
+        )
         record2.thread = 456
         logger.emit(record2)
 
@@ -84,7 +91,9 @@ class TestGUIModular(unittest.TestCase):
     def test_project_explorer_search(self) -> None:
         frame = ttk.Frame(self.root)
         root_var = tk.StringVar(value=os.getcwd())
-        explorer = ProjectExplorer(frame, root_var, on_double_click_callback=lambda x: None)
+        explorer = ProjectExplorer(
+            frame, root_var, on_double_click_callback=lambda x: None
+        )
 
         # Mock search variable
         explorer.search_var.set("BaseAgent")
@@ -98,46 +107,28 @@ class TestGUIModular(unittest.TestCase):
 
     def test_agent_column_data_retrieval(self) -> None:
         frame = ttk.Frame(self.root)
-        def dummy_cb(*args: Any) -> None: pass
 
-
-
-
-
-
-
-
-
+        def dummy_cb(*args: Any) -> None:
+            pass
 
         callbacks = {
             "execute": dummy_cb,
             "stop": dummy_cb,
             "browse_file": dummy_cb,
-
-
-
-
             "voice": dummy_cb,
             "remove": dummy_cb,
-            "diff": dummy_cb
+            "diff": dummy_cb,
         }
         column = AgentColumn(frame, "Coder", callbacks)
-
 
         column.file_var.set("test_file.py")
         column.backend_cb.set("gh")
         column.prompt_text.insert("1.0", "New Task")
 
-
-
-
         data = column.get_data()
         self.assertEqual(data["file"], "test_file.py")
         self.assertEqual(data["backend"], "gh")
         self.assertEqual(data["prompt"], "New Task")
-
-
-
 
 
 if __name__ == "__main__":

@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .TestFixture import TestFixture
 from pathlib import Path
 import logging
@@ -29,8 +29,6 @@ import shutil
 import tempfile
 
 __version__ = VERSION
-
-
 
 
 class FixtureGenerator:

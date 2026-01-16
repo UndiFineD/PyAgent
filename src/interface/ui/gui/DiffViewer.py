@@ -25,7 +25,7 @@
 """Diff Viewer component for the PyAgent GUI."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import tkinter as tk
 from tkinter import ttk, messagebox
 import difflib
@@ -34,20 +34,21 @@ from typing import Any
 __version__ = VERSION
 
 
-
-
 class DiffViewer:
     """A window for viewing differences between original and changed files."""
+
     def __init__(self, parent: Any) -> None:
         self.parent = parent
 
-    def show_diff(self, original_path: str, changed_content: str, title: str = "Changes Preview") -> None:
+    def show_diff(
+        self, original_path: str, changed_content: str, title: str = "Changes Preview"
+    ) -> None:
         if not original_path:
             messagebox.showwarning("Warning", "No original file specified.")
             return
 
         try:
-            with open(original_path, encoding='utf-8') as f:
+            with open(original_path, encoding="utf-8") as f:
                 original_content = f.read()
         except Exception as e:
             messagebox.showerror("Error", f"Failed to read original file: {e}")
@@ -58,12 +59,14 @@ class DiffViewer:
             changed_content.splitlines(),
             fromfile="Original",
             tofile="Proposed",
-            lineterm=""
+            lineterm="",
         )
 
         diff_text = "\n".join(list(diff))
         if not diff_text:
-            messagebox.showinfo("No Changes", "The proposed content is identical to the original.")
+            messagebox.showinfo(
+                "No Changes", "The proposed content is identical to the original."
+            )
             return
 
         # Create diff window
@@ -80,11 +83,15 @@ class DiffViewer:
         text.tag_configure("header", foreground="blue", font=("Segoe UI", 10, "bold"))
 
         for line in diff_text.splitlines():
-            if line.startswith('+') and not line.startswith('+++'):
+            if line.startswith("+") and not line.startswith("+++"):
                 text.insert(tk.END, line + "\n", "add")
-            elif line.startswith('-') and not line.startswith('---'):
+            elif line.startswith("-") and not line.startswith("---"):
                 text.insert(tk.END, line + "\n", "remove")
-            elif line.startswith('@@') or line.startswith('---') or line.startswith('+++'):
+            elif (
+                line.startswith("@@")
+                or line.startswith("---")
+                or line.startswith("+++")
+            ):
                 text.insert(tk.END, line + "\n", "header")
             else:
                 text.insert(tk.END, line + "\n")

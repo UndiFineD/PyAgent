@@ -1,4 +1,3 @@
-
 """
 Core logic for Swarm Topology Generation (Phase 169).
 This module is designed to be side-effect free and a candidate for Rust acceleration.
@@ -6,17 +5,19 @@ This module is designed to be side-effect free and a candidate for Rust accelera
 
 try:
     import rust_core
+
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
 
-
-
 class TopologyCore:
     """Core logic for generating swarm topology visualizations."""
+
     @staticmethod
-    def generate_mermaid_graph(nodes: list[str], edges: list[dict[str, str]], direction: str = "TD") -> str:
+    def generate_mermaid_graph(
+        nodes: list[str], edges: list[dict[str, str]], direction: str = "TD"
+    ) -> str:
         """
         Generates a Mermaid.js flowchart string.
         """
@@ -40,9 +41,9 @@ class TopologyCore:
 
         # Add edges
         for edge in edges:
-            u = edge['from'].replace(".", "_").replace("/", "_").replace("\\", "_")
-            v = edge['to'].replace(".", "_").replace("/", "_").replace("\\", "_")
-            label = edge.get('label', '')
+            u = edge["from"].replace(".", "_").replace("/", "_").replace("\\", "_")
+            v = edge["to"].replace(".", "_").replace("/", "_").replace("\\", "_")
+            label = edge.get("label", "")
             if label:
                 lines.append(f"    {u} -->|{label}| {v}")
             else:
@@ -51,18 +52,24 @@ class TopologyCore:
         return "\n".join(lines)
 
     @staticmethod
-    def filter_active_relationships(all_deps: dict[str, list[str]], focus_list: list[str]) -> dict[str, list[str]]:
+    def filter_active_relationships(
+        all_deps: dict[str, list[str]], focus_list: list[str]
+    ) -> dict[str, list[str]]:
         """
         Filters a dependency map to only include nodes relevant to the focus list.
         """
         if HAS_RUST:
             try:
-                return rust_core.filter_active_topology_relationships(all_deps, focus_list)  # type: ignore[attr-defined]
+                return rust_core.filter_active_topology_relationships(
+                    all_deps, focus_list
+                )  # type: ignore[attr-defined]
             except Exception:
                 pass
 
         filtered = {}
         for source, targets in all_deps.items():
             if any(f in source for f in focus_list):
-                filtered[source] = [t for t in targets if any(f in t for f in focus_list) or "Core" in t]
+                filtered[source] = [
+                    t for t in targets if any(f in t for f in focus_list) or "Core" in t
+                ]
         return filtered

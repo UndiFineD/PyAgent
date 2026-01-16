@@ -19,17 +19,13 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from dataclasses import dataclass, field
-from src.core.base.models import AuthConfig, AuthMethod, _empty_dict_str_str
+from src.core.base.models import AuthConfig, AuthMethod
+from src.core.base.models.BaseModels import _empty_dict_str_str
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class AuthenticationManager:
@@ -38,7 +34,9 @@ class AuthenticationManager:
     def __init__(self, config: AuthConfig | None = None) -> None:
         self.config = config or AuthConfig()
         self.token_cache: dict[str, str] = {}
-        logging.debug(f"AuthenticationManager initialized with method={self.config.method.value}")
+        logging.debug(
+            f"AuthenticationManager initialized with method={self.config.method.value}"
+        )
 
     def get_headers(self) -> dict[str, str]:
         headers: dict[str, str] = {}
@@ -48,6 +46,7 @@ class AuthenticationManager:
             headers["Authorization"] = f"Bearer {self.config.token}"
         elif self.config.method == AuthMethod.BASIC_AUTH:
             import base64
+
             credentials = f"{self.config.username}:{self.config.password}"
             encoded = base64.b64encode(credentials.encode()).decode()
             headers["Authorization"] = f"Basic {encoded}"
@@ -66,60 +65,34 @@ class AuthenticationManager:
             logging.error(f"OAuth token missing for {cache_key}")
             return ""
 
-
-
-
-
-
-
-
-
-
         self.token_cache[cache_key] = token
         return token
-
-
 
     def refresh_token(self) -> None:
         self.token_cache.clear()
 
     def set_custom_header(self, key: str, value: str) -> None:
-
-
-
-
-
         self.config.custom_headers[key] = value
 
     def validate(self) -> bool:
         if self.config.method == AuthMethod.NONE:
             return True
 
-
-
-
-
         if self.config.method == AuthMethod.API_KEY:
             return bool(self.config.api_key)
         if self.config.method == AuthMethod.BEARER_TOKEN:
             return bool(self.config.token)
         if self.config.method == AuthMethod.BASIC_AUTH:
-
-
-
-
             return bool(self.config.username and self.config.password)
         if self.config.method == AuthMethod.OAUTH2:
             return bool(self.config.oauth_client_id and self.config.oauth_client_secret)
         return True
 
 
-
-
-
 @dataclass
 class AuthManager:
     """Manages authentication."""
+
     method: AuthMethod | str | None = None
     credentials: dict[str, str] = field(default_factory=_empty_dict_str_str)
     custom_headers: dict[str, str] = field(default_factory=_empty_dict_str_str)

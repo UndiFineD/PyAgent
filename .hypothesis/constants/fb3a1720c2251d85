@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\TechDebtAgent.py
-# hypothesis_version: 6.150.1
-
-[1000, '.', '.py', '.venv', 'Error', 'High Complexity', 'Low', 'Medium', 'Missing Docstring', 'Module', '__pycache__', 'detail', 'file', 'hotspots', 'issue_count', 'issues', 'name', 'node_modules', 'severity', 'total_issues', 'type', 'utf-8', 'venv']

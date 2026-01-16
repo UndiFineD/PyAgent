@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\dev\agent_tests\environment.py
-# hypothesis_version: 6.150.1
-
-[1000, 'Already active', 'auto_increment', 'cleaned', 'dependencies', 'environment', 'error', 'example.com', 'overrides', 'python_version', 'random_email', 'random_int', 'random_string', 'ready', 'status', 'success', 'variables', 'warning']

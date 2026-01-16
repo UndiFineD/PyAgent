@@ -21,11 +21,9 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 
 __version__ = VERSION
-
-
 
 
 class AccessController:
@@ -43,7 +41,9 @@ class AccessController:
         self._assigned_roles.setdefault(improvement_id, {})[user] = role
 
     def grant(self, improvement_id: str, user: str, level: str) -> None:
-        self.permissions.setdefault(improvement_id, {}).setdefault(user, set()).add(level)
+        self.permissions.setdefault(improvement_id, {}).setdefault(user, set()).add(
+            level
+        )
 
     def can_access(self, improvement_id: str, user: str, level: str) -> bool:
         direct = level in self.permissions.get(improvement_id, {}).get(user, set())

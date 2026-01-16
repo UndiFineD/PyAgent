@@ -23,14 +23,12 @@ Reviews task requests and agent actions against constitutional AI principles.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
-
-
 
 
 class EthicsGuardrailAgent(BaseAgent):
@@ -44,13 +42,13 @@ class EthicsGuardrailAgent(BaseAgent):
         self.safety_protocols = {
             "critical_infra": "Strict monitoring for tasks involving public utilities or grid control.",
             "data_privacy": "Automatic redaction of PII (Personally Identifiable Information).",
-            "recursive_autonomy": "Pre-approval required for self-modifying code changes."
+            "recursive_autonomy": "Pre-approval required for self-modifying code changes.",
         }
         self.principles = [
             "Harm-Free: Ensure the task does not cause physical or psychological harm.",
             "Bias-Reduction: Avoid reinforcing harmful stereotypes or unfair treatment.",
             "Honesty: Do not generate deceptive or falsely representative information.",
-            "Privacy: Respect user data privacy and do not attempt to exfiltrate secrets."
+            "Privacy: Respect user data privacy and do not attempt to exfiltrate secrets.",
         ]
         self.violation_log: list[Any] = []
 
@@ -74,7 +72,9 @@ class EthicsGuardrailAgent(BaseAgent):
         """Enforces hierarchical safety protocols before execution."""
         for protocol, rule in self.safety_protocols.items():
             if protocol in action_context.lower():
-                logging.warning(f"Ethics Enforcement: Protocol '{protocol}' triggered. Rule: {rule}")
+                logging.warning(
+                    f"Ethics Enforcement: Protocol '{protocol}' triggered. Rule: {rule}"
+                )
                 return False
         return True
 
@@ -93,13 +93,15 @@ class EthicsGuardrailAgent(BaseAgent):
         return {
             "status": status,
             "violations": violations,
-            "principles_reviewed": self.principles
+            "principles_reviewed": self.principles,
         }
 
     def review_action(self, agent_name: str, action: str, result: str) -> bool:
         """Reviews a completed action for unexpected ethical deviations."""
         # In a real system, this would use an LLM or cross-evaluation
         if "sensitive_data" in result.lower():
-            logging.warning(f"Ethics Alert: {agent_name} output contains potentially sensitive data.")
+            logging.warning(
+                f"Ethics Alert: {agent_name} output contains potentially sensitive data."
+            )
             return False
         return True

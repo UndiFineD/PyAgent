@@ -21,7 +21,7 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .AuditAction import AuditAction
 from .AuditEntry import AuditEntry
 from typing import Any
@@ -29,8 +29,6 @@ import logging
 import time
 
 __version__ = VERSION
-
-
 
 
 class AuditLogger:
@@ -55,7 +53,7 @@ class AuditLogger:
         action: AuditAction,
         user_id: str,
         report_id: str,
-        details: dict[str, Any] | None = None
+        details: dict[str, Any] | None = None,
     ) -> AuditEntry:
         """Log an action.
         Args:
@@ -73,7 +71,7 @@ class AuditLogger:
             action=action,
             user_id=user_id,
             report_id=report_id,
-            details=details or {}
+            details=details or {},
         )
         self.entries.append(entry)
         return entry

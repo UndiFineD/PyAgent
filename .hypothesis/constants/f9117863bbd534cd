@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\pydantic\v1\dataclasses.py
-# hypothesis_version: 6.150.1
-
-['BaseModel', 'CallableGenerator', 'Dataclass', 'DataclassProxy', 'DataclassT', 'NoArgAnyCallable', '_T', '__annotations__', '__dataclass__', '__get_validators__', '__init__', '__post_init__', '__pydantic_model__', '__setattr__', '__validate__', 'after_validation', 'before_validation', 'dataclass', 'is_builtin_dataclass', 'set_validation']

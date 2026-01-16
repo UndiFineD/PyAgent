@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\integrals\meijerint.py
-# hypothesis_version: 6.150.1
-
-['  Flipping G.', '  Trying to split at', '  ap = %s, %s', '  bq = %s, %s', '  c%s: %s', '  case %s: %s', '  case 1:', '  case 2:', '  case 3:', '  extra case:', '  second extra case:', ' could rewrite:', '3/2', '==', 'Changed function to', 'Changed limits to', 'E1', 'E2', 'E3', 'E4', 'Integrating', 'Laplace-inverting', 'Trying', 'Trying x -> x + %s', 'Unexpected form...', '_condsimp: ', 'a', 'expand', 'expand_mul', 'is_Piecewise', 'meijerg', 'meijerint-definite2', 'meijerint-indefinite', 'n', 'nonrepsmall', 'original integrand', 'p q r', 'pq', 'pqabc', 'rewrite-single', 's', 't', 'trig power reduction', 'used new rule:', 'wrt', 'x', 'z']

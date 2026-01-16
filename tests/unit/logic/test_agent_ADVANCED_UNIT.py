@@ -12,21 +12,19 @@ from concurrent.futures import ThreadPoolExecutor
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
     class agent_sys_path:
         def __enter__(self) -> bool:
-
             return self
-
-
-
-
-
-
 
         def __exit__(self, *args) -> str:
             sys.path.remove(str(AGENT_DIR))
@@ -59,9 +57,11 @@ class TestGitBranchProcessor:
         # May return None if not a real git repo
         assert branch is None or isinstance(branch, str)
 
+
 # ============================================================================
 # SESSION 9: VALIDATION RULE MANAGER TESTS
 # ============================================================================
+
 
 class TestValidationRuleManager:
     """Tests for ValidationRuleManager class."""
@@ -79,18 +79,21 @@ class TestValidationRuleManager:
         ValidationRule = agent_module.ValidationRule
 
         manager = ValidationRuleManager()
-        manager.add_rule(ValidationRule(
-            name="no_print",
-            file_pattern="*.py",
-            validator=lambda c, p: "print(" not in c,
-            error_message="Contains print statement",
-        ))
+        manager.add_rule(
+            ValidationRule(
+                name="no_print",
+                file_pattern="*.py",
+                validator=lambda c, p: "print(" not in c,
+                error_message="Contains print statement",
+            )
+        )
 
         test_file: Path = tmp_path / "test.py"
         results = manager.validate(test_file, "print('hello')")
 
         assert len(results) == 1
         assert not results[0]["passed"]
+
 
 # ============================================================================
 # SESSION 9: AGENT PRIORITY QUEUE TESTS
@@ -120,6 +123,7 @@ class TestAgentPriorityQueue:
 
         assert order[0] == "high"
         assert order[-1] == "low"
+
 
 # ============================================================================
 # SESSION 9: TELEMETRY COLLECTOR TESTS
@@ -163,6 +167,7 @@ class TestTelemetryCollector:
 
         assert len(data) == 1
 
+
 # ============================================================================
 # SESSION 9: CONDITIONAL EXECUTOR TESTS
 # ============================================================================
@@ -203,9 +208,11 @@ class TestConditionalExecutor:
         # Should not execute without TODO
         assert not executor.should_execute("coder", test_file, "# Clean code")
 
+
 # ============================================================================
 # SESSION 9: TEMPLATE MANAGER TESTS
 # ============================================================================
+
 
 class TestTemplateManager:
     """Tests for TemplateManager class."""
@@ -237,9 +244,11 @@ class TestTemplateManager:
         assert len(templates) >= 3
         assert "python_full" in templates
 
+
 # ============================================================================
 # SESSION 9: DEPENDENCY GRAPH TESTS
 # ============================================================================
+
 
 class TestDependencyGraph:
     """Tests for DependencyGraph class."""
@@ -276,6 +285,7 @@ class TestDependencyGraph:
         assert order.index("coder") < order.index("tests")
         assert order.index("tests") < order.index("docs")
 
+
 # ============================================================================
 # SESSION 9: PROFILE MANAGER TESTS
 # ============================================================================
@@ -301,6 +311,7 @@ class TestProfileManager:
         config = manager.get_active_config()
         assert config is not None
         assert config.dry_run is True
+
 
 # ============================================================================
 # SESSION 9: RESULT CACHE TESTS
@@ -336,6 +347,7 @@ class TestResultCache:
 
         assert result is None
 
+
 # ============================================================================
 # SESSION 9: EXECUTION SCHEDULER TESTS
 # ============================================================================
@@ -370,6 +382,7 @@ class TestExecutionScheduler:
         config = scheduler.get_config("test")
         assert config["max_files"] == 10
 
+
 # =============================================================================
 # Session 9: Plugin-Based Agent Loading Tests
 # =============================================================================
@@ -396,6 +409,7 @@ class TestPluginBasedAgentLoading:
         plugins = system.list_plugins()
         assert "test_plugin" in plugins
 
+
 # =============================================================================
 # Session 9: Agent Communication Tests
 # =============================================================================
@@ -415,6 +429,7 @@ class TestAgentCommunication:
         on_message("test_message")
         assert "test_message" in messages
 
+
 # =============================================================================
 # Session 9: Agent State Serialization Tests
 # =============================================================================
@@ -428,12 +443,12 @@ class TestAgentStateSerialization:
         IncrementalState = agent_module.IncrementalState
 
         state = IncrementalState(
-            last_run_timestamp="2025-01-16",
-            processed_files=["a.py", "b.py"]
+            last_run_timestamp="2025-01-16", processed_files=["a.py", "b.py"]
         )
 
         assert state.last_run_timestamp == "2025-01-16"
         assert len(state.processed_files) == 2
+
 
 # =============================================================================
 # Session 9: Distributed Agent Execution Tests
@@ -454,6 +469,7 @@ class TestDistributedAgentExecution:
         # They should be separate
         assert workspace1 != workspace2
 
+
 # =============================================================================
 # Session 9: Agent Dependency Resolution Tests
 # =============================================================================
@@ -472,6 +488,7 @@ class TestAgentDependencyResolution:
 
         deps = graph.get_dependencies("coder")
         assert "context" in deps
+
 
 # =============================================================================
 # Session 9: Agent Lifecycle Hooks Tests
@@ -501,6 +518,7 @@ class TestAgentLifecycleHooks:
         post_hook()
         assert "post" in hook_called
 
+
 # =============================================================================
 # Session 9: Agent Resource Quotas Tests
 # =============================================================================
@@ -514,16 +532,15 @@ class TestAgentResourceQuotas:
         """Test rate limit configuration."""
         RateLimitConfig = agent_module.RateLimitConfig
 
-        config = RateLimitConfig(
-            max_requests_per_minute=60,
-            max_concurrent_requests=5
-        )
+        config = RateLimitConfig(max_requests_per_minute=60, max_concurrent_requests=5)
 
         assert config.max_requests_per_minute == 60
+
 
 # =============================================================================
 # Session 9: Agent Retry Policies Tests
 # =============================================================================
+
 
 @pytest.mark.skip(reason="Some retry policies not fully implemented")
 class TestAgentRetryPolicies:
@@ -545,6 +562,7 @@ class TestAgentRetryPolicies:
 
         assert breaker.state == "open"
 
+
 # =============================================================================
 # Session 9: Agent Metrics Tests
 # =============================================================================
@@ -563,9 +581,11 @@ class TestAgentMetricsTelemetry:
 
         assert collector._spans is not None
 
+
 # =============================================================================
 # Session 9: Agent Configuration Inheritance Tests
 # =============================================================================
+
 
 @pytest.mark.skip(reason="Config inheritance patterns need more work")
 class TestAgentConfigInheritance:
@@ -583,6 +603,7 @@ class TestAgentConfigInheritance:
         config = loader.load(str(base_config), "json")
 
         assert config.get("timeout") == 30
+
 
 # =============================================================================
 # Session 9: Agent Sandbox Isolation Tests
@@ -604,9 +625,11 @@ class TestAgentSandboxIsolation:
         assert test_file.exists()
         assert test_file.parent == sandbox
 
+
 # =============================================================================
 # Session 9: Agent Output Validation Tests
 # =============================================================================
+
 
 @pytest.mark.skip(reason="Output validation not implemented")
 class TestAgentOutputValidation:
@@ -616,13 +639,10 @@ class TestAgentOutputValidation:
         """Test validation rule creation."""
         ValidationRule = agent_module.ValidationRule
 
-        rule = ValidationRule(
-            name="test_rule",
-            pattern=".*",
-            severity="warning"
-        )
+        rule = ValidationRule(name="test_rule", pattern=".*", severity="warning")
 
         assert rule.name == "test_rule"
+
 
 # =============================================================================
 # Session 9: Agent Error Aggregation Tests
@@ -637,6 +657,7 @@ class TestAgentCompatibility:
 
         # Should be Python 3.8+
         assert sys.version_info >= (3, 8)
+
 
 # =============================================================================
 # Session 9: Agent Profiling Tests
@@ -656,6 +677,7 @@ class TestAgentProfiling:
 
         assert end >= start
 
+
 # =============================================================================
 # Session 9: Agent Timeout Tests
 # =============================================================================
@@ -671,9 +693,11 @@ class TestAgentExecutionTimeouts:
 
         assert timeout_value > 0
 
+
 # =============================================================================
 # Session 9: Agent Memory Management Tests
 # =============================================================================
+
 
 class TestAgentMemoryManagement:
     """Tests for agent memory management."""
@@ -688,9 +712,11 @@ class TestAgentMemoryManagement:
         # Cache should have entry
         assert cache.get("test", "coder", "hash1") is not None
 
+
 # =============================================================================
 # Session 9: Agent Graceful Shutdown Tests
 # =============================================================================
+
 
 @pytest.mark.skip(reason="Some shutdown features need more work")
 class TestAgentGracefulShutdownBehavior:
@@ -700,18 +726,16 @@ class TestAgentGracefulShutdownBehavior:
         """Test shutdown state."""
         ShutdownState = agent_module.ShutdownState
 
-        state = ShutdownState(
-            requested=True,
-            in_progress=True,
-            completed=False
-        )
+        state = ShutdownState(requested=True, in_progress=True, completed=False)
 
         assert state.requested is True
         assert state.completed is False
 
+
 # =============================================================================
 # Session 9: Agent Concurrent Execution Tests
 # =============================================================================
+
 
 class TestAgentConcurrentExecution:
     """Tests for agent concurrent execution."""
@@ -726,6 +750,7 @@ class TestAgentConcurrentExecution:
             results = list(executor.map(task, [1, 2, 3]))
 
         assert results == [2, 4, 6]
+
 
 # =============================================================================
 # Session 9: Agent Result Caching Tests
@@ -755,6 +780,7 @@ class TestAgentResultCachingBehavior:
         # Different hash should miss
         result = cache.get("file.py", "coder", "new_hash")
         assert result is None
+
 
 # =============================================================================
 # ADVANCED TESTS: Large Repository Performance, Git Operations, Logging

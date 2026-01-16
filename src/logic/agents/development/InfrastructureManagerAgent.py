@@ -23,15 +23,13 @@ Provides tools for remote system administration and automated environment scalin
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class InfrastructureManagerAgent(BaseAgent):
@@ -67,7 +65,9 @@ class InfrastructureManagerAgent(BaseAgent):
         )
 
     @as_tool
-    def control_homeassistant_device(self, entity_id: str, action: str, api_url: str, token: str) -> str:
+    def control_homeassistant_device(
+        self, entity_id: str, action: str, api_url: str, token: str
+    ) -> str:
         """Controls a HomeAssistant device (light, switch, etc.).
         Args:
             entity_id: The HA entity ID (e.g., 'light.living_room').
@@ -80,59 +80,29 @@ class InfrastructureManagerAgent(BaseAgent):
         # url = f"{api_url}/api/services/{entity_id.split('.')[0]}/{action}"
         # headers = {"Authorization": f"Bearer {token}"}
 
-
-
-
-
-
-
-
-
-
-
         return f"Successfully executed `{action}` for `{entity_id}` on HomeAssistant at {api_url}."
 
     @as_tool
-
-
-
-
-
-
-
-
-
-
     def get_system_metrics(self, server_ip: str) -> dict[str, Any]:
         """Retrieves hardware metrics (CPU, RAM, Disk) from a remote server via SSH or SNMP."""
         logging.info(f"INFRA: Fetching metrics for {server_ip}")
         # Mock metrics
         return {
-
-
-
-
-
-
-
-
-
             "server": server_ip,
             "cpu_usage": "15%",
             "ram_free": "8.2GB",
             "disk_status": "Healthy",
-            "uptime": "14 days, 3 hours"
-
+            "uptime": "14 days, 3 hours",
         }
 
     def improve_content(self, prompt: str) -> str:
         return "Infrastructure Manager ready. Provide Proxmox or HomeAssistant credentials to begin orchestration."
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(InfrastructureManagerAgent, "Infra Manager", "Infra logs")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        InfrastructureManagerAgent, "Infra Manager", "Infra logs"
+    )
     main()

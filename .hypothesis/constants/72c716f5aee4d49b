@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\_loss\loss.py
-# hypothesis_version: 6.150.1
-
-[0.5, 0.9, 1.5, 100, 'F', 'absolute_error', 'binomial_loss', 'exponential_loss', 'gamma_loss', 'huber_loss', 'multinomial_loss', 'neither', 'pinball_loss', 'poisson_loss', 'quantile', 'squared_error', 'tweedie_loss']

@@ -3,10 +3,7 @@ from hypothesis import given, strategies as st
 from src.core.base.core.ResilienceCore import ResilienceCore
 
 
-
-
 class TestResilienceCore(unittest.TestCase):
-
     @given(st.data())
     def test_calculate_backoff_bounds(self, data):
         failure_count = data.draw(st.integers(min_value=0, max_value=20))
@@ -28,7 +25,7 @@ class TestResilienceCore(unittest.TestCase):
             # where backoff is capped at max_timeout
 
             exponent = max(0, failure_count - threshold)
-            calc_cap = min(max_timeout, base * (multiplier ** exponent))
+            calc_cap = min(max_timeout, base * (multiplier**exponent))
 
             self.assertGreaterEqual(backoff, base / 2)
             self.assertLessEqual(backoff, calc_cap)
@@ -36,7 +33,7 @@ class TestResilienceCore(unittest.TestCase):
     @given(
         last_failure=st.floats(min_value=0, max_value=1e9),
         current=st.floats(min_value=0, max_value=1e9),
-        timeout=st.floats(min_value=0.1, max_value=1000)
+        timeout=st.floats(min_value=0.1, max_value=1000),
     )
     def test_should_attempt_recovery(self, last_failure, current, timeout):
         result = ResilienceCore.should_attempt_recovery(last_failure, current, timeout)
@@ -48,31 +45,18 @@ class TestResilienceCore(unittest.TestCase):
         success_count=st.integers(min_value=0, max_value=10),
         needed=st.integers(min_value=1, max_value=5),
         failure_count=st.integers(min_value=0, max_value=10),
-        threshold=st.integers(min_value=1, max_value=5)
-
-
-
-
-
-
-
-
-
-
+        threshold=st.integers(min_value=1, max_value=5),
     )
-    def test_evaluate_state_transition(self, state, success_count, needed, failure_count, threshold):
+    def test_evaluate_state_transition(
+        self, state, success_count, needed, failure_count, threshold
+    ):
         new_state = ResilienceCore.evaluate_state_transition(
             state, success_count, needed, failure_count, threshold
-
-
-
-
         )
 
         if state == "CLOSED":
             if failure_count >= threshold:
                 self.assertEqual(new_state, "OPEN")
-
 
             else:
                 self.assertEqual(new_state, "CLOSED")
@@ -80,16 +64,11 @@ class TestResilienceCore(unittest.TestCase):
             if success_count >= needed:
                 self.assertEqual(new_state, "CLOSED")
 
-
-
             else:
                 self.assertEqual(new_state, "HALF_OPEN")
         else:
             self.assertEqual(new_state, state)
 
 
-
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

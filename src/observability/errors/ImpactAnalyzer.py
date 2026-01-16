@@ -21,14 +21,12 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ErrorEntry import ErrorEntry
 from .ErrorImpact import ErrorImpact
 from .ErrorSeverity import ErrorSeverity
 
 __version__ = VERSION
-
-
 
 
 class ImpactAnalyzer:
@@ -78,9 +76,7 @@ class ImpactAnalyzer:
         downstream = self._find_downstream_effects(error.file_path)
 
         impact_score = self._calculate_impact_score(
-            len(affected_files),
-            len(affected_functions),
-            error.severity
+            len(affected_files), len(affected_functions), error.severity
         )
 
         return ErrorImpact(
@@ -88,7 +84,7 @@ class ImpactAnalyzer:
             affected_files=affected_files,
             affected_functions=affected_functions,
             downstream_effects=downstream,
-            impact_score=impact_score
+            impact_score=impact_score,
         )
 
     def _find_affected_files(self, file_path: str) -> list[str]:

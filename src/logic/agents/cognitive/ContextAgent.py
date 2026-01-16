@@ -21,8 +21,10 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.logic.agents.cognitive.context.models.ContextAnnotation import ContextAnnotation
+from src.core.base.Version import VERSION
+from src.logic.agents.cognitive.context.models.ContextAnnotation import (
+    ContextAnnotation,
+)
 from src.logic.agents.cognitive.context.models.ContextPriority import ContextPriority
 from src.logic.agents.cognitive.context.models.ContextTag import ContextTag
 from src.logic.agents.cognitive.context.models.ContextTemplate import ContextTemplate
@@ -67,7 +69,7 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 # Example usage
 ```
 """,
-        required_fields=["Purpose"]
+        required_fields=["Purpose"],
     ),
     "javascript": ContextTemplate(
         name="JavaScript Module",
@@ -89,7 +91,7 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 // Example usage
 ```
 """,
-        required_fields=["Purpose"]
+        required_fields=["Purpose"],
     ),
     "shell": ContextTemplate(
         name="Shell Script",
@@ -113,7 +115,7 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 ## Environment Variables
 [List required environment variables]
 """,
-        required_fields=["Purpose", "Usage"]
+        required_fields=["Purpose", "Usage"],
     ),
     "config": ContextTemplate(
         name="Configuration File",
@@ -132,7 +134,7 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 |--------|------|---------|-------------|
 |        |      |         |             |
 """,
-        required_fields=["Purpose"]
+        required_fields=["Purpose"],
     ),
     "test": ContextTemplate(
         name="Test File",
@@ -152,7 +154,7 @@ DEFAULT_TEMPLATES: dict[str, ContextTemplate] = {
 ## Coverage
 [Note which modules / functions are tested]
 """,
-        required_fields=["Purpose", "Test Cases"]
+        required_fields=["Purpose", "Test Cases"],
     ),
 }
 
@@ -163,23 +165,21 @@ DEFAULT_VALIDATION_RULES: list[ValidationRule] = [
         pattern=r"##\s*Purpose\b",
         message="Context should have a Purpose section",
         severity="error",
-        required=True
+        required=True,
     ),
     ValidationRule(
         name="no_empty_sections",
         pattern=r"##\s*\w+\s*\n\s*\n##",
         message="Empty section detected",
-        severity="warning"
+        severity="warning",
     ),
     ValidationRule(
         name="valid_code_blocks",
         pattern=r"```\w*\n[\s\S]*?```",
         message="Code blocks should have language identifier",
-        severity="info"
+        severity="info",
     ),
 ]
-
-
 
 
 class ContextAgent(BaseAgent):
@@ -193,9 +193,22 @@ class ContextAgent(BaseAgent):
         # Configuration
         self.config = {
             "extensions": [
-                '.py', '.js', '.ts', '.go', '.rs', '.java', '.sh',
-                '.json', '.yaml', '.yml', '.toml', '.ini', '.cfg',
-                '.md', '.rst', '.txt'
+                ".py",
+                ".js",
+                ".ts",
+                ".go",
+                ".rs",
+                ".java",
+                ".sh",
+                ".json",
+                ".yaml",
+                ".yml",
+                ".toml",
+                ".ini",
+                ".cfg",
+                ".md",
+                ".rst",
+                ".txt",
             ]
         }
 
@@ -216,20 +229,24 @@ class ContextAgent(BaseAgent):
     def shard_selection(self, query: str) -> list[str]:
         """Selects the best vector shards based on file path and query sentiment."""
         active_path = str(self.file_path)
-        selected = self.rag_core.route_query_to_shards(query, active_path, self.rag_shards)
+        selected = self.rag_core.route_query_to_shards(
+            query, active_path, self.rag_shards
+        )
         logging.info(f"ContextAgent: Query '{query}' routed to {len(selected)} shards.")
         return selected
 
     def _validate_file_extension(self) -> None:
         """Validate that the file has the correct extension."""
-        if not self.file_path.name.endswith('.description.md'):
-            logging.warning(f"File {self.file_path.name} does not end with .description.md. "
-                             "Context operations may be limited.")
+        if not self.file_path.name.endswith(".description.md"):
+            logging.warning(
+                f"File {self.file_path.name} does not end with .description.md. "
+                "Context operations may be limited."
+            )
 
     def _derive_source_path(self) -> Path | None:
         """Derive source file path from .description.md filename."""
-        if self.file_path.name.endswith('.description.md'):
-            stem = self.file_path.name.replace('.description.md', '')
+        if self.file_path.name.endswith(".description.md"):
+            stem = self.file_path.name.replace(".description.md", "")
             # Use configurable extensions
             for ext in self.config.get("extensions", []):
                 source = self.file_path.parent / f"{stem}{ext}"
@@ -303,7 +320,7 @@ class ContextAgent(BaseAgent):
         if not template:
             return self._get_default_content()
 
-        filename = self.file_path.name.replace('.description.md', '')
+        filename = self.file_path.name.replace(".description.md", "")
         return template.template_content.format(filename=filename)
 
     # ========== Tagging ==========
@@ -334,10 +351,7 @@ class ContextAgent(BaseAgent):
     # ========== Versioning ==========
 
     def create_version(
-        self,
-        version: str,
-        changes: list[str] | None = None,
-        author: str = ""
+        self, version: str, changes: list[str] | None = None, author: str = ""
     ) -> ContextVersion:
         """Create a new version snapshot."""
         content = self.current_content or self.previous_content or ""
@@ -348,7 +362,7 @@ class ContextAgent(BaseAgent):
             timestamp=datetime.now().isoformat(),
             content_hash=content_hash,
             changes=changes or [],
-            author=author
+            author=author,
         )
 
         self._versions.append(version_obj)
@@ -377,7 +391,7 @@ class ContextAgent(BaseAgent):
             "from_hash": ver1.content_hash,
             "to_hash": ver2.content_hash,
             "changed": ver1.content_hash != ver2.content_hash,
-            "changes_v2": ver2.changes
+            "changes_v2": ver2.changes,
         }
 
     # ========== Compression ==========
@@ -432,22 +446,26 @@ class ContextAgent(BaseAgent):
             if rule.required:
                 # Required patterns must be present
                 if not re.search(rule.pattern, content):
-                    issues.append({
-                        "rule": rule.name,
-                        "message": rule.message,
-                        "severity": rule.severity,
-                        "required": True
-                    })
+                    issues.append(
+                        {
+                            "rule": rule.name,
+                            "message": rule.message,
+                            "severity": rule.severity,
+                            "required": True,
+                        }
+                    )
             else:
                 # Non - required patterns are warnings when matched
                 matches = re.findall(rule.pattern, content)
                 if matches and rule.severity != "info":
-                    issues.append({
-                        "rule": rule.name,
-                        "message": rule.message,
-                        "severity": rule.severity,
-                        "matches": len(matches)
-                    })
+                    issues.append(
+                        {
+                            "rule": rule.name,
+                            "message": rule.message,
+                            "severity": rule.severity,
+                            "matches": len(matches),
+                        }
+                    )
 
         return issues
 
@@ -459,10 +477,7 @@ class ContextAgent(BaseAgent):
     # ========== Annotations ==========
 
     def add_annotation(
-        self,
-        line_number: int,
-        content: str,
-        author: str = ""
+        self, line_number: int, content: str, author: str = ""
     ) -> ContextAnnotation:
         """Add an annotation to the context."""
         annotation = ContextAnnotation(
@@ -470,7 +485,7 @@ class ContextAgent(BaseAgent):
             line_number=line_number,
             content=content,
             author=author,
-            timestamp=datetime.now().isoformat()
+            timestamp=datetime.now().isoformat(),
         )
         self._annotations.append(annotation)
         return annotation
@@ -600,14 +615,14 @@ class ContextAgent(BaseAgent):
             "tags": [t.name for t in self._tags.values()],
             "versions": len(self._versions),
             "annotations": len(self._annotations),
-            "custom": self._metadata
+            "custom": self._metadata,
         }
         return json.dumps(data, indent=2)
 
     # ========== Core Methods ==========
     def _get_default_content(self) -> str:
         """Return rich, structured template for new descriptions."""
-        self.file_path.name.replace('.description.md', '')
+        self.file_path.name.replace(".description.md", "")
         return """# Description: `{filename}`
 
 ## Purpose
@@ -625,9 +640,11 @@ class ContextAgent(BaseAgent):
 
     def _get_fallback_response(self) -> str:
         """Return fallback response when Copilot is unavailable."""
-        return ("# AI Improvement Unavailable\n"
-                "# GitHub CLI not found. Install from https://cli.github.com/\n\n"
-                "# Original content preserved below:\n\n")
+        return (
+            "# AI Improvement Unavailable\n"
+            "# GitHub CLI not found. Install from https://cli.github.com/\n\n"
+            "# Original content preserved below:\n\n"
+        )
 
     def improve_content(self, prompt: str) -> str:
         """Use AI to improve the context.
@@ -641,7 +658,7 @@ class ContextAgent(BaseAgent):
             logging.debug(f"Using source file: {self.source_path}")
             try:
                 # Limit source code to 8000 chars to avoid token limits
-                source_code = self.source_path.read_text(encoding='utf-8')[:8000]
+                source_code = self.source_path.read_text(encoding="utf-8")[:8000]
                 enhanced_prompt = (
                     f"{prompt}\n\n"
                     f"Source code to analyze ({self.source_path.name}):\n"

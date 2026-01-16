@@ -21,7 +21,7 @@
 """Auto-extracted class from agent_test_utils.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .CleanupStrategy import CleanupStrategy
 from pathlib import Path
 from typing import Any
@@ -30,8 +30,6 @@ import logging
 import shutil
 
 __version__ = VERSION
-
-
 
 
 class TestDataCleaner:
@@ -45,6 +43,7 @@ class TestDataCleaner:
         cleaner.register_file(temp_file)
         cleaner.cleanup_all()
     """
+
     __test__ = False
 
     def __init__(self, strategy: CleanupStrategy = CleanupStrategy.IMMEDIATE) -> None:

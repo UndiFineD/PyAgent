@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\orchestration\IntelligenceOrchestrator.py
-# hypothesis_version: 6.150.1
-
-['.', 'High', 'Medium', 'agent', 'bottleneck', 'confidence', 'description', 'error', 'failure', 'id', 'insight', 'insights_collected', 'missing', 'origin_pattern', 'patterns_identified', 'quantum', 'reinitialize', 'severity', 'sql_metadata', 'timestamp', 'top_patterns', 'workspace_root']

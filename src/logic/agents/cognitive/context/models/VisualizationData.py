@@ -21,14 +21,14 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.logic.agents.cognitive.context.models.VisualizationType import VisualizationType
+from src.core.base.Version import VERSION
+from src.logic.agents.cognitive.context.models.VisualizationType import (
+    VisualizationType,
+)
 from dataclasses import dataclass, field
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 @dataclass
@@ -41,6 +41,7 @@ class VisualizationData:
         edges: List of edge connections.
         layout: Layout algorithm to use.
     """
+
     viz_type: VisualizationType
     nodes: list[dict[str, Any]] = field(default_factory=lambda: [])
     edges: list[tuple[str, str]] = field(default_factory=lambda: [])

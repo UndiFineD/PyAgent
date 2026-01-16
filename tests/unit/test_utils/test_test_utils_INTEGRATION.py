@@ -12,21 +12,19 @@ import tempfile
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
     class agent_sys_path:
         def __enter__(self) -> Self:
-
             return self
-
-
-
-
-
-
 
         def __exit__(self, *args) -> None:
             sys.path.remove(str(AGENT_DIR))
@@ -122,12 +120,12 @@ class TestIntegration(unittest.TestCase):
 
     def test_integration_with_fixtures(self) -> None:
         """Test integration with fixtures."""
-        with tempfile.NamedTemporaryFile(mode='w', delete=False) as f:
+        with tempfile.NamedTemporaryFile(mode="w", delete=False) as f:
             f.write("test data")
             filename: str = f.name
 
         try:
-            with open(filename, 'r') as f:
+            with open(filename, "r") as f:
                 content = f.read()
 
             self.assertEqual(content, "test data")

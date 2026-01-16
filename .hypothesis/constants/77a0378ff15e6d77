@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_dynamo\variables\torch_function.py
-# hypothesis_version: 6.150.1
-
-['PyCodegen', 'VariableTracker', '__class__', '__enter__', '__exit__', '__torch_function__', 'class_type', 'fget', 'torch_function_fn']

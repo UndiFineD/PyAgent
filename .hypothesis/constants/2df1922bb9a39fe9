@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\security\ImmuneResponseOrchestrator.py
-# hypothesis_version: 6.150.1
-
-[0.999, 'Deployed', 'ImmuneResponse', 'Internal', 'Shield', 'active_threats', 'all', 'attempts_neutralized', 'deployed_at', 'developer mode', 'ignore all previous', 'injection_detected', 'input', 'last_scan', 'nodes_affected', 'patch_applied', 'patched', 'prompt_injection', 'remediated', 'safe', 'status', 'system prompt', 'system_integrity', 'threat_type', 'timestamp', 'type', 'vulnerability']

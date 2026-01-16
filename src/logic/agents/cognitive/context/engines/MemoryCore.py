@@ -24,7 +24,7 @@ Handles episode structuring, utility scoring, and rank-based filtering.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from typing import Any
 from datetime import datetime
 
@@ -36,19 +36,27 @@ except ImportError:
 __version__ = VERSION
 
 
-
-
 class MemoryCore:
     """Logic for episodic memory construction and utility estimation."""
+
     def __init__(self, baseline_utility: float = 0.5) -> None:
         self.baseline_utility = baseline_utility
 
-    def create_episode(self, agent_name: str, task: str, outcome: str, success: bool, metadata: dict[str, Any] | None = None) -> dict[str, Any]:
+    def create_episode(
+        self,
+        agent_name: str,
+        task: str,
+        outcome: str,
+        success: bool,
+        metadata: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
         """Pure logic to construct an episode and calculate utility."""
         if rc:
             try:
                 meta = metadata or {}
-                return rc.create_episode_struct(agent_name, task, outcome, success, meta, self.baseline_utility)  # type: ignore[attr-defined]
+                return rc.create_episode_struct(
+                    agent_name, task, outcome, success, meta, self.baseline_utility
+                )  # type: ignore[attr-defined]
             except Exception:
                 pass
 
@@ -67,7 +75,7 @@ class MemoryCore:
             "outcome": outcome,
             "success": success,
             "utility_score": max(0.0, min(1.0, utility_score)),
-            "metadata": metadata or {}
+            "metadata": metadata or {},
         }
 
     def format_for_indexing(self, episode: dict[str, Any]) -> str:
@@ -83,6 +91,8 @@ class MemoryCore:
         """Logic for utility score decay/boost."""
         return max(0.0, min(1.0, old_score + increment))
 
-    def filter_relevant_memories(self, memories: list[dict[str, Any]], min_utility: float = 0.3) -> list[dict[str, Any]]:
+    def filter_relevant_memories(
+        self, memories: list[dict[str, Any]], min_utility: float = 0.3
+    ) -> list[dict[str, Any]]:
         """Filters memories by utility threshold."""
-        return [m for m in memories if m.get('utility_score', 0.0) >= min_utility]
+        return [m for m in memories if m.get("utility_score", 0.0) >= min_utility]

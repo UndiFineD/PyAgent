@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\stats\agents.py
-# hypothesis_version: 6.150.1
-
-['Reporting', 'files_with_changes', 'files_with_context', 'files_with_errors', 'files_with_tests', 'total_files']

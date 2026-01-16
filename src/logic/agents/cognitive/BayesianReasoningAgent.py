@@ -23,15 +23,13 @@ Applies Bayes' theorem to update beliefs based on new evidence.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class BayesianReasoningAgent(BaseAgent):
@@ -48,7 +46,9 @@ class BayesianReasoningAgent(BaseAgent):
         self.beliefs: dict[str, Any] = {}
 
     @as_tool
-    def update_belief(self, concept: str, evidence_observed: str, likelihood: float) -> dict[str, float]:
+    def update_belief(
+        self, concept: str, evidence_observed: str, likelihood: float
+    ) -> dict[str, float]:
         """
         Updates the posterior probability of a concept given new evidence.
         Formula: P(H|E) = (P(E|H) * P(H)) / P(E)
@@ -71,7 +71,9 @@ class BayesianReasoningAgent(BaseAgent):
         # Update internal state
         self.beliefs[concept]["prior"] = posterior
 
-        logging.info(f"BayesianAgent: Updated belief for '{concept}' to {posterior:.4f} based on '{evidence_observed}'")
+        logging.info(
+            f"BayesianAgent: Updated belief for '{concept}' to {posterior:.4f} based on '{evidence_observed}'"
+        )
         return {"concept": concept, "posterior": posterior, "prior_was": prior}
 
     @as_tool
@@ -88,47 +90,30 @@ class BayesianReasoningAgent(BaseAgent):
             concept = action.get("success_prob_concept")
             prob = self.beliefs.get(concept, {}).get("prior", 0.5) if concept else 1.0
 
-
-
-
-
-
             expected_utility = action["utility"] * prob
             results.append(f"{action['name']}: {expected_utility:.2f}")
 
-            if expected_utility > max_utility :
-
-
-
-
+            if expected_utility > max_utility:
                 max_utility = expected_utility
                 best_action = action["name"]
 
         return f"Policy Decision: Recommended '{best_action}'. Analysis: {', '.join(results)}"
-
-
-
 
     def improve_content(self, input_text: str) -> str:
         """Analyzes text for uncertainty and provides Bayesian calibration."""
         prompt = (
             "Analyze the following report or code for potential uncertainties or failure points. "
             "Assign probabilistic confidence scores to different success paths and suggest a "
-
-
-
-
             "Bayesian strategy to mitigate risks.\n\n"
             f"Content:\n{input_text}"
         )
         return self.think(prompt)
 
 
-
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(BayesianReasoningAgent, "Bayesian Agent", "Belief store path")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        BayesianReasoningAgent, "Bayesian Agent", "Belief store path"
+    )
     main()

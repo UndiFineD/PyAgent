@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 import hashlib
 import hmac
@@ -11,19 +10,13 @@ except ImportError:
     rc: Any = None  # type: ignore[no-redef]
 
 
-
-
 @dataclass(frozen=True)
 class AgentIdentity:
-
-
-
-
     """Immutable identity representation for a peer agent during discovery."""
+
     agent_id: str
     public_key: str
     claims: dict[str, Any]
-
 
 
 class IdentityCore:
@@ -48,7 +41,9 @@ class IdentityCore:
                 return rc.sign_payload(payload, secret_key)  # type: ignore[attr-defined]
             except Exception:
                 pass
-        return hmac.new(secret_key.encode(), payload.encode(), hashlib.sha256).hexdigest()
+        return hmac.new(
+            secret_key.encode(), payload.encode(), hashlib.sha256
+        ).hexdigest()
 
     def verify_signature(self, payload: str, signature: str, public_key: str) -> bool:
         """Verifies a payload signature (simulated verification)."""

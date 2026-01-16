@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\linear_model\_perceptron.py
-# hypothesis_version: 6.150.1
-
-[0.0001, 0.001, 0.1, 0.15, 0.5, 1.0, 1000, 'alpha', 'average', 'both', 'constant', 'elasticnet', 'eta0', 'l1', 'l1_ratio', 'l2', 'left', 'loss', 'neither', 'penalty', 'perceptron']

@@ -24,7 +24,7 @@ Mocks integration with Azure Key Vault or HashiCorp Vault.
 
 from __future__ import annotations
 from typing import Any
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import os
 import json
 import logging
@@ -33,15 +33,17 @@ from .SecretCore import SecretCore
 __version__ = VERSION
 
 
-
-
 class SecretManager:
     """
     Provides secure access to credentials and API keys.
     Shell for SecretCore.
     """
 
-    def __init__(self, provider: str = "local", vault_path: str = "data/memory/agent_store/vault.json") -> None:
+    def __init__(
+        self,
+        provider: str = "local",
+        vault_path: str = "data/memory/agent_store/vault.json",
+    ) -> None:
         self.provider = provider
         self.vault_path = vault_path
         self.core = SecretCore()
@@ -50,7 +52,7 @@ class SecretManager:
             "local": self._fetch_local,
             "azure": self._fetch_azure,
             "vault": self._fetch_vault,
-            "file": self._fetch_file_vault
+            "file": self._fetch_file_vault,
         }
         self._load_file_vault()
 
@@ -60,7 +62,9 @@ class SecretManager:
             try:
                 with open(self.vault_path) as f:
                     self._cache.update(json.load(f))
-                logging.info(f"Loaded {len(self._cache)} secrets from {self.vault_path}")
+                logging.info(
+                    f"Loaded {len(self._cache)} secrets from {self.vault_path}"
+                )
             except Exception as e:
                 logging.error(f"Failed to load vault file: {e}")
 

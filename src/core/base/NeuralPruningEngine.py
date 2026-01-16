@@ -20,7 +20,7 @@
 
 from __future__ import annotations
 from typing import Any
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import time
 import os
@@ -29,15 +29,15 @@ import numpy as np
 from typing import TYPE_CHECKING
 from src.core.base.core.PruningCore import PruningCore, SynapticWeight
 
+try:
+    import rust_core as rc
+except ImportError:
+    rc = None
+
 __version__ = VERSION
 
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
-
-
-
-
-
 
 
 class NeuralPruningEngine:
@@ -54,8 +54,12 @@ class NeuralPruningEngine:
         self.weights: dict[str, SynapticWeight] = {}  # path_id -> weight dataclass
         self.usage_statistics: dict[str, int] = {}  # path_id -> hits
         self.cost_statistics: dict[str, float] = {}  # path_id -> total_tokens
-        self.performance_statistics: dict[str, list[bool]] = {}  # path_id -> success/fail history
-        self.interaction_history: list[tuple[str, str, float]] = []  # (agent_a, agent_b, timestamp)
+        self.performance_statistics: dict[
+            str, list[bool]
+        ] = {}  # path_id -> success/fail history
+        self.interaction_history: list[
+            tuple[str, str, float]
+        ] = []  # (agent_a, agent_b, timestamp)
         self.current_cycle: int = 0
 
     @property
@@ -76,8 +80,33 @@ class NeuralPruningEngine:
         """
         logging.info("NeuralPruningEngine: Clustering agent interactions.")
 
-        # 1. Build adjacency matrix from interaction history
-        agents = sorted(list(set([a for a, b, t in self.interaction_history] + [b for a, b, t in self.interaction_history])))
+        # 1. Rust-Accelerated Clustering (Phase 321 Acceleration)
+        if rc:
+            try:
+                # Pre-calculate weights with decay in a list of tuples for Rust
+                now = time.time()
+                interactions = []
+                for a, b, t in self.interaction_history:
+                    age = (now - t) / 3600 # hours
+                    weight = np.exp(-age)
+                    interactions.append((a, b, float(weight)))
+                
+                # Call Rust
+                clusters = rc.cluster_interactions_rust(interactions, 0.5, 2)
+                logging.info(f"NeuralPruningEngine: Identified {len(clusters)} active agent clusters (Rust).")
+                return clusters
+            except Exception as e:
+                logging.error(f"NeuralPruningEngine: Rust clustering failed: {e}")
+
+        # 1. Build adjacency matrix from interaction history (Python Fallback)
+        agents = sorted(
+            list(
+                set(
+                    [a for a, b, t in self.interaction_history]
+                    + [b for a, b, t in self.interaction_history]
+                )
+            )
+        )
         if not agents:
             return {}
 
@@ -101,7 +130,8 @@ class NeuralPruningEngine:
         min_samples = 2
 
         for i in range(n):
-            if labels[i] != -1: continue
+            if labels[i] != -1:
+                continue
 
             # Find neighbors
             neighbors = [j for j in range(n) if adj[i, j] > eps]
@@ -121,18 +151,25 @@ class NeuralPruningEngine:
 
         res: dict[Any, Any] = {}
         for i, label in enumerate(labels):
-            if label not in res: res[label] = []
+            if label not in res:
+                res[label] = []
             res[label].append(agents[i])
 
-        logging.info(f"NeuralPruningEngine: Identified {cluster_id} active agent clusters.")
+        logging.info(
+            f"NeuralPruningEngine: Identified {cluster_id} active agent clusters."
+        )
         return res
 
-    def perform_dead_code_analysis(self, search_root: str = "src") -> dict[str, list[str]]:
+    def perform_dead_code_analysis(
+        self, search_root: str = "src"
+    ) -> dict[str, list[str]]:
         """
         Performs workspace-wide static analysis to identify functions/classes with zero references.
         Returns a dictionary mapping file paths to lists of 'dead' symbols.
         """
-        logging.info(f"NeuralPruningEngine: Starting dead code analysis in {search_root}")
+        logging.info(
+            f"NeuralPruningEngine: Starting dead code analysis in {search_root}"
+        )
         dead_symbols: dict[str, list[str]] = {}
 
         # 1. Discover all symbols
@@ -145,7 +182,9 @@ class NeuralPruningEngine:
                     if file_path not in dead_symbols:
                         dead_symbols[file_path] = []
                     dead_symbols[file_path].append(symbol)
-                    logging.warning(f"NeuralPruningEngine: Identified potentially dead symbol: {symbol} in {file_path}")
+                    logging.warning(
+                        f"NeuralPruningEngine: Identified potentially dead symbol: {symbol} in {file_path}"
+                    )
 
         return dead_symbols
 
@@ -154,7 +193,9 @@ class NeuralPruningEngine:
         Identify classes/modules that are almost identical and suggest merges.
         Returns a list of (file1, file2, similarity_score).
         """
-        logging.info("NeuralPruningEngine: Identifying redundant logic for merge suggestions.")
+        logging.info(
+            "NeuralPruningEngine: Identifying redundant logic for merge suggestions."
+        )
         suggestions: list[tuple[str, str, float]] = []
 
         files = []
@@ -164,14 +205,23 @@ class NeuralPruningEngine:
                     files.append(os.path.join(root, f))
 
         # Basic similarity check (heuristic: symbol overlap)
-        processed_pairs: set[Any] = set()
         definitions = self._discover_definitions(search_root)
 
         for i, file1 in enumerate(files):
-            for file2 in files[i+1:]:
+            for file2 in files[i + 1 :]:
                 # Check for redundant Core/Engine naming patterns (Phase 253)
-                base1 = os.path.basename(file1).replace("Core.py", "").replace("Engine.py", "").replace("Manager.py", "")
-                base2 = os.path.basename(file2).replace("Core.py", "").replace("Engine.py", "").replace("Manager.py", "")
+                base1 = (
+                    os.path.basename(file1)
+                    .replace("Core.py", "")
+                    .replace("Engine.py", "")
+                    .replace("Manager.py", "")
+                )
+                base2 = (
+                    os.path.basename(file2)
+                    .replace("Core.py", "")
+                    .replace("Engine.py", "")
+                    .replace("Manager.py", "")
+                )
 
                 if base1 == base2 and base1:
                     symbols1 = definitions.get(file1, set())
@@ -185,7 +235,9 @@ class NeuralPruningEngine:
 
                     if similarity > 0.6:  # High similarity
                         suggestions.append((file1, file2, similarity))
-                        logging.info(f"NeuralPruningEngine: Suggested MERGE: {file1} <-> {file2} ({similarity:.2f} similarity)")
+                        logging.info(
+                            f"NeuralPruningEngine: Suggested MERGE: {file1} <-> {file2} ({similarity:.2f} similarity)"
+                        )
 
         return suggestions
 
@@ -211,7 +263,9 @@ class NeuralPruningEngine:
                         continue
         return defs
 
-    def _is_symbol_used(self, symbol: str, definition_file: str, search_root: str) -> bool:
+    def _is_symbol_used(
+        self, symbol: str, definition_file: str, search_root: str
+    ) -> bool:
         """Checks if a symbol is used outside its definition file."""
         # This is a heuristic: search workspace for the string
         # In a real engine, we'd use 'list_code_usages' or 'grep'
@@ -225,7 +279,9 @@ class NeuralPruningEngine:
 
     def _get_or_create_weight(self, path_id: str) -> SynapticWeight:
         if path_id not in self.weights:
-            self.weights[path_id] = SynapticWeight(agent_id=path_id, weight=1.0, last_fired=time.time())
+            self.weights[path_id] = SynapticWeight(
+                agent_id=path_id, weight=1.0, last_fired=time.time()
+            )
         return self.weights[path_id]
 
     def record_usage(self, path_id: str) -> str:
@@ -244,10 +300,12 @@ class NeuralPruningEngine:
             weight=new_weight,
             last_fired=time.time(),
             last_fired_cycle=self.current_cycle,
-            refractory_until=time.time() + 5.0  # 5s refractory
+            refractory_until=time.time() + 5.0,  # 5s refractory
         )
 
-    def record_performance(self, path_id: str, success: bool, cost: float = 0.0) -> None:
+    def record_performance(
+        self, path_id: str, success: bool, cost: float = 0.0
+    ) -> None:
         """Records performance and cost for a path, adjusting synaptic weight.
 
         Args:
@@ -263,7 +321,11 @@ class NeuralPruningEngine:
         self.performance_statistics[path_id].append(success)
 
         # Phase 276: Dynamic SynapticAdjustmentFactor
-        median_cost = np.median(list(self.cost_statistics.values())) if self.cost_statistics else 1.0
+        median_cost = (
+            np.median(list(self.cost_statistics.values()))
+            if self.cost_statistics
+            else 1.0
+        )
         adjustment_factor = 1.0 / (1.0 + (cost / max(1.0, median_cost)))
 
         # Calculate weight adjustment
@@ -271,7 +333,11 @@ class NeuralPruningEngine:
         current_weight = weight_obj.weight
 
         # Success bonus / Failure penalty (scaled by adjustment factor)
-        multiplier = (1.0 + (0.15 * adjustment_factor)) if success else (1.0 - (0.3 / adjustment_factor))
+        multiplier = (
+            (1.0 + (0.15 * adjustment_factor))
+            if success
+            else (1.0 - (0.3 / adjustment_factor))
+        )
 
         # Performance trend (last 5)
         recent_perf = self.performance_statistics[path_id][-5:]
@@ -298,7 +364,9 @@ class NeuralPruningEngine:
             if idle_cycles >= 50:
                 # 50-cycle penalty: Reduce by 50%
                 weight_obj.weight *= 0.5
-                logging.info(f"NeuralPruningEngine: 50-cycle idle penalty for {path_id} (New weight: {weight_obj.weight:.2f})")
+                logging.info(
+                    f"NeuralPruningEngine: 50-cycle idle penalty for {path_id} (New weight: {weight_obj.weight:.2f})"
+                )
             else:
                 # Standard decay
                 weight_obj.weight *= 0.9
@@ -325,5 +393,7 @@ class NeuralPruningEngine:
 
         # Select agent with highest synaptic weight
         best_agent = max(candidate_agents, key=lambda a: self.get_firing_priority(a))
-        logging.info(f"NeuralPruningEngine: Optimized inference selecting '{best_agent}' for task.")
+        logging.info(
+            f"NeuralPruningEngine: Optimized inference selecting '{best_agent}' for task."
+        )
         return best_agent

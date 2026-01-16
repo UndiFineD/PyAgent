@@ -8,8 +8,8 @@ for monitoring PyAgent system performance and health.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
-from .observability_core import (
+from src.core.base.Version import VERSION as VERSION
+from .ObservabilityCore import (
     Metric as Metric,
     MetricType as MetricType,
     Alert as Alert,
@@ -29,9 +29,9 @@ from .observability_core import (
     StreamingConfig as StreamingConfig,
     StreamingProtocol as StreamingProtocol,
     DerivedMetric as DerivedMetric,
-    StatsNamespace as StatsNamespace
+    StatsNamespace as StatsNamespace,
 )
-from .metrics_engine import (
+from .MetricsEngine import (
     ObservabilityEngine as ObservabilityEngine,
     DerivedMetricCalculator as DerivedMetricCalculator,
     CorrelationAnalyzer as CorrelationAnalyzer,
@@ -53,43 +53,40 @@ from .metrics_engine import (
     ABComparator as ABComparator,
     ABComparisonResult as ABComparisonResult,
     ABSignificanceResult as ABSignificanceResult,
-    ABComparison as ABComparison
+    ABComparison as ABComparison,
 )
-from .exporters import (
+from .Exporters import (
     MetricsExporter as MetricsExporter,
     StatsExporter as StatsExporter,
     PrometheusExporter as PrometheusExporter,
     CloudExporter as CloudExporter,
     OTelManager as OTelManager,
-    Span as Span
+    Span as Span,
 )
 from .StatsAgent import StatsAgent as StatsAgent
 from .ReportingAgent import ReportingAgent as ReportingAgent
 from .TransparencyAgent import TransparencyAgent as TransparencyAgent
 
-from .api import (
-    StatsAPIServer as StatsAPIServer,
-    APIEndpoint as APIEndpoint
-)
-from .streaming import (
+from .API import StatsAPIServer as StatsAPIServer, APIEndpoint as APIEndpoint
+from .Streaming import (
     StatsStreamManager as StatsStreamManager,
-    StatsStreamer as StatsStreamer
+    StatsStreamer as StatsStreamer,
 )
-from .engine import StatsNamespaceManager as StatsNamespaceManager
-from .namespaces import MetricNamespaceManager as MetricNamespaceManager
-from .federation import StatsFederation as StatsFederation
-from .alerting import ThresholdAlertManager as ThresholdAlertManager
-from .access import StatsAccessController as StatsAccessController
-from .storage_engine import (
+from .Engine import StatsNamespaceManager as StatsNamespaceManager
+from .Namespaces import MetricNamespaceManager as MetricNamespaceManager
+from .Federation import StatsFederation as StatsFederation
+from .Alerting import ThresholdAlertManager as ThresholdAlertManager
+from .Access import StatsAccessController as StatsAccessController
+from .StorageEngine import (
     StatsBackupManager as StatsBackupManager,
     StatsSnapshotManager as StatsSnapshotManager,
-    StatsCompressor as StatsCompressor
+    StatsCompressor as StatsCompressor,
 )
-from .subs_engine import (
+from .SubsEngine import (
     AnnotationManager as AnnotationManager,
     StatsAnnotationManager as StatsAnnotationManager,
     SubscriptionManager as SubscriptionManager,
-    StatsSubscriptionManager as StatsSubscriptionManager
+    StatsSubscriptionManager as StatsSubscriptionManager,
 )
 
 __version__ = VERSION

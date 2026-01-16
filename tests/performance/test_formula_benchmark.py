@@ -4,7 +4,7 @@ This establishes the baseline before Rust conversion.
 """
 
 import time
-from src.observability.stats.metrics_engine import FormulaEngineCore
+from src.observability.stats.Metrics_engine import FormulaEngineCore
 
 
 def benchmark_simple_operation(iterations: int = 10000) -> float:

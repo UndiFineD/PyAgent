@@ -3,8 +3,6 @@ from hypothesis import given, strategies as st
 from src.observability.stats.MetricsCore import ModelFallbackCore
 
 
-
-
 class TestModelFallbackCore(unittest.TestCase):
     def setUp(self):
         self.core = ModelFallbackCore()
@@ -12,13 +10,13 @@ class TestModelFallbackCore(unittest.TestCase):
     @given(
         max_cost=st.floats(min_value=0.0, max_value=1.0),
         req_speed=st.floats(min_value=0.0, max_value=1.0),
-        req_quality=st.floats(min_value=0.0, max_value=1.0)
+        req_quality=st.floats(min_value=0.0, max_value=1.0),
     )
     def test_select_best_model(self, max_cost, req_speed, req_quality):
         constraints = {
             "max_cost": max_cost,
             "required_speed": req_speed,
-            "required_quality": req_quality
+            "required_quality": req_quality,
         }
         model = self.core.select_best_model(constraints)
         self.assertIsInstance(model, str)
@@ -59,49 +57,26 @@ class TestModelFallbackCore(unittest.TestCase):
         # So `ModelFallbackCore` capabilities "cost" seem to be WRONG or I am misinterpreting "cost" field.
         # Unless "cost" means "Performance Cost" or something.
 
-
-
-
-
-
-
-
-
-
         # BUT, `select_best_model` is pure logic. I should test that logic matches.
 
         # Scenario: max_cost = 0.2.
         # Models with cost <= 0.2: gpt-4 (0.1), claude-3-opus (0.15).
-
-
-
 
         # Should return one of them.
         constraints = {"max_cost": 0.2}
         model = self.core.select_best_model(constraints)
         self.assertIn(model, ["gpt-4", "claude-3-opus"])
 
-
-
-
     def test_get_fallback_chain_known(self):
         chain = self.core.get_fallback_chain("gpt-4")
         self.assertEqual(chain, ["gpt-4-turbo", "gpt-3.5-turbo", "claude-3-opus"])
 
     def test_get_fallback_chain_unknown(self):
-
-
-
-
         chain = self.core.get_fallback_chain("unknown-model")
         # Should return all keys
         self.assertEqual(len(chain), 5)
         self.assertIn("gpt-4", chain)
 
 
-
-
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

@@ -21,18 +21,17 @@
 """Container for shared state and context between agents in a workflow."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from dataclasses import dataclass, field
 from typing import Any
 
 __version__ = VERSION
 
 
-
-
 @dataclass
 class WorkflowState:
     """Maintains context, variables, and history for a multi-agent session."""
+
     task_id: str
     original_request: str
     variables: dict[str, Any] = field(default_factory=dict)
@@ -47,8 +46,10 @@ class WorkflowState:
         return self.variables.get(key, default)
 
     def add_history(self, agent: str, action: str, result: str) -> None:
-        self.history.append({
-            "agent": agent,
-            "action": action,
-            "result": result[:500] + "..." if len(result) > 500 else result
-        })
+        self.history.append(
+            {
+                "agent": agent,
+                "action": action,
+                "result": result[:500] + "..." if len(result) > 500 else result,
+            }
+        )

@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\backend\UsageQuotaManager.py
-# hypothesis_version: 6.150.1
-
-[100, 1000, 3600, 86400, 'daily_limit', 'daily_remaining', 'daily_used', 'hourly_limit', 'hourly_remaining', 'hourly_used']

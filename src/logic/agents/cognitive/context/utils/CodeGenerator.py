@@ -21,12 +21,10 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.logic.agents.cognitive.context.models.GeneratedCode import GeneratedCode
 
 __version__ = VERSION
-
-
 
 
 class CodeGenerator:
@@ -95,7 +93,9 @@ class CodeGenerator:
             context_snippets.append(context)
 
         # Simplified generation - in production, use an LLM.
-        context_header = "" if not used_contexts else f"# Context used: {', '.join(used_contexts)}\n"
+        context_header = (
+            "" if not used_contexts else f"# Context used: {', '.join(used_contexts)}\n"
+        )
         code = (
             f"# Generated for: {prompt}\n"
             f"{context_header}"

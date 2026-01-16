@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\distributed\_shard\sharded_tensor\api.py
-# hypothesis_version: 6.150.1
-
-['_sharded_tensor_id', 'copy', 'cpu', 'cuda', 'device', 'dtype', 'gloo', 'layout', 'local ShardMetadata', 'memory_format', 'non_blocking', 'pin_memory', 'process_group', 'requires_grad', 'size', 'tensor property']

@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sympy\core\evalf.py
-# hypothesis_version: 6.150.1
-
-[-3.321, 0.0, 2.0, 2.5, 100, 333, '### input', '### output', '### raw', '-inf', 'A', 'ADD: wanted', 'Abs', 'Add', 'AlgebraicNumber', 'B', 'D', 'Float', 'Integer', 'Integral', 'MUL: wanted', 'Mul', 'Pow', 'Product', 'Rational', 'SIN/COS/TAN', 'Sum', '_as_mpf_val', '_cache', 'accurate bits, got', 'as_real_imag', 'atan', 'ceiling', 'chop', 'eps must be positive', 'exp', 'floor', 'func', 'gap', 'im', 'inf', 'log', 'maxprec', 'osc', 'quad', 're', 'richardson', 'sign must be +/-1', 'strict', 'subs', 'verbose', 'wanted']

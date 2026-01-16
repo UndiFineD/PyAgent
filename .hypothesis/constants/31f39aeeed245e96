@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\core\base\managers\BatchManagers.py
-# hypothesis_version: 6.150.1
-
-[0.0, 'avg_time', 'batch_size', 'failed', 'processed', 'success_rate', 'successful', 'total_time']

@@ -19,7 +19,7 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import time
 from pathlib import Path
@@ -34,11 +34,6 @@ if TYPE_CHECKING:
     from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
 
-
-
-
-
-
 class BatchRequest:
     """Request in a batch processing queue."""
 
@@ -47,59 +42,39 @@ class BatchRequest:
         file_path: Path | None = None,
         prompt: str | None = None,
         priority: FilePriority = FilePriority.NORMAL,
-
-
-
-
-
-
-
-
-
-
         callback: Callable[[str], None] | None = None,
-        max_size: int | None = None
+        max_size: int | None = None,
     ) -> None:
-
-
-
         self.file_path = file_path
         self.prompt = prompt or ""
         self.priority = priority
         self.callback = callback
-
-
-
-
 
         self.max_size = max_size
         self.items: list[Any] = []
 
     def add(self, item: Any) -> None:
         if self.max_size is not None and len(self.items) >= self.max_size:
-
             return
         self.items.append(item)
 
     @property
     def size(self) -> int:
-
-
-
-
         return len(self.items)
 
     def execute(self, processor: Callable[[list[Any]], list[Any]]) -> list[Any]:
         return processor(self.items)
 
 
-
-
-
 class RequestBatcher:
     """Batch processor for multiple file requests."""
 
-    def __init__(self, batch_size: int = 10, max_concurrent: int = 4, recorder: LocalContextRecorder | None = None) -> None:
+    def __init__(
+        self,
+        batch_size: int = 10,
+        max_concurrent: int = 4,
+        recorder: LocalContextRecorder | None = None,
+    ) -> None:
         self.batch_size = batch_size
         self.max_concurrent = max_concurrent
         self.recorder = recorder
@@ -122,13 +97,17 @@ class RequestBatcher:
     def _sort_by_priority(self) -> list[BatchRequest]:
         return sorted(self.queue, key=lambda r: r.priority.value, reverse=True)
 
-    def process_batch(self, agent_factory: Callable[[str], BaseAgent]) -> list[BatchResult]:
+    def process_batch(
+        self, agent_factory: Callable[[str], BaseAgent]
+    ) -> list[BatchResult]:
         sorted_requests = self._sort_by_priority()
-        batch = sorted_requests[:self.batch_size]
+        batch = sorted_requests[: self.batch_size]
         results: list[BatchResult] = []
 
         if self.recorder:
-            self.recorder.record_lesson("batch_processing_start", {"batch_size": len(batch)})
+            self.recorder.record_lesson(
+                "batch_processing_start", {"batch_size": len(batch)}
+            )
 
         for request in batch:
             start_time = time.time()
@@ -140,7 +119,7 @@ class RequestBatcher:
                     file_path=request.file_path,
                     success=True,
                     content=content,
-                    processing_time=time.time() - start_time
+                    processing_time=time.time() - start_time,
                 )
                 if request.callback:
                     request.callback(content)
@@ -149,14 +128,16 @@ class RequestBatcher:
                     file_path=request.file_path,
                     success=False,
                     error=str(e),
-                    processing_time=time.time() - start_time
+                    processing_time=time.time() - start_time,
                 )
             results.append(result)
             self.queue.remove(request)
         self.results.extend(results)
         return results
 
-    def process_all(self, agent_factory: Callable[[str], BaseAgent]) -> list[BatchResult]:
+    def process_all(
+        self, agent_factory: Callable[[str], BaseAgent]
+    ) -> list[BatchResult]:
         all_results: list[BatchResult] = []
         while self.queue:
             batch_results = self.process_batch(agent_factory)

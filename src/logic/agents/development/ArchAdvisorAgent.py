@@ -21,15 +21,15 @@
 """Agent specializing in architectural analysis and decoupled system design."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function
-from src.logic.agents.cognitive.context.engines.GraphContextEngine import GraphContextEngine
+from src.core.base.BaseUtilities import create_main_function
+from src.logic.agents.cognitive.context.engines.GraphContextEngine import (
+    GraphContextEngine,
+)
 from src.logic.agents.development.ArchCore import ArchCore
 
 __version__ = VERSION
-
-
 
 
 class ArchAdvisorAgent(BaseAgent):
@@ -60,21 +60,11 @@ class ArchAdvisorAgent(BaseAgent):
 
         report = ["## Architectural Coupling Analysis\n"]
 
-
-
-
-
-
-
-
-
-
-
         # Hotspots (High Out-degree)
         report.append("### 🚩 Dependency Hotspots (High Out-degree)")
-        report.append("These files depend on many other things and might be too complex:")
-
-
+        report.append(
+            "These files depend on many other things and might be too complex:"
+        )
 
         for node, degree in top_out:
             report.append(f"- **{node}**: {degree} dependencies")
@@ -82,22 +72,17 @@ class ArchAdvisorAgent(BaseAgent):
         # Central Hubs (High In-degree)
         report.append("\n### 🏗️ Central Hubs (High In-degree)")
 
-
-        report.append("These files are used by many other modules. Changes here have high impact:")
+        report.append(
+            "These files are used by many other modules. Changes here have high impact:"
+        )
         for node, degree in top_in:
             report.append(f"- **{node}**: {degree} dependers")
 
         return "\n".join(report)
 
-
-
-
     def improve_content(self, prompt: str) -> str:
         """Perform architectural review."""
         return self.analyze_coupling()
-
-
-
 
 
 if __name__ == "__main__":

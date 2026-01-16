@@ -9,13 +9,16 @@ from pathlib import Path
 
 # Import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
-    AGENT_DIR = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR = Path(__file__).parent.parent.parent.parent / "src"
 
 # Import from src if needed
-
-
 
 
 class TestReportCacheManager:
@@ -77,7 +80,6 @@ class TestReportCacheManager:
         result = manager.get("test.py", "abc123")
 
         assert result is None
-
 
 
 class TestReportComparator:
@@ -145,7 +147,6 @@ class TestReportComparator:
         assert "- Item 3" in items
 
 
-
 class TestReportFilter:
     """Tests for ReportFilter class."""
 
@@ -172,12 +173,12 @@ class TestReportFilter:
         syntax_issue = CodeIssue(
             message="Syntax error",
             category=IssueCategory.SYNTAX,
-            severity=SeverityLevel.ERROR
+            severity=SeverityLevel.ERROR,
         )
         style_issue = CodeIssue(
             message="Style issue",
             category=IssueCategory.STYLE,
-            severity=SeverityLevel.WARNING
+            severity=SeverityLevel.WARNING,
         )
 
         assert filter_obj.matches(syntax_issue) is True
@@ -195,14 +196,12 @@ class TestReportFilter:
         filter_obj = ReportFilter(criteria)
 
         error_issue = CodeIssue(
-            message="Error",
-            category=IssueCategory.SYNTAX,
-            severity=SeverityLevel.ERROR
+            message="Error", category=IssueCategory.SYNTAX, severity=SeverityLevel.ERROR
         )
         warning_issue = CodeIssue(
             message="Warning",
             category=IssueCategory.STYLE,
-            severity=SeverityLevel.WARNING
+            severity=SeverityLevel.WARNING,
         )
 
         assert filter_obj.matches(error_issue) is True
@@ -223,17 +222,17 @@ class TestReportFilter:
             CodeIssue(
                 message="Syntax error",
                 category=IssueCategory.SYNTAX,
-                severity=SeverityLevel.ERROR
+                severity=SeverityLevel.ERROR,
             ),
             CodeIssue(
                 message="Style issue",
                 category=IssueCategory.STYLE,
-                severity=SeverityLevel.WARNING
+                severity=SeverityLevel.WARNING,
             ),
             CodeIssue(
                 message="Another syntax error",
                 category=IssueCategory.SYNTAX,
-                severity=SeverityLevel.WARNING
+                severity=SeverityLevel.WARNING,
             ),
         ]
 
@@ -306,7 +305,6 @@ class TestSubscriptionManager:
         assert len(manager.delivery_queue) == 0
 
 
-
 class TestReportArchiver:
     """Tests for ReportArchiver class."""
 
@@ -355,14 +353,13 @@ class TestReportArchiver:
             file_path="test.py",
             content="Old content",
             archived_at=1.0,  # Very old timestamp
-            retention_days=1
+            retention_days=1,
         )
         archiver.archives["test.py"] = [old_archive]
 
         removed = archiver.cleanup_expired()
         assert removed == 1
         assert len(archiver.list_archives("test.py")) == 0
-
 
 
 class TestAnnotationManager:
@@ -400,7 +397,6 @@ class TestAnnotationManager:
         assert len(manager.get_annotations("report1")) == 0
 
 
-
 class TestReportSearchEngine:
     """Tests for ReportSearchEngine class."""
 
@@ -430,7 +426,6 @@ class TestReportSearchEngine:
         engine = ReportSearchEngine()
         results = engine.search("nonexistent")
         assert len(results) == 0
-
 
 
 class TestMetricsCollector:
@@ -468,7 +463,6 @@ class TestMetricsCollector:
         assert summary["total_files"] == 2
         assert summary["total_metrics"] == 2
         assert summary["averages"]["issues"] == 7.5
-
 
 
 class TestAccessController:
@@ -517,7 +511,6 @@ class TestAccessController:
         assert controller.check("user1", "report.md", PermissionLevel.READ) is False
 
 
-
 class TestReportExporter:
     """Tests for ReportExporter class."""
 
@@ -552,7 +545,7 @@ class TestReportExporter:
                 message="Test error",
                 category=IssueCategory.SYNTAX,
                 severity=SeverityLevel.ERROR,
-                line_number=10
+                line_number=10,
             )
         ]
         csv = exporter.to_csv(issues)
@@ -572,7 +565,6 @@ class TestReportExporter:
 
         assert "<h1>Test</h1>" in result
         assert output.exists()
-
 
 
 class TestAuditLogger:
@@ -622,7 +614,6 @@ class TestAuditLogger:
 
         activity = logger.get_user_activity("user1")
         assert len(activity) == 2
-
 
 
 class TestReportValidator:
@@ -677,7 +668,6 @@ class TestReportValidator:
         assert validator.verify_checksum(content, "wrong") is False
 
 
-
 class TestReportLocalizer:
     """Tests for ReportLocalizer class."""
 
@@ -713,7 +703,9 @@ class TestReportLocalizer:
         ReportLocalizer = report_module.ReportLocalizer
 
         localizer = ReportLocalizer()
-        localizer.add_string("custom.key", {"en-US": "Custom", "de-DE": "Benutzerdefiniert"})
+        localizer.add_string(
+            "custom.key", {"en-US": "Custom", "de-DE": "Benutzerdefiniert"}
+        )
 
         assert localizer.get("custom.key") == "Custom"
 
@@ -735,7 +727,6 @@ class TestReportLocalizer:
         text = localizer.get("unknown.key")
 
         assert text == "unknown.key"
-
 
 
 class TestReportAPI:
@@ -783,7 +774,6 @@ class TestReportAPI:
 
         assert result is True
         assert (tmp_path / "new.errors.md").exists()
-
 
 
 class TestReportScheduler:
@@ -838,7 +828,6 @@ class TestReportScheduler:
         assert scheduler.schedules["daily"]["last_run"] > 0
 
 
-
 class TestReportAggregator:
     """Tests for ReportAggregator class."""
 
@@ -872,12 +861,14 @@ class TestReportAggregator:
         SeverityLevel = report_module.SeverityLevel
 
         aggregator = ReportAggregator()
-        aggregator.add_source("file1.py", [
-            CodeIssue("Error 1", IssueCategory.SYNTAX, SeverityLevel.ERROR)
-        ])
-        aggregator.add_source("file2.py", [
-            CodeIssue("Warning 1", IssueCategory.STYLE, SeverityLevel.WARNING)
-        ])
+        aggregator.add_source(
+            "file1.py",
+            [CodeIssue("Error 1", IssueCategory.SYNTAX, SeverityLevel.ERROR)],
+        )
+        aggregator.add_source(
+            "file2.py",
+            [CodeIssue("Warning 1", IssueCategory.STYLE, SeverityLevel.WARNING)],
+        )
 
         report = aggregator.aggregate()
 
@@ -894,9 +885,9 @@ class TestReportAggregator:
         SeverityLevel = report_module.SeverityLevel
 
         aggregator = ReportAggregator()
-        aggregator.add_source("file1.py", [
-            CodeIssue("Error", IssueCategory.SYNTAX, SeverityLevel.ERROR)
-        ])
+        aggregator.add_source(
+            "file1.py", [CodeIssue("Error", IssueCategory.SYNTAX, SeverityLevel.ERROR)]
+        )
         aggregator.clear()
 
         assert aggregator.sources == {}
@@ -905,7 +896,9 @@ class TestReportAggregator:
 class TestReportCachingInvalidation:
     """Tests for report caching invalidation."""
 
-    def test_cache_invalidation_by_path(self, report_module: Any, tmp_path: Path) -> None:
+    def test_cache_invalidation_by_path(
+        self, report_module: Any, tmp_path: Path
+    ) -> None:
         """Test cache invalidation by file path."""
         ReportCacheManager = report_module.ReportCacheManager
 
@@ -1023,13 +1016,17 @@ class TestReportDataAggregation:
 
         aggregator = ReportAggregator()
 
-        aggregator.add_source("file1.py", [
-            CodeIssue("Error 1", IssueCategory.SYNTAX, SeverityLevel.ERROR)
-        ])
-        aggregator.add_source("file2.py", [
-            CodeIssue("Error 2", IssueCategory.STYLE, SeverityLevel.WARNING),
-            CodeIssue("Error 3", IssueCategory.SECURITY, SeverityLevel.CRITICAL)
-        ])
+        aggregator.add_source(
+            "file1.py",
+            [CodeIssue("Error 1", IssueCategory.SYNTAX, SeverityLevel.ERROR)],
+        )
+        aggregator.add_source(
+            "file2.py",
+            [
+                CodeIssue("Error 2", IssueCategory.STYLE, SeverityLevel.WARNING),
+                CodeIssue("Error 3", IssueCategory.SECURITY, SeverityLevel.CRITICAL),
+            ],
+        )
 
         report = aggregator.aggregate()
 
@@ -1044,11 +1041,14 @@ class TestReportDataAggregation:
         SeverityLevel = report_module.SeverityLevel
 
         aggregator = ReportAggregator()
-        aggregator.add_source("file.py", [
-            CodeIssue("E1", IssueCategory.SYNTAX, SeverityLevel.ERROR),
-            CodeIssue("E2", IssueCategory.SYNTAX, SeverityLevel.ERROR),
-            CodeIssue("W1", IssueCategory.STYLE, SeverityLevel.WARNING)
-        ])
+        aggregator.add_source(
+            "file.py",
+            [
+                CodeIssue("E1", IssueCategory.SYNTAX, SeverityLevel.ERROR),
+                CodeIssue("E2", IssueCategory.SYNTAX, SeverityLevel.ERROR),
+                CodeIssue("W1", IssueCategory.STYLE, SeverityLevel.WARNING),
+            ],
+        )
 
         report = aggregator.aggregate()
 
@@ -1063,9 +1063,9 @@ class TestReportDataAggregation:
         SeverityLevel = report_module.SeverityLevel
 
         aggregator = ReportAggregator()
-        aggregator.add_source("file.py", [
-            CodeIssue("Error", IssueCategory.SYNTAX, SeverityLevel.ERROR)
-        ])
+        aggregator.add_source(
+            "file.py", [CodeIssue("Error", IssueCategory.SYNTAX, SeverityLevel.ERROR)]
+        )
 
         aggregator.clear()
 
@@ -1085,7 +1085,7 @@ class TestReportPermissionManagement:
             user_id="user1",
             report_pattern="*.md",
             level=PermissionLevel.READ,
-            expires_at=time.time() - 3600  # Expired 1 hour ago
+            expires_at=time.time() - 3600,  # Expired 1 hour ago
         )
 
         assert expired_perm.expires_at < time.time()
@@ -1124,10 +1124,10 @@ class TestReportExporting:
         """Test exporting JSON file."""
         data = {"title": "Report", "items": [1, 2, 3]}
         json_file = tmp_path / "report.json"
-        with open(json_file, 'w') as f:
+        with open(json_file, "w") as f:
             json.dump(data, f)
 
-        with open(json_file, 'r') as f:
+        with open(json_file, "r") as f:
             restored = json.load(f)
         assert restored["title"] == "Report"
 
@@ -1160,17 +1160,17 @@ class TestReportVersioningMechanism:
     def test_report_version_tracking(self) -> None:
         """Test tracking report versions."""
         reports = [
-            {'version': 1, 'date': '2024-01-01', 'metrics': {'coverage': 75}},
-            {'version': 2, 'date': '2024-01-08', 'metrics': {'coverage': 78}},
-            {'version': 3, 'date': '2024-01-15', 'metrics': {'coverage': 85}}
+            {"version": 1, "date": "2024-01-01", "metrics": {"coverage": 75}},
+            {"version": 2, "date": "2024-01-08", "metrics": {"coverage": 78}},
+            {"version": 3, "date": "2024-01-15", "metrics": {"coverage": 85}},
         ]
         assert len(reports) == 3
-        assert reports[-1]['metrics']['coverage'] == 85
+        assert reports[-1]["metrics"]["coverage"] == 85
 
     def test_report_diff_calculation(self) -> None:
         """Test calculating diff between report versions."""
-        v1: Dict[str, int] = {'coverage': 75, 'warnings': 20, 'errors': 5}
-        v2: Dict[str, int] = {'coverage': 85, 'warnings': 15, 'errors': 2}
+        v1: Dict[str, int] = {"coverage": 75, "warnings": 20, "errors": 5}
+        v2: Dict[str, int] = {"coverage": 85, "warnings": 15, "errors": 2}
         diff: Dict[str, int] = {k: v2[k] - v1[k] for k in v1}
-        assert diff['coverage'] == 10
-        assert diff['errors'] == -3
+        assert diff["coverage"] == 10
+        assert diff["errors"] == -3

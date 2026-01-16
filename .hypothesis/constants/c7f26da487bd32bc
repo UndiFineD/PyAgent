@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\utils\embedding_functions\huggingface_embedding_function.py
-# hypothesis_version: 6.150.1
-
-['Authorization', 'HUGGINGFACE_API_KEY', 'api_key_env_var', 'cosine', 'huggingface', 'huggingface_server', 'inputs', 'ip', 'l2', 'model_name', 'options', 'url', 'wait_for_model']

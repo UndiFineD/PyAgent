@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\stats\observability_core.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.001, 0.5, 2.0, 100, 300, 1000, 8080, '1m', 'Metrics', 'Stats Visualization', 'Values', 'agents', 'anomaly', 'average', 'avg_duration', 'avg_duration_ms', 'cloudwatch', 'count', 'counter', 'datadog', 'default', 'difference', 'gauge', 'grafana', 'grpc', 'histogram', 'hybrid', 'info', 'maximum', 'minimum', 'mqtt', 'percentage_change', 'percentile_50', 'percentile_95', 'percentile_99', 'prometheus', 'pull', 'push', 'right', 'server_sent_events', 'skyblue', 'snapshot1', 'snapshot2', 'stackdriver', 'success', 'sum', 'summary', 'tags', 'threshold', 'timestamp', 'total', 'total_cost', 'total_cost_usd', 'total_count', 'unknown', 'utf-8', 'value', 'websocket']

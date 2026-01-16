@@ -19,17 +19,15 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import time
 import random
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class HolographicContextAgent(BaseAgent):
@@ -49,22 +47,29 @@ class HolographicContextAgent(BaseAgent):
         )
 
     @as_tool
-    def create_hologram(self, name: str, state_data: dict[str, Any], angles: list[str] = ["security", "performance"]) -> str:
+    def create_hologram(
+        self,
+        name: str,
+        state_data: dict[str, Any],
+        angles: list[str] = ["security", "performance"],
+    ) -> str:
         """
         Creates a multi-angle 'hologram' of the provided state data.
         """
         hologram = {
             "timestamp": time.time(),
             "source_data": state_data,
-            "perspectives": {}
+            "perspectives": {},
         }
 
         for angle in angles:
             # In a real system, this would call specialized agents or use specific prompts to 're-view' the data
             hologram["perspectives"][angle] = {
                 "summary": f"Perspective on {angle} for {name}",
-                "metrics": {angle: random.uniform(0.1, 1.0) if 'random' in globals() else 0.5},
-                "recommendations": [f"Improve {angle} by doing X."]
+                "metrics": {
+                    angle: random.uniform(0.1, 1.0) if "random" in globals() else 0.5
+                },
+                "recommendations": [f"Improve {angle} by doing X."],
             }
 
         self.holograms[name] = hologram
@@ -78,7 +83,9 @@ class HolographicContextAgent(BaseAgent):
         """
         if name in self.holograms:
             h = self.holograms[name]
-            return h["perspectives"].get(angle, {"error": f"Angle '{angle}' not found in hologram '{name}'."})
+            return h["perspectives"].get(
+                angle, {"error": f"Angle '{angle}' not found in hologram '{name}'."}
+            )
         return {"error": f"Hologram '{name}' not found."}
 
     @as_tool

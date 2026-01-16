@@ -21,7 +21,7 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from pathlib import Path
 from typing import Any
 import fnmatch
@@ -29,8 +29,6 @@ import logging
 import subprocess
 
 __version__ = VERSION
-
-
 
 
 class GitBranchProcessor:
@@ -57,10 +55,7 @@ class GitBranchProcessor:
         """Record git operations if recorder is available."""
         if self.recorder:
             self.recorder.record_interaction(
-                provider="Git",
-                model="cli",
-                prompt=action,
-                result=result
+                provider="Git", model="cli", prompt=action, result=result
             )
 
     def get_changed_files(
@@ -90,10 +85,15 @@ class GitBranchProcessor:
 
             if result.returncode != 0:
                 logging.warning(f"Git diff failed: {result.stderr}")
-                self._record(f"git diff {base_branch}...{branch}", f"Failed: {result.stderr}")
+                self._record(
+                    f"git diff {base_branch}...{branch}", f"Failed: {result.stderr}"
+                )
                 return []
 
-            self._record(f"git diff {base_branch}...{branch}", f"Success: {len(result.stdout.strip().splitlines())} files")
+            self._record(
+                f"git diff {base_branch}...{branch}",
+                f"Success: {len(result.stdout.strip().splitlines())} files",
+            )
             files: list[Path] = []
             for line in result.stdout.strip().split("\n"):
                 if not line:

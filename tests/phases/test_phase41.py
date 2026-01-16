@@ -10,8 +10,6 @@ from unittest import IsolatedAsyncioTestCase
 from src.infrastructure.fleet.FleetManager import FleetManager
 
 
-
-
 class TestPhase41(IsolatedAsyncioTestCase):
     def setUp(self):
         self.workspace = os.getcwd()
@@ -23,7 +21,7 @@ class TestPhase41(IsolatedAsyncioTestCase):
         proposals = {
             "AgentA": "def hello(): return 'world'",
             "AgentB": "def hello(): return 'world' # Improved",
-            "AgentC": "TODO: implement"
+            "AgentC": "TODO: implement",
         }
         res = judge.run_committee_vote("Write a hello world function", proposals)
         if asyncio.iscoroutine(res):
@@ -37,30 +35,15 @@ class TestPhase41(IsolatedAsyncioTestCase):
     async def test_federated_knowledge(self) -> None:
         print("\nTesting FederatedKnowledgeOrchestrator...")
 
-
-
-
-
-
-
-
-
-
         fk = self.fleet.federated_knowledge
         res = fk.run_fleet_wide_sync()
         if asyncio.iscoroutine(res):
             result = await res
 
-
-
-
         else:
             result = res
         self.assertEqual(result["status"], "success")
         self.assertTrue(result["fused_insights"] > 0)
-
-
-
 
     async def test_sql_bug_fix(self) -> None:
         print("\nTesting SQLAgent bug fix...")
@@ -68,17 +51,12 @@ class TestPhase41(IsolatedAsyncioTestCase):
         # Should not raise AttributeError now
         res = sql_agent.improve_content("Show me tables")
 
-
-
-
         if asyncio.iscoroutine(res):
             res = await res
         # Check for successful output OR graceful degradation (no crash)
-        self.assertTrue("Connection active" in res or "AI Improvement" in res or "GitHub CLI" in res)
-
-
-
-
+        self.assertTrue(
+            "Connection active" in res or "AI Improvement" in res or "GitHub CLI" in res
+        )
 
 
 if __name__ == "__main__":

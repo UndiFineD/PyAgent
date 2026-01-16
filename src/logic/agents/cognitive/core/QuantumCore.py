@@ -1,4 +1,3 @@
-
 """
 Core logic for Quantum-Ready Reasoning (Phase 177).
 Mathematical models for "Superposition Prompting" (Theoretical).
@@ -7,18 +6,22 @@ Mathematical models for "Superposition Prompting" (Theoretical).
 import math
 
 
-
-
 class QuantumCore:
     """Logic for quantum-inspired probability modeling."""
+
     @staticmethod
-    def calculate_superposition_weights(prompts: list[str], constraints: dict[str, float]) -> list[float]:
+    def calculate_superposition_weights(
+        prompts: list[str], constraints: dict[str, float]
+    ) -> list[float]:
         r"""
         Calculates weights for multiple prompts being processed in "superposition".
         $W_i = \frac{e^{C_i}}{\sum e^{C_j}}$ where $C$ is the constraint score.
         """
         try:
-            from rust_core import calculate_superposition_weights as calculate_weights_rust  # type: ignore[attr-defined]
+            from rust_core import (
+                calculate_superposition_weights as calculate_weights_rust,
+            )  # type: ignore[attr-defined]
+
             return calculate_weights_rust(prompts)
         except (ImportError, AttributeError):
             if not prompts:
@@ -47,6 +50,7 @@ class QuantumCore:
         """
         try:
             from rust_core import simulate_interference_pattern as simulate_rust  # type: ignore[attr-defined]
+
             return simulate_rust(weights)
         except (ImportError, AttributeError):
             if not weights:

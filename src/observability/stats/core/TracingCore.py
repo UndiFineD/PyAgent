@@ -1,4 +1,3 @@
-
 from __future__ import annotations
 from typing import Any
 import time
@@ -7,8 +6,6 @@ try:
     import rust_core as rc
 except ImportError:
     rc = None  # type: ignore[assignment]
-
-
 
 
 class TracingCore:
@@ -24,13 +21,11 @@ class TracingCore:
                 return rc.create_span_context(trace_id, span_id)  # type: ignore[attr-defined]
             except Exception:
                 pass
-        return {
-            "trace_id": trace_id,
-            "span_id": span_id,
-            "version": "OTel-1.1"
-        }
+        return {"trace_id": trace_id, "span_id": span_id, "version": "OTel-1.1"}
 
-    def calculate_latency_breakdown(self, total_time: float, network_time: float) -> dict[str, float]:
+    def calculate_latency_breakdown(
+        self, total_time: float, network_time: float
+    ) -> dict[str, float]:
         """
         Calculates agent thinking time vs network latency.
         """
@@ -44,7 +39,7 @@ class TracingCore:
             "total_latency_ms": total_time * 1000,
             "network_latency_ms": network_time * 1000,
             "agent_thinking_ms": thinking_time * 1000,
-            "think_ratio": thinking_time / total_time if total_time > 0 else 0
+            "think_ratio": thinking_time / total_time if total_time > 0 else 0,
         }
 
     def format_otel_log(self, name: str, attributes: dict[str, Any]) -> dict[str, Any]:
@@ -53,5 +48,5 @@ class TracingCore:
             "timestamp": time.time_ns(),
             "name": name,
             "attributes": attributes,
-            "kind": "INTERNAL"
+            "kind": "INTERNAL",
         }

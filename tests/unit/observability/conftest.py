@@ -7,11 +7,11 @@ from typing import Any
 # Add src to path
 
 
-
 @pytest.fixture
 def stats_module() -> Any:
     """Load and return the stats module."""
     import src.observability.stats as stats
+
     return stats
 
 
@@ -29,10 +29,12 @@ def report_module() -> Any:
     """Fixture to provide the report generation module."""
     try:
         import src.observability.reports as reports
+
         return reports
     except ImportError:
         # Fallback to loading it manually if path setup is tricky
-        AGENT_DIR = Path(__file__).parent.parent.parent.parent / 'src'
+        AGENT_DIR = Path(__file__).parent.parent.parent.parent / "src"
 
         import observability.reports as reports
+
         return reports

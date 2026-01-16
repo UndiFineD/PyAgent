@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\chromadb\utils\embedding_functions\bm25_embedding_function.py
-# hypothesis_version: 6.150.1
-
-['Qdrant/bm25', 'avg_len', 'b', 'bm25', 'cache_dir', 'disable_stemmer', 'document', 'k', 'kwargs', 'language', 'model_name', 'query', 'query_config', 'specific_model_path', 'task', 'token_max_length']

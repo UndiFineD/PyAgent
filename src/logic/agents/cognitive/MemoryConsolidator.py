@@ -21,19 +21,18 @@
 """Shell for MemoryConsolidator, handling storage and orchestration."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import logging
 from pathlib import Path
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
+
 # Fixed import path assuming Core is in the same directory
 from src.logic.agents.cognitive.MemoryConsolidatorCore import MemoryConsolidatorCore
 
 __version__ = VERSION
-
-
 
 
 class MemoryConsolidator(BaseAgent):
@@ -83,7 +82,7 @@ class MemoryConsolidator(BaseAgent):
         """I/O: Load memory from disk."""
         if self.long_term_memory_file.exists():
             try:
-                with open(self.long_term_memory_file, encoding='utf-8') as f:
+                with open(self.long_term_memory_file, encoding="utf-8") as f:
                     return json.load(f)
             except Exception as e:
                 logging.error(f"Failed to load memory: {e}")
@@ -93,7 +92,7 @@ class MemoryConsolidator(BaseAgent):
         """I/O: Save memory to disk atomically."""
         temp_path = self.long_term_memory_file.with_suffix(".tmp")
         try:
-            with open(temp_path, 'w', encoding='utf-8') as f:
+            with open(temp_path, "w", encoding="utf-8") as f:
                 json.dump(memory, f, indent=2)
             temp_path.replace(self.long_term_memory_file)
         except Exception as e:

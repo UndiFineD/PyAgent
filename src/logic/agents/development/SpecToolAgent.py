@@ -21,16 +21,14 @@
 """Agent specializing in generating tools and code from specifications (OpenAPI, JSON Schema, MCP)."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import json
 import logging
 from pathlib import Path
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function, as_tool
+from src.core.base.BaseUtilities import create_main_function, as_tool
 
 __version__ = VERSION
-
-
 
 
 class SpecToolAgent(BaseAgent):
@@ -86,7 +84,10 @@ class SpecToolAgent(BaseAgent):
         root = Path("openspec")
         for sub in ["specs", "changes", "archive"]:
             (root / sub).mkdir(parents=True, exist_ok=True)
-        (root / "project.md").write_text("# Project Context\nDefine tech stack and conventions here.", encoding="utf-8")
+        (root / "project.md").write_text(
+            "# Project Context\nDefine tech stack and conventions here.",
+            encoding="utf-8",
+        )
         return "OpenSpec structure initialized. Populated openspec/project.md."
 
     @as_tool
@@ -95,12 +96,20 @@ class SpecToolAgent(BaseAgent):
         change_dir = Path("openspec/changes") / name.replace(" ", "-").lower()
         change_dir.mkdir(parents=True, exist_ok=True)
 
-        (change_dir / "proposal.md").write_text(f"# Proposal: {name}\n\n## Intent\n{intent}", encoding="utf-8")
-        (change_dir / "tasks.md").write_text("## Tasks\n- [ ] 1.1 Implement core logic\n- [ ] 1.2 Add tests", encoding="utf-8")
+        (change_dir / "proposal.md").write_text(
+            f"# Proposal: {name}\n\n## Intent\n{intent}", encoding="utf-8"
+        )
+        (change_dir / "tasks.md").write_text(
+            "## Tasks\n- [ ] 1.1 Implement core logic\n- [ ] 1.2 Add tests",
+            encoding="utf-8",
+        )
 
         specs_dir = change_dir / "specs"
         specs_dir.mkdir(exist_ok=True)
-        (specs_dir / "delta.md").write_text("## ADDED Requirements\n- The system SHALL support the new intent.", encoding="utf-8")
+        (specs_dir / "delta.md").write_text(
+            "## ADDED Requirements\n- The system SHALL support the new intent.",
+            encoding="utf-8",
+        )
 
         return f"Change proposal '{name}' scaffolded at {change_dir}."
 
@@ -134,63 +143,51 @@ class SpecToolAgent(BaseAgent):
 
             code = [
                 "import logging",
-                "from src.core.base.utilities import as_tool",
+                "from src.core.base.BaseUtilities import as_tool",
                 "",
                 f"class {title}Tool:",
                 f'    """{info.get("description", "Auto-generated tool class")}"""',
                 "",
                 "    def __init__(self) -> None:",
                 "        self.name = '" + title + "'",
-                ""
+                "",
             ]
 
             for path_val, methods in paths.items():
                 for method, details in methods.items():
-                    details.get("operationId", f"{method}_{path_val.strip('/').replace('/', '_')}")
+                    details.get(
+                        "operationId",
+                        f"{method}_{path_val.strip('/').replace('/', '_')}",
+                    )
                     summary = details.get("summary", "No summary")
 
-                    code.extend([
-                        "    @as_tool",
-
-
-
-
-
-
-
-
-
-
-                        f"        '''{summary}'''",
-                        "        return {'path': '" + path_val + "', 'method': '" + method.upper() + "', 'result': 'Mocked'}",
-                        ""
-                    ])
-
-
-
-
+                    code.extend(
+                        [
+                            "    @as_tool",
+                            f"        '''{summary}'''",
+                            "        return {'path': '"
+                            + path_val
+                            + "', 'method': '"
+                            + method.upper()
+                            + "', 'result': 'Mocked'}",
+                            "",
+                        ]
+                    )
 
             full_code = "\n".join(code)
             output_path.write_text(full_code, encoding="utf-8")
 
             return f"Successfully generated tool: {output_path}. Methods: {len(paths)}"
 
-
         except Exception as e:
             logging.error(f"Spec generation failed: {e}")
             return f"Error parsing spec: {e}"
 
     def improve_content(self, prompt: str) -> str:
-
-
-
         """Generate a tool from a prompt or path."""
         if ".json" in prompt:
             return self.generate_tool_from_spec(prompt)
         return "Please provide a path to a JSON specification file."
-
-
-
 
 
 if __name__ == "__main__":

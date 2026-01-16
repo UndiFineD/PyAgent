@@ -21,7 +21,7 @@
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .CodeIssue import CodeIssue
 from .ExportFormat import ExportFormat
 from pathlib import Path
@@ -30,8 +30,6 @@ import logging
 import re
 
 __version__ = VERSION
-
-
 
 
 class ReportExporter:
@@ -59,10 +57,16 @@ class ReportExporter:
 
         # Simple markdown to HTML conversion
         html_content = content
-        html_content = re.sub(r'# (.+)$', r'<h1>\1</h1>', html_content, flags=re.MULTILINE)
-        html_content = re.sub(r'## (.+)$', r'<h2>\1</h2>', html_content, flags=re.MULTILINE)
-        html_content = re.sub(r'^- (.+)$', r'<li>\1</li>', html_content, flags=re.MULTILINE)
-        html_content = re.sub(r'`([^`]+)`', r'<code>\1</code>', html_content)
+        html_content = re.sub(
+            r"# (.+)$", r"<h1>\1</h1>", html_content, flags=re.MULTILINE
+        )
+        html_content = re.sub(
+            r"## (.+)$", r"<h2>\1</h2>", html_content, flags=re.MULTILINE
+        )
+        html_content = re.sub(
+            r"^- (.+)$", r"<li>\1</li>", html_content, flags=re.MULTILINE
+        )
+        html_content = re.sub(r"`([^`]+)`", r"<code>\1</code>", html_content)
         return f"""<!DOCTYPE html>
 <html>
 <head><title>{title}</title></head>
@@ -86,10 +90,7 @@ class ReportExporter:
         return "\n".join(lines)
 
     def export(
-        self,
-        content: str,
-        format: ExportFormat,
-        output_path: Path | None = None
+        self, content: str, format: ExportFormat, output_path: Path | None = None
     ) -> str:
         """Export report to format.
         Args:

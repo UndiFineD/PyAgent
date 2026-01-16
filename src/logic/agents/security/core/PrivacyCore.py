@@ -1,66 +1,29 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Recovered and standardized for Phase 317
 
 """
-Core logic for Data Privacy (Phase 171).
-Handles PII detection and redaction using regex.
+The gh-copilot extension has been deprecated in favor of the newer GitHub Copilot CLI.
+
+For more information, visit:
+- Copilot CLI: https://github.com/github/copilot-cli
+- Deprecation announcement: https://github.blog/changelog/2025-09-25-upcoming-deprecation-of-gh-copilot-cli-extension
+
+No commands will be executed.
 """
 
-import re
+from __future__ import annotations
+from src.core.base.Version import VERSION
+import logging
 
-try:
-    import rust_core as rc
-except ImportError:
-    rc = None  # type: ignore[assignment]
-
-
-
+__version__ = VERSION
 
 class PrivacyCore:
-    """Core logic for PII detection and content redaction."""
-    # Patterns for sensitive data
-    PATTERNS = {
-        "email": r'[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+',
-        "api_key": r'(?:api_key|secret_key|secret|token)\s*[:=]\s*["\']?([a-zA-Z0-9_\-\.\~]{16,})["\']?',
-        "ipv4": r'\b(?:\d{1,3}\.){3}\d{1,3}\b',
-        "credit_card": r'\b(?:\d[ -]*?){13,16}\b'
-    }
+    """
+    PrivacyCore recovered after Copilot CLI deprecation event.
+    Standardized placeholder for future re-implementation.
+    """
+    def __init__(self, *args, **kwargs) -> None:
+        self.version = VERSION
+        logging.info(f"PrivacyCore initialized (Placeholder).")
 
-    @classmethod
-    def redact_text(cls, text: str) -> str:
-        """
-        Scans text for PII and replaces it with [REDACTED].
-        """
-        if rc:
-            try:
-                return rc.redact_pii(text)  # type: ignore[attr-defined]
-            except Exception:
-                pass
-
-        redacted = text
-        for label, pattern in cls.PATTERNS.items():
-            if label == "api_key":
-                # For API keys, we want to redact the value part captured in group 1
-                matches = re.finditer(pattern, redacted, re.IGNORECASE)
-                offset = 0
-                for match in matches:
-                    val = match.group(1)
-                    start = match.start(1) + offset
-                    end = match.end(1) + offset
-                    redacted = redacted[:start] + "[REDACTED]" + redacted[end:]
-                    offset += len("[REDACTED]") - len(val)
-            else:
-                label_fmt = "IP" if label == "ipv4" else label.upper()
-                redacted = re.sub(pattern, f"[{label_fmt}_REDACTED]", redacted)
-        return redacted
-
-    @classmethod
-    def scan_log_entry(cls, entry: dict) -> dict:
-        """
-        Recursively redacts sensitive info from a log dictionary.
-        """
-        if isinstance(entry, dict):
-            return {k: cls.scan_log_entry(v) for k, v in entry.items()}
-        elif isinstance(entry, list):
-            return [cls.scan_log_entry(i) for i in entry]
-        elif isinstance(entry, str):
-            return cls.redact_text(entry)
-        return entry

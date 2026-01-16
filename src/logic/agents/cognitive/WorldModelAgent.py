@@ -19,18 +19,16 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 import os
 import ast
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class WorldModelAgent(BaseAgent):
@@ -56,7 +54,7 @@ class WorldModelAgent(BaseAgent):
             return ["File non-existent"]
 
         try:
-            with open(file_path, encoding='utf-8') as f:
+            with open(file_path, encoding="utf-8") as f:
                 tree = ast.parse(f.read())
 
             for node in ast.walk(tree):
@@ -68,12 +66,16 @@ class WorldModelAgent(BaseAgent):
         return impacted_symbols
 
     @as_tool
-    def predict_action_outcome(self, action_description: str, current_context: str) -> dict[str, Any]:
+    def predict_action_outcome(
+        self, action_description: str, current_context: str
+    ) -> dict[str, Any]:
         """
         Predicts the outcome of a proposed action based on current context.
         Returns a dictionary with predicted success, side effects, and risk level.
         """
-        logging.info(f"WorldModelAgent: Predicting outcome for action: {action_description}")
+        logging.info(
+            f"WorldModelAgent: Predicting outcome for action: {action_description}"
+        )
 
         # In a real implementation, this would involve lookahead reasoning
         # and checking the file tree/project graph.
@@ -91,7 +93,7 @@ class WorldModelAgent(BaseAgent):
                 "success_probability": 0.8,
                 "predicted_changes": ["Hypothetical changes based on description"],
                 "risks": ["Potential hallucination in prediction"],
-                "validation_steps": ["Verify manually"]
+                "validation_steps": ["Verify manually"],
             }
 
     @as_tool
@@ -100,7 +102,9 @@ class WorldModelAgent(BaseAgent):
         Simulates the state of the workspace after a set of hypothetical changes.
         Useful for 'what-if' analysis.
         """
-        logging.info(f"WorldModelAgent: Simulating workspace state with {len(hypothetical_changes)} changes.")
+        logging.info(
+            f"WorldModelAgent: Simulating workspace state with {len(hypothetical_changes)} changes."
+        )
 
         simulation = "SIMULATED WORKSPACE STATE:\n"
         for change in hypothetical_changes:
@@ -109,12 +113,16 @@ class WorldModelAgent(BaseAgent):
         return simulation
 
     @as_tool
-    def simulate_agent_interaction(self, agent_a: str, agent_b: str, shared_goal: str) -> dict[str, Any]:
+    def simulate_agent_interaction(
+        self, agent_a: str, agent_b: str, shared_goal: str
+    ) -> dict[str, Any]:
         """
         Recursive World Modeling: Simulates how two agents will interact to solve a goal.
         Predicts potential conflicts, cooperative strategies, and final throughput.
         """
-        logging.info(f"WorldModelAgent: Simulating interaction between {agent_a} and {agent_b} for goal: {shared_goal}")
+        logging.info(
+            f"WorldModelAgent: Simulating interaction between {agent_a} and {agent_b} for goal: {shared_goal}"
+        )
 
         prompt = (
             f"Simulate the interaction between Agent A ({agent_a}) and Agent B ({agent_b}) "
@@ -132,7 +140,10 @@ class WorldModelAgent(BaseAgent):
         except Exception:
             return {
                 "bottlenecks": ["Communication overhead"],
-                "division_of_labor": {agent_a: "Primary executor", agent_b: "QA/Validator"},
+                "division_of_labor": {
+                    agent_a: "Primary executor",
+                    agent_b: "QA/Validator",
+                },
                 "convergence_probability": 0.95,
-                "note": "Simulation based on standard cooperation patterns."
+                "note": "Simulation based on standard cooperation patterns.",
             }

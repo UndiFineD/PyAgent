@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\cluster\_birch.py
-# hypothesis_version: 6.150.1
-
-[-2.0, 0.0, 0.5, 'Y_norm_squared', 'boolean', 'branching_factor', 'compute_labels', 'csr', 'float32', 'float64', 'left', 'n_clusters', 'neither', 'root_', 'threshold']

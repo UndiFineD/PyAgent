@@ -19,18 +19,16 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import os
 import json
 import logging
 import re
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class IdiomExtractorAgent(BaseAgent):
@@ -54,12 +52,12 @@ class IdiomExtractorAgent(BaseAgent):
             "naming_conventions": {
                 "classes": "PascalCase",
                 "functions": "snake_case",
-                "variables": "snake_case"
+                "variables": "snake_case",
             },
             "common_decorators": [],
             "frequent_imports": [],
             "error_handling_patterns": [],
-            "docstring_style": "Google"
+            "docstring_style": "Google",
         }
 
         # Simple pattern extraction logic
@@ -70,7 +68,7 @@ class IdiomExtractorAgent(BaseAgent):
             for file in files:
                 if file.endswith(".py"):
                     try:
-                        with open(os.path.join(root, file), encoding='utf-8') as f:
+                        with open(os.path.join(root, file), encoding="utf-8") as f:
                             content = f.read()
 
                             # Extract decorators
@@ -93,10 +91,12 @@ class IdiomExtractorAgent(BaseAgent):
 
         # Deduplicate and sort
         idioms["common_decorators"] = sorted(list(set(idioms["common_decorators"])))
-        idioms["frequent_imports"] = sorted(list(set(idioms["frequent_imports"])))[:50]  # Top 50
+        idioms["frequent_imports"] = sorted(list(set(idioms["frequent_imports"])))[
+            :50
+        ]  # Top 50
 
         # Save to file
-        with open(self.idioms_file, 'w', encoding='utf-8') as f:
+        with open(self.idioms_file, "w", encoding="utf-8") as f:
             json.dump(idioms, f, indent=4)
 
         return f"Successfully extracted {len(idioms['common_decorators'])} decorators and {len(idioms['frequent_imports'])} common imports. Saved to {self.idioms_file}."
@@ -107,6 +107,6 @@ class IdiomExtractorAgent(BaseAgent):
         Returns the currently stored project idioms.
         """
         if os.path.exists(self.idioms_file):
-            with open(self.idioms_file, encoding='utf-8') as f:
+            with open(self.idioms_file, encoding="utf-8") as f:
                 return json.load(f)
         return {"error": "Idioms file not found. Run extract_idioms first."}

@@ -35,6 +35,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class TokenCostResult:
     """Result of token cost calculation."""
+
     total_cost: float
     input_cost: float
     output_cost: float
@@ -63,7 +64,9 @@ class TokenCostCore:
         """Initialize token cost calculator."""
         self.cache: Dict[Tuple[int, int, str], TokenCostResult] = {}
 
-    def calculate_cost(self, input_tokens: int, output_tokens: int, model: str = "gpt-3.5-turbo") -> TokenCostResult:
+    def calculate_cost(
+        self, input_tokens: int, output_tokens: int, model: str = "gpt-3.5-turbo"
+    ) -> TokenCostResult:
         """Calculate total cost for token usage (pure calculation).
 
         Args:
@@ -77,10 +80,16 @@ class TokenCostCore:
         # Optimized with Rust if available
         if rc:
             try:
-                total, i_cost, o_cost = rc.calculate_token_cost(input_tokens, output_tokens, model)  # type: ignore[attr-defined]
-                return TokenCostResult(total_cost=total, input_cost=i_cost, output_cost=o_cost)
+                total, i_cost, o_cost = rc.calculate_token_cost(
+                    input_tokens, output_tokens, model
+                )  # type: ignore[attr-defined]
+                return TokenCostResult(
+                    total_cost=total, input_cost=i_cost, output_cost=o_cost
+                )
             except Exception as e:
-                logger.warning(f"Rust calculate_token_cost failed: {e}. Falling back to Python.")
+                logger.warning(
+                    f"Rust calculate_token_cost failed: {e}. Falling back to Python."
+                )
 
         # Check cache
         cache_key = (input_tokens, output_tokens, model)
@@ -96,9 +105,7 @@ class TokenCostCore:
         total_cost = input_cost + output_cost
 
         result = TokenCostResult(
-            total_cost=total_cost,
-            input_cost=input_cost,
-            output_cost=output_cost
+            total_cost=total_cost, input_cost=input_cost, output_cost=output_cost
         )
 
         # Cache result
@@ -112,7 +119,7 @@ class TokenCostCore:
             total_cost=total_cost,
             input_cost=input_cost,
             output_cost=output_cost,
-            currency="USD"
+            currency="USD",
         )
 
         # Cache result
@@ -161,7 +168,9 @@ class ModelFallbackCore:
             try:
                 return rc.select_best_model(constraints)  # type: ignore[attr-defined]
             except Exception as e:
-                logger.warning(f"Rust select_best_model failed: {e}. Falling back to Python.")
+                logger.warning(
+                    f"Rust select_best_model failed: {e}. Falling back to Python."
+                )
 
         max_cost = constraints.get("max_cost", 1.0)
         required_speed = constraints.get("required_speed", 0.0)
@@ -169,8 +178,16 @@ class ModelFallbackCore:
 
         candidates = []
         for model, caps in self.model_capabilities.items():
-            if caps["cost"] <= max_cost and caps["speed"] >= required_speed and caps["quality"] >= required_quality:
-                score = (caps["speed"] * 0.3) + (caps["quality"] * 0.5) + ((1 - caps["cost"]) * 0.2)
+            if (
+                caps["cost"] <= max_cost
+                and caps["speed"] >= required_speed
+                and caps["quality"] >= required_quality
+            ):
+                score = (
+                    (caps["speed"] * 0.3)
+                    + (caps["quality"] * 0.5)
+                    + ((1 - caps["cost"]) * 0.2)
+                )
                 candidates.append((model, score))
 
         if not candidates:
@@ -191,7 +208,9 @@ class ModelFallbackCore:
             try:
                 return rc.get_fallback_chain(primary)  # type: ignore[attr-defined]
             except Exception as e:
-                logger.warning(f"Rust get_fallback_chain failed: {e}. Falling back to Python.")
+                logger.warning(
+                    f"Rust get_fallback_chain failed: {e}. Falling back to Python."
+                )
 
         fallback_chains = {
             "gpt-4": ["gpt-4-turbo", "gpt-3.5-turbo", "claude-3-opus"],
@@ -216,7 +235,7 @@ class DerivedMetricCalculator:
             ast.Pow: operator.pow,
             ast.BitXor: operator.xor,
             ast.USub: operator.neg,
-            ast.UAdd: operator.pos
+            ast.UAdd: operator.pos,
         }
 
     def _eval_node(self, node: ast.AST) -> float:
@@ -226,16 +245,20 @@ class DerivedMetricCalculator:
         elif hasattr(ast, "Num") and isinstance(node, ast.Num):
             return float(node.n)
         elif isinstance(node, ast.BinOp):
-            return self.operators[type(node.op)](self._eval_node(node.left), self._eval_node(node.right))
+            return self.operators[type(node.op)](
+                self._eval_node(node.left), self._eval_node(node.right)
+            )
         elif isinstance(node, ast.UnaryOp):
             return self.operators[type(node.op)](self._eval_node(node.operand))
         # Handle Name nodes (variable substitution)
         elif isinstance(node, ast.Name):
-             # This requires context, but _eval_node in strict mode doesn't have it?
-             # DerivedMetricCalculator usually should handle substitution BEFORE parsing or pass context.
-             # If check 'register_derived' usage, it might be storing dependencies.
-             # IMPORTANT: To support calculation with context, we need a method that accepts values.
-            raise ValueError(f"Variable {node.id} cannot be evaluated without context in _eval_node.")
+            # This requires context, but _eval_node in strict mode doesn't have it?
+            # DerivedMetricCalculator usually should handle substitution BEFORE parsing or pass context.
+            # If check 'register_derived' usage, it might be storing dependencies.
+            # IMPORTANT: To support calculation with context, we need a method that accepts values.
+            raise ValueError(
+                f"Variable {node.id} cannot be evaluated without context in _eval_node."
+            )
         elif isinstance(node, ast.Call):
             if isinstance(node.func, ast.Name):
                 func_name = node.func.id
@@ -268,23 +291,27 @@ class DerivedMetricCalculator:
 
         metric_def = self.derived_metrics[metric_name]
         # metric_def might be a DerivedMetric object or formula.
-        formula = getattr(metric_def, 'formula', metric_def) if not isinstance(metric_def, str) else metric_def
+        formula = (
+            getattr(metric_def, "formula", metric_def)
+            if not isinstance(metric_def, str)
+            else metric_def
+        )
 
         # Variable substitution in formula string before parsing
         # The test uses "{a} / {b}". format() method can handle this if keys match.
         try:
-             # Try simple format if formula contains {
+            # Try simple format if formula contains {
             if "{" in formula and "}" in formula:
                 expression = formula.format(**context)
             else:
                 expression = formula  # Assume already names?
-                 # If formula uses simple names like "a + b", we need AST substitution logic.
-                 # But if test uses {a}, format() is creating "10.0 / 2.0"
+                # If formula uses simple names like "a + b", we need AST substitution logic.
+                # But if test uses {a}, format() is creating "10.0 / 2.0"
         except Exception:
             expression = formula  # Fallback
 
         # Now parse
-        tree = ast.parse(expression, mode='eval')
+        tree = ast.parse(expression, mode="eval")
         return self._eval_node(tree.body)
 
     def get_all_derived(self, context: dict[str, float]) -> dict[str, float]:
@@ -298,7 +325,8 @@ class DerivedMetricCalculator:
         return results
 
     def register_derived(self, name: str, dependencies: list[str], formula: str) -> Any:
-        from src.observability.stats.observability_core import DerivedMetric
+        from src.observability.stats.ObservabilityCore import DerivedMetric
+
         metric = DerivedMetric(name=name, dependencies=dependencies, formula=formula)
         self.derived_metrics[name] = metric
         return metric
@@ -315,7 +343,9 @@ class DerivedMetricCalculator:
             try:
                 return rc.evaluate_formula(formula, values)  # type: ignore[attr-defined]
             except Exception as e:
-                logger.warning(f"Rust evaluate_formula failed: {e}. Falling back to Python.")
+                logger.warning(
+                    f"Rust evaluate_formula failed: {e}. Falling back to Python."
+                )
 
         # Handle python format strings like "{a} + {b}"
         if "{" in formula and "}" in formula:
@@ -356,7 +386,7 @@ class StatsRollupCore:
         """Calculate sum of values (pure calculation)."""
         if rc:
             try:
-                return rc.calculate_sum(values)  # type: ignore[attr-defined]
+                return rc.calculate_sum_rust(values)  # type: ignore[attr-defined]
             except Exception:
                 pass
         return sum(values) if values else 0.0
@@ -365,7 +395,7 @@ class StatsRollupCore:
         """Calculate average (pure calculation)."""
         if rc:
             try:
-                return rc.calculate_avg(values)  # type: ignore[attr-defined]
+                return rc.calculate_avg_rust(values)  # type: ignore[attr-defined]
             except Exception:
                 pass
         return sum(values) / len(values) if values else 0.0
@@ -374,7 +404,7 @@ class StatsRollupCore:
         """Calculate minimum (pure calculation)."""
         if rc:
             try:
-                return rc.calculate_min(values)  # type: ignore[attr-defined]
+                return rc.calculate_min_rust(values)  # type: ignore[attr-defined]
             except Exception:
                 pass
         return min(values) if values else 0.0
@@ -383,7 +413,7 @@ class StatsRollupCore:
         """Calculate maximum (pure calculation)."""
         if rc:
             try:
-                return rc.calculate_max(values)  # type: ignore[attr-defined]
+                return rc.calculate_max_rust(values)  # type: ignore[attr-defined]
             except Exception:
                 pass
         return max(values) if values else 0.0
@@ -392,22 +422,28 @@ class StatsRollupCore:
         """Calculate 50th percentile (median) (pure calculation)."""
         if rc:
             try:
-                return rc.calculate_median(values)  # type: ignore[attr-defined]
+                return rc.calculate_median_rust(values)  # type: ignore[attr-defined]
             except Exception:
                 pass
         if not values:
             return 0.0
         sorted_vals = sorted(values)
         idx = len(sorted_vals) // 2
-        return sorted_vals[idx] if len(sorted_vals) % 2 == 1 else (sorted_vals[idx - 1] + sorted_vals[idx]) / 2
+        return (
+            sorted_vals[idx]
+            if len(sorted_vals) % 2 == 1
+            else (sorted_vals[idx - 1] + sorted_vals[idx]) / 2
+        )
 
     def rollup_p95(self, values: List[float]) -> float:
         """Calculate 95th percentile (pure calculation)."""
         if rc:
             try:
-                return rc.calculate_p95(values)  # type: ignore[attr-defined]
+                return rc.calculate_p95_rust(values)  # type: ignore[attr-defined]
             except Exception as e:
-                logger.warning(f"Rust calculate_p95 failed: {e}. Falling back to Python.")
+                logger.warning(
+                    f"Rust calculate_p95_rust failed: {e}. Falling back to Python."
+                )
 
         if not values or len(values) < 20:
             return self.rollup_max(values)
@@ -427,7 +463,7 @@ class StatsRollupCore:
         """Calculate standard deviation (pure calculation)."""
         if rc:
             try:
-                return rc.calculate_stddev(values)  # type: ignore[attr-defined]
+                return rc.calculate_stddev_rust(values)  # type: ignore[attr-defined]
             except Exception:
                 pass
         if len(values) < 2:
@@ -440,7 +476,9 @@ class StatsRollupCore:
 class CorrelationCore:
     """Pure correlation analysis (Rust-convertible)."""
 
-    def calculate_correlation(self, series1: List[float], series2: List[float]) -> float:
+    def calculate_correlation(
+        self, series1: List[float], series2: List[float]
+    ) -> float:
         """Calculate Pearson correlation coefficient (pure calculation).
 
         Args:
@@ -450,6 +488,12 @@ class CorrelationCore:
         Returns:
             Correlation coefficient (-1.0 to 1.0)
         """
+        if rc:
+            try:
+                return rc.calculate_pearson_correlation_rust(series1, series2)  # type: ignore[attr-defined]
+            except Exception:
+                pass
+
         if len(series1) != len(series2) or len(series1) < 2:
             return 0.0
 
@@ -469,7 +513,9 @@ class CorrelationCore:
 class ABTestCore:
     """Pure A/B testing calculations (Rust-convertible)."""
 
-    def calculate_significance(self, control_values: List[float], treatment_values: List[float]) -> Dict[str, float]:
+    def calculate_significance(
+        self, control_values: List[float], treatment_values: List[float]
+    ) -> Dict[str, float]:
         """Calculate statistical significance (pure calculation).
 
         Uses simplified t-test approach.
@@ -483,9 +529,13 @@ class ABTestCore:
         """
         if rc:
             try:
-                return rc.calculate_statistical_significance(control_values, treatment_values)  # type: ignore[attr-defined]
+                return rc.calculate_statistical_significance(
+                    control_values, treatment_values
+                )  # type: ignore[attr-defined]
             except Exception as e:
-                logger.warning(f"Rust calculate_statistical_significance failed: {e}. Falling back to Python.")
+                logger.warning(
+                    f"Rust calculate_statistical_significance failed: {e}. Falling back to Python."
+                )
 
         if not control_values or not treatment_values:
             return {"p_value": 1.0, "t_statistic": 0.0, "effect_size": 0.0}
@@ -493,13 +543,24 @@ class ABTestCore:
         control_mean = sum(control_values) / len(control_values)
         treatment_mean = sum(treatment_values) / len(treatment_values)
 
-        control_var = sum((x - control_mean) ** 2 for x in control_values) / len(control_values)
-        treatment_var = sum((x - treatment_mean) ** 2 for x in treatment_values) / len(treatment_values)
+        control_var = sum((x - control_mean) ** 2 for x in control_values) / len(
+            control_values
+        )
+        treatment_var = sum((x - treatment_mean) ** 2 for x in treatment_values) / len(
+            treatment_values
+        )
 
-        pooled_se = math.sqrt((control_var / len(control_values)) + (treatment_var / len(treatment_values)))
+        pooled_se = math.sqrt(
+            (control_var / len(control_values))
+            + (treatment_var / len(treatment_values))
+        )
         t_stat = (treatment_mean - control_mean) / pooled_se if pooled_se > 0 else 0
 
-        effect_size = (treatment_mean - control_mean) / math.sqrt(max(control_var, treatment_var)) if max(control_var, treatment_var) > 0 else 0
+        effect_size = (
+            (treatment_mean - control_mean) / math.sqrt(max(control_var, treatment_var))
+            if max(control_var, treatment_var) > 0
+            else 0
+        )
 
         return {
             "p_value": 0.05 if abs(t_stat) > 2 else 0.95,  # Simplified
@@ -507,7 +568,9 @@ class ABTestCore:
             "effect_size": effect_size,
         }
 
-    def calculate_sample_size(self, effect_size: float, alpha: float = 0.05, power: float = 0.8) -> int:
+    def calculate_sample_size(
+        self, effect_size: float, alpha: float = 0.05, power: float = 0.8
+    ) -> int:
         """Calculate required sample size (pure calculation).
 
         Args:
@@ -522,13 +585,15 @@ class ABTestCore:
             try:
                 return rc.calculate_sample_size(effect_size, alpha, power)  # type: ignore[attr-defined]
             except Exception as e:
-                logger.warning(f"Rust calculate_sample_size failed: {e}. Falling back to Python.")
+                logger.warning(
+                    f"Rust calculate_sample_size failed: {e}. Falling back to Python."
+                )
 
         # Simplified formula: n = 2 * (z_alpha + z_beta)^2 / effect_size^2
         z_alpha = 1.96  # For alpha=0.05
-        z_beta = 0.84   # For power=0.8
+        z_beta = 0.84  # For power=0.8
 
         if effect_size == 0:
             return 1000000
 
-        return int(2 * ((z_alpha + z_beta) ** 2) / (effect_size ** 2))
+        return int(2 * ((z_alpha + z_beta) ** 2) / (effect_size**2))

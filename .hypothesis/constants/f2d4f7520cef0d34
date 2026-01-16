@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\optim\adadelta.py
-# hypothesis_version: 6.150.1
-
-[0.0, 1e-06, 0.9, 1.0, 'Adadelta', 'acc_delta', 'adadelta', 'capturable', 'cpu', 'differentiable', 'eps', 'foreach', 'lr', 'maximize', 'params', 'rho', 'square_avg', 'step', 'weight_decay']

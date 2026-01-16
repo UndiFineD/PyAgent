@@ -21,7 +21,7 @@
 """Core execution logic for SubagentRunner."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import os
 import time
@@ -34,24 +34,23 @@ if TYPE_CHECKING:
     from .SubagentRunner import SubagentRunner
 
 
-
-
-
-
-
 class SubagentCore:
     """Delegated execution core for SubagentRunner."""
 
     def __init__(self, runner: SubagentRunner) -> None:
         self.runner = runner
 
-    def run_subagent(self, description: str, prompt: str, original_content: str = "") -> str | None:
+    def run_subagent(
+        self, description: str, prompt: str, original_content: str = ""
+    ) -> str | None:
         """Run a subagent using available backends."""
         backend_env = os.environ.get("DV_AGENT_BACKEND", "auto").strip().lower()
         use_cache = os.environ.get("DV_AGENT_CACHE", "true").lower() == "true"
 
         cache_model = backend_env if backend_env != "auto" else "subagent_auto"
-        cache_key = self.runner._get_cache_key(f"{description}:{prompt}:{original_content}", cache_model)
+        cache_key = self.runner._get_cache_key(
+            f"{description}:{prompt}:{original_content}", cache_model
+        )
 
         if use_cache:
             if cache_key in self.runner._response_cache:
@@ -63,25 +62,29 @@ class SubagentCore:
                 self.runner._response_cache[cache_key] = cached_val
                 return cached_val
 
-        full_prompt = BackendHandlers.build_full_prompt(description, prompt, original_content)
+        full_prompt = BackendHandlers.build_full_prompt(
+            description, prompt, original_content
+        )
         repo_root = self.runner._resolve_repo_root()
 
         def _try_codex_cli() -> str | None:
-            if not self.runner._command_available('codex'):
+            if not self.runner._command_available("codex"):
                 return None
             return BackendHandlers.try_codex_cli(full_prompt, repo_root)
 
         def _try_copilot_cli() -> str | None:
-            if not self.runner._command_available('copilot'):
+            if not self.runner._command_available("copilot"):
                 return None
             return BackendHandlers.try_copilot_cli(full_prompt, repo_root)
 
         def _try_gh_copilot(allow_non_command: bool) -> str | None:
-            if not self.runner._command_available('gh'):
+            if not self.runner._command_available("gh"):
                 return None
             if not allow_non_command and not self.runner._looks_like_command(prompt):
                 return None
-            return BackendHandlers.try_gh_copilot(full_prompt, repo_root, allow_non_command)
+            return BackendHandlers.try_gh_copilot(
+                full_prompt, repo_root, allow_non_command
+            )
 
         def _try_github_models() -> str | None:
             return BackendHandlers.try_github_models(full_prompt, self.runner.requests)
@@ -90,7 +93,9 @@ class SubagentCore:
             return self.runner.llm_client.llm_chat_via_vllm(full_prompt, model="llama3")
 
         def _try_ollama() -> str | None:
-            return self.runner.llm_client.llm_chat_via_ollama(full_prompt, model="llama3")
+            return self.runner.llm_client.llm_chat_via_ollama(
+                full_prompt, model="llama3"
+            )
 
         def _try_openai_api() -> str | None:
             return BackendHandlers.try_openai_api(full_prompt, self.runner.requests)
@@ -112,9 +117,15 @@ class SubagentCore:
             res = _try_openai_api()
         else:
             # auto (default) logic
-            res = (_try_vllm() or _try_ollama() or _try_codex_cli() or
-                   _try_copilot_cli() or _try_github_models() or
-                   _try_openai_api() or _try_gh_copilot(allow_non_command=False))
+            res = (
+                _try_vllm()
+                or _try_ollama()
+                or _try_codex_cli()
+                or _try_copilot_cli()
+                or _try_github_models()
+                or _try_openai_api()
+                or _try_gh_copilot(allow_non_command=False)
+            )
 
         if res and use_cache:
             self.runner._response_cache[cache_key] = res
@@ -125,7 +136,7 @@ class SubagentCore:
                 provider="SubagentRunner",
                 model=backend_env,
                 prompt=prompt,
-                result=res or "FAILED"
+                result=res or "FAILED",
             )
 
         return res
@@ -166,11 +177,13 @@ class SubagentCore:
                 token=token,
                 timeout_s=timeout_s,
                 max_retries=max_retries,
-                stream=stream
+                stream=stream,
             )
 
             if result:
-                if validate_content and not self.runner.validate_response_content(result):
+                if validate_content and not self.runner.validate_response_content(
+                    result
+                ):
                     logging.warning("Response validation failed")
                 if use_cache:
                     self.runner._response_cache[cache_key] = result

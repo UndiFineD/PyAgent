@@ -21,19 +21,15 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from enum import Enum
 
 __version__ = VERSION
 
 
-
-
-
-
-
 class FeedFormat(Enum):
     """Feed format types for RSS / Atom generation."""
+
     RSS_20 = "rss_20"
     ATOM_10 = "atom_10"
     JSON_FEED = "json_feed"

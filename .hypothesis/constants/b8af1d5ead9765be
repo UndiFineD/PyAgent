@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\jsonschema\__init__.py
-# hypothesis_version: 6.150.1
-
-['Draft201909Validator', 'Draft202012Validator', 'Draft3Validator', 'Draft4Validator', 'Draft6Validator', 'Draft7Validator', 'ErrorTree', 'FormatChecker', 'FormatError', 'RefResolutionError', 'RefResolver', 'SchemaError', 'TypeChecker', 'ValidationError', 'Validator', '__version__', 'jsonschema', 'validate']

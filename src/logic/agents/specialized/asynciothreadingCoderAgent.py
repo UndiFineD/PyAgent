@@ -2,9 +2,7 @@ from __future__ import annotations
 from typing import Dict, Any, List
 
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.version import VERSION
-
-
+from src.core.base.Version import VERSION
 
 
 class asynciothreadingCoderAgent(BaseAgent):
@@ -12,6 +10,7 @@ class asynciothreadingCoderAgent(BaseAgent):
     Speciation Agent: Fosters agent evolution by identifying niche capabilities
     and synthesizing new, specialized agent types from existing 'Base' agents.
     """
+
     def __init__(self, workspace_path: str) -> None:
         super().__init__(workspace_path)
         self.version = VERSION

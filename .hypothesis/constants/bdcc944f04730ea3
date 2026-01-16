@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\intelligence\core\LocalizationCore.py
-# hypothesis_version: 6.150.1
-
-['\\bbite the bullet\\b', '\\bblackbox\\b', '\\bblacklist\\b', '\\bdoghouse\\b', '\\bgrandfathered\\b', '\\bkill two birds\\b', '\\bsanity check\\b', '\\bwhitelist\\b', 'ar', 'bn', 'de', 'en', 'es', 'fr', 'hi', 'index', 'ja', 'ko', 'low', 'pt', 'ru', 'severity', 'suggestion', 'term', 'zh']

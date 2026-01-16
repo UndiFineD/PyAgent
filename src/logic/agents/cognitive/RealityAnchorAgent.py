@@ -19,16 +19,14 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class RealityAnchorAgent(BaseAgent):
@@ -65,17 +63,24 @@ class RealityAnchorAgent(BaseAgent):
         try:
             return json.loads(response)
         except Exception:
-            return {"grounded": False, "mismatch_detail": "Documentation source unreachable or unreadable."}
+            return {
+                "grounded": False,
+                "mismatch_detail": "Documentation source unreachable or unreadable.",
+            }
 
     @as_tool
-    def check_physics_constraints(self, action: str, environment_state: dict[str, Any]) -> dict[str, Any]:
+    def check_physics_constraints(
+        self, action: str, environment_state: dict[str, Any]
+    ) -> dict[str, Any]:
         """
         Validates an action against physics-based constraints (Simulated).
         Args:
             action: Description of the action (e.g., 'Agent moves 100km in 1 second').
             environment_state: Current state (gravity, boundaries, object masses).
         """
-        logging.info(f"RealityAnchorAgent: Checking physics constraints for action: {action}")
+        logging.info(
+            f"RealityAnchorAgent: Checking physics constraints for action: {action}"
+        )
 
         prompt = (
             f"Action: {action}\n"
@@ -88,7 +93,10 @@ class RealityAnchorAgent(BaseAgent):
         try:
             return json.loads(response)
         except Exception:
-            return {"feasible": False, "reasoning": "Could not parse physics evaluation."}
+            return {
+                "feasible": False,
+                "reasoning": "Could not parse physics evaluation.",
+            }
 
     @as_tool
     def verify_claim(self, claim: str, evidence_sources: list[str]) -> dict[str, Any]:
@@ -117,7 +125,7 @@ class RealityAnchorAgent(BaseAgent):
                 "verdict": "Unknown",
                 "confidence": 0.5,
                 "reasoning": "Failed to parse verification response.",
-                "claim": claim
+                "claim": claim,
             }
 
     @as_tool

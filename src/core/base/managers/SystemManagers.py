@@ -20,7 +20,7 @@
 # Optional import for PluginManager
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import hashlib
 import json
 import logging
@@ -32,9 +32,15 @@ from pathlib import Path
 from typing import Any
 from collections.abc import Callable
 from src.core.base.models import (
-    FilePriority, FilePriorityConfig, AgentEvent, ConfigProfile, HealthStatus,
-    AgentHealthCheck, ExecutionProfile,
-    _empty_dict_str_str, _empty_agent_event_handlers
+    FilePriority,
+    FilePriorityConfig,
+    AgentEvent,
+    ConfigProfile,
+    HealthStatus,
+    AgentHealthCheck,
+    ExecutionProfile,
+    _empty_dict_str_str,
+    _empty_agent_event_handlers,
 )
 
 try:
@@ -52,85 +58,47 @@ class FilePriorityManager:
     """Manager for file priority and request ordering."""
 
     def __init__(self, config: FilePriorityConfig | None = None) -> None:
-
-
-
-
-
-
-
-
-
-
-
-
-
         self.config = config or FilePriorityConfig()
 
-
         self._default_extensions = {
-
-
-
-            ".py": FilePriority.HIGH, ".js": FilePriority.HIGH, ".ts": FilePriority.HIGH,
-
-            ".md": FilePriority.NORMAL, ".json": FilePriority.LOW, ".txt": FilePriority.LOW,
-
+            ".py": FilePriority.HIGH,
+            ".js": FilePriority.HIGH,
+            ".ts": FilePriority.HIGH,
+            ".md": FilePriority.NORMAL,
+            ".json": FilePriority.LOW,
+            ".txt": FilePriority.LOW,
         }
-
 
     def set_pattern_priority(self, pattern: str, priority: FilePriority) -> None:
         self.config.path_patterns[pattern] = priority
 
-
-
-
     def set_extension_priority(self, extension: str, priority: FilePriority) -> None:
-
         self.config.extension_priorities[extension] = priority
 
-
     def get_priority(self, path: Path) -> FilePriority:
-
-
         import fnmatch
 
         path_str = str(path)
-
 
         for pattern, priority in self.config.path_patterns.items():
             if fnmatch.fnmatch(path_str, pattern):
                 return priority
         ext = path.suffix.lower()
 
-
-
-
-
-
-
-
-
-
-
-
         if ext in self.config.extension_priorities:
-
             return self.config.extension_priorities[ext]
         if ext in self._default_extensions:
             return self._default_extensions[ext]
 
-
         return self.config.default_priority
 
     def sort_by_priority(self, paths: list[Path]) -> list[Path]:
-
         return sorted(paths, key=lambda p: self.get_priority(p).value, reverse=True)
 
-    def filter_by_priority(self, paths: list[Path], min_priority: FilePriority = FilePriority.LOW) -> list[Path]:
+    def filter_by_priority(
+        self, paths: list[Path], min_priority: FilePriority = FilePriority.LOW
+    ) -> list[Path]:
         return [p for p in paths if self.get_priority(p).value >= min_priority.value]
-
-
 
 
 @dataclass
@@ -142,19 +110,21 @@ class ResponseCache:
     Caches responses based on prompts.
     Supports Prompt Caching (Phase 128) by identifying prefix reusable contexts.
     """
+
     cache_dir: Path
 
     cache_data: dict[str, str] = field(default_factory=_empty_dict_str_str)
     prefix_map: dict[str, str] = field(default_factory=_empty_dict_str_str)
 
     def __post_init__(self) -> None:
-
         self.cache_dir.mkdir(parents=True, exist_ok=True)
 
     def _get_cache_key(self, prompt: str) -> str:
-
-
-
+        try:
+            import rust_core as rc
+            return rc.fast_cache_key_rust(prompt)  # type: ignore[attr-defined]
+        except (ImportError, Exception):
+            pass
         return hashlib.md5(prompt.encode()).hexdigest()
 
     def set(self, prompt: str, response: str) -> None:
@@ -164,36 +134,33 @@ class ResponseCache:
         # Support prefix caching: Index the first 500 chars (approx. context window prefix)
 
         if len(prompt) > 500:
-            prefix_key = hashlib.md5(prompt[:500].encode()).hexdigest()
+            try:
+                import rust_core as rc
+                prefix_key = rc.fast_prefix_key_rust(prompt, 500)  # type: ignore[attr-defined]
+            except (ImportError, Exception):
+                prefix_key = hashlib.md5(prompt[:500].encode()).hexdigest()
             self.prefix_map[prefix_key] = key
 
-        (self.cache_dir / f"{key}.json").write_text(json.dumps({
-            "prompt": prompt,
-
-
-            "response": response,
-            "timestamp": "2026-01-11"
-        }))
+        (self.cache_dir / f"{key}.json").write_text(
+            json.dumps(
+                {"prompt": prompt, "response": response, "timestamp": "2026-01-11"}
+            )
+        )
 
     def get(self, prompt: str) -> str | None:
         key = self._get_cache_key(prompt)
 
-
         if key in self.cache_data:
-
-
             return self.cache_data[key]
 
         # Check prefix map for partial hits (simulation of provider-side prompt caching)
         if len(prompt) > 500:
-
-
             prefix_key = hashlib.md5(prompt[:500].encode()).hexdigest()
             if prefix_key in self.prefix_map:
-                logging.info("ResponseCache: Prompt Prefix hit - internal cache redirection triggered.")
+                logging.info(
+                    "ResponseCache: Prompt Prefix hit - internal cache redirection triggered."
+                )
                 # We still want the full key for safety, but this flags reuse potential
-
-
 
         cache_file = self.cache_dir / f"{key}.json"
         if cache_file.exists():
@@ -210,16 +177,21 @@ class ResponseCache:
         if cache_file.exists():
             cache_file.unlink()
 
+
 @dataclass
 class StatePersistence:
     """Persists agent state to disk."""
+
     state_file: Path
     backup: bool = False
     backup_count: int = 0
 
     def save(self, state: dict[str, Any]) -> None:
         if self.backup and self.state_file.exists():
-            self.state_file.rename(self.state_file.parent / f"{self.state_file.stem}.{self.backup_count}.bak")
+            self.state_file.rename(
+                self.state_file.parent
+                / f"{self.state_file.stem}.{self.backup_count}.bak"
+            )
             self.backup_count += 1
         self.state_file.parent.mkdir(parents=True, exist_ok=True)
         self.state_file.write_text(json.dumps(state))
@@ -230,20 +202,18 @@ class StatePersistence:
         return default or {}
 
 
-
-
 @dataclass
 class EventManager:
     """Manages agent events."""
-    handlers: dict[AgentEvent, list[Callable[..., None]]] = field(default_factory=_empty_agent_event_handlers)
+
+    handlers: dict[AgentEvent, list[Callable[..., None]]] = field(
+        default_factory=_empty_agent_event_handlers
+    )
 
     def on(self, event: AgentEvent, handler: Callable[..., None]) -> None:
         if event not in self.handlers:
             self.handlers[event] = []
         self.handlers[event].append(handler)
-
-
-
 
     def emit(self, event: AgentEvent, data: Any = None) -> None:
         if event in self.handlers:
@@ -252,7 +222,6 @@ class EventManager:
                     handler(data)
                 else:
                     handler()
-
 
 
 class HealthChecker:
@@ -281,14 +250,20 @@ class HealthChecker:
 
     def get_metrics(self) -> dict[str, Any]:
         """Stub compatibility."""
-        error_rate = self.error_count / self.request_count if self.request_count > 0 else 0
-        avg_latency = self.total_latency / self.request_count if self.request_count > 0 else 0
-        return {"total_requests": self.request_count, "error_count": self.error_count, "error_rate": error_rate, "avg_latency_ms": avg_latency}
+        error_rate = (
+            self.error_count / self.request_count if self.request_count > 0 else 0
+        )
+        avg_latency = (
+            self.total_latency / self.request_count if self.request_count > 0 else 0
+        )
+        return {
+            "total_requests": self.request_count,
+            "error_count": self.error_count,
+            "error_rate": error_rate,
+            "avg_latency_ms": avg_latency,
+        }
 
     def check(self) -> dict[str, Any]:
-
-
-
         """Stub compatibility mixed with real check if results exist."""
         components = {name: func() for name, func in self.checks.items()}
         base_status = {"status": "healthy", "components": components}
@@ -300,60 +275,82 @@ class HealthChecker:
         """Check if an agent script exists and is valid."""
         start_time = time.time()
         # Look for script in src/ directory
-        script_path = self.repo_root / f'src/agent_{agent_name}.py'
+        script_path = self.repo_root / f"src/agent_{agent_name}.py"
 
         if not script_path.exists():
             return AgentHealthCheck(
                 agent_name=agent_name,
                 status=HealthStatus.UNHEALTHY,
-                error_message=f"Script not found: {script_path}"
+                error_message=f"Script not found: {script_path}",
             )
 
         try:
             import ast
-            content = script_path.read_text(encoding='utf-8', errors='ignore')
+
+            content = script_path.read_text(encoding="utf-8", errors="ignore")
             ast.parse(content)
             response_time = (time.time() - start_time) * 1000
             return AgentHealthCheck(
                 agent_name=agent_name,
                 status=HealthStatus.HEALTHY,
                 response_time_ms=response_time,
-                details={'script_path': str(script_path)}
+                details={"script_path": str(script_path)},
             )
         except SyntaxError as e:
             return AgentHealthCheck(
                 agent_name=agent_name,
                 status=HealthStatus.UNHEALTHY,
-                error_message=f"Syntax error: {e}"
+                error_message=f"Syntax error: {e}",
             )
 
     def check_git(self) -> AgentHealthCheck:
         """Check if git is available."""
         start_time = time.time()
         try:
-            result = subprocess.run(['git', '--version'], capture_output=True, text=True, timeout=5)
+            result = subprocess.run(
+                ["git", "--version"], capture_output=True, text=True, timeout=5
+            )
             response_time = (time.time() - start_time) * 1000
             if result.returncode == 0:
-                return AgentHealthCheck(agent_name='git', status=HealthStatus.HEALTHY, response_time_ms=response_time, details={'version': result.stdout.strip()})
-            return AgentHealthCheck(agent_name='git', status=HealthStatus.UNHEALTHY, error_message=result.stderr)
+                return AgentHealthCheck(
+                    agent_name="git",
+                    status=HealthStatus.HEALTHY,
+                    response_time_ms=response_time,
+                    details={"version": result.stdout.strip()},
+                )
+            return AgentHealthCheck(
+                agent_name="git",
+                status=HealthStatus.UNHEALTHY,
+                error_message=result.stderr,
+            )
         except Exception as e:
-            return AgentHealthCheck(agent_name='git', status=HealthStatus.UNHEALTHY, error_message=str(e))
+            return AgentHealthCheck(
+                agent_name="git", status=HealthStatus.UNHEALTHY, error_message=str(e)
+            )
 
     def check_python(self) -> AgentHealthCheck:
         """Check Python environment."""
         start_time = time.time()
         return AgentHealthCheck(
-            agent_name='python',
+            agent_name="python",
             status=HealthStatus.HEALTHY,
             response_time_ms=(time.time() - start_time) * 1000,
-            details={'version': sys.version, 'executable': sys.executable}
+            details={"version": sys.version, "executable": sys.executable},
         )
 
     def run_all_checks(self) -> dict[str, AgentHealthCheck]:
         """Run all health checks."""
-        agent_names = ['coder', 'tests', 'changes', 'context', 'errors', 'improvements', 'stats']
-        self.results['python'] = self.check_python()
-        self.results['git'] = self.check_git()
+        agent_names = [
+            "coder",
+            "tests",
+            "changes",
+            "context",
+            "errors",
+            "improvements",
+            "stats",
+        ]
+        self.results["python"] = self.check_python()
+        self.results["git"] = self.check_git()
         for name in agent_names:
             self.results[name] = self.check_agent_script(name)
         return self.results
@@ -401,7 +398,7 @@ class ProfileManager:
 
     def add_profile(self, profile: Any) -> None:
         """Add a profile (either ExecutionProfile or ConfigProfile)."""
-        if hasattr(profile, 'name'):
+        if hasattr(profile, "name"):
             if isinstance(profile, ExecutionProfile):
                 self._profiles[profile.name] = profile
             else:
@@ -434,13 +431,17 @@ class ProfileManager:
     def get_setting(self, key: str, default: Any = None) -> Any:
         """Stub compatibility for ConfigProfile settings."""
         active_p = self.active
-        if not active_p or not hasattr(active_p, 'settings'):
+        if not active_p or not hasattr(active_p, "settings"):
             return default
 
         if key in active_p.settings:
             return active_p.settings[key]
 
-        if hasattr(active_p, 'parent') and active_p.parent and active_p.parent in self.profiles:
+        if (
+            hasattr(active_p, "parent")
+            and active_p.parent
+            and active_p.parent in self.profiles
+        ):
             parent = self.profiles[active_p.parent]
             if key in parent.settings:
                 return parent.settings[key]

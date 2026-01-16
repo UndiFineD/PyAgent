@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\huggingface_hub\file_download.py
-# hypothesis_version: 6.150.1
-
-[255, 300, 399, 401, ' (hf_transfer=True)', '"', '--', '..\\', '.incomplete', '.locks', '.no_exist', '/', 'Accept-Encoding', 'Content-Disposition', 'Content-Encoding', 'Content-Length', 'Content-Range', 'ETag', 'GET', 'HEAD', 'Invalid repo type', 'Location', 'Range', 'W/', '\\..\\', '\\\\?\\', '^[0-9a-f]{40}$', '^[0-9a-f]{64}$', 'ab', 'authorization', 'auto', 'blobs', 'bytes=0-0', 'callback', 'dummy_file_dst', 'dummy_file_src', 'filename', 'identity', 'main', 'model', 'nt', 'range', 'rb', 'refs', 'snapshots']

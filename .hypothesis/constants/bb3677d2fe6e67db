@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\mtia\__init__.py
-# hypothesis_version: 6.150.1
-
-['_mtia_exchangeDevice', 'all', 'current_device', 'current_stream', 'default_stream', 'device', 'device_count', 'empty_cache', 'get_rng_state', 'init', 'is_available', 'is_bf16_supported', 'is_initialized', 'is_initializing', 'max_memory_allocated', 'memory_allocated', 'memory_stats', 'mtia', 'python', 'set_device', 'set_rng_state', 'set_stream', 'snapshot', 'stream', 'synchronize', 'torch.mtia.Stream']

@@ -1,7 +1,7 @@
-# PROXIMA VOYAGER: Interstellar Swarm Orchestration
+# PROXIMA VOYAGER: Interstellar Swarm Orchestration (Phase 317)
 
 ## Overview
-Proxima is complete. Voyager awaits.
+**Proxima is complete.** The fleet has successfully integrated Rust acceleration and achieved Synaptic Acceleration (Phase 317). Voyager awaits.
 
 Voyager is the next major evolution of the PyAgent ecosystem, moving from a single-machine fleet to a truly decentralized, Peer-to-Peer (P2P) swarm orchestration system that spans multiple distinct user machines across any network.
 
@@ -10,8 +10,8 @@ Voyager is the next major evolution of the PyAgent ecosystem, moving from a sing
 ### 1. From "Fleet" to "Constellation"
 Traditional fleets are localized. Constellations are distributed. Voyager allows agents on Machine A to seamlessly delegate tasks to agents on Machine B without a centralized server.
 
-### 2. P2P Binary Communication (FastSwarm v2)
-Using the foundations laid in Phase 255 (Binary Protocol), Voyager utilizes a DHT (Distributed Hash Table) for agent discovery and `noise`-protocol encrypted binary streams for secure inter-node communication.
+### 2. Rust-Enhanced FFI (FastSwarm v2 - Synaptic Acceleration)
+Using the foundations laid in Phase 317, Voyager utilizes the high-performance `rust_core` for sub- interpreter communication and serialized binary states.
 
 ### 3. Federated Long-Term Memory
 Memory isn't just local; it's sharded across the constellation. An agent in New York can query the "Experience Buffer" of an agent in Tokyo to avoid repeating the same mistake.

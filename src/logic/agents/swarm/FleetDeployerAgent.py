@@ -24,18 +24,16 @@ and managing node spawning across environments.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import os
 import json
 import asyncio
 from pathlib import Path
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class FleetDeployerAgent(BaseAgent):
@@ -52,7 +50,9 @@ class FleetDeployerAgent(BaseAgent):
         )
 
     @as_tool
-    async def generate_dockerfile(self, agent_type: str, python_version: str = "3.10-slim") -> str:
+    async def generate_dockerfile(
+        self, agent_type: str, python_version: str = "3.10-slim"
+    ) -> str:
         """Generates a specialized Dockerfile for an agent type.
 
 
@@ -93,10 +93,6 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
         # Phase 287: Use asyncio.to_thread for blocking I/O if needed,
         # but small writes are usually fine. However, we'll be consistent.
 
-
-
-
-
         def write_file() -> str:
             with open(path, "w", encoding="utf-8") as f:
                 f.write(dockerfile_content)
@@ -114,13 +110,15 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
             agent_name: Unique name for the new node.
             agent_type: The agent class to instantiate.
         """
-        logging.info(f"FleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'")
+        logging.info(
+            f"FleetDeployer: Spawning new node '{agent_name}' of type '{agent_type}'"
+        )
 
         spawn_log = {
             "node_id": agent_name,
             "type": agent_type,
             "status": "provisioning",
-            "timestamp": time.time() if 'time' in globals() else 0
+            "timestamp": time.time() if "time" in globals() else 0,
         }
 
         log_path = self.deploy_dir / "provisioning_logs.jsonl"
@@ -166,6 +164,8 @@ CMD ["python", "src/logic/agents/specialized/{agent_type}.py"]
     @as_tool
     async def consensus_driven_deploy(self, agent_type: str, node_name: str) -> str:
         """Deploys an agent, but only after reaching consensus (Mock)."""
-        logging.info(f"FleetDeployer: Requesting consensus for deployment of {node_name}...")
+        logging.info(
+            f"FleetDeployer: Requesting consensus for deployment of {node_name}..."
+        )
         # Mock approval
         return await self.spawn_node(node_name, agent_type)

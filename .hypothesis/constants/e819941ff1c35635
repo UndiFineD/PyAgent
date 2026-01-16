@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\observability\stats\engine.py
-# hypothesis_version: 6.150.1
-
-[1000, '.', 'avg_duration', 'avg_duration_ms', 'count', 'success', 'total_cost', 'total_cost_usd', 'total_count', 'unknown']

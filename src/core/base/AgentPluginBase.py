@@ -21,7 +21,7 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.models import AgentHealthCheck, AgentPriority, HealthStatus
 from abc import ABC, abstractmethod
 from pathlib import Path
@@ -29,11 +29,6 @@ from typing import Any
 import logging
 
 __version__ = VERSION
-
-
-
-
-
 
 
 class AgentPluginBase(ABC):
@@ -48,8 +43,12 @@ class AgentPluginBase(ABC):
         config: Plugin configuration.
     """
 
-    def __init__(self, name: str, priority: AgentPriority = AgentPriority.NORMAL,
-                 config: dict[str, Any] | None = None) -> None:
+    def __init__(
+        self,
+        name: str,
+        priority: AgentPriority = AgentPriority.NORMAL,
+        config: dict[str, Any] | None = None,
+    ) -> None:
         """Initialize the plugin.
 
         Args:
@@ -94,7 +93,4 @@ class AgentPluginBase(ABC):
         Returns:
             AgentHealthCheck: Health check result.
         """
-        return AgentHealthCheck(
-            agent_name=self.name,
-            status=HealthStatus.HEALTHY
-        )
+        return AgentHealthCheck(agent_name=self.name, status=HealthStatus.HEALTHY)

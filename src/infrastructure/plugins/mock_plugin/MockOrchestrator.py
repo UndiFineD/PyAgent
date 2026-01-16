@@ -21,13 +21,11 @@
 """Mock orchestrator plugin for demonstrating community extension patterns."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class MockOrchestrator:
@@ -35,6 +33,7 @@ class MockOrchestrator:
     A mock orchestrator demonstrating how community members can add
     new coordination logic to the fleet.
     """
+
     def __init__(self, fleet: Any) -> None:
         self.fleet = fleet
         logging.info("MockOrchestrator online.")

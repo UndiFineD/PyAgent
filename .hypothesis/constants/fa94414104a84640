@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\_dynamo\variables\base.py
-# hypothesis_version: 6.150.1
-
-['<unknown type>', 'PyCodegen', 'VariableTracker', '__getattr__', '__iter__', '__len__', '__next__', 'guards', 'mutation_type', 'parents_tracker', 'source', 'value']

@@ -24,15 +24,13 @@ Used in Phase 42 for model distillation and fine-tuning loops.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
-
-
 
 
 class RewardModelAgent(BaseAgent):
@@ -47,7 +45,9 @@ class RewardModelAgent(BaseAgent):
         )
 
     @as_tool
-    async def rank_proposals(self, task: str, proposals: dict[str, str]) -> dict[str, Any]:
+    async def rank_proposals(
+        self, task: str, proposals: dict[str, str]
+    ) -> dict[str, Any]:
         """Ranks a set of proposals from best to worst and provides reward scores.
 
         Args:
@@ -55,9 +55,14 @@ class RewardModelAgent(BaseAgent):
             proposals: Mapping of agent names to their generated content.
         """
         if self.recorder:
-            self.recorder.record_lesson("reward_model_ranking", {"task": task[:100], "agent_count": len(proposals)})
+            self.recorder.record_lesson(
+                "reward_model_ranking",
+                {"task": task[:100], "agent_count": len(proposals)},
+            )
 
-        logging.info(f"RewardModel: Ranking {len(proposals)} items for task: {task[:30]}...")
+        logging.info(
+            f"RewardModel: Ranking {len(proposals)} items for task: {task[:30]}..."
+        )
 
         # In a real system, we'd use a dedicated Reward Model or a strong LLM to judge.
         # Here we use the base agent's reasoning to produce a ranking.
@@ -76,53 +81,37 @@ class RewardModelAgent(BaseAgent):
             # Try to parse JSON from response
             import json
             import re
+
             match = re.search(r"(\{.*\})", res.replace("\n", " "), re.DOTALL)
             if match:
                 data = json.loads(match.group(1))
                 return data
         except Exception as e:
-
-
-
-
-
-
-
-
-
-
             logging.error(f"RewardModel: Failed to parse ranking: {e}")
 
         # Fallback heuristic ranking
         scores = {}
-
-
 
         for name, content in proposals.items():
             score = 7.0  # neutral
             if "TODO" in content or len(content) < 15:
                 score = 3.0
             elif len(content) > 20:
-
-
                 score = 9.0
             scores[name] = score
 
         ranking = sorted(scores, key=scores.get, reverse=True)
         return {"ranking": ranking, "scores": scores}
 
-
-
-
     async def improve_content(self, input_text: str) -> str:
         """Standard AI-powered evaluation."""
         return await super().improve_content(input_text)
 
 
-
-
-
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
-    main = create_main_function(RewardModelAgent, "Reward Model Agent", "Rankings and Reward signals")
+    from src.core.base.BaseUtilities import create_main_function
+
+    main = create_main_function(
+        RewardModelAgent, "Reward Model Agent", "Rankings and Reward signals"
+    )
     main()

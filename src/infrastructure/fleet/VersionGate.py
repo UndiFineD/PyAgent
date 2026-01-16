@@ -24,12 +24,10 @@ Handles semantic versioning checks and capability validation.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 
 __version__ = VERSION
-
-
 
 
 class VersionGate:
@@ -45,8 +43,8 @@ class VersionGate:
         Major version must match or current must be higher (if backward compatible).
         """
         try:
-            curr_parts = [int(x) for x in current.split('.')]
-            req_parts = [int(x) for x in required.split('.')]
+            curr_parts = [int(x) for x in current.split(".")]
+            req_parts = [int(x) for x in required.split(".")]
 
             # Pad to 3 parts (major, minor, patch)
             curr_parts += [0] * (3 - len(curr_parts))
@@ -69,7 +67,9 @@ class VersionGate:
             # Patch check
             return curr_parts[2] >= req_parts[2]
         except Exception as e:
-            logging.debug(f"VersionGate: Failed to parse version '{current}' or '{required}': {e}")
+            logging.debug(
+                f"VersionGate: Failed to parse version '{current}' or '{required}': {e}"
+            )
             # Fail safe: if we can't parse, assume it's legacy (compatible)
             return True
 

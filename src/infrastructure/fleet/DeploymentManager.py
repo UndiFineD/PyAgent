@@ -21,12 +21,10 @@
 """Manager for automated deployment, containerization, and fleet-as-a-service scaling."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from pathlib import Path
 
 __version__ = VERSION
-
-
 
 
 class DeploymentManager:

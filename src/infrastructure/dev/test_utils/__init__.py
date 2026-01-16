@@ -20,7 +20,7 @@
 """Auto-generated module exports."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
+from src.core.base.Version import VERSION as VERSION
 from .AgentAssertions import AgentAssertions as AgentAssertions
 from .AssertionHelpers import AssertionHelpers as AssertionHelpers
 from .BaselineManager import BaselineManager as BaselineManager
@@ -47,7 +47,9 @@ from .ModuleLoader import ModuleLoader as ModuleLoader
 from .ParallelTestResult import ParallelTestResult as ParallelTestResult
 from .ParallelTestRunner import ParallelTestRunner as ParallelTestRunner
 from .ParameterizedTestCase import ParameterizedTestCase as ParameterizedTestCase
-from .ParameterizedTestGenerator import ParameterizedTestGenerator as ParameterizedTestGenerator
+from .ParameterizedTestGenerator import (
+    ParameterizedTestGenerator as ParameterizedTestGenerator,
+)
 from .PerformanceMetric import PerformanceMetric as PerformanceMetric
 from .PerformanceMetricType import PerformanceMetricType as PerformanceMetricType
 from .PerformanceTracker import PerformanceTracker as PerformanceTracker
@@ -55,7 +57,9 @@ from .RecordedInteraction import RecordedInteraction as RecordedInteraction
 from .ResourceHandle import ResourceHandle as ResourceHandle
 from .ResourcePool import ResourcePool as ResourcePool
 from .RetryHelper import RetryHelper as RetryHelper
-from .SnapshotComparisonResult import SnapshotComparisonResult as SnapshotComparisonResult
+from .SnapshotComparisonResult import (
+    SnapshotComparisonResult as SnapshotComparisonResult,
+)
 from .SnapshotManager import SnapshotManager as SnapshotManager
 from .TestAssertion import TestAssertion as TestAssertion
 from .TestBaseline import TestBaseline as TestBaseline

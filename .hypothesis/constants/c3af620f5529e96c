@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\infrastructure\api\core\GatewayCore.py
-# hypothesis_version: 6.150.1
-
-['GET', 'POST', 'action', 'background', 'claude-3-haiku', 'cli', 'create', 'glm-4-flash', 'gpt-4o', 'gui', 'jira', 'llama-3-70b', 'method', 'params', 'service', 'slack', 'trello', 'update', 'web_ui']

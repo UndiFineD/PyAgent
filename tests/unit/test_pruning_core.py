@@ -5,8 +5,6 @@ import time
 from src.core.base.core.PruningCore import PruningCore, SynapticWeight
 
 
-
-
 class TestPruningCore(unittest.TestCase):
     def setUp(self):
         self.core = PruningCore()
@@ -14,7 +12,7 @@ class TestPruningCore(unittest.TestCase):
     @given(
         current_weight=st.floats(min_value=0.0, max_value=1.0),
         idle_time=st.floats(min_value=0.0, max_value=100000.0),
-        half_life=st.floats(min_value=1.0, max_value=10000.0)
+        half_life=st.floats(min_value=1.0, max_value=10000.0),
     )
     def test_calculate_decay(self, current_weight, idle_time, half_life):
         new_weight = self.core.calculate_decay(current_weight, idle_time, half_life)
@@ -31,15 +29,10 @@ class TestPruningCore(unittest.TestCase):
         expected = max(expected, 0.05)
         self.assertAlmostEqual(new_weight, expected)
 
-    @given(
-        refractory_until=st.floats(min_value=0, max_value=2000000000)
-    )
+    @given(refractory_until=st.floats(min_value=0, max_value=2000000000))
     def test_is_in_refractory(self, refractory_until):
         weight = SynapticWeight(
-            agent_id="test",
-            weight=0.5,
-            last_fired=0,
-            refractory_until=refractory_until
+            agent_id="test", weight=0.5, last_fired=0, refractory_until=refractory_until
         )
         # We can't strictly control time.time(), so we test relative
         now = time.time()
@@ -51,24 +44,10 @@ class TestPruningCore(unittest.TestCase):
             self.assertFalse(result)
 
     @given(
-        current_weight=st.floats(min_value=0.0, max_value=1.0),
-        success=st.booleans()
-
-
-
-
-
-
-
-
-
-
+        current_weight=st.floats(min_value=0.0, max_value=1.0), success=st.booleans()
     )
     def test_update_weight_on_fire(self, current_weight, success):
         new_weight = self.core.update_weight_on_fire(current_weight, success)
-
-
-
 
         if success:
             expected = min(current_weight * 1.1, 1.0)
@@ -76,27 +55,16 @@ class TestPruningCore(unittest.TestCase):
         else:
             expected = max(current_weight * 0.8, 0.1)
 
-
-
-
             self.assertAlmostEqual(new_weight, expected)
 
     @given(
         weight=st.floats(min_value=0.0, max_value=1.0),
-        threshold=st.floats(min_value=0.0, max_value=1.0)
-
-
-
-
-
+        threshold=st.floats(min_value=0.0, max_value=1.0),
     )
     def test_should_prune(self, weight, threshold):
         result = self.core.should_prune(weight, threshold)
         self.assertEqual(result, weight < threshold)
 
 
-
-
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

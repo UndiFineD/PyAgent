@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\tree\_classes.py
-# hypothesis_version: 6.150.1
-
-[0.0, 0.5, 1.0, 'C', 'ExtraTreeClassifier', 'ExtraTreeRegressor', 'X', 'absolute_error', 'allow-nan', 'array-like', 'balanced', 'best', 'both', 'ccp_alpha', 'check_input', 'class_weight', 'criterion', 'csc', 'csr', 'dtype', 'entropy', 'friedman_mse', 'gini', 'ignore', 'left', 'log2', 'log_loss', 'max_depth', 'max_features', 'max_leaf_nodes', 'min_samples_leaf', 'min_samples_split', 'monotonic_cst', 'neither', 'poisson', 'random', 'random_state', 'right', 'splitter', 'sqrt', 'squared_error']

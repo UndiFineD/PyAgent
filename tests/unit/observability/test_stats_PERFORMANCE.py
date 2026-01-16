@@ -10,21 +10,19 @@ import sys
 
 # Try to import test utilities
 try:
-    from tests.utils.agent_test_utils import AGENT_DIR, agent_sys_path, load_module_from_path, agent_dir_on_path
+    from tests.utils.agent_test_utils import (
+        AGENT_DIR,
+        agent_sys_path,
+        load_module_from_path,
+        agent_dir_on_path,
+    )
 except ImportError:
     # Fallback
-    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / 'src'
+    AGENT_DIR: Path = Path(__file__).parent.parent.parent.parent / "src"
 
     class agent_sys_path:
         def __enter__(self) -> Self:
-
             return self
-
-
-
-
-
-
 
         def __exit__(self, *args) -> None:
             sys.path.remove(str(AGENT_DIR))
@@ -62,6 +60,7 @@ class TestStatsQueryPerformance:
         result = engine.query("metric1", aggregation="avg")
         assert result["value"] == 20.0
 
+
 class TestPerformanceMetrics(unittest.TestCase):
     """Tests for performance metrics tracking."""
 
@@ -77,6 +76,7 @@ class TestPerformanceMetrics(unittest.TestCase):
     def test_track_memory_usage(self) -> None:
         """Test tracking memory usage."""
         import sys
+
         size: int = sys.getsizeof("hello")
         assert size > 0
 
@@ -112,6 +112,7 @@ class TestBenchmarking(unittest.TestCase):
         baseline = {"operation": "parse", "time_ms": 10.0}
         current = {"operation": "parse", "time_ms": 12.5}
 
-        regression_percent = ((current["time_ms"] - baseline["time_ms"])
-                              / baseline["time_ms"]) * 100
+        regression_percent = (
+            (current["time_ms"] - baseline["time_ms"]) / baseline["time_ms"]
+        ) * 100
         assert regression_percent > 0  # Performance regressed

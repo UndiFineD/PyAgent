@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\svm\_base.py
-# hypothesis_version: 6.150.1
-
-[-1.0, 0.0, 0.1, 1.0, 'C', 'W', '[LibLinear]', '[LibSVM]', '__call__', 'auto', 'balanced', 'boolean', 'break_ties', 'c_svc', 'cache_size', 'class_weight', 'class_weight_', 'classes_', 'coef0', 'crammer_singer', 'csr', 'degree', 'epsilon', 'epsilon_insensitive', 'epsilon_svr', 'gamma', 'hinge', 'i', 'kernel', 'l1', 'l2', 'left', 'linear', 'logistic_regression', 'max_iter', 'neither', 'nu', 'nu_svc', 'nu_svr', 'one_class', 'ovo', 'ovr', 'poly', 'precomputed', 'probability', 'random_state', 'rbf', 'right', 'scale', 'shape', 'shrinking', 'sigmoid', 'squared_hinge', 'tol', 'verbose']

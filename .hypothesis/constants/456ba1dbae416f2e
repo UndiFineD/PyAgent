@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\neighbors\_base.py
-# hypothesis_version: 6.150.1
-
-[0.0, 1.0, '1.11', '1.17', '1.9', 'C', 'X', '__contains__', 'algorithm', 'allow-nan', 'auto', 'ball_tree', 'boolean', 'both', 'braycurtis', 'brute', 'canberra', 'chebyshev', 'clip', 'connectivity', 'coo', 'copy', 'correlation', 'cosine', 'csc', 'csr', 'dice', 'distance', 'euclidean', 'graph', 'hamming', 'haversine', 'ignore', 'jaccard', 'kd_tree', 'kulsinski', 'leaf_size', 'left', 'lil', 'mahalanobis', 'manhattan', 'matching', 'mergesort', 'metric', 'metric_params', 'minkowski', 'n_jobs', 'n_neighbors', 'nan_euclidean', 'p', 'precomputed', 'radius', 'right', 'rogerstanimoto', 'russellrao', 'seuclidean', 'sokalmichener', 'sokalsneath', 'sparse matrix', 'sqeuclidean', 'squared', 'threads', 'uniform', 'w', 'warn_when_not_sorted', 'yule']

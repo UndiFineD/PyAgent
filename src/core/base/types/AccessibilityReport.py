@@ -21,17 +21,12 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types.AccessibilityIssue import AccessibilityIssue
 from src.core.base.types.WCAGLevel import WCAGLevel
 from dataclasses import dataclass, field
 
 __version__ = VERSION
-
-
-
-
-
 
 
 @dataclass
@@ -48,6 +43,7 @@ class AccessibilityReport:
         serious_count: Number of serious issues.
         recommendations: High - level recommendations.
     """
+
     file_path: str
     issues: list[AccessibilityIssue] = field(default_factory=lambda: [])
     total_elements: int = 0

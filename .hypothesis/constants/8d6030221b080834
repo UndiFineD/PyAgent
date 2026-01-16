@@ -1,4 +1,0 @@
-# file: C:\DEV\PyAgent\src\logic\agents\development\NetworkArchSearchAgent.py
-# hypothesis_version: 6.150.1
-
-['15% accuracy boost', '2ms', 'LoRA', 'alpha', 'architecture_type', 'q_proj', 'rank', 'target_modules', 'v_proj']

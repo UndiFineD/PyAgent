@@ -13,12 +13,7 @@
 
 from __future__ import annotations
 from typing import Any
-from src.core.base.modules import BaseModule
-
-
-
-
-
+from src.core.base.BaseModules import BaseModule
 
 
 class BlackboardModule(BaseModule):
@@ -26,8 +21,8 @@ class BlackboardModule(BaseModule):
     Consolidated core module for Blackboard operations.
     Migrated from BlackboardCore.
     """
-    def __init__(self, config:
-        dict[str, Any] | None = None) -> None:
+
+    def __init__(self, config: dict[str, Any] | None = None) -> None:
         super().__init__(config)
         self.data: dict[str, Any] = {}
         self.history: list[dict[str, Any]] = []
@@ -36,8 +31,7 @@ class BlackboardModule(BaseModule):
         """Initialize blackboard state."""
         return super().initialize()
 
-    def execute(self, action:
-        str, **kwargs) -> Any:
+    def execute(self, action: str, **kwargs) -> Any:
         """
         Executes blackboard operations.
         Supported actions: post, get, keys
@@ -49,7 +43,7 @@ class BlackboardModule(BaseModule):
             return self.process_post(
                 kwargs.get("key"),
                 kwargs.get("value"),
-                kwargs.get("agent_name", "unknown")
+                kwargs.get("agent_name", "unknown"),
             )
         elif action == "get":
             return self.get_value(kwargs.get("key"))
@@ -57,16 +51,14 @@ class BlackboardModule(BaseModule):
             return self.get_all_keys()
         return None
 
-    def process_post(self, key:
-        str, value: Any, agent_name: str) -> dict[str, Any]:
+    def process_post(self, key: str, value: Any, agent_name: str) -> dict[str, Any]:
         """Core logic for posting data."""
         self.data[key] = value
         entry = {"agent": agent_name, "key": key, "value": value}
         self.history.append(entry)
         return entry
 
-    def get_value(self, key:
-        str) -> Any:
+    def get_value(self, key: str) -> Any:
         return self.data.get(key)
 
     def get_all_keys(self) -> list[str]:

@@ -23,23 +23,22 @@ Converts images and PDFs into structured Markdown/JSON/HTML while preserving for
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import json
 from pathlib import Path
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool, create_main_function
+from src.core.base.BaseUtilities import as_tool, create_main_function
 
 __version__ = VERSION
 
 try:
     from pypdf import PdfReader
+
     HAS_PYPDF = True
 except ImportError:
     HAS_PYPDF = False
-
-
 
 
 class DocInferenceAgent(BaseAgent):
@@ -79,7 +78,9 @@ class DocInferenceAgent(BaseAgent):
             return f"Error parsing PDF: {str(e)}"
 
     @as_tool
-    def ingest_document_to_knowledge(self, doc_path: str, tags: list[str] | None = None) -> dict[str, Any]:
+    def ingest_document_to_knowledge(
+        self, doc_path: str, tags: list[str] | None = None
+    ) -> dict[str, Any]:
         """Converts a document into context-aware Knowledge for the Fleet.
 
         Args:
@@ -87,7 +88,11 @@ class DocInferenceAgent(BaseAgent):
             tags: Optional metadata tags.
         """
         logging.info(f"DocInference: Ingesting {doc_path} into Knowledge.")
-        content = self.parse_pdf_text(doc_path) if doc_path.lower().endswith(".pdf") else "Non-PDF content raw placeholder."
+        content = (
+            self.parse_pdf_text(doc_path)
+            if doc_path.lower().endswith(".pdf")
+            else "Non-PDF content raw placeholder."
+        )
 
         # Here we would typically interface with KnowledgeAgent or save to a known export path
         export_dir = Path("data/memory/knowledge_exports")
@@ -98,16 +103,16 @@ class DocInferenceAgent(BaseAgent):
             "source": doc_path,
             "content": content,
             "tags": tags or ["ingested", "doc_inference"],
-            "type": "unstructured_to_knowledge"
+            "type": "unstructured_to_knowledge",
         }
 
-        with open(knowledge_file, 'w', encoding='utf-8') as f:
+        with open(knowledge_file, "w", encoding="utf-8") as f:
             json.dump(knowledge_data, f, indent=4)
 
         return {
             "status": "success",
             "message": f"Successfully ingested {doc_path} into {knowledge_file}",
-            "char_count": len(content)
+            "char_count": len(content),
         }
 
     @as_tool
@@ -121,22 +126,15 @@ class DocInferenceAgent(BaseAgent):
         # Mocking the layout conversion logic
         return f"Successfully reconstructed {doc_path} as {format}. Tables extracted: 2, Handwriting detected: Yes."
 
-
-
-
-
-
     @as_tool
     def extract_form_data(self, image_path: str) -> dict[str, Any]:
         """Extracts key-value pairs and checkbox states from a form image."""
         logging.info(f"DocInference: Extracting form from {image_path}")
 
-
-
         return {
             "fields": {"Full Name": "John Doe", "Date": "2025-10-14"},
             "checkboxes": {"Priority": True, "Reviewed": False},
-            "status": "Verified"
+            "status": "Verified",
         }
 
     @as_tool
@@ -144,15 +142,13 @@ class DocInferenceAgent(BaseAgent):
         """Uses advanced vision-language models to transcribe handwritten notes."""
         return "Transcribed Note: 'Meeting at 5pm to discuss the new agent architecture. Don't forget the coffee.'"
 
-
     def improve_content(self, prompt: str) -> str:
         """Generic processing helper."""
         return f"DocInference status: Layout engine active. Ready for {prompt}."
 
 
-
-
-
 if __name__ == "__main__":
-    main = create_main_function(DocInferenceAgent, "Document Inference Agent", "Path to document")
+    main = create_main_function(
+        DocInferenceAgent, "Document Inference Agent", "Path to document"
+    )
     main()

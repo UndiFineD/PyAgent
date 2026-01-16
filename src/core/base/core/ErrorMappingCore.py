@@ -13,12 +13,6 @@
 # limitations under the License.
 
 from __future__ import annotations
-from typing import Dict
-
-
-
-
-
 
 
 class ErrorMappingCore:
@@ -34,26 +28,22 @@ class ErrorMappingCore:
         "NetworkTimeout": "PA-1002",
         "DiskFull": "PA-1003",
         "PermissionsDenied": "PA-1004",
-
         # 20xx: Model & AI
         "ModelTimeout": "PA-2001",
         "InvalidResponse": "PA-2002",
         "ContextWindowExceeded": "PA-2003",
         "RateLimitExceeded": "PA-2004",
-
         # 30xx: Logic & Reasoning
         "DecompositionFailure": "PA-3001",
         "CircularDependency": "PA-3002",
-         "InfiniteLoopDetected": "PA-3003",
-
+        "InfiniteLoopDetected": "PA-3003",
         # 40xx: Security & Compliance
         "UnauthorizedAccess": "PA-4001",
         "SafetyFilterTriggered": "PA-4002",
         "SensitiveDataExposure": "PA-4003",
-
         # 50xx: Configuration
         "ManifestMismatch": "PA-5001",
-        "EnvVarMissing": "PA-5002"
+        "EnvVarMissing": "PA-5002",
     }
 
     @classmethod
@@ -72,6 +62,6 @@ class ErrorMappingCore:
         descriptions = {
             "PA-1001": "FileSystemError: The workspace could not be accessed.",
             "PA-2001": "ModelTimeout: The LLM backend did not respond in time.",
-            "PA-4002": "SafetyFilterTriggered: The generated content was blocked by safety guardrails."
+            "PA-4002": "SafetyFilterTriggered: The generated content was blocked by safety guardrails.",
         }
         return descriptions.get(error_code, "Unknown System Error")

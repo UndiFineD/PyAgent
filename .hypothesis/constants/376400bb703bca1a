@@ -1,4 +1,0 @@
-# file: c:\DEV\PyAgent\src\core\base\types\DependencyType.py
-# hypothesis_version: 6.150.1
-
-['class_inheritance', 'function_call', 'import', 'variable_reference']

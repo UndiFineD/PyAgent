@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\torch\optim\adagrad.py
-# hypothesis_version: 6.150.1
-
-[0.0, 1e-10, 0.01, 1.0, 'Adagrad', 'adagrad', 'cpu', 'differentiable', 'eps', 'foreach', 'found_inf', 'fused', 'grad_scale', 'lr', 'lr_decay', 'maximize', 'params', 'step', 'sum', 'weight_decay']

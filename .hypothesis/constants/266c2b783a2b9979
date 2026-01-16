@@ -1,4 +1,0 @@
-# file: C:\Users\Keimpe\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0\LocalCache\local-packages\Python313\site-packages\sklearn\model_selection\_split.py
-# hypothesis_version: 6.150.1
-
-[0.1, 0.2, 0.25, -100, 300, 500, '%s(%s)', '%s=%s', ',\n', ', ', '...', 'BaseCrossValidator', 'GroupKFold', 'GroupShuffleSplit', 'KFold', 'LeaveOneGroupOut', 'LeaveOneOut', 'LeavePGroupsOut', 'LeavePOut', 'PredefinedSplit', 'RepeatedKFold', 'ShuffleSplit', 'StratifiedGroupKFold', 'StratifiedKFold', '__test__', 'always', 'array-like', 'binary', 'boolean', 'check_cv', 'clip', 'cvargs', 'deprecated_original', 'f', 'groups', 'i', 'left', 'mergesort', 'multiclass', 'neither', 'random_state', 'self', 'shuffle', 'split', 'str', 'stratify', 'test_size', 'train_size', 'train_test_split', 'y']

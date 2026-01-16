@@ -18,13 +18,11 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import time
 from typing import Any
 
 __version__ = VERSION
-
-
 
 
 class MemoryPruningAgent:
@@ -32,6 +30,7 @@ class MemoryPruningAgent:
     Optimizes Long-Term Memory (LTM) by ranking importance and
     pruning low-utility or stale data slices.
     """
+
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
 
@@ -44,7 +43,7 @@ class MemoryPruningAgent:
         # Factor 1: Recency
         age = time.time() - memory_entry.get("timestamp", 0)
         recency_penalty = min(0.5, age / (3600 * 24))  # Max penalty 0.5 for >1 day
-        score += (0.5 - recency_penalty)
+        score += 0.5 - recency_penalty
 
         # Factor 2: Frequency
         access_count = memory_entry.get("access_count", 0)
@@ -58,7 +57,9 @@ class MemoryPruningAgent:
 
         return round(score, 3)
 
-    def select_pruning_targets(self, memory_list: list[dict[str, Any]], threshold: float = 0.2) -> list[dict[str, Any]]:
+    def select_pruning_targets(
+        self, memory_list: list[dict[str, Any]], threshold: float = 0.2
+    ) -> list[dict[str, Any]]:
         """
         Identifies entries that fall below the utility threshold.
         """
@@ -69,7 +70,9 @@ class MemoryPruningAgent:
                 targets.append({"index": i, "rank": rank, "id": entry.get("id")})
         return targets
 
-    def generate_archival_plan(self, memory_list: list[dict[str, Any]]) -> dict[str, list[str]]:
+    def generate_archival_plan(
+        self, memory_list: list[dict[str, Any]]
+    ) -> dict[str, list[str]]:
         """
         Decides which memories to move to 'cold' storage vs 'delete'.
         """
