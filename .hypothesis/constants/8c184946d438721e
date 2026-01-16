@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\IdiomExtractorAgent.py
+# hypothesis_version: 6.150.1
+
+['"""', '.py', '.pyagent_idioms.json', ':', ':param', '@([a-zA-Z0-9_\\.]+)', 'Args:', 'Google', 'PascalCase', 'Returns:', 'classes', 'common_decorators', 'docstring_style', 'error', 'frequent_imports', 'functions', 'naming_conventions', 'reStructuredText', 'snake_case', 'src', 'utf-8', 'variables', 'w']

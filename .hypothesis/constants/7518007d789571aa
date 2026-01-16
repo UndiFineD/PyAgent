@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\development\DocumentationIndexerAgent.py
+# hypothesis_version: 6.150.1
+
+['*.md', '*.py', 'Path to index', 'README', '__main__', 'docs', 'readmes', 'source_comments']

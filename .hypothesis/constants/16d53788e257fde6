@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\backend\ResponseTransform.py
+# hypothesis_version: 6.150.1
+
+['extract_code', 'extract_json', 'markdown_to_text', 'none', 'strip']

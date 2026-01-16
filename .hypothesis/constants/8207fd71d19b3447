@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\utils\RateLimiter.py
+# hypothesis_version: 6.150.1
+
+[0.01, 1.0, 'burst_size', 'requests_last_minute', 'requests_per_second', 'tokens_available']

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\swarm\PredictiveSchedulerAgent.py
+# hypothesis_version: 6.150.1
+
+[0.05, 0.1, 0.4, 0.5, 0.8, 0.9, 1.0, 1000.0, -1000, 1000, 2000, 5000, 'action', 'agent', 'agent_name', 'avg', 'collect_more_data', 'confidence', 'current_nodes', 'forecasted_tokens', 'recommended_nodes', 'scale_up', 'stable', 'timestamp', 'token_count', 'tokens', 'trend', 'trigger_scaling', 'unknown', 'weights']

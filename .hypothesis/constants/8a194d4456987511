@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\core\base\IncrementalProcessor.py
+# hypothesis_version: 6.150.1
+
+[0.8, 4096, 65536, '.agent_state.cbor', '.json', 'file_hashes', 'last_run_timestamp', 'pending_files', 'processed_files', 'rb']

@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\cognitive\context\engines\GlobalContextCore.py
+# hypothesis_version: 6.150.1
+
+[1000, 5000000, '\n## ⚠️ Constraints', '\n## 💡 Key Insights', '\n## 📋 Project Facts', 'accumulate', 'constraints', 'default', 'facts', 'insights', 'last_modified', 'latest', 'lessons_learned', 'merge', 'source', 'text', 'timestamp', 'updated_at', 'value']

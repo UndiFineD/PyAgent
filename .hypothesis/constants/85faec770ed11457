@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\development\TypeSafetyAgent.py
+# hypothesis_version: 6.150.1
+
+['*.py', '.git', 'Any', 'HIGH', 'LOW', 'MEDIUM', 'Missing Param Type', 'Missing Return Type', 'TypeSafety Agent', "Usage of 'Any'", '__main__', '__pycache__', 'item', 'line', 'self', 'severity', 'src', 'src/classes', 'type', 'utf-8', 'venv', '⚠️', '🚨']
