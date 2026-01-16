@@ -33,6 +33,14 @@ All file-system modifications are wrapped in `StateTransaction`.
 - **Atomic Operations**: Changes are buffered.
 - **Rollback**: If an agent fails midway through a multi-file refactor, the `StateTransaction` restores previous states from a secure vault.
 
+### 7. Mixin-Based Agent Modularization (`src/core/base/mixins/`)
+Following the Phase 317 complexity sweep, the monolithic `BaseAgent` (Complexity: 135) was refactored into a decentralized Mixin architecture.
+- **IdentityMixin**: Handles agent naming, versioning, and core metadata.
+- **PersistenceMixin**: Manages state serialization, checkpointing, and history.
+- **KnowledgeMixin**: Orchestrates access to the "Knowledge Trinity" (Structured, Semantic, Relational).
+- **OrchestrationMixin**: Manages task delegation, tool calling, and recursive reasoning.
+- **GovernanceMixin**: Enforces security protocols, privacy boundaries, and ethical guardrails.
+
 ## Future Roadmap: Project "VOYAGER"
 - **P2P Swarms**: Decentralized fleet synchronization without a central manager.
 - **Cross-Language Rust Port**: Low-level migration of core logic to `rust_core/`.
