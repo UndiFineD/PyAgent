@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\infrastructure\backend\SubagentCore.py
+# hypothesis_version: 6.150.1
+
+[1000, 'DV_AGENT_BACKEND', 'DV_AGENT_CACHE', 'FAILED', 'SubagentRunner', 'auto', 'cache_hits', 'codex', 'codex-cli', 'copilot', 'copilot-cli', 'errors', 'gh', 'gh-copilot', 'github-models', 'github_models', 'gpt', 'huggingface', 'llama3', 'local', 'localai', 'models', 'ollama', 'openai', 'requests', 'subagent_auto', 'total_latency_ms', 'true', 'vllm']

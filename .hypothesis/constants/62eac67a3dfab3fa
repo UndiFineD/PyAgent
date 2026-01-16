@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\system\ModelOptimizerAgent.py
+# hypothesis_version: 6.150.1
+
+[0.85, 0.92, 0.95, 12.5, 256, 450, 3350, 3958, '4-bit', '4bit', '8-bit', 'Avoid OOM errors', 'FP8', 'Fast (PPA Efficient)', 'Moderate', 'NVIDIA H100 (Hopper)', 'None', 'Normal', 'Run 70B on 4GB VRAM', 'Slow (Disk IO Bound)', 'Standard', '__main__', 'acceleration', 'benefits', 'bottlenecks', 'energy_uj', 'estimated_speed', 'h100', 'hardware', 'hopper', 'hopper_optimized', 'hw', 'latency_ms', 'layered_inference', 'memory_kb', 'method', 'model', 'npu_dna2', 'offload_to_cpu', 'pattern', 'peak_tflops_fp8', 'quantization', 'recommendation', 'size', 'suitability_score', 'target', 'tinyml_benchmark', 'vram']

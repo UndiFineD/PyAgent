@@ -1,0 +1,4 @@
+# file: C:\DEV\PyAgent\src\logic\agents\development\DocumentationAgent.py
+# hypothesis_version: 6.150.1
+
+['## 🔗 Dependency Map', '*.py', '---', 'Documentation Agent', '__init__', '__main__', '```', '```mermaid', 'src/classes', 'utf-8']
