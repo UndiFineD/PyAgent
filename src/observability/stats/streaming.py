@@ -5,7 +5,7 @@
 from __future__ import annotations
 import logging
 from typing import Any, Callable
-from .Metrics import Metric
+from .metrics import Metric
 from .ObservabilityCore import StreamingConfig
 
 logger = logging.getLogger(__name__)

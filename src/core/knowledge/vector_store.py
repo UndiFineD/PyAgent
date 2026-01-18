@@ -36,10 +36,10 @@ class VectorKnowledgeStore(KnowledgeStore):
             self.collection = self.client.get_or_create_collection(
                 name=f"{agent_id}_knowledge"
             )
-        except ImportError:
+        except (ImportError, AttributeError):
             self.client = None
             logging.warning(
-                "ChromaDB not installed, VectorKnowledgeStore will be disabled."
+                "ChromaDB not installed or incompatible, VectorKnowledgeStore will be disabled."
             )
 
     def store(

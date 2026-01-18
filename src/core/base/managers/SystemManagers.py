@@ -222,8 +222,8 @@ class EventManager:
 class HealthChecker:
     """Performs health checks on agent components."""
 
-    def __init__(self, repo_root: Path | None = None, recorder: Any = None) -> None:
-        self.repo_root = repo_root or Path.cwd()
+    def __init__(self, repo_root: Path | str | None = None, recorder: Any = None) -> None:
+        self.repo_root = Path(repo_root) if repo_root else Path.cwd()
         self.recorder = recorder
         self.results: dict[str, AgentHealthCheck] = {}
         # Stub compatibility

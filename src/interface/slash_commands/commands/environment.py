@@ -127,11 +127,11 @@ def cmd_hostname(ctx: CommandContext) -> CommandResult:
 
 
 @register(
-    "user",
+    "whoami",
     description="Get current user",
-    usage="/user",
-    aliases=["whoami"],
+    usage="/whoami",
     category="environment",
+    aliases=["user"],
 )
 def cmd_user(ctx: CommandContext) -> CommandResult:
     """Get current user name."""

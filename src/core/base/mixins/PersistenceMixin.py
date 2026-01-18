@@ -45,6 +45,18 @@ class PersistenceMixin:
     def get_diff(self) -> str:
         return self.generate_diff()
 
+    def read_previous_content(self) -> str:
+        """Reads original file content into previous_content."""
+        if not hasattr(self, "file_path") or not self.file_path.exists():
+            self.previous_content = "# New Document\n"
+            return self.previous_content
+
+        try:
+            self.previous_content = self.file_path.read_text(encoding="utf-8")
+        except Exception:
+            self.previous_content = ""
+        return self.previous_content
+
     def update_file(self) -> bool:
         """Write content back to disk."""
         if not hasattr(self, "current_content") or not hasattr(self, "file_path"):
