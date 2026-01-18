@@ -65,6 +65,20 @@ class SemanticSearchEngine:
         """Lazy initialization of ChromaDB collection."""
         if self._collection is None:
             try:
+                # Handle Pydantic v2 compatibility for older ChromaDB versions
+                try:
+                    import pydantic
+                    if hasattr(pydantic, "__version__") and pydantic.__version__.startswith("2"):
+                        try:
+                            from pydantic_settings import BaseSettings
+                            # Only patch if not already present
+                            if not hasattr(pydantic, "BaseSettings"):
+                                pydantic.BaseSettings = BaseSettings
+                        except ImportError:
+                            pass
+                except ImportError:
+                    pass
+
                 import chromadb
                 from chromadb.utils import embedding_functions
 
