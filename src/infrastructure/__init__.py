@@ -61,6 +61,22 @@ _LAZY_MODULES = ModuleLazyLoader({
         "src.infrastructure.attention.PagedAttentionEngine",
         "PagedAttentionEngine",
     ),
+    "KVzapPruner": (
+        "src.infrastructure.kv_transfer.KVzap",
+        "KVzapPruner",
+    ),
+    "SynapticLink": (
+        "src.infrastructure.kv_transfer.LatentLink",
+        "SynapticLink",
+    ),
+    "STEMManager": (
+        "src.infrastructure.engine.STEMScaling",
+        "STEMManager",
+    ),
+    "TableCacheManager": (
+        "src.infrastructure.tools.TableCache",
+        "TableCacheManager",
+    ),
 })
 
 
