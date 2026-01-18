@@ -20,7 +20,7 @@ import sys
 sys.path.insert(0, "C:/DEV/PyAgent/src")
 
 # XGrammarBackend imports
-from infrastructure.structured_output.XGrammarBackend import (
+from src.infrastructure.structured_output.XGrammarBackend import (
     GrammarType,
     VocabType,
     TokenizerInfo,
@@ -32,7 +32,7 @@ from infrastructure.structured_output.XGrammarBackend import (
 )
 
 # LogitsProcessorV2 imports
-from infrastructure.structured_output.LogitsProcessorV2 import (
+from src.infrastructure.structured_output.LogitsProcessorV2 import (
     MoveDirectionality,
     SamplingParams,
     BatchUpdate,
@@ -45,14 +45,14 @@ from infrastructure.structured_output.LogitsProcessorV2 import (
 )
 
 # BadWordsProcessorV2 imports
-from infrastructure.structured_output.BadWordsProcessorV2 import (
+from src.infrastructure.structured_output.BadWordsProcessorV2 import (
     BadWordsPenaltyMode,
     TrieNode,
     BadWordsProcessorV2,
 )
 
 # GuidanceBackend imports
-from infrastructure.structured_output.GuidanceBackend import (
+from src.infrastructure.structured_output.GuidanceBackend import (
     GuidanceTemplateType,
     GuidanceVariable,
     GuidanceTemplate,
@@ -64,7 +64,7 @@ from infrastructure.structured_output.GuidanceBackend import (
 )
 
 # LMFormatEnforcerBackend imports
-from infrastructure.structured_output.LMFormatEnforcerBackend import (
+from src.infrastructure.structured_output.LMFormatEnforcerBackend import (
     DFAStateType,
     DFAState,
     DFATransition,
@@ -79,7 +79,7 @@ from infrastructure.structured_output.LMFormatEnforcerBackend import (
 )
 
 # StructuredOutputOrchestrator imports
-from infrastructure.structured_output.StructuredOutputOrchestrator import (
+from src.infrastructure.structured_output.StructuredOutputOrchestrator import (
     StructuredOutputBackendType,
     ConstraintType,
     GrammarProtocol,

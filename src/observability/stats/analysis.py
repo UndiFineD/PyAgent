@@ -13,7 +13,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from .Metrics import (
+from .metrics import (
     DerivedMetric,
     MetricCorrelation,
     ABComparisonResult,
