@@ -6,6 +6,7 @@ Speculative tree structures for EAGLE.
 
 from __future__ import annotations
 from dataclasses import dataclass, field
+from typing import cast
 
 
 @dataclass(slots=True)
@@ -71,7 +72,7 @@ class SpeculativeTree:
     def expand(
         self,
         node: TreeNode,
-        candidates: list[tuple[int, float, float]],  # (token_id, logprob, confidence)
+        candidates: list[tuple[int, float] | tuple[int, float, float]],  # (token_id, logprob, [confidence])
         max_width: int = 4
     ) -> list[TreeNode]:
         """Expand node with candidate tokens based on confidence.
@@ -81,8 +82,16 @@ class SpeculativeTree:
         if node.depth >= self.max_depth:
             return []
         
+        # Standardize to 3-tuples (token_id, logprob, confidence)
+        standardized = []
+        for c in candidates:
+            if len(c) == 2:
+                standardized.append((c[0], c[1], 1.0))
+            else:
+                standardized.append(cast(tuple[int, float, float], c))
+
         # Filter by confidence threshold first
-        viable_candidates = [c for c in candidates if c[2] >= self.confidence_threshold]
+        viable_candidates = [c for c in standardized if c[2] >= self.confidence_threshold]
         
         # Sort by logprob and take top candidates
         sorted_candidates = sorted(viable_candidates, key=lambda x: x[1], reverse=True)

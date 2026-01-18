@@ -9,9 +9,9 @@ import time
 import uuid
 from dataclasses import dataclass, field
 from typing import Any
-from .Analysis import TracingCore
+from .analysis import TracingCore
 from .ObservabilityCore import ExportDestination
-from .Metrics import Metric
+from .metrics import Metric
 
 logger = logging.getLogger(__name__)
 

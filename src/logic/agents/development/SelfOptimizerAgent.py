@@ -19,7 +19,7 @@ from __future__ import annotations
 from src.core.base.Version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import create_main_function
-from src.observability.stats.Monitoring import ResourceMonitor
+from src.observability.stats.monitoring import ResourceMonitor
 from src.observability.stats.Metrics_engine import ObservabilityEngine
 
 __version__ = VERSION

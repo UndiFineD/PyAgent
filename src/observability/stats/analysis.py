@@ -13,7 +13,7 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from .Metrics import (
+from .metrics import (
     DerivedMetric,
     MetricCorrelation,
     ABComparisonResult,
@@ -314,6 +314,14 @@ class CorrelationAnalyzer:
         self.correlations.append(res)
 
         return res
+
+    def find_strong_correlations(
+        self, threshold: float = 0.8
+    ) -> list[MetricCorrelation]:
+        """Find correlations exceeding a threshold."""
+        return [
+            c for c in self.correlations if abs(c.correlation_coefficient) >= threshold
+        ]
 
 
 try:

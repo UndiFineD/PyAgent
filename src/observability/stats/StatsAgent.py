@@ -506,7 +506,9 @@ class StatsAgent:
                 "baseline": baseline_value,
                 "difference": current_value - baseline_value,
             }
-        logger.info(json.dumps(comparison, indent=2))
+        report = json.dumps(comparison, indent=2)
+        logger.info(report)
+        print(report)
 
     def report_stats(self, output_format: str = "text") -> None:
         """Print the statistics report."""

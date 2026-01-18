@@ -25,7 +25,7 @@ try:
 except ImportError:
 
     psutil = None
-from .Exporters import PrometheusExporter, OTelManager, MetricsExporter
+from .exporters import PrometheusExporter, OTelManager, MetricsExporter
 
 try:
     from src.observability.reports.GrafanaGenerator import (
