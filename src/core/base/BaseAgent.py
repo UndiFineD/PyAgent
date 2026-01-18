@@ -80,6 +80,32 @@ class BaseAgent(
     _plugins: dict[str, Any] = {}
     _event_hooks: dict[EventType, list[Callable[[dict[str, Any]], None]]] = {}
 
+    @classmethod
+    def register_plugin(cls, name_or_plugin: Any, plugin: Any | None = None) -> None:
+        """Register a plugin with the agent."""
+        if plugin is None:
+            # Called with one arg: register_plugin(plugin)
+            plugin_obj = name_or_plugin
+            name = getattr(plugin_obj, "name", "unknown")
+        else:
+            # Called with two args: register_plugin(name, plugin)
+            name = name_or_plugin
+            plugin_obj = plugin
+        cls._plugins[name] = plugin_obj
+
+    @classmethod
+    def unregister_plugin(cls, name: str) -> bool:
+        """Unregister a plugin."""
+        if name in cls._plugins:
+            del cls._plugins[name]
+            return True
+        return False
+
+    @classmethod
+    def get_plugin(cls, name: str) -> Any:
+        """Get a registered plugin."""
+        return cls._plugins.get(name)
+
     def __init__(self, file_path: str, **kwargs: Any) -> None:
         """Initialize the BaseAgent with decentralized initialization."""
         self.file_path = Path(file_path)
@@ -110,13 +136,18 @@ class BaseAgent(
         self._state_data: dict[str, Any] = {}
         self._post_processors: list[Callable[[str], str]] = []
         self._model: str | None = kwargs.get("model")
+        self.recorder = kwargs.get("recorder")
         self._system_prompt: str = "You are a helpful AI assistant."
 
     def _run_command(
         self, cmd: list[str], timeout: int = 120
     ) -> subprocess.CompletedProcess[str]:
         return ShellExecutor.run_command(
-            cmd, self._workspace_root, self.agent_name, timeout=timeout
+            cmd,
+            self._workspace_root,
+            self.agent_name,
+            models_config=getattr(self, "models", None),
+            timeout=timeout,
         )
 
     async def run(self, prompt: str) -> str:

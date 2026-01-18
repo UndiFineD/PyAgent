@@ -40,7 +40,3 @@ __all__ = [
     "register_command",
     "command",
 ]
-
-    
-    "command",
-]
