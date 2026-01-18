@@ -1,23 +1,20 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
-StructuredOutputGrammar - Grammar-constrained decoding infrastructure.
-
-Inspired by vLLM's v1/structured_output/ backends (xgrammar, guidance, outlines).
-Provides JSON schema, regex, choice, and EBNF grammar constraints for LLM outputs.
+Grammar-constrained decoding package.
 """
 
-from .grammar import (
-    ChoiceGrammar,
-    EBNFGrammar,
-    GrammarCompiler,
-    GrammarRule,
-    JSONSchemaGrammar,
-    RegexGrammar,
+from .Base import (
     StructuredOutputGrammar,
-    StructuredOutputManager,
     StructuredOutputOptions,
     StructuredOutputsParams,
+)
+from .EBNFGrammar import EBNFGrammar, GrammarRule
+from .JsonConstraint import JSONSchemaGrammar
+from .RegexConstraint import ChoiceGrammar, RegexGrammar
+from .Registry import (
+    GrammarCompiler,
+    StructuredOutputManager,
     compile_grammar,
     validate_structured_output_params,
 )
