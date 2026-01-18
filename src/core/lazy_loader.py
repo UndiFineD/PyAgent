@@ -10,6 +10,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 """
 Lazy loading utilities for PyAgent.
 
@@ -41,6 +42,7 @@ Example usage:
 from __future__ import annotations
 
 import importlib
+import sys
 from functools import lru_cache
 from typing import Any, Callable, Dict, Optional, Tuple, TypeVar
 
@@ -184,8 +186,8 @@ class ModuleLazyLoader:
         from src.core.lazy_loader import ModuleLazyLoader
 
         _lazy = ModuleLazyLoader({
-            "EagleProposer": ("src.infrastructure.engine.speculative.eagle_proposer", "EagleProposer"),
-            "ARCOffloadManager": ("src.infrastructure.storage.kv_transfer.arc_offload_manager", "ARCOffloadManager"),
+            "EagleProposer": ("src.infrastructure.speculative_v2.EagleProposer", "EagleProposer"),
+            "ARCOffloadManager": ("src.infrastructure.kv_transfer.ARCOffloadManager", "ARCOffloadManager"),
         })
 
         def __getattr__(name: str):
@@ -244,9 +246,13 @@ class ModuleLazyLoader:
             self._cache[name] = attr
             return attr
         except ImportError as e:
-            raise ImportError(f"Failed to lazy import {name!r} from {module_path}: {e}") from e
+            raise ImportError(
+                f"Failed to lazy import {name!r} from {module_path}: {e}"
+            ) from e
         except AttributeError as e:
-            raise AttributeError(f"Module {module_path!r} has no attribute {attr_name!r}: {e}") from e
+            raise AttributeError(
+                f"Module {module_path!r} has no attribute {attr_name!r}: {e}"
+            ) from e
 
     def available_names(self) -> list[str]:
         """
