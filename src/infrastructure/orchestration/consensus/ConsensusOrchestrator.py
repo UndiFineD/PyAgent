@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
@@ -84,10 +79,10 @@ class ConsensusOrchestrator:
             )
 
     def _collect_proposals(self, task: str, agents: list[str]) -> list[dict[str, Any]]:
-        proposals = []
+        proposals: list[dict[str, Any]] = []
         import asyncio
 
-        loop = None
+        loop: asyncio.AbstractEventLoop
         try:
             loop = asyncio.get_event_loop()
         except RuntimeError:
@@ -121,6 +116,15 @@ class ConsensusOrchestrator:
         """
         Agents review each other's proposals and refine their own.
         """
+        import asyncio
+
+        loop: asyncio.AbstractEventLoop
+        try:
+            loop = asyncio.get_event_loop()
+        except RuntimeError:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+
         current_proposals = proposals
         for r in range(rounds):
             logging.info(f"ConsensusOrchestrator: Debate Round {r + 1}")

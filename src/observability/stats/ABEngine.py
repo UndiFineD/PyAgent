@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # A/B testing and comparison engine.
+# Phase 16: Rust acceleration for statistical significance calculations
 
 from __future__ import annotations
 import hashlib
@@ -9,6 +10,14 @@ from dataclasses import dataclass, field
 from typing import Any
 
 logger = logging.getLogger(__name__)
+
+# Phase 16: Rust acceleration imports
+try:
+    import rust_core
+    _RUST_AVAILABLE = True
+except ImportError:
+    _RUST_AVAILABLE = False
+    logging.debug("rust_core not available, using Python fallback for ABEngine")
 
 
 @dataclass
@@ -88,13 +97,6 @@ class ABComparisonEngine:
             "confidence": comp.confidence,
             "metrics_count": len(comp.metrics_a) + len(comp.metrics_b),
         }
-        if version.lower() == "a":
-            comp.metrics_a[metric_name] = value
-        elif version.lower() == "b":
-            comp.metrics_b[metric_name] = value
-        else:
-            return False
-        return True
 
     def calculate_winner(
         self, comparison_id: str, metric_name: str, higher_is_better: bool = True
@@ -147,6 +149,20 @@ class ABComparator:
             return ABSignificanceResult(
                 p_value=1.0, is_significant=False, effect_size=0.0
             )
+        
+        # Phase 16: Try Rust-accelerated t-test calculation
+        if _RUST_AVAILABLE and hasattr(rust_core, "calculate_ttest_rust"):
+            try:
+                result = rust_core.calculate_ttest_rust(control_values, treatment_values, alpha)
+                if result:
+                    return ABSignificanceResult(
+                        p_value=result.get("p_value", 1.0),
+                        is_significant=result.get("is_significant", False),
+                        effect_size=result.get("effect_size", 0.0),
+                    )
+            except Exception:
+                pass  # Fall through to Python implementation
+        
         mean_a = sum(control_values) / len(control_values)
         mean_b = sum(treatment_values) / len(treatment_values)
         effect = mean_b - mean_a

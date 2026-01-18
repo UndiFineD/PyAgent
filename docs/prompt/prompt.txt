@@ -1,36 +1,745 @@
-# Strategic Improvement Directives (Phase 317)
-# Priority: HIGH | Focus: Logic Complexity & Type Safety
-@focus: ["src/maintenance", "src/logic", "src/infrastructure/orchestration"]
+# Strategic Improvement Directives (Phase 44+)
+# Priority: CRITICAL | Status: vLLM INTEGRATION PHASES 17-44 COMPLETE
+# Rust Functions: 467 | Test Coverage: ~2888+ tests passing
+@focus: ["src/infrastructure/sampling", "src/infrastructure/multimodal", "src/infrastructure/cache", "rust_core/src"]
 
-## Primary Objectives
+## Quick Reference - Completed Phases
 
-### 1. Complexity Reduction (CRITICAL)
-- Target the 32 files identified with **Cyclomatic Complexity > 25**.
-- Break down monolithic functions into smaller, deterministic helper methods.
-- Prioritize `src/logic/agents` and `src/infrastructure/orchestration`.
+### Core Infrastructure (Phases 1-16) ✅
+- Voyager ZMQ Transport, Neural Oxidation, Shard Hashing
+- Cognitive Acceleration (Phase 14): 8 Rust functions
+- Core Infrastructure (Phase 15): 8 Rust functions  
+- Vector Math (Phase 16): 12 Rust functions
+- **Total**: 100 tracked Rust functions
 
-### 2. Type Safety & Rust Portability
-- Inject explicit type hints into all `src/infrastructure` orchestrators.
-- Focus on method arguments and return values.
-- Ensure `self` is not typed, but all other complex objects (Fleet, Agents) are.
+### vLLM Integration (Phases 17-44) ✅
+| Phase | Focus | Modules | Rust | Tests |
+|-------|-------|---------|------|-------|
+| 17 | Core Patterns | 6 | 11 | 21/21 |
+| 17.P2 | Lazy Loading | 3 | 3 | 34/34 |
+| 18 | Resilience | 6 | 0 | 36/36 |
+| 19 | Performance | 6 | 0 | 38/38 |
+| 20 | Infrastructure | 6 | 0 | 42/42 |
+| 21 | LM Studio | 2 | 0 | 36/36 |
+| 22 | Utilities | 4 | 6 | 56/56 |
+| 23 | Serialization | 5 | 7 | 50/50 |
+| 24 | Observability | 6 | 7 | 55/55 |
+| 25 | Spec Decode | 5 | 8 | 48/48 |
+| 26 | Multimodal | 4 | 11 | 57/57 |
+| 27 | Attention | 3 | 9 | ~30 |
+| 28 | Lifecycle | 3 | 8 | ~40 |
+| 29-33 | Various | ~20 | ~50 | ~200 |
+| 34 | Disaggregated | 6 | 12 | 70/85 |
+| 35 | Async Cache | 6 | 12 | 95/97 |
+| 36 | CUDA Graph | 6 | 8 | 70/70 |
+| 37 | Weight/EPLB | 4 | 9 | 57/57 |
+| 38 | MoE/SSM/MLA | 4 | 11 | 50/50 |
+| 39 | Struct/Spec/Tens | 6 | 12 | 40/40 |
+| 40 | Reasoning/Media | 6 | 17 | 35/35 |
+| 41 | Token/Model/LoRA | 6 | 18 | 269/269 |
+| 42 | Platform/API/Prompt | 6 | 17 | 163/163 |
+| 43 | Engine/KVCache/Queue | 4 | 16 | 122/122 |
+| 44 | Sampling/SpecDec v2 | 6 | 12 | 38/38 |
 
-### 3. Documentation Injection (Maintenance Phase)
-- Ensure every file in `src/maintenance` has a module-level docstring starting with triple quotes.
-- Verify that every public class has a high-quality docstring explaining its role in the 5-tier architecture.
+---
 
-### 4. Swarm Intelligence Verification
-- Use `SelfImprovementOrchestrator` to apply "Swarm Intelligence Fixes" based on the latest interaction shards.
-- Validate that lessons from Shard 220 (Copilot CLI deprecation patterns) are being processed.
+## Phase 44: Advanced Sampling & Speculative Decoding v2 ✅ COMPLETE
+@location: ["src/infrastructure/sampling", "src/infrastructure/multimodal", "src/infrastructure/cache"]
 
-### 5. FFI Stability Check
-- Ensure Python type hints align with the expected signatures in `rust_core.pyd`.
-- Identify functions in `src/core` that are candidates for the next wave of Rust oxidation (Phase 318).
+### Implemented Modules (6 Python)
+1. **RejectionSampler.py** - Speculative decoding verification (600 lines)
+   - RejectionStrategy: STANDARD, STRICT, LENIENT, ADAPTIVE
+   - Recovery sampling from adjusted distribution
+   - StreamingRejectionSampler for partial verification
+   - BatchRejectionSampler for multi-sequence
+
+2. **TopKTopPSampler.py** - Multi-variant nucleus sampling (650 lines)
+   - NucleusSamplingVariant: STANDARD, TYPICAL, ETA, EPSILON, MIN_P
+   - TemperatureSchedule: CONSTANT, LINEAR, COSINE, ADAPTIVE
+   - GumbelSoftmaxSampler for differentiable sampling
+   - BatchTopKTopPSampler with per-request parameters
+
+3. **PenaltyEngine.py** - Comprehensive penalty application (500 lines)
+   - PenaltyType: REPETITION, FREQUENCY, PRESENCE, NGRAM, POSITIONAL
+   - PenaltySchedule: CONSTANT, WARMUP, DECAY, ADAPTIVE
+   - BatchPenaltyEngine for batched application
+
+4. **NgramProposer.py** - N-gram token proposal (600 lines)
+   - MatchingStrategy: FIRST, LONGEST, RECENT, WEIGHTED
+   - AdaptiveNgramProposer with dynamic n-sizing
+   - SuffixTreeProposer for O(m) matching
+
+5. **EncoderCacheManager.py** - Multimodal encoder caching (550 lines)
+   - CacheTier: MEMORY, DISK, REMOTE
+   - MultiTierEncoderCache with tiered eviction
+   - Content-based deduplication via hashing
+
+6. **KVCacheMetrics.py** - Cache lifecycle metrics (550 lines)
+   - MetricType: ALLOCATION, ACCESS, EVICTION, UTILIZATION
+   - AlertLevel: INFO, WARNING, CRITICAL
+   - Anomaly detection with z-score thresholds
+
+### Rust Accelerations (12 functions)
+- rejection_sample_verify_rust - Speculative decoding verification
+- apply_top_k_rust, apply_top_p_rust - Logit filtering
+- batch_topk_topp_sample_rust - Batched sampling
+- batch_apply_penalties_rust - Penalty application
+- advanced_ngram_propose_rust - N-gram proposal
+- apply_typical_sampling_rust, apply_min_p_rust - Advanced sampling
+- gumbel_noise_rust - Gumbel noise generation
+- encoder_content_hash_rust, encoder_cache_lru_evict_rust - Encoder cache
+- kv_cache_metrics_aggregate_rust - Metrics aggregation
+
+---
+
+## Phase 43: Engine Core, KV Cache & Request Queue ✅ COMPLETE
+@location: ["src/infrastructure/engine"]
+
+### Implemented Modules (4 Python)
+1. **KVCacheCoordinator.py** - Multi-group KV cache management (912 lines)
+   - CacheGroupType: FULL_ATTENTION, SLIDING_WINDOW, CROSS_ATTENTION, MLA_COMPRESSED, CHUNKED_LOCAL
+   - BlockHash with content-based prefix caching
+   - FreeBlockQueue for O(1) allocation/deallocation
+   - HierarchicalKVCacheCoordinator for per-layer coordination
+   - PredictiveKVCacheCoordinator with length prediction
+   - AsyncPrefetchCoordinator with background prefetching
+
+2. **RequestQueue.py** - Priority-based request scheduling (600 lines)
+   - 5 scheduling policies: FCFS, PRIORITY, DEADLINE, FAIR, MLFQ
+   - QueuedRequest with priority, deadline, client_id
+   - Multi-level feedback queue with aging
+   - RequestQueueManager for policy-based queue selection
+
+3. **ParallelSampling.py** - Multi-sequence sampling (550 lines)
+   - Seed generation for reproducibility
+   - Best-of-N ranking with length normalization
+   - Beam diversity penalties
+
+4. **IterationMetrics.py** - Per-iteration statistics (500 lines)
+   - Sliding window percentile computation
+   - Anomaly detection with z-score thresholds
+   - Trend analysis with linear regression
+
+### Rust Accelerations (16 functions)
+- compute_block_hashes_batched_rust - Batched block hash with chaining
+- calculate_blocks_needed_rust - Block count with sliding window
+- compute_block_eviction_order_rust - LRU eviction candidates
+- find_prefix_match_rust - Prefix cache hash lookup
+- sort_requests_by_priority_rust - Priority queue sorting
+- compute_fair_schedule_rust - Fair share scheduling
+- compute_deadline_priorities_rust - Deadline urgency calculation
+- generate_sample_seeds_rust - Reproducible seed generation
+- rank_completions_rust - Best-of-N ranking
+- compute_diversity_penalty_rust - Beam diversity calculation
+- compute_percentiles_rust - Fast sliding window percentiles
+- detect_anomalies_rust - Z-score anomaly detection
+- compute_cache_hit_rate_rust - Cache statistics
+- analyze_trend_rust - Linear regression trends
+- aggregate_iteration_stats_rust - Statistics aggregation
+
+### Beyond vLLM Innovations
+| Feature | PyAgent | vLLM |
+|---------|---------|------|
+| Cache Group Types | 5 types | 3 types |
+| Allocation Strategy | 3 strategies | 1 strategy |
+| Eviction Policy | LRU, ARC, PRIORITY | LRU only |
+| Hierarchical Cache | Per-layer | Global only |
+| Predictive Allocation | Yes | No |
+| Scheduling Policies | 5 policies | 2 policies |
+| MLFQ with Aging | Yes | No |
+| Anomaly Detection | Z-score | None |
+| Trend Analysis | Linear regression | None |
+
+---
+
+## Phase 42: Platform, OpenAI API & Prompt Rendering ✅ COMPLETE
+@location: ["src/infrastructure/platform", "src/infrastructure/openai_api", "src/infrastructure/prompt_renderer", "src/infrastructure/mcp_tools", "src/infrastructure/conversation", "src/infrastructure/chat_templates"]
+
+### Implemented Modules (6 Python Infrastructure Packages)
+1. **PlatformInterface.py** - Multi-platform device abstraction (700 lines)
+   - Platform enum with CUDA, ROCm, TPU, XPU, Neuron, CPU support
+   - DeviceCapability for capability comparisons (8.0, 8.6, 9.0, etc.)
+   - MemoryInfo with total/free/used tracking and utilization
+   - PlatformRegistry for dynamic platform detection
+   - Quantization and attention backend selection per platform
+
+2. **ResponsesAPI.py** - Full OpenAI Responses API compatibility (1074 lines)
+   - Complete protocol models (Response, Message, ContentPart, etc.)
+   - SSE streaming with SSEEvent/SSEStream classes
+   - ResponseStore with InMemoryResponseStore implementation
+   - StreamingHandler for incremental content delivery
+   - ConversationBuilder for multi-turn context management
+
+3. **PromptRenderer** package - Prompt rendering infrastructure
+   - TruncationStrategy with NONE, AUTO, LEFT, RIGHT, MIDDLE, SMART
+   - RenderResult with text, tokens, cache_salt, truncation info
+   - ChatRenderer and CompletionRenderer implementations
+   - CacheSaltGenerator for prefix caching optimization
+
+4. **MCPTools** package - Model Context Protocol integration
+   - ToolSchema, ToolCall, ToolResult dataclasses
+   - MCPSession with SessionState management
+   - LocalMCPServer and SSEMCPServer implementations
+   - SchemaAdapter for OpenAI↔MCP format conversion
+
+5. **Conversation** package - Agentic conversation context
+   - AgenticContext with tool orchestration
+   - ContextManager for state machine transitions
+   - TokenMetrics tracking (input/output/cached/tool/reasoning)
+   - TurnTracker with ConversationTurn history
+
+6. **ChatTemplates** package - Template registry and rendering
+   - TemplateType enum (ChatML, Llama2/3, Mistral, Phi, Qwen, etc.)
+   - JinjaTemplate for custom template rendering
+   - ChatTemplateRegistry with builtin templates
+   - TemplateResolver for model→template mapping
+
+### Rust Accelerations (17 new functions, 439 total)
+- platform_fingerprint_rust, check_capability_rust
+- estimate_memory_footprint_rust for GPU memory estimation
+- parse_response_json_rust, parse_sse_event_rust, encode_sse_event_rust
+- render_simple_template_rust, detect_chat_template_rust
+- parse_mcp_tool_call_rust, validate_mcp_schema_rust
+- hash_conversation_context_rust, fast_token_count_rust
+- truncate_tokens_rust for context window management
+- generate_cache_salt_rust, aggregate_token_metrics_rust
+
+### Tests Created (163 tests, all passing)
+- test_phase42_platform.py (29 tests)
+- test_phase42_responses.py (26 tests)
+- test_phase42_prompt.py (23 tests)
+- test_phase42_mcp.py (20 tests)
+- test_phase42_conversation.py (20 tests)
+- test_phase42_templates.py (21 tests)
+- test_phase42_rust.py (24 tests)
+
+---
+
+## Phase 41: Tokenizer Registry, Model Registry & LoRA ✅ COMPLETE
+@location: ["src/infrastructure/tokenizer", "src/infrastructure/models", "src/infrastructure/lora", "src/infrastructure/logprobs", "src/infrastructure/tools", "src/infrastructure/structured_output"]
+
+### Implemented Modules (6 Python, ~3600 lines)
+1. **TokenizerRegistry.py** - Multi-backend tokenization (700 lines)
+   - Protocol-based abstraction with backends (HF, Tiktoken, Mistral, SentencePiece)
+   - LRU caching with configurable max_cached_tokenizers
+   - TokenizerPool for concurrent tokenization with pool_size workers
+   - Fast token estimation and backend auto-detection
+2. **ModelRegistry.py** - Architecture management (650 lines)
+   - 40+ architecture registration (Llama, Mistral, Qwen2, Gemma2, Phi3, etc.)
+   - Capability detection (TEXT, VISION, AUDIO, TOOL_USE, EMBEDDING, MULTIMODAL)
+   - VRAM estimation with context scaling and batch size considerations
+   - ArchitectureDetector for config-based and name-based detection
+3. **LoRAManager.py** - Adapter lifecycle management (600 lines)
+   - LoRA/QLoRA/DoRA/rsLoRA method support
+   - GPU slot allocation with LoRASlotManager
+   - Adapter composition with merge_adapters
+   - Hot-swapping and caching with LoRARegistry
+4. **LogprobsProcessor.py** - GC-optimized logprobs (550 lines)
+   - FlatLogprobs NumPy-based storage (GC-friendly)
+   - StreamingLogprobs for incremental processing
+   - LogprobsAnalyzer for perplexity, entropy, confidence metrics
+   - Anomaly detection with z-score thresholding
+5. **ToolParserFramework.py** - Model-specific tool parsing (600 lines)
+   - 5 parsers: Generic JSON, Hermes, Llama3, Mistral, Granite
+   - StreamingToolParser for incremental extraction
+   - ToolParserRegistry for model-based parser selection
+   - JSON extraction and validation utilities
+6. **StructuredOutputParams.py** - Unified output config (500 lines)
+   - StructuredOutputType: JSON_SCHEMA, REGEX, CHOICE, GRAMMAR, TYPE, COMPOSITE
+   - Multi-backend: AUTO, OUTLINES, LMFE, XGRAMMAR, PYAGENT
+   - ConstraintBuilder fluent API for composition
+   - StructuredOutputValidator for constraint validation
+
+### Rust Accelerators (18 functions)
+1. bpe_encode_fast_rust - BPE merge-based tokenization
+2. batch_estimate_tokens_rust - Batch token estimation
+3. tokenizer_cache_key_rust - LRU cache key hashing
+4. architecture_fingerprint_rust - Model config fingerprinting
+5. estimate_vram_bytes_rust - VRAM estimation (min/optimal)
+6. detect_architecture_rust - Architecture detection from config
+7. lora_scaling_rust - LoRA/rsLoRA scaling computation
+8. lora_delta_compute_rust - LoRA delta weight (B @ A)
+9. lora_adapter_hash_rust - Adapter caching hash
+10. log_softmax_stable_rust - Numerically stable log softmax
+11. extract_top_k_logprobs_rust - Top-k extraction
+12. compute_perplexity_rust - Perplexity computation
+13. compute_entropy_rust - Entropy computation
+14. batch_logprobs_rust - Batch logits → logprobs
+15. extract_json_positions_rust - JSON object position detection
+16. detect_tool_format_rust - Tool format detection (Hermes/Llama3/Mistral/Granite)
+17. parse_tool_arguments_rust - Tool argument parsing
+18. validate_json_schema_fast_rust - JSON schema validation
+
+### Beyond vLLM Innovations
+| Feature | vLLM | PyAgent Phase 41 |
+|---------|------|------------------|
+| Tokenizer Backend | HF only | HF, Tiktoken, Mistral, SentencePiece, Custom |
+| Tokenizer Caching | No | LRU with configurable size |
+| Tokenizer Pool | No | Concurrent pool with workers |
+| Model Registry | Static | 40+ architectures with capability flags |
+| VRAM Estimation | Basic | Context-scaled with batch size |
+| LoRA Methods | LoRA | LoRA, QLoRA, DoRA, rsLoRA |
+| LoRA Composition | No | Adapter merging and composition |
+| Logprobs Storage | Standard | GC-optimized FlatLogprobs NumPy |
+| Logprobs Analysis | Basic | Perplexity, entropy, confidence, anomaly |
+| Tool Parsers | OpenAI | JSON, Hermes, Llama3, Mistral, Granite |
+| Streaming Tools | Partial | Full streaming extraction |
+| Structured Output | Single | Multi-backend with fallback |
+| Constraint Composition | No | Fluent builder with chaining |
+
+---
+
+## Phase 40: Reasoning, MultiModal Cache, Pooling, Input & Media IO ✅ COMPLETE
+@location: ["src/infrastructure/reasoning", "src/infrastructure/multimodal", "src/infrastructure/pooling", "src/infrastructure/inputs", "src/infrastructure/sampling", "src/infrastructure/mediaio"]
+
+### Implemented Modules (6 Python, ~3200 lines)
+1. **ReasoningEngine.py** - Unified thinking/tool extraction (750 lines)
+   - DeepSeek R1, Qwen3, Claude thinking token extraction
+   - OpenAI/Hermes tool call parsing with streaming support
+   - Configurable reasoning formats and partial parsing
+2. **MultiModalCache.py** - Content-aware multimodal caching (650 lines)
+   - Blake3/SHA256/perceptual hashing algorithms
+   - LRU in-memory cache with size limits
+   - IPC cross-process shared memory cache
+   - Prefetch support for predictive loading
+3. **PoolingEngine.py** - Unified embedding pooling (550 lines)
+   - Mean/CLS/Last/Max/Attention pooling strategies
+   - Matryoshka embeddings for dimension reduction
+   - ColBERT multi-vector token-level pooling
+   - Step pooling for sequence compression
+4. **InputPreprocessor.py** - Input processing pipeline (600 lines)
+   - Prompt type detection (TEXT, TOKENS, EMBEDS, CHAT)
+   - ChatML/Llama3/Mistral template conversion
+   - Validation and linearization of chat messages
+5. **AdvancedSamplingParams.py** - Extended sampling (600 lines)
+   - Temperature scheduling (constant, linear, cosine, adaptive)
+   - Mirostat v1/v2 sampling for perplexity control
+   - Bad words blocking and token whitelisting
+6. **MediaIOEngine.py** - Unified media loading (550 lines)
+   - Async image/video/audio loading with format detection
+   - Multiple resize modes (FIT, FILL, CROP, PAD)
+   - GPU decode support for accelerated loading
+
+### Rust Accelerators (17 functions)
+1. extract_thinking_blocks_rust - Block extraction
+2. parse_tool_calls_rust - Tool call JSON parsing
+3. classify_token_context_rust - Streaming classification
+4. blake3_hash_rust - Fast content hashing
+5. perceptual_hash_distance_rust - Similarity scoring
+6. lru_evict_candidates_rust - LRU eviction selection
+7. arc_cache_priority_rust - ARC cache priority
+8. mean_pool_rust - Mean pooling with mask
+9. cls_pool_rust - CLS token extraction
+10. last_token_pool_rust - Last token pooling
+11. matryoshka_truncate_rust - Dimension reduction
+12. attention_pool_rust - Attention-weighted pooling
+13. estimate_tokens_rust - Fast token estimation
+14. validate_chat_messages_rust - Message validation
+15. linearize_chat_rust - Multi-format linearization
+16. apply_temperature_schedule_rust - Scheduled temperature
+17. mirostat_sample_rust - Mirostat sampling
+
+### Beyond vLLM Innovations
+| Feature | vLLM | PyAgent Phase 40 |
+|---------|------|------------------|
+| Reasoning Extraction | DeepSeek R1 only | DeepSeek R1, Qwen3, Mistral, Claude, Generic |
+| Tool Parsing | OpenAI format | OpenAI, Hermes, Anthropic with streaming |
+| Cache Hashing | SHA256 | Blake3, SHA256, Perceptual similarity |
+| Cache Backend | In-memory only | LRU, IPC (shared memory), Prefetch |
+| Pooling | Mean, CLS | Mean, CLS, Last, Max, Attention, Weighted |
+| Matryoshka | Not supported | Full MRL dimension reduction |
+| Multi-vector | Not supported | ColBERT token-level pooling |
+| Input Templates | ChatML | ChatML, Llama3, Mistral, custom |
+| Temperature | Fixed | Constant, Linear, Cosine, Adaptive scheduling |
+| Mirostat | Not available | Mode 1 & 2 with entropy targeting |
+| Media Loading | Sync | Async with GPU decode acceleration |
+
+---
+
+## Phase 39: Structured Output, Speculative v2 & Tensorizer ✅ COMPLETE
+@location: ["src/infrastructure/structured_output", "src/infrastructure/speculative_v2", "src/infrastructure/tensorizer"]
+
+### Implemented Modules (6 Python)
+1. **StructuredOutputManager.py** - Multi-backend grammar orchestration (600 lines)
+2. **GrammarEngine.py** - FSM-based grammar constraints (600 lines)
+3. **LogitProcessor.py** - Composable token processors (550 lines)
+4. **SpeculativeDecoder.py** - Tree-based speculation (600 lines)
+5. **Tensorizer.py** - Streaming model serialization (600 lines)
+6. **Package __init__.py files** - Exports for 3 packages
+
+### Rust Accelerators (12 functions)
+1. regex_to_fsm_rust - Regex → FSM state machine
+2. fill_token_bitmask_rust - Token constraint bitmasks
+3. validate_token_sequence_rust - FSM sequence validation
+4. json_schema_fsm_rust - JSON schema → FSM
+5. apply_grammar_mask_rust - Grammar logit masking
+6. batch_fill_bitmask_rust - Batch constraint generation
+7. build_speculation_tree_rust - N-gram tree construction
+8. verify_speculation_tree_rust - Tree verification
+9. extract_accepted_path_rust - Path extraction
+10. speculation_stats_rust - Statistics computation
+11. tensorizer_checksum_rust - SHA256 checksums
+12. pack_tensor_metadata_rust - Metadata serialization
+
+### Beyond vLLM Innovations
+- Multi-backend Grammar: Regex, JSON, EBNF, Lark, Custom
+- FSM Transition Table: NumPy-based O(1) lookups
+- Composite Processors: Chainable temperature/topk/topp/repetition
+- Tree Speculation: Multi-path speculation with pruning
+- N-gram Proposer: Suffix-based speculation
+- Medusa Integration: Multiple head speculation
+- Streaming Tensorizer: Async memory-efficient loading
+- Multi-compression: LZ4, ZSTD, Snappy support
+
+---
+
+## Phase 38: FusedMoE, Mamba SSM & MLA ✅ COMPLETE
+@location: ["src/infrastructure/moe", "src/infrastructure/ssm"]
+
+### Implemented Modules (4 Python)
+1. **WeightLoader.py** - Multi-threaded weight loading, atomic writes
+2. **ShardedStateLoader.py** - Tensor-parallel checkpoint loading
+3. **KVOffloadManager.py** - LRU/ARC KV cache offloading
+4. **ExpertLoadBalancer.py** - Expert parallel load balancing
+
+### Rust Accelerators (9 functions)
+1. weight_hash_compute_rust - FNV-1a weight spec hashing
+2. validate_weight_shapes_rust - Shape consistency validation
+3. compute_shard_assignment_rust - TP shard assignment
+4. validate_shard_shapes_rust - Cross-shard validation
+5. compute_lru_eviction_rust - LRU eviction selection
+6. compute_arc_target_rust - ARC target adaptation
+7. compute_balanced_packing_rust - Expert bin-packing
+8. compute_expert_replication_rust - Hot expert replication
+9. compute_load_imbalance_rust - Load imbalance ratio
+
+### Beyond vLLM Innovations
+- FastSafetensorsLoader: GDS support for direct GPU loading
+- StreamingWeightLoader: Memory budget + priority weights
+- IncrementalShardLoader: LRU cache for shard reuse
+- AsyncShardLoader: Prefetch queue for async loading
+- TieredOffloadManager: Multi-backend tiering (CPU→NVMe→S3)
+- LocalityAwarePolicy: Network topology-aware EPLB
+- AsyncExpertRebalancer: Background rebalancing thread
+
+---
+
+## Phase 39: Next Priority (PLANNED)
+@focus: ["src/infrastructure/serialization"]
+
+### Planned Patterns
+- Tensorizer Integration: Fast serialized weight loading
+- Guided Decoding: JSON/regex-constrained generation
+- FlashMLA Sparse: Sparse attention patterns
+- Speculative Decoding v2: Tree-based speculation
+
+---
 
 ## Quality Gates
-- All autonomous fixes must maintain system stability (Stability Gate 1.0).
-- No regression in interaction recording performance.
-- Validated masking of all sensitive tokens in logs.
+- ✅ All Rust functions have unit tests
+- ✅ Stability Gate: 1.0 (Green)
+- ✅ No JSON log regressions
+- ✅ pytest parity tests passing
 
 ## Exclusions
-- Do not modify files in `temp/` or `data/`.
-- Skip documentation injection for `__init__.py` files unless they contain significant logic.
+- Do not modify docs/archive/
+- Skip Tier 1 optimization unless regression
+
+## Key Files Reference
+- docs/comparison_vllm.md - Full vLLM analysis
+- rust_core/src/inference.rs - Inference Rust functions
+- rust_core/src/lib.rs - PyO3 bindings (361+ functions)
+
+
+### 34. Phase 34: Disaggregated Inference & Advanced RoPE (NEW)
+@focus: ["src/infrastructure/kv_transfer", "src/infrastructure/position", "src/inference/speculation", "src/infrastructure/attention", "rust_core/src"]
+
+#### vLLM v1 Patterns Analyzed (from GitHub searches)
+- KV Transfer Connectors: P2pNcclConnector, NixlConnector, MooncakeConnector, MoRIIOConnector
+- DecodeBenchConnector: Dummy KV cache filling for decode benchmarking
+- Disaggregated Prefill-Decode: Separate prefill/decode instances with KV transfer
+- RotaryEmbedding variants: MRoPE, XDRoPE, DualChunk, DeepseekScaling
+- EagleProposer: Tree-based speculation with EAGLE/EAGLE3 draft models
+- NgramProposer: N-gram based token prediction with Numba JIT
+- Triton Decode Attention: Grouped attention with KV splits
+- BatchDCPPrefillWrapper: DCP attention with all_gather operations
+
+#### Python Modules (6 new)
+1. `src/infrastructure/kv_transfer/KVTransferConnector.py` - Base connector framework
+   - KVConnectorRole enum (PRODUCER/CONSUMER/BOTH)
+   - KVTransferConfig dataclass (connector settings)
+   - KVConnectorBase ABC (interface for all connectors)
+   - register_kv_caches() cache registration
+   - start_load_kv()/wait_for_layer_load() async KV loading
+   - save_kv_layer() layer persistence
+   - get_num_new_matched_tokens() token matching for transfer
+   - BEYOND vLLM: Multi-backend support with fallback chain
+
+2. `src/infrastructure/scheduling/DisaggregatedScheduler.py` - Prefill-decode split
+   - DCPConfig dataclass (disaggregation settings)
+   - PrefillInstance/DecodeInstance management
+   - schedule_prefill()/schedule_decode() phase-specific scheduling
+   - kv_transfer_params() transfer metadata
+   - proxy_orchestrator() request routing
+   - BEYOND vLLM: Dynamic instance scaling based on load
+
+3. `src/infrastructure/position/RotaryEmbeddingEngine.py` - Unified RoPE
+   - RoPEVariant enum (NEOX/GPTJ/MROPE/XDROPE/DUAL_CHUNK/DEEPSEEK)
+   - RotaryEmbeddingBase common interface
+   - forward_native()/forward_cuda() backend dispatch
+   - MRotaryEmbedding multimodal sections (temporal/height/width)
+   - XDRotaryEmbedding dynamic NTK scaling
+   - DualChunkRotaryEmbedding dual chunk pattern
+   - BEYOND vLLM: Automatic variant detection from model config
+
+4. `src/inference/speculation/SpeculativeEngine.py` - Unified speculation
+   - SpecMethod enum (EAGLE/EAGLE3/NGRAM/MEDUSA/MTP)
+   - DrafterBase ABC drafter interface
+   - EagleProposer tree-based EAGLE speculation
+   - NgramProposer N-gram lookup with Numba
+   - propose()/verify()/accept_reject() verification flow
+   - speculative_token_tree parsing
+   - BEYOND vLLM: Hybrid drafter (EAGLE + N-gram fallback)
+
+5. `src/infrastructure/attention/TritonAttentionOps.py` - Fused Triton kernels
+   - kernel_paged_attention_2d chunked prefill + paged decode
+   - _decode_att_m_fwd/_decode_grouped_att_m_fwd decode attention
+   - _fwd_kernel_stage1/_fwd_kernel_stage2 two-stage decode
+   - KV split support for memory efficiency
+   - ALiBi slopes integration
+   - BEYOND vLLM: Dynamic block size selection
+
+6. `src/infrastructure/attention/BatchDCPWrapper.py` - DCP attention wrapper
+   - BatchDCPPrefillWrapper context + new tokens planning
+   - plan() set up prefill indices
+   - run() execute with DCP group all_gather
+   - cp_lse_ag_out_rs() LSE all-gather output reduce-scatter
+   - BEYOND vLLM: Mixed precision DCP (FP8 KV + BF16 compute)
+
+#### Rust Accelerations (12 new functions → 302+ total)
+- rotary_embedding_kernel_rust: Fast position encoding
+- mrope_section_indices_rust: Multimodal section calculation
+- dynamic_ntk_alpha_rust: NTK scaling factor computation
+- ngram_propose_rust: Parallel N-gram search
+- eagle_tree_expand_rust: Tree structure expansion
+- kv_transfer_metadata_rust: Transfer param encoding
+- verify_draft_tokens_rust: Fast draft verification
+- block_table_lookup_rust: Paged attention indices
+- triton_attention_dispatch_rust: Kernel parameter setup
+- dcp_group_coordinate_rust: DCP rank coordination
+- kv_connector_score_rust: Connector capability scoring
+- speculation_tree_parse_rust: Token tree parsing
+
+#### Tests
+- tests/phases/test_phase34_disaggregated.py (target: 60+ tests)
+
+#### Status
+- [COMPLETED] KVTransferConnector implementation
+- [COMPLETED] DisaggregatedScheduler implementation
+- [COMPLETED] RotaryEmbeddingEngine implementation
+- [COMPLETED] SpeculativeEngine implementation
+- [COMPLETED] TritonAttentionOps implementation
+- [COMPLETED] BatchDCPWrapper implementation
+- [COMPLETED] Rust accelerations (12 functions)
+- [COMPLETED] Unit tests (70 passed, 15 skipped)
+- ✅ Target achieved: 6 Python modules + 12 Rust functions (Phase 34 COMPLETE)
+
+### 35. Phase 35: Async Execution & Advanced Caching ✅ COMPLETE (95 passed, 2 skipped)
+@focus: ["src/infrastructure/engine", "src/infrastructure/cache", "src/infrastructure/memory", "src/inference/execution", "src/infrastructure/parallel", "rust_core/src"]
+
+#### vLLM v1 Patterns Analyzed (from GitHub searches)
+- EngineCoreClient hierarchy: InprocClient, SyncMPClient, AsyncMPClient, DPAsyncMPClient
+- EngineCoreProc.run_busy_loop(): Core async execution loop
+- BlockPool: LRU eviction with get_new_blocks()/free_blocks()/cache_blocks()/touch()
+- KVCacheManager.allocate_slots(): Prefix caching, get_computed_blocks()
+- SingleTypeKVCacheManager.find_longest_cache_hit(): Cache hit detection
+- CuMemAllocator: sleep()/wake_up() for GPU memory sharing
+- DPEngineCoreProc: step_counter, wave_id for DP coordination
+- DPLBAsyncMPClient: Power of Two Choices (P2C) load balancing
+- AsyncGPUPoolingModelRunnerOutput: Non-blocking model outputs
+
+#### Python Modules (6 new)
+1. `src/infrastructure/engine/AsyncEngineClient.py` - Multi-process async engine
+   - ClientMode enum (INPROC/SYNC_MP/ASYNC_MP/DP_ASYNC)
+   - EngineCoreClientBase ABC client interface
+   - InprocClient single-GPU in-process
+   - SyncMPClient ZMQ synchronous multi-process
+   - AsyncMPClient async with queue handlers
+   - DPAsyncMPClient DP load balancing (P2C algorithm)
+   - run_busy_loop() core execution loop
+   - get_output_async() non-blocking output retrieval
+   - BEYOND vLLM: Automatic client selection based on GPU topology
+
+2. `src/infrastructure/cache/BlockPoolManager.py` - Advanced KV block management
+   - BlockState enum (FREE/ALLOCATED/CACHED/PINNED)
+   - BlockPool class LRU eviction with metrics
+   - get_new_blocks()/free_blocks()/cache_blocks()/touch()
+   - cached_block_hash_to_block prefix cache hash map
+   - ARCPolicy Adaptive Replacement Cache policy
+   - KVCacheMetricsCollector eviction events, residency
+   - BEYOND vLLM: ARC eviction (adaptive frequency+recency)
+
+3. `src/infrastructure/memory/GPUMemoryAllocator.py` - GPU memory optimization
+   - MemoryState enum (ACTIVE/SLEEPING/SNAPSHOT)
+   - CuMemAllocator class custom CUDA allocation
+   - sleep()/wake_up() memory sharing
+   - use_memory_pool() context manager
+   - MemorySnapshot state capture/restore
+   - allocation_callback/deallocation_callback hooks
+   - BEYOND vLLM: Multi-GPU memory balancing
+
+4. `src/infrastructure/cache/PrefixCacheOptimizer.py` - Prefix cache hits
+   - PrefixCacheConfig dataclass settings
+   - PrefixTree class radix tree for prefix lookup
+   - find_longest_cache_hit() O(log n) prefix matching
+   - get_computed_blocks() return cached block IDs
+   - remove_skipped_blocks() cleanup unused
+   - update_prefix_state() state management
+   - BEYOND vLLM: Speculative prefix pre-warming
+
+5. `src/inference/execution/AsyncModelRunner.py` - Async model execution
+   - RunnerState enum (IDLE/EXECUTING/WAITING)
+   - AsyncGPUPoolingModelRunnerOutput pooled outputs
+   - execute_model_async() non-blocking forward
+   - _model_forward() actual computation
+   - output_future_pool result future management
+   - BEYOND vLLM: Pipelined async with overlap
+
+6. `src/infrastructure/parallel/DataParallelCoordinator.py` - DP coordination
+   - DPConfig dataclass parallel settings
+   - DPEngineCoreProc class DP rank management
+   - step_counter/step_request_count sync tracking
+   - wave_id/wave_complete() wave management
+   - P2CLoadBalancer Power of Two Choices algorithm
+   - select_worker() optimal worker selection
+   - BEYOND vLLM: Hierarchical DP with locality awareness
+
+#### Rust Accelerations (12 new functions → 314+ total)
+- block_pool_evict_lru_rust: Fast LRU eviction selection
+- arc_cache_balance_rust: ARC frequency/recency calculation
+- prefix_tree_lookup_rust: Radix tree prefix matching
+- block_hash_compute_rust: Fast block content hashing
+- gpu_memory_snapshot_rust: Memory state serialization
+- p2c_select_worker_rust: Power of Two Choices selection
+- step_counter_sync_rust: Atomic step synchronization
+- wave_id_barrier_rust: Wave coordination barrier
+- async_output_merge_rust: Merge async output futures
+- dp_rank_coordinate_rust: DP rank assignment
+- kv_metrics_aggregate_rust: Metrics aggregation
+- cache_hit_score_rust: Prefix cache hit scoring
+
+#### Tests
+- tests/phases/test_phase35_async_cache.py (95 passed, 2 skipped) ✅
+
+---
+
+### 36. Phase 36: CUDA Graph & Compilation (NEW - PRIORITY)
+@focus: ["src/infrastructure/cuda", "src/infrastructure/compilation", "rust_core/src"]
+
+#### vLLM Patterns to Implement
+
+**1. CUDAGraphWrapper (vllm/compilation/cuda_graph.py)**
+- BatchDescriptor: Graph cache keys (num_tokens, num_reqs)
+- CUDAGraphEntry: Cached graph + output weak refs
+- Runtime modes: NONE/PIECEWISE/FULL
+- Capture/replay with input address validation
+
+**2. UBatchWrapper (vllm/v1/worker/gpu_ubatch_wrapper.py)**
+- Micro-batch splitting for graph efficiency
+- Thread-coordinated execution with barriers
+- DP metadata passing for data parallel
+
+**3. CudagraphDispatcher (vllm/v1/cudagraph_dispatcher.py)**
+- dispatch(): Runtime mode + descriptor selection
+- Relaxed key lookup: Fallback to larger graphs
+- Uniform decode: Special handling for decode batches
+
+**4. CompilerInterface (vllm/compilation/compiler_interface.py)**
+- InductorStandaloneAdaptor: torch.compile backend
+- Cache management: Compiled artifact persistence
+- Range compilation: Single-size or dynamic shapes
+
+**5. InputBatch (vllm/v1/worker/gpu/input_batch.py)**
+- Persistent GPU buffers for graph replay
+- Query start location tracking
+- Consistent padding for shapes
+
+#### Python Modules (6 new)
+
+1. `src/infrastructure/cuda/CUDAGraphManager.py` - CUDA graph management
+   - CUDAGraphMode enum (NONE/PIECEWISE/FULL)
+   - BatchDescriptor dataclass (num_tokens, num_reqs)
+   - CUDAGraphEntry (graph, output, input_addresses)
+   - CUDAGraphWrapper class with capture/replay
+   - validate_addresses() debug mode checking
+   - BEYOND vLLM: Adaptive capture based on hit patterns
+
+2. `src/infrastructure/cuda/UBatchProcessor.py` - Micro-batch processing
+   - UBatchContext dataclass
+   - UbatchMetadata (sliced inputs per micro-batch)
+   - UBatchWrapper class
+   - barrier_sync() thread coordination
+   - BEYOND vLLM: Dynamic ubatch sizing based on memory
+
+3. `src/infrastructure/cuda/CudagraphDispatcher.py` - Graph dispatch
+   - initialize_cudagraph_keys() pre-registration
+   - dispatch() → (CUDAGraphMode, BatchDescriptor)
+   - add_cudagraph_key() dynamic registration
+   - relaxed_key_lookup() fallback matching
+   - BEYOND vLLM: Predictive shape pre-warming
+
+4. `src/infrastructure/compilation/TorchCompileIntegration.py` - Compilation
+   - CompilerConfig dataclass
+   - CompilationCache with disk persistence
+   - @support_torch_compile decorator
+   - compile_graph() → compiled artifact
+   - BEYOND vLLM: Cross-run cache sharing
+
+5. `src/infrastructure/cuda/InputBufferManager.py` - Input staging
+   - InputBuffers (persistent GPU tensors)
+   - InputBatch (batch state management)
+   - make_dummy() warmup batch creation
+   - copy_inputs() input staging for graphs
+   - BEYOND vLLM: Async input staging pipeline
+
+6. `src/observability/stats/CompilationCounter.py` - Compilation metrics
+   - num_inductor_compiles counter
+   - num_cudagraph_captured counter
+   - compilation_times dict[shape, time]
+   - BEYOND vLLM: Cost tracking per compilation
+
+#### Rust Accelerations (8 new functions)
+- batch_descriptor_hash_rust: Fast batch key hashing
+- input_address_check_rust: Validate input addresses
+- ubatch_slice_compute_rust: Optimal micro-batch slicing
+- graph_pool_manage_rust: Pool ID management
+- warmup_shapes_select_rust: Select shapes for warmup
+- compile_cache_lookup_rust: Fast compiled cache search
+- padding_compute_rust: Optimal padding calculation
+- buffer_copy_async_rust: Async buffer staging
+
+#### Tests
+- tests/phases/test_phase36_cudagraph.py (target: 70+ tests)
+
+#### Status
+- [ ] CUDAGraphManager implementation
+- [ ] UBatchProcessor implementation  
+- [ ] CudagraphDispatcher implementation
+- [ ] TorchCompileIntegration implementation
+- [ ] InputBufferManager implementation
+- [ ] CompilationCounter implementation
+- [ ] Rust accelerations (8 functions)
+- [ ] Unit tests
+
+## Quality Gates
+- ✅ All Rust-native implementations have matching unit tests in `rust_core/src/tests`.
+- ✅ Stability Gate: 1.0 (Green).
+- ✅ No regression in JSON log validity.
+- ✅ All 20 SelfImprovements verified via py_compile and import tests.
+- ✅ pytest rust_core parity tests: 5/5 passed.
+- ✅ Phase 16: 6 files enhanced with 12 new Rust hooks (100 total tracked).
+
+## Exclusions
+- Do not modify legacy files in `docs/archive/`.
+- Skip optimization for Tier 1 (Primitives) unless a regression is detected.
+

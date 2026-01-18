@@ -11,29 +11,39 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """
 AgentRegistryCore logic for version compatibility and manifest validation.
 Pure logic component to be potentially rustified.
+
+Phase 15 Rust Optimizations:
+- topological_sort_rust: O(V+E) topological ordering for agent load order
+- to_snake_case_rust: Fast CamelCase to snake_case conversion
+- detect_cycles_rust: DFS-based cycle detection in dependency graphs
 """
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
 import os
+import logging
 from typing import Any
 from .VersionGate import VersionGate
+
+logger = logging.getLogger(__name__)
 
 try:
     from rust_core import topological_sort_rust, to_snake_case_rust
     _RUST_ACCEL = True
 except ImportError:
     _RUST_ACCEL = False
+
+# Additional Rust functions for Phase 15
+try:
+    from rust_core import detect_cycles_rust
+    _RUST_CYCLES = True
+except ImportError:
+    _RUST_CYCLES = False
 
 __version__ = VERSION
 
@@ -55,32 +65,45 @@ class AgentRegistryCore:
 
         for rel_path in file_paths:
             file = os.path.basename(rel_path)
-            if file.endswith(".py") and not file.startswith("__"):
-                agent_name: str = file[:-3]
-                module_path: str = (
-                    rel_path.replace(os.path.sep, ".")
-                    .replace("/", ".")
-                    .replace(".py", "")
-                )
+            if not file.endswith(".py") or file.startswith("__"):
+                continue
 
-                # Phase 105: Discovered agents should not default to their own file path as arg
-                discovered[agent_name] = (module_path, agent_name, None)
+            agent_name = file[:-3]
+            module_path = (
+                rel_path.replace(os.path.sep, ".")
+                .replace("/", ".")
+                .replace(".py", "")
+            )
 
-                # Add snake_case name for tolerance
-                snake_name = self._to_snake_case(agent_name)
-                if snake_name not in discovered:
-                    discovered[snake_name] = (module_path, agent_name, None)
-
-                # Add short name
-                if agent_name.endswith("Agent"):
-                    short_name: str = agent_name[:-5]
-                    if short_name and short_name not in discovered:
-                        discovered[short_name] = (module_path, agent_name, None)
-                elif agent_name.endswith("Orchestrator"):
-                    short_name: str = agent_name[:-12]
-                    if short_name and short_name not in discovered:
-                        discovered[short_name] = (module_path, agent_name, None)
+            # Register multiple variants for the same module
+            self._register_agent_variants(discovered, agent_name, module_path)
         return discovered
+
+    def _register_agent_variants(
+        self, discovered: dict[str, tuple[str, str, str | None]],
+        agent_name: str, module_path: str
+    ) -> None:
+        """Helper to register an agent under its primary, snake_case, and short names."""
+        # 1. Primary name
+        discovered[agent_name] = (module_path, agent_name, None)
+
+        # 2. Snake case name (for underscore tolerance)
+        snake_name = self._to_snake_case(agent_name)
+        if snake_name not in discovered:
+            discovered[snake_name] = (module_path, agent_name, None)
+
+        # 3. Short names (strip 'Agent' or 'Orchestrator')
+        short_name = self._get_short_name(agent_name)
+        if short_name and short_name not in discovered:
+            discovered[short_name] = (module_path, agent_name, None)
+
+    def _get_short_name(self, name: str) -> str | None:
+        """Strips the 'Agent' or 'Orchestrator' suffix from a name."""
+        if name.endswith("Agent"):
+            return name[:-5]
+        if name.endswith("Orchestrator"):
+            return name[:-12]
+        return None
 
     def parse_manifest(
         self, raw_manifest: dict[str, Any]
@@ -114,8 +137,16 @@ class AgentRegistryCore:
         """
         Logic for detecting circular dependencies in the agent graph.
         Useful for preventing init-loop during complex swarm orchestration.
-        Uses DFS to find back-edges.
+        Uses DFS to find back-edges. Rust-accelerated when available.
         """
+        # Rust-accelerated cycle detection
+        if _RUST_CYCLES:
+            try:
+                graph_list = [(k, v) for k, v in dep_graph.items()]
+                return detect_cycles_rust(graph_list)
+            except Exception:
+                pass  # Fall back to Python
+        
         visited = set()
         path: list[Any] = []
         cycles = []
@@ -180,7 +211,12 @@ class AgentRegistryCore:
                     return result
             except Exception:
                 pass
-        # Python fallback - Calculate in-degrees
+
+        return self._topological_sort_py(dep_graph)
+
+    def _topological_sort_py(self, dep_graph: dict[str, list[str]]) -> list[str]:
+        """Python implementation of topological sort (Kahn's Algorithm)."""
+        # Calculate in-degrees
         in_degree = {u: 0 for u in dep_graph}
         for u in dep_graph:
             for v in dep_graph[u]:

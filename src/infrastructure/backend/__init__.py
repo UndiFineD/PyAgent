@@ -10,12 +10,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Auto-generated module exports."""
 
@@ -69,12 +64,12 @@ from .UsageRecord import UsageRecord as UsageRecord
 from .VersionNegotiator import VersionNegotiator as VersionNegotiator
 from .DiskCache import DiskCache as DiskCache
 from .ExecutionEngine import (
-    llm_chat_via_github_models,
-    llm_chat_via_ollama,
-    llm_chat_via_copilot_cli,
-    run_subagent,
-    get_backend_status,
-    describe_backends,
+    llm_chat_via_github_models as llm_chat_via_github_models,
+    llm_chat_via_ollama as llm_chat_via_ollama,
+    llm_chat_via_copilot_cli as llm_chat_via_copilot_cli,
+    run_subagent as run_subagent,
+    get_backend_status as get_backend_status,
+    describe_backends as describe_backends,
 )
 
 __version__ = VERSION

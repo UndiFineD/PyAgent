@@ -25,5 +25,5 @@ class MultiModalContextAgent:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"MultiModalContextAgent initialized (Placeholder).")
+        logging.info("MultiModalContextAgent initialized (Placeholder).")
 

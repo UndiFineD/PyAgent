@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Centralized LLM client for various backends."""
 
@@ -35,6 +30,7 @@ from .llm_backends.OllamaBackend import OllamaBackend
 from .llm_backends.VllmBackend import VllmBackend
 from .llm_backends.VllmNativeBackend import VllmNativeBackend
 from .llm_backends.CopilotCliBackend import CopilotCliBackend
+from .llm_backends.LMStudioBackend import LMStudioBackend, LMStudioConfig
 
 
 class LLMClient:
@@ -89,6 +85,10 @@ class LLMClient:
                 self.session, self.connectivity, self.recorder
             ),
             "copilot_cli": CopilotCliBackend(
+                self.session, self.connectivity, self.recorder
+            ),
+            # Phase 21: LM Studio integration
+            "lmstudio": LMStudioBackend(
                 self.session, self.connectivity, self.recorder
             ),
         }
@@ -207,6 +207,30 @@ class LLMClient:
         """Calls the GitHub Copilot CLI extension (gh copilot)."""
         return self.backends["copilot_cli"].chat(prompt, model, system_prompt, **kwargs)
 
+    def llm_chat_via_lmstudio(
+        self,
+        prompt: str,
+        model: str = "",
+        system_prompt: str = "You are a helpful assistant.",
+        **kwargs,
+    ) -> str:
+        """
+        Call LM Studio local inference server (Phase 21).
+        
+        Uses the lmstudio SDK for WebSocket-based communication.
+        Supports streaming, tool calling, and embeddings.
+        
+        Args:
+            prompt: User message
+            model: Model identifier (empty = any loaded model)
+            system_prompt: System message
+            **kwargs: Additional options (temperature, max_tokens, etc.)
+        
+        Returns:
+            Generated response text
+        """
+        return self.backends["lmstudio"].chat(prompt, model, system_prompt, **kwargs)
+
     def smart_chat(
         self,
         prompt: str,
@@ -228,11 +252,11 @@ class LLMClient:
 
         # Phase 108: Check for Preferred working endpoint first (15m TTL)
         preferred = self.connectivity.get_preferred_endpoint("llm_backends")
-        
-        # Phase 317 robustness: If preferred is copilot_cli, we only use it if no other 
+
+        # Phase 317 robustness: If preferred is copilot_cli, we only use it if no other
         # local backends are available, as it's low-quality for code fixes.
         if preferred == "copilot_cli" and (
-            self.connectivity.is_endpoint_available("ollama") or 
+            self.connectivity.is_endpoint_available("ollama") or
             self.connectivity.is_endpoint_available("vllm") or
             self.connectivity.is_endpoint_available("vllm_native")
         ):
@@ -258,6 +282,7 @@ class LLMClient:
         # force a retry across all of them ignoring the skipped cache.
         force_retry = False
         known_backends = [
+            "lmstudio",  # Phase 21: LM Studio (highest priority local)
             "vllm_native",
             "vllm",
             "ollama",
@@ -274,15 +299,25 @@ class LLMClient:
         used_provider = "none"
 
         if preference == "local":
-            # 0. Try Native vLLM Library (Highest Performance Local, Phase 108)
-            if force_retry or self.connectivity.is_endpoint_available("vllm_native"):
+            # 0. Try LM Studio (Highest Priority Local, Phase 21)
+            if force_retry or self.connectivity.is_endpoint_available("lmstudio"):
+                result = self.llm_chat_via_lmstudio(
+                    prompt, model=local_model, system_prompt=system_prompt
+                )
+                if result:
+                    used_provider, _used_model = "lmstudio", local_model
+
+            # 1. Try Native vLLM Library (High Performance Local, Phase 108)
+            if not result and (
+                force_retry or self.connectivity.is_endpoint_available("vllm_native")
+            ):
                 result = self.llm_chat_via_vllm_native(
                     prompt, system_prompt=system_prompt, model=local_model
                 )
                 if result:
                     used_provider, _used_model = "vllm_native", local_model
 
-            # 1. Try vLLM Server (Remote/Docker)
+            # 2. Try vLLM Server (Remote/Docker)
             if not result and (
                 force_retry or self.connectivity.is_endpoint_available("vllm")
             ):
@@ -292,7 +327,7 @@ class LLMClient:
                 if result:
                     used_provider, _used_model = "vllm", local_model
 
-            # 2. Try Ollama if vLLM failed
+            # 3. Try Ollama if vLLM failed
             if not result and (
                 force_retry or self.connectivity.is_endpoint_available("ollama")
             ):

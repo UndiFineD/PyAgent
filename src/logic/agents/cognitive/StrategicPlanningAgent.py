@@ -10,12 +10,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
@@ -27,8 +22,8 @@ __version__ = VERSION
 
 class StrategicPlanningAgent(BaseAgent):
     """
-    Strategic Planning Agent: Handles long-term goal setting, roadmap
-    prioritization, and autonomous project management for the fleet.
+    Tier 2 (Cognitive Logic) - Strategic Planning Agent: Handles long-term 
+    goal setting, roadmap prioritization, and autonomous project management for the fleet.
     """
 
     def __init__(self, workspace_path: str) -> None:
@@ -50,7 +45,7 @@ class StrategicPlanningAgent(BaseAgent):
             "milestones": [],
         }
         self.goals.append(goal)
-        print(f"Strategy: Goal set - {goal_description}")
+        self.logger.info(f"Strategy: Goal set - {goal_description}")
         return goal
 
     def add_milestone_to_goal(self, goal_id: str, milestone_description: str) -> bool:
@@ -60,7 +55,7 @@ class StrategicPlanningAgent(BaseAgent):
                 goal["milestones"].append(
                     {"description": milestone_description, "achieved": False}
                 )
-                print(
+                self.logger.info(
                     f"Strategy: Milestone added to {goal_id} - {milestone_description}"
                 )
                 return True
@@ -93,7 +88,7 @@ class StrategicPlanningAgent(BaseAgent):
                 for milestone in goal["milestones"]:
                     if milestone["description"] == milestone_description:
                         milestone["achieved"] = True
-                        print(
+                        self.logger.info(
                             f"Strategy: Milestone '{milestone_description}' achieved for {goal_id}!"
                         )
                         return True

@@ -25,5 +25,5 @@ class MarkdownAgent:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"MarkdownAgent initialized (Placeholder).")
+        logging.info("MarkdownAgent initialized (Placeholder).")
 

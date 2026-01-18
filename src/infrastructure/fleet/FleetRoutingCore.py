@@ -36,35 +36,14 @@ class FleetRoutingCore:
         if hasattr(self.fleet, "temporal_sync"):
             self.fleet.temporal_sync.report_activity()
 
-        g_low = goal.lower()
-
-        # New: Capability Hint Lookup
-        for hint_key, agent_name in self.fleet._capability_hints.items():
-            if hint_key in g_low and agent_name in self.fleet.agents:
-                _ = self.fleet.agents[agent_name]  # Force load
-                logging.info(
-                    f"Fleet: Lazy-loaded '{agent_name}' for capability '{hint_key}'"
-                )
-
-        # New: Auto-instantiate agent if goal matches agent name
-        if goal in self.fleet.agents:
-            _ = self.fleet.agents[
-                goal
-            ]  # Access triggers instantiation and tool registration
-        else:
-            # Check if any agent name contains the goal
-            for agent_name in self.fleet.agents:
-                if g_low in agent_name.lower():
-                    _ = self.fleet.agents[agent_name]
-                    break
+        self._ensure_agents_loaded(goal)
 
         # Get tool metadata for scoring
         tools = self.fleet.registry.list_tools()
-        tools_metadata = []
-        for t in tools:
-            tools_metadata.append(
-                {"name": t.name, "owner": t.owner, "sync": getattr(t, "sync", True)}
-            )
+        tools_metadata = [
+            {"name": t.name, "owner": t.owner, "sync": getattr(t, "sync", True)}
+            for t in tools
+        ]
 
         scored_candidates = self.fleet.core.score_tool_candidates(
             goal, tools_metadata, kwargs
@@ -73,24 +52,50 @@ class FleetRoutingCore:
         if not scored_candidates:
             return f"No tool found for goal: {goal}"
 
-        candidates = [c[1] for c in scored_candidates]
+        best_tool = self._select_optimized_tool(goal, [c[1] for c in scored_candidates])
+        return await self._execute_tool_with_lifecycle(best_tool, tools, goal, **kwargs)
 
+    def _ensure_agents_loaded(self, goal: str) -> None:
+        """Heuristically load agents based on the goal string."""
+        g_low = goal.lower()
+        for hint_key, agent_name in self.fleet._capability_hints.items():
+            if hint_key in g_low and agent_name in self.fleet.agents:
+                _ = self.fleet.agents[agent_name]  # Force load
+                logging.info(
+                    f"Fleet: Lazy-loaded '{agent_name}' for capability '{hint_key}'"
+                )
+
+        if goal in self.fleet.agents:
+            _ = self.fleet.agents[goal]
+        else:
+            for agent_name in self.fleet.agents:
+                if g_low in agent_name.lower():
+                    _ = self.fleet.agents[agent_name]
+                    break
+
+    def _select_optimized_tool(self, goal: str, candidates: list[str]) -> str:
+        """Select the best tool from candidates, using RL if available."""
         selector = self.fleet.rl_selector
         if selector and hasattr(selector, "select_best_tool"):
             best_tool = selector.select_best_tool(candidates)
             logging.info(
                 f"Fleet selected optimized tool '{best_tool}' using RL for goal '{goal}'"
             )
-        else:
-            best_tool = candidates[0]
-            logging.info(
-                f"Fleet: RLSelector missing or incompatible. Defaulting to first candidate '{best_tool}' for goal '{goal}'"
-            )
+            return best_tool
 
+        logging.info(
+            f"Fleet: RLSelector missing. Defaulting to first candidate '{candidates[0]}' for goal '{goal}'"
+        )
+        return candidates[0]
+
+    async def _execute_tool_with_lifecycle(
+        self, best_tool: str, tools: list[Any], goal: str, **kwargs
+    ) -> str:
+        """Execute the selected tool with built-in timeout, security audit, and self-healing."""
         owner = next((t.owner for t in tools if t.name == best_tool), None)
         is_essential = owner in self.fleet.agents.registry_configs if owner else False
-
         start_time = time.time()
+
         try:
 
             async def run_tool() -> str:
@@ -113,28 +118,10 @@ class FleetRoutingCore:
                     return error_msg
 
             # Phase 123: Security Audit Feedback Loop
-            audit_passed = True
-            if "ImmuneSystem" in self.fleet.agents:
-                try:
-                    immune = self.fleet.agents["ImmuneSystem"]
-                    if asyncio.iscoroutinefunction(immune.perform_security_audit):
-                        audit_passed = await immune.perform_security_audit(
-                            best_tool, str(res)
-                        )
-                    else:
-                        audit_passed = immune.perform_security_audit(
-                            best_tool, str(res)
-                        )
-                except (AttributeError, ValueError, TypeError):
-                    pass
-
-            if not audit_passed:
-                logging.warning(
-                    f"Fleet: Security audit FAILED for tool '{best_tool}'. Penalizing RLSelector."
+            if not await self._perform_security_audit(best_tool, str(res)):
+                return (
+                    f"ERROR: Security audit failed for tool '{best_tool}'. Output blocked."
                 )
-                if self.fleet.rl_selector:
-                    self.fleet.rl_selector.update_stats(best_tool, success=False)
-                return f"ERROR: Security audit failed for tool '{best_tool}'. Output blocked."
 
             if self.fleet.rl_selector:
                 self.fleet.rl_selector.update_stats(best_tool, success=True)
@@ -146,23 +133,53 @@ class FleetRoutingCore:
             if self.fleet.rl_selector:
                 self.fleet.rl_selector.update_stats(best_tool, success=False)
             logging.error(f"Error executing tool {best_tool}: {e}")
-            if self.fleet.self_healing:
-                target_agent = owner if owner else best_tool
-                clean_kwargs = {k: v for k, v in kwargs.items() if k != "agent_name"}
-                if asyncio.iscoroutinefunction(self.fleet.self_healing.attempt_repair):
-                    return await self.fleet.self_healing.attempt_repair(
-                        target_agent, e, **clean_kwargs
-                    )
-                else:
-                    return self.fleet.self_healing.attempt_repair(
-                        target_agent, e, **clean_kwargs
-                    )
-            return f"Error executing tool {best_tool}: {e}"
+            return await self._attempt_self_healing(best_tool, owner, e, **kwargs)
         finally:
             if hasattr(self.fleet, "telemetry"):
                 self.fleet.telemetry.trace_workflow(
                     f"tool_{best_tool}", time.time() - start_time
                 )
+
+    async def _perform_security_audit(self, best_tool: str, result: str) -> bool:
+        """Invokes ImmuneSystem to audit tool output."""
+        if "ImmuneSystem" not in self.fleet.agents:
+            return True
+
+        try:
+            immune = self.fleet.agents["ImmuneSystem"]
+            if asyncio.iscoroutinefunction(immune.perform_security_audit):
+                audit_passed = await immune.perform_security_audit(best_tool, result)
+            else:
+                audit_passed = immune.perform_security_audit(best_tool, result)
+        except (AttributeError, ValueError, TypeError):
+            audit_passed = True
+
+        if not audit_passed:
+            logging.warning(
+                f"Fleet: Security audit FAILED for tool '{best_tool}'. Penalizing RLSelector."
+            )
+            if self.fleet.rl_selector:
+                self.fleet.rl_selector.update_stats(best_tool, success=False)
+            return False
+        return True
+
+    async def _attempt_self_healing(
+        self, best_tool: str, owner: str | None, error: Exception, **kwargs
+    ) -> str:
+        """Attempt to repair the agent or environment if an error occurs."""
+        if not self.fleet.self_healing:
+            return f"Error executing tool {best_tool}: {error}"
+
+        target_agent = owner if owner else best_tool
+        clean_kwargs = {k: v for k, v in kwargs.items() if k != "agent_name"}
+        if asyncio.iscoroutinefunction(self.fleet.self_healing.attempt_repair):
+            return await self.fleet.self_healing.attempt_repair(
+                target_agent, error, **clean_kwargs
+            )
+        else:
+            return self.fleet.self_healing.attempt_repair(
+                target_agent, error, **clean_kwargs
+            )
 
     def route_task(self, task_type: str, task_data: Any) -> str:
         """Routes tasks based on system load and hardware availability."""

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Backup, snapshot, and compression engine.
+# Phase 16: Rust acceleration for JSON serialization and compression
 
 from __future__ import annotations
 import json
@@ -13,6 +14,14 @@ from dataclasses import dataclass
 from .ObservabilityCore import StatsSnapshot
 
 logger = logging.getLogger(__name__)
+
+# Phase 16: Rust acceleration imports
+try:
+    import rust_core
+    _RUST_AVAILABLE = True
+except ImportError:
+    _RUST_AVAILABLE = False
+    logging.debug("rust_core not available, using Python fallback for StorageEngine")
 
 
 @dataclass
@@ -189,6 +198,16 @@ class StatsCompressor:
     """Compresses metric data."""
 
     def compress(self, data: Any) -> bytes:
+        # Phase 16: Try Rust-accelerated JSON serialization + compression
+        if _RUST_AVAILABLE and hasattr(rust_core, "compress_json_rust"):
+            try:
+                if not isinstance(data, (bytes, bytearray)):
+                    result = rust_core.compress_json_rust(data)
+                    if result:
+                        return result
+            except Exception:
+                pass  # Fall through to Python implementation
+        
         payload = (
             (b"b" + bytes(data))
             if isinstance(data, (bytes, bytearray))
@@ -197,6 +216,15 @@ class StatsCompressor:
         return zlib.compress(payload)
 
     def decompress(self, data: bytes) -> Any:
+        # Phase 16: Try Rust-accelerated decompression + JSON parsing
+        if _RUST_AVAILABLE and hasattr(rust_core, "decompress_json_rust"):
+            try:
+                result = rust_core.decompress_json_rust(data)
+                if result is not None:
+                    return result
+            except Exception:
+                pass  # Fall through to Python implementation
+        
         payload = zlib.decompress(data)
         tag, body = payload[:1], payload[1:]
         if tag == b"b":

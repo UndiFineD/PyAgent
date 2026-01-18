@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Agent implementing MemoRAG patterns for global context understanding.
 Generates 'clues' from global memory to improve retrieval accuracy.
@@ -29,6 +24,13 @@ import logging
 from pathlib import Path
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import as_tool
+
+try:
+    import rust_core
+
+    HAS_RUST = True
+except ImportError:
+    HAS_RUST = False
 
 __version__ = VERSION
 
@@ -59,12 +61,32 @@ class MemoRAGAgent(BaseAgent):
     def recall_clues_from_shard(
         self, query: str, shard_name: str = "global"
     ) -> list[str]:
-        """Generates clues by scanning a specific memory shard."""
+        """Generates clues by scanning a specific memory shard. Uses Rust similarity if available."""
         shard_file = self.shard_dir / f"{shard_name}.txt"
         if not shard_file.exists():
             return [f"Notice: Shard '{shard_name}' does not exist."]
 
-        # Simulated intelligent retrieval
+        if HAS_RUST:
+            try:
+                with open(shard_file, "r", encoding="utf-8") as f:
+                    lines = [line.strip() for line in f if line.strip().startswith("[MEM]")]
+                
+                if lines:
+                    from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore
+                    sc = SynthesisCore()
+                    q_embedding = sc.vectorize_insight(query)
+                    
+                    # Generate embeddings for lines (in a real system we would cache these)
+                    line_embeddings = [sc.vectorize_insight(line) for line in lines]
+                    
+                    # Fast Rust retrieval
+                    matches = rust_core.top_k_cosine_similarity(q_embedding, line_embeddings, 2)
+                    return [f"Semantic Clue [{score:.2f}]: {lines[idx]}" for idx, score in matches]
+                    
+            except Exception as e:
+                logging.warning(f"MemoRAG semantic search failed: {e}")
+
+        # Simulated intelligent retrieval fallback
         return [
             f"Clue for '{query}' in {shard_name}: Recent updates to core logic.",
             "Historical context suggests a dependency on previous Phase 40 logic.",

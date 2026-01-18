@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 # Identity Mixin for BaseAgent
 from typing import Any
-import logging
 from src.core.base.models import AgentPriority
 
 class IdentityMixin:
     """Handles agent identity, configuration, and capabilities."""
-    
+
     def __init__(self, **kwargs: Any) -> None:
         self.agent_name = self.__class__.__name__.lower().replace("agent", "") or "base"
         self.capabilities: list[str] = ["base"]

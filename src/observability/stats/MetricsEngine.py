@@ -3,88 +3,29 @@
 # Unified logic for metric calculation, processing, and management.
 
 from __future__ import annotations
-import ast
 import json
 import logging
-import math
-import platform
-import re
 import time
-import zlib
-from datetime import datetime
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict
 from typing import Any
-from collections.abc import Callable
 from pathlib import Path
-import hashlib
-import operator
 from .ObservabilityCore import (
-    Metric,
-    RetentionPolicy,
-    AggregationType,
-    MetricNamespace,
-    MetricAnnotation,
-    MetricCorrelation,
-    MetricSubscription,
-    FederatedSource,
-    FederationMode,
-    RollupConfig,
-    StreamingConfig,
     AgentMetric,
     ObservabilityCore,
-    StatsSnapshot,
-    StatsSubscription,
-    ThresholdAlert,
-    DerivedMetric,
 )
 
 # Import pure calculation cores
 from .MetricsCore import (
     TokenCostCore,
     ModelFallbackCore,
-    DerivedMetricCalculator,
-    StatsRollupCore,
-    CorrelationCore,
 )
-from .RollupEngine import StatsRollup, StatsRollupCalculator, StatsQueryEngine
-from .PredictionEngine import StatsChangeDetector, StatsForecaster
-from .FormulaEngine import FormulaEngineCore, FormulaValidation
-from .ABEngine import (
-    ABComparisonEngine,
-    ABComparison,
-    ABComparisonResult,
-    ABSignificanceResult,
-)
-from .Monitoring import ResourceMonitor
-from .Alerting import RetentionEnforcer, ThresholdAlertManager
-from .SubsEngine import (
-    SubscriptionManager,
-    StatsSubscriptionManager,
-    AnnotationManager,
-    StatsAnnotationManager,
-)
-from .Namespaces import MetricNamespaceManager
-from .Federation import StatsFederation
-from .Streaming import StatsStreamer, StatsStreamManager, StatsStream
-from .StorageEngine import (
-    StatsBackupManager,
-    StatsSnapshotManager,
-    StatsCompressor,
-    StatsBackup,
-)
-from .Access import StatsAccessController
-from .API import StatsAPIServer
 
 try:
-    from .Analysis import MODEL_COSTS, HAS_PSUTIL
     import psutil
 except ImportError:
-    from .Analysis import HAS_PSUTIL
 
     psutil = None
 from .Exporters import PrometheusExporter, OTelManager, MetricsExporter
-from src.core.base.ConnectivityManager import ConnectivityManager
-from .StatsAgent import StatsAgent
 
 try:
     from src.observability.reports.GrafanaGenerator import (
@@ -269,15 +210,15 @@ class ObservabilityEngine:
         total_latency = 0.0
         success_count = 0
         agents = {}
-        
+
         for m in self.metrics:
             total_latency += m.duration_ms
             if m.status == "success":
                 success_count += 1
-            
+
             if m.agent_name not in agents:
                 agents[m.agent_name] = {"calls": 0, "latency": 0.0, "cost": 0.0}
-            
+
             a = agents[m.agent_name]
             a["calls"] += 1
             a["latency"] += m.duration_ms

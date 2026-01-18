@@ -10,19 +10,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
 import time
 import logging
-from typing import Any
+from typing import Any, TYPE_CHECKING
 from .IntelligenceCore import IntelligenceCore
+
+if TYPE_CHECKING:
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
 __version__ = VERSION
 
@@ -34,7 +32,7 @@ class IntelligenceOrchestrator:
     Optimized for Phase 108 with high-performance local AI (vLLM) integration.
     """
 
-    def __init__(self, fleet_manager: Any) -> None:
+    def __init__(self, fleet_manager: FleetManager | None = None) -> None:
         self.fleet_manager = fleet_manager
         self.workspace_root = str(getattr(fleet_manager, "workspace_root", "."))
         self.insight_pool: list[dict[str, Any]] = []

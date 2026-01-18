@@ -1,0 +1,579 @@
+C901 `verify_imports` is too complex (11 > 10)
+  --> src\core\base\AgentVerification.py:80:9
+   |
+79 |     @staticmethod
+80 |     def verify_imports(root_dir: str = "src") -> dict[str, list[str]]:
+   |         ^^^^^^^^^^^^^^
+81 |         """
+82 |         Scans all Python files in the given directory for broken internal imports.
+   |
+
+C901 `audit_workspace` is too complex (21 > 10)
+   --> src\core\base\AgentVerification.py:157:9
+    |
+156 |     @staticmethod
+157 |     def audit_workspace(root_dir: str = "src") -> dict[str, Any]:
+    |         ^^^^^^^^^^^^^^^
+158 |         """
+159 |         Scans for bare excepts, print statements, large files, and undocumented classes.
+    |
+
+C901 `_is_stub_node` is too complex (19 > 10)
+   --> src\core\base\AgentVerification.py:246:9
+    |
+245 |     @staticmethod
+246 |     def _is_stub_node(node: ast.AST) -> bool | str:
+    |         ^^^^^^^^^^^^^
+247 |         """Determines if a node is an empty stub (pass/NotImplementedError)."""
+248 |         if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+    |
+
+C901 `as_tool` is too complex (13 > 10)
+   --> src\core\base\BaseUtilities.py:112:5
+    |
+112 | def as_tool(priority: int = 0, category: str | None = None) -> Callable:
+    |     ^^^^^^^
+113 |     """Decorator to mark a method as a tool for the ToolRegistry.
+114 |     Automatically records tool interactions to the fleet context shards for autonomous learning.
+    |
+
+C901 `decorator` is too complex (11 > 10)
+   --> src\core\base\BaseUtilities.py:120:9
+    |
+118 |     import time
+119 |
+120 |     def decorator(func: Callable) -> Callable:
+    |         ^^^^^^^^^
+121 |         import asyncio
+    |
+
+C901 `cluster_interactions` is too complex (14 > 10)
+  --> src\core\base\NeuralPruningEngine.py:76:9
+   |
+74 |             self.interaction_history.pop(0)
+75 |
+76 |     def cluster_interactions(self) -> dict[int, list[str]]:
+   |         ^^^^^^^^^^^^^^^^^^^^
+77 |         """
+78 |         Uses DBSCAN-like clustering to identify 'tight' agent cliques.
+   |
+
+C901 `discover` is too complex (13 > 10)
+  --> src\core\base\managers\PluginManager.py:71:9
+   |
+69 |                 pass
+70 |
+71 |     def discover(self) -> list[str]:
+   |         ^^^^^^^^
+72 |         """Scans manifest and directory for compatible plugins."""
+73 |         discovered = []
+   |
+
+C901 `execute` is too complex (12 > 10)
+  --> src\core\modules\DocGenModule.py:30:9
+   |
+28 |         return super().initialize()
+29 |
+30 |     def execute(self, source_code: str, file_name: str) -> str:
+   |         ^^^^^^^
+31 |         """
+32 |         Extracts markdown documentation from Python source code.
+   |
+
+C901 `smart_chat` is too complex (20 > 10)
+   --> src\infrastructure\backend\LLMClient.py:210:9
+    |
+208 |         return self.backends["copilot_cli"].chat(prompt, model, system_prompt, **kwargs)
+209 |
+210 |     def smart_chat(
+    |         ^^^^^^^^^^
+211 |         self,
+212 |         prompt: str,
+    |
+
+C901 `run_subagent` is too complex (24 > 10)
+  --> src\infrastructure\backend\SubagentCore.py:43:9
+   |
+41 |         self.runner = runner
+42 |
+43 |     def run_subagent(
+   |         ^^^^^^^^^^^^
+44 |         self, description: str, prompt: str, original_content: str = ""
+45 |     ) -> str | None:
+   |
+
+C901 `chat` is too complex (22 > 10)
+  --> src\infrastructure\backend\llm_backends\GitHubModelsBackend.py:34:9
+   |
+32 |     """GitHub Models LLM Backend."""
+33 |
+34 |     def chat(
+   |         ^^^^
+35 |         self,
+36 |         prompt: str,
+   |
+
+C901 `_validate_test_structure` is too complex (14 > 10)
+   --> src\infrastructure\dev\agent_tests\agents.py:476:9
+    |
+474 |             return False
+475 |
+476 |     def _validate_test_structure(self, content: str) -> bool:
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^
+477 |         """Validate pytest / unittest-specific patterns."""
+478 |         try:
+    |
+
+C901 `curate_dependencies` is too complex (17 > 10)
+  --> src\infrastructure\dev\scripts\analysis\curate_dependencies.py:25:5
+   |
+25 | def curate_dependencies() -> None:
+   |     ^^^^^^^^^^^^^^^^^^^
+26 |     workspace_root = Path(".")
+27 |     src_dir = workspace_root / "src"
+   |
+
+C901 `generate_catalog` is too complex (14 > 10)
+  --> src\infrastructure\dev\scripts\analysis\generate_agent_catalog.py:20:5
+   |
+20 | def generate_catalog() -> None:
+   |     ^^^^^^^^^^^^^^^^
+21 |     """Phase 244: Scans src/logic/agents and generates detailed documentation."""
+22 |     agents_dir = Path("src/logic/agents")
+   |
+
+C901 `_cycle_throttle` is too complex (11 > 10)
+   --> src\infrastructure\dev\scripts\analysis\run_fleet_self_improvement.py:383:5
+    |
+383 | def _cycle_throttle(
+    |     ^^^^^^^^^^^^^^^
+384 |     delay: int, root: str, target_dirs: list[str], use_watcher: bool = False
+385 | ) -> None:
+    |
+
+C901 `print_report` is too complex (15 > 10)
+   --> src\infrastructure\dev\scripts\analysis\run_profiled_self_improvement.py:234:9
+    |
+232 |         }
+233 |     
+234 |     def print_report(self, report: dict) -> None:
+    |         ^^^^^^^^^^^^
+235 |         """Print formatted report."""
+236 |         summary = report["summary"]
+    |
+
+C901 `generate_swarm_graph` is too complex (12 > 10)
+  --> src\infrastructure\dev\scripts\analysis\visualize_swarm_graph.py:11:5
+   |
+11 | def generate_swarm_graph(output_format: str = "mermaid") -> str:
+   |     ^^^^^^^^^^^^^^^^^^^^
+12 |     """
+13 |     Phase 247: Traces message flows in SignalRegistry to build an interaction matrix
+   |
+
+C901 `fix` is too complex (22 > 10)
+  --> src\infrastructure\dev\scripts\maintenance\final_fix.py:30:5
+   |
+30 | def fix() -> None:
+   |     ^^^
+31 |     """Correct import indentation and leading whitespace errors."""
+32 |     for root, dirs, files in os.walk(os.getcwd()):
+   |
+
+C901 `strict_scan` is too complex (11 > 10)
+  --> src\infrastructure\dev\scripts\management\debug_final_scan.py:34:5
+   |
+34 | def strict_scan() -> None:
+   |     ^^^^^^^^^^^
+35 |     src_dir = Path("src")
+36 |     patterns = [
+   |
+
+C901 `main` is too complex (12 > 10)
+  --> src\infrastructure\dev\scripts\management\repair_packages.py:74:5
+   |
+74 | def main() -> None:
+   |     ^^^^
+75 |     """Execute the package and import repair workflow."""
+76 |     workspace = Path(".")
+   |
+
+C901 `fix_all` is too complex (25 > 10)
+  --> src\infrastructure\dev\scripts\management\repair_v3.py:30:5
+   |
+30 | def fix_all() -> None:
+   |     ^^^^^^^
+31 |     """Correct import indentation and reposition VERSION imports."""
+32 |     target_module = "src.version"
+   |
+
+C901 `fix_future_ordering` is too complex (13 > 10)
+  --> src\infrastructure\dev\scripts\refactoring\fix_future_ordering.py:29:5
+   |
+29 | def fix_future_ordering(directory: str) -> None:
+   |     ^^^^^^^^^^^^^^^^^^^
+30 |     """Reorder file content to place __future__ imports correctly."""
+31 |     for root, _, files in os.walk(directory):
+   |
+
+C901 `fix_header` is too complex (19 > 10)
+  --> src\infrastructure\dev\scripts\refactoring\fix_headers.py:19:5
+   |
+19 | def fix_header(lines: list[str], filename: str = "") -> list[str]:
+   |     ^^^^^^^^^^
+20 |     shebang = None
+21 |     _future = "from __future__ import annotations\n"
+   |
+
+C901 `fix_file` is too complex (12 > 10)
+  --> src\infrastructure\dev\scripts\refactoring\move_imports_util.py:30:5
+   |
+30 | def fix_file(file_path: str) -> None:
+   |     ^^^^^^^^
+31 |     """Move standard library imports from TYPE_CHECKING to top-level."""
+32 |     with open(file_path, encoding="utf-8") as f:
+   |
+
+C901 `cleanup_all` is too complex (11 > 10)
+  --> src\infrastructure\dev\test_utils\TestDataCleaner.py:86:9
+   |
+84 |         self._callbacks.append(callback)
+85 |
+86 |     def cleanup_all(self, force: bool = False) -> int:
+   |         ^^^^^^^^^^^
+87 |         """Clean up all registered resources.
+   |
+
+C901 `execute_workflow_async` is too complex (12 > 10)
+  --> src\infrastructure\fleet\AsyncFleetManager.py:47:15
+   |
+45 |         self._migration_events: dict[str, asyncio.Event] = {}
+46 |
+47 |     async def execute_workflow_async(
+   |               ^^^^^^^^^^^^^^^^^^^^^^
+48 |         self,
+49 |         task: str,
+   |
+
+C901 `execute_with_consensus` is too complex (15 > 10)
+  --> src\infrastructure\fleet\FleetConsensusManager.py:32:9
+   |
+30 |         self.fleet = fleet
+31 |
+32 |     def execute_with_consensus(
+   |         ^^^^^^^^^^^^^^^^^^^^^^
+33 |         self,
+34 |         task: str,
+   |
+
+C901 `__getattr__` is too complex (16 > 10)
+  --> src\infrastructure\fleet\FleetManager.py:75:9
+   |
+73 |     """
+74 |
+75 |     def __getattr__(self, name: str) -> Any:
+   |         ^^^^^^^^^^^
+76 |         """Delegate to orchestrators and agents for lazy loading support."""
+77 |         if name.startswith("__"):
+   |
+
+C901 `call_by_capability` is too complex (25 > 10)
+  --> src\infrastructure\fleet\FleetRoutingCore.py:33:15
+   |
+31 |         self.fleet = fleet
+32 |
+33 |     async def call_by_capability(self, goal: str, **kwargs) -> str:
+   |               ^^^^^^^^^^^^^^^^^^
+34 |         """Finds an agent with the required capability and executes it with RL optimization."""
+35 |         # Report activity to TemporalSync
+   |
+
+C901 `_instantiate` is too complex (17 > 10)
+   --> src\infrastructure\fleet\OrchestratorRegistry.py:146:9
+    |
+144 |             return False
+145 |
+146 |     def _instantiate(self, key: str, config: tuple[str, str, bool, str | None]) -> Any:
+    |         ^^^^^^^^^^^^
+147 |         module_path, class_name, needs_fleet, arg_path_suffix = config
+148 |         try:
+    |
+
+C901 `analyze_content` is too complex (25 > 10)
+  --> src\infrastructure\orchestration\core\SelfImprovementCore.py:60:9
+   |
+58 |         self.io_pattern = r"(requests\.(get|post|put|delete|patch|head)\(|self\.ai|subprocess\.(run|call|Popen|check_call|check_output…
+59 |
+60 |     def analyze_content(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
+   |         ^^^^^^^^^^^^^^^
+61 |         """
+62 |         Performs multi-dimensional analysis on file content.
+   |
+
+C901 `get_targets` is too complex (12 > 10)
+   --> src\interface\ui\gui\BmadManager.py:208:9
+    |
+206 |             self.callbacks["get_workflow_manager"]().start_workflow(track, targets)
+207 |
+208 |     def get_targets(self) -> list[str]:
+    |         ^^^^^^^^^^^
+209 |         mode = self.target_mode.get()
+210 |         targets = []
+    |
+
+C901 `hierarchical_query` is too complex (12 > 10)
+   --> src\logic\agents\cognitive\HierarchicalMemoryAgent.py:113:9
+    |
+112 |     @as_tool
+113 |     def hierarchical_query(self, query: str, deep_search: bool = False) -> str:
+    |         ^^^^^^^^^^^^^^^^^^
+114 |         """Searches across memory tiers starting from short-term.
+115 |         Args:
+    |
+
+C901 `partition_memory` is too complex (11 > 10)
+  --> src\logic\agents\cognitive\context\engines\GlobalContextCore.py:42:9
+   |
+40 |     """
+41 |
+42 |     def partition_memory(
+   |         ^^^^^^^^^^^^^^^^
+43 |         self, memory: dict[str, Any], max_entries_per_shard: int = 1000
+44 |     ) -> dict[str, dict[str, Any]]:
+   |
+
+C901 `analyze` is too complex (14 > 10)
+  --> src\logic\agents\cognitive\context\utils\RefactoringAdvisor.py:63:9
+   |
+61 |         self.patterns[name] = {"pattern": pattern, "description": description}
+62 |
+63 |     def analyze(self, contexts: Any) -> list[RefactoringSuggestion]:
+   |         ^^^^^^^
+64 |         """Analyze contexts for refactoring opportunities.
+   |
+
+C901 `_analyze_html` is too complex (13 > 10)
+   --> src\logic\agents\development\AccessibilityAgent.py:145:9
+    |
+143 |         return self._generate_report("content")
+144 |
+145 |     def _analyze_html(self, content: str) -> None:
+    |         ^^^^^^^^^^^^^
+146 |         """Analyze HTML content for accessibility issues.
+    |
+
+C901 `_check_python_quality` is too complex (11 > 10)
+  --> src\logic\agents\development\CodeQualityAgent.py:73:9
+   |
+71 |         return report
+72 |
+73 |     def _check_python_quality(self, path: str) -> list[dict[str, Any]]:
+   |         ^^^^^^^^^^^^^^^^^^^^^
+74 |         """Run quality analysis for Python."""
+75 |         issues = []
+   |
+
+C901 `extract_docs` is too complex (12 > 10)
+  --> src\logic\agents\development\DocGenAgent.py:41:9
+   |
+39 |         self.doc_registry: dict[Any, Any] = {}  # module_path -> extracted_docs
+40 |
+41 |     def extract_docs(self, file_path: str) -> str:
+   |         ^^^^^^^^^^^^
+42 |         """Extracts docstrings from a Python file and returns Markdown content."""
+43 |         if not file_path.endswith(".py"):
+   |
+
+C901 `extract_markdown_from_source` is too complex (11 > 10)
+  --> src\logic\agents\development\DocGenCore.py:35:9
+   |
+34 |     @staticmethod
+35 |     def extract_markdown_from_source(source_code: str, file_name: str) -> str:
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+36 |         """
+37 |         Parses source code using AST and generates Markdown documentation.
+   |
+
+C901 `scan_project` is too complex (11 > 10)
+  --> src\logic\agents\infrastructure\NetworkContextAgent.py:53:9
+   |
+51 |         return "# Codebase Network Analysis\n\n## Clusters\nPending scan...\n"
+52 |
+53 |     def scan_project(self) -> str:
+   |         ^^^^^^^^^^^^
+54 |         """Perform a full scan of the project to build the graph."""
+55 |         root = self.file_path.parent
+   |
+
+C901 `_analyze_thought` is too complex (11 > 10)
+  --> src\logic\agents\security\FirewallAgent.py:61:15
+   |
+59 |         return []
+60 |
+61 |     async def _analyze_thought(self, event: dict[str, Any]) -> None:
+   |               ^^^^^^^^^^^^^^^^
+62 |         """Inform the fleet and perform security analysis on the thought."""
+63 |         data = event.get("data", {})
+   |
+
+C901 `scan_file` is too complex (16 > 10)
+  --> src\logic\agents\security\SecurityAuditAgent.py:47:9
+   |
+45 |         ]
+46 |
+47 |     def scan_file(self, file_path: str) -> list[dict[str, Any]]:
+   |         ^^^^^^^^^
+48 |         """Scans a single file for security issues."""
+49 |         findings = []
+   |
+
+C901 `format_entries_as_markdown` is too complex (12 > 10)
+   --> src\logic\agents\swarm\ChangesAgent.py:504:9
+    |
+502 |         return removed
+503 |
+504 |     def format_entries_as_markdown(self) -> str:
+    |         ^^^^^^^^^^^^^^^^^^^^^^^^^^
+505 |         """Format all entries as markdown changelog."""
+506 |         if not self._entries:
+    |
+
+C901 `process_file` is too complex (16 > 10)
+   --> src\logic\agents\swarm\OrchestratorFeatures.py:385:9
+    |
+383 |         self.run_stats_update(code_files)
+384 |
+385 |     def process_file(self, code_file: Path) -> None:
+    |         ^^^^^^^^^^^^
+386 |         """Process a single code file through the improvement loop."""
+387 |         if (
+    |
+
+C901 `_parse_file` is too complex (14 > 10)
+  --> src\logic\agents\system\TopologicalNavigator.py:76:9
+   |
+74 |         return f"Dependency map built successfully. Indexed {count} files. Total nodes: {len(self.graph)}"
+75 |
+76 |     def _parse_file(self, file_path: Path) -> None:
+   |         ^^^^^^^^^^^
+77 |         """Extracts imports and class/function definitions from a file."""
+78 |         try:
+   |
+
+C901 `parse_markdown` is too complex (13 > 10)
+   --> src\observability\improvements\ImprovementManager.py:125:9
+    |
+123 |         return improvement
+124 |
+125 |     def parse_markdown(self, content: str) -> None:
+    |         ^^^^^^^^^^^^^^
+126 |         """Parse improvements from markdown content."""
+127 |         self._improvements = []
+    |
+
+C901 `_check_associated_file` is too complex (13 > 10)
+  --> src\observability\improvements\ImprovementsAgent.py:72:9
+   |
+70 |             )
+71 |
+72 |     def _check_associated_file(self) -> None:
+   |         ^^^^^^^^^^^^^^^^^^^^^^
+73 |         """Check if the associated code file exists.
+   |
+
+C901 `export_improvements` is too complex (13 > 10)
+   --> src\observability\improvements\ImprovementsAgent.py:432:9
+    |
+431 |     # ========== Export ==========
+432 |     def export_improvements(self, format: str = "json") -> str:
+    |         ^^^^^^^^^^^^^^^^^^^
+433 |         """Export improvements to various formats."""
+434 |         if format == "json":
+    |
+
+C901 `render_errors` is too complex (14 > 10)
+   --> src\observability\reports\ReportGenerator.py:263:9
+    |
+261 |         return "\n".join(lines)
+262 |
+263 |     def render_errors(
+    |         ^^^^^^^^^^^^^
+264 |         self, py_path: Path, source: str, compile_result: CompileResult | str | None
+265 |     ) -> str:
+    |
+
+C901 `_find_issues` is too complex (16 > 10)
+   --> src\observability\reports\ReportGenerator.py:408:9
+    |
+406 |         return out
+407 |
+408 |     def _find_issues(self, tree: ast.AST, source: str, py_path: Path) -> list[str]:
+    |         ^^^^^^^^^^^^
+409 |         issues = []
+410 |         # 1. Mutable defaults
+    |
+
+C901 `_find_issues` is too complex (11 > 10)
+   --> src\observability\reports\ReportUtils.py:105:5
+    |
+105 | def _find_issues(tree: ast.AST, source: str) -> list[str]:
+    |     ^^^^^^^^^^^^
+106 |     """Find potential issues via lightweight static analysis."""
+107 |     issues: list[str] = []
+    |
+
+C901 `_eval_node` is too complex (12 > 10)
+   --> src\observability\stats\Analysis.py:171:9
+    |
+169 |         }
+170 |
+171 |     def _eval_node(self, node: ast.AST) -> float:
+    |         ^^^^^^^^^^
+172 |         if isinstance(node, ast.Constant):
+173 |             return float(node.value)
+    |
+
+C901 `_eval_node` is too complex (13 > 10)
+   --> src\observability\stats\MetricsCore.py:241:9
+    |
+239 |         }
+240 |
+241 |     def _eval_node(self, node: ast.AST) -> float:
+    |         ^^^^^^^^^^
+242 |         """Recursively evaluate an AST node (pure calculation)."""
+243 |         if isinstance(node, ast.Constant):
+    |
+
+C901 `compute_rollup` is too complex (14 > 10)
+   --> src\observability\stats\RollupEngine.py:117:9
+    |
+115 |         self._raw_data[metric_name].append((ts, value))
+116 |
+117 |     def compute_rollup(self, name: str) -> list[dict[str, Any]]:
+    |         ^^^^^^^^^^^^^^
+118 |         config = self.configs.get(name)
+    |
+
+C901 `query` is too complex (12 > 10)
+   --> src\observability\stats\RollupEngine.py:181:9
+    |
+179 |         self._rows[metric].append({"timestamp": float(timestamp), "value": value})
+180 |
+181 |     def query(
+    |         ^^^^^
+182 |         self,
+183 |         metric_name: str,
+    |
+
+C901 `_check_thresholds` is too complex (11 > 10)
+   --> src\observability\stats\StatsAgent.py:225:9
+    |
+223 |         return len(self._thresholds) < original_count
+224 |
+225 |     def _check_thresholds(self, metric: Metric) -> None:
+    |         ^^^^^^^^^^^^^^^^^
+226 |         """Check if metric breaches any thresholds."""
+227 |         for threshold in self._thresholds:
+    |
+
+Found 56 errors.

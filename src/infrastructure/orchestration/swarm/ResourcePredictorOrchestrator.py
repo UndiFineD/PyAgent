@@ -25,5 +25,5 @@ class ResourcePredictorOrchestrator:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"ResourcePredictorOrchestrator initialized (Placeholder).")
+        logging.info("ResourcePredictorOrchestrator initialized (Placeholder).")
 

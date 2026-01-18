@@ -25,5 +25,5 @@ class ConsensusEngine:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"ConsensusEngine initialized (Placeholder).")
+        logging.info("ConsensusEngine initialized (Placeholder).")
 

@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Coordinator for deploying and aggregating results from multiple agents."""
 
@@ -26,8 +21,6 @@ import logging
 from pathlib import Path
 from typing import Any, TYPE_CHECKING
 from src.observability.StructuredLogger import StructuredLogger
-from src.core.base.BaseAgent import BaseAgent
-from src.core.base.models import AgentPriority
 from src.infrastructure.fleet.WorkflowState import WorkflowState
 from src.infrastructure.fleet.AgentRegistry import AgentRegistry
 from src.infrastructure.fleet.OrchestratorRegistry import OrchestratorRegistry
@@ -36,26 +29,14 @@ from src.infrastructure.fleet.FleetLifecycleManager import FleetLifecycleManager
 from src.infrastructure.fleet.FleetInteractionRecorder import FleetInteractionRecorder
 from src.infrastructure.fleet.FleetRoutingCore import FleetRoutingCore
 from src.infrastructure.fleet.FleetConsensusManager import FleetConsensusManager
+from src.infrastructure.fleet.mixins.FleetTaskMixin import FleetTaskMixin
+from src.infrastructure.fleet.mixins.FleetRoutingMixin import FleetRoutingMixin
+from src.infrastructure.fleet.mixins.FleetLifecycleMixin import FleetLifecycleMixin
+from src.infrastructure.fleet.mixins.FleetLookupMixin import FleetLookupMixin
 
 # Type Hinting Imports (Phase 106)
 if TYPE_CHECKING:
-    from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
-    from src.infrastructure.backend.SqlMetadataHandler import SqlMetadataHandler
-    from src.observability.stats.Metrics_engine import (
-        ObservabilityEngine,
-        ModelFallbackEngine,
-    )
-    from src.infrastructure.orchestration.system.ToolRegistry import ToolRegistry
-    from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
-    from src.infrastructure.orchestration.healing.SelfHealingOrchestrator import (
-        SelfHealingOrchestrator,
-    )
-    from src.infrastructure.orchestration.intel.SelfImprovementOrchestrator import (
-        SelfImprovementOrchestrator,
-    )
-    from src.logic.agents.cognitive.context.engines.GlobalContextEngine import (
-        GlobalContextEngine,
-    )
+    pass
 
 # Core Components
 
@@ -65,70 +46,12 @@ __version__ = VERSION
 logger = StructuredLogger(__name__)
 
 
-class FleetManager:
+class FleetManager(FleetTaskMixin, FleetRoutingMixin, FleetLifecycleMixin, FleetLookupMixin):
     """
     The central hub for the PyAgent ecosystem. Orchestrates a swarm of specialized
     agents to complete complex workflows, manages resource scaling, and ensures
     system-wide stability through various orchestrators.
     """
-
-    def __getattr__(self, name: str) -> Any:
-        """Delegate to orchestrators and agents for lazy loading support."""
-        if name.startswith("__"):
-            raise AttributeError(f"'FleetManager' object has no attribute '{name}'")
-
-        # Optimization: Avoid recursion if we are already looking for an internal attribute
-        current_dict = self.__dict__
-
-        # Phase 130: Handle Backend -> System rename for legacy support
-        effective_name = name
-        if "backend" in name:
-            effective_name = name.replace("backend", "system")
-
-        # 1. Capability Hints Fallback (Phase 125: Check explicit mappings first)
-        hints = getattr(self, "_capability_hints", {})
-        if effective_name in hints:
-            target = hints[effective_name]
-            try:
-                return getattr(self, target)
-            except AttributeError:
-                pass
-        elif name != effective_name and name in hints:
-            target = hints[name]
-            try:
-                return getattr(self, target)
-            except AttributeError:
-                pass
-
-        # 2. Try Orchestrators
-        if "orchestrators" in current_dict:
-            orchestrators = current_dict["orchestrators"]
-            try:
-                # LazyOrchestratorMap implements __getattr__
-                return getattr(orchestrators, effective_name)
-            except AttributeError:
-                if effective_name != name:
-                    try:
-                        return getattr(orchestrators, name)
-                    except AttributeError:
-                        pass
-            except Exception as e:
-                logging.debug(f"Fleet: Lazy-load error for orchestrator '{name}': {e}")
-
-        # 3. Try Agents
-        if "agents" in current_dict:
-            agents = current_dict["agents"]
-            try:
-                # LazyAgentMap implements __getitem__ with fallback logic
-                return agents[effective_name]
-            except (KeyError, Exception):
-                if effective_name != name:
-                    try:
-                        return agents[name]
-                    except (KeyError, Exception):
-                        pass
-
-        raise AttributeError(f"'FleetManager' object has no attribute '{name}'")
 
     def __init__(self, workspace_root: str) -> None:
         self.workspace_root = Path(workspace_root)
@@ -185,6 +108,8 @@ class FleetManager:
             "neurosymbolic": "NeuroSymbolicAgent",
             "neuro_symbolic": "NeuroSymbolicAgent",
             "agent_identity": "IdentityAgent",
+            "ethics_guardrail": "EthicsGuardrailAgent",
+            "linguist": "LinguisticAgent",
         }
 
         self.remote_nodes: list[str] = []
@@ -208,174 +133,7 @@ class FleetManager:
         except Exception as e:
             logging.debug(f"Peer discovery initialization skipped or failed: {e}")
 
-    @property
-    def telemetry(self) -> ObservabilityEngine:
-        return self.orchestrators.telemetry
-
-    @property
-    def registry(self) -> ToolRegistry:
-        return self.orchestrators.registry
-
-    @property
-    def signals(self) -> SignalRegistry:
-        return self.orchestrators.signals
-
-    @property
-    def recorder(self) -> LocalContextRecorder:
-        return self.orchestrators.recorder
-
-    @property
-    def sql_metadata(self) -> SqlMetadataHandler:
-        return self.orchestrators.sql_metadata
-
-    @property
-    def self_healing(self) -> SelfHealingOrchestrator:
-        return self.orchestrators.self_healing
-
-    @property
-    def self_improvement(self) -> SelfImprovementOrchestrator:
-        return self.orchestrators.self_improvement
-
-    @property
-    def global_context(self) -> GlobalContextEngine:
-        return self.orchestrators.global_context
-
-    @property
-    def fallback(self) -> ModelFallbackEngine:
-        return self.orchestrators.fallback_engine
-
-    @property
-    def core(self) -> Any:
-        return self.orchestrators.core
-
-    @property
-    def rl_selector(self) -> Any:
-        return getattr(self.orchestrators, "r_l_selector", None) or getattr(
-            self.orchestrators, "rl_selector", None
-        )
-
-    # PHASE 260: Preemption Logic
-    def preempt_lower_priority_tasks(self, new_priority: AgentPriority) -> None:
-        """Suspends all tasks with lower priority than the new high-priority task."""
-        for tid, data in self.active_tasks.items():
-            if data["priority"].value > new_priority.value:
-                logging.info(
-                    f"Preempting lower-priority task {tid} ({data['priority'].name})"
-                )
-                for agent in data.get("agents", []):
-                    if hasattr(agent, "suspend"):
-                        agent.suspend()
-
-    def resume_tasks(self) -> None:
-        """Resumes all suspended tasks if no critical tasks are running."""
-        # Check if any Critical/High tasks are still active
-        critical_active = any(
-            d["priority"].value < AgentPriority.NORMAL.value
-            for d in self.active_tasks.values()
-        )
-        if not critical_active:
-            for tid, data in self.active_tasks.items():
-                for agent in data.get("agents", []):
-                    if hasattr(agent, "resume"):
-                        agent.resume()
-
-    async def execute_reliable_task(
-        self, task: str, priority: AgentPriority = AgentPriority.NORMAL
-    ) -> str:
-        """Executes a task using the 7-phase inner loop and linguistic articulation."""
-        return await self.execution_core.execute_reliable_task(task, priority=priority)
-
-    async def _record_success(self, res_or_prompt: Any, *args, **kwargs) -> None:
-        """Records the success of a workflow step (Delegated)."""
-        await self.interaction_recorder.record_success(res_or_prompt, *args, **kwargs)
-
-    async def _record_failure(self, prompt: str, error: str, model: str) -> None:
-        """Records errors, failures, and mistakes (Delegated)."""
-        await self.interaction_recorder.record_failure(prompt, error, model)
-
-    def register_remote_node(
-        self, node_url: str, agent_names: list[str], remote_version: str = "1.0.0"
-    ) -> str:
-        """
-        Registers a remote node and its available agents.
-        Uses VersionGate to ensure compatibility (Phase 104).
-        """
-        from src.core.base.Version import SDK_VERSION
-        from src.infrastructure.fleet.VersionGate import VersionGate
-        from src.infrastructure.fleet.RemoteAgentProxy import RemoteAgentProxy
-
-        if not VersionGate.is_compatible(SDK_VERSION, remote_version):
-            logging.warning(
-                f"Fleet: Rejecting remote node {node_url} (Incompatible version {remote_version})"
-            )
-            return
-
-        self.remote_nodes.append(node_url)
-        for name in agent_names:
-            proxy = RemoteAgentProxy(
-                str(self.workspace_root / f"remote_{name.lower()}.proxy"),
-                node_url,
-                name,
-            )
-            self.agents[f"remote_{name}"] = proxy
-            logging.info(f"Registered remote agent proxy: remote_{name} at {node_url}")
-
-    async def call_by_capability(self, goal: str, **kwargs) -> str:
-        """Finds an agent with the required capability and executes it with RL optimization."""
-        return await self.routing_core.call_by_capability(goal, **kwargs)
-
-    def register_agent(
-        self, name: str, agent_class: type[BaseAgent], file_path: str | None = None
-    ) -> str:
-        """Adds an agent to the fleet."""
-        return self.lifecycle_manager.register_agent(name, agent_class, file_path)
-
-    # --- Biological Cell-Swarm Pattern (Phase 17) ---
-
-    def cell_divide(self, agent_name: str) -> str:
-        """Simulates biological mitosis."""
-        return self.lifecycle_manager.cell_divide(agent_name)
-
-    def cell_differentiate(self, agent_name: str, specialization: str) -> str:
-        """Changes an agent's characteristics."""
-        return self.lifecycle_manager.cell_differentiate(agent_name, specialization)
-
-    def cell_apoptosis(self, agent_name: str) -> str:
-        """Cleanly shuts down and removes an agent."""
-        return self.lifecycle_manager.cell_apoptosis(agent_name)
-
-    async def execute_workflow(
-        self,
-        task: str,
-        workflow_steps: list[dict[str, Any]],
-        priority: AgentPriority = AgentPriority.NORMAL,
-    ) -> str:
-        """Runs a sequence of agent actions with shared state and signals."""
-        return await self.execution_core.execute_workflow(
-            task, workflow_steps, priority=priority
-        )
-
-    def execute_with_consensus(
-        self,
-        task: str,
-        primary_agent: str | None = None,
-        secondary_agents: list[str] | None = None,
-    ) -> dict[str, Any]:
-        """
-
-
-        Executes a task across multiple agents and uses ByzantineConsensusAgent to pick the winner.
-        """
-        return self.consensus_manager.execute_with_consensus(
-            task, primary_agent, secondary_agents
-        )
-
-    def route_task(self, task_type: str, task_data: Any) -> str:
-        """
-        Routes tasks based on system load and hardware availability (Phase 126).
-        """
-        return self.routing_core.route_task(task_type, task_data)
-
+    # Logic delegated to mixins
 
 if __name__ == "__main__":
     # Test script for FleetManager

@@ -603,74 +603,7 @@ pub fn filter_active_topology_relationships(all_deps: HashMap<String, Vec<String
 // Removed regex_compress_python to remove duplicate definition in utils.rs
 // Removed summarize_markdown to remove duplicate definition in utils.rs
 
-/// SynthesisCore Implementations
-
-#[pyfunction]
-pub fn generate_synthetic_snippets(count: usize) -> PyResult<Vec<String>> {
-    let templates = vec![
-        "def {name}(*args, **kwargs): return args[0] if args else kwargs.get('default')",
-        "async with {context} as c: yield await c.exec(f'{{a}} + {{b}}')",
-        "lambda x: [i for i in x if i is not None and not isinstance(i, (int, float))]",
-        "class {name}(metaclass=Singleton): pass"
-    ];
-    
-    let mut results = Vec::with_capacity(count);
-    for i in 0..count {
-        let tpl = templates[i % templates.len()];
-        let snippet = tpl.replace("{name}", &format!("func_{}", i))
-                         .replace("{context}", &format!("ctx_{}", i));
-        results.push(snippet);
-    }
-    Ok(results)
-}
-
-#[pyfunction]
-pub fn vectorize_text_insight(insight: &str) -> PyResult<Vec<f64>> {
-    // Deterministic mock embedding based on input hash/properties
-    let seed = insight.len() as u64 + insight.chars().next().map(|c| c as u64).unwrap_or(0);
-    
-    // Simple LCG for deterministic generation
-    let mut state = seed;
-    let mut vector = Vec::with_capacity(128);
-    
-    for _ in 0..128 {
-        // LCG parameters (glibc)
-        state = (state.wrapping_mul(1103515245).wrapping_add(12345)) & 0x7fffffff;
-        let val = (state as f64 / 2147483648.0) * 2.0 - 1.0; // -1 to 1
-        vector.push(val);
-    }
-    
-    Ok(vector)
-}
-
-#[pyfunction]
-pub fn average_feature_vectors(vectors: Vec<Vec<f64>>) -> PyResult<Vec<f64>> {
-    if vectors.is_empty() {
-        return Ok(vec![0.0; 128]);
-    }
-    
-    let dim = vectors[0].len();
-    if dim == 0 {
-        return Ok(Vec::new());
-    }
-
-    let mut sums = vec![0.0; dim];
-    let count = vectors.len() as f64;
-    
-    for v in &vectors {
-        if v.len() != dim {
-            // In strict rust we'd error, but let's just skip or partial sum to be robust or fail
-            // Failing is safer for debugging
-             return Err(pyo3::exceptions::PyValueError::new_err("Vector dimension mismatch"));
-        }
-        for (i, val) in v.iter().enumerate() {
-            sums[i] += val;
-        }
-    }
-    
-    let avg: Vec<f64> = sums.into_iter().map(|s| s / count).collect();
-    Ok(avg)
-}
+/// SynthesisCore implementations now handled in neural.rs for hardware acceleration.
 
 
 // === LocalizationCore Implementations ===
