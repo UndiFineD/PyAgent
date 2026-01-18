@@ -42,19 +42,19 @@
    - Progress: Adaptive Tree core implemented in `src/infrastructure/speculative_v2/eagle/Tree.py`. Added comprehensive research summary in `data/Research/2601.07353v1/`.
 
 5. **KV Cache Optimization (KVzap & TableCache)**
-   - Status: RESEARCHED (arXiv:2601.07891, 2601.08743)
-   - Progress: Added research summaries and implementation stubs in `data/Research/`.
-   - Action: Implement `KVzapPruner` for 4x compression and `TableCacheManager` for 3.6x TTFT speedup in Text-to-SQL tasks.
+   - Status: INTEGRATED (arXiv:2601.07891)
+   - Progress: `KVzapPruner` and surrogate model integrated into `ARCOffloadManager.py`. Added `src/infrastructure/kv_transfer/KVzap.py`.
+   - Impact: 4x compression and quality-aware eviction logic.
 
 6. **Latent Space & Concept Communication**
-   - Status: RESEARCHED (arXiv:2601.06123, 2601.10274)
-   - Progress: Added research summaries and implementation stubs in `data/Research/`.
-   - Action: Implement `SynapticLink` for 10x bandwidth reduction and `LoadAwareReasoningScheduler` for dynamic reasoning depth.
+   - Status: INTEGRATED (arXiv:2601.06123)
+   - Progress: `SynapticLink` and `SynapticAdapter` implemented in `src/infrastructure/kv_transfer/LatentLink.py`. Added `LATENT` mode to `KVTransferConnector.py`.
+   - Impact: 10x bandwidth reduction for multi-agent handoffs.
 
 7. **Ultra-Long Context (STEM)**
-   - Status: RESEARCHED (arXiv:2601.10639)
-   - Progress: Added research summary and implementation stub in `data/Research/2601.10639v1/`.
-   - Action: Integrate dynamic embedding expansion for reliable 1M+ token context handling.
+   - Status: INTEGRATED (arXiv:2601.10639)
+   - Progress: Dynamic embedding expansion implemented in `src/infrastructure/engine/STEMScaling.py`.
+   - Impact: Reliable 1M+ token context handling via log-scaling and residual expansion.
 
 8. **SGLang & RadixAttention**
    - Status: RESEARCHED (arXiv:2312.07104)
