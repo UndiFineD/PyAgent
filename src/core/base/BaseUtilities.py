@@ -21,6 +21,7 @@ from src.core.base.Version import VERSION
 import json
 import logging
 import argparse
+import inspect
 import os
 import sys
 import re
@@ -122,9 +123,7 @@ def as_tool(priority: int = 0, category: str | None = None) -> Callable:
     import time
 
     def decorator(func: Callable) -> Callable:
-        import asyncio
-
-        if asyncio.iscoroutinefunction(func):
+        if inspect.iscoroutinefunction(func):
 
             @wraps(func)
             async def wrapper(self: Any, *args: Any, **kwargs: Any) -> Any:

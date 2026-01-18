@@ -120,7 +120,7 @@ class StatsNamespaceManager:
         self.namespaces: dict[str, Any] = {}
 
     def create(self, name: str) -> Any:
-        from .Metrics import StatsNamespace
+        from .metrics import StatsNamespace
 
         ns = StatsNamespace(name)
         self.namespaces[name] = ns

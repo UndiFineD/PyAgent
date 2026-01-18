@@ -27,7 +27,7 @@ class TestTensorShape:
     
     def test_basic_shape(self):
         """Test basic shape creation."""
-        from core.base.validation.TensorSchema import TensorShape
+        from src.core.base.validation.TensorSchema import TensorShape
         
         shape = TensorShape(32, 768)
         assert len(shape) == 2
@@ -35,14 +35,14 @@ class TestTensorShape:
     
     def test_symbolic_dimensions(self):
         """Test symbolic dimension names."""
-        from core.base.validation.TensorSchema import TensorShape
+        from src.core.base.validation.TensorSchema import TensorShape
         
         shape = TensorShape("batch", "seq_len", 768)
         assert shape.dims == ("batch", "seq_len", 768)
     
     def test_resolve_bindings(self):
         """Test resolving symbolic dimensions."""
-        from core.base.validation.TensorSchema import TensorShape
+        from src.core.base.validation.TensorSchema import TensorShape
         
         shape = TensorShape("batch", "seq_len", 768)
         resolved = shape.resolve(batch=32, seq_len=512)
@@ -50,7 +50,7 @@ class TestTensorShape:
     
     def test_partial_resolve(self):
         """Test partial resolution."""
-        from core.base.validation.TensorSchema import TensorShape
+        from src.core.base.validation.TensorSchema import TensorShape
         
         shape = TensorShape("batch", "seq_len", 768)
         resolved = shape.resolve(batch=32)
@@ -58,7 +58,7 @@ class TestTensorShape:
     
     def test_matches_exact(self):
         """Test exact shape matching."""
-        from core.base.validation.TensorSchema import TensorShape
+        from src.core.base.validation.TensorSchema import TensorShape
         
         shape = TensorShape(32, 512, 768)
         assert shape.matches((32, 512, 768))
@@ -66,14 +66,14 @@ class TestTensorShape:
     
     def test_matches_with_bindings(self):
         """Test matching with bindings."""
-        from core.base.validation.TensorSchema import TensorShape
+        from src.core.base.validation.TensorSchema import TensorShape
         
         shape = TensorShape("batch", 512, 768)
         assert shape.matches((32, 512, 768), batch=32)
     
     def test_dynamic_dimension(self):
         """Test dynamic dimensions."""
-        from core.base.validation.TensorSchema import TensorShape, DynamicDim
+        from src.core.base.validation.TensorSchema import TensorShape, DynamicDim
         
         shape = TensorShape("batch", DynamicDim("seq_len"), 768)
         assert "seq_len" in shape.dynamic_dims
@@ -84,7 +84,7 @@ class TestTensorSchema:
     
     def test_schema_creation(self):
         """Test schema with multiple fields."""
-        from core.base.validation.TensorSchema import TensorSchema, TensorShape
+        from src.core.base.validation.TensorSchema import TensorSchema, TensorShape
         
         schema = TensorSchema(
             input_ids=TensorShape("batch", "seq_len"),
@@ -95,7 +95,7 @@ class TestTensorSchema:
     
     def test_schema_from_tuples(self):
         """Test schema creation from tuples."""
-        from core.base.validation.TensorSchema import TensorSchema
+        from src.core.base.validation.TensorSchema import TensorSchema
         
         schema = TensorSchema(
             input_ids=("batch", "seq_len"),
@@ -113,7 +113,7 @@ class TestConstantList:
     
     def test_read_access(self):
         """Test read operations."""
-        from core.base.structures.ImmutableCollections import ConstantList
+        from src.core.base.structures.ImmutableCollections import ConstantList
         
         data = [1, 2, 3, 4, 5]
         const = ConstantList(data)
@@ -125,7 +125,7 @@ class TestConstantList:
     
     def test_iteration(self):
         """Test iteration."""
-        from core.base.structures.ImmutableCollections import ConstantList
+        from src.core.base.structures.ImmutableCollections import ConstantList
         
         data = [1, 2, 3]
         const = ConstantList(data)
@@ -135,7 +135,7 @@ class TestConstantList:
     
     def test_append_blocked(self):
         """Test that append is blocked."""
-        from core.base.structures.ImmutableCollections import ConstantList
+        from src.core.base.structures.ImmutableCollections import ConstantList
         
         const = ConstantList([1, 2, 3])
         with pytest.raises(TypeError, match="Cannot append"):
@@ -143,7 +143,7 @@ class TestConstantList:
     
     def test_extend_blocked(self):
         """Test that extend is blocked."""
-        from core.base.structures.ImmutableCollections import ConstantList
+        from src.core.base.structures.ImmutableCollections import ConstantList
         
         const = ConstantList([1, 2, 3])
         with pytest.raises(TypeError, match="Cannot extend"):
@@ -151,7 +151,7 @@ class TestConstantList:
     
     def test_setitem_blocked(self):
         """Test that setitem is blocked."""
-        from core.base.structures.ImmutableCollections import ConstantList
+        from src.core.base.structures.ImmutableCollections import ConstantList
         
         const = ConstantList([1, 2, 3])
         with pytest.raises(TypeError, match="Cannot set item"):
@@ -159,7 +159,7 @@ class TestConstantList:
     
     def test_delitem_blocked(self):
         """Test that delitem is blocked."""
-        from core.base.structures.ImmutableCollections import ConstantList
+        from src.core.base.structures.ImmutableCollections import ConstantList
         
         const = ConstantList([1, 2, 3])
         with pytest.raises(TypeError, match="Cannot delete"):
@@ -167,7 +167,7 @@ class TestConstantList:
     
     def test_copy_returns_mutable(self):
         """Test that copy returns mutable list."""
-        from core.base.structures.ImmutableCollections import ConstantList
+        from src.core.base.structures.ImmutableCollections import ConstantList
         
         const = ConstantList([1, 2, 3])
         mutable = const.copy()
@@ -177,7 +177,7 @@ class TestConstantList:
     
     def test_index_and_count(self):
         """Test index and count methods."""
-        from core.base.structures.ImmutableCollections import ConstantList
+        from src.core.base.structures.ImmutableCollections import ConstantList
         
         const = ConstantList([1, 2, 2, 3])
         assert const.index(2) == 1
@@ -189,7 +189,7 @@ class TestConstantDict:
     
     def test_read_access(self):
         """Test read operations."""
-        from core.base.structures.ImmutableCollections import ConstantDict
+        from src.core.base.structures.ImmutableCollections import ConstantDict
         
         data = {"a": 1, "b": 2}
         const = ConstantDict(data)
@@ -200,7 +200,7 @@ class TestConstantDict:
     
     def test_setitem_blocked(self):
         """Test that setitem is blocked."""
-        from core.base.structures.ImmutableCollections import ConstantDict
+        from src.core.base.structures.ImmutableCollections import ConstantDict
         
         const = ConstantDict({"a": 1})
         with pytest.raises(TypeError, match="Cannot set item"):
@@ -208,7 +208,7 @@ class TestConstantDict:
     
     def test_pop_blocked(self):
         """Test that pop is blocked."""
-        from core.base.structures.ImmutableCollections import ConstantDict
+        from src.core.base.structures.ImmutableCollections import ConstantDict
         
         const = ConstantDict({"a": 1})
         with pytest.raises(TypeError, match="Cannot pop"):
@@ -216,7 +216,7 @@ class TestConstantDict:
     
     def test_keys_values_items(self):
         """Test view methods."""
-        from core.base.structures.ImmutableCollections import ConstantDict
+        from src.core.base.structures.ImmutableCollections import ConstantDict
         
         const = ConstantDict({"a": 1, "b": 2})
         assert set(const.keys()) == {"a", "b"}
@@ -229,7 +229,7 @@ class TestFrozenDict:
     
     def test_hashable(self):
         """Test that FrozenDict is hashable."""
-        from core.base.structures.ImmutableCollections import FrozenDict
+        from src.core.base.structures.ImmutableCollections import FrozenDict
         
         fd = FrozenDict({"a": 1, "b": 2})
         hash_val = hash(fd)
@@ -237,7 +237,7 @@ class TestFrozenDict:
     
     def test_as_dict_key(self):
         """Test using as dictionary key."""
-        from core.base.structures.ImmutableCollections import FrozenDict
+        from src.core.base.structures.ImmutableCollections import FrozenDict
         
         fd = FrozenDict({"x": 1})
         cache = {fd: "value"}
@@ -245,7 +245,7 @@ class TestFrozenDict:
     
     def test_equality(self):
         """Test equality."""
-        from core.base.structures.ImmutableCollections import FrozenDict
+        from src.core.base.structures.ImmutableCollections import FrozenDict
         
         fd1 = FrozenDict({"a": 1})
         fd2 = FrozenDict({"a": 1})
@@ -257,7 +257,7 @@ class TestFrozenDict:
     
     def test_setitem_blocked(self):
         """Test that setitem is blocked."""
-        from core.base.structures.ImmutableCollections import FrozenDict
+        from src.core.base.structures.ImmutableCollections import FrozenDict
         
         fd = FrozenDict({"a": 1})
         with pytest.raises(TypeError):
@@ -269,21 +269,21 @@ class TestAsConstant:
     
     def test_wrap_list(self):
         """Test wrapping list."""
-        from core.base.structures.ImmutableCollections import as_constant, ConstantList
+        from src.core.base.structures.ImmutableCollections import as_constant, ConstantList
         
         result = as_constant([1, 2, 3])
         assert isinstance(result, ConstantList)
     
     def test_wrap_dict(self):
         """Test wrapping dict."""
-        from core.base.structures.ImmutableCollections import as_constant, ConstantDict
+        from src.core.base.structures.ImmutableCollections import as_constant, ConstantDict
         
         result = as_constant({"a": 1})
         assert isinstance(result, ConstantDict)
     
     def test_wrap_invalid(self):
         """Test wrapping invalid type."""
-        from core.base.structures.ImmutableCollections import as_constant
+        from src.core.base.structures.ImmutableCollections import as_constant
         
         with pytest.raises(TypeError):
             as_constant("string")
@@ -298,14 +298,14 @@ class TestLogitsProcessorList:
     
     def test_empty_list(self):
         """Test empty processor list."""
-        from core.base.processing.LogitsProcessor import LogitsProcessorList
+        from src.core.base.processing.LogitsProcessor import LogitsProcessorList
         
         processors = LogitsProcessorList()
         assert len(processors) == 0
     
     def test_append(self):
         """Test appending processors."""
-        from core.base.processing.LogitsProcessor import (
+        from src.core.base.processing.LogitsProcessor import (
             LogitsProcessorList, TemperatureProcessor
         )
         
@@ -321,7 +321,7 @@ class TestTemperatureProcessor:
         """Test temperature scaling."""
         pytest.importorskip("torch")
         import torch
-        from core.base.processing.LogitsProcessor import TemperatureProcessor
+        from src.core.base.processing.LogitsProcessor import TemperatureProcessor
         
         processor = TemperatureProcessor(0.5)
         logits = torch.tensor([1.0, 2.0, 3.0])
@@ -334,7 +334,7 @@ class TestTemperatureProcessor:
         """Test temperature=1 returns unchanged."""
         pytest.importorskip("torch")
         import torch
-        from core.base.processing.LogitsProcessor import TemperatureProcessor
+        from src.core.base.processing.LogitsProcessor import TemperatureProcessor
         
         processor = TemperatureProcessor(1.0)
         logits = torch.tensor([1.0, 2.0, 3.0])
@@ -344,7 +344,7 @@ class TestTemperatureProcessor:
     
     def test_invalid_temperature(self):
         """Test invalid temperature."""
-        from core.base.processing.LogitsProcessor import TemperatureProcessor
+        from src.core.base.processing.LogitsProcessor import TemperatureProcessor
         
         with pytest.raises(ValueError):
             TemperatureProcessor(0)
@@ -359,7 +359,7 @@ class TestTopKProcessor:
         """Test top-k filtering."""
         pytest.importorskip("torch")
         import torch
-        from core.base.processing.LogitsProcessor import TopKProcessor
+        from src.core.base.processing.LogitsProcessor import TopKProcessor
         
         processor = TopKProcessor(2)
         logits = torch.tensor([1.0, 3.0, 2.0, 0.5])
@@ -375,7 +375,7 @@ class TestTopKProcessor:
         """Test top-k larger than vocab size."""
         pytest.importorskip("torch")
         import torch
-        from core.base.processing.LogitsProcessor import TopKProcessor
+        from src.core.base.processing.LogitsProcessor import TopKProcessor
         
         processor = TopKProcessor(100)
         logits = torch.tensor([1.0, 2.0, 3.0])
@@ -391,7 +391,7 @@ class TestTopPProcessor:
         """Test nucleus sampling."""
         pytest.importorskip("torch")
         import torch
-        from core.base.processing.LogitsProcessor import TopPProcessor
+        from src.core.base.processing.LogitsProcessor import TopPProcessor
         
         processor = TopPProcessor(0.9)
         logits = torch.tensor([1.0, 5.0, 0.5, 0.1])
@@ -404,7 +404,7 @@ class TestTopPProcessor:
         """Test top_p=1 returns unchanged."""
         pytest.importorskip("torch")
         import torch
-        from core.base.processing.LogitsProcessor import TopPProcessor
+        from src.core.base.processing.LogitsProcessor import TopPProcessor
         
         processor = TopPProcessor(1.0)
         logits = torch.tensor([1.0, 2.0, 3.0])
@@ -420,7 +420,7 @@ class TestRepetitionPenaltyProcessor:
         """Test repetition penalty application."""
         pytest.importorskip("torch")
         import torch
-        from core.base.processing.LogitsProcessor import RepetitionPenaltyProcessor
+        from src.core.base.processing.LogitsProcessor import RepetitionPenaltyProcessor
         
         processor = RepetitionPenaltyProcessor(1.5)
         logits = torch.tensor([1.0, 2.0, 3.0])
@@ -436,7 +436,7 @@ class TestRepetitionPenaltyProcessor:
         """Test penalty=1 returns unchanged."""
         pytest.importorskip("torch")
         import torch
-        from core.base.processing.LogitsProcessor import RepetitionPenaltyProcessor
+        from src.core.base.processing.LogitsProcessor import RepetitionPenaltyProcessor
         
         processor = RepetitionPenaltyProcessor(1.0)
         logits = torch.tensor([1.0, 2.0, 3.0])
@@ -452,7 +452,7 @@ class TestNoBadWordsProcessor:
         """Test single token bad words."""
         pytest.importorskip("torch")
         import torch
-        from core.base.processing.LogitsProcessor import NoBadWordsProcessor
+        from src.core.base.processing.LogitsProcessor import NoBadWordsProcessor
         
         processor = NoBadWordsProcessor([[1], [3]])
         logits = torch.tensor([0.0, 1.0, 2.0, 3.0])
@@ -468,7 +468,7 @@ class TestNoBadWordsProcessor:
         """Test multi-token bad word sequences."""
         pytest.importorskip("torch")
         import torch
-        from core.base.processing.LogitsProcessor import NoBadWordsProcessor
+        from src.core.base.processing.LogitsProcessor import NoBadWordsProcessor
         
         processor = NoBadWordsProcessor([[1, 2, 3]])
         logits = torch.tensor([0.0, 1.0, 2.0, 3.0, 4.0])
@@ -489,7 +489,7 @@ class TestMinLengthProcessor:
         """Test EOS blocking before min length."""
         pytest.importorskip("torch")
         import torch
-        from core.base.processing.LogitsProcessor import MinLengthProcessor
+        from src.core.base.processing.LogitsProcessor import MinLengthProcessor
         
         processor = MinLengthProcessor(min_length=5, eos_token_id=2)
         logits = torch.tensor([1.0, 2.0, 3.0, 4.0])
@@ -502,7 +502,7 @@ class TestMinLengthProcessor:
         """Test EOS allowed after min length."""
         pytest.importorskip("torch")
         import torch
-        from core.base.processing.LogitsProcessor import MinLengthProcessor
+        from src.core.base.processing.LogitsProcessor import MinLengthProcessor
         
         processor = MinLengthProcessor(min_length=3, eos_token_id=2)
         logits = torch.tensor([1.0, 2.0, 3.0, 4.0])
@@ -517,14 +517,14 @@ class TestCreateProcessorChain:
     
     def test_empty_chain(self):
         """Test creating empty chain."""
-        from core.base.processing.LogitsProcessor import create_processor_chain
+        from src.core.base.processing.LogitsProcessor import create_processor_chain
         
         chain = create_processor_chain()
         assert len(chain) == 0
     
     def test_full_chain(self):
         """Test creating full chain."""
-        from core.base.processing.LogitsProcessor import create_processor_chain
+        from src.core.base.processing.LogitsProcessor import create_processor_chain
         
         chain = create_processor_chain(
             temperature=0.7,
@@ -544,7 +544,7 @@ class TestZeroCopySerializer:
     
     def test_msgspec_available_check(self):
         """Test MSGSPEC_AVAILABLE flag."""
-        from infrastructure.serialization.ZeroCopySerializer import MSGSPEC_AVAILABLE
+        from src.infrastructure.serialization.ZeroCopySerializer import MSGSPEC_AVAILABLE
         # Just check it's a boolean
         assert isinstance(MSGSPEC_AVAILABLE, bool)
     
@@ -555,7 +555,7 @@ class TestZeroCopySerializer:
     def test_encode_simple_dict(self):
         """Test encoding simple dictionary."""
         msgspec = pytest.importorskip("msgspec")
-        from infrastructure.serialization.ZeroCopySerializer import ZeroCopyEncoder
+        from src.infrastructure.serialization.ZeroCopySerializer import ZeroCopyEncoder
         
         encoder = ZeroCopyEncoder()
         data = {"key": "value", "number": 42}
@@ -571,7 +571,7 @@ class TestZeroCopySerializer:
     def test_encode_decode_roundtrip(self):
         """Test encode/decode roundtrip."""
         msgspec = pytest.importorskip("msgspec")
-        from infrastructure.serialization.ZeroCopySerializer import (
+        from src.infrastructure.serialization.ZeroCopySerializer import (
             ZeroCopyEncoder, ZeroCopyDecoder
         )
         
@@ -594,8 +594,8 @@ class TestPhase23Integration:
     
     def test_immutable_in_schema(self):
         """Test using immutable collections in validation."""
-        from core.base.structures.ImmutableCollections import ConstantList
-        from core.base.validation.TensorSchema import TensorShape
+        from src.core.base.structures.ImmutableCollections import ConstantList
+        from src.core.base.validation.TensorSchema import TensorShape
         
         # Create a constant list of shapes
         shapes = ConstantList([
@@ -610,7 +610,7 @@ class TestPhase23Integration:
         """Test processor chain creation and application."""
         pytest.importorskip("torch")
         import torch
-        from core.base.processing.LogitsProcessor import (
+        from src.core.base.processing.LogitsProcessor import (
             LogitsProcessorList, TemperatureProcessor, TopKProcessor
         )
         

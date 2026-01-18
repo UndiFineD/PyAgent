@@ -315,6 +315,14 @@ class CorrelationAnalyzer:
 
         return res
 
+    def find_strong_correlations(
+        self, threshold: float = 0.8
+    ) -> list[MetricCorrelation]:
+        """Find correlations exceeding a threshold."""
+        return [
+            c for c in self.correlations if abs(c.correlation_coefficient) >= threshold
+        ]
+
 
 try:
     import rust_core as rc

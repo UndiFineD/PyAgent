@@ -17,6 +17,8 @@ from __future__ import annotations
 from src.core.base.Version import VERSION
 import logging
 import time
+import inspect
+import asyncio
 from typing import Any, TYPE_CHECKING
 from src.core.base.models import AgentPriority
 from src.infrastructure.fleet.WorkflowState import WorkflowState
@@ -249,11 +251,10 @@ class FleetExecutionCore:
             self.fleet.action_history.append(action_signature)
 
             try:
-                import asyncio
                 current_model = getattr(agent, "get_model", lambda: "default")()
                 logging.info(f"Fleet (Attempt {attempts}): {action_signature} [{priority.name}]")
 
-                if asyncio.iscoroutinefunction(action_fn):
+                if inspect.iscoroutinefunction(action_fn):
                     res = await action_fn(*args)
                 else:
                     loop = asyncio.get_running_loop()

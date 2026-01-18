@@ -20,6 +20,7 @@ from src.core.base.Version import VERSION
 import logging
 import time
 import asyncio
+import inspect
 from typing import Any
 from collections.abc import Callable
 from src.core.base.core.ResilienceCore import ResilienceCore
@@ -125,7 +126,7 @@ class CircuitBreaker:
         logging.debug(f"CircuitBreaker '{self.name}': Probing backend health...")
         try:
             # Perform the actual health check provided by the backend wrapper
-            if asyncio.iscoroutinefunction(health_check_func):
+            if inspect.iscoroutinefunction(health_check_func):
                 result = await health_check_func()
             else:
                 result = health_check_func()

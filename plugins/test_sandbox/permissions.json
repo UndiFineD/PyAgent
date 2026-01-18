@@ -1,3 +1,4 @@
 [
-    "write:temp"
+    "write:temp",
+    "read:src"
 ]

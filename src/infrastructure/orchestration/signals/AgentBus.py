@@ -23,6 +23,7 @@ import zmq.asyncio
 import orjson
 import logging
 import asyncio
+import inspect
 from typing import Any, Callable
 
 
@@ -75,7 +76,7 @@ class AgentCommunicationBus:
 
                     if topic in self.handlers:
                         for handler in self.handlers[topic]:
-                            if asyncio.iscoroutinefunction(handler):
+                            if inspect.iscoroutinefunction(handler):
                                 await handler(data)
 
                             else:

@@ -11,6 +11,7 @@ Phase 18: Beyond vLLM - Resilience Patterns
 """
 from __future__ import annotations
 import asyncio
+import inspect
 import functools
 import threading
 import time
@@ -405,7 +406,7 @@ class AdaptiveRateLimiter:
     
     def __call__(self, func: Callable[P, R]) -> Callable[P, R]:
         """Decorator for rate limiting functions."""
-        if asyncio.iscoroutinefunction(func):
+        if inspect.iscoroutinefunction(func):
             @functools.wraps(func)
             async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
                 acquired = await self.acquire_async(block=True)
@@ -560,7 +561,7 @@ def rate_limit(
     bucket = TokenBucket(rate=rate, capacity=capacity)
     
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
-        if asyncio.iscoroutinefunction(func):
+        if inspect.iscoroutinefunction(func):
             @functools.wraps(func)
             async def async_wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
                 acquired = await bucket.acquire_async(block=block)
