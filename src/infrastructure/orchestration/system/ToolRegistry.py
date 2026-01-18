@@ -15,6 +15,7 @@
 from __future__ import annotations
 import logging
 import asyncio
+import inspect
 from typing import Any, TYPE_CHECKING
 from collections.abc import Callable
 from .ToolCore import ToolCore
@@ -54,7 +55,7 @@ class ToolRegistry:
                 "function": func,
                 "category": category,
                 "priority": priority,
-                "sync": not asyncio.iscoroutinefunction(func),
+                "sync": not inspect.iscoroutinefunction(func),
             }
         )
         # Sort by priority desc
@@ -100,7 +101,7 @@ class ToolRegistry:
         filtered_kwargs = self.core.filter_arguments(tool, kwargs)
         logging.info(f"Invoking tool: {name} with filtered {filtered_kwargs}")
 
-        if asyncio.iscoroutinefunction(tool):
+        if inspect.iscoroutinefunction(tool):
             return await tool(**filtered_kwargs)
         else:
             loop = asyncio.get_running_loop()

@@ -47,6 +47,10 @@ class PluginMetadata:
     permissions: list[str] = None
     restricted_mode: bool = False
 
+    def get(self, key: str, default: Any = None) -> Any:
+        """Compatibility method for dictionary-like access."""
+        return getattr(self, key, default)
+
 
 class PluginManager:
     """
