@@ -41,20 +41,25 @@
    - Goal: Integrate confidence thresholds into tree pruning logic
    - Progress: Adaptive Tree core implemented in `src/infrastructure/speculative_v2/eagle/Tree.py`. Added comprehensive research summary in `data/Research/2601.07353v1/`.
 
-5. **KV Cache Optimization (KVzap)**
-   - Status: RESEARCHED (arXiv:2601.07891)
-   - Progress: Added research summary and implementation stub in `data/Research/2601.07891v1/`.
-   - Action: Implement `KVzapPruner` using surrogate MLP to achieve 2-4x compression with <1% overhead.
+5. **KV Cache Optimization (KVzap & TableCache)**
+   - Status: RESEARCHED (arXiv:2601.07891, 2601.08743)
+   - Progress: Added research summaries and implementation stubs in `data/Research/`.
+   - Action: Implement `KVzapPruner` for 4x compression and `TableCacheManager` for 3.6x TTFT speedup in Text-to-SQL tasks.
 
-6. **Latent Space Communication**
-   - Status: RESEARCHED (arXiv:2601.06123)
-   - Progress: Added research summary and implementation stub in `data/Research/2601.06123v1/`.
-   - Action: Implement `SynapticLink` adapters to allow agents to share KV cache "thoughts" directly, reducing bandwidth by 10x.
+6. **Latent Space & Concept Communication**
+   - Status: RESEARCHED (arXiv:2601.06123, 2601.10274)
+   - Progress: Added research summaries and implementation stubs in `data/Research/`.
+   - Action: Implement `SynapticLink` for 10x bandwidth reduction and `LoadAwareReasoningScheduler` for dynamic reasoning depth.
 
-7. **SGLang & RadixAttention**
+7. **Ultra-Long Context (STEM)**
+   - Status: RESEARCHED (arXiv:2601.10639)
+   - Progress: Added research summary and implementation stub in `data/Research/2601.10639v1/`.
+   - Action: Integrate dynamic embedding expansion for reliable 1M+ token context handling.
+
+8. **SGLang & RadixAttention**
    - Status: RESEARCHED (arXiv:2312.07104)
    - Progress: Added research summary and RadixTree implementation stub in `data/Research/2312.07104v2/`.
-   - Action: Integrate `RadixTreeManager` into `RequestQueue.py` to enable automatic prefix caching and 5x throughput gains.
+   - Action: Integrate `RadixTreeManager` into `RequestQueue.py` to enable automatic prefix caching.
 
 ### Medium Priority
 
