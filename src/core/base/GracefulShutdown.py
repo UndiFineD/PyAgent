@@ -40,7 +40,7 @@ class GracefulShutdown:
     """
 
     def __init__(
-        self, repo_root: Path, state_file: str = ".agent_shutdown.json"
+        self, repo_root: Path | str, state_file: str = ".agent_shutdown.json"
     ) -> None:
         """Initialize graceful shutdown handler.
 
@@ -48,8 +48,8 @@ class GracefulShutdown:
             repo_root: Repository root directory.
             state_file: Name of state file.
         """
-        self.repo_root = repo_root
-        self.state_file = repo_root / state_file
+        self.repo_root = Path(repo_root)
+        self.state_file = self.repo_root / state_file
         self.state = ShutdownState()
         self._original_sigint = None
         self._original_sigterm = None

@@ -80,6 +80,32 @@ class BaseAgent(
     _plugins: dict[str, Any] = {}
     _event_hooks: dict[EventType, list[Callable[[dict[str, Any]], None]]] = {}
 
+    @classmethod
+    def register_plugin(cls, name_or_plugin: Any, plugin: Any | None = None) -> None:
+        """Register a plugin with the agent."""
+        if plugin is None:
+            # Called with one arg: register_plugin(plugin)
+            plugin_obj = name_or_plugin
+            name = getattr(plugin_obj, "name", "unknown")
+        else:
+            # Called with two args: register_plugin(name, plugin)
+            name = name_or_plugin
+            plugin_obj = plugin
+        cls._plugins[name] = plugin_obj
+
+    @classmethod
+    def unregister_plugin(cls, name: str) -> bool:
+        """Unregister a plugin."""
+        if name in cls._plugins:
+            del cls._plugins[name]
+            return True
+        return False
+
+    @classmethod
+    def get_plugin(cls, name: str) -> Any:
+        """Get a registered plugin."""
+        return cls._plugins.get(name)
+
     def __init__(self, file_path: str, **kwargs: Any) -> None:
         """Initialize the BaseAgent with decentralized initialization."""
         self.file_path = Path(file_path)
@@ -110,17 +136,72 @@ class BaseAgent(
         self._state_data: dict[str, Any] = {}
         self._post_processors: list[Callable[[str], str]] = []
         self._model: str | None = kwargs.get("model")
+        self.recorder = kwargs.get("recorder")
         self._system_prompt: str = "You are a helpful AI assistant."
 
     def _run_command(
         self, cmd: list[str], timeout: int = 120
     ) -> subprocess.CompletedProcess[str]:
         return ShellExecutor.run_command(
-            cmd, self._workspace_root, self.agent_name, timeout=timeout
+            cmd,
+            self._workspace_root,
+            self.agent_name,
+            models_config=getattr(self, "models", None),
+            timeout=timeout,
         )
 
-    async def run(self, prompt: str) -> str:
-        """Main execution entry point."""
+    async def think(self, prompt: str) -> str:
+        """Asynchronous thinking logic."""
+        # Simple implementation for BaseAgent
+        return f"Thinking about: {prompt}"
+
+    def run(self, prompt: str | None = None) -> str:
+        """
+        Synchronous execution entry point for legacy support.
+        """
+        if prompt is None:
+            # Default behavior for no prompt (usually legacy loop)
+            # In Phase 5/6, this triggers an 'agent_complete' event
+            self._notify_webhooks("agent_complete", {"status": "success"})
+            return "No prompt provided."
+            
+        import asyncio
+        try:
+            # Check if there is an existing event loop
+            try:
+                loop = asyncio.get_event_loop()
+            except RuntimeError:
+                loop = None
+
+            if loop and loop.is_running():
+                # For compatibility in nested async
+                result = "Async loop already running"
+            else:
+                result = asyncio.run(self.run_async(prompt))
+                
+            self._notify_webhooks("agent_complete", {"status": "success", "result": result})
+            return result
+        except Exception as e:
+            self._notify_webhooks("agent_error", {"error": str(e)})
+            return f"Error: {e}"
+
+    def _notify_webhooks(self, event: str, data: dict[str, Any]) -> None:
+        """Helper to notify registered webhooks."""
+        if not hasattr(self, "_webhooks") or not self._webhooks:
+            return
+            
+        if not HAS_REQUESTS or requests is None:
+            return
+            
+        payload = {"event": event, "data": data, "agent": self.agent_name}
+        for url in self._webhooks:
+            try:
+                requests.post(url, json=payload, timeout=5)
+            except Exception:
+                pass
+
+    async def run_async(self, prompt: str) -> str:
+        """Main execution entry point (formerly run)."""
         self.previous_content = self.current_content
         result = await self.think(prompt)
         self.current_content = result

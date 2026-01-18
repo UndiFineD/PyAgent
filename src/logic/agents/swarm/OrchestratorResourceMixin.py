@@ -15,8 +15,11 @@ from src.core.base.utils.RateLimiter import RateLimiter
 class OrchestratorResourceMixin:
     """Resource management methods (rate limiting, locking, incremental processing) for OrchestratorAgent."""
 
-    def enable_rate_limiting(self, config: RateLimitConfig | None = None) -> None:
+    def enable_rate_limiting(self, config: RateLimitConfig | dict[str, Any] | None = None) -> None:
         """Enable rate limiting for API calls."""
+        if isinstance(config, dict):
+            config = RateLimitConfig(**config)
+            
         self.rate_limiter = RateLimiter(config)
         logging.info(f"Rate limiting enabled: {config or 'default settings'}")
 

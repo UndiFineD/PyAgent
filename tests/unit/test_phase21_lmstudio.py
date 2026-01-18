@@ -13,6 +13,7 @@ Tests for LM Studio backend and msgspec serializers.
 
 import os
 import time
+import inspect
 from dataclasses import dataclass
 from typing import Any
 from unittest.mock import MagicMock, patch, AsyncMock
@@ -207,8 +208,7 @@ class TestLMStudioConvenienceFunctions:
         """Test async function can be imported."""
         from src.infrastructure.backend.llm_backends.LMStudioBackend import lmstudio_chat_async
         
-        import asyncio
-        assert asyncio.iscoroutinefunction(lmstudio_chat_async)
+        assert inspect.iscoroutinefunction(lmstudio_chat_async)
 
 
 # ============================================================================

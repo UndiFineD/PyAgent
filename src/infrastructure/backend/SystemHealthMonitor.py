@@ -21,7 +21,7 @@ from .SystemHealthStatus import SystemHealthStatus
 from .SystemState import SystemState
 import logging
 import threading
-from src.observability.stats.Analysis import FleetMetrics
+from src.observability.stats.analysis import FleetMetrics
 
 __version__ = VERSION
 # from src.observability.stats.core.StabilityCore import StabilityCore, FleetMetrics
