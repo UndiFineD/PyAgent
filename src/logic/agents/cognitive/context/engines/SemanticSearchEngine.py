@@ -11,12 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
+# Phase 16: Rust acceleration for keyword matching and scoring
 
 """Auto-extracted class from agent_context.py"""
 
@@ -30,6 +26,14 @@ from typing import Any
 import logging
 
 __version__ = VERSION
+
+# Phase 16: Rust acceleration imports
+try:
+    import rust_core
+    _RUST_AVAILABLE = True
+except ImportError:
+    _RUST_AVAILABLE = False
+    logging.debug("rust_core not available, using Python fallback for SemanticSearchEngine")
 
 
 class SemanticSearchEngine:
@@ -172,6 +176,28 @@ class SemanticSearchEngine:
                 )
 
         # Fallback to keyword search (original logic)
+        # Phase 16: Try Rust-accelerated keyword scoring
+        if _RUST_AVAILABLE and hasattr(rust_core, "keyword_search_score_rust"):
+            try:
+                query_words = query.lower().split()
+                doc_items = list(self.documents.items())
+                contents = [content for _, content in doc_items]
+                scores = rust_core.keyword_search_score_rust(query_words, contents)
+                if scores:
+                    for i, (file_path, content) in enumerate(doc_items):
+                        if scores[i] > 0:
+                            self.results.append(
+                                SemanticSearchResult(
+                                    file_path=file_path,
+                                    content_snippet=content[:80],
+                                    similarity_score=min(scores[i], 1.0),
+                                )
+                            )
+                    return sorted(self.results, key=lambda r: r.similarity_score, reverse=True)
+            except Exception:
+                pass  # Fall through to Python implementation
+        
+        # Python fallback
         query_words = set(query.lower().split())
 
         for file_path, content in self.documents.items():

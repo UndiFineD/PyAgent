@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Engine for Self-Referential Swarm Optimization.
 Monitors fleet performance and suggests structural or configuration changes.
@@ -24,7 +19,10 @@ Monitors fleet performance and suggests structural or configuration changes.
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
-from typing import Any
+from typing import Any, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
 __version__ = VERSION
 
@@ -32,7 +30,7 @@ __version__ = VERSION
 class SwarmOptimizer:
     """Optimizes fleet efficiency through performance monitoring."""
 
-    def __init__(self, fleet_manager: Any) -> None:
+    def __init__(self, fleet_manager: FleetManager) -> None:
         self.fleet = fleet_manager
 
     def monitor_efficiency(self) -> list[dict[str, Any]]:

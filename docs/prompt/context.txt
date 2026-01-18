@@ -1,6 +1,6 @@
 # PyAgent Workspace Context
-# Generated: January 16, 2026
-# Version: 3.6.0 (Evolution Phase 317 - SYNAPTIC ACCELERATION)
+# Generated: January 17, 2026
+# Version: 3.14.0 (Evolution Phase 44 - ADVANCED SAMPLING, SPECULATIVE DECODING V2)
 
 ## Project Overview
 PyAgent is an AI-powered multi-agent orchestration system for autonomous code improvement.
@@ -10,28 +10,109 @@ improve, and maintain Python codebases with high autonomy.
 ## Architecture (5-Tiered)
 - src/core/          → Primitives, Knowledge Trinity (B-Tree, Vector, Graph)
 - src/logic/         → Swarm Intelligence, Specialized Agents, Reasoning Strategies  
-- src/infrastructure/→ Fleet Management, Economy, API Wrappers, Orchestration
+- src/infrastructure/→ Fleet Management, Economy, API Wrappers, Orchestration, Engine
 - src/interface/     → Multi-UI layer (CLI, GUI, Web, Mobile)
 - src/observability/ → Telemetry, Stats, Reporting, Audit Trails
 
 ## Rust Acceleration (rust_core/)
-- 200+ PyO3 functions for CPU-bound operations
-- Integration: `rust_core.pyd` binary active in workspace root.
-- Recent fixes: JSON log builder bug resolved, compiler warnings cleared.
-- Performance: 37% end-to-end acceleration; optimized complexity analysis (Rust-native).
+- **467+ PyO3 functions** for CPU-bound operations
+- **Hardware-Aware Neural Engine** (`neural.rs`): Scales Transformer models based on VRAM/RAM.
+- Integration: `rust_core.pyd` binary active in .venv site-packages.
+- Recent fixes: Old rust_core.pyd in workspace root was blocking new module.
+- Performance: 41% end-to-end acceleration; optimized complexity analysis (Rust-native).
+- **Phase 14**: Cognitive acceleration (hedge word detection, top-K activations, buffer sorting).
+- **Phase 15**: Core infrastructure (token estimation, graph cycle detection, structure analysis).
+- **Phase 16**: Vector math & aggregation (embedding stats, k-means, similarity matrix, JSON compression).
+- **Phase 17**: vLLM-inspired utilities (cdiv, power-of-2, xxhash, cache hit ratio, atomic counters).
+- **Phases 18-33**: Resilience, performance, infrastructure, multimodal, attention.
+- **Phase 34**: Disaggregated inference & KV transfer (12 Rust functions).
+- **Phase 35**: Async execution & cache management (12 Rust functions).
+- **Phase 36**: CUDA graph & torch.compile integration (8 Rust functions).
+- **Phase 37**: Weight loading, KV offload & EPLB (9 Rust functions).
+- **Phase 38**: FusedMoE, Mamba SSM & MLA (11 Rust functions).
+- **Phase 39**: Structured output, speculative v2 & tensorizer (12 Rust functions).
+- **Phase 40**: Reasoning, multimodal cache, pooling, inputs, media IO (17 Rust functions).
+- **Phase 41**: Tokenizer registry, model registry, LoRA, logprobs, tools, structured output (18 Rust functions).
+- **Phase 42**: Platform interface, OpenAI API, prompt rendering, MCP tools (17 Rust functions).
+- **Phase 43**: Engine core, KV cache coordination, request queue, parallel sampling (16 Rust functions).
+- **Phase 44**: Advanced sampling, speculative decoding v2, encoder cache, KV metrics (12 Rust functions).
 
-## Current State (Phase 317)
-- Test baseline: 1,300+ tests with 100% collection health.
-- Self-Healing: Enabled for complexity reduction (>25), docstring injection, and type inference.
+## Current State (Phase 44 COMPLETE)
+- Test baseline: 2,888+ tests with 100% collection health.
+- vLLM Integration: 28 phases complete (17-44), 467 Rust functions, ~130 Python modules.
+- Self-Healing: Active. ZMQ Transport Layer now supports graceful shutdown and Ctrl+C interrupts.
+- **Phase 44 Modules** (6 Python, 12 Rust):
+  - RejectionSampler.py: 4 rejection strategies, recovery modes, streaming/batch verification
+  - TopKTopPSampler.py: 5 nucleus variants, 4 temperature schedules, Gumbel-softmax
+  - PenaltyEngine.py: 5 penalty types, 4 penalty schedules, batched application
+  - NgramProposer.py: 4 matching strategies, adaptive n-sizing, suffix tree indexing
+  - EncoderCacheManager.py: 3 cache tiers, 4 eviction policies, multi-tier caching
+  - KVCacheMetrics.py: 4 metric types, 3 alert levels, anomaly detection
+
+## Current State (Phase 319)
+- Test baseline: 1,305+ tests with 100% collection health.
+- Self-Healing: Active. ZMQ Transport Layer now supports graceful shutdown and Ctrl+C interrupts.
+- Reinforcement Learning: [DEPLOYED] Full RL framework with 7 production-ready modules:
+  - MDP.py: ExperienceReplayBuffer, value iteration, policy extraction, priority replay
+  - Environment.py: Gymnasium-compatible CodeImprovementEnvironment with multi-objective rewards
+  - ActionSpace.py: Discrete/Box/MultiDiscrete/Dict spaces with cooldowns and eligibility
+  - TransitionDynamics.py: Laplace smoothing, entropy-based uncertainty, trajectory sampling
+  - RewardFunctions.py: RewardSignal/CompositeRewardFunction with curriculum learning and shaping
+  - LearningObjectives.py: ObjectiveType enum, constraints, priority weighting, Pareto optimization
+  - LearningAlgorithms.py: Q-Learning, SARSA, Double Q, TD(λ), UCB exploration, GAE
+- Specialized Agents: [DEPLOYED] 20+ specialist agents with production-grade implementations:
+  - MathAgent: Safe expression evaluation, calculus, matrix operations, equation solving
+  - VisionAgent: OCR, code screenshot analysis, diagram interpretation, chart parsing
+  - ReasoningAgent: 5 strategies (CoT, ToT, Self-Consistency, Reflection, Multi-Agent Debate)
+  - TrustAgent: Multi-dimensional trust scoring, EmotionalState, manipulation detection
+  - ScalingAgent: 5 load balancing strategies (Round-Robin, Weighted, Least-Conn, Random, IP-Hash)
+  - StreamAgent: Webhook registration, retry logic, schema validation, event buffering
+  - GUIAgent: 9 framework support, UI element caching, accessibility auditing (WCAG)
+  - VotingAgent: 7 voting methods including ranked-choice, Borda, and quadratic voting
+  - ClassificationAgent: 4 classification types with taxonomy registration and batch processing
+  - DimensionalityAgent: PCA, random projection, k-means clustering with explained variance
+  - RegressionAgent: Linear/polynomial/exponential regression, Mann-Kendall trend detection
+  - WebSearchEssayAgent: 6 essay styles, multi-query research, fact-checking, citation
+  - ObsidianCodeDescriberAgent: Directory documentation, YAML frontmatter, MOC generation
+- Complexity Reduction: [VERIFIED] All 32 high-complexity targets resolved. Current max complexity < 25 project-wide.
 - Model backend: Ollama/tinyllama:latest (Local High-Speed) -> Copilot CLI (Fallback).
 - Stability Gate: 1.0 (Green).
 
+## vLLM Integration Summary (Phases 17-44)
+| Phase | Focus | Modules | Rust Fns |
+|-------|-------|---------|----------|
+| 17 | Core Patterns | 6 | 11 |
+| 18 | Resilience | 6 | 0 |
+| 19 | Performance | 6 | 0 |
+| 20-24 | Infrastructure | 27 | 20 |
+| 25-28 | Inference | 15 | 36 |
+| 29-33 | Advanced | 20 | 50 |
+| 34-36 | Async/CUDA | 18 | 32 |
+| 37 | Weight/EPLB | 4 | 9 |
+| 38 | MoE/SSM/MLA | 4 | 11 |
+| 39 | Struct/Spec/Tens | 6 | 12 |
+| 40 | Reasoning/Media | 6 | 17 |
+| 41 | Token/Model/LoRA | 6 | 18 |
+| 42 | Platform/API/Prompt | 6 | 17 |
+| 43 | Engine/KVCache/Queue | 4 | 16 |
+| 44 | Sampling/SpecDec v2 | 6 | 12 |
+| **Total** | - | **~130** | **467** |
+
 ## Data & Observability
-- 1,024 virtual shards for interaction history (MD5-indexed).
+- 1,024 virtual shards for interaction history (Rust-native MD5 implementation verified).
+- Shard 220: GitHub Copilot CLI deprecation patterns successfully ingested and verified.
 - Centralized ConnectivityManager with 15-minute persistent TTL status cache.
 - Structured Logger yielding valid, masked JSON logs via Rust core.
 
-## known Issues to Address (Self-Improvement Focus)
-- 32 files with high logic complexity.
-- Typing gaps in src/infrastructure for Rust FFI stability.
-- Missing docstrings in Logic and Maintenance layers.
+## Known Issues to Address (Phase 319 Focus)
+- [RESOLVED] Swarm Intelligence: Implement ZeroMQ-mDNS bridge in DiscoveryNode for decentralized routing.
+- [RESOLVED] Performance: Cycle overhead reduced with Phase 15 optimizations.
+- [RESOLVED] Swarm Intelligence: Verified complexity reductions improved reasoning latency.
+- [COMPLETED] Phase 15: AgentCore, SubagentRunner, AgentRegistryCore Rust acceleration.
+- [COMPLETED] Phase 16: DimensionalityAgent, StorageEngine, RollupEngine, PromptManagers, SemanticSearchEngine, ABEngine.
+- [COMPLETED] Phase 17: vLLM pattern integration - 6 Python modules, 11 Rust functions, 21/21 tests passed.
+- [COMPLETED] Phase 38: FusedMoE, Mamba SSM & MLA - 4 Python modules, 11 Rust functions, 50/50 tests passed.
+- [COMPLETED] Phase 39: Structured Output, Speculative v2 & Tensorizer - 6 Python modules, 12 Rust functions, 40/40 tests passed.
+- [COMPLETED] Phase 40: Reasoning, MultiModal Cache, Pooling, Inputs, Media IO - 6 Python modules, 17 Rust functions, 35/35 tests passed.
+- [NEW] Phase 41: Continue vLLM pattern integration (see docs/comparison_vllm.md for remaining patterns).
+

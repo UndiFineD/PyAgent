@@ -5,7 +5,7 @@ from typing import Any
 
 # Add src to path
 
-from tests.utils.legacy_support import create_legacy_agent_wrapper
+from tests.utils.LegacySupport import create_legacy_agent_wrapper
 from tests.utils.agent_test_utils import agent_dir_on_path
 
 

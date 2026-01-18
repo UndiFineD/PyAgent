@@ -25,5 +25,5 @@ class LongTermMemory:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"LongTermMemory initialized (Placeholder).")
+        logging.info("LongTermMemory initialized (Placeholder).")
 

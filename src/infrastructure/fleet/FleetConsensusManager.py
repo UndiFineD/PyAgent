@@ -17,6 +17,7 @@
 from __future__ import annotations
 import logging
 import time
+import asyncio
 from typing import Any, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -114,16 +115,19 @@ class FleetConsensusManager:
             self.fleet, "federated_knowledge", None
         ):
             try:
-                self.fleet.federated_knowledge.broadcast_lesson(
-                    lesson_id=f"consensus_{int(time.time())}",
-                    lesson_data={
-                        "agent": result.get("winner"),
-                        "task_type": "high_integrity_code",
-                        "success": True,
-                        "fix": f"Consensus reached by {result.get('winner')} for {task[:30]}",
-                    },
+                # Phase 319: Federated Knowledge is now async (Voyager)
+                asyncio.create_task(
+                    self.fleet.federated_knowledge.broadcast_lesson(
+                        lesson_id=f"consensus_{int(time.time())}",
+                        lesson_data={
+                            "agent": result.get("winner"),
+                            "task_type": "high_integrity_code",
+                            "success": True,
+                            "fix": f"Consensus reached by {result.get('winner')} for {task[:30]}",
+                        },
+                    )
                 )
-            except Exception:
-                pass
+            except Exception as e:
+                logging.warning(f"FleetConsensus: Failed to trigger federated broadcast: {e}")
 
         return result

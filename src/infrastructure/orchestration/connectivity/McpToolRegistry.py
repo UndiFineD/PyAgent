@@ -25,5 +25,5 @@ class McpToolRegistry:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"McpToolRegistry initialized (Placeholder).")
+        logging.info("McpToolRegistry initialized (Placeholder).")
 

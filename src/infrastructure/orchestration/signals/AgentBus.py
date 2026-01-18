@@ -36,10 +36,12 @@ class AgentCommunicationBus:
 
         # PUB socket for broadcasting
         self.publisher = self.context.socket(zmq.PUB)
+        self.publisher.setsockopt(zmq.LINGER, 0)
         self.publisher.bind(f"tcp://*:{self.pub_port}")
 
         # SUB socket for receiving
         self.subscriber = self.context.socket(zmq.SUB)
+        self.subscriber.setsockopt(zmq.LINGER, 0)
         self.subscriber.connect(f"tcp://localhost:{self.pub_port}")
 
         self.handlers: dict[str, list[Callable]] = {}
@@ -62,21 +64,29 @@ class AgentCommunicationBus:
         self._running = True
         try:
             while self._running:
-                topic_bytes, payload_bytes = await self.subscriber.recv_multipart()
-                topic = topic_bytes.decode()
-                data = orjson.loads(payload_bytes)["data"]
+                try:
+                    result = await self.subscriber.recv_multipart()
+                    if not result:
+                        break
+                    
+                    topic_bytes, payload_bytes = result
+                    topic = topic_bytes.decode()
+                    data = orjson.loads(payload_bytes)["data"]
 
-                if topic in self.handlers:
-                    for handler in self.handlers[topic]:
-                        if asyncio.iscoroutinefunction(handler):
-                            await handler(data)
+                    if topic in self.handlers:
+                        for handler in self.handlers[topic]:
+                            if asyncio.iscoroutinefunction(handler):
+                                await handler(data)
 
-                        else:
-                            handler(data)
-        except Exception as e:
-            if self._running:
-                logging.error(f"AgentBus Error: {e}")
-
+                            else:
+                                handler(data)
+                except (zmq.ContextTerminated, zmq.ZMQError, asyncio.CancelledError):
+                    self._running = False
+                    break
+                except Exception as e:
+                    if self._running:
+                        logging.error(f"AgentBus Error: {e}")
+                        await asyncio.sleep(0.1)
         finally:
             self.stop()
 
@@ -84,13 +94,22 @@ class AgentCommunicationBus:
         """Stops the bus and cleans up sockets."""
 
         self._running = False
-        self.publisher.close()
-        self.subscriber.close()
-        self.context.term()
+        if hasattr(self, 'publisher') and not self.publisher.closed:
+            self.publisher.close(linger=0)
+        if hasattr(self, 'subscriber') and not self.subscriber.closed:
+            self.subscriber.close(linger=0)
+        if hasattr(self, 'context'):
+            self.context.term()
 
 
 if __name__ == "__main__":
-    # Example usage
+    import signal
+    import sys
+
+    # ZeroMQ on Windows requires SelectorEventLoop
+    if sys.platform == 'win32':
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
     async def run_example() -> None:
         bus = AgentCommunicationBus()
 
@@ -99,14 +118,34 @@ if __name__ == "__main__":
 
         bus.subscribe("telemetry", on_msg)
 
-        # Start listener in background
-        listener = asyncio.create_task(bus.start())
+        # Setup graceful shutdown via signals (non-Windows)
+        loop = asyncio.get_running_loop()
+        stop_event = asyncio.Event()
 
-        await asyncio.sleep(1)
-        await bus.broadcast("telemetry", {"status": "alive", "agent": "test"})
-        await asyncio.sleep(1)
+        def handle_stop():
+            print("\nShutting down AgentBus...")
+            bus.stop()
+            stop_event.set()
 
-        bus.stop()
-        await listener
+        try:
+            for sig in (signal.SIGINT, signal.SIGTERM):
+                loop.add_signal_handler(sig, handle_stop)
+        except NotImplementedError:
+            pass
 
-    asyncio.run(run_example())
+        print("AgentBus running. Press Ctrl+C to stop.")
+        
+        try:
+            listener = asyncio.create_task(bus.start())
+            await bus.broadcast("telemetry", {"status": "online"})
+            await asyncio.wait([listener, stop_event.wait()], return_when=asyncio.FIRST_COMPLETED)
+        except (KeyboardInterrupt, asyncio.CancelledError):
+            handle_stop()
+        finally:
+            bus.stop()
+            print("AgentBus stopped.")
+
+    try:
+        asyncio.run(run_example())
+    except KeyboardInterrupt:
+        pass

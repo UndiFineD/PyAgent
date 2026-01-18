@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Auto-extracted class from agent_improvements.py"""
 
@@ -70,9 +65,9 @@ class MergeDetector:
                     )
                     for imp in improvements
                 ]
-                
+
                 rust_results = find_similar_pairs_rust(items, self.similarity_threshold)
-                
+
                 return [
                     MergeCandidate(
                         source_id=src_id,
@@ -84,7 +79,7 @@ class MergeDetector:
                 ]
             except Exception:
                 pass  # Fall back to Python
-        
+
         # Python fallback
         candidates: list[MergeCandidate] = []
         for i, imp1 in enumerate(improvements):

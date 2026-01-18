@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """
 High-performance native vLLM engine for PyAgent's 'Own AI'.
@@ -125,8 +120,27 @@ class VllmNativeEngine:
         system_prompt: str = "",
         temperature: float = 0.7,
         max_tokens: int = 1024,
+        lora_request: Optional[Any] = None,
+        guided_json: Optional[dict] = None,
+        guided_regex: Optional[str] = None,
+        guided_choice: Optional[list] = None,
     ) -> str:
-        """Generates text from the local model."""
+        """
+        Generates text from the local model.
+        
+        Args:
+            prompt: Input prompt
+            system_prompt: System prompt
+            temperature: Sampling temperature
+            max_tokens: Maximum tokens to generate
+            lora_request: Optional LoRA adapter request
+            guided_json: Optional JSON schema for guided decoding
+            guided_regex: Optional regex pattern for guided decoding
+            guided_choice: Optional list of choices for guided decoding
+            
+        Returns:
+            Generated text
+        """
         if not self._init_llm():
             return ""
 
@@ -138,11 +152,30 @@ class VllmNativeEngine:
                 else prompt
             )
 
-            sampling_params = SamplingParams(
-                temperature=temperature, max_tokens=max_tokens, top_p=0.95
-            )
+            # Build sampling params with optional guided decoding
+            sampling_kwargs = {
+                "temperature": temperature,
+                "max_tokens": max_tokens,
+                "top_p": 0.95,
+            }
+            
+            if guided_json is not None:
+                sampling_kwargs["guided_json"] = guided_json
+            if guided_regex is not None:
+                sampling_kwargs["guided_regex"] = guided_regex
+            if guided_choice is not None:
+                sampling_kwargs["guided_choice"] = guided_choice
+            
+            sampling_params = SamplingParams(**sampling_kwargs)
 
-            outputs = self._llm.generate([full_prompt], sampling_params)
+            # Build generate kwargs
+            generate_kwargs = {}
+            if lora_request is not None:
+                generate_kwargs["lora_request"] = lora_request
+
+            outputs = self._llm.generate(
+                [full_prompt], sampling_params, **generate_kwargs
+            )
 
             if outputs:
                 return outputs[0].outputs[0].text
@@ -150,6 +183,58 @@ class VllmNativeEngine:
         except Exception as e:
             logging.error(f"Native vLLM generation failed: {e}")
             return ""
+    
+    def generate_json(
+        self,
+        prompt: str,
+        schema: dict,
+        system_prompt: str = "",
+        temperature: float = 0.3,
+        max_tokens: int = 1024,
+    ) -> str:
+        """Generate JSON output constrained by schema."""
+        json_system = "You must respond with valid JSON only."
+        if system_prompt:
+            json_system = f"{system_prompt}\n\n{json_system}"
+        
+        return self.generate(
+            prompt,
+            system_prompt=json_system,
+            temperature=temperature,
+            max_tokens=max_tokens,
+            guided_json=schema,
+        )
+    
+    def generate_choice(
+        self,
+        prompt: str,
+        choices: list,
+        system_prompt: str = "",
+    ) -> str:
+        """Generate output constrained to specific choices."""
+        return self.generate(
+            prompt,
+            system_prompt=system_prompt,
+            temperature=0.0,
+            max_tokens=len(max(choices, key=len)) + 5,
+            guided_choice=choices,
+        ).strip()
+    
+    def generate_regex(
+        self,
+        prompt: str,
+        pattern: str,
+        system_prompt: str = "",
+        max_tokens: int = 256,
+    ) -> str:
+        """Generate output matching a regex pattern."""
+        return self.generate(
+            prompt,
+            system_prompt=system_prompt,
+            temperature=0.5,
+            max_tokens=max_tokens,
+            guided_regex=pattern,
+        )
 
     def shutdown(self) -> None:
         """Clears the vLLM instance and frees VRAM (Phase 108)."""

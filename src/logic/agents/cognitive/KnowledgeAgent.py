@@ -21,22 +21,20 @@ from src.logic.agents.cognitive.KnowledgeGraphAssistant import KnowledgeGraphAss
 from src.logic.agents.cognitive.KnowledgeIndexingAssistant import (
     KnowledgeIndexingAssistant,
 )
-import logging
 import json
-from pathlib import Path
 from typing import Any
 
 __version__ = VERSION
 
-try:
-    import chromadb
-    HAS_CHROMADB = True
-except ImportError:
-    HAS_CHROMADB = False
+import importlib.util
+HAS_CHROMADB = importlib.util.find_spec("chromadb") is not None
 
 
 class KnowledgeAgent(BaseAgent):
-    """Agent that scans the workspace for context. Refactored."""
+    """
+    Tier 2 (Cognitive Logic) - Knowledge Agent: Scans workspace for semantic 
+    context, maintains the knowledge graph, and orchestrates RAG operations.
+    """
 
     def __init__(self, file_path: str | None = None, fleet: Any | None = None) -> None:
         if file_path is None:
@@ -52,7 +50,7 @@ class KnowledgeAgent(BaseAgent):
         self.memory_engine = MemoryEngine(str(workspace_root))
         self.compressor = ContextCompressor(str(workspace_root))
         self.knowledge_core = KnowledgeCore()
-        
+
         self.tiered_memory = TieredMemoryEngine(str(self.db_path))
         self.graph_assistant = KnowledgeGraphAssistant(str(workspace_root))
         self.index_assistant = KnowledgeIndexingAssistant(str(workspace_root))
@@ -72,9 +70,11 @@ class KnowledgeAgent(BaseAgent):
 
     def build_vector_index(self) -> None:
         """Builds a vector index of the workspace."""
-        if not HAS_CHROMADB: return
+        if not HAS_CHROMADB:
+            return
         docs, metas, ids = self.index_assistant.build_vector_data(self.file_path.parent)
-        if docs: self.tiered_memory.upsert_documents(docs, metas, ids)
+        if docs:
+            self.tiered_memory.upsert_documents(docs, metas, ids)
 
     def semantic_search(self, query: str, n_results: int = 3) -> str:
         """Performs semantic search."""
@@ -82,7 +82,7 @@ class KnowledgeAgent(BaseAgent):
         snippets = []
         for m in hits:
             doc = m["content"][:1000]
-            snippets.append(f"> [!ABSTRACT] File: {m['metadata']['path']}\n> ```\n" + 
+            snippets.append(f"> [!ABSTRACT] File: {m['metadata']['path']}\n> ```\n" +
                            "\n".join([f"> {sl}" for sl in doc.splitlines()[:20]]) + "\n> ```\n")
         return "\n".join(snippets)
 
@@ -92,30 +92,41 @@ class KnowledgeAgent(BaseAgent):
         root = self.file_path.parent
         context_snippets = []
         impacted = self.graph_engine.get_impact_radius(query)
-        if impacted: context_snippets.append(f"> [!IMPORTANT] Impact: {list(impacted)[:5]}\n")
+        if impacted:
+            context_snippets.append(f"> [!IMPORTANT] Impact: {list(impacted)[:5]}\n")
         lessons = self.memory_engine.get_lessons_learned(query)
-        if lessons: context_snippets.append("> [!NOTE] Memory: Lessons\n" + "\n".join([f"> - {l['task']}" for l in lessons]))
+        if lessons:
+            context_snippets.append(
+                "> [!NOTE] Memory: Lessons\n"
+                + "\n".join([f"> - {lesson['task']}" for lesson in lessons])
+            )
         index_hits = self.knowledge_core.search_index(query, index, root)
-        if index_hits: context_snippets.extend(index_hits)
+        if index_hits:
+            context_snippets.extend(index_hits)
         if HAS_CHROMADB:
             hits = self.semantic_search(query)
-            if hits: context_snippets.append(hits)
+            if hits:
+                context_snippets.append(hits)
         if len(context_snippets) < 3:
             context_snippets.extend(self.knowledge_core.perform_fallback_scan(query, root, index.get(query, [])))
         return "\n".join(context_snippets) if context_snippets else "No context."
 
     def _load_index(self) -> dict:
         """Loads or builds symbols."""
-        if not self.index_file.exists(): self.build_index()
+        if not self.index_file.exists():
+            self.build_index()
         try:
-            with open(self.index_file) as f: return json.load(f)
-        except: return {}
+            with open(self.index_file) as f:
+                return json.load(f)
+        except Exception:
+            return {}
 
     def build_index(self) -> None:
         """Builds symbol index."""
         patterns = {".md": r"\[\[(.*?)\]\]", ".py": r"(?:class|def)\s+([a-zA-Z_]\w*)"}
         index = self.knowledge_core.build_symbol_map(self.file_path.parent, patterns)
-        with open(self.index_file, "w", encoding="utf-8") as f: json.dump(index, f, indent=4)
+        with open(self.index_file, "w", encoding="utf-8") as f:
+            json.dump(index, f, indent=4)
 
     def find_backlinks(self, file_name: str) -> list[str]:
         return self.graph_assistant.find_backlinks(file_name, self._load_index())

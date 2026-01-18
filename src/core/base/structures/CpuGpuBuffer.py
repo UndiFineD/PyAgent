@@ -1,0 +1,301 @@
+"""
+CpuGpuBuffer - Efficient CPU-GPU tensor transfer utilities.
+
+Implements vLLM's CpuGpuBuffer pattern for paired CPU/GPU tensors
+with non-blocking transfers and optional numpy views.
+
+Phase 23: Advanced Serialization & Validation
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Any
+
+try:
+    import torch
+    TORCH_AVAILABLE = True
+except ImportError:
+    TORCH_AVAILABLE = False
+    torch = None
+
+try:
+    import numpy as np
+    NUMPY_AVAILABLE = True
+except ImportError:
+    NUMPY_AVAILABLE = False
+    np = None
+
+if TYPE_CHECKING:
+    import numpy as np
+    import torch
+
+__all__ = [
+    "CpuGpuBuffer",
+    "is_pin_memory_available",
+    "get_device",
+]
+
+
+def is_pin_memory_available() -> bool:
+    """Check if CUDA pinned memory is available."""
+    if not TORCH_AVAILABLE:
+        return False
+    return torch.cuda.is_available()
+
+
+def get_device(device: str | int | None = None) -> "torch.device":
+    """
+    Get a torch device.
+    
+    Args:
+        device: Device specification (None = auto-detect)
+        
+    Returns:
+        torch.device instance
+    """
+    if not TORCH_AVAILABLE:
+        raise ImportError("torch is required")
+    
+    if device is None:
+        if torch.cuda.is_available():
+            return torch.device("cuda")
+        return torch.device("cpu")
+    
+    return torch.device(device)
+
+
+class CpuGpuBuffer:
+    """
+    Buffer for efficient tensor transfers between CPU and GPU.
+    
+    Maintains paired CPU and GPU tensors of the same shape, enabling
+    fast non-blocking transfers. Optionally provides a numpy view of
+    the CPU tensor for efficient data manipulation.
+    
+    Example:
+        >>> buffer = CpuGpuBuffer(32, 768, dtype=torch.float32, device="cuda")
+        >>> # Fill CPU buffer via numpy
+        >>> buffer.np[:] = my_data
+        >>> # Transfer to GPU (non-blocking)
+        >>> gpu_tensor = buffer.copy_to_gpu()
+        >>> # Use gpu_tensor in computation...
+        >>> # Transfer results back
+        >>> buffer.copy_to_cpu()
+        >>> torch.cuda.synchronize()  # Required for CPU data to be valid
+    """
+    
+    def __init__(
+        self,
+        *size: int,
+        dtype: "torch.dtype" = None,
+        device: "torch.device | str | int" = None,
+        pin_memory: bool = True,
+        with_numpy: bool = True,
+    ) -> None:
+        """
+        Create paired CPU/GPU buffers.
+        
+        Args:
+            *size: Tensor dimensions
+            dtype: Tensor data type (default float32)
+            device: GPU device for the GPU buffer
+            pin_memory: Use pinned memory for CPU tensor (faster transfers)
+            with_numpy: Create numpy view of CPU tensor
+        """
+        if not TORCH_AVAILABLE:
+            raise ImportError("torch is required for CpuGpuBuffer")
+        
+        if dtype is None:
+            dtype = torch.float32
+        
+        # Determine if we can use pinned memory
+        use_pin = pin_memory and is_pin_memory_available()
+        
+        # Create CPU tensor
+        self.cpu = torch.zeros(*size, dtype=dtype, device="cpu", pin_memory=use_pin)
+        
+        # Create GPU tensor
+        gpu_device = get_device(device)
+        if gpu_device.type == "cpu":
+            # If no GPU, just use another CPU tensor
+            self.gpu = torch.zeros(*size, dtype=dtype, device="cpu")
+        else:
+            self.gpu = torch.zeros(*size, dtype=dtype, device=gpu_device)
+        
+        # Optional numpy view
+        self.np: "np.ndarray | None" = None
+        if with_numpy and NUMPY_AVAILABLE:
+            # bfloat16 not supported by numpy
+            if dtype == torch.bfloat16:
+                # Skip numpy view for bfloat16
+                pass
+            else:
+                self.np = self.cpu.numpy()
+        
+        self._size = size
+        self._dtype = dtype
+    
+    def copy_to_gpu(self, n: int | None = None, non_blocking: bool = True) -> "torch.Tensor":
+        """
+        Copy data from CPU to GPU.
+        
+        Args:
+            n: Number of elements to copy (first dim). None = all.
+            non_blocking: Use non-blocking transfer (default True)
+            
+        Returns:
+            The GPU tensor (or slice if n specified)
+        """
+        if n is None:
+            return self.gpu.copy_(self.cpu, non_blocking=non_blocking)
+        return self.gpu[:n].copy_(self.cpu[:n], non_blocking=non_blocking)
+    
+    def copy_to_cpu(self, n: int | None = None, non_blocking: bool = True) -> "torch.Tensor":
+        """
+        Copy data from GPU to CPU.
+        
+        NOTE: Because this is non-blocking, you must call torch.cuda.synchronize()
+        before accessing the CPU data to ensure the transfer is complete.
+        
+        Args:
+            n: Number of elements to copy (first dim). None = all.
+            non_blocking: Use non-blocking transfer (default True)
+            
+        Returns:
+            The CPU tensor (or slice if n specified)
+        """
+        if n is None:
+            return self.cpu.copy_(self.gpu, non_blocking=non_blocking)
+        return self.cpu[:n].copy_(self.gpu[:n], non_blocking=non_blocking)
+    
+    def fill(self, value: float) -> None:
+        """Fill both CPU and GPU buffers with a value."""
+        self.cpu.fill_(value)
+        self.gpu.fill_(value)
+    
+    def zero(self) -> None:
+        """Zero both buffers."""
+        self.cpu.zero_()
+        self.gpu.zero_()
+    
+    def resize(self, *new_size: int) -> None:
+        """
+        Resize the buffers (creates new tensors).
+        
+        Args:
+            *new_size: New dimensions
+        """
+        use_pin = self.cpu.is_pinned() if hasattr(self.cpu, "is_pinned") else False
+        
+        self.cpu = torch.zeros(*new_size, dtype=self._dtype, device="cpu", pin_memory=use_pin)
+        self.gpu = torch.zeros(*new_size, dtype=self._dtype, device=self.gpu.device)
+        
+        if self.np is not None and NUMPY_AVAILABLE:
+            if self._dtype != torch.bfloat16:
+                self.np = self.cpu.numpy()
+        
+        self._size = new_size
+    
+    @property
+    def shape(self) -> tuple[int, ...]:
+        """Get the buffer shape."""
+        return tuple(self.cpu.shape)
+    
+    @property
+    def dtype(self) -> "torch.dtype":
+        """Get the buffer dtype."""
+        return self._dtype
+    
+    @property
+    def device(self) -> "torch.device":
+        """Get the GPU device."""
+        return self.gpu.device
+    
+    @property
+    def numel(self) -> int:
+        """Get number of elements."""
+        return self.cpu.numel()
+    
+    @property
+    def nbytes(self) -> int:
+        """Get size in bytes."""
+        return self.cpu.numel() * self.cpu.element_size()
+    
+    def __repr__(self) -> str:
+        return (
+            f"CpuGpuBuffer(shape={self.shape}, dtype={self._dtype}, "
+            f"device={self.gpu.device}, pinned={self.cpu.is_pinned() if hasattr(self.cpu, 'is_pinned') else False})"
+        )
+
+
+class CpuGpuBufferPool:
+    """
+    Pool of CpuGpuBuffers for efficient reuse.
+    
+    Maintains a pool of pre-allocated buffers to avoid repeated allocation.
+    """
+    
+    def __init__(
+        self,
+        size: tuple[int, ...],
+        dtype: "torch.dtype" = None,
+        device: str | int | None = None,
+        pool_size: int = 4,
+    ):
+        """
+        Create a buffer pool.
+        
+        Args:
+            size: Buffer dimensions
+            dtype: Tensor dtype
+            device: GPU device
+            pool_size: Number of buffers in pool
+        """
+        self._size = size
+        self._dtype = dtype or torch.float32
+        self._device = device
+        self._pool: list[CpuGpuBuffer] = []
+        self._in_use: set[int] = set()
+        
+        # Pre-allocate buffers
+        for _ in range(pool_size):
+            buf = CpuGpuBuffer(*size, dtype=self._dtype, device=device)
+            self._pool.append(buf)
+    
+    def acquire(self) -> tuple[CpuGpuBuffer, int]:
+        """
+        Acquire a buffer from the pool.
+        
+        Returns:
+            Tuple of (buffer, handle) for release
+        """
+        for i, buf in enumerate(self._pool):
+            if i not in self._in_use:
+                self._in_use.add(i)
+                return buf, i
+        
+        # Pool exhausted - create new buffer
+        buf = CpuGpuBuffer(*self._size, dtype=self._dtype, device=self._device)
+        idx = len(self._pool)
+        self._pool.append(buf)
+        self._in_use.add(idx)
+        return buf, idx
+    
+    def release(self, handle: int) -> None:
+        """
+        Release a buffer back to the pool.
+        
+        Args:
+            handle: Handle from acquire()
+        """
+        self._in_use.discard(handle)
+    
+    @property
+    def available(self) -> int:
+        """Number of available buffers."""
+        return len(self._pool) - len(self._in_use)
+    
+    @property
+    def total(self) -> int:
+        """Total number of buffers."""
+        return len(self._pool)

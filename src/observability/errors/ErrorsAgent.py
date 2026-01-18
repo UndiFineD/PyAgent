@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Auto-extracted class from agent_errors.py"""
 
@@ -267,7 +262,7 @@ class ErrorsAgent(BaseAgent):
                 return None
             except Exception:
                 pass  # Fall back to Python
-        
+
         # Python fallback
         for pattern in self._patterns:
             if re.search(pattern.regex, error.message):
@@ -332,10 +327,10 @@ class ErrorsAgent(BaseAgent):
                 except ValueError:
                     pass
             active_rules.append(rule)
-        
+
         if not active_rules:
             return False
-        
+
         # Rust-accelerated suppression check
         if _RUST_AVAILABLE:
             try:
@@ -344,7 +339,7 @@ class ErrorsAgent(BaseAgent):
                 return is_match
             except Exception:
                 pass  # Fall back to Python
-        
+
         # Python fallback
         for rule in active_rules:
             if re.search(rule.pattern, error.message):

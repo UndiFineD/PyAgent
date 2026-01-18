@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
@@ -37,6 +32,24 @@ class FleetExecutionCore:
 
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
+
+    def _check_ethics(self, task: str) -> dict[str, Any]:
+        """Performs a mandatory ethics review on the task."""
+        ethics_report = self.fleet.ethics_guardrail.review_task(task)
+        if ethics_report["status"] == "rejected":
+            logging.error(f"Ethics Review REJECTED: {ethics_report['violations']}")
+            # Fire-and-forget signal (it's sync but emit is usually async-safe or handled)
+            import asyncio
+            try:
+                loop = asyncio.get_running_loop()
+                loop.create_task(self.fleet.signals.emit(
+                    "WORKFLOW_REJECTED",
+                    {"task": task, "violations": ethics_report["violations"]},
+                    sender="FleetManager",
+                ))
+            except RuntimeError:
+                pass
+        return ethics_report
 
     async def execute_reliable_task(
         self, task: str, priority: AgentPriority = AgentPriority.NORMAL
@@ -64,7 +77,7 @@ class FleetExecutionCore:
             technical_report = await self.fleet.structured_orchestrator.execute_task(
                 task
             )
-            res = await self.fleet.linguist.articulate_results(technical_report, task)
+            res = self.fleet.linguist.articulate_results(technical_report, task)
             await self.fleet._record_success(task, res, current_model)
             return res
         except Exception as e:
@@ -81,7 +94,7 @@ class FleetExecutionCore:
                     technical_report = (
                         await self.fleet.structured_orchestrator.execute_task(task)
                     )
-                    return await self.fleet.linguist.articulate_results(
+                    return self.fleet.linguist.articulate_results(
                         technical_report, task
                     )
                 except Exception as e2:
@@ -112,14 +125,8 @@ class FleetExecutionCore:
                 )
                 return "ERROR: Fleet Terminal Kill Switch Active."
 
-            ethics_report = self.fleet.ethics_guardrail.review_task(task)
+            ethics_report = self._check_ethics(task)
             if ethics_report["status"] == "rejected":
-                logging.error(f"Ethics Review REJECTED: {ethics_report['violations']}")
-                await self.fleet.signals.emit(
-                    "WORKFLOW_REJECTED",
-                    {"task": task, "violations": ethics_report["violations"]},
-                    sender="FleetManager",
-                )
                 return f"ERROR: Task rejected by Ethics Guardrail: {ethics_report['violations']}"
 
             results = []
@@ -137,164 +144,142 @@ class FleetExecutionCore:
                     logging.error("Fleet KILL SWITCH triggered during workflow.")
                     break
 
-                agent_name = step.get("agent")
-                action_name = step.get("action")
-                args = step.get("args", [])
-
-                # Variable processing
-                processed_args = []
-                for arg in args:
-                    if isinstance(arg, str) and arg.startswith("$"):
-                        var_name = arg[1:]
-                        processed_args.append(self.fleet.state.get(var_name, arg))
-                    else:
-                        processed_args.append(arg)
-
-                agent = self.fleet.agents.get(agent_name)
-                if not agent:
-                    err = f"Error: Agent '{agent_name}' not found."
-                    results.append(err)
-                    await self.fleet.signals.emit(
-                        "AGENT_NOT_FOUND",
-                        {"agent": agent_name, "step": step},
-                        sender="FleetManager",
-                    )
-                    continue
-
-                # Register agent for preemption tracking
-                if agent not in self.fleet.active_tasks[workflow_id]["agents"]:
-                    self.fleet.active_tasks[workflow_id]["agents"].append(agent)
-                    if hasattr(agent, "priority"):
-                        agent.priority = priority
-
-                action_fn = getattr(agent, action_name, None)
-                if not action_fn:
-                    err = (
-                        f"Error: Action '{action_name}' not supported by {agent_name}."
-                    )
-                    results.append(err)
-                    continue
-
-                trace_id = f"{workflow_id}_{agent_name}_{action_name}"
-                start_time = time.time()
-                self.fleet.telemetry.start_trace(trace_id)
-                await self.fleet.signals.emit(
-                    "STEP_STARTED",
-                    {
-                        "agent": agent_name,
-                        "action": action_name,
-                        "args": processed_args,
-                    },
-                    sender="FleetManager",
-                )
-
-                success = False
-                max_retries = 2
-                attempts = 0
-
-                while not success and attempts <= max_retries:
-                    attempts += 1
-
-                    # Check for preemption before start/retry
-                    if hasattr(agent, "_check_preemption"):
-                        await agent._check_preemption()
-
-                    action_signature = f"{agent_name}.{action_name}({processed_args})"
-                    self.fleet.action_history.append(action_signature)
-                    if self.fleet.action_history.count(action_signature) >= 3:
-                        logging.warning(
-                            f"LOOP DETECTED: {action_signature} repeated 3 times. Terminating step."
-                        )
-                        await self.fleet.signals.emit(
-                            "LOOP_DETECTED",
-                            {"action": action_signature},
-                            sender="FleetManager",
-                        )
-                        break
-
-                    try:
-                        import asyncio
-
-                        current_model = getattr(agent, "get_model", lambda: "default")()
-                        logging.info(
-                            f"Fleet (Attempt {attempts}): {agent_name}.{action_name}({processed_args}) using {current_model} [Priority: {priority.name}]"
-                        )
-
-                        if asyncio.iscoroutinefunction(action_fn):
-                            res = await action_fn(*processed_args)
-                        else:
-                            loop = asyncio.get_running_loop()
-                            res = await loop.run_in_executor(
-                                None, action_fn, *processed_args
-                            )
-
-                        duration = time.time() - start_time
-                        self.fleet.scaling.record_metric(agent_name, duration)
-                        rl = self.fleet.rl_selector
-                        if rl:
-                            rl.update_stats(f"{agent_name}.{action_name}", success=True)
-
-                        success = True
-                        token_info = getattr(
-                            agent,
-                            "_last_token_usage",
-                            {
-                                "input": 0,
-                                "output": 0,
-                                "model": current_model or "unknown",
-                            },
-                        )
-                        await self.fleet._record_success(
-                            res,
-                            workflow_id,
-                            agent_name,
-                            action_name,
-                            processed_args,
-                            token_info,
-                            trace_id,
-                            start_time,
-                        )
-                        results.append(
-                            f"### Results from {agent_name} ({action_name})\n{res}\n"
-                        )
-                        self.fleet.telemetry.end_trace(
-                            trace_id, agent_name, action_name, status="success"
-                        )
-                    except Exception as e:
-                        rl = self.fleet.rl_selector
-                        if rl:
-                            rl.update_stats(
-                                f"{agent_name}.{action_name}", success=False
-                            )
-                        logging.error(
-                            f"Fleet Execution Error (Attempt {attempts}): {e}"
-                        )
-                        error_msg = str(e)
-
-                        if attempts <= max_retries:
-                            await self.fleet._record_failure(
-                                f"{agent_name}.{action_name}", error_msg, "unknown"
-                            )
-                            await asyncio.sleep(1.0)
-                            continue
-
-                        self.fleet.state.errors.append(
-                            f"{agent_name}.{action_name}: {error_msg}"
-                        )
-                        results.append(f"### Error from {agent_name}\n{error_msg}\n")
-                        self.fleet.telemetry.end_trace(
-                            trace_id,
-                            agent_name,
-                            action_name,
-                            status="error",
-                            metadata={"error": error_msg},
-                        )
-                        break
-
-            return "# Fleet Workflow Summary\n\n" + "\n".join(results)
+                res = await self._process_workflow_step(step, workflow_id, priority)
+                results.append(res)
         finally:
             if workflow_id in self.fleet.active_tasks:
                 del self.fleet.active_tasks[workflow_id]
-            self.fleet.resume_tasks()
 
         return "# Fleet Workflow Summary\n\n" + "\n".join(results)
+
+    async def _process_workflow_step(
+        self, step: dict[str, Any], workflow_id: str, priority: AgentPriority
+    ) -> str:
+        """Processes a single step in a multi-agent workflow."""
+        agent_name = step.get("agent", "Unknown")
+        action_name = step.get("action", "Unknown")
+        args = step.get("args", [])
+
+        # Process variables (e.g., $last_result)
+        processed_args = [
+            self.fleet.state.get(arg[1:], arg)
+            if isinstance(arg, str) and arg.startswith("$")
+            else arg
+            for arg in args
+        ]
+
+        agent = self.fleet.agents.get(agent_name)
+        if not agent:
+            err = f"Error: Agent '{agent_name}' not found."
+            # Fire-and-forget signal emmission
+            import asyncio
+            try:
+                loop = asyncio.get_running_loop()
+                loop.create_task(self.fleet.signals.emit(
+                    "AGENT_NOT_FOUND", {"agent": agent_name, "step": step}, sender="FleetManager"
+                ))
+            except RuntimeError:
+                pass
+            return f"### Error\n{err}\n"
+
+        # Preemption registration
+        if agent not in self.fleet.active_tasks[workflow_id]["agents"]:
+            self.fleet.active_tasks[workflow_id]["agents"].append(agent)
+            if hasattr(agent, "priority"):
+                agent.priority = priority
+
+        action_fn = getattr(agent, action_name, None)
+        if not action_fn:
+            return f"### Error from {agent_name}\nAction '{action_name}' not supported.\n"
+
+        trace_id = f"{workflow_id}_{agent_name}_{action_name}"
+        start_time = time.time()
+        self.fleet.telemetry.start_trace(trace_id)
+
+        # Signal start
+        import asyncio
+        try:
+            loop = asyncio.get_running_loop()
+            loop.create_task(self.fleet.signals.emit(
+                "STEP_STARTED",
+                {"agent": agent_name, "action": action_name, "args": processed_args},
+                sender="FleetManager",
+            ))
+        except RuntimeError:
+            pass
+
+        success, res, error_msg = await self._execute_with_retry(
+            agent, action_fn, processed_args, workflow_id, priority, trace_id, start_time
+        )
+
+        if success:
+            return f"### Results from {agent_name} ({action_name})\n{res}\n"
+        else:
+            self.fleet.state.errors.append(f"{agent_name}.{action_name}: {error_msg}")
+            return f"### Error from {agent_name}\n{error_msg}\n"
+
+    async def _execute_with_retry(
+        self, agent, action_fn, args, workflow_id, priority, trace_id, start_time
+    ) -> tuple[bool, str, str]:
+        """Executes an action with a retry loop and loop detection."""
+        success = False
+        res = ""
+        error_msg = ""
+        max_retries = 2
+        attempts = 0
+        agent_name = getattr(agent, "agent_id", str(agent))
+        action_name = action_fn.__name__
+
+        while not success and attempts <= max_retries:
+            attempts += 1
+            if hasattr(agent, "_check_preemption"):
+                await agent._check_preemption()
+
+            action_signature = f"{agent_name}.{action_name}({args})"
+            if self.fleet.action_history.count(action_signature) >= 3:
+                msg = f"LOOP DETECTED: {action_signature} repeated 3 times."
+                import asyncio
+                try:
+                    loop = asyncio.get_running_loop()
+                    loop.create_task(self.fleet.signals.emit("LOOP_DETECTED", {"action": action_signature}, sender="FleetManager"))
+                except RuntimeError:
+                    pass
+                return False, "", msg
+
+            self.fleet.action_history.append(action_signature)
+
+            try:
+                import asyncio
+                current_model = getattr(agent, "get_model", lambda: "default")()
+                logging.info(f"Fleet (Attempt {attempts}): {action_signature} [{priority.name}]")
+
+                if asyncio.iscoroutinefunction(action_fn):
+                    res = await action_fn(*args)
+                else:
+                    loop = asyncio.get_running_loop()
+                    res = await loop.run_in_executor(None, action_fn, *args)
+
+                # Record Success
+                duration = time.time() - start_time
+                self.fleet.scaling.record_metric(agent_name, duration)
+                if self.fleet.rl_selector:
+                    self.fleet.rl_selector.update_stats(f"{agent_name}.{action_name}", success=True)
+
+                token_info = getattr(agent, "_last_token_usage", {"input": 0, "output": 0, "model": current_model})
+                await self.fleet._record_success(res, workflow_id, agent_name, action_name, args, token_info, trace_id, start_time)
+                self.fleet.telemetry.end_trace(trace_id, agent_name, action_name, status="success")
+                success = True
+            except Exception as e:
+                error_msg = str(e)
+                if self.fleet.rl_selector:
+                    self.fleet.rl_selector.update_stats(f"{agent_name}.{action_name}", success=False)
+
+                if attempts <= max_retries:
+                    await self.fleet._record_failure(f"{agent_name}.{action_name}", error_msg, "unknown")
+                    await asyncio.sleep(1.0)
+                    continue
+
+                self.fleet.telemetry.end_trace(trace_id, agent_name, action_name, status="error", metadata={"error": error_msg})
+                break
+
+        return success, res, error_msg

@@ -11,17 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """
 Autonomous Fleet Self-Improvement Loop.
 Scans the workspace for issues, applies autonomous fixes, and harvests external intelligence.
 """
+
+# ruff: noqa: E402
 
 from __future__ import annotations
 import os
@@ -73,7 +70,7 @@ class DirectiveParser:
         """Extracts @focus: folders from the directives."""
         if not self.strategic_note:
             return ["src"]
-        
+
         focus_match = re.search(
             r"@focus:\s*(\[.*?\]|.*?\n)", self.strategic_note, re.DOTALL | re.IGNORECASE
         )
@@ -94,7 +91,7 @@ class DirectiveParser:
         """Extracts and runs @cmd: markers."""
         if not self.strategic_note:
             return
-        
+
         import shlex
         cmd_matches = re.findall(r"@cmd:\s*(.*)", self.strategic_note, re.IGNORECASE)
         for cmd in cmd_matches:
@@ -114,7 +111,7 @@ class IntelligenceHarvester:
     def harvest(self) -> list[dict[str, Any]]:
         """Harvests insights from multiple external backends."""
         from src.infrastructure import backend as ai
-        
+
         prompt = "Provide 3 high-level architectural or security recommendations for a Python-based AI Agent fleet."
         lessons = []
 
@@ -144,7 +141,7 @@ class IntelligenceHarvester:
                     )
             except Exception as e:
                 logging.debug(f"Insight contribution failed: {e}")
-        
+
         return lessons
 
 class CycleOrchestrator:
@@ -161,7 +158,7 @@ class CycleOrchestrator:
         current_cycle = 0
         while True:
             current_cycle += 1
-            
+
             run_cycle(
                 self.fleet, self.root, self.logger,
                 prompt_path=self.args.prompt,
@@ -227,8 +224,8 @@ def run_cycle(
 
     # 3. Report Results
     logger.info(f" - Scanned: {combined_stats['files_scanned']}, Issues: {combined_stats['issues_found']}, Fixed: {combined_stats['fixes_applied']}")
-    
-    _report_remaining_debt(combined_stats, logger, fleet, root, prompt_path=prompt_path, model_name=model_name, current_cycle=current_cycle)
+
+    _report_remaining_debt(combined_stats, logger, fleet, root, target_dirs=target_dirs, prompt_path=prompt_path, model_name=model_name, current_cycle=current_cycle)
 
     # 4. Harvest External Intelligence
     harvester = IntelligenceHarvester(fleet, model_name)
@@ -243,9 +240,8 @@ def consult_external_models(fleet, broken_items, prompt_path=None, model_name=No
         print(f" - Analyzed {len(broken_items)} debt clusters.")
     print(" - Federated consensus reached: Continue localized refactoring.")
 
-def _report_remaining_debt(stats: dict[str, Any], logger: StructuredLogger, fleet: FleetManager, root: str, prompt_path: str | None = None, model_name: str | None = None, current_cycle: int = 1) -> None:
-    """Logs issues that were not autonomously fixed."""
-    start_time = time.time()
+def _analyze_unfixed_issues(stats: dict[str, Any]) -> list[dict[str, Any]]:
+    """Filters and summarizes issues that were not fixed."""
     broken_items = []
     for detail in stats["details"]:
         unfixed = [i for i in detail["issues"] if not i.get("fixed")]
@@ -253,138 +249,129 @@ def _report_remaining_debt(stats: dict[str, Any], logger: StructuredLogger, flee
             # Filter matches for the orchestrator itself if they are false positives
             if "run_fleet_self_improvement.py" in detail["file"]:
                 unfixed = [i for i in unfixed if "subprocess.run" not in str(i) and "time.sleep" not in str(i)]
-            
+
             if unfixed:
                 broken_items.append({"file": detail["file"], "remaining_issues": unfixed})
+    return broken_items
 
-    if broken_items:
-        logger.warning("--- Remaining Technical Debt ---")
-        for item in broken_items:
-            logger.info(f"File: {item['file']}")
-            for issue in item["remaining_issues"]:
-                logger.info(f"  - [ ] {issue.get('type') or 'Issue'}: {issue.get('detail') or issue.get('message', '')}")
-
-    logger.info("[Documentation] Generating updated docs for improvements...")
+def _update_auto_documentation(fleet: FleetManager, root: str, stats: dict[str, Any]) -> None:
+    """Updates FLEET_AUTO_DOC.md with cycle results."""
     doc_res = fleet.doc_gen_agent.extract_docs(
         os.path.join(root, "src/infrastructure/fleet/FleetManager.py")
     )
     doc_path = os.path.join(root, "docs/FLEET_AUTO_DOC.md")
-    # Using 'a' to preserve maintenance summary if it exists, or handling intelligently
+
     with open(doc_path, "w", encoding="utf-8") as f:
         f.write("# Swarm Auto-Generated Documentation\n\n")
         f.write(doc_res)
 
-    # Re-trigger maintenance log if it was overwritten
     maintenance_summary = (
         f"\n## {time.strftime('%Y-%m-%d')} - Maintenance Cycle Summary\n"
+        f"The fleet's SelfImprovementOrchestrator completed a cycle over {stats['files_scanned']} files. Re-stabilization phase engaged.\n"
     )
-    maintenance_summary += f"The fleet's SelfImprovementOrchestrator completed a cycle over {stats['files_scanned']} files. Re-stabilization phase engaged.\n"
     with open(doc_path, "a", encoding="utf-8") as f:
         f.write(maintenance_summary)
 
-    logger.info(f" - Updated documentation logged to {doc_path}")
-
-    # 4. Explainability Log
-    workflow_id = "self_improvement_01"
+def _log_explainability(fleet: FleetManager, stats: dict[str, Any]) -> None:
+    """Logs the reasoning for the improvement cycle."""
     fleet.explainability.log_reasoning_step(
-        workflow_id,
+        "self_improvement_01",
         "SelfImprovementOrchestrator",
         "run_improvement_cycle",
         "Autonomous fleet optimization maintains system health and security parity.",
         {"stats": stats},
     )
-    logger.info("Reasoning for this cycle logged to Explainability trace.")
 
-    # 5. Smart AI Recording Verification (Phase 107)
-    print("\n[Intelligence] Verifying local interaction recording...")
-    # Simulated internal AI thought to be recorded
+def _verify_ai_recording(fleet: FleetManager) -> None:
+    """Verifies that local interaction recording is functional."""
     test_prompt = "How can we optimize for a trillion parameters?"
-    test_result = (
-        "By using compressed sharding and adler32 hashing for high-speed indexing."
-    )
+    test_result = "By using compressed sharding and adler32 hashing for high-speed indexing."
     fleet.recorder.record_interaction(
         "internal_fleet_optimizer", "logic-v1", test_prompt, test_result
     )
-    print(" - Interaction archived to compressed local shard.")
 
-    # 6. External Federated Learning (Phase 112+)
-    consult_external_models(
-        fleet, broken_items, prompt_path=prompt_path, model_name=model_name
-    )
-
-    # 7. Knowledge Synthesis (Phase 108)
-    print("\n[Intelligence] Synthesizing collective knowledge...")
+def _synthesize_collective_knowledge(fleet: FleetManager) -> None:
+    """Triggers knowledge synthesis from the swarm."""
     try:
         new_patterns = fleet.intelligence.synthesize_collective_intelligence()
         if new_patterns:
-            print(
-                f" - Identified {len(new_patterns)} new actionable patterns for the next cycle."
-            )
+            print(f"\n[Intelligence] Identified {len(new_patterns)} new actionable patterns for the next cycle.")
     except Exception as e:
-        print(f" - Intelligence synthesis skipped: {e}")
+        print(f"\n[Intelligence] Synthesis skipped: {e}")
 
-    # 8. Self-Pruning Directive (Phase 135) - Auto-remove successful commands/focus
-    if prompt_path and not broken_items:
-        p_path = Path(prompt_path)
-        if not p_path.is_absolute():
-            p_path = Path(root) / prompt_path
-        if p_path.exists():
-            print(
-                f"\n[Maintenance] Area '@focus: {target_dirs}' is CLEAN. Pruning directive..."
-            )
-            content = p_path.read_text(encoding="utf-8")
+def _prune_verified_directives(prompt_path: str | None, root: str, target_dirs: list[str], broken_items: list) -> None:
+    """Removes completed directives from the prompt file."""
+    if not (prompt_path and not broken_items):
+        return
 
-            # Remove ONLY the first focus and commands that are now verified (Phase 135 fix)
+    p_path = Path(prompt_path)
+    if not p_path.is_absolute():
+        p_path = Path(root) / prompt_path
+    if not p_path.exists():
+        return
 
-            # DYNAMIC MULTI-LINE PRUNING (Phase 141)
-            new_content = re.sub(
-                r"^@focus:.*?\].*?\n",
-                "",
-                content,
-                count=1,
-                flags=re.MULTILINE | re.IGNORECASE | re.DOTALL,
-            )
-            if new_content == content:
-                # Fallback if no brackets
-                new_content = re.sub(
-                    r"^@focus:.*$\n?",
-                    "",
-                    content,
-                    count=1,
-                    flags=re.MULTILINE | re.IGNORECASE,
-                )
+    print(f"\n[Maintenance] Area '@focus: {target_dirs}' is CLEAN. Pruning directive...")
+    content = p_path.read_text(encoding="utf-8")
 
-            new_content = re.sub(
-                r"^@cmd:.*$\n?",
-                "",
-                new_content,
-                count=1,
-                flags=re.MULTILINE | re.IGNORECASE,
-            )
+    # DYNAMIC MULTI-LINE PRUNING (Phase 141)
+    new_content = re.sub(
+        r"^@focus:.*?\].*?\n",
+        "",
+        content,
+        count=1,
+        flags=re.MULTILINE | re.IGNORECASE | re.DOTALL,
+    )
+    if new_content == content:
+        new_content = re.sub(r"^@focus:.*$\n?", "", content, count=1, flags=re.MULTILINE | re.IGNORECASE)
 
-            # For python blocks, we use DOTALL so we need to be careful.
-            # We'll remove the first python block if it exists.
-            new_content = re.sub(
-                r"^@python:\s*\"\"\"(.*?)\"\"\"\n?",
-                "",
-                new_content,
-                count=1,
-                flags=re.DOTALL | re.IGNORECASE,
-            )
+    new_content = re.sub(r"^@cmd:.*$\n?", "", new_content, count=1, flags=re.MULTILINE | re.IGNORECASE)
+    new_content = re.sub(r"^@python:\s*\"\"\"(.*?)\"\"\"\n?", "", new_content, count=1, flags=re.DOTALL | re.IGNORECASE)
+    new_content = re.sub(r"^- \[x\].*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE)
+    new_content = re.sub(r"^# DONE.*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE)
 
-            # Also remove completed task markers if they exist
+    if new_content != content:
+        p_path.write_text(new_content.strip() + "\n", encoding="utf-8")
+        print(f" - Updated {p_path.name}: Verified directives REMOVED.")
 
-            new_content = re.sub(
-                r"^- \[x\].*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE
-            )
-            new_content = re.sub(
-                r"^# DONE.*$\n?", "", new_content, flags=re.MULTILINE | re.IGNORECASE
-            )
+def _report_remaining_debt(
+    stats: dict[str, Any],
+    logger: StructuredLogger,
+    fleet: FleetManager,
+    root: str,
+    target_dirs: list[str],
+    prompt_path: str | None = None,
+    model_name: str | None = None,
+    current_cycle: int = 1,
+) -> None:
+    """Logs issues that were not autonomously fixed and performs maintenance."""
+    start_time = time.time()
 
-            if new_content != content:
-                p_path.write_text(new_content.strip() + "\n", encoding="utf-8")
+    # 1. Analyze and Log Unfixed Issues
+    broken_items = _analyze_unfixed_issues(stats)
+    if broken_items:
+        logger.warning("--- Remaining Technical Debt ---")
+        for item in broken_items:
+            logger.info(f"File: {item['file']}")
+            for issue in item["remaining_issues"]:
+                logger.info(f"  - [ ] {issue.get('type', 'Issue')}: {issue.get('message', '')}")
 
-                print(f" - Updated {p_path.name}: Verified directives REMOVED.")
+    # 2. Update Documentation
+    logger.info("[Documentation] Generating updated docs for improvements...")
+    _update_auto_documentation(fleet, root, stats)
+    logger.info(" - Updated documentation logged to docs/FLEET_AUTO_DOC.md")
+
+    # 3. Observability and Recording
+    _log_explainability(fleet, stats)
+    print("\n[Intelligence] Verifying local interaction recording...")
+    _verify_ai_recording(fleet)
+    print(" - Interaction archived to compressed local shard.")
+
+    # 4. Intelligence and Synthesis
+    consult_external_models(fleet, broken_items, prompt_path=prompt_path, model_name=model_name)
+    _synthesize_collective_knowledge(fleet)
+
+    # 5. Maintenance: Pruning
+    _prune_verified_directives(prompt_path, root, target_dirs, broken_items)
 
     duration = time.time() - start_time
     print(f"\n=== CYCLE {current_cycle} COMPLETE (Time spent: {duration:.2f}s) ===")

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Rollup, query, and correlation analyzer engine.
+# Phase 16: Rust acceleration for aggregation and percentile calculations
 
 from __future__ import annotations
 import logging
@@ -12,6 +13,14 @@ from .ObservabilityCore import RollupConfig
 from .MetricsCore import StatsRollupCore, CorrelationCore
 
 logger = logging.getLogger(__name__)
+
+# Phase 16: Rust acceleration imports
+try:
+    import rust_core
+    _RUST_AVAILABLE = True
+except ImportError:
+    _RUST_AVAILABLE = False
+    logging.debug("rust_core not available, using Python fallback for RollupEngine")
 
 
 class StatsRollupCalculator:
@@ -126,29 +135,52 @@ class StatsRollup:
         if not all_values:
             return []
 
-        if config.aggregation == AggregationType.SUM:
-            result = sum(all_values)
-        elif config.aggregation == AggregationType.AVG:
-            result = sum(all_values) / len(all_values)
-        elif config.aggregation == AggregationType.MIN:
-            result = min(all_values)
-        elif config.aggregation == AggregationType.MAX:
-            result = max(all_values)
-        elif config.aggregation == AggregationType.COUNT:
-            result = float(len(all_values))
-        elif config.aggregation == AggregationType.P50:
-            sorted_vals = sorted(all_values)
+        # Phase 16: Try Rust-accelerated aggregation
+        result = None
+        if _RUST_AVAILABLE:
+            try:
+                if config.aggregation == AggregationType.SUM and hasattr(rust_core, "calculate_sum_rust"):
+                    result = rust_core.calculate_sum_rust(all_values)
+                elif config.aggregation == AggregationType.AVG and hasattr(rust_core, "calculate_avg_rust"):
+                    result = rust_core.calculate_avg_rust(all_values)
+                elif config.aggregation == AggregationType.MIN and hasattr(rust_core, "calculate_min_rust"):
+                    result = rust_core.calculate_min_rust(all_values)
+                elif config.aggregation == AggregationType.MAX and hasattr(rust_core, "calculate_max_rust"):
+                    result = rust_core.calculate_max_rust(all_values)
+                elif config.aggregation == AggregationType.P50 and hasattr(rust_core, "calculate_median_rust"):
+                    result = rust_core.calculate_median_rust(all_values)
+                elif config.aggregation == AggregationType.P95 and hasattr(rust_core, "calculate_p95_rust"):
+                    result = rust_core.calculate_p95_rust(all_values)
+                elif config.aggregation == AggregationType.P99 and hasattr(rust_core, "calculate_p99_rust"):
+                    result = rust_core.calculate_p99_rust(all_values)
+            except Exception:
+                result = None  # Fall through to Python
+        
+        # Python fallback if Rust didn't handle it
+        if result is None:
+            if config.aggregation == AggregationType.SUM:
+                result = sum(all_values)
+            elif config.aggregation == AggregationType.AVG:
+                result = sum(all_values) / len(all_values)
+            elif config.aggregation == AggregationType.MIN:
+                result = min(all_values)
+            elif config.aggregation == AggregationType.MAX:
+                result = max(all_values)
+            elif config.aggregation == AggregationType.COUNT:
+                result = float(len(all_values))
+            elif config.aggregation == AggregationType.P50:
+                sorted_vals = sorted(all_values)
 
-            result = sorted_vals[len(sorted_vals) // 2]
-        elif config.aggregation == AggregationType.P95:
-            sorted_vals = sorted(all_values)
-            result = sorted_vals[int(len(sorted_vals) * 0.95)]
-        elif config.aggregation == AggregationType.P99:
-            sorted_vals = sorted(all_values)
-            result = sorted_vals[int(len(sorted_vals) * 0.99)]
+                result = sorted_vals[len(sorted_vals) // 2]
+            elif config.aggregation == AggregationType.P95:
+                sorted_vals = sorted(all_values)
+                result = sorted_vals[int(len(sorted_vals) * 0.95)]
+            elif config.aggregation == AggregationType.P99:
+                sorted_vals = sorted(all_values)
+                result = sorted_vals[int(len(sorted_vals) * 0.99)]
 
-        else:
-            result = sum(all_values) / len(all_values)
+            else:
+                result = sum(all_values) / len(all_values)
 
         rollup_entry: dict[str, Any] = {
             "timestamp": datetime.now().isoformat(),
@@ -293,13 +325,13 @@ class CorrelationAnalyzer:
         """Find strong correlations."""
         from types import SimpleNamespace
         keys = list(self._metric_history.keys())
-        
+
         # Rust-accelerated O(N²) pairwise correlation
         try:
             from rust_core import find_strong_correlations_rust
             metric_values = [self._metric_history[k] for k in keys]
             rust_results = find_strong_correlations_rust(metric_values, threshold)
-            
+
             strong = []
             for i, j, corr in rust_results:
                 result = SimpleNamespace(
@@ -313,7 +345,7 @@ class CorrelationAnalyzer:
             return strong
         except (ImportError, Exception):
             pass  # Fall back to Python
-        
+
         # Python fallback: Re-compute pairwise for all history (O(N^2) naive)
         strong = []
         for i in range(len(keys)):

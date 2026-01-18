@@ -10,20 +10,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
 from src.core.base.AgentVerification import CodeIntegrityVerifier, CodeHealthAuditor
 import time
 import logging
-from typing import Any
+from typing import Any, TYPE_CHECKING
 from .SelfHealingCore import SelfHealingCore
+
+if TYPE_CHECKING:
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
 __version__ = VERSION
 
@@ -35,8 +33,8 @@ class SelfHealingOrchestrator:
     Uses AgentRegistry tools for re-loading failed plugins.
     """
 
-    def __init__(self, fleet_manager: Any) -> None:
-        self.fleet_manager: Any = fleet_manager
+    def __init__(self, fleet_manager: FleetManager) -> None:
+        self.fleet_manager: FleetManager = fleet_manager
         # Shell-Core separation: The core handles pure logic and state registry
         self.core = SelfHealingCore(timeout_seconds=15.0, max_errors=3)
         self.state_backups: dict[str, Any] = {}  # agent_name -> state_snapshot
@@ -73,14 +71,14 @@ class SelfHealingOrchestrator:
         """
         logging.info("Self-Healing: Running project integrity scan...")
         report = CodeIntegrityVerifier.verify_imports("src")
-        
+
         broken = report.get("broken_imports", [])
         if broken:
             for issue in broken:
                 logging.error(f"Integrity Error: {issue}")
         else:
             logging.info("Self-Healing: Project integrity scan passed.")
-            
+
         return report
 
     def run_health_audit(self) -> dict[str, Any]:
@@ -89,11 +87,11 @@ class SelfHealingOrchestrator:
         """
         logging.info("Self-Healing: Running codebase health audit...")
         audit_results = CodeHealthAuditor.audit_workspace("src")
-        
+
         # Log summary statistics
         counts = {k: len(v) for k, v in audit_results.items()}
         logging.info(f"Health Audit: {counts}")
-        
+
         return audit_results
 
     def attempt_recovery(self, agent_name: str) -> bool:

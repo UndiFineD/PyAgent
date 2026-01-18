@@ -1,7 +1,6 @@
 # Copyright 2026 PyAgent Authors
 # Assistant for indexing the workspace for vector search.
 
-import os
 from typing import List, Dict, Any, Tuple
 
 class KnowledgeIndexingAssistant:

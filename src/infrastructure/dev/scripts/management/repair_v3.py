@@ -10,12 +10,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Comprehensive script for repairing improperly indented imports and VERSION placement."""
 
@@ -28,116 +23,86 @@ __version__ = VERSION
 
 
 def fix_all() -> None:
-    """Correct import indentation and reposition VERSION imports."""
-    target_module = "src.version"
-    import_pattern = re.compile(r"^(import \w+|from [\w\.]+ import)")
-
+    """Correct import indentation and reposition VERSION imports across the workspace."""
     for root, dirs, files in os.walk(os.getcwd()):
-        if "__pycache__" in root or ".git" in root:
+        if _should_skip_dir(root):
             continue
 
         for file in files:
             if file.endswith(".py"):
-                path = os.path.join(root, file)
-                try:
-                    with open(path, encoding="utf-8") as f:
-                        lines = f.readlines()
-                except Exception:
-                    continue
+                _process_file(os.path.join(root, file))
 
-                changed = False
-                new_lines = []
-                is_inside_block = False
-                last_non_empty_indent = ""
+def _should_skip_dir(root: str) -> bool:
+    """Returns True if the directory should be skipped during repair."""
+    return "__pycache__" in root or ".git" in root or "venv" in root
 
-                for i, line in enumerate(lines):
-                    # 1. Fix the version import (SHOULD ALWAYS BE COL 0 AT TOP LEVEL)
-                    if f"from {target_module} import VERSION" in line:
-                        if not is_inside_block:
-                            if line.startswith(" ") or line.startswith("\t"):
-                                line = line.lstrip()
-                                changed = True
 
-                    # 2. Track block state
-                    ls = line.lstrip()
-                    if ls.startswith(
-                        (
-                            "def ",
-                            "class ",
-                            "try:",
-                            "except",
-                            "finally:",
-                            "if ",
-                            "for ",
-                            "while ",
-                            "with ",
-                        )
-                    ):
-                        is_inside_block = True
+def _process_file(path: str) -> None:
+    """Reads a file, repairs its content if necessary, and writes back."""
+    try:
+        with open(path, encoding="utf-8") as f:
+            lines = f.readlines()
+    except Exception:
+        return
 
-                    # Keep track of indentation for non-empty lines
-                    m = re.match(r"^(\s+)", line)
-                    if m and line.strip():
-                        last_non_empty_indent = m.group(1)
+    new_lines, changed = _repair_module_content(lines)
 
-                    # 3. Fix imports at col 0 that should be indented
-                    if is_inside_block and import_pattern.match(line):
-                        # Guess indent
-                        indent = ""
-                        # Look back for indent
-                        for j in range(i - 1, -1, -1):
-                            if lines[j].strip() and (
-                                lines[j].startswith(" ") or lines[j].startswith("\t")
-                            ):
-                                m = re.match(r"^(\s+)", lines[j])
-                                if m:
-                                    indent = m.group(1)
-                                    break
-                        if not indent:
-                            # Look forward
-                            for j in range(i + 1, min(i + 10, len(lines))):
-                                if lines[j].strip() and (
-                                    lines[j].startswith(" ")
-                                    or lines[j].startswith("\t")
-                                ):
-                                    m = re.match(r"^(\s+)", lines[j])
-                                    if m:
-                                        indent = m.group(1)
-                                        break
-                        if not indent:
-                            indent = last_non_empty_indent or "    "
+    if changed:
+        with open(path, "w", encoding="utf-8") as f:
+            f.writelines(new_lines)
+        print(f"Repaired: {path}")
 
-                        line = indent + line
-                        changed = True
 
-                    # Reset block state if we see a code line at col 0 that isn't a block keyword or comment
-                    if line.strip() and not (
-                        line.startswith(" ") or line.startswith("\t")
-                    ):
-                        if not line.startswith(("#", "import", "from")):
-                            # Check if it starts a new block
+def _repair_module_content(lines: list[str]) -> tuple[list[str], bool]:
+    """Applies repair logic to a list of lines."""
+    target_module = "src.version"
+    import_pattern = re.compile(r"^(import \w+|from [\w\.]+ import)")
+    changed = False
+    new_lines = []
+    is_inside_block = False
+    last_non_empty_indent = ""
 
-                            if not line.startswith(
-                                (
-                                    "def ",
-                                    "class ",
-                                    "try:",
-                                    "except",
-                                    "finally:",
-                                    "if ",
-                                    "for ",
-                                    "while ",
-                                    "with ",
-                                )
-                            ):
-                                is_inside_block = False
+    for i, line in enumerate(lines):
+        # 1. Fix version import indentation
+        if f"from {target_module} import VERSION" in line:
+            if not is_inside_block and (line.startswith(" ") or line.startswith("\t")):
+                line = line.lstrip()
+                changed = True
 
-                    new_lines.append(line)
+        # 2. Track block state
+        ls = line.lstrip()
+        if ls.startswith(("def ", "class ", "try:", "except", "if ", "for ", "with ")):
+            is_inside_block = True
 
-                if changed:
-                    with open(path, "w", encoding="utf-8") as f:
-                        f.writelines(new_lines)
-                    print(f"Fixed {path}")
+        # Keep track of indentation
+        m = re.match(r"^(\s+)", line)
+        if m and line.strip():
+            last_non_empty_indent = m.group(1)
+
+        # 3. Fix misplaced imports
+        if is_inside_block and import_pattern.match(line):
+            indent = _guess_indent(lines, i) or last_non_empty_indent or "    "
+            line = indent + line.lstrip()
+            changed = True
+
+        new_lines.append(line)
+
+    return new_lines, changed
+
+
+def _guess_indent(lines: list[str], index: int) -> str | None:
+    """Look back and forward to guess the correct indentation level."""
+    for j in range(index - 1, -1, -1):
+        if lines[j].strip():
+            m = re.match(r"^(\s+)", lines[j])
+            if m:
+                return m.group(1)
+    for j in range(index + 1, min(index + 10, len(lines))):
+        if lines[j].strip():
+            m = re.match(r"^(\s+)", lines[j])
+            if m:
+                return m.group(1)
+    return None
 
 
 if __name__ == "__main__":

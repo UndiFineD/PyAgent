@@ -25,5 +25,5 @@ class LockManager:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"LockManager initialized (Placeholder).")
+        logging.info("LockManager initialized (Placeholder).")
 

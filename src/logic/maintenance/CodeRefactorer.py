@@ -25,5 +25,5 @@ class CodeRefactorer:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"CodeRefactorer initialized (Placeholder).")
+        logging.info("CodeRefactorer initialized (Placeholder).")
 

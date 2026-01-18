@@ -10,28 +10,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
+from src.core.base.BaseAgent import BaseAgent
 import time
 from typing import Any
 
 __version__ = VERSION
 
 
-class ConsensusConflictAgent:
+class ConsensusConflictAgent(BaseAgent):
     """
-    Arbitrates disagreements and resolves conflicts between agents in the swarm.
-    Uses voting systems and consensus mechanisms to reach a final decision.
+    Tier 2 (Cognitive Logic) - Consensus Conflict Agent: Arbitrates disagreements 
+    and resolves conflicts between agents in the swarm using voting systems.
     """
 
     def __init__(self, workspace_path: str) -> None:
+        super().__init__(workspace_path)
         self.workspace_path = workspace_path
         self.active_disputes: dict[
             Any, Any

@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """QuantumShardOrchestrator for PyAgent.
 Simulates non-local state synchronization (Quantum Entanglement pattern).
@@ -37,14 +32,19 @@ __version__ = VERSION
 
 
 class QuantumShardOrchestrator(BaseAgent):
-    """Simulates distributed quantum-sharded state management."""
+    """
+    Simulates distributed quantum-sharded state management.
+
+    Part of Tier 3 (Infrastructure) architecture, providing non-local consistency
+    for high-latency distributed environments.
+    """
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.shard_id = str(uuid.uuid4())[:8]
+        self.shard_id: str = str(uuid.uuid4())[:8]
         self.shared_state: dict[str, Any] = {}
-        self.state_file = Path("data/memory/agent_store/quantum_state.json")
-        self._system_prompt = (
+        self.state_file: Path = Path("data/memory/agent_store/quantum_state.json")
+        self._system_prompt: str = (
             "You are the Quantum Shard Orchestrator. You ensure non-local state consistency. "
             "When a variable is updated in one shard, it is instantly reflected across the "
             "entire 'entangled' network."
@@ -53,10 +53,12 @@ class QuantumShardOrchestrator(BaseAgent):
     def _sync_to_disk(self) -> None:
         """Simulates 'instant' broadcast by writing to a shared file (the 'quantum field')."""
         try:
-            current_field = {}
+            current_field: dict[str, Any] = {}
             if self.state_file.exists():
                 with open(self.state_file) as f:
-                    current_field = json.load(f)
+                    content = f.read()
+                    if content:
+                        current_field = json.loads(content)
 
             current_field.update(self.shared_state)
 

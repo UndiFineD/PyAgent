@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
@@ -57,6 +52,8 @@ class VllmBackend(LLMBackend):
         }
 
         timeout_s = kwargs.get("timeout_s", 60)
+        import time
+        start_t = time.time()
 
         try:
             response = self.session.post(
@@ -67,7 +64,10 @@ class VllmBackend(LLMBackend):
             )
             response.raise_for_status()
             content = response.json()["choices"][0]["message"]["content"]
-            self._record("vllm", model, prompt, content, system_prompt=system_prompt)
+            latency = time.time() - start_t
+            self._record(
+                "vllm", model, prompt, content, system_prompt=system_prompt, latency_s=latency
+            )
             self._update_status("vllm", True)
             return content
         except Exception as e:
@@ -75,6 +75,11 @@ class VllmBackend(LLMBackend):
             logging.debug(f"vLLM call failed: {e}")
             self._update_status("vllm", False)
             self._record(
-                "vllm", model, prompt, f"ERROR: {str(e)}", system_prompt=system_prompt
+                "vllm",
+                model,
+                prompt,
+                f"ERROR: {str(e)}",
+                system_prompt=system_prompt,
+                latency_s=time.time() - start_t,
             )
             return ""

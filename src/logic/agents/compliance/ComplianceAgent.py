@@ -8,7 +8,6 @@ from typing import Any
 try:
     from src.logic.agents.compliance.core.ComplianceCore import (
         ComplianceCore,
-        ComplianceIssue,
     )
 except ImportError:
     # If core doesn't exist yet, we might need to mock or it is in a different place
@@ -36,6 +35,7 @@ class ComplianceAgent(BaseAgent):
         if not self.core:
             return {"status": "ERROR", "message": "ComplianceCore missing"}
 
+        all_issues = []
         for path, content in file_map.items():
             issues = self.core.audit_content(content, path)
             all_issues.extend(issues)

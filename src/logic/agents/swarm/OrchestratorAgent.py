@@ -25,5 +25,5 @@ class OrchestratorAgent:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"OrchestratorAgent initialized (Placeholder).")
+        logging.info("OrchestratorAgent initialized (Placeholder).")
 
