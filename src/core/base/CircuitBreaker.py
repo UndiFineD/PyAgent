@@ -23,7 +23,7 @@ import asyncio
 from typing import Any
 from collections.abc import Callable
 from src.core.base.core.ResilienceCore import ResilienceCore
-from src.observability.stats.Exporters import OTelManager
+from src.observability.stats.exporters import OTelManager
 
 __version__ = VERSION
 
