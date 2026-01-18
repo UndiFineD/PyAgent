@@ -24,10 +24,10 @@ from src.logic.agents.cognitive.core.LocalRAGCore import LocalRAGCore, RAGShard
 from pathlib import Path
 import logging
 
-from .ContextTemplateMixin import ContextTemplateMixin, DEFAULT_TEMPLATES
-from .ContextTaggingMixin import ContextTaggingMixin
-from .ContextVersioningMixin import ContextVersioningMixin
-from .ContextValidationMixin import ContextValidationMixin, DEFAULT_VALIDATION_RULES
+from src.logic.agents.cognitive.ContextTemplateMixin import ContextTemplateMixin, DEFAULT_TEMPLATES
+from src.logic.agents.cognitive.ContextTaggingMixin import ContextTaggingMixin
+from src.logic.agents.cognitive.ContextVersioningMixin import ContextVersioningMixin
+from src.logic.agents.cognitive.ContextValidationMixin import ContextValidationMixin, DEFAULT_VALIDATION_RULES
 from .ContextAnnotationMixin import ContextAnnotationMixin
 from .ContextCategorizationMixin import ContextCategorizationMixin
 from .ContextRAGMixin import ContextRAGMixin
