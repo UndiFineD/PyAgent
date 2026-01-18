@@ -67,6 +67,7 @@ class KVTransferMode(Enum):
     PUSH = auto()      # Producer pushes to consumer (async)
     PULL = auto()      # Consumer pulls from producer (sync)
     HYBRID = auto()    # Adaptive based on network conditions
+    LATENT = auto()    # Latent-space synaptic transfer (arXiv:2601.06123)
 
 
 @dataclass
