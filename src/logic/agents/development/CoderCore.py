@@ -25,13 +25,13 @@ from src.core.base.types.CodeMetrics import CodeMetrics
 from src.core.base.types.StyleRule import StyleRule
 from src.core.base.types.StyleRuleSeverity import StyleRuleSeverity
 from src.core.base.AgentCore import LogicCore
-from .mixins.CoderMetricsMixin import CoderMetricsMixin
-from .mixins.CoderStyleMixin import CoderStyleMixin
-from .mixins.CoderSmellMixin import CoderSmellMixin
-from .mixins.CoderDuplicationMixin import CoderDuplicationMixin
-from .mixins.CoderQualityMixin import CoderQualityMixin
-from .mixins.CoderDocMixin import CoderDocMixin
-from .mixins.CoderValidationMixin import CoderValidationMixin
+from src.logic.agents.development.mixins.CoderMetricsMixin import CoderMetricsMixin
+from src.logic.agents.development.mixins.CoderStyleMixin import CoderStyleMixin
+from src.logic.agents.development.mixins.CoderSmellMixin import CoderSmellMixin
+from src.logic.agents.development.mixins.CoderDuplicationMixin import CoderDuplicationMixin
+from src.logic.agents.development.mixins.CoderQualityMixin import CoderQualityMixin
+from src.logic.agents.development.mixins.CoderDocMixin import CoderDocMixin
+from src.logic.agents.development.mixins.CoderValidationMixin import CoderValidationMixin
 import ast
 
 __version__ = VERSION

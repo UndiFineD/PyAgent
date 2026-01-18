@@ -48,6 +48,10 @@ class SlotMapping:
     def compute_slot(self, block_idx: int, offset: int) -> int:
         return block_idx * self.block_size + offset
     
+    def decode_slot(self, slot: int) -> tuple[int, int]:
+        """Decode slot into (block_idx, block_offset)."""
+        return divmod(slot, self.block_size)
+    
     def map_sequence_slots(self, block_table: list[int], seq_len: int) -> np.ndarray:
         slots = np.zeros(seq_len, dtype=np.int64)
         for i in range(seq_len):

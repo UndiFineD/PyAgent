@@ -862,6 +862,9 @@ def estimate_token_count(text: str, model_name: Optional[str] = None) -> int:
     
     Uses Rust acceleration when available.
     """
+    if not text:
+        return 0
+        
     try:
         import rust_core
         return rust_core.estimate_tokens_rust(text)

@@ -35,6 +35,10 @@ class OrchestrationMixin:
     def strategy(self, value: Any) -> None:
         self._strategy = value
 
+    def set_strategy(self, strategy: Any) -> None:
+        """Sets the execution strategy for the agent."""
+        self._strategy = strategy
+
     def register_tools(self, registry: Any) -> None:
         if not registry:
             return
@@ -73,12 +77,12 @@ class OrchestrationMixin:
                 raise CycleInterrupt(reason)
 
         try:
-            from src.infrastructure import backend as ab
+            from src.infrastructure.backend import ExecutionEngine as ab
         except ImportError:
             import sys
             from pathlib import Path
             sys.path.append(str(Path(__file__).parent.parent.parent.parent))
-            from src.infrastructure import backend as ab
+            from src.infrastructure.backend import ExecutionEngine as ab
 
         import asyncio
         result: str | None = await asyncio.to_thread(
@@ -89,10 +93,42 @@ class OrchestrationMixin:
              self.quotas.update_usage(len(prompt) // 4, len(result) // 4)
 
         if result is None:
+            if original_content:
+                return original_content
             if hasattr(self, "_get_fallback_response"):
                 return self._get_fallback_response()
             return original_content
         return result
+
+    async def improve_content(self, prompt: str) -> str:
+        """Improve content using a subagent (respected strategy if set)."""
+        description = (
+            f"Improve {self.file_path.name}"
+            if hasattr(self, "file_path")
+            else "Improve content"
+        )
+        original = getattr(self, "previous_content", "")
+
+        curr_strategy = self.strategy
+        if curr_strategy:
+
+            async def backend_call(
+                p: str,
+                sp: str | None = None,
+                h: list[dict[str, str]] | None = None,
+            ) -> str:
+                # We ignore sp and h for now as run_subagent doesn't support them yet
+                # but they could be injected into the prompt if needed.
+                return await self.run_subagent(description, p, original)
+
+            return await curr_strategy.execute(
+                prompt,
+                original,
+                backend_call,
+                system_prompt=getattr(self, "_system_prompt", None),
+            )
+
+        return await self.run_subagent(description, prompt, original)
 
     @staticmethod
     def get_backend_status() -> dict[str, Any]:
