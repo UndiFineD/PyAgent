@@ -1,8 +1,18 @@
 """Pytest fixtures for test_agent tests."""
 
 import pytest
+import os
 from pathlib import Path
 from typing import Any, Optional
+
+# Ensure git is in PATH for tests on Windows
+for possible_git in [
+    r"C:\Program Files\Git\cmd",
+    r"C:\Program Files (x86)\Git\cmd",
+    os.path.join(os.environ.get("LOCALAPPDATA", ""), "Programs", "Git", "cmd")
+]:
+    if os.path.exists(possible_git) and possible_git not in os.environ["PATH"]:
+        os.environ["PATH"] = possible_git + os.pathsep + os.environ["PATH"]
 
 from tests.utils.agent_test_utils import agent_dir_on_path, load_agent_module
 
@@ -15,7 +25,7 @@ def agent_module() -> Any:
 
         # Configuration for legacy injections
         injections = [
-            ("src.core.base.models.CoreEnums", ["AgentExecutionState", "ConfigFormat", "DiffOutputFormat", "HealthStatus", "LockType", "RateLimitStrategy"]),
+            ("src.core.base.models.CoreEnums", ["AgentExecutionState", "AgentPriority", "ConfigFormat", "DiffOutputFormat", "HealthStatus", "LockType", "RateLimitStrategy"]),
             ("src.core.base.utils.AgentPriorityQueue", ["AgentPriorityQueue"]),
             ("src.core.base.utils.ValidationRuleManager", ["ValidationRuleManager"]),
             ("src.core.base.utils.TelemetryCollector", ["TelemetryCollector"]),
@@ -31,7 +41,7 @@ def agent_module() -> Any:
             ("src.core.base.ConfigLoader", ["ConfigLoader"]),
             ("src.core.base.GracefulShutdown", ["GracefulShutdown"]),
             ("src.core.base.IncrementalProcessor", ["IncrementalProcessor"]),
-            ("src.core.base.BaseManagers.SystemManagers", ["ProfileManager", "HealthChecker"]),
+            ("src.core.base.managers.SystemManagers", ["ProfileManager", "HealthChecker"]),
             ("src.logic.agents.development.GitBranchProcessor", ["GitBranchProcessor"]),
             ("src.logic.orchestration.AgentChain", ["AgentChain"]),
             ("src.core.base.models.FleetModels", ["IncrementalState", "RateLimitConfig", "ShutdownState"]),
@@ -87,10 +97,13 @@ def _create_legacy_validation_rule_shim(real_cls: Any) -> Any:
     class TestValidationRule:
         def __init__(self, name, pattern="", message="Validation failed", severity="error", **kwargs):
             self.name = name
-            self.pattern = pattern or kwargs.get("file_pattern", "")
+            self.file_pattern = pattern or kwargs.get("file_pattern", "")
+            self.pattern = self.file_pattern
             self.message = message or kwargs.get("error_message", "Validation failed")
-            self.severity = severity
             self.error_message = self.message
+            self.severity = severity
+            self.validator = kwargs.get("validator")
+            self.kwargs = kwargs
     return TestValidationRule
 
 
@@ -108,7 +121,11 @@ def _inject_legacy_agent_wrapper(mod: Any) -> None:
     """Injects the LegacyAgentWrapper into the module if BaseAgent is present."""
     if hasattr(mod, "BaseAgent"):
         from tests.utils.LegacySupport import create_legacy_agent_wrapper
-        mod.Agent = create_legacy_agent_wrapper(mod.BaseAgent)
+        # Create wrapper that inherits from the current BaseAgent
+        LegacyAgent = create_legacy_agent_wrapper(mod.BaseAgent)
+        mod.Agent = LegacyAgent
+        # Also alias BaseAgent to the wrapper for legacy tests that use mod.BaseAgent
+        mod.BaseAgent = LegacyAgent
 
 
 @pytest.fixture

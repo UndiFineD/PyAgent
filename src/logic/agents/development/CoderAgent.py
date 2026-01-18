@@ -25,10 +25,10 @@ from src.core.base.types.RefactoringPattern import RefactoringPattern
 from src.core.base.types.StyleRule import StyleRule
 from src.logic.agents.development.CoderCore import CoderCore, DEFAULT_PYTHON_STYLE_RULES
 from src.core.base.BaseAgent import BaseAgent
-from .mixins.agent.AgentLanguageMixin import AgentLanguageMixin
-from .mixins.agent.AgentStyleMixin import AgentStyleMixin
-from .mixins.agent.AgentMetricsMixin import AgentMetricsMixin
-from .mixins.agent.AgentRefactorMixin import AgentRefactorMixin
+from src.logic.agents.development.mixins.agent.AgentLanguageMixin import AgentLanguageMixin
+from src.logic.agents.development.mixins.agent.AgentStyleMixin import AgentStyleMixin
+from src.logic.agents.development.mixins.agent.AgentMetricsMixin import AgentMetricsMixin
+from src.logic.agents.development.mixins.agent.AgentRefactorMixin import AgentRefactorMixin
 from pathlib import Path
 import logging
 

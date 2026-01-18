@@ -20,9 +20,9 @@ Inspired by the Handy pattern (Rust terminal agent) and GitHub Copilot CLI.
 from __future__ import annotations
 from src.core.base.Version import VERSION
 from pathlib import Path
-from .mixins.HandyFileSystemMixin import HandyFileSystemMixin
-from .mixins.HandyTerminalMixin import HandyTerminalMixin
-from .mixins.HandyCoreMixin import HandyCoreMixin
+from src.logic.agents.development.mixins.HandyFileSystemMixin import HandyFileSystemMixin
+from src.logic.agents.development.mixins.HandyTerminalMixin import HandyTerminalMixin
+from src.logic.agents.development.mixins.HandyCoreMixin import HandyCoreMixin
 from src.core.base.BaseAgent import BaseAgent
 from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
 
