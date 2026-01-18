@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
@@ -60,6 +55,7 @@ class LLMBackend(ABC):
         prompt: str,
         result: str,
         system_prompt: str = "",
+        latency_s: float | None = None,
     ) -> None:
         if self.recorder:
             try:
@@ -68,6 +64,7 @@ class LLMBackend(ABC):
                 meta = {
                     "system_prompt": system_prompt,
                     "phase": 120,
+                    "latency_s": latency_s,
                     "timestamp_unix": time.time(),
                 }
                 self.recorder.record_interaction(

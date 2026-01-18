@@ -1,0 +1,446 @@
+"""
+UsageMessage - Structured telemetry for platform detection and async reporting.
+
+Inspired by vLLM's UsageMessage pattern for collecting environment information
+and reporting usage statistics with privacy-respecting opt-out support.
+
+Phase 24: Advanced Observability & Parsing
+"""
+
+from __future__ import annotations
+
+import os
+import platform
+import sys
+import time
+from dataclasses import dataclass, field
+from datetime import datetime, timezone
+from enum import Enum
+from pathlib import Path
+from threading import Thread
+from typing import Any
+from uuid import uuid4
+
+# ============================================================================
+# Constants and configuration
+# ============================================================================
+
+_CONFIG_HOME = os.environ.get("PYAGENT_CONFIG_ROOT", str(Path.home() / ".config" / "pyagent"))
+_USAGE_STATS_JSON_PATH = os.path.join(_CONFIG_HOME, "usage_stats.json")
+_DO_NOT_TRACK_PATH = os.path.join(_CONFIG_HOME, "do_not_track")
+_USAGE_STATS_ENABLED: bool | None = None
+
+# Environment variables to collect
+_ENV_VARS_TO_COLLECT = [
+    "PYAGENT_MODEL_BACKEND",
+    "PYAGENT_LOG_LEVEL",
+    "PYAGENT_FLEET_SIZE",
+    "PYAGENT_CACHE_DIR",
+]
+
+# Global runtime data
+_GLOBAL_RUNTIME_DATA: dict[str, str | int | bool] = {}
+
+
+class UsageContext(str, Enum):
+    """Context in which PyAgent is being used."""
+    UNKNOWN = "UNKNOWN"
+    CLI = "CLI"
+    API_SERVER = "API_SERVER"
+    FLEET_ORCHESTRATION = "FLEET_ORCHESTRATION"
+    AGENT_TASK = "AGENT_TASK"
+    TESTING = "TESTING"
+
+
+# ============================================================================
+# Global runtime data management
+# ============================================================================
+
+def set_runtime_usage_data(key: str, value: str | int | bool) -> None:
+    """
+    Set global usage data to include in telemetry.
+    
+    Args:
+        key: Data key
+        value: Data value
+    """
+    _GLOBAL_RUNTIME_DATA[key] = value
+
+
+def get_runtime_usage_data() -> dict[str, str | int | bool]:
+    """Get all global runtime usage data."""
+    return _GLOBAL_RUNTIME_DATA.copy()
+
+
+def clear_runtime_usage_data() -> None:
+    """Clear all global runtime usage data."""
+    _GLOBAL_RUNTIME_DATA.clear()
+
+
+# ============================================================================
+# Opt-out checking
+# ============================================================================
+
+def is_usage_stats_enabled() -> bool:
+    """
+    Check if usage statistics collection is enabled.
+    
+    Respects the following opt-out mechanisms:
+    - PYAGENT_DO_NOT_TRACK=1
+    - DO_NOT_TRACK=1
+    - PYAGENT_NO_USAGE_STATS=1
+    - ~/.config/pyagent/do_not_track file exists
+    
+    Returns:
+        True if usage stats are enabled, False otherwise
+    """
+    global _USAGE_STATS_ENABLED
+    
+    if _USAGE_STATS_ENABLED is None:
+        do_not_track = os.environ.get("PYAGENT_DO_NOT_TRACK", "0") == "1"
+        generic_do_not_track = os.environ.get("DO_NOT_TRACK", "0") == "1"
+        no_usage_stats = os.environ.get("PYAGENT_NO_USAGE_STATS", "0") == "1"
+        do_not_track_file = os.path.exists(_DO_NOT_TRACK_PATH)
+        
+        _USAGE_STATS_ENABLED = not any([
+            do_not_track,
+            generic_do_not_track,
+            no_usage_stats,
+            do_not_track_file,
+        ])
+    
+    return _USAGE_STATS_ENABLED
+
+
+def disable_usage_stats() -> None:
+    """Programmatically disable usage stats collection."""
+    global _USAGE_STATS_ENABLED
+    _USAGE_STATS_ENABLED = False
+
+
+def enable_usage_stats() -> None:
+    """Programmatically enable usage stats collection."""
+    global _USAGE_STATS_ENABLED
+    _USAGE_STATS_ENABLED = True
+
+
+# ============================================================================
+# Platform detection
+# ============================================================================
+
+def detect_cloud_provider() -> str:
+    """
+    Detect the cloud provider where the code is running.
+    
+    Returns:
+        Cloud provider name or "UNKNOWN"
+    """
+    # Check vendor files (Linux)
+    vendor_files = [
+        "/sys/class/dmi/id/product_version",
+        "/sys/class/dmi/id/bios_vendor",
+        "/sys/class/dmi/id/product_name",
+        "/sys/class/dmi/id/chassis_asset_tag",
+        "/sys/class/dmi/id/sys_vendor",
+    ]
+    
+    cloud_identifiers = {
+        "amazon": "AWS",
+        "microsoft corporation": "AZURE",
+        "google": "GCP",
+        "oraclecloud": "OCI",
+        "digitalocean": "DIGITALOCEAN",
+        "linode": "LINODE",
+        "vultr": "VULTR",
+    }
+    
+    for vendor_file in vendor_files:
+        try:
+            if os.path.isfile(vendor_file):
+                with open(vendor_file, "r") as f:
+                    content = f.read().lower()
+                    for identifier, provider in cloud_identifiers.items():
+                        if identifier in content:
+                            return provider
+        except (IOError, PermissionError):
+            continue
+    
+    # Check environment variables
+    env_to_provider = {
+        "AWS_REGION": "AWS",
+        "AWS_EXECUTION_ENV": "AWS",
+        "AZURE_HTTP_USER_AGENT": "AZURE",
+        "GOOGLE_CLOUD_PROJECT": "GCP",
+        "RUNPOD_DC_ID": "RUNPOD",
+        "LAMBDA_LABS_ENV": "LAMBDA",
+    }
+    
+    for env_var, provider in env_to_provider.items():
+        if os.environ.get(env_var):
+            return provider
+    
+    return "UNKNOWN"
+
+
+def get_cpu_info() -> dict[str, Any]:
+    """
+    Get CPU information.
+    
+    Returns:
+        Dictionary with CPU details
+    """
+    try:
+        import cpuinfo
+        info = cpuinfo.get_cpu_info()
+        return {
+            "brand": info.get("brand_raw", "Unknown"),
+            "count": info.get("count", os.cpu_count()),
+            "arch": info.get("arch", platform.machine()),
+            "bits": info.get("bits", 64),
+        }
+    except ImportError:
+        return {
+            "brand": "Unknown",
+            "count": os.cpu_count(),
+            "arch": platform.machine(),
+            "bits": 64,
+        }
+
+
+def get_gpu_info() -> dict[str, Any]:
+    """
+    Get GPU information if available.
+    
+    Returns:
+        Dictionary with GPU details or empty dict
+    """
+    try:
+        import torch
+        if torch.cuda.is_available():
+            return {
+                "count": torch.cuda.device_count(),
+                "name": torch.cuda.get_device_name(0),
+                "memory": torch.cuda.get_device_properties(0).total_memory,
+                "cuda_version": torch.version.cuda,
+            }
+    except ImportError:
+        pass
+    
+    return {}
+
+
+def get_memory_info() -> dict[str, int]:
+    """
+    Get system memory information.
+    
+    Returns:
+        Dictionary with memory details in bytes
+    """
+    try:
+        import psutil
+        mem = psutil.virtual_memory()
+        return {
+            "total": mem.total,
+            "available": mem.available,
+            "used": mem.used,
+        }
+    except ImportError:
+        return {}
+
+
+# ============================================================================
+# Usage message dataclass
+# ============================================================================
+
+@dataclass
+class UsageMessage:
+    """
+    Structured usage telemetry message.
+    
+    Collects platform information and reports it asynchronously.
+    """
+    
+    # Unique identifier for this session
+    uuid: str = field(default_factory=lambda: str(uuid4()))
+    
+    # Environment information
+    provider: str | None = None
+    num_cpu: int | None = None
+    cpu_type: str | None = None
+    total_memory: int | None = None
+    architecture: str | None = None
+    platform_name: str | None = None
+    python_version: str | None = None
+    
+    # GPU information
+    gpu_count: int | None = None
+    gpu_type: str | None = None
+    gpu_memory: int | None = None
+    cuda_version: str | None = None
+    
+    # Application information
+    app_version: str | None = None
+    context: str | None = None
+    
+    # Metadata
+    log_time: int | None = None
+    source: str = "pyagent"
+    
+    # Collected environment variables (JSON string)
+    env_var_json: str | None = None
+    
+    def collect_environment_info(self) -> None:
+        """Collect all environment information."""
+        # Platform
+        self.provider = detect_cloud_provider()
+        self.architecture = platform.machine()
+        self.platform_name = platform.system()
+        self.python_version = platform.python_version()
+        
+        # CPU
+        cpu_info = get_cpu_info()
+        self.num_cpu = cpu_info.get("count")
+        self.cpu_type = cpu_info.get("brand")
+        
+        # Memory
+        mem_info = get_memory_info()
+        self.total_memory = mem_info.get("total")
+        
+        # GPU
+        gpu_info = get_gpu_info()
+        if gpu_info:
+            self.gpu_count = gpu_info.get("count")
+            self.gpu_type = gpu_info.get("name")
+            self.gpu_memory = gpu_info.get("memory")
+            self.cuda_version = gpu_info.get("cuda_version")
+        
+        # Environment variables
+        import json
+        env_data = {
+            var: os.environ.get(var)
+            for var in _ENV_VARS_TO_COLLECT
+            if os.environ.get(var)
+        }
+        if env_data:
+            self.env_var_json = json.dumps(env_data)
+    
+    def report_usage(
+        self,
+        context: UsageContext,
+        app_version: str = "unknown",
+        extra_kvs: dict[str, Any] | None = None,
+    ) -> None:
+        """
+        Report usage asynchronously in background thread.
+        
+        Args:
+            context: Usage context
+            app_version: Application version
+            extra_kvs: Extra key-value pairs to include
+        """
+        if not is_usage_stats_enabled():
+            return
+        
+        thread = Thread(
+            target=self._report_usage_worker,
+            args=(context, app_version, extra_kvs or {}),
+            daemon=True,
+        )
+        thread.start()
+    
+    def _report_usage_worker(
+        self,
+        context: UsageContext,
+        app_version: str,
+        extra_kvs: dict[str, Any],
+    ) -> None:
+        """Background worker for usage reporting."""
+        try:
+            self.context = context.value
+            self.app_version = app_version
+            self.log_time = int(datetime.now(timezone.utc).timestamp() * 1e9)
+            
+            # Collect environment info
+            self.collect_environment_info()
+            
+            # Save locally (no external reporting by default)
+            self._save_local_stats(extra_kvs)
+            
+        except Exception:
+            # Never fail due to telemetry
+            pass
+    
+    def _save_local_stats(self, extra_kvs: dict[str, Any]) -> None:
+        """Save usage stats to local file."""
+        import json
+        
+        data = self.to_dict()
+        data.update(extra_kvs)
+        data.update(_GLOBAL_RUNTIME_DATA)
+        
+        try:
+            os.makedirs(os.path.dirname(_USAGE_STATS_JSON_PATH), exist_ok=True)
+            with open(_USAGE_STATS_JSON_PATH, "w") as f:
+                json.dump(data, f, indent=2)
+        except (IOError, PermissionError):
+            pass
+    
+    def to_dict(self) -> dict[str, Any]:
+        """Convert to dictionary, excluding None values."""
+        return {
+            k: v for k, v in {
+                "uuid": self.uuid,
+                "provider": self.provider,
+                "num_cpu": self.num_cpu,
+                "cpu_type": self.cpu_type,
+                "total_memory": self.total_memory,
+                "architecture": self.architecture,
+                "platform": self.platform_name,
+                "python_version": self.python_version,
+                "gpu_count": self.gpu_count,
+                "gpu_type": self.gpu_type,
+                "gpu_memory": self.gpu_memory,
+                "cuda_version": self.cuda_version,
+                "app_version": self.app_version,
+                "context": self.context,
+                "log_time": self.log_time,
+                "source": self.source,
+                "env_var_json": self.env_var_json,
+            }.items() if v is not None
+        }
+
+
+# ============================================================================
+# Convenience functions
+# ============================================================================
+
+def report_usage(
+    context: UsageContext = UsageContext.UNKNOWN,
+    app_version: str = "unknown",
+    **extra_kvs: Any,
+) -> None:
+    """
+    Report usage telemetry.
+    
+    This is a convenience function that creates a UsageMessage
+    and reports it asynchronously.
+    
+    Args:
+        context: Usage context
+        app_version: Application version
+        **extra_kvs: Extra key-value pairs
+    """
+    msg = UsageMessage()
+    msg.report_usage(context, app_version, extra_kvs)
+
+
+def get_platform_summary() -> dict[str, Any]:
+    """
+    Get a summary of the current platform.
+    
+    Returns:
+        Dictionary with platform information
+    """
+    msg = UsageMessage()
+    msg.collect_environment_info()
+    return msg.to_dict()

@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 # Orchestration Mixin for BaseAgent
-from typing import Any, Optional
-import logging
+from typing import Any
 
 class OrchestrationMixin:
     """Handles registry, tools, strategies, and distributed logging."""
-    
+
     def __init__(self, **kwargs: Any) -> None:
         self.fleet: Any = None
         self._strategy: Any = None
-        
+
         try:
             from src.infrastructure.orchestration.signals.SignalRegistry import SignalRegistry
             self.registry = SignalRegistry()
@@ -85,7 +84,7 @@ class OrchestrationMixin:
         result: str | None = await asyncio.to_thread(
             ab.run_subagent, description, prompt, original_content
         )
-        
+
         if hasattr(self, "quotas") and result:
              self.quotas.update_usage(len(prompt) // 4, len(result) // 4)
 

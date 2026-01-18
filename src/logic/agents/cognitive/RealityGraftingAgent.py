@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
@@ -29,8 +24,8 @@ __version__ = VERSION
 
 class RealityGraftingAgent(BaseAgent):
     """
-    Phase 34: Reality Grafting.
-    Automatically 'grafts' successful logic paths from DreamState simulations into production.
+    Tier 2 (Cognitive Logic) - Reality Grafting Agent: Integrates successful 
+    logic paths from simulations and experimental shards into production codebases.
     """
 
     def __init__(self, file_path: str) -> None:

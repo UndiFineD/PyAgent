@@ -1,0 +1,171 @@
+C901 `fix_all` is too complex (25 > 24)
+  --> src\infrastructure\dev\scripts\management\repair_v3.py:30:5
+   |
+30 | def fix_all() -> None:
+   |     ^^^^^^^
+31 |     """Correct import indentation and reposition VERSION imports."""
+32 |     target_module = "src.version"
+   |
+
+C901 `call_by_capability` is too complex (25 > 24)
+  --> src\infrastructure\fleet\FleetRoutingCore.py:33:15
+   |
+31 |         self.fleet = fleet
+32 |
+33 |     async def call_by_capability(self, goal: str, **kwargs) -> str:
+   |               ^^^^^^^^^^^^^^^^^^
+34 |         """Finds an agent with the required capability and executes it with RL optimization."""
+35 |         # Report activity to TemporalSync
+   |
+
+C901 `analyze_content` is too complex (25 > 24)
+  --> src\infrastructure\orchestration\core\SelfImprovementCore.py:60:9
+   |
+58 |         self.io_pattern = r"(requests\.(get|post|put|delete|patch|head)\(|self\.ai|subprocess\.(run|call|Popen|check_call|check_output…
+59 |
+60 |     def analyze_content(self, content: str, file_path_rel: str) -> List[Dict[str, Any]]:
+   |         ^^^^^^^^^^^^^^^
+61 |         """
+62 |         Performs multi-dimensional analysis on file content.
+   |
+
+invalid-syntax: Expected a newline after line continuation character
+  --> temp\check_complexity.py:33:29
+   |
+31 |     for f in findings:
+32 |         if f["complexity"] >= 25:
+33 |              print(f"*** {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+   |                             ^
+34 |         else:
+35 |              print(f"    {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+   |
+
+invalid-syntax: Expected FStringEnd, found string
+  --> temp\check_complexity.py:33:30
+   |
+31 |     for f in findings:
+32 |         if f["complexity"] >= 25:
+33 |              print(f"*** {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+   |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+34 |         else:
+35 |              print(f"    {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+   |
+
+invalid-syntax: f-string: unterminated string
+  --> temp\check_complexity.py:33:102
+   |
+31 |     for f in findings:
+32 |         if f["complexity"] >= 25:
+33 |              print(f"*** {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+   |                                                                                                      ^
+34 |         else:
+35 |              print(f"    {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+   |
+
+invalid-syntax: Expected a statement
+  --> temp\check_complexity.py:34:9
+   |
+32 |         if f["complexity"] >= 25:
+33 |              print(f"*** {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+34 |         else:
+   |         ^^^^
+35 |              print(f"    {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+   |
+
+invalid-syntax: Expected a statement
+  --> temp\check_complexity.py:34:13
+   |
+32 |         if f["complexity"] >= 25:
+33 |              print(f"*** {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+34 |         else:
+   |             ^
+35 |              print(f"    {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+   |
+
+invalid-syntax: Expected a newline after line continuation character
+  --> temp\check_complexity.py:35:29
+   |
+33 |              print(f"*** {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+34 |         else:
+35 |              print(f"    {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+   |                             ^
+36 |
+37 | if __name__ == \"__main__\":
+   |
+
+invalid-syntax: Expected FStringEnd, found string
+  --> temp\check_complexity.py:35:30
+   |
+33 |              print(f"*** {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+34 |         else:
+35 |              print(f"    {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+   |                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+36 |
+37 | if __name__ == \"__main__\":
+   |
+
+invalid-syntax: f-string: unterminated string
+  --> temp\check_complexity.py:35:102
+   |
+33 |              print(f"*** {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+34 |         else:
+35 |              print(f"    {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+   |                                                                                                      ^
+36 |
+37 | if __name__ == \"__main__\":
+   |
+
+invalid-syntax: Expected a newline after line continuation character
+  --> temp\check_complexity.py:37:16
+   |
+35 |              print(f"    {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+36 |
+37 | if __name__ == \"__main__\":
+   |                ^
+38 |     check_complexity()
+   |
+
+invalid-syntax: missing closing quote in string literal
+  --> temp\check_complexity.py:37:17
+   |
+35 |              print(f"    {f[\"complexity\"]:<2} {f[\"func_name\"]: <40} {f[\"file\"]}:{f[\"line\"]}")
+36 |
+37 | if __name__ == \"__main__\":
+   |                 ^^^^^^^^^^^^
+38 |     check_complexity()
+   |
+
+invalid-syntax: Simple statements must be separated by newlines or semicolons
+  --> temp\check_complexity.py:38:5
+   |
+37 | if __name__ == \"__main__\":
+38 |     check_complexity()
+   |     ^^^^^^^^^^^^^^^^
+   |
+
+invalid-syntax: unexpected EOF while parsing
+  --> temp\check_complexity.py:39:1
+   |
+37 | if __name__ == \"__main__\":
+38 |     check_complexity()
+   |                       ^
+   |
+
+C901 `agent_module` is too complex (114 > 24)
+  --> tests\unit\logic\conftest.py:13:5
+   |
+12 | @pytest.fixture
+13 | def agent_module() -> Any:
+   |     ^^^^^^^^^^^^
+14 |     """Load and return the agent module.
+   |
+
+C901 `create_legacy_agent_wrapper` is too complex (61 > 24)
+ --> tests\utils\LegacySupport.py:5:5
+  |
+5 | def create_legacy_agent_wrapper(BaseAgentClass):
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+6 |     """Factory to create LegacyAgentWrapper class inheriting from the provided BaseAgentClass."""
+  |
+
+Found 17 errors.

@@ -260,7 +260,6 @@ class ImprovementManager:
             status=ImprovementStatus.PENDING,
             created_at=datetime.now().isoformat(),
         )
-        return total
 
     def export_markdown(self) -> str:
         """Export improvements to markdown format."""

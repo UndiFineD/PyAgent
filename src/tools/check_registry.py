@@ -13,13 +13,12 @@ from src.infrastructure.fleet.OrchestratorRegistry import LazyOrchestratorMap
 def run_diagnostic():
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
     root = Path(os.getcwd())
-    
+
     print("=== PyAgent Registry Diagnostic ===")
-    
+
     # Check Agents
     print("\n[Agents]")
     try:
-        from src.core.base.types import Path  # type: ignore # Handle shadow if needed
         # In reality, LazyAgentMap expects a fleet or workspace root
         agents = LazyAgentMap(root)
         print(f"Discovered {len(agents._discovered_configs)} agent configurations.")
@@ -36,7 +35,7 @@ def run_diagnostic():
         # Mocking a fleet since OrchestratorRegistry needs it
         class MockFleet:
             def __init__(self): self.workspace_root = root
-        
+
         orchestrators = LazyOrchestratorMap(MockFleet())
         print(f"Discovered {len(orchestrators._configs)} orchestrator configurations.")
         for name in list(orchestrators._configs.keys()):

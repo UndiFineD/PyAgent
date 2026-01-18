@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """
 MetacognitiveCore logic for PyAgent.
@@ -27,12 +22,27 @@ No I/O or side effects.
 from __future__ import annotations
 from src.core.base.Version import VERSION
 from typing import Any
+import logging
 
 __version__ = VERSION
 
+logger = logging.getLogger(__name__)
+
+try:
+    import rust_core as rc
+    RUST_AVAILABLE = True
+except ImportError:
+    rc = None
+    RUST_AVAILABLE = False
+
 
 class MetacognitiveCore:
-    """Pure logic core for metacognitive evaluation and intention prediction."""
+    """Pure logic core for metacognitive evaluation and intention prediction.
+    
+    Phase 14 Rust Optimizations:
+    - count_hedge_words_rust: Fast multi-pattern matching for hedge word detection
+    - predict_intent_rust: Optimized pattern-based intent classification
+    """
 
     def calibrate_confidence_weight(
         self, reported_conf: float, actual_correct: bool, current_weight: float
@@ -70,9 +80,21 @@ class MetacognitiveCore:
 
     @staticmethod
     def calculate_confidence(reasoning_chain: str) -> dict[str, Any]:
-        """Analyzes a reasoning chain for hedge words and length patterns."""
+        """Analyzes a reasoning chain for hedge words and length patterns.
+        
+        Uses Rust-accelerated multi-pattern matching when available.
+        """
         hedge_words = ["maybe", "perhaps", "i think", "not sure", "unclear", "likely"]
-        count = sum(1 for word in hedge_words if word in reasoning_chain.lower())
+        
+        # Rust-accelerated hedge word counting
+        if RUST_AVAILABLE and hasattr(rc, 'count_hedge_words_rust'):
+            try:
+                count = rc.count_hedge_words_rust(reasoning_chain.lower(), hedge_words)
+            except Exception as e:
+                logger.debug(f"Rust count_hedge_words failed: {e}, using Python fallback")
+                count = sum(1 for word in hedge_words if word in reasoning_chain.lower())
+        else:
+            count = sum(1 for word in hedge_words if word in reasoning_chain.lower())
 
         uncertainty_score = min(1.0, count / 5.0)
         confidence = 1.0 - uncertainty_score

@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Core execution logic for SubagentRunner."""
 
@@ -100,6 +95,18 @@ class SubagentCore:
         def _try_openai_api() -> str | None:
             return BackendHandlers.try_openai_api(full_prompt, self.runner.requests)
 
+        def _try_neural() -> str | None:
+            """Attempts to use the local Rust-accelerated NeuralTransformer (Phase 319)."""
+            try:
+                import rust_core
+
+                logging.info("Attempting local NeuralTransformer inference...")
+                response = rust_core.generate_neural_response(full_prompt)
+                return response
+            except Exception as e:
+                logging.debug(f"Neural backend failed: {e}")
+                return None
+
         res = None
         if backend_env in {"codex", "codex-cli"}:
             res = _try_codex_cli()
@@ -107,6 +114,8 @@ class SubagentCore:
             res = _try_vllm()
         elif backend_env in {"ollama"}:
             res = _try_ollama()
+        elif backend_env in {"neural", "rust", "local-neural"}:
+            res = _try_neural()
         elif backend_env in {"copilot", "local", "copilot-cli"}:
             res = _try_codex_cli() or _try_vllm() or _try_ollama() or _try_copilot_cli()
         elif backend_env in {"gh", "gh-copilot"}:
@@ -125,6 +134,7 @@ class SubagentCore:
                 or _try_github_models()
                 or _try_openai_api()
                 or _try_gh_copilot(allow_non_command=False)
+                or _try_neural()
             )
 
         if res and use_cache:

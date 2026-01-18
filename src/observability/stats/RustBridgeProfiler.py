@@ -5,7 +5,7 @@ from __future__ import annotations
 import time
 import logging
 from collections import defaultdict
-from typing import Any, Dict, List, Callable
+from typing import Any, Dict, Callable
 
 try:
     import rust_core
@@ -35,7 +35,7 @@ class RustBridgeProfiler:
                 func = getattr(rust_core, name)
                 if callable(func):
                     setattr(rust_core, name, self._wrap_function(func, name))
-        
+
         self._is_active = True
         logging.info("RustBridgeProfiler: Enabled (High-precision profiling active).")
 

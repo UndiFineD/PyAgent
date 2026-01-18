@@ -1,0 +1,381 @@
+"""
+EnhancedLogger - Extended logging with deduplication and scope control.
+
+Inspired by vLLM's logger pattern with debug_once, info_once, warning_once
+methods and scope-aware logging for distributed systems.
+
+Phase 24: Advanced Observability & Parsing
+"""
+
+from __future__ import annotations
+
+import logging
+from collections.abc import Hashable
+from enum import Enum
+from functools import lru_cache
+from types import MethodType
+from typing import Any, Literal
+
+# Type alias for log scope
+LogScope = Literal["process", "global", "local"]
+
+
+class LogScopeEnum(Enum):
+    """Enum for log scope types."""
+    PROCESS = "process"
+    GLOBAL = "global"
+    LOCAL = "local"
+
+
+# ============================================================================
+# Core deduplication functions
+# ============================================================================
+
+@lru_cache(maxsize=10000)
+def _dedupe_debug(logger: logging.Logger, msg: str, *args: Hashable) -> None:
+    """Log debug message only once."""
+    logger.debug(msg, *args, stacklevel=4)
+
+
+@lru_cache(maxsize=10000)
+def _dedupe_info(logger: logging.Logger, msg: str, *args: Hashable) -> None:
+    """Log info message only once."""
+    logger.info(msg, *args, stacklevel=4)
+
+
+@lru_cache(maxsize=10000)
+def _dedupe_warning(logger: logging.Logger, msg: str, *args: Hashable) -> None:
+    """Log warning message only once."""
+    logger.warning(msg, *args, stacklevel=4)
+
+
+@lru_cache(maxsize=10000)
+def _dedupe_error(logger: logging.Logger, msg: str, *args: Hashable) -> None:
+    """Log error message only once."""
+    logger.error(msg, *args, stacklevel=4)
+
+
+# ============================================================================
+# Scope checking (for distributed systems)
+# ============================================================================
+
+def _should_log_with_scope(scope: LogScope) -> bool:
+    """
+    Determine whether to log based on scope.
+    
+    Args:
+        scope: Logging scope
+            - "process": Always log (default)
+            - "global": Only log on global first rank
+            - "local": Only log on local first rank
+            
+    Returns:
+        True if logging should proceed
+    """
+    if scope == "process":
+        return True
+    
+    # For distributed systems, check rank
+    # These functions should be provided by the distributed module
+    try:
+        if scope == "global":
+            from src.infrastructure.distributed import is_global_first_rank
+            return is_global_first_rank()
+        elif scope == "local":
+            from src.infrastructure.distributed import is_local_first_rank
+            return is_local_first_rank()
+    except ImportError:
+        # Not in distributed mode, always log
+        return True
+    
+    return True
+
+
+# ============================================================================
+# Logger extension methods
+# ============================================================================
+
+def debug_once(
+    self: logging.Logger,
+    msg: str,
+    *args: Hashable,
+    scope: LogScope = "process",
+) -> None:
+    """
+    Log debug message only once per unique (msg, args) combination.
+    
+    Args:
+        msg: Log message (can include % formatting)
+        *args: Arguments for % formatting (must be hashable)
+        scope: Logging scope for distributed systems
+    """
+    if not _should_log_with_scope(scope):
+        return
+    _dedupe_debug(self, msg, *args)
+
+
+def info_once(
+    self: logging.Logger,
+    msg: str,
+    *args: Hashable,
+    scope: LogScope = "process",
+) -> None:
+    """
+    Log info message only once per unique (msg, args) combination.
+    
+    Args:
+        msg: Log message (can include % formatting)
+        *args: Arguments for % formatting (must be hashable)
+        scope: Logging scope for distributed systems
+    """
+    if not _should_log_with_scope(scope):
+        return
+    _dedupe_info(self, msg, *args)
+
+
+def warning_once(
+    self: logging.Logger,
+    msg: str,
+    *args: Hashable,
+    scope: LogScope = "process",
+) -> None:
+    """
+    Log warning message only once per unique (msg, args) combination.
+    
+    Args:
+        msg: Log message (can include % formatting)
+        *args: Arguments for % formatting (must be hashable)
+        scope: Logging scope for distributed systems
+    """
+    if not _should_log_with_scope(scope):
+        return
+    _dedupe_warning(self, msg, *args)
+
+
+def error_once(
+    self: logging.Logger,
+    msg: str,
+    *args: Hashable,
+    scope: LogScope = "process",
+) -> None:
+    """
+    Log error message only once per unique (msg, args) combination.
+    
+    Args:
+        msg: Log message (can include % formatting)
+        *args: Arguments for % formatting (must be hashable)
+        scope: Logging scope for distributed systems
+    """
+    if not _should_log_with_scope(scope):
+        return
+    _dedupe_error(self, msg, *args)
+
+
+# ============================================================================
+# Logger patching
+# ============================================================================
+
+def patch_logger(logger: logging.Logger) -> logging.Logger:
+    """
+    Patch a logger instance with _once methods.
+    
+    Adds debug_once, info_once, warning_once, error_once methods
+    to the logger instance.
+    
+    Args:
+        logger: Logger to patch
+        
+    Returns:
+        The patched logger (same instance)
+    """
+    logger.debug_once = MethodType(debug_once, logger)  # type: ignore
+    logger.info_once = MethodType(info_once, logger)  # type: ignore
+    logger.warning_once = MethodType(warning_once, logger)  # type: ignore
+    logger.error_once = MethodType(error_once, logger)  # type: ignore
+    return logger
+
+
+def init_logger(name: str) -> logging.Logger:
+    """
+    Initialize a logger with enhanced methods.
+    
+    Args:
+        name: Logger name (typically __name__)
+        
+    Returns:
+        Logger with debug_once, info_once, warning_once, error_once methods
+    """
+    logger = logging.getLogger(name)
+    return patch_logger(logger)
+
+
+# ============================================================================
+# Logger adapter for clean API
+# ============================================================================
+
+class EnhancedLoggerAdapter(logging.LoggerAdapter):
+    """
+    Logger adapter providing enhanced logging methods.
+    
+    Provides a clean API without patching the underlying logger.
+    """
+    
+    def __init__(
+        self,
+        logger: logging.Logger,
+        extra: dict[str, Any] | None = None,
+    ):
+        super().__init__(logger, extra or {})
+        self._logged_messages: set[tuple[str, tuple[Hashable, ...]]] = set()
+    
+    def debug_once(
+        self,
+        msg: str,
+        *args: Hashable,
+        scope: LogScope = "process",
+    ) -> None:
+        """Log debug message only once."""
+        if not _should_log_with_scope(scope):
+            return
+        key = (msg, args)
+        if key not in self._logged_messages:
+            self._logged_messages.add(key)
+            self.debug(msg, *args)
+    
+    def info_once(
+        self,
+        msg: str,
+        *args: Hashable,
+        scope: LogScope = "process",
+    ) -> None:
+        """Log info message only once."""
+        if not _should_log_with_scope(scope):
+            return
+        key = (msg, args)
+        if key not in self._logged_messages:
+            self._logged_messages.add(key)
+            self.info(msg, *args)
+    
+    def warning_once(
+        self,
+        msg: str,
+        *args: Hashable,
+        scope: LogScope = "process",
+    ) -> None:
+        """Log warning message only once."""
+        if not _should_log_with_scope(scope):
+            return
+        key = (msg, args)
+        if key not in self._logged_messages:
+            self._logged_messages.add(key)
+            self.warning(msg, *args)
+    
+    def error_once(
+        self,
+        msg: str,
+        *args: Hashable,
+        scope: LogScope = "process",
+    ) -> None:
+        """Log error message only once."""
+        if not _should_log_with_scope(scope):
+            return
+        key = (msg, args)
+        if key not in self._logged_messages:
+            self._logged_messages.add(key)
+            self.error(msg, *args)
+    
+    def reset_once_cache(self) -> None:
+        """Clear the deduplication cache."""
+        self._logged_messages.clear()
+    
+    def get_logged_count(self) -> int:
+        """Get number of unique messages logged."""
+        return len(self._logged_messages)
+
+
+def create_enhanced_logger(
+    name: str,
+    extra: dict[str, Any] | None = None,
+) -> EnhancedLoggerAdapter:
+    """
+    Create an enhanced logger adapter.
+    
+    Args:
+        name: Logger name
+        extra: Extra context to include in log records
+        
+    Returns:
+        EnhancedLoggerAdapter with _once methods
+    """
+    logger = logging.getLogger(name)
+    return EnhancedLoggerAdapter(logger, extra)
+
+
+# ============================================================================
+# Global deduplication cache management
+# ============================================================================
+
+def clear_dedup_cache() -> None:
+    """Clear the global deduplication caches."""
+    _dedupe_debug.cache_clear()
+    _dedupe_info.cache_clear()
+    _dedupe_warning.cache_clear()
+    _dedupe_error.cache_clear()
+
+
+def get_dedup_cache_info() -> dict[str, Any]:
+    """Get statistics about the deduplication caches."""
+    return {
+        "debug": _dedupe_debug.cache_info()._asdict(),
+        "info": _dedupe_info.cache_info()._asdict(),
+        "warning": _dedupe_warning.cache_info()._asdict(),
+        "error": _dedupe_error.cache_info()._asdict(),
+    }
+
+
+# ============================================================================
+# Convenience class for type hints
+# ============================================================================
+
+class EnhancedLogger(logging.Logger):
+    """
+    Type hint class for enhanced logger.
+    
+    Not for direct instantiation - use init_logger() or patch_logger().
+    """
+    
+    def debug_once(
+        self,
+        msg: str,
+        *args: Hashable,
+        scope: LogScope = "process",
+    ) -> None:
+        """Log debug message only once."""
+        ...
+    
+    def info_once(
+        self,
+        msg: str,
+        *args: Hashable,
+        scope: LogScope = "process",
+    ) -> None:
+        """Log info message only once."""
+        ...
+    
+    def warning_once(
+        self,
+        msg: str,
+        *args: Hashable,
+        scope: LogScope = "process",
+    ) -> None:
+        """Log warning message only once."""
+        ...
+    
+    def error_once(
+        self,
+        msg: str,
+        *args: Hashable,
+        scope: LogScope = "process",
+    ) -> None:
+        """Log error message only once."""
+        ...

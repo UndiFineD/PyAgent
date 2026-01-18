@@ -1,8 +1,7 @@
 # Copyright 2026 PyAgent Authors
 # Assistant for managing the knowledge graph and impact radius.
 
-import os
-from typing import Any, Set
+from typing import Set
 
 class KnowledgeGraphAssistant:
     """Handles backlinks, dependency tracking, and graph visualization."""

@@ -153,15 +153,19 @@ class PhaseOrchestrator:
 
     async def _phase_verify(self, execution_result: str, criteria: str) -> str:
         """Compare execution results against build criteria."""
-        return await self.fleet.call_by_capability(
+        res: str = await self.fleet.call_by_capability(
             "Security.improve_content",
             prompt=f"Verify if the result matches criteria.\nResult: {execution_result}\nCriteria: {criteria}",
         )
+        return res
 
     async def _phase_learn(self, task: str, verification: str) -> str:
         """Extract insights and update global context."""
-        return await self.fleet.global_context.record_lesson(
+        # Ensure we have a valid lesson string
+        lesson: str = f"Verification results: {verification}"
+        self.fleet.global_context.record_lesson(
             failure_context=task,
-            error_msg="No error detected.",
-            lesson=f"Verification results: {verification}",
+            correction=lesson,
+            agent="PhaseOrchestrator",
         )
+        return lesson

@@ -25,5 +25,5 @@ class ResourceForecastingAgent:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"ResourceForecastingAgent initialized (Placeholder).")
+        logging.info("ResourceForecastingAgent initialized (Placeholder).")
 

@@ -1,7 +1,6 @@
 # Copyright 2026 PyAgent Authors
 # Specialized assistant for applying autonomous fixes to the codebase.
 
-import os
 import logging
 from typing import Any, List, Dict
 
@@ -28,7 +27,7 @@ class SelfImprovementFixer:
             # In a production scenario, this would call LLM to generate a patch
             # For Phase 317, we only fix if it's a high-confidence autonomous target
             # and the gate is open.
-            
+
             # NOTE: We disabled autonomous patching temporarily due to Copilot CLI deprecation
             # which caused file corruption. Fixes must be validated by the orchestrator.
             pass

@@ -25,5 +25,5 @@ class SwarmDistillationAgent:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"SwarmDistillationAgent initialized (Placeholder).")
+        logging.info("SwarmDistillationAgent initialized (Placeholder).")
 

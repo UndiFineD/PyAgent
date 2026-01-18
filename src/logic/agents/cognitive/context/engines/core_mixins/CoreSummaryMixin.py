@@ -1,0 +1,41 @@
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+
+from typing import Any
+
+class CoreSummaryMixin:
+    """Methods for summary generation and pruning."""
+
+    def prune_lessons(
+        self, lessons: list[dict[str, Any]], max_lessons: int = 20
+    ) -> list[dict[str, Any]]:
+        """Prunes lessons to keep only the most recent."""
+        return lessons[-max_lessons:]
+
+    def generate_markdown_summary(self, memory: dict[str, Any]) -> str:
+        """Logic for formatting the cognitive summary."""
+        summary = ["# 🧠 Long-Term Memory Summary"]
+
+        if memory.get("facts"):
+            summary.append("\n## 📋 Project Facts")
+            for k, v in memory["facts"].items():
+                summary.append(f"- **{k}**: {v['value']}")
+
+        if memory.get("constraints"):
+            summary.append("\n## ⚠️ Constraints")
+            for c in memory["constraints"]:
+                summary.append(f"- {c}")
+
+        if memory.get("insights"):
+            summary.append("\n## 💡 Key Insights")
+            for i in memory["insights"][-5:]:  # Show last 5
+                summary.append(f"- {i['text']} (via {i['source']})")
+
+        if memory.get("lessons_learned"):
+            summary.append("\n## 🎓 Lessons Learned")
+            for lesson in memory["lessons_learned"][-3:]:
+                summary.append(
+                    f"- **Issue**: {lesson['failure']} | **Fix**: {lesson['correction']}"
+                )
+
+        return "\n".join(summary)

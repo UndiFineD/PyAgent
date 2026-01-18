@@ -1,0 +1,561 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
+CUDAGraphManager - Graph capture and replay for reduced kernel launch overhead.
+
+Implements vLLM's CUDA graph patterns for efficient GPU execution:
+- CUDAGraphEntry: Captured graph with metadata
+- CUDAGraphKey: Batch size + flags hashing
+- CUDAGraphManager: Capture/lookup/replay operations
+
+Beyond vLLM: LRU eviction for memory pressure management.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import logging
+import time
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from typing import Any, Callable, NamedTuple
+from collections import OrderedDict
+
+import numpy as np
+
+logger = logging.getLogger(__name__)
+
+# Try to import torch
+try:
+    import torch
+    HAS_TORCH = True
+except ImportError:
+    HAS_TORCH = False
+    torch = None  # type: ignore
+
+
+class CUDAGraphMode(Enum):
+    """CUDA graph execution modes."""
+    NONE = auto()  # No CUDA graph, eager execution
+    PIECEWISE = auto()  # Piecewise capture (attention separate)
+    FULL = auto()  # Full model capture
+
+
+class BatchDescriptor(NamedTuple):
+    """Describes a batch for CUDA graph keying."""
+    num_tokens: int
+    num_reqs: int
+    uniform: bool  # All requests have same token count
+    has_lora: bool  # LoRA adapters active
+    has_multimodal: bool  # Multimodal inputs present
+
+
+@dataclass
+class CUDAGraphEntry:
+    """
+    A captured CUDA graph with associated metadata.
+    """
+    key: str  # Hash key for lookup
+    graph: Any  # torch.cuda.CUDAGraph
+    input_buffers: dict[str, Any]  # Input placeholder tensors
+    output_buffers: dict[str, Any]  # Output placeholder tensors
+    num_tokens: int
+    num_reqs: int
+    capture_time: float = field(default_factory=time.time)
+    replay_count: int = 0
+    last_used: float = field(default_factory=time.time)
+    memory_bytes: int = 0
+    
+    def mark_used(self) -> None:
+        """Update usage statistics."""
+        self.replay_count += 1
+        self.last_used = time.time()
+
+
+class CUDAGraphRegistry:
+    """
+    Registry of captured CUDA graphs with LRU eviction.
+    """
+    
+    def __init__(self, max_graphs: int = 32, max_memory_bytes: int = 0):
+        """
+        Initialize the registry.
+        
+        Args:
+            max_graphs: Maximum number of graphs to cache
+            max_memory_bytes: Maximum total memory for graphs (0 = unlimited)
+        """
+        self.max_graphs = max_graphs
+        self.max_memory_bytes = max_memory_bytes
+        self._graphs: OrderedDict[str, CUDAGraphEntry] = OrderedDict()
+        self._total_memory = 0
+    
+    def get(self, key: str) -> CUDAGraphEntry | None:
+        """Get a graph by key, updating LRU order."""
+        if key in self._graphs:
+            # Move to end (most recently used)
+            self._graphs.move_to_end(key)
+            entry = self._graphs[key]
+            entry.mark_used()
+            return entry
+        return None
+    
+    def put(self, entry: CUDAGraphEntry) -> None:
+        """Add a graph to the registry with LRU eviction."""
+        # Evict if at capacity
+        while len(self._graphs) >= self.max_graphs:
+            self._evict_lru()
+        
+        # Check memory limit
+        if self.max_memory_bytes > 0:
+            while self._total_memory + entry.memory_bytes > self.max_memory_bytes:
+                if not self._evict_lru():
+                    logger.warning(
+                        f"Cannot cache graph: memory limit exceeded "
+                        f"({entry.memory_bytes} bytes)"
+                    )
+                    return
+        
+        self._graphs[entry.key] = entry
+        self._total_memory += entry.memory_bytes
+        logger.debug(f"Cached CUDA graph: key={entry.key}, size={entry.memory_bytes}")
+    
+    def _evict_lru(self) -> bool:
+        """Evict least recently used graph. Returns True if evicted."""
+        if not self._graphs:
+            return False
+        
+        # Pop first item (least recently used)
+        key, entry = self._graphs.popitem(last=False)
+        self._total_memory -= entry.memory_bytes
+        
+        # Release graph resources
+        if HAS_TORCH and entry.graph is not None:
+            del entry.graph
+        
+        logger.debug(f"Evicted CUDA graph: key={key}")
+        return True
+    
+    def clear(self) -> None:
+        """Clear all cached graphs."""
+        for entry in self._graphs.values():
+            if HAS_TORCH and entry.graph is not None:
+                del entry.graph
+        self._graphs.clear()
+        self._total_memory = 0
+    
+    def __len__(self) -> int:
+        return len(self._graphs)
+    
+    def __contains__(self, key: str) -> bool:
+        return key in self._graphs
+
+
+def compute_graph_key(desc: BatchDescriptor) -> str:
+    """
+    Compute a unique key for a batch descriptor.
+    
+    The key is used to lookup cached CUDA graphs.
+    """
+    # Create a deterministic string representation
+    key_str = f"{desc.num_tokens}_{desc.num_reqs}_{desc.uniform}_{desc.has_lora}_{desc.has_multimodal}"
+    # Hash for compact storage
+    return hashlib.md5(key_str.encode()).hexdigest()[:16]
+
+
+def generate_warmup_sizes(
+    max_tokens: int,
+    max_reqs: int,
+    granularity: int = 8
+) -> list[tuple[int, int]]:
+    """
+    Generate batch sizes for CUDA graph warmup.
+    
+    Uses power-of-2 and granularity-aligned sizes for efficient coverage.
+    
+    Args:
+        max_tokens: Maximum tokens per batch
+        max_reqs: Maximum requests per batch
+        granularity: Alignment granularity
+        
+    Returns:
+        List of (num_tokens, num_reqs) tuples
+    """
+    sizes = []
+    
+    # Power-of-2 token counts
+    token_count = granularity
+    while token_count <= max_tokens:
+        sizes.append((token_count, 1))
+        token_count *= 2
+    
+    # Add max tokens
+    if max_tokens not in [s[0] for s in sizes]:
+        sizes.append((max_tokens, 1))
+    
+    # Add multi-request batches
+    for num_reqs in [2, 4, 8, 16, 32]:
+        if num_reqs > max_reqs:
+            break
+        tokens_per_req = max(1, max_tokens // num_reqs)
+        sizes.append((tokens_per_req * num_reqs, num_reqs))
+    
+    return sorted(set(sizes))
+
+
+class CUDAGraphManager:
+    """
+    Manages CUDA graph capture and replay for model execution.
+    
+    Provides:
+    - Graph capture with dummy inputs
+    - Batch-size keyed lookup
+    - Graph replay with input buffer updates
+    - Memory pool tracking
+    - LRU eviction (beyond vLLM)
+    """
+    
+    def __init__(
+        self,
+        mode: CUDAGraphMode = CUDAGraphMode.FULL,
+        max_graphs: int = 32,
+        max_memory_bytes: int = 0,
+        device: Any = None,
+    ):
+        """
+        Initialize the CUDA graph manager.
+        
+        Args:
+            mode: Graph capture mode
+            max_graphs: Maximum cached graphs
+            max_memory_bytes: Maximum memory for graph cache
+            device: Target device
+        """
+        self.mode = mode
+        self.registry = CUDAGraphRegistry(max_graphs, max_memory_bytes)
+        
+        if HAS_TORCH:
+            self.device = device or torch.device("cuda" if torch.cuda.is_available() else "cpu")
+            self._has_cuda = torch.cuda.is_available()
+            # Memory pool for graph captures
+            self._memory_pool = torch.cuda.graph_pool_handle() if self._has_cuda else None
+        else:
+            self.device = device or "cpu"
+            self._has_cuda = False
+            self._memory_pool = None
+        
+        self._warmup_complete = False
+        self._capture_count = 0
+        self._replay_count = 0
+        
+        logger.info(f"CUDAGraphManager initialized: mode={mode.name}, max_graphs={max_graphs}")
+    
+    @property
+    def enabled(self) -> bool:
+        """Check if CUDA graph execution is enabled."""
+        return self.mode != CUDAGraphMode.NONE and self._has_cuda
+    
+    def warmup(
+        self,
+        generate_fn: Callable[..., Any],
+        max_tokens: int,
+        max_reqs: int,
+        create_dummy_inputs: Callable[[int, int], dict[str, Any]],
+    ) -> None:
+        """
+        Warmup by capturing graphs for common batch sizes.
+        
+        Args:
+            generate_fn: Model generation function to capture
+            max_tokens: Maximum tokens per batch
+            max_reqs: Maximum requests per batch
+            create_dummy_inputs: Function to create dummy inputs for a batch size
+        """
+        if not self.enabled:
+            logger.debug("CUDA graphs disabled, skipping warmup")
+            return
+        
+        sizes = generate_warmup_sizes(max_tokens, max_reqs)
+        logger.info(f"Warming up CUDA graphs for {len(sizes)} batch sizes")
+        
+        for num_tokens, num_reqs in sizes:
+            try:
+                dummy_inputs = create_dummy_inputs(num_tokens, num_reqs)
+                self.capture(
+                    generate_fn=generate_fn,
+                    num_tokens=num_tokens,
+                    num_reqs=num_reqs,
+                    input_buffers=dummy_inputs,
+                    uniform=True,
+                    has_lora=False,
+                    has_multimodal=False,
+                )
+            except Exception as e:
+                logger.warning(f"Failed to capture graph for {num_tokens}x{num_reqs}: {e}")
+        
+        self._warmup_complete = True
+        logger.info(f"CUDA graph warmup complete: {len(self.registry)} graphs cached")
+    
+    def capture(
+        self,
+        generate_fn: Callable[..., Any],
+        num_tokens: int,
+        num_reqs: int,
+        input_buffers: dict[str, Any],
+        uniform: bool = True,
+        has_lora: bool = False,
+        has_multimodal: bool = False,
+    ) -> CUDAGraphEntry | None:
+        """
+        Capture a CUDA graph for the given batch configuration.
+        
+        Args:
+            generate_fn: Function to capture
+            num_tokens: Number of tokens in batch
+            num_reqs: Number of requests in batch
+            input_buffers: Input tensors to use for capture
+            uniform: Whether all requests have same token count
+            has_lora: Whether LoRA adapters are active
+            has_multimodal: Whether multimodal inputs present
+            
+        Returns:
+            Captured graph entry, or None if capture failed
+        """
+        if not self.enabled:
+            return None
+        
+        desc = BatchDescriptor(
+            num_tokens=num_tokens,
+            num_reqs=num_reqs,
+            uniform=uniform,
+            has_lora=has_lora,
+            has_multimodal=has_multimodal,
+        )
+        key = compute_graph_key(desc)
+        
+        # Check if already captured
+        if key in self.registry:
+            return self.registry.get(key)
+        
+        try:
+            # Warmup run
+            generate_fn(**input_buffers)
+            if HAS_TORCH:
+                torch.cuda.synchronize()
+            
+            # Capture graph
+            if HAS_TORCH:
+                graph = torch.cuda.CUDAGraph()
+                with torch.cuda.graph(graph, pool=self._memory_pool):
+                    output_buffers = generate_fn(**input_buffers)
+                torch.cuda.synchronize()
+            else:
+                # Fallback: just run the function
+                graph = None
+                output_buffers = generate_fn(**input_buffers)
+            
+            # Estimate memory usage
+            memory_bytes = self._estimate_graph_memory(input_buffers, output_buffers)
+            
+            entry = CUDAGraphEntry(
+                key=key,
+                graph=graph,
+                input_buffers=input_buffers,
+                output_buffers=output_buffers if isinstance(output_buffers, dict) else {"output": output_buffers},
+                num_tokens=num_tokens,
+                num_reqs=num_reqs,
+                memory_bytes=memory_bytes,
+            )
+            
+            self.registry.put(entry)
+            self._capture_count += 1
+            
+            logger.debug(
+                f"Captured CUDA graph: tokens={num_tokens}, reqs={num_reqs}, "
+                f"memory={memory_bytes / 1024:.1f}KB"
+            )
+            return entry
+            
+        except Exception as e:
+            logger.error(f"Failed to capture CUDA graph: {e}")
+            return None
+    
+    def _estimate_graph_memory(
+        self, 
+        input_buffers: dict[str, Any],
+        output_buffers: Any
+    ) -> int:
+        """Estimate memory usage of a graph."""
+        total = 0
+        
+        if HAS_TORCH:
+            for tensor in input_buffers.values():
+                if isinstance(tensor, torch.Tensor):
+                    total += tensor.numel() * tensor.element_size()
+            
+            if isinstance(output_buffers, dict):
+                for tensor in output_buffers.values():
+                    if isinstance(tensor, torch.Tensor):
+                        total += tensor.numel() * tensor.element_size()
+            elif isinstance(output_buffers, torch.Tensor):
+                total += output_buffers.numel() * output_buffers.element_size()
+        
+        return total
+    
+    def lookup(
+        self,
+        num_tokens: int,
+        num_reqs: int,
+        uniform: bool = True,
+        has_lora: bool = False,
+        has_multimodal: bool = False,
+    ) -> CUDAGraphEntry | None:
+        """
+        Look up a cached CUDA graph for the batch configuration.
+        
+        Args:
+            num_tokens: Number of tokens in batch
+            num_reqs: Number of requests in batch
+            uniform: Whether all requests have same token count
+            has_lora: Whether LoRA adapters are active
+            has_multimodal: Whether multimodal inputs present
+            
+        Returns:
+            Cached graph entry, or None if not found
+        """
+        desc = BatchDescriptor(
+            num_tokens=num_tokens,
+            num_reqs=num_reqs,
+            uniform=uniform,
+            has_lora=has_lora,
+            has_multimodal=has_multimodal,
+        )
+        key = compute_graph_key(desc)
+        return self.registry.get(key)
+    
+    def replay(
+        self,
+        entry: CUDAGraphEntry,
+        input_updates: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        """
+        Replay a captured CUDA graph with optional input updates.
+        
+        Args:
+            entry: Graph entry to replay
+            input_updates: New values to copy into input buffers
+            
+        Returns:
+            Output buffers from the graph
+        """
+        if input_updates and HAS_TORCH:
+            # Update input buffers
+            for name, value in input_updates.items():
+                if name in entry.input_buffers:
+                    target = entry.input_buffers[name]
+                    if isinstance(target, torch.Tensor) and isinstance(value, torch.Tensor):
+                        target.copy_(value)
+        
+        # Replay graph
+        if HAS_TORCH and entry.graph is not None:
+            entry.graph.replay()
+        
+        self._replay_count += 1
+        return entry.output_buffers
+    
+    def get_or_run(
+        self,
+        generate_fn: Callable[..., Any],
+        input_buffers: dict[str, Any],
+        num_tokens: int,
+        num_reqs: int,
+        uniform: bool = True,
+        has_lora: bool = False,
+        has_multimodal: bool = False,
+    ) -> Any:
+        """
+        Get cached graph and replay, or run function directly if not cached.
+        
+        This is the main entry point for graph-accelerated execution.
+        """
+        if not self.enabled:
+            return generate_fn(**input_buffers)
+        
+        entry = self.lookup(
+            num_tokens=num_tokens,
+            num_reqs=num_reqs,
+            uniform=uniform,
+            has_lora=has_lora,
+            has_multimodal=has_multimodal,
+        )
+        
+        if entry is not None:
+            return self.replay(entry, input_buffers)
+        
+        # Not cached, try to capture
+        entry = self.capture(
+            generate_fn=generate_fn,
+            num_tokens=num_tokens,
+            num_reqs=num_reqs,
+            input_buffers=input_buffers,
+            uniform=uniform,
+            has_lora=has_lora,
+            has_multimodal=has_multimodal,
+        )
+        
+        if entry is not None:
+            return entry.output_buffers
+        
+        # Capture failed, run directly
+        return generate_fn(**input_buffers)
+    
+    def pad_for_cudagraph(self, size: int, granularity: int = 8) -> int:
+        """
+        Pad a size to the next granularity boundary.
+        
+        Useful for aligning batch sizes to cached graph sizes.
+        """
+        return ((size + granularity - 1) // granularity) * granularity
+    
+    def find_closest_size(
+        self, 
+        num_tokens: int, 
+        num_reqs: int
+    ) -> tuple[int, int] | None:
+        """
+        Find the closest cached graph size >= requested size.
+        
+        Returns (num_tokens, num_reqs) or None if no suitable graph.
+        """
+        best = None
+        best_overhead = float("inf")
+        
+        for key in self.registry._graphs:
+            entry = self.registry._graphs[key]
+            if entry.num_tokens >= num_tokens and entry.num_reqs >= num_reqs:
+                overhead = (entry.num_tokens - num_tokens) + (entry.num_reqs - num_reqs)
+                if overhead < best_overhead:
+                    best = (entry.num_tokens, entry.num_reqs)
+                    best_overhead = overhead
+        
+        return best
+    
+    def get_stats(self) -> dict[str, Any]:
+        """Get manager statistics."""
+        return {
+            "mode": self.mode.name,
+            "enabled": self.enabled,
+            "num_cached": len(self.registry),
+            "capture_count": self._capture_count,
+            "replay_count": self._replay_count,
+            "warmup_complete": self._warmup_complete,
+            "total_memory_bytes": self.registry._total_memory,
+        }
+    
+    def clear(self) -> None:
+        """Clear all cached graphs."""
+        self.registry.clear()
+        self._capture_count = 0
+        self._replay_count = 0
+        self._warmup_complete = False
+        logger.info("CUDA graph cache cleared")

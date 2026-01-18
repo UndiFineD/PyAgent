@@ -323,7 +323,7 @@ class BaseAgentCore:
                 return rc.deduplicate_entries(entries)
             except Exception:
                 pass
-        
+
         seen = set()
         result = []
         for entry in entries:

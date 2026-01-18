@@ -5,6 +5,7 @@ It also implements the Feature Store logic for vectorized insights.
 
 from __future__ import annotations
 import random
+import logging
 
 try:
     import rust_core
@@ -33,9 +34,21 @@ class SynthesisCore:
         """Generates synthetic Python snippets based on templates."""
         if HAS_RUST:
             try:
-                return rust_core.generate_synthetic_snippets(count)  # type: ignore[attr-defined]
-            except Exception:
-                pass
+                res, stats = rust_core.generate_synthetic_snippets_with_stats(count)
+                print(f"[SynthesisCore] Generated {stats.token_count} tokens in {stats.duration_ms:.2f}ms ({stats.tps:.2f} tokens/s)")
+                print(f"[SynthesisCore] Hardware Savings: ${stats.cost_usd:.6f} (@ 0.0005 cent/token)")
+                
+                # Optional: persistent tracking via FleetEconomy
+                try:
+                    from src.logic.agents.swarm.FleetEconomyAgent import FleetEconomyAgent
+                    fea = FleetEconomyAgent()
+                    fea.log_hardware_savings("SynthesisCore/Generation", stats.token_count, stats.tps, stats.cost_usd)
+                except ImportError:
+                    pass
+                
+                return res
+            except Exception as e:
+                logging.debug(f"SynthesisCore: Rust generation failed: {e}")
 
         results = []
         for i in range(count):
@@ -50,9 +63,22 @@ class SynthesisCore:
         """
         if HAS_RUST:
             try:
-                return rust_core.vectorize_text_insight(insight)  # type: ignore[attr-defined]
-            except Exception:
-                pass
+                vec, stats = rust_core.vectorize_text_insight_with_stats(insight)
+                # We typically only log if it's a large insight or for performance tracking
+                if len(insight) > 100:
+                    print(f"[SynthesisCore] Vectorized {stats.token_count} tokens at {stats.tps:.2f} t/s")
+                    print(f"[SynthesisCore] Hardware Savings: ${stats.cost_usd:.6f}")
+                    
+                    try:
+                        from src.logic.agents.swarm.FleetEconomyAgent import FleetEconomyAgent
+                        fea = FleetEconomyAgent()
+                        fea.log_hardware_savings("SynthesisCore/Vectorization", stats.token_count, stats.tps, stats.cost_usd)
+                    except ImportError:
+                        pass
+                
+                return vec
+            except Exception as e:
+                logging.debug(f"SynthesisCore: Rust vectorization failed: {e}")
 
         # In a real scenario, this would call a local embedding model
         # Use a deterministic mock based on text length and first char
