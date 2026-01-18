@@ -1,0 +1,107 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""Utility functions for LoRA initialization and analysis."""
+
+import math
+import numpy as np
+from typing import Any, TYPE_CHECKING
+from .config import LoRAConfig
+from .weights import LoRALayerWeights
+from .model import LoRAModel
+
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
+
+
+def create_lora_weights(
+    in_features: int,
+    out_features: int,
+    rank: int,
+    alpha: float = 16.0,
+    module_name: str = "linear",
+    init_method: str = "kaiming",
+) -> LoRALayerWeights:
+    """Create initialized LoRA layer weights."""
+    if init_method == "kaiming":
+        # Kaiming uniform for A, zeros for B
+        bound = math.sqrt(6.0 / (rank + in_features))
+        lora_a = np.random.uniform(-bound, bound, (rank, in_features)).astype(np.float32)
+        lora_b = np.zeros((out_features, rank), dtype=np.float32)
+    elif init_method == "gaussian":
+        # Gaussian for A, zeros for B
+        std = 1.0 / math.sqrt(rank)
+        lora_a = np.random.normal(0, std, (rank, in_features)).astype(np.float32)
+        lora_b = np.zeros((out_features, rank), dtype=np.float32)
+    else:  # zero
+        lora_a = np.zeros((rank, in_features), dtype=np.float32)
+        lora_b = np.zeros((out_features, rank), dtype=np.float32)
+    
+    return LoRALayerWeights(
+        lora_a=lora_a,
+        lora_b=lora_b,
+        scaling=alpha / rank,
+        module_name=module_name,
+    )
+
+
+def create_lora_model(
+    model_id: str,
+    layer_dims: dict[str, tuple[int, int]],
+    config: LoRAConfig | None = None,
+) -> LoRAModel:
+    """Create a LoRA model with initialized weights."""
+    config = config or LoRAConfig()
+    model = LoRAModel(model_id=model_id, config=config)
+    
+    for module_name, (in_features, out_features) in layer_dims.items():
+        if module_name not in config.target_modules:
+            continue
+        
+        layer = create_lora_weights(
+            in_features=in_features,
+            out_features=out_features,
+            rank=config.rank,
+            alpha=config.alpha,
+            module_name=module_name,
+        )
+        model.add_layer(layer)
+    
+    return model
+
+
+def merge_lora_weights(
+    base_weights: dict[str, NDArray[np.float32]],
+    lora_model: LoRAModel,
+) -> dict[str, NDArray[np.float32]]:
+    """Merge LoRA weights into base model weights."""
+    merged = {}
+    
+    for module_name, base_weight in base_weights.items():
+        lora_layer = lora_model.get_layer(module_name)
+        if lora_layer is not None:
+            merged[module_name] = lora_layer.merge_into_base(base_weight)
+        else:
+            merged[module_name] = base_weight.copy()
+    
+    return merged
+
+
+def compute_effective_rank(
+    lora_a: NDArray[np.float32],
+    lora_b: NDArray[np.float32],
+    threshold: float = 0.01,
+) -> int:
+    """Compute effective rank of LoRA matrices."""
+    # Compute BA product
+    product = lora_b @ lora_a
+    
+    # SVD
+    _, s, _ = np.linalg.svd(product, full_matrices=False)
+    
+    # Count significant singular values
+    max_s = s[0] if len(s) > 0 else 0
+    if max_s == 0:
+        return 0
+    
+    effective = int(np.sum(s / max_s > threshold))
+    return effective

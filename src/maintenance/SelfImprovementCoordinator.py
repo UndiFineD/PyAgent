@@ -73,10 +73,44 @@ class SelfImprovementCoordinator:
         """Simulates triggering implementations for high-priority ideas."""
         for idea in active_ideas:
             print(f"[ACTION] Processing Improvement: {idea['title']} (Status: {idea['status']})")
-            if idea["status"] == "PLANNED":
-                print(f"  -> Triggering Implementation Agent for: {idea['title']}")
-            elif idea["status"] == "RESEARCH":
-                print(f"  -> Triggering Research Subagent for: {idea['title']}")
+            await self.trigger_agent_execution(idea)
+
+    async def trigger_agent_execution(self, item: Dict[str, Any]):
+        """
+        Synaptic Automation: Hands off planned improvements to the Director/Research swarm.
+        This connects the monitoring phase to the execution phase.
+        """
+        title = item["title"]
+        status = item["status"]
+        
+        try:
+            if status == "PLANNED" or status == "PLANNING":
+                from src.infrastructure.orchestration.swarm.DirectorAgent import DirectorAgent
+                self.logger.info(f"Handing off to DirectorAgent: {title}")
+                agent = DirectorAgent(str(self.improvements_file))
+                
+                # Hand off task to director
+                prompt = f"Improvement Task: {title}\nPlease decompose this and delegate to the appropriate specialists."
+                res = await agent.think(prompt)
+                print(f"  -> [DIRECTOR RESPONSE] {res[:200]}...")
+                
+            elif status == "RESEARCH":
+                from src.logic.agents.intelligence.ResearchAgent import ResearchAgent
+                self.logger.info(f"Handing off to ResearchAgent: {title}")
+                agent = ResearchAgent(str(self.improvements_file))
+                
+                # Find associated research links if any
+                links = await self.scan_for_research()
+                prompt = f"Research Task: {title}\nRelated links found: {links}"
+                res = await agent.think(prompt)
+                print(f"  -> [RESEARCH RESPONSE] {res[:200]}...")
+
+        except ImportError as e:
+            self.logger.warning(f"  -> [SKIP] Required agent not found: {e}")
+        except Exception as e:
+            self.logger.error(f"  -> [ERROR] Failed to trigger agent: {e}")
+            import traceback
+            self.logger.error(traceback.format_exc())
 
 async def main():
     coordinator = SelfImprovementCoordinator(os.getcwd())

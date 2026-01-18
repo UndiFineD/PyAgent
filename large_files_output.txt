@@ -1,0 +1,7 @@
+Path                                                                             LineCount 
+------------------------------------------------------------------------------------------
+c:\DEV\PyAgent\src\infrastructure\chat_templates\ChatTemplateRegistry.py         836       
+c:\DEV\PyAgent\src\infrastructure\engine\RequestLifecycle.py                     805       
+c:\DEV\PyAgent\src\infrastructure\adapters\LoRAManager.py                        780       
+c:\DEV\PyAgent\src\infrastructure\tensorizer\Tensorizer.py                       780       
+c:\DEV\PyAgent\src\infrastructure\multimodal\MultiModalCache.py                  775       

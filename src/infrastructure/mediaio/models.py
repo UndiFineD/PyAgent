@@ -1,0 +1,153 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
+Models and configurations for media loading.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from typing import Any, List, Optional, Tuple, Union
+
+import numpy as np
+
+
+class MediaType(Enum):
+    """Supported media types."""
+    IMAGE = auto()
+    VIDEO = auto()
+    AUDIO = auto()
+    DOCUMENT = auto()
+
+
+class ImageFormat(Enum):
+    """Supported image formats."""
+    JPEG = auto()
+    PNG = auto()
+    WEBP = auto()
+    GIF = auto()
+    BMP = auto()
+    TIFF = auto()
+    HEIC = auto()
+
+
+class VideoFormat(Enum):
+    """Supported video formats."""
+    MP4 = auto()
+    WEBM = auto()
+    AVI = auto()
+    MOV = auto()
+    MKV = auto()
+
+
+class AudioFormat(Enum):
+    """Supported audio formats."""
+    WAV = auto()
+    MP3 = auto()
+    FLAC = auto()
+    OGG = auto()
+    M4A = auto()
+
+
+class ResizeMode(Enum):
+    """Image resize modes."""
+    CROP = auto()       # Center crop to target
+    PAD = auto()        # Pad to target maintaining aspect
+    STRETCH = auto()    # Stretch to target
+    SHORTEST = auto()   # Resize shortest side
+    LONGEST = auto()    # Resize longest side
+
+
+@dataclass
+class MediaMetadata:
+    """Metadata for loaded media."""
+    media_type: MediaType
+    format: Union[ImageFormat, VideoFormat, AudioFormat, None]
+    width: Optional[int] = None
+    height: Optional[int] = None
+    channels: int = 3
+    duration: Optional[float] = None     # For video/audio (seconds)
+    frame_count: Optional[int] = None    # For video
+    sample_rate: Optional[int] = None    # For audio
+    file_size: int = 0
+    hash: Optional[str] = None
+
+
+@dataclass
+class ImageData:
+    """Loaded image data."""
+    data: np.ndarray                     # [H, W, C] or [N, H, W, C]
+    metadata: MediaMetadata
+    source: str
+    
+    @property
+    def shape(self) -> Tuple[int, ...]:
+        return self.data.shape
+    
+    @property
+    def height(self) -> int:
+        if self.data.ndim == 3:
+            return self.data.shape[0]
+        return self.data.shape[1]
+    
+    @property
+    def width(self) -> int:
+        if self.data.ndim == 3:
+            return self.data.shape[1]
+        return self.data.shape[2]
+
+
+@dataclass
+class VideoData:
+    """Loaded video data."""
+    frames: np.ndarray                   # [N, H, W, C]
+    metadata: MediaMetadata
+    source: str
+    timestamps: Optional[np.ndarray] = None
+    
+    @property
+    def frame_count(self) -> int:
+        return self.frames.shape[0]
+
+
+@dataclass
+class AudioData:
+    """Loaded audio data."""
+    waveform: np.ndarray                 # [C, T] or [T]
+    metadata: MediaMetadata
+    source: str
+    
+    @property
+    def duration(self) -> float:
+        if self.metadata.sample_rate:
+            return self.waveform.shape[-1] / self.metadata.sample_rate
+        return 0.0
+
+
+@dataclass
+class MediaLoadConfig:
+    """Configuration for media loading."""
+    # Image settings
+    target_size: Optional[Tuple[int, int]] = None
+    resize_mode: ResizeMode = ResizeMode.SHORTEST
+    normalize: bool = True
+    mean: Tuple[float, ...] = (0.48145466, 0.4578275, 0.40821073)  # CLIP mean
+    std: Tuple[float, ...] = (0.26862954, 0.26130258, 0.27577711)  # CLIP std
+    
+    # Video settings
+    max_frames: int = 32
+    frame_rate: Optional[float] = None   # Sample at this FPS
+    
+    # Audio settings
+    target_sample_rate: int = 16000
+    max_duration: float = 30.0           # Max audio duration
+    mono: bool = True
+    
+    # GPU settings
+    use_gpu_decode: bool = True
+    device: str = "cuda:0"
+    
+    # Caching
+    enable_cache: bool = True
+    cache_dir: Optional[str] = None

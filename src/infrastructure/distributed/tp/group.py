@@ -1,0 +1,323 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
+Tensor parallel group operations.
+"""
+
+import logging
+from typing import Any
+from contextlib import contextmanager
+
+from .coordinator import GroupCoordinator
+
+logger = logging.getLogger(__name__)
+
+# Try to import torch.distributed
+try:
+    import torch
+    import torch.distributed as dist
+    HAS_TORCH = True
+    HAS_DIST = dist.is_available()
+except ImportError:
+    HAS_TORCH = False
+    HAS_DIST = False
+    torch = None
+    dist = None
+
+
+class TensorParallelGroup:
+    """
+    Tensor parallel operations for distributed model execution.
+    
+    Provides collective operations (all_reduce, all_gather, etc.)
+    specifically for tensor parallelism.
+    """
+    
+    def __init__(
+        self,
+        coordinator: GroupCoordinator,
+        device: Any = None,
+    ):
+        """
+        Initialize tensor parallel group.
+        
+        Args:
+            coordinator: Group coordinator
+            device: Target device
+        """
+        self.coordinator = coordinator
+        self.config = coordinator.config
+        self.rank_info = coordinator.rank_info
+        
+        if HAS_TORCH:
+            self.device = device or torch.device(
+                f"cuda:{coordinator.rank_info.local_rank}" 
+                if torch.cuda.is_available() else "cpu"
+            )
+        else:
+            self.device = device or "cpu"
+        
+        self._custom_allreduce_enabled = False
+        
+        logger.debug(f"TensorParallelGroup: rank={self.tp_rank}/{self.tp_size}")
+    
+    @property
+    def tp_size(self) -> int:
+        """Tensor parallel world size."""
+        return self.config.tensor_parallel_size
+    
+    @property
+    def tp_rank(self) -> int:
+        """Tensor parallel rank."""
+        return self.rank_info.tp_rank
+    
+    @property
+    def is_first_rank(self) -> bool:
+        """Check if this is TP rank 0."""
+        return self.tp_rank == 0
+    
+    @property
+    def is_last_rank(self) -> bool:
+        """Check if this is the last TP rank."""
+        return self.tp_rank == self.tp_size - 1
+    
+    def all_reduce(
+        self,
+        tensor: Any,
+        op: str = "sum",
+        async_op: bool = False,
+    ) -> Any:
+        """
+        All-reduce tensor across TP group.
+        """
+        if self.tp_size == 1:
+            return tensor
+        
+        if not HAS_DIST or not dist.is_initialized():
+            return tensor
+        
+        # Map op to dist.ReduceOp
+        op_map = {
+            "sum": dist.ReduceOp.SUM,
+            "mean": dist.ReduceOp.SUM,
+            "max": dist.ReduceOp.MAX,
+            "min": dist.ReduceOp.MIN,
+        }
+        reduce_op = op_map.get(op, dist.ReduceOp.SUM)
+        
+        handle = dist.all_reduce(
+            tensor, 
+            op=reduce_op, 
+            group=self.coordinator.tp_group,
+            async_op=async_op,
+        )
+        
+        if op == "mean":
+            tensor.div_(self.tp_size)
+        
+        return handle if async_op else tensor
+    
+    def all_gather(
+        self,
+        tensor: Any,
+        dim: int = 0,
+        async_op: bool = False,
+    ) -> Any:
+        """
+        All-gather tensors from all TP ranks.
+        """
+        if self.tp_size == 1:
+            return tensor
+        
+        if not HAS_TORCH:
+            return tensor
+        
+        if not HAS_DIST or not dist.is_initialized():
+            return tensor
+        
+        # Create output tensor list
+        tensor_list = [torch.empty_like(tensor) for _ in range(self.tp_size)]
+        
+        handle = dist.all_gather(
+            tensor_list,
+            tensor,
+            group=self.coordinator.tp_group,
+            async_op=async_op,
+        )
+        
+        if async_op:
+            return handle
+        
+        # Concatenate along specified dimension
+        return torch.cat(tensor_list, dim=dim)
+    
+    def reduce_scatter(
+        self,
+        tensor: Any,
+        dim: int = 0,
+        op: str = "sum",
+        async_op: bool = False,
+    ) -> Any:
+        """
+        Reduce-scatter: reduce then scatter result.
+        """
+        if self.tp_size == 1:
+            return tensor
+        
+        if not HAS_TORCH:
+            return tensor
+        
+        if not HAS_DIST or not dist.is_initialized():
+            chunk_size = tensor.shape[dim] // self.tp_size
+            start = self.tp_rank * chunk_size
+            end = start + chunk_size
+            return tensor.narrow(dim, start, chunk_size)
+        
+        # Split input tensor
+        input_chunks = list(tensor.chunk(self.tp_size, dim=dim))
+        
+        # Output is the reduced chunk for this rank
+        output = torch.empty_like(input_chunks[0])
+        
+        op_map = {
+            "sum": dist.ReduceOp.SUM,
+            "mean": dist.ReduceOp.SUM,
+            "max": dist.ReduceOp.MAX,
+            "min": dist.ReduceOp.MIN,
+        }
+        reduce_op = op_map.get(op, dist.ReduceOp.SUM)
+        
+        handle = dist.reduce_scatter(
+            output,
+            input_chunks,
+            op=reduce_op,
+            group=self.coordinator.tp_group,
+            async_op=async_op,
+        )
+        
+        if op == "mean":
+            output.div_(self.tp_size)
+        
+        return handle if async_op else output
+    
+    def scatter(
+        self,
+        tensor: Any | None,
+        dim: int = 0,
+        src_rank: int = 0,
+    ) -> Any:
+        """
+        Scatter tensor from source rank to all TP ranks.
+        """
+        if self.tp_size == 1:
+            return tensor
+        
+        if not HAS_TORCH:
+            return tensor
+        
+        if not HAS_DIST or not dist.is_initialized():
+            if tensor is not None:
+                chunk_size = tensor.shape[dim] // self.tp_size
+                start = self.tp_rank * chunk_size
+                return tensor.narrow(dim, start, chunk_size)
+            return None
+        
+        if self.tp_rank == src_rank:
+            scatter_list = list(tensor.chunk(self.tp_size, dim=dim))
+            output = torch.empty_like(scatter_list[0])
+        else:
+            # Need to receive shape first
+            output = tensor  # Will be replaced
+            scatter_list = None
+        
+        dist.scatter(
+            output,
+            scatter_list if self.tp_rank == src_rank else None,
+            src=src_rank,
+            group=self.coordinator.tp_group,
+        )
+        
+        return output
+    
+    def broadcast(
+        self,
+        tensor: Any,
+        src_rank: int = 0,
+        async_op: bool = False,
+    ) -> Any:
+        """
+        Broadcast tensor from source rank to all TP ranks.
+        """
+        if self.tp_size == 1:
+            return tensor
+        
+        if not HAS_DIST or not dist.is_initialized():
+            return tensor
+        
+        handle = dist.broadcast(
+            tensor,
+            src=src_rank,
+            group=self.coordinator.tp_group,
+            async_op=async_op,
+        )
+        
+        return handle if async_op else tensor
+    
+    def barrier(self) -> None:
+        """Synchronize all TP ranks."""
+        if self.tp_size == 1:
+            return
+        
+        if not HAS_DIST or not dist.is_initialized():
+            return
+        
+        dist.barrier(group=self.coordinator.tp_group)
+    
+    def shard_tensor(
+        self,
+        tensor: Any,
+        dim: int = 0,
+    ) -> Any:
+        """
+        Shard a tensor for this TP rank.
+        """
+        if self.tp_size == 1:
+            return tensor
+        
+        if not HAS_TORCH:
+            size = len(tensor) if hasattr(tensor, '__len__') else tensor.shape[dim]
+            chunk_size = size // self.tp_size
+            start = self.tp_rank * chunk_size
+            return tensor[start:start + chunk_size]
+        
+        chunks = tensor.chunk(self.tp_size, dim=dim)
+        return chunks[self.tp_rank].contiguous()
+    
+    def unshard_tensor(
+        self,
+        tensor: Any,
+        dim: int = 0,
+    ) -> Any:
+        """
+        Reconstruct full tensor from shards (all-gather).
+        """
+        return self.all_gather(tensor, dim=dim)
+    
+    @contextmanager
+    def parallel_region(self):
+        """
+        Context manager for tensor parallel execution regions.
+        """
+        yield
+        self.barrier()
+    
+    def get_stats(self) -> dict[str, Any]:
+        """Get TP group statistics."""
+        return {
+            "tp_size": self.tp_size,
+            "tp_rank": self.tp_rank,
+            "is_first_rank": self.is_first_rank,
+            "is_last_rank": self.is_last_rank,
+            "custom_allreduce_enabled": self._custom_allreduce_enabled,
+            "device": str(self.device),
+        }
