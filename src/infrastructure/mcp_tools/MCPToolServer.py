@@ -5,40 +5,39 @@ Facade for MCP Tool Server Integration.
 Delegates to modularized sub-packages in src/infrastructure/mcp_tools/.
 """
 
-from __future__ import annotations
-
 from .models import (
     MCPServerConfig,
     MCPServerType,
+    ToolStatus,
+    SessionState,
     ToolSchema,
     ToolCall,
     ToolResult,
-    ToolStatus,
-    SessionState,
     MCPSession,
 )
-from .base import MCPToolServer as MCPToolServerBase
-from .sse import SSEMCPServer
-from .local import LocalMCPServer
+from .base import MCPToolServer
+from .sse import SSEToolServer
+from .local import LocalToolServer
 from .adapter import SchemaAdapter
 from .registry import MCPServerRegistry, SessionManager
 
-# For backward compatibility
-MCPToolServer = MCPToolServerBase
+# For backward compatibility mapping
+ServerType = MCPServerType
 
 __all__ = [
     "MCPServerConfig",
     "MCPServerType",
+    "ServerType",
+    "ToolStatus",
+    "SessionState",
     "ToolSchema",
     "ToolCall",
     "ToolResult",
-    "ToolStatus",
-    "SessionState",
     "MCPSession",
     "MCPToolServer",
-    "SSEMCPServer",
-    "LocalMCPServer",
-    "MCPServerRegistry",
+    "SSEToolServer",
+    "LocalToolServer",
     "SchemaAdapter",
+    "MCPServerRegistry",
     "SessionManager",
 ]
