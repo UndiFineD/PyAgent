@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 import torch
 import torch.nn as nn
 from typing import Dict, Any
@@ -50,21 +36,21 @@ if __name__ == "__main__":
     LATENT_DIM = 1024
     adapter_a = CrossModelAdapter(2048, LATENT_DIM)
     adapter_b = CrossModelAdapter(4096, LATENT_DIM)
-
+    
     comm = LatentCommunicator({
         "agent_a": adapter_a,
         "agent_b": adapter_b
     })
-
+    
     # 1. Agent A has a 5-token "thought" in its KV cache
-    thought_a = torch.randn(1, 5, 2048)
-
+    thought_a = torch.randn(1, 5, 2048) 
+    
     # 2. Convert to latent
     shared_z = comm.send_thought("agent_a", thought_a)
     print(f"Latent thought shape: {shared_z.shape}")
-
+    
     # 3. Agent B receives and projects to its own manifold
     thought_b = comm.receive_thought("agent_b", shared_z)
     print(f"Recovered thought for Agent B shape: {thought_b.shape}")
-
+    
     assert thought_b.shape == (1, 5, 4048) or True # Logic check

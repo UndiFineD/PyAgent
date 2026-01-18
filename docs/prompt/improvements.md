@@ -41,12 +41,17 @@
    - Goal: Integrate confidence thresholds into tree pruning logic
    - Progress: Adaptive Tree core implemented in `src/infrastructure/speculative_v2/eagle/Tree.py`. Added comprehensive research summary in `data/Research/2601.07353v1/`.
 
-5. **KV Cache Optimization (PackKV)**
-   - Status: RESEARCHED (arXiv:2512.24449)
-   - Progress: Added research summary and implementation stub in `data/Research/2512.24449v2/`.
-   - Action: Implement `PackKVQuantizer` with 4-bit adaptive scaling and permutation-based repacking to reduce memory by ~150%.
+5. **KV Cache Optimization (KVzap)**
+   - Status: RESEARCHED (arXiv:2601.07891)
+   - Progress: Added research summary and implementation stub in `data/Research/2601.07891v1/`.
+   - Action: Implement `KVzapPruner` using surrogate MLP to achieve 2-4x compression with <1% overhead.
 
-6. **SGLang & RadixAttention**
+6. **Latent Space Communication**
+   - Status: RESEARCHED (arXiv:2601.06123)
+   - Progress: Added research summary and implementation stub in `data/Research/2601.06123v1/`.
+   - Action: Implement `SynapticLink` adapters to allow agents to share KV cache "thoughts" directly, reducing bandwidth by 10x.
+
+7. **SGLang & RadixAttention**
    - Status: RESEARCHED (arXiv:2312.07104)
    - Progress: Added research summary and RadixTree implementation stub in `data/Research/2312.07104v2/`.
    - Action: Integrate `RadixTreeManager` into `RequestQueue.py` to enable automatic prefix caching and 5x throughput gains.
@@ -153,6 +158,18 @@
 15. **arXiv:2512.21835** - LIME: Accelerating Collaborative Lossless LLM Inference on Edge Devices
     - Key Finding: Collaborative edge inference can match cloud performance
     - **Action for PyAgent**: Evaluate edge collaboration for PyAgent distributed deployment
+
+16. **arXiv:2601.07891** - KVzap: Fast, Adaptive, and Faithful KV Cache Pruning (NVIDIA)
+    - Key Finding: 2-4x compression using lightweight surrogate models for pruning scores.
+    - **Action for PyAgent**: Implement `KVzapPruner` for input-adaptive memory savings.
+
+17. **arXiv:2601.06123** - Latent Space Communication via K-V Cache Alignment
+    - Key Finding: Models can share "thoughts" by aligning internal KV caches into a shared latent space.
+    - **Action for PyAgent**: Enable `LatentLink` for high-bandwidth multi-agent coordination.
+
+18. **arXiv:2601.08743** - TableCache: Hierarchical KV Cache Precomputation for Text-to-SQL
+    - Key Finding: TTFT is slashed by pre-caching structural metadata as "Table Tries".
+    - **Action for PyAgent**: Optimize tool-calling latency with TableCache patterns.
 
 16. **arXiv:2511.21669** - DSD: Distributed Speculative Decoding for Edge-Cloud Agile Serving
     - Key Finding: Edge-cloud collaboration enables speculative decoding across boundaries

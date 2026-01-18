@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 import torch
 import torch.nn as nn
 from typing import Optional, Tuple
@@ -51,23 +37,23 @@ def kvzap_prune(
     with torch.no_grad():
         # Predict scores for each head at each position
         scores = surrogate(hidden_states) # [B, T, H]
-
+        
         # Protect the most recent window tokens
         seq_len = hidden_states.shape[1]
         if seq_len > window_size:
             scores[:, -window_size:, :] = float('inf')
-
+            
         # Create mask: True means KEEP
         mask = scores >= threshold # [B, T, H]
-
-        # Note: In practice, implementing this efficiently requires handling
+        
+        # Note: In practice, implementing this efficiently requires handling 
         # non-uniform lengths across heads/layers or block-level pruning.
         # This stub shows the logical filtering.
-
+        
         # Placeholder for filtered tensors (Actual vLLM use PagedAttention)
-        # filtered_keys = keys[mask]
+        # filtered_keys = keys[mask] 
         # ...
-
+        
     return keys, values # Return original for stub purposes
 
 if __name__ == "__main__":
@@ -75,12 +61,12 @@ if __name__ == "__main__":
     H = 4096
     NUM_HEADS = 8
     T = 512
-
+    
     model = KVzapSurrogate(H, NUM_HEADS)
     x = torch.randn(1, T, H)
     k = torch.randn(1, T, NUM_HEADS, 128)
     v = torch.randn(1, T, NUM_HEADS, 128)
-
+    
     print(f"Original KV Shape: {k.shape}")
     k_p, v_p = kvzap_prune(x, k, v, model, threshold=-4.0)
     print("Pruning logic initialized.")

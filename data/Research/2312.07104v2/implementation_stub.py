@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 RadixAttention: Automatic KV Cache Reuse for Structural LLM Programs
 Ref: arXiv:2312.07104 (SGLang)
@@ -37,13 +23,13 @@ class RadixTreeManager:
         """
         current = self.root
         tokens_processed = 0
-
+        
         while tokens_processed < len(tokens):
             token = tokens[tokens_processed]
             if token not in current.children:
                 # Calculate blocks for this segment (Simplification)
                 current.children[token] = RadixNode(
-                    tokens[tokens_processed:],
+                    tokens[tokens_processed:], 
                     block_indices[tokens_processed:] # Map to physical blocks
                 )
                 break
@@ -57,12 +43,12 @@ class RadixTreeManager:
         current = self.root
         matched_blocks = []
         tokens_processed = 0
-
+        
         while tokens_processed < len(tokens):
             token = tokens[tokens_processed]
             if token not in current.children:
                 break
-
+                
             node = current.children[token]
             # Check if all tokens in the child node match the input
             node_len = len(node.tokens)
@@ -72,7 +58,7 @@ class RadixTreeManager:
                 current = node
             else:
                 break
-
+                
         return matched_blocks if matched_blocks else None
 
 # Integration in Engine:
