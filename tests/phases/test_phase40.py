@@ -10,10 +10,10 @@ from unittest import IsolatedAsyncioTestCase
 
 # Add src to path
 
-from src.infrastructure.orchestration.AutoDebuggerOrchestrator import (
+from src.infrastructure.orchestration.healing.AutoDebuggerOrchestrator import (
     AutoDebuggerOrchestrator,
 )
-from src.infrastructure.orchestration.SwarmPruningOrchestrator import (
+from src.infrastructure.orchestration.swarm.SwarmPruningOrchestrator import (
     SwarmPruningOrchestrator,
 )
 from src.core.base.NeuralPruningEngine import NeuralPruningEngine
