@@ -14,16 +14,22 @@ No commands will be executed.
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
+from src.core.base.BaseAgent import BaseAgent
 import logging
 
 __version__ = VERSION
 
-class MarkdownAgent:
+class MarkdownAgent(BaseAgent):
     """
-    MarkdownAgent recovered after Copilot CLI deprecation event.
-    Standardized placeholder for future re-implementation.
+    MarkdownAgent specializing in technical documentation and markdown optimization.
     """
-    def __init__(self, *args, **kwargs) -> None:
-        self.version = VERSION
-        logging.info("MarkdownAgent initialized (Placeholder).")
+    def __init__(self, file_path: str, **kwargs) -> None:
+        super().__init__(file_path, **kwargs)
+        self._system_prompt = (
+            "You are a Markdown specialist. Your goal is to optimize documentation, "
+            "ensure technical accuracy, and maintain style consistency in .md files."
+        )
+
+    def _get_default_content(self) -> str:
+        return "# New Documentation\n\nContent pending..."
 
