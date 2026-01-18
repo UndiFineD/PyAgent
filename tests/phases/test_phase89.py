@@ -2,7 +2,7 @@ import unittest
 
 # Ensure the project root is in PYTHONPATH
 
-from src.infrastructure.orchestration.IntelligenceOrchestrator import (
+from src.infrastructure.orchestration.intel.IntelligenceOrchestrator import (
     IntelligenceOrchestrator,
 )
 
