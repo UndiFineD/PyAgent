@@ -1,0 +1,168 @@
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Lazy import functions for expensive infrastructure modules.
+
+This module provides lazy loading functions for the largest and most
+expensive modules in the infrastructure layer. These functions defer
+imports until first access, significantly improving startup time.
+
+Usage:
+    from src.infrastructure.lazy import get_eagle_proposer
+
+    # EagleProposer is only imported when this function is called
+    EagleProposer = get_eagle_proposer()
+    proposer = EagleProposer(config)
+
+Available lazy imports:
+    - get_eagle_proposer() -> EagleProposer class
+    - get_arc_offload_manager() -> ARCOffloadManager class
+    - get_tool_parser_framework() -> ToolParserFramework class
+    - get_reasoning_engine() -> ReasoningEngine class
+    - get_paged_attention_engine() -> PagedAttentionEngine class
+"""
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, Type
+
+from src.core.lazy_loader import lazy_import
+
+__all__ = [
+    "get_eagle_proposer",
+    "get_arc_offload_manager",
+    "get_tool_parser_registry",
+    "get_reasoning_engine",
+    "get_paged_attention_engine",
+]
+
+# Type checking imports for IDE support
+if TYPE_CHECKING:
+    from src.infrastructure.speculative_v2.EagleProposer import EagleProposer
+    from src.infrastructure.kv_transfer.ARCOffloadManager import ARCOffloadManager
+    from src.infrastructure.tools.ToolParserFramework import ToolParserRegistry
+    from src.infrastructure.reasoning.ReasoningEngine import ReasoningEngine
+    from src.infrastructure.attention.PagedAttentionEngine import PagedAttentionEngine
+
+
+@lazy_import
+def get_eagle_proposer() -> Type["EagleProposer"]:
+    """
+    Lazily import and return the EagleProposer class.
+
+    EagleProposer implements EAGLE-style speculative decoding with tree
+    attention for faster inference. This is a large module (~710 lines)
+    with significant dependencies.
+
+    Returns:
+        The EagleProposer class for instantiation.
+
+    Example:
+        EagleProposer = get_eagle_proposer()
+        config = EagleConfig(tree_depth=4, tree_width=8)
+        proposer = EagleProposer(config)
+    """
+    from src.infrastructure.speculative_v2.EagleProposer import EagleProposer
+    return EagleProposer
+
+
+@lazy_import
+def get_arc_offload_manager() -> Type["ARCOffloadManager"]:
+    """
+    Lazily import and return the ARCOffloadManager class.
+
+    ARCOffloadManager implements ARC (Adaptive Replacement Cache) eviction
+    with T1/T2/B1/B2 ghost lists for intelligent KV cache offloading.
+    This is a substantial module (~580 lines) with memory management logic.
+
+    Returns:
+        The ARCOffloadManager class for instantiation.
+
+    Example:
+        ARCOffloadManager = get_arc_offload_manager()
+        manager = ARCOffloadManager(
+            max_cache_size=1024,
+            offload_device="cpu",
+        )
+    """
+    from src.infrastructure.kv_transfer.ARCOffloadManager import ARCOffloadManager
+    return ARCOffloadManager
+
+
+@lazy_import
+def get_tool_parser_registry() -> Type["ToolParserRegistry"]:
+    """
+    Lazily import and return the ToolParserRegistry class.
+
+    ToolParserRegistry provides model-specific tool parsing capabilities
+    for function calling and structured outputs. This module (~1000 lines)
+    includes parsers, validators, and registry components.
+
+    Returns:
+        The ToolParserRegistry class for instantiation.
+
+    Example:
+        ToolParserRegistry = get_tool_parser_registry()
+        registry = ToolParserRegistry()
+        parser = registry.get_parser("llama3")
+    """
+    from src.infrastructure.tools.ToolParserFramework import ToolParserRegistry
+    return ToolParserRegistry
+
+
+@lazy_import
+def get_reasoning_engine() -> Type["ReasoningEngine"]:
+    """
+    Lazily import and return the ReasoningEngine class.
+
+    ReasoningEngine provides unified thinking and tool extraction
+    capabilities for chain-of-thought reasoning. This is a complex
+    module (~900 lines) with multiple reasoning strategies.
+
+    Returns:
+        The ReasoningEngine class for instantiation.
+
+    Example:
+        ReasoningEngine = get_reasoning_engine()
+        engine = ReasoningEngine(
+            strategy="tree_of_thought",
+            max_depth=5,
+        )
+        result = engine.reason(prompt)
+    """
+    from src.infrastructure.reasoning.ReasoningEngine import ReasoningEngine
+    return ReasoningEngine
+
+
+@lazy_import
+def get_paged_attention_engine() -> Type["PagedAttentionEngine"]:
+    """
+    Lazily import and return the PagedAttentionEngine class.
+
+    PagedAttentionEngine implements paged attention for efficient
+    memory management during inference. This module (~870 lines)
+    includes cache management, scheduling, and execution components.
+
+    Returns:
+        The PagedAttentionEngine class for instantiation.
+
+    Example:
+        PagedAttentionEngine = get_paged_attention_engine()
+        engine = PagedAttentionEngine(
+            block_size=16,
+            num_gpu_blocks=1024,
+        )
+    """
+    from src.infrastructure.attention.PagedAttentionEngine import PagedAttentionEngine
+    return PagedAttentionEngine
