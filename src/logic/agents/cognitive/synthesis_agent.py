@@ -13,32 +13,27 @@
 # limitations under the License.
 
 
-"""Agent responsible for merging specialized agent capabilities."""
-
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import logging
 import os
 from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import as_tool
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
 
 
-# pylint: disable=too-many-ancestors
 class SynthesisAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Synthesis Agent: Responsible for Swarm Synthesis,
+    Tier 2 (Cognitive Logic) - Synthesis Agent: Responsible for Swarm Synthesis, 
     merging specialized agent capabilities into optimized super-agent architectures.
     """
 
     def __init__(self, workspace_root: str) -> None:
         # Initialize with a dummy path as base_agent needs a file path
         dummy_path = os.path.join(
-            workspace_root, r"src\logic\agents\cognitive\synthesis_agent.py"
+            workspace_root, "src/logic/agents/cognitive/SynthesisAgent.py"
         )
         super().__init__(dummy_path)
         self.workspace_root = workspace_root
@@ -50,7 +45,7 @@ class SynthesisAgent(BaseAgent):
         )
 
     @as_tool
-    async def fuse_agents(
+    def fuse_agents(
         self, agent_names: list[str], new_agent_name: str
     ) -> dict[str, Any]:
         """
@@ -69,13 +64,12 @@ class SynthesisAgent(BaseAgent):
         prompt = (
             f"I want to create a new agent named {new_agent_name} that combines the features "
             f"of these source agents: {', '.join(agent_names)}.\n"
-            "The new agent should inherit from BaseAgent and use the @as_tool decorator "
-            "for all combined capabilities.\n"
+            "The new agent should inherit from BaseAgent and use the @as_tool decorator for all combined capabilities.\n"
             "Generate the full Python code for this new agent class. include all necessary imports.\n"
             "Make sure the class name is exactly " + new_agent_name + "."
         )
 
-        agent_code = await self.think(prompt)
+        agent_code = self.think(prompt)
 
         # Clean up code markup if present
         if "```python" in agent_code:
@@ -90,7 +84,7 @@ class SynthesisAgent(BaseAgent):
         temp_path = file_path + ".tmp"
 
         try:
-            with open(temp_path, "w", encoding="utf-8") as f:
+            with open(temp_path, "w") as f:
                 f.write(agent_code)
 
             # Atomic rename
@@ -104,11 +98,11 @@ class SynthesisAgent(BaseAgent):
                 "file_path": file_path,
                 "components_fused": agent_names,
             }
-        except (OSError, IOError) as e:
+        except Exception as e:
             if os.path.exists(temp_path):
                 try:
                     os.remove(temp_path)
-                except (OSError, IOError):
+                except Exception:
                     pass
             logging.error(f"SynthesisAgent: Failed to save fused agent atomically: {e}")
             return {"status": "error", "message": str(e)}
@@ -120,7 +114,6 @@ class SynthesisAgent(BaseAgent):
         """
         Analyzes the fleet to suggest which agents should be fused based on usage patterns.
         """
-        _ = fleet_agents
         logging.info("SynthesisAgent: Analyzing fleet for fusion candidates.")
         # This would typically use telemetry to find agents that frequently call each other.
         # For now, we suggest a logical fusion.

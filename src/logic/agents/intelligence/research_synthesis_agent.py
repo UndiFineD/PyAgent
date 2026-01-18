@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,23 +11,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Research synthesis agent.py module.
-"""
-
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 from typing import Any
-
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.observability.structured_logger import StructuredLogger
+from src.core.base.BaseAgent import BaseAgent
+from src.observability.StructuredLogger import StructuredLogger
 
 __version__ = VERSION
 
 
-class ResearchSynthesisAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+class ResearchSynthesisAgent(BaseAgent):
     """
     Autonomously conducts research on technical topics by querying
     external/internal sources and synthesizing complex findings.
@@ -42,7 +35,9 @@ class ResearchSynthesisAgent(BaseAgent):  # pylint: disable=too-many-ancestors
 
     def conduct_research(self, topic: str, focus_areas: list[str]) -> dict[str, Any]:
         """Conducts a simulated research session on a given topic."""
-        self.logger.info(f"Conducting research on: {topic}", topic=topic, areas=focus_areas)
+        self.logger.info(
+            f"Conducting research on: {topic}", topic=topic, areas=focus_areas
+        )
         research_id = f"R-{hash(topic) % 1000}"
 
         # Simulate research gathering
@@ -85,5 +80,7 @@ class ResearchSynthesisAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         """Returns metrics on research productivity."""
         return {
             "topics_researched": len(self.research_library),
-            "total_insights_generated": sum(len(s.split("\n")) for s in self.research_library.values()),
+            "total_insights_generated": sum(
+                len(s.split("\n")) for s in self.research_library.values()
+            ),
         }

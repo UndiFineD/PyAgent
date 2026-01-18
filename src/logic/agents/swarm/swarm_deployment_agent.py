@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -8,44 +7,22 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-SwarmDeploymentAgent: Swarm agent for orchestrating deployment, scaling, and lifecycle management of agents and services in the PyAgent swarm.
-Handles distributed deployment and rollout strategies.
-"""
-
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Swarm deployment agent.py module.
-"""
 
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import os
 from typing import Any
-
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.observability.structured_logger import StructuredLogger
+from src.core.base.BaseAgent import BaseAgent
+from src.observability.StructuredLogger import StructuredLogger
 
 __version__ = VERSION
 
 
-class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+class SwarmDeploymentAgent(BaseAgent):
     """
     Autonomous Fleet Expansion: Provisions and initializes new agent nodes
     on simulated cloud infrastructure.
@@ -77,9 +54,13 @@ class SwarmDeploymentAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         self.active_deployments.append(node_details)
         return node_details
 
-    def scale_swarm(self, target_node_count: int, node_type: str) -> list[dict[str, Any]]:
+    def scale_swarm(
+        self, target_node_count: int, node_type: str
+    ) -> list[dict[str, Any]]:
         """Scales the swarm up to the target count of nodes."""
-        current_count = sum(1 for d in self.active_deployments if d["node_type"] == node_type)
+        current_count = sum(
+            1 for d in self.active_deployments if d["node_type"] == node_type
+        )
         new_nodes = []
 
         if target_node_count > current_count:

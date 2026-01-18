@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -8,37 +7,15 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-PolicyEnforcementAgent: Agent for enforcing security, privacy, and operational policies across the PyAgent swarm.
-Implements real-time policy checks and automated enforcement actions.
-"""
-
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Policy enforcement agent.py module.
-"""
 
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import time
 from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -59,18 +36,22 @@ class PolicyEnforcementAgent:
         self.violation_log: list[dict[str, Any]] = []
         self.quarantine_list: set[str] = set()
 
-    def evaluate_action(self, agent_id: str, action_type: str, metadata: Any) -> dict[str, Any]:
+    def evaluate_action(
+        self, agent_id: str, action_type: str, metadata: Any
+    ) -> dict[str, Any]:
         """
         Evaluates if an agent action complies with active policies.
         """
-        _ = (agent_id, action_type, metadata)
         violations = []
 
-        if action_type == "external_push" and self.active_policies["no_external_data_leak"]:
+        if (
+            action_type == "external_push"
+            and self.active_policies["no_external_data_leak"]
+        ):
             if "credentials" in str(metadata).lower():
                 violations.append("DATA_LEAK_PREVENTION")
 
-        if violations:
+        if len(violations) > 0:
             self.violation_log.append(
                 {
                     "agent_id": agent_id,
@@ -90,5 +71,4 @@ class PolicyEnforcementAgent:
         return {"agent_id": agent_id, "status": "quarantined", "reason": reason}
 
     def is_agent_quarantined(self, agent_id: str) -> bool:
-        """Checks if an agent is in the quarantine list."""
         return agent_id in self.quarantine_list

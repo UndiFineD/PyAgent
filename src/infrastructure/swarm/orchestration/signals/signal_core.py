@@ -11,17 +11,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Signal core.py module.
-"""
-
 
 from __future__ import annotations
-
-from datetime import datetime
+from src.core.base.Version import VERSION
 from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
+from datetime import datetime
 
 __version__ = VERSION
 
@@ -44,6 +38,8 @@ class SignalCore:
             "timestamp_iso": datetime.now().isoformat(),
         }
 
-    def prune_history(self, history: list[dict[str, Any]], limit: int) -> list[dict[str, Any]]:
+    def prune_history(
+        self, history: list[dict[str, Any]], limit: int
+    ) -> list[dict[str, Any]]:
         """Returns the last N events from the signal history."""
         return history[-limit:]

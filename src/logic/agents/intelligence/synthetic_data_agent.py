@@ -12,26 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Synthetic data agent.py module.
-"""
-
 
 from __future__ import annotations
-
-import json
+from src.core.base.Version import VERSION
 import logging
+import json
 import os
-
-from src.core.base.common.base_utilities import as_tool
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.intelligence.core.synthesis_core import SynthesisCore
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.BaseUtilities import as_tool
+from src.logic.agents.intelligence.core.SynthesisCore import SynthesisCore
 
 __version__ = VERSION
 
 
-class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+class SyntheticDataAgent(BaseAgent):
     """
     Agent specializing in generating high-fidelity synthetic training data.
     Used to create datasets for fine-tuning local models (ModelForge).
@@ -55,7 +49,12 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         filepath = os.path.join(self.output_dir, "python_edge_cases.jsonl")
         with open(filepath, "w", encoding="utf-8") as f:
             for s in snippets:
-                f.write(json.dumps({"instruction": "Complete or explain this code", "output": s}) + "\n")
+                f.write(
+                    json.dumps(
+                        {"instruction": "Complete or explain this code", "output": s}
+                    )
+                    + "\n"
+                )
 
         return f"Generated {count} edge cases in {filepath}"
 
@@ -65,7 +64,9 @@ class SyntheticDataAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         Generates synthetic training pairs (instruction, input, output) for a given topic.
         Saves them to a .jsonl file in the logs directory.
         """
-        logging.info(f"SyntheticDataAgent: Generating {count} training pairs for topic: {topic}")
+        logging.info(
+            f"SyntheticDataAgent: Generating {count} training pairs for topic: {topic}"
+        )
 
         dataset = []
         for i in range(count):

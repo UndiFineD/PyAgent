@@ -12,20 +12,18 @@
 # limitations under the License.
 
 
-"""Script for final namespace correction and import migration."""
+"""Script for reconciling workspace-wide module imports and missing __init__.py files."""
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import os
 import re
-
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 
 def fix_imports(content: str) -> str:
-    """Migrate legacy module names to the src namespace."""
+    """Correct legacy module imports to use the src prefix."""
 
     modules = [
         "agent_backend",
@@ -43,12 +41,15 @@ def fix_imports(content: str) -> str:
     ]
 
     for mod in modules:
+        # Match from agent_X and import agent_X
+        # Using \b to ensure we match the full module name
         content = re.sub(
             rf"^\s*from ({mod})(\b\s+import|\b\s+)",
             r"from src.\1\2",
             content,
             flags=re.MULTILINE,
         )
+
         content = re.sub(
             rf"^\s*import ({mod})(\b\s*$)",
             r"from src import \1",
@@ -57,36 +58,64 @@ def fix_imports(content: str) -> str:
         )
 
     content = content.replace("from classes.", "from src.")
-    # Fix src.agent -> src.logic.agents
-    content = content.replace("from src.agent.", "from src.logic.agents.")
-    content = content.replace("import src.agent.", "import src.logic.agents.")
-
-    # Handle the specific case in agent_deprecated.py
-    content = content.replace(
-        "from src.agent import *",
-        "from src.logic.agents.swarm.OrchestratorAgent import *",
-    )  # Assuming Agent.py has the stuff
-
     return content
 
 
+print("Starting fix script...")
 updated_count = 0
+inits_count = 0
+
 for root_dir in ["src", "tests"]:
+    if not os.path.exists(root_dir):
+        print(f"Directory {root_dir} not found")
+        continue
     for root, dirs, files in os.walk(root_dir):
         if "__pycache__" in root or ".git" in root:
             continue
+
+        init_file = os.path.join(root, "__init__.py")
+        if not os.path.exists(init_file):
+            with open(init_file, "w", encoding="utf-8") as f:
+                f.write("")
+            inits_count += 1
+
         for file in files:
             if file.endswith(".py"):
                 path = os.path.join(root, file)
                 try:
                     with open(path, encoding="utf-8") as f:
                         content = f.read()
+
                     new_content = fix_imports(content)
+
                     if new_content != content:
                         with open(path, "w", encoding="utf-8") as f:
                             f.write(new_content)
                         updated_count += 1
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                    pass
+                except Exception as e:
+                    print(f"Error in {path}: {e}")
 
-print(f"Updated {updated_count} files.")
+# CircuitBreaker fix
+cb_path = os.path.join("src", "backend", "CircuitBreaker.py")
+if os.path.exists(cb_path):
+    with open(cb_path, encoding="utf-8") as f:
+        content = f.read()
+    if "src.agent.CircuitBreakerCore" in content or "CircuitBreakerCore" in content:
+        content = content.replace(
+            "from src.agent.CircuitBreakerCore import CircuitBreakerCore",
+            "from src.core.base.CircuitBreaker import CircuitBreaker as CircuitBreakerImpl",
+        )
+        content = content.replace("CircuitBreakerCore", "CircuitBreakerImpl")
+        with open(cb_path, "w", encoding="utf-8") as f:
+            f.write(content)
+        print("Fixed CircuitBreaker.py")
+
+# Rename agent.py to agent_facade.py if it exists in src/
+agent_path = os.path.join("src", "agent.py")
+if os.path.exists(agent_path):
+    os.rename(agent_path, os.path.join("src", "agent_facade.py"))
+    print("Renamed src/agent.py to src/agent_facade.py")
+
+print(
+    f"Finished. Created {inits_count} __init__.py files. Updated {updated_count} files."
+)

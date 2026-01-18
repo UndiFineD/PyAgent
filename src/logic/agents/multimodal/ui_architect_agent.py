@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -8,43 +7,20 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-UIArchitectAgent: Multimodal agent for designing, generating, and optimizing user interfaces across the PyAgent platform.
-Supports adaptive UI synthesis, accessibility, and cross-modal interaction design.
-"""
-
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Ui architect agent.py module.
-"""
 
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 from typing import Any
-
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
 
-# pylint: disable=too-many-ancestors
-class UiArchitectAgent(BaseAgent):
+class UIArchitectAgent(BaseAgent):
     """
     Phase 54: UI Architect Agent.
     Designs and generates dynamic UI layouts for the Fleet Dashboard.
@@ -55,7 +31,9 @@ class UiArchitectAgent(BaseAgent):
         super().__init__(path)
         self.layouts: dict[str, Any] = {}
 
-    def design_dashboard_layout(self, active_workflow: str, agent_list: list[str]) -> dict[str, Any]:
+    def design_dashboard_layout(
+        self, active_workflow: str, agent_list: list[str]
+    ) -> dict[str, Any]:
         """Creates a layout JSON based on active agents and workflow type."""
         layout = {
             "title": f"Live View: {active_workflow}",

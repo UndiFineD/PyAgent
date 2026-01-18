@@ -13,19 +13,14 @@
 # limitations under the License.
 
 
-"""Context recommendation engine for Cognitive agents.
-
-This module provides tools to suggest improvements and section additions
-to context files by analyzing similar reference contexts and patterns.
-"""
+"""Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-import re
-
-from src.core.base.lifecycle.version import VERSION
-from src.logic.agents.cognitive.context.models.context_recommendation import (
+from src.core.base.Version import VERSION
+from src.logic.agents.cognitive.context.models.ContextRecommendation import (
     ContextRecommendation,
 )
+import re
 
 __version__ = VERSION
 
@@ -36,32 +31,19 @@ class ContextRecommender:
     Analyzes similar files to suggest context improvements.
 
     Example:
-        >>> recommender = ContextRecommender()
-        >>> recommendations = recommender.recommend("auth.py", similar_contexts)
+        >>> recommender=ContextRecommender()
+        >>> recommendations=recommender.recommend("auth.py", similar_contexts)
     """
 
     def __init__(self) -> None:
-        """Initialize context recommender."""
         self.reference_files: dict[str, str] = {}
 
     def add_reference(self, file_name: str, content: str) -> None:
-        """Add a reference context file used for recommendations.
-
-        Args:
-            file_name: Name of the reference file.
-            content: Content of the reference file.
-        """
+        """Add a reference context file used for recommendations."""
         self.reference_files[file_name] = content
 
     def find_similar(self, query: str) -> list[str]:
-        """Find reference files that look similar to the query.
-
-        Args:
-            query: The query string or content to find similarities for.
-
-        Returns:
-            List of reference file names that match the query.
-        """
+        """Find reference files that look similar to the query."""
         query_words = set(query.lower().split())
         matches: list[str] = []
         for name, content in self.reference_files.items():
@@ -81,13 +63,6 @@ class ContextRecommender:
         - If similar_contexts is provided, it is treated as the corpus.
         - Otherwise, content_or_target_file is treated as the target content
           and reference_files are used as the corpus.
-
-        Args:
-            content_or_target_file: Content to analyze or path to target file.
-            similar_contexts: Optional external corpus of contexts.
-
-        Returns:
-            List of ContextRecommendation objects.
         """
         corpus = (
             similar_contexts if similar_contexts is not None else self.reference_files

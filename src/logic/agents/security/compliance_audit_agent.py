@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -8,43 +7,21 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-ComplianceAuditAgent: Agent for performing detailed compliance audits, evidence collection, and reporting in the PyAgent swarm.
-Supports automated audit trails and compliance verification.
-"""
-
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Compliance audit agent.py module.
-"""
 
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 from typing import Any
-
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
-from src.observability.structured_logger import StructuredLogger
+from src.core.base.BaseAgent import BaseAgent
+from src.observability.StructuredLogger import StructuredLogger
 
 __version__ = VERSION
 
 
-class ComplianceAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+class ComplianceAuditAgent(BaseAgent):
     """
     Compliance Audit Agent: Verifies fleet operations against simulated
     industry standards (e.g., SOC2, GDPR, HIPAA patterns).

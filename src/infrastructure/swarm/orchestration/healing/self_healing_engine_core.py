@@ -11,36 +11,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Self healing engine core.py module.
-"""
-
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
 
 try:
     import rust_core as rc
-
     HAS_RUST = True
 except ImportError:
     HAS_RUST = False
 
 __version__ = VERSION
-
-
-class FailureType:
-    """Enumeration of swarm failure types."""
-    SYNTAX_ERROR = "fix_syntax"
-    DEPENDENCY_ERROR = "install_dependency"
-    CONFIG_ERROR = "check_config"
-    API_MISMATCH = "verify_api_compatibility"
-    STATE_CORRUPTION = "fix_state_corruption"
-    CONTEXT_LOSS = "restore_context"
-    UNKNOWN = "manual_review"
 
 
 class SelfHealingEngineCore:
@@ -49,7 +31,9 @@ class SelfHealingEngineCore:
     Decides what kind of fix is needed based on the traceback.
     """
 
-    def analyze_failure(self, agent_name: str, tool_name: str, error_msg: str, tb: str) -> dict[str, Any]:
+    def analyze_failure(
+        self, agent_name: str, tool_name: str, error_msg: str, tb: str
+    ) -> dict[str, Any]:
         """Analyzes a failure and suggests a strategy."""
         # Rust-accelerated strategy detection
         if HAS_RUST:
@@ -62,24 +46,19 @@ class SelfHealingEngineCore:
                     "strategy": strategy,
                     "is_critical": "Registry" in agent_name or "Fleet" in agent_name,
                 }
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 pass
 
-        strategy = FailureType.UNKNOWN
+        strategy = "manual_review"
 
         if "SyntaxError" in tb:
-            strategy = FailureType.SYNTAX_ERROR
+            strategy = "fix_syntax"
         elif "ImportError" in tb:
-            strategy = FailureType.DEPENDENCY_ERROR
+            strategy = "install_dependency"
         elif "KeyError" in tb:
-            strategy = FailureType.CONFIG_ERROR
+            strategy = "check_config"
         elif "AttributeError" in tb:
-            strategy = FailureType.API_MISMATCH
-        # Phase 336: New taxonomy
-        elif "Empty File" in error_msg or "Corruption" in error_msg:
-            strategy = FailureType.STATE_CORRUPTION
-        elif "Context" in error_msg or "Task ID" in error_msg:
-            strategy = FailureType.CONTEXT_LOSS
+            strategy = "verify_api_compatibility"
 
         return {
             "agent": agent_name,
