@@ -39,20 +39,30 @@
 4. **TALON: Confidence-Aware Speculative Decoding**
    - Status: IMPLEMENTING (arXiv:2601.07353)
    - Goal: Integrate confidence thresholds into tree pruning logic
-   - Progress: Adaptive Tree core implemented in `src/infrastructure/speculative_v2/eagle/Tree.py`.
+   - Progress: Adaptive Tree core implemented in `src/infrastructure/speculative_v2/eagle/Tree.py`. Added comprehensive research summary in `data/Research/2601.07353v1/`.
+
+5. **KV Cache Optimization (PackKV)**
+   - Status: RESEARCHED (arXiv:2512.24449)
+   - Progress: Added research summary in `data/Research/2512.24449v2/`. Planning implementation for K-V lossy compression.
+
+6. **SGLang & RadixAttention**
+   - Status: RESEARCHED (arXiv:2312.07104)
+   - Progress: Added research summary in `data/Research/2312.07104v2/`. Identified integration points for prefix caching.
 
 ### Medium Priority
 
-4. **Research Paper Integration Workflow**
-   - Status: COMPLETED
-   - Process:
-     1. Monitor arXiv RSS feeds (cs.CL, cs.LG, cs.AI)
-     2. Auto-extract key innovations
-     3. Generate improvement tickets
-     4. Prototype and test
+7. **Hydra Sequential Heads**
+   - Status: RESEARCHED (arXiv:2402.05109)
+   - Progress: Added research summary in `data/Research/2402.05109v2/`.
 
-5. **Test Coverage Expansion**
-   - Status: ONGOING
+9. **Architectural Multi-Stage GenAI Framework**
+   - Status: COMPLETED
+   - Research: arXiv:2601.10696 & ASEJ S2090447925006203
+   - Progress: Deployed `ArchitecturalDesignAgent` with 7-phase design workflow. Integrated 14% aesthetic delta tracking and iterative feedback loops. Summaries available in `data/Research/`.
+
+10. **Research Process Optimization**
+   - Status: COMPLETED
+   - Progress: Standardized the "Research -> Summary -> Agentic Implementation" pipeline. Automated tracking of PII and arXiv IDs.
    - Current: 3,064+ tests
    - Target: 90%+ coverage across all modules
    - Focus areas: Error handling, edge cases, integration tests

@@ -1,0 +1,74 @@
+from __future__ import annotations
+import math
+import threading
+from typing import Any, List, Optional, Union
+import numpy as np
+from .config import LogprobFormat, LogprobEntry, TopLogprob
+from .storage import FlatLogprobs
+
+class LogprobsProcessor:
+    """Process and extract logprobs from model outputs."""
+    
+    def __init__(self, top_k: int = 5, output_format: LogprobFormat = LogprobFormat.FLAT):
+        self.top_k = top_k
+        self.output_format = output_format
+    
+    def process_logits(self, logits: np.ndarray, token_ids: np.ndarray, tokenizer: Optional[Any] = None) -> Union[FlatLogprobs, List[LogprobEntry]]:
+        logprobs = self._log_softmax(logits)
+        n = len(token_ids)
+        selected_logprobs = logprobs[np.arange(n), token_ids]
+        top_k_indices = np.argsort(logprobs, axis=1)[:, -self.top_k:][:, ::-1]
+        top_k_logprobs = np.take_along_axis(logprobs, top_k_indices, axis=1)
+        
+        if self.output_format == LogprobFormat.FLAT:
+            return FlatLogprobs(token_ids.astype(np.int32), selected_logprobs.astype(np.float32),
+                               top_k_indices.astype(np.int32), top_k_logprobs.astype(np.float32))
+        
+        entries = []
+        for i in range(n):
+            tops = [TopLogprob(int(top_k_indices[i, j]), self._decode(int(top_k_indices[i, j]), tokenizer), float(top_k_logprobs[i, j])) 
+                    for j in range(self.top_k)]
+            entries.append(LogprobEntry(int(token_ids[i]), self._decode(int(token_ids[i]), tokenizer), 
+                                      float(selected_logprobs[i]), tuple(tops), i))
+        return entries
+    
+    def _log_softmax(self, logits: np.ndarray) -> np.ndarray:
+        max_logits = np.max(logits, axis=-1, keepdims=True)
+        shifted = logits - max_logits
+        return shifted - np.log(np.sum(np.exp(shifted), axis=-1, keepdims=True))
+
+    def _decode(self, tid: int, tokenizer: Optional[Any]) -> str:
+        if tokenizer:
+            try: return tokenizer.decode([tid])
+            except: pass
+        return f"<{tid}>"
+
+class StreamingLogprobs:
+    """Streaming logprobs accumulator."""
+    def __init__(self, top_k: int = 5, max_tokens: int = 4096):
+        self.top_k = top_k
+        self.max_tokens = max_tokens
+        self._token_ids = np.zeros(max_tokens, dtype=np.int32)
+        self._logprobs = np.zeros(max_tokens, dtype=np.float32)
+        self._top_k_ids = np.zeros((max_tokens, top_k), dtype=np.int32)
+        self._top_k_lps = np.full((max_tokens, top_k), -float('inf'), dtype=np.float32)
+        self._position = 0
+        self._sum_logprobs = 0.0
+        self._lock = threading.Lock()
+    
+    def add_token(self, token_id: int, logprob: float, top_k_ids: Optional[np.ndarray] = None, top_k_logprobs: Optional[np.ndarray] = None):
+        with self._lock:
+            if self._position >= self.max_tokens: return
+            i = self._position
+            self._token_ids[i], self._logprobs[i] = token_id, logprob
+            if top_k_ids is not None:
+                k = min(len(top_k_ids), self.top_k)
+                self._top_k_ids[i, :k], self._top_k_lps[i, :k] = top_k_ids[:k], top_k_logprobs[:k]
+            self._sum_logprobs += logprob
+            self._position += 1
+            
+    def finalize(self) -> FlatLogprobs:
+        with self._lock:
+            n = self._position
+            return FlatLogprobs(self._token_ids[:n].copy(), self._logprobs[:n].copy(),
+                               self._top_k_ids[:n].copy(), self._top_k_lps[:n].copy())
