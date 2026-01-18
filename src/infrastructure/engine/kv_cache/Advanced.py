@@ -1,0 +1,65 @@
+# SPDX-License-Identifier: Apache-2.0
+import threading
+from typing import Dict, List, Tuple, Any
+from collections import defaultdict
+from .DataClasses import CacheConfig, KVCacheBlocks
+from .Coordinator import KVCacheCoordinator
+
+class HierarchicalKVCacheCoordinator(KVCacheCoordinator):
+    """Hierarchical coordinator for complex model architectures."""
+    def __init__(self, config: CacheConfig, max_model_len: int, num_layers: int) -> None:
+        super().__init__(config, max_model_len)
+        self.num_layers = num_layers
+        self.layer_stats: Dict[int, Dict[str, int]] = defaultdict(lambda: {'allocations': 0, 'hits': 0})
+    
+    def allocate_for_layer(self, request_id: str, num_tokens: int, layer_idx: int) -> KVCacheBlocks:
+        blocks = self.allocate(request_id, num_tokens)
+        self.layer_stats[layer_idx]['allocations'] += 1
+        return blocks
+
+
+class PredictiveKVCacheCoordinator(KVCacheCoordinator):
+    """Coordinator with predictive allocation based on request patterns."""
+    def __init__(self, config: CacheConfig, max_model_len: int, memory_budget_bytes: int) -> None:
+        super().__init__(config, max_model_len)
+        self.memory_budget = memory_budget_bytes
+        self._length_history: List[int] = []
+        self._avg_length: float = 256.0
+    
+    def predict_length(self, prompt_length: int) -> int:
+        if not self._length_history: return int(self._avg_length)
+        return int(self._avg_length * 0.9 + prompt_length * 0.1)
+    
+    def record_completion_length(self, length: int) -> None:
+        self._length_history.append(length)
+        if len(self._length_history) > 1000: self._length_history = self._length_history[-500:]
+        self._avg_length = sum(self._length_history) / len(self._length_history)
+    
+    def allocate_predictive(self, request_id: str, current_tokens: int, prompt_length: int) -> KVCacheBlocks:
+        predicted = self.predict_length(prompt_length)
+        target_tokens = max(current_tokens, predicted)
+        return self.allocate(request_id, target_tokens)
+
+
+class AsyncPrefetchCoordinator(KVCacheCoordinator):
+    """Coordinator with async prefetch support."""
+    def __init__(self, config: CacheConfig, max_model_len: int, prefetch_queue_size: int = 100) -> None:
+        super().__init__(config, max_model_len)
+        self.prefetch_queue_size = prefetch_queue_size
+        self._prefetch_requests: List[Tuple[str, int]] = []
+        self._prefetch_lock = threading.Lock()
+    
+    def queue_prefetch(self, request_id: str, expected_tokens: int, priority: int = 0) -> None:
+        with self._prefetch_lock:
+            if len(self._prefetch_requests) < self.prefetch_queue_size: self._prefetch_requests.append((request_id, expected_tokens))
+    
+    def process_prefetch_queue(self, max_blocks: int = 10) -> int:
+        processed = 0
+        with self._prefetch_lock:
+            while self._prefetch_requests and processed < max_blocks:
+                request_id, tokens = self._prefetch_requests.pop(0)
+                try:
+                    self.allocate(request_id, tokens); processed += 1
+                except MemoryError:
+                    self._prefetch_requests.insert(0, (request_id, tokens)); break
+        return processed
