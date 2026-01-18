@@ -54,120 +54,122 @@ class GeminiConnector(CloudProviderBase):
         location: str = "us-central1",
         **config,
     ):
-        """
-        Initialize the Gemini connector.
-        
-        Args:
-            api_key: Google API key (or set GOOGLE_API_KEY env var).
-            project_id: GCP project ID for Vertex AI (optional).
-            location: GCP region for Vertex AI.
-            **config: Additional configuration options.
-        """
         super().__init__(api_key=api_key, **config)
         self._api_key = api_key or os.getenv("GOOGLE_API_KEY")
         self._project_id = project_id or os.getenv("GOOGLE_CLOUD_PROJECT")
         self._location = location
-        
-        # TODO: Initialize Google Generative AI client
-        # from google import generativeai as genai
-        # genai.configure(api_key=self._api_key)
         self._client = None
     
     @property
     def name(self) -> str:
-        """Return provider name."""
         return "Gemini"
     
     @property
     def available_models(self) -> List[str]:
-        """Return list of available Gemini models."""
-        return [
-            "gemini-pro",
-            "gemini-pro-vision",
-            "gemini-ultra",
-            "gemini-1.5-pro",
-            "gemini-1.5-flash",
-            "gemini-2.0-flash",
-        ]
+        return list(self.PRICING.keys())
     
     async def complete(self, request: InferenceRequest) -> InferenceResponse:
-        """
-        Perform a completion request to Gemini API.
-        
-        Args:
-            request: The inference request.
-            
-        Returns:
-            InferenceResponse with the generated content.
-        """
+        import httpx
         start_time = time.perf_counter()
         
-        # TODO: Implement actual Gemini API call
-        # Example implementation:
-        # model = genai.GenerativeModel(request.model)
-        # response = await model.generate_content_async(
-        #     self._format_messages(request.messages),
-        #     generation_config=genai.GenerationConfig(
-        #         max_output_tokens=request.max_tokens,
-        #         temperature=request.temperature,
-        #     ),
-        # )
-        
-        # Placeholder response
-        latency_ms = (time.perf_counter() - start_time) * 1000
-        
-        return InferenceResponse(
-            content="[Gemini response placeholder - implement API call]",
-            tokens_used=0,
-            cost_estimate=0.0,
-            latency_ms=latency_ms,
-            provider=self.name,
-            model=request.model,
-        )
-    
-    async def stream(self, request: InferenceRequest) -> AsyncIterator[str]:
-        """
-        Stream a completion from Gemini API.
-        
-        Args:
-            request: The inference request.
+        if not self._api_key:
+            raise AuthenticationError("Gemini API key is required.")
+
+        gemini_contents = []
+        for msg in request.messages:
+            role = "user" if msg["role"] == "user" else "model"
+            gemini_contents.append({"role": role, "parts": [{"text": msg["content"]}]})
+
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{request.model}:generateContent?key={self._api_key}"
+        payload = {
+            "contents": gemini_contents,
+            "generationConfig": {
+                "temperature": request.temperature,
+                "maxOutputTokens": request.max_tokens,
+                "topP": request.top_p or 0.95,
+            }
+        }
+
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            try:
+                response = await client.post(url, json=payload)
+            except Exception as e:
+                raise CloudProviderError(f"Gemini connection failed: {e}")
             
-        Yields:
-            String chunks of the response.
-        """
-        # TODO: Implement streaming
-        # model = genai.GenerativeModel(request.model)
-        # response = await model.generate_content_async(
-        #     self._format_messages(request.messages),
-        #     generation_config=genai.GenerationConfig(
-        #         max_output_tokens=request.max_tokens,
-        #         temperature=request.temperature,
-        #     ),
-        #     stream=True,
-        # )
-        # async for chunk in response:
-        #     yield chunk.text
+            if response.status_code == 429:
+                raise RateLimitError("Gemini API rate limit exceeded.")
+            elif response.status_code != 200:
+                raise CloudProviderError(f"Gemini API error ({response.status_code}): {response.text}")
+
+            data = response.json()
+            try:
+                content = data["candidates"][0]["content"]["parts"][0]["text"]
+                prompt_tokens = len(str(payload)) // 4
+                comp_tokens = len(content) // 4
+                pricing = self.PRICING.get(request.model, self.PRICING["gemini-1.5-flash"])
+                cost = (prompt_tokens * pricing["input"] + comp_tokens * pricing["output"]) / 1_000_000
+
+                return InferenceResponse(
+                    content=content,
+                    tokens_used=prompt_tokens + comp_tokens,
+                    prompt_tokens=prompt_tokens,
+                    completion_tokens=comp_tokens,
+                    cost_estimate=cost,
+                    latency_ms=(time.perf_counter() - start_time) * 1000,
+                    provider="Google Gemini",
+                    model=request.model,
+                    raw_response=data
+                )
+            except (KeyError, IndexError) as e:
+                raise CloudProviderError(f"Failed to parse Gemini response: {e}")
+
+    async def stream(self, request: InferenceRequest) -> AsyncIterator[InferenceResponse]:
+        import httpx
+        import json
         
-        yield "[Gemini streaming placeholder - implement API call]"
-    
+        if not self._api_key:
+            raise AuthenticationError("Gemini API key is required.")
+
+        gemini_contents = []
+        for msg in request.messages:
+            role = "user" if msg["role"] == "user" else "model"
+            gemini_contents.append({"role": role, "parts": [{"text": msg["content"]}]})
+
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{request.model}:streamGenerateContent?alt=sse&key={self._api_key}"
+        payload = {
+            "contents": gemini_contents,
+            "generationConfig": {
+                "temperature": request.temperature,
+                "maxOutputTokens": request.max_tokens,
+            }
+        }
+
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            async with client.stream("POST", url, json=payload) as response:
+                if response.status_code != 200:
+                    raise CloudProviderError(f"Gemini streaming error ({response.status_code})")
+
+                async for line in response.aiter_lines():
+                    if line.startswith("data: "):
+                        try:
+                            data = json.loads(line[6:])
+                            if "candidates" in data:
+                                chunk = data["candidates"][0]["content"]["parts"][0].get("text", "")
+                                if chunk:
+                                    yield InferenceResponse(
+                                        content=chunk,
+                                        tokens_used=0,
+                                        cost_estimate=0.0,
+                                        latency_ms=0.0,
+                                        provider="Google Gemini",
+                                        model=request.model
+                                    )
+                        except json.JSONDecodeError:
+                            continue
+
     async def health_check(self) -> bool:
-        """
-        Check if Gemini API is accessible.
-        
-        Returns:
-            True if the API is healthy.
-        """
-        # TODO: Implement health check
-        # try:
-        #     models = await genai.list_models_async()
-        #     self._is_healthy = True
-        #     return True
-        # except Exception as e:
-        #     self._is_healthy = False
-        #     self._last_error = str(e)
-        #     return False
-        
-        return True  # Placeholder
+        """Check if Gemini API is accessible."""
+        return self._api_key is not None
     
     def estimate_cost(self, request: InferenceRequest) -> float:
         """
