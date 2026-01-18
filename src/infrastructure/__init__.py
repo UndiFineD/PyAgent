@@ -11,15 +11,103 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Infrastructure layer for PyAgent, handling core system utilities and services.
+
+This module uses lazy loading via __getattr__ to defer imports of expensive
+modules until they are first accessed. This significantly improves startup time.
+
+Lazily loaded modules:
+    - EagleProposer: EAGLE-style speculative decoding
+    - ARCOffloadManager: ARC cache eviction with ghost lists
+    - ToolParserRegistry: Model-specific tool parsing
+    - ReasoningEngine: Unified thinking and tool extraction
+    - PagedAttentionEngine: Paged attention for memory efficiency
+
+Example:
+    from src.infrastructure import EagleProposer  # Not loaded until accessed
+    proposer = EagleProposer(config)  # Now the module is imported
+"""
+
 from __future__ import annotations
+
+from typing import Any, List
+
 from src.core.base.Version import VERSION as VERSION
+from src.core.lazy_loader import ModuleLazyLoader
 
 __version__ = VERSION
 
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+# Registry of expensive modules for lazy loading
+# Maps attribute name -> (module_path, attribute_name)
+_LAZY_MODULES = ModuleLazyLoader({
+    "EagleProposer": (
+        "src.infrastructure.speculative_v2.EagleProposer",
+        "EagleProposer",
+    ),
+    "ARCOffloadManager": (
+        "src.infrastructure.kv_transfer.ARCOffloadManager",
+        "ARCOffloadManager",
+    ),
+    "ToolParserRegistry": (
+        "src.infrastructure.tools.ToolParserFramework",
+        "ToolParserRegistry",
+    ),
+    "ReasoningEngine": (
+        "src.infrastructure.reasoning.ReasoningEngine",
+        "ReasoningEngine",
+    ),
+    "PagedAttentionEngine": (
+        "src.infrastructure.attention.PagedAttentionEngine",
+        "PagedAttentionEngine",
+    ),
+})
 
-"""Infrastructure layer for PyAgent, handling core system utilities and services."""
+
+def __getattr__(name: str) -> Any:
+    """
+    Module-level __getattr__ for lazy loading of expensive imports.
+
+    This implements PEP 562 to defer loading of large modules until
+    they are first accessed, improving import time.
+
+    Args:
+        name: The attribute name being accessed.
+
+    Returns:
+        The lazily loaded attribute.
+
+    Raises:
+        AttributeError: If the attribute is not found in lazy modules.
+    """
+    if name in _LAZY_MODULES:
+        return _LAZY_MODULES.load(name)
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
+
+
+def __dir__() -> List[str]:
+    """
+    Return the list of public names in this module.
+
+    Includes both regular module attributes and lazily loaded modules.
+
+    Returns:
+        List of public attribute names.
+    """
+    # Get regular module attributes
+    module_attrs = list(globals().keys())
+    # Add lazy-loaded module names
+    lazy_names = _LAZY_MODULES.available_names()
+    # Combine and filter private names
+    all_names = set(module_attrs) | set(lazy_names)
+    return [name for name in all_names if not name.startswith("_")]
+
+
+# Expose lazy import functions for explicit lazy loading
+from src.infrastructure.lazy import (
+    get_eagle_proposer,
+    get_arc_offload_manager,
+    get_tool_parser_registry,
+    get_reasoning_engine,
+    get_paged_attention_engine,
+)
