@@ -29,8 +29,8 @@ Current Status: 532 Rust functions | 34 phases complete (17-50) | ~195 Python mo
 - [COMPLETED] AWS Bedrock Integration: Fully asynchronous cloud connector for high-redundancy inference.
 - [COMPLETED] Automation Hook: DirectorAgent automatically updates documentation status upon task completion.
 - [COMPLETED] Modernization: Split ConversationContext.py (1011 lines) and PlatformInterface.py (1024 lines) into modular packages.
-- [COMPLETED] Research Synthesis: Processed and summarized core papers in data\Research (TALON, PackKV, Hydra, SGLang).
-- [IMPLEMENTING] TALON: Confidence-aware speculative decoding (arXiv:2601.07353) in Eagle v2.
+- [COMPLETED] Research Synthesis: Processed and summarized core papers in data\Research (TALON, KVzap, LatentLink, TableCache, ARCQuant).
+- [INTEGRATED] TALON: Adaptive Tree logic (arXiv:2601.07353) integrated into `src/infrastructure/speculative_v2/eagle/Tree.py`.
 
 ### Phase 49: Infrastructure Modularization & Academic Integration (v3.16.1) ✅ COMPLETE
 - Complexity Threshold: Systematically decomposing files > 500 lines.
@@ -45,7 +45,9 @@ Current Status: 532 Rust functions | 34 phases complete (17-50) | ~195 Python mo
 - Academic Alignment:
   - [INTEGRATED] arXiv:2601.10696 & ScienceDirect S2090447925006203 fully implemented.
   - [INTEGRATED] GAAD (Generative-Adversarial Architecture Design) loop refined for Architectural Specialist.
-  - [IMPLEMENTING] arXiv:2601.07353 (TALON): Confidence-aware speculative decoding with adaptive token trees.
+  - [INTEGRATED] arXiv:2601.07353 (TALON): Adaptive token trees for speculative decoding.
+  - [RESEARCHED] arXiv:2601.07891 (KVzap): Fast adaptive KV pruning using surrogate MLPs.
+  - [RESEARCHED] arXiv:2601.06123 (LatentLink): KV cache alignment for multi-agent communication.
 - Modules: ~185 Python modules.
 - Rust Functions: 532 functions (Nixl/RDMA sync stubs added).
 
