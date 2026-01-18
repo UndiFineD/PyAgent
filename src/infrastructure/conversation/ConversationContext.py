@@ -17,6 +17,7 @@ Performance: Uses Rust-accelerated context hashing.
 from __future__ import annotations
 
 import asyncio
+import inspect
 import hashlib
 import json
 import logging
@@ -518,7 +519,7 @@ class ToolOrchestrator:
 
     async def _call_handler(self, execution: ToolExecution) -> Any:
         """Call the tool handler."""
-        if asyncio.iscoroutinefunction(self.tool_handler):
+        if inspect.iscoroutinefunction(self.tool_handler):
             return await asyncio.wait_for(
                 self.tool_handler(execution.tool_name, execution.arguments),
                 timeout=self.config.tool_timeout_seconds,

@@ -91,15 +91,24 @@ class LocalContextRecorder(ContextRecorderInterface):
             "meta": meta or {},
         }
 
-        line = (json.dumps(record) + "\n").encode("utf-8")
+        # Handle non-serializable objects (like MagicMocks in tests)
+        def _safe_serialize(obj: Any) -> Any:
+            try:
+                if isinstance(obj, (int, float, str, bool, type(None))):
+                    return obj
+                return str(obj)
+            except Exception:
+                return f"<unserializable {type(obj).__name__}>"
 
         try:
             if self.use_compression:
+                line = (json.dumps(record, default=_safe_serialize) + "\n").encode("utf-8")
                 with gzip.open(log_file, "ab") as f:
                     f.write(line)
             else:
+                line_str = json.dumps(record, default=_safe_serialize) + "\n"
                 with open(log_file, "a", encoding="utf-8") as f:
-                    f.write(json.dumps(record) + "\n")
+                    f.write(line_str)
 
             # Update a centralized index for fast semantic lookup in the future (Phase 106)
             self._update_index(prompt_hash, str(log_file.name))
