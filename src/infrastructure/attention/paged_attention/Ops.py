@@ -70,5 +70,5 @@ class PagedAttentionOps:
         return output.astype(query.dtype)
     
     @staticmethod
-    def expand_kv_for_gqa(kv: np.ndarray, nq_per_kv: int) -> np.ndarray:
-        return kv if nq_per_kv == 1 else np.repeat(kv, nq_per_kv, axis=1)
+    def expand_kv_for_gqa(kv: np.ndarray, num_queries_per_kv: int) -> np.ndarray:
+        return kv if num_queries_per_kv == 1 else np.repeat(kv, num_queries_per_kv, axis=1)

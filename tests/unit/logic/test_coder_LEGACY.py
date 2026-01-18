@@ -38,9 +38,10 @@ def test_coder_agent_keyword_prompt_generates_suggestions(
     # Always mock rust_core for this test
     mock_rust = MagicMock()
     mock_rust.CoderCore = MagicMock(return_value=MagicMock())
+    mock_rust.generate_neural_response = MagicMock(
+        return_value="x=1 # AI GENERATED CONTENT"
+    )
     monkeypatch.setitem(sys.modules, "rust_core", mock_rust)
-
-    # Mock BaseAgent.improve_content in the SYSTEM modules, which CoderAgent uses
     async def fake_improve_content(self, prompt: str) -> str:
         return "x=1 # AI GENERATED CONTENT"
 

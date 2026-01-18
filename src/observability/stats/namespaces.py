@@ -4,7 +4,7 @@
 
 from __future__ import annotations
 from typing import Any
-from .Metrics import MetricNamespace
+from .metrics import MetricNamespace
 
 
 class MetricNamespaceManager:

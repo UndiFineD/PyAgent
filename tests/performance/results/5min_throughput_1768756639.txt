@@ -1,0 +1,10 @@
+5-Minute Token Throughput Test Results
+======================================================================
+
+Test Date: 2026-01-18 18:17:19
+Duration: 300.00s
+Iterations: 428,861
+Total Tokens: 17,840,579
+Tokens/Second: 59,468
+Tokens/Minute: 3,568,108
+Tokens/Hour: 214,086,477

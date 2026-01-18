@@ -20,12 +20,12 @@ from src.core.base.Version import VERSION
 from src.core.base.types.AccessibilityIssue import AccessibilityIssue
 from src.core.base.types.AccessibilityIssueType import AccessibilityIssueType
 from src.core.base.types.WCAGLevel import WCAGLevel
-from .HtmlAccessibilityMixin import HtmlAccessibilityMixin
-from .PythonAccessibilityMixin import PythonAccessibilityMixin
-from .JavascriptAccessibilityMixin import JavascriptAccessibilityMixin
-from .AccessibilityReportMixin import AccessibilityReportMixin
-from .mixins.AccessibilityCoreMixin import AccessibilityCoreMixin
-from .mixins.AccessibilityLogicMixin import AccessibilityLogicMixin
+from src.logic.agents.development.HtmlAccessibilityMixin import HtmlAccessibilityMixin
+from src.logic.agents.development.PythonAccessibilityMixin import PythonAccessibilityMixin
+from src.logic.agents.development.JavascriptAccessibilityMixin import JavascriptAccessibilityMixin
+from src.logic.agents.development.AccessibilityReportMixin import AccessibilityReportMixin
+from src.logic.agents.development.mixins.AccessibilityCoreMixin import AccessibilityCoreMixin
+from src.logic.agents.development.mixins.AccessibilityLogicMixin import AccessibilityLogicMixin
 from src.core.base.BaseAgent import BaseAgent
 import logging
 

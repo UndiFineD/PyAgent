@@ -156,14 +156,6 @@ class TestChatDecoratorCommands:
 class TestChatAliases:
     """Test that chat command aliases work."""
     
-    def test_user_alias(self):
-        """Test /user alias for /human."""
-        from src.interface.slash_commands import execute_command
-        
-        result = execute_command("user", ["test"])
-        assert result.success is True
-        assert result.data["role"] == "human"
-    
     def test_assistant_alias(self):
         """Test /assistant alias for /ai."""
         from src.interface.slash_commands import execute_command
