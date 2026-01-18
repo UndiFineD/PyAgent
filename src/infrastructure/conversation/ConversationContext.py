@@ -1,19 +1,25 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
-Conversation Context Management - Phase 42
-
-Multi-turn conversation state management for agentic workflows.
-Inspired by vLLM's conversation context module.
-
-Key Features:
-- Multi-turn state tracking
-- Tool call orchestration
-- Token metrics per turn
-- Error recovery
-- Async session cleanup
-
-Performance: Uses Rust-accelerated context hashing.
+Conversation context management.
+Note: This is a legacy facade. The implementation has been moved to the
+'src.infrastructure.conversation.context' sub-package.
 """
 
+from .context import (
+    ContextConfig,
+    ContextState,
+    ContextSnapshot,
+    TokenMetrics,
+    TurnType,
+    ConversationTurn,
+    ToolExecution,
+    ConversationContext,
+    AgenticContext,
+    ContextManager,
+    get_context_manager,
+    TurnTracker,
+    ToolOrchestrator,
 from __future__ import annotations
 
 import asyncio
@@ -44,29 +50,20 @@ from typing import (
     Union,
 )
 
-logger = logging.getLogger(__name__)
-
 __all__ = [
-    # Enums
+    "ContextConfig",
     "ContextState",
-    "TurnType",
-    "ToolExecutionPolicy",
-    # Data Classes
+    "ContextSnapshot",
     "TokenMetrics",
+    "TurnType",
     "ConversationTurn",
     "ToolExecution",
-    "ContextConfig",
-    "ContextSnapshot",
-    # Main Classes
     "ConversationContext",
     "AgenticContext",
     "ContextManager",
+    "get_context_manager",
     "TurnTracker",
     "ToolOrchestrator",
-    # Functions
-    "create_context",
-    "restore_context",
-    "merge_contexts",
 ]
 
 
