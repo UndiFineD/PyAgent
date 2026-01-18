@@ -78,7 +78,8 @@ to become the best streaming ai out there.
 - research process: Automated synthesis of papers from https://arxiv.org/list/cs.AI/recent?skip=0&show=2000. 
 - Integrated latest architectural research (arXiv:2601.10696 & ASEJ S2090447925006203) into `ArchitecturalDesignAgent`.
 - research workflow: Find -> Summarize in `data\Research` -> Map to Agent Logic -> Implement & Test -> Update `improvements.md`.
-- copy and implement AgentBar
+- copy and implement AgentBar [DONE]
+- systematically refactored monolithic infrastructure files (>500 lines) into facades [IN-PROGRESS]
 - when the number of pending changes is above 50, 
 review with coderabbit, do the git dance, merge branches into main
 
