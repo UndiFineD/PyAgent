@@ -11,9 +11,15 @@ Exports:
     - ToolParser: Base parser protocol
     - ToolParserRegistry: Parser registration
     - StreamingToolParser: Streaming extraction
+
+Structure:
+    - parser/     - Base classes and parser implementations
+    - validator/  - Schema validation logic
+    - registry/   - Parser registry and streaming parser
 """
 
-from .ToolParserFramework import (
+# Import from split modules (preferred)
+from .parser import (
     # Enums
     ToolParserType,
     ToolCallStatus,
@@ -30,14 +36,20 @@ from .ToolParserFramework import (
     Llama3ToolParser,
     MistralToolParser,
     GraniteToolParser,
-    # Registry
-    ToolParserRegistry,
-    # Streaming
-    StreamingToolParser,
     # Utilities
-    parse_tool_call,
     extract_json_from_text,
+)
+
+from .validator import (
     validate_tool_call,
+    validate_tool_schema,
+    validate_argument_type,
+)
+
+from .registry import (
+    ToolParserRegistry,
+    StreamingToolParser,
+    parse_tool_call,
 )
 
 __all__ = [
@@ -65,4 +77,6 @@ __all__ = [
     "parse_tool_call",
     "extract_json_from_text",
     "validate_tool_call",
+    "validate_tool_schema",
+    "validate_argument_type",
 ]
