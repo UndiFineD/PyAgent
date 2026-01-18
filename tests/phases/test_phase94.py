@@ -2,7 +2,7 @@ import unittest
 
 # Ensure the project root is in PYTHONPATH
 
-from src.infrastructure.orchestration.MultiCloudBridgeOrchestrator import (
+from src.infrastructure.orchestration.connectivity.MultiCloudBridgeOrchestrator import (
     MultiCloudBridgeOrchestrator,
 )
 
