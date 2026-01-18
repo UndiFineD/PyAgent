@@ -41,6 +41,25 @@
    - Goal: Integrate confidence thresholds into tree pruning logic
    - Progress: Adaptive Tree core implemented in `src/infrastructure/speculative_v2/eagle/Tree.py`. Added comprehensive research summary in `data/Research/2601.07353v1/`.
 
+5. **KV Cache Optimization (KVzap & TableCache)**
+   - Status: INTEGRATED (arXiv:2601.07891)
+   - Progress: `KVzapPruner` and surrogate model integrated into `ARCOffloadManager.py`. Added `src/infrastructure/kv_transfer/KVzap.py`.
+   - Impact: 4x compression and quality-aware eviction logic.
+
+6. **Latent Space & Concept Communication**
+   - Status: INTEGRATED (arXiv:2601.06123)
+   - Progress: `SynapticLink` and `SynapticAdapter` implemented in `src/infrastructure/kv_transfer/LatentLink.py`. Added `LATENT` mode to `KVTransferConnector.py`.
+   - Impact: 10x bandwidth reduction for multi-agent handoffs.
+
+7. **Ultra-Long Context (STEM)**
+   - Status: INTEGRATED (arXiv:2601.10639)
+   - Progress: Dynamic embedding expansion implemented in `src/infrastructure/engine/STEMScaling.py`.
+   - Impact: Reliable 1M+ token context handling via log-scaling and residual expansion.
+
+8. **SGLang & RadixAttention**
+   - Status: RESEARCHED (arXiv:2312.07104)
+   - Progress: Added research summary and RadixTree implementation stub in `data/Research/2312.07104v2/`.
+   - Action: Integrate `RadixTreeManager` into `RequestQueue.py` to enable automatic prefix caching.
 5. **KV Cache Optimization (KVzap)**
    - Status: RESEARCHED (arXiv:2601.07891)
    - Progress: Added research summary and implementation stub in `data/Research/2601.07891v1/`.
