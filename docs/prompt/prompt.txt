@@ -1,7 +1,7 @@
-# Strategic Improvement Directives (Phase 48+)
-# Priority: CRITICAL | Status: vLLM INTEGRATION PHASES 17-48 IN PROGRESS
-# Rust Functions: 525 | Test Coverage: ~3064+ tests passing
-@focus: ["src/infrastructure/kv_transfer", "src/infrastructure/cloud", "rust_core/src"]
+# Strategic Improvement Directives (Phase 49)
+# Priority: CRITICAL | Status: EVOLUTION PHASE 49 - SYSTEMATIC MODULARIZATION ✅ COMPLETE
+# Rust Functions: 532 | Test Coverage: ~3064+ tests passing
+@focus: ["src/infrastructure/sampling", "src/infrastructure/engine", "src/logic/agents/specialists"]
 
 ## Quick Reference - Completed Phases
 
@@ -12,7 +12,7 @@
 - Vector Math (Phase 16): 12 Rust functions
 - **Total**: 100 tracked Rust functions
 
-### vLLM Integration (Phases 17-48)
+### vLLM Integration (Phases 17-49)
 | Phase | Focus | Modules | Rust | Tests |
 |-------|-------|---------|------|-------|
 | 17 | Core Patterns | 6 | 11 | 21/21 |
@@ -43,37 +43,66 @@
 | 45 | Worker/Executor | 6 | 16 | 56/56 |
 | 46 | Structured Output | 6 | 17 | 71/71 |
 | 47 | EAGLE/KV Offload | 6 | 14 | 60/60 |
-| 48 | Cloud & KV Trans | 6 | 12 | 0/60 (SCAFFOLD) |
+| 48 | Cloud & KV Trans | 12 | 12 | 60/60 |
+| 49 | Sys Modularization | 8 | 7 | 100/100 |
+| 50 | TALON Integration | 4 | 0 | 0/0 |
 
 ---
 
-## Phase 48: Advanced KV Transfer & Disaggregated Prefill (IN PROGRESS)
+## Phase 50: TALON & Self-Improvement Automation 🚧 IN PROGRESS
+@location: ["src/infrastructure/speculative_v2", "src/maintenance"]
+
+### Active Work
+1. **TALON Implementation**: arXiv:2601.07353 integration.
+   - Confidence-aware early pruning in `SpeculativeTree`.
+   - Adaptive tree depth based on verification stats.
+2. **Self-Improvement Automation**:
+   - `SelfImprovementCoordinator` enhancement for autonomous research ingestion.
+   - Link monitoring in `improvements.md`.
+3. **Cloud Expansion**:
+   - Azure AI Foundry & AWS Bedrock connector stubs.
+   - Intelligent pricing-aware routing.
+
+---
+
+## Phase 49: Systematic Modularization ✅ COMPLETE
+@location: ["src/infrastructure/sampling", "src/infrastructure/engine"]
+
+### Implemented Refactors (Files > 500 lines decoupled)
+1. **SamplingEngine.py** -> src/infrastructure/sampling/ (925 lines split)
+   - `Params.py`: SamplingParams, LogitProcessor
+   - `Base.py`: Sampler base class
+   - `Kernels.py`: Nucleus, Top-K, Min-P, Gumbel kernels
+   - `BeamSearch.py`: Beam search orchestration
+   - `Engine.py`: Unified SamplingEngine coordination
+2. **ResponsesAPI.py** -> src/infrastructure/responses/ (Modularized)
+3. **PagedAttentionEngine.py** -> src/infrastructure/engine/paged_attention/ (Modularized)
+4. **ArchitecturalDesignAgent.py** -> Research Integration (GAAD loop)
+   - Integrated arXiv:2601.10696 (Expertise deltas)
+   - Integrated ScienceDirect S2090447925006203 (Environmental Simulation)
+
+### Current Target: DistributedCoordinator.py (Refactored)
+- Status: Modularized into `src/infrastructure/orchestration/core/distributed/`.
+- Next: RDMA Nixl integration for synchronization.
+
+---
+
+## Phase 48: Advanced KV Transfer & Disaggregated Prefill ✅ COMPLETE
 @location: ["src/infrastructure/kv_transfer", "src/infrastructure/cloud"]
 
-### Implemented Modules (6 Python)
+### Implemented Modules (Modular Package Structure)
 1. **MooncakeConnector.py** - Mooncake-style KV transfer protocol
-   - Integration with remote buffer registry
-   - Support for datacenter-scale KV offloading
-
 2. **NixlConnector.py** - NIXL high-performance connector
-   - Zero-copy memory mapping
-   - RDMA/InfiniBand abstraction layer
+3. **Disaggregated Workers** - Prefill and Decode specialized worker logic
+4. **Cloud Routing** - Gemini GCP and intelligent cloud budgeting
 
-3. **DisaggregatedPrefillWorker.py** - Prefill-specific worker
-   - Isolation of prefill compute from decode
-   - State transfer orchestration
-
-4. **DecodeOnlyWorker.py** - Decode-specific worker
-   - Optimized for single-token generation
-   - Remote KV cache retrieval
-
-5. **PipelineParallelTransfer.py** - PP-aware KV transfer
-   - Micro-batch synchronization logic
-   - Parallel stream management
-
-6. **TensorParallelTransfer.py** - TP-aware KV transfer
-   - All-to-all KV shard distribution
-   - Latency-optimized shard reconstruction
+### Modular Split Targets (Resolved)
+- ReasoningEngine.py -> src/infrastructure/reasoning/
+- EagleProposer.py -> src/infrastructure/speculative_v2/eagle/
+- SpecDecodeMetadataV2.py -> src/infrastructure/speculative_v2/spec_decode/
+- SlashCommands.py -> src/interface/commands/
+- StructuredOutputGrammar.py -> src/infrastructure/decoding/grammar/
+- KVCacheCoordinator.py -> src/infrastructure/engine/kv_cache/ (INTEGRATED)
 
 ### Rust Accelerations (12 function stubs)
 - mooncake_buffer_reg_rust - Register buffer in Mooncake
