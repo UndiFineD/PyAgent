@@ -20,13 +20,13 @@
    - Impact: Improved maintainability, faster unit tests, and reduced cognitive load for sub-agents.
 
 2. **Cloud Cost Optimization**
-   - Status: IMPLEMENTATION STARTED (GEMINI)
+   - Status: IMPLEMENTING (GEMINI operational, AZURE implemented, AWS planned)
    - Goal: Multi-cloud inference without high costs
    - Strategy:
      - Local-first with cloud fallback
      - Spot/preemptible instances for burst capacity
      - Scale-to-zero serverless endpoints
-   - Providers: Azure AI (primary), GCP Vertex AI, AWS Bedrock
+   - Providers: Azure AI (implemented), GCP Vertex AI (operational), AWS Bedrock (planned)
 
 3. **Distributed Inference Pipeline**
    - Status: PLANNING
@@ -35,6 +35,11 @@
      - ZeroMQ mesh for local network discovery
      - VRAM pooling across machines
      - Load balancing by model size and latency requirements
+
+4. **TALON: Confidence-Aware Speculative Decoding**
+   - Status: IMPLEMENTING (arXiv:2601.07353)
+   - Goal: Integrate confidence thresholds into tree pruning logic
+   - Progress: Adaptive Tree core implemented in `src/infrastructure/speculative_v2/eagle/Tree.py`.
 
 ### Medium Priority
 
