@@ -13,11 +13,25 @@ __all__ = [
     "GeminiConnector",
     "AWSBedrockConnector",
     "GroqConnector",
+    "AzureAIConnector",
 ]
 
 
 def __getattr__(name: str):
     """Lazy load provider implementations."""
+    if name == "GeminiConnector":
+        from .gemini import GeminiConnector
+        return GeminiConnector
+    if name == "AWSBedrockConnector":
+        from .bedrock import AWSBedrockConnector
+        return AWSBedrockConnector
+    if name == "GroqConnector":
+        from .groq import GroqConnector
+        return GroqConnector
+    if name == "AzureAIConnector":
+        from .azure import AzureAIConnector
+        return AzureAIConnector
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
     if name == "GeminiConnector":
         from .gemini import GeminiConnector
         return GeminiConnector

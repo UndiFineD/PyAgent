@@ -302,3 +302,4 @@ This document lists all specialized agents available in the PyAgent fleet. It is
 | Utils | `MergeConflictResolver` | CORE-LINKED | Resolves merge conflicts in context files. | [MergeConflictResolver.py](../src/logic/agents/cognitive/context/utils/MergeConflictResolver.py) |
 | Utils | `RefactoringAdvisor` | CORE-LINKED | Suggests refactoring based on context analysis. | [RefactoringAdvisor.py](../src/logic/agents/cognitive/context/utils/RefactoringAdvisor.py) |
 | Utils | `SearchAlgorithm` | CORE-LINKED | Algorithms for semantic search. | [SearchAlgorithm.py](../src/logic/agents/cognitive/context/utils/SearchAlgorithm.py) |
+| Specialists | `ArchitecturalDesignAgent` | 3.16.1 | Advanced architectural reasoning with GAAD (Generative-Adversarial Architecture Design) loop integration. | [ArchitecturalDesignAgent.py](../src/logic/agents/specialists/ArchitecturalDesignAgent.py) |
