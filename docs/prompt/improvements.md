@@ -8,17 +8,19 @@
 
 ### High Priority
 
-1. **Lazy Loading for Large Modules**
-   - Status: PLANNED
-   - Rationale: Several modules exceed 500 lines and increase startup time
-   - Targets:
-     - EagleProposer.py (~710 lines) -> Split into config/tree/proposer
-     - SpecDecodeMetadataV2.py (~610 lines) -> Split into metadata/verification/scoring
-     - ARCOffloadManager.py (~580 lines) -> Split into cache/policy/transfer
-   - Implementation: Use importlib.util and __getattr__ patterns
+1. **Lazy Loading and Modularization for Large Modules**
+   - Status: COMPLETED
+   - Rationale: Several modules exceeded 500 lines, slowing down analysis and increasing complexity.
+   - Completed Splits:
+     - SlashCommands.py -> src/interface/commands/
+     - StructuredOutputGrammar.py -> src/infrastructure/decoding/grammar/
+     - EagleProposer.py -> src/infrastructure/speculative_v2/eagle/
+     - SpecDecodeMetadataV2.py -> src/infrastructure/speculative_v2/spec_decode/
+     - ReasoningEngine.py -> src/infrastructure/reasoning/
+   - Impact: Improved maintainability, faster unit tests, and reduced cognitive load for sub-agents.
 
 2. **Cloud Cost Optimization**
-   - Status: RESEARCH
+   - Status: IMPLEMENTATION STARTED (GEMINI)
    - Goal: Multi-cloud inference without high costs
    - Strategy:
      - Local-first with cloud fallback
@@ -37,7 +39,7 @@
 ### Medium Priority
 
 4. **Research Paper Integration Workflow**
-   - Status: ACTIVE
+   - Status: COMPLETED
    - Process:
      1. Monitor arXiv RSS feeds (cs.CL, cs.LG, cs.AI)
      2. Auto-extract key innovations
@@ -221,3 +223,20 @@ https://arxiv.org/list/cs.AI/recent?skip=0&show=2000
 
 https://github.com/ especially research documents and code on python, rust, llm, ai and agi.
 our own github is ofcourse found at https://github.com/UndiFineD/PyAgent
+https://github.com/bmad-code-org/BMAD-METHOD is the BMAD method which we want to keep integrated
+
+are there other cloud providers that we wish to integrate, for example using deepseek or qwen or grok.
+we should not only look at costs but also keep track of capabilities 
+of ourselves and cloud providing models and what is needed for the prompt.
+as models develop very quickly we should do a weekly check of capabilities.
+
+drop the tkinter gui and focus on the webbased interfaces, 
+where the mobile flutter app is the easy swipe frontend, 
+administrating the modular webgui, 
+that gives access to mulitple parallel agents, statistics, 
+n8n workflow design, 
+read documents, 
+mindmap, 
+neural network layouts, 
+etc 
+
