@@ -8,11 +8,11 @@
 
 ### Critical Priority (>900 lines)
 
-| File | Lines | Status/Recommendation |
-|------|-------|-----------------------|
-| ToolParserFramework.py | 1057 | **REFACTORED & SPLIT** (src/tools/parser/) |
-| SlashCommands.py | 960 | **REFACTORED & SPLIT** (src/interface/commands/) |
+| File | Lines | Recommendation |
+|------|-------|----------------|
+| ToolParserFramework.py | 1057 | Split: Parser, Validator, Registry |
 | StructuredOutputGrammar.py | 1039 | Split: Grammar, Generator, Validator |
+| SlashCommands.py | 960 | Split: CommandBase, CommandRegistry, Handlers |
 | ReasoningEngine.py | 904 | Split: Strategies, Executor, Combiner |
 | ResponsesAPI.py | 874 | Split: Request, Response, Streaming |
 | PagedAttentionEngine.py | 868 | Split: Cache, Scheduler, Executor |
@@ -109,7 +109,7 @@ class LazyLoader:
 # Usage:
 class InfrastructureModule:
     EagleProposer = LazyLoader(
-        "src.infrastructure.engine.speculative.EagleProposer",
+        "src.infrastructure.speculative_v2.EagleProposer",
         "EagleProposer"
     )
 ```

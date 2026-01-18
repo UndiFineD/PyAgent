@@ -1,108 +1,328 @@
-# PyAgent Development Roadmap (Strategic & Tactical)
-
-## 🌌 High-Level Strategy: The Scale Singularity (Phases 91-100)
-
-### Phase 91-95: Real-time Swarm Liquidity (Q1 2026)
-@focus: Data-Centric Swarm (src/infrastructure/liquidity/)
-
-1. **Phase 91: Semantic Cache Invalidation**
-   - Implements real-time invalidation of LSH buckets based on sliding context windows.
-2. **Phase 92: Neural Context Pruning**
-   - Dynamic pruning of KV shards using attention-entropy maps to free VRAM.
-3. **Phase 93: Distributed Checkpointing (State Sync)**
-   - RDMA-based full-swarm state snapshots for instantaneous recovery after crashes.
-4. **Phase 94: Adaptive Bias Scanning**
-   - Active auditing of the Federated Meta-Optimizer to prevent "performance drift."
-5. **Phase 95: Zero-Downtime Re-sharding**
-   - Live rank-reassignment and context re-sharding without interrupting 120fps streams.
-
-### Phase 96-100: The Meta-Cognitive Fleet (Q2 2026)
-@focus: Consciousness & Providence (src/core/sentinel/)
-
-1. **Phase 96: Cross-Modal Latent Linking**
-   - Direct latent-space memory transfer between Video (Vision) and Text experts.
-2. **Phase 97: Swarm-scale RAG (1B+ Tokens)**
-   - O(1) retrieval across petabyte-scale agent knowledge indices using LSH.
-3. **Phase 98: Decentralized Expert Mining**
-   - Autonomous spawning of "Hobbyist" experts for niche coding/research domains.
-4. **Phase 99: Swarm Sentinel (Self-Repair)**
-   - Predictive health monitoring that auto-corrects failing nodes and stale memory.
-5. **Phase 100: The Singularity Loop**
-   - Self-generating architectural improvements and Rust-core optimization suggestions.
+# PyAgent Strategic Roadmap
+# Generated: January 19, 2026
+# Version: 3.15.0 (Post Phase 47 - Speculative Decoding V3 & KV Offload)
+# Goal: "Become the best streaming AI out there"
 
 ================================================================================
-## CLOUD INTEGRATION STRATEGY (V2)
+## EXECUTIVE SUMMARY
 ================================================================================
 
-### philosophy: "True Liquidity"
-- **Spot Instance Migration**: Automatically shift context shards from dying Spot VMs to stable reserved instances.
-- **Multimodal Overflow**: Burst 120fps video streams to Azure AI Foundry when local NPU/GPU limits are hit.
-- **Edge-Cloud Hybrid**: Local agents handle "Reasoning," Cloud agents handle "Heavy Multimodal Synthesis."
+PyAgent is evolving from a multi-agent code improvement system into a world-class
+streaming AI platform. This roadmap outlines the strategic path forward, focusing on:
+1. Completing vLLM integration (Phases 48+)
+2. Automating self-improvement processes
+3. Cloud/distributed computing integration
+4. Code refactoring and lazy loading optimization
+5. Research-driven innovation
+
+Current Status: 513 Rust functions | 31 phases complete (17-47) | ~148 Python modules
 
 ================================================================================
-## TECHNOLOGY STACK (V4.4.0)
+## PHASE 47 COMPLETED (January 2026)
 ================================================================================
-- **Runtime**: Python 3.12.12 + Rust (PyO3/Maturin)
-- **Transport**: ZeroMQ (Heartbeat) + RDMA Simulation (vLLM P2P)
-- **Consensus**: Raft Protocol (Swarm State)
-- **Indexing**: LSH (Locality Sensitive Hashing)
-- **Quantization**: Dynamic Bit-Scaling (FP16/FP8/INT4/INT2)
-- **Protocols**: MCP (Model Context Protocol) for tool expansion
+
+### Speculative Decoding V3 & KV Offload
+- EagleProposer.py: EAGLE-style speculative decoding with tree attention
+- NgramProposer.py: N-gram based draft proposal with fuzzy matching  
+- SpecDecodeMetadataV2.py: Enhanced verification metadata
+- ARCOffloadManager.py: ARC cache eviction with ghost lists
+- LRUOffloadManager.py: LRU cache eviction variants
+- BlockTableV2.py: Enhanced block table with sparse representation
+- 14 new Rust functions (499 → 513)
+- 60 tests passing
+
+================================================================================
+## NEAR-TERM ROADMAP (Q1 2026)
+================================================================================
+
+### Phase 48: Advanced KV Transfer & Disaggregated Prefill (Next)
+@target: 12-15 Rust functions | 6 Python modules
+@focus: vllm/v1/kv_transfer/, vllm/v1/worker/
+
+Planned Modules:
+1. MooncakeConnector.py - Mooncake-style KV transfer protocol
+2. NixlConnector.py - NIXL high-performance connector
+3. DisaggregatedPrefillWorker.py - Prefill-specific worker
+4. DecodeOnlyWorker.py - Decode-specific worker
+5. PipelineParallelTransfer.py - PP-aware KV transfer
+6. TensorParallelTransfer.py - TP-aware KV transfer
+
+Key Innovations:
+- Zero-copy KV transfer between prefill/decode workers
+- Mooncake protocol for datacenter-scale inference
+- RDMA/InfiniBand support abstraction
+
+### Phase 49: Advanced Attention Mechanisms
+@target: 10-12 Rust functions | 4-6 Python modules
+@focus: vllm/v1/attention/
+
+Planned Modules:
+1. FlashInferBackend.py - FlashInfer attention backend
+2. CudnnBackend.py - cuDNN fused attention
+3. MlpFusedAttention.py - MLP+attention fusion
+4. BlockSparseAttention.py - Block-sparse attention patterns
+
+### Phase 50: Scheduler Optimization
+@target: 8-10 Rust functions | 4 Python modules
+@focus: vllm/v1/core/
+
+Planned Modules:
+1. ContinuousBatchScheduler.py - Enhanced continuous batching
+2. PrefillDecodeBalancer.py - Prefill/decode workload balancing
+3. MemoryPressureScheduler.py - Memory-aware scheduling
+4. PriorityQueueScheduler.py - Priority-based request scheduling
+
+================================================================================
+## MID-TERM ROADMAP (Q2 2026)
+================================================================================
+
+### Phase 51-55: Multi-GPU & Distributed Inference
+- Tensor Parallelism (TP) implementation
+- Pipeline Parallelism (PP) support
+- Expert Parallelism (EP) for MoE models
+- Ray-based distributed scheduling
+- NVLink/NVSwitch topology optimization
+
+### Phase 56-60: Model-Specific Optimizations
+- Llama 3.x/4.x architecture support
+- Gemma 2/3 architecture support
+- Mistral/Mixtral optimizations
+- Qwen2/Qwen3 architecture support
+- DeepSeek-V3 MLA optimizations
+
+================================================================================
+## SELF-IMPROVEMENT AUTOMATION
+================================================================================
+
+### Automated Improvement Pipeline
+@priority: HIGH
+@status: PLANNING
+
+1. **Monitoring Layer**
+   - Watch docs/prompt/improvements.md for new insights
+   - Parse research papers automatically (arXiv, ScienceDirect)
+   - Monitor GitHub issues/discussions for feature requests
+
+2. **Analysis Layer**
+   - Code complexity monitoring (maintain < 25 cyclomatic)
+   - Performance regression detection
+   - Test coverage gap analysis
+   - Dead code detection
+
+3. **Implementation Layer**
+   - Auto-generate improvement tickets
+   - Suggest refactoring targets
+   - Auto-create PR drafts for simple fixes
+   - Integration with Copilot Coding Agent
+
+4. **Validation Layer**
+   - Automated test generation
+   - Performance benchmarking
+   - Regression testing
+   - Coverage verification
+
+### Improvement Sources
+- docs/prompt/improvements.md - Manual insights and ideas
+- Research papers - Academic innovations
+- vLLM upstream - Latest inference optimizations
+- Community feedback - User-reported issues
+
+================================================================================
+## CLOUD INTEGRATION STRATEGY
+================================================================================
+
+### Philosophy: "Without costing an arm and a leg"
+@priority: MEDIUM
+@timeline: Q2 2026
+
+### Multi-Cloud Support Matrix
+
+| Cloud | Service | Use Case | Cost Strategy |
+|-------|---------|----------|---------------|
+| Azure | Azure AI Foundry | Production inference | Spot instances, reserved |
+| Azure | Azure ML | Model training | Preemptible VMs |
+| GCP | Vertex AI | Gemini integration | Free tier + pay-as-go |
+| GCP | Cloud Run | Serverless endpoints | Scale-to-zero |
+| AWS | SageMaker | Multi-region | Spot instances |
+| AWS | Lambda | Lightweight inference | Free tier |
+
+### Local-Cloud Hybrid Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                    PYAGENT HYBRID INFERENCE                      │
+├──────────────────┬──────────────────┬───────────────────────────┤
+│   LOCAL TIER     │   EDGE TIER      │       CLOUD TIER          │
+│ (Primary)        │ (LAN/VPN)        │ (Overflow/Specialized)    │
+├──────────────────┼──────────────────┼───────────────────────────┤
+│ - Ollama         │ - Network GPUs   │ - Azure AI (Fallback)     │
+│ - Local RTX      │ - Shared VRAM    │ - GCP Vertex (Gemini)     │
+│ - CPU inference  │ - Distributed    │ - AWS SageMaker (Scale)   │
+│ - tinyllama      │   batch          │ - Groq (Speed)            │
+└──────────────────┴──────────────────┴───────────────────────────┘
+```
+
+### Implementation Plan
+
+1. **Local Network Discovery** (Q1)
+   - mDNS/Bonjour for local GPU discovery
+   - ZeroMQ mesh for distributed work
+   - VRAM pooling across LAN machines
+
+2. **Cloud Fallback Layer** (Q2)
+   - Azure AI Foundry connector (existing)
+   - GCP Vertex AI connector
+   - AWS Bedrock/SageMaker connector
+   - Cost tracking and budget limits
+
+3. **Intelligent Routing** (Q2)
+   - Route by model size (small=local, large=cloud)
+   - Route by latency requirement
+   - Route by cost budget
+   - Automatic failover
+
+================================================================================
+## CODE REFACTORING PRIORITIES
+================================================================================
+
+### Large File Candidates for Splitting
+@priority: HIGH
+@rationale: Files > 500 lines should be evaluated for splitting
+
+Identified Targets:
+1. src/infrastructure/speculative_v2/EagleProposer.py (~710 lines)
+   → Split: EagleConfig, SpeculativeTree, EagleProposer
+   
+2. src/infrastructure/speculative_v2/SpecDecodeMetadataV2.py (~610 lines)
+   → Split: Metadata, Verification, Scoring
+
+3. src/infrastructure/kv_transfer/ARCOffloadManager.py (~580 lines)
+   → Split: ARCCache, OffloadPolicy, TransferManager
+
+### Lazy Loading Strategy
+@priority: HIGH
+@rationale: Reduce startup time and memory footprint
+
+1. **Import Optimization**
+   - Convert absolute imports to lazy imports
+   - Use `importlib.util` for deferred loading
+   - Module-level `__getattr__` for lazy access
+
+2. **Plugin Architecture**
+   - Agents loaded on-demand
+   - Rust functions dynamically registered
+   - Optional dependencies isolated
+
+3. **Lazy Initialization Patterns**
+   ```python
+   # Pattern 1: Lazy module import
+   def get_eagle_proposer():
+       from .speculative_v2.EagleProposer import EagleProposer
+       return EagleProposer
+   
+   # Pattern 2: Module __getattr__
+   def __getattr__(name):
+       if name == "EagleProposer":
+           from .speculative_v2 import EagleProposer
+           return EagleProposer
+       raise AttributeError(name)
+   ```
+
+### Refactoring Schedule
+- Week 1-2: Audit files > 500 lines
+- Week 3-4: Design split architectures
+- Week 5-6: Implement lazy loading
+- Week 7-8: Validate with benchmarks
+
+================================================================================
+## RESEARCH INTEGRATION
+================================================================================
+
+### Active Research Monitoring
+
+1. **arXiv Categories**
+   - cs.CL (Computation and Language)
+   - cs.LG (Machine Learning)
+   - cs.AI (Artificial Intelligence)
+   - cs.DC (Distributed Computing)
+
+2. **Key Topics**
+   - Speculative decoding advances
+   - KV cache optimization
+   - Attention mechanism improvements
+   - Distributed inference
+   - Quantization techniques
+   - Model compression
+
+3. **Integration Workflow**
+   ```
+   Paper Published → Monitor → Analyze → Prototype → Test → Integrate
+        ↓              ↓          ↓          ↓         ↓        ↓
+     arXiv RSS    improvements.md  PoC code  pytest   PR    comparison_vllm.md
+   ```
+
+### Research Papers of Interest
+
+Recent (January 2026):
+- arXiv:2601.10696 - GenAI in architectural design (methodology insights)
+- ScienceDirect 2090447925006203 - AI design frameworks (iterative design patterns)
+
+Key Historical:
+- EAGLE/EAGLE-2/EAGLE-3 speculative decoding papers
+- FlashAttention/FlashAttention-2/FlashAttention-3
+- PagedAttention (vLLM foundation)
+- Mooncake KV transfer
+- NIXL high-performance connectors
 
 ================================================================================
 ## METRICS & SUCCESS CRITERIA
 ================================================================================
-- **Context Capacity**: 100M+ tokens supported across distributed swarm.
-- **Inference Latency**: <30ms p99 via Speculative Drafting.
-- **Throughput**: 10,000+ tokens/sec aggregate swarm throughput.
-- **Self-Healing**: 99.9% uptime during node failures using Raft + Mirroring.
 
----
+### Phase Completion Targets
+- Q1 2026: Phases 48-50 (36+ Rust functions)
+- Q2 2026: Phases 51-55 (50+ Rust functions)
+- Q3 2026: Phases 56-60 (50+ Rust functions)
 
-## 🛠️ Tactical Execution Plan (Actionable Items)
+### Performance Targets
+- Inference latency: < 50ms p99 for local models
+- Token throughput: > 100 tokens/sec per GPU
+- Memory efficiency: < 10% overhead vs native
+- Startup time: < 3 seconds (with lazy loading)
 
-### 🧹 Technical Debt & Codebase Health
-- [x] **Recursive Scanning**: Implement recursive directory scanning for report aggregation in `report_generator.py`. (Verified: `rglob` is utilized)
-- [x] **Majority Timeout**: Implement "Wait-for-Majority" timeout in `byzantine_consensus_agent.py`. (Implemented)
-- [x] **Recursion Safety**: Add `depth_limit` to `CascadeContext` in `communication_models.py` to prevent infinite swarm loops. (Implemented)
-- [x] **HTML Export**: Add support for HTML export in `report_utils.py`. (Implemented)
-- [x] **Cleanup**: Remove `debug_final_scan.py` before production release. (Implemented)
-- [x] **Standardization**: Ensure all new agents follow the `QuantumScalingCoderAgent` documentation and license standards. (Implemented via fix_standards_all.py)
+### Quality Targets
+- Test coverage: > 90%
+- Code complexity: max 25 per function
+- Documentation: 100% public API coverage
+- Type hints: 100% coverage
 
-### 🚀 Performance Engineering (Rust & NPU)
-*Refer to [docs/RUST_ACCELERATION.md](c:/DEV/PyAgent/docs/RUST_ACCELERATION.md)*
-- [x] **Formula Evaluation**: Migrate `FormulaCore.evaluate` (AST parsing) to Rust. (Implemented via `rust_core::utils::evaluate_formula`)
-- [x] **Bulk I/O Optimization**: Migrate `StorageCore.to_json` to Rust serialization to prevent event loop blocking. (Implemented via `rust_core::fs::to_json_rust`)
-- [x] **Import Analysis**: Optimize `AnalysisCore.get_imports` with Rust for large-scale codebase scans. (Implemented via `rust_core::analysis::get_imports_rust`)
-- [x] **Telemetry Consolidation**: Implement high-throughput aggregation in `MetricsEngine` using Rust. (Implemented)
-- [x] **Ryzen AI NPU Support**: Integrate `.FastFlowLM` as a compute provider in `ScalingAgent` to unlock AMD XDNA2 NPUs. (Implemented)
-- [x] **FLM Connector**: Create `FlmConnectorAgent` to interface with FastFlowLM's local server. (Implemented)
+================================================================================
+## APPENDIX: TECHNOLOGY STACK
+================================================================================
 
-### 🌐 Distributed Systems (Voyager)
-*Refer to [docs/proxima_voyager.md](c:/DEV/PyAgent/docs/proxima_voyager.md)*
-- [x] **P2P Transport (Voyager Phase 2.0)**: Implement encrypted binary message bus using `ZeroMQ` + AES-GCM. (Implemented)
-- [x] **Byzantine Consensus (Voyager Phase 3.0)**: Mature the multi-surgeon BFT implementation. (Implemented & Tested)
-- [x] **Cross-Machine Synergy (Voyager Phase 4.0)**: Enable resource sharing and task preemption across distinct network nodes. (Implemented in `InterFleetBridgeOrchestrator`)
-- [x] **Federated Memory**: Implement sharded "Experience Buffers" across the constellation. (Implemented via `query_federated_memory`)
+### Current Stack
+- Python 3.12.12
+- Rust (PyO3 bindings)
+- Maturin (build system)
+- pytest (testing)
+- ZeroMQ (transport)
+- Ollama (local inference)
 
-### 🧪 Testing & Validation
-- [x] **Adversarial Suite**: Expand `tests/adversarial/` to cover new BFT consensus edge cases. (Implemented)
-- [x] **Benchmark Convergence**: Maintain the 3,996+ test passing rate across all acceleration migrations. (Verified critical paths: Phase 41, 42, 43, Voice, Quantum)
-- [x] **Quantum Optimization Benchmarking**: Create regression tests for `QuantumScalingCoderAgent` optimizations. (Implemented in `tests/performance/test_quantum_benchmarks.py`)
+### Planned Additions
+- Ray (distributed computing)
+- NCCL/RCCL (collective ops)
+- Redis (distributed cache)
+- Prometheus (metrics)
+- Grafana (visualization)
 
-### 👁️ Multimodal & Ecosystem
-- [x] **Stream-Omni Pipeline**: Implement `speech_to_token` -> `LLM` -> `token_to_speech` flow ("See-While-Hear"). (Implemented in `VoiceInteractionAgent.run_omni_pipeline`)
-- [x] **CosyVoice Orchestration**: Add lifecycle management for Speech generation. (Implemented in `VoiceAgent.manage_cosyvoice_lifecycle`)
-- [x] **Unified Provider List**: Port `models.dev` integration (65+ providers) from `.code_puppy`. (Implemented in `src/core/base/common/models_registry.py`)
-- [x] **CLI Upgrade**: Evaluate TUI architecture for richer console interaction. (Prototype in `src/interface/ui/cli/tui_launcher.py`)
-- [x] **Dependency Speed**: Migrate to `uv` for instant environment activation. (Added pyproject.toml configuration)
+================================================================================
+## CHANGELOG
+================================================================================
 
-### 🦙 Ollama & Edge Intelligence
-- [x] **Async Migration**: Refactor `OllamaConnectorAgent` to use `httpx` for non-blocking AsyncIO compatible with the swarm event loop.
-- [x] **Chat API Upgrade**: Transition from `/api/generate` to `/api/chat` to support conversation history and system messages.
-- [x] **JSON Schema Validation**: Implement full JSON Schema support in `format` parameter (not just "json") for robust structured outputs.
-- [x] **Reasoning Engine**: Integrate support for the `think` parameter and parse `<think>` tags from models like DeepSeek-R1.
-- [x] **OpenAI SDK Unification**: Refactor `OllamaConnectorAgent` to use the standard `openai` Python client via `base_url` for protocol consistency.
-- [x] **Code Infill (FIM)**: Add `suffix` parameter support to `OllamaConnectorAgent` for Fill-In-The-Middle code completion capabilities.
-- [x] **Code Consolidation**: Investigate `src.infrastructure.backend` usage in `run_fleet_self_improvement.py` and unify Ollama client logic.
-- [x] **Dynamic Capacity**: Update `ScalingAgent` to dynamically detect Ollama VRAM capacity instead of hardcoding `capacity=3`.
+2026-01-19: Initial roadmap creation (Post Phase 47)
+- Added Phase 48-50 near-term plan
+- Added cloud integration strategy
+- Added self-improvement automation plan
+- Added refactoring priorities
+- Added research integration workflow
+
+================================================================================

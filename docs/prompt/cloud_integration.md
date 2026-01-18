@@ -48,8 +48,8 @@
 ### 3. Budget Controls
 ```python
 class CloudBudgetManager:
-    daily_limit: float = 25.00  # USD
-    monthly_limit: float = 250.00
+    daily_limit: float = 5.00  # USD
+    monthly_limit: float = 100.00
     alert_threshold: float = 0.80  # 80% of limit
     
     def can_make_request(self, estimated_cost: float) -> bool:
