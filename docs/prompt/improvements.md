@@ -60,6 +60,20 @@
    - Status: RESEARCHED (arXiv:2312.07104)
    - Progress: Added research summary and RadixTree implementation stub in `data/Research/2312.07104v2/`.
    - Action: Integrate `RadixTreeManager` into `RequestQueue.py` to enable automatic prefix caching.
+5. **KV Cache Optimization (KVzap)**
+   - Status: RESEARCHED (arXiv:2601.07891)
+   - Progress: Added research summary and implementation stub in `data/Research/2601.07891v1/`.
+   - Action: Implement `KVzapPruner` using surrogate MLP to achieve 2-4x compression with <1% overhead.
+
+6. **Latent Space Communication**
+   - Status: RESEARCHED (arXiv:2601.06123)
+   - Progress: Added research summary and implementation stub in `data/Research/2601.06123v1/`.
+   - Action: Implement `SynapticLink` adapters to allow agents to share KV cache "thoughts" directly, reducing bandwidth by 10x.
+
+7. **SGLang & RadixAttention**
+   - Status: RESEARCHED (arXiv:2312.07104)
+   - Progress: Added research summary and RadixTree implementation stub in `data/Research/2312.07104v2/`.
+   - Action: Integrate `RadixTreeManager` into `RequestQueue.py` to enable automatic prefix caching and 5x throughput gains.
 
 ### Medium Priority
 
