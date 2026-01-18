@@ -1,0 +1,477 @@
+"""
+PrefixCacheManager - Block-level content-addressable caching.
+
+Inspired by vLLM's v1/core/kv_cache_utils.py - implements block-level
+hashing for prefix caching with LRU eviction.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import time
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from typing import Any, Callable, Dict, List, Optional, Sequence, Set, Tuple
+from collections import OrderedDict
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+class HashAlgorithm(Enum):
+    """Supported hash algorithms for prefix caching."""
+    SHA256 = "sha256"
+    XXHASH = "xxhash"
+    MD5 = "md5"
+
+
+@dataclass(frozen=True)
+class BlockHash:
+    """
+    Hash of a block's contents.
+    
+    Includes the hash value and the token IDs for verification.
+    """
+    hash_value: bytes
+    token_ids: Tuple[int, ...]
+    extra_keys: Optional[Tuple[Any, ...]] = None
+    
+    def __hash__(self) -> int:
+        return hash(self.hash_value)
+    
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, BlockHash):
+            return False
+        return self.hash_value == other.hash_value
+
+
+@dataclass
+class CacheBlock:
+    """A cached KV block."""
+    block_id: int
+    block_hash: BlockHash
+    ref_count: int = 0
+    last_access_time: float = field(default_factory=time.time)
+    is_pinned: bool = False
+    
+    def touch(self) -> None:
+        """Update last access time."""
+        self.last_access_time = time.time()
+
+
+def get_hash_function(algorithm: HashAlgorithm) -> Callable[[bytes], bytes]:
+    """Get hash function for the specified algorithm."""
+    if algorithm == HashAlgorithm.SHA256:
+        return lambda data: hashlib.sha256(data).digest()
+    elif algorithm == HashAlgorithm.MD5:
+        return lambda data: hashlib.md5(data).digest()
+    elif algorithm == HashAlgorithm.XXHASH:
+        try:
+            import xxhash
+            return lambda data: xxhash.xxh3_128(data).digest()
+        except ImportError:
+            logger.warning("xxhash not available, falling back to SHA256")
+            return lambda data: hashlib.sha256(data).digest()
+    else:
+        return lambda data: hashlib.sha256(data).digest()
+
+
+def hash_block_tokens(
+    hash_function: Callable[[Any], bytes],
+    parent_block_hash: Optional[BlockHash],
+    curr_block_token_ids: Sequence[int],
+    extra_keys: Optional[Tuple[Any, ...]] = None,
+) -> BlockHash:
+    """
+    Compute hash for a block of tokens.
+    
+    The hash incorporates:
+    - Parent block hash (for chain integrity)
+    - Current block's token IDs
+    - Optional extra keys (e.g., image hashes)
+    
+    Args:
+        hash_function: Hash function to use
+        parent_block_hash: Hash of parent block (None for first block)
+        curr_block_token_ids: Token IDs in this block
+        extra_keys: Additional keys to include in hash
+        
+    Returns:
+        BlockHash with computed hash value
+    """
+    # Build data to hash
+    data_parts = []
+    
+    # Include parent hash
+    if parent_block_hash is not None:
+        data_parts.append(parent_block_hash.hash_value)
+    
+    # Include token IDs
+    token_bytes = bytes(str(list(curr_block_token_ids)), 'utf-8')
+    data_parts.append(token_bytes)
+    
+    # Include extra keys
+    if extra_keys:
+        extra_bytes = bytes(str(extra_keys), 'utf-8')
+        data_parts.append(extra_bytes)
+    
+    # Combine and hash
+    combined = b''.join(data_parts)
+    hash_value = hash_function(combined)
+    
+    return BlockHash(
+        hash_value=hash_value,
+        token_ids=tuple(curr_block_token_ids),
+        extra_keys=extra_keys,
+    )
+
+
+def hash_block_tokens_rust(
+    parent_hash: Optional[bytes],
+    token_ids: List[int],
+    extra_keys: Optional[List[Any]] = None,
+) -> bytes:
+    """
+    Rust-accelerated block hashing.
+    Falls back to Python implementation.
+    """
+    try:
+        from rust_core import hash_block_tokens_rust as _rust_impl
+        return _rust_impl(parent_hash, token_ids, extra_keys)
+    except ImportError:
+        hash_fn = get_hash_function(HashAlgorithm.XXHASH)
+        parent_block_hash = BlockHash(hash_value=parent_hash, token_ids=()) if parent_hash else None
+        result = hash_block_tokens(hash_fn, parent_block_hash, token_ids, tuple(extra_keys) if extra_keys else None)
+        return result.hash_value
+
+
+def init_none_hash(hash_function: Callable[[Any], bytes]) -> bytes:
+    """Initialize a null hash value."""
+    return hash_function(b"")
+
+
+class PrefixCacheManager:
+    """
+    Manager for prefix caching with block-level granularity.
+    
+    Implements content-addressable caching where blocks with the same
+    content (token IDs) share the same cached KV values.
+    """
+    
+    def __init__(
+        self,
+        block_size: int = 16,
+        max_blocks: int = 1000,
+        hash_algorithm: HashAlgorithm = HashAlgorithm.SHA256,
+        enable_eviction: bool = True,
+    ):
+        self.block_size = block_size
+        self.max_blocks = max_blocks
+        self.hash_algorithm = hash_algorithm
+        self.enable_eviction = enable_eviction
+        
+        # Hash function
+        self.hash_function = get_hash_function(hash_algorithm)
+        
+        # Block storage - ordered dict for LRU
+        self._blocks: OrderedDict[bytes, CacheBlock] = OrderedDict()
+        self._block_id_counter = 0
+        
+        # Hash to block mapping
+        self._hash_to_block: Dict[bytes, int] = {}
+        
+        # Statistics
+        self._hits = 0
+        self._misses = 0
+        self._evictions = 0
+    
+    def compute_block_hashes(
+        self,
+        token_ids: List[int],
+        extra_keys_per_block: Optional[List[Optional[Tuple[Any, ...]]]] = None,
+    ) -> List[BlockHash]:
+        """
+        Compute hashes for all blocks in a token sequence.
+        
+        Args:
+            token_ids: Full token sequence
+            extra_keys_per_block: Optional extra keys for each block
+            
+        Returns:
+            List of BlockHash objects for each full block
+        """
+        hashes = []
+        parent_hash: Optional[BlockHash] = None
+        
+        num_full_blocks = len(token_ids) // self.block_size
+        
+        for i in range(num_full_blocks):
+            start = i * self.block_size
+            end = start + self.block_size
+            block_tokens = token_ids[start:end]
+            
+            extra_keys = None
+            if extra_keys_per_block and i < len(extra_keys_per_block):
+                extra_keys = extra_keys_per_block[i]
+            
+            block_hash = hash_block_tokens(
+                self.hash_function,
+                parent_hash,
+                block_tokens,
+                extra_keys,
+            )
+            
+            hashes.append(block_hash)
+            parent_hash = block_hash
+        
+        return hashes
+    
+    def get_cached_blocks(
+        self,
+        block_hashes: List[BlockHash],
+    ) -> Tuple[List[int], int]:
+        """
+        Find cached blocks matching the given hashes.
+        
+        Args:
+            block_hashes: Hashes to look up
+            
+        Returns:
+            Tuple of (list of block IDs, number of matched blocks)
+        """
+        block_ids = []
+        num_matched = 0
+        
+        for block_hash in block_hashes:
+            hash_value = block_hash.hash_value
+            
+            if hash_value in self._blocks:
+                block = self._blocks[hash_value]
+                block.touch()
+                block.ref_count += 1
+                
+                # Move to end (most recently used)
+                self._blocks.move_to_end(hash_value)
+                
+                block_ids.append(block.block_id)
+                num_matched += 1
+                self._hits += 1
+            else:
+                # Cache miss - stop here (can't use later blocks)
+                self._misses += 1
+                break
+        
+        return block_ids, num_matched
+    
+    def allocate_blocks(
+        self,
+        block_hashes: List[BlockHash],
+        start_index: int = 0,
+    ) -> List[int]:
+        """
+        Allocate new blocks for the given hashes.
+        
+        Args:
+            block_hashes: Hashes for blocks to allocate
+            start_index: Index to start allocating from
+            
+        Returns:
+            List of newly allocated block IDs
+        """
+        block_ids = []
+        
+        for block_hash in block_hashes[start_index:]:
+            # Check if we need to evict
+            if self.enable_eviction and len(self._blocks) >= self.max_blocks:
+                self._evict_lru()
+            
+            # Allocate new block
+            block_id = self._block_id_counter
+            self._block_id_counter += 1
+            
+            block = CacheBlock(
+                block_id=block_id,
+                block_hash=block_hash,
+                ref_count=1,
+            )
+            
+            self._blocks[block_hash.hash_value] = block
+            self._hash_to_block[block_hash.hash_value] = block_id
+            
+            block_ids.append(block_id)
+        
+        return block_ids
+    
+    def free_blocks(self, block_ids: List[int]) -> None:
+        """
+        Free blocks by decrementing reference count.
+        
+        Args:
+            block_ids: IDs of blocks to free
+        """
+        for block_id in block_ids:
+            # Find block by ID
+            for hash_value, block in self._blocks.items():
+                if block.block_id == block_id:
+                    block.ref_count = max(0, block.ref_count - 1)
+                    break
+    
+    def _evict_lru(self) -> bool:
+        """
+        Evict least recently used unpinned block.
+        
+        Returns:
+            True if a block was evicted, False otherwise
+        """
+        # Find LRU unpinned block with ref_count == 0
+        for hash_value, block in self._blocks.items():
+            if not block.is_pinned and block.ref_count == 0:
+                del self._blocks[hash_value]
+                if hash_value in self._hash_to_block:
+                    del self._hash_to_block[hash_value]
+                self._evictions += 1
+                return True
+        
+        # No evictable blocks found
+        return False
+    
+    def pin_block(self, block_id: int) -> bool:
+        """Pin a block to prevent eviction."""
+        for block in self._blocks.values():
+            if block.block_id == block_id:
+                block.is_pinned = True
+                return True
+        return False
+    
+    def unpin_block(self, block_id: int) -> bool:
+        """Unpin a block to allow eviction."""
+        for block in self._blocks.values():
+            if block.block_id == block_id:
+                block.is_pinned = False
+                return True
+        return False
+    
+    def reset(self) -> None:
+        """Reset the cache, clearing all blocks."""
+        self._blocks.clear()
+        self._hash_to_block.clear()
+        self._block_id_counter = 0
+        logger.info("Prefix cache reset")
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """Get cache statistics."""
+        total = self._hits + self._misses
+        hit_rate = self._hits / total if total > 0 else 0.0
+        
+        return {
+            "num_blocks": len(self._blocks),
+            "max_blocks": self.max_blocks,
+            "hits": self._hits,
+            "misses": self._misses,
+            "hit_rate": hit_rate,
+            "evictions": self._evictions,
+            "block_size": self.block_size,
+            "hash_algorithm": self.hash_algorithm.value,
+        }
+
+
+def compute_prefix_match(
+    cached_hashes: List[bytes],
+    request_hashes: List[bytes],
+) -> int:
+    """
+    Find the length of common prefix between cached and request hashes.
+    
+    Uses binary search for efficiency.
+    """
+    if not cached_hashes or not request_hashes:
+        return 0
+    
+    # Linear scan for simplicity (binary search only helps for very long sequences)
+    match_length = 0
+    for i, (cached, requested) in enumerate(zip(cached_hashes, request_hashes)):
+        if cached == requested:
+            match_length = i + 1
+        else:
+            break
+    
+    return match_length
+
+
+def compute_prefix_match_rust(
+    cached_hashes: List[bytes],
+    request_hashes: List[bytes],
+) -> int:
+    """Rust-accelerated prefix matching."""
+    try:
+        from rust_core import compute_prefix_match_rust as _rust_impl
+        return _rust_impl(cached_hashes, request_hashes)
+    except ImportError:
+        return compute_prefix_match(cached_hashes, request_hashes)
+
+
+def compute_cache_keys(
+    request_ids: List[str],
+    token_ids_list: List[List[int]],
+    block_size: int = 16,
+) -> Dict[str, List[bytes]]:
+    """
+    Compute cache keys for multiple requests.
+    
+    Args:
+        request_ids: List of request IDs
+        token_ids_list: Token IDs for each request
+        block_size: Block size for hashing
+        
+    Returns:
+        Dict mapping request ID to list of block hashes
+    """
+    hash_fn = get_hash_function(HashAlgorithm.SHA256)
+    result = {}
+    
+    for request_id, token_ids in zip(request_ids, token_ids_list):
+        hashes = []
+        parent_hash = None
+        
+        num_blocks = len(token_ids) // block_size
+        for i in range(num_blocks):
+            start = i * block_size
+            end = start + block_size
+            block_tokens = token_ids[start:end]
+            
+            block_hash = hash_block_tokens(hash_fn, parent_hash, block_tokens)
+            hashes.append(block_hash.hash_value)
+            parent_hash = block_hash
+        
+        result[request_id] = hashes
+    
+    return result
+
+
+def compute_cache_keys_rust(
+    request_ids: List[str],
+    token_ids_list: List[List[int]],
+    block_size: int = 16,
+) -> Dict[str, List[bytes]]:
+    """Rust-accelerated batch cache key computation."""
+    try:
+        from rust_core import compute_cache_keys_rust as _rust_impl
+        return _rust_impl(request_ids, token_ids_list, block_size)
+    except ImportError:
+        return compute_cache_keys(request_ids, token_ids_list, block_size)
+
+
+__all__ = [
+    "HashAlgorithm",
+    "BlockHash",
+    "CacheBlock",
+    "get_hash_function",
+    "hash_block_tokens",
+    "hash_block_tokens_rust",
+    "init_none_hash",
+    "PrefixCacheManager",
+    "compute_prefix_match",
+    "compute_prefix_match_rust",
+    "compute_cache_keys",
+    "compute_cache_keys_rust",
+]

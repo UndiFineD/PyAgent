@@ -12,29 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Sub swarm spawner.py module.
-"""
-
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import logging
 import uuid
 from typing import TYPE_CHECKING
 
-from src.core.base.lifecycle.version import VERSION
-
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
 
 class SubSwarm:
     """A lightweight sub-swarm with a subset of capabilities."""
 
-    def __init__(self, swarm_id: str, agents: list[str], parent_fleet: FleetManager) -> None:
+    def __init__(
+        self, swarm_id: str, agents: list[str], parent_fleet: FleetManager
+    ) -> None:
         self.swarm_id = swarm_id
         self.agents = agents
         self.fleet = parent_fleet
@@ -49,7 +45,9 @@ class SubSwarm:
         agent_name = self.agents[0]
         try:
             # We use call_by_capability with the agent name as the goal (Phase 33 fix)
-            coro = self.fleet.call_by_capability(agent_name, input_text=task, technical_report=task, user_query=task)
+            coro = self.fleet.call_by_capability(
+                agent_name, input_text=task, technical_report=task, user_query=task
+            )
             import asyncio
 
             try:
@@ -60,13 +58,13 @@ class SubSwarm:
                     return f"[PENDING] {agent_name} logic execution"
 
                 result = loop.run_until_complete(coro)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 # Fallback for complex loop states
                 result = f"Direct execution of {agent_name} failed"
 
             self.task_log.append(task)
             return str(result)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             return f"SubSwarm execution failed: {e}"
 
 
@@ -85,7 +83,9 @@ class SubSwarmSpawner:
         Creates a new sub-swarm based on requested capabilities or agent names.
         """
         swarm_id = f"swarm_{uuid.uuid4().hex[:8]}"
-        logging.info(f"SubSwarmSpawner: Spawning sub-swarm {swarm_id} with {capabilities}")
+        logging.info(
+            f"SubSwarmSpawner: Spawning sub-swarm {swarm_id} with {capabilities}"
+        )
 
         # In a real system, we'd filter fleet agents by capability
         # For now, we assume provide agent names
@@ -93,7 +93,9 @@ class SubSwarmSpawner:
         self.active_sub_swarms[swarm_id] = new_swarm
 
         if hasattr(self.fleet, "signals"):
-            coro = self.fleet.signals.emit("SUB_SWARM_SPAWNED", {"swarm_id": swarm_id, "agents": capabilities})
+            coro = self.fleet.signals.emit(
+                "SUB_SWARM_SPAWNED", {"swarm_id": swarm_id, "agents": capabilities}
+            )
             try:
                 import asyncio
 
@@ -102,7 +104,7 @@ class SubSwarmSpawner:
                     asyncio.create_task(coro)
                 else:
                     loop.run_until_complete(coro)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 pass
 
         return swarm_id

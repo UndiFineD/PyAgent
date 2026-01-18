@@ -13,21 +13,17 @@ No commands will be executed.
 """
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import logging
 from typing import Any
 
-from src.core.base.lifecycle.version import VERSION
-
 __version__ = VERSION
-
 
 class SignalRegistry:
     """
     SignalRegistry recovered after Copilot CLI deprecation event.
     Standardized placeholder for future re-implementation.
     """
-
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
         logging.info("SignalRegistry initialized (Placeholder).")
@@ -37,7 +33,3 @@ class SignalRegistry:
         logging.debug(f"Signal: {signal_name} from {sender} (Stubbed)")
         pass
 
-    def subscribe(self, signal_name: str, callback: Any) -> None:
-        """Stub for signal subscription."""
-        logging.debug(f"Subscribed to {signal_name} (Stubbed)")
-        pass

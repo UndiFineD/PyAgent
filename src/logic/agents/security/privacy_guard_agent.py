@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -8,43 +7,21 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-PrivacyGuardAgent: Agent for monitoring, enforcing, and auditing privacy controls and data protection in the PyAgent swarm.
-Implements privacy risk detection and compliance automation.
-"""
-
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Privacy guard agent.py module.
-"""
 
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import re
 from typing import Any
-
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
 
-class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+class PrivacyGuardAgent(BaseAgent):
     """
     Privacy Guard Agent: Monitors fleet communications for PII (Personally
     Identifiable Information), performs redaction, and tracks compliance.
@@ -58,10 +35,6 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             "Phone": r"\b(?:\d{3}[-.]?)?\d{3}[-.]?\d{4}\b",
             "SSN": r"\b\d{3}-\d{2}-\d{4}\b",
             "CreditCard": r"\b(?:\d[ -]*?){13,16}\b",
-            "AWS_KEY": r"(?i)AKIA[0-9A-Z]{16}",
-            "AWS_SECRET": r"(?i)SECRET.*['\"]?[a-zA-Z0-9/+=]{40}['\"]?",
-            "GENERIC_TOKEN": r"(?i)(token|auth|key|secret)[ \t]*[:=][ \t]*['\"]?[a-zA-Z0-9_\-\.]{16,}",
-            "GITHUB_TOKEN": r"ghp_[a-zA-Z0-9]{36}",
         }
         self.redaction_logs: list[Any] = []
 
@@ -77,14 +50,18 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             rust_findings = scan_pii_rust(text)
             for pii_type, match in rust_findings:
                 findings.append({"type": pii_type, "value": match})
-                redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")
+                redacted_text = redacted_text.replace(
+                    match, f"[REDACTED_{pii_type.upper()}]"
+                )
         except (ImportError, AttributeError):
             for pii_type, pattern in self.pii_patterns.items():
                 matches = re.findall(pattern, text)
                 if matches:
                     for match in matches:
                         findings.append({"type": pii_type, "value": match})
-                        redacted_text = redacted_text.replace(match, f"[REDACTED_{pii_type.upper()}]")
+                        redacted_text = redacted_text.replace(
+                            match, f"[REDACTED_{pii_type.upper()}]"
+                        )
 
         if findings:
             self.redaction_logs.append(
@@ -106,7 +83,7 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         return {
             "original": original_text,
             "redacted": redacted_text,
-            "pii_detected": bool(findings),
+            "pii_detected": len(findings) > 0,
             "findings": findings,
         }
 
@@ -116,8 +93,7 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         Offloads the heavy filesystem traversal and regex matching to Rust.
         """
         try:
-            from rust_core import \
-                scan_secrets_rust  # type: ignore[attr-defined]
+            from rust_core import scan_secrets_rust  # type: ignore[attr-defined]
 
             return scan_secrets_rust(self.workspace_path)
         except (ImportError, AttributeError):
@@ -139,6 +115,10 @@ class PrivacyGuardAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         """Returns summary metrics for privacy protection efforts."""
         return {
             "total_redactions": len(self.redaction_logs),
-            "pii_types_captured": list(set(t for log in self.redaction_logs for t in log["pii_types"])),
-            "safety_rating": "High" if len(self.redaction_logs) < 100 else "Critical Levels of PII Exposure",
+            "pii_types_captured": list(
+                set(t for log in self.redaction_logs for t in log["pii_types"])
+            ),
+            "safety_rating": "High"
+            if len(self.redaction_logs) < 100
+            else "Critical Levels of PII Exposure",
         }

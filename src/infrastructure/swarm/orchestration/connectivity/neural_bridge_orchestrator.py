@@ -12,23 +12,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Neural bridge orchestrator.py module.
-"""
-
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import logging
 import uuid
-from typing import TYPE_CHECKING, Any
-
-from src.core.base.lifecycle.version import VERSION
+from typing import Any, TYPE_CHECKING
 
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
 
 class NeuralBridgeOrchestrator:
@@ -41,13 +35,17 @@ class NeuralBridgeOrchestrator:
         self.fleet = fleet
         self.bridge_id = str(uuid.uuid4())
         self.connected_nodes: list[str] = ["localhost"]
-        self.shared_consciousness: dict[str, Any] = {}  # Key-value store for global state
+        self.shared_consciousness: dict[
+            str, Any
+        ] = {}  # Key-value store for global state
 
     def establish_bridge(self, remote_node_url: str) -> bool:
         """
         Connects a remote fleet node to the neural bridge.
         """
-        logging.info(f"NeuralBridgeOrchestrator: Establishing bridge to {remote_node_url}")
+        logging.info(
+            f"NeuralBridgeOrchestrator: Establishing bridge to {remote_node_url}"
+        )
         if remote_node_url not in self.connected_nodes:
             self.connected_nodes.append(remote_node_url)
 
@@ -63,7 +61,9 @@ class NeuralBridgeOrchestrator:
         """
         Synchronizes a piece of state across the neural bridge.
         """
-        logging.info(f"NeuralBridgeOrchestrator: Syncing state key '{key}' across {len(self.connected_nodes)} nodes")
+        logging.info(
+            f"NeuralBridgeOrchestrator: Syncing state key '{key}' across {len(self.connected_nodes)} nodes"
+        )
         self.shared_consciousness[key] = value
 
         # In a real distributed system, this would be a broadcast to all remote nodes.

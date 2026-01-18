@@ -11,15 +11,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from typing import Any
+from src.core.base.Version import VERSION
 import logging
 import socket
 import threading
@@ -32,24 +28,27 @@ __version__ = VERSION
 if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
 
+
 class DiscoveryOrchestrator:
     """Handles peer-to-peer discovery of fleet nodes using mDNS/Zeroconf."""
-    
+
     SERVICE_TYPE = "_pyagent._tcp.local."
-    
+
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
         self._failure_count = 0
         self._circuit_open = False
         self._last_retry = 0
-        self._last_advertisement = 0 # Rate limiting
-        
+        self._last_advertisement = 0  # Rate limiting
+
         try:
             self.zeroconf = Zeroconf(ip_version=IPVersion.V4Only)
             self.listener = FleetServiceListener(self.fleet)
-            self.browser = ServiceBrowser(self.zeroconf, self.SERVICE_TYPE, self.listener)
+            self.browser = ServiceBrowser(
+                self.zeroconf, self.SERVICE_TYPE, self.listener
+            )
             self._is_advertising = False
-            
+
             # Start advertising in a background thread to not block fleet init
             threading.Thread(target=self.start_advertising, daemon=True).start()
         except Exception as e:
@@ -59,7 +58,9 @@ class DiscoveryOrchestrator:
         """Handles internal discovery failures with a circuit breaker mechanism."""
         self._failure_count += 1
         if self._failure_count > 5:
-            logging.error(f"Discovery: Circuit breaker OPEN due to multiple failures: {error}")
+            logging.error(
+                f"Discovery: Circuit breaker OPEN due to multiple failures: {error}"
+            )
             self._circuit_open = True
             self._last_retry = time.time()
 
@@ -68,7 +69,9 @@ class DiscoveryOrchestrator:
         if self._circuit_open:
             if time.time() - self._last_retry > 60:
                 # 1 minute cooldown
-                logging.info("Discovery: Circuit breaker HALF-OPEN, attempting retry...")
+                logging.info(
+                    "Discovery: Circuit breaker HALF-OPEN, attempting retry..."
+                )
                 self._circuit_open = False
                 self._failure_count = 0
                 return True
@@ -90,26 +93,28 @@ class DiscoveryOrchestrator:
         """Advertises the local fleet node to the network."""
         # 1. Check Circuit & Rate Limiting (Phase 123/124 Hardening)
         if self._is_advertising:
-             return
-             
+            return
+
         if not self._check_circuit():
             return
-            
+
         now = time.time()
         if now - self._last_advertisement < 30:
             # Max once every 30 seconds
             logging.debug("Discovery: Advertisement rate-limited (Skipping).")
             return
-            
+
         self._last_advertisement = now
         local_ip = self.get_local_ip()
         node_id = f"pyagent-{socket.gethostname()}"
-        
+
         # Get list of local agent names to share (limit to top 15)
-        agent_names = []
-        if hasattr(self.fleet, "agents") and hasattr(self.fleet.agents, "registry_configs"):
+        agent_names: list[str] = []
+        if hasattr(self.fleet, "agents") and hasattr(
+            self.fleet.agents, "registry_configs"
+        ):
             agent_names = list(self.fleet.agents.registry_configs.keys())
-        
+
         info = ServiceInfo(
             self.SERVICE_TYPE,
             f"{node_id}.{self.SERVICE_TYPE}",
@@ -118,16 +123,19 @@ class DiscoveryOrchestrator:
             properties={
                 "agents": ",".join(agent_names[:15]),
                 "version": "1.0.0",
-                "hostname": socket.gethostname()
+                "hostname": socket.gethostname(),
             },
             server=f"{node_id}.local.",
         )
-        
+
         try:
-            logging.info(f"Discovery: Advertising local fleet node '{node_id}' at {local_ip}:{port}")
+            logging.info(
+                f"Discovery: Advertising local fleet node '{node_id}' at {local_ip}:{port}"
+            )
             self.zeroconf.register_service(info, allow_name_change=True)
             self._is_advertising = True
-            self._failure_count = 0 # Reset on success
+            self._failure_count = 0  # Reset on success
+
         except Exception as e:
             logging.error(f"Discovery: Failed to register service: {e}")
             self._on_failure(e)
@@ -138,14 +146,15 @@ class DiscoveryOrchestrator:
             self.zeroconf.unregister_all_services()
             self.zeroconf.close()
 
+
 class FleetServiceListener(ServiceListener):
     """Listens for other PyAgent fleet nodes and registers them."""
-    
+
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
-        self._discovered_nodes = set()
+        self._discovered_nodes: set[Any] = set()
         self._last_add_time = 0
-        self._min_interval = 0.5 # Rate limit: 2 adds per second
+        self._min_interval = 0.5  # Rate limit: 2 adds per second
 
     def update_service(self, zc: Zeroconf, type_: str, name: str) -> None:
         pass
@@ -162,19 +171,24 @@ class FleetServiceListener(ServiceListener):
             return
         self._last_add_time = now
 
-        info = zc.get_service_info(type_, name)
+        try:
+            info = zc.get_service_info(type_, name)
+        except Exception:
+            # Zeroconf instance loop might be stopping, already stopped, or other transient issue (Phase 123)
+            return
+
         if not info:
             return
-            
+
         if name in self._discovered_nodes:
             return
-            
+
         self._discovered_nodes.add(name)
-        
+
         addresses = [socket.inet_ntoa(addr) for addr in info.addresses]
         if not addresses:
             return
-            
+
         # Filter out self
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -192,9 +206,11 @@ class FleetServiceListener(ServiceListener):
         agents = agents_bytes.decode("utf-8").split(",") if agents_bytes else []
         version_bytes = info.properties.get(b"version", b"1.0.0")
         version = version_bytes.decode("utf-8")
-        
-        logging.info(f"Discovery: Found remote fleet node '{name}' at {url} with agents: {agents}")
-        
+
+        logging.info(
+            f"Discovery: Found remote fleet node '{name}' at {url} with agents: {agents}"
+        )
+
         # Register the remote node in the fleet
         try:
             self.fleet.register_remote_node(url, agents, version)

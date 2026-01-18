@@ -1,131 +1,51 @@
 {
-    "facts": {},
-    "preferences": {},
-    "constraints": [],
-    "insights": [],
-    "entities": {
-        "Consolidator": {
-            "last_success": "consolidate_all",
-            "success_count": 8,
-            "last_modified": "2026-01-08T06:12:35.960339"
-        },
-        "PR": {
-            "last_success": "analyze_commit_history",
-            "success_count": 8,
-            "last_modified": "2026-01-08T06:12:36.078498"
-        },
-        "Kernel": {
-            "last_success": "get_system_info",
-            "success_count": 7,
-            "last_modified": "2026-01-08T06:12:36.144100"
-        },
-        "Reasoning": {
-            "last_success": "analyze_tot",
-            "success_count": 8,
-            "last_modified": "2026-01-08T06:12:36.147170"
-        },
-        "Transparency": {
-            "last_success": "generate_audit_trail",
-            "success_count": 8,
-            "last_modified": "2026-01-08T06:12:36.150160"
-        },
-        "SpecAgent": {
-            "last_success": "generate_tool_from_spec",
-            "success_count": 8,
-            "last_modified": "2026-01-08T06:12:36.155142"
-        },
-        "Optimizer": {
-            "last_success": "improve_content",
-            "success_count": 8,
-            "last_modified": "2026-01-08T06:12:36.192708"
-        },
-        "Healing": {
-            "last_success": "scan_for_failures",
-            "success_count": 8,
-            "last_modified": "2026-01-08T06:12:36.196327"
-        },
-        "Gate": {
-            "last_success": "improve_content",
-            "success_count": 8,
-            "last_modified": "2026-01-08T06:12:37.122273"
-        },
-        "Knowledge": {
-            "last_success": "scan_workspace",
-            "success_count": 9,
-            "last_modified": "2026-01-08T06:47:16.370513"
-        },
-        "Config": {
-            "last_success": "validate_env",
-            "success_count": 4,
-            "last_modified": "2026-01-08T06:12:35.964216"
-        },
-        "MCP": {
-            "last_success": "list_mcp_servers",
-            "success_count": 3,
-            "last_modified": "2026-01-08T06:12:35.977741"
-        },
-        "Browser": {
-            "last_success": "search_and_summarize",
-            "success_count": 3,
-            "last_modified": "2026-01-08T06:12:35.980933"
-        },
-        "Evolution": {
-            "last_success": "evolve_new_tool",
-            "success_count": 3,
-            "last_modified": "2026-01-08T06:12:35.984266"
-        },
-        "Visualizer": {
-            "last_success": "generate_call_graph",
-            "success_count": 2,
-            "last_modified": "2026-01-08T06:12:37.006301"
-        },
-        "Dummy": {
-            "last_success": "audit_environment",
-            "success_count": 2,
-            "last_modified": "2026-01-08T06:42:59.352442"
-        },
-        "PrivacyGuard": {
-            "last_success": "scan_and_redact",
-            "success_count": 2,
-            "last_modified": "2026-01-08T21:17:50.725386"
-        }
+  "facts": {},
+  "preferences": {},
+  "constraints": [],
+  "insights": [],
+  "entities": {},
+  "lessons_learned": [
+    {
+      "failure": "Analyze the repo and suggest 3 files that should be oxidized to Rust next, prioritized by cyclomatic complexity.",
+      "correction": "Verification results: No tool found for goal: Security.improve_content",
+      "agent": "PhaseOrchestrator",
+      "timestamp": "2026-01-16T15:56:22.208063"
     },
-    "lessons_learned": [
-        {
-            "failure": "Kernel.get_system_info failed with name 'json' is not defined",
-            "correction": "Retry with claude-3-5-sonnet",
-            "agent": "FleetManager",
-            "timestamp": "2026-01-08T06:07:31.383673"
-        },
-        {
-            "failure": "Kernel.get_system_info failed with name 'json' is not defined",
-            "correction": "Retry with gpt-4-turbo",
-            "agent": "FleetManager",
-            "timestamp": "2026-01-08T06:07:31.388173"
-        },
-        {
-            "failure": "Dummy.audit_environment failed with slice(None, 100, None)",
-            "correction": "Retry with claude-3-5-sonnet",
-            "agent": "FleetManager",
-            "timestamp": "2026-01-08T06:42:49.017619"
-        },
-        {
-            "failure": "Dummy.audit_environment failed with slice(None, 100, None)",
-            "correction": "Retry with gpt-4-turbo",
-            "agent": "FleetManager",
-            "timestamp": "2026-01-08T06:42:49.050929"
-        },
-        {
-            "failure": "Knowledge.scan_workspace failed with Unknown format code 's' for object of type 'float'",
-            "correction": "Retry with claude-3-5-sonnet",
-            "agent": "FleetManager",
-            "timestamp": "2026-01-08T06:46:41.752856"
-        },
-        {
-            "failure": "Knowledge.scan_workspace failed with Unknown format code 's' for object of type 'float'",
-            "correction": "Retry with gpt-4-turbo",
-            "agent": "FleetManager",
-            "timestamp": "2026-01-08T06:46:42.453712"
-        }
-    ]
+    {
+      "failure": "Analyze the repo and suggest 3 files that should be oxidized to Rust next, prioritized by cyclomatic complexity.",
+      "correction": "Verification results: No tool found for goal: Security.improve_content",
+      "agent": "PhaseOrchestrator",
+      "timestamp": "2026-01-16T15:56:22.224209"
+    },
+    {
+      "failure": "Analyze the repo and suggest 3 files that should be oxidized to Rust next, prioritized by cyclomatic complexity.",
+      "correction": "Verification results: No tool found for goal: Security.improve_content",
+      "agent": "PhaseOrchestrator",
+      "timestamp": "2026-01-16T15:56:44.120746"
+    },
+    {
+      "failure": "Analyze the repo and suggest 3 files that should be oxidized to Rust next, prioritized by cyclomatic complexity.",
+      "correction": "Verification results: No tool found for goal: Security.improve_content",
+      "agent": "PhaseOrchestrator",
+      "timestamp": "2026-01-16T15:56:44.144242"
+    },
+    {
+      "failure": "Analyze the repo and suggest 3 files that should be oxidized to Rust next, prioritized by cyclomatic complexity.",
+      "correction": "Verification results: No tool found for goal: Security.improve_content",
+      "agent": "PhaseOrchestrator",
+      "timestamp": "2026-01-16T15:57:00.279191"
+    },
+    {
+      "failure": "Analyze the repo and suggest 3 files that should be oxidized to Rust next, prioritized by cyclomatic complexity.",
+      "correction": "Verification results: No tool found for goal: Security.improve_content",
+      "agent": "PhaseOrchestrator",
+      "timestamp": "2026-01-16T15:57:00.398252"
+    },
+    {
+      "failure": "Analyze the repo and suggest 3 files that should be oxidized to Rust next, prioritized by cyclomatic complexity.",
+      "correction": "Verification results: No tool found for goal: Security.improve_content",
+      "agent": "PhaseOrchestrator",
+      "timestamp": "2026-01-16T15:57:24.321322"
+    }
+  ]
 }

@@ -11,22 +11,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Tool core.py module.
-"""
-
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import inspect
-import logging
 import re
-from collections.abc import Callable
+import logging
 from typing import Any
-
+from collections.abc import Callable
 from pydantic import BaseModel
-
-from src.core.base.lifecycle.version import VERSION
 
 try:
     import rust_core as rc
@@ -57,7 +50,9 @@ class ToolCore:
     Handles parameter introspection and argument filtering.
     """
 
-    def extract_metadata(self, owner_name: str, func: Callable, category: str, priority: int = 0) -> ToolMetadata:
+    def extract_metadata(
+        self, owner_name: str, func: Callable, category: str, priority: int = 0
+    ) -> ToolMetadata:
         """Extracts ToolMetadata from a function signature with enhanced scoring."""
         name: str = func.__name__
         doc: str = func.__doc__ or "No description provided."
@@ -68,7 +63,11 @@ class ToolCore:
         for p_name, param in sig.parameters.items():
             if p_name == "self":
                 continue  # Skip self
-            params[p_name] = str(param.annotation) if param.annotation != inspect.Parameter.empty else "Any"
+            params[p_name] = (
+                str(param.annotation)
+                if param.annotation != inspect.Parameter.empty
+                else "Any"
+            )
 
         # Phase 119: Dynamic priority based on docstring length and detail
         calc_priority = priority + (len(doc) // 100)
@@ -82,10 +81,14 @@ class ToolCore:
             priority=calc_priority,
         )
 
-    def filter_arguments(self, func: Callable, args_dict: dict[str, Any]) -> dict[str, Any]:
+    def filter_arguments(
+        self, func: Callable, args_dict: dict[str, Any]
+    ) -> dict[str, Any]:
         """Filters input dictionary to only include keys supported by the function."""
         sig = inspect.signature(func)
-        has_kwargs: bool = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values())
+        has_kwargs: bool = any(
+            p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values()
+        )
 
         if has_kwargs:
             return args_dict
@@ -99,9 +102,10 @@ class ToolCore:
         """
         if rc:
             try:
-                # type: ignore[attr-defined]
-                return rc.score_tool_relevance(metadata.name, metadata.description, query)
-            except (AttributeError, TypeError, RuntimeError, OSError) as e:
+                return rc.score_tool_relevance(
+                    metadata.name, metadata.description, query
+                )  # type: ignore[attr-defined]
+            except Exception as e:
                 logger.warning(f"Rust score_tool_relevance failed: {e}")
 
         query_lower = query.lower()
@@ -125,7 +129,9 @@ class ToolCore:
 
         return score
 
-    def update_reliability(self, metadata: ToolMetadata, success: bool, weight: float = 0.1) -> ToolMetadata:
+    def update_reliability(
+        self, metadata: ToolMetadata, success: bool, weight: float = 0.1
+    ) -> ToolMetadata:
         """
         Updates the reliability score of a tool based on success/failure.
         Phase 120: Feedback loop for Genetic Algorithm.
@@ -134,11 +140,14 @@ class ToolCore:
             # Reward: Approach 1.0 asymptotically
             metadata.reliability_score = min(
                 1.0,
-                metadata.reliability_score + (1.0 - metadata.reliability_score) * weight,
+                metadata.reliability_score
+                + (1.0 - metadata.reliability_score) * weight,
             )
         else:
             # Penalty: Decrease with minimum floor
-            metadata.reliability_score = max(0.1, metadata.reliability_score - (metadata.reliability_score * weight))
+            metadata.reliability_score = max(
+                0.1, metadata.reliability_score - (metadata.reliability_score * weight)
+            )
 
         return metadata
 

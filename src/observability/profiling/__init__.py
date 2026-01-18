@@ -30,6 +30,18 @@ from src.observability.profiling.rust_profiler import (
     FunctionStats, RustProfiler, RustUsageScanner, create_profiled_rust_core,
     profile_rust_call)
 
+from src.observability.profiling.ProfileDecorators import (
+    ProfileResult,
+    cprofile_context,
+    cprofile,
+    timer_context,
+    timer,
+    ProfileAccumulator,
+    track,
+    get_profile_report,
+    reset_profile_data,
+)
+
 __all__ = [
     # RustProfiler
     "RustProfiler",

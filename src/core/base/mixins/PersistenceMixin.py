@@ -7,7 +7,7 @@ from src.core.base.AgentScratchpad import AgentScratchpad
 
 class PersistenceMixin:
     """Handles agent state, history, scratchpad, metrics, and file persistence."""
-    
+
     def __init__(self, **kwargs: Any) -> None:
         self._state: AgentState = AgentState.INITIALIZED
         self._history_manager = AgentConversationHistory()
@@ -49,7 +49,7 @@ class PersistenceMixin:
         """Write content back to disk."""
         if not hasattr(self, "current_content") or not hasattr(self, "file_path"):
             return False
-            
+
         content_to_write = self.current_content
         suffix = self.file_path.suffix.lower()
         if suffix in {".md", ".markdown"} or self.file_path.name.lower().endswith(".plan.md"):

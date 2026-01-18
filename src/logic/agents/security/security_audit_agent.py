@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -8,44 +7,22 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-SecurityAuditAgent: Agent for performing security audits, vulnerability scanning, and compliance checks across the PyAgent swarm.
-Implements advanced analysis and reporting for system security posture.
-"""
-
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Security audit agent.py module.
-"""
 
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import os
 import re
 from typing import Any
-
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
 
-class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
+class SecurityAuditAgent(BaseAgent):
     """
     Scans the workspace for potential security risks including hardcoded secrets,
     vulnerable patterns, and insecure file permissions.
@@ -72,11 +49,13 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
             # Rust acceleration for secret scanning
             try:
                 from rust_core import (  # type: ignore[attr-defined]
-                    scan_hardcoded_secrets_rust, scan_insecure_patterns_rust)
+                    scan_hardcoded_secrets_rust,
+                    scan_insecure_patterns_rust,
+                )
 
                 # Scan for hardcoded secrets
                 secret_findings = scan_hardcoded_secrets_rust(content)
-                for pattern_name, _ in secret_findings:
+                for pattern_name, line_num in secret_findings:
                     findings.append(
                         {
                             "file": file_path,
@@ -118,7 +97,9 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                         flag_end = pattern.find(")") + 1
                         flags = pattern[:flag_end]
                         actual_pattern = pattern[flag_end:]
-                        full_pattern = f"{flags}\\b{actual_pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"
+                        full_pattern = (
+                            f"{flags}\\b{actual_pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"
+                        )
                     else:
                         full_pattern = f"\\b{pattern}\\b\\s*[:=]\\s*['\"]([^'\"]+)['\"]"
 
@@ -152,7 +133,10 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                             }
                         )
 
-                if re.search(r"shell\s*=\s*True", content) and "SecurityAuditAgent" not in content:
+                if (
+                    re.search(r"shell\s*=\s*True", content)
+                    and "SecurityAuditAgent" not in content
+                ):
                     shell_match = re.search(r".*shell\s*=\s*True.*", content)
                     if shell_match and "# nosec" not in shell_match.group(0):
                         findings.append(
@@ -164,7 +148,7 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
                             }
                         )
 
-        except (IOError, UnicodeDecodeError) as e:
+        except Exception as e:
             findings.append(
                 {
                     "file": file_path,
@@ -192,7 +176,10 @@ class SecurityAuditAgent(BaseAgent):  # pylint: disable=too-many-ancestors
         for root, dirs, files in os.walk(self.workspace_path):
             # Skip hidden dirs and common excludes
             dirs[:] = [
-                d for d in dirs if not d.startswith(".") and d not in ["node_modules", "__pycache__", ".venv", "venv"]
+                d
+                for d in dirs
+                if not d.startswith(".")
+                and d not in ["node_modules", "__pycache__", ".venv", "venv"]
             ]
 
             for file in files:

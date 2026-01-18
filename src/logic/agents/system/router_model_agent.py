@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,20 +11,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from __future__ import annotations
-
-"""
-RouterModelAgent: System agent responsible for routing tasks and messages to appropriate models or agents.
-Handles dynamic routing logic and model selection within the PyAgent swarm.
-"""
-
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 from typing import Any
-
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.lifecycle.version import VERSION
+from src.core.base.BaseAgent import BaseAgent
 
 __version__ = VERSION
 
@@ -79,7 +69,9 @@ class RouterModelAgent(BaseAgent):
         Prioritizes 'internal_ai' unless capability requirements exceed it.
         """
         if self.recorder:
-            self.recorder.record_lesson("router_decision_request", {"task": task_type, "max_cost": max_cost})
+            self.recorder.record_lesson(
+                "router_decision_request", {"task": task_type, "max_cost": max_cost}
+            )
 
         # Phase 120: Heuristic Risk/Capability Mapping
         if "high_reasoning" in task_type.lower():
@@ -116,7 +108,11 @@ class RouterModelAgent(BaseAgent):
             return long_prompt
 
         # Simple simulation: take start and end
-        compressed = long_prompt[: target_tokens // 2] + "\n...[OMITTED]...\n" + long_prompt[-target_tokens // 2 :]
+        compressed = (
+            long_prompt[: target_tokens // 2]
+            + "\n...[OMITTED]...\n"
+            + long_prompt[-target_tokens // 2 :]
+        )
         return compressed
 
     def get_routing_stats(self) -> dict[str, Any]:

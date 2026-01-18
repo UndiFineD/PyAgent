@@ -11,24 +11,26 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Auto-extracted class from generate_agent_reports.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ReportSearchResult import ReportSearchResult
 from .ReportType import ReportType
-from typing import Dict, List, Tuple
 import logging
 import re
 
+# Rust acceleration imports
+try:
+    from rust_core import tokenize_and_index_rust, tokenize_query_rust
+    _RUST_AVAILABLE = True
+except ImportError:
+    _RUST_AVAILABLE = False
+
 __version__ = VERSION
+
 
 class ReportSearchEngine:
     """Search engine for reports.
@@ -49,10 +51,7 @@ class ReportSearchEngine:
         logging.debug("ReportSearchEngine initialized")
 
     def index_report(
-        self,
-        file_path: str,
-        report_type: ReportType,
-        content: str
+        self, file_path: str, report_type: ReportType, content: str
     ) -> None:
         """Index a report for searching.
         Args:
@@ -63,9 +62,23 @@ class ReportSearchEngine:
 
         key = f"{file_path}:{report_type.name}"
         self._reports[key] = content
-        # Build index
+
+        # Rust-accelerated indexing path
+        if _RUST_AVAILABLE:
+            try:
+                rust_index = tokenize_and_index_rust(file_path, report_type.name, content)
+                for word, locations in rust_index.items():
+                    if word not in self.index:
+                        self.index[word] = []
+                    for fp, rt, ln in locations:
+                        self.index[word].append((fp, ReportType[rt], ln))
+                return
+            except Exception:
+                pass  # Fall back to Python
+
+        # Python fallback: Build index
         for line_num, line in enumerate(content.split("\n"), 1):
-            words = re.findall(r'\w+', line.lower())
+            words = re.findall(r"\w+", line.lower())
             for word in words:
                 if word not in self.index:
                     self.index[word] = []
@@ -80,7 +93,15 @@ class ReportSearchEngine:
             List of search results.
         """
 
-        words = re.findall(r'\w+', query.lower())
+        # Rust-accelerated query tokenization
+        if _RUST_AVAILABLE:
+            try:
+                words = tokenize_query_rust(query)
+            except Exception:
+                words = re.findall(r"\w+", query.lower())
+        else:
+            words = re.findall(r"\w+", query.lower())
+
         matches: dict[str, int] = {}
         for word in words:
             if word in self.index:
@@ -98,11 +119,13 @@ class ReportSearchEngine:
             content = self._reports.get(report_key, "")
             lines = content.split("\n")
             match_text = lines[line_num - 1] if line_num <= len(lines) else ""
-            results.append(ReportSearchResult(
-                file_path=file_path,
-                report_type=report_type,
-                match_text=match_text,
-                line_number=line_num,
-                score=float(score)
-            ))
+            results.append(
+                ReportSearchResult(
+                    file_path=file_path,
+                    report_type=report_type,
+                    match_text=match_text,
+                    line_number=line_num,
+                    score=float(score),
+                )
+            )
         return results

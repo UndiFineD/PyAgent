@@ -13,22 +13,17 @@ No commands will be executed.
 """
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import logging
-from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
-
 
 class ServiceMesh:
     """
     ServiceMesh recovered after Copilot CLI deprecation event.
     Standardized placeholder for future re-implementation.
     """
-
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        _ = args, kwargs
+    def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
         logging.info("ServiceMesh initialized (Placeholder).")
+

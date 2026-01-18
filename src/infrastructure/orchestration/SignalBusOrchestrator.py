@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
 from src.core.base.version import VERSION
@@ -35,13 +30,13 @@ class SignalBusOrchestrator:
     """
     
     def __init__(self) -> None:
-        self._subscribers: dict[str, list[Callable]] = {}
-        self._queue = queue.Queue()
-        self._running = True
-        self._thread = threading.Thread(target=self._process_bus, daemon=True)
+        self._subscribers: dict[str, list[Callable[[Any, str], None]]] = {}
+        self._queue: queue.Queue[dict[str, Any]] = queue.Queue()
+        self._running: bool = True
+        self._thread: threading.Thread = threading.Thread(target=self._process_bus, daemon=True)
         self._thread.start()
 
-    def subscribe(self, signal_type: str, callback: Callable) -> None:
+    def subscribe(self, signal_type: str, callback: Callable[[Any, str], None]) -> None:
         """Registers a callback for a specific signal type."""
         if signal_type not in self._subscribers:
             self._subscribers[signal_type] = []

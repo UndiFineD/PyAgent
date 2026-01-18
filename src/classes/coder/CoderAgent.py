@@ -11,17 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.types.CodeLanguage import CodeLanguage
 from src.core.base.types.CodeMetrics import CodeMetrics
 from src.core.base.types.CodeSmell import CodeSmell
@@ -30,17 +25,19 @@ from src.core.base.types.RefactoringPattern import RefactoringPattern
 from src.core.base.types.StyleRule import StyleRule
 from src.logic.agents.development.CoderCore import CoderCore, DEFAULT_PYTHON_STYLE_RULES
 from src.core.base.BaseAgent import BaseAgent
+from .mixins.agent.AgentLanguageMixin import AgentLanguageMixin
+from .mixins.agent.AgentStyleMixin import AgentStyleMixin
+from .mixins.agent.AgentMetricsMixin import AgentMetricsMixin
+from .mixins.agent.AgentRefactorMixin import AgentRefactorMixin
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Tuple
 import logging
-import re
-import shutil
-import subprocess
-import sys
 
 __version__ = VERSION
 
-class CoderAgent(BaseAgent):
+
+class CoderAgent(
+    BaseAgent, AgentLanguageMixin, AgentStyleMixin, AgentMetricsMixin, AgentRefactorMixin
+):
     """Updates code files using AI assistance.
 
     Invariants:
@@ -68,11 +65,11 @@ class CoderAgent(BaseAgent):
         self.file_path = Path(file_path)
         self._language = self._detect_language()
         super().__init__(file_path)
-        self.capabilities.extend(["python", "javascript", "code-refactor"]) # Phase 241
-        
+        self.capabilities.extend(["python", "javascript", "code-refactor"])  # Phase 241
+
         # New: Delegate core logic to CoderCore (Rust-ready component)
         self.core = CoderCore(self._language)
-        
+
         # Create copies of style rules to avoid cross-instance state leakage
         self._style_rules: list[StyleRule] = [
             StyleRule(
@@ -82,8 +79,9 @@ class CoderAgent(BaseAgent):
                 severity=r.severity,
                 enabled=r.enabled,
                 language=r.language,
-                auto_fix=r.auto_fix
-            ) for r in DEFAULT_PYTHON_STYLE_RULES
+                auto_fix=r.auto_fix,
+            )
+            for r in DEFAULT_PYTHON_STYLE_RULES
         ]
         self._metrics: CodeMetrics | None = None
         self._quality_score: QualityScore | None = None
@@ -106,172 +104,6 @@ class CoderAgent(BaseAgent):
         self.core.language = self._language  # Sync core
         return self._language
 
-    @property
-    def language(self) -> CodeLanguage:
-        """Get the detected language."""
-        return self._language
-
-    @property
-    def _is_python_file(self) -> bool:
-        """Check if the file is a Python file."""
-        return self._language == CodeLanguage.PYTHON
-
-    # ========== Style Enforcement ==========
-    def add_style_rule(self, rule: StyleRule) -> None:
-        """Add a custom style rule."""
-        self._style_rules.append(rule)
-
-    def remove_style_rule(self, rule_name: str) -> bool:
-        """Remove a style rule by name."""
-        for i, rule in enumerate(self._style_rules):
-            if rule.name == rule_name:
-                del self._style_rules[i]
-                return True
-        return False
-
-    def enable_style_rule(self, rule_name: str) -> bool:
-        """Enable a style rule."""
-        for rule in self._style_rules:
-            if rule.name == rule_name:
-                rule.enabled = True
-                return True
-        return False
-
-    def disable_style_rule(self, rule_name: str) -> bool:
-        """Disable a style rule."""
-        for rule in self._style_rules:
-            if rule.name == rule_name:
-                rule.enabled = False
-                return True
-        return False
-
-    def check_style(self, content: str) -> list[dict[str, Any]]:
-        """Check code against all enabled style rules."""
-        return self.core.check_style(content, self._style_rules)
-
-    def auto_fix_style(self, content: str) -> tuple[str, int]:
-        """Apply auto-fixes for style violations."""
-        return self.core.auto_fix_style(content, self._style_rules)
-
-    # ========== Code Metrics ==========
-    def calculate_metrics(self, content: str | None = None) -> CodeMetrics:
-        """Calculate code metrics for the content."""
-        if content is None:
-            content = self.current_content or self.previous_content or ""
-        self._metrics = self.core.calculate_metrics(content)
-        return self._metrics
-
-    def _get_test_coverage(self) -> float:
-        """Attempt to calculate test coverage for the current file."""
-        if not self._is_python_file or not self.file_path.exists():
-            return 0.0
-
-        # Heuristic: Check common test locations
-        test_file = self.file_path.parent / f"test_{self.file_path.name}"
-        if not test_file.exists():
-            # Try tests/test_filename.py
-            test_file = self.file_path.parent.parent / "tests" / f"test_{self.file_path.name}"
-
-        if not test_file.exists():
-            return 0.0
-
-        # If pytest is available, try to run it with coverage
-        if shutil.which('pytest'):
-            try:
-                # Run coverage for just this file
-                # Use --cov-fail-under=0 to avoid exit code 1 if coverage is low
-                result = subprocess.run(
-                    [sys.executable, '-m', 'pytest', '--cov=' + str(self.file_path), '--cov-report=term-missing', str(test_file)],
-                    capture_output=True,
-                    text=True,
-                    timeout=30,
-                    check=False
-                )
-                # Parse output for percentage (e.g., TOTAL 10 2 80%)
-                match = re.search(r'TOTAL.*?\s+(\d+)%', result.stdout)
-                
-                # Phase 108: Record coverage intelligence
-                self._record(f"pytest --cov on {self.file_path.name}", 
-                             f"Coverage: {match.group(1)}%" if match else "No match",
-                             provider="Shell", model="pytest")
-                
-                if match:
-                    return float(match.group(1))
-            except Exception as e:
-                logging.debug(f"Coverage calculation failed: {e}")
-
-        return 0.0
-
-    # ========== Code Quality Scoring ==========
-    def calculate_quality_score(self, content: str | None = None) -> QualityScore:
-        """Calculate an overall code quality score."""
-        if content is None:
-            content = self.current_content or self.previous_content or ""
-        metrics = self.calculate_metrics(content)
-        style_violations = self.check_style(content)
-        code_smells = self.detect_code_smells(content)
-        coverage = self._get_test_coverage()
-        
-        self._quality_score = self.core.calculate_quality_score(metrics, style_violations, code_smells, coverage)
-        return self._quality_score
-
-    # ========== Code Smell Detection ==========
-    def detect_code_smells(self, content: str | None = None) -> list[CodeSmell]:
-        """Detect code smells in the content."""
-        if content is None:
-            content = self.current_content or self.previous_content or ""
-        self._code_smells = self.core.detect_code_smells(content)
-        return self._code_smells
-
-    # ========== Code Deduplication ==========
-    def find_duplicate_code(
-        self,
-        content: str | None = None,
-        min_lines: int = 4
-    ) -> list[dict[str, Any]]:
-        """Find duplicate code blocks."""
-        if content is None:
-            content = self.current_content or self.previous_content or ""
-        return self.core.find_duplicate_code(content, min_lines)
-
-    def get_duplicate_ratio(self, content: str | None = None) -> float:
-        """Calculate the ratio of duplicate code."""
-        if content is None:
-            content = self.current_content or self.previous_content or ""
-        duplicates = self.find_duplicate_code(content)
-        total_lines = len(content.split('\n'))
-        if total_lines == 0:
-            return 0.0
-        duplicate_lines = sum(
-            (d["occurrences"] - 1) * 4  # min_lines default
-            for d in duplicates
-        )
-        return min(1.0, duplicate_lines / total_lines)
-
-    # ========== Refactoring Patterns ==========
-    def add_refactoring_pattern(self, pattern: RefactoringPattern) -> None:
-        """Add a refactoring pattern."""
-        self._refactoring_patterns.append(pattern)
-
-    def apply_refactoring_patterns(self, content: str) -> tuple[str, list[str]]:
-        """Apply all registered refactoring patterns."""
-        result = content
-        applied: list[str] = []
-        for pattern in self._refactoring_patterns:
-            if pattern.language != self._language:
-                continue
-            new_result = re.sub(pattern.pattern, pattern.replacement, result)
-            if new_result != result:
-                applied.append(pattern.name)
-                result = new_result
-        return result, applied
-
-    def suggest_refactorings(self, content: str | None = None) -> list[dict[str, str]]:
-        """Suggest possible refactorings based on code analysis."""
-        if content is None:
-            content = self.current_content or self.previous_content or ""
-        return self.core.suggest_refactorings(content)
-
     # ========== Documentation Generation ==========
     def generate_documentation(self, content: str | None = None) -> str:
         """Generate documentation from code."""
@@ -286,23 +118,17 @@ class CoderAgent(BaseAgent):
 
     def _get_fallback_response(self) -> str:
         """Return fallback response when Copilot is unavailable."""
-        return ("# AI Improvement Unavailable\n"
-                "# GitHub CLI not found. Install from https://cli.github.com/\n\n"
-                "# Original code preserved below:\n\n")
+        return (
+            "# AI Improvement Unavailable\n"
+            "# GitHub CLI not found. Install from https://cli.github.com/\n\n"
+            "# Original code preserved below:\n\n"
+        )
 
-    def _validate_syntax(self, content: str) -> bool:
-        """Validate Python syntax using ast."""
-        return self.core.validate_syntax(content)
-
-    def _validate_flake8(self, content: str) -> bool:
-        """Validate Python code using flake8 if available."""
-        return self.core.validate_flake8(content)
-
-    def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str) -> str:
         """Use AI to improve the code with specific coding suggestions."""
         logging.info(f"Improving content for {self.file_path}")
         # Call base implementation directly to use AI backend
-        new_content = super().improve_content(prompt)
+        new_content = await super().improve_content(prompt)
         # Validate syntax
         if not self._validate_syntax(new_content):
             logging.error("Generated code failed syntax validation. Reverting.")
@@ -311,7 +137,9 @@ class CoderAgent(BaseAgent):
         logging.debug("Syntax validation passed")
         # Validate style (flake8)
         if not self._validate_flake8(new_content):
-            logging.warning("Generated code failed style validation (flake8). Proceeding anyway.")
+            logging.warning(
+                "Generated code failed style validation (flake8). Proceeding anyway."
+            )
         else:
             logging.debug("Style validation passed")
         return new_content

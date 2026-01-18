@@ -12,22 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Modal teleportation orchestrator.py module.
-"""
-
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import logging
-from typing import TYPE_CHECKING, Any
-
-from src.core.base.lifecycle.version import VERSION
+from typing import Any, TYPE_CHECKING
 
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
 
 class ModalTeleportationOrchestrator:
@@ -39,11 +33,15 @@ class ModalTeleportationOrchestrator:
     def __init__(self, fleet: FleetManager) -> None:
         self.fleet = fleet
 
-    def teleport_state(self, source_modality: str, target_modality: str, source_data: Any) -> Any:
+    def teleport_state(
+        self, source_modality: str, target_modality: str, source_data: Any
+    ) -> Any:
         """
         Converts data from one modality to another.
         """
-        logging.info(f"ModalTeleportationOrchestrator: Teleporting state from {source_modality} to {target_modality}")
+        logging.info(
+            f"ModalTeleportationOrchestrator: Teleporting state from {source_modality} to {target_modality}"
+        )
 
         # In a real system, this would use specialized agents (Linguistic, SQL, Android) to bridge the gap.
         # Example: GUI Actions -> Python Script
@@ -64,10 +62,10 @@ class ModalTeleportationOrchestrator:
                     coro.close()
                     return f"[DEFERRED] Teleportation to {target_modality}"
                 return loop.run_until_complete(coro)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 coro.close()
                 return f"[ERROR] Teleportation to {target_modality}"
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.error(f"Teleportation failed: {e}")
             return f"Error: Could not teleport from {source_modality} to {target_modality}."
 

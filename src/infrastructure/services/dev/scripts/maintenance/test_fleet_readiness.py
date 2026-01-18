@@ -13,7 +13,7 @@
 # limitations under the License.
 
 """
-Verification script to ensure core fleet components are correctly refactored
+Verification script to ensure core fleet components are correctly refactored 
 and importable. Ported from temp/verify_refactor.py.
 """
 
@@ -25,29 +25,26 @@ project_root = Path(__file__).resolve().parents[5]
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
-
 def test_imports():
     """Attempts to instantiate major agents to verify import health."""
     try:
-        from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
-        from src.logic.agents.specialists.handy_agent import HandyAgent
-
+        from src.infrastructure.fleet.FleetManager import FleetManager
+        from src.logic.agents.development.HandyAgent import HandyAgent
+        
         print(f"Detecting workspace root at: {project_root}")
-
-        _ = FleetManager(workspace_root=str(project_root))
+        
+        fleet = FleetManager(workspace_root=str(project_root))
         print("SUCCESS: FleetManager instantiated.")
-
-        _ = HandyAgent(file_path="dummy.py")
+        
+        handy = HandyAgent(file_path="dummy.py")
         print("SUCCESS: HandyAgent instantiated.")
-
+        
         return True
-    except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+    except Exception as e:
         print(f"FAILURE: Error during instantiation: {e}")
         import traceback
-
         traceback.print_exc()
         return False
-
 
 if __name__ == "__main__":
     print("=== PyAgent Readiness Test ===")

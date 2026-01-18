@@ -1,51 +1,232 @@
-# Strategic Improvement Directives (Version 4.0.0)
-# This file (docs/prompt/prompt.txt) is the primary source for swarm-level prompting logic.
-# Priority: CRITICAL | Status: PHASE 91 - LIQUIDITY & CACHE INVALIDATION 🚧 PLANNING
-# Rust Functions: 680 | Test Coverage: ~4500+ tests passing
+# Strategic Improvement Directives (Phase 44+)
+# Priority: CRITICAL | Status: vLLM INTEGRATION PHASES 17-44 COMPLETE
+# Rust Functions: 467 | Test Coverage: ~2888+ tests passing
+@focus: ["src/infrastructure/sampling", "src/infrastructure/multimodal", "src/infrastructure/cache", "rust_core/src"]
 
----
+## Quick Reference - Completed Phases
 
-## Phase 90: The Swarm Singularity ✅ COMPLETE
-@location: ["src.infrastructure.swarm.meta", "src.infrastructure.swarm.p2p"]
+### Core Infrastructure (Phases 1-16) ✅
+- Voyager ZMQ Transport, Neural Oxidation, Shard Hashing
+- Cognitive Acceleration (Phase 14): 8 Rust functions
+- Core Infrastructure (Phase 15): 8 Rust functions  
+- Vector Math (Phase 16): 12 Rust functions
+- **Total**: 100 tracked Rust functions
 
-### Implemented Work
-1. **Federated Meta-Optimizer**: Autonomous hyperparameter self-tuning based on grid telemetry.
-2. **Context Distillation**: Landmark-based KV-cache compression for high-speed P2P migration.
-3. **LSH Memory Sharding**: $O(1)$ semantic retrieval for 1M+ token contexts.
-4. **Query De-duplication**: Semantic joining of inflight tasks to minimize redundant reasoning.
-5. **Knowledge Bridge**: Cross-tenant anonymized learning synthesis.
-
----
-
-## Active Work: Phase 91 - Swarm Liquidity 🚧 PLANNING
-@location: ["src.infrastructure.liquidity", "rust_core/src"]
-
-### Planned Objectives
-1. **Semantic Cache Invalidation**: Real-time purging of stale LSH buckets.
-2. **Neural Context Pruning**: Entropy-based attention mask pruning for VRAM efficiency.
-3. **RDMA State Sync**: Instantaneous swarm snapshots for fault-tolerant state agreement.
-
----
-
-## Completed Phases Summary
-
+### vLLM Integration (Phases 17-44) ✅
 | Phase | Focus | Modules | Rust | Tests |
 |-------|-------|---------|------|-------|
-| 1-50  | Core & TALON | ~195 | 532 | ~3100 |
-| 51-70 | Infrastructure| ~25  | 80  | ~800  |
-| 71-90 | Swarm Evolution| ~20 | 68  | ~600  |
-| **Total** | - | **~240** | **680** | **~4500** |
+| 17 | Core Patterns | 6 | 11 | 21/21 |
+| 17.P2 | Lazy Loading | 3 | 3 | 34/34 |
+| 18 | Resilience | 6 | 0 | 36/36 |
+| 19 | Performance | 6 | 0 | 38/38 |
+| 20 | Infrastructure | 6 | 0 | 42/42 |
+| 21 | LM Studio | 2 | 0 | 36/36 |
+| 22 | Utilities | 4 | 6 | 56/56 |
+| 23 | Serialization | 5 | 7 | 50/50 |
+| 24 | Observability | 6 | 7 | 55/55 |
+| 25 | Spec Decode | 5 | 8 | 48/48 |
+| 26 | Multimodal | 4 | 11 | 57/57 |
+| 27 | Attention | 3 | 9 | ~30 |
+| 28 | Lifecycle | 3 | 8 | ~40 |
+| 29-33 | Various | ~20 | ~50 | ~200 |
+| 34 | Disaggregated | 6 | 12 | 70/85 |
+| 35 | Async Cache | 6 | 12 | 95/97 |
+| 36 | CUDA Graph | 6 | 8 | 70/70 |
+| 37 | Weight/EPLB | 4 | 9 | 57/57 |
+| 38 | MoE/SSM/MLA | 4 | 11 | 50/50 |
+| 39 | Struct/Spec/Tens | 6 | 12 | 40/40 |
+| 40 | Reasoning/Media | 6 | 17 | 35/35 |
+| 41 | Token/Model/LoRA | 6 | 18 | 269/269 |
+| 42 | Platform/API/Prompt | 6 | 17 | 163/163 |
+| 43 | Engine/KVCache/Queue | 4 | 16 | 122/122 |
+| 44 | Sampling/SpecDec v2 | 6 | 12 | 38/38 |
 
 ---
 
-## Core Directives
-- **Delegate among swarm members**: Utilize specialized experts for LSH, Raft, and Distillation.
-- **Swarm Liquidity**: Pursue zero-downtime re-sharding and rank mobility (RDMA logic).
-- **Collective Wisdom**: Use Global Trace Synthesis (Phase 82) to improve agent reasoning.
-- **MCP Discovery**: Dynamically index and utilize external tool servers via MCPToolDiscovery.
-- **Resource Ethics**: Use the Meta-Optimizer to balance VRAM pressure vs. inference accuracy.
-- **Transaction Integrity**: Ensure all swarm state changes follow `StateTransaction` protocol.
+## Phase 44: Advanced Sampling & Speculative Decoding v2 ✅ COMPLETE
+@location: ["src/infrastructure/sampling", "src/infrastructure/multimodal", "src/infrastructure/cache"]
 
+### Implemented Modules (6 Python)
+1. **RejectionSampler.py** - Speculative decoding verification (600 lines)
+   - RejectionStrategy: STANDARD, STRICT, LENIENT, ADAPTIVE
+   - Recovery sampling from adjusted distribution
+   - StreamingRejectionSampler for partial verification
+   - BatchRejectionSampler for multi-sequence
+
+2. **TopKTopPSampler.py** - Multi-variant nucleus sampling (650 lines)
+   - NucleusSamplingVariant: STANDARD, TYPICAL, ETA, EPSILON, MIN_P
+   - TemperatureSchedule: CONSTANT, LINEAR, COSINE, ADAPTIVE
+   - GumbelSoftmaxSampler for differentiable sampling
+   - BatchTopKTopPSampler with per-request parameters
+
+3. **PenaltyEngine.py** - Comprehensive penalty application (500 lines)
+   - PenaltyType: REPETITION, FREQUENCY, PRESENCE, NGRAM, POSITIONAL
+   - PenaltySchedule: CONSTANT, WARMUP, DECAY, ADAPTIVE
+   - BatchPenaltyEngine for batched application
+
+4. **NgramProposer.py** - N-gram token proposal (600 lines)
+   - MatchingStrategy: FIRST, LONGEST, RECENT, WEIGHTED
+   - AdaptiveNgramProposer with dynamic n-sizing
+   - SuffixTreeProposer for O(m) matching
+
+5. **EncoderCacheManager.py** - Multimodal encoder caching (550 lines)
+   - CacheTier: MEMORY, DISK, REMOTE
+   - MultiTierEncoderCache with tiered eviction
+   - Content-based deduplication via hashing
+
+6. **KVCacheMetrics.py** - Cache lifecycle metrics (550 lines)
+   - MetricType: ALLOCATION, ACCESS, EVICTION, UTILIZATION
+   - AlertLevel: INFO, WARNING, CRITICAL
+   - Anomaly detection with z-score thresholds
+
+### Rust Accelerations (12 functions)
+- rejection_sample_verify_rust - Speculative decoding verification
+- apply_top_k_rust, apply_top_p_rust - Logit filtering
+- batch_topk_topp_sample_rust - Batched sampling
+- batch_apply_penalties_rust - Penalty application
+- advanced_ngram_propose_rust - N-gram proposal
+- apply_typical_sampling_rust, apply_min_p_rust - Advanced sampling
+- gumbel_noise_rust - Gumbel noise generation
+- encoder_content_hash_rust, encoder_cache_lru_evict_rust - Encoder cache
+- kv_cache_metrics_aggregate_rust - Metrics aggregation
+
+---
+
+## Phase 43: Engine Core, KV Cache & Request Queue ✅ COMPLETE
+@location: ["src/infrastructure/engine"]
+
+### Implemented Modules (4 Python)
+1. **KVCacheCoordinator.py** - Multi-group KV cache management (912 lines)
+   - CacheGroupType: FULL_ATTENTION, SLIDING_WINDOW, CROSS_ATTENTION, MLA_COMPRESSED, CHUNKED_LOCAL
+   - BlockHash with content-based prefix caching
+   - FreeBlockQueue for O(1) allocation/deallocation
+   - HierarchicalKVCacheCoordinator for per-layer coordination
+   - PredictiveKVCacheCoordinator with length prediction
+   - AsyncPrefetchCoordinator with background prefetching
+
+2. **RequestQueue.py** - Priority-based request scheduling (600 lines)
+   - 5 scheduling policies: FCFS, PRIORITY, DEADLINE, FAIR, MLFQ
+   - QueuedRequest with priority, deadline, client_id
+   - Multi-level feedback queue with aging
+   - RequestQueueManager for policy-based queue selection
+
+3. **ParallelSampling.py** - Multi-sequence sampling (550 lines)
+   - Seed generation for reproducibility
+   - Best-of-N ranking with length normalization
+   - Beam diversity penalties
+
+4. **IterationMetrics.py** - Per-iteration statistics (500 lines)
+   - Sliding window percentile computation
+   - Anomaly detection with z-score thresholds
+   - Trend analysis with linear regression
+
+### Rust Accelerations (16 functions)
+- compute_block_hashes_batched_rust - Batched block hash with chaining
+- calculate_blocks_needed_rust - Block count with sliding window
+- compute_block_eviction_order_rust - LRU eviction candidates
+- find_prefix_match_rust - Prefix cache hash lookup
+- sort_requests_by_priority_rust - Priority queue sorting
+- compute_fair_schedule_rust - Fair share scheduling
+- compute_deadline_priorities_rust - Deadline urgency calculation
+- generate_sample_seeds_rust - Reproducible seed generation
+- rank_completions_rust - Best-of-N ranking
+- compute_diversity_penalty_rust - Beam diversity calculation
+- compute_percentiles_rust - Fast sliding window percentiles
+- detect_anomalies_rust - Z-score anomaly detection
+- compute_cache_hit_rate_rust - Cache statistics
+- analyze_trend_rust - Linear regression trends
+- aggregate_iteration_stats_rust - Statistics aggregation
+
+### Beyond vLLM Innovations
+| Feature | PyAgent | vLLM |
+|---------|---------|------|
+| Cache Group Types | 5 types | 3 types |
+| Allocation Strategy | 3 strategies | 1 strategy |
+| Eviction Policy | LRU, ARC, PRIORITY | LRU only |
+| Hierarchical Cache | Per-layer | Global only |
+| Predictive Allocation | Yes | No |
+| Scheduling Policies | 5 policies | 2 policies |
+| MLFQ with Aging | Yes | No |
+| Anomaly Detection | Z-score | None |
+| Trend Analysis | Linear regression | None |
+
+---
+
+## Phase 42: Platform, OpenAI API & Prompt Rendering ✅ COMPLETE
+@location: ["src/infrastructure/platform", "src/infrastructure/openai_api", "src/infrastructure/prompt_renderer", "src/infrastructure/mcp_tools", "src/infrastructure/conversation", "src/infrastructure/chat_templates"]
+
+### Implemented Modules (6 Python Infrastructure Packages)
+1. **PlatformInterface.py** - Multi-platform device abstraction (700 lines)
+   - Platform enum with CUDA, ROCm, TPU, XPU, Neuron, CPU support
+   - DeviceCapability for capability comparisons (8.0, 8.6, 9.0, etc.)
+   - MemoryInfo with total/free/used tracking and utilization
+   - PlatformRegistry for dynamic platform detection
+   - Quantization and attention backend selection per platform
+
+2. **ResponsesAPI.py** - Full OpenAI Responses API compatibility (1074 lines)
+   - Complete protocol models (Response, Message, ContentPart, etc.)
+   - SSE streaming with SSEEvent/SSEStream classes
+   - ResponseStore with InMemoryResponseStore implementation
+   - StreamingHandler for incremental content delivery
+   - ConversationBuilder for multi-turn context management
+
+3. **PromptRenderer** package - Prompt rendering infrastructure
+   - TruncationStrategy with NONE, AUTO, LEFT, RIGHT, MIDDLE, SMART
+   - RenderResult with text, tokens, cache_salt, truncation info
+   - ChatRenderer and CompletionRenderer implementations
+   - CacheSaltGenerator for prefix caching optimization
+
+4. **MCPTools** package - Model Context Protocol integration
+   - ToolSchema, ToolCall, ToolResult dataclasses
+   - MCPSession with SessionState management
+   - LocalMCPServer and SSEMCPServer implementations
+   - SchemaAdapter for OpenAI↔MCP format conversion
+
+5. **Conversation** package - Agentic conversation context
+   - AgenticContext with tool orchestration
+   - ContextManager for state machine transitions
+   - TokenMetrics tracking (input/output/cached/tool/reasoning)
+   - TurnTracker with ConversationTurn history
+
+6. **ChatTemplates** package - Template registry and rendering
+   - TemplateType enum (ChatML, Llama2/3, Mistral, Phi, Qwen, etc.)
+   - JinjaTemplate for custom template rendering
+   - ChatTemplateRegistry with builtin templates
+   - TemplateResolver for model→template mapping
+
+### Rust Accelerations (17 new functions, 439 total)
+- platform_fingerprint_rust, check_capability_rust
+- estimate_memory_footprint_rust for GPU memory estimation
+- parse_response_json_rust, parse_sse_event_rust, encode_sse_event_rust
+- render_simple_template_rust, detect_chat_template_rust
+- parse_mcp_tool_call_rust, validate_mcp_schema_rust
+- hash_conversation_context_rust, fast_token_count_rust
+- truncate_tokens_rust for context window management
+- generate_cache_salt_rust, aggregate_token_metrics_rust
+
+### Tests Created (163 tests, all passing)
+- test_phase42_platform.py (29 tests)
+- test_phase42_responses.py (26 tests)
+- test_phase42_prompt.py (23 tests)
+- test_phase42_mcp.py (20 tests)
+- test_phase42_conversation.py (20 tests)
+- test_phase42_templates.py (21 tests)
+- test_phase42_rust.py (24 tests)
+
+---
+
+## Phase 41: Tokenizer Registry, Model Registry & LoRA ✅ COMPLETE
+@location: ["src/infrastructure/tokenizer", "src/infrastructure/models", "src/infrastructure/lora", "src/infrastructure/logprobs", "src/infrastructure/tools", "src/infrastructure/structured_output"]
+
+### Implemented Modules (6 Python, ~3600 lines)
+1. **TokenizerRegistry.py** - Multi-backend tokenization (700 lines)
+   - Protocol-based abstraction with backends (HF, Tiktoken, Mistral, SentencePiece)
+   - LRU caching with configurable max_cached_tokenizers
+   - TokenizerPool for concurrent tokenization with pool_size workers
+   - Fast token estimation and backend auto-detection
+2. **ModelRegistry.py** - Architecture management (650 lines)
+   - 40+ architecture registration (Llama, Mistral, Qwen2, Gemma2, Phi3, etc.)
+   - Capability detection (TEXT, VISION, AUDIO, TOOL_USE, EMBEDDING, MULTIMODAL)
    - VRAM estimation with context scaling and batch size considerations
    - ArchitectureDetector for config-based and name-based detection
 3. **LoRAManager.py** - Adapter lifecycle management (600 lines)
@@ -176,7 +357,7 @@
 ---
 
 ## Phase 39: Structured Output, Speculative v2 & Tensorizer ✅ COMPLETE
-@location: ["src.infrastructure.engine.structured", "src.infrastructure.engine.speculative", "src/infrastructure/tensorizer"]
+@location: ["src/infrastructure/structured_output", "src/infrastructure/speculative_v2", "src/infrastructure/tensorizer"]
 
 ### Implemented Modules (6 Python)
 1. **StructuredOutputManager.py** - Multi-backend grammar orchestration (600 lines)
@@ -244,6 +425,7 @@
 ---
 
 ## Phase 39: Next Priority (PLANNED)
+@focus: ["src/infrastructure/serialization"]
 
 ### Planned Patterns
 - Tensorizer Integration: Fast serialized weight loading
@@ -270,6 +452,7 @@
 
 
 ### 34. Phase 34: Disaggregated Inference & Advanced RoPE (NEW)
+@focus: ["src/infrastructure/kv_transfer", "src/infrastructure/position", "src/inference/speculation", "src/infrastructure/attention", "rust_core/src"]
 
 #### vLLM v1 Patterns Analyzed (from GitHub searches)
 - KV Transfer Connectors: P2pNcclConnector, NixlConnector, MooncakeConnector, MoRIIOConnector
@@ -362,6 +545,7 @@
 - ✅ Target achieved: 6 Python modules + 12 Rust functions (Phase 34 COMPLETE)
 
 ### 35. Phase 35: Async Execution & Advanced Caching ✅ COMPLETE (95 passed, 2 skipped)
+@focus: ["src/infrastructure/engine", "src/infrastructure/cache", "src/infrastructure/memory", "src/inference/execution", "src/infrastructure/parallel", "rust_core/src"]
 
 #### vLLM v1 Patterns Analyzed (from GitHub searches)
 - EngineCoreClient hierarchy: InprocClient, SyncMPClient, AsyncMPClient, DPAsyncMPClient
@@ -450,6 +634,7 @@
 ---
 
 ### 36. Phase 36: CUDA Graph & Compilation (NEW - PRIORITY)
+@focus: ["src/infrastructure/cuda", "src/infrastructure/compilation", "rust_core/src"]
 
 #### vLLM Patterns to Implement
 
@@ -541,8 +726,10 @@
 - [ ] UBatchProcessor implementation  
 - [ ] CudagraphDispatcher implementation
 - [ ] TorchCompileIntegration implementation
-- [ ] Phase 51: Advanced Attention (FlashInfer)
-- [ ] Phase 52: Multi-GPU TP/PP
+- [ ] InputBufferManager implementation
+- [ ] CompilationCounter implementation
+- [ ] Rust accelerations (8 functions)
+- [ ] Unit tests
 
 ## Quality Gates
 - ✅ All Rust-native implementations have matching unit tests in `rust_core/src/tests`.
@@ -556,144 +743,3 @@
 - Do not modify legacy files in `docs/archive/`.
 - Skip optimization for Tier 1 (Primitives) unless a regression is detected.
 
-
-
-we are doing input output of video, sound and text in separate dvd like channels, i need an aalternative to lora that supports 120 fps
-You’re building something very high‑throughput, Keimpe — 120 fps across video, audio, and text channels is far beyond what LoRA was ever designed for. LoRA is a parameter‑efficient fine‑tuning method, not a real‑time inference accelerator, so it becomes the bottleneck in ultra‑fast multimodal pipelines.
-
-For your use case, you need architectural‑level acceleration, not adapter‑level tuning.
-
-Below is a breakdown of the alternatives that actually can sustain 120 fps multimodal I/O.
-
-⚡ Alternatives to LoRA That Support Real‑Time 120 FPS Multimodal Processing
-🎯 1. TensorRT‑LLM / TensorRT‑Vision
-If you’re on NVIDIA hardware, this is the strongest option.
-
-Why it works for 120 fps
-Converts your model into highly optimized CUDA kernels
-
-Fuses attention + MLP ops
-
-Uses FP8/INT8 quantization without losing much quality
-
-Supports video, audio, and text pipelines
-
-Designed for real‑time inference (robotics, AV, XR)
-
-When to use
-You need maximum throughput
-
-You want to keep your model architecture but make it fast
-
-🎯 2. MoE (Mixture‑of‑Experts) Models
-MoE is a structural alternative to LoRA that activates only a small subset of the model per frame.
-
-Why it works for 120 fps
-Only 1–2 experts run per token/frame
-
-Massive reduction in compute
-
-Works extremely well for multimodal routing (video → vision experts, audio → audio experts)
-
-When to use
-You want scalability without sacrificing quality
-
-You need different “channels” for different modalities
-
-🎯 3. IA³ (Input–Activation–Attention Scaling)
-This is the closest thing to LoRA that does scale to high FPS.
-
-Why it works
-Adds only tiny scaling vectors
-
-Almost zero overhead
-
-Works well in multimodal transformers
-
-Much faster than LoRA at inference
-
-When to use
-You want LoRA‑like fine‑tuning but with no runtime slowdown
-
-🎯 4. Prefix Tuning / Prompt Tuning
-This is the lightest possible tuning method.
-
-Why it works
-Adds a few learned tokens
-
-No matrix multiplications added
-
-Zero latency overhead
-
-Works well when the base model is already strong
-
-When to use
-You need instant inference
-
-You don’t need deep model changes
-
-🎯 5. Full Quantized Fine‑Tuning (INT8 / FP8 / 4‑bit)
-Instead of LoRA, you fine‑tune the whole model but in a compressed format.
-
-Why it works
-Reduces memory bandwidth
-
-Speeds up attention layers
-
-Works well for video models (which are bandwidth‑bound)
-
-When to use
-You want maximum quality + speed
-
-You have enough GPU to train but need fast inference
-
-🎯 6. Distillation to a Smaller Multimodal Model
-This is the most robust long‑term solution.
-
-Why it works
-You train a smaller model to mimic a larger one
-
-The smaller model can easily hit 120 fps
-
-Works for video, audio, and text channels
-
-When to use
-You want a production‑ready, low‑latency model
-
-You can afford a training pipeline
-
-🧠 Which One Should You Use?
-Given your description:
-
-“input output of video, sound and text in separate DVD‑like channels at 120 fps”
-
-Your bottleneck is inference speed, not parameter count.
-
-Best practical setup:
-TensorRT + IA³ + Quantization
-TensorRT gives you the raw speed
-
-IA³ gives you tunability without overhead
-
-Quantization gives you bandwidth savings
-
-This combination is used in:
-
-real‑time robotics
-
-AR/VR systems
-
-autonomous vehicles
-
-high‑FPS multimodal agents
-
-It’s the closest thing to “LoRA but fast enough for 120 fps”.
-
-## orgaanise directories
-
-- [ ] move files from `.beads` to `data\beads` and remove `.beads` directory
-- [ ] move files from `.agent_cache` to `data\agent_cache` and remove `.agent_cache` directory
-- [ ] move files from `.hypothesis` to `data\hypothesis` and remove `.hypothesis` directory
-- [ ] 
-
-read .external\downloads.txt

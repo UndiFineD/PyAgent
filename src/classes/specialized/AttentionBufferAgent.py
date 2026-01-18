@@ -11,29 +11,36 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import logging
 import time
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
 
+try:
+    import rust_core as rc
+    RUST_AVAILABLE = True
+except ImportError:
+    rc = None
+    RUST_AVAILABLE = False
+
+
 class AttentionBufferAgent(BaseAgent):
     """
-    Agent that maintains a shared attention buffer between humans and agents.
-Maintain a high-resolution stream of state changes, user interactions, and agent thoughts.
-    """
+    Tier 2 (Cognitive Logic) - Attention Buffer Agent: Maintains a shared 
+    attention context between humans and agents to ensure cohesive collaboration.
     
+    Phase 14 Rust Optimizations:
+    - sort_buffer_by_priority_rust: Fast priority-timestamp composite sorting
+    - filter_stale_entries_rust: Optimized timestamp-based filtering
+    """
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.buffer: list[dict[str, Any]] = []
@@ -54,14 +61,14 @@ Maintain a high-resolution stream of state changes, user interactions, and agent
             "timestamp": time.time(),
             "source": source,
             "content": content,
-            "priority": priority
+            "priority": priority,
         }
         self.buffer.append(point)
-        
+
         # Maintain size limit
         if len(self.buffer) > self.max_buffer_size:
             self.buffer.pop(0)
-            
+
         logging.info(f"Attention point added from {source}: {content[:50]}...")
         return f"Attention point registered. Buffer size: {len(self.buffer)}"
 
@@ -69,21 +76,48 @@ Maintain a high-resolution stream of state changes, user interactions, and agent
     def get_attention_summary(self) -> dict[str, Any]:
         """
         Returns the current state of the attention buffer, sorted by priority and recency.
+        Uses Rust-accelerated sorting when available.
         """
-        sorted_buffer = sorted(self.buffer, key=lambda x: (x['priority'], x['timestamp']), reverse=True)
+        # Rust-accelerated priority-timestamp sorting
+        if RUST_AVAILABLE and hasattr(rc, 'sort_buffer_by_priority_rust') and self.buffer:
+            try:
+                priorities = [x["priority"] for x in self.buffer]
+                timestamps = [x["timestamp"] for x in self.buffer]
+                sorted_indices = rc.sort_buffer_by_priority_rust(priorities, timestamps)
+                sorted_buffer = [self.buffer[i] for i in sorted_indices]
+            except Exception:
+                sorted_buffer = sorted(
+                    self.buffer, key=lambda x: (x["priority"], x["timestamp"]), reverse=True
+                )
+        else:
+            sorted_buffer = sorted(
+                self.buffer, key=lambda x: (x["priority"], x["timestamp"]), reverse=True
+            )
         return {
             "current_focus": sorted_buffer[0] if sorted_buffer else None,
             "recent_context": sorted_buffer[:10],
-            "total_points": len(self.buffer)
+            "total_points": len(self.buffer),
         }
 
     @as_tool
     def clear_stale_attention(self, age_seconds: int = 3600) -> str:
         """
         Removes attention points older than a certain duration.
+        Uses Rust-accelerated filtering when available.
         """
         now = time.time()
         initial_count = len(self.buffer)
-        self.buffer = [p for p in self.buffer if now - p['timestamp'] < age_seconds]
+        
+        # Rust-accelerated stale entry filtering
+        if RUST_AVAILABLE and hasattr(rc, 'filter_stale_entries_rust') and self.buffer:
+            try:
+                timestamps = [p["timestamp"] for p in self.buffer]
+                valid_indices = rc.filter_stale_entries_rust(timestamps, now, age_seconds)
+                self.buffer = [self.buffer[i] for i in valid_indices]
+            except Exception:
+                self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]
+        else:
+            self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]
+        
         removed = initial_count - len(self.buffer)
         return f"Cleared {removed} stale attention points."

@@ -7,7 +7,7 @@ from src.core.base.managers.ResourceQuotaManager import ResourceQuotaManager, Qu
 
 class GovernanceMixin:
     """Handles resource quotas, preemption, and security clearance."""
-    
+
     def __init__(self, config: Any, **kwargs: Any) -> None:
         self.quotas = ResourceQuotaManager(
             config=QuotaConfig(

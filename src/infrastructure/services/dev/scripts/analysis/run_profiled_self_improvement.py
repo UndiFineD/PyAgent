@@ -21,20 +21,19 @@ plus custom rust_core wrapper for Rust function tracking.
 """
 
 from __future__ import annotations
-
-import atexit
-import cProfile
-import functools
-import io
-import json
 import os
-import pstats
 import sys
 import time
-from collections import defaultdict
-from dataclasses import dataclass
-from datetime import datetime
+import json
+import atexit
+import functools
+import cProfile
+import pstats
+import io
 from pathlib import Path
+from datetime import datetime
+from dataclasses import dataclass
+from collections import defaultdict
 
 # Ensure project root is in path FIRST
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "..", ".."))
@@ -48,11 +47,9 @@ src_path = os.path.join(project_root, "src")
 # RUST PROFILER (Custom wrapper)
 # =============================================================================
 
-
 @dataclass
 class RustFunctionStats:
     """Statistics for a Rust function."""
-
     name: str
     call_count: int = 0
     total_time_ns: int = 0
@@ -71,10 +68,10 @@ class RustProfiler:
 
     _instance = None
 
-    def __new__(cls) -> RustProfiler:
+    def __new__(cls):
         if cls._instance is None:
             cls._instance = super().__new__(cls)
-            cls._instance._stats = {}
+            cls._instance._stats: dict[str, RustFunctionStats] = {}
         return cls._instance
 
     def record_call(self, func_name: str, elapsed_ns: int) -> None:
@@ -96,21 +93,18 @@ try:
     class ProfiledRustCore:
         """Wrapper that profiles all rust_core function calls."""
 
-        def __getattr__(self, name: str) -> object:
+        def __getattr__(self, name: str):
             original = getattr(_original_rc, name)
 
             if callable(original):
-
                 @functools.wraps(original)
-
                 def profiled_func(*args, **kwargs):
-                    start_time_ns = time.perf_counter_ns()
+                    start = time.perf_counter_ns()
                     try:
                         return original(*args, **kwargs)
                     finally:
-                        elapsed_ns = time.perf_counter_ns() - start_time_ns
-                        rust_profiler.record_call(name, elapsed_ns)
-
+                        elapsed = time.perf_counter_ns() - start
+                        rust_profiler.record_call(name, elapsed)
                 return profiled_func
             return original
 
@@ -124,22 +118,21 @@ except ImportError:
 # COMPREHENSIVE PROFILE ANALYZER
 # =============================================================================
 
-
 class ComprehensiveProfileAnalyzer:
     """Analyzes cProfile results and filters for src/ code."""
 
-    def __init__(self, src_dir: str, proj_root: str) -> None:
-        self._src_dir = src_dir
-        self._proj_root = proj_root
+    def __init__(self, src_path: str, project_root: str):
+        self.src_path = src_path
+        self.project_root = project_root
         self.profiler = cProfile.Profile()
         self._start_time = None
 
-    def start(self) -> None:
+    def start(self):
         """Start profiling."""
         self._start_time = time.time()
         self.profiler.enable()
 
-    def stop(self) -> None:
+    def stop(self):
         """Stop profiling."""
         self.profiler.disable()
 
@@ -150,19 +143,17 @@ class ComprehensiveProfileAnalyzer:
         # Normalize path for comparison
         try:
             norm_file = os.path.normpath(filename)
-            norm_src = os.path.normpath(self._src_dir)
+            norm_src = os.path.normpath(self.src_path)
             return norm_file.startswith(norm_src)
-        except (TypeError, AttributeError, ValueError):
-            # Defensive: filename or src_path may be None or malformed
+        except Exception:
             return False
 
     def _clean_filename(self, filename: str) -> str:
         """Convert full path to relative module-style path."""
         try:
-            rel = os.path.relpath(filename, self._proj_root)
+            rel = os.path.relpath(filename, self.project_root)
             return rel.replace(os.sep, ".").replace(".py", "")
-        except (ValueError, TypeError):
-            # Defensive: filename/project_root may be malformed
+        except Exception:
             return filename
 
     def analyze(self) -> dict:
@@ -178,23 +169,21 @@ class ComprehensiveProfileAnalyzer:
         src_functions = []
         module_stats = defaultdict(lambda: {"call_count": 0, "total_time_s": 0.0, "functions": set()})
 
-        for (filename, _line, func_name), (ncalls, totcalls, tottime, cumtime, _callers) in raw_stats.items():
+        for (filename, line, func_name), (ncalls, totcalls, tottime, cumtime, callers) in raw_stats.items():
             if self._is_src_file(filename):
                 module = self._clean_filename(filename)
                 qualified_name = f"{module}.{func_name}"
 
-                src_functions.append(
-                    {
-                        "function": qualified_name,
-                        "ncalls": ncalls,
-                        "totcalls": totcalls,
-                        "tottime_s": tottime,
-                        "cumtime_s": cumtime,
-                        "tottime_ms": tottime * 1000,
-                        "cumtime_ms": cumtime * 1000,
-                        "avg_us": (tottime / ncalls * 1_000_000) if ncalls > 0 else 0,
-                    }
-                )
+                src_functions.append({
+                    "function": qualified_name,
+                    "ncalls": ncalls,
+                    "totcalls": totcalls,
+                    "tottime_s": tottime,
+                    "cumtime_s": cumtime,
+                    "tottime_ms": tottime * 1000,
+                    "cumtime_ms": cumtime * 1000,
+                    "avg_us": (tottime / ncalls * 1_000_000) if ncalls > 0 else 0,
+                })
 
                 module_stats[module]["call_count"] += ncalls
                 module_stats[module]["total_time_s"] += tottime
@@ -207,28 +196,20 @@ class ComprehensiveProfileAnalyzer:
 
         # Module summary
         module_summary = sorted(
-            [
-                {
-                    "module": k,
-                    "call_count": v["call_count"],
-                    "total_time_ms": v["total_time_s"] * 1000,
-                    "function_count": len(v["functions"]),
-                }
-                for k, v in module_stats.items()
-            ],
+            [{"module": k, "call_count": v["call_count"], "total_time_ms": v["total_time_s"] * 1000,
+              "function_count": len(v["functions"])}
+             for k, v in module_stats.items()],
             key=lambda x: x["total_time_ms"],
-            reverse=True,
+            reverse=True
         )
 
         # Get Rust stats
         rust_stats = rust_profiler.get_stats()
         rust_by_time = sorted(
-            [
-                {"function": k, "calls": v.call_count, "total_ms": v.total_time_ms, "avg_us": v.avg_time_us}
-                for k, v in rust_stats.items()
-            ],
+            [{"function": k, "calls": v.call_count, "total_ms": v.total_time_ms, "avg_us": v.avg_time_us}
+             for k, v in rust_stats.items()],
             key=lambda x: x["total_ms"],
-            reverse=True,
+            reverse=True
         )
 
         return {
@@ -257,9 +238,9 @@ class ComprehensiveProfileAnalyzer:
         print("📊 COMPREHENSIVE PROFILING REPORT")
         print("=" * 80)
 
-        print(f"\n{'─' * 40}")
+        print(f"\n{'─'*40}")
         print("📈 SUMMARY")
-        print(f"{'─' * 40}")
+        print(f"{'─'*40}")
         print(f"  Python Functions Profiled: {summary['python_functions_profiled']:,}")
         print(f"  Python Total Calls:        {summary['python_total_calls']:,}")
         print(f"  Python Total Time:         {summary['python_total_time_ms']:.2f} ms")
@@ -270,11 +251,11 @@ class ComprehensiveProfileAnalyzer:
 
         # Top by cumulative time (including child calls)
         if report["python_by_cumtime"]:
-            print(f"\n{'─' * 40}")
+            print(f"\n{'─'*40}")
             print("🐍 TOP PYTHON BY CUMULATIVE TIME (incl. child calls)")
-            print(f"{'─' * 40}")
+            print(f"{'─'*40}")
             print(f"  {'Function':<50} {'Calls':>8} {'Cum(ms)':>10} {'Own(ms)':>10}")
-            print(f"  {'-' * 50} {'-' * 8} {'-' * 10} {'-' * 10}")
+            print(f"  {'-'*50} {'-'*8} {'-'*10} {'-'*10}")
             for item in report["python_by_cumtime"][:20]:
                 name = item["function"]
                 if len(name) > 50:
@@ -283,11 +264,11 @@ class ComprehensiveProfileAnalyzer:
 
         # Top by own time (excluding child calls)
         if report["python_by_tottime"]:
-            print(f"\n{'─' * 40}")
+            print(f"\n{'─'*40}")
             print("⏱️ TOP PYTHON BY OWN TIME (excl. child calls)")
-            print(f"{'─' * 40}")
+            print(f"{'─'*40}")
             print(f"  {'Function':<50} {'Calls':>8} {'Own(ms)':>10} {'Avg(μs)':>10}")
-            print(f"  {'-' * 50} {'-' * 8} {'-' * 10} {'-' * 10}")
+            print(f"  {'-'*50} {'-'*8} {'-'*10} {'-'*10}")
             for item in report["python_by_tottime"][:15]:
                 name = item["function"]
                 if len(name) > 50:
@@ -296,11 +277,11 @@ class ComprehensiveProfileAnalyzer:
 
         # Top by call count
         if report["python_by_calls"]:
-            print(f"\n{'─' * 40}")
+            print(f"\n{'─'*40}")
             print("📞 TOP PYTHON BY CALL COUNT")
-            print(f"{'─' * 40}")
+            print(f"{'─'*40}")
             print(f"  {'Function':<50} {'Calls':>10} {'Own(ms)':>10}")
-            print(f"  {'-' * 50} {'-' * 10} {'-' * 10}")
+            print(f"  {'-'*50} {'-'*10} {'-'*10}")
             for item in report["python_by_calls"][:15]:
                 name = item["function"]
                 if len(name) > 50:
@@ -309,31 +290,26 @@ class ComprehensiveProfileAnalyzer:
 
         # Rust functions
         if report["rust_by_time"]:
-            print(f"\n{'─' * 40}")
+            print(f"\n{'─'*40}")
             print("🦀 RUST FUNCTIONS BY TIME")
-            print(f"{'─' * 40}")
+            print(f"{'─'*40}")
             print(f"  {'Function':<45} {'Calls':>8} {'Total(ms)':>10} {'Avg(μs)':>10}")
-            print(f"  {'-' * 45} {'-' * 8} {'-' * 10} {'-' * 10}")
+            print(f"  {'-'*45} {'-'*8} {'-'*10} {'-'*10}")
             for item in report["rust_by_time"][:15]:
-                print(
-                    f"  {item['function']:<45} {item['calls']:>8,} "
-                    f"{item['total_ms']:>10.3f} {item['avg_us']:>10.2f}"
-                )
+                print(f"  {item['function']:<45} {item['calls']:>8,} {item['total_ms']:>10.3f} {item['avg_us']:>10.2f}")
 
         # Modules
         if report["modules"]:
-            print(f"\n{'─' * 40}")
+            print(f"\n{'─'*40}")
             print("📦 TOP MODULES BY TIME")
-            print(f"{'─' * 40}")
+            print(f"{'─'*40}")
             print(f"  {'Module':<45} {'Calls':>10} {'Time(ms)':>10} {'Funcs':>6}")
-            print(f"  {'-' * 45} {'-' * 10} {'-' * 10} {'-' * 6}")
+            print(f"  {'-'*45} {'-'*10} {'-'*10} {'-'*6}")
             for item in report["modules"][:15]:
                 mod = item["module"]
                 if len(mod) > 45:
                     mod = "..." + mod[-42:]
-                print(
-                    f"  {mod:<45} {item['call_count']:>10,} {item['total_time_ms']:>10.2f} {item['function_count']:>6}"
-                )
+                print(f"  {mod:<45} {item['call_count']:>10,} {item['total_time_ms']:>10.2f} {item['function_count']:>6}")
 
         print("\n" + "=" * 80)
 
@@ -348,11 +324,10 @@ print("🐍 Python profiling enabled - using cProfile for src/ code")
 analyzer = ComprehensiveProfileAnalyzer(src_path, project_root)
 
 # Import the self-improvement script AFTER setting up profiling
-from src.infrastructure.services.dev.scripts.analysis.run_fleet_self_improvement import \
-    main as run_self_improvement_main  # noqa: E402
+from src.infrastructure.dev.scripts.analysis.run_fleet_self_improvement import main as run_self_improvement_main  # noqa: E402
 
 
-def save_profile_report() -> None:
+def save_profile_report():
     """Save profiling report on exit."""
     analyzer.stop()
     report = analyzer.analyze()
@@ -395,9 +370,8 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("\n⚠️ Interrupted by user")
     except Exception as e:
-        # Broad except is justified here to ensure all errors are logged and surfaced in profiling context
         print(f"\n❌ Error: {e}")
         raise
     finally:
-        elapsed_time = time.time() - start_time
-        print(f"\n⏱️ Total execution time: {elapsed_time:.2f} seconds")
+        elapsed = time.time() - start_time
+        print(f"\n⏱️ Total execution time: {elapsed:.2f} seconds")

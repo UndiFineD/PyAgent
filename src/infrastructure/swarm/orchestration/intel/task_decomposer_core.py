@@ -11,17 +11,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Task decomposer core.py module.
-"""
-
 
 from __future__ import annotations
-
-from dataclasses import dataclass, field
+from src.core.base.Version import VERSION
 from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
+from dataclasses import dataclass, field
 
 try:
     import rust_core as rc
@@ -56,7 +50,7 @@ class TaskDecomposerCore:
             try:
                 # Use Rust implementation for high-speed heuristic planning
                 return rc.generate_heuristic_plan(request)  # type: ignore[attr-defined]
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 pass
 
         request_lower = request.lower()
@@ -90,7 +84,11 @@ class TaskDecomposerCore:
                 PlanStep(
                     agent="SQLAgent",
                     action="query_database",
-                    args=["SELECT * FROM relevant_tables WHERE context LIKE '%" + request[:20] + "%'"],
+                    args=[
+                        "SELECT * FROM relevant_tables WHERE context LIKE '%"
+                        + request[:20]
+                        + "%'"
+                    ],
                     metadata={"priority": 2},
                 )
             )
@@ -134,5 +132,7 @@ class TaskDecomposerCore:
         for i, step in enumerate(steps):
             meta = step.get("metadata", {})
             pri = meta.get("priority", 5)
-            summary_lines.append(f"{i + 1}. **{step.get('agent')}** :: `{step.get('action')}` (P{pri})")
+            summary_lines.append(
+                f"{i + 1}. **{step.get('agent')}** :: `{step.get('action')}` (P{pri})"
+            )
         return "\n".join(summary_lines)

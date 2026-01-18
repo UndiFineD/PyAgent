@@ -13,16 +13,15 @@
 # limitations under the License.
 
 
-"""TheoryOfMindCore logic for PyAgent.
-
-Pure logic for modeling agent mental states and capabilities. Analyzes agent
-profiles and observations to maintain a model of the swarm's collective intelligence.
+"""
+TheoryOfMindCore logic for PyAgent.
+Pure logic for modeling agent mental states and capabilities.
+No I/O or side effects.
 """
 
 from __future__ import annotations
+from src.core.base.Version import VERSION
 from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

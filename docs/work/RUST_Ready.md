@@ -2,468 +2,316 @@
 
 This document tracks Python files that are ready or nearly ready for Rust conversion. These files typically contain pure logic, minimal I/O, clear interfaces, and high computational value.
 
+**Last Updated**: January 17, 2026 (Phase 17 Complete)
+**Total Accelerated Functions**: 111
+
 ## Status Legend
-- ✅ **READY** - Pure logic, no I/O, well-typed, good candidate
+- ✅ **OPTIMIZED** - Already integrated with rust_core (PyO3)
+- 🚀 **READY** - Pure logic, no I/O, well-typed, ready for conversion
 - 🔄 **NEAR-READY** - Minimal I/O or dependencies, needs minor cleanup
 - ⚠️ **NEEDS-WORK** - Has I/O or complex dependencies, requires refactoring first
 - 📊 **HIGH-VALUE** - Performance-critical, would benefit most from Rust
 
 ---
 
-## TIER 1: READY FOR IMMEDIATE CONVERSION (20 files)
+## 📊 FUNCTION INVENTORY (72 Total)
 
-### Core Base Logic (src/core/base/core/)
-1. ✅📊 **ErrorMappingCore.py** - Pure error code mapping
-   - Size: ~71 lines
-   - Dependencies: None (just dict mappings)
-   - Rust benefit: Type safety for error codes
-   - Priority: HIGH (used across entire system)
+### Security Module (8 functions)
+| Function | Purpose |
+|----------|---------|
+| `scan_code_vulnerabilities_rust` | Scan code for security vulnerabilities |
+| `scan_injections_rust` | Detect injection attack patterns |
+| `scan_pii_rust` | Find personally identifiable information |
+| `analyze_thought_rust` | Analyze agent thought patterns |
+| `scan_hardcoded_secrets_rust` | Find hardcoded secrets/credentials |
+| `scan_insecure_patterns_rust` | Detect insecure coding patterns |
+| `scan_optimization_patterns_rust` | Find optimization opportunities |
+| `scan_secrets_rust` | General secrets scanning |
 
-2. ✅📊 **AutonomyCore.py** - Self-model and daemon sleep calculation
-   - Size: ~50 lines
-   - Dependencies: Basic types only
-   - Rust benefit: Performance for optimization scoring
-   - Priority: MEDIUM
+### Statistics Module (4 functions)
+| Function | Purpose |
+|----------|---------|
+| `calculate_pearson_correlation` | Compute Pearson correlation coefficient |
+| `predict_linear` | Linear prediction extrapolation |
+| `predict_with_confidence_rust` | Predictions with confidence intervals |
+| `aggregate_score_rust` | Aggregate compliance scores |
 
-3. ✅ **ConvergenceCore.py** - Convergence detection logic
-   - Size: Small
-   - Dependencies: Minimal
-   - Rust benefit: Fast convergence calculations
+### Neural Module (1 function)
+| Function | Purpose |
+|----------|---------|
+| `cluster_interactions_rust` | Cluster agent interactions |
 
-4. ✅ **IdentityCore.py** - Agent identity and hashing
-   - Size: Small
-   - Dependencies: Minimal
-   - Rust benefit: Fast hash operations
+### Base Module (1 function)
+| Function | Purpose |
+|----------|---------|
+| `is_response_valid_rust` | Validate response content |
 
-5. ✅ **PruningCore.py** - Agent pruning logic
-   - Size: Small
-   - Dependencies: Minimal
-   - Rust benefit: Performance for large fleets
+### Text Processing Module (58 functions)
 
-6. ✅ **ResilienceCore.py** - Resilience scoring
-   - Size: Small
-   - Dependencies: Minimal
-   - Rust benefit: Fast resilience calculations
+#### Core Text Operations
+| Function | Purpose |
+|----------|---------|
+| `tokenize_and_index_rust` | Tokenize and build inverted index |
+| `tokenize_query_rust` | Tokenize search queries |
+| `calculate_text_similarity_rust` | Jaccard text similarity |
+| `find_similar_pairs_rust` | Find similar text pairs |
+| `bulk_tokenize_rust` | Batch tokenization |
+| `word_frequencies_rust` | Calculate word frequencies |
+| `deduplicate_strings_rust` | Deduplicate string collections |
 
-7. ✅ **AuthCore.py** - Authentication logic
-   - Size: Small
-   - Dependencies: Minimal (may need crypto library)
-   - Rust benefit: Security + performance
+#### Pattern Matching
+| Function | Purpose |
+|----------|---------|
+| `match_patterns_rust` | Match against pattern list |
+| `bulk_match_patterns_rust` | Batch pattern matching |
+| `check_suppression_rust` | Check suppression patterns |
+| `scan_lines_multi_pattern_rust` | Multi-pattern line scanner |
+| `apply_patterns_rust` | Apply pattern transformations |
+| `analyze_security_patterns_rust` | Security pattern analysis |
 
-### Performance & Benchmarking (src/logic/agents/development/core/)
-8. ✅📊 **BenchmarkCore.py** - Benchmark calculations
-   - Size: ~50 lines
-   - Dependencies: dataclass only
-   - Rust benefit: HIGH - performance benchmarking should be fast
-   - Priority: HIGH
+#### Search & Filtering
+| Function | Purpose |
+|----------|---------|
+| `search_content_scored_rust` | Scored content search |
+| `search_with_tags_rust` | Tag-based search |
+| `filter_memory_by_query_rust` | Memory filtering |
+| `search_blocks_rust` | Block-based search |
 
-### Statistics & Analysis (src/observability/stats/)
-9. ✅📊 **FormulaEngineCore.py** - AST-based formula evaluation
-   - Size: ~150 lines
-   - Dependencies: ast, operator, math
-   - Rust benefit: VERY HIGH - computational core
-   - Priority: CRITICAL
+#### Vector Operations
+| Function | Purpose |
+|----------|---------|
+| `cosine_similarity_rust` | Cosine similarity calculation |
+| `batch_cosine_similarity_rust` | Batch cosine similarity |
+| `find_strong_correlations_rust` | Find correlated vectors |
 
-10. ✅📊 **TokenCostCore.py** - Token cost calculations
-    - Size: ~50 lines
-    - Dependencies: Basic math
-    - Rust benefit: HIGH - called frequently
-    - Priority: HIGH
+#### Code Analysis
+| Function | Purpose |
+|----------|---------|
+| `extract_versions_rust` | Extract version strings |
+| `batch_scan_files_rust` | Batch file scanning |
+| `find_dependents_rust` | Find module dependents |
+| `match_policies_rust` | Policy pattern matching |
+| `calculate_coupling_rust` | Calculate module coupling |
+| `topological_sort_rust` | Topological sort for dependencies |
+| `count_untyped_functions_rust` | Count untyped functions |
+| `build_graph_edges_rust` | Build dependency graph edges |
+| `find_duplicate_code_rust` | Find duplicate code blocks |
+| `check_style_patterns_rust` | Check style guide compliance |
+| `scan_compliance_patterns_rust` | Scan for compliance issues |
+| `analyze_tech_debt_rust` | Analyze technical debt |
 
-11. ✅📊 **ModelFallbackCore.py** - Model fallback logic
-    - Size: ~100 lines
-    - Dependencies: Basic types
-    - Rust benefit: Performance for model selection
-    - Priority: MEDIUM
+#### Infrastructure Operations
+| Function | Purpose |
+|----------|---------|
+| `partition_to_shards_rust` | Partition data to shards |
+| `linear_forecast_rust` | Linear time series forecast |
+| `normalize_and_hash_rust` | Normalize and hash content |
+| `generate_unified_diff_rust` | Generate unified diffs |
+| `calculate_jaccard_set_rust` | Jaccard set similarity |
+| `fast_cache_key_rust` | Fast cache key generation |
+| `fast_prefix_key_rust` | Fast prefix-based key |
+| `select_best_agent_rust` | Select optimal agent |
+| `aggregate_file_metrics_rust` | Aggregate file metrics |
 
-12. ✅📊 **ProfilingCore.py** - Profile analysis
-    - Size: ~80 lines
-    - Dependencies: Stats structures
-    - Rust benefit: HIGH - profiling should be fast
-    - Priority: HIGH
+#### Phase 12: Healing & Resilience
+| Function | Purpose |
+|----------|---------|
+| `calculate_weighted_load_rust` | Calculate weighted load metrics |
+| `detect_failed_agents_rust` | Detect failed agents |
+| `calculate_variance_rust` | Calculate statistical variance |
+| `validate_semver_rust` | Validate semantic versioning |
+| `analyze_failure_strategy_rust` | Analyze failure recovery strategy |
 
-13. ✅📊 **StabilityCore.py** - Stability scoring
-    - Size: ~100 lines
-    - Dependencies: Basic math
-    - Rust benefit: Performance for stability checks
-    - Priority: HIGH
+#### Phase 13: Stats & Knowledge
+| Function | Purpose |
+|----------|---------|
+| `calculate_sum_rust` | Fast sum calculation |
+| `calculate_avg_rust` | Fast average calculation |
+| `calculate_min_rust` | Fast minimum finding |
+| `calculate_max_rust` | Fast maximum finding |
+| `calculate_median_rust` | Fast median (P50) |
+| `calculate_p95_rust` | 95th percentile |
+| `calculate_p99_rust` | 99th percentile |
+| `calculate_stddev_rust` | Standard deviation |
+| `calculate_pearson_correlation_rust` | Pearson correlation (new) |
+| `calculate_shard_id_rust` | Adler32 hash sharding |
+| `merge_knowledge_rust` | JSON dict merging |
+| `filter_stable_knowledge_rust` | Confidence filtering |
 
-14. ✅📊 **TracingCore.py** - Distributed tracing logic
-    - Size: ~60 lines
-    - Dependencies: Basic types, time
-    - Rust benefit: LOW latency tracing
-    - Priority: HIGH
-
-### Agent Core Logic (src/logic/agents/)
-15. ✅ **AuctionCore.py** - Auction bid calculations
-    - Size: Small
-    - Dependencies: Minimal
-    - Rust benefit: Fast auction resolution
-
-16. ✅ **ByzantineCore.py** - Byzantine consensus
-    - Size: Small
-    - Dependencies: Minimal
-    - Rust benefit: Performance + security
-
-17. ✅ **PrivacyCore.py** - Privacy calculations
-    - Size: Small
-    - Dependencies: Minimal
-    - Rust benefit: Security + performance
-
-18. ✅ **DeduplicationCore.py** - Deduplication logic
-    - Size: Small (~50 lines)
-    - Dependencies: Basic types
-    - Rust benefit: Performance for large datasets
-
-19. ✅📊 **BaseAgentCore.py** - Agent validation and strategy logic
-    - Size: ~300 lines (pure logic extracted from BaseAgent.py)
-    - Dependencies: Standard library only
-    - Rust benefit: Faster anchoring/strategy calculations for agents
-    - Priority: HIGH
-
-20. ✅📊 **MetricsCore.py** - Metrics calculation engines
-    - Size: ~380 lines (TokenCost, ModelFallback, StatsRollup, ABTest)
-    - Dependencies: Standard library only
-    - Rust benefit: High-speed analytics and cost calculations
-    - Priority: HIGH
-
----
-
-## TIER 2: NEAR-READY (Needs Minor Cleanup) (25 files)
-
-### Context & Memory Engines (src/logic/agents/cognitive/context/engines/)
-- 🔄 **MemoryCore.py** - Memory utility calculations
-    - Issue: May have some I/O for persistence
-    - Fix: Extract pure logic to MemoryLogicCore
-
-- 🔄 **KnowledgeCore.py** - Knowledge graph operations
-    - Issue: Graph persistence
-    - Fix: Separate computation from storage
-
-- 🔄 **GraphCore.py** - Graph algorithms
-    - Issue: File I/O for graph storage
-    - Fix: Extract pure graph algorithms
-
-- 🔄 **ContextCompressorCore.py** - Context compression
-    - Issue: May have encoding dependencies
-    - Fix: Ensure pure compression logic
-
-### Development Tools (src/logic/agents/development/core/)
-- 🔄 **BashCore.py** - Bash script linting
-    - Issue: subprocess calls
-    - Fix: Extract validation logic only
-    - Note: Already has context recording added
-
-- 🔄 **AndroidCore.py** - ADB command logic
-    - Issue: subprocess calls
-    - Fix: Extract command building logic
-    - Note: Already has context recording added
-
-- 🔄 **ToolDraftingCore.py** - Tool synthesis logic
-    - Issue: Unknown dependencies
-    - Fix: Review and extract pure logic
-
-### System Cores (src/logic/agents/system/core/)
-- 🔄 **EntropyCore.py** - Entropy calculations
-    - Issue: Unknown dependencies
-    - Rust benefit: Fast entropy computation
-
-- 🔄 **ConfigHygieneCore.py** - Config validation
-    - Issue: File I/O likely
-    - Fix: Extract validation logic
-
-- 🔄 **CurationCore.py** - Content curation scoring
-    - Issue: Unknown dependencies
-    - Fix: Review and extract
-
-- 🔄 **ConvergenceCore.py** (system) - Convergence detection
-    - Issue: May overlap with base ConvergenceCore
-    - Fix: Consolidate or differentiate
-
-- 🔄 **ModelRegistryCore.py** - Model registration logic
-    - Issue: Likely has I/O
-    - Fix: Extract registry operations logic
-
-- 🔄 **MorphologyCore.py** - Agent morphology
-    - Issue: Unknown
-    - Fix: Review
-
-- 🔄 **MultiModalCore.py** - Multi-modal processing
-    - Issue: Unknown
-    - Fix: Review
-
-### Intelligence & Research (src/logic/agents/intelligence/)
-- 🔄 **LocalizationCore.py** - Localization logic
-    - Issue: Unknown
-    - Fix: Review
-
-- 🔄 **SearchMeshCore.py** - Search mesh algorithms
-    - Issue: Unknown
-    - Fix: Review
-
-- 🔄 **SynthesisCore.py** - Synthesis logic
-    - Issue: Unknown (exec usage noted in scan)
-    - Fix: Remove exec, extract pure logic
-
-- 🔄 **SearchCore.py** - Search algorithms
-    - Issue: Likely has API calls
-    - Fix: Extract ranking/scoring logic
-
-- 🔄 **ResearchCore.py** - Research logic
-    - Issue: Likely has API calls
-    - Fix: Extract analysis logic
-
-- 🔄 **WebCore.py** - Web scraping logic
-    - Issue: Network I/O
-    - Fix: Extract parsing/analysis only
-
-### Observability (src/observability/)
-- 🔄 **LoggingCore.py** - Logging utilities
-    - Issue: File I/O
-    - Fix: Extract formatting/filtering logic
-
-### Infrastructure (src/infrastructure/)
-- 🔄 **AttributionCore.py** - Attribution calculations
-    - Issue: Unknown
-    - Fix: Review
-
-- 🔄 **EconomyCore.py** - Economy calculations
-    - Issue: Unknown
-    - Fix: Review
-
-- 🔄 **LoadBalancerCore.py** - Load balancing logic
-    - Issue: Unknown
-    - Fix: Review
-
-- 🔄 **GPUMonitorCore.py** - GPU metrics
-    - Issue: System calls likely
-    - Fix: Extract calculation logic
+#### Phase 17: vLLM-Inspired Utilities (11 functions)
+| Function | Purpose |
+|----------|---------|
+| `cdiv_rust` | Ceiling division without floating point |
+| `next_power_of_2_rust` | Smallest power of 2 >= n |
+| `prev_power_of_2_rust` | Largest power of 2 <= n |
+| `round_up_rust` | Round up to nearest multiple |
+| `round_down_rust` | Round down to nearest multiple |
+| `atomic_counter_add_rust` | Atomic counter addition |
+| `xxhash_rust` | Fast non-cryptographic hashing |
+| `fast_cache_hash_rust` | Cache key hashing with prefix |
+| `cache_hit_ratio_rust` | Calculate cache hit ratio |
+| `batch_cdiv_rust` | Batch ceiling division |
+| `batch_next_power_of_2_rust` | Batch power-of-2 calculation |
 
 ---
 
-## TIER 3: NEEDS WORK (Refactoring Required) (30+ files)
+## TIER 1: OPTIMIZED (72 files/functions)
 
-### Complex Agents with I/O
-- ⚠️ **CoderCore.py** - Code generation
-    - Issue: Heavy LLM interaction
-    - Fix: Extract validation/analysis logic only
+### Core Infrastructure
+1. ✅ **SecurityCore.py** - Integrated with scan_code_vulnerabilities_rust, scan_injections_rust
+2. ✅ **ObservabilityCore.py** - Integrated with calculate_pearson_correlation, predict_linear
+3. ✅ **ReportSearchEngine.py** - Integrated with tokenize_and_index_rust, search_content_scored_rust
+4. ✅ **MergeDetector.py** - Integrated with calculate_text_similarity_rust, find_similar_pairs_rust
+5. ✅ **SuppressionEngine.py** - Integrated with check_suppression_rust, scan_lines_multi_pattern_rust
+6. ✅ **PrivacyCore.py** - Integrated with scan_pii_rust
+7. ✅ **DependencyCore.py** - Integrated with find_dependents_rust, calculate_coupling_rust
+8. ✅ **PolicyCore.py** - Integrated with match_policies_rust
+9. ✅ **QuantumShardOrchestrator.py** - Integrated with partition_to_shards_rust
+10. ✅ **TypeCoverageCore.py** - Integrated with count_untyped_functions_rust
+11. ✅ **ModuleGraphCore.py** - Integrated with build_graph_edges_rust, topological_sort_rust
 
-- ⚠️ **CodeQualityCore.py** - Code quality checks
-    - Issue: File I/O, subprocess
-    - Fix: Extract scoring algorithms
+### Agent Logic
+12. ✅ **CoderCore.py** - Integrated with check_style_patterns_rust, find_duplicate_code_rust
+13. ✅ **ComplianceCore.py** - Integrated with scan_compliance_patterns_rust
+14. ✅ **LessonCore.py** - Integrated with normalize_and_hash_rust
+15. ✅ **DiffGenerator.py** - Integrated with generate_unified_diff_rust
+16. ✅ **MorphologyCore.py** - Integrated with calculate_jaccard_set_rust
+17. ✅ **ResponseCache.py** - Integrated with fast_cache_key_rust, fast_prefix_key_rust
+18. ✅ **LoadBalancerCore.py** - Integrated with select_best_agent_rust
+19. ✅ **EntropyCore.py** - Integrated with aggregate_file_metrics_rust
+20. ✅ **ScalingCore.py** - Integrated with calculate_weighted_load_rust
+21. ✅ **SelfHealingCore.py** - Integrated with detect_failed_agents_rust, validate_semver_rust
+22. ✅ **StabilityCore.py** - Integrated with calculate_variance_rust
+23. ✅ **SelfHealingEngineCore.py** - Integrated with analyze_failure_strategy_rust
+24. ✅ **TechDebtCore.py** - Integrated with analyze_tech_debt_rust
 
-- ⚠️ **DependencyCore.py** (both versions) - Dependency analysis
-    - Issue: File I/O for requirements
-    - Fix: Extract parsing/resolution logic
-    - Note: Already has context recording added
+### Stats & Metrics
+25. ✅ **MetricsCore.py (StatsRollupCore)** - Integrated with calculate_sum/avg/min/max/median/stddev_rust
+26. ✅ **MetricsCore.py (CorrelationCore)** - Integrated with calculate_pearson_correlation_rust
+27. ✅ **ShardedKnowledgeCore.py** - Integrated with calculate_shard_id_rust, merge_knowledge_rust
 
-- ⚠️ **SecurityCore.py** - Security scanning
-    - Issue: Pattern detection on files
-    - Fix: Extract pattern matching logic
-
-- ⚠️ **TechDebtCore.py** - Tech debt analysis
-    - Issue: File scanning
-    - Fix: Extract scoring logic
-
-- ⚠️ **DocGenCore.py** - Documentation generation
-    - Issue: File I/O
-    - Fix: Extract formatting logic
-
-- ⚠️ **ArchCore.py** - Architecture analysis
-    - Issue: File I/O
-    - Fix: Extract graph analysis
-
-### Cognitive & Learning
-- ⚠️ **VisionCore.py** - Vision processing
-    - Issue: TODO comment - needs implementation
-    - Fix: Implement + extract pure vision logic
-
-- ⚠️ **TheoryOfMindCore.py** - Theory of mind
-    - Issue: Unknown complexity
-    - Fix: Review
-
-- ⚠️ **QuantumCore.py** - Quantum algorithms
-    - Issue: Unknown complexity
-    - Fix: Review
-
-- ⚠️ **MetacognitiveCore.py** - Metacognition
-    - Issue: Unknown
-    - Fix: Review
-
-- ⚠️ **MemoryConsolidatorCore.py** - Memory consolidation
-    - Issue: Likely has I/O
-    - Fix: Extract consolidation algorithms
-
-- ⚠️ **LocalRAGCore.py** - Local RAG
-    - Issue: Vector DB operations
-    - Fix: Extract embedding/search logic
-
-- ⚠️ **InterpretableCore.py** - Interpretability
-    - Issue: Unknown
-    - Fix: Review
-
-- ⚠️ **EvolutionCore.py** - Evolution algorithms
-    - Issue: Unknown (perform_specialized_task missing type hints)
-    - Fix: Add types, extract pure evolution logic
-
-### Fleet & Orchestration
-- ⚠️ **FleetCore.py** - Fleet management
-    - Issue: Heavy I/O and orchestration
-    - Fix: Extract coordination algorithms
-
-- ⚠️ **FleetExecutionCore.py** - Fleet execution
-    - Issue: Execution + I/O
-    - Fix: Extract scheduling logic
-
-- ⚠️ **OrchestratorRegistryCore.py** - Orchestrator registry
-    - Issue: Registry I/O
-    - Fix: Extract lookup logic
-
-- ⚠️ **ScalingCore.py** - Auto-scaling
-    - Issue: System metrics
-    - Fix: Extract scaling algorithms
-
-- ⚠️ **KnowledgeTransferCore.py** - Knowledge transfer
-    - Issue: Network + storage
-    - Fix: Extract transfer protocols
-
-- ⚠️ **IntelligenceCore.py** - Collective intelligence
-    - Issue: Complex coordination
-    - Fix: Extract aggregation logic
-
-- ⚠️ **ConsensusCore.py** - Consensus algorithms
-    - Issue: Network coordination
-    - Fix: Extract consensus math
-
-- ⚠️ **BlackboardCore.py** - Blackboard pattern
-    - Issue: Shared state management
-    - Fix: Extract pattern matching
-
-- ⚠️ **TaskDecomposerCore.py** - Task decomposition
-    - Issue: Complex AI logic
-    - Fix: Extract decomposition algorithms
-
-- ⚠️ **SelfHealingCore.py** - Self-healing
-    - Issue: System interaction
-    - Fix: Extract healing strategies
-
-- ⚠️ **PluginSynthesisCore.py** - Plugin synthesis
-    - Issue: Code generation
-    - Fix: Extract template logic
-
-- ⚠️ **ToolCore.py** - Tool management
-    - Issue: Tool execution
-    - Fix: Extract tool discovery
-
-- ⚠️ **SignalCore.py** - Signal handling
-    - Issue: Event coordination
-    - Fix: Extract signal logic
-
-### Other Infrastructure
-- ⚠️ **SandboxCore.py** - Sandbox execution
-    - Issue: Process management
-    - Fix: Extract validation logic
-
-- ⚠️ **SimulationCore.py** - Simulation
-    - Issue: Complex state management
-    - Fix: Extract simulation math
-
-- ⚠️ **ImportHealerCore.py** - Import healing
-    - Issue: AST manipulation + I/O
-    - Fix: Extract import resolution logic
-
-- ⚠️ **LogRotationCore.py** - Log rotation
-    - Issue: File I/O
-    - Fix: Extract rotation algorithms
-
-- ⚠️ **RebirthCore.py** - Agent rebirth
-    - Issue: Unknown
-    - Fix: Review
-
-- ⚠️ **PoolingCore.py** - Connection pooling
-    - Issue: Network management
-    - Fix: Extract pooling algorithms
-
-- ⚠️ **GatewayCore.py** - API gateway
-    - Issue: HTTP handling
-    - Fix: Extract routing logic
-
-- ⚠️ **APICore.py** - API logic
-    - Issue: HTTP/REST
-    - Fix: Extract validation
-
-- ⚠️ **InterfaceSyncCore.py** - Interface sync
-    - Issue: Unknown
-    - Fix: Review
+### Previous Phases (1-9)
+28-72. ✅ **[Previous 44 files]** - See Phase 1-9 documentation
 
 ---
 
-## CONVERSION PRIORITY MATRIX
+## 🔧 PROFILING TOOLS
 
-### CRITICAL (Start Here)
-1. **FormulaEngineCore.py** - Most computational, pure logic ⭐⭐⭐
-2. **ErrorMappingCore.py** - Used everywhere, simple ⭐⭐⭐
-3. **BenchmarkCore.py** - Performance testing should be fast ⭐⭐⭐
-4. **TokenCostCore.py** - Called frequently ⭐⭐
-5. **StabilityCore.py** - Core fleet health ⭐⭐
-6. **TracingCore.py** - Low-latency requirement ⭐⭐
+### RustProfiler (New)
+Location: `src/observability/profiling/RustProfiler.py`
 
-### HIGH VALUE (Next Wave)
-7. ProfilingCore.py
-8. ModelFallbackCore.py
-9. AutonomyCore.py
-10. DeduplicationCore.py
-11. ByzantineCore.py
-12. AuctionCore.py
+**Features:**
+- Real-time call tracking with nanosecond precision
+- Thread-safe singleton design
+- Python fallback detection
+- Source location tracking
+- JSON report export
 
-### MEDIUM VALUE (After Core)
-- All Tier 1 remaining files
-- Tier 2 files after cleanup
+**Usage:**
+```python
+from src.observability.profiling.RustProfiler import RustProfiler, RustUsageScanner
 
-### FUTURE (Complex Refactoring Required)
-- Tier 3 files requiring significant decomposition
+# Get profiler instance
+profiler = RustProfiler.get_instance()
 
----
+# Scan codebase for Rust usage
+scanner = RustUsageScanner()
+report = scanner.generate_report(Path("src"), Path("tests"))
 
-## RUST CONVERSION CHECKLIST
+# Print runtime statistics
+profiler.print_report()
+```
 
-For each file marked ✅ READY:
-- [ ] Verify no hidden I/O operations
-- [ ] Check all dependencies are Rust-compatible
-- [ ] Add comprehensive type hints in Python version
-- [ ] Write property-based tests
-- [ ] Create Rust equivalent with PyO3 bindings
-- [ ] Benchmark Python vs Rust
-- [ ] Add to rust_core module
-- [ ] Update Python imports to use Rust version
-- [ ] Validate no performance regression
-- [ ] Document conversion in ARCHITECTURE.md
+**CLI Usage:**
+```bash
+python src/observability/profiling/RustProfiler.py --src src --tests tests -o report.json -v
+```
 
 ---
 
-## ESTIMATED PERFORMANCE GAINS
+## TIER 2: READY FOR CONVERSION (0 files)
 
-Based on typical Rust vs Python benchmarks:
-
-| File | Type | Expected Speedup | Impact |
-|------|------|------------------|--------|
-| FormulaEngineCore.py | CPU-intensive math | 10-50x | CRITICAL |
-| TokenCostCore.py | Repeated calculations | 5-20x | HIGH |
-| BenchmarkCore.py | Statistical analysis | 10-30x | HIGH |
-| StabilityCore.py | Scoring algorithms | 5-15x | HIGH |
-| TracingCore.py | High-frequency calls | 3-10x | MEDIUM |
-| ErrorMappingCore.py | Simple lookups | 2-5x | LOW |
-| DeduplicationCore.py | Hash operations | 5-15x | MEDIUM |
+(All Tier 2 candidates migrated to Tier 1/Optimized)
 
 ---
 
-## TOTAL SUMMARY
+## TIER 3: NEAR-READY (Needs Minor Cleanup)
 
-- **Tier 1 (Ready)**: 18 files
-- **Tier 2 (Near-ready)**: 25 files
-- **Tier 3 (Needs work)**: 30+ files
-- **Total Core files identified**: 94
+| File | Reason | Blocker |
+|------|--------|---------|
+| `ContextBuilderCore.py` | Text processing heavy | Needs prompt_path I/O separation |
+| `FederatedSearchCore.py` | Result aggregation | Has rust_core fallback, needs full integration |
 
-**Recommended First Phase**: Convert Tier 1 files (18 files, ~1500 lines total)
-**Expected overall performance gain**: 20-40% for computation-heavy workloads
-**Estimated development time**: 2-3 weeks for first phase
+---
+
+## 📈 MIGRATION HISTORY
+
+| Phase | Date | Functions Added | Total |
+|-------|------|-----------------|-------|
+| 1-9 | Dec 2025 | 43 | 43 |
+| 10 | Jan 10, 2026 | 5 | 48 |
+| 11 | Jan 12, 2026 | 6 | 54 |
+| 12 | Jan 14, 2026 | 6 | 60 |
+| 13 | Jan 16, 2026 | 12 | 72 |
+| 14 | Jan 17, 2026 | 8 | 80 |
+| 15 | Jan 17, 2026 | 8 | 88 |
+| 16 | Jan 17, 2026 | 12 | 100 |
+
+---
+
+## 📊 PHASE 14: COGNITIVE & BUFFER ACCELERATION (8 Functions)
+
+| Function | Purpose | Module |
+|----------|---------|--------|
+| `count_hedge_words_rust` | Multi-pattern hedge word detection | MetacognitiveCore |
+| `predict_intent_rust` | Pattern-based intent classification | MetacognitiveCore |
+| `top_k_indices_rust` | O(n) top-K selection for activations | InterpretableCore |
+| `decompose_activations_rust` | Vectorized SAE decomposition | InterpretableCore |
+| `sort_buffer_by_priority_rust` | Priority-timestamp composite sorting | AttentionBufferAgent |
+| `filter_stale_entries_rust` | Timestamp-based entry filtering | AttentionBufferAgent |
+| `calculate_statistical_significance` | T-test significance calculation | ABTestCore |
+| `calculate_sample_size` | Power analysis sample size | ABTestCore |
+
+---
+
+## 📊 PHASE 15: CORE & INFRASTRUCTURE ACCELERATION (8 Functions)
+
+| Function | Purpose | Module |
+|----------|---------|--------|
+| `analyze_structure_rust` | Fast line/word/token counting | AgentCore |
+| `estimate_tokens_rust` | BPE-approximated token estimation | SubagentRunner |
+| `detect_cycles_rust` | DFS-based cycle detection in graphs | AgentRegistryCore |
+| `validate_response_rust` | Vectorized content validation | SubagentRunner |
+| `process_text_rust` | Fast text normalization | AgentCore |
+| `exponential_forecast_rust` | Exponential smoothing forecasts | ObservabilityCore |
+| `batch_token_count_rust` | Batch token counting | ExecutionEngine |
+| `graph_bfs_rust` | BFS graph traversal | DependencyCore |
+
+---
+
+## 🎯 NEXT TARGETS (Phase 17+)
+
+1. **ContextBuilder** - Context window pruning and optimization
+2. **FederatedSearch** - Distributed search aggregation
+3. **WorkflowEngine** - Workflow state machine transitions
+4. **MetricAggregator** - Real-time metric aggregation
+5. **GraphContextEngine** - Graph traversal and pathfinding
+
+---
+
+## 📊 PHASE 16: VECTOR MATH & AGGREGATION (12 Functions)
+
+| Function | Purpose | Module |
+|----------|---------|--------|
+| `compute_embedding_stats_rust` | Mean, variance, norm, sparsity, percentiles | DimensionalityAgent |
+| `kmeans_cluster_rust` | K-means clustering with iterative refinement | DimensionalityAgent |
+| `compute_similarity_matrix_rust` | Cosine similarity matrix with top-K pairs | DimensionalityAgent |
+| `pca_reduce_rust` | PCA-like dimensionality reduction | DimensionalityAgent |
+| `random_projection_rust` | Random projection for dimension reduction | DimensionalityAgent |
+| `compress_json_rust` | JSON serialization + zlib compression | StorageEngine |
+| `decompress_json_rust` | Zlib decompression + JSON parsing | StorageEngine |
+| `weighted_random_select_rust` | Weighted random selection for A/B testing | PromptManagers |
+| `keyword_search_score_rust` | Batch keyword matching with scoring | SemanticSearchEngine |
+| `calculate_ttest_rust` | Welch's t-test for A/B significance | ABEngine |
+| `batch_aggregate_rust` | Batch aggregation (sum/avg/min/max) | RollupEngine |
+| `rolling_window_rust` | Rolling window statistics | RollupEngine |

@@ -1,56 +1,43 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 Global command registry and registration utilities.
 """
-
-# pylint: disable=cyclic-import
 
 from __future__ import annotations
 
 from typing import Any, Callable
 
-from .core import CommandDefinition, CommandHandler, CommandRegistry
+from src.interface.slash_commands.core import (
+    CommandHandler,
+    CommandRegistry,
+    CommandDefinition,
+)
 
 # ============================================================================
 # Global Registry
 # ============================================================================
 
-_GLOBAL_REGISTRY: CommandRegistry | None = None
+_global_registry: CommandRegistry | None = None
 
 
 def get_global_registry() -> CommandRegistry:
     """Get the global command registry."""
-    global _GLOBAL_REGISTRY  # pylint: disable=global-statement
-    if _GLOBAL_REGISTRY is None:
-        _GLOBAL_REGISTRY = CommandRegistry()
-    return _GLOBAL_REGISTRY
+    global _global_registry
+    if _global_registry is None:
+        _global_registry = CommandRegistry()
+    return _global_registry
 
 
 def reset_global_registry() -> None:
     """Reset the global registry (for testing)."""
-    global _GLOBAL_REGISTRY  # pylint: disable=global-statement
-    if _GLOBAL_REGISTRY:
-        _GLOBAL_REGISTRY.clear()
-    _GLOBAL_REGISTRY = None
+    global _global_registry
+    if _global_registry:
+        _global_registry.clear()
+    _global_registry = None
 
 
 # ============================================================================
 # Registration Functions
 # ============================================================================
-
 
 def register(
     name: str,
@@ -64,13 +51,12 @@ def register(
 ) -> Callable[[CommandHandler], CommandHandler]:
     """
     Decorator to register a command with the global registry.
-
+    
     Example:
         @register("greet", description="Greet someone", aliases=["hi"])
         def cmd_greet(ctx: CommandContext) -> CommandResult:
             return CommandResult.ok(f"Hello, {ctx.first_arg or 'world'}!")
     """
-
     def decorator(handler: CommandHandler) -> CommandHandler:
         get_global_registry().register(
             name,
@@ -83,7 +69,6 @@ def register(
             category=category,
         )
         return handler
-
     return decorator
 
 
@@ -94,12 +79,12 @@ def register_command(
 ) -> CommandDefinition:
     """
     Register a command function with the global registry.
-
+    
     Args:
         name: Command name
         handler: Handler function
         **kwargs: Additional command options
-
+        
     Returns:
         The command definition
     """

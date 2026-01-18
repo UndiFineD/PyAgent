@@ -11,17 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from .ErrorCategory import ErrorCategory
 from .ErrorCluster import ErrorCluster
 from .ErrorEntry import ErrorEntry
@@ -30,11 +25,18 @@ from .ErrorSeverity import ErrorSeverity
 from .SuppressionRule import SuppressionRule
 from src.core.base.BaseAgent import BaseAgent
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Set
+from typing import Any
 import hashlib
 import json
 import logging
 import re
+
+# Rust acceleration imports
+try:
+    from rust_core import match_patterns_rust, check_suppression_rust
+    _RUST_AVAILABLE = True
+except ImportError:
+    _RUST_AVAILABLE = False
 
 # Default error patterns
 
@@ -44,39 +46,40 @@ DEFAULT_ERROR_PATTERNS: list[ErrorPattern] = [
         regex=r"NameError: name '(\w+)' is not defined",
         severity=ErrorSeverity.HIGH,
         category=ErrorCategory.RUNTIME,
-        suggested_fix="Define the variable before use or check for typos"
+        suggested_fix="Define the variable before use or check for typos",
     ),
     ErrorPattern(
         name="syntax_error",
         regex=r"SyntaxError: (.*)",
         severity=ErrorSeverity.CRITICAL,
         category=ErrorCategory.SYNTAX,
-        suggested_fix="Fix the syntax according to the error message"
+        suggested_fix="Fix the syntax according to the error message",
     ),
     ErrorPattern(
         name="type_error",
         regex=r"TypeError: (.*)",
         severity=ErrorSeverity.HIGH,
         category=ErrorCategory.TYPE,
-        suggested_fix="Check type compatibility of operands"
+        suggested_fix="Check type compatibility of operands",
     ),
     ErrorPattern(
         name="import_error",
         regex=r"ImportError: (.*)",
         severity=ErrorSeverity.HIGH,
         category=ErrorCategory.RUNTIME,
-        suggested_fix="Ensure the module is installed and accessible"
+        suggested_fix="Ensure the module is installed and accessible",
     ),
     ErrorPattern(
         name="attribute_error",
         regex=r"AttributeError: (.*)",
         severity=ErrorSeverity.MEDIUM,
         category=ErrorCategory.RUNTIME,
-        suggested_fix="Check if the attribute exists on the object"
+        suggested_fix="Check if the attribute exists on the object",
     ),
 ]
 
 __version__ = VERSION
+
 
 class ErrorsAgent(BaseAgent):
     """Updates code file error reports using AI assistance."""
@@ -95,24 +98,26 @@ class ErrorsAgent(BaseAgent):
 
     def _validate_error_file_path(self) -> None:
         """Validate that the file has the correct extension."""
-        if not self.file_path.name.endswith('.errors.md'):
+        if not self.file_path.name.endswith(".errors.md"):
             logging.warning(f"File {self.file_path.name} does not end with .errors.md")
 
     def _check_associated_file(self) -> None:
         """Check if the associated code file exists."""
         name = self.file_path.name
-        if name.endswith('.errors.md'):
+        if name.endswith(".errors.md"):
             base_name = name[:-10]  # len('.errors.md')
             # Try to find the file with common extensions or exact match
             candidate = self.file_path.parent / base_name
             if candidate.exists():
                 return
             # Try adding extensions
-            for ext in ['.py', '.sh', '.js', '.ts', '.md']:
+            for ext in [".py", ".sh", ".js", ".ts", ".md"]:
                 candidate = self.file_path.parent / (base_name + ext)
                 if candidate.exists() and candidate != self.file_path:
                     return
-            logging.warning(f"Could not find associated code file for {self.file_path.name}")
+            logging.warning(
+                f"Could not find associated code file for {self.file_path.name}"
+            )
 
     # ========== Error Management ==========
     def add_error(
@@ -123,7 +128,7 @@ class ErrorsAgent(BaseAgent):
         severity: ErrorSeverity = ErrorSeverity.MEDIUM,
         category: ErrorCategory = ErrorCategory.OTHER,
         stack_trace: str = "",
-        suggested_fix: str = ""
+        suggested_fix: str = "",
     ) -> ErrorEntry:
         """Add a new error entry."""
         error_id = hashlib.md5(
@@ -138,7 +143,7 @@ class ErrorsAgent(BaseAgent):
             category=category,
             timestamp=datetime.now().isoformat(),
             stack_trace=stack_trace,
-            suggested_fix=suggested_fix
+            suggested_fix=suggested_fix,
         )
         # Check if suppressed
         if not self._is_suppressed(error):
@@ -194,9 +199,7 @@ class ErrorsAgent(BaseAgent):
     def prioritize_errors(self) -> list[ErrorEntry]:
         """Return errors sorted by priority (highest first)."""
         return sorted(
-            self._errors,
-            key=lambda e: self.calculate_severity_score(e),
-            reverse=True
+            self._errors, key=lambda e: self.calculate_severity_score(e), reverse=True
         )
 
     # ========== Error Clustering ==========
@@ -219,7 +222,7 @@ class ErrorsAgent(BaseAgent):
                     name=key[:50],
                     pattern=key,
                     error_ids=[e.id for e in errors],
-                    description=f"Cluster of {len(errors)} similar errors"
+                    description=f"Cluster of {len(errors)} similar errors",
                 )
         return self._clusters
 
@@ -248,6 +251,19 @@ class ErrorsAgent(BaseAgent):
 
     def recognize_pattern(self, error: ErrorEntry) -> ErrorPattern | None:
         """Recognize if an error matches a known pattern."""
+        # Rust-accelerated pattern matching
+        if _RUST_AVAILABLE and self._patterns:
+            try:
+                patterns = [p.regex for p in self._patterns]
+                idx = match_patterns_rust(error.message, patterns)
+                if idx >= 0:
+                    self._patterns[idx].occurrences += 1
+                    return self._patterns[idx]
+                return None
+            except Exception:
+                pass  # Fall back to Python
+
+        # Python fallback
         for pattern in self._patterns:
             if re.search(pattern.regex, error.message):
                 pattern.occurrences += 1
@@ -276,7 +292,7 @@ class ErrorsAgent(BaseAgent):
         pattern: str,
         reason: str,
         expires: str | None = None,
-        created_by: str = ""
+        created_by: str = "",
     ) -> SuppressionRule:
         """Add a suppression rule."""
         rule = SuppressionRule(
@@ -285,7 +301,7 @@ class ErrorsAgent(BaseAgent):
             reason=reason,
             expires=expires,
             created_by=created_by,
-            created_at=datetime.now().isoformat()
+            created_at=datetime.now().isoformat(),
         )
         self._suppression_rules.append(rule)
         return rule
@@ -300,8 +316,9 @@ class ErrorsAgent(BaseAgent):
 
     def _is_suppressed(self, error: ErrorEntry) -> bool:
         """Check if an error is suppressed."""
+        # Filter out expired rules first
+        active_rules = []
         for rule in self._suppression_rules:
-            # Check expiration
             if rule.expires:
                 try:
                     expires_dt = datetime.fromisoformat(rule.expires)
@@ -309,6 +326,22 @@ class ErrorsAgent(BaseAgent):
                         continue
                 except ValueError:
                     pass
+            active_rules.append(rule)
+
+        if not active_rules:
+            return False
+
+        # Rust-accelerated suppression check
+        if _RUST_AVAILABLE:
+            try:
+                patterns = [r.pattern for r in active_rules]
+                is_match, _ = check_suppression_rust(error.message, patterns)
+                return is_match
+            except Exception:
+                pass  # Fall back to Python
+
+        # Python fallback
+        for rule in active_rules:
             if re.search(rule.pattern, error.message):
                 return True
         return False
@@ -369,7 +402,7 @@ class ErrorsAgent(BaseAgent):
             "by_severity": by_severity,
             "by_category": by_category,
             "cluster_count": len(self._clusters),
-            "suppression_rules_count": len(self._suppression_rules)
+            "suppression_rules_count": len(self._suppression_rules),
         }
         return self._statistics
 
@@ -391,22 +424,27 @@ class ErrorsAgent(BaseAgent):
                 docs.append(f"### {category.value.title()}\n")
                 for error in errors:
                     status = "✓" if error.resolved else "✗"
-                    docs.append(f"- [{status}] {error.message} (line {error.line_number})")
+                    docs.append(
+                        f"- [{status}] {error.message} (line {error.line_number})"
+                    )
                 docs.append("")
-        return '\n'.join(docs)
+        return "\n".join(docs)
 
     def export_errors(self, format: str = "json") -> str:
         """Export errors to various formats."""
         if format == "json":
-            data: list[dict[str, Any]] = [{
-                "id": e.id,
-                "message": e.message,
-                "file": e.file_path,
-                "line": e.line_number,
-                "severity": e.severity.name,
-                "category": e.category.name,
-                "resolved": e.resolved
-            } for e in self._errors]
+            data: list[dict[str, Any]] = [
+                {
+                    "id": e.id,
+                    "message": e.message,
+                    "file": e.file_path,
+                    "line": e.line_number,
+                    "severity": e.severity.name,
+                    "category": e.category.name,
+                    "resolved": e.resolved,
+                }
+                for e in self._errors
+            ]
             return json.dumps(data, indent=2)
         elif format == "csv":
             lines = ["id,message,file,line,severity,category,resolved"]
@@ -416,7 +454,7 @@ class ErrorsAgent(BaseAgent):
                     f"{e.line_number},{e.severity.name},"
                     f"{e.category.name},{e.resolved}"
                 )
-            return '\n'.join(lines)
+            return "\n".join(lines)
         return ""
 
     # ========== Core Methods ==========
@@ -442,9 +480,11 @@ class ErrorsAgent(BaseAgent):
 
     def _get_fallback_response(self) -> str:
         """Return fallback response when Copilot is unavailable."""
-        return ("# AI Improvement Unavailable\n"
-                "# GitHub CLI not found. Install from https://cli.github.com/\n\n"
-                "# Original error report preserved below:\n\n")
+        return (
+            "# AI Improvement Unavailable\n"
+            "# GitHub CLI not found. Install from https://cli.github.com/\n\n"
+            "# Original error report preserved below:\n\n"
+        )
 
     def improve_content(self, prompt: str) -> str:
         """Use AI to improve the error report.

@@ -1,20 +1,14 @@
-
-"""
-Rust bridge profiler.py module.
-"""
 # Copyright 2026 PyAgent Authors
 # Rust Bridge Profiler: Comprehensive metadata tracking for Rust-accelerated functions.
 
 from __future__ import annotations
-
-import logging
 import time
+import logging
 from collections import defaultdict
-from typing import Any, Callable, Dict
+from typing import Any, Dict, Callable
 
 try:
     import rust_core
-
     _RUST_AVAILABLE = True
 except ImportError:
     rust_core = None
@@ -47,7 +41,6 @@ class RustBridgeProfiler:
 
     def _wrap_function(self, fn: Callable, fname: str) -> Callable:
         """Wraps a function with nanosecond-precision timing."""
-
         def wrapper(*args, **kwargs):
             start = time.perf_counter_ns()
             try:
@@ -56,13 +49,12 @@ class RustBridgeProfiler:
                 self.stats[fname]["calls"] += 1
                 self.stats[fname]["total_ns"] += duration
                 return result
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 # Still record the time even if it failed
                 duration = time.perf_counter_ns() - start
                 self.stats[fname]["calls"] += 1
                 self.stats[fname]["total_ns"] += duration
                 raise e
-
         return wrapper
 
     def get_report(self) -> str:
@@ -81,12 +73,12 @@ class RustBridgeProfiler:
             f"- **Cumulative Execution Time**: {total_time_ms:.3f} ms",
             "",
             "| Function | Calls | Total (ms) | Avg (μs) |",
-            "| :--- | :---: | :---: | :---: |",
+            "| :--- | :---: | :---: | :---: |"
         ]
 
         for name, s in sorted_stats:
             avg_us = (s["total_ns"] / s["calls"]) / 1000 if s["calls"] > 0 else 0
-            report.append(f"| `{name}` | {s['calls']} | {s['total_ns'] / 1e6:.3f} | {avg_us:.2f} |")
+            report.append(f"| `{name}` | {s['calls']} | {s['total_ns']/1e6:.3f} | {avg_us:.2f} |")
 
         return "\n".join(report)
 

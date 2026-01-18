@@ -1,43 +1,38 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""Knowledge Agent module for MIRIX cognitive tier."""
+# Refactored for < 50 Complexity
 
 from __future__ import annotations
+from src.core.base.Version import VERSION
+from src.core.base.BaseAgent import BaseAgent
+from src.core.base.BaseUtilities import create_main_function, as_tool
+from src.logic.agents.cognitive.context.engines.GraphContextEngine import (
+    GraphContextEngine,
+)
+from src.logic.agents.cognitive.context.engines.MemoryEngine import MemoryEngine
+from src.logic.agents.cognitive.context.engines.ContextCompressor import (
+    ContextCompressor,
+)
+from src.logic.agents.cognitive.context.engines.KnowledgeCore import KnowledgeCore
+from src.logic.agents.cognitive.context.engines.TieredMemoryEngine import (
+    TieredMemoryEngine,
+)
+from src.logic.agents.cognitive.KnowledgeGraphAssistant import KnowledgeGraphAssistant
+from src.logic.agents.cognitive.KnowledgeIndexingAssistant import (
+    KnowledgeIndexingAssistant,
+)
 import json
-import logging
-import importlib.util
 from typing import Any
 
-from src.core.base.lifecycle.base_agent import BaseAgent
-from src.core.base.common.base_utilities import as_tool, create_main_function
+__version__ = VERSION
 
-from .context.engines.graph_context_engine import GraphContextEngine
-from .context.engines.memory_engine import MemoryEngine
-from .context.engines.context_compressor import ContextCompressor
-from .context.engines.tiered_memory_engine import TieredMemoryEngine
-from .context.engines.knowledge_core import KnowledgeCore
-from .knowledge_graph_assistant import KnowledgeGraphAssistant
-from .knowledge_indexing_assistant import KnowledgeIndexingAssistant
-
+import importlib.util
 HAS_CHROMADB = importlib.util.find_spec("chromadb") is not None
 
 
-# pylint: disable=too-many-ancestors
 class KnowledgeAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Knowledge Agent: Scans workspace for semantic
+    Tier 2 (Cognitive Logic) - Knowledge Agent: Scans workspace for semantic 
     context, maintains the knowledge graph, and orchestrates RAG operations.
     """
 
@@ -117,38 +112,29 @@ class KnowledgeAgent(BaseAgent):
         return "\n".join(context_snippets) if context_snippets else "No context."
 
     def _load_index(self) -> dict:
-        """Loads or builds symbol index mapping."""
+        """Loads or builds symbols."""
         if not self.index_file.exists():
             self.build_index()
         try:
-            with open(self.index_file, "r", encoding="utf-8") as f:
+            with open(self.index_file) as f:
                 return json.load(f)
-        except (json.JSONDecodeError, OSError) as e:
-            logging.error(f"Error loading index: {e}")
+        except Exception:
             return {}
 
     def build_index(self) -> None:
-        """Builds symbol index from markdown and python files in the workspace."""
+        """Builds symbol index."""
         patterns = {".md": r"\[\[(.*?)\]\]", ".py": r"(?:class|def)\s+([a-zA-Z_]\w*)"}
         index = self.knowledge_core.build_symbol_map(self.file_path.parent, patterns)
-        try:
-            with open(self.index_file, "w", encoding="utf-8") as f:
-                json.dump(index, f, indent=4)
-        except OSError as e:
-            logging.error(f"Error saving index: {e}")
+        with open(self.index_file, "w", encoding="utf-8") as f:
+            json.dump(index, f, indent=4)
 
     def find_backlinks(self, file_name: str) -> list[str]:
-        """Finds all files that reference the given file name."""
         return self.graph_assistant.find_backlinks(file_name, self._load_index())
 
     def auto_update_backlinks(self, directory: str | None = None) -> int:
-        """Updates backlink sections in all markdown files in a directory."""
-        return self.graph_assistant.update_directory_backlinks(
-            directory or str(self.file_path.parent), self._load_index()
-        )
+        return self.graph_assistant.update_directory_backlinks(directory or str(self.file_path.parent), self._load_index())
 
     def get_graph_mermaid(self) -> str:
-        """Generates a Mermaid graph representing the knowledge connections."""
         return self.graph_assistant.generate_mermaid(self._load_index())
 
     @as_tool
@@ -160,3 +146,4 @@ class KnowledgeAgent(BaseAgent):
 if __name__ == "__main__":
     main = create_main_function(KnowledgeAgent, "Knowledge Agent", "Query")
     main()
+

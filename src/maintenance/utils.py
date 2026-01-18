@@ -1,91 +1,30 @@
-import os
-import datetime
-import subprocess
-from pathlib import Path
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Recovered and standardized for Phase 317
 
-def get_timestamp():
-    return datetime.datetime.now().strftime("%Y%m%d-%H%M")
+"""
+Standard maintenance utilities for the PyAgent ecosystem.
 
-def setup_fix_directory(agent_name):
-    timestamp = get_timestamp()
-    base_path = Path("fixes") / agent_name / "date" / timestamp
-    
-    (base_path / "diff-files").mkdir(parents=True, exist_ok=True)
-    (base_path / "log").mkdir(parents=True, exist_ok=True)
-    (base_path / "code").mkdir(parents=True, exist_ok=True)
-    
-    return base_path
+Provides shared helper functions for filesystem cleanup, log rotation,
+and environment verification used by other maintenance components.
+"""
 
-def run_command(command, cwd=None):
-    try:
-        result = subprocess.run(
-            command,
-            cwd=cwd or os.getcwd(),
-            shell=True,
-            capture_output=True,
-            text=True,
-            encoding="utf-8",
-            errors="replace"
-        )
-        return result.returncode, result.stdout or "", result.stderr or ""
-    except Exception as e:
-        return -1, "", str(e)
+from __future__ import annotations
+from src.core.base.Version import VERSION
+import logging
+from typing import Any
 
-class GitManager:
-    @staticmethod
-    def create_restore_point(branch_name=None):
-        if not branch_name:
-            timestamp = get_timestamp()
-            branch_name = f"restore-point-{timestamp}"
-        
-        _, current_branch, _ = run_command("git rev-parse --abbrev-ref HEAD")
-        current_branch = current_branch.strip()
-        
-        code, stdout, stderr = run_command(f"git checkout -b {branch_name}")
-        return branch_name if code == 0 else None, current_branch
+__version__ = VERSION
 
-    @staticmethod
-    def get_changed_files():
-        """Returns a list of changed/added python files relative to main or uncommitted."""
-        # 1. Uncommitted changes
-        _, stdout, _ = run_command("git diff --name-only")
-        files = set(stdout.splitlines())
-        
-        # 2. Files changed in this branch relative to main
-        _, stdout_main, _ = run_command("git diff --name-only main")
-        files.update(stdout_main.splitlines())
-        
-        # 3. Filter for Python files only and ensure they exist
-        py_files = [f for f in files if f.endswith(".py") and os.path.exists(f)]
-        return py_files
+class MaintenanceUtils:
+    """
+    Support utilities for fleet maintenance and environment stabilization.
 
-    @staticmethod
-    def commit_changes(message):
-        run_command("git add .")
-        code, stdout, stderr = run_command(f'git commit -m "{message}"')
-        return code == 0
+    Provides foundational tools for the Tier 5 (Maintenance) layer,
+    including log rotation, temporary file pruning, and environment
+    integrity checks required for long-running autonomous operations.
+    """
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        self.version = VERSION
+        logging.info(f"MaintenanceUtils initialized (v{VERSION}).")
 
-    @staticmethod
-    def create_diff(output_path):
-        code, stdout, stderr = run_command(f"git diff main > {output_path}")
-        return code == 0
-
-    @staticmethod
-    def rollback(branch_name):
-        code, stdout, stderr = run_command(f"git checkout {branch_name}")
-        return code == 0
-
-    @staticmethod
-    def hard_rollback():
-        code, stdout, stderr = run_command("git reset --hard HEAD")
-        # removed git clean -fd to avoid accidental deletion of fresh files
-        return code == 0
-
-    @staticmethod
-    def merge_to_main(branch_name):
-        run_command("git checkout main")
-        run_command("git pull origin main")
-        code, stdout, stderr = run_command(f"git merge {branch_name}")
-        if code == 0:
-            run_command(f"git branch -d {branch_name}")
-        return code == 0

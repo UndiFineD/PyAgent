@@ -11,22 +11,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Orchestrator registry core.py module.
-"""
-
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import os
 from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
 
 # Rust acceleration
 try:
     from rust_core import to_snake_case_rust
-
     _RUST_ACCEL = True
 except ImportError:
     _RUST_ACCEL = False
@@ -43,7 +36,9 @@ class OrchestratorRegistryCore:
     def __init__(self, current_sdk_version: str) -> None:
         self.sdk_version: str = current_sdk_version
 
-    def process_discovered_files(self, file_paths: list[str]) -> dict[str, tuple[str, str, bool, str | None]]:
+    def process_discovered_files(
+        self, file_paths: list[str]
+    ) -> dict[str, tuple[str, str, bool, str | None]]:
         """
         Processes a list of file paths and extracts orchestrator configurations.
         Expects relative paths from workspace root.
@@ -53,16 +48,10 @@ class OrchestratorRegistryCore:
         for rel_path in file_paths:
             file = os.path.basename(rel_path)
             if file.endswith(".py") and not file.startswith("__"):
-                filename_base: str = file[:-3]
+                class_name: str = file[:-3]
 
-                # Convert filename to likely class name (snake_case -> PascalCase)
-                # e.g., "signal_bus_orchestrator" -> "SignalBusOrchestrator"
-                class_name = "".join(x.capitalize() for x in filename_base.split("_"))
-
-                # Check for orchestrator-like components (case-insensitive for snake_case filenames)
-                search_name = filename_base.lower()
                 if any(
-                    x.lower() in search_name
+                    x in class_name
                     for x in [
                         "Orchestrator",
                         "Manager",
@@ -76,19 +65,15 @@ class OrchestratorRegistryCore:
                     module_path: str = rel_path.replace(os.sep, ".").replace(".py", "")
 
                     # Convert ClassName -> snake_case key
-                    # Robust handling for both PascalCase and snake_case (Phase 135)
                     # "SelfHealingOrchestrator" -> "self_healing"
-                    # "signal_bus_orchestrator" -> "signal_bus"
-                    raw_short = class_name
-                    for suffix in ["Orchestrator", "orchestrator", "_orchestrator"]:
-                        raw_short = raw_short.replace(suffix, "")
-
-                    short_key: str = self._to_snake_case(raw_short)
+                    short_key: str = self._to_snake_case(
+                        class_name.replace("Orchestrator", "")
+                    )
                     full_key: str = self._to_snake_case(class_name)
 
                     # Default heuristic for 'needs_fleet'
                     needs_fleet: bool = any(
-                        x.lower() in search_name
+                        x in class_name
                         for x in [
                             "Orchestrator",
                             "Spawner",
@@ -104,7 +89,9 @@ class OrchestratorRegistryCore:
                     if short_key:
                         discovered[short_key] = cfg
                     discovered[full_key] = cfg
-                    discovered[class_name] = cfg  # Also keep original class name for direct access
+                    discovered[class_name] = (
+                        cfg  # Also keep original class name for direct access
+                    )
 
         return discovered
 
@@ -113,15 +100,16 @@ class OrchestratorRegistryCore:
         if _RUST_ACCEL:
             try:
                 return to_snake_case_rust(name)
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception:
                 pass
         # Python fallback
         import re
-
         s1 = re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name)
         return re.sub("([a-z0-9])([A-Z])", r"\1_\2", s1).lower()
 
-    def parse_manifest(self, raw_manifest: dict[str, Any]) -> dict[str, tuple[str, str, bool, str | None]]:
+    def parse_manifest(
+        self, raw_manifest: dict[str, Any]
+    ) -> dict[str, tuple[str, str, bool, str | None]]:
         """
         Parses the raw manifest dictionary and filters incompatible plugins.
         Returns a dict of {Name: (module, class, needs_fleet, arg_path)}.
@@ -157,5 +145,5 @@ class OrchestratorRegistryCore:
             if p_parts[0] < r_parts[0]:
                 return False
             return p_parts[1] >= r_parts[1]
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception:
             return True

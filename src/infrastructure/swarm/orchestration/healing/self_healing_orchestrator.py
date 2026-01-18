@@ -11,26 +11,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Self healing orchestrator.py module.
-"""
-
 
 from __future__ import annotations
-
-import logging
+from src.core.base.Version import VERSION
+from src.core.base.AgentVerification import CodeIntegrityVerifier, CodeHealthAuditor
 import time
-from pathlib import Path
-from typing import TYPE_CHECKING, Any
-
-from src.core.base.lifecycle.version import VERSION
-from src.core.base.logic.agent_verification import (CodeHealthAuditor,
-                                                    CodeIntegrityVerifier)
-
-from .self_healing_core import SelfHealingCore
+import logging
+from typing import Any, TYPE_CHECKING
+from .SelfHealingCore import SelfHealingCore
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
 __version__ = VERSION
 
@@ -48,30 +39,6 @@ class SelfHealingOrchestrator:
         self.core = SelfHealingCore(timeout_seconds=15.0, max_errors=3)
         self.state_backups: dict[str, Any] = {}  # agent_name -> state_snapshot
         self.recovery_logs: list[dict[str, Any]] = []
-
-        # Phase 317: Initialize with docs/prompt context if available
-        # Derive project root from module location for consistent resolution
-        self.work_root = Path(__file__).resolve().parents[4]  # Adjust depth as needed
-        self._load_strategic_overrides()
-
-    def _load_strategic_overrides(self) -> None:
-        """
-        Loads strategic healing parameters from docs/prompt/context.txt.
-        Allows for dynamic adjustment of recovery thresholds (e.g., more aggressive during evolution phases).
-        """
-        prompt_dir = self.work_root / "docs" / "prompt"
-        context_file = prompt_dir / "context.txt"
-
-        if context_file.exists():
-            try:
-                content = context_file.read_text(encoding="utf-8")
-                # Look for "Phase" markers to increase sensitivity
-                if "Evolution Phase 50" in content:
-                    self.core.timeout_seconds = 10.0  # More aggressive during heavy dev
-                    self.core.max_errors = 2
-                    logging.info("Self-Healing: Strategic overrides applied for Phase 50 TALON.")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
-                logging.warning(f"Self-Healing: Failed to load overrides: {e}")
 
     @property
     def health_registry(self) -> dict[str, Any]:
@@ -130,17 +97,23 @@ class SelfHealingOrchestrator:
     def attempt_recovery(self, agent_name: str) -> bool:
         """Attempts to restart a failed agent and restore its last known state."""
         action = self.core.get_recovery_action(agent_name)
-        logging.info(f"Self-Healing: Recovery action '{action}' triggered for {agent_name}")
+        logging.info(
+            f"Self-Healing: Recovery action '{action}' triggered for {agent_name}"
+        )
 
         success = False
 
         # Action implementation using FleetManager/Registry
         if action == "reinitialize" or action == "restart_process":
             # Attempt to reload through the registry
-            if hasattr(self.fleet_manager, "agents") and hasattr(self.fleet_manager.agents, "try_reload"):
+            if hasattr(self.fleet_manager, "agents") and hasattr(
+                self.fleet_manager.agents, "try_reload"
+            ):
                 success = self.fleet_manager.agents.try_reload(agent_name)
             else:
-                logging.warning(f"Self-Healing: FleetManager registry unavailable for {agent_name} recovery.")
+                logging.warning(
+                    f"Self-Healing: FleetManager registry unavailable for {agent_name} recovery."
+                )
                 success = False
 
         if success:
@@ -163,13 +136,17 @@ class SelfHealingOrchestrator:
             logging.info(f"Self-Healing: Successfully recovered {agent_name}")
             return True
         elif action == "apoptosis":
-            logging.error(f"Self-Healing: Agent {agent_name} is unrecoverable. Initiating apoptosis.")
+            logging.error(
+                f"Self-Healing: Agent {agent_name} is unrecoverable. Initiating apoptosis."
+            )
             # Logic to remove from registry or kill process here
             return False
 
         return False
 
-    def attempt_repair(self, agent_name: str, error: Exception | None = None, **kwargs) -> Any:
+    def attempt_repair(
+        self, agent_name: str, error: Exception | None = None, **kwargs
+    ) -> Any:
         """Alias for attempt_recovery (Legacy Phase 35 compatibility)."""
         logging.info(f"Self-Healing: Attempting repair for {agent_name}...")
         self.attempt_recovery(agent_name)
@@ -191,7 +168,9 @@ class SelfHealingOrchestrator:
         if not self.recovery_logs:
             return
 
-        logging.info("Self-Healing: Reviewing recovery logs for new intelligence lessons...")
+        logging.info(
+            "Self-Healing: Reviewing recovery logs for new intelligence lessons..."
+        )
         for log in self.recovery_logs[-10:]:
             if log.get("action") == "apoptosis":
                 lesson = f"Lesson: Agent {log['agent']} reached apoptosis. Root cause analysis needed."

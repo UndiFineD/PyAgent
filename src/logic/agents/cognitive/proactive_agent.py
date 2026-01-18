@@ -11,28 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Agent specializing in proactive task management and recurring workflows (Sentient pattern)."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 import logging
 import json
 import time
-from typing import Dict, List, Any, Optional
+from typing import Any
 
 __version__ = VERSION
 
+
 class ProactiveAgent(BaseAgent):
-    """Manages recurring, triggered, and scheduled tasks proactively."""
-    
+    """
+    Tier 2 (Cognitive Logic) - Proactive Agent: Manages autonomous triggers, 
+    scheduled maintenance, and predictive task execution for the fleet.
+    """
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self._system_prompt = (
@@ -49,6 +48,7 @@ class ProactiveAgent(BaseAgent):
         """
         try:
             from src.observability.stats.ResourceMonitor import ResourceMonitor
+
             monitor = ResourceMonitor(self._workspace_root)
             return monitor.get_current_stats()
         except (ImportError, AttributeError):
@@ -60,51 +60,63 @@ class ProactiveAgent(BaseAgent):
             "id": f"task_{int(time.time())}",
             "task": task,
             "trigger": cron_or_delay,
-            "status": "scheduled"
+            "status": "scheduled",
         }
         self.scheduled_tasks.append(task_entry)
-        logging.info(f"ProactiveAgent: Scheduled task '{task}' with trigger '{cron_or_delay}'")
+        logging.info(
+            f"ProactiveAgent: Scheduled task '{task}' with trigger '{cron_or_delay}'"
+        )
         return json.dumps(task_entry)
 
-    def scan_for_triggers(self, environment_state: dict[str, Any] | None = None) -> list[str]:
+    def scan_for_triggers(
+        self, environment_state: dict[str, Any] | None = None
+    ) -> list[str]:
         """Checks if any environmental triggers should fire a proactive task."""
         state = environment_state or self.observe_environment()
         triggered_tasks = []
-        
+
         # CPU/Memory Triggers
         if state.get("status") == "CRITICAL":
-            triggered_tasks.append(f"Resource Alert: System status is {state['status']}. Optimizing processes.")
-            
+            triggered_tasks.append(
+                f"Resource Alert: System status is {state['status']}. Optimizing processes."
+            )
+
         # Disk Triggers
         if state.get("disk_free_gb", 100) < 5:
-            triggered_tasks.append("Cleanup workspace: Disk space is critically low (less than 5GB free)")
-            
+            triggered_tasks.append(
+                "Cleanup workspace: Disk space is critically low (less than 5GB free)"
+            )
+
         # Original placeholders
         if state.get("error_count", 0) > 5:
             triggered_tasks.append("Diagnostic: High error rate detected")
-            
+
         return triggered_tasks
 
     def get_habit_recommendation(self, user_history: list[str]) -> str:
         """Uses LLM to detect user behavior patterns and recommend proactive habits."""
         if not user_history:
             return "Not enough data yet to establish habits."
-            
-        logging.info(f"ProactiveAgent: Analyzing history of {len(user_history)} interactions.")
+
+        logging.info(
+            f"ProactiveAgent: Analyzing history of {len(user_history)} interactions."
+        )
         prompt = (
             f"Analyze the following user interaction history: {json.dumps(user_history)}\n"
             "Identify recurring patterns (e.g., 'always runs tests after editing models') "
             "and suggest one proactive automation or habit that would save time. "
             "Be concise and helpful."
         )
-        
+
         return self.think(prompt)
 
     def improve_content(self, input_text: str) -> str:
         """Returns proactive suggestions based on current context."""
         return self.get_habit_recommendation([input_text])
 
+
 if __name__ == "__main__":
-    from src.core.base.utilities import create_main_function
+    from src.core.base.BaseUtilities import create_main_function
+
     main = create_main_function(ProactiveAgent)
     main()

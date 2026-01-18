@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 Environment and version commands.
 """
@@ -20,8 +6,8 @@ import os
 import platform
 import sys
 
-from ..core import CommandContext, CommandResult
-from ..registry import register
+from src.interface.slash_commands.registry import register
+from src.interface.slash_commands.core import CommandContext, CommandResult
 
 
 @register(
@@ -31,10 +17,10 @@ from ..registry import register
     aliases=["ver", "v"],
     category="environment",
 )
-def cmd_version(_ctx: CommandContext) -> CommandResult:
+def cmd_version(ctx: CommandContext) -> CommandResult:
     """Get Python and OS version."""
     python_version = sys.version.split()[0]
-
+    
     return CommandResult.ok(
         output=f"[Python {python_version} | {platform.system()} {platform.release()}]",
         data={
@@ -70,11 +56,11 @@ def cmd_env(ctx: CommandContext) -> CommandResult:
             output=f"[{ctx.first_arg.upper()}: not set]",
             data={"key": ctx.first_arg.upper(), "value": None},
         )
-
+    
     # List common env vars
     common_vars = ["PATH", "HOME", "USER", "SHELL", "VIRTUAL_ENV", "PYTHONPATH"]
     found = {k: os.environ.get(k, "not set")[:30] for k in common_vars if k in os.environ}
-
+    
     return CommandResult.ok(
         output=f"[Env vars: {len(os.environ)} total]",
         data={"count": len(os.environ), "sample": found},
@@ -88,13 +74,12 @@ def cmd_env(ctx: CommandContext) -> CommandResult:
     aliases=["py"],
     category="environment",
 )
-def cmd_python(_ctx: CommandContext) -> CommandResult:
+def cmd_python(ctx: CommandContext) -> CommandResult:
     """Get Python interpreter information."""
-    v = sys.version_info
     return CommandResult.ok(
-        output=f"[Python {v.major}.{v.minor}.{v.micro} at {sys.executable}]",
+        output=f"[Python {sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro} at {sys.executable}]",
         data={
-            "version": f"{v.major}.{v.minor}.{v.micro}",
+            "version": f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}",
             "executable": sys.executable,
             "prefix": sys.prefix,
             "platform": sys.platform,
@@ -109,7 +94,7 @@ def cmd_python(_ctx: CommandContext) -> CommandResult:
     aliases=["pwd", "dir"],
     category="environment",
 )
-def cmd_cwd(_ctx: CommandContext) -> CommandResult:
+def cmd_cwd(ctx: CommandContext) -> CommandResult:
     """Get current working directory."""
     cwd = os.getcwd()
     return CommandResult.ok(
@@ -125,17 +110,16 @@ def cmd_cwd(_ctx: CommandContext) -> CommandResult:
     aliases=["host"],
     category="environment",
 )
-def cmd_hostname(_ctx: CommandContext) -> CommandResult:
+def cmd_hostname(ctx: CommandContext) -> CommandResult:
     """Get system hostname."""
     import socket
-
     hostname = socket.gethostname()
-
+    
     try:
         ip = socket.gethostbyname(hostname)
     except socket.gaierror:
         ip = "unknown"
-
+    
     return CommandResult.ok(
         output=f"[{hostname} ({ip})]",
         data={"hostname": hostname, "ip": ip},
@@ -143,19 +127,19 @@ def cmd_hostname(_ctx: CommandContext) -> CommandResult:
 
 
 @register(
-    "whoami",
+    "user",
     description="Get current user",
-    usage="/whoami",
+    usage="/user",
+    aliases=["whoami"],
     category="environment",
-    aliases=["user"],
 )
-def cmd_user(_ctx: CommandContext) -> CommandResult:
+def cmd_user(ctx: CommandContext) -> CommandResult:
     """Get current user name."""
     import getpass
-
+    
     username = getpass.getuser()
     home = os.path.expanduser("~")
-
+    
     return CommandResult.ok(
         output=f"[User: {username}]",
         data={"username": username, "home": home},
@@ -169,17 +153,17 @@ def cmd_user(_ctx: CommandContext) -> CommandResult:
     aliases=["virtualenv"],
     category="environment",
 )
-def cmd_venv(_ctx: CommandContext) -> CommandResult:
+def cmd_venv(ctx: CommandContext) -> CommandResult:
     """Get virtual environment information."""
     venv = os.environ.get("VIRTUAL_ENV")
-
+    
     if venv:
         venv_name = os.path.basename(venv)
         return CommandResult.ok(
             output=f"[venv: {venv_name}]",
             data={"active": True, "path": venv, "name": venv_name},
         )
-
+    
     return CommandResult.ok(
         output="[venv: Not active]",
         data={"active": False},

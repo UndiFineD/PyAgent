@@ -11,14 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
 
-"""Implementation of subagent running logic."""
+
+"""Implementation of subagent running logic.
+
+Phase 15 Rust Optimizations:
+- estimate_tokens_rust: Fast BPE-approximated token counting
+- validate_response_rust: Vectorized content validation
+"""
 
 from __future__ import annotations
 from src.core.base.version import VERSION
@@ -35,6 +35,13 @@ from .SubagentCore import SubagentCore
 from .SubagentStatus import SubagentStatus
 
 __version__ = VERSION
+
+try:
+    import rust_core as rc
+    RUST_AVAILABLE = True
+except ImportError:
+    rc = None
+    RUST_AVAILABLE = False
 
 try:
     import requests
@@ -169,9 +176,20 @@ class SubagentRunner:
         return True
 
     def estimate_tokens(self, text: str) -> int:
-        """Estimate token count for text."""
+        """Estimate token count for text.
+        
+        Uses Rust-accelerated BPE approximation when available.
+        """
         if not text:
             return 0
+        
+        # Rust-accelerated token estimation
+        if RUST_AVAILABLE and hasattr(rc, 'estimate_tokens_rust'):
+            try:
+                return rc.estimate_tokens_rust(text)
+            except Exception:
+                pass  # Fall back to Python
+        
         return max(1, len(text) // 4)
 
     def estimate_cost(self, tokens: int, model: str = "gpt-4", rate_per_1k_input: float = 0.03) -> float:

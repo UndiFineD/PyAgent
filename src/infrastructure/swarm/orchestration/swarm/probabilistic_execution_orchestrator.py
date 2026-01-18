@@ -12,22 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Probabilistic execution orchestrator.py module.
-"""
-
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import logging
-from typing import TYPE_CHECKING, Any
-
-from src.core.base.lifecycle.version import VERSION
+from typing import Any, TYPE_CHECKING
 
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
 
 class ProbabilisticExecutionOrchestrator:
@@ -43,7 +37,9 @@ class ProbabilisticExecutionOrchestrator:
         """
         Executes a task multiple times and collapses the results into a single high-confidence output.
         """
-        logging.info(f"ProbabilisticExecutionOrchestrator: Executing task '{task}' with {variations} variations.")
+        logging.info(
+            f"ProbabilisticExecutionOrchestrator: Executing task '{task}' with {variations} variations."
+        )
 
         results = []
         import asyncio
@@ -69,14 +65,14 @@ class ProbabilisticExecutionOrchestrator:
                     res = loop.run_until_complete(coro)
                 results.append(res)
                 logging.info(f"Variation {i + 1} completed.")
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logging.error(f"Variation {i + 1} failed: {e}")
 
         if not results:
             return {"status": "error", "message": "All execution variations failed."}
 
         # Wave-function collapse: Select the best result
-        collapsed_result = loop.run_until_complete(self._collapse(task, results))
+        collapsed_result = self._collapse(task, results)
 
         confidence = self._calculate_confidence(results, collapsed_result)
 
@@ -89,7 +85,7 @@ class ProbabilisticExecutionOrchestrator:
             "confidence": confidence,
         }
 
-    async def _collapse(self, task: str, results: list[Any]) -> Any:
+    def _collapse(self, task: str, results: list[Any]) -> Any:
         """
         Selects the most optimal result from the set of variations.
         If RealityAnchorAgent is available, it uses it for verification.
@@ -101,12 +97,12 @@ class ProbabilisticExecutionOrchestrator:
 
             for res in results:
                 try:
-                    verification = await self.fleet.reality_anchor.verify_claim(str(res))
+                    verification = self.fleet.reality_anchor.verify_claim(str(res))
                     score = verification.get("confidence_score", 0.0)
                     if score > highest_score:
                         highest_score = score
                         best_result = res
-                except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+                except Exception:
                     continue
 
             if best_result is not None:

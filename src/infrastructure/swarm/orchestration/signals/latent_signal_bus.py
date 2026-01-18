@@ -12,25 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Latent signal bus.py module.
-"""
-
 
 from __future__ import annotations
-
-import base64
-import json
+from src.core.base.Version import VERSION
 import logging
+import json
+import base64
+from typing import Any, TYPE_CHECKING
 from datetime import datetime
-from typing import TYPE_CHECKING, Any
-
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
 if TYPE_CHECKING:
-    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
+    from src.infrastructure.fleet.FleetManager import FleetManager
 
 
 class LatentSignalBus:
@@ -80,12 +74,14 @@ class LatentSignalBus:
         latent_data = self.latent_space[channel]
         vector = latent_data["vector"]
 
-        logging.info(f"LatentSignalBus: Decoding latent signal from channel '{channel}'")
+        logging.info(
+            f"LatentSignalBus: Decoding latent signal from channel '{channel}'"
+        )
 
         try:
             decoded_json = base64.b64decode(vector).decode()
             return json.loads(decoded_json)
-        except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+        except Exception as e:
             logging.error(f"LatentSignalBus: Decompression failed: {e}")
             return None
 

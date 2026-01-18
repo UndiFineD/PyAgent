@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -8,37 +7,15 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-"""
-SwarmVisualizerAgent: Swarm agent for visualizing agent activity, system state, and distributed workflows in the PyAgent swarm.
-Provides dashboards and real-time observability for swarm operations.
-"""
-
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
-"""
-Swarm visualizer agent.py module.
-"""
 
 
 from __future__ import annotations
-
+from src.core.base.Version import VERSION
 import time
 from typing import Any
-
-from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -51,10 +28,14 @@ class SwarmVisualizerAgent:
 
     def __init__(self, workspace_path: str) -> None:
         self.workspace_path = workspace_path
-        self.interaction_log: list[Any] = []  # List of (from_agent, to_agent, message_type, timestamp)
+        self.interaction_log: list[
+            Any
+        ] = []  # List of (from_agent, to_agent, message_type, timestamp)
         self.agent_positions: dict[Any, Any] = {}  # agent_id -> (x, y)
 
-    def log_interaction(self, from_agent: str, to_agent: str, message_type: str) -> None:
+    def log_interaction(
+        self, from_agent: str, to_agent: str, message_type: str
+    ) -> None:
         """Logs an interaction between two agents."""
         self.interaction_log.append(
             {

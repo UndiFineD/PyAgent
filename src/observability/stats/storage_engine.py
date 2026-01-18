@@ -1,31 +1,23 @@
 #!/usr/bin/env python3
-
-"""
-Storage engine.py module.
-"""
 # Copyright 2026 PyAgent Authors
 # Backup, snapshot, and compression engine.
 # Phase 16: Rust acceleration for JSON serialization and compression
 
 from __future__ import annotations
-
-import contextlib
 import json
 import logging
 import zlib
-from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
 from typing import Any
+from dataclasses import dataclass
+from .ObservabilityCore import StatsSnapshot
 
-from .observability_core import StatsSnapshot
-
-logger: logging.Logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 # Phase 16: Rust acceleration imports
 try:
     import rust_core
-
     _RUST_AVAILABLE = True
 except ImportError:
     _RUST_AVAILABLE = False
@@ -45,25 +37,30 @@ class StatsBackupManager:
     """Manages backups of stats."""
 
     def __init__(self, backup_dir: str | Path | None = None) -> None:
-        self.backup_dir: Path | None = Path(backup_dir) if backup_dir is not None else None
+        self.backup_dir = Path(backup_dir) if backup_dir is not None else None
         if self.backup_dir:
             self.backup_dir.mkdir(parents=True, exist_ok=True)
         self.backups: dict[str, dict[str, Any]] = {}
 
     def _safe_name(self, name: str) -> str:
-        return "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in name) or "backup"
+        return (
+            "".join(ch if ch.isalnum() or ch in "-_" else "_" for ch in name)
+            or "backup"
+        )
 
     def create_backup(self, name: str, data: dict[str, Any]) -> StatsBackup:
-        timestamp: str = datetime.now().isoformat()
+        timestamp = datetime.now().isoformat()
         self.backups[name] = {"data": data, "timestamp": timestamp}
-        path: Path = (
+        path = (
             (self.backup_dir / f"{self._safe_name(name)}.json")
             if self.backup_dir
             else Path(f"{self._safe_name(name)}.json")
         )
         if self.backup_dir:
             path.write_text(
-                json.dumps({"name": name, "timestamp": timestamp, "data": data}, indent=2),
+                json.dumps(
+                    {"name": name, "timestamp": timestamp, "data": data}, indent=2
+                ),
                 encoding="utf-8",
             )
         return StatsBackup(name=name, path=path, timestamp=timestamp)
@@ -73,48 +70,54 @@ class StatsBackupManager:
         backups = []
         # Add in-memory backups
         for name, data in self.backups.items():
-            path_obj: Path = (
+            path_obj = (
                 self.backup_dir / f"{self._safe_name(name)}.json"
                 if self.backup_dir
                 else Path(f"{self._safe_name(name)}.json")
             )
-            backups.append(StatsBackup(name=name, path=path_obj, timestamp=data.get("timestamp", "")))
+            backups.append(
+                StatsBackup(
+                    name=name, path=path_obj, timestamp=data.get("timestamp", "")
+                )
+            )
 
         # Add from disk if not already present
-        backups.extend(self._load_backups_from_disk())
-        return backups
-
-    def _load_backups_from_disk(self) -> list[StatsBackup]:
-        """Helper to load backups from disk not already in memory."""
-        disk_backups = []
         if self.backup_dir and self.backup_dir.exists():
             for f in self.backup_dir.glob("*.json"):
                 name = f.stem
                 if name not in self.backups:
-                    with contextlib.suppress(Exception):
+                    try:
                         payload = json.loads(f.read_text(encoding="utf-8"))
-                        disk_backups.append(
+                        backups.append(
                             StatsBackup(
                                 name=name,
                                 path=f,
                                 timestamp=payload.get("timestamp", ""),
                             )
                         )
-        return disk_backups
+                    except Exception:
+                        pass
+        return backups
 
     def restore(self, name: str) -> dict[str, Any] | None:
         if name in self.backups:
             return self.backups[name]["data"]
 
-        path: Path | None = self.backup_dir / f"{self._safe_name(name)}.json" if self.backup_dir else None
+        path = (
+            self.backup_dir / f"{self._safe_name(name)}.json"
+            if self.backup_dir
+            else None
+        )
         if path and path.exists():
-            with contextlib.suppress(Exception):
+            try:
                 payload = json.loads(path.read_text(encoding="utf-8"))
                 self.backups[name] = {
                     "data": payload["data"],
                     "timestamp": payload["timestamp"],
                 }
                 return payload["data"]
+            except Exception:
+                pass
         return None
 
 
@@ -122,16 +125,18 @@ class StatsSnapshotManager:
     """Manages snapshots of stats state."""
 
     def __init__(self, snapshot_dir: str | Path | None = None) -> None:
-        self.snapshot_dir: Path | None = Path(snapshot_dir) if snapshot_dir is not None else None
+        self.snapshot_dir = Path(snapshot_dir) if snapshot_dir is not None else None
         if self.snapshot_dir:
             self.snapshot_dir.mkdir(parents=True, exist_ok=True)
         self.snapshots: dict[str, StatsSnapshot] = {}
 
     def create_snapshot(self, name: str, data: dict[str, Any]) -> StatsSnapshot:
-        snapshot = StatsSnapshot(name=name, data=data, timestamp=datetime.now().isoformat())
+        snapshot = StatsSnapshot(
+            name=name, data=data, timestamp=datetime.now().isoformat()
+        )
         self.snapshots[name] = snapshot
         if self.snapshot_dir:
-            path: Path = self.snapshot_dir / f"{name}.json"
+            path = self.snapshot_dir / f"{name}.json"
             path.write_text(
                 json.dumps(
                     {"name": name, "timestamp": snapshot.timestamp, "data": data},
@@ -143,27 +148,27 @@ class StatsSnapshotManager:
 
     def list_snapshots(self) -> list[StatsSnapshot]:
         """List all available snapshots."""
-        snapshots = list(self.snapshots.values())
-        snapshots.extend(self._load_snapshots_from_disk())
-        return snapshots
+        snapshots = []
+        for name, snap in self.snapshots.items():
+            snapshots.append(snap)
 
-    def _load_snapshots_from_disk(self) -> list[StatsSnapshot]:
-        """Helper to load snapshots from disk not already in memory."""
-        disk_snaps = []
         if self.snapshot_dir and self.snapshot_dir.exists():
             for f in self.snapshot_dir.glob("*.json"):
                 name = f.stem
                 if name not in self.snapshots:
-                    with contextlib.suppress(Exception):
+                    try:
                         payload = json.loads(f.read_text(encoding="utf-8"))
-                        disk_snaps.append(
+                        # Assuming payload has data, timestamp, name
+                        snapshots.append(
                             StatsSnapshot(
                                 name=payload.get("name", name),
                                 data=payload.get("data", {}),
                                 timestamp=payload.get("timestamp", ""),
                             )
                         )
-        return disk_snaps
+                    except Exception:
+                        pass
+        return snapshots
 
     def restore_snapshot(self, name: str) -> dict[str, Any] | None:
         """Restore a snapshot by name."""
@@ -171,10 +176,10 @@ class StatsSnapshotManager:
             return self.snapshots[name].data
 
         if self.snapshot_dir:
-            path: Path = self.snapshot_dir / f"{name}.json"
+            path = self.snapshot_dir / f"{name}.json"
 
             if path.exists():
-                with contextlib.suppress(Exception):
+                try:
                     payload = json.loads(path.read_text(encoding="utf-8"))
                     data = payload.get("data", {})
                     snap = StatsSnapshot(
@@ -184,6 +189,8 @@ class StatsSnapshotManager:
                     )
                     self.snapshots[name] = snap
                     return data
+                except Exception:
+                    pass
         return None
 
 
@@ -193,26 +200,32 @@ class StatsCompressor:
     def compress(self, data: Any) -> bytes:
         # Phase 16: Try Rust-accelerated JSON serialization + compression
         if _RUST_AVAILABLE and hasattr(rust_core, "compress_json_rust"):
-            with contextlib.suppress(Exception):
+            try:
                 if not isinstance(data, (bytes, bytearray)):
                     result = rust_core.compress_json_rust(data)
                     if result:
                         return result
-
-        payload: bytes = (
-            (b"b" + bytes(data)) if isinstance(data, (bytes, bytearray)) else (b"j" + json.dumps(data).encode("utf-8"))
+            except Exception:
+                pass  # Fall through to Python implementation
+        
+        payload = (
+            (b"b" + bytes(data))
+            if isinstance(data, (bytes, bytearray))
+            else (b"j" + json.dumps(data).encode("utf-8"))
         )
         return zlib.compress(payload)
 
     def decompress(self, data: bytes) -> Any:
         # Phase 16: Try Rust-accelerated decompression + JSON parsing
         if _RUST_AVAILABLE and hasattr(rust_core, "decompress_json_rust"):
-            with contextlib.suppress(Exception):
+            try:
                 result = rust_core.decompress_json_rust(data)
                 if result is not None:
                     return result
-
-        payload: bytes = zlib.decompress(data)
+            except Exception:
+                pass  # Fall through to Python implementation
+        
+        payload = zlib.decompress(data)
         tag, body = payload[:1], payload[1:]
         if tag == b"b":
             return body
@@ -220,7 +233,5 @@ class StatsCompressor:
             return json.loads(body.decode("utf-8"))
         try:
             return json.loads(payload.decode("utf-8"))
-        except json.JSONDecodeError as e:  # pylint: disable=broad-exception-caught, unused-variable
-            import traceback
-            traceback.print_exc()
+        except Exception:
             return payload

@@ -10,32 +10,28 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 import time
 import logging
-from typing import Dict, List, Any
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import as_tool
+from src.core.base.BaseUtilities import as_tool
 
 __version__ = VERSION
 
+
 class CooperativeCommunicationAgent(BaseAgent):
     """
-    Cooperative Communication Agent: Manages high-speed signal synchronization 
-    between sibling agent nodes in the fleet.
-    Uses LLM thinking to optimize communication protocols.
+    Tier 2 (Cognitive Logic) - Cooperative Communication Agent: Orchestrates 
+    high-speed signal synchronization and communication protocols between agent nodes.
     """
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
-        self.active_channels: dict[str, Any] = {} # node_id -> channel_metadata
+        self.active_channels: dict[str, Any] = {}  # node_id -> channel_metadata
         self._system_prompt = (
             "You are the Cooperative Communication Agent. "
             "Your role is to optimize peer-to-peer data transfers "
@@ -48,18 +44,24 @@ class CooperativeCommunicationAgent(BaseAgent):
         Creates a dedicated sub-millisecond link between two nodes.
         """
         import random
+
         channel_id = f"chan_{node_a}_{node_b}"
         self.active_channels[channel_id] = {
             "status": "ready",
             "latency_ms": random.uniform(0.01, 0.05),
             "protocol": "UltraSync-v1",
-            "established_at": time.time()
+            "established_at": time.time(),
         }
         logging.info(f"COOP: P2P Channel {channel_id} established.")
-        return {"channel_id": channel_id, "latency": self.active_channels[channel_id]["latency_ms"]}
+        return {
+            "channel_id": channel_id,
+            "latency": self.active_channels[channel_id]["latency_ms"],
+        }
 
     @as_tool
-    def broadcast_thought_packet(self, origin_node: str, thought_payload: Any) -> dict[str, Any]:
+    def broadcast_thought_packet(
+        self, origin_node: str, thought_payload: Any
+    ) -> dict[str, Any]:
         """
         Multicasts a thought packet to all connected nodes.
         """
@@ -70,7 +72,7 @@ class CooperativeCommunicationAgent(BaseAgent):
             "packet_id": packet_id,
             "node_count": len(self.active_channels),
             "status": "broadcast_complete",
-            "timestamp": time.time()
+            "timestamp": time.time(),
         }
 
     @as_tool
@@ -80,14 +82,15 @@ class CooperativeCommunicationAgent(BaseAgent):
         Uses a real hash of the provided state.
         """
         import hashlib
+
         state_str = str(fleet_state)
         state_hash = hashlib.sha256(state_str.encode()).hexdigest()
-        
+
         return {
             "synchronized": True,
             "state_hash": state_hash,
             "nodes_aligned": "all",
-            "verification_ts": time.time()
+            "verification_ts": time.time(),
         }
 
     @as_tool
