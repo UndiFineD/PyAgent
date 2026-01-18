@@ -28,9 +28,9 @@ from src.logic.agents.cognitive.ContextTemplateMixin import ContextTemplateMixin
 from src.logic.agents.cognitive.ContextTaggingMixin import ContextTaggingMixin
 from src.logic.agents.cognitive.ContextVersioningMixin import ContextVersioningMixin
 from src.logic.agents.cognitive.ContextValidationMixin import ContextValidationMixin, DEFAULT_VALIDATION_RULES
-from .ContextAnnotationMixin import ContextAnnotationMixin
-from .ContextCategorizationMixin import ContextCategorizationMixin
-from .ContextRAGMixin import ContextRAGMixin
+from src.logic.agents.cognitive.ContextAnnotationMixin import ContextAnnotationMixin
+from src.logic.agents.cognitive.ContextCategorizationMixin import ContextCategorizationMixin
+from src.logic.agents.cognitive.ContextRAGMixin import ContextRAGMixin
 
 __version__ = VERSION
 

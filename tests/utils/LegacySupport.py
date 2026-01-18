@@ -49,22 +49,39 @@ class LegacyAgentMixin:
         self._webhooks: list[Any] = []
 
     def enable_rate_limiting(self, config=None, requests_per_second: float | None = None) -> None:
-        pass
+        from src.core.base.utils.RateLimiter import RateLimiter
+        from src.core.base.models.FleetModels import RateLimitConfig
+        if config is None and requests_per_second is not None:
+            config = RateLimitConfig(requests_per_second=requests_per_second)
+        self.rate_limiter = RateLimiter(config)
 
     def get_rate_limit_stats(self):
         return self.rate_limiter.get_stats() if self.rate_limiter else {}
 
     def enable_file_locking(self, lock_timeout: float | None = None) -> None:
-        pass
+        from src.core.base.utils.FileLockManager import FileLockManager
+        self.lock_manager = FileLockManager()
+        if lock_timeout is not None:
+            self.lock_manager.lock_timeout = lock_timeout
 
     def enable_diff_preview(self) -> None:
-        pass
+        from src.core.base.utils.DiffGenerator import DiffGenerator
+        self.diff_generator = DiffGenerator()
 
     def preview_changes(self, file_path: Path, content: str):
-        return None
+        if not self.diff_generator:
+            from src.core.base.utils.DiffGenerator import DiffGenerator
+            self.diff_generator = DiffGenerator()
+        
+        original = ""
+        if file_path.exists():
+            original = file_path.read_text(errors="ignore")
+            
+        return self.diff_generator.generate_diff(file_path, original, content)
 
     def enable_incremental_processing(self) -> None:
-        pass
+        from src.core.base.IncrementalProcessor import IncrementalProcessor
+        self.incremental_processor = IncrementalProcessor(repo_root=self.repo_root)
 
     def get_changed_files(self, files: list[Path]):
         return self.incremental_processor.get_changed_files(files) if self.incremental_processor else files
@@ -74,15 +91,22 @@ class LegacyAgentMixin:
             self.incremental_processor.reset_state()
 
     def enable_graceful_shutdown(self) -> None:
-        pass
+        from src.core.base.GracefulShutdown import GracefulShutdown
+        self.shutdown_handler = GracefulShutdown(repo_root=self.repo_root)
 
     def resume_from_shutdown(self) -> Optional[Any]:
+        if self.shutdown_handler:
+            return self.shutdown_handler.get_shutdown_state()
         return None
 
     def run_health_checks(self):
-        return []
+        from src.core.base.managers.SystemManagers import HealthChecker
+        self.health_checker = HealthChecker(repo_root=self.repo_root)
+        return self.health_checker.run_all_checks()
 
     def is_healthy(self) -> bool:
+        if self.health_checker:
+            return all(c.status == "HEALTHY" for c in self.health_checker.run_all_checks())
         return True
 
     @property

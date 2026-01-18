@@ -287,7 +287,7 @@ def _format_conversation(
     "human",
     description="Decorate text as a human/user message with styled HTML",
     category="chat",
-    aliases=["user", "prompt", "you"],
+    aliases=["prompt", "you"],
 )
 def cmd_human(ctx: CommandContext) -> CommandResult:
     """Format text as a human message bubble."""
