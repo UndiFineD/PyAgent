@@ -43,11 +43,13 @@
 
 5. **KV Cache Optimization (PackKV)**
    - Status: RESEARCHED (arXiv:2512.24449)
-   - Progress: Added research summary in `data/Research/2512.24449v2/`. Planning implementation for K-V lossy compression.
+   - Progress: Added research summary and implementation stub in `data/Research/2512.24449v2/`.
+   - Action: Implement `PackKVQuantizer` with 4-bit adaptive scaling and permutation-based repacking to reduce memory by ~150%.
 
 6. **SGLang & RadixAttention**
    - Status: RESEARCHED (arXiv:2312.07104)
-   - Progress: Added research summary in `data/Research/2312.07104v2/`. Identified integration points for prefix caching.
+   - Progress: Added research summary and RadixTree implementation stub in `data/Research/2312.07104v2/`.
+   - Action: Integrate `RadixTreeManager` into `RequestQueue.py` to enable automatic prefix caching and 5x throughput gains.
 
 ### Medium Priority
 
