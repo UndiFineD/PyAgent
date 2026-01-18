@@ -7,6 +7,7 @@ Tests for MediaIOEngine - unified media loading.
 
 import pytest
 import asyncio
+import inspect
 import numpy as np
 from pathlib import Path
 from typing import List
@@ -379,7 +380,7 @@ class TestMediaIOEngine:
         engine = MediaIOEngine()
         
         # Just verify the method exists and is async
-        assert asyncio.iscoroutinefunction(engine.load_batch)
+        assert inspect.iscoroutinefunction(engine.load_batch)
 
 
 class TestFactoryFunctions:
@@ -406,17 +407,17 @@ class TestFactoryFunctions:
     async def test_load_image_function(self):
         """Test load_image convenience function."""
         # Just verify the function is async
-        assert asyncio.iscoroutinefunction(load_image)
+        assert inspect.iscoroutinefunction(load_image)
     
     @pytest.mark.asyncio
     async def test_load_video_function(self):
         """Test load_video convenience function."""
-        assert asyncio.iscoroutinefunction(load_video)
+        assert inspect.iscoroutinefunction(load_video)
     
     @pytest.mark.asyncio
     async def test_load_audio_function(self):
         """Test load_audio convenience function."""
-        assert asyncio.iscoroutinefunction(load_audio)
+        assert inspect.iscoroutinefunction(load_audio)
 
 
 class TestResizeModes:

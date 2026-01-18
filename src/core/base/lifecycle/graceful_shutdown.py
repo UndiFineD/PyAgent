@@ -16,16 +16,17 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.Version import VERSION
 from src.core.base.models import ShutdownState
 from pathlib import Path
-from typing import List, Optional, Any, cast
+from typing import Any, cast
 import json
 import logging
 import signal
 import time
 
 __version__ = VERSION
+
 
 class GracefulShutdown:
     """Handles graceful shutdown with state persistence.
@@ -38,15 +39,17 @@ class GracefulShutdown:
         state_file: Path to state persistence file.
     """
 
-    def __init__(self, repo_root: Path, state_file: str = ".agent_shutdown.json") -> None:
+    def __init__(
+        self, repo_root: Path | str, state_file: str = ".agent_shutdown.json"
+    ) -> None:
         """Initialize graceful shutdown handler.
 
         Args:
             repo_root: Repository root directory.
             state_file: Name of state file.
         """
-        self.repo_root = repo_root
-        self.state_file = repo_root / state_file
+        self.repo_root = Path(repo_root)
+        self.state_file = self.repo_root / state_file
         self.state = ShutdownState()
         self._original_sigint = None
         self._original_sigterm = None
@@ -54,7 +57,7 @@ class GracefulShutdown:
     def install_handlers(self) -> None:
         """Install signal handlers for graceful shutdown."""
         self._original_sigint = signal.signal(signal.SIGINT, self._handle_signal)
-        if hasattr(signal, 'SIGTERM'):
+        if hasattr(signal, "SIGTERM"):
             self._original_sigterm = signal.signal(signal.SIGTERM, self._handle_signal)
         logging.debug("Installed graceful shutdown handlers")
 
@@ -62,7 +65,7 @@ class GracefulShutdown:
         """Restore original signal handlers."""
         if self._original_sigint:
             signal.signal(signal.SIGINT, self._original_sigint)
-        if self._original_sigterm and hasattr(signal, 'SIGTERM'):
+        if self._original_sigterm and hasattr(signal, "SIGTERM"):
             signal.signal(signal.SIGTERM, self._original_sigterm)
         logging.debug("Restored original signal handlers")
 
@@ -111,11 +114,11 @@ class GracefulShutdown:
         """Save shutdown state to disk."""
         try:
             data: dict[str, Any] = {
-                'shutdown_requested': self.state.shutdown_requested,
-                'current_file': self.state.current_file,
-                'completed_files': self.state.completed_files,
-                'pending_files': self.state.pending_files,
-                'start_time': self.state.start_time
+                "shutdown_requested": self.state.shutdown_requested,
+                "current_file": self.state.current_file,
+                "completed_files": self.state.completed_files,
+                "pending_files": self.state.pending_files,
+                "start_time": self.state.start_time,
             }
             self.state_file.write_text(json.dumps(data, indent=2))
         except Exception as e:
@@ -132,16 +135,20 @@ class GracefulShutdown:
 
         try:
             raw = json.loads(self.state_file.read_text())
-            data: dict[str, Any] = cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
+            data: dict[str, Any] = (
+                cast(dict[str, Any], raw) if isinstance(raw, dict) else {}
+            )
             state = ShutdownState(
                 shutdown_requested=False,  # Reset for resume
-                current_file=data.get('current_file'),
-                completed_files=data.get('completed_files', []),
-                pending_files=data.get('pending_files', []),
-                start_time=data.get('start_time', time.time())
+                current_file=data.get("current_file"),
+                completed_files=data.get("completed_files", []),
+                pending_files=data.get("pending_files", []),
+                start_time=data.get("start_time", time.time()),
             )
-            logging.info(f"Loaded resume state: {len(state.completed_files)} completed, "
-                         f"{len(state.pending_files)} pending")
+            logging.info(
+                f"Loaded resume state: {len(state.completed_files)} completed, "
+                f"{len(state.pending_files)} pending"
+            )
             return state
         except Exception as e:
             logging.warning(f"Failed to load resume state: {e}")

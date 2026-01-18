@@ -42,16 +42,16 @@ class IncrementalProcessor:
         state: Current incremental processing state.
     """
 
-    def __init__(self, repo_root: Path, state_file: str = ".agent_state.cbor") -> None:
+    def __init__(self, repo_root: Path | str, state_file: str = ".agent_state.cbor") -> None:
         """Initialize the incremental processor.
 
         Args:
             repo_root: Repository root directory.
             state_file: Name of state file.
         """
-        self.repo_root = repo_root
+        self.repo_root = Path(repo_root)
         # Support migration from .json to .cbor if needed, but default to .cbor
-        self.state_file = repo_root / state_file
+        self.state_file = self.repo_root / state_file
         self.state = IncrementalState()
         self._load_state()
 

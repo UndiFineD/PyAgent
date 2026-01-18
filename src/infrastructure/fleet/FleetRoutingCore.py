@@ -17,6 +17,7 @@
 from __future__ import annotations
 import logging
 import time
+import inspect
 from typing import Any, TYPE_CHECKING
 import asyncio
 
@@ -99,7 +100,7 @@ class FleetRoutingCore:
         try:
 
             async def run_tool() -> str:
-                if asyncio.iscoroutinefunction(self.fleet.registry.call_tool):
+                if inspect.iscoroutinefunction(self.fleet.registry.call_tool):
                     return await self.fleet.registry.call_tool(best_tool, **kwargs)
                 else:
                     loop = asyncio.get_running_loop()
@@ -147,7 +148,7 @@ class FleetRoutingCore:
 
         try:
             immune = self.fleet.agents["ImmuneSystem"]
-            if asyncio.iscoroutinefunction(immune.perform_security_audit):
+            if inspect.iscoroutinefunction(immune.perform_security_audit):
                 audit_passed = await immune.perform_security_audit(best_tool, result)
             else:
                 audit_passed = immune.perform_security_audit(best_tool, result)
@@ -172,7 +173,7 @@ class FleetRoutingCore:
 
         target_agent = owner if owner else best_tool
         clean_kwargs = {k: v for k, v in kwargs.items() if k != "agent_name"}
-        if asyncio.iscoroutinefunction(self.fleet.self_healing.attempt_repair):
+        if inspect.iscoroutinefunction(self.fleet.self_healing.attempt_repair):
             return await self.fleet.self_healing.attempt_repair(
                 target_agent, error, **clean_kwargs
             )
