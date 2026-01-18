@@ -50,10 +50,7 @@
 {"node_id": "SQL_Node_01", "type": "SQLAgent", "status": "provisioning", "timestamp": 0}
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 0}
 {"node_id": "SQL_Node_01", "type": "SQLAgent", "status": "provisioning", "timestamp": 0}
-<<<<<<< HEAD
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 0}
 {"node_id": "SQL_Node_01", "type": "SQLAgent", "status": "provisioning", "timestamp": 0}
-=======
->>>>>>> origin/restore-point-20260115-1505
 {"node_id": "swarm-01", "type": "WebAgent", "status": "provisioning", "timestamp": 1768690592.2038357}
 {"node_id": "SQL_Node_01", "type": "SQLAgent", "status": "provisioning", "timestamp": 1768690689.0005314}
