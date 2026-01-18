@@ -48,6 +48,12 @@ All file-system modifications are wrapped in `StateTransaction`.
 ### 7. Mixin-Based Agent Modularization (`src/core/base/mixins/`)
 Following the Phase 317 complexity sweep, the monolithic `BaseAgent` (Complexity: 135) was refactored into a decentralized Mixin architecture.
 - **IdentityMixin**: Handles agent naming, versioning, and core metadata.
+
+### 8. Phase 48: Advanced Memory & API Partitioning (v3.16.x)
+To manage extreme complexity and performance in inference sub-systems, major monolithic components were modularized into high-cohesion sub-packages.
+- **Paged Attention Engine**: Split into `src/infrastructure/attention/paged_attention/`, implementing partitioned online softmax and block-based KV management.
+- **OpenAI Responses API Server**: Modularized into `src/infrastructure/openai_api/responses/`, featuring dedicated models, storage, and SSE streaming handlers.
+- **NIXL RDMA Connector**: High-performance KV transfer logic using Rust-accelerated RDMA memory registration and block-wise zero-copy transfers between prefill and decode instances.
 - **PersistenceMixin**: Manages state serialization, checkpointing, and history.
 - **KnowledgeMixin**: Orchestrates access to the "Knowledge Trinity" (Structured, Semantic, Relational).
 - **OrchestrationMixin**: Manages task delegation, tool calling, and recursive reasoning.
