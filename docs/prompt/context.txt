@@ -1,10 +1,10 @@
 # PyAgent Workspace Context
 # Generated: January 19, 2026
-# Version: 3.16.1 (Evolution Phase 49 - Systematic Modularization)
+# Version: 3.17.0 (Evolution Phase 50 - TALON & Automation)
 
 ## Project Overview
 PyAgent is an AI-powered multi-agent orchestration system for autonomous code improvement.
-The fleet coordinates 50+ specialized agents across 5 architectural tiers to analyze,
+The fleet coordinates 100+ specialized agents across 5 architectural tiers to analyze,
 improve, and maintain Python codebases with high autonomy.
 
 ## Architecture (5-Tiered)
@@ -45,13 +45,11 @@ improve, and maintain Python codebases with high autonomy.
 
 ## Current State (Phase 50 TALON)
 - Test baseline: 3,064+ tests with 100% collection health.
-- vLLM Integration: 34 phases complete (17-50), 532 Rust functions, ~185 Python modules.
+- vLLM Integration: 35 phases complete (17-50), 532 Rust functions, ~190 Python modules.
 - Modular Refactoring: All files > 500 lines split into subpackages (Sampling, Reasoning, Speculative, Commands).
-- Self-Healing: Active via SelfImprovementCoordinator.
-- Research Integration: ArchitecturalDesignAgent (GAAD loop, ScienceDirect S2090447925006203, arXiv:2601.10696) verified.
-- Speculative Decoding: TALON (Confidence-Aware Token Trees) implementation in progress.
-- Distributed KV: Mooncake and Nixl connectors implemented via RDMA stubs.
-- Cloud Integration: Gemini GCP provider operational; Azure AI & AWS Bedrock planning initiated.
+- Self-Healing: Active via SelfImprovementCoordinator + DirectorAgent cycle.
+- Research Integration: TALON (Confidence-Aware Token Trees) and GAAD loops active.
+- Cloud Integration: Gemini GCP, Azure AI, and AWS Bedrock operational.
   - DecodeOnlyWorker.py: Decode-specific worker logic
   - PipelineParallelTransfer.py: PP-aware KV transfer
   - TensorParallelTransfer.py: TP-aware KV transfer
@@ -118,5 +116,6 @@ find https://arxiv.org/abs/2601.10696,
 search the web and find https://www.sciencedirect.com/science/article/pii/S2090447925006203 
 transform this into code and test it, does the result match the reseach ? 
 update the research in data\Research and summarise docs\prompt\improvements.md
+- copy and implement AgentBar
 - when the number of pending changes is above 50, 
 review with coderabbit, do the git dance, merge branches into main

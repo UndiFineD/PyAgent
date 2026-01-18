@@ -10,7 +10,11 @@ from __future__ import annotations
 import os
 import time
 import json
+import logging
 from typing import AsyncIterator, List, Optional, Dict, Any
+
+import aioboto3
+from botocore.exceptions import ClientError
 
 from ..base import (
     CloudProviderBase,
@@ -20,6 +24,8 @@ from ..base import (
     RateLimitError,
     AuthenticationError,
 )
+
+logger = logging.getLogger(__name__)
 
 
 class AWSBedrockConnector(CloudProviderBase):
@@ -78,16 +84,12 @@ class AWSBedrockConnector(CloudProviderBase):
         self._access_key = aws_access_key_id
         self._secret_key = aws_secret_access_key
         
-        # TODO: Initialize boto3 Bedrock client
-        # import boto3
-        # session = boto3.Session(
-        #     region_name=self._region,
-        #     profile_name=self._profile,
-        #     aws_access_key_id=self._access_key,
-        #     aws_secret_access_key=self._secret_key,
-        # )
-        # self._client = session.client("bedrock-runtime")
-        self._client = None
+        self._session = aioboto3.Session(
+            region_name=self._region,
+            profile_name=self._profile,
+            aws_access_key_id=self._access_key,
+            aws_secret_access_key=self._secret_key,
+        )
     
     @property
     def name(self) -> str:
@@ -128,26 +130,48 @@ class AWSBedrockConnector(CloudProviderBase):
         """
         start_time = time.perf_counter()
         
-        # TODO: Implement actual Bedrock API call
-        # body = self._format_request_body(request)
-        # response = self._client.invoke_model(
-        #     modelId=request.model,
-        #     body=json.dumps(body),
-        #     contentType="application/json",
-        #     accept="application/json",
-        # )
-        # response_body = json.loads(response["body"].read())
-        
-        latency_ms = (time.perf_counter() - start_time) * 1000
-        
-        return InferenceResponse(
-            content="[Bedrock response placeholder - implement API call]",
-            tokens_used=0,
-            cost_estimate=0.0,
-            latency_ms=latency_ms,
-            provider=self.name,
-            model=request.model,
-        )
+        try:
+            body = self._format_request_body(request)
+            
+            async with self._session.client("bedrock-runtime") as client:
+                response = await client.invoke_model(
+                    modelId=request.model,
+                    body=json.dumps(body),
+                    contentType="application/json",
+                    accept="application/json",
+                )
+                
+                response_body = json.loads(await response["body"].read())
+                content = self._parse_response(response_body, request.model)
+                
+                # Token counting (approximate if not provided)
+                prompt_tokens = self._estimate_tokens(request.messages)
+                completion_tokens = self._estimate_tokens([{"content": content}])
+                tokens_used = prompt_tokens + completion_tokens
+                
+                latency_ms = (time.perf_counter() - start_time) * 1000
+                cost = self.estimate_cost(request) # Refine this if needed
+                
+                return InferenceResponse(
+                    content=content,
+                    tokens_used=tokens_used,
+                    cost_estimate=cost,
+                    latency_ms=latency_ms,
+                    provider=self.name,
+                    model=request.model,
+                    prompt_tokens=prompt_tokens,
+                    completion_tokens=completion_tokens,
+                    raw_response=response_body,
+                )
+        except ClientError as e:
+            error_code = e.response.get("Error", {}).get("Code")
+            if error_code == "ThrottlingException":
+                raise RateLimitError(str(e), provider=self.name)
+            elif error_code == "AccessDeniedException":
+                raise AuthenticationError(str(e), provider=self.name)
+            raise CloudProviderError(f"Bedrock error: {str(e)}", provider=self.name)
+        except Exception as e:
+            raise CloudProviderError(f"Unexpected error: {str(e)}", provider=self.name)
     
     async def stream(self, request: InferenceRequest) -> AsyncIterator[str]:
         """
@@ -159,40 +183,79 @@ class AWSBedrockConnector(CloudProviderBase):
         Yields:
             String chunks of the response.
         """
-        # TODO: Implement streaming with invoke_model_with_response_stream
-        # body = self._format_request_body(request)
-        # response = self._client.invoke_model_with_response_stream(
-        #     modelId=request.model,
-        #     body=json.dumps(body),
-        #     contentType="application/json",
-        #     accept="application/json",
-        # )
-        # for event in response["body"]:
-        #     chunk = json.loads(event["chunk"]["bytes"])
-        #     yield self._extract_text_from_chunk(chunk, request.model)
-        
-        yield "[Bedrock streaming placeholder - implement API call]"
+        try:
+            body = self._format_request_body(request)
+            
+            async with self._session.client("bedrock-runtime") as client:
+                response = await client.invoke_model_with_response_stream(
+                    modelId=request.model,
+                    body=json.dumps(body),
+                    contentType="application/json",
+                    accept="application/json",
+                )
+                
+                async for event in response["body"]:
+                    chunk = json.loads(event["chunk"]["bytes"])
+                    text = self._extract_text_from_chunk(chunk, request.model)
+                    if text:
+                        yield text
+        except Exception as e:
+            logger.error(f"Bedrock streaming error: {str(e)}")
+            raise CloudProviderError(f"Streaming failed: {str(e)}", provider=self.name)
+    
+    def _parse_response(self, response_body: Dict[str, Any], model: str) -> str:
+        """Extract text content from various Bedrock response formats."""
+        if model.startswith("anthropic.claude-3"):
+            return response_body.get("content", [{}])[0].get("text", "")
+        elif model.startswith("anthropic."):
+            return response_body.get("completion", "")
+        elif model.startswith("amazon.titan"):
+            return response_body.get("results", [{}])[0].get("outputText", "")
+        elif model.startswith("meta.llama"):
+            return response_body.get("generation", "")
+        elif model.startswith("mistral."):
+            return response_body.get("outputs", [{}])[0].get("text", "")
+        return ""
+
+    def _extract_text_from_chunk(self, chunk: Dict[str, Any], model: str) -> str:
+        """Extract text from a streaming chunk based on model provider."""
+        if model.startswith("anthropic."):
+            # Claude 3 uses message_start, content_block_delta, etc.
+            if chunk.get("type") == "content_block_delta":
+                return chunk.get("delta", {}).get("text", "")
+            # Older Claude might use "completion"
+            return chunk.get("completion", "")
+        elif model.startswith("amazon.titan"):
+            return chunk.get("outputText", "")
+        elif model.startswith("meta.llama"):
+            return chunk.get("generation", "")
+        elif model.startswith("mistral."):
+            return chunk.get("outputs", [{}])[0].get("text", "")
+        return ""
+
+    def _estimate_tokens(self, messages: List[Dict[str, str]]) -> int:
+        """Rough token estimation (4 chars/token)."""
+        total_chars = sum(len(m.get("content", "")) for m in messages)
+        return max(1, total_chars // 4)
     
     async def health_check(self) -> bool:
         """
-        Check if AWS Bedrock is accessible.
+        Check if AWS Bedrock is accessible by listing models.
         
         Returns:
             True if the API is healthy.
         """
-        # TODO: Implement health check
-        # try:
-        #     # List available models as a health check
-        #     bedrock_client = boto3.client("bedrock", region_name=self._region)
-        #     bedrock_client.list_foundation_models(byOutputModality="TEXT")
-        #     self._is_healthy = True
-        #     return True
-        # except Exception as e:
-        #     self._is_healthy = False
-        #     self._last_error = str(e)
-        #     return False
-        
-        return True  # Placeholder
+        try:
+            async with self._session.client("bedrock") as client:
+                # Lightweight call to verify connectivity
+                await client.list_foundation_models(byOutputModality="TEXT")
+                self._is_healthy = True
+                return True
+        except Exception as e:
+            logger.error(f"Bedrock health check failed: {str(e)}")
+            self._is_healthy = False
+            self._last_error = str(e)
+            return False
     
     def estimate_cost(self, request: InferenceRequest) -> float:
         """
@@ -224,13 +287,33 @@ class AWSBedrockConnector(CloudProviderBase):
         """
         model = request.model
         
-        if model.startswith("anthropic."):
-            # Claude format
-            return {
+        if model.startswith("anthropic.claude-3"):
+            # Claude 3 format (Messages API)
+            system_prompt = ""
+            filtered_messages = []
+            for m in request.messages:
+                if m["role"] == "system":
+                    system_prompt = m["content"]
+                else:
+                    filtered_messages.append(m)
+            
+            body = {
                 "anthropic_version": "bedrock-2023-05-31",
                 "max_tokens": request.max_tokens,
                 "temperature": request.temperature,
-                "messages": request.messages,
+                "messages": filtered_messages,
+            }
+            if system_prompt:
+                body["system"] = system_prompt
+            return body
+            
+        elif model.startswith("anthropic."):
+            # Older Claude (Text Completions API)
+            prompt = self._messages_to_claude_prompt(request.messages)
+            return {
+                "prompt": prompt,
+                "max_tokens_to_sample": request.max_tokens,
+                "temperature": request.temperature,
             }
         
         elif model.startswith("amazon.titan"):
@@ -244,12 +327,30 @@ class AWSBedrockConnector(CloudProviderBase):
                 },
             }
         
+        elif model.startswith("meta.llama3"):
+            # Llama 3 format
+            prompt = self._messages_to_llama3_prompt(request.messages)
+            return {
+                "prompt": prompt,
+                "max_gen_len": request.max_tokens,
+                "temperature": request.temperature,
+            }
+        
         elif model.startswith("meta.llama"):
-            # Llama format
+            # Llama 2 format
             prompt = self._messages_to_llama_prompt(request.messages)
             return {
                 "prompt": prompt,
                 "max_gen_len": request.max_tokens,
+                "temperature": request.temperature,
+            }
+        
+        elif model.startswith("mistral."):
+            # Mistral format
+            prompt = self._messages_to_prompt(request.messages)
+            return {
+                "prompt": prompt,
+                "max_tokens": request.max_tokens,
                 "temperature": request.temperature,
             }
         
@@ -261,6 +362,30 @@ class AWSBedrockConnector(CloudProviderBase):
                 "max_tokens": request.max_tokens,
                 "temperature": request.temperature,
             }
+
+    def _messages_to_claude_prompt(self, messages: List[Dict[str, str]]) -> str:
+        """Convert messages to legacy Claude \n\nHuman:/\n\nAssistant: format."""
+        prompt = ""
+        for msg in messages:
+            role = msg.get("role", "user")
+            content = msg.get("content", "")
+            if role == "user":
+                prompt += f"\n\nHuman: {content}"
+            elif role == "assistant":
+                prompt += f"\n\nAssistant: {content}"
+            elif role == "system":
+                prompt = f"{content}{prompt}"
+        return f"{prompt}\n\nAssistant:"
+
+    def _messages_to_llama3_prompt(self, messages: List[Dict[str, str]]) -> str:
+        """Convert messages to Llama 3 chat format."""
+        prompt = "<|begin_of_text|>"
+        for msg in messages:
+            role = msg.get("role", "user")
+            content = msg.get("content", "")
+            prompt += f"<|start_header_id|>{role}<|end_header_id|>\n\n{content}<|eot_id|>"
+        prompt += "<|start_header_id|>assistant<|end_header_id|>\n\n"
+        return prompt
     
     def _messages_to_prompt(self, messages: List[Dict[str, str]]) -> str:
         """Convert messages to a simple prompt string."""
@@ -272,8 +397,7 @@ class AWSBedrockConnector(CloudProviderBase):
         return "\n\n".join(parts) + "\n\nAssistant:"
     
     def _messages_to_llama_prompt(self, messages: List[Dict[str, str]]) -> str:
-        """Convert messages to Llama chat format."""
-        # TODO: Implement proper Llama chat template
+        """Convert messages to Llama 2 chat format."""
         parts = []
         for msg in messages:
             role = msg.get("role", "user")
@@ -282,6 +406,6 @@ class AWSBedrockConnector(CloudProviderBase):
                 parts.append(f"<<SYS>>\n{content}\n<</SYS>>")
             elif role == "user":
                 parts.append(f"[INST] {content} [/INST]")
-            else:
-                parts.append(content)
+            elif role == "assistant":
+                parts.append(f"{content}")
         return "\n".join(parts)
