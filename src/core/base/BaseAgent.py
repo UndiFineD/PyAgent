@@ -207,6 +207,64 @@ class BaseAgent(
         self.current_content = result
         return result
 
+    async def think(self, prompt: str) -> str:
+        """
+        The core synaptic processing method.
+        Decomposes the prompt, consults knowledge, and produces a reasoning-based response.
+        """
+        import logging
+        logging.info(f"[{self.__class__.__name__}] Reasoning on prompt: {prompt[:50]}...")
+
+        # 1. Governance & Quota Checks
+        if hasattr(self, "_check_preemption"):
+            await self._check_preemption()
+        
+        if hasattr(self, "quotas"):
+            exceeded, reason = self.quotas.check_quotas()
+            if exceeded:
+                logging.error(f"Quota exceeded: {reason}")
+                return f"ERROR: {reason}"
+
+        # 2. Prompt Construction
+        # Combine system prompt, history, and current task
+        full_prompt = f"SYSTEM: {self._system_prompt}\n\n"
+        if hasattr(self, "_build_prompt_with_history"):
+            full_prompt += self._build_prompt_with_history(prompt)
+        else:
+            full_prompt += f"USER: {prompt}"
+
+        # 3. Execution via Backend
+        import asyncio
+        try:
+            from src.infrastructure import backend as ab
+            
+            # Execute in thread to avoid blocking the async loop if the backend is sync
+            result = await asyncio.to_thread(
+                ab.run_subagent, 
+                description=f"{self.__class__.__name__} core reasoning",
+                prompt=full_prompt,
+                original_content=self.current_content
+            )
+            
+            if result:
+                # Update stats/usage
+                if hasattr(self, "quotas"):
+                    self.quotas.update_usage(len(full_prompt) // 4, len(result) // 4)
+                return result
+            
+            return self._get_fallback_response()
+            
+        except Exception as e:
+            logging.error(f"Think execution failed: {e}")
+            return f"Error encountered during agent reasoning: {str(e)}"
+
+    async def improve_content(self, prompt: str) -> str:
+        """
+        Generic improvement method.
+        Subclasses likely override this for specialized transformations (e.g., CoderAgent).
+        """
+        return await self.think(prompt)
+
     def get_model(self) -> str:
         return self._model or "gemini-3-flash"
 
