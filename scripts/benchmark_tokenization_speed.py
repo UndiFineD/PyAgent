@@ -13,12 +13,13 @@ from pathlib import Path
 project_root = Path(__file__).parent.parent
 sys.path.insert(0, str(project_root))
 
-print("🚀 PyAgent Token Generation Speed Test (Direct API)")
-print("=" * 70)
+def run_benchmarks():
+    print("🚀 PyAgent Token Generation Speed Test (Direct API)")
+    print("=" * 70)
 
-# Test tokenization performance
-print("\n📊 Testing Tokenization Performance")
-print("-" * 70)
+    # Test tokenization performance
+    print("\n📊 Testing Tokenization Performance")
+    print("-" * 70)
 
 try:
     from src.infrastructure.tokenizer.TokenizerRegistry import estimate_token_count
