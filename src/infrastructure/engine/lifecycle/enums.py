@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Lifecycle enums for request status and finish reasons."""
@@ -57,18 +43,18 @@ class RequestStatus(enum.IntEnum):
     """
 
     # Active states
-    WAITING = enum.auto()  # In waiting queue
-    WAITING_FOR_FSM = enum.auto()  # Waiting for FSM compilation
+    WAITING = enum.auto()                 # In waiting queue
+    WAITING_FOR_FSM = enum.auto()         # Waiting for FSM compilation
     WAITING_FOR_REMOTE_KVS = enum.auto()  # Waiting for remote KV cache
-    RUNNING = enum.auto()  # Currently being processed
-    PREEMPTED = enum.auto()  # Preempted, will be rescheduled
+    RUNNING = enum.auto()                 # Currently being processed
+    PREEMPTED = enum.auto()               # Preempted, will be rescheduled
 
     # Finished states (anything after PREEMPTED)
-    FINISHED_STOPPED = enum.auto()  # Completed with stop token/string
+    FINISHED_STOPPED = enum.auto()        # Completed with stop token/string
     FINISHED_LENGTH_CAPPED = enum.auto()  # Hit max_tokens or max_model_len
-    FINISHED_ABORTED = enum.auto()  # Aborted by client
-    FINISHED_IGNORED = enum.auto()  # Ignored (prompt too long)
-    FINISHED_ERROR = enum.auto()  # Internal error
+    FINISHED_ABORTED = enum.auto()        # Aborted by client
+    FINISHED_IGNORED = enum.auto()        # Ignored (prompt too long)
+    FINISHED_ERROR = enum.auto()          # Internal error
 
     def __str__(self) -> str:
         return self.name
@@ -145,7 +131,6 @@ def is_valid_transition(from_status: RequestStatus, to_status: RequestStatus) ->
 
 class RequestEventType(enum.Enum):
     """Types of request lifecycle events."""
-
     CREATED = "created"
     QUEUED = "queued"
     SCHEDULED = "scheduled"

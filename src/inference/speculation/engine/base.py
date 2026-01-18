@@ -1,40 +1,21 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Abstract base class for draft token proposers."""
 
 from abc import ABC, abstractmethod
 from typing import Any, List, Optional
-
-from src.core.base.lifecycle.version import VERSION
-
-__version__ = VERSION
-
 from .config import SpeculativeConfig
 from .proposals import DraftProposal, SpecDecodingMetrics
 
 
 class DrafterBase(ABC):
     """Abstract base class for draft token proposers."""
-
-    def __init__(self, config: SpeculativeConfig) -> None:
+    
+    def __init__(self, config: SpeculativeConfig):
         self.config = config
         self.num_speculative_tokens = config.num_speculative_tokens
         self.metrics = SpecDecodingMetrics()
-
+    
     @abstractmethod
     def propose(
         self,
@@ -43,11 +24,12 @@ class DrafterBase(ABC):
         **kwargs: Any,
     ) -> DraftProposal:
         """Propose draft tokens for a batch of requests."""
-
+        ...
+    
     def load_model(self, *args: Any, **kwargs: Any) -> None:
         """Load any required models."""
-        # Optional implementation for derived classes
-
+        pass
+    
     def reset_metrics(self) -> None:
         """Reset performance metrics."""
         self.metrics = SpecDecodingMetrics()

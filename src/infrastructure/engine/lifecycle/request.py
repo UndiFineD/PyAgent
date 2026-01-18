@@ -1,17 +1,3 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
 """Request object implementation."""
@@ -19,9 +5,7 @@
 import time
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Union
-
-from .enums import (FinishReason, RequestEventType, RequestStatus,
-                    is_valid_transition)
+from .enums import RequestStatus, FinishReason, RequestEventType, is_valid_transition
 from .event import RequestEvent
 
 
@@ -44,11 +28,10 @@ class Request:
         stop_reason: Why the request stopped (if finished)
         finish_reason: High-level finish reason enum
     """
-
     request_id: str
     prompt: Union[str, List[int]]
     max_tokens: int = 100
-
+    
     # Optional parameters
     temperature: float = 1.0
     top_p: float = 1.0
@@ -56,35 +39,35 @@ class Request:
     stop_strings: Optional[List[str]] = None
     stop_token_ids: Optional[List[int]] = None
     eos_token_id: Optional[int] = None
-
+    
     # State tracking
     status: RequestStatus = field(default=RequestStatus.WAITING)
     arrival_time: float = field(default_factory=time.time)
     events: List[RequestEvent] = field(default_factory=list)
-
+    
     # Output tracking
     output_token_ids: List[int] = field(default_factory=list)
     prompt_token_ids: Optional[List[int]] = None
-
+    
     # Finish state
     stop_reason: Optional[Union[int, str]] = None
     finish_reason: Optional[FinishReason] = None
-
+    
     # Timing (set during lifecycle)
     first_scheduled_time: Optional[float] = None
     first_token_time: Optional[float] = None
     finished_time: Optional[float] = None
-
+    
     # Metadata
     lora_request: Optional[Any] = None
     kv_transfer_params: Optional[Dict[str, Any]] = None
     priority: int = 0
-
-    def __post_init__(self) -> None:
+    
+    def __post_init__(self):
         """Record creation event."""
-        self.record_event(RequestEventType.CREATED)
+        self._record_event(RequestEventType.CREATED)
 
-    def record_event(
+    def _record_event(
         self,
         event_type: RequestEventType,
         details: Optional[Dict[str, Any]] = None,
@@ -95,7 +78,9 @@ class Request:
     def _transition_to(self, new_status: RequestStatus) -> None:
         """Transition to a new status with validation."""
         if not is_valid_transition(self.status, new_status):
-            raise ValueError(f"Invalid status transition: {self.status} -> {new_status}")
+            raise ValueError(
+                f"Invalid status transition: {self.status} -> {new_status}"
+            )
         self.status = new_status
 
     # -------------------------------------------------------------------------
@@ -173,29 +158,31 @@ class Request:
         self._transition_to(RequestStatus.RUNNING)
         if self.first_scheduled_time is None:
             self.first_scheduled_time = now
-        self.record_event(RequestEventType.SCHEDULED)
+        self._record_event(RequestEventType.SCHEDULED)
 
     def add_output_token(self, token_id: int) -> None:
         """Add a generated token to the output."""
         if not self.is_running():
-            raise RuntimeError(f"Cannot add token to request in state {self.status}")
-        was_empty = not self.output_token_ids
+            raise RuntimeError(
+                f"Cannot add token to request in state {self.status}"
+            )
+        was_empty = len(self.output_token_ids) == 0
         self.output_token_ids.append(token_id)
         if was_empty:
             self.first_token_time = time.time()
-            self.record_event(RequestEventType.FIRST_TOKEN)
+            self._record_event(RequestEventType.FIRST_TOKEN)
 
     def preempt(self) -> None:
         """Preempt the request (move back to waiting)."""
         self._transition_to(RequestStatus.PREEMPTED)
-        self.record_event(RequestEventType.PREEMPTED)
+        self._record_event(RequestEventType.PREEMPTED)
 
     def resume(self) -> None:
         """Resume a preempted request."""
         if self.status != RequestStatus.PREEMPTED:
             raise ValueError("Can only resume preempted requests")
         self.status = RequestStatus.WAITING
-        self.record_event(RequestEventType.RESUMED)
+        self._record_event(RequestEventType.RESUMED)
 
     def finish(
         self,
@@ -211,12 +198,12 @@ class Request:
             FinishReason.ERROR: RequestStatus.FINISHED_ERROR,
         }
         new_status = status_map.get(reason, RequestStatus.FINISHED_STOPPED)
-
+        
         self._transition_to(new_status)
         self.finish_reason = reason
         self.stop_reason = stop_reason
         self.finished_time = time.time()
-        self.record_event(
+        self._record_event(
             RequestEventType.FINISHED,
             {"reason": str(reason), "stop_reason": stop_reason},
         )
@@ -227,7 +214,7 @@ class Request:
             self.status = RequestStatus.FINISHED_ABORTED
             self.finish_reason = FinishReason.ABORT
             self.finished_time = time.time()
-            self.record_event(RequestEventType.ABORTED)
+            self._record_event(RequestEventType.ABORTED)
 
     def error(self, error_msg: Optional[str] = None) -> None:
         """Mark the request as errored."""
@@ -235,7 +222,7 @@ class Request:
             self.status = RequestStatus.FINISHED_ERROR
             self.finish_reason = FinishReason.ERROR
             self.finished_time = time.time()
-            self.record_event(RequestEventType.ERROR, {"message": error_msg})
+            self._record_event(RequestEventType.ERROR, {"message": error_msg})
 
     def should_stop(self, max_model_len: Optional[int] = None) -> bool:
         """Check if the request should stop generating."""
