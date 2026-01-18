@@ -19,7 +19,7 @@ from __future__ import annotations
 from src.core.base.Version import VERSION
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import create_main_function
-from src.infrastructure.orchestration.StatusManager import StatusManager
+from src.infrastructure.orchestration.state.StatusManager import StatusManager
 import logging
 import json
 from pathlib import Path
