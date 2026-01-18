@@ -1,5 +1,1 @@
-<<<<<<< HEAD
 {"base_model": "unsloth/llama-3-8b-bnb-4bit", "peft_type": "LORA", "job_id": "job_opt_SQLAgent_v12_1768486466"}
-=======
-{"base_model": "unsloth/llama-3-8b-bnb-4bit", "peft_type": "LORA", "job_id": "job_opt_SQLAgent_v12_1768486035"}
->>>>>>> origin/restore-point-20260115-1505
