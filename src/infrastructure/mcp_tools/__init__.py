@@ -4,32 +4,36 @@
 Model Context Protocol (MCP) Tool Integration.
 """
 
+from __future__ import annotations
+
 from .models import (
     MCPServerConfig,
-    ServerType,
+    MCPServerType,
     ToolSchema,
     ToolCall,
     ToolResult,
     ToolStatus,
     MCPSession,
+    SessionState,
 )
 from .base import MCPToolServer
-from .sse import SSEToolServer
-from .local import LocalToolServer
+from .sse import SSEMCPServer
+from .local import LocalMCPServer
 from .adapter import SchemaAdapter
 from .registry import MCPServerRegistry, SessionManager
 
 __all__ = [
     "MCPServerConfig",
-    "ServerType",
+    "MCPServerType",
     "ToolSchema",
     "ToolCall",
     "ToolResult",
     "ToolStatus",
+    "SessionState",
     "MCPSession",
     "MCPToolServer",
-    "SSEToolServer",
-    "LocalToolServer",
+    "SSEMCPServer",
+    "LocalMCPServer",
     "SchemaAdapter",
     "MCPServerRegistry",
     "SessionManager",
