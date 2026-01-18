@@ -10,7 +10,7 @@ from src.logic.agents.system.MessagingAgent import MessagingAgent
 from src.logic.agents.cognitive.BayesianReasoningAgent import BayesianReasoningAgent
 from src.core.base.LoggingAgent import LoggingAgent
 from src.logic.agents.system.IdentityAgent import IdentityAgent as AgentIdentityAgent
-from src.infrastructure.orchestration.RLSelector import RLSelector
+from src.infrastructure.orchestration.intel.RLSelector import RLSelector
 from pathlib import Path
 
 class TestPhase123Decentralization(unittest.TestCase):

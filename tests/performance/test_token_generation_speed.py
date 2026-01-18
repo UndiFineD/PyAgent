@@ -143,7 +143,7 @@ class TokenGenerationBenchmark:
             ),
         }
     
-    def measure_agent_generation_speed(
+    async def measure_agent_generation_speed(
         self,
         agent: BaseAgent,
         prompt: str,
@@ -169,10 +169,12 @@ class TokenGenerationBenchmark:
         try:
             # Call agent (this will vary based on your agent implementation)
             # Adjust this based on your actual agent API
-            if hasattr(agent, 'improve_content'):
-                output_text = agent.improve_content(prompt)
-            elif hasattr(agent, 'chat'):
-                output_text = agent.chat(prompt)
+            if hasattr(agent, "run_async"):
+                output_text = await agent.run_async(prompt)
+            elif hasattr(agent, "improve_content"):
+                output_text = await agent.improve_content(prompt)
+            elif hasattr(agent, "chat"):
+                output_text = await agent.chat(prompt)
             else:
                 raise AttributeError("Agent doesn't have expected methods")
             
@@ -272,7 +274,7 @@ class TokenGenerationBenchmark:
                 streaming=True,
             )
     
-    def measure_batch_generation_speed(
+    async def measure_batch_generation_speed(
         self,
         agent: BaseAgent,
         prompts: list[str],
@@ -295,10 +297,12 @@ class TokenGenerationBenchmark:
         
         try:
             for prompt in prompts:
-                if hasattr(agent, 'improve_content'):
-                    output = agent.improve_content(prompt)
-                elif hasattr(agent, 'chat'):
-                    output = agent.chat(prompt)
+                if hasattr(agent, "run_async"):
+                    output = await agent.run_async(prompt)
+                elif hasattr(agent, "improve_content"):
+                    output = await agent.improve_content(prompt)
+                elif hasattr(agent, "chat"):
+                    output = await agent.chat(prompt)
                 else:
                     raise AttributeError("Agent doesn't have expected methods")
                 
@@ -330,13 +334,13 @@ class TokenGenerationBenchmark:
                 error_message=str(e),
             )
     
-    def run_single_prompt_tests(self, agent: BaseAgent) -> list[TokenGenMetrics]:
+    async def run_single_prompt_tests(self, agent: BaseAgent) -> list[TokenGenMetrics]:
         """Run tests with different prompt lengths."""
         results = []
         
         for prompt_type, prompt in self.test_prompts.items():
             print(f"\n🔄 Testing {prompt_type} prompt...")
-            metric = self.measure_agent_generation_speed(
+            metric = await self.measure_agent_generation_speed(
                 agent=agent,
                 prompt=prompt,
                 test_name=f"single_{prompt_type}",
@@ -344,9 +348,10 @@ class TokenGenerationBenchmark:
             results.append(metric)
             self._print_metric(metric)
         
+        self.results.extend(results)
         return results
     
-    def run_streaming_tests(self) -> list[TokenGenMetrics]:
+    async def run_streaming_tests(self) -> list[TokenGenMetrics]:
         """Run streaming performance tests."""
         results = []
         
@@ -354,21 +359,24 @@ class TokenGenerationBenchmark:
             print(f"\n🌊 Testing streaming with {prompt_type} prompt...")
             
             try:
-                metric = asyncio.run(
-                    self.measure_streaming_speed(
-                        prompt=prompt,
-                        test_name=f"streaming_{prompt_type}",
-                    )
+                metric = await self.measure_streaming_speed(
+                    prompt=prompt,
+                    test_name=f"streaming_{prompt_type}",
                 )
                 results.append(metric)
                 self._print_metric(metric)
             except Exception as e:
                 print(f"❌ Streaming test failed: {e}")
         
+        self.results.extend(results)
         return results
     
-    def run_batch_tests(self, agent: BaseAgent, batch_sizes: list[int] = [5, 10, 20]) -> list[TokenGenMetrics]:
+    async def run_batch_tests(
+        self, agent: BaseAgent, batch_sizes: list[int] | None = None
+    ) -> list[TokenGenMetrics]:
         """Run batch processing tests."""
+        if batch_sizes is None:
+            batch_sizes = [5, 10, 20]
         results = []
         
         for batch_size in batch_sizes:
@@ -377,7 +385,7 @@ class TokenGenerationBenchmark:
             # Use short prompts for batching
             prompts = [self.test_prompts["short"]] * batch_size
             
-            metric = self.measure_batch_generation_speed(
+            metric = await self.measure_batch_generation_speed(
                 agent=agent,
                 prompts=prompts,
                 test_name=f"batch_{batch_size}",
@@ -385,9 +393,12 @@ class TokenGenerationBenchmark:
             results.append(metric)
             self._print_metric(metric)
         
+        self.results.extend(results)
+        return results
+        
         return results
     
-    def run_all_tests(
+    async def run_all_tests(
         self,
         agent: Optional[BaseAgent] = None,
         include_streaming: bool = True,
@@ -410,23 +421,25 @@ class TokenGenerationBenchmark:
                 pytest.skip("PyAgent not available")
             agent = BenchmarkAgent(".")
         
+        self.results = []  # Clear previous results
+        
         print("=" * 70)
         print("🚀 PyAgent Token Generation Speed Benchmark Suite")
         print("=" * 70)
         
         # Single prompt tests
         print("\n📝 Running single prompt tests...")
-        results = self.run_single_prompt_tests(agent)
+        results = await self.run_single_prompt_tests(agent)
         
         # Streaming tests
         if include_streaming:
             print("\n🌊 Running streaming tests...")
-            results.extend(self.run_streaming_tests())
+            results.extend(await self.run_streaming_tests())
         
         # Batch tests
         if include_batch:
             print("\n📦 Running batch tests...")
-            results.extend(self.run_batch_tests(agent))
+            results.extend(await self.run_batch_tests(agent))
         
         self.results = results
         return results
@@ -571,9 +584,9 @@ class TokenGenerationBenchmark:
 # ============================================================================
 
 @pytest.fixture
-def benchmark():
+def benchmark(tmp_path):
     """Create benchmark instance for tests."""
-    return TokenGenerationBenchmark()
+    return TokenGenerationBenchmark(output_dir=tmp_path)
 
 
 @pytest.fixture
@@ -584,9 +597,10 @@ def test_agent():
     return BenchmarkAgent(".")
 
 
-def test_single_prompt_short(benchmark, test_agent):
+@pytest.mark.asyncio
+async def test_single_prompt_short(benchmark, test_agent):
     """Test token generation with a short prompt."""
-    metric = benchmark.measure_agent_generation_speed(
+    metric = await benchmark.measure_agent_generation_speed(
         agent=test_agent,
         prompt=benchmark.test_prompts["short"],
         test_name="test_short",
@@ -598,9 +612,10 @@ def test_single_prompt_short(benchmark, test_agent):
         assert metric.total_tokens > 0
 
 
-def test_single_prompt_medium(benchmark, test_agent):
+@pytest.mark.asyncio
+async def test_single_prompt_medium(benchmark, test_agent):
     """Test token generation with a medium prompt."""
-    metric = benchmark.measure_agent_generation_speed(
+    metric = await benchmark.measure_agent_generation_speed(
         agent=test_agent,
         prompt=benchmark.test_prompts["medium"],
         test_name="test_medium",
@@ -609,14 +624,16 @@ def test_single_prompt_medium(benchmark, test_agent):
     assert metric.total_duration_sec > 0
     if metric.success:
         assert metric.tokens_per_second > 0
-        assert metric.input_tokens > benchmark.test_prompts["short"]
+        short_tokens = estimate_token_count(benchmark.test_prompts["short"])
+        assert metric.input_tokens > short_tokens
 
 
-def test_batch_generation(benchmark, test_agent):
+@pytest.mark.asyncio
+async def test_batch_generation(benchmark, test_agent):
     """Test batch token generation."""
     prompts = [benchmark.test_prompts["short"]] * 5
     
-    metric = benchmark.measure_batch_generation_speed(
+    metric = await benchmark.measure_batch_generation_speed(
         agent=test_agent,
         prompts=prompts,
         test_name="test_batch_5",
@@ -650,9 +667,10 @@ def test_token_estimation_rust():
     assert isinstance(count, int)
 
 
-def test_full_benchmark_suite(benchmark, test_agent):
+@pytest.mark.asyncio
+async def test_full_benchmark_suite(benchmark, test_agent):
     """Run the complete benchmark suite."""
-    results = benchmark.run_all_tests(
+    results = await benchmark.run_all_tests(
         agent=test_agent,
         include_streaming=False,  # Skip streaming in pytest by default
         include_batch=True,
@@ -665,9 +683,10 @@ def test_full_benchmark_suite(benchmark, test_agent):
     benchmark.print_summary()
 
 
-def test_save_and_load_results(benchmark, test_agent, tmp_path):
+@pytest.mark.asyncio
+async def test_save_and_load_results(benchmark, test_agent, tmp_path):
     """Test saving and loading benchmark results."""
-    benchmark.run_single_prompt_tests(test_agent)
+    await benchmark.run_single_prompt_tests(test_agent)
     
     output_file = tmp_path / "test_results.json"
     saved_path = benchmark.save_results(str(output_file.name))
@@ -714,11 +733,11 @@ if __name__ == "__main__":
     
     # Run all tests
     try:
-        results = benchmark.run_all_tests(
+        results = asyncio.run(benchmark.run_all_tests(
             agent=agent,
             include_streaming=True,
             include_batch=True,
-        )
+        ))
         
         # Print summary
         benchmark.print_summary()

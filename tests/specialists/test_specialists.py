@@ -4,7 +4,7 @@ from pathlib import Path
 
 # Add src to path
 
-from src.infrastructure.orchestration.DirectorAgent import DirectorAgent
+from src.infrastructure.orchestration.swarm.DirectorAgent import DirectorAgent
 from src.logic.agents.development.RustAgent import RustAgent
 from src.logic.agents.development.GoAgent import GoAgent
 from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
