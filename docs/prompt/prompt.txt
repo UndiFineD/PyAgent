@@ -1,7 +1,7 @@
-# Strategic Improvement Directives (Phase 44+)
-# Priority: CRITICAL | Status: vLLM INTEGRATION PHASES 17-44 COMPLETE
-# Rust Functions: 467 | Test Coverage: ~2888+ tests passing
-@focus: ["src/infrastructure/sampling", "src/infrastructure/multimodal", "src/infrastructure/cache", "rust_core/src"]
+# Strategic Improvement Directives (Phase 47+)
+# Priority: CRITICAL | Status: vLLM INTEGRATION PHASES 17-47 COMPLETE
+# Rust Functions: 513 | Test Coverage: ~3064+ tests passing
+@focus: ["src/infrastructure/speculative_v2", "src/infrastructure/kv_transfer", "rust_core/src"]
 
 ## Quick Reference - Completed Phases
 
@@ -40,6 +40,67 @@
 | 42 | Platform/API/Prompt | 6 | 17 | 163/163 |
 | 43 | Engine/KVCache/Queue | 4 | 16 | 122/122 |
 | 44 | Sampling/SpecDec v2 | 6 | 12 | 38/38 |
+| 45 | Worker/Executor | 6 | 16 | 56/56 |
+| 46 | Structured Output | 6 | 17 | 71/71 |
+| 47 | EAGLE/KV Offload | 6 | 14 | 60/60 |
+
+---
+
+## Phase 47: Speculative Decoding V3 & KV Offload ✅ COMPLETE
+@location: ["src/infrastructure/speculative_v2", "src/infrastructure/kv_transfer"]
+
+### Implemented Modules (6 Python)
+1. **EagleProposer.py** - EAGLE-style speculative decoding (~710 lines)
+   - EagleMethod: EAGLE_1, EAGLE_2, EAGLE_3, EAGLE_3_LFM
+   - Tree attention with multiple expansion strategies
+   - Autoregressive draft head with configurable layers
+   - AcceptanceStats with adaptive threshold adjustment
+
+2. **NgramProposer.py** - N-gram based draft proposal (~520 lines)
+   - NgramConfig with adaptive n-sizing and fuzzy matching
+   - WeightedNgramProposer with recency/frequency weighting
+   - PromptLookupProposer for prompt-based n-gram matching
+   - HybridNgramProposer combining multiple strategies
+
+3. **SpecDecodeMetadataV2.py** - Enhanced verification metadata (~610 lines)
+   - SpecDecodeMetadataV2 dataclass with frozen fields
+   - BatchedSpecDecodeMetadata for multi-request batching
+   - StreamingSpecDecodeMetadata for incremental verification
+   - DynamicSpecDecodeMetadata with adaptive parameters
+
+4. **ARCOffloadManager.py** - ARC cache eviction (~580 lines)
+   - T1/T2 cache lists with B1/B2 ghost lists
+   - Adaptive cache balance with p parameter
+   - Multi-tier offload (CPU/disk/remote)
+   - BatchARCOffloadManager for throughput
+
+5. **LRUOffloadManager.py** - LRU cache eviction variants (~500 lines)
+   - WeightedLRUOffloadManager with cost-aware eviction
+   - TieredLRUOffloadManager with hot/warm/cold tiers
+   - PrefetchingLRUOffloadManager with access prediction
+   - BatchLRUOffloadManager for efficient batch transfers
+
+6. **BlockTableV2.py** - Enhanced block table (~550 lines)
+   - SparseBlockTable with sparse storage representation
+   - PredictiveBlockTable with allocation prediction
+   - HierarchicalBlockTable with multi-level block mapping
+   - StreamingBlockTable for incremental updates
+
+### Rust Accelerations (14 functions)
+- eagle_tree_expand_rust - Tree node expansion for EAGLE
+- eagle_verify_accept_rust - Token verification and acceptance
+- eagle_attention_mask_rust - Tree attention mask generation
+- ngram_fuzzy_match_rust - Fuzzy n-gram matching
+- ngram_weighted_lookup_rust - Weighted n-gram lookup
+- spec_metadata_batch_rust - Batch metadata operations
+- arc_cache_adapt_rust - ARC adaptive parameter update
+- arc_ghost_promote_rust - Ghost list promotion logic
+- lru_weighted_evict_rust - Weighted LRU eviction
+- lru_tier_demote_rust - Tiered cache demotion
+- block_table_sparse_ops_rust - Sparse block operations
+- block_table_predict_alloc_rust - Predictive allocation
+- block_table_defrag_rust - Block defragmentation
+- kv_offload_batch_transfer_rust - Batch KV transfer
 
 ---
 
