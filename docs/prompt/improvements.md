@@ -60,7 +60,104 @@
 ## RESEARCH INSIGHTS
 ================================================================================
 
-### January 2026 Papers Analyzed
+### January 2026 - LLM Inference Optimization Papers (arXiv Survey)
+
+#### SPECULATIVE DECODING ADVANCES
+
+1. **arXiv:2401.15077** - EAGLE: Speculative Sampling Requires Rethinking Feature Uncertainty
+   - Key Finding: Autoregression at feature (second-to-top-layer) level is more straightforward than token level
+   - Speedup: 2.7x-3.5x latency reduction on LLaMA2-Chat 70B, doubled throughput
+   - Technique: Incorporates token sequence advanced by one time step to resolve uncertainty
+   - **Action for PyAgent**: Implement feature-level prediction in EagleProposer.py, use second-to-top-layer features
+
+2. **arXiv:2406.16858** - EAGLE-2: Faster Inference with Dynamic Draft Trees
+   - Key Finding: Draft token acceptance rate is context-dependent, not just position-dependent
+   - Speedup: 3.05x-4.26x (20%-40% faster than EAGLE-1)
+   - Technique: Context-aware dynamic draft tree construction using calibrated confidence scores
+   - **Action for PyAgent**: Add dynamic tree depth adjustment based on confidence in speculation_tree.py
+
+3. **arXiv:2401.10774** - Medusa: Simple LLM Inference Acceleration with Multiple Decoding Heads
+   - Key Finding: Extra decoding heads predict multiple tokens in parallel without separate draft model
+   - Speedup: Medusa-1: 2.2x (frozen backbone), Medusa-2: 2.3-3.6x (fine-tuned)
+   - Technique: Tree-based attention mechanism verifies multiple candidate continuations simultaneously
+   - **Action for PyAgent**: Consider Medusa-style parallel heads as alternative to EAGLE for smaller models
+
+4. **arXiv:2601.07353** - TALON: Confidence-Aware Speculative Decoding with Adaptive Token Trees
+   - Key Finding: Adaptive tree construction based on confidence improves acceptance rates
+   - **Action for PyAgent**: Integrate confidence thresholds into tree pruning logic
+
+5. **arXiv:2509.20416** - FastEagle: Cascaded Drafting for Accelerating Speculative Decoding
+   - Key Finding: Cascaded drafting improves speculation quality
+   - **Action for PyAgent**: Evaluate cascaded approach for multi-stage speculation
+
+6. **arXiv:2402.05109** - Hydra: Sequentially-Dependent Draft Heads for Medusa Decoding
+   - Key Finding: Sequential dependencies between draft heads improve prediction accuracy
+   - **Action for PyAgent**: Consider Hydra-style sequential heads for improved draft quality
+
+#### KV CACHE OPTIMIZATION
+
+7. **arXiv:2512.24449** - PackKV: Reducing KV Cache Memory via LLM-Aware Lossy Compression
+   - Key Finding: LLM-aware compression maintains quality while significantly reducing memory
+   - **Action for PyAgent**: Implement lossy compression in ARCOffloadManager with quality thresholds
+
+8. **arXiv:2512.15550** - CTkvr: KV Cache Retrieval via Centroid then Token Indexing
+   - Key Finding: Two-stage retrieval (centroid → token) efficiently handles long contexts
+   - **Action for PyAgent**: Add centroid-based indexing for long-context streaming scenarios
+
+9. **arXiv:2512.14946** - EVICPRESS: Joint KV-Cache Compression and Eviction
+   - Key Finding: Combining compression with intelligent eviction outperforms either alone
+   - **Action for PyAgent**: Integrate eviction policies with compression in kv_cache_manager.py
+
+10. **arXiv:2510.09665** - LMCache: Efficient KV Cache Layer for Enterprise-Scale LLM Inference
+    - Key Finding: Dedicated caching layer provides significant speedups for enterprise workloads
+    - **Action for PyAgent**: Consider LMCache patterns for multi-tenant scenarios
+
+11. **arXiv:2510.07651** - OBCache: Optimal Brain KV Cache Pruning for Long-Context LLM Inference
+    - Key Finding: Brain-inspired pruning maintains quality with reduced memory
+    - **Action for PyAgent**: Implement importance-based pruning in cache eviction
+
+12. **arXiv:2512.05916** - KQ-SVD: Compressing KV Cache with Provable Guarantees on Attention Fidelity
+    - Key Finding: SVD-based compression provides mathematical guarantees on output quality
+    - **Action for PyAgent**: Evaluate SVD compression for predictable quality trade-offs
+
+#### DISTRIBUTED INFERENCE
+
+13. **arXiv:2312.07104** - SGLang: Efficient Execution of Structured Language Model Programs
+    - Key Finding: RadixAttention enables massive KV cache reuse; up to 6.4x higher throughput
+    - Technique: Compressed finite state machines for faster structured output decoding
+    - **Action for PyAgent**: Integrate RadixAttention patterns for multi-turn conversations
+
+14. **arXiv:2512.22925** - Argus: Token Aware Distributed LLM Inference Optimization
+    - Key Finding: Token-aware scheduling improves distributed inference efficiency
+    - **Action for PyAgent**: Add token-awareness to ZeroMQ mesh load balancing
+
+15. **arXiv:2512.21835** - LIME: Accelerating Collaborative Lossless LLM Inference on Edge Devices
+    - Key Finding: Collaborative edge inference can match cloud performance
+    - **Action for PyAgent**: Evaluate edge collaboration for PyAgent distributed deployment
+
+16. **arXiv:2511.21669** - DSD: Distributed Speculative Decoding for Edge-Cloud Agile Serving
+    - Key Finding: Edge-cloud collaboration enables speculative decoding across boundaries
+    - **Action for PyAgent**: Consider edge drafting with cloud verification
+
+17. **arXiv:2510.14686** - xLLM: Intelligent and Efficient LLM Inference Framework
+    - Key Finding: Deep optimization across the inference stack provides enterprise-grade serving
+    - **Action for PyAgent**: Study xLLM architecture for performance bottleneck identification
+
+#### QUANTIZATION FOR INFERENCE
+
+18. **arXiv:2511.19438** - Opt4GPTQ: Co-Optimizing Memory and Computation for 4-bit GPTQ
+    - Key Finding: Joint memory-computation optimization for 4-bit quantized models
+    - **Action for PyAgent**: Implement GPTQ-aware scheduling in inference pipeline
+
+19. **arXiv:2510.10964** - Not All Bits Are Equal: Scale-Dependent Memory Optimization for Reasoning Models
+    - Key Finding: 4-bit quantization doesn't work universally; reasoning models need different strategies
+    - **Action for PyAgent**: Add adaptive quantization based on task type (reasoning vs. generation)
+
+20. **arXiv:2512.14481** - SASQ: Static Activation Scaling for Quantization-Aware Training
+    - Key Finding: Static activation scaling enables efficient deployment of quantized models
+    - **Action for PyAgent**: Consider SASQ for model fine-tuning pipeline
+
+### Previous Analysis (January 2026)
 
 1. **arXiv:2601.10696** - The Impact of Generative AI on Architectural Conceptual Design
    - Key Finding: GenAI effectiveness depends on user expertise and prompting strategy
@@ -72,12 +169,13 @@
    - Insight: AI works best for ideation, visualization, and presentation
    - Action: Structure agent workflows with clear human-AI handoff points
 
-### Pending Research Topics
+### Key Implementation Priorities for PyAgent
 
-- Speculative decoding advances (EAGLE-3, Medusa-2)
-- KV cache compression techniques
-- Distributed attention mechanisms
-- Flash Attention 3 patterns
+1. **EAGLE-2 Dynamic Trees** - Highest impact for speculative decoding (20-40% over EAGLE-1)
+2. **RadixAttention from SGLang** - Critical for multi-turn streaming conversations
+3. **PackKV/EVICPRESS Compression** - Essential for long-context memory management
+4. **Adaptive Quantization** - Important for mixed workloads (reasoning vs. generation)
+5. **Distributed Speculative Decoding** - Key differentiator for edge-cloud deployments
 
 ================================================================================
 ## SELF-IMPROVEMENT TRIGGERS
@@ -120,3 +218,6 @@ Key differentiators to develop:
 ================================================================================
 
 https://arxiv.org/list/cs.AI/recent?skip=0&show=2000
+
+https://github.com/ especially research documents and code on python, rust, llm, ai and agi.
+our own github is ofcourse found at https://github.com/UndiFineD/PyAgent
