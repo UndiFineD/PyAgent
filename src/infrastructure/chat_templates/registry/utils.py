@@ -1,0 +1,121 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""Utility and convenience functions for chat templates."""
+
+import logging
+from typing import Any, Dict, List, Optional
+from .config import TemplateType, TemplateConfig, RenderOptions, MODEL_TEMPLATE_MAP
+from .base import ChatTemplate
+from .jinja import JinjaTemplate
+from .registry import ChatTemplateRegistry
+from .resolver import TemplateResolver
+
+logger = logging.getLogger(__name__)
+
+_default_registry: Optional[ChatTemplateRegistry] = None
+_default_resolver: Optional[TemplateResolver] = None
+
+
+def _get_registry() -> ChatTemplateRegistry:
+    """Get default registry."""
+    global _default_registry
+    if _default_registry is None:
+        _default_registry = ChatTemplateRegistry()
+    return _default_registry
+
+
+def _get_resolver() -> TemplateResolver:
+    """Get default resolver."""
+    global _default_resolver
+    if _default_resolver is None:
+        _default_resolver = TemplateResolver()
+    return _default_resolver
+
+
+def register_template(
+    name: str,
+    template_string: str,
+    template_type: TemplateType = TemplateType.CUSTOM,
+    model_patterns: Optional[List[str]] = None,
+) -> ChatTemplate:
+    """Register a custom template."""
+    config = TemplateConfig(
+        template_type=template_type,
+        template_string=template_string,
+    )
+    return _get_registry().register_config(name, config, model_patterns)
+
+
+def get_template(
+    model_name: str,
+    tokenizer: Optional[Any] = None,
+) -> ChatTemplate:
+    """Get template for a model."""
+    if tokenizer:
+        return _get_registry().resolve(model_name, tokenizer)
+    return _get_resolver().resolve(model_name)
+
+
+def render_template(
+    messages: List[Dict[str, Any]],
+    model_name: Optional[str] = None,
+    template: Optional[ChatTemplate] = None,
+    template_string: Optional[str] = None,
+    add_generation_prompt: bool = True,
+) -> str:
+    """Render messages using a template."""
+    # Get template
+    if template is None:
+        if template_string:
+            config = TemplateConfig(
+                template_type=TemplateType.JINJA,
+                template_string=template_string,
+            )
+            template = JinjaTemplate(config)
+        elif model_name:
+            template = get_template(model_name)
+        else:
+            template = _get_registry().get(TemplateType.CHATML.value)
+
+    # Render
+    options = RenderOptions(add_generation_prompt=add_generation_prompt)
+    return template.render(messages, options)
+
+
+def detect_template_type(model_name: str) -> TemplateType:
+    """Detect template type from model name."""
+    model_lower = model_name.lower()
+
+    for pattern, template_type in MODEL_TEMPLATE_MAP.items():
+        if pattern in model_lower:
+            return template_type
+
+    return TemplateType.CHATML
+
+
+def _try_rust_render_template(
+    template: str,
+    messages: List[Dict[str, Any]],
+    add_generation_prompt: bool,
+) -> Optional[str]:
+    """Try Rust-accelerated template rendering."""
+    try:
+        from rust_core import render_jinja_template_rust
+
+        return render_jinja_template_rust(
+            template,
+            messages,
+            add_generation_prompt,
+        )
+    except ImportError:
+        return None
+
+
+def _try_rust_detect_template(model_name: str) -> Optional[str]:
+    """Try Rust-accelerated template detection."""
+    try:
+        from rust_core import detect_chat_template_rust
+
+        return detect_chat_template_rust(model_name)
+    except ImportError:
+        return None

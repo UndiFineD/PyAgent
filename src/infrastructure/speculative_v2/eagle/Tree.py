@@ -5,6 +5,7 @@ Speculative tree structures for EAGLE.
 """
 
 from __future__ import annotations
+import math
 from dataclasses import dataclass, field
 from typing import cast
 
@@ -118,3 +119,73 @@ class SpeculativeTree:
                 for child in node.children:
                     _prune(child)
         _prune(self.root)
+
+
+class TalonTreeBuilder:
+    """Implements Budget-Driven Adaptive Tree Expansion (arXiv:2601.07353)."""
+
+    def __init__(
+        self,
+        budget: int = 64,
+        max_depth: int = 10,
+        confidence_threshold: float = 0.1,
+        branching_factor: int = 4
+    ):
+        self.budget = budget
+        self.max_depth = max_depth
+        self.confidence_threshold = confidence_threshold
+        self.branching_factor = branching_factor
+
+    def build_tree(
+        self,
+        root_token_id: int,
+        get_candidates_fn: callable # fn(node) -> list[(token_id, logprob, confidence)]
+    ) -> SpeculativeTree:
+        """Constructs an adaptive tree until budget is exhausted."""
+        tree = SpeculativeTree.create(
+            root_token_id,
+            max_depth=self.max_depth,
+            confidence_threshold=self.confidence_threshold
+        )
+        
+        # Priority queue for expansion nodes (Expansion Score, Node)
+        # Expansion Score = cumulative_logprob * node_confidence (simplified)
+        from heapq import heappush, heappop
+        
+        frontier = []
+        # Use negative logprob for max-heap behavior
+        heappush(frontier, (-0.0, tree.root))
+        
+        while tree.num_nodes < self.budget and frontier:
+            neg_score, current_node = heappop(frontier)
+            
+            if current_node.depth >= self.max_depth:
+                continue
+                
+            # Get candidates from draft model
+            candidates = get_candidates_fn(current_node)
+            
+            # Filter and sort by confidence
+            viable = [c for c in candidates if c[2] >= self.confidence_threshold]
+            if not viable:
+                continue
+                
+            # Expand current node
+            new_nodes = tree.expand(
+                current_node,
+                viable,
+                max_width=self.branching_factor
+            )
+            
+            # Add new nodes to frontier
+            for child in new_nodes:
+                # Talon Expansion Score: 
+                # likelihood of the sequence * confidence of the token
+                score = child.cumulative_logprob + math.log(max(child.confidence, 1e-9))
+                heappush(frontier, (-score, child))
+                
+                # Check budget during expansion loop
+                if tree.num_nodes >= self.budget:
+                    break
+                    
+        return tree

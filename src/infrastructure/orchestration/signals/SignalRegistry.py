@@ -33,3 +33,8 @@ class SignalRegistry:
         logging.debug(f"Signal: {signal_name} from {sender} (Stubbed)")
         pass
 
+    def subscribe(self, signal_name: str, callback: Any) -> None:
+        """Stub for signal subscription."""
+        logging.debug(f"Subscribed to {signal_name} (Stubbed)")
+        pass
+
