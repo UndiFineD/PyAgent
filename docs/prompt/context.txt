@@ -1,6 +1,6 @@
 # PyAgent Workspace Context
-# Generated: January 17, 2026
-# Version: 3.14.0 (Evolution Phase 44 - ADVANCED SAMPLING, SPECULATIVE DECODING V2)
+# Generated: January 19, 2026
+# Version: 3.15.0 (Evolution Phase 47 - SPECULATIVE DECODING V3 & KV OFFLOAD)
 
 ## Project Overview
 PyAgent is an AI-powered multi-agent orchestration system for autonomous code improvement.
@@ -15,7 +15,7 @@ improve, and maintain Python codebases with high autonomy.
 - src/observability/ → Telemetry, Stats, Reporting, Audit Trails
 
 ## Rust Acceleration (rust_core/)
-- **467+ PyO3 functions** for CPU-bound operations
+- **513 PyO3 functions** for CPU-bound operations
 - **Hardware-Aware Neural Engine** (`neural.rs`): Scales Transformer models based on VRAM/RAM.
 - Integration: `rust_core.pyd` binary active in .venv site-packages.
 - Recent fixes: Old rust_core.pyd in workspace root was blocking new module.
@@ -36,18 +36,21 @@ improve, and maintain Python codebases with high autonomy.
 - **Phase 42**: Platform interface, OpenAI API, prompt rendering, MCP tools (17 Rust functions).
 - **Phase 43**: Engine core, KV cache coordination, request queue, parallel sampling (16 Rust functions).
 - **Phase 44**: Advanced sampling, speculative decoding v2, encoder cache, KV metrics (12 Rust functions).
+- **Phase 45**: Worker protocol, executor patterns, spec decode orchestration (16 Rust functions).
+- **Phase 46**: Structured output constraints, JSON schema, guided decoding (17 Rust functions).
+- **Phase 47**: EAGLE speculative decoding, ARC/LRU offload, BlockTable v2 (14 Rust functions).
 
-## Current State (Phase 44 COMPLETE)
-- Test baseline: 2,888+ tests with 100% collection health.
-- vLLM Integration: 28 phases complete (17-44), 467 Rust functions, ~130 Python modules.
+## Current State (Phase 47 COMPLETE)
+- Test baseline: 3,064+ tests with 100% collection health.
+- vLLM Integration: 31 phases complete (17-47), 513 Rust functions, ~148 Python modules.
 - Self-Healing: Active. ZMQ Transport Layer now supports graceful shutdown and Ctrl+C interrupts.
-- **Phase 44 Modules** (6 Python, 12 Rust):
-  - RejectionSampler.py: 4 rejection strategies, recovery modes, streaming/batch verification
-  - TopKTopPSampler.py: 5 nucleus variants, 4 temperature schedules, Gumbel-softmax
-  - PenaltyEngine.py: 5 penalty types, 4 penalty schedules, batched application
-  - NgramProposer.py: 4 matching strategies, adaptive n-sizing, suffix tree indexing
-  - EncoderCacheManager.py: 3 cache tiers, 4 eviction policies, multi-tier caching
-  - KVCacheMetrics.py: 4 metric types, 3 alert levels, anomaly detection
+- **Phase 47 Modules** (6 Python, 14 Rust):
+  - EagleProposer.py: EAGLE-style speculative decoding with tree attention
+  - NgramProposer.py: N-gram based draft proposal with fuzzy matching
+  - SpecDecodeMetadataV2.py: Enhanced verification metadata
+  - ARCOffloadManager.py: ARC cache eviction with T1/T2/B1/B2 ghost lists
+  - LRUOffloadManager.py: LRU cache eviction variants (weighted/tiered/prefetching)
+  - BlockTableV2.py: Enhanced block table with sparse representation
 
 ## Current State (Phase 319)
 - Test baseline: 1,305+ tests with 100% collection health.
@@ -78,7 +81,7 @@ improve, and maintain Python codebases with high autonomy.
 - Model backend: Ollama/tinyllama:latest (Local High-Speed) -> Copilot CLI (Fallback).
 - Stability Gate: 1.0 (Green).
 
-## vLLM Integration Summary (Phases 17-44)
+## vLLM Integration Summary (Phases 17-47)
 | Phase | Focus | Modules | Rust Fns |
 |-------|-------|---------|----------|
 | 17 | Core Patterns | 6 | 11 |
@@ -96,7 +99,10 @@ improve, and maintain Python codebases with high autonomy.
 | 42 | Platform/API/Prompt | 6 | 17 |
 | 43 | Engine/KVCache/Queue | 4 | 16 |
 | 44 | Sampling/SpecDec v2 | 6 | 12 |
-| **Total** | - | **~130** | **467** |
+| 45 | Worker/Executor | 6 | 16 |
+| 46 | Structured Output | 6 | 17 |
+| 47 | EAGLE/KV Offload | 6 | 14 |
+| **Total** | - | **~148** | **513** |
 
 ## Data & Observability
 - 1,024 virtual shards for interaction history (Rust-native MD5 implementation verified).
