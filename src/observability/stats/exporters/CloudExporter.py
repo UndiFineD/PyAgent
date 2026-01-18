@@ -16,15 +16,16 @@
 """Auto-extracted class from agent_stats.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from ..observability_core import ExportDestination
-from ..observability_core import Metric
+from src.core.base.Version import VERSION
+from ..ObservabilityCore import ExportDestination
+from ..ObservabilityCore import Metric
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any
 import json
 import logging
 
 __version__ = VERSION
+
 
 class CloudExporter:
     """Export stats to cloud monitoring services.
@@ -39,10 +40,7 @@ class CloudExporter:
     """
 
     def __init__(
-        self,
-        destination: ExportDestination,
-        api_key: str = "",
-        endpoint: str = ""
+        self, destination: ExportDestination, api_key: str = "", endpoint: str = ""
     ) -> None:
         """Initialize cloud exporter.
 
@@ -69,7 +67,7 @@ class CloudExporter:
             ExportDestination.PROMETHEUS: "http://localhost:9090 / api / v1 / write",
             ExportDestination.GRAFANA: "http://localhost:3000 / api / datasources",
             ExportDestination.CLOUDWATCH: "cloudwatch.amazonaws.com",
-            ExportDestination.STACKDRIVER: "monitoring.googleapis.com"
+            ExportDestination.STACKDRIVER: "monitoring.googleapis.com",
         }
         return defaults.get(self.destination, "")
 
@@ -105,12 +103,15 @@ class CloudExporter:
     def _export_datadog(self) -> None:
         """Export in Datadog format."""
         payload: dict[str, list[dict[str, Any]]] = {
-            "series": [{
-                "metric": m.name,
-                "points": [[int(datetime.now().timestamp()), m.value]],
-                "type": m.metric_type.value,
-                "tags": [f"{k}:{v}" for k, v in m.tags.items()]
-            } for m in self.export_queue]
+            "series": [
+                {
+                    "metric": m.name,
+                    "points": [[int(datetime.now().timestamp()), m.value]],
+                    "type": m.metric_type.value,
+                    "tags": [f"{k}:{v}" for k, v in m.tags.items()],
+                }
+                for m in self.export_queue
+            ]
         }
         logging.debug(f"Datadog export: {json.dumps(payload)}")
 
@@ -119,34 +120,35 @@ class CloudExporter:
         metrics_file = "data/metrics/prometheus.metrics"
         try:
             import os
+
             os.makedirs("data/metrics", exist_ok=True)
-            
+
             lines = []
             for m in self.export_queue:
                 # Track specialized metrics as requested in Phase 290
                 # Success Rate (Counter/Gauge)
                 # Latency (Histogram/Summary)
                 # Token Burn Rate (Gauge)
-                
+
                 tags = ",".join(f'{k}="{v}"' for k, v in m.tags.items())
                 tag_str = f"{{{tags}}}" if tags else ""
                 lines.append(f"{m.name}{tag_str} {m.value}")
-            
+
             with open(metrics_file, "a") as f:
                 f.write("\n".join(lines) + "\n")
-            
-            logging.info(f"Prometheus export: Appended {len(lines)} metrics to {metrics_file}")
+
+            logging.info(
+                f"Prometheus export: Appended {len(lines)} metrics to {metrics_file}"
+            )
         except Exception as e:
             logging.error(f"Prometheus export failed: {e}")
 
     def _export_generic(self) -> None:
         """Generic export format."""
-        data: list[dict[str, Any]] = [{
-            "name": m.name,
-            "value": m.value,
-            "timestamp": m.timestamp,
-            "tags": m.tags
-        } for m in self.export_queue]
+        data: list[dict[str, Any]] = [
+            {"name": m.name, "value": m.value, "timestamp": m.timestamp, "tags": m.tags}
+            for m in self.export_queue
+        ]
         logging.debug(f"Generic export: {json.dumps(data)}")
 
     def get_export_stats(self) -> dict[str, Any]:
@@ -159,5 +161,5 @@ class CloudExporter:
             "destination": self.destination.value,
             "total_exported": self._export_count,
             "last_export": self._last_export.isoformat() if self._last_export else None,
-            "queue_size": len(self.export_queue)
+            "queue_size": len(self.export_queue),
         }

@@ -1,15 +1,9 @@
 #!/usr/bin/env python3
-
-"""
-Namespaces.py module.
-"""
 # Copyright 2026 PyAgent Authors
 # Metric namespace management engine.
 
 from __future__ import annotations
-
 from typing import Any
-
 from .metrics import MetricNamespace
 
 
@@ -29,7 +23,9 @@ class MetricNamespaceManager:
     ) -> MetricNamespace:
         if parent and parent not in self.namespaces:
             raise ValueError("Parent missing")
-        ns = MetricNamespace(name=name, description=description, parent=parent, tags=tags or {})
+        ns = MetricNamespace(
+            name=name, description=description, parent=parent, tags=tags or {}
+        )
         self.namespaces[name] = ns
         self.metrics_by_namespace[name] = []
         return ns
@@ -50,9 +46,9 @@ class MetricNamespaceManager:
 
     def get_full_path(self, namespace: str) -> str:
         hierarchy: list[Any] = []
-        current: str = namespace
+        current = namespace
         while current:
             hierarchy.insert(0, current)
-            ns: MetricNamespace | None = self.namespaces.get(current)
-            current: str | None = ns.parent if ns else None
+            ns = self.namespaces.get(current)
+            current = ns.parent if ns else None
         return " / ".join(hierarchy)
