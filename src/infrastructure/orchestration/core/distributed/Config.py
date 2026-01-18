@@ -1,0 +1,115 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
+"""
+Configuration and state enums for distributed coordination.
+"""
+
+from __future__ import annotations
+
+import uuid
+from dataclasses import dataclass, field
+from enum import Enum, auto
+
+
+class EngineState(Enum):
+    """State of a distributed engine instance."""
+    
+    INITIALIZING = auto()   # Engine is starting up
+    READY = auto()          # Engine is ready to process
+    BUSY = auto()           # Engine is processing requests
+    DRAINING = auto()       # Engine is draining requests
+    STOPPED = auto()        # Engine has stopped
+    ERROR = auto()          # Engine encountered an error
+
+
+class WorkerState(Enum):
+    """State of a worker process."""
+    
+    STARTING = auto()
+    RUNNING = auto()
+    PAUSED = auto()
+    STOPPING = auto()
+    STOPPED = auto()
+    ERROR = auto()
+
+
+class LoadBalancingStrategy(Enum):
+    """Load balancing strategies for data parallel."""
+    
+    ROUND_ROBIN = auto()
+    LEAST_LOADED = auto()
+    RANDOM = auto()
+    CONSISTENT_HASH = auto()
+
+
+@dataclass
+class ParallelConfig:
+    """Configuration for parallelism.
+    
+    Inspired by vLLM's ParallelConfig.
+    
+    Attributes:
+        data_parallel_size: Number of data parallel replicas.
+        tensor_parallel_size: Number of tensor parallel ranks.
+        pipeline_parallel_size: Number of pipeline stages.
+        world_size: Total number of distributed ranks.
+        distributed_executor_backend: Backend type (mp, ray).
+        worker_use_ray: Whether workers use Ray.
+        max_parallel_loading: Max workers loading simultaneously.
+    """
+    
+    data_parallel_size: int = 1
+    tensor_parallel_size: int = 1
+    pipeline_parallel_size: int = 1
+    distributed_executor_backend: str = "mp"
+    worker_use_ray: bool = False
+    max_parallel_loading: int = 4
+    
+    @property
+    def world_size(self) -> int:
+        """Total number of distributed ranks."""
+        return (
+            self.data_parallel_size
+            * self.tensor_parallel_size
+            * self.pipeline_parallel_size
+        )
+    
+    @property
+    def is_distributed(self) -> bool:
+        """Check if running in distributed mode."""
+        return self.world_size > 1
+
+
+@dataclass
+class EngineIdentity:
+    """Identity of a distributed engine instance.
+    
+    Inspired by vLLM's coordinator identity management.
+    
+    Attributes:
+        dp_rank: Data parallel rank.
+        dp_size: Data parallel world size.
+        address: Network address.
+        engine_id: Unique engine identifier.
+    """
+    
+    dp_rank: int
+    dp_size: int
+    address: str = ""
+    engine_id: str = field(default_factory=lambda: str(uuid.uuid4())[:8])
+    
+    def __str__(self) -> str:
+        return f"Engine[{self.engine_id}:DP{self.dp_rank}/{self.dp_size}]"
+
+
+@dataclass
+class WorkerIdentity:
+    """Identity of a worker process."""
+    
+    worker_id: int
+    engine_id: str
+    rank: int
+    local_rank: int
+    world_size: int
+    tp_rank: int = 0
+    pp_rank: int = 0

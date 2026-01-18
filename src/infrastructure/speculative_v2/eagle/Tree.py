@@ -17,17 +17,19 @@ class TreeNode:
     children: list[TreeNode] = field(default_factory=list)
     logprob: float = 0.0
     cumulative_logprob: float = 0.0
+    confidence: float = 1.0  # TALON: Confidence-aware decoding
     hidden_state: list[float] | None = None
     is_accepted: bool = False
     
-    def add_child(self, token_id: int, logprob: float) -> TreeNode:
+    def add_child(self, token_id: int, logprob: float, confidence: float = 1.0) -> TreeNode:
         """Add child node."""
         child = TreeNode(
             token_id=token_id,
             depth=self.depth + 1,
             parent=self,
             logprob=logprob,
-            cumulative_logprob=self.cumulative_logprob + logprob
+            cumulative_logprob=self.cumulative_logprob + logprob,
+            confidence=confidence
         )
         self.children.append(child)
         return child
@@ -58,30 +60,37 @@ class SpeculativeTree:
     max_depth: int
     num_nodes: int = 1
     accepted_path: list[int] = field(default_factory=list)
+    confidence_threshold: float = 0.1  # TALON threshold
     
     @classmethod
-    def create(cls, root_token_id: int, max_depth: int) -> SpeculativeTree:
+    def create(cls, root_token_id: int, max_depth: int, confidence_threshold: float = 0.1) -> SpeculativeTree:
         """Create new speculative tree."""
         root = TreeNode(token_id=root_token_id, depth=0)
-        return cls(root=root, max_depth=max_depth)
+        return cls(root=root, max_depth=max_depth, confidence_threshold=confidence_threshold)
     
     def expand(
         self,
         node: TreeNode,
-        candidates: list[tuple[int, float]],
+        candidates: list[tuple[int, float, float]],  # (token_id, logprob, confidence)
         max_width: int = 4
     ) -> list[TreeNode]:
-        """Expand node with candidate tokens."""
+        """Expand node with candidate tokens based on confidence.
+        
+        Matches TALON (arXiv:2601.07353) adaptive construction.
+        """
         if node.depth >= self.max_depth:
             return []
         
+        # Filter by confidence threshold first
+        viable_candidates = [c for c in candidates if c[2] >= self.confidence_threshold]
+        
         # Sort by logprob and take top candidates
-        sorted_candidates = sorted(candidates, key=lambda x: x[1], reverse=True)
+        sorted_candidates = sorted(viable_candidates, key=lambda x: x[1], reverse=True)
         top_candidates = sorted_candidates[:max_width]
         
         new_nodes = []
-        for token_id, logprob in top_candidates:
-            child = node.add_child(token_id, logprob)
+        for token_id, logprob, confidence in top_candidates:
+            child = node.add_child(token_id, logprob, confidence)
             new_nodes.append(child)
             self.num_nodes += 1
         
