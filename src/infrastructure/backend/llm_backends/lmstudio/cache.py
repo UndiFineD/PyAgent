@@ -5,6 +5,7 @@ Model cache for LM Studio handles.
 """
 
 import time
+from typing import Any
 from .models import CachedModel
 
 

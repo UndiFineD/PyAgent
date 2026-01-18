@@ -1,0 +1,166 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+
+import time
+from dataclasses import dataclass, field
+from typing import Any, Dict, List, Optional
+from .enums import InstanceRole, SchedulingPolicy
+
+
+@dataclass
+class InstanceInfo:
+    """Information about a vLLM instance.
+    
+    Inspired by vLLM's proxy server patterns.
+    """
+    instance_id: str
+    role: InstanceRole
+    host: str
+    http_port: int
+    kv_port: Optional[int] = None
+    handshake_port: Optional[int] = None
+    notify_port: Optional[int] = None
+    
+    # Load and health metrics
+    num_running_requests: int = 0
+    num_waiting_requests: int = 0
+    kv_cache_usage: float = 0.0
+    last_health_check: float = 0.0
+    is_healthy: bool = True
+    
+    # Parallel configuration
+    tp_size: int = 1
+    dp_size: int = 1
+    dp_rank: Optional[int] = None
+    
+    @property
+    def base_url(self) -> str:
+        """Get the HTTP base URL for this instance."""
+        return f"http://{self.host}:{self.http_port}"
+    
+    @property
+    def kv_address(self) -> Optional[str]:
+        """Get the KV transfer address."""
+        if self.kv_port:
+            return f"{self.host}:{self.kv_port}"
+        return None
+    
+    @property
+    def load_score(self) -> float:
+        """Calculate load score (lower is better)."""
+        return self.num_running_requests + self.num_waiting_requests * 0.5
+
+
+@dataclass
+class DCPConfig:
+    """Configuration for disaggregated prefill-decode.
+    
+    Inspired by vLLM's kv_transfer configuration.
+    """
+    enabled: bool = False
+    
+    # Instance configuration
+    prefill_instances: List[InstanceInfo] = field(default_factory=list)
+    decode_instances: List[InstanceInfo] = field(default_factory=list)
+    
+    # Routing configuration
+    prefill_policy: SchedulingPolicy = SchedulingPolicy.LEAST_LOADED
+    decode_policy: SchedulingPolicy = SchedulingPolicy.LEAST_LOADED
+    
+    # KV transfer configuration
+    kv_connector: str = "NixlConnector"
+    kv_buffer_size: int = int(1e10)  # 10GB
+    kv_buffer_device: str = "cuda"
+    
+    # Health check configuration
+    health_check_interval: float = 5.0
+    health_check_timeout: float = 2.0
+    max_consecutive_failures: int = 3
+    
+    # Beyond vLLM: Scaling configuration
+    auto_scale: bool = False
+    min_prefill_instances: int = 1
+    max_prefill_instances: int = 4
+    min_decode_instances: int = 1
+    max_decode_instances: int = 4
+    scale_up_threshold: float = 0.8  # KV cache usage
+    scale_down_threshold: float = 0.3
+
+
+@dataclass
+class KVTransferParams:
+    """Parameters for KV cache transfer between instances.
+    
+    Inspired by vLLM's kv_transfer_params dict structure.
+    """
+    do_remote_prefill: bool = False
+    do_remote_decode: bool = False
+    
+    # Remote instance info
+    remote_engine_id: Optional[str] = None
+    remote_host: Optional[str] = None
+    remote_port: Optional[int] = None
+    remote_block_ids: Optional[List[int]] = None
+    
+    # Port configuration
+    remote_handshake_port: Optional[int] = None
+    remote_notify_port: Optional[int] = None
+    
+    # Parallel configuration
+    remote_tp_size: int = 1
+    remote_dp_size: int = 1
+    remote_dp_rank: Optional[int] = None
+    
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert to dictionary for request body."""
+        return {
+            "do_remote_prefill": self.do_remote_prefill,
+            "do_remote_decode": self.do_remote_decode,
+            "remote_engine_id": self.remote_engine_id,
+            "remote_host": self.remote_host,
+            "remote_port": self.remote_port,
+            "remote_block_ids": self.remote_block_ids,
+            "remote_handshake_port": self.remote_handshake_port,
+            "remote_notify_port": self.remote_notify_port,
+            "remote_tp_size": self.remote_tp_size,
+            "remote_dp_size": self.remote_dp_size,
+            "remote_dp_rank": self.remote_dp_rank,
+        }
+    
+    @classmethod
+    def from_dict(cls, data: Dict[str, Any]) -> "KVTransferParams":
+        """Create from dictionary."""
+        return cls(
+            do_remote_prefill=data.get("do_remote_prefill", False),
+            do_remote_decode=data.get("do_remote_decode", False),
+            remote_engine_id=data.get("remote_engine_id"),
+            remote_host=data.get("remote_host"),
+            remote_port=data.get("remote_port"),
+            remote_block_ids=data.get("remote_block_ids"),
+            remote_handshake_port=data.get("remote_handshake_port"),
+            remote_notify_port=data.get("remote_notify_port"),
+            remote_tp_size=data.get("remote_tp_size", 1),
+            remote_dp_size=data.get("remote_dp_size", 1),
+            remote_dp_rank=data.get("remote_dp_rank"),
+        )
+
+
+@dataclass
+class ScheduledRequest:
+    """A request scheduled for processing."""
+    request_id: str
+    prompt: str
+    max_tokens: int
+    
+    # Scheduling metadata
+    arrival_time: float = field(default_factory=time.time)
+    scheduled_time: Optional[float] = None
+    prefill_instance: Optional[InstanceInfo] = None
+    decode_instance: Optional[InstanceInfo] = None
+    
+    # KV transfer state
+    kv_transfer_params: Optional[KVTransferParams] = None
+    prefill_complete: bool = False
+    
+    # Additional parameters
+    extra_params: Dict[str, Any] = field(default_factory=dict)
