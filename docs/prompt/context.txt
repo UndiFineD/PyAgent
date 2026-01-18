@@ -35,7 +35,7 @@ improve, and maintain Python codebases with high autonomy.
 - vLLM Integration: 34 phases complete (17-50), 532 Rust functions, ~195 Python modules.
 - Modular Refactoring: All files > 500 lines split into subpackages (Sampling, Reasoning, Speculative, Commands).
 - Self-Healing: Active via SelfImprovementCoordinator + DirectorAgent cycle.
-- Research Integration: TALON (arXiv:2601.07353), PackKV (arXiv:2512.24449), Hydra (arXiv:2402.05109), and SGLang (arXiv:2312.07104) analyzed and synthesized in `data/Research/`.
+- Research Integration: TALON (arXiv:2601.07353), KVzap (arXiv:2601.07891), LatentLink (arXiv:2601.06123), and SGLang (arXiv:2312.07104) analyzed and synthesized in `data/Research/`.
 - Cloud Integration: Gemini GCP, Azure AI, and AWS Bedrock operational.
 
 ## vLLM Integration Summary (Phases 17-50)
