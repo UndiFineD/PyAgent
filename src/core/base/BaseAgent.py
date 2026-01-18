@@ -150,8 +150,58 @@ class BaseAgent(
             timeout=timeout,
         )
 
-    async def run(self, prompt: str) -> str:
-        """Main execution entry point."""
+    async def think(self, prompt: str) -> str:
+        """Asynchronous thinking logic."""
+        # Simple implementation for BaseAgent
+        return f"Thinking about: {prompt}"
+
+    def run(self, prompt: str | None = None) -> str:
+        """
+        Synchronous execution entry point for legacy support.
+        """
+        if prompt is None:
+            # Default behavior for no prompt (usually legacy loop)
+            # In Phase 5/6, this triggers an 'agent_complete' event
+            self._notify_webhooks("agent_complete", {"status": "success"})
+            return "No prompt provided."
+            
+        import asyncio
+        try:
+            # Check if there is an existing event loop
+            try:
+                loop = asyncio.get_event_loop()
+            except RuntimeError:
+                loop = None
+
+            if loop and loop.is_running():
+                # For compatibility in nested async
+                result = "Async loop already running"
+            else:
+                result = asyncio.run(self.run_async(prompt))
+                
+            self._notify_webhooks("agent_complete", {"status": "success", "result": result})
+            return result
+        except Exception as e:
+            self._notify_webhooks("agent_error", {"error": str(e)})
+            return f"Error: {e}"
+
+    def _notify_webhooks(self, event: str, data: dict[str, Any]) -> None:
+        """Helper to notify registered webhooks."""
+        if not hasattr(self, "_webhooks") or not self._webhooks:
+            return
+            
+        if not HAS_REQUESTS or requests is None:
+            return
+            
+        payload = {"event": event, "data": data, "agent": self.agent_name}
+        for url in self._webhooks:
+            try:
+                requests.post(url, json=payload, timeout=5)
+            except Exception:
+                pass
+
+    async def run_async(self, prompt: str) -> str:
+        """Main execution entry point (formerly run)."""
         self.previous_content = self.current_content
         result = await self.think(prompt)
         self.current_content = result

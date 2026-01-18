@@ -19,6 +19,7 @@ from __future__ import annotations
 from src.core.base.Version import VERSION
 import logging
 import asyncio
+import inspect
 import time
 from typing import Any
 from .FleetManager import FleetManager
@@ -202,7 +203,7 @@ class AsyncFleetManager(FleetManager):
             async def run_with_async_locks(res_list: list[str]) -> Any:
                 if not res_list:
                     # Execute task
-                    if asyncio.iscoroutinefunction(action_fn):
+                    if inspect.iscoroutinefunction(action_fn):
                         return await action_fn(*args)
                     else:
                         loop = asyncio.get_running_loop()

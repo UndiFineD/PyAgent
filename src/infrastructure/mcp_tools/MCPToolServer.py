@@ -17,6 +17,7 @@ Performance: Uses Rust-accelerated schema validation.
 from __future__ import annotations
 
 import asyncio
+import inspect
 import hashlib
 import json
 import logging
@@ -566,7 +567,7 @@ class LocalMCPServer(MCPToolServer):
 
         try:
             # Handle async handlers
-            if asyncio.iscoroutinefunction(handler):
+            if inspect.iscoroutinefunction(handler):
                 result = await handler(**call.arguments)
             else:
                 result = handler(**call.arguments)
