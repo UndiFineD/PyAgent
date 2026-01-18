@@ -25,5 +25,5 @@ class PrivacyCore:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"PrivacyCore initialized (Placeholder).")
+        logging.info("PrivacyCore initialized (Placeholder).")
 

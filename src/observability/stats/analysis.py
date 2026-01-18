@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
 # Logic for metric analysis, profiling, stability, and forecasting.
+# Phase 14: Rust acceleration for variance, stasis detection, and forecasting
 
 from __future__ import annotations
 import ast
@@ -18,6 +19,13 @@ from .Metrics import (
     ABComparisonResult,
     ABSignificanceResult,
 )
+
+try:
+    import rust_core as rc
+    RUST_AVAILABLE = True
+except ImportError:
+    rc = None
+    RUST_AVAILABLE = False
 
 try:
     import psutil
@@ -98,7 +106,11 @@ class FleetMetrics:
 
 
 class StabilityCore:
-    """Pure logic for calculating fleet stability and reasoning coherence."""
+    """Pure logic for calculating fleet stability and reasoning coherence.
+    
+    Phase 14 Rust Optimizations:
+    - calculate_variance_rust: Fast variance calculation for stasis detection
+    """
 
     def calculate_stability_score(
         self, metrics: FleetMetrics, sae_anomalies: int
@@ -113,8 +125,21 @@ class StabilityCore:
         return min(max(score, 0.0), 1.0)
 
     def is_in_stasis(self, score_history: list[float]) -> bool:
+        """Detect if the fleet is in stasis (low variance).
+        
+        Uses Rust-accelerated variance calculation when available.
+        """
         if len(score_history) < 10:
             return False
+        
+        # Rust-accelerated variance calculation
+        if RUST_AVAILABLE and hasattr(rc, 'calculate_variance_rust'):
+            try:
+                variance = rc.calculate_variance_rust(score_history)
+                return variance < 0.0001
+            except Exception:
+                pass  # Fall back to Python
+        
         avg = sum(score_history) / len(score_history)
         variance = sum((x - avg) ** 2 for x in score_history) / len(score_history)
         return variance < 0.0001

@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Agent specializing in self-critique and reflection."""
 
@@ -29,7 +24,10 @@ __version__ = VERSION
 
 
 class ReflectionAgent(BaseAgent):
-    """Critique and refinement engine."""
+    """
+    Tier 2 (Cognitive Logic) - Reflection Agent: Critique and refinement engine 
+    specializing in self-improvement and logic verification.
+    """
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)

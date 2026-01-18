@@ -18,12 +18,19 @@ Memory isn't just local; it's sharded across the constellation. An agent in New 
 
 ## Mission Phases
 
-| Phase | Name | Focus |
-|-------|------|-------|
-| 1.0 | Discovery | DHT-based peer discovery and identity verification. |
-| 2.0 | Transport | Encrypted P2P binary message bus using `libp2p` or `ZeroMQ`. |
-| 3.0 | Consensus | Multi-node Byzantine Fault Tolerance for critical workspace edits. |
-| 4.0 | Synergy | Cross-machine resource sharing and task preemption. |
+| Phase | Name | Focus | Status |
+|-------|------|-------|--------|
+| 1.0 | Discovery | mDNS/DHT-based peer discovery and identity verification. | **IN-PROGRESS (mDNS Active)** |
+| 2.0 | Transport | Encrypted P2P binary message bus using `libp2p` or `ZeroMQ`. | *Planned* |
+| 3.0 | Consensus | Multi-surgeon Byzantine Fault Tolerance (BFT). | *Planned* |
+| 4.0 | Synergy | Cross-machine resource sharing and task preemption. | *Planned* |
+
+### Technical Implementation (Phase 1.0)
+The discovery layer is implemented via `DiscoveryNode` using the `zeroconf` protocol, allowing nodes on the same local network segment to identify each other without a central registry.
+
+- **Service Type**: `_pyagent_voyager._tcp.local.`
+- **Broadcast**: Nodes advertise their UUID, IP, and Version.
+- **Location**: `src/infrastructure/voyager/DiscoveryNode.py`
 
 ## Conclusion
 The swarm is no longer confined to one machine. It is everywhere.

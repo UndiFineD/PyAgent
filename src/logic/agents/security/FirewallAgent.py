@@ -36,13 +36,13 @@ class FirewallAgent(BaseAgent):
         # Initialize as a BaseAgent (Mock path if none provided)
         super().__init__(workspace_path)
         self.signal_registry = SignalRegistry()
-        
+
         # Phase 281: Subscribe to thought streams to inform the fleet
         self.signal_registry.subscribe("thought_stream", self._analyze_thought)
-        
+
         # In-memory registry of granted clearances (agent_id:thought_hash -> status)
         self.clearance_registry: dict[str, bool] = {}
-        
+
         # Load Whitelist
         self.whitelist_path = Path("data/config/whitelist-domains.json")
         self.whitelisted_domains = self._load_whitelist()
@@ -63,7 +63,7 @@ class FirewallAgent(BaseAgent):
         data = event.get("data", {})
         agent_name = data.get("agent", "Unknown")
         thought = data.get("thought", "")
-        
+
         if not thought:
             return
 
@@ -78,7 +78,7 @@ class FirewallAgent(BaseAgent):
                     logging.warning(f"[FirewallAgent] DENIED (Rust): {reason}")
                     self._deny(agent_name, thought)
                     return
-                
+
                 # If Rust passed, we consider it granted (Hybrid approach)
                 self._grant(agent_name, thought)
                 return
@@ -93,7 +93,7 @@ class FirewallAgent(BaseAgent):
             r"\bMKFS\b", r"\bFDISK\b", r"\bMKDIR\b", r"\bRMDIR\b",
             r"\bOS\.REMOVE\b", r"\bSHUTIL\.RMTREE\b", r"\bPATH\.UNLINK\b"
         ]
-        
+
         for pattern in destructive_patterns:
             if re.search(pattern, thought, re.IGNORECASE):
                 logging.warning(f"[FirewallAgent] DENIED: Destructive action detected ('{pattern}'). Human permission required.")
@@ -105,7 +105,7 @@ class FirewallAgent(BaseAgent):
         urls = re.findall(r'https?://([a-zA-Z0-9.-]+)', thought)
         if not urls and any(kw in thought.upper() for kw in ["CURL", "WGET", "REQUESTS.GET", "URLLIB"]):
             # Generic network intent without specific URL? Potential bypass or discovery.
-            logging.warning(f"[FirewallAgent] DENIED: Undisclosed internet access intent detected.")
+            logging.warning("[FirewallAgent] DENIED: Undisclosed internet access intent detected.")
             self._deny(agent_name, thought)
             return
 
@@ -118,7 +118,7 @@ class FirewallAgent(BaseAgent):
         # 4. Standard Blocklist (Legacy)
         legacy_patterns = ["MALWARE", "CREDENTIAL_LEAK", "BYPASS"]
         if any(p in thought.upper() for p in legacy_patterns):
-            logging.warning(f"[FirewallAgent] DENIED: Malicious pattern detected.")
+            logging.warning("[FirewallAgent] DENIED: Malicious pattern detected.")
             self._deny(agent_name, thought)
             return
 

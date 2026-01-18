@@ -42,7 +42,7 @@ class ImportRefactorer:
         path = Path(config_path)
         if not path.is_absolute():
             path = self.workspace_root / path
-            
+
         if not path.exists():
             print(f"Config mapping file not found: {path}")
             return
@@ -72,7 +72,7 @@ class ImportRefactorer:
                 return False
 
         original_content = content
-        
+
         # Apply absolute mappings
         for old, new in self.absolute_mappings.items():
             # Match imports: 'from src.mod import', 'import src.mod'
@@ -86,10 +86,10 @@ class ImportRefactorer:
         if parent_dir in self.relative_mappings:
             for old, new in self.relative_mappings[parent_dir].items():
                 old_fixed = old.replace(".", r"\.")
-                
+
                 # Case 1: from .old import ...
                 content = re.sub(fr"(?<=from\s){old_fixed}(?=\s|import)", new, content)
-                
+
                 # Case 2: import .old (invalid python but we support dots in mappings)
                 content = re.sub(fr"(?<=import\s){old_fixed}(?=\s|$|\n)", new, content)
 
@@ -137,13 +137,13 @@ def main():
     parser.add_argument("--config", help="Path to JSON config with mappings")
     parser.add_argument("--dry-run", action="store_true", help="Display changes without writing")
     parser.add_argument("--paths", nargs="+", help="Specific paths to scan (overrides defaults)")
-    
+
     args = parser.parse_args()
-    
+
     refactorer = ImportRefactorer(args.root, args.dry_run)
     if args.config:
         refactorer.load_mappings(args.config)
-    
+
     refactorer.run(args.paths)
 
 if __name__ == "__main__":

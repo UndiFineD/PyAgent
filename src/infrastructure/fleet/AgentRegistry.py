@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Registry for mapping agent names to their implementations and initialization logic."""
 
@@ -26,7 +21,7 @@ import importlib
 import logging
 import os
 import json
-from typing import Any
+from typing import Any, TYPE_CHECKING
 from collections.abc import Iterable
 from pathlib import Path
 from .ResilientStubs import ResilientStub
@@ -34,6 +29,9 @@ from src.logic.agents.system.MCPAgent import MCPAgent
 from .AgentRegistryCore import AgentRegistryCore
 from .BootstrapConfigs import BOOTSTRAP_AGENTS
 from src.core.base.Version import SDK_VERSION
+
+if TYPE_CHECKING:
+    from .FleetManager import FleetManager
 
 # Import local version for gatekeeping
 __version__ = VERSION
@@ -45,8 +43,8 @@ class LazyAgentMap(dict):
     def __init__(
         self,
         workspace_root: Path,
-        registry_configs: dict[str, tuple] = None,
-        fleet_instance=None,
+        registry_configs: dict[str, tuple] | None = None,
+        fleet_instance: FleetManager | None = None,
     ) -> None:
         super().__init__()
         self.workspace_root: Path = workspace_root
@@ -246,92 +244,86 @@ class LazyAgentMap(dict):
         """Standard instantiation logic with dependency injection and version checks."""
         module_path, class_name, arg_path_suffix = config
 
-        # Special Logic for MCP Bridge
         if module_path == "mcp":
-            try:
-                instance = MCPAgent(class_name)
-                self._instances[key] = instance
-                return instance
-            except Exception as e:
-                logging.error(f"Failed to start MCP Agent {key}: {e}")
-                stub = ResilientStub(key, str(e))
-                self._instances[key] = stub
-                return stub
+            return self._handle_mcp_agent(key, class_name)
 
         try:
-            module: importlib.ModuleType = importlib.import_module(module_path)
+            module = importlib.import_module(module_path)
+            if not self._check_compatibility(key, module):
+                return self._instances[key]
 
-            # Version Gatekeeping (Shell layer check using Core logic)
-            min_sdk: Any | str = getattr(
-                module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0")
-            )
-            if not self.core.is_compatible(min_sdk):
-                error_msg: str = f"Agent '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}."
-                logging.warning(error_msg)
-                stub = ResilientStub(key, error_msg)
-                self._instances[key] = stub
-                return stub
+            agent_class = self._resolve_agent_class(module, class_name)
+            arg = self._get_agent_argument(arg_path_suffix)
 
-            # Try variants of class name
-            try:
-                agent_class = getattr(module, class_name)
-            except AttributeError:
-                try:
-                    agent_class = getattr(module, class_name + "Agent")
-                except AttributeError:
-                    try:
-                        agent_class = getattr(module, "Agent")
-                    except AttributeError:
-                        raise AttributeError(
-                            f"Module '{module_path}' has no attribute '{class_name}' or variants."
-                        )
-
-            # Phase 105: Default to workspace root if no specific arg provided (BaseAgent compatibility)
-            arg = None
-            if arg_path_suffix:
-                potential_p = self.workspace_root / arg_path_suffix
-                arg = str(potential_p) if potential_p.exists() else arg_path_suffix
-            else:
-                arg = str(self.workspace_root)
-
-            # Attempt instantiation with arg, fallback to no-arg if it fails (not all are BaseAgents)
             try:
                 instance = agent_class(arg)
             except TypeError:
                 instance = agent_class()
 
-            # Fleet Injection and Tool Registration
-            if self.fleet:
-                if (
-                    hasattr(instance, "fleet")
-                    and getattr(instance, "fleet", None) is None
-                ):
-                    instance.fleet = self.fleet
-
-                # Check for tool registration capability
-                if hasattr(instance, "register_tools") and hasattr(
-                    self.fleet, "registry"
-                ):
-                    try:
-                        instance.register_tools(self.fleet.registry)
-                        logging.debug(f"Registered tools for {key}")
-                    except Exception as e:
-                        logging.warning(f"Failed to register tools for {key}: {e}")
-
+            self._inject_fleet_and_tools(key, instance)
             self._instances[key] = instance
             return instance
 
         except (ImportError, SyntaxError) as e:
-            logging.error(
-                f"Critical load error for agent {key} from {module_path}: {e}"
-            )
+            logging.error(f"Critical load error for agent {key} from {module_path}: {e}")
             stub = ResilientStub(key, str(e))
             self._instances[key] = stub
-
             return stub
         except Exception as e:
             logging.error(f"Failed to lazy-load agent {key} from {module_path}: {e}")
             return None
+
+    def _handle_mcp_agent(self, key: str, class_name: str) -> Any:
+        """Handles initialization for MCP agents."""
+        try:
+            instance = MCPAgent(class_name)
+            self._instances[key] = instance
+            return instance
+        except Exception as e:
+            logging.error(f"Failed to start MCP Agent {key}: {e}")
+            stub = ResilientStub(key, str(e))
+            self._instances[key] = stub
+            return stub
+
+    def _check_compatibility(self, key: str, module: Any) -> bool:
+        """Checks if the agent module is compatible with current SDK version."""
+        min_sdk = getattr(module, "SDK_REQUIRED", getattr(module, "__min_sdk__", "1.0.0"))
+        if not self.core.is_compatible(min_sdk):
+            error_msg = f"Agent '{key}' requires SDK {min_sdk}, but current is {SDK_VERSION}."
+            logging.warning(error_msg)
+            self._instances[key] = ResilientStub(key, error_msg)
+            return False
+        return True
+
+    def _resolve_agent_class(self, module: Any, class_name: str) -> type:
+        """Finds the agent class within a module using multiple naming conventions."""
+        for name in [class_name, f"{class_name}Agent", "Agent"]:
+            cls = getattr(module, name, None)
+            if cls:
+                return cls
+        raise AttributeError(f"Module '{module.__name__}' has no attribute matching '{class_name}'.")
+
+    def _get_agent_argument(self, arg_path_suffix: str | None) -> str:
+        """Determines the workspace or specific path argument for agent initialization."""
+        if arg_path_suffix:
+            potential_p = self.workspace_root / arg_path_suffix
+            return str(potential_p) if potential_p.exists() else arg_path_suffix
+        return str(self.workspace_root)
+
+    def _inject_fleet_and_tools(self, key: str, instance: Any) -> None:
+        """Injects fleet reference and registers tools if supported."""
+        if not self.fleet:
+            return
+
+        if hasattr(instance, "fleet") and getattr(instance, "fleet", None) is None:
+            instance.fleet = self.fleet
+
+        if hasattr(instance, "register_tools") and hasattr(self.fleet, "registry"):
+            try:
+                instance.register_tools(self.fleet.registry)
+                logging.debug(f"Registered tools for {key}")
+            except Exception as e:
+                logging.warning(f"Failed to register tools for {key}: {e}")
 
     def get(self, key: str, default: Any = None) -> Any:
         try:
@@ -348,7 +340,9 @@ class AgentRegistry:
     """Registry for mapping agent names to their implementations via lazy loading."""
 
     @staticmethod
-    def get_agent_map(workspace_root: Path, fleet_instance=None) -> LazyAgentMap:
+    def get_agent_map(
+        workspace_root: Path, fleet_instance: FleetManager | None = None
+    ) -> LazyAgentMap:
         """
         Returns the initial map of agents.
         Most agents are now dynamically discovered via AgentRegistryCore.scan_directory_for_agents().

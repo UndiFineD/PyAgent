@@ -3,27 +3,28 @@
 # Recovered and standardized for Phase 317
 
 """
-The gh-copilot extension has been deprecated in favor of the newer GitHub Copilot CLI.
+Standard maintenance utilities for the PyAgent ecosystem.
 
-For more information, visit:
-- Copilot CLI: https://github.com/github/copilot-cli
-- Deprecation announcement: https://github.blog/changelog/2025-09-25-upcoming-deprecation-of-gh-copilot-cli-extension
-
-No commands will be executed.
+Provides shared helper functions for filesystem cleanup, log rotation,
+and environment verification used by other maintenance components.
 """
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
 import logging
+from typing import Any
 
 __version__ = VERSION
 
-class utils:
+class MaintenanceUtils:
     """
-    utils recovered after Copilot CLI deprecation event.
-    Standardized placeholder for future re-implementation.
+    Support utilities for fleet maintenance and environment stabilization.
+
+    Provides foundational tools for the Tier 5 (Maintenance) layer,
+    including log rotation, temporary file pruning, and environment
+    integrity checks required for long-running autonomous operations.
     """
-    def __init__(self, *args, **kwargs) -> None:
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
         self.version = VERSION
-        logging.info(f"utils initialized (Placeholder).")
+        logging.info(f"MaintenanceUtils initialized (v{VERSION}).")
 

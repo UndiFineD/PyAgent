@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Distributed tracing for the PyAgent fleet using OpenTelemetry standards.
 Allows visualization of agent chains and request propagation across nodes.
@@ -35,10 +30,6 @@ from src.observability.stats.core.TracingCore import TracingCore
 try:
     from opentelemetry import trace
     from opentelemetry.sdk.trace import TracerProvider
-    from opentelemetry.sdk.trace.export import (
-        BatchSpanProcessor,
-        ConsoleSpanExporter,
-    )
     from opentelemetry.sdk.resources import Resource
 
     # Initialize Global Tracer
@@ -137,7 +128,6 @@ class OTelManager:
             if attributes:
                 raw_span.attributes.update(attributes)
 
-            total_latency = raw_span.end_time - raw_span.start_time
             # ... existing logic for completed_spans could go here if needed for export_spans()
             self.completed_spans.append(raw_span)
 

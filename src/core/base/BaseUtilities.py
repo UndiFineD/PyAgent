@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 # -*- coding: utf-8 -*-
 
 """Utility classes for BaseAgent framework."""
@@ -65,7 +60,16 @@ def bulk_replace(
     """
     Performs a bulk string or regex replacement across multiple files.
     Returns a mapping of file path to boolean (True if file was modified).
+    Phase 318: Rust-Native Parallel Engine.
     """
+    # 1. High-Speed Rust Acceleration (Phase 318)
+    from src.core.rust_bridge import RustBridge
+    if RustBridge.is_rust_active():
+        str_paths = [str(p) for p in file_paths]
+        replacements = {old_pattern: new_string}
+        return RustBridge.bulk_replace_files(str_paths, replacements)
+
+    # 2. Python Fallback
     results = {}
     for path_in in file_paths:
         path = Path(path_in)

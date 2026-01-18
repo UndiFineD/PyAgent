@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """
 StructuredLogger: JSON-based logging for Phase 144 observability.
@@ -110,7 +105,7 @@ class StructuredLogger:
     def log(self, level: str, message: str, **kwargs: Any) -> None:
         """Log a structured entry."""
         timestamp = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
-        
+
         # Fast path: Use Rust for building the log entry (includes masking)
         if _RUST_ACCEL and rc is not None:
             try:
@@ -127,7 +122,7 @@ class StructuredLogger:
                 std_logger = logging.getLogger(f"PyAgent.{self.agent_id}")
                 log_func = getattr(std_logger, level.lower(), std_logger.info)
                 log_func(f"[{self.agent_id}] {message[:200]}")
-                
+
                 # File write
                 try:
                     with open(self.log_file, "a", encoding="utf-8") as f:
@@ -137,7 +132,7 @@ class StructuredLogger:
                 return
             except Exception:
                 pass  # Fall through to Python path
-        
+
         # Python fallback path
         clean_message = self._mask_sensitive(message)
         clean_kwargs = {

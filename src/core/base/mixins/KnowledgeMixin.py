@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # Knowledge Mixin for BaseAgent
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 from src.core.base.ShardedKnowledgeCore import ShardedKnowledgeCore
 
 class KnowledgeMixin:
     """Handles knowledge engines, memory, sharded storage, and templates."""
-    
+
     def __init__(self, agent_name: str, workspace_root: Path, **kwargs: Any) -> None:
         # Knowledge Trinity initialization
         try:

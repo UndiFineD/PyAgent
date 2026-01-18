@@ -331,12 +331,6 @@ class DerivedMetricCalculator:
         self.derived_metrics[name] = metric
         return metric
 
-    def calculate(self, name: str, context: dict[str, float]) -> float:
-        if name not in self.derived_metrics:
-            return 0.0
-        details = self.derived_metrics[name]
-        return self.evaluate_formula(details.formula, context)
-
     def evaluate_formula(self, formula: str, values: Dict[str, float]) -> float:
         """Evaluate a formula with given values (pure calculation)."""
         if rc:

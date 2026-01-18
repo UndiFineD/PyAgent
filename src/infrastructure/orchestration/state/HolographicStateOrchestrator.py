@@ -25,5 +25,5 @@ class HolographicStateOrchestrator:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"HolographicStateOrchestrator initialized (Placeholder).")
+        logging.info("HolographicStateOrchestrator initialized (Placeholder).")
 

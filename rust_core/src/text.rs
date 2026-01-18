@@ -17,6 +17,9 @@
 use pyo3::prelude::*;
 use regex::Regex;
 use std::collections::{HashMap, HashSet};
+use walkdir::WalkDir;
+use rayon::prelude::*;
+use std::fs;
 
 /// Tokenize text content and build a search index.
 /// Returns a HashMap mapping words to (file_path, report_type, line_number) tuples.
@@ -1659,20 +1662,18 @@ pub fn filter_stable_knowledge_rust(data_json: &str, threshold: f64) -> PyResult
 // SelfImprovementCore Rust Acceleration (Phase 14)
 // ============================================================================
 
-/// Comprehensive code analysis for self-improvement.
-/// Performs security, quality, and pattern analysis in a single pass.
-/// Returns Vec of (issue_type, message, line_number) tuples.
-#[pyfunction]
-pub fn analyze_code_quality_rust(
+/// Internal helper for code quality analysis.
+pub fn analyze_code_quality_internal(
     content: &str,
     file_path: &str,
-    dangerous_patterns: Vec<(String, String)>,
-) -> PyResult<Vec<(String, String, i32)>> {
+    compiled_patterns: &[(Regex, &str)],
+) -> Vec<(String, String, i32)> {
     static BARE_EXCEPT_RE: std::sync::OnceLock<Regex> = std::sync::OnceLock::new();
     static TIME_SLEEP_RE: std::sync::OnceLock<Regex> = std::sync::OnceLock::new();
     static UNTYPED_DEF_RE: std::sync::OnceLock<Regex> = std::sync::OnceLock::new();
     static IO_PATTERN_RE: std::sync::OnceLock<Regex> = std::sync::OnceLock::new();
     static RECORDING_RE: std::sync::OnceLock<Regex> = std::sync::OnceLock::new();
+    static TODO_RE: std::sync::OnceLock<Regex> = std::sync::OnceLock::new();
 
     let bare_except = BARE_EXCEPT_RE.get_or_init(|| {
         Regex::new(r"^\s*except:\s*(#.*)?$").unwrap()
@@ -1689,16 +1690,13 @@ pub fn analyze_code_quality_rust(
     let recording = RECORDING_RE.get_or_init(|| {
         Regex::new(r"_record|record_lesson|record_interaction").unwrap()
     });
+    let todo_re = TODO_RE.get_or_init(|| {
+        Regex::new(r"(?i)#\s*TODO:?\s*(.*)").unwrap()
+    });
 
     let mut findings: Vec<(String, String, i32)> = Vec::new();
     let lines: Vec<&str> = content.lines().collect();
     let file_lower = file_path.to_lowercase();
-
-    // Compile dangerous patterns
-    let compiled_patterns: Vec<(Regex, &str)> = dangerous_patterns
-        .iter()
-        .filter_map(|(pat, msg)| Regex::new(pat).ok().map(|re| (re, msg.as_str())))
-        .collect();
 
     // Single pass through all lines
     let mut has_docstring = false;
@@ -1712,11 +1710,19 @@ pub fn analyze_code_quality_rust(
         has_docstring = true;
     }
 
+    if content.len() > 25000 {
+        findings.push((
+            "Large File".to_string(),
+            format!("File size exceeds 25KB limit ({} bytes).", content.len()),
+            -1,
+        ));
+    }
+
     for (line_num, line) in lines.iter().enumerate() {
         let line_num_1 = (line_num + 1) as i32;
 
         // Security patterns
-        for (re, msg) in &compiled_patterns {
+        for (re, msg) in compiled_patterns {
             if re.is_match(line) && !line.contains("# nosec") {
                 findings.push((
                     "Security Risk".to_string(),
@@ -1731,6 +1737,15 @@ pub fn analyze_code_quality_rust(
             findings.push((
                 "Robustness Issue".to_string(),
                 "Bare 'except:' caught. Use 'except Exception:' or specific errors.".to_string(),
+                line_num_1,
+            ));
+        }
+
+        // TODO detection
+        if let Some(cap) = todo_re.captures(line) {
+            findings.push((
+                "TODO".to_string(),
+                cap.get(1).map_or("".to_string(), |m| m.as_str().trim().to_string()),
                 line_num_1,
             ));
         }
@@ -1785,7 +1800,25 @@ pub fn analyze_code_quality_rust(
         ));
     }
 
-    Ok(findings)
+    findings
+}
+
+/// Comprehensive code analysis for self-improvement.
+/// Performs security, quality, and pattern analysis in a single pass.
+/// Returns Vec of (issue_type, message, line_number) tuples.
+#[pyfunction]
+pub fn analyze_code_quality_rust(
+    content: &str,
+    file_path: &str,
+    dangerous_patterns: Vec<(String, String)>,
+) -> PyResult<Vec<(String, String, i32)>> {
+    // Compile dangerous patterns
+    let compiled_patterns: Vec<(Regex, &str)> = dangerous_patterns
+        .iter()
+        .filter_map(|(pat, msg)| Regex::new(pat).ok().map(|re| (re, msg.as_str())))
+        .collect();
+
+    Ok(analyze_code_quality_internal(content, file_path, &compiled_patterns))
 }
 
 /// Batch prepare technical debt records for bulk SQL insert.
@@ -1838,3 +1871,110 @@ pub fn apply_simple_fixes_rust(content: &str) -> PyResult<Option<(String, i32)>>
         Ok(None)
     }
 }
+#[pyfunction]
+pub fn bulk_replace_rust(content: &str, replacements: std::collections::HashMap<String, String>) -> pyo3::PyResult<String> {
+    if replacements.is_empty() {
+        return Ok(content.to_string());
+    }
+    let mut keys: Vec<&String> = replacements.keys().collect();
+    keys.sort_by(|a, b| b.len().cmp(&a.len()));
+    let pattern = keys.iter().map(|k| regex::escape(k)).collect::<Vec<_>>().join("|");
+    let re = regex::Regex::new(&pattern).map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
+    let result = re.replace_all(content, |caps: &regex::Captures| {
+        replacements.get(&caps[0]).cloned().unwrap_or_else(|| caps[0].to_string())
+    });
+    Ok(result.into_owned())
+}
+
+/// Performs bulk replacement across multiple files in parallel (Phase 318).
+/// Returns a map of file_path -> modified_bool.
+#[pyfunction]
+pub fn bulk_replace_files_rust(
+    file_paths: Vec<String>,
+    replacements: std::collections::HashMap<String, String>,
+) -> PyResult<std::collections::HashMap<String, bool>> {
+    use rayon::prelude::*;
+    use std::fs;
+    use std::path::Path;
+
+    if replacements.is_empty() {
+        return Ok(file_paths.into_iter().map(|p| (p, false)).collect());
+    }
+
+    // Pre-compile the regex for all files
+    let mut keys: Vec<&String> = replacements.keys().collect();
+    keys.sort_by(|a, b| b.len().cmp(&a.len()));
+    let pattern = keys.iter().map(|k| regex::escape(k)).collect::<Vec<_>>().join("|");
+    let re = regex::Regex::new(&pattern).map_err(|e| pyo3::exceptions::PyValueError::new_err(e.to_string()))?;
+
+    let results: std::collections::HashMap<String, bool> = file_paths
+        .par_iter()
+        .map(|path_str| {
+            let path = Path::new(path_str);
+            if !path.exists() {
+                return (path_str.clone(), false);
+            }
+
+            match fs::read_to_string(path) {
+                Ok(content) => {
+                    let mut changed = false;
+                    let result = re.replace_all(&content, |caps: &regex::Captures| {
+                        changed = true;
+                        replacements.get(&caps[0]).cloned().unwrap_or_else(|| caps[0].to_string())
+                    });
+
+                    if changed {
+                        if let Err(_) = fs::write(path, result.as_ref()) {
+                            return (path_str.clone(), false);
+                        }
+                    }
+                    (path_str.clone(), changed)
+                }
+                Err(_) => (path_str.clone(), false),
+            }
+        })
+        .collect();
+
+    Ok(results)
+}
+
+
+/// Scans an entire workspace path for quality issues in parallel.
+#[pyfunction]
+pub fn scan_workspace_quality_rust(
+    root_dir: &str,
+    ignore_patterns: Vec<String>,
+    dangerous_patterns: Vec<(String, String)>,
+) -> PyResult<HashMap<String, Vec<(String, String, i32)>>> {
+    let compiled_dangerous: Vec<(Regex, &str)> = dangerous_patterns
+        .iter()
+        .filter_map(|(pat, msg)| Regex::new(pat).ok().map(|re| (re, msg.as_str())))
+        .collect();
+
+    let findings: HashMap<String, Vec<(String, String, i32)>> = WalkDir::new(root_dir)
+        .into_iter()
+        .filter_map(|e| e.ok())
+        .filter(|e| e.path().extension().map_or(false, |ext| ext == "py"))
+        .par_bridge()
+        .filter_map(|entry| {
+            let path = entry.path();
+            let path_str = path.to_string_lossy().to_string();
+
+            if ignore_patterns.iter().any(|p| path_str.contains(p)) {
+                return None;
+            }
+
+            let content = fs::read_to_string(path).ok()?;
+            let file_findings = analyze_code_quality_internal(&content, &path_str, &compiled_dangerous);
+            
+            if file_findings.is_empty() {
+                None
+            } else {
+                Some((path_str, file_findings))
+            }
+        })
+        .collect();
+
+    Ok(findings)
+}
+

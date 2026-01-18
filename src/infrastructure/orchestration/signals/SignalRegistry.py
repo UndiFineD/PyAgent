@@ -15,6 +15,7 @@ No commands will be executed.
 from __future__ import annotations
 from src.core.base.Version import VERSION
 import logging
+from typing import Any
 
 __version__ = VERSION
 
@@ -25,5 +26,10 @@ class SignalRegistry:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"SignalRegistry initialized (Placeholder).")
+        logging.info("SignalRegistry initialized (Placeholder).")
+
+    async def emit(self, signal_name: str, payload: dict[str, Any], sender: str = "unknown") -> None:
+        """Stub for signal emission."""
+        logging.debug(f"Signal: {signal_name} from {sender} (Stubbed)")
+        pass
 

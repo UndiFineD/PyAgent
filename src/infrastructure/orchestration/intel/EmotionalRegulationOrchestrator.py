@@ -25,5 +25,5 @@ class EmotionalRegulationOrchestrator:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"EmotionalRegulationOrchestrator initialized (Placeholder).")
+        logging.info("EmotionalRegulationOrchestrator initialized (Placeholder).")
 

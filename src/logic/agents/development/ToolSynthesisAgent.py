@@ -25,5 +25,5 @@ class ToolSynthesisAgent:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"ToolSynthesisAgent initialized (Placeholder).")
+        logging.info("ToolSynthesisAgent initialized (Placeholder).")
 

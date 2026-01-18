@@ -10,15 +10,11 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
+from src.core.base.BaseAgent import BaseAgent
 from pathlib import Path
 import sqlite3
 import logging
@@ -27,13 +23,14 @@ from typing import Any
 __version__ = VERSION
 
 
-class FleetEconomyAgent:
+class FleetEconomyAgent(BaseAgent):
     """
-    Manages internal agent "wallets", credits, and resource bidding mechanisms.
-    Phase 284: Implemented persistent SQLite backend and Second-Price auctions.
+    Tier 4 (Economy) - Fleet Economy Agent: Manages internal agent "wallets", 
+    credits, and resource bidding mechanisms using a persistent SQLite backend.
     """
 
     def __init__(self, workspace_path: str | Path = ".") -> None:
+        super().__init__(str(workspace_path))
         self.workspace_path = Path(workspace_path)
         self.db_path = self.workspace_path / "data/db/swarm_economy.db"
         self._init_db()
@@ -48,6 +45,9 @@ class FleetEconomyAgent:
                 )
                 conn.execute(
                     "CREATE TABLE IF NOT EXISTS bids (task_id TEXT, agent_id TEXT, bid REAL, priority INTEGER, status TEXT)"
+                )
+                conn.execute(
+                    "CREATE TABLE IF NOT EXISTS hardware_savings (timestamp DATETIME DEFAULT CURRENT_TIMESTAMP, agent_id TEXT, tokens INTEGER, tps REAL, savings_usd REAL)"
                 )
                 conn.commit()
             logging.info(
@@ -156,3 +156,30 @@ class FleetEconomyAgent:
 
     def get_wallet_summary(self) -> dict[str, float]:
         return self.wallets
+
+    def log_hardware_savings(
+        self, agent_id: str, tokens: int, tps: float, savings_usd: float
+    ) -> None:
+        """Logs the efficiency and economic data for oxidized operations."""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                conn.execute(
+                    "INSERT INTO hardware_savings (agent_id, tokens, tps, savings_usd) VALUES (?, ?, ?, ?)",
+                    (agent_id, tokens, tps, savings_usd),
+                )
+                conn.commit()
+            logging.info(
+                f"FleetEconomyAgent: Logged ${savings_usd:.6f} hardware savings for {agent_id}"
+            )
+        except Exception as e:
+            logging.debug(f"FleetEconomyAgent: Failed to log savings: {e}")
+
+    def get_total_savings(self) -> float:
+        """Returns the aggregate hardware savings from oxidized operations."""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.execute("SELECT SUM(savings_usd) FROM hardware_savings")
+                res = cursor.fetchone()[0]
+                return float(res) if res else 0.0
+        except Exception:
+            return 0.0

@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
 from typing import Any
@@ -90,7 +85,7 @@ class NeuralPruningEngine:
                     age = (now - t) / 3600 # hours
                     weight = np.exp(-age)
                     interactions.append((a, b, float(weight)))
-                
+
                 # Call Rust
                 clusters = rc.cluster_interactions_rust(interactions, 0.5, 2)
                 logging.info(f"NeuralPruningEngine: Identified {len(clusters)} active agent clusters (Rust).")

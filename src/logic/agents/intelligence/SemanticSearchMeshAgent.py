@@ -10,12 +10,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
@@ -23,6 +18,13 @@ import asyncio
 from typing import Any
 from src.logic.agents.intelligence.core.SearchMeshCore import SearchMeshCore
 from src.logic.agents.intelligence.MemoRAGAgent import MemoRAGAgent
+
+try:
+    import rust_core
+
+    HAS_RUST = True
+except ImportError:
+    HAS_RUST = False
 
 __version__ = VERSION
 
@@ -102,17 +104,37 @@ class SemanticSearchMeshAgent:
     ) -> list[dict[str, Any]]:
         """
         Simulates a search across all registered shards.
+        Uses Rust acceleration for cosine similarity if available.
         """
         results = []
         for index in self.local_indices:
-            # Simulate matching logic
-            results.append(
-                {
-                    "shard": index["id"],
-                    "score": 0.85,  # Simulated similarity
-                    "content": f"Match from {index['id']} for provided embedding vector",
-                }
-            )
+            shard_id = index["id"]
+            vectors = index["meta"].get("vectors", [])
+            
+            if HAS_RUST and vectors:
+                # Direct Rust acceleration for multi-vector search
+                matches = rust_core.top_k_cosine_similarity(query_embedding, vectors, limit)
+                for idx, score in matches:
+                    results.append(
+                        {
+                            "shard": shard_id,
+                            "index": idx,
+                            "score": score,
+                            "content": f"Match {idx} from {shard_id} via Rust Acceleration",
+                        }
+                    )
+            else:
+                # Fallback to simulated logic
+                results.append(
+                    {
+                        "shard": shard_id,
+                        "score": 0.85,
+                        "content": f"Match from {shard_id} (Simulated Similarity)",
+                    }
+                )
+        
+        # Sort combined results by score
+        results.sort(key=lambda x: x["score"], reverse=True)
         return results[:limit]
 
     def replicate_shard(self, source_shard: str, target_node: str) -> dict[str, Any]:

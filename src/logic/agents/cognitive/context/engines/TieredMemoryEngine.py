@@ -1,7 +1,6 @@
 # Copyright 2026 PyAgent Authors
 # MIRIX 6-tier memory engine utilizing ChromaDB.
 
-import os
 import logging
 from typing import Any, List, Dict, Optional
 

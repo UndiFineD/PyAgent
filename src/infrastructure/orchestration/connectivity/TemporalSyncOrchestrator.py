@@ -25,5 +25,9 @@ class TemporalSyncOrchestrator:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"TemporalSyncOrchestrator initialized (Placeholder).")
+        logging.info("TemporalSyncOrchestrator initialized (Placeholder).")
+
+    def report_activity(self) -> None:
+        """Stub for activity reporting."""
+        pass
 

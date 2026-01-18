@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """Agent specializing in model inference optimization and low-VRAM strategies."""
 
@@ -29,7 +24,10 @@ from typing import Any
 
 
 class ModelOptimizerAgent(BaseAgent):
-    """Optimizes LLM deployment and inference using patterns like AirLLM."""
+    """
+    Tier 2 (Cognitive Logic) - Model Optimizer Agent: Optimizes LLM deployment, 
+    quantization strategies, and inference performance for the fleet.
+    """
 
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
@@ -128,7 +126,7 @@ class ModelOptimizerAgent(BaseAgent):
         """
         sim = HopperSim()
         utilization = 0.85  # H100 Transformer Engine target
-        
+
         # Estimate latency for a standard 4096 context block (simulated)
         latency = sim.estimate_matmul_latency(4096, 4096, 4096, precision=Precision.FP8)
 

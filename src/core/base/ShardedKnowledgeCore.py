@@ -11,12 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# limitations under the License.
+
 
 """
 ShardedKnowledgeCore: Logic for managing a trillion-parameter scale knowledge graph.
@@ -55,13 +50,9 @@ class ShardedKnowledgeCore:
         self._index_cache: dict[str, Any] = {}
 
     def get_shard_id(self, entity_name: str) -> int:
-        """Determines the shard ID for a given entity using stable hashing (Adler-32)."""
-        if HAS_RUST:
-            try:
-                return rc.calculate_shard_id_rust(entity_name, self.shard_count)
-            except Exception:
-                pass
-        return zlib.adler32(entity_name.encode("utf-8")) % self.shard_count
+        """Determines the shard ID for a given entity using stable MD5 hashing (Phase 318)."""
+        from src.core.rust_bridge import RustBridge
+        return RustBridge.calculate_shard_id(entity_name, self.shard_count)
 
     def get_shard_path(self, shard_id: int) -> Path:
         """Calculates the file path for a specific shard."""

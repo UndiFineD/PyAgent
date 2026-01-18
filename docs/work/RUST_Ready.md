@@ -2,8 +2,8 @@
 
 This document tracks Python files that are ready or nearly ready for Rust conversion. These files typically contain pure logic, minimal I/O, clear interfaces, and high computational value.
 
-**Last Updated**: January 16, 2026 (Phase 13 Complete)
-**Total Accelerated Functions**: 72
+**Last Updated**: January 17, 2026 (Phase 17 Complete)
+**Total Accelerated Functions**: 111
 
 ## Status Legend
 - ✅ **OPTIMIZED** - Already integrated with rust_core (PyO3)
@@ -138,6 +138,21 @@ This document tracks Python files that are ready or nearly ready for Rust conver
 | `merge_knowledge_rust` | JSON dict merging |
 | `filter_stable_knowledge_rust` | Confidence filtering |
 
+#### Phase 17: vLLM-Inspired Utilities (11 functions)
+| Function | Purpose |
+|----------|---------|
+| `cdiv_rust` | Ceiling division without floating point |
+| `next_power_of_2_rust` | Smallest power of 2 >= n |
+| `prev_power_of_2_rust` | Largest power of 2 <= n |
+| `round_up_rust` | Round up to nearest multiple |
+| `round_down_rust` | Round down to nearest multiple |
+| `atomic_counter_add_rust` | Atomic counter addition |
+| `xxhash_rust` | Fast non-cryptographic hashing |
+| `fast_cache_hash_rust` | Cache key hashing with prefix |
+| `cache_hit_ratio_rust` | Calculate cache hit ratio |
+| `batch_cdiv_rust` | Batch ceiling division |
+| `batch_next_power_of_2_rust` | Batch power-of-2 calculation |
+
 ---
 
 ## TIER 1: OPTIMIZED (72 files/functions)
@@ -238,13 +253,65 @@ python src/observability/profiling/RustProfiler.py --src src --tests tests -o re
 | 11 | Jan 12, 2026 | 6 | 54 |
 | 12 | Jan 14, 2026 | 6 | 60 |
 | 13 | Jan 16, 2026 | 12 | 72 |
+| 14 | Jan 17, 2026 | 8 | 80 |
+| 15 | Jan 17, 2026 | 8 | 88 |
+| 16 | Jan 17, 2026 | 12 | 100 |
 
 ---
 
-## 🎯 NEXT TARGETS (Phase 14+)
+## 📊 PHASE 14: COGNITIVE & BUFFER ACCELERATION (8 Functions)
 
-1. **ABTestCore** - Statistical significance calculations
-2. **ProfileCore** - Agent profile merging
-3. **InstrumentationCore** - Hedge word counting, intent prediction
-4. **ActivationCore** - Top-K activation finding
-5. **BufferCore** - Buffer processing, memory search
+| Function | Purpose | Module |
+|----------|---------|--------|
+| `count_hedge_words_rust` | Multi-pattern hedge word detection | MetacognitiveCore |
+| `predict_intent_rust` | Pattern-based intent classification | MetacognitiveCore |
+| `top_k_indices_rust` | O(n) top-K selection for activations | InterpretableCore |
+| `decompose_activations_rust` | Vectorized SAE decomposition | InterpretableCore |
+| `sort_buffer_by_priority_rust` | Priority-timestamp composite sorting | AttentionBufferAgent |
+| `filter_stale_entries_rust` | Timestamp-based entry filtering | AttentionBufferAgent |
+| `calculate_statistical_significance` | T-test significance calculation | ABTestCore |
+| `calculate_sample_size` | Power analysis sample size | ABTestCore |
+
+---
+
+## 📊 PHASE 15: CORE & INFRASTRUCTURE ACCELERATION (8 Functions)
+
+| Function | Purpose | Module |
+|----------|---------|--------|
+| `analyze_structure_rust` | Fast line/word/token counting | AgentCore |
+| `estimate_tokens_rust` | BPE-approximated token estimation | SubagentRunner |
+| `detect_cycles_rust` | DFS-based cycle detection in graphs | AgentRegistryCore |
+| `validate_response_rust` | Vectorized content validation | SubagentRunner |
+| `process_text_rust` | Fast text normalization | AgentCore |
+| `exponential_forecast_rust` | Exponential smoothing forecasts | ObservabilityCore |
+| `batch_token_count_rust` | Batch token counting | ExecutionEngine |
+| `graph_bfs_rust` | BFS graph traversal | DependencyCore |
+
+---
+
+## 🎯 NEXT TARGETS (Phase 17+)
+
+1. **ContextBuilder** - Context window pruning and optimization
+2. **FederatedSearch** - Distributed search aggregation
+3. **WorkflowEngine** - Workflow state machine transitions
+4. **MetricAggregator** - Real-time metric aggregation
+5. **GraphContextEngine** - Graph traversal and pathfinding
+
+---
+
+## 📊 PHASE 16: VECTOR MATH & AGGREGATION (12 Functions)
+
+| Function | Purpose | Module |
+|----------|---------|--------|
+| `compute_embedding_stats_rust` | Mean, variance, norm, sparsity, percentiles | DimensionalityAgent |
+| `kmeans_cluster_rust` | K-means clustering with iterative refinement | DimensionalityAgent |
+| `compute_similarity_matrix_rust` | Cosine similarity matrix with top-K pairs | DimensionalityAgent |
+| `pca_reduce_rust` | PCA-like dimensionality reduction | DimensionalityAgent |
+| `random_projection_rust` | Random projection for dimension reduction | DimensionalityAgent |
+| `compress_json_rust` | JSON serialization + zlib compression | StorageEngine |
+| `decompress_json_rust` | Zlib decompression + JSON parsing | StorageEngine |
+| `weighted_random_select_rust` | Weighted random selection for A/B testing | PromptManagers |
+| `keyword_search_score_rust` | Batch keyword matching with scoring | SemanticSearchEngine |
+| `calculate_ttest_rust` | Welch's t-test for A/B significance | ABEngine |
+| `batch_aggregate_rust` | Batch aggregation (sum/avg/min/max) | RollupEngine |
+| `rolling_window_rust` | Rolling window statistics | RollupEngine |

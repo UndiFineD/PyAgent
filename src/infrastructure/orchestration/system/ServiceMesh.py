@@ -25,5 +25,5 @@ class ServiceMesh:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"ServiceMesh initialized (Placeholder).")
+        logging.info("ServiceMesh initialized (Placeholder).")
 

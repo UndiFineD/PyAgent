@@ -25,5 +25,5 @@ class EntanglementOrchestrator:
     """
     def __init__(self, *args, **kwargs) -> None:
         self.version = VERSION
-        logging.info(f"EntanglementOrchestrator initialized (Placeholder).")
+        logging.info("EntanglementOrchestrator initialized (Placeholder).")
 
