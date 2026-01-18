@@ -1,75 +1,53 @@
-# Copyright (c) 2026 PyAgent Authors. All rights reserved.
-# Phase 40: Media IO Package
-
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
-Media IO Engine.
-
-Provides unified media loading with GPU decode support:
-- Async image/video/audio loading
-- Format-agnostic abstraction
-- GPU-accelerated decode (NVDEC)
-- Automatic resize and normalization
-- Batched processing
+Media IO package for unified media loading and processing.
 """
 
-from .MediaIOEngine import (
-    # Enums
-    MediaType,
-    ImageFormat,
-    VideoFormat,
-    AudioFormat,
-    ResizeMode,
-    
-    # Data classes
-    MediaMetadata,
-    ImageData,
-    VideoData,
+from .models import (
     AudioData,
+    AudioFormat,
+    ImageData,
+    ImageFormat,
     MediaLoadConfig,
-    
-    # Loaders
-    MediaLoader,
-    ImageLoader,
-    VideoLoader,
-    AudioLoader,
-    
-    # Engine
+    MediaMetadata,
+    MediaType,
+    ResizeMode,
+    VideoData,
+    VideoFormat,
+)
+from .base import MediaLoader
+from .engine import (
     MediaIOEngine,
-    
-    # Factory functions
     create_media_engine,
+    load_audio,
     load_image,
     load_video,
-    load_audio,
 )
+from .image import ImageLoader
+from .video import VideoLoader
+from .audio import AudioLoader
 
 __all__ = [
-    # Enums
     "MediaType",
     "ImageFormat",
     "VideoFormat",
     "AudioFormat",
     "ResizeMode",
-    
-    # Data classes
     "MediaMetadata",
     "ImageData",
     "VideoData",
     "AudioData",
     "MediaLoadConfig",
-    
-    # Loaders
     "MediaLoader",
     "ImageLoader",
     "VideoLoader",
     "AudioLoader",
-    
-    # Engine
     "MediaIOEngine",
-    
-    # Factory functions
     "create_media_engine",
     "load_image",
     "load_video",
     "load_audio",
 ]
+
+

@@ -17,24 +17,24 @@
      - EagleProposer.py -> src/infrastructure/speculative_v2/eagle/
      - SpecDecodeMetadataV2.py -> src/infrastructure/speculative_v2/spec_decode/
      - ReasoningEngine.py -> src/infrastructure/reasoning/
+     - ConversationContext.py -> src/infrastructure/conversation/context/
+     - PlatformInterface.py -> src/infrastructure/platform/
    - Impact: Improved maintainability, faster unit tests, and reduced cognitive load for sub-agents.
 
 2. **Cloud Cost Optimization**
-   - Status: IMPLEMENTING (GEMINI operational, AZURE implemented, AWS planned)
+   - Status: COMPLETED (GEMINI, AZURE, AWS operational)
    - Goal: Multi-cloud inference without high costs
    - Strategy:
      - Local-first with cloud fallback
      - Spot/preemptible instances for burst capacity
      - Scale-to-zero serverless endpoints
-   - Providers: Azure AI (implemented), GCP Vertex AI (operational), AWS Bedrock (planned)
+   - Providers: Azure AI (implemented), GCP Vertex AI (operational), AWS Bedrock (operational)
+   - Note: Added aioboto3-powered AWS Bedrock connector for multi-region redundancy.
 
-3. **Distributed Inference Pipeline**
-   - Status: PLANNING
-   - Goal: Utilize multiple machines for inference
-   - Approach:
-     - ZeroMQ mesh for local network discovery
-     - VRAM pooling across machines
-     - Load balancing by model size and latency requirements
+3. **Automation of Documentation Updates**
+   - Status: COMPLETED
+   - Goal: Automatically update improvement status in documentation.
+   - Progress: Integrated `_update_improvement_status` into `DirectorAgent` for closing the loop between implementation and documentation.
 
 4. **TALON: Confidence-Aware Speculative Decoding**
    - Status: IMPLEMENTING (arXiv:2601.07353)
@@ -224,18 +224,18 @@ Key differentiators to develop:
 
 ================================================================================
 
-https://arxiv.org/list/cs.AI/recent?skip=0&show=2000
+- https://arxiv.org/list/cs.AI/recent?skip=0&show=2000
 
-https://github.com/ especially research documents and code on python, rust, llm, ai and agi.
+- https://github.com/ especially research documents and code on python, rust, llm, ai and agi.
 our own github is ofcourse found at https://github.com/UndiFineD/PyAgent
 https://github.com/bmad-code-org/BMAD-METHOD is the BMAD method which we want to keep integrated
 
-are there other cloud providers that we wish to integrate, for example using deepseek or qwen or grok.
+- are there other cloud providers that we wish to integrate, for example using deepseek or qwen or grok.
 we should not only look at costs but also keep track of capabilities 
 of ourselves and cloud providing models and what is needed for the prompt.
 as models develop very quickly we should do a weekly check of capabilities.
 
-drop the tkinter gui and focus on the webbased interfaces, 
+- drop the tkinter gui and focus on the webbased interfaces, 
 where the mobile flutter app is the easy swipe frontend, 
 administrating the modular webgui, 
 that gives access to mulitple parallel agents, statistics, 

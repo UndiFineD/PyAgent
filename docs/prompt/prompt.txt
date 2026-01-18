@@ -1,7 +1,7 @@
-# Strategic Improvement Directives (Phase 49)
-# Priority: CRITICAL | Status: EVOLUTION PHASE 49 - SYSTEMATIC MODULARIZATION ✅ COMPLETE
+# Strategic Improvement Directives (Phase 50)
+# Priority: CRITICAL | Status: EVOLUTION PHASE 50 - TALON & AUTOMATION 🚧 IN PROGRESS
 # Rust Functions: 532 | Test Coverage: ~3064+ tests passing
-@focus: ["src/infrastructure/sampling", "src/infrastructure/engine", "src/logic/agents/specialists"]
+@focus: ["src/infrastructure/speculative_v2", "src/maintenance", "src/infrastructure/cloud"]
 
 ## Quick Reference - Completed Phases
 
@@ -54,14 +54,14 @@
 
 ### Active Work
 1. **TALON Implementation**: arXiv:2601.07353 integration.
-   - Confidence-aware early pruning in `SpeculativeTree`.
+   - Confidence-aware pruning in `src/infrastructure/speculative_v2/eagle/Tree.py`.
    - Adaptive tree depth based on verification stats.
 2. **Self-Improvement Automation**:
-   - `SelfImprovementCoordinator` enhancement for autonomous research ingestion.
-   - Link monitoring in `improvements.md`.
+   - Dynamic delegation loop: Coordinator -> Director -> Specialist.
+   - Status tracking in `improvements.md`.
 3. **Cloud Expansion**:
-   - Azure AI Foundry & AWS Bedrock connector stubs.
-   - Intelligent pricing-aware routing.
+   - [COMPLETE] AWS Bedrock integration.
+   - Intelligent pricing-aware routing with budget controls.
 
 ---
 
