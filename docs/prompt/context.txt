@@ -1,37 +1,24 @@
 # PyAgent Workspace Context
 # Generated: January 19, 2026
-# Version: 3.16.1 (Evolution Phase 49 - Systematic Modularization)
+# Version: 3.17.0 (Evolution Phase 50 - TALON & Automation)
 
 ## Project Overview
 PyAgent is an AI-powered multi-agent orchestration system for autonomous code improvement.
-The fleet coordinates 50+ specialized agents across 5 architectural tiers to analyze,
+The fleet coordinates 100+ specialized agents across 5 architectural tiers to analyze,
 improve, and maintain Python codebases with high autonomy.
 
 ## Architecture (5-Tiered)
 - src/core/          → Primitives, Knowledge Trinity (B-Tree, Vector, Graph)
 - src/logic/         → Swarm Intelligence, Specialized Agents, Reasoning Strategies  
-- src/infrastructure/→ Fleet Management, Economy, API Wrappers, Orchestration, Engine, Mooncake, Nixl, Disaggregated Workers, Parallel Transfer
+- src/infrastructure/→ Fleet Management, Economy, API Wrappers, Orchestration, Engine (Modularized), Mooncake, Nixl, Disaggregated Workers.
 - src/interface/     → Multi-UI layer (CLI, GUI, Web, Mobile)
 - src/observability/ → Telemetry, Stats, Reporting, Audit Trails
 
 ## Rust Acceleration (rust_core/)
-- **532 PyO3 functions** for CPU-bound operations (Nixl/RDMA added)
+- **532 PyO3 functions** for CPU-bound operations (Nixl/RDMA, TALON blocks added).
 - **Hardware-Aware Neural Engine** (`neural.rs`): Scales Transformer models based on VRAM/RAM.
-- Integration: `rust_core.pyd` binary active in .venv site-packages.
-- Recent fixes: Old rust_core.pyd in workspace root was blocking new module.
 - Performance: 41% end-to-end acceleration; optimized complexity analysis (Rust-native).
-- **Phase 14**: Cognitive acceleration (hedge word detection, top-K activations, buffer sorting).
-- **Phase 15**: Core infrastructure (token estimation, graph cycle detection, structure analysis).
-- **Phase 16**: Vector math & aggregation (embedding stats, k-means, similarity matrix, JSON compression).
-- **Phase 17**: vLLM-inspired utilities (cdiv, power-of-2, xxhash, cache hit ratio, atomic counters).
-- **Phases 18-33**: Resilience, performance, infrastructure, multimodal, attention.
-- **Phase 34**: Disaggregated inference & KV transfer (12 Rust functions).
-- **Phase 35**: Async execution & cache management (12 Rust functions).
-- **Phase 36**: CUDA graph & torch.compile integration (8 Rust functions).
-- **Phase 37**: Weight loading, KV offload & EPLB (9 Rust functions).
-- **Phase 38**: FusedMoE, Mamba SSM & MLA (11 Rust functions).
-- **Phase 39**: Structured output, speculative v2 & tensorizer (12 Rust functions).
-- **Phase 40**: Reasoning, multimodal cache, pooling, inputs, media IO (17 Rust functions).
+- **Phases 1-40**: Core logic, vector math, memory management, and initial vLLM patterns.
 - **Phase 41**: Tokenizer registry, model registry, LoRA, logprobs, tools, structured output (18 Rust functions).
 - **Phase 42**: Platform interface, OpenAI API, prompt rendering, MCP tools (17 Rust functions).
 - **Phase 43**: Engine core, KV cache coordination, request queue, parallel sampling (16 Rust functions).
@@ -45,57 +32,30 @@ improve, and maintain Python codebases with high autonomy.
 
 ## Current State (Phase 50 TALON)
 - Test baseline: 3,064+ tests with 100% collection health.
-- vLLM Integration: 34 phases complete (17-50), 532 Rust functions, ~185 Python modules.
+- vLLM Integration: 34 phases complete (17-50), 532 Rust functions, ~195 Python modules.
 - Modular Refactoring: All files > 500 lines split into subpackages (Sampling, Reasoning, Speculative, Commands).
-- Self-Healing: Active via SelfImprovementCoordinator.
-- Research Integration: ArchitecturalDesignAgent (GAAD loop, ScienceDirect S2090447925006203, arXiv:2601.10696) verified.
-- Speculative Decoding: TALON (Confidence-Aware Token Trees) implementation in progress.
-- Distributed KV: Mooncake and Nixl connectors implemented via RDMA stubs.
-- Cloud Integration: Gemini GCP provider operational; Azure AI & AWS Bedrock planning initiated.
-  - DecodeOnlyWorker.py: Decode-specific worker logic
-  - PipelineParallelTransfer.py: PP-aware KV transfer
-  - TensorParallelTransfer.py: TP-aware KV transfer
+- Self-Healing: Active via SelfImprovementCoordinator + DirectorAgent cycle.
+- Research Integration: TALON (arXiv:2601.07353), PackKV (arXiv:2512.24449), Hydra (arXiv:2402.05109), and SGLang (arXiv:2312.07104) analyzed and synthesized in `data/Research/`.
+- Cloud Integration: Gemini GCP, Azure AI, and AWS Bedrock operational.
 
-## vLLM Integration Summary (Phases 17-47)
+## vLLM Integration Summary (Phases 17-50)
 | Phase | Focus | Modules | Rust Fns |
 |-------|-------|---------|----------|
-| 17 | Core Patterns | 6 | 11 |
-| 18 | Resilience | 6 | 0 |
-| 19 | Performance | 6 | 0 |
-| 20-24 | Infrastructure | 27 | 20 |
-| 25-28 | Inference | 15 | 36 |
-| 29-33 | Advanced | 20 | 50 |
-| 34-36 | Async/CUDA | 18 | 32 |
-| 37 | Weight/EPLB | 4 | 9 |
-| 38 | MoE/SSM/MLA | 4 | 11 |
-| 39 | Struct/Spec/Tens | 6 | 12 |
-| 40 | Reasoning/Media | 6 | 17 |
-| 41 | Token/Model/LoRA | 6 | 18 |
-| 42 | Platform/API/Prompt | 6 | 17 |
-| 43 | Engine/KVCache/Queue | 4 | 16 |
-| 44 | Sampling/SpecDec v2 | 6 | 12 |
-| 45 | Worker/Executor | 6 | 16 |
-| 46 | Structured Output | 6 | 17 |
-| 47 | EAGLE/KV Offload | 6 | 14 |
-| **Total** | - | **~148** | **513** |
+| 17-47 | Core & Advanced Patterns | ~148 | 513 |
+| 48 | Cloud & KV Transfer | 12 | 12 |
+| 49 | Sys Modularization | 8 | 7 |
+| 50 | TALON & Automation | 6 | 0 |
+| **Total** | - | **~195** | **532** |
 
 ## Data & Observability
 - 1,024 virtual shards for interaction history (Rust-native MD5 implementation verified).
-- Shard 220: GitHub Copilot CLI deprecation patterns successfully ingested and verified.
 - Centralized ConnectivityManager with 15-minute persistent TTL status cache.
 - Structured Logger yielding valid, masked JSON logs via Rust core.
 
-## Known Issues to Address (Phase 319 Focus)
-- [RESOLVED] Swarm Intelligence: Implement ZeroMQ-mDNS bridge in DiscoveryNode for decentralized routing.
-- [RESOLVED] Performance: Cycle overhead reduced with Phase 15 optimizations.
-- [RESOLVED] Swarm Intelligence: Verified complexity reductions improved reasoning latency.
-- [COMPLETED] Phase 15: AgentCore, SubagentRunner, AgentRegistryCore Rust acceleration.
-- [COMPLETED] Phase 16: DimensionalityAgent, StorageEngine, RollupEngine, PromptManagers, SemanticSearchEngine, ABEngine.
-- [COMPLETED] Phase 17: vLLM pattern integration - 6 Python modules, 11 Rust functions, 21/21 tests passed.
-- [COMPLETED] Phase 38: FusedMoE, Mamba SSM & MLA - 4 Python modules, 11 Rust functions, 50/50 tests passed.
-- [COMPLETED] Phase 39: Structured Output, Speculative v2 & Tensorizer - 6 Python modules, 12 Rust functions, 40/40 tests passed.
-- [COMPLETED] Phase 40: Reasoning, MultiModal Cache, Pooling, Inputs, Media IO - 6 Python modules, 17 Rust functions, 35/35 tests passed.
-- [NEW] Phase 41: Continue vLLM pattern integration (see docs/comparison_vllm.md for remaining patterns).
+## Known Issues to Address (Phase 51 Focus)
+- [PENDING] Phase 51: Advanced Attention Mechanisms (FlashInfer, BlockSparse).
+- [PENDING] Modularization: Finalize splitting of remaining files in `src/logic/agents/`.
+- [PENDING] Research: Implement PackKV (lossy compression) in `KVCacheCoordinator`.
 
 ## fixed prompt
 - delegate among multiple agents
@@ -112,11 +72,10 @@ see what we can do with google gemini gcp, or aws or microsoft azure ai integrat
 without costing us an arm and a leg, 
 - our goal is to bring in all the improvements and research 
 to become the best streaming ai out there.  
-- research papers take time to find and then understand 
-and code and incorporate from https://arxiv.org/list/cs.AI/recent?skip=0&show=2000 
-find https://arxiv.org/abs/2601.10696, 
-search the web and find https://www.sciencedirect.com/science/article/pii/S2090447925006203 
-transform this into code and test it, does the result match the reseach ? 
-update the research in data\Research and summarise docs\prompt\improvements.md
+- research process: Automated synthesis of papers from https://arxiv.org/list/cs.AI/recent?skip=0&show=2000. 
+- Integrated latest architectural research (arXiv:2601.10696 & ASEJ S2090447925006203) into `ArchitecturalDesignAgent`.
+- research workflow: Find -> Summarize in `data\Research` -> Map to Agent Logic -> Implement & Test -> Update `improvements.md`.
+- copy and implement AgentBar
 - when the number of pending changes is above 50, 
 review with coderabbit, do the git dance, merge branches into main
+

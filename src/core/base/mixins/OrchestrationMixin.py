@@ -145,3 +145,63 @@ class OrchestrationMixin:
         except ImportError:
             return "Backends unavailable"
         return ab.describe_backends()
+
+    async def delegate_to(self, agent_type: str, prompt: str, target_file: str | None = None) -> str:
+        """
+        Synaptic Delegation: Hands off a sub-task to a specialized agent.
+        Supports both fleet-managed agents and dynamic on-demand instantiation.
+        """
+        import logging
+        from pathlib import Path
+        import asyncio
+
+        logging.info(f"[{self.__class__.__name__}] Delegating task to {agent_type} (Target: {target_file})")
+
+        # 1. Attempt delegation via Fleet Manager (if attached)
+        if hasattr(self, "fleet") and self.fleet:
+            try:
+                # FleetManager.agents is a LazyAgentMap
+                if agent_type in self.fleet.agents:
+                    sub_agent = self.fleet.agents[agent_type]
+                    if target_file:
+                        sub_agent.file_path = Path(target_file)
+                    
+                    # Log the delegation event
+                    self.log_distributed("INFO", f"Delegated to fleet agent: {agent_type}", target=target_file)
+                    
+                    # Execute
+                    res = sub_agent.improve_content(prompt)
+                    if asyncio.iscoroutine(res):
+                        return await res
+                    return res
+            except Exception as e:
+                logging.warning(f"Fleet delegation failed for {agent_type}: {e}")
+
+        # 2. Dynamic Import Fallback (via AgentRegistry)
+        try:
+            from src.infrastructure.fleet.AgentRegistry import AgentRegistry
+            from src.core.base.AgentCore import BaseCore
+            
+            ws_root = getattr(self, "_workspace_root", None) or Path(BaseCore.detect_workspace_root(Path.cwd()))
+            
+            # Use the registry to get the agent map
+            agent_map = AgentRegistry.get_agent_map(ws_root, fleet_instance=getattr(self, "fleet", None))
+            
+            if agent_type in agent_map:
+                sub_agent = agent_map[agent_type]
+                if target_file:
+                    sub_agent.file_path = Path(target_file)
+                
+                self.log_distributed("INFO", f"Delegated to registry agent: {agent_type}", target=target_file)
+                
+                # Execute
+                res = sub_agent.improve_content(prompt)
+                if asyncio.iscoroutine(res):
+                    return await res
+                return res
+
+        except Exception as e:
+            logging.error(f"Registry delegation failed for {agent_type}: {e}")
+            return f"Error: Registry lookup of {agent_type} failed. {str(e)}"
+
+        return f"Error: Agent {agent_type} not found in system catalogs."
