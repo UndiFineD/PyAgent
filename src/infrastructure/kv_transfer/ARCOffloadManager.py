@@ -31,6 +31,7 @@ try:
 except ImportError:
     HAS_RUST = False
 
+from .KVzap import KVzapPruner, KVzapConfig
 
 # Type for block hash
 BlockHash = bytes | str | int
@@ -62,6 +63,7 @@ class BlockStatus:
     size_bytes: int = 0
     compressed: bool = False
     last_access_time: float = 0.0
+    importance_score: float = 1.0  # KVzap importance score (arXiv:2601.07891)
     
     @property
     def is_ready(self) -> bool:
@@ -262,11 +264,17 @@ class ARCOffloadManager(OffloadingManager):
         self,
         backend: Backend,
         enable_events: bool = False,
-        adaptation_speed: float = 1.0
+        adaptation_speed: float = 1.0,
+        kvzap_config: Optional[KVzapConfig] = None
     ):
         self.backend = backend
         self.adaptation_speed = adaptation_speed
         
+        # KVzap Integration (arXiv:2601.07891)
+        self.pruner: Optional[KVzapPruner] = None
+        if kvzap_config:
+            self.pruner = KVzapPruner(kvzap_config)
+            
         # ARC data structures
         self.target_t1_size: float = 0.0
         self.t1: OrderedDict[BlockHash, BlockStatus] = OrderedDict()
@@ -445,24 +453,59 @@ class ARCOffloadManager(OffloadingManager):
             )
     
     def _select_victim(self) -> tuple[BlockHash, BlockStatus, bool] | None:
-        """Select victim block for eviction based on ARC policy."""
-        # Try T1 first if above target
+        """
+        Select victim block for eviction based on ARC policy + KVzap importance.
+        
+        Prioritizes:
+        1. Blocks with critical importance_score < threshold (if KVzap enabled)
+        2. T1 blocks if T1 size > target
+        3. T2 blocks (Least Frequently Used)
+        4. T1 blocks (Least Recently Used)
+        """
+        # Step 0: Quality-Aware Eviction (KVzap)
+        if self.pruner:
+            threshold = self.pruner.config.threshold
+            # check T1 for low importance
+            for block_hash, block in self.t1.items():
+                if block.can_evict and block.importance_score < threshold:
+                    return (block_hash, block, True)
+            # check T2 for low importance
+            for block_hash, block in self.t2.items():
+                if block.can_evict and block.importance_score < threshold:
+                    return (block_hash, block, False)
+
+        # Step 1: Try T1 first if above target (ARC standard)
         if len(self.t1) >= int(self.target_t1_size):
             for block_hash, block in self.t1.items():
                 if block.can_evict:
                     return (block_hash, block, True)
         
-        # Try T2
+        # Step 2: Try T2 (ARC standard)
         for block_hash, block in self.t2.items():
             if block.can_evict:
                 return (block_hash, block, False)
         
-        # Fall back to T1 if T2 exhausted
+        # Step 3: Fall back to T1 if T2 exhausted
         for block_hash, block in self.t1.items():
             if block.can_evict:
                 return (block_hash, block, True)
         
         return None
+
+    def update_block_importance(self, block_hash: BlockHash, hidden_states: torch.Tensor) -> None:
+        """
+        Update a block's importance score using the KVzap pruner.
+        
+        This should be called during prefill or when hidden states are available.
+        """
+        if not self.pruner:
+            return
+            
+        block = self.t1.get(block_hash) or self.t2.get(block_hash)
+        if block:
+            scores = self.pruner.get_importance_scores(hidden_states)
+            # Use mean importance across tokens and heads for the block
+            block.importance_score = scores.mean().item()
     
     def _trim_ghost_lists(self) -> None:
         """Trim ghost lists to bounded size."""
