@@ -6,7 +6,7 @@ from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any
-from .Metrics import AggregationResult
+from .metrics import AggregationResult
 from .ObservabilityCore import FederatedSource, FederationMode, AggregationType
 from src.core.base.ConnectivityManager import ConnectivityManager
 
