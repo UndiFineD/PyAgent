@@ -25,6 +25,10 @@ from .manager import (
 from .tracker import TurnTracker
 from .orchestrator import ToolOrchestrator
 
+# Aliases for compatibility
+TokenTracker = TurnTracker
+ContextOrchestrator = ToolOrchestrator
+
 __all__ = [
     "ContextConfig",
     "ContextState",
@@ -42,5 +46,7 @@ __all__ = [
     "merge_contexts",
     "restore_context",
     "TurnTracker",
+    "TokenTracker",
     "ToolOrchestrator",
+    "ContextOrchestrator",
 ]

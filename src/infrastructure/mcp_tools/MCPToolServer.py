@@ -10,11 +10,11 @@ from __future__ import annotations
 from .models import (
     MCPServerConfig,
     MCPServerType,
+    ToolStatus,
+    SessionState,
     ToolSchema,
     ToolCall,
     ToolResult,
-    ToolStatus,
-    SessionState,
     MCPSession,
 )
 from .base import MCPToolServer as MCPToolServerBase
@@ -23,8 +23,9 @@ from .local import LocalMCPServer
 from .adapter import SchemaAdapter
 from .registry import MCPServerRegistry, SessionManager
 
-# For backward compatibility
+# For backward compatibility mapping
 MCPToolServer = MCPToolServerBase
+ServerType = MCPServerType
 
 def adapt_tool_schema(schema: ToolSchema | List[ToolSchema]) -> List[Dict[str, Any]]:
     """Legacy helper for adaptation."""
@@ -43,20 +44,20 @@ def discover_mcp_servers() -> List[str]:
 __all__ = [
     "MCPServerConfig",
     "MCPServerType",
+    "ServerType",
+    "ToolStatus",
+    "SessionState",
     "ToolSchema",
     "ToolCall",
     "ToolResult",
-    "ToolStatus",
-    "SessionState",
     "MCPSession",
     "MCPToolServer",
     "SSEMCPServer",
     "LocalMCPServer",
-    "MCPServerRegistry",
     "SchemaAdapter",
+    "MCPServerRegistry",
     "SessionManager",
     "adapt_tool_schema",
     "create_mcp_session",
     "discover_mcp_servers",
 ]
-
