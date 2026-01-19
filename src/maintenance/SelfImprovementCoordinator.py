@@ -41,16 +41,18 @@ class SelfImprovementCoordinator:
         """Initializes LANDiscovery for peer finding."""
         try:
             from src.infrastructure.network.LANDiscovery import LANDiscovery
-            # Use deterministic port or one from config
+            secret_key = os.getenv("PYAGENT_SECRET")
+            if not secret_key:
+                self.logger.warning("PYAGENT_SECRET not set; LAN discovery disabled for security.")
+                return
             self.discovery = LANDiscovery(
                 agent_id=f"Coordinator-{os.getpid()}",
                 service_port=8000,
-                secret_key=os.getenv("PYAGENT_SECRET", "pyagent-default-secret")
+                secret_key=secret_key
             )
             self.discovery.start()
         except ImportError:
             self.logger.warning("LANDiscovery not available.")
-
     async def load_strategic_context(self):
         """Loads and parses context.txt and prompt.txt for strategic directives."""
         self.directives = {
@@ -70,9 +72,8 @@ class SelfImprovementCoordinator:
                 self.directives["fixed_prompts"].extend([p.strip().replace("\n", " ") for p in fixed_prompts])
                 
                 # Extract arXiv links
-                arxiv = re.findall(r"arxiv\.org/[abs|list]/[\w\.\/\?=&]+", content)
-                self.directives["research_links"].extend(arxiv)
-                
+                arxiv = re.findall(r"arxiv\.org/(?:abs|list)/[\w\.\/\?=&]+", content)
+                self.directives["research_links"].extend(arxiv)                
                 # Extract potential peers mentioned in context
                 peers = re.findall(r"peer:\s*([\w\-]+)", content)
                 self.directives["target_peers"].extend(peers)
@@ -135,6 +136,7 @@ class SelfImprovementCoordinator:
         Reads health stats and documentation context to trigger repairs.
         """
         from src.infrastructure.orchestration.healing.SelfHealingOrchestrator import SelfHealingOrchestrator
+        from src.infrastructure.orchestration.healing.SelfHealingOrchestrator import SelfHealingOrchestrator
         
         # Initialize orchestrator (which now loads overrides from docs/prompt)
         orchestrator = SelfHealingOrchestrator(None) # type: ignore
@@ -146,9 +148,9 @@ class SelfImprovementCoordinator:
         health_audit = orchestrator.run_health_audit()
         
         # 3. Check for failed agents in health registry
-        failed_agents = orchestrator.core.detect_failures()
-        
-        results = {
+        failed_agents = []
+        if orchestrator.core is not None:
+            failed_agents = orchestrator.core.detect_failures()        results = {
             "integrity": integrity_report,
             "health": health_audit,
             "failures": failed_agents,
@@ -172,13 +174,13 @@ class SelfImprovementCoordinator:
         Dispatches a healing or improvement task to a remote peer.
         This enables 'Distributed computing across local network'.
         """
-        self.logger.info(f"Dispatching task '{task.get('title')}' to peer {target_peer}")
-        
         # 1. Check if peer is known and online
         peers = await self.discover_external_servers()
         target = next((p for p in peers if p["id"] == target_peer), None)
         
-        if not target or target.get("status") != "online":
+        valid_statuses = {"online", "connected", "available"}
+        if not target or target.get("status") not in valid_statuses:
+            return {"status": "failed", "error": f"Peer {target_peer} is offline or unknown"}        if not target or target.get("status") != "online":
             return {"status": "failed", "error": f"Peer {target_peer} is offline or unknown"}
 
         # 2. Simulate task dispatch (Integration with RequestQueue.py / DistributedCoordinator.py)
