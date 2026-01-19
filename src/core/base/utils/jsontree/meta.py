@@ -1,0 +1,81 @@
+from __future__ import annotations
+from typing import Callable
+from src.core.base.utils.jsontree.types import JSONTree, _T
+from src.core.base.utils.jsontree.iteration import json_iter_leaves, json_iter_leaves_with_path
+
+def json_count_leaves(value: JSONTree[_T]) -> int:
+    """Count the number of leaves in a nested JSON structure."""
+    return sum(1 for _ in json_iter_leaves(value))
+
+
+def json_depth(value: JSONTree[_T]) -> int:
+    """Calculate the maximum depth of a nested JSON structure."""
+    if isinstance(value, dict):
+        if not value:
+            return 1
+        return 1 + max(json_depth(v) for v in value.values())
+    elif isinstance(value, (list, tuple)):
+        if not value:
+            return 1
+        return 1 + max(json_depth(v) for v in value)
+    else:
+        return 0
+
+
+def json_filter_leaves(
+    predicate: Callable[[_T], bool],
+    value: JSONTree[_T],
+) -> JSONTree[_T]:
+    """Filter leaves in a nested structure, keeping only those matching predicate."""
+    if isinstance(value, dict):
+        result = {}
+        for k, v in value.items():
+            filtered = json_filter_leaves(predicate, v)
+            if isinstance(filtered, dict) and not filtered:
+                continue
+            if isinstance(filtered, (list, tuple)) and not filtered:
+                continue
+            result[k] = filtered
+        return result
+    elif isinstance(value, list):
+        result_list = []
+        for v in value:
+            filtered = json_filter_leaves(predicate, v)
+            if isinstance(filtered, dict) and not filtered:
+                continue
+            if isinstance(filtered, (list, tuple)) and not filtered:
+                continue
+            result_list.append(filtered)
+        return result_list
+    elif isinstance(value, tuple):
+        result_tuple = []
+        for v in value:
+            filtered = json_filter_leaves(predicate, v)
+            if isinstance(filtered, dict) and not filtered:
+                continue
+            if isinstance(filtered, (list, tuple)) and not filtered:
+                continue
+            result_tuple.append(filtered)
+        return tuple(result_tuple)
+    else:
+        return value if predicate(value) else {}  # type: ignore
+
+
+def json_validate_leaves(
+    validator: Callable[[_T], bool],
+    value: JSONTree[_T],
+) -> bool:
+    """Check if all leaves in a structure satisfy a predicate."""
+    return all(validator(leaf) for leaf in json_iter_leaves(value))
+
+
+def json_find_leaves(
+    predicate: Callable[[_T], bool],
+    value: JSONTree[_T],
+) -> list[tuple[str, _T]]:
+    """Find all leaves matching a predicate, with their paths."""
+    return [
+        (path, leaf) 
+        for path, leaf in json_iter_leaves_with_path(value) 
+        if predicate(leaf)
+    ]
