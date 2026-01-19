@@ -26,6 +26,20 @@ from .registry import MCPServerRegistry, SessionManager
 # For backward compatibility
 MCPToolServer = MCPToolServerBase
 
+def adapt_tool_schema(schema: ToolSchema | List[ToolSchema]) -> List[Dict[str, Any]]:
+    """Legacy helper for adaptation."""
+    if isinstance(schema, ToolSchema):
+        return [schema.to_openai_format()]
+    return SchemaAdapter.to_openai(schema)
+
+async def create_mcp_session(server_name: str) -> Optional[MCPSession]:
+    """Legacy helper for session creation."""
+    return await SessionManager().create_session(server_name)
+
+def discover_mcp_servers() -> List[str]:
+    """Legacy helper for server discovery."""
+    return list(MCPServerRegistry().servers.keys())
+
 __all__ = [
     "MCPServerConfig",
     "MCPServerType",
@@ -41,4 +55,8 @@ __all__ = [
     "MCPServerRegistry",
     "SchemaAdapter",
     "SessionManager",
+    "adapt_tool_schema",
+    "create_mcp_session",
+    "discover_mcp_servers",
 ]
+
