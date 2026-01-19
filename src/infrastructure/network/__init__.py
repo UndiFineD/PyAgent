@@ -43,6 +43,7 @@ from .NetworkUtils import (
     get_network_interfaces,
     get_primary_interface,
 )
+from .LANDiscovery import LANDiscovery, PeerInfo
 
 __all__ = [
     "get_ip",
