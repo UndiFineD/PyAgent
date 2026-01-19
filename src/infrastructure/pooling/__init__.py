@@ -17,9 +17,15 @@ from .strategies import (
     BasePooler,
     MeanPooler,
     CLSPooler,
-    AttentionPooler
+    LastTokenPooler,
+    MaxPooler,
+    AttentionPooler,
+    WeightedMeanPooler,
+    MatryoshkaPooler,
+    MultiVectorPooler,
+    StepPooler
 )
-from .engine import PoolingEngine
+from .engine import PoolingEngine, create_pooling_engine
 
 # Connection Pooling
 from .ConnectionPool import (
@@ -42,8 +48,15 @@ __all__ = [
     "BasePooler",
     "MeanPooler",
     "CLSPooler",
+    "LastTokenPooler",
+    "MaxPooler",
     "AttentionPooler",
+    "WeightedMeanPooler",
+    "MatryoshkaPooler",
+    "MultiVectorPooler",
+    "StepPooler",
     "PoolingEngine",
+    "create_pooling_engine",
     
     # Connection
     "ConnectionState",
