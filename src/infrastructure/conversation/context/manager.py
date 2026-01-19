@@ -139,3 +139,41 @@ def get_context_manager() -> ContextManager:
     if _global_manager is None:
         _global_manager = ContextManager()
     return _global_manager
+
+
+def create_context(
+    context_id: Optional[str] = None,
+    config: Optional[ContextConfig] = None,
+    context_class: Type[ConversationContext] = AgenticContext,
+    **kwargs: Any,
+) -> ConversationContext:
+    """Convenience function to create a context using the global manager."""
+    return get_context_manager().create_context(
+        context_id=context_id,
+        config=config,
+        context_class=context_class,
+        **kwargs
+    )
+
+
+def merge_contexts(
+    primary: ConversationContext,
+    secondary: ConversationContext,
+    deduplicate: bool = True
+) -> ConversationContext:
+    """Merge turns from secondary into primary context."""
+    seen_ids = {t.id for t in primary.turns} if deduplicate else set()
+
+    for turn in secondary.turns:
+        if deduplicate and turn.id in seen_ids:
+            continue
+        primary._turn_tracker._turns.append(turn)
+        primary._turn_tracker._turn_index[turn.id] = turn
+
+    primary._update_activity()
+    return primary
+
+
+def restore_context(snapshot: ContextSnapshot) -> ConversationContext:
+    """Restore context from a snapshot."""
+    return ConversationContext.from_snapshot(snapshot)
