@@ -12,9 +12,16 @@ from .models import (
     TurnType,
     ConversationTurn,
     ToolExecution,
+    ToolExecutionPolicy,
 )
 from .core import ConversationContext, AgenticContext
-from .manager import ContextManager, get_context_manager
+from .manager import (
+    ContextManager,
+    get_context_manager,
+    create_context,
+    merge_contexts,
+    restore_context,
+)
 from .tracker import TurnTracker
 from .orchestrator import ToolOrchestrator
 
@@ -26,10 +33,14 @@ __all__ = [
     "TurnType",
     "ConversationTurn",
     "ToolExecution",
+    "ToolExecutionPolicy",
     "ConversationContext",
     "AgenticContext",
     "ContextManager",
     "get_context_manager",
+    "create_context",
+    "merge_contexts",
+    "restore_context",
     "TurnTracker",
     "ToolOrchestrator",
 ]
