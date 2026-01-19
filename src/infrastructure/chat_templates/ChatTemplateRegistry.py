@@ -10,7 +10,9 @@ chat template registry implementation.
 from .registry import (
     TemplateType,
     TemplateConfig,
+    TemplateInfo,
     RenderOptions,
+    ModelType,
     MODEL_TEMPLATE_MAP,
     DEFAULT_CONFIG,
     ChatTemplate,
@@ -26,7 +28,9 @@ from .registry import (
 __all__ = [
     "TemplateType",
     "TemplateConfig",
+    "TemplateInfo",
     "RenderOptions",
+    "ModelType",
     "MODEL_TEMPLATE_MAP",
     "DEFAULT_CONFIG",
     "ChatTemplate",
@@ -38,3 +42,5 @@ __all__ = [
     "render_template",
     "detect_template_type",
 ]
+
+
