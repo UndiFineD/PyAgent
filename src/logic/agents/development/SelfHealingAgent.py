@@ -58,27 +58,52 @@ class SelfHealingAgent(BaseAgent):
                 if "Project Overview" in content:
                     overview = content.split("## Project Overview")[1].split("##")[0].strip()
                     self._system_prompt += f"\n\nProject Context:\n{overview}"
-            except Exception:
-                pass
-
+            except Exception as e:
+                # Log but don't fail - dynamic prompt is optional enhancement
+                import logging
+                logging.getLogger(__name__).debug("Failed to load dynamic prompt: %s", e)
     @as_tool
     async def discover_peers_and_budget(self) -> str:
         """Discovers available peers and current cloud budget status."""
-        await self.coordinator.load_strategic_context()
-        peers = await self.coordinator.discover_external_servers()
-        budget_status = {
-            "today_spend": self.coordinator.budget.today_spend,
-            "daily_limit": self.coordinator.budget.daily_limit,
-            "remaining": self.coordinator.budget.daily_limit - self.coordinator.budget.today_spend
-        }
+        if self.coordinator is None:
+            return "❌ Error: Self-healing coordinator is not initialized."
+
+        import logging
+        logger = logging.getLogger(__name__)
         
-        report = [f"## 🌐 Network & Budget Report\n"]
-        report.append(f"**Budget**: ${budget_status['today_spend']:.2f} / ${budget_status['daily_limit']:.2f} (Remaining: ${budget_status['remaining']:.2f})")
+        peers = []
+        try:
+            await self.coordinator.load_strategic_context()
+            peers = await self.coordinator.discover_external_servers() or []
+        except Exception as e:
+            logger.error("Failed to query peer network or context: %s", e, exc_info=True)
+            return f"❌ Failure during network discovery: {str(e)}"
+
+        # Defensive check for budget manager
+        budget_info = {"today_spend": 0.0, "daily_limit": 0.0, "remaining": 0.0, "known": False}
+        if hasattr(self.coordinator, "budget") and self.coordinator.budget:
+            try:
+                budget_info["today_spend"] = float(getattr(self.coordinator.budget, "today_spend", 0.0))
+                budget_info["daily_limit"] = float(getattr(self.coordinator.budget, "daily_limit", 0.0))
+                budget_info["remaining"] = max(0.0, budget_info["daily_limit"] - budget_info["today_spend"])
+                budget_info["known"] = True
+            except (AttributeError, TypeError, ValueError) as e:
+                logger.warning("Could not extract budget metrics: %s", e)
+
+        report = ["## 🌐 Network & Budget Report\n"]
+        
+        if budget_info["known"]:
+            report.append(f"**Budget**: ${budget_info['today_spend']:.2f} / ${budget_info['daily_limit']:.2f} (Remaining: ${budget_info['remaining']:.2f})")
+        else:
+            report.append("**Budget**: [Unknown/Unavailable]")
         
         if peers:
             report.append("\n**Available Peers**:")
             for p in peers:
-                report.append(f"- {p['id']} ({p['type']}): {p['status']}")
+                p_id = p.get('id', 'unknown')
+                p_type = p.get('type', 'generic')
+                p_status = p.get('status', 'online')
+                report.append(f"- {p_id} ({p_type}): {p_status}")
         else:
             report.append("\n❌ No external peers or servers discovered.")
             
@@ -87,17 +112,28 @@ class SelfHealingAgent(BaseAgent):
     @as_tool
     async def request_remote_healing(self, agent_name: str, error_msg: str, target_peer: str) -> str:
         """Requests a remote peer to perform a healing analysis for a specific agent."""
+        if self.coordinator is None:
+            return "❌ Error: Coordinator not initialized."
+
         task = {
             "title": f"Heal {agent_name}",
             "description": f"Perform deep analysis on: {error_msg}",
             "agent_type": "SelfHealing"
         }
         
-        res = await self.coordinator.execute_remote_task(task, target_peer)
-        if res["status"] == "success":
-            return f"✅ Remote healing task dispatched to {target_peer}. Task ID: {res['task_id']}"
+        try:
+            res = await self.coordinator.execute_remote_task(task, target_peer)
+        except Exception as e:
+            return f"❌ Failed to dispatch to {target_peer}: {e}"
+        
+        if not res or not isinstance(res, dict):
+            return f"❌ Invalid response from {target_peer}"
+        
+        if res.get("status") == "success":
+            return f"✅ Remote healing task dispatched to {target_peer}. Task ID: {res.get('task_id', 'unknown')}"
         else:
-            return f"❌ Failed to dispatch to {target_peer}: {res['error']}"
+            error_msg = res.get('error', 'Unknown error')
+            return f"❌ Failed to dispatch to {target_peer}: {error_msg}"
 
     def _get_default_content(self) -> str:
         return "# Self-Healing Log\n\n## Status\nMonitoring fleet health...\n"
