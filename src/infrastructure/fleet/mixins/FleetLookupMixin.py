@@ -44,15 +44,16 @@ class FleetLookupMixin:
         hints = self.__dict__.get("_capability_hints", {})
         if effective_name in hints:
             target = hints[effective_name]
-            # Avoid infinite recursion if target is same as name
-            if target != effective_name:
+            # Avoid infinite recursion if target resolves back to name or effective_name
+            if target != effective_name and target != name:
                 try:
                     return getattr(self, target)
                 except AttributeError:
                     pass
         elif name != effective_name and name in hints:
             target = hints[name]
-            if target != name:
+            # Avoid recursion if target resolves back to name or effective_name
+            if target != name and target != effective_name:
                 try:
                     return getattr(self, target)
                 except AttributeError:

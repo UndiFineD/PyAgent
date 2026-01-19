@@ -48,6 +48,13 @@ htmlcov/
 .nox/
 .tox/
 
+# Local logs and artifacts
+collection_log.txt
+*.txt
+!README.md
+!requirements.txt
+!prompt.txt
+
 # Rust
 rust_core/target/
 
