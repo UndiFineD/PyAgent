@@ -34,8 +34,6 @@ from src.infrastructure.fleet.mixins.FleetRoutingMixin import FleetRoutingMixin
 from src.infrastructure.fleet.mixins.FleetLifecycleMixin import FleetLifecycleMixin
 from src.infrastructure.fleet.mixins.FleetLookupMixin import FleetLookupMixin
 from src.infrastructure.fleet.mixins.FleetDiscoveryMixin import FleetDiscoveryMixin
-from src.infrastructure.fleet.mixins.FleetDelegationMixin import FleetDelegationMixin
-from src.infrastructure.fleet.mixins.FleetUpdateMixin import FleetUpdateMixin
 
 # Type Hinting Imports (Phase 106)
 if TYPE_CHECKING:
@@ -55,8 +53,6 @@ class FleetManager(
     FleetLifecycleMixin,
     FleetLookupMixin,
     FleetDiscoveryMixin,
-    FleetDelegationMixin,
-    FleetUpdateMixin,
 ):
     """
     The central hub for the PyAgent ecosystem. Orchestrates a swarm of specialized
@@ -78,9 +74,6 @@ class FleetManager(
 
         # Phase 320: LAN Discovery
         self.init_discovery(agent_id=f"fleet-{self.workspace_root.name}")
-
-        # Phase 322: Autonomous Update Service (15-min cycle)
-        self.init_update_service(interval_seconds=900)
 
         # Capability Hints for Lazy Loading (Core Agents)
         self._capability_hints = {

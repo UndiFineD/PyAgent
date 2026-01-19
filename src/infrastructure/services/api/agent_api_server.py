@@ -119,6 +119,22 @@ async def list_fastest_peers() -> dict[str, Any]:
     }
 
 
+@app.get("/discovery/peers")
+async def list_discovery_peers() -> dict[str, Any]:
+    """Returns the list of peers discovered on the LAN."""
+    return {
+        "peers": [p.to_dict() for p in fleet.get_lan_peers()]
+    }
+
+
+@app.get("/discovery/peers/fastest")
+async def list_fastest_peers() -> dict[str, Any]:
+    """Returns the top 5 lowest-latency peers discovered."""
+    return {
+        "peers": [p.to_dict() for p in fleet.get_fastest_peers()]
+    }
+
+
 @app.post("/task")
 async def dispatch_task(request: TaskRequest) -> dict[str, Any]:
     # Route through Load Balancer
