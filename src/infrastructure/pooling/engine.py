@@ -13,7 +13,8 @@ import numpy as np
 from .models import PoolingConfig, PoolingStrategy, PoolingResult
 from .strategies import (
     BasePooler, MeanPooler, CLSPooler, LastTokenPooler, 
-    MaxPooler, AttentionPooler, WeightedMeanPooler
+    MaxPooler, AttentionPooler, WeightedMeanPooler,
+    MatryoshkaPooler, MultiVectorPooler, StepPooler
 )
 
 logger = logging.getLogger(__name__)
@@ -27,7 +28,10 @@ class PoolingEngine:
         PoolingStrategy.LAST: LastTokenPooler,
         PoolingStrategy.MAX: MaxPooler,
         PoolingStrategy.ATTENTION: AttentionPooler,
-        PoolingStrategy.WEIGHTED_MEAN: WeightedMeanPooler
+        PoolingStrategy.WEIGHTED_MEAN: WeightedMeanPooler,
+        PoolingStrategy.MATRYOSHKA: MatryoshkaPooler,
+        PoolingStrategy.MULTI_VECTOR: MultiVectorPooler,
+        PoolingStrategy.STEP: StepPooler
     }
     
     def __init__(self, config: Optional[PoolingConfig] = None, **kwargs):
