@@ -11,7 +11,7 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any
 from dataclasses import dataclass
-from .ObservabilityCore import StatsSnapshot
+from .observability_core import StatsSnapshot
 
 logger = logging.getLogger(__name__)
 

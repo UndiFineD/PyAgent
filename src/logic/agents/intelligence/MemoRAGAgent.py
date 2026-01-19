@@ -97,7 +97,7 @@ class MemoRAGAgent(BaseAgent):
         """Lists all existing memory shards."""
         return [f.stem for f in self.shard_dir.glob("*.txt")]
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         self.list_shards()
         clues = self.recall_clues_from_shard(prompt, self.active_shard)
         return f"### MemoRAG Active Shard: {self.active_shard}\n" + "\n".join(

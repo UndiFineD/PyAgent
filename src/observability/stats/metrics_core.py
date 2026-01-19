@@ -325,7 +325,7 @@ class DerivedMetricCalculator:
         return results
 
     def register_derived(self, name: str, dependencies: list[str], formula: str) -> Any:
-        from src.observability.stats.ObservabilityCore import DerivedMetric
+        from src.observability.stats.observability_core import DerivedMetric
 
         metric = DerivedMetric(name=name, dependencies=dependencies, formula=formula)
         self.derived_metrics[name] = metric

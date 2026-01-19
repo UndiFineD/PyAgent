@@ -26,7 +26,7 @@ class TestStructuredCounter:
     
     def test_counter_creation(self):
         """Test creating a structured counter."""
-        from src.observability.stats.StructuredCounter import RequestCounter
+        from src.observability.stats.structured_counter import RequestCounter
         
         counter = RequestCounter()
         assert counter.requests_received == 0
@@ -35,7 +35,7 @@ class TestStructuredCounter:
     
     def test_counter_increment(self):
         """Test incrementing counter fields."""
-        from src.observability.stats.StructuredCounter import RequestCounter
+        from src.observability.stats.structured_counter import RequestCounter
         
         counter = RequestCounter()
         counter.requests_received += 1
@@ -47,7 +47,7 @@ class TestStructuredCounter:
     
     def test_counter_clone(self):
         """Test cloning a counter."""
-        from src.observability.stats.StructuredCounter import CacheCounter
+        from src.observability.stats.structured_counter import CacheCounter
         
         counter = CacheCounter()
         counter.cache_hits = 10
@@ -63,7 +63,7 @@ class TestStructuredCounter:
     
     def test_counter_diff(self):
         """Test computing diff between counters."""
-        from src.observability.stats.StructuredCounter import CacheCounter
+        from src.observability.stats.structured_counter import CacheCounter
         
         before = CacheCounter()
         before.cache_hits = 10
@@ -79,7 +79,7 @@ class TestStructuredCounter:
     
     def test_counter_expect(self):
         """Test expect() context manager."""
-        from src.observability.stats.StructuredCounter import RequestCounter
+        from src.observability.stats.structured_counter import RequestCounter
         
         counter = RequestCounter()
         
@@ -89,7 +89,7 @@ class TestStructuredCounter:
     
     def test_counter_expect_failure(self):
         """Test expect() raises on mismatch."""
-        from src.observability.stats.StructuredCounter import RequestCounter
+        from src.observability.stats.structured_counter import RequestCounter
         
         counter = RequestCounter()
         
@@ -101,7 +101,7 @@ class TestStructuredCounter:
     
     def test_counter_as_dict(self):
         """Test converting counter to dict."""
-        from src.observability.stats.StructuredCounter import CacheCounter
+        from src.observability.stats.structured_counter import CacheCounter
         
         counter = CacheCounter()
         counter.cache_hits = 100
@@ -113,7 +113,7 @@ class TestStructuredCounter:
     
     def test_cache_counter_hit_ratio(self):
         """Test cache hit ratio computation."""
-        from src.observability.stats.StructuredCounter import CacheCounter
+        from src.observability.stats.structured_counter import CacheCounter
         
         counter = CacheCounter()
         counter.cache_hits = 80
@@ -123,7 +123,7 @@ class TestStructuredCounter:
     
     def test_pool_counter_active_objects(self):
         """Test pool active objects computation."""
-        from src.observability.stats.StructuredCounter import PoolCounter
+        from src.observability.stats.structured_counter import PoolCounter
         
         counter = PoolCounter()
         counter.objects_acquired = 10
@@ -630,7 +630,7 @@ class TestPhase24Integration:
     
     def test_counter_with_tool_parsing(self):
         """Test using counters while parsing tool calls."""
-        from src.observability.stats.StructuredCounter import RequestCounter
+        from src.observability.stats.structured_counter import RequestCounter
         from src.core.base.parsers.ToolParser import extract_tool_calls
         
         counter = RequestCounter()

@@ -75,7 +75,7 @@ class TransparencyAgent(BaseAgent):
 
         return "\n".join(report)
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Trigger an audit report."""
         return self.generate_audit_trail()
 

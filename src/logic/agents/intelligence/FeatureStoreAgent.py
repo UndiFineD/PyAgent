@@ -106,7 +106,7 @@ class FeatureStoreAgent(BaseAgent):
         """Lists all available features in the store."""
         return [f.stem for f in self.feature_dir.glob("*.json")]
 
-    def improve_content(self, input_text: str) -> str:
+    def improve_content(self, input_text: str, target_file: str | None = None) -> str:
         """Advisory on feature engineering for agents."""
         return (
             "I am serving current agentic features. Recommend a feature for extraction?"

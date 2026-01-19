@@ -83,14 +83,14 @@ class TestCacheInfo:
     """Test CacheInfo module."""
     
     def test_lru_cache_basic(self):
-        from src.observability.stats.CacheInfo import LRUCache
+        from src.observability.stats.cache_info import LRUCache
         cache = LRUCache[str, int](max_size=100)
         cache.put("key1", 42)
         assert cache.get("key1") == 42
         assert cache.get("missing") is None
     
     def test_lru_cache_hit_stats(self):
-        from src.observability.stats.CacheInfo import LRUCache
+        from src.observability.stats.cache_info import LRUCache
         cache = LRUCache[str, int](max_size=100)
         cache.put("key1", 42)
         cache.get("key1")  # hit
@@ -100,7 +100,7 @@ class TestCacheInfo:
         assert cache.stats.hit_ratio == 0.5
     
     def test_lru_cache_pinned(self):
-        from src.observability.stats.CacheInfo import LRUCache
+        from src.observability.stats.cache_info import LRUCache
         cache = LRUCache[str, int](max_size=2)
         cache.put("pinned", 100, pinned=True)
         cache.put("a", 1)
@@ -114,7 +114,7 @@ class TestRequestMetrics:
     """Test RequestMetrics module."""
     
     def test_request_lifecycle(self):
-        from src.observability.stats.RequestMetrics import RequestMetrics, RequestState
+        from src.observability.stats.request_metrics import RequestMetrics, RequestState
         m = RequestMetrics(request_id="test-123")
         m.mark_queued()
         m.mark_scheduled()
@@ -128,7 +128,7 @@ class TestRequestMetrics:
         assert m.total_time_ms >= 0
     
     def test_request_failed(self):
-        from src.observability.stats.RequestMetrics import RequestMetrics, RequestState
+        from src.observability.stats.request_metrics import RequestMetrics, RequestState
         m = RequestMetrics(request_id="fail-123")
         m.mark_failed("Test error")
         
@@ -142,13 +142,13 @@ class TestMemorySnapshot:
     """Test MemorySnapshot module."""
     
     def test_capture_snapshot(self):
-        from src.observability.stats.MemorySnapshot import capture_memory_snapshot
+        from src.observability.stats.memory_snapshot import capture_memory_snapshot
         snap = capture_memory_snapshot(include_gpu=False)
         assert snap.gc_objects > 0
         assert snap.timestamp > 0
     
     def test_gc_stats(self):
-        from src.observability.stats.MemorySnapshot import gc_stats
+        from src.observability.stats.memory_snapshot import gc_stats
         stats = gc_stats()
         assert 'counts' in stats
         assert 'thresholds' in stats

@@ -101,9 +101,10 @@ class ChangesAgent(
 
         return bool(super().update_file())
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Use AI to improve the changelogs with specific change tracking suggestions."""
-        logging.info(f"Improving changelog for {self.file_path}")
+        actual_path = Path(target_file) if target_file else self.file_path
+        logging.info(f"Improving changelog for {actual_path}")
         # Add guidance for structured output
         enhanced_prompt = (
             f"{prompt}\n\n"

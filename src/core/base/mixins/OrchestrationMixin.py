@@ -100,11 +100,18 @@ class OrchestrationMixin:
             return original_content
         return result
 
-    async def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Improve content using a subagent (respected strategy if set)."""
+        actual_path = None
+        if target_file:
+            from pathlib import Path
+            actual_path = Path(target_file)
+        elif hasattr(self, "file_path"):
+            actual_path = self.file_path
+
         description = (
-            f"Improve {self.file_path.name}"
-            if hasattr(self, "file_path")
+            f"Improve {actual_path.name}"
+            if actual_path
             else "Improve content"
         )
         original = getattr(self, "previous_content", "")
@@ -163,14 +170,12 @@ class OrchestrationMixin:
                 # FleetManager.agents is a LazyAgentMap
                 if agent_type in self.fleet.agents:
                     sub_agent = self.fleet.agents[agent_type]
-                    if target_file:
-                        sub_agent.file_path = Path(target_file)
                     
                     # Log the delegation event
                     self.log_distributed("INFO", f"Delegated to fleet agent: {agent_type}", target=target_file)
                     
-                    # Execute
-                    res = sub_agent.improve_content(prompt)
+                    # Execute with explicit target_file (Phase 317 thread-safety)
+                    res = sub_agent.improve_content(prompt, target_file=target_file)
                     if asyncio.iscoroutine(res):
                         return await res
                     return res
@@ -189,13 +194,11 @@ class OrchestrationMixin:
             
             if agent_type in agent_map:
                 sub_agent = agent_map[agent_type]
-                if target_file:
-                    sub_agent.file_path = Path(target_file)
                 
                 self.log_distributed("INFO", f"Delegated to registry agent: {agent_type}", target=target_file)
                 
-                # Execute
-                res = sub_agent.improve_content(prompt)
+                # Execute with explicit target_file
+                res = sub_agent.improve_content(prompt, target_file=target_file)
                 if asyncio.iscoroutine(res):
                     return await res
                 return res

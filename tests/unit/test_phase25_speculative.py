@@ -413,7 +413,7 @@ class TestSchedulerStats:
 
     def test_prefix_cache_stats_init(self):
         """Test PrefixCacheStats initialization."""
-        from src.observability.stats.SchedulerStats import PrefixCacheStats
+        from src.observability.stats.scheduler_stats import PrefixCacheStats
         
         stats = PrefixCacheStats()
         assert stats.num_tokens == 0
@@ -422,7 +422,7 @@ class TestSchedulerStats:
 
     def test_prefix_cache_stats_record(self):
         """Test PrefixCacheStats recording."""
-        from src.observability.stats.SchedulerStats import PrefixCacheStats
+        from src.observability.stats.scheduler_stats import PrefixCacheStats
         
         stats = PrefixCacheStats()
         stats.record(num_tokens=100, num_hits=75)
@@ -434,7 +434,7 @@ class TestSchedulerStats:
 
     def test_spec_decoding_stats_init(self):
         """Test SpecDecodingStats initialization."""
-        from src.observability.stats.SchedulerStats import SpecDecodingStats
+        from src.observability.stats.scheduler_stats import SpecDecodingStats
         
         stats = SpecDecodingStats.new(num_spec_tokens=5)
         
@@ -443,7 +443,7 @@ class TestSchedulerStats:
 
     def test_spec_decoding_stats_observe(self):
         """Test SpecDecodingStats observing drafts."""
-        from src.observability.stats.SchedulerStats import SpecDecodingStats
+        from src.observability.stats.scheduler_stats import SpecDecodingStats
         
         stats = SpecDecodingStats.new(num_spec_tokens=5)
         stats.observe_draft(
@@ -462,7 +462,7 @@ class TestSchedulerStats:
 
     def test_cuda_graph_stats(self):
         """Test CUDAGraphStats tracking."""
-        from src.observability.stats.SchedulerStats import CUDAGraphStats
+        from src.observability.stats.scheduler_stats import CUDAGraphStats
         
         stats = CUDAGraphStats()
         stats.record_capture(time_ms=10.0, memory_mb=100.0)
@@ -476,7 +476,7 @@ class TestSchedulerStats:
 
     def test_perf_stats(self):
         """Test PerfStats timing breakdown."""
-        from src.observability.stats.SchedulerStats import PerfStats
+        from src.observability.stats.scheduler_stats import PerfStats
         
         stats = PerfStats()
         stats.record_step(schedule_ms=1.0, forward_ms=10.0, sample_ms=0.5)
@@ -488,7 +488,7 @@ class TestSchedulerStats:
 
     def test_kv_cache_eviction_event(self):
         """Test KVCacheEvictionEvent creation."""
-        from src.observability.stats.SchedulerStats import KVCacheEvictionEvent
+        from src.observability.stats.scheduler_stats import KVCacheEvictionEvent
         
         event = KVCacheEvictionEvent.now(
             request_id="req-123",
@@ -503,7 +503,7 @@ class TestSchedulerStats:
 
     def test_scheduler_stats_init(self):
         """Test SchedulerStats initialization."""
-        from src.observability.stats.SchedulerStats import SchedulerStats
+        from src.observability.stats.scheduler_stats import SchedulerStats
         
         stats = SchedulerStats()
         
@@ -513,7 +513,7 @@ class TestSchedulerStats:
 
     def test_scheduler_stats_record_step(self):
         """Test SchedulerStats recording steps."""
-        from src.observability.stats.SchedulerStats import SchedulerStats
+        from src.observability.stats.scheduler_stats import SchedulerStats
         
         stats = SchedulerStats()
         stats.record_step(num_running=10, num_waiting=5, kv_usage=0.75)
@@ -525,7 +525,7 @@ class TestSchedulerStats:
 
     def test_scheduler_stats_as_dict(self):
         """Test SchedulerStats serialization."""
-        from src.observability.stats.SchedulerStats import create_scheduler_stats
+        from src.observability.stats.scheduler_stats import create_scheduler_stats
         
         stats = create_scheduler_stats(enable_spec_decoding=True, num_spec_tokens=5)
         stats.record_step(num_running=10, num_waiting=5, kv_usage=0.75)
@@ -539,7 +539,7 @@ class TestSchedulerStats:
 
     def test_scheduler_stats_to_prometheus(self):
         """Test SchedulerStats Prometheus export."""
-        from src.observability.stats.SchedulerStats import SchedulerStats
+        from src.observability.stats.scheduler_stats import SchedulerStats
         
         stats = SchedulerStats()
         stats.record_step(num_running=10, num_waiting=5, kv_usage=0.75)
@@ -552,7 +552,7 @@ class TestSchedulerStats:
 
     def test_scheduler_stats_collector(self):
         """Test SchedulerStatsCollector aggregation."""
-        from src.observability.stats.SchedulerStats import create_stats_collector
+        from src.observability.stats.scheduler_stats import create_stats_collector
         
         collector = create_stats_collector(window_size=10)
         
@@ -663,7 +663,7 @@ class TestPhase25Integration:
 
     def test_full_inference_pipeline_stats(self):
         """Test full inference pipeline with comprehensive stats."""
-        from src.observability.stats.SchedulerStats import (
+        from src.observability.stats.scheduler_stats import (
             SchedulerStats,
             SpecDecodingStats,
             PerfStats,

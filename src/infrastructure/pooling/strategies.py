@@ -182,18 +182,8 @@ class MatryoshkaPooler(BasePooler):
         hidden_states: np.ndarray,
         attention_mask: Optional[np.ndarray] = None
     ) -> np.ndarray:
-        # Avoid recursion by calling the fallback pooler directly
-        embeddings = self.fallback_pooler.pool(hidden_states, attention_mask)
-        
-        # Manually apply truncation and normalization since we can't call pool_and_process
-        if self.config.truncate_dim:
-            embeddings = self.truncate(embeddings, self.config.truncate_dim)
-            
-        if self.config.normalize:
-            embeddings = self.normalize(embeddings)
-            
-        return embeddings
-
+        # Delegate to fallback pooler; let pool_and_process handle truncation/normalization
+        return self.fallback_pooler.pool(hidden_states, attention_mask)
     def get_dimension(self, dim: int) -> int:
         """Returns the nearest supported dimension."""
         return min(self.supported_dims, key=lambda x: abs(x - dim))

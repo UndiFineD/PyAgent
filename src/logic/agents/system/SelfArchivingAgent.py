@@ -74,5 +74,5 @@ class SelfArchivingAgent(BaseAgent):
 
         return report
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return self.archive_targets(self.identify_archivable_targets())

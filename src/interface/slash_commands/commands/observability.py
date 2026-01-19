@@ -48,7 +48,7 @@ def cmd_cache(ctx: CommandContext) -> CommandResult:
 def cmd_counters(ctx: CommandContext) -> CommandResult:
     """Get structured counter statistics."""
     try:
-        from src.observability.stats.StructuredCounter import (
+        from src.observability.stats.structured_counter import (
             RequestCounter,
             CacheCounter,
         )

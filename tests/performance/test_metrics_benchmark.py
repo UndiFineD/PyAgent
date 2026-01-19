@@ -5,7 +5,7 @@ This establishes the baseline before Rust conversion.
 
 import time
 import random
-from src.observability.stats.MetricsCore import (
+from src.observability.stats.metrics_core import (
     TokenCostCore,
     ModelFallbackCore,
     StatsRollupCore,
