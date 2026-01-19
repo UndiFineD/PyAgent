@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright 2025 PyAgent Contributors
 """
-Facade for Conversation Context Management.
-Delegates to modularized sub-packages in src/infrastructure/conversation/context/.
+Conversation context management.
+Facade for the modularized implementation in src/infrastructure/conversation/context/.
 """
 
 from __future__ import annotations
@@ -24,7 +24,9 @@ from .context import (
     merge_contexts,
     restore_context,
     TurnTracker,
+    TokenTracker,
     ToolOrchestrator,
+    ContextOrchestrator,
 )
 
 __all__ = [
@@ -44,7 +46,7 @@ __all__ = [
     "merge_contexts",
     "restore_context",
     "TurnTracker",
+    "TokenTracker",
     "ToolOrchestrator",
+    "ContextOrchestrator",
 ]
-
-
