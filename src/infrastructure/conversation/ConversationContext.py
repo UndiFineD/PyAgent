@@ -5,7 +5,9 @@ Conversation context management.
 Facade for the modularized implementation in src/infrastructure/conversation/context/.
 """
 
-from .context.models import (
+from __future__ import annotations
+
+from .context import (
     ContextConfig,
     ContextState,
     ContextSnapshot,
@@ -14,21 +16,17 @@ from .context.models import (
     ConversationTurn,
     ToolExecution,
     ToolExecutionPolicy,
-)
-from .context.core import (
     ConversationContext,
     AgenticContext,
-)
-from .context.manager import (
     ContextManager,
     get_context_manager,
-)
-from .context.orchestrator import (
-    ContextOrchestrator,
-)
-from .context.tracker import (
+    create_context,
+    merge_contexts,
+    restore_context,
     TurnTracker,
     TokenTracker,
+    ToolOrchestrator,
+    ContextOrchestrator,
 )
 
 __all__ = [
@@ -44,7 +42,11 @@ __all__ = [
     "AgenticContext",
     "ContextManager",
     "get_context_manager",
-    "ContextOrchestrator",
+    "create_context",
+    "merge_contexts",
+    "restore_context",
     "TurnTracker",
     "TokenTracker",
+    "ToolOrchestrator",
+    "ContextOrchestrator",
 ]
