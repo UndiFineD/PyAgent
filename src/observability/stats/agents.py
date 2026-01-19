@@ -10,7 +10,7 @@ from pathlib import Path
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from .Engine import StatsCore
-from .ObservabilityCore import Alert, Metric, MetricSnapshot, MetricType, Threshold
+from .observability_core import Alert, Metric, MetricSnapshot, MetricType, Threshold
 
 logger = logging.getLogger(__name__)
 

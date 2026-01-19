@@ -23,7 +23,7 @@ import argparse
 import json
 import logging
 import sys
-from .StatsAgent import StatsAgent
+from .stats_agent import StatsAgent
 
 try:
     import matplotlib

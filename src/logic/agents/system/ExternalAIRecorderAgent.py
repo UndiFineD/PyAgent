@@ -88,7 +88,7 @@ class ExternalAIRecorderAgent(BaseAgent):
 
         return "Local knowledge synthesis: Identification of 5 high-value patterns from external records completed."
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return "Local knowledge base is thriving with data from external AI sessions."
 
 

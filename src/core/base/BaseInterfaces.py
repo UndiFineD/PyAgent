@@ -45,7 +45,7 @@ class AgentInterface(Protocol):
     def read_previous_content(self) -> str:
         raise NotImplementedError()
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         raise NotImplementedError()
 
     def update_file(self) -> bool:

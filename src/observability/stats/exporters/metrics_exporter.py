@@ -21,7 +21,7 @@ from __future__ import annotations
 from src.core.base.Version import VERSION
 import logging
 import time
-from .PrometheusExporter import PrometheusExporter
+from .prometheus_exporter import PrometheusExporter
 
 __version__ = VERSION
 

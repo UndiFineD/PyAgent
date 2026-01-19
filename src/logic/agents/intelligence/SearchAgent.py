@@ -183,14 +183,15 @@ class SearchAgent(BaseAgent):
         # Fallback to DDG
         return self._search_duckduckgo(query)
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Perform research based on the topic and prompt."""
+        actual_path = Path(target_file) if target_file else self.file_path
         # Step 1: Perform real search
         search_results = self.perform_search(prompt)
 
         # Step 2: Use AI to synthesize the results
         research_prompt = (
-            f"You are a Research Agent. Your task is to perform deep research on the following topic: {self.file_path}\n"
+            f"You are a Research Agent. Your task is to perform deep research on the following topic: {actual_path}\n"
             f"Specific focus: {prompt}\n\n"
             f"Here are REAL search results retrieved for your query:\n\n{search_results}\n\n"
             "Based on these results and your internal knowledge, provide a comprehensive report."

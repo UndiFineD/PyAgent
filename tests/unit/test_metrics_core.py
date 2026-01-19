@@ -1,6 +1,6 @@
 from hypothesis import given, strategies as st
 import math
-from src.observability.stats.MetricsCore import (
+from src.observability.stats.metrics_core import (
     TokenCostCore,
     ModelFallbackCore,
     StatsRollupCore,

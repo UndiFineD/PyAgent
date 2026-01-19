@@ -258,11 +258,15 @@ class BaseAgent(
             logging.error(f"Think execution failed: {e}")
             return f"Error encountered during agent reasoning: {str(e)}"
 
-    async def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """
         Generic improvement method.
         Subclasses likely override this for specialized transformations (e.g., CoderAgent).
         """
+        if target_file:
+            # Optionally update local context if needed, but avoid mutating shared state if possible.
+            # Most specialized agents will use target_file directly.
+            pass
         return await self.think(prompt)
 
     def get_model(self) -> str:

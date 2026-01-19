@@ -137,9 +137,9 @@ class DocInferenceAgent(BaseAgent):
         """Uses advanced vision-language models to transcribe handwritten notes."""
         return "Transcribed Note: 'Meeting at 5pm to discuss the new agent architecture. Don't forget the coffee.'"
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Generic processing helper."""
-        return f"DocInference status: Layout engine active. Ready for {prompt}."
+        return f"DocInference status: Layout engine active. Ready for {prompt} (Target: {target_file})."
 
 
 if __name__ == "__main__":

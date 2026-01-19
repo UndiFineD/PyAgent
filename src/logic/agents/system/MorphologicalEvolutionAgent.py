@@ -95,6 +95,6 @@ class MorphologicalEvolutionAgent(BaseAgent):
             "evolution_readiness": 0.85,
         }
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         # Standard implementation
         return "Morphological Evolution Report: Proposing structural symmetry for fleet interfaces."

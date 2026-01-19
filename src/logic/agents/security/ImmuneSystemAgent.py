@@ -172,7 +172,7 @@ class ImmuneSystemAgent(BaseAgent):
 
         return f"### Autonomous Security Patch Proposal\n\n{patch}"
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """General threat mitigation strategy."""
         return "The digital immune system is active. All node telemetry is within normal bounds."
 

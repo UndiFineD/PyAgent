@@ -21,7 +21,7 @@ import os
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import create_main_function, as_tool
-from src.observability.stats.MetricsEngine import ObservabilityEngine
+from src.observability.stats.metrics_engine import ObservabilityEngine
 
 __version__ = VERSION
 
@@ -189,7 +189,7 @@ class SelfHealingAgent(BaseAgent):
 
         return "\n".join(report)
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Trigger a self-healing scan."""
         return self.scan_for_failures()
 

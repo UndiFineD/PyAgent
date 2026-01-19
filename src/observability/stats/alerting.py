@@ -6,7 +6,7 @@ from __future__ import annotations
 import logging
 from datetime import datetime
 from typing import Any
-from .ObservabilityCore import Alert, AlertSeverity, RetentionPolicy, Threshold
+from .observability_core import Alert, AlertSeverity, RetentionPolicy, Threshold
 
 try:
     from rust_core import match_policies_rust

@@ -116,7 +116,7 @@ class WebAgent(BaseAgent):
             f"https://en.wikipedia.org/wiki/{query.replace(' ', '_')}",
         ]
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Handle web-related requests."""
         if "fetch" in prompt.lower() or "read" in prompt.lower():
             # Basic parsing of URL from prompt

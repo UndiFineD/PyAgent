@@ -81,7 +81,7 @@ from src.infrastructure.compilation.TorchCompileIntegration import (
     get_compile_config,
 )
 
-from src.observability.stats.CompilationCounter import (
+from src.observability.stats.compilation_counter import (
     CompileEventType,
     CompileEvent,
     FunctionStats,
