@@ -1,0 +1,78 @@
+# SPDX-License-Identifier: Apache-2.0
+"""
+N-gram Proposer Types - Enums and Configuration for n-gram matching.
+"""
+
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from enum import Enum, auto
+
+
+class MatchingStrategy(Enum):
+    """Strategy for n-gram matching."""
+    FIRST = auto()       # Return first match found
+    LONGEST = auto()     # Return longest matching continuation
+    RECENT = auto()      # Prefer more recent matches
+    WEIGHTED = auto()    # Weight by position and frequency
+
+
+@dataclass
+class NgramConfig:
+    """Configuration for n-gram proposer."""
+    min_n: int = 1                     # Minimum n-gram size
+    max_n: int = 4                     # Maximum n-gram size
+    num_speculative_tokens: int = 5    # Number of tokens to propose
+    max_model_len: int = 8192          # Maximum model context length
+    strategy: MatchingStrategy = MatchingStrategy.LONGEST
+    recency_weight: float = 0.1        # Weight for recency (0 = no recency bias)
+    min_match_frequency: int = 1       # Minimum match frequency to consider
+    use_suffix_tree: bool = True       # Use suffix tree for fast lookup
+    parallel_threshold: int = 8192     # Token count threshold for parallel processing
+    
+    def __post_init__(self) -> None:
+        if self.min_n < 1:
+            raise ValueError(f"min_n must be >= 1, got {self.min_n}")
+        if self.max_n < self.min_n:
+            raise ValueError(f"max_n must be >= min_n")
+        if self.num_speculative_tokens < 1:
+            raise ValueError(f"num_speculative_tokens must be >= 1")
+
+
+@dataclass
+class ProposalStats:
+    """Statistics for n-gram proposals."""
+    total_proposals: int = 0
+    successful_matches: int = 0
+    average_proposal_length: float = 0.0
+    match_positions: list[int] = field(default_factory=list)
+    ngram_sizes_used: dict[int, int] = field(default_factory=dict)
+    
+    def update(self, proposal_length: int, ngram_size: int, position: int) -> None:
+        """Update statistics with new proposal."""
+        self.total_proposals += 1
+        if proposal_length > 0:
+            self.successful_matches += 1
+            self.match_positions.append(position)
+        
+        # Update running average
+        prev_total = self.average_proposal_length * (self.total_proposals - 1)
+        self.average_proposal_length = (prev_total + proposal_length) / self.total_proposals
+        
+        # Track n-gram sizes
+        self.ngram_sizes_used[ngram_size] = self.ngram_sizes_used.get(ngram_size, 0) + 1
+    
+    @property
+    def success_rate(self) -> float:
+        """Rate of successful matches."""
+        if self.total_proposals == 0:
+            return 0.0
+        return self.successful_matches / self.total_proposals
+    
+    def reset(self) -> None:
+        """Reset statistics."""
+        self.total_proposals = 0
+        self.successful_matches = 0
+        self.average_proposal_length = 0.0
+        self.match_positions.clear()
+        self.ngram_sizes_used.clear()

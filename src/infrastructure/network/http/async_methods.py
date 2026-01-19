@@ -1,0 +1,117 @@
+from __future__ import annotations
+from pathlib import Path
+from typing import Any, Callable, Mapping, TYPE_CHECKING
+if TYPE_CHECKING:
+    from src.infrastructure.network.http.connection import HTTPConnection
+
+class AsyncHTTPMixin:
+    """Mixin providing asynchronous HTTP methods."""
+    
+    async def async_get_response(
+        self: HTTPConnection,
+        url: str,
+        *,
+        timeout: float | None = None,
+        extra_headers: Mapping[str, str] | None = None,
+        allow_redirects: bool = True,
+    ) -> Any:
+        """Make an async GET request and return the response object."""
+        self._validate_http_url(url)
+        
+        client = await self.get_async_client()
+        extra_headers = extra_headers or {}
+        
+        return client.get(
+            url,
+            headers=self._headers(**extra_headers),
+            timeout=timeout,
+            allow_redirects=allow_redirects,
+        )
+    
+    async def async_get_bytes(
+        self: HTTPConnection,
+        url: str,
+        *,
+        timeout: float | None = None,
+        allow_redirects: bool = True,
+    ) -> bytes:
+        """Async GET request returning response body as bytes."""
+        async with await self.async_get_response(
+            url, timeout=timeout, allow_redirects=allow_redirects
+        ) as r:
+            r.raise_for_status()
+            return await r.read()
+    
+    async def async_get_text(
+        self: HTTPConnection,
+        url: str,
+        *,
+        timeout: float | None = None,
+        encoding: str | None = None,
+    ) -> str:
+        """Async GET request returning response body as text."""
+        async with await self.async_get_response(url, timeout=timeout) as r:
+            r.raise_for_status()
+            return await r.text(encoding=encoding)
+    
+    async def async_get_json(
+        self: HTTPConnection,
+        url: str,
+        *,
+        timeout: float | None = None,
+    ) -> Any:
+        """Async GET request returning response body as parsed JSON."""
+        async with await self.async_get_response(url, timeout=timeout) as r:
+            r.raise_for_status()
+            return await r.json()
+    
+    async def async_post_json(
+        self: HTTPConnection,
+        url: str,
+        data: Any,
+        *,
+        timeout: float | None = None,
+        extra_headers: Mapping[str, str] | None = None,
+    ) -> Any:
+        """Async POST JSON data and return parsed JSON response."""
+        self._validate_http_url(url)
+        
+        client = await self.get_async_client()
+        extra_headers = extra_headers or {}
+        
+        async with client.post(
+            url,
+            json=data,
+            headers=self._headers(**extra_headers),
+            timeout=timeout,
+        ) as r:
+            r.raise_for_status()
+            return await r.json()
+    
+    async def async_download_file(
+        self: HTTPConnection,
+        url: str,
+        save_path: Path | str,
+        *,
+        timeout: float | None = None,
+        chunk_size: int = 8192,
+        progress_callback: Callable[[int, int | None], None] | None = None,
+    ) -> Path:
+        """Async download a file from URL to local path."""
+        save_path = Path(save_path)
+        save_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        async with await self.async_get_response(url, timeout=timeout) as r:
+            r.raise_for_status()
+            
+            total_size = int(r.headers.get("content-length", 0)) or None
+            downloaded = 0
+            
+            with save_path.open("wb") as f:
+                async for chunk in r.content.iter_chunked(chunk_size):
+                    f.write(chunk)
+                    downloaded += len(chunk)
+                    if progress_callback:
+                        progress_callback(downloaded, total_size)
+        
+        return save_path

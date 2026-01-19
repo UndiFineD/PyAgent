@@ -1,0 +1,74 @@
+"""
+Phase 45: Engine Client Types
+Shared types and configurations for engine clients.
+"""
+
+from __future__ import annotations
+import time
+from dataclasses import dataclass, field
+from enum import Enum, auto
+from typing import Any, Optional
+
+
+class ClientMode(Enum):
+    """Engine client execution mode."""
+    INPROC = auto()      # In-process, single GPU
+    SYNC_MP = auto()     # Synchronous multi-process
+    ASYNC_MP = auto()    # Async multi-process
+    DP_ASYNC = auto()    # Data parallel with load balancing
+
+
+class WorkerState(Enum):
+    """Worker health state."""
+    HEALTHY = auto()
+    DEGRADED = auto()
+    UNHEALTHY = auto()
+    DEAD = auto()
+
+
+@dataclass
+class EngineClientConfig:
+    """Configuration for engine client."""
+    mode: ClientMode = ClientMode.ASYNC_MP
+    num_workers: int = 1
+    zmq_endpoint: str = "ipc:///tmp/pyagent_engine"
+    request_timeout_ms: int = 30000
+    health_check_interval_s: float = 5.0
+    max_pending_requests: int = 1000
+    p2c_sample_size: int = 2  # Power of Two Choices
+    auto_select_mode: bool = True  # Auto-select based on GPU topology
+
+
+@dataclass
+class SchedulerOutput:
+    """Output from scheduler for engine core."""
+    request_ids: list[str] = field(default_factory=list)
+    scheduled_tokens: int = 0
+    num_prefill: int = 0
+    num_decode: int = 0
+    block_tables: dict[str, list[int]] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
+
+
+@dataclass
+class EngineOutput:
+    """Output from engine core execution."""
+    request_id: str
+    outputs: list[Any] = field(default_factory=list)
+    finished: bool = False
+    metrics: dict[str, float] = field(default_factory=dict)
+    error: Optional[str] = None
+    timestamp: float = field(default_factory=time.time)
+
+
+@dataclass
+class WorkerInfo:
+    """Worker metadata and health."""
+    worker_id: int
+    endpoint: str
+    state: WorkerState = WorkerState.HEALTHY
+    pending_requests: int = 0
+    total_processed: int = 0
+    avg_latency_ms: float = 0.0
+    last_health_check: float = field(default_factory=time.time)
+    consecutive_failures: int = 0

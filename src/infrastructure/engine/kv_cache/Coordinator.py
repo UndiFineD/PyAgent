@@ -4,6 +4,7 @@ from .Enums import CacheGroupType
 from .DataClasses import CacheConfig, KVCacheBlocks, BlockHash, BlockHashWithGroupId, KVCacheBlock, CacheGroupSpec
 from .Structural import BlockPool
 from .Managers import SingleTypeKVCacheManager, FullAttentionManager, SlidingWindowManager, CrossAttentionManager
+from .PackKV import PackKVManager
 
 class KVCacheCoordinator:
     """Coordinates multiple KV cache groups for complex attention patterns."""
@@ -23,6 +24,7 @@ class KVCacheCoordinator:
         if spec.group_type == CacheGroupType.FULL_ATTENTION: return FullAttentionManager(spec, self.block_pool)
         elif spec.group_type == CacheGroupType.SLIDING_WINDOW: return SlidingWindowManager(spec, self.block_pool)
         elif spec.group_type == CacheGroupType.CROSS_ATTENTION: return CrossAttentionManager(spec, self.block_pool)
+        elif spec.group_type == CacheGroupType.PACKKV_COMPRESSED: return PackKVManager(spec, self.block_pool)
         return FullAttentionManager(spec, self.block_pool)
     
     @property
@@ -53,6 +55,16 @@ class KVCacheCoordinator:
     def get_blocks(self, request_id: str) -> KVCacheBlocks:
         blocks_per_group = [tuple(manager.get_blocks(request_id)) for manager in self.managers]
         return KVCacheBlocks(tuple(blocks_per_group))
+
+    def get_compression_metadata(self, request_id: str) -> Dict[int, Dict[str, Any]]:
+        """Collect compression metadata from all managers supporting it."""
+        metadata = {}
+        for manager in self.managers:
+            if hasattr(manager, "compression_metadata"):
+                # manager.compression_metadata is Dict[int, Dict[str, Any]]
+                # where key is block_id
+                metadata.update(getattr(manager, "compression_metadata"))
+        return metadata
     
     def cache_blocks(self, request_id: str, block_hashes: List[BlockHash], group_id: int = 0) -> None:
         blocks = self.managers[group_id].get_blocks(request_id)

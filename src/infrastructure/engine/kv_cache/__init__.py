@@ -15,6 +15,7 @@ from .Managers import (
     SlidingWindowManager, 
     CrossAttentionManager
 )
+from .PackKV import PackKVManager
 from .Coordinator import KVCacheCoordinator
 from .Advanced import (
     HierarchicalKVCacheCoordinator, 
@@ -40,6 +41,7 @@ __all__ = [
     'FullAttentionManager',
     'SlidingWindowManager',
     'CrossAttentionManager',
+    'PackKVManager',
     'KVCacheCoordinator',
     'HierarchicalKVCacheCoordinator',
     'PredictiveKVCacheCoordinator',

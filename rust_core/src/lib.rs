@@ -315,6 +315,7 @@ fn rust_core(m: &Bound<'_, PyModule>) -> PyResult<()> {
 
     // Phase 25: Inference Acceleration (Speculative Decoding, Prefix Cache, KV Cache)
     m.add_function(wrap_pyfunction!(inference::ngram_match_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(inference::fused_packkv_attention_rust, m)?)?;
     m.add_function(wrap_pyfunction!(inference::build_ngram_index_rust, m)?)?;
     m.add_function(wrap_pyfunction!(inference::find_continuations_rust, m)?)?;
     m.add_function(wrap_pyfunction!(inference::build_suffix_array_rust, m)?)?;

@@ -8,6 +8,7 @@ class CacheGroupType(Enum):
     CROSS_ATTENTION = auto()
     CHUNKED_LOCAL = auto()
     MLA_COMPRESSED = auto()
+    PACKKV_COMPRESSED = auto()
 
 
 class AllocationStrategy(Enum):
