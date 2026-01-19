@@ -29,6 +29,8 @@ from .utils import (
     detect_tokenizer_backend,
 )
 
+import numpy as np
+
 __all__ = [
     "TokenizerBackend",
     "SpecialTokenHandling",

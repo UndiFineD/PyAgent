@@ -7,7 +7,9 @@ Chat template registry package for Jinja2 and custom template management.
 from .config import (
     TemplateType,
     TemplateConfig,
+    TemplateInfo,
     RenderOptions,
+    ModelType,
     MODEL_TEMPLATE_MAP,
     DEFAULT_CONFIG,
 )
@@ -25,7 +27,9 @@ from .utils import (
 __all__ = [
     "TemplateType",
     "TemplateConfig",
+    "TemplateInfo",
     "RenderOptions",
+    "ModelType",
     "MODEL_TEMPLATE_MAP",
     "DEFAULT_CONFIG",
     "ChatTemplate",
