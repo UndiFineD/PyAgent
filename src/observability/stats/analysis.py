@@ -13,11 +13,11 @@ import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
-from .ObservabilityCore import (
+from .observability_core import (
     DerivedMetric,
     MetricCorrelation,
 )
-from .ABEngine import (
+from .ab_engine import (
     ABComparisonResult,
     ABSignificanceResult,
 )

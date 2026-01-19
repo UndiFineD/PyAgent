@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
     from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
     from src.infrastructure.backend.SqlMetadataHandler import SqlMetadataHandler
-    from src.observability.stats.MetricsEngine import (
+    from src.observability.stats.metrics_engine import (
         ObservabilityEngine,
         ModelFallbackEngine,
     )

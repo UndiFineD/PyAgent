@@ -24,7 +24,7 @@ import inspect
 from typing import Any
 from collections.abc import Callable
 from src.core.base.core.ResilienceCore import ResilienceCore
-from src.observability.stats.exporters import OTelManager
+from src.observability.stats.exporters import otel_manager
 
 __version__ = VERSION
 

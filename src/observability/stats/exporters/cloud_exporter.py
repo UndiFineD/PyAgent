@@ -17,8 +17,8 @@
 
 from __future__ import annotations
 from src.core.base.Version import VERSION
-from ..ObservabilityCore import ExportDestination
-from ..ObservabilityCore import Metric
+from ..observability_core import ExportDestination
+from ..observability_core import Metric
 from datetime import datetime
 from typing import Any
 import json

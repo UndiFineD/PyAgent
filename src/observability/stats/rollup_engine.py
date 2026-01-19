@@ -8,9 +8,9 @@ import logging
 import math
 from datetime import datetime
 from typing import Any
-from .Metrics import AggregationType, Metric
-from .ObservabilityCore import RollupConfig
-from .MetricsCore import StatsRollupCore, CorrelationCore
+from .metrics import AggregationType, Metric
+from .observability_core import RollupConfig
+from .metrics_core import StatsRollupCore, CorrelationCore
 
 logger = logging.getLogger(__name__)
 

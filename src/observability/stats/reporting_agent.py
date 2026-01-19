@@ -44,7 +44,7 @@ class ReportingAgent(BaseAgent):
         from src.logic.agents.cognitive.MemoryConsolidationAgent import (
             MemoryConsolidationAgent,
         )
-        from src.observability.stats.TransparencyAgent import TransparencyAgent
+        from src.observability.stats.transparency_agent import transparency_agent
         from src.logic.agents.development.SpecToolAgent import SpecToolAgent
         from src.logic.agents.system.KernelAgent import KernelAgent
         from src.logic.agents.development.PullRequestAgent import PRAgent
@@ -170,7 +170,7 @@ class ReportingAgent(BaseAgent):
 
         return "\n".join(dashboard)
 
-    async def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Alias for dashboard generation or refinement."""
         return await self.generate_dashboard()
 

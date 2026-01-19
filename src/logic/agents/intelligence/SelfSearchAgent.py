@@ -75,7 +75,7 @@ Query: {query}
         logging.info(f"SelfSearchAgent: Executing internal search for '{query}'")
         return f"Executing structured self-search for: {query}\nStructure:\n{structure}"
 
-    def improve_content(self, query: str) -> str:
+    def improve_content(self, query: str, target_file: str | None = None) -> str:
         """Returns the self-search results for a given query."""
         return self.perform_internal_search(query)
 

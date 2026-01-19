@@ -93,7 +93,7 @@ class SQLQueryAgent(BaseAgent):
         except Exception as e:
             return f"Schema Error: {e}"
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """SQL generation helper."""
         return f"SQLAgent: Ready to query database. Connection active: {self.connection is not None}."
 

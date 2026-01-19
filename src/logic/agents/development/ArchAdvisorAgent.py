@@ -75,7 +75,7 @@ class ArchAdvisorAgent(BaseAgent):
 
         return "\n".join(report)
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Perform architectural review."""
         return self.analyze_coupling()
 

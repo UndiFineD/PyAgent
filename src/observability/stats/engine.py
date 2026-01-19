@@ -7,11 +7,11 @@ import logging
 import time
 from pathlib import Path
 from typing import Any
-from .Alerting import ThresholdAlertManager
+from .alerting import ThresholdAlertManager
 from .analysis import TokenCostEngine
-from .RollupEngine import StatsQueryEngine, StatsRollupCalculator
+from .rollup_engine import StatsQueryEngine, StatsRollupCalculator
 from .exporters import MetricsExporter, OTelManager, PrometheusExporter
-from .Metrics import AgentMetric, Metric
+from .metrics import AgentMetric, Metric
 
 logger = logging.getLogger(__name__)
 
@@ -120,7 +120,7 @@ class StatsNamespaceManager:
         self.namespaces: dict[str, Any] = {}
 
     def create(self, name: str) -> Any:
-        from .ObservabilityCore import StatsNamespace
+        from .observability_core import StatsNamespace
 
         ns = StatsNamespace(name)
         self.namespaces[name] = ns

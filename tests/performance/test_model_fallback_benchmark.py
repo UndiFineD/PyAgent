@@ -1,6 +1,6 @@
 import timeit
 import statistics
-from src.observability.stats.MetricsCore import ModelFallbackCore
+from src.observability.stats.metrics_core import ModelFallbackCore
 
 
 def benchmark_fallback():

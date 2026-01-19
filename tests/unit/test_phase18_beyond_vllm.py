@@ -521,7 +521,7 @@ class TestHistogram:
     
     def test_histogram_basic(self):
         """Test basic histogram operations."""
-        from src.observability.stats.Histogram import Histogram
+        from src.observability.stats.histogram import Histogram
         
         h = Histogram(min_value=0.0, max_value=100.0, num_buckets=10)
         
@@ -533,7 +533,7 @@ class TestHistogram:
     
     def test_histogram_percentiles(self):
         """Test percentile calculations."""
-        from src.observability.stats.Histogram import Histogram
+        from src.observability.stats.histogram import Histogram
         
         h = Histogram(min_value=1.0, max_value=1000.0, num_buckets=100)
         
@@ -551,7 +551,7 @@ class TestHistogram:
     
     def test_histogram_stats(self):
         """Test histogram statistics."""
-        from src.observability.stats.Histogram import Histogram
+        from src.observability.stats.histogram import Histogram
         
         h = Histogram(min_value=1.0, max_value=100.0, num_buckets=50)
         
@@ -567,7 +567,7 @@ class TestHistogram:
     
     def test_latency_histogram(self):
         """Test pre-configured latency histogram."""
-        from src.observability.stats.Histogram import LatencyHistogram
+        from src.observability.stats.histogram import LatencyHistogram
         
         h = LatencyHistogram()
         
@@ -584,7 +584,7 @@ class TestHistogram:
     
     def test_exponential_histogram(self):
         """Test exponential histogram."""
-        from src.observability.stats.Histogram import ExponentialHistogram
+        from src.observability.stats.histogram import ExponentialHistogram
         
         h = ExponentialHistogram(scale=2)
         

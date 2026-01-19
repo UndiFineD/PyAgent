@@ -128,7 +128,7 @@ class TemporalPredictorAgent(BaseAgent):
 
         return "No immediate preemptive actions required. System state is nominal."
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """General predictive guidance."""
         return "Temporal analysis active. I am forecasting system stability and bottleneck risks."
 
