@@ -51,7 +51,7 @@ def test_swarm_features() -> None:
 
     # Clear metrics to ensure threshold is hit
     fleet.telemetry.metrics = []
-    from src.observability.stats.Metrics_engine import AgentMetric
+    from src.observability.stats.Metrics import AgentMetric
 
     fleet.telemetry.metrics.append(
         AgentMetric(

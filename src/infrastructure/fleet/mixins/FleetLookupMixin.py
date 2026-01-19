@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from src.infrastructure.fleet.FleetManager import FleetManager
     from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
     from src.infrastructure.backend.SqlMetadataHandler import SqlMetadataHandler
-    from src.observability.stats.Metrics_engine import (
+    from src.observability.stats.MetricsEngine import (
         ObservabilityEngine,
         ModelFallbackEngine,
     )
@@ -41,19 +41,22 @@ class FleetLookupMixin:
             effective_name = name.replace("backend", "system")
 
         # 1. Capability Hints Fallback (Phase 125: Check explicit mappings first)
-        hints = getattr(self, "_capability_hints", {})
+        hints = self.__dict__.get("_capability_hints", {})
         if effective_name in hints:
             target = hints[effective_name]
-            try:
-                return getattr(self, target)
-            except AttributeError:
-                pass
+            # Avoid infinite recursion if target is same as name
+            if target != effective_name:
+                try:
+                    return getattr(self, target)
+                except AttributeError:
+                    pass
         elif name != effective_name and name in hints:
             target = hints[name]
-            try:
-                return getattr(self, target)
-            except AttributeError:
-                pass
+            if target != name:
+                try:
+                    return getattr(self, target)
+                except AttributeError:
+                    pass
 
         # 2. Try Orchestrators
         if "orchestrators" in current_dict:

@@ -109,23 +109,32 @@ class SelfImprovementCoordinator:
                     "type": "mcp_server",
                     "status": "connected" if name in registry._sessions else "registered"
                 })
-        except ImportError:
-            pass
+        except ImportError as e:
+            self.logger.debug(f"MCPServerRegistry not available for discovery: {e}")
+        except Exception as e:
+            self.logger.error(f"Error during MCP server discovery from registry: {e}", exc_info=True)
             
         # 3. Check persistent ConnectivityManager status
         try:
             from src.core.base.ConnectivityManager import ConnectivityManager
-            conn_mgr = ConnectivityManager(str(self.workspace_root))
+            # Ensure connectivity status is checked from the source
             status_file = self.workspace_root / "data" / "logs" / "connectivity_status.json"
             if status_file.exists():
-                data = json.loads(status_file.read_text())
-                for key, val in data.items():
-                    if isinstance(val, dict) and val.get("working") and not key.startswith("__"):
-                        # Avoid duplicates from LAN/MCP
-                        if not any(n["id"] == key for n in all_nodes):
-                            all_nodes.append({"id": key, "type": "remote_endpoint", "status": "available"})
-        except Exception:
-            pass
+                try:
+                    data = json.loads(status_file.read_text(encoding="utf-8"))
+                    for key, val in data.items():
+                        if isinstance(val, dict) and val.get("working") and not key.startswith("__"):
+                            # Avoid duplicates from LAN/MCP
+                            if not any(n["id"] == key for n in all_nodes):
+                                all_nodes.append({"id": key, "type": "remote_endpoint", "status": "available"})
+                except json.JSONDecodeError as jde:
+                    self.logger.warning(f"Failed to parse connectivity_status.json: {jde}")
+                except Exception as inner_e:
+                    self.logger.error(f"Error reading/processing connectivity_status.json: {inner_e}")
+        except ImportError as e:
+            self.logger.debug(f"ConnectivityManager not available for status check: {e}")
+        except Exception as e:
+            self.logger.error(f"Unexpected error in ConnectivityManager discovery block: {e}", exc_info=True)
 
         self.logger.info(f"Discovery Cycle: Found {len(all_nodes)} total available/connected servers/nodes.")
         return all_nodes
@@ -150,7 +159,9 @@ class SelfImprovementCoordinator:
         # 3. Check for failed agents in health registry
         failed_agents = []
         if orchestrator.core is not None:
-            failed_agents = orchestrator.core.detect_failures()        results = {
+            failed_agents = orchestrator.core.detect_failures()
+            
+        results = {
             "integrity": integrity_report,
             "health": health_audit,
             "failures": failed_agents,
@@ -180,7 +191,6 @@ class SelfImprovementCoordinator:
         
         valid_statuses = {"online", "connected", "available"}
         if not target or target.get("status") not in valid_statuses:
-            return {"status": "failed", "error": f"Peer {target_peer} is offline or unknown"}        if not target or target.get("status") != "online":
             return {"status": "failed", "error": f"Peer {target_peer} is offline or unknown"}
 
         # 2. Simulate task dispatch (Integration with RequestQueue.py / DistributedCoordinator.py)
