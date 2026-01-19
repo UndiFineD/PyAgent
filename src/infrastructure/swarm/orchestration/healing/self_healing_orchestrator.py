@@ -50,7 +50,8 @@ class SelfHealingOrchestrator:
         """
         Loads strategic healing parameters from docs/prompt/context.txt.
         Allows for dynamic adjustment of recovery thresholds (e.g., more aggressive during evolution phases).
-        """        prompt_dir = self.work_root / "docs" / "prompt"
+        """
+        prompt_dir = self.work_root / "docs" / "prompt"
         context_file = prompt_dir / "context.txt"
         
         if context_file.exists():

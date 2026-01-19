@@ -30,8 +30,16 @@ class PoolingEngine:
         PoolingStrategy.WEIGHTED_MEAN: WeightedMeanPooler
     }
     
-    def __init__(self, config: Optional[PoolingConfig] = None):
+    def __init__(self, config: Optional[PoolingConfig] = None, **kwargs):
         self.config = config or PoolingConfig()
+        # Phase 125: Handle legacy/test pass-through parameters
+        if "strategy" in kwargs:
+            self.config.strategy = kwargs["strategy"]
+        if "truncate_dim" in kwargs:
+            self.config.truncate_dim = kwargs["truncate_dim"]
+        if "task" in kwargs:
+            self.config.task = kwargs["task"]
+
         self._poolers: Dict[PoolingStrategy, BasePooler] = {}
         logger.debug("Initialized PoolingEngine with strategy: %s", self.config.strategy)
 
@@ -95,3 +103,9 @@ class PoolingEngine:
         if hasattr(data, "numpy"): # TF
             return data.numpy()
         return np.array(data)
+
+
+def create_pooling_engine(config: Optional[PoolingConfig] = None, **kwargs) -> PoolingEngine:
+    """Factory function for PoolingEngine."""
+    return PoolingEngine(config, **kwargs)
+
