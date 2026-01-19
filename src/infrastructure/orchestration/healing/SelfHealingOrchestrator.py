@@ -17,6 +17,8 @@ from src.core.base.Version import VERSION
 from src.core.base.AgentVerification import CodeIntegrityVerifier, CodeHealthAuditor
 import time
 import logging
+import os
+from pathlib import Path
 from typing import Any, TYPE_CHECKING
 from .SelfHealingCore import SelfHealingCore
 
@@ -39,6 +41,29 @@ class SelfHealingOrchestrator:
         self.core = SelfHealingCore(timeout_seconds=15.0, max_errors=3)
         self.state_backups: dict[str, Any] = {}  # agent_name -> state_snapshot
         self.recovery_logs: list[dict[str, Any]] = []
+        
+        # Phase 317: Initialize with docs/prompt context if available
+        self.work_root = Path(os.getcwd())
+        self._load_strategic_overrides()
+
+    def _load_strategic_overrides(self) -> None:
+        """
+        Loads strategic healing parameters from docs/prompt/context.txt and roadmap.txt.
+        Allows for dynamic adjustment of recovery thresholds (e.g., more aggressive during evolution phases).
+        """
+        prompt_dir = self.work_root / "docs" / "prompt"
+        context_file = prompt_dir / "context.txt"
+        
+        if context_file.exists():
+            try:
+                content = context_file.read_text(encoding="utf-8")
+                # Look for "Phase" markers to increase sensitivity
+                if "Evolution Phase 50" in content:
+                    self.core.timeout_seconds = 10.0  # More aggressive during heavy dev
+                    self.core.max_errors = 2
+                    logging.info("Self-Healing: Strategic overrides applied for Phase 50 TALON.")
+            except Exception as e:
+                logging.warning(f"Self-Healing: Failed to load overrides: {e}")
 
     @property
     def health_registry(self) -> dict[str, Any]:
