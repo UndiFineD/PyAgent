@@ -525,13 +525,14 @@ class ImprovementsAgent(BaseAgent):
             "# Original suggestions preserved below:\n\n"
         )
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Use AI to improve the improvement suggestions.
 
         When Copilot CLI is unavailable, BaseAgent keeps the existing content
         unchanged (avoids duplicated wrapper sections).
         """
-        logging.info(f"Improving suggestions for {self.file_path}")
+        actual_path = Path(target_file) if target_file else self.file_path
+        logging.info(f"Improving suggestions for {actual_path}")
         # Add guidance for structured output
         enhanced_prompt = (
             f"{prompt}\n\n"
@@ -541,7 +542,7 @@ class ImprovementsAgent(BaseAgent):
             "- [ ] Actionable item 2\n\n"
             "Group improvements by priority (High, Medium, Low) if applicable."
         )
-        return super().improve_content(enhanced_prompt)
+        return super().improve_content(enhanced_prompt, target_file=target_file)
 
     def validate_improved_content(self, content: str) -> bool:
         """Validate that the improved content follows the required format.

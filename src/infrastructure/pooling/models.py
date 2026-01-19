@@ -75,7 +75,11 @@ class PoolingResult:
     def dimension(self) -> int:
         """Legacy access for dimension."""
         return self.dim
-
+    
+    @property
+    def strategy_used(self) -> PoolingStrategy:
+        """Legacy access for strategy_used."""
+        return self.strategy
 
 @dataclass
 class EmbeddingOutput:

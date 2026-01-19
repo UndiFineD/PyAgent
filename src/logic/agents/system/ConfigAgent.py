@@ -75,5 +75,5 @@ class ConfigAgent(BaseAgent):
         except Exception as e:
             return f"❌ Error parsing `models.yaml`: {e}"
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         return self.validate_env()

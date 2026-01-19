@@ -7,8 +7,8 @@ import hashlib
 import logging
 from datetime import datetime
 from typing import Any, Callable
-from .Metrics import MetricAnnotation
-from .ObservabilityCore import MetricSubscription, StatsSubscription
+from .metrics import MetricAnnotation
+from .observability_core import MetricSubscription, StatsSubscription
 
 logger = logging.getLogger(__name__)
 

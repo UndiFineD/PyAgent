@@ -124,11 +124,12 @@ class CoderAgent(
             "# Original code preserved below:\n\n"
         )
 
-    async def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Use AI to improve the code with specific coding suggestions."""
-        logging.info(f"Improving content for {self.file_path}")
+        actual_path = Path(target_file) if target_file else self.file_path
+        logging.info(f"Improving content for {actual_path}")
         # Call base implementation directly to use AI backend
-        new_content = await super().improve_content(prompt)
+        new_content = await super().improve_content(prompt, target_file=target_file)
         # Validate syntax
         if not self._validate_syntax(new_content):
             logging.error("Generated code failed syntax validation. Reverting.")

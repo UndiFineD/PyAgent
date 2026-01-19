@@ -486,11 +486,12 @@ class ErrorsAgent(BaseAgent):
             "# Original error report preserved below:\n\n"
         )
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Use AI to improve the error report.
 
         When Copilot CLI is unavailable, BaseAgent keeps the existing content
         unchanged (avoids duplicated wrapper sections).
         """
-        logging.info(f"Improving error report for {self.file_path}")
-        return super().improve_content(prompt)
+        actual_path = Path(target_file) if target_file else self.file_path
+        logging.info(f"Improving error report for {actual_path}")
+        return super().improve_content(prompt, target_file=target_file)

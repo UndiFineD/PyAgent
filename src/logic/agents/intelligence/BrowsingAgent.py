@@ -56,7 +56,7 @@ class BrowsingAgent(BaseAgent):
         # For the simulation, we return a hypothesized success message.
         return f"Browsing {url}... Detected OpenAPI 3.0 spec. Ready for SpecToolAgent."
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Browse the web based on a prompt."""
         if "http" in prompt:
             return self.extract_api_spec(prompt)

@@ -1,6 +1,6 @@
 import unittest
 from hypothesis import given, strategies as st
-from src.observability.stats.MetricsCore import ModelFallbackCore
+from src.observability.stats.metrics_core import ModelFallbackCore
 
 
 class TestModelFallbackCore(unittest.TestCase):

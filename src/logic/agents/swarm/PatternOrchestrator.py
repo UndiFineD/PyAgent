@@ -220,8 +220,8 @@ class PatternOrchestrator(BaseAgent):
 
         return f"Technical report for task '{task}': Validated and processed via PatternOrchestrator logic."
 
-    def improve_content(self, prompt: str) -> str:
-        return f"PatternOrchestrator ready to route: {prompt}"
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        return f"PatternOrchestrator ready to route: {prompt} (Target: {target_file})"
 
 
 if __name__ == "__main__":

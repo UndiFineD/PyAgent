@@ -78,8 +78,8 @@ class ResearchAgent(BaseAgent):
 
         return f"Tool draft generated for '{title}':\n{tool_code}"
 
-    def improve_content(self, prompt: str) -> str:
-        return f"ResearchAgent scanning for SOTA updates: {prompt}"
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
+        return f"ResearchAgent scanning for SOTA updates: {prompt} (Target: {target_file})"
 
 
 if __name__ == "__main__":

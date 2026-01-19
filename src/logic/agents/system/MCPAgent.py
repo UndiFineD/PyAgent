@@ -124,9 +124,9 @@ class MCPAgent(BaseAgent):
                 )
             return f"Failed to start MCP server '{name}'"
 
-    async def improve_content(self, prompt: str) -> str:
+    async def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """Handle MCP-related requests."""
         if "list" in prompt.lower():
             return await self.list_mcp_servers()
         # Fallback to base logic if needed
-        return await super().improve_content(prompt)
+        return await super().improve_content(prompt, target_file=target_file)

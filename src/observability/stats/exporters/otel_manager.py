@@ -24,7 +24,7 @@ import time
 import uuid
 from typing import Any
 from dataclasses import dataclass, field
-from src.observability.stats.core.TracingCore import TracingCore
+from src.observability.stats.core.tracing_core import TracingCore
 
 # Phase 307: Official OpenTelemetry SDK integration
 try:

@@ -10,7 +10,7 @@ except ImportError:
 
 def test_stats_agent_counts_files(tmp_path: Path) -> None:
     with agent_dir_on_path():
-        from src.observability.stats.StatsAgent import StatsAgent
+        from src.observability.stats.stats_agent import StatsAgent
 
     a = tmp_path / "a.py"
     b = tmp_path / "b.py"

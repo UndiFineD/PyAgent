@@ -106,7 +106,7 @@ class QuantumMemoryAgent(BaseAgent):
 
         return f"Knowledge Graph exported to {filepath}"
 
-    def improve_content(self, prompt: str) -> str:
+    def improve_content(self, prompt: str, target_file: str | None = None) -> str:
         """General memory optimization logic."""
         return "I am optimizing the local memory pool. Memory fragments are being quantized for retrieval efficiency."
 
