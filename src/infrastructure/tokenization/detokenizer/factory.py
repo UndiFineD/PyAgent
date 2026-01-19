@@ -1,0 +1,86 @@
+# SPDX-License-Identifier: Apache-2.0
+# SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
+Factory for incremental detokenizers.
+"""
+
+from __future__ import annotations
+
+from typing import (
+    List,
+    Optional,
+    Set,
+    Tuple,
+)
+
+from src.infrastructure.tokenization.detokenizer.types import TokenizerLike
+from src.infrastructure.tokenization.detokenizer.stop_checker import StopChecker
+from src.infrastructure.tokenization.detokenizer.base import IncrementalDetokenizer
+from src.infrastructure.tokenization.detokenizer.fast import FastIncrementalDetokenizer
+from src.infrastructure.tokenization.detokenizer.slow import SlowIncrementalDetokenizer
+
+def create_detokenizer(
+    tokenizer: TokenizerLike,
+    skip_special_tokens: bool = True,
+    spaces_between_special_tokens: bool = True,
+    stop_strings: Optional[List[str]] = None,
+    stop_token_ids: Optional[Set[int]] = None,
+    use_fast: bool = True,
+) -> IncrementalDetokenizer:
+    """
+    Create an appropriate detokenizer for the given tokenizer.
+    """
+    # Create stop checker if needed
+    stop_checker = None
+    if stop_strings or stop_token_ids:
+        eos_token_id = getattr(tokenizer, 'eos_token_id', None)
+        stop_checker = StopChecker(
+            stop_strings=stop_strings,
+            stop_token_ids=stop_token_ids or set(),
+            eos_token_id=eos_token_id,
+        )
+    
+    # Check if tokenizer supports fast decoding
+    is_fast = use_fast and hasattr(tokenizer, 'is_fast') and tokenizer.is_fast
+    
+    if is_fast or use_fast:
+        return FastIncrementalDetokenizer(
+            tokenizer,
+            skip_special_tokens=skip_special_tokens,
+            spaces_between_special_tokens=spaces_between_special_tokens,
+            stop_checker=stop_checker,
+        )
+    else:
+        return SlowIncrementalDetokenizer(
+            tokenizer,
+            skip_special_tokens=skip_special_tokens,
+            spaces_between_special_tokens=spaces_between_special_tokens,
+            stop_checker=stop_checker,
+        )
+
+def detokenize_incrementally(
+    tokenizer: TokenizerLike,
+    token_ids: List[int],
+    skip_special_tokens: bool = True,
+    spaces_between_special_tokens: bool = True,
+    stop_strings: Optional[List[str]] = None,
+) -> Tuple[str, Optional[str | int]]:
+    """
+    Convenience function to detokenize a sequence of tokens.
+    """
+    detokenizer = create_detokenizer(
+        tokenizer,
+        skip_special_tokens=skip_special_tokens,
+        spaces_between_special_tokens=spaces_between_special_tokens,
+        stop_strings=stop_strings,
+    )
+    
+    # Process all tokens
+    for token_id in token_ids:
+        result = detokenizer.update(token_id)
+        if result.finished:
+            return result.full_text, result.stop_reason
+    
+    # Finalize
+    result = detokenizer.finalize()
+    return result.full_text, result.stop_reason

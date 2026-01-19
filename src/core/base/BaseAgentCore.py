@@ -4,14 +4,7 @@
 
 """BaseAgentCore - Pure logic and calculation methods for agent operations.
 
-This module contains all pure computational logic without I/O operations,
-making it a candidate for Rust conversion. It handles:
-- Anchoring strength calculations
-- Self-verification logic
-- Strategy matching and evaluation
-- Configuration validation
-- Response quality assessment
-- Capability enumeration
+Modularized via the 'core_logic' subpackage to maintain <500 line limit.
 """
 
 from __future__ import annotations
@@ -25,7 +18,15 @@ from src.core.base.models import (
     ConversationMessage,
     EventType,
 )
-from src.core.base.AgentVerification import AgentVerifier
+
+# Phase 317: Modularized Logic Mixins
+from .core_logic import (
+    ValidationCore,
+    MetricsCore,
+    FormattingCore,
+    UtilsCore,
+    EventCore,
+)
 
 try:
     import rust_core as rc
@@ -35,11 +36,10 @@ except ImportError:
 logger = logging.getLogger(__name__)
 
 
-class BaseAgentCore:
+class BaseAgentCore(ValidationCore, MetricsCore, FormattingCore, UtilsCore, EventCore):
     """Pure logic core for agent operations (Rust-convertible).
 
-    Contains all computational methods without I/O dependencies.
-    Designed for high performance and potential Rust translation.
+    Inherits from logic mixins to satisfy the 500-line modularization rule.
     """
 
     def __init__(self) -> None:
@@ -48,8 +48,7 @@ class BaseAgentCore:
 
     def fix_markdown_content(self, content: str) -> str:
         """Fix markdown formatting in content (Pure Logic)."""
-        # Basic markdown fixes - can be extended
-        return content
+        return self.fix_markdown(content)
 
     def prepare_capability_payload(
         self, agent_name: str, capabilities: list[str]
@@ -69,25 +68,6 @@ class BaseAgentCore:
             cache_enabled=os.environ.get("DV_AGENT_CACHE", "true").lower() == "true",
             token_budget=int(os.environ.get("DV_AGENT_TOKEN_BUDGET", "100000")),
         )
-
-    def trigger_event(
-        self,
-        event: EventType,
-        data: dict[str, Any],
-        hooks: list[Callable[[dict[str, Any]], None]],
-    ) -> None:
-        """Trigger an event and invoke provided hooks (Pure Logic)."""
-        for callback in hooks:
-            try:
-                callback(data)
-            except Exception as e:
-                logger.warning(f"Hook error for {event.value}: {e}")
-
-    def format_history_for_prompt(
-        self, history: list[ConversationMessage]
-    ) -> list[dict[str, str]]:
-        """Converts internal history objects to dicts for backend consumption."""
-        return [{"role": m.role.value, "content": m.content} for m in history]
 
     def process_token_tracking(
         self, input_tokens: int, output_tokens: int, model: str
@@ -145,379 +125,9 @@ class BaseAgentCore:
                 collected.append((method, category, priority))
         return collected
 
-    def calculate_anchoring_strength(
-        self, result: str, context_pool: Optional[Dict[str, Any]] = None
-    ) -> float:
-        """Calculate the 'Anchoring Strength' metric (Stanford Research 2025).
-
-        Pure calculation based on result and context.
-        No I/O operations.
-
-        Args:
-            result: The result string to evaluate
-            context_pool: Optional context for anchoring calculation
-
-        Returns:
-            Anchoring strength score as float
-        """
-        if context_pool is None:
-            context_pool = self.context_pool
-        return AgentVerifier.calculate_anchoring_strength(result, context_pool)
-
-    def verify_self(self, result: str) -> Tuple[bool, str]:
-        """Self-verification layer (inspired by Keio University 2026 research).
-
-        Pure validation logic without side effects.
-
-        Args:
-            result: The result string to verify
-
-        Returns:
-            Tuple of (is_valid, reason)
-        """
-        anchoring_score = self.calculate_anchoring_strength(result)
-        return AgentVerifier.verify_self(result, anchoring_score)
-
-    def validate_config(self, config: AgentConfig) -> Tuple[bool, str]:
-        """Validate agent configuration.
-
-        Pure validation without side effects.
-
-        Args:
-            config: AgentConfig to validate
-
-        Returns:
-            Tuple of (is_valid, error_message)
-        """
-        if not config.backend:
-            return False, "Backend must be specified"
-
-        if config.max_tokens <= 0:
-            return False, "max_tokens must be > 0"
-
-        if not (0.0 <= config.temperature <= 2.0):
-            return False, "temperature must be between 0.0 and 2.0"
-
-        if config.retry_count < 0:
-            return False, "retry_count must be >= 0"
-
-        if config.timeout <= 0:
-            return False, "timeout must be > 0"
-
-        return True, ""
-
-    def set_strategy(self, strategy: Any) -> str:
-        """Validate and prepare strategy for use.
-
-        Pure logic without side effects.
-
-        Args:
-            strategy: An instance of AgentStrategy
-
-        Returns:
-            Status message
-        """
-        if strategy is None:
-            return "ERROR: Strategy cannot be None"
-
-        if not hasattr(strategy, "execute"):
-            return f"ERROR: Strategy {strategy.__class__.__name__} missing 'execute' method"
-
-        return f"Strategy set to {strategy.__class__.__name__}"
-
     def get_capabilities(self) -> List[str]:
-        """Get agent capabilities list.
-
-        Pure data retrieval without I/O.
-
-        Returns:
-            List of capability strings
-        """
+        """Get agent capabilities list."""
         return ["base", "calculation", "verification"]
-
-    def assess_response_quality(
-        self, response: str, metadata: Optional[Dict[str, Any]] = None
-    ) -> ResponseQuality:
-        """Assess the quality of a response.
-
-        Pure calculation based on response content and metadata.
-
-        Args:
-            response: The response string to assess
-            metadata: Optional metadata for assessment
-
-        Returns:
-            ResponseQuality enum value
-        """
-        if rc:
-            try:
-                # rc.assess_response_quality returns a float score
-                final_score = rc.assess_response_quality(response, metadata)
-            except Exception:
-                final_score = self._assess_quality_python(response, metadata)
-        else:
-            final_score = self._assess_quality_python(response, metadata)
-
-        # Map score to enum value
-        if final_score >= 0.9:
-            return ResponseQuality.EXCELLENT
-        elif final_score >= 0.7:
-            return ResponseQuality.GOOD
-        elif final_score >= 0.5:
-            return ResponseQuality.ACCEPTABLE
-        elif final_score >= 0.3:
-            return ResponseQuality.POOR
-        else:
-            return ResponseQuality.INVALID
-
-    def _assess_quality_python(
-        self, response: str, metadata: Optional[Dict[str, Any]] = None
-    ) -> float:
-        """Fallback Python implementation of quality assessment."""
-        if metadata is None:
-            metadata = {}
-
-        # Pure calculation logic
-        score = 0.5  # Base score
-
-        # Check length
-        if len(response) > 100:
-            score += 0.1
-
-        # Check for key indicators
-        if "error" not in response.lower() and "fail" not in response.lower():
-            score += 0.1
-
-        # Check metadata
-        if metadata.get("has_references"):
-            score += 0.1
-
-        if metadata.get("is_complete"):
-            score += 0.1
-
-        return min(1.0, score)
-
-    def filter_events(
-        self, events: List[Dict[str, Any]], event_type: Optional[str] = None
-    ) -> List[Dict[str, Any]]:
-        """Filter events based on type.
-
-        Pure filtering logic.
-
-        Args:
-            events: List of event dictionaries
-            event_type: Optional type to filter by
-
-        Returns:
-            Filtered list of events
-        """
-        if not event_type:
-            return events
-
-        return [e for e in events if e.get("type") == event_type]
-
-    def deduplicate_entries(self, entries: List[str]) -> List[str]:
-        """Deduplicate string entries while preserving order."""
-        if rc:
-            try:
-                return rc.deduplicate_entries(entries)
-            except Exception:
-                pass
-
-        seen = set()
-        result = []
-        for entry in entries:
-            if entry not in seen:
-                seen.add(entry)
-                result.append(entry)
-        return result
-
-    def calculate_priority_score(
-        self, priority: AgentPriority, urgency: float
-    ) -> float:
-        """Calculate effective priority score."""
-        priority_base = {
-            AgentPriority.LOW: 0.2,
-            AgentPriority.NORMAL: 0.5,
-            AgentPriority.HIGH: 0.8,
-            AgentPriority.CRITICAL: 1.0,
-        }.get(priority, 0.5)
-
-        if rc:
-            try:
-                return rc.calculate_priority_score(priority_base, urgency)
-            except Exception:
-                pass
-
-        # Blend priority with urgency (70% priority, 30% urgency)
-        return (priority_base * 0.7) + (urgency * 0.3)
-
-    def merge_configurations(
-        self, base: AgentConfig, override: AgentConfig
-    ) -> AgentConfig:
-        """Merge two configurations, with override taking precedence.
-
-        Pure configuration merging logic.
-
-        Args:
-            base: Base configuration
-            override: Override configuration
-
-        Returns:
-            Merged configuration
-        """
-        return AgentConfig(
-            backend=override.backend or base.backend,
-            model=override.model or base.model,
-            max_tokens=override.max_tokens
-            if override.max_tokens != base.max_tokens
-            else base.max_tokens,
-            temperature=override.temperature
-            if override.temperature != base.temperature
-            else base.temperature,
-            retry_count=override.retry_count
-            if override.retry_count != base.retry_count
-            else base.retry_count,
-            timeout=override.timeout
-            if override.timeout != base.timeout
-            else base.timeout,
-            cache_enabled=override.cache_enabled
-            if override.cache_enabled != base.cache_enabled
-            else base.cache_enabled,
-            token_budget=override.token_budget
-            if override.token_budget != base.token_budget
-            else base.token_budget,
-        )
-
-    def normalize_response(self, response: str) -> str:
-        """Normalize response text for consistency."""
-        if rc:
-            try:
-                return rc.normalize_response(response)
-            except Exception:
-                pass
-
-        # Strip whitespace
-        normalized = response.strip()
-
-        # Normalize line endings
-        normalized = normalized.replace("\r\n", "\n")
-
-        # Remove multiple spaces
-        normalized = " ".join(normalized.split())
-
-        return normalized
-
-    def calculate_token_estimate(self, text: str, chars_per_token: float = 4.0) -> int:
-        """Estimate token count (pure calculation)."""
-        if rc:
-            try:
-                return rc.calculate_token_estimate(text, chars_per_token)
-            except Exception:
-                pass
-
-        return max(1, int(len(text) / chars_per_token))
-
-    def is_response_valid(
-        self, response: str, min_length: int = 10
-    ) -> Tuple[bool, str]:
-        """Validate response meets minimum criteria.
-
-        Pure validation logic.
-
-        Args:
-            response: Response to validate
-            min_length: Minimum response length
-
-        Returns:
-            Tuple of (is_valid, reason)
-        """
-        if rc:
-            try:
-                return rc.is_response_valid_rust(response, min_length)
-            except Exception:
-                pass
-
-        if not response:
-            return False, "Response is empty"
-
-        if len(response) < min_length:
-            return False, f"Response too short (< {min_length} chars)"
-
-        if len(response) > 1000000:
-            return False, "Response too long (> 1M chars)"
-
-        return True, ""
-
-    def calculate_diff(self, old_content: str, new_content: str, filename: str) -> str:
-        """Logic for generating a unified diff."""
-        import difflib
-
-        old_lines: list[str] = old_content.splitlines(keepends=True)
-        new_lines: list[str] = new_content.splitlines(keepends=True)
-        diff_lines = list(
-            difflib.unified_diff(
-                old_lines, new_lines, fromfile=f"a/{filename}", tofile=f"b/{filename}"
-            )
-        )
-        return "".join(diff_lines)
-
-    def fix_markdown(self, content: str) -> str:
-        """Pure logic to normalize markdown content."""
-        # Simple normalization: trim blocks and ensure double newlines for headers if missing
-        import re
-
-        lines = content.splitlines()
-        fixed_lines = []
-        for i, line in enumerate(lines):
-            # Ensure headers have space after #
-            if line.startswith("#") and not line.startswith("# "):
-                line = re.sub(r"^(#+)", r"\1 ", line)
-            fixed_lines.append(line)
-        return "\n".join(fixed_lines)
-
-    def validate_content_safety(self, content: str) -> bool:
-        """Pure logic for simple content safety checks."""
-        # Check for obvious malicious patterns or anomalies
-        # We split the strings to avoid triggering simple security scanners
-        unsafe_patterns = ["<script", "os." + "system(", "eval" + "("]
-        for pattern in unsafe_patterns:
-            if pattern in content.lower():
-                # Note: We'd normally use a more robust check or just warn
-                pass
-        return True
-
-    def generate_cache_key(self, prompt: str, context: str) -> str:
-        """Logic to generate a hash for caching."""
-        if rc:
-            try:
-                return rc.generate_cache_key(prompt, context)
-            except Exception:
-                pass
-
-        import hashlib
-
-        combined = f"{prompt}:{context}"
-        return hashlib.sha256(combined.encode()).hexdigest()
-
-    def get_default_content(self, filename: str) -> str:
-        """Logic for default content based on file extension."""
-        ext = os.path.splitext(filename)[1].lower()
-        if ext == ".py":
-            return "#!/usr/bin/env python3\n\npass\n"
-        elif ext in [".md", ".markdown"]:
-            return "# New Document\n"
-        return ""
-
-    def build_prompt_with_history(
-        self, prompt: str, history: list[ConversationMessage], system_prompt: str
-    ) -> str:
-        """Logic to assemble the full prompt string (Shell provides history and system_prompt)."""
-        full_prompt = f"System: {system_prompt}\n\n"
-        for msg in history:
-            full_prompt += f"{msg.role.name}: {msg.content}\n"
-        full_prompt += f"User: {prompt}\n"
-        return full_prompt
 
     def prepare_improvement_prompt(
         self,
@@ -553,3 +163,4 @@ class BaseAgentCore:
             "# Windows: winget install GitHub.Copilot\n"
             "# npm: npm install -g @github/copilot\n"
         )
+

@@ -33,6 +33,23 @@ pub fn ngram_match_rust(
     matches
 }
 
+/// Fused PackKV Attention (arXiv:2512.24449)
+/// Performs register-level decompression during attention matmul.
+/// Placeholder for phase 51 acceleration.
+#[pyfunction]
+#[pyo3(signature = (q, k_compressed, v_compressed, metadata_map, scale=None))]
+pub fn fused_packkv_attention_rust(
+    q: Vec<f32>,
+    k_compressed: Vec<u8>,
+    v_compressed: Vec<u8>,
+    metadata_map: HashMap<i32, HashMap<String, f32>>,
+    scale: Option<f32>,
+) -> PyResult<Vec<f32>> {
+    // In production, this would use a high-performance Rust/SIMD or CUDA/Triton bridge
+    // to perform matmul without full dequantization to VRAM.
+    Ok(q) // Placeholder
+}
+
 /// Build n-gram index from token sequence for fast lookup
 /// Returns HashMap mapping n-gram tuples to list of positions
 #[pyfunction]
