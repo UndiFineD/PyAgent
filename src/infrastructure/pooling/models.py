@@ -62,14 +62,19 @@ class PoolingConfig:
 class PoolingResult:
     """Result from pooling operation."""
     embeddings: np.ndarray                        # Pooled embeddings
-    dimension: int                                # Embedding dimension
-    strategy_used: PoolingStrategy = PoolingStrategy.MEAN
+    dim: int                                      # Embedding dimension (compatible with engine.py results.shape[-1])
+    strategy: PoolingStrategy                     # Strategy used
     normalized: bool = True
     metadata: Dict[str, Any] = field(default_factory=dict)
     
     @property
     def shape(self) -> Tuple[int, ...]:
         return self.embeddings.shape
+    
+    @property
+    def dimension(self) -> int:
+        """Legacy access for dimension."""
+        return self.dim
 
 
 @dataclass
@@ -78,4 +83,18 @@ class EmbeddingOutput:
     embedding: np.ndarray                         # Single embedding vector
     tokens_used: int                              # Number of tokens pooled
     truncated: bool = False                       # Was dimension truncated
+
+    def to_list(self) -> List[float]:
+        """Convert embedding to list of floats."""
+        return self.embedding.tolist()
+
+
+@dataclass
+class ClassificationOutput:
+    """Output for classification tasks."""
+    logits: np.ndarray                            # Raw logits
+    probs: np.ndarray                             # Softmax probabilities
+    label: Optional[str] = None                   # Predicted label
+    score: Optional[float] = None                 # Confidence score
+
 

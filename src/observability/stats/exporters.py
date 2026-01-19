@@ -11,7 +11,7 @@ from dataclasses import dataclass, field
 from typing import Any
 from .analysis import TracingCore
 from .ObservabilityCore import ExportDestination
-from .metrics import Metric
+from .Metrics import Metric
 
 logger = logging.getLogger(__name__)
 

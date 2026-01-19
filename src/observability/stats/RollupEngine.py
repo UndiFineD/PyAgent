@@ -8,7 +8,7 @@ import logging
 import math
 from datetime import datetime
 from typing import Any
-from .metrics import AggregationType, Metric
+from .Metrics import AggregationType, Metric
 from .ObservabilityCore import RollupConfig
 from .MetricsCore import StatsRollupCore, CorrelationCore
 
