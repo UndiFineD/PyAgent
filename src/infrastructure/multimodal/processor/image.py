@@ -1,4 +1,4 @@
-from typing import Tuple, Any, Optional
+from typing import Tuple, Any, Optional, Dict
 import numpy as np
 from .base import BaseMultiModalProcessor, ModalityType, MultiModalConfig
 

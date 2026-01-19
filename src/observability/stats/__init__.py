@@ -56,11 +56,11 @@ from .FormulaEngine import (
     FormulaValidation as FormulaValidation,
 )
 
-from .monitoring import (
+from .Monitoring import (
     ResourceMonitor as ResourceMonitor,
 )
 
-from .alerting import (
+from .Alerting import (
     ThresholdAlertManager as ThresholdAlertManager,
     RetentionEnforcer as RetentionEnforcer,
 )
@@ -96,7 +96,7 @@ from .StatsAgent import StatsAgent as StatsAgent
 from .ReportingAgent import ReportingAgent as ReportingAgent
 from .TransparencyAgent import TransparencyAgent as TransparencyAgent
 
-from .api import StatsAPIServer as StatsAPIServer, APIEndpoint as APIEndpoint
+from .API import StatsAPIServer as StatsAPIServer, APIEndpoint as APIEndpoint
 from .streaming import (
     StatsStreamManager as StatsStreamManager,
     StatsStreamer as StatsStreamer,
@@ -104,7 +104,7 @@ from .streaming import (
 from .engine import StatsNamespaceManager as StatsNamespaceManager
 from .namespaces import MetricNamespaceManager as MetricNamespaceManager
 from .federation import StatsFederation as StatsFederation
-from .access import StatsAccessController as StatsAccessController
+from .Access import StatsAccessController as StatsAccessController
 from .StorageEngine import (
     StatsBackupManager as StatsBackupManager,
     StatsSnapshotManager as StatsSnapshotManager,

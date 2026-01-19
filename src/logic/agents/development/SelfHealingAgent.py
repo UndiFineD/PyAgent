@@ -21,7 +21,7 @@ import os
 from typing import Any
 from src.core.base.BaseAgent import BaseAgent
 from src.core.base.BaseUtilities import create_main_function, as_tool
-from src.observability.stats.Metrics_engine import ObservabilityEngine
+from src.observability.stats.MetricsEngine import ObservabilityEngine
 
 __version__ = VERSION
 
