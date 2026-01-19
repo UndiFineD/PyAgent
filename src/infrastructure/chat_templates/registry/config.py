@@ -197,3 +197,13 @@ class RenderOptions:
             "add_special_tokens": self.add_special_tokens,
             "include_tools": self.include_tools,
         }
+
+
+# Default configuration
+DEFAULT_CONFIG = TemplateConfig(
+    template_type=TemplateType.CHATML,
+    add_bos_token=True,
+    add_eos_token=True,
+    add_generation_prompt=True,
+)
+
