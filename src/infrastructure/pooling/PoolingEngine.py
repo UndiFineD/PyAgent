@@ -10,15 +10,22 @@ from .models import (
     PoolingStrategy,
     PoolingConfig,
     PoolingResult,
-    EmbeddingOutput
+    EmbeddingOutput,
+    ClassificationOutput
 )
 from .strategies import (
     BasePooler,
     MeanPooler,
     CLSPooler,
-    AttentionPooler
+    LastTokenPooler,
+    MaxPooler,
+    AttentionPooler,
+    WeightedMeanPooler,
+    MatryoshkaPooler,
+    MultiVectorPooler,
+    StepPooler
 )
-from .engine import PoolingEngine
+from .engine import PoolingEngine, create_pooling_engine
 
 __all__ = [
     "PoolingTask",
@@ -26,10 +33,19 @@ __all__ = [
     "PoolingConfig",
     "PoolingResult",
     "EmbeddingOutput",
+    "ClassificationOutput",
     "BasePooler",
     "MeanPooler",
     "CLSPooler",
+    "LastTokenPooler",
+    "MaxPooler",
     "AttentionPooler",
-    "PoolingEngine"
+    "WeightedMeanPooler",
+    "MatryoshkaPooler",
+    "MultiVectorPooler",
+    "StepPooler",
+    "PoolingEngine",
+    "create_pooling_engine"
 ]
+
 

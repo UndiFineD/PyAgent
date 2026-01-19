@@ -13,7 +13,7 @@ class TestPhases53_55(IsolatedAsyncioTestCase):
     async def test_resource_prediction(self) -> None:
         print("\nTesting Phase 53: Predictive Resource Forecasting...")
         # Mock some metrics
-        from src.observability.stats.metrics import AgentMetric
+        from src.observability.stats.Metrics import AgentMetric
 
         metrics = [
             AgentMetric("AgentA", "task", 100.0, token_count=1000),
