@@ -1,0 +1,24 @@
+TOP 20 LARGE FILES (>300 lines):
+758: c:\DEV\PyAgent\src\core\base\utils\JSONTreeUtils.py
+738: c:\DEV\PyAgent\src\infrastructure\structured_output\StructuredOutputParams.py
+734: c:\DEV\PyAgent\src\infrastructure\scheduling\ChunkedPrefillManager.py
+713: c:\DEV\PyAgent\src\infrastructure\network\HTTPClient.py
+708: c:\DEV\PyAgent\src\infrastructure\executor\MultiprocExecutor.py
+694: c:\DEV\PyAgent\src\infrastructure\engine\AsyncEngineClient.py
+693: c:\DEV\PyAgent\src\infrastructure\kv_transfer\ARCOffloadManager.py
+689: c:\DEV\PyAgent\src\infrastructure\sampling\NgramProposer.py
+685: c:\DEV\PyAgent\src\core\base\structures\UvaBufferPool.py
+682: c:\DEV\PyAgent\src\infrastructure\metrics\LoRAStatsManager.py
+680: c:\DEV\PyAgent\src\infrastructure\ssm\MambaMixer.py
+678: c:\DEV\PyAgent\src\infrastructure\kv_transfer\KVTransferConnector.py
+676: c:\DEV\PyAgent\src\infrastructure\tokenization\IncrementalDetokenizer.py
+670: c:\DEV\PyAgent\src\infrastructure\metrics\PrometheusRegistry.py
+663: c:\DEV\PyAgent\src\infrastructure\network\NetworkUtils.py
+660: c:\DEV\PyAgent\src\infrastructure\moe\ExpertRouter.py
+660: c:\DEV\PyAgent\src\infrastructure\sampling\RejectionSampler.py
+660: c:\DEV\PyAgent\src\infrastructure\structured_output\XGrammarBackend.py
+659: c:\DEV\PyAgent\src\infrastructure\memory\GPUMemoryAllocator.py
+655: c:\DEV\PyAgent\src\infrastructure\sampling\TopKTopPSampler.py
+
+SEARCHING FOR KEYWORDS IN CONTENT...
+Keywords not found in any .py file content in src or data/agents.

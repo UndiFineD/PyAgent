@@ -1,34 +1,17 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 """
 Phase 45: Async Multi-process Engine Client
 Queue-based asynchronous client.
 """
 
 from __future__ import annotations
-
 import asyncio
 import logging
-from typing import TYPE_CHECKING, Optional
-
+from typing import Optional, TYPE_CHECKING
 from src.infrastructure.engine.engine_client.base import EngineCoreClientBase
 from src.infrastructure.engine.engine_client.types import EngineOutput
 
 if TYPE_CHECKING:
-    from src.infrastructure.engine.engine_client.types import (
-        EngineClientConfig, SchedulerOutput)
+    from src.infrastructure.engine.engine_client.types import EngineClientConfig, SchedulerOutput
 
 logger = logging.getLogger(__name__)
 
@@ -36,140 +19,151 @@ logger = logging.getLogger(__name__)
 class AsyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
     """
     Async multi-process engine client with queue handlers.
-
+    
     Non-blocking request submission with async output retrieval.
     """
-
-    def __init__(self, config: EngineClientConfig) -> None:
+    
+    def __init__(self, config: EngineClientConfig):
         super().__init__(config)
         self._request_queue: asyncio.Queue[tuple[str, SchedulerOutput]] = asyncio.Queue()
         self._output_queue: asyncio.Queue[EngineOutput] = asyncio.Queue()
         self._pending_futures: dict[str, asyncio.Future[EngineOutput]] = {}
         self._worker_task: Optional[asyncio.Task] = None
         self._output_task: Optional[asyncio.Task] = None
-
+    
     async def _run_busy_loop(self) -> None:
         """
         Core async execution loop.
-
+        
         vLLM Pattern: EngineCoreProc.run_busy_loop()
         """
         while self._running:
             try:
                 # Get next request with timeout
                 try:
-                    request_id, request = await asyncio.wait_for(self._request_queue.get(), timeout=0.1)
+                    request_id, request = await asyncio.wait_for(
+                        self._request_queue.get(),
+                        timeout=0.1
+                    )
                 except asyncio.TimeoutError:
                     continue
-
+                
                 # Mock execution
                 await asyncio.sleep(0.001)  # Simulate work
-
+                
                 output = EngineOutput(
                     request_id=request_id,
                     outputs=[{"token_ids": list(range(request.scheduled_tokens))}],
                     finished=True,
-                    metrics={"latency_ms": 1.0},
+                    metrics={"latency_ms": 1.0}
                 )
-
+                
                 await self._output_queue.put(output)
-
+                
             except asyncio.CancelledError:
                 break
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logger.error(f"Busy loop error: {e}")
-
+    
     async def _output_handler(self) -> None:
         """Handle output distribution to waiting futures."""
         while self._running:
             try:
-                output = await asyncio.wait_for(self._output_queue.get(), timeout=0.1)
-
+                output = await asyncio.wait_for(
+                    self._output_queue.get(),
+                    timeout=0.1
+                )
+                
                 if output.request_id in self._pending_futures:
                     future = self._pending_futures.pop(output.request_id)
                     if not future.done():
                         future.set_result(output)
-
+                        
             except asyncio.TimeoutError:
                 continue
             except asyncio.CancelledError:
                 break
-            except Exception as e:  # pylint: disable=broad-exception-caught, unused-variable
+            except Exception as e:
                 logger.error(f"Output handler error: {e}")
-
+    
     def send_request(self, request: SchedulerOutput) -> str:
         """Submit request to async queue."""
         request_id = self._generate_request_id()
-
+        
         # loop = asyncio.get_event_loop() # Use get_running_loop if available or create_task to use current loop
         try:
             loop = asyncio.get_running_loop()
         except RuntimeError:
             loop = asyncio.get_event_loop()
-
+            
         future: asyncio.Future[EngineOutput] = loop.create_future()
         self._pending_futures[request_id] = future
-
+        
         # Non-blocking put
         asyncio.create_task(self._request_queue.put((request_id, request)))
-
+        
         return request_id
-
+    
     def get_output(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
         """Blocking get (runs event loop)."""
         if request_id not in self._pending_futures:
             return None
-
+        
         try:
             loop = asyncio.get_running_loop()
         except RuntimeError:
             loop = asyncio.get_event_loop()
-
+            
         timeout = (timeout_ms or self.config.request_timeout_ms) / 1000.0
-
+        
         try:
-            return loop.run_until_complete(asyncio.wait_for(self._pending_futures[request_id], timeout=timeout))
+            return loop.run_until_complete(
+                asyncio.wait_for(self._pending_futures[request_id], timeout=timeout)
+            )
         except asyncio.TimeoutError:
             return None
-
+    
     async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
         """Non-blocking async get."""
         if request_id not in self._pending_futures:
             return None
-
+        
         timeout = (timeout_ms or self.config.request_timeout_ms) / 1000.0
-
+        
         try:
-            return await asyncio.wait_for(self._pending_futures[request_id], timeout=timeout)
+            return await asyncio.wait_for(
+                self._pending_futures[request_id],
+                timeout=timeout
+            )
         except asyncio.TimeoutError:
             return None
-
+    
     def start(self) -> None:
         """Start async workers."""
         self._running = True
-
+        
         try:
             loop = asyncio.get_running_loop()
         except RuntimeError:
             loop = asyncio.get_event_loop()
-
+            
         self._worker_task = loop.create_task(self._run_busy_loop())
         self._output_task = loop.create_task(self._output_handler())
-
+        
         logger.info("AsyncMPClient started")
-
+    
     def shutdown(self) -> None:
         """Shutdown async workers."""
         self._running = False
-
+        
         if self._worker_task:
             self._worker_task.cancel()
         if self._output_task:
             self._output_task.cancel()
-
+        
         # Cancel pending futures
         for future in self._pending_futures.values():
             if not future.done():
                 future.cancel()
-
+        
         logger.info("AsyncMPClient shutdown")
