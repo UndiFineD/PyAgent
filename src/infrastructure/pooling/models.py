@@ -30,6 +30,9 @@ class PoolingStrategy(Enum):
     ATTENTION = auto()         # Attention-weighted pooling
     WEIGHTED_MEAN = auto()     # IDF-weighted mean
     FIRST_LAST_AVG = auto()    # Average of first and last hidden states
+    MATRYOSHKA = auto()        # Matryoshka Rep Learning
+    MULTI_VECTOR = auto()      # Multi-vector (ColBERT style)
+    STEP = auto()              # Step-specific pooling
 
 
 @dataclass

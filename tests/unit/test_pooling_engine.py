@@ -286,7 +286,7 @@ class TestMatryoshkaPooler:
         # 3D input for pool method: (batch, seq_len, hidden_dim)
         hidden_states = np.array([[[3.0, 4.0, 0.0, 0.0]]])
         
-        result = pooler.pool(hidden_states)
+        result = pooler.pool_and_process(hidden_states)
         
         # Should be normalized and truncated to 2 dims
         assert result.shape[-1] == 2
