@@ -16,27 +16,88 @@
 """Agent specializing in self-healing through telemetry analysis and error correction."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from typing import Dict, List, Any
+from src.core.base.Version import VERSION
+import os
+from typing import Any
 from src.core.base.BaseAgent import BaseAgent
-from src.core.base.utilities import create_main_function, as_tool
-from src.observability.stats.ObservabilityEngine import ObservabilityEngine
+from src.core.base.BaseUtilities import create_main_function, as_tool
+from src.observability.stats.Metrics_engine import ObservabilityEngine
 
 __version__ = VERSION
 
+
 class SelfHealingAgent(BaseAgent):
     """Monitors telemetry for agent failures and proposes fixes."""
-    
+
     def __init__(self, file_path: str) -> None:
         super().__init__(file_path)
         self.workspace_root = self.file_path.parent.parent.parent
         self.telemetry = ObservabilityEngine(str(self.workspace_root))
+        
+        # Phase 317: Dynamic prompt loading and coordinator integration
+        from src.maintenance.SelfImprovementCoordinator import SelfImprovementCoordinator
+        self.coordinator = SelfImprovementCoordinator(str(self.workspace_root))
+        self._load_dynamic_prompt()
+
+    def _load_dynamic_prompt(self) -> None:
+        """Loads self-healing goals and context from project documentation."""
         self._system_prompt = (
             "You are the Self-Healing Agent. "
             "Your goal is to detect failures in the agent fleet and propose corrective actions. "
             "Analyze telemetry logs for crashes, timeouts, and logic errors. "
-            "Suggest patches to the source code or configuration to prevent future failures."
+            "Suggest patches to the source code or configuration to prevent future failures. "
+            "Check budget and available remote peers before proposing expensive cloud-based solutions."
         )
+        
+        prompt_dir = self.workspace_root / "docs" / "prompt"
+        context_file = prompt_dir / "context.txt"
+        if context_file.exists():
+            try:
+                content = context_file.read_text(encoding="utf-8")
+                # Append high-level project goals to improve alignment
+                if "Project Overview" in content:
+                    overview = content.split("## Project Overview")[1].split("##")[0].strip()
+                    self._system_prompt += f"\n\nProject Context:\n{overview}"
+            except Exception:
+                pass
+
+    @as_tool
+    async def discover_peers_and_budget(self) -> str:
+        """Discovers available peers and current cloud budget status."""
+        await self.coordinator.load_strategic_context()
+        peers = await self.coordinator.discover_external_servers()
+        budget_status = {
+            "today_spend": self.coordinator.budget.today_spend,
+            "daily_limit": self.coordinator.budget.daily_limit,
+            "remaining": self.coordinator.budget.daily_limit - self.coordinator.budget.today_spend
+        }
+        
+        report = [f"## 🌐 Network & Budget Report\n"]
+        report.append(f"**Budget**: ${budget_status['today_spend']:.2f} / ${budget_status['daily_limit']:.2f} (Remaining: ${budget_status['remaining']:.2f})")
+        
+        if peers:
+            report.append("\n**Available Peers**:")
+            for p in peers:
+                report.append(f"- {p['id']} ({p['type']}): {p['status']}")
+        else:
+            report.append("\n❌ No external peers or servers discovered.")
+            
+        return "\n".join(report)
+
+    @as_tool
+    async def request_remote_healing(self, agent_name: str, error_msg: str, target_peer: str) -> str:
+        """Requests a remote peer to perform a healing analysis for a specific agent."""
+        task = {
+            "title": f"Heal {agent_name}",
+            "description": f"Perform deep analysis on: {error_msg}",
+            "agent_type": "SelfHealing"
+        }
+        
+        res = await self.coordinator.execute_remote_task(task, target_peer)
+        if res["status"] == "success":
+            return f"✅ Remote healing task dispatched to {target_peer}. Task ID: {res['task_id']}"
+        else:
+            return f"❌ Failed to dispatch to {target_peer}: {res['error']}"
 
     def _get_default_content(self) -> str:
         return "# Self-Healing Log\n\n## Status\nMonitoring fleet health...\n"
@@ -47,44 +108,55 @@ class SelfHealingAgent(BaseAgent):
         self._track_tokens(200, 350)
         self.telemetry.get_summary()
         metrics = self.telemetry.metrics
-        
+
         errors = [m for m in metrics if m.status == "error"]
-        
+
         if not errors:
             return "✅ No fleet failures detected in current telemetry."
-            
+
         report = ["## 🛠️ Self-Healing Analysis Report\n"]
         report.append(f"Detected **{len(errors)}** failures in recent operations.\n")
-        
+
         # Categorize by agent
         by_agent: dict[str, list[Any]] = {}
         for e in errors:
             if e.agent_name not in by_agent:
                 by_agent[e.agent_name] = []
             by_agent[e.agent_name].append(e)
-            
+
         for agent, agent_errors in by_agent.items():
             report.append(f"### Agent: {agent}")
-            for err in agent_errors[:3]: # Show last 3
-                ts = err.timestamp.split('T')[1].split('.')[0]
+            for err in agent_errors[:3]:  # Show last 3
+                ts = err.timestamp.split("T")[1].split(".")[0]
+
                 op = err.operation
-                msg = err.metadata.get('error', 'Unknown error')
+                msg = err.metadata.get("error", "Unknown error")
                 report.append(f"- **[{ts}] {op}**: `{msg}`")
-                
+
             report.append(f"\n> [!TIP] Suggested Fix for {agent}")
-            if "missing 1 required positional argument" in str(agent_errors[0].metadata):
-                report.append("> - Check `improve_content` signature in the source file.")
+            if "missing 1 required positional argument" in str(
+                agent_errors[0].metadata
+            ):
+                report.append(
+                    "> - Check `improve_content` signature in the source file."
+                )
             elif "ImportError" in str(agent_errors[0].metadata):
-                report.append("> - Verify `__init__.py` exports or virtual environment packages.")
+                report.append(
+                    "> - Verify `__init__.py` exports or virtual environment packages."
+                )
+
             else:
-                report.append("> - Increase timeout or check for circular dependencies.")
+                report.append(
+                    "> - Increase timeout or check for circular dependencies."
+                )
             report.append("")
-            
+
         return "\n".join(report)
 
     def improve_content(self, prompt: str) -> str:
         """Trigger a self-healing scan."""
         return self.scan_for_failures()
+
 
 if __name__ == "__main__":
     main = create_main_function(SelfHealingAgent, "SelfHealing Agent", "Task")
