@@ -43,15 +43,14 @@ class SelfHealingOrchestrator:
         self.recovery_logs: list[dict[str, Any]] = []
         
         # Phase 317: Initialize with docs/prompt context if available
-        self.work_root = Path(os.getcwd())
+        # Derive project root from module location for consistent resolution
+        self.work_root = Path(__file__).resolve().parents[4]  # Adjust depth as needed
         self._load_strategic_overrides()
-
     def _load_strategic_overrides(self) -> None:
         """
-        Loads strategic healing parameters from docs/prompt/context.txt and roadmap.txt.
+        Loads strategic healing parameters from docs/prompt/context.txt.
         Allows for dynamic adjustment of recovery thresholds (e.g., more aggressive during evolution phases).
-        """
-        prompt_dir = self.work_root / "docs" / "prompt"
+        """        prompt_dir = self.work_root / "docs" / "prompt"
         context_file = prompt_dir / "context.txt"
         
         if context_file.exists():
