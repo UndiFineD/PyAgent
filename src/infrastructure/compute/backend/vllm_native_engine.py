@@ -19,10 +19,10 @@ Optimized for local inference and future trillion-parameter context handling.
 """
 
 from __future__ import annotations
-from src.core.base.lifecycle.version import VERSION
 import logging
-from typing import Any, Optional
 import os
+from typing import Any, Optional
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 
@@ -56,6 +56,7 @@ class VllmNativeEngine:
 
     @classmethod
     def get_instance(cls, **kwargs) -> VllmNativeEngine:
+        """Get the singleton instance of the native engine."""
         if cls._instance is None:
             cls._instance = VllmNativeEngine(**kwargs)
         return cls._instance
@@ -67,6 +68,7 @@ class VllmNativeEngine:
 
         if self._llm is None:
             try:
+                # pylint: disable=import-outside-toplevel
                 import torch
 
                 # Phase 108: Dynamic hardware detection
@@ -88,8 +90,6 @@ class VllmNativeEngine:
                     self.model_name,
                     os.environ.get("VLLM_TARGET_DEVICE", "auto")
                 )
-
-                import torch
 
                 # Only check CUDA if we aren't explicitly targeting CPU
                 if (
@@ -243,6 +243,7 @@ class VllmNativeEngine:
         if self._llm:
             # vLLM doesn't have a simple 'off' but we can delete reference
             # and try to trigger GC or rely on process exit.
+            # pylint: disable=import-outside-toplevel
             import gc
             import torch
 
