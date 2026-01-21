@@ -15,7 +15,7 @@ __version__ = VERSION
 
 class VisionAgent(BaseAgent):
     """
-    Agent specializing in image description, OCR, diagram analysis, 
+    Agent specializing in image description, OCR, diagram analysis,
     and visual pattern recognition using multi-modal model backends.
     """
 
@@ -46,9 +46,9 @@ class VisionAgent(BaseAgent):
 
         prompt = f"[IMAGE_DATA:{b64_data}]\n{query}"
         logging.info("VisionAgent: Requesting multi-modal analysis...")
-        
+
         result = await self.improve_content(prompt)
-        
+
         response = {
             "query": query,
             "description": result,
@@ -70,9 +70,9 @@ class VisionAgent(BaseAgent):
             "Preserve the layout and formatting as much as possible. "
             "Output only the extracted text, nothing else."
         )
-        
+
         result = await self.improve_content(prompt)
-        
+
         return {
             "extracted_text": result,
             "word_count": len(result.split()),
@@ -92,10 +92,10 @@ class VisionAgent(BaseAgent):
             "Output ONLY the code with proper indentation, no explanations."
         )
         extracted_code = await self.improve_content(extract_prompt)
-        
+
         analyze_prompt = f"Analyze this code and identify:\n1. Programming language\n2. Purpose/functionality\n3. Any visible issues\n\nCode:\n{extracted_code}"
         analysis = await self.improve_content(analyze_prompt)
-        
+
         # Detect language
         language = "unknown"
         lang_patterns = {
@@ -108,7 +108,7 @@ class VisionAgent(BaseAgent):
             if re.search(pattern, extracted_code):
                 language = lang
                 break
-        
+
         return {
             "extracted_code": extracted_code,
             "detected_language": language,
@@ -129,9 +129,9 @@ class VisionAgent(BaseAgent):
             "Identify:\n1. Type of diagram\n2. Main components/nodes\n3. Relationships/connections\n"
             "4. Data flow or sequence (if applicable)\n5. Key insights"
         )
-        
+
         result = await self.improve_content(prompt)
-        
+
         return {
             "diagram_type": diagram_type,
             "analysis": result,
@@ -143,7 +143,7 @@ class VisionAgent(BaseAgent):
         """Compares two images and identifies differences."""
         b64_1 = await self._resolve_image_source(image1_source)
         b64_2 = await self._resolve_image_source(image2_source)
-        
+
         if not b64_1 or not b64_2:
             return {"error": "Could not load one or both images", "status": "failed"}
 
@@ -153,9 +153,9 @@ class VisionAgent(BaseAgent):
             "Compare these two images. Identify:\n"
             "1. Key similarities\n2. Key differences\n3. Any notable changes"
         )
-        
+
         result = await self.improve_content(prompt)
-        
+
         return {
             "comparison": result,
             "status": "success"
@@ -179,9 +179,9 @@ class VisionAgent(BaseAgent):
                 f"[IMAGE_DATA:{b64_data}]\n"
                 "List all distinct objects visible in this image with their approximate locations."
             )
-        
+
         result = await self.improve_content(prompt)
-        
+
         return {
             "target_objects": target_objects,
             "detections": result,
@@ -192,11 +192,11 @@ class VisionAgent(BaseAgent):
         """Resolves various image sources to base64."""
         if not source:
             return None
-            
+
         # Already base64
         if len(source) > 500 and not source.startswith(("http", "/")):
             return source
-        
+
         # File path
         path = Path(source)
         if path.exists() and path.is_file():
@@ -206,7 +206,7 @@ class VisionAgent(BaseAgent):
             except Exception as e:
                 logging.error(f"VisionAgent: Failed to read file {source}: {e}")
                 return None
-        
+
         # URL
         if source.startswith(("http://", "https://")):
             try:
@@ -217,5 +217,5 @@ class VisionAgent(BaseAgent):
             except Exception as e:
                 logging.error(f"VisionAgent: Failed to fetch URL {source}: {e}")
                 return None
-        
+
         return source  # Assume it's already base64

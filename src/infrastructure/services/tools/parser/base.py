@@ -64,7 +64,7 @@ class ToolCall:
     raw_arguments: str = ""                 # Original JSON string
     status: ToolCallStatus = ToolCallStatus.COMPLETE
     error: Optional[str] = None
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "id": self.id,
@@ -74,7 +74,7 @@ class ToolCall:
                 "arguments": self.raw_arguments or json.dumps(self.arguments),
             },
         }
-    
+
     def to_openai_format(self) -> Dict[str, Any]:
         """Convert to OpenAI API format."""
         return {
@@ -95,11 +95,11 @@ class ToolParseResult:
     raw_output: str = ""                    # Full raw output
     complete: bool = True
     errors: List[str] = field(default_factory=list)
-    
+
     @property
     def has_tool_calls(self) -> bool:
         return bool(self.tool_calls)
-    
+
     @property
     def is_valid(self) -> bool:
         return all(tc.status == ToolCallStatus.COMPLETE for tc in self.tool_calls)
@@ -123,26 +123,26 @@ class StreamingToolState:
 
 class ToolParser(ABC):
     """Base class for tool parsers."""
-    
+
     @property
     @abstractmethod
     def parser_type(self) -> ToolParserType:
         """Return parser type."""
         ...
-    
+
     @abstractmethod
     def parse(self, text: str) -> ToolParseResult:
         """
         Parse tool calls from text.
-        
+
         Args:
             text: Model output text
-        
+
         Returns:
             ToolParseResult with extracted tool calls
         """
         ...
-    
+
     @abstractmethod
     def parse_streaming(
         self,
@@ -151,16 +151,16 @@ class ToolParser(ABC):
     ) -> Tuple[StreamingToolState, Optional[ToolCall]]:
         """
         Parse streaming token.
-        
+
         Args:
             delta: New token(s)
             state: Current parsing state
-        
+
         Returns:
             (updated_state, completed_tool_call_if_any)
         """
         ...
-    
+
     def _generate_call_id(self, index: int = 0) -> str:
         """Generate a unique call ID."""
         import uuid
@@ -174,16 +174,16 @@ class ToolParser(ABC):
 def extract_json_from_text(text: str) -> List[str]:
     """
     Extract all JSON objects from text.
-    
+
     Returns:
         List of JSON strings
     """
     results = []
-    
+
     brace_depth = 0
     start_idx = -1
     in_string = False
-    
+
     for i, char in enumerate(text):
         if char == '"' and (i == 0 or text[i-1] != '\\'):
             in_string = not in_string
@@ -197,5 +197,5 @@ def extract_json_from_text(text: str) -> List[str]:
                 if brace_depth == 0 and start_idx >= 0:
                     results.append(text[start_idx:i+1])
                     start_idx = -1
-    
+
     return results

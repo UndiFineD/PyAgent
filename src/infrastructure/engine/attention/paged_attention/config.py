@@ -20,21 +20,21 @@ class AttentionConfig:
     sliding_window: int | None = None
     alibi_slopes: NDArray[np.float32] | None = None
     kv_cache_dtype: KVCacheDtype = KVCacheDtype.AUTO
-    
+
     def __post_init__(self):
         if self.num_kv_heads == 0:
             self.num_kv_heads = self.num_heads
         if self.scale is None:
             self.scale = 1.0 / math.sqrt(self.head_size)
-    
+
     @property
     def num_queries_per_kv(self) -> int:
         return self.num_heads // self.num_kv_heads
-    
+
     @property
     def is_gqa(self) -> bool:
         return self.num_heads != self.num_kv_heads
-    
+
     @property
     def is_mqa(self) -> bool:
         return self.num_kv_heads == 1 and self.num_heads > 1

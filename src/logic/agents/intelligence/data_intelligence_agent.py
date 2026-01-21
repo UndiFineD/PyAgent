@@ -45,7 +45,7 @@ class DataIntelligenceAgent(BaseAgent):
     @as_tool
     def execute_query(self, sql: str, read_only: bool = True) -> str:
         """Executes a SQL query and returns results.
-        
+
         Args:
             sql: The SQL query to run.
             read_only: If True, blocks destructive commands (DROP, DELETE, etc.).

@@ -68,7 +68,7 @@ class FastIncrementalDetokenizer(IncrementalDetokenizer):
         """Decode tokens using fast tokenizer approach."""
         if not token_ids:
             return "", prefix_offset, read_offset
-        
+
         if HAS_RUST:
             new_prefix, new_read = update_prefix_offset_rust(
                 len(token_ids),
@@ -78,7 +78,7 @@ class FastIncrementalDetokenizer(IncrementalDetokenizer):
         else:
             new_prefix = max(len(token_ids) - 6, 0)
             new_read = len(token_ids)
-        
+
         if new_prefix > 0:
             prefix_text = self.tokenizer.decode(
                 token_ids[:new_prefix],
@@ -86,15 +86,15 @@ class FastIncrementalDetokenizer(IncrementalDetokenizer):
             )
         else:
             prefix_text = ""
-        
+
         full_text = self.tokenizer.decode(
             token_ids[:new_read],
             skip_special_tokens=self.skip_special_tokens,
         )
-        
+
         if len(full_text) > len(prefix_text):
             new_text = full_text[len(prefix_text):]
         else:
             new_text = ""
-        
+
         return new_text, new_prefix, new_read

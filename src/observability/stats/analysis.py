@@ -100,7 +100,7 @@ class FleetMetrics:
 
 class StabilityCore:
     """Pure logic for calculating fleet stability and reasoning coherence.
-    
+
     Phase 14 Rust Optimizations:
     - calculate_variance_rust: Fast variance calculation for stasis detection
     """
@@ -119,18 +119,18 @@ class StabilityCore:
 
     def is_in_stasis(self, score_history: list[float]) -> bool:
         """Detect if the fleet is in stasis (low variance).
-        
+
         Uses Rust-accelerated variance calculation when available.
         """
         if len(score_history) < 10:
             return False
-        
+
         # Rust-accelerated variance calculation
         if RUST_AVAILABLE and hasattr(rc, 'calculate_variance_rust'):
             with contextlib.suppress(Exception):
                 variance = rc.calculate_variance_rust(score_history)
                 return variance < 0.0001
-        
+
         avg = sum(score_history) / len(score_history)
         variance = sum((x - avg) ** 2 for x in score_history) / len(score_history)
         return variance < 0.0001

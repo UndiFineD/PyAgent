@@ -28,7 +28,7 @@ __version__ = VERSION
 
 class TelemetryAgent(BaseAgent):
     """
-    Tier 5 (Maintenance) - Telemetry Agent: Responsible for broadcasting fleet 
+    Tier 5 (Maintenance) - Telemetry Agent: Responsible for broadcasting fleet
     telemetry and archiving interactions for swarm intelligence harvesting.
     """
 

@@ -12,7 +12,7 @@ import numpy as np
 
 from .models import PoolingConfig, PoolingStrategy, PoolingResult
 from .strategies import (
-    BasePooler, MeanPooler, CLSPooler, LastTokenPooler, 
+    BasePooler, MeanPooler, CLSPooler, LastTokenPooler,
     MaxPooler, AttentionPooler, WeightedMeanPooler,
     MatryoshkaPooler, MultiVectorPooler, StepPooler
 )
@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 class PoolingEngine:
     """Manager for various pooling operations."""
-    
+
     _STRATEGIES: Dict[PoolingStrategy, Type[BasePooler]] = {
         PoolingStrategy.MEAN: MeanPooler,
         PoolingStrategy.CLS: CLSPooler,
@@ -33,7 +33,7 @@ class PoolingEngine:
         PoolingStrategy.MULTI_VECTOR: MultiVectorPooler,
         PoolingStrategy.STEP: StepPooler
     }
-    
+
     def __init__(self, config: Optional[PoolingConfig] = None, **kwargs):
         self.config = config or PoolingConfig()
         # Phase 125: Handle legacy/test pass-through parameters
@@ -73,24 +73,24 @@ class PoolingEngine:
         # Convert any tensor types to numpy for generic processing if needed
         h_states = self._ensure_numpy(hidden_states)
         mask = self._ensure_numpy(attention_mask) if attention_mask is not None else None
-        
+
         target_strat = strategy or self.config.strategy
         pooler = self.get_pooler(target_strat)
-        
+
         # Handle weighted mean special case
         if target_strat == PoolingStrategy.WEIGHTED_MEAN:
             results = pooler.pool(h_states, mask, token_ids=kwargs.get("token_ids"))
         else:
             results = pooler.pool(h_states, mask)
-            
+
         # Optional Matryoshka truncation
         if truncate_dim:
             results = pooler.truncate(results, truncate_dim)
-            
+
         # Optional normalization
         if normalize:
             results = pooler.normalize(results)
-            
+
         return PoolingResult(
             embeddings=results,
             strategy=target_strat,

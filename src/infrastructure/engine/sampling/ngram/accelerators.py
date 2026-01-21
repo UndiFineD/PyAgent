@@ -34,7 +34,7 @@ if HAS_NUMBA:
         n_pattern = len(pattern)
         matches = np.zeros(max_matches, dtype=np.int32)
         match_count = 0
-        
+
         for i in range(n_tokens - n_pattern + 1):
             found = True
             for j in range(n_pattern):
@@ -46,9 +46,9 @@ if HAS_NUMBA:
                 match_count += 1
                 if match_count >= max_matches:
                     break
-        
+
         return matches[:match_count]
-    
+
     @njit(parallel=True)
     def _batch_propose_numba(
         all_tokens: np.ndarray,       # Flattened tokens
@@ -62,27 +62,27 @@ if HAS_NUMBA:
     ) -> None:
         """Numba-accelerated batch proposal."""
         batch_size = len(token_offsets)
-        
+
         for b in prange(batch_size):
             offset = token_offsets[b]
             length = token_lengths[b]
-            
+
             if length < min_n:
                 proposal_lens[b] = 0
                 continue
-            
+
             tokens = all_tokens[offset:offset + length]
-            
+
             # Simple greedy matching for now
             best_len = 0
             best_proposal = np.zeros(k, dtype=np.int32)
-            
+
             for n in range(max_n, min_n - 1, -1):
                 if n > length:
                     continue
-                
+
                 pattern = tokens[-(n-1):]
-                
+
                 # Find matches
                 for i in range(length - n):
                     found = True
@@ -90,21 +90,21 @@ if HAS_NUMBA:
                         if tokens[i + j] != pattern[j]:
                             found = False
                             break
-                    
+
                     if found:
                         # Get continuation
                         cont_start = i + n - 1
                         cont_len = min(k, length - cont_start)
-                        
+
                         if cont_len > best_len:
                             best_len = cont_len
                             for c in range(cont_len):
                                 best_proposal[c] = tokens[cont_start + c]
                             break
-                
+
                 if best_len > 0:
                     break
-            
+
             proposal_lens[b] = best_len
             for c in range(best_len):
                 proposals[b, c] = best_proposal[c]

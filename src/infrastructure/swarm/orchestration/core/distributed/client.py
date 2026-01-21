@@ -32,11 +32,11 @@ T = TypeVar("T")
 
 class MPClient(Generic[T]):
     """Client for communicating with worker processes.
-    
+
     Inspired by vLLM's MPClient pattern.
     Synchronous interface for multi-process workers.
     """
-    
+
     def __init__(
         self,
         worker_factory: Callable[[WorkerIdentity], BaseWorker],
@@ -45,11 +45,11 @@ class MPClient(Generic[T]):
         self.worker_factory = worker_factory
         self.config = parallel_config
         self.engine_id = str(uuid.uuid4())[:8]
-        
+
         self._workers: List[WorkerProcess] = []
         self._pending: Dict[str, int] = {}  # request_id -> worker_id
         self._lock = threading.Lock()
-    
+
     def start(self) -> None:
         """Start all worker processes."""
         for i in range(self.config.data_parallel_size):
@@ -62,33 +62,33 @@ class MPClient(Generic[T]):
             )
             worker.start()
             self._workers.append(worker)
-        
+
         # Wait for workers to initialize
         time.sleep(0.5)
         logger.info("Started %d workers", len(self._workers))
-    
+
     def stop(self) -> None:
         """Stop all worker processes."""
         for worker in self._workers:
             worker.stop()
         self._workers.clear()
         logger.info("Stopped all workers")
-    
+
     def submit(self, request: RequestMessage) -> None:
         """Submit a request to be processed.
-        
+
         Uses round-robin distribution by default.
         """
         with self._lock:
             worker_id = hash(request.request_id) % len(self._workers)
             self._pending[request.request_id] = worker_id
             self._workers[worker_id].submit(request)
-    
+
     def get_response(self, timeout: float = None) -> Optional[ResponseMessage]:
         """Get a response from any worker."""
         # Poll all workers
         deadline = time.time() + (timeout or 0)
-        
+
         while True:
             for worker in self._workers:
                 response = worker.get_response(timeout=0.01)
@@ -96,15 +96,15 @@ class MPClient(Generic[T]):
                     with self._lock:
                         self._pending.pop(response.request_id, None)
                     return response
-            
+
             if timeout and time.time() >= deadline:
                 return None
-    
+
     @property
     def num_workers(self) -> int:
         """Number of active workers."""
         return len(self._workers)
-    
+
     @property
     def num_pending(self) -> int:
         """Number of pending requests."""
@@ -113,11 +113,11 @@ class MPClient(Generic[T]):
 
 class AsyncMPClient(Generic[T]):
     """Async client for communicating with worker processes.
-    
+
     Inspired by vLLM's AsyncMPClient.
     Async interface for non-blocking operations.
     """
-    
+
     def __init__(
         self,
         worker_factory: Callable[[WorkerIdentity], BaseWorker],
@@ -126,22 +126,22 @@ class AsyncMPClient(Generic[T]):
         self._sync_client = MPClient[T](worker_factory, parallel_config)
         self._loop: Optional[asyncio.AbstractEventLoop] = None
         self._executor = None
-    
+
     async def start(self) -> None:
         """Start worker processes."""
         self._loop = asyncio.get_event_loop()
         await self._loop.run_in_executor(None, self._sync_client.start)
-    
+
     async def stop(self) -> None:
         """Stop worker processes."""
         if self._loop:
             await self._loop.run_in_executor(None, self._sync_client.stop)
-    
+
     async def submit(self, request: RequestMessage) -> None:
         """Submit a request asynchronously."""
         if self._loop:
             await self._loop.run_in_executor(None, self._sync_client.submit, request)
-    
+
     async def get_response(self, timeout: float = None) -> Optional[ResponseMessage]:
         """Get a response asynchronously."""
         if self._loop:
@@ -153,11 +153,11 @@ class AsyncMPClient(Generic[T]):
 
 class DPLBAsyncMPClient(Generic[T]):
     """Data-parallel load-balanced async client.
-    
+
     Inspired by vLLM's dp_lb_pool and DPAsyncMPClient.
     Combines coordination with async multi-process execution.
     """
-    
+
     def __init__(
         self,
         worker_factory: Callable[[WorkerIdentity], BaseWorker],
@@ -166,11 +166,11 @@ class DPLBAsyncMPClient(Generic[T]):
     ):
         self.worker_factory = worker_factory
         self.config = parallel_config
-        
+
         self._coordinator = DPCoordinator(parallel_config, load_balancing)
         self._clients: Dict[str, AsyncMPClient[T]] = {}
         self._lock = asyncio.Lock()
-    
+
     async def start(self) -> None:
         """Start all data-parallel instances."""
         for dp_rank in range(self.config.data_parallel_size):
@@ -180,7 +180,7 @@ class DPLBAsyncMPClient(Generic[T]):
                 dp_size=self.config.data_parallel_size,
                 engine_id=engine_id,
             )
-            
+
             client: AsyncMPClient[T] = AsyncMPClient(
                 worker_factory=self.worker_factory,
                 parallel_config=ParallelConfig(
@@ -189,20 +189,20 @@ class DPLBAsyncMPClient(Generic[T]):
                 ),
             )
             await client.start()
-            
+
             self._clients[engine_id] = client
             self._coordinator.register_engine(identity)
-        
+
         logger.info("Started %d data-parallel instances", len(self._clients))
-    
+
     async def stop(self) -> None:
         """Stop all data-parallel instances."""
         for engine_id, client in self._clients.items():
             await client.stop()
             self._coordinator.deregister_engine(engine_id)
-        
+
         self._clients.clear()
-    
+
     async def submit(self, request: RequestMessage) -> None:
         """Submit a request with load balancing."""
         engine_id = self._coordinator.select_engine(request.request_id)
@@ -210,7 +210,7 @@ class DPLBAsyncMPClient(Generic[T]):
             await self._clients[engine_id].submit(request)
         else:
             raise RuntimeError("No available engines")
-    
+
     async def get_response(self, timeout: float = None) -> Optional[ResponseMessage]:
         """Get a response from any client."""
         # Poll all clients
@@ -218,30 +218,30 @@ class DPLBAsyncMPClient(Generic[T]):
             asyncio.create_task(client.get_response(timeout=0.01))
             for client in self._clients.values()
         ]
-        
+
         done, pending = await asyncio.wait(
             tasks,
             timeout=timeout,
             return_when=asyncio.FIRST_COMPLETED,
         )
-        
+
         # Cancel pending
         for task in pending:
             task.cancel()
-        
+
         # Return first response
         for task in done:
             result = task.result()
             if result:
                 return result
-        
+
         return None
-    
+
     @property
     def num_engines(self) -> int:
         """Number of data-parallel engines."""
         return self._coordinator.num_engines
-    
+
     @property
     def num_ready(self) -> int:
         """Number of ready engines."""

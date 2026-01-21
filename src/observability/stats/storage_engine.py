@@ -198,7 +198,7 @@ class StatsCompressor:
                     result = rust_core.compress_json_rust(data)
                     if result:
                         return result
-        
+
         payload = (
             (b"b" + bytes(data))
             if isinstance(data, (bytes, bytearray))
@@ -213,7 +213,7 @@ class StatsCompressor:
                 result = rust_core.decompress_json_rust(data)
                 if result is not None:
                     return result
-        
+
         payload = zlib.decompress(data)
         tag, body = payload[:1], payload[1:]
         if tag == b"b":

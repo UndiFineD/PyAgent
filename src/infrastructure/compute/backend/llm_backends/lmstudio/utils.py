@@ -19,14 +19,14 @@ def lmstudio_chat(
     """Convenience function for quick LM Studio chat."""
     try:
         import lmstudio
-        
+
         llm = lmstudio.llm(model) if model else lmstudio.llm()
         chat = lmstudio.Chat(system_prompt)
         chat.add_user_message(prompt)
-        
+
         result = llm.respond(chat)
         return str(result)
-        
+
     except Exception as e:
         logger.error(f"lmstudio_chat error: {e}")
         return ""
@@ -40,14 +40,14 @@ def lmstudio_stream(
     """Convenience function for streaming LM Studio chat."""
     try:
         import lmstudio
-        
+
         llm = lmstudio.llm(model) if model else lmstudio.llm()
         chat = lmstudio.Chat(system_prompt)
         chat.add_user_message(prompt)
-        
+
         for fragment in llm.respond_stream(chat):
             yield str(fragment)
-            
+
     except Exception as e:
         logger.error(f"lmstudio_stream error: {e}")
 
@@ -61,16 +61,16 @@ async def lmstudio_chat_async(
     """Async convenience function for LM Studio chat."""
     try:
         import lmstudio
-        
+
         async with lmstudio.AsyncClient(host) as client:
             llm = await client.llm.get(model) if model else await client.llm.get()
-            
+
             chat = lmstudio.Chat(system_prompt)
             chat.add_user_message(prompt)
-            
+
             result = await llm.respond(chat)
             return str(result)
-            
+
     except Exception as e:
         logger.error(f"lmstudio_chat_async error: {e}")
         return ""

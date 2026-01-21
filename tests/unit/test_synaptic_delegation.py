@@ -14,18 +14,18 @@ def test_delegation():
     print("--- Testing Synaptic Delegation ---")
     # Initialize DirectorAgent
     director = DirectorAgent("test_project.md")
-    
+
     # Mocking fleet just in case
     class MockFleet:
         def __init__(self):
             self.agents = {}
     director.fleet = MockFleet()
-    
+
     print(f"Available agents: {director._get_available_agents()}")
-    
+
     # Test delegate_to (Dynamic import check)
     print("\nTesting dynamic delegation to CoderAgent...")
-    
+
     async def run_test():
         try:
             result = await director.delegate_to("CoderAgent", "Hello Coder", "test_file.py")

@@ -26,14 +26,14 @@ except ImportError:
 class NaiveAttentionBackend(AttentionBackend[None]):
     """
     Naive reference implementation for testing.
-    
+
     Simple scaled dot-product attention without optimizations.
     """
-    
+
     @staticmethod
     def get_name() -> str:
         return "naive"
-    
+
     @staticmethod
     def get_capabilities() -> AttentionCapabilities:
         return AttentionCapabilities(
@@ -54,7 +54,7 @@ class NaiveAttentionBackend(AttentionBackend[None]):
             best_for_long_seqs=False,
             memory_efficient=False,
         )
-    
+
     def forward(
         self,
         query: Any,
@@ -67,23 +67,23 @@ class NaiveAttentionBackend(AttentionBackend[None]):
         """Naive attention implementation."""
         if not HAS_TORCH:
             raise RuntimeError("PyTorch required for NaiveAttentionBackend")
-        
+
         # Get dimensions
         batch_seq, num_heads, head_dim = query.shape
         _, num_kv_heads, _ = key.shape
-        
+
         if scale is None:
             scale = 1.0 / (head_dim ** 0.5)
-        
+
         # Handle GQA/MQA by repeating KV heads
         if num_kv_heads != num_heads:
             repeat_factor = num_heads // num_kv_heads
             key = key.repeat_interleave(repeat_factor, dim=1)
             value = value.repeat_interleave(repeat_factor, dim=1)
-        
+
         # Simple attention: Q @ K.T * scale -> softmax -> @ V
         attn_weights = torch.matmul(query, key.transpose(-2, -1)) * scale
         attn_weights = torch.softmax(attn_weights, dim=-1)
         output = torch.matmul(attn_weights, value)
-        
+
         return output

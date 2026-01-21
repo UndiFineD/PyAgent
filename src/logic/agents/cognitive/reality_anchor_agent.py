@@ -26,8 +26,8 @@ __version__ = VERSION
 
 class RealityAnchorAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Reality Anchor Agent: Specializes in 
-    zero-hallucination execution by cross-referencing factual claims against 
+    Tier 2 (Cognitive Logic) - Reality Anchor Agent: Specializes in
+    zero-hallucination execution by cross-referencing factual claims against
     verified 'Reality Graphs' (compiler outputs, documentation, tests).
     """
 

@@ -22,7 +22,7 @@ __version__ = VERSION
 
 class StrategicPlanningAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Strategic Planning Agent: Handles long-term 
+    Tier 2 (Cognitive Logic) - Strategic Planning Agent: Handles long-term
     goal setting, roadmap prioritization, and autonomous project management for the fleet.
     """
 

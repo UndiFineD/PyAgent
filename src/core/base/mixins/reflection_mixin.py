@@ -24,7 +24,7 @@ from src.core.base.logic.core.lesson_core import LessonCore, Lesson
 
 class ReflectionMixin:
     """
-    Adds a self-reflection loop to agents to ensure output correctness and 
+    Adds a self-reflection loop to agents to ensure output correctness and
     long-term learning from reasoning failures.
     """
 

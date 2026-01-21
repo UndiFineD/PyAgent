@@ -57,7 +57,7 @@ def sample_logits(
     """Convenience function to sample from logits."""
     params = params or SamplingParams()
     samplers: List[Sampler] = []
-    
+
     if params.repetition_penalty != 1.0:
         samplers.append(RepetitionPenaltySampler())
     if params.presence_penalty != 0 or params.frequency_penalty != 0:
@@ -67,6 +67,6 @@ def sample_logits(
     if params.use_top_k or params.use_top_p or params.use_min_p:
         samplers.append(TopKTopPSampler())
     samplers.append(GumbelSampler())
-    
+
     pipeline = SamplingPipeline(samplers)
     return pipeline.sample(logits, params, state)

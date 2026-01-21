@@ -14,7 +14,7 @@ class HTTPConnection(SyncHTTPMixin, AsyncHTTPMixin):
     """
     Helper class to send HTTP requests with session reuse.
     """
-    
+
     def __init__(
         self,
         *,
@@ -25,10 +25,10 @@ class HTTPConnection(SyncHTTPMixin, AsyncHTTPMixin):
         self.reuse_client = reuse_client
         self.default_timeout = default_timeout
         self.user_agent = user_agent or f"PyAgent/{__version__}"
-        
+
         self._sync_client: Any = None  # requests.Session
         self._async_client: Any = None  # aiohttp.ClientSession
-    
+
     def get_sync_client(self) -> Any:
         """Get or create a sync HTTP client (requests.Session)."""
         if self._sync_client is None or not self.reuse_client:
@@ -41,7 +41,7 @@ class HTTPConnection(SyncHTTPMixin, AsyncHTTPMixin):
                     "Install with: pip install requests"
                 )
         return self._sync_client
-    
+
     async def get_async_client(self) -> Any:
         """Get or create an async HTTP client (aiohttp.ClientSession)."""
         if self._async_client is None or not self.reuse_client:
@@ -57,31 +57,31 @@ class HTTPConnection(SyncHTTPMixin, AsyncHTTPMixin):
                     "Install with: pip install aiohttp"
                 )
         return self._async_client
-    
+
     def close(self) -> None:
         """Close sync client session."""
         if self._sync_client is not None:
             self._sync_client.close()
             self._sync_client = None
-    
+
     async def aclose(self) -> None:
         """Close async client session."""
         if self._async_client is not None:
             await self._async_client.close()
             self._async_client = None
-    
+
     def __enter__(self) -> HTTPConnection:
         return self
-    
+
     def __exit__(self, *args: Any) -> None:
         self.close()
-    
+
     async def __aenter__(self) -> HTTPConnection:
         return self
-    
+
     async def __aexit__(self, *args: Any) -> None:
         await self.aclose()
-    
+
     def _validate_http_url(self, url: str) -> None:
         """Validate that URL uses http or https scheme."""
         parsed = urlparse(url)
@@ -89,7 +89,7 @@ class HTTPConnection(SyncHTTPMixin, AsyncHTTPMixin):
             raise ValueError(
                 f"Invalid HTTP URL: expected 'http' or 'https' scheme, got '{parsed.scheme}'"
             )
-    
+
     def _headers(self, **extras: str) -> MutableMapping[str, str]:
         """Build request headers with User-Agent."""
         return {"User-Agent": self.user_agent, **extras}

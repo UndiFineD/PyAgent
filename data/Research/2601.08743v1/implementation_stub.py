@@ -45,7 +45,7 @@ class TableCacheManager:
         cache_ptr = self.trie.lookup(tables)
         if cache_ptr:
             print(f"Hot-Swapping KV Cache for tables: {tables}")
-            # Logic here would trigger asynchronous DMA transfer 
+            # Logic here would trigger asynchronous DMA transfer
             # while the prompt is being tokenized.
             return cache_ptr
         return None
@@ -53,7 +53,7 @@ class TableCacheManager:
 if __name__ == "__main__":
     manager = TableCacheManager()
     manager.trie.insert(["users", "orders"], "ptr_0x001")
-    
+
     # Verification: order-independence
     result = manager.trie.lookup(["orders", "users"])
     print(f"Lookup Result (Orders/Users): {result}")

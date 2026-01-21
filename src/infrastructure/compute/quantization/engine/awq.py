@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 class AWQQuantizer(Quantizer):
     """Activation-Aware Weight Quantization (AWQ)."""
-    
+
     def __init__(
         self,
         config: QuantConfig,
@@ -20,28 +20,28 @@ class AWQQuantizer(Quantizer):
         super().__init__(config)
         self.calibration_data = calibration_data
         self._importance_cache: dict[tuple[int, ...], NDArray[np.float32]] = {}
-    
+
     def quantize(
         self,
         weight: NDArray[np.float32],
         activations: NDArray[np.float32] | None = None,
     ) -> QuantizedTensor:
         activations = activations if activations is not None else self.calibration_data
-        
+
         if activations is not None:
             importance = self._compute_importance(activations, weight)
             scaled_weight = weight * importance
         else:
             scaled_weight = weight
-        
+
         linear_quant = LinearQuantizer(self.config)
         qtensor = linear_quant.quantize(scaled_weight)
-        
+
         if activations is not None:
             self._importance_cache[weight.shape] = importance
-        
+
         return qtensor
-    
+
     def dequantize(
         self,
         qtensor: QuantizedTensor,
@@ -51,7 +51,7 @@ class AWQQuantizer(Quantizer):
             importance = self._importance_cache[qtensor.shape]
             result = result / importance
         return result
-    
+
     def _compute_importance(
         self,
         activations: NDArray[np.float32],

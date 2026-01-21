@@ -8,7 +8,7 @@ from .scheduler import DisaggregatedScheduler
 
 class SchedulerFactory:
     """Factory for creating DisaggregatedScheduler instances."""
-    
+
     @staticmethod
     def create_scheduler(
         prefill_policy: SchedulingPolicy = SchedulingPolicy.ROUND_ROBIN,
@@ -46,7 +46,7 @@ def create_dcp_scheduler(
             InstanceInfo(f"d{i}", InstanceRole.DECODE, url, 8001)
             for i, url in enumerate(decode_urls)
         ]
-    
+
     return SchedulerFactory.create_scheduler(
         prefill_policy, decode_policy, prefill_instances, decode_instances
     )

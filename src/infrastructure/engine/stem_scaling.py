@@ -17,7 +17,7 @@ class STEMScalingLayer(nn.Module):
         super().__init__()
         self.hidden_dim = hidden_dim
         self.expansion_factor = expansion_factor
-        
+
         # STEM scaling parameters
         self.scaling_weight = nn.Parameter(torch.ones(hidden_dim))
         self.expansion_proj = nn.Linear(hidden_dim, hidden_dim * expansion_factor)
@@ -31,15 +31,15 @@ class STEMScalingLayer(nn.Module):
         # STEM suggests scaling increases logarithmically with context length
         scale = torch.log2(torch.tensor(context_length, dtype=x.dtype, device=x.device)) / 20.0
         scale = torch.clamp(scale, min=1.0)
-        
+
         # Apply scaling
         x = x * self.scaling_weight * scale
-        
+
         # Higher-order expansion for long contexts
         if context_length > 32768:
             expanded = torch.relu(self.expansion_proj(x))
             x = self.contraction_proj(expanded)
-            
+
         return x
 
 class STEMManager:

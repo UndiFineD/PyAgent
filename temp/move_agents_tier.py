@@ -35,31 +35,31 @@ MAPPING = {
     "code_quality_core.py": ANALYSIS, # Direct move for now
     "tech_debt_core.py": ANALYSIS,
     "dependency_core.py": ANALYSIS,
-    
+
     # Multimodal
     "android_agent.py": MULTIMODAL,
     "ui_architect_agent.py": MULTIMODAL,
     "svg_agent.py": MULTIMODAL,
-    
+
     # Security
     "ethics_guardrail_agent.py": SECURITY,
     "security_agent.py": SECURITY,
     "security_guard_agent.py": SECURITY,
     "security_audit_manager.py": SECURITY,
     "security_core.py": SECURITY,
-    
+
     # Infrastructure
     "infrastructure_manager_agent.py": INFRA,
     "infrastructure_repair_agent.py": INFRA,
     "network_arch_search_agent.py": INFRA,
-    
+
     # System
     "dashboard_agent.py": SYSTEM,
     "process_synthesizer_agent.py": SYSTEM,
     "sandbox_agent.py": SYSTEM,
     "self_healing_agent.py": SYSTEM,
     "self_optimizer_agent.py": SYSTEM,
-    
+
     # Specialists
     "handy_agent.py": SPECIALISTS,
     "accessibility_agent.py": SPECIALISTS,
@@ -144,7 +144,7 @@ def update_imports():
     for i in range(0, len(sorted_items), batch_size):
         batch = sorted_items[i:i+batch_size]
         pattern = "|".join([old.replace(".", "\\.") for old, _ in batch])
-        
+
         # Find files using powershell Select-String since rg might not be in path
         print(f"Batch {i//batch_size}: Replacing {pattern}")
         for old_import, new_import in batch:

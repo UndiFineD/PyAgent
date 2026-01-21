@@ -225,7 +225,7 @@ class LazyAgentMap(dict):
             return True
         if key in self._discovered_configs:
             return True
-        
+
         # Case-insensitive check (Phase 104)
         k_norm = str(key).lower().replace("_", "")
         for d_key in self._discovered_configs:
@@ -234,7 +234,7 @@ class LazyAgentMap(dict):
         for d_key in self.registry_configs:
             if d_key.lower().replace("_", "") == k_norm:
                 return True
-                
+
         return False
 
     def __getitem__(self, key: str) -> Any:

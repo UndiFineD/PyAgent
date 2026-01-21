@@ -18,7 +18,7 @@ async def dp_collective_all_reduce(
 ) -> list[float]:
     """
     Async all-reduce across DP ranks.
-    
+
     Beyond vLLM: Async collective operations.
     """
     # Placeholder for collective communication logic

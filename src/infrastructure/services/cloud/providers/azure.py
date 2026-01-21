@@ -26,13 +26,13 @@ logger = logging.getLogger(__name__)
 class AzureAIConnector(CloudProviderBase):
     """
     Connector for Azure AI Foundry models.
-    
-    Supports models hosted on Azure AI Foundry endpoints, 
+
+    Supports models hosted on Azure AI Foundry endpoints,
     including Llama 3, Phi-3, Cohere, etc.
-    
+
     Compatible with OpenAI-style API endpoints provided by Azure.
     """
-    
+
     # Pricing per 1M tokens (input/output) - approximate (Standard Azure Pay-As-Go)
     PRICING = {
         "gpt-4": {"input": 30.00, "output": 60.00},
@@ -42,7 +42,7 @@ class AzureAIConnector(CloudProviderBase):
         "meta-llama-3-8b-instruct": {"input": 0.15, "output": 0.15},
         "phi-3-mini-4k-instruct": {"input": 0.10, "output": 0.10},
     }
-    
+
     def __init__(
         self,
         api_key: Optional[str] = None,
@@ -52,7 +52,7 @@ class AzureAIConnector(CloudProviderBase):
     ):
         """
         Initialize Azure AI Connector.
-        
+
         Args:
             api_key: Azure AI Registry or Endpoint key.
             endpoint: Full endpoint URL (e.g., https://<name>.<region>.inference.ai.azure.com).
@@ -63,19 +63,19 @@ class AzureAIConnector(CloudProviderBase):
         self._api_key = api_key or os.getenv("AZURE_AI_KEY")
         self._endpoint = endpoint or os.getenv("AZURE_AI_ENDPOINT")
         self._api_version = api_version
-        
+
     @property
     def name(self) -> str:
         return "AzureAI"
-        
+
     @property
     def available_models(self) -> List[str]:
         return list(self.PRICING.keys())
-        
+
     async def complete(self, request: InferenceRequest) -> InferenceResponse:
         import httpx
         start_time = time.perf_counter()
-        
+
         if not self._api_key or not self._endpoint:
             raise AuthenticationError("Azure AI API key and endpoint are required.")
 
@@ -83,13 +83,13 @@ class AzureAIConnector(CloudProviderBase):
         url = self._endpoint
         if not url.endswith("/chat/completions"):
             url = f"{self._endpoint.rstrip('/')}/v1/chat/completions"
-            
+
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self._api_key}" if not self._is_entra_token() else f"Bearer {self._api_key}",
             "api-key": self._api_key # Azure specific header
         }
-        
+
         payload = {
             "messages": request.messages,
             "max_tokens": request.max_tokens,
@@ -103,23 +103,23 @@ class AzureAIConnector(CloudProviderBase):
                 response = await client.post(url, json=payload, headers=headers)
             except Exception as e:
                 raise CloudProviderError(f"Azure AI connection failed: {e}")
-            
+
             if response.status_code == 429:
                 raise RateLimitError("Azure AI rate limit exceeded.")
             elif response.status_code != 200:
                 raise CloudProviderError(f"Azure AI returned error {response.status_code}: {response.text}")
-                
+
             data = response.json()
             content = data["choices"][0]["message"]["content"]
-            
+
             # Simple token estimation if usage not returned
             usage = data.get("usage", {})
             input_tokens = usage.get("prompt_tokens", len(str(request.messages)) // 4)
             output_tokens = usage.get("completion_tokens", len(content) // 4)
-            
+
             cost = self._calculate_cost(request.model, input_tokens, output_tokens)
             latency = (time.perf_counter() - start_time) * 1000
-            
+
             return InferenceResponse(
                 content=content,
                 model=request.model,

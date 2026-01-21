@@ -35,7 +35,7 @@ class TableCacheManager:
             if char not in node.children:
                 node.children[char] = TableTrieNode()
             node = node.children[char]
-        
+
         node.metadata = TableMetadata(table_name=table_name, columns=columns)
         self.table_count += 1
 
@@ -46,7 +46,7 @@ class TableCacheManager:
             if char not in node.children:
                 return []
             node = node.children[char]
-        
+
         # Collect all metadata in subtree
         results = []
         self._collect_metadata(node, results)

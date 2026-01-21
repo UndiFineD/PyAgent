@@ -8,11 +8,11 @@ class DistributedExecutor(Executor):
     """
     Distributed executor for multi-node setups.
     """
-    
+
     uses_ray = False
     supports_pp = True
     supports_tp = True
-    
+
     def __init__(
         self,
         world_size: int = 1,
@@ -26,7 +26,7 @@ class DistributedExecutor(Executor):
         self._functions = functions or {}
         self._started = False
         self._local_executor: Optional[MultiprocExecutor] = None
-    
+
     def start(self) -> None:
         """Start the distributed executor."""
         # Start local executor
@@ -36,35 +36,35 @@ class DistributedExecutor(Executor):
         )
         self._local_executor.start()
         self._started = True
-    
+
     def shutdown(self, graceful: bool = True) -> None:
         """Shutdown the executor."""
         if self._local_executor:
             self._local_executor.shutdown(graceful)
         self._started = False
-    
+
     def submit(self, func_name: str, *args: Any, **kwargs: Any) -> FutureWrapper[Any]:
         """Submit a task (local only in this basic implementation)."""
         if not self._local_executor:
             raise RuntimeError("Executor not started")
         return self._local_executor.submit(func_name, *args, **kwargs)
-    
+
     def broadcast(self, func_name: str, *args: Any, **kwargs: Any) -> List[FutureWrapper[Any]]:
         """Broadcast to all local workers."""
         if not self._local_executor:
             raise RuntimeError("Executor not started")
         return self._local_executor.broadcast(func_name, *args, **kwargs)
-    
+
     def get_num_workers(self) -> int:
         """Get total workers across all nodes."""
         return self._world_size * self._local_size
-    
+
     def is_healthy(self) -> bool:
         """Check health."""
         if not self._local_executor:
             return False
         return self._local_executor.is_healthy()
-    
+
     @property
     def is_leader(self) -> bool:
         """Check if this is the leader node."""

@@ -51,7 +51,7 @@ def register(
 ) -> Callable[[CommandHandler], CommandHandler]:
     """
     Decorator to register a command with the global registry.
-    
+
     Example:
         @register("greet", description="Greet someone", aliases=["hi"])
         def cmd_greet(ctx: CommandContext) -> CommandResult:
@@ -79,12 +79,12 @@ def register_command(
 ) -> CommandDefinition:
     """
     Register a command function with the global registry.
-    
+
     Args:
         name: Command name
         handler: Handler function
         **kwargs: Additional command options
-        
+
     Returns:
         The command definition
     """

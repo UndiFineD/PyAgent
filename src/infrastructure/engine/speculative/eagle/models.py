@@ -20,7 +20,7 @@ class DraftOutput:
 
 class DraftModelWrapper(ABC):
     """Abstract wrapper for draft model."""
-    
+
     @abstractmethod
     def forward(
         self,
@@ -30,7 +30,7 @@ class DraftModelWrapper(ABC):
     ) -> DraftOutput:
         """Run draft model forward pass."""
         pass
-    
+
     @abstractmethod
     def get_hidden_size(self) -> int:
         """Get hidden state size."""
@@ -39,11 +39,11 @@ class DraftModelWrapper(ABC):
 
 class SimpleDraftModel(DraftModelWrapper):
     """Simple mock draft model for testing."""
-    
+
     def __init__(self, vocab_size: int = 32000, hidden_size: int = 4096):
         self.vocab_size = vocab_size
         self.hidden_size = hidden_size
-    
+
     def forward(
         self,
         input_ids: list[int],
@@ -57,6 +57,6 @@ class SimpleDraftModel(DraftModelWrapper):
         token_ids = [random.randint(0, self.vocab_size - 1) for _ in range(n)]
         logits = [[random.random() for _ in range(self.vocab_size)] for _ in range(n)]
         return DraftOutput(token_ids=token_ids, logits=logits)
-    
+
     def get_hidden_size(self) -> int:
         return self.hidden_size

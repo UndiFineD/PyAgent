@@ -25,11 +25,11 @@ except ImportError:
 class InputBuffers:
     """
     Pre-allocated GPU tensors for batch inputs.
-    
+
     Maintains persistent buffers to avoid runtime allocation overhead.
     CUDA graph compatible through fixed-size allocation.
     """
-    
+
     def __init__(
         self,
         max_num_reqs: int,
@@ -44,25 +44,25 @@ class InputBuffers:
         self.device = device
         self.dtype = dtype
         self.vocab_size = vocab_size
-        
+
         if not HAS_TORCH:
             # Fallback to numpy for testing
             self._init_numpy_buffers(max_num_reqs, max_num_tokens)
             return
-        
+
         # Core input tensors
         self.input_ids = torch.zeros(max_num_tokens, dtype=torch.int32, device=device)
         self.positions = torch.zeros(max_num_tokens, dtype=torch.int64, device=device)
         self.query_start_loc = torch.zeros(max_num_reqs + 1, dtype=torch.int32, device=device)
         self.seq_lens = torch.zeros(max_num_reqs, dtype=torch.int32, device=device)
-        
+
         # Multi-rope positions (with dummy for non-contiguous)
         self.mrope_positions = torch.zeros((3, max_num_tokens + 1), dtype=torch.int64, device=device)
-        
+
         # Logits indices
         self.logits_indices = torch.zeros(max_num_reqs, dtype=torch.int32, device=device)
         self.cu_num_logits = torch.zeros(max_num_reqs + 1, dtype=torch.int32, device=device)
-        
+
         # Optional embeddings
         if inputs_embeds_size > 0:
             self.inputs_embeds = torch.zeros(
@@ -70,11 +70,11 @@ class InputBuffers:
             )
         else:
             self.inputs_embeds = None
-        
+
         logger.debug(
             f"InputBuffers initialized: max_reqs={max_num_reqs}, max_tokens={max_num_tokens}"
         )
-    
+
     def _init_numpy_buffers(self, max_num_reqs: int, max_num_tokens: int) -> None:
         """Initialize numpy buffers for testing without torch."""
         self.input_ids = np.zeros(max_num_tokens, dtype=np.int32)

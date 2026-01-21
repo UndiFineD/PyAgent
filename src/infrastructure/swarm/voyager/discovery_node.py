@@ -51,7 +51,7 @@ class DiscoveryNode:
         self.peers: Dict[str, ServiceInfo] = {}
         self.info: Optional[ServiceInfo] = None
         self.browser: Optional[ServiceBrowser] = None
-        
+
         # Local IP detection
         self.local_ip = self._get_local_ip()
 
@@ -76,7 +76,7 @@ class DiscoveryNode:
             'transport_port': str(self.transport_port),
             'status': 'Online'
         }
-        
+
         self.info = ServiceInfo(
             self.SERVICE_TYPE,
             f"{self.node_name}.{self.SERVICE_TYPE}",
@@ -85,7 +85,7 @@ class DiscoveryNode:
             properties=desc,
             server=f"{self.node_name}.local.",
         )
-        
+
         logger.info(f"Voyager: Advertising node {self.node_name} at {self.local_ip}:{self.port}")
         await self.aiozc.zeroconf.async_register_service(self.info)
 
@@ -97,8 +97,8 @@ class DiscoveryNode:
         logger.info("Voyager: Starting peer discovery browser...")
         loop = asyncio.get_running_loop()
         self.browser = ServiceBrowser(
-            self.aiozc.zeroconf, 
-            self.SERVICE_TYPE, 
+            self.aiozc.zeroconf,
+            self.SERVICE_TYPE,
             VoyagerPeerListener(self._peer_discovered, loop)
         )
 
@@ -124,7 +124,7 @@ class DiscoveryNode:
                 "name": name,
                 "addresses": info.parsed_addresses(),
                 "port": info.port,
-                "properties": {k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v 
+                "properties": {k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
                                for k, v in info.properties.items()}
             })
         return results
@@ -135,27 +135,27 @@ class DiscoveryNode:
         This enables decentralized routing without hardcoded IPs.
         """
         for name, info in self.peers.items():
-            props = {k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v 
+            props = {k.decode() if isinstance(k, bytes) else k: v.decode() if isinstance(v, bytes) else v
                     for k, v in info.properties.items()}
-            
+
             # Match by node_name, node_id, or mDNS service name
-            if (peer_name == props.get("node_id") or 
-                peer_name == name.split('.')[0] or 
+            if (peer_name == props.get("node_id") or
+                peer_name == name.split('.')[0] or
                 peer_name in name):
-                
+
                 addrs = info.parsed_addresses()
                 t_port = props.get("transport_port")
                 if addrs and t_port:
                     return (addrs[0], int(t_port))
-        
+
         return None
 
 if __name__ == "__main__":
     import sys
-    
+
     if sys.platform == 'win32':
         asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-    
+
     async def run_test():
         node = DiscoveryNode()
         try:

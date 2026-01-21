@@ -41,7 +41,7 @@ class LearningObjective:
         """Calculates progress towards the objective (0.0 to 1.0+)."""
         if self.target_value == 0:
             return 1.0 if self.current_value == 0 else 0.0
-        
+
         if self.objective_type == ObjectiveType.MAXIMIZE:
             return min(2.0, self.current_value / self.target_value)
         elif self.objective_type == ObjectiveType.MINIMIZE:
@@ -72,10 +72,10 @@ class LearningObjective:
             "progress": self.progress
         })
         self.current_value = new_value
-        
+
         if self.status == ObjectiveStatus.NOT_STARTED:
             self.status = ObjectiveStatus.IN_PROGRESS
-        
+
         if self.is_achieved:
             self.status = ObjectiveStatus.ACHIEVED
 
@@ -86,7 +86,7 @@ class ObjectiveConstraint:
     metric: str
     min_value: Optional[float] = None
     max_value: Optional[float] = None
-    
+
     def is_satisfied(self, value: float) -> bool:
         if self.min_value is not None and value < self.min_value:
             return False
@@ -96,7 +96,7 @@ class ObjectiveConstraint:
 
 class ObjectiveTracker:
     """Manages high-level goals for the self-improving fleet."""
-    
+
     def __init__(self):
         self.objectives: List[LearningObjective] = [
             LearningObjective(
@@ -178,12 +178,12 @@ class ObjectiveTracker:
         """Returns weighted aggregate progress towards all objectives."""
         if not self.objectives:
             return 1.0
-        
+
         weighted_progress = 0.0
         for obj in self.objectives:
             weight = self._objective_weights.get(obj.name, 0.0)
             weighted_progress += weight * obj.progress
-        
+
         return min(1.0, weighted_progress)
 
     def get_priority_objective(self) -> Optional[LearningObjective]:
@@ -211,7 +211,7 @@ class ObjectiveTracker:
     def compute_reward(self, metrics: Dict[str, float]) -> float:
         """Computes a reward signal based on objective progress."""
         reward = 0.0
-        
+
         # Progress reward
         for obj in self.objectives:
             if obj.target_metric in metrics:
@@ -221,16 +221,16 @@ class ObjectiveTracker:
                 obj.current_value = metrics[obj.target_metric]
                 new_progress = obj.progress
                 obj.current_value = temp_value  # Revert
-                
+
                 # Reward for improvement
                 improvement = new_progress - old_progress
                 weight = self._objective_weights.get(obj.name, 0.0)
                 reward += weight * improvement * 10.0  # Scale factor
-        
+
         # Penalty for constraint violations
         violations = self.check_constraints(metrics)
         reward -= len(violations) * 5.0
-        
+
         return reward
 
     def get_status_report(self) -> Dict[str, Any]:

@@ -201,7 +201,7 @@ class TestSSEStream:
         stream = SSEStream(response_id="resp_123")
         event_data = {"type": "response.created", "response": {"id": "resp_123"}}
         await stream.send("response.created", event_data)
-        
+
         assert not stream._closed
 
     @pytest.mark.asyncio
@@ -312,7 +312,7 @@ class TestConversationBuilder:
             instructions="You are helpful",
             messages=None,
         )
-        
+
         assert len(messages) == 2
         assert messages[0].role == RoleType.SYSTEM
         assert messages[1].role == RoleType.USER
@@ -333,7 +333,7 @@ class TestConversationBuilder:
             instructions=None,
             messages=existing_messages,
         )
-        
+
         assert len(messages) == 1
 
 

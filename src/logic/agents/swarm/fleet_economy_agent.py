@@ -25,7 +25,7 @@ __version__ = VERSION
 
 class FleetEconomyAgent(BaseAgent):
     """
-    Tier 4 (Economy) - Fleet Economy Agent: Manages internal agent "wallets", 
+    Tier 4 (Economy) - Fleet Economy Agent: Manages internal agent "wallets",
     credits, and resource bidding mechanisms using a persistent SQLite backend.
     """
 

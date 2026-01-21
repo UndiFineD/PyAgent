@@ -33,9 +33,9 @@ except ImportError:
 
 class AttentionBufferAgent(BaseAgent):
     """
-    Tier 2 (Cognitive Logic) - Attention Buffer Agent: Maintains a shared 
+    Tier 2 (Cognitive Logic) - Attention Buffer Agent: Maintains a shared
     attention context between humans and agents to ensure cohesive collaboration.
-    
+
     Phase 14 Rust Optimizations:
     - sort_buffer_by_priority_rust: Fast priority-timestamp composite sorting
     - filter_stale_entries_rust: Optimized timestamp-based filtering
@@ -107,7 +107,7 @@ class AttentionBufferAgent(BaseAgent):
         """
         now = time.time()
         initial_count = len(self.buffer)
-        
+
         # Rust-accelerated stale entry filtering
         if RUST_AVAILABLE and hasattr(rc, 'filter_stale_entries_rust') and self.buffer:
             try:
@@ -118,6 +118,6 @@ class AttentionBufferAgent(BaseAgent):
                 self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]
         else:
             self.buffer = [p for p in self.buffer if now - p["timestamp"] < age_seconds]
-        
+
         removed = initial_count - len(self.buffer)
         return f"Cleared {removed} stale attention points."

@@ -11,13 +11,13 @@ def create_json_constraint(
     """Create a JSON schema constraint configuration."""
     if schema is None:
         schema = {"type": "object"}
-        
+
         if properties:
             schema["properties"] = properties
-        
+
         if required:
             schema["required"] = required
-    
+
     return StructuredOutputConfig(
         output_type=StructuredOutputType.JSON_SCHEMA,
         json_schema=schema,
@@ -50,20 +50,20 @@ def combine_constraints(
     """
     if not configs:
         return StructuredOutputConfig()
-    
+
     # Start with first config
     combined = StructuredOutputConfig(
         output_type=StructuredOutputType.COMPOSITE,
         backend=configs[0].backend,
         whitespace=configs[0].whitespace,
     )
-    
+
     # Collect all constraints
     for config in configs:
         constraints = config.get_all_constraints()
         combined.additional_constraints.extend(constraints)
-    
+
     # Use strictest mode
     combined.strict_mode = any(c.strict_mode for c in configs)
-    
+
     return combined

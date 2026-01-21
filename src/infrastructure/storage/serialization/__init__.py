@@ -28,17 +28,17 @@ from src.infrastructure.storage.serialization.msg_spec_serializer import (
     is_msgspec_available,
     require_msgspec,
     MSGSPEC_AVAILABLE,
-    
+
     # Encoders
     JSONEncoder,
     MsgPackEncoder,
     TypedSerializer,
-    
+
     # Chat helpers
     encode_chat_request,
     decode_chat_response,
     decode_stream_chunk,
-    
+
     # Benchmarking
     BenchmarkResult,
     benchmark_serialization,
@@ -62,7 +62,7 @@ __all__ = [
     'from_json',
     'to_msgpack',
     'from_msgpack',
-    
+
     # Phase 21: MsgSpecSerializer
     "is_msgspec_available",
     "require_msgspec",
@@ -92,7 +92,7 @@ if MSGSPEC_AVAILABLE:
         ToolDefinition,
         FunctionDefinition,
     )
-    
+
     __all__.extend([
         "Role",
         "ChatMessage",

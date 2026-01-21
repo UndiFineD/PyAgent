@@ -541,34 +541,34 @@ fn json_escape_into(output: &mut String, s: &str) {
     }
 }
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(generate_cache_key, m)?)?;
-    m.add_function(wrap_pyfunction!(get_error_code, m)?)?;
-    m.add_function(wrap_pyfunction!(get_error_documentation_link, m)?)?;
-    m.add_function(wrap_pyfunction!(redact_pii, m)?)?;
-    m.add_function(wrap_pyfunction!(identify_blind_spots, m)?)?;
-    m.add_function(wrap_pyfunction!(calculate_daemon_sleep_interval, m)?)?;
-    m.add_function(wrap_pyfunction!(generate_self_improvement_plan, m)?)?;
-    m.add_function(wrap_pyfunction!(generate_challenge, m)?)?;
-    m.add_function(wrap_pyfunction!(generate_auth_proof, m)?)?;
-    m.add_function(wrap_pyfunction!(verify_auth_proof, m)?)?;
-    m.add_function(wrap_pyfunction!(is_proof_expired, m)?)?;
+    m.add_function(wrap_pyfunction!(build_log_entry_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_anchoring_fallback, m)?)?;
     m.add_function(wrap_pyfunction!(calculate_backoff, m)?)?;
-    m.add_function(wrap_pyfunction!(should_attempt_recovery, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_daemon_sleep_interval, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_decay, m)?)?;
+    m.add_function(wrap_pyfunction!(check_latent_reasoning, m)?)?;
     m.add_function(wrap_pyfunction!(evaluate_state_transition, m)?)?;
     m.add_function(wrap_pyfunction!(generate_agent_id, m)?)?;
-    m.add_function(wrap_pyfunction!(sign_payload, m)?)?;
-    m.add_function(wrap_pyfunction!(verify_signature, m)?)?;
-    m.add_function(wrap_pyfunction!(validate_identity, m)?)?;
-    m.add_function(wrap_pyfunction!(calculate_decay, m)?)?;
+    m.add_function(wrap_pyfunction!(generate_auth_proof, m)?)?;
+    m.add_function(wrap_pyfunction!(generate_cache_key, m)?)?;
+    m.add_function(wrap_pyfunction!(generate_challenge, m)?)?;
+    m.add_function(wrap_pyfunction!(generate_self_improvement_plan, m)?)?;
+    m.add_function(wrap_pyfunction!(get_error_code, m)?)?;
+    m.add_function(wrap_pyfunction!(get_error_documentation_link, m)?)?;
+    m.add_function(wrap_pyfunction!(identify_blind_spots, m)?)?;
     m.add_function(wrap_pyfunction!(is_in_refractory, m)?)?;
-    m.add_function(wrap_pyfunction!(update_weight_on_fire, m)?)?;
-    m.add_function(wrap_pyfunction!(should_prune, m)?)?;
-    m.add_function(wrap_pyfunction!(verify_fleet_health, m)?)?;
-    m.add_function(wrap_pyfunction!(calculate_anchoring_fallback, m)?)?;
-    m.add_function(wrap_pyfunction!(check_latent_reasoning, m)?)?;
+    m.add_function(wrap_pyfunction!(is_proof_expired, m)?)?;
     m.add_function(wrap_pyfunction!(is_response_valid_rust, m)?)?;
     m.add_function(wrap_pyfunction!(mask_sensitive_logs, m)?)?;
+    m.add_function(wrap_pyfunction!(redact_pii, m)?)?;
+    m.add_function(wrap_pyfunction!(should_attempt_recovery, m)?)?;
+    m.add_function(wrap_pyfunction!(should_prune, m)?)?;
+    m.add_function(wrap_pyfunction!(sign_payload, m)?)?;
     m.add_function(wrap_pyfunction!(to_snake_case_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(build_log_entry_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(update_weight_on_fire, m)?)?;
+    m.add_function(wrap_pyfunction!(validate_identity, m)?)?;
+    m.add_function(wrap_pyfunction!(verify_auth_proof, m)?)?;
+    m.add_function(wrap_pyfunction!(verify_fleet_health, m)?)?;
+    m.add_function(wrap_pyfunction!(verify_signature, m)?)?;
     Ok(())
 }

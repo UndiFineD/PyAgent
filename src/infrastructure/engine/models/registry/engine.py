@@ -15,7 +15,7 @@ class ModelRegistry:
     """Central registry for model architectures."""
     _instance: Optional['ModelRegistry'] = None
     _lock = threading.Lock()
-    
+
     def __new__(cls) -> 'ModelRegistry':
         if cls._instance is None:
             with cls._lock:
@@ -23,7 +23,7 @@ class ModelRegistry:
                     cls._instance = super().__new__(cls)
                     cls._instance._initialized = False
         return cls._instance
-    
+
     def __init__(self):
         if getattr(self, "_initialized", False):
             return
@@ -32,15 +32,15 @@ class ModelRegistry:
         self._cache_lock = threading.RLock()
         self._register_defaults()
         self._initialized = True
-    
+
     def _register_defaults(self):
         for arch in [ModelArchitecture.LLAMA, ModelArchitecture.MISTRAL, ModelArchitecture.QWEN2]:
-            self.register(ArchitectureSpec(name=arch.name.lower(), architecture=arch, 
+            self.register(ArchitectureSpec(name=arch.name.lower(), architecture=arch,
                                          capabilities=ModelCapability.TEXT | ModelCapability.TOOL_USE))
-            
+
     def register(self, spec: ArchitectureSpec):
         self._architectures[spec.architecture] = spec
-        
+
     def list_architectures(self) -> List[ModelArchitecture]:
         """List all registered model architectures."""
         return list(self._architectures.keys())
@@ -57,7 +57,7 @@ class ModelRegistry:
                         config.get("num_attention_heads", 32) if config else 32)
         with self._cache_lock: self._model_cache[name] = info
         return info
-    
+
     def _load_config(self, name: str) -> Optional[Dict[str, Any]]:
         if os.path.isdir(name) and (Path(name) / "config.json").exists():
             with open(Path(name) / "config.json", mode="r", encoding="utf-8") as f:
@@ -69,7 +69,7 @@ class ModelRegistry:
                 return json.load(f)
         except (ImportError, RuntimeError, ValueError):
             return None
-        
+
     def _estimate_params(self, c: Dict[str, Any]) -> int:
         h, l, v = c.get("hidden_size", 4096), c.get("num_hidden_layers", 32), c.get("vocab_size", 32000)
         return int(v * h + l * (4 * h * h + 3 * h * c.get("intermediate_size", h * 4)) + v * h)

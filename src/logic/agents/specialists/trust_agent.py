@@ -49,7 +49,7 @@ class TrustMetrics:
 
 class TrustAgent(BaseAgent):
     """
-    Agent specializing in human-agent alignment, mood detection, 
+    Agent specializing in human-agent alignment, mood detection,
     emotional intelligence, and maintaining trust scores for interaction safety.
     """
 
@@ -102,30 +102,30 @@ class TrustAgent(BaseAgent):
             '  "explanation": "brief explanation"\n'
             "}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 data = json.loads(match.group(1))
-                
+
                 # Update emotional state
                 self.emotional_state.valence = data.get("valence", 0.0)
                 self.emotional_state.arousal = data.get("arousal", 0.0)
                 self._map_emotion_to_mood(data.get("primary_emotion", "neutral"))
-                
+
                 # Update trust metrics
                 adj = data.get("trust_adjustment", 0.0)
                 self._update_trust(adj, data.get("explanation", ""))
-                
+
                 # Record interaction
                 self._interaction_history.append({
                     "text": text[:100],
                     "analysis": data,
                     "timestamp": time.time()
                 })
-                
+
                 return {
                     **data,
                     "current_trust_score": self.trust_score,
@@ -134,7 +134,7 @@ class TrustAgent(BaseAgent):
                 }
         except Exception as e:
             logging.debug(f"TrustAgent: Parse error: {e}")
-        
+
         return {"error": "parsing_failed", "raw": res}
 
     @as_tool
@@ -152,14 +152,14 @@ class TrustAgent(BaseAgent):
             "5. Overall Trust Score\n"
             "Format as JSON with 'honesty', 'reliability', 'consistency', 'competence', 'overall', 'reasoning'"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         with contextlib.suppress(Exception):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
-        
+
         return {"entity": entity, "raw_assessment": res}
 
     @as_tool
@@ -175,9 +175,9 @@ class TrustAgent(BaseAgent):
             "5. Deception patterns\n\n"
             "Return JSON: {'manipulation_detected': true/false, 'tactics': [...], 'severity': 0-10, 'advice': '...'}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         with contextlib.suppress(Exception):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
@@ -186,7 +186,7 @@ class TrustAgent(BaseAgent):
                     severity = data.get("severity", 5) / 10
                     self._update_trust(-severity * 0.1, "Manipulation detected")
                 return data
-        
+
         return {"error": "analysis_failed", "raw": res}
 
     @as_tool
@@ -201,14 +201,14 @@ class TrustAgent(BaseAgent):
             "- Warmth vs professionalism balance\n"
             "Return JSON: {'recommended_tone': '...', 'empathy_level': 0-10, 'assertiveness': 0-10, 'sample_phrases': [...]}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         with contextlib.suppress(Exception):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
-        
+
         return {"raw_recommendation": res}
 
     def get_trust_report(self) -> Dict[str, Any]:

@@ -14,18 +14,18 @@ class ReasoningEngine:
     """
     Unified reasoning and tool call extraction engine.
     """
-    
+
     _reasoning_parsers: Dict[ReasoningFormat, type] = {
         ReasoningFormat.DEEPSEEK_R1: DeepSeekReasoningParser,
         ReasoningFormat.QWEN3: QwenReasoningParser,
         ReasoningFormat.GENERIC: GenericReasoningParser,
     }
-    
+
     _tool_parsers: Dict[ToolCallFormat, type] = {
         ToolCallFormat.OPENAI: OpenAIToolParser,
         ToolCallFormat.HERMES: HermesToolParser,
     }
-    
+
     def __init__(
         self,
         reasoning_format: ReasoningFormat = ReasoningFormat.GENERIC,
@@ -38,34 +38,34 @@ class ReasoningEngine:
         self.tool_format = tool_format
         self.enable_thinking = enable_thinking
         self.cache_thoughts = cache_thoughts
-        
+
         self._reasoning_parser: Optional[ReasoningParser] = None
         self._tool_parser: Optional[ToolParser] = None
-        
+
         if reasoning_format != ReasoningFormat.NONE:
             parser_cls = self._reasoning_parsers.get(reasoning_format, GenericReasoningParser)
             self._reasoning_parser = parser_cls()
-        
+
         if tool_format != ToolCallFormat.NONE:
             parser_cls = self._tool_parsers.get(tool_format, OpenAIToolParser)
             self._tool_parser = parser_cls()
-        
+
         self._thought_cache: Dict[str, ThinkingBlock] = {}
         self._thought_lru: deque = deque(maxlen=max_cached_thoughts)
-        
+
         self._stats = {
             "total_parsed": 0,
             "thinking_blocks_extracted": 0,
             "tool_calls_parsed": 0,
             "cache_hits": 0,
         }
-    
+
     def parse(self, text: str) -> ParseResult:
         start_time = time.time()
         content = text
         thinking_blocks = []
         tool_calls = []
-        
+
         if self._reasoning_parser and self.enable_thinking:
             content, thinking_blocks = self._reasoning_parser.extract_thinking(text)
             if self.cache_thoughts:
@@ -74,14 +74,14 @@ class ReasoningEngine:
                     if cache_key not in self._thought_cache:
                         self._thought_cache[str(cache_key)] = block
                         self._thought_lru.append(cache_key)
-        
+
         if self._tool_parser:
             tool_calls = self._tool_parser.parse_tool_calls(content)
-        
+
         self._stats["total_parsed"] += 1
         self._stats["thinking_blocks_extracted"] += len(thinking_blocks)
         self._stats["tool_calls_parsed"] += len(tool_calls)
-        
+
         return ParseResult(
             content=content,
             thinking_blocks=thinking_blocks,
@@ -90,7 +90,7 @@ class ReasoningEngine:
             parse_time_ms=(time.time() - start_time) * 1000,
             tokens_processed=len(text)
         )
-    
+
     def parse_streaming(
         self,
         token_stream: Iterator[str]
@@ -108,14 +108,14 @@ class ReasoningEngine:
                     is_thinking = True
             yield (token, is_thinking, tool_call)
         return self.parse(buffer)
-    
+
     def detect_format(self, text: str) -> ReasoningFormat:
         if "<think>" in text and "</think>" in text: return ReasoningFormat.DEEPSEEK_R1
         elif "<thinking>" in text: return ReasoningFormat.CLAUDE
         elif "[THINK]" in text: return ReasoningFormat.MISTRAL
         elif "<|start_think|>" in text: return ReasoningFormat.LLAMA_COT
         return ReasoningFormat.NONE
-    
+
     def score_reasoning(self, block: ThinkingBlock) -> float:
         score = 0.0
         content = block.content
@@ -128,7 +128,7 @@ class ReasoningEngine:
         for marker in logical_markers:
             if marker.lower() in content.lower(): score += 0.05
         return min(score, 1.0)
-    
+
     def visualize_reasoning(self, result: ParseResult) -> str:
         lines = ["=" * 60, "REASONING CHAIN VISUALIZATION", "=" * 60]
         for i, block in enumerate(result.thinking_blocks):
@@ -146,9 +146,9 @@ class ReasoningEngine:
             for tc in result.tool_calls:
                 lines.append(f"  - {tc.name}({json.dumps(tc.arguments)[:50]}...)")
         return "\n".join(lines)
-    
+
     def get_stats(self) -> Dict[str, int]: return self._stats.copy()
-    
+
     def reset(self) -> None:
         if self._reasoning_parser: self._reasoning_parser.reset()
         if self._tool_parser: self._tool_parser.reset()

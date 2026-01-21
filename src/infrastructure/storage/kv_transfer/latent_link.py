@@ -38,16 +38,16 @@ class LatentLinkManager:
             self.adapters[key] = SynapticAdapter(source_dim, target_dim)
 
     def transfer_latent(
-        self, 
-        source_id: str, 
-        target_id: str, 
+        self,
+        source_id: str,
+        target_id: str,
         source_kv: torch.Tensor
     ) -> torch.Tensor:
         """transfer KV cache across agents via latent projection."""
         adapter = self.adapters.get((source_id, target_id))
         if adapter is None:
             raise ValueError(f"No LatentLink registered from {source_id} to {target_id}")
-        
+
         with torch.no_grad():
             return adapter(source_kv)
 

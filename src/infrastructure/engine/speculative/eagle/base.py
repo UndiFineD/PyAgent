@@ -22,18 +22,18 @@ class CpuGpuBuffer:
     cpu_data: list[Any]
     gpu_data: list[Any] | None = None
     dirty: bool = False
-    
+
     def sync_to_gpu(self) -> None:
         """Sync CPU data to GPU."""
         if self.dirty:
             self.gpu_data = list(self.cpu_data)
             self.dirty = False
-    
+
     def sync_to_cpu(self) -> None:
         """Sync GPU data to CPU."""
         if self.gpu_data is not None:
             self.cpu_data = list(self.gpu_data)
-    
+
     def update(self, data: list[Any]) -> None:
         """Update CPU data."""
         self.cpu_data = data
@@ -52,7 +52,7 @@ class AttentionMetadata:
     slot_mapping: list[int] = field(default_factory=list)
 
 
-@dataclass(slots=True) 
+@dataclass(slots=True)
 class TreeAttentionMetadata(AttentionMetadata):
     """Metadata for tree attention."""
     tree_mask: list[list[bool]] = field(default_factory=list)

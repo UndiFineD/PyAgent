@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 @dataclass
 class CostRecord:
     """Record of a single cost event."""
-    
+
     timestamp: datetime
     provider: str
     model: str
@@ -31,7 +31,7 @@ class CostRecord:
 @dataclass
 class BudgetAlert:
     """Budget alert notification."""
-    
+
     alert_type: str  # 'threshold', 'daily_exceeded', 'monthly_exceeded'
     message: str
     current_spend: float
@@ -42,13 +42,13 @@ class BudgetAlert:
 class BudgetManager:
     """
     Thread-safe budget manager for cloud AI spending.
-    
+
     Tracks costs across providers with daily and monthly limits,
     and triggers alerts when thresholds are crossed.
-    
+
     Example:
         budget = BudgetManager(daily_limit=10.0, monthly_limit=200.0)
-        
+
         if budget.can_make_request(estimated_cost=0.05):
             # Make the API call
             response = await provider.complete(request)
@@ -59,7 +59,7 @@ class BudgetManager:
                 tokens=response.tokens_used
             )
     """
-    
+
     def __init__(
         self,
         daily_limit: float = 50.0,
@@ -69,7 +69,7 @@ class BudgetManager:
     ):
         """
         Initialize the budget manager.
-        
+
         Args:
             daily_limit: Maximum spend per day in USD.
             monthly_limit: Maximum spend per month in USD.
@@ -80,39 +80,39 @@ class BudgetManager:
         self.monthly_limit = monthly_limit
         self.alert_threshold = alert_threshold
         self._alert_callback = alert_callback
-        
+
         # Thread safety
         self._lock = threading.RLock()
-        
+
         # Cost tracking
         self._daily_costs: Dict[date, float] = defaultdict(float)
         self._monthly_costs: Dict[str, float] = defaultdict(float)  # "YYYY-MM" -> cost
         self._cost_history: List[CostRecord] = []
         self._provider_costs: Dict[str, float] = defaultdict(float)
-        
+
         # Alert tracking (to avoid duplicate alerts)
         self._alerts_sent: set = set()
-    
+
     @property
     def today_spend(self) -> float:
         """Get today's total spend."""
         with self._lock:
             return self._daily_costs[date.today()]
-    
+
     @property
     def month_spend(self) -> float:
         """Get current month's total spend."""
         with self._lock:
             month_key = datetime.now().strftime("%Y-%m")
             return self._monthly_costs[month_key]
-    
+
     def can_make_request(self, estimated_cost: float = 0.0) -> bool:
         """
         Check if a request can be made within budget limits.
-        
+
         Args:
             estimated_cost: Estimated cost of the pending request.
-            
+
         Returns:
             True if the request is within budget, False otherwise.
         """
@@ -123,16 +123,16 @@ class BudgetManager:
                     f"Daily budget exceeded: {self.today_spend:.4f} + {estimated_cost:.4f} > {self.daily_limit:.2f}"
                 )
                 return False
-            
+
             # Check monthly limit
             if self.month_spend + estimated_cost > self.monthly_limit:
                 logger.warning(
                     f"Monthly budget exceeded: {self.month_spend:.4f} + {estimated_cost:.4f} > {self.monthly_limit:.2f}"
                 )
                 return False
-            
+
             return True
-    
+
     def record_cost(
         self,
         cost: float,
@@ -143,7 +143,7 @@ class BudgetManager:
     ) -> None:
         """
         Record a cost from an API request.
-        
+
         Args:
             cost: Actual cost in USD.
             provider: Name of the cloud provider.
@@ -155,12 +155,12 @@ class BudgetManager:
             now = datetime.now()
             today = now.date()
             month_key = now.strftime("%Y-%m")
-            
+
             # Record the cost
             self._daily_costs[today] += cost
             self._monthly_costs[month_key] += cost
             self._provider_costs[provider] += cost
-            
+
             # Store in history
             record = CostRecord(
                 timestamp=now,
@@ -171,14 +171,14 @@ class BudgetManager:
                 request_id=request_id,
             )
             self._cost_history.append(record)
-            
+
             # Check for alerts
             self._check_alerts()
-    
+
     def get_remaining_budget(self) -> Dict[str, float]:
         """
         Get remaining budget for daily and monthly limits.
-        
+
         Returns:
             Dict with 'daily' and 'monthly' remaining amounts.
         """
@@ -187,12 +187,12 @@ class BudgetManager:
                 "daily": max(0.0, self.daily_limit - self.today_spend),
                 "monthly": max(0.0, self.monthly_limit - self.month_spend),
             }
-    
+
     def get_spend_by_provider(self) -> Dict[str, float]:
         """Get total spend broken down by provider."""
         with self._lock:
             return dict(self._provider_costs)
-    
+
     def get_cost_history(
         self,
         since: Optional[datetime] = None,
@@ -201,32 +201,32 @@ class BudgetManager:
     ) -> List[CostRecord]:
         """
         Get cost history with optional filters.
-        
+
         Args:
             since: Only return records after this time.
             provider: Filter by provider name.
             limit: Maximum records to return.
-            
+
         Returns:
             List of CostRecord objects.
         """
         with self._lock:
             records = self._cost_history.copy()
-        
+
         if since:
             records = [r for r in records if r.timestamp >= since]
-        
+
         if provider:
             records = [r for r in records if r.provider == provider]
-        
+
         return records[-limit:]
-    
+
     def reset_daily(self) -> None:
         """Reset daily tracking (for testing or manual reset)."""
         with self._lock:
             self._daily_costs[date.today()] = 0.0
             self._alerts_sent.discard("daily_threshold")
-    
+
     def _check_alerts(self) -> None:
         """Check and trigger budget alerts."""
         # Daily threshold alert
@@ -239,7 +239,7 @@ class BudgetManager:
                 limit=self.daily_limit,
             ))
             self._alerts_sent.add("daily_threshold")
-        
+
         # Monthly threshold alert
         monthly_ratio = self.month_spend / self.monthly_limit if self.monthly_limit > 0 else 0
         if monthly_ratio >= self.alert_threshold and "monthly_threshold" not in self._alerts_sent:
@@ -250,7 +250,7 @@ class BudgetManager:
                 limit=self.monthly_limit,
             ))
             self._alerts_sent.add("monthly_threshold")
-    
+
     def _send_alert(self, alert: BudgetAlert) -> None:
         """Send a budget alert."""
         logger.warning(f"Budget Alert: {alert.message}")

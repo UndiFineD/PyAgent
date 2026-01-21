@@ -9,7 +9,7 @@ class StructuredOutputGrammar(ABC):
     """
     Abstract base class for grammar instances.
     """
-    
+
     def __init__(
         self,
         grammar_spec: GrammarSpec,
@@ -22,38 +22,38 @@ class StructuredOutputGrammar(ABC):
         self._is_terminated = False
         self._tokens_accepted = 0
         self._state_history: List[Any] = []
-    
+
     @abstractmethod
     def accept_tokens(self, tokens: Sequence[int]) -> bool:
         pass
-    
+
     @abstractmethod
     def validate_tokens(self, tokens: Sequence[int]) -> int:
         pass
-    
+
     @abstractmethod
     def fill_bitmask(self, bitmask: np.ndarray, batch_index: int = 0) -> None:
         pass
-    
+
     @abstractmethod
     def get_allowed_tokens(self) -> List[int]:
         pass
-    
+
     def rollback(self, num_tokens: int) -> None:
         if num_tokens <= 0:
             return
-        
+
         rollback_count = min(num_tokens, len(self._state_history))
         for _ in range(rollback_count):
             if self._state_history:
                 self._state_history.pop()
-        
+
         self._tokens_accepted = max(0, self._tokens_accepted - rollback_count)
         self._is_terminated = False
-    
+
     def is_terminated(self) -> bool:
         return self._is_terminated
-    
+
     def reset(self) -> None:
         self._is_terminated = False
         self._tokens_accepted = 0
@@ -63,7 +63,7 @@ class StructuredOutputBackend(ABC):
     """
     Abstract backend for grammar compilation and management.
     """
-    
+
     def __init__(
         self,
         vocab_size: int,
@@ -75,7 +75,7 @@ class StructuredOutputBackend(ABC):
         self.tokenizer_decode = tokenizer_decode
         self.stats = BackendStats()
         self._lock = threading.Lock()
-    
+
     @abstractmethod
     def compile_grammar(
         self,
@@ -83,17 +83,17 @@ class StructuredOutputBackend(ABC):
         request_id: Optional[str] = None,
     ) -> StructuredOutputGrammar:
         pass
-    
+
     @abstractmethod
     def get_supported_types(self) -> List[GrammarType]:
         pass
-    
+
     def allocate_token_bitmask(
         self,
         max_batch_size: int,
     ) -> np.ndarray:
         return np.zeros((max_batch_size, self.vocab_size), dtype=np.bool_)
-    
+
     def get_stats(self) -> BackendStats:
         with self._lock:
             return BackendStats(

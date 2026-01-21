@@ -10,11 +10,11 @@ from .base import CommandDefinition, CommandHandler, CommandResult
 
 class CommandRegistry:
     """Registry for slash commands."""
-    
+
     def __init__(self) -> None:
         self._commands: dict[str, CommandDefinition] = {}
         self._aliases: dict[str, str] = {}
-    
+
     def register(
         self,
         name: str,
@@ -37,25 +37,25 @@ class CommandRegistry:
             requires_args=requires_args,
         )
         self._commands[name] = defn
-        
+
         # Register aliases
         for alias in defn.aliases:
             self._aliases[alias] = name
-    
+
     def get(self, name: str) -> CommandDefinition | None:
         """Get a command by name or alias."""
         # Check aliases first
         if name in self._aliases:
             name = self._aliases[name]
         return self._commands.get(name)
-    
+
     def list_commands(self, include_hidden: bool = False) -> list[CommandDefinition]:
         """List all registered commands."""
         return [
             cmd for cmd in self._commands.values()
             if include_hidden or not cmd.hidden
         ]
-    
+
     def command(
         self,
         name: str,

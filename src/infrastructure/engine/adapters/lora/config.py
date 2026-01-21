@@ -33,10 +33,10 @@ class LoRAConfig:
     fan_in_fan_out: bool = False
     bias: str = "none"
     modules_to_save: set[str] = field(default_factory=set)
-    
+
     def __post_init__(self):
         self._validate()
-    
+
     def _validate(self):
         """Validate configuration."""
         if self.rank <= 0:
@@ -47,7 +47,7 @@ class LoRAConfig:
             raise ValueError(f"dropout must be in [0, 1), got {self.dropout}")
         if self.bias not in ("none", "all", "lora_only"):
             raise ValueError(f"bias must be 'none', 'all', or 'lora_only', got {self.bias}")
-    
+
     @property
     def scaling(self) -> float:
         """LoRA scaling factor (alpha / rank)."""

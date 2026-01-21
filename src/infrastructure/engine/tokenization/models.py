@@ -60,7 +60,7 @@ class TokenizerConfig:
     add_bos_token: bool = True
     add_eos_token: bool = False
     extra_config: Dict[str, Any] = field(default_factory=dict)
-    
+
     def __hash__(self) -> int:
         return hash((
             self.model_name,
@@ -86,7 +86,7 @@ class TokenizerInfo:
     supports_chat_template: bool = False
     chat_template: Optional[str] = None
     special_tokens: Dict[str, int] = field(default_factory=dict)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "backend": self.backend.name,
@@ -111,10 +111,10 @@ class TokenizeResult:
     tokens: Optional[List[str]] = None
     num_tokens: int = 0
     truncated: bool = False
-    
+
     def __post_init__(self):
         self.num_tokens = len(self.input_ids)
-    
+
     def to_numpy(self) -> Dict[str, np.ndarray]:
         result = {"input_ids": np.array(self.input_ids, dtype=np.int64)}
         if self.attention_mask:
@@ -131,11 +131,11 @@ class BatchTokenizeResult:
     attention_mask: Optional[List[List[int]]] = None
     token_counts: List[int] = field(default_factory=list)
     max_length: int = 0
-    
+
     def __post_init__(self):
         self.token_counts = [len(ids) for ids in self.input_ids]
         self.max_length = max(self.token_counts) if self.token_counts else 0
-    
+
     def pad_to_max(self, pad_token_id: int = 0) -> 'BatchTokenizeResult':
         padded_ids = []
         padded_mask = []

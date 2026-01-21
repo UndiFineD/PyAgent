@@ -10,7 +10,7 @@ from .enums import InstanceRole, SchedulingPolicy
 @dataclass
 class InstanceInfo:
     """Information about a vLLM instance.
-    
+
     Inspired by vLLM's proxy server patterns.
     """
     instance_id: str
@@ -20,31 +20,31 @@ class InstanceInfo:
     kv_port: Optional[int] = None
     handshake_port: Optional[int] = None
     notify_port: Optional[int] = None
-    
+
     # Load and health metrics
     num_running_requests: int = 0
     num_waiting_requests: int = 0
     kv_cache_usage: float = 0.0
     last_health_check: float = 0.0
     is_healthy: bool = True
-    
+
     # Parallel configuration
     tp_size: int = 1
     dp_size: int = 1
     dp_rank: Optional[int] = None
-    
+
     @property
     def base_url(self) -> str:
         """Get the HTTP base URL for this instance."""
         return f"http://{self.host}:{self.http_port}"
-    
+
     @property
     def kv_address(self) -> Optional[str]:
         """Get the KV transfer address."""
         if self.kv_port:
             return f"{self.host}:{self.kv_port}"
         return None
-    
+
     @property
     def load_score(self) -> float:
         """Calculate load score (lower is better)."""
@@ -54,29 +54,29 @@ class InstanceInfo:
 @dataclass
 class DCPConfig:
     """Configuration for disaggregated prefill-decode.
-    
+
     Inspired by vLLM's kv_transfer configuration.
     """
     enabled: bool = False
-    
+
     # Instance configuration
     prefill_instances: List[InstanceInfo] = field(default_factory=list)
     decode_instances: List[InstanceInfo] = field(default_factory=list)
-    
+
     # Routing configuration
     prefill_policy: SchedulingPolicy = SchedulingPolicy.LEAST_LOADED
     decode_policy: SchedulingPolicy = SchedulingPolicy.LEAST_LOADED
-    
+
     # KV transfer configuration
     kv_connector: str = "NixlConnector"
     kv_buffer_size: int = int(1e10)  # 10GB
     kv_buffer_device: str = "cuda"
-    
+
     # Health check configuration
     health_check_interval: float = 5.0
     health_check_timeout: float = 2.0
     max_consecutive_failures: int = 3
-    
+
     # Beyond vLLM: Scaling configuration
     auto_scale: bool = False
     min_prefill_instances: int = 1
@@ -90,27 +90,27 @@ class DCPConfig:
 @dataclass
 class KVTransferParams:
     """Parameters for KV cache transfer between instances.
-    
+
     Inspired by vLLM's kv_transfer_params dict structure.
     """
     do_remote_prefill: bool = False
     do_remote_decode: bool = False
-    
+
     # Remote instance info
     remote_engine_id: Optional[str] = None
     remote_host: Optional[str] = None
     remote_port: Optional[int] = None
     remote_block_ids: Optional[List[int]] = None
-    
+
     # Port configuration
     remote_handshake_port: Optional[int] = None
     remote_notify_port: Optional[int] = None
-    
+
     # Parallel configuration
     remote_tp_size: int = 1
     remote_dp_size: int = 1
     remote_dp_rank: Optional[int] = None
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary for request body."""
         return {
@@ -126,7 +126,7 @@ class KVTransferParams:
             "remote_dp_size": self.remote_dp_size,
             "remote_dp_rank": self.remote_dp_rank,
         }
-    
+
     @classmethod
     def from_dict(cls, data: Dict[str, Any]) -> "KVTransferParams":
         """Create from dictionary."""
@@ -151,16 +151,16 @@ class ScheduledRequest:
     request_id: str
     prompt: str
     max_tokens: int
-    
+
     # Scheduling metadata
     arrival_time: float = field(default_factory=time.time)
     scheduled_time: Optional[float] = None
     prefill_instance: Optional[InstanceInfo] = None
     decode_instance: Optional[InstanceInfo] = None
-    
+
     # KV transfer state
     kv_transfer_params: Optional[KVTransferParams] = None
     prefill_complete: bool = False
-    
+
     # Additional parameters
     extra_params: Dict[str, Any] = field(default_factory=dict)
