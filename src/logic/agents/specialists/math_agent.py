@@ -48,7 +48,7 @@ class MathAgent(BaseAgent):
         """Evaluates a mathematical expression safely."""
         # Sanitize input
         sanitized = self._sanitize_expression(expression)
-        
+
         try:
             # Try Rust-accelerated evaluation first
             try:
@@ -59,12 +59,12 @@ class MathAgent(BaseAgent):
                     return {"expression": expression, "result": result, "status": "success", "engine": "rust"}
             except (ImportError, AttributeError):
                 pass
-            
+
             # Python safe eval fallback
             result = eval(sanitized, SAFE_MATH_NAMESPACE)
             self._record_calculation(expression, result, "python")
             return {"expression": expression, "result": result, "status": "success", "engine": "python"}
-            
+
         except Exception as e:
             logging.debug(f"MathAgent: Direct evaluation failed: {e}")
             # Fallback to LLM reasoning for complex/symbolic math
@@ -79,11 +79,11 @@ class MathAgent(BaseAgent):
             "Show step-by-step solution and provide the final answer in the format: {variable} = value"
         )
         result = await self.improve_content(prompt)
-        
+
         # Try to extract numerical answer
         match = re.search(rf"{variable}\s*=\s*([-\d.]+)", result)
         extracted = float(match.group(1)) if match else None
-        
+
         return {
             "equation": equation,
             "variable": variable,
@@ -125,7 +125,7 @@ class MathAgent(BaseAgent):
         """Performs matrix operations (multiply, add, determinant, inverse, etc.)."""
         try:
             import numpy as np
-            
+
             if operation == "multiply" and len(matrices) >= 2:
                 result = np.array(matrices[0])
                 for m in matrices[1:]:
@@ -142,7 +142,7 @@ class MathAgent(BaseAgent):
                 return {"operation": operation, "result": eigenvalues.tolist(), "status": "success"}
         except Exception as e:
             return {"operation": operation, "error": str(e), "status": "failed"}
-        
+
         return {"operation": operation, "status": "unsupported"}
 
     def _sanitize_expression(self, expr: str) -> str:
@@ -164,11 +164,11 @@ class MathAgent(BaseAgent):
         """Uses LLM for complex mathematical reasoning."""
         prompt = f"Solve this math problem step-by-step: {expression}\nProvide the final numerical answer if possible."
         llm_result = await self.improve_content(prompt)
-        
+
         # Try to extract a number from the response
         numbers = re.findall(r'[-+]?\d*\.?\d+', llm_result)
         final_answer = float(numbers[-1]) if numbers else None
-        
+
         return {
             "expression": expression,
             "result": final_answer,

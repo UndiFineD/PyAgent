@@ -22,19 +22,19 @@ class MambaConfig:
     conv_kernel_size: int = 4  # d_conv
     intermediate_size: int | None = None  # d_inner, defaults to 2*hidden_size
     time_step_rank: int | None = None  # dt_rank, defaults to ceil(hidden_size/16)
-    
+
     # Activation
     activation: str = "silu"
-    
+
     # Normalization
     use_rms_norm: bool = True
     rms_norm_eps: float = 1e-5
     rms_norm_has_weight: bool = True
-    
+
     # Bias
     use_conv_bias: bool = True
     use_bias: bool = False
-    
+
     def __post_init__(self) -> None:
         if self.hidden_size <= 0:
             raise ValueError(f"hidden_size must be > 0, got {self.hidden_size}")
@@ -42,12 +42,12 @@ class MambaConfig:
             raise ValueError(f"ssm_state_size must be > 0, got {self.ssm_state_size}")
         if self.conv_kernel_size <= 0:
             raise ValueError(f"conv_kernel_size must be > 0, got {self.conv_kernel_size}")
-    
+
     @property
     def d_inner(self) -> int:
         """Get intermediate size."""
         return self.intermediate_size or (2 * self.hidden_size)
-    
+
     @property
     def dt_rank(self) -> int:
         """Get time step rank."""
@@ -61,7 +61,7 @@ class MambaState:
     """
     conv_state: np.ndarray  # [batch, d_inner, d_conv]
     ssm_state: np.ndarray  # [batch, d_inner, ssm_state_size]
-    
+
     @classmethod
     def zeros(
         cls,
@@ -80,7 +80,7 @@ class MambaState:
                 dtype=dtype,
             ),
         )
-    
+
     def clone(self) -> "MambaState":
         """Clone state."""
         return MambaState(

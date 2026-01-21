@@ -34,13 +34,13 @@ class PrivacyCore:
         """Redacts PII from text using regex patterns."""
         if not text:
             return text
-            
+
         patterns = {
             r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+": "[EMAIL_REDACTED]",
             r"\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b": "[IP_REDACTED]",
             r"(api_key|secret_key|secret|token)\s*[:=]\s*[']?[a-zA-Z0-9_.~-]{16,}[']?": r"\1=[REDACTED]"
         }
-        
+
         result = text
         for pattern, replacement in patterns.items():
             result = re.sub(pattern, replacement, result)

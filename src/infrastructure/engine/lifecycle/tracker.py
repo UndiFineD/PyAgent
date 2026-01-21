@@ -16,22 +16,22 @@ class RequestTracker:
     This class aggregates statistics across all requests for
     monitoring and optimization.
     """
-    
+
     # Counters
     total_requests: int = 0
     completed_requests: int = 0
     aborted_requests: int = 0
     error_requests: int = 0
-    
+
     # Timing aggregates (in seconds)
     total_queue_time: float = 0.0
     total_ttft: float = 0.0  # Time to first token
     total_completion_time: float = 0.0
-    
+
     # Token counts
     total_prompt_tokens: int = 0
     total_output_tokens: int = 0
-    
+
     # For computing averages
     _queue_times: List[float] = field(default_factory=list)
     _ttfts: List[float] = field(default_factory=list)
@@ -41,9 +41,9 @@ class RequestTracker:
         """Record metrics from a finished request."""
         if not request.is_finished():
             return
-        
+
         self.total_requests += 1
-        
+
         # Categorize by finish reason
         if request.finish_reason == FinishReason.ABORT:
             self.aborted_requests += 1
@@ -51,20 +51,20 @@ class RequestTracker:
             self.error_requests += 1
         else:
             self.completed_requests += 1
-        
+
         # Record tokens
         self.total_prompt_tokens += request.num_prompt_tokens
         self.total_output_tokens += request.num_output_tokens
-        
+
         # Record timing
         if request.time_in_queue is not None:
             self.total_queue_time += request.time_in_queue
             self._queue_times.append(request.time_in_queue)
-        
+
         if request.time_to_first_token is not None:
             self.total_ttft += request.time_to_first_token
             self._ttfts.append(request.time_to_first_token)
-        
+
         if request.total_time is not None:
             self.total_completion_time += request.total_time
             self._completion_times.append(request.total_time)

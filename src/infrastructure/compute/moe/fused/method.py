@@ -14,7 +14,7 @@ except ImportError:
 
 class FusedMoEMethodBase(ABC):
     """Base class for MoE computation methods."""
-    
+
     @abstractmethod
     def create_weights(
         self,
@@ -23,7 +23,7 @@ class FusedMoEMethodBase(ABC):
         device: str = "cpu",
     ) -> dict[str, Any]:
         pass
-    
+
     @abstractmethod
     def apply(
         self,
@@ -37,7 +37,7 @@ class FusedMoEMethodBase(ABC):
 
 class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
     """Unquantized MoE computation method."""
-    
+
     def create_weights(
         self,
         config: FusedMoEConfig,
@@ -50,7 +50,7 @@ class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
             config.num_experts,
             parallel_config.expert_placement_strategy,
         )
-        
+
         if not HAS_TORCH:
             return {
                 "w1": np.zeros(
@@ -66,7 +66,7 @@ class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
                     dtype=np.float32
                 ),
             }
-        
+
         return {
             "w1": torch.zeros(
                 local_num_experts, config.intermediate_size, config.hidden_size,
@@ -81,7 +81,7 @@ class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
                 device=device
             ),
         }
-    
+
     def apply(
         self,
         x: Any,
@@ -93,7 +93,7 @@ class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
         if not HAS_TORCH:
             return self._apply_numpy(x, router_logits, top_k, renormalize, weights)
         return self._apply_torch(x, router_logits, top_k, renormalize, weights)
-    
+
     def _apply_numpy(
         self,
         x: np.ndarray,
@@ -104,33 +104,33 @@ class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
     ) -> np.ndarray:
         batch_size, hidden_size = x.shape
         num_experts = router_logits.shape[-1]
-        
+
         routing_weights = np.exp(router_logits - router_logits.max(axis=-1, keepdims=True))
         routing_weights = routing_weights / routing_weights.sum(axis=-1, keepdims=True)
-        
+
         top_k_indices = np.argsort(routing_weights, axis=-1)[:, -top_k:]
         top_k_weights = np.take_along_axis(routing_weights, top_k_indices, axis=-1)
-        
+
         if renormalize:
             top_k_weights = top_k_weights / top_k_weights.sum(axis=-1, keepdims=True)
-        
+
         output = np.zeros_like(x)
         for i in range(batch_size):
             for k in range(top_k):
                 expert_idx = top_k_indices[i, k]
                 weight = top_k_weights[i, k]
-                
+
                 gate = x[i] @ weights["w1"][expert_idx].T
                 gate = gate * (1 / (1 + np.exp(-gate)))  # SiLU
                 up = x[i] @ weights["w3"][expert_idx].T
-                
+
                 hidden = gate * up
                 expert_out = hidden @ weights["w2"][expert_idx].T
-                
+
                 output[i] += weight * expert_out
-        
+
         return output
-    
+
     def _apply_torch(
         self,
         x: "torch.Tensor",
@@ -142,25 +142,25 @@ class UnquantizedFusedMoEMethod(FusedMoEMethodBase):
         batch_size, hidden_size = x.shape
         routing_weights = F.softmax(router_logits, dim=-1)
         top_k_weights, top_k_indices = torch.topk(routing_weights, top_k, dim=-1)
-        
+
         if renormalize:
             top_k_weights = top_k_weights / top_k_weights.sum(dim=-1, keepdim=True)
-        
+
         output = torch.zeros_like(x)
-        
+
         for k in range(top_k):
             expert_indices = top_k_indices[:, k]
             expert_weights = top_k_weights[:, k:k+1]
-            
+
             for expert_idx in expert_indices.unique():
                 mask = expert_indices == expert_idx
                 expert_x = x[mask]
-                
+
                 gate = F.silu(expert_x @ weights["w1"][expert_idx].T)
                 up = expert_x @ weights["w3"][expert_idx].T
                 hidden = gate * up
                 expert_out = hidden @ weights["w2"][expert_idx].T
-                
+
                 output[mask] += expert_weights[mask] * expert_out
-        
+
         return output

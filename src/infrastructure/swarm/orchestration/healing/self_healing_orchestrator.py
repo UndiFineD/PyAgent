@@ -41,7 +41,7 @@ class SelfHealingOrchestrator:
         self.core = SelfHealingCore(timeout_seconds=15.0, max_errors=3)
         self.state_backups: dict[str, Any] = {}  # agent_name -> state_snapshot
         self.recovery_logs: list[dict[str, Any]] = []
-        
+
         # Phase 317: Initialize with docs/prompt context if available
         # Derive project root from module location for consistent resolution
         self.work_root = Path(__file__).resolve().parents[4]  # Adjust depth as needed
@@ -53,7 +53,7 @@ class SelfHealingOrchestrator:
         """
         prompt_dir = self.work_root / "docs" / "prompt"
         context_file = prompt_dir / "context.txt"
-        
+
         if context_file.exists():
             try:
                 content = context_file.read_text(encoding="utf-8")

@@ -25,27 +25,27 @@ from .json_parser import JsonToolParser
 class Llama3ToolParser(ToolParser):
     """
     Llama 3 tool call parser.
-    
+
     Format:
     <|python_tag|>function_name(arg1=value1, arg2=value2)
     or
     {"name": "...", "parameters": {...}}
     """
-    
+
     PYTHON_TAG = "<|python_tag|>"
-    
+
     @property
     def parser_type(self) -> ToolParserType:
         return ToolParserType.LLAMA3
-    
+
     def parse(self, text: str) -> ToolParseResult:
         result = ToolParseResult(raw_output=text)
-        
+
         # Check for python_tag format
         if self.PYTHON_TAG in text:
             parts = text.split(self.PYTHON_TAG)
             result.content = parts[0].strip()
-            
+
             for i, part in enumerate(parts[1:]):
                 tool_call = self._parse_pythonic_call(part.strip(), i)
                 if tool_call:
@@ -54,9 +54,9 @@ class Llama3ToolParser(ToolParser):
             # Try JSON format
             json_parser = JsonToolParser()
             return json_parser.parse(text)
-        
+
         return result
-    
+
     def _parse_pythonic_call(
         self,
         text: str,
@@ -66,48 +66,48 @@ class Llama3ToolParser(ToolParser):
         # Match function_name(args)
         pattern = re.compile(r'^(\w+)\((.*)\)$', re.DOTALL)
         match = pattern.match(text.strip())
-        
+
         if not match:
             return None
-        
+
         name = match.group(1)
         args_str = match.group(2).strip()
-        
+
         # Parse arguments
         args = self._parse_kwargs(args_str)
-        
+
         return ToolCall(
             id=self._generate_call_id(index),
             name=name,
             arguments=args,
             raw_arguments=json.dumps(args),
         )
-    
+
     def _parse_kwargs(self, args_str: str) -> Dict[str, Any]:
         """Parse keyword arguments."""
         args = {}
-        
+
         if not args_str:
             return args
-        
+
         # Simple parsing - handle key=value pairs
         # This is a simplified version; production would need proper parsing
         with contextlib.suppress(Exception):
             # Try to evaluate as Python dict
             # Safe alternative: parse manually
             parts = self._split_args(args_str)
-            
+
             for part in parts:
                 if '=' in part:
                     key, value = part.split('=', 1)
                     key = key.strip()
                     value = value.strip()
-                    
+
                     # Parse value
                     args[key] = self._parse_value(value)
-        
+
         return args
-    
+
     def _split_args(self, args_str: str) -> List[str]:
         """Split arguments respecting quotes and brackets."""
         parts = []
@@ -115,7 +115,7 @@ class Llama3ToolParser(ToolParser):
         depth = 0
         in_string = False
         string_char = None
-        
+
         for char in args_str:
             if char in '"\'':
                 if not in_string:
@@ -132,14 +132,14 @@ class Llama3ToolParser(ToolParser):
                     parts.append(current.strip())
                     current = ""
                     continue
-            
+
             current += char
-        
+
         if current.strip():
             parts.append(current.strip())
-        
+
         return parts
-    
+
     def _parse_value(self, value: str) -> Any:
         """Parse a value string."""
         # Try JSON
@@ -147,7 +147,7 @@ class Llama3ToolParser(ToolParser):
             return json.loads(value)
         except json.JSONDecodeError:
             pass
-        
+
         # Try Python literals
         if value.lower() == 'true':
             return True
@@ -155,7 +155,7 @@ class Llama3ToolParser(ToolParser):
             return False
         if value.lower() == 'none':
             return None
-        
+
         # Try number
         try:
             if '.' in value:
@@ -163,14 +163,14 @@ class Llama3ToolParser(ToolParser):
             return int(value)
         except ValueError:
             pass
-        
+
         # Return as string (strip quotes)
         if (value.startswith('"') and value.endswith('"')) or \
            (value.startswith("'") and value.endswith("'")):
             return value[1:-1]
-        
+
         return value
-    
+
     def parse_streaming(
         self,
         delta: str,
@@ -178,17 +178,17 @@ class Llama3ToolParser(ToolParser):
     ) -> Tuple[StreamingToolState, Optional[ToolCall]]:
         state.buffer += delta
         completed_tool = None
-        
+
         # Check for python_tag
         if self.PYTHON_TAG in state.buffer:
             idx = state.buffer.index(self.PYTHON_TAG)
             after_tag = state.buffer[idx + len(self.PYTHON_TAG):]
-            
+
             # Check if we have a complete call (closing paren at depth 0)
             depth = 0
             in_string = False
             string_char = None
-            
+
             for i, char in enumerate(after_tag):
                 if char in '"\'':
                     if not in_string:
@@ -211,9 +211,9 @@ class Llama3ToolParser(ToolParser):
                                 completed_tool = tool_call
                                 state.completed_tools.append(tool_call)
                                 state.tool_call_index += 1
-                            
+
                             # Clear processed part
                             state.buffer = after_tag[i+1:]
                             break
-        
+
         return state, completed_tool

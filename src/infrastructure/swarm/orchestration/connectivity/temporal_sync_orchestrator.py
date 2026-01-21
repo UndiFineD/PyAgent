@@ -42,7 +42,7 @@ class TemporalSyncOrchestrator:
         base = 1.0 if not self.sprint_mode else 5.0
         # Decay metabolism if idle
         return max(0.1, base * (0.9 ** (elapsed / 60)))
-        
+
     def set_sprint_mode(self, mode: bool) -> None:
         """Sets the temporal sprint mode."""
         self.sprint_mode = mode

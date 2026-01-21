@@ -25,23 +25,23 @@ except ImportError:
 class BloomFilter:
     """
     Space-efficient probabilistic set membership test.
-    
+
     Use cases:
     - Cache key existence checks before expensive lookups
     - Duplicate detection in streaming data
     - Spell checking (is word in dictionary?)
     - Network routing (is IP in blocklist?)
-    
+
     Example:
         >>> bf = BloomFilter(expected_items=10000, fp_rate=0.01)
-        >>> 
+        >>>
         >>> bf.add("hello")
         >>> bf.add("world")
-        >>> 
+        >>>
         >>> "hello" in bf  # True (definitely added)
         >>> "foo" in bf    # False (probably not added)
     """
-    
+
     def __init__(
         self,
         expected_items: int = 10000,
@@ -51,7 +51,7 @@ class BloomFilter:
     ) -> None:
         """
         Initialize Bloom filter.
-        
+
         Args:
             expected_items: Expected number of items to add
             fp_rate: Desired false positive rate (0.0-1.0)
@@ -68,11 +68,11 @@ class BloomFilter:
             self._size = self._optimal_size(expected_items, fp_rate)
             self._bits = bytearray((self._size + 7) // 8)
             self._num_hashes = self._optimal_num_hashes(self._size, expected_items)
-        
+
         self._count = 0
         self._expected_items = expected_items
         self._fp_rate = fp_rate
-    
+
     @staticmethod
     def _optimal_size(n: int, p: float) -> int:
         """Calculate optimal bit array size."""
@@ -81,7 +81,7 @@ class BloomFilter:
             p = 0.0001
         m = -(n * math.log(p)) / (math.log(2) ** 2)
         return max(64, int(math.ceil(m)))
-    
+
     @staticmethod
     def _optimal_num_hashes(m: int, n: int) -> int:
         """Calculate optimal number of hash functions."""
@@ -90,7 +90,7 @@ class BloomFilter:
             n = 1
         k = (m / n) * math.log(2)
         return max(1, int(round(k)))
-    
+
     def _get_hash_positions(self, item: Any) -> list[int]:
         """Get bit positions for an item using double hashing."""
         # Convert to bytes
@@ -100,70 +100,70 @@ class BloomFilter:
             data = item.encode('utf-8')
         else:
             data = str(item).encode('utf-8')
-        
+
         # Double hashing: h(i) = h1 + i*h2
         h1 = int(hashlib.md5(data, usedforsecurity=False).hexdigest(), 16)
         h2 = int(hashlib.sha1(data).hexdigest(), 16)
-        
+
         positions = []
         for i in range(self._num_hashes):
             pos = (h1 + i * h2) % self._size
             positions.append(pos)
-        
+
         return positions
-    
+
     def _set_bit(self, pos: int) -> None:
         """Set a bit at position."""
         byte_idx = pos // 8
         bit_idx = pos % 8
         self._bits[byte_idx] |= (1 << bit_idx)
-    
+
     def _get_bit(self, pos: int) -> bool:
         """Get a bit at position."""
         byte_idx = pos // 8
         bit_idx = pos % 8
         return bool(self._bits[byte_idx] & (1 << bit_idx))
-    
+
     def add(self, item: Any) -> None:
         """Add an item to the filter."""
         for pos in self._get_hash_positions(item):
             self._set_bit(pos)
         self._count += 1
-    
+
     def __contains__(self, item: Any) -> bool:
         """Check if item might be in the filter."""
         return all(self._get_bit(pos) for pos in self._get_hash_positions(item))
-    
+
     def contains(self, item: Any) -> bool:
         """Check if item might be in the filter."""
         return item in self
-    
+
     @property
     def count(self) -> int:
         """Get approximate item count."""
         return self._count
-    
+
     @property
     def size_bytes(self) -> int:
         """Get size in bytes."""
         return len(self._bits)
-    
+
     @property
     def estimated_fp_rate(self) -> float:
         """Estimate current false positive rate."""
         # p = (1 - e^(-kn/m))^k
         if self._count == 0:
             return 0.0
-        
+
         exp_term = -self._num_hashes * self._count / self._size
         return (1 - math.exp(exp_term)) ** self._num_hashes
-    
+
     @property
     def fill_ratio(self) -> float:
         """Get ratio of set bits."""
         set_bits = sum(bin(byte).count('1') for byte in self._bits)
         return set_bits / self._size
-    
+
     def get_stats(self) -> dict:
         """Get filter statistics."""
         return {
@@ -176,16 +176,16 @@ class BloomFilter:
             'estimated_fp_rate': round(self.estimated_fp_rate, 6),
             'fill_ratio': round(self.fill_ratio, 4),
         }
-    
+
     def union(self, other: 'BloomFilter') -> 'BloomFilter':
         """Create union of two filters (must be same size)."""
         if self._size != other._size or self._num_hashes != other._num_hashes:
             raise ValueError("Filters must have same size and hash count")
-        
+
         new_bits = bytearray(
             a | b for a, b in zip(self._bits, other._bits)
         )
-        
+
         bf = BloomFilter(
             expected_items=self._expected_items,
             bit_array=new_bits,
@@ -193,11 +193,11 @@ class BloomFilter:
         )
         bf._count = self._count + other._count
         return bf
-    
+
     def __or__(self, other: 'BloomFilter') -> 'BloomFilter':
         """Union operator."""
         return self.union(other)
-    
+
     def serialize(self) -> bytes:
         """Serialize filter to bytes."""
         import struct
@@ -209,14 +209,14 @@ class BloomFilter:
             self._expected_items,
         )
         return header + bytes(self._bits)
-    
+
     @classmethod
     def deserialize(cls, data: bytes) -> 'BloomFilter':
         """Deserialize filter from bytes."""
         import struct
         size, num_hashes, count, expected = struct.unpack('<IIII', data[:16])
         bits = bytearray(data[16:])
-        
+
         bf = cls(
             expected_items=expected,
             bit_array=bits,
@@ -230,19 +230,19 @@ class BloomFilter:
 class CountingBloomFilter:
     """
     Bloom filter that supports removal by using counters.
-    
+
     Uses more memory but allows items to be removed.
-    
+
     Example:
         >>> cbf = CountingBloomFilter(expected_items=1000)
-        >>> 
+        >>>
         >>> cbf.add("hello")
         >>> "hello" in cbf  # True
-        >>> 
+        >>>
         >>> cbf.remove("hello")
         >>> "hello" in cbf  # False
     """
-    
+
     def __init__(
         self,
         expected_items: int = 10000,
@@ -251,7 +251,7 @@ class CountingBloomFilter:
     ) -> None:
         """
         Initialize counting Bloom filter.
-        
+
         Args:
             expected_items: Expected number of items
             fp_rate: Desired false positive rate
@@ -261,11 +261,11 @@ class CountingBloomFilter:
         self._num_hashes = BloomFilter._optimal_num_hashes(self._size, expected_items)
         self._counter_bits = counter_bits
         self._max_count = (1 << counter_bits) - 1
-        
+
         # Use list of counters (could optimize with packed array)
         self._counters = [0] * self._size
         self._count = 0
-    
+
     def _get_hash_positions(self, item: Any) -> list[int]:
         """Get bit positions for an item."""
         if isinstance(item, bytes):
@@ -274,57 +274,57 @@ class CountingBloomFilter:
             data = item.encode('utf-8')
         else:
             data = str(item).encode('utf-8')
-        
+
         h1 = int(hashlib.md5(data, usedforsecurity=False).hexdigest(), 16)
         h2 = int(hashlib.sha1(data).hexdigest(), 16)
-        
+
         positions = []
         for i in range(self._num_hashes):
             pos = (h1 + i * h2) % self._size
             positions.append(pos)
-        
+
         return positions
-    
+
     def add(self, item: Any) -> None:
         """Add an item to the filter."""
         for pos in self._get_hash_positions(item):
             if self._counters[pos] < self._max_count:
                 self._counters[pos] += 1
         self._count += 1
-    
+
     def remove(self, item: Any) -> bool:
         """
         Remove an item from the filter.
-        
+
         Returns:
             True if item was possibly present, False if definitely not
         """
         positions = self._get_hash_positions(item)
-        
+
         # Check if item is present
         if not all(self._counters[pos] > 0 for pos in positions):
             return False
-        
+
         # Decrement counters
         for pos in positions:
             if self._counters[pos] > 0:
                 self._counters[pos] -= 1
-        
+
         self._count = max(0, self._count - 1)
         return True
-    
+
     def __contains__(self, item: Any) -> bool:
         """Check if item might be in the filter."""
         return all(
             self._counters[pos] > 0
             for pos in self._get_hash_positions(item)
         )
-    
+
     @property
     def count(self) -> int:
         """Get approximate item count."""
         return self._count
-    
+
     def get_stats(self) -> dict:
         """Get filter statistics."""
         non_zero = sum(1 for c in self._counters if c > 0)
@@ -341,18 +341,18 @@ class CountingBloomFilter:
 class ScalableBloomFilter:
     """
     Bloom filter that grows automatically as items are added.
-    
+
     Maintains target false positive rate across growth.
-    
+
     Example:
         >>> sbf = ScalableBloomFilter(initial_capacity=1000, fp_rate=0.01)
-        >>> 
+        >>>
         >>> for i in range(100000):
         ...     sbf.add(f"item_{i}")
-        >>> 
+        >>>
         >>> print(sbf.get_stats())  # Shows multiple internal filters
     """
-    
+
     def __init__(
         self,
         initial_capacity: int = 1000,
@@ -362,7 +362,7 @@ class ScalableBloomFilter:
     ) -> None:
         """
         Initialize scalable Bloom filter.
-        
+
         Args:
             initial_capacity: Initial filter capacity
             fp_rate: Target false positive rate
@@ -373,37 +373,37 @@ class ScalableBloomFilter:
         self._fp_rate = fp_rate
         self._growth_factor = growth_factor
         self._fp_tightening_ratio = fp_tightening_ratio
-        
+
         # Start with one filter
         self._filters: list[BloomFilter] = [
             BloomFilter(expected_items=initial_capacity, fp_rate=fp_rate)
         ]
-    
+
     def add(self, item: Any) -> None:
         """Add an item to the filter."""
         # Check if current filter is full
         current = self._filters[-1]
-        
+
         if current.fill_ratio > 0.5:
             # Create new filter with tighter FP rate
             new_capacity = current._expected_items * self._growth_factor
             new_fp = self._fp_rate * (self._fp_tightening_ratio ** len(self._filters))
-            
+
             self._filters.append(
                 BloomFilter(expected_items=new_capacity, fp_rate=new_fp)
             )
-        
+
         self._filters[-1].add(item)
-    
+
     def __contains__(self, item: Any) -> bool:
         """Check if item might be in any filter."""
         return any(item in bf for bf in self._filters)
-    
+
     @property
     def count(self) -> int:
         """Get total item count."""
         return sum(bf.count for bf in self._filters)
-    
+
     def get_stats(self) -> dict:
         """Get filter statistics."""
         return {

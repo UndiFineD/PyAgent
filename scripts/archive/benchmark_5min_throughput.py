@@ -81,19 +81,19 @@ try:
     while True:
         current_time = time.perf_counter()
         elapsed = current_time - start_time
-        
+
         # Check if test duration reached
         if elapsed >= TEST_DURATION:
             break
-        
+
         # Process one text
         text = test_texts[text_index]
         tokens = estimate_token_count(text)
-        
+
         iterations += 1
         total_tokens_processed += tokens
         text_index = (text_index + 1) % len(test_texts)
-        
+
         # Progress report
         if current_time - last_report >= PROGRESS_INTERVAL:
             tokens_per_sec = total_tokens_processed / elapsed

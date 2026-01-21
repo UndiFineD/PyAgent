@@ -49,7 +49,7 @@ class EssayOutline:
 
 class WebSearchEssayAgent(SearchAgent):
     """
-    Agent that researches complex subjects via web search and 
+    Agent that researches complex subjects via web search and
     composes structured essays based on findings.
     """
 
@@ -67,8 +67,8 @@ class WebSearchEssayAgent(SearchAgent):
 
     @as_tool
     async def write_essay(
-        self, 
-        subject: str, 
+        self,
+        subject: str,
         length: str = "medium",
         style: str = "academic",
         include_citations: bool = True,
@@ -76,10 +76,10 @@ class WebSearchEssayAgent(SearchAgent):
     ) -> Dict[str, Any]:
         """Researches a subject and writes an essay."""
         logging.info(f"WebSearchEssayAgent: Researching subject: {subject}")
-        
+
         essay_style = EssayStyle(style) if style in [s.value for s in EssayStyle] else EssayStyle.ACADEMIC
         essay_length = EssayLength(length) if length in [l.value for l in EssayLength] else EssayLength.MEDIUM
-        
+
         word_targets = {
             EssayLength.SHORT: 500,
             EssayLength.MEDIUM: 1000,
@@ -87,13 +87,13 @@ class WebSearchEssayAgent(SearchAgent):
             EssayLength.COMPREHENSIVE: 3000
         }
         target_words = word_targets.get(essay_length, 1000)
-        
+
         # Step 1: Multi-query research
         sources = await self._research_topic(subject)
-        
+
         # Step 2: Generate outline
         outline = await self._generate_outline(subject, sources, essay_style)
-        
+
         # Step 3: Compose essay
         essay_prompt = (
             f"Subject: {subject}\n"
@@ -111,14 +111,14 @@ class WebSearchEssayAgent(SearchAgent):
             "4. Compelling conclusion that synthesizes the argument\n"
             "5. Professional tone appropriate for the style"
         )
-        
+
         essay = await self.improve_content(essay_prompt)
-        
+
         # Step 4: Generate references if citations included
         references = ""
         if include_citations:
             references = await self._generate_references(sources)
-        
+
         result = {
             "subject": subject,
             "style": essay_style.value,
@@ -128,20 +128,20 @@ class WebSearchEssayAgent(SearchAgent):
             "target_words": target_words,
             "estimated_words": len(essay.split())
         }
-        
+
         self._essay_history.append({
             "subject": subject,
             "timestamp": time.time(),
             "word_count": result["estimated_words"]
         })
-        
+
         return result
 
     @as_tool
     async def research_topic(self, subject: str, depth: str = "standard") -> Dict[str, Any]:
         """Performs in-depth research on a topic without writing an essay."""
         sources = await self._research_topic(subject, depth)
-        
+
         # Synthesize findings
         synthesis_prompt = (
             f"Synthesize the key findings from this research on '{subject}':\n\n"
@@ -154,9 +154,9 @@ class WebSearchEssayAgent(SearchAgent):
             "5. Gaps in available information\n"
             "Output JSON: {'key_facts': [...], 'perspectives': [...], 'consensus': [...], 'controversies': [...], 'gaps': [...]}"
         )
-        
+
         res = await self.improve_content(synthesis_prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
@@ -165,7 +165,7 @@ class WebSearchEssayAgent(SearchAgent):
                 synthesis = {"raw": res}
         except Exception:
             synthesis = {"raw": res}
-        
+
         return {
             "subject": subject,
             "sources": [{"title": s.title, "url": s.url, "snippet": s.snippet} for s in sources],
@@ -174,17 +174,17 @@ class WebSearchEssayAgent(SearchAgent):
 
     @as_tool
     async def generate_outline(
-        self, 
-        subject: str, 
+        self,
+        subject: str,
         style: str = "academic",
         num_sections: int = 4
     ) -> Dict[str, Any]:
         """Generates an essay outline for a subject."""
         sources = await self._research_topic(subject, "light")
         essay_style = EssayStyle(style) if style in [s.value for s in EssayStyle] else EssayStyle.ACADEMIC
-        
+
         outline = await self._generate_outline(subject, sources, essay_style, num_sections)
-        
+
         return {
             "subject": subject,
             "style": essay_style.value,
@@ -195,11 +195,11 @@ class WebSearchEssayAgent(SearchAgent):
     async def fact_check(self, claim: str) -> Dict[str, Any]:
         """Fact-checks a claim using web search."""
         logging.info(f"WebSearchEssayAgent: Fact-checking: {claim}")
-        
+
         # Search for verification
         search_query = f"fact check {claim}"
         search_data = self._search_duckduckgo(search_query)
-        
+
         prompt = (
             f"Claim to fact-check: {claim}\n\n"
             f"Search Results:\n{search_data}\n\n"
@@ -210,14 +210,14 @@ class WebSearchEssayAgent(SearchAgent):
             "4. UNVERIFIABLE - insufficient evidence\n\n"
             "Output JSON: {'verdict': '...', 'confidence': 0-1, 'evidence': [...], 'explanation': '...'}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         with contextlib.suppress(Exception):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
-        
+
         return {"raw": res}
 
     @as_tool
@@ -229,7 +229,7 @@ class WebSearchEssayAgent(SearchAgent):
             query = f"{topic} {perspective}"
             data = self._search_duckduckgo(query)
             all_findings.append({"perspective": perspective, "findings": data})
-        
+
         prompt = (
             f"Topic: {topic}\n\n"
             f"Perspectives to compare:\n"
@@ -241,34 +241,34 @@ class WebSearchEssayAgent(SearchAgent):
             "4. Irreconcilable differences\n"
             "Output JSON: {'comparison': {...}, 'common_ground': [...], 'key_differences': [...]}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         with contextlib.suppress(Exception):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
-        
+
         return {"raw": res}
 
     async def _research_topic(self, subject: str, depth: str = "standard") -> List[Source]:
         """Performs multi-query research on a topic."""
         if subject in self._research_cache:
             return self._research_cache[subject]
-        
+
         queries = [
             f"comprehensive overview {subject}",
             f"{subject} latest research 2025 2026",
             f"{subject} expert analysis"
         ]
-        
+
         if depth == "deep":
             queries.extend([
                 f"{subject} statistics data",
                 f"{subject} criticism controversy",
                 f"{subject} future trends predictions"
             ])
-        
+
         sources = []
         for query in queries:
             try:
@@ -283,14 +283,14 @@ class WebSearchEssayAgent(SearchAgent):
                 sources.append(source)
             except Exception as e:
                 logging.debug(f"Search failed for query '{query}': {e}")
-        
+
         self._research_cache[subject] = sources
         return sources
 
     async def _generate_outline(
-        self, 
-        subject: str, 
-        sources: List[Source], 
+        self,
+        subject: str,
+        sources: List[Source],
         style: EssayStyle,
         num_sections: int = 4
     ) -> Dict[str, Any]:
@@ -312,14 +312,14 @@ class WebSearchEssayAgent(SearchAgent):
             '  ]\n'
             "}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         with contextlib.suppress(Exception):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
-        
+
         return {"title": subject, "thesis": "", "sections": []}
 
     async def _generate_references(self, sources: List[Source]) -> str:

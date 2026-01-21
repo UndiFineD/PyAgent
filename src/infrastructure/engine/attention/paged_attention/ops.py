@@ -5,7 +5,7 @@ from .storage import PagedKVCache
 
 class PagedAttentionOps:
     """Pure NumPy implementation of paged attention operations."""
-    
+
     @staticmethod
     def scaled_dot_product_attention(query: np.ndarray, key: np.ndarray, value: np.ndarray, scale: float = 1.0, causal: bool = True, sliding_window: int | None = None) -> np.ndarray:
         scores = np.einsum("bhqd,bhkd->bhqk", query, key) * scale
@@ -21,7 +21,7 @@ class PagedAttentionOps:
         scores_exp = np.exp(scores - scores_max)
         attn_weights = scores_exp / (np.sum(scores_exp, axis=-1, keepdims=True) + 1e-9)
         return np.einsum("bhqk,bhkd->bhqd", attn_weights, value)
-    
+
     @staticmethod
     def paged_attention_v1(query: np.ndarray, key_cache: PagedKVCache, block_tables: np.ndarray, seq_lens: np.ndarray, config: AttentionConfig) -> np.ndarray:
         num_seqs, num_heads, head_size = query.shape
@@ -40,7 +40,7 @@ class PagedAttentionOps:
             out = PagedAttentionOps.scaled_dot_product_attention(q, k, v, scale=config.scale, causal=True, sliding_window=config.sliding_window)
             output[seq_idx] = out.reshape(num_heads, head_size)
         return output
-    
+
     @staticmethod
     def paged_attention_v2(query: np.ndarray, key_cache: PagedKVCache, block_tables: np.ndarray, seq_lens: np.ndarray, config: AttentionConfig, partition_size: int = 512) -> np.ndarray:
         ns, nh, hs = query.shape
@@ -68,7 +68,7 @@ class PagedAttentionOps:
                 maxs = new_max
             output[seq_idx] = part_out / (exps[:, None] + 1e-9)
         return output.astype(query.dtype)
-    
+
     @staticmethod
     def expand_kv_for_gqa(kv: np.ndarray, num_queries_per_kv: int) -> np.ndarray:
         return kv if num_queries_per_kv == 1 else np.repeat(kv, num_queries_per_kv, axis=1)

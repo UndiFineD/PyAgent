@@ -14,10 +14,10 @@ def pack_int4(data: NDArray[np.int8]) -> NDArray[np.int8]:
     flat = data.flatten()
     if len(flat) % 2 != 0:
         flat = np.pad(flat, (0, 1), constant_values=0)
-    
+
     evens = flat[0::2].astype(np.int8)
     odds = flat[1::2].astype(np.int8)
-    
+
     packed = (evens & 0x0F) | ((odds & 0x0F) << 4)
     return packed.astype(np.int8)
 
@@ -25,14 +25,14 @@ def unpack_int4(packed: NDArray[np.int8]) -> NDArray[np.int8]:
     flat = packed.flatten()
     lower = flat & 0x0F
     upper = (flat >> 4) & 0x0F
-    
+
     lower = np.where(lower > 7, lower - 16, lower)
     upper = np.where(upper > 7, upper - 16, upper)
-    
+
     unpacked = np.empty(len(flat) * 2, dtype=np.int8)
     unpacked[0::2] = lower
     unpacked[1::2] = upper
-    
+
     return unpacked
 
 def compute_scales_minmax(
@@ -42,7 +42,7 @@ def compute_scales_minmax(
 ) -> tuple[NDArray[np.float32], NDArray[np.int32] | None]:
     qmax = (1 << (bits - 1)) - 1 if symmetric else (1 << bits) - 1
     qmin = -(1 << (bits - 1)) if symmetric else 0
-    
+
     if symmetric:
         max_val = np.max(np.abs(weight))
         scale = max_val / qmax if max_val > 0 else 1.0
@@ -70,14 +70,14 @@ def quantize_tensor(
         group_size=group_size,
         symmetric=symmetric,
     )
-    
+
     if scheme.lower() == "awq":
         quantizer = AWQQuantizer(config)
     elif scheme.lower() == "gptq":
         quantizer = GPTQQuantizer(config)
     else:
         quantizer = LinearQuantizer(config)
-    
+
     return quantizer.quantize(tensor)
 
 def get_quantization_error(
@@ -85,15 +85,15 @@ def get_quantization_error(
     qtensor: QuantizedTensor,
 ) -> dict[str, float]:
     dequant = qtensor.dequantize()
-    
+
     mse = np.mean((original - dequant) ** 2)
     mae = np.mean(np.abs(original - dequant))
     max_error = np.max(np.abs(original - dequant))
-    
+
     signal_power = np.mean(original ** 2)
     noise_power = mse
     snr = 10 * np.log10(signal_power / (noise_power + 1e-10))
-    
+
     return {
         "mse": float(mse),
         "mae": float(mae),

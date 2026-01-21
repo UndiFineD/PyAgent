@@ -21,38 +21,38 @@ R = TypeVar("R")
 
 class EngineCoreClientBase(ABC, Generic[T, R]):
     """Base class for engine core clients."""
-    
+
     def __init__(self, config: EngineClientConfig):
         self.config = config
         self._running = False
         self._request_counter = 0
         self._lock = threading.Lock()
-    
+
     @abstractmethod
     def send_request(self, request: T) -> str:
         """Send request and return request ID."""
         pass
-    
+
     @abstractmethod
     def get_output(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[R]:
         """Get output for request (blocking)."""
         pass
-    
+
     @abstractmethod
     async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[R]:
         """Get output for request (async)."""
         pass
-    
+
     @abstractmethod
     def start(self) -> None:
         """Start the client."""
         pass
-    
+
     @abstractmethod
     def shutdown(self) -> None:
         """Shutdown the client."""
         pass
-    
+
     def _generate_request_id(self) -> str:
         """Generate unique request ID."""
         with self._lock:

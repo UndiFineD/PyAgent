@@ -31,7 +31,7 @@ class Request:
     request_id: str
     prompt: Union[str, List[int]]
     max_tokens: int = 100
-    
+
     # Optional parameters
     temperature: float = 1.0
     top_p: float = 1.0
@@ -39,30 +39,30 @@ class Request:
     stop_strings: Optional[List[str]] = None
     stop_token_ids: Optional[List[int]] = None
     eos_token_id: Optional[int] = None
-    
+
     # State tracking
     status: RequestStatus = field(default=RequestStatus.WAITING)
     arrival_time: float = field(default_factory=time.time)
     events: List[RequestEvent] = field(default_factory=list)
-    
+
     # Output tracking
     output_token_ids: List[int] = field(default_factory=list)
     prompt_token_ids: Optional[List[int]] = None
-    
+
     # Finish state
     stop_reason: Optional[Union[int, str]] = None
     finish_reason: Optional[FinishReason] = None
-    
+
     # Timing (set during lifecycle)
     first_scheduled_time: Optional[float] = None
     first_token_time: Optional[float] = None
     finished_time: Optional[float] = None
-    
+
     # Metadata
     lora_request: Optional[Any] = None
     kv_transfer_params: Optional[Dict[str, Any]] = None
     priority: int = 0
-    
+
     def __post_init__(self):
         """Record creation event."""
         self._record_event(RequestEventType.CREATED)
@@ -198,7 +198,7 @@ class Request:
             FinishReason.ERROR: RequestStatus.FINISHED_ERROR,
         }
         new_status = status_map.get(reason, RequestStatus.FINISHED_STOPPED)
-        
+
         self._transition_to(new_status)
         self.finish_reason = reason
         self.stop_reason = stop_reason

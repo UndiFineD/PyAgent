@@ -20,15 +20,15 @@ from src.interface.slash_commands.core import CommandContext, CommandResult
 def cmd_tokens(ctx: CommandContext) -> CommandResult:
     """Estimate token count for text."""
     text = ctx.arg_string
-    
+
     # Simple token estimation (words + punctuation)
     # For accurate counts, would need tiktoken/tokenizers
     words = len(text.split())
     chars = len(text)
-    
+
     # Rough estimate: ~4 chars per token for English
     estimated_tokens = max(1, chars // 4)
-    
+
     return CommandResult.ok(
         output=f"[~{estimated_tokens} tokens, {words} words, {chars} chars]",
         data={
@@ -67,20 +67,20 @@ def cmd_random(ctx: CommandContext) -> CommandResult:
     """Generate random number."""
     max_val = 100
     min_val = 1
-    
+
     if ctx.first_arg:
         try:
             max_val = int(ctx.first_arg)
         except ValueError:
             pass
-    
+
     if len(ctx.args) >= 2:
         try:
             min_val = int(ctx.args[0])
             max_val = int(ctx.args[1])
         except ValueError:
             pass
-    
+
     value = random_module.randint(min_val, max_val)
     return CommandResult.ok(
         output=f"[{value}]",
@@ -100,7 +100,7 @@ def cmd_choice(ctx: CommandContext) -> CommandResult:
     """Pick a random choice from arguments."""
     if not ctx.args:
         return CommandResult.fail("Provide options to choose from")
-    
+
     chosen = random_module.choice(ctx.args)
     return CommandResult.ok(
         output=f"[{chosen}]",
@@ -119,10 +119,10 @@ def cmd_choice(ctx: CommandContext) -> CommandResult:
 def cmd_hash(ctx: CommandContext) -> CommandResult:
     """Hash text using SHA256."""
     import hashlib
-    
+
     text = ctx.arg_string
     hash_value = hashlib.sha256(text.encode()).hexdigest()
-    
+
     return CommandResult.ok(
         output=f"[{hash_value[:16]}...]",
         data={"hash": hash_value, "algorithm": "sha256", "input": text},
@@ -140,10 +140,10 @@ def cmd_hash(ctx: CommandContext) -> CommandResult:
 def cmd_base64(ctx: CommandContext) -> CommandResult:
     """Base64 encode text."""
     import base64
-    
+
     text = ctx.arg_string
     encoded = base64.b64encode(text.encode()).decode()
-    
+
     return CommandResult.ok(
         output=f"[{encoded}]",
         data={"encoded": encoded, "original": text},
@@ -161,7 +161,7 @@ def cmd_base64(ctx: CommandContext) -> CommandResult:
 def cmd_length(ctx: CommandContext) -> CommandResult:
     """Get length of text."""
     text = ctx.arg_string
-    
+
     return CommandResult.ok(
         output=f"[{len(text)} chars]",
         data={"length": len(text), "text": text},
@@ -178,17 +178,17 @@ def cmd_length(ctx: CommandContext) -> CommandResult:
 def cmd_help(ctx: CommandContext) -> CommandResult:
     """Get help for commands."""
     registry = get_global_registry()
-    
+
     if ctx.first_arg:
         defn = registry.get(ctx.first_arg)
         if not defn:
             return CommandResult.ok(output=f"[Unknown command: {ctx.first_arg}]")
-        
+
         aliases_str = f" (aliases: {', '.join('/' + a for a in defn.aliases)})" if defn.aliases else ""
         output = f"[/{defn.name}{aliases_str}: {defn.description}]"
         if defn.usage:
             output = f"[Usage: {defn.usage}]"
-        
+
         return CommandResult.ok(
             output=output,
             data={
@@ -199,15 +199,15 @@ def cmd_help(ctx: CommandContext) -> CommandResult:
                 "category": defn.category,
             },
         )
-    
+
     # List all commands by category
     categories = registry.list_categories()
     all_commands = []
-    
+
     for cat in categories:
         commands = registry.list_commands(category=cat)
         all_commands.extend([c.name for c in commands])
-    
+
     return CommandResult.ok(
         output=f"[Commands: {', '.join('/' + c for c in sorted(all_commands))}]",
         data={"commands": sorted(all_commands), "categories": categories},

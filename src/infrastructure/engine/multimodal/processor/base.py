@@ -47,15 +47,15 @@ class MultiModalConfig:
     media_io_kwargs: Dict[str, Dict[str, Any]] = field(default_factory=dict)
     mm_processor_kwargs: Optional[Dict[str, Any]] = None
     trust_remote_code: bool = False
-    
+
     # Placeholder tokens
     image_token: str = "<image>"
     video_token: str = "<video>"
     audio_token: str = "<audio>"
-    
+
     def get_limit(self, modality: str) -> int:
         return self.limit_per_prompt.get(modality, 1)
-    
+
     def get_media_kwargs(self, modality: str) -> Dict[str, Any]:
         return self.media_io_kwargs.get(modality, {})
 
@@ -67,7 +67,7 @@ class PlaceholderInfo:
     start_idx: int
     length: int
     is_embed: Optional[np.ndarray] = None  # Boolean mask
-    
+
     @property
     def end_idx(self) -> int:
         return self.start_idx + self.length
@@ -79,7 +79,7 @@ class MultiModalData:
     videos: List[Tuple[np.ndarray, Dict[str, Any]]] = field(default_factory=list)
     audios: List[Tuple[np.ndarray, int]] = field(default_factory=list)
     embeds: List[np.ndarray] = field(default_factory=list)
-    
+
     def is_empty(self) -> bool:
         return (
             not self.images
@@ -87,7 +87,7 @@ class MultiModalData:
             and not self.audios
             and not self.embeds
         )
-    
+
     def get_modality_count(self, modality: ModalityType) -> int:
         if modality == ModalityType.IMAGE:
             return len(self.images)
@@ -106,10 +106,10 @@ class MultiModalInputs:
     mm_embeddings: Dict[str, List[np.ndarray]] = field(default_factory=dict)
     mm_placeholders: Dict[str, List[PlaceholderInfo]] = field(default_factory=dict)
     mm_kwargs: Dict[str, Any] = field(default_factory=dict)
-    
+
     def has_multimodal(self) -> bool:
         return any(bool(embeds) for embeds in self.mm_embeddings.values())
-    
+
     def get_placeholder_count(self) -> int:
         return sum(
             sum(p.length for p in placeholders)
@@ -121,10 +121,10 @@ T = TypeVar("T")
 class BaseMultiModalProcessor(ABC, Generic[T]):
     """Abstract base class for modality-specific processors."""
     modality: ModalityType
-    
+
     def __init__(self, config: Optional[MultiModalConfig] = None):
         self.config = config or MultiModalConfig()
-    
+
     @abstractmethod
     def process(
         self,
@@ -132,11 +132,11 @@ class BaseMultiModalProcessor(ABC, Generic[T]):
         **kwargs: Any,
     ) -> Tuple[np.ndarray, Dict[str, Any]]:
         ...
-    
+
     @abstractmethod
     def get_placeholder_count(self, data: T, **kwargs: Any) -> int:
         ...
-    
+
     def compute_hash(self, data: T) -> str:
         if isinstance(data, np.ndarray):
             return hashlib.sha256(data.tobytes()).hexdigest()[:16]

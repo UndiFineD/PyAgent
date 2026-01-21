@@ -83,10 +83,10 @@ class NixlConnector(KVConnectorBase):
         self.memory_regions: Dict[int, NixlMemoryRegion] = {}
         self.active_transfers: Set[str] = set()
         self._lock = threading.Lock()
-        
+
         self._stop_event = threading.Event()
         self._completion_thread: Optional[threading.Thread] = None
-        
+
         # Initialize RDMA
         self._init_rdma()
         logger.info("NixlConnector initialized on rank %d/%d", self.rank, self.world_size)
@@ -99,7 +99,7 @@ class NixlConnector(KVConnectorBase):
                 "world_size": self.world_size,
                 "device_name": self.config.extra_config.get("rdma_device", "ib0")
             })
-            
+
             # Start completion thread
             self._completion_thread = threading.Thread(target=self._poll_loop, daemon=True)
             self._completion_thread.start()
@@ -118,7 +118,7 @@ class NixlConnector(KVConnectorBase):
             tensor_id = id(tensor)
             if tensor_id in self.memory_regions:
                 return self.memory_regions[tensor_id]
-            
+
             addr = 0
             length = 0
             if np is not None and isinstance(tensor, np.ndarray):
@@ -127,12 +127,12 @@ class NixlConnector(KVConnectorBase):
             elif hasattr(tensor, "data_ptr"):
                 addr = tensor.data_ptr()
                 length = tensor.numel() * tensor.element_size()
-                
+
             result = self.rust_bridge.execute("nixl_register_mr", {
                 "address": addr,
                 "length": length
             })
-            
+
             region = NixlMemoryRegion(
                 address=addr,
                 length=length,
@@ -155,7 +155,7 @@ class NixlConnector(KVConnectorBase):
         try:
             region = self.register_memory(local_tensor)
             transfer_id = f"tx_{int(time.time() * 1000)}_{uuid.uuid4().hex[:8]}"
-            
+
             self.rust_bridge.execute("nixl_rdma_write", {
                 "transfer_id": transfer_id,
                 "target_rank": target_rank,
@@ -164,7 +164,7 @@ class NixlConnector(KVConnectorBase):
                 "remote_ptr": remote_buffer_ptr,
                 "remote_rkey": rkey
             })
-            
+
             with self._lock:
                 self.active_transfers.add(transfer_id)
             return True
@@ -194,7 +194,7 @@ class NixlConnector(KVConnectorBase):
         """Initiate RDMA Read from producer."""
         if not self.config.is_consumer:
             return
-            
+
         source_rank = kwargs.get("source_rank", (self.rank - 1) % self.world_size)
         logger.debug("Nixl starting RDMA Read from rank %d", source_rank)
 
@@ -206,16 +206,16 @@ class NixlConnector(KVConnectorBase):
         """Save layer and trigger RDMA Write to consumers."""
         if not self.config.is_producer:
             return
-            
+
         target_ranks = kwargs.get("target_ranks", [(self.rank + 1) % self.world_size])
-        block_ids = getattr(attn_metadata, "slot_mapping", []) 
-        
+        block_ids = getattr(attn_metadata, "slot_mapping", [])
+
         for t_rank in target_ranks:
             self.transfer_blocks(
                 target_rank=t_rank,
                 block_ids=block_ids,
                 local_tensor=kv_layer,
-                remote_buffer_ptr=0, 
+                remote_buffer_ptr=0,
                 rkey=0
             )
 

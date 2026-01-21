@@ -36,7 +36,7 @@ class WebhookConfig:
     retry_delay: float = 1.0
     schema: Optional[Dict[str, Any]] = None
 
-@dataclass 
+@dataclass
 class StreamEvent:
     """Represents an event in the data stream."""
     event_type: str
@@ -85,7 +85,7 @@ class StreamAgent(BaseAgent):
             schema=schema
         )
         self._webhooks[name] = config
-        
+
         return {
             "success": True,
             "webhook_name": name,
@@ -95,43 +95,43 @@ class StreamAgent(BaseAgent):
 
     @as_tool
     async def push_to_n8n(
-        self, 
-        webhook_url: str, 
+        self,
+        webhook_url: str,
         data: Dict,
         webhook_name: Optional[str] = None,
         validate_schema: bool = True
     ) -> Dict[str, Any]:
         """Sends data to an n8n webhook with retry logic and validation."""
         import requests
-        
+
         # Get config if named webhook
         config = self._webhooks.get(webhook_name) if webhook_name else None
         if config:
             webhook_url = config.url
-        
+
         # Schema validation
         if validate_schema and config and config.schema:
             validation = self._validate_schema(data, config.schema)
             if not validation["valid"]:
                 return {"success": False, "error": "schema_validation_failed", "details": validation["errors"]}
-        
+
         # Retry logic
         max_retries = config.max_retries if config else 3
         timeout = config.timeout if config else 10.0
         headers = config.headers if config else {"Content-Type": "application/json"}
-        
+
         last_error = None
         for attempt in range(max_retries):
             try:
                 response = requests.post(
-                    webhook_url, 
-                    json=data, 
+                    webhook_url,
+                    json=data,
                     headers=headers,
                     timeout=timeout
                 )
-                
+
                 status = WebhookStatus.SUCCESS if response.status_code in (200, 201, 202) else WebhookStatus.FAILED
-                
+
                 result = {
                     "success": status == WebhookStatus.SUCCESS,
                     "status_code": response.status_code,
@@ -139,26 +139,26 @@ class StreamAgent(BaseAgent):
                     "webhook_url": webhook_url[:50] + "...",
                     "response_preview": response.text[:200] if response.text else None
                 }
-                
+
                 self._delivery_log.append({
                     **result,
                     "timestamp": time.time(),
                     "payload_size": len(json.dumps(data))
                 })
-                
+
                 if status == WebhookStatus.SUCCESS:
                     return result
-                    
+
             except requests.Timeout:
                 last_error = "timeout"
             except requests.ConnectionError:
                 last_error = "connection_error"
             except Exception as e:
                 last_error = str(e)
-            
+
             if attempt < max_retries - 1:
                 await asyncio.sleep(config.retry_delay if config else 1.0)
-        
+
         return {
             "success": False,
             "status": WebhookStatus.FAILED.value,
@@ -187,29 +187,29 @@ class StreamAgent(BaseAgent):
                 "- 'schema': inferred schema"
             )
             res = await self.improve_content(prompt)
-            
+
             with contextlib.suppress(Exception):
                 match = re.search(r"(\{[\s\S]*\})", res)
                 if match:
                     return json.loads(match.group(1))
-            
+
             return {"raw": res, "format": "unknown"}
 
     @as_tool
     async def transform_data(
-        self, 
-        data: Dict[str, Any], 
+        self,
+        data: Dict[str, Any],
         mapping: Dict[str, str],
         filters: Optional[List[str]] = None
     ) -> Dict[str, Any]:
         """Transforms data using a field mapping and optional filters."""
         result = {}
-        
+
         for target_key, source_path in mapping.items():
             value = self._get_nested_value(data, source_path)
             if value is not None:
                 result[target_key] = value
-        
+
         # Apply filters
         if filters:
             for filter_expr in filters:
@@ -229,7 +229,7 @@ class StreamAgent(BaseAgent):
                                 result["_filtered_out"] = True
                 except Exception:
                     pass
-        
+
         return {
             "transformed": result,
             "original_keys": list(data.keys()),
@@ -245,7 +245,7 @@ class StreamAgent(BaseAgent):
             source=source
         )
         self._event_buffer.append(event)
-        
+
         return {
             "buffered": True,
             "buffer_size": len(self._event_buffer),
@@ -257,13 +257,13 @@ class StreamAgent(BaseAgent):
         """Flushes buffered events to a registered webhook."""
         if webhook_name not in self._webhooks:
             return {"success": False, "error": f"Webhook '{webhook_name}' not registered"}
-        
+
         events = self._event_buffer.copy()
         self._event_buffer.clear()
-        
+
         if not events:
             return {"success": True, "message": "Buffer was empty", "flushed": 0}
-        
+
         payload = {
             "events": [
                 {"type": e.event_type, "payload": e.payload, "timestamp": e.timestamp, "source": e.source}
@@ -272,7 +272,7 @@ class StreamAgent(BaseAgent):
             "batch_size": len(events),
             "flush_timestamp": time.time()
         }
-        
+
         result = await self.push_to_n8n("", payload, webhook_name=webhook_name)
         result["flushed"] = len(events)
         return result
@@ -282,10 +282,10 @@ class StreamAgent(BaseAgent):
         """Returns delivery statistics."""
         if not self._delivery_log:
             return {"total_deliveries": 0, "success_rate": "N/A"}
-        
+
         successes = sum(1 for d in self._delivery_log if d.get("success"))
         total = len(self._delivery_log)
-        
+
         return {
             "total_deliveries": total,
             "successful": successes,
@@ -337,13 +337,13 @@ class StreamAgent(BaseAgent):
         lines = raw.strip().split("\n")
         if len(lines) < 2:
             return {"error": "insufficient_csv_lines", "raw": raw[:500]}
-        
+
         headers = [h.strip() for h in lines[0].split(",")]
         rows = []
         for line in lines[1:]:
             values = [v.strip() for v in line.split(",")]
             rows.append(dict(zip(headers, values)))
-        
+
         return {"headers": headers, "rows": rows, "row_count": len(rows), "format": "csv"}
 
     def _extract_xml(self, raw: str) -> Dict[str, Any]:

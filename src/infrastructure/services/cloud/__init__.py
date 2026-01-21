@@ -26,30 +26,30 @@ def __getattr__(name: str):
     """Lazy load cloud components on first access."""
     if name in ("CloudProviderBase", "InferenceRequest", "InferenceResponse"):
         from .base import CloudProviderBase, InferenceRequest, InferenceResponse
-        return {"CloudProviderBase": CloudProviderBase, 
-                "InferenceRequest": InferenceRequest, 
+        return {"CloudProviderBase": CloudProviderBase,
+                "InferenceRequest": InferenceRequest,
                 "InferenceResponse": InferenceResponse}[name]
-    
+
     if name == "BudgetManager":
         from .budget import BudgetManager
         return BudgetManager
-    
+
     if name == "IntelligentRouter":
         from .routing import IntelligentRouter
         return IntelligentRouter
-    
+
     if name == "GeminiConnector":
         from .providers.gemini import GeminiConnector
         return GeminiConnector
-    
+
     if name == "AWSBedrockConnector":
         from .providers.bedrock import AWSBedrockConnector
         return AWSBedrockConnector
-    
+
     if name == "GroqConnector":
         from .providers.groq import GroqConnector
         return GroqConnector
-    
+
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 

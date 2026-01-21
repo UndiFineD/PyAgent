@@ -19,7 +19,7 @@ class HierarchicalDPCoordinator:
     """
     Hierarchical DP coordinator with locality awareness.
     """
-    
+
     def __init__(
         self,
         num_local_coordinators: int,
@@ -29,7 +29,7 @@ class HierarchicalDPCoordinator:
         self._num_local = num_local_coordinators
         self._workers_per = workers_per_coordinator
         self._local_coordinators: list[DPEngineCoreProc] = []
-        
+
         for i in range(num_local_coordinators):
             config = DPConfig(
                 num_workers=workers_per_coordinator,
@@ -40,12 +40,12 @@ class HierarchicalDPCoordinator:
                 locality_groups=locality_groups or []
             )
             self._local_coordinators.append(DPEngineCoreProc(config))
-        
+
         self._global_step = 0
         self._global_wave = 0
         self._next_coordinator = 0
         self._lock = threading.Lock()
-    
+
     def route_request(self, request_id: str, hint_locality: Optional[int] = None) -> Tuple[int, int]:
         """Route request to coordinator and worker."""
         with self._lock:
@@ -54,11 +54,11 @@ class HierarchicalDPCoordinator:
             else:
                 coord_idx = self._next_coordinator
                 self._next_coordinator = (self._next_coordinator + 1) % self._num_local
-            
+
             coordinator = self._local_coordinators[coord_idx]
             worker_id = coordinator.assign_request(request_id)
             return (coord_idx, worker_id)
-    
+
     def complete_request(
         self,
         coordinator_idx: int,
@@ -71,7 +71,7 @@ class HierarchicalDPCoordinator:
             self._local_coordinators[coordinator_idx].complete_request(
                 worker_id, latency_ms, success
             )
-    
+
     def global_step_sync(self) -> int:
         """Synchronize all coordinators at step boundary."""
         with self._lock:
@@ -79,7 +79,7 @@ class HierarchicalDPCoordinator:
             for coord in self._local_coordinators:
                 coord.step_sync()
             return self._global_step
-    
+
     def global_wave_sync(self) -> int:
         """Synchronize all coordinators at wave boundary."""
         with self._lock:
@@ -87,7 +87,7 @@ class HierarchicalDPCoordinator:
             for coord in self._local_coordinators:
                 coord.wave_sync()
             return self._global_wave
-    
+
     def get_global_metrics(self) -> dict[str, Any]:
         """Get aggregated metrics."""
         with self._lock:

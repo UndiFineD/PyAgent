@@ -25,28 +25,28 @@ from .models import (
 
 class ImageLoader(MediaLoader):
     """Load and process images."""
-    
+
     def __init__(self):
         self._pil_available = False
         self._cv2_available = False
-        
+
         try:
             from PIL import Image
             self._pil_available = True
             self._Image = Image
         except ImportError:
             pass
-        
+
         try:
             import cv2
             self._cv2_available = True
             self._cv2 = cv2
         except ImportError:
             pass
-    
+
     def supports(self, media_type: MediaType) -> bool:
         return media_type == MediaType.IMAGE
-    
+
     async def load(
         self,
         source: Union[str, bytes, BinaryIO],
@@ -55,14 +55,14 @@ class ImageLoader(MediaLoader):
         """Load image from source."""
         data, source_str = await self._read_source(source)
         fmt = self._detect_format(data)
-        
+
         if self._pil_available:
             img = await self._load_pil(data, config)
         elif self._cv2_available:
             img = await self._load_cv2(data, config)
         else:
             raise RuntimeError("No image loading library available")
-        
+
         metadata = MediaMetadata(
             media_type=MediaType.IMAGE,
             format=fmt,
@@ -72,9 +72,9 @@ class ImageLoader(MediaLoader):
             file_size=len(data),
             hash=self.compute_hash(data),
         )
-        
+
         return ImageData(data=img, metadata=metadata, source=source_str)
-    
+
     async def _read_source(
         self,
         source: Union[str, bytes, BinaryIO]
@@ -82,7 +82,7 @@ class ImageLoader(MediaLoader):
         """Read bytes from source."""
         if isinstance(source, bytes):
             return source, "<bytes>"
-        
+
         if isinstance(source, (str, Path)):
             source_str = str(source)
             if source_str.startswith(('http://', 'https://')):
@@ -91,10 +91,10 @@ class ImageLoader(MediaLoader):
                 with open(source_str, 'rb') as f:
                     data = f.read()
             return data, source_str
-        
+
         data = source.read()
         return data, "<stream>"
-    
+
     async def _fetch_url(self, url: str) -> bytes:
         """Fetch image from URL."""
         try:
@@ -106,7 +106,7 @@ class ImageLoader(MediaLoader):
             import urllib.request
             with urllib.request.urlopen(url) as resp:
                 return resp.read()
-    
+
     def _detect_format(self, data: bytes) -> ImageFormat:
         """Detect image format from magic bytes."""
         if data[:2] == b'\xff\xd8':
@@ -120,7 +120,7 @@ class ImageLoader(MediaLoader):
         elif data[:2] == b'BM':
             return ImageFormat.BMP
         return ImageFormat.JPEG
-    
+
     async def _load_pil(
         self,
         data: bytes,
@@ -130,10 +130,10 @@ class ImageLoader(MediaLoader):
         img = self._Image.open(io.BytesIO(data))
         if img.mode != 'RGB':
             img = img.convert('RGB')
-        
+
         if config.target_size:
             img = self._resize_pil(img, config.target_size, config.resize_mode)
-        
+
         arr = np.array(img, dtype=np.float32)
         if config.normalize:
             arr = arr / 255.0
@@ -141,7 +141,7 @@ class ImageLoader(MediaLoader):
             std = np.array(config.std, dtype=np.float32).reshape(1, 1, 3)
             arr = (arr - mean) / std
         return arr
-    
+
     def _resize_pil(
         self,
         img,
@@ -177,7 +177,7 @@ class ImageLoader(MediaLoader):
             scale = max(tw / w, th / h)
             new_w, new_h = int(w * scale), int(h * scale)
             return img.resize((new_w, new_h), self._Image.Resampling.BICUBIC)
-    
+
     async def _load_cv2(
         self,
         data: bytes,
@@ -187,10 +187,10 @@ class ImageLoader(MediaLoader):
         arr = np.frombuffer(data, dtype=np.uint8)
         img = self._cv2.imdecode(arr, self._cv2.IMREAD_COLOR)
         img = self._cv2.cvtColor(img, self._cv2.COLOR_BGR2RGB)
-        
+
         if config.target_size:
             img = self._resize_cv2(img, config.target_size, config.resize_mode)
-        
+
         img = img.astype(np.float32)
         if config.normalize:
             img = img / 255.0
@@ -198,7 +198,7 @@ class ImageLoader(MediaLoader):
             std = np.array(config.std, dtype=np.float32).reshape(1, 1, 3)
             img = (img - mean) / std
         return img
-    
+
     def _resize_cv2(
         self,
         img: np.ndarray,

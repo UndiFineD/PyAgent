@@ -23,7 +23,7 @@ def cmd_datetime(ctx: CommandContext) -> CommandResult:
     """Get current date and time in UTC."""
     now = datetime.now(timezone.utc)
     local_now = datetime.now()
-    
+
     return CommandResult.ok(
         output=f"[{now.strftime('%Y-%m-%d %H:%M:%S')} UTC]",
         data={
@@ -75,19 +75,19 @@ def cmd_time(ctx: CommandContext) -> CommandResult:
 def cmd_uptime(ctx: CommandContext) -> CommandResult:
     """Get process uptime."""
     uptime_seconds = time.time() - _start_time
-    
+
     days = int(uptime_seconds // 86400)
     hours = int((uptime_seconds % 86400) // 3600)
     minutes = int((uptime_seconds % 3600) // 60)
     seconds = int(uptime_seconds % 60)
-    
+
     if days > 0:
         uptime_str = f"{days}d {hours}h {minutes}m"
     elif hours > 0:
         uptime_str = f"{hours}h {minutes}m {seconds}s"
     else:
         uptime_str = f"{minutes}m {seconds}s"
-    
+
     return CommandResult.ok(
         output=f"[Uptime: {uptime_str}]",
         data={

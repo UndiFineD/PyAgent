@@ -14,7 +14,7 @@ class MemoryMultiModalCache(MultiModalCache):
     """
     In-memory LRU cache for multimodal content.
     """
-    
+
     def __init__(
         self,
         max_size_bytes: int = 1024 * 1024 * 1024,
@@ -24,7 +24,7 @@ class MemoryMultiModalCache(MultiModalCache):
         super().__init__(max_size_bytes, max_entries, hasher)
         self._cache: OrderedDict[str, CacheEntry] = OrderedDict()
         self._current_size = 0
-    
+
     def get(self, key: MediaHash) -> Optional[CacheEntry]:
         """Get entry, moving to end for LRU."""
         with self._lock:
@@ -32,18 +32,18 @@ class MemoryMultiModalCache(MultiModalCache):
             if key_str not in self._cache:
                 self._stats.misses += 1
                 return None
-            
+
             self._cache.move_to_end(key_str)
             entry = self._cache[key_str]
             entry.touch()
             self._stats.hits += 1
             return entry
-    
+
     def put(self, key: MediaHash, data: Any, metadata: Optional[Dict] = None) -> CacheEntry:
         """Put entry, evicting if necessary."""
         with self._lock:
             key_str = key.value
-            
+
             # Calculate size
             if isinstance(data, np.ndarray):
                 size = data.nbytes
@@ -51,13 +51,13 @@ class MemoryMultiModalCache(MultiModalCache):
                 size = len(data)
             else:
                 size = 0
-            
-            while (self._current_size + size > self.max_size_bytes or 
+
+            while (self._current_size + size > self.max_size_bytes or
                    len(self._cache) >= self.max_entries):
                 if not self._cache:
                     break
                 self.evict(1)
-            
+
             entry = CacheEntry(
                 key=key,
                 data=data,
@@ -65,18 +65,18 @@ class MemoryMultiModalCache(MultiModalCache):
                 size_bytes=size,
                 metadata=metadata or {}
             )
-            
+
             if key_str in self._cache:
                 old = self._cache[key_str]
                 self._current_size -= old.size_bytes
-            
+
             self._cache[key_str] = entry
             self._current_size += size
             self._stats.entry_count = len(self._cache)
             self._stats.total_size_bytes = self._current_size
-            
+
             return entry
-    
+
     def evict(self, count: int = 1) -> int:
         """Evict least recently used entries."""
         evicted = 0
@@ -88,11 +88,11 @@ class MemoryMultiModalCache(MultiModalCache):
                 self._current_size -= entry.size_bytes
                 evicted += 1
                 self._stats.evictions += 1
-        
+
         self._stats.entry_count = len(self._cache)
         self._stats.total_size_bytes = self._current_size
         return evicted
-    
+
     def clear(self) -> None:
         """Clear all entries."""
         with self._lock:
@@ -100,11 +100,11 @@ class MemoryMultiModalCache(MultiModalCache):
             self._current_size = 0
             self._stats.entry_count = 0
             self._stats.total_size_bytes = 0
-    
+
     def contains(self, key: MediaHash) -> bool:
         """Check if key exists."""
         return key.value in self._cache
-    
+
     def keys(self) -> List[MediaHash]:
         """Get all cache keys."""
         with self._lock:
@@ -115,7 +115,7 @@ class PerceptualCache(MemoryMultiModalCache):
     """
     Cache with perceptual similarity matching.
     """
-    
+
     def __init__(
         self,
         max_size_bytes: int = 1024 * 1024 * 1024,
@@ -125,7 +125,7 @@ class PerceptualCache(MemoryMultiModalCache):
         super().__init__(max_size_bytes, max_entries)
         self.similarity_threshold = similarity_threshold
         self._perceptual_index: Dict[str, List[str]] = {}
-    
+
     def put_with_perceptual(
         self,
         content_hash: MediaHash,
@@ -139,7 +139,7 @@ class PerceptualCache(MemoryMultiModalCache):
             self._perceptual_index[perceptual_hash] = []
         self._perceptual_index[perceptual_hash].append(content_hash.value)
         return entry
-    
+
     def find_similar(self, perceptual_hash: str) -> List[CacheEntry]:
         """Find entries with similar perceptual hash."""
         similar = []
@@ -147,7 +147,7 @@ class PerceptualCache(MemoryMultiModalCache):
             for content_key in self._perceptual_index[perceptual_hash]:
                 if content_key in self._cache:
                     similar.append(self._cache[content_key])
-        
+
         phash_int = int(perceptual_hash, 16) if perceptual_hash else 0
         for cached_phash, content_keys in self._perceptual_index.items():
             if cached_phash == perceptual_hash:
@@ -171,7 +171,7 @@ class PrefetchMultiModalCache(MemoryMultiModalCache):
     """
     Cache with async prefetch support.
     """
-    
+
     def __init__(
         self,
         max_size_bytes: int = 1024 * 1024 * 1024,
@@ -183,7 +183,7 @@ class PrefetchMultiModalCache(MemoryMultiModalCache):
         self._prefetch_queue: List[Tuple[MediaHash, Callable, float]] = []
         self._access_patterns: Dict[str, List[str]] = {}
         self._prefetch_lock = threading.Lock()
-    
+
     def record_access(self, key: MediaHash, subsequent_key: Optional[MediaHash] = None) -> None:
         """Record access pattern."""
         key_str = key.value
@@ -191,7 +191,7 @@ class PrefetchMultiModalCache(MemoryMultiModalCache):
             if key_str not in self._access_patterns:
                 self._access_patterns[key_str] = []
             self._access_patterns[key_str].append(subsequent_key.value)
-    
+
     def predict_next(self, key: MediaHash) -> List[str]:
         """Predict likely next accesses."""
         key_str = key.value
@@ -200,7 +200,7 @@ class PrefetchMultiModalCache(MemoryMultiModalCache):
         subsequent = self._access_patterns[key_str]
         counter = Counter(subsequent)
         return [k for k, _ in counter.most_common(5)]
-    
+
     def schedule_prefetch(
         self,
         key: MediaHash,
@@ -214,7 +214,7 @@ class PrefetchMultiModalCache(MemoryMultiModalCache):
                 self._prefetch_queue.pop()
             self._prefetch_queue.append((key, loader, priority))
             self._prefetch_queue.sort(key=lambda x: x[2], reverse=True)
-    
+
     def execute_prefetch(self, count: int = 1) -> int:
         """Execute pending prefetches."""
         executed = 0

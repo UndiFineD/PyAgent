@@ -24,7 +24,7 @@ class TestBenchmarkSuite:
         suite = BenchmarkSuite()
         test_texts = {"tiny": "hello world"}
         results = suite.benchmark_tokenization(test_texts, iterations=10, compare_rust=False)
-        
+
         assert len(results) >= 1
         assert "Python Tokenization: tiny" in results[0].name
         assert results[0].total_tokens > 0
@@ -36,14 +36,14 @@ class TestBenchmarkSuite:
         suite = BenchmarkSuite()
         mock_agent = MagicMock()
         mock_agent.chat.return_value = "This is a response"
-        
+
         result = await suite.benchmark_agent_performance(
-            mock_agent, 
-            prompt="Hello", 
-            label="SyncAgent", 
+            mock_agent,
+            prompt="Hello",
+            label="SyncAgent",
             method_name="chat"
         )
-        
+
         assert result.success
         assert result.name == "SyncAgent"
         assert result.total_tokens > 0
@@ -53,20 +53,20 @@ class TestBenchmarkSuite:
     async def test_benchmark_agent_performance_async(self):
         """Test agent performance benchmark with an async method."""
         suite = BenchmarkSuite()
-        
+
         async def mock_chat(prompt):
             return "Async response"
-            
+
         mock_agent = MagicMock()
         mock_agent.chat = mock_chat
-        
+
         result = await suite.benchmark_agent_performance(
-            mock_agent, 
-            prompt="Hello", 
-            label="AsyncAgent", 
+            mock_agent,
+            prompt="Hello",
+            label="AsyncAgent",
             method_name="chat"
         )
-        
+
         assert result.success
         assert result.name == "AsyncAgent"
         assert result.metrics.get("output_length", 0) > 0 or result.total_tokens > 0
@@ -75,10 +75,10 @@ class TestBenchmarkSuite:
         """Test sustained throughput benchmark execution."""
         suite = BenchmarkSuite()
         test_texts = ["test 1", "test 2"]
-        
+
         # Run for a very short duration for testing
         result = suite.run_sustained_throughput(test_texts, duration_seconds=0.1)
-        
+
         assert result.success
         assert result.duration >= 0.1
         assert result.iterations > 0

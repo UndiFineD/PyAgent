@@ -70,7 +70,7 @@ class ClassificationAgent(BaseAgent):
             descriptions=descriptions or {}
         )
         self._taxonomies[name] = taxonomy
-        
+
         return {
             "success": True,
             "taxonomy_name": name,
@@ -80,8 +80,8 @@ class ClassificationAgent(BaseAgent):
 
     @as_tool
     async def classify(
-        self, 
-        content: str, 
+        self,
+        content: str,
         categories: Optional[List[str]] = None,
         taxonomy_name: Optional[str] = None,
         classification_type: str = "single_label",
@@ -98,9 +98,9 @@ class ClassificationAgent(BaseAgent):
             cats = categories or ["positive", "negative", "neutral"]
             hierarchy = {}
             descriptions = {}
-        
+
         cls_type = ClassificationType(classification_type)
-        
+
         # Build prompt based on classification type
         if cls_type == ClassificationType.BINARY:
             prompt = self._build_binary_prompt(content, cats)
@@ -110,43 +110,43 @@ class ClassificationAgent(BaseAgent):
             prompt = self._build_hierarchical_prompt(content, cats, hierarchy, descriptions)
         else:
             prompt = self._build_single_label_prompt(content, cats, descriptions)
-        
+
         res = await self.improve_content(prompt)
-        
+
         try:
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 data = json.loads(match.group(1))
-                
+
                 # Validate confidence threshold
                 confidence = data.get("confidence", 0.0)
                 if isinstance(confidence, (int, float)) and confidence < self._confidence_threshold:
                     data["below_threshold"] = True
                     data["threshold"] = self._confidence_threshold
-                
+
                 # Record classification
                 self._classification_history.append({
                     "content_preview": content[:100],
                     "result": data,
                     "type": classification_type
                 })
-                
+
                 return data
         except Exception as e:
             logging.debug(f"ClassificationAgent: Parse error: {e}")
-        
+
         return {"category": "unknown", "confidence": 0.0, "raw": res}
 
     @as_tool
     async def classify_batch(
-        self, 
-        contents: List[str], 
+        self,
+        contents: List[str],
         categories: List[str],
         classification_type: str = "single_label"
     ) -> Dict[str, Any]:
         """Classifies multiple items in batch."""
         results = []
-        
+
         for idx, content in enumerate(contents):
             result = await self.classify(
                 content=content,
@@ -158,13 +158,13 @@ class ClassificationAgent(BaseAgent):
                 "content_preview": content[:50],
                 **result
             })
-        
+
         # Compute distribution
         category_counts = {}
         for r in results:
             cat = r.get("category", "unknown")
             category_counts[cat] = category_counts.get(cat, 0) + 1
-        
+
         return {
             "results": results,
             "total": len(contents),
@@ -176,20 +176,20 @@ class ClassificationAgent(BaseAgent):
     async def suggest_categories(self, sample_content: List[str], num_categories: int = 5) -> Dict[str, Any]:
         """Suggests categories based on sample content."""
         samples = "\n".join([f"- {c[:200]}" for c in sample_content[:10]])
-        
+
         prompt = (
             f"Based on these content samples, suggest {num_categories} distinct categories:\n\n"
             f"{samples}\n\n"
             "Output JSON: {'categories': ['cat1', 'cat2', ...], 'descriptions': {'cat1': 'description', ...}}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         with contextlib.suppress(Exception):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
-        
+
         return {"raw": res}
 
     @as_tool
@@ -205,14 +205,14 @@ class ClassificationAgent(BaseAgent):
             "3. Why other categories were rejected\n"
             "Output JSON: {'explanation': '...', 'key_features': [...], 'rejected_categories': {...}}"
         )
-        
+
         res = await self.improve_content(prompt)
-        
+
         with contextlib.suppress(Exception):
             match = re.search(r"(\{[\s\S]*\})", res)
             if match:
                 return json.loads(match.group(1))
-        
+
         return {"raw_explanation": res}
 
     @as_tool
@@ -228,19 +228,19 @@ class ClassificationAgent(BaseAgent):
         """Returns classification statistics."""
         if not self._classification_history:
             return {"total_classifications": 0}
-        
+
         categories = {}
         confidences = []
-        
+
         for item in self._classification_history:
             result = item.get("result", {})
             cat = result.get("category", "unknown")
             conf = result.get("confidence", 0.0)
-            
+
             categories[cat] = categories.get(cat, 0) + 1
             if isinstance(conf, (int, float)):
                 confidences.append(conf)
-        
+
         return {
             "total_classifications": len(self._classification_history),
             "category_distribution": categories,

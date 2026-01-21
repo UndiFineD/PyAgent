@@ -26,38 +26,38 @@ def get_commands_dir() -> Path:
 def discover_command_modules() -> list[str]:
     """
     Discover all command modules in the commands directory.
-    
+
     Returns:
         List of module names (without .py extension)
     """
     commands_dir = get_commands_dir()
-    
+
     if not commands_dir.exists():
         return []
-    
+
     modules = []
     for file in commands_dir.iterdir():
         if file.is_file() and file.suffix == ".py" and not file.name.startswith("_"):
             modules.append(file.stem)
-    
+
     return sorted(modules)
 
 
 def load_module(module_name: str) -> bool:
     """
     Load a single command module.
-    
+
     Args:
         module_name: Name of the module (without .py)
-        
+
     Returns:
         True if loaded successfully
     """
     full_module_name = f"src.interface.slash_commands.commands.{module_name}"
-    
+
     if full_module_name in _loaded_modules:
         return True
-    
+
     try:
         importlib.import_module(full_module_name)
         _loaded_modules.add(full_module_name)
@@ -73,18 +73,18 @@ def load_module(module_name: str) -> bool:
 def unload_module(module_name: str) -> bool:
     """
     Unload a command module (removes from loaded set).
-    
+
     Note: This doesn't actually unload from sys.modules,
     but prevents it from being reloaded.
-    
+
     Args:
         module_name: Name of the module
-        
+
     Returns:
         True if was loaded
     """
     full_module_name = f"src.interface.slash_commands.commands.{module_name}"
-    
+
     if full_module_name in _loaded_modules:
         _loaded_modules.discard(full_module_name)
         return True
@@ -94,25 +94,25 @@ def unload_module(module_name: str) -> bool:
 def load_commands(registry: "CommandRegistry | None" = None) -> int:
     """
     Load all command modules from the commands directory.
-    
+
     Args:
         registry: Optional registry (not used directly, modules register themselves)
-        
+
     Returns:
         Number of modules loaded
     """
     global _commands_loaded
-    
+
     if _commands_loaded:
         return len(_loaded_modules)
-    
+
     modules = discover_command_modules()
     loaded = 0
-    
+
     for module_name in modules:
         if load_module(module_name):
             loaded += 1
-    
+
     _commands_loaded = True
     return loaded
 
@@ -120,16 +120,16 @@ def load_commands(registry: "CommandRegistry | None" = None) -> int:
 def reload_commands() -> int:
     """
     Reload all command modules.
-    
+
     Returns:
         Number of modules reloaded
     """
     global _commands_loaded
-    
+
     # Clear loaded state
     _loaded_modules.clear()
     _commands_loaded = False
-    
+
     # Reload
     return load_commands()
 

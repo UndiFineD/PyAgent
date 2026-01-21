@@ -19,21 +19,21 @@ class TaskStats:
     timeouts: int = 0
     total_wait_time_ms: float = 0.0
     total_exec_time_ms: float = 0.0
-    
+
     @property
     def avg_wait_time_ms(self) -> float:
         """Average wait time in milliseconds."""
         if self.completed == 0:
             return 0.0
         return self.total_wait_time_ms / self.completed
-    
+
     @property
     def avg_exec_time_ms(self) -> float:
         """Average execution time in milliseconds."""
         if self.completed == 0:
             return 0.0
         return self.total_exec_time_ms / self.completed
-    
+
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary."""
         return {
@@ -50,12 +50,12 @@ class TaskStats:
 @dataclass(order=True)
 class ScheduledTask(Generic[R]):
     """A task scheduled for execution."""
-    
+
     # Ordering fields (for priority queue)
     priority_value: float = field(compare=True)
     deadline: float = field(compare=True)
     sequence: int = field(compare=True)
-    
+
     # Task data (not compared)
     id: str = field(compare=False)
     func: Callable[[], R] = field(compare=False, repr=False)
@@ -66,7 +66,7 @@ class ScheduledTask(Generic[R]):
     result: Optional[R] = field(compare=False, default=None)
     error: Optional[Exception] = field(compare=False, default=None)
     future: Optional[Future[R]] = field(compare=False, default=None, repr=False)
-    
+
     @property
     def is_expired(self) -> bool:
         """Check if task has exceeded its deadline."""

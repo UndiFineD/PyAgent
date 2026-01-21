@@ -55,7 +55,7 @@ def parse_ruff_complexity(json_file: str, threshold: int = 25):
     header = f"{'Comp':<5} {'Function':<40} {'Location'}"
     print(header)
     print("-" * 100)
-    
+
     for f in findings:
         comp_val = f["complexity"]
         name = f["func_name"]
@@ -67,6 +67,6 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Parse Ruff complexity reports.")
     parser.add_argument("--input", type=str, default="ruff_output.json", help="Path to ruff_output.json.")
     parser.add_argument("--threshold", type=int, default=25, help="Highlight threshold.")
-    
+
     args = parser.parse_args()
     parse_ruff_complexity(args.input, args.threshold)

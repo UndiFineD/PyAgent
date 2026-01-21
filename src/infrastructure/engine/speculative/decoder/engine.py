@@ -12,7 +12,7 @@ from .verification import SpeculativeVerifier, VerificationResult
 
 class SpeculativeDecoder:
     """Main speculative decoding orchestrator."""
-    
+
     def __init__(
         self,
         vocab_size: int,
@@ -26,7 +26,7 @@ class SpeculativeDecoder:
         self.max_speculation_depth = max_speculation_depth
         self._accepted_count = 0
         self._proposed_count = 0
-    
+
     def step(
         self,
         input_ids: np.ndarray,
@@ -35,7 +35,7 @@ class SpeculativeDecoder:
     ) -> Tuple[List[int], VerificationResult]:
         """Perform one speculative decoding step."""
         tree = self.proposer.propose(input_ids, num_candidates=num_candidates)
-        
+
         if not tree:
             target_logits = target_forward_fn(input_ids)
             new_token = int(np.argmax(target_logits[-1]))
@@ -43,7 +43,7 @@ class SpeculativeDecoder:
 
         sequences = tree.to_sequences()
         proposed = sequences[0] if sequences else []
-        
+
         if not proposed:
             target_logits = target_forward_fn(input_ids)
             new_token = int(np.argmax(target_logits[-1]))
@@ -51,22 +51,22 @@ class SpeculativeDecoder:
 
         extended_input = np.concatenate([input_ids, np.array(proposed)])
         target_logits = target_forward_fn(extended_input)
-        
+
         # Adjust logit extraction
         verify_logits = target_logits[len(input_ids)-1 : len(input_ids)+len(proposed)]
-        
+
         draft_probs = np.array([
-            tree.tokens[i].probability if i < len(tree.tokens) else 1.0/self.vocab_size 
+            tree.tokens[i].probability if i < len(tree.tokens) else 1.0/self.vocab_size
             for i in range(len(proposed))
         ])
-        
+
         result = self.verifier.verify(proposed, verify_logits, draft_probs)
         self.proposer.update(result.accepted_tokens, result.rollback_position)
-        
+
         new_tokens = list(result.accepted_tokens)
         if result.bonus_token is not None:
             new_tokens.append(result.bonus_token)
-        
+
         self._accepted_count += len(new_tokens)
         self._proposed_count += len(proposed)
         return new_tokens, result

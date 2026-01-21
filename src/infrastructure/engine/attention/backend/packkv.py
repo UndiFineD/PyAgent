@@ -21,11 +21,11 @@ class PackKVAttentionBackend(AttentionBackend[None]):
     Attention backend optimized for PackKV compressed KV caches.
     Matches the research from arXiv:2512.24449.
     """
-    
+
     @staticmethod
     def get_name() -> str:
         return "packkv"
-    
+
     @staticmethod
     def get_capabilities() -> AttentionCapabilities:
         return AttentionCapabilities(
@@ -36,7 +36,7 @@ class PackKVAttentionBackend(AttentionBackend[None]):
             min_sm_version=80,
             memory_efficient=True,
         )
-    
+
     def forward(
         self,
         query: Any,
@@ -54,13 +54,13 @@ class PackKVAttentionBackend(AttentionBackend[None]):
             return TorchSDPABackend().forward(
                 query, key, value, kv_cache, metadata, scale
             )
-        
+
         # In a real implementation, this would call a fused kernel (Triton/CUDA/Rust)
         # that performs dequantization into registers during the matmul loops.
         # Here we simulate the logic or call a placeholder kernel.
-        
+
         logger.debug("Executing PackKV fused decompression kernel")
-        
+
         # Placeholder: simulate decompression then SDPA
         # In production: rust_core.fused_packkv_attention(...)
         return TorchSDPABackend().forward(

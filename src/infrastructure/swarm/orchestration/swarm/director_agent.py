@@ -65,12 +65,12 @@ class DirectorAgent(BaseAgent):
         # Target the core agent source directories
         ws_root = getattr(self, "_workspace_root", None) or Path.cwd()
         src_path = Path(ws_root) / "src"
-        
+
         # Scan src/data/agents, src/logic/agents, and orchestration folders
         for p in src_path.rglob("*Agent.py"):
             if p.name not in ["BaseAgent.py", "DirectorAgent.py"]:
                 agents.append(p.stem)
-        
+
         # Ensure we unique and sort
         return sorted(list(set(agents)))
 
@@ -100,7 +100,7 @@ class DirectorAgent(BaseAgent):
                 return await self.execute_project_plan(prompt)
             finally:
                 self._is_planning = False
-        
+
         # Otherwise, fall back to standard thinking/planning
         return await super().think(prompt)
 
@@ -195,7 +195,7 @@ class DirectorAgent(BaseAgent):
                 rf"\*\*{re.escape(title)}\*\*\n\s+-\s+Status:\s+([A-Z/ ()\w]+)",
                 re.MULTILINE
             )
-            
+
             match = pattern.search(content)
             if match:
                 old_status_line = match.group(0)

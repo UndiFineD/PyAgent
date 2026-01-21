@@ -69,7 +69,7 @@ class TestOpenAIAPIRustFunctions:
             ],
         })
         result = rust_core.parse_response_json_rust(response_json)
-        
+
         assert isinstance(result, dict)
         assert result["id"] == "resp_123"
         assert result["status"] == "completed"
@@ -93,7 +93,7 @@ class TestConversationRustFunctions:
         """Test fast token counting."""
         text = "Hello world, this is a test sentence."
         count = rust_core.fast_token_count_rust(text)
-        
+
         assert isinstance(count, int)
         assert count >= 5  # At least a few tokens
 
@@ -110,7 +110,7 @@ class TestRustPerformance:
         """Test that fast token count handles large text."""
         large_text = "word " * 10000
         count = rust_core.fast_token_count_rust(large_text)
-        
+
         assert count > 5000  # Should count most words
 
 
@@ -138,7 +138,7 @@ class TestValidationFunctions:
         json_str = json.dumps({"name": "test", "count": 5})
         required_keys = ["name"]  # List of required keys
         expected_types = {"name": "string", "count": "number"}  # Dict not JSON string
-        
+
         result = rust_core.validate_json_schema_fast_rust(json_str, required_keys, expected_types)
         # Returns (is_valid, error_message) tuple
         assert isinstance(result, tuple) or result is True
@@ -178,7 +178,7 @@ class TestHashingFunctions:
         data = b"test data for hashing"
         hash1 = rust_core.blake3_hash_rust(data)
         hash2 = rust_core.blake3_hash_rust(data)
-        
+
         assert hash1 == hash2  # Deterministic
         assert len(hash1) > 0
 
@@ -193,7 +193,7 @@ class TestHashingFunctions:
         """Test consistent hashing."""
         hash1 = rust_core.consistent_hash_rust("key1", 10)
         hash2 = rust_core.consistent_hash_rust("key1", 10)
-        
+
         assert hash1 == hash2
         assert 0 <= hash1 < 10
 
@@ -205,7 +205,7 @@ class TestTokenFunctions:
         """Test token estimation."""
         text = "Hello, this is a test message for token estimation."
         count = rust_core.estimate_tokens_rust(text)
-        
+
         assert isinstance(count, int)
         assert count > 0
 
@@ -214,7 +214,7 @@ class TestTokenFunctions:
         # batch_estimate_tokens_rust needs list and chars_per_token
         texts = ["Hello world", "Test message", "Another text"]
         results = rust_core.batch_estimate_tokens_rust(texts, 4)
-        
+
         assert isinstance(results, (str, list))
 
 
@@ -225,7 +225,7 @@ class TestPatternMatching:
         """Test pattern matching."""
         text = "The quick brown fox jumps"
         patterns = ["quick", "fox", "dog"]  # Pass as list
-        
+
         # Returns index of first matching pattern or -1
         match_index = rust_core.match_patterns_rust(text, patterns)
         assert isinstance(match_index, int)
@@ -236,7 +236,7 @@ class TestPatternMatching:
         text = "Hello world <END>"
         new_char_count = len(text)
         stop_strings = ["<END>", "<STOP>"]  # Pass as list
-        
+
         # check_stop_strings_rust(output_text, new_char_count, stop_strings, include_in_output)
         result = rust_core.check_stop_strings_rust(text, new_char_count, stop_strings, True)
         # Returns (stop_string_index, truncation_position) or None
@@ -250,7 +250,7 @@ class TestMetricsFunctions:
         """Test metrics calculation."""
         values = json.dumps([1.0, 2.0, 3.0, 4.0, 5.0])
         result = rust_core.calculate_metrics_rust(values)
-        
+
         # Result can be string JSON or dict
         if isinstance(result, str):
             metrics = json.loads(result)
@@ -261,6 +261,6 @@ class TestMetricsFunctions:
     def test_calculate_throughput_rust(self):
         """Test throughput calculation."""
         result = rust_core.calculate_throughput_rust(1000, 2.5)  # 1000 tokens in 2.5 seconds
-        
+
         assert isinstance(result, (int, float))
         assert result > 0

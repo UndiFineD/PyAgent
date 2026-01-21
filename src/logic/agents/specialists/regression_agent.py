@@ -49,17 +49,17 @@ class RegressionAgent(BaseAgent):
 
     @as_tool
     async def predict_future_state(
-        self, 
-        history: List[float], 
+        self,
+        history: List[float],
         steps: int = 1,
         method: str = "linear"
     ) -> Dict[str, Any]:
         """Predicts the next values in a sequence using the specified method."""
         if len(history) < 2:
             return {"predictions": history, "error": "Need at least 2 data points"}
-        
+
         regression_type = RegressionType(method) if method in [m.value for m in RegressionType] else RegressionType.LINEAR
-        
+
         if regression_type == RegressionType.LINEAR:
             result = self._linear_regression(history, steps)
         elif regression_type == RegressionType.POLYNOMIAL:
@@ -70,7 +70,7 @@ class RegressionAgent(BaseAgent):
             result = self._moving_average(history, steps, window=3)
         else:
             result = self._linear_regression(history, steps)
-        
+
         # Record prediction
         self._prediction_history.append({
             "history_length": len(history),
@@ -78,46 +78,46 @@ class RegressionAgent(BaseAgent):
             "method": regression_type.value,
             "predictions": result["predictions"]
         })
-        
+
         return result
 
     @as_tool
     async def analyze_correlation(
-        self, 
-        var_a: List[float], 
+        self,
+        var_a: List[float],
         var_b: List[float]
     ) -> Dict[str, Any]:
         """Calculates correlation and relationship metrics between two variables."""
         if len(var_a) != len(var_b):
             return {"error": "Variables must have same length"}
-        
+
         n = len(var_a)
         if n < 2:
             return {"error": "Need at least 2 data points"}
-        
+
         # Means
         mean_a = sum(var_a) / n
         mean_b = sum(var_b) / n
-        
+
         # Variances and covariance
         var_a_sq = sum((x - mean_a) ** 2 for x in var_a)
         var_b_sq = sum((x - mean_b) ** 2 for x in var_b)
         covar = sum((a - mean_a) * (b - mean_b) for a, b in zip(var_a, var_b))
-        
+
         # Pearson correlation
         denom = math.sqrt(var_a_sq * var_b_sq)
         correlation = covar / denom if denom > 0 else 0
-        
+
         # Spearman rank correlation
         ranks_a = self._rank(var_a)
         ranks_b = self._rank(var_b)
         d_sq_sum = sum((ra - rb) ** 2 for ra, rb in zip(ranks_a, ranks_b))
         spearman = 1 - (6 * d_sq_sum) / (n * (n**2 - 1)) if n > 1 else 0
-        
+
         # Interpretation
         strength = "strong" if abs(correlation) > 0.7 else "moderate" if abs(correlation) > 0.4 else "weak"
         direction = "positive" if correlation > 0 else "negative" if correlation < 0 else "none"
-        
+
         return {
             "pearson_correlation": round(correlation, 4),
             "spearman_correlation": round(spearman, 4),
@@ -139,33 +139,33 @@ class RegressionAgent(BaseAgent):
         """Fits a regression model to the data."""
         if len(x) != len(y):
             return {"error": "x and y must have same length"}
-        
+
         n = len(x)
         if n < 2:
             return {"error": "Need at least 2 data points"}
-        
+
         regression_type = RegressionType(model_type) if model_type in [m.value for m in RegressionType] else RegressionType.LINEAR
-        
+
         if regression_type == RegressionType.LINEAR:
             # Fit linear: y = a + b*x
             mean_x = sum(x) / n
             mean_y = sum(y) / n
-            
+
             numerator = sum((xi - mean_x) * (yi - mean_y) for xi, yi in zip(x, y))
             denominator = sum((xi - mean_x) ** 2 for xi in x)
-            
+
             b = numerator / denominator if denominator > 0 else 0
             a = mean_y - b * mean_x
-            
+
             # Predictions and residuals
             predictions = [a + b * xi for xi in x]
             residuals = [yi - pi for yi, pi in zip(y, predictions)]
-            
+
             # R-squared
             ss_res = sum(r ** 2 for r in residuals)
             ss_tot = sum((yi - mean_y) ** 2 for yi in y)
             r_squared = 1 - (ss_res / ss_tot) if ss_tot > 0 else 0
-            
+
             result = RegressionResult(
                 regression_type=regression_type,
                 coefficients=[a, b],
@@ -173,10 +173,10 @@ class RegressionAgent(BaseAgent):
                 predictions=predictions,
                 residuals=residuals
             )
-            
+
             cache_key = f"linear_{n}"
             self._model_cache[cache_key] = result
-            
+
             return {
                 "model_type": "linear",
                 "equation": f"y = {round(a, 4)} + {round(b, 4)} * x",
@@ -186,7 +186,7 @@ class RegressionAgent(BaseAgent):
                 "std_error": round(math.sqrt(ss_res / (n - 2)) if n > 2 else 0, 4),
                 "sample_size": n
             }
-        
+
         return {"error": f"Model type {model_type} not fully implemented"}
 
     @as_tool
@@ -195,12 +195,12 @@ class RegressionAgent(BaseAgent):
         n = len(data)
         if n < 3:
             return {"trend": "insufficient_data", "error": "Need at least 3 points"}
-        
+
         # Linear trend
         x = list(range(n))
         fit = await self.fit_model(x, data, "linear")
         slope = fit.get("slope", 0)
-        
+
         # Mann-Kendall trend test (simplified)
         s = 0
         for i in range(n):
@@ -209,7 +209,7 @@ class RegressionAgent(BaseAgent):
                     s += 1
                 elif data[j] < data[i]:
                     s -= 1
-        
+
         # Determine trend
         if s > 0 and slope > 0:
             trend = "increasing"
@@ -217,11 +217,11 @@ class RegressionAgent(BaseAgent):
             trend = "decreasing"
         else:
             trend = "stable"
-        
+
         # Trend strength
         max_s = n * (n - 1) / 2
         trend_strength = abs(s) / max_s if max_s > 0 else 0
-        
+
         return {
             "trend": trend,
             "slope": round(slope, 4),
@@ -244,29 +244,29 @@ class RegressionAgent(BaseAgent):
         n = len(history)
         if n < 3:
             return {"error": "Need at least 3 data points for confidence intervals"}
-        
+
         # Fit model and get predictions
         x = list(range(n))
         fit = await self.fit_model(x, history, "linear")
-        
+
         slope = fit.get("slope", 0)
         intercept = fit.get("intercept", history[-1])
-        
+
         # Predict future values
         forecasts = []
         for step in range(1, steps + 1):
             point = intercept + slope * (n - 1 + step)
             forecasts.append(point)
-        
+
         # Calculate standard error
         predictions = [intercept + slope * i for i in range(n)]
         residuals = [y - p for y, p in zip(history, predictions)]
         std_error = math.sqrt(sum(r ** 2 for r in residuals) / (n - 2)) if n > 2 else 0
-        
+
         # Z-score for confidence level (simplified)
         z_scores = {0.90: 1.645, 0.95: 1.96, 0.99: 2.576}
         z = z_scores.get(confidence, 1.96)
-        
+
         # Build forecast with intervals
         forecast_details = []
         for step, point in enumerate(forecasts, 1):
@@ -278,7 +278,7 @@ class RegressionAgent(BaseAgent):
                 "lower_bound": round(point - interval_width, 4),
                 "upper_bound": round(point + interval_width, 4)
             })
-        
+
         return {
             "forecasts": forecast_details,
             "confidence_level": confidence,
@@ -290,18 +290,18 @@ class RegressionAgent(BaseAgent):
         """Simple linear regression prediction."""
         n = len(history)
         x = list(range(n))
-        
+
         mean_x = sum(x) / n
         mean_y = sum(history) / n
-        
+
         numerator = sum((xi - mean_x) * (yi - mean_y) for xi, yi in zip(x, history))
         denominator = sum((xi - mean_x) ** 2 for xi in x)
-        
+
         slope = numerator / denominator if denominator > 0 else 0
         intercept = mean_y - slope * mean_x
-        
+
         predictions = [intercept + slope * (n + i) for i in range(steps)]
-        
+
         return {
             "predictions": [round(p, 4) for p in predictions],
             "slope": round(slope, 4),
@@ -312,13 +312,13 @@ class RegressionAgent(BaseAgent):
     def _polynomial_regression(self, history: List[float], steps: int, degree: int = 2) -> Dict[str, Any]:
         """Polynomial regression (simplified quadratic)."""
         n = len(history)
-        
+
         # Fit quadratic: use simple finite differences
         if n >= 3:
             # Estimate second derivative
             accel = (history[-1] - 2 * history[-2] + history[-3])
             slope = history[-1] - history[-2]
-            
+
             predictions = []
             last = history[-1]
             for i in range(steps):
@@ -326,7 +326,7 @@ class RegressionAgent(BaseAgent):
                 predictions.append(last)
         else:
             return self._linear_regression(history, steps)
-        
+
         return {
             "predictions": [round(p, 4) for p in predictions],
             "method": "polynomial",
@@ -337,15 +337,15 @@ class RegressionAgent(BaseAgent):
         """Exponential growth/decay prediction."""
         if any(h <= 0 for h in history):
             return self._linear_regression(history, steps)
-        
+
         # Convert to log space for linear fit
         log_history = [math.log(h) for h in history]
         linear_result = self._linear_regression(log_history, steps)
-        
+
         # Convert predictions back
         log_preds = linear_result["predictions"]
         predictions = [math.exp(p) for p in log_preds]
-        
+
         return {
             "predictions": [round(p, 4) for p in predictions],
             "growth_rate": round(math.exp(linear_result["slope"]) - 1, 4),
@@ -356,10 +356,10 @@ class RegressionAgent(BaseAgent):
         """Moving average prediction."""
         if len(history) < window:
             window = len(history)
-        
+
         last_avg = sum(history[-window:]) / window
         predictions = [last_avg] * steps
-        
+
         return {
             "predictions": [round(p, 4) for p in predictions],
             "window": window,

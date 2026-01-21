@@ -24,7 +24,7 @@ from .models import (
 
 class AudioLoader(MediaLoader):
     """Load and process audio."""
-    
+
     def __init__(self):
         self._scipy_available = False
         self._librosa_available = False
@@ -40,10 +40,10 @@ class AudioLoader(MediaLoader):
             self._librosa = librosa
         except ImportError:
             pass
-    
+
     def supports(self, media_type: MediaType) -> bool:
         return media_type == MediaType.AUDIO
-    
+
     async def load(
         self,
         source: Union[str, bytes, BinaryIO],
@@ -60,7 +60,7 @@ class AudioLoader(MediaLoader):
         else:
             data = source.read()
             source_str = "<stream>"
-        
+
         fmt = self._detect_format(data)
         if fmt == AudioFormat.WAV and self._scipy_available:
             waveform, sample_rate = await self._load_wav(data)
@@ -68,26 +68,26 @@ class AudioLoader(MediaLoader):
             waveform, sample_rate = await self._load_librosa(data, source_str)
         else:
             raise RuntimeError("No audio loading library available")
-        
+
         if config.target_sample_rate and sample_rate != config.target_sample_rate:
             waveform = self._resample(waveform, sample_rate, config.target_sample_rate)
             sample_rate = config.target_sample_rate
-        
+
         if config.mono and waveform.ndim > 1:
             waveform = waveform.mean(axis=0)
-        
+
         max_samples = int(config.max_duration * sample_rate)
         if len(waveform.flatten()) > max_samples:
             if waveform.ndim == 1:
                 waveform = waveform[:max_samples]
             else:
                 waveform = waveform[:, :max_samples]
-        
+
         if config.normalize:
             max_val = np.abs(waveform).max()
             if max_val > 0:
                 waveform = waveform / max_val
-        
+
         metadata = MediaMetadata(
             media_type=MediaType.AUDIO,
             format=fmt,
@@ -96,7 +96,7 @@ class AudioLoader(MediaLoader):
             channels=waveform.shape[0] if waveform.ndim > 1 else 1,
         )
         return AudioData(waveform=waveform, metadata=metadata, source=source_str)
-    
+
     def _detect_format(self, data: bytes) -> AudioFormat:
         """Detect audio format from magic bytes."""
         if data[:4] == b'RIFF' and data[8:12] == b'WAVE':
@@ -108,7 +108,7 @@ class AudioLoader(MediaLoader):
         elif data[:4] == b'OggS':
             return AudioFormat.OGG
         return AudioFormat.WAV
-    
+
     async def _load_wav(self, data: bytes) -> Tuple[np.ndarray, int]:
         """Load WAV using scipy."""
         sample_rate, waveform = self._wavfile.read(io.BytesIO(data))
@@ -118,7 +118,7 @@ class AudioLoader(MediaLoader):
         elif waveform.dtype == np.int32:
             waveform = waveform / 2147483648.0
         return waveform, sample_rate
-    
+
     async def _load_librosa(
         self,
         data: bytes,
@@ -134,7 +134,7 @@ class AudioLoader(MediaLoader):
             path = source
         waveform, sample_rate = self._librosa.load(path, sr=None)
         return waveform, sample_rate
-    
+
     def _resample(
         self,
         waveform: np.ndarray,

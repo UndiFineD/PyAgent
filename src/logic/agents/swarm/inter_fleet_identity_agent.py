@@ -26,7 +26,7 @@ __version__ = VERSION
 
 class InterFleetIdentityAgent(BaseAgent):
     """
-    Tier 3 (Orchestration) - Inter-Fleet Identity Agent: Manages federated 
+    Tier 3 (Orchestration) - Inter-Fleet Identity Agent: Manages federated
     identities for agents across multiple fleets using cryptographic signing and DID.
     """
 

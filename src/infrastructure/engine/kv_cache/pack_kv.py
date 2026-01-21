@@ -21,7 +21,7 @@ class PackKVManager(SingleTypeKVCacheManager):
 
     def get_num_blocks_needed(self, num_tokens: int) -> int:
         from math import ceil
-        # PackKV typically uses 4-bit quantization, 
+        # PackKV typically uses 4-bit quantization,
         # allowing 4x more tokens per physical block if stored densely.
         # But if physical blocks are fixed-size, we track compressed groups.
         return ceil(num_tokens / self.spec.block_size)

@@ -14,12 +14,12 @@ from .base import BaseTokenizer
 
 class HuggingFaceTokenizer(BaseTokenizer):
     """HuggingFace transformers tokenizer wrapper."""
-    
+
     def __init__(self, config: TokenizerConfig):
         super().__init__(config)
         self._tokenizer = None
         self._load_tokenizer()
-    
+
     def _load_tokenizer(self):
         """Load the HuggingFace tokenizer."""
         try:
@@ -37,37 +37,37 @@ class HuggingFaceTokenizer(BaseTokenizer):
                     self._tokenizer.add_special_tokens({'pad_token': '[PAD]'})
         except ImportError:
             raise ImportError("transformers package required for HuggingFace tokenizer")
-    
+
     @property
     def vocab_size(self) -> int:
         return self._tokenizer.vocab_size
-    
+
     @property
     def bos_token_id(self) -> Optional[int]:
         return self._tokenizer.bos_token_id
-    
+
     @property
     def eos_token_id(self) -> Optional[int]:
         return self._tokenizer.eos_token_id
-    
+
     @property
     def pad_token_id(self) -> Optional[int]:
         return self._tokenizer.pad_token_id
-    
+
     def encode(
         self,
         text: str,
         add_special_tokens: bool = True,
     ) -> List[int]:
         return self._tokenizer.encode(text, add_special_tokens=add_special_tokens)
-    
+
     def decode(
         self,
         token_ids: Sequence[int],
         skip_special_tokens: bool = True,
     ) -> str:
         return self._tokenizer.decode(token_ids, skip_special_tokens=skip_special_tokens)
-    
+
     def batch_encode(
         self,
         texts: List[str],
@@ -80,7 +80,7 @@ class HuggingFaceTokenizer(BaseTokenizer):
             truncation=False,
         )
         return result["input_ids"]
-    
+
     def apply_chat_template(
         self,
         messages: List[Dict[str, str]],
@@ -94,7 +94,7 @@ class HuggingFaceTokenizer(BaseTokenizer):
                 add_generation_prompt=add_generation_prompt,
             )
         raise ValueError("Tokenizer does not support chat templates")
-    
+
     def get_info(self) -> TokenizerInfo:
         if self._info is None:
             has_chat = hasattr(self._tokenizer, 'chat_template') and self._tokenizer.chat_template is not None

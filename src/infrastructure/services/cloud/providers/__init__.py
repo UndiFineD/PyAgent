@@ -35,15 +35,15 @@ def __getattr__(name: str):
     if name == "GeminiConnector":
         from .gemini import GeminiConnector
         return GeminiConnector
-    
+
     if name == "AWSBedrockConnector":
         from .bedrock import AWSBedrockConnector
         return AWSBedrockConnector
-    
+
     if name == "GroqConnector":
         from .groq import GroqConnector
         return GroqConnector
-    
+
     raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 

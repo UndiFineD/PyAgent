@@ -76,7 +76,7 @@ class VocabType(Enum):
 class TokenizerInfo:
     """
     Tokenizer information for XGrammar.
-    
+
     Encapsulates vocabulary and tokenizer metadata needed for
     grammar compilation and bitmask generation.
     """
@@ -85,12 +85,12 @@ class TokenizerInfo:
     vocab_size: int
     stop_token_ids: Tuple[int, ...]
     add_prefix_space: bool = True
-    
+
     @property
     def token_strings(self) -> Dict[int, str]:
         """Get mapping of token ID to string."""
         return {i: s for i, s in enumerate(self.encoded_vocab)}
-    
+
     @property
     def eos_token_id(self) -> Optional[int]:
         """Get EOS token ID."""
@@ -105,24 +105,24 @@ class TokenizerInfo:
         """Create TokenizerInfo from a HuggingFace tokenizer."""
         vocab_dict = tokenizer.get_vocab()
         actual_vocab_size = vocab_size or len(vocab_dict)
-        
+
         # Build encoded vocab maintaining tokenizer's indexing
         encoded_vocab = [""] * actual_vocab_size
         for token, idx in vocab_dict.items():
             if idx < actual_vocab_size:
                 encoded_vocab[idx] = token
-        
+
         # Detect vocab type
         vocab_type = cls._detect_vocab_type(tokenizer)
-        
+
         # Get stop token IDs
         stop_token_ids = []
         if hasattr(tokenizer, 'eos_token_id') and tokenizer.eos_token_id is not None:
             stop_token_ids.append(tokenizer.eos_token_id)
-        
+
         # Detect add_prefix_space
         add_prefix_space = getattr(tokenizer, 'add_prefix_space', True)
-        
+
         return cls(
             encoded_vocab=tuple(encoded_vocab),
             vocab_type=vocab_type,
@@ -130,7 +130,7 @@ class TokenizerInfo:
             stop_token_ids=tuple(stop_token_ids),
             add_prefix_space=add_prefix_space,
         )
-    
+
     @staticmethod
     def _detect_vocab_type(tokenizer: Any) -> VocabType:
         """Detect vocabulary type from tokenizer."""
@@ -145,7 +145,7 @@ class TokenizerInfo:
 class CompiledGrammar:
     """
     Compiled grammar context.
-    
+
     Holds the compiled grammar state and provides methods for
     token acceptance checking and bitmask generation.
     """
@@ -156,22 +156,22 @@ class CompiledGrammar:
     token_strings: Dict[int, str] = field(default_factory=dict)
     fsm: Optional[FSMTransitionTable] = None
     eos_token_id: Optional[int] = None
-    
+
     # Internal state
     _current_state: int = field(default=0)
     _accepted_tokens: List[int] = field(default_factory=list)
     _state_history: List[int] = field(default_factory=list)
     _cache_key: str = field(default="")
-    
+
     def __post_init__(self):
         self._cache_key = self._compute_cache_key()
         self._state_history = [self._current_state]
-    
+
     def _compute_cache_key(self) -> str:
         """Compute cache key for grammar."""
         content = f"{self.grammar_type.name}:{self.grammar_spec}"
         return hashlib.md5(content.encode()).hexdigest()[:16]
-    
+
     def accept_token(self, token_id: int) -> bool:
         """Accept a token and update state."""
         if token_id == self.eos_token_id:
@@ -184,7 +184,7 @@ class CompiledGrammar:
         tstr = self.token_strings.get(token_id, "")
         if not tstr:
             return False
-            
+
         if not self.fsm:
             self._accepted_tokens.append(token_id)
             return True
@@ -196,46 +196,46 @@ class CompiledGrammar:
             if next_state == -1:
                 return False
             temp_state = next_state
-            
+
         self._current_state = temp_state
         self._accepted_tokens.append(token_id)
         self._state_history.append(self._current_state)
         return True
-    
+
     def rollback(self, num_tokens: int) -> None:
         """Rollback the last N tokens."""
         if num_tokens > 0 and len(self._accepted_tokens) >= num_tokens:
             self._accepted_tokens = self._accepted_tokens[:-num_tokens]
             self._state_history = self._state_history[:len(self._accepted_tokens) + 1]
             self._current_state = self._state_history[-1]
-    
+
     def reset(self) -> None:
         """Reset grammar state."""
         self._accepted_tokens.clear()
         self._current_state = 0
         self._state_history = [0]
-    
+
     def is_terminated(self) -> bool:
         """Check if grammar is in terminal state."""
         if not self.fsm:
             return False
         return self.fsm.is_accepting(self._current_state)
-    
+
     def fill_bitmask(self, bitmask: "np.ndarray") -> None:
         """Fill bitmask with allowed tokens."""
         if not HAS_NUMPY:
             return
-            
+
         if not self.fsm:
             bitmask.fill(1)
             return
 
         # Start with all zeros
         bitmask.fill(0)
-        
+
         # Get allowed characters in current state
         allowed_chars = self.fsm.get_allowed_chars(self._current_state)
-        
+
         # Optimize: If no allowed chars, only check if accepting
         if not allowed_chars:
             if self.fsm.is_accepting(self._current_state) and self.eos_token_id is not None:
@@ -247,7 +247,7 @@ class CompiledGrammar:
         allowed_ids = []
         for tid, tstr in self.token_strings.items():
             if not tstr: continue
-            
+
             # Check if this token is allowed starting from current state
             temp_state = self._current_state
             is_valid = True
@@ -257,7 +257,7 @@ class CompiledGrammar:
                     is_valid = False
                     break
                 temp_state = next_state
-            
+
             if is_valid:
                 allowed_ids.append(tid)
 
@@ -279,17 +279,17 @@ class CompiledGrammar:
 class GrammarMatcher:
     """
     Grammar matcher with rollback support.
-    
+
     Wraps CompiledGrammar with additional state management
     for speculative decoding scenarios.
     """
     grammar: CompiledGrammar
     max_rollback_tokens: int = 0
-    
+
     # State tracking
     _token_history: List[int] = field(default_factory=list)
     _state_history: List[Any] = field(default_factory=list)
-    
+
     def accept_token(self, token_id: int) -> bool:
         """Accept token with history tracking."""
         # Save state before accepting
@@ -298,22 +298,22 @@ class GrammarMatcher:
             # Trim history if needed
             if len(self._token_history) > self.max_rollback_tokens:
                 self._token_history.pop(0)
-        
+
         return self.grammar.accept_token(token_id)
-    
+
     def rollback(self, num_tokens: int) -> None:
         """Rollback with history."""
         num_tokens = min(num_tokens, len(self._token_history))
         if num_tokens > 0:
             self._token_history = self._token_history[:-num_tokens]
             self.grammar.rollback(num_tokens)
-    
+
     def reset(self) -> None:
         """Reset matcher state."""
         self._token_history.clear()
         self._state_history.clear()
         self.grammar.reset()
-    
+
     def fill_next_token_bitmask(self, bitmask: "np.ndarray") -> None:
         """Fill bitmask for next token."""
         self.grammar.fill_bitmask(bitmask)
@@ -322,11 +322,11 @@ class GrammarMatcher:
 class GrammarCompiler:
     """
     Grammar compiler with caching.
-    
+
     Compiles grammar specifications into executable matchers
     with thread-safe caching and configurable limits.
     """
-    
+
     def __init__(
         self,
         tokenizer_info: TokenizerInfo,
@@ -338,11 +338,11 @@ class GrammarCompiler:
         self.max_threads = max_threads
         self.cache_enabled = cache_enabled
         self.cache_limit_bytes = cache_limit_bytes
-        
+
         self._cache: Dict[str, CompiledGrammar] = {}
         self._cache_size_bytes = 0
         self._lock = threading.Lock()
-        
+
         # Statistics
         self._stats = {
             'compilations': 0,
@@ -350,7 +350,7 @@ class GrammarCompiler:
             'cache_misses': 0,
             'total_compile_time': 0.0,
         }
-    
+
     def compile_json_schema(
         self,
         schema: str,
@@ -358,13 +358,13 @@ class GrammarCompiler:
     ) -> CompiledGrammar:
         """Compile JSON schema to grammar."""
         cache_key = f"json:{schema}:{any_whitespace}"
-        
+
         cached = self._get_cached(cache_key)
         if cached is not None:
             return cached
-        
+
         start_time = time.time()
-        
+
         # Build FSM using JsonSchemaGrammar
         engine = JsonSchemaGrammar(
             vocab_size=self.tokenizer_info.vocab_size,
@@ -372,7 +372,7 @@ class GrammarCompiler:
             eos_token_id=self.tokenizer_info.eos_token_id,
         )
         fsm = engine.build_fsm(schema)
-        
+
         grammar = CompiledGrammar(
             grammar_type=GrammarType.JSON_SCHEMA,
             grammar_spec=schema,
@@ -381,30 +381,30 @@ class GrammarCompiler:
             fsm=fsm,
             eos_token_id=self.tokenizer_info.eos_token_id,
         )
-        
+
         self._stats['compilations'] += 1
         self._stats['total_compile_time'] += time.time() - start_time
-        
+
         self._put_cached(cache_key, grammar)
         return grammar
-    
+
     def compile_regex(self, pattern: str) -> CompiledGrammar:
         """Compile regex pattern to grammar."""
         cache_key = f"regex:{pattern}"
-        
+
         cached = self._get_cached(cache_key)
         if cached is not None:
             return cached
-        
+
         start_time = time.time()
-        
+
         engine = RegexGrammar(
             vocab_size=self.tokenizer_info.vocab_size,
             token_strings=self.tokenizer_info.token_strings,
             eos_token_id=self.tokenizer_info.eos_token_id,
         )
         fsm = engine.build_fsm(pattern)
-        
+
         grammar = CompiledGrammar(
             grammar_type=GrammarType.REGEX,
             grammar_spec=pattern,
@@ -413,30 +413,30 @@ class GrammarCompiler:
             fsm=fsm,
             eos_token_id=self.tokenizer_info.eos_token_id,
         )
-        
+
         self._stats['compilations'] += 1
         self._stats['total_compile_time'] += time.time() - start_time
-        
+
         self._put_cached(cache_key, grammar)
         return grammar
-    
+
     def compile_grammar(self, ebnf: str) -> CompiledGrammar:
         """Compile EBNF grammar."""
         cache_key = f"ebnf:{ebnf}"
-        
+
         cached = self._get_cached(cache_key)
         if cached is not None:
             return cached
-        
+
         start_time = time.time()
-        
+
         engine = EBNFGrammar(
             vocab_size=self.tokenizer_info.vocab_size,
             token_strings=self.tokenizer_info.token_strings,
             eos_token_id=self.tokenizer_info.eos_token_id,
         )
         fsm = engine.build_fsm(ebnf)
-        
+
         grammar = CompiledGrammar(
             grammar_type=GrammarType.EBNF,
             grammar_spec=ebnf,
@@ -445,13 +445,13 @@ class GrammarCompiler:
             fsm=fsm,
             eos_token_id=self.tokenizer_info.eos_token_id,
         )
-        
+
         self._stats['compilations'] += 1
         self._stats['total_compile_time'] += time.time() - start_time
-        
+
         self._put_cached(cache_key, grammar)
         return grammar
-    
+
     def compile_structural_tag(
         self,
         spec: Union[str, List[Dict[str, Any]]],
@@ -462,33 +462,33 @@ class GrammarCompiler:
             spec_str = json.dumps({'structures': spec, 'triggers': triggers or []})
         else:
             spec_str = spec
-        
+
         cache_key = f"structural:{spec_str}"
-        
+
         cached = self._get_cached(cache_key)
         if cached is not None:
             return cached
-        
+
         start_time = time.time()
-        
+
         grammar = CompiledGrammar(
             grammar_type=GrammarType.STRUCTURAL_TAG,
             grammar_spec=spec_str,
             vocab_size=self.tokenizer_info.vocab_size,
         )
-        
+
         self._stats['compilations'] += 1
         self._stats['total_compile_time'] += time.time() - start_time
-        
+
         self._put_cached(cache_key, grammar)
         return grammar
-    
+
     def _get_cached(self, key: str) -> Optional[CompiledGrammar]:
         """Get grammar from cache."""
         if not self.cache_enabled:
             self._stats['cache_misses'] += 1
             return None
-        
+
         with self._lock:
             grammar = self._cache.get(key)
             if grammar is not None:
@@ -496,12 +496,12 @@ class GrammarCompiler:
             else:
                 self._stats['cache_misses'] += 1
             return grammar
-    
+
     def _put_cached(self, key: str, grammar: CompiledGrammar) -> None:
         """Put grammar in cache."""
         if not self.cache_enabled:
             return
-        
+
         with self._lock:
             # Evict if needed
             estimated_size = len(grammar.grammar_spec) * 2
@@ -510,15 +510,15 @@ class GrammarCompiler:
                 old_key = next(iter(self._cache))
                 old_grammar = self._cache.pop(old_key)
                 self._cache_size_bytes -= len(old_grammar.grammar_spec) * 2
-            
+
             self._cache[key] = grammar
             self._cache_size_bytes += estimated_size
-    
+
     def get_stats(self) -> Dict[str, Any]:
         """Get compilation statistics."""
         with self._lock:
             return dict(self._stats)
-    
+
     def clear_cache(self) -> None:
         """Clear grammar cache."""
         with self._lock:
@@ -529,11 +529,11 @@ class GrammarCompiler:
 class XGrammarGrammar:
     """
     XGrammar grammar wrapper.
-    
+
     Provides the interface expected by the structured output system
     while wrapping the internal grammar matcher.
     """
-    
+
     def __init__(
         self,
         matcher: GrammarMatcher,
@@ -544,27 +544,27 @@ class XGrammarGrammar:
         self.vocab_size = vocab_size
         self.ctx = ctx
         self._jump_forward_string: Optional[str] = None
-    
+
     def accept_token(self, token_id: int) -> bool:
         """Accept a token."""
         return self.matcher.accept_token(token_id)
-    
+
     def rollback(self, num_tokens: int) -> None:
         """Rollback tokens."""
         self.matcher.rollback(num_tokens)
-    
+
     def reset(self) -> None:
         """Reset grammar state."""
         self.matcher.reset()
-    
+
     def is_terminated(self) -> bool:
         """Check if grammar is terminated."""
         return self.matcher.grammar.is_terminated()
-    
+
     def fill_next_token_bitmask(self, bitmask: "np.ndarray") -> None:
         """Fill bitmask for next token."""
         self.matcher.fill_next_token_bitmask(bitmask)
-    
+
     def jump_forward_string(self) -> Optional[str]:
         """Get jump-forward string if available."""
         return self._jump_forward_string
@@ -573,17 +573,17 @@ class XGrammarGrammar:
 class XGrammarBackend:
     """
     XGrammar-based structured output backend.
-    
+
     Provides constrained decoding using grammar-based token filtering.
     Supports JSON schema, regex, EBNF, and structural tags.
-    
+
     Beyond vLLM innovations:
     - Multi-tokenizer support with automatic detection
     - Async grammar compilation with futures
     - Grammar composition for complex constraints
     - Detailed performance metrics
     """
-    
+
     def __init__(
         self,
         tokenizer: Any,
@@ -597,17 +597,17 @@ class XGrammarBackend:
         self.vocab_size = vocab_size
         self.disable_any_whitespace = disable_any_whitespace
         self.num_speculative_tokens = num_speculative_tokens
-        
+
         # Create tokenizer info
         self.tokenizer_info = TokenizerInfo.from_tokenizer(
             tokenizer,
             vocab_size=vocab_size,
         )
-        
+
         # Update vocab_size from tokenizer_info if not provided
         if self.vocab_size is None:
             self.vocab_size = self.tokenizer_info.vocab_size
-        
+
         # Create grammar compiler
         self.compiler = GrammarCompiler(
             tokenizer_info=self.tokenizer_info,
@@ -615,11 +615,11 @@ class XGrammarBackend:
             cache_enabled=True,
             cache_limit_bytes=cache_limit_mb * 1024 * 1024,
         )
-        
+
         # Bitmask pool for reuse
         self._bitmask_pool: List["np.ndarray"] = []
         self._pool_lock = threading.Lock()
-    
+
     def compile_grammar(
         self,
         grammar_type: GrammarType,
@@ -647,44 +647,44 @@ class XGrammarBackend:
             ctx = self.compiler.compile_structural_tag(grammar_spec)
         else:
             raise ValueError(f"Unsupported grammar type: {grammar_type}")
-        
+
         matcher = GrammarMatcher(
             grammar=ctx,
             max_rollback_tokens=self.num_speculative_tokens,
         )
-        
+
         return XGrammarGrammar(
             matcher=matcher,
             vocab_size=self.vocab_size,
             ctx=ctx,
         )
-    
+
     def allocate_token_bitmask(self, max_num_seqs: int) -> "np.ndarray":
         """Allocate token bitmask for batch processing."""
         if not HAS_NUMPY:
             raise RuntimeError("NumPy required for bitmask allocation")
-        
+
         with self._pool_lock:
             if self._bitmask_pool:
                 bitmask = self._bitmask_pool.pop()
                 if bitmask.shape == (max_num_seqs, self.vocab_size):
                     bitmask.fill(1)
                     return bitmask
-        
+
         # Allocate new bitmask
         return np.ones((max_num_seqs, self.vocab_size), dtype=np.int32)
-    
+
     def release_token_bitmask(self, bitmask: "np.ndarray") -> None:
         """Return bitmask to pool."""
         with self._pool_lock:
             if len(self._bitmask_pool) < 10:  # Limit pool size
                 self._bitmask_pool.append(bitmask)
-    
+
     def _convert_lark_to_ebnf(self, lark_grammar: str) -> str:
         """Convert Lark grammar to EBNF."""
         # Basic conversion - real implementation would be more sophisticated
         return lark_grammar
-    
+
     def get_stats(self) -> Dict[str, Any]:
         """Get backend statistics."""
         stats = self.compiler.get_stats()
@@ -692,7 +692,7 @@ class XGrammarBackend:
         stats['num_speculative_tokens'] = self.num_speculative_tokens
         stats['bitmask_pool_size'] = len(self._bitmask_pool)
         return stats
-    
+
     def destroy(self) -> None:
         """Clean up resources."""
         self.compiler.clear_cache()
@@ -703,14 +703,14 @@ class XGrammarBackend:
 class AsyncXGrammarBackend(XGrammarBackend):
     """
     Async-enabled XGrammar backend.
-    
+
     Provides async grammar compilation for non-blocking operation.
     """
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._compile_executor: Optional[Any] = None
-    
+
     async def compile_grammar_async(
         self,
         grammar_type: GrammarType,
@@ -718,7 +718,7 @@ class AsyncXGrammarBackend(XGrammarBackend):
     ) -> XGrammarGrammar:
         """Async grammar compilation."""
         import asyncio
-        
+
         loop = asyncio.get_event_loop()
         return await loop.run_in_executor(
             self._compile_executor,
@@ -731,40 +731,40 @@ class AsyncXGrammarBackend(XGrammarBackend):
 class CompositeGrammar:
     """
     Composite grammar for combining multiple constraints.
-    
+
     Beyond vLLM: Allows chaining multiple grammars for complex constraints.
     """
-    
+
     def __init__(self, grammars: List[XGrammarGrammar]):
         self.grammars = grammars
         self.vocab_size = grammars[0].vocab_size if grammars else 0
-    
+
     def accept_token(self, token_id: int) -> bool:
         """Accept token in all grammars."""
         return all(g.accept_token(token_id) for g in self.grammars)
-    
+
     def rollback(self, num_tokens: int) -> None:
         """Rollback all grammars."""
         for g in self.grammars:
             g.rollback(num_tokens)
-    
+
     def reset(self) -> None:
         """Reset all grammars."""
         for g in self.grammars:
             g.reset()
-    
+
     def is_terminated(self) -> bool:
         """Check if all grammars are terminated."""
         return all(g.is_terminated() for g in self.grammars)
-    
+
     def fill_next_token_bitmask(self, bitmask: "np.ndarray") -> None:
         """Fill bitmask with intersection of all grammar constraints."""
         if not HAS_NUMPY or not self.grammars:
             return
-        
+
         # Start with all ones
         bitmask.fill(1)
-        
+
         # Apply each grammar's constraints (intersection)
         temp_mask = np.ones_like(bitmask)
         for grammar in self.grammars:

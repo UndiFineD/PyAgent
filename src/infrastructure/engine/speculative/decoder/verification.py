@@ -18,7 +18,7 @@ class VerificationResult:
     acceptance_rate: float
     rollback_position: int
     bonus_token: Optional[int] = None
-    
+
     @property
     def success(self) -> bool:
         """True if at least one token was accepted."""
@@ -27,7 +27,7 @@ class VerificationResult:
 
 class SpeculativeVerifier:
     """Verifies speculative tokens against target model."""
-    
+
     def __init__(
         self,
         vocab_size: int,
@@ -39,13 +39,13 @@ class SpeculativeVerifier:
         self.temperature = temperature
         self._verify_count = 0
         self._accept_count = 0
-    
+
     def verify_greedy(self, proposed_tokens: List[int], target_logits: np.ndarray) -> VerificationResult:
         """Greedy verification: accept if matches argmax."""
         accepted = []
         rollback_pos = 0
         bonus = None
-        
+
         for i, proposed in enumerate(proposed_tokens):
             target_token = int(np.argmax(target_logits[i]))
             if proposed == target_token:
@@ -57,10 +57,10 @@ class SpeculativeVerifier:
         else:
             if len(target_logits) > len(proposed_tokens):
                 bonus = int(np.argmax(target_logits[len(proposed_tokens)]))
-        
+
         self._verify_count += len(proposed_tokens)
         self._accept_count += len(accepted)
-        
+
         return VerificationResult(
             accepted_tokens=accepted,
             accepted_count=len(accepted),
@@ -82,15 +82,15 @@ class SpeculativeVerifier:
             logits = target_logits[i] / self.temperature
             probs = np.exp(logits - np.max(logits))
             target_probs.append(probs / np.sum(probs))
-            
+
         accepted = []
         rollback_pos = 0
         bonus = None
-        
+
         for i, proposed in enumerate(proposed_tokens):
             p_draft = draft_probs[i]
             p_target = target_probs[i][proposed]
-            
+
             if np.random.random() < min(1.0, p_target / max(p_draft, 1e-10)):
                 accepted.append(proposed)
                 rollback_pos = i + 1
@@ -98,10 +98,10 @@ class SpeculativeVerifier:
                 residual = np.maximum(target_probs[i] - p_draft, 0)
                 bonus = int(np.random.choice(self.vocab_size, p=residual / max(np.sum(residual), 1e-10)))
                 break
-        
+
         self._verify_count += len(proposed_tokens)
         self._accept_count += len(accepted)
-        
+
         return VerificationResult(
             accepted_tokens=accepted,
             accepted_count=len(accepted),

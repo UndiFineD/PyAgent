@@ -153,7 +153,7 @@ class StatsRollup:
                     result = rust_core.calculate_p95_rust(all_values)
                 elif config.aggregation == AggregationType.P99 and hasattr(rust_core, "calculate_p99_rust"):
                     result = rust_core.calculate_p99_rust(all_values)
-        
+
         # Python fallback if Rust didn't handle it
         if result is None:
             if config.aggregation == AggregationType.SUM:

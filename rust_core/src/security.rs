@@ -284,12 +284,12 @@ pub fn scan_insecure_patterns_rust(content: &str) -> PyResult<Vec<(String, Strin
 
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
     m.add_function(wrap_pyfunction!(analyze_thought_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(scan_secrets_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(scan_pii_rust, m)?)?;
     m.add_function(wrap_pyfunction!(scan_code_vulnerabilities_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(scan_injections_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(scan_optimization_patterns_rust, m)?)?;
     m.add_function(wrap_pyfunction!(scan_hardcoded_secrets_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(scan_injections_rust, m)?)?;
     m.add_function(wrap_pyfunction!(scan_insecure_patterns_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(scan_optimization_patterns_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(scan_pii_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(scan_secrets_rust, m)?)?;
     Ok(())
 }

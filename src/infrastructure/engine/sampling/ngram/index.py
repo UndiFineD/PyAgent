@@ -16,11 +16,11 @@ if TYPE_CHECKING:
 class SuffixIndex:
     """
     Suffix-based index for fast n-gram lookup.
-    
+
     Beyond vLLM: O(1) average case lookup for n-gram matching
     using hash-based suffix indexing.
     """
-    
+
     def __init__(self, max_n: int = 4):
         self.max_n = max_n
         # Map from n-gram tuple to list of positions
@@ -28,16 +28,16 @@ class SuffixIndex:
             n: {} for n in range(1, max_n + 1)
         }
         self._built = False
-    
+
     def build(self, tokens: list[int] | NDArray[np.int32]) -> None:
         """Build suffix index from token sequence."""
         tokens = list(tokens)
         n_tokens = len(tokens)
-        
+
         # Clear existing index
         for n in range(1, self.max_n + 1):
             self._index[n].clear()
-        
+
         # Build index for each n-gram size
         for n in range(1, self.max_n + 1):
             for i in range(n_tokens - n + 1):
@@ -45,9 +45,9 @@ class SuffixIndex:
                 if ngram not in self._index[n]:
                     self._index[n][ngram] = []
                 self._index[n][ngram].append(i)
-        
+
         self._built = True
-    
+
     def lookup(self, ngram: tuple[int, ...]) -> list[int]:
         """Look up positions where n-gram appears."""
         n = len(ngram)
@@ -56,7 +56,7 @@ class SuffixIndex:
             if n > self.max_n or n < 1
             else self._index.get(n, {}).get(ngram, [])
         )
-    
+
     def get_continuations(
         self,
         prefix: tuple[int, ...],
@@ -67,24 +67,24 @@ class SuffixIndex:
         positions = self.lookup(prefix)
         if not positions:
             return []
-        
+
         # Get continuations from each position
         n = len(prefix)
         continuations = []
-        
+
         for pos in positions:
             end_pos = pos + n
             if cont := tokens[end_pos:end_pos + k]:
                 continuations.append((pos, cont))
-        
+
         return continuations
-    
+
     def clear(self) -> None:
         """Clear the index."""
         for n in self._index:
             self._index[n].clear()
         self._built = False
-    
+
     @property
     def is_built(self) -> bool:
         """Check if index is built."""
@@ -94,11 +94,11 @@ class SuffixIndex:
 class SuffixTreeProposer:
     """
     Suffix tree-based proposer for O(m) lookup complexity.
-    
+
     Beyond vLLM: Uses suffix tree for exact and approximate matching
     with support for edit distance tolerance.
     """
-    
+
     def __init__(
         self,
         num_speculative_tokens: int = 5,
@@ -108,12 +108,12 @@ class SuffixTreeProposer:
         self.max_edit_distance = max_edit_distance
         self._tree: dict[int, Any] = {}
         self._positions: dict[int, list[int]] = {}
-    
+
     def build(self, tokens: list[int]) -> None:
         """Build suffix tree from tokens."""
         self._tree.clear()
         self._positions.clear()
-        
+
         n = len(tokens)
         for i in range(n):
             node = self._tree
@@ -125,7 +125,7 @@ class SuffixTreeProposer:
                         self._positions[token] = []
                     self._positions[token].append(j)
                 node = node[token]
-    
+
     def find_continuation(
         self,
         prefix: list[int],
@@ -138,15 +138,15 @@ class SuffixTreeProposer:
             if token not in node:
                 return []
             node = node[token]
-        
+
         # Get all paths from this node
         if not node:
             return []
-        
+
         # Find a continuation path
         continuation = []
         current = node
-        
+
         for _ in range(self.num_speculative_tokens):
             if not current:
                 break
@@ -154,5 +154,5 @@ class SuffixTreeProposer:
             next_token = max(current.keys(), key=lambda t: len(self._positions.get(t, [])))
             continuation.append(next_token)
             current = current.get(next_token, {})
-        
+
         return continuation

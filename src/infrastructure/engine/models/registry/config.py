@@ -100,7 +100,7 @@ class ModelConfig:
     tensor_parallel_size: int = 1
     dtype: str = "auto"
     extra_config: Dict[str, Any] = field(default_factory=dict)
-    
+
     def __hash__(self) -> int:
         return hash((self.model_name, self.architecture, self.quantization))
 
@@ -138,15 +138,15 @@ class ModelInfo:
     quantization: QuantizationType = QuantizationType.NONE
     format: ModelFormat = ModelFormat.HUGGINGFACE
     license: Optional[str] = None
-    
+
     @property
     def is_multimodal(self) -> bool:
         return bool(self.capabilities & ModelCapability.MULTIMODAL)
-    
+
     @property
     def has_gqa(self) -> bool:
         return self.num_kv_heads is not None and self.num_kv_heads < self.num_attention_heads
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "name": self.name, "architecture": self.architecture.name, "num_params": self.num_params,

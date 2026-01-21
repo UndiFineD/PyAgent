@@ -6,7 +6,7 @@ from .storage import FlatLogprobs
 
 class LogprobsAnalyzer:
     """Analyze logprobs for insights."""
-    
+
     @staticmethod
     def rank_token_importance(logprobs: Union[FlatLogprobs, List[LogprobEntry]], threshold: float = -5.0) -> List[Tuple[int, float]]:
         lps = logprobs.logprobs if isinstance(logprobs, FlatLogprobs) else np.array([e.logprob for e in logprobs])
@@ -15,7 +15,7 @@ class LogprobsAnalyzer:
         scores = importance[positions]
         indices = np.argsort(scores)[::-1]
         return [(int(positions[i]), float(scores[i])) for i in indices]
-    
+
     @staticmethod
     def compute_confidence(logprobs: Union[FlatLogprobs, List[LogprobEntry]], method: str = "mean") -> float:
         lps = logprobs.logprobs if isinstance(logprobs, FlatLogprobs) else np.array([e.logprob for e in logprobs])
@@ -28,7 +28,7 @@ class LogprobsAnalyzer:
             normalized = np.mean(entropy) / np.log(5)
             return float(1.0 - min(normalized, 1.0))
         raise ValueError(f"Unknown method: {method}")
-    
+
     @staticmethod
     def detect_anomalies(logprobs: Union[FlatLogprobs, List[LogprobEntry]], z_threshold: float = 2.5) -> List[int]:
         lps = logprobs.logprobs if isinstance(logprobs, FlatLogprobs) else np.array([e.logprob for e in logprobs])
@@ -36,7 +36,7 @@ class LogprobsAnalyzer:
         mean, std = np.mean(lps), np.std(lps)
         if std < 1e-6: return []
         return np.where((lps - mean) / std < -z_threshold)[0].tolist()
-    
+
     @staticmethod
     def compute_calibration(logprobs: Union[FlatLogprobs, List[LogprobEntry]], num_bins: int = 10) -> Dict[str, Any]:
         probs = np.exp(logprobs.logprobs) if isinstance(logprobs, FlatLogprobs) else np.array([e.probability for e in logprobs])

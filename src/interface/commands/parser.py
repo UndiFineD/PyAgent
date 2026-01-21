@@ -33,10 +33,10 @@ COMMAND_PATTERN = re.compile(
 def parse_commands(prompt: str) -> list[ParsedCommand]:
     """
     Parse slash commands from a prompt.
-    
+
     Args:
         prompt: The input prompt text
-        
+
     Returns:
         List of parsed commands with positions
     """

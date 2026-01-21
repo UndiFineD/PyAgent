@@ -84,13 +84,13 @@ class BeamSearchSampler(Sampler):
         if not self._beams: self.reset()
         log_probs = _log_softmax(logits)
         candidates: List[Tuple[float, int, BeamHypothesis]] = []
-        
+
         for beam_idx, beam in enumerate(self._beams):
             if beam.finished: continue
             beam_log_probs = log_probs[beam_idx] if len(log_probs) > beam_idx else log_probs[0]
             top_k = min(self.config.beam_width * 2, len(beam_log_probs))
             top_indices = np.argpartition(beam_log_probs, -top_k)[-top_k:]
-            
+
             for token_id in top_indices:
                 log_prob = float(beam_log_probs[token_id])
                 new_beam = beam.extend(token_id, log_prob)
@@ -99,7 +99,7 @@ class BeamSearchSampler(Sampler):
                 else:
                     score = new_beam.normalized_score(self.config.length_penalty)
                     candidates.append((score, len(candidates), new_beam))
-        
+
         candidates.sort(key=lambda x: -x[0])
         self._beams = [c[2] for c in candidates[:self.config.beam_width]]
         return self._beams

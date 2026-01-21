@@ -18,23 +18,23 @@ T = TypeVar("T")
 class AttentionBackend(ABC, Generic[T]):
     """
     Abstract base class for attention backends.
-    
+
     Each backend implements specific attention algorithms
     optimized for different scenarios.
     """
-    
+
     @staticmethod
     @abstractmethod
     def get_name() -> str:
         """Get the backend name."""
         ...
-    
+
     @staticmethod
     @abstractmethod
     def get_capabilities() -> AttentionCapabilities:
         """Get backend capabilities."""
         ...
-    
+
     @abstractmethod
     def forward(
         self,
@@ -47,7 +47,7 @@ class AttentionBackend(ABC, Generic[T]):
     ) -> Any:
         """
         Compute attention.
-        
+
         Args:
             query: Query tensor
             key: Key tensor
@@ -55,12 +55,12 @@ class AttentionBackend(ABC, Generic[T]):
             kv_cache: Optional KV cache tensors
             metadata: Attention metadata
             scale: Attention scale (defaults to 1/sqrt(head_dim))
-            
+
         Returns:
             Attention output [batch*seq, num_heads, head_dim]
         """
         ...
-    
+
     def supports(self, attn_type: AttentionType) -> bool:
         """Check if backend supports attention type."""
         caps = self.get_capabilities()

@@ -30,7 +30,7 @@ class GrammarSpec:
     spec: str  # JSON schema string, regex pattern, EBNF, or choice list
     strict: bool = True  # Whether to strictly enforce the grammar
     max_tokens: Optional[int] = None  # Maximum tokens to generate
-    
+
     def to_cache_key(self) -> str:
         """Generate cache key for this spec."""
         content = f"{self.grammar_type.name}:{self.spec}:{self.strict}"
@@ -43,11 +43,11 @@ class CompilationResult:
     grammar: Optional["StructuredOutputGrammar"] = None
     error: Optional[str] = None
     compile_time_ms: float = 0.0
-    
+
     @property
     def is_ready(self) -> bool:
         return self.status == CompilationStatus.READY
-    
+
     @property
     def is_failed(self) -> bool:
         return self.status == CompilationStatus.FAILED

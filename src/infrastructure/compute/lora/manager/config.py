@@ -51,13 +51,13 @@ class LoRAConfig:
     scaling: Optional[float] = None
     bias: str = "none"
     extra_config: Dict[str, Any] = field(default_factory=dict)
-    
+
     @property
     def computed_scaling(self) -> float:
         if self.scaling is not None: return self.scaling
         if self.use_rslora: return self.alpha / (self.rank ** 0.5)
         return self.alpha / self.rank
-    
+
     def __hash__(self) -> int:
         return hash((self.adapter_name, self.adapter_path, self.rank))
 
@@ -68,7 +68,7 @@ class LoRARequest:
     adapter_name: str
     adapter_config: Optional[LoRAConfig] = None
     priority: int = 0
-    
+
     def __hash__(self) -> int:
         return hash((self.request_id, self.adapter_name))
 
@@ -85,7 +85,7 @@ class LoRAInfo:
     status: AdapterStatus
     load_time_ms: float = 0.0
     last_used: float = field(default_factory=time.time)
-    
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "adapter_name": self.adapter_name,
@@ -106,7 +106,7 @@ class AdapterSlot:
     is_active: bool = False
     memory_allocated: int = 0
     assigned_at: float = field(default_factory=time.time)
-    
+
     @property
     def is_free(self) -> bool:
         return self.adapter_name is None

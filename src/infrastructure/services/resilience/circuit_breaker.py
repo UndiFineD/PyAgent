@@ -46,21 +46,21 @@ class CircuitStats:
     last_success_time: float | None = None
     consecutive_failures: int = 0
     consecutive_successes: int = 0
-    
+
     @property
     def failure_rate(self) -> float:
         """Calculate failure rate."""
         if self.total_calls == 0:
             return 0.0
         return self.failed_calls / self.total_calls
-    
+
     @property
     def success_rate(self) -> float:
         """Calculate success rate."""
         if self.total_calls == 0:
             return 0.0
         return self.successful_calls / self.total_calls
-    
+
     def to_dict(self) -> dict:
         """Convert to dictionary."""
         return {
@@ -86,24 +86,24 @@ class CircuitBreakerError(Exception):
 class CircuitBreaker:
     """
     Thread-safe circuit breaker for protecting against cascading failures.
-    
+
     Example:
         >>> breaker = CircuitBreaker(
         ...     failure_threshold=5,
         ...     recovery_timeout=30.0,
         ...     half_open_max_calls=3,
         ... )
-        >>> 
+        >>>
         >>> @breaker
         ... def call_external_service():
         ...     return requests.get("http://api.example.com")
-        >>> 
+        >>>
         >>> try:
         ...     result = call_external_service()
         ... except CircuitBreakerError as e:
         ...     print(f"Circuit open, retry after {e.retry_after}s")
     """
-    
+
     def __init__(
         self,
         failure_threshold: int = 5,
@@ -116,7 +116,7 @@ class CircuitBreaker:
     ) -> None:
         """
         Initialize circuit breaker.
-        
+
         Args:
             failure_threshold: Consecutive failures to open circuit
             recovery_timeout: Seconds before attempting recovery
@@ -133,71 +133,71 @@ class CircuitBreaker:
         self._success_threshold = success_threshold
         self._excluded_exceptions = excluded_exceptions
         self._name = name
-        
+
         self._state = CircuitState.CLOSED
         self._stats = CircuitStats()
         self._lock = threading.RLock()
         self._opened_at: float | None = None
         self._half_open_calls = 0
         self._half_open_successes = 0
-        
+
         # Callbacks
         self._on_open: list[Callable[[], None]] = []
         self._on_close: list[Callable[[], None]] = []
         self._on_half_open: list[Callable[[], None]] = []
-    
+
     @property
     def state(self) -> CircuitState:
         """Get current state."""
         with self._lock:
             self._check_state_transition()
             return self._state
-    
+
     @property
     def stats(self) -> CircuitStats:
         """Get statistics."""
         return self._stats
-    
+
     @property
     def is_closed(self) -> bool:
         """Check if circuit is closed (normal operation)."""
         return self.state == CircuitState.CLOSED
-    
+
     @property
     def is_open(self) -> bool:
         """Check if circuit is open (rejecting requests)."""
         return self.state == CircuitState.OPEN
-    
+
     def _check_state_transition(self) -> None:
         """Check if state should transition based on timeout."""
         if self._state == CircuitState.OPEN and self._opened_at:
             elapsed = time.monotonic() - self._opened_at
             if elapsed >= self._recovery_timeout:
                 self._transition_to(CircuitState.HALF_OPEN)
-    
+
     def _transition_to(self, new_state: CircuitState) -> None:
         """Transition to a new state."""
         if self._state == new_state:
             return
-        
+
         old_state = self._state
         self._state = new_state
         self._stats.state_changes += 1
-        
+
         if new_state == CircuitState.OPEN:
             # When circuit opens, it stays open for reset_timeout
             self._opened_at = time.monotonic()
             for callback in self._on_open:
                 with contextlib.suppress(Exception):
                     callback()
-        
+
         elif new_state == CircuitState.HALF_OPEN:
             self._half_open_calls = 0
             self._half_open_successes = 0
             for callback in self._on_half_open:
                 with contextlib.suppress(Exception):
                     callback()
-        
+
         elif new_state == CircuitState.CLOSED:
             # Circuit has reset
             self._opened_at = None
@@ -205,25 +205,25 @@ class CircuitBreaker:
             for callback in self._on_close:
                 with contextlib.suppress(Exception):
                     callback()
-    
+
     def _should_allow_request(self) -> bool:
         """Check if request should be allowed."""
         with self._lock:
             self._check_state_transition()
-            
+
             if self._state == CircuitState.CLOSED:
                 return True
-            
+
             if self._state == CircuitState.OPEN:
                 return False
-            
+
             # HALF_OPEN: Allow limited requests
             if self._half_open_calls < self._half_open_max_calls:
                 self._half_open_calls += 1
                 return True
-            
+
             return False
-    
+
     def _record_success(self) -> None:
         """Record a successful call."""
         with self._lock:
@@ -232,12 +232,12 @@ class CircuitBreaker:
             self._stats.last_success_time = time.monotonic()
             self._stats.consecutive_successes += 1
             self._stats.consecutive_failures = 0
-            
+
             if self._state == CircuitState.HALF_OPEN:
                 self._half_open_successes += 1
                 if self._half_open_successes >= self._success_threshold:
                     self._transition_to(CircuitState.CLOSED)
-    
+
     def _record_failure(self) -> None:
         """Record a failed call."""
         with self._lock:
@@ -246,47 +246,47 @@ class CircuitBreaker:
             self._stats.last_failure_time = time.monotonic()
             self._stats.consecutive_failures += 1
             self._stats.consecutive_successes = 0
-            
+
             if self._state == CircuitState.HALF_OPEN:
                 # Any failure in half-open reopens circuit
                 self._transition_to(CircuitState.OPEN)
-            
+
             elif self._state == CircuitState.CLOSED:
                 # Check if we should open
                 should_open = False
-                
+
                 if self._stats.consecutive_failures >= self._failure_threshold:
                     should_open = True
-                
-                if (self._failure_rate_threshold and 
+
+                if (self._failure_rate_threshold and
                     self._stats.total_calls >= 10 and
                     self._stats.failure_rate >= self._failure_rate_threshold):
                     should_open = True
-                
+
                 if should_open:
                     self._transition_to(CircuitState.OPEN)
-    
+
     def _get_retry_after(self) -> float | None:
         """Get seconds until retry is possible."""
         if self._state != CircuitState.OPEN or not self._opened_at:
             return None
-        
+
         elapsed = time.monotonic() - self._opened_at
         remaining = self._recovery_timeout - elapsed
         return max(0.0, remaining)
-    
+
     def call(self, func: Callable[P, R], *args: P.args, **kwargs: P.kwargs) -> R:
         """
         Execute a function through the circuit breaker.
-        
+
         Args:
             func: Function to call
             *args: Positional arguments
             **kwargs: Keyword arguments
-            
+
         Returns:
             Function result
-            
+
         Raises:
             CircuitBreakerError: If circuit is open
         """
@@ -296,7 +296,7 @@ class CircuitBreaker:
                 f"Circuit breaker '{self._name}' is OPEN",
                 retry_after=self._get_retry_after(),
             )
-        
+
         try:
             result = func(*args, **kwargs)
             self._record_success()
@@ -308,9 +308,9 @@ class CircuitBreaker:
         except Exception:
             self._record_failure()
             raise
-    
+
     async def call_async(
-        self, 
+        self,
         func: Callable[P, Any],
         *args: P.args,
         **kwargs: P.kwargs,
@@ -324,7 +324,7 @@ class CircuitBreaker:
                 f"Circuit breaker '{self._name}' is OPEN",
                 retry_after=self._get_retry_after(),
             )
-        
+
         try:
             result = await func(*args, **kwargs)
             self._record_success()
@@ -335,7 +335,7 @@ class CircuitBreaker:
         except Exception:
             self._record_failure()
             raise
-    
+
     def __call__(self, func: Callable[P, R]) -> Callable[P, R]:
         """Decorator for wrapping functions with circuit breaker."""
         if inspect.iscoroutinefunction(func):
@@ -348,19 +348,19 @@ class CircuitBreaker:
             def sync_wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
                 return self.call(func, *args, **kwargs)
             return sync_wrapper
-    
+
     def on_open(self, callback: Callable[[], None]) -> None:
         """Register callback for when circuit opens."""
         self._on_open.append(callback)
-    
+
     def on_close(self, callback: Callable[[], None]) -> None:
         """Register callback for when circuit closes."""
         self._on_close.append(callback)
-    
+
     def on_half_open(self, callback: Callable[[], None]) -> None:
         """Register callback for when circuit enters half-open."""
         self._on_half_open.append(callback)
-    
+
     def reset(self) -> None:
         """Manually reset circuit to closed state."""
         with self._lock:
@@ -371,21 +371,21 @@ class CircuitBreaker:
 class CircuitBreakerRegistry:
     """
     Registry for managing multiple circuit breakers.
-    
+
     Example:
         >>> registry = CircuitBreakerRegistry()
-        >>> 
+        >>>
         >>> @registry.breaker("openai_api")
         ... def call_openai(prompt):
         ...     return openai.chat(prompt)
-        >>> 
+        >>>
         >>> print(registry.get_all_stats())
     """
-    
+
     def __init__(self) -> None:
         self._breakers: dict[str, CircuitBreaker] = {}
         self._lock = threading.Lock()
-    
+
     def get_or_create(
         self,
         name: str,
@@ -396,7 +396,7 @@ class CircuitBreakerRegistry:
             if name not in self._breakers:
                 self._breakers[name] = CircuitBreaker(name=name, **kwargs)
             return self._breakers[name]
-    
+
     def breaker(
         self,
         name: str,
@@ -405,21 +405,21 @@ class CircuitBreakerRegistry:
         """Decorator to wrap function with named circuit breaker."""
         cb = self.get_or_create(name, **kwargs)
         return cb
-    
+
     def get_stats(self, name: str) -> dict | None:
         """Get stats for a specific circuit breaker."""
         cb = self._breakers.get(name)
         if cb:
             return cb.stats.to_dict()
         return None
-    
+
     def get_all_stats(self) -> dict[str, dict]:
         """Get stats for all circuit breakers."""
         return {
             name: cb.stats.to_dict()
             for name, cb in self._breakers.items()
         }
-    
+
     def reset_all(self) -> None:
         """Reset all circuit breakers."""
         for cb in self._breakers.values():
@@ -436,7 +436,7 @@ def circuit_breaker(
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
     """
     Decorator to protect a function with a circuit breaker.
-    
+
     Example:
         >>> @circuit_breaker("external_api", failure_threshold=3)
         ... def call_api():

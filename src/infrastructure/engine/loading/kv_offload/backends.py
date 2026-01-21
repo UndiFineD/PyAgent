@@ -21,10 +21,10 @@ from .models import (
 class MemoryBackend(OffloadingBackend):
     """
     In-memory backend for block storage.
-    
+
     Simple implementation for testing and CPU offloading.
     """
-    
+
     def __init__(
         self,
         capacity_blocks: int,
@@ -37,30 +37,30 @@ class MemoryBackend(OffloadingBackend):
         self._allocated: Dict[int, bytes] = {}
         self._next_address = 0
         self._lock = threading.Lock()
-    
+
     @property
     def medium(self) -> str:
         return self._medium
-    
+
     @property
     def block_size(self) -> int:
         return self._block_size
-    
+
     def get_num_free_blocks(self) -> int:
         with self._lock:
             return self._capacity - len(self._allocated)
-    
+
     def allocate_blocks(self, block_hashes: List[BlockHash]) -> List[BlockStatus]:
         blocks = []
         with self._lock:
             for _ in block_hashes:
                 if len(self._allocated) >= self._capacity:
                     raise RuntimeError("Backend out of capacity")
-                
+
                 address = self._next_address
                 self._next_address += self._block_size
                 self._allocated[address] = bytes(self._block_size)
-                
+
                 blocks.append(BlockStatus(
                     address=address,
                     size=self._block_size,
@@ -68,12 +68,12 @@ class MemoryBackend(OffloadingBackend):
                     is_ready=False,
                 ))
         return blocks
-    
+
     def free(self, block: BlockStatus) -> None:
         with self._lock:
             if block.address in self._allocated:
                 del self._allocated[block.address]
-    
+
     def get_load_store_spec(
         self,
         block_hashes: Iterable[BlockHash],

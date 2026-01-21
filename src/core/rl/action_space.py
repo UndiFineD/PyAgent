@@ -18,13 +18,13 @@ class ActionMetadata:
 
 class ActionSpace:
     """Defines the set of possible actions an agent can take."""
-    
+
     def __init__(self, actions: List[str] = None, metadata: Dict[str, ActionMetadata] = None):
         self.actions = actions or []
         self.metadata = metadata or {}
         self._action_history: List[Tuple[str, float]] = []
         self._cooldowns: Dict[str, float] = {}
-        
+
     def sample(self) -> str:
         """Returns a random action from the space."""
         available = self.get_available_actions()
@@ -84,7 +84,7 @@ class BoxActionSpace:
         self.high = np.full(shape, high, dtype=dtype) if np.isscalar(high) else np.array(high, dtype=dtype)
         self.shape = shape
         self.dtype = dtype
-        
+
     def sample(self) -> np.ndarray:
         return np.random.uniform(self.low, self.high, self.shape).astype(self.dtype)
 
@@ -101,7 +101,7 @@ class MultiDiscreteActionSpace:
     def __init__(self, nvec: List[int]):
         self.nvec = np.array(nvec)
         self.shape = (len(nvec),)
-    
+
     def sample(self) -> np.ndarray:
         return np.array([random.randint(0, n - 1) for n in self.nvec])
 
@@ -112,7 +112,7 @@ class DictActionSpace:
     """Hierarchical action space with named sub-spaces."""
     def __init__(self, spaces: Dict[str, ActionSpace]):
         self.spaces = spaces
-    
+
     def sample(self) -> Dict[str, Any]:
         return {k: v.sample() for k, v in self.spaces.items()}
 

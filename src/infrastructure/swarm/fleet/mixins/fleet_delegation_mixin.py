@@ -16,10 +16,10 @@ class FleetDelegationMixin:
     ) -> str:
         """Synaptic Delegation: Hands off a sub-task to a specialized agent."""
         logging.info(f"Fleet: Delegating {agent_type} (Target: {target_file})")
-        
+
         if agent_type in self.agents:
             sub_agent = self.agents[agent_type]
-            
+
             # Execute via improve_content or similar primary entrypoint
             # We pass target_file explicitly to avoid mutating shared state (Phase 317)
             res = sub_agent.improve_content(prompt, target_file=target_file)

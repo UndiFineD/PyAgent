@@ -13,10 +13,10 @@ Key Components:
 
 Example:
     >>> from src.infrastructure.engine import EngineLifecycleManager, EngineConfig
-    >>> 
+    >>>
     >>> config = EngineConfig(max_requests=100)
     >>> manager = EngineLifecycleManager(config)
-    >>> 
+    >>>
     >>> manager.start()  # INITIALIZING -> READY
     >>> manager.step()   # READY -> RUNNING -> READY
     >>> manager.shutdown()  # -> SHUTTING_DOWN -> DEAD
@@ -130,7 +130,7 @@ class EngineConfig:
     enable_sleep_mode: bool = True
     sleep_level: int = 1
     health_check_interval: float = 5.0
-    
+
     # Callback configuration
     on_state_change: Optional[Callable[[EngineState, EngineState], None]] = None
     on_request_complete: Optional[Callable[[Request], None]] = None
@@ -170,20 +170,20 @@ class EngineLifecycleManager:
         self.config = config or EngineConfig()
         self.request_queue = request_queue or RequestQueue()
         self.tracker = RequestTracker()
-        
+
         self._state = EngineState.INITIALIZING
         self._lock = threading.RLock()
         self._shutdown_event = threading.Event()
         self._drain_complete = threading.Event()
-        
+
         # Sleep mode state
         self._sleep_level = 0
         self._wake_tags: Optional[List[str]] = None
-        
+
         # Step counting
         self._step_count = 0
         self._last_step_time: Optional[float] = None
-        
+
         # Error tracking
         self._last_error: Optional[Exception] = None
         self._error_count = 0
@@ -241,19 +241,19 @@ class EngineLifecycleManager:
                     new_state,
                 )
                 return False
-            
+
             old_state = self._state
             self._state = new_state
-            
+
             logger.info("Engine state: %s -> %s", old_state, new_state)
-            
+
             # Call state change callback
             if self.config.on_state_change:
                 try:
                     self.config.on_state_change(old_state, new_state)
                 except Exception as e:
                     logger.exception("Error in state change callback: %s", e)
-            
+
             return True
 
     # -------------------------------------------------------------------------
@@ -270,7 +270,7 @@ class EngineLifecycleManager:
         if self._state != EngineState.INITIALIZING:
             logger.warning("Cannot start engine from state %s", self._state)
             return False
-        
+
         return self._transition_to(EngineState.READY)
 
     def shutdown(self, timeout: Optional[float] = None) -> bool:
@@ -284,16 +284,16 @@ class EngineLifecycleManager:
             True if shutdown completed successfully
         """
         timeout = timeout or self.config.shutdown_timeout
-        
+
         # Signal shutdown
         self._shutdown_event.set()
-        
+
         # Transition to shutting down
         if not self._transition_to(EngineState.SHUTTING_DOWN):
             # Force transition if we're in a terminal state
             if not self._state.is_terminal():
                 self._state = EngineState.SHUTTING_DOWN
-        
+
         # Drain requests if configured
         if self.config.drain_requests_on_shutdown:
             start_time = time.time()
@@ -310,7 +310,7 @@ class EngineLifecycleManager:
                         self.request_queue.abort_request(request.request_id)
                     break
                 time.sleep(0.1)
-        
+
         self._drain_complete.set()
         return self._transition_to(EngineState.DEAD)
 
@@ -327,11 +327,11 @@ class EngineLifecycleManager:
         if not self.config.enable_sleep_mode:
             logger.warning("Sleep mode is not enabled")
             return False
-        
+
         if not self._state.is_active():
             logger.warning("Cannot sleep from state %s", self._state)
             return False
-        
+
         self._sleep_level = min(max(level, 1), 3)
         logger.info("Engine sleeping at level %d", self._sleep_level)
         return self._transition_to(EngineState.SLEEPING)
@@ -348,7 +348,7 @@ class EngineLifecycleManager:
         """
         if self._state != EngineState.SLEEPING:
             return True  # Already awake
-        
+
         self._wake_tags = tags
         self._sleep_level = 0
         logger.info("Engine waking up (tags: %s)", tags)
@@ -374,12 +374,12 @@ class EngineLifecycleManager:
                 self._state,
             )
             return False
-        
+
         # Check capacity
         if self.request_queue.get_num_unfinished() >= self.config.max_requests:
             logger.warning("Engine at capacity (%d requests)", self.config.max_requests)
             return False
-        
+
         self.request_queue.add_request(request)
         return True
 
@@ -422,16 +422,16 @@ class EngineLifecycleManager:
         """
         if self._shutdown_event.is_set():
             return []
-        
+
         # Transition to running if we have work
         if self._state == EngineState.READY and self.request_queue.has_unfinished_requests():
             self._transition_to(EngineState.RUNNING)
-        
+
         if self._state != EngineState.RUNNING:
             return []
-        
+
         finished = []
-        
+
         try:
             # Schedule waiting requests
             available_slots = (
@@ -439,11 +439,11 @@ class EngineLifecycleManager:
             )
             if available_slots > 0:
                 self.request_queue.schedule_next(available_slots)
-            
+
             # Record step timing
             self._step_count += 1
             self._last_step_time = time.time()
-            
+
             # Process running requests (placeholder - actual processing
             # would happen in a subclass or via callbacks)
             for request in self.request_queue.get_running_requests():
@@ -453,31 +453,31 @@ class EngineLifecycleManager:
                     if request.output_token_ids and request.eos_token_id:
                         if request.output_token_ids[-1] == request.eos_token_id:
                             reason = FinishReason.STOP
-                    
+
                     self.request_queue.finish_request(
                         request.request_id,
                         reason,
                     )
                     self.tracker.record_request(request)
                     finished.append(request)
-                    
+
                     if self.config.on_request_complete:
                         try:
                             self.config.on_request_complete(request)
                         except Exception as e:
                             logger.exception("Error in completion callback: %s", e)
-            
+
             # Transition back to ready if no work remains
             if not self.request_queue.has_unfinished_requests():
                 self._transition_to(EngineState.READY)
-        
+
         except Exception as e:
             self._last_error = e
             self._error_count += 1
             logger.exception("Error during step: %s", e)
             if self.config.on_error:
                 self.config.on_error(e)
-        
+
         return finished
 
     async def step_async(self) -> List[Request]:
@@ -529,7 +529,7 @@ class EngineLifecycleManager:
         def signal_handler(signum, frame):
             logger.info("Received signal %s, initiating shutdown", signum)
             self.shutdown()
-        
+
         signal.signal(signal.SIGTERM, signal_handler)
         signal.signal(signal.SIGINT, signal_handler)
 

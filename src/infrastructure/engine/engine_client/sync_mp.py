@@ -19,16 +19,16 @@ logger = logging.getLogger(__name__)
 class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
     """
     Synchronous multi-process engine client with ZMQ.
-    
+
     Blocking request/response pattern.
     """
-    
+
     def __init__(self, config: EngineClientConfig):
         super().__init__(config)
         self._context: Optional[zmq.Context] = None
         self._socket: Optional[zmq.Socket] = None
         self._pending: dict[str, EngineOutput] = {}
-    
+
     def _init_zmq(self) -> None:
         """Initialize ZMQ socket."""
         try:
@@ -40,11 +40,11 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
             self._socket.connect(self.config.zmq_endpoint)
         except ImportError:
             logger.warning("ZMQ not available, using mock mode")
-    
+
     def send_request(self, request: SchedulerOutput) -> str:
         """Send request via ZMQ."""
         request_id = self._generate_request_id()
-        
+
         if self._socket is None:
             # Mock mode
             self._pending[request_id] = EngineOutput(
@@ -53,7 +53,7 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
                 finished=True
             )
             return request_id
-        
+
         try:
             import msgpack
             payload = msgpack.packb({
@@ -64,11 +64,11 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
                 "num_decode": request.num_decode,
             })
             self._socket.send(payload)
-            
+
             # Blocking receive
             response = self._socket.recv()
             data = msgpack.unpackb(response)
-            
+
             self._pending[request_id] = EngineOutput(
                 request_id=request_id,
                 outputs=data.get("outputs", []),
@@ -81,23 +81,23 @@ class SyncMPClient(EngineCoreClientBase["SchedulerOutput", EngineOutput]):
                 request_id=request_id,
                 error=str(e)
             )
-        
+
         return request_id
-    
+
     def get_output(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
         """Get output synchronously."""
         return self._pending.pop(request_id, None)
-    
+
     async def get_output_async(self, request_id: str, timeout_ms: Optional[int] = None) -> Optional[EngineOutput]:
         """Get output (sync wrapper for async interface)."""
         return self.get_output(request_id, timeout_ms)
-    
+
     def start(self) -> None:
         """Start client."""
         self._init_zmq()
         self._running = True
         logger.info("SyncMPClient started")
-    
+
     def shutdown(self) -> None:
         """Shutdown client."""
         self._running = False

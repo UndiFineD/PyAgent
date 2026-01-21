@@ -23,13 +23,13 @@ class RadixTreeManager:
         """
         current = self.root
         tokens_processed = 0
-        
+
         while tokens_processed < len(tokens):
             token = tokens[tokens_processed]
             if token not in current.children:
                 # Calculate blocks for this segment (Simplification)
                 current.children[token] = RadixNode(
-                    tokens[tokens_processed:], 
+                    tokens[tokens_processed:],
                     block_indices[tokens_processed:] # Map to physical blocks
                 )
                 break
@@ -43,12 +43,12 @@ class RadixTreeManager:
         current = self.root
         matched_blocks = []
         tokens_processed = 0
-        
+
         while tokens_processed < len(tokens):
             token = tokens[tokens_processed]
             if token not in current.children:
                 break
-                
+
             node = current.children[token]
             # Check if all tokens in the child node match the input
             node_len = len(node.tokens)
@@ -58,7 +58,7 @@ class RadixTreeManager:
                 current = node
             else:
                 break
-                
+
         return matched_blocks if matched_blocks else None
 
 # Integration in Engine:

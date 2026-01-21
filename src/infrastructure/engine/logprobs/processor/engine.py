@@ -9,34 +9,34 @@ from .storage import FlatLogprobs
 
 class LogprobsProcessor:
     """Process and extract logprobs from model outputs."""
-    
+
     def __init__(self, top_k: int = 5, output_format: LogprobFormat = LogprobFormat.FLAT):
         self.top_k = top_k
         self.output_format = output_format
-    
+
     def process_logits(self, logits: np.ndarray, token_ids: np.ndarray, tokenizer: Optional[Any] = None) -> Union[FlatLogprobs, List[LogprobEntry]]:
         logprobs = self._log_softmax(logits)
         n = len(token_ids)
         selected_logprobs = logprobs[np.arange(n), token_ids]
         top_k_indices = np.argsort(logprobs, axis=1)[:, -self.top_k:][:, ::-1]
         top_k_logprobs = np.take_along_axis(logprobs, top_k_indices, axis=1)
-        
+
         if self.output_format == LogprobFormat.FLAT:
             return FlatLogprobs(token_ids.astype(np.int32), selected_logprobs.astype(np.float32),
                                top_k_indices.astype(np.int32), top_k_logprobs.astype(np.float32))
-        
+
         entries = []
         for i in range(n):
-            tops = [TopLogprob(int(top_k_indices[i, j]), self._decode(int(top_k_indices[i, j]), tokenizer), float(top_k_logprobs[i, j])) 
+            tops = [TopLogprob(int(top_k_indices[i, j]), self._decode(int(top_k_indices[i, j]), tokenizer), float(top_k_logprobs[i, j]))
                     for j in range(self.top_k)]
-            entries.append(LogprobEntry(int(token_ids[i]), self._decode(int(token_ids[i]), tokenizer), 
+            entries.append(LogprobEntry(int(token_ids[i]), self._decode(int(token_ids[i]), tokenizer),
                                       float(selected_logprobs[i]), tuple(tops), i))
         return entries
-    
+
     def process_batch(self, batch_logits: List[np.ndarray], batch_token_ids: List[np.ndarray], tokenizer: Optional[Any] = None) -> List[Union[FlatLogprobs, List[LogprobEntry]]]:
         """Process a batch of logits."""
         return [self.process_logits(logits, tids, tokenizer) for logits, tids in zip(batch_logits, batch_token_ids)]
-    
+
     def _log_softmax(self, logits: np.ndarray) -> np.ndarray:
         max_logits = np.max(logits, axis=-1, keepdims=True)
         shifted = logits - max_logits
@@ -60,7 +60,7 @@ class StreamingLogprobs:
         self._position = 0
         self._sum_logprobs = 0.0
         self._lock = threading.RLock()
-    
+
     @property
     def num_tokens(self) -> int:
         return self._position
@@ -85,20 +85,20 @@ class StreamingLogprobs:
                 self._top_k_ids[i, :k], self._top_k_lps[i, :k] = top_k_ids[:k], top_k_logprobs[:k]
             self._sum_logprobs += logprob
             self._position += 1
-    
+
     def add_from_logits(self, logits: np.ndarray, token_id: int):
         """Add a token from raw logits."""
         max_logits = np.max(logits)
         shifted = logits - max_logits
         log_sum_exp = np.log(np.sum(np.exp(shifted)))
         logprobs = shifted - log_sum_exp
-        
+
         lp = logprobs[token_id]
         indices = np.argsort(logprobs)[-self.top_k:][::-1]
         lps = logprobs[indices]
-        
+
         self.add_token(token_id, float(lp), indices, lps)
-    
+
     def reset(self):
         """Reset the accumulator."""
         with self._lock:
@@ -108,7 +108,7 @@ class StreamingLogprobs:
             self._logprobs.fill(0)
             self._top_k_ids.fill(0)
             self._top_k_lps.fill(-float('inf'))
-            
+
     def finalize(self) -> FlatLogprobs:
         with self._lock:
             n = self._position

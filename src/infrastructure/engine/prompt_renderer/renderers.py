@@ -179,7 +179,7 @@ class ChatRenderer(PromptRenderer):
     ) -> Optional[List[int]]:
         """Find image placeholder positions in text."""
         patterns = ["<image>", "[IMAGE]", "<|image|>", "{{IMAGE}}"]
-        
+
         # Try Rust acceleration
         from .utils import _try_rust_find_placeholders
         rust_positions = _try_rust_find_placeholders(text, patterns)

@@ -19,7 +19,7 @@ class OrchestratorResourceMixin:
         """Enable rate limiting for API calls."""
         if isinstance(config, dict):
             config = RateLimitConfig(**config)
-            
+
         self.rate_limiter = RateLimiter(config)
         logging.info(f"Rate limiting enabled: {config or 'default settings'}")
 

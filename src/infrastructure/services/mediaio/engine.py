@@ -26,21 +26,21 @@ from .video import VideoLoader
 
 class MediaIOEngine:
     """Unified media loading engine."""
-    
+
     def __init__(self, config: Optional[MediaLoadConfig] = None):
         self.config = config or MediaLoadConfig()
         self._loaders: Dict[MediaType, MediaLoader] = {}
         self._cache: Dict[str, Any] = {}
-        
+
         # Register default loaders
         self._loaders[MediaType.IMAGE] = ImageLoader()
         self._loaders[MediaType.VIDEO] = VideoLoader()
         self._loaders[MediaType.AUDIO] = AudioLoader()
-    
+
     def register_loader(self, media_type: MediaType, loader: MediaLoader):
         """Register custom loader for media type."""
         self._loaders[media_type] = loader
-    
+
     async def load(
         self,
         source: Union[str, bytes, BinaryIO],
@@ -51,20 +51,20 @@ class MediaIOEngine:
         cfg = config or self.config
         if media_type is None:
             media_type = self._detect_media_type(source)
-        
+
         cache_key = self._compute_cache_key(source, media_type)
         if cfg.enable_cache and cache_key in self._cache:
             return self._cache[cache_key]
-        
+
         loader = self._loaders.get(media_type)
         if loader is None:
             raise ValueError(f"No loader for media type: {media_type}")
-        
+
         result = await loader.load(source, cfg)
         if cfg.enable_cache:
             self._cache[cache_key] = result
         return result
-    
+
     async def load_batch(
         self,
         sources: List[Union[str, bytes]],
@@ -74,7 +74,7 @@ class MediaIOEngine:
         """Load multiple media files concurrently."""
         tasks = [self.load(source, media_type, config) for source in sources]
         return await asyncio.gather(*tasks)
-    
+
     def _detect_media_type(
         self,
         source: Union[str, bytes, BinaryIO]
@@ -89,7 +89,7 @@ class MediaIOEngine:
             elif ext in ('.wav', '.mp3', '.flac', '.ogg', '.m4a'):
                 return MediaType.AUDIO
         return MediaType.IMAGE
-    
+
     def _compute_cache_key(
         self,
         source: Union[str, bytes, BinaryIO],
@@ -102,7 +102,7 @@ class MediaIOEngine:
             h = hashlib.blake2b(source, digest_size=16).hexdigest()
             return f"{media_type.name}:{h}"
         return ""
-    
+
     def clear_cache(self):
         """Clear media cache."""
         self._cache.clear()

@@ -8,11 +8,11 @@ class ConstraintBuilder:
     """
     Fluent builder for structured output constraints.
     """
-    
+
     def __init__(self):
         self._config = StructuredOutputConfig()
         self._constraints: List[OutputConstraint] = []
-    
+
     def json_schema(
         self,
         schema: Dict[str, Any],
@@ -23,18 +23,18 @@ class ConstraintBuilder:
         self._config.output_type = StructuredOutputType.JSON_SCHEMA
         self._config.strict_mode = strict
         return self
-    
+
     def json_object(self) -> "ConstraintBuilder":
         """Force JSON object output."""
         self._config.json_object = True
         return self
-    
+
     def regex(self, pattern: str, flags: int = 0) -> "ConstraintBuilder":
         """Add regex constraint."""
         self._config.regex = pattern
         self._config.output_type = StructuredOutputType.REGEX
         return self
-    
+
     def choices(
         self,
         options: List[str],
@@ -44,7 +44,7 @@ class ConstraintBuilder:
         self._config.choices = options
         self._config.output_type = StructuredOutputType.CHOICE
         return self
-    
+
     def grammar(
         self,
         grammar_spec: str,
@@ -55,7 +55,7 @@ class ConstraintBuilder:
         self._config.grammar_type = grammar_type
         self._config.output_type = StructuredOutputType.GRAMMAR
         return self
-    
+
     def backend(
         self,
         backend: GuidedDecodingBackend,
@@ -65,7 +65,7 @@ class ConstraintBuilder:
         self._config.backend = backend
         self._config.backend_fallback = fallback
         return self
-    
+
     def whitespace(
         self,
         pattern: WhitespacePattern,
@@ -76,7 +76,7 @@ class ConstraintBuilder:
         if custom:
             self._config.whitespace_pattern = custom
         return self
-    
+
     def add_constraint(
         self,
         constraint: OutputConstraint,
@@ -84,17 +84,17 @@ class ConstraintBuilder:
         """Add additional constraint."""
         self._constraints.append(constraint)
         return self
-    
+
     def max_tokens(self, tokens: int) -> "ConstraintBuilder":
         """Set max tokens."""
         self._config.max_tokens = tokens
         return self
-    
+
     def allow_partial(self, allow: bool = True) -> "ConstraintBuilder":
         """Allow partial completion."""
         self._config.allow_partial_completion = allow
         return self
-    
+
     def build(self) -> StructuredOutputConfig:
         """Build the configuration."""
         self._config.additional_constraints = self._constraints

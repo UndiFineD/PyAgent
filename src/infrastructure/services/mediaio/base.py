@@ -21,7 +21,7 @@ from .models import (
 
 class MediaLoader(ABC):
     """Abstract base class for media loaders."""
-    
+
     @abstractmethod
     async def load(
         self,
@@ -30,12 +30,12 @@ class MediaLoader(ABC):
     ) -> Union[ImageData, VideoData, AudioData]:
         """Load media from source."""
         pass
-    
+
     @abstractmethod
     def supports(self, media_type: MediaType) -> bool:
         """Check if loader supports media type."""
         pass
-    
+
     def compute_hash(self, data: bytes) -> str:
         """Compute hash for caching."""
         return hashlib.blake2b(data, digest_size=16).hexdigest()

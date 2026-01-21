@@ -8,9 +8,9 @@ from typing import Dict, List, Optional, Any, Tuple
 
 from .enums import InstanceRole, SchedulingPolicy
 from .config import (
-    InstanceInfo, 
-    DCPConfig, 
-    KVTransferParams, 
+    InstanceInfo,
+    DCPConfig,
+    KVTransferParams,
     ScheduledRequest
 )
 from .selectors import (
@@ -25,44 +25,44 @@ logger = logging.getLogger(__name__)
 
 class DisaggregatedScheduler:
     """Scheduler for disaggregated prefill-decode inference.
-    
+
     Coordinates request routing between prefill and decode instances.
-    
+
     Inspired by vLLM's disaggregated serving patterns.
     """
-    
+
     _SELECTOR_MAP: Dict[SchedulingPolicy, type] = {
         SchedulingPolicy.ROUND_ROBIN: RoundRobinSelector,
         SchedulingPolicy.LEAST_LOADED: LeastLoadedSelector,
         SchedulingPolicy.RANDOM: RandomSelector,
         SchedulingPolicy.HASH_BASED: HashSelector,
     }
-    
+
     def __init__(self, config: DCPConfig):
         """Initialize the scheduler.
-        
+
         Args:
             config: Disaggregation configuration
         """
         self.config = config
-        
+
         # Instance pools
         self._prefill_instances: List[InstanceInfo] = list(config.prefill_instances)
         self._decode_instances: List[InstanceInfo] = list(config.decode_instances)
-        
+
         # Selectors
         self._prefill_selector = self._create_selector(config.prefill_policy)
         self._decode_selector = self._create_selector(config.decode_policy)
-        
+
         # Request tracking
         self._pending_requests: Dict[str, ScheduledRequest] = {}
         self._completed_prefills: Dict[str, ScheduledRequest] = {}
-        
+
         # Statistics
         self._total_requests = 0
         self._prefill_requests = 0
         self._decode_requests = 0
-        
+
         # Health check state
         self._health_check_task: Optional[asyncio.Task] = None
         self._running = False
@@ -72,7 +72,7 @@ class DisaggregatedScheduler:
         if policy not in self._SELECTOR_MAP:
             logger.warning("Unknown policy %s, using round-robin", policy)
             policy = SchedulingPolicy.ROUND_ROBIN
-        
+
         selector_cls = self._SELECTOR_MAP[policy]
         return selector_cls()
 
@@ -135,15 +135,15 @@ class DisaggregatedScheduler:
         prefill_instance = self._prefill_selector.select(
             self._prefill_instances, request
         )
-        
+
         if prefill_instance is None:
             logger.warning("No healthy prefill instance available")
             return None, KVTransferParams()
-        
+
         decode_instance = self._decode_selector.select(
             self._decode_instances, request
         )
-        
+
         params = KVTransferParams(
             do_remote_decode=True,
             do_remote_prefill=False,
@@ -154,17 +154,17 @@ class DisaggregatedScheduler:
             remote_tp_size=decode_instance.tp_size if decode_instance else 1,
             remote_dp_size=decode_instance.dp_size if decode_instance else 1,
         )
-        
+
         request.prefill_instance = prefill_instance
         request.decode_instance = decode_instance
         request.kv_transfer_params = params
         request.scheduled_time = time.time()
-        
+
         self._pending_requests[request.request_id] = request
         self._prefill_requests += 1
         self._total_requests += 1
         prefill_instance.num_running_requests += 1
-        
+
         return prefill_instance, params
 
     def schedule_decode(
@@ -178,14 +178,14 @@ class DisaggregatedScheduler:
             decode_instance = self._decode_selector.select(
                 self._decode_instances, request
             )
-        
+
         if decode_instance is None:
             logger.warning("No healthy decode instance available")
             return None, KVTransferParams()
-        
+
         kv_params_dict = prefill_response.get("kv_transfer_params", {})
         prefill_instance = request.prefill_instance
-        
+
         params = KVTransferParams(
             do_remote_prefill=True,
             do_remote_decode=False,
@@ -198,18 +198,18 @@ class DisaggregatedScheduler:
             remote_tp_size=prefill_instance.tp_size if prefill_instance else 1,
             remote_dp_size=prefill_instance.dp_size if prefill_instance else 1,
         )
-        
+
         request.prefill_complete = True
         request.kv_transfer_params = params
         request.decode_instance = decode_instance
-        
+
         self._completed_prefills[request.request_id] = request
         self._decode_requests += 1
-        
+
         if prefill_instance:
             prefill_instance.num_running_requests -= 1
         decode_instance.num_running_requests += 1
-        
+
         return decode_instance, params
 
     def request_finished(self, request_id: str) -> None:
@@ -217,7 +217,7 @@ class DisaggregatedScheduler:
         request = self._pending_requests.pop(request_id, None)
         if request is None:
             request = self._completed_prefills.pop(request_id, None)
-        
+
         if request and request.decode_instance:
             request.decode_instance.num_running_requests -= 1
 

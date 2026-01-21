@@ -27,16 +27,16 @@ class RoPEConfig:
     scaling_factor: float = 1.0
     scaling_type: RoPEScalingType = RoPEScalingType.NONE
     is_neox_style: bool = True
-    
+
     # Advanced features
     dynamic_scaling: bool = False
     original_max_position: int = 2048
     yarn_beta_fast: float = 32.0
     yarn_beta_slow: float = 1.0
-    
+
     # Multimodal specific
     mrope_sections: List[int] = field(default_factory=list)
-    
+
     # Variant
     variant: RoPEVariant = RoPEVariant.NEOX
 
@@ -45,7 +45,7 @@ class RoPEConfig:
             self.rotary_dim = self.head_dim
         if self.original_max_position is None:
             self.original_max_position = self.max_position_embeddings
-        
+
         # Automatic variant detection
         if self.mrope_sections and self.variant == RoPEVariant.NEOX:
             self.variant = RoPEVariant.MROPE

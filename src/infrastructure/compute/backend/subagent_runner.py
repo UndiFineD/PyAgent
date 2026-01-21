@@ -196,12 +196,12 @@ class SubagentRunner:
 
     def estimate_tokens(self, text: str) -> int:
         """Estimate token count for text.
-        
+
         Uses Rust-accelerated BPE approximation when available.
         """
         if not text:
             return 0
-        
+
         # Rust-accelerated token estimation
         if RUST_AVAILABLE:
             if hasattr(rc, 'fast_token_count_rust'):
@@ -217,7 +217,7 @@ class SubagentRunner:
                         return res
                 except (AttributeError, ValueError, RuntimeError):
                     pass  # Fall back to Python
-        
+
         return max(1, len(text) // 4)
 
     def estimate_cost(

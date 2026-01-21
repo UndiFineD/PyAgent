@@ -27,10 +27,10 @@ class QuantConfig:
     symmetric: bool = True
     zero_point: bool = False
     desc_act: bool = False
-    
+
     def __post_init__(self):
         self._validate()
-    
+
     def _validate(self):
         if self.bits not in (4, 8):
             raise ValueError(f"bits must be 4 or 8, got {self.bits}")
@@ -38,17 +38,17 @@ class QuantConfig:
             raise ValueError(f"group_size must be -1 or positive, got {self.group_size}")
         if self.symmetric and self.zero_point:
             raise ValueError("symmetric quantization cannot have zero_point")
-    
+
     @property
     def pack_factor(self) -> int:
         return 32 // self.bits
-    
+
     @property
     def qmin(self) -> int:
         if self.symmetric:
             return -(1 << (self.bits - 1))
         return 0
-    
+
     @property
     def qmax(self) -> int:
         if self.symmetric:

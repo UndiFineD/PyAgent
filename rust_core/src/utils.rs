@@ -1,3 +1,4 @@
+// cspell:ignore peekable walkdir pipefail halstead signum dtype nbytes RUNPOD
 use pyo3::prelude::*;
 use pyo3::wrap_pyfunction;
 use std::collections::{HashMap, HashSet};
@@ -14,8 +15,8 @@ pub fn fast_hash(key: &str) -> PyResult<String> {
     Ok(format!("{:016x}", hash))
 }
 
-/// Evaluate a math formula with variables using meval.
-/// This is a safe, minimal Rust core for FormulaEngineCore parity.
+/// Evaluate a math formula with variables using a minimal hand-written parser.
+/// This is a safe, dependency-free Rust core for FormulaEngineCore parity.
 #[pyfunction]
 pub fn evaluate_formula(formula: &str, variables: HashMap<String, f64>) -> PyResult<f64> {
     let mut expr = formula.to_string();
@@ -26,9 +27,94 @@ pub fn evaluate_formula(formula: &str, variables: HashMap<String, f64>) -> PyRes
         expr = expr.replace(&placeholder, &v.to_string());
     }
 
-    match meval::eval_str(expr) {
+    match mini_eval(&expr) {
         Ok(val) => Ok(val),
-        Err(e) => Err(pyo3::exceptions::PyValueError::new_err(e.to_string())),
+        Err(e) => Err(pyo3::exceptions::PyValueError::new_err(e)),
+    }
+}
+
+/// Simple recursive descent parser for basic math (+ - * / ^ ( ))
+fn mini_eval(expr: &str) -> Result<f64, String> {
+    let mut it = expr.chars().filter(|c| !c.is_whitespace()).peekable();
+    parse_expr(&mut it)
+}
+
+fn parse_expr<I: Iterator<Item = char>>(it: &mut std::iter::Peekable<I>) -> Result<f64, String> {
+    let mut val = parse_term(it)?;
+    while let Some(&c) = it.peek() {
+        match c {
+            '+' => {
+                it.next();
+                val += parse_term(it)?;
+            }
+            '-' => {
+                it.next();
+                val -= parse_term(it)?;
+            }
+            _ => break,
+        }
+    }
+    Ok(val)
+}
+
+fn parse_term<I: Iterator<Item = char>>(it: &mut std::iter::Peekable<I>) -> Result<f64, String> {
+    let mut val = parse_power(it)?;
+    while let Some(&c) = it.peek() {
+        match c {
+            '*' => {
+                it.next();
+                val *= parse_power(it)?;
+            }
+            '/' => {
+                it.next();
+                let div = parse_power(it)?;
+                if div == 0.0 {
+                    return Err("Division by zero".into());
+                }
+                val /= div;
+            }
+            _ => break,
+        }
+    }
+    Ok(val)
+}
+
+fn parse_power<I: Iterator<Item = char>>(it: &mut std::iter::Peekable<I>) -> Result<f64, String> {
+    let val = parse_factor(it)?;
+    if let Some(&'^') = it.peek() {
+        it.next();
+        Ok(val.powf(parse_power(it)?)) // Right-associative
+    } else {
+        Ok(val)
+    }
+}
+
+fn parse_factor<I: Iterator<Item = char>>(it: &mut std::iter::Peekable<I>) -> Result<f64, String> {
+    match it.next() {
+        Some('(') => {
+            let val = parse_expr(it)?;
+            if it.next() != Some(')') {
+                return Err("Missing closing parenthesis".into());
+            }
+            Ok(val)
+        }
+        Some('-') => Ok(-parse_factor(it)?),
+        Some('+') => Ok(parse_factor(it)?),
+        Some(c) if c.is_digit(10) || c == '.' => {
+            let mut s = c.to_string();
+            while let Some(&c) = it.peek() {
+                if c.is_digit(10) || c == '.' || c == 'e' || c == 'E' {
+                    s.push(it.next().unwrap());
+                } else if (c == '+' || c == '-') && (s.ends_with('e') || s.ends_with('E')) {
+                    s.push(it.next().unwrap());
+                } else {
+                    break;
+                }
+            }
+            s.parse::<f64>().map_err(|_| format!("Invalid number: {}", s))
+        }
+        Some(c) => Err(format!("Unexpected character: {}", c)),
+        None => Err("Unexpected end of expression".into()),
     }
 }
 
@@ -1110,56 +1196,56 @@ pub fn parse_xml_tool_call_rust(
 }
 
 pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
-    m.add_function(wrap_pyfunction!(fast_hash, m)?)?;
-    m.add_function(wrap_pyfunction!(calculate_metrics_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(calculate_interaction_shard_md5, m)?)?;
-    m.add_function(wrap_pyfunction!(evaluate_formula, m)?)?;
-    m.add_function(wrap_pyfunction!(compress_python_regex, m)?)?;
-    m.add_function(wrap_pyfunction!(summarize_markdown, m)?)?;
-    m.add_function(wrap_pyfunction!(parse_bing_results, m)?)?;
-    m.add_function(wrap_pyfunction!(parse_google_results, m)?)?;
-    m.add_function(wrap_pyfunction!(parse_ddg_results, m)?)?;
-    m.add_function(wrap_pyfunction!(format_results_block, m)?)?;
-    m.add_function(wrap_pyfunction!(calculate_stochastic_failures, m)?)?;
     m.add_function(wrap_pyfunction!(apply_latency_spike, m)?)?;
-    m.add_function(wrap_pyfunction!(format_progress_bar, m)?)?;
-    m.add_function(wrap_pyfunction!(score_tool_relevance, m)?)?;
-    m.add_function(wrap_pyfunction!(generate_openapi_spec, m)?)?;
-    m.add_function(wrap_pyfunction!(flatten_env_vars, m)?)?;
-    m.add_function(wrap_pyfunction!(prune_directory_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(deep_clean_pycache_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(ensure_safety_flags_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(parse_adb_devices_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(cdiv_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(next_power_of_2_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(prev_power_of_2_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(round_up_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(round_down_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(atomic_counter_add_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(xxhash_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(fast_cache_hash_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(cache_hit_ratio_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(batch_cdiv_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(batch_next_power_of_2_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(json_count_leaves_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(json_iter_leaves_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(json_flatten_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(json_depth_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(json_get_path_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(json_validate_leaves_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(msgpack_encode_tensor_meta_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(validate_tensor_shape_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(apply_repetition_penalty_rust, m)?)?;
     m.add_function(wrap_pyfunction!(apply_temperature_rust, m)?)?;
     m.add_function(wrap_pyfunction!(apply_top_k_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(apply_repetition_penalty_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(atomic_counter_add_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(batch_cdiv_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(batch_next_power_of_2_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(cache_hit_ratio_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_interaction_shard_md5, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_metrics_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_stochastic_failures, m)?)?;
+    m.add_function(wrap_pyfunction!(cdiv_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compress_python_regex, m)?)?;
     m.add_function(wrap_pyfunction!(compute_logits_mask_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(encode_slice_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(structured_counter_diff_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(flat_logprobs_append_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(extract_json_tool_calls_rust, m)?)?;
     m.add_function(wrap_pyfunction!(dedupe_log_messages_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(deep_clean_pycache_rust, m)?)?;
     m.add_function(wrap_pyfunction!(detect_cloud_provider_rust, m)?)?;
-    m.add_function(wrap_pyfunction!(validate_prompt_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(encode_slice_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(ensure_safety_flags_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(evaluate_formula, m)?)?;
+    m.add_function(wrap_pyfunction!(extract_json_tool_calls_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(fast_cache_hash_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(fast_hash, m)?)?;
+    m.add_function(wrap_pyfunction!(flat_logprobs_append_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(flatten_env_vars, m)?)?;
+    m.add_function(wrap_pyfunction!(format_progress_bar, m)?)?;
+    m.add_function(wrap_pyfunction!(format_results_block, m)?)?;
+    m.add_function(wrap_pyfunction!(generate_openapi_spec, m)?)?;
+    m.add_function(wrap_pyfunction!(json_count_leaves_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(json_depth_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(json_flatten_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(json_get_path_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(json_iter_leaves_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(json_validate_leaves_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(msgpack_encode_tensor_meta_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(next_power_of_2_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(parse_adb_devices_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(parse_bing_results, m)?)?;
+    m.add_function(wrap_pyfunction!(parse_ddg_results, m)?)?;
+    m.add_function(wrap_pyfunction!(parse_google_results, m)?)?;
     m.add_function(wrap_pyfunction!(parse_xml_tool_call_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(prev_power_of_2_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(prune_directory_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(round_down_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(round_up_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(score_tool_relevance, m)?)?;
+    m.add_function(wrap_pyfunction!(structured_counter_diff_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(summarize_markdown, m)?)?;
+    m.add_function(wrap_pyfunction!(validate_prompt_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(validate_tensor_shape_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(xxhash_rust, m)?)?;
     Ok(())
 }

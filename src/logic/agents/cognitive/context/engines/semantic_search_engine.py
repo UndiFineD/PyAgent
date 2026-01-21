@@ -210,7 +210,7 @@ class SemanticSearchEngine:
                     return sorted(self.results, key=lambda r: r.similarity_score, reverse=True)
             except Exception:
                 pass  # Fall through to Python implementation
-        
+
         # Python fallback
         query_words = set(query.lower().split())
 

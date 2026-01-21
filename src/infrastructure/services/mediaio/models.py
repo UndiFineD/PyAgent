@@ -80,17 +80,17 @@ class ImageData:
     data: np.ndarray                     # [H, W, C] or [N, H, W, C]
     metadata: MediaMetadata
     source: str
-    
+
     @property
     def shape(self) -> Tuple[int, ...]:
         return self.data.shape
-    
+
     @property
     def height(self) -> int:
         if self.data.ndim == 3:
             return self.data.shape[0]
         return self.data.shape[1]
-    
+
     @property
     def width(self) -> int:
         if self.data.ndim == 3:
@@ -105,7 +105,7 @@ class VideoData:
     metadata: MediaMetadata
     source: str
     timestamps: Optional[np.ndarray] = None
-    
+
     @property
     def frame_count(self) -> int:
         return self.frames.shape[0]
@@ -117,7 +117,7 @@ class AudioData:
     waveform: np.ndarray                 # [C, T] or [T]
     metadata: MediaMetadata
     source: str
-    
+
     @property
     def duration(self) -> float:
         if self.metadata.sample_rate:
@@ -134,20 +134,20 @@ class MediaLoadConfig:
     normalize: bool = True
     mean: Tuple[float, ...] = (0.48145466, 0.4578275, 0.40821073)  # CLIP mean
     std: Tuple[float, ...] = (0.26862954, 0.26130258, 0.27577711)  # CLIP std
-    
+
     # Video settings
     max_frames: int = 32
     frame_rate: Optional[float] = None   # Sample at this FPS
-    
+
     # Audio settings
     target_sample_rate: int = 16000
     max_duration: float = 30.0           # Max audio duration
     mono: bool = True
-    
+
     # GPU settings
     use_gpu_decode: bool = True
     device: str = "cuda:0"
-    
+
     # Caching
     enable_cache: bool = True
     cache_dir: Optional[str] = None

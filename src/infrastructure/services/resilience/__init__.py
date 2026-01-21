@@ -36,7 +36,7 @@ __all__ = [
     'CircuitBreakerError',
     'CircuitBreakerRegistry',
     'circuit_breaker',
-    
+
     # Retry Strategy
     'RetryStrategy',
     'RetryStats',
@@ -44,7 +44,7 @@ __all__ = [
     'JitterType',
     'RetryBudget',
     'retry',
-    
+
     # Rate Limiting
     'TokenBucket',
     'SlidingWindowCounter',

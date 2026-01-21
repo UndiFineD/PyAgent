@@ -18,14 +18,14 @@ class FSMState:
     is_accepting: bool = False
     is_initial: bool = False
     transitions: Tuple[Tuple[str, int], ...] = ()  # (char, next_state)
-    
+
     def get_transition(self, char: str) -> Optional[int]:
         """Get next state for a character transition."""
         for c, next_state in self.transitions:
             if c == char:
                 return next_state
         return None
-    
+
     def get_all_transitions(self) -> Dict[str, int]:
         """Get all transitions as a dict."""
         return dict(self.transitions)
@@ -37,41 +37,41 @@ class FSMTransitionTable:
     num_states: int
     initial_state: int
     accepting_states: FrozenSet[int]
-    
+
     # transition_table[state][char_code] = next_state (-1 = invalid)
     transition_table: np.ndarray = field(default=None)
-    
+
     # Allowed characters per state (for bitmask generation)
     allowed_chars: Dict[int, Set[str]] = field(default_factory=dict)
-    
+
     def __post_init__(self):
         if self.transition_table is None:
             # Default: 256 ASCII characters
             self.transition_table = np.full(
                 (self.num_states, 256), -1, dtype=np.int32
             )
-    
+
     def add_transition(self, from_state: int, char: str, to_state: int) -> None:
         """Add a transition."""
         char_code = ord(char) if len(char) == 1 else ord(char[0])
         if 0 <= char_code < 256:
             self.transition_table[from_state, char_code] = to_state
-            
+
             if from_state not in self.allowed_chars:
                 self.allowed_chars[from_state] = set()
             self.allowed_chars[from_state].add(char)
-    
+
     def get_next_state(self, current_state: int, char: str) -> int:
         """Get next state for a character. Returns -1 if invalid."""
         char_code = ord(char) if len(char) == 1 else ord(char[0])
         if 0 <= char_code < 256:
             return int(self.transition_table[current_state, char_code])
         return -1
-    
+
     def is_accepting(self, state: int) -> bool:
         """Check if state is accepting."""
         return state in self.accepting_states
-    
+
     def get_allowed_chars(self, state: int) -> Set[str]:
         """Get allowed characters at a state."""
         return self.allowed_chars.get(state, set())
@@ -82,44 +82,44 @@ class TokenMask:
     """Token-level constraint mask."""
     vocab_size: int
     mask: np.ndarray = field(default=None)
-    
+
     def __post_init__(self):
         if self.mask is None:
             self.mask = np.ones(self.vocab_size, dtype=np.bool_)
-    
+
     def allow_only(self, token_ids: Set[int]) -> None:
         """Set mask to allow only specified tokens."""
         self.mask.fill(False)
         for tid in token_ids:
             if 0 <= tid < self.vocab_size:
                 self.mask[tid] = True
-    
+
     def disallow(self, token_ids: Set[int]) -> None:
         """Disallow specific tokens."""
         for tid in token_ids:
             if 0 <= tid < self.vocab_size:
                 self.mask[tid] = False
-    
+
     def apply_to_logits(self, logits: np.ndarray) -> np.ndarray:
         """Apply mask to logits (set disallowed to -inf)."""
         result = logits.copy()
         result[~self.mask] = float("-inf")
         return result
-    
+
     def get_allowed_count(self) -> int:
         """Get number of allowed tokens."""
         return int(np.sum(self.mask))
-    
+
     def get_allowed_tokens(self) -> List[int]:
         """Get list of allowed token IDs."""
         return list(np.where(self.mask)[0])
-    
+
     def combine_and(self, other: "TokenMask") -> "TokenMask":
         """Combine masks with AND."""
         result = TokenMask(self.vocab_size)
         result.mask = self.mask & other.mask
         return result
-    
+
     def combine_or(self, other: "TokenMask") -> "TokenMask":
         """Combine masks with OR."""
         result = TokenMask(self.vocab_size)
