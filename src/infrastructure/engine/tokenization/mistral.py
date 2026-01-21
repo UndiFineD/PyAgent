@@ -29,7 +29,7 @@ class MistralTokenizer(BaseTokenizer):
             from transformers import AutoTokenizer
             self._tokenizer = AutoTokenizer.from_pretrained(
                 self.config.model_name,
-                trust_remote_code=True,
+                trust_remote_code=self.config.trust_remote_code,
             )
 
     @property

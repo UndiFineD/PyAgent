@@ -34,7 +34,7 @@ try:
     profiled_rc = create_profiled_rust_core()
     if profiled_rc:
         sys.modules['rust_core'] = profiled_rc
-        print(f"DEBUG: sys.modules['rust_core'] patched")
+        print("DEBUG: sys.modules['rust_core'] patched")
 except ImportError as e:
     print(f"DEBUG: Initial import error: {e}")
 
@@ -46,10 +46,10 @@ async def main():
     
     # Verify that calling it manually works
     import rust_core as rc
-    print(f"DEBUG: Calling estimate_tokens_rust...")
+    print("DEBUG: Calling estimate_tokens_rust...")
     try:
         rc.estimate_tokens_rust("test")
-    except Exception as e:
+    except (AttributeError, RuntimeError) as e:
         print(f"DEBUG: Manual call failed: {e}")
         
     print(f"DEBUG: Profiler calls for estimate_tokens_rust: {profiler.get_stats().get('estimate_tokens_rust', None)}")

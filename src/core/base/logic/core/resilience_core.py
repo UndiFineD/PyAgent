@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""
+Core logic for Agent Resilience and Fault Tolerance.
+"""
+
 from __future__ import annotations
 from typing import Any
 import random
@@ -43,12 +47,13 @@ class ResilienceCore:
         """
         if rc:
             try:
+                # pylint: disable=no-member
                 # rc.calculate_backoff(failure_count, threshold, base_timeout, multiplier, max_timeout)
                 # Rust version assumes jitter_mode is full for simplicity if not provided.
                 return rc.calculate_backoff(
                     failure_count, threshold, base_timeout, multiplier, max_timeout
                 )  # type: ignore[attr-defined]
-            except Exception:
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
 
         if failure_count < threshold:
@@ -75,10 +80,11 @@ class ResilienceCore:
         """Determines if the cooldown period has passed."""
         if rc:
             try:
+                # pylint: disable=no-member
                 return rc.should_attempt_recovery(
                     last_failure_time, current_time, timeout
                 )  # type: ignore[attr-defined]
-            except Exception:
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
         return (current_time - last_failure_time) > timeout
 
@@ -100,14 +106,15 @@ class ResilienceCore:
         """
         if rc:
             try:
-                return rc.evaluate_state_transition(  # type: ignore[attr-defined]
-                    current_state,
-                    success_count,
-                    consecutive_successes_needed,
-                    failure_count,
-                    failure_threshold,
-                )
-            except Exception:
+                if hasattr(rc, "evaluate_state_transition"):
+                    return rc.evaluate_state_transition(  # type: ignore[attr-defined]
+                        current_state,
+                        success_count,
+                        consecutive_successes_needed,
+                        failure_count,
+                        failure_threshold,
+                    )
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
 
         if current_state == "CLOSED":
@@ -125,7 +132,7 @@ class ResilienceCore:
         is_success: bool,
         failure_count: int,
         success_count: int,
-        last_failure_time: float,
+        _last_failure_time: float,
         thresholds: dict[str, Any],
     ) -> tuple[str, int, int]:
         """

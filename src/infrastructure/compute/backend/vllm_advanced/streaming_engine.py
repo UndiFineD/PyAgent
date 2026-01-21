@@ -24,17 +24,26 @@ from __future__ import annotations
 import asyncio
 import logging
 import time
+import os
+import gc
 from dataclasses import dataclass, field
 from typing import (
-    Any,
     AsyncIterator,
-    Callable,
     Iterator,
     List,
     Optional,
     Protocol,
-    Union,
 )
+
+logger = logging.getLogger(__name__)
+
+# Check torch availability
+try:
+    import torch
+    HAS_TORCH = True
+except ImportError:
+    HAS_TORCH = False
+    torch = None
 
 # Check vLLM availability
 try:
@@ -59,7 +68,6 @@ class StreamCallback(Protocol):
         finish_reason: Optional[str] = None,
     ) -> None:
         """Called for each generated token."""
-        ...
 
 
 @dataclass
@@ -69,7 +77,7 @@ class StreamingConfig:
     model: str = "meta-llama/Llama-3-8B-Instruct"
     gpu_memory_utilization: float = 0.85
     tensor_parallel_size: int = 1
-    trust_remote_code: bool = True
+    trust_remote_code: bool = False
 
     # Streaming behavior
     min_tokens_per_yield: int = 1
@@ -251,24 +259,21 @@ class StreamingVllmEngine:
     def _ensure_initialized(self) -> bool:
         """Lazily initialize the engine."""
         if not HAS_VLLM:
-            logging.warning("vLLM not available for streaming")
+            logger.warning("vLLM not available for streaming")
             return False
 
         if self._initialized and self._llm:
             return True
 
         try:
-            import os
-            import torch
-
             # Auto-detect device
             if "VLLM_TARGET_DEVICE" not in os.environ:
-                if torch.cuda.is_available():
+                if HAS_TORCH and torch.cuda.is_available():
                     os.environ["VLLM_TARGET_DEVICE"] = "cuda"
                 else:
                     os.environ["VLLM_TARGET_DEVICE"] = "cpu"
 
-            logging.info(f"Initializing StreamingVllmEngine: {self.config.model}")
+            logger.info("Initializing StreamingVllmEngine: %s", self.config.model)
 
             kwargs = {
                 "model": self.config.model,
@@ -284,11 +289,11 @@ class StreamingVllmEngine:
             self._llm = LLM(**kwargs)
             self._initialized = True
 
-            logging.info("StreamingVllmEngine initialized successfully")
+            logger.info("StreamingVllmEngine initialized successfully")
             return True
 
-        except Exception as e:
-            logging.error(f"Failed to initialize StreamingVllmEngine: {e}")
+        except (RuntimeError, ValueError) as e:
+            logger.error("Failed to initialize StreamingVllmEngine: %s", e)
             return False
 
     def generate_with_callback(
@@ -349,8 +354,8 @@ class StreamingVllmEngine:
 
             return full_text
 
-        except Exception as e:
-            logging.error(f"Streaming generation failed: {e}")
+        except (RuntimeError, ValueError) as e:
+            logger.error("Streaming generation failed: %s", e)
             return ""
 
     async def generate_stream(
@@ -434,7 +439,7 @@ class StreamingVllmEngine:
 
             await iterator.finish("stop")
 
-        except Exception as e:
+        except (RuntimeError, ValueError) as e:
             await iterator.error(e)
 
     def generate_buffered(
@@ -481,8 +486,8 @@ class StreamingVllmEngine:
             for i in range(0, len(full_text), buffer_tokens):
                 yield full_text[i:i + buffer_tokens]
 
-        except Exception as e:
-            logging.error(f"Buffered generation failed: {e}")
+        except (RuntimeError, ValueError) as e:
+            logger.error("Buffered generation failed: %s", e)
 
     def get_stats(self) -> dict:
         """Get streaming statistics."""
@@ -494,17 +499,12 @@ class StreamingVllmEngine:
     def shutdown(self) -> None:
         """Shutdown and free resources."""
         if self._llm:
-            import gc
             del self._llm
             self._llm = None
             gc.collect()
 
-            try:
-                import torch
-                if torch.cuda.is_available():
-                    torch.cuda.empty_cache()
-            except ImportError:
-                pass
+            if HAS_TORCH and torch.cuda.is_available():
+                torch.cuda.empty_cache()
 
             self._initialized = False
-            logging.info("StreamingVllmEngine shut down")
+            logger.info("StreamingVllmEngine shut down")
