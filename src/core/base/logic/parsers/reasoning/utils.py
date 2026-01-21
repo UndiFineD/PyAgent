@@ -1,5 +1,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
+"""
+Utility functions for reasoning extraction and streaming parsing.
+"""
 
 from typing import Any
 from .registry import ReasoningParserManager

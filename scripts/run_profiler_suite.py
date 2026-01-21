@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
-# Performance Profiling Suite for PyAgent.
+"""
+Performance Profiling Suite for PyAgent.
+Validates Rust-accelerated logic and monitors tokenization throughput.
+"""
 
 import sys
 import asyncio
@@ -12,10 +15,10 @@ project_root = Path(__file__).parent.parent
 # sys.path.insert(0, str(project_root))
 
 # Remove current directory from path to avoid shadowing rust_core with the folder
-cwd = str(Path.cwd())
+CURRENT_WORKING_DIR = str(Path.cwd())
 print(f"DEBUG: Before cleaning sys.path: {sys.path[:3]}")
-while cwd in sys.path:
-    sys.path.remove(cwd)
+while CURRENT_WORKING_DIR in sys.path:
+    sys.path.remove(CURRENT_WORKING_DIR)
 while "" in sys.path:
     sys.path.remove("")
 print(f"DEBUG: After cleaning sys.path: {sys.path[:3]}")
@@ -24,10 +27,11 @@ try:
     # Force profile rust_core BEFORE other imports
     import rust_core
     print(f"DEBUG: rust_core file: {getattr(rust_core, '__file__', 'None')}")
-    
+
     # Now we can add project_root for other imports
     sys.path.insert(0, str(project_root))
-    
+
+    # pylint: disable=wrong-import-position
     from src.observability.profiling.rust_profiler import RustProfiler, create_profiled_rust_core
     print(f"DEBUG: rust_core dir count: {len(dir(rust_core))}")
 
@@ -38,20 +42,23 @@ try:
 except ImportError as e:
     print(f"DEBUG: Initial import error: {e}")
 
+# pylint: disable=wrong-import-position
 from src.infrastructure.services.benchmarks.benchmark_suite import BenchmarkSuite
 
 async def main():
+    """Main execution point for the profiling suite."""
     profiler = RustProfiler.get_instance()
     profiler.enable()
-    
+
     # Verify that calling it manually works
+    # pylint: disable=import-outside-toplevel
     import rust_core as rc
     print("DEBUG: Calling estimate_tokens_rust...")
     try:
         rc.estimate_tokens_rust("test")
     except (AttributeError, RuntimeError) as e:
         print(f"DEBUG: Manual call failed: {e}")
-        
+
     print(f"DEBUG: Profiler calls for estimate_tokens_rust: {profiler.get_stats().get('estimate_tokens_rust', None)}")
 
     suite = BenchmarkSuite()
@@ -60,8 +67,19 @@ async def main():
     test_texts = {
         "Short": "What is Python?",
         "Medium": "Explain the concept of technical debt in software development.",
-        "Long": "Provide a comprehensive analysis of microservices architecture, including its advantages, disadvantages, common patterns, best practices, and real-world use cases." * 10,
-        "Code": "def binary_search(arr, target):\n    left, right = 0, len(arr) - 1\n    while left <= right:\n        mid = (left + right) // 2\n        if arr[mid] == target: return mid\n        elif arr[mid] < target: left = mid + 1\n        else: right = mid - 1\n    return -1"
+        "Long": (
+            "Provide a comprehensive analysis of microservices architecture." * 50
+        ),
+        "Code": """
+def binary_search(arr, target):
+    left, right = 0, len(arr) - 1
+    while left <= right:
+        mid = (left + right) // 2
+        if arr[mid] == target: return mid
+        elif arr[mid] < target: left = mid + 1
+        else: right = mid - 1
+    return -1
+"""
     }
 
     print("\n🚀 Running Profiled Benchmarks...")
@@ -75,7 +93,7 @@ async def main():
     # Print summaries
     suite.print_summary()
     profiler.print_report()
-    
+
     # Save report
     report_path = project_root / "temp" / "profiling_report.json"
     profiler.save_report(report_path)

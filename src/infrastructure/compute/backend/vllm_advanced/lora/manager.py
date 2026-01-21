@@ -76,7 +76,7 @@ class LoraManager:
         """
         adapter = self.registry.get(name)
         if not adapter:
-            logger.error(f"Adapter not found: {name}")
+            logger.error("Adapter not found: %s", name)
             return False
 
         if name in self._active_adapters:
@@ -108,12 +108,12 @@ class LoraManager:
             self._update_lru(name)
             self._stats["total_loads"] += 1
 
-            logger.info(f"Activated LoRA adapter: {name} ({adapter.load_time_ms:.1f}ms)")
+            logger.info("Activated LoRA adapter: %s (%.1fms)", name, adapter.load_time_ms)
             return True
 
-        except Exception as e:
+        except Exception as e: # pylint: disable=broad-exception-caught
             adapter.state = AdapterState.ERROR
-            logger.error(f"Failed to activate adapter {name}: {e}")
+            logger.error("Failed to activate adapter %s: %s", name, e)
             return False
 
     def deactivate(self, name: str) -> bool:
@@ -129,7 +129,7 @@ class LoraManager:
         if name in self._lru_cache:
             self._lru_cache.remove(name)
 
-        logger.info(f"Deactivated LoRA adapter: {name}")
+        logger.info("Deactivated LoRA adapter: %s", name)
         return True
 
     def _update_lru(self, name: str) -> None:
@@ -146,7 +146,7 @@ class LoraManager:
         lru_name = self._lru_cache[0]
         if self.deactivate(lru_name):
             self._stats["evictions"] += 1
-            logger.info(f"Evicted LRU adapter: {lru_name}")
+            logger.info("Evicted LRU adapter: %s", lru_name)
             return True
 
         return False
@@ -161,7 +161,7 @@ class LoraManager:
 
         adapter = self.registry.get(name)
         if not adapter:
-            logger.error(f"Adapter not found: {name}")
+            logger.error("Adapter not found: %s", name)
             return None
 
         # Ensure activated

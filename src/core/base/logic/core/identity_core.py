@@ -56,7 +56,8 @@ class IdentityCore:
         if rc:
             try:
                 # pylint: disable=no-member
-                return rc.verify_signature(payload, signature, public_key)  # type: ignore[attr-defined]
+                # type: ignore[attr-defined]
+                return rc.verify_signature(payload, signature, public_key)
             except Exception: # pylint: disable=broad-exception-caught
                 pass
         # In a real implementation, this would use asymmetrical crypto.
