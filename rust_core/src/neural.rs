@@ -12,6 +12,7 @@
 // limitations under the License.
 
 use pyo3::prelude::*;
+use pyo3::wrap_pyfunction;
 use std::collections::{HashMap, VecDeque, HashSet};
 use sysinfo::System;
 use ndarray::prelude::*;
@@ -815,3 +816,27 @@ pub fn generate_synthetic_snippets(count: usize) -> PyResult<Vec<String>> {
     Ok(snippets)
 }
 
+
+pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_class::<HardwareProfile>()?;
+    m.add_class::<TransformerConfig>()?;
+    m.add_class::<NeuralTransformer>()?;
+    m.add_class::<FlexibleNeuralNetwork>()?;
+    m.add_class::<KVCache>()?;
+    m.add_class::<GenerationStats>()?;
+    m.add_function(wrap_pyfunction!(generate_neural_response, m)?)?;
+    m.add_function(wrap_pyfunction!(cluster_interactions_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(top_k_cosine_similarity, m)?)?;
+    m.add_function(wrap_pyfunction!(vectorize_text_insight, m)?)?;
+    m.add_function(wrap_pyfunction!(vectorize_text_insight_with_stats, m)?)?;
+    m.add_function(wrap_pyfunction!(average_feature_vectors, m)?)?;
+    m.add_function(wrap_pyfunction!(generate_synthetic_snippets, m)?)?;
+    m.add_function(wrap_pyfunction!(generate_synthetic_snippets_with_stats, m)?)?;
+    m.add_class::<NeuralTransformer>()?;
+    m.add_class::<TransformerConfig>()?;
+    m.add_class::<FlexibleNeuralNetwork>()?;
+    m.add_class::<KVCache>()?;
+    m.add_class::<GenerationStats>()?;
+    m.add_class::<HardwareProfile>()?;
+    Ok(())
+}

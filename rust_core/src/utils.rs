@@ -1,4 +1,5 @@
 use pyo3::prelude::*;
+use pyo3::wrap_pyfunction;
 use std::collections::{HashMap, HashSet};
 
 /// Fast hashing for shard lookup (Phase 131).
@@ -1106,4 +1107,59 @@ pub fn parse_xml_tool_call_rust(
     }
     
     Ok(None)
+}
+
+pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(fast_hash, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_metrics_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_interaction_shard_md5, m)?)?;
+    m.add_function(wrap_pyfunction!(evaluate_formula, m)?)?;
+    m.add_function(wrap_pyfunction!(compress_python_regex, m)?)?;
+    m.add_function(wrap_pyfunction!(summarize_markdown, m)?)?;
+    m.add_function(wrap_pyfunction!(parse_bing_results, m)?)?;
+    m.add_function(wrap_pyfunction!(parse_google_results, m)?)?;
+    m.add_function(wrap_pyfunction!(parse_ddg_results, m)?)?;
+    m.add_function(wrap_pyfunction!(format_results_block, m)?)?;
+    m.add_function(wrap_pyfunction!(calculate_stochastic_failures, m)?)?;
+    m.add_function(wrap_pyfunction!(apply_latency_spike, m)?)?;
+    m.add_function(wrap_pyfunction!(format_progress_bar, m)?)?;
+    m.add_function(wrap_pyfunction!(score_tool_relevance, m)?)?;
+    m.add_function(wrap_pyfunction!(generate_openapi_spec, m)?)?;
+    m.add_function(wrap_pyfunction!(flatten_env_vars, m)?)?;
+    m.add_function(wrap_pyfunction!(prune_directory_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(deep_clean_pycache_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(ensure_safety_flags_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(parse_adb_devices_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(cdiv_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(next_power_of_2_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(prev_power_of_2_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(round_up_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(round_down_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(atomic_counter_add_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(xxhash_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(fast_cache_hash_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(cache_hit_ratio_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(batch_cdiv_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(batch_next_power_of_2_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(json_count_leaves_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(json_iter_leaves_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(json_flatten_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(json_depth_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(json_get_path_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(json_validate_leaves_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(msgpack_encode_tensor_meta_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(validate_tensor_shape_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(apply_temperature_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(apply_top_k_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(apply_repetition_penalty_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compute_logits_mask_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(encode_slice_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(structured_counter_diff_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(flat_logprobs_append_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(extract_json_tool_calls_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(dedupe_log_messages_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(detect_cloud_provider_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(validate_prompt_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(parse_xml_tool_call_rust, m)?)?;
+    Ok(())
 }
