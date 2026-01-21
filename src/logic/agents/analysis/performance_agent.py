@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-"""PerformanceAgent identifies and suggests code optimizations."""
-
 # Copyright 2026 PyAgent Authors
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -14,26 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+
+"""Auto-extracted class from agent_coder.py"""
+
 from __future__ import annotations
-
-import logging
-import re
-
-# Try to import rust acceleration
-try:
-    from rust_core import \
-        scan_optimization_patterns_rust  # pylint: disable=no-name-in-module
-
-    HAS_RUST_CORE = True
-except ImportError:
-    HAS_RUST_CORE = False
-
-from src.core.base.common.types.optimization_suggestion import \
-    OptimizationSuggestion
-from src.core.base.common.types.optimization_type import OptimizationType
 from src.core.base.lifecycle.version import VERSION
-
-logger = logging.getLogger(__name__)
+from src.core.base.common.types.optimization_suggestion import OptimizationSuggestion
+from src.core.base.common.types.optimization_type import OptimizationType
+import re
 
 __version__ = VERSION
 
@@ -88,42 +74,47 @@ class PerformanceAgent:
         """
         self.suggestions = []
 
-        if HAS_RUST_CORE:
-            try:
-                rust_results = scan_optimization_patterns_rust(content)
-                if rust_results:
-                    for line_num, pattern_idx, groups in rust_results:
-                        if pattern_idx < len(self.OPTIMIZATION_PATTERNS):
-                            pattern, opt_type, desc, fix = self.OPTIMIZATION_PATTERNS[pattern_idx]
-                            self.suggestions.append(
-                                OptimizationSuggestion(
-                                    type=opt_type,
-                                    description=desc,
-                                    impact="medium",
-                                    code_location=f"line {line_num}",
-                                    before_snippet="",
-                                    after_snippet=fix.format(*groups) if groups else fix,
-                                )
+        try:
+            from rust_core import scan_optimization_patterns_rust  # type: ignore[attr-defined]
+
+            rust_results = scan_optimization_patterns_rust(content)
+            if rust_results:
+                for line_num, pattern_idx, groups in rust_results:
+                    if pattern_idx < len(self.OPTIMIZATION_PATTERNS):
+                        pattern, opt_type, desc, fix = self.OPTIMIZATION_PATTERNS[
+                            pattern_idx
+                        ]
+                        self.suggestions.append(
+                            OptimizationSuggestion(
+                                type=opt_type,
+                                description=desc,
+                                impact="medium",
+                                code_location=f"line {line_num}",
+                                before_snippet="",
+                                after_snippet=fix.format(*groups) if groups else fix,
                             )
-                    return self.suggestions
-            except (ImportError, AttributeError, RuntimeError) as e:
-                logger.debug("Rust acceleration failed: %s", e)
+                        )
+                return self.suggestions
+        except (ImportError, AttributeError) as e:
+            logger.debug(f"Rust acceleration not available: {e}")
 
         # Fallback to Python implementation
         lines = content.split("\n")
-        for i, line in enumerate(lines, 1):
-            for pattern, opt_type, desc, fix in self.OPTIMIZATION_PATTERNS:
-                match = re.search(pattern, line)
-                if match:
-                    self.suggestions.append(
-                        OptimizationSuggestion(
-                            type=opt_type,
-                            description=desc,
-                            impact="medium",
-                            code_location=f"line {i}",
-                            before_snippet=line.strip(),
-                            after_snippet=fix.format(*match.groups()) if match.groups() else fix,
+            for i, line in enumerate(lines, 1):
+                for pattern, opt_type, desc, fix in self.OPTIMIZATION_PATTERNS:
+                    match = re.search(pattern, line)
+                    if match:
+                        self.suggestions.append(
+                            OptimizationSuggestion(
+                                type=opt_type,
+                                description=desc,
+                                impact="medium",
+                                code_location=f"line {i}",
+                                before_snippet=line.strip(),
+                                after_snippet=fix.format(*match.groups())
+                                if match.groups()
+                                else fix,
+                            )
                         )
-                    )
 
         return self.suggestions

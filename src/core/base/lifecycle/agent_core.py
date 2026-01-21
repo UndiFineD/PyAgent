@@ -101,9 +101,21 @@ class LogicCore:
     def calculate_diff(
         self, old_content: str, new_content: str, filename: str = "file"
     ) -> str:
-        """Generates a unified diff between two strings."""
+        """Generates a unified diff between strings.
+
+        Phase 15: Native Rust acceleration for Myers diff.
+        """
         if not old_content or not new_content:
             return ""
+
+        if RUST_AVAILABLE and hasattr(rc, "generate_unified_diff_rust"):
+            try:
+                diff_text, _, _ = rc.generate_unified_diff_rust(
+                    old_content, new_content, filename, 3
+                )
+                return diff_text
+            except Exception as e:
+                logger.debug(f"Rust diff failed: {e}")
 
         diff = difflib.unified_diff(
             old_content.splitlines(keepends=True),
