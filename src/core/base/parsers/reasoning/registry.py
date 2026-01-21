@@ -3,7 +3,7 @@
 
 import importlib
 import logging
-from typing import Any, ClassVar, Callable, type
+from typing import Any, ClassVar, Callable, Type
 from .base import ReasoningParser
 
 logger = logging.getLogger(__name__)

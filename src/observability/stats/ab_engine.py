@@ -6,6 +6,7 @@
 from __future__ import annotations
 import hashlib
 import logging
+import contextlib
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -152,7 +153,7 @@ class ABComparator:
         
         # Phase 16: Try Rust-accelerated t-test calculation
         if _RUST_AVAILABLE and hasattr(rust_core, "calculate_ttest_rust"):
-            try:
+            with contextlib.suppress(Exception):
                 result = rust_core.calculate_ttest_rust(control_values, treatment_values, alpha)
                 if result:
                     return ABSignificanceResult(
@@ -160,8 +161,6 @@ class ABComparator:
                         is_significant=result.get("is_significant", False),
                         effect_size=result.get("effect_size", 0.0),
                     )
-            except Exception:
-                pass  # Fall through to Python implementation
         
         mean_a = sum(control_values) / len(control_values)
         mean_b = sum(treatment_values) / len(treatment_values)

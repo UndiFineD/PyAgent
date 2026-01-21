@@ -7,7 +7,7 @@ Tests for the actual RequestQueue implementation API.
 import pytest
 import time
 
-from src.infrastructure.engine.RequestQueue import (
+from src.infrastructure.engine.request_queue import (
     SchedulingPolicy,
     RequestStatus,
     RequestPriority,

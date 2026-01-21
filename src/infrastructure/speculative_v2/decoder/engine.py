@@ -6,7 +6,6 @@ from __future__ import annotations
 from typing import Any, Callable, Dict, List, Optional, Tuple
 import numpy as np
 from .config import AcceptanceMethod
-from .tree import SpeculativeTree
 from .proposers import SpeculativeProposer, NgramProposer, MedusaProposer
 from .verification import SpeculativeVerifier, VerificationResult
 
@@ -37,7 +36,7 @@ class SpeculativeDecoder:
         """Perform one speculative decoding step."""
         tree = self.proposer.propose(input_ids, num_candidates=num_candidates)
         
-        if len(tree) == 0:
+        if not tree:
             target_logits = target_forward_fn(input_ids)
             new_token = int(np.argmax(target_logits[-1]))
             return [new_token], VerificationResult([new_token], 1, 0, 1.0, 1)

@@ -7,12 +7,13 @@ NVIDIA CUDA platform implementation.
 from __future__ import annotations
 
 import logging
-from typing import List, Set, Optional
+from typing import Set
 
 from .models import (
     PlatformType,
     DeviceCapability,
     MemoryInfo,
+    DeviceInfo,
     DeviceFeature,
     AttentionBackend,
     QuantizationType,
@@ -99,7 +100,7 @@ class CudaPlatform(Platform):
         torch = self._get_torch()
         try:
             return torch.version.cuda or "unknown"
-        except Exception:
+        except (AttributeError, RuntimeError):
             return "unknown"
 
     def get_supported_quantizations(self) -> Set[QuantizationType]:
@@ -125,29 +126,20 @@ class CudaPlatform(Platform):
 
         return quants
 
-    def get_attention_backends(self) -> List[AttentionBackend]:
-        cap = self.get_device_capability()
-        backends = []
+    def get_device_info(self, device_id: int = 0) -> DeviceInfo:
+        return DeviceInfo(
+            device_id=device_id,
+            name=self.get_device_name(device_id),
+            platform=self.get_platform_type(),
+            capability=self.get_device_capability(device_id),
+            memory=self.get_memory_info(device_id),
+            features=self.get_device_features(device_id),
+            driver_version=self.get_driver_version(),
+        )
 
-        if cap >= DeviceCapability(8, 0):
-            backends.append(AttentionBackend.FLASH_ATTN_V2)
-            try:
-                import flash_attn
-                if hasattr(flash_attn, "__version__") and flash_attn.__version__.startswith("3."):
-                    backends.insert(0, AttentionBackend.FLASH_ATTN_V3)
-            except ImportError:
-                pass
-
-        if cap >= DeviceCapability(9, 0):
-            backends.insert(0, AttentionBackend.FLASHINFER)
-
-        backends.extend([
-            AttentionBackend.XFORMERS,
-            AttentionBackend.TORCH_SDPA,
-            AttentionBackend.PAGED_ATTENTION,
-            AttentionBackend.DEFAULT,
-        ])
-        return backends
+    def select_attention_backend(self, _capability: DeviceCapability) -> AttentionBackend:
+        backends = self.get_attention_backends()
+        return backends[0] if backends else AttentionBackend.DEFAULT
 
     def empty_cache(self) -> None:
         torch = self._get_torch()

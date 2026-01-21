@@ -10,7 +10,7 @@ This package provides:
 - ReasoningEngine: Unified reasoning extraction
 """
 
-from .ReasoningEngine import (
+from .reasoning_engine import (
     # Enums
     ReasoningFormat,
     ToolCallFormat,

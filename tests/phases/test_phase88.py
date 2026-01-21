@@ -3,7 +3,7 @@ import os
 
 # Ensure the project root is in PYTHONPATH
 
-from src.logic.agents.development.DocGenAgent import DocGenAgent
+from src.logic.agents.development.doc_gen_agent import DocGenAgent
 
 
 class TestDocGen(unittest.TestCase):

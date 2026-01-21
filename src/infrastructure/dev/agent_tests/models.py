@@ -16,7 +16,7 @@
 """Data models for test agent functionality."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 from dataclasses import dataclass, field
 from typing import Any
 from .enums import (

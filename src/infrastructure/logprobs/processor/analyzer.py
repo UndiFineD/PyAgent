@@ -19,7 +19,7 @@ class LogprobsAnalyzer:
     @staticmethod
     def compute_confidence(logprobs: Union[FlatLogprobs, List[LogprobEntry]], method: str = "mean") -> float:
         lps = logprobs.logprobs if isinstance(logprobs, FlatLogprobs) else np.array([e.logprob for e in logprobs])
-        if len(lps) == 0: return 0.0
+        if not lps.size: return 0.0
         if method == "mean": return float(np.mean(np.exp(lps)))
         if method == "geometric": return float(np.exp(np.mean(lps)))
         if method == "min": return float(np.exp(np.min(lps)))

@@ -61,7 +61,7 @@ class TiktokenTokenizer(BaseTokenizer):
     def eos_token_id(self) -> Optional[int]:
         try:
             return self._encoding.encode("<|endoftext|>", allowed_special={"<|endoftext|>"})[0]
-        except:
+        except Exception:
             return None
     
     @property

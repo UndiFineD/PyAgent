@@ -18,24 +18,13 @@
 # limitations under the License.
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import argparse
 import json
 import logging
 import sys
+import contextlib
 from .stats_agent import StatsAgent
-
-try:
-    import matplotlib
-
-    # Use non-interactive backend
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-
-    has_matplotlib = True
-except (ImportError, RuntimeError, Exception):
-    plt = None  # type: ignore[assignment]
-    has_matplotlib = False
 
 __version__ = VERSION
 
@@ -87,7 +76,10 @@ def main() -> None:
                 baseline_stats = json.load(baseline_file)
             agent.generate_comparison_report(baseline_stats)
         agent.report_stats(output_format=args.format)
-        if has_matplotlib:
+        
+        # Visualize only if requested and available
+        with contextlib.suppress(ImportError):
+            import matplotlib
             agent.visualize_stats()
     except ValueError as e:
         logging.error(str(e))

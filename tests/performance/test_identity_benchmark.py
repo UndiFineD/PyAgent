@@ -1,5 +1,5 @@
 import timeit
-from src.core.base.core.IdentityCore import IdentityCore
+from src.core.base.core.identity_core import IdentityCore
 
 
 def benchmark_identity():

@@ -16,7 +16,7 @@
 """Debugging utilities for test execution."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import json
 from dataclasses import dataclass, field
 from datetime import datetime

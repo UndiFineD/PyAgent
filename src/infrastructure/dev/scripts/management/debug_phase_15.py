@@ -16,11 +16,11 @@
 """Validation script for Phase 15: Ethics & Safety Governance."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import logging
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
-from src.logic.agents.cognitive.KnowledgeAgent import KnowledgeAgent
+from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.logic.agents.cognitive.knowledge_agent import KnowledgeAgent
 
 __version__ = VERSION
 

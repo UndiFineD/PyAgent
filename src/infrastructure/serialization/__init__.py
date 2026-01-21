@@ -4,7 +4,7 @@ Serialization infrastructure.
 Phase 19: Beyond vLLM - Fast serialization patterns.
 Phase 21: MsgSpec high-performance serialization.
 """
-from src.infrastructure.serialization.FastSerializer import (
+from src.infrastructure.serialization.fast_serializer import (
     Serializer,
     SerializerStats,
     SerializationFormat,
@@ -23,7 +23,7 @@ from src.infrastructure.serialization.FastSerializer import (
     from_msgpack,
 )
 
-from src.infrastructure.serialization.MsgSpecSerializer import (
+from src.infrastructure.serialization.msg_spec_serializer import (
     # Availability
     is_msgspec_available,
     require_msgspec,
@@ -79,7 +79,7 @@ __all__ = [
 
 # Conditionally export Struct types from MsgSpecSerializer
 if MSGSPEC_AVAILABLE:
-    from src.infrastructure.serialization.MsgSpecSerializer import (
+    from src.infrastructure.serialization.msg_spec_serializer import (
         Role,
         ChatMessage,
         ToolCall,

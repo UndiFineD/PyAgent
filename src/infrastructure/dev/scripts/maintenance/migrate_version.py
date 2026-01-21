@@ -18,7 +18,7 @@ from __future__ import annotations
 import os
 
 src_path = r"c:\DEV\PyAgent\src"
-version_import = "from src.core.base.Version import VERSION"
+version_import = "from src.core.base.version import VERSION"
 target_version = 'VERSION = "2.1.2-stable"'
 
 print(f"Starting version migration in: {src_path}")

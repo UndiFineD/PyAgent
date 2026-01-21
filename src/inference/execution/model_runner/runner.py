@@ -145,12 +145,12 @@ class AsyncModelRunner:
         """
         start_time = time.perf_counter()
         
-        if self._model_forward_fn is not None:
+        if self._model_forward_fn:
             output = self._model_forward_fn(model_input)
         else:
             # Mock execution for testing
             output = self._output_pool.acquire()
-            if output is None:
+            if not output:
                 output = ModelOutput(request_id=model_input.request_id)
             
             output.request_id = model_input.request_id
@@ -252,7 +252,7 @@ class AsyncModelRunner:
         with self._lock:
             avg_latency = (
                 self._total_latency_ms / self._total_executions
-                if self._total_executions > 0 else 0.0
+                if self._total_executions else 0.0
             )
             
             return {

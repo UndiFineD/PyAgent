@@ -17,7 +17,7 @@ from unittest.mock import patch
 import tkinter as tk
 import os
 import json
-from src.interface.ui.gui.MainApp import PyAgentGUI
+from src.interface.ui.gui.main_app import PyAgentGUI
 
 
 class TestGUIIntegration(unittest.TestCase):

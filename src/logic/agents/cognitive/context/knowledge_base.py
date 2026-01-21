@@ -18,7 +18,7 @@ Context Agent: Maintains and improves context/description files.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import sys
 from pathlib import Path
 
@@ -32,7 +32,7 @@ if str(root / "src") not in sys.path:
     sys.path.append(str(root / "src"))
 
     from src.core.base.entrypoint import create_main_function
-    from src.logic.agents.cognitive.ContextAgent import ContextAgent
+    from src.logic.agents.cognitive.context_agent import ContextAgent
 
 # Create main function using the helper
 main = create_main_function(

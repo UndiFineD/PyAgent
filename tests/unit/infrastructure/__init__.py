@@ -40,5 +40,5 @@ __all__ = [
     "TestVersionNegotiator",
 ]
 
-from .test_backend_UNIT import *  # noqa: F401, F403
-from .test_backend_CORE_UNIT import *  # noqa: F401, F403
+from .test_backend_unit import *  # noqa: F401, F403
+from .test_backend_core_unit import *  # noqa: F401, F403

@@ -1,6 +1,6 @@
 import unittest
 from hypothesis import given, strategies as st
-from src.observability.stats.core.StabilityCore import StabilityCore, FleetMetrics
+from src.observability.stats.core.stability_core import StabilityCore, FleetMetrics
 
 
 class TestStabilityCore(unittest.TestCase):

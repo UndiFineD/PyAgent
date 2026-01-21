@@ -18,7 +18,7 @@ Test Utils: Common utilities for agent and backend unit tests.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import sys
 from pathlib import Path
 from contextlib import contextmanager

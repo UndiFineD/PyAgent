@@ -3,7 +3,7 @@ import json
 import os
 import threading
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Union
+from typing import Any, Dict, List, Optional
 from .config import (
     ModelArchitecture, ArchitectureSpec, ModelInfo, ModelCapability,
     QuantizationType, VRAMEstimate
@@ -25,7 +25,8 @@ class ModelRegistry:
         return cls._instance
     
     def __init__(self):
-        if self._initialized: return
+        if getattr(self, "_initialized", False):
+            return
         self._architectures: Dict[ModelArchitecture, ArchitectureSpec] = {}
         self._model_cache: Dict[str, ModelInfo] = {}
         self._cache_lock = threading.RLock()
@@ -40,6 +41,10 @@ class ModelRegistry:
     def register(self, spec: ArchitectureSpec):
         self._architectures[spec.architecture] = spec
         
+    def list_architectures(self) -> List[ModelArchitecture]:
+        """List all registered model architectures."""
+        return list(self._architectures.keys())
+
     def get_model_info(self, name: str, config: Optional[Dict[str, Any]] = None) -> ModelInfo:
         with self._cache_lock:
             if name in self._model_cache: return self._model_cache[name]
@@ -55,12 +60,15 @@ class ModelRegistry:
     
     def _load_config(self, name: str) -> Optional[Dict[str, Any]]:
         if os.path.isdir(name) and (Path(name) / "config.json").exists():
-            with open(Path(name) / "config.json") as f: return json.load(f)
+            with open(Path(name) / "config.json", mode="r", encoding="utf-8") as f:
+                return json.load(f)
         try:
             from huggingface_hub import hf_hub_download
             p = hf_hub_download(repo_id=name, filename="config.json")
-            with open(p) as f: return json.load(f)
-        except: return None
+            with open(p, mode="r", encoding="utf-8") as f:
+                return json.load(f)
+        except (ImportError, RuntimeError, ValueError):
+            return None
         
     def _estimate_params(self, c: Dict[str, Any]) -> int:
         h, l, v = c.get("hidden_size", 4096), c.get("num_hidden_layers", 32), c.get("vocab_size", 32000)

@@ -22,24 +22,24 @@ Phase 31: Extends PyAgent's vLLM integration with:
 - Guided decoding for structured output (JSON, regex)
 """
 
-from .AsyncVllmEngine import (
+from .async_vllm_engine import (
     AsyncVllmEngine,
     AsyncEngineConfig,
     AsyncRequestHandle,
 )
-from .StreamingEngine import (
+from .streaming_engine import (
     StreamingVllmEngine,
     StreamingConfig,
     StreamCallback,
     TokenStreamIterator,
 )
-from .LoraManager import (
+from .lora_manager import (
     LoraManager,
     LoraAdapter,
     LoraConfig,
     LoraRegistry,
 )
-from .GuidedDecoder import (
+from .guided_decoder import (
     GuidedDecoder,
     GuidedConfig,
     JsonSchema,

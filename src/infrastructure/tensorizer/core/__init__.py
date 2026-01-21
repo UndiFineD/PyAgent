@@ -3,7 +3,6 @@
 
 from .config import TensorizerConfig, CompressionType, TensorDtype
 from .metadata import TensorMetadata
-from .compression import CompressionBackend, ZstdBackend, Lz4Backend
 from .writer import TensorizerWriter
 from .reader import TensorizerReader
 from .streaming import StreamingTensorizerReader
@@ -14,9 +13,6 @@ __all__ = [
     "CompressionType",
     "TensorDtype",
     "TensorMetadata",
-    "CompressionBackend",
-    "ZstdBackend",
-    "Lz4Backend",
     "TensorizerWriter",
     "TensorizerReader",
     "StreamingTensorizerReader",

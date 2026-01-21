@@ -1,5 +1,5 @@
 from hypothesis import given, strategies as st, settings, HealthCheck
-from src.logic.agents.swarm.core.AuctionCore import AuctionCore
+from src.logic.agents.swarm.core.auction_core import AuctionCore
 
 
 class TestAuctionCore:

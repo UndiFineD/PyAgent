@@ -1,0 +1,159 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""
+GraphCore logic for PyAgent.
+Pure logic for AST-based code relationship analysis and graph management.
+"""
+
+from __future__ import annotations
+from src.core.base.version import VERSION
+import ast
+from typing import Any
+
+try:
+    import rust_core
+    _RUST_ACCEL = True
+except ImportError:
+    _RUST_ACCEL = False
+
+__version__ = VERSION
+
+
+class CodeGraphVisitor(ast.NodeVisitor):
+    """AST visitor to extract imports, classes, and function calls."""
+
+    def __init__(self, file_path: str) -> None:
+        self.file_path = file_path
+        self.imports: set[str] = set()
+        self.classes: list[str] = []
+        self.calls: set[str] = set()
+        self.bases: dict[str, list[str]] = {}
+
+    def visit_Import(self, node: ast.Import) -> None:
+        for alias in node.names:
+            self.imports.add(alias.name)
+        self.generic_visit(node)
+
+    def visit_ImportFrom(self, node: ast.ImportFrom) -> None:
+        if node.module:
+            self.imports.add(node.module)
+        self.generic_visit(node)
+
+    def visit_ClassDef(self, node: ast.ClassDef) -> None:
+        self.classes.append(node.name)
+        bases = []
+
+        for base in node.bases:
+            if isinstance(base, ast.Name):
+                bases.append(base.id)
+            elif isinstance(base, ast.Attribute):
+                bases.append(base.attr)
+
+        self.bases[node.name] = bases
+        self.generic_visit(node)
+
+    def visit_Call(self, node: ast.Call) -> None:
+        if isinstance(node.func, ast.Name):
+            self.calls.add(node.func.id)
+        elif isinstance(node.func, ast.Attribute):
+            self.calls.add(node.func.attr)
+        self.generic_visit(node)
+
+
+class GraphCore:
+    """Pure logic for managing code relationship graphs."""
+
+    @staticmethod
+    def parse_python_content(rel_path: str, content: str) -> dict[str, Any]:
+        """Parses Python code and returns extracted symbols and relationships."""
+        try:
+            import rust_core
+
+            # Rust returns {imports: [], classes: [(name, bases)], calls: []}
+            data = rust_core.extract_graph_entities_regex(content)  # type: ignore[attr-defined]
+
+            # Map Rust output to expected format
+            inherits = {}
+            classes_list = []
+            for name, bases_str in data.get("classes", []):
+                classes_list.append(name)
+                # Parse bases string simply by split ','
+                if bases_str:
+                    bases = [b.strip() for b in bases_str.split(",") if b.strip()]
+                    inherits[name] = bases
+                else:
+                    inherits[name] = []
+
+            return {
+                "rel_path": rel_path,
+                "imports": data.get("imports", []),
+                "classes": classes_list,
+                "inherits": inherits,
+                "calls": data.get("calls", []),
+            }
+        except (ImportError, AttributeError):
+            pass
+
+        try:
+            tree = ast.parse(content)
+            visitor = CodeGraphVisitor(rel_path)
+            visitor.visit(tree)
+            return {
+                "rel_path": rel_path,
+                "imports": list(visitor.imports),
+                "classes": visitor.classes,
+                "inherits": visitor.bases,
+                "calls": list(visitor.calls),
+            }
+        except Exception:
+            return {
+                "rel_path": rel_path,
+                "imports": [],
+                "classes": [],
+                "inherits": {},
+                "calls": [],
+            }
+
+    @staticmethod
+    def build_edges(analysis: dict[str, Any]) -> list[tuple[str, str, str]]:
+        """
+        Builds graph edges from analysis results.
+        Returns list of (source, target, relationship_type).
+        """
+        if _RUST_ACCEL:
+            try:
+                inherits_list = [(k, v) for k, v in analysis.get("inherits", {}).items()]
+                return rust_core.build_graph_edges_rust(
+                    analysis["rel_path"],
+                    analysis.get("imports", []),
+                    inherits_list
+                )
+            except Exception:
+                pass
+        # Python fallback
+        edges = []
+        rel_path = analysis["rel_path"]
+
+        # File level dependencies
+        for imp in analysis["imports"]:
+            edges.append((rel_path, imp, "imports"))
+
+        # Class level edges
+        for cls, bases in analysis["inherits"].items():
+            for base in bases:
+                edges.append((f"{rel_path}::{cls}", base, "inherits"))
+
+        return edges

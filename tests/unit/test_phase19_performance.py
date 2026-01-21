@@ -23,7 +23,7 @@ class TestObjectPool:
     
     def test_basic_acquire_release(self):
         """Test basic pool operations."""
-        from src.core.base.structures.ObjectPool import ObjectPool
+        from src.core.base.structures.object_pool import ObjectPool
         
         pool = ObjectPool(factory=list, max_size=10)
         
@@ -36,7 +36,7 @@ class TestObjectPool:
     
     def test_object_reuse(self):
         """Test objects are reused from pool."""
-        from src.core.base.structures.ObjectPool import ObjectPool
+        from src.core.base.structures.object_pool import ObjectPool
         
         pool = ObjectPool(
             factory=list,
@@ -55,7 +55,7 @@ class TestObjectPool:
     
     def test_borrow_context_manager(self):
         """Test context manager auto-returns."""
-        from src.core.base.structures.ObjectPool import ObjectPool
+        from src.core.base.structures.object_pool import ObjectPool
         
         pool = ObjectPool(factory=dict, max_size=5)
         
@@ -67,7 +67,7 @@ class TestObjectPool:
     
     def test_max_size_limit(self):
         """Test pool respects max size."""
-        from src.core.base.structures.ObjectPool import ObjectPool
+        from src.core.base.structures.object_pool import ObjectPool
         
         pool = ObjectPool(factory=list, max_size=2)
         
@@ -84,7 +84,7 @@ class TestObjectPool:
     
     def test_buffer_pool(self):
         """Test specialized buffer pool."""
-        from src.core.base.structures.ObjectPool import BufferPool
+        from src.core.base.structures.object_pool import BufferPool
         
         pool = BufferPool(buffer_size=4096, max_buffers=10)
         
@@ -96,7 +96,7 @@ class TestObjectPool:
     
     def test_tiered_buffer_pool(self):
         """Test multi-tier buffer pool."""
-        from src.core.base.structures.ObjectPool import TieredBufferPool
+        from src.core.base.structures.object_pool import TieredBufferPool
         
         pool = TieredBufferPool()
         
@@ -113,7 +113,7 @@ class TestObjectPool:
     
     def test_pooled_list_dict_set(self):
         """Test convenience functions."""
-        from src.core.base.structures.ObjectPool import (
+        from src.core.base.structures.object_pool import (
             pooled_list, pooled_dict, pooled_set
         )
         
@@ -135,7 +135,7 @@ class TestLockFreeQueue:
     
     def test_mpmc_basic(self):
         """Test MPMC queue basic operations."""
-        from src.core.base.structures.LockFreeQueue import MPMCQueue
+        from src.core.base.structures.lock_free_queue import MPMCQueue
         
         queue = MPMCQueue[int](capacity=100)
         
@@ -149,7 +149,7 @@ class TestLockFreeQueue:
     
     def test_mpmc_try_operations(self):
         """Test non-blocking operations."""
-        from src.core.base.structures.LockFreeQueue import MPMCQueue
+        from src.core.base.structures.lock_free_queue import MPMCQueue
         
         queue = MPMCQueue[int](capacity=2)
         
@@ -163,7 +163,7 @@ class TestLockFreeQueue:
     
     def test_mpmc_concurrent(self):
         """Test concurrent access."""
-        from src.core.base.structures.LockFreeQueue import MPMCQueue
+        from src.core.base.structures.lock_free_queue import MPMCQueue
         
         queue = MPMCQueue[int](capacity=1000)
         results = []
@@ -203,7 +203,7 @@ class TestLockFreeQueue:
     
     def test_spsc_queue(self):
         """Test single-producer single-consumer queue."""
-        from src.core.base.structures.LockFreeQueue import SPSCQueue
+        from src.core.base.structures.lock_free_queue import SPSCQueue
         
         queue = SPSCQueue[int](capacity=16)
         
@@ -217,7 +217,7 @@ class TestLockFreeQueue:
     
     def test_priority_queue(self):
         """Test priority queue."""
-        from src.core.base.structures.LockFreeQueue import PriorityQueue
+        from src.core.base.structures.lock_free_queue import PriorityQueue
         
         queue = PriorityQueue[str]()
         
@@ -232,7 +232,7 @@ class TestLockFreeQueue:
     
     def test_work_stealing_deque(self):
         """Test work-stealing deque."""
-        from src.core.base.structures.LockFreeQueue import WorkStealingDeque
+        from src.core.base.structures.lock_free_queue import WorkStealingDeque
         
         deque = WorkStealingDeque[int](capacity=100)
         
@@ -250,7 +250,7 @@ class TestLockFreeQueue:
     
     def test_batching_queue(self):
         """Test batching queue."""
-        from src.core.base.structures.LockFreeQueue import BatchingQueue
+        from src.core.base.structures.lock_free_queue import BatchingQueue
         
         queue = BatchingQueue[int](batch_size=5, batch_timeout=0.1)
         
@@ -267,7 +267,7 @@ class TestFastSerializer:
     
     def test_json_serializer(self):
         """Test JSON serialization."""
-        from src.infrastructure.serialization.FastSerializer import JSONSerializer
+        from src.infrastructure.serialization.fast_serializer import JSONSerializer
         
         s = JSONSerializer()
         
@@ -279,7 +279,7 @@ class TestFastSerializer:
     
     def test_json_compressed(self):
         """Test compressed JSON."""
-        from src.infrastructure.serialization.FastSerializer import JSONSerializer
+        from src.infrastructure.serialization.fast_serializer import JSONSerializer
         
         s = JSONSerializer(compress=True)
         
@@ -294,7 +294,7 @@ class TestFastSerializer:
     
     def test_pickle_serializer(self):
         """Test Pickle serialization."""
-        from src.infrastructure.serialization.FastSerializer import PickleSerializer
+        from src.infrastructure.serialization.fast_serializer import PickleSerializer
         
         s = PickleSerializer()
         
@@ -306,7 +306,7 @@ class TestFastSerializer:
     
     def test_binary_serializer(self):
         """Test custom binary serialization."""
-        from src.infrastructure.serialization.FastSerializer import BinarySerializer
+        from src.infrastructure.serialization.fast_serializer import BinarySerializer
         
         s = BinarySerializer()
         
@@ -330,7 +330,7 @@ class TestFastSerializer:
     
     def test_binary_nested(self):
         """Test binary serialization with nested data."""
-        from src.infrastructure.serialization.FastSerializer import BinarySerializer
+        from src.infrastructure.serialization.fast_serializer import BinarySerializer
         
         s = BinarySerializer()
         
@@ -349,7 +349,7 @@ class TestFastSerializer:
     
     def test_serializer_registry(self):
         """Test serializer registry."""
-        from src.infrastructure.serialization.FastSerializer import (
+        from src.infrastructure.serialization.fast_serializer import (
             SerializerRegistry, SerializationFormat
         )
         
@@ -366,7 +366,7 @@ class TestFastSerializer:
     
     def test_fast_serialize(self):
         """Test fast serialize convenience function."""
-        from src.infrastructure.serialization.FastSerializer import (
+        from src.infrastructure.serialization.fast_serializer import (
             fast_serialize, fast_deserialize
         )
         
@@ -382,7 +382,7 @@ class TestPriorityScheduler:
     
     def test_basic_scheduling(self):
         """Test basic task scheduling."""
-        from src.infrastructure.scheduling.PriorityScheduler import (
+        from src.infrastructure.scheduling.priority_scheduler import (
             PriorityScheduler, TaskPriority
         )
         
@@ -397,7 +397,7 @@ class TestPriorityScheduler:
     
     def test_priority_order(self):
         """Test tasks execute in priority order."""
-        from src.infrastructure.scheduling.PriorityScheduler import (
+        from src.infrastructure.scheduling.priority_scheduler import (
             PriorityScheduler, TaskPriority
         )
         
@@ -430,7 +430,7 @@ class TestPriorityScheduler:
     
     def test_deadline_scheduler(self):
         """Test deadline-based scheduler."""
-        from src.infrastructure.scheduling.PriorityScheduler import DeadlineScheduler
+        from src.infrastructure.scheduling.priority_scheduler import DeadlineScheduler
         
         scheduler = DeadlineScheduler(workers=2)
         
@@ -443,7 +443,7 @@ class TestPriorityScheduler:
     
     def test_scheduler_stats(self):
         """Test scheduler statistics."""
-        from src.infrastructure.scheduling.PriorityScheduler import PriorityScheduler
+        from src.infrastructure.scheduling.priority_scheduler import PriorityScheduler
         
         scheduler = PriorityScheduler(workers=2)
         
@@ -468,7 +468,7 @@ class TestConnectionPool:
     
     def test_basic_pool(self):
         """Test basic connection pool."""
-        from src.infrastructure.pooling.ConnectionPool import ConnectionPool
+        from src.infrastructure.pooling.connection_pool import ConnectionPool
         
         # Mock connection
         class MockConnection:
@@ -492,7 +492,7 @@ class TestConnectionPool:
     
     def test_connection_context_manager(self):
         """Test connection pool context manager."""
-        from src.infrastructure.pooling.ConnectionPool import ConnectionPool
+        from src.infrastructure.pooling.connection_pool import ConnectionPool
         
         class MockConnection:
             def close(self):
@@ -511,7 +511,7 @@ class TestConnectionPool:
     
     def test_pool_stats(self):
         """Test pool statistics."""
-        from src.infrastructure.pooling.ConnectionPool import ConnectionPool
+        from src.infrastructure.pooling.connection_pool import ConnectionPool
         
         class MockConnection:
             def close(self):
@@ -536,7 +536,7 @@ class TestConnectionPool:
     
     def test_pool_timeout(self):
         """Test connection acquisition timeout."""
-        from src.infrastructure.pooling.ConnectionPool import ConnectionPool
+        from src.infrastructure.pooling.connection_pool import ConnectionPool
         
         class MockConnection:
             def close(self):
@@ -563,7 +563,7 @@ class TestMemoryArena:
     
     def test_basic_allocation(self):
         """Test basic arena allocation."""
-        from src.core.base.structures.MemoryArena import MemoryArena
+        from src.core.base.structures.memory_arena import MemoryArena
         
         arena = MemoryArena(block_size=4096)
         
@@ -577,7 +577,7 @@ class TestMemoryArena:
     
     def test_arena_reset(self):
         """Test arena reset frees all allocations."""
-        from src.core.base.structures.MemoryArena import MemoryArena
+        from src.core.base.structures.memory_arena import MemoryArena
         
         arena = MemoryArena(block_size=1024)
         
@@ -593,7 +593,7 @@ class TestMemoryArena:
     
     def test_arena_scope(self):
         """Test scoped allocation with auto-reset."""
-        from src.core.base.structures.MemoryArena import MemoryArena
+        from src.core.base.structures.memory_arena import MemoryArena
         
         arena = MemoryArena(block_size=1024)
         
@@ -611,7 +611,7 @@ class TestMemoryArena:
     
     def test_stack_arena(self):
         """Test stack arena with marks."""
-        from src.core.base.structures.MemoryArena import StackArena
+        from src.core.base.structures.memory_arena import StackArena
         
         arena = StackArena(size=4096)
         
@@ -628,7 +628,7 @@ class TestMemoryArena:
     
     def test_stack_arena_frame(self):
         """Test stack arena frame context manager."""
-        from src.core.base.structures.MemoryArena import StackArena
+        from src.core.base.structures.memory_arena import StackArena
         
         arena = StackArena(size=4096)
         
@@ -643,7 +643,7 @@ class TestMemoryArena:
     
     def test_temp_arena(self):
         """Test temporary arena context manager."""
-        from src.core.base.structures.MemoryArena import temp_arena
+        from src.core.base.structures.memory_arena import temp_arena
         
         with temp_arena(size=1024) as arena:
             buf = arena.alloc(100)
@@ -651,7 +651,7 @@ class TestMemoryArena:
     
     def test_thread_local_arena(self):
         """Test thread-local arena."""
-        from src.core.base.structures.MemoryArena import thread_temp_alloc
+        from src.core.base.structures.memory_arena import thread_temp_alloc
         
         with thread_temp_alloc() as arena:
             buf = arena.alloc(64)
@@ -663,8 +663,8 @@ class TestIntegration:
     
     def test_pool_with_scheduler(self):
         """Test object pool with scheduler."""
-        from src.core.base.structures.ObjectPool import ObjectPool
-        from src.infrastructure.scheduling.PriorityScheduler import PriorityScheduler
+        from src.core.base.structures.object_pool import ObjectPool
+        from src.infrastructure.scheduling.priority_scheduler import PriorityScheduler
         
         pool = ObjectPool(factory=list, max_size=10)
         scheduler = PriorityScheduler(workers=2)
@@ -685,8 +685,8 @@ class TestIntegration:
     
     def test_serializer_with_queue(self):
         """Test serializer with queue."""
-        from src.infrastructure.serialization.FastSerializer import BinarySerializer
-        from src.core.base.structures.LockFreeQueue import MPMCQueue
+        from src.infrastructure.serialization.fast_serializer import BinarySerializer
+        from src.core.base.structures.lock_free_queue import MPMCQueue
         
         serializer = BinarySerializer()
         queue = MPMCQueue[bytes](capacity=100)

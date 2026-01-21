@@ -98,7 +98,7 @@ class ToolParseResult:
     
     @property
     def has_tool_calls(self) -> bool:
-        return len(self.tool_calls) > 0
+        return bool(self.tool_calls)
     
     @property
     def is_valid(self) -> bool:

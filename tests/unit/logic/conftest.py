@@ -21,32 +21,32 @@ from tests.utils.agent_test_utils import agent_dir_on_path, load_agent_module
 def agent_module() -> Any:
     """Load and return the agent module with legacy state injections."""
     with agent_dir_on_path():
-        mod = load_agent_module("core/base/BaseAgent.py")
+        mod = load_agent_module("src/core/base/base_agent.py")
 
         # Configuration for legacy injections
         injections = [
-            ("src.core.base.models.CoreEnums", ["AgentExecutionState", "AgentPriority", "ConfigFormat", "DiffOutputFormat", "HealthStatus", "LockType", "RateLimitStrategy"]),
-            ("src.core.base.utils.AgentPriorityQueue", ["AgentPriorityQueue"]),
-            ("src.core.base.utils.ValidationRuleManager", ["ValidationRuleManager"]),
-            ("src.core.base.utils.TelemetryCollector", ["TelemetryCollector"]),
-            ("src.core.base.utils.ConditionalExecutor", ["ConditionalExecutor"]),
-            ("src.core.base.utils.TemplateManager", ["TemplateManager"]),
-            ("src.core.base.utils.ResultCache", ["ResultCache"]),
-            ("src.core.base.utils.ExecutionScheduler", ["ExecutionScheduler"]),
-            ("src.core.base.utils.FileLockManager", ["FileLockManager"]),
-            ("src.core.base.utils.RateLimiter", ["RateLimiter"]),
-            ("src.core.base.utils.DiffGenerator", ["DiffGenerator"]),
-            ("src.core.base.utils.FileLock", ["FileLock"]),
-            ("src.core.base.DependencyGraph", ["DependencyGraph"]),
-            ("src.core.base.ConfigLoader", ["ConfigLoader"]),
-            ("src.core.base.GracefulShutdown", ["GracefulShutdown"]),
-            ("src.core.base.IncrementalProcessor", ["IncrementalProcessor"]),
-            ("src.core.base.managers.SystemManagers", ["ProfileManager", "HealthChecker"]),
-            ("src.logic.agents.development.GitBranchProcessor", ["GitBranchProcessor"]),
-            ("src.logic.orchestration.AgentChain", ["AgentChain"]),
-            ("src.core.base.models.FleetModels", ["IncrementalState", "RateLimitConfig", "ShutdownState"]),
-            ("src.core.base.models.AgentModels", ["AgentPluginConfig", "AgentHealthCheck"]),
-            ("src.core.base.models.BaseModels", ["ExecutionCondition", "DiffResult"]),
+            ("src.core.base.models.core_enums", ["AgentExecutionState", "AgentPriority", "ConfigFormat", "DiffOutputFormat", "HealthStatus", "LockType", "RateLimitStrategy"]),
+            ("src.core.base.utils.agent_priority_queue", ["AgentPriorityQueue"]),
+            ("src.core.base.utils.validation_rule_manager", ["ValidationRuleManager"]),
+            ("src.core.base.utils.telemetry_collector", ["TelemetryCollector"]),
+            ("src.core.base.utils.conditional_executor", ["ConditionalExecutor"]),
+            ("src.core.base.utils.template_manager", ["TemplateManager"]),
+            ("src.core.base.utils.result_cache", ["ResultCache"]),
+            ("src.core.base.utils.execution_scheduler", ["ExecutionScheduler"]),
+            ("src.core.base.utils.file_lock_manager", ["FileLockManager"]),
+            ("src.core.base.utils.rate_limiter", ["RateLimiter"]),
+            ("src.core.base.utils.diff_generator", ["DiffGenerator"]),
+            ("src.core.base.utils.file_lock", ["FileLock"]),
+            ("src.core.base.dependency_graph", ["DependencyGraph"]),
+            ("src.core.base.config_loader", ["ConfigLoader"]),
+            ("src.core.base.graceful_shutdown", ["GracefulShutdown"]),
+            ("src.core.base.incremental_processor", ["IncrementalProcessor"]),
+            ("src.core.base.managers.system_managers", ["ProfileManager", "HealthChecker"]),
+            ("src.logic.agents.development.git_branch_processor", ["GitBranchProcessor"]),
+            ("src.logic.orchestration.agent_chain", ["AgentChain"]),
+            ("src.core.base.models.fleet_models", ["IncrementalState", "RateLimitConfig", "ShutdownState"]),
+            ("src.core.base.models.agent_models", ["AgentPluginConfig", "AgentHealthCheck"]),
+            ("src.core.base.models.base_models", ["ExecutionCondition", "DiffResult"]),
         ]
 
         for module_path, attr_names in injections:
@@ -72,7 +72,7 @@ def _inject_from_module(target_mod: Any, module_path: str, attr_names: list[str]
 def _inject_special_shims(mod: Any) -> None:
     """Injects complex shims (classes/methods) that require customization."""
     try:
-        from src.core.base.AgentPluginBase import AgentPluginBase
+        from src.core.base.agent_plugin_base import AgentPluginBase
         if hasattr(AgentPluginBase, "shutdown"):
             AgentPluginBase.shutdown = lambda self: None
         mod.AgentPluginBase = AgentPluginBase
@@ -80,13 +80,13 @@ def _inject_special_shims(mod: Any) -> None:
         pass
 
     try:
-        from src.core.base.models.BaseModels import ValidationRule as RealValidationRule
+        from src.core.base.models.base_models import ValidationRule as RealValidationRule
         mod.ValidationRule = _create_legacy_validation_rule_shim(RealValidationRule)
     except ImportError:
         pass
 
     try:
-        from src.core.base.CircuitBreaker import CircuitBreaker as RealCircuitBreaker
+        from src.core.base.circuit_breaker import CircuitBreaker as RealCircuitBreaker
         mod.CircuitBreaker = _create_legacy_circuit_breaker_shim(RealCircuitBreaker)
     except ImportError:
         pass
@@ -120,7 +120,7 @@ def _create_legacy_circuit_breaker_shim(real_cls: Any) -> Any:
 def _inject_legacy_agent_wrapper(mod: Any) -> None:
     """Injects the LegacyAgentWrapper into the module if BaseAgent is present."""
     if hasattr(mod, "BaseAgent"):
-        from tests.utils.LegacySupport import create_legacy_agent_wrapper
+        from tests.utils.legacy_support import create_legacy_agent_wrapper
         # Create wrapper that inherits from the current BaseAgent
         LegacyAgent = create_legacy_agent_wrapper(mod.BaseAgent)
         mod.Agent = LegacyAgent

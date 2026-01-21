@@ -1,4 +1,4 @@
-from src.core.base.AgentPluginBase import AgentPluginBase
+from src.core.base.agent_plugin_base import AgentPluginBase
 from pathlib import Path
 from typing import Dict, Any
 

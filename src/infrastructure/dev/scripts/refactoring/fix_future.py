@@ -15,7 +15,7 @@
 """Script for standardizing the position of __future__ imports at the top of files."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import os
 
 __version__ = VERSION

@@ -2,6 +2,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any, List, Optional, Sequence
 import numpy as np
+import contextlib
 from .config import LogprobEntry, TopLogprob
 
 @dataclass
@@ -30,6 +31,44 @@ class FlatLogprobs:
         if len(self.top_k_token_ids.shape) == 2:
             return self.top_k_token_ids.shape[1]
         return 0
+    
+    @property
+    def memory_bytes(self) -> int:
+        return self.token_ids.nbytes + self.logprobs.nbytes + \
+               self.top_k_token_ids.nbytes + self.top_k_logprobs.nbytes
+    
+    def slice(self, start: int, end: int) -> "FlatLogprobs":
+        return FlatLogprobs(
+            self.token_ids[start:end],
+            self.logprobs[start:end],
+            self.top_k_token_ids[start:end],
+            self.top_k_logprobs[start:end]
+        )
+    
+    def append(self, other: "FlatLogprobs") -> "FlatLogprobs":
+        return FlatLogprobs(
+            np.concatenate([self.token_ids, other.token_ids]),
+            np.concatenate([self.logprobs, other.logprobs]),
+            np.concatenate([self.top_k_token_ids, other.top_k_token_ids]),
+            np.concatenate([self.top_k_logprobs, other.top_k_logprobs])
+        )
+    
+    def mean_logprob(self) -> float:
+        """Compute mean logprob."""
+        return float(np.mean(self.logprobs)) if self.logprobs.size > 0 else 0.0
+    
+    def perplexity(self) -> float:
+        """Compute perplexity."""
+        return float(np.exp(-np.mean(self.logprobs))) if self.logprobs.size > 0 else 1.0
+    
+    @classmethod
+    def empty(cls, top_k: int = 5) -> "FlatLogprobs":
+        return cls(
+            np.array([], dtype=np.int32),
+            np.array([], dtype=np.float32),
+            np.zeros((0, top_k), dtype=np.int32),
+            np.zeros((0, top_k), dtype=np.float32)
+        )
     
     @classmethod
     def from_entries(cls, entries: Sequence[LogprobEntry], top_k: int = 5) -> "FlatLogprobs":
@@ -61,15 +100,9 @@ class FlatLogprobs:
     
     def _decode(self, tid: int, tokenizer: Optional[Any]) -> str:
         if tokenizer:
-            try: return tokenizer.decode([tid])
-            except: pass
+            with contextlib.suppress(AttributeError, ValueError, RuntimeError):
+                return tokenizer.decode([tid])
         return f"<{tid}>"
-    
-    def mean_logprob(self) -> float:
-        return float(np.mean(self.logprobs)) if self.num_tokens > 0 else 0.0
-    
-    def perplexity(self) -> float:
-        return float(np.exp(-np.mean(self.logprobs))) if self.num_tokens > 0 else 0.0
     
     def entropy_per_token(self) -> np.ndarray:
         max_lps = np.max(self.top_k_logprobs, axis=1, keepdims=True)

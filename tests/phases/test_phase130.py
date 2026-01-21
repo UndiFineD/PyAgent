@@ -1,8 +1,8 @@
 from pathlib import Path
 from src.core.knowledge.btree_store import BTreeKnowledgeStore
-from src.logic.agents.cognitive.LatentReasoningAgent import LatentReasoningAgent
-from src.logic.agents.system.ModelOptimizerAgent import ModelOptimizerAgent
-from src.infrastructure.fleet.ShardingOrchestrator import ShardingOrchestrator
+from src.logic.agents.cognitive.latent_reasoning_agent import LatentReasoningAgent
+from src.logic.agents.system.model_optimizer_agent import ModelOptimizerAgent
+from src.infrastructure.fleet.sharding_orchestrator import ShardingOrchestrator
 
 
 def test_phase130_structure_verification() -> None:
@@ -45,14 +45,14 @@ def test_phase130_btree_sharding() -> None:
 
 def test_phase130_agent_integration() -> None:
     """Basic sanity check for specialized agents."""
-    latent_agent = LatentReasoningAgent(file_path="src/core/base/BaseAgent.py")
+    latent_agent = LatentReasoningAgent(file_path="src\core\base\base_agent.py")
     # Corrected method based on actual code
     audit_res = latent_agent.audit_multilingual_output(
         "Calculate 1+1", "The answer is 2.", "Swahili"
     )
     assert "is_consistent" in audit_res
 
-    optimizer = ModelOptimizerAgent(file_path="src/core/base/BaseAgent.py")
+    optimizer = ModelOptimizerAgent(file_path="src\core\base\base_agent.py")
     strategy = optimizer.select_optimization_strategy(70, 24, ["h100"])
     assert "FP8" in strategy.get("quantization", "") or strategy.get("hopper_optimized")
 

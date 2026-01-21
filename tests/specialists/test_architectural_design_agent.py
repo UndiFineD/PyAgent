@@ -3,7 +3,7 @@
 
 import pytest
 import asyncio
-from src.logic.agents.specialists.ArchitecturalDesignAgent import ArchitecturalDesignAgent, DesignPhase
+from src.logic.agents.specialists.architectural_design_agent import ArchitecturalDesignAgent, DesignPhase
 
 @pytest.mark.asyncio
 async def test_architectural_workflow_logic():

@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+"""
+Reflection Mixin: Enables autonomous self-critique and lesson learning for all agents.
+"""
+
+from __future__ import annotations
+import logging
+from typing import Any
+from src.core.base.core.lesson_core import LessonCore, Lesson
+
+
+class ReflectionMixin:
+    """
+    Adds a self-reflection loop to agents to ensure output correctness and 
+    long-term learning from reasoning failures.
+    """
+
+    def __init__(self, **kwargs: Any) -> None:
+        """Initialize reflection state."""
+        self._reflection_enabled: bool = kwargs.get("reflection_enabled", True)
+        self._reflection_count: int = 0
+        self._max_reflections: int = 1  # User requested "one-time self reflection"
+        self._lesson_core = LessonCore()
+
+    async def reflect(self, prompt: str, result: str) -> str:
+        """
+        Evaluates the generated output against the original prompt.
+        If flaws are detected, attempts a single corrective pass and records a lesson.
+        """
+        if not self._reflection_enabled or self._reflection_count >= self._max_reflections:
+            return result
+
+        logging.info(f"[{self.__class__.__name__}] Initiating one-time self-reflection...")
+        self._reflection_count += 1
+
+        # Craft reflection instructions
+        reflection_instructions = (
+            "### SELF-REFLECTION MANDATE\n"
+            "You are now in reflection mode. Review your previous output for the task below.\n"
+            f"ORIGINAL PROMPT: {prompt}\n"
+            f"YOUR OUTPUT:\n---\n{result}\n---\n"
+            "CRITIQUE CRITERIA:\n"
+            "1. Is the answer factually correct?\n"
+            "2. Does it follow all constraints provided in the prompt?\n"
+            "3. Are there logic errors or code bugs?\n\n"
+            "If you find mistakes, provide the COMPLETE corrected version.\n"
+            "If the output is already optimal, respond ONLY with the word 'VERIFIED'."
+        )
+
+        try:
+            # We use the agent's think method to process the reflection
+            # We temporarily disable reflection for this call to prevent recursion
+            self._reflection_enabled = False
+            reflection_output = await self.think(reflection_instructions)
+            self._reflection_enabled = True
+
+            if reflection_output.strip().upper() == "VERIFIED":
+                logging.info(f"[{self.__class__.__name__}] Self-reflection confirmed output stability.")
+                return result
+
+            # Mistake found - record a lesson
+            lesson = Lesson(
+                error_pattern=f"Task: {prompt[:100]}",
+                cause="Initial reasoning failed reflection check",
+                solution="Refined during self-critique pass",
+                impact_score=0.8
+            )
+            self._lesson_core.record_lesson(lesson)
+            logging.warning(f"[{self.__class__.__name__}] Mistake identified; corrective lesson recorded.")
+
+            return reflection_output
+
+        except Exception as e:
+            logging.error(f"[{self.__class__.__name__}] Reflection cycle failed: {e}")
+            self._reflection_enabled = True
+            return result
+
+    def reset_reflection(self) -> None:
+        """Resets the reflection count for a new task session."""
+        self._reflection_count = 0

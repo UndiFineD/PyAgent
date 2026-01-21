@@ -20,7 +20,7 @@ class TestPagedAttentionEngine:
     
     def test_attention_config_creation(self):
         """Test AttentionConfig dataclass."""
-        from src.infrastructure.attention.PagedAttentionEngine import (
+        from src.infrastructure.attention.paged_attention_engine import (
             AttentionConfig, AttentionType, KVCacheDtype
         )
         
@@ -40,7 +40,7 @@ class TestPagedAttentionEngine:
     
     def test_attention_config_with_sliding_window(self):
         """Test AttentionConfig with sliding window."""
-        from src.infrastructure.attention.PagedAttentionEngine import AttentionConfig
+        from src.infrastructure.attention.paged_attention_engine import AttentionConfig
         
         config = AttentionConfig(
             head_size=128,
@@ -53,7 +53,7 @@ class TestPagedAttentionEngine:
     
     def test_block_table_allocation(self):
         """Test BlockTable block allocation."""
-        from src.infrastructure.attention.PagedAttentionEngine import BlockTable
+        from src.infrastructure.attention.paged_attention_engine import BlockTable
         
         table = BlockTable(num_blocks=100, block_size=16)
         
@@ -69,7 +69,7 @@ class TestPagedAttentionEngine:
     
     def test_block_table_free(self):
         """Test BlockTable block freeing."""
-        from src.infrastructure.attention.PagedAttentionEngine import BlockTable
+        from src.infrastructure.attention.paged_attention_engine import BlockTable
         
         table = BlockTable(num_blocks=100, block_size=16)
         
@@ -82,7 +82,7 @@ class TestPagedAttentionEngine:
     
     def test_slot_mapping(self):
         """Test SlotMapping token-to-slot mapping."""
-        from src.infrastructure.attention.PagedAttentionEngine import SlotMapping
+        from src.infrastructure.attention.paged_attention_engine import SlotMapping
         
         slot_map = SlotMapping(block_size=16)
         
@@ -97,7 +97,7 @@ class TestPagedAttentionEngine:
     
     def test_paged_kv_cache(self):
         """Test PagedKVCache read/write."""
-        from src.infrastructure.attention.PagedAttentionEngine import PagedKVCache
+        from src.infrastructure.attention.paged_attention_engine import PagedKVCache
         
         cache = PagedKVCache(
             num_blocks=32,
@@ -121,7 +121,7 @@ class TestPagedAttentionEngine:
     
     def test_attention_metadata(self):
         """Test AttentionMetadata creation."""
-        from src.infrastructure.attention.PagedAttentionEngine import AttentionMetadata
+        from src.infrastructure.attention.paged_attention_engine import AttentionMetadata
         
         metadata = AttentionMetadata.from_seq_lens(
             seq_lens=[128, 64, 256],
@@ -136,7 +136,7 @@ class TestPagedAttentionEngine:
     
     def test_scaled_dot_product_attention(self):
         """Test PagedAttentionOps.scaled_dot_product_attention."""
-        from src.infrastructure.attention.PagedAttentionEngine import PagedAttentionOps
+        from src.infrastructure.attention.paged_attention_engine import PagedAttentionOps
         
         batch = 2
         seq_len = 4
@@ -155,7 +155,7 @@ class TestPagedAttentionEngine:
     
     def test_expand_kv_for_gqa(self):
         """Test PagedAttentionOps.expand_kv_for_gqa."""
-        from src.infrastructure.attention.PagedAttentionEngine import PagedAttentionOps
+        from src.infrastructure.attention.paged_attention_engine import PagedAttentionOps
         
         seq_len = 8
         num_kv_heads = 2
@@ -180,7 +180,7 @@ class TestPagedAttentionEngine:
     
     def test_paged_attention_engine(self):
         """Test PagedAttentionEngine high-level API."""
-        from src.infrastructure.attention.PagedAttentionEngine import (
+        from src.infrastructure.attention.paged_attention_engine import (
             PagedAttentionEngine, AttentionConfig
         )
         
@@ -218,7 +218,7 @@ class TestQuantizationEngine:
     
     def test_quant_config_validation(self):
         """Test QuantConfig validation."""
-        from src.infrastructure.quantization.QuantizationEngine import (
+        from src.infrastructure.quantization.quantization_engine import (
             QuantConfig, QuantScheme, QuantStrategy
         )
         
@@ -237,7 +237,7 @@ class TestQuantizationEngine:
     
     def test_quant_config_asymmetric(self):
         """Test QuantConfig for asymmetric quantization."""
-        from src.infrastructure.quantization.QuantizationEngine import QuantConfig
+        from src.infrastructure.quantization.quantization_engine import QuantConfig
         
         config = QuantConfig(bits=8, symmetric=False, zero_point=True)
         
@@ -246,7 +246,7 @@ class TestQuantizationEngine:
     
     def test_linear_quantizer_tensor(self):
         """Test LinearQuantizer per-tensor quantization."""
-        from src.infrastructure.quantization.QuantizationEngine import (
+        from src.infrastructure.quantization.quantization_engine import (
             LinearQuantizer, QuantConfig, QuantStrategy
         )
         
@@ -265,7 +265,7 @@ class TestQuantizationEngine:
     
     def test_linear_quantizer_group(self):
         """Test LinearQuantizer per-group quantization."""
-        from src.infrastructure.quantization.QuantizationEngine import (
+        from src.infrastructure.quantization.quantization_engine import (
             LinearQuantizer, QuantConfig, QuantStrategy
         )
         
@@ -285,7 +285,7 @@ class TestQuantizationEngine:
     
     def test_pack_unpack_int4(self):
         """Test INT4 packing and unpacking."""
-        from src.infrastructure.quantization.QuantizationEngine import pack_int4, unpack_int4
+        from src.infrastructure.quantization.quantization_engine import pack_int4, unpack_int4
         
         # Original int4 values [-8, 7]
         original = np.array([0, 1, -1, 7, -8, 3, 2, -2], dtype=np.int8)
@@ -298,7 +298,7 @@ class TestQuantizationEngine:
     
     def test_quantized_tensor_compression_ratio(self):
         """Test QuantizedTensor compression ratio."""
-        from src.infrastructure.quantization.QuantizationEngine import (
+        from src.infrastructure.quantization.quantization_engine import (
             LinearQuantizer, QuantConfig, QuantStrategy
         )
         
@@ -313,7 +313,7 @@ class TestQuantizationEngine:
     
     def test_awq_quantizer(self):
         """Test AWQQuantizer activation-aware quantization."""
-        from src.infrastructure.quantization.QuantizationEngine import (
+        from src.infrastructure.quantization.quantization_engine import (
             AWQQuantizer, QuantConfig
         )
         
@@ -331,7 +331,7 @@ class TestQuantizationEngine:
     
     def test_gptq_quantizer(self):
         """Test GPTQQuantizer with Hessian."""
-        from src.infrastructure.quantization.QuantizationEngine import (
+        from src.infrastructure.quantization.quantization_engine import (
             GPTQQuantizer, QuantConfig
         )
         
@@ -350,7 +350,7 @@ class TestQuantizationEngine:
     
     def test_dequantized_linear_forward(self):
         """Test DequantizedLinear forward pass."""
-        from src.infrastructure.quantization.QuantizationEngine import (
+        from src.infrastructure.quantization.quantization_engine import (
             LinearQuantizer, QuantConfig, DequantizedLinear
         )
         
@@ -370,7 +370,7 @@ class TestQuantizationEngine:
     
     def test_quantization_error_metrics(self):
         """Test get_quantization_error function."""
-        from src.infrastructure.quantization.QuantizationEngine import (
+        from src.infrastructure.quantization.quantization_engine import (
             LinearQuantizer, QuantConfig, get_quantization_error
         )
         
@@ -397,7 +397,7 @@ class TestLoRAManager:
     
     def test_lora_config_creation(self):
         """Test LoRAConfig dataclass."""
-        from src.infrastructure.adapters.LoRAManager import LoRAConfig
+        from src.infrastructure.adapters.lo_ra_manager import LoRAConfig
         
         config = LoRAConfig(
             rank=8,
@@ -412,7 +412,7 @@ class TestLoRAManager:
     
     def test_lora_layer_weights_forward(self):
         """Test LoRALayerWeights forward pass."""
-        from src.infrastructure.adapters.LoRAManager import LoRALayerWeights
+        from src.infrastructure.adapters.lo_ra_manager import LoRALayerWeights
         
         rank = 8
         in_features = 64
@@ -437,7 +437,7 @@ class TestLoRAManager:
     
     def test_lora_layer_merge(self):
         """Test LoRALayerWeights merge_into_base."""
-        from src.infrastructure.adapters.LoRAManager import LoRALayerWeights
+        from src.infrastructure.adapters.lo_ra_manager import LoRALayerWeights
         
         rank = 4
         in_features = 16
@@ -462,7 +462,7 @@ class TestLoRAManager:
     
     def test_packed_lora_weights(self):
         """Test PackedLoRAWeights creation and unpacking."""
-        from src.infrastructure.adapters.LoRAManager import (
+        from src.infrastructure.adapters.lo_ra_manager import (
             LoRALayerWeights, PackedLoRAWeights
         )
         
@@ -486,7 +486,7 @@ class TestLoRAManager:
     
     def test_lora_model(self):
         """Test LoRAModel creation and forward."""
-        from src.infrastructure.adapters.LoRAManager import (
+        from src.infrastructure.adapters.lo_ra_manager import (
             LoRAConfig, LoRAModel, LoRALayerWeights
         )
         
@@ -511,7 +511,7 @@ class TestLoRAManager:
     
     def test_lora_registry(self):
         """Test LoRARegistry LRU eviction."""
-        from src.infrastructure.adapters.LoRAManager import (
+        from src.infrastructure.adapters.lo_ra_manager import (
             LoRAConfig, LoRAModel, LoRALayerWeights, LoRARegistry
         )
         
@@ -535,7 +535,7 @@ class TestLoRAManager:
     
     def test_lora_manager_load_adapter(self):
         """Test LoRAManager adapter loading."""
-        from src.infrastructure.adapters.LoRAManager import (
+        from src.infrastructure.adapters.lo_ra_manager import (
             LoRAManager, LoRAConfig
         )
         
@@ -560,7 +560,7 @@ class TestLoRAManager:
     
     def test_lora_manager_request_binding(self):
         """Test LoRAManager per-request adapter binding."""
-        from src.infrastructure.adapters.LoRAManager import (
+        from src.infrastructure.adapters.lo_ra_manager import (
             LoRAManager, LoRAConfig
         )
         
@@ -587,7 +587,7 @@ class TestLoRAManager:
     
     def test_lora_manager_apply_lora(self):
         """Test LoRAManager apply_lora."""
-        from src.infrastructure.adapters.LoRAManager import (
+        from src.infrastructure.adapters.lo_ra_manager import (
             LoRAManager, LoRAConfig
         )
         
@@ -620,7 +620,7 @@ class TestLoRAManager:
     
     def test_create_lora_weights(self):
         """Test create_lora_weights factory function."""
-        from src.infrastructure.adapters.LoRAManager import create_lora_weights
+        from src.infrastructure.adapters.lo_ra_manager import create_lora_weights
         
         layer = create_lora_weights(
             in_features=64,
@@ -639,7 +639,7 @@ class TestLoRAManager:
     
     def test_merge_lora_weights(self):
         """Test merge_lora_weights utility function."""
-        from src.infrastructure.adapters.LoRAManager import (
+        from src.infrastructure.adapters.lo_ra_manager import (
             LoRAConfig, LoRAModel, create_lora_weights, merge_lora_weights
         )
         

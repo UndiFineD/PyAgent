@@ -61,7 +61,7 @@ class PriorityQueue(RequestQueue):
         return len(self._heap)
     
     def __bool__(self) -> bool:
-        return len(self._heap) > 0
+        return bool(self._heap)
     
     def __iter__(self) -> Iterator[T]:
         return iter(sorted(self._heap))

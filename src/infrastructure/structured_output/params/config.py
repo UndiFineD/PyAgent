@@ -117,8 +117,8 @@ class ValidationResult:
     
     @property
     def has_errors(self) -> bool:
-        return len(self.errors) > 0
+        return bool(self.errors)
     
     @property
     def has_warnings(self) -> bool:
-        return len(self.warnings) > 0
+        return bool(self.warnings)

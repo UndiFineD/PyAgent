@@ -16,7 +16,7 @@
 """Test generation and case minimization."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import ast
 from typing import Any
 from collections.abc import Callable

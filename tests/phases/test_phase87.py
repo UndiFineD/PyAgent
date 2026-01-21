@@ -5,7 +5,7 @@ import os
 
 # Ensure the project root is in PYTHONPATH
 
-from src.logic.agents.development.CodeQualityAgent import CodeQualityAgent
+from src.logic.agents.development.code_quality_agent import CodeQualityAgent
 
 
 class TestCodeQuality(unittest.TestCase):

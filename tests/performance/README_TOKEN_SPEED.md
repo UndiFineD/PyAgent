@@ -4,23 +4,23 @@ This directory contains comprehensive tools for testing and benchmarking token g
 
 ## Quick Start
 
-### Option 1: Simple Standalone Script (Recommended)
+### Option 1: Unified Benchmark Script (Recommended)
 
-Run the simple benchmark script directly:
+Run the unified benchmark script for high-speed infrastructure testing:
 
 ```bash
-python scripts/benchmark_token_speed.py
+python scripts/run_benchmarks.py
 ```
 
 This will:
-- Initialize a BenchmarkAgent
-- Test token generation with 4 different prompt types (short, medium, long, code)
-- Measure tokens/second, latency, and throughput
-- Display results and summary
+- Run tokenization benchmarks (Python vs Rust)
+- Measure sustained throughput for 10 seconds
+- Trace agent-level latency using `BenchmarkAgent`
+- Display a consolidated performance summary
 
 ### Option 2: Comprehensive Test Suite
 
-Run the full pytest-based benchmark suite:
+Run the full pytest-based benchmark suite for detailed LLM generation analysis:
 
 ```bash
 # Run all performance tests
@@ -28,38 +28,21 @@ pytest tests/performance/test_token_generation_speed.py -v
 
 # Run with detailed output
 pytest tests/performance/test_token_generation_speed.py -v -s
-
-# Run specific test
-pytest tests/performance/test_token_generation_speed.py::test_single_prompt_short -v
-
-# Run with coverage
-pytest tests/performance/test_token_generation_speed.py --cov=src --cov-report=html
 ```
 
-### Option 3: Use as Python Module
+### Option 3: Unified Infrastructure API
 
 ```python
-from tests.performance.test_token_generation_speed import TokenGenerationBenchmark
-from src.logic.agents.development.BenchmarkAgent import BenchmarkAgent
+from src.infrastructure.benchmarks.benchmark_suite import BenchmarkSuite
 
-# Create benchmark instance
-benchmark = TokenGenerationBenchmark()
+# Create benchmark suite instance
+suite = BenchmarkSuite()
 
-# Create agent to test
-agent = BenchmarkAgent(".")
+# Run all benchmarks
+results = suite.run_all()
 
-# Run all tests
-results = benchmark.run_all_tests(
-    agent=agent,
-    include_streaming=True,
-    include_batch=True,
-)
-
-# Print summary
-benchmark.print_summary()
-
-# Save results
-benchmark.save_results("my_benchmark.json")
+# Print summary to console
+suite.print_summary()
 ```
 
 ## What Gets Tested

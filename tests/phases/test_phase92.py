@@ -4,7 +4,7 @@ import os
 
 # Ensure the project root is in PYTHONPATH
 
-from src.logic.agents.swarm.ResourceForecastingAgent import ResourceForecastingAgent
+from src.logic.agents.swarm.resource_forecasting_agent import ResourceForecastingAgent
 
 
 class TestResourceForecasting(unittest.TestCase):

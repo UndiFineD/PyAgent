@@ -82,7 +82,7 @@ class TestFusedMoELayer:
 
     def test_fused_moe_config(self, moe_config):
         """Test FusedMoEConfig dataclass."""
-        from infrastructure.moe import FusedMoEConfig
+        from src.infrastructure.moe import FusedMoEConfig
         
         config = FusedMoEConfig(
             num_experts=moe_config["num_experts"],
@@ -98,7 +98,7 @@ class TestFusedMoELayer:
 
     def test_fused_moe_parallel_config(self):
         """Test FusedMoEParallelConfig."""
-        from infrastructure.moe import FusedMoEParallelConfig
+        from src.infrastructure.moe import FusedMoEParallelConfig
         
         config = FusedMoEParallelConfig(
             tp_size=2,
@@ -112,8 +112,8 @@ class TestFusedMoELayer:
 
     def test_determine_expert_map(self, moe_config):
         """Test expert-to-device mapping."""
-        from infrastructure.moe.FusedMoELayer import determine_expert_map
-        from infrastructure.moe import ExpertPlacementStrategy
+        from src.infrastructure.moe.fused_mo_e_layer import determine_expert_map
+        from src.infrastructure.moe import ExpertPlacementStrategy
         
         # Linear placement
         local_num, linear_map, mask = determine_expert_map(
@@ -136,8 +136,8 @@ class TestFusedMoELayer:
 
     def test_fused_moe_layer_creation(self, moe_config):
         """Test FusedMoELayer creation."""
-        from infrastructure.moe.FusedMoELayer import FusedMoELayer
-        from infrastructure.moe import FusedMoEConfig
+        from src.infrastructure.moe.fused_mo_e_layer import FusedMoELayer
+        from src.infrastructure.moe import FusedMoEConfig
         
         config = FusedMoEConfig(
             num_experts=moe_config["num_experts"],
@@ -153,7 +153,7 @@ class TestFusedMoELayer:
 
     def test_sparse_dispatcher(self, moe_config):
         """Test SparseDispatcher for token-to-expert dispatch."""
-        from infrastructure.moe.FusedMoELayer import SparseDispatcher
+        from src.infrastructure.moe.fused_mo_e_layer import SparseDispatcher
         
         batch_size = moe_config["batch_size"]
         seq_len = moe_config["seq_len"]
@@ -178,7 +178,7 @@ class TestFusedMoELayer:
 
     def test_dense_dispatcher(self, moe_config):
         """Test DenseDispatcher for matrix-based dispatch."""
-        from infrastructure.moe.FusedMoELayer import DenseDispatcher
+        from src.infrastructure.moe.fused_mo_e_layer import DenseDispatcher
         
         batch_size = moe_config["batch_size"]
         seq_len = moe_config["seq_len"]
@@ -206,8 +206,8 @@ class TestFusedMoELayer:
 
     def test_adaptive_moe_layer(self, moe_config):
         """Test AdaptiveMoELayer with dynamic expert count."""
-        from infrastructure.moe.FusedMoELayer import AdaptiveMoELayer
-        from infrastructure.moe import FusedMoEConfig
+        from src.infrastructure.moe.fused_mo_e_layer import AdaptiveMoELayer
+        from src.infrastructure.moe import FusedMoEConfig
         
         config = FusedMoEConfig(
             num_experts=moe_config["num_experts"],
@@ -216,24 +216,31 @@ class TestFusedMoELayer:
             intermediate_size=moe_config["intermediate_size"],
         )
         
-        layer = AdaptiveMoELayer(config, min_experts=1, max_experts=4)
+        layer = AdaptiveMoELayer(config, min_top_k=1, max_top_k=4)
         
-        assert layer.min_experts == 1
-        assert layer.max_experts == 4
+        assert layer.min_top_k == 1
+        assert layer.max_top_k == 4
 
     def test_hierarchical_moe_layer(self, moe_config):
         """Test HierarchicalMoELayer with two-level routing."""
-        from infrastructure.moe.FusedMoELayer import HierarchicalMoELayer
+        from src.infrastructure.moe.fused_mo_e_layer import HierarchicalMoELayer
+        from src.infrastructure.moe import FusedMoEConfig
         
-        layer = HierarchicalMoELayer(
-            num_groups=4,
-            experts_per_group=4,
+        config = FusedMoEConfig(
+            num_experts=moe_config["num_experts"],
+            top_k=moe_config["top_k"],
             hidden_size=moe_config["hidden_size"],
             intermediate_size=moe_config["intermediate_size"],
         )
         
-        assert layer.num_groups == 4
-        assert layer.experts_per_group == 4
+        layer = HierarchicalMoELayer(
+            config=config,
+            num_clusters=4,
+            cluster_top_k=1,
+        )
+        
+        assert layer.num_clusters == 4
+        assert layer.cluster_top_k == 1
 
 
 class TestExpertRouter:
@@ -241,7 +248,7 @@ class TestExpertRouter:
 
     def test_router_config(self, moe_config):
         """Test RouterConfig dataclass."""
-        from infrastructure.moe import RouterConfig
+        from src.infrastructure.moe import RouterConfig
         
         config = RouterConfig(
             num_experts=moe_config["num_experts"],
@@ -254,7 +261,7 @@ class TestExpertRouter:
 
     def test_topk_router(self, moe_config):
         """Test TopKRouter for standard top-k selection."""
-        from infrastructure.moe import TopKRouter, RouterConfig
+        from src.infrastructure.moe import TopKRouter, RouterConfig
         
         config = RouterConfig(
             num_experts=moe_config["num_experts"],
@@ -275,7 +282,7 @@ class TestExpertRouter:
 
     def test_expert_choice_router(self, moe_config):
         """Test ExpertChoiceRouter (experts select tokens)."""
-        from infrastructure.moe import ExpertChoiceRouter, RouterConfig
+        from src.infrastructure.moe import ExpertChoiceRouter, RouterConfig
         
         config = RouterConfig(
             num_experts=moe_config["num_experts"],
@@ -296,7 +303,7 @@ class TestExpertRouter:
 
     def test_soft_moe_router(self, moe_config):
         """Test SoftMoERouter for differentiable routing."""
-        from infrastructure.moe import SoftMoERouter, RouterConfig
+        from src.infrastructure.moe import SoftMoERouter, RouterConfig
         
         config = RouterConfig(
             num_experts=moe_config["num_experts"],
@@ -317,8 +324,8 @@ class TestExpertRouter:
 
     def test_adaptive_router(self, moe_config):
         """Test AdaptiveRouter with learned k per token."""
-        from infrastructure.moe.ExpertRouter import AdaptiveRouter
-        from infrastructure.moe import RouterConfig
+        from src.infrastructure.moe.expert_router import AdaptiveRouter
+        from src.infrastructure.moe import RouterConfig
         
         config = RouterConfig(
             num_experts=moe_config["num_experts"],
@@ -333,7 +340,7 @@ class TestExpertRouter:
 
     def test_routing_simulator(self, moe_config):
         """Test RoutingSimulator for analysis."""
-        from infrastructure.moe.ExpertRouter import RoutingSimulator
+        from src.infrastructure.moe.expert_router import RoutingSimulator
         
         simulator = RoutingSimulator(
             num_experts=moe_config["num_experts"],
@@ -352,7 +359,7 @@ class TestExpertRouter:
 
     def test_router_aux_losses(self, moe_config):
         """Test auxiliary loss computation."""
-        from infrastructure.moe import TopKRouter, RouterConfig
+        from src.infrastructure.moe import TopKRouter, RouterConfig
         
         config = RouterConfig(
             num_experts=moe_config["num_experts"],
@@ -378,7 +385,7 @@ class TestMambaMixer:
 
     def test_mamba_config(self, ssm_config):
         """Test MambaConfig dataclass."""
-        from infrastructure.ssm import MambaConfig
+        from src.infrastructure.ssm import MambaConfig
         
         config = MambaConfig(
             hidden_size=ssm_config["hidden_size"],
@@ -394,7 +401,7 @@ class TestMambaMixer:
 
     def test_mamba_state(self, ssm_config):
         """Test MambaState dataclass."""
-        from infrastructure.ssm import MambaState, MambaConfig
+        from src.infrastructure.ssm import MambaState, MambaConfig
         
         batch_size = ssm_config["batch_size"]
         
@@ -415,7 +422,7 @@ class TestMambaMixer:
 
     def test_causal_conv1d(self, ssm_config):
         """Test CausalConv1d layer."""
-        from infrastructure.ssm.MambaMixer import CausalConv1d
+        from src.infrastructure.ssm.mamba_mixer import CausalConv1d
         
         d_inner = ssm_config["d_inner"]
         kernel_size = ssm_config["conv_kernel_size"]
@@ -433,7 +440,7 @@ class TestMambaMixer:
 
     def test_causal_conv1d_step(self, ssm_config):
         """Test CausalConv1d single step update."""
-        from infrastructure.ssm.MambaMixer import CausalConv1d
+        from src.infrastructure.ssm.mamba_mixer import CausalConv1d
         
         d_inner = ssm_config["d_inner"]
         kernel_size = ssm_config["conv_kernel_size"]
@@ -452,7 +459,7 @@ class TestMambaMixer:
 
     def test_selective_scan(self, ssm_config):
         """Test SelectiveScan layer."""
-        from infrastructure.ssm.MambaMixer import SelectiveScan
+        from src.infrastructure.ssm.mamba_mixer import SelectiveScan
         
         d_inner = ssm_config["d_inner"]
         ssm_state_size = ssm_config["ssm_state_size"]
@@ -474,8 +481,8 @@ class TestMambaMixer:
 
     def test_mamba_mixer(self, ssm_config):
         """Test full MambaMixer layer."""
-        from infrastructure.ssm.MambaMixer import MambaMixer as MambaMixerClass
-        from infrastructure.ssm import MambaConfig
+        from src.infrastructure.ssm.mamba_mixer import MambaMixer as MambaMixerClass
+        from src.infrastructure.ssm import MambaConfig
         
         config = MambaConfig(
             hidden_size=ssm_config["hidden_size"],
@@ -497,8 +504,8 @@ class TestMambaMixer:
 
     def test_mamba_mixer_step(self, ssm_config):
         """Test MambaMixer single step for decoding."""
-        from infrastructure.ssm.MambaMixer import MambaMixer as MambaMixerClass
-        from infrastructure.ssm import MambaConfig, MambaState
+        from src.infrastructure.ssm.mamba_mixer import MambaMixer as MambaMixerClass
+        from src.infrastructure.ssm import MambaConfig, MambaState
         
         config = MambaConfig(
             hidden_size=ssm_config["hidden_size"],
@@ -524,8 +531,8 @@ class TestMambaMixer:
 
     def test_mamba2_mixer(self, ssm_config):
         """Test Mamba2Mixer with multi-head SSM."""
-        from infrastructure.ssm.MambaMixer import Mamba2Mixer
-        from infrastructure.ssm import MambaConfig
+        from src.infrastructure.ssm.mamba_mixer import Mamba2Mixer
+        from src.infrastructure.ssm import MambaConfig
         
         config = MambaConfig(
             hidden_size=ssm_config["hidden_size"],
@@ -540,8 +547,8 @@ class TestMambaMixer:
 
     def test_hybrid_mamba_mixer(self, ssm_config):
         """Test HybridMambaMixer combining SSM with attention."""
-        from infrastructure.ssm.MambaMixer import HybridMambaMixer
-        from infrastructure.ssm import MambaConfig
+        from src.infrastructure.ssm.mamba_mixer import HybridMambaMixer
+        from src.infrastructure.ssm import MambaConfig
         
         config = MambaConfig(
             hidden_size=ssm_config["hidden_size"],
@@ -560,7 +567,7 @@ class TestMambaUtils:
 
     def test_compute_ssm_state_shape(self, ssm_config):
         """Test SSM state shape computation."""
-        from infrastructure.ssm.MambaUtils import compute_ssm_state_shape
+        from src.infrastructure.ssm.mamba_utils import compute_ssm_state_shape
         
         shape = compute_ssm_state_shape(
             batch_size=ssm_config["batch_size"],
@@ -572,7 +579,7 @@ class TestMambaUtils:
 
     def test_compute_conv_state_shape(self, ssm_config):
         """Test conv state shape computation."""
-        from infrastructure.ssm.MambaUtils import compute_conv_state_shape
+        from src.infrastructure.ssm.mamba_utils import compute_conv_state_shape
         
         shape = compute_conv_state_shape(
             batch_size=ssm_config["batch_size"],
@@ -584,7 +591,7 @@ class TestMambaUtils:
 
     def test_discretize_ssm(self, ssm_config):
         """Test SSM discretization."""
-        from infrastructure.ssm.MambaUtils import discretize_ssm
+        from src.infrastructure.ssm.mamba_utils import discretize_ssm
         
         d_inner = ssm_config["d_inner"]
         ssm_state = ssm_config["ssm_state_size"]
@@ -603,7 +610,7 @@ class TestMambaUtils:
 
     def test_silu_activation(self, ssm_config):
         """Test SiLU activation."""
-        from infrastructure.ssm.MambaUtils import silu_activation
+        from src.infrastructure.ssm.mamba_utils import silu_activation
         
         x = np.array([[-2.0, -1.0, 0.0, 1.0, 2.0]], dtype=np.float32)
         
@@ -618,7 +625,7 @@ class TestMambaUtils:
 
     def test_parallel_scan(self, ssm_config):
         """Test parallel scan for SSM."""
-        from infrastructure.ssm.MambaUtils import parallel_scan
+        from src.infrastructure.ssm.mamba_utils import parallel_scan
         
         batch_size = 2
         seq_len = 8
@@ -636,7 +643,7 @@ class TestMambaUtils:
 
     def test_mamba_block_state(self, ssm_config):
         """Test MambaBlockState for multi-layer state."""
-        from infrastructure.ssm.MambaUtils import MambaBlockState
+        from src.infrastructure.ssm.mamba_utils import MambaBlockState
         
         num_layers = 4
         batch_size = ssm_config["batch_size"]
@@ -660,7 +667,7 @@ class TestMambaUtils:
 
     def test_chunk_sequence(self, ssm_config):
         """Test sequence chunking."""
-        from infrastructure.ssm.MambaUtils import chunk_sequence, merge_chunks
+        from src.infrastructure.ssm.mamba_utils import chunk_sequence, merge_chunks
         
         batch_size = ssm_config["batch_size"]
         seq_len = ssm_config["seq_len"]
@@ -680,7 +687,7 @@ class TestMambaUtils:
 
     def test_init_A_log(self, ssm_config):
         """Test A_log initialization."""
-        from infrastructure.ssm.MambaUtils import init_A_log
+        from src.infrastructure.ssm.mamba_utils import init_A_log
         
         d_inner = ssm_config["d_inner"]
         ssm_state_size = ssm_config["ssm_state_size"]
@@ -892,8 +899,8 @@ class TestPhase38Integration:
 
     def test_moe_full_forward(self, moe_config):
         """Test full MoE forward pass."""
-        from infrastructure.moe.FusedMoELayer import FusedMoELayer
-        from infrastructure.moe import FusedMoEConfig, TopKRouter, RouterConfig
+        from src.infrastructure.moe.fused_mo_e_layer import FusedMoELayer
+        from src.infrastructure.moe import FusedMoEConfig, TopKRouter, RouterConfig
         
         # Setup
         config = FusedMoEConfig(
@@ -924,8 +931,8 @@ class TestPhase38Integration:
 
     def test_mamba_full_forward(self, ssm_config):
         """Test full Mamba forward pass."""
-        from infrastructure.ssm.MambaMixer import MambaMixer as MambaMixerClass
-        from infrastructure.ssm import MambaConfig
+        from src.infrastructure.ssm.mamba_mixer import MambaMixer as MambaMixerClass
+        from src.infrastructure.ssm import MambaConfig
         
         config = MambaConfig(
             hidden_size=ssm_config["hidden_size"],
@@ -947,8 +954,8 @@ class TestPhase38Integration:
 
     def test_mamba_autoregressive_decode(self, ssm_config):
         """Test autoregressive decoding with Mamba."""
-        from infrastructure.ssm.MambaMixer import MambaMixer as MambaMixerClass
-        from infrastructure.ssm import MambaConfig, MambaState
+        from src.infrastructure.ssm.mamba_mixer import MambaMixer as MambaMixerClass
+        from src.infrastructure.ssm import MambaConfig, MambaState
         
         config = MambaConfig(
             hidden_size=ssm_config["hidden_size"],
@@ -982,7 +989,7 @@ class TestPhase38Integration:
     @pytest.mark.skipif(not HAS_RUST, reason="Rust core not available")
     def test_rust_python_equivalence_topk_routing(self, moe_config):
         """Test that Rust and Python top-k routing give similar results."""
-        from infrastructure.moe import TopKRouter, RouterConfig
+        from src.infrastructure.moe import TopKRouter, RouterConfig
         
         num_tokens = 16
         num_experts = moe_config["num_experts"]
@@ -1013,7 +1020,7 @@ class TestPhase38Performance:
         """Measure MoE routing performance."""
         import time
         
-        from infrastructure.moe import TopKRouter, RouterConfig
+        from src.infrastructure.moe import TopKRouter, RouterConfig
         
         config = RouterConfig(
             num_experts=moe_config["num_experts"],
@@ -1046,8 +1053,8 @@ class TestPhase38Performance:
         """Measure SSM step performance."""
         import time
         
-        from infrastructure.ssm.MambaMixer import MambaMixer as MambaMixerClass
-        from infrastructure.ssm import MambaConfig, MambaState
+        from src.infrastructure.ssm.mamba_mixer import MambaMixer as MambaMixerClass
+        from src.infrastructure.ssm import MambaConfig, MambaState
         
         config = MambaConfig(
             hidden_size=ssm_config["hidden_size"],

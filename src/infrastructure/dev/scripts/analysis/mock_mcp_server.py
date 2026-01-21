@@ -16,7 +16,7 @@
 """Mock MCP server implementation for testing Agentic capabilities."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import json
 import sys
 

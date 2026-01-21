@@ -64,6 +64,10 @@ improve, and maintain Python codebases with high autonomy.
 - delegate among multiple agents
 - update and maintain a roadmap in docs\prompt\roadmap.txt
 - update docs\prompt\context.txt and docs\prompt\prompt.txt
+
+## Context Management
+- **Cascade Context**: Passing a `CascadeContext` object through all recursive agent calls to track lineage and prevent "hallucination loops."
+
 - work towards automating the self improvement process 
 - monitor docs\prompt\improvements.md for new texts and websites that may have new insights.
 - we have a lot of code, some of it may need refactoring, 

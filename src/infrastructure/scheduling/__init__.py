@@ -4,7 +4,7 @@ Scheduling infrastructure.
 Phase 19: Beyond vLLM - Priority and deadline scheduling.
 Phase 34: Disaggregated prefill-decode scheduling.
 """
-from src.infrastructure.scheduling.PriorityScheduler import (
+from src.infrastructure.scheduling.priority_scheduler import (
     TaskPriority,
     TaskState,
     TaskStats,
@@ -14,7 +14,7 @@ from src.infrastructure.scheduling.PriorityScheduler import (
     RateLimitedScheduler,
     DeadlineScheduler,
 )
-from src.infrastructure.scheduling.DisaggregatedScheduler import (
+from src.infrastructure.scheduling.disaggregated_scheduler import (
     DCPConfig,
     DisaggregatedScheduler,
     HashSelector,

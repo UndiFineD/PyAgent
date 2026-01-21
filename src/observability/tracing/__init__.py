@@ -5,7 +5,7 @@ OpenTelemetry Tracing Package - Phase 20
 Distributed tracing with OpenTelemetry integration.
 """
 
-from .OpenTelemetryTracer import (
+from .open_telemetry_tracer import (
     # Constants
     TRACE_HEADERS,
     SpanAttributes,

@@ -18,7 +18,7 @@ Utility script to rename the project from DebVisor to PyAgent across the workspa
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import os
 
 __version__ = VERSION

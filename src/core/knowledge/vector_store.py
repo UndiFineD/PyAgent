@@ -13,7 +13,7 @@
 
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 from .storage_base import KnowledgeStore
 from typing import Any
 import logging

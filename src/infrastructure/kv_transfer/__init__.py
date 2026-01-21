@@ -7,7 +7,7 @@ Provides connectors for transferring KV cache between prefill and decode instanc
 Inspired by vLLM's distributed/kv_transfer/ architecture.
 """
 
-from .KVTransferConnector import (
+from .kv_transfer_connector import (
     KVConnectorRole,
     KVTransferConfig,
     KVConnectorBase,

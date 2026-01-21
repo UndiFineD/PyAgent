@@ -8,7 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum, Flag, auto
-from typing import Any, Dict, List, Optional, Set, NamedTuple
+from typing import List, Optional, Set, NamedTuple
 
 
 class PlatformType(Enum):
@@ -100,7 +100,7 @@ class DeviceCapability(NamedTuple):
     minor: int
 
     def __str__(self) -> str:
-        return f"{self.major#.minor}"
+        return f"{self.major}.{self.minor}"
 
     def __ge__(self, other: "DeviceCapability") -> bool:
         return (self.major, self.minor) >= (other.major, other.minor)

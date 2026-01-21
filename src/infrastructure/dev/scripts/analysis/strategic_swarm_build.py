@@ -18,7 +18,7 @@ optimization and strategic execution of complex workflows.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import os
 import sys
 import logging
@@ -33,8 +33,8 @@ logging.basicConfig(level=logging.ERROR)
 sys.path.append(os.getcwd())
 
 try:
-    from src.infrastructure.fleet.FleetManager import FleetManager
-    from src.infrastructure.backend.LLMClient import LLMClient
+    from src.infrastructure.fleet.fleet_manager import FleetManager
+    from src.infrastructure.backend.llm_client import LLMClient
     import requests
 except ImportError as e:
     print(f"FAILED TO IMPORT: {e}")

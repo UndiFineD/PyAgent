@@ -15,7 +15,7 @@ class TestParseCommands:
     
     def test_parse_single_command(self):
         """Test parsing a single command."""
-        from src.interface.SlashCommands import parse_commands
+        from src.interface.slash_commands import parse_commands
         
         result = parse_commands("/datetime")
         assert len(result) == 1
@@ -24,7 +24,7 @@ class TestParseCommands:
     
     def test_parse_command_with_args(self):
         """Test parsing command with arguments."""
-        from src.interface.SlashCommands import parse_commands
+        from src.interface.slash_commands import parse_commands
         
         result = parse_commands("/tokens hello world")
         assert len(result) == 1
@@ -33,7 +33,7 @@ class TestParseCommands:
     
     def test_parse_command_in_text(self):
         """Test parsing command embedded in text."""
-        from src.interface.SlashCommands import parse_commands
+        from src.interface.slash_commands import parse_commands
         
         result = parse_commands("What is /datetime right now?")
         assert len(result) == 1
@@ -41,7 +41,7 @@ class TestParseCommands:
     
     def test_parse_multiple_commands(self):
         """Test parsing multiple commands."""
-        from src.interface.SlashCommands import parse_commands
+        from src.interface.slash_commands import parse_commands
         
         result = parse_commands("/datetime /stats /version")
         assert len(result) == 3
@@ -51,7 +51,7 @@ class TestParseCommands:
     
     def test_parse_commands_with_text_between(self):
         """Test parsing commands with text between them."""
-        from src.interface.SlashCommands import parse_commands
+        from src.interface.slash_commands import parse_commands
         
         result = parse_commands("Hello /datetime and /stats please")
         assert len(result) == 2
@@ -60,14 +60,14 @@ class TestParseCommands:
     
     def test_parse_no_commands(self):
         """Test parsing text without commands."""
-        from src.interface.SlashCommands import parse_commands
+        from src.interface.slash_commands import parse_commands
         
         result = parse_commands("No commands here")
         assert len(result) == 0
     
     def test_parse_command_positions(self):
         """Test that command positions are recorded."""
-        from src.interface.SlashCommands import parse_commands
+        from src.interface.slash_commands import parse_commands
         
         prompt = "Hello /datetime world"
         result = parse_commands(prompt)
@@ -81,7 +81,7 @@ class TestCommandResult:
     
     def test_ok_result(self):
         """Test creating OK result."""
-        from src.interface.SlashCommands import CommandResult
+        from src.interface.slash_commands import CommandResult
         
         result = CommandResult.ok("Hello", {"key": "value"})
         assert result.success is True
@@ -91,7 +91,7 @@ class TestCommandResult:
     
     def test_fail_result(self):
         """Test creating fail result."""
-        from src.interface.SlashCommands import CommandResult
+        from src.interface.slash_commands import CommandResult
         
         result = CommandResult.fail("Something went wrong")
         assert result.success is False
@@ -104,21 +104,21 @@ class TestCommandContext:
     
     def test_arg_string(self):
         """Test arg_string property."""
-        from src.interface.SlashCommands import CommandContext
+        from src.interface.slash_commands import CommandContext
         
         ctx = CommandContext(command="test", args=["hello", "world"])
         assert ctx.arg_string == "hello world"
     
     def test_first_arg(self):
         """Test first_arg property."""
-        from src.interface.SlashCommands import CommandContext
+        from src.interface.slash_commands import CommandContext
         
         ctx = CommandContext(command="test", args=["first", "second"])
         assert ctx.first_arg == "first"
     
     def test_first_arg_empty(self):
         """Test first_arg with no args."""
-        from src.interface.SlashCommands import CommandContext
+        from src.interface.slash_commands import CommandContext
         
         ctx = CommandContext(command="test", args=[])
         assert ctx.first_arg is None
@@ -129,7 +129,7 @@ class TestCommandRegistry:
     
     def test_register_command(self):
         """Test registering a command."""
-        from src.interface.SlashCommands import CommandRegistry, CommandContext, CommandResult
+        from src.interface.slash_commands import CommandRegistry, CommandContext, CommandResult
         
         registry = CommandRegistry()
         
@@ -145,7 +145,7 @@ class TestCommandRegistry:
     
     def test_register_with_aliases(self):
         """Test registering command with aliases."""
-        from src.interface.SlashCommands import CommandRegistry, CommandContext, CommandResult
+        from src.interface.slash_commands import CommandRegistry, CommandContext, CommandResult
         
         registry = CommandRegistry()
         
@@ -161,7 +161,7 @@ class TestCommandRegistry:
     
     def test_command_decorator(self):
         """Test @command decorator."""
-        from src.interface.SlashCommands import CommandRegistry, CommandContext, CommandResult
+        from src.interface.slash_commands import CommandRegistry, CommandContext, CommandResult
         
         registry = CommandRegistry()
         
@@ -175,7 +175,7 @@ class TestCommandRegistry:
     
     def test_list_commands(self):
         """Test listing commands."""
-        from src.interface.SlashCommands import CommandRegistry, CommandContext, CommandResult
+        from src.interface.slash_commands import CommandRegistry, CommandContext, CommandResult
         
         registry = CommandRegistry()
         
@@ -197,7 +197,7 @@ class TestSlashCommands:
     
     def test_execute_datetime(self):
         """Test executing /datetime command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("datetime")
@@ -209,7 +209,7 @@ class TestSlashCommands:
     
     def test_execute_date(self):
         """Test executing /date command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("date")
@@ -219,7 +219,7 @@ class TestSlashCommands:
     
     def test_execute_time(self):
         """Test executing /time command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("time")
@@ -229,7 +229,7 @@ class TestSlashCommands:
     
     def test_execute_version(self):
         """Test executing /version command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("version")
@@ -240,7 +240,7 @@ class TestSlashCommands:
     
     def test_execute_uptime(self):
         """Test executing /uptime command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("uptime")
@@ -251,7 +251,7 @@ class TestSlashCommands:
     
     def test_execute_tokens(self):
         """Test executing /tokens command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("tokens", ["hello", "world"])
@@ -262,7 +262,7 @@ class TestSlashCommands:
     
     def test_execute_tokens_requires_args(self):
         """Test /tokens fails without args."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("tokens")
@@ -272,7 +272,7 @@ class TestSlashCommands:
     
     def test_execute_env(self):
         """Test executing /env command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         
@@ -284,7 +284,7 @@ class TestSlashCommands:
     
     def test_execute_env_not_found(self):
         """Test /env with non-existent variable."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("env", ["NONEXISTENT_VAR_12345"])
@@ -294,7 +294,7 @@ class TestSlashCommands:
     
     def test_execute_unknown_command(self):
         """Test executing unknown command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("unknowncommand123")
@@ -304,7 +304,7 @@ class TestSlashCommands:
     
     def test_execute_help(self):
         """Test executing /help command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("help")
@@ -314,7 +314,7 @@ class TestSlashCommands:
     
     def test_execute_help_specific(self):
         """Test executing /help for specific command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("help", ["datetime"])
@@ -324,7 +324,7 @@ class TestSlashCommands:
     
     def test_execute_uuid(self):
         """Test executing /uuid command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("uuid")
@@ -335,7 +335,7 @@ class TestSlashCommands:
     
     def test_execute_random(self):
         """Test executing /random command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("random", ["10"])
@@ -346,7 +346,7 @@ class TestSlashCommands:
     
     def test_execute_cwd(self):
         """Test executing /cwd command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("cwd")
@@ -356,7 +356,7 @@ class TestSlashCommands:
     
     def test_execute_python(self):
         """Test executing /python command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         import sys
         
         slash = SlashCommands()
@@ -367,7 +367,7 @@ class TestSlashCommands:
     
     def test_alias_resolution(self):
         """Test that aliases work."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         
@@ -387,7 +387,7 @@ class TestProcessPrompt:
     
     def test_process_single_command(self):
         """Test processing prompt with single command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.process("What time is it? /datetime")
@@ -398,7 +398,7 @@ class TestProcessPrompt:
     
     def test_process_multiple_commands(self):
         """Test processing prompt with multiple commands."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.process("/datetime /version")
@@ -410,7 +410,7 @@ class TestProcessPrompt:
     
     def test_process_inline_replacement(self):
         """Test that commands are replaced inline."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.process("Hello /version and more")
@@ -423,7 +423,7 @@ class TestProcessPrompt:
     
     def test_process_remove_commands(self):
         """Test removing commands from prompt."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.process("Hello /datetime world", remove_commands=True)
@@ -435,7 +435,7 @@ class TestProcessPrompt:
     
     def test_process_no_commands(self):
         """Test processing prompt without commands."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.process("Just regular text here")
@@ -445,7 +445,7 @@ class TestProcessPrompt:
     
     def test_process_command_data(self):
         """Test accessing command data from result."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.process("/version")
@@ -456,7 +456,7 @@ class TestProcessPrompt:
     
     def test_process_command_outputs(self):
         """Test accessing command outputs from result."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.process("/version")
@@ -471,7 +471,7 @@ class TestConvenienceFunctions:
     
     def test_get_slash_commands(self):
         """Test getting default instance."""
-        from src.interface.SlashCommands import get_slash_commands
+        from src.interface.slash_commands import get_slash_commands
         
         slash = get_slash_commands()
         assert slash is not None
@@ -482,14 +482,14 @@ class TestConvenienceFunctions:
     
     def test_process_prompt_function(self):
         """Test process_prompt function."""
-        from src.interface.SlashCommands import process_prompt
+        from src.interface.slash_commands import process_prompt
         
         result = process_prompt("/datetime")
         assert result.has_commands is True
     
     def test_execute_command_function(self):
         """Test execute_command function."""
-        from src.interface.SlashCommands import execute_command
+        from src.interface.slash_commands import execute_command
         
         result = execute_command("version")
         assert result.success is True
@@ -497,7 +497,7 @@ class TestConvenienceFunctions:
     
     def test_register_command_function(self):
         """Test register_command function."""
-        from src.interface.SlashCommands import (
+        from src.interface.slash_commands import (
             register_command,
             execute_command,
             CommandContext,
@@ -524,7 +524,7 @@ class TestSystemCommands:
     
     def test_stats_command(self):
         """Test /stats command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("stats")
@@ -536,7 +536,7 @@ class TestSystemCommands:
     
     def test_memory_command(self):
         """Test /memory command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("memory")
@@ -548,7 +548,7 @@ class TestSystemCommands:
     
     def test_health_command(self):
         """Test /health command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.execute("health")
@@ -564,7 +564,7 @@ class TestEdgeCases:
     
     def test_empty_prompt(self):
         """Test processing empty prompt."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.process("")
@@ -574,7 +574,7 @@ class TestEdgeCases:
     
     def test_command_only_prompt(self):
         """Test prompt that is just a command."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.process("/version")
@@ -584,7 +584,7 @@ class TestEdgeCases:
     
     def test_commands_at_line_start(self):
         """Test commands at start of lines."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         result = slash.process("/datetime\n/version")
@@ -594,7 +594,7 @@ class TestEdgeCases:
     
     def test_get_help_method(self):
         """Test get_help method."""
-        from src.interface.SlashCommands import SlashCommands
+        from src.interface.slash_commands import SlashCommands
         
         slash = SlashCommands()
         

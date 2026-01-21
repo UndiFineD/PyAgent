@@ -16,9 +16,9 @@ Phase 40 additions:
 - Temperature scheduling
 """
 
-from .Params import SamplingParams, SamplingState
-from .Base import Sampler, HAS_RUST
-from .Kernels import (
+from .params import SamplingParams, SamplingState
+from .base import Sampler, HAS_RUST
+from .kernels import (
     TemperatureSampler,
     TopKSampler,
     TopPSampler,
@@ -27,14 +27,14 @@ from .Kernels import (
     RepetitionPenaltySampler,
     PenaltySampler,
 )
-from .BeamSearch import (
+from .beam_search import (
     BeamSearchConfig,
     BeamHypothesis,
     BeamSearchSampler,
 )
-from .Engine import SamplingPipeline, sample_logits
+from .engine import SamplingPipeline, sample_logits
 
-from .AdvancedSamplingParams import (
+from .advanced_sampling_params import (
     # Enums
     OutputKind,
     StopCondition,

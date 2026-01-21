@@ -5,7 +5,7 @@ Google TPU platform implementation.
 """
 
 from __future__ import annotations
-
+import contextlib
 from typing import List, Set
 
 from .models import (
@@ -36,11 +36,11 @@ class TpuPlatform(Platform):
             return False
 
     def get_device_count(self) -> int:
-        try:
+        count = 1
+        with contextlib.suppress(Exception):
             import torch_xla.core.xla_model as xm
-            return xm.xrt_world_size()
-        except Exception:
-            return 1
+            count = xm.xrt_world_size()
+        return count
 
     def get_device_capability(self, device_id: int = 0) -> DeviceCapability:
         return DeviceCapability(major=4, minor=0)

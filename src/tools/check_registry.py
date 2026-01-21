@@ -7,8 +7,8 @@ from pathlib import Path
 # Ensure src is on path
 sys.path.append(os.getcwd())
 
-from src.infrastructure.fleet.AgentRegistry import LazyAgentMap
-from src.infrastructure.fleet.OrchestratorRegistry import LazyOrchestratorMap
+from src.infrastructure.fleet.agent_registry import LazyAgentMap
+from src.infrastructure.fleet.orchestrator_registry import LazyOrchestratorMap
 
 def run_diagnostic():
     logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')

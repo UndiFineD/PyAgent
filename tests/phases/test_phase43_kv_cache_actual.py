@@ -9,7 +9,7 @@ import time
 from typing import Optional
 
 # Python implementations
-from src.infrastructure.engine.KVCacheCoordinator import (
+from src.infrastructure.engine.kv_cache_coordinator import (
     CacheGroupType,
     AllocationStrategy,
     EvictionPolicy,

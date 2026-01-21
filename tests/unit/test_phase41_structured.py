@@ -7,7 +7,7 @@ Tests for StructuredOutputParams module.
 
 import pytest
 
-from src.infrastructure.structured_output.StructuredOutputParams import (
+from src.infrastructure.structured_output.structured_output_params import (
     StructuredOutputType,
     ConstraintType,
     SchemaFormat,

@@ -10,7 +10,7 @@ from typing import Any
 from .alerting import ThresholdAlertManager
 from .analysis import TokenCostEngine
 from .rollup_engine import StatsQueryEngine, StatsRollupCalculator
-from .exporters import MetricsExporter, OTelManager, PrometheusExporter
+from .exporters import metrics_exporter, otel_manager, prometheus_exporter
 from .metrics import AgentMetric, Metric
 
 logger = logging.getLogger(__name__)

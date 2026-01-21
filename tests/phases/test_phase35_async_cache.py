@@ -19,31 +19,31 @@ import threading
 from typing import Optional
 
 # Python module imports
-from src.infrastructure.engine.AsyncEngineClient import (
+from src.infrastructure.engine.async_engine_client import (
     ClientMode, WorkerState, EngineClientConfig, SchedulerOutput,
     EngineOutput, WorkerInfo, EngineCoreClientBase, InprocClient,
     SyncMPClient, AsyncMPClient, P2CLoadBalancer, DPAsyncMPClient,
     auto_select_client_mode, create_engine_client
 )
-from src.infrastructure.cache.BlockPoolManager import (
+from src.infrastructure.cache.block_pool_manager import (
     BlockState, Block, BlockPoolConfig, EvictionEvent, CacheMetrics,
     KVCacheMetricsCollector, ARCPolicy, BlockPool, compute_block_hash
 )
-from src.infrastructure.memory.GPUMemoryAllocator import (
+from src.infrastructure.memory.gpu_memory_allocator import (
     MemoryState, AllocationStrategy, MemoryRegion, MemorySnapshot,
     MemoryPoolConfig, MemoryPressureEvent, CuMemAllocator,
     MultiGPUMemoryBalancer
 )
-from src.infrastructure.cache.PrefixCacheOptimizer import (
+from src.infrastructure.cache.prefix_cache_optimizer import (
     CacheTier, PrefixCacheConfig, PrefixEntry, CacheHitResult,
     RadixTreeNode, PrefixTree, PrefixCacheOptimizer
 )
-from src.inference.execution.AsyncModelRunner import (
+from src.inference.execution.async_model_runner import (
     RunnerState, ModelInput, ModelOutput, AsyncGPUPoolingModelRunnerOutput,
     ExecutionPipeline, AsyncModelRunner, BatchedAsyncRunner,
     SchedulerOutput as RunnerSchedulerOutput
 )
-from src.infrastructure.parallel.DataParallelCoordinator import (
+from src.infrastructure.parallel.data_parallel_coordinator import (
     DPRole, WorkerHealth, LoadBalanceStrategy, DPConfig,
     WorkerState as DPWorkerState, StepState, WaveState,
     P2CLoadBalancer as DPLoadBalancer, DPEngineCoreProc,
@@ -937,12 +937,7 @@ class TestRustARCCacheBalance:
     def test_b1_hit_increases_p(self, rust_module):
         """B1 ghost hit increases p (favor recency)."""
         new_p = rust_module.arc_cache_balance_rust(
-            t1_size=10, t2_size=10,
-            b1_size=5, b2_size=10,
-            capacity=100,
-            current_p=50.0,
-            hit_in_b1=True,
-            hit_in_b2=False
+            10, 10, 5, 10, 100, 50.0, True, False
         )
         
         assert new_p > 50.0
@@ -950,12 +945,7 @@ class TestRustARCCacheBalance:
     def test_b2_hit_decreases_p(self, rust_module):
         """B2 ghost hit decreases p (favor frequency)."""
         new_p = rust_module.arc_cache_balance_rust(
-            t1_size=10, t2_size=10,
-            b1_size=10, b2_size=5,
-            capacity=100,
-            current_p=50.0,
-            hit_in_b1=False,
-            hit_in_b2=True
+            10, 10, 10, 5, 100, 50.0, False, True
         )
         
         assert new_p < 50.0
@@ -1045,9 +1035,7 @@ class TestRustWaveIdBarrier:
     def test_incomplete_wave(self, rust_module):
         """Incomplete wave detection."""
         is_complete, ratio = rust_module.wave_id_barrier_rust(
-            wave_id=1,
-            completed_steps=[5, 5, 5, 5],
-            expected_steps=10
+            1, [5, 5, 5, 5], 10
         )
         
         assert is_complete is False
@@ -1055,9 +1043,7 @@ class TestRustWaveIdBarrier:
     def test_complete_wave(self, rust_module):
         """Complete wave detection."""
         is_complete, ratio = rust_module.wave_id_barrier_rust(
-            wave_id=1,
-            completed_steps=[10, 10, 10, 10],
-            expected_steps=10
+            1, [10, 10, 10, 10], 10
         )
         
         assert is_complete is True

@@ -36,7 +36,7 @@ class StructuredOutputValidator:
                     warnings.append(f"Constraint warning: {type(constraint).__name__}")
         
         return ValidationResult(
-            valid=len(errors) == 0,
+            valid=not errors,
             errors=errors,
             warnings=warnings,
             parsed_value=parsed_value,
@@ -64,7 +64,7 @@ class StructuredOutputValidator:
                 errors.append("Does not match any choice prefix")
         
         return ValidationResult(
-            valid=len(errors) == 0,
+            valid=not errors,
             errors=errors,
             warnings=warnings,
         )

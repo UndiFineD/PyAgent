@@ -4,13 +4,13 @@
 Speculative decoding verification package.
 """
 
-from .Config import VerificationStrategy, AcceptancePolicy, SpecDecodeConfig
-from .Metadata import (
+from .config import VerificationStrategy, AcceptancePolicy, SpecDecodeConfig
+from .metadata import (
     SpecDecodeMetadataV2,
     TreeVerificationMetadata,
     SpecDecodeMetadataFactory
 )
-from .Verification import (
+from .verification import (
     VerificationResult,
     SpecDecodeVerifier,
     BatchVerifier,

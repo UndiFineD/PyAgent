@@ -16,10 +16,10 @@
 """Validation script for Phase 10: Human-Agent Teaming & Ecosystem."""
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import logging
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 
 __version__ = VERSION
 

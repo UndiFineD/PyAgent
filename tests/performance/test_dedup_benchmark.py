@@ -1,7 +1,7 @@
 import time
 import random
 import string
-from src.observability.reports.core.DeduplicationCore import DeduplicationCore
+from src.observability.reports.core.deduplication_core import DeduplicationCore
 
 
 def generate_sentence(words=10):

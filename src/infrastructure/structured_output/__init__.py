@@ -13,7 +13,7 @@ This module provides grammar-based token constraints for:
 - Function call validation
 """
 
-from src.infrastructure.structured_output.StructuredOutputManager import (
+from src.infrastructure.structured_output.structured_output_manager import (
     StructuredOutputManager,
     StructuredOutputBackend,
     StructuredOutputGrammar,
@@ -22,7 +22,7 @@ from src.infrastructure.structured_output.StructuredOutputManager import (
     CompilationResult,
 )
 
-from src.infrastructure.structured_output.GrammarEngine import (
+from src.infrastructure.structured_output.grammar_engine import (
     GrammarEngine,
     RegexGrammar,
     JsonSchemaGrammar,
@@ -32,7 +32,7 @@ from src.infrastructure.structured_output.GrammarEngine import (
     TokenMask,
 )
 
-from src.infrastructure.structured_output.LogitProcessor import (
+from src.infrastructure.structured_output.logit_processor import (
     LogitProcessor,
     ConstrainedLogitProcessor,
     BitmaskLogitProcessor,
@@ -41,7 +41,7 @@ from src.infrastructure.structured_output.LogitProcessor import (
 )
 
 # Phase 41: Enhanced structured output parameters
-from src.infrastructure.structured_output.StructuredOutputParams import (
+from src.infrastructure.structured_output.structured_output_params import (
     StructuredOutputType,
     ConstraintType,
     SchemaFormat,

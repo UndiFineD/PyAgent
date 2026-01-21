@@ -2,7 +2,7 @@ import unittest
 import os
 import asyncio
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
+from src.infrastructure.fleet.fleet_manager import FleetManager
 
 
 class TestPhases47_49(unittest.TestCase):
@@ -53,16 +53,18 @@ class TestPhases47_49(unittest.TestCase):
             {"id": "AgentA", "position": [1, 2, 0]},
             {"id": "ToolB", "position": [5, 2, 0]},
         ]
-        spatial_res = self.fleet.visualizer.spatial_reasoning(
-            objects, "Is AgentA close to ToolB?"
+        spatial_res = asyncio.run(
+            self.fleet.visualizer.spatial_reasoning(objects, "Is AgentA close to ToolB?")
         )
         print(f"Spatial reasoning res: {spatial_res}")
         self.assertIsNotNone(spatial_res)
 
         # Physics constraints
-        physics_res = self.fleet.reality_anchor.check_physics_constraints(
-            "Agent moves 1000m in 1ms",
-            {"max_velocity": 343},  # Speed of sound
+        physics_res = asyncio.run(
+            self.fleet.reality_anchor.check_physics_constraints(
+                "Agent moves 1000m in 1ms",
+                {"max_velocity": 343},  # Speed of sound
+            )
         )
         print(f"Physics res: {physics_res}")
         # It's an AI tool so verdict depends on model, but we check key presence

@@ -15,13 +15,13 @@
 # Add src to path
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import logging
 import sys
 import os
 from pathlib import Path
-from src.infrastructure.fleet.FleetManager import FleetManager
-from src.logic.agents.system.MCPAgent import MCPAgent
+from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.logic.agents.system.mcp_agent import MCPAgent
 
 sys.path.append(str(Path(__file__).parent))
 
@@ -35,7 +35,7 @@ def test_phase_16() -> None:
     fleet = FleetManager(workspace)
 
     print("\n--- Phase 16: MCP Integration (Server Init) ---")
-    mcp_agent = MCPAgent(str(Path(workspace) / "src/logic/agents/system/MCPAgent.py"))
+    mcp_agent = MCPAgent(str(Path(workspace) / "src\logic\agents\system\mcp_agent.py"))
 
     # We use 'python' to run our mock server
     res = mcp_agent.initialize_mcp_server(

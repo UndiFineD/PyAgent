@@ -23,7 +23,7 @@ Connects to the Fleet Load Balancer via the Agent API Server.
 """
 
 from __future__ import annotations
-from src.core.base.Version import VERSION
+from src.core.base.version import VERSION
 import sys
 import requests
 import argparse
@@ -39,8 +39,8 @@ from rich.progress import (
     TaskProgressColumn,
 )
 from rich.columns import Columns
-from src.core.base.ConnectivityManager import ConnectivityManager
-from src.infrastructure.backend.LocalContextRecorder import LocalContextRecorder
+from src.core.base.connectivity_manager import ConnectivityManager
+from src.infrastructure.backend.local_context_recorder import LocalContextRecorder
 
 # from functools import lru_cache
 
