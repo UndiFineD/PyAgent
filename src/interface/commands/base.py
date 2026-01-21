@@ -4,7 +4,6 @@ Base types and models for slash commands.
 
 from __future__ import annotations
 
-import time
 from dataclasses import dataclass, field
 from typing import Any, Callable, TypeAlias
 
@@ -16,33 +15,33 @@ AsyncCommandHandler: TypeAlias = Callable[["CommandContext"], "CommandResult"]
 @dataclass
 class CommandContext:
     """Context passed to command handlers."""
-    
+
     command: str
     """The command name (without slash)."""
-    
+
     args: list[str] = field(default_factory=list)
     """Arguments passed to the command."""
-    
+
     raw_match: str = ""
     """The raw matched string from the prompt."""
-    
+
     prompt: str = ""
     """The full original prompt."""
-    
+
     user_id: str | None = None
     """Optional user identifier."""
-    
+
     session_id: str | None = None
     """Optional session identifier."""
-    
+
     metadata: dict[str, Any] = field(default_factory=dict)
     """Additional metadata."""
-    
+
     @property
     def arg_string(self) -> str:
         """Get arguments as a single string."""
         return " ".join(self.args)
-    
+
     @property
     def first_arg(self) -> str | None:
         """Get first argument or None."""
@@ -52,27 +51,27 @@ class CommandContext:
 @dataclass
 class CommandResult:
     """Result from a command execution."""
-    
+
     success: bool = True
     """Whether the command executed successfully."""
-    
+
     output: str = ""
     """The output text to insert/display."""
-    
+
     data: dict[str, Any] = field(default_factory=dict)
     """Structured data from the command."""
-    
+
     error: str | None = None
     """Error message if success is False."""
-    
+
     inline: bool = True
     """Whether output should be inserted inline."""
-    
+
     @classmethod
     def ok(cls, output: str, data: dict[str, Any] | None = None, inline: bool = True) -> CommandResult:
         """Create a successful result."""
         return cls(success=True, output=output, data=data or {}, inline=inline)
-    
+
     @classmethod
     def fail(cls, error: str) -> CommandResult:
         """Create a failed result."""
@@ -82,27 +81,28 @@ class CommandResult:
 @dataclass
 class CommandDefinition:
     """Definition of a slash command."""
-    
+
     name: str
     """Primary command name."""
-    
+
     handler: CommandHandler
     """The handler function."""
-    
+
     description: str = ""
     """Short description for help."""
-    
+
     usage: str = ""
     """Usage example."""
-    
+
     aliases: list[str] = field(default_factory=list)
     """Alternative names for the command."""
-    
+
     hidden: bool = False
     """Whether to hide from help listing."""
-    
+
     requires_args: bool = False
     """Whether arguments are required."""
+
 
 
 @dataclass
