@@ -41,10 +41,10 @@ pub fn ngram_match_rust(
 #[pyo3(signature = (q, k_compressed, v_compressed, metadata_map, scale=None))]
 pub fn fused_packkv_attention_rust(
     q: Vec<f32>,
-    k_compressed: Vec<u8>,
-    v_compressed: Vec<u8>,
-    metadata_map: HashMap<i32, HashMap<String, f32>>,
-    scale: Option<f32>,
+    _k_compressed: Vec<u8>,
+    _v_compressed: Vec<u8>,
+    _metadata_map: HashMap<i32, HashMap<String, f32>>,
+    _scale: Option<f32>,
 ) -> PyResult<Vec<f32>> {
     // In production, this would use a high-performance Rust/SIMD or CUDA/Triton bridge
     // to perform matmul without full dequantization to VRAM.
@@ -60,18 +60,18 @@ pub fn build_ngram_index_rust(
     tokens: Vec<i64>,
     n: usize,
 ) -> PyResult<PyObject> {
-    let index = PyDict::new_bound(py);
+    let index = PyDict::new(py);
     
     if tokens.len() < n {
-        return Ok(index.into_py(py));
+        return Ok(index.to_object(py));
     }
     
     for i in 0..=tokens.len() - n {
-        let ngram = PyTuple::new_bound(py, &tokens[i..i + n]);
+        let ngram = PyTuple::new(py, &tokens[i..i + n]);
         let list = match index.get_item(&ngram)? {
             Some(obj) => obj.downcast_into::<PyList>()?,
             None => {
-                let new_list = PyList::empty_bound(py);
+                let new_list = PyList::empty(py);
                 index.set_item(&ngram, &new_list)?;
                 new_list
             }
@@ -79,7 +79,7 @@ pub fn build_ngram_index_rust(
         list.append(i)?;
     }
     
-    Ok(index.into_py(py))
+    Ok(index.to_object(py))
 }
 
 /// Find continuation candidates after matching n-grams
