@@ -16,7 +16,7 @@
 """Auto-extracted class from agent.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from src.logic.orchestration.agent_chain_step import AgentChainStep
 from typing import Any
 from collections.abc import Callable

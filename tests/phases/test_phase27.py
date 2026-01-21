@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 def test_phase27() -> None:

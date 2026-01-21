@@ -16,15 +16,15 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.types.code_language import CodeLanguage
-from src.core.base.types.code_metrics import CodeMetrics
-from src.core.base.types.code_smell import CodeSmell
-from src.core.base.types.quality_score import QualityScore
-from src.core.base.types.refactoring_pattern import RefactoringPattern
-from src.core.base.types.style_rule import StyleRule
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.types.code_language import CodeLanguage
+from src.core.base.common.types.code_metrics import CodeMetrics
+from src.core.base.common.types.code_smell import CodeSmell
+from src.core.base.common.types.quality_score import QualityScore
+from src.core.base.common.types.refactoring_pattern import RefactoringPattern
+from src.core.base.common.types.style_rule import StyleRule
 from src.logic.agents.development.coder_core import CoderCore, DEFAULT_PYTHON_STYLE_RULES
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 from src.logic.agents.development.mixins.agent.agent_language_mixin import AgentLanguageMixin
 from src.logic.agents.development.mixins.agent.agent_style_mixin import AgentStyleMixin
 from src.logic.agents.development.mixins.agent.agent_metrics_mixin import AgentMetricsMixin

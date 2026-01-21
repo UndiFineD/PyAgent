@@ -45,7 +45,7 @@ def test_coder_agent_keyword_prompt_generates_suggestions(
     async def fake_improve_content(self, prompt: str, **kwargs: Any) -> str:
         return "x=1 # AI GENERATED CONTENT"
 
-    import src.core.base.base_agent
+    import src.core.base.lifecycle.base_agent
 
     print(f"DEBUG: src.core.base.BaseAgent type: {type(src.core.base.BaseAgent)}")
     if isinstance(src.core.base.BaseAgent, type):

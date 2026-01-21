@@ -5,9 +5,9 @@
 from __future__ import annotations
 import logging
 from pathlib import Path
-from src.core.base.models import AgentHealthCheck, HealthStatus
-from src.core.base.graceful_shutdown import GracefulShutdown
-from src.core.base.managers.system_managers import HealthChecker
+from src.core.base.common.models import AgentHealthCheck, HealthStatus
+from src.core.base.lifecycle.graceful_shutdown import GracefulShutdown
+from src.core.base.logic.managers.system_managers import HealthChecker
 
 
 class OrchestratorLifecycleMixin:

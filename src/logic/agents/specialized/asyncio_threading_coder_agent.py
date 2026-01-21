@@ -1,8 +1,8 @@
 from __future__ import annotations
 from typing import Dict, Any, List
 
-from src.core.base.base_agent import BaseAgent
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
 
 
 class AsyncioThreadingCoderAgent(BaseAgent):

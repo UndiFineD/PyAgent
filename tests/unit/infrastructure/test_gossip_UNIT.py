@@ -2,7 +2,7 @@
 
 import pytest
 from unittest.mock import MagicMock
-from src.infrastructure.orchestration.consensus.gossip_protocol_orchestrator import (
+from src.infrastructure.swarm.orchestration.consensus.gossip_protocol_orchestrator import (
     GossipProtocolOrchestrator,
 )
 

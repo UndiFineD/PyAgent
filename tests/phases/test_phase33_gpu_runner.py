@@ -43,7 +43,7 @@ class TestCachedRequestState:
     
     def test_create_cached_request_state(self):
         """Test creating a cached request state."""
-        from src.infrastructure.execution.input_batch_orchestrator import CachedRequestState
+        from src.infrastructure.services.execution.input_batch_orchestrator import CachedRequestState
         
         state = CachedRequestState(
             req_id="req-001",
@@ -59,7 +59,7 @@ class TestCachedRequestState:
     
     def test_cached_request_state_token_operations(self):
         """Test token operations on cached state."""
-        from src.infrastructure.execution.input_batch_orchestrator import CachedRequestState
+        from src.infrastructure.services.execution.input_batch_orchestrator import CachedRequestState
         
         state = CachedRequestState(
             req_id="req-002",
@@ -76,7 +76,7 @@ class TestCachedRequestState:
     
     def test_cached_request_state_num_tokens(self):
         """Test num_tokens property."""
-        from src.infrastructure.execution.input_batch_orchestrator import CachedRequestState
+        from src.infrastructure.services.execution.input_batch_orchestrator import CachedRequestState
         
         state = CachedRequestState(
             req_id="req-003",
@@ -93,7 +93,7 @@ class TestInputBuffers:
     @pytest.mark.skipif(not HAS_TORCH, reason="PyTorch not available")
     def test_create_input_buffers(self):
         """Test creating input buffers."""
-        from src.infrastructure.execution.input_batch_orchestrator import InputBuffers
+        from src.infrastructure.services.execution.input_batch_orchestrator import InputBuffers
         
         buffers = InputBuffers(
             max_num_reqs=32,
@@ -112,7 +112,7 @@ class TestInputBuffers:
     @pytest.mark.skipif(not HAS_TORCH, reason="PyTorch not available")
     def test_buffer_shapes(self):
         """Test buffer tensor shapes."""
-        from src.infrastructure.execution.input_batch_orchestrator import InputBuffers
+        from src.infrastructure.services.execution.input_batch_orchestrator import InputBuffers
         
         buffers = InputBuffers(
             max_num_reqs=16,
@@ -133,7 +133,7 @@ class TestBatchUpdateBuilder:
     
     def test_batch_update_builder_record_swap(self):
         """Test recording swaps in batch builder."""
-        from src.infrastructure.execution.input_batch_orchestrator import BatchUpdateBuilder
+        from src.infrastructure.services.execution.input_batch_orchestrator import BatchUpdateBuilder
         
         builder = BatchUpdateBuilder()
         
@@ -145,7 +145,7 @@ class TestBatchUpdateBuilder:
     
     def test_batch_update_builder_reset(self):
         """Test resetting updates."""
-        from src.infrastructure.execution.input_batch_orchestrator import BatchUpdateBuilder
+        from src.infrastructure.services.execution.input_batch_orchestrator import BatchUpdateBuilder
         
         builder = BatchUpdateBuilder()
         builder.record_add("req-1", 0)
@@ -160,7 +160,7 @@ class TestInputBatchOrchestrator:
     @pytest.mark.skipif(not HAS_TORCH, reason="PyTorch not available")
     def test_create_orchestrator(self):
         """Test creating batch orchestrator."""
-        from src.infrastructure.execution.input_batch_orchestrator import InputBatchOrchestrator
+        from src.infrastructure.services.execution.input_batch_orchestrator import InputBatchOrchestrator
         
         orchestrator = InputBatchOrchestrator(
             max_num_reqs=32,
@@ -175,7 +175,7 @@ class TestInputBatchOrchestrator:
     @pytest.mark.skipif(not HAS_TORCH, reason="PyTorch not available")
     def test_orchestrator_request_tracking(self):
         """Test request tracking in orchestrator."""
-        from src.infrastructure.execution.input_batch_orchestrator import InputBatchOrchestrator
+        from src.infrastructure.services.execution.input_batch_orchestrator import InputBatchOrchestrator
         
         orchestrator = InputBatchOrchestrator(
             max_num_reqs=8,
@@ -196,7 +196,7 @@ class TestBatchDescriptor:
     
     def test_create_batch_descriptor(self):
         """Test creating a batch descriptor."""
-        from src.infrastructure.execution.cuda_graph_manager import BatchDescriptor
+        from src.infrastructure.services.execution.cuda_graph_manager import BatchDescriptor
         
         desc = BatchDescriptor(
             num_tokens=128,
@@ -212,7 +212,7 @@ class TestBatchDescriptor:
     
     def test_batch_descriptor_hash(self):
         """Test batch descriptor hashing."""
-        from src.infrastructure.execution.cuda_graph_manager import BatchDescriptor
+        from src.infrastructure.services.execution.cuda_graph_manager import BatchDescriptor
         
         desc1 = BatchDescriptor(8, 1, True, False, False)
         desc2 = BatchDescriptor(8, 1, True, False, False)
@@ -227,7 +227,7 @@ class TestCUDAGraphRegistry:
     
     def test_create_registry(self):
         """Test creating graph registry."""
-        from src.infrastructure.execution.cuda_graph_manager import CUDAGraphRegistry
+        from src.infrastructure.services.execution.cuda_graph_manager import CUDAGraphRegistry
         
         registry = CUDAGraphRegistry(max_graphs=10)
         
@@ -236,7 +236,7 @@ class TestCUDAGraphRegistry:
     
     def test_registry_put_and_get(self):
         """Test put and get operations."""
-        from src.infrastructure.execution.cuda_graph_manager import (
+        from src.infrastructure.services.execution.cuda_graph_manager import (
             CUDAGraphRegistry,
             CUDAGraphEntry,
         )
@@ -260,7 +260,7 @@ class TestCUDAGraphRegistry:
     
     def test_registry_lru_eviction(self):
         """Test LRU eviction in registry."""
-        from src.infrastructure.execution.cuda_graph_manager import (
+        from src.infrastructure.services.execution.cuda_graph_manager import (
             CUDAGraphRegistry,
             CUDAGraphEntry,
         )
@@ -291,7 +291,7 @@ class TestCUDAGraphManager:
     
     def test_create_manager(self):
         """Test creating graph manager."""
-        from src.infrastructure.execution.cuda_graph_manager import (
+        from src.infrastructure.services.execution.cuda_graph_manager import (
             CUDAGraphManager,
             CUDAGraphMode,
         )
@@ -306,7 +306,7 @@ class TestCUDAGraphManager:
     
     def test_compute_graph_key(self):
         """Test graph key computation."""
-        from src.infrastructure.execution.cuda_graph_manager import (
+        from src.infrastructure.services.execution.cuda_graph_manager import (
             compute_graph_key,
             BatchDescriptor,
         )
@@ -319,7 +319,7 @@ class TestCUDAGraphManager:
     
     def test_graph_mode_enum(self):
         """Test CUDA graph mode enum."""
-        from src.infrastructure.execution.cuda_graph_manager import CUDAGraphMode
+        from src.infrastructure.services.execution.cuda_graph_manager import CUDAGraphMode
         
         assert CUDAGraphMode.NONE is not None
         assert CUDAGraphMode.PIECEWISE is not None
@@ -336,7 +336,7 @@ class TestBatchInvariantOps:
     @pytest.mark.skipif(not HAS_TORCH, reason="PyTorch not available")
     def test_softmax_batch_invariant(self):
         """Test batch invariant softmax."""
-        from src.core.base.math.batch_invariant_ops import softmax_batch_invariant
+        from src.core.base.logic.math.batch_invariant_ops import softmax_batch_invariant
         
         x = torch.randn(4, 8, 16)
         result = softmax_batch_invariant(x, dim=-1)
@@ -349,7 +349,7 @@ class TestBatchInvariantOps:
     @pytest.mark.skipif(not HAS_TORCH, reason="PyTorch not available")
     def test_mean_batch_invariant(self):
         """Test batch invariant mean."""
-        from src.core.base.math.batch_invariant_ops import mean_batch_invariant
+        from src.core.base.logic.math.batch_invariant_ops import mean_batch_invariant
         
         x = torch.randn(4, 8, 16)
         result = mean_batch_invariant(x, dim=-1)
@@ -359,7 +359,7 @@ class TestBatchInvariantOps:
     @pytest.mark.skipif(not HAS_TORCH, reason="PyTorch not available")
     def test_mm_batch_invariant(self):
         """Test batch invariant matrix multiply."""
-        from src.core.base.math.batch_invariant_ops import mm_batch_invariant
+        from src.core.base.logic.math.batch_invariant_ops import mm_batch_invariant
         
         a = torch.randn(32, 64)
         b = torch.randn(64, 16)
@@ -373,7 +373,7 @@ class TestBatchInvariantOps:
     @pytest.mark.skipif(not HAS_TORCH, reason="PyTorch not available")
     def test_layer_norm_batch_invariant(self):
         """Test batch invariant layer norm."""
-        from src.core.base.math.batch_invariant_ops import layer_norm_batch_invariant
+        from src.core.base.logic.math.batch_invariant_ops import layer_norm_batch_invariant
         
         x = torch.randn(4, 8, 64)
         weight = torch.ones(64)
@@ -386,7 +386,7 @@ class TestBatchInvariantOps:
     @pytest.mark.skipif(not HAS_TORCH, reason="PyTorch not available")
     def test_gelu_batch_invariant(self):
         """Test batch invariant GELU."""
-        from src.core.base.math.batch_invariant_ops import gelu_batch_invariant
+        from src.core.base.logic.math.batch_invariant_ops import gelu_batch_invariant
         
         x = torch.randn(16, 32)
         result = gelu_batch_invariant(x)
@@ -406,7 +406,7 @@ class TestParallelConfig:
     
     def test_create_parallel_config(self):
         """Test creating parallel config."""
-        from src.infrastructure.distributed.tensor_parallel_group import ParallelConfig
+        from src.infrastructure.swarm.distributed.tensor_parallel_group import ParallelConfig
         
         config = ParallelConfig(
             tensor_parallel_size=4,
@@ -420,7 +420,7 @@ class TestParallelConfig:
     
     def test_parallel_config_from_env(self):
         """Test creating config from environment."""
-        from src.infrastructure.distributed.tensor_parallel_group import ParallelConfig
+        from src.infrastructure.swarm.distributed.tensor_parallel_group import ParallelConfig
         import os
         
         # Save original env
@@ -443,7 +443,7 @@ class TestRankInfo:
     
     def test_create_rank_info(self):
         """Test creating rank info."""
-        from src.infrastructure.distributed.tensor_parallel_group import RankInfo
+        from src.infrastructure.swarm.distributed.tensor_parallel_group import RankInfo
         
         info = RankInfo(
             global_rank=5,
@@ -462,7 +462,7 @@ class TestGroupCoordinator:
     
     def test_create_group_coordinator(self):
         """Test creating group coordinator."""
-        from src.infrastructure.distributed.tensor_parallel_group import (
+        from src.infrastructure.swarm.distributed.tensor_parallel_group import (
             GroupCoordinator,
             ParallelConfig,
             RankInfo,
@@ -481,7 +481,7 @@ class TestTensorParallelGroup:
     
     def test_create_tp_group(self):
         """Test creating TP group."""
-        from src.infrastructure.distributed.tensor_parallel_group import (
+        from src.infrastructure.swarm.distributed.tensor_parallel_group import (
             TensorParallelGroup,
             GroupCoordinator,
             ParallelConfig,
@@ -499,7 +499,7 @@ class TestTensorParallelGroup:
     @pytest.mark.skipif(not HAS_TORCH, reason="PyTorch not available")
     def test_shard_tensor(self):
         """Test tensor sharding."""
-        from src.infrastructure.distributed.tensor_parallel_group import (
+        from src.infrastructure.swarm.distributed.tensor_parallel_group import (
             TensorParallelGroup,
             GroupCoordinator,
             ParallelConfig,
@@ -527,7 +527,7 @@ class TestNCCLConfig:
     
     def test_create_nccl_config(self):
         """Test creating NCCL config."""
-        from src.infrastructure.distributed.nccl_communicator import NCCLConfig
+        from src.infrastructure.swarm.distributed.nccl_communicator import NCCLConfig
         
         config = NCCLConfig(
             timeout_seconds=600.0,
@@ -543,7 +543,7 @@ class TestNCCLCommunicator:
     
     def test_create_communicator(self):
         """Test creating NCCL communicator."""
-        from src.infrastructure.distributed.nccl_communicator import NCCLCommunicator
+        from src.infrastructure.swarm.distributed.nccl_communicator import NCCLCommunicator
         
         comm = NCCLCommunicator()
         
@@ -552,7 +552,7 @@ class TestNCCLCommunicator:
     
     def test_get_stats(self):
         """Test getting communicator stats."""
-        from src.infrastructure.distributed.nccl_communicator import NCCLCommunicator
+        from src.infrastructure.swarm.distributed.nccl_communicator import NCCLCommunicator
         
         comm = NCCLCommunicator()
         stats = comm.get_stats()
@@ -567,7 +567,7 @@ class TestReduceOp:
     
     def test_reduce_ops(self):
         """Test reduce operation enum values."""
-        from src.infrastructure.distributed.nccl_communicator import ReduceOp
+        from src.infrastructure.swarm.distributed.nccl_communicator import ReduceOp
         
         assert ReduceOp.SUM is not None
         assert ReduceOp.PROD is not None
@@ -585,7 +585,7 @@ class TestAttentionBackendEnum:
     
     def test_backend_enum_values(self):
         """Test backend enum values."""
-        from src.infrastructure.attention.attention_backend_registry import AttentionBackendEnum
+        from src.infrastructure.engine.attention.attention_backend_registry import AttentionBackendEnum
         
         assert AttentionBackendEnum.FLASH_ATTN.value == "flash_attn"
         assert AttentionBackendEnum.FLASHINFER.value == "flashinfer"
@@ -597,7 +597,7 @@ class TestAttentionCapabilities:
     
     def test_create_capabilities(self):
         """Test creating attention capabilities."""
-        from src.infrastructure.attention.attention_backend_registry import AttentionCapabilities
+        from src.infrastructure.engine.attention.attention_backend_registry import AttentionCapabilities
         
         caps = AttentionCapabilities(
             supports_prefill=True,
@@ -616,13 +616,13 @@ class TestNaiveAttentionBackend:
     
     def test_naive_backend_name(self):
         """Test naive backend name."""
-        from src.infrastructure.attention.attention_backend_registry import NaiveAttentionBackend
+        from src.infrastructure.engine.attention.attention_backend_registry import NaiveAttentionBackend
         
         assert NaiveAttentionBackend.get_name() == "naive"
     
     def test_naive_backend_capabilities(self):
         """Test naive backend capabilities."""
-        from src.infrastructure.attention.attention_backend_registry import NaiveAttentionBackend
+        from src.infrastructure.engine.attention.attention_backend_registry import NaiveAttentionBackend
         
         caps = NaiveAttentionBackend.get_capabilities()
         
@@ -635,7 +635,7 @@ class TestAttentionBackendRegistry:
     
     def test_singleton_pattern(self):
         """Test registry singleton pattern."""
-        from src.infrastructure.attention.attention_backend_registry import AttentionBackendRegistry
+        from src.infrastructure.engine.attention.attention_backend_registry import AttentionBackendRegistry
         
         reg1 = AttentionBackendRegistry()
         reg2 = AttentionBackendRegistry()
@@ -644,7 +644,7 @@ class TestAttentionBackendRegistry:
     
     def test_list_backends(self):
         """Test listing registered backends."""
-        from src.infrastructure.attention.attention_backend_registry import get_attention_registry
+        from src.infrastructure.engine.attention.attention_backend_registry import get_attention_registry
         
         registry = get_attention_registry()
         backends = registry.list_backends()
@@ -654,7 +654,7 @@ class TestAttentionBackendRegistry:
     
     def test_get_backend(self):
         """Test getting a backend."""
-        from src.infrastructure.attention.attention_backend_registry import get_attention_registry
+        from src.infrastructure.engine.attention.attention_backend_registry import get_attention_registry
         
         registry = get_attention_registry()
         backend = registry.get_backend("naive")
@@ -664,7 +664,7 @@ class TestAttentionBackendRegistry:
     
     def test_select_backend(self):
         """Test selecting backend based on capabilities."""
-        from src.infrastructure.attention.attention_backend_registry import get_attention_registry
+        from src.infrastructure.engine.attention.attention_backend_registry import get_attention_registry
         
         registry = get_attention_registry()
         backend = registry.select_backend()
@@ -788,11 +788,11 @@ class TestPhase33Integration:
     
     def test_input_batch_to_attention(self):
         """Test flow from input batch to attention."""
-        from src.infrastructure.execution.input_batch_orchestrator import (
+        from src.infrastructure.services.execution.input_batch_orchestrator import (
             CachedRequestState,
             BatchUpdateBuilder,
         )
-        from src.infrastructure.attention.attention_backend_registry import (
+        from src.infrastructure.engine.attention.attention_backend_registry import (
             get_attention_registry,
             AttentionMetadata,
             AttentionType,
@@ -814,13 +814,13 @@ class TestPhase33Integration:
     @pytest.mark.skipif(not HAS_TORCH, reason="PyTorch not available")
     def test_tensor_parallel_with_comm(self):
         """Test tensor parallel with communicator."""
-        from src.infrastructure.distributed.tensor_parallel_group import (
+        from src.infrastructure.swarm.distributed.tensor_parallel_group import (
             TensorParallelGroup,
             GroupCoordinator,
             ParallelConfig,
             RankInfo,
         )
-        from src.infrastructure.distributed.nccl_communicator import NCCLCommunicator
+        from src.infrastructure.swarm.distributed.nccl_communicator import NCCLCommunicator
         
         # Create TP group
         config = ParallelConfig(tensor_parallel_size=4)
@@ -840,7 +840,7 @@ class TestPhase33Integration:
     
     def test_cudagraph_with_batch(self):
         """Test CUDA graph manager with batch descriptor."""
-        from src.infrastructure.execution.cuda_graph_manager import (
+        from src.infrastructure.services.execution.cuda_graph_manager import (
             CUDAGraphManager,
             CUDAGraphMode,
             BatchDescriptor,
@@ -881,7 +881,7 @@ class TestEdgeCases:
     
     def test_empty_batch(self):
         """Test handling empty batch."""
-        from src.infrastructure.execution.input_batch_orchestrator import BatchUpdateBuilder
+        from src.infrastructure.services.execution.input_batch_orchestrator import BatchUpdateBuilder
         
         builder = BatchUpdateBuilder()
         
@@ -891,7 +891,7 @@ class TestEdgeCases:
     
     def test_registry_unknown_backend(self):
         """Test getting unknown backend."""
-        from src.infrastructure.attention.attention_backend_registry import get_attention_registry
+        from src.infrastructure.engine.attention.attention_backend_registry import get_attention_registry
         
         registry = get_attention_registry()
         backend = registry.get_backend("nonexistent_backend")
@@ -913,7 +913,7 @@ class TestEdgeCases:
     
     def test_communicator_stats_reset(self):
         """Test resetting communicator stats."""
-        from src.infrastructure.distributed.nccl_communicator import NCCLCommunicator
+        from src.infrastructure.swarm.distributed.nccl_communicator import NCCLCommunicator
         
         comm = NCCLCommunicator()
         comm.reset_stats()
@@ -923,7 +923,7 @@ class TestEdgeCases:
     
     def test_cached_request_state_defaults(self):
         """Test CachedRequestState with minimal args."""
-        from src.infrastructure.execution.input_batch_orchestrator import CachedRequestState
+        from src.infrastructure.services.execution.input_batch_orchestrator import CachedRequestState
         
         state = CachedRequestState(req_id="test")
         
@@ -933,7 +933,7 @@ class TestEdgeCases:
     
     def test_graph_registry_empty_get(self):
         """Test getting from empty registry."""
-        from src.infrastructure.execution.cuda_graph_manager import CUDAGraphRegistry
+        from src.infrastructure.services.execution.cuda_graph_manager import CUDAGraphRegistry
         
         registry = CUDAGraphRegistry(max_graphs=10)
         

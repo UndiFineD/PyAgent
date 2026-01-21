@@ -10,7 +10,7 @@ root = Path(__file__).resolve().parent.parent
 if str(root) not in sys.path:
     sys.path.append(str(root))
 
-from src.infrastructure.fleet.secret_manager import SecretManager
+from src.infrastructure.swarm.fleet.secret_manager import SecretManager
 from src.logic.agents.security.immune_system_agent import ImmuneSystemAgent
 from src.logic.agents.cognitive.visualizer_agent import VisualizerAgent
 from src.logic.agents.system.identity_agent import IdentityAgent as AgentIdentityAgent
@@ -46,7 +46,7 @@ class TestPhase122Specialists(unittest.TestCase):
     from unittest.mock import patch, AsyncMock
     import asyncio
 
-    @patch("src.core.base.base_agent.BaseAgent.think", new_callable=AsyncMock)
+    @patch("src.core.base.lifecycle.base_agent.BaseAgent.think", new_callable=AsyncMock)
     def test_immune_system_patching(self, mock_think) -> None:
         """Test that ImmuneSystemAgent can propose a patch via LLM."""
         mock_think.return_value = "FIXED_CODE_HERE"

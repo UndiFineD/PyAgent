@@ -16,7 +16,7 @@
 """Auto-extracted class from agent_strategies.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 

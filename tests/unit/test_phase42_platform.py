@@ -11,7 +11,7 @@ class TestPlatformEnums:
 
     def test_platform_type_values(self):
         """Test PlatformType enum values."""
-        from src.infrastructure.platform.platform_interface import PlatformType
+        from src.infrastructure.services.platform.platform_interface import PlatformType
 
         assert PlatformType.CUDA.value == "cuda"
         assert PlatformType.ROCM.value == "rocm"
@@ -21,7 +21,7 @@ class TestPlatformEnums:
 
     def test_cpu_architecture_values(self):
         """Test CpuArchitecture enum."""
-        from src.infrastructure.platform.platform_interface import CpuArchitecture
+        from src.infrastructure.services.platform.platform_interface import CpuArchitecture
 
         assert CpuArchitecture.X86_64.value == "x86_64"
         assert CpuArchitecture.ARM64.value == "arm64"
@@ -29,7 +29,7 @@ class TestPlatformEnums:
 
     def test_quantization_type_values(self):
         """Test QuantizationType enum."""
-        from src.infrastructure.platform.platform_interface import QuantizationType
+        from src.infrastructure.services.platform.platform_interface import QuantizationType
 
         assert QuantizationType.NONE.value == "none"
         assert QuantizationType.GPTQ.value == "gptq"
@@ -38,7 +38,7 @@ class TestPlatformEnums:
 
     def test_attention_backend_values(self):
         """Test AttentionBackend enum."""
-        from src.infrastructure.platform.platform_interface import AttentionBackend
+        from src.infrastructure.services.platform.platform_interface import AttentionBackend
 
         assert AttentionBackend.FLASH_ATTN.value == "flash_attn"
         assert AttentionBackend.XFORMERS.value == "xformers"
@@ -46,7 +46,7 @@ class TestPlatformEnums:
 
     def test_device_feature_flags(self):
         """Test DeviceFeature flag composition."""
-        from src.infrastructure.platform.platform_interface import DeviceFeature
+        from src.infrastructure.services.platform.platform_interface import DeviceFeature
 
         combined = DeviceFeature.FP16 | DeviceFeature.BF16
         assert bool(combined & DeviceFeature.FP16)
@@ -59,7 +59,7 @@ class TestDeviceCapability:
 
     def test_capability_creation(self):
         """Test creating DeviceCapability."""
-        from src.infrastructure.platform.platform_interface import DeviceCapability
+        from src.infrastructure.services.platform.platform_interface import DeviceCapability
 
         cap = DeviceCapability(major=8, minor=6)
         assert cap.major == 8
@@ -67,14 +67,14 @@ class TestDeviceCapability:
 
     def test_capability_string(self):
         """Test string representation."""
-        from src.infrastructure.platform.platform_interface import DeviceCapability
+        from src.infrastructure.services.platform.platform_interface import DeviceCapability
 
         cap = DeviceCapability(major=8, minor=0)
         assert str(cap) == "8.0"
 
     def test_capability_comparison(self):
         """Test capability comparison."""
-        from src.infrastructure.platform.platform_interface import DeviceCapability
+        from src.infrastructure.services.platform.platform_interface import DeviceCapability
 
         cap80 = DeviceCapability(8, 0)
         cap86 = DeviceCapability(8, 6)
@@ -86,7 +86,7 @@ class TestDeviceCapability:
 
     def test_capability_as_int(self):
         """Test as_int property."""
-        from src.infrastructure.platform.platform_interface import DeviceCapability
+        from src.infrastructure.services.platform.platform_interface import DeviceCapability
 
         cap = DeviceCapability(8, 6)
         assert cap.as_int == 86
@@ -97,7 +97,7 @@ class TestMemoryInfo:
 
     def test_memory_info_creation(self):
         """Test creating MemoryInfo."""
-        from src.infrastructure.platform.platform_interface import MemoryInfo
+        from src.infrastructure.services.platform.platform_interface import MemoryInfo
 
         mem = MemoryInfo(
             total_bytes=16 * (1024**3),
@@ -109,7 +109,7 @@ class TestMemoryInfo:
 
     def test_memory_gb_properties(self):
         """Test GB conversion properties."""
-        from src.infrastructure.platform.platform_interface import MemoryInfo
+        from src.infrastructure.services.platform.platform_interface import MemoryInfo
 
         mem = MemoryInfo(
             total_bytes=16 * (1024**3),
@@ -122,7 +122,7 @@ class TestMemoryInfo:
 
     def test_utilization(self):
         """Test memory utilization calculation."""
-        from src.infrastructure.platform.platform_interface import MemoryInfo
+        from src.infrastructure.services.platform.platform_interface import MemoryInfo
 
         mem = MemoryInfo(
             total_bytes=100,
@@ -137,7 +137,7 @@ class TestDeviceInfo:
 
     def test_device_info_creation(self):
         """Test creating DeviceInfo."""
-        from src.infrastructure.platform.platform_interface import (
+        from src.infrastructure.services.platform.platform_interface import (
             DeviceInfo,
             DeviceCapability,
             MemoryInfo,
@@ -158,7 +158,7 @@ class TestDeviceInfo:
 
     def test_supports_feature(self):
         """Test feature support check."""
-        from src.infrastructure.platform.platform_interface import (
+        from src.infrastructure.services.platform.platform_interface import (
             DeviceInfo,
             DeviceCapability,
             MemoryInfo,
@@ -184,20 +184,20 @@ class TestCpuPlatform:
 
     def test_cpu_always_available(self):
         """Test CPU platform is always available."""
-        from src.infrastructure.platform.platform_interface import CpuPlatform
+        from src.infrastructure.services.platform.platform_interface import CpuPlatform
 
         assert CpuPlatform.is_available() is True
 
     def test_cpu_device_count(self):
         """Test CPU device count is 1."""
-        from src.infrastructure.platform.platform_interface import CpuPlatform
+        from src.infrastructure.services.platform.platform_interface import CpuPlatform
 
         platform = CpuPlatform()
         assert platform.get_device_count() == 1
 
     def test_cpu_capability(self):
         """Test CPU capability is (0, 0)."""
-        from src.infrastructure.platform.platform_interface import CpuPlatform
+        from src.infrastructure.services.platform.platform_interface import CpuPlatform
 
         platform = CpuPlatform()
         cap = platform.get_device_capability()
@@ -206,7 +206,7 @@ class TestCpuPlatform:
 
     def test_cpu_platform_type(self):
         """Test CPU platform type."""
-        from src.infrastructure.platform.platform_interface import (
+        from src.infrastructure.services.platform.platform_interface import (
             CpuPlatform,
             PlatformType,
         )
@@ -215,7 +215,7 @@ class TestCpuPlatform:
 
     def test_cpu_quantizations(self):
         """Test CPU supported quantizations."""
-        from src.infrastructure.platform.platform_interface import (
+        from src.infrastructure.services.platform.platform_interface import (
             CpuPlatform,
             QuantizationType,
         )
@@ -232,7 +232,7 @@ class TestPlatformRegistry:
 
     def test_registry_singleton(self):
         """Test registry is singleton pattern."""
-        from src.infrastructure.platform.platform_interface import PlatformRegistry
+        from src.infrastructure.services.platform.platform_interface import PlatformRegistry
 
         PlatformRegistry.reset()
         p1 = PlatformRegistry.get_current()
@@ -241,7 +241,7 @@ class TestPlatformRegistry:
 
     def test_detect_platform(self):
         """Test platform detection returns valid platform."""
-        from src.infrastructure.platform.platform_interface import (
+        from src.infrastructure.services.platform.platform_interface import (
             PlatformRegistry,
             Platform,
         )
@@ -252,7 +252,7 @@ class TestPlatformRegistry:
 
     def test_get_all_tools(self):
         """Test getting all tools from registry."""
-        from src.infrastructure.platform.platform_interface import PlatformRegistry
+        from src.infrastructure.services.platform.platform_interface import PlatformRegistry
 
         # Just verify it returns a platform
         PlatformRegistry.reset()
@@ -265,7 +265,7 @@ class TestConvenienceFunctions:
 
     def test_get_current_platform(self):
         """Test get_current_platform."""
-        from src.infrastructure.platform.platform_interface import (
+        from src.infrastructure.services.platform.platform_interface import (
             get_current_platform,
             Platform,
         )
@@ -275,7 +275,7 @@ class TestConvenienceFunctions:
 
     def test_detect_platform(self):
         """Test detect_platform returns PlatformType."""
-        from src.infrastructure.platform.platform_interface import (
+        from src.infrastructure.services.platform.platform_interface import (
             detect_platform,
             PlatformType,
         )
@@ -285,7 +285,7 @@ class TestConvenienceFunctions:
 
     def test_get_device_count(self):
         """Test get_device_count returns positive integer."""
-        from src.infrastructure.platform.platform_interface import get_device_count
+        from src.infrastructure.services.platform.platform_interface import get_device_count
 
         count = get_device_count()
         assert isinstance(count, int)
@@ -293,7 +293,7 @@ class TestConvenienceFunctions:
 
     def test_is_quantization_supported(self):
         """Test quantization support check."""
-        from src.infrastructure.platform.platform_interface import (
+        from src.infrastructure.services.platform.platform_interface import (
             is_quantization_supported,
             QuantizationType,
         )
@@ -303,7 +303,7 @@ class TestConvenienceFunctions:
 
     def test_select_attention_backend(self):
         """Test attention backend selection."""
-        from src.infrastructure.platform.platform_interface import (
+        from src.infrastructure.services.platform.platform_interface import (
             select_attention_backend,
             AttentionBackend,
         )
@@ -317,7 +317,7 @@ class TestPlatformConfig:
 
     def test_platform_config_defaults(self):
         """Test PlatformConfig default values."""
-        from src.infrastructure.platform.platform_interface import (
+        from src.infrastructure.services.platform.platform_interface import (
             PlatformConfig,
             PlatformType,
         )
@@ -351,7 +351,7 @@ class TestMockCudaPlatform:
 
     def test_cuda_platform_with_mock(self, mock_torch):
         """Test CUDA platform with mocked torch."""
-        from src.infrastructure.platform.platform_interface import CudaPlatform
+        from src.infrastructure.services.platform.platform_interface import CudaPlatform
 
         with patch.dict("sys.modules", {"torch": mock_torch}):
             platform = CudaPlatform()

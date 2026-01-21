@@ -17,8 +17,8 @@ from __future__ import annotations
 import logging
 import os
 from typing import Any
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
 from pathlib import Path
 
 
@@ -67,7 +67,7 @@ class SpeciationAgent(BaseAgent):
                 "SpeciationAgent: LLM returned no distinct code or returned prompt. Using skeleton."
             )
             specialized_code = f"""
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 class {new_agent_name}(BaseAgent):
     \"\"\"Specialized agent evolved by SpeciationAgent.\"\"\"
     def __init__(self, workspace_path: str) -> None:
@@ -150,7 +150,7 @@ class {new_agent_name}(BaseAgent):
 import unittest
 import os
 from {rel_import} import {agent_name}
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 __version__ = VERSION
 
 class Test{agent_name}(unittest.TestCase):

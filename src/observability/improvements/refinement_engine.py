@@ -18,7 +18,7 @@ Improvements Agent: Maintains and improves improvement suggestions.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import sys
 from pathlib import Path
 from src.core.base.entrypoint import create_main_function

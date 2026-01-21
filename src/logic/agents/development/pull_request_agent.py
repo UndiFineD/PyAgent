@@ -18,14 +18,14 @@ Inspired by PR-Agent and GitHub CLI.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import subprocess
 import time
 from pathlib import Path
 from typing import Any
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import as_tool
-from src.infrastructure.backend.local_context_recorder import LocalContextRecorder
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
+from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 
 __version__ = VERSION
 

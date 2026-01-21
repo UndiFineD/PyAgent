@@ -16,7 +16,7 @@
 """Engine for persistent episodic memory of agent actions and outcomes."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from pathlib import Path
 from typing import Any
 from src.logic.agents.cognitive.context.engines.memory_core import MemoryCore

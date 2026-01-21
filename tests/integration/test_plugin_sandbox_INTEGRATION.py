@@ -7,7 +7,7 @@ sandbox permissions.
 import unittest
 import logging
 from pathlib import Path
-from src.core.base.managers.plugin_manager import PluginManager
+from src.core.base.logic.managers.plugin_manager import PluginManager
 
 class TestPluginSandboxIntegration(unittest.TestCase):
     def setUp(self):

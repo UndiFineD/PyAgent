@@ -16,7 +16,7 @@
 """Auto-extracted class from agent_changes.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from .changelog_entry import ChangelogEntry
 from .changelog_template import ChangelogTemplate
 from .validation_rule import ValidationRule
@@ -28,7 +28,7 @@ from .mixins.changes_template_mixin import ChangesTemplateMixin
 from .mixins.changes_versioning_mixin import ChangesVersioningMixin
 from .mixins.changes_preview_mixin import ChangesPreviewMixin
 from .mixins.changes_entry_mixin import ChangesEntryMixin
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 from typing import Any
 import logging
 
@@ -141,7 +141,7 @@ class ChangesAgent(
         # This intentionally bypasses BaseAgent.improve_content() caching so
         # tests that monkeypatch base_agent.BaseAgent.run_subagent remain
         # deterministic even when earlier test runs have populated caches.
-        from src.core.base.base_agent import entrypoint as _base_agent
+        from src.core.base.lifecycle.base_agent import entrypoint as _base_agent
 
         try:
             full_prompt = self._build_prompt_with_history(enhanced_prompt)

@@ -79,10 +79,10 @@ def _should_log_with_scope(scope: LogScope) -> bool:
     # These functions should be provided by the distributed module
     try:
         if scope == "global":
-            from src.infrastructure.distributed import is_global_first_rank
+            from src.infrastructure.swarm.distributed import is_global_first_rank
             return is_global_first_rank()
         elif scope == "local":
-            from src.infrastructure.distributed import is_local_first_rank
+            from src.infrastructure.swarm.distributed import is_local_first_rank
             return is_local_first_rank()
     except ImportError:
         # Not in distributed mode, always log

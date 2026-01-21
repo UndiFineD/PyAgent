@@ -19,7 +19,7 @@ Handles episode structuring, utility scoring, and rank-based filtering.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from typing import Any
 from datetime import datetime
 

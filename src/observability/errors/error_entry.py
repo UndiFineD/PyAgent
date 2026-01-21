@@ -16,7 +16,7 @@
 """Auto-extracted class from agent_errors.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from .error_category import ErrorCategory
 from .error_severity import ErrorSeverity
 from dataclasses import dataclass, field

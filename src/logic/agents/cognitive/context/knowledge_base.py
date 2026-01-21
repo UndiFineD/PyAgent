@@ -18,7 +18,7 @@ Context Agent: Maintains and improves context/description files.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import sys
 from pathlib import Path
 

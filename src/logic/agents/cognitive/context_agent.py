@@ -16,10 +16,10 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.context_priority import ContextPriority
 from src.logic.agents.cognitive.context.models.file_category import FileCategory
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 from src.logic.agents.cognitive.core.local_rag_core import LocalRAGCore, RAGShard
 from pathlib import Path
 import logging

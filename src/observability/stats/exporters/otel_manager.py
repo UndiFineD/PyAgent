@@ -18,7 +18,7 @@ Allows visualization of agent chains and request propagation across nodes.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import logging
 import time
 import uuid

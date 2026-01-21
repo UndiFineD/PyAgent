@@ -21,7 +21,7 @@ Ensures machine-readable logs with mandatory AgentID and TraceID fields.
 from __future__ import annotations
 import contextlib
 from typing import Any
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import json
 import logging
 import re

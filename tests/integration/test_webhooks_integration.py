@@ -11,7 +11,7 @@ def load_agent_module() -> Any:
     if str(repo_root) not in sys.path:
         sys.path.append(str(repo_root))
 
-    import src.core.base.base_agent as agent_module
+    import src.core.base.lifecycle.base_agent as agent_module
 
     return agent_module
 
@@ -22,7 +22,7 @@ def test_webhooks_sent_on_run(monkeypatch, tmp_path) -> None:
         Agent = agent_mod.BaseAgent
     except AttributeError:
         # If agent_mod is already the class or other issue, try direct import
-        from src.core.base.base_agent import BaseAgent as Agent
+        from src.core.base.lifecycle.base_agent import BaseAgent as Agent
 
     # Create a minimal repo root
     (tmp_path / "README.md").write_text("# repo")
@@ -59,7 +59,7 @@ def test_webhooks_sent_on_run(monkeypatch, tmp_path) -> None:
     import sys
 
     # Find the module in sys.modules
-    agent_mod_internal = sys.modules.get("src.core.base.base_agent")
+    agent_mod_internal = sys.modules.get("src.core.base.lifecycle.base_agent")
     if agent_mod_internal:
         monkeypatch.setattr(
             agent_mod_internal,

@@ -6,7 +6,7 @@ import logging
 # Add the workspace root to sys.path
 
 import pytest
-from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 @pytest.mark.asyncio

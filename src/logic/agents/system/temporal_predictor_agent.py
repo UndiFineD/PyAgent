@@ -19,14 +19,14 @@ Analyzes historical patterns to forecast potential failures.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import logging
 import json
 from pathlib import Path
 from typing import Any
 from datetime import datetime
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
@@ -134,7 +134,7 @@ class TemporalPredictorAgent(BaseAgent):
 
 
 if __name__ == "__main__":
-    from src.core.base.base_utilities import create_main_function
+    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(
         TemporalPredictorAgent, "Temporal Predictor Agent", "Predictive execution tool"

@@ -16,8 +16,8 @@
 """Shell for MetacognitiveMonitor, handling logging and alerting."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.base_agent import BaseAgent
 import logging
 from typing import Any
 from src.logic.agents.cognitive.core.metacognitive_core import MetacognitiveCore

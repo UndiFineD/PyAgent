@@ -8,8 +8,8 @@ import importlib.util
 from pathlib import Path
 from typing import Any
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
-from src.core.base.agent_plugin_base import AgentPluginBase
-from src.core.base.models import AgentPluginConfig
+from src.core.base.logic.agent_plugin_base import AgentPluginBase
+from src.core.base.common.models import AgentPluginConfig
 
 
 class OrchestratorPluginMixin:

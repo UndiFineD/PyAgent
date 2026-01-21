@@ -10,7 +10,7 @@ obsolete agent logs, and ensuring agent-specific reminders are generated.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import logging
 from datetime import datetime
 from typing import Any

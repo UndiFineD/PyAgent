@@ -8,7 +8,7 @@ from datetime import datetime
 from typing import Any
 from .metrics import AggregationResult
 from .observability_core import FederatedSource, FederationMode, AggregationType
-from src.core.base.connectivity_manager import ConnectivityManager
+from src.core.base.logic.connectivity_manager import ConnectivityManager
 
 logger = logging.getLogger(__name__)
 

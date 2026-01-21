@@ -29,7 +29,7 @@ async def main():
     print("--- Starting Self-Improvement Automation Cycle (MOCKED) ---")
     
     # Patch the backend
-    with patch("src.infrastructure.backend.run_subagent", side_effect=mock_run_subagent):
+    with patch("src.infrastructure.compute.backend.run_subagent", side_effect=mock_run_subagent):
         # Initialize coordinator
         coordinator = SelfImprovementCoordinator(os.getcwd())
         

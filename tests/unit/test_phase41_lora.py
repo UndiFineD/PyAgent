@@ -12,7 +12,7 @@ from pathlib import Path
 import tempfile
 import json
 
-from src.infrastructure.lora.lo_ra_manager import (
+from src.infrastructure.compute.lora.lo_ra_manager import (
     LoRAMethod,
     AdapterStatus,
     TargetModule,

@@ -13,12 +13,12 @@
 
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from pathlib import Path
 from .mixins.privacy_scanner_mixin import PrivacyScannerMixin
 from .mixins.privacy_assessment_mixin import PrivacyAssessmentMixin
-from src.core.base.base_agent import BaseAgent
-from src.infrastructure.backend.local_context_recorder import LocalContextRecorder
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 
 __version__ = VERSION
 

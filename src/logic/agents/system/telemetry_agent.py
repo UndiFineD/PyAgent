@@ -13,14 +13,14 @@
 
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import json
 import time
 from typing import Any
 from pathlib import Path
-from src.core.base.base_agent import BaseAgent
-from src.core.base.connectivity_manager import ConnectivityManager
-from src.infrastructure.backend.local_context_recorder import LocalContextRecorder
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.logic.connectivity_manager import ConnectivityManager
+from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 from src.observability.structured_logger import StructuredLogger
 
 __version__ = VERSION

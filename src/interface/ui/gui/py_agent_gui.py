@@ -18,7 +18,7 @@ GUI Agent: Provides a graphical user interface for PyAgent.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import sys
 import tkinter as tk
 from pathlib import Path

@@ -18,7 +18,7 @@ Inspired by Open Interpreter and Openator.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import os
 import sys
 import json
@@ -26,9 +26,9 @@ import shutil
 import platform
 import logging
 import asyncio
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import as_tool
-from src.logic.agents.development.security_guard_agent import SecurityGuardAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
+from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
 
 __version__ = VERSION
 

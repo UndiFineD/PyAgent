@@ -10,7 +10,7 @@ import sys
 import subprocess
 from pathlib import Path
 from unittest.mock import patch
-from src.core.base.agent_command_handler import AgentCommandHandler
+from src.core.base.execution.agent_command_handler import AgentCommandHandler
 
 
 class TestAgentCommandHandler(unittest.TestCase):

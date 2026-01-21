@@ -3,7 +3,7 @@
 import asyncio
 import logging
 from typing import Any
-from src.core.base.managers.resource_quota_manager import ResourceQuotaManager, QuotaConfig
+from src.core.base.logic.managers.resource_quota_manager import ResourceQuotaManager, QuotaConfig
 
 class GovernanceMixin:
     """Handles resource quotas, preemption, and security clearance."""

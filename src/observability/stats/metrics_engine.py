@@ -37,7 +37,7 @@ try:
     )
 except ImportError:
     GrafanaGenerator = None
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

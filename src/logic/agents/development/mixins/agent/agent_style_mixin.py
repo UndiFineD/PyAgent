@@ -16,7 +16,7 @@
 
 from __future__ import annotations
 from typing import Any
-from src.core.base.types.style_rule import StyleRule
+from src.core.base.common.types.style_rule import StyleRule
 
 class AgentStyleMixin:
     """Mixin for managing and checking code style rules."""

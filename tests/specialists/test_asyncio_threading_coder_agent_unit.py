@@ -2,7 +2,7 @@ import unittest
 from src.logic.agents.specialized.asyncio_threading_coder_agent import (
     AsyncioThreadingCoderAgent,
 )
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 
 __version__ = VERSION
 

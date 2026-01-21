@@ -3,7 +3,7 @@
 # Apache 2.0 License
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from .agent_strategy import AgentStrategy
 from typing import TYPE_CHECKING
 import logging

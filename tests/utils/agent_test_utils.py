@@ -3,7 +3,7 @@
 from __future__ import annotations
 from pathlib import Path
 from typing import Union
-from src.infrastructure.dev.test_utils import (
+from src.infrastructure.services.dev.test_utils import (
     FileSystemIsolator,
     MockAIBackend,
     ModuleLoader,

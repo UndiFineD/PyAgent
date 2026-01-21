@@ -3,7 +3,7 @@
 import logging
 import sys
 from pathlib import Path
-from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 logging.basicConfig(level=logging.INFO)
 root = Path(Path(__file__).resolve().parents[3])

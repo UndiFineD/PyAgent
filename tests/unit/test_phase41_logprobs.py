@@ -10,7 +10,7 @@ import numpy as np
 import math
 from unittest.mock import Mock, MagicMock
 
-from src.infrastructure.logprobs.logprobs_processor import (
+from src.infrastructure.engine.logprobs.logprobs_processor import (
     LogprobFormat,
     LogprobEntry,
     TopLogprob,

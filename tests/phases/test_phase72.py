@@ -1,7 +1,7 @@
 import unittest
 import os
 from pathlib import Path
-from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class TestPhase72(unittest.TestCase):

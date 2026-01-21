@@ -4,7 +4,7 @@ Tests performance calculation logic before Rust conversion.
 """
 
 from hypothesis import given, strategies as st
-from src.logic.agents.development.core.benchmark_core import (
+from src.logic.agents.analysis.core.benchmark_core import (
     BenchmarkCore,
     BenchmarkResult,
 )

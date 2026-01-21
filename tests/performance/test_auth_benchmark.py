@@ -1,5 +1,5 @@
 import timeit
-from src.core.base.core.auth_core import AuthCore
+from src.core.base.logic.core.auth_core import AuthCore
 
 
 def benchmark_auth():

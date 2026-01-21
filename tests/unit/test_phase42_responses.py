@@ -12,7 +12,7 @@ class TestResponseEnums:
 
     def test_response_status_values(self):
         """Test ResponseStatus enum values."""
-        from src.infrastructure.openai_api.responses_api import ResponseStatus
+        from src.infrastructure.services.openai_api.responses_api import ResponseStatus
 
         assert ResponseStatus.IN_PROGRESS.value == "in_progress"
         assert ResponseStatus.COMPLETED.value == "completed"
@@ -21,7 +21,7 @@ class TestResponseEnums:
 
     def test_content_part_type_values(self):
         """Test ContentPartType enum values."""
-        from src.infrastructure.openai_api.responses_api import ContentPartType
+        from src.infrastructure.services.openai_api.responses_api import ContentPartType
 
         assert ContentPartType.TEXT.value == "text"
         assert ContentPartType.REFUSAL.value == "refusal"
@@ -29,7 +29,7 @@ class TestResponseEnums:
 
     def test_role_type_values(self):
         """Test RoleType enum values."""
-        from src.infrastructure.openai_api.responses_api import RoleType
+        from src.infrastructure.services.openai_api.responses_api import RoleType
 
         assert RoleType.SYSTEM.value == "system"
         assert RoleType.USER.value == "user"
@@ -41,14 +41,14 @@ class TestContentParts:
 
     def test_text_content_creation(self):
         """Test TextContent creation."""
-        from src.infrastructure.openai_api.responses_api import TextContent
+        from src.infrastructure.services.openai_api.responses_api import TextContent
 
         part = TextContent(text="Hello world")
         assert part.text == "Hello world"
 
     def test_text_content_to_dict(self):
         """Test TextContent serialization."""
-        from src.infrastructure.openai_api.responses_api import TextContent
+        from src.infrastructure.services.openai_api.responses_api import TextContent
 
         part = TextContent(text="Hello")
         data = part.to_dict()
@@ -57,14 +57,14 @@ class TestContentParts:
 
     def test_refusal_content(self):
         """Test RefusalContent creation."""
-        from src.infrastructure.openai_api.responses_api import RefusalContent
+        from src.infrastructure.services.openai_api.responses_api import RefusalContent
 
         part = RefusalContent(refusal="I cannot assist with that")
         assert part.refusal == "I cannot assist with that"
 
     def test_image_content(self):
         """Test ImageContent creation."""
-        from src.infrastructure.openai_api.responses_api import ImageContent
+        from src.infrastructure.services.openai_api.responses_api import ImageContent
 
         part = ImageContent(
             url="https://example.com/img.png",
@@ -79,7 +79,7 @@ class TestMessage:
 
     def test_message_creation(self):
         """Test creating a message."""
-        from src.infrastructure.openai_api.responses_api import (
+        from src.infrastructure.services.openai_api.responses_api import (
             Message,
             RoleType,
         )
@@ -92,7 +92,7 @@ class TestMessage:
 
     def test_message_to_dict(self):
         """Test message serialization."""
-        from src.infrastructure.openai_api.responses_api import (
+        from src.infrastructure.services.openai_api.responses_api import (
             Message,
             RoleType,
         )
@@ -111,7 +111,7 @@ class TestToolDefinition:
 
     def test_tool_definition_creation(self):
         """Test creating a tool definition."""
-        from src.infrastructure.openai_api.responses_api import ToolDefinition, ToolType
+        from src.infrastructure.services.openai_api.responses_api import ToolDefinition, ToolType
 
         tool = ToolDefinition(
             type=ToolType.FUNCTION,
@@ -123,7 +123,7 @@ class TestToolDefinition:
 
     def test_tool_definition_to_dict(self):
         """Test tool definition serialization."""
-        from src.infrastructure.openai_api.responses_api import ToolDefinition, ToolType
+        from src.infrastructure.services.openai_api.responses_api import ToolDefinition, ToolType
 
         tool = ToolDefinition(
             type=ToolType.FUNCTION,
@@ -140,7 +140,7 @@ class TestResponse:
 
     def test_response_creation(self):
         """Test creating a response."""
-        from src.infrastructure.openai_api.responses_api import (
+        from src.infrastructure.services.openai_api.responses_api import (
             Response,
             ResponseStatus,
         )
@@ -154,7 +154,7 @@ class TestResponse:
 
     def test_response_to_dict(self):
         """Test response serialization."""
-        from src.infrastructure.openai_api.responses_api import (
+        from src.infrastructure.services.openai_api.responses_api import (
             Response,
             ResponseStatus,
         )
@@ -172,14 +172,14 @@ class TestResponseConfig:
 
     def test_config_with_model(self):
         """Test configuration with model."""
-        from src.infrastructure.openai_api.responses_api import ResponseConfig
+        from src.infrastructure.services.openai_api.responses_api import ResponseConfig
 
         config = ResponseConfig(model="gpt-4o")
         assert config.model == "gpt-4o"
 
     def test_config_with_options(self):
         """Test configuration with options."""
-        from src.infrastructure.openai_api.responses_api import ResponseConfig
+        from src.infrastructure.services.openai_api.responses_api import ResponseConfig
 
         config = ResponseConfig(
             model="gpt-4-turbo",
@@ -196,7 +196,7 @@ class TestSSEStream:
     @pytest.mark.asyncio
     async def test_sse_stream_send_event(self):
         """Test SSE event sending."""
-        from src.infrastructure.openai_api.responses_api import SSEStream
+        from src.infrastructure.services.openai_api.responses_api import SSEStream
 
         stream = SSEStream(response_id="resp_123")
         event_data = {"type": "response.created", "response": {"id": "resp_123"}}
@@ -207,7 +207,7 @@ class TestSSEStream:
     @pytest.mark.asyncio
     async def test_sse_stream_close(self):
         """Test SSE stream closing."""
-        from src.infrastructure.openai_api.responses_api import SSEStream
+        from src.infrastructure.services.openai_api.responses_api import SSEStream
 
         stream = SSEStream(response_id="resp_123")
         await stream.close()
@@ -220,7 +220,7 @@ class TestInMemoryResponseStore:
     @pytest.mark.asyncio
     async def test_store_and_retrieve(self):
         """Test storing and retrieving response."""
-        from src.infrastructure.openai_api.responses_api import (
+        from src.infrastructure.services.openai_api.responses_api import (
             InMemoryResponseStore,
             Response,
             ResponseStatus,
@@ -239,7 +239,7 @@ class TestInMemoryResponseStore:
     @pytest.mark.asyncio
     async def test_delete_response(self):
         """Test deleting response."""
-        from src.infrastructure.openai_api.responses_api import (
+        from src.infrastructure.services.openai_api.responses_api import (
             InMemoryResponseStore,
             Response,
             ResponseStatus,
@@ -262,7 +262,7 @@ class TestStreamingHandler:
     @pytest.mark.asyncio
     async def test_streaming_handler_init(self):
         """Test StreamingHandler initialization."""
-        from src.infrastructure.openai_api.responses_api import (
+        from src.infrastructure.services.openai_api.responses_api import (
             StreamingHandler,
             Response,
             ResponseStatus,
@@ -281,7 +281,7 @@ class TestResponsesAPIServer:
 
     def test_server_creation(self):
         """Test server creation with mock handler."""
-        from src.infrastructure.openai_api.responses_api import ResponsesAPIServer
+        from src.infrastructure.services.openai_api.responses_api import ResponsesAPIServer
 
         mock_handler = MagicMock()
         server = ResponsesAPIServer(model_handler=mock_handler)
@@ -289,7 +289,7 @@ class TestResponsesAPIServer:
 
     def test_server_has_handler(self):
         """Test server has model handler."""
-        from src.infrastructure.openai_api.responses_api import ResponsesAPIServer
+        from src.infrastructure.services.openai_api.responses_api import ResponsesAPIServer
 
         mock_handler = MagicMock()
         server = ResponsesAPIServer(model_handler=mock_handler)
@@ -301,7 +301,7 @@ class TestConversationBuilder:
 
     def test_conversation_builder_from_input(self):
         """Test building a conversation from input."""
-        from src.infrastructure.openai_api.responses_api import (
+        from src.infrastructure.services.openai_api.responses_api import (
             ConversationBuilder,
             Message,
             RoleType,
@@ -319,7 +319,7 @@ class TestConversationBuilder:
 
     def test_conversation_with_messages(self):
         """Test conversation with provided messages."""
-        from src.infrastructure.openai_api.responses_api import (
+        from src.infrastructure.services.openai_api.responses_api import (
             ConversationBuilder,
             Message,
             RoleType,
@@ -342,7 +342,7 @@ class TestParseResponseRequest:
 
     def test_parse_simple_request(self):
         """Test parsing simple request."""
-        from src.infrastructure.openai_api.responses_api import parse_response_request
+        from src.infrastructure.services.openai_api.responses_api import parse_response_request
 
         request = {
             "model": "gpt-4",
@@ -353,7 +353,7 @@ class TestParseResponseRequest:
 
     def test_parse_request_with_messages(self):
         """Test parsing request with messages."""
-        from src.infrastructure.openai_api.responses_api import parse_response_request
+        from src.infrastructure.services.openai_api.responses_api import parse_response_request
 
         request = {
             "model": "gpt-4",

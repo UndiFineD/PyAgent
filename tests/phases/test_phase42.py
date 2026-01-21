@@ -7,7 +7,7 @@ from unittest import IsolatedAsyncioTestCase
 
 # Add src to path
 
-from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class TestPhase42(IsolatedAsyncioTestCase):
