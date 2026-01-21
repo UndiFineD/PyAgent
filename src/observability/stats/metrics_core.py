@@ -78,40 +78,33 @@ class TokenCostCore:
         Returns:
             TokenCostResult with cost breakdown
         """
-        # Optimized with Rust if available
+        # optimized using Rust if available
         if rc:
             try:
+                # Returns (total_cost, input_cost, output_cost)
                 total, i_cost, o_cost = rc.calculate_token_cost(
                     input_tokens, output_tokens, model
-                )  # type: ignore[attr-defined]
+                )
                 return TokenCostResult(
-                    total_cost=total, input_cost=i_cost, output_cost=o_cost
+                    total_cost=total,
+                    input_cost=i_cost,
+                    output_cost=o_cost,
+                    currency="USD",
                 )
             except Exception as e:
                 logger.warning(
                     f"Rust calculate_token_cost failed: {e}. Falling back to Python."
                 )
 
-        # Check cache
+        # check cache
         cache_key = (input_tokens, output_tokens, model)
         if cache_key in self.cache:
             return self.cache[cache_key]
 
-        # Get pricing
+        # get pricing
         pricing = self.MODEL_COSTS.get(model, self.MODEL_COSTS["gpt-3.5-turbo"])
 
-        # Calculate costs (convert from cost per 1M to per token)
-        input_cost = (input_tokens / 1_000_000) * pricing["input"]
-        output_cost = (output_tokens / 1_000_000) * pricing["output"]
-        total_cost = input_cost + output_cost
-
-        result = TokenCostResult(
-            total_cost=total_cost, input_cost=input_cost, output_cost=output_cost
-        )
-
-        # Cache result
-        self.cache[cache_key] = result
-        return result
+        # calculate costs (convert from cost per 1M to per token)
         input_cost = (input_tokens * pricing["input"]) / 1_000_000
         output_cost = (output_tokens * pricing["output"]) / 1_000_000
         total_cost = input_cost + output_cost
@@ -123,7 +116,7 @@ class TokenCostCore:
             currency="USD",
         )
 
-        # Cache result
+        # cache result
         self.cache[cache_key] = result
         return result
 
@@ -281,37 +274,14 @@ class DerivedMetricCalculator:
         if metric_name not in self.derived_metrics:
             raise KeyError(f"Derived metric {metric_name} not found")
 
-        # Check if derived_metrics stores DerivedMetric objs or just formula string
-        # register_derived takes (name, dependencies, formula)
-        # assuming stored as tuple or object.
-        # But wait! I implemented register_derived? No, I am modifying MetricsCore.py
-        # I need to CHECK register_derived implementation.
-        # Assuming formula string is stored.
-
         metric_def = self.derived_metrics[metric_name]
-        # metric_def might be a DerivedMetric object or formula.
         formula = (
             getattr(metric_def, "formula", metric_def)
             if not isinstance(metric_def, str)
             else metric_def
         )
 
-        # Variable substitution in formula string before parsing
-        # The test uses "{a} / {b}". format() method can handle this if keys match.
-        try:
-            # Try simple format if formula contains {
-            if "{" in formula and "}" in formula:
-                expression = formula.format(**context)
-            else:
-                expression = formula  # Assume already names?
-                # If formula uses simple names like "a + b", we need AST substitution logic.
-                # But if test uses {a}, format() is creating "10.0 / 2.0"
-        except Exception:
-            expression = formula  # Fallback
-
-        # Now parse
-        tree = ast.parse(expression, mode="eval")
-        return self._eval_node(tree.body)
+        return self.evaluate_formula(formula, context)
 
     def get_all_derived(self, context: dict[str, float]) -> dict[str, float]:
         """Calculate all derived metrics."""
