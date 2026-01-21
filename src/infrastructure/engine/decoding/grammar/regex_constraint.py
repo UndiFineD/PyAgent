@@ -58,6 +58,7 @@ class RegexGrammar(StructuredOutputGrammar):
         # Initialize Rust FSM if available
         if rc and hasattr(rc, "regex_to_fsm_rust"):
             try:
+                # pylint: disable=no-member
                 trans, acc, init = rc.regex_to_fsm_rust(self.pattern, self.vocab_size)
                 self._transitions = trans
                 self._accepting = set(acc)
@@ -71,7 +72,7 @@ class RegexGrammar(StructuredOutputGrammar):
                     self._token_to_chars.append(list(s.encode("utf-8")))
 
                 self._has_fsm = True
-            except Exception:
+            except Exception: # pylint: disable=broad-exception-caught
                 self._has_fsm = False
 
     def accept_tokens(self, request_id: str, tokens: List[int]) -> bool:
@@ -92,7 +93,6 @@ class RegexGrammar(StructuredOutputGrammar):
                         else:
                             temp_state = -1
                             break
-                    
                     if temp_state >= 0:
                         self._fsm_state = temp_state
 
@@ -125,7 +125,7 @@ class RegexGrammar(StructuredOutputGrammar):
                 if self._regex.match(text[:i]):
                     return True
             return not text
-        except Exception:
+        except Exception: # pylint: disable=broad-exception-caught
             return False
 
     def validate_tokens(self, tokens: List[int]) -> List[int]:
@@ -157,7 +157,6 @@ class RegexGrammar(StructuredOutputGrammar):
         for token in self._token_history:
             token_str = self.token_to_string(token)
             self._buffer += token_str
-            
             if self._has_fsm:
                 token_bytes = token_str.encode("utf-8")
                 for b in token_bytes:
@@ -184,11 +183,12 @@ class RegexGrammar(StructuredOutputGrammar):
         if self._has_fsm:
             try:
                 # Use Rust to calculate bitmask for current state across entire vocab
+                # pylint: disable=no-member
                 mask = rc.fill_token_bitmask_rust(
                     self._fsm_state, self._transitions, self._token_to_chars
                 )
                 return {i for i, allowed in enumerate(mask) if allowed}
-            except Exception:
+            except Exception: # pylint: disable=broad-exception-caught
                 pass
 
         valid: Set[int] = set()

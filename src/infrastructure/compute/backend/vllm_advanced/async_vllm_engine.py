@@ -30,13 +30,12 @@ from enum import Enum, auto
 from typing import (
     Any,
     AsyncIterator,
-    Callable,
     Dict,
     List,
     Optional,
-    Tuple,
-    Union,
 )
+
+logger = logging.getLogger(__name__)
 
 # Check vLLM availability
 try:
@@ -72,7 +71,7 @@ class AsyncEngineConfig:
     max_model_len: Optional[int] = None
     dtype: str = "auto"
     quantization: Optional[str] = None
-    trust_remote_code: bool = True
+    trust_remote_code: bool = False
 
     # Scheduling
     max_num_seqs: int = 256
@@ -131,6 +130,7 @@ class AsyncRequestHandle:
 
     @property
     def is_finished(self) -> bool:
+        """Check if request has completed or failed."""
         return self.state in (
             RequestState.COMPLETED,
             RequestState.FAILED,
@@ -139,12 +139,14 @@ class AsyncRequestHandle:
 
     @property
     def latency_ms(self) -> Optional[float]:
+        """Get end-to-end latency in milliseconds."""
         if self.started_at and self.completed_at:
             return (self.completed_at - self.started_at) * 1000
         return None
 
     @property
     def tokens_per_second(self) -> Optional[float]:
+        """Get generated tokens per second."""
         latency = self.latency_ms
         if latency and self.generated_tokens > 0:
             return self.generated_tokens / (latency / 1000)
@@ -211,24 +213,24 @@ class AsyncVllmEngine:
     async def start(self) -> bool:
         """Start the async engine."""
         if not HAS_ASYNC_VLLM:
-            logging.warning("vLLM async engine not available")
+            logger.warning("vLLM async engine not available")
             return False
 
         if self._running:
             return True
 
         try:
-            logging.info(f"Starting AsyncVllmEngine with model: {self.config.model}")
+            logger.info("Starting AsyncVllmEngine with model: %s", self.config.model)
 
             engine_args = self.config.to_engine_args()
             self._engine = AsyncLLMEngine.from_engine_args(engine_args)
             self._running = True
 
-            logging.info("AsyncVllmEngine started successfully")
+            logger.info("AsyncVllmEngine started successfully")
             return True
 
-        except Exception as e:
-            logging.error(f"Failed to start AsyncVllmEngine: {e}")
+        except (RuntimeError, ValueError) as e:
+            logger.error("Failed to start AsyncVllmEngine: %s", e)
             self._running = False
             return False
 
@@ -241,7 +243,7 @@ class AsyncVllmEngine:
 
             self._engine = None
             self._running = False
-            logging.info("AsyncVllmEngine stopped")
+            logger.info("AsyncVllmEngine stopped")
 
     def _generate_request_id(self) -> str:
         """Generate unique request ID."""
@@ -316,10 +318,15 @@ class AsyncVllmEngine:
             if final_output and final_output.outputs:
                 output = final_output.outputs[0]
                 handle.output_text = output.text
-                handle.output_tokens = list(output.token_ids) if hasattr(output, 'token_ids') else []
+                handle.output_tokens = (
+                    list(output.token_ids) if hasattr(output, 'token_ids') else []
+                )
                 handle.finish_reason = output.finish_reason
                 handle.generated_tokens = len(handle.output_tokens)
-                handle.prompt_tokens = len(final_output.prompt_token_ids) if hasattr(final_output, 'prompt_token_ids') else 0
+                handle.prompt_tokens = (
+                    len(final_output.prompt_token_ids)
+                    if hasattr(final_output, 'prompt_token_ids') else 0
+                )
 
             handle.state = RequestState.COMPLETED
             handle.completed_at = time.time()
@@ -330,7 +337,7 @@ class AsyncVllmEngine:
 
             return handle.output_text
 
-        except Exception as e:
+        except (RuntimeError, ValueError) as e:
             handle.state = RequestState.FAILED
             handle.error = str(e)
             handle.completed_at = time.time()
@@ -338,7 +345,7 @@ class AsyncVllmEngine:
             async with self._lock:
                 self._stats["failed_requests"] += 1
 
-            logging.error(f"Generation failed for {request_id}: {e}")
+            logger.error("Generation failed for %s: %s", request_id, e)
             return ""
 
         finally:
@@ -444,10 +451,10 @@ class AsyncVllmEngine:
             async with self._lock:
                 self._stats["completed_requests"] += 1
 
-        except Exception as e:
+        except (RuntimeError, ValueError) as e:
             handle.state = RequestState.FAILED
             handle.error = str(e)
-            logging.error(f"Streaming failed for {request_id}: {e}")
+            logger.error("Streaming failed for %s: %s", request_id, e)
 
     async def abort_request(self, request_id: str) -> bool:
         """Abort a running request."""
@@ -467,8 +474,8 @@ class AsyncVllmEngine:
             handle.completed_at = time.time()
             return True
 
-        except Exception as e:
-            logging.error(f"Failed to abort request {request_id}: {e}")
+        except (RuntimeError, ValueError) as e:
+            logger.error("Failed to abort request %s: %s", request_id, e)
             return False
 
     def get_request(self, request_id: str) -> Optional[AsyncRequestHandle]:
