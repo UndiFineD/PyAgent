@@ -1,0 +1,96 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""Auto-extracted class from agent_test_utils.py"""
+
+from __future__ import annotations
+from src.core.base.lifecycle.version import VERSION
+from .parameterized_test_case import ParameterizedTestCase
+from typing import Any
+from collections.abc import Callable
+
+__version__ = VERSION
+
+
+class ParameterizedTestGenerator:
+    """Generator for parameterized tests.
+
+    Generates test cases from parameter combinations for data - driven testing.
+
+    Example:
+        gen=ParameterizedTestGenerator()
+        gen.add_parameter("size", [1, 10, 100])
+        gen.add_parameter("mode", ["fast", "slow"])
+        cases=gen.generate_cases()  # 6 combinations
+    """
+
+    def __init__(self, test_name: str = "test") -> None:
+        """Initialize generator.
+
+        Args:
+            test_name: Base name for generated tests.
+        """
+        self.test_name = test_name
+        self._parameters: dict[str, list[Any]] = {}
+        self._expected_fn: Callable[..., Any] | None = None
+
+    def add_parameter(self, name: str, values: list[Any]) -> ParameterizedTestGenerator:
+        """Add parameter with possible values.
+
+        Args:
+            name: Parameter name.
+            values: List of possible values.
+
+        Returns:
+            Self for chaining.
+        """
+        self._parameters[name] = values
+        return self
+
+    def set_expected_fn(self, fn: Callable[..., Any]) -> ParameterizedTestGenerator:
+        """Set function to compute expected result.
+
+        Args:
+            fn: Function that takes params dict and returns expected.
+
+        Returns:
+            Self for chaining.
+        """
+        self._expected_fn = fn
+        return self
+
+    def generate_cases(self) -> list[ParameterizedTestCase]:
+        """Generate all test case combinations.
+
+        Returns:
+            List of parameterized test cases.
+        """
+        if not self._parameters:
+            return []
+        import itertools
+
+        keys = list(self._parameters.keys())
+        values = [self._parameters[k] for k in keys]
+        cases: list[ParameterizedTestCase] = []
+        for i, combo in enumerate(itertools.product(*values)):
+            params = dict(zip(keys, combo))
+            expected = self._expected_fn(params) if self._expected_fn else None
+            case = ParameterizedTestCase(
+                name=f"{self.test_name}_{i}",
+                params=params,
+                expected=expected,
+            )
+            cases.append(case)
+        return cases

@@ -2,7 +2,7 @@ import unittest
 from hypothesis import given, strategies as st
 import hashlib
 import hmac
-from src.core.base.core.identity_core import IdentityCore, AgentIdentity
+from src.core.base.logic.core.identity_core import IdentityCore, AgentIdentity
 
 
 class TestIdentityCore(unittest.TestCase):

@@ -141,7 +141,7 @@ class TestFlatLogprobs:
     
     def test_append_logprobs(self):
         """Test appending logprobs for a position."""
-        from src.core.base.structures.flat_logprobs import FlatLogprobs, Logprob
+        from src.core.base.logic.structures.flat_logprobs import FlatLogprobs, Logprob
         
         logprobs = FlatLogprobs()
         logprobs.append({
@@ -154,7 +154,7 @@ class TestFlatLogprobs:
     
     def test_getitem_single(self):
         """Test accessing single position."""
-        from src.core.base.structures.flat_logprobs import FlatLogprobs, Logprob
+        from src.core.base.logic.structures.flat_logprobs import FlatLogprobs, Logprob
         
         logprobs = FlatLogprobs()
         logprobs.append({
@@ -168,7 +168,7 @@ class TestFlatLogprobs:
     
     def test_getitem_slice(self):
         """Test slicing FlatLogprobs."""
-        from src.core.base.structures.flat_logprobs import FlatLogprobs, Logprob
+        from src.core.base.logic.structures.flat_logprobs import FlatLogprobs, Logprob
         
         logprobs = FlatLogprobs()
         for i in range(5):
@@ -182,7 +182,7 @@ class TestFlatLogprobs:
     
     def test_append_fast(self):
         """Test fast append without dict creation."""
-        from src.core.base.structures.flat_logprobs import FlatLogprobs
+        from src.core.base.logic.structures.flat_logprobs import FlatLogprobs
         
         logprobs = FlatLogprobs()
         logprobs.append_fast(
@@ -197,7 +197,7 @@ class TestFlatLogprobs:
     
     def test_iteration(self):
         """Test iterating over positions."""
-        from src.core.base.structures.flat_logprobs import FlatLogprobs, Logprob
+        from src.core.base.logic.structures.flat_logprobs import FlatLogprobs, Logprob
         
         logprobs = FlatLogprobs()
         for i in range(3):
@@ -211,7 +211,7 @@ class TestFlatLogprobs:
     
     def test_immutability(self):
         """Test that setitem/delitem raise errors."""
-        from src.core.base.structures.flat_logprobs import FlatLogprobs, Logprob
+        from src.core.base.logic.structures.flat_logprobs import FlatLogprobs, Logprob
         
         logprobs = FlatLogprobs()
         logprobs.append({100: Logprob(logprob=-0.5, rank=1)})
@@ -224,7 +224,7 @@ class TestFlatLogprobs:
     
     def test_negative_index(self):
         """Test negative indexing."""
-        from src.core.base.structures.flat_logprobs import FlatLogprobs, Logprob
+        from src.core.base.logic.structures.flat_logprobs import FlatLogprobs, Logprob
         
         logprobs = FlatLogprobs()
         for i in range(5):
@@ -235,7 +235,7 @@ class TestFlatLogprobs:
     
     def test_create_prompt_logprobs(self):
         """Test creating prompt logprobs container."""
-        from src.core.base.structures.flat_logprobs import create_prompt_logprobs
+        from src.core.base.logic.structures.flat_logprobs import create_prompt_logprobs
         
         logprobs = create_prompt_logprobs(flat_logprobs=True)
         # First position should be None (for first token)
@@ -251,7 +251,7 @@ class TestToolParser:
     
     def test_json_tool_parser_single(self):
         """Test parsing single JSON tool call."""
-        from src.core.base.parsers.tool_parser import JSONToolParser
+        from src.core.base.logic.parsers.tool_parser import JSONToolParser
         
         parser = JSONToolParser()
         output = '[{"name": "get_weather", "arguments": {"city": "London"}}]'
@@ -264,7 +264,7 @@ class TestToolParser:
     
     def test_json_tool_parser_multiple(self):
         """Test parsing multiple JSON tool calls."""
-        from src.core.base.parsers.tool_parser import JSONToolParser
+        from src.core.base.logic.parsers.tool_parser import JSONToolParser
         
         parser = JSONToolParser()
         output = '''[
@@ -279,7 +279,7 @@ class TestToolParser:
     
     def test_json_tool_parser_with_content(self):
         """Test parsing tool calls with surrounding content."""
-        from src.core.base.parsers.tool_parser import JSONToolParser
+        from src.core.base.logic.parsers.tool_parser import JSONToolParser
         
         parser = JSONToolParser()
         output = 'I will help you. [{"name": "help", "arguments": {}}]'
@@ -290,7 +290,7 @@ class TestToolParser:
     
     def test_xml_tool_parser(self):
         """Test parsing XML tool calls."""
-        from src.core.base.parsers.tool_parser import XMLToolParser
+        from src.core.base.logic.parsers.tool_parser import XMLToolParser
         
         parser = XMLToolParser()
         output = '''<tool_call>
@@ -304,21 +304,21 @@ class TestToolParser:
     
     def test_tool_parser_manager_get(self):
         """Test getting parser from registry."""
-        from src.core.base.parsers.tool_parser import ToolParserManager, JSONToolParser
+        from src.core.base.logic.parsers.tool_parser import ToolParserManager, JSONToolParser
         
         parser_cls = ToolParserManager.get("json")
         assert parser_cls == JSONToolParser
     
     def test_tool_parser_manager_create(self):
         """Test creating parser instance from registry."""
-        from src.core.base.parsers.tool_parser import ToolParserManager
+        from src.core.base.logic.parsers.tool_parser import ToolParserManager
         
         parser = ToolParserManager.create("json")
         assert parser is not None
     
     def test_tool_parser_decorator(self):
         """Test @tool_parser decorator."""
-        from src.core.base.parsers.tool_parser import tool_parser, ToolParser, ToolParserManager, ExtractedToolCalls
+        from src.core.base.logic.parsers.tool_parser import tool_parser, ToolParser, ToolParserManager, ExtractedToolCalls
         
         @tool_parser("custom_test")
         class CustomParser(ToolParser):
@@ -332,7 +332,7 @@ class TestToolParser:
     
     def test_extract_tool_calls_convenience(self):
         """Test convenience function."""
-        from src.core.base.parsers.tool_parser import extract_tool_calls
+        from src.core.base.logic.parsers.tool_parser import extract_tool_calls
         
         output = '[{"name": "test", "arguments": {}}]'
         result = extract_tool_calls(output, parser_name="json")
@@ -503,14 +503,14 @@ class TestTypedPrompts:
     
     def test_is_string_prompt(self):
         """Test string prompt type guard."""
-        from src.core.base.types.typed_prompts import is_string_prompt
+        from src.core.base.common.types.typed_prompts import is_string_prompt
         
         assert is_string_prompt("Hello world")
         assert not is_string_prompt({"prompt": "Hello"})
     
     def test_is_text_prompt(self):
         """Test TextPrompt type guard."""
-        from src.core.base.types.typed_prompts import is_text_prompt
+        from src.core.base.common.types.typed_prompts import is_text_prompt
         
         assert is_text_prompt({"prompt": "Hello world"})
         assert not is_text_prompt("Hello")
@@ -518,21 +518,21 @@ class TestTypedPrompts:
     
     def test_is_tokens_prompt(self):
         """Test TokensPrompt type guard."""
-        from src.core.base.types.typed_prompts import is_tokens_prompt
+        from src.core.base.common.types.typed_prompts import is_tokens_prompt
         
         assert is_tokens_prompt({"prompt_token_ids": [1, 2, 3]})
         assert not is_tokens_prompt({"prompt": "Hello"})
     
     def test_is_embeds_prompt(self):
         """Test EmbedsPrompt type guard."""
-        from src.core.base.types.typed_prompts import is_embeds_prompt
+        from src.core.base.common.types.typed_prompts import is_embeds_prompt
         
         assert is_embeds_prompt({"prompt_embeds": [0.1, 0.2, 0.3]})
         assert not is_embeds_prompt({"prompt": "Hello"})
     
     def test_is_explicit_encoder_decoder(self):
         """Test encoder/decoder prompt type guard."""
-        from src.core.base.types.typed_prompts import is_explicit_encoder_decoder_prompt
+        from src.core.base.common.types.typed_prompts import is_explicit_encoder_decoder_prompt
         
         prompt = {
             "encoder_prompt": "Translate this",
@@ -542,7 +542,7 @@ class TestTypedPrompts:
     
     def test_parse_prompt_string(self):
         """Test parsing string prompt."""
-        from src.core.base.types.typed_prompts import parse_prompt
+        from src.core.base.common.types.typed_prompts import parse_prompt
         
         result = parse_prompt("Hello world")
         assert result["type"] == "text"
@@ -550,7 +550,7 @@ class TestTypedPrompts:
     
     def test_parse_prompt_text(self):
         """Test parsing TextPrompt."""
-        from src.core.base.types.typed_prompts import parse_prompt
+        from src.core.base.common.types.typed_prompts import parse_prompt
         
         result = parse_prompt({"prompt": "Hello"})
         assert result["type"] == "text"
@@ -558,7 +558,7 @@ class TestTypedPrompts:
     
     def test_parse_prompt_tokens(self):
         """Test parsing TokensPrompt."""
-        from src.core.base.types.typed_prompts import parse_prompt
+        from src.core.base.common.types.typed_prompts import parse_prompt
         
         result = parse_prompt({"prompt_token_ids": [1, 2, 3]})
         assert result["type"] == "tokens"
@@ -566,7 +566,7 @@ class TestTypedPrompts:
     
     def test_get_prompt_text(self):
         """Test extracting text from prompts."""
-        from src.core.base.types.typed_prompts import get_prompt_text
+        from src.core.base.common.types.typed_prompts import get_prompt_text
         
         assert get_prompt_text("Hello") == "Hello"
         assert get_prompt_text({"prompt": "World"}) == "World"
@@ -574,7 +574,7 @@ class TestTypedPrompts:
     
     def test_has_multi_modal_data(self):
         """Test checking for multi-modal data."""
-        from src.core.base.types.typed_prompts import has_multi_modal_data
+        from src.core.base.common.types.typed_prompts import has_multi_modal_data
         
         assert has_multi_modal_data({"prompt": "Hi", "multi_modal_data": {"images": []}})
         assert not has_multi_modal_data({"prompt": "Hi"})
@@ -582,7 +582,7 @@ class TestTypedPrompts:
     
     def test_make_text_prompt(self):
         """Test creating TextPrompt."""
-        from src.core.base.types.typed_prompts import make_text_prompt
+        from src.core.base.common.types.typed_prompts import make_text_prompt
         
         prompt = make_text_prompt("Hello", cache_salt="abc")
         assert prompt["prompt"] == "Hello"
@@ -590,7 +590,7 @@ class TestTypedPrompts:
     
     def test_make_tokens_prompt(self):
         """Test creating TokensPrompt."""
-        from src.core.base.types.typed_prompts import make_tokens_prompt
+        from src.core.base.common.types.typed_prompts import make_tokens_prompt
         
         prompt = make_tokens_prompt([1, 2, 3], prompt_text="Hi")
         assert prompt["prompt_token_ids"] == [1, 2, 3]
@@ -598,7 +598,7 @@ class TestTypedPrompts:
     
     def test_validate_prompt_valid(self):
         """Test validating valid prompts."""
-        from src.core.base.types.typed_prompts import validate_prompt
+        from src.core.base.common.types.typed_prompts import validate_prompt
         
         errors = validate_prompt("Hello")
         assert len(errors) == 0
@@ -611,7 +611,7 @@ class TestTypedPrompts:
     
     def test_validate_prompt_empty(self):
         """Test validating empty prompts."""
-        from src.core.base.types.typed_prompts import validate_prompt
+        from src.core.base.common.types.typed_prompts import validate_prompt
         
         errors = validate_prompt("")
         assert len(errors) == 1
@@ -631,7 +631,7 @@ class TestPhase24Integration:
     def test_counter_with_tool_parsing(self):
         """Test using counters while parsing tool calls."""
         from src.observability.stats.structured_counter import RequestCounter
-        from src.core.base.parsers.tool_parser import extract_tool_calls
+        from src.core.base.logic.parsers.tool_parser import extract_tool_calls
         
         counter = RequestCounter()
         
@@ -658,8 +658,8 @@ class TestPhase24Integration:
     
     def test_flat_logprobs_with_typed_prompts(self):
         """Test FlatLogprobs with TypedPrompts."""
-        from src.core.base.structures.flat_logprobs import FlatLogprobs, Logprob
-        from src.core.base.types.typed_prompts import make_tokens_prompt
+        from src.core.base.logic.structures.flat_logprobs import FlatLogprobs, Logprob
+        from src.core.base.common.types.typed_prompts import make_tokens_prompt
         
         # Create prompt
         prompt = make_tokens_prompt([100, 200, 300])

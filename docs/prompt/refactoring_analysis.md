@@ -109,7 +109,7 @@ class LazyLoader:
 # Usage:
 class InfrastructureModule:
     EagleProposer = LazyLoader(
-        "src.infrastructure.speculative_v2.EagleProposer",
+        "src.infrastructure.engine.speculative.EagleProposer",
         "EagleProposer"
     )
 ```

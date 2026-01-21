@@ -3,9 +3,9 @@
 # Refactored for < 50 Complexity
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import create_main_function, as_tool
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import create_main_function, as_tool
 from src.logic.agents.cognitive.context.engines.graph_context_engine import (
     GraphContextEngine,
 )

@@ -4,7 +4,7 @@ import pytest
 import subprocess
 from pathlib import Path
 from typing import Any
-from src.infrastructure.backend.local_context_recorder import LocalContextRecorder
+from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 
 try:
     from tests.utils.agent_test_utils import *

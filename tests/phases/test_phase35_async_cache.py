@@ -25,16 +25,16 @@ from src.infrastructure.engine.async_engine_client import (
     SyncMPClient, AsyncMPClient, P2CLoadBalancer, DPAsyncMPClient,
     auto_select_client_mode, create_engine_client
 )
-from src.infrastructure.cache.block_pool_manager import (
+from src.infrastructure.storage.cache.block_pool_manager import (
     BlockState, Block, BlockPoolConfig, EvictionEvent, CacheMetrics,
     KVCacheMetricsCollector, ARCPolicy, BlockPool, compute_block_hash
 )
-from src.infrastructure.memory.gpu_memory_allocator import (
+from src.infrastructure.storage.memory.gpu_memory_allocator import (
     MemoryState, AllocationStrategy, MemoryRegion, MemorySnapshot,
     MemoryPoolConfig, MemoryPressureEvent, CuMemAllocator,
     MultiGPUMemoryBalancer
 )
-from src.infrastructure.cache.prefix_cache_optimizer import (
+from src.infrastructure.storage.cache.prefix_cache_optimizer import (
     CacheTier, PrefixCacheConfig, PrefixEntry, CacheHitResult,
     RadixTreeNode, PrefixTree, PrefixCacheOptimizer
 )
@@ -43,7 +43,7 @@ from src.inference.execution.async_model_runner import (
     ExecutionPipeline, AsyncModelRunner, BatchedAsyncRunner,
     SchedulerOutput as RunnerSchedulerOutput
 )
-from src.infrastructure.parallel.data_parallel_coordinator import (
+from src.infrastructure.swarm.parallel.data_parallel_coordinator import (
     DPRole, WorkerHealth, LoadBalanceStrategy, DPConfig,
     WorkerState as DPWorkerState, StepState, WaveState,
     P2CLoadBalancer as DPLoadBalancer, DPEngineCoreProc,

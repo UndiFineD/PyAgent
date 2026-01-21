@@ -18,13 +18,13 @@ Converts images and PDFs into structured Markdown/JSON/HTML while preserving for
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import logging
 import json
 from pathlib import Path
 from typing import Any
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import as_tool, create_main_function
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool, create_main_function
 
 __version__ = VERSION
 

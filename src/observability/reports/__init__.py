@@ -15,7 +15,7 @@
 """Auto-generated module exports."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
+from src.core.base.lifecycle.version import VERSION as VERSION
 from .access_controller import AccessController as AccessController
 from .aggregated_report import AggregatedReport as AggregatedReport
 from .annotation_manager import AnnotationManager as AnnotationManager

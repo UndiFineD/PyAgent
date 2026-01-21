@@ -13,10 +13,10 @@
 
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import re
 from typing import Any
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 
 __version__ = VERSION
 

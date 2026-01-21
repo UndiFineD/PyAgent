@@ -22,7 +22,7 @@ print("\n📊 Test 1: Token Estimation Performance")
 print("-" * 70)
 
 try:
-    from src.infrastructure.tokenizer.tokenizer_registry import estimate_token_count
+    from src.infrastructure.engine.tokenization.tokenizer_registry import estimate_token_count
     print("✅ TokenizerRegistry imported successfully")
     
     # Test prompts
@@ -89,7 +89,7 @@ print("\n🌊 Test 3: Streaming Engine")
 print("-" * 70)
 
 try:
-    from src.infrastructure.backend.vllm_advanced.streaming_engine import (
+    from src.infrastructure.compute.backend.vllm_advanced.streaming_engine import (
         StreamingVllmEngine,
         StreamingConfig,
     )

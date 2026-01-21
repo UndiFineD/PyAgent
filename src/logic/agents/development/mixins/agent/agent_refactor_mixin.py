@@ -17,7 +17,7 @@
 from __future__ import annotations
 import re
 from typing import Any
-from src.core.base.types.refactoring_pattern import RefactoringPattern
+from src.core.base.common.types.refactoring_pattern import RefactoringPattern
 
 class AgentRefactorMixin:
     """Mixin for code deduplication and refactoring patterns."""

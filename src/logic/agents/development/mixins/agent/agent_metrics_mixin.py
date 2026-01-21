@@ -20,9 +20,9 @@ import re
 import shutil
 import subprocess
 import sys
-from src.core.base.types.code_metrics import CodeMetrics
-from src.core.base.types.quality_score import QualityScore
-from src.core.base.types.code_smell import CodeSmell
+from src.core.base.common.types.code_metrics import CodeMetrics
+from src.core.base.common.types.quality_score import QualityScore
+from src.core.base.common.types.code_smell import CodeSmell
 
 class AgentMetricsMixin:
     """Mixin for code metrics, quality scoring, and smell detection."""

@@ -16,7 +16,7 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from .effort_estimate import EffortEstimate
 from .improvement_category import ImprovementCategory
 from .improvement_priority import ImprovementPriority

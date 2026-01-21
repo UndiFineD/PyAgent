@@ -16,9 +16,9 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.types.migration_rule import MigrationRule
-from src.core.base.types.migration_status import MigrationStatus
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.types.migration_rule import MigrationRule
+from src.core.base.common.types.migration_status import MigrationStatus
 from typing import Any
 import re
 

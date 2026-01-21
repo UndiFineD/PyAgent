@@ -6,11 +6,11 @@ from pathlib import Path
 
 # Add project root to sys.path
 
-from src.infrastructure.fleet.orchestrator_registry import (
+from src.infrastructure.swarm.fleet.orchestrator_registry import (
     LazyOrchestratorMap,
     OrchestratorRegistry,
 )
-from src.core.base.version import SDK_VERSION
+from src.core.base.lifecycle.version import SDK_VERSION
 
 
 class MockFleet:

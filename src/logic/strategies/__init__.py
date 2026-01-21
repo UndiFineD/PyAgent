@@ -15,7 +15,7 @@
 """Auto-generated module exports."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION as VERSION
+from src.core.base.lifecycle.version import VERSION as VERSION
 from collections.abc import Callable
 from .agent_strategy import AgentStrategy as AgentStrategy
 from .chain_of_thought_strategy import ChainOfThoughtStrategy as ChainOfThoughtStrategy

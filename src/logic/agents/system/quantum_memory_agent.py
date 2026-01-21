@@ -19,12 +19,12 @@ Uses hierarchical summarization and selective hydration to handle massive local 
 
 from __future__ import annotations
 from typing import Any
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import logging
 import json
 from pathlib import Path
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
 
 try:
     from rust_core import search_blocks_rust
@@ -112,7 +112,7 @@ class QuantumMemoryAgent(BaseAgent):
 
 
 if __name__ == "__main__":
-    from src.core.base.base_utilities import create_main_function
+    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(
         QuantumMemoryAgent, "Quantum Memory Agent", "Context compression tool"

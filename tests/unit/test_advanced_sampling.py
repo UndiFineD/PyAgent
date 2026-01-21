@@ -9,7 +9,7 @@ import pytest
 import numpy as np
 from typing import List
 
-from src.infrastructure.sampling import (
+from src.infrastructure.engine.sampling import (
     OutputKind,
     StopCondition,
     TemperatureSchedule,

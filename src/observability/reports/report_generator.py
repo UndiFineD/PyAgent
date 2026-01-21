@@ -16,7 +16,7 @@
 """Report generation logic for agent source files."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import ast
 import hashlib
 import logging

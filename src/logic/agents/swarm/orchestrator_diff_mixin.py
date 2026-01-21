@@ -5,8 +5,8 @@
 from __future__ import annotations
 import logging
 from pathlib import Path
-from src.core.base.utils.diff_generator import DiffGenerator
-from src.core.base.models import DiffOutputFormat, DiffResult
+from src.core.base.common.utils.diff_generator import DiffGenerator
+from src.core.base.common.models import DiffOutputFormat, DiffResult
 
 
 class OrchestratorDiffMixin:

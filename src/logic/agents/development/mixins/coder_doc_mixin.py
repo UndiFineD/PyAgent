@@ -18,7 +18,7 @@ Documentation generation logic for CoderCore.
 
 from __future__ import annotations
 import ast
-from src.core.base.types.code_language import CodeLanguage
+from src.core.base.common.types.code_language import CodeLanguage
 
 class CoderDocMixin:
     """Mixin for generating documentation from code."""

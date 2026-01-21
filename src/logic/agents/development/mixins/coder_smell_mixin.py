@@ -19,8 +19,8 @@ Code smell detection logic for CoderCore.
 from __future__ import annotations
 import ast
 from typing import List, Dict, Any
-from src.core.base.types.code_language import CodeLanguage
-from src.core.base.types.code_smell import CodeSmell
+from src.core.base.common.types.code_language import CodeLanguage
+from src.core.base.common.types.code_smell import CodeSmell
 
 # Common code smells patterns (Imported from CoderCore or redefined if constants)
 CODE_SMELL_PATTERNS: Dict[str, Dict[str, Any]] = {

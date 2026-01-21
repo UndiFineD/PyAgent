@@ -22,7 +22,7 @@ def run_benchmarks():
     print("-" * 70)
 
 try:
-    from src.infrastructure.tokenizer.tokenizer_registry import estimate_token_count
+    from src.infrastructure.engine.tokenization.tokenizer_registry import estimate_token_count
     print("✅ Successfully imported token estimation")
     
     test_texts = {

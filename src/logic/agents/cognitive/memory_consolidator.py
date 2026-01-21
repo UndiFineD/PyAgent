@@ -16,13 +16,13 @@
 """Shell for MemoryConsolidator, handling storage and orchestration."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import json
 import logging
 from pathlib import Path
 from typing import Any
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
 
 # Fixed import path assuming Core is in the same directory
 from src.logic.agents.cognitive.MemoryConsolidatorCore import MemoryConsolidatorCore

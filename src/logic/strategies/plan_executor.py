@@ -18,7 +18,7 @@ Strategies Module: Unified interface for agent decision-making strategies.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import sys
 from pathlib import Path
 from collections.abc import Callable, Awaitable

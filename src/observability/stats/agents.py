@@ -8,7 +8,7 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import Any
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 from .engine import StatsCore
 from .observability_core import Alert, Metric, MetricSnapshot, MetricType, Threshold
 

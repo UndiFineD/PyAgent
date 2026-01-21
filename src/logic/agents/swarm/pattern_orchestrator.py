@@ -20,11 +20,11 @@ Inspired by multi-agent-generator and LangGraph.
 
 from __future__ import annotations
 from pathlib import Path
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import logging
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import as_tool
-from src.core.base.version import EVOLUTION_PHASE
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.lifecycle.version import EVOLUTION_PHASE
 from src.logic.cognitive.prompt_templates import VIBE_CODING_2025_TRACKS
 
 __version__ = VERSION
@@ -99,7 +99,7 @@ class PatternOrchestrator(BaseAgent):
         """Runs the Supervisor pattern (Phase 283): delegates sub-goals to specialist agents."""
         logging.info(f"ORCHESTRATOR: Supervisor mode for goal: {goal}")
 
-        from src.core.base.agent_delegator import AgentDelegator
+        from src.core.base.execution.agent_delegator import AgentDelegator
 
         delegator = AgentDelegator(self)
         results = []
@@ -123,7 +123,7 @@ class PatternOrchestrator(BaseAgent):
         """Runs the Debate pattern (Phase 283): agents argue iterations to reach consensus."""
         logging.info(f"ORCHESTRATOR: Debate mode for topic: {topic}")
 
-        from src.core.base.agent_delegator import AgentDelegator
+        from src.core.base.execution.agent_delegator import AgentDelegator
 
         delegator = AgentDelegator(self)
 
@@ -179,7 +179,7 @@ class PatternOrchestrator(BaseAgent):
     @as_tool
     def orchestrate_mapreduce(self, file_path: str, chunk_size: int = 1000) -> str:
         """Runs MapReduce (Phase 283): splits file, processes in parallel, merges results."""
-        from src.core.base.agent_delegator import AgentDelegator
+        from src.core.base.execution.agent_delegator import AgentDelegator
         import math
 
         path = Path(file_path)
@@ -225,7 +225,7 @@ class PatternOrchestrator(BaseAgent):
 
 
 if __name__ == "__main__":
-    from src.core.base.base_utilities import create_main_function
+    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(
         PatternOrchestrator, "Pattern Orchestrator", "Orchestration logs"

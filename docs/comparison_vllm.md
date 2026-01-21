@@ -814,7 +814,7 @@ Unified media loading with GPU decode support.
 - **Beyond vLLM**: Streaming extraction, auto-detection
 
 #### StructuredOutputParams.py (~500 lines)
-`src/infrastructure/structured_output/StructuredOutputParams.py`
+`src.infrastructure.engine.structured/StructuredOutputParams.py`
 - `StructuredOutputType` - Enum: JSON, JSON_SCHEMA, REGEX, GRAMMAR, CHOICE
 - `ConstraintType` - Enum: JSON_SCHEMA, REGEX, CHOICE, GRAMMAR, COMPOSITE
 - `Constraint` - ABC with validate() and validate_partial()

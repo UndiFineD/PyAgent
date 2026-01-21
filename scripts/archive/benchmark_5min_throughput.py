@@ -17,7 +17,7 @@ print("🚀 PyAgent 5-Minute Token Throughput Test")
 print("=" * 70)
 
 try:
-    from src.infrastructure.tokenizer.tokenizer_registry import estimate_token_count
+    from src.infrastructure.engine.tokenization.tokenizer_registry import estimate_token_count
     print("✅ Token estimation module loaded\n")
 except ImportError as e:
     print(f"❌ Failed to import: {e}")

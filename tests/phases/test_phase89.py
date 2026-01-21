@@ -2,7 +2,7 @@ import unittest
 
 # Ensure the project root is in PYTHONPATH
 
-from src.infrastructure.orchestration.intel.intelligence_orchestrator import (
+from src.infrastructure.swarm.orchestration.intel.intelligence_orchestrator import (
     IntelligenceOrchestrator,
 )
 

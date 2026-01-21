@@ -15,7 +15,7 @@ class TestPrometheusRegistry:
     
     def test_counter_basic(self):
         """Test basic counter operations."""
-        from src.infrastructure.metrics.prometheus_registry import (
+        from src.infrastructure.services.metrics.prometheus_registry import (
             Counter, MetricSpec, MetricType
         )
         
@@ -34,7 +34,7 @@ class TestPrometheusRegistry:
     
     def test_counter_with_labels(self):
         """Test counter with labels."""
-        from src.infrastructure.metrics.prometheus_registry import (
+        from src.infrastructure.services.metrics.prometheus_registry import (
             Counter, MetricSpec, MetricType
         )
         
@@ -55,7 +55,7 @@ class TestPrometheusRegistry:
     
     def test_gauge_basic(self):
         """Test basic gauge operations."""
-        from src.infrastructure.metrics.prometheus_registry import (
+        from src.infrastructure.services.metrics.prometheus_registry import (
             Gauge, MetricSpec, MetricType
         )
         
@@ -77,7 +77,7 @@ class TestPrometheusRegistry:
     
     def test_histogram_basic(self):
         """Test histogram operations."""
-        from src.infrastructure.metrics.prometheus_registry import (
+        from src.infrastructure.services.metrics.prometheus_registry import (
             Histogram, MetricSpec, MetricType
         )
         
@@ -107,7 +107,7 @@ class TestPrometheusRegistry:
     
     def test_summary_basic(self):
         """Test summary operations."""
-        from src.infrastructure.metrics.prometheus_registry import (
+        from src.infrastructure.services.metrics.prometheus_registry import (
             Summary, MetricSpec, MetricType
         )
         
@@ -133,7 +133,7 @@ class TestPrometheusRegistry:
     
     def test_registry_singleton(self):
         """Test registry singleton pattern."""
-        from src.infrastructure.metrics.prometheus_registry import MetricsRegistry
+        from src.infrastructure.services.metrics.prometheus_registry import MetricsRegistry
         
         reg1 = MetricsRegistry.get_instance()
         reg2 = MetricsRegistry.get_instance()
@@ -142,7 +142,7 @@ class TestPrometheusRegistry:
     
     def test_registry_metric_creation(self):
         """Test creating metrics through registry."""
-        from src.infrastructure.metrics.prometheus_registry import (
+        from src.infrastructure.services.metrics.prometheus_registry import (
             MetricsRegistry, MetricsBackend
         )
         
@@ -162,7 +162,7 @@ class TestPrometheusRegistry:
     
     def test_vllm_metrics(self):
         """Test VLLMMetrics collection."""
-        from src.infrastructure.metrics.prometheus_registry import VLLMMetrics
+        from src.infrastructure.services.metrics.prometheus_registry import VLLMMetrics
         
         metrics = VLLMMetrics()
         
@@ -181,7 +181,7 @@ class TestPrometheusRegistry:
     
     def test_sampled_counter(self):
         """Test sampled counter for high-frequency ops."""
-        from src.infrastructure.metrics.prometheus_registry import (
+        from src.infrastructure.services.metrics.prometheus_registry import (
             SampledCounter, MetricSpec, MetricType
         )
         
@@ -205,7 +205,7 @@ class TestLoRAStatsManager:
     
     def test_adapter_registration(self):
         """Test registering LoRA adapters."""
-        from src.infrastructure.metrics.lo_ra_stats_manager import (
+        from src.infrastructure.services.metrics.lo_ra_stats_manager import (
             LoRAStatsManager, LoRALoadState
         )
         
@@ -226,7 +226,7 @@ class TestLoRAStatsManager:
     
     def test_adapter_loading(self):
         """Test adapter loading lifecycle."""
-        from src.infrastructure.metrics.lo_ra_stats_manager import (
+        from src.infrastructure.services.metrics.lo_ra_stats_manager import (
             LoRAStatsManager, LoRALoadState
         )
         
@@ -253,7 +253,7 @@ class TestLoRAStatsManager:
     
     def test_request_lifecycle(self):
         """Test LoRA request lifecycle."""
-        from src.infrastructure.metrics.lo_ra_stats_manager import LoRAStatsManager
+        from src.infrastructure.services.metrics.lo_ra_stats_manager import LoRAStatsManager
         
         manager = LoRAStatsManager()
         
@@ -283,7 +283,7 @@ class TestLoRAStatsManager:
     
     def test_lora_stats_aggregation(self):
         """Test LoRA stats aggregation."""
-        from src.infrastructure.metrics.lo_ra_stats_manager import LoRAStatsManager
+        from src.infrastructure.services.metrics.lo_ra_stats_manager import LoRAStatsManager
         
         manager = LoRAStatsManager()
         
@@ -304,7 +304,7 @@ class TestLoRAStatsManager:
     
     def test_request_lifecycle_manager(self):
         """Test RequestLifecycleManager."""
-        from src.infrastructure.metrics.lo_ra_stats_manager import (
+        from src.infrastructure.services.metrics.lo_ra_stats_manager import (
             RequestLifecycleManager, RequestStatus
         )
         
@@ -332,7 +332,7 @@ class TestCachingMetrics:
     
     def test_sliding_window_metrics(self):
         """Test sliding window hit rate."""
-        from src.infrastructure.metrics.caching_metrics import SlidingWindowMetrics
+        from src.infrastructure.services.metrics.caching_metrics import SlidingWindowMetrics
         
         window = SlidingWindowMetrics(window_seconds=60.0)
         
@@ -347,7 +347,7 @@ class TestCachingMetrics:
     
     def test_caching_metrics_observe(self):
         """Test CachingMetrics observation."""
-        from src.infrastructure.metrics.caching_metrics import (
+        from src.infrastructure.services.metrics.caching_metrics import (
             CachingMetrics, CacheType, EvictionReason
         )
         
@@ -365,7 +365,7 @@ class TestCachingMetrics:
     
     def test_eviction_tracking(self):
         """Test eviction tracking."""
-        from src.infrastructure.metrics.caching_metrics import (
+        from src.infrastructure.services.metrics.caching_metrics import (
             CachingMetrics, CacheType, EvictionReason
         )
         
@@ -381,7 +381,7 @@ class TestCachingMetrics:
     
     def test_prefix_cache_stats(self):
         """Test PrefixCacheStats."""
-        from src.infrastructure.metrics.caching_metrics import PrefixCacheStats
+        from src.infrastructure.services.metrics.caching_metrics import PrefixCacheStats
         
         stats = PrefixCacheStats()
         
@@ -396,7 +396,7 @@ class TestCachingMetrics:
     
     def test_multi_level_cache(self):
         """Test multi-level cache metrics."""
-        from src.infrastructure.metrics.caching_metrics import (
+        from src.infrastructure.services.metrics.caching_metrics import (
             MultiLevelCacheMetrics, CacheType
         )
         
@@ -417,7 +417,7 @@ class TestPoolingMetadata:
     
     def test_pooling_cursor(self):
         """Test PoolingCursor operations."""
-        from src.infrastructure.pooling.pooling_metadata import PoolingCursor
+        from src.infrastructure.engine.pooling.pooling_metadata import PoolingCursor
         
         cursor = PoolingCursor(seq_start_idx=10, seq_len=100)
         
@@ -433,7 +433,7 @@ class TestPoolingMetadata:
     
     def test_pooling_states_mean(self):
         """Test PoolingStates mean strategy."""
-        from src.infrastructure.pooling.pooling_metadata import (
+        from src.infrastructure.engine.pooling.pooling_metadata import (
             PoolingStates, PoolingStrategy
         )
         
@@ -453,7 +453,7 @@ class TestPoolingMetadata:
     
     def test_pooling_metadata_create(self):
         """Test PoolingMetadata creation."""
-        from src.infrastructure.pooling.pooling_metadata import (
+        from src.infrastructure.engine.pooling.pooling_metadata import (
             PoolingMetadata, PoolingStrategy
         )
         
@@ -470,7 +470,7 @@ class TestPoolingMetadata:
     
     def test_mean_pooler(self):
         """Test MeanPooler."""
-        from src.infrastructure.pooling.pooling_metadata import (
+        from src.infrastructure.engine.pooling.pooling_metadata import (
             MeanPooler, PoolingMetadata, PoolingStrategy
         )
         
@@ -497,7 +497,7 @@ class TestPoolingMetadata:
     
     def test_pooler_factory(self):
         """Test PoolerFactory."""
-        from src.infrastructure.pooling.pooling_metadata import (
+        from src.infrastructure.engine.pooling.pooling_metadata import (
             PoolerFactory, PoolingStrategy, MeanPooler, MaxPooler
         )
         
@@ -509,7 +509,7 @@ class TestPoolingMetadata:
     
     def test_chunked_pooling_manager(self):
         """Test ChunkedPoolingManager."""
-        from src.infrastructure.pooling.pooling_metadata import (
+        from src.infrastructure.engine.pooling.pooling_metadata import (
             ChunkedPoolingManager, PoolingStrategy
         )
         
@@ -544,7 +544,7 @@ class TestLogprobsProcessor:
     
     def test_token_logprob(self):
         """Test TokenLogprob dataclass."""
-        from src.infrastructure.outputs.logprobs_processor import TokenLogprob
+        from src.infrastructure.engine.outputs.logprobs_processor import TokenLogprob
         
         lp1 = TokenLogprob(token_id=100, token="hello", logprob=-0.5)
         lp2 = TokenLogprob(token_id=200, token="world", logprob=-1.0)
@@ -554,7 +554,7 @@ class TestLogprobsProcessor:
     
     def test_logprobs_lists(self):
         """Test LogprobsLists."""
-        from src.infrastructure.outputs.logprobs_processor import (
+        from src.infrastructure.engine.outputs.logprobs_processor import (
             LogprobsLists, TopLogprobs, TokenLogprob
         )
         
@@ -579,7 +579,7 @@ class TestLogprobsProcessor:
     
     def test_logprobs_tensors_sparse(self):
         """Test LogprobsTensors sparse storage."""
-        from src.infrastructure.outputs.logprobs_processor import LogprobsTensors
+        from src.infrastructure.engine.outputs.logprobs_processor import LogprobsTensors
         
         tensors = LogprobsTensors.create_empty(
             batch_size=2,
@@ -598,7 +598,7 @@ class TestLogprobsProcessor:
     
     def test_sampler_output(self):
         """Test SamplerOutput."""
-        from src.infrastructure.outputs.logprobs_processor import SamplerOutput
+        from src.infrastructure.engine.outputs.logprobs_processor import SamplerOutput
         
         output = SamplerOutput(
             sampled_token_ids=np.array([100, 200, 300]),
@@ -611,7 +611,7 @@ class TestLogprobsProcessor:
     
     def test_model_runner_output(self):
         """Test ModelRunnerOutput."""
-        from src.infrastructure.outputs.logprobs_processor import ModelRunnerOutput
+        from src.infrastructure.engine.outputs.logprobs_processor import ModelRunnerOutput
         
         output = ModelRunnerOutput.create(
             sampled_token_ids=np.array([100, 200]),
@@ -627,7 +627,7 @@ class TestLogprobsProcessor:
     
     def test_streaming_logprobs_collector(self):
         """Test StreamingLogprobsCollector."""
-        from src.infrastructure.outputs.logprobs_processor import (
+        from src.infrastructure.engine.outputs.logprobs_processor import (
             StreamingLogprobsCollector, TopLogprobs
         )
         
@@ -656,7 +656,7 @@ class TestMultiprocExecutor:
     
     def test_future_wrapper(self):
         """Test FutureWrapper."""
-        from src.infrastructure.executor.multiproc_executor import FutureWrapper
+        from src.infrastructure.services.executor.multiproc_executor import FutureWrapper
         
         future: FutureWrapper[int] = FutureWrapper("task-1")
         
@@ -668,7 +668,7 @@ class TestMultiprocExecutor:
     
     def test_future_wrapper_exception(self):
         """Test FutureWrapper with exception."""
-        from src.infrastructure.executor.multiproc_executor import FutureWrapper
+        from src.infrastructure.services.executor.multiproc_executor import FutureWrapper
         
         future: FutureWrapper[int] = FutureWrapper("task-1")
         future.set_exception(ValueError("test error"))
@@ -679,7 +679,7 @@ class TestMultiprocExecutor:
     
     def test_future_wrapper_timeout(self):
         """Test FutureWrapper timeout."""
-        from src.infrastructure.executor.multiproc_executor import FutureWrapper
+        from src.infrastructure.services.executor.multiproc_executor import FutureWrapper
         
         future: FutureWrapper[int] = FutureWrapper("task-1")
         
@@ -688,7 +688,7 @@ class TestMultiprocExecutor:
     
     def test_uniproc_executor(self):
         """Test UniprocExecutor."""
-        from src.infrastructure.executor.multiproc_executor import UniprocExecutor
+        from src.infrastructure.services.executor.multiproc_executor import UniprocExecutor
         
         def add(a: int, b: int) -> int:
             return a + b
@@ -703,7 +703,7 @@ class TestMultiprocExecutor:
     
     def test_executor_factory(self):
         """Test ExecutorFactory."""
-        from src.infrastructure.executor.multiproc_executor import (
+        from src.infrastructure.services.executor.multiproc_executor import (
             ExecutorFactory, ExecutorBackend, UniprocExecutor
         )
         
@@ -716,7 +716,7 @@ class TestMultiprocExecutor:
     
     def test_executor_get_class(self):
         """Test Executor.get_class factory method."""
-        from src.infrastructure.executor.multiproc_executor import (
+        from src.infrastructure.services.executor.multiproc_executor import (
             Executor, ExecutorBackend, MultiprocExecutor, UniprocExecutor
         )
         

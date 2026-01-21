@@ -16,9 +16,9 @@
 """Agent specializing in Bash and shell scripting."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.development.coder_agent import CoderAgent
-from src.core.base.base_utilities import create_main_function, as_tool
+from src.core.base.common.base_utilities import create_main_function, as_tool
 from src.logic.agents.development.core.bash_core import BashCore
 
 __version__ = VERSION

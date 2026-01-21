@@ -7,8 +7,8 @@ import sys
 import time
 import logging
 from typing import Any
-from src.infrastructure.orchestration.signals.signal_registry import SignalRegistry
-from src.core.base.version import VERSION
+from src.infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
+from src.core.base.lifecycle.version import VERSION
 
 
 class ThoughtDebugger:

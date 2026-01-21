@@ -18,7 +18,7 @@ Knowledge Agent: Manages workspace knowledge and backlinks.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import sys
 import argparse
 import logging

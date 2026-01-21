@@ -6,8 +6,8 @@ import os
 import re
 import asyncio
 from typing import Any
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
 
 
 class PrivacyGuardAgent(BaseAgent):

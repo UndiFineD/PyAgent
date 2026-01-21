@@ -16,8 +16,8 @@
 """Auto-extracted class from agent_coder.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.types.modernization_suggestion import ModernizationSuggestion
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.types.modernization_suggestion import ModernizationSuggestion
 import re
 
 __version__ = VERSION

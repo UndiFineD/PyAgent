@@ -2,8 +2,8 @@
 
 import logging
 from pathlib import Path
-from src.infrastructure.fleet.agent_registry import AgentRegistry, LazyAgentMap
-from src.infrastructure.fleet.resilient_stubs import ResilientStub
+from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry, LazyAgentMap
+from src.infrastructure.swarm.fleet.resilient_stubs import ResilientStub
 
 
 def test_version_gate() -> None:

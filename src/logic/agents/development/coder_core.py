@@ -19,12 +19,12 @@ Designed for high-performance rule checking with future Rust integration.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
-from src.core.base.types.code_language import CodeLanguage
-from src.core.base.types.code_metrics import CodeMetrics
-from src.core.base.types.style_rule import StyleRule
-from src.core.base.types.style_rule_severity import StyleRuleSeverity
-from src.core.base.agent_core import LogicCore
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.common.types.code_language import CodeLanguage
+from src.core.base.common.types.code_metrics import CodeMetrics
+from src.core.base.common.types.style_rule import StyleRule
+from src.core.base.common.types.style_rule_severity import StyleRuleSeverity
+from src.core.base.lifecycle.agent_core import LogicCore
 from src.logic.agents.development.mixins.coder_metrics_mixin import CoderMetricsMixin
 from src.logic.agents.development.mixins.coder_style_mixin import CoderStyleMixin
 from src.logic.agents.development.mixins.coder_smell_mixin import CoderSmellMixin

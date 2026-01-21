@@ -10,14 +10,14 @@ import time
 import requests
 from pathlib import Path
 from typing import Any, List, Dict, Optional
-from src.core.base.version import VERSION
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import as_tool
-from src.core.base.connectivity_manager import ConnectivityManager
-from src.infrastructure.backend.local_context_recorder import LocalContextRecorder
+from src.core.base.lifecycle.version import VERSION
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
+from src.core.base.logic.connectivity_manager import ConnectivityManager
+from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 from src.logic.agents.intelligence.web_core import WebCore
 from src.logic.agents.intelligence.search_core import SearchCore
-from src.logic.agents.development.security_guard_agent import SecurityGuardAgent
+from src.logic.agents.security.security_guard_agent import SecurityGuardAgent
 
 __version__ = VERSION
 

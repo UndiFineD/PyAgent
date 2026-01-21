@@ -25,28 +25,28 @@ def agent_module() -> Any:
 
         # Configuration for legacy injections
         injections = [
-            ("src.core.base.models.core_enums", ["AgentExecutionState", "AgentPriority", "ConfigFormat", "DiffOutputFormat", "HealthStatus", "LockType", "RateLimitStrategy"]),
-            ("src.core.base.utils.agent_priority_queue", ["AgentPriorityQueue"]),
-            ("src.core.base.utils.validation_rule_manager", ["ValidationRuleManager"]),
-            ("src.core.base.utils.telemetry_collector", ["TelemetryCollector"]),
-            ("src.core.base.utils.conditional_executor", ["ConditionalExecutor"]),
-            ("src.core.base.utils.template_manager", ["TemplateManager"]),
-            ("src.core.base.utils.result_cache", ["ResultCache"]),
-            ("src.core.base.utils.execution_scheduler", ["ExecutionScheduler"]),
-            ("src.core.base.utils.file_lock_manager", ["FileLockManager"]),
-            ("src.core.base.utils.rate_limiter", ["RateLimiter"]),
-            ("src.core.base.utils.diff_generator", ["DiffGenerator"]),
-            ("src.core.base.utils.file_lock", ["FileLock"]),
-            ("src.core.base.dependency_graph", ["DependencyGraph"]),
-            ("src.core.base.config_loader", ["ConfigLoader"]),
-            ("src.core.base.graceful_shutdown", ["GracefulShutdown"]),
-            ("src.core.base.incremental_processor", ["IncrementalProcessor"]),
-            ("src.core.base.managers.system_managers", ["ProfileManager", "HealthChecker"]),
+            ("src.core.base.common.models.core_enums", ["AgentExecutionState", "AgentPriority", "ConfigFormat", "DiffOutputFormat", "HealthStatus", "LockType", "RateLimitStrategy"]),
+            ("src.core.base.common.utils.agent_priority_queue", ["AgentPriorityQueue"]),
+            ("src.core.base.common.utils.validation_rule_manager", ["ValidationRuleManager"]),
+            ("src.core.base.common.utils.telemetry_collector", ["TelemetryCollector"]),
+            ("src.core.base.common.utils.conditional_executor", ["ConditionalExecutor"]),
+            ("src.core.base.common.utils.template_manager", ["TemplateManager"]),
+            ("src.core.base.common.utils.result_cache", ["ResultCache"]),
+            ("src.core.base.common.utils.execution_scheduler", ["ExecutionScheduler"]),
+            ("src.core.base.common.utils.file_lock_manager", ["FileLockManager"]),
+            ("src.core.base.common.utils.rate_limiter", ["RateLimiter"]),
+            ("src.core.base.common.utils.diff_generator", ["DiffGenerator"]),
+            ("src.core.base.common.utils.file_lock", ["FileLock"]),
+            ("src.core.base.logic.dependency_graph", ["DependencyGraph"]),
+            ("src.core.base.common.config_loader", ["ConfigLoader"]),
+            ("src.core.base.lifecycle.graceful_shutdown", ["GracefulShutdown"]),
+            ("src.core.base.logic.incremental_processor", ["IncrementalProcessor"]),
+            ("src.core.base.logic.managers.system_managers", ["ProfileManager", "HealthChecker"]),
             ("src.logic.agents.development.git_branch_processor", ["GitBranchProcessor"]),
             ("src.logic.orchestration.agent_chain", ["AgentChain"]),
-            ("src.core.base.models.fleet_models", ["IncrementalState", "RateLimitConfig", "ShutdownState"]),
-            ("src.core.base.models.agent_models", ["AgentPluginConfig", "AgentHealthCheck"]),
-            ("src.core.base.models.base_models", ["ExecutionCondition", "DiffResult"]),
+            ("src.core.base.common.models.fleet_models", ["IncrementalState", "RateLimitConfig", "ShutdownState"]),
+            ("src.core.base.common.models.agent_models", ["AgentPluginConfig", "AgentHealthCheck"]),
+            ("src.core.base.common.models.base_models", ["ExecutionCondition", "DiffResult"]),
         ]
 
         for module_path, attr_names in injections:
@@ -72,7 +72,7 @@ def _inject_from_module(target_mod: Any, module_path: str, attr_names: list[str]
 def _inject_special_shims(mod: Any) -> None:
     """Injects complex shims (classes/methods) that require customization."""
     try:
-        from src.core.base.agent_plugin_base import AgentPluginBase
+        from src.core.base.logic.agent_plugin_base import AgentPluginBase
         if hasattr(AgentPluginBase, "shutdown"):
             AgentPluginBase.shutdown = lambda self: None
         mod.AgentPluginBase = AgentPluginBase
@@ -80,13 +80,13 @@ def _inject_special_shims(mod: Any) -> None:
         pass
 
     try:
-        from src.core.base.models.base_models import ValidationRule as RealValidationRule
+        from src.core.base.common.models.base_models import ValidationRule as RealValidationRule
         mod.ValidationRule = _create_legacy_validation_rule_shim(RealValidationRule)
     except ImportError:
         pass
 
     try:
-        from src.core.base.circuit_breaker import CircuitBreaker as RealCircuitBreaker
+        from src.core.base.logic.circuit_breaker import CircuitBreaker as RealCircuitBreaker
         mod.CircuitBreaker = _create_legacy_circuit_breaker_shim(RealCircuitBreaker)
     except ImportError:
         pass

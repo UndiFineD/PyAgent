@@ -7,7 +7,7 @@ root = Path(__file__).resolve().parents[2].parent
 if str(root) not in sys.path:
     sys.path.append(str(root))
 
-from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class TestPhase78(unittest.TestCase):

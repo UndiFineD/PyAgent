@@ -16,7 +16,7 @@
 """Auto-extracted class from agent_context.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from src.logic.agents.cognitive.context.models.branch_comparison import BranchComparison
 
 __version__ = VERSION

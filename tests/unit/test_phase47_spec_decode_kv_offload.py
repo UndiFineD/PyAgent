@@ -26,7 +26,7 @@ class TestEagleProposer:
     
     def test_eagle_config(self):
         """Test EagleConfig creation."""
-        from src.infrastructure.speculative_v2.eagle_proposer import (
+        from src.infrastructure.engine.speculative.eagle_proposer import (
             EagleConfig, EagleMethod
         )
         
@@ -42,7 +42,7 @@ class TestEagleProposer:
     
     def test_tree_node(self):
         """Test TreeNode operations."""
-        from src.infrastructure.speculative_v2.eagle_proposer import TreeNode
+        from src.infrastructure.engine.speculative.eagle_proposer import TreeNode
         
         root = TreeNode(token_id=1, depth=0)
         child1 = root.add_child(2, 0.5)
@@ -61,7 +61,7 @@ class TestEagleProposer:
     
     def test_speculative_tree(self):
         """Test SpeculativeTree creation and expansion."""
-        from src.infrastructure.speculative_v2.eagle_proposer import SpeculativeTree
+        from src.infrastructure.engine.speculative.eagle_proposer import SpeculativeTree
         
         tree = SpeculativeTree.create(root_token_id=100, max_depth=3)
         
@@ -80,7 +80,7 @@ class TestEagleProposer:
     
     def test_acceptance_stats(self):
         """Test AcceptanceStats tracking."""
-        from src.infrastructure.speculative_v2.eagle_proposer import AcceptanceStats
+        from src.infrastructure.engine.speculative.eagle_proposer import AcceptanceStats
         
         stats = AcceptanceStats(window_size=10)
         
@@ -100,7 +100,7 @@ class TestEagleProposer:
     
     def test_eagle_proposer_creation(self):
         """Test EagleProposer instantiation."""
-        from src.infrastructure.speculative_v2.eagle_proposer import (
+        from src.infrastructure.engine.speculative.eagle_proposer import (
             EagleProposer, EagleConfig
         )
         
@@ -112,7 +112,7 @@ class TestEagleProposer:
     
     def test_eagle_proposer_propose(self):
         """Test draft proposal generation."""
-        from src.infrastructure.speculative_v2.eagle_proposer import (
+        from src.infrastructure.engine.speculative.eagle_proposer import (
             EagleProposer, EagleConfig
         )
         
@@ -131,7 +131,7 @@ class TestEagleProposer:
     
     def test_eagle_proposer_tree_propose(self):
         """Test tree-based draft proposal."""
-        from src.infrastructure.speculative_v2.eagle_proposer import (
+        from src.infrastructure.engine.speculative.eagle_proposer import (
             EagleProposer, EagleConfig
         )
         
@@ -148,7 +148,7 @@ class TestEagleProposer:
     
     def test_eagle_verify_accept(self):
         """Test verification and acceptance."""
-        from src.infrastructure.speculative_v2.eagle_proposer import (
+        from src.infrastructure.engine.speculative.eagle_proposer import (
             EagleProposer, EagleConfig
         )
         
@@ -169,7 +169,7 @@ class TestEagleProposer:
     
     def test_eagle_extrapolate_hidden(self):
         """Test hidden state extrapolation."""
-        from src.infrastructure.speculative_v2.eagle_proposer import (
+        from src.infrastructure.engine.speculative.eagle_proposer import (
             EagleProposer, EagleConfig
         )
         
@@ -189,7 +189,7 @@ class TestEagleProposer:
     
     def test_eagle_factory(self):
         """Test EagleProposerFactory."""
-        from src.infrastructure.speculative_v2.eagle_proposer import (
+        from src.infrastructure.engine.speculative.eagle_proposer import (
             EagleProposerFactory, EagleMethod
         )
         
@@ -211,7 +211,7 @@ class TestNgramProposer:
     
     def test_ngram_config(self):
         """Test NgramConfig creation."""
-        from src.infrastructure.speculative_v2.ngram_proposer import NgramConfig
+        from src.infrastructure.engine.speculative.ngram_proposer import NgramConfig
         
         config = NgramConfig(min_n=2, max_n=5, num_speculative_tokens=4)
         
@@ -221,7 +221,7 @@ class TestNgramProposer:
     
     def test_ngram_cache(self):
         """Test NgramCache operations."""
-        from src.infrastructure.speculative_v2.ngram_proposer import NgramCache
+        from src.infrastructure.engine.speculative.ngram_proposer import NgramCache
         
         cache = NgramCache(max_n=3)
         
@@ -235,7 +235,7 @@ class TestNgramProposer:
     
     def test_ngram_proposer_creation(self):
         """Test NgramProposer instantiation."""
-        from src.infrastructure.speculative_v2.ngram_proposer import (
+        from src.infrastructure.engine.speculative.ngram_proposer import (
             NgramProposer, NgramConfig
         )
         
@@ -247,7 +247,7 @@ class TestNgramProposer:
     
     def test_ngram_propose_exact_match(self):
         """Test n-gram proposal with exact match."""
-        from src.infrastructure.speculative_v2.ngram_proposer import (
+        from src.infrastructure.engine.speculative.ngram_proposer import (
             NgramProposer, NgramConfig
         )
         
@@ -265,7 +265,7 @@ class TestNgramProposer:
     
     def test_ngram_propose_no_match(self):
         """Test n-gram proposal with no match."""
-        from src.infrastructure.speculative_v2.ngram_proposer import (
+        from src.infrastructure.engine.speculative.ngram_proposer import (
             NgramProposer, NgramConfig
         )
         
@@ -282,7 +282,7 @@ class TestNgramProposer:
     
     def test_ngram_batch_propose(self):
         """Test batch n-gram proposal."""
-        from src.infrastructure.speculative_v2.ngram_proposer import (
+        from src.infrastructure.engine.speculative.ngram_proposer import (
             NgramProposer, NgramConfig
         )
         
@@ -300,7 +300,7 @@ class TestNgramProposer:
     
     def test_ngram_fuzzy_match(self):
         """Test fuzzy n-gram matching."""
-        from src.infrastructure.speculative_v2.ngram_proposer import (
+        from src.infrastructure.engine.speculative.ngram_proposer import (
             NgramProposer, NgramConfig
         )
         
@@ -317,7 +317,7 @@ class TestNgramProposer:
     
     def test_prompt_lookup_proposer(self):
         """Test PromptLookupProposer."""
-        from src.infrastructure.speculative_v2.ngram_proposer import PromptLookupProposer
+        from src.infrastructure.engine.speculative.ngram_proposer import PromptLookupProposer
         
         proposer = PromptLookupProposer(
             min_lookup_len=2,
@@ -335,7 +335,7 @@ class TestNgramProposer:
     
     def test_hybrid_ngram_proposer(self):
         """Test HybridNgramProposer."""
-        from src.infrastructure.speculative_v2.ngram_proposer import (
+        from src.infrastructure.engine.speculative.ngram_proposer import (
             HybridNgramProposer, NgramConfig
         )
         
@@ -358,7 +358,7 @@ class TestSpecDecodeMetadataV2:
     
     def test_spec_decode_config(self):
         """Test SpecDecodeConfig creation."""
-        from src.infrastructure.speculative_v2.spec_decode_metadata_v2 import (
+        from src.infrastructure.engine.speculative.spec_decode_metadata_v2 import (
             SpecDecodeConfig, VerificationStrategy
         )
         
@@ -372,7 +372,7 @@ class TestSpecDecodeMetadataV2:
     
     def test_spec_decode_metadata_creation(self):
         """Test SpecDecodeMetadataV2 instantiation."""
-        from src.infrastructure.speculative_v2.spec_decode_metadata_v2 import (
+        from src.infrastructure.engine.speculative.spec_decode_metadata_v2 import (
             SpecDecodeMetadataV2
         )
         
@@ -387,7 +387,7 @@ class TestSpecDecodeMetadataV2:
     
     def test_spec_decode_metadata_make_dummy(self):
         """Test make_dummy factory method."""
-        from src.infrastructure.speculative_v2.spec_decode_metadata_v2 import (
+        from src.infrastructure.engine.speculative.spec_decode_metadata_v2 import (
             SpecDecodeMetadataV2
         )
         
@@ -399,7 +399,7 @@ class TestSpecDecodeMetadataV2:
     
     def test_spec_decode_metadata_from_proposals(self):
         """Test from_proposals factory method."""
-        from src.infrastructure.speculative_v2.spec_decode_metadata_v2 import (
+        from src.infrastructure.engine.speculative.spec_decode_metadata_v2 import (
             SpecDecodeMetadataV2
         )
         
@@ -411,7 +411,7 @@ class TestSpecDecodeMetadataV2:
     
     def test_verification_result(self):
         """Test VerificationResult properties."""
-        from src.infrastructure.speculative_v2.spec_decode_metadata_v2 import (
+        from src.infrastructure.engine.speculative.spec_decode_metadata_v2 import (
             VerificationResult
         )
         
@@ -426,7 +426,7 @@ class TestSpecDecodeMetadataV2:
     
     def test_spec_decode_verifier(self):
         """Test SpecDecodeVerifier."""
-        from src.infrastructure.speculative_v2.spec_decode_metadata_v2 import (
+        from src.infrastructure.engine.speculative.spec_decode_metadata_v2 import (
             SpecDecodeVerifier, SpecDecodeConfig, SpecDecodeMetadataV2
         )
         
@@ -448,7 +448,7 @@ class TestSpecDecodeMetadataV2:
     
     def test_tree_verification_metadata(self):
         """Test TreeVerificationMetadata."""
-        from src.infrastructure.speculative_v2.spec_decode_metadata_v2 import (
+        from src.infrastructure.engine.speculative.spec_decode_metadata_v2 import (
             TreeVerificationMetadata
         )
         
@@ -473,7 +473,7 @@ class TestARCOffloadManager:
     
     def test_block_status(self):
         """Test BlockStatus creation."""
-        from src.infrastructure.kv_transfer.arc_offload_manager import (
+        from src.infrastructure.storage.kv_transfer.arc_offload_manager import (
             BlockStatus, BlockState, OffloadMedium
         )
         
@@ -491,7 +491,7 @@ class TestARCOffloadManager:
     
     def test_simple_backend(self):
         """Test SimpleBackend operations."""
-        from src.infrastructure.kv_transfer.arc_offload_manager import (
+        from src.infrastructure.storage.kv_transfer.arc_offload_manager import (
             SimpleBackend, OffloadMedium
         )
         
@@ -506,7 +506,7 @@ class TestARCOffloadManager:
     
     def test_arc_manager_creation(self):
         """Test ARCOffloadManager instantiation."""
-        from src.infrastructure.kv_transfer.arc_offload_manager import (
+        from src.infrastructure.storage.kv_transfer.arc_offload_manager import (
             ARCOffloadManager, SimpleBackend
         )
         
@@ -519,7 +519,7 @@ class TestARCOffloadManager:
     
     def test_arc_manager_store_and_lookup(self):
         """Test store and lookup operations."""
-        from src.infrastructure.kv_transfer.arc_offload_manager import (
+        from src.infrastructure.storage.kv_transfer.arc_offload_manager import (
             ARCOffloadManager, SimpleBackend
         )
         
@@ -541,7 +541,7 @@ class TestARCOffloadManager:
     
     def test_arc_manager_touch_promotion(self):
         """Test touch promotes from T1 to T2."""
-        from src.infrastructure.kv_transfer.arc_offload_manager import (
+        from src.infrastructure.storage.kv_transfer.arc_offload_manager import (
             ARCOffloadManager, SimpleBackend
         )
         
@@ -563,7 +563,7 @@ class TestARCOffloadManager:
     
     def test_arc_manager_eviction(self):
         """Test ARC eviction policy."""
-        from src.infrastructure.kv_transfer.arc_offload_manager import (
+        from src.infrastructure.storage.kv_transfer.arc_offload_manager import (
             ARCOffloadManager, SimpleBackend
         )
         
@@ -582,7 +582,7 @@ class TestARCOffloadManager:
     
     def test_arc_manager_stats(self):
         """Test statistics tracking."""
-        from src.infrastructure.kv_transfer.arc_offload_manager import (
+        from src.infrastructure.storage.kv_transfer.arc_offload_manager import (
             ARCOffloadManager, SimpleBackend
         )
         
@@ -609,8 +609,8 @@ class TestLRUOffloadManager:
     
     def test_lru_manager_creation(self):
         """Test LRUOffloadManager instantiation."""
-        from src.infrastructure.kv_transfer.arc_offload_manager import SimpleBackend
-        from src.infrastructure.kv_transfer.lru_offload_manager import LRUOffloadManager
+        from src.infrastructure.storage.kv_transfer.arc_offload_manager import SimpleBackend
+        from src.infrastructure.storage.kv_transfer.lru_offload_manager import LRUOffloadManager
         
         backend = SimpleBackend(num_blocks=100)
         manager = LRUOffloadManager(backend)
@@ -619,8 +619,8 @@ class TestLRUOffloadManager:
     
     def test_lru_manager_store_lookup(self):
         """Test LRU store and lookup."""
-        from src.infrastructure.kv_transfer.arc_offload_manager import SimpleBackend
-        from src.infrastructure.kv_transfer.lru_offload_manager import LRUOffloadManager
+        from src.infrastructure.storage.kv_transfer.arc_offload_manager import SimpleBackend
+        from src.infrastructure.storage.kv_transfer.lru_offload_manager import LRUOffloadManager
         
         backend = SimpleBackend(num_blocks=100)
         manager = LRUOffloadManager(backend)
@@ -636,8 +636,8 @@ class TestLRUOffloadManager:
     
     def test_lru_manager_eviction_order(self):
         """Test LRU evicts least recently used."""
-        from src.infrastructure.kv_transfer.arc_offload_manager import SimpleBackend
-        from src.infrastructure.kv_transfer.lru_offload_manager import LRUOffloadManager
+        from src.infrastructure.storage.kv_transfer.arc_offload_manager import SimpleBackend
+        from src.infrastructure.storage.kv_transfer.lru_offload_manager import LRUOffloadManager
         
         backend = SimpleBackend(num_blocks=2)
         manager = LRUOffloadManager(backend)
@@ -658,7 +658,7 @@ class TestLRUOffloadManager:
     
     def test_weighted_lru_manager(self):
         """Test WeightedLRUManager."""
-        from src.infrastructure.kv_transfer.lru_offload_manager import (
+        from src.infrastructure.storage.kv_transfer.lru_offload_manager import (
             WeightedLRUManager, LRUManagerFactory
         )
         
@@ -677,7 +677,7 @@ class TestLRUOffloadManager:
     
     def test_prefetching_lru_manager(self):
         """Test PrefetchingLRUManager."""
-        from src.infrastructure.kv_transfer.lru_offload_manager import (
+        from src.infrastructure.storage.kv_transfer.lru_offload_manager import (
             PrefetchingLRUManager, LRUManagerFactory
         )
         
@@ -702,7 +702,7 @@ class TestBlockTableV2:
     
     def test_block_table_config(self):
         """Test BlockTableConfig creation."""
-        from src.infrastructure.kv_transfer.block_table_v2 import BlockTableConfig
+        from src.infrastructure.storage.kv_transfer.block_table_v2 import BlockTableConfig
         
         config = BlockTableConfig(
             block_size=16,
@@ -715,7 +715,7 @@ class TestBlockTableV2:
     
     def test_block_table_creation(self):
         """Test BlockTable instantiation."""
-        from src.infrastructure.kv_transfer.block_table_v2 import (
+        from src.infrastructure.storage.kv_transfer.block_table_v2 import (
             BlockTable, BlockTableConfig
         )
         
@@ -727,7 +727,7 @@ class TestBlockTableV2:
     
     def test_block_table_append_row(self):
         """Test appending blocks to row."""
-        from src.infrastructure.kv_transfer.block_table_v2 import (
+        from src.infrastructure.storage.kv_transfer.block_table_v2 import (
             BlockTable, BlockTableConfig
         )
         
@@ -742,7 +742,7 @@ class TestBlockTableV2:
     
     def test_block_table_slot_mapping(self):
         """Test slot mapping computation."""
-        from src.infrastructure.kv_transfer.block_table_v2 import (
+        from src.infrastructure.storage.kv_transfer.block_table_v2 import (
             BlockTable, BlockTableConfig
         )
         
@@ -760,7 +760,7 @@ class TestBlockTableV2:
     
     def test_sparse_block_table(self):
         """Test SparseBlockTable operations."""
-        from src.infrastructure.kv_transfer.block_table_v2 import (
+        from src.infrastructure.storage.kv_transfer.block_table_v2 import (
             SparseBlockTable, BlockTableConfig
         )
         
@@ -777,7 +777,7 @@ class TestBlockTableV2:
     
     def test_predictive_allocator(self):
         """Test PredictiveBlockAllocator."""
-        from src.infrastructure.kv_transfer.block_table_v2 import (
+        from src.infrastructure.storage.kv_transfer.block_table_v2 import (
             PredictiveBlockAllocator
         )
         
@@ -797,7 +797,7 @@ class TestBlockTableV2:
     
     def test_block_table_v2(self):
         """Test BlockTableV2 with prediction."""
-        from src.infrastructure.kv_transfer.block_table_v2 import (
+        from src.infrastructure.storage.kv_transfer.block_table_v2 import (
             BlockTableV2, BlockTableConfig
         )
         
@@ -981,10 +981,10 @@ class TestPhase47Integration:
     
     def test_eagle_full_pipeline(self):
         """Test full EAGLE proposal and verification pipeline."""
-        from src.infrastructure.speculative_v2.eagle_proposer import (
+        from src.infrastructure.engine.speculative.eagle_proposer import (
             EagleProposer, EagleConfig
         )
-        from src.infrastructure.speculative_v2.spec_decode_metadata_v2 import (
+        from src.infrastructure.engine.speculative.spec_decode_metadata_v2 import (
             SpecDecodeMetadataV2, SpecDecodeVerifier, SpecDecodeConfig
         )
         
@@ -1014,10 +1014,10 @@ class TestPhase47Integration:
     
     def test_ngram_to_verification(self):
         """Test N-gram proposal to verification pipeline."""
-        from src.infrastructure.speculative_v2.ngram_proposer import (
+        from src.infrastructure.engine.speculative.ngram_proposer import (
             NgramProposer, NgramConfig
         )
-        from src.infrastructure.speculative_v2.spec_decode_metadata_v2 import (
+        from src.infrastructure.engine.speculative.spec_decode_metadata_v2 import (
             SpecDecodeMetadataV2
         )
         
@@ -1035,10 +1035,10 @@ class TestPhase47Integration:
     
     def test_arc_lru_comparison(self):
         """Compare ARC and LRU cache behavior."""
-        from src.infrastructure.kv_transfer.arc_offload_manager import (
+        from src.infrastructure.storage.kv_transfer.arc_offload_manager import (
             ARCOffloadManager, SimpleBackend
         )
-        from src.infrastructure.kv_transfer.lru_offload_manager import LRUOffloadManager
+        from src.infrastructure.storage.kv_transfer.lru_offload_manager import LRUOffloadManager
         
         # Create both managers
         arc_backend = SimpleBackend(num_blocks=10)
@@ -1065,10 +1065,10 @@ class TestPhase47Integration:
     
     def test_block_table_with_kv_cache(self):
         """Test block table integration with KV cache concepts."""
-        from src.infrastructure.kv_transfer.block_table_v2 import (
+        from src.infrastructure.storage.kv_transfer.block_table_v2 import (
             BlockTableV2, BlockTableConfig
         )
-        from src.infrastructure.kv_transfer.arc_offload_manager import (
+        from src.infrastructure.storage.kv_transfer.arc_offload_manager import (
             ARCOffloadManager, SimpleBackend
         )
         

@@ -29,7 +29,7 @@ from src.infrastructure.engine.engine_lifecycle import (
     EngineConfig,
     EngineLifecycleManager,
 )
-from src.infrastructure.sampling.sampling_engine import (
+from src.infrastructure.engine.sampling.sampling_engine import (
     SamplingParams,
     SamplingState,
     TopKSampler,
@@ -43,7 +43,7 @@ from src.infrastructure.sampling.sampling_engine import (
     SamplingPipeline,
     sample_logits,
 )
-from src.infrastructure.tokenization.incremental_detokenizer import (
+from src.infrastructure.engine.tokenization.incremental_detokenizer import (
     DetokenizeResult,
     StopChecker,
     FastIncrementalDetokenizer,
@@ -470,7 +470,7 @@ class TestSamplers:
     
     def test_beam_search_sampler(self):
         """Test beam search initialization."""
-        from src.infrastructure.sampling.sampling_engine import BeamSearchConfig
+        from src.infrastructure.engine.sampling.sampling_engine import BeamSearchConfig
         
         config = BeamSearchConfig(
             beam_width=4,

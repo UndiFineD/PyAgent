@@ -19,10 +19,10 @@ import logging
 from datetime import datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 
 if TYPE_CHECKING:
-    from src.infrastructure.fleet.fleet_manager import FleetManager
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class ReportingAgent(BaseAgent):
@@ -49,7 +49,7 @@ class ReportingAgent(BaseAgent):
         from src.logic.agents.system.kernel_agent import KernelAgent
         from src.logic.agents.development.pull_request_agent import PRAgent
         from src.logic.agents.system.config_agent import ConfigAgent
-        from src.logic.agents.development.test_agent import TestAgent
+        from src.logic.agents.analysis.test_agent import TestAgent
         from src.logic.agents.intelligence.browsing_agent import BrowsingAgent
         from src.logic.agents.system.mcp_agent import MCPAgent
         from src.logic.agents.development.tool_evolution_agent import ToolEvolutionAgent
@@ -93,7 +93,7 @@ class ReportingAgent(BaseAgent):
         self.fleet.register_agent(
             "Test",
             TestAgent,
-            str(self.workspace_root / "src\logic\agents\development\test_agent.py"),
+            str(self.workspace_root / "src.logic.agents.analysis.test_agent.py"),
         )
         self.fleet.register_agent(
             "Browser",
@@ -179,7 +179,7 @@ if __name__ == "__main__":
     # Local test
     import asyncio
     from src.observability.structured_logger import StructuredLogger
-    from src.infrastructure.fleet.fleet_manager import FleetManager
+    from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
     logger = StructuredLogger(__name__)
     f = FleetManager()

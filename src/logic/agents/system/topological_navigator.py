@@ -18,13 +18,13 @@ Builds a semantic map of the codebase for graph-based dependency exploration.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import os
 from pathlib import Path
 from .mixins.map_builder_mixin import MapBuilderMixin
 from .mixins.graph_analysis_mixin import GraphAnalysisMixin
 from .mixins.federation_mixin import FederationMixin
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 
 __version__ = VERSION
 

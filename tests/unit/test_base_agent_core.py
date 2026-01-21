@@ -4,8 +4,8 @@ Tests pure logic methods before Rust conversion.
 """
 
 from hypothesis import given, strategies as st
-from src.core.base.base_agent_core import BaseAgentCore
-from src.core.base.models import AgentConfig, AgentPriority
+from src.core.base.lifecycle.base_agent_core import BaseAgentCore
+from src.core.base.common.models import AgentConfig, AgentPriority
 
 
 class TestBaseAgentCoreValidation:

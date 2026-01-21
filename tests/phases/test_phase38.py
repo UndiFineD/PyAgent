@@ -5,7 +5,7 @@ import os
 
 # Add project root to path
 
-from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 import asyncio
 
 
