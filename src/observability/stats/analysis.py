@@ -108,6 +108,21 @@ class StabilityCore:
     def calculate_stability_score(
         self, metrics: FleetMetrics, sae_anomalies: int
     ) -> float:
+        """Calculate stability score.
+
+        Uses Rust-accelerated logic if available.
+        """
+        if RUST_AVAILABLE and hasattr(rc, "calculate_stability_score"):
+            with contextlib.suppress(Exception):
+                # Convert dataclass to dict for Rust bridge
+                metrics_dict = {
+                    "avg_error_rate": float(metrics.avg_error_rate),
+                    "total_token_out": int(metrics.total_token_out),
+                    "active_agent_count": int(metrics.active_agent_count),
+                    "latency_p95": float(metrics.latency_p95),
+                }
+                return rc.calculate_stability_score(metrics_dict, sae_anomalies)
+
         score = 1.0
 
         score -= metrics.avg_error_rate * 5.0
@@ -232,8 +247,16 @@ class DerivedMetricCalculator:
         for dep in derived.dependencies:
             if dep not in metric_values:
                 return None
-        formula = derived.formula
 
+        # Phase 14: Use Rust-accelerated formula evaluation if possible
+        if RUST_AVAILABLE and hasattr(rc, "evaluate_formula"):
+            # Ensure all values are floats for Rust
+            cast_values = {k: float(v) for k, v in metric_values.items()}
+            with contextlib.suppress(Exception):
+                # The Rust version handles {dep} replacement internally
+                return float(rc.evaluate_formula(derived.formula, cast_values))
+
+        formula = derived.formula
         for dep in derived.dependencies:
             formula = formula.replace(f"{{{dep}}}", str(metric_values[dep]))
         try:
