@@ -21,7 +21,7 @@ from tests.utils.agent_test_utils import agent_dir_on_path, load_agent_module
 def agent_module() -> Any:
     """Load and return the agent module with legacy state injections."""
     with agent_dir_on_path():
-        mod = load_agent_module("src/core/base/base_agent.py")
+        mod = load_agent_module("src/core/base/lifecycle/base_agent.py")
 
         # Configuration for legacy injections
         injections = [

@@ -5,7 +5,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Any, ClassVar, Sequence
 from functools import cached_property
-from src.core.base.common.models import ReasoningResult, StreamingReasoningState
+from .models import ReasoningResult, StreamingReasoningState
 
 
 class ReasoningParser(ABC):

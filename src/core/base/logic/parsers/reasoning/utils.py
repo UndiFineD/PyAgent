@@ -3,7 +3,7 @@
 
 from typing import Any
 from .registry import ReasoningParserManager
-from src.core.base.common.models import ReasoningResult, StreamingReasoningState
+from .models import ReasoningResult, StreamingReasoningState
 
 
 def extract_reasoning(
