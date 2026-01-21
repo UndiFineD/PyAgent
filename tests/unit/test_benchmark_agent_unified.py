@@ -3,8 +3,8 @@
 
 import pytest
 from unittest.mock import MagicMock
-from src.logic.agents.development.benchmark_agent import BenchmarkAgent
-from src.infrastructure.benchmarks.models import BenchmarkResult
+from src.logic.agents.analysis.benchmark_agent import BenchmarkAgent
+from src.infrastructure.services.benchmarks.models import BenchmarkResult
 
 class TestBenchmarkAgent:
     def test_benchmark_agent_init(self):

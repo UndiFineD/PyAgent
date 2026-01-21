@@ -16,11 +16,11 @@
 """Agent specializing in code generation, refactoring, and style enforcement."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import sys
 from pathlib import Path
 from src.logic.agents.development.coder_agent import CoderAgent
-from src.core.base.base_utilities import create_main_function
+from src.core.base.common.base_utilities import create_main_function
 
 # Ensure project root and src are in path for modular imports
 root = Path(__file__).resolve().parents[2]

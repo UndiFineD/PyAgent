@@ -20,7 +20,7 @@ from __future__ import annotations
 import re
 import logging
 from typing import Any, List, Dict, Tuple
-from src.core.base.types.style_rule import StyleRule
+from src.core.base.common.types.style_rule import StyleRule
 
 class CoderStyleMixin:
     """Mixin for style checking and auto-fixing."""

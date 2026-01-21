@@ -20,7 +20,7 @@ import sys
 sys.path.insert(0, "C:/DEV/PyAgent/src")
 
 # XGrammarBackend imports
-from src.infrastructure.structured_output.x_grammar_backend import (
+from src.infrastructure.engine.structured.x_grammar_backend import (
     GrammarType,
     VocabType,
     TokenizerInfo,
@@ -32,7 +32,7 @@ from src.infrastructure.structured_output.x_grammar_backend import (
 )
 
 # LogitsProcessorV2 imports
-from src.infrastructure.structured_output.logits_processor_v2 import (
+from src.infrastructure.engine.structured.logits_processor_v2 import (
     MoveDirectionality,
     SamplingParams,
     BatchUpdate,
@@ -45,14 +45,14 @@ from src.infrastructure.structured_output.logits_processor_v2 import (
 )
 
 # BadWordsProcessorV2 imports
-from src.infrastructure.structured_output.bad_words_processor_v2 import (
+from src.infrastructure.engine.structured.bad_words_processor_v2 import (
     BadWordsPenaltyMode,
     TrieNode,
     BadWordsProcessorV2,
 )
 
 # GuidanceBackend imports
-from src.infrastructure.structured_output.guidance_backend import (
+from src.infrastructure.engine.structured.guidance_backend import (
     GuidanceTemplateType,
     GuidanceVariable,
     GuidanceTemplate,
@@ -64,7 +64,7 @@ from src.infrastructure.structured_output.guidance_backend import (
 )
 
 # LMFormatEnforcerBackend imports
-from src.infrastructure.structured_output.lm_format_enforcer_backend import (
+from src.infrastructure.engine.structured.lm_format_enforcer_backend import (
     DFAStateType,
     DFAState,
     DFATransition,
@@ -79,7 +79,7 @@ from src.infrastructure.structured_output.lm_format_enforcer_backend import (
 )
 
 # StructuredOutputOrchestrator imports
-from src.infrastructure.structured_output.structured_output_orchestrator import (
+from src.infrastructure.engine.structured.structured_output_orchestrator import (
     StructuredOutputBackendType,
     ConstraintType,
     GrammarProtocol,
@@ -181,6 +181,7 @@ class TestXGrammarBackend:
             grammar_type=GrammarType.JSON_SCHEMA,
             grammar_spec='{}',
             vocab_size=100,
+            token_strings={1: "token1", 2: "token2"}
         )
         matcher = GrammarMatcher(grammar)
         
@@ -195,6 +196,8 @@ class TestXGrammarBackend:
             grammar_type=GrammarType.JSON_SCHEMA,
             grammar_spec='{}',
             vocab_size=100,
+            token_strings={1: "token1", 2: "token2"},
+            max_rollback_tokens=10
         )
         matcher = GrammarMatcher(grammar, max_rollback_tokens=10)
         
@@ -208,7 +211,8 @@ class TestXGrammarBackend:
     def test_grammar_compiler_caching(self):
         """Test GrammarCompiler caches compiled grammars."""
         tokenizer = MockTokenizer()
-        compiler = GrammarCompiler(tokenizer)
+        info = TokenizerInfo.from_tokenizer(tokenizer)
+        compiler = GrammarCompiler(info)
         
         schema = '{"type": "object"}'
         grammar1 = compiler.compile_json_schema(schema)

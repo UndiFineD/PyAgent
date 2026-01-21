@@ -13,11 +13,11 @@
 
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import hashlib
 import os
 import logging
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 
 __version__ = VERSION
 

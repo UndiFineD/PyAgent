@@ -10,13 +10,13 @@ class OrchestrationMixin:
         self._strategy: Any = None
 
         try:
-            from src.infrastructure.orchestration.signals.signal_registry import SignalRegistry
+            from src.infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
             self.registry = SignalRegistry()
         except (ImportError, ValueError):
             self.registry = None
 
         try:
-            from src.infrastructure.orchestration.system.tool_registry import ToolRegistry
+            from src.infrastructure.swarm.orchestration.system.tool_registry import ToolRegistry
             self.tool_registry = ToolRegistry()
         except (ImportError, ValueError):
             self.tool_registry = None
@@ -73,16 +73,16 @@ class OrchestrationMixin:
         if hasattr(self, "quotas"):
             exceeded, reason = self.quotas.check_quotas()
             if exceeded:
-                from src.core.base.base_exceptions import CycleInterrupt
+                from src.core.base.common.base_exceptions import CycleInterrupt
                 raise CycleInterrupt(reason)
 
         try:
-            from src.infrastructure.backend import execution_engine as ab
+            from src.infrastructure.compute.backend import execution_engine as ab
         except ImportError:
             import sys
             from pathlib import Path
             sys.path.append(str(Path(__file__).parent.parent.parent.parent))
-            from src.infrastructure.backend import execution_engine as ab
+            from src.infrastructure.compute.backend import execution_engine as ab
 
         import asyncio
         result: str | None = await asyncio.to_thread(
@@ -184,8 +184,8 @@ class OrchestrationMixin:
 
         # 2. Dynamic Import Fallback (via AgentRegistry)
         try:
-            from src.infrastructure.fleet.agent_registry import AgentRegistry
-            from src.core.base.agent_core import BaseCore
+            from src.infrastructure.swarm.fleet.agent_registry import AgentRegistry
+            from src.core.base.lifecycle.agent_core import BaseCore
             
             ws_root = getattr(self, "_workspace_root", None) or Path(BaseCore.detect_workspace_root(Path.cwd()))
             

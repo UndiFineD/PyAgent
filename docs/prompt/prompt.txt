@@ -2,7 +2,7 @@
 # This file (docs/prompt/prompt.txt) is the primary source for most prompting logic.
 # Priority: CRITICAL | Status: EVOLUTION PHASE 50 - TALON & AUTOMATION ✅ RESEARCH COMPLETE | 🚧 IMPLEMENTING
 # Rust Functions: 532 | Test Coverage: ~3064+ tests passing
-@focus: ["src/infrastructure/speculative_v2", "src/maintenance", "src/infrastructure/cloud"]
+@focus: ["src.infrastructure.engine.speculative", "src/maintenance", "src/infrastructure/cloud"]
 
 ## Quick Reference - Completed Phases
 
@@ -19,11 +19,11 @@
 ---
 
 ## Phase 50: TALON & Self-Improvement Automation ✅ RESEARCH | 🚧 IMPLEMENTING
-@location: ["src/infrastructure/speculative_v2", "src/maintenance"]
+@location: ["src.infrastructure.engine.speculative", "src/maintenance"]
 
 ### Active Work
 1. **TALON Implementation**: arXiv:2601.07353 integration.
-   - Confidence-aware pruning in `src/infrastructure/speculative_v2/eagle/Tree.py`.
+   - Confidence-aware pruning in `src.infrastructure.engine.speculative/eagle/Tree.py`.
    - Adaptive tree depth based on verification stats.
 2. **Self-Improvement Automation**:
    - Dynamic delegation loop: Coordinator -> Director -> Specialist.
@@ -89,8 +89,8 @@ review with coderabbit, do the git dance, merge branches into main
 
 ### Modular Split Targets (Resolved)
 - ReasoningEngine.py -> src/infrastructure/reasoning/
-- EagleProposer.py -> src/infrastructure/speculative_v2/eagle/
-- SpecDecodeMetadataV2.py -> src/infrastructure/speculative_v2/spec_decode/
+- EagleProposer.py -> src.infrastructure.engine.speculative/eagle/
+- SpecDecodeMetadataV2.py -> src.infrastructure.engine.speculative/spec_decode/
 - SlashCommands.py -> src/interface/commands/
 - StructuredOutputGrammar.py -> src/infrastructure/decoding/grammar/
 - KVCacheCoordinator.py -> src/infrastructure/engine/kv_cache/ (INTEGRATED)
@@ -287,7 +287,7 @@ review with coderabbit, do the git dance, merge branches into main
 ---
 
 ## Phase 41: Tokenizer Registry, Model Registry & LoRA ✅ COMPLETE
-@location: ["src/infrastructure/tokenizer", "src/infrastructure/models", "src/infrastructure/lora", "src/infrastructure/logprobs", "src/infrastructure/tools", "src/infrastructure/structured_output"]
+@location: ["src/infrastructure/tokenizer", "src/infrastructure/models", "src/infrastructure/lora", "src/infrastructure/logprobs", "src/infrastructure/tools", "src.infrastructure.engine.structured"]
 
 ### Implemented Modules (6 Python, ~3600 lines)
 1. **TokenizerRegistry.py** - Multi-backend tokenization (700 lines)
@@ -428,7 +428,7 @@ review with coderabbit, do the git dance, merge branches into main
 ---
 
 ## Phase 39: Structured Output, Speculative v2 & Tensorizer ✅ COMPLETE
-@location: ["src/infrastructure/structured_output", "src/infrastructure/speculative_v2", "src/infrastructure/tensorizer"]
+@location: ["src.infrastructure.engine.structured", "src.infrastructure.engine.speculative", "src/infrastructure/tensorizer"]
 
 ### Implemented Modules (6 Python)
 1. **StructuredOutputManager.py** - Multi-backend grammar orchestration (600 lines)

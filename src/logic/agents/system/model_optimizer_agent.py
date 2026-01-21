@@ -16,8 +16,8 @@
 """Agent specializing in model inference optimization and low-VRAM strategies."""
 
 from __future__ import annotations
-from src.core.base.base_agent import BaseAgent
-from src.infrastructure.simulation.hopper_sim import HopperSim, Precision
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.infrastructure.services.simulation.hopper_sim import HopperSim, Precision
 import logging
 import json
 from typing import Any
@@ -192,7 +192,7 @@ print(model.tokenizer.decode(output.sequences[0]))
 
 
 if __name__ == "__main__":
-    from src.core.base.base_utilities import create_main_function
+    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(ModelOptimizerAgent)
     main()

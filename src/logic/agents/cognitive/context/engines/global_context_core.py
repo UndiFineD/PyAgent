@@ -13,7 +13,7 @@
 
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from .core_mixins.core_partition_mixin import CorePartitionMixin
 from .core_mixins.core_resolution_mixin import CoreResolutionMixin
 from .core_mixins.core_summary_mixin import CoreSummaryMixin

@@ -3,15 +3,15 @@
 # Based on research: arXiv:2601.10696 and ScienceDirect S2090447925006203 (Jiang et al., 2026)
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import logging
 import json
 import asyncio
 import contextlib
 from typing import Any, Dict, List, Optional
 from enum import Enum
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 

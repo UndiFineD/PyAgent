@@ -20,7 +20,7 @@
 """Custom logging handler for redirecing output to Tkinter widgets."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from typing import Any
 import logging
 import tkinter as tk

@@ -17,7 +17,7 @@
 from __future__ import annotations
 import logging
 from typing import Any
-from src.core.base.base_utilities import as_tool
+from src.core.base.common.base_utilities import as_tool
 
 class GraphEntityMixin:
     """Mixin for entity and relationship management."""

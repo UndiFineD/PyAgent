@@ -11,7 +11,7 @@ import asyncio
 import numpy as np
 from typing import List
 
-from src.infrastructure.multimodal.multi_modal_cache import (
+from src.infrastructure.engine.multimodal.multi_modal_cache import (
     MediaType,
     CacheBackend,
     HashAlgorithm,

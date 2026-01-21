@@ -2,7 +2,7 @@ import unittest
 import os
 import asyncio
 from pathlib import Path
-from src.infrastructure.fleet.fleet_manager import FleetManager
+from src.infrastructure.swarm.fleet.fleet_manager import FleetManager
 
 
 class TestPhases47_49(unittest.TestCase):

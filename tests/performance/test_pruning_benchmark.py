@@ -1,5 +1,5 @@
 import timeit
-from src.core.base.core.pruning_core import PruningCore, SynapticWeight
+from src.core.base.logic.core.pruning_core import PruningCore, SynapticWeight
 import time
 
 

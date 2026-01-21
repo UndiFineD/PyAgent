@@ -16,7 +16,7 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from .improvement import Improvement
 from .sla_configuration import SLAConfiguration
 from .sla_level import SLALevel

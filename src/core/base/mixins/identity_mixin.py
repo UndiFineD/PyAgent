@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Identity Mixin for BaseAgent
 from typing import Any
-from src.core.base.models import AgentPriority
+from src.core.base.common.models import AgentPriority
 
 class IdentityMixin:
     """Handles agent identity, configuration, and capabilities."""
@@ -19,7 +19,7 @@ class IdentityMixin:
         """Emits a signal with agent capabilities for discovery."""
         try:
             import asyncio
-            from src.infrastructure.orchestration.signals.signal_registry import SignalRegistry
+            from src.infrastructure.swarm.orchestration.signals.signal_registry import SignalRegistry
 
             signals = SignalRegistry()
             # Note: We expect the class using this mixin to have agent_logic_core

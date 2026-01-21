@@ -19,15 +19,15 @@ Follows Decentralized Autonomous Organization (DAO) principles for agent swarms.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import logging
 import json
 import uuid
 import time
 from pathlib import Path
 from typing import Any
-from src.core.base.base_agent import BaseAgent
-from src.core.base.base_utilities import as_tool
+from src.core.base.lifecycle.base_agent import BaseAgent
+from src.core.base.common.base_utilities import as_tool
 
 __version__ = VERSION
 
@@ -167,7 +167,7 @@ class GovernanceAgent(BaseAgent):
 
 
 if __name__ == "__main__":
-    from src.core.base.base_utilities import create_main_function
+    from src.core.base.common.base_utilities import create_main_function
 
     main = create_main_function(
         GovernanceAgent, "Governance Agent", "Swarm DAO Management"

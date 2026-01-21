@@ -18,7 +18,7 @@ Generates data structures for internal/external dashboard consumers.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import json
 import logging
 from typing import Any

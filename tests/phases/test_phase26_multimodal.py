@@ -32,7 +32,7 @@ class TestModalityType:
     
     def test_modality_types_exist(self):
         """Test all modality types are defined."""
-        from src.infrastructure.multimodal import ModalityType
+        from src.infrastructure.engine.multimodal import ModalityType
         
         assert ModalityType.IMAGE is not None
         assert ModalityType.VIDEO is not None
@@ -42,7 +42,7 @@ class TestModalityType:
     
     def test_modality_type_values_unique(self):
         """Test modality type values are unique."""
-        from src.infrastructure.multimodal import ModalityType
+        from src.infrastructure.engine.multimodal import ModalityType
         
         values = [m.value for m in ModalityType]
         assert len(values) == len(set(values))
@@ -53,7 +53,7 @@ class TestMultiModalConfig:
     
     def test_default_config(self):
         """Test default configuration values."""
-        from src.infrastructure.multimodal import MultiModalConfig
+        from src.infrastructure.engine.multimodal import MultiModalConfig
         
         config = MultiModalConfig()
         assert config.limit_per_prompt["image"] >= 1
@@ -63,7 +63,7 @@ class TestMultiModalConfig:
     
     def test_custom_config(self):
         """Test custom configuration."""
-        from src.infrastructure.multimodal import MultiModalConfig
+        from src.infrastructure.engine.multimodal import MultiModalConfig
         
         config = MultiModalConfig(
             limit_per_prompt={"image": 10, "video": 5, "audio": 3},
@@ -80,7 +80,7 @@ class TestMultiModalData:
     
     def test_create_image_data(self):
         """Test creating image multimodal data."""
-        from src.infrastructure.multimodal import MultiModalData
+        from src.infrastructure.engine.multimodal import MultiModalData
         
         data = MultiModalData(
             images=[np.zeros((224, 224, 3))],
@@ -90,7 +90,7 @@ class TestMultiModalData:
     
     def test_create_audio_data(self):
         """Test creating audio multimodal data."""
-        from src.infrastructure.multimodal import MultiModalData
+        from src.infrastructure.engine.multimodal import MultiModalData
         
         # Audio is (waveform, sample_rate) tuple
         data = MultiModalData(
@@ -102,7 +102,7 @@ class TestMultiModalData:
     
     def test_is_empty(self):
         """Test is_empty check."""
-        from src.infrastructure.multimodal import MultiModalData
+        from src.infrastructure.engine.multimodal import MultiModalData
         
         data = MultiModalData()
         assert data.is_empty()
@@ -116,7 +116,7 @@ class TestImageProcessor:
     
     def test_process_numpy_image(self):
         """Test processing numpy array image."""
-        from src.infrastructure.multimodal import ImageProcessor, MultiModalConfig
+        from src.infrastructure.engine.multimodal import ImageProcessor, MultiModalConfig
         
         config = MultiModalConfig()
         processor = ImageProcessor(config, target_size=(224, 224))
@@ -132,7 +132,7 @@ class TestImageProcessor:
     
     def test_get_placeholder_count(self):
         """Test placeholder token count calculation."""
-        from src.infrastructure.multimodal import ImageProcessor, MultiModalConfig
+        from src.infrastructure.engine.multimodal import ImageProcessor, MultiModalConfig
         
         config = MultiModalConfig()
         processor = ImageProcessor(config, target_size=(224, 224), patch_size=14)
@@ -149,7 +149,7 @@ class TestVideoProcessor:
     
     def test_process_video(self):
         """Test video processing."""
-        from src.infrastructure.multimodal import MultiModalConfig, VideoProcessor
+        from src.infrastructure.engine.multimodal import MultiModalConfig, VideoProcessor
         
         config = MultiModalConfig()
         processor = VideoProcessor(config, num_frames=4)
@@ -163,7 +163,7 @@ class TestVideoProcessor:
     
     def test_get_placeholder_count(self):
         """Test placeholder count for video."""
-        from src.infrastructure.multimodal import MultiModalConfig, VideoProcessor
+        from src.infrastructure.engine.multimodal import MultiModalConfig, VideoProcessor
         
         config = MultiModalConfig()
         processor = VideoProcessor(config, num_frames=8, target_size=(224, 224), patch_size=14)
@@ -180,7 +180,7 @@ class TestAudioProcessor:
     
     def test_process_audio(self):
         """Test audio processing."""
-        from src.infrastructure.multimodal import AudioProcessor, MultiModalConfig
+        from src.infrastructure.engine.multimodal import AudioProcessor, MultiModalConfig
         
         config = MultiModalConfig()
         processor = AudioProcessor(config, target_sample_rate=16000)
@@ -195,7 +195,7 @@ class TestAudioProcessor:
     
     def test_get_placeholder_count(self):
         """Test audio placeholder count."""
-        from src.infrastructure.multimodal import AudioProcessor, MultiModalConfig
+        from src.infrastructure.engine.multimodal import AudioProcessor, MultiModalConfig
         
         config = MultiModalConfig()
         processor = AudioProcessor(config, target_sample_rate=16000, hop_length=160)
@@ -212,7 +212,7 @@ class TestMultiModalRegistry:
     
     def test_create_processor(self):
         """Test creating a processor."""
-        from src.infrastructure.multimodal import (
+        from src.infrastructure.engine.multimodal import (
             ModalityType,
             MultiModalConfig,
             MultiModalRegistry,
@@ -227,7 +227,7 @@ class TestMultiModalRegistry:
     
     def test_process_inputs(self):
         """Test processing multiple inputs."""
-        from src.infrastructure.multimodal import (
+        from src.infrastructure.engine.multimodal import (
             ModalityType,
             MultiModalConfig,
             MultiModalData,
@@ -257,7 +257,7 @@ class TestStructuredOutputOptions:
     
     def test_option_types_exist(self):
         """Test all option types are defined."""
-        from src.infrastructure.decoding import StructuredOutputOptions
+        from src.infrastructure.engine.decoding import StructuredOutputOptions
         
         assert StructuredOutputOptions.JSON is not None
         assert StructuredOutputOptions.REGEX is not None
@@ -270,7 +270,7 @@ class TestStructuredOutputsParams:
     
     def test_json_param(self):
         """Test JSON schema parameter."""
-        from src.infrastructure.decoding import StructuredOutputsParams
+        from src.infrastructure.engine.decoding import StructuredOutputsParams
         
         params = StructuredOutputsParams(json={"type": "object"})
         assert params.json == {"type": "object"}
@@ -278,7 +278,7 @@ class TestStructuredOutputsParams:
     
     def test_only_one_constraint(self):
         """Test that only one constraint can be set."""
-        from src.infrastructure.decoding import StructuredOutputsParams
+        from src.infrastructure.engine.decoding import StructuredOutputsParams
         
         with pytest.raises(ValueError):
             StructuredOutputsParams(
@@ -288,7 +288,7 @@ class TestStructuredOutputsParams:
     
     def test_get_option_type(self):
         """Test getting option type."""
-        from src.infrastructure.decoding import (
+        from src.infrastructure.engine.decoding import (
             StructuredOutputOptions,
             StructuredOutputsParams,
         )
@@ -298,7 +298,7 @@ class TestStructuredOutputsParams:
     
     def test_get_spec(self):
         """Test getting specification string."""
-        from src.infrastructure.decoding import StructuredOutputsParams
+        from src.infrastructure.engine.decoding import StructuredOutputsParams
         
         params = StructuredOutputsParams(choice=["yes", "no"])
         spec = params.get_spec()
@@ -318,7 +318,7 @@ class TestJSONSchemaGrammar:
     
     def test_accept_valid_prefix(self):
         """Test accepting valid JSON prefix."""
-        from src.infrastructure.decoding import JSONSchemaGrammar
+        from src.infrastructure.engine.decoding import JSONSchemaGrammar
         
         schema = {"type": "object"}
         grammar = JSONSchemaGrammar(
@@ -333,7 +333,7 @@ class TestJSONSchemaGrammar:
     
     def test_rollback(self):
         """Test rolling back tokens."""
-        from src.infrastructure.decoding import JSONSchemaGrammar
+        from src.infrastructure.engine.decoding import JSONSchemaGrammar
         
         schema = {"type": "object"}
         grammar = JSONSchemaGrammar(
@@ -350,7 +350,7 @@ class TestJSONSchemaGrammar:
     
     def test_reset(self):
         """Test resetting grammar."""
-        from src.infrastructure.decoding import JSONSchemaGrammar
+        from src.infrastructure.engine.decoding import JSONSchemaGrammar
         
         schema = {"type": "object"}
         grammar = JSONSchemaGrammar(
@@ -374,7 +374,7 @@ class TestRegexGrammar:
     
     def test_accept_matching_tokens(self):
         """Test accepting tokens that match pattern."""
-        from src.infrastructure.decoding import RegexGrammar
+        from src.infrastructure.engine.decoding import RegexGrammar
         
         grammar = RegexGrammar(
             pattern=r"\d+",
@@ -387,7 +387,7 @@ class TestRegexGrammar:
     
     def test_is_terminated(self):
         """Test termination detection."""
-        from src.infrastructure.decoding import RegexGrammar
+        from src.infrastructure.engine.decoding import RegexGrammar
         
         grammar = RegexGrammar(
             pattern=r"\d{3}",  # Exactly 3 digits
@@ -404,7 +404,7 @@ class TestChoiceGrammar:
     
     def test_accept_valid_choice(self):
         """Test accepting valid choice."""
-        from src.infrastructure.decoding import ChoiceGrammar
+        from src.infrastructure.engine.decoding import ChoiceGrammar
         
         def token_to_string(t: int) -> str:
             return ["y", "e", "s", "n", "o"][t] if t < 5 else ""
@@ -422,7 +422,7 @@ class TestChoiceGrammar:
     
     def test_reject_invalid_choice(self):
         """Test rejecting invalid choice prefix."""
-        from src.infrastructure.decoding import ChoiceGrammar
+        from src.infrastructure.engine.decoding import ChoiceGrammar
         
         def token_to_string(t: int) -> str:
             return ["x", "y", "z"][t] if t < 3 else ""
@@ -443,7 +443,7 @@ class TestEBNFGrammar:
     
     def test_parse_grammar(self):
         """Test parsing EBNF grammar."""
-        from src.infrastructure.decoding import EBNFGrammar
+        from src.infrastructure.engine.decoding import EBNFGrammar
         
         grammar_str = '''
         root ::= "SELECT " column
@@ -465,7 +465,7 @@ class TestGrammarCompiler:
     
     def test_compile_json_grammar(self):
         """Test compiling JSON schema to grammar."""
-        from src.infrastructure.decoding import (
+        from src.infrastructure.engine.decoding import (
             GrammarCompiler,
             JSONSchemaGrammar,
             StructuredOutputsParams,
@@ -483,7 +483,7 @@ class TestGrammarCompiler:
     
     def test_compile_regex_grammar(self):
         """Test compiling regex to grammar."""
-        from src.infrastructure.decoding import (
+        from src.infrastructure.engine.decoding import (
             GrammarCompiler,
             RegexGrammar,
             StructuredOutputsParams,
@@ -505,7 +505,7 @@ class TestStructuredOutputManager:
     
     def test_init_and_get_grammar(self):
         """Test initializing and getting grammar."""
-        from src.infrastructure.decoding import (
+        from src.infrastructure.engine.decoding import (
             StructuredOutputManager,
             StructuredOutputsParams,
         )
@@ -523,7 +523,7 @@ class TestStructuredOutputManager:
     
     def test_remove_grammar(self):
         """Test removing grammar."""
-        from src.infrastructure.decoding import (
+        from src.infrastructure.engine.decoding import (
             StructuredOutputManager,
             StructuredOutputsParams,
         )
@@ -550,7 +550,7 @@ class TestParallelConfig:
     
     def test_default_config(self):
         """Test default parallel configuration."""
-        from src.infrastructure.orchestration.core.distributed_coordinator import (
+        from src.infrastructure.swarm.orchestration.core.distributed_coordinator import (
             ParallelConfig,
         )
         
@@ -562,7 +562,7 @@ class TestParallelConfig:
     
     def test_distributed_config(self):
         """Test distributed configuration."""
-        from src.infrastructure.orchestration.core.distributed_coordinator import (
+        from src.infrastructure.swarm.orchestration.core.distributed_coordinator import (
             ParallelConfig,
         )
         
@@ -579,7 +579,7 @@ class TestEngineIdentity:
     
     def test_create_identity(self):
         """Test creating engine identity."""
-        from src.infrastructure.orchestration.core.distributed_coordinator import (
+        from src.infrastructure.swarm.orchestration.core.distributed_coordinator import (
             EngineIdentity,
         )
         
@@ -590,7 +590,7 @@ class TestEngineIdentity:
     
     def test_identity_str(self):
         """Test identity string representation."""
-        from src.infrastructure.orchestration.core.distributed_coordinator import (
+        from src.infrastructure.swarm.orchestration.core.distributed_coordinator import (
             EngineIdentity,
         )
         
@@ -605,7 +605,7 @@ class TestDPCoordinator:
     
     def test_register_engine(self):
         """Test registering an engine."""
-        from src.infrastructure.orchestration.core.distributed_coordinator import (
+        from src.infrastructure.swarm.orchestration.core.distributed_coordinator import (
             DPCoordinator,
             EngineIdentity,
             EngineState,
@@ -623,7 +623,7 @@ class TestDPCoordinator:
     
     def test_select_engine_round_robin(self):
         """Test round-robin engine selection."""
-        from src.infrastructure.orchestration.core.distributed_coordinator import (
+        from src.infrastructure.swarm.orchestration.core.distributed_coordinator import (
             DPCoordinator,
             EngineIdentity,
             LoadBalancingStrategy,
@@ -649,7 +649,7 @@ class TestDPCoordinator:
     
     def test_deregister_engine(self):
         """Test deregistering an engine."""
-        from src.infrastructure.orchestration.core.distributed_coordinator import (
+        from src.infrastructure.swarm.orchestration.core.distributed_coordinator import (
             DPCoordinator,
             EngineIdentity,
             ParallelConfig,
@@ -671,7 +671,7 @@ class TestMessages:
     
     def test_request_message(self):
         """Test RequestMessage creation."""
-        from src.infrastructure.orchestration.core.distributed_coordinator import (
+        from src.infrastructure.swarm.orchestration.core.distributed_coordinator import (
             RequestMessage,
         )
         
@@ -682,7 +682,7 @@ class TestMessages:
     
     def test_response_message(self):
         """Test ResponseMessage creation."""
-        from src.infrastructure.orchestration.core.distributed_coordinator import (
+        from src.infrastructure.swarm.orchestration.core.distributed_coordinator import (
             ResponseMessage,
         )
         
@@ -697,7 +697,7 @@ class TestMessages:
     
     def test_metrics_message(self):
         """Test MetricsMessage creation."""
-        from src.infrastructure.orchestration.core.distributed_coordinator import (
+        from src.infrastructure.swarm.orchestration.core.distributed_coordinator import (
             MetricsMessage,
         )
         
@@ -716,7 +716,7 @@ class TestMPClient:
     
     def test_num_workers(self):
         """Test worker count before start."""
-        from src.infrastructure.orchestration.core.distributed_coordinator import (
+        from src.infrastructure.swarm.orchestration.core.distributed_coordinator import (
             BaseWorker,
             MPClient,
             ParallelConfig,
@@ -745,7 +745,7 @@ class TestDistributedExecutor:
     
     def test_create_executor(self):
         """Test creating a distributed executor."""
-        from src.infrastructure.orchestration.core.distributed_coordinator import (
+        from src.infrastructure.swarm.orchestration.core.distributed_coordinator import (
             BaseWorker,
             ParallelConfig,
             create_distributed_executor,
@@ -930,7 +930,7 @@ class TestMultiModalIntegration:
     
     def test_full_image_pipeline(self):
         """Test full image processing pipeline."""
-        from src.infrastructure.multimodal import (
+        from src.infrastructure.engine.multimodal import (
             ModalityType,
             MultiModalConfig,
             MultiModalData,
@@ -955,7 +955,7 @@ class TestStructuredOutputIntegration:
     
     def test_json_schema_generation(self):
         """Test generating output matching JSON schema."""
-        from src.infrastructure.decoding import (
+        from src.infrastructure.engine.decoding import (
             GrammarCompiler,
             StructuredOutputsParams,
         )
@@ -986,7 +986,7 @@ class TestValidation:
     
     def test_validate_structured_output_params(self):
         """Test parameter validation."""
-        from src.infrastructure.decoding import (
+        from src.infrastructure.engine.decoding import (
             StructuredOutputsParams,
             validate_structured_output_params,
         )

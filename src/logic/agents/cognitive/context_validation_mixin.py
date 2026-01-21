@@ -5,7 +5,7 @@
 from __future__ import annotations
 import re
 from typing import Any
-from src.core.base.models import ValidationRule
+from src.core.base.common.models import ValidationRule
 
 # Default validation rules
 DEFAULT_VALIDATION_RULES: list[ValidationRule] = [

@@ -1,6 +1,6 @@
 import unittest
 from hypothesis import given, strategies as st
-from src.core.base.core.resilience_core import ResilienceCore
+from src.core.base.logic.core.resilience_core import ResilienceCore
 
 
 class TestResilienceCore(unittest.TestCase):

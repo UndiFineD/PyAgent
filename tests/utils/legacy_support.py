@@ -49,8 +49,8 @@ class LegacyAgentMixin:
         self._webhooks: list[Any] = []
 
     def enable_rate_limiting(self, config=None, requests_per_second: float | None = None) -> None:
-        from src.core.base.utils.rate_limiter import RateLimiter
-        from src.core.base.models.fleet_models import RateLimitConfig
+        from src.core.base.common.utils.rate_limiter import RateLimiter
+        from src.core.base.common.models.fleet_models import RateLimitConfig
         if config is None and requests_per_second is not None:
             config = RateLimitConfig(requests_per_second=requests_per_second)
         self.rate_limiter = RateLimiter(config)
@@ -59,18 +59,18 @@ class LegacyAgentMixin:
         return self.rate_limiter.get_stats() if self.rate_limiter else {}
 
     def enable_file_locking(self, lock_timeout: float | None = None) -> None:
-        from src.core.base.utils.file_lock_manager import FileLockManager
+        from src.core.base.common.utils.file_lock_manager import FileLockManager
         self.lock_manager = FileLockManager()
         if lock_timeout is not None:
             self.lock_manager.lock_timeout = lock_timeout
 
     def enable_diff_preview(self) -> None:
-        from src.core.base.utils.diff_generator import DiffGenerator
+        from src.core.base.common.utils.diff_generator import DiffGenerator
         self.diff_generator = DiffGenerator()
 
     def preview_changes(self, file_path: Path, content: str):
         if not self.diff_generator:
-            from src.core.base.utils.diff_generator import DiffGenerator
+            from src.core.base.common.utils.diff_generator import DiffGenerator
             self.diff_generator = DiffGenerator()
         
         original = ""
@@ -80,7 +80,7 @@ class LegacyAgentMixin:
         return self.diff_generator.generate_diff(file_path, original, content)
 
     def enable_incremental_processing(self) -> None:
-        from src.core.base.incremental_processor import IncrementalProcessor
+        from src.core.base.logic.incremental_processor import IncrementalProcessor
         self.incremental_processor = IncrementalProcessor(repo_root=self.repo_root)
 
     def get_changed_files(self, files: list[Path]):
@@ -91,7 +91,7 @@ class LegacyAgentMixin:
             self.incremental_processor.reset_state()
 
     def enable_graceful_shutdown(self) -> None:
-        from src.core.base.graceful_shutdown import GracefulShutdown
+        from src.core.base.lifecycle.graceful_shutdown import GracefulShutdown
         self.shutdown_handler = GracefulShutdown(repo_root=self.repo_root)
 
     def resume_from_shutdown(self) -> Optional[Any]:
@@ -100,7 +100,7 @@ class LegacyAgentMixin:
         return None
 
     def run_health_checks(self):
-        from src.core.base.managers.system_managers import HealthChecker
+        from src.core.base.logic.managers.system_managers import HealthChecker
         self.health_checker = HealthChecker(repo_root=self.repo_root)
         return self.health_checker.run_all_checks()
 

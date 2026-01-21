@@ -2,7 +2,7 @@ from pathlib import Path
 from src.core.knowledge.btree_store import BTreeKnowledgeStore
 from src.logic.agents.cognitive.latent_reasoning_agent import LatentReasoningAgent
 from src.logic.agents.system.model_optimizer_agent import ModelOptimizerAgent
-from src.infrastructure.fleet.sharding_orchestrator import ShardingOrchestrator
+from src.infrastructure.swarm.fleet.sharding_orchestrator import ShardingOrchestrator
 
 
 def test_phase130_structure_verification() -> None:

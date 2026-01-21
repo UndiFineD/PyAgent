@@ -8,7 +8,7 @@ import pytest
 from unittest.mock import Mock, MagicMock, patch
 
 # Import from the package
-from src.infrastructure.mcp_tools import (
+from src.infrastructure.services.mcp import (
     LocalMCPServer,
     MCPServerConfig,
     MCPServerRegistry,

@@ -1,6 +1,6 @@
 import pytest
 from hypothesis import given, strategies as st
-from src.core.base.core.convergence_core import ConvergenceCore
+from src.core.base.logic.core.convergence_core import ConvergenceCore
 
 
 class TestConvergenceCore:

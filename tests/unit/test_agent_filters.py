@@ -1,7 +1,7 @@
 """Unit tests for agent-specific file filtering logic."""
 
 from pathlib import Path
-from src.core.base.utils.agent_file_manager import AgentFileManager
+from src.core.base.common.utils.agent_file_manager import AgentFileManager
 
 
 def test_agents_only_filters_agent_files(tmp_path: Path) -> None:

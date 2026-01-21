@@ -16,7 +16,7 @@
 """Shell for TheoryOfMind, managing agent profiles and state."""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from typing import Any
 from src.logic.agents.cognitive.TheoryOfMindCore import TheoryOfMindCore
 

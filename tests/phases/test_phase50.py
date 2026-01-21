@@ -1,6 +1,6 @@
 import unittest
 from fastapi.testclient import TestClient
-from src.infrastructure.api.agent_api_server import app
+from src.infrastructure.services.api.agent_api_server import app
 
 
 class TestPhase50(unittest.TestCase):

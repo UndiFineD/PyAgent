@@ -23,7 +23,7 @@ Connects to the Fleet Load Balancer via the Agent API Server.
 """
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import sys
 import requests
 import argparse
@@ -39,8 +39,8 @@ from rich.progress import (
     TaskProgressColumn,
 )
 from rich.columns import Columns
-from src.core.base.connectivity_manager import ConnectivityManager
-from src.infrastructure.backend.local_context_recorder import LocalContextRecorder
+from src.core.base.logic.connectivity_manager import ConnectivityManager
+from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 
 # from functools import lru_cache
 
@@ -215,7 +215,7 @@ def main() -> None:
     if not check_server():
         console.print("[bold red]Error: API Server is not running.[/bold red]")
         console.print(
-            "[yellow]Please start the server first: python -m uvicorn src.infrastructure.api.AgentAPIServer:app[/yellow]"
+            "[yellow]Please start the server first: python -m uvicorn src.infrastructure.services.api.AgentAPIServer:app[/yellow]"
         )
         sys.exit(1)
 

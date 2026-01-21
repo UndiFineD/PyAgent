@@ -5,9 +5,9 @@ from pathlib import Path
 from requests import Response
 
 # Infrastructure
-from src.infrastructure.backend.llm_client import LLMClient
-from src.core.base.connectivity_manager import ConnectivityManager
-from src.infrastructure.backend.local_context_recorder import LocalContextRecorder
+from src.infrastructure.compute.backend.llm_client import LLMClient
+from src.core.base.logic.connectivity_manager import ConnectivityManager
+from src.infrastructure.compute.backend.local_context_recorder import LocalContextRecorder
 
 
 def test_ollama() -> None:

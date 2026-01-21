@@ -8,7 +8,7 @@ import pytest
 from unittest.mock import Mock, MagicMock, patch
 
 # Import from the package
-from src.infrastructure.chat_templates import (
+from src.infrastructure.engine.chat_templates import (
     TemplateType,
     ModelType,
     ChatTemplate,

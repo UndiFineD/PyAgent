@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""Auto-extracted class from agent_backend.py"""
+
+from __future__ import annotations
+from src.core.base.lifecycle.version import VERSION
+from typing import Any
+import threading
+import time
+
+__version__ = VERSION
+
+
+class RequestThrottler:
+    """Throttles requests to prevent overloading backends.
+
+    Implements token bucket algorithm for rate limiting.
+
+    Example:
+        throttler=RequestThrottler(requests_per_second=10)
+        if throttler.allow_request("github-models"):
+            make_request()
+        else:
+            wait_or_queue()
+    """
+
+    def __init__(
+        self,
+        requests_per_second: float = 10.0,
+        burst_size: int = 20,
+    ) -> None:
+        """Initialize request throttler.
+
+        Args:
+            requests_per_second: Sustained request rate.
+            burst_size: Maximum burst size.
+        """
+        self.requests_per_second = requests_per_second
+        self.burst_size = burst_size
+        self._buckets: dict[str, float] = {}  # backend -> tokens
+        self._last_update: dict[str, float] = {}
+        self._lock = threading.Lock()
+
+    def allow_request(self, backend: str) -> bool:
+        """Check if request is allowed.
+
+        Args:
+            backend: Backend identifier.
+
+        Returns:
+            bool: True if request is allowed.
+        """
+        with self._lock:
+            now = time.time()
+
+            # Initialize bucket if needed
+            if backend not in self._buckets:
+                self._buckets[backend] = float(self.burst_size)
+                self._last_update[backend] = now
+
+            # Replenish tokens
+            elapsed = now - self._last_update[backend]
+            self._buckets[backend] = min(
+                self.burst_size,
+                self._buckets[backend] + elapsed * self.requests_per_second,
+            )
+            self._last_update[backend] = now
+
+            # Check if token available
+            if self._buckets[backend] >= 1.0:
+                self._buckets[backend] -= 1.0
+                return True
+
+            return False
+
+    def wait_for_token(self, backend: str, timeout: float = 10.0) -> bool:
+        """Wait for a token to become available.
+
+        Args:
+            backend: Backend identifier.
+            timeout: Maximum wait time.
+
+        Returns:
+            bool: True if token acquired.
+        """
+        start = time.time()
+
+        while time.time() - start < timeout:
+            if self.allow_request(backend):
+                return True
+            import threading
+
+            threading.Event().wait(timeout=0.1)
+
+        return False
+
+    def get_status(self, backend: str) -> dict[str, Any]:
+        """Get throttle status for backend.
+
+        Args:
+            backend: Backend identifier.
+
+        Returns:
+            Dict: Throttle status.
+        """
+        with self._lock:
+            tokens = self._buckets.get(backend, self.burst_size)
+            return {
+                "available_tokens": tokens,
+                "max_tokens": self.burst_size,
+                "requests_per_second": self.requests_per_second,
+            }

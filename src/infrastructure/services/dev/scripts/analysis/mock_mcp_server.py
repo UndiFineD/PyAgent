@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+# Copyright 2026 PyAgent Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+"""Mock MCP server implementation for testing Agentic capabilities."""
+
+from __future__ import annotations
+from src.core.base.lifecycle.version import VERSION
+import json
+import sys
+
+__version__ = VERSION
+
+
+def main() -> None:
+    """Run a basic JSON-RPC server loop for MCP tool mocking."""
+    while True:
+        line = sys.stdin.readline()
+        if not line:
+            break
+
+        try:
+            request = json.loads(line)
+            if request.get("method") == "tools/list":
+                response = {
+                    "jsonrpc": "2.0",
+                    "id": request.get("id"),
+                    "result": {
+                        "tools": [
+                            {
+                                "name": "echo_tool",
+                                "description": "Returns what you sent",
+                            }
+                        ]
+                    },
+                }
+            elif request.get("method") == "tools/call":
+                response = {
+                    "jsonrpc": "2.0",
+                    "id": request.get("id"),
+                    "result": {
+                        "content": f"Echo: {request['params']['arguments'].get('msg')}"
+                    },
+                }
+            else:
+                response = {
+                    "jsonrpc": "2.0",
+                    "id": request.get("id"),
+                    "error": "Unknown method",
+                }
+
+            sys.stdout.write(json.dumps(response) + "\n")
+            sys.stdout.flush()
+        except Exception:
+            break
+
+
+if __name__ == "__main__":
+    main()

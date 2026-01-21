@@ -16,7 +16,7 @@
 """Auto-extracted class from agent_stats.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from src.observability.stats.observability_core import Alert
 from src.observability.stats.observability_core import AlertSeverity
 from src.observability.stats.observability_core import Metric

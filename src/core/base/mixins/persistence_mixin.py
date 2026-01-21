@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # Persistence Mixin for BaseAgent
 from typing import Any, List
-from src.core.base.models import AgentState, EventType
-from src.core.base.agent_history import AgentConversationHistory
-from src.core.base.agent_scratchpad import AgentScratchpad
+from src.core.base.common.models import AgentState, EventType
+from src.core.base.state.agent_history import AgentConversationHistory
+from src.core.base.state.agent_scratchpad import AgentScratchpad
 
 class PersistenceMixin:
     """Handles agent state, history, scratchpad, metrics, and file persistence."""

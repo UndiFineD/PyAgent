@@ -16,7 +16,7 @@ sys.path.insert(0, str(project_root))
 
 try:
     from src.logic.agents.development.benchmark_agent import BenchmarkAgent
-    from src.infrastructure.tokenizer.tokenizer_registry import estimate_token_count
+    from src.infrastructure.engine.tokenization.tokenizer_registry import estimate_token_count
     print("✅ Successfully imported PyAgent modules")
 except ImportError as e:
     print(f"❌ Failed to import PyAgent modules: {e}")

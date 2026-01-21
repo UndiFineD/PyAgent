@@ -23,7 +23,7 @@ import os
 import shutil
 import subprocess
 import tempfile
-from src.core.base.types.code_language import CodeLanguage
+from src.core.base.common.types.code_language import CodeLanguage
 
 class CoderValidationMixin:
     """Mixin for validating syntax and linting code."""

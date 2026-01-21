@@ -13,14 +13,14 @@
 
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 import hashlib
 import time
 import json
 import uuid
 import os
 from typing import Any
-from src.core.base.base_agent import BaseAgent
+from src.core.base.lifecycle.base_agent import BaseAgent
 
 __version__ = VERSION
 
@@ -36,7 +36,7 @@ class IdentityAgent(BaseAgent):
         self.identity_registry: dict[Any, Any] = {}  # agent_id -> DID document
 
         # New: Shared Secret Manager Access
-        from src.infrastructure.fleet.secret_manager import SecretManager
+        from src.infrastructure.swarm.fleet.secret_manager import SecretManager
 
         self.secret_manager = SecretManager(
             vault_path=os.path.join(

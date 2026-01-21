@@ -16,7 +16,7 @@
 """Auto-extracted class from agent_improvements.py"""
 
 from __future__ import annotations
-from src.core.base.version import VERSION
+from src.core.base.lifecycle.version import VERSION
 from .analysis_tool_type import AnalysisToolType
 from .improvement_category import ImprovementCategory
 from .tool_suggestion import ToolSuggestion
