@@ -526,3 +526,18 @@ pub fn aggregate_worker_metrics_rust(
     
     (total_queued, avg_queue, total_errors, avg_latency, max_latency)
 }
+
+pub fn register(m: &Bound<'_, PyModule>) -> PyResult<()> {
+    m.add_function(wrap_pyfunction!(image_resize_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(normalize_pixels_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(extract_video_frames_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(resample_audio_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(json_schema_to_regex_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(regex_match_prefix_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(compile_ebnf_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(grammar_next_tokens_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(consistent_hash_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(select_worker_lb_rust, m)?)?;
+    m.add_function(wrap_pyfunction!(aggregate_worker_metrics_rust, m)?)?;
+    Ok(())
+}

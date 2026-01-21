@@ -68,7 +68,9 @@ class CommandResult:
     """Whether output should be inserted inline."""
 
     @classmethod
-    def ok(cls, output: str, data: dict[str, Any] | None = None, inline: bool = True) -> CommandResult:
+    def ok(
+        cls, output: str, data: dict[str, Any] | None = None, inline: bool = True
+    ) -> CommandResult:
         """Create a successful result."""
         return cls(success=True, output=output, data=data or {}, inline=inline)
 
@@ -108,19 +110,19 @@ class CommandDefinition:
 @dataclass
 class ParsedCommand:
     """A parsed command from the prompt."""
-    
+
     command: str
     """Command name."""
-    
+
     args: list[str]
     """Command arguments."""
-    
+
     start: int
     """Start position in prompt."""
-    
+
     end: int
     """End position in prompt."""
-    
+
     raw: str
     """Raw matched text."""
 
@@ -128,34 +130,34 @@ class ParsedCommand:
 @dataclass
 class ProcessedPrompt:
     """Result of processing a prompt."""
-    
+
     original: str
     """Original prompt text."""
-    
+
     processed: str
     """Processed prompt with command results."""
-    
+
     commands: list[ParsedCommand]
     """Parsed commands found."""
-    
+
     results: list[tuple[ParsedCommand, CommandResult]]
     """Execution results for each command."""
-    
+
     @property
     def has_commands(self) -> bool:
         """Whether any commands were found."""
         return bool(self.commands)
-    
+
     @property
     def all_succeeded(self) -> bool:
         """Whether all commands succeeded."""
         return all(r.success for _, r in self.results)
-    
+
     @property
     def command_outputs(self) -> dict[str, str]:
         """Map of command names to outputs."""
         return {cmd.command: result.output for cmd, result in self.results}
-    
+
     @property
     def command_data(self) -> dict[str, dict[str, Any]]:
         """Map of command names to structured data."""
