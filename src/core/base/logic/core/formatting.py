@@ -30,7 +30,16 @@ class FormattingCore:
         return " ".join(normalized.split())
 
     def calculate_diff(self, old_content: str, new_content: str, filename: str) -> str:
-        """Logic for generating a unified diff."""
+        """Logic for generating a unified diff. Accelerated by Rust."""
+        if rc and hasattr(rc, "generate_unified_diff_rust"):
+            try:
+                diff_text, _, _ = rc.generate_unified_diff_rust(
+                    old_content, new_content, filename, 3
+                )
+                return diff_text
+            except Exception:
+                pass
+
         old_lines = old_content.splitlines(keepends=True)
         new_lines = new_content.splitlines(keepends=True)
         diff_lines = list(difflib.unified_diff(
