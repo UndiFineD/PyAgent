@@ -1,6 +1,6 @@
-"""Analysis and metrics processing logic for fleet observability."""
 #!/usr/bin/env python3
 # Copyright 2026 PyAgent Authors
+"""Analysis and metrics processing logic for fleet observability."""
 # Logic for metric analysis, profiling, stability, and forecasting.
 # Phase 14: Rust acceleration for variance, stasis detection, and forecasting
 
@@ -48,6 +48,7 @@ MODEL_COSTS = {
 
 @dataclass(frozen=True)
 class ProfileStats:
+    """Statistics for a single function call profile."""
     function_name: str
     call_count: int
     total_time: float
@@ -79,16 +80,19 @@ class ProfilingCore:
     def identify_bottlenecks(
         self, stats: list[ProfileStats], threshold_ms: float = 100.0
     ) -> list[str]:
+        """Identify functions exceeding a latency threshold."""
         return [
             s.function_name for s in stats if s.total_time > (threshold_ms / 1000.0)
         ]
 
     def calculate_optimization_priority(self, stats: ProfileStats) -> float:
+        """Calculate optimization priority based on total time and call count."""
         return stats.total_time * stats.call_count
 
 
 @dataclass(frozen=True)
 class FleetMetrics:
+    """Consolidated metrics for a fleet of agents."""
     avg_error_rate: float
     total_token_out: int
     active_agent_count: int
@@ -148,6 +152,7 @@ class StabilityCore:
         return variance < 0.0001
 
     def get_healing_threshold(self, stability_score: float) -> float:
+        """Get the threshold for triggering self-healing based on stability."""
         if stability_score < 0.3:
             return 0.9
         return 0.5
@@ -157,11 +162,13 @@ class TracingCore:
     """distributed tracing and latency breakdown logic."""
 
     def create_span_context(self, trace_id: str, span_id: str) -> dict[str, str]:
+        """Create a standard OTel span context."""
         return {"trace_id": trace_id, "span_id": span_id, "version": "OTel-1.1"}
 
     def calculate_latency_breakdown(
         self, total_time: float, network_time: float
     ) -> dict[str, float]:
+        """Calculate network vs thinking latency breakdown."""
         thinking_time = total_time - network_time
         return {
             "total_latency_ms": total_time * 1000,
@@ -171,6 +178,7 @@ class TracingCore:
         }
 
     def format_otel_log(self, name: str, attributes: dict[str, Any]) -> dict[str, Any]:
+        """Format a log entry for OpenTelemetry ingestion."""
         return {
             "timestamp": time.time_ns(),
             "name": name,
@@ -196,17 +204,19 @@ class DerivedMetricCalculator:
             ast.UAdd: operator.pos,
         }
 
+    # pylint: disable=too-many-return-statements
     def _eval_node(self, node: ast.AST) -> float:
+        """Recursively evaluate AST nodes for math formulas."""
         if isinstance(node, ast.Constant):
             return float(node.value)
-        elif isinstance(node, ast.BinOp):
+        if isinstance(node, ast.BinOp):
             return self.operators[type(node.op)](
                 self._eval_node(node.left), self._eval_node(node.right)
             )
-        elif isinstance(node, ast.UnaryOp):
+        if isinstance(node, ast.UnaryOp):
             return self.operators[type(node.op)](self._eval_node(node.operand))
 
-        elif isinstance(node, ast.Call):
+        if isinstance(node, ast.Call):
             if isinstance(node.func, ast.Name):
                 func_name = node.func.id
                 args = [self._eval_node(a) for a in node.args]
@@ -228,6 +238,7 @@ class DerivedMetricCalculator:
     def register_derived(
         self, name: str, dependencies: list[str], formula: str, description: str = ""
     ) -> DerivedMetric:
+        """Register a new derived metric with a formula."""
         derived = DerivedMetric(
             name=name,
             dependencies=dependencies,
@@ -238,6 +249,7 @@ class DerivedMetricCalculator:
         return derived
 
     def calculate(self, name: str, metric_values: dict[str, float]) -> float | None:
+        """Calculate the value of a derived metric."""
         derived = self.derived_metrics.get(name)
         if not derived:
             return None
@@ -287,6 +299,7 @@ class CorrelationAnalyzer:
         self._metric_history: dict[str, list[float]] = {}
 
     def record_value(self, metric_name: str, value: float) -> None:
+        """Record a metric value for correlation analysis."""
         if metric_name not in self._metric_history:
             self._metric_history[metric_name] = []
 
@@ -295,6 +308,7 @@ class CorrelationAnalyzer:
     def compute_correlation(
         self, metric_a: str, metric_b: str
     ) -> MetricCorrelation | None:
+        """Compute the Pearson correlation between two metrics."""
         va, vb = (
             self._metric_history.get(metric_a, []),
             self._metric_history.get(metric_b, []),
@@ -430,7 +444,7 @@ class TokenCostCore:
         """Compute USD cost based on model and token counts."""
         mk = model.lower()
         p = MODEL_COSTS.get(mk) or next(
-            (MODEL_COSTS[k] for k in MODEL_COSTS if k != "default" and k in mk),
+            (v for k, v in MODEL_COSTS.items() if k != "default" and k in mk),
             MODEL_COSTS["default"],
         )
         return round((in_t / 1000) * p["input"] + (out_t / 1000) * p["output"], 6)
