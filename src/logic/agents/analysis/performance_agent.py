@@ -78,22 +78,28 @@ class PerformanceAgent:
             from rust_core import scan_optimization_patterns_rust  # type: ignore[attr-defined]
 
             rust_results = scan_optimization_patterns_rust(content)
-            for line_num, pattern_idx, groups in rust_results:
-                if pattern_idx < len(self.OPTIMIZATION_PATTERNS):
-                    pattern, opt_type, desc, fix = self.OPTIMIZATION_PATTERNS[pattern_idx]
-                    self.suggestions.append(
-                        OptimizationSuggestion(
-                            type=opt_type,
-                            description=desc,
-                            impact="medium",
-                            code_location=f"line {line_num}",
-                            before_snippet="",
-                            after_snippet=fix.format(*groups) if groups else fix,
+            if rust_results:
+                for line_num, pattern_idx, groups in rust_results:
+                    if pattern_idx < len(self.OPTIMIZATION_PATTERNS):
+                        pattern, opt_type, desc, fix = self.OPTIMIZATION_PATTERNS[
+                            pattern_idx
+                        ]
+                        self.suggestions.append(
+                            OptimizationSuggestion(
+                                type=opt_type,
+                                description=desc,
+                                impact="medium",
+                                code_location=f"line {line_num}",
+                                before_snippet="",
+                                after_snippet=fix.format(*groups) if groups else fix,
+                            )
                         )
-                    )
-        except (ImportError, AttributeError):
-            # Fallback to Python implementation
-            lines = content.split("\n")
+                return self.suggestions
+        except (ImportError, AttributeError) as e:
+            logger.debug(f"Rust acceleration not available: {e}")
+
+        # Fallback to Python implementation
+        lines = content.split("\n")
             for i, line in enumerate(lines, 1):
                 for pattern, opt_type, desc, fix in self.OPTIMIZATION_PATTERNS:
                     match = re.search(pattern, line)
