@@ -1,32 +1,14 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-
 # SPDX-License-Identifier: Apache-2.0
 # SPDX-FileCopyrightText: Copyright contributors to the PyAgent project
-"""
-Reasoning parsers for structured agent outputs.
-Supports XML, JSON, and Markdown reasoning blocks.
-"""
 
-from .base import ReasoningParser  # noqa: F401
-from .implementations.identity import IdentityReasoningParser  # noqa: F401
-from .implementations.json import JSONReasoningParser  # noqa: F401
-from .implementations.markdown import MarkdownReasoningParser  # noqa: F401
-from .implementations.xml import XMLReasoningParser  # noqa: F401
-from .models import ReasoningResult, StreamingReasoningState  # noqa: F401
-from .registry import ReasoningParserManager, reasoning_parser  # noqa: F401
-from .utils import create_streaming_parser, extract_reasoning  # noqa: F401
+from .models import ReasoningResult, StreamingReasoningState
+from .base import ReasoningParser
+from .registry import ReasoningParserManager, reasoning_parser
+from .utils import extract_reasoning, create_streaming_parser
+from .implementations.xml import XMLReasoningParser
+from .implementations.json import JSONReasoningParser
+from .implementations.markdown import MarkdownReasoningParser
+from .implementations.identity import IdentityReasoningParser
 
 # Register built-in parsers
 ReasoningParserManager.register_module("xml", XMLReasoningParser)

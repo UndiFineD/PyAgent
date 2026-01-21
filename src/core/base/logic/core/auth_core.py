@@ -1,27 +1,66 @@
-#!/usr/bin/env python3
-# Copyright 2026 PyAgent Authors
-# Licensed under the Apache License, Version 2.0 (the "License");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
+from __future__ import annotations
+from typing import Any
+import hashlib
+import time
+from dataclasses import dataclass
 
-"""
-Core logic for Authentication.
-(Facade for src.core.base.common.auth_core)
-"""
-
-from src.core.base.common.auth_core import AuthCore as StandardAuthCore
+try:
+    import rust_core as rc
+except ImportError:
+    rc: Any = None  # type: ignore[no-redef]
 
 
-class AuthCore(StandardAuthCore):
+@dataclass(frozen=True)
+class AuthProof:
+    """Authentication proof container for agent validation."""
+
+    timestamp: float
+    challenge: str
+    proof: str
+
+
+class AuthCore:
+    """Pure logic for zero-knowledge-style agent authentication.
+    Handles challenge-response generation without secret exposure.
     """
-    Facade for StandardAuthCore to maintain backward compatibility.
-    Authentication logic is now centralized in the Infrastructure/Common tier.
-    """
+
+    def generate_challenge(self, agent_id: str) -> str:
+        """Generates a unique challenge for an agent."""
+        if rc:
+            try:
+                return rc.generate_challenge(agent_id)  # type: ignore[attr-defined]
+            except Exception:
+                pass
+        seed = f"{agent_id}_{time.time()}_{hashlib.sha256(str(time.time()).encode()).hexdigest()}"
+        return hashlib.sha256(seed.encode()).hexdigest()
+
+    def generate_proof(self, challenge: str, secret_key: str) -> str:
+        """Generates a proof for a challenge using a secret key."""
+        if rc:
+            try:
+                return rc.generate_auth_proof(challenge, secret_key)  # type: ignore[attr-defined]
+            except Exception:
+                pass
+        return hashlib.sha512(f"{challenge}:{secret_key}".encode()).hexdigest()
+
+    def verify_proof(
+        self, challenge: str, proof: str, expected_secret_hash: str
+    ) -> bool:
+        """Verifies proof against the expected secret hash without knowing the secret."""
+        if rc:
+            try:
+                return rc.verify_auth_proof(challenge, proof, expected_secret_hash)  # type: ignore[attr-defined]
+            except Exception:
+                pass
+        # Simulated ZK verify: In a real ZK, we wouldn't even need the secret hash here.
+        # But for this logic-isolation stage, we use hashed comparison.
+        return (
+            proof
+            == hashlib.sha512(
+                f"{challenge}:{expected_secret_hash}".encode()
+            ).hexdigest()
+        )
+
+    def is_proof_expired(self, proof_time: float, ttl: int = 60) -> bool:
+        """Standard TTL check for authentication proofs."""
+        return (time.time() - proof_time) > ttl
